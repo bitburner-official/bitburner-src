@@ -88,7 +88,6 @@ import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { DarknetServer } from "../Server/DarknetServer";
-import { isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -389,7 +388,7 @@ export class Terminal {
       const canRunScripts = hasAdminRights && currServ.maxRam > 0;
       this.print("Can run scripts on this host: " + (canRunScripts ? "YES" : "NO"));
       this.print("RAM: " + formatRam(currServ.maxRam));
-      if (isDarknetServer(currServ) && currServ.ramBlock) {
+      if (currServ instanceof DarknetServer && currServ.ramBlock) {
         this.print("RAM blocked by owner: " + formatRam(currServ.ramBlock));
         this.print("Stasis link: " + (currServ.hasStasisLink ? "YES" : "NO"));
         this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"));
@@ -578,7 +577,7 @@ export class Terminal {
       (!all && s.purchasedByPlayer && s.hostname != "home") ||
       d > depth ||
       (!all && s instanceof HacknetServer) ||
-      isDarknetServer(s);
+      (s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
 
     const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
       hostname: s.hostname,
@@ -603,12 +602,14 @@ export class Terminal {
 
       const server = GetServer(node.hostname);
       if (!server) return;
+      const hasRoot = server.hasAdminRights ? "YES" : "NO";
       if (server instanceof Server) {
-        const hasRoot = server.hasAdminRights ? "YES" : "NO";
         this.print(
           `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
         );
         this.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n");
+      } else {
+        this.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n");
       }
       this.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
       node.children.forEach((n, i) =>

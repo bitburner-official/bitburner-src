@@ -120,7 +120,7 @@ import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
 import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
 import { SpecialServers } from "./Server/data/SpecialServers";
-import { isDarknetServer } from "./DarkNet/utils/darknetServerUtils";
+import { DarknetServer } from "./Server/DarknetServer";
 
 export const enums: NSEnums = {
   CityName,
@@ -182,7 +182,7 @@ export const ns: InternalAPI<NSFull> = {
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
-      if (s === null || (isDarknetServer(s) && s.hostname !== SpecialServers.DarkWeb)) continue;
+      if (s === null || (s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb)) continue;
       const entry = helpers.returnServerID(s, returnOpts);
       if (entry === null) continue;
       out.push(entry);
@@ -794,10 +794,13 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => `scp failed, because ${source} is offline.`);
       return false;
     }
-    const destServer = helpers.getServer(ctx, destination);
+    // WIP: If we use helpers.getServer, the behavior may not be consistent if the server is an offline dnet server
     const sourceServer = helpers.getServer(ctx, source);
+    const destServer = helpers.getServer(ctx, destination);
+    if (destServer instanceof DarknetServer) {
+      expectAuthenticated(ctx, destServer);
+    }
     const files = Array.isArray(_files) ? _files : [_files];
-    expectAuthenticated(ctx, destServer);
     return helpers.scp(ctx, files, sourceServer, destServer);
   },
   ls: (ctx) => (_host, _substring) => {
@@ -997,7 +1000,8 @@ export const ns: InternalAPI<NSFull> = {
     const host = helpers.string(ctx, "host", _host);
     const server = GetServer(host);
     return (
-      server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home" || isDarknetServer(server))
+      server !== null &&
+      (server.serversOnNetwork.length > 0 || server.hostname === "home" || server instanceof DarknetServer)
     );
   },
   fileExists: (ctx) => (_filename, _host) => {

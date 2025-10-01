@@ -1,7 +1,12 @@
-import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
+import {
+  connectServers,
+  DeleteServer,
+  disconnectServers,
+  GetDarknetServerOrThrow,
+  GetServer,
+} from "../../Server/AllServers";
 import { DarknetEvents, DarknetState, getServerState, storeDarknetCycles } from "../models/DarknetState";
 import { createDarknetServer } from "./ServerGenerator";
-import { BaseServer } from "../../Server/BaseServer";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -15,8 +20,10 @@ import {
   getDarknetCyclesPerMutation,
   getIslands,
 } from "../utils/darknetNetworkUtils";
-import { getDarknetData, isDarknetServer, isImmutable } from "../utils/darknetServerUtils";
+import { isImmutable } from "../utils/darknetServerUtils";
 import { DarknetConstants } from "../Constants";
+import type { DarknetServer } from "../../Server/DarknetServer";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);
@@ -144,18 +151,24 @@ export const deleteRandomDarknetServers = (count = 1) => {
   sanitizeDarkwebNetwork();
 };
 
-export const deleteDarknetServer = (server: BaseServer, force = false) => {
-  if (!server || (isImmutable(server) && !force)) {
+export const deleteDarknetServer = (server: DarknetServer, force = false) => {
+  if (server.hostname === SpecialServers.DarkWeb) {
+    exceptionAlert(new Error("Something is trying to delete darkweb"), true);
+    return false;
+  }
+  if (isImmutable(server) && !force) {
     return false;
   }
   const isLabyrinth = isLabyrinthServer(server.hostname);
   movePlayerIfNeeded(server);
   killScripts(server);
   disconnectServer(server, true);
-  if (isDarknetServer(server) && DarknetState.Network[server.depth]?.[server.leftOffset]) {
+  if (DarknetState.Network[server.depth]?.[server.leftOffset]) {
     DarknetState.Network[server.depth][server.leftOffset] = null;
   }
-  !isLabyrinth && DarknetState.offlineServers.push(server.hostname);
+  if (!isLabyrinth) {
+    DarknetState.offlineServers.push(server.hostname);
+  }
   DeleteServer(server.hostname);
 };
 
@@ -184,16 +197,19 @@ export const balanceDarknetServers = () => {
   }
 };
 
-export const moveDarknetServer = (server: BaseServer, maxDepthDecrease = 3, maxDepthIncrease = 3) => {
-  const darknetData = getDarknetData(server);
-  if (!server || !darknetData || isImmutable(server)) {
+export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, maxDepthIncrease = 3) => {
+  if (server.hostname === SpecialServers.DarkWeb) {
+    exceptionAlert(new Error("Something is trying to move darkweb"), true);
+    return false;
+  }
+  if (isImmutable(server)) {
     // Do not try to move the server that is open in the UI or the terminal
     return false;
   }
 
   const positionOptions = getAllOpenPositions(
-    darknetData.difficulty - maxDepthDecrease,
-    darknetData.difficulty + maxDepthIncrease,
+    server.difficulty - maxDepthDecrease,
+    server.difficulty + maxDepthIncrease,
   );
   if (positionOptions.length === 0) {
     return false;
@@ -202,14 +218,18 @@ export const moveDarknetServer = (server: BaseServer, maxDepthDecrease = 3, maxD
   const [newX, newY] = positionOptions[Math.floor(Math.random() * positionOptions.length)];
   disconnectServer(server, true);
 
-  if (DarknetState.Network[darknetData.depth]?.[darknetData.leftOffset]) {
-    DarknetState.Network[darknetData.depth][darknetData.leftOffset] = null;
+  if (DarknetState.Network[server.depth]?.[server.leftOffset]) {
+    DarknetState.Network[server.depth][server.leftOffset] = null;
   }
   addServerToNetwork(server, newX, newY);
   return true;
 };
 
-export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
+export const disconnectServer = (server: DarknetServer, disconnectDarkweb = false) => {
+  if (server.hostname === SpecialServers.DarkWeb) {
+    exceptionAlert(new Error("Something is trying to disconnect darkweb"), true);
+    return false;
+  }
   if (isImmutable(server)) {
     return false;
   }
@@ -222,8 +242,8 @@ export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) 
   });
 };
 
-export const restartServer = (server: BaseServer) => {
-  if (!isDarknetServer(server) || isImmutable(server)) {
+export const restartServer = (server: DarknetServer) => {
+  if (isImmutable(server)) {
     return false;
   }
   killScripts(server);
@@ -235,13 +255,12 @@ export const restartServer = (server: BaseServer) => {
   addGuaranteedConnection(server);
 };
 
-export const addGuaranteedConnection = (server: BaseServer) => {
-  const darknetData = getDarknetData(server);
-  if (!darknetData || isLabyrinthServer(server.hostname)) {
+export const addGuaranteedConnection = (server: DarknetServer) => {
+  if (isLabyrinthServer(server.hostname)) {
     return;
   }
 
-  const neighbors = getAllAdjacentNeighbors(darknetData.depth ?? 0, darknetData.leftOffset ?? 0);
+  const neighbors = getAllAdjacentNeighbors(server.depth, server.leftOffset);
   if (neighbors.length === 0) {
     return;
   }
@@ -250,21 +269,19 @@ export const addGuaranteedConnection = (server: BaseServer) => {
 };
 
 export const sanitizeDarkwebNetwork = () => {
-  const darkweb = GetServer(SpecialServers.DarkWeb);
-  if (!darkweb) {
-    return;
-  }
+  const darkweb = GetDarknetServerOrThrow(SpecialServers.DarkWeb);
   const servers = [...getAllMobileDarknetServers(), darkweb];
   for (const server of servers) {
-    const darknetData = getDarknetData(server);
-    if (!GetServer(server.hostname) && DarknetState.Network[darknetData?.depth ?? -1]) {
-      DarknetState.Network[darknetData?.depth ?? 0][darknetData?.leftOffset ?? 0] = null;
+    // WIP
+    if (!GetServer(server.hostname) && DarknetState.Network[server.depth]) {
+      DarknetState.Network[server.depth][server.leftOffset] = null;
       disconnectServer(server, true);
       deleteDarknetServer(server);
       continue;
     }
 
     for (const conn of server.serversOnNetwork) {
+      // WIP
       const connection = GetServer(conn);
       if (!connection) {
         server.serversOnNetwork = server.serversOnNetwork.filter((c) => c !== conn);
@@ -275,7 +292,7 @@ export const sanitizeDarkwebNetwork = () => {
       }
     }
 
-    if (darknetData?.depth === 0 && darkweb) {
+    if (server.depth === 0 && darkweb) {
       connectServers(server, darkweb);
     }
   }

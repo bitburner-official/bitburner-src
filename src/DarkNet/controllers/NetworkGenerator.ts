@@ -14,7 +14,6 @@ import {
   deleteDarknetServer,
   disconnectServer,
 } from "./NetworkMovement";
-import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Icon, labIcon } from "../ui/ServerIcon";
 import { Player } from "@player";
@@ -42,15 +41,16 @@ import {
   getServersOnRowAbove,
   getServersOnRowBelow,
 } from "../utils/darknetNetworkUtils";
-import { getDarknetData, isDarknetServer } from "../utils/darknetServerUtils";
+import { getDarknetServerSafely } from "../utils/darknetServerUtils";
 
+// WIP: This may be the wrong way to migrate darkweb server
 /**
  * Creates the dark web server if it does not already exist, or returns the existing one if it does.
  * If the current darkweb server is a standard server, it will be deleted and replaced with a darknet server.
  */
 export const GetOrCreateDarkwebServer = (): DarknetServer => {
   const existingServer = GetServer(SpecialServers.DarkWeb);
-  if (isDarknetServer(existingServer)) {
+  if (existingServer instanceof DarknetServer) {
     return existingServer;
   } else if (existingServer) {
     // Remove legacy darkweb server, so it can be made into a darknet server
@@ -115,15 +115,15 @@ export const clearDarknet = (force = false) => {
   }
 
   for (const lab of getLabyrinthServerNames()) {
-    const labyrinth = GetServer(lab);
+    const labyrinth = getDarknetServerSafely(lab);
     if (!labyrinth) continue;
     deleteDarknetServer(labyrinth);
   }
 };
 
-export const movePlayerIfNeeded = (server?: BaseServer) => {
+export const movePlayerIfNeeded = (server?: DarknetServer) => {
   const connectedServer = Player.getCurrentServer();
-  if ((!server && isDarknetServer(connectedServer)) || server?.hostname === connectedServer.hostname) {
+  if ((!server && connectedServer instanceof DarknetServer) || server?.hostname === connectedServer.hostname) {
     Terminal.print(`Something seems to have happened to '${connectedServer.hostname}'...`);
     Terminal.connectToServer(SpecialServers.Home);
   }
@@ -138,12 +138,13 @@ export const loadDarknet = () => {
     return;
   }
 
-  const darkWebServers = getAllMobileDarknetServers();
-  for (const server of darkWebServers) {
-    if (isDarknetServer(server) && !isLabyrinthServer(server.hostname)) {
-      disconnectServer(server, true);
-      addServerToNetwork(server, server.depth, server.leftOffset);
+  const darkNetServers = getAllMobileDarknetServers();
+  for (const server of darkNetServers) {
+    if (isLabyrinthServer(server.hostname)) {
+      continue;
     }
+    disconnectServer(server, true);
+    addServerToNetwork(server, server.depth, server.leftOffset);
   }
   balanceDarknetServers();
 
@@ -154,13 +155,12 @@ export const loadDarknet = () => {
   }
 };
 
-export const addRandomConnections = (server: BaseServer) => {
-  const darknetData = getDarknetData(server);
-  if (!darknetData || isLabyrinthServer(server.hostname)) {
+export const addRandomConnections = (server: DarknetServer) => {
+  if (isLabyrinthServer(server.hostname)) {
     return;
   }
-  const x = darknetData.depth;
-  const y = darknetData.leftOffset;
+  const x = server.depth;
+  const y = server.leftOffset;
   const horizontalNeighbors = getNeighborsOnRow(x, y);
   horizontalNeighbors.forEach((neighbor) => {
     if (Math.random() < HORIZONTAL_CONNECTION_CHANCE) {
@@ -178,19 +178,17 @@ export const addRandomConnections = (server: BaseServer) => {
   });
 };
 
-export const addServerToNetwork = (server: BaseServer, x: number, y: number) => {
+export const addServerToNetwork = (server: DarknetServer, x: number, y: number) => {
+  // WIP: Delete this check. If it happens, let it crash.
   if (DarknetState.Network[x]?.[y] === undefined) {
     console.error(`Invalid coordinate: ${x}-${y}`);
     return;
   }
   if (DarknetState.Network[x][y]?.hostname) {
+    // WIP: Use exceptionAlert
     console.error(
       `Server already exists at this coordinate. Hostname: ${DarknetState.Network[x][y].hostname}. Coordinate: ${x}-${y}`,
     );
-    return;
-  }
-  if (!isDarknetServer(server)) {
-    console.error(`Server missing dark web data. Hostname: ${server.hostname}`);
     return;
   }
 

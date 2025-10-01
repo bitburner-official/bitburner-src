@@ -1,33 +1,15 @@
-import { helpers } from "../../Netscript/NetscriptHelpers";
 import { Player } from "@player";
 import { getRamBlockRemoved, handleRamBlockClearedRewards } from "./effects";
 import { formatNumber } from "../../ui/formatNumber";
-import { getFailureResult, logger } from "./offlineServerHandling";
+import { logger } from "./offlineServerHandling";
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
-import { getDarknetServerSafely } from "../utils/darknetServerUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
-export const handleRamBlockRemoved = (ctx: NetscriptContext, hostname: string) => {
-  const onlineConnectionCheck = getFailureResult(ctx, hostname, { requireDirectConnection: true });
-  if (!onlineConnectionCheck.success) {
-    return helpers.netscriptDelay(ctx, 100).then(() => ({
-      success: false,
-      message: onlineConnectionCheck.message,
-    }));
-  }
-  const server = getDarknetServerSafely(hostname);
-  if (!server) {
-    throw helpers.errorMessage(ctx, `Server ${hostname} not found. It may have gone offline.`);
-  }
-
-  if (server.ramBlock <= 0) {
-    const result = `Server ${server.hostname} has no host-owned ram left to reallocate.`;
-    logger(ctx)(result);
-    return {
-      success: false,
-      message: result,
-    };
-  }
-
+/**
+ * WIP-@fico: Do we need a separate function/file? This block of code is only used by memoryReallocation in
+ * src\NetscriptFunctions\Darknet.ts.
+ */
+export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServer) => {
   const threads = ctx.workerScript.scriptRef.threads;
   const difficulty = server.difficulty + 1;
   const xpGained =

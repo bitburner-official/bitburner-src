@@ -4,7 +4,6 @@ import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH } from "../Enums";
 import { GetAllServers } from "../../Server/AllServers";
 import { getNetDepth } from "../effects/labyrinth";
 import { CONSTANTS } from "../../Constants";
-import { isDarknetServer } from "./darknetServerUtils";
 
 export const getDarknetCyclesPerMutation = () => {
   const depth = getNetDepth();
@@ -62,9 +61,14 @@ export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] 
 };
 
 export const getAllMobileDarknetServers = (): DarknetServer[] => {
-  return GetAllServers(true)
-    .filter(isDarknetServer)
-    .filter((s) => s.isMobile);
+  const mobileDarknetServers = [];
+  for (const server of GetAllServers(true)) {
+    if (!(server instanceof DarknetServer) || !server.isMobile) {
+      continue;
+    }
+    mobileDarknetServers.push(server);
+  }
+  return mobileDarknetServers;
 };
 
 export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] => {
@@ -79,13 +83,10 @@ export const getIslands = () => getAllMobileDarknetServers().filter((s) => !s.se
 export const getBackdooredDarkwebServers = (): DarknetServer[] =>
   getAllMobileDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
 
-export const getRandomNearbyServer = (server: DarknetServer, disconnected = false) => {
-  if (!isDarknetServer(server)) return null;
+export const getNearbyNonEmptyPasswordServer = (server: DarknetServer, disconnected = false) => {
   return getAllAdjacentNeighbors(server.depth, server.leftOffset).find(
     (neighbor) =>
-      neighbor &&
-      isDarknetServer(neighbor) &&
-      !neighbor?.hasAdminRights &&
+      !neighbor.hasAdminRights &&
       neighbor.password &&
       (!disconnected || !server.serversOnNetwork.includes(neighbor.hostname)),
   );

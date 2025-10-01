@@ -1,22 +1,18 @@
-import { BaseServer } from "../../Server/BaseServer";
 import { commonPasswordDictionary, letters, packetSniffPhrases } from "./dictionaryData";
 import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } from "../controllers/ServerGenerator";
 import { getDarknetServerName, PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
 import { getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
-import { GetServer } from "../../Server/AllServers";
 import { ModelIds } from "../Enums";
-import { getDarknetData, getDarknetServerSafely, isDarknetServer } from "../utils/darknetServerUtils";
+import { getDarknetServerSafely } from "../utils/darknetServerUtils";
 import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 import { getExactCorrectChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
 const MAX_LOG_LINES = 32;
 
-export const capturePackets = (server: BaseServer) => {
-  if (!isDarknetServer(server)) {
-    return "A great silence stretches across the network. No unsecured packets are here to capture.";
-  }
+export const capturePackets = (server: DarknetServer) => {
   const BASE_PASSWORD_INCLUSION_RATE = 0.18;
   const DIFFICULTY_MODIFIER = 0.88;
   const difficulty = server.difficulty * 1.3;
@@ -25,30 +21,27 @@ export const capturePackets = (server: BaseServer) => {
 
   if (Math.random() < passwordInclusionChance) {
     const intro = Math.floor(Math.random() * 124);
-    return `${getRandomData(intro, server)}${server.password}${getRandomData(
-      124 - intro - server.password.length,
+    return `${getRandomData(server, intro)}${server.password}${getRandomData(
       server,
+      124 - intro - server.password.length,
     )}`;
   }
   if (Math.random() < passwordInclusionChance) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    const connectedServer = GetServer(connectedServerName);
-    if (connectedServer && isDarknetServer(connectedServer)) {
+    const connectedServer = getDarknetServerSafely(connectedServerName);
+    if (connectedServer) {
       const intro = Math.floor(Math.random() * 124);
-      return `${getRandomData(intro, server)} ${connectedServerName}:${connectedServer.password} ${getRandomData(
-        124 - intro - connectedServer.password.length - connectedServerName.length,
+      return `${getRandomData(server, intro)} ${connectedServerName}:${connectedServer.password} ${getRandomData(
         server,
+        124 - intro - connectedServer.password.length - connectedServerName.length,
       )}`;
     }
   }
 
-  return `${getRandomData(124, server)}`;
+  return `${getRandomData(server, 124)}`;
 };
 
-const getRandomData = (length: number, server: BaseServer) => {
-  if (!isDarknetServer(server)) {
-    return packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
-  }
+const getRandomData = (server: DarknetServer, length: number) => {
   const password = server.password;
   let result = "";
   while (result.length < length) {
@@ -109,25 +102,20 @@ const getExactCharactersHint = (lastPassword: string, realPassword: string) => {
   return `The characters ${rightChars.join(", ")} are in the right place. `;
 };
 
-export const logPasswordAttempt = (server: BaseServer, passwordResponse: PasswordResponse) => {
-  if (!isDarknetServer(server)) {
-    return;
-  }
-
-  const darknetData = getDarknetData(server);
+export const logPasswordAttempt = (server: DarknetServer, passwordResponse: PasswordResponse) => {
   const serverState = getServerState(server.hostname);
   const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
 
-  if (passwordResponse.message === darknetData?.staticPasswordHint) {
+  if (passwordResponse.message === server.staticPasswordHint) {
     if (Math.random() < 0.1) {
-      passwordResponse.message = getExactCharactersHint(passwordResponse.passwordAttempted, darknetData.password);
+      passwordResponse.message = getExactCharactersHint(passwordResponse.passwordAttempted, server.password);
       passwordResponse.data = "";
     }
 
     if (Math.random() < 0.1) {
       const { exactCharacters, misplacedCharacters } = getMastermindResponse(
-        darknetData.password,
+        server.password,
         passwordResponse.passwordAttempted,
       );
       passwordResponse.message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
@@ -141,10 +129,7 @@ export const logPasswordAttempt = (server: BaseServer, passwordResponse: Passwor
   serverState.serverLogs = [logMessage, ...serverLogs].slice(0, MAX_LOG_LINES); // Keep only the last 50 logs
 };
 
-export const populateServerLogsWithNoise = (server: BaseServer) => {
-  if (!isDarknetServer(server)) {
-    return;
-  }
+export const populateServerLogsWithNoise = (server: DarknetServer) => {
   const serverState = getServerState(server.hostname);
   const interval = server.logTrafficInterval;
   if (!serverState.lastLogTime) {
@@ -169,11 +154,7 @@ export const populateServerLogsWithNoise = (server: BaseServer) => {
   }
 };
 
-const getLogNoise = (server: BaseServer, logDate: Date) => {
-  if (!isDarknetServer(server)) {
-    return "";
-  }
-
+const getLogNoise = (server: DarknetServer, logDate: Date) => {
   if (Math.random() < 0.2) {
     return packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
   }
@@ -211,10 +192,7 @@ const getLogNoise = (server: BaseServer, logDate: Date) => {
   return `${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`;
 };
 
-export const getServerLogs = (server: BaseServer, logLines: number, peek = false, requireAuthLog = false) => {
-  if (!isDarknetServer(server)) {
-    return [];
-  }
+export const getServerLogs = (server: DarknetServer, logLines: number, peek = false, requireAuthLog = false) => {
   const serverState = getServerState(server.hostname);
 
   if (requireAuthLog) {

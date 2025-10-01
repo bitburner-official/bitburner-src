@@ -4,17 +4,14 @@ import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { ServerStatusBox } from "./ServerStatusBox";
 import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
-import { GetServer } from "../../Server/AllServers";
+import { GetDarknetServerOrThrow } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { BaseServer } from "../../Server/BaseServer";
 import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles } from "./dnetStyles";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-
-import { isDarknetServer } from "../utils/darknetServerUtils";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -31,8 +28,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => {
       if (canvas.current) {
-        const deepestServer: number = DarknetState.Network.flat().reduce((deepest, server) => {
-          if (server?.hasAdminRights && isDarknetServer(server) && (server.depth ?? 0 > deepest)) {
+        const deepestServer = DarknetState.Network.flat().reduce((deepest, server) => {
+          if (server?.hasAdminRights && server.depth > deepest) {
             return server.depth;
           }
           return deepest;
@@ -45,7 +42,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       }
     });
     canvas.current && drawOnCanvas(canvas.current);
-    draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
+    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
 
     return () => {
       clearSubscription();
@@ -56,11 +53,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     DarknetEvents.emit();
   }, []);
 
-  const allowAuth = (server: BaseServer | null) =>
+  const allowAuth = (server: DarknetServer | null) =>
     !!server &&
-    (server.hasAdminRights || server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights));
+    (server.hasAdminRights ||
+      server.serversOnNetwork.some((neighbor) => GetDarknetServerOrThrow(neighbor).hasAdminRights));
 
-  const darkWebRoot = GetServer(SpecialServers.DarkWeb);
+  const darkWebRoot = GetDarknetServerOrThrow(SpecialServers.DarkWeb);
   const labDetails = getLabyrinthDetails();
   const labyrinth = labDetails.lab;
   const depth = labDetails.depth;
@@ -90,7 +88,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const handleZoom: WheelEventHandler<HTMLDivElement> = (wheelEvent) => {
     wheelEvent.stopPropagation();
     const target = wheelEvent.target as HTMLDivElement;
-    if (!draggableBackground?.current || DarknetState.openServer) {
+    if (!draggableBackground.current || DarknetState.openServer) {
       return;
     }
     if (wheelEvent.deltaY < 0) {

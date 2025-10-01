@@ -8,21 +8,19 @@ import { getAuthResult } from "../effects/authentication";
 import { DarknetEvents } from "../models/DarknetState";
 import { LabyrinthSummary } from "./LabyrinthSummary";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
-import { BaseServer } from "../../Server/BaseServer";
 import { ModelIds } from "../Enums";
 import { sleep } from "../../utils/Utility";
-import { getDarknetData } from "../utils/darknetServerUtils";
 import { getSharedChars } from "../utils/darknetAuthUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
 export type PasswordPromptProps = {
-  server: BaseServer;
+  server: DarknetServer;
   onClose: () => void;
   onSuccess: () => void;
 };
 
 export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptProps): React.ReactElement => {
-  const darknetData = getDarknetData(server);
-  const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? darknetData?.password ?? "" : "");
+  const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.password : "");
   const [enableSubmit, setEnableSubmit] = useState(true);
   const [response, setResponse] = useState("(no response yet)");
   const [rawResponse, setRawResponse] = useState<{ result: Result; response: PasswordResponse } | null>(null);
@@ -39,13 +37,11 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
     setResponse("Checking password...");
 
     const sharedChars =
-      darknetData?.modelId === ModelIds.TimingAttack
-        ? getSharedChars(darknetData?.password ?? "", passwordAttempted)
-        : 0;
+      server.modelId === ModelIds.TimingAttack ? getSharedChars(server.password, passwordAttempted) : 0;
     const responseTime = 500 + sharedChars * 150;
     await sleep(responseTime);
 
-    const response = getAuthResult(passwordAttempted, server, 2, responseTime);
+    const response = getAuthResult(server, passwordAttempted, 2, responseTime);
     setRawResponse(response);
     setResponse(JSON.stringify(response.result, null, 2));
 
@@ -69,7 +65,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
       return;
     }
     if (enableSubmit) {
-      void attemptPassword(inputPassword);
+      attemptPassword(inputPassword).catch((error) => console.error(error));
     }
   };
 
@@ -127,28 +123,27 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
           <Container disableGutters>
             <div style={{ color: "white" }}>
               <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                <span className={classes.serverDetailsText}>hint:</span> {darknetData?.staticPasswordHint}
+                <span className={classes.serverDetailsText}>hint:</span> {server.staticPasswordHint}
                 <br />
-                {darknetData?.passwordHintData && (
+                {server.passwordHintData && (
                   <>
-                    <span className={classes.serverDetailsText}>data: </span> {darknetData?.passwordHintData}
+                    <span className={classes.serverDetailsText}>data: </span> {server.passwordHintData}
                     <br />
                   </>
                 )}
                 {!isLabServer && (
                   <>
-                    <span className={classes.serverDetailsText}>length:</span> {darknetData?.password?.length}
+                    <span className={classes.serverDetailsText}>length:</span> {server.password.length}
                     <br />
-                    <span className={classes.serverDetailsText}>format:</span>{" "}
-                    {getPasswordType(darknetData?.password ?? "")}
+                    <span className={classes.serverDetailsText}>format:</span> {getPasswordType(server.password)}
                     <br />
                   </>
                 )}
-                <span className={classes.serverDetailsText}>model:</span> {darknetData?.modelId ?? ""}
+                <span className={classes.serverDetailsText}>model:</span> {server.modelId}
                 <br />
                 {isLabServer && (
                   <>
-                    <span className={classes.serverDetailsText}>cha:</span> {darknetData?.requiredCharismaSkill ?? ""}
+                    <span className={classes.serverDetailsText}>cha:</span> {server.requiredCharismaSkill}
                     <br />
                   </>
                 )}

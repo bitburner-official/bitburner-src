@@ -1,5 +1,5 @@
 import { DarknetState } from "../models/DarknetState";
-import { GetServer } from "../../Server/AllServers";
+import { GetDarknetServerOrThrow } from "../../Server/AllServers";
 import {
   DW_SERVER_GAP_LEFT,
   DW_SERVER_GAP_TOP,
@@ -9,9 +9,8 @@ import {
 } from "./dnetStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
-import { BaseServer } from "../../Server/BaseServer";
 import { NET_WIDTH } from "../Enums";
-import { getDarknetDataOrThrow } from "../utils/darknetServerUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");
@@ -22,16 +21,20 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (const server of DarknetState.Network.flat()) {
-    if (!server || (!server.hasAdminRights && !server.serversOnNetwork.find((s) => GetServer(s)?.hasAdminRights))) {
+    if (
+      !server ||
+      (!server.hasAdminRights && !server.serversOnNetwork.find((s) => GetDarknetServerOrThrow(s).hasAdminRights))
+    ) {
       continue;
     }
 
     // draw a line between each server and its connected servers
     for (const connectedServerName of server.serversOnNetwork) {
-      const connectedServer = GetServer(connectedServerName);
+      const connectedServer = GetDarknetServerOrThrow(connectedServerName);
       if (
         !connectedServer ||
-        (!connectedServer.hasAdminRights && !connectedServer.serversOnNetwork.find((s) => GetServer(s)?.hasAdminRights))
+        (!connectedServer.hasAdminRights &&
+          !connectedServer.serversOnNetwork.find((s) => GetDarknetServerOrThrow(s).hasAdminRights))
       ) {
         continue;
       }
@@ -48,7 +51,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   }
 };
 
-export const getPixelPosition = (server: BaseServer, centered = false) => {
+export const getPixelPosition = (server: DarknetServer, centered = false) => {
   const centeredOffsetHorizontal = centered ? DW_SERVER_WIDTH / 2 : 0;
   const centeredOffsetVertical = centered ? DW_SERVER_HEIGHT / 2 : 0;
 
@@ -80,10 +83,9 @@ export const getPixelPosition = (server: BaseServer, centered = false) => {
   };
 };
 
-const getCoordinates = (server: BaseServer) => {
-  const darknetData = getDarknetDataOrThrow(server);
+const getCoordinates = (server: DarknetServer) => {
   return {
-    x: darknetData.depth,
-    y: darknetData.leftOffset,
+    x: server.depth,
+    y: server.leftOffset,
   };
 };

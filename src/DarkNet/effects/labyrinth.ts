@@ -1,11 +1,10 @@
-import { BaseServer } from "../../Server/BaseServer";
 import { PasswordResponse } from "../models/DarknetServerOptions";
 import { addSessionToServer, DarknetState } from "../models/DarknetState";
 import { calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
-import { DarknetServer } from "../../Server/DarknetServer";
+import type { DarknetServer } from "../../Server/DarknetServer";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { ResponseStatus } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
@@ -205,7 +204,7 @@ export const getRandomOpenCoordinate = (maze: string[][]) => {
 
 export const handleLabyrinthPassword = (
   attemptedPassword: string,
-  server: BaseServer,
+  server: DarknetServer,
   threads: number,
   pid: number = -1,
 ): PasswordResponse => {
@@ -388,7 +387,7 @@ export const getLabyrinthDetails = (): {
   if (hasAugment(AugmentationName.TheSword)) {
     const data = labData[SpecialServers.FinalLab];
     return {
-      lab: getDarknetServerSafely(SpecialServers.FinalLab) ?? null,
+      lab: getDarknetServerSafely(SpecialServers.FinalLab),
       depth: data.depth,
       manual: false,
       mazeWidth: 10,

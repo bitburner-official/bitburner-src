@@ -74,8 +74,7 @@ export function GetDarknetServerOrThrow(serverId: string): DarknetServer {
   if (!server) {
     throw new Error(`Server ${serverId} does not exist.`);
   }
-  // WIP: check behavior after discussing darkweb
-  if (!isDarknetServer(server)) {
+  if (!(server instanceof DarknetServer)) {
     throw new Error(`Server ${serverId} is not a darknet server.`);
   }
   return server;
@@ -92,9 +91,10 @@ export function GetReachableServer(s: string): BaseServer | null {
 export function GetAllServers(showDarkweb = false): BaseServer[] {
   const servers: BaseServer[] = [];
   for (const key of Object.keys(AllServers)) {
-    if (showDarkweb || !isDarknetServer(AllServers[key])) {
-      servers.push(AllServers[key]);
+    if (!showDarkweb && AllServers[key] instanceof DarknetServer) {
+      continue;
     }
+    servers.push(AllServers[key]);
   }
   return servers;
 }

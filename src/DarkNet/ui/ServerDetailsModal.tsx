@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { Container, Card, SvgIcon, Typography, Tooltip } from "@mui/material";
-import { getIcon, Icon } from "./ServerIcon";
+import { getIcon } from "./ServerIcon";
 import { DarknetEvents, getServerState } from "../models/DarknetState";
-import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
 import { isLabyrinthServer } from "../effects/labyrinth";
@@ -11,12 +10,12 @@ import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
 import { sleep } from "../../utils/Utility";
-import { getDarknetDataOrThrow } from "../utils/darknetServerUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
   onClose: () => void;
-  server: BaseServer;
+  server: DarknetServer;
   classes: {
     [key: string]: string;
   };
@@ -38,18 +37,12 @@ export const ServerDetailsModal = ({
     };
   }, [rerender]);
 
-  const darknetData = getDarknetDataOrThrow(server);
-  if (!darknetData) {
-    console.warn(`ServerDetailsModal: server ${server.hostname} missing darknet data`);
-    return <></>;
-  }
-
-  const icon = getIcon(darknetData.icon ?? Icon.Terminal);
+  const icon = getIcon(server.icon);
   populateServerLogsWithNoise(server);
   const serverState = getServerState(server.hostname);
   const isLabServer = isLabyrinthServer(server.hostname);
   const recentLogs = serverState.serverLogs.slice(0, 5);
-  const ramBlock = darknetData.ramBlock;
+  const ramBlock = server.ramBlock;
   const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
   const usedRamString = formatToMaxDigits(server.ramUsed - ramBlock, 1);
   const serverRamString = `ram in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`;
@@ -84,7 +77,7 @@ export const ServerDetailsModal = ({
           <br />
           {server.hasAdminRights ? (
             <>
-              <Typography>Password: "{darknetData?.password ?? ""}"</Typography>
+              <Typography>Password: "{server.password}"</Typography>
               <br />
               {isLabServer && (
                 <>
@@ -93,7 +86,7 @@ export const ServerDetailsModal = ({
                 </>
               )}
               <Typography color="secondary">
-                {server.ip} cha:{darknetData?.requiredCharismaSkill}
+                {server.ip} cha:{server.requiredCharismaSkill}
               </Typography>
               <Tooltip
                 title={`Ram blocked by server owner: ${ramBlock} GB. Ram in use by scripts: ${
@@ -102,7 +95,7 @@ export const ServerDetailsModal = ({
               >
                 <Typography color="secondary">{serverRamString}</Typography>
               </Tooltip>
-              <Typography color="secondary">model:{darknetData?.modelId}</Typography>
+              <Typography color="secondary">model:{server.modelId}</Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>
                 <ServerSummary server={server} enableAuth={true} showDetails={true} classes={classes} />
@@ -111,7 +104,13 @@ export const ServerDetailsModal = ({
               <br />
             </>
           ) : (
-            <PasswordPrompt server={server} onClose={onClose} onSuccess={() => void onSuccess()} />
+            <PasswordPrompt
+              server={server}
+              onClose={onClose}
+              onSuccess={() => {
+                onSuccess().catch((error) => console.error(error));
+              }}
+            />
           )}
           {!isLabServer && (
             <>

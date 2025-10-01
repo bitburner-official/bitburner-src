@@ -36,15 +36,11 @@ export const getDarknetDataOrThrow = (server: BaseServer | null): DarknetServerD
 
 export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | null => {
   const server = GetServer(hostnameOrIp);
-  if (!server || !isDarknetServer(server)) {
+  if (!server || !(server instanceof DarknetServer)) {
     return null;
   }
   return server;
 };
 
-export const isImmutable = (server?: BaseServer | null) =>
-  !server ||
-  !isDarknetServer(server) ||
-  server === DarknetState.openServer ||
-  server.isConnectedTo ||
-  server.hasStasisLink;
+export const isImmutable = (server: DarknetServer) =>
+  server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;

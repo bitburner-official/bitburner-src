@@ -1,4 +1,3 @@
-import { BaseServer } from "../../Server/BaseServer";
 import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
 import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
 import { Result } from "@nsdefs";
@@ -6,7 +5,6 @@ import { PasswordResponse } from "../models/DarknetServerOptions";
 import { logPasswordAttempt } from "../models/packetSniffing";
 import { getServerState } from "../models/DarknetState";
 import { ModelIds, ResponseStatus } from "../Enums";
-import { isDarknetServer } from "../utils/darknetServerUtils";
 import {
   getExactCorrectChars,
   getExactCorrectCharsCount,
@@ -14,22 +12,15 @@ import {
   getGenericSuccess,
   getMisplacedCorrectCharsCount,
 } from "../utils/darknetAuthUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
 export const checkPassword = (
+  server: DarknetServer,
   attemptedPassword: string,
-  server: BaseServer,
   threads: number = 1,
   pid?: number,
   responseTime = 0,
 ): PasswordResponse => {
-  if (!isDarknetServer(server)) {
-    return {
-      status: ResponseStatus.AUTH_FAILURE,
-      message: "This server is not a darknet server",
-      passwordAttempted: attemptedPassword,
-    };
-  }
-
   if (isLabyrinthServer(server.hostname)) {
     return handleLabyrinthPassword(attemptedPassword, server, threads, pid);
   }
@@ -99,14 +90,14 @@ export const checkPassword = (
 };
 
 export const getAuthResult = (
+  server: DarknetServer,
   attemptedPassword: string,
-  server: BaseServer,
   threads = 1,
   responseTime = 0,
   pid = -1,
   logActivity = true,
 ): { result: Result; response: PasswordResponse } => {
-  const response = checkPassword(attemptedPassword, server, threads, pid, responseTime);
+  const response = checkPassword(server, attemptedPassword, threads, pid, responseTime);
   if (logActivity) {
     logPasswordAttempt(server, response);
   }
@@ -128,10 +119,7 @@ export const getAuthResult = (
   };
 };
 
-export const isAuthenticated = (server: BaseServer, pid: number): boolean => {
-  if (!isDarknetServer(server)) {
-    return true;
-  }
+export const isAuthenticated = (server: DarknetServer, pid: number): boolean => {
   const serverState = getServerState(server.hostname);
   return serverState.authenticatedPIDs.includes(pid);
 };

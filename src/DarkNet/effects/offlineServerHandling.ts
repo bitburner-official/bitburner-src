@@ -1,9 +1,9 @@
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { isAuthenticated } from "./authentication";
-import { getServer, helpers } from "../../Netscript/NetscriptHelpers";
+import { helpers } from "../../Netscript/NetscriptHelpers";
 import { errorMessage } from "../../Netscript/ErrorMessages";
-import { BaseServer } from "../../Server/BaseServer";
+import type { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { DarknetState } from "../models/DarknetState";
 import { ResponseStatus } from "../Enums";
@@ -22,7 +22,11 @@ type FailureResultOptions = {
 
 export const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
 
-export function expectDarknetAccess(ctx: NetscriptContext) {
+/**
+ * WIP-@fico: Why do some APIs not call this function? For example: authenticate, connectToSession, heartbleed,
+ * packetCapture.
+ */
+export function expectDarknetAccess(ctx: NetscriptContext): void {
   if (!hasDarknetAccess()) {
     throw errorMessage(
       ctx,
@@ -55,7 +59,7 @@ export function getFailureResult(
       throw errorMessage(ctx, result);
     }
   }
-  if (!isDarknetServer(targetServer)) {
+  if (!(targetServer instanceof DarknetServer)) {
     const result = `${targetServer.hostname} is not a darknet server.`;
     throw errorMessage(ctx, result);
   }
@@ -98,18 +102,27 @@ export function getFailureResult(
   };
 }
 
-export const isDirectConnected = (currentServer: BaseServer, targetServer: BaseServer): boolean =>
+export const isDirectConnected = (currentServer: BaseServer, targetServer: DarknetServer): boolean =>
   currentServer.serversOnNetwork.includes(targetServer.hostname) || currentServer.hostname === targetServer.hostname;
 
-export function expectDarknetServer(ctx: NetscriptContext, hostname: string) {
-  const targetServer = getServer(ctx, hostname);
-  if (!isDarknetServer(targetServer)) {
-    throw new Error(`${hostname} is not a darknet server`);
+/**
+ * This function should only be used to check if the script is running on a darknet server.
+ *
+ * Note that this function only checks the server with a simple check of "instanceof". It does not handle the offline
+ * cases like getFailureResult does. This is intentional. When a server goes offline, all scripts are killed. After
+ * that, accessing NS APIs will throw the ScriptDeath error. There is no way this function can be called.
+ */
+export function expectScriptRunningOnDarknetServer(ctx: NetscriptContext): DarknetServer {
+  const hostname = ctx.workerScript.hostname;
+  const targetServer = GetServer(hostname);
+  if (!(targetServer instanceof DarknetServer)) {
+    throw errorMessage(ctx, `${hostname} is not a darknet server`);
   }
   return targetServer;
 }
 
-export function expectAuthenticated(ctx: NetscriptContext, server: BaseServer) {
+export function expectAuthenticated(ctx: NetscriptContext, server: DarknetServer) {
+  // WIP
   if (
     !isDarknetServer(server) ||
     ctx.workerScript.hostname === server.hostname ||

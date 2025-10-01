@@ -50,5 +50,5 @@ export const applyOfflineWebstorm = () => {
 export const handleStormSeed = (server: BaseServer) => {
   server.programs = server.programs.filter((p) => p !== CompletedProgramName.stormSeed);
   DarknetState.lastStormTime = new Date();
-  void launchWebstorm();
+  launchWebstorm().catch((error) => console.error(error));
 };

@@ -25,7 +25,7 @@ import { getPhishingAttackSpeed, handlePhishingAttack } from "../DarkNet/effects
 import { handleRamBlockRemoved } from "../DarkNet/effects/ramblock";
 import {
   expectDarknetAccess,
-  expectDarknetServer,
+  expectScriptRunningOnDarknetServer,
   getFailureResult,
   getTimeoutChance,
   isDirectConnected,
@@ -135,7 +135,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           }
 
           const server = onlineConnectionCheck.server;
-          const authResult = getAuthResult(password, server, threads, networkDelay, ctx.workerScript.pid);
+          const authResult = getAuthResult(server, password, threads, networkDelay, ctx.workerScript.pid);
           const success = authResult.result.success;
           const xp = formatNumber(calculatePasswordAttemptChaGain(server, threads, success), 1);
           logger(ctx)(
@@ -179,7 +179,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         }
         const server = onlineConnectionCheck.server;
 
-        const result = checkPassword(token, server, 0, ctx.workerScript.pid);
+        const result = checkPassword(server, token, 0, ctx.workerScript.pid);
         if (result.status === ResponseStatus.SUCCESS) {
           logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
           addSessionToServer(server, ctx.workerScript.pid);
@@ -605,32 +605,50 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const delayTime = Math.max(8000 * (500 / (500 + Player.skills.charisma)), 200);
 
         return helpers.netscriptDelay(ctx, delayTime).then(() => {
-          return handleRamBlockRemoved(ctx, hostname);
+          /**
+           * WIP-@fico: I moved this block of code from handleRamBlockRemoved to here. I notice that the check here does
+           * not use requireSession like the check above. Is this intentional?
+           */
+          const onlineConnectionCheck = getFailureResult(ctx, hostname, { requireDirectConnection: true });
+          if (!onlineConnectionCheck.success) {
+            return helpers.netscriptDelay(ctx, 100).then(() => ({
+              success: false,
+              message: onlineConnectionCheck.message,
+            }));
+          }
+          const server = onlineConnectionCheck.server;
+          if (server.ramBlock <= 0) {
+            const result = `Server ${server.hostname} has no host-owned ram left to reallocate.`;
+            logger(ctx)(result);
+            return {
+              success: false,
+              message: result,
+            };
+          }
+          return handleRamBlockRemoved(ctx, server);
         });
       },
     getOwnerAllocatedRam:
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        expectScriptRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, hostname);
         if (!onlineConnectionCheck.success) {
           return 0;
         }
-        const server = onlineConnectionCheck.server;
-        expectDarknetServer(ctx, ctx.workerScript.hostname);
-        return server.ramBlock;
+        return onlineConnectionCheck.server.ramBlock;
       },
     getCurrentDepth:
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        expectScriptRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, hostname);
         if (!onlineConnectionCheck.success) {
           return -1;
         }
-        const server = onlineConnectionCheck.server;
-        expectDarknetServer(ctx, ctx.workerScript.hostname);
-        return server.depth;
+        return onlineConnectionCheck.server.depth;
       },
     promoteStock:
       (ctx: NetscriptContext) =>
@@ -638,7 +656,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const symbol = helpers.string(ctx, "symbol", _symbol);
         const stock = getStockFromSymbol(ctx, symbol);
         // WIP: Discuss with d0sboots
-        expectDarknetServer(ctx, ctx.workerScript.hostname);
+        expectScriptRunningOnDarknetServer(ctx);
         expectDarknetAccess(ctx);
 
         const waitTime = Math.max(8000 * (600 / (600 + Player.skills.charisma)), 200);
@@ -665,7 +683,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     phishingAttack: (ctx: NetscriptContext) => (): Promise<DarknetResult> => {
       const waitTime = getPhishingAttackSpeed();
       // WIP: Discuss with d0sboots
-      expectDarknetServer(ctx, ctx.workerScript.hostname);
+      expectScriptRunningOnDarknetServer(ctx);
       expectDarknetAccess(ctx);
 
       return helpers.netscriptDelay(ctx, waitTime).then(() => {

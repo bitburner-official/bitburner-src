@@ -1,16 +1,15 @@
 import React from "react";
 import { Container, SvgIcon, Tooltip, Typography } from "@mui/material";
-import { BaseServer } from "../../Server/BaseServer";
 import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
 import { RunningScript } from "../../Script/RunningScript";
 import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
 
-import { getDarknetData } from "../utils/darknetServerUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
 export type ServerSummaryProps = {
-  server: BaseServer;
+  server: DarknetServer;
   enableAuth: boolean;
   showDetails?: boolean;
   classes: {
@@ -31,7 +30,6 @@ export function ServerSummary({
     return <Typography color="secondary">(no connection)</Typography>;
   }
 
-  const darknetData = getDarknetData(server);
   const cacheCount = server.caches.length;
   const fileCount = server.textFiles.size + server.messages.length;
   const contractCount = server.contracts.length;
@@ -40,9 +38,9 @@ export function ServerSummary({
     .map((pidMap: Map<number, RunningScript>) => pidMap.size)
     .reduce((a, b) => a + b, 0);
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
-  const hasBackdoor = server.backdoorInstalled && !darknetData?.hasStasisLink;
-  const ramBlockedDetails = formatToMaxDigits(darknetData?.ramBlock ?? 0, 2) + "GB";
-  const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(darknetData?.ramBlock ?? 0, 0);
+  const hasBackdoor = server.backdoorInstalled && !server.hasStasisLink;
+  const ramBlockedDetails = formatToMaxDigits(server.ramBlock, 2) + "GB";
+  const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.ramBlock, 0);
 
   const runningScriptsComponent = (
     <Tooltip key="runningScript" title={<>Running scripts on server: {runningScriptCount}</>}>
@@ -102,13 +100,11 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  if (darknetData?.ramBlock) {
+  if (server.ramBlock) {
     components.push(
       <Tooltip
         key="ramBlocked"
-        title={
-          <>Ram blocked by owner: {ramBlockedDetails}. This can be freed up using dnet.influence.memoryReallocation()</>
-        }
+        title={<>Ram blocked by owner: {ramBlockedDetails}. This can be freed up using ns.dnet.memoryReallocation()</>}
       >
         <Typography color={"secondary"}>
           <SvgIcon component={LockPerson} className={classes.serverStatusIcon} />

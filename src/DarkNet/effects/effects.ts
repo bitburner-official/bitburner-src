@@ -2,7 +2,6 @@ import { Player } from "@player";
 import { DarknetServer as IDarknetServer, Person as IPerson } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import { generateContract } from "../../CodingContract/ContractGenerator";
-import { BaseServer } from "../../Server/BaseServer";
 import {
   commonPasswordDictionary,
   notebookFileNames,
@@ -15,7 +14,7 @@ import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
 import { clampNumber } from "../../utils/helpers/clampNumber";
-import { DarknetServer } from "../../Server/DarknetServer";
+import type { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
@@ -24,11 +23,11 @@ import { getDarknetData, getDarknetServerSafely, isDarknetServer } from "../util
 import {
   getAllMobileDarknetServers,
   getBackdooredDarkwebServers,
-  getRandomNearbyServer,
+  getNearbyNonEmptyPasswordServer,
 } from "../utils/darknetNetworkUtils";
 import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 
-export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
+export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number = -1) => {
   if (!threads) return;
 
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
@@ -38,21 +37,20 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: n
 
   server.hasAdminRights = true;
   addClue(server);
-  const darknetData = getDarknetData(server);
 
   // TODO: balance coding contract chance
-  if (Math.random() < 0.1 && (darknetData?.difficulty ?? 0) > 2) {
+  if (Math.random() < 0.1 && server.difficulty > 2) {
     generateContract({ server: server.hostname });
   }
 
   // TODO: balance cache chance
-  const chance = 0.1 * 1.05 ** (darknetData?.difficulty ?? 1);
+  const chance = 0.1 * 1.05 ** server?.difficulty;
   if (Math.random() < chance) {
     addCacheToServer(server);
   }
 };
 
-export const handleFailedAuth = (server: BaseServer, threads: number) => {
+export const handleFailedAuth = (server: DarknetServer, threads: number) => {
   // TODO: chance to sever connection or crash script
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, false));
 };
@@ -119,7 +117,7 @@ export const getBackdoorAuthTimeDebuff = () => {
   return 1.07 ** backdoorSurplus;
 };
 
-export const handleRamBlockClearedRewards = (server: BaseServer) => {
+export const handleRamBlockClearedRewards = (server: DarknetServer) => {
   addCacheToServer(server);
   if (Math.random() < 0.3) {
     addClue(server);
@@ -146,7 +144,7 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
 };
 
 // TODO: balance xp gain
-export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: number = 1, success = false) => {
+export const calculatePasswordAttemptChaGain = (server: DarknetServer, threads: number = 1, success = false) => {
   if (!isDarknetServer(server) || !threads) return 0;
   const baseXpGain = 3;
   const difficultyBase = 1.12;
@@ -158,9 +156,7 @@ export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: num
 };
 
 // TODO: balance password clue spawn rate
-const addClue = (server: BaseServer) => {
-  if (!isDarknetServer(server)) return;
-
+const addClue = (server: DarknetServer) => {
   // Basic mechanics hints
   if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
@@ -183,7 +179,7 @@ const addClue = (server: BaseServer) => {
     const passwordHintName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
     const neighboringServerName = server.serversOnNetwork.find((s) => {
       const server = getDarknetServerSafely(s);
-      return server && !server?.hasAdminRights && server.password;
+      return server && !server.hasAdminRights && server.password;
     });
     const neighboringServer = neighboringServerName ? getDarknetServerSafely(neighboringServerName) : null;
     if (neighboringServer) {
@@ -195,9 +191,9 @@ const addClue = (server: BaseServer) => {
   // non-connected nearby server's password (includes server name)
   if (Math.random() < 0.1) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
-    const targetServer = getRandomNearbyServer(server, true);
-    if (targetServer && isDarknetServer(targetServer)) {
-      const contents = `Server: ${targetServer?.hostname} Password: "${targetServer?.password}"`;
+    const targetServer = getNearbyNonEmptyPasswordServer(server, true);
+    if (targetServer) {
+      const contents = `Server: ${targetServer.hostname} Password: "${targetServer.password}"`;
       server.writeToTextFile(hintFileName as TextFilePath, contents);
       return;
     }
@@ -212,8 +208,8 @@ const addClue = (server: BaseServer) => {
 
   if (Math.random() < 0.7) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
-    const targetServer = getRandomNearbyServer(server);
-    if (targetServer && isDarknetServer(targetServer) && targetServer.password) {
+    const targetServer = getNearbyNonEmptyPasswordServer(server);
+    if (targetServer) {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);
       const hint = `The password for ${targetServer.hostname} contains ${containedChar1} and ${containedChar2}`;
       server.writeToTextFile(hintFileName as TextFilePath, hint);
@@ -222,10 +218,9 @@ const addClue = (server: BaseServer) => {
   }
 };
 
-export const getRamBlockRemoved = (server: BaseServer, threads: number = 1, player: IPerson = Player) => {
-  const darknetData = getDarknetData(server);
-  const difficulty = darknetData?.difficulty ?? 1;
-  const remainingRamBlock = darknetData?.ramBlock ?? 0;
+export const getRamBlockRemoved = (server: DarknetServer, threads: number = 1, player: IPerson = Player) => {
+  const difficulty = server.difficulty;
+  const remainingRamBlock = server.ramBlock;
   const charismaFactor = 1 + player.skills.charisma / 100;
   const difficultyFactor = 2 * 0.92 ** (difficulty + 1);
   const baseAmount = 0.02;

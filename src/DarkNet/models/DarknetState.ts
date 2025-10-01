@@ -1,11 +1,10 @@
 import { EventEmitter } from "../../utils/EventEmitter";
 import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
-import { DarknetServer } from "../../Server/DarknetServer";
+import type { DarknetServer } from "../../Server/DarknetServer";
 import { MAX_NET_DEPTH, NET_WIDTH } from "../Enums";
 
 import { getDarknetCyclesPerMutation } from "../utils/darknetNetworkUtils";
-import { isDarknetServer } from "../utils/darknetServerUtils";
 
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
@@ -47,16 +46,14 @@ export const getServerState = (hostname: string): serverState => {
   return DarknetState.serverState[hostname];
 };
 
-export const addSessionToServer = (server: BaseServer, pid: number) => {
-  if (!isDarknetServer(server)) return;
+export const addSessionToServer = (server: DarknetServer, pid: number) => {
   const serverState = getServerState(server.hostname);
   removeExpiredSessions(server);
   if (serverState.authenticatedPIDs.includes(pid)) return;
   serverState.authenticatedPIDs.push(pid);
 };
 
-const removeExpiredSessions = (server: BaseServer) => {
-  if (!isDarknetServer(server)) return;
+const removeExpiredSessions = (server: DarknetServer) => {
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = serverState.authenticatedPIDs.filter((pid) => findRunningScriptByPid(pid));
 };

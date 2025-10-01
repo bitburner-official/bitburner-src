@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { Box, Button, Container, Typography, SvgIcon } from "@mui/material";
 import { ServerDetailsModal } from "./ServerDetailsModal";
-import { getIcon, Icon } from "./ServerIcon";
-import { BaseServer } from "../../Server/BaseServer";
+import { getIcon } from "./ServerIcon";
 import { DarknetState } from "../models/DarknetState";
 import { getPixelPosition } from "./networkCanvas";
 import { ServerSummary } from "./ServerSummary";
 
-import { getDarknetData } from "../utils/darknetServerUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
 
 export type DWServerProps = {
-  server: BaseServer;
+  server: DarknetServer;
   enableAuth: boolean;
   classes: {
     [key: string]: string;
@@ -19,9 +18,8 @@ export type DWServerProps = {
 
 export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const darknetData = getDarknetData(server);
-  const color = darknetData?.hasStasisLink ? classes.goldBorder : server.hasAdminRights ? classes.green : classes.grey;
-  const icon = getIcon(darknetData?.icon ?? Icon.Terminal);
+  const color = server.hasStasisLink ? classes.goldBorder : server.hasAdminRights ? classes.green : classes.grey;
+  const icon = getIcon(server.icon);
 
   const authButtonHandler = () => {
     DarknetState.openServer = server;
@@ -33,7 +31,7 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
     setOpen(false);
   };
 
-  const getServerPositionStyles = (server: BaseServer) => {
+  const getServerPositionStyles = (server: DarknetServer) => {
     const position = getPixelPosition(server);
     return {
       top: `${position.top}px`,
@@ -58,7 +56,7 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
             </Typography>
           </Box>
           <Typography color="secondary" className={classes.ip}>
-            {server.ip} cha:{darknetData?.requiredCharismaSkill ?? 0}
+            {server.ip} cha:{server.requiredCharismaSkill}
           </Typography>
           <br />
           <ServerSummary server={server} enableAuth={enableAuth} classes={classes} />
