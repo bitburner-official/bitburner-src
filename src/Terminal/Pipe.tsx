@@ -40,6 +40,8 @@ function handlePipe(): void {
     return TerminalEvents.emit();
   }
 
+  // TODO: pipe to script file?
+
   // TODO: test piping to script
   if (hasScriptExtension(command)) {
     handlePipeToScript(parsedCommand);
@@ -68,26 +70,32 @@ function advancePipe() {
 }
 
 export function parsePipes(commandString: string) {
-  if (!commandString.includes("|") && !commandString.includes(">")) {
+  const pipeRegex = /(>>)|[|>]/g;
+  const match = pipeRegex.exec(commandString);
+  if (!match) {
     return null;
   }
-
-  const commands = commandString.split(/[|>]/).slice(1);
+  const command = commandString.split(pipeRegex)[0].trim();
 
   return {
-    pipeChain: buildPipeChain(commands),
-    firstCommand: commandString.split(/[|>]/)[0].trim(),
+    firstCommand: command,
+    pipeChain: buildPipeChain(commandString.slice(match.index - 1)),
   };
 }
 
-function buildPipeChain(commands: string[]): PipedCommand | null {
-  if (commands.length === 0) {
-    return null;
-  }
+function buildPipeChain(commandString: string): PipedCommand | null {
+  const pipeRegex = /(>>)|[|>]/g;
+  const match = pipeRegex.exec(commandString);
+  if (!match) return null;
+
+  const commandStringWithoutLeadingPipe = commandString.slice(match.index + match[0].length).trim();
+  const nextCommand = commandStringWithoutLeadingPipe.split(pipeRegex)[0].trim();
+  const remainingCommandString = commandStringWithoutLeadingPipe.slice(nextCommand.length).trim();
 
   return {
-    commandString: commands[0].trim(),
-    nextPipe: buildPipeChain(commands.slice(1)),
+    commandString: nextCommand,
+    pipeType: match[0],
+    nextPipe: buildPipeChain(remainingCommandString),
   };
 }
 
@@ -114,8 +122,11 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
 
   const file = Terminal.getTextFile(command);
   const output = Terminal.outputToBeProcessed.map((o) => stringify(o, true)).join("\n");
-  if (file) {
+  const overwrite = Terminal.currentTerminalPipe?.pipeType === ">";
+  if (file && !overwrite) {
     file.text += `${file.text ? "\n" : ""}${output}`;
+  } else if (file && overwrite) {
+    file.text = output;
   } else {
     const newFile = new TextFile(command as TextFilePath, output);
     Player.getCurrentServer().textFiles.set(command as TextFilePath, newFile);

@@ -693,8 +693,8 @@ export class Terminal {
 
     if (!this.currentTerminalPipe) {
       const result = parsePipes(commandString);
-      this.currentTerminalPipe = result?.pipeChain ?? null;
-      command = result?.firstCommand ?? commandString;
+      this.currentTerminalPipe = result?.pipeChain || null;
+      command = result?.firstCommand || commandString;
     }
 
     const commandArray = parseCommand(command);
@@ -890,6 +890,7 @@ function findSimilarCommands(command: string): string[] {
 
 export type PipedCommand = {
   commandString: string;
+  pipeType: string;
   nextPipe: PipedCommand | null;
 };
 
