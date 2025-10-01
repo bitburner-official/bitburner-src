@@ -42,7 +42,7 @@ export function getFailureResult(
   // If the target server does not exist
   if (!targetServer) {
     if (DarknetState.offlineServers.includes(hostname)) {
-      // If the server is offline, return error object .
+      // If the server is offline, return error object.
       const result = `Target server ${hostname} is offline.`;
       logger(ctx)(result);
       return {

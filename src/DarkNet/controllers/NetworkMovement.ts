@@ -16,13 +16,20 @@ import {
   getIslands,
 } from "../utils/darknetNetworkUtils";
 import { getDarknetData, isDarknetServer, isImmutable } from "../utils/darknetServerUtils";
+import { DarknetConstants } from "../Constants";
 
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);
-  const cyclesPerUpdate = getDarknetCyclesPerMutation();
 
-  if (DarknetState.cyclesSinceLastMutation > cyclesPerUpdate) {
-    DarknetState.storedCycles = Math.max(0, DarknetState.storedCycles - cyclesPerUpdate * 3);
+  if (DarknetState.storedCycles < DarknetConstants.MinCyclesToProcess) {
+    return;
+  }
+
+  const cyclesToProcess = Math.min(DarknetState.storedCycles, DarknetConstants.MaxCyclesToProcess);
+  DarknetState.storedCycles -= cyclesToProcess;
+
+  const cyclesPerMutation = getDarknetCyclesPerMutation();
+  if (DarknetState.cyclesSinceLastMutation > cyclesPerMutation) {
     DarknetState.cyclesSinceLastMutation = 0;
     mutateDarknet();
   }
