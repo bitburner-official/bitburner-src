@@ -88,7 +88,7 @@ import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { parsePipes } from "./Pipe";
+import { PipedCommand, ScriptPipe, splitPipesFromFirstCommand } from "./Pipe";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -686,18 +686,10 @@ export class Terminal {
     this.clear();
   }
 
-  executeCommand(commandString: string): void {
-    if (this.action !== null)
-      return this.error(`Cannot execute command (${commandString}) while an action is in progress`);
-    let command = commandString.trim();
+  executeCommand(command: string): void {
+    if (this.action !== null) return this.error(`Cannot execute command (${command}) while an action is in progress`);
 
-    if (!this.currentTerminalPipe) {
-      const result = parsePipes(commandString);
-      this.currentTerminalPipe = result?.pipeChain || null;
-      command = result?.firstCommand || commandString;
-    }
-
-    const commandArray = parseCommand(command);
+    const commandArray = parseCommand(splitPipesFromFirstCommand(command));
     if (!commandArray.length) return;
 
     const currentServer = Player.getCurrentServer();
@@ -887,14 +879,3 @@ function findSimilarCommands(command: string): string[] {
   const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
   return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }
-
-export type PipedCommand = {
-  commandString: string;
-  pipeType: string;
-  nextPipe: PipedCommand | null;
-};
-
-export type ScriptPipe = {
-  pipe: PipedCommand;
-  output: (Output | Link | RawOutput)[];
-};

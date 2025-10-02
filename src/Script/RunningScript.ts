@@ -18,7 +18,7 @@ import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
-import { PipedCommand } from "../Terminal/Terminal";
+import { PipedCommand } from "../Terminal/Pipe";
 
 export class RunningScript {
   // Script arguments
