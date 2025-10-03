@@ -22,37 +22,37 @@ describe("DarkWebServer Tests", () => {
   test("getEchoVulnServer creates a server and checks password correctly", () => {
     const server = serverFactory(getEchoVulnConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword("wrongPassword", server);
+    const failedAttemptResponse = checkPassword(server, "wrongPassword");
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(failedAttemptResponse.message.includes(server.password)).toBe(true);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getNoPasswordServer creates a server with no password", () => {
     const server = serverFactory(getNoPasswordConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword("wrongPassword", server);
+    const failedAttemptResponse = checkPassword(server, "wrongPassword");
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getDefaultPasswordServer creates a server with default password", () => {
     const server = serverFactory(getDefaultPasswordConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword("wrongPassword", server);
+    const failedAttemptResponse = checkPassword(server, "wrongPassword");
 
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
 
     expect(defaultSettingsDictionary.includes(server.password)).toBe(true);
 
-    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -66,10 +66,13 @@ describe("DarkWebServer Tests", () => {
       console.log(DarknetState.serverState, server.hostname);
       const responseLog = DarknetState.serverState[server.hostname].serverLogs.slice(0, 1)[0];
       const feedback = JSON.parse(responseLog) as PasswordResponse;
+      if (!feedback.data) {
+        throw new Error(`Invalid responseLog: ${responseLog}`);
+      }
       return feedback.data.split(",").map((item) => item.trim());
     };
 
-    const failedAttemptResponse1 = getAuthResult("", server);
+    const failedAttemptResponse1 = getAuthResult(server, "");
     expect(failedAttemptResponse1.response.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
 
@@ -77,25 +80,25 @@ describe("DarkWebServer Tests", () => {
     expect(correctCount1).toBe("0");
     expect(closeCount1).toBe("0");
 
-    const failedAttemptResponse2 = getAuthResult("123", server);
+    const failedAttemptResponse2 = getAuthResult(server, "123");
     expect(failedAttemptResponse2.response.status).toBe(ResponseStatus.AUTH_FAILURE);
     const [correctCount2, closeCount2] = getData();
     expect(correctCount2).toBe("1");
     expect(closeCount2).toBe("2");
 
-    const failedAttemptResponse3 = getAuthResult("11111111", server);
+    const failedAttemptResponse3 = getAuthResult(server, "11111111");
     expect(failedAttemptResponse3.response.status).toBe(ResponseStatus.AUTH_FAILURE);
     const [correctCount3, closeCount3] = getData();
     expect(correctCount3).toBe("2");
     expect(closeCount3).toBe("0");
 
-    const failedAttemptResponse4 = getAuthResult("1122334", server);
+    const failedAttemptResponse4 = getAuthResult(server, "1122334");
     expect(failedAttemptResponse4.response.status).toBe(ResponseStatus.AUTH_FAILURE);
     const [correctCount4, closeCount4] = getData();
     expect(correctCount4).toBe("6");
     expect(closeCount4).toBe("1");
 
-    const failedAttemptResponse5 = getAuthResult("22114333", server);
+    const failedAttemptResponse5 = getAuthResult(server, "22114333");
     expect(failedAttemptResponse5.response.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
     const [correctCount5, closeCount5] = getData();
@@ -103,29 +106,32 @@ describe("DarkWebServer Tests", () => {
     expect(closeCount5).toBe("6");
 
     server.password = "2435";
-    const failedAttemptResponse6 = getAuthResult("3423", server);
+    const failedAttemptResponse6 = getAuthResult(server, "3423");
     expect(failedAttemptResponse6.response.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
     const [correctCount6, closeCount6] = getData();
     expect(correctCount6).toBe("1");
     expect(closeCount6).toBe("2");
 
-    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test(" getConvertToBase10Server creates a server with a correct password hint", () => {
     const server = serverFactory(getConvertToBase10Config, 5, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword("wrongPassword", server);
+    const failedAttemptResponse = checkPassword(server, "wrongPassword");
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
+    if (!failedAttemptResponse.data) {
+      throw new Error("Invalid failedAttemptResponse");
+    }
     const [base, numberString] = failedAttemptResponse.data.split(",");
 
-    expect(numberString).toBe(encodeNumberInBaseN(+server.password, base));
+    expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
-    const attemptedPassword = parseBaseNNumberString(numberString, base);
+    const attemptedPassword = parseBaseNNumberString(numberString, Number(base));
 
-    const result = checkPassword(`${attemptedPassword}`, server);
+    const result = checkPassword(server, `${attemptedPassword}`);
 
     expect(result.status).toBe(ResponseStatus.SUCCESS);
   });
