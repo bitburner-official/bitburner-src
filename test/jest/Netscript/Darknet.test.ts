@@ -133,13 +133,13 @@ describe("home", () => {
     const ns = getNsOnHome();
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toThrow("home is not a darknet server");
+    }).rejects.toContain("home is not a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNsOnHome();
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toThrow("home is not a darknet server");
+    }).rejects.toContain("home is not a darknet server");
   });
 });
 
@@ -190,7 +190,7 @@ describe("darkweb", () => {
   });
   test("openCache", () => {
     const ns = getNsOnDarkWeb();
-    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+    const darkweb = GetDarknetServerOrThrow(SpecialServers.DarkWeb);
     const result = addCacheToServer(darkweb, "test");
     if (!result.success) {
       throw new Error("Cannot add cache");
@@ -297,7 +297,7 @@ describe("Non-darkweb darknet server", () => {
   });
   test("openCache", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = addCacheToServer(GetServerOrThrow(ns.getHostname()), "test.cache");
+    const result = addCacheToServer(GetDarknetServerOrThrow(ns.getHostname()), "test.cache");
     if (!result.success) {
       throw new Error(result.message);
     }

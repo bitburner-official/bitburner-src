@@ -9,7 +9,7 @@ import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
 import { hasContractExtension } from "../../../Paths/ContractFilePath";
 
-import { hasCacheFileExtension } from "../../../DarkNet/effects/cacheFiles";
+import { hasCacheExtension } from "../../../Paths/CacheFilePath";
 
 interface EditorParameters {
   args: (string | number | boolean)[];
@@ -59,7 +59,7 @@ export function commonEditor(
     const path = Terminal.getFilepath(pattern);
     if (!path) return Terminal.error(`Invalid file path ${arg}`);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-      const hint = hasContractExtension(path) || hasCacheFileExtension(path) ? " (Try using 'run')" : "";
+      const hint = hasContractExtension(path) || hasCacheExtension(path) ? " (Try using 'run')" : "";
       return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`);
     }
     if (isLegacyScript(path)) {

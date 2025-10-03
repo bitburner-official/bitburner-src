@@ -42,9 +42,6 @@ interface writeResult {
 
 /** Abstract Base Class for any Server object */
 export abstract class BaseServer implements IServer {
-  // Random reward caches on this server
-  caches: FilePath[] = [];
-
   // Coding Contract files on this server
   contracts: CodingContract[] = [];
 

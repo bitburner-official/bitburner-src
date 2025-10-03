@@ -10,7 +10,6 @@ import {
   getStasisLinkLimit,
 } from "../DarkNet/effects/effects";
 import { Player } from "@player";
-import type { FilePath } from "../Paths/FilePath";
 import { formatNumber } from "../ui/formatNumber";
 import { GetServer } from "../Server/AllServers";
 import { capturePackets } from "../DarkNet/models/packetSniffing";
@@ -33,10 +32,11 @@ import {
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
 import { exampleDarknetServer, ResponseStatus } from "../DarkNet/Enums";
-import { getRewardFromCache, hasCacheFileExtension } from "../DarkNet/effects/cacheFiles";
+import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getDarknetData } from "../DarkNet/utils/darknetServerUtils";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
+import { resolveCacheFilePath } from "../Paths/CacheFilePath";
 
 export type DarknetResult = { success: boolean; message: string };
 
@@ -290,19 +290,20 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (_fileName, _suppressToast): void => {
         const fileName = helpers.string(ctx, "fileName", _fileName);
         const suppressToast = _suppressToast ? helpers.boolean(ctx, "suppressToast", _suppressToast) : false;
+        const server = expectScriptRunningOnDarknetServer(ctx);
         expectDarknetAccess(ctx);
 
-        if (!hasCacheFileExtension(fileName)) {
-          throw new Error(`Invalid cache file. (File must end in .cache) : ${fileName}`);
+        const path = resolveCacheFilePath(fileName);
+        if (!path) {
+          throw helpers.errorMessage(ctx, `Invalid cache file. (File must end in .cache) : ${fileName}`);
         }
-        const currentServer = ctx.workerScript.getServer();
-        const hasCacheFile = currentServer.caches.includes(fileName as FilePath);
+        const hasCacheFile = server.caches.includes(path);
         if (!hasCacheFile) {
-          throw new Error(`Cache file not found: ${fileName} on server ${currentServer.hostname}`);
+          throw helpers.errorMessage(ctx, `Cache file not found: ${fileName} on server ${server.hostname}`);
         }
 
-        currentServer.caches = currentServer.caches.filter((cache) => cache !== fileName);
-        const result = getRewardFromCache(currentServer, suppressToast);
+        server.caches = server.caches.filter((cache) => cache !== fileName);
+        const result = getRewardFromCache(server, suppressToast);
         logger(ctx)(`Data file ${fileName} opened. ${result}`);
       },
     probe:
@@ -683,11 +684,11 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     phishingAttack: (ctx: NetscriptContext) => (): Promise<DarknetResult> => {
       const waitTime = getPhishingAttackSpeed();
       // WIP: Discuss with d0sboots
-      expectScriptRunningOnDarknetServer(ctx);
+      const server = expectScriptRunningOnDarknetServer(ctx);
       expectDarknetAccess(ctx);
 
       return helpers.netscriptDelay(ctx, waitTime).then(() => {
-        return handlePhishingAttack(ctx);
+        return handlePhishingAttack(ctx, server);
       });
     },
     getCurrentDarknetInstability: () => () => {

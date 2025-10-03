@@ -12,6 +12,7 @@ import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
 import { TerminalCommands } from "./Terminal";
+import { DarknetServer } from "../Server/DarknetServer";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -93,7 +94,6 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   const addCodingContracts = () => {
     addGeneric({ iterable: currServ.contracts.map((contract) => contract.fn), usePathing: true });
   };
-  const addCaches = () => addGeneric({ iterable: currServ.caches, usePathing: true });
 
   const addLiterature = () => {
     addGeneric({ iterable: currServ.messages.filter((message) => message.endsWith(".lit")), usePathing: true });
@@ -236,7 +236,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg) {
         addPrograms();
         addCodingContracts();
-        addCaches();
+        if (currServ instanceof DarknetServer) {
+          addGeneric({ iterable: currServ.caches, usePathing: true });
+        }
         addScripts();
       } else {
         const options = await scriptAutocomplete();

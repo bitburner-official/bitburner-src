@@ -1,7 +1,6 @@
 import { tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
 import { Player } from "@player";
 import { formatMoney, formatNumber } from "../../ui/formatNumber";
-import { BaseServer } from "../../Server/BaseServer";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { CompletedProgramName, ToastVariant } from "@enums";
@@ -9,20 +8,16 @@ import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { cachePrefixes } from "../models/dictionaryData";
-import { FilePath, resolveFilePath } from "../../Paths/FilePath";
 import type { Result } from "../../types";
-import { getDarknetData } from "../utils/darknetServerUtils";
+import type { DarknetServer } from "../../Server/DarknetServer";
+import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
 
-export const hasCacheFileExtension = (path: string) => {
-  return path.endsWith(".cache");
-};
-
-export const addCacheToServer: (server: BaseServer, filename?: string) => Result<{ cacheFilename: FilePath }> = (
-  server,
-  filename,
-) => {
+export const addCacheToServer: (
+  server: DarknetServer,
+  filename?: string,
+) => Result<{ cacheFilename: CacheFilePath }> = (server, filename) => {
   const prefix = filename ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
-  const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
+  const cacheFilename = resolveCacheFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache`);
   if (!cacheFilename) {
     return { success: false, message: `Cannot generate path. filename: ${filename}` };
   }
@@ -30,9 +25,8 @@ export const addCacheToServer: (server: BaseServer, filename?: string) => Result
   return { success: true, cacheFilename };
 };
 
-export const getRewardFromCache = (server: BaseServer, suppressToast = false): string => {
-  const darknetData = getDarknetData(server);
-  const difficulty = darknetData?.difficulty ?? 1;
+export const getRewardFromCache = (server: DarknetServer, suppressToast = false): string => {
+  const difficulty = server.difficulty;
   const karmaLoss = (difficulty + 1) * 2;
   Player.karma -= karmaLoss;
   if (isLabyrinthServer(server.hostname)) {
@@ -117,7 +111,7 @@ export const getNextPortOpener = (difficulty: number, karmaLoss: number, suppres
   return getXpReward(difficulty, karmaLoss);
 };
 
-const getLabReward = (server: BaseServer, suppressToast = false) => {
+const getLabReward = (server: DarknetServer, suppressToast = false) => {
   const labDetails = getLabyrinthDetails();
   if (!labDetails.augReward) {
     getRewardFromCache(server, suppressToast);

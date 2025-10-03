@@ -438,7 +438,7 @@ export class Terminal {
       this.finishBackdoor(this.action.server, cancelled);
     } else if (this.action.action === "a") {
       this.finishAnalyze(this.action.server, cancelled);
-    } else if (this.action.action === "c") {
+    } else if (this.action.action === "c" && this.action.server instanceof DarknetServer) {
       this.action.server.caches.pop();
       this.print(getRewardFromCache(this.action.server, true));
     }

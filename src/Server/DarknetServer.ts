@@ -5,8 +5,11 @@ import { DarknetServer as IDarknetServer } from "@nsdefs";
 import { DarknetServerData } from "../DarkNet/models/DarknetServerOptions";
 import { exampleDarknetServer } from "../DarkNet/Enums";
 import { createRandomIp } from "../utils/IPAddress";
+import type { CacheFilePath } from "../Paths/CacheFilePath";
 
 export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {
+  /** Random reward caches on this server */
+  caches: CacheFilePath[] = [];
   /** The icon of the server, used for display */
   icon: Icon | typeof labIcon;
   /** Indicates if the server is online */

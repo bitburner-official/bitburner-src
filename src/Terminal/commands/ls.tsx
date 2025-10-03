@@ -26,6 +26,8 @@ import {
 import { isMember } from "../../utils/EnumHelper";
 import { Settings } from "../../Settings/Settings";
 import { formatBytes, formatRam } from "../../ui/formatNumber";
+import { DarknetServer } from "../../Server/DarknetServer";
+import type { CacheFilePath } from "../../Paths/CacheFilePath";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   enum FileType {
@@ -95,7 +97,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   const allScripts: ScriptFilePath[] = [];
   const allTextFiles: TextFilePath[] = [];
   const allContracts: ContractFilePath[] = [];
-  const allCaches: FilePath[] = [];
+  const allCaches: CacheFilePath[] = [];
   const allMessages: FilePath[] = [];
   const folders: Directory[] = [];
 
@@ -123,7 +125,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   for (const scriptFilename of server.scripts.keys()) handlePath(scriptFilename, allScripts);
   for (const txtFilename of server.textFiles.keys()) handlePath(txtFilename, allTextFiles);
   for (const contract of server.contracts) handlePath(contract.fn, allContracts);
-  for (const cache of server.caches) handlePath(cache, allCaches);
+  if (server instanceof DarknetServer) {
+    for (const cache of server.caches) handlePath(cache, allCaches);
+  }
   for (const msgOrLit of server.messages) handlePath(msgOrLit as FilePath, allMessages);
 
   // Sort the files/folders alphabetically then print each
@@ -146,6 +150,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     allScripts.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Script }));
     allPrograms.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Program }));
     allContracts.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Contract }));
+    allCaches.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Cache }));
 
     for (const item of allDisplayableItems) {
       const { ramDisplay, sizeDisplay } = getItemNumericData(item.path, item.type);
