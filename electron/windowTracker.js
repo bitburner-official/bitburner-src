@@ -4,7 +4,6 @@ const log = require("electron-log");
 const debounce = require("lodash/debounce");
 const Store = require("electron-store");
 const store = new Store();
-const storage = require("./storage");
 
 // https://stackoverflow.com/a/68627253
 const windowTracker = (windowName) => {
@@ -14,8 +13,6 @@ const windowTracker = (windowName) => {
     // Restore from appConfig
     if (store.has(`window.${windowName}`)) {
       windowState = store.get(`window.${windowName}`);
-      windowState.autoHideMenuBar = storage.isMenuHideEnabled();
-
       return;
     }
 
@@ -28,7 +25,6 @@ const windowTracker = (windowName) => {
       width: size.width,
       height: size.height,
       isMaximized: true,
-      autoHideMenuBar: false,
     };
   };
 
@@ -64,7 +60,6 @@ const windowTracker = (windowName) => {
       width: windowState.width,
       height: windowState.height,
       isMaximized: windowState.isMaximized,
-      autoHideMenuBar: windowState.autoHideMenuBar ?? true,
     },
     track,
   };
