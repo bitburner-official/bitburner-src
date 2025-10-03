@@ -218,6 +218,9 @@ function getMenu(window) {
           })(),
         },
         {
+          type: "separator",
+        },
+        {
           label: "Zoom In",
           enabled: canZoomIn,
           accelerator: "CommandOrControl+numadd",
@@ -258,6 +261,9 @@ function getMenu(window) {
           visible: false,
           acceleratorWorksWhenHidden: true,
           click: resetZoom,
+        },
+        {
+          type: "separator",
         },
         {
           label: "Autohide top menu",
