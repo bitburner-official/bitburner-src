@@ -3,6 +3,7 @@ import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { Player, setPlayer } from "@player";
 import { BlackOperation, Contract, GeneralAction, Operation } from "../../../src/Bladeburner/Actions";
 import {
+  AugmentationName,
   BladeburnerActionType,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
@@ -15,6 +16,8 @@ import { CrimeWork } from "../../../src/Work/CrimeWork";
 import type { Action, ActionIdentifier } from "../../../src/Bladeburner/Types";
 import type { Skills } from "@nsdefs";
 import { BlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
+import { applyAugmentation } from "../../../src/Augmentation/AugmentationHelpers";
+import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 
 describe("Bladeburner Actions", () => {
   const SampleContract = Contract.createId(BladeburnerContractName.Tracking);
@@ -24,6 +27,7 @@ describe("Bladeburner Actions", () => {
 
   const ENOUGH_TIME_TO_FINISH_ACTION = 1e5;
   const BASE_STAT_EXP = 1e6;
+  const HIGH_CHAOS = 1e12;
 
   let bb: Bladeburner;
 
@@ -83,26 +87,30 @@ describe("Bladeburner Actions", () => {
 
       it("mildly reduces chaos in the current city", () => {
         allCitiesHighChaos();
-        let { chaos } = bb.getCurrentCity();
+        const { chaos } = bb.getCurrentCity();
         complete(diplomacy);
         expect(bb.getCurrentCity().chaos).toBeGreaterThan(chaos * 0.9);
         expect(bb.getCurrentCity().chaos).toBeLessThan(chaos);
       });
 
       it("effect scales significantly with player charisma", () => {
-        Player.gainCharismaExp(1e500);
+        gainHighCharismaLevel();
         allCitiesHighChaos();
         complete(diplomacy);
-        expect(bb.getCurrentCity().chaos).toBe(0);
+        expect(bb.getCurrentCity().chaos).toStrictEqual(0);
       });
 
       it("does NOT affect chaos in other cities", () => {
-        const otherCity = <CityName>cities.find((c) => c !== bb.getCurrentCity().name);
+        const otherCity = cities.find((c) => c !== bb.getCurrentCity().name);
+        if (!otherCity) {
+          throw new Error("Invalid otherCity");
+        }
         /** Testing against a guaranteed 0-chaos level of charisma */
-        Player.gainCharismaExp(1e500);
+        gainHighCharismaLevel();
         allCitiesHighChaos();
         complete(diplomacy);
-        expect(bb.cities[otherCity].chaos).toBeGreaterThan(0);
+        expect(bb.getCurrentCity().chaos).toStrictEqual(0);
+        expect(bb.cities[otherCity].chaos).toStrictEqual(HIGH_CHAOS);
       });
     });
 
@@ -284,6 +292,15 @@ describe("Bladeburner Actions", () => {
     resetCity();
   }
 
+  function gainHighCharismaLevel() {
+    for (let i = 1; i <= 1000; ++i) {
+      const aug = new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor);
+      aug.level = i;
+      applyAugmentation(aug);
+    }
+    Player.gainCharismaExp(1e6);
+  }
+
   function resetCity() {
     bb.cities[bb.city].chaos = 0;
     bb.cities[bb.city].comms = 100;
@@ -295,7 +312,7 @@ describe("Bladeburner Actions", () => {
 
   function allCitiesHighChaos() {
     for (const city of Object.values(bb.cities)) {
-      city.chaos = 1e12;
+      city.chaos = HIGH_CHAOS;
     }
   }
 

@@ -122,11 +122,6 @@ async function expectErrorWhenRunningScript(
   errorShown: Promise<unknown>,
   errorMessage: string,
 ): Promise<void> {
-  /**
-   * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
-   * this test, we intentionally throw an error, so we can ignore it.
-   */
-  jest.spyOn(console, "error").mockImplementation(jest.fn());
   for (const script of scripts) {
     Player.getHomeComputer().writeToScriptFile(script.filePath, script.code);
   }
@@ -135,10 +130,16 @@ async function expectErrorWhenRunningScript(
   if (!workerScript) {
     throw new Error(`Invalid worker script`);
   }
+  /**
+   * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
+   * this test, we intentionally throw an error, so we can ignore it.
+   */
+  const consoleError = jest.spyOn(console, "error").mockImplementation(jest.fn());
   const result = await Promise.race([
     errorShown,
     new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
   ]);
+  consoleError.mockRestore();
   expect(result).toBeDefined();
   expect(workerScript.scriptRef.logs[0]).toContain(errorMessage);
 }
