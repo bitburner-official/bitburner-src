@@ -6,7 +6,11 @@ import { Settings } from "../../src/Settings/Settings";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import { UIEventEmitter, UIEventType } from "../../src/ui/UIEventEmitter";
+import { fixDoImportIssue } from "./Utilities";
+
 jest.useFakeTimers();
+
+fixDoImportIssue();
 
 // Direct tests of loading and saving.
 // Tests here should try to be comprehensive (cover as much stuff as possible)
@@ -98,7 +102,7 @@ function loadStandardServers() {
             {
               "ctor": "Script",
               "data": {
-                "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
+                "code": "/** @param {NS} ns */\nexport async function main(ns) {\n  return ns.asleep(1000000);\n}",
                 "filename": "script.js",
                 "module": {},
                 "dependencies": [
