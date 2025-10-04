@@ -6,6 +6,7 @@ import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Util
 
 const themeHexColor = "#abc";
 const fontFamily = "monospace";
+const ceRestore = console.error; // to restore from mocked function
 
 beforeAll(() => {
   initGameEnvironment();
@@ -57,6 +58,9 @@ describe("setTheme", () => {
   });
 
   describe("Failure", () => {
+    beforeEach(() => {
+      console.error = jest.fn(); // Silence expected errors
+    });
     test("Full theme", () => {
       const ns = getNS();
       const newTheme = ns.ui.getTheme();
@@ -73,6 +77,9 @@ describe("setTheme", () => {
       ns.ui.setTheme(newTheme as unknown as UserInterfaceTheme);
       const result = ns.ui.getTheme();
       expect(result.primary).toStrictEqual(defaultTheme.primary);
+    });
+    afterEach(() => {
+      console.error = ceRestore; // Restore to original function
     });
   });
 });
@@ -123,6 +130,9 @@ describe("setStyles", () => {
   });
 
   describe("Failure", () => {
+    beforeEach(() => {
+      console.error = jest.fn(); // silence expected errors
+    });
     test("Full styles", () => {
       const ns = getNS();
       const newStyles = ns.ui.getStyles();
@@ -139,6 +149,9 @@ describe("setStyles", () => {
       ns.ui.setStyles(newStyles as unknown as IStyleSettings);
       const result = ns.ui.getStyles();
       expect(result.fontFamily).toStrictEqual(defaultStyles.fontFamily);
+    });
+    afterEach(() => {
+      console.error = ceRestore; // restore original functionality
     });
   });
 });
