@@ -6,7 +6,6 @@ import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Util
 
 const themeHexColor = "#abc";
 const fontFamily = "monospace";
-const ceRestore = console.error; // to restore from mocked function
 
 beforeAll(() => {
   initGameEnvironment();
@@ -58,8 +57,9 @@ describe("setTheme", () => {
   });
 
   describe("Failure", () => {
+    let spyConErr: jest.Spied<typeof console.error>;
     beforeEach(() => {
-      console.error = jest.fn(); // Silence expected errors
+      spyConErr = jest.spyOn(console, "error").mockImplementation(() => null);
     });
     test("Full theme", () => {
       const ns = getNS();
@@ -67,6 +67,7 @@ describe("setTheme", () => {
       newTheme.primary = "";
       ns.ui.setTheme(newTheme);
       const result = ns.ui.getTheme();
+      expect(spyConErr).toHaveBeenCalled();
       expect(result.primary).toStrictEqual(defaultTheme.primary);
     });
     test("Partial theme", () => {
@@ -76,10 +77,11 @@ describe("setTheme", () => {
       };
       ns.ui.setTheme(newTheme as unknown as UserInterfaceTheme);
       const result = ns.ui.getTheme();
+      expect(spyConErr).toHaveBeenCalled();
       expect(result.primary).toStrictEqual(defaultTheme.primary);
     });
     afterEach(() => {
-      console.error = ceRestore; // Restore to original function
+      jest.restoreAllMocks(); // e.g. console.error
     });
   });
 });
@@ -130,8 +132,9 @@ describe("setStyles", () => {
   });
 
   describe("Failure", () => {
+    let spyConErr: jest.Spied<typeof console.error>;
     beforeEach(() => {
-      console.error = jest.fn(); // silence expected errors
+      spyConErr = jest.spyOn(console, "error").mockImplementation(() => null);
     });
     test("Full styles", () => {
       const ns = getNS();
@@ -139,6 +142,7 @@ describe("setStyles", () => {
       (newStyles.fontFamily as unknown) = 123;
       ns.ui.setStyles(newStyles);
       const result = ns.ui.getStyles();
+      expect(spyConErr).toHaveBeenCalled();
       expect(result.fontFamily).toStrictEqual(defaultStyles.fontFamily);
     });
     test("Partial styles", () => {
@@ -148,10 +152,11 @@ describe("setStyles", () => {
       };
       ns.ui.setStyles(newStyles as unknown as IStyleSettings);
       const result = ns.ui.getStyles();
+      expect(spyConErr).toHaveBeenCalled();
       expect(result.fontFamily).toStrictEqual(defaultStyles.fontFamily);
     });
     afterEach(() => {
-      console.error = ceRestore; // restore original functionality
+      jest.restoreAllMocks();
     });
   });
 });
