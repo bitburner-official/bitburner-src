@@ -8,8 +8,6 @@ import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import { UIEventEmitter, UIEventType } from "../../src/ui/UIEventEmitter";
 jest.useFakeTimers();
 
-const ceRestore = console.error; // store original fn, so we can mock & restore it
-
 // Direct tests of loading and saving.
 // Tests here should try to be comprehensive (cover as much stuff as possible)
 // without requiring burdensome levels of maintenance when legitimate changes
@@ -166,10 +164,6 @@ test("load/saveAllServers", () => {
   expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
 });
 
-beforeEach(() => {
-  console.error = jest.fn();
-});
-
 test("load/saveAllServers pruning RunningScripts", () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
@@ -180,8 +174,4 @@ test("load/saveAllServers pruning RunningScripts", () => {
   Settings.ExcludeRunningScriptsFromSave = true;
   const result = saveAllServers();
   expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
-});
-
-afterEach(() => {
-  console.error = ceRestore;
 });
