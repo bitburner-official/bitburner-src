@@ -12,6 +12,9 @@ import { Link, Output, RawOutput } from "./OutputTypes";
 import { ANSI_ESCAPE } from "../ui/React/ANSIITypography";
 import { debounce } from "lodash";
 import { Script } from "../Script/Script";
+import { LiteratureName, MessageFilename } from "@enums";
+import { Messages } from "../Message/MessageHelpers";
+import { Literatures } from "../Literature/Literatures";
 
 const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
@@ -41,8 +44,8 @@ function handlePipe(): void {
     return TerminalEvents.emit();
   }
 
-  // TODO: test piping to script
-  // TODO: test piping out of script
+  // TODO: test piping to script - should it live here or in runScript?
+  // TODO: implement piping out of script - pid in tprint through append
   if (hasScriptExtension(command)) {
     handlePipeToScript(parsedCommand);
     return TerminalEvents.emit();
@@ -65,7 +68,7 @@ export function splitPipesFromFirstCommand(commandString: string): string {
   const parsedCommands = parseCommand(commandString);
   const firstCommand = getFirstCommand(parsedCommands);
 
-  if (firstCommand.trim() === commandString.trim()) {
+  if (!parsedCommands.find(arg => `${arg}`.match(pipeMatcher()))) {
     return commandString;
   }
 
@@ -74,10 +77,40 @@ export function splitPipesFromFirstCommand(commandString: string): string {
   return firstCommand;
 }
 
+export function pipeContent(content: string) {
+  if (!Terminal.currentTerminalPipe) {
+    return;
+  }
+
+  Terminal.outputToBeProcessed.push(new Output(content, "primary"));
+  TerminalEvents.emit();
+}
+
+export function pipeMessage(message: MessageFilename) {
+  if (!Terminal.currentTerminalPipe) {
+    return;
+  }
+  const messageDetails = Messages[message];
+  const content = `${messageDetails.filename}\n${messageDetails.msg}`;
+
+  Terminal.outputToBeProcessed.push(new Output(content, "primary"));
+  TerminalEvents.emit();
+}
+
+export function pipeLiterature(message: LiteratureName) {
+  if (!Terminal.currentTerminalPipe) {
+    return;
+  }
+  const messageDetails = Literatures[message];
+  const content = `${messageDetails.filename}\n${stringify(messageDetails.text)}`;
+
+  Terminal.outputToBeProcessed.push(new Output(content, "primary"));
+  TerminalEvents.emit();
+}
+
 function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCommand | null {
-  const pipeRegex = /^(>>)|[|>]$/g;
   const pipe = `${parsedCommands[0]}`;
-  if (!pipe || !pipe.match(pipeRegex)) return null;
+  if (!pipe || !pipe.match(pipeMatcher())) return null;
 
   parsedCommands.shift();
   const nextCommand = getFirstCommand(parsedCommands);
@@ -90,10 +123,9 @@ function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCom
 }
 
 function getFirstCommand(parsedCommands: (string | number | boolean)[]): string {
-  const pipeRegex = /^(>>)|[|>]$/g;
   let firstCommand = "";
 
-  while (parsedCommands.length && !pipeRegex.test(`${parsedCommands[0]}`)) {
+  while (parsedCommands.length && !pipeMatcher().test(`${parsedCommands[0]}`)) {
     const arg = `${parsedCommands[0]}`;
     parsedCommands.shift();
     firstCommand += arg + " ";
@@ -204,17 +236,21 @@ function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void 
   advancePipe();
 }
 
-function stringify(s: Output | Link | RawOutput, stripAnsiEscape = false): string {
+function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape = false): string {
   if (s instanceof Output) {
     return stripAnsiEscape ? s.text.replaceAll(ANSI_ESCAPE, "") : s.text;
   } else if (s instanceof Link) {
     return `${s.dashes} ${s.hostname}`;
   } else {
-    const markup = renderToStaticMarkup(<>{s.raw}</>);
+    const markup = renderToStaticMarkup(<>{s instanceof RawOutput ? s.raw : s}</>);
     const div = document.createElement("div");
     div.innerHTML = markup.replaceAll(">", "> ");
     return div.textContent ?? div.innerText ?? "";
   }
+}
+
+function pipeMatcher(): RegExp {
+  return /^(>>)|[|>]$/g;
 }
 
 export type PipedCommand = {
