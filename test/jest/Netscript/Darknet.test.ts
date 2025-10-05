@@ -6,7 +6,7 @@ import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { GetDarknetServerOrThrow, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 
 beforeAll(() => {
   initGameEnvironment();

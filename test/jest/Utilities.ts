@@ -54,8 +54,8 @@ export function setupBasicTestingEnvironment(): void {
   initForeignServers(Player.getHomeComputer());
 }
 
-export function getNS(): NSFull {
-  const home = GetServerOrThrow(SpecialServers.Home);
+export function getNS(hostname: string = SpecialServers.Home): NSFull {
+  const home = GetServerOrThrow(hostname);
   home.maxRam = 1024;
   const filePath = "test.js" as ScriptFilePath;
   home.writeToScriptFile(filePath, "");
