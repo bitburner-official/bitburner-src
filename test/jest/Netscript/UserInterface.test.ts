@@ -81,7 +81,7 @@ describe("setTheme", () => {
       expect(result.primary).toStrictEqual(defaultTheme.primary);
     });
     afterEach(() => {
-      jest.restoreAllMocks(); // e.g. console.error
+      spyConErr.mockRestore();
     });
   });
 });
@@ -156,7 +156,7 @@ describe("setStyles", () => {
       expect(result.fontFamily).toStrictEqual(defaultStyles.fontFamily);
     });
     afterEach(() => {
-      jest.restoreAllMocks();
+      spyConErr.mockRestore();
     });
   });
 });
