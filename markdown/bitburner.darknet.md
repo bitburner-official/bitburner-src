@@ -18,26 +18,268 @@ If you are not in BitNode-15, then you must have Source-File 15 in order to use 
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [authenticate(hostname, password, additionalMsec)](./bitburner.darknet.authenticate.md) | <p>Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.</p><p>If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files from it. (scp() \*to\* the server is always allowed.)</p><p>Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/></p> |
-|  [connectToSession(hostname, password)](./bitburner.darknet.connecttosession.md) | <p>Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.</p><p>If successful, grants the script a session, allowing it to exec() to that server or scp() from it.</p><p>If not, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.</p><p>Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/></p> |
-|  [getCurrentDarknetInstability()](./bitburner.darknet.getcurrentdarknetinstability.md) | Gets the current instability of the darknet caused by excessive backdoor-ing of servers. |
-|  [getCurrentDepth(hostname)](./bitburner.darknet.getcurrentdepth.md) | <p>Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and each visual row in the UI below that increases the depth of the server.</p><p>Returns -1 if the server is offline, not found, or not a darkweb server.</p> |
-|  [getOwnerAllocatedRam(hostname)](./bitburner.darknet.getownerallocatedram.md) | Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation(). |
-|  [getServer(host)](./bitburner.darknet.getserver.md) | <p>Returns a server object for the given server. Defaults to the running script's server if host is not specified.</p><p>If the server has recently gone offline, it will return a blank server object with <code>isOnline: false</code>.</p> |
-|  [getServerAuthDetails(host)](./bitburner.darknet.getserverauthdetails.md) | Returns the server's authentication protocol details. |
-|  [getStasisLinkedServers(returnByIP)](./bitburner.darknet.getstasislinkedservers.md) | Returns the hostnames of servers that have a stasis link applied. |
-|  [getStasisLinkLimit()](./bitburner.darknet.getstasislinklimit.md) | Returns the maximum number of stasis links that can be applied globally, based on the player's current status. Stasis link limit can be increased by finding special augmentations in the deep darknet. |
-|  [heartbleed(hostname, options)](./bitburner.darknet.heartbleed.md) | <p>Uses an exploit to extract log data from a server by sending a malformed heartbeat request. Retrieves and removes the most recent logs on the server. This can be used to get more feedback on authentication attempts.</p><p>Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.</p><p>The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.</p> |
-|  [induceServerMigration(hostname)](./bitburner.darknet.induceservermigration.md) | <p>Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server. It does not affect the current server, only nearby ones. Must be run from a darknet server.</p><p>Effect scales with threads.</p> |
-|  [isDarknetServer(host)](./bitburner.darknet.isdarknetserver.md) | <p>Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.</p><p>Returns false if the server does not exist or has gone offline.</p> |
-|  [memoryReallocation(hostname)](./bitburner.darknet.memoryreallocation.md) | Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server. The amount of ram recovered scales with charisma and the number of threads used. |
-|  [openCache(filename, suppressToast)](./bitburner.darknet.opencache.md) | Opens a .cache file on the current server to acquire its valuable contents. |
-|  [packetCapture(host)](./bitburner.darknet.packetcapture.md) | <p>Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise. The target server must be directly connected to the server that the script is running on.</p><p>Using multiple threads speeds up the capture process.</p> |
-|  [phishingAttack()](./bitburner.darknet.phishingattack.md) | <p>Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa. Often the attempt will fail, but success can be increased with crime success rate and charisma stats.</p><p>The amount of money lifted scales with the number of threads used, if successful. Very occasionally you can retrieve a cache file from the attempt.</p><p>Phishing attacks can only be run from scripts on darknet servers.</p> |
-|  [probe(returnByIP)](./bitburner.darknet.probe.md) | Returns a list of all darknet servers connected to the script's current server. |
-|  [promoteStock(sym)](./bitburner.darknet.promotestock.md) | Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone. |
-|  [setStasisLink(shouldLink)](./bitburner.darknet.setstasislink.md) | <p>Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.</p><p>Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.</p><p>There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit(). This limit can be increased by finding special augmentations in the deep darknet.</p> |
-|  [unleashStormSeed()](./bitburner.darknet.unleashstormseed.md) | Executes STORM\_SEED.exe, if it is present on the server the script is running on. Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[authenticate(hostname, password, additionalMsec)](./bitburner.darknet.authenticate.md)
+
+
+</td><td>
+
+Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.
+
+If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files from it. (scp() \*to\* the server is always allowed.)
+
+Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
+
+
+</td></tr>
+<tr><td>
+
+[connectToSession(hostname, password)](./bitburner.darknet.connecttosession.md)
+
+
+</td><td>
+
+Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.
+
+If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
+
+If not, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+
+Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
+
+
+</td></tr>
+<tr><td>
+
+[getCurrentDarknetInstability()](./bitburner.darknet.getcurrentdarknetinstability.md)
+
+
+</td><td>
+
+Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+
+
+</td></tr>
+<tr><td>
+
+[getCurrentDepth(hostname)](./bitburner.darknet.getcurrentdepth.md)
+
+
+</td><td>
+
+Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and each visual row in the UI below that increases the depth of the server.
+
+Returns -1 if the server is offline, not found, or not a darkweb server.
+
+
+</td></tr>
+<tr><td>
+
+[getOwnerAllocatedRam(hostname)](./bitburner.darknet.getownerallocatedram.md)
+
+
+</td><td>
+
+Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+
+
+</td></tr>
+<tr><td>
+
+[getServer(host)](./bitburner.darknet.getserver.md)
+
+
+</td><td>
+
+Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+
+If the server has recently gone offline, it will return a blank server object with `isOnline: false`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
+[getServerAuthDetails(host)](./bitburner.darknet.getserverauthdetails.md)
+
+
+</td><td>
+
+Returns the server's authentication protocol details.
+
+
+</td></tr>
+<tr><td>
+
+[getStasisLinkedServers(returnByIP)](./bitburner.darknet.getstasislinkedservers.md)
+
+
+</td><td>
+
+Returns the hostnames of servers that have a stasis link applied.
+
+
+</td></tr>
+<tr><td>
+
+[getStasisLinkLimit()](./bitburner.darknet.getstasislinklimit.md)
+
+
+</td><td>
+
+Returns the maximum number of stasis links that can be applied globally, based on the player's current status. Stasis link limit can be increased by finding special augmentations in the deep darknet.
+
+
+</td></tr>
+<tr><td>
+
+[heartbleed(hostname, options)](./bitburner.darknet.heartbleed.md)
+
+
+</td><td>
+
+Uses an exploit to extract log data from a server by sending a malformed heartbeat request. Retrieves and removes the most recent logs on the server. This can be used to get more feedback on authentication attempts.
+
+Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
+
+The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
+
+
+</td></tr>
+<tr><td>
+
+[induceServerMigration(hostname)](./bitburner.darknet.induceservermigration.md)
+
+
+</td><td>
+
+Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server. It does not affect the current server, only nearby ones. Must be run from a darknet server.
+
+Effect scales with threads.
+
+
+</td></tr>
+<tr><td>
+
+[isDarknetServer(host)](./bitburner.darknet.isdarknetserver.md)
+
+
+</td><td>
+
+Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
+
+Returns false if the server does not exist or has gone offline.
+
+
+</td></tr>
+<tr><td>
+
+[memoryReallocation(hostname)](./bitburner.darknet.memoryreallocation.md)
+
+
+</td><td>
+
+Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server. The amount of ram recovered scales with charisma and the number of threads used.
+
+
+</td></tr>
+<tr><td>
+
+[openCache(filename, suppressToast)](./bitburner.darknet.opencache.md)
+
+
+</td><td>
+
+Opens a .cache file on the current server to acquire its valuable contents.
+
+
+</td></tr>
+<tr><td>
+
+[packetCapture(host)](./bitburner.darknet.packetcapture.md)
+
+
+</td><td>
+
+Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise. The target server must be directly connected to the server that the script is running on.
+
+Using multiple threads speeds up the capture process.
+
+
+</td></tr>
+<tr><td>
+
+[phishingAttack()](./bitburner.darknet.phishingattack.md)
+
+
+</td><td>
+
+Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa. Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
+
+The amount of money lifted scales with the number of threads used, if successful. Very occasionally you can retrieve a cache file from the attempt.
+
+Phishing attacks can only be run from scripts on darknet servers.
+
+
+</td></tr>
+<tr><td>
+
+[probe(returnByIP)](./bitburner.darknet.probe.md)
+
+
+</td><td>
+
+Returns a list of all darknet servers connected to the script's current server.
+
+
+</td></tr>
+<tr><td>
+
+[promoteStock(sym)](./bitburner.darknet.promotestock.md)
+
+
+</td><td>
+
+Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone.
+
+
+</td></tr>
+<tr><td>
+
+[setStasisLink(shouldLink)](./bitburner.darknet.setstasislink.md)
+
+
+</td><td>
+
+Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
+
+Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
+
+There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit(). This limit can be increased by finding special augmentations in the deep darknet.
+
+
+</td></tr>
+<tr><td>
+
+[unleashStormSeed()](./bitburner.darknet.unleashstormseed.md)
+
+
+</td><td>
+
+Executes STORM\_SEED.exe, if it is present on the server the script is running on. Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
+
+
+</td></tr>
+</tbody></table>
 

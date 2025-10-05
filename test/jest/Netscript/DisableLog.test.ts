@@ -25,6 +25,9 @@ test("Edge cases of disableLog", function () {
     const ws = new WorkerScript(runningScript, 1, NetscriptFunctions);
 
     const ns = ws.env.vars;
+    if (!ns) {
+      throw new Error("Invalid ws.env.vars");
+    }
 
     // Generate logs in a specific pattern that checks edge cases in
     // disableLog. We want to check various combinations of things that
@@ -82,6 +85,8 @@ test("Edge cases of disableLog", function () {
       "end",
     ]);
   } finally {
-    DeleteServer(server.hostname);
+    if (server) {
+      DeleteServer(server.hostname);
+    }
   }
 });

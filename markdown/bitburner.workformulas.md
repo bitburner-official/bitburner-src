@@ -14,12 +14,70 @@ interface WorkFormulas
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [companyGains(person, companyName, workType, favor)](./bitburner.workformulas.companygains.md) |  |
-|  [crimeGains(person, crimeType)](./bitburner.workformulas.crimegains.md) |  |
-|  [crimeSuccessChance(person, crimeType)](./bitburner.workformulas.crimesuccesschance.md) |  |
-|  [factionGains(person, workType, favor)](./bitburner.workformulas.factiongains.md) |  |
-|  [gymGains(person, gymType, locationName)](./bitburner.workformulas.gymgains.md) |  |
-|  [universityGains(person, classType, locationName)](./bitburner.workformulas.universitygains.md) |  |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[companyGains(person, companyName, workType, favor)](./bitburner.workformulas.companygains.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[crimeGains(person, crimeType)](./bitburner.workformulas.crimegains.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[crimeSuccessChance(person, crimeType)](./bitburner.workformulas.crimesuccesschance.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[factionGains(person, workType, favor)](./bitburner.workformulas.factiongains.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[gymGains(person, gymType, locationName)](./bitburner.workformulas.gymgains.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[universityGains(person, classType, locationName)](./bitburner.workformulas.universitygains.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

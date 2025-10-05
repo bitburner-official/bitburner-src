@@ -14,8 +14,60 @@ interface NotRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [condition](./bitburner.notrequirement.condition.md) |  | [PlayerRequirement](./bitburner.playerrequirement.md) |  |
-|  [type](./bitburner.notrequirement.type.md) |  | "not" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[condition](./bitburner.notrequirement.condition.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PlayerRequirement](./bitburner.playerrequirement.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.notrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"not"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

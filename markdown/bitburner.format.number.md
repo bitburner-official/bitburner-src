@@ -14,12 +14,87 @@ number(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: b
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  n | number | Number to format. |
-|  fractionalDigits | number | _(Optional)_ Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3. |
-|  suffixStart | number | _(Optional)_ How high a number must be before a suffix will be added. Optional, defaults to 1000. |
-|  isInteger | boolean | _(Optional)_ Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+n
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number to format.
+
+
+</td></tr>
+<tr><td>
+
+fractionalDigits
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
+
+
+</td></tr>
+<tr><td>
+
+suffixStart
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ How high a number must be before a suffix will be added. Optional, defaults to 1000.
+
+
+</td></tr>
+<tr><td>
+
+isInteger
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,9 +14,39 @@ getEquipmentStats(equipName: string): EquipmentStats;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  equipName | string | Name of equipment. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+equipName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of equipment.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

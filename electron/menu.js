@@ -204,24 +204,10 @@ function getMenu(window) {
       ],
     },
     {
-      label: "Reloads",
+      label: "View",
       submenu: [
         {
-          label: "Reload",
-          accelerator: "f5",
-          click: () => window.loadFile("index.html"),
-        },
-        {
-          label: "Reload && Kill All Scripts",
-          click: () => utils.reloadAndKill(window, true),
-        },
-      ],
-    },
-    {
-      label: "Fullscreen",
-      submenu: [
-        {
-          label: "Toggle",
+          label: "Fullscreen",
           accelerator: "f9",
           click: (() => {
             let full = false;
@@ -231,11 +217,9 @@ function getMenu(window) {
             };
           })(),
         },
-      ],
-    },
-    {
-      label: "Zoom",
-      submenu: [
+        {
+          type: "separator",
+        },
         {
           label: "Zoom In",
           enabled: canZoomIn,
@@ -277,6 +261,38 @@ function getMenu(window) {
           visible: false,
           acceleratorWorksWhenHidden: true,
           click: resetZoom,
+        },
+        {
+          type: "separator",
+        },
+        {
+          label: "Autohide top menu",
+          type: "checkbox",
+          checked: storage.isMenuHideEnabled(),
+          click: (menuItem) => {
+            storage.setMenuHideConfig(menuItem.checked);
+            window.setAutoHideMenuBar(menuItem.checked);
+            if (menuItem.checked) {
+              window.setMenuBarVisibility(false);
+            } else {
+              window.setMenuBarVisibility(true);
+            }
+            refreshMenu(window);
+          },
+        },
+      ],
+    },
+    {
+      label: "Reloads",
+      submenu: [
+        {
+          label: "Reload",
+          accelerator: "f5",
+          click: () => window.loadFile("index.html"),
+        },
+        {
+          label: "Reload && Kill All Scripts",
+          click: () => utils.reloadAndKill(window, true),
         },
       ],
     },

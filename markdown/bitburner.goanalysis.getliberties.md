@@ -18,9 +18,39 @@ getLiberties(boardState?: string[]): number[][];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  boardState | string\[\] | _(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+boardState
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+_(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

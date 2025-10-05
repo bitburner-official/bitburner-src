@@ -14,9 +14,77 @@ interface CompanyReputationRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [company](./bitburner.companyreputationrequirement.company.md) |  | [CompanyName](./bitburner.companyname.md) |  |
-|  [reputation](./bitburner.companyreputationrequirement.reputation.md) |  | number |  |
-|  [type](./bitburner.companyreputationrequirement.type.md) |  | "companyReputation" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[company](./bitburner.companyreputationrequirement.company.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CompanyName](./bitburner.companyname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[reputation](./bitburner.companyreputationrequirement.reputation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.companyreputationrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"companyReputation"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

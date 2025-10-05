@@ -14,13 +14,103 @@ hashGainRate(level: number, ramUsed: number, maxRam: number, cores: number, mult
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  level | number | level of the server. |
-|  ramUsed | number | ramUsed of the server. |
-|  maxRam | number | maxRam of the server. |
-|  cores | number | cores of the server. |
-|  mult | number | _(Optional)_ player production mult (default to 1) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+level
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+level of the server.
+
+
+</td></tr>
+<tr><td>
+
+ramUsed
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+ramUsed of the server.
+
+
+</td></tr>
+<tr><td>
+
+maxRam
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+maxRam of the server.
+
+
+</td></tr>
+<tr><td>
+
+cores
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+cores of the server.
+
+
+</td></tr>
+<tr><td>
+
+mult
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ player production mult (default to 1)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

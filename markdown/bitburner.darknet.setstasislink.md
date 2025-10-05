@@ -18,9 +18,39 @@ setStasisLink(shouldLink?: boolean): Promise<Result>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  shouldLink | boolean | _(Optional)_ true to apply a stasis link, false to remove it. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+shouldLink
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ true to apply a stasis link, false to remove it.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

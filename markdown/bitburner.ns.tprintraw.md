@@ -14,9 +14,39 @@ tprintRaw(node: ReactNode): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  node | [ReactNode](./bitburner.reactnode.md) | The React node to be printed. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+node
+
+
+</td><td>
+
+[ReactNode](./bitburner.reactnode.md)
+
+
+</td><td>
+
+The React node to be printed.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

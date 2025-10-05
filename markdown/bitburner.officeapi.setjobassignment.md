@@ -19,12 +19,87 @@ setJobAssignment(
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) | Name of the city |
-|  job | Exclude&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, "Unassigned"&gt; | Name of the job. Passing "Unassigned" will cause this API to not do anything and just return false. |
-|  amount | number | Number of employees to assign to that job |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of the city
+
+
+</td></tr>
+<tr><td>
+
+job
+
+
+</td><td>
+
+Exclude&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, "Unassigned"&gt;
+
+
+</td><td>
+
+Name of the job. Passing "Unassigned" will cause this API to not do anything and just return false.
+
+
+</td></tr>
+<tr><td>
+
+amount
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of employees to assign to that job
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

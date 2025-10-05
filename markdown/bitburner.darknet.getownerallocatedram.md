@@ -14,9 +14,39 @@ getOwnerAllocatedRam(hostname?: string): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hostname | string | _(Optional)_ Optional. Hostname of the server to check. Defaults to the scripts current server. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hostname
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname of the server to check. Defaults to the scripts current server.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

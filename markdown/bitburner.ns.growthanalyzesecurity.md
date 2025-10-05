@@ -14,11 +14,71 @@ growthAnalyzeSecurity(threads: number, host?: string, cores?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  threads | number | Amount of threads that will be used. |
-|  host | string | _(Optional)_ Optional. Hostname/IP of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money. |
-|  cores | number | _(Optional)_ Optional. The number of cores of the server that would run grow. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+threads
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of threads that will be used.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname/IP of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money.
+
+
+</td></tr>
+<tr><td>
+
+cores
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional. The number of cores of the server that would run grow.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

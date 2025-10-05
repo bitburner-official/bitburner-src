@@ -16,9 +16,39 @@ getCurrentDepth(hostname?: string): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hostname | string | _(Optional)_ Optional. Hostname of the server to check. Defaults to the scripts current server.  The current depth of the server into the darknet. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hostname
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname of the server to check. Defaults to the scripts current server.  The current depth of the server into the darknet.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

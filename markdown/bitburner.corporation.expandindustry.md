@@ -14,10 +14,55 @@ expandIndustry(industryType: CorpIndustryName, divisionName: string): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  industryType | [CorpIndustryName](./bitburner.corpindustryname.md) | Name of the industry |
-|  divisionName | string | Name of the division |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+industryType
+
+
+</td><td>
+
+[CorpIndustryName](./bitburner.corpindustryname.md)
+
+
+</td><td>
+
+Name of the industry
+
+
+</td></tr>
+<tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

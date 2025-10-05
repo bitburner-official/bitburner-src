@@ -14,11 +14,71 @@ getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): string[]
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of script to get logs from. |
-|  host | string | _(Optional)_ Optional. Hostname/IP of the server that the script is on. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments to identify which scripts to get logs for. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+fn
+
+
+</td><td>
+
+[FilenameOrPID](./bitburner.filenameorpid.md)
+
+
+</td><td>
+
+_(Optional)_ Optional. Filename or PID of script to get logs from.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname/IP of the server that the script is on.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments to identify which scripts to get logs for.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

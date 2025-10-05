@@ -16,9 +16,39 @@ getServer(host?: string): DarknetServer;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | _(Optional)_ Optional. Hostname for the requested server object. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname for the requested server object.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

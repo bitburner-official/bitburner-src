@@ -2,7 +2,7 @@ import { IStyleSettings, UserInterfaceTheme } from "../../../src/ScriptEditor/Ne
 import { Settings } from "../../../src/Settings/Settings";
 import { defaultStyles } from "../../../src/Themes/Styles";
 import { defaultTheme } from "../../../src/Themes/Themes";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 
 const themeHexColor = "#abc";
 const fontFamily = "monospace";

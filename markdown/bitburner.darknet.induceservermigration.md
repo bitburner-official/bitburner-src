@@ -16,9 +16,39 @@ induceServerMigration(hostname?: string): Promise<Result>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hostname | string | _(Optional)_ Optional. Hostname of the connected server to migrate. Defaults to the current server. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hostname
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname of the connected server to migrate. Defaults to the current server.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

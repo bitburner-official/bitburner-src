@@ -14,9 +14,39 @@ getIndustryData(industryName: CorpIndustryName): CorpIndustryData;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  industryName | [CorpIndustryName](./bitburner.corpindustryname.md) | Name of the industry |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+industryName
+
+
+</td><td>
+
+[CorpIndustryName](./bitburner.corpindustryname.md)
+
+
+</td><td>
+
+Name of the industry
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -24,11 +24,71 @@ getValidMoves(boardState?: string[] | boolean, priorBoardState?: string[], playA
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  boardState | string\[\] \| boolean | _(Optional)_ Optional. The board state to analyze, in the string\[\] format used by getBoardState(). Defaults to the current board state. Alternatively can be simply "true" to get current valid moves for white. |
-|  priorBoardState | string\[\] | _(Optional)_ Optional. The move before the board state to analyze, in the format used by getBoardState(). Defaults to the current board's prior move state. |
-|  playAsWhite | boolean | _(Optional)_ Optional. Whether to analyze the board state as if the white player is the current player. Defaults to false. Intended to be used when playing as white when the opponent is set to "No AI". |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+boardState
+
+
+</td><td>
+
+string\[\] \| boolean
+
+
+</td><td>
+
+_(Optional)_ Optional. The board state to analyze, in the string\[\] format used by getBoardState(). Defaults to the current board state. Alternatively can be simply "true" to get current valid moves for white.
+
+
+</td></tr>
+<tr><td>
+
+priorBoardState
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+_(Optional)_ Optional. The move before the board state to analyze, in the format used by getBoardState(). Defaults to the current board's prior move state.
+
+
+</td></tr>
+<tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional. Whether to analyze the board state as if the white player is the current player. Defaults to false. Intended to be used when playing as white when the opponent is set to "No AI".
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

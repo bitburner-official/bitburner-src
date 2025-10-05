@@ -14,10 +14,102 @@ interface CorpProductData
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [desc](./bitburner.corpproductdata.desc.md) |  | string | Description of product creation |
-|  [name](./bitburner.corpproductdata.name.md) |  | string | Name of the product |
-|  [ratingWeights](./bitburner.corpproductdata.ratingweights.md) |  | { aesthetics?: number; durability?: number; features?: number; quality?: number; performance?: number; reliability?: number; } | Weighting factors for product |
-|  [verb](./bitburner.corpproductdata.verb.md) |  | string | Verb used to describe creation of the product |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[desc](./bitburner.corpproductdata.desc.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Description of product creation
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.corpproductdata.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the product
+
+
+</td></tr>
+<tr><td>
+
+[ratingWeights](./bitburner.corpproductdata.ratingweights.md)
+
+
+</td><td>
+
+
+</td><td>
+
+{ aesthetics?: number; durability?: number; features?: number; quality?: number; performance?: number; reliability?: number; }
+
+
+</td><td>
+
+Weighting factors for product
+
+
+</td></tr>
+<tr><td>
+
+[verb](./bitburner.corpproductdata.verb.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Verb used to describe creation of the product
+
+
+</td></tr>
+</tbody></table>
 

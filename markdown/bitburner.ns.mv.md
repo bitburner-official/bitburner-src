@@ -14,11 +14,71 @@ mv(host: string, source: string, destination: string): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname/IP of target server. |
-|  source | string | Filename of the source file. |
-|  destination | string | Filename of the destination file. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of target server.
+
+
+</td></tr>
+<tr><td>
+
+source
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of the source file.
+
+
+</td></tr>
+<tr><td>
+
+destination
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of the destination file.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

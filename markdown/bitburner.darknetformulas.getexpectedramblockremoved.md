@@ -14,11 +14,71 @@ getExpectedRamBlockRemoved(server: DarknetServer, threads?: number, player?: Per
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  server | [DarknetServer](./bitburner.darknetserver.md) | The server to check ram freed on. |
-|  threads | number | _(Optional)_ The number of threads used in the memoryReallocation call. Optional, defaults to 1 |
-|  player | [Person](./bitburner.person.md) | _(Optional)_ The player object. Optional, defaults to the current player status |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+server
+
+
+</td><td>
+
+[DarknetServer](./bitburner.darknetserver.md)
+
+
+</td><td>
+
+The server to check ram freed on.
+
+
+</td></tr>
+<tr><td>
+
+threads
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ The number of threads used in the memoryReallocation call. Optional, defaults to 1
+
+
+</td></tr>
+<tr><td>
+
+player
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+_(Optional)_ The player object. Optional, defaults to the current player status
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

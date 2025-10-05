@@ -14,8 +14,60 @@ interface MoneyRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [money](./bitburner.moneyrequirement.money.md) |  | number |  |
-|  [type](./bitburner.moneyrequirement.type.md) |  | "money" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[money](./bitburner.moneyrequirement.money.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.moneyrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"money"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

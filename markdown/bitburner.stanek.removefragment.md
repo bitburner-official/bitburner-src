@@ -14,10 +14,55 @@ removeFragment(rootX: number, rootY: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  rootX | number | X against which to align the top left of the fragment. |
-|  rootY | number | Y against which to align the top left of the fragment. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+rootX
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+X against which to align the top left of the fragment.
+
+
+</td></tr>
+<tr><td>
+
+rootY
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Y against which to align the top left of the fragment.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

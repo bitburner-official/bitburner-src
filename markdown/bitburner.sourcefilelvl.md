@@ -13,8 +13,64 @@ interface SourceFileLvl
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [lvl](./bitburner.sourcefilelvl.lvl.md) |  | number | The level of the source file |
-|  [n](./bitburner.sourcefilelvl.n.md) |  | number | The number of the source file |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[lvl](./bitburner.sourcefilelvl.lvl.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The level of the source file
+
+
+</td></tr>
+<tr><td>
+
+[n](./bitburner.sourcefilelvl.n.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The number of the source file
+
+
+</td></tr>
+</tbody></table>
 

@@ -2,12 +2,11 @@ import type { Script } from "../../../src/Script/Script";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { runScriptFromScript, startWorkerScript } from "../../../src/NetscriptWorker";
 import { workerScripts } from "../../../src/Netscript/WorkerScripts";
-import { config as EvaluatorConfig } from "../../../src/NetscriptJSEvaluator";
 import { Server } from "../../../src/Server/Server";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { AddToAllServers, DeleteServer, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
-import { initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { fixDoImportIssue, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { Terminal } from "../../../src/Terminal";
 import { runScript } from "../../../src/Terminal/commands/runScript";
 import { Player } from "@player";
@@ -18,25 +17,7 @@ import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
 import type { PositiveInteger } from "../../../src/types";
 import { ErrorState } from "../../../src/ErrorHandling/ErrorState";
 
-declare const importActual: (typeof EvaluatorConfig)["doImport"];
-
-// Replace Blob/ObjectURL functions, because they don't work natively in Jest
-global.Blob = class extends Blob {
-  code: string;
-  constructor(blobParts?: BlobPart[], __options?: BlobPropertyBag) {
-    super();
-    this.code = String((blobParts ?? [])[0]);
-  }
-};
-global.URL.revokeObjectURL = function () {};
-// Critical: We have to overwrite this, otherwise we get Jest's hooked
-// implementation, which will not work without passing special flags to Node,
-// and tends to crash even if you do.
-EvaluatorConfig.doImport = importActual;
-
-global.URL.createObjectURL = function (blob) {
-  return "data:text/javascript," + encodeURIComponent((blob as unknown as { code: string }).code);
-};
+fixDoImportIssue();
 
 initGameEnvironment();
 
@@ -122,11 +103,6 @@ async function expectErrorWhenRunningScript(
   errorShown: Promise<unknown>,
   errorMessage: string,
 ): Promise<void> {
-  /**
-   * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
-   * this test, we intentionally throw an error, so we can ignore it.
-   */
-  jest.spyOn(console, "error").mockImplementation(jest.fn());
   for (const script of scripts) {
     Player.getHomeComputer().writeToScriptFile(script.filePath, script.code);
   }
@@ -135,10 +111,16 @@ async function expectErrorWhenRunningScript(
   if (!workerScript) {
     throw new Error(`Invalid worker script`);
   }
+  /**
+   * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
+   * this test, we intentionally throw an error, so we can ignore it.
+   */
+  const consoleError = jest.spyOn(console, "error").mockImplementation(jest.fn());
   const result = await Promise.race([
     errorShown,
     new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
   ]);
+  consoleError.mockRestore();
   expect(result).toBeDefined();
   expect(workerScript.scriptRef.logs[0]).toContain(errorMessage);
 }

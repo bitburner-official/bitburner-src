@@ -14,11 +14,71 @@ percent(n: number, fractionalDigits?: number, suffixStart?: number): string;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  n | number | Number to format as a percentage. |
-|  fractionalDigits | number | _(Optional)_ Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2. |
-|  suffixStart | number | _(Optional)_ When to switch the percentage to a multiplier. Default is 1e6 or x1.00m. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+n
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number to format as a percentage.
+
+
+</td></tr>
+<tr><td>
+
+fractionalDigits
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+
+
+</td></tr>
+<tr><td>
+
+suffixStart
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

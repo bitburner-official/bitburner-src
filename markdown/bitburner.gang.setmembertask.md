@@ -14,10 +14,55 @@ setMemberTask(memberName: string, taskName: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  memberName | string | Name of Gang member to assign. |
-|  taskName | string | Task to assign. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+memberName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of Gang member to assign.
+
+
+</td></tr>
+<tr><td>
+
+taskName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Task to assign.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

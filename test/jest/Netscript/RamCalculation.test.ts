@@ -1,15 +1,15 @@
 import { Player } from "../../../src/Player";
 import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
-import { RamCosts, getRamCost, RamCostConstants, RamCostTree } from "../../../src/Netscript/RamCostGenerator";
+import { RamCosts, getRamCost, RamCostConstants, type RamCostTree } from "../../../src/Netscript/RamCostGenerator";
 import { Environment } from "../../../src/Netscript/Environment";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { Script } from "../../../src/Script/Script";
-import { WorkerScript } from "../../../src/Netscript/WorkerScript";
+import type { WorkerScript } from "../../../src/Netscript/WorkerScript";
 import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { ns } from "../../../src/NetscriptFunctions";
-import { InternalAPI } from "src/Netscript/APIWrapper";
-import { Singularity } from "@nsdefs";
-import { ScriptFilePath } from "src/Paths/ScriptFilePath";
+import type { InternalAPI } from "../../../src/Netscript/APIWrapper";
+import type { Singularity } from "@nsdefs";
+import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 
 type PotentiallyAsyncFunction = (arg?: unknown) => { catch?: PotentiallyAsyncFunction };
 
@@ -21,12 +21,10 @@ function getFunction(fn: unknown) {
 function grabCost<API>(ramEntry: RamCostTree<API>[keyof API]) {
   if (typeof ramEntry === "function") return ramEntry();
   if (typeof ramEntry === "number") return ramEntry;
-  throw new Error("Invalid ramcost: " + ramEntry);
+  throw new Error("Invalid ramcost: " + String(ramEntry));
 }
 
 describe("Netscript RAM Calculation/Generation Tests", function () {
-  jest.spyOn(console, "warn").mockImplementation(() => {});
-  jest.spyOn(console, "error").mockImplementation(() => {});
   Player.sourceFiles.set(4, 3);
   // For simulating costs of singularity functions.
   const baseCost = RamCostConstants.Base;
@@ -96,12 +94,23 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     workerScript.env.vars = nsExternal;
 
     // Run the function through the workerscript's args
+    const fnPathAsString = fnPath.join(".");
     if (typeof fn === "function") {
+      let consoleError;
+      let consoleWarning;
+      if (fnPathAsString === "ui.setTheme" || fnPathAsString === "ui.setStyles") {
+        consoleError = jest.spyOn(console, "error").mockImplementation(jest.fn());
+      }
+      if (fnPathAsString === "alterReality") {
+        consoleWarning = jest.spyOn(console, "warn").mockImplementation(jest.fn());
+      }
       tryFunction(fn);
       tryFunction(fn);
       tryFunction(fn);
+      consoleError?.mockRestore();
+      consoleWarning?.mockRestore();
     } else {
-      throw new Error(`Invalid function specified: [${fnPath.toString()}]`);
+      throw new Error(`Invalid function specified: [${fnPathAsString}]`);
     }
 
     if (expectedRamCost !== 0) {
@@ -180,7 +189,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     ])("%s", (code, expected) => {
       const fullCode = `export function main(ns) { ${code} }`;
 
-      const result = calculateRamUsage(fullCode, "testfile.js", new Map(), "testserver");
+      const result = calculateRamUsage(fullCode, "testfile.js" as ScriptFilePath, "testserver", new Map());
       expect(result.errorMessage).toBe(undefined);
       expect(result.cost).toBe(expected);
     });

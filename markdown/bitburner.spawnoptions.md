@@ -14,7 +14,45 @@ interface SpawnOptions extends RunOptions
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [spawnDelay?](./bitburner.spawnoptions.spawndelay.md) |  | number | _(Optional)_ Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a non-negative integer. If 0, the script will be spawned synchronously. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[spawnDelay?](./bitburner.spawnoptions.spawndelay.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a non-negative integer. If 0, the script will be spawned synchronously.
+
+
+</td></tr>
+</tbody></table>
 

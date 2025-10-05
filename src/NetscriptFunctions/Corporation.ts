@@ -247,6 +247,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         importAmount: material.importAmount,
         actualSellAmount: material.actualSellAmount,
         exports: exports,
+        productionLimit: material.productionLimit,
       };
     },
     getProduct: (ctx) => (_divisionName, _cityName, _productName) => {
@@ -274,6 +275,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         advertisingInvestment: product.advertisingInvestment,
         designInvestment: product.designInvestment,
         size: product.size,
+        productionLimit: cityData.productionLimit,
       };
     },
     purchaseWarehouse: (ctx) => (_divisionName, _cityName) => {

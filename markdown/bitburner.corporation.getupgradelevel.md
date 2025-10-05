@@ -14,9 +14,39 @@ getUpgradeLevel(upgradeName: CorpUpgradeName): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  upgradeName | [CorpUpgradeName](./bitburner.corpupgradename.md) | Name of the upgrade |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+upgradeName
+
+
+</td><td>
+
+[CorpUpgradeName](./bitburner.corpupgradename.md)
+
+
+</td><td>
+
+Name of the upgrade
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

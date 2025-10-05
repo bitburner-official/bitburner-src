@@ -14,10 +14,55 @@ clearPointHighlight(x: number, y: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  x | number | the x coordinate to remove highlight from |
-|  y | number | the y coordinate to remove highlight from |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+x
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+the x coordinate to remove highlight from
+
+
+</td></tr>
+<tr><td>
+
+y
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+the y coordinate to remove highlight from
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
