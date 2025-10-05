@@ -275,7 +275,9 @@ export function getControlledEmptyNodes(_board?: Board) {
 export function setTestingBoardState(board: Board, komi?: number) {
   resetBoardState(
     () => {},
-    (s): never => {throw new Error(s)},
+    (s): never => {
+      throw new Error(s);
+    },
     GoOpponent.none,
     board.length,
   );
