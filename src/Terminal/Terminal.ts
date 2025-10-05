@@ -88,7 +88,7 @@ import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { PipedCommand, ScriptPipe, splitPipesFromFirstCommand } from "./Pipe";
+import { PipedCommand, PipedOutput, ScriptPipe, splitPipesFromFirstCommand } from "./Pipe";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -150,6 +150,7 @@ export class Terminal {
   ];
 
   outputToBeProcessed: (Output | Link | RawOutput)[] = [];
+  // outputToBeProcessed: PipedOutput[] = [];
 
   currentTerminalPipe: PipedCommand | null = null;
 

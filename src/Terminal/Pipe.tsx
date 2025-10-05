@@ -44,6 +44,8 @@ function handlePipe(): void {
     return TerminalEvents.emit();
   }
 
+  // TODO: piped output should carry their remaining pipe chain with them - refactor outputToBeProcessed
+
   // TODO: test piping to script - should it live here or in runScript?
   // TODO: implement piping out of script - pid in tprint through append
   if (hasScriptExtension(command)) {
@@ -253,6 +255,11 @@ function pipeMatcher(): RegExp {
   return /^(>>)|[|>]$/g;
 }
 
+export type PipedOutput = {
+  output: (Output | Link | RawOutput)[];
+  remainingPipe: PipedCommand | null;
+};
+
 export type PipedCommand = {
   commandString: string;
   pipeType: string;
@@ -262,4 +269,5 @@ export type PipedCommand = {
 export type ScriptPipe = {
   pipe: PipedCommand;
   output: (Output | Link | RawOutput)[];
+  //output: PipedOutput[];
 };
