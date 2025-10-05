@@ -128,7 +128,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
           return;
         }
         const komi: number | undefined = _komi !== undefined ? helpers.number(ctx, "komi", _komi) : undefined;
-        return setTestingBoardState(State.board, komi);
+        return setTestingBoardState(logger(ctx), error(ctx), State.board, komi);
       },
       highlightPoint: (ctx) => (_x, _y, _color, _text) => {
         const x = helpers.number(ctx, "x", _x);

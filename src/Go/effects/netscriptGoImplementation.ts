@@ -268,19 +268,16 @@ export function getControlledEmptyNodes(_board?: Board) {
 }
 
 /**
- * Resets the active game to be a new board with "No AI" as the opponent. Used for testing scenarios.
- * @param board - The new board state to apply
- * @param komi - the handicap value to apply for white
+ * Resets the active game to be a new board with "No AI" as the opponent. Applies the specified board state and komi to the new game.
+ * Used for testing scenarios.
  */
-export function setTestingBoardState(board: Board, komi?: number) {
-  resetBoardState(
-    () => {},
-    (s): never => {
-      throw new Error(s);
-    },
-    GoOpponent.none,
-    board.length,
-  );
+export function setTestingBoardState(
+  logger: (s: string) => void,
+  error: (s: string) => never,
+  board: Board,
+  komi?: number,
+) {
+  resetBoardState(logger, error, GoOpponent.none, board.length);
   Go.currentGame.board = board;
   if (komi != undefined) {
     Go.currentGame.komiOverride = komi;
