@@ -56,16 +56,16 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
 
   const boardSize = Go.currentGame.board.length;
   if (x < 0 || x >= boardSize) {
-    error(`Invalid column number (x = ${x}), column must be a number 0 through ${boardSize - 1}`);
+    return error(`Invalid column number (x = ${x}), column must be a number 0 through ${boardSize - 1}`);
   }
   if (y < 0 || y >= boardSize) {
-    error(`Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
+    return error(`Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
   }
 
   const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, moveColor);
   const point = Go.currentGame.board[x][y];
   if (!point && check.onlineNode) {
-    error(
+    return error(
       `The node ${x},${y} is offline, so you cannot ${
         methodName === "removeRouter"
           ? "clear this point with removeRouter()"
@@ -76,17 +76,17 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
     );
   }
   if (validity === GoValidity.noSuicide && check.suicide) {
-    error(
+    return error(
       `${moveString} ${validity}. That point has no neighboring empty nodes, and is not connected to a network with access to empty nodes, meaning it would be instantly captured if played there.`,
     );
   }
   if (validity === GoValidity.boardRepeated && check.repeat) {
-    error(
+    return error(
       `${moveString} ${validity}. That move would repeat the previous board state, which is illegal as it leads to infinite loops.`,
     );
   }
   if (point?.color !== GoColor.empty && check.emptyNode) {
-    error(
+    return error(
       `The point ${x},${y} is occupied by a router, so you cannot ${
         methodName === "destroyNode" ? "destroy this node. (Attempted to destroyNode)" : "place a router there"
       }`,
@@ -94,31 +94,33 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
   }
 
   if (point?.color === GoColor.empty && check.requireNonEmptyNode) {
-    error(`The point ${x},${y} does not have a router on it, so you cannot clear this point with removeRouter().`);
+    return error(
+      `The point ${x},${y} does not have a router on it, so you cannot clear this point with removeRouter().`,
+    );
   }
   if (point && check.requireOfflineNode) {
-    error(`The node ${x},${y} is not offline, so you cannot repair the node.`);
+    return error(`The node ${x},${y} is not offline, so you cannot repair the node.`);
   }
 }
 
 function validatePlayAsWhite(error: (s: string) => never) {
   if (Go.currentGame.ai !== GoOpponent.none) {
-    error(`${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
+    return error(`${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
   }
 
   if (Go.currentGame.previousPlayer === GoColor.white) {
-    error(`${GoValidity.notYourTurn}. You cannot play or pass as white until the opponent has played.`);
+    return error(`${GoValidity.notYourTurn}. You cannot play or pass as white until the opponent has played.`);
   }
 }
 
 function validateTurn(error: (s: string) => never, moveString = "", color = GoColor.black) {
   if (Go.currentGame.previousPlayer === color) {
-    error(
+    return error(
       `${moveString} ${GoValidity.notYourTurn}. Do you have multiple scripts running, or did you forget to await makeMove() or opponentNextTurn()`,
     );
   }
   if (Go.currentGame.previousPlayer === null) {
-    error(
+    return error(
       `${moveString} ${GoValidity.gameOver}. You cannot make more moves. Start a new game using resetBoardState().`,
     );
   }
@@ -153,7 +155,7 @@ export function makePlayerMove(
   const moveWasMade = makeMove(boardState, x, y, color);
 
   if (validity !== GoValidity.valid || !moveWasMade) {
-    error(`Invalid move: ${x} ${y}. ${validity}.`);
+    return error(`Invalid move: ${x} ${y}. ${validity}.`);
   }
 
   logger(`Go move played: ${x}, ${y}${playAsWhite ? " (White)" : ""}`);
@@ -265,10 +267,15 @@ export function getControlledEmptyNodes(_board?: Board) {
   );
 }
 
+/**
+ * Resets the active game to be a new board with "No AI" as the opponent. Used for testing scenarios.
+ * @param board - The new board state to apply
+ * @param komi - the handicap value to apply for white
+ */
 export function setTestingBoardState(board: Board, komi?: number) {
   resetBoardState(
     () => {},
-    () => {},
+    (s): never => {throw new Error(s)},
     GoOpponent.none,
     board.length,
   );
@@ -338,18 +345,16 @@ function logEndGame(logger: (s: string) => void) {
  */
 export function resetBoardState(
   logger: (s: string) => void,
-  error: (s: string) => void,
+  error: (s: string) => never,
   opponent: GoOpponent,
   boardSize: number,
 ) {
   if (![5, 7, 9, 13].includes(boardSize) && opponent !== GoOpponent.w0r1d_d43m0n) {
-    error(`Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
-    return;
+    return error(`Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
   }
 
   if (opponent === GoOpponent.w0r1d_d43m0n && !Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
-    error(`Invalid opponent requested (${opponent}), this opponent has not yet been discovered`);
-    return;
+    return error(`Invalid opponent requested (${opponent}), this opponent has not yet been discovered`);
   }
 
   const oldBoardState = Go.currentGame;
@@ -443,7 +448,7 @@ export function validateBoardState(
       playAsWhite ? GoColor.black : GoColor.white,
     );
   } catch (e) {
-    error(boardValidity.failedToCreateBoard);
+    return error(boardValidity.failedToCreateBoard);
   }
 }
 
@@ -455,22 +460,22 @@ function getSimpleBoardFromUnknown(error: (arg0: string) => never, _boardState: 
     return undefined;
   }
   if (!Array.isArray(_boardState)) {
-    error(boardValidity.badType);
+    return error(boardValidity.badType);
   }
   if ((_boardState as unknown[]).find((row) => typeof row !== "string")) {
-    error(boardValidity.badType);
+    return error(boardValidity.badType);
   }
 
   const boardState = _boardState as string[];
 
   if (boardState.find((row) => row.length !== boardState.length)) {
-    error(boardValidity.badShape);
+    return error(boardValidity.badShape);
   }
   if (![5, 7, 9, 13, 19].includes(boardState.length)) {
-    error(boardValidity.badSize);
+    return error(boardValidity.badSize);
   }
   if (boardState.find((row) => row.match(/[^XO#.]/))) {
-    error(boardValidity.badCharacters);
+    return error(boardValidity.badCharacters);
   }
   return boardState as SimpleBoard;
 }
@@ -480,7 +485,7 @@ export function checkCheatApiAccess(error: (s: string) => never): void {
   const hasSourceFile = Player.activeSourceFileLvl(14) > 1;
   const isBitnodeFourteenTwo = Player.activeSourceFileLvl(14) === 1 && Player.bitNodeN === 14;
   if (!hasSourceFile && !isBitnodeFourteenTwo) {
-    error(
+    return error(
       `The go.cheat API requires Source-File 14.2 to run, a power up you obtain later in the game.
       It will be very obvious when and how you can obtain it.`,
     );
@@ -571,7 +576,7 @@ export function cheatRemoveRouter(
 ): Promise<Play> {
   const point = Go.currentGame.board[x][y];
   if (!point) {
-    error(`Cheat failed. The point ${x},${y} is already offline.`);
+    return error(`Cheat failed. The point ${x},${y} is already offline.`);
   }
   return determineCheatSuccess(
     logger,
@@ -603,7 +608,7 @@ export function cheatPlayTwoMoves(
   const point2 = Go.currentGame.board[x2][y2];
 
   if (!point1 || !point2) {
-    error(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
+    return error(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
   }
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
 
