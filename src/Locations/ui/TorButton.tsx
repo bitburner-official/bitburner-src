@@ -7,7 +7,7 @@ import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
 
 import { Money } from "../../ui/React/Money";
-import { GetOrCreateDarkwebServer } from "../../DarkNet/controllers/NetworkGenerator";
+import { getTorRouter } from "../../Server/ServerHelpers";
 
 /** Attempt to purchase a TOR router using the button. */
 export function purchaseTorRouter(): void {
@@ -27,13 +27,6 @@ export function purchaseTorRouter(): void {
       "You now have access to the dark web from your home computer.\n" +
       `Use the "buy" command in the terminal to purchase programs.`,
   );
-}
-
-export function getTorRouter(): void {
-  const darkweb = GetOrCreateDarkwebServer();
-
-  Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
-  darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);
 }
 
 interface IProps {

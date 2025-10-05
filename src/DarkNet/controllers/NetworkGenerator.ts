@@ -42,17 +42,24 @@ import {
   getServersOnRowBelow,
 } from "../utils/darknetNetworkUtils";
 import { getDarknetServerSafely } from "../utils/darknetServerUtils";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { JSONMap } from "../../Types/Jsonable";
+import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import type { Script } from "../../Script/Script";
+import type { CodingContract } from "../../CodingContract/Contract";
+import { getTorRouter } from "../../Server/ServerHelpers";
 
-// WIP: This may be the wrong way to migrate darkweb server
-/**
- * Creates the dark web server if it does not already exist, or returns the existing one if it does.
- * If the current darkweb server is a standard server, it will be deleted and replaced with a darknet server.
- */
-export const GetOrCreateDarkwebServer = (): DarknetServer => {
+export function initDarkwebServer(): void {
   const existingServer = GetServer(SpecialServers.DarkWeb);
   if (existingServer instanceof DarknetServer) {
-    return existingServer;
-  } else if (existingServer) {
+    return;
+  }
+  let scripts = new JSONMap<ScriptFilePath, Script>();
+  let contracts: CodingContract[] = [];
+  const hasTOR = Player.hasTorRouter();
+  if (existingServer) {
+    scripts = existingServer.scripts;
+    contracts = existingServer.contracts;
     // Remove legacy darkweb server, so it can be made into a darknet server
     disconnectServers(existingServer, Player.getHomeComputer());
     DeleteServer(existingServer.hostname);
@@ -73,12 +80,15 @@ export const GetOrCreateDarkwebServer = (): DarknetServer => {
   darkweb.isMobile = false;
   darkweb.hasAdminRights = true;
   darkweb.ramBlock = 0;
-
-  return darkweb;
-};
+  darkweb.scripts = scripts;
+  darkweb.contracts = contracts;
+  if (hasTOR) {
+    getTorRouter();
+  }
+}
 
 export const populateDarknet = () => {
-  GetOrCreateDarkwebServer();
+  initDarkwebServer();
 
   if (getAllMobileDarknetServers().length) {
     loadDarknet();
@@ -179,14 +189,8 @@ export const addRandomConnections = (server: DarknetServer) => {
 };
 
 export const addServerToNetwork = (server: DarknetServer, x: number, y: number) => {
-  // WIP: Delete this check. If it happens, let it crash.
-  if (DarknetState.Network[x]?.[y] === undefined) {
-    console.error(`Invalid coordinate: ${x}-${y}`);
-    return;
-  }
   if (DarknetState.Network[x][y]?.hostname) {
-    // WIP: Use exceptionAlert
-    console.error(
+    exceptionAlert(
       `Server already exists at this coordinate. Hostname: ${DarknetState.Network[x][y].hostname}. Coordinate: ${x}-${y}`,
     );
     return;

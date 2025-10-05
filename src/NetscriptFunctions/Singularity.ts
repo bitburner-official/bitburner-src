@@ -23,7 +23,7 @@ import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { getServerOnNetwork } from "../Server/ServerHelpers";
+import { getServerOnNetwork, getTorRouter } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
 import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
@@ -53,7 +53,7 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
-import { GetOrCreateDarkwebServer, populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
+import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -409,10 +409,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
-      const darkweb = GetOrCreateDarkwebServer();
-
-      Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
-      darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);
+      getTorRouter();
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 500);
       helpers.log(ctx, () => "You have purchased a Tor router!");
       return true;

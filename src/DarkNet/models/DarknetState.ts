@@ -9,7 +9,7 @@ import { getDarknetCyclesPerMutation } from "../utils/darknetNetworkUtils";
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
 
-export type serverState = {
+export type ServerState = {
   lastLogTime?: Date;
   serverLogs: string[];
   authenticatedPIDs: number[];
@@ -28,14 +28,14 @@ export const DarknetState = {
   stockPromotions: {} as Record<string, number>,
   migrationInductionServers: {} as Record<string, number>,
   webstormTokens: 0,
-  serverState: {} as Record<string, serverState>,
+  serverState: {} as Record<string, ServerState>,
   offlineServers: [] as string[],
   storedCycles: 0,
   cyclesSinceLastMutation: 0,
   showFullNetwork: false,
 };
 
-export const getServerState = (hostname: string): serverState => {
+export const getServerState = (hostname: string): ServerState => {
   if (!DarknetState.serverState[hostname]) {
     DarknetState.serverState[hostname] = {
       serverLogs: [],

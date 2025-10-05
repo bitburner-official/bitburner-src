@@ -22,7 +22,7 @@ import { checkForMessagesToSend } from "./Message/MessageHelpers";
 import { loadAllRunningScripts, updateOnlineScriptTimes } from "./NetscriptWorker";
 import { Player } from "@player";
 import { saveObject, loadGame } from "./SaveObject";
-import { GetAllServers, initForeignServers } from "./Server/AllServers";
+import { GetAllServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
 import { initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
@@ -51,8 +51,8 @@ import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { getRecordEntries } from "./Types/Record";
 import { storeDarknetCycles } from "./DarkNet/models/DarknetState";
 import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
-
 import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
+import { initForeignServers } from "./Server/ServerHelpers";
 
 declare global {
   // This property is only available in the dev build

@@ -18,7 +18,6 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
-import { getTorRouter } from "../../Locations/ui/TorButton";
 import { getDarknetData, getDarknetServerSafely, isDarknetServer } from "../utils/darknetServerUtils";
 import {
   getAllMobileDarknetServers,
@@ -26,6 +25,7 @@ import {
   getNearbyNonEmptyPasswordServer,
 } from "../utils/darknetNetworkUtils";
 import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
+import { getTorRouter } from "../../Server/ServerHelpers";
 
 export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number = -1) => {
   if (!threads) return;

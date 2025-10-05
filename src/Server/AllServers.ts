@@ -1,25 +1,17 @@
 import { Server } from "./Server";
 import { BaseServer } from "./BaseServer";
-import { serverMetadata } from "./data/servers";
 
 import { HacknetServer } from "../Hacknet/HacknetServer";
 
-import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
-import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { Reviver } from "../utils/GenericReviver";
-import { SpecialServers } from "./data/SpecialServers";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
-import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 import { applyRamBlocks } from "../DarkNet/effects/effects";
-import { getTorRouter } from "../Locations/ui/TorButton";
 import { DarknetServer } from "./DarknetServer";
 import { isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
-import { hasDarknetAccess } from "../DarkNet/utils/darknetAuthUtils";
 
 /**
  * Map of all Servers that exist in the game
@@ -110,9 +102,12 @@ export function DeleteServer(serverkey: string): void {
 }
 
 export const connectServers = (server1: BaseServer, server2: BaseServer) => {
-  if (server1.serversOnNetwork.includes(server2.hostname)) return;
-  server1.serversOnNetwork.push(server2.hostname);
-  server2.serversOnNetwork.push(server1.hostname);
+  if (!server1.serversOnNetwork.includes(server2.hostname)) {
+    server1.serversOnNetwork.push(server2.hostname);
+  }
+  if (!server2.serversOnNetwork.includes(server1.hostname)) {
+    server2.serversOnNetwork.push(server1.hostname);
+  }
 };
 
 export const disconnectServers = (server1: BaseServer, server2: BaseServer) => {
@@ -155,90 +150,6 @@ export const renameServer = (hostname: string, newName: string): void => {
   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete AllServers[hostname];
 };
-
-interface IServerParams {
-  hackDifficulty?: number;
-  hostname: string;
-  ip: IPAddress;
-  maxRam?: number;
-  moneyAvailable?: number;
-  numOpenPortsRequired: number;
-  organizationName: string;
-  requiredHackingSkill?: number;
-  serverGrowth?: number;
-}
-
-export function initForeignServers(homeComputer: Server): void {
-  /* Create a randomized network for all the foreign servers */
-  //Groupings for creating a randomized network
-  const networkLayers: Server[][] = [];
-  for (let i = 0; i < 15; i++) {
-    networkLayers.push([]);
-  }
-
-  const toNumber = (value: number | IMinMaxRange): number => {
-    if (typeof value === "number") return value;
-    else return getRandomIntInclusive(value.min, value.max);
-  };
-
-  for (const metadata of serverMetadata) {
-    const serverParams: IServerParams = {
-      hostname: metadata.hostname,
-      ip: createUniqueRandomIp(),
-      numOpenPortsRequired: metadata.numOpenPortsRequired,
-      organizationName: metadata.organizationName,
-    };
-
-    if (metadata.maxRamExponent !== undefined) {
-      serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
-    }
-
-    if (metadata.hackDifficulty) serverParams.hackDifficulty = toNumber(metadata.hackDifficulty);
-    if (metadata.moneyAvailable) serverParams.moneyAvailable = toNumber(metadata.moneyAvailable);
-    if (metadata.requiredHackingSkill) serverParams.requiredHackingSkill = toNumber(metadata.requiredHackingSkill);
-    if (metadata.serverGrowth) serverParams.serverGrowth = toNumber(metadata.serverGrowth);
-
-    const server = new Server(serverParams);
-
-    if (metadata.networkLayer) {
-      const layer = toNumber(metadata.networkLayer);
-      server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
-    }
-
-    for (const filename of metadata.literature || []) {
-      server.messages.push(filename);
-    }
-
-    if (server.hostname === SpecialServers.WorldDaemon) {
-      server.requiredHackingSkill *= currentNodeMults.WorldDaemonDifficulty;
-    }
-    AddToAllServers(server);
-    if (metadata.networkLayer !== undefined) {
-      networkLayers[toNumber(metadata.networkLayer) - 1].push(server);
-    }
-  }
-
-  /* Create a randomized network for all the foreign servers */
-
-  const getRandomArrayItem = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
-
-  const linkNetworkLayers = (network1: Server[], selectServer: () => Server): void => {
-    for (const server of network1) {
-      connectServers(server, selectServer());
-    }
-  };
-
-  // Connect the first tier of servers to the player's home computer
-  linkNetworkLayers(networkLayers[0], () => homeComputer);
-  for (let i = 1; i < networkLayers.length; i++) {
-    linkNetworkLayers(networkLayers[i], () => getRandomArrayItem(networkLayers[i - 1]));
-  }
-
-  if (hasDarknetAccess()) {
-    getTorRouter();
-    populateDarknet();
-  }
-}
 
 export function prestigeAllServers(): void {
   for (const member of Object.keys(AllServers)) {

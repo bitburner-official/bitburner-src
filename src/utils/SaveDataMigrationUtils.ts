@@ -34,6 +34,7 @@ import type { PositiveInteger } from "../types";
 import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../Corporation/data/Constants";
 import { load } from "../db";
 import { downloadContentAsFile } from "./FileUtils";
+import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -619,6 +620,7 @@ Error: ${e}`,
       }
       unlocks.delete("VeChain");
     }
+    initDarkwebServer();
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }
