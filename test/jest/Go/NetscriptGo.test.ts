@@ -145,24 +145,18 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board);
       resetAI();
 
-      try {
-        resetBoardState(mockCtx, GoOpponent.w0r1d_d43m0n, 9);
-      } catch (e) {
-        expect(e).toContain(
-          `Invalid opponent requested (${GoOpponent.w0r1d_d43m0n}), this opponent has not yet been discovered`,
-        );
-      }
+      expect(() => resetBoardState(mockCtx, GoOpponent.w0r1d_d43m0n, 9)).toThrow(
+        `Invalid opponent requested (${GoOpponent.w0r1d_d43m0n}), this opponent has not yet been discovered`,
+      );
     });
     it("should throw an error if an invalid size is requested", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
       Go.currentGame = boardStateFromSimpleBoard(board);
       resetAI();
 
-      try {
-        resetBoardState(mockCtx, GoOpponent.TheBlackHand, 31337);
-      } catch (e) {
-        expect(e).toContain("Invalid subnet size requested (31337), size must be 5, 7, 9, or 13");
-      }
+      expect(() => resetBoardState(mockCtx, GoOpponent.TheBlackHand, 31337)).toThrow(
+        "Invalid subnet size requested (31337), size must be 5, 7, 9, or 13",
+      );
     });
   });
 
@@ -263,14 +257,12 @@ describe("Netscript Go API unit tests", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
-      try {
+      expect(() =>
         validateMove(mockCtx, 0, 0, "playTwoMoves", {
           repeat: false,
           suicide: false,
-        });
-      } catch (e) {
-        expect(e).toContain("The point 0,0 is occupied by a router, so you cannot place a router there");
-      }
+        }),
+      ).toThrow("The point 0,0 is occupied by a router, so you cannot place a router there");
     });
 
     it("should update the board with both player moves if nodes are unoccupied and cheat is successful", async () => {
@@ -313,18 +305,14 @@ describe("Netscript Go API unit tests", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
-      try {
+      expect(() =>
         validateMove(mockCtx, 1, 0, "removeRouter", {
           emptyNode: false,
           requireNonEmptyNode: true,
           repeat: false,
           suicide: false,
-        });
-      } catch (e) {
-        expect(e).toContain(
-          "The point 1,0 does not have a router on it, so you cannot clear this point with removeRouter().",
-        );
-      }
+        }),
+      ).toThrow("The point 1,0 does not have a router on it, so you cannot clear this point with removeRouter().");
     });
 
     it("should remove the router if the move is valid", async () => {
@@ -354,17 +342,15 @@ describe("Netscript Go API unit tests", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....#"];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
-      try {
+      expect(() =>
         validateMove(mockCtx, 0, 0, "repairOfflineNode", {
           emptyNode: false,
           repeat: false,
           onlineNode: false,
           requireOfflineNode: true,
           suicide: false,
-        });
-      } catch (e) {
-        expect(e).toContain("The node 0,0 is not offline, so you cannot repair the node.");
-      }
+        }),
+      ).toThrow("The node 0,0 is not offline, so you cannot repair the node.");
     });
 
     it("should update the board with the repaired node if the cheat is successful", async () => {
