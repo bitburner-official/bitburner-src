@@ -29,8 +29,8 @@ import { installAugmentations } from "../../../src/Augmentation/AugmentationHelp
 import { AddToAllServers } from "../../../src/Server/AllServers";
 import { Server } from "../../../src/Server/Server";
 import { initSourceFiles } from "../../../src/SourceFile/SourceFiles";
-import { NetscriptContext } from "../../../src/Netscript/APIWrapper";
-import { WorkerScript } from "../../../src/Netscript/WorkerScript";
+import type { NetscriptContext } from "../../../src/Netscript/APIWrapper";
+import type { WorkerScript } from "../../../src/Netscript/WorkerScript";
 
 jest.mock("../../../src/Faction/Factions", () => ({
   Factions: {},
@@ -53,7 +53,7 @@ const mockCtx: NetscriptContext = {
     scriptRef: {
       dependencies: [],
     },
-  } as WorkerScript,
+  } as unknown as WorkerScript,
 };
 
 setPlayer(new PlayerObject());
