@@ -38,7 +38,8 @@ function warnIfNonArgProgramIsRunWithArgs(name: CompletedProgramName, args: stri
   }
   Terminal.warn(
     `You are running ${name} with arguments, but ${name} does not accept arguments. These arguments will be ignored. ` +
-      `${name} only affects the server ('${Player.currentServer}') that you are connecting via the terminal.`,
+      `${name} only affects the server ('${Player.currentServer}') that you are connecting via the terminal. ` +
+      "If you want to pass the target's hostname as an argument, you have to use the respective NS API.",
   );
 }
 
