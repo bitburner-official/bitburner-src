@@ -8,6 +8,9 @@ import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 
+const hostnameOfNonExistentServer = "fake-server";
+const errorMessageForNonExistentServer = `Target server ${hostnameOfNonExistentServer} does not exist. It may have gone offline.`;
+
 beforeAll(() => {
   initGameEnvironment();
   initStockMarket();
@@ -165,12 +168,13 @@ describe("Normal NPC server", () => {
   });
   test("probe", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    const result = ns.dnet.probe();
-    expect(result.length).toStrictEqual(0);
+    expect(() => {
+      ns.dnet.probe();
+    }).toThrow("CSEC is not a darknet server");
   });
   test("setStasisLink", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.setStasisLink(true)).toThrow("Failed to stasis link: CSEC is not a darknet server.");
+    expect(() => ns.dnet.setStasisLink(true)).toThrow("CSEC is not a darknet server.");
   });
   test("getServer", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
@@ -211,13 +215,13 @@ describe("Normal NPC server", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toThrow("CSEC is not a darknet server");
+    }).rejects.toContain("CSEC is not a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toThrow("CSEC is not a darknet server");
+    }).rejects.toContain("CSEC is not a darknet server");
   });
 });
 
@@ -243,12 +247,13 @@ describe("Private server", () => {
   });
   test("probe", () => {
     const ns = getNS("test-server-1");
-    const result = ns.dnet.probe();
-    expect(result.length).toStrictEqual(0);
+    expect(() => {
+      ns.dnet.probe();
+    }).toThrow("test-server-1 is not a darknet server");
   });
   test("setStasisLink", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.setStasisLink(true)).toThrow("Failed to stasis link: test-server-1 is not a darknet server.");
+    expect(() => ns.dnet.setStasisLink(true)).toThrow("test-server-1 is not a darknet server.");
   });
   test("getServer", () => {
     const ns = getNS("test-server-1");
@@ -289,13 +294,13 @@ describe("Private server", () => {
     const ns = getNS("test-server-1");
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toThrow("test-server-1 is not a darknet server");
+    }).rejects.toContain("test-server-1 is not a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNS("test-server-1");
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toThrow("test-server-1 is not a darknet server");
+    }).rejects.toContain("test-server-1 is not a darknet server");
   });
 });
 
@@ -321,14 +326,13 @@ describe("Hashnet server", () => {
   });
   test("probe", () => {
     const ns = getNS("hacknet-server-0");
-    const result = ns.dnet.probe();
-    expect(result.length).toStrictEqual(0);
+    expect(() => {
+      ns.dnet.probe();
+    }).toThrow("hacknet-server-0 is not a darknet server");
   });
   test("setStasisLink", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.setStasisLink(true)).toThrow(
-      "Failed to stasis link: hacknet-server-0 is not a darknet server.",
-    );
+    expect(() => ns.dnet.setStasisLink(true)).toThrow("hacknet-server-0 is not a darknet server.");
   });
   test("getServer", () => {
     const ns = getNS("hacknet-server-0");
@@ -369,13 +373,13 @@ describe("Hashnet server", () => {
     const ns = getNS("hacknet-server-0");
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toThrow("hacknet-server-0 is not a darknet server");
+    }).rejects.toContain("hacknet-server-0 is not a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNS("hacknet-server-0");
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toThrow("hacknet-server-0 is not a darknet server");
+    }).rejects.toContain("hacknet-server-0 is not a darknet server");
   });
 });
 
@@ -383,18 +387,18 @@ describe("Non-existent server", () => {
   test("authenticate from darkweb", async () => {
     const ns = getNsOnDarkWeb();
     await expect(async () => {
-      await ns.dnet.authenticate("fake-server", "");
-    }).rejects.toContain("fake-server is not a darknet server");
+      await ns.dnet.authenticate(hostnameOfNonExistentServer, "");
+    }).rejects.toContain(errorMessageForNonExistentServer);
   });
   test("connectToSession", () => {
     const ns = getNsOnHome();
     expect(() => {
-      ns.dnet.connectToSession("fake-server", "");
-    }).toThrow("fake-server is not a darknet server");
+      ns.dnet.connectToSession(hostnameOfNonExistentServer, "");
+    }).toThrow(errorMessageForNonExistentServer);
   });
   test("heartbleed from darkweb", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.heartbleed("fake-server")).toThrow("fake-server is not a darknet server");
+    expect(() => ns.dnet.heartbleed(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
   test("openCache", () => {
     // Intentionally empty. Caches cannot be spawned on non-darknet servers.
@@ -402,29 +406,29 @@ describe("Non-existent server", () => {
   test("getServer", () => {
     const ns = getNsOnDarkWeb();
     expect(() => {
-      ns.dnet.getServer("fake-server");
-    }).toThrow("fake-server is not a darknet server");
+      ns.dnet.getServer(hostnameOfNonExistentServer);
+    }).toThrow(errorMessageForNonExistentServer);
   });
   test("getServerAuthDetails", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.getServerAuthDetails("fake-server")).toThrow("fake-server is not a darknet server");
+    expect(() => ns.dnet.getServerAuthDetails(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
   test("packetCapture", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.packetCapture("fake-server")).toThrow("fake-server is not a darknet server");
+    expect(() => ns.dnet.packetCapture(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
   test("induceServerMigration", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.induceServerMigration("fake-server")).toThrow("fake-server is not a darknet server");
+    expect(() => ns.dnet.induceServerMigration(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
   test("isDarknetServer", () => {
     const ns = getNsOnDarkWeb();
-    const result = ns.dnet.isDarknetServer("fake-server");
+    const result = ns.dnet.isDarknetServer(hostnameOfNonExistentServer);
     expect(result).toStrictEqual(false);
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.getOwnerAllocatedRam("fake-server")).toThrow("fake-server is not a darknet server");
+    expect(() => ns.dnet.getOwnerAllocatedRam(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
 });
 

@@ -1,6 +1,5 @@
 import {
   generateMaze,
-  getRandomOpenCoordinate,
   getSurroundingsVisualized,
 } from "../../../src/DarkNet/effects/labyrinth";
 
@@ -10,16 +9,16 @@ describe("Labyrinth Tests", () => {
     const height = 20;
     const maze = generateMaze(width, height);
 
-    console.log(
-      maze
-        .map((row) =>
-          row
-            .split("")
-            .map((x) => `${x}${x}`)
-            .join(""),
-        )
-        .join("\n"),
-    );
+    // console.log(
+    //   maze
+    //     .map((row) =>
+    //       row
+    //         .split("")
+    //         .map((x) => `${x}${x}`)
+    //         .join(""),
+    //     )
+    //     .join("\n"),
+    // );
 
     console.log(getSurroundingsVisualized(maze, 1, 1));
 

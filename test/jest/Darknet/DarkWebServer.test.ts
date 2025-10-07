@@ -63,7 +63,6 @@ describe("DarkWebServer Tests", () => {
     expect(server).toBeDefined();
 
     const getData = () => {
-      console.log(DarknetState.serverState, server.hostname);
       const responseLog = DarknetState.serverState[server.hostname].serverLogs.slice(0, 1)[0];
       const feedback = JSON.parse(responseLog) as PasswordResponse;
       if (!feedback.data) {
