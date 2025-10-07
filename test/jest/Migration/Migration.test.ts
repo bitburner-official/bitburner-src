@@ -20,7 +20,27 @@ describe("v3", () => {
 
     const mockedDownload = jest.spyOn(FileUtils, "downloadContentAsFile");
 
+    const originalConsoleError = console.error;
+    const originalConsoleWarning = console.warn;
+    const consoleError = jest.spyOn(console, "error").mockImplementation((...data: unknown[]) => {
+      if (Array.isArray(data) && data.length > 0 && (data[0] === "There was no Darknet savedata" || data[0] === "")) {
+        return;
+      }
+      originalConsoleError(...data);
+    });
+    const consoleWarning = jest.spyOn(console, "warn").mockImplementation((...data: unknown[]) => {
+      if (
+        Array.isArray(data) &&
+        data.length > 0 &&
+        (data[0] === "Encountered the following issue while loading Darknet savedata:" || data[0] === "Savedata:")
+      ) {
+        return;
+      }
+      originalConsoleWarning(...data);
+    });
     await loadGame(await db.load());
+    consoleError.mockRestore();
+    consoleWarning.mockRestore();
 
     // Check if auto-migration works
     expect(
