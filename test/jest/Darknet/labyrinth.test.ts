@@ -1,6 +1,5 @@
 import {
   generateMaze,
-  getSurroundingsVisualized,
 } from "../../../src/DarkNet/effects/labyrinth";
 
 describe("Labyrinth Tests", () => {
@@ -20,7 +19,7 @@ describe("Labyrinth Tests", () => {
     //     .join("\n"),
     // );
 
-    console.log(getSurroundingsVisualized(maze, 1, 1));
+    // console.log(getSurroundingsVisualized(maze, 1, 1));
 
     expect(maze).toHaveLength(height + 1);
     expect(maze[0]).toHaveLength(width - 1);
