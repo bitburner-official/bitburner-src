@@ -32,6 +32,16 @@ function bitFlumeRequirements() {
   };
 }
 
+function warnIfNonArgProgramIsRunWithArgs(name: CompletedProgramName, args: string[]): void {
+  if (args.length === 0) {
+    return;
+  }
+  Terminal.warn(
+    `You are running ${name} with arguments, but ${name} does not accept arguments. These arguments will be ignored. ` +
+      `${name} only affects the server ('${Player.currentServer}') that you are connecting via the terminal.`,
+  );
+}
+
 export const Programs: Record<CompletedProgramName, Program> = {
   [CompletedProgramName.nuke]: new Program({
     name: CompletedProgramName.nuke,
@@ -41,7 +51,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(1),
       time: CONSTANTS.MillisecondsPerFiveMinutes,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.nuke, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot nuke this kind of server.");
         return;
@@ -69,7 +80,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(50),
       time: CONSTANTS.MillisecondsPerFiveMinutes * 2,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.bruteSsh, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run BruteSSH.exe on this kind of server.");
         return;
@@ -92,7 +104,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(100),
       time: CONSTANTS.MillisecondsPerHalfHour,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.ftpCrack, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run FTPCrack.exe on this kind of server.");
         return;
@@ -115,7 +128,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(250),
       time: CONSTANTS.MillisecondsPer2Hours,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.relaySmtp, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run relaySMTP.exe on this kind of server.");
         return;
@@ -138,7 +152,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(500),
       time: CONSTANTS.MillisecondsPer4Hours,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.httpWorm, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run HTTPWorm.exe on this kind of server.");
         return;
@@ -161,7 +176,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(750),
       time: CONSTANTS.MillisecondsPer8Hours,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.sqlInject, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run SQLInject.exe on this kind of server.");
         return;
