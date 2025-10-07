@@ -5,7 +5,6 @@ exports[`load/saveAllServers 1`] = `
   "home": {
     "ctor": "Server",
     "data": {
-      "caches": [],
       "contracts": [],
       "cpuCores": 1,
       "ftpPortOpen": false,
@@ -94,7 +93,6 @@ exports[`load/saveAllServers 1`] = `
   "n00dles": {
     "ctor": "Server",
     "data": {
-      "caches": [],
       "contracts": [],
       "cpuCores": 1,
       "ftpPortOpen": false,
@@ -143,7 +141,6 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
   "home": {
     "ctor": "Server",
     "data": {
-      "caches": [],
       "contracts": [],
       "cpuCores": 1,
       "ftpPortOpen": false,
@@ -211,7 +208,6 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
   "n00dles": {
     "ctor": "Server",
     "data": {
-      "caches": [],
       "contracts": [],
       "cpuCores": 1,
       "ftpPortOpen": false,
