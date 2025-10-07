@@ -4,7 +4,7 @@
 
 ## Darknet.phishingAttack() method
 
-Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa. Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
+Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charisma. Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
 
 The amount of money lifted scales with the number of threads used, if successful. Very occasionally you can retrieve a cache file from the attempt.
 

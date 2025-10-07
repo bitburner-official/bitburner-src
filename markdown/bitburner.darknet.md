@@ -38,7 +38,7 @@ Description
 
 Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.
 
-If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files from it. (scp() \*to\* the server is always allowed.)
+If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
 
 Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
 
@@ -103,7 +103,7 @@ Gets the amount of RAM blocked by the server owner's processes. This ram can be 
 
 </td><td>
 
-Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+Returns a server object for the given server.
 
 If the server has recently gone offline, it will return a blank server object with `isOnline: false`<!-- -->.
 
@@ -177,7 +177,7 @@ Effect scales with threads.
 
 </td><td>
 
-Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
+Returns whether the server is a darknet server.
 
 Returns false if the server does not exist or has gone offline.
 
@@ -225,7 +225,7 @@ Using multiple threads speeds up the capture process.
 
 </td><td>
 
-Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa. Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
+Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charisma. Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
 
 The amount of money lifted scales with the number of threads used, if successful. Very occasionally you can retrieve a cache file from the attempt.
 

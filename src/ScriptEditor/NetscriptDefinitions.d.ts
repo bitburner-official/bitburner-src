@@ -4249,7 +4249,7 @@ export interface Darknet {
    * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
    * to the server that the script is running on. The speed of authentication scales with the number of threads used.
    *
-   * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files from it. (scp() *to* the server is always allowed.)
+   * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
    *
    * Response messages:<br/>
    * - "200 Success" - Authentication was successful.<br/>
@@ -4321,7 +4321,7 @@ export interface Darknet {
    * RAM cost: 2 GB
    *
    * @param filename - the cache file to open.
-   * @param suppressToast - optional. If true, suppresses the toast notification that appears when opening a cache file.
+   * @param suppressToast - optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
    */
   openCache(filename: string, suppressToast?: boolean): void;
 
@@ -4331,7 +4331,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.2 GB
    *
-   * @param returnByIP - Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false
+   * @param returnByIP - Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false.
    * @returns An array of strings containing the hostnames of all servers connected to the current server.
    */
   probe(returnByIP?: boolean): string[];
@@ -4349,7 +4349,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 12 GB
    *
-   * @param shouldLink - true to apply a stasis link, false to remove it.
+   * @param shouldLink - true to apply a stasis link, false to remove it. Optional. Defaults to true.
    * @returns A promise that resolves to a {@link Result} object.
    */
   setStasisLink(shouldLink?: boolean): Promise<Result>;
@@ -4369,19 +4369,19 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param returnByIP - Optional. If true, returns IPs instead of hostnames.
+   * @param returnByIP - Optional. If true, returns IPs instead of hostnames. Defaults to false.
    */
   getStasisLinkedServers(returnByIP?: boolean): string[];
 
   /**
-   * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+   * Returns a server object for the given server.
    *
    * If the server has recently gone offline, it will return a blank server object with `isOnline: false`.
    *
    * @remarks
    * RAM cost: 2 GB
    *
-   * @param host - Optional. Hostname for the requested server object.
+   * @param host - Optional. Hostname for the requested server object. Defaults to the running script's server.
    * @returns The requested server object, or null if the server is not found.
    */
   getServer(host?: string): DarknetServer;
@@ -4426,7 +4426,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * @param hostname - Optional. Hostname of the connected server to migrate. Defaults to the current server.
+   * @param hostname - Optional. Hostname of the connected server to migrate. Defaults to the running script's server.
    * @returns A promise that resolves to a {@link Result} object.
    */
   induceServerMigration(hostname?: string): Promise<Result>;
@@ -4441,14 +4441,14 @@ export interface Darknet {
   unleashStormSeed(): Result;
 
   /**
-   * Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
+   * Returns whether the server is a darknet server.
    *
    * Returns false if the server does not exist or has gone offline.
    *
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * @param host - Optional. Hostname for the requested server object.
+   * @param host - Optional. Hostname for the requested server object. Defaults to the running script's server.
    * @returns true if the server is a darknet server, false otherwise.
    */
   isDarknetServer(host?: string): boolean;
@@ -4460,7 +4460,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @param hostname - Optional. Hostname of the connected server to free ram from.
+   * @param hostname - Optional. Hostname of the connected server to free ram from. Defaults to the running script's server.
    */
   memoryReallocation(hostname?: string): Promise<Result>;
 
@@ -4470,7 +4470,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param hostname - Optional. Hostname of the server to check. Defaults to the scripts current server.
+   * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
    * @returns The amount of RAM blocked by the server owner's processes.
    */
   getOwnerAllocatedRam(hostname?: string): number;
@@ -4484,7 +4484,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * @param hostname - Optional. Hostname of the server to check. Defaults to the scripts current server.
+   * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
    * @return The current depth of the server into the darknet.
    */
   getCurrentDepth(hostname?: string): number;
@@ -4501,7 +4501,7 @@ export interface Darknet {
   promoteStock(sym: string): Promise<Result>;
 
   /**
-   * Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
+   * Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charisma.
    * Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
    *
    * The amount of money lifted scales with the number of threads used, if successful. Very occasionally you can retrieve a cache file from the attempt.
@@ -7460,7 +7460,7 @@ export interface NS {
    * @remarks
    * RAM cost: 1.3 GB
    *
-   * Run a script as a separate process on a specified server. This is similar to the function {@link NS.run | run}
+   * Run a script as a separate process on a specified server. This is similar to the function {@link NS.run | run},
    * except that it can be used to run a script that already exists on any server, instead of just the current server.
    *
    * If the script was successfully started, then this function returns the PID of that script.

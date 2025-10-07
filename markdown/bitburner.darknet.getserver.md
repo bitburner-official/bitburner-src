@@ -4,7 +4,7 @@
 
 ## Darknet.getServer() method
 
-Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+Returns a server object for the given server.
 
 If the server has recently gone offline, it will return a blank server object with `isOnline: false`<!-- -->.
 
@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname for the requested server object.
+_(Optional)_ Optional. Hostname for the requested server object. Defaults to the running script's server.
 
 
 </td></tr>

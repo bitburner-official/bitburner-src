@@ -4,7 +4,7 @@
 
 ## Darknet.isDarknetServer() method
 
-Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
+Returns whether the server is a darknet server.
 
 Returns false if the server does not exist or has gone offline.
 
@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname for the requested server object.
+_(Optional)_ Optional. Hostname for the requested server object. Defaults to the running script's server.
 
 
 </td></tr>

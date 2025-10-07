@@ -42,7 +42,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ Optional. If true, returns IPs instead of hostnames.
+_(Optional)_ Optional. If true, returns IPs instead of hostnames. Defaults to false.
 
 
 </td></tr>

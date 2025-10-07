@@ -58,7 +58,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ optional. If true, suppresses the toast notification that appears when opening a cache file.
+_(Optional)_ optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
 
 
 </td></tr>

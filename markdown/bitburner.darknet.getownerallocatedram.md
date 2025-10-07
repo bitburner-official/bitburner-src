@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname of the server to check. Defaults to the scripts current server.
+_(Optional)_ Optional. Hostname of the server to check. Defaults to the running script's server.
 
 
 </td></tr>

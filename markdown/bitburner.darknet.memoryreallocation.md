@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname of the connected server to free ram from.
+_(Optional)_ Optional. Hostname of the connected server to free ram from. Defaults to the running script's server.
 
 
 </td></tr>

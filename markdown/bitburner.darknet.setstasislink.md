@@ -46,7 +46,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ true to apply a stasis link, false to remove it.
+_(Optional)_ true to apply a stasis link, false to remove it. Optional. Defaults to true.
 
 
 </td></tr>

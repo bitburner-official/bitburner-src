@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname of the connected server to migrate. Defaults to the current server.
+_(Optional)_ Optional. Hostname of the connected server to migrate. Defaults to the running script's server.
 
 
 </td></tr>
