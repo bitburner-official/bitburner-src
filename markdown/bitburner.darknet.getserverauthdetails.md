@@ -14,9 +14,39 @@ getServerAuthDetails(host?: string): ServerAuthDetails;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | _(Optional)_ Hostname of the server to analyze. Defaults to the running script's server if not specified. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname of the server to analyze. Defaults to the running script's server if not specified.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

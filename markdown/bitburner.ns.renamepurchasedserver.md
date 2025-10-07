@@ -14,10 +14,55 @@ renamePurchasedServer(hostname: string, newName: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hostname | string | Current server hostname. |
-|  newName | string | New server hostname. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hostname
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Current server hostname.
+
+
+</td></tr>
+<tr><td>
+
+newName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+New server hostname.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

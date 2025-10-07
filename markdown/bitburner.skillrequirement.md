@@ -14,8 +14,60 @@ interface SkillRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [skills](./bitburner.skillrequirement.skills.md) |  | Partial&lt;[Skills](./bitburner.skills.md)<!-- -->&gt; |  |
-|  [type](./bitburner.skillrequirement.type.md) |  | "skills" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[skills](./bitburner.skillrequirement.skills.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Partial&lt;[Skills](./bitburner.skills.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.skillrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"skills"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

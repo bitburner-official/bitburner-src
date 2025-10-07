@@ -14,11 +14,71 @@ run(script: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[])
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  script | string | Filename of script to run. |
-|  threadOrOptions | number \| [RunOptions](./bitburner.runoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument threadOrOptions must be filled in with a value. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+script
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of script to run.
+
+
+</td></tr>
+<tr><td>
+
+threadOrOptions
+
+
+</td><td>
+
+number \| [RunOptions](./bitburner.runoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument threadOrOptions must be filled in with a value.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

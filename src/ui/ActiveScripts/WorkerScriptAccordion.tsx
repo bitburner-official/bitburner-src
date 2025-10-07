@@ -68,7 +68,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
       <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper}>
         <ListItemText
           primary={
-            <Typography style={{ wordWrap: "break-word" }}>
+            <Typography sx={{ overflowWrap: "break-word" }}>
               └ {props.workerScript.name} {JSON.stringify(props.workerScript.args)}
             </Typography>
           }
@@ -89,7 +89,9 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={2}>
-                  <Typography>└ Args: {arrayToString(props.workerScript.args)}</Typography>
+                  <Typography sx={{ overflowWrap: "anywhere" }}>
+                    └ Args: {arrayToString(props.workerScript.args)}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>

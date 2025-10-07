@@ -14,9 +14,39 @@ getAugmentationGraftTime(augName: string): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  augName | string | Name of the aug to check the grafting time of. Must be an exact match. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+augName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the aug to check the grafting time of. Must be an exact match.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

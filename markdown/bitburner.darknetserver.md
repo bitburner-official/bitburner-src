@@ -14,25 +14,387 @@ export interface DarknetServer
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [backdoorInstalled?](./bitburner.darknetserver.backdoorinstalled.md) |  | boolean | _(Optional)_ Flag indicating whether this server has a backdoor installed by a player |
-|  [depth](./bitburner.darknetserver.depth.md) |  | number | The depth of the server in the net |
-|  [difficulty](./bitburner.darknetserver.difficulty.md) |  | number | The difficulty rating of the server, associated with its original depth in the net |
-|  [hasAdminRights](./bitburner.darknetserver.hasadminrights.md) |  | boolean | Flag indicating whether player has admin/root access to this server |
-|  [hasStasisLink](./bitburner.darknetserver.hasstasislink.md) |  | boolean | If the server has a stasis link applied |
-|  [hostname](./bitburner.darknetserver.hostname.md) |  | string | Hostname. Must be unique |
-|  [ip](./bitburner.darknetserver.ip.md) |  | string | IP Address. Must be unique |
-|  [isConnectedTo](./bitburner.darknetserver.isconnectedto.md) |  | boolean | Flag indicating whether player is currently connected to this server |
-|  [isOnline](./bitburner.darknetserver.isonline.md) |  | boolean | Flag indicating whether this server is currently online |
-|  [logTrafficInterval](./bitburner.darknetserver.logtrafficinterval.md) |  | number | The interval at which the server periodically adds to its logs, in seconds. |
-|  [maxRam](./bitburner.darknetserver.maxram.md) |  | number | RAM (GB) available on this server |
-|  [modelId](./bitburner.darknetserver.modelid.md) |  | string | The model of the server. Similar models have similar vulnerabilites. |
-|  [organizationName](./bitburner.darknetserver.organizationname.md) |  | string | Name of company/faction/etc. that this server belongs to, not applicable to all Servers |
-|  [passwordHintData?](./bitburner.darknetserver.passwordhintdata.md) |  | string | _(Optional)_ Data associated with the password hint |
-|  [purchasedByPlayer](./bitburner.darknetserver.purchasedbyplayer.md) |  | boolean | Flag indicating whether this is a purchased server |
-|  [ramBlock](./bitburner.darknetserver.ramblock.md) |  | number | The amount of ram blocked by the server owner |
-|  [ramUsed](./bitburner.darknetserver.ramused.md) |  | number | RAM (GB) used. i.e. unavailable RAM |
-|  [requiredCharismaSkill](./bitburner.darknetserver.requiredcharismaskill.md) |  | number | The charisma skill required to heartbleed the server |
-|  [staticPasswordHint](./bitburner.darknetserver.staticpasswordhint.md) |  | string | The generic password prompt for the server |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[backdoorInstalled?](./bitburner.darknetserver.backdoorinstalled.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Flag indicating whether this server has a backdoor installed by a player
+
+
+</td></tr>
+<tr><td>
+
+[depth](./bitburner.darknetserver.depth.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The depth of the server in the net
+
+
+</td></tr>
+<tr><td>
+
+[difficulty](./bitburner.darknetserver.difficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The difficulty rating of the server, associated with its original depth in the net
+
+
+</td></tr>
+<tr><td>
+
+[hasAdminRights](./bitburner.darknetserver.hasadminrights.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Flag indicating whether player has admin/root access to this server
+
+
+</td></tr>
+<tr><td>
+
+[hasStasisLink](./bitburner.darknetserver.hasstasislink.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+If the server has a stasis link applied
+
+
+</td></tr>
+<tr><td>
+
+[hostname](./bitburner.darknetserver.hostname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname. Must be unique
+
+
+</td></tr>
+<tr><td>
+
+[ip](./bitburner.darknetserver.ip.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+IP Address. Must be unique
+
+
+</td></tr>
+<tr><td>
+
+[isConnectedTo](./bitburner.darknetserver.isconnectedto.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Flag indicating whether player is currently connected to this server
+
+
+</td></tr>
+<tr><td>
+
+[isOnline](./bitburner.darknetserver.isonline.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Flag indicating whether this server is currently online
+
+
+</td></tr>
+<tr><td>
+
+[logTrafficInterval](./bitburner.darknetserver.logtrafficinterval.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The interval at which the server periodically adds to its logs, in seconds.
+
+
+</td></tr>
+<tr><td>
+
+[maxRam](./bitburner.darknetserver.maxram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+RAM (GB) available on this server
+
+
+</td></tr>
+<tr><td>
+
+[modelId](./bitburner.darknetserver.modelid.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The model of the server. Similar models have similar vulnerabilites.
+
+
+</td></tr>
+<tr><td>
+
+[organizationName](./bitburner.darknetserver.organizationname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of company/faction/etc. that this server belongs to, not applicable to all Servers
+
+
+</td></tr>
+<tr><td>
+
+[passwordHintData?](./bitburner.darknetserver.passwordhintdata.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Data associated with the password hint
+
+
+</td></tr>
+<tr><td>
+
+[purchasedByPlayer](./bitburner.darknetserver.purchasedbyplayer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Flag indicating whether this is a purchased server
+
+
+</td></tr>
+<tr><td>
+
+[ramBlock](./bitburner.darknetserver.ramblock.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The amount of ram blocked by the server owner
+
+
+</td></tr>
+<tr><td>
+
+[ramUsed](./bitburner.darknetserver.ramused.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+RAM (GB) used. i.e. unavailable RAM
+
+
+</td></tr>
+<tr><td>
+
+[requiredCharismaSkill](./bitburner.darknetserver.requiredcharismaskill.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The charisma skill required to heartbleed the server
+
+
+</td></tr>
+<tr><td>
+
+[staticPasswordHint](./bitburner.darknetserver.staticpasswordhint.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The generic password prompt for the server
+
+
+</td></tr>
+</tbody></table>
 

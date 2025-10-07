@@ -14,9 +14,39 @@ createDummyContract(type: CodingContractName): string;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | [CodingContractName](./bitburner.codingcontractname.md) | Type of contract to generate |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[CodingContractName](./bitburner.codingcontractname.md)
+
+
+</td><td>
+
+Type of contract to generate
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -87,6 +87,14 @@ function setCloudEnabledConfig(value) {
   store.set("cloud-enabled", value);
 }
 
+function isMenuHideEnabled() {
+  return store.get("autoHideMenuBar", false);
+}
+
+function setMenuHideConfig(value) {
+  return store.set("autoHideMenuBar", value);
+}
+
 function getSaveFolder(window, root = false) {
   if (root) {
     return path.join(app.getPath("userData"), "/saves");
@@ -388,4 +396,6 @@ module.exports = {
   setCloudEnabledConfig,
   isAutosaveEnabled,
   setAutosaveConfig,
+  isMenuHideEnabled,
+  setMenuHideConfig,
 };

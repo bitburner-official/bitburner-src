@@ -14,11 +14,71 @@ setActionAutolevel(type: BladeburnerActionType, name: BladeburnerActionName, aut
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) | Name of action. Must be an exact match. |
-|  autoLevel | boolean | Whether or not to autolevel this action |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[BladeburnerActionType](./bitburner.bladeburneractiontype.md)
+
+
+</td><td>
+
+Type of action.
+
+
+</td></tr>
+<tr><td>
+
+name
+
+
+</td><td>
+
+[BladeburnerActionName](./bitburner.bladeburneractionname.md)
+
+
+</td><td>
+
+Name of action. Must be an exact match.
+
+
+</td></tr>
+<tr><td>
+
+autoLevel
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether or not to autolevel this action
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -34,7 +34,7 @@ import { DarknetServer } from "../Server/DarknetServer";
 import { exampleDarknetServer, ResponseStatus } from "../DarkNet/Enums";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
-import { getDarknetData } from "../DarkNet/utils/darknetServerUtils";
+import { getDarknetData, getDarknetServerSafely } from "../DarkNet/utils/darknetServerUtils";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 import { resolveCacheFilePath } from "../Paths/CacheFilePath";
 

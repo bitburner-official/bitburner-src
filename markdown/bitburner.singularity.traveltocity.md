@@ -14,9 +14,39 @@ travelToCity(city: CityName): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  city | [CityName](./bitburner.cityname.md) | City to travel to. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+City to travel to.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,9 +14,49 @@ interface DarknetFormulas
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [getAuthenticateTime(server, threads, player)](./bitburner.darknetformulas.getauthenticatetime.md) | Gets the time it will take to authenticate a server. |
-|  [getExpectedRamBlockRemoved(server, threads, player)](./bitburner.darknetformulas.getexpectedramblockremoved.md) | Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation |
-|  [getHeartbleedTime(server, threads, player)](./bitburner.darknetformulas.getheartbleedtime.md) | Gets the time it will take to scrape logs from a server. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[getAuthenticateTime(server, threads, player)](./bitburner.darknetformulas.getauthenticatetime.md)
+
+
+</td><td>
+
+Gets the time it will take to authenticate a server.
+
+
+</td></tr>
+<tr><td>
+
+[getExpectedRamBlockRemoved(server, threads, player)](./bitburner.darknetformulas.getexpectedramblockremoved.md)
+
+
+</td><td>
+
+Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+
+
+</td></tr>
+<tr><td>
+
+[getHeartbleedTime(server, threads, player)](./bitburner.darknetformulas.getheartbleedtime.md)
+
+
+</td><td>
+
+Gets the time it will take to scrape logs from a server.
+
+
+</td></tr>
+</tbody></table>
 

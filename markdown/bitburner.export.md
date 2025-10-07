@@ -14,9 +14,83 @@ interface Export
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [amount](./bitburner.export.amount.md) |  | string | Amount of material exported |
-|  [city](./bitburner.export.city.md) |  | [CityName](./bitburner.cityname.md) | City the material is being exported to |
-|  [division](./bitburner.export.division.md) |  | string | Division the material is being exported to |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[amount](./bitburner.export.amount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Amount of material exported
+
+
+</td></tr>
+<tr><td>
+
+[city](./bitburner.export.city.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+City the material is being exported to
+
+
+</td></tr>
+<tr><td>
+
+[division](./bitburner.export.division.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Division the material is being exported to
+
+
+</td></tr>
+</tbody></table>
 

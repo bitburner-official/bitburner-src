@@ -14,10 +14,55 @@ hack(host: string, opts?: BasicHGWOptions): Promise<number>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname/IP of the target server to hack. |
-|  opts | [BasicHGWOptions](./bitburner.basichgwoptions.md) | _(Optional)_ Optional parameters for configuring function behavior. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of the target server to hack.
+
+
+</td></tr>
+<tr><td>
+
+opts
+
+
+</td><td>
+
+[BasicHGWOptions](./bitburner.basichgwoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Optional parameters for configuring function behavior.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

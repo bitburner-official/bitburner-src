@@ -16,9 +16,39 @@ packetCapture(host: string): Promise<Result & { data: string }>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | the hostname of the server to listen to. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+the hostname of the server to listen to.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

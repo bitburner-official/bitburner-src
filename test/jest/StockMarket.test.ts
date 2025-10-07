@@ -33,10 +33,6 @@ import {
 } from "../../src/StockMarket/StockMarketHelpers";
 import { CompanyName, LocationName, OrderType, PositionType } from "../../src/Enums";
 
-// jest.mock("../src/ui/React/createPopup.tsx", () => ({
-//   createPopup: jest.fn(),
-// }));
-
 describe("Stock Market Tests", function () {
   const commission = StockMarketConstants.StockMarketCommission;
 
@@ -451,7 +447,7 @@ describe("Stock Market Tests", function () {
 
       it("should trigger a price update when it has enough cycles", function () {
         // Get the initial prices
-        const initialValues: Record<string, any> = {};
+        const initialValues: Record<string, { price: number; otlkMag: number; b: boolean }> = {};
         for (const stockName in StockMarket) {
           const stock = StockMarket[stockName];
           if (!(stock instanceof Stock)) {

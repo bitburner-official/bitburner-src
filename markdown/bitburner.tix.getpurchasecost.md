@@ -14,11 +14,71 @@ getPurchaseCost(sym: string, shares: number, positionType: PositionType): number
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sym | string | Stock symbol. |
-|  shares | number | Number of shares to purchase. |
-|  positionType | [PositionType](./bitburner.positiontype.md) | Specifies whether the order is a Long ("L") or Short ("S") position. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sym
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Stock symbol.
+
+
+</td></tr>
+<tr><td>
+
+shares
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of shares to purchase.
+
+
+</td></tr>
+<tr><td>
+
+positionType
+
+
+</td><td>
+
+[PositionType](./bitburner.positiontype.md)
+
+
+</td><td>
+
+Specifies whether the order is a Long ("L") or Short ("S") position.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -18,11 +18,71 @@ authenticate(hostname: string, password: string, additionalMsec?: number): Promi
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hostname | string | name of the target server (connected to the current server) to try a password. |
-|  password | string | password to attempt to authenticate with. |
-|  additionalMsec | number | _(Optional)_ optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hostname
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+name of the target server (connected to the current server) to try a password.
+
+
+</td></tr>
+<tr><td>
+
+password
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+password to attempt to authenticate with.
+
+
+</td></tr>
+<tr><td>
+
+additionalMsec
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,9 +14,39 @@ createGang(faction: FactionName): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  faction | [FactionName](./bitburner.factionname.md) | Name of the faction that you want to create a gang with. This faction must allow this action, and you must be its member. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+faction
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of the faction that you want to create a gang with. This faction must allow this action, and you must be its member.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

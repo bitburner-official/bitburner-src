@@ -14,9 +14,39 @@ alert(...args: any[]): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  args | any\[\] | Value(s) to be alerted. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+Value(s) to be alerted.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

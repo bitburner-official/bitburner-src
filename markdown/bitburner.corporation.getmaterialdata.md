@@ -14,9 +14,39 @@ getMaterialData(materialName: CorpMaterialName): CorpMaterialConstantData;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+materialName
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

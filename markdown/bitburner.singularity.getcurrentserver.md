@@ -14,9 +14,39 @@ getCurrentServer(returnOpts?: HostReturnOptions): string;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  returnOpts | [HostReturnOptions](./bitburner.hostreturnoptions.md) | _(Optional)_ Optional. Controls whether the function returns an IP. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+returnOpts
+
+
+</td><td>
+
+[HostReturnOptions](./bitburner.hostreturnoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Optional. Controls whether the function returns an IP.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

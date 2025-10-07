@@ -14,10 +14,55 @@ writePort(portNumber: number, data: any): any;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  portNumber | number | Port to write to. Must be a positive integer. |
-|  data | any | Data to write, it's cloned with structuredClone(). |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+portNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Port to write to. Must be a positive integer.
+
+
+</td></tr>
+<tr><td>
+
+data
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+Data to write, it's cloned with structuredClone().
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

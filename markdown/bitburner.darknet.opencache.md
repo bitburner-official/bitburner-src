@@ -14,10 +14,55 @@ openCache(filename: string, suppressToast?: boolean): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  filename | string | the cache file to open. |
-|  suppressToast | boolean | _(Optional)_ optional. If true, suppresses the toast notification that appears when opening a cache file. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+filename
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+the cache file to open.
+
+
+</td></tr>
+<tr><td>
+
+suppressToast
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ optional. If true, suppresses the toast notification that appears when opening a cache file.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

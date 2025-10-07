@@ -14,11 +14,71 @@ wget(url: string, target: string, host?: string): Promise<boolean>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  url | string | URL to pull data from. |
-|  target | string | Filename to write data to. Must be script or text file. |
-|  host | string | _(Optional)_ Optional hostname/ip of server for target file. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+url
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+URL to pull data from.
+
+
+</td></tr>
+<tr><td>
+
+target
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename to write data to. Must be script or text file.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional hostname/ip of server for target file.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,11 +14,71 @@ workForFaction(faction: FactionName, workType: FactionWorkType, focus?: boolean)
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  faction | [FactionName](./bitburner.factionname.md) | Name of faction to work for. |
-|  workType | [FactionWorkType](./bitburner.factionworktype.md) | Type of work to perform for the faction. |
-|  focus | boolean | _(Optional)_ Acquire player focus on this work operation. Optional. Defaults to true. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+faction
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of faction to work for.
+
+
+</td></tr>
+<tr><td>
+
+workType
+
+
+</td><td>
+
+[FactionWorkType](./bitburner.factionworktype.md)
+
+
+</td><td>
+
+Type of work to perform for the faction.
+
+
+</td></tr>
+<tr><td>
+
+focus
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Acquire player focus on this work operation. Optional. Defaults to true.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

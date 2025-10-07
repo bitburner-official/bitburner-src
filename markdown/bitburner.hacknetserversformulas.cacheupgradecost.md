@@ -14,10 +14,55 @@ cacheUpgradeCost(startingCache: number, extraCache?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  startingCache | number | starting cache level |
-|  extraCache | number | _(Optional)_ amount of levels of cache to purchase (defaults to 1) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+startingCache
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+starting cache level
+
+
+</td></tr>
+<tr><td>
+
+extraCache
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ amount of levels of cache to purchase (defaults to 1)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,10 +14,55 @@ upgradeSkill(skillName: BladeburnerSkillName, count?: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  skillName | [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) | Name of skill to be upgraded. Case-sensitive and must be an exact match. |
-|  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+skillName
+
+
+</td><td>
+
+[BladeburnerSkillName](./bitburner.bladeburnerskillname.md)
+
+
+</td><td>
+
+Name of skill to be upgraded. Case-sensitive and must be an exact match.
+
+
+</td></tr>
+<tr><td>
+
+count
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

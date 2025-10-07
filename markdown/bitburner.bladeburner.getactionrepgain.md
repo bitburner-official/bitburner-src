@@ -14,11 +14,71 @@ getActionRepGain(type: BladeburnerActionType, name: BladeburnerActionName, level
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) | Name of action. Must be an exact match. |
-|  level | number | _(Optional)_ Optional number. Action level at which to calculate the gain. Will be the action's current level if not given. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[BladeburnerActionType](./bitburner.bladeburneractiontype.md)
+
+
+</td><td>
+
+Type of action.
+
+
+</td></tr>
+<tr><td>
+
+name
+
+
+</td><td>
+
+[BladeburnerActionName](./bitburner.bladeburneractionname.md)
+
+
+</td><td>
+
+Name of action. Must be an exact match.
+
+
+</td></tr>
+<tr><td>
+
+level
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

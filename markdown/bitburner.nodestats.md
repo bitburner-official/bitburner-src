@@ -14,16 +14,216 @@ interface NodeStats
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cache?](./bitburner.nodestats.cache.md) |  | number | _(Optional)_ Cache level. Only applicable for Hacknet Servers |
-|  [cores](./bitburner.nodestats.cores.md) |  | number | Node's number of cores |
-|  [hashCapacity?](./bitburner.nodestats.hashcapacity.md) |  | number | _(Optional)_ Hash Capacity provided by this Node. Only applicable for Hacknet Servers |
-|  [level](./bitburner.nodestats.level.md) |  | number | Node's level |
-|  [name](./bitburner.nodestats.name.md) |  | string | Node's name |
-|  [production](./bitburner.nodestats.production.md) |  | number | Node's production per second |
-|  [ram](./bitburner.nodestats.ram.md) |  | number | Node's RAM (GB) |
-|  [ramUsed?](./bitburner.nodestats.ramused.md) |  | number | _(Optional)_ Node's used RAM (GB) |
-|  [timeOnline](./bitburner.nodestats.timeonline.md) |  | number | Number of seconds since Node has been purchased |
-|  [totalProduction](./bitburner.nodestats.totalproduction.md) |  | number | Total number of money Node has produced |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cache?](./bitburner.nodestats.cache.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Cache level. Only applicable for Hacknet Servers
+
+
+</td></tr>
+<tr><td>
+
+[cores](./bitburner.nodestats.cores.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Node's number of cores
+
+
+</td></tr>
+<tr><td>
+
+[hashCapacity?](./bitburner.nodestats.hashcapacity.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Hash Capacity provided by this Node. Only applicable for Hacknet Servers
+
+
+</td></tr>
+<tr><td>
+
+[level](./bitburner.nodestats.level.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Node's level
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.nodestats.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Node's name
+
+
+</td></tr>
+<tr><td>
+
+[production](./bitburner.nodestats.production.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Node's production per second
+
+
+</td></tr>
+<tr><td>
+
+[ram](./bitburner.nodestats.ram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Node's RAM (GB)
+
+
+</td></tr>
+<tr><td>
+
+[ramUsed?](./bitburner.nodestats.ramused.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Node's used RAM (GB)
+
+
+</td></tr>
+<tr><td>
+
+[timeOnline](./bitburner.nodestats.timeonline.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of seconds since Node has been purchased
+
+
+</td></tr>
+<tr><td>
+
+[totalProduction](./bitburner.nodestats.totalproduction.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total number of money Node has produced
+
+
+</td></tr>
+</tbody></table>
 

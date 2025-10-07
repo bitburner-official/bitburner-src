@@ -14,10 +14,55 @@ createProgram(program: string, focus?: boolean): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  program | string | Name of program to create. |
-|  focus | boolean | _(Optional)_ Acquire player focus on this program creation. Optional. Defaults to true. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+program
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of program to create.
+
+
+</td></tr>
+<tr><td>
+
+focus
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Acquire player focus on this program creation. Optional. Defaults to true.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

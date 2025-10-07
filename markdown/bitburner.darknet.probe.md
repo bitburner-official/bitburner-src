@@ -14,9 +14,39 @@ probe(returnByIP?: boolean): string[];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  returnByIP | boolean | _(Optional)_ Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+returnByIP
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

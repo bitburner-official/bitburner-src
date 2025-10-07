@@ -20,10 +20,55 @@ connectToSession(hostname: string, password: string): Result;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hostname | string | name of the target server to connect to existing session |
-|  password | string | the server's password, to verify the session |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hostname
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+name of the target server to connect to existing session
+
+
+</td></tr>
+<tr><td>
+
+password
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+the server's password, to verify the session
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
