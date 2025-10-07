@@ -1,6 +1,4 @@
-import {
-  generateMaze,
-} from "../../../src/DarkNet/effects/labyrinth";
+import { generateMaze } from "../../../src/DarkNet/effects/labyrinth";
 
 describe("Labyrinth Tests", () => {
   it("should create a maze with the correct size", () => {
