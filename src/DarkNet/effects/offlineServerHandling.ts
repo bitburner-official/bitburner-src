@@ -1,7 +1,7 @@
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { isAuthenticated } from "./authentication";
-import { getServer, helpers } from "../../Netscript/NetscriptHelpers";
+import { helpers } from "../../Netscript/NetscriptHelpers";
 import { errorMessage } from "../../Netscript/ErrorMessages";
 import { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
@@ -101,7 +101,7 @@ export const isDirectConnected = (currentServer: BaseServer, targetServer: BaseS
   currentServer.serversOnNetwork.includes(targetServer.hostname) || currentServer.hostname === targetServer.hostname;
 
 export function expectDarknetServer(ctx: NetscriptContext, hostname: string) {
-  const targetServer = getServer(ctx, hostname);
+  const targetServer = GetServer(hostname);
   if (!isDarknetServer(targetServer)) {
     throw new Error(`${hostname} is not a darknet server`);
   }

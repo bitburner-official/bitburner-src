@@ -10,6 +10,8 @@ import { initSourceFiles } from "../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../src/ui/formatNumber";
 import { Router } from "../../src/ui/GameRoot";
 import { config } from "../../src/NetscriptJSEvaluator";
+import { purchaseServer } from "../../src/Server/ServerPurchases";
+import { purchaseHacknet } from "../../src/Hacknet/HacknetHelpers";
 
 declare const importActual: (typeof config)["doImport"];
 
@@ -51,7 +53,11 @@ export function setupBasicTestingEnvironment(): void {
   setPlayer(new PlayerObject());
   Player.init();
   Player.sourceFiles.set(4, 3);
+  Player.sourceFiles.set(9, 3);
+  Player.money = 1e15;
   initForeignServers(Player.getHomeComputer());
+  purchaseServer("test-server-1", 2);
+  purchaseHacknet();
 }
 
 export function getNS(hostname: string = SpecialServers.Home): NSFull {
