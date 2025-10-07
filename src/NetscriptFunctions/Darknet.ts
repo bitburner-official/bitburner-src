@@ -519,6 +519,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         return helpers.netscriptDelay(ctx, !CONSTANTS.isInTestEnvironment ? 6000 : 0).then(() => {
           const onlineConnectionCheck = getFailureResult(ctx, hostname, {
             requireDirectConnection: true,
+            preventUseOnImmobileServers: true,
           });
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({
