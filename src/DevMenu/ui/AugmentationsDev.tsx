@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import React from "react";
-import { Clear, ExpandMore } from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -19,6 +19,7 @@ import { Factions } from "../../Faction/Factions";
 import { FactionChooser } from "./FactionChooser";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 
 export function AugmentationsDev(): React.ReactElement {
   const [augmentation, setAugmentation] = React.useState<AugmentationName | null>(null);
@@ -63,9 +64,18 @@ export function AugmentationsDev(): React.ReactElement {
 
   function clearAugs(): void {
     Player.augmentations = [];
+    Player.reapplyAllAugmentations();
+    Player.reapplyAllSourceFiles();
   }
 
   function clearQueuedAugs(): void {
+    Player.queuedAugmentations = [];
+  }
+
+  function installAugs(): void {
+    for (const aug of Player.queuedAugmentations) {
+      applyAugmentation(aug);
+    }
     Player.queuedAugmentations = [];
   }
 
@@ -101,13 +111,14 @@ export function AugmentationsDev(): React.ReactElement {
               setAugmentation(augmentationName);
             }}
           ></Autocomplete>
-          <Tooltip title="Clear augmentations" style={{ marginLeft: "8px" }}>
-            <Button onClick={clearAugs}>
-              <Clear />
-            </Button>
-          </Tooltip>
         </Box>
-        <Button onClick={clearQueuedAugs}>Clear queued augmentations</Button>
+        <Button onClick={installAugs} style={{ marginRight: "8px" }}>
+          {`Quick-install ${Player.queuedAugmentations.length} queued augmentations`}
+        </Button>
+        <Button onClick={clearQueuedAugs} style={{ marginRight: "8px" }}>
+          {`Clear ${Player.queuedAugmentations.length} queued augmentations`}
+        </Button>
+        <Button onClick={clearAugs}>{`Uninstall ${Player.augmentations.length} installed augmentations`}</Button>
         <Box display="flex" marginTop="8px">
           <Tooltip title="Queue all augmentations offered by faction, except NFG">
             <Button onClick={queueAllAugsOfFaction}>

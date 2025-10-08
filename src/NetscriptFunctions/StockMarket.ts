@@ -247,7 +247,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketData: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
       }
 
@@ -268,7 +268,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketDataTixApi: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
       }
 

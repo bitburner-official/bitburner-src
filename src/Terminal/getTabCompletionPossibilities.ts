@@ -5,13 +5,15 @@ import { GetAllServers } from "../Server/AllServers";
 import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
-import { Flags, type Schema } from "../NetscriptFunctions/Flags";
+import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
 import { TerminalCommands } from "./Terminal";
+import { Terminal } from "../Terminal";
+import { parseUnknownError } from "../utils/ErrorHelper";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -276,7 +278,12 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       //Will return the already compiled module if recompilation not needed.
       loadedModule = await compile(script, currServ.scripts);
     } catch (e) {
-      //fail silently if the script fails to compile (e.g. syntax error)
+      const errorData = parseUnknownError(e);
+      Terminal.error(
+        `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
+          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+        }`,
+      );
       return;
     }
     if (!loadedModule) {
@@ -312,17 +319,29 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
       enums: enums,
-      flags: (schema: Schema) => {
-        if (!Array.isArray(schema)) throw new Error("flags require an array of array");
-        pos2 = schema.map((f) => {
-          if (!Array.isArray(f)) throw new Error("flags require an array of array");
-          if (f[0].length === 1) return "-" + f[0];
-          return "--" + f[0];
+      flags: (schema: unknown) => {
+        if (!Array.isArray(schema)) {
+          throw new Error("The schema passed to AutocompleteData.flags must be an array of arrays");
+        }
+        pos2 = schema.map((flag: unknown) => {
+          if (!Array.isArray(flag) || flag.length === 0) {
+            throw new Error("Each flag in the schema passed to AutocompleteData.flags must be a non-empty array");
+          }
+          const flagName: unknown = flag[0];
+          if (typeof flagName !== "string") {
+            throw new Error("The flag name must be a string");
+          }
+          // Short form
+          if (flagName.length === 1) {
+            return "-" + flagName;
+          }
+          // Long form
+          return "--" + flagName;
         });
         try {
           return flagFunc(schema);
-        } catch (err) {
-          return {};
+        } catch (error) {
+          throw new Error("Cannot parse the schema passed to AutocompleteData.flags", { cause: error });
         }
       },
       hostname: currServ.hostname,
@@ -340,9 +359,20 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     };
     let pos: string[] = [];
     let pos2: string[] = [];
-    const options = loadedModule.autocomplete(autocompleteData, flags._);
-    if (!Array.isArray(options)) throw new Error("autocomplete did not return list of strings");
-    pos = pos.concat(options.map((x) => String(x)));
+    try {
+      const options = loadedModule.autocomplete(autocompleteData, flags._);
+      if (!Array.isArray(options)) {
+        throw new Error("The autocomplete function must return an array");
+      }
+      pos = pos.concat(options.map((x) => String(x)));
+    } catch (error) {
+      const errorData = parseUnknownError(error);
+      Terminal.error(
+        `The autocomplete function in ${filepath} throws an error. Reason: ${errorData.errorAsString}.${
+          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+        }`,
+      );
+    }
     return pos.concat(pos2);
   }
 }

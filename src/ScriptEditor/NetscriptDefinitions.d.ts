@@ -264,7 +264,10 @@ interface RunningScript {
   onlineMoneyMade: number;
   /** Number of seconds that this script has been running online */
   onlineRunningTime: number;
-  /** Process ID. Must be an integer */
+  /** A Process ID unique to this script across all hosts. Must be an integer starting
+   * from 1 for the first process spawned at game launch and incrementing from there.
+   * Note that PIDs are not saved in the savegame and are regenerated at launch.
+   */
   pid: number;
   /**
    * Process ID of the parent process.
@@ -7003,7 +7006,7 @@ export interface NS {
    * If the script was successfully started, then this functions returns the PID of that script.
    * Otherwise, it returns 0.
    *
-   * PID stands for Process ID. The PID is a unique identifier for each script.
+   * PID stands for Process ID. The PID is a unique identifier for each script across all hosts.
    * The PID will always be a positive integer.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
@@ -7037,7 +7040,7 @@ export interface NS {
    * If the script was successfully started, then this function returns the PID of that script.
    * Otherwise, it returns 0.
    *
-   * PID stands for Process ID. The PID is a unique identifier for each script.
+   * PID stands for Process ID. The PID is a unique identifier for each script across all hosts.
    * The PID will always be a positive integer.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
@@ -7106,7 +7109,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * Kills the script with the provided PID.
+   * Kills the script with the provided PID. PIDs are unique across all hosts.
    * To instead kill a script using its filename, host, and args, see {@link NS.(kill:2) | the other ns.kill entry}.
    *
    * @example
@@ -7715,6 +7718,7 @@ export interface NS {
    * Attempts to write data to the specified Netscript port.
    * If the port is full, the data will not be written.
    * Otherwise, the data will be written normally.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to attempt to write to. Must be a positive integer.
    * @param data - Data to write, it's cloned with structuredClone().
@@ -7728,6 +7732,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Sleeps until the port is written to.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param port - Port to listen for a write on. Must be a positive integer.
    */
@@ -7769,6 +7774,7 @@ export interface NS {
    * This function is used to peek at the data from a port. It returns the
    * first element in the specified port without removing that element. If
    * the port is empty, the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to peek. Must be a positive integer.
    * @returns Data in the specified port.
@@ -7808,6 +7814,7 @@ export interface NS {
    * usually means that there is a bug in your script that leaks port data. A port is freed when it does not have any
    * data in its underlying queue. `ns.clearPort` deletes all data on a port. `ns.readPort` reads the first element in
    * the port's queue, then removes it from the queue.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to write to. Must be a positive integer.
    * @param data - Data to write, it's cloned with structuredClone().
@@ -7823,6 +7830,8 @@ export interface NS {
    * Read data from that port. A port is a serialized queue.
    * This function will remove the first element from that queue and return it.
    * If the queue is empty, then the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
    * @param portNumber - Port to read from. Must be a positive integer.
    * @returns The data read.
    */
@@ -7834,6 +7843,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Get a handle to a Netscript Port.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port number. Must be a positive integer.
    */
@@ -9971,6 +9981,8 @@ interface Product {
   designInvestment: number;
   /** How much warehouse space is occupied per unit of this product */
   size: number;
+  /** A limit on the maximum amount to produce per second */
+  productionLimit: number | null;
 }
 
 /**
@@ -10004,6 +10016,8 @@ interface Material {
   desiredSellAmount: string | number;
   /** Export orders */
   exports: Export[];
+  /** A limit on the maximum amount to produce per second */
+  productionLimit: number | null;
 }
 
 /**

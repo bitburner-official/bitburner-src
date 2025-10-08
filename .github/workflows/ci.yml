@@ -67,3 +67,20 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm run test
+  check-docs:
+    name: Check docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Generate docs
+        run: npm run doc
+      - name: Check generated docs
+        run: |
+          test -z "$(git status --porcelain)" || (echo "::error title=Documentation is outdated::You need to run 'run npm doc'";exit 1;)

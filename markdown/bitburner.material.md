@@ -246,6 +246,25 @@ Amount of material produced last cycle
 </td></tr>
 <tr><td>
 
+[productionLimit](./bitburner.material.productionlimit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| null
+
+
+</td><td>
+
+A limit on the maximum amount to produce per second
+
+
+</td></tr>
+<tr><td>
+
 [quality](./bitburner.material.quality.md)
 
 

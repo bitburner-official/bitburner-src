@@ -265,6 +265,25 @@ Production cost
 </td></tr>
 <tr><td>
 
+[productionLimit](./bitburner.product.productionlimit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| null
+
+
+</td><td>
+
+A limit on the maximum amount to produce per second
+
+
+</td></tr>
+<tr><td>
+
 [rating](./bitburner.product.rating.md)
 
 
