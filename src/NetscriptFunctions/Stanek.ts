@@ -58,7 +58,22 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     fragmentDefinitions: (ctx) => () => {
       checkStanekAPIAccess(ctx);
       helpers.log(ctx, () => `Returned ${Fragments.length} fragments`);
-      return Fragments.map((f) => f.copy() as Fragment);
+      return Fragments.filter(
+        (f) =>
+          // Filter out internal values
+          f.type !== FragmentType.None &&
+          f.type !== FragmentType.Delete &&
+          // Filter out unused values
+          f.type !== FragmentType.HackingChance,
+      ).map(
+        (f) =>
+          // Cast as Netscript `Fragment` because it's property of `type` does not contain:
+          // - None
+          // - Delete
+          // - HackingChance
+          // But we filtered them out above
+          f.copy() as Fragment,
+      );
     },
     activeFragments: (ctx) => () => {
       checkStanekAPIAccess(ctx);
