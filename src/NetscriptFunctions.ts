@@ -117,6 +117,7 @@ import { isIPAddress } from "./Types/strings";
 import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
+import { FragmentType } from "./CotMG/FragmentType";
 
 export const enums: NSEnums = {
   CityName,
@@ -135,6 +136,7 @@ export const enums: NSEnums = {
   OrderType,
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
+  FragmentType,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);

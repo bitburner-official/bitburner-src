@@ -5,7 +5,7 @@ import { canAcceptStaneksGift, staneksGift } from "../CotMG/Helper";
 import { Fragments, FragmentById } from "../CotMG/Fragment";
 import { FragmentType } from "../CotMG/FragmentType";
 
-import { Stanek as IStanek } from "@nsdefs";
+import { Fragment, Stanek as IStanek } from "@nsdefs";
 import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { joinFaction } from "../Faction/FactionHelpers";
@@ -58,7 +58,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     fragmentDefinitions: (ctx) => () => {
       checkStanekAPIAccess(ctx);
       helpers.log(ctx, () => `Returned ${Fragments.length} fragments`);
-      return Fragments.map((f) => f.copy());
+      return Fragments.map((f) => f.copy() as Fragment);
     },
     activeFragments: (ctx) => () => {
       checkStanekAPIAccess(ctx);

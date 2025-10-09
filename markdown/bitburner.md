@@ -1805,6 +1805,26 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 </td></tr>
 <tr><td>
 
+[FragmentEnumType](./bitburner.fragmentenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FragmentType](./bitburner.fragmenttype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [GoOpponent](./bitburner.goopponent.md)
 
 
