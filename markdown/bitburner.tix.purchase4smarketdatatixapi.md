@@ -4,7 +4,9 @@
 
 ## TIX.purchase4SMarketDataTixApi() method
 
-Purchase 4S Market Data TIX API Access.
+Purchase 4S Market Data TIX API access (NS APIs only).
+
+You need to have TIX API access. Note that this feature only unlocks access to 4S Market Data via NS APIs.
 
 **Signature:**
 

@@ -150,7 +150,7 @@ export function loadStockMarket(saveString: string): void {
     console.error(error);
     console.error("Invalid StockMarketSave:", saveString);
     deleteStockMarket();
-    if (Player.hasWseAccount) {
+    if (canAccessStockMarket()) {
       initStockMarket();
     }
     const errorMessage = `Cannot load data of StockMarket. StockMarket is reset.`;
@@ -163,6 +163,18 @@ export function loadStockMarket(saveString: string): void {
   StockMarket = stockMarketData as IStockMarket;
 }
 
+export function canAccessStockMarket(): boolean {
+  return Player.hasWseAccount || Player.hasTixApiAccess;
+}
+
+export function isStockMarketInitialized(): boolean {
+  return StockMarket.lastUpdate > 0;
+}
+
+/**
+ * After calling this function, the stock market will be back to the uninitialized state (i.e.,
+ * isStockMarketInitialized() returns false).
+ */
 export function deleteStockMarket(): void {
   StockMarket = getDefaultEmptyStockMarket();
 }
@@ -187,7 +199,7 @@ export function initStockMarket(): void {
   StockMarket.Orders = orders;
 
   StockMarket.storedCycles = 0;
-  StockMarket.lastUpdate = 0;
+  StockMarket.lastUpdate = Date.now();
   StockMarket.ticksUntilCycle = getRandomIntInclusive(1, StockMarketConstants.TicksPerCycle);
   initSymbolToStockMap();
 }

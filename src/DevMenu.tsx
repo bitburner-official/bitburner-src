@@ -28,6 +28,7 @@ import { EntropyDev } from "./DevMenu/ui/EntropyDev";
 import { Exploit } from "./Exploits/Exploit";
 import { useRerender } from "./ui/React/hooks";
 import { AutoExpandContext, getAutoExpandData, setAutoExpandData } from "./ui/AutoExpand/AutoExpandContext";
+import { canAccessStockMarket } from "./StockMarket/StockMarket";
 
 export function DevMenuRoot(): React.ReactElement {
   const autoExpandContextValue = useRef({
@@ -65,7 +66,7 @@ export function DevMenuRoot(): React.ReactElement {
 
       <CodingContractsDev />
 
-      {Player.hasWseAccount && <StockMarketDev />}
+      {canAccessStockMarket() && <StockMarketDev />}
 
       {Player.sleeves.length > 0 && <SleevesDev />}
       {Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1) && <StanekDev />}

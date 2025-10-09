@@ -382,6 +382,7 @@ describe("Stock Market Tests", function () {
       const stocks: string[] = [];
 
       beforeEach(function () {
+        expect(deleteStockMarket).not.toThrow();
         expect(initStockMarket).not.toThrow();
         expect(initSymbolToStockMap).not.toThrow();
       });
@@ -413,7 +414,7 @@ describe("Stock Market Tests", function () {
         expect(StockMarket).toHaveProperty("storedCycles");
         expect(StockMarket["storedCycles"]).toEqual(0);
         expect(StockMarket).toHaveProperty("lastUpdate");
-        expect(StockMarket["lastUpdate"]).toEqual(0);
+        expect(StockMarket["lastUpdate"]).toBeGreaterThan(0);
         expect(StockMarket).toHaveProperty("ticksUntilCycle");
         expect(typeof StockMarket["ticksUntilCycle"]).toBe("number");
       });
@@ -1069,6 +1070,7 @@ describe("Stock Market Tests", function () {
 
   describe("Order Placing & Processing", function () {
     beforeEach(function () {
+      expect(deleteStockMarket).not.toThrow();
       expect(initStockMarket).not.toThrow();
       expect(initSymbolToStockMap).not.toThrow();
 
@@ -1155,6 +1157,7 @@ describe("Stock Market Tests", function () {
       let processOrdersRefs: IProcessOrderRefs;
 
       beforeEach(function () {
+        expect(deleteStockMarket).not.toThrow();
         expect(initStockMarket).not.toThrow();
         expect(initSymbolToStockMap).not.toThrow();
 
@@ -1289,6 +1292,7 @@ describe("Stock Market Tests", function () {
     });
 
     beforeEach(function () {
+      expect(deleteStockMarket).not.toThrow();
       expect(initStockMarket).not.toThrow();
       expect(initSymbolToStockMap).not.toThrow();
 
