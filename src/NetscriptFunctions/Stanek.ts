@@ -67,7 +67,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
           f.type !== FragmentType.HackingChance,
       ).map(
         (f) =>
-          // Cast as Netscript `Fragment` because it's property of `type` does not contain:
+          // Cast as Netscript `Fragment` because its property of `type` does not contain:
           // - None
           // - Delete
           // - HackingChance
