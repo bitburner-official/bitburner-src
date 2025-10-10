@@ -548,13 +548,14 @@ function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: un
       let moneyDrained = server.moneyAvailable * percentHacked * threads;
 
       // Over-the-top safety checks
-      if (moneyDrained <= 0) {
+      if (moneyDrained < 0) {
         moneyDrained = 0;
         expGainedOnSuccess = expGainedOnFailure;
       }
       if (moneyDrained > server.moneyAvailable) {
         moneyDrained = server.moneyAvailable;
       }
+
       server.moneyAvailable -= moneyDrained;
       if (server.moneyAvailable < 0) {
         server.moneyAvailable = 0;
