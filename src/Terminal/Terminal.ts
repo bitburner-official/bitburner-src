@@ -396,7 +396,9 @@ export class Terminal {
         this.print("Time to hack: " + (!isHacknet ? convertTimeMsToTimeElapsedString(hackingTime, true) : "N/A"));
       }
       this.print(
-        `Total money available on server: ${currServ instanceof Server ? formatMoney(currServ.moneyAvailable) : "N/A"}`,
+        `Total money available on server: ${
+          currServ instanceof Server ? formatMoney(currServ.moneyAvailable, true) : "N/A"
+        }`,
       );
       if (currServ instanceof Server) {
         const numPort = currServ.numOpenPortsRequired;
