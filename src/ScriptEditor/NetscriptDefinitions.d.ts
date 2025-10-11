@@ -5756,6 +5756,29 @@ export interface Formulas {
 }
 
 /** @public */
+type FragmentEnumType = {
+  HackingSpeed: 3;
+  HackingMoney: 4;
+  HackingGrow: 5;
+  Hacking: 6;
+  Strength: 7;
+  Defense: 8;
+  Dexterity: 9;
+  Agility: 10;
+  Charisma: 11;
+  HacknetMoney: 12;
+  HacknetCost: 13;
+  Rep: 14;
+  WorkMoney: 15;
+  Crime: 16;
+  Bladeburner: 17;
+  Booster: 18;
+};
+
+/** @public */
+type FragmentType = _ValueOf<FragmentEnumType>;
+
+/** @public */
 interface Fragment {
   id: number;
   shape: boolean[][];

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Fragments, type Fragment } from "../Fragment";
-import { FragmentType, Effect } from "../FragmentType";
+import { FragmentTypeEnum, Effect } from "../FragmentType";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentPreview } from "./FragmentPreview";
 import { formatStaneksGiftPower } from "../../ui/formatNumber";
@@ -28,12 +28,12 @@ function FragmentOption(props: IOptionProps): React.ReactElement {
           colorAt={(x, y) => {
             if (!props.fragment.fullAt(x, y, 0)) return "";
             if (left === 0) return "grey";
-            return props.fragment.type === FragmentType.Booster ? "blue" : "green";
+            return props.fragment.type === FragmentTypeEnum.Booster ? "blue" : "green";
           }}
         />
       </Box>
       <Typography>
-        {props.fragment.type === FragmentType.Booster
+        {props.fragment.type === FragmentTypeEnum.Booster
           ? `${props.fragment.power}x adjacent fragment power`
           : Effect(props.fragment.type)}
         <br />

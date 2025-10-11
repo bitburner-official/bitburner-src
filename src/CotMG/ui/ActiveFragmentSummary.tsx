@@ -1,13 +1,14 @@
 import React from "react";
 import { ActiveFragment } from "../ActiveFragment";
 import { StaneksGift } from "../StaneksGift";
-import { FragmentType, Effect } from "../FragmentType";
+import { FragmentTypeEnum, Effect } from "../FragmentType";
 import { formatPercent } from "../../ui/formatNumber";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import { TableBody, TableCell, TableRow } from "@mui/material";
+import type { FragmentType } from "@nsdefs";
 
 interface IProps {
   gift: StaneksGift;
@@ -30,23 +31,24 @@ export function ActiveFragmentSummary(props: IProps): React.ReactElement {
   props.gift.fragments.forEach((fragment: ActiveFragment) => {
     const f = fragment.fragment();
     // Discard Booster.
-    if (![FragmentType.Booster].includes(f.type)) {
-      // Check for an existing entry in summary for this fragment's type
-      const entry = summary.find((e) => {
-        return e.type === f.type;
+    if (f.type === FragmentTypeEnum.Booster) {
+      return;
+    }
+    // Check for an existing entry in summary for this fragment's type
+    const entry = summary.find((e) => {
+      return e.type === f.type;
+    });
+    if (entry) {
+      // If there's one, update the existing entry
+      entry.effect *= props.gift.effect(fragment);
+      entry.coordinate.push({ x: fragment.x, y: fragment.y });
+    } else {
+      // If there's none, create a new entry
+      summary.push({
+        coordinate: [{ x: fragment.x, y: fragment.y }],
+        effect: props.gift.effect(fragment),
+        type: f.type,
       });
-      if (entry) {
-        // If there's one, update the existing entry
-        entry.effect *= props.gift.effect(fragment);
-        entry.coordinate.push({ x: fragment.x, y: fragment.y });
-      } else {
-        // If there's none, create a new entry
-        summary.push({
-          coordinate: [{ x: fragment.x, y: fragment.y }],
-          effect: props.gift.effect(fragment),
-          type: f.type,
-        });
-      }
     }
   });
 
