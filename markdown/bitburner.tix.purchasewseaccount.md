@@ -4,9 +4,9 @@
 
 ## TIX.purchaseWseAccount() method
 
-Purchase WSE account.
+Purchase a WSE account.
 
-You need to have this account to perform actions via Stock Market UI. Note that if you want to perform actions via NS APIs, you need to have TIX API access, not this account.
+You need to have this account to perform actions via the Stock Market UI. Note that if you want to perform actions via NS APIs, you need to have TIX API access, not this account.
 
 **Signature:**
 
