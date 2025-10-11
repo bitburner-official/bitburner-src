@@ -48,8 +48,8 @@ export function FragmentInspector(props: IProps): React.ReactElement {
 
   let charge = formatStaneksGiftCharge(props.fragment.highestCharge * props.fragment.numCharge);
   let effect = "N/A";
-  // Boosters and cooling don't deal with heat.
-  if ([FragmentType.Booster, FragmentType.None, FragmentType.Delete].includes(f.type)) {
+  // Boosters cannot be charged.
+  if ([FragmentType.Booster].includes(f.type)) {
     charge = "N/A";
     effect = `${f.power}x adjacent fragment power`;
   } else if (Effect(f.type).includes("+x%")) {

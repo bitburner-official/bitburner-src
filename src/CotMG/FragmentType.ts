@@ -1,36 +1,26 @@
 // Numeric enum
 export enum FragmentType {
-  // Special fragments for the UI
-  None,
-  Delete,
-
-  // Stats boosting fragments
-  HackingChance,
-  HackingSpeed,
-  HackingMoney,
-  HackingGrow,
-  Hacking,
-  Strength,
-  Defense,
-  Dexterity,
-  Agility,
-  Charisma,
-  HacknetMoney,
-  HacknetCost,
-  Rep,
-  WorkMoney,
-  Crime,
-  Bladeburner,
-
-  // utility fragments.
-  Booster,
+  HackingSpeed = 3,
+  HackingMoney = 4,
+  HackingGrow = 5,
+  Hacking = 6,
+  Strength = 7,
+  Defense = 8,
+  Dexterity = 9,
+  Agility = 10,
+  Charisma = 11,
+  HacknetMoney = 12,
+  HacknetCost = 13,
+  Rep = 14,
+  WorkMoney = 15,
+  Crime = 16,
+  Bladeburner = 17,
+  // Utility fragments.
+  Booster = 18,
 }
 
-export function Effect(tpe: FragmentType): string {
-  switch (tpe) {
-    case FragmentType.HackingChance: {
-      return "+x% hack() success chance";
-    }
+export function Effect(type: FragmentType): string {
+  switch (type) {
     case FragmentType.HackingSpeed: {
       return "+x% faster hack(), grow(), and weaken()";
     }
@@ -80,5 +70,4 @@ export function Effect(tpe: FragmentType): string {
       return "1.1x adjacent fragment power";
     }
   }
-  throw new Error("Calling effect for fragment type that doesn't have an effect " + tpe);
 }

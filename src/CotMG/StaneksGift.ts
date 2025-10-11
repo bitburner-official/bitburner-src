@@ -139,9 +139,6 @@ export class StaneksGift extends BaseGift {
 
       const power = this.effect(aFrag);
       switch (fragment.type) {
-        case FragmentType.HackingChance:
-          mults.hacking_chance *= power;
-          break;
         case FragmentType.HackingSpeed:
           mults.hacking_speed *= power;
           break;

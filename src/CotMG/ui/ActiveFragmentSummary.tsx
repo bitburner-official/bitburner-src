@@ -29,8 +29,8 @@ export function ActiveFragmentSummary(props: IProps): React.ReactElement {
   // Iterate through Active Fragment
   props.gift.fragments.forEach((fragment: ActiveFragment) => {
     const f = fragment.fragment();
-    // Discard ToolBrush and Booster.
-    if (![FragmentType.Booster, FragmentType.None, FragmentType.Delete].includes(f.type)) {
+    // Discard Booster.
+    if (![FragmentType.Booster].includes(f.type)) {
       // Check for an existing entry in summary for this fragment's type
       const entry = summary.find((e) => {
         return e.type === f.type;

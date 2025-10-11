@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Fragments, Fragment, NoneFragment, DeleteFragment } from "../Fragment";
+import { Fragments, type Fragment } from "../Fragment";
 import { FragmentType, Effect } from "../FragmentType";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentPreview } from "./FragmentPreview";
@@ -45,10 +45,21 @@ function FragmentOption(props: IOptionProps): React.ReactElement {
   );
 }
 
+export interface UIFragment {
+  type: "None" | "Delete";
+}
+
+export function isUIFragment(fragment: object): fragment is UIFragment {
+  return "type" in fragment && (fragment.type === "None" || fragment.type === "Delete");
+}
+
 interface IProps {
   gift: StaneksGift;
-  selectFragment: (fragment: Fragment) => void;
+  selectFragment: (fragment: UIFragment | Fragment) => void;
 }
+
+export const NoneFragment: UIFragment = { type: "None" };
+const DeleteFragment: UIFragment = { type: "Delete" };
 
 export function FragmentSelector(props: IProps): React.ReactElement {
   const [value, setValue] = useState<string | number>("None");

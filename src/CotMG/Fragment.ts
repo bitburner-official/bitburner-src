@@ -372,6 +372,3 @@ export function FragmentById(id: number): Fragment | null {
     ),
   );
 })();
-
-export const NoneFragment = new Fragment(-2, [], FragmentType.None, 0, Infinity, "");
-export const DeleteFragment = new Fragment(-2, [], FragmentType.Delete, 0, Infinity, "");
