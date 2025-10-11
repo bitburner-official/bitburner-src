@@ -550,10 +550,13 @@ function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: un
       // Over-the-top safety checks
       if (moneyDrained < 0) {
         moneyDrained = 0;
-        expGainedOnSuccess = expGainedOnFailure;
       }
       if (moneyDrained > server.moneyAvailable) {
         moneyDrained = server.moneyAvailable;
+      }
+
+      if (moneyDrained === 0) {
+        expGainedOnSuccess = expGainedOnFailure;
       }
 
       server.moneyAvailable -= moneyDrained;
