@@ -1,6 +1,17 @@
+## Playtest thread link:
+
+https://discord.com/channels/415207508303544321/1358930422607642845/1358930424281432127
+
 ## TODO:
 
-- improve phishing documentation
+- fix references to "Dark Web"
+- debounce scroll events - https://www.developerway.com/posts/debouncing-in-react
+- remove starter script - instead have example snippets
+- test importing legacy save - fix darknet on purchasing darknet navigator if it's a legacy server. This may work already
+- darknet scripts are killed on restart?
+- too many data files generated?
+- fix "In other words, if you want to copy files to or run scripts on a darknet server from a long distance away, the source script needs to run dnet.connectToSession with the server's password first, and you need to stasis link or backdoor the server."
+- performance
 
 - more hint notes
 

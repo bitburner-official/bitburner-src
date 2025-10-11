@@ -146,6 +146,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             return {
               success: success,
               message: authResult.response.message,
+              data: authResult.response.data,
             };
           }
 

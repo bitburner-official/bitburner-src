@@ -187,7 +187,7 @@ export const getSurroundingsVisualized = (
     result += "\n";
   }
 
-  return result;
+  return result.split("\n");
 };
 
 export const getRandomOpenCoordinate = (maze: string[][]) => {
@@ -226,6 +226,7 @@ export const handleLabyrinthPassword = (
 
   const maze = getLabMaze();
   const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
+  DarknetState.labLocations[pid] ??= [initialX, initialY];
   const end = [maze[0].length - 2, maze.length - 2];
   const [dx, dy] = getDirectionFromInput(attemptedPassword);
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];
@@ -267,7 +268,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       status: ResponseStatus.AUTH_FAILURE,
-      message: `You cannot go that way. You are still at ${newLocation[0]},${newLocation[1]}.`,
+      message: `You cannot go that way. You are still at ${initialX},${initialY}.`,
       data: JSON.stringify(status),
     };
   }
@@ -293,6 +294,7 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       status: ResponseStatus.SUCCESS,
       message: "You have successfully navigated the labyrinth! Congratulations",
+      data: labServer.password,
     };
   }
 

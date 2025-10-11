@@ -9,6 +9,7 @@ import { getDarknetServerSafely } from "../utils/darknetServerUtils";
 import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 import { getExactCorrectChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
+import { isLabyrinthServer } from "../effects/labyrinth";
 
 const MAX_LOG_LINES = 32;
 
@@ -130,6 +131,8 @@ export const logPasswordAttempt = (server: DarknetServer, passwordResponse: Pass
 };
 
 export const populateServerLogsWithNoise = (server: DarknetServer) => {
+  if (isLabyrinthServer(server.hostname)) return;
+
   const serverState = getServerState(server.hostname);
   const interval = server.logTrafficInterval;
   if (!serverState.lastLogTime) {

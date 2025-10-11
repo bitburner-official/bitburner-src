@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, Select, MenuItem } from "@mui/material";
+import { Typography, Select, MenuItem, Card } from "@mui/material";
 import { DarknetState } from "../models/DarknetState";
 import { getLabMaze, getLabyrinthDetails, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
@@ -42,6 +42,7 @@ export const LabyrinthSummary = ({
   // movement message
   const [x, y] = currentPerspective ? DarknetState.labLocations[currentPerspective] : [1, 1];
   const surroundings = getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true)
+    .join("\n")
     .split("")
     .map((c) => `${c}${c}${c}`)
     .join("")
@@ -88,31 +89,48 @@ export const LabyrinthSummary = ({
     );
   };
 
+  const response =
+    DarknetState.serverState[lab.name]?.serverLogs
+      .slice(-3)
+      .map((log) => log.replaceAll('\\"', "'"))
+      .join("\n") || "(no response yet)";
+
   return (
     <>
       {lab.cha > Player.skills.charisma ? (
         <Typography color="error">You dont yet have the wits needed to attempt the labyrinth.</Typography>
       ) : (
         <>
-          {currentPerspective === undefined ? (
-            <>
-              <Typography style={{ fontStyle: "italic" }}>
-                This lab cannot be completed manually. Select a script PID that is attempting the labyrinth from the
-                options below to view its progress.
-              </Typography>
-              <br />
-              <br />
-            </>
-          ) : (
-            <>
-              <Typography>{loadingText?.includes("{") ? lastMovementFeedback ?? "" : "Travelling..."}</Typography>
-              <Typography>Current Surroundings:</Typography>
-              <pre className={classes.maze}>{surroundings}</pre>
-              <Typography>
-                Current Coordinates: {x},{y}
-              </Typography>
-            </>
-          )}
+          <div className={classes.inlineFlexBox}>
+            <div style={{ width: "50%" }}>
+              {currentPerspective === undefined ? (
+                <>
+                  <Typography style={{ fontStyle: "italic" }}>
+                    This lab cannot be completed manually. Select a script PID that is attempting the labyrinth from the
+                    options below to view its progress.
+                  </Typography>
+                  <br />
+                  <br />
+                </>
+              ) : (
+                <>
+                  <Typography>{loadingText?.includes("{") ? lastMovementFeedback ?? "" : "Travelling..."}</Typography>
+                  <Typography>Current Surroundings:</Typography>
+                  <pre className={classes.maze}>{surroundings}</pre>
+                  <Typography>
+                    Current Coordinates: {x},{y}
+                  </Typography>
+                </>
+              )}
+            </div>
+            <div style={{ width: "50%" }}>
+              <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
+                <div style={{ color: "white" }}>
+                  <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
+                </div>
+              </Card>
+            </div>
+          </div>
 
           <br />
           <br />

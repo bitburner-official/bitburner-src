@@ -705,7 +705,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.CacheHint1]: new Literature({
     title: "eGeoCacheing?",
     filename: LiteratureName.CacheHint1,
-    text: <Typography>I've heard there are valuable .cache files to find out in the dark web.</Typography>,
+    text: <Typography>I've heard there are valuable .cache files to find out in the dark net.</Typography>,
   }),
   [LiteratureName.CacheHint2]: new Literature({
     title: "Cache the Flag",
