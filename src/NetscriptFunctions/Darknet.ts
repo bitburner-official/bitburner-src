@@ -289,7 +289,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx: NetscriptContext) =>
       (_fileName, _suppressToast): void => {
         const fileName = helpers.string(ctx, "fileName", _fileName);
-        const suppressToast = _suppressToast ? helpers.boolean(ctx, "suppressToast", _suppressToast) : false;
+        const suppressToast = helpers.boolean(ctx, "suppressToast", _suppressToast ?? false);
         const server = expectScriptRunningOnDarknetServer(ctx);
         expectDarknetAccess(ctx);
 
@@ -310,7 +310,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx: NetscriptContext) =>
       (_returnByIp): string[] => {
         const returnByIP = helpers.boolean(ctx, "returnByIP", _returnByIp ?? false);
-        expectDarknetAccess(ctx);
         const hostname = ctx.workerScript.getServer().hostname;
         const onlineConnectionCheck = getFailureResult(ctx, hostname);
         if (!onlineConnectionCheck.success) {
@@ -336,7 +335,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx: NetscriptContext) =>
       (_shouldLink): Promise<DarknetResult> => {
         const shouldLink = helpers.boolean(ctx, "shouldLink", _shouldLink ?? true);
-        expectDarknetAccess(ctx);
         const hostname = ctx.workerScript.getServer().hostname;
         const onlineConnectionCheck = getFailureResult(ctx, hostname);
         if (!onlineConnectionCheck.success) {
@@ -437,7 +435,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     },
     getServerAuthDetails: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      expectDarknetAccess(ctx);
       const onlineConnectionCheck = getFailureResult(ctx, hostname);
       if (!onlineConnectionCheck.success) {
         logger(ctx)(onlineConnectionCheck.message);

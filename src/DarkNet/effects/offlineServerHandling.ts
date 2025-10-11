@@ -22,10 +22,6 @@ type FailureResultOptions = {
 
 export const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
 
-/**
- * WIP-@fico: Why do some APIs not call this function? For example: authenticate, connectToSession, heartbleed,
- * packetCapture.
- */
 export function expectDarknetAccess(ctx: NetscriptContext): void {
   if (!hasDarknetAccess()) {
     throw errorMessage(
@@ -110,7 +106,7 @@ export const isDirectConnected = (currentServer: BaseServer, targetServer: Darkn
  *
  * Note that this function only checks the server with a simple check of "instanceof". It does not handle the offline
  * cases like getFailureResult does. This is intentional. When a server goes offline, all scripts are killed. After
- * that, accessing NS APIs will throw the ScriptDeath error. There is no way this function can be called.
+ * that, accessing NS APIs will throw the ScriptDeath error, so there is no way this function can be called.
  */
 export function expectScriptRunningOnDarknetServer(ctx: NetscriptContext): DarknetServer {
   const hostname = ctx.workerScript.hostname;
