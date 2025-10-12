@@ -1,13 +1,16 @@
 import React, {
-  PointerEventHandler,
   useEffect,
   useRef,
   useState,
   useMemo,
   useCallback,
-  WheelEventHandler,
+  type PointerEventHandler,
+  type WheelEventHandler,
+  type FormEventHandler,
+  type FormEvent,
 } from "react";
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Typography, Button, Box, TextField, IconButton } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { throttle } from "lodash";
 import { ServerStatusBox } from "./ServerStatusBox";
@@ -21,6 +24,10 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
+import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { ToastVariant } from "@enums";
+import { ServerDetailsModal } from "./ServerDetailsModal";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -31,6 +38,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [zoomIndex, setZoomIndex] = useState(7);
   const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [serverOpened, setServerOpened] = useState<DarknetServer | null>(null);
   const zoomOptions = useMemo(() => [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5], []);
   const { classes } = dnetStyles({});
 
@@ -167,8 +176,54 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     );
   };
 
+  const searchForm: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    search();
+  };
+
+  const search = () => {
+    if (!searchTerm) return;
+
+    const foundServer = getAllDarknetServers().find(
+      (s) => s.hostname.toLowerCase().includes(searchTerm) && s.depth <= netDisplayDepth,
+    );
+
+    if (!foundServer) {
+      SnackbarEvents.emit(`No server found for search term ${searchTerm}`, ToastVariant.ERROR, 2000);
+      return;
+    }
+
+    const position = getPixelPosition(foundServer, true);
+
+    if (draggableBackground.current) {
+      draggableBackground.current.scrollTo({
+        top: position.top * zoomOptions[zoomIndex] - (draggableBackground.current.clientHeight / 2 - 100),
+        left: position.left * zoomOptions[zoomIndex] - draggableBackground.current.clientWidth / 2,
+        behavior: "instant",
+      });
+    }
+
+    if (allowAuth(foundServer)) {
+      setServerOpened(foundServer);
+    }
+  };
+
+  const updateSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <Container maxWidth={false} disableGutters>
+      {serverOpened ? (
+        <ServerDetailsModal
+          open={!!serverOpened}
+          onClose={() => setServerOpened(null)}
+          server={serverOpened}
+          classes={classes}
+        />
+      ) : (
+        ""
+      )}
       {DarknetState.allowMutating ? (
         <Typography variant={"h6"}>Dark Net</Typography>
       ) : (
@@ -229,6 +284,17 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         <Button onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/darknet.md" })}>
           Darknet Documentation
         </Button>
+        <form onSubmit={searchForm}>
+          <Typography component="div" display="flex">
+            <Typography display="flex" alignItems="center" paddingRight="1em">
+              Search for server:
+            </Typography>
+            <TextField value={searchTerm} onChange={updateSearch}></TextField>
+            <IconButton onClick={search}>
+              <SearchIcon />
+            </IconButton>
+          </Typography>
+        </form>
       </Box>
     </Container>
   );

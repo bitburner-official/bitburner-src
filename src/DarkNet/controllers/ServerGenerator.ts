@@ -213,7 +213,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
     return {
       modelId: ModelIds.RomanNumeral,
       password: `${password}`,
-      staticPasswordHint: `The password is the value of the number ${encodedPassword}`,
+      staticPasswordHint: `The password is the value of the number '${encodedPassword}'`,
       passwordHintData: encodedPassword,
     };
   } else {
@@ -221,7 +221,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
     const passwordRangeMax = password + Math.floor(Math.random() * difficulty * 10 + 10);
     const encodedMin = romanNumeralEncoder(passwordRangeMin);
     const encodedMax = romanNumeralEncoder(passwordRangeMax);
-    const hint = `The password is between ${encodedMin} and ${encodedMax}`;
+    const hint = `The password is between '${encodedMin}' and '${encodedMax}'`;
     const hintData = `${encodedMin},${encodedMax}`;
     return {
       modelId: ModelIds.RomanNumeral,

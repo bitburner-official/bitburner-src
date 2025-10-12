@@ -60,6 +60,10 @@ export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] 
   return rowAbove;
 };
 
+export const getAllDarknetServers = (): DarknetServer[] => {
+  return GetAllServers(true).filter((server) => server instanceof DarknetServer);
+};
+
 export const getAllMobileDarknetServers = (): DarknetServer[] => {
   const mobileDarknetServers = [];
   for (const server of GetAllServers(true)) {
