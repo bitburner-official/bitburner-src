@@ -1,6 +1,15 @@
-import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
+import React, {
+  PointerEventHandler,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  WheelEventHandler,
+} from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
+import { throttle } from "lodash";
 import { ServerStatusBox } from "./ServerStatusBox";
 import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
@@ -22,7 +31,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [zoomIndex, setZoomIndex] = useState(7);
   const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
-  const zoomOptions = [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
+  const zoomOptions = useMemo(() => [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5], []);
   const { classes } = dnetStyles({});
 
   useEffect(() => {
@@ -85,37 +94,58 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     }
   };
 
+  const zoomOut = useCallback(() => {
+    setZoomIndex(Math.max(Math.min(zoomIndex + 1, zoomOptions.length - 1), 0));
+  }, [zoomIndex, setZoomIndex, zoomOptions]);
+
+  const zoomIn = useCallback(() => {
+    setZoomIndex(Math.max(Math.min(zoomIndex - 1, zoomOptions.length - 1), 0));
+  }, [zoomIndex, setZoomIndex, zoomOptions]);
+
+  const zoom = useCallback(
+    (wheelEvent: WheelEvent) => {
+      const target = wheelEvent.target as HTMLDivElement;
+      if (!draggableBackground.current || DarknetState.openServer) {
+        return;
+      }
+      if (wheelEvent.deltaY < 0) {
+        zoomOut();
+      } else {
+        zoomIn();
+      }
+
+      if (!target?.parentElement?.getBoundingClientRect()) {
+        return;
+      }
+      // TODO: scroll toward the mouse cursor location?
+      // const width = target?.parentElement?.getBoundingClientRect()?.width;
+      // const height = target?.parentElement?.getBoundingClientRect()?.height;
+      // const deltaX = wheelEvent.pageX - target?.parentElement?.getBoundingClientRect()?.x;
+      // const deltaY = wheelEvent.pageY - target?.parentElement?.getBoundingClientRect()?.y;
+      // // adjust the draggableBackground scrollLeft and scrollTop to make the zoom center around the mouse position
+      // draggableBackground.current.scrollLeft += width * 0.5;
+      // draggableBackground.current.scrollTop += height * 0.5;
+    },
+    [draggableBackground, zoomIn, zoomOut],
+  );
+
+  const zoomRef = useRef(zoom);
+
+  useEffect(() => {
+    zoomRef.current = zoom;
+  }, [zoom]);
+
+  // creating throttled callback only once - on mount
+  const throttledZoom = useMemo(() => {
+    const func = (wheelEvent: WheelEvent) => {
+      zoomRef.current?.(wheelEvent);
+    };
+    return throttle(func, 200);
+  }, []);
+
   const handleZoom: WheelEventHandler<HTMLDivElement> = (wheelEvent) => {
     wheelEvent.stopPropagation();
-    const target = wheelEvent.target as HTMLDivElement;
-    if (!draggableBackground.current || DarknetState.openServer) {
-      return;
-    }
-    if (wheelEvent.deltaY < 0) {
-      zoomOut();
-    } else {
-      zoomIn();
-    }
-
-    if (!target?.parentElement?.getBoundingClientRect()) {
-      return;
-    }
-    // TODO: scroll toward the mouse cursor location?
-    // const width = target?.parentElement?.getBoundingClientRect()?.width;
-    // const height = target?.parentElement?.getBoundingClientRect()?.height;
-    // const deltaX = wheelEvent.pageX - target?.parentElement?.getBoundingClientRect()?.x;
-    // const deltaY = wheelEvent.pageY - target?.parentElement?.getBoundingClientRect()?.y;
-    // // adjust the draggableBackground scrollLeft and scrollTop to make the zoom center around the mouse position
-    // draggableBackground.current.scrollLeft += width * 0.5;
-    // draggableBackground.current.scrollTop += height * 0.5;
-  };
-
-  const zoomOut = () => {
-    setZoomIndex(Math.max(Math.min(zoomIndex + 1, zoomOptions.length - 1), 0));
-  };
-
-  const zoomIn = () => {
-    setZoomIndex(Math.max(Math.min(zoomIndex - 1, zoomOptions.length - 1), 0));
+    throttledZoom(wheelEvent as unknown as WheelEvent);
   };
 
   const isWithinScreen = (server: DarknetServer) => {
