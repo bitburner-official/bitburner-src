@@ -184,9 +184,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const search = () => {
     if (!searchTerm) return;
 
-    const foundServer = getAllDarknetServers().find(
+    const results = getAllDarknetServers().filter(
       (s) => s.hostname.toLowerCase().includes(searchTerm) && s.depth <= netDisplayDepth,
     );
+    const foundServer = results[Math.floor(Math.random() * results.length)] ?? null;
 
     if (!foundServer) {
       SnackbarEvents.emit(`No server found for search term ${searchTerm}`, ToastVariant.ERROR, 2000);
