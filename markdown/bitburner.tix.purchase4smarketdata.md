@@ -4,7 +4,9 @@
 
 ## TIX.purchase4SMarketData() method
 
-Purchase 4S Market Data Access.
+Purchase 4S Market Data UI access (UI only).
+
+You need to have a WSE account. Note that this feature only unlocks access to 4S Market Data in the Stock Market UI. If you want to access 4S Market Data via NS APIs, you have to unlock "4S Market Data TIX API access" via [purchase4SMarketDataTixApi](./bitburner.tix.purchase4smarketdatatixapi.md)<!-- -->, which is unrelated to this feature.
 
 **Signature:**
 

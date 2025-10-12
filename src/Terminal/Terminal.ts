@@ -269,9 +269,9 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
+      let moneyDrained = server.moneyAvailable * calculatePercentMoneyHacked(server, Player);
 
-      if (moneyDrained <= 0) {
+      if (moneyDrained < 0) {
         moneyDrained = 0;
       } // Safety check
 
@@ -292,7 +292,7 @@ export class Terminal {
       const newSec = server.hackDifficulty;
 
       this.print(
-        `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained)} and ${formatExp(
+        `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained, true)} and ${formatExp(
           expGainedOnSuccess,
         )} hacking exp`,
       );
@@ -405,7 +405,9 @@ export class Terminal {
         this.print("Time to hack: " + (!isHacknet ? convertTimeMsToTimeElapsedString(hackingTime, true) : "N/A"));
       }
       this.print(
-        `Total money available on server: ${currServ instanceof Server ? formatMoney(currServ.moneyAvailable) : "N/A"}`,
+        `Total money available on server: ${
+          currServ instanceof Server ? formatMoney(currServ.moneyAvailable, true) : "N/A"
+        }`,
       );
       if (currServ instanceof Server) {
         const numPort = currServ.numOpenPortsRequired;

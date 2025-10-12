@@ -14,7 +14,7 @@ import { resetPidCounter } from "./Netscript/Pid";
 import { GetServer, AddToAllServers, prestigeAllServers } from "./Server/AllServers";
 import { initForeignServers, prestigeHomeComputer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
-import { deleteStockMarket, initStockMarket } from "./StockMarket/StockMarket";
+import { canAccessStockMarket, deleteStockMarket, initStockMarket } from "./StockMarket/StockMarket";
 import { Terminal } from "./Terminal";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -167,7 +167,7 @@ export function prestigeAugmentation(): void {
   }
 
   // Reset Stock market
-  if (Player.hasWseAccount) {
+  if (canAccessStockMarket()) {
     initStockMarket();
   }
 
@@ -297,7 +297,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
   }
-  if (Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) > 0) {
+  if (canAccessBitNodeFeature(8)) {
     Player.hasWseAccount = true;
     Player.hasTixApiAccess = true;
   }
@@ -320,7 +320,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // Reset Stock market, gang, and corporation
-  if (Player.hasWseAccount) {
+  if (canAccessStockMarket()) {
     initStockMarket();
   } else {
     deleteStockMarket();

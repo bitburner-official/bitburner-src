@@ -4,7 +4,9 @@
 
 ## TIX.purchaseTixApi() method
 
-Purchase TIX API Access
+Purchase TIX API access.
+
+You need to have TIX API access to perform actions via NS APIs. Note that you can buy TIX API access without a WSE account.
 
 **Signature:**
 

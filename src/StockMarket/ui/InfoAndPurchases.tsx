@@ -10,7 +10,7 @@ import { getStockMarket4SDataCost, getStockMarket4STixApiCost } from "../StockMa
 import { StockMarketConstants } from "../data/Constants";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
-import { initStockMarket } from "../StockMarket";
+import { initStockMarket, isStockMarketInitialized } from "../StockMarket";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -47,7 +47,7 @@ function Purchase4SMarketDataTixApiAccessButton(props: IProps): React.ReactEleme
   if (Player.has4SDataTixApi) {
     return (
       <Typography>
-        Market Data TIX API Access <CheckIcon />
+        4S Market Data TIX API Access <CheckIcon />
       </Typography>
     );
   }
@@ -91,19 +91,21 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
       return;
     }
     Player.hasWseAccount = true;
-    initStockMarket();
+    if (!isStockMarketInitialized()) {
+      initStockMarket();
+    }
     Player.loseMoney(StockMarketConstants.WseAccountCost, "stock");
     props.rerender();
   }
 
   const cost = StockMarketConstants.WseAccountCost;
-  let tooltipTitle = "Let you trade stock";
+  let tooltipTitle = "Let you trade stock via UI";
   if (!Player.canAfford(cost)) {
     tooltipTitle = "You do not have enough money";
   }
   return (
     <>
-      <Typography>To begin trading, you must first purchase an account:</Typography>
+      <Typography>If you want to trade via Stock Market dashboard (UI), you must purchase a WSE account.</Typography>
       <Tooltip title={<Typography>{tooltipTitle}</Typography>}>
         <span>
           <Button disabled={!Player.canAfford(cost)} onClick={purchaseWseAccount}>
@@ -121,13 +123,13 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
     if (Player.hasTixApiAccess) {
       return;
     }
-    if (!Player.hasWseAccount) {
-      return;
-    }
     if (!Player.canAfford(StockMarketConstants.TixApiCost)) {
       return;
     }
     Player.hasTixApiAccess = true;
+    if (!isStockMarketInitialized()) {
+      initStockMarket();
+    }
     Player.loseMoney(StockMarketConstants.TixApiCost, "stock");
     props.rerender();
   }
@@ -140,21 +142,26 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
     );
   }
   const cost = StockMarketConstants.TixApiCost;
-  let tooltipTitle = "Let you trade stock through Netscript";
-  if (!Player.hasWseAccount) {
-    tooltipTitle = "Requires WSE Account";
-  } else if (!Player.canAfford(cost)) {
+  let tooltipTitle = "Let you trade stock via NS APIs";
+  if (!Player.canAfford(cost)) {
     tooltipTitle = "You do not have enough money";
   }
   return (
-    <Tooltip title={<Typography>{tooltipTitle}</Typography>}>
-      <span>
-        <Button disabled={!Player.hasWseAccount || !Player.canAfford(cost)} onClick={purchaseTixApiAccess}>
-          Buy Trade Information eXchange (TIX) API Access -&nbsp;
-          <Money money={cost} forPurchase={true} />
-        </Button>
-      </span>
-    </Tooltip>
+    <>
+      <Typography>
+        TIX, short for Trade Information eXchange, is the communications protocol used by the WSE. Purchasing access to
+        the TIX API lets you write code to create your own algorithmic/automated trading strategies.
+      </Typography>
+      <Typography>If you want to trade via NS APIs, you must purchase TIX API access.</Typography>
+      <Tooltip title={<Typography>{tooltipTitle}</Typography>}>
+        <span>
+          <Button disabled={!Player.canAfford(cost)} onClick={purchaseTixApiAccess}>
+            Buy Trade Information eXchange (TIX) API Access -&nbsp;
+            <Money money={cost} forPurchase={true} />
+          </Button>
+        </span>
+      </Tooltip>
+    </>
   );
 }
 
@@ -179,7 +186,7 @@ function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
   if (Player.has4SData) {
     return (
       <Typography>
-        4S Market Data Access <CheckIcon />
+        4S Market Data UI Access <CheckIcon />
       </Typography>
     );
   }
@@ -213,16 +220,16 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
     <>
       <Typography variant="h4">Welcome to the World Stock Exchange (WSE)!</Typography>
 
+      <Typography variant="h5" color="primary">
+        WSE Account
+      </Typography>
       <PurchaseWseAccountButton {...props} />
 
       <Typography variant="h5" color="primary">
         Trade Information eXchange (TIX) API
       </Typography>
-      <Typography>
-        TIX, short for Trade Information eXchange, is the communications protocol used by the WSE. Purchasing access to
-        the TIX API lets you write code to create your own algorithmic/automated trading strategies.
-      </Typography>
       <PurchaseTixApiAccessButton {...props} />
+
       <Typography variant="h5" color="primary">
         {FactionName.FourSigma} (4S) Market Data Feed
       </Typography>
@@ -235,6 +242,7 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
       </Typography>
       <Purchase4SMarketDataTixApiAccessButton {...props} />
       <Purchase4SMarketDataButton {...props} />
+
       <Typography>
         Commission Fees: Every transaction you make has a{" "}
         <Money money={StockMarketConstants.StockMarketCommission} forPurchase={true} /> commission fee.

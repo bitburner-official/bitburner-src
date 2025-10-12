@@ -10,6 +10,7 @@ import { initSourceFiles } from "../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../src/ui/formatNumber";
 import { Router } from "../../src/ui/GameRoot";
 import { config } from "../../src/NetscriptJSEvaluator";
+import type { NetscriptContext } from "../../src/Netscript/APIWrapper";
 import { purchaseServer } from "../../src/Server/ServerPurchases";
 import { purchaseHacknet } from "../../src/Hacknet/HacknetHelpers";
 import { initForeignServers } from "../../src/Server/ServerHelpers";
@@ -77,4 +78,19 @@ export function getNS(hostname: string = SpecialServers.Home): NSFull {
     throw new Error("Invalid NS instance");
   }
   return ns;
+}
+
+export function getMockedNetscriptContext(
+  workerScriptLogFunction: (func: string, txt: () => string) => void = () => {},
+): NetscriptContext {
+  return {
+    function: "",
+    functionPath: "",
+    workerScript: {
+      log: workerScriptLogFunction,
+      scriptRef: {
+        dependencies: [],
+      },
+    } as unknown as WorkerScript,
+  };
 }

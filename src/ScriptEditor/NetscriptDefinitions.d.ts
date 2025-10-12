@@ -264,7 +264,10 @@ interface RunningScript {
   onlineMoneyMade: number;
   /** Number of seconds that this script has been running online */
   onlineRunningTime: number;
-  /** Process ID. Must be an integer */
+  /** A Process ID unique to this script across all hosts. Must be an integer starting
+   * from 1 for the first process spawned at game launch and incrementing from there.
+   * Note that PIDs are not saved in the savegame and are regenerated at launch.
+   */
   pid: number;
   /**
    * Process ID of the parent process.
@@ -1632,28 +1635,44 @@ export interface TIX {
   getForecast(sym: string): number;
 
   /**
-   * Purchase 4S Market Data Access.
+   * Purchase 4S Market Data UI access (UI only).
+   *
+   * You need to have a WSE account. Note that this feature only unlocks access to 4S Market Data in the Stock Market
+   * UI. If you want to access 4S Market Data via NS APIs, you have to unlock "4S Market Data TIX API access" via
+   * {@link TIX.purchase4SMarketDataTixApi | purchase4SMarketDataTixApi}, which is unrelated to this feature.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchase4SMarketData(): boolean;
 
   /**
-   * Purchase 4S Market Data TIX API Access.
+   * Purchase 4S Market Data TIX API access (NS APIs only).
+   *
+   * You need to have TIX API access. Note that this feature only unlocks access to 4S Market Data via NS APIs.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchase4SMarketDataTixApi(): boolean;
 
   /**
-   * Purchase WSE Account.
+   * Purchase a WSE account.
+   *
+   * You need to have this account to perform actions via the Stock Market UI. Note that if you want to perform actions
+   * via NS APIs, you need to have TIX API access, not this account.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchaseWseAccount(): boolean;
 
   /**
-   * Purchase TIX API Access
+   * Purchase TIX API access.
+   *
+   * You need to have TIX API access to perform actions via NS APIs. Note that you can buy TIX API access without a WSE
+   * account.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
@@ -7432,7 +7451,7 @@ export interface NS {
    * If the script was successfully started, then this functions returns the PID of that script.
    * Otherwise, it returns 0.
    *
-   * PID stands for Process ID. The PID is a unique identifier for each script.
+   * PID stands for Process ID. The PID is a unique identifier for each script across all hosts.
    * The PID will always be a positive integer.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
@@ -7466,7 +7485,7 @@ export interface NS {
    * If the script was successfully started, then this function returns the PID of that script.
    * Otherwise, it returns 0.
    *
-   * PID stands for Process ID. The PID is a unique identifier for each script.
+   * PID stands for Process ID. The PID is a unique identifier for each script across all hosts.
    * The PID will always be a positive integer.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
@@ -7537,7 +7556,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * Kills the script with the provided PID.
+   * Kills the script with the provided PID. PIDs are unique across all hosts.
    * To instead kill a script using its filename, host, and args, see {@link NS.(kill:2) | the other ns.kill entry}.
    *
    * @example
@@ -8149,6 +8168,7 @@ export interface NS {
    * Attempts to write data to the specified Netscript port.
    * If the port is full, the data will not be written.
    * Otherwise, the data will be written normally.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to attempt to write to. Must be a positive integer.
    * @param data - Data to write, it's cloned with structuredClone().
@@ -8162,6 +8182,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Sleeps until the port is written to.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param port - Port to listen for a write on. Must be a positive integer.
    */
@@ -8203,6 +8224,7 @@ export interface NS {
    * This function is used to peek at the data from a port. It returns the
    * first element in the specified port without removing that element. If
    * the port is empty, the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to peek. Must be a positive integer.
    * @returns Data in the specified port.
@@ -8242,6 +8264,7 @@ export interface NS {
    * usually means that there is a bug in your script that leaks port data. A port is freed when it does not have any
    * data in its underlying queue. `ns.clearPort` deletes all data on a port. `ns.readPort` reads the first element in
    * the port's queue, then removes it from the queue.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to write to. Must be a positive integer.
    * @param data - Data to write, it's cloned with structuredClone().
@@ -8257,6 +8280,8 @@ export interface NS {
    * Read data from that port. A port is a serialized queue.
    * This function will remove the first element from that queue and return it.
    * If the queue is empty, then the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
    * @param portNumber - Port to read from. Must be a positive integer.
    * @returns The data read.
    */
@@ -8268,6 +8293,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Get a handle to a Netscript Port.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port number. Must be a positive integer.
    */

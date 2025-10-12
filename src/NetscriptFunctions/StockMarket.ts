@@ -7,6 +7,7 @@ import {
   cancelOrder,
   initStockMarket,
   StockMarketPromise,
+  isStockMarketInitialized,
 } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
 import { StockSymbol } from "@enums";
@@ -27,9 +28,6 @@ import { getDarknetVolatilityMult } from "../DarkNet/effects/effects";
 export function NetscriptStockMarket(): InternalAPI<TIX> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
   const checkTixApiAccess = function (ctx: NetscriptContext): void {
-    if (!Player.hasWseAccount) {
-      throw helpers.errorMessage(ctx, `You don't have WSE Access! Cannot use ${ctx.function}()`);
-    }
     if (!Player.hasTixApiAccess) {
       throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
     }
@@ -258,6 +256,11 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
         return true;
       }
 
+      if (!Player.hasWseAccount) {
+        helpers.log(ctx, () => "You need to have a WSE account.");
+        return false;
+      }
+
       if (Player.money < getStockMarket4SDataCost()) {
         helpers.log(ctx, () => "Not enough money to purchase 4S Market Data.");
         return false;
@@ -303,7 +306,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       }
 
       Player.hasWseAccount = true;
-      initStockMarket();
+      if (!isStockMarketInitialized()) {
+        initStockMarket();
+      }
       Player.loseMoney(getStockMarketWseCost(), "stock");
       helpers.log(ctx, () => "Purchased WSE Account Access");
       return true;
@@ -320,6 +325,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       }
 
       Player.hasTixApiAccess = true;
+      if (!isStockMarketInitialized()) {
+        initStockMarket();
+      }
       Player.loseMoney(getStockMarketTixApiCost(), "stock");
       helpers.log(ctx, () => "Purchased TIX API");
       return true;
