@@ -253,7 +253,7 @@ export class Terminal {
     // Calculate whether hack was successful
     const hackChance = calculateHackingChance(server, Player);
     const rand = Math.random();
-    const expGainedOnSuccess = calculateHackingExpGain(server, Player);
+    let expGainedOnSuccess = calculateHackingExpGain(server, Player);
     const expGainedOnFailure = expGainedOnSuccess / 4;
     if (rand < hackChance) {
       // Success!
@@ -268,9 +268,17 @@ export class Terminal {
 
       let moneyDrained = server.moneyAvailable * calculatePercentMoneyHacked(server, Player);
 
+      // Over-the-top safety checks
       if (moneyDrained < 0) {
         moneyDrained = 0;
-      } // Safety check
+      }
+      if (moneyDrained > server.moneyAvailable) {
+        moneyDrained = server.moneyAvailable;
+      }
+
+      if (moneyDrained === 0) {
+        expGainedOnSuccess = expGainedOnFailure;
+      }
 
       server.moneyAvailable -= moneyDrained;
       if (server.moneyAvailable < 0) {
