@@ -168,4 +168,3 @@ const l33tifyName = (name: string): string => {
   }
   return updatedName;
 };
-

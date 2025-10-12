@@ -5,9 +5,7 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 ## TODO:
 
 - debounce scroll events - https://www.developerway.com/posts/debouncing-in-react
-- remove starter script - instead have example snippets
 - darknet scripts are killed on restart?
-- fix "In other words, if you want to copy files to or run scripts on a darknet server from a long distance away, the source script needs to run dnet.connectToSession with the server's password first, and you need to stasis link or backdoor the server."
 - performance
 - link server logs to PID for labyrinth display?
 
@@ -36,7 +34,6 @@ webstorm screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 - server that returns a string in response to the attempt?
 
   - result: (encoded attempt) expectation: (encoded password)
-
 
 most common item in array server
 more leetcode array manipulation servers
