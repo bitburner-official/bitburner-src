@@ -29,8 +29,7 @@ import { installAugmentations } from "../../../src/Augmentation/AugmentationHelp
 import { AddToAllServers } from "../../../src/Server/AllServers";
 import { Server } from "../../../src/Server/Server";
 import { initSourceFiles } from "../../../src/SourceFile/SourceFiles";
-import type { NetscriptContext } from "../../../src/Netscript/APIWrapper";
-import type { WorkerScript } from "../../../src/Netscript/WorkerScript";
+import { getMockedNetscriptContext } from "../Utilities";
 
 jest.mock("../../../src/Faction/Factions", () => ({
   Factions: {},
@@ -43,18 +42,9 @@ jest.mock("../../../src/ui/GameRoot", () => ({
   },
 }));
 const mockLogger: (s: string) => void = jest.fn();
-const mockCtx: NetscriptContext = {
-  function: "",
-  functionPath: "",
-  workerScript: {
-    log: (_: string, text: () => string) => {
-      mockLogger(text());
-    },
-    scriptRef: {
-      dependencies: [],
-    },
-  } as unknown as WorkerScript,
-};
+const mockCtx = getMockedNetscriptContext((_: string, txt: () => string) => {
+  mockLogger(txt());
+});
 
 setPlayer(new PlayerObject());
 AddToAllServers(new Server({ hostname: "home" }));

@@ -285,7 +285,9 @@ Place order for stocks.
 
 </td><td>
 
-Purchase 4S Market Data Access.
+Purchase 4S Market Data UI access (UI only).
+
+You need to have a WSE account. Note that this feature only unlocks access to 4S Market Data in the Stock Market UI. If you want to access 4S Market Data via NS APIs, you have to unlock "4S Market Data TIX API access" via [purchase4SMarketDataTixApi](./bitburner.tix.purchase4smarketdatatixapi.md)<!-- -->, which is unrelated to this feature.
 
 
 </td></tr>
@@ -296,7 +298,9 @@ Purchase 4S Market Data Access.
 
 </td><td>
 
-Purchase 4S Market Data TIX API Access.
+Purchase 4S Market Data TIX API access (NS APIs only).
+
+You need to have TIX API access. Note that this feature only unlocks access to 4S Market Data via NS APIs.
 
 
 </td></tr>
@@ -307,7 +311,9 @@ Purchase 4S Market Data TIX API Access.
 
 </td><td>
 
-Purchase TIX API Access
+Purchase TIX API access.
+
+You need to have TIX API access to perform actions via NS APIs. Note that you can buy TIX API access without a WSE account.
 
 
 </td></tr>
@@ -318,7 +324,9 @@ Purchase TIX API Access
 
 </td><td>
 
-Purchase WSE Account.
+Purchase a WSE account.
+
+You need to have this account to perform actions via the Stock Market UI. Note that if you want to perform actions via NS APIs, you need to have TIX API access, not this account.
 
 
 </td></tr>

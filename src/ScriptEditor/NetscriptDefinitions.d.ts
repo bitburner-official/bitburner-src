@@ -1635,28 +1635,44 @@ export interface TIX {
   getForecast(sym: string): number;
 
   /**
-   * Purchase 4S Market Data Access.
+   * Purchase 4S Market Data UI access (UI only).
+   *
+   * You need to have a WSE account. Note that this feature only unlocks access to 4S Market Data in the Stock Market
+   * UI. If you want to access 4S Market Data via NS APIs, you have to unlock "4S Market Data TIX API access" via
+   * {@link TIX.purchase4SMarketDataTixApi | purchase4SMarketDataTixApi}, which is unrelated to this feature.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchase4SMarketData(): boolean;
 
   /**
-   * Purchase 4S Market Data TIX API Access.
+   * Purchase 4S Market Data TIX API access (NS APIs only).
+   *
+   * You need to have TIX API access. Note that this feature only unlocks access to 4S Market Data via NS APIs.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchase4SMarketDataTixApi(): boolean;
 
   /**
-   * Purchase WSE Account.
+   * Purchase a WSE account.
+   *
+   * You need to have this account to perform actions via the Stock Market UI. Note that if you want to perform actions
+   * via NS APIs, you need to have TIX API access, not this account.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchaseWseAccount(): boolean;
 
   /**
-   * Purchase TIX API Access
+   * Purchase TIX API access.
+   *
+   * You need to have TIX API access to perform actions via NS APIs. Note that you can buy TIX API access without a WSE
+   * account.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
