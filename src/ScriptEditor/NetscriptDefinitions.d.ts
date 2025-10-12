@@ -56,7 +56,7 @@ interface Player extends Person {
   numPeopleKilled: number;
   entropy: number;
   jobs: Partial<Record<CompanyName, JobName>>;
-  factions: string[];
+  factions: FactionName[];
   totalPlaytime: number;
   location: LocationName;
   karma: number;
@@ -844,7 +844,7 @@ interface BladeburnerCurAction {
  */
 interface GangGenInfo {
   /** Name of faction that the gang belongs to ("Slum Snakes", etc.) */
-  faction: string;
+  faction: FactionName;
   /** Indicating whether or not it's a hacking gang */
   isHacking: boolean;
   /** Money earned per game cycle */
@@ -9919,7 +9919,7 @@ type CorpResearchName =
  */
 interface CorpMaterialConstantData {
   /** Name of the material */
-  name: string;
+  name: CorpMaterialName;
   /** Size of the material */
   size: number;
   demandBase: number;

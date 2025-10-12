@@ -64,7 +64,7 @@ Gang gives a discount on all equipment. This multiplier is applied to the equipm
 
 </td><td>
 
-string
+[FactionName](./bitburner.factionname.md)
 
 
 </td><td>

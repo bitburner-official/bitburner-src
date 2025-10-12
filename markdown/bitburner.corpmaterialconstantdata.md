@@ -166,7 +166,7 @@ number
 
 </td><td>
 
-string
+[CorpMaterialName](./bitburner.corpmaterialname.md)
 
 
 </td><td>
