@@ -31,7 +31,8 @@ export function ServerSummary({
   }
 
   const cacheCount = server.caches.length;
-  const fileCount = server.textFiles.size + server.messages.length;
+  const dataFileCount = Array.from(server.textFiles.keys()).filter((f) => f.endsWith("data.txt")).length;
+  const fileCount = dataFileCount + server.messages.length;
   const contractCount = server.contracts.length;
   const runningScriptCount = server.runningScriptMap
     .values()

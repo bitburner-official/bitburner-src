@@ -4,22 +4,14 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
-- fix references to "Dark Web"
 - debounce scroll events - https://www.developerway.com/posts/debouncing-in-react
 - remove starter script - instead have example snippets
-- test importing legacy save - fix darknet on purchasing darknet navigator if it's a legacy server. This may work already
 - darknet scripts are killed on restart?
-- too many data files generated?
 - fix "In other words, if you want to copy files to or run scripts on a darknet server from a long distance away, the source script needs to run dnet.connectToSession with the server's password first, and you need to stasis link or backdoor the server."
 - performance
+- link server logs to PID for labyrinth display?
 
 - more hint notes
-
-  most common item in array server
-  more leetcode array manipulation servers
-  more guess and check servers
-  verbal description of simple math problem (nth root of depth)
-  basic cypher server?
 
 ## Post MVP:
 
@@ -44,6 +36,13 @@ webstorm screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 - server that returns a string in response to the attempt?
 
   - result: (encoded attempt) expectation: (encoded password)
+
+
+most common item in array server
+more leetcode array manipulation servers
+more guess and check servers
+verbal description of simple math problem (nth root of depth)
+basic cypher server?
 
 ## Community feedback:
 

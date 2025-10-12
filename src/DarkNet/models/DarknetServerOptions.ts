@@ -15,6 +15,7 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetServer as IDarknetServer, ResponseStatusType } from "@nsdefs";
 import { MinigamesType } from "../Enums";
 import { DarknetState } from "./DarknetState";
+import { getRamBlock } from "../effects/ramblock";
 
 export type PasswordResponse = {
   status: ResponseStatusType;
@@ -168,17 +169,3 @@ const l33tifyName = (name: string): string => {
   return updatedName;
 };
 
-const getRamBlock = (maxRam: number): number => {
-  if (maxRam === 16) {
-    return [0, 1, 2][Math.floor(Math.random() * 2)];
-  }
-  if (maxRam <= 32) {
-    return [0, 2, 4][Math.floor(Math.random() * 2)];
-  }
-
-  if (maxRam <= 64) {
-    return [16, 32, maxRam - 8][Math.floor(Math.random() * 3)];
-  }
-
-  return [maxRam, maxRam - 8, maxRam - 64, maxRam / 2][Math.floor(Math.random() * 4)];
-};

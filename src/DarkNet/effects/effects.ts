@@ -13,7 +13,6 @@ import { TextFilePath } from "../../Paths/TextFilePath";
 import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
-import { clampNumber } from "../../utils/helpers/clampNumber";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
@@ -117,20 +116,6 @@ export const getBackdoorAuthTimeDebuff = () => {
   return 1.07 ** backdoorSurplus;
 };
 
-export const handleRamBlockClearedRewards = (server: DarknetServer) => {
-  addCacheToServer(server);
-  if (Math.random() < 0.3) {
-    addClue(server);
-  }
-
-  const stormSeedChance = 0.15;
-  const timeSinceLastStorm = Date.now() - DarknetState.lastStormTime.getTime();
-  const stormFileExists = getAllMobileDarknetServers().some((s) => s.programs.includes(CompletedProgramName.stormSeed));
-  if (timeSinceLastStorm > 30 * 60 * 1000 && !stormFileExists && Math.random() < stormSeedChance) {
-    server.programs.push(CompletedProgramName.stormSeed);
-  }
-};
-
 /**
  * Returns a small multiplier based on charisma.
  * With scalar at 1 it gives ~1.2 at 2000 charisma and ~1.6 at 10000 charisma. Caps at 2.1 at infinite cha
@@ -156,7 +141,9 @@ export const calculatePasswordAttemptChaGain = (server: DarknetServer, threads: 
 };
 
 // TODO: balance password clue spawn rate
-const addClue = (server: DarknetServer) => {
+export const addClue = (server: DarknetServer) => {
+  const dataFileSuffix = ".data.txt";
+
   // Basic mechanics hints
   if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
@@ -167,7 +154,7 @@ const addClue = (server: DarknetServer) => {
 
   // some entries from the common password dictionary
   if (Math.random() < 0.1) {
-    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
     const start = Math.floor(Math.random() * (commonPasswordDictionary.length - 6));
     const commonPasswords = commonPasswordDictionary.slice(start, start + 6).join(", ");
     server.writeToTextFile(hintFileName as TextFilePath, `Some common passwords include ${commonPasswords}`);
@@ -176,7 +163,7 @@ const addClue = (server: DarknetServer) => {
 
   // connected neighboring server's password (does not include server name)
   if (Math.random() < 0.1) {
-    const passwordHintName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const passwordHintName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
     const neighboringServerName = server.serversOnNetwork.find((s) => {
       const server = getDarknetServerSafely(s);
       return server && !server.hasAdminRights && server.password;
@@ -190,7 +177,7 @@ const addClue = (server: DarknetServer) => {
 
   // non-connected nearby server's password (includes server name)
   if (Math.random() < 0.1) {
-    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
     const targetServer = getNearbyNonEmptyPasswordServer(server, true);
     if (targetServer) {
       const contents = `Server: ${targetServer.hostname} Password: "${targetServer.password}"`;
@@ -200,14 +187,14 @@ const addClue = (server: DarknetServer) => {
   }
 
   if (Math.random() < 0.4) {
-    const hintFileName = notebookFileNames[Math.floor(Math.random() * notebookFileNames.length)] + ".txt";
+    const hintFileName = notebookFileNames[Math.floor(Math.random() * notebookFileNames.length)] + dataFileSuffix;
     const loreNote = packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
     server.writeToTextFile(hintFileName as TextFilePath, loreNote);
     return;
   }
 
   if (Math.random() < 0.7) {
-    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
     const targetServer = getNearbyNonEmptyPasswordServer(server);
     if (targetServer) {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);
@@ -216,15 +203,6 @@ const addClue = (server: DarknetServer) => {
       return;
     }
   }
-};
-
-export const getRamBlockRemoved = (server: DarknetServer, threads: number = 1, player: IPerson = Player) => {
-  const difficulty = server.difficulty;
-  const remainingRamBlock = server.ramBlock;
-  const charismaFactor = 1 + player.skills.charisma / 100;
-  const difficultyFactor = 2 * 0.92 ** (difficulty + 1);
-  const baseAmount = 0.02;
-  return clampNumber(baseAmount * difficultyFactor * threads * charismaFactor, 0, remainingRamBlock);
 };
 
 export const getDarknetVolatilityMult = (symbol: string) => {
@@ -245,13 +223,6 @@ export const getStasisLinkLimit = (): number => {
   const hasTheBrokenWings = Player.hasAugmentation(AugmentationName.TheBrokenWings);
   const hasTheHammer = Player.hasAugmentation(AugmentationName.TheHammer);
   return 1 + +hasTheBrokenWings + +hasTheHammer;
-};
-
-export const applyRamBlocks = () => {
-  const servers = getAllMobileDarknetServers();
-  for (const server of servers) {
-    server.updateRamUsed(server.ramBlock ?? 0);
-  }
 };
 
 export const chargeServerMigration = (server: DarknetServer, threads = 1) => {

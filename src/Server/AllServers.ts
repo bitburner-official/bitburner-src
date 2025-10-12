@@ -9,9 +9,9 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
-import { applyRamBlocks } from "../DarkNet/effects/effects";
 import { DarknetServer } from "./DarknetServer";
 import { isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
+import { applyRamBlocks } from "../DarkNet/effects/ramblock";
 
 /**
  * Map of all Servers that exist in the game
