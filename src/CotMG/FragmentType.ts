@@ -1,84 +1,75 @@
+import type { FragmentType } from "@nsdefs";
+
 // Numeric enum
-export enum FragmentType {
-  // Special fragments for the UI
-  None,
-  Delete,
+export const FragmentTypeEnum = {
+  HackingSpeed: 3,
+  HackingMoney: 4,
+  HackingGrow: 5,
+  Hacking: 6,
+  Strength: 7,
+  Defense: 8,
+  Dexterity: 9,
+  Agility: 10,
+  Charisma: 11,
+  HacknetMoney: 12,
+  HacknetCost: 13,
+  Rep: 14,
+  WorkMoney: 15,
+  Crime: 16,
+  Bladeburner: 17,
+  // Utility fragments.
+  Booster: 18,
+} as const;
 
-  // Stats boosting fragments
-  HackingChance,
-  HackingSpeed,
-  HackingMoney,
-  HackingGrow,
-  Hacking,
-  Strength,
-  Defense,
-  Dexterity,
-  Agility,
-  Charisma,
-  HacknetMoney,
-  HacknetCost,
-  Rep,
-  WorkMoney,
-  Crime,
-  Bladeburner,
-
-  // utility fragments.
-  Booster,
-}
-
-export function Effect(tpe: FragmentType): string {
-  switch (tpe) {
-    case FragmentType.HackingChance: {
-      return "+x% hack() success chance";
-    }
-    case FragmentType.HackingSpeed: {
+export function Effect(type: FragmentType): string {
+  switch (type) {
+    case FragmentTypeEnum.HackingSpeed: {
       return "+x% faster hack(), grow(), and weaken()";
     }
-    case FragmentType.HackingMoney: {
+    case FragmentTypeEnum.HackingMoney: {
       return "+x% hack() power";
     }
-    case FragmentType.HackingGrow: {
+    case FragmentTypeEnum.HackingGrow: {
       return "+x% grow() power";
     }
-    case FragmentType.Hacking: {
+    case FragmentTypeEnum.Hacking: {
       return "+x% hacking experience and skill level";
     }
-    case FragmentType.Strength: {
+    case FragmentTypeEnum.Strength: {
       return "+x% strength experience and skill level";
     }
-    case FragmentType.Defense: {
+    case FragmentTypeEnum.Defense: {
       return "+x% defense experience and skill level";
     }
-    case FragmentType.Dexterity: {
+    case FragmentTypeEnum.Dexterity: {
       return "+x% dexterity experience and skill level";
     }
-    case FragmentType.Agility: {
+    case FragmentTypeEnum.Agility: {
       return "+x% agility experience and skill level";
     }
-    case FragmentType.Charisma: {
+    case FragmentTypeEnum.Charisma: {
       return "+x% charisma experience and skill level";
     }
-    case FragmentType.HacknetMoney: {
+    case FragmentTypeEnum.HacknetMoney: {
       return "+x% hacknet production";
     }
-    case FragmentType.HacknetCost: {
+    case FragmentTypeEnum.HacknetCost: {
       return "-x% cheaper hacknet costs";
     }
-    case FragmentType.Rep: {
+    case FragmentTypeEnum.Rep: {
       return "+x% reputation from factions and companies";
     }
-    case FragmentType.WorkMoney: {
+    case FragmentTypeEnum.WorkMoney: {
       return "+x% work money";
     }
-    case FragmentType.Crime: {
+    case FragmentTypeEnum.Crime: {
       return "+x% crime money and success chance";
     }
-    case FragmentType.Bladeburner: {
+    case FragmentTypeEnum.Bladeburner: {
       return "+x% bladeburner stats (max stamina, stamina gain, Field Analysis effectiveness, action success chance)";
     }
-    case FragmentType.Booster: {
+    case FragmentTypeEnum.Booster: {
       return "1.1x adjacent fragment power";
     }
   }
-  throw new Error("Calling effect for fragment type that doesn't have an effect " + tpe);
 }
