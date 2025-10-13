@@ -34,7 +34,6 @@ import { DarknetServer } from "../Server/DarknetServer";
 import { exampleDarknetServer, ResponseStatus } from "../DarkNet/Enums";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
-import { getDarknetData } from "../DarkNet/utils/darknetServerUtils";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 import { resolveCacheFilePath } from "../Paths/CacheFilePath";
 
@@ -315,17 +314,11 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx: NetscriptContext) =>
       (_returnByIp): string[] => {
         const returnByIP = helpers.boolean(ctx, "returnByIP", _returnByIp ?? false);
-        const hostname = ctx.workerScript.getServer().hostname;
-        const onlineConnectionCheck = getFailureResult(ctx, hostname);
-        if (!onlineConnectionCheck.success) {
-          return [];
-        }
-        const server = onlineConnectionCheck.server;
-        const out: string[] = [];
+        const server = ctx.workerScript.getServer();
+        const out = [];
         for (const neighbor of server.serversOnNetwork) {
           const neighborServer = GetServer(neighbor);
-          const darknetData = getDarknetData(neighborServer);
-          if (!neighborServer || !darknetData) {
+          if (!(neighborServer instanceof DarknetServer)) {
             continue;
           }
           const entry = helpers.returnServerID(neighborServer, { returnByIP });

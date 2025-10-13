@@ -99,9 +99,9 @@ describe("home", () => {
   });
   test("probe", () => {
     const ns = getNsOnHome();
-    expect(() => {
-      ns.dnet.probe();
-    }).toThrow("home is not a darknet server");
+    const hostnames = ns.dnet.probe();
+    expect(hostnames.length).toStrictEqual(1);
+    expect(hostnames[0]).toStrictEqual(SpecialServers.DarkWeb);
   });
   test("setStasisLink", () => {
     const ns = getNsOnHome();
@@ -260,9 +260,7 @@ describe("Normal NPC server", () => {
   });
   test("probe", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => {
-      ns.dnet.probe();
-    }).toThrow("CSEC is not a darknet server");
+    expect(ns.dnet.probe().length).toStrictEqual(0);
   });
   test("setStasisLink", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
@@ -339,9 +337,7 @@ describe("Private server", () => {
   });
   test("probe", () => {
     const ns = getNS("test-server-1");
-    expect(() => {
-      ns.dnet.probe();
-    }).toThrow("test-server-1 is not a darknet server");
+    expect(ns.dnet.probe().length).toStrictEqual(0);
   });
   test("setStasisLink", () => {
     const ns = getNS("test-server-1");
@@ -418,9 +414,7 @@ describe("Hashnet server", () => {
   });
   test("probe", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => {
-      ns.dnet.probe();
-    }).toThrow("hacknet-server-0 is not a darknet server");
+    expect(ns.dnet.probe().length).toStrictEqual(0);
   });
   test("setStasisLink", () => {
     const ns = getNS("hacknet-server-0");
