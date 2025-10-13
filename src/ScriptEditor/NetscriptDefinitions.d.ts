@@ -5798,7 +5798,7 @@ type FragmentType = _ValueOf<FragmentEnumType>;
 interface Fragment {
   id: number;
   shape: boolean[][];
-  type: number;
+  type: FragmentType;
   power: number;
   limit: number;
   effect: string;
@@ -8868,6 +8868,7 @@ type NSEnums = {
   OrderType: OrderEnumType;
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
+  FragmentType: FragmentEnumType;
 };
 
 /**
