@@ -160,7 +160,9 @@ Go to `Terminal` and enter the following command:
     $ scan-analyze 2
 
 This will show detailed information about some [Servers](../basic/servers.md) on the network.
-The **network is randomized so it will be different for every person**.
+
+***The network is randomized, so it will be different for every person.***
+
 Here's what mine showed at the time I made this:
 
     [home ~]> scan-analyze 2
