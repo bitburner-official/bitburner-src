@@ -220,6 +220,7 @@ Take note of the following servers:
 - `nectar-net`
 - `hong-fang-tea`
 - `harakiri-sushi`
+- `foodnstuff`
 
 All of these servers have 16GB of [RAM](../basic/ram.md).
 Furthermore, all of these servers do not require any open ports in order to NUKE.
@@ -251,6 +252,7 @@ Here's the sequence of `Terminal` commands I used in order to achieve this:
     $ scp early-hack-template.js nectar-net
     $ scp early-hack-template.js hong-fang-tea
     $ scp early-hack-template.js harakiri-sushi
+    $ scp early-hack-template.js foodnstuff
     $ connect n00dles
     $ run NUKE.exe
     $ run early-hack-template.js -t 1
@@ -271,8 +273,12 @@ Here's the sequence of `Terminal` commands I used in order to achieve this:
     $ run NUKE.exe
     $ run early-hack-template.js -t 6
     $ home
-    $ connect hong-fang-tea
+    $ connect n00dles
     $ connect nectar-net
+    $ run NUKE.exe
+    $ run early-hack-template.js -t 6
+    $ home
+    $ connect foodnstuff
     $ run NUKE.exe
     $ run early-hack-template.js -t 6
 
@@ -285,7 +291,7 @@ The `home` command is used to connect to the home computer. When running our [Sc
 Note that the `nectar-net` [Server](../basic/servers.md) isn't in the home computer's immediate network.
 This means you can't directly connect to it from home. You will have to search for it inside the network.
 The results of the `scan-analyze 2` command we ran before will show where it is.
-In my case, I could connect to it by going from `hong-fang-tea` -> `nectar-net`.
+In my case, I could connect to it by going from `n00dles` -> `nectar-net`.
 However, this will probably be different for you.
 
 After running all of these `Terminal` commands, our [Scripts](../basic/scripts.md) are now up and running.
