@@ -25,12 +25,11 @@ import { Page } from "../../ui/Router";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
-import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { ToastVariant } from "@enums";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
+const initialSearchLabel = `Search for server:`;
 
 export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
@@ -39,6 +38,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const [zoomIndex, setZoomIndex] = useState(7);
   const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchLabel, setSearchLabel] = useState<string>(initialSearchLabel);
   const [serverOpened, setServerOpened] = useState<DarknetServer | null>(null);
   const zoomOptions = useMemo(() => [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5], []);
   const { classes } = dnetStyles({});
@@ -182,16 +182,21 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   };
 
   const search = () => {
-    if (!searchTerm) return;
+    if (!searchTerm) {
+      setSearchLabel(initialSearchLabel);
+      return;
+    }
 
     const results = getAllDarknetServers().filter(
-      (s) => s.hostname.toLowerCase().includes(searchTerm) && s.depth <= netDisplayDepth,
+      (s) => s.hostname.toLowerCase().includes(searchTerm) && s.depth < netDisplayDepth,
     );
     const foundServer = results[Math.floor(Math.random() * results.length)] ?? null;
 
     if (!foundServer) {
-      SnackbarEvents.emit(`No server found for search term ${searchTerm}`, ToastVariant.ERROR, 2000);
+      setSearchLabel(`(No results for "${searchTerm}")`);
       return;
+    } else {
+      setSearchLabel(initialSearchLabel);
     }
 
     const position = getPixelPosition(foundServer, true);
@@ -204,7 +209,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       });
     }
 
-    if (allowAuth(foundServer)) {
+    if (allowAuth(foundServer) && results.length === 1) {
       setServerOpened(foundServer);
     }
   };
@@ -288,7 +293,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         <form onSubmit={searchForm}>
           <Typography component="div" display="flex">
             <Typography display="flex" alignItems="center" paddingRight="1em">
-              Search for server:
+              {searchLabel}
             </Typography>
             <TextField value={searchTerm} onChange={updateSearch}></TextField>
             <IconButton onClick={search}>
