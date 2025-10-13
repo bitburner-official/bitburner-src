@@ -161,7 +161,7 @@ Go to `Terminal` and enter the following command:
 
 This will show detailed information about some [Servers](../basic/servers.md) on the network.
 
-***The network is randomized, so it will be different for every person.***
+**_The network is randomized, so it will be different for every person._**
 
 Here's what mine showed at the time I made this:
 
