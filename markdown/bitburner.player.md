@@ -62,7 +62,7 @@ number
 
 </td><td>
 
-string\[\]
+[FactionName](./bitburner.factionname.md)<!-- -->\[\]
 
 
 </td><td>

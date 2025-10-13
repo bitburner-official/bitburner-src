@@ -3,9 +3,9 @@ import { AugmentationName, FactionName } from "@enums";
 
 import { canAcceptStaneksGift, staneksGift } from "../CotMG/Helper";
 import { Fragments, FragmentById } from "../CotMG/Fragment";
-import { FragmentType } from "../CotMG/FragmentType";
+import { FragmentTypeEnum } from "../CotMG/FragmentType";
 
-import { Fragment, Stanek as IStanek } from "@nsdefs";
+import { Stanek as IStanek } from "@nsdefs";
 import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { joinFaction } from "../Faction/FactionHelpers";
@@ -37,7 +37,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       const fragment = staneksGift.findFragment(rootX, rootY);
       //Check whether the selected fragment can ge charged
       if (!fragment) throw helpers.errorMessage(ctx, `No fragment with root (${rootX}, ${rootY}).`);
-      if (fragment.fragment().type == FragmentType.Booster) {
+      if (fragment.fragment().type == FragmentTypeEnum.Booster) {
         throw helpers.errorMessage(
           ctx,
           `The fragment with root (${rootX}, ${rootY}) is a Booster Fragment and thus cannot be charged.`,
@@ -58,22 +58,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     fragmentDefinitions: (ctx) => () => {
       checkStanekAPIAccess(ctx);
       helpers.log(ctx, () => `Returned ${Fragments.length} fragments`);
-      return Fragments.filter(
-        (f) =>
-          // Filter out internal values
-          f.type !== FragmentType.None &&
-          f.type !== FragmentType.Delete &&
-          // Filter out unused values
-          f.type !== FragmentType.HackingChance,
-      ).map(
-        (f) =>
-          // Cast as Netscript `Fragment` because its property of `type` does not contain:
-          // - None
-          // - Delete
-          // - HackingChance
-          // But we filtered them out above
-          f.copy() as Fragment,
-      );
+      return Fragments.map((f) => f.copy());
     },
     activeFragments: (ctx) => () => {
       checkStanekAPIAccess(ctx);

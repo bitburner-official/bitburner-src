@@ -58,5 +58,5 @@ Data in the specified port.
 
 RAM cost: 0 GB
 
-This function is used to peek at the data from a port. It returns the first element in the specified port without removing that element. If the port is empty, the string “NULL PORT DATA” will be returned.
+This function is used to peek at the data from a port. It returns the first element in the specified port without removing that element. If the port is empty, the string “NULL PORT DATA” will be returned. Ports are shared across all hosts and contents are reset on game restart.
 
