@@ -8,7 +8,7 @@ import { addCacheToServer } from "./cacheFiles";
 import { DarknetState } from "../models/DarknetState";
 import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 import { CompletedProgramName } from "@enums";
-import { Person as IPerson } from "@nsdefs";
+import type { Person as IPerson } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 
 /*

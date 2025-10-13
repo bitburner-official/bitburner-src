@@ -25,6 +25,7 @@ import {
 } from "../utils/darknetNetworkUtils";
 import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import { getTorRouter } from "../../Server/ServerHelpers";
+import { DarknetConstants } from "../Constants";
 
 export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -142,8 +143,6 @@ export const calculatePasswordAttemptChaGain = (server: DarknetServer, threads: 
 
 // TODO: balance password clue spawn rate
 export const addClue = (server: DarknetServer) => {
-  const dataFileSuffix = ".data.txt";
-
   // Basic mechanics hints
   if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
@@ -154,7 +153,8 @@ export const addClue = (server: DarknetServer) => {
 
   // some entries from the common password dictionary
   if (Math.random() < 0.1) {
-    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
+    const hintFileName =
+      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
     const start = Math.floor(Math.random() * (commonPasswordDictionary.length - 6));
     const commonPasswords = commonPasswordDictionary.slice(start, start + 6).join(", ");
     server.writeToTextFile(hintFileName as TextFilePath, `Some common passwords include ${commonPasswords}`);
@@ -163,7 +163,8 @@ export const addClue = (server: DarknetServer) => {
 
   // connected neighboring server's password (does not include server name)
   if (Math.random() < 0.1) {
-    const passwordHintName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
+    const passwordHintName =
+      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
     const neighboringServerName = server.serversOnNetwork.find((s) => {
       const server = getDarknetServerSafely(s);
       return server && !server.hasAdminRights && server.password;
@@ -177,7 +178,8 @@ export const addClue = (server: DarknetServer) => {
 
   // non-connected nearby server's password (includes server name)
   if (Math.random() < 0.1) {
-    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
+    const hintFileName =
+      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
     const targetServer = getNearbyNonEmptyPasswordServer(server, true);
     if (targetServer) {
       const contents = `Server: ${targetServer.hostname} Password: "${targetServer.password}"`;
@@ -187,14 +189,16 @@ export const addClue = (server: DarknetServer) => {
   }
 
   if (Math.random() < 0.4) {
-    const hintFileName = notebookFileNames[Math.floor(Math.random() * notebookFileNames.length)] + dataFileSuffix;
+    const hintFileName =
+      notebookFileNames[Math.floor(Math.random() * notebookFileNames.length)] + DarknetConstants.DataFileSuffix;
     const loreNote = packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
     server.writeToTextFile(hintFileName as TextFilePath, loreNote);
     return;
   }
 
   if (Math.random() < 0.7) {
-    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + dataFileSuffix;
+    const hintFileName =
+      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
     const targetServer = getNearbyNonEmptyPasswordServer(server);
     if (targetServer) {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);

@@ -14,6 +14,7 @@ import type { NetscriptContext } from "../../src/Netscript/APIWrapper";
 import { purchaseServer } from "../../src/Server/ServerPurchases";
 import { purchaseHacknet } from "../../src/Hacknet/HacknetHelpers";
 import { initForeignServers } from "../../src/Server/ServerHelpers";
+import { generateNextPid } from "../../src/Netscript/Pid";
 
 declare const importActual: (typeof config)["doImport"];
 
@@ -50,19 +51,28 @@ export function initGameEnvironment() {
   initSourceFiles();
 }
 
-export function setupBasicTestingEnvironment(): void {
+export function setupBasicTestingEnvironment(
+  { purchaseHacknetServer, purchasePServer } = { purchasePServer: false, purchaseHacknetServer: false },
+): void {
   prestigeAllServers();
   setPlayer(new PlayerObject());
   Player.init();
   Player.sourceFiles.set(4, 3);
-  Player.sourceFiles.set(9, 3);
   Player.money = 1e15;
   initForeignServers(Player.getHomeComputer());
-  purchaseServer("test-server-1", 2);
-  purchaseHacknet();
+  if (purchasePServer) {
+    purchaseServer("test-server-1", 2);
+  }
+  if (purchaseHacknetServer) {
+    Player.sourceFiles.set(9, 3);
+    purchaseHacknet();
+  }
 }
 
-export function getNS(hostname: string = SpecialServers.Home): NSFull {
+export function getWorkerScriptAndNS(hostname: string = SpecialServers.Home): {
+  ws: WorkerScript;
+  ns: NSFull;
+} {
   const home = GetServerOrThrow(hostname);
   home.maxRam = 1024;
   const filePath = "test.js" as ScriptFilePath;
@@ -72,12 +82,19 @@ export function getNS(hostname: string = SpecialServers.Home): NSFull {
     throw new Error("Invalid script");
   }
   const runningScript = new RunningScript(script, 1024);
-  const workerScript = new WorkerScript(runningScript, 1, NetscriptFunctions);
+  const workerScript = new WorkerScript(runningScript, generateNextPid(), NetscriptFunctions);
   const ns = workerScript.env.vars;
   if (!ns) {
     throw new Error("Invalid NS instance");
   }
-  return ns;
+  return {
+    ws: workerScript,
+    ns,
+  };
+}
+
+export function getNS(hostname: string = SpecialServers.Home): NSFull {
+  return getWorkerScriptAndNS(hostname).ns;
 }
 
 export function getMockedNetscriptContext(

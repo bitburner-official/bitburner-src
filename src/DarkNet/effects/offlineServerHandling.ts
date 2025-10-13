@@ -8,7 +8,6 @@ import { GetServer } from "../../Server/AllServers";
 import { DarknetState } from "../models/DarknetState";
 import { ResponseStatus } from "../Enums";
 import { getBackdooredDarkwebServers } from "../utils/darknetNetworkUtils";
-import { isDarknetServer } from "../utils/darknetServerUtils";
 import { hasDarknetAccess } from "../utils/darknetAuthUtils";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { Result } from "../../types";
@@ -108,38 +107,46 @@ export const isDirectConnected = (currentServer: BaseServer, targetServer: Darkn
  * cases like getFailureResult does. This is intentional. When a server goes offline, all scripts are killed. After
  * that, accessing NS APIs will throw the ScriptDeath error, so there is no way this function can be called.
  */
-export function expectScriptRunningOnDarknetServer(ctx: NetscriptContext): DarknetServer {
+export function expectRunningOnDarknetServer(ctx: NetscriptContext): DarknetServer {
   const hostname = ctx.workerScript.hostname;
-  const targetServer = GetServer(hostname);
-  if (!(targetServer instanceof DarknetServer)) {
-    throw errorMessage(ctx, `${hostname} is not a darknet server`);
+  const server = GetServer(hostname);
+  if (!(server instanceof DarknetServer)) {
+    throw errorMessage(
+      ctx,
+      `This API can only be used on a darknet server, but it was called by ${ctx.workerScript.name} (PID: ` +
+        `${ctx.workerScript.pid}) on ${hostname}.`,
+    );
   }
-  return targetServer;
+  return server;
 }
 
 export function expectAuthenticated(ctx: NetscriptContext, server: DarknetServer) {
-  // WIP
-  if (
-    !isDarknetServer(server) ||
-    ctx.workerScript.hostname === server.hostname ||
-    server.hostname === SpecialServers.DarkWeb
-  ) {
+  /**
+   * Some non-dnet APIs (e.g., scp, exec) requires a session. We make darkweb an exception, so the player can interact
+   * with it without buying DarkscapeNavigator.exe.
+   */
+  if (ctx.workerScript.hostname === server.hostname || server.hostname === SpecialServers.DarkWeb) {
     return;
   }
   if (!server.hasAdminRights) {
-    throw new Error(
+    throw errorMessage(
+      ctx,
       `[${ctx.function}] Server ${server.hostname} is password-protected. Use ns.dnet.authenticate() to gain access before running ${ctx.function}.`,
     );
   }
   if (!isAuthenticated(server, ctx.workerScript.pid)) {
-    throw new Error(
+    throw errorMessage(
+      ctx,
       `[${ctx.function}] Server ${server.hostname} requires a session to be targeted with ${ctx.function}. Use ns.dnet.connectToSession() first to authenticate with that server.`,
     );
   }
 }
 
-export function hasExecConnection(ctx: NetscriptContext, targetServer: BaseServer) {
-  if (!isDarknetServer(targetServer)) return true;
+/**
+ * This function checks if the target server has a session and a direct connection (serversOnNetwork, stasis link,
+ * backdoor) to the running script's server.
+ */
+export function hasExecConnection(ctx: NetscriptContext, targetServer: DarknetServer) {
   expectAuthenticated(ctx, targetServer);
   const directConnected = isDirectConnected(ctx.workerScript.getServer(), targetServer);
   const backdoored = targetServer.backdoorInstalled;

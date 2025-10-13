@@ -6,17 +6,27 @@ import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { GetDarknetServerOrThrow, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import {
+  fixDoImportIssue,
+  getNS,
+  getWorkerScriptAndNS,
+  initGameEnvironment,
+  setupBasicTestingEnvironment,
+} from "../Utilities";
+import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
+import { getServerState } from "../../../src/DarkNet/models/DarknetState";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Target server ${hostnameOfNonExistentServer} does not exist. It may have gone offline.`;
+
+fixDoImportIssue();
 
 beforeAll(() => {
   initGameEnvironment();
   initStockMarket();
 });
 beforeEach(() => {
-  setupBasicTestingEnvironment();
+  setupBasicTestingEnvironment({ purchasePServer: true, purchaseHacknetServer: true });
   getDarkscapeNavigator();
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
   Player.gainCharismaExp(1e100);
@@ -126,23 +136,105 @@ describe("home", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("home is not a darknet server");
+    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("home is not a darknet server");
+    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNsOnHome();
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toContain("home is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNsOnHome();
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toContain("home is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
+  });
+  test("scp to darkweb and exec on darkweb", () => {
+    const ns = getNsOnHome();
+    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+    const scriptPath = "a.js" as ScriptFilePath;
+    const scriptContent = "export async function main(ns) {}";
+    ns.write(scriptPath, scriptContent);
+
+    expect(darkweb.scripts.has(scriptPath)).toStrictEqual(false);
+    ns.scp(scriptPath, SpecialServers.DarkWeb, SpecialServers.Home);
+    expect(darkweb.scripts.has(scriptPath)).toStrictEqual(true);
+
+    expect(ns.exec(scriptPath, SpecialServers.DarkWeb)).toBeGreaterThan(0);
+  });
+  test("scp to dnet server and exec on dnet server", async () => {
+    const ns = getNsOnHome();
+    const scriptPath = "a.js" as ScriptFilePath;
+    const scriptContent = "export async function main(ns) {}";
+    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+
+    // Get a dnet server connected to darkweb
+    const dnetServerHostname = darkweb.serversOnNetwork.find(
+      (hostname) => GetServerOrThrow(hostname).hostname !== SpecialServers.Home,
+    );
+    if (!dnetServerHostname) {
+      throw new Error("Cannot find any darknet server connected to darkweb");
+    }
+    const dnetServer = GetDarknetServerOrThrow(dnetServerHostname);
+
+    // Cannot scp before authenticating
+    expect(dnetServer.hasAdminRights).toStrictEqual(false);
+    expect(() => {
+      ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home);
+    }).toThrow(`Server ${dnetServerHostname} is password-protected`);
+    expect(dnetServer.scripts.size).toStrictEqual(0);
+    // Cannot exec before authenticating
+    expect(() => {
+      ns.exec(scriptPath, dnetServerHostname);
+    }).toThrow(`Server ${dnetServerHostname} is password-protected`);
+
+    const { ws, ns: nsDarkWeb } = getWorkerScriptAndNS(SpecialServers.DarkWeb);
+    // Authenticate from darkweb
+    expect((await nsDarkWeb.dnet.authenticate(dnetServerHostname, dnetServer.password)).success).toStrictEqual(true);
+    expect(dnetServer.hasAdminRights).toStrictEqual(true);
+    // Check session created after successfully calling authenticate API
+    expect(getServerState(dnetServerHostname).authenticatedPIDs.includes(ws.pid)).toStrictEqual(true);
+    // Write the test script to darkweb
+    nsDarkWeb.write(scriptPath, scriptContent);
+    // scp from darkweb
+    expect(nsDarkWeb.scp(scriptPath, dnetServerHostname, SpecialServers.DarkWeb)).toStrictEqual(true);
+    expect(dnetServer.scripts.has(scriptPath)).toStrictEqual(true);
+    // exec from darkweb
+    expect(nsDarkWeb.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
+
+    // Clear scripts on dnet server
+    dnetServer.scripts.clear();
+
+    // Cannot scp from home without a session
+    expect(() => {
+      ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home);
+    }).toThrow(`Server ${dnetServerHostname} requires a session`);
+    expect(dnetServer.scripts.size).toStrictEqual(0);
+    // Cannot exec from home without a session
+    expect(() => {
+      ns.exec(scriptPath, dnetServerHostname);
+    }).toThrow(`Server ${dnetServerHostname} requires a session`);
+
+    // Create a session from home to dnet server
+    expect(ns.dnet.connectToSession(dnetServerHostname, dnetServer.password).success).toStrictEqual(true);
+    // Write the test script to home
+    ns.write(scriptPath, scriptContent);
+    // scp from home
+    expect(ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home)).toStrictEqual(true);
+    expect(dnetServer.scripts.has(scriptPath)).toStrictEqual(true);
+    // Cannot exec from home because there is no direct connection
+    expect(ns.exec(scriptPath, dnetServerHostname)).toStrictEqual(0);
+    // Install backdoor on dnet server
+    ns.singularity.connect(SpecialServers.DarkWeb);
+    ns.singularity.connect(dnetServerHostname);
+    await ns.singularity.installBackdoor();
+    // Can exec from home
+    expect(ns.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
   });
 });
 
@@ -205,23 +297,23 @@ describe("Normal NPC server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("CSEC is not a darknet server");
+    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("CSEC is not a darknet server");
+    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toContain("CSEC is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toContain("CSEC is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
 
@@ -284,23 +376,23 @@ describe("Private server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("test-server-1 is not a darknet server");
+    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("test-server-1 is not a darknet server");
+    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS("test-server-1");
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toContain("test-server-1 is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNS("test-server-1");
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toContain("test-server-1 is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
 
@@ -363,23 +455,23 @@ describe("Hashnet server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("hacknet-server-0 is not a darknet server");
+    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("hacknet-server-0 is not a darknet server");
+    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS("hacknet-server-0");
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
-    }).rejects.toContain("hacknet-server-0 is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
   test("phishingAttack", async () => {
     const ns = getNS("hacknet-server-0");
     await expect(async () => {
       await ns.dnet.phishingAttack();
-    }).rejects.toContain("hacknet-server-0 is not a darknet server");
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
 
@@ -435,6 +527,8 @@ describe("Non-existent server", () => {
 describe("darkweb targets home", () => {
   // WIP: Add more tests
 });
+
+// WIP: test expectRunningOnDarknetServer
 
 describe("darkweb", () => {
   test("authenticate from home", async () => {

@@ -7,6 +7,7 @@ import { CompletedProgramName } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
+import { DarknetConstants } from "../Constants";
 
 export type ServerSummaryProps = {
   server: DarknetServer;
@@ -31,7 +32,9 @@ export function ServerSummary({
   }
 
   const cacheCount = server.caches.length;
-  const dataFileCount = Array.from(server.textFiles.keys()).filter((f) => f.endsWith("data.txt")).length;
+  const dataFileCount = Array.from(server.textFiles.keys()).filter((f) =>
+    f.endsWith(DarknetConstants.DataFileSuffix),
+  ).length;
   const fileCount = dataFileCount + server.messages.length;
   const contractCount = server.contracts.length;
   const runningScriptCount = server.runningScriptMap

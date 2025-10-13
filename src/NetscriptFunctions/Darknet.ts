@@ -24,7 +24,7 @@ import { getPhishingAttackSpeed, handlePhishingAttack } from "../DarkNet/effects
 import { handleRamBlockRemoved } from "../DarkNet/effects/ramblock";
 import {
   expectDarknetAccess,
-  expectScriptRunningOnDarknetServer,
+  expectRunningOnDarknetServer,
   getFailureResult,
   getTimeoutChance,
   isDirectConnected,
@@ -183,6 +183,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const result = checkPassword(server, token, 0, ctx.workerScript.pid);
         if (result.status === ResponseStatus.SUCCESS) {
           logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
+          /**
+           * WIP-@fico: Do we need to call addSessionToServer here? handleSuccessfulAuth and handleLabyrinthPassword
+           * already call it if the password is correct.
+           */
           addSessionToServer(server, ctx.workerScript.pid);
           return {
             success: true,
@@ -291,7 +295,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (_fileName, _suppressToast): void => {
         const fileName = helpers.string(ctx, "fileName", _fileName);
         const suppressToast = helpers.boolean(ctx, "suppressToast", _suppressToast ?? false);
-        const server = expectScriptRunningOnDarknetServer(ctx);
+        const server = expectRunningOnDarknetServer(ctx);
         expectDarknetAccess(ctx);
 
         const path = resolveCacheFilePath(fileName);
@@ -632,7 +636,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-        expectScriptRunningOnDarknetServer(ctx);
+        expectRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, hostname);
         if (!onlineConnectionCheck.success) {
           return 0;
@@ -643,7 +647,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-        expectScriptRunningOnDarknetServer(ctx);
+        expectRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, hostname);
         if (!onlineConnectionCheck.success) {
           return -1;
@@ -655,8 +659,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (_symbol): Promise<DarknetResult> => {
         const symbol = helpers.string(ctx, "symbol", _symbol);
         const stock = getStockFromSymbol(ctx, symbol);
-        // WIP: Discuss with d0sboots
-        expectScriptRunningOnDarknetServer(ctx);
+        expectRunningOnDarknetServer(ctx);
         expectDarknetAccess(ctx);
 
         const waitTime = Math.max(8000 * (600 / (600 + Player.skills.charisma)), 200);
@@ -682,8 +685,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     phishingAttack: (ctx: NetscriptContext) => (): Promise<DarknetResult> => {
       const waitTime = getPhishingAttackSpeed();
-      // WIP: Discuss with d0sboots
-      const server = expectScriptRunningOnDarknetServer(ctx);
+      const server = expectRunningOnDarknetServer(ctx);
       expectDarknetAccess(ctx);
 
       return helpers.netscriptDelay(ctx, waitTime).then(() => {

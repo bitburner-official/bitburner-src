@@ -659,7 +659,7 @@ export const ns: InternalAPI<NSFull> = {
         return 0;
       }
       const server = helpers.getServer(ctx, host);
-      if (!hasExecConnection(ctx, server)) {
+      if (server instanceof DarknetServer && !hasExecConnection(ctx, server)) {
         const currentHostname = ctx.workerScript.getServer().hostname;
         helpers.log(
           ctx,
@@ -794,7 +794,6 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => `scp failed, because ${source} is offline.`);
       return false;
     }
-    // WIP: If we use helpers.getServer, the behavior may not be consistent if the server is an offline dnet server
     const sourceServer = helpers.getServer(ctx, source);
     const destServer = helpers.getServer(ctx, destination);
     if (destServer instanceof DarknetServer) {
