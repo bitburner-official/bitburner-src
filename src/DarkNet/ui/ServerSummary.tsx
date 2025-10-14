@@ -43,8 +43,8 @@ export function ServerSummary({
     .reduce((a, b) => a + b, 0);
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
   const hasBackdoor = server.backdoorInstalled && !server.hasStasisLink;
-  const ramBlockedDetails = formatToMaxDigits(server.ramBlock, 2) + "GB";
-  const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.ramBlock, 0);
+  const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";
+  const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.blockedRam, 0);
 
   const runningScriptsComponent = (
     <Tooltip key="runningScript" title={<>Running scripts on server: {runningScriptCount}</>}>
@@ -104,7 +104,7 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  if (server.ramBlock) {
+  if (server.blockedRam) {
     components.push(
       <Tooltip
         key="ramBlocked"

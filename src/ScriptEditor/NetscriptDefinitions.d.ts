@@ -56,7 +56,7 @@ interface Player extends Person {
   numPeopleKilled: number;
   entropy: number;
   jobs: Partial<Record<CompanyName, JobName>>;
-  factions: string[];
+  factions: FactionName[];
   totalPlaytime: number;
   location: LocationName;
   karma: number;
@@ -844,7 +844,7 @@ interface BladeburnerCurAction {
  */
 interface GangGenInfo {
   /** Name of faction that the gang belongs to ("Slum Snakes", etc.) */
-  faction: string;
+  faction: FactionName;
   /** Indicating whether or not it's a hacking gang */
   isHacking: boolean;
   /** Money earned per game cycle */
@@ -4159,50 +4159,50 @@ export interface Format {
 type ResponseStatus = {
   SUCCESS: "200 Success";
   AUTH_FAILURE: "401 Not Authorized";
+  /** Server is offline */
   NOT_FOUND: "401 Hostname Not Found";
   TIMEOUT: "408 Request Timeout";
+  /** There is no direct connection */
   MOVED_PERMANENTLY: "301 Server Has Moved";
 };
 
+/** @public */
 type ResponseStatusType = _ValueOf<ResponseStatus>;
 
+/** @public */
 export type Result = { success: boolean; message: string };
 
 /**
- * Darknet server information.
+ * Darknet server data.
  * @public
  */
-export interface DarknetServer {
+export interface DarknetServerData {
   /** Hostname. Must be unique */
   hostname: string;
-  /** Flag indicating whether this server is currently online */
-  isOnline: boolean;
   /** IP Address. Must be unique */
   ip: string;
-  /** Flag indicating whether player has admin/root access to this server */
+  /** Flag indicating whether the player has admin/root access to this server */
   hasAdminRights: boolean;
-  /** Flag indicating whether player is currently connected to this server */
+  /** Flag indicating whether the player's terminal is currently connected to this server */
   isConnectedTo: boolean;
-  /** RAM (GB) used. i.e. unavailable RAM */
+  /** Number of CPU cores */
+  cpuCores: number;
+  /** Used RAM (GB). i.e. unavailable RAM */
   ramUsed: number;
-  /** RAM (GB) available on this server */
+  /** Max RAM (GB) of this server */
   maxRam: number;
-  /** Name of company/faction/etc. that this server belongs to, not applicable to all Servers */
-  organizationName: string;
-  /** Flag indicating whether this is a purchased server */
-  purchasedByPlayer: boolean;
-  /** Flag indicating whether this server has a backdoor installed by a player */
-  backdoorInstalled?: boolean;
+  /** Flag indicating whether this server has a backdoor installed by the player */
+  backdoorInstalled: boolean;
   /** If the server has a stasis link applied */
   hasStasisLink: boolean;
   /** The amount of ram blocked by the server owner */
-  ramBlock: number;
+  blockedRam: number;
   /** The model of the server. Similar models have similar vulnerabilites. */
   modelId: string;
   /** The generic password prompt for the server */
   staticPasswordHint: string;
   /** Data associated with the password hint */
-  passwordHintData?: string;
+  passwordHintData: string;
   /** The difficulty rating of the server, associated with its original depth in the net */
   difficulty: number;
   /** The depth of the server in the net */
@@ -4218,8 +4218,6 @@ export interface DarknetServer {
  * @public
  */
 export type ServerAuthDetails = {
-  /** True if the server is still online. */
-  isOnline: boolean;
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
@@ -4243,17 +4241,11 @@ export type ServerAuthDetails = {
  * @public
  */
 export type HeartbleedOptions = {
-  /**
-   * If true, looks at the most recent log line but does not extract it. (Overrides logsToCapture.)
-   */
+  /** If true, looks at the most recent log line but does not extract it. (Overrides logsToCapture.) */
   peek?: boolean;
-  /**
-   * The number of log lines to remove from the server, up to a max of 8. Default is 1.
-   */
+  /** The number of log lines to remove from the server, up to a max of 8. Default is 1. */
   logsToCapture?: number;
-  /**
-   * The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
-   */
+  /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. */
   additionalMsec?: number;
 };
 
@@ -4270,12 +4262,17 @@ export interface Darknet {
    *
    * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
    *
-   * Response messages:<br/>
-   * - "200 Success" - Authentication was successful.<br/>
-   * - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/>
-   * - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
-   * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/>
-   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
+   * Response messages:
+   *
+   * - "200 Success" - Authentication was successful.
+   *
+   * - "401 Not Authorized" - Authentication failed. The password is incorrect.
+   *
+   * - "404 Hostname Not Found" - The server is offline.
+   *
+   * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+   *
+   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
    *
    * @remarks
    * RAM cost: 0.6 GB
@@ -4288,23 +4285,27 @@ export interface Darknet {
   authenticate(hostname: string, password: string, additionalMsec?: number): Promise<Result>;
 
   /**
-   * Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server,
+   * Attempts to connect to a darkweb server that you have previously authenticated on. The target must either be directly connected to the current server,
    * have a stasis link, or be backdoored.
    *
    * If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
    *
    * If not, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
    *
-   * Response messages:<br/>
-   * - "200 Success" - Authentication was successful.<br/>
-   * - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/>
-   * - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
-   * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/>
-   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
+   * Response messages:
+   *
+   * - "200 Success" - Authentication was successful.
+   *
+   * - "401 Not Authorized" - Authentication failed. The password is incorrect.
+   *
+   * - "404 Hostname Not Found" - The server is offline.
+   *
+   * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+   *
+   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
    *
    * @remarks
    * RAM cost: 0.05 GB
-   *
    *
    * @param hostname - name of the target server to connect to existing session
    * @param password - the server's password, to verify the session
@@ -4393,7 +4394,7 @@ export interface Darknet {
   getStasisLinkedServers(returnByIP?: boolean): string[];
 
   /**
-   * Returns a server object for the given server.
+   * Returns data of the darknet server.
    *
    * If the server has recently gone offline, it will return a blank server object with `isOnline: false`.
    *
@@ -4401,9 +4402,9 @@ export interface Darknet {
    * RAM cost: 2 GB
    *
    * @param host - Optional. Hostname for the requested server object. Defaults to the running script's server.
-   * @returns The requested server object, or null if the server is not found.
+   * @returns Data of the darknet server.
    */
-  getServer(host?: string): DarknetServer;
+  getServer(host?: string): DarknetServerData & { isOnline: boolean };
 
   /**
    * Returns the server's authentication protocol details.
@@ -4413,14 +4414,8 @@ export interface Darknet {
    *
    * @param host - Hostname of the server to analyze. Defaults to the running script's server if not specified.
    * @returns An object containing the server's authentication protocol details.
-   *     isOnline: True if the server is still online.
-   *     isConnected: True if the server is directly connected to the current server.
-   *     modelId: The model ID of the server. Similar models have similar vulnerabilities.
-   *     passwordHint: The password hint for the server.
-   *     data: The data associated with the password hint (if any).
-   *     logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
    */
-  getServerAuthDetails(host?: string): ServerAuthDetails;
+  getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
 
   /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
@@ -4462,7 +4457,8 @@ export interface Darknet {
   /**
    * Returns whether the server is a darknet server.
    *
-   * Returns false if the server does not exist or has gone offline.
+   * Returns false if the server does not exist or has gone offline recently. This function does not require SF15 (don't
+   * worry if you don't know what "SF" is; it will be unlocked later) or DarkscapeNavigator.exe.
    *
    * @remarks
    * RAM cost: 0.05 GB
@@ -4492,7 +4488,7 @@ export interface Darknet {
    * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
    * @returns The amount of RAM blocked by the server owner's processes.
    */
-  getOwnerAllocatedRam(hostname?: string): number;
+  getBlockedRam(hostname?: string): number;
 
   /**
    * Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and
@@ -4504,9 +4500,9 @@ export interface Darknet {
    * RAM cost: 0.05 GB
    *
    * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
-   * @return The current depth of the server into the darknet.
+   * @returns The current depth of the server into the darknet.
    */
-  getCurrentDepth(hostname?: string): number;
+  getDepth(hostname?: string): number;
 
   /**
    * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
@@ -4541,7 +4537,7 @@ export interface Darknet {
    *    authenticateDurationIncrease: the increase in time that authentication takes, as a decimal
    *    authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
    */
-  getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
+  getDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
 }
 
 /**
@@ -6142,26 +6138,26 @@ interface BladeburnerFormulas {
 interface DarknetFormulas {
   /**
    * Gets the time it will take to authenticate a server.
-   * @param server - The server to check authentication time on.
+   * @param darknetServerData - The server to check authentication time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getAuthenticateTime(server: DarknetServer, threads?: number, player?: Person): number;
+  getAuthenticateTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
   /**
    * Gets the time it will take to scrape logs from a server.
-   * @param server - The server to check heartbleed log scraping time on.
+   * @param darknetServerData - The server to check heartbleed log scraping time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedTime(server: DarknetServer, threads?: number, player?: Person): number;
+  getHeartbleedTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
-   * @param server - The server to check ram freed on.
+   * @param darknetServerData - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(server: DarknetServer, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
 }
 
 /**
@@ -6195,10 +6191,33 @@ export interface Formulas {
 }
 
 /** @public */
+type FragmentEnumType = {
+  HackingSpeed: 3;
+  HackingMoney: 4;
+  HackingGrow: 5;
+  Hacking: 6;
+  Strength: 7;
+  Defense: 8;
+  Dexterity: 9;
+  Agility: 10;
+  Charisma: 11;
+  HacknetMoney: 12;
+  HacknetCost: 13;
+  Rep: 14;
+  WorkMoney: 15;
+  Crime: 16;
+  Bladeburner: 17;
+  Booster: 18;
+};
+
+/** @public */
+type FragmentType = _ValueOf<FragmentEnumType>;
+
+/** @public */
 interface Fragment {
   id: number;
   shape: boolean[][];
-  type: number;
+  type: FragmentType;
   power: number;
   limit: number;
   effect: string;
@@ -9280,6 +9299,7 @@ type NSEnums = {
   OrderType: OrderEnumType;
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
+  FragmentType: FragmentEnumType;
 };
 
 /**
@@ -10354,7 +10374,7 @@ type CorpResearchName =
  */
 interface CorpMaterialConstantData {
   /** Name of the material */
-  name: string;
+  name: CorpMaterialName;
   /** Size of the material */
   size: number;
   demandBase: number;

@@ -8,7 +8,7 @@ import { addCacheToServer } from "./cacheFiles";
 import { DarknetState } from "../models/DarknetState";
 import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 import { CompletedProgramName } from "@enums";
-import type { Person as IPerson } from "@nsdefs";
+import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 
 /*
@@ -22,10 +22,10 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   Player.gainCharismaExp(xpGained);
 
   const ramBlockRemoved = getRamBlockRemoved(server, threads);
-  server.ramBlock -= ramBlockRemoved;
+  server.blockedRam -= ramBlockRemoved;
   server.updateRamUsed(server.ramUsed - ramBlockRemoved);
 
-  if (server.ramBlock <= 0) {
+  if (server.blockedRam <= 0) {
     handleRamBlockClearedRewards(server);
   }
 
@@ -60,9 +60,9 @@ export const handleRamBlockClearedRewards = (server: DarknetServer) => {
 /*
  * Calculates the amount of RAM block that is removed from a Darknet server, based on the number of threads and the player's charisma.
  */
-export const getRamBlockRemoved = (server: DarknetServer, threads: number = 1, player: IPerson = Player) => {
-  const difficulty = server.difficulty;
-  const remainingRamBlock = server.ramBlock;
+export const getRamBlockRemoved = (darknetServerData: DarknetServerData, threads = 1, player: IPerson = Player) => {
+  const difficulty = darknetServerData.difficulty;
+  const remainingRamBlock = darknetServerData.blockedRam;
   const charismaFactor = 1 + player.skills.charisma / 100;
   const difficultyFactor = 2 * 0.92 ** (difficulty + 1);
   const baseAmount = 0.02;
@@ -75,7 +75,7 @@ export const getRamBlockRemoved = (server: DarknetServer, threads: number = 1, p
 export const applyRamBlocks = () => {
   const servers = getAllMobileDarknetServers();
   for (const server of servers) {
-    server.updateRamUsed(server.ramBlock ?? 0);
+    server.updateRamUsed(server.blockedRam);
   }
 };
 

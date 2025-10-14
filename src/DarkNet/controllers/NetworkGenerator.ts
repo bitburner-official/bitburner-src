@@ -25,7 +25,7 @@ import {
   getNetDepth,
   isLabyrinthServer,
 } from "../effects/labyrinth";
-import { DarknetServer } from "../../Server/DarknetServer";
+import { DarknetServer, type DarknetServerConstructorParams } from "../../Server/DarknetServer";
 import {
   HORIZONTAL_CONNECTION_CHANCE,
   MAX_NET_DEPTH,
@@ -79,7 +79,7 @@ export function initDarkwebServer(): void {
   const darkweb = DnetServerBuilder(data, SpecialServers.DarkWeb);
   darkweb.isMobile = false;
   darkweb.hasAdminRights = true;
-  darkweb.ramBlock = 0;
+  darkweb.blockedRam = 0;
   darkweb.scripts = scripts;
   darkweb.contracts = contracts;
   if (hasTOR) {
@@ -220,45 +220,29 @@ export const addServerToNetwork = (server: DarknetServer, x: number, y: number) 
 
 // Creates all the special servers for use at the bottom of the dark net
 export const addLabyrinth = () => {
-  const passwordSalt = Math.floor(Math.random() * 10000);
-  const darknetData = {
+  const commonData: Omit<DarknetServerConstructorParams, "hostname" | "ip" | "password" | "requiredCharismaSkill"> = {
+    maxRam: 128,
     icon: labIcon,
-    password: `!!the:masterwork:of:daedalus<${passwordSalt}>!!`,
+    modelId: ModelIds.labyrinth,
     staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
     passwordHintData: "",
-    modelId: ModelIds.labyrinth,
     difficulty: 10,
     depth: -1,
     leftOffset: -1,
     hasStasisLink: false,
-    ramBlock: 0,
+    blockedRam: 0,
     logTrafficInterval: Number.MAX_SAFE_INTEGER,
-    requiredCharismaSkill: 0,
-  };
-
-  const params = {
-    ip: createUniqueRandomIp(),
-    organizationName: "darkweb",
-    maxRam: 128,
-    hackDifficulty: 10,
-    moneyAvailable: 0,
-    numOpenPortsRequired: 69,
-    adminRights: false,
-    ...darknetData,
+    isMobile: false,
   };
 
   for (const hostname of getLabyrinthServerNames()) {
-    const cha = getLabyrinthChaiRequirement(hostname);
+    const passwordSalt = Math.floor(Math.random() * 10000);
     const server = new DarknetServer({
-      ...params,
-      isOnline: true,
-      requiredCharismaSkill: cha,
+      ...commonData,
       hostname: hostname,
-      hasAdminRights: false,
-      isConnectedTo: false,
-      purchasedByPlayer: false,
-      ramUsed: 0,
-      isMobile: false,
+      ip: createUniqueRandomIp(),
+      password: `!!the:masterwork:of:daedalus<${passwordSalt}>!!`,
+      requiredCharismaSkill: getLabyrinthChaiRequirement(hostname),
     });
     AddToAllServers(server);
   }

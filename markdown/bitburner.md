@@ -360,12 +360,12 @@ Darknet formulas
 </td></tr>
 <tr><td>
 
-[DarknetServer](./bitburner.darknetserver.md)
+[DarknetServerData](./bitburner.darknetserverdata.md)
 
 
 </td><td>
 
-Darknet server information.
+Darknet server data.
 
 
 </td></tr>
@@ -1838,6 +1838,26 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 </td></tr>
 <tr><td>
 
+[FragmentEnumType](./bitburner.fragmentenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FragmentType](./bitburner.fragmenttype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [GoOpponent](./bitburner.goopponent.md)
 
 
@@ -2062,6 +2082,7 @@ Response statuses used for authenticate and connectToSession methods
 </td><td>
 
 
+
 </td></tr>
 <tr><td>
 
@@ -2069,6 +2090,7 @@ Response statuses used for authenticate and connectToSession methods
 
 
 </td><td>
+
 
 
 </td></tr>

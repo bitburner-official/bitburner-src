@@ -1,4 +1,4 @@
-import { _ValueOf, DarknetServer as IDarknetServer } from "@nsdefs";
+import type { _ValueOf, DarknetServerData } from "@nsdefs";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
@@ -45,18 +45,15 @@ export const ResponseStatus = {
   MOVED_PERMANENTLY: "301 Server Has Moved",
 } as const;
 
-export const exampleDarknetServer: IDarknetServer = {
+export const exampleDarknetServerData: DarknetServerData = {
   difficulty: 0,
-  isOnline: true,
   hasAdminRights: false,
   hasStasisLink: false,
   hostname: "",
   ip: "",
   isConnectedTo: false,
-  maxRam: 16,
-  organizationName: "",
-  purchasedByPlayer: false,
-  ramBlock: 0,
+  maxRam: 0,
+  blockedRam: 0,
   ramUsed: 0,
   requiredCharismaSkill: 0,
   staticPasswordHint: "",
@@ -64,4 +61,6 @@ export const exampleDarknetServer: IDarknetServer = {
   depth: -1,
   modelId: "",
   logTrafficInterval: -1,
-};
+  backdoorInstalled: false,
+  cpuCores: 1,
+} as const;

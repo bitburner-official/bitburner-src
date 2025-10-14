@@ -1,6 +1,6 @@
 import { commonPasswordDictionary, letters, packetSniffPhrases } from "./dictionaryData";
 import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } from "../controllers/ServerGenerator";
-import { getDarknetServerName, PasswordResponse } from "./DarknetServerOptions";
+import { generateDarknetServerName, type PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
 import { getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
@@ -59,7 +59,7 @@ const getRandomData = (server: DarknetServer, length: number) => {
     } else if (Math.random() < 0.33) {
       result += " " + getExactCharactersHint(getServerLogs(server, 1, true, true)[0] || "", password);
     } else if (Math.random() < 0.6) {
-      result += " " + getDarknetServerName() + " ";
+      result += " " + generateDarknetServerName() + " ";
     } else if (Math.random() < 0.15) {
       result += "/" + Object.keys(LocationName)[Math.floor(Math.random() * Object.keys(LocationName).length)] + "/";
     } else if (Math.random() < 0.05) {

@@ -52,7 +52,7 @@ function getNsOnNonDarkwebDarknetServer() {
 }
 
 describe("Common APIs", () => {
-  test("getCurrentDarknetInstability", () => {
+  test("getDarknetInstability", () => {
     const ns = getNsOnDarkWeb();
     expect(ns.dnet.getStasisLinkLimit()).toStrictEqual(1);
     Player.augmentations.push(new PlayerOwnedAugmentation(AugmentationName.TheBrokenWings));
@@ -69,9 +69,9 @@ describe("Common APIs", () => {
     // WIP: Add more tests
     expect(result2.success).toStrictEqual(true);
   });
-  test("getCurrentDarknetInstability", () => {
+  test("getDarknetInstability", () => {
     const ns = getNsOnDarkWeb();
-    const result = ns.dnet.getCurrentDarknetInstability();
+    const result = ns.dnet.getDarknetInstability();
     // WIP: Add more tests
     expect(Number.isFinite(result.authenticateDurationIncrease)).toStrictEqual(true);
   });
@@ -134,13 +134,13 @@ describe("home", () => {
     const ns = getNsOnHome();
     expect(() => ns.dnet.memoryReallocation()).toThrow("home is not a darknet server");
   });
-  test("getOwnerAllocatedRam", () => {
+  test("getBlockedRam", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
-  test("getCurrentDepth", () => {
+  test("getDepth", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNsOnHome();
@@ -293,13 +293,13 @@ describe("Normal NPC server", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     expect(() => ns.dnet.memoryReallocation()).toThrow("CSEC is not a darknet server");
   });
-  test("getOwnerAllocatedRam", () => {
+  test("getBlockedRam", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
-  test("getCurrentDepth", () => {
+  test("getDepth", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
@@ -370,13 +370,13 @@ describe("Private server", () => {
     const ns = getNS("test-server-1");
     expect(() => ns.dnet.memoryReallocation()).toThrow("test-server-1 is not a darknet server");
   });
-  test("getOwnerAllocatedRam", () => {
+  test("getBlockedRam", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
-  test("getCurrentDepth", () => {
+  test("getDepth", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS("test-server-1");
@@ -447,13 +447,13 @@ describe("Hashnet server", () => {
     const ns = getNS("hacknet-server-0");
     expect(() => ns.dnet.memoryReallocation()).toThrow("hacknet-server-0 is not a darknet server");
   });
-  test("getOwnerAllocatedRam", () => {
+  test("getBlockedRam", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
-  test("getCurrentDepth", () => {
+  test("getDepth", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.getCurrentDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS("hacknet-server-0");
@@ -512,9 +512,9 @@ describe("Non-existent server", () => {
     const result = ns.dnet.isDarknetServer(hostnameOfNonExistentServer);
     expect(result).toStrictEqual(false);
   });
-  test("getOwnerAllocatedRam", () => {
+  test("getBlockedRam", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.getOwnerAllocatedRam(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
+    expect(() => ns.dnet.getBlockedRam(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
 });
 
@@ -601,14 +601,14 @@ describe("darkweb", () => {
     const result = await ns.dnet.memoryReallocation();
     expect(result.success).toStrictEqual(false);
   });
-  test("getOwnerAllocatedRam", () => {
+  test("getBlockedRam", () => {
     const ns = getNsOnDarkWeb();
-    const result = ns.dnet.getOwnerAllocatedRam();
+    const result = ns.dnet.getBlockedRam();
     expect(result).toStrictEqual(0);
   });
-  test("getCurrentDepth", () => {
+  test("getDepth", () => {
     const ns = getNsOnDarkWeb();
-    const result = ns.dnet.getCurrentDepth();
+    const result = ns.dnet.getDepth();
     expect(result).toStrictEqual(-1);
   });
   test("promoteStock", async () => {
@@ -725,21 +725,21 @@ describe("Non-darkweb darknet server", () => {
     expect(result1.success).toStrictEqual(false);
     const target = ns.getHostname();
     const server = GetDarknetServerOrThrow(target);
-    server.ramUsed = server.ramBlock = 1;
+    server.ramUsed = server.blockedRam = 1;
     const password = server.password;
     const result2 = await ns.dnet.authenticate(target, password);
     expect(result2.success).toStrictEqual(true);
     const result3 = await ns.dnet.memoryReallocation();
     expect(result3.success).toStrictEqual(true);
   });
-  test("getOwnerAllocatedRam", () => {
+  test("getBlockedRam", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = ns.dnet.getOwnerAllocatedRam();
-    expect(result).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).ramBlock);
+    const result = ns.dnet.getBlockedRam();
+    expect(result).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).blockedRam);
   });
-  test("getCurrentDepth", () => {
+  test("getDepth", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = ns.dnet.getCurrentDepth();
+    const result = ns.dnet.getDepth();
     expect(result).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).depth);
   });
   test("promoteStock", async () => {

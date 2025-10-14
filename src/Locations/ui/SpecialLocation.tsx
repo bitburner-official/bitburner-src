@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 
 import { Location } from "../Location";
 import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
-import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
+import { AugmentationName, CompletedProgramName, FactionName, LocationName, ToastVariant } from "@enums";
 import { Factions } from "../../Faction/Factions";
 import { joinFaction } from "../../Faction/FactionHelpers";
 
@@ -41,6 +41,8 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 import { canAcceptStaneksGift } from "../../CotMG/Helper";
 import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
 import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
+import { DarknetConstants } from "../../DarkNet/Constants";
+import { formatMoney } from "../../ui/formatNumber";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -339,16 +341,21 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderShadowedWalkway(): React.ReactElement {
     function handleDarknetNavigator(): void {
-      if (Player.money < 30e6) {
-        dialogBoxCreate("You don't have enough money to buy DarkscapeNavigator.exe");
+      if (Player.money < DarknetConstants.DarkscapeNavigatorDiscountedPrice) {
+        dialogBoxCreate(`You don't have enough money to buy ${CompletedProgramName.darkscape}`);
         return;
       }
-      Player.loseMoney(30e6, "other");
+      Player.loseMoney(DarknetConstants.DarkscapeNavigatorDiscountedPrice, "other");
       getDarkscapeNavigator();
-      dialogBoxCreate("You bought DarkscapeNavigator.exe for $30 million.");
+      dialogBoxCreate(
+        `You bought ${CompletedProgramName.darkscape} for ${formatMoney(
+          DarknetConstants.DarkscapeNavigatorDiscountedPrice,
+        )}.`,
+      );
       rerender();
     }
-    const canBuyDarknetNavigator = Player.money >= 30e6 && !hasDarknetAccess();
+    const canBuyDarknetNavigator =
+      Player.money >= DarknetConstants.DarkscapeNavigatorDiscountedPrice && !hasDarknetAccess();
     return (
       <>
         <Typography>
@@ -373,7 +380,10 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <br />
           <br />
           <Button onClick={handleDarknetNavigator} disabled={!canBuyDarknetNavigator}>
-            Buy DarkscapeNavigator.exe {hasDarknetAccess() ? " - Purchased" : "($30m)"}
+            Buy {CompletedProgramName.darkscape}{" "}
+            {hasDarknetAccess()
+              ? " - Purchased"
+              : `(${formatMoney(DarknetConstants.DarkscapeNavigatorDiscountedPrice)})`}
           </Button>
         </Typography>
       </>

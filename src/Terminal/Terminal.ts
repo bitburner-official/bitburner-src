@@ -256,7 +256,7 @@ export class Terminal {
     // Calculate whether hack was successful
     const hackChance = calculateHackingChance(server, Player);
     const rand = Math.random();
-    const expGainedOnSuccess = calculateHackingExpGain(server, Player);
+    let expGainedOnSuccess = calculateHackingExpGain(server, Player);
     const expGainedOnFailure = expGainedOnSuccess / 4;
     if (rand < hackChance) {
       // Success!
@@ -271,9 +271,17 @@ export class Terminal {
 
       let moneyDrained = server.moneyAvailable * calculatePercentMoneyHacked(server, Player);
 
+      // Over-the-top safety checks
       if (moneyDrained < 0) {
         moneyDrained = 0;
-      } // Safety check
+      }
+      if (moneyDrained > server.moneyAvailable) {
+        moneyDrained = server.moneyAvailable;
+      }
+
+      if (moneyDrained === 0) {
+        expGainedOnSuccess = expGainedOnFailure;
+      }
 
       server.moneyAvailable -= moneyDrained;
       if (server.moneyAvailable < 0) {
@@ -388,8 +396,8 @@ export class Terminal {
       const canRunScripts = hasAdminRights && currServ.maxRam > 0;
       this.print("Can run scripts on this host: " + (canRunScripts ? "YES" : "NO"));
       this.print("RAM: " + formatRam(currServ.maxRam));
-      if (currServ instanceof DarknetServer && currServ.ramBlock) {
-        this.print("RAM blocked by owner: " + formatRam(currServ.ramBlock));
+      if (currServ instanceof DarknetServer && currServ.blockedRam) {
+        this.print("RAM blocked by owner: " + formatRam(currServ.blockedRam));
         this.print("Stasis link: " + (currServ.hasStasisLink ? "YES" : "NO"));
         this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"));
       }

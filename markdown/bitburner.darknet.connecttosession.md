@@ -4,13 +4,23 @@
 
 ## Darknet.connectToSession() method
 
-Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.
+Attempts to connect to a darkweb server that you have previously authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.
 
 If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
 
 If not, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
 
-Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
+Response messages:
+
+- "200 Success" - Authentication was successful.
+
+- "401 Not Authorized" - Authentication failed. The password is incorrect.
+
+- "404 Hostname Not Found" - The server is offline.
+
+- "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+
+- "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
 
 **Signature:**
 

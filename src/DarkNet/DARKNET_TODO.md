@@ -291,10 +291,10 @@ reduced higher lab's cha requirements, and rebalanced server difficulty scaling 
 - Added additionalMsec support to both authenticate and heartbleed for fancy batch-style use
 
 - Moved these analysis methods to a new `dnet` namespace under formulas
-  getCurrentDarknetInstability
+  getDarknetInstability
   getAuthenticateEstimatedTime
   getHeartbleedEstimatedTime
-  getOwnerAllocatedRam
+  getBlockedRam
   getExpectedRamBlockRemoved
 
 - removed the `influence` namespace and moved its contents to base ns.dnet namespace. I didn't like how long the invocations were, and it felt like almost everything would fit there, and it made the api less discoverable.
@@ -317,7 +317,7 @@ Darknet servers belong to somebody already, and they are doing stuff on them. Wh
 
 - added new method `dnet.analytics.getAuthenticateEstimatedTime` to predict the duration of an auth attempt
 
-- Moved `getCurrentDarknetInstability` to live under new namespace `dnet.analytics`
+- Moved `getDarknetInstability` to live under new namespace `dnet.analytics`
 - moved `isDarknetServer` to live under new namespace `dnet.analytics`
 
 - added a new mutation: adding a connection to a darknet server that has none currently. This should help reduce isolated servers somewhat. Also increased darknet density slightly.
@@ -364,7 +364,7 @@ Coming soon:
 - Backdoored servers are more likely to be targeted for restarts (which remove backdoors) or going offline, which makes them less reliable and naturally reduces their number over time
 - Backdooring too many servers starts to accrue a debuff to authenticate() time taken
 - Backdooring too many servers starts causing authenticate() to fail with a timeout error, requiring a retry
-- added dnet.getCurrentDarknetInstability() to view the current debuff and timeout chances
+- added dnet.getDarknetInstability() to view the current debuff and timeout chances
 
 - added current server depth to getServer()
 

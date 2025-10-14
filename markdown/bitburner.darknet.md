@@ -40,7 +40,17 @@ Sends a network request to try to authenticate on a darkweb server. The target s
 
 If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
 
-Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
+Response messages:
+
+- "200 Success" - Authentication was successful.
+
+- "401 Not Authorized" - Authentication failed. The password is incorrect.
+
+- "404 Hostname Not Found" - The server is offline.
+
+- "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+
+- "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
 
 
 </td></tr>
@@ -51,19 +61,40 @@ Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - 
 
 </td><td>
 
-Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.
+Attempts to connect to a darkweb server that you have previously authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.
 
 If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
 
 If not, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
 
-Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
+Response messages:
+
+- "200 Success" - Authentication was successful.
+
+- "401 Not Authorized" - Authentication failed. The password is incorrect.
+
+- "404 Hostname Not Found" - The server is offline.
+
+- "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+
+- "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
 
 
 </td></tr>
 <tr><td>
 
-[getCurrentDarknetInstability()](./bitburner.darknet.getcurrentdarknetinstability.md)
+[getBlockedRam(hostname)](./bitburner.darknet.getblockedram.md)
+
+
+</td><td>
+
+Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+
+
+</td></tr>
+<tr><td>
+
+[getDarknetInstability()](./bitburner.darknet.getdarknetinstability.md)
 
 
 </td><td>
@@ -74,7 +105,7 @@ Gets the current instability of the darknet caused by excessive backdoor-ing of 
 </td></tr>
 <tr><td>
 
-[getCurrentDepth(hostname)](./bitburner.darknet.getcurrentdepth.md)
+[getDepth(hostname)](./bitburner.darknet.getdepth.md)
 
 
 </td><td>
@@ -87,23 +118,12 @@ Returns -1 if the server is offline, not found, or not a darkweb server.
 </td></tr>
 <tr><td>
 
-[getOwnerAllocatedRam(hostname)](./bitburner.darknet.getownerallocatedram.md)
-
-
-</td><td>
-
-Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
-
-
-</td></tr>
-<tr><td>
-
 [getServer(host)](./bitburner.darknet.getserver.md)
 
 
 </td><td>
 
-Returns a server object for the given server.
+Returns data of the darknet server.
 
 If the server has recently gone offline, it will return a blank server object with `isOnline: false`<!-- -->.
 
@@ -179,7 +199,7 @@ Effect scales with threads.
 
 Returns whether the server is a darknet server.
 
-Returns false if the server does not exist or has gone offline.
+Returns false if the server does not exist or has gone offline recently. This function does not require SF15 (don't worry if you don't know what "SF" is; it will be unlocked later) or DarkscapeNavigator.exe.
 
 
 </td></tr>
