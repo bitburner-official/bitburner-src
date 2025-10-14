@@ -243,7 +243,7 @@ const dnet = {
   unleashStormSeed: 0.1,
   isDarknetServer: 0.05,
   memoryReallocation: 1,
-  getOwnerAllocatedRam: 0,
+  getBlockedRam: 0,
   getCurrentDepth: 0.05,
   promoteStock: 2,
   phishingAttack: 2,

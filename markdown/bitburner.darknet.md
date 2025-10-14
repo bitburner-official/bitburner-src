@@ -83,6 +83,17 @@ Response messages:
 </td></tr>
 <tr><td>
 
+[getBlockedRam(hostname)](./bitburner.darknet.getblockedram.md)
+
+
+</td><td>
+
+Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+
+
+</td></tr>
+<tr><td>
+
 [getCurrentDarknetInstability()](./bitburner.darknet.getcurrentdarknetinstability.md)
 
 
@@ -102,17 +113,6 @@ Gets the current instability of the darknet caused by excessive backdoor-ing of 
 Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and each visual row in the UI below that increases the depth of the server.
 
 Returns -1 if the server is offline, not found, or not a darkweb server.
-
-
-</td></tr>
-<tr><td>
-
-[getOwnerAllocatedRam(hostname)](./bitburner.darknet.getownerallocatedram.md)
-
-
-</td><td>
-
-Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
 
 
 </td></tr>

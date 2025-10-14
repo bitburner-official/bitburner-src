@@ -22,10 +22,10 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   Player.gainCharismaExp(xpGained);
 
   const ramBlockRemoved = getRamBlockRemoved(server, threads);
-  server.ramBlock -= ramBlockRemoved;
+  server.blockedRam -= ramBlockRemoved;
   server.updateRamUsed(server.ramUsed - ramBlockRemoved);
 
-  if (server.ramBlock <= 0) {
+  if (server.blockedRam <= 0) {
     handleRamBlockClearedRewards(server);
   }
 
@@ -62,7 +62,7 @@ export const handleRamBlockClearedRewards = (server: DarknetServer) => {
  */
 export const getRamBlockRemoved = (darknetServerData: DarknetServerData, threads = 1, player: IPerson = Player) => {
   const difficulty = darknetServerData.difficulty;
-  const remainingRamBlock = darknetServerData.ramBlock;
+  const remainingRamBlock = darknetServerData.blockedRam;
   const charismaFactor = 1 + player.skills.charisma / 100;
   const difficultyFactor = 2 * 0.92 ** (difficulty + 1);
   const baseAmount = 0.02;
@@ -75,7 +75,7 @@ export const getRamBlockRemoved = (darknetServerData: DarknetServerData, threads
 export const applyRamBlocks = () => {
   const servers = getAllMobileDarknetServers();
   for (const server of servers) {
-    server.updateRamUsed(server.ramBlock ?? 0);
+    server.updateRamUsed(server.blockedRam);
   }
 };
 

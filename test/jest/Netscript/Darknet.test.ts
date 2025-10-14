@@ -136,7 +136,7 @@ describe("home", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNsOnHome();
@@ -295,7 +295,7 @@ describe("Normal NPC server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
@@ -372,7 +372,7 @@ describe("Private server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNS("test-server-1");
@@ -449,7 +449,7 @@ describe("Hashnet server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
   });
   test("getCurrentDepth", () => {
     const ns = getNS("hacknet-server-0");
@@ -514,7 +514,7 @@ describe("Non-existent server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.getOwnerAllocatedRam(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
+    expect(() => ns.dnet.getBlockedRam(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
 });
 
@@ -603,7 +603,7 @@ describe("darkweb", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNsOnDarkWeb();
-    const result = ns.dnet.getOwnerAllocatedRam();
+    const result = ns.dnet.getBlockedRam();
     expect(result).toStrictEqual(0);
   });
   test("getCurrentDepth", () => {
@@ -725,7 +725,7 @@ describe("Non-darkweb darknet server", () => {
     expect(result1.success).toStrictEqual(false);
     const target = ns.getHostname();
     const server = GetDarknetServerOrThrow(target);
-    server.ramUsed = server.ramBlock = 1;
+    server.ramUsed = server.blockedRam = 1;
     const password = server.password;
     const result2 = await ns.dnet.authenticate(target, password);
     expect(result2.success).toStrictEqual(true);
@@ -734,8 +734,8 @@ describe("Non-darkweb darknet server", () => {
   });
   test("getOwnerAllocatedRam", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = ns.dnet.getOwnerAllocatedRam();
-    expect(result).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).ramBlock);
+    const result = ns.dnet.getBlockedRam();
+    expect(result).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).blockedRam);
   });
   test("getCurrentDepth", () => {
     const ns = getNsOnNonDarkwebDarknetServer();

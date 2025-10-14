@@ -56,6 +56,25 @@ Flag indicating whether this server has a backdoor installed by the player
 </td></tr>
 <tr><td>
 
+[blockedRam](./bitburner.darknetserverdata.blockedram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The amount of ram blocked by the server owner
+
+
+</td></tr>
+<tr><td>
+
 [depth](./bitburner.darknetserverdata.depth.md)
 
 
@@ -260,25 +279,6 @@ string
 </td><td>
 
 Data associated with the password hint
-
-
-</td></tr>
-<tr><td>
-
-[ramBlock](./bitburner.darknetserverdata.ramblock.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-The amount of ram blocked by the server owner
 
 
 </td></tr>

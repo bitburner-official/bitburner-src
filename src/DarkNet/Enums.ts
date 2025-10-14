@@ -53,7 +53,7 @@ export const exampleDarknetServerData: DarknetServerData = {
   ip: "",
   isConnectedTo: false,
   maxRam: 0,
-  ramBlock: 0,
+  blockedRam: 0,
   ramUsed: 0,
   requiredCharismaSkill: 0,
   staticPasswordHint: "",

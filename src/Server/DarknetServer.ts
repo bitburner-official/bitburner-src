@@ -22,7 +22,7 @@ export interface DarknetServerConstructorParams {
   depth: number;
   leftOffset: number;
   hasStasisLink: boolean;
-  ramBlock: number;
+  blockedRam: number;
   logTrafficInterval: number;
   requiredCharismaSkill: number;
   isMobile: boolean;
@@ -53,7 +53,7 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
   /** If the server has a stasis link applied */
   hasStasisLink: boolean;
   /** The amount of ram blocked by the server owner */
-  ramBlock: number;
+  blockedRam: number;
   /** The interval at which the server logs traffic */
   logTrafficInterval: number;
   /** The charisma skill required to heartbleed the server */
@@ -82,7 +82,7 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
     this.depth = params.depth;
     this.leftOffset = params.leftOffset;
     this.hasStasisLink = params.hasStasisLink;
-    this.ramBlock = params.ramBlock;
+    this.blockedRam = params.blockedRam;
     this.logTrafficInterval = params.logTrafficInterval;
     this.requiredCharismaSkill = params.requiredCharismaSkill;
     this.isMobile = params.isMobile;

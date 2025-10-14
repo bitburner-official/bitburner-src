@@ -410,9 +410,9 @@ import nsDoc_bitburner_crimetask_type_md from "../../markdown/bitburner.crimetas
 import nsDoc_bitburner_crimetype_md from "../../markdown/bitburner.crimetype.md?raw";
 import nsDoc_bitburner_darknet_authenticate_md from "../../markdown/bitburner.darknet.authenticate.md?raw";
 import nsDoc_bitburner_darknet_connecttosession_md from "../../markdown/bitburner.darknet.connecttosession.md?raw";
+import nsDoc_bitburner_darknet_getblockedram_md from "../../markdown/bitburner.darknet.getblockedram.md?raw";
 import nsDoc_bitburner_darknet_getcurrentdarknetinstability_md from "../../markdown/bitburner.darknet.getcurrentdarknetinstability.md?raw";
 import nsDoc_bitburner_darknet_getcurrentdepth_md from "../../markdown/bitburner.darknet.getcurrentdepth.md?raw";
-import nsDoc_bitburner_darknet_getownerallocatedram_md from "../../markdown/bitburner.darknet.getownerallocatedram.md?raw";
 import nsDoc_bitburner_darknet_getserver_md from "../../markdown/bitburner.darknet.getserver.md?raw";
 import nsDoc_bitburner_darknet_getserverauthdetails_md from "../../markdown/bitburner.darknet.getserverauthdetails.md?raw";
 import nsDoc_bitburner_darknet_getstasislinkedservers_md from "../../markdown/bitburner.darknet.getstasislinkedservers.md?raw";
@@ -434,6 +434,7 @@ import nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md from "../..
 import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown/bitburner.darknetformulas.getheartbleedtime.md?raw";
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
 import nsDoc_bitburner_darknetserverdata_backdoorinstalled_md from "../../markdown/bitburner.darknetserverdata.backdoorinstalled.md?raw";
+import nsDoc_bitburner_darknetserverdata_blockedram_md from "../../markdown/bitburner.darknetserverdata.blockedram.md?raw";
 import nsDoc_bitburner_darknetserverdata_depth_md from "../../markdown/bitburner.darknetserverdata.depth.md?raw";
 import nsDoc_bitburner_darknetserverdata_difficulty_md from "../../markdown/bitburner.darknetserverdata.difficulty.md?raw";
 import nsDoc_bitburner_darknetserverdata_hasadminrights_md from "../../markdown/bitburner.darknetserverdata.hasadminrights.md?raw";
@@ -446,7 +447,6 @@ import nsDoc_bitburner_darknetserverdata_maxram_md from "../../markdown/bitburne
 import nsDoc_bitburner_darknetserverdata_md from "../../markdown/bitburner.darknetserverdata.md?raw";
 import nsDoc_bitburner_darknetserverdata_modelid_md from "../../markdown/bitburner.darknetserverdata.modelid.md?raw";
 import nsDoc_bitburner_darknetserverdata_passwordhintdata_md from "../../markdown/bitburner.darknetserverdata.passwordhintdata.md?raw";
-import nsDoc_bitburner_darknetserverdata_ramblock_md from "../../markdown/bitburner.darknetserverdata.ramblock.md?raw";
 import nsDoc_bitburner_darknetserverdata_ramused_md from "../../markdown/bitburner.darknetserverdata.ramused.md?raw";
 import nsDoc_bitburner_darknetserverdata_requiredcharismaskill_md from "../../markdown/bitburner.darknetserverdata.requiredcharismaskill.md?raw";
 import nsDoc_bitburner_darknetserverdata_staticpasswordhint_md from "../../markdown/bitburner.darknetserverdata.staticpasswordhint.md?raw";
@@ -1966,9 +1966,9 @@ AllPages["nsDoc/bitburner.crimetask.type.md"] = nsDoc_bitburner_crimetask_type_m
 AllPages["nsDoc/bitburner.crimetype.md"] = nsDoc_bitburner_crimetype_md;
 AllPages["nsDoc/bitburner.darknet.authenticate.md"] = nsDoc_bitburner_darknet_authenticate_md;
 AllPages["nsDoc/bitburner.darknet.connecttosession.md"] = nsDoc_bitburner_darknet_connecttosession_md;
+AllPages["nsDoc/bitburner.darknet.getblockedram.md"] = nsDoc_bitburner_darknet_getblockedram_md;
 AllPages["nsDoc/bitburner.darknet.getcurrentdarknetinstability.md"] = nsDoc_bitburner_darknet_getcurrentdarknetinstability_md;
 AllPages["nsDoc/bitburner.darknet.getcurrentdepth.md"] = nsDoc_bitburner_darknet_getcurrentdepth_md;
-AllPages["nsDoc/bitburner.darknet.getownerallocatedram.md"] = nsDoc_bitburner_darknet_getownerallocatedram_md;
 AllPages["nsDoc/bitburner.darknet.getserver.md"] = nsDoc_bitburner_darknet_getserver_md;
 AllPages["nsDoc/bitburner.darknet.getserverauthdetails.md"] = nsDoc_bitburner_darknet_getserverauthdetails_md;
 AllPages["nsDoc/bitburner.darknet.getstasislinkedservers.md"] = nsDoc_bitburner_darknet_getstasislinkedservers_md;
@@ -1990,6 +1990,7 @@ AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDo
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
 AllPages["nsDoc/bitburner.darknetserverdata.backdoorinstalled.md"] = nsDoc_bitburner_darknetserverdata_backdoorinstalled_md;
+AllPages["nsDoc/bitburner.darknetserverdata.blockedram.md"] = nsDoc_bitburner_darknetserverdata_blockedram_md;
 AllPages["nsDoc/bitburner.darknetserverdata.depth.md"] = nsDoc_bitburner_darknetserverdata_depth_md;
 AllPages["nsDoc/bitburner.darknetserverdata.difficulty.md"] = nsDoc_bitburner_darknetserverdata_difficulty_md;
 AllPages["nsDoc/bitburner.darknetserverdata.hasadminrights.md"] = nsDoc_bitburner_darknetserverdata_hasadminrights_md;
@@ -2002,7 +2003,6 @@ AllPages["nsDoc/bitburner.darknetserverdata.maxram.md"] = nsDoc_bitburner_darkne
 AllPages["nsDoc/bitburner.darknetserverdata.md"] = nsDoc_bitburner_darknetserverdata_md;
 AllPages["nsDoc/bitburner.darknetserverdata.modelid.md"] = nsDoc_bitburner_darknetserverdata_modelid_md;
 AllPages["nsDoc/bitburner.darknetserverdata.passwordhintdata.md"] = nsDoc_bitburner_darknetserverdata_passwordhintdata_md;
-AllPages["nsDoc/bitburner.darknetserverdata.ramblock.md"] = nsDoc_bitburner_darknetserverdata_ramblock_md;
 AllPages["nsDoc/bitburner.darknetserverdata.ramused.md"] = nsDoc_bitburner_darknetserverdata_ramused_md;
 AllPages["nsDoc/bitburner.darknetserverdata.requiredcharismaskill.md"] = nsDoc_bitburner_darknetserverdata_requiredcharismaskill_md;
 AllPages["nsDoc/bitburner.darknetserverdata.staticpasswordhint.md"] = nsDoc_bitburner_darknetserverdata_staticpasswordhint_md;

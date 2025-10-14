@@ -388,8 +388,8 @@ export class Terminal {
       const canRunScripts = hasAdminRights && currServ.maxRam > 0;
       this.print("Can run scripts on this host: " + (canRunScripts ? "YES" : "NO"));
       this.print("RAM: " + formatRam(currServ.maxRam));
-      if (currServ instanceof DarknetServer && currServ.ramBlock) {
-        this.print("RAM blocked by owner: " + formatRam(currServ.ramBlock));
+      if (currServ instanceof DarknetServer && currServ.blockedRam) {
+        this.print("RAM blocked by owner: " + formatRam(currServ.blockedRam));
         this.print("Stasis link: " + (currServ.hasStasisLink ? "YES" : "NO"));
         this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"));
       }

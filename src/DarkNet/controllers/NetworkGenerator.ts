@@ -79,7 +79,7 @@ export function initDarkwebServer(): void {
   const darkweb = DnetServerBuilder(data, SpecialServers.DarkWeb);
   darkweb.isMobile = false;
   darkweb.hasAdminRights = true;
-  darkweb.ramBlock = 0;
+  darkweb.blockedRam = 0;
   darkweb.scripts = scripts;
   darkweb.contracts = contracts;
   if (hasTOR) {
@@ -230,7 +230,7 @@ export const addLabyrinth = () => {
     depth: -1,
     leftOffset: -1,
     hasStasisLink: false,
-    ramBlock: 0,
+    blockedRam: 0,
     logTrafficInterval: Number.MAX_SAFE_INTEGER,
     isMobile: false,
   };

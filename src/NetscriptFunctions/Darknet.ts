@@ -419,7 +419,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         depth: server.depth,
         modelId: server.modelId,
         hasStasisLink: server.hasStasisLink,
-        ramBlock: server.ramBlock,
+        blockedRam: server.blockedRam,
         staticPasswordHint: server.staticPasswordHint,
         passwordHintData: server.passwordHintData,
         difficulty: server.difficulty,
@@ -585,7 +585,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         const server = onlineConnectionCheck.server;
 
-        if (server.ramBlock <= 0) {
+        if (server.blockedRam <= 0) {
           const result = `Failed. Server ${server.hostname} has no host-owned ram left to reallocate.`;
           logger(ctx)(result);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -610,7 +610,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             }));
           }
           const server = onlineConnectionCheck.server;
-          if (server.ramBlock <= 0) {
+          if (server.blockedRam <= 0) {
             const result = `Server ${server.hostname} has no host-owned ram left to reallocate.`;
             logger(ctx)(result);
             return {
@@ -621,7 +621,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           return handleRamBlockRemoved(ctx, server);
         });
       },
-    getOwnerAllocatedRam:
+    getBlockedRam:
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
@@ -630,7 +630,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (!onlineConnectionCheck.success) {
           return 0;
         }
-        return onlineConnectionCheck.server.ramBlock;
+        return onlineConnectionCheck.server.blockedRam;
       },
     getCurrentDepth:
       (ctx) =>

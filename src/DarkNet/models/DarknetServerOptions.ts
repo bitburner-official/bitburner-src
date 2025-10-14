@@ -63,7 +63,7 @@ export const DnetServerBuilder = (
     depth: options.depth,
     leftOffset: options.leftOffset,
     hasStasisLink: false,
-    ramBlock,
+    blockedRam: ramBlock,
     logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
     requiredCharismaSkill: requiredLevel,
     isMobile: true,

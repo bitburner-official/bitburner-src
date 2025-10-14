@@ -4194,7 +4194,7 @@ export interface DarknetServerData {
   /** If the server has a stasis link applied */
   hasStasisLink: boolean;
   /** The amount of ram blocked by the server owner */
-  ramBlock: number;
+  blockedRam: number;
   /** The model of the server. Similar models have similar vulnerabilites. */
   modelId: string;
   /** The generic password prompt for the server */
@@ -4486,7 +4486,7 @@ export interface Darknet {
    * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
    * @returns The amount of RAM blocked by the server owner's processes.
    */
-  getOwnerAllocatedRam(hostname?: string): number;
+  getBlockedRam(hostname?: string): number;
 
   /**
    * Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and
