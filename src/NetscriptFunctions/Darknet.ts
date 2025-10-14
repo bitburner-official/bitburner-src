@@ -133,6 +133,15 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             }));
           }
 
+          // Authentication has a chance to timeout based on darknet instability
+          if (Math.random() < getTimeoutChance()) {
+            logger(ctx)(`Autnetication to ${targetHostname} timed out due to network instability. Please try again.`);
+            return {
+              success: false,
+              message: ResponseStatus.TIMEOUT,
+            };
+          }
+
           const server = onlineConnectionCheck.server;
           const authResult = getAuthResult(server, password, threads, networkDelay, ctx.workerScript.pid);
           const success = authResult.result.success;
