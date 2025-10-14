@@ -4,11 +4,11 @@
 
 ## Darknet.connectToSession() method
 
-Attempts to connect to a darkweb server that you have previously authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.
+Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`<!-- -->, connectToSession can be used to get a session on servers at any distance.
 
-If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
+If successful, grants the script a session, allowing it to scp() files from that target. It also allows starting scripts with exec() on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
 
-If not, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
 
 Response messages:
 
