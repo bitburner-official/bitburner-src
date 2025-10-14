@@ -56,7 +56,7 @@ interface Player extends Person {
   numPeopleKilled: number;
   entropy: number;
   jobs: Partial<Record<CompanyName, JobName>>;
-  factions: string[];
+  factions: FactionName[];
   totalPlaytime: number;
   location: LocationName;
   karma: number;
@@ -844,7 +844,7 @@ interface BladeburnerCurAction {
  */
 interface GangGenInfo {
   /** Name of faction that the gang belongs to ("Slum Snakes", etc.) */
-  faction: string;
+  faction: FactionName;
   /** Indicating whether or not it's a hacking gang */
   isHacking: boolean;
   /** Money earned per game cycle */
@@ -6189,10 +6189,33 @@ export interface Formulas {
 }
 
 /** @public */
+type FragmentEnumType = {
+  HackingSpeed: 3;
+  HackingMoney: 4;
+  HackingGrow: 5;
+  Hacking: 6;
+  Strength: 7;
+  Defense: 8;
+  Dexterity: 9;
+  Agility: 10;
+  Charisma: 11;
+  HacknetMoney: 12;
+  HacknetCost: 13;
+  Rep: 14;
+  WorkMoney: 15;
+  Crime: 16;
+  Bladeburner: 17;
+  Booster: 18;
+};
+
+/** @public */
+type FragmentType = _ValueOf<FragmentEnumType>;
+
+/** @public */
 interface Fragment {
   id: number;
   shape: boolean[][];
-  type: number;
+  type: FragmentType;
   power: number;
   limit: number;
   effect: string;
@@ -9274,6 +9297,7 @@ type NSEnums = {
   OrderType: OrderEnumType;
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
+  FragmentType: FragmentEnumType;
 };
 
 /**
@@ -10348,7 +10372,7 @@ type CorpResearchName =
  */
 interface CorpMaterialConstantData {
   /** Name of the material */
-  name: string;
+  name: CorpMaterialName;
   /** Size of the material */
   size: number;
   demandBase: number;

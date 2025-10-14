@@ -129,7 +129,7 @@ boolean\[\]\[\]
 
 </td><td>
 
-number
+[FragmentType](./bitburner.fragmenttype.md)
 
 
 </td><td>

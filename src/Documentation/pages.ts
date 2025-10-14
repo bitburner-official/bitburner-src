@@ -524,6 +524,8 @@ import nsDoc_bitburner_fragment_md from "../../markdown/bitburner.fragment.md?ra
 import nsDoc_bitburner_fragment_power_md from "../../markdown/bitburner.fragment.power.md?raw";
 import nsDoc_bitburner_fragment_shape_md from "../../markdown/bitburner.fragment.shape.md?raw";
 import nsDoc_bitburner_fragment_type_md from "../../markdown/bitburner.fragment.type.md?raw";
+import nsDoc_bitburner_fragmentenumtype_md from "../../markdown/bitburner.fragmentenumtype.md?raw";
+import nsDoc_bitburner_fragmenttype_md from "../../markdown/bitburner.fragmenttype.md?raw";
 import nsDoc_bitburner_gameinfo_commit_md from "../../markdown/bitburner.gameinfo.commit.md?raw";
 import nsDoc_bitburner_gameinfo_md from "../../markdown/bitburner.gameinfo.md?raw";
 import nsDoc_bitburner_gameinfo_platform_md from "../../markdown/bitburner.gameinfo.platform.md?raw";
@@ -2080,6 +2082,8 @@ AllPages["nsDoc/bitburner.fragment.md"] = nsDoc_bitburner_fragment_md;
 AllPages["nsDoc/bitburner.fragment.power.md"] = nsDoc_bitburner_fragment_power_md;
 AllPages["nsDoc/bitburner.fragment.shape.md"] = nsDoc_bitburner_fragment_shape_md;
 AllPages["nsDoc/bitburner.fragment.type.md"] = nsDoc_bitburner_fragment_type_md;
+AllPages["nsDoc/bitburner.fragmentenumtype.md"] = nsDoc_bitburner_fragmentenumtype_md;
+AllPages["nsDoc/bitburner.fragmenttype.md"] = nsDoc_bitburner_fragmenttype_md;
 AllPages["nsDoc/bitburner.gameinfo.commit.md"] = nsDoc_bitburner_gameinfo_commit_md;
 AllPages["nsDoc/bitburner.gameinfo.md"] = nsDoc_bitburner_gameinfo_md;
 AllPages["nsDoc/bitburner.gameinfo.platform.md"] = nsDoc_bitburner_gameinfo_platform_md;

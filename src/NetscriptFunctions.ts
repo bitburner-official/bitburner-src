@@ -121,6 +121,7 @@ import { DarknetState } from "./DarkNet/models/DarknetState";
 import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { DarknetServer } from "./Server/DarknetServer";
+import { FragmentTypeEnum } from "./CotMG/FragmentType";
 
 export const enums: NSEnums = {
   CityName,
@@ -139,6 +140,7 @@ export const enums: NSEnums = {
   OrderType,
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
+  FragmentType: FragmentTypeEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
