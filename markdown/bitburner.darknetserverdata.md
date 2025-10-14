@@ -75,6 +75,25 @@ The amount of ram blocked by the server owner
 </td></tr>
 <tr><td>
 
+[cpuCores](./bitburner.darknetserverdata.cpucores.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of CPU cores
+
+
+</td></tr>
+<tr><td>
+
 [depth](./bitburner.darknetserverdata.depth.md)
 
 

@@ -413,6 +413,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         ip: server.ip,
         hasAdminRights: server.hasAdminRights,
         isConnectedTo: server.isConnectedTo,
+        cpuCores: server.cpuCores,
         ramUsed: server.ramUsed,
         maxRam: server.maxRam,
         backdoorInstalled: server.backdoorInstalled,

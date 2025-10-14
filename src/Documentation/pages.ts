@@ -435,6 +435,7 @@ import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
 import nsDoc_bitburner_darknetserverdata_backdoorinstalled_md from "../../markdown/bitburner.darknetserverdata.backdoorinstalled.md?raw";
 import nsDoc_bitburner_darknetserverdata_blockedram_md from "../../markdown/bitburner.darknetserverdata.blockedram.md?raw";
+import nsDoc_bitburner_darknetserverdata_cpucores_md from "../../markdown/bitburner.darknetserverdata.cpucores.md?raw";
 import nsDoc_bitburner_darknetserverdata_depth_md from "../../markdown/bitburner.darknetserverdata.depth.md?raw";
 import nsDoc_bitburner_darknetserverdata_difficulty_md from "../../markdown/bitburner.darknetserverdata.difficulty.md?raw";
 import nsDoc_bitburner_darknetserverdata_hasadminrights_md from "../../markdown/bitburner.darknetserverdata.hasadminrights.md?raw";
@@ -1993,6 +1994,7 @@ AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburn
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
 AllPages["nsDoc/bitburner.darknetserverdata.backdoorinstalled.md"] = nsDoc_bitburner_darknetserverdata_backdoorinstalled_md;
 AllPages["nsDoc/bitburner.darknetserverdata.blockedram.md"] = nsDoc_bitburner_darknetserverdata_blockedram_md;
+AllPages["nsDoc/bitburner.darknetserverdata.cpucores.md"] = nsDoc_bitburner_darknetserverdata_cpucores_md;
 AllPages["nsDoc/bitburner.darknetserverdata.depth.md"] = nsDoc_bitburner_darknetserverdata_depth_md;
 AllPages["nsDoc/bitburner.darknetserverdata.difficulty.md"] = nsDoc_bitburner_darknetserverdata_difficulty_md;
 AllPages["nsDoc/bitburner.darknetserverdata.hasadminrights.md"] = nsDoc_bitburner_darknetserverdata_hasadminrights_md;

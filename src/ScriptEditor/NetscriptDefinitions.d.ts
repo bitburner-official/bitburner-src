@@ -4185,6 +4185,8 @@ export interface DarknetServerData {
   hasAdminRights: boolean;
   /** Flag indicating whether the player's terminal is currently connected to this server */
   isConnectedTo: boolean;
+  /** Number of CPU cores */
+  cpuCores: number;
   /** Used RAM (GB). i.e. unavailable RAM */
   ramUsed: number;
   /** Max RAM (GB) of this server */

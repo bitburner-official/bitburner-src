@@ -62,4 +62,5 @@ export const exampleDarknetServerData: DarknetServerData = {
   modelId: "",
   logTrafficInterval: -1,
   backdoorInstalled: false,
+  cpuCores: 1,
 } as const;
