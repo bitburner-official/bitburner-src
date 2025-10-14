@@ -4,6 +4,7 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
+- set fixed zoom on search
 - darknet scripts are killed on restart?
 - performance
 - link server logs to PID for labyrinth display?
