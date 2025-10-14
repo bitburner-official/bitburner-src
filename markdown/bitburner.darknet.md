@@ -94,7 +94,7 @@ Gets the amount of RAM blocked by the server owner's processes. This ram can be 
 </td></tr>
 <tr><td>
 
-[getCurrentDarknetInstability()](./bitburner.darknet.getcurrentdarknetinstability.md)
+[getDarknetInstability()](./bitburner.darknet.getdarknetinstability.md)
 
 
 </td><td>
@@ -105,7 +105,7 @@ Gets the current instability of the darknet caused by excessive backdoor-ing of 
 </td></tr>
 <tr><td>
 
-[getCurrentDepth(hostname)](./bitburner.darknet.getcurrentdepth.md)
+[getDepth(hostname)](./bitburner.darknet.getdepth.md)
 
 
 </td><td>

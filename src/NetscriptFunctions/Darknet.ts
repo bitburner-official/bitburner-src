@@ -633,7 +633,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         return onlineConnectionCheck.server.blockedRam;
       },
-    getCurrentDepth:
+    getDepth:
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
@@ -682,7 +682,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return handlePhishingAttack(ctx, server);
       });
     },
-    getCurrentDarknetInstability: () => () => {
+    getDarknetInstability: () => () => {
       return {
         authenticateDurationIncrease: getBackdoorAuthTimeDebuff(),
         authenticateTimeoutChance: getTimeoutChance(),

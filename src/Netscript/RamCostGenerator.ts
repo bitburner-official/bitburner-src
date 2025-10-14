@@ -244,10 +244,10 @@ const dnet = {
   isDarknetServer: 0.05,
   memoryReallocation: 1,
   getBlockedRam: 0,
-  getCurrentDepth: 0.05,
+  getDepth: 0.05,
   promoteStock: 2,
   phishingAttack: 2,
-  getCurrentDarknetInstability: 0,
+  getDarknetInstability: 0,
 } as const;
 
 const format = {

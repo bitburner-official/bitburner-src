@@ -4502,7 +4502,7 @@ export interface Darknet {
    * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
    * @returns The current depth of the server into the darknet.
    */
-  getCurrentDepth(hostname?: string): number;
+  getDepth(hostname?: string): number;
 
   /**
    * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
@@ -4537,7 +4537,7 @@ export interface Darknet {
    *    authenticateDurationIncrease: the increase in time that authentication takes, as a decimal
    *    authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
    */
-  getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
+  getDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
 }
 
 /**
