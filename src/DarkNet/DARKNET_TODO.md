@@ -293,7 +293,7 @@ reduced higher lab's cha requirements, and rebalanced server difficulty scaling 
   getCurrentDarknetInstability
   getAuthenticateEstimatedTime
   getHeartbleedEstimatedTime
-  getOwnerAllocatedRam
+  getBlockedRam
   getExpectedRamBlockRemoved
 
 - removed the `influence` namespace and moved its contents to base ns.dnet namespace. I didn't like how long the invocations were, and it felt like almost everything would fit there, and it made the api less discoverable.
