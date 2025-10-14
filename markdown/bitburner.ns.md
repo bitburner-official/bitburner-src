@@ -413,12 +413,12 @@ Namespace for [Stanek](./bitburner.stanek.md) functions. Contains spoilers.
 
 </td><td>
 
-[TIX](./bitburner.tix.md)
+[Stock](./bitburner.stock.md)
 
 
 </td><td>
 
-Namespace for [stock](./bitburner.tix.md) functions.
+Namespace for [stock](./bitburner.stock.md) functions.
 
 
 </td></tr>

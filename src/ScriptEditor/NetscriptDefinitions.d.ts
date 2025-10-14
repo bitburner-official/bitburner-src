@@ -1237,7 +1237,7 @@ export interface NetscriptPort {
  * Stock market API
  * @public
  */
-export interface TIX {
+export interface Stock {
   /**
    * Get game constants for the stock market mechanic.
    *
@@ -1639,7 +1639,7 @@ export interface TIX {
    *
    * You need to have a WSE account. Note that this feature only unlocks access to 4S Market Data in the Stock Market
    * UI. If you want to access 4S Market Data via NS APIs, you have to unlock "4S Market Data TIX API access" via
-   * {@link TIX.purchase4SMarketDataTixApi | purchase4SMarketDataTixApi}, which is unrelated to this feature.
+   * {@link Stock.purchase4SMarketDataTixApi | purchase4SMarketDataTixApi}, which is unrelated to this feature.
    *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
@@ -6251,10 +6251,10 @@ export interface NS {
   readonly sleeve: Sleeve;
 
   /**
-   * Namespace for {@link TIX | stock} functions.
+   * Namespace for {@link Stock | stock} functions.
    * @remarks RAM cost: 0 GB
    */
-  readonly stock: TIX;
+  readonly stock: Stock;
 
   /**
    * Namespace for {@link Formulas | formulas} functions.
