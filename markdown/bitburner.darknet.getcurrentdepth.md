@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname of the server to check. Defaults to the running script's server.  The current depth of the server into the darknet.
+_(Optional)_ Optional. Hostname of the server to check. Defaults to the running script's server.
 
 
 </td></tr>
@@ -53,6 +53,8 @@ _(Optional)_ Optional. Hostname of the server to check. Defaults to the running 
 **Returns:**
 
 number
+
+The current depth of the server into the darknet.
 
 ## Remarks
 

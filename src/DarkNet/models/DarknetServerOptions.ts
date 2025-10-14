@@ -12,8 +12,8 @@ import {
 } from "./dictionaryData";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { DarknetServer as IDarknetServer, ResponseStatusType } from "@nsdefs";
-import { MinigamesType } from "../Enums";
+import type { ResponseStatusType } from "@nsdefs";
+import type { MinigamesType } from "../Enums";
 import { DarknetState } from "./DarknetState";
 import { getRamBlock } from "../effects/ramblock";
 
@@ -36,21 +36,9 @@ export type DarknetServerOptions = {
   leftOffset: number;
 };
 
-/** Represents a server on the darknet. Includes fields not revealed to players. */
-export interface DarknetServerData extends IDarknetServer {
-  /** The icon of the server, used for display */
-  icon: Icon | typeof labIcon;
-  /** The location of the server in its row on the darknet */
-  leftOffset: number;
-  /** The password for the server, used for authentication */
-  password: string;
-  /** If this darknet server can move. False for fixed/story servers. */
-  isMobile: boolean;
-}
-
 export const DnetServerBuilder = (
   options: DarknetServerOptions,
-  name: string = getDarknetServerName(),
+  name: string = generateDarknetServerName(),
 ): DarknetServer => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
   const ramBlock = getRamBlock(maxRam);
@@ -62,8 +50,10 @@ export const DnetServerBuilder = (
   const levelVariance = (Math.random() * 3 - 1) * depth;
   const requiredLevel = Math.max(Math.floor(depthScaling + levelVariance), 1);
 
-  const darknetData = {
-    ramBlock,
+  const server = new DarknetServer({
+    hostname: name,
+    ip: createUniqueRandomIp(),
+    maxRam,
     icon: options.icon ?? getRandomIcon(),
     password: options.password,
     modelId: options.modelId,
@@ -73,22 +63,10 @@ export const DnetServerBuilder = (
     depth: options.depth,
     leftOffset: options.leftOffset,
     hasStasisLink: false,
+    ramBlock,
     logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
     requiredCharismaSkill: requiredLevel,
-  };
-
-  const server = new DarknetServer({
-    hostname: name,
-    ip: createUniqueRandomIp(),
-    organizationName: "darkweb",
-    isOnline: true,
-    maxRam,
-    hasAdminRights: false,
-    isConnectedTo: false,
-    ramUsed: 0,
-    purchasedByPlayer: false,
     isMobile: true,
-    ...darknetData,
   });
   server.updateRamUsed(ramBlock);
   removeFromOfflineServers(name);
@@ -97,7 +75,7 @@ export const DnetServerBuilder = (
   return server;
 };
 
-export const getDarknetServerName = (): string => {
+export const generateDarknetServerName = (): string => {
   if (Math.random() < 0.03 && DarknetState.offlineServers.length > 0) {
     return DarknetState.offlineServers[Math.floor(Math.random() * DarknetState.offlineServers.length)];
   }

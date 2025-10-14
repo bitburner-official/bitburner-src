@@ -360,12 +360,12 @@ Darknet formulas
 </td></tr>
 <tr><td>
 
-[DarknetServer](./bitburner.darknetserver.md)
+[DarknetServerData](./bitburner.darknetserverdata.md)
 
 
 </td><td>
 
-Darknet server information.
+Darknet server data.
 
 
 </td></tr>
@@ -2062,6 +2062,7 @@ Response statuses used for authenticate and connectToSession methods
 </td><td>
 
 
+
 </td></tr>
 <tr><td>
 
@@ -2069,6 +2070,7 @@ Response statuses used for authenticate and connectToSession methods
 
 
 </td><td>
+
 
 
 </td></tr>

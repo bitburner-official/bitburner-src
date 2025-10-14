@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import type { Darknet as NSDnet } from "@nsdefs";
+import type { Darknet as DarknetAPI } from "@nsdefs";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import {
@@ -31,7 +31,7 @@ import {
   logger,
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
-import { exampleDarknetServer, ResponseStatus } from "../DarkNet/Enums";
+import { exampleDarknetServerData, ResponseStatus } from "../DarkNet/Enums";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
@@ -83,7 +83,7 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
   };
 }
 
-export function NetscriptDarknet(): InternalAPI<NSDnet> {
+export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
   return {
     authenticate:
       (ctx: NetscriptContext) =>
@@ -109,7 +109,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: onlineConnectionCheck.message,
-            requireDarknet: true,
           }));
         }
         const server = onlineConnectionCheck.server;
@@ -402,26 +401,23 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       if (!onlineConnectionCheck.success) {
         logger(ctx)(onlineConnectionCheck.message);
         return {
-          ...exampleDarknetServer,
-          hostname: hostname,
           isOnline: false,
-        };
+          ...exampleDarknetServerData,
+          hostname: hostname,
+        } satisfies ReturnType<DarknetAPI["getServer"]>;
       }
       const server = onlineConnectionCheck.server;
       return {
-        hostname: server.hostname,
         isOnline: true,
+        hostname: server.hostname,
         ip: server.ip,
         hasAdminRights: server.hasAdminRights,
         isConnectedTo: server.isConnectedTo,
         ramUsed: server.ramUsed,
         maxRam: server.maxRam,
-        ownerAllocatedRam: server.ramBlock,
         backdoorInstalled: server.backdoorInstalled,
         depth: server.depth,
         modelId: server.modelId,
-        organizationName: server.organizationName,
-        purchasedByPlayer: server.purchasedByPlayer,
         hasStasisLink: server.hasStasisLink,
         ramBlock: server.ramBlock,
         staticPasswordHint: server.staticPasswordHint,
@@ -429,7 +425,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         difficulty: server.difficulty,
         requiredCharismaSkill: server.requiredCharismaSkill,
         logTrafficInterval: server.logTrafficInterval,
-      };
+      } satisfies ReturnType<DarknetAPI["getServer"]>;
     },
     getServerAuthDetails: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
@@ -446,7 +442,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           logTrafficInterval: -1,
           passwordLength: -1,
           passwordFormat: "numeric",
-        };
+        } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
       }
       const targetServer = onlineConnectionCheck.server;
       const localServer = ctx.workerScript.getServer();
@@ -464,7 +460,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         logTrafficInterval: targetServer.logTrafficInterval,
         passwordLength: targetServer.password.length,
         passwordFormat: getPasswordType(targetServer.password),
-      };
+      } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
     },
     packetCapture: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);

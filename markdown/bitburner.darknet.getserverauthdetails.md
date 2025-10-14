@@ -9,7 +9,7 @@ Returns the server's authentication protocol details.
 **Signature:**
 
 ```typescript
-getServerAuthDetails(host?: string): ServerAuthDetails;
+getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
 ```
 
 ## Parameters
@@ -50,9 +50,9 @@ _(Optional)_ Hostname of the server to analyze. Defaults to the running script's
 
 **Returns:**
 
-[ServerAuthDetails](./bitburner.serverauthdetails.md)
+[ServerAuthDetails](./bitburner.serverauthdetails.md) &amp; { isOnline: boolean }
 
-An object containing the server's authentication protocol details. isOnline: True if the server is still online. isConnected: True if the server is directly connected to the current server. modelId: The model ID of the server. Similar models have similar vulnerabilities. passwordHint: The password hint for the server. data: The data associated with the password hint (if any). logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
+An object containing the server's authentication protocol details.
 
 ## Remarks
 

@@ -4,6 +4,7 @@
 
 ## ResponseStatusType type
 
+
 **Signature:**
 
 ```typescript

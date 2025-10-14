@@ -11,6 +11,7 @@ import { getBackdooredDarkwebServers } from "../utils/darknetNetworkUtils";
 import { hasDarknetAccess } from "../utils/darknetAuthUtils";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { Result } from "../../types";
+import { CompletedProgramName } from "../../Enums";
 
 type FailureResultOptions = {
   requireAdminRights?: boolean;
@@ -25,7 +26,7 @@ export function expectDarknetAccess(ctx: NetscriptContext): void {
   if (!hasDarknetAccess()) {
     throw errorMessage(
       ctx,
-      `You do not have access to the dnet api. Purchase "DarkscapeNavigator.exe" through your tor router to unlock it.`,
+      `You do not have access to the dnet api. Purchase "${CompletedProgramName.darkscape}" through your TOR router to unlock it.`,
     );
   }
 }

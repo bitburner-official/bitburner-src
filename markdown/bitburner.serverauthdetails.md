@@ -10,7 +10,6 @@ Details about a server's authentication schema
 
 ```typescript
 export type ServerAuthDetails = {
-  isOnline: boolean;
   isConnectedToCurrentServer: boolean;
   hasSession: boolean;
   modelId: string;

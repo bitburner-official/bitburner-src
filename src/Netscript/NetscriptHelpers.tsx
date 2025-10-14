@@ -56,7 +56,7 @@ import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { errorMessage, log } from "./ErrorMessages";
-import { assertStringWithNSContext, debugType } from "./TypeAssertion";
+import { assertStringWithNSContext, debugType, missingKey } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,
@@ -67,8 +67,6 @@ import { Settings } from "../Settings/Settings";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContentFilePath } from "../Paths/ContentFile";
 import { LiteratureName } from "@enums";
-import { DarknetServer as IDarknetServer } from "@nsdefs";
-import { exampleDarknetServer } from "../DarkNet/Enums";
 import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
@@ -99,7 +97,6 @@ export const helpers = {
   portNumber,
   person,
   server,
-  darknetServer,
   scp,
   gang,
   gangMember,
@@ -663,22 +660,6 @@ function server(ctx: NetscriptContext, s: unknown): IServer {
   const error = missingKey(fakeServer, s);
   if (error) throw errorMessage(ctx, `server should be a Server.\n${error}`, "TYPE");
   return s as IServer;
-}
-
-function darknetServer(ctx: NetscriptContext, s: unknown): IDarknetServer {
-  const error = missingKey(exampleDarknetServer, s);
-  if (error) throw errorMessage(ctx, `server should be a Darknet Server.\n${error}`, "TYPE");
-  return s as IDarknetServer;
-}
-
-function missingKey(expect: object, actual: unknown): string | false {
-  if (typeof actual !== "object" || actual === null) {
-    return `Expected to be an object, was ${actual === null ? "null" : typeof actual}.`;
-  }
-  for (const key in expect) {
-    if (!(key in actual)) return `Property ${key} was expected but not present.`;
-  }
-  return false;
 }
 
 function gang(ctx: NetscriptContext, g: unknown): FormulaGang {

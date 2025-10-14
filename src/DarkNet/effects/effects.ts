@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { DarknetServer as IDarknetServer, Person as IPerson } from "@nsdefs";
+import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import { generateContract } from "../../CodingContract/ContractGenerator";
 import {
@@ -13,11 +13,11 @@ import { TextFilePath } from "../../Paths/TextFilePath";
 import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
-import type { DarknetServer } from "../../Server/DarknetServer";
+import { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
-import { getDarknetData, getDarknetServerSafely, isDarknetServer } from "../utils/darknetServerUtils";
+import { getDarknetServerSafely } from "../utils/darknetServerUtils";
 import {
   getAllMobileDarknetServers,
   getBackdooredDarkwebServers,
@@ -26,6 +26,7 @@ import {
 import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import { getTorRouter } from "../../Server/ServerHelpers";
 import { DarknetConstants } from "../Constants";
+import { GetServer } from "../../Server/AllServers";
 
 export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -57,23 +58,19 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
 
 /**
  * Returns the time it takes to authenticate on a server in milliseconds
- * @param server - the target server to attempt a password on
+ * @param darknetServerData - the target server to attempt a password on
  * @param person - the player's character
  * @param attemptedPassword - the password being attempted
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
  */
 export const calculateAuthenticationTime = (
-  server: IDarknetServer,
+  darknetServerData: DarknetServerData,
   person: IPerson = Player,
-  threads: number = 1,
-  attemptedPassword: string = "",
+  threads = 1,
+  attemptedPassword = "",
 ) => {
-  if (!isDarknetServer(server)) return 0;
-  const darknetData = getDarknetData(server);
-  if (!darknetData) return 0;
-
-  const chaRequired = server.requiredCharismaSkill;
-  const difficulty = darknetData.difficulty;
+  const chaRequired = darknetServerData.requiredCharismaSkill;
+  const difficulty = darknetServerData.difficulty;
 
   const baseDiff = (difficulty + 1) * 100;
   const diffFactor = 5;
@@ -100,9 +97,11 @@ export const calculateAuthenticationTime = (
     bonusTimeFactor *
     threadsFactor;
 
+  const server = GetServer(darknetServerData.hostname);
+  const password = server instanceof DarknetServer ? server.password : "";
   // Add extra time for timing attack server, per correct character
   const sharedChars =
-    darknetData.modelId === ModelIds.TimingAttack ? getSharedChars(darknetData.password, attemptedPassword) : 0;
+    darknetServerData.modelId === ModelIds.TimingAttack ? getSharedChars(password, attemptedPassword) : 0;
   const sharedCharsExtraTime = sharedChars * 150;
 
   return time * calculateIntelligenceBonus(person.skills.intelligence, 0.25) + sharedCharsExtraTime;
@@ -130,8 +129,7 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
 };
 
 // TODO: balance xp gain
-export const calculatePasswordAttemptChaGain = (server: DarknetServer, threads: number = 1, success = false) => {
-  if (!isDarknetServer(server) || !threads) return 0;
+export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threads: number = 1, success = false) => {
   const baseXpGain = 3;
   const difficultyBase = 1.12;
   const xpGain = baseXpGain + difficultyBase ** server.difficulty;

@@ -9,7 +9,7 @@ Gets the time it will take to authenticate a server.
 **Signature:**
 
 ```typescript
-getAuthenticateTime(server: DarknetServer, threads?: number, player?: Person): number;
+getAuthenticateTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
 ```
 
 ## Parameters
@@ -32,12 +32,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-server
+darknetServerData
 
 
 </td><td>
 
-[DarknetServer](./bitburner.darknetserver.md)
+[DarknetServerData](./bitburner.darknetserverdata.md)
 
 
 </td><td>

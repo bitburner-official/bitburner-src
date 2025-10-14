@@ -1,3 +1,5 @@
+import { exampleDarknetServerData } from "../DarkNet/Enums";
+import type { DarknetServerData } from "@nsdefs";
 import type { NetscriptContext } from "./APIWrapper";
 import { errorMessage } from "./ErrorMessages";
 
@@ -37,4 +39,21 @@ export function assertFunctionWithNSContext(
   v: unknown,
 ): asserts v is () => void {
   if (typeof v !== "function") throw errorMessage(ctx, `${argName} expected to be a function ${debugType(v)}`, "TYPE");
+}
+
+export function missingKey(expect: object, actual: unknown): string | false {
+  if (typeof actual !== "object" || actual === null) {
+    return `Expected to be an object, was ${actual === null ? "null" : typeof actual}.`;
+  }
+  for (const key in expect) {
+    if (!(key in actual)) return `Property ${key} was expected but not present.`;
+  }
+  return false;
+}
+
+export function assertDarknetServerData(ctx: NetscriptContext, data: unknown): asserts data is DarknetServerData {
+  const error = missingKey(exampleDarknetServerData, data);
+  if (error) {
+    throw errorMessage(ctx, `Invalid darknet server data.\n${error}`, "TYPE");
+  }
 }

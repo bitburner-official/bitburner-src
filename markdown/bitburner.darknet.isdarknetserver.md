@@ -6,7 +6,7 @@
 
 Returns whether the server is a darknet server.
 
-Returns false if the server does not exist or has gone offline.
+Returns false if the server does not exist or has gone offline recently. This function does not require SF15 (don't worry if you don't know what "SF" is; it will be unlocked later) or DarkscapeNavigator.exe.
 
 **Signature:**
 

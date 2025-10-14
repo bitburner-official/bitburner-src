@@ -1,19 +1,41 @@
 import { Icon, labIcon } from "../DarkNet/ui/ServerIcon";
-import { BaseServer, IConstructorParams } from "./BaseServer";
+import { BaseServer } from "./BaseServer";
 import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
-import { DarknetServer as IDarknetServer } from "@nsdefs";
-import { DarknetServerData } from "../DarkNet/models/DarknetServerOptions";
-import { exampleDarknetServer } from "../DarkNet/Enums";
+import type { DarknetServerData } from "@nsdefs";
+import { exampleDarknetServerData } from "../DarkNet/Enums";
 import { createRandomIp } from "../utils/IPAddress";
 import type { CacheFilePath } from "../Paths/CacheFilePath";
+import type { IPAddress } from "../Types/strings";
 
-export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {
+export interface DarknetServerConstructorParams {
+  // Properties of BaseServer
+  hostname: string;
+  ip: IPAddress;
+  maxRam: number;
+  // Properties of DarknetServer
+  icon: Icon | typeof labIcon;
+  password: string;
+  modelId: string;
+  staticPasswordHint: string;
+  passwordHintData: string;
+  difficulty: number;
+  depth: number;
+  leftOffset: number;
+  hasStasisLink: boolean;
+  ramBlock: number;
+  logTrafficInterval: number;
+  requiredCharismaSkill: number;
+  isMobile: boolean;
+}
+
+export class DarknetServer extends BaseServer implements DarknetServerData {
+  // Override the optional "backdoorInstalled" property in BaseServer
+  backdoorInstalled: boolean = false;
+
   /** Random reward caches on this server */
   caches: CacheFilePath[] = [];
   /** The icon of the server, used for display */
   icon: Icon | typeof labIcon;
-  /** Indicates if the server is online */
-  isOnline: boolean;
   /** The password for the server, used for authentication */
   password: string;
   /** The model of the server. Similar models have similar vulnerabilities. */
@@ -21,7 +43,7 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
   /** The generic password prompt for the server */
   staticPasswordHint: string;
   /** Data associated with the password hint */
-  passwordHintData?: string;
+  passwordHintData: string;
   /** The difficulty rating of the server, associated with its original depth in the net */
   difficulty: number;
   /** The depth of the server in the net */
@@ -40,18 +62,17 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
   isMobile: boolean;
 
   constructor(
-    params: IConstructorParams & DarknetServerData = {
-      ...exampleDarknetServer,
+    params: DarknetServerConstructorParams = {
+      ...exampleDarknetServerData,
       ip: createRandomIp(),
       icon: Icon.Terminal,
-      leftOffset: 0,
       password: "",
+      leftOffset: 0,
       isMobile: true,
     },
   ) {
     super(params);
     this.icon = params.icon;
-    this.isOnline = params.isOnline;
     this.password = params.password;
     this.modelId = params.modelId;
     this.maxRam = params.maxRam;

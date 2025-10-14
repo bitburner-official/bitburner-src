@@ -4,14 +4,14 @@
 
 ## Darknet.getServer() method
 
-Returns a server object for the given server.
+Returns data of the darknet server.
 
 If the server has recently gone offline, it will return a blank server object with `isOnline: false`<!-- -->.
 
 **Signature:**
 
 ```typescript
-getServer(host?: string): DarknetServer;
+getServer(host?: string): DarknetServerData & { isOnline: boolean };
 ```
 
 ## Parameters
@@ -52,9 +52,9 @@ _(Optional)_ Optional. Hostname for the requested server object. Defaults to the
 
 **Returns:**
 
-[DarknetServer](./bitburner.darknetserver.md)
+[DarknetServerData](./bitburner.darknetserverdata.md) &amp; { isOnline: boolean }
 
-The requested server object, or null if the server is not found.
+Data of the darknet server.
 
 ## Remarks
 

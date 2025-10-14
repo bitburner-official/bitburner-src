@@ -4,6 +4,7 @@
 
 ## Result type
 
+
 **Signature:**
 
 ```typescript

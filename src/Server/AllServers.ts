@@ -10,7 +10,6 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { DarknetServer } from "./DarknetServer";
-import { isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
 import { applyRamBlocks } from "../DarkNet/effects/ramblock";
 
 /**
@@ -166,7 +165,7 @@ export function loadAllServers(saveString: string): void {
     throw new Error("Server list is empty.");
   }
   for (const [serverName, server] of Object.entries(allServersData)) {
-    if (!(server instanceof Server) && !(server instanceof HacknetServer) && !isDarknetServer(server as BaseServer)) {
+    if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);
     }
   }

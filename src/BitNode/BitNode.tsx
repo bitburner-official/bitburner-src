@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from "@player";
-import { AugmentationName, CityName, FactionName } from "@enums";
+import { AugmentationName, CityName, CompletedProgramName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
 
 class BitNode {
@@ -209,7 +209,7 @@ export function initBitNodes() {
           <li>
             <code>getBitNodeMultipliers()</code> Netscript function
           </li>
-          <li>Permanent access to Formulas.exe</li>
+          <li>Permanent access to {CompletedProgramName.formulas}</li>
           <li>
             Access to BitNode multiplier information on the <b>Stats</b> page
           </li>
@@ -572,7 +572,7 @@ export function initBitNodes() {
       <>
         This Source-File grants the following benefits:
         <ul>
-          <li>Level 1: Permanently start with the TOR router and DarkscapeNavigator.exe</li>
+          <li>Level 1: Permanently start with the TOR router and {CompletedProgramName.darkscape}</li>
           <li>
             Level 2: Your charisma level increases job salary and rep gain. Also increases authentication speed by 20%
           </li>

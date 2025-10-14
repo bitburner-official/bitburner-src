@@ -6,7 +6,7 @@ import {
   createUniqueRandomIp,
   ipExists,
 } from "./AllServers";
-import { Server, IConstructorParams } from "./Server";
+import { Server, StandardServerConstructorParams } from "./Server";
 import { BaseServer } from "./BaseServer";
 import { calculateGrowMoney, calculateServerGrowthLog } from "./formulas/grow";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
@@ -39,7 +39,7 @@ export enum ServerOwnershipType {
  * Constructs a new server, while also ensuring that the new server
  * does not have a duplicate hostname/ip.
  */
-export function safelyCreateUniqueServer(params: IConstructorParams): Server {
+export function safelyCreateUniqueServer(params: StandardServerConstructorParams): Server {
   let hostname: string = params.hostname.replace(/ /g, `-`);
 
   if (params.ip != null && ipExists(params.ip)) {
