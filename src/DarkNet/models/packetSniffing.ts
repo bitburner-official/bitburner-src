@@ -5,7 +5,7 @@ import { LocationName } from "@enums";
 import { getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { ModelIds } from "../Enums";
-import { getDarknetServerSafely } from "../utils/darknetServerUtils";
+import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 import { getExactCorrectChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
@@ -29,7 +29,7 @@ export const capturePackets = (server: DarknetServer) => {
   }
   if (Math.random() < passwordInclusionChance) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    const connectedServer = getDarknetServerSafely(connectedServerName);
+    const connectedServer = getDarknetServer(connectedServerName);
     if (connectedServer) {
       const intro = Math.floor(Math.random() * 124);
       return `${getRandomData(server, intro)} ${connectedServerName}:${connectedServer.password} ${getRandomData(
@@ -163,7 +163,7 @@ const getLogNoise = (server: DarknetServer, logDate: Date) => {
   }
   if (Math.random() < 0.05 * (1 / (server.difficulty + 1))) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    const connectedServer = getDarknetServerSafely(connectedServerName);
+    const connectedServer = getDarknetServer(connectedServerName);
     if (connectedServer) {
       return `Connecting to ${connectedServerName}:${connectedServer.password} ...`;
     }

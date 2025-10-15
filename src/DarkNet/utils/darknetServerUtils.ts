@@ -1,14 +1,21 @@
 import { DarknetServer } from "../../Server/DarknetServer";
 import { GetServer } from "../../Server/AllServers";
-import { DarknetState } from "../models/DarknetState";
 
-export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | null => {
-  const server = GetServer(hostnameOrIp);
+export const getDarknetServer = (host: string): DarknetServer | null => {
+  const server = GetServer(host);
   if (!server || !(server instanceof DarknetServer)) {
     return null;
   }
   return server;
 };
 
-export const isImmutable = (server: DarknetServer) =>
-  server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;
+export function getDarknetServerOrThrow(host: string): DarknetServer {
+  const server = GetServer(host);
+  if (!server) {
+    throw new Error(`Server ${host} does not exist.`);
+  }
+  if (!(server instanceof DarknetServer)) {
+    throw new Error(`Server ${host} is not a darknet server.`);
+  }
+  return server;
+}

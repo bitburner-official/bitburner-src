@@ -13,7 +13,6 @@ import { throttle } from "lodash";
 import { ServerStatusBox } from "./ServerStatusBox";
 import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
-import { GetDarknetServerOrThrow } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles } from "./dnetStyles";
@@ -24,6 +23,8 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
+import { getDarknetServer, getDarknetServerOrThrow } from "../utils/darknetServerUtils";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -71,9 +72,21 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const allowAuth = (server: DarknetServer | null) =>
     !!server &&
     (server.hasAdminRights ||
-      server.serversOnNetwork.some((neighbor) => GetDarknetServerOrThrow(neighbor).hasAdminRights));
+      server.serversOnNetwork.some((neighbor) => {
+        const neighborServer = getDarknetServer(neighbor);
+        if (neighborServer == null) {
+          exceptionAlert(
+            new Error(
+              `Found invalid neighbor dnet server. Server: ${server.hostname}. serversOnNetwork: ${server.serversOnNetwork}. ` +
+                `neighbor: ${neighbor}. offlineServers: ${DarknetState.offlineServers}`,
+            ),
+          );
+          return false;
+        }
+        return neighborServer.hasAdminRights;
+      }));
 
-  const darkWebRoot = GetDarknetServerOrThrow(SpecialServers.DarkWeb);
+  const darkWebRoot = getDarknetServerOrThrow(SpecialServers.DarkWeb);
   const labDetails = getLabyrinthDetails();
   const labyrinth = labDetails.lab;
   const depth = labDetails.depth;

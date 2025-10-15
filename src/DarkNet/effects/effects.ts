@@ -17,7 +17,7 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
-import { getDarknetServerSafely } from "../utils/darknetServerUtils";
+import { getDarknetServer } from "../utils/darknetServerUtils";
 import {
   getAllMobileDarknetServers,
   getBackdooredDarkwebServers,
@@ -164,10 +164,10 @@ export const addClue = (server: DarknetServer) => {
     const passwordHintName =
       passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
     const neighboringServerName = server.serversOnNetwork.find((s) => {
-      const server = getDarknetServerSafely(s);
+      const server = getDarknetServer(s);
       return server && !server.hasAdminRights && server.password;
     });
-    const neighboringServer = neighboringServerName ? getDarknetServerSafely(neighboringServerName) : null;
+    const neighboringServer = neighboringServerName ? getDarknetServer(neighboringServerName) : null;
     if (neighboringServer) {
       server.writeToTextFile(passwordHintName as TextFilePath, `Remember this password: ${neighboringServer.password}`);
       return;

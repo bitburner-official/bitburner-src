@@ -1,10 +1,4 @@
-import {
-  connectServers,
-  DeleteServer,
-  disconnectServers,
-  GetDarknetServerOrThrow,
-  GetServer,
-} from "../../Server/AllServers";
+import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
 import { DarknetEvents, DarknetState, getServerState, storeDarknetCycles } from "../models/DarknetState";
 import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
@@ -20,10 +14,10 @@ import {
   getDarknetCyclesPerMutation,
   getIslands,
 } from "../utils/darknetNetworkUtils";
-import { isImmutable } from "../utils/darknetServerUtils";
 import { DarknetConstants } from "../Constants";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
 
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);
@@ -197,6 +191,9 @@ export const balanceDarknetServers = () => {
   }
 };
 
+const isImmutable = (server: DarknetServer) =>
+  server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;
+
 export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, maxDepthIncrease = 3) => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to move darkweb"), true);
@@ -269,7 +266,7 @@ export const addGuaranteedConnection = (server: DarknetServer) => {
 };
 
 export const sanitizeDarkwebNetwork = () => {
-  const darkweb = GetDarknetServerOrThrow(SpecialServers.DarkWeb);
+  const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
   const servers = [...getAllMobileDarknetServers(), darkweb];
   for (const server of servers) {
     // WIP

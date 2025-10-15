@@ -41,7 +41,7 @@ import {
   getServersOnRowAbove,
   getServersOnRowBelow,
 } from "../utils/darknetNetworkUtils";
-import { getDarknetServerSafely } from "../utils/darknetServerUtils";
+import { getDarknetServer } from "../utils/darknetServerUtils";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { JSONMap } from "../../Types/Jsonable";
 import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
@@ -125,7 +125,7 @@ export const clearDarknet = (force = false) => {
   }
 
   for (const lab of getLabyrinthServerNames()) {
-    const labyrinth = getDarknetServerSafely(lab);
+    const labyrinth = getDarknetServer(lab);
     if (!labyrinth) continue;
     deleteDarknetServer(labyrinth);
   }

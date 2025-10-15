@@ -134,7 +134,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
           // Authentication has a chance to timeout based on darknet instability
           if (Math.random() < getTimeoutChance()) {
-            logger(ctx)(`Autnetication to ${targetHostname} timed out due to network instability. Please try again.`);
+            logger(ctx)(`Authentication to ${targetHostname} timed out due to network instability. Please try again.`);
             return {
               success: false,
               message: ResponseStatus.TIMEOUT,

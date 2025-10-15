@@ -490,7 +490,7 @@ export function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
   const server = GetServer(hostname);
   if (
     server == null ||
-    (server.serversOnNetwork.length == 0 && server.hostname !== "home" && !(server instanceof DarknetServer))
+    (server.serversOnNetwork.length === 0 && server.hostname !== "home" && !(server instanceof DarknetServer))
   ) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw errorMessage(ctx, `Invalid hostname: ${str}`);

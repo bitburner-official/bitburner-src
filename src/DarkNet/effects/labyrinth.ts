@@ -8,7 +8,7 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { ResponseStatus } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
-import { getDarknetServerSafely } from "../utils/darknetServerUtils";
+import { getDarknetServer } from "../utils/darknetServerUtils";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -389,7 +389,7 @@ export const getLabyrinthDetails = (): {
   if (hasAugment(AugmentationName.TheSword)) {
     const data = labData[SpecialServers.FinalLab];
     return {
-      lab: getDarknetServerSafely(SpecialServers.FinalLab),
+      lab: getDarknetServer(SpecialServers.FinalLab),
       depth: data.depth,
       manual: false,
       mazeWidth: 10,
@@ -433,7 +433,7 @@ export const getLabyrinthDetails = (): {
   const labDetails = labData[labName];
 
   return {
-    lab: getDarknetServerSafely(labName) ?? null,
+    lab: getDarknetServer(labName),
     augReward: labDetails.augReward,
     depth: labDetails.depth,
     manual: labDetails.manual,
