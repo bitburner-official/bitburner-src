@@ -900,6 +900,12 @@ export const ns: InternalAPI<NSFull> = {
   getServer: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
     const server = helpers.getServer(ctx, host);
+    if (server instanceof DarknetServer) {
+      throw helpers.errorMessage(
+        ctx,
+        `${server.hostname} is a darknet server. If you want to get darknet server data, you have to use ns.dnet.getServer().`,
+      );
+    }
     return {
       hostname: server.hostname,
       ip: server.ip,
