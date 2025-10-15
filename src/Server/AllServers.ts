@@ -125,9 +125,14 @@ export function createUniqueRandomIp(): IPAddress {
 // Safely add a Server to the AllServers map
 export function AddToAllServers(server: Server | HacknetServer | DarknetServer): void {
   if (GetServer(server.hostname)) {
-    console.warn(`The hostname of the server that's being added is: ${server.hostname}`);
-    console.warn(`The server that already has this hostname is: ${AllServers[server.hostname].hostname}`);
+    console.error(`The hostname of the server that's being added is: ${server.hostname}`);
+    console.error(`The server that already has this hostname is: ${AllServers[server.hostname].hostname}`);
     throw new Error(`Error: Trying to add a server with an existing hostname. Hostname: ${server.hostname}.`);
+  }
+  if (GetServer(server.ip)) {
+    console.error(`The IP of the server that's being added is: ${server.ip}`);
+    console.error(`The server that already has this IP is: ${AllServers[server.hostname].ip}`);
+    throw new Error(`Error: Trying to add a server with an existing IP. IP: ${server.ip}.`);
   }
 
   AllServers[server.hostname] = server;
