@@ -164,6 +164,7 @@ export const deleteDarknetServer = (server: DarknetServer, force = false) => {
     DarknetState.offlineServers.push(server.hostname);
   }
   DeleteServer(server.hostname);
+  sanitizeDarkwebNetwork();
 };
 
 export const addRandomDarknetServers = (count = 1, difficulty?: number) => {
@@ -237,6 +238,7 @@ export const disconnectServer = (server: DarknetServer, disconnectDarkweb = fals
       disconnectServers(server, connectedServer);
     }
   });
+  server.serversOnNetwork = server.serversOnNetwork.filter((serv) => GetServer(serv));
 };
 
 export const restartServer = (server: DarknetServer) => {
@@ -250,6 +252,7 @@ export const restartServer = (server: DarknetServer) => {
   disconnectServer(server);
   addGuaranteedConnection(server);
   addGuaranteedConnection(server);
+  sanitizeDarkwebNetwork();
 };
 
 export const addGuaranteedConnection = (server: DarknetServer) => {

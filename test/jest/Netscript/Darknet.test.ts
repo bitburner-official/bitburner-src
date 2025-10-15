@@ -3,7 +3,7 @@ import { Player } from "@player";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { addCacheToServer } from "../../../src/DarkNet/effects/cacheFiles";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
-import { GetDarknetServerOrThrow, GetServerOrThrow } from "../../../src/Server/AllServers";
+import { GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import {
@@ -15,6 +15,7 @@ import {
 } from "../Utilities";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { getServerState } from "../../../src/DarkNet/models/DarknetState";
+import { getDarknetServerOrThrow } from "../../../src/DarkNet/utils/darknetServerUtils";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Target server ${hostnameOfNonExistentServer} does not exist. It may have gone offline.`;
@@ -64,7 +65,7 @@ describe("Common APIs", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const result1 = ns.dnet.unleashStormSeed();
     expect(result1.success).toStrictEqual(false);
-    GetDarknetServerOrThrow(ns.getHostname()).programs.push(CompletedProgramName.stormSeed);
+    getDarknetServerOrThrow(ns.getHostname()).programs.push(CompletedProgramName.stormSeed);
     const result2 = ns.dnet.unleashStormSeed();
     // WIP: Add more tests
     expect(result2.success).toStrictEqual(true);
@@ -180,7 +181,7 @@ describe("home", () => {
     if (!dnetServerHostname) {
       throw new Error("Cannot find any darknet server connected to darkweb");
     }
-    const dnetServer = GetDarknetServerOrThrow(dnetServerHostname);
+    const dnetServer = getDarknetServerOrThrow(dnetServerHostname);
 
     // Cannot scp before authenticating
     expect(dnetServer.hasAdminRights).toStrictEqual(false);
@@ -551,7 +552,7 @@ describe("darkweb", () => {
   });
   test("openCache", () => {
     const ns = getNsOnDarkWeb();
-    const darkweb = GetDarknetServerOrThrow(SpecialServers.DarkWeb);
+    const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
     const result = addCacheToServer(darkweb, "test");
     if (!result.success) {
       throw new Error("Cannot add cache");
@@ -627,18 +628,18 @@ describe("Non-darkweb darknet server", () => {
   test("authenticate from darkweb", async () => {
     const ns = getNsOnDarkWeb();
     const target = getFirstDarknetServerAdjacentToDarkWeb();
-    const result = await ns.dnet.authenticate(target, GetDarknetServerOrThrow(target).password);
+    const result = await ns.dnet.authenticate(target, getDarknetServerOrThrow(target).password);
     expect(result.success).toStrictEqual(true);
   });
   test("authenticate itself", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = await ns.dnet.authenticate(ns.getHostname(), GetDarknetServerOrThrow(ns.getHostname()).password);
+    const result = await ns.dnet.authenticate(ns.getHostname(), getDarknetServerOrThrow(ns.getHostname()).password);
     expect(result.success).toStrictEqual(true);
   });
   test("connectToSession from darkweb", async () => {
     const ns = getNsOnDarkWeb();
     const target = getFirstDarknetServerAdjacentToDarkWeb();
-    const password = GetDarknetServerOrThrow(target).password;
+    const password = getDarknetServerOrThrow(target).password;
     const result1 = await ns.dnet.authenticate(target, password);
     expect(result1.success).toStrictEqual(true);
     const result2 = ns.dnet.connectToSession(target, password);
@@ -658,7 +659,7 @@ describe("Non-darkweb darknet server", () => {
   });
   test("openCache", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = addCacheToServer(GetDarknetServerOrThrow(ns.getHostname()), "test.cache");
+    const result = addCacheToServer(getDarknetServerOrThrow(ns.getHostname()), "test.cache");
     if (!result.success) {
       throw new Error(result.message);
     }
@@ -680,12 +681,12 @@ describe("Non-darkweb darknet server", () => {
     const stasisLinkServers = ns.dnet.getStasisLinkedServers();
     expect(stasisLinkServers.length).toStrictEqual(1);
     expect(stasisLinkServers[0]).toStrictEqual(ns.getHostname());
-    expect(GetDarknetServerOrThrow(ns.getHostname()).hasStasisLink).toStrictEqual(true);
+    expect(getDarknetServerOrThrow(ns.getHostname()).hasStasisLink).toStrictEqual(true);
 
     // Remove stasis link
     const result2 = await ns.dnet.setStasisLink(false);
     expect(result2.success).toStrictEqual(true);
-    expect(GetDarknetServerOrThrow(ns.getHostname()).hasStasisLink).toStrictEqual(false);
+    expect(getDarknetServerOrThrow(ns.getHostname()).hasStasisLink).toStrictEqual(false);
   });
   test("getServer", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
@@ -695,7 +696,7 @@ describe("Non-darkweb darknet server", () => {
   test("getServerAuthDetails", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const authDetails = ns.dnet.getServerAuthDetails();
-    expect(authDetails.modelId).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).modelId);
+    expect(authDetails.modelId).toStrictEqual(getDarknetServerOrThrow(ns.getHostname()).modelId);
   });
   test("packetCapture from home", async () => {
     const ns = getNsOnHome();
@@ -724,7 +725,7 @@ describe("Non-darkweb darknet server", () => {
     const result1 = await ns.dnet.memoryReallocation();
     expect(result1.success).toStrictEqual(false);
     const target = ns.getHostname();
-    const server = GetDarknetServerOrThrow(target);
+    const server = getDarknetServerOrThrow(target);
     server.ramUsed = server.blockedRam = 1;
     const password = server.password;
     const result2 = await ns.dnet.authenticate(target, password);
@@ -735,12 +736,12 @@ describe("Non-darkweb darknet server", () => {
   test("getBlockedRam", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const result = ns.dnet.getBlockedRam();
-    expect(result).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).blockedRam);
+    expect(result).toStrictEqual(getDarknetServerOrThrow(ns.getHostname()).blockedRam);
   });
   test("getDepth", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const result = ns.dnet.getDepth();
-    expect(result).toStrictEqual(GetDarknetServerOrThrow(ns.getHostname()).depth);
+    expect(result).toStrictEqual(getDarknetServerOrThrow(ns.getHostname()).depth);
   });
   test("promoteStock", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
