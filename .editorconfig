@@ -6,8 +6,5 @@ indent_size = 2
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[src/ScriptEditor/NetscriptDefinitions.d.ts]
-trim_trailing_whitespace = false
-
 [*.md]
 trim_trailing_whitespace = false

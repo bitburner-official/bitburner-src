@@ -18,14 +18,14 @@ import {
   getStockMarketTixApiCost,
 } from "../StockMarket/StockMarketCosts";
 import type { Stock } from "../StockMarket/Stock";
-import type { StockOrder, TIX } from "@nsdefs";
+import type { StockOrder, Stock as StockAPI } from "@nsdefs";
 import { setRemovedFunctions, type InternalAPI, type NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { getDarknetVolatilityMult } from "../DarkNet/effects/effects";
 
-export function NetscriptStockMarket(): InternalAPI<TIX> {
+export function NetscriptStockMarket(): InternalAPI<StockAPI> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
   const checkTixApiAccess = function (ctx: NetscriptContext): void {
     if (!Player.hasTixApiAccess) {
@@ -42,7 +42,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     return stock;
   };
 
-  const stockFunctions: InternalAPI<TIX> = {
+  const stockFunctions: InternalAPI<StockAPI> = {
     getConstants: () => () => structuredClone(StockMarketConstants),
     hasWseAccount: () => () => Player.hasWseAccount,
     hasTixApiAccess: () => () => Player.hasTixApiAccess,

@@ -1294,6 +1294,17 @@ Stanek's Gift API.
 </td></tr>
 <tr><td>
 
+[Stock](./bitburner.stock.md)
+
+
+</td><td>
+
+Stock market API
+
+
+</td></tr>
+<tr><td>
+
 [StockMarketConstants](./bitburner.stockmarketconstants.md)
 
 
@@ -1331,17 +1342,6 @@ Study
 
 </td><td>
 
-
-
-</td></tr>
-<tr><td>
-
-[TIX](./bitburner.tix.md)
-
-
-</td><td>
-
-Stock market API
 
 
 </td></tr>
