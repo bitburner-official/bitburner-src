@@ -4,10 +4,11 @@ import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
+import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,
+  getAllDarknetServers,
   getAllMobileDarknetServers,
   getAllOpenPositions,
   getBackdooredDarkwebServers,
@@ -17,9 +18,8 @@ import {
 import { DarknetConstants } from "../Constants";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
-import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
 
-export const processDarknet = (cycles: number) => {
+export const processDarknet = (cycles: number): void => {
   storeDarknetCycles(cycles);
 
   if (DarknetState.storedCycles < DarknetConstants.MinCyclesToProcess) {
@@ -36,7 +36,7 @@ export const processDarknet = (cycles: number) => {
   }
 };
 
-export const mutateDarknet = () => {
+export const mutateDarknet = (): void => {
   if (!DarknetState.allowMutating) {
     return;
   }
@@ -55,7 +55,9 @@ export const mutateDarknet = () => {
   if (Math.random() < 0.3) {
     const islands = getIslands();
     const island = islands[Math.floor(Math.random() * islands.length)];
-    island && moveDarknetServer(island);
+    if (island) {
+      moveDarknetServer(island);
+    }
   }
 
   if (Math.random() < 0.1) {
@@ -69,6 +71,7 @@ export const mutateDarknet = () => {
     for (let i = 0; i < serversToAdd; i++) {
       addRandomDarknetServers();
     }
+    // WIP-@fico: Some if return immediately, some do not. Is this intentional?
     return;
   }
 
@@ -92,8 +95,7 @@ export const mutateDarknet = () => {
 
   if (Math.random() < 0.2) {
     // restart a server
-    const server = servers[Math.floor(Math.random() * servers.length)];
-    restartServer(server);
+    restartRandomServer();
   }
 
   if (Math.random() < 0.5) {
@@ -101,57 +103,64 @@ export const mutateDarknet = () => {
   }
 
   if (Math.random() < 0.5) {
-    // add a couple connections
-    const server2 = servers[Math.floor(Math.random() * servers.length)];
-    addGuaranteedConnection(server2);
-    addGuaranteedConnection(server2);
+    addConnectionsToRandomServer();
     return;
   }
 
   if (Math.random() < 0.5) {
     // delink all connections from a server
-    const server3 = servers[Math.floor(Math.random() * servers.length)];
-    disconnectServer(server3);
+    disconnectionRandomServer();
   }
 
   if (Math.random() < 0.1) {
     // balance network to stay at a certain density
     balanceDarknetServers();
   }
-  sanitizeDarkwebNetwork();
+  validateDarknetNetwork();
+  DarknetEvents.emit();
 };
 
-export const restartAllDarknetServers = () => {
+export const restartAllDarknetServers = (): void => {
   const servers = getAllMobileDarknetServers();
   for (const server of servers) {
     restartServer(server);
   }
 };
 
-export const moveRandomDarknetServers = (count = 1) => {
-  const servers = getAllMobileDarknetServers();
+export const moveRandomDarknetServers = (count = 1): void => {
   for (let i = 0; i < count; i++) {
+    const servers = getAllMobileDarknetServers();
+    if (servers.length === 0) {
+      break;
+    }
     const server = servers[Math.floor(Math.random() * servers.length)];
     moveDarknetServer(server);
   }
 };
 
-export const deleteRandomDarknetServers = (count = 1) => {
+export const deleteRandomDarknetServers = (count = 1): void => {
   for (let i = 0; i < count; i++) {
+    /**
+     * WIP-@fico: Do we need to filter labyrinth servers? "isMobile" of labyrinth servers is false, so they should not
+     * be returned in getAllMobileDarknetServers(), unless there are bugs in getAllMobileDarknetServers or addLabyrinth.
+     * If we want to make sure there are no regression bugs, I think we should add some tests instead of filtering here.
+     */
     const servers = getAllMobileDarknetServers().filter((server) => !isLabyrinthServer(server.hostname));
+    if (servers.length === 0) {
+      break;
+    }
     const serverToDelete = servers[Math.floor(Math.random() * servers.length)];
     deleteDarknetServer(serverToDelete);
   }
-  sanitizeDarkwebNetwork();
 };
 
-export const deleteDarknetServer = (server: DarknetServer, force = false) => {
+export const deleteDarknetServer = (server: DarknetServer, force = false): void => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to delete darkweb"), true);
-    return false;
+    return;
   }
   if (isImmutable(server) && !force) {
-    return false;
+    return;
   }
   const isLabyrinth = isLabyrinthServer(server.hostname);
   movePlayerIfNeeded(server);
@@ -164,10 +173,9 @@ export const deleteDarknetServer = (server: DarknetServer, force = false) => {
     DarknetState.offlineServers.push(server.hostname);
   }
   DeleteServer(server.hostname);
-  sanitizeDarkwebNetwork();
 };
 
-export const addRandomDarknetServers = (count = 1, difficulty?: number) => {
+export const addRandomDarknetServers = (count = 1, difficulty?: number): void => {
   for (let i = 0; i < count; i++) {
     const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
     const newServer = createDarknetServer(diff, -1, -1);
@@ -179,23 +187,24 @@ export const addRandomDarknetServers = (count = 1, difficulty?: number) => {
       DarknetState.offlineServers = DarknetState.offlineServers.filter((s) => s !== newServer.hostname);
     }
   }
-  sanitizeDarkwebNetwork();
 };
 
-export const balanceDarknetServers = () => {
-  if (getAllMobileDarknetServers().length > getNetDepth() * NET_WIDTH * SERVER_DENSITY) {
-    const serversToRemove = getAllMobileDarknetServers().length - getNetDepth() * NET_WIDTH * SERVER_DENSITY;
+export const balanceDarknetServers = (): void => {
+  const mobileServers = getAllMobileDarknetServers();
+  const netDepth = getNetDepth();
+  if (mobileServers.length > netDepth * NET_WIDTH * SERVER_DENSITY) {
+    const serversToRemove = mobileServers.length - netDepth * NET_WIDTH * SERVER_DENSITY;
     deleteRandomDarknetServers(serversToRemove);
   } else {
-    const serversToAdd = getNetDepth() * NET_WIDTH * SERVER_DENSITY - getAllMobileDarknetServers().length;
+    const serversToAdd = netDepth * NET_WIDTH * SERVER_DENSITY - mobileServers.length;
     addRandomDarknetServers(serversToAdd);
   }
 };
 
-const isImmutable = (server: DarknetServer) =>
+const isImmutable = (server: DarknetServer): boolean =>
   server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;
 
-export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, maxDepthIncrease = 3) => {
+export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, maxDepthIncrease = 3): boolean => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to move darkweb"), true);
     return false;
@@ -223,27 +232,46 @@ export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, m
   return true;
 };
 
-export const disconnectServer = (server: DarknetServer, disconnectDarkweb = false) => {
+const disconnectionRandomServer = (): void => {
+  const servers = getAllMobileDarknetServers();
+  if (servers.length === 0) {
+    return;
+  }
+  const server = servers[Math.floor(Math.random() * servers.length)];
+  disconnectServer(server);
+};
+
+/**
+ * WIP-@fico: What is the purpose of disconnectDarkweb?
+ */
+export const disconnectServer = (server: DarknetServer, disconnectDarkweb = false): void => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to disconnect darkweb"), true);
-    return false;
+    return;
   }
   if (isImmutable(server)) {
-    return false;
+    return;
   }
-  server.serversOnNetwork.forEach((conn) => {
-    const connectedServer = GetServer(conn);
+  for (const neighbor of server.serversOnNetwork) {
+    const connectedServer = GetServer(neighbor);
     const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
     if (connectedServer && isOkToDisconnect) {
       disconnectServers(server, connectedServer);
     }
-  });
-  server.serversOnNetwork = server.serversOnNetwork.filter((serv) => GetServer(serv));
+  }
 };
 
-export const restartServer = (server: DarknetServer) => {
+const restartRandomServer = (): void => {
+  const servers = getAllMobileDarknetServers();
+  if (servers.length === 0) {
+    return;
+  }
+  restartServer(servers[Math.floor(Math.random() * servers.length)]);
+};
+
+export const restartServer = (server: DarknetServer): void => {
   if (isImmutable(server)) {
-    return false;
+    return;
   }
   killScripts(server);
   const serverState = getServerState(server.hostname);
@@ -251,11 +279,18 @@ export const restartServer = (server: DarknetServer) => {
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);
-  addGuaranteedConnection(server);
-  sanitizeDarkwebNetwork();
 };
 
-export const addGuaranteedConnection = (server: DarknetServer) => {
+const addConnectionsToRandomServer = (): void => {
+  const servers = getAllMobileDarknetServers();
+  if (servers.length === 0) {
+    return;
+  }
+  const server = servers[Math.floor(Math.random() * servers.length)];
+  addGuaranteedConnection(server);
+};
+
+export const addGuaranteedConnection = (server: DarknetServer): void => {
   if (isLabyrinthServer(server.hostname)) {
     return;
   }
@@ -268,33 +303,55 @@ export const addGuaranteedConnection = (server: DarknetServer) => {
   connectServers(server, neighbor);
 };
 
-export const sanitizeDarkwebNetwork = () => {
-  const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
-  const servers = [...getAllMobileDarknetServers(), darkweb];
+export const validateDarknetNetwork = (): void => {
+  const servers = getAllDarknetServers();
+  /**
+   * WIP-@fico: Please check if my comment below is correct. I assume the darknet always has darkweb and labyrinth
+   * servers, but I'm not sure if there are special cases.
+   */
+  // The darknet should have at least darkweb and labyrinth servers.
+  if (servers.length < getLabyrinthServerNames().length + 1) {
+    exceptionAlert(new Error(`There are too few darknet servers. servers.length: ${servers.length}`), true);
+  }
   for (const server of servers) {
-    // WIP
-    if (!GetServer(server.hostname) && DarknetState.Network[server.depth]) {
-      DarknetState.Network[server.depth][server.leftOffset] = null;
-      disconnectServer(server, true);
-      deleteDarknetServer(server);
-      continue;
+    if (server.depth !== -1 && DarknetState.Network[server.depth]?.[server.leftOffset]?.hostname !== server.hostname) {
+      exceptionAlert(
+        new Error(
+          `${server.hostname} does not exist in DarknetState.Network at [${server.depth}][${server.leftOffset}]`,
+        ),
+        true,
+      );
     }
-
-    for (const conn of server.serversOnNetwork) {
-      // WIP
-      const connection = GetServer(conn);
-      if (!connection) {
-        server.serversOnNetwork = server.serversOnNetwork.filter((c) => c !== conn);
+    for (const neighborHostname of server.serversOnNetwork) {
+      const neighbor = GetServer(neighborHostname);
+      if (!neighbor) {
+        exceptionAlert(
+          new Error(
+            `Found invalid neighbor dnet server. hostname: ${server.hostname}. neighbor: ${neighborHostname}. ` +
+              `serversOnNetwork: ${server.serversOnNetwork}`,
+          ),
+          true,
+        );
         continue;
       }
-      if (!connection.serversOnNetwork.includes(server.hostname)) {
-        server.serversOnNetwork = server.serversOnNetwork.filter((c) => c !== connection.hostname);
+      if (!neighbor.serversOnNetwork.includes(server.hostname)) {
+        exceptionAlert(
+          new Error(
+            `The connection between ${server.hostname} and ${neighbor.hostname} is unidirectional. ` +
+              `server.serversOnNetwork: ${server.serversOnNetwork}. neighbor.serversOnNetwork: ${neighbor.serversOnNetwork}`,
+          ),
+          true,
+        );
       }
     }
-
-    if (server.depth === 0 && darkweb) {
-      connectServers(server, darkweb);
+    if (server.depth === 0 && !server.serversOnNetwork.includes(SpecialServers.DarkWeb)) {
+      exceptionAlert(
+        new Error(
+          `${server.hostname} at depth 0 does not have a connection to ${SpecialServers.DarkWeb}. ` +
+            `server.serversOnNetwork: ${server.serversOnNetwork}`,
+        ),
+        true,
+      );
     }
   }
-  DarknetEvents.emit();
 };

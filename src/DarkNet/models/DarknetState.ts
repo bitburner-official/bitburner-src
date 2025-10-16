@@ -19,7 +19,7 @@ export const DarknetState = {
   allowMutating: true,
   openServer: null as BaseServer | null,
 
-  Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (DarknetServer | null)[]),
+  Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null)),
 
   labyrinth: null as string[] | null,
   labLocations: { "-1": [1, 1] } as Record<number, [number, number]>,

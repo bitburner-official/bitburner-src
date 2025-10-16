@@ -1,4 +1,4 @@
-import { DarknetState } from "../models/DarknetState";
+import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { CompletedProgramName, ToastVariant } from "@enums";
 import {
@@ -7,12 +7,18 @@ import {
   deleteRandomDarknetServers,
   moveRandomDarknetServers,
   restartAllDarknetServers,
+  validateDarknetNetwork,
 } from "../controllers/NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
 import { NET_WIDTH } from "../Enums";
 import { sleep } from "../../utils/Utility";
 import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
+
+const validateDarknetNetworkAndEmitDarknetEvent = (): void => {
+  validateDarknetNetwork();
+  DarknetEvents.emit();
+};
 
 export const launchWebstorm = async (suppressToast = false) => {
   DarknetState.allowMutating = false;
@@ -25,19 +31,32 @@ export const launchWebstorm = async (suppressToast = false) => {
   deleteRandomDarknetServers(serversToDelete);
   moveRandomDarknetServers((getAllMobileDarknetServers().length - serversToDelete) * 0.6);
   restartAllDarknetServers();
+  validateDarknetNetworkAndEmitDarknetEvent();
 
   await sleep(4000);
   addRandomDarknetServers(NET_WIDTH);
+  validateDarknetNetworkAndEmitDarknetEvent();
+
   await sleep(4000);
   addRandomDarknetServers(NET_WIDTH * 2);
+  validateDarknetNetworkAndEmitDarknetEvent();
+
   await sleep(4000);
   addRandomDarknetServers(NET_WIDTH * 2);
+  validateDarknetNetworkAndEmitDarknetEvent();
+
   await sleep(8000);
   balanceDarknetServers();
+  validateDarknetNetworkAndEmitDarknetEvent();
+
   await sleep(5000);
   DarknetState.allowMutating = true;
 };
 
+/**
+ * WIP-@fico: It's time to decide if we should use this function. If yes, please add a test for it in
+ * test\jest\Darknet\Darknet.test.ts
+ */
 // TODO: launch this if the player has been offline for long enough?
 export const applyOfflineWebstorm = () => {
   const serversToDelete = getAllMobileDarknetServers().length * 0.5 + (Math.random() * getNetDepth() - 4);
@@ -45,6 +64,7 @@ export const applyOfflineWebstorm = () => {
   restartAllDarknetServers();
 
   balanceDarknetServers();
+  validateDarknetNetworkAndEmitDarknetEvent();
 };
 
 export const handleStormSeed = (server: BaseServer) => {

@@ -135,10 +135,14 @@ export const generateMaze = (width: number = 41, height: number = 29): string[] 
   return resultingMaze.map((row) => row.join(""));
 };
 
+/**
+ * WIP-@fico: While checking my note in test\jest\Darknet\labyrinth.test.ts, please also check this function. Do we need
+ * "as [number, number]"?
+ */
 const mazeMaker = (setWidth: number, setHeight: number): string[][] => {
   const width = setWidth % 2 === 0 ? setWidth + 1 : setWidth;
   const height = setHeight % 2 === 0 ? setHeight + 1 : setHeight;
-  const maze: string[][] = Array.from({ length: height }, () => Array(width).fill(WALL) as string[]);
+  const maze: string[][] = Array.from({ length: height }, () => Array<string>(width).fill(WALL));
   const stack: [number, number][] = [];
   stack.push([1, 1]);
   const directions = [NORTH, EAST, SOUTH, WEST];
@@ -345,7 +349,7 @@ export const getLabyrinthServerNames = () => {
   return labHostnames;
 };
 
-export const getLabyrinthChaiRequirement = (name: string) => {
+export const getLabyrinthChaRequirement = (name: string) => {
   return labData[name]?.cha ?? 0;
 };
 

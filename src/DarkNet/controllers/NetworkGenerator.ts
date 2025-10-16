@@ -19,7 +19,7 @@ import { Icon, labIcon } from "../ui/ServerIcon";
 import { Player } from "@player";
 import { Terminal } from "../../Terminal";
 import {
-  getLabyrinthChaiRequirement,
+  getLabyrinthChaRequirement,
   getLabyrinthDetails,
   getLabyrinthServerNames,
   getNetDepth,
@@ -192,6 +192,7 @@ export const addServerToNetwork = (server: DarknetServer, x: number, y: number) 
   if (DarknetState.Network[x][y]?.hostname) {
     exceptionAlert(
       `Server already exists at this coordinate. Hostname: ${DarknetState.Network[x][y].hostname}. Coordinate: ${x}-${y}`,
+      true,
     );
     return;
   }
@@ -242,7 +243,7 @@ export const addLabyrinth = () => {
       hostname: hostname,
       ip: createUniqueRandomIp(),
       password: `!!the:masterwork:of:daedalus<${passwordSalt}>!!`,
-      requiredCharismaSkill: getLabyrinthChaiRequirement(hostname),
+      requiredCharismaSkill: getLabyrinthChaRequirement(hostname),
     });
     AddToAllServers(server);
   }

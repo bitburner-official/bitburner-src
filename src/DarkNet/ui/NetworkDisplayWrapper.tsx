@@ -23,8 +23,7 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
-import { getDarknetServer, getDarknetServerOrThrow } from "../utils/darknetServerUtils";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -72,19 +71,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const allowAuth = (server: DarknetServer | null) =>
     !!server &&
     (server.hasAdminRights ||
-      server.serversOnNetwork.some((neighbor) => {
-        const neighborServer = getDarknetServer(neighbor);
-        if (neighborServer == null) {
-          exceptionAlert(
-            new Error(
-              `Found invalid neighbor dnet server. Server: ${server.hostname}. serversOnNetwork: ${server.serversOnNetwork}. ` +
-                `neighbor: ${neighbor}. offlineServers: ${DarknetState.offlineServers}`,
-            ),
-          );
-          return false;
-        }
-        return neighborServer.hasAdminRights;
-      }));
+      server.serversOnNetwork.some((neighbor) => getDarknetServerOrThrow(neighbor).hasAdminRights));
 
   const darkWebRoot = getDarknetServerOrThrow(SpecialServers.DarkWeb);
   const labDetails = getLabyrinthDetails();

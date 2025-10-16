@@ -36,10 +36,7 @@ export type DarknetServerOptions = {
   leftOffset: number;
 };
 
-export const DnetServerBuilder = (
-  options: DarknetServerOptions,
-  name: string = generateDarknetServerName(),
-): DarknetServer => {
+export const DnetServerBuilder = (options: DarknetServerOptions, name = generateDarknetServerName()): DarknetServer => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
   const ramBlock = getRamBlock(maxRam);
 

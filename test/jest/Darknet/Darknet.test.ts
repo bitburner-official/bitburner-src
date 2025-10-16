@@ -15,8 +15,27 @@ import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionar
 import { checkPassword, getAuthResult } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 import { ResponseStatus } from "../../../src/DarkNet/Enums";
+import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
+import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
+import * as UtilityModule from "../../../src/utils/Utility";
+import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
+import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 
-describe("DarkWebServer Tests", () => {
+beforeAll(() => {
+  initGameEnvironment();
+});
+
+beforeEach(() => {
+  setupBasicTestingEnvironment();
+  getDarkscapeNavigator();
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+describe("Password Tests", () => {
   const difficulty = 1;
 
   test("getEchoVulnServer creates a server and checks password correctly", () => {
@@ -116,7 +135,7 @@ describe("DarkWebServer Tests", () => {
     expect(server.hasAdminRights).toBe(true);
   });
 
-  test(" getConvertToBase10Server creates a server with a correct password hint", () => {
+  test("getConvertToBase10Server creates a server with a correct password hint", () => {
     const server = serverFactory(getConvertToBase10Config, 5, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword(server, "wrongPassword");
@@ -188,5 +207,27 @@ describe("DarkWebServer Tests", () => {
     const expression = generateSimpleArithmeticExpression(13);
     const numberParts = expression.substring(0, expression.indexOf(";"));
     expect(eval(numberParts)).toBeCloseTo(parseSimpleArithmeticExpression(expression));
+  });
+});
+
+describe("mutateDarknet and webstorm", () => {
+  test("mutateDarknet", () => {
+    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
+    for (let i = 0; i < 5000; ++i) {
+      mutateDarknet();
+    }
+    expect(spiedExceptionAlert).not.toHaveBeenCalled();
+    expect(spiedConsoleError).not.toHaveBeenCalled();
+  });
+  test("webstorm", async () => {
+    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
+    jest.spyOn(UtilityModule, "sleep").mockImplementation();
+    for (let i = 0; i < 100; ++i) {
+      await launchWebstorm();
+    }
+    expect(spiedExceptionAlert).not.toHaveBeenCalled();
+    expect(spiedConsoleError).not.toHaveBeenCalled();
   });
 });
