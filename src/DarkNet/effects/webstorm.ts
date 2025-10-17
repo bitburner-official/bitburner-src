@@ -53,20 +53,6 @@ export const launchWebstorm = async (suppressToast = false) => {
   DarknetState.allowMutating = true;
 };
 
-/**
- * WIP-@fico: It's time to decide if we should use this function. If yes, please add a test for it in
- * test\jest\Darknet\Darknet.test.ts
- */
-// TODO: launch this if the player has been offline for long enough?
-export const applyOfflineWebstorm = () => {
-  const serversToDelete = getAllMobileDarknetServers().length * 0.5 + (Math.random() * getNetDepth() - 4);
-  deleteRandomDarknetServers(serversToDelete);
-  restartAllDarknetServers();
-
-  balanceDarknetServers();
-  validateDarknetNetworkAndEmitDarknetEvent();
-};
-
 export const handleStormSeed = (server: BaseServer) => {
   server.programs = server.programs.filter((p) => p !== CompletedProgramName.stormSeed);
   DarknetState.lastStormTime = new Date();

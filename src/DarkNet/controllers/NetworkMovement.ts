@@ -71,7 +71,6 @@ export const mutateDarknet = (): void => {
     for (let i = 0; i < serversToAdd; i++) {
       addRandomDarknetServers();
     }
-    // WIP-@fico: Some if return immediately, some do not. Is this intentional?
     return;
   }
 
@@ -140,12 +139,7 @@ export const moveRandomDarknetServers = (count = 1): void => {
 
 export const deleteRandomDarknetServers = (count = 1): void => {
   for (let i = 0; i < count; i++) {
-    /**
-     * WIP-@fico: Do we need to filter labyrinth servers? "isMobile" of labyrinth servers is false, so they should not
-     * be returned in getAllMobileDarknetServers(), unless there are bugs in getAllMobileDarknetServers or addLabyrinth.
-     * If we want to make sure there are no regression bugs, I think we should add some tests instead of filtering here.
-     */
-    const servers = getAllMobileDarknetServers().filter((server) => !isLabyrinthServer(server.hostname));
+    const servers = getAllMobileDarknetServers();
     if (servers.length === 0) {
       break;
     }
@@ -241,10 +235,7 @@ const disconnectionRandomServer = (): void => {
   disconnectServer(server);
 };
 
-/**
- * WIP-@fico: What is the purpose of disconnectDarkweb?
- */
-export const disconnectServer = (server: DarknetServer, disconnectDarkweb = false): void => {
+export const disconnectServer = (server: DarknetServer, disconnectFromDarkweb = false): void => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to disconnect darkweb"), true);
     return;
@@ -254,7 +245,7 @@ export const disconnectServer = (server: DarknetServer, disconnectDarkweb = fals
   }
   for (const neighbor of server.serversOnNetwork) {
     const connectedServer = GetServer(neighbor);
-    const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
+    const isOkToDisconnect = disconnectFromDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
     if (connectedServer && isOkToDisconnect) {
       disconnectServers(server, connectedServer);
     }
@@ -305,10 +296,6 @@ export const addGuaranteedConnection = (server: DarknetServer): void => {
 
 export const validateDarknetNetwork = (): void => {
   const servers = getAllDarknetServers();
-  /**
-   * WIP-@fico: Please check if my comment below is correct. I assume the darknet always has darkweb and labyrinth
-   * servers, but I'm not sure if there are special cases.
-   */
   // The darknet should have at least darkweb and labyrinth servers.
   if (servers.length < getLabyrinthServerNames().length + 1) {
     exceptionAlert(new Error(`There are too few darknet servers. servers.length: ${servers.length}`), true);

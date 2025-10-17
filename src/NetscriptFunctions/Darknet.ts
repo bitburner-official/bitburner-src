@@ -13,7 +13,7 @@ import { Player } from "@player";
 import { formatNumber } from "../ui/formatNumber";
 import { GetServer } from "../Server/AllServers";
 import { capturePackets } from "../DarkNet/models/packetSniffing";
-import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
+import { DarknetState, getServerState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkNet/effects/webstorm";
@@ -190,11 +190,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const result = checkPassword(server, token, 0, ctx.workerScript.pid);
         if (result.status === ResponseStatus.SUCCESS) {
           logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
-          /**
-           * WIP-@fico: Do we need to call addSessionToServer here? handleSuccessfulAuth and handleLabyrinthPassword
-           * already call it if the password is correct.
-           */
-          addSessionToServer(server, ctx.workerScript.pid);
           return {
             success: true,
             message: ResponseStatus.SUCCESS,
@@ -608,11 +603,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const delayTime = Math.max(8000 * (500 / (500 + Player.skills.charisma)), 200);
 
         return helpers.netscriptDelay(ctx, delayTime).then(() => {
-          /**
-           * WIP-@fico: I moved this block of code from handleRamBlockRemoved to here. I notice that the check here does
-           * not use requireSession like the check above. Is this intentional?
-           */
-          const onlineConnectionCheck = getFailureResult(ctx, hostname, { requireDirectConnection: true });
+          const onlineConnectionCheck = getFailureResult(ctx, hostname, {
+            requireDirectConnection: true,
+            requireSession: true,
+          });
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({
               success: false,

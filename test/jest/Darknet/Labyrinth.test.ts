@@ -22,16 +22,4 @@ describe("Labyrinth Tests", () => {
     expect(maze).toHaveLength(height + 1);
     expect(maze[0]).toHaveLength(width - 1);
   });
-
-  // WIP-@fico: According to eslint, you pass the wrong data to getRandomOpenCoordinate.
-  // it("should be able to pick random empty coordinates", () => {
-  //   const width = 30;
-  //   const height = 20;
-  //   const maze = generateMaze(width, height);
-
-  //   for (let i = 0; i < 10; i++) {
-  //     const [x, y] = getRandomOpenCoordinate(maze);
-  //     expect(maze[y][x]).toBe(" ");
-  //   }
-  // });
 });

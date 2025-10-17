@@ -135,10 +135,6 @@ export const generateMaze = (width: number = 41, height: number = 29): string[] 
   return resultingMaze.map((row) => row.join(""));
 };
 
-/**
- * WIP-@fico: While checking my note in test\jest\Darknet\labyrinth.test.ts, please also check this function. Do we need
- * "as [number, number]"?
- */
 const mazeMaker = (setWidth: number, setHeight: number): string[][] => {
   const width = setWidth % 2 === 0 ? setWidth + 1 : setWidth;
   const height = setHeight % 2 === 0 ? setHeight + 1 : setHeight;
@@ -152,15 +148,15 @@ const mazeMaker = (setWidth: number, setHeight: number): string[][] => {
     const [x, y] = node;
 
     const neighbors = directions
-      .map(([dx, dy]) => [x + dx * 2, y + dy * 2] as [number, number])
+      .map(([dx, dy]) => [x + dx * 2, y + dy * 2])
       .filter(([nx, ny]) => nx > 0 && nx < width && ny > 0 && ny < height && maze[ny][nx] === WALL);
 
     if (neighbors.length > 0) {
-      stack.push([x, y] as [number, number]);
+      stack.push([x, y]);
       const [nx, ny] = neighbors[Math.floor(Math.random() * neighbors.length)];
       maze[(y + ny) / 2][(x + nx) / 2] = PATH;
       maze[ny][nx] = PATH;
-      stack.push([nx, ny] as [number, number]);
+      stack.push([nx, ny]);
     }
   }
 
@@ -192,18 +188,6 @@ export const getSurroundingsVisualized = (
   }
 
   return result.split("\n");
-};
-
-export const getRandomOpenCoordinate = (maze: string[][]) => {
-  const openCoordinates: [number, number][] = [];
-  for (let y = 1; y < maze.length; y += 2) {
-    for (let x = 0; x < maze[y].length; x += 2) {
-      if (maze[y][x] === PATH) {
-        openCoordinates.push([x, y]);
-      }
-    }
-  }
-  return openCoordinates[Math.floor(Math.random() * openCoordinates.length)];
 };
 
 export const handleLabyrinthPassword = (
