@@ -18,7 +18,7 @@ import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles } from "./dnetStyles";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { getLabyrinthDetails } from "../effects/labyrinth";
+import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
@@ -207,6 +207,18 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     }
   };
 
+  const getAutocompleteSuggestionList = (): string[] => {
+    const servers = getAllDarknetServers()
+      .filter((s) => s.depth < netDisplayDepth && !isLabyrinthServer(s.hostname))
+      .map((s) => s.hostname);
+
+    if (labyrinth && netDisplayDepth > depth) {
+      return [...servers, labyrinth.hostname];
+    }
+
+    return servers;
+  };
+
   return (
     <Container maxWidth={false} disableGutters>
       {serverOpened ? (
@@ -287,10 +299,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             sx={{ maxWidth: "300px" }}
             placeholder="Search for server"
             maxSuggestions={6}
-            suggestionList={() => getAllDarknetServers().map((s) => s.hostname)}
+            suggestionList={getAutocompleteSuggestionList}
             ignoredTextRegex={/ /g}
-            onSelection={(event, selection, options) => {
-              search(options[0] ?? "");
+            onSelection={(event, selection) => {
+              search(selection ?? "");
             }}
           />
         </Typography>
