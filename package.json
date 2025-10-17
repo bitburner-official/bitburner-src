@@ -92,7 +92,7 @@
     "monaco-editor": "^0.52.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "prettier": "^2.8.8",
-    "react-refresh": "^0.17.0",
+    "react-refresh": "^0.18.0",
     "rehype-mathjax": "^4.0.3",
     "rehype-raw": "^6.1.1",
     "remark-math": "^5.1.1",
