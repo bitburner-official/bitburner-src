@@ -11,7 +11,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   const arg = args.shift();
   if (!arg)
     return Terminal.error(
-      "Usage: run [program/script] [-t num_threads] [--tail] [--ram-override ram_in_GBs] [args...]",
+      "Usage: run [program/script] [-t num_threads] [--tail] [--ram-override ram_in_GBs] [--temporary] [args...]",
     );
 
   const path = Terminal.getFilepath(String(arg));

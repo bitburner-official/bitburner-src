@@ -294,7 +294,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       return ["--tail"];
     }
 
-    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
+    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number, "--temporary": Boolean };
     let flags = {
       _: [],
     };
