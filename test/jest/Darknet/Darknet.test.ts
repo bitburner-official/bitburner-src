@@ -12,7 +12,7 @@ import {
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
-import { checkPassword, getAuthResult } from "../../../src/DarkNet/effects/authentication";
+import { getAuthResult } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
@@ -41,37 +41,37 @@ describe("Password Tests", () => {
   test("getEchoVulnServer creates a server and checks password correctly", () => {
     const server = serverFactory(getEchoVulnConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
-    expect(failedAttemptResponse.code).toBe(ResponseCodeEnum.AuthFailure);
-    expect(failedAttemptResponse.message.includes(server.password)).toBe(true);
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(failedAttemptResponse.response.message.includes(server.password)).toBe(true);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server, server.password, 1).code).toBe(ResponseCodeEnum.Success);
+    expect(getAuthResult(server, server.password, 1).result.code).toBe(ResponseCodeEnum.Success);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getNoPasswordServer creates a server with no password", () => {
     const server = serverFactory(getNoPasswordConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
-    expect(failedAttemptResponse.code).toBe(ResponseCodeEnum.AuthFailure);
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server, server.password, 1).code).toBe(ResponseCodeEnum.Success);
+    expect(getAuthResult(server, server.password, 1).result.code).toBe(ResponseCodeEnum.Success);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getDefaultPasswordServer creates a server with default password", () => {
     const server = serverFactory(getDefaultPasswordConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
 
-    expect(failedAttemptResponse.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
     expect(server.hasAdminRights).toBe(false);
 
     expect(defaultSettingsDictionary.includes(server.password)).toBe(true);
 
-    expect(checkPassword(server, server.password, 1).code).toBe(ResponseCodeEnum.Success);
+    expect(getAuthResult(server, server.password, 1).result.code).toBe(ResponseCodeEnum.Success);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -131,27 +131,27 @@ describe("Password Tests", () => {
     expect(correctCount6).toBe("1");
     expect(closeCount6).toBe("2");
 
-    expect(checkPassword(server, server.password, 1).code).toBe(ResponseCodeEnum.Success);
+    expect(getAuthResult(server, server.password, 1).result.code).toBe(ResponseCodeEnum.Success);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getConvertToBase10Server creates a server with a correct password hint", () => {
     const server = serverFactory(getConvertToBase10Config, 5, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
-    expect(failedAttemptResponse.code).toBe(ResponseCodeEnum.AuthFailure);
-    if (!failedAttemptResponse.data) {
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+    if (!failedAttemptResponse.response.data) {
       throw new Error("Invalid failedAttemptResponse");
     }
-    const [base, numberString] = failedAttemptResponse.data.split(",");
+    const [base, numberString] = failedAttemptResponse.response.data.split(",");
 
     expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
     const attemptedPassword = parseBaseNNumberString(numberString, Number(base));
 
-    const result = checkPassword(server, `${attemptedPassword}`, 1);
+    const result = getAuthResult(server, `${attemptedPassword}`, 1);
 
-    expect(result.code).toBe(ResponseCodeEnum.Success);
+    expect(result.response.code).toBe(ResponseCodeEnum.Success);
   });
 
   test("encodeNumberInBaseN and parseBaseNNumberString encode/decode numbers correctly", () => {
