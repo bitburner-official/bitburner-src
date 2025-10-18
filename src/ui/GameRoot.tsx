@@ -219,7 +219,7 @@ export function GameRoot(): React.ReactElement {
   }, [rerender]);
 
   function killAllScripts(): void {
-    for (const server of GetAllServers()) {
+    for (const server of GetAllServers(true)) {
       server.runningScriptMap.clear();
     }
     saveObject
