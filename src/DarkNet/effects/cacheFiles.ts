@@ -6,7 +6,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { CompletedProgramName, ToastVariant } from "@enums";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
-import { initStockMarket } from "../../StockMarket/StockMarket";
+import { initStockMarket, isStockMarketInitialized } from "../../StockMarket/StockMarket";
 import { cachePrefixes } from "../models/dictionaryData";
 import type { Result } from "../../types";
 import type { DarknetServer } from "../../Server/DarknetServer";
@@ -64,7 +64,7 @@ export const getXpReward = (difficulty: number, karmaLoss: number) => {
 };
 
 export const getNextPortOpener = (difficulty: number, karmaLoss: number, suppressToast = false) => {
-  const currentPlayerWork = (Player.currentWork as CreateProgramWork)?.programName;
+  const currentPlayerWork = Player.currentWork instanceof CreateProgramWork ? Player.currentWork.programName : null;
   const programs = [
     CompletedProgramName.serverProfiler,
     CompletedProgramName.bruteSsh,
@@ -90,18 +90,23 @@ export const getNextPortOpener = (difficulty: number, karmaLoss: number, suppres
   }
   if (!Player.hasWseAccount) {
     Player.hasWseAccount = true;
-    initStockMarket();
+    if (!isStockMarketInitialized()) {
+      initStockMarket();
+    }
     const result = `You have discovered a stolen WSE Account!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
     return result + karmaLossMessage;
   }
   if (!Player.hasTixApiAccess) {
     Player.hasTixApiAccess = true;
+    if (!isStockMarketInitialized()) {
+      initStockMarket();
+    }
     const result = `You have discovered a stolen TIX API access point!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
     return result + karmaLossMessage;
   }
-  if (!Player.has4SData && Player.bitNodeN !== 8) {
+  if (!Player.has4SData && Player.bitNodeN !== 8 && !Player.bitNodeOptions.disable4SData) {
     Player.has4SData = true;
     const result = `You have discovered a cache of stolen 4S Data!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
