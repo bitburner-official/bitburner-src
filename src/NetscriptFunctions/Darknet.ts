@@ -718,7 +718,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     },
     getDarknetInstability: () => () => {
       return {
-        authenticateDurationIncrease: getBackdoorAuthTimeDebuff(),
+        authenticateDurationMultiplier: getBackdoorAuthTimeDebuff(),
         authenticateTimeoutChance: getTimeoutChance(),
       };
     },

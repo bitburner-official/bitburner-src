@@ -14,11 +14,14 @@ import {
   setupBasicTestingEnvironment,
 } from "../Utilities";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
-import { getServerState } from "../../../src/DarkNet/models/DarknetState";
+import { DarknetState, getServerState } from "../../../src/DarkNet/models/DarknetState";
 import { getDarknetServerOrThrow } from "../../../src/DarkNet/utils/darknetServerUtils";
+import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
+import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Target server ${hostnameOfNonExistentServer} does not exist. It may have gone offline.`;
+const hostnameForOfflineServer = "darknet-offline-server";
 
 fixDoImportIssue();
 
@@ -31,6 +34,8 @@ beforeEach(() => {
   getDarkscapeNavigator();
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
   Player.gainCharismaExp(1e100);
+
+  DarknetState.offlineServers.push(hostnameForOfflineServer);
 });
 
 function getNsOnHome() {
@@ -71,10 +76,44 @@ describe("Common APIs", () => {
     expect(result2.success).toStrictEqual(true);
   });
   test("getDarknetInstability", () => {
+    // WIP: review as needed
     const ns = getNsOnDarkWeb();
-    const result = ns.dnet.getDarknetInstability();
-    // WIP: Add more tests
-    expect(Number.isFinite(result.authenticateDurationIncrease)).toStrictEqual(true);
+    const initialResult = ns.dnet.getDarknetInstability();
+
+    expect(initialResult.authenticateTimeoutChance).toStrictEqual(0);
+    expect(initialResult.authenticateDurationMultiplier).toStrictEqual(1);
+
+    const darknetServers = getAllMovableDarknetServers();
+
+    // The first two backdoors do not increase instability
+    darknetServers.slice(0, 2).forEach((server) => (server.backdoorInstalled = true));
+
+    const resultAfterTwoBackdoors = ns.dnet.getDarknetInstability();
+    expect(resultAfterTwoBackdoors.authenticateTimeoutChance).toStrictEqual(0);
+    expect(resultAfterTwoBackdoors.authenticateDurationMultiplier).toStrictEqual(1);
+
+    // Stasis linked servers do not increase instability
+    darknetServers.slice(2, 5).forEach((server) => (server.backdoorInstalled = true));
+    darknetServers.slice(2, 5).forEach((server) => (server.hasStasisLink = true));
+
+    const resultAfterFiveBackdoorsAndThreeStasisLinks = ns.dnet.getDarknetInstability();
+    expect(resultAfterFiveBackdoorsAndThreeStasisLinks.authenticateTimeoutChance).toStrictEqual(0);
+    expect(resultAfterFiveBackdoorsAndThreeStasisLinks.authenticateDurationMultiplier).toStrictEqual(1);
+
+    // The rest of backdoors each increase instability
+    darknetServers.slice(5, 8).forEach((server) => (server.backdoorInstalled = true));
+    const resultAfterEightBackdoors = ns.dnet.getDarknetInstability();
+    expect(resultAfterEightBackdoors.authenticateTimeoutChance).toBeGreaterThan(0);
+    expect(resultAfterEightBackdoors.authenticateDurationMultiplier).toBeGreaterThan(1);
+
+    darknetServers.slice(8, 12).forEach((server) => (server.backdoorInstalled = true));
+    const resultAfterAllBackdoors = ns.dnet.getDarknetInstability();
+    expect(resultAfterAllBackdoors.authenticateTimeoutChance).toBeGreaterThan(
+      resultAfterEightBackdoors.authenticateTimeoutChance,
+    );
+    expect(resultAfterAllBackdoors.authenticateDurationMultiplier).toBeGreaterThan(
+      resultAfterEightBackdoors.authenticateDurationMultiplier,
+    );
   });
 });
 
@@ -756,5 +795,73 @@ describe("Non-darkweb darknet server", () => {
 });
 
 describe("Offline darknet server", () => {
-  // WIP: Add more tests
+  // WIP: review as needed
+  test("authenticate from home", async () => {
+    const ns = getNsOnHome();
+    const result = await ns.dnet.authenticate(hostnameForOfflineServer, "leekspin");
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
+  });
+  test("authenticate itself", async () => {
+    const ns = getNsOnDarkWeb();
+    const result = await ns.dnet.authenticate(hostnameForOfflineServer, "leekspin");
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
+  });
+  test("connectToSession from home", () => {
+    const ns = getNsOnHome();
+    const result = ns.dnet.connectToSession(hostnameForOfflineServer, "leekspin");
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
+  });
+  test("heartbleed from home", async () => {
+    const ns = getNsOnHome();
+    const result = await ns.dnet.heartbleed(hostnameForOfflineServer);
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
+  });
+  test("getServer", () => {
+    const ns = getNsOnDarkWeb();
+    const server = ns.dnet.getServer(hostnameForOfflineServer);
+    // WIP: Update after discussing darkweb and dnet.getServer implementation
+    expect(server.isOnline).toStrictEqual(false);
+  });
+  test("getServerAuthDetails", () => {
+    const ns = getNsOnDarkWeb();
+    const authDetails = ns.dnet.getServerAuthDetails(hostnameForOfflineServer);
+    expect(authDetails.isOnline).toStrictEqual(false);
+  });
+  test("packetCapture from home", async () => {
+    const ns = getNsOnHome();
+    const result = await ns.dnet.packetCapture(hostnameForOfflineServer);
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
+  });
+  test("induceServerMigration", async () => {
+    const ns = getNsOnDarkWeb();
+    const result = await ns.dnet.induceServerMigration(hostnameForOfflineServer);
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
+  });
+  test("isDarknetServer", () => {
+    const ns = getNsOnDarkWeb();
+    const result = ns.dnet.isDarknetServer(hostnameForOfflineServer);
+    expect(result).toStrictEqual(false);
+  });
+  test("memoryReallocation", async () => {
+    const ns = getNsOnDarkWeb();
+    const result = await ns.dnet.memoryReallocation(hostnameForOfflineServer);
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
+  });
+  test("getBlockedRam", () => {
+    const ns = getNsOnDarkWeb();
+    const result = ns.dnet.getBlockedRam(hostnameForOfflineServer);
+    expect(result).toStrictEqual(0);
+  });
+  test("getDepth", () => {
+    const ns = getNsOnDarkWeb();
+    const result = ns.dnet.getDepth(hostnameForOfflineServer);
+    expect(result).toStrictEqual(-1);
+  });
 });

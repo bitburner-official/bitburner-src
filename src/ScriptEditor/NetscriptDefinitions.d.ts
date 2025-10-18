@@ -4531,10 +4531,10 @@ export interface Darknet {
    * Ram cost: 0 GB
    *
    * @returns An object containing the current instability values.
-   *    authenticateDurationIncrease: the increase in time that authentication takes, as a decimal
+   *    authenticateDurationMultiplier: the increase in time that authentication takes, as a decimal
    *    authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
    */
-  getDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
+  getDarknetInstability(): { authenticateDurationMultiplier: number; authenticateTimeoutChance: number };
 }
 
 /**

@@ -9,13 +9,13 @@ Gets the current instability of the darknet caused by excessive backdoor-ing of 
 **Signature:**
 
 ```typescript
-getDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
+getDarknetInstability(): { authenticateDurationMultiplier: number; authenticateTimeoutChance: number };
 ```
 **Returns:**
 
-{ authenticateDurationIncrease: number; authenticateTimeoutChance: number }
+{ authenticateDurationMultiplier: number; authenticateTimeoutChance: number }
 
-An object containing the current instability values. authenticateDurationIncrease: the increase in time that authentication takes, as a decimal authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
+An object containing the current instability values. authenticateDurationMultiplier: the increase in time that authentication takes, as a decimal authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
 
 ## Remarks
 
