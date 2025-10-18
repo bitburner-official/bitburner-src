@@ -52,6 +52,7 @@ import { getTorRouter } from "../../Server/ServerHelpers";
 export function initDarkwebServer(): void {
   const existingServer = GetServer(SpecialServers.DarkWeb);
   if (existingServer instanceof DarknetServer) {
+    existingServer.isStationary = true;
     return;
   }
   let scripts = new JSONMap<ScriptFilePath, Script>();
