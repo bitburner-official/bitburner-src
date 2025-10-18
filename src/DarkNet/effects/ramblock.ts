@@ -53,7 +53,9 @@ export const handleRamBlockClearedRewards = (server: DarknetServer) => {
 
   const stormSeedChance = 0.15;
   const timeSinceLastStorm = Date.now() - DarknetState.lastStormTime.getTime();
-  const stormFileExists = getAllMovableDarknetServers().some((s) => s.programs.includes(CompletedProgramName.stormSeed));
+  const stormFileExists = getAllMovableDarknetServers().some((s) =>
+    s.programs.includes(CompletedProgramName.stormSeed),
+  );
   if (timeSinceLastStorm > 30 * 60 * 1000 && !stormFileExists && Math.random() < stormSeedChance) {
     server.programs.push(CompletedProgramName.stormSeed);
   }

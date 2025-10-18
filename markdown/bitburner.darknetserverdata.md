@@ -227,6 +227,25 @@ Flag indicating whether the player's terminal is currently connected to this ser
 </td></tr>
 <tr><td>
 
+[isStationary](./bitburner.darknetserverdata.isstationary.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+If this darknet server cannot be moved. True for fixed/story servers.
+
+
+</td></tr>
+<tr><td>
+
 [logTrafficInterval](./bitburner.darknetserverdata.logtrafficinterval.md)
 
 

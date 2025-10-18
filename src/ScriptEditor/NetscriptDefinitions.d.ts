@@ -4228,6 +4228,8 @@ export interface DarknetServerData {
   requiredCharismaSkill: number;
   /** The interval at which the server periodically adds to its logs, in seconds. */
   logTrafficInterval: number;
+  /** If this darknet server cannot be moved. True for fixed/story servers. */
+  isStationary: boolean;
 }
 
 /**

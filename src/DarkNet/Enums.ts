@@ -83,4 +83,5 @@ export const exampleDarknetServerData: DarknetServerData = {
   depth: -1,
   requiredCharismaSkill: 0,
   logTrafficInterval: -1,
+  isStationary: false,
 } as const;

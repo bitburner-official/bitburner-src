@@ -452,6 +452,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         difficulty: server.difficulty,
         requiredCharismaSkill: server.requiredCharismaSkill,
         logTrafficInterval: server.logTrafficInterval,
+        isStationary: server.isStationary,
       } satisfies ReturnType<DarknetAPI["getServer"]>;
     },
     getServerAuthDetails: (ctx) => (_hostname) => {
