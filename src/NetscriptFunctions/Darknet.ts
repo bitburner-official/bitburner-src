@@ -13,7 +13,7 @@ import { Player } from "@player";
 import { formatNumber } from "../ui/formatNumber";
 import { GetServer } from "../Server/AllServers";
 import { capturePackets } from "../DarkNet/models/packetSniffing";
-import { DarknetState, getServerState } from "../DarkNet/models/DarknetState";
+import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkNet/effects/webstorm";
@@ -202,6 +202,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             message: GenericResponseMessage.AuthFailure,
           };
         }
+        addSessionToServer(server, ctx.workerScript.pid);
         logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
         return {
           success: true,
