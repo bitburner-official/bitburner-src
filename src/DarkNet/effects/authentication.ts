@@ -17,20 +17,16 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 export const checkPassword = (
   server: DarknetServer,
   attemptedPassword: string,
-  threads: number,
-  // WIP-@fico
-  pid?: number,
+  pid: number,
   responseTime = 0,
 ): PasswordResponse => {
   if (isLabyrinthServer(server.hostname)) {
-    return handleLabyrinthPassword(attemptedPassword, server, threads, pid);
+    return handleLabyrinthPassword(attemptedPassword, server, pid);
   }
 
   if (server.password === attemptedPassword) {
-    handleSuccessfulAuth(server, threads, pid);
     return getGenericSuccess(attemptedPassword);
   }
-  handleFailedAuth(server, threads);
 
   switch (server.modelId) {
     case ModelIds.MastermindHint: {
@@ -84,7 +80,6 @@ export const checkPassword = (
         Math.abs((parsedAttemptedPassword - +server.password) / +server.password) < 0.005
       ) {
         // ignore small rounding errors during floating point operations
-        handleSuccessfulAuth(server, threads);
         return getGenericSuccess(attemptedPassword);
       }
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? "");
@@ -107,11 +102,12 @@ export const getAuthResult = (
   pid = -1,
   logActivity = true,
 ): { result: DarknetResult; response: PasswordResponse } => {
-  const response = checkPassword(server, attemptedPassword, threads, pid, responseTime);
+  const response = checkPassword(server, attemptedPassword, pid, responseTime);
   if (logActivity) {
     logPasswordAttempt(server, response);
   }
   if (response.code === ResponseCodeEnum.Success) {
+    handleSuccessfulAuth(server, threads, pid);
     return {
       result: {
         success: true,
@@ -121,6 +117,7 @@ export const getAuthResult = (
       response: response,
     };
   }
+  handleFailedAuth(server, threads);
   return {
     result: {
       success: false,

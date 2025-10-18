@@ -29,9 +29,6 @@ import { DarknetConstants } from "../Constants";
 import { GetServer } from "../../Server/AllServers";
 
 export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number = -1) => {
-  // WIP-@fico
-  if (!threads) return;
-
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
   addSessionToServer(server, pid);
 

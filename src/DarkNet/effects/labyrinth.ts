@@ -193,7 +193,6 @@ export const getSurroundingsVisualized = (
 export const handleLabyrinthPassword = (
   attemptedPassword: string,
   server: DarknetServer,
-  threads: number,
   pid: number = -1,
 ): PasswordResponse => {
   const labDetails = getLabyrinthDetails();
@@ -265,14 +264,14 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
-      message: `You don't know how to do that. Try a direction such as "NORTH"`,
+      message: `You don't know how to do that. Try a command such as "go north"`,
     };
   }
 
   DarknetState.labLocations[pid] = newLocation;
 
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
-    Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, Math.max(threads * 2, 32), true));
+    Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, 32, true));
     server.hasAdminRights = true;
     const isSpecialCache = getLabyrinthDetails().augReward;
     addCacheToServer(server, isSpecialCache ? "the_great_work" : undefined);
