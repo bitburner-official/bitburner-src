@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import type { Darknet as DarknetAPI } from "@nsdefs";
+import type { Darknet as DarknetAPI, DarknetResult } from "@nsdefs";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import {
@@ -31,13 +31,11 @@ import {
   logger,
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
-import { exampleDarknetServerData, ResponseStatus } from "../DarkNet/Enums";
+import { exampleDarknetServerData, GenericResponseMessage, ResponseCodeEnum } from "../DarkNet/Enums";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 import { resolveCacheFilePath } from "../Paths/CacheFilePath";
-
-export type DarknetResult = { success: boolean; message: string };
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -108,6 +106,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
+            code: onlineConnectionCheck.code,
             message: onlineConnectionCheck.message,
           }));
         }
@@ -128,6 +127,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({
               success: false,
+              code: onlineConnectionCheck.code,
               message: onlineConnectionCheck.message,
             }));
           }
@@ -137,7 +137,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             logger(ctx)(`Authentication to ${targetHostname} timed out due to network instability. Please try again.`);
             return {
               success: false,
-              message: ResponseStatus.TIMEOUT,
+              code: ResponseCodeEnum.RequestTimeOut,
+              message: GenericResponseMessage.RequestTimeOut,
             };
           }
 
@@ -152,6 +153,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           if (isLabyrinthServer(targetHostname)) {
             return {
               success: success,
+              code: success ? ResponseCodeEnum.Success : ResponseCodeEnum.AuthFailure,
               message: authResult.response.message,
               data: authResult.response.data,
             };
@@ -159,7 +161,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
           return {
             success: success,
-            message: success ? ResponseStatus.SUCCESS : ResponseStatus.AUTH_FAILURE,
+            code: success ? ResponseCodeEnum.Success : ResponseCodeEnum.AuthFailure,
+            message: success ? GenericResponseMessage.Success : GenericResponseMessage.AuthFailure,
           };
         });
       },
@@ -182,25 +185,28 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (!onlineConnectionCheck.success) {
           return {
             success: false,
+            code: onlineConnectionCheck.code,
             message: onlineConnectionCheck.message,
           };
         }
         const server = onlineConnectionCheck.server;
 
         const result = checkPassword(server, token, ctx.workerScript.scriptRef.threads, ctx.workerScript.pid);
-        if (result.status === ResponseStatus.SUCCESS) {
-          logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
+        if (result.code !== ResponseCodeEnum.Success) {
+          logger(ctx)(
+            `${targetHostname} does not recognise that password. Use ns.dnet.authenticate() to create a session.`,
+          );
           return {
-            success: true,
-            message: ResponseStatus.SUCCESS,
+            success: false,
+            code: ResponseCodeEnum.AuthFailure,
+            message: GenericResponseMessage.AuthFailure,
           };
         }
-        logger(ctx)(
-          `${targetHostname} does not recognise that password. Use ns.dnet.authenticate() to create a session.`,
-        );
+        logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
         return {
-          success: false,
-          message: ResponseStatus.AUTH_FAILURE,
+          success: true,
+          code: ResponseCodeEnum.Success,
+          message: GenericResponseMessage.Success,
         };
       },
     heartbleed:
@@ -214,6 +220,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
+            code: onlineConnectionCheck.code,
             message: onlineConnectionCheck.message,
             logs: [],
           }));
@@ -227,11 +234,13 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         );
 
         if (Player.skills.charisma < server.requiredCharismaSkill) {
-          const result = `You need a higher charisma level to extract data from ${targetHostname}. (${server.requiredHackingSkill} required)`;
-          logger(ctx)(result);
+          logger(ctx)(
+            `You need a higher charisma level to extract data from ${targetHostname}. (${server.requiredHackingSkill} required)`,
+          );
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
-            message: result,
+            code: ResponseCodeEnum.NotEnoughCharisma,
+            message: GenericResponseMessage.NotEnoughCharisma,
             logs: [],
           }));
         }
@@ -243,6 +252,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           if (!onlineConnectionCheck.success) {
             return {
               success: false,
+              code: onlineConnectionCheck.code,
               message: onlineConnectionCheck.message,
               logs: [],
             };
@@ -256,8 +266,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             if (!location) {
               return {
                 success: true,
-                message: "A mysterious maze has appeared...",
-                logs: [],
+                code: ResponseCodeEnum.Success,
+                message: GenericResponseMessage.Success,
+                logs: ["A mysterious maze has appeared..."],
               };
             }
             const surroundings = getSurroundingsVisualized(getLabMaze(), location[0], location[1]);
@@ -270,7 +281,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             };
             return {
               success: true,
-              message: `Extracted log data from ${targetHostname}`,
+              code: ResponseCodeEnum.Success,
+              message: GenericResponseMessage.Success,
               logs: [JSON.stringify(status)],
             };
           }
@@ -278,7 +290,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           if (options.peek) {
             return {
               success: true,
-              message: `Extracted log data from ${targetHostname}`,
+              code: ResponseCodeEnum.Success,
+              message: GenericResponseMessage.Success,
               logs: serverState.serverLogs.slice(0, 1),
             };
           }
@@ -287,7 +300,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
           return {
             success: true,
-            message: `Extracted log data from ${targetHostname}`,
+            code: ResponseCodeEnum.Success,
+            message: GenericResponseMessage.Success,
             logs: capturedLogs,
           };
         });
@@ -341,6 +355,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
+            code: onlineConnectionCheck.code,
             message: onlineConnectionCheck.message,
           }));
         }
@@ -349,7 +364,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           helpers.log(ctx, () => `${server.hostname} cannot be stasis linked: it is a stationary server.`);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
-            message: `${server.hostname} cannot be stasis linked.`,
+            code: ResponseCodeEnum.StationaryServer,
+            message: GenericResponseMessage.StationaryServer,
           }));
         }
 
@@ -359,7 +375,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
-            message: `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`,
+            code: ResponseCodeEnum.StasisLinkLimitReached,
+            message: GenericResponseMessage.StasisLinkLimitReached,
           }));
         }
         helpers.log(
@@ -374,7 +391,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
             return {
               success: false,
-              message: `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`,
+              code: ResponseCodeEnum.StasisLinkLimitReached,
+              message: GenericResponseMessage.StasisLinkLimitReached,
             };
           }
 
@@ -382,7 +400,11 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           server.backdoorInstalled = shouldLink;
           const message = `Stasis link ${shouldLink ? "applied to" : "removed from"} server ${server.hostname}.`;
           helpers.log(ctx, () => `${message}. (${stasisLinkCount}/${stasisLinkLimit} links in use)`);
-          return { success: true, message };
+          return {
+            success: true,
+            code: ResponseCodeEnum.Success,
+            message: GenericResponseMessage.Success,
+          };
         });
       },
     getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
@@ -475,6 +497,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       if (!onlineConnectionCheck.success) {
         return helpers.netscriptDelay(ctx, 100).then(() => ({
           success: false,
+          code: onlineConnectionCheck.code,
           message: onlineConnectionCheck.message,
           data: "",
         }));
@@ -484,12 +507,12 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const networkDelay = calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 4;
       const xp = formatNumber(calculatePasswordAttemptChaGain(server, ctx.workerScript.scriptRef.threads), 1);
 
-      const result = `Captured some outgoing transmissions from ${hostname}. (Gained ${xp} cha xp)`;
-      logger(ctx)(result);
+      logger(ctx)(`Captured some outgoing transmissions from ${hostname}. (Gained ${xp} cha xp)`);
       return helpers.netscriptDelay(ctx, networkDelay).then(() => {
         return {
           success: true,
-          message: result,
+          code: ResponseCodeEnum.Success,
+          message: GenericResponseMessage.Success,
           data: capturePackets(server),
         };
       });
@@ -505,6 +528,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
+            code: onlineConnectionCheck.code,
             message: onlineConnectionCheck.message,
           }));
         }
@@ -520,6 +544,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({
               success: false,
+              code: onlineConnectionCheck.code,
               message: onlineConnectionCheck.message,
             }));
           }
@@ -527,18 +552,18 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           const currentDepth = server.depth;
           const result = chargeServerMigration(server, ctx.workerScript.scriptRef.threads);
 
-          const message = `Induced ${formatNumber(
-            result.chargeIncrease * 100,
-          )}%. Migration prep is now at ${formatNumber(result.newCharge * 100)}%.  (Gained ${formatNumber(
-            result.xpGained,
-          )} cha xp)`;
-          logger(ctx)(message);
+          logger(ctx)(
+            `Induced ${formatNumber(result.chargeIncrease * 100)}%. Migration prep is now at ${formatNumber(
+              result.newCharge * 100,
+            )}%. (Gained ${formatNumber(result.xpGained)} cha xp)`,
+          );
           if (result.newCharge >= 1 && currentDepth < server.depth) {
             logger(ctx)(`${server.hostname} has been migrated!`);
           }
           return {
             success: true,
-            message: message,
+            code: ResponseCodeEnum.Success,
+            message: GenericResponseMessage.Success,
           };
         });
       },
@@ -547,11 +572,12 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const server = ctx.workerScript.getServer();
       const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
       if (!hasStormSeed) {
-        const result = `No executable found on ${server.hostname}...`;
+        const result = `No ${CompletedProgramName.stormSeed} found on ${server.hostname}`;
         logger(ctx)(result);
         return {
           success: false,
-          message: result,
+          code: ResponseCodeEnum.NotFound,
+          message: GenericResponseMessage.NotFound,
         };
       }
 
@@ -560,7 +586,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       handleStormSeed(server);
       return {
         success: true,
-        message: result,
+        code: ResponseCodeEnum.Success,
+        message: GenericResponseMessage.Success,
       };
     },
     isDarknetServer: (ctx) => (_hostname) => {
@@ -585,17 +612,18 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
+            code: onlineConnectionCheck.code,
             message: onlineConnectionCheck.message,
           }));
         }
         const server = onlineConnectionCheck.server;
 
         if (server.blockedRam <= 0) {
-          const result = `Failed. Server ${server.hostname} has no host-owned ram left to reallocate.`;
-          logger(ctx)(result);
+          logger(ctx)(`Server ${server.hostname} has no host-owned ram left to reallocate.`);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
-            message: result,
+            code: ResponseCodeEnum.NoBlockRAM,
+            message: GenericResponseMessage.NoBlockRAM,
           }));
         }
 
@@ -610,16 +638,17 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({
               success: false,
+              code: onlineConnectionCheck.code,
               message: onlineConnectionCheck.message,
             }));
           }
           const server = onlineConnectionCheck.server;
           if (server.blockedRam <= 0) {
-            const result = `Server ${server.hostname} has no host-owned ram left to reallocate.`;
-            logger(ctx)(result);
+            logger(ctx)(`Server ${server.hostname} has no host-owned ram left to reallocate.`);
             return {
               success: false,
-              message: result,
+              code: ResponseCodeEnum.NoBlockRAM,
+              message: GenericResponseMessage.NoBlockRAM,
             };
           }
           return handleRamBlockRemoved(ctx, server);
@@ -668,11 +697,11 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           const chaXp = Player.mults.charisma_exp * threads * 10 * ((200 + Player.skills.charisma) / 200);
           Player.gainCharismaExp(chaXp);
 
-          const result = `Spread promotion for ${stock.name}. (Gained ${formatNumber(chaXp, 1)} cha xp)`;
-          logger(ctx)(result);
+          logger(ctx)(`Spread promotion for ${stock.name}. (Gained ${formatNumber(chaXp, 1)} cha xp)`);
           return {
             success: true,
-            message: result,
+            code: ResponseCodeEnum.Success,
+            message: GenericResponseMessage.Success,
           };
         });
       },

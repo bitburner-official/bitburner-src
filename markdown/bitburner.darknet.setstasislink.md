@@ -13,7 +13,7 @@ There is a maximum of stasis links that can be applied globally, which can be se
 **Signature:**
 
 ```typescript
-setStasisLink(shouldLink?: boolean): Promise<Result>;
+setStasisLink(shouldLink?: boolean): Promise<DarknetResult>;
 ```
 
 ## Parameters
@@ -54,9 +54,9 @@ _(Optional)_ true to apply a stasis link, false to remove it. Optional. Defaults
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
 
-A promise that resolves to a [Result](./bitburner.result.md) object.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object.
 
 ## Remarks
 

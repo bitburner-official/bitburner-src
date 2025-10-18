@@ -9,7 +9,7 @@ Spends some time spreading propaganda about a stock to increase its volatility. 
 **Signature:**
 
 ```typescript
-promoteStock(sym: string): Promise<Result>;
+promoteStock(sym: string): Promise<DarknetResult>;
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ Stock symbol.
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
 
 ## Remarks
 

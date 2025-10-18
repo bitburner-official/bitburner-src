@@ -11,7 +11,7 @@ Effect scales with threads.
 **Signature:**
 
 ```typescript
-induceServerMigration(hostname?: string): Promise<Result>;
+induceServerMigration(hostname?: string): Promise<DarknetResult>;
 ```
 
 ## Parameters
@@ -52,9 +52,9 @@ _(Optional)_ Optional. Hostname of the connected server to migrate. Defaults to 
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
 
-A promise that resolves to a [Result](./bitburner.result.md) object.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object.
 
 ## Remarks
 

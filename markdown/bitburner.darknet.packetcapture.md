@@ -11,7 +11,7 @@ Using multiple threads speeds up the capture process.
 **Signature:**
 
 ```typescript
-packetCapture(host: string): Promise<Result & { data: string }>;
+packetCapture(host: string): Promise<DarknetResult & { data: string }>;
 ```
 
 ## Parameters
@@ -52,9 +52,9 @@ the hostname of the server to listen to.
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md) &amp; { data: string }&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { data: string }&gt;
 
-A promise that resolves to a [Result](./bitburner.result.md) object, plus the captured data.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object, plus the captured data.
 
 ## Remarks
 

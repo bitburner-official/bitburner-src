@@ -6,12 +6,12 @@ import { errorMessage } from "../../Netscript/ErrorMessages";
 import type { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { DarknetState } from "../models/DarknetState";
-import { ResponseStatus } from "../Enums";
+import { GenericResponseMessage, ResponseCodeEnum } from "../Enums";
 import { getBackdooredDarkwebServers } from "../utils/darknetNetworkUtils";
 import { hasDarknetAccess } from "../utils/darknetAuthUtils";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { Result } from "../../types";
 import { CompletedProgramName } from "../../Enums";
+import type { DarknetResponseCode } from "@nsdefs";
 
 type FailureResultOptions = {
   requireAdminRights?: boolean;
@@ -35,7 +35,9 @@ export function getFailureResult(
   ctx: NetscriptContext,
   hostname: string,
   options: FailureResultOptions = {},
-): Result<{ server: DarknetServer }> {
+):
+  | { success: true; code: DarknetResponseCode; message: string; server: DarknetServer }
+  | { success: false; code: DarknetResponseCode; message: string } {
   expectDarknetAccess(ctx);
   const currentServer = ctx.workerScript.getServer();
   const targetServer = GetServer(hostname);
@@ -47,7 +49,8 @@ export function getFailureResult(
       logger(ctx)(result);
       return {
         success: false,
-        message: ResponseStatus.NOT_FOUND,
+        code: ResponseCodeEnum.ServiceUnavailable,
+        message: GenericResponseMessage.ServiceUnavailable,
       };
     } else {
       // Throw, otherwise.
@@ -68,7 +71,8 @@ export function getFailureResult(
     logger(ctx)(result);
     return {
       success: false,
-      message: ResponseStatus.MOVED_PERMANENTLY,
+      code: ResponseCodeEnum.DirectConnectionRequired,
+      message: GenericResponseMessage.DirectConnectionRequired,
     };
   }
   if ((options.requireSession || options.requireAdminRights) && !targetServer.hasAdminRights) {
@@ -76,7 +80,8 @@ export function getFailureResult(
     logger(ctx)(result);
     return {
       success: false,
-      message: ResponseStatus.AUTH_FAILURE,
+      code: ResponseCodeEnum.AuthFailure,
+      message: GenericResponseMessage.AuthFailure,
     };
   }
   if (
@@ -88,12 +93,15 @@ export function getFailureResult(
     logger(ctx)(result);
     return {
       success: false,
-      message: ResponseStatus.AUTH_FAILURE,
+      code: ResponseCodeEnum.AuthFailure,
+      message: GenericResponseMessage.AuthFailure,
     };
   }
 
   return {
     success: true,
+    code: ResponseCodeEnum.Success,
+    message: GenericResponseMessage.Success,
     server: targetServer,
   };
 }

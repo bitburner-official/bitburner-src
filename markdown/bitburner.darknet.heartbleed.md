@@ -13,7 +13,7 @@ The speed of capture scales with the number of threads used. See formulas.dnet.g
 **Signature:**
 
 ```typescript
-heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & { logs: string[] }>;
+heartbleed(hostname: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;
 ```
 
 ## Parameters
@@ -70,9 +70,9 @@ _(Optional)_ optional [HeartbleedOptions](./bitburner.heartbleedoptions.md) to m
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md) &amp; { logs: string\[\] }&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { logs: string\[\] }&gt;
 
-a promise that resolves to a [Result](./bitburner.result.md) object, plus the scraped logs.
+a promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object, plus the scraped logs.
 
 ## Remarks
 

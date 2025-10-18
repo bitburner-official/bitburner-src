@@ -13,11 +13,11 @@ Phishing attacks can only be run from scripts on darknet servers.
 **Signature:**
 
 ```typescript
-phishingAttack(): Promise<Result>;
+phishingAttack(): Promise<DarknetResult>;
 ```
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
 
 ## Remarks
 

@@ -1785,6 +1785,47 @@ Names of all companies
 </td></tr>
 <tr><td>
 
+[DarknetResponseCode](./bitburner.darknetresponsecode.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DarknetResponseCodeType](./bitburner.darknetresponsecodetype.md)
+
+
+</td><td>
+
+Errors:
+
+- DirectConnectionRequired: The target server is not directly connected to the current server. This may be caused by a user error (specifying the wrong neighbor host's hostname) or a network change (the target server was moved).
+
+- AuthFailure: Authentication failed. The password is incorrect.
+
+- NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
+
+- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+
+- ServiceUnavailable: The server is offline.
+
+
+</td></tr>
+<tr><td>
+
+[DarknetResult](./bitburner.darknetresult.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [FactionName](./bitburner.factionname.md)
 
 
@@ -2060,37 +2101,6 @@ Structured interface to requirements for joining a faction or company. For field
 A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.
 
 Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.
-
-
-</td></tr>
-<tr><td>
-
-[ResponseStatus](./bitburner.responsestatus.md)
-
-
-</td><td>
-
-Response statuses used for authenticate and connectToSession methods
-
-
-</td></tr>
-<tr><td>
-
-[ResponseStatusType](./bitburner.responsestatustype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[Result](./bitburner.result.md)
-
-
-</td><td>
-
 
 
 </td></tr>

@@ -9,7 +9,7 @@ Spends some time freeing some of the RAM currently blocked by the server owner. 
 **Signature:**
 
 ```typescript
-memoryReallocation(hostname?: string): Promise<Result>;
+memoryReallocation(hostname?: string): Promise<DarknetResult>;
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ _(Optional)_ Optional. Hostname of the connected server to free ram from. Defaul
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
 
 ## Remarks
 

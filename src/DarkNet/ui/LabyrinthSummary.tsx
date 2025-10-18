@@ -3,12 +3,12 @@ import { Typography, Select, MenuItem, Card } from "@mui/material";
 import { DarknetState } from "../models/DarknetState";
 import { getLabMaze, getLabyrinthDetails, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
-import { Result } from "@nsdefs";
+import type { DarknetResult } from "@nsdefs";
 import { Player } from "@player";
 import { useCycleRerender } from "../../ui/React/hooks";
 
 export type LabyrinthSummaryProps = {
-  result: Result | undefined;
+  result: DarknetResult | undefined;
   lastMovementFeedback: string | undefined;
   loadingText?: string;
 };

@@ -10,22 +10,10 @@ If successful, grants the script a session, allowing it to scp() files from that
 
 If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
 
-Response messages:
-
-- "200 Success" - Authentication was successful.
-
-- "401 Not Authorized" - Authentication failed. The password is incorrect.
-
-- "404 Hostname Not Found" - The server is offline.
-
-- "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-
-- "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
-
 **Signature:**
 
 ```typescript
-connectToSession(hostname: string, password: string): Result;
+connectToSession(hostname: string, password: string): DarknetResult;
 ```
 
 ## Parameters
@@ -82,9 +70,9 @@ the server's password, to verify the session
 
 **Returns:**
 
-[Result](./bitburner.result.md)
+[DarknetResult](./bitburner.darknetresult.md)
 
-a promise that resolves to a [Result](./bitburner.result.md) object. The response will have a `status` of "200 Success" \| "401 Not Authorized" \| "401 Hostname Not Found" \| "408 Request Timeout" \| "301 Server Has Moved"
+a promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object. The response will have a `status` of "200 Success" \| "401 Not Authorized" \| "401 Hostname Not Found" \| "408 Request Timeout" \| "301 Server Has Moved"
 
 ## Remarks
 

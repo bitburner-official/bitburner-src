@@ -9,11 +9,11 @@ Executes STORM\_SEED.exe, if it is present on the server the script is running o
 **Signature:**
 
 ```typescript
-unleashStormSeed(): Result;
+unleashStormSeed(): DarknetResult;
 ```
 **Returns:**
 
-[Result](./bitburner.result.md)
+[DarknetResult](./bitburner.darknetresult.md)
 
 ## Remarks
 

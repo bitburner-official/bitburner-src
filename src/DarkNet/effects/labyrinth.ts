@@ -6,7 +6,7 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
-import { ResponseStatus } from "../Enums";
+import { ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 
@@ -207,7 +207,7 @@ export const handleLabyrinthPassword = (
     ];
     return {
       passwordAttempted: attemptedPassword,
-      status: ResponseStatus.AUTH_FAILURE,
+      code: ResponseCodeEnum.NotEnoughCharisma,
       message: failureMessages[Math.floor(Math.random() * failureMessages.length)],
     };
   }
@@ -228,7 +228,7 @@ export const handleLabyrinthPassword = (
     addSessionToServer(labServer, pid);
     return {
       passwordAttempted: attemptedPassword,
-      status: ResponseStatus.SUCCESS,
+      code: ResponseCodeEnum.Success,
       message: "You have discovered the end the labyrinth.",
       data: labServer.password,
     };
@@ -237,7 +237,7 @@ export const handleLabyrinthPassword = (
   if (!labServer.hasAdminRights && attemptedPassword === labServer.password) {
     return {
       passwordAttempted: attemptedPassword,
-      status: ResponseStatus.AUTH_FAILURE,
+      code: ResponseCodeEnum.AuthFailure,
       message: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
     };
   }
@@ -255,7 +255,7 @@ export const handleLabyrinthPassword = (
 
     return {
       passwordAttempted: attemptedPassword,
-      status: ResponseStatus.AUTH_FAILURE,
+      code: ResponseCodeEnum.AuthFailure,
       message: `You cannot go that way. You are still at ${initialX},${initialY}.`,
       data: JSON.stringify(status),
     };
@@ -264,7 +264,7 @@ export const handleLabyrinthPassword = (
   if (!dx && !dy) {
     return {
       passwordAttempted: attemptedPassword,
-      status: ResponseStatus.AUTH_FAILURE,
+      code: ResponseCodeEnum.AuthFailure,
       message: `You don't know how to do that. Try a direction such as "NORTH"`,
     };
   }
@@ -280,7 +280,7 @@ export const handleLabyrinthPassword = (
 
     return {
       passwordAttempted: attemptedPassword,
-      status: ResponseStatus.SUCCESS,
+      code: ResponseCodeEnum.Success,
       message: "You have successfully navigated the labyrinth! Congratulations",
       data: labServer.password,
     };
@@ -297,7 +297,7 @@ export const handleLabyrinthPassword = (
 
   return {
     passwordAttempted: attemptedPassword,
-    status: ResponseStatus.AUTH_FAILURE,
+    code: ResponseCodeEnum.AuthFailure,
     message: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
     data: JSON.stringify(status),
   };

@@ -39,7 +39,7 @@ export const decolorJsonProperties = (logLine: string) => {
       {result?.passwordAttempted ?? ""}
       <br />
       <span style={{ color: "grey" }}>status: </span>
-      {result?.status ?? ""}
+      {result?.code ?? ""}
       <br />
     </>
   );

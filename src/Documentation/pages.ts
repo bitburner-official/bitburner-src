@@ -433,6 +433,9 @@ import nsDoc_bitburner_darknetformulas_getauthenticatetime_md from "../../markdo
 import nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md from "../../markdown/bitburner.darknetformulas.getexpectedramblockremoved.md?raw";
 import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown/bitburner.darknetformulas.getheartbleedtime.md?raw";
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
+import nsDoc_bitburner_darknetresponsecode_md from "../../markdown/bitburner.darknetresponsecode.md?raw";
+import nsDoc_bitburner_darknetresponsecodetype_md from "../../markdown/bitburner.darknetresponsecodetype.md?raw";
+import nsDoc_bitburner_darknetresult_md from "../../markdown/bitburner.darknetresult.md?raw";
 import nsDoc_bitburner_darknetserverdata_backdoorinstalled_md from "../../markdown/bitburner.darknetserverdata.backdoorinstalled.md?raw";
 import nsDoc_bitburner_darknetserverdata_blockedram_md from "../../markdown/bitburner.darknetserverdata.blockedram.md?raw";
 import nsDoc_bitburner_darknetserverdata_cpucores_md from "../../markdown/bitburner.darknetserverdata.cpucores.md?raw";
@@ -1196,9 +1199,6 @@ import nsDoc_bitburner_resetinfo_lastnodereset_md from "../../markdown/bitburner
 import nsDoc_bitburner_resetinfo_md from "../../markdown/bitburner.resetinfo.md?raw";
 import nsDoc_bitburner_resetinfo_ownedaugs_md from "../../markdown/bitburner.resetinfo.ownedaugs.md?raw";
 import nsDoc_bitburner_resetinfo_ownedsf_md from "../../markdown/bitburner.resetinfo.ownedsf.md?raw";
-import nsDoc_bitburner_responsestatus_md from "../../markdown/bitburner.responsestatus.md?raw";
-import nsDoc_bitburner_responsestatustype_md from "../../markdown/bitburner.responsestatustype.md?raw";
-import nsDoc_bitburner_result_md from "../../markdown/bitburner.result.md?raw";
 import nsDoc_bitburner_runningscript_args_md from "../../markdown/bitburner.runningscript.args.md?raw";
 import nsDoc_bitburner_runningscript_dynamicramusage_md from "../../markdown/bitburner.runningscript.dynamicramusage.md?raw";
 import nsDoc_bitburner_runningscript_filename_md from "../../markdown/bitburner.runningscript.filename.md?raw";
@@ -1992,6 +1992,9 @@ AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] = nsDoc_bitbu
 AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
+AllPages["nsDoc/bitburner.darknetresponsecode.md"] = nsDoc_bitburner_darknetresponsecode_md;
+AllPages["nsDoc/bitburner.darknetresponsecodetype.md"] = nsDoc_bitburner_darknetresponsecodetype_md;
+AllPages["nsDoc/bitburner.darknetresult.md"] = nsDoc_bitburner_darknetresult_md;
 AllPages["nsDoc/bitburner.darknetserverdata.backdoorinstalled.md"] = nsDoc_bitburner_darknetserverdata_backdoorinstalled_md;
 AllPages["nsDoc/bitburner.darknetserverdata.blockedram.md"] = nsDoc_bitburner_darknetserverdata_blockedram_md;
 AllPages["nsDoc/bitburner.darknetserverdata.cpucores.md"] = nsDoc_bitburner_darknetserverdata_cpucores_md;
@@ -2755,9 +2758,6 @@ AllPages["nsDoc/bitburner.resetinfo.lastnodereset.md"] = nsDoc_bitburner_resetin
 AllPages["nsDoc/bitburner.resetinfo.md"] = nsDoc_bitburner_resetinfo_md;
 AllPages["nsDoc/bitburner.resetinfo.ownedaugs.md"] = nsDoc_bitburner_resetinfo_ownedaugs_md;
 AllPages["nsDoc/bitburner.resetinfo.ownedsf.md"] = nsDoc_bitburner_resetinfo_ownedsf_md;
-AllPages["nsDoc/bitburner.responsestatus.md"] = nsDoc_bitburner_responsestatus_md;
-AllPages["nsDoc/bitburner.responsestatustype.md"] = nsDoc_bitburner_responsestatustype_md;
-AllPages["nsDoc/bitburner.result.md"] = nsDoc_bitburner_result_md;
 AllPages["nsDoc/bitburner.runningscript.args.md"] = nsDoc_bitburner_runningscript_args_md;
 AllPages["nsDoc/bitburner.runningscript.dynamicramusage.md"] = nsDoc_bitburner_runningscript_dynamicramusage_md;
 AllPages["nsDoc/bitburner.runningscript.filename.md"] = nsDoc_bitburner_runningscript_filename_md;

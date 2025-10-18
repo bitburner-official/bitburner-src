@@ -6,6 +6,7 @@ import { NetscriptContext } from "../../Netscript/APIWrapper";
 import { helpers } from "../../Netscript/NetscriptHelpers";
 import { addCacheToServer } from "./cacheFiles";
 import type { DarknetServer } from "../../Server/DarknetServer";
+import { ResponseCodeEnum } from "../Enums";
 
 export const getPhishingAttackSpeed = () => Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
 const getPhishingCacheCooldownDuration = () => (hasDarknetBonusTime() ? 12_000 : 24_000);
@@ -27,6 +28,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
     helpers.log(ctx, () => result);
     return {
       success: true,
+      code: ResponseCodeEnum.Success,
       message: result,
     };
   } else if (Math.random() < moneyRewardChance) {
@@ -48,6 +50,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
     helpers.log(ctx, () => result);
     return {
       success: true,
+      code: ResponseCodeEnum.Success,
       message: result,
     };
   }
@@ -55,6 +58,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
   helpers.log(ctx, () => result);
   return {
     success: false,
+    code: ResponseCodeEnum.PhishingFailed,
     message: result,
   };
 };

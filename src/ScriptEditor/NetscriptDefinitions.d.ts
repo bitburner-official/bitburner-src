@@ -4153,24 +4153,41 @@ export interface Format {
 }
 
 /**
- * Response statuses used for authenticate and connectToSession methods
+ * Errors:
+ *
+ * - DirectConnectionRequired: The target server is not directly connected to the current server. This may be caused
+ * by a user error (specifying the wrong neighbor host's hostname) or a network change (the target server was moved).
+ *
+ * - AuthFailure: Authentication failed. The password is incorrect.
+ *
+ * - NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
+ *
+ * - RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+ *
+ * - ServiceUnavailable: The server is offline.
+ *
  * @public
  */
-type ResponseStatus = {
-  SUCCESS: "200 Success";
-  AUTH_FAILURE: "401 Not Authorized";
-  /** Server is offline */
-  NOT_FOUND: "401 Hostname Not Found";
-  TIMEOUT: "408 Request Timeout";
-  /** There is no direct connection */
-  MOVED_PERMANENTLY: "301 Server Has Moved";
+type DarknetResponseCodeType = {
+  Success: 200;
+  DirectConnectionRequired: 351;
+  AuthFailure: 401;
+  Forbidden: 403;
+  NotFound: 404;
+  RequestTimeOut: 408;
+  NotEnoughCharisma: 451;
+  StationaryServer: 452; // WIP: Experimental. May be changed later.
+  StasisLinkLimitReached: 453;
+  NoBlockRAM: 454;
+  PhishingFailed: 455;
+  ServiceUnavailable: 503;
 };
 
 /** @public */
-type ResponseStatusType = _ValueOf<ResponseStatus>;
+type DarknetResponseCode = _ValueOf<DarknetResponseCodeType>;
 
 /** @public */
-export type Result = { success: boolean; message: string };
+export type DarknetResult = { success: boolean; code: DarknetResponseCode; message: string };
 
 /**
  * Darknet server data.
@@ -4262,27 +4279,15 @@ export interface Darknet {
    *
    * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
    *
-   * Response messages:
-   *
-   * - "200 Success" - Authentication was successful.
-   *
-   * - "401 Not Authorized" - Authentication failed. The password is incorrect.
-   *
-   * - "404 Hostname Not Found" - The server is offline.
-   *
-   * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-   *
-   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
-   *
    * @remarks
    * RAM cost: 0.6 GB
    *
    * @param hostname - name of the target server (connected to the current server) to try a password.
    * @param password - password to attempt to authenticate with.
    * @param additionalMsec - optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
-   * @returns a promise that resolves to a {@link Result} object.
+   * @returns a promise that resolves to a {@link DarknetResult} object.
    */
-  authenticate(hostname: string, password: string, additionalMsec?: number): Promise<Result>;
+  authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult>;
 
   /**
    * Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`,
@@ -4294,27 +4299,14 @@ export interface Darknet {
    *
    * If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
    *
-   *
-   * Response messages:
-   *
-   * - "200 Success" - Authentication was successful.
-   *
-   * - "401 Not Authorized" - Authentication failed. The password is incorrect.
-   *
-   * - "404 Hostname Not Found" - The server is offline.
-   *
-   * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-   *
-   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
-   *
    * @remarks
    * RAM cost: 0.05 GB
    *
    * @param hostname - name of the target server to connect to existing session
    * @param password - the server's password, to verify the session
-   * @returns a promise that resolves to a {@link Result} object. The response will have a `status` of "200 Success" | "401 Not Authorized" | "401 Hostname Not Found" | "408 Request Timeout" | "301 Server Has Moved"
+   * @returns a promise that resolves to a {@link DarknetResult} object. The response will have a `status` of "200 Success" | "401 Not Authorized" | "401 Hostname Not Found" | "408 Request Timeout" | "301 Server Has Moved"
    */
-  connectToSession(hostname: string, password: string): Result;
+  connectToSession(hostname: string, password: string): DarknetResult;
 
   /**
    * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
@@ -4332,10 +4324,10 @@ export interface Darknet {
    *    peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture.
    *    logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1.
    *    additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
-   *  @returns a promise that resolves to a {@link Result} object, plus the scraped logs.
+   *  @returns a promise that resolves to a {@link DarknetResult} object, plus the scraped logs.
    *
    */
-  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & { logs: string[] }>;
+  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;
 
   /**
    * Opens a .cache file on the current server to acquire its valuable contents.
@@ -4373,9 +4365,9 @@ export interface Darknet {
    * RAM cost: 12 GB
    *
    * @param shouldLink - true to apply a stasis link, false to remove it. Optional. Defaults to true.
-   * @returns A promise that resolves to a {@link Result} object.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
    */
-  setStasisLink(shouldLink?: boolean): Promise<Result>;
+  setStasisLink(shouldLink?: boolean): Promise<DarknetResult>;
 
   /**
    * Returns the maximum number of stasis links that can be applied globally, based on the player's current status.
@@ -4430,9 +4422,9 @@ export interface Darknet {
    * RAM cost: 6 GB
    *
    * @param host - the hostname of the server to listen to.
-   * @returns A promise that resolves to a {@link Result} object, plus the captured data.
+   * @returns A promise that resolves to a {@link DarknetResult} object, plus the captured data.
    */
-  packetCapture(host: string): Promise<Result & { data: string }>;
+  packetCapture(host: string): Promise<DarknetResult & { data: string }>;
 
   /**
    * Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server.
@@ -4444,10 +4436,11 @@ export interface Darknet {
    * RAM cost: 0.5 GB
    *
    * @param hostname - Optional. Hostname of the connected server to migrate. Defaults to the running script's server.
-   * @returns A promise that resolves to a {@link Result} object.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
    */
-  induceServerMigration(hostname?: string): Promise<Result>;
+  induceServerMigration(hostname?: string): Promise<DarknetResult>;
 
+  // WIP: better doc
   /**
    * Executes STORM_SEED.exe, if it is present on the server the script is running on.
    * Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
@@ -4455,7 +4448,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    */
-  unleashStormSeed(): Result;
+  unleashStormSeed(): DarknetResult;
 
   /**
    * Returns whether the server is a darknet server.
@@ -4479,7 +4472,7 @@ export interface Darknet {
    *
    * @param hostname - Optional. Hostname of the connected server to free ram from. Defaults to the running script's server.
    */
-  memoryReallocation(hostname?: string): Promise<Result>;
+  memoryReallocation(hostname?: string): Promise<DarknetResult>;
 
   /**
    * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
@@ -4515,7 +4508,7 @@ export interface Darknet {
    *
    * @param sym - Stock symbol.
    */
-  promoteStock(sym: string): Promise<Result>;
+  promoteStock(sym: string): Promise<DarknetResult>;
 
   /**
    * Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charisma.
@@ -4528,7 +4521,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 2 GB
    */
-  phishingAttack(): Promise<Result>;
+  phishingAttack(): Promise<DarknetResult>;
 
   /**
    * Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
@@ -9314,6 +9307,7 @@ type NSEnums = {
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
   FragmentType: FragmentEnumType;
+  DarknetResponseCode: DarknetResponseCodeType;
 };
 
 /**

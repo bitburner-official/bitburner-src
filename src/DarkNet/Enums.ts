@@ -37,30 +37,50 @@ export const ModelIds = {
 
 export type MinigamesType = _ValueOf<typeof ModelIds>;
 
-export const ResponseStatus = {
-  SUCCESS: "200 Success",
-  AUTH_FAILURE: "401 Not Authorized",
-  NOT_FOUND: "401 Hostname Not Found",
-  TIMEOUT: "408 Request Timeout",
-  MOVED_PERMANENTLY: "301 Server Has Moved",
+export const GenericResponseMessage = {
+  Success: "Success",
+  DirectConnectionRequired: "Direct Connection Required",
+  AuthFailure: "Unauthorized",
+  NotFound: "Not Found",
+  RequestTimeOut: "Request Timeout",
+  NotEnoughCharisma: "Not Enough Charisma",
+  StationaryServer: "Stationary Server", // WIP: Experimental. May be changed later.
+  StasisLinkLimitReached: "Stasis Link Limit Reached",
+  NoBlockRAM: "No Host-owned RAM Left To Reallocate",
+  ServiceUnavailable: "Service Unavailable",
+};
+
+export const ResponseCodeEnum = {
+  Success: 200,
+  DirectConnectionRequired: 351,
+  AuthFailure: 401,
+  Forbidden: 403,
+  NotFound: 404,
+  RequestTimeOut: 408,
+  NotEnoughCharisma: 451,
+  StationaryServer: 452,
+  StasisLinkLimitReached: 453,
+  NoBlockRAM: 454,
+  PhishingFailed: 455,
+  ServiceUnavailable: 503,
 } as const;
 
 export const exampleDarknetServerData: DarknetServerData = {
-  difficulty: 0,
-  hasAdminRights: false,
-  hasStasisLink: false,
   hostname: "",
   ip: "",
+  hasAdminRights: false,
   isConnectedTo: false,
-  maxRam: 0,
-  blockedRam: 0,
+  cpuCores: 1,
   ramUsed: 0,
-  requiredCharismaSkill: 0,
+  maxRam: 0,
+  backdoorInstalled: false,
+  hasStasisLink: false,
+  blockedRam: 0,
+  modelId: "",
   staticPasswordHint: "",
   passwordHintData: "",
+  difficulty: 0,
   depth: -1,
-  modelId: "",
+  requiredCharismaSkill: 0,
   logTrafficInterval: -1,
-  backdoorInstalled: false,
-  cpuCores: 1,
 } as const;

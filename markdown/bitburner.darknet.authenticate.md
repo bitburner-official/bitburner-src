@@ -8,22 +8,10 @@ Sends a network request to try to authenticate on a darkweb server. The target s
 
 If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
 
-Response messages:
-
-- "200 Success" - Authentication was successful.
-
-- "401 Not Authorized" - Authentication failed. The password is incorrect.
-
-- "404 Hostname Not Found" - The server is offline.
-
-- "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-
-- "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
-
 **Signature:**
 
 ```typescript
-authenticate(hostname: string, password: string, additionalMsec?: number): Promise<Result>;
+authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult>;
 ```
 
 ## Parameters
@@ -96,9 +84,9 @@ _(Optional)_ optional. The number of additional milliseconds to add to the run t
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
 
-a promise that resolves to a [Result](./bitburner.result.md) object.
+a promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object.
 
 ## Remarks
 

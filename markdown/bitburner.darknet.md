@@ -40,18 +40,6 @@ Sends a network request to try to authenticate on a darkweb server. The target s
 
 If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
 
-Response messages:
-
-- "200 Success" - Authentication was successful.
-
-- "401 Not Authorized" - Authentication failed. The password is incorrect.
-
-- "404 Hostname Not Found" - The server is offline.
-
-- "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-
-- "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
-
 
 </td></tr>
 <tr><td>
@@ -66,18 +54,6 @@ Attempts to connect to a target darkweb server that you have previously authenti
 If successful, grants the script a session, allowing it to scp() files from that target. It also allows starting scripts with exec() on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
 
 If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
-
-Response messages:
-
-- "200 Success" - Authentication was successful.
-
-- "401 Not Authorized" - Authentication failed. The password is incorrect.
-
-- "404 Hostname Not Found" - The server is offline.
-
-- "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-
-- "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
 
 
 </td></tr>

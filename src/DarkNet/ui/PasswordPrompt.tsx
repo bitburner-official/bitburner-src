@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Button, Container, Card, TextField, Typography } from "@mui/material";
 import { getPasswordType } from "../controllers/ServerGenerator";
 import { dnetStyles } from "./dnetStyles";
-import { Result } from "@nsdefs";
+import type { DarknetResult } from "@nsdefs";
 import { PasswordResponse } from "../models/DarknetServerOptions";
 import { getAuthResult } from "../effects/authentication";
 import { DarknetEvents } from "../models/DarknetState";
@@ -23,7 +23,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
   const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.password : "");
   const [enableSubmit, setEnableSubmit] = useState(true);
   const [response, setResponse] = useState("(no response yet)");
-  const [rawResponse, setRawResponse] = useState<{ result: Result; response: PasswordResponse } | null>(null);
+  const [rawResponse, setRawResponse] = useState<{ result: DarknetResult; response: PasswordResponse } | null>(null);
   const { classes } = dnetStyles({});
 
   const passwordInput = useRef<HTMLInputElement>(null);

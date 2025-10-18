@@ -1,7 +1,7 @@
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { Player } from "@player";
 import { CompletedProgramName } from "@enums";
-import { ResponseStatus } from "../Enums";
+import { GenericResponseMessage, ResponseCodeEnum } from "../Enums";
 
 export const hasDarknetAccess = () => {
   return canAccessBitNodeFeature(15) || Player.hasProgram(CompletedProgramName.darkscape);
@@ -51,13 +51,13 @@ export const getMisplacedCorrectCharsCount = (password: string, attemptedPasswor
 };
 
 export const getGenericSuccess = (attemptedPassword: string) => ({
-  status: ResponseStatus.SUCCESS,
-  message: "Success! Access granted.",
+  code: ResponseCodeEnum.Success,
+  message: GenericResponseMessage.Success,
   passwordAttempted: attemptedPassword,
 });
 
 export const getFailureResponse = (attemptedPassword: string, message: string, data: string) => ({
-  status: ResponseStatus.AUTH_FAILURE,
+  code: ResponseCodeEnum.AuthFailure,
   message,
   data,
   passwordAttempted: attemptedPassword,

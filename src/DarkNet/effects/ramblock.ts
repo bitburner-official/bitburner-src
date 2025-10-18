@@ -10,6 +10,7 @@ import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 import { CompletedProgramName } from "@enums";
 import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { ResponseCodeEnum } from "../Enums";
 
 /*
  * Handles the effects of removing some blocked RAM from a Darknet server.
@@ -36,6 +37,7 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   logger(ctx)(result);
   return {
     success: true,
+    code: ResponseCodeEnum.Success,
     message: result,
   };
 };
