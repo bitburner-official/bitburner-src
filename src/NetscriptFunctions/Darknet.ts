@@ -187,7 +187,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         const server = onlineConnectionCheck.server;
 
-        const result = checkPassword(server, token, 0, ctx.workerScript.pid);
+        const result = checkPassword(server, token, ctx.workerScript.scriptRef.threads, ctx.workerScript.pid);
         if (result.status === ResponseStatus.SUCCESS) {
           logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
           return {

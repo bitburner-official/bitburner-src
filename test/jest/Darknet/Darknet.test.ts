@@ -41,37 +41,37 @@ describe("Password Tests", () => {
   test("getEchoVulnServer creates a server and checks password correctly", () => {
     const server = serverFactory(getEchoVulnConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword");
+    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(failedAttemptResponse.message.includes(server.password)).toBe(true);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password, 1).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getNoPasswordServer creates a server with no password", () => {
     const server = serverFactory(getNoPasswordConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword");
+    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password, 1).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getDefaultPasswordServer creates a server with default password", () => {
     const server = serverFactory(getDefaultPasswordConfig, difficulty, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword");
+    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
 
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
 
     expect(defaultSettingsDictionary.includes(server.password)).toBe(true);
 
-    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password, 1).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -131,14 +131,14 @@ describe("Password Tests", () => {
     expect(correctCount6).toBe("1");
     expect(closeCount6).toBe("2");
 
-    expect(checkPassword(server, server.password).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server, server.password, 1).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getConvertToBase10Server creates a server with a correct password hint", () => {
     const server = serverFactory(getConvertToBase10Config, 5, 0, 0);
     expect(server).toBeDefined();
-    const failedAttemptResponse = checkPassword(server, "wrongPassword");
+    const failedAttemptResponse = checkPassword(server, "wrongPassword", 1);
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     if (!failedAttemptResponse.data) {
       throw new Error("Invalid failedAttemptResponse");
@@ -149,7 +149,7 @@ describe("Password Tests", () => {
 
     const attemptedPassword = parseBaseNNumberString(numberString, Number(base));
 
-    const result = checkPassword(server, `${attemptedPassword}`);
+    const result = checkPassword(server, `${attemptedPassword}`, 1);
 
     expect(result.status).toBe(ResponseStatus.SUCCESS);
   });

@@ -17,7 +17,8 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 export const checkPassword = (
   server: DarknetServer,
   attemptedPassword: string,
-  threads: number = 1,
+  threads: number,
+  // WIP-@fico
   pid?: number,
   responseTime = 0,
 ): PasswordResponse => {
@@ -75,6 +76,7 @@ export const checkPassword = (
       Math.abs((parsedAttemptedPassword - +server.password) / +server.password) < 0.005
     ) {
       // ignore small rounding errors during floating point operations
+      // WIP-@fico
       handleSuccessfulAuth(server, threads);
       return getGenericSuccess(attemptedPassword);
     }
