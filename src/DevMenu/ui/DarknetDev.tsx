@@ -65,7 +65,7 @@ export function DarknetDev(): React.ReactElement {
             onClick={() => {
               getAllMovableDarknetServers().forEach((server) => {
                 if (!isLabyrinthServer(server.hostname)) {
-                  handleSuccessfulAuth(server, 1);
+                  handleSuccessfulAuth(server, 1, -1);
                 }
               });
               SnackbarEvents.emit("Gained darknet server admin rights", ToastVariant.SUCCESS, 2000);

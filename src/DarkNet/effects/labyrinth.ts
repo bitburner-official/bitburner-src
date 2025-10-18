@@ -38,7 +38,7 @@ export const labData: Record<string, labDetails> = {
     augReward: AugmentationName.TheBrokenWings,
     mazeWidth: 20,
     mazeHeight: 14,
-    manual: false,
+    manual: true,
   },
   [SpecialServers.CruelLab]: {
     name: SpecialServers.CruelLab,
@@ -193,7 +193,7 @@ export const getSurroundingsVisualized = (
 export const handleLabyrinthPassword = (
   attemptedPassword: string,
   server: DarknetServer,
-  pid: number = -1,
+  pid: number,
 ): PasswordResponse => {
   const labDetails = getLabyrinthDetails();
 

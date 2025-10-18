@@ -28,7 +28,7 @@ import { getTorRouter } from "../../Server/ServerHelpers";
 import { DarknetConstants } from "../Constants";
 import { GetServer } from "../../Server/AllServers";
 
-export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number = -1) => {
+export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number) => {
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
   addSessionToServer(server, pid);
 
