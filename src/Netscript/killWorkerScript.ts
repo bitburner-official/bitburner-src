@@ -36,7 +36,7 @@ export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boole
 }
 
 export const killAllScripts = () => {
-  for (const server of GetAllServers()) {
+  for (const server of GetAllServers(true)) {
     for (const byPid of server.runningScriptMap.values()) {
       for (const pid of byPid.keys()) {
         killWorkerScriptByPid(pid);
