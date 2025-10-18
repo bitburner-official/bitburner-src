@@ -446,6 +446,7 @@ import nsDoc_bitburner_darknetserverdata_hasstasislink_md from "../../markdown/b
 import nsDoc_bitburner_darknetserverdata_hostname_md from "../../markdown/bitburner.darknetserverdata.hostname.md?raw";
 import nsDoc_bitburner_darknetserverdata_ip_md from "../../markdown/bitburner.darknetserverdata.ip.md?raw";
 import nsDoc_bitburner_darknetserverdata_isconnectedto_md from "../../markdown/bitburner.darknetserverdata.isconnectedto.md?raw";
+import nsDoc_bitburner_darknetserverdata_isstationary_md from "../../markdown/bitburner.darknetserverdata.isstationary.md?raw";
 import nsDoc_bitburner_darknetserverdata_logtrafficinterval_md from "../../markdown/bitburner.darknetserverdata.logtrafficinterval.md?raw";
 import nsDoc_bitburner_darknetserverdata_maxram_md from "../../markdown/bitburner.darknetserverdata.maxram.md?raw";
 import nsDoc_bitburner_darknetserverdata_md from "../../markdown/bitburner.darknetserverdata.md?raw";
@@ -2005,6 +2006,7 @@ AllPages["nsDoc/bitburner.darknetserverdata.hasstasislink.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.darknetserverdata.hostname.md"] = nsDoc_bitburner_darknetserverdata_hostname_md;
 AllPages["nsDoc/bitburner.darknetserverdata.ip.md"] = nsDoc_bitburner_darknetserverdata_ip_md;
 AllPages["nsDoc/bitburner.darknetserverdata.isconnectedto.md"] = nsDoc_bitburner_darknetserverdata_isconnectedto_md;
+AllPages["nsDoc/bitburner.darknetserverdata.isstationary.md"] = nsDoc_bitburner_darknetserverdata_isstationary_md;
 AllPages["nsDoc/bitburner.darknetserverdata.logtrafficinterval.md"] = nsDoc_bitburner_darknetserverdata_logtrafficinterval_md;
 AllPages["nsDoc/bitburner.darknetserverdata.maxram.md"] = nsDoc_bitburner_darknetserverdata_maxram_md;
 AllPages["nsDoc/bitburner.darknetserverdata.md"] = nsDoc_bitburner_darknetserverdata_md;
