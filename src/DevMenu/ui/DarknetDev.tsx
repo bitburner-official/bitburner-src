@@ -16,7 +16,7 @@ import { getDarkscapeNavigator, handleSuccessfulAuth } from "../../DarkNet/effec
 import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
-import { getAllMobileDarknetServers } from "../../DarkNet/utils/darknetNetworkUtils";
+import { getAllMovableDarknetServers } from "../../DarkNet/utils/darknetNetworkUtils";
 
 export function DarknetDev(): React.ReactElement {
   const toggleShowFullNetwork = (newValue: boolean): void => {
@@ -63,7 +63,7 @@ export function DarknetDev(): React.ReactElement {
         <Tooltip title={<Typography>Root all standard darknet servers.</Typography>}>
           <Button
             onClick={() => {
-              getAllMobileDarknetServers().forEach((server) => {
+              getAllMovableDarknetServers().forEach((server) => {
                 if (!isLabyrinthServer(server.hostname)) {
                   handleSuccessfulAuth(server, 1);
                 }
@@ -79,7 +79,7 @@ export function DarknetDev(): React.ReactElement {
         <Tooltip title={<Typography>Root all darknet labyrinth servers.</Typography>}>
           <Button
             onClick={() => {
-              getAllMobileDarknetServers().forEach((server) => {
+              getAllMovableDarknetServers().forEach((server) => {
                 if (isLabyrinthServer(server.hostname)) {
                   server.hasAdminRights = true;
                 }

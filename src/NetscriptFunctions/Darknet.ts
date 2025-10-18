@@ -360,7 +360,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           }));
         }
         const server = onlineConnectionCheck.server;
-        if (!server.isMobile) {
+        if (server.isStationary) {
           helpers.log(ctx, () => `${server.hostname} cannot be stasis linked: it is a stationary server.`);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
@@ -523,7 +523,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
         const onlineConnectionCheck = getFailureResult(ctx, hostname, {
           requireDirectConnection: true,
-          preventUseOnImmobileServers: true,
+          preventUseOnStationaryServers: true,
         });
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -539,7 +539,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return helpers.netscriptDelay(ctx, !CONSTANTS.isInTestEnvironment ? 6000 : 0).then(() => {
           const onlineConnectionCheck = getFailureResult(ctx, hostname, {
             requireDirectConnection: true,
-            preventUseOnImmobileServers: true,
+            preventUseOnStationaryServers: true,
           });
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({

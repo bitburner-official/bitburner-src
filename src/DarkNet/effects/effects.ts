@@ -19,7 +19,7 @@ import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import {
-  getAllMobileDarknetServers,
+  getAllMovableDarknetServers,
   getBackdooredDarkwebServers,
   getNearbyNonEmptyPasswordServer,
 } from "../utils/darknetNetworkUtils";
@@ -110,7 +110,7 @@ export const calculateAuthenticationTime = (
 
 export const getBackdoorAuthTimeDebuff = () => {
   const backdooredServerCount = getBackdooredDarkwebServers().length;
-  const serverCount = getAllMobileDarknetServers().filter((s) => s.hasAdminRights).length;
+  const serverCount = getAllMovableDarknetServers().filter((s) => s.hasAdminRights).length;
   const safeBackdoors = Math.max(serverCount / (NET_WIDTH * 3), 2);
   const backdoorSurplus = Math.max(0, backdooredServerCount - safeBackdoors);
 

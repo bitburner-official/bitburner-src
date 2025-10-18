@@ -6,7 +6,7 @@ import { getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { ModelIds } from "../Enums";
 import { getDarknetServer } from "../utils/darknetServerUtils";
-import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
+import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 import { getExactCorrectChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { isLabyrinthServer } from "../effects/labyrinth";
@@ -63,7 +63,7 @@ const getRandomData = (server: DarknetServer, length: number) => {
     } else if (Math.random() < 0.15) {
       result += "/" + Object.keys(LocationName)[Math.floor(Math.random() * Object.keys(LocationName).length)] + "/";
     } else if (Math.random() < 0.05) {
-      const servers = getAllMobileDarknetServers();
+      const servers = getAllMovableDarknetServers();
       const randomServer = servers[Math.floor(Math.random() * servers.length)];
       return `--${randomServer.password ?? ""}--`;
     } else {
@@ -187,7 +187,7 @@ const getLogNoise = (server: DarknetServer, logDate: Date) => {
   }
 
   if (Math.random() < 0.05) {
-    const servers = getAllMobileDarknetServers();
+    const servers = getAllMovableDarknetServers();
     const randomServer = servers[Math.floor(Math.random() * servers.length)];
     return `--${randomServer.password ?? ""}--`;
   }

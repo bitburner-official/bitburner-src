@@ -25,7 +25,7 @@ export interface DarknetServerConstructorParams {
   blockedRam: number;
   logTrafficInterval: number;
   requiredCharismaSkill: number;
-  isMobile: boolean;
+  isStationary: boolean;
 }
 
 export class DarknetServer extends BaseServer implements DarknetServerData {
@@ -58,8 +58,8 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
   logTrafficInterval: number;
   /** The charisma skill required to heartbleed the server */
   requiredCharismaSkill: number;
-  /** If this darknet server can move. False for fixed/story servers. */
-  isMobile: boolean;
+  /** If this darknet server cannot be moved. True for fixed/story servers. */
+  isStationary: boolean;
 
   constructor(
     params: DarknetServerConstructorParams = {
@@ -68,7 +68,7 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
       icon: Icon.Terminal,
       password: "",
       leftOffset: 0,
-      isMobile: true,
+      isStationary: false,
     },
   ) {
     super(params);
@@ -85,7 +85,7 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
     this.blockedRam = params.blockedRam;
     this.logTrafficInterval = params.logTrafficInterval;
     this.requiredCharismaSkill = params.requiredCharismaSkill;
-    this.isMobile = params.isMobile;
+    this.isStationary = params.isStationary;
   }
 
   toJSON(): IReviverValue {

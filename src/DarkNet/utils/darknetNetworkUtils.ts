@@ -64,15 +64,15 @@ export const getAllDarknetServers = (): DarknetServer[] => {
   return GetAllServers(true).filter((server) => server instanceof DarknetServer);
 };
 
-export const getAllMobileDarknetServers = (): DarknetServer[] => {
-  const mobileDarknetServers = [];
+export const getAllMovableDarknetServers = (): DarknetServer[] => {
+  const movableDarknetServers = [];
   for (const server of GetAllServers(true)) {
-    if (!(server instanceof DarknetServer) || !server.isMobile) {
+    if (!(server instanceof DarknetServer) || server.isStationary) {
       continue;
     }
-    mobileDarknetServers.push(server);
+    movableDarknetServers.push(server);
   }
-  return mobileDarknetServers;
+  return movableDarknetServers;
 };
 
 export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] => {
@@ -82,10 +82,10 @@ export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] =
   return [...rowAbove, ...rowBelow, ...neighborsOnRow];
 };
 
-export const getIslands = () => getAllMobileDarknetServers().filter((s) => !s.serversOnNetwork.length);
+export const getIslands = () => getAllMovableDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
 export const getBackdooredDarkwebServers = (): DarknetServer[] =>
-  getAllMobileDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
+  getAllMovableDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
 
 export const getNearbyNonEmptyPasswordServer = (server: DarknetServer, disconnected = false) => {
   return getAllAdjacentNeighbors(server.depth, server.leftOffset).find(
@@ -96,7 +96,7 @@ export const getNearbyNonEmptyPasswordServer = (server: DarknetServer, disconnec
   );
 };
 
-export const getStasisLinkServers = () => getAllMobileDarknetServers().filter((s) => s.hasStasisLink);
+export const getStasisLinkServers = () => getAllMovableDarknetServers().filter((s) => s.hasStasisLink);
 
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 

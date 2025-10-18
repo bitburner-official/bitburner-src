@@ -63,7 +63,7 @@ export const DnetServerBuilder = (options: DarknetServerOptions, name = generate
     blockedRam: ramBlock,
     logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
     requiredCharismaSkill: requiredLevel,
-    isMobile: true,
+    isStationary: false,
   });
   server.updateRamUsed(ramBlock);
   removeFromOfflineServers(name);

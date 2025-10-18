@@ -9,7 +9,7 @@ import { NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,
   getAllDarknetServers,
-  getAllMobileDarknetServers,
+  getAllMovableDarknetServers,
   getAllOpenPositions,
   getBackdooredDarkwebServers,
   getDarknetCyclesPerMutation,
@@ -40,7 +40,7 @@ export const mutateDarknet = (): void => {
   if (!DarknetState.allowMutating) {
     return;
   }
-  const servers = getAllMobileDarknetServers();
+  const servers = getAllMovableDarknetServers();
   if (servers.length === 0) {
     return;
   }
@@ -120,7 +120,7 @@ export const mutateDarknet = (): void => {
 };
 
 export const restartAllDarknetServers = (): void => {
-  const servers = getAllMobileDarknetServers();
+  const servers = getAllMovableDarknetServers();
   for (const server of servers) {
     restartServer(server);
   }
@@ -128,7 +128,7 @@ export const restartAllDarknetServers = (): void => {
 
 export const moveRandomDarknetServers = (count = 1): void => {
   for (let i = 0; i < count; i++) {
-    const servers = getAllMobileDarknetServers();
+    const servers = getAllMovableDarknetServers();
     if (servers.length === 0) {
       break;
     }
@@ -139,7 +139,7 @@ export const moveRandomDarknetServers = (count = 1): void => {
 
 export const deleteRandomDarknetServers = (count = 1): void => {
   for (let i = 0; i < count; i++) {
-    const servers = getAllMobileDarknetServers();
+    const servers = getAllMovableDarknetServers();
     if (servers.length === 0) {
       break;
     }
@@ -184,13 +184,13 @@ export const addRandomDarknetServers = (count = 1, difficulty?: number): void =>
 };
 
 export const balanceDarknetServers = (): void => {
-  const mobileServers = getAllMobileDarknetServers();
+  const movableServers = getAllMovableDarknetServers();
   const netDepth = getNetDepth();
-  if (mobileServers.length > netDepth * NET_WIDTH * SERVER_DENSITY) {
-    const serversToRemove = mobileServers.length - netDepth * NET_WIDTH * SERVER_DENSITY;
+  if (movableServers.length > netDepth * NET_WIDTH * SERVER_DENSITY) {
+    const serversToRemove = movableServers.length - netDepth * NET_WIDTH * SERVER_DENSITY;
     deleteRandomDarknetServers(serversToRemove);
   } else {
-    const serversToAdd = netDepth * NET_WIDTH * SERVER_DENSITY - mobileServers.length;
+    const serversToAdd = netDepth * NET_WIDTH * SERVER_DENSITY - movableServers.length;
     addRandomDarknetServers(serversToAdd);
   }
 };
@@ -227,7 +227,7 @@ export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, m
 };
 
 const disconnectionRandomServer = (): void => {
-  const servers = getAllMobileDarknetServers();
+  const servers = getAllMovableDarknetServers();
   if (servers.length === 0) {
     return;
   }
@@ -253,7 +253,7 @@ export const disconnectServer = (server: DarknetServer, disconnectFromDarkweb = 
 };
 
 const restartRandomServer = (): void => {
-  const servers = getAllMobileDarknetServers();
+  const servers = getAllMovableDarknetServers();
   if (servers.length === 0) {
     return;
   }
@@ -273,7 +273,7 @@ export const restartServer = (server: DarknetServer): void => {
 };
 
 const addConnectionsToRandomServer = (): void => {
-  const servers = getAllMobileDarknetServers();
+  const servers = getAllMovableDarknetServers();
   if (servers.length === 0) {
     return;
   }

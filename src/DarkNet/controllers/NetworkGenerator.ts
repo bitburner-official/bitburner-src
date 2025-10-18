@@ -36,7 +36,7 @@ import {
 } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
 import {
-  getAllMobileDarknetServers,
+  getAllMovableDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
   getServersOnRowBelow,
@@ -77,7 +77,7 @@ export function initDarkwebServer(): void {
   };
 
   const darkweb = DnetServerBuilder(data, SpecialServers.DarkWeb);
-  darkweb.isMobile = false;
+  darkweb.isStationary = true;
   darkweb.hasAdminRights = true;
   darkweb.blockedRam = 0;
   darkweb.scripts = scripts;
@@ -90,7 +90,7 @@ export function initDarkwebServer(): void {
 export const populateDarknet = () => {
   initDarkwebServer();
 
-  if (getAllMobileDarknetServers().length) {
+  if (getAllMovableDarknetServers().length) {
     loadDarknet();
     return;
   }
@@ -102,7 +102,7 @@ export const populateDarknet = () => {
   addRandomDarknetServers(5 - DarknetState.Network[1].length);
   balanceDarknetServers();
 
-  const updatedServers = getAllMobileDarknetServers();
+  const updatedServers = getAllMovableDarknetServers();
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
@@ -143,12 +143,12 @@ export const movePlayerIfNeeded = (server?: DarknetServer) => {
  * Loads all the darknet servers into DarknetState.Network, if it is not already populated
  */
 export const loadDarknet = () => {
-  const currentServers = DarknetState.Network.flat().filter((s) => s !== null && s.isMobile);
+  const currentServers = DarknetState.Network.flat().filter((s) => s !== null && !s.isStationary);
   if (currentServers.length) {
     return;
   }
 
-  const darkNetServers = getAllMobileDarknetServers();
+  const darkNetServers = getAllMovableDarknetServers();
   for (const server of darkNetServers) {
     if (isLabyrinthServer(server.hostname)) {
       continue;
@@ -158,7 +158,7 @@ export const loadDarknet = () => {
   }
   balanceDarknetServers();
 
-  const updatedServers = getAllMobileDarknetServers();
+  const updatedServers = getAllMovableDarknetServers();
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
@@ -233,7 +233,7 @@ export const addLabyrinth = () => {
     hasStasisLink: false,
     blockedRam: 0,
     logTrafficInterval: Number.MAX_SAFE_INTEGER,
-    isMobile: false,
+    isStationary: true,
   };
 
   for (const hostname of getLabyrinthServerNames()) {

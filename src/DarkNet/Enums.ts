@@ -48,7 +48,7 @@ export const GenericResponseMessage = {
   StasisLinkLimitReached: "Stasis Link Limit Reached",
   NoBlockRAM: "No Host-owned RAM Left To Reallocate",
   ServiceUnavailable: "Service Unavailable",
-};
+} as const;
 
 export const ResponseCodeEnum = {
   Success: 200,

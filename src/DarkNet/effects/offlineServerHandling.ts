@@ -17,7 +17,7 @@ type FailureResultOptions = {
   requireAdminRights?: boolean;
   requireSession?: boolean;
   requireDirectConnection?: boolean;
-  preventUseOnImmobileServers?: boolean;
+  preventUseOnStationaryServers?: boolean;
 };
 
 export const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
@@ -62,7 +62,7 @@ export function getFailureResult(
     const result = `${targetServer.hostname} is not a darknet server.`;
     throw errorMessage(ctx, result);
   }
-  if (options.preventUseOnImmobileServers && targetServer.isMobile == false) {
+  if (options.preventUseOnStationaryServers && targetServer.isStationary) {
     const result = `${targetServer.hostname} is not a valid target: it is a stationary server.`;
     throw errorMessage(ctx, result);
   }

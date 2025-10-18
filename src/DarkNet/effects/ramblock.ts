@@ -6,7 +6,7 @@ import type { NetscriptContext } from "../../Netscript/APIWrapper";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { addCacheToServer } from "./cacheFiles";
 import { DarknetState } from "../models/DarknetState";
-import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
+import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 import { CompletedProgramName } from "@enums";
 import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
@@ -53,7 +53,7 @@ export const handleRamBlockClearedRewards = (server: DarknetServer) => {
 
   const stormSeedChance = 0.15;
   const timeSinceLastStorm = Date.now() - DarknetState.lastStormTime.getTime();
-  const stormFileExists = getAllMobileDarknetServers().some((s) => s.programs.includes(CompletedProgramName.stormSeed));
+  const stormFileExists = getAllMovableDarknetServers().some((s) => s.programs.includes(CompletedProgramName.stormSeed));
   if (timeSinceLastStorm > 30 * 60 * 1000 && !stormFileExists && Math.random() < stormSeedChance) {
     server.programs.push(CompletedProgramName.stormSeed);
   }
@@ -75,7 +75,7 @@ export const getRamBlockRemoved = (darknetServerData: DarknetServerData, threads
  * Sets the RAM used on all Darknet servers to account for any changes in their RAM blocks.
  */
 export const applyRamBlocks = () => {
-  const servers = getAllMobileDarknetServers();
+  const servers = getAllMovableDarknetServers();
   for (const server of servers) {
     server.updateRamUsed(server.blockedRam);
   }
