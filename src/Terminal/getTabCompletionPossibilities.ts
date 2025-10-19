@@ -14,6 +14,7 @@ import { enums } from "../NetscriptFunctions";
 import { TerminalCommands } from "./Terminal";
 import { Terminal } from "../Terminal";
 import { parseUnknownError } from "../utils/ErrorHelper";
+import { CompletedProgramName } from "@enums";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -231,7 +232,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         addPrograms();
         addCodingContracts();
         addScripts();
-      } else if (commandArray[1] == "ServerProfiler.exe") {
+      } else if (commandArray[1] === CompletedProgramName.serverProfiler) {
         addServerNames();
       } else {
         const options = await scriptAutocomplete();
