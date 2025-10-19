@@ -9,6 +9,8 @@ import {
   getConvertToBase10Config,
   parseSimpleArithmeticExpression,
   generateSimpleArithmeticExpression,
+  getLargestPrimeFactorConfig,
+  largePrimes,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
@@ -21,6 +23,7 @@ import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert
 import * as UtilityModule from "../../../src/utils/Utility";
 import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
+import { isNumber } from "../../../src/types";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -207,6 +210,24 @@ describe("Password Tests", () => {
     const expression = generateSimpleArithmeticExpression(13);
     const numberParts = expression.substring(0, expression.indexOf(";"));
     expect(eval(numberParts)).toBeCloseTo(parseSimpleArithmeticExpression(expression));
+  });
+
+  test("getLargestPrimeFactor server creates valid password and hint", () => {
+    const server = serverFactory(() => getLargestPrimeFactorConfig(20), 5, 0, 0);
+    const password = +server.password;
+    const hint = +server.passwordHintData;
+
+    expect(isNumber(password)).toBe(true);
+    expect(isNumber(hint)).toBe(true);
+
+    const factor = hint / password;
+    expect(factor).toEqual(Math.floor(factor));
+
+    const factors = largePrimes
+      .filter((n) => hint / n === Math.floor(hint / n))
+      .sort()
+      .toReversed();
+    expect(factors[0]).toEqual(password);
   });
 });
 

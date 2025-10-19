@@ -237,8 +237,8 @@ export const getLargestPrimeFactorConfig = (difficulty: number): ServerConfig =>
   return {
     modelId: ModelIds.LargestPrimeFactor,
     password: `${largestPrimePasswordDetails.largestPrime}`,
-    staticPasswordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
-    passwordHintData: `${largestPrimePasswordDetails.password}`,
+    staticPasswordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.targetNumber}`,
+    passwordHintData: `${largestPrimePasswordDetails.targetNumber}`,
   };
 };
 
@@ -558,23 +558,29 @@ export const romanNumeralEncoder = (input: number): string => {
   return result || " ";
 };
 
-const smallPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
-const largePrimes = [
-  10007, 10009, 10037, 10039, 10061, 10067, 10069, 10079, 10091, 10159, 10163, 10169, 10177, 10181, 10193, 10211, 10223,
-  10243, 10247, 10253, 10259, 10267, 343051, 426799, 464279, 532993, 982097, 987929, 993893, 997609,
+export const smallPrimes = [
+  2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
+];
+export const largePrimes = [
+  1069, 1409, 1471, 1567, 1597, 1601, 1697, 1747, 1801, 1889, 1979, 1999, 2063, 2207, 2371, 2503, 2539, 2693, 2741,
+  2753, 2801, 2819, 2837, 2909, 2939, 3169, 3389, 3571, 3761, 3881, 4217, 4289, 4547, 4729, 4789, 4877, 4943, 4951,
+  4957, 5393, 5417, 5419, 5441, 5519, 5527, 5647, 5779, 5881, 6007, 6089, 6133, 6389, 6451, 6469, 6547, 6661, 6719,
+  6841, 7103, 7549, 7559, 7573, 7691, 7753, 7867, 8053, 8081, 8221, 8329, 8599, 8677, 8761, 8839, 8963, 9103, 9199,
+  9343, 9467, 9551, 9601, 9739, 9749, 9859,
 ];
 
 const getLargestPrimeFactorPassword = (difficulty = 1) => {
-  const factorCount = 2 + Math.min(8, Math.floor(difficulty / 2));
+  const factorCount = 1 + Math.min(5, Math.floor(difficulty / 3));
 
-  const largePrimeIndex = Math.floor(Math.random() * (largePrimes.length - 1));
-  let number = largePrimes[Math.random() * largePrimes.length];
+  const largePrimeIndex = 2 + Math.floor(Math.random() * (largePrimes.length - 2));
+  const largestPrime = largePrimes[largePrimeIndex];
+  let number = largestPrime * largePrimes[Math.floor(Math.random() * largePrimeIndex)];
   for (let i = 1; i <= factorCount; i++) {
     number *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
   }
 
   return {
-    largestPrime: largePrimes[largePrimeIndex],
-    password: number,
+    largestPrime: largestPrime,
+    targetNumber: number,
   };
 };

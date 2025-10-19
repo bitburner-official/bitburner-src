@@ -4,14 +4,24 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
-- set fixed zoom on search
+-tweak starter script to work from home
+
 - darknet scripts are killed on restart?
 - performance
-- link server logs to PID for labyrinth display?
+- link server logs to PID for labyrinth display
+
+- cache toasts - all or nothing
+- return reward details from cache
+
+tweak milestones and flight to indicate tht TRP is in the dark net for BN15
 
 - more hint notes
 
+- access .lit and .data files from UI
+
 ## Post MVP:
+
+- Lab interactions: doors, chests, mimics, grue
 
 - stanek fragments for darkweb
 
@@ -23,11 +33,6 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
   - only nearby servers are valid
 
 webstorm screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
-
-- ub3r_l4byr1nth server
-
-  - treasure chests in maze?
-  - traps or monsters in maze?
 
 - server that returns yes/no in its failure response
 
