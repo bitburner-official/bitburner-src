@@ -1023,7 +1023,7 @@ export const ns: InternalAPI<NSFull> = {
   serverExists: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
     const server = GetServer(host);
-    return server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home");
+    return server !== null && server.serversOnNetwork.length > 0;
   },
   fileExists: (ctx) => (_filename, _host) => {
     const filename = helpers.string(ctx, "filename", _filename);
