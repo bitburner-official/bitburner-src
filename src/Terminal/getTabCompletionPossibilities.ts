@@ -231,6 +231,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         addPrograms();
         addCodingContracts();
         addScripts();
+      } else if (commandArray[1] == "ServerProfiler.exe") {
+        addServerNames();
       } else {
         const options = await scriptAutocomplete();
         if (options) addGeneric({ iterable: options, usePathing: false });
