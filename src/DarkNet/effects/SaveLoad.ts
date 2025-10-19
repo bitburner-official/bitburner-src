@@ -1,4 +1,5 @@
 import { DarknetState } from "../models/DarknetState";
+import { migrateLegacyImmobileServers } from "../controllers/NetworkGenerator";
 
 export type DarknetSaveFormat = {
   storedCycles: number;
@@ -34,4 +35,6 @@ export function loadDarkNet(data: unknown) {
   if (isNaN(storedCycles)) return showError("Parsed savedata storedCycles was not a number");
 
   DarknetState.storedCycles = storedCycles < 0 ? 0 : storedCycles;
+
+  migrateLegacyImmobileServers();
 }

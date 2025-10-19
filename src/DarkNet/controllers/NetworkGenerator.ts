@@ -36,6 +36,7 @@ import {
 } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
 import {
+  getAllDarknetServers,
   getAllMovableDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
@@ -52,7 +53,6 @@ import { getTorRouter } from "../../Server/ServerHelpers";
 export function initDarkwebServer(): void {
   const existingServer = GetServer(SpecialServers.DarkWeb);
   if (existingServer instanceof DarknetServer) {
-    existingServer.isStationary = true;
     return;
   }
   let scripts = new JSONMap<ScriptFilePath, Script>();
@@ -107,6 +107,15 @@ export const populateDarknet = () => {
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
+  }
+};
+
+export const migrateLegacyImmobileServers = () => {
+  const darknetServers = getAllDarknetServers();
+  for (const server of darknetServers) {
+    if (server.hostname === SpecialServers.DarkWeb || isLabyrinthServer(server.hostname)) {
+      server.isStationary = true;
+    }
   }
 };
 
