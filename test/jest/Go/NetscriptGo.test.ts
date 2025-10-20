@@ -1,4 +1,4 @@
-import { Player, setPlayer } from "@player";
+import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType } from "@enums";
 import { Go } from "../../../src/Go/Go";
 import {
@@ -22,32 +22,20 @@ import {
   resetBoardState,
   validateMove,
 } from "../../../src/Go/effects/netscriptGoImplementation";
-import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
-import "../../../src/Faction/Factions";
 import { getNewBoardState, getNewBoardStateFromSimpleBoard } from "../../../src/Go/boardState/boardState";
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
-import { AddToAllServers } from "../../../src/Server/AllServers";
-import { Server } from "../../../src/Server/Server";
-import { initSourceFiles } from "../../../src/SourceFile/SourceFiles";
-import { getMockedNetscriptContext } from "../Utilities";
+import { getMockedNetscriptContext, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 
-jest.mock("../../../src/Faction/Factions", () => ({
-  Factions: {},
-}));
+initGameEnvironment();
 
-jest.mock("../../../src/ui/GameRoot", () => ({
-  Router: {
-    page: () => ({}),
-    toPage: () => ({}),
-  },
-}));
+beforeEach(() => {
+  setupBasicTestingEnvironment();
+});
+
 const mockLogger: (s: string) => void = jest.fn();
 const mockCtx = getMockedNetscriptContext((_: string, txt: () => string) => {
   mockLogger(txt());
 });
-
-setPlayer(new PlayerObject());
-AddToAllServers(new Server({ hostname: "home" }));
 
 describe("Netscript Go API unit tests", () => {
   describe("makeMove() tests", () => {
@@ -365,7 +353,6 @@ describe("Netscript Go API unit tests", () => {
 
     it("should have a scaled chance based on layer cheat success level", () => {
       Player.setBitNodeNumber(13);
-      initSourceFiles();
       Player.queueAugmentation(AugmentationName.BrachiBlades);
       Player.queueAugmentation(AugmentationName.GrapheneBrachiBlades);
       Player.queueAugmentation(AugmentationName.INFRARet);
