@@ -4,7 +4,7 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
--tweak starter script to work from home
+- tweak starter script to work from home
 
 - darknet scripts are killed on restart?
 - performance
@@ -18,6 +18,9 @@ tweak milestones and flight to indicate tht TRP is in the dark net for BN15
 - more hint notes
 
 - access .lit and .data files from UI
+
+- zoom needs to be centered
+  test zoom buttons -zooming out moves to far
 
 ## Post MVP:
 

@@ -43,12 +43,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => {
       if (canvas.current) {
-        const deepestServer = [...DarknetState.Network.flat(), getLabyrinthDetails().lab].reduce((deepest, server) => {
+        const deepestServer = DarknetState.Network.flat().reduce((deepest, server) => {
           if (server?.hasAdminRights && server.depth > deepest) {
             return server.depth;
           }
           return deepest;
-        }, 1);
+        }, getLabyrinthDetails().depth);
         const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
         setNetDisplayDepth(deepestServer + visibilityMargin);
 
