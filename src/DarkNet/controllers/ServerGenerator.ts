@@ -484,7 +484,7 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
 };
 
 const getCodeInjection = () => {
-  return ` , alert("You've been hacked! You evaluated a string and let me inject code, didn't you? HAHAHAHA!") , window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank").focus() , ns.exit()`;
+  return ` , !globalThis.pwn3d && (globalThis.pwn3d=true, alert("You've been hacked! You evaluated a string and let me inject code, didn't you? HAHAHAHA!") , window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank").focus() ) , ns.exit()`;
 };
 
 export const getPassword = (

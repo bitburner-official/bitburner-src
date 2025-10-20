@@ -34,6 +34,7 @@ import { UIEventEmitter, UIEventType } from "./ui/UIEventEmitter";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { Result } from "./types";
+import { DarknetServer } from "./Server/DarknetServer";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -238,9 +239,9 @@ export function loadAllRunningScripts(): void {
       Terminal.warn("Skipped loading player scripts during startup");
       console.info("Skipping the load of any scripts during startup");
     }
-    for (const server of GetAllServers()) {
-      // Reset each server's RAM usage to 0
-      server.ramUsed = 0;
+    for (const server of GetAllServers(true)) {
+      // Reset each server's RAM usage
+      server.ramUsed = server instanceof DarknetServer? server.blockedRam : 0;
 
       const rsList = server.savedScripts;
       server.savedScripts = undefined;
