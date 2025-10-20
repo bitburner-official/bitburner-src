@@ -241,7 +241,7 @@ export function loadAllRunningScripts(): void {
     }
     for (const server of GetAllServers(true)) {
       // Reset each server's RAM usage
-      server.ramUsed = server instanceof DarknetServer? server.blockedRam : 0;
+      server.ramUsed = server instanceof DarknetServer ? server.blockedRam : 0;
 
       const rsList = server.savedScripts;
       server.savedScripts = undefined;

@@ -12,8 +12,6 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 - cache toasts - all or nothing
 - return reward details from cache
 
-tweak milestones and flight to indicate tht TRP is in the dark net for BN15
-
 - more hint notes
 
 - access .lit and .data files from UI
