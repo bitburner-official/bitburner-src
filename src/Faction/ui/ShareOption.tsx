@@ -62,8 +62,8 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
         <br />
         Free RAM on home computer: {formatRam(home.maxRam - home.ramUsed)}.
         <br />
-        Current bonus: {formatNumber(calculateCurrentShareBonus())}. Bonus with {formatRam(ram)}:{" "}
-        {formatNumber(calculateShareBonusWithAdditionalThreads(threads, home.cpuCores))}
+        Current bonus: {formatNumber(calculateCurrentShareBonus(), 6)}. Bonus with {formatRam(ram)}:{" "}
+        {formatNumber(calculateShareBonusWithAdditionalThreads(threads, home.cpuCores), 6)}
       </Typography>
 
       <TextField
