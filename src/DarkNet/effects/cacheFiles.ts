@@ -11,6 +11,7 @@ import { cachePrefixes } from "../models/dictionaryData";
 import type { Result } from "../../types";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
+import { cacheResult } from "@nsdefs";
 
 export const addCacheToServer: (
   server: DarknetServer,
@@ -25,16 +26,35 @@ export const addCacheToServer: (
   return { success: true, cacheFilename };
 };
 
-export const getRewardFromCache = (server: DarknetServer, suppressToast = false): string => {
+export const getRewardFromCache = (server: DarknetServer, suppressToast = false): cacheResult => {
   const difficulty = server.difficulty;
   const karmaLoss = (difficulty + 1) * 2;
   Player.karma -= karmaLoss;
-  if (isLabyrinthServer(server.hostname)) {
-    return getLabReward(server, suppressToast);
+  if (isLabyrinthServer(server.hostname) && getLabyrinthDetails().augReward) {
+    const labReward = getLabReward();
+    return {
+      success: true,
+      message: labReward,
+      karmaLoss: -karmaLoss,
+    };
   }
+  if (isLabyrinthServer(server.hostname) && getLabyrinthDetails().augReward === null) {
+    !suppressToast &&
+      SnackbarEvents.emit("You have discovered all of the secrets of the lab.", ToastVariant.SUCCESS, 4000);
+  }
+
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
-  return reward(difficulty, karmaLoss, suppressToast);
+  const result = reward(difficulty);
+
+  const canAccessGang = Player.sourceFileLvl(2) > 0 || Player.bitNodeN === 2;
+  const karmaLossMessage = canAccessGang ? ` Gained -${karmaLoss} karma.` : 0;
+  !suppressToast && SnackbarEvents.emit(result + karmaLossMessage, ToastVariant.SUCCESS, 4000);
+  return {
+    success: true,
+    message: result,
+    karmaLoss: -karmaLoss,
+  };
 };
 
 export const getCCTReward = () => {
@@ -43,7 +63,7 @@ export const getCCTReward = () => {
   return `New coding contracts are now available on the network!`;
 };
 
-export const getMoneyReward = (difficulty: number, karmaLoss: number) => {
+export const getMoneyReward = (difficulty: number) => {
   const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward =
     1.2 ** difficulty *
@@ -53,17 +73,17 @@ export const getMoneyReward = (difficulty: number, karmaLoss: number) => {
     Player.mults.crime_money *
     currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");
-  return `You have discovered a cache with ${formatMoney(reward)}. Gained -${karmaLoss} karma.`;
+  return `You have discovered a cache with ${formatMoney(reward)}.`;
 };
 
-export const getXpReward = (difficulty: number, karmaLoss: number) => {
+export const getXpReward = (difficulty: number) => {
   const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward = 1.2 ** difficulty * 500 * sf15_3Factor * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
-  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP. Gained -${karmaLoss} karma.`;
+  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
 };
 
-export const getNextPortOpener = (difficulty: number, karmaLoss: number, suppressToast = false) => {
+export const getNextPortOpener = (difficulty: number) => {
   const currentPlayerWork = Player.currentWork instanceof CreateProgramWork ? Player.currentWork.programName : null;
   const programs = [
     CompletedProgramName.serverProfiler,
@@ -78,14 +98,10 @@ export const getNextPortOpener = (difficulty: number, karmaLoss: number, suppres
     CompletedProgramName.formulas,
   ];
 
-  const karmaLossMessage = ` Gained -${karmaLoss} karma.`;
-
   for (const program of programs) {
     if (!Player.hasProgram(program) && currentPlayerWork !== program) {
       Player.getHomeComputer().pushProgram(program);
-      const result = `You have discovered the program ${program}.${karmaLossMessage}`;
-      !suppressToast && SnackbarEvents.emit(`You have discovered the program ${program}!`, ToastVariant.SUCCESS, 4000);
-      return result;
+      return `You have discovered the program ${program}.`;
     }
   }
   if (!Player.hasWseAccount) {
@@ -93,37 +109,28 @@ export const getNextPortOpener = (difficulty: number, karmaLoss: number, suppres
     if (!isStockMarketInitialized()) {
       initStockMarket();
     }
-    const result = `You have discovered a stolen WSE Account!`;
-    !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
-    return result + karmaLossMessage;
+    return `You have discovered a stolen WSE Account!`;
   }
   if (!Player.hasTixApiAccess) {
     Player.hasTixApiAccess = true;
     if (!isStockMarketInitialized()) {
       initStockMarket();
     }
-    const result = `You have discovered a stolen TIX API access point!`;
-    !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
-    return result + karmaLossMessage;
+    return `You have discovered a stolen TIX API access point!`;
   }
   if (!Player.has4SData && Player.bitNodeN !== 8 && !Player.bitNodeOptions.disable4SData) {
     Player.has4SData = true;
-    const result = `You have discovered a cache of stolen 4S Data!`;
-    !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
-    return result + karmaLossMessage;
+    return `You have discovered a cache of stolen 4S Data!`;
   }
 
-  return getXpReward(difficulty, karmaLoss);
+  return getXpReward(difficulty);
 };
 
-const getLabReward = (server: DarknetServer, suppressToast = false) => {
+const getLabReward = () => {
   const labDetails = getLabyrinthDetails();
   if (!labDetails.augReward) {
-    getRewardFromCache(server, suppressToast);
     return "You have discovered all of the secrets of the lab.";
   }
   Player.queueAugmentation(labDetails.augReward);
-  const result = `You have discovered a cache with the augmentation ${labDetails.augReward}!`;
-  !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
-  return result;
+  return `You have discovered a cache with the augmentation ${labDetails.augReward}!`;
 };

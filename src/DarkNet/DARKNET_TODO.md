@@ -2,15 +2,10 @@
 
 https://discord.com/channels/415207508303544321/1358930422607642845/1358930424281432127
 
-## TODO:
-
-- tweak starter script to work from home
+## TODO:\
 
 - performance
 - link server logs to PID for labyrinth display
-
-- cache toasts - all or nothing
-- return reward details from cache
 
 - more hint notes
 

@@ -334,10 +334,10 @@ export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
       password *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
     }
   }
-  if (scale > 12) {
+  if (difficulty > 12) {
     password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
   }
-  if (scale > 18) {
+  if (difficulty > 24) {
     password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
   }
   return {

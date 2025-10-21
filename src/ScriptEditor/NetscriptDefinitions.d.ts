@@ -4232,6 +4232,13 @@ export interface DarknetServerData {
   isStationary: boolean;
 }
 
+/** @public */
+export type cacheResult = {
+  success: boolean;
+  message: string;
+  karmaLoss: number;
+};
+
 /**
  * Details about a server's authentication schema
  * @public
@@ -4339,8 +4346,9 @@ export interface Darknet {
    *
    * @param filename - the cache file to open.
    * @param suppressToast - optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
+   * @returns An object containing the contents of the cache, and the karma lost.
    */
-  openCache(filename: string, suppressToast?: boolean): void;
+  openCache(filename: string, suppressToast?: boolean): cacheResult;
 
   /**
    * Returns a list of all darknet servers connected to the script's current server.

@@ -36,6 +36,7 @@ import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 import { resolveCacheFilePath } from "../Paths/CacheFilePath";
+import { cacheResult } from "@nsdefs";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -309,7 +310,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       },
     openCache:
       (ctx: NetscriptContext) =>
-      (_fileName, _suppressToast): void => {
+      (_fileName, _suppressToast): cacheResult => {
         const fileName = helpers.string(ctx, "fileName", _fileName);
         const suppressToast = helpers.boolean(ctx, "suppressToast", _suppressToast ?? false);
         const server = expectRunningOnDarknetServer(ctx);
@@ -326,7 +327,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
         server.caches = server.caches.filter((cache) => cache !== fileName);
         const result = getRewardFromCache(server, suppressToast);
-        logger(ctx)(`Data file ${fileName} opened. ${result}`);
+        logger(ctx)(`Data file ${fileName} opened. ${result.message}.`);
+        return result;
       },
     probe:
       (ctx: NetscriptContext) =>

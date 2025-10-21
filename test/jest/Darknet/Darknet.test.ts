@@ -209,7 +209,7 @@ describe("Password Tests", () => {
     ).toBeCloseTo(2319.425);
 
     const expression = generateSimpleArithmeticExpression(13);
-    const numberParts = expression.substring(0, expression.indexOf(";"));
+    const numberParts = expression.substring(0, expression.indexOf(","));
     expect(eval(numberParts)).toBeCloseTo(parseSimpleArithmeticExpression(expression));
   });
 

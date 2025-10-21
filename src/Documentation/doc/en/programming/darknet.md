@@ -123,19 +123,17 @@ You can see the currently stasis-linked servers with `dnet.getStasisLinkedServer
 
 ### **Warning: STOP HERE IF YOU WANT TO START YOUR CODE COMPLETELY FROM SCRATCH!**
 
-(or don't stop here, it's up to you)
+(or don't stop here, it's up to you :)
 
-(this is to help you get started quickly - you can decide if you want this much help or not)
+(this is to help you get started quickly - you can decide if you want to use it or not)
 
-(by looking at this with your eyeballs, you consent to learning less-than-forbidden knowledge)
+(by looking at this with your eyeballs, you consent to learning totally non-forbidden knowledge)
 
 This is a simple self-replicating script that demonstrates how the darknet api can be used.
 
-This is intended to be run starting on the `darkweb` server (the root of the dark network). It needs some improvements, and only works on one model type right now. See the `// TODO`s in the code for suggestions and ideas.
+It needs some improvements, and only works on one model type right now. See the `// TODO`s in the code for suggestions and ideas.
 
 ```js
-/* This script is intended to be run from the `darkweb` server (the root of the dark network). */
-
 /** @param {NS} ns */
 export async function main(ns) {
   while (true) {
@@ -177,6 +175,10 @@ export const serverSolver = async (ns, hostname) => {
     // If the server isn't connected or is offline, we can't authenticate
     return false;
   }
+  // If you are already authenticated to that server with this script, you don't need to do it again
+  if (details.hasSession) {
+    return true;
+  }
 
   switch (details.modelId) {
     case "ZeroLogon":
@@ -201,4 +203,10 @@ const authenticateWithNoPassword = async (ns, hostname) => {
   // TODO: store discovered passwords somewhere safe, in case we need them later
   return result.success;
 };
+
+// This lets you tab-complete putting "--tail" on the run command so you can see the script logs as it runs, if you want
+// If you make the script take other arguments, you can add them here for convenience
+export function autocomplete(data: AutocompleteData) {
+  return ["--tail"];
+}
 ```
