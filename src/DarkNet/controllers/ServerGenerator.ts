@@ -343,7 +343,7 @@ export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.divisibilityTest,
     password: `${password}`,
-    staticPasswordHint: `The password is divisible by 1`,
+    staticPasswordHint: `The password is divisible by 1 ;)`,
   };
 };
 
