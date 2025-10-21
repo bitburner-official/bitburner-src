@@ -9,7 +9,7 @@ Opens a .cache file on the current server to acquire its valuable contents.
 **Signature:**
 
 ```typescript
-openCache(filename: string, suppressToast?: boolean): void;
+openCache(filename: string, suppressToast?: boolean): cacheResult;
 ```
 
 ## Parameters
@@ -66,7 +66,9 @@ _(Optional)_ optional. If true, suppresses the toast notification that appears w
 
 **Returns:**
 
-void
+[cacheResult](./bitburner.cacheresult.md)
+
+An object containing the contents of the cache, and the karma lost.
 
 ## Remarks
 

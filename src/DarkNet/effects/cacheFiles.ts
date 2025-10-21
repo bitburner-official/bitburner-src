@@ -3,7 +3,7 @@ import { Player } from "@player";
 import { formatMoney, formatNumber } from "../../ui/formatNumber";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { CompletedProgramName, ToastVariant } from "@enums";
+import { AugmentationName, CompletedProgramName, ToastVariant } from "@enums";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { initStockMarket, isStockMarketInitialized } from "../../StockMarket/StockMarket";
@@ -12,6 +12,8 @@ import type { Result } from "../../types";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import { cacheResult } from "@nsdefs";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 
 export const addCacheToServer: (
   server: DarknetServer,
@@ -30,17 +32,13 @@ export const getRewardFromCache = (server: DarknetServer, suppressToast = false)
   const difficulty = server.difficulty;
   const karmaLoss = (difficulty + 1) * 2;
   Player.karma -= karmaLoss;
-  if (isLabyrinthServer(server.hostname) && getLabyrinthDetails().augReward) {
+  if (isLabyrinthServer(server.hostname)) {
     const labReward = getLabReward();
     return {
       success: true,
       message: labReward,
       karmaLoss: -karmaLoss,
     };
-  }
-  if (isLabyrinthServer(server.hostname) && getLabyrinthDetails().augReward === null) {
-    !suppressToast &&
-      SnackbarEvents.emit("You have discovered all of the secrets of the lab.", ToastVariant.SUCCESS, 4000);
   }
 
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
@@ -128,9 +126,15 @@ export const getNextPortOpener = (difficulty: number) => {
 
 const getLabReward = () => {
   const labDetails = getLabyrinthDetails();
-  if (!labDetails.augReward) {
-    return "You have discovered all of the secrets of the lab.";
+  let reward = labDetails.augReward ?? AugmentationName.NeuroFluxGovernor;
+  if (
+    labDetails.name === SpecialServers.BonusLab &&
+    !Player.hasAugmentation(AugmentationName.TheRedPill) &&
+    getBitNodeMultipliers(Player.bitNodeN, 1).DarknetLabyrinthRewardsTheRedPill
+  ) {
+    // TODO: remove this once it is no longer needed for early playtesters
+    reward = AugmentationName.TheRedPill;
   }
-  Player.queueAugmentation(labDetails.augReward);
-  return `You have discovered a cache with the augmentation ${labDetails.augReward}!`;
+  Player.queueAugmentation(reward);
+  return `You have discovered a cache with the augmentation ${reward}!`;
 };

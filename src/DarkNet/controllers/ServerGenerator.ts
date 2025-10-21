@@ -330,7 +330,7 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
 };
 
 export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
-  const scale = Math.min(difficulty, 20);
+  const scale = Math.min(difficulty / 2, 18);
   let password = Math.floor(Math.random() * 8 * (scale + 1));
   for (let i = 0; i < scale / 2; i++) {
     if (Math.random() < 0.5) {
@@ -585,7 +585,7 @@ const getLargestPrimeFactorPassword = (difficulty = 1) => {
 
   const largePrimeIndex = 2 + Math.floor(Math.random() * (largePrimes.length - 2));
   const largestPrime = largePrimes[largePrimeIndex];
-  let number = largestPrime * largePrimes[Math.floor(Math.random() * largePrimeIndex)];
+  let number = largestPrime;
   for (let i = 1; i <= factorCount; i++) {
     number *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
   }
