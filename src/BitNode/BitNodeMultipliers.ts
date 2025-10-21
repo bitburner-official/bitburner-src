@@ -61,7 +61,7 @@ export class BitNodeMultipliers {
   DaedalusAugsRequirement = 30;
 
   /** If true, TRP can be found in the fourth lab deep in the darknet. */
-  DarknetLabyrinthRewardsTheRedPill = 0;
+  DarknetLabyrinthRewardsTheRedPill = 1;
 
   /** Influences how much money the player gains from darknet mechanics (phishing and reward caches). */
   DarknetMoneyMultiplier = 1;

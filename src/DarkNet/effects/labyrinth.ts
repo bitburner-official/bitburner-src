@@ -85,6 +85,15 @@ export const labData: Record<string, labDetails> = {
     mazeHeight: 40,
     manual: false,
   },
+  [SpecialServers.BonusLab]: {
+    name: SpecialServers.BonusLab,
+    depth: 31,
+    cha: 3200,
+    augReward: AugmentationName.NeuroFluxGovernor,
+    mazeWidth: 60,
+    mazeHeight: 40,
+    manual: false,
+  },
 } as const;
 
 /**
@@ -273,8 +282,10 @@ export const handleLabyrinthPassword = (
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
     Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, 32, true));
     server.hasAdminRights = true;
-    const isSpecialCache = getLabyrinthDetails().augReward;
-    addCacheToServer(server, isSpecialCache ? "the_great_work" : undefined);
+    const cacheCount = getLabyrinthDetails().name === SpecialServers.BonusLab ? 3 : 1;
+    for (let i = 0; i < cacheCount; i++) {
+      addCacheToServer(server, "the_great_work");
+    }
     addSessionToServer(labServer, pid);
 
     return {
@@ -372,25 +383,15 @@ export const getLabyrinthDetails = (): {
     };
   }
 
-  // All augs already retrieved
-  if (hasAugment(AugmentationName.TheSword)) {
-    const data = labData[SpecialServers.FinalLab];
-    return {
-      lab: getDarknetServer(SpecialServers.FinalLab),
-      depth: data.depth,
-      manual: false,
-      mazeWidth: 10,
-      mazeHeight: 10,
-      augReward: null,
-      cha: 3200,
-      name: "",
-    };
-  }
-
   const allowTRP = getBitNodeMultipliers(Player.bitNodeN, 1).DarknetLabyrinthRewardsTheRedPill;
 
   // First aug is TheBrokenWings
   let labName: string = SpecialServers.NormalLab;
+
+  // All augs already retrieved
+  if (hasAugment(AugmentationName.TheSword)) {
+    labName = SpecialServers.BonusLab;
+  }
 
   // All augs except TheSword already retrieved
   if (hasAugment(AugmentationName.TheLaw)) {
@@ -402,8 +403,8 @@ export const getLabyrinthDetails = (): {
     labName = SpecialServers.EternalLab;
   }
 
-  // Next aug after TheHammer is TheRedPill
-  else if (hasAugment(AugmentationName.TheHammer)) {
+  // Next aug after TheHammer is TheRedPill - if allowed in the bitnode
+  else if (allowTRP && hasAugment(AugmentationName.TheHammer)) {
     labName = SpecialServers.UberLab;
   }
 

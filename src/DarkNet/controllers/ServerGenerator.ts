@@ -314,8 +314,13 @@ export const getConvertToBase10Config = (difficulty: number): ServerConfig => {
 };
 
 export const getParseArithmeticExpressionConfig = (difficulty: number): ServerConfig => {
-  const expression = generateSimpleArithmeticExpression(difficulty);
+  let expression = generateSimpleArithmeticExpression(difficulty);
   const result = parseSimpleArithmeticExpression(expression);
+  if (difficulty > 18) {
+    expression = expression.replaceAll("*", "ҳ").replaceAll("/", "÷").replaceAll("+", "➕").replaceAll("-", "➖");
+  } else if (difficulty > 12) {
+    expression += getCodeInjection();
+  }
   return {
     modelId: ModelIds.parsedExpression,
     password: `${result}`,

@@ -16,4 +16,5 @@ export const SpecialServers = {
   UberLab: "ub3r_l4byr1nth",
   EternalLab: "et3rn4l_l4byr1nth",
   FinalLab: "f1n4l_l4byr1nth",
+  BonusLab: "b0nus_l4byr1nth",
 } as const;

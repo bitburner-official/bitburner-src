@@ -208,9 +208,13 @@ describe("Password Tests", () => {
       ),
     ).toBeCloseTo(2319.425);
 
-    const expression = generateSimpleArithmeticExpression(13);
-    const numberParts = expression.substring(0, expression.indexOf(","));
-    expect(eval(numberParts)).toBeCloseTo(parseSimpleArithmeticExpression(expression));
+    const expression = generateSimpleArithmeticExpression(20);
+    const cleanedExpression = expression
+      .replaceAll("ҳ", "*")
+      .replaceAll("➕", "+")
+      .replaceAll("➖", "-")
+      .replaceAll("÷", "/");
+    expect(eval(cleanedExpression)).toBeCloseTo(parseSimpleArithmeticExpression(cleanedExpression));
   });
 
   test("getLargestPrimeFactor server creates valid password and hint", () => {
