@@ -15,6 +15,7 @@ import { TerminalCommands } from "./Terminal";
 import { Terminal } from "../Terminal";
 import { parseUnknownError } from "../utils/ErrorHelper";
 import { DarknetServer } from "../Server/DarknetServer";
+import { CompletedProgramName } from "@enums";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -242,6 +243,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
           addGeneric({ iterable: currServ.caches, usePathing: true });
         }
         addScripts();
+      } else if (commandArray[1] === CompletedProgramName.serverProfiler) {
+        addServerNames();
       } else {
         const options = await scriptAutocomplete();
         if (options) addGeneric({ iterable: options, usePathing: false });
@@ -305,7 +308,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       return ["--tail"];
     }
 
-    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
+    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number, "--temporary": Boolean };
     let flags = {
       _: [],
     };

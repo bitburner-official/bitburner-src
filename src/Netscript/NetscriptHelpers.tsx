@@ -479,8 +479,8 @@ function scriptIdentifier(
 }
 
 /**
- * Gets the server with a specific hostname/ip, throwing an error if the server does not exist or it is an isolated
- * non-dnet server (e.g., WD).
+ * Gets the server with a specific hostname/ip. Throw an error if the server does not exist or is a non-darkweb isolated
+ * server (e.g., pre-TOR darkweb, pre-TRP WD).
  *
  * @param {NetscriptContext} ctx - Context from which getServer is being called. For logging purposes.
  * @param {string} hostname - Hostname of the server
@@ -488,10 +488,7 @@ function scriptIdentifier(
  */
 export function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
   const server = GetServer(hostname);
-  if (
-    server == null ||
-    (server.serversOnNetwork.length === 0 && server.hostname !== "home" && !(server instanceof DarknetServer))
-  ) {
+  if (server == null || (server.serversOnNetwork.length == 0 && !(server instanceof DarknetServer))) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw errorMessage(ctx, `Invalid hostname: ${str}`);
   }

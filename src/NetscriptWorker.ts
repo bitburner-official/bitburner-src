@@ -267,8 +267,7 @@ export function loadAllRunningScripts(): void {
 export function createRunningScriptInstance(
   server: BaseServer,
   scriptPath: ScriptFilePath,
-  ramOverride: number | null | undefined,
-  threads: number,
+  runOpts: CompleteRunOptions,
   args: ScriptArg[],
 ): Result<{ runningScript: RunningScript }> {
   const script = server.scripts.get(scriptPath);
@@ -286,25 +285,26 @@ export function createRunningScriptInstance(
     };
   }
 
-  const singleRamUsage = ramOverride ?? script.getRamUsage(server.scripts);
+  const singleRamUsage = runOpts.ramOverride ?? script.getRamUsage(server.scripts);
   if (!singleRamUsage) {
     return {
       success: false,
       message: `Cannot calculate RAM usage of ${scriptPath}. Reason: ${script.ramCalculationError}`,
     };
   }
-  const ramUsage = singleRamUsage * threads;
+  const ramUsage = singleRamUsage * runOpts.threads;
   const ramAvailable = server.maxRam - server.ramUsed;
   if (ramUsage > ramAvailable + 0.001) {
     return {
       success: false,
-      message: `Cannot run ${scriptPath} (t=${threads}) on ${server.hostname}. This script requires ${formatRam(
+      message: `Cannot run ${scriptPath} (t=${runOpts.threads}) on ${server.hostname}. This script requires ${formatRam(
         ramUsage,
       )} of RAM.`,
     };
   }
 
   const runningScript = new RunningScript(script, singleRamUsage, args);
+  runningScript.temporary = runOpts.temporary;
   return {
     success: true,
     runningScript,
@@ -321,7 +321,7 @@ export function runScriptFromScript(
   runOpts: CompleteRunOptions,
 ): number {
   // This does not adjust server RAM usage or change any state, so it is safe to call before performing other checks
-  const result = createRunningScriptInstance(server, scriptPath, runOpts.ramOverride, runOpts.threads, args);
+  const result = createRunningScriptInstance(server, scriptPath, runOpts, args);
   if (!result.success) {
     workerScript.log(caller, () => result.message);
     return 0;

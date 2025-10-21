@@ -13,7 +13,7 @@ import {
   ShareBonusTime,
   startSharing,
 } from "../../NetworkShare/Share";
-import { formatRam } from "../../ui/formatNumber";
+import { formatRam, formatNumber } from "../../ui/formatNumber";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
@@ -62,8 +62,8 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
         <br />
         Free RAM on home computer: {formatRam(home.maxRam - home.ramUsed)}.
         <br />
-        Current bonus: {calculateCurrentShareBonus()}. Bonus with {formatRam(ram)}:{" "}
-        {calculateShareBonusWithAdditionalThreads(threads, home.cpuCores)}
+        Current bonus: {formatNumber(calculateCurrentShareBonus(), 6)}. Bonus with {formatRam(ram)}:{" "}
+        {formatNumber(calculateShareBonusWithAdditionalThreads(threads, home.cpuCores), 6)}
       </Typography>
 
       <TextField
