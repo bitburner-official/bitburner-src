@@ -37,7 +37,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
   const [searchLabel, setSearchLabel] = useState<string>(initialSearchLabel);
   const [serverOpened, setServerOpened] = useState<DarknetServer | null>(null);
-  const zoomOptions = useMemo(() => [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5], []);
+  const zoomOptions = useMemo(() => [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.3], []);
   const { classes } = dnetStyles({});
 
   useEffect(() => {
@@ -100,12 +100,28 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     }
   };
 
-  const zoomOut = useCallback(() => {
-    setZoomIndex(Math.max(Math.min(zoomIndex + 1, zoomOptions.length - 1), 0));
+  const zoomIn = useCallback(() => {
+    if (zoomIndex >= zoomOptions.length - 1) {
+      return;
+    }
+    setZoomIndex(Math.max(zoomIndex + 1, 0));
+    if (draggableBackground.current) {
+      const zoom = zoomOptions[zoomIndex];
+      draggableBackground.current.scrollLeft += (draggableBackground.current.clientWidth / 4) * zoom;
+      draggableBackground.current.scrollTop += (draggableBackground.current.clientHeight / 4) * zoom;
+    }
   }, [zoomIndex, setZoomIndex, zoomOptions]);
 
-  const zoomIn = useCallback(() => {
-    setZoomIndex(Math.max(Math.min(zoomIndex - 1, zoomOptions.length - 1), 0));
+  const zoomOut = useCallback(() => {
+    if (zoomIndex <= 0) {
+      return;
+    }
+    setZoomIndex(Math.min(zoomIndex - 1, zoomOptions.length - 1));
+    if (draggableBackground.current) {
+      const zoom = zoomOptions[zoomIndex];
+      draggableBackground.current.scrollLeft -= (draggableBackground.current.clientWidth / 4) * zoom;
+      draggableBackground.current.scrollTop -= (draggableBackground.current.clientHeight / 4) * zoom;
+    }
   }, [zoomIndex, setZoomIndex, zoomOptions]);
 
   const zoom = useCallback(
@@ -115,24 +131,16 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         return;
       }
       if (wheelEvent.deltaY < 0) {
-        zoomOut();
-      } else {
         zoomIn();
+      } else {
+        zoomOut();
       }
 
       if (!target?.parentElement?.getBoundingClientRect()) {
         return;
       }
-      // TODO: scroll toward the mouse cursor location?
-      // const width = target?.parentElement?.getBoundingClientRect()?.width;
-      // const height = target?.parentElement?.getBoundingClientRect()?.height;
-      // const deltaX = wheelEvent.pageX - target?.parentElement?.getBoundingClientRect()?.x;
-      // const deltaY = wheelEvent.pageY - target?.parentElement?.getBoundingClientRect()?.y;
-      // // adjust the draggableBackground scrollLeft and scrollTop to make the zoom center around the mouse position
-      // draggableBackground.current.scrollLeft += width * 0.5;
-      // draggableBackground.current.scrollTop += height * 0.5;
     },
-    [draggableBackground, zoomIn, zoomOut],
+    [draggableBackground, zoomOut, zoomIn],
   );
 
   const zoomRef = useRef(zoom);
@@ -179,17 +187,13 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       return;
     }
 
-    const results = getAllDarknetServers().filter(
-      (s) => s.hostname.toLowerCase().includes(searchTerm) && s.depth < netDisplayDepth,
-    );
-    const foundServer = results[Math.floor(Math.random() * results.length)] ?? null;
+    const foundServer = getAllDarknetServers().find((s) => s.hostname.toLowerCase() === searchTerm.toLowerCase());
 
     if (!foundServer) {
       setSearchLabel(`(No results for "${searchTerm}")`);
       return;
     } else {
       setSearchLabel(initialSearchLabel);
-      setZoomIndex(8);
     }
 
     const position = getPixelPosition(foundServer, true);
@@ -202,7 +206,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       });
     }
 
-    if (allowAuth(foundServer) && results.length === 1) {
+    if (allowAuth(foundServer)) {
       setServerOpened(foundServer);
     }
   };
@@ -280,10 +284,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </div>
       </div>
       <div className={classes.zoomContainer}>
-        <Button className={classes.button} onClick={() => zoomOut()}>
+        <Button className={classes.button} onClick={() => zoomIn()}>
           <ZoomIn />
         </Button>
-        <Button className={classes.button} onClick={() => zoomIn()}>
+        <Button className={classes.button} onClick={() => zoomOut()}>
           <ZoomOut />
         </Button>
       </div>
