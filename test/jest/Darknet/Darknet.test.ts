@@ -11,6 +11,7 @@ import {
   generateSimpleArithmeticExpression,
   getLargestPrimeFactorConfig,
   largePrimes,
+  getDivisibilityTestConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
@@ -228,6 +229,35 @@ describe("Password Tests", () => {
       .sort()
       .toReversed();
     expect(factors[0]).toEqual(password);
+  });
+
+  test("getDivisibilityTestConfig server creates valid password and hint", () => {
+    const server = serverFactory(() => getDivisibilityTestConfig(100), 5, 0, 0);
+
+    expect(server.password.includes("+")).toBe(false);
+    expect(isNumber(+server.password)).toBe(true);
+    expect(isNumber(+server.passwordHintData)).toBe(true);
+
+    DarknetState.serverState[server.hostname] = {
+      serverLogs: [],
+      authenticatedPIDs: [],
+    };
+    const nonDivisibleResult = getAuthResult(server, `${server.password + 1}`, 1);
+    expect(nonDivisibleResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    const nonDivisibleLogs = DarknetState.serverState[server.hostname].serverLogs[0];
+    expect(nonDivisibleLogs).toContain("not divisible");
+
+    let factor = 2;
+    while (+server.password % factor !== 0) {
+      ++factor;
+    }
+
+    const divisibleResult = getAuthResult(server, `${factor}`, 1);
+    expect(divisibleResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(divisibleResult.response.message).toContain("IS divisible");
+
+    const correctResult = getAuthResult(server, `${server.password}`, 1);
+    expect(correctResult.response.code).toBe(ResponseCodeEnum.Success);
   });
 });
 

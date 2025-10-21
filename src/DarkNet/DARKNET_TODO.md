@@ -16,9 +16,6 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 - access .lit and .data files from UI
 
-- zoom needs to be centered
-  test zoom buttons -zooming out moves to far
-
 ## Post MVP:
 
 - Lab interactions: doors, chests, mimics, grue

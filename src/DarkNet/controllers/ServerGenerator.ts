@@ -283,7 +283,8 @@ export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.BinaryEncodedFeedback,
     password,
-    staticPasswordHint: binaryEncodedPassword,
+    staticPasswordHint: "beep boop",
+    passwordHintData: binaryEncodedPassword,
   };
 };
 
@@ -297,7 +298,7 @@ export const getSpiceLevelConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getConvertToBase10Config = (difficulty: number): ServerConfig => {
-  const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
+  const password = Math.floor(Math.random() * 100 * (difficulty + 1));
   const bases = [2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16];
   let base = bases[Math.floor(Math.random() * bases.length)];
   if (difficulty > 12) {
@@ -324,15 +325,20 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
 };
 
 export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
-  let password = Math.floor(Math.random() * 8 * (difficulty + 1));
-  for (let i = 0; i < difficulty; i++) {
+  const scale = Math.min(difficulty, 20);
+  let password = Math.floor(Math.random() * 8 * (scale + 1));
+  for (let i = 0; i < scale / 2; i++) {
     if (Math.random() < 0.5) {
       password *= Math.ceil(Math.random() * 5);
-    } else if (Math.random() < 0.7 || difficulty < 12) {
-      password *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
     } else {
-      password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
+      password *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
     }
+  }
+  if (scale > 12) {
+    password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
+  }
+  if (scale > 18) {
+    password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
   }
   return {
     modelId: ModelIds.divisibilityTest,
