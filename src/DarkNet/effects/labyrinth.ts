@@ -1,6 +1,6 @@
 import { PasswordResponse } from "../models/DarknetServerOptions";
 import { addSessionToServer, DarknetState } from "../models/DarknetState";
-import { calculatePasswordAttemptChaGain } from "./effects";
+import { calculatePasswordAttemptChaGain, hasFullDarknetAccess } from "./effects";
 import { Player } from "@player";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
@@ -359,6 +359,30 @@ export const isLabyrinthServer = (hostName: string) => {
 
 const hasAugment = (aug: AugmentationName) => !!Player.augmentations.find((a) => a.name === aug);
 
+const getCurrentLabName = () => {
+  const allowTRP = getBitNodeMultipliers(Player.bitNodeN, 1).DarknetLabyrinthRewardsTheRedPill;
+
+  if (!hasAugment(AugmentationName.TheBrokenWings)) {
+    return SpecialServers.NormalLab;
+  }
+  if (!hasAugment(AugmentationName.TheBoots)) {
+    return SpecialServers.CruelLab;
+  }
+  if (!hasAugment(AugmentationName.TheHammer)) {
+    return SpecialServers.MercilessLab;
+  }
+  if (allowTRP && !hasAugment(AugmentationName.TheRedPill)) {
+    return SpecialServers.UberLab;
+  }
+  if (!hasAugment(AugmentationName.TheLaw)) {
+    return SpecialServers.EternalLab;
+  }
+  if (!hasAugment(AugmentationName.TheSword)) {
+    return SpecialServers.FinalLab;
+  }
+  return SpecialServers.BonusLab;
+};
+
 export const getLabyrinthDetails = (): {
   lab: DarknetServer | null;
   augReward: AugmentationName | null;
@@ -370,7 +394,7 @@ export const getLabyrinthDetails = (): {
   name: string;
 } => {
   // Lab not unlocked yet
-  if (!Player.sourceFileLvl(15) && Player.bitNodeN !== 15) {
+  if (!hasFullDarknetAccess()) {
     return {
       augReward: null,
       cha: 300,
@@ -383,41 +407,7 @@ export const getLabyrinthDetails = (): {
     };
   }
 
-  const allowTRP = getBitNodeMultipliers(Player.bitNodeN, 1).DarknetLabyrinthRewardsTheRedPill;
-
-  // First aug is TheBrokenWings
-  let labName: string = SpecialServers.NormalLab;
-
-  // All augs already retrieved
-  if (hasAugment(AugmentationName.TheSword)) {
-    labName = SpecialServers.BonusLab;
-  }
-
-  // All augs except TheSword already retrieved
-  if (hasAugment(AugmentationName.TheLaw)) {
-    labName = SpecialServers.FinalLab;
-  }
-
-  // Next aug after TRP is TheLaw
-  else if (hasAugment(AugmentationName.TheRedPill) || (!allowTRP && hasAugment(AugmentationName.TheHammer))) {
-    labName = SpecialServers.EternalLab;
-  }
-
-  // Next aug after TheHammer is TheRedPill - if allowed in the bitnode
-  else if (allowTRP && hasAugment(AugmentationName.TheHammer)) {
-    labName = SpecialServers.UberLab;
-  }
-
-  // Next aug after TheBoots is TheHammer
-  else if (hasAugment(AugmentationName.TheBoots)) {
-    labName = SpecialServers.MercilessLab;
-  }
-
-  // Next aug after TheWings is TheBoots
-  else if (hasAugment(AugmentationName.TheBrokenWings)) {
-    labName = SpecialServers.CruelLab;
-  }
-
+  const labName = getCurrentLabName();
   const labDetails = labData[labName];
 
   return {

@@ -12,8 +12,6 @@ import type { Result } from "../../types";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import { cacheResult } from "@nsdefs";
-import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 
 export const addCacheToServer: (
   server: DarknetServer,
@@ -126,15 +124,7 @@ export const getNextPortOpener = (difficulty: number) => {
 
 const getLabReward = () => {
   const labDetails = getLabyrinthDetails();
-  let reward = labDetails.augReward ?? AugmentationName.NeuroFluxGovernor;
-  if (
-    labDetails.name === SpecialServers.BonusLab &&
-    !Player.hasAugmentation(AugmentationName.TheRedPill) &&
-    getBitNodeMultipliers(Player.bitNodeN, 1).DarknetLabyrinthRewardsTheRedPill
-  ) {
-    // TODO: remove this once it is no longer needed for early playtesters
-    reward = AugmentationName.TheRedPill;
-  }
+  const reward = labDetails.augReward ?? AugmentationName.NeuroFluxGovernor;
   Player.queueAugmentation(reward);
   return `You have discovered a cache with the augmentation ${reward}!`;
 };
