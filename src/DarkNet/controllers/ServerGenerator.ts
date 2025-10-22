@@ -330,9 +330,9 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
 };
 
 export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
-  const scale = Math.min(difficulty / 2, 18);
+  const scale = Math.min(difficulty / 2, 15);
   let password = Math.floor(Math.random() * 8 * (scale + 1));
-  for (let i = 0; i < scale / 2; i++) {
+  for (let i = 0; i < scale / 3; i++) {
     if (Math.random() < 0.5) {
       password *= Math.ceil(Math.random() * 5);
     } else {
