@@ -16,6 +16,7 @@ import type { DarknetResponseCode } from "@nsdefs";
 import type { MinigamesType } from "../Enums";
 import { DarknetState } from "./DarknetState";
 import { getRamBlock } from "../effects/ramblock";
+import { hasFullDarknetAccess } from "../effects/effects";
 
 export type PasswordResponse = {
   code: DarknetResponseCode;
@@ -73,7 +74,7 @@ export const DnetServerBuilder = (options: DarknetServerOptions, name = generate
 };
 
 export const generateDarknetServerName = (): string => {
-  if (Math.random() < 0.03 && DarknetState.offlineServers.length > 0 && DarknetState.allowServerRevival) {
+  if (Math.random() < 0.03 && DarknetState.offlineServers.length > 0 && hasFullDarknetAccess()) {
     return DarknetState.offlineServers[Math.floor(Math.random() * DarknetState.offlineServers.length)];
   }
   return decorateName(getBaseName());
