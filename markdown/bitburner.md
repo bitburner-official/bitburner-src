@@ -1583,7 +1583,7 @@ Skill names type of Bladeburner
 </td></tr>
 <tr><td>
 
-[cacheResult](./bitburner.cacheresult.md)
+[CacheResult](./bitburner.cacheresult.md)
 
 
 </td><td>

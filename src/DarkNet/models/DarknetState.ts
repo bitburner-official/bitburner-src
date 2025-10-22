@@ -22,7 +22,7 @@ export const DarknetState = {
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null)),
 
   labyrinth: null as string[] | null,
-  labLocations: { "-1": [1, 1] } as Record<number, [number, number]>,
+  labLocations: { "-1": [1, 1] } as Record<number, [number, number] | null>,
   lastPhishingCacheTime: new Date(),
   lastStormTime: new Date(),
   stockPromotions: {} as Record<string, number>,

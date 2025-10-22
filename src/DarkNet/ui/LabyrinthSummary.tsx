@@ -40,7 +40,10 @@ export const LabyrinthSummary = ({
   }
 
   // movement message
-  const [x, y] = currentPerspective ? DarknetState.labLocations[currentPerspective] : [1, 1];
+  const [x, y] =
+    currentPerspective && DarknetState.labLocations[currentPerspective]
+      ? DarknetState.labLocations[currentPerspective]
+      : [1, 1];
   const surroundings = getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true)
     .join("\n")
     .split("")

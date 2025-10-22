@@ -9,6 +9,7 @@ import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
+import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -311,6 +312,16 @@ export const handleLabyrinthPassword = (
     message: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
     data: JSON.stringify(status),
   };
+};
+
+export const cleanLabLocations = () => {
+  for (const pidStr of Object.keys(DarknetState.labLocations)) {
+    const pid = parseInt(pidStr);
+    if (!findRunningScriptByPid(pid)) {
+      DarknetState.labLocations[pid] = null;
+    }
+    // TODO: handle moved/disconnected scripts
+  }
 };
 
 const getDirectionFromInput = (input: string) => {
