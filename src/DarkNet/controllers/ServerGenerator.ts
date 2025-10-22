@@ -557,7 +557,7 @@ export const romanNumeralEncoder = (input: number): string => {
     1000: "M",
   };
 
-  const keys = Object.keys(romanNumerals).map((key) => +key);
+  const keys = Object.keys(romanNumerals).map((key) => Number(key));
   let result = "";
   for (let i = keys.length - 1; i >= 0; i--) {
     const key = keys[i];

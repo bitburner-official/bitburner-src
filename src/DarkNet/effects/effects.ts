@@ -220,9 +220,9 @@ export const scaleDarknetVolatilityIncreases = (scalar: number) => {
 };
 
 export const getStasisLinkLimit = (): number => {
-  const hasTheBrokenWings = Player.hasAugmentation(AugmentationName.TheBrokenWings);
-  const hasTheHammer = Player.hasAugmentation(AugmentationName.TheHammer);
-  return 1 + +hasTheBrokenWings + +hasTheHammer;
+  const brokenWingLimitIncrease = Player.hasAugmentation(AugmentationName.TheBrokenWings) ? 1 : 0;
+  const hammerLimitIncrease = Player.hasAugmentation(AugmentationName.TheHammer) ? 1 : 0;
+  return 1 + brokenWingLimitIncrease + hammerLimitIncrease;
 };
 
 export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
@@ -254,4 +254,4 @@ export const getDarkscapeNavigator = () => {
   populateDarknet();
 };
 
-export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || !!Player.sourceFileLvl(15);
+export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.sourceFileLvl(15) > 0;

@@ -37,7 +37,7 @@ export const checkPassword = (
       return getFailureResponse(attemptedPassword, message, `${exactCharacters},${misplacedCharacters}`);
     }
     case ModelIds.GuessNumber: {
-      const hintData = +attemptedPassword > +server.password ? "Lower" : "Higher";
+      const hintData = Number(attemptedPassword) > Number(server.password) ? "Lower" : "Higher";
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, hintData);
     }
     case ModelIds.Yesn_t: {
@@ -65,8 +65,8 @@ export const checkPassword = (
       );
     }
     case ModelIds.divisibilityTest: {
-      const password = +server.password;
-      const attemptedDivisor = +attemptedPassword;
+      const password = Number(server.password);
+      const attemptedDivisor = Number(attemptedPassword);
       if (isNaN(attemptedDivisor) || password % attemptedDivisor || attemptedPassword === "") {
         return getFailureResponse(attemptedPassword, `Password is not divisible by '${attemptedPassword}'`, "false");
       }
@@ -77,7 +77,7 @@ export const checkPassword = (
       const parsedAttemptedPassword = parseFloat(attemptedPassword);
       if (
         !isNaN(parsedAttemptedPassword) &&
-        Math.abs((parsedAttemptedPassword - +server.password) / +server.password) < 0.005
+        Math.abs((parsedAttemptedPassword - Number(server.password)) / Number(server.password)) < 0.005
       ) {
         // ignore small rounding errors during floating point operations
         return getGenericSuccess(attemptedPassword);

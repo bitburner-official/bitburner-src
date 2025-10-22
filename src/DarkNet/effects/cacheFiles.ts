@@ -11,7 +11,7 @@ import { cachePrefixes } from "../models/dictionaryData";
 import type { Result } from "../../types";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
-import { cacheResult } from "@nsdefs";
+import { CacheResult } from "@nsdefs";
 
 export const addCacheToServer: (
   server: DarknetServer,
@@ -26,7 +26,7 @@ export const addCacheToServer: (
   return { success: true, cacheFilename };
 };
 
-export const getRewardFromCache = (server: DarknetServer, suppressToast = false): cacheResult => {
+export const getRewardFromCache = (server: DarknetServer, suppressToast = false): CacheResult => {
   const difficulty = server.difficulty;
   const karmaLoss = (difficulty + 1) * 2;
   Player.karma -= karmaLoss;
