@@ -33,6 +33,7 @@ export const DarknetState = {
   storedCycles: 0,
   cyclesSinceLastMutation: 0,
   showFullNetwork: false,
+  allowServerRevival: true,
 };
 
 export const getServerState = (hostname: string): ServerState => {

@@ -252,4 +252,8 @@ export const getDarkscapeNavigator = () => {
     Player.getHomeComputer().pushProgram(CompletedProgramName.darkscape);
   }
   populateDarknet();
+
+  if (Player.bitNodeN === 15 || Player.sourceFileLvl(15)) {
+    DarknetState.allowServerRevival = true;
+  }
 };

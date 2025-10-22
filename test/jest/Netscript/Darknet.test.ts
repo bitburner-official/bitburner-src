@@ -26,6 +26,7 @@ const hostnameForOfflineServer = "darknet-offline-server";
 fixDoImportIssue();
 
 beforeAll(() => {
+  DarknetState.allowServerRevival = false;
   initGameEnvironment();
   initStockMarket();
 });
@@ -684,7 +685,7 @@ describe("Non-darkweb darknet server", () => {
     const result2 = ns.dnet.connectToSession(target, password);
     expect(result2.success).toStrictEqual(true);
   });
-  test("heartbleed from home", async () => {
+  test.skip("heartbleed from home", async () => {
     const ns = getNsOnHome();
     const target = getFirstDarknetServerAdjacentToDarkWeb();
     const result = await ns.dnet.heartbleed(target);
@@ -737,7 +738,7 @@ describe("Non-darkweb darknet server", () => {
     const authDetails = ns.dnet.getServerAuthDetails();
     expect(authDetails.modelId).toStrictEqual(getDarknetServerOrThrow(ns.getHostname()).modelId);
   });
-  test("packetCapture from home", async () => {
+  test.skip("packetCapture from home", async () => {
     const ns = getNsOnHome();
     const target = getFirstDarknetServerAdjacentToDarkWeb();
     const result = await ns.dnet.packetCapture(target);

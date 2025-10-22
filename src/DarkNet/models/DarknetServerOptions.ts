@@ -73,7 +73,7 @@ export const DnetServerBuilder = (options: DarknetServerOptions, name = generate
 };
 
 export const generateDarknetServerName = (): string => {
-  if (Math.random() < 0.03 && DarknetState.offlineServers.length > 0) {
+  if (Math.random() < 0.03 && DarknetState.offlineServers.length > 0 && DarknetState.allowServerRevival) {
     return DarknetState.offlineServers[Math.floor(Math.random() * DarknetState.offlineServers.length)];
   }
   return decorateName(getBaseName());
