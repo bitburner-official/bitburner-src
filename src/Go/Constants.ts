@@ -70,7 +70,7 @@ export const opponentDetails = {
 
 export const boardSizes = [5, 7, 9, 13, 19];
 
-export const columnIndexes = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
+export const columnIndexes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export function newOpponentStats(): OpponentStats {
   return {
