@@ -342,17 +342,17 @@ At the top of the [Script](../basic/scripts.md), change the `target` variable to
 Note that this will **NOT** affect any instances of the [Script](../basic/scripts.md) that are already running.
 This will only affect instances of the [Script](../basic/scripts.md) that are run from this point forward.
 
-## Creating a New Script to Purchase New Servers
+## Creating a New Script to Access Cloud Servers
 
-Next, we're going to create a [Script](../basic/scripts.md) that automatically purchases additional [Servers](../basic/servers.md).
-These [Servers](../basic/servers.md) will be used to run many [Scripts](../basic/scripts.md).
-Running this [Script](../basic/scripts.md) will initially be very expensive since purchasing a [Server](../basic/servers.md) costs money, but it will pay off in the long run.
+Next, we're going to create a [Script](../basic/scripts.md) that automatically purchases access to additional cloud [Servers](../basic/servers.md).
+These cloud [Servers](../basic/servers.md) will be used to run many [Scripts](../basic/scripts.md).
+Running this [Script](../basic/scripts.md) will initially be very expensive since purchasing a cloud [Server](../basic/servers.md) costs money, but it will pay off in the long run.
 
-In order to create this [Script](../basic/scripts.md), you should familiarize yourself with the following functions:
+In order to create this [Script](../basic/scripts.md), you should familiarize yourself with the following functions in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>):
 
-- `purchaseServer()`
-- `getPurchasedServerCost()`
-- `getPurchasedServerLimit()`
+- `purchaseCloudServer()`
+- `getCloudServerCost()`
+- `getCloudServerLimit()`
 - `getServerMoneyAvailable()`
 - `scp()`
 - `exec()`
@@ -366,24 +366,24 @@ Paste the following code into the [Script](../basic/scripts.md) editor:
 
     /** @param {NS} ns */
     export async function main(ns) {
-        // How much RAM each purchased server will have. In this case, it'll
+        // How much RAM each cloud server will have. In this case, it'll
         // be 8GB.
         const ram = 8;
 
         // Iterator we'll use for our loop
         let i = 0;
 
-        // Continuously try to purchase servers until we've reached the maximum
+        // Continuously try to purchase cloud servers until we've reached the maximum
         // amount of servers
-        while (i < ns.getPurchasedServerLimit()) {
-            // Check if we have enough money to purchase a server
-            if (ns.getServerMoneyAvailable("home") > ns.getPurchasedServerCost(ram)) {
+        while (i < ns.cloud.getCloudServerLimit()) {
+            // Check if we have enough money to purchase access to a server
+            if (ns.getServerMoneyAvailable("home") > ns.cloud.getCloudServerCost(ram)) {
                 // If we have enough money, then:
                 //  1. Purchase the server
-                //  2. Copy our hacking script onto the newly-purchased server
-                //  3. Run our hacking script on the newly-purchased server with 3 threads
+                //  2. Copy our hacking script onto the newly-purchased cloud server
+                //  3. Run our hacking script on the newly-purchased cloud server with 3 threads
                 //  4. Increment our iterator to indicate that we've bought a new server
-                let hostname = ns.purchaseServer("pserv-" + i, ram);
+                let hostname = ns.cloud.purchaseCloudServer("cloudServ-" + i, ram);
                 ns.scp("early-hack-template.js", hostname);
                 ns.exec("early-hack-template.js", hostname, 3);
                 ++i;
@@ -394,25 +394,25 @@ Paste the following code into the [Script](../basic/scripts.md) editor:
         }
     }
 
-This code uses a while loop to purchase the maximum amount of [Servers](../basic/servers.md) using the `purchaseServer()` function.
+This code uses a while loop to purchase the maximum amount of cloud [Servers](../basic/servers.md) using the `purchaseCloudServer()` function.
 Each of these [Servers](../basic/servers.md) will have 8GB of [RAM](../basic/ram.md), as defined in the `ram` variable.
 Note that the [Script](../basic/scripts.md) uses the command `getServerMoneyAvailable("home")` to get the amount of money you currently have.
-This is then used to check if you can afford to purchase a [Server](../basic/servers.md).
+This is then used to check if you can afford to purchase a cloud [Server](../basic/servers.md).
 
-Whenever the script purchases a new [Server](../basic/servers.md), it uses the `scp()` function to copy our [Script](../basic/scripts.md) onto that new [Server](../basic/servers.md), and then it uses the `exec()` function to execute it on that [Server](../basic/servers.md).
+Whenever the script purchases a new cloud [Server](../basic/servers.md), it uses the `scp()` function to copy our [Script](../basic/scripts.md) onto that new [Server](../basic/servers.md), and then it uses the `exec()` function to execute it on that cloud [Server](../basic/servers.md).
 
 To run this [Script](../basic/scripts.md), go to `Terminal` and type:
 
     $ run purchase-server-8gb.js
 
-This purchase will continuously run until it has purchased the maximum number of [Servers](../basic/servers.md).
+This purchase will continuously run until it has purchased the maximum number of cloud [Servers](../basic/servers.md).
 When this happens, it'll mean that you have a bunch of new [Servers](../basic/servers.md) that are all running [hacking](../basic/hacking.md) [Scripts](../basic/scripts.md) against the `joesguns` [Server](../basic/servers.md)!
 
 The reason we're using so many [Scripts](../basic/scripts.md) to hack `joesguns` instead of targeting other [Servers](../basic/servers.md) is because it's more effective.
 This early in the game, we don't have enough [RAM](../basic/ram.md) to efficiently hack multiple targets, and trying to do so would be slow as we'd be spread too thin.
 You should definitely do this later on, though!
 
-Note that purchasing a [Server](../basic/servers.md) is fairly expensive, and purchasing the maximum amount of [Servers](../basic/servers.md) even more so.
+Note that purchasing a cloud [Server](../basic/servers.md) is fairly expensive, and purchasing the maximum amount of cloud [Servers](../basic/servers.md) even more so.
 At the time of writing this guide, the [Script](../basic/scripts.md) above requires \$11 million in order to finish purchasing all of the 8GB [Servers](../basic/servers.md).
 Therefore, we need to find additional ways to make money to speed up the process!
 These are covered in the next section.
@@ -477,9 +477,9 @@ This job offers higher pay and also earns you hacking experience.
 There are many more companies in the `City` tab that offer more pay and also more gameplay features.
 Feel free to explore!
 
-## After you Purchase your New Servers
+## After you Purchase your New Cloud Servers
 
-After you've made a total of \$11 million, your automatic [Server](../basic/servers.md)-purchasing [Script](../basic/scripts.md) should finish running.
+After you've made a total of \$11 million, your automatic cloud [Server](../basic/servers.md)-purchasing [Script](../basic/scripts.md) should finish running.
 This will free up some [RAM](../basic/ram.md) on your home computer.
 We don't want this [RAM](../basic/ram.md) to go to waste, so we'll make use of it.
 Go to `Terminal` and enter the following commands:
@@ -770,7 +770,7 @@ Feel free to adjust it to your liking.
 
 ## Random Tips
 
-- Early on in the game, it's better to spend your money on upgrading [RAM](../basic/ram.md) and purchasing new [Servers](../basic/servers.md) rather than spending it on [Augmentations](../basic/augmentations.md)
+- Early on in the game, it's better to spend your money on upgrading [RAM](../basic/ram.md) and purchasing new cloud [Servers](../basic/servers.md) rather than spending it on [Augmentations](../basic/augmentations.md)
 - The more money available on a [Server](../basic/servers.md), the more effective the `hack()` and `grow()` functions will be.
   This is because both of these functions use percentages rather than flat values.
   `hack()` steals a percentage of a [Server](../basic/servers.md)'s total available money, and `grow()` increases a [Server](../basic/servers.md)'s money by X%.

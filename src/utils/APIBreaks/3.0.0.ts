@@ -391,5 +391,52 @@ export const breakingChanges300: VersionBreakingChange = {
         "Note that this change does not affect 4S Market Data TIX API access (ns.stock.purchase4SMarketDataTixApi()).",
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.getPurchasedServerCost",
+          migration: { searchValue: "ns.getPurchasedServerCost", replaceValue: "ns.cloud.getCloudServerCost" },
+        },
+        {
+          name: "ns.purchaseServer",
+          migration: { searchValue: "ns.purchaseServer", replaceValue: "ns.cloud.purchaseCloudServer" },
+        },
+        {
+          name: "ns.getPurchasedServerUpgradeCost",
+          migration: {
+            searchValue: "ns.getPurchasedServerUpgradeCost",
+            replaceValue: "ns.cloud.getCloudServerUpgradeCost",
+          },
+        },
+        {
+          name: "ns.upgradePurchasedServer",
+          migration: { searchValue: "ns.upgradePurchasedServer", replaceValue: "ns.cloud.upgradeCloudServer" },
+        },
+        {
+          name: "ns.renamePurchasedServer",
+          migration: { searchValue: "ns.renamePurchasedServer", replaceValue: "ns.cloud.renameCloudServer" },
+        },
+        {
+          name: "ns.deleteServer",
+          migration: { searchValue: "ns.deleteServer", replaceValue: "ns.cloud.deleteCloudServer" },
+        },
+        {
+          name: "ns.getPurchasedServers",
+          migration: { searchValue: "ns.getPurchasedServers", replaceValue: "ns.cloud.getCloudServers" },
+        },
+        {
+          name: "ns.getPurchasedServerLimit",
+          migration: { searchValue: "ns.getPurchasedServerLimit", replaceValue: "ns.cloud.getCloudServerLimit" },
+        },
+        {
+          name: "ns.getPurchasedServerMaxRam",
+          migration: { searchValue: "ns.getPurchasedServerMaxRam", replaceValue: "ns.cloud.getCloudServerMaxRam" },
+        },
+      ],
+      info:
+        "The cloud server (purchased server) functions have been moved to their own interface, ns.cloud.\n" +
+        "Each function has been replaced with their corresponding interface variant.\n",
+      showWarning: true,
+    },
   ],
 };

@@ -349,7 +349,7 @@ describe("connect", () => {
     });
     test("Private server", () => {
       const ns = getNS();
-      ns.purchaseServer("pserver-0", 8);
+      ns.cloud.purchaseCloudServer("pserver-0", 8);
       Terminal.connectToServer(SpecialServers.DaedalusServer);
       expectConnectSuccessfully(ns, "pserver-0");
     });

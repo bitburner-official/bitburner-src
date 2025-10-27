@@ -170,6 +170,82 @@ Influences the experience gained for each ability when a player completes a clas
 </td></tr>
 <tr><td>
 
+[CloudServerCost](./bitburner.bitnodemultipliers.cloudservercost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influence how much it costs to purchase a server
+
+
+</td></tr>
+<tr><td>
+
+[CloudServerLimit](./bitburner.bitnodemultipliers.cloudserverlimit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the maximum number of purchased servers you can have
+
+
+</td></tr>
+<tr><td>
+
+[CloudServerMaxRam](./bitburner.bitnodemultipliers.cloudservermaxram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the maximum allowed RAM for a purchased server
+
+
+</td></tr>
+<tr><td>
+
+[CloudServerSoftcap](./bitburner.bitnodemultipliers.cloudserversoftcap.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influence how much it costs to purchase a server
+
+
+</td></tr>
+<tr><td>
+
 [CodingContractMoney](./bitburner.bitnodemultipliers.codingcontractmoney.md)
 
 
@@ -735,82 +811,6 @@ number
 </td><td>
 
 Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.
-
-
-</td></tr>
-<tr><td>
-
-[PurchasedServerCost](./bitburner.bitnodemultipliers.purchasedservercost.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-Influence how much it costs to purchase a server
-
-
-</td></tr>
-<tr><td>
-
-[PurchasedServerLimit](./bitburner.bitnodemultipliers.purchasedserverlimit.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-Influences the maximum number of purchased servers you can have
-
-
-</td></tr>
-<tr><td>
-
-[PurchasedServerMaxRam](./bitburner.bitnodemultipliers.purchasedservermaxram.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-Influences the maximum allowed RAM for a purchased server
-
-
-</td></tr>
-<tr><td>
-
-[PurchasedServerSoftcap](./bitburner.bitnodemultipliers.purchasedserversoftcap.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-Influence how much it costs to purchase a server
 
 
 </td></tr>

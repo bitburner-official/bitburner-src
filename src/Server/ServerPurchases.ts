@@ -36,8 +36,8 @@ export function getPurchaseServerCost(ram: number): number {
   return (
     sanitizedRam *
     ServerConstants.BaseCostFor1GBOfRamServer *
-    currentNodeMults.PurchasedServerCost *
-    Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
+    currentNodeMults.CloudServerCost *
+    Math.pow(currentNodeMults.CloudServerSoftcap, upg)
   );
 }
 
@@ -94,11 +94,11 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
 };
 
 export function getPurchaseServerLimit(): number {
-  return Math.round(ServerConstants.PurchasedServerLimit * currentNodeMults.PurchasedServerLimit);
+  return Math.round(ServerConstants.CloudServerLimit * currentNodeMults.CloudServerLimit);
 }
 
 export function getPurchaseServerMaxRam(): number {
-  const ram = Math.round(ServerConstants.PurchasedServerMaxRam * currentNodeMults.PurchasedServerMaxRam);
+  const ram = Math.round(ServerConstants.CloudServerMaxRam * currentNodeMults.CloudServerMaxRam);
 
   // Round this to the nearest power of 2
   return 1 << (31 - Math.clz32(ram));

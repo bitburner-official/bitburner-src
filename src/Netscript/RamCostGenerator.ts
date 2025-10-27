@@ -226,6 +226,18 @@ const singularity = {
   getUnlockedAchievements: SF4Cost(RamCostConstants.SingularityFn3),
 } as const;
 
+const cloud = {
+  getCloudServerLimit: RamCostConstants.GetPurchasedServerLimit,
+  getCloudServerMaxRam: RamCostConstants.GetPurchasedServerMaxRam,
+  getCloudServerCost: RamCostConstants.GetPurchaseServer,
+  getCloudServerUpgradeCost: 0.1,
+  getCloudServers: 1.05,
+  upgradeCloudServer: 0.25,
+  renameCloudServer: 0,
+  purchaseCloudServer: RamCostConstants.PurchaseServer,
+  deleteCloudServer: RamCostConstants.PurchaseServer,
+} as const;
+
 const format = {
   number: 0,
   ram: 0,
@@ -500,6 +512,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stock,
   singularity,
   format,
+  cloud,
   gang,
   go,
   bladeburner,
@@ -577,15 +590,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   serverExists: RamCostConstants.GetServer,
   fileExists: RamCostConstants.FileExists,
   isRunning: RamCostConstants.IsRunning,
-  getPurchasedServerLimit: RamCostConstants.GetPurchasedServerLimit,
-  getPurchasedServerMaxRam: RamCostConstants.GetPurchasedServerMaxRam,
-  getPurchasedServerCost: RamCostConstants.GetPurchaseServer,
-  getPurchasedServerUpgradeCost: 0.1,
-  getPurchasedServers: 1.05,
-  upgradePurchasedServer: 0.25,
-  renamePurchasedServer: 0,
-  purchaseServer: RamCostConstants.PurchaseServer,
-  deleteServer: RamCostConstants.PurchaseServer,
   write: 0,
   tryWritePort: 0,
   read: 0,

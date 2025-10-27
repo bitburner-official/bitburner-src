@@ -195,6 +195,17 @@ Player must be located in this city.
 </td></tr>
 <tr><td>
 
+[Cloud](./bitburner.cloud.md)
+
+
+</td><td>
+
+Cloud API
+
+
+</td></tr>
+<tr><td>
+
 [CodingContract](./bitburner.codingcontract.md)
 
 
@@ -754,7 +765,7 @@ Hacknet Server formulas
 
 </td><td>
 
-Options to control how a server identifier (hostname or IP address) is returned. Affects the behavior of [scan](./bitburner.ns.scan.md)<!-- -->, [getPurchasedServers](./bitburner.ns.getpurchasedservers.md)<!-- -->, and [getCurrentServer](./bitburner.singularity.getcurrentserver.md)
+Options to control how a server identifier (hostname or IP address) is returned. Affects the behavior of [scan](./bitburner.ns.scan.md)<!-- -->, [getCloudServers](./bitburner.cloud.getcloudservers.md)<!-- -->, and [getCurrentServer](./bitburner.singularity.getcurrentserver.md)
 
 
 </td></tr>
