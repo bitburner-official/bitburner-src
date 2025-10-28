@@ -5872,7 +5872,7 @@ interface Stanek {
    *
    * @returns List of active fragments placed on Stanek's Gift.
    */
-  activeFragments(): ActiveFragment[];
+  activeFragments(): (ActiveFragment & Fragment)[];
 
   /**
    * Clear the board of all fragments.

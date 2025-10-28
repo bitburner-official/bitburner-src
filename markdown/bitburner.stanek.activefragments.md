@@ -9,11 +9,11 @@ List of fragments in Stanek's Gift.
 **Signature:**
 
 ```typescript
-activeFragments(): ActiveFragment[];
+activeFragments(): (ActiveFragment & Fragment)[];
 ```
 **Returns:**
 
-[ActiveFragment](./bitburner.activefragment.md)<!-- -->\[\]
+([ActiveFragment](./bitburner.activefragment.md) &amp; [Fragment](./bitburner.fragment.md)<!-- -->)\[\]
 
 List of active fragments placed on Stanek's Gift.
 
