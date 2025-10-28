@@ -296,8 +296,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           The amount of money on a server is not limitless. So, if you constantly hack a server and deplete its money,
           then you will encounter diminishing returns in your hacking. You will need to use the "grow" command which
-          tricks the company into adding money to their server and the "weaken" command which increases the speed and
-          effect of hack and grow.
+          tricks the company into adding money to their server and the "weaken" command which decreases the server's
+          security level.
           <br />
           <Example content="[n00dles /]> grow" />
           <Example content="[n00dles /]> weaken" />
