@@ -11,7 +11,9 @@ import {
   generateSimpleArithmeticExpression,
   getLargestPrimeFactorConfig,
   largePrimes,
-  getDivisibilityTestConfig, getRomanNumeralConfig, romanNumeralDecoder,
+  getDivisibilityTestConfig,
+  getRomanNumeralConfig,
+  romanNumeralDecoder,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
@@ -218,7 +220,6 @@ describe("Password Tests", () => {
   });
 
   test("getRomanNumeralsServer creates a server with a correct password hint", () => {
-
     const server = serverFactory(() => getRomanNumeralConfig(5), 5, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
