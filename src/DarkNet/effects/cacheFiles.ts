@@ -44,7 +44,12 @@ export const getRewardFromCache = (server: DarknetServer, suppressToast = false)
   const result = reward(difficulty);
 
   if (!suppressToast) {
-    SnackbarEvents.emit(result + ` Gained -${karmaLoss} karma.`, ToastVariant.SUCCESS, 4000);
+    SnackbarEvents.emit(
+      // WIP-@fico: Add explanation
+      result + (Player.isAwareOfGang() ? ` Gained -${karmaLoss} karma.` : ""),
+      ToastVariant.SUCCESS,
+      4000,
+    );
   }
   return {
     success: true,
