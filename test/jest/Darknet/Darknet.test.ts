@@ -146,11 +146,8 @@ describe("Password Tests", () => {
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
-    if (!failedAttemptResponse.response.data) {
-      throw new Error("Invalid failedAttemptResponse");
-    }
-    const [base, numberString] = failedAttemptResponse.response.data.split(",");
 
+    const [base, numberString] = failedAttemptResponse.response.data.split(",");
     expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
     const attemptedPassword = parseBaseNNumberString(numberString, Number(base));
