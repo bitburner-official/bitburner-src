@@ -11,7 +11,7 @@ import { cachePrefixes } from "../models/dictionaryData";
 import type { Result } from "../../types";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
-import { CacheResult } from "@nsdefs";
+import type { CacheResult } from "@nsdefs";
 
 export const addCacheToServer: (
   server: DarknetServer,
@@ -39,7 +39,7 @@ export const getRewardFromCache = (server: DarknetServer, suppressToast = false)
     };
   }
 
-  const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
+  const rewards = [getMoneyReward, getXpReward, getProgramAndStockMarketRelatedRewards, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   const result = reward(difficulty);
 
@@ -53,13 +53,13 @@ export const getRewardFromCache = (server: DarknetServer, suppressToast = false)
   };
 };
 
-export const getCCTReward = () => {
+export const getCCTReward = (): string => {
   const contractCount = [2, 3, 4][Math.floor(Math.random() * 3)];
   tryGeneratingRandomContract(contractCount);
   return `New coding contracts are now available on the network!`;
 };
 
-export const getMoneyReward = (difficulty: number) => {
+export const getMoneyReward = (difficulty: number): string => {
   const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward =
     1.2 ** difficulty *
@@ -72,14 +72,14 @@ export const getMoneyReward = (difficulty: number) => {
   return `You have discovered a cache with ${formatMoney(reward)}.`;
 };
 
-export const getXpReward = (difficulty: number) => {
+export const getXpReward = (difficulty: number): string => {
   const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward = 1.2 ** difficulty * 500 * sf15_3Factor * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
   return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
 };
 
-export const getNextPortOpener = (difficulty: number) => {
+export const getProgramAndStockMarketRelatedRewards = (difficulty: number): string => {
   const creatingProgram = Player.currentWork instanceof CreateProgramWork ? Player.currentWork.programName : null;
   const programs = [
     CompletedProgramName.serverProfiler,
@@ -122,7 +122,7 @@ export const getNextPortOpener = (difficulty: number) => {
   return getXpReward(difficulty);
 };
 
-const getLabReward = () => {
+const getLabReward = (): string => {
   const labDetails = getLabyrinthDetails();
   const reward = labDetails.augReward ?? AugmentationName.NeuroFluxGovernor;
   Player.queueAugmentation(reward);
