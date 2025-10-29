@@ -74,7 +74,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname/IP of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+_(Optional)_ Optional. Hostname/IP of the target script. Defaults to the server the calling script is running on.
 
 
 </td></tr>
