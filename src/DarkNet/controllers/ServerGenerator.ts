@@ -217,7 +217,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
       passwordHintData: encodedPassword,
     };
   } else {
-    const passwordRangeMin = password - Math.floor(Math.random() * difficulty * 10 + 10);
+    const passwordRangeMin = 0;
     const passwordRangeMax = password + Math.floor(Math.random() * difficulty * 10 + 10);
     const encodedMin = romanNumeralEncoder(passwordRangeMin);
     const encodedMax = romanNumeralEncoder(passwordRangeMax);
@@ -298,7 +298,7 @@ export const getSpiceLevelConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getConvertToBase10Config = (difficulty: number): ServerConfig => {
-  const password = Math.floor(Math.random() * 100 * (difficulty + 1));
+  const password = Math.ceil(Math.random() * 99 * (difficulty + 1));
   const bases = [2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16];
   let base = bases[Math.floor(Math.random() * bases.length)];
   if (difficulty > 12) {
@@ -566,8 +566,39 @@ export const romanNumeralEncoder = (input: number): string => {
       input -= key;
     }
   }
-  return result || " ";
+  return result || "nulla";
 };
+
+export const romanNumeralDecoder = (input: string): number => {
+  if (input.toLowerCase() === "nulla") {
+    return 0;
+  }
+
+  const romanToInt: { [key: string]: number } = {
+    I: 1,
+    V: 5,
+    X: 10,
+    L: 50,
+    C: 100,
+    D: 500,
+    M: 1000,
+  };
+  let total = 0;
+  let prevValue = 0;
+
+  for (let i = input.length - 1; i >= 0; i--) {
+    const currentValue = romanToInt[input[i]];
+    if (currentValue < prevValue) {
+      total -= currentValue;
+    } else {
+      total += currentValue;
+    }
+    prevValue = currentValue;
+  }
+
+  return total;
+}
+
 
 export const smallPrimes = [
   2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
