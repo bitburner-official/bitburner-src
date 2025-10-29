@@ -81,7 +81,7 @@ export const calculateAuthenticationTime = (
   const underleveledFactor =
     person.skills.charisma >= chaRequired ? 1 : 1.5 + (chaRequired + 50) / (person.skills.charisma + 50);
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
-  const hasSf15_2Factor = Player.sourceFileLvl(15) > 2 ? 0.8 : 1;
+  const hasSf15_2Factor = Player.activeSourceFileLvl(15) > 2 ? 0.8 : 1;
   const bonusTimeFactor = hasDarknetBonusTime() ? 0.75 : 1;
 
   const time =
@@ -254,4 +254,4 @@ export const getDarkscapeNavigator = () => {
   populateDarknet();
 };
 
-export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.sourceFileLvl(15) > 0;
+export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.activeSourceFileLvl(15) > 0;

@@ -43,8 +43,7 @@ export const getRewardFromCache = (server: DarknetServer, suppressToast = false)
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   const result = reward(difficulty);
 
-  const canAccessGang = Player.sourceFileLvl(2) > 0 || Player.bitNodeN === 2;
-  const karmaLossMessage = canAccessGang ? ` Gained -${karmaLoss} karma.` : "";
+  const karmaLossMessage = Player.isAwareOfGang() ? ` Gained -${karmaLoss} karma.` : "";
   !suppressToast && SnackbarEvents.emit(result + karmaLossMessage, ToastVariant.SUCCESS, 4000);
   return {
     success: true,
@@ -60,7 +59,7 @@ export const getCCTReward = () => {
 };
 
 export const getMoneyReward = (difficulty: number) => {
-  const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
+  const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward =
     1.2 ** difficulty *
     1e7 *
@@ -73,14 +72,14 @@ export const getMoneyReward = (difficulty: number) => {
 };
 
 export const getXpReward = (difficulty: number) => {
-  const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
+  const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward = 1.2 ** difficulty * 500 * sf15_3Factor * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
   return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
 };
 
 export const getNextPortOpener = (difficulty: number) => {
-  const currentPlayerWork = Player.currentWork instanceof CreateProgramWork ? Player.currentWork.programName : null;
+  const creatingProgram = Player.currentWork instanceof CreateProgramWork ? Player.currentWork.programName : null;
   const programs = [
     CompletedProgramName.serverProfiler,
     CompletedProgramName.bruteSsh,
@@ -95,7 +94,7 @@ export const getNextPortOpener = (difficulty: number) => {
   ];
 
   for (const program of programs) {
-    if (!Player.hasProgram(program) && currentPlayerWork !== program) {
+    if (!Player.hasProgram(program) && creatingProgram !== program) {
       Player.getHomeComputer().pushProgram(program);
       return `You have discovered the program ${program}.`;
     }
