@@ -19,7 +19,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration and approval in other people.",
       company_rep: 1.1,
       faction_rep: 1.1,
-      charisma: 1.05,
+      charisma_exp: 1.05,
       factions: [
         FactionName.TianDiHui,
         FactionName.TheSyndicate,
@@ -531,7 +531,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       charisma: 1.1,
       crime_success: 1.1,
       work_money: 1.2,
-      factions: [FactionName.NewTokyo, FactionName.SpeakersForTheDead],
+      factions: [FactionName.SpeakersForTheDead],
     },
     [AugmentationName.EMS4Recombination]: {
       repCost: 2.5e3,
@@ -761,7 +761,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "An implant that, when activated, makes the speaker sound unbelievably reasonable and plausible to listeners " +
         "for the next hour. It requires no concentration from the user, and only a verbal activation component. It even affects " +
         "most electronic detection methods.",
-      charisma: 1.2,
+      charisma_exp: 1.2,
       company_rep: 1.1,
       factions: [FactionName.Tetrads, FactionName.Bladeburners],
     },
@@ -1048,7 +1048,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       prereqs: [AugmentationName.LuminCloaking1],
       agility: 1.1,
       defense: 1.1,
-      charisma: 1.1,
+      charisma_exp: 1.1,
       crime_money: 1.25,
       factions: [FactionName.SlumSnakes, FactionName.Tetrads],
     },
@@ -1488,7 +1488,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A cranial implant that affects the user's personality, making them better " +
         "at negotiation in social situations.",
-      charisma: 1.15,
+      charisma_exp: 1.15,
       work_money: 1.1,
       company_rep: 1.15,
       faction_rep: 1.15,

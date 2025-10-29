@@ -1122,7 +1122,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         BladeburnerRank: 0.2,
         BladeburnerSkillCost: 3,
 
-        GangUniqueAugs: 0.35,
+        GangUniqueAugs: 0.3,
 
         StaneksGiftPowerMultiplier: 0.7,
         StaneksGiftExtraSize: -2,

@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, SvgIcon, Tooltip, Typography } from "@mui/material";
 import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
-import { RunningScript } from "../../Script/RunningScript";
 import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
@@ -37,20 +36,21 @@ export function ServerSummary({
   ).length;
   const fileCount = dataFileCount + server.messages.length;
   const contractCount = server.contracts.length;
-  const runningScriptCount = server.runningScriptMap
-    .values()
-    .map((pidMap: Map<number, RunningScript>) => pidMap.size)
-    .reduce((a, b) => a + b, 0);
+  const runningScriptNames = Array.from(server.runningScriptMap.keys())
+    .map(script => script.replace("*[]", ""));
+  const runningScriptsTooltip = runningScriptNames.length > 0 ?
+    `Running scripts on server: ${runningScriptNames.slice(0,3).join(", ")}${runningScriptNames.length > 3 ? ` +${runningScriptNames.length-3}` : ""}` :
+    "No running scripts on server";
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
   const hasBackdoor = server.backdoorInstalled && !server.hasStasisLink;
   const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.blockedRam, 0);
 
   const runningScriptsComponent = (
-    <Tooltip key="runningScript" title={<>Running scripts on server: {runningScriptCount}</>}>
-      <Typography color={runningScriptCount ? "primary" : "secondary"}>
+    <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
+      <Typography color={runningScriptNames.length > 0 ? "primary" : "secondary"}>
         <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
-        {runningScriptCount}
+        {runningScriptNames.length}
       </Typography>
     </Tooltip>
   );
