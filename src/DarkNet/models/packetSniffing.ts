@@ -64,7 +64,7 @@ const getRandomData = (server: DarknetServer, length: number) => {
     } else if (Math.random() < 0.05) {
       const servers = getAllMovableDarknetServers();
       const randomServer = servers[Math.floor(Math.random() * servers.length)];
-      return `--${randomServer.password ?? ""}--`;
+      return `--${randomServer.password}--`;
     } else {
       result += romanNumeralEncoder(Math.floor(Math.random() * 5000));
     }
@@ -170,7 +170,7 @@ const getLogNoise = (server: DarknetServer, logDate: Date) => {
   if (Math.random() < 0.05) {
     const servers = getAllMovableDarknetServers();
     const randomServer = servers[Math.floor(Math.random() * servers.length)];
-    return `--${randomServer.password ?? ""}--`;
+    return `--${randomServer.password}--`;
   }
 
   return `${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`;

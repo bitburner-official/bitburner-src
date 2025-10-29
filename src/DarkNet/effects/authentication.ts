@@ -82,15 +82,15 @@ export const checkPassword = (
         // ignore small rounding errors during floating point operations
         return getGenericSuccess(attemptedPassword);
       }
-      return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? "");
+      return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
     }
     case ModelIds.TimingAttack:
       return {
         responseTime,
-        ...getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? ""),
+        ...getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData),
       };
     default:
-      return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? "");
+      return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
   }
 };
 

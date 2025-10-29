@@ -308,8 +308,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             maxSuggestions={6}
             suggestionList={getAutocompleteSuggestionList}
             ignoredTextRegex={/ /g}
-            onSelection={(event, selection) => {
-              search(selection ?? "");
+            onSelection={(_, selection) => {
+              search(selection);
             }}
           />
         </Typography>

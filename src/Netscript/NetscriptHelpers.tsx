@@ -479,7 +479,7 @@ function scriptIdentifier(
 }
 
 /**
- * Gets the server with a specific hostname/ip. Throw an error if the server does not exist or is a non-darkweb isolated
+ * Gets the server with a specific hostname/ip. Throw an error if the server does not exist or is an isolated non-dnet
  * server (e.g., pre-TOR darkweb, pre-TRP WD).
  *
  * @param {NetscriptContext} ctx - Context from which getServer is being called. For logging purposes.

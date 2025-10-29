@@ -93,7 +93,7 @@ export const Milestones: Milestone[] = [
   },
   {
     title: () =>
-      Player?.bitNodeN === 15
+      Player.bitNodeN === 15
         ? `Find The Red Pill somewhere in the dark net`
         : `Install the special Augmentation from ${FactionName.Daedalus}`,
     fulfilled: (): boolean => {
