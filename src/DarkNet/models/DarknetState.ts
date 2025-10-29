@@ -11,8 +11,13 @@ export const DarknetEvents = new EventEmitter();
 
 export type ServerState = {
   lastLogTime?: Date;
-  serverLogs: string[];
+  serverLogs: LogEntry[];
   authenticatedPIDs: number[];
+};
+
+export type LogEntry = {
+  pid: number;
+  message: string;
 };
 
 export const DarknetState = {

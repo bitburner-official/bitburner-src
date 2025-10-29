@@ -2,7 +2,7 @@ import { commonPasswordDictionary, letters, packetSniffPhrases } from "./diction
 import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } from "../controllers/ServerGenerator";
 import { generateDarknetServerName, type PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
-import { getServerState } from "./DarknetState";
+import { getServerState, LogEntry } from "./DarknetState";
 import { ModelIds } from "../Enums";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
@@ -56,7 +56,8 @@ const getRandomData = (server: DarknetServer, length: number) => {
     } else if (Math.random() < 0.3) {
       result += generateSimpleArithmeticExpression(Math.floor(Math.random() * 5 + 2));
     } else if (Math.random() < 0.33) {
-      result += " " + getExactCharactersHint(getServerLogs(server, 1, true, true)[0] || "", password);
+      const mostRecentAuthLog = getServerLogs(server, 1, true, true)[0]?.message || "";
+      result += " " + getExactCharactersHint(mostRecentAuthLog, password);
     } else if (Math.random() < 0.6) {
       result += " " + generateDarknetServerName() + " ";
     } else if (Math.random() < 0.15) {
@@ -102,12 +103,15 @@ const getExactCharactersHint = (lastPassword: string, realPassword: string) => {
   return `The characters ${rightChars.join(", ")} are in the right place. `;
 };
 
-export const logPasswordAttempt = (server: DarknetServer, passwordResponse: PasswordResponse) => {
+export const logPasswordAttempt = (server: DarknetServer, passwordResponse: PasswordResponse, pid: number) => {
   const serverState = getServerState(server.hostname);
   const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
 
-  const logMessage = JSON.stringify(passwordResponse, null, 2);
+  const logMessage = {
+    message: JSON.stringify(passwordResponse, null, 2),
+    pid,
+  };
   serverState.serverLogs = [logMessage, ...serverLogs].slice(0, MAX_LOG_LINES); // Keep only the last 50 logs
 };
 
@@ -138,49 +142,56 @@ export const populateServerLogsWithNoise = (server: DarknetServer) => {
   }
 };
 
-const getLogNoise = (server: DarknetServer, logDate: Date) => {
+const getLogNoise = (server: DarknetServer, logDate: Date): LogEntry => {
   if (Math.random() < 0.2) {
-    return packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
+    return log(packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)]);
   }
   if (Math.random() < 0.05 * (1 / (server.difficulty + 1))) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
     const connectedServer = getDarknetServer(connectedServerName);
     if (connectedServer) {
-      return `Connecting to ${connectedServerName}:${connectedServer.password} ...`;
+      return log(`Connecting to ${connectedServerName}:${connectedServer.password} ...`);
     }
   }
   if (Math.random() < 0.05) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    return `[sending transaction details to ${connectedServerName}.]`;
+    return log(`[sending transaction details to ${connectedServerName}.]`);
   }
   if (Math.random() < 0.1) {
     const serverState = getServerState(server.hostname);
-    const lastPasswordAttempt = serverState.serverLogs.find((log) => log.includes("passwordAttempted"));
+    const lastPasswordAttempt =
+      serverState.serverLogs.find((log) => log.message.includes("passwordAttempted"))?.message ?? "";
     if (lastPasswordAttempt) {
       const authLog = JSON.parse(lastPasswordAttempt) as PasswordResponse;
       const password = authLog.passwordAttempted;
-      return getExactCharactersHint(getServerLogs(server, 1, true, true)[0] || "", password);
+      const mostRecentAuthLog = getServerLogs(server, 1, true, true)[0]?.message || "";
+      return log(getExactCharactersHint(mostRecentAuthLog, password));
     }
   }
 
   if (Math.random() < 0.1) {
-    return getRandomCharsInPassword(server.password);
+    return log(getRandomCharsInPassword(server.password));
   }
 
   if (Math.random() < 0.05) {
     const servers = getAllMovableDarknetServers();
     const randomServer = servers[Math.floor(Math.random() * servers.length)];
-    return `--${randomServer.password}--`;
+    return log(`--${randomServer.password}--`);
   }
 
-  return `${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`;
+  return log(`${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`);
 };
+
+const log = (message: string, pid = -1) => ({
+  message,
+  pid,
+});
 
 export const getServerLogs = (server: DarknetServer, logLines: number, peek = false, requireAuthLog = false) => {
   const serverState = getServerState(server.hostname);
 
   if (requireAuthLog) {
-    const authLog = serverState.serverLogs.find((log) => log.includes("passwordAttempted"));
+    const authLog = serverState.serverLogs.find((log) => log.message.includes("passwordAttempted"));
     if (authLog) {
       return [authLog];
     } else {

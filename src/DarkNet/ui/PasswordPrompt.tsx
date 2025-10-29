@@ -116,9 +116,11 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
           <br />
           <br />
           <br />
-          <Typography variant="caption" color="secondary">
-            Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
-          </Typography>
+          {!isLabServer && (
+            <Typography variant="caption" color="secondary">
+              Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+            </Typography>
+          )}
         </div>
         <div style={{ width: "50%" }}>
           <Container disableGutters>

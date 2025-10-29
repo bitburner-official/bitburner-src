@@ -104,7 +104,7 @@ export const getAuthResult = (
 ): { result: DarknetResult; response: PasswordResponse } => {
   const response = checkPassword(server, attemptedPassword, pid, responseTime);
   if (logActivity) {
-    logPasswordAttempt(server, response);
+    logPasswordAttempt(server, response, pid);
   }
   if (response.code === ResponseCodeEnum.Success) {
     handleSuccessfulAuth(server, threads, pid);

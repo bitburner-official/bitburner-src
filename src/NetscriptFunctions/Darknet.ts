@@ -294,7 +294,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
               success: true,
               code: ResponseCodeEnum.Success,
               message: GenericResponseMessage.Success,
-              logs: serverState.serverLogs.slice(0, 1),
+              logs: serverState.serverLogs.slice(0, 1).map((log) => log.message),
             };
           }
           const capturedLogs = serverState.serverLogs.slice(0, options.logsToCapture);
@@ -304,7 +304,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             success: true,
             code: ResponseCodeEnum.Success,
             message: GenericResponseMessage.Success,
-            logs: capturedLogs,
+            logs: capturedLogs.map((log) => log.message),
           };
         });
       },

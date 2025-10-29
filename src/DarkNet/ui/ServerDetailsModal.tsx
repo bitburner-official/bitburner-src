@@ -53,7 +53,7 @@ export const ServerDetailsModal = ({
       color="secondary"
       style={{ borderLeft: "1px solid grey", paddingLeft: "3px", whiteSpace: "normal" }}
     >
-      {decolorJsonProperties(log)}
+      {decolorJsonProperties(log.message)}
     </pre>
   ));
 
@@ -79,12 +79,6 @@ export const ServerDetailsModal = ({
             <>
               <Typography>Password: "{server.password}"</Typography>
               <br />
-              {isLabServer && (
-                <>
-                  <br />
-                  <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
-                </>
-              )}
               <Typography color="secondary">
                 {server.ip} cha:{server.requiredCharismaSkill}
               </Typography>
@@ -102,6 +96,12 @@ export const ServerDetailsModal = ({
               </div>{" "}
               <br />
               <br />
+              {isLabServer && (
+                <>
+                  <br />
+                  <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
+                </>
+              )}
             </>
           ) : (
             <PasswordPrompt

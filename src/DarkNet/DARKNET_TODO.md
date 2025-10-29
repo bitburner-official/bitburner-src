@@ -4,17 +4,12 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
-- multiple scripts trying to solve the labyrinth at the same time
-
-- show script and server with pid in lab UI dropdown
-
 - Tweak gang balance
 - Tweak new city aug balance
 
 - tweak induceServerMigration balance
 
 - performance
-- link server logs to PID for labyrinth display
 - icon for stasis link
 
 - more hint notes

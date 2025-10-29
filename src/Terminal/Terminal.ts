@@ -450,8 +450,12 @@ export class Terminal {
       this.finishAnalyze(this.action.server, cancelled);
     } else if (this.action.action === "c" && this.action.server instanceof DarknetServer) {
       const cache = this.action.server.caches.pop();
-      const result = getRewardFromCache(this.action.server, cache, true);
-      this.print(result.message);
+      if (!cache) {
+        this.print("No cache files found.");
+      } else {
+        const result = getRewardFromCache(this.action.server, cache, true);
+        this.print(result.message);
+      }
     }
 
     if (cancelled) {

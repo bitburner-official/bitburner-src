@@ -100,11 +100,20 @@ export const LabyrinthSummary = ({
     );
   };
 
-  const response =
+  const getLogs = () =>
     DarknetState.serverState[lab.name]?.serverLogs
-      .slice(-3)
-      .map((log) => log.replaceAll('\\"', "'"))
+      .filter((log) => log.pid === currentPerspective)
+      .slice(0, 2)
+      .map((log) => log.message.replaceAll('\\"', "'"))
       .join("\n") || "(no response yet)";
+
+  const getManualFeedback = () => {
+    if (currentPerspective !== -1) return " ";
+    if (loadingText?.includes("{") || loadingText?.includes("(")) {
+      return lastMovementFeedback ?? "";
+    }
+    return "Travelling...";
+  };
 
   return (
     <>
@@ -125,7 +134,7 @@ export const LabyrinthSummary = ({
                 </>
               ) : (
                 <>
-                  <Typography>{loadingText?.includes("{") ? lastMovementFeedback ?? "" : "Travelling..."}</Typography>
+                  <Typography>{getManualFeedback()}</Typography>
                   <Typography>Current Surroundings:</Typography>
                   <pre className={classes.maze}>{surroundings}</pre>
                   <Typography>
@@ -137,7 +146,7 @@ export const LabyrinthSummary = ({
             <div style={{ width: "50%" }}>
               <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
                 <div style={{ color: "white" }}>
-                  <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
+                  <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{getLogs()}</pre>
                 </div>
               </Card>
             </div>

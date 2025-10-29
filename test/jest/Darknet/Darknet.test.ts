@@ -88,7 +88,7 @@ describe("Password Tests", () => {
     expect(server).toBeDefined();
 
     const getData = () => {
-      const responseLog = DarknetState.serverState[server.hostname].serverLogs.slice(0, 1)[0];
+      const responseLog = DarknetState.serverState[server.hostname].serverLogs.slice(0, 1)[0]?.message ?? "";
       const feedback = JSON.parse(responseLog) as PasswordResponse;
       if (!feedback.data) {
         throw new Error(`Invalid responseLog: ${responseLog}`);

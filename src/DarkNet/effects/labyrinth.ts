@@ -267,7 +267,7 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
       message: `You cannot go that way. You are still at ${initialX},${initialY}.`,
-      data: JSON.stringify(status),
+      data: JSON.stringify(status, null, 2),
     };
   }
 
@@ -310,7 +310,7 @@ export const handleLabyrinthPassword = (
   return {
     passwordAttempted: attemptedPassword,
     code: ResponseCodeEnum.AuthFailure,
-    message: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
+    message: `You have moved to ${newLocation[0]},${newLocation[1]}.`,
     data: JSON.stringify(status),
   };
 };
