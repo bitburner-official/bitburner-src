@@ -449,8 +449,8 @@ export class Terminal {
     } else if (this.action.action === "a") {
       this.finishAnalyze(this.action.server, cancelled);
     } else if (this.action.action === "c" && this.action.server instanceof DarknetServer) {
-      this.action.server.caches.pop();
-      const result = getRewardFromCache(this.action.server, true);
+      const cache = this.action.server.caches.pop();
+      const result = getRewardFromCache(this.action.server, cache, true);
       this.print(result.message);
     }
 

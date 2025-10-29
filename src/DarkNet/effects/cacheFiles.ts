@@ -1,7 +1,7 @@
 import { tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
 import { Player } from "@player";
 import { formatMoney, formatNumber } from "../../ui/formatNumber";
-import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
+import { getLabyrinthDetails, isLabyrinthServer, LAB_CACHE_NAME } from "./labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { AugmentationName, CompletedProgramName, ToastVariant } from "@enums";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
@@ -26,11 +26,11 @@ export const addCacheToServer: (
   return { success: true, cacheFilename };
 };
 
-export const getRewardFromCache = (server: DarknetServer, suppressToast = false): CacheResult => {
+export const getRewardFromCache = (server: DarknetServer, cacheName: string, suppressToast = false): CacheResult => {
   const difficulty = server.difficulty;
   const karmaLoss = (difficulty + 1) * 2;
   Player.karma -= karmaLoss;
-  if (isLabyrinthServer(server.hostname)) {
+  if (isLabyrinthServer(server.hostname) && cacheName.includes(LAB_CACHE_NAME)) {
     const labReward = getLabReward();
     return {
       success: true,
@@ -45,7 +45,8 @@ export const getRewardFromCache = (server: DarknetServer, suppressToast = false)
 
   if (!suppressToast) {
     SnackbarEvents.emit(
-      // WIP-@fico: Add explanation
+      // Karma is only useful in relation to gangs, so we only show the karma loss if the player has started unlocking gang
+      // content. This is to avoid cluttering the UI with unnecessary info, and confusion before players discover karma.
       result + (Player.isAwareOfGang() ? ` Gained -${karmaLoss} karma.` : ""),
       ToastVariant.SUCCESS,
       4000,
@@ -129,7 +130,10 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): stri
 
 const getLabReward = (): string => {
   const labDetails = getLabyrinthDetails();
-  const reward = labDetails.augReward ?? AugmentationName.NeuroFluxGovernor;
+  let reward = labDetails.augReward;
+  if (!reward || Player.hasAugmentation(reward)) {
+    reward = AugmentationName.NeuroFluxGovernor;
+  }
   Player.queueAugmentation(reward);
   return `You have discovered a cache with the augmentation ${reward}!`;
 };

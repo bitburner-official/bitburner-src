@@ -326,7 +326,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
 
         server.caches = server.caches.filter((cache) => cache !== fileName);
-        const result = getRewardFromCache(server, suppressToast);
+        const result = getRewardFromCache(server, fileName, suppressToast);
         logger(ctx)(`Data file ${fileName} opened. ${result.message}.`);
         return result;
       },

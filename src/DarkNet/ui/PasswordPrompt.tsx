@@ -41,6 +41,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
     const responseTime = 500 + sharedChars * 150;
     await sleep(responseTime);
 
+    // Manual password entry counts as having two threads, to increase the cha xp slightly during early exploration
     const response = getAuthResult(server, passwordAttempted, 2, responseTime);
     setRawResponse(response);
     setResponse(JSON.stringify(response.result, null, 2));

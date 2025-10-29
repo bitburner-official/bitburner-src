@@ -10,6 +10,8 @@ import { ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 
+export const LAB_CACHE_NAME = "the_great_work";
+
 const NORTH = [0, -1];
 const EAST = [1, 0];
 const SOUTH = [0, 1];
@@ -284,7 +286,7 @@ export const handleLabyrinthPassword = (
     server.hasAdminRights = true;
     const cacheCount = getLabyrinthDetails().name === SpecialServers.BonusLab ? 3 : 1;
     for (let i = 0; i < cacheCount; i++) {
-      addCacheToServer(server, "the_great_work");
+      addCacheToServer(server, LAB_CACHE_NAME);
     }
     addSessionToServer(labServer, pid);
 
