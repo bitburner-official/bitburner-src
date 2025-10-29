@@ -970,7 +970,9 @@ Get the ram cost of a script.
 
 </td><td>
 
-Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+Returns data of a server.
+
+If the server is a darknet server and has recently gone offline, it will return a dummy server object with `isOnline: false`<!-- -->.
 
 
 </td></tr>

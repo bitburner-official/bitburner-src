@@ -94,19 +94,6 @@ Returns -1 if the server is offline, not found, or not a darkweb server.
 </td></tr>
 <tr><td>
 
-[getServer(host)](./bitburner.darknet.getserver.md)
-
-
-</td><td>
-
-Returns data of the darknet server.
-
-If the server has recently gone offline, it will return a blank server object with `isOnline: false`<!-- -->.
-
-
-</td></tr>
-<tr><td>
-
 [getServerAuthDetails(host)](./bitburner.darknet.getserverauthdetails.md)
 
 

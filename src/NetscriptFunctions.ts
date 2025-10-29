@@ -83,7 +83,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
+import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer, DarknetServerData } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -122,7 +122,7 @@ import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlin
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
-import { ResponseCodeEnum } from "./DarkNet/Enums";
+import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 
 export const enums: NSEnums = {
   CityName,
@@ -901,12 +901,48 @@ export const ns: InternalAPI<NSFull> = {
     },
   getServer: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-    const server = helpers.getServer(ctx, host);
+    const server = GetServer(host);
+    // If the target server does not exist
+    if (!server) {
+      if (DarknetState.offlineServers.includes(host)) {
+        // If the server is offline, return a dummy object with isOnline = false.
+        helpers.log(ctx, () => `Server ${host} is offline.`);
+        return {
+          isOnline: false,
+          ...exampleDarknetServerData,
+          hostname: host,
+        } satisfies DarknetServerData & { isOnline: boolean };
+      } else {
+        // Throw, otherwise.
+        throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
+      }
+    }
     if (server instanceof DarknetServer) {
-      throw helpers.errorMessage(
-        ctx,
-        `${server.hostname} is a darknet server. If you want to get darknet server data, you have to use ns.dnet.getServer().`,
-      );
+      return {
+        isOnline: true,
+        hostname: server.hostname,
+        ip: server.ip,
+        hasAdminRights: server.hasAdminRights,
+        isConnectedTo: server.isConnectedTo,
+        cpuCores: server.cpuCores,
+        ramUsed: server.ramUsed,
+        maxRam: server.maxRam,
+        backdoorInstalled: server.backdoorInstalled,
+        depth: server.depth,
+        modelId: server.modelId,
+        hasStasisLink: server.hasStasisLink,
+        blockedRam: server.blockedRam,
+        staticPasswordHint: server.staticPasswordHint,
+        passwordHintData: server.passwordHintData,
+        difficulty: server.difficulty,
+        requiredCharismaSkill: server.requiredCharismaSkill,
+        logTrafficInterval: server.logTrafficInterval,
+        isStationary: server.isStationary,
+      } satisfies DarknetServerData & { isOnline: boolean };
+    }
+    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
+    if (server.serversOnNetwork.length === 0) {
+      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
     }
     return {
       hostname: server.hostname,
@@ -933,7 +969,7 @@ export const ns: InternalAPI<NSFull> = {
       openPortCount: server.openPortCount,
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
-    };
+    } satisfies NSInterfaceServer;
   },
   getServerMoneyAvailable: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);

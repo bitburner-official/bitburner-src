@@ -4399,19 +4399,6 @@ export interface Darknet {
   getStasisLinkedServers(returnByIP?: boolean): string[];
 
   /**
-   * Returns data of the darknet server.
-   *
-   * If the server has recently gone offline, it will return a blank server object with `isOnline: false`.
-   *
-   * @remarks
-   * RAM cost: 2 GB
-   *
-   * @param host - Optional. Hostname for the requested server object. Defaults to the running script's server.
-   * @returns Data of the darknet server.
-   */
-  getServer(host?: string): DarknetServerData & { isOnline: boolean };
-
-  /**
    * Returns the server's authentication protocol details.
    *
    * @remarks
@@ -7806,14 +7793,18 @@ export interface NS {
   getHacknetMultipliers(): HacknetMultipliers;
 
   /**
-   * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+   * Returns data of a server.
+   *
+   * If the server is a darknet server and has recently gone offline, it will return a dummy server object with
+   * `isOnline: false`.
    *
    * @remarks
    * RAM cost: 2 GB
-   * @param host - Optional. Hostname/IP for the requested server object.
-   * @returns The requested server object.
+   *
+   * @param host - Optional. Hostname/IP of the server. Defaults to the hostname of the running script's server.
+   * @returns Data of the server.
    */
-  getServer(host?: string): Server;
+  getServer(host?: string): Server | (DarknetServerData & { isOnline: boolean });
 
   /**
    * Get money available on a server.

@@ -45,8 +45,7 @@ export function getFailureResult(
   if (!targetServer) {
     if (DarknetState.offlineServers.includes(hostname)) {
       // If the server is offline, return a dummy object with isOnline = false.
-      const result = `Target server ${hostname} is offline.`;
-      logger(ctx)(result);
+      logger(ctx)(`Server ${hostname} is offline.`);
       return {
         success: false,
         code: ResponseCodeEnum.ServiceUnavailable,
@@ -54,8 +53,7 @@ export function getFailureResult(
       };
     } else {
       // Throw, otherwise.
-      const result = `Target server ${hostname} does not exist. It may have gone offline.`;
-      throw errorMessage(ctx, result);
+      throw errorMessage(ctx, `Server ${hostname} does not exist.`);
     }
   }
   if (!(targetServer instanceof DarknetServer)) {

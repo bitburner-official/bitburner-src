@@ -31,7 +31,7 @@ import {
   logger,
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
-import { exampleDarknetServerData, GenericResponseMessage, ResponseCodeEnum } from "../DarkNet/Enums";
+import { GenericResponseMessage, ResponseCodeEnum } from "../DarkNet/Enums";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
@@ -424,40 +424,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         logger(ctx)(`Stasis linked servers: ${serverNames}`);
         return serverNames;
       },
-    getServer: (ctx) => (_hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const onlineConnectionCheck = getFailureResult(ctx, hostname);
-      if (!onlineConnectionCheck.success) {
-        logger(ctx)(onlineConnectionCheck.message);
-        return {
-          isOnline: false,
-          ...exampleDarknetServerData,
-          hostname: hostname,
-        } satisfies ReturnType<DarknetAPI["getServer"]>;
-      }
-      const server = onlineConnectionCheck.server;
-      return {
-        isOnline: true,
-        hostname: server.hostname,
-        ip: server.ip,
-        hasAdminRights: server.hasAdminRights,
-        isConnectedTo: server.isConnectedTo,
-        cpuCores: server.cpuCores,
-        ramUsed: server.ramUsed,
-        maxRam: server.maxRam,
-        backdoorInstalled: server.backdoorInstalled,
-        depth: server.depth,
-        modelId: server.modelId,
-        hasStasisLink: server.hasStasisLink,
-        blockedRam: server.blockedRam,
-        staticPasswordHint: server.staticPasswordHint,
-        passwordHintData: server.passwordHintData,
-        difficulty: server.difficulty,
-        requiredCharismaSkill: server.requiredCharismaSkill,
-        logTrafficInterval: server.logTrafficInterval,
-        isStationary: server.isStationary,
-      } satisfies ReturnType<DarknetAPI["getServer"]>;
-    },
     getServerAuthDetails: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
       const onlineConnectionCheck = getFailureResult(ctx, hostname);

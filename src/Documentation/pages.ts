@@ -414,7 +414,6 @@ import nsDoc_bitburner_darknet_connecttosession_md from "../../markdown/bitburne
 import nsDoc_bitburner_darknet_getblockedram_md from "../../markdown/bitburner.darknet.getblockedram.md?raw";
 import nsDoc_bitburner_darknet_getdarknetinstability_md from "../../markdown/bitburner.darknet.getdarknetinstability.md?raw";
 import nsDoc_bitburner_darknet_getdepth_md from "../../markdown/bitburner.darknet.getdepth.md?raw";
-import nsDoc_bitburner_darknet_getserver_md from "../../markdown/bitburner.darknet.getserver.md?raw";
 import nsDoc_bitburner_darknet_getserverauthdetails_md from "../../markdown/bitburner.darknet.getserverauthdetails.md?raw";
 import nsDoc_bitburner_darknet_getstasislinkedservers_md from "../../markdown/bitburner.darknet.getstasislinkedservers.md?raw";
 import nsDoc_bitburner_darknet_getstasislinklimit_md from "../../markdown/bitburner.darknet.getstasislinklimit.md?raw";
@@ -1975,7 +1974,6 @@ AllPages["nsDoc/bitburner.darknet.connecttosession.md"] = nsDoc_bitburner_darkne
 AllPages["nsDoc/bitburner.darknet.getblockedram.md"] = nsDoc_bitburner_darknet_getblockedram_md;
 AllPages["nsDoc/bitburner.darknet.getdarknetinstability.md"] = nsDoc_bitburner_darknet_getdarknetinstability_md;
 AllPages["nsDoc/bitburner.darknet.getdepth.md"] = nsDoc_bitburner_darknet_getdepth_md;
-AllPages["nsDoc/bitburner.darknet.getserver.md"] = nsDoc_bitburner_darknet_getserver_md;
 AllPages["nsDoc/bitburner.darknet.getserverauthdetails.md"] = nsDoc_bitburner_darknet_getserverauthdetails_md;
 AllPages["nsDoc/bitburner.darknet.getstasislinkedservers.md"] = nsDoc_bitburner_darknet_getstasislinkedservers_md;
 AllPages["nsDoc/bitburner.darknet.getstasislinklimit.md"] = nsDoc_bitburner_darknet_getstasislinklimit_md;

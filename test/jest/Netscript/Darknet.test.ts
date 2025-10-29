@@ -20,7 +20,7 @@ import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 
 const hostnameOfNonExistentServer = "fake-server";
-const errorMessageForNonExistentServer = `Target server ${hostnameOfNonExistentServer} does not exist. It may have gone offline.`;
+const errorMessageForNonExistentServer = `Server ${hostnameOfNonExistentServer} does not exist.`;
 const hostnameForOfflineServer = "darknet-offline-server";
 
 fixDoImportIssue();
@@ -148,9 +148,7 @@ describe("home", () => {
   });
   test("getServer", () => {
     const ns = getNsOnHome();
-    expect(() => {
-      ns.dnet.getServer();
-    }).toThrow("home is not a darknet server");
+    expect(ns.getServer().hostname).toStrictEqual(SpecialServers.Home);
   });
   test("getServerAuthDetails", () => {
     const ns = getNsOnHome();
@@ -307,9 +305,7 @@ describe("Normal NPC server", () => {
   });
   test("getServer", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => {
-      ns.dnet.getServer();
-    }).toThrow("CSEC is not a darknet server");
+    expect(ns.getServer().hostname).toStrictEqual(SpecialServers.CyberSecServer);
   });
   test("getServerAuthDetails", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
@@ -384,9 +380,7 @@ describe("Private server", () => {
   });
   test("getServer", () => {
     const ns = getNS("test-server-1");
-    expect(() => {
-      ns.dnet.getServer();
-    }).toThrow("test-server-1 is not a darknet server");
+    expect(ns.getServer().hostname).toStrictEqual("test-server-1");
   });
   test("getServerAuthDetails", () => {
     const ns = getNS("test-server-1");
@@ -461,9 +455,7 @@ describe("Hashnet server", () => {
   });
   test("getServer", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => {
-      ns.dnet.getServer();
-    }).toThrow("hacknet-server-0 is not a darknet server");
+    expect(ns.getServer().hostname).toStrictEqual("hacknet-server-0");
   });
   test("getServerAuthDetails", () => {
     const ns = getNS("hacknet-server-0");
@@ -531,7 +523,7 @@ describe("Non-existent server", () => {
   test("getServer", () => {
     const ns = getNsOnDarkWeb();
     expect(() => {
-      ns.dnet.getServer(hostnameOfNonExistentServer);
+      ns.getServer(hostnameOfNonExistentServer);
     }).toThrow(errorMessageForNonExistentServer);
   });
   test("getServerAuthDetails", () => {
@@ -617,8 +609,10 @@ describe("darkweb", () => {
   });
   test("getServer", () => {
     const ns = getNsOnDarkWeb();
-    const server = ns.dnet.getServer();
-    // WIP: Update after discussing darkweb and dnet.getServer implementation
+    const server = ns.getServer();
+    if (!("isOnline" in server)) {
+      throw new Error("getServer does not return DarknetServerData");
+    }
     expect(server.passwordHintData).toStrictEqual("leekspin");
   });
   test("getServerAuthDetails", () => {
@@ -745,7 +739,7 @@ describe("Non-darkweb darknet server", () => {
   });
   test("getServer", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const server = ns.dnet.getServer();
+    const server = ns.getServer();
     expect(server.hostname).toStrictEqual(ns.getHostname());
   });
   test("getServerAuthDetails", () => {
@@ -849,8 +843,10 @@ describe("Offline darknet server", () => {
   });
   test("getServer", () => {
     const ns = getNsOnDarkWeb();
-    const server = ns.dnet.getServer(hostnameForOfflineServer);
-    // WIP: Update after discussing darkweb and dnet.getServer implementation
+    const server = ns.getServer(hostnameForOfflineServer);
+    if (!("isOnline" in server)) {
+      throw new Error("getServer does not return DarknetServerData");
+    }
     expect(server.isOnline).toStrictEqual(false);
   });
   test("getServerAuthDetails", () => {
