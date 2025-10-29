@@ -2,7 +2,6 @@ import { commonPasswordDictionary, letters, packetSniffPhrases } from "./diction
 import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } from "../controllers/ServerGenerator";
 import { generateDarknetServerName, type PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
-import { getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { ModelIds } from "../Enums";
 import { getDarknetServer } from "../utils/darknetServerUtils";
@@ -107,24 +106,6 @@ export const logPasswordAttempt = (server: DarknetServer, passwordResponse: Pass
   const serverState = getServerState(server.hostname);
   const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
-
-  if (passwordResponse.message === server.staticPasswordHint) {
-    if (Math.random() < 0.1) {
-      passwordResponse.message = getExactCharactersHint(passwordResponse.passwordAttempted, server.password);
-      passwordResponse.data = "";
-    }
-
-    if (Math.random() < 0.1) {
-      const { exactCharacters, misplacedCharacters } = getMastermindResponse(
-        server.password,
-        passwordResponse.passwordAttempted,
-      );
-      passwordResponse.message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
-        misplacedCharacters == 1 ? "is" : "are"
-      } close.`;
-      passwordResponse.data = "";
-    }
-  }
 
   const logMessage = JSON.stringify(passwordResponse, null, 2);
   serverState.serverLogs = [logMessage, ...serverLogs].slice(0, MAX_LOG_LINES); // Keep only the last 50 logs
