@@ -24,6 +24,7 @@ import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
+import { getServerLogs } from "../models/packetSniffing";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -43,12 +44,14 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => {
       if (canvas.current) {
+        const lab = getLabyrinthDetails().lab;
+        const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
         const deepestServer = DarknetState.Network.flat().reduce((deepest, server) => {
           if (server?.hasAdminRights && server.depth > deepest) {
             return server.depth;
           }
           return deepest;
-        }, getLabyrinthDetails().depth);
+        }, startingDepth);
         const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
         setNetDisplayDepth(deepestServer + visibilityMargin);
 

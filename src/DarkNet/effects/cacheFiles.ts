@@ -44,7 +44,7 @@ export const getRewardFromCache = (server: DarknetServer, suppressToast = false)
   const result = reward(difficulty);
 
   const canAccessGang = Player.sourceFileLvl(2) > 0 || Player.bitNodeN === 2;
-  const karmaLossMessage = canAccessGang ? ` Gained -${karmaLoss} karma.` : 0;
+  const karmaLossMessage = canAccessGang ? ` Gained -${karmaLoss} karma.` : "";
   !suppressToast && SnackbarEvents.emit(result + karmaLossMessage, ToastVariant.SUCCESS, 4000);
   return {
     success: true,

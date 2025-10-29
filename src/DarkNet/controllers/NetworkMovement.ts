@@ -4,7 +4,7 @@ import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { cleanLabLocations, getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
+import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,
@@ -167,7 +167,6 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
     DarknetState.offlineServers.push(server.hostname);
   }
   DeleteServer(server.hostname);
-  cleanLabLocations();
 };
 
 export const addRandomDarknetServers = (count = 1, difficulty?: number): void => {
@@ -251,7 +250,6 @@ export const disconnectServer = (server: DarknetServer, disconnectFromDarkweb = 
       disconnectServers(server, connectedServer);
     }
   }
-  cleanLabLocations();
 };
 
 const restartRandomServer = (): void => {

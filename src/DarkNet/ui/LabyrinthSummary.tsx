@@ -6,6 +6,8 @@ import { dnetStyles } from "./dnetStyles";
 import type { DarknetResult } from "@nsdefs";
 import { Player } from "@player";
 import { useCycleRerender } from "../../ui/React/hooks";
+import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
+import { GetServer } from "../../Server/AllServers";
 
 export type LabyrinthSummaryProps = {
   result: DarknetResult | undefined;
@@ -58,12 +60,17 @@ export const LabyrinthSummary = ({
   const getMenuItems = () => {
     const scriptOptions = [
       ...Object.entries(DarknetState.labLocations)
-        .filter(([key, __]) => key != "-1")
-        .map(([key, __]) => (
-          <MenuItem key={key} value={Number(key)}>
-            {`PID ${key}`}
-          </MenuItem>
-        )),
+        .filter(([key, __]) => findRunningScriptByPid(Number(key)))
+        .map(([key, __]) => {
+          const script = findRunningScriptByPid(Number(key));
+          const scriptServer = GetServer(script?.server ?? "");
+          const connectedToLab = scriptServer?.serversOnNetwork.includes(lab.name);
+          return (
+            <MenuItem key={key} value={Number(key)} disabled={!connectedToLab}>
+              {`PID ${key}: ${script?.server ?? ""} - ${!connectedToLab ? "(Not connected to lab)" : script?.filename}`}
+            </MenuItem>
+          );
+        }),
     ];
     if (lab.manual) {
       return [
@@ -86,6 +93,7 @@ export const LabyrinthSummary = ({
         value={currentPerspective}
         label="Perspective to view"
         onChange={(val) => setCurrentPerspective(+val.target.value)}
+        style={{ maxWidth: "250px" }}
       >
         {getMenuItems()}
       </Select>

@@ -13,10 +13,12 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 - performance
 - link server logs to PID for labyrinth display
+- icon for stasis link
 
 - more hint notes
 
 - access .lit and .data files from UI
+- show running script names in ui
 
 ## Post MVP:
 

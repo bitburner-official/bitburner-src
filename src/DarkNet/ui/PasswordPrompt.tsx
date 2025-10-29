@@ -151,11 +151,13 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
             </div>
           </Container>
           <br />
-          <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
-            <div style={{ color: "white" }}>
-              <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
-            </div>
-          </Card>
+          {!isLabServer && (
+            <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
+              <div style={{ color: "white" }}>
+                <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
+              </div>
+            </Card>
+          )}
         </div>
       </div>
       <br />
