@@ -473,7 +473,7 @@ export const breakingChanges300: VersionBreakingChange = {
         "The cloud server (purchased server) functions have been moved to their own interface, ns.cloud.\n" +
         "Some have had wording changes for clarity.\n" +
         "Each function has been replaced with their corresponding interface variant.\n",
-      showWarning: true,
+      showWarning: false,
     },
   ],
 };
