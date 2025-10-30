@@ -7969,8 +7969,8 @@ export interface NS {
    * Returns 0 if the script does not exist.
    *
    * @param script - Filename of script. This is case-sensitive.
-   * @param host - Hostname/IP of target server the script is located on. Optional. Defaults to the server the calling script is running on.
-   * @returns Amount of RAM (in GB) required to run the specified script on the target server, and 0 if the script does not exist.
+   * @param host - Hostname/IP of the server the script is located on. Optional. Defaults to the server the calling script is running on.
+   * @returns Amount of RAM (in GB) required to run the specified script, and 0 if the script does not exist.
    */
   getScriptRam(script: string, host?: string): number;
 
