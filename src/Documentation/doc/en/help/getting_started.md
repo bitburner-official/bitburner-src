@@ -348,11 +348,12 @@ Next, we're going to create a [Script](../basic/scripts.md) that automatically p
 These cloud [Servers](../basic/servers.md) will be used to run many [Scripts](../basic/scripts.md).
 Running this [Script](../basic/scripts.md) will initially be very expensive since purchasing a cloud [Server](../basic/servers.md) costs money, but it will pay off in the long run.
 
-In order to create this [Script](../basic/scripts.md), you should familiarize yourself with the following functions in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>):
+In order to create this [Script](../basic/scripts.md), you should familiarize yourself with the following functions, some of which are in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>):
 
-- `purchaseCloudServer()`
-- `getCloudServerCost()`
-- `getCloudServerLimit()`
+- `purchaseServer()`
+- `getServerCost()`
+- `getServerLimit()`
+- `getRamLimit()`
 - `getServerMoneyAvailable()`
 - `scp()`
 - `exec()`
@@ -394,7 +395,7 @@ Paste the following code into the [Script](../basic/scripts.md) editor:
         }
     }
 
-This code uses a while loop to purchase the maximum amount of cloud [Servers](../basic/servers.md) using the `purchaseCloudServer()` function.
+This code uses a while loop to purchase the maximum amount of cloud [Servers](../basic/servers.md) using the `purchaseServer()` function.
 Each of these [Servers](../basic/servers.md) will have 8GB of [RAM](../basic/ram.md), as defined in the `ram` variable.
 Note that the [Script](../basic/scripts.md) uses the command `getServerMoneyAvailable("home")` to get the amount of money you currently have.
 This is then used to check if you can afford to purchase a cloud [Server](../basic/servers.md).
