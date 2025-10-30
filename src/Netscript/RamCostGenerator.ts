@@ -239,7 +239,7 @@ const dnet = {
   getServer: 2,
   getServerAuthDetails: 0.05,
   packetCapture: 6,
-  induceServerMigration: 0.5,
+  induceServerMigration: 4,
   unleashStormSeed: 0.1,
   isDarknetServer: 0.05,
   memoryReallocation: 1,

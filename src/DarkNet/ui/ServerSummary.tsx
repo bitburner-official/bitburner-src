@@ -36,11 +36,13 @@ export function ServerSummary({
   ).length;
   const fileCount = dataFileCount + server.messages.length;
   const contractCount = server.contracts.length;
-  const runningScriptNames = Array.from(server.runningScriptMap.keys())
-    .map(script => script.replace("*[]", ""));
-  const runningScriptsTooltip = runningScriptNames.length > 0 ?
-    `Running scripts on server: ${runningScriptNames.slice(0,3).join(", ")}${runningScriptNames.length > 3 ? ` +${runningScriptNames.length-3}` : ""}` :
-    "No running scripts on server";
+  const runningScriptNames = Array.from(server.runningScriptMap.keys()).map((script) => script.replace("*[]", ""));
+  const runningScriptsTooltip =
+    runningScriptNames.length > 0
+      ? `Running scripts on server: ${runningScriptNames.slice(0, 3).join(", ")}${
+          runningScriptNames.length > 3 ? ` +${runningScriptNames.length - 3}` : ""
+        }`
+      : "No running scripts on server";
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
   const hasBackdoor = server.backdoorInstalled && !server.hasStasisLink;
   const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";

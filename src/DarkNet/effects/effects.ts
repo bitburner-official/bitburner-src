@@ -226,7 +226,7 @@ export const getStasisLinkLimit = (): number => {
 };
 
 export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
-  const chargeIncrease = ((Player.skills.charisma + 50) / (server.difficulty * 4 + 100)) * 0.01 * threads;
+  const chargeIncrease = ((Player.skills.charisma + 500) / (server.difficulty * 200 + 1000)) * 0.01 * threads;
   const xpGained = Player.mults.charisma_exp * 50 * ((200 + Player.skills.charisma) / 200) * threads;
   Player.gainCharismaExp(xpGained);
   DarknetState.migrationInductionServers[server.hostname] =
