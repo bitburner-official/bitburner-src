@@ -66,7 +66,6 @@ import file63 from "./doc/en/programming/typescript_react.md?raw";
 
 import nsDoc_bitburner__valueof_md from "../../markdown/bitburner._valueof.md?raw";
 import nsDoc_bitburner_activefragment_highestcharge_md from "../../markdown/bitburner.activefragment.highestcharge.md?raw";
-import nsDoc_bitburner_activefragment_id_md from "../../markdown/bitburner.activefragment.id.md?raw";
 import nsDoc_bitburner_activefragment_md from "../../markdown/bitburner.activefragment.md?raw";
 import nsDoc_bitburner_activefragment_numcharge_md from "../../markdown/bitburner.activefragment.numcharge.md?raw";
 import nsDoc_bitburner_activefragment_rotation_md from "../../markdown/bitburner.activefragment.rotation.md?raw";
@@ -1574,7 +1573,6 @@ AllPages["en/programming/typescript_react.md"] = file63;
 
 AllPages["nsDoc/bitburner._valueof.md"] = nsDoc_bitburner__valueof_md;
 AllPages["nsDoc/bitburner.activefragment.highestcharge.md"] = nsDoc_bitburner_activefragment_highestcharge_md;
-AllPages["nsDoc/bitburner.activefragment.id.md"] = nsDoc_bitburner_activefragment_id_md;
 AllPages["nsDoc/bitburner.activefragment.md"] = nsDoc_bitburner_activefragment_md;
 AllPages["nsDoc/bitburner.activefragment.numcharge.md"] = nsDoc_bitburner_activefragment_numcharge_md;
 AllPages["nsDoc/bitburner.activefragment.rotation.md"] = nsDoc_bitburner_activefragment_rotation_md;

@@ -5816,8 +5816,7 @@ interface Fragment {
 }
 
 /** @public */
-interface ActiveFragment {
-  id: number;
+interface ActiveFragment extends Fragment {
   highestCharge: number;
   numCharge: number;
   rotation: number;
