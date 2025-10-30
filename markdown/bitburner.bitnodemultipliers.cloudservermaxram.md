@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CloudServerMaxRam property
 
-Influences the maximum allowed RAM for a purchased server
+Influences the maximum allowed RAM for a cloud server
 
 **Signature:**
 

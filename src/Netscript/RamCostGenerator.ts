@@ -41,10 +41,6 @@ export const RamCostConstants = {
   HNUpgCore: 0.8,
   GetStock: 2.0,
   BuySellStock: 2.5,
-  GetPurchaseServer: 0.25,
-  PurchaseServer: 2.25,
-  GetPurchasedServerLimit: 0.05,
-  GetPurchasedServerMaxRam: 0.05,
   Round: 0.05,
   ReadWrite: 1.0,
   ArbScript: 1.0,
@@ -227,15 +223,15 @@ const singularity = {
 } as const;
 
 const cloud = {
-  getCloudServerLimit: RamCostConstants.GetPurchasedServerLimit,
-  getCloudServerMaxRam: RamCostConstants.GetPurchasedServerMaxRam,
-  getCloudServerCost: RamCostConstants.GetPurchaseServer,
-  getCloudServerUpgradeCost: 0.1,
-  getCloudServers: 1.05,
-  upgradeCloudServer: 0.25,
-  renameCloudServer: 0,
-  purchaseCloudServer: RamCostConstants.PurchaseServer,
-  deleteCloudServer: RamCostConstants.PurchaseServer,
+  getServerLimit: 0.05,
+  getRamLimit: 0.05,
+  getServerCost: 0.25,
+  getServerUpgradeCost: 0.1,
+  getServerNames: 1.05,
+  upgradeServer: 0.25,
+  renameServer: 0,
+  purchaseServer: 2.25,
+  deleteServer: 2.25,
 } as const;
 
 const format = {

@@ -27,7 +27,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[deleteCloudServer(host)](./bitburner.cloud.deletecloudserver.md)
+[deleteServer(host)](./bitburner.cloud.deleteserver.md)
 
 
 </td><td>
@@ -38,29 +38,7 @@ Delete a cloud server.
 </td></tr>
 <tr><td>
 
-[getCloudServerCost(ram)](./bitburner.cloud.getcloudservercost.md)
-
-
-</td><td>
-
-Get cost of purchasing a cloud server.
-
-
-</td></tr>
-<tr><td>
-
-[getCloudServerLimit()](./bitburner.cloud.getcloudserverlimit.md)
-
-
-</td><td>
-
-Returns the maximum number of cloud servers you can purchase.
-
-
-</td></tr>
-<tr><td>
-
-[getCloudServerMaxRam()](./bitburner.cloud.getcloudservermaxram.md)
+[getRamLimit()](./bitburner.cloud.getramlimit.md)
 
 
 </td><td>
@@ -71,7 +49,29 @@ Returns the maximum RAM that a cloud server can have.
 </td></tr>
 <tr><td>
 
-[getCloudServers(returnOpts)](./bitburner.cloud.getcloudservers.md)
+[getServerCost(ram)](./bitburner.cloud.getservercost.md)
+
+
+</td><td>
+
+Get cost of purchasing a cloud server.
+
+
+</td></tr>
+<tr><td>
+
+[getServerLimit()](./bitburner.cloud.getserverlimit.md)
+
+
+</td><td>
+
+Returns the maximum number of cloud servers you can purchase.
+
+
+</td></tr>
+<tr><td>
+
+[getServerNames(returnOpts)](./bitburner.cloud.getservernames.md)
 
 
 </td><td>
@@ -82,7 +82,7 @@ Returns an array with the hostnames or IP addresses of all of the cloud servers 
 </td></tr>
 <tr><td>
 
-[getCloudServerUpgradeCost(host, ram)](./bitburner.cloud.getcloudserverupgradecost.md)
+[getServerUpgradeCost(host, ram)](./bitburner.cloud.getserverupgradecost.md)
 
 
 </td><td>
@@ -93,7 +93,7 @@ Get cost of upgrading a cloud server to the given RAM.
 </td></tr>
 <tr><td>
 
-[purchaseCloudServer(hostname, ram)](./bitburner.cloud.purchasecloudserver.md)
+[purchaseServer(hostname, ram)](./bitburner.cloud.purchaseserver.md)
 
 
 </td><td>
@@ -104,7 +104,7 @@ Purchase a cloud server.
 </td></tr>
 <tr><td>
 
-[renameCloudServer(hostname, newName)](./bitburner.cloud.renamecloudserver.md)
+[renameServer(hostname, newName)](./bitburner.cloud.renameserver.md)
 
 
 </td><td>
@@ -115,7 +115,7 @@ Rename a cloud server.
 </td></tr>
 <tr><td>
 
-[upgradeCloudServer(host, ram)](./bitburner.cloud.upgradecloudserver.md)
+[upgradeServer(host, ram)](./bitburner.cloud.upgradeserver.md)
 
 
 </td><td>

@@ -394,47 +394,84 @@ export const breakingChanges300: VersionBreakingChange = {
     {
       brokenAPIs: [
         {
+          name: "ns.getBitNodeMultipliers().PurchasedServerCost",
+          migration: {
+            searchValue: "ns.getBitNodeMultipliers().PurchasedServerCost",
+            replaceValue: "ns.getBitNodeMultipliers().CloudServerCost",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerSoftcap",
+          migration: {
+            searchValue: "ns.getBitNodeMultipliers().PurchasedServerSoftcap",
+            replaceValue: "ns.getBitNodeMultipliers().CloudServerSoftcap",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerLimit",
+          migration: {
+            searchValue: "ns.getBitNodeMultipliers().PurchasedServerLimit",
+            replaceValue: "ns.getBitNodeMultipliers().CloudServerLimit",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerMaxRam",
+          migration: {
+            searchValue: "ns.getBitNodeMultipliers().PurchasedServerMaxRam",
+            replaceValue: "ns.getBitNodeMultipliers().CloudServerMaxRam",
+          },
+        },
+      ],
+      info:
+        "ns.getBitNodeMultipliers() Purchased Server properties have been renamed to CloudServers with the creation of the cloud API.\n" +
+        "They have been automatically replaced with the corresponding interface variants.",
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
           name: "ns.getPurchasedServerCost",
-          migration: { searchValue: "ns.getPurchasedServerCost", replaceValue: "ns.cloud.getCloudServerCost" },
+          migration: { searchValue: "ns.getPurchasedServerCost", replaceValue: "ns.cloud.getServerCost" },
         },
         {
           name: "ns.purchaseServer",
-          migration: { searchValue: "ns.purchaseServer", replaceValue: "ns.cloud.purchaseCloudServer" },
+          migration: { searchValue: "ns.purchaseServer", replaceValue: "ns.cloud.purchaseServer" },
         },
         {
           name: "ns.getPurchasedServerUpgradeCost",
           migration: {
             searchValue: "ns.getPurchasedServerUpgradeCost",
-            replaceValue: "ns.cloud.getCloudServerUpgradeCost",
+            replaceValue: "ns.cloud.getServerUpgradeCost",
           },
         },
         {
           name: "ns.upgradePurchasedServer",
-          migration: { searchValue: "ns.upgradePurchasedServer", replaceValue: "ns.cloud.upgradeCloudServer" },
+          migration: { searchValue: "ns.upgradePurchasedServer", replaceValue: "ns.cloud.upgradeServer" },
         },
         {
           name: "ns.renamePurchasedServer",
-          migration: { searchValue: "ns.renamePurchasedServer", replaceValue: "ns.cloud.renameCloudServer" },
+          migration: { searchValue: "ns.renamePurchasedServer", replaceValue: "ns.cloud.renameServer" },
         },
         {
           name: "ns.deleteServer",
-          migration: { searchValue: "ns.deleteServer", replaceValue: "ns.cloud.deleteCloudServer" },
+          migration: { searchValue: "ns.deleteServer", replaceValue: "ns.cloud.deleteServer" },
         },
         {
           name: "ns.getPurchasedServers",
-          migration: { searchValue: "ns.getPurchasedServers", replaceValue: "ns.cloud.getCloudServers" },
+          migration: { searchValue: "ns.getPurchasedServers", replaceValue: "ns.cloud.getServerNames" },
         },
         {
           name: "ns.getPurchasedServerLimit",
-          migration: { searchValue: "ns.getPurchasedServerLimit", replaceValue: "ns.cloud.getCloudServerLimit" },
+          migration: { searchValue: "ns.getPurchasedServerLimit", replaceValue: "ns.cloud.getServerLimit" },
         },
         {
           name: "ns.getPurchasedServerMaxRam",
-          migration: { searchValue: "ns.getPurchasedServerMaxRam", replaceValue: "ns.cloud.getCloudServerMaxRam" },
+          migration: { searchValue: "ns.getPurchasedServerMaxRam", replaceValue: "ns.cloud.getRamLimit" },
         },
       ],
       info:
         "The cloud server (purchased server) functions have been moved to their own interface, ns.cloud.\n" +
+        "Some have had wording changes for clarity.\n" +
         "Each function has been replaced with their corresponding interface variant.\n",
       showWarning: true,
     },

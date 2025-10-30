@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CloudServerLimit property
 
-Influences the maximum number of purchased servers you can have
+Influences the maximum number of cloud servers you can have
 
 **Signature:**
 

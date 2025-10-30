@@ -375,15 +375,15 @@ Paste the following code into the [Script](../basic/scripts.md) editor:
 
         // Continuously try to purchase cloud servers until we've reached the maximum
         // amount of servers
-        while (i < ns.cloud.getCloudServerLimit()) {
+        while (i < ns.cloud.getServerLimit()) {
             // Check if we have enough money to purchase access to a server
-            if (ns.getServerMoneyAvailable("home") > ns.cloud.getCloudServerCost(ram)) {
+            if (ns.getServerMoneyAvailable("home") > ns.cloud.getRamLimit(ram)) {
                 // If we have enough money, then:
                 //  1. Purchase the server
                 //  2. Copy our hacking script onto the newly-purchased cloud server
                 //  3. Run our hacking script on the newly-purchased cloud server with 3 threads
                 //  4. Increment our iterator to indicate that we've bought a new server
-                let hostname = ns.cloud.purchaseCloudServer("cloudServ-" + i, ram);
+                let hostname = ns.cloud.purchaseServer("cloudServ-" + i, ram);
                 ns.scp("early-hack-template.js", hostname);
                 ns.exec("early-hack-template.js", hostname, 3);
                 ++i;

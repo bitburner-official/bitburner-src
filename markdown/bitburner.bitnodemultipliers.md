@@ -183,7 +183,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a server
+Influence how much it costs to purchase a cloud server
 
 
 </td></tr>
@@ -202,7 +202,7 @@ number
 
 </td><td>
 
-Influences the maximum number of purchased servers you can have
+Influences the maximum number of cloud servers you can have
 
 
 </td></tr>
@@ -221,7 +221,7 @@ number
 
 </td><td>
 
-Influences the maximum allowed RAM for a purchased server
+Influences the maximum allowed RAM for a cloud server
 
 
 </td></tr>
@@ -240,7 +240,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a server
+Influence how much it costs to purchase a cloud server
 
 
 </td></tr>

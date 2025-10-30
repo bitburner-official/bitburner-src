@@ -3,12 +3,12 @@ import { InternalAPI } from "src/Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Player } from "@player";
 import {
-  getPurchasedServerUpgradeCost,
-  getPurchaseServerCost,
-  getPurchaseServerLimit,
-  getPurchaseServerMaxRam,
-  renamePurchasedServer,
-  upgradePurchasedServer,
+  getCloudServerUpgradeCost,
+  getCloudServerCost,
+  getCloudServerLimit,
+  getCloudServerMaxRam,
+  renameCloudServer,
+  upgradeCloudServer,
 } from "../Server/ServerPurchases";
 import { DeleteServer, AddToAllServers, createUniqueRandomIp } from "../Server/AllServers";
 import { safelyCreateUniqueServer } from "../Server/ServerHelpers";
@@ -17,12 +17,12 @@ import { isIPAddress } from "../Types/strings";
 
 export function NetscriptCloud(): InternalAPI<Cloud> {
   return {
-    getCloudServerCost: (ctx) => (_ram) => {
+    getServerCost: (ctx) => (_ram) => {
       const ram = helpers.number(ctx, "ram", _ram);
 
-      const cost = getPurchaseServerCost(ram);
+      const cost = getCloudServerCost(ram);
       if (cost === Infinity) {
-        if (ram > getPurchaseServerMaxRam()) {
+        if (ram > getCloudServerMaxRam()) {
           helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than CloudServerMaxRam`);
         } else {
           helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
@@ -32,7 +32,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
 
       return cost;
     },
-    purchaseCloudServer: (ctx) => (_name, _ram) => {
+    purchaseServer: (ctx) => (_name, _ram) => {
       const name = helpers.string(ctx, "name", _name);
       const ram = helpers.number(ctx, "ram", _ram);
       let hostnameStr = String(name);
@@ -46,18 +46,18 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
         return "";
       }
 
-      if (Player.purchasedServers.length >= getPurchaseServerLimit()) {
+      if (Player.purchasedServers.length >= getCloudServerLimit()) {
         helpers.log(
           ctx,
           () =>
-            `You have reached the maximum limit of ${getPurchaseServerLimit()} cloud servers. You cannot purchase any more.`,
+            `You have reached the maximum limit of ${getCloudServerLimit()} cloud servers. You cannot purchase any more.`,
         );
         return "";
       }
 
-      const cost = getPurchaseServerCost(ram);
+      const cost = getCloudServerCost(ram);
       if (cost === Infinity) {
-        if (ram > getPurchaseServerMaxRam()) {
+        if (ram > getCloudServerMaxRam()) {
           helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than CloudServerMaxRam`);
         } else {
           helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
@@ -89,32 +89,32 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       helpers.log(ctx, () => `Purchased new cloud server with hostname '${newServ.hostname}' for ${formatMoney(cost)}`);
       return newServ.hostname;
     },
-    getCloudServerUpgradeCost: (ctx) => (_host, _ram) => {
+    getServerUpgradeCost: (ctx) => (_host, _ram) => {
       const host = helpers.string(ctx, "host", _host);
       const ram = helpers.number(ctx, "ram", _ram);
       try {
-        return getPurchasedServerUpgradeCost(host, ram);
+        return getCloudServerUpgradeCost(host, ram);
       } catch (err) {
         helpers.log(ctx, () => String(err));
         return -1;
       }
     },
-    upgradeCloudServer: (ctx) => (_host, _ram) => {
+    upgradeServer: (ctx) => (_host, _ram) => {
       const host = helpers.string(ctx, "host", _host);
       const ram = helpers.number(ctx, "ram", _ram);
       try {
-        upgradePurchasedServer(host, ram);
+        upgradeCloudServer(host, ram);
         return true;
       } catch (err) {
         helpers.log(ctx, () => String(err));
         return false;
       }
     },
-    renameCloudServer: (ctx) => (_hostname, _newName) => {
+    renameServer: (ctx) => (_hostname, _newName) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const newName = helpers.string(ctx, "newName", _newName);
       try {
-        renamePurchasedServer(hostname, newName);
+        renameCloudServer(hostname, newName);
         return true;
       } catch (err) {
         helpers.log(ctx, () => String(err));
@@ -122,7 +122,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       }
     },
 
-    deleteCloudServer: (ctx) => (_name) => {
+    deleteServer: (ctx) => (_name) => {
       const name = helpers.string(ctx, "name", _name);
       let hostnameStr = String(name);
       hostnameStr = hostnameStr.replace(/\s\s+/g, "");
@@ -188,7 +188,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       helpers.log(ctx, () => `Could not find server ${hostname} as a cloud server. This is a bug. Report to dev.`);
       return false;
     },
-    getCloudServers:
+    getServerNames:
       (ctx) =>
       (_returnOpts): string[] => {
         const returnOpts = helpers.hostReturnOptions(_returnOpts);
@@ -200,11 +200,11 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
         }
         return res;
       },
-    getCloudServerLimit: () => () => {
-      return getPurchaseServerLimit();
+    getServerLimit: () => () => {
+      return getCloudServerLimit();
     },
-    getCloudServerMaxRam: () => () => {
-      return getPurchaseServerMaxRam();
+    getRamLimit: () => () => {
+      return getCloudServerMaxRam();
     },
   };
 }

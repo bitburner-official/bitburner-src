@@ -20,14 +20,14 @@ import { isIPAddress } from "../Types/strings";
  * @param ram Amount of RAM on purchased server (GB)
  * @returns Cost of purchasing the given server. Returns infinity for invalid arguments
  */
-export function getPurchaseServerCost(ram: number): number {
+export function getCloudServerCost(ram: number): number {
   // TODO shift checks into
   const sanitizedRam = Math.round(ram);
   if (isNaN(sanitizedRam) || !isPowerOfTwo(sanitizedRam) || !(Math.sign(sanitizedRam) === 1)) {
     return Infinity;
   }
 
-  if (sanitizedRam > getPurchaseServerMaxRam()) {
+  if (sanitizedRam > getCloudServerMaxRam()) {
     return Infinity;
   }
 
@@ -41,34 +41,33 @@ export function getPurchaseServerCost(ram: number): number {
   );
 }
 
-export const getPurchasedServerUpgradeCost = (hostname: string, ram: number): number => {
+export const getCloudServerUpgradeCost = (hostname: string, ram: number): number => {
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' not found.`);
-  if (!Player.purchasedServers.includes(server.hostname))
-    throw new Error(`Server '${hostname}' not a purchased server.`);
+  if (!Player.purchasedServers.includes(server.hostname)) throw new Error(`Server '${hostname}' not a cloud server.`);
   if (isNaN(ram) || !isPowerOfTwo(ram) || !(Math.sign(ram) === 1))
     throw new Error(`${ram} is not a positive power of 2`);
   if (server.maxRam >= ram)
     throw new Error(`The new ram of '${hostname}' (${ram}) must be bigger than its current ram (${server.maxRam}).`);
-  return getPurchaseServerCost(ram) - getPurchaseServerCost(server.maxRam);
+  return getCloudServerCost(ram) - getCloudServerCost(server.maxRam);
 };
 
-export const upgradePurchasedServer = (hostname: string, ram: number): void => {
+export const upgradeCloudServer = (hostname: string, ram: number): void => {
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' not found.`);
-  const cost = getPurchasedServerUpgradeCost(hostname, ram);
+  const cost = getCloudServerUpgradeCost(hostname, ram);
   if (!Player.canAfford(cost)) throw new Error(`You don't have enough money to upgrade '${hostname}'.`);
   Player.loseMoney(cost, "servers");
   server.maxRam = ram;
 };
 
-export const renamePurchasedServer = (hostname: string, newName: string): void => {
+export const renameCloudServer = (hostname: string, newName: string): void => {
   if (isIPAddress(hostname)) throw new Error(`${hostname} is an IP address, not a hostname.`);
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' doesn't exists.`);
   if (newName == "" || isIPAddress(newName)) throw new Error(`${newName} is an invalid hostname.`);
   if (GetServer(newName)) throw new Error(`Server '${newName}' already exists.`);
-  if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' is not a player server.`);
+  if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' is not a cloud server.`);
   if (newName.startsWith("hacknet-node-") || newName.startsWith("hacknet-server-")) {
     throw new Error(`'${newName}' is a reserved hostname.`);
   }
@@ -93,11 +92,11 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
   renameServer(hostname, newName);
 };
 
-export function getPurchaseServerLimit(): number {
+export function getCloudServerLimit(): number {
   return Math.round(ServerConstants.CloudServerLimit * currentNodeMults.CloudServerLimit);
 }
 
-export function getPurchaseServerMaxRam(): number {
+export function getCloudServerMaxRam(): number {
   const ram = Math.round(ServerConstants.CloudServerMaxRam * currentNodeMults.CloudServerMaxRam);
 
   // Round this to the nearest power of 2
@@ -106,7 +105,7 @@ export function getPurchaseServerMaxRam(): number {
 
 // Manually purchase a server (NOT through Netscript)
 export function purchaseServer(hostname: string, ram: number): void {
-  const cost = getPurchaseServerCost(ram);
+  const cost = getCloudServerCost(ram);
   if (cost === Infinity) {
     return;
   }
@@ -118,13 +117,13 @@ export function purchaseServer(hostname: string, ram: number): void {
   }
 
   //Maximum server limit
-  if (Player.purchasedServers.length >= getPurchaseServerLimit()) {
+  if (Player.purchasedServers.length >= getCloudServerLimit()) {
     dialogBoxCreate(
       "You have reached the maximum limit of " +
-        getPurchaseServerLimit() +
-        " servers. " +
+        getCloudServerLimit() +
+        " cloud servers. " +
         "You cannot purchase any more. You can " +
-        "delete some of your purchased servers using the deleteServer() Netscript function in a script",
+        "delete some of your cloud servers using the cloud.deleteServer() Netscript function in a script",
     );
     return;
   }
@@ -161,7 +160,7 @@ export function purchaseServer(hostname: string, ram: number): void {
 
   Player.loseMoney(cost, "servers");
 
-  dialogBoxCreate("Server successfully purchased with hostname " + newServ.hostname);
+  dialogBoxCreate("Cloud server successfully purchased with hostname " + newServ.hostname);
 }
 
 // Manually upgrade RAM on home computer (NOT through Netscript)

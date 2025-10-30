@@ -41,7 +41,7 @@ The player's home computer is special for a variety of reasons:
   (you will, however, lose programs and messages on your home computer).
 
 The player can also purchase access to additional cloud servers for their use. These are virtual machines hosted remotely that the player has access to.
-This can be done by visiting certain locations in the [World](world.md), or it can be done automatically through a script using the `purchaseCloudServer` function in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>).
+This can be done by visiting certain locations in the [World](world.md), or it can be done automatically through a script using the `purchaseServer` function in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>).
 The advantage of cloud servers is that, in terms of [RAM](ram.md), they are cheaper than upgrading your home computer.
 The disadvantage is that access to your cloud servers is lost when you install [Augmentations](augmentations.md), and you will need to purchase access again.
 

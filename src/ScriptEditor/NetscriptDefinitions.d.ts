@@ -407,7 +407,7 @@ interface BasicHGWOptions {
 
 /**
  * Options to control how a server identifier (hostname or IP address) is returned.
- * Affects the behavior of {@link NS.scan | scan}, {@link Cloud.getCloudServers | getCloudServers}, and {@link Singularity.getCurrentServer | getCurrentServer}
+ * Affects the behavior of {@link NS.scan | scan}, {@link Cloud.getServerNames | getServerNames}, and {@link Singularity.getCurrentServer | getCurrentServer}
  * @public
  */
 interface HostReturnOptions {
@@ -754,13 +754,13 @@ interface BitNodeMultipliers {
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;
-  /** Influence how much it costs to purchase a server */
+  /** Influence how much it costs to purchase a cloud server */
   CloudServerCost: number;
-  /** Influence how much it costs to purchase a server */
+  /** Influence how much it costs to purchase a cloud server */
   CloudServerSoftcap: number;
-  /** Influences the maximum number of purchased servers you can have */
+  /** Influences the maximum number of cloud servers you can have */
   CloudServerLimit: number;
-  /** Influences the maximum allowed RAM for a purchased server */
+  /** Influences the maximum allowed RAM for a cloud server */
   CloudServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction: number;
@@ -4088,13 +4088,13 @@ export interface Cloud {
    * @example
    * ```js
    * const ram = 2 ** 20;
-   * const cost = ns.cloud.getCloudServerCost(ram);
+   * const cost = ns.cloud.getServerCost(ram);
    * ns.tprint(`A cloud server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a cloud server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
    */
-  getCloudServerCost(ram: number): number;
+  getServerCost(ram: number): number;
 
   /**
    * Purchase a cloud server.
@@ -4126,14 +4126,14 @@ export interface Cloud {
    * const ram = 64;
    * const prefix = "cloudServer-";
    * for (let i = 0; i < 5; ++i) {
-   *    ns.cloud.purchaseCloudServer(prefix + i, ram);
+   *    ns.cloud.purchaseServer(prefix + i, ram);
    * }
    * ```
    * @param hostname - Hostname of the cloud server.
    * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The hostname of the new cloud server.
    */
-  purchaseCloudServer(hostname: string, ram: number): string;
+  purchaseServer(hostname: string, ram: number): string;
 
   /**
    * Get cost of upgrading a cloud server to the given RAM.
@@ -4144,7 +4144,7 @@ export interface Cloud {
    * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The price to upgrade or -1 if either input is not valid, i.e. host is not the name of a cloud server or ram is not a valid amount.
    */
-  getCloudServerUpgradeCost(host: string, ram: number): number;
+  getServerUpgradeCost(host: string, ram: number): number;
   /**
    * Upgrade a cloud server's RAM.
    * @remarks
@@ -4154,7 +4154,7 @@ export interface Cloud {
    * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns True if the upgrade succeeded, and false otherwise.
    */
-  upgradeCloudServer(host: string, ram: number): boolean;
+  upgradeServer(host: string, ram: number): boolean;
 
   /**
    * Rename a cloud server.
@@ -4165,7 +4165,7 @@ export interface Cloud {
    * @param newName - New cloud server hostname.
    * @returns True if successful, and false otherwise.
    */
-  renameCloudServer(hostname: string, newName: string): boolean;
+  renameServer(hostname: string, newName: string): boolean;
 
   /**
    * Delete a cloud server.
@@ -4181,7 +4181,7 @@ export interface Cloud {
    * @param host - Hostname/IP of the cloud server to delete.
    * @returns True if successful, and false otherwise.
    */
-  deleteCloudServer(host: string): boolean;
+  deleteServer(host: string): boolean;
   /**
    * Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
    * Returns hostnames by default.
@@ -4191,7 +4191,7 @@ export interface Cloud {
    * @param returnOpts - Optional. Controls whether the function returns IPs
    * @returns Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
    */
-  getCloudServers(returnOpts?: HostReturnOptions): string[];
+  getServerNames(returnOpts?: HostReturnOptions): string[];
 
   /**
    * Returns the maximum number of cloud servers you can purchase.
@@ -4199,7 +4199,7 @@ export interface Cloud {
    * @remarks RAM cost: 0.05 GB
    * @returns Returns the maximum number of cloud servers you can purchase.
    */
-  getCloudServerLimit(): number;
+  getServerLimit(): number;
 
   /**
    * Returns the maximum RAM that a cloud server can have.
@@ -4207,7 +4207,7 @@ export interface Cloud {
    * @remarks RAM cost: 0.05 GB
    * @returns Returns the maximum RAM (in GB) that a cloud server can have.
    */
-  getCloudServerMaxRam(): number;
+  getRamLimit(): number;
 }
 
 /**

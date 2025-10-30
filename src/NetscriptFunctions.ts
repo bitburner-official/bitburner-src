@@ -1528,39 +1528,39 @@ setRemovedFunctions(ns, {
   },
   getPurchasedServerCost: {
     version: "3.0.0",
-    replacement: "ns.cloud.getCloudServerCost",
+    replacement: "ns.cloud.getServerCost()",
   },
   purchaseServer: {
     version: "3.0.0",
-    replacement: "ns.cloud.purchaseCloudServer",
+    replacement: "ns.cloud.purchaseServer()",
   },
   getPurchasedServerUpgradeCost: {
     version: "3.0.0",
-    replacement: "ns.cloud.getCloudServerUpgradeCost",
+    replacement: "ns.cloud.getServerUpgradeCost()",
   },
   upgradePurchasedServer: {
     version: "3.0.0",
-    replacement: "ns.cloud.upgradeCloudServer",
+    replacement: "ns.cloud.upgradeServer()",
   },
   renamePurchasedServer: {
     version: "3.0.0",
-    replacement: "ns.cloud.renameCloudServer",
+    replacement: "ns.cloud.renameServer()",
   },
   deleteServer: {
     version: "3.0.0",
-    replacement: "ns.cloud.deleteCloudServer",
+    replacement: "ns.cloud.deleteServer()",
   },
   getPurchasedServers: {
     version: "3.0.0",
-    replacement: "ns.cloud.getCloudServers",
+    replacement: "ns.cloud.getServerNames()",
   },
   getPurchasedServerLimit: {
     version: "3.0.0",
-    replacement: "ns.cloud.getCloudServerLimit",
+    replacement: "ns.cloud.getServerLimit()",
   },
   getPurchasedServerMaxRam: {
     version: "3.0.0",
-    replacement: "ns.cloud.getCloudServerMaxRam",
+    replacement: "ns.cloud.getRamLimit()",
   },
 });
 

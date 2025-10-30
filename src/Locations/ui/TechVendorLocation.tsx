@@ -12,7 +12,7 @@ import { RamButton } from "./RamButton";
 import { TorButton } from "./TorButton";
 import { CoresButton } from "./CoresButton";
 
-import { getPurchaseServerCost, getPurchaseServerLimit, getPurchaseServerMaxRam } from "../../Server/ServerPurchases";
+import { getCloudServerCost, getCloudServerLimit, getCloudServerMaxRam } from "../../Server/ServerPurchases";
 
 import { Money } from "../../ui/React/Money";
 import { Player } from "@player";
@@ -23,8 +23,8 @@ import { useCycleRerender } from "../../ui/React/hooks";
 
 function ServerButton(props: { ram: number }): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const cost = getPurchaseServerCost(props.ram);
-  const reachLimitOfPrivateServer = Player.purchasedServers.length >= getPurchaseServerLimit();
+  const cost = getCloudServerCost(props.ram);
+  const reachLimitOfPrivateServer = Player.purchasedServers.length >= getCloudServerLimit();
   return (
     <>
       <Button onClick={() => setOpen(true)} disabled={!Player.canAfford(cost) || reachLimitOfPrivateServer}>
@@ -41,7 +41,7 @@ export function TechVendorLocation(props: { loc: Location }): React.ReactElement
 
   const purchaseServerButtons: React.ReactNode[] = [];
   for (let ram = props.loc.techVendorMinRam; ram <= props.loc.techVendorMaxRam; ram *= 2) {
-    if (ram > getPurchaseServerMaxRam()) {
+    if (ram > getCloudServerMaxRam()) {
       break;
     }
     purchaseServerButtons.push(<ServerButton key={ram} ram={ram} />);

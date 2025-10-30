@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CloudServerCost property
 
-Influence how much it costs to purchase a server
+Influence how much it costs to purchase a cloud server
 
 **Signature:**
 
