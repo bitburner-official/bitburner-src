@@ -21,7 +21,7 @@ export function GameTimer({ endTimestamp }: GameTimerProps): React.ReactElement 
   useEffect(() => {
     // All manipulation must be done in an effect, since this is after React's
     // "commit," where the DOM is materialized.
-    const ele = ref.current?.firstElementChild as HTMLElement;
+    const ele = ref.current?.firstElementChild;
     const startTimestamp = changeRef.current.startTimestamp;
     if (!ele) return;
     // The delay will be negative. This is because the animation starts

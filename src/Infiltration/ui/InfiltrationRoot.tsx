@@ -110,7 +110,7 @@ export function InfiltrationRoot(): React.ReactElement {
       ) : (
         <Container>
           <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center", gap: 1 }}>
-            {state.stage instanceof VictoryModel || (
+            {!(state.stage instanceof VictoryModel) && (
               <Button sx={{ width: "100%" }} onClick={cancel}>
                 Cancel Infiltration
               </Button>
@@ -121,11 +121,14 @@ export function InfiltrationRoot(): React.ReactElement {
             <Progress results={state.results} />
           </Paper>
 
-          {state.stage instanceof CountdownModel || state.stage instanceof VictoryModel || (
-            <Paper sx={{ p: 1, mb: 1 }}>
-              <GameTimer endTimestamp={state.stageEndTimestamp} />
-            </Paper>
-          )}
+          {
+            // The logic is weird here because "false" gets dropped but "true" generates a console warning
+            !(state.stage instanceof CountdownModel || state.stage instanceof VictoryModel) && (
+              <Paper sx={{ p: 1, mb: 1 }}>
+                <GameTimer endTimestamp={state.stageEndTimestamp} />
+              </Paper>
+            )
+          }
 
           <StageComponent state={state} stage={state.stage} />
         </Container>
