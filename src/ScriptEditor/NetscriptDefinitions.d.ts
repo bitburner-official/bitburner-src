@@ -5817,8 +5817,7 @@ interface Fragment {
 }
 
 /** @public */
-interface ActiveFragment {
-  id: number;
+interface ActiveFragment extends Fragment {
   highestCharge: number;
   numCharge: number;
   rotation: number;
@@ -5872,7 +5871,7 @@ interface Stanek {
    *
    * @returns List of active fragments placed on Stanek's Gift.
    */
-  activeFragments(): (ActiveFragment & Fragment)[];
+  activeFragments(): ActiveFragment[];
 
   /**
    * Clear the board of all fragments.
