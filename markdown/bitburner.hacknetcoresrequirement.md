@@ -14,8 +14,60 @@ interface HacknetCoresRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [hacknetCores](./bitburner.hacknetcoresrequirement.hacknetcores.md) |  | number |  |
-|  [type](./bitburner.hacknetcoresrequirement.type.md) |  | "hacknetCores" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[hacknetCores](./bitburner.hacknetcoresrequirement.hacknetcores.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.hacknetcoresrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"hacknetCores"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

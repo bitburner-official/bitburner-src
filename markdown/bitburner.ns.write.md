@@ -14,11 +14,71 @@ write(filename: string, data?: string, mode?: "w" | "a"): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  filename | string | Name of the file to be written to. |
-|  data | string | _(Optional)_ Data to write. |
-|  mode | "w" \| "a" | _(Optional)_ Defines the write mode. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+filename
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the file to be written to.
+
+
+</td></tr>
+<tr><td>
+
+data
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Data to write.
+
+
+</td></tr>
+<tr><td>
+
+mode
+
+
+</td><td>
+
+"w" \| "a"
+
+
+</td><td>
+
+_(Optional)_ Defines the write mode.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

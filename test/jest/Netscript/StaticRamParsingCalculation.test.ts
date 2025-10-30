@@ -3,6 +3,8 @@ import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { RamCosts } from "../../../src/Netscript/RamCostGenerator";
 import { Script } from "../../../src/Script/Script";
+import { setPlayer } from "@player";
+import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 
 const BaseCost = 1.6;
 const HackCost = 0.1;
@@ -14,8 +16,14 @@ const MaxCost = 1024;
 const filename = "testfile.js" as ScriptFilePath;
 const folderFilename = "test/testfile.js" as ScriptFilePath;
 const server = "testserver";
+
+/**
+ * Init the player object. When calculating the RAM usage of singularity APIs, RamCostGenerator.ts needs to access some
+ * properties and functions of the player object.
+ */
+setPlayer(new PlayerObject());
+
 describe("Parsing NetScript code to work out static RAM costs", function () {
-  jest.spyOn(console, "error").mockImplementation(() => {});
   /** Tests numeric equality, allowing for floating point imprecision - and includes script base cost */
   function expectCost(val: number | undefined, expected: number) {
     const expectedWithBase = Math.min(expected + BaseCost, MaxCost);
@@ -24,7 +32,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
   }
 
   describe("Single files with basic NS functions", function () {
-    it("Empty main function", async function () {
+    it("Empty main function", function () {
       const code = `
         export async function main(ns) { }
       `;
@@ -32,7 +40,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, 0);
     });
 
-    it("Free NS function directly in main", async function () {
+    it("Free NS function directly in main", function () {
       const code = `
         export async function main(ns) {
           ns.print("Slum snakes r00l!");
@@ -42,7 +50,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, 0);
     });
 
-    it("Single simple base NS function directly in main", async function () {
+    it("Single simple base NS function directly in main", function () {
       const code = `
         export async function main(ns) {
           await ns.hack("joesguns");
@@ -52,7 +60,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Single simple base NS function directly in main with differing arg name", async function () {
+    it("Single simple base NS function directly in main with differing arg name", function () {
       const code = `
         export async function main(X) {
           await X.hack("joesguns");
@@ -62,7 +70,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Repeated simple base NS function directly in main", async function () {
+    it("Repeated simple base NS function directly in main", function () {
       const code = `
         export async function main(ns) {
           await ns.hack("joesguns");
@@ -73,7 +81,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Multiple simple base NS functions directly in main", async function () {
+    it("Multiple simple base NS functions directly in main", function () {
       const code = `
         export async function main(ns) {
           await ns.hack("joesguns");
@@ -84,7 +92,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost + GrowCost);
     });
 
-    it("Simple base NS functions in a referenced function", async function () {
+    it("Simple base NS functions in a referenced function", function () {
       const code = `
         export async function main(ns) {
           doHacking(ns);
@@ -97,7 +105,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Simple base NS functions in a referenced class", async function () {
+    it("Simple base NS functions in a referenced class", function () {
       const code = `
         export async function main(ns) {
           await new Hacker(ns).doHacking();
@@ -112,7 +120,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Simple base NS functions in a referenced class", async function () {
+    it("Simple base NS functions in a referenced class", function () {
       const code = `
         export async function main(ns) {
           await new Hacker(ns).doHacking();
@@ -129,7 +137,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
   });
 
   describe("Functions that can be confused with NS functions", function () {
-    it("Function 'get' that can be confused with Stanek.get", async function () {
+    it("Function 'get' that can be confused with Stanek.get", function () {
       const code = `
         export async function main(ns) {
           get();
@@ -140,7 +148,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, 0);
     });
 
-    it("Function 'purchaseNode' that can be confused with Hacknet.purchaseNode", async function () {
+    it("Function 'purchaseNode' that can be confused with Hacknet.purchaseNode", function () {
       const code = `
         export async function main(ns) {
           purchaseNode();
@@ -153,7 +161,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
     });
 
     // TODO: once we fix static parsing this should pass
-    it.skip("Function 'getTask' that can be confused with Sleeve.getTask", async function () {
+    it.skip("Function 'getTask' that can be confused with Sleeve.getTask", function () {
       const code = `
         export async function main(ns) {
           getTask();
@@ -166,7 +174,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
   });
 
   describe("Single files with non-core NS functions", function () {
-    it("Hacknet NS function with a cost from namespace", async function () {
+    it("Hacknet NS function with a cost from namespace", function () {
       const code = `
         export async function main(ns) {
           ns.hacknet.purchaseNode(0);
@@ -176,7 +184,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HacknetCost);
     });
 
-    it("Sleeve functions with an individual cost", async function () {
+    it("Sleeve functions with an individual cost", function () {
       const code = `
         export async function main(ns) {
           ns.sleeve.getTask(3);
@@ -188,7 +196,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
   });
 
   describe("Imported files", function () {
-    it("Simple imported function with no cost", async function () {
+    it("Simple imported function with no cost", function () {
       const libCode = `
         export function dummy() { return 0; }
       `;
@@ -209,7 +217,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, 0);
     });
 
-    it("Imported ns function", async function () {
+    it("Imported ns function", function () {
       const libCode = `
         export async function doHack(ns) { return await ns.hack("joesguns"); }
       `;
@@ -230,7 +238,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Importing a single function from a library that exports multiple", async function () {
+    it("Importing a single function from a library that exports multiple", function () {
       const libCode = `
         export async function doHack(ns) { return await ns.hack("joesguns"); }
         export async function doGrow(ns) { return await ns.grow("joesguns"); }
@@ -252,7 +260,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Importing all functions from a library that exports multiple", async function () {
+    it("Importing all functions from a library that exports multiple", function () {
       const libCode = `
         export async function doHack(ns) { return await ns.hack("joesguns"); }
         export async function doGrow(ns) { return await ns.grow("joesguns"); }
@@ -296,7 +304,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
     });
 
     // TODO: once we fix static parsing this should pass
-    it.skip("Importing a function from a library that contains a class", async function () {
+    it.skip("Importing a function from a library that contains a class", function () {
       const libCode = `
         export async function doHack(ns) { return await ns.hack("joesguns"); }
         class Grower {
@@ -322,7 +330,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HackCost);
     });
 
-    it("Importing a function from a library that creates a class in a function", async function () {
+    it("Importing a function from a library that creates a class in a function", function () {
       const libCode = `
           export function createClass() {
             class Grower {
@@ -353,7 +361,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, GrowCost);
     });
 
-    it("Importing with a relative path - One Layer Deep", async function () {
+    it("Importing with a relative path - One Layer Deep", function () {
       const libCode = `
           export async function testRelative(ns) {
               await ns.hack("n00dles")
@@ -375,7 +383,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       ).cost;
       expectCost(calculated, HackCost);
     });
-    it("Importing with a relative path - Two Layer Deep", async function () {
+    it("Importing with a relative path - Two Layer Deep", function () {
       const libNameOne = "test/libTestOne.js" as ScriptFilePath;
       const libNameTwo = "test/libTestTwo.js" as ScriptFilePath;
 
@@ -412,7 +420,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       ).cost;
       expectCost(calculated, HackCost);
     });
-    it("Importing with a relative path - possible path conflict", async function () {
+    it("Importing with a relative path - possible path conflict", function () {
       const libNameOne = "foo/libTestOne.js" as ScriptFilePath;
       const libNameTwo = "foo/libTestTwo.js" as ScriptFilePath;
       const incorrect_libNameTwo = "test/libTestTwo.js" as ScriptFilePath;

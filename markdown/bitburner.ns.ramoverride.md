@@ -14,9 +14,39 @@ ramOverride(ram?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  ram | number | _(Optional)_ The new RAM limit to set. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+ram
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ The new RAM limit to set.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

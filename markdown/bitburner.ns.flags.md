@@ -14,9 +14,37 @@ flags(schema: [string, string | number | boolean | string[]][]): { [key: string]
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  schema | \[string, string \| number \| boolean \| string\[\]\]\[\] |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+schema
+
+
+</td><td>
+
+\[string, string \| number \| boolean \| string\[\]\]\[\]
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

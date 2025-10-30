@@ -117,6 +117,7 @@ import { isIPAddress } from "./Types/strings";
 import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
+import { FragmentTypeEnum } from "./CotMG/FragmentType";
 
 export const enums: NSEnums = {
   CityName,
@@ -135,6 +136,7 @@ export const enums: NSEnums = {
   OrderType,
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
+  FragmentType: FragmentTypeEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -1021,7 +1023,7 @@ export const ns: InternalAPI<NSFull> = {
   serverExists: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
     const server = GetServer(host);
-    return server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home");
+    return server !== null && server.serversOnNetwork.length > 0;
   },
   fileExists: (ctx) => (_filename, _host) => {
     const filename = helpers.string(ctx, "filename", _filename);

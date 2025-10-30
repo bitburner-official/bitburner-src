@@ -14,8 +14,60 @@ interface JobTitleRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [jobTitle](./bitburner.jobtitlerequirement.jobtitle.md) |  | [JobName](./bitburner.jobname.md) |  |
-|  [type](./bitburner.jobtitlerequirement.type.md) |  | "jobTitle" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[jobTitle](./bitburner.jobtitlerequirement.jobtitle.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[JobName](./bitburner.jobname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.jobtitlerequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"jobTitle"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

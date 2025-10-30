@@ -161,9 +161,11 @@ export class Division {
     //Then calculate salaries and process the markets
     if (state === "START") {
       if (isNaN(this.thisCycleRevenue) || isNaN(this.thisCycleExpenses)) {
-        console.error("NaN in Corporation's computed revenue/expenses");
-        dialogBoxCreate(
-          "Something went wrong when compting Corporation's revenue/expenses. This is a bug. Please report to game developer",
+        exceptionAlert(
+          new Error(
+            `Invalid revenue/expenses. thisCycleRevenue: ${this.thisCycleRevenue}. thisCycleExpenses: ${this.thisCycleExpenses}`,
+          ),
+          true,
         );
         this.thisCycleRevenue = 0;
         this.thisCycleExpenses = 0;

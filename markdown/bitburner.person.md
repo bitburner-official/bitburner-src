@@ -13,11 +13,111 @@ interface Person
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [city](./bitburner.person.city.md) |  | [CityName](./bitburner.cityname.md) |  |
-|  [exp](./bitburner.person.exp.md) |  | [Skills](./bitburner.skills.md) |  |
-|  [hp](./bitburner.person.hp.md) |  | [HP](./bitburner.hp.md) |  |
-|  [mults](./bitburner.person.mults.md) |  | [Multipliers](./bitburner.multipliers.md) |  |
-|  [skills](./bitburner.person.skills.md) |  | [Skills](./bitburner.skills.md) |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[city](./bitburner.person.city.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[exp](./bitburner.person.exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Skills](./bitburner.skills.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[hp](./bitburner.person.hp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[HP](./bitburner.hp.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[mults](./bitburner.person.mults.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Multipliers](./bitburner.multipliers.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[skills](./bitburner.person.skills.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Skills](./bitburner.skills.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -14,9 +14,39 @@ asleep(millis?: number): Promise<true>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  millis | number | _(Optional)_ Number of milliseconds to sleep. Default to 0. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+millis
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of milliseconds to sleep. Default to 0.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

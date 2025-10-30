@@ -14,8 +14,64 @@ interface BladeburnerCurAction
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [name](./bitburner.bladeburnercuraction.name.md) |  | string | Name of Action |
-|  [type](./bitburner.bladeburnercuraction.type.md) |  | string | Type of Action |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[name](./bitburner.bladeburnercuraction.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of Action
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.bladeburnercuraction.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Type of Action
+
+
+</td></tr>
+</tbody></table>
 

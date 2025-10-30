@@ -384,5 +384,12 @@ export const breakingChanges300: VersionBreakingChange = {
         `- "White Ferrari" was renamed to "${convertV2GangEquipmentNames("White Ferrari")}".\n`,
       showWarning: false,
     },
+    {
+      brokenAPIs: [{ name: "purchase4SMarketData" }],
+      info:
+        "You have to purchase a WSE account before purchasing 4S Market Data UI access via ns.stock.purchase4SMarketData().\n" +
+        "Note that this change does not affect 4S Market Data TIX API access (ns.stock.purchase4SMarketDataTixApi()).",
+      showWarning: false,
+    },
   ],
 };

@@ -25,7 +25,7 @@ import { saveObject, loadGame } from "./SaveObject";
 import { GetAllServers, initForeignServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
-import { initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
+import { canAccessStockMarket, initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
 import { Terminal } from "./Terminal";
 
 import { Money } from "./ui/React/Money";
@@ -92,7 +92,7 @@ const Engine = {
     Player.processWork(numCycles);
 
     // Update stock prices
-    if (Player.hasWseAccount) {
+    if (canAccessStockMarket()) {
       processStockPrices(numCycles);
     }
 
@@ -236,7 +236,7 @@ const Engine = {
     if (await loadGame(saveData)) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      if (Player.hasWseAccount) {
+      if (canAccessStockMarket()) {
         initSymbolToStockMap();
       }
 
@@ -307,7 +307,7 @@ const Engine = {
       processPassiveFactionRepGain(numCyclesOffline);
 
       // Stock Market offline progress
-      if (Player.hasWseAccount) {
+      if (canAccessStockMarket()) {
         processStockPrices(numCyclesOffline);
       }
 

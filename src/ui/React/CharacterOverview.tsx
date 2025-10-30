@@ -17,8 +17,7 @@ import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFuncti
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
-import { StatsProgressOverviewCell } from "./StatsProgressBar";
-import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { StatsProgressBar } from "./StatsProgressBar";
 
 import { isClassWork } from "../../Work/ClassWork";
 import { CONSTANTS } from "../../Constants";
@@ -28,17 +27,13 @@ import { isFactionWork } from "../../Work/FactionWork";
 import { ReputationRate } from "./ReputationRate";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isCrimeWork } from "../../Work/CrimeWork";
-import { Skills } from "../../PersonObjects/Skills";
-import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { useRerender } from "./hooks";
 
-type SkillRowName = "Hack" | "Str" | "Def" | "Dex" | "Agi" | "Cha" | "Int";
-type RowName = SkillRowName | "HP" | "Money";
-const OverviewEventEmitter = new EventEmitter();
+export const OverviewEventEmitter = new EventEmitter();
 
 // These values aren't displayed, they're just used for comparison to check if state has changed
-const valUpdaters: Record<RowName, () => unknown> = {
+const valUpdaters = {
   HP: () => Player.hp.current + "|" + Player.hp.max, // This isn't displayed, it's just compared for updates.
   Money: () => Player.money,
   Hack: () => Player.skills.hacking,
@@ -48,10 +43,10 @@ const valUpdaters: Record<RowName, () => unknown> = {
   Agi: () => Player.skills.agility,
   Cha: () => Player.skills.charisma,
   Int: () => Player.skills.intelligence,
-};
+} as const;
 
 //These formattedVals functions don't take in a value because of the weirdness around HP.
-const formattedVals: Record<RowName, () => string> = {
+const formattedVals = {
   HP: () => `${formatHp(Player.hp.current)} / ${formatHp(Player.hp.max)}`,
   Money: () => formatMoney(Player.money),
   Hack: () => formatSkill(Player.skills.hacking),
@@ -61,53 +56,10 @@ const formattedVals: Record<RowName, () => string> = {
   Agi: () => formatSkill(Player.skills.agility),
   Cha: () => formatSkill(Player.skills.charisma),
   Int: () => formatSkill(Player.skills.intelligence),
-};
-
-const skillMultUpdaters: Record<SkillRowName, () => number> = {
-  //Used by skill bars to calculate the mult
-  Hack: () => Player.mults.hacking * currentNodeMults.HackingLevelMultiplier,
-  Str: () => Player.mults.strength * currentNodeMults.StrengthLevelMultiplier,
-  Def: () => Player.mults.defense * currentNodeMults.DefenseLevelMultiplier,
-  Dex: () => Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier,
-  Agi: () => Player.mults.agility * currentNodeMults.AgilityLevelMultiplier,
-  Cha: () => Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier,
-  Int: () => 1,
-};
-
-const skillNameMap: Record<SkillRowName, keyof Skills> = {
-  Hack: "hacking",
-  Str: "strength",
-  Def: "defense",
-  Dex: "dexterity",
-  Agi: "agility",
-  Cha: "charisma",
-  Int: "intelligence",
-};
-
-interface SkillBarProps {
-  name: SkillRowName;
-  color?: string;
-}
-function SkillBar({ name, color }: SkillBarProps): React.ReactElement {
-  const [progress, setProgress] = useState(calculateSkillProgress(0));
-  useEffect(() => {
-    const clearSubscription = OverviewEventEmitter.subscribe(() => {
-      const mult = skillMultUpdaters[name]();
-      setProgress(calculateSkillProgress(Player.exp[skillNameMap[name]], mult));
-    });
-
-    return clearSubscription;
-  }, [name]);
-
-  return (
-    <TableRow>
-      <StatsProgressOverviewCell progress={progress} color={color} />
-    </TableRow>
-  );
-}
+} as const;
 
 interface ValProps {
-  name: RowName;
+  name: keyof typeof valUpdaters;
   color?: string;
 }
 export function Val({ name, color }: ValProps): React.ReactElement {
@@ -136,15 +88,14 @@ export function Val({ name, color }: ValProps): React.ReactElement {
 }
 
 interface DataRowProps {
-  name: RowName; //name for UI display
+  name: keyof typeof formattedVals; //name for UI display
   showBar: boolean;
   color?: string;
   cellType: "cellNone" | "cell";
 }
 export function DataRow({ name, showBar, color, cellType }: DataRowProps): React.ReactElement {
   const { classes } = useStyles();
-  const isSkill = name in skillNameMap;
-  const skillBar = showBar && isSkill ? <SkillBar name={name as SkillRowName} color={color} /> : <></>;
+  const skillBar = showBar && <StatsProgressBar name={name} color={color} />;
   return (
     <>
       <TableRow>

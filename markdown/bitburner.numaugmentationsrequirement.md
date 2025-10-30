@@ -14,8 +14,60 @@ interface NumAugmentationsRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [numAugmentations](./bitburner.numaugmentationsrequirement.numaugmentations.md) |  | number |  |
-|  [type](./bitburner.numaugmentationsrequirement.type.md) |  | "numAugmentations" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[numAugmentations](./bitburner.numaugmentationsrequirement.numaugmentations.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.numaugmentationsrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"numAugmentations"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

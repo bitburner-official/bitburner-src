@@ -7,7 +7,7 @@ import { GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { Factions } from "../../../src/Faction/Factions";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { Terminal } from "../../../src/Terminal";
 import type { NSFull } from "../../../src/NetscriptFunctions";
 import { Companies } from "../../../src/Company/Companies";

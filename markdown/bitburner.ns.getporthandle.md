@@ -14,9 +14,39 @@ getPortHandle(portNumber: number): NetscriptPort;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  portNumber | number | Port number. Must be a positive integer. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+portNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Port number. Must be a positive integer.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -26,5 +56,5 @@ getPortHandle(portNumber: number): NetscriptPort;
 
 RAM cost: 0 GB
 
-Get a handle to a Netscript Port.
+Get a handle to a Netscript Port. Ports are shared across all hosts and contents are reset on game restart.
 

@@ -14,11 +14,71 @@ run(script: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[])
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  script | string | Filename of script to run. |
-|  threadOrOptions | number \| [RunOptions](./bitburner.runoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument threadOrOptions must be filled in with a value. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+script
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of script to run.
+
+
+</td></tr>
+<tr><td>
+
+threadOrOptions
+
+
+</td><td>
+
+number \| [RunOptions](./bitburner.runoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument threadOrOptions must be filled in with a value.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -36,7 +96,7 @@ The second argument is either a thread count, or a [RunOptions](./bitburner.runo
 
 If the script was successfully started, then this functions returns the PID of that script. Otherwise, it returns 0.
 
-PID stands for Process ID. The PID is a unique identifier for each script. The PID will always be a positive integer.
+PID stands for Process ID. The PID is a unique identifier for each script across all hosts. The PID will always be a positive integer.
 
 Running this function with 0 or fewer threads will cause a runtime error.
 

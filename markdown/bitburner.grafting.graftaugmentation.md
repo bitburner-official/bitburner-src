@@ -14,10 +14,55 @@ graftAugmentation(augName: string, focus?: boolean): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  augName | string | The name of the aug to begin grafting. Must be an exact match. |
-|  focus | boolean | _(Optional)_ Acquire player focus on this Augmentation grafting. Optional. Defaults to true. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+augName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The name of the aug to begin grafting. Must be an exact match.
+
+
+</td></tr>
+<tr><td>
+
+focus
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Acquire player focus on this Augmentation grafting. Optional. Defaults to true.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

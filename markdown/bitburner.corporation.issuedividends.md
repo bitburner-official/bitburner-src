@@ -14,9 +14,39 @@ issueDividends(rate: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  rate | number | Fraction of profit to issue as dividends. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+rate
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Fraction of profit to issue as dividends.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

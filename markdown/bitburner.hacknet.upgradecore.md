@@ -14,10 +14,55 @@ upgradeCore(index: number, n?: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  index | number | Index/Identifier of Hacknet Node. |
-|  n | number | _(Optional)_ Number of cores to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+index
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index/Identifier of Hacknet Node.
+
+
+</td></tr>
+<tr><td>
+
+n
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of cores to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,39 +14,617 @@ interface CorpConstants
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [baseProductProfitMult](./bitburner.corpconstants.baseproductprofitmult.md) |  | number |  |
-|  [bribeAmountPerReputation](./bitburner.corpconstants.bribeamountperreputation.md) |  | number |  |
-|  [bribeThreshold](./bitburner.corpconstants.bribethreshold.md) |  | number |  |
-|  [dividendMaxRate](./bitburner.corpconstants.dividendmaxrate.md) |  | number |  |
-|  [employeePositions](./bitburner.corpconstants.employeepositions.md) |  | [CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->\[\] | Names of all employee positions |
-|  [employeeRaiseAmount](./bitburner.corpconstants.employeeraiseamount.md) |  | number |  |
-|  [employeeSalaryMultiplier](./bitburner.corpconstants.employeesalarymultiplier.md) |  | number | Conversion factor for employee stats to initial salary |
-|  [gameCyclesPerCorpStateCycle](./bitburner.corpconstants.gamecyclespercorpstatecycle.md) |  | number |  |
-|  [gameCyclesPerMarketCycle](./bitburner.corpconstants.gamecyclespermarketcycle.md) |  | number |  |
-|  [industryNames](./bitburner.corpconstants.industrynames.md) |  | [CorpIndustryName](./bitburner.corpindustryname.md)<!-- -->\[\] | Names of all industries |
-|  [initialShares](./bitburner.corpconstants.initialshares.md) |  | number |  |
-|  [issueNewSharesCooldown](./bitburner.corpconstants.issuenewsharescooldown.md) |  | number | Cooldown for issue new shares cooldown in game cycles (1 game cycle = 200ms) |
-|  [marketCyclesPerEmployeeRaise](./bitburner.corpconstants.marketcyclesperemployeeraise.md) |  | number |  |
-|  [materialNames](./bitburner.corpconstants.materialnames.md) |  | [CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\] | Names of all materials |
-|  [maxProductsBase](./bitburner.corpconstants.maxproductsbase.md) |  | number | Max products for a division without upgrades |
-|  [minEmployeeDecay](./bitburner.corpconstants.minemployeedecay.md) |  | number | The minimum decay value for morale/energy |
-|  [officeInitialCost](./bitburner.corpconstants.officeinitialcost.md) |  | number |  |
-|  [officeInitialSize](./bitburner.corpconstants.officeinitialsize.md) |  | number |  |
-|  [officeSizeUpgradeCostBase](./bitburner.corpconstants.officesizeupgradecostbase.md) |  | number |  |
-|  [researchNames](./bitburner.corpconstants.researchnames.md) |  | [CorpResearchName](./bitburner.corpresearchname.md)<!-- -->\[\] | Names of all researches |
-|  [researchNamesBase](./bitburner.corpconstants.researchnamesbase.md) |  | [CorpResearchName](./bitburner.corpresearchname.md)<!-- -->\[\] | Names of all researches common to all industries |
-|  [researchNamesProductOnly](./bitburner.corpconstants.researchnamesproductonly.md) |  | [CorpResearchName](./bitburner.corpresearchname.md)<!-- -->\[\] | Names of all researches only available to product industries |
-|  [secondsPerMarketCycle](./bitburner.corpconstants.secondspermarketcycle.md) |  | number |  |
-|  [sellSharesCooldown](./bitburner.corpconstants.sellsharescooldown.md) |  | number | Cooldown for selling shares in game cycles (1 game cycle = 200ms) |
-|  [sharesPerPriceUpdate](./bitburner.corpconstants.sharesperpriceupdate.md) |  | number | When selling large number of shares, price is dynamically updated for every batch of this amount |
-|  [smartSupplyOptions](./bitburner.corpconstants.smartsupplyoptions.md) |  | [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md)<!-- -->\[\] |  |
-|  [stateNames](./bitburner.corpconstants.statenames.md) |  | [CorpStateName](./bitburner.corpstatename.md)<!-- -->\[\] | Names of all corporation game states |
-|  [teaCostPerEmployee](./bitburner.corpconstants.teacostperemployee.md) |  | number |  |
-|  [unlockNames](./bitburner.corpconstants.unlocknames.md) |  | [CorpUnlockName](./bitburner.corpunlockname.md)<!-- -->\[\] | Names of all one-time corporation-wide unlocks |
-|  [upgradeNames](./bitburner.corpconstants.upgradenames.md) |  | [CorpUpgradeName](./bitburner.corpupgradename.md)<!-- -->\[\] | Names of all corporation-wide upgrades |
-|  [warehouseInitialCost](./bitburner.corpconstants.warehouseinitialcost.md) |  | number |  |
-|  [warehouseInitialSize](./bitburner.corpconstants.warehouseinitialsize.md) |  | number |  |
-|  [warehouseSizeUpgradeCostBase](./bitburner.corpconstants.warehousesizeupgradecostbase.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[baseProductProfitMult](./bitburner.corpconstants.baseproductprofitmult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[bribeAmountPerReputation](./bitburner.corpconstants.bribeamountperreputation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[bribeThreshold](./bitburner.corpconstants.bribethreshold.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dividendMaxRate](./bitburner.corpconstants.dividendmaxrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[employeePositions](./bitburner.corpconstants.employeepositions.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all employee positions
+
+
+</td></tr>
+<tr><td>
+
+[employeeRaiseAmount](./bitburner.corpconstants.employeeraiseamount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[employeeSalaryMultiplier](./bitburner.corpconstants.employeesalarymultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Conversion factor for employee stats to initial salary
+
+
+</td></tr>
+<tr><td>
+
+[gameCyclesPerCorpStateCycle](./bitburner.corpconstants.gamecyclespercorpstatecycle.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[gameCyclesPerMarketCycle](./bitburner.corpconstants.gamecyclespermarketcycle.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[industryNames](./bitburner.corpconstants.industrynames.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpIndustryName](./bitburner.corpindustryname.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all industries
+
+
+</td></tr>
+<tr><td>
+
+[initialShares](./bitburner.corpconstants.initialshares.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[issueNewSharesCooldown](./bitburner.corpconstants.issuenewsharescooldown.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cooldown for issue new shares cooldown in game cycles (1 game cycle = 200ms)
+
+
+</td></tr>
+<tr><td>
+
+[marketCyclesPerEmployeeRaise](./bitburner.corpconstants.marketcyclesperemployeeraise.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[materialNames](./bitburner.corpconstants.materialnames.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all materials
+
+
+</td></tr>
+<tr><td>
+
+[maxProductsBase](./bitburner.corpconstants.maxproductsbase.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Max products for a division without upgrades
+
+
+</td></tr>
+<tr><td>
+
+[minEmployeeDecay](./bitburner.corpconstants.minemployeedecay.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The minimum decay value for morale/energy
+
+
+</td></tr>
+<tr><td>
+
+[officeInitialCost](./bitburner.corpconstants.officeinitialcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[officeInitialSize](./bitburner.corpconstants.officeinitialsize.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[officeSizeUpgradeCostBase](./bitburner.corpconstants.officesizeupgradecostbase.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[researchNames](./bitburner.corpconstants.researchnames.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpResearchName](./bitburner.corpresearchname.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all researches
+
+
+</td></tr>
+<tr><td>
+
+[researchNamesBase](./bitburner.corpconstants.researchnamesbase.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpResearchName](./bitburner.corpresearchname.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all researches common to all industries
+
+
+</td></tr>
+<tr><td>
+
+[researchNamesProductOnly](./bitburner.corpconstants.researchnamesproductonly.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpResearchName](./bitburner.corpresearchname.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all researches only available to product industries
+
+
+</td></tr>
+<tr><td>
+
+[secondsPerMarketCycle](./bitburner.corpconstants.secondspermarketcycle.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[sellSharesCooldown](./bitburner.corpconstants.sellsharescooldown.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cooldown for selling shares in game cycles (1 game cycle = 200ms)
+
+
+</td></tr>
+<tr><td>
+
+[sharesPerPriceUpdate](./bitburner.corpconstants.sharesperpriceupdate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+When selling large number of shares, price is dynamically updated for every batch of this amount
+
+
+</td></tr>
+<tr><td>
+
+[smartSupplyOptions](./bitburner.corpconstants.smartsupplyoptions.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md)<!-- -->\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[stateNames](./bitburner.corpconstants.statenames.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpStateName](./bitburner.corpstatename.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all corporation game states
+
+
+</td></tr>
+<tr><td>
+
+[teaCostPerEmployee](./bitburner.corpconstants.teacostperemployee.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[unlockNames](./bitburner.corpconstants.unlocknames.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpUnlockName](./bitburner.corpunlockname.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all one-time corporation-wide unlocks
+
+
+</td></tr>
+<tr><td>
+
+[upgradeNames](./bitburner.corpconstants.upgradenames.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpUpgradeName](./bitburner.corpupgradename.md)<!-- -->\[\]
+
+
+</td><td>
+
+Names of all corporation-wide upgrades
+
+
+</td></tr>
+<tr><td>
+
+[warehouseInitialCost](./bitburner.corpconstants.warehouseinitialcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[warehouseInitialSize](./bitburner.corpconstants.warehouseinitialsize.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[warehouseSizeUpgradeCostBase](./bitburner.corpconstants.warehousesizeupgradecostbase.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

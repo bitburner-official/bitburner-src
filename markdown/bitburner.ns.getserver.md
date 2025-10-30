@@ -4,7 +4,7 @@
 
 ## NS.getServer() method
 
-Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+Returns a server object for the given server.
 
 **Signature:**
 
@@ -14,9 +14,39 @@ getServer(host?: string): Server;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | _(Optional)_ Optional. Hostname/IP for the requested server object. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname/IP for the requested server object. Defaults to the server the calling script is running on.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

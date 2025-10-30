@@ -14,8 +14,38 @@ interface Infiltration
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [getInfiltration(location)](./bitburner.infiltration.getinfiltration.md) | Get all infiltrations with difficulty, location and rewards. |
-|  [getPossibleLocations()](./bitburner.infiltration.getpossiblelocations.md) | Get all locations that can be infiltrated. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[getInfiltration(location)](./bitburner.infiltration.getinfiltration.md)
+
+
+</td><td>
+
+Get all infiltrations with difficulty, location and rewards.
+
+
+</td></tr>
+<tr><td>
+
+[getPossibleLocations()](./bitburner.infiltration.getpossiblelocations.md)
+
+
+</td><td>
+
+Get all locations that can be infiltrated.
+
+
+</td></tr>
+</tbody></table>
 

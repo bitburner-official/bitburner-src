@@ -14,8 +14,60 @@ interface BladeburnerRankRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [bladeburnerRank](./bitburner.bladeburnerrankrequirement.bladeburnerrank.md) |  | number |  |
-|  [type](./bitburner.bladeburnerrankrequirement.type.md) |  | "bladeburnerRank" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[bladeburnerRank](./bitburner.bladeburnerrankrequirement.bladeburnerrank.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.bladeburnerrankrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"bladeburnerRank"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

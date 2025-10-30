@@ -14,10 +14,55 @@ time(milliseconds: number, milliPrecision?: boolean): string;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  milliseconds | number | Number of millisecond to format. |
-|  milliPrecision | boolean | _(Optional)_ Format time with subsecond precision. Defaults to false. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+milliseconds
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of millisecond to format.
+
+
+</td></tr>
+<tr><td>
+
+milliPrecision
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Format time with subsecond precision. Defaults to false.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

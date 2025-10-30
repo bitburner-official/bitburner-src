@@ -7,6 +7,7 @@ import {
   cancelOrder,
   initStockMarket,
   StockMarketPromise,
+  isStockMarketInitialized,
 } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
 import { StockSymbol } from "@enums";
@@ -17,18 +18,15 @@ import {
   getStockMarketTixApiCost,
 } from "../StockMarket/StockMarketCosts";
 import type { Stock } from "../StockMarket/Stock";
-import type { StockOrder, TIX } from "@nsdefs";
+import type { StockOrder, Stock as StockAPI } from "@nsdefs";
 import { setRemovedFunctions, type InternalAPI, type NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
 import { getEnumHelper } from "../utils/EnumHelper";
 
-export function NetscriptStockMarket(): InternalAPI<TIX> {
+export function NetscriptStockMarket(): InternalAPI<StockAPI> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
   const checkTixApiAccess = function (ctx: NetscriptContext): void {
-    if (!Player.hasWseAccount) {
-      throw helpers.errorMessage(ctx, `You don't have WSE Access! Cannot use ${ctx.function}()`);
-    }
     if (!Player.hasTixApiAccess) {
       throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
     }
@@ -43,7 +41,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     return stock;
   };
 
-  const stockFunctions: InternalAPI<TIX> = {
+  const stockFunctions: InternalAPI<StockAPI> = {
     getConstants: () => () => structuredClone(StockMarketConstants),
     hasWseAccount: () => () => Player.hasWseAccount,
     hasTixApiAccess: () => () => Player.hasTixApiAccess,
@@ -247,13 +245,18 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketData: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
       }
 
       if (Player.has4SData) {
         helpers.log(ctx, () => "Already purchased 4S Market Data.");
         return true;
+      }
+
+      if (!Player.hasWseAccount) {
+        helpers.log(ctx, () => "You need to have a WSE account.");
+        return false;
       }
 
       if (Player.money < getStockMarket4SDataCost()) {
@@ -268,7 +271,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketDataTixApi: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
       }
 
@@ -301,7 +304,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       }
 
       Player.hasWseAccount = true;
-      initStockMarket();
+      if (!isStockMarketInitialized()) {
+        initStockMarket();
+      }
       Player.loseMoney(getStockMarketWseCost(), "stock");
       helpers.log(ctx, () => "Purchased WSE Account Access");
       return true;
@@ -318,6 +323,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       }
 
       Player.hasTixApiAccess = true;
+      if (!isStockMarketInitialized()) {
+        initStockMarket();
+      }
       Player.loseMoney(getStockMarketTixApiCost(), "stock");
       helpers.log(ctx, () => "Purchased TIX API");
       return true;

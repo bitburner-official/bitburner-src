@@ -9,5 +9,5 @@ Name of the material
 **Signature:**
 
 ```typescript
-name: string;
+name: CorpMaterialName;
 ```

@@ -114,7 +114,7 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
 
   return (
     <TableCell align={align}>
-      <Typography align={align} classes={{ root: classes.th }}>
+      <Typography component="div" align={align} classes={{ root: classes.th }}>
         {props.children}
       </Typography>
     </TableCell>

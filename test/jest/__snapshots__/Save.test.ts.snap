@@ -29,7 +29,7 @@ exports[`load/saveAllServers 1`] = `
             {
               "ctor": "Script",
               "data": {
-                "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
+                "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
                 "filename": "script.js",
                 "server": "home",
                 "metadata": {
@@ -165,7 +165,7 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
             {
               "ctor": "Script",
               "data": {
-                "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
+                "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
                 "filename": "script.js",
                 "server": "home",
                 "metadata": {

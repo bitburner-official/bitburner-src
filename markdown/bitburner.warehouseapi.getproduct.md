@@ -14,11 +14,71 @@ getProduct(divisionName: string, cityName: CityName, productName: string): Produ
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  cityName | [CityName](./bitburner.cityname.md) | Name of the city |
-|  productName | string | Name of the product |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+cityName
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of the city
+
+
+</td></tr>
+<tr><td>
+
+productName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the product
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -48,6 +48,7 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { createRunningScriptInstance, startWorkerScript } from "../../NetscriptWorker";
+import type { PositiveInteger } from "../../types";
 
 // Extend acorn-walk to support TypeScript nodes.
 extendAcornWalkForTypeScriptNodes(walk.base);
@@ -242,7 +243,12 @@ function Root(props: IProps): React.ReactElement {
     // Always save before doing anything else.
     await save();
 
-    const result = createRunningScriptInstance(server, currentScript.path, null, 1, []);
+    const result = createRunningScriptInstance(
+      server,
+      currentScript.path,
+      { threads: 1 as PositiveInteger, temporary: false, preventDuplicates: false },
+      [],
+    );
     if (!result.success) {
       dialogBoxCreate(result.message);
       return;
