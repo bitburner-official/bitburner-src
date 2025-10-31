@@ -318,7 +318,7 @@ export const breakingChanges300: VersionBreakingChange = {
         "- ns.getServerMaxMoney\n" +
         "- ns.getServerGrowth\n" +
         "- ns.getServerNumPortsRequired\n" +
-        "- ns.deleteServer\n" +
+        "- ns.cloud.deleteServer\n" +
         "- ns.getHackTime\n" +
         "- ns.getGrowTime\n" +
         "- ns.getWeakenTime\n",
@@ -394,42 +394,6 @@ export const breakingChanges300: VersionBreakingChange = {
     {
       brokenAPIs: [
         {
-          name: "ns.getBitNodeMultipliers().PurchasedServerCost",
-          migration: {
-            searchValue: "ns.getBitNodeMultipliers().PurchasedServerCost",
-            replaceValue: "ns.getBitNodeMultipliers().CloudServerCost",
-          },
-        },
-        {
-          name: "ns.getBitNodeMultipliers().PurchasedServerSoftcap",
-          migration: {
-            searchValue: "ns.getBitNodeMultipliers().PurchasedServerSoftcap",
-            replaceValue: "ns.getBitNodeMultipliers().CloudServerSoftcap",
-          },
-        },
-        {
-          name: "ns.getBitNodeMultipliers().PurchasedServerLimit",
-          migration: {
-            searchValue: "ns.getBitNodeMultipliers().PurchasedServerLimit",
-            replaceValue: "ns.getBitNodeMultipliers().CloudServerLimit",
-          },
-        },
-        {
-          name: "ns.getBitNodeMultipliers().PurchasedServerMaxRam",
-          migration: {
-            searchValue: "ns.getBitNodeMultipliers().PurchasedServerMaxRam",
-            replaceValue: "ns.getBitNodeMultipliers().CloudServerMaxRam",
-          },
-        },
-      ],
-      info:
-        "ns.getBitNodeMultipliers() Purchased Server properties have been renamed to CloudServers with the creation of the cloud API.\n" +
-        "They have been automatically replaced with the corresponding interface variants.",
-      showWarning: false,
-    },
-    {
-      brokenAPIs: [
-        {
           name: "ns.getPurchasedServerCost",
           migration: { searchValue: "ns.getPurchasedServerCost", replaceValue: "ns.cloud.getServerCost" },
         },
@@ -471,8 +435,67 @@ export const breakingChanges300: VersionBreakingChange = {
       ],
       info:
         "The cloud server (purchased server) functions have been moved to their own interface, ns.cloud.\n" +
-        "Some have had wording changes for clarity.\n" +
-        "Each function has been replaced with their corresponding interface variant.\n",
+        '"ns.getPurchasedServerCost()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerCost()"\n\n' +
+        '"ns.purchaseServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.purchaseServer()"\n\n' +
+        '"ns.getPurchasedServerUpgradeCost()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerUpgradeCost()"\n\n' +
+        '"ns.upgradePurchasedServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.upgradeServer()"\n\n' +
+        '"ns.renamePurchasedServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.renameServer()"\n\n' +
+        '"ns.deleteServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.deleteServer()"\n\n' +
+        '"ns.getPurchasedServers()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerNames()"\n\n' +
+        '"ns.getPurchasedServerLimit()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerLimit()"\n\n' +
+        '"ns.getPurchasedServerMaxRam()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getRamLimit()"',
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerCost",
+          migration: {
+            searchValue: "PurchasedServerCost",
+            replaceValue: "CloudServerCost",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerSoftcap",
+          migration: {
+            searchValue: "PurchasedServerSoftcap",
+            replaceValue: "CloudServerSoftcap",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerLimit",
+          migration: {
+            searchValue: "PurchasedServerLimit",
+            replaceValue: "CloudServerLimit",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerMaxRam",
+          migration: {
+            searchValue: "PurchasedServerMaxRam",
+            replaceValue: "CloudServerMaxRam",
+          },
+        },
+      ],
+      info:
+        "ns.getBitNodeMultipliers() Purchased Server properties have been renamed to CloudServers with the creation of the cloud API.\n" +
+        '"ns.getBitNodeMultipliers().PurchasedServerCost" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerCost".\n\n' +
+        '"ns.getBitNodeMultipliers().PurchasedServerSoftcap" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerSoftcap".\n\n' +
+        '"ns.getBitNodeMultipliers().PurchasedServerLimit" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerLimit".\n\n' +
+        '"ns.getBitNodeMultipliers().PurchasedServerMaxRam" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerMaxRam".',
       showWarning: false,
     },
   ],

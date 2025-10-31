@@ -350,10 +350,10 @@ Running this [Script](../basic/scripts.md) will initially be very expensive sinc
 
 In order to create this [Script](../basic/scripts.md), you should familiarize yourself with the following functions, some of which are in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>):
 
-- `purchaseServer()`
-- `getServerCost()`
-- `getServerLimit()`
-- `getRamLimit()`
+- `cloud.purchaseServer()`
+- `cloud.getServerCost()`
+- `cloud.getServerLimit()`
+- `cloud.getRamLimit()`
 - `getServerMoneyAvailable()`
 - `scp()`
 - `exec()`
