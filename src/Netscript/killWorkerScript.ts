@@ -109,7 +109,11 @@ function removeWorkerScript(workerScript: WorkerScript): void {
 
   //unmount stylesheets created by this script
   const scriptStyleSheets = workerScript.loadedStyles.values().toArray();
-  document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+
+  //Our test suite doesnt polyfill adoptedStyleSheets.
+  //In a real browser it is always an array but to prevent the test from crashing
+  //we need to do some optional chaining 
+  document.adoptedStyleSheets = document.adoptedStyleSheets?.filter(
     (loadedSheet) => !scriptStyleSheets.includes(loadedSheet),
   );
 
