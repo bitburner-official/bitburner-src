@@ -6187,6 +6187,14 @@ interface UserInterface {
   resetStyles(): void;
 
   /**
+   * Loads a CSS file and applies its rules.
+   * The CSS is only loaded while the script is alive
+   * @remarks
+   * RAM cost: 0GB
+   */
+  loadCSS(path: string): void;
+
+  /**
    * Gets the current game information (version, commit, ...)
    * @remarks
    * RAM cost: 0 GB

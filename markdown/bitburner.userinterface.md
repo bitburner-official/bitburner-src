@@ -82,6 +82,17 @@ Get the current theme
 </td></tr>
 <tr><td>
 
+[loadCSS(path)](./bitburner.userinterface.loadcss.md)
+
+
+</td><td>
+
+Loads a CSS file and applies its rules. The CSS is only loaded while the script is alive
+
+
+</td></tr>
+<tr><td>
+
 [moveTail(x, y, pid)](./bitburner.userinterface.movetail.md)
 
 

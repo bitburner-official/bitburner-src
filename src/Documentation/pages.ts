@@ -1403,6 +1403,7 @@ import nsDoc_bitburner_userinterface_closetail_md from "../../markdown/bitburner
 import nsDoc_bitburner_userinterface_getgameinfo_md from "../../markdown/bitburner.userinterface.getgameinfo.md?raw";
 import nsDoc_bitburner_userinterface_getstyles_md from "../../markdown/bitburner.userinterface.getstyles.md?raw";
 import nsDoc_bitburner_userinterface_gettheme_md from "../../markdown/bitburner.userinterface.gettheme.md?raw";
+import nsDoc_bitburner_userinterface_loadcss_md from "../../markdown/bitburner.userinterface.loadcss.md?raw";
 import nsDoc_bitburner_userinterface_md from "../../markdown/bitburner.userinterface.md?raw";
 import nsDoc_bitburner_userinterface_movetail_md from "../../markdown/bitburner.userinterface.movetail.md?raw";
 import nsDoc_bitburner_userinterface_opentail_md from "../../markdown/bitburner.userinterface.opentail.md?raw";
@@ -2910,6 +2911,7 @@ AllPages["nsDoc/bitburner.userinterface.closetail.md"] = nsDoc_bitburner_userint
 AllPages["nsDoc/bitburner.userinterface.getgameinfo.md"] = nsDoc_bitburner_userinterface_getgameinfo_md;
 AllPages["nsDoc/bitburner.userinterface.getstyles.md"] = nsDoc_bitburner_userinterface_getstyles_md;
 AllPages["nsDoc/bitburner.userinterface.gettheme.md"] = nsDoc_bitburner_userinterface_gettheme_md;
+AllPages["nsDoc/bitburner.userinterface.loadcss.md"] = nsDoc_bitburner_userinterface_loadcss_md;
 AllPages["nsDoc/bitburner.userinterface.md"] = nsDoc_bitburner_userinterface_md;
 AllPages["nsDoc/bitburner.userinterface.movetail.md"] = nsDoc_bitburner_userinterface_movetail_md;
 AllPages["nsDoc/bitburner.userinterface.opentail.md"] = nsDoc_bitburner_userinterface_opentail_md;

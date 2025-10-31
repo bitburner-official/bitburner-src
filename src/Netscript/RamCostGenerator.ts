@@ -408,6 +408,7 @@ const ui = {
   getStyles: 0,
   setStyles: 0,
   resetStyles: 0,
+  loadCSS: 0,
   getGameInfo: 0,
   clearTerminal: 0,
   windowSize: 0,

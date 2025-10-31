@@ -78,6 +78,8 @@ export class WorkerScript {
   /**Map of functions called when the script ends. */
   atExit: Map<string, () => void> = new Map();
 
+  loadedStyles: Map<string, CSSStyleSheet> = new Map();
+
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;
     this.hostname = runningScriptObj.server;

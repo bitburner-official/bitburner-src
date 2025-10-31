@@ -107,6 +107,12 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   // Update ram used. Reround to prevent accumulation of error.
   server.updateRamUsed(roundToTwo(server.ramUsed - rs.ramUsage * rs.threads));
 
+  //unmount stylesheets created by this script
+  const scriptStyleSheets = workerScript.loadedStyles.values().toArray();
+  document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+    (loadedSheet) => !scriptStyleSheets.includes(loadedSheet),
+  );
+
   workerScripts.delete(workerScript.pid);
   if (rs.temporary === false) {
     AddRecentScript(workerScript);

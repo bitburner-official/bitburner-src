@@ -10,6 +10,7 @@ import { Terminal } from "../../src/Terminal";
 import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
 import { assertAndSanitizeMainTheme, assertAndSanitizeStyles } from "../JsonSchema/JSONSchemaAssertion";
 import { LogBoxCloserEvents, LogBoxEvents } from "../ui/React/LogBoxManager";
+import { hasStyleExtension } from "../Paths/TextFilePath";
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
@@ -156,6 +157,23 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       Settings.styles = { ...defaultStyles };
       ThemeEvents.emit();
       helpers.log(ctx, () => `Reinitialized styles to default`);
+    },
+
+    loadCSS: (ctx) => (file) => {
+      const filePath = helpers.filePath(ctx, "path", file);
+
+      if (!hasStyleExtension(filePath)) {
+        throw helpers.errorMessage(ctx, "path must be for a .css file");
+      }
+
+      const styleSheet = ctx.workerScript.loadedStyles.get(filePath) ?? new CSSStyleSheet();
+      const cssRaw = ctx.workerScript.getServer().getContentFile(filePath)?.content ?? "";
+
+      styleSheet.replaceSync(cssRaw);
+
+      if (!ctx.workerScript.loadedStyles.has(filePath)) document.adoptedStyleSheets.push(styleSheet);
+
+      ctx.workerScript.loadedStyles.set(filePath, styleSheet);
     },
 
     getGameInfo: () => () => {
