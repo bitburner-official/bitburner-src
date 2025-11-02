@@ -23,6 +23,7 @@ export class Remote {
 
   public stopConnection(): void {
     this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
+    this.closeAutoConnectToast?.();
   }
 
   private enableErrorToasts(): void {
