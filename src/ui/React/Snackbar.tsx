@@ -37,20 +37,29 @@ export function SnackbarProvider(props: IProps): React.ReactElement {
   );
 }
 
-export const SnackbarEvents = new EventEmitter<[string | React.ReactNode, ToastVariant, number | null]>();
+type SnackbarResolver = (resolve: () => void) => void;
 
-export function Snackbar({ hidden }: { hidden: boolean }): React.ReactElement {
+export const SnackbarEvents = new EventEmitter<[string | React.ReactNode, ToastVariant, number | null | SnackbarResolver]>();
+
+export function Snackbar({ hidden }: { hidden: boolean; }): React.ReactElement {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (hidden) return;
-    return SnackbarEvents.subscribe((s, variant, duration) => {
+    return SnackbarEvents.subscribe((s, variant, durationOrResolveFunction) => {
+
+      const persist = typeof durationOrResolveFunction == "function";
+      const duration = persist ? null : durationOrResolveFunction;
+
       const id = enqueueSnackbar(<Alert severity={variant}>{s}</Alert>, {
         content: (k, m) => <Paper key={k}>{m}</Paper>,
         variant: variant,
         autoHideDuration: duration,
+        persist,
         onClick: () => closeSnackbar(id),
       });
+
+      if (persist) durationOrResolveFunction(() => closeSnackbar(id));
     });
   }, [closeSnackbar, enqueueSnackbar, hidden]);
   return <></>;

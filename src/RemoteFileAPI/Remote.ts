@@ -14,6 +14,7 @@ export class Remote {
   connection?: WebSocket;
   ipaddr: string;
   port: number;
+  closeAutoConnectToast?: () => void;
 
   constructor(ip: string, port: number) {
     this.ipaddr = ip;
@@ -24,8 +25,17 @@ export class Remote {
     this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
   }
 
-  public startConnection(): void {
-    const address = (Settings.UseWssForRemoteFileApi ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
+  private enableErrorToasts(): void {
+    if (!this.connection) return;
+    this.connection.addEventListener("error", (e: Event) => showErrorMessage(this.makeWebsocketURL(), JSON.stringify(e)));
+  }
+
+  private makeWebsocketURL(): string {
+    return (Settings.UseWssForRemoteFileApi ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
+  }
+
+  public startConnection(isAutoConnect = false): void {
+    const address = this.makeWebsocketURL();
     try {
       this.connection = new WebSocket(address);
     } catch (error) {
@@ -33,14 +43,24 @@ export class Remote {
       showErrorMessage(address, String(error));
       return;
     }
-    this.connection.addEventListener("error", (e: Event) => showErrorMessage(address, JSON.stringify(e)));
+
+    if (!isAutoConnect) //dont spam error messages on auto connect
+      this.enableErrorToasts();
+
     this.connection.addEventListener("message", handleMessageEvent);
-    this.connection.addEventListener("open", () =>
+    this.connection.addEventListener("open", () => {
       SnackbarEvents.emit(
         `Remote API connection established on ${this.ipaddr}:${this.port}`,
         ToastVariant.SUCCESS,
         2000,
-      ),
+      );
+      if (this.closeAutoConnectToast) {
+        //we still want errors after a successful auto connect
+        this.enableErrorToasts();
+        this.closeAutoConnectToast();
+        this.closeAutoConnectToast = undefined;
+      }
+    }
     );
     this.connection.addEventListener("close", (event) => {
       /**
@@ -52,10 +72,16 @@ export class Remote {
       if (event.code === eventCodeWhenIntentionallyStoppingConnection) {
         return;
       }
-      SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
+      if (!isAutoConnect)
+        SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
       if (Settings.RemoteFileApiReconnectionDelay > 0) {
         setTimeout(() => {
-          this.startConnection();
+          if (!this.closeAutoConnectToast) {
+            SnackbarEvents.emit(`Attempting to auto connect Remote API`, ToastVariant.WARNING, (closeSnackbar) => {
+              this.closeAutoConnectToast = closeSnackbar;
+            });
+          }
+          this.startConnection(true);
         }, Settings.RemoteFileApiReconnectionDelay * 1000);
       }
     });
