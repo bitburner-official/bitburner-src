@@ -12,7 +12,7 @@ import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
 
 import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { Script } from "./Script";
-import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { hasScriptExtension, type ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { ServerName } from "../Types/strings";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import {
@@ -459,6 +459,12 @@ function parseOnlyCalculateDeps(
           if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
             return;
           }
+
+          if (!hasScriptExtension(rawImportModuleName)) {
+            //non script imports are irrelevant for ram
+            return;
+          }
+
           const importModuleName = getModuleScript(rawImportModuleName, currentModule, otherScripts).filename;
           additionalModules.push(importModuleName);
 

@@ -9,12 +9,24 @@ import { fromObject } from "convert-source-map";
 
 import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
 import type { Script } from "./Script/Script";
-import type { ScriptFilePath } from "./Paths/ScriptFilePath";
-import { FileType, getFileType, getModuleScript, transformScript } from "./utils/ScriptTransformer";
+import { hasScriptExtension, type ScriptFilePath } from "./Paths/ScriptFilePath";
+import {
+  FileType,
+  getFileType,
+  getModuleScript,
+  ModuleResolutionError,
+  transformScript,
+} from "./utils/ScriptTransformer";
+import { GetServer } from "./Server/AllServers";
+import { resolveTextFilePath } from "./Paths/TextFilePath";
 
 // Makes a blob that contains the code of a given script.
 function makeScriptBlob(code: string): Blob {
   return new Blob([code], { type: "text/javascript" });
+}
+
+function makeJSONBlob(code: string): Blob {
+  return new Blob([code], { type: "application/json" });
 }
 
 // Webpack likes to turn the import into a require, which sort of
@@ -168,6 +180,45 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   let newCode = scriptCode;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
+    //if import is not a script
+    if (!hasScriptExtension(node.filename)) {
+      const hasImportAttribute = /^\s*with/.test(script.code.substring(node.end + 1));
+
+      if (!hasImportAttribute) {
+        throw new ModuleResolutionError(`Non-Script imports **must** have an import attribute`);
+      }
+
+      const path = resolveTextFilePath(node.filename);
+
+      if (!path) {
+        throw new ModuleResolutionError(`Module can not be resolved: '${node.filename}'`);
+      }
+
+      const moduleContent = GetServer(script.server)?.getContentFile(path)?.content;
+
+      if (!moduleContent) {
+        throw new ModuleResolutionError(`File does not exist on '${script.server}': '${node.filename}'`);
+      }
+
+      let module: Blob;
+      const moduleType = path.split(".").at(-1);
+
+      //switch case to make future module support easier
+      switch (moduleType) {
+        case "json":
+          module = makeJSONBlob(moduleContent);
+          break;
+        default:
+          throw new ModuleResolutionError(`Unkown module type: '${moduleType}'`);
+      }
+
+      const moduleURL = URL.createObjectURL(module);
+
+      newCode = newCode.substring(0, node.start) + moduleURL + newCode.substring(node.end);
+
+      continue;
+    }
+
     const importedScript = getModuleScript(node.filename, script.filename, scripts);
     for (const scriptInSeenStack of seenStack) {
       if (scriptInSeenStack.filename === script.filename) {
