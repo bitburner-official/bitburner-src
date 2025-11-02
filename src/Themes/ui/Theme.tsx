@@ -51,6 +51,7 @@ declare module "@mui/material/styles" {
 }
 
 let theme: Theme;
+const themeStyleSheet = new CSSStyleSheet();
 
 export function refreshTheme(): void {
   theme = createTheme({
@@ -419,7 +420,20 @@ export function refreshTheme(): void {
   });
 
   document.body.style.backgroundColor = theme.colors.backgroundprimary?.toString() ?? "black";
+
+  const styleSheet =
+    ":root {" +
+    Object.entries(Settings.theme)
+      .map(([k, v]) => `--bb-theme-${k}: ${v}`)
+      .join(";") +
+    "}";
+
+  themeStyleSheet.replaceSync(styleSheet);
 }
+
+//The test suite does not polyfill this property
+document.adoptedStyleSheets?.push(themeStyleSheet);
+
 refreshTheme();
 
 interface IProps {
