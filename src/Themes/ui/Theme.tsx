@@ -428,7 +428,8 @@ export function refreshTheme(): void {
       .join(";") +
     "}";
 
-  themeStyleSheet.replaceSync(styleSheet);
+  //The test suite does not polyfill this property
+  themeStyleSheet.replaceSync?.(styleSheet);
 }
 
 //The test suite does not polyfill this property
