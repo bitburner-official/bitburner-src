@@ -28,7 +28,9 @@ export class Remote {
 
   private enableErrorToasts(): void {
     if (!this.connection) return;
-    this.connection.addEventListener("error", (e: Event) => showErrorMessage(this.makeWebsocketURL(), JSON.stringify(e)));
+    this.connection.addEventListener("error", (e: Event) =>
+      showErrorMessage(this.makeWebsocketURL(), JSON.stringify(e)),
+    );
   }
 
   private makeWebsocketURL(): string {
@@ -45,7 +47,8 @@ export class Remote {
       return;
     }
 
-    if (!isAutoConnect) //dont spam error messages on auto connect
+    if (!isAutoConnect)
+      //dont spam error messages on auto connect
       this.enableErrorToasts();
 
     this.connection.addEventListener("message", handleMessageEvent);
@@ -61,8 +64,7 @@ export class Remote {
         this.closeAutoConnectToast();
         this.closeAutoConnectToast = undefined;
       }
-    }
-    );
+    });
     this.connection.addEventListener("close", (event) => {
       /**
        * On Bitburner side, we may intentionally close the connection. For example, we do that before starting a new
