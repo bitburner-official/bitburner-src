@@ -14,6 +14,7 @@ export class Remote {
   connection?: WebSocket;
   ipaddr: string;
   port: number;
+  closeAutoConnectToast?: () => void;
 
   constructor(ip: string, port: number) {
     this.ipaddr = ip;
@@ -22,6 +23,7 @@ export class Remote {
 
   public stopConnection(): void {
     this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
+    this.closeAutoConnectToast?.();
   }
 
   public startConnection(autoConnectAttempt = 0): void {
