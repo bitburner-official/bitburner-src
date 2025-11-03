@@ -9,7 +9,7 @@ import { fromObject } from "convert-source-map";
 
 import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
 import type { Script } from "./Script/Script";
-import { hasScriptExtension, type ScriptFilePath } from "./Paths/ScriptFilePath";
+import { resolveScriptFilePath, validScriptExtensions, type ScriptFilePath } from "./Paths/ScriptFilePath";
 import {
   FileType,
   getFileType,
@@ -180,15 +180,19 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   let newCode = scriptCode;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
+    const isScriptImport = validScriptExtensions.some((extension) =>
+      resolveScriptFilePath(node.filename, script.filename, extension),
+    );
+
     //if import is not a script
-    if (!hasScriptExtension(node.filename)) {
+    if (!isScriptImport) {
       const hasImportAttribute = /^\s*with/.test(script.code.substring(node.end + 1));
 
       if (!hasImportAttribute) {
         throw new ModuleResolutionError(`Non-Script imports **must** have an import attribute`);
       }
 
-      const path = resolveTextFilePath(node.filename);
+      const path = resolveTextFilePath(node.filename, script.filename);
 
       if (!path) {
         throw new ModuleResolutionError(`Module can not be resolved: '${node.filename}'`);
