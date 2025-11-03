@@ -24,8 +24,12 @@ export class Remote {
     this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
   }
 
-  public startConnection(): void {
+  public startConnection(autoConnectAttempt = 0): void {
     const address = (Settings.UseWssForRemoteFileApi ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
+
+    //This tracks if a connection was established to prevent redundant toasts
+    let successfullyConnected = false;
+
     try {
       this.connection = new WebSocket(address);
     } catch (error) {
@@ -33,15 +37,27 @@ export class Remote {
       showErrorMessage(address, String(error));
       return;
     }
-    this.connection.addEventListener("error", (e: Event) => showErrorMessage(address, JSON.stringify(e)));
+
+    //log connection errors on manual and the first auto connect attempts
+    if (autoConnectAttempt <= 1)
+      this.connection.addEventListener("error", (e: Event) => showErrorMessage(address, JSON.stringify(e)));
+
     this.connection.addEventListener("message", handleMessageEvent);
-    this.connection.addEventListener("open", () =>
+
+    this.connection.addEventListener("open", () => {
+      successfullyConnected = true;
+
       SnackbarEvents.emit(
         `Remote API connection established on ${this.ipaddr}:${this.port}`,
         ToastVariant.SUCCESS,
         2000,
-      ),
-    );
+      );
+
+      //enable error reports after a successfull auto connect
+      if (autoConnectAttempt > 2 && this.connection) {
+        this.connection.addEventListener("error", (e: Event) => showErrorMessage(address, JSON.stringify(e)));
+      }
+    });
     this.connection.addEventListener("close", (event) => {
       /**
        * On Bitburner side, we may intentionally close the connection. For example, we do that before starting a new
@@ -52,10 +68,21 @@ export class Remote {
       if (event.code === eventCodeWhenIntentionallyStoppingConnection) {
         return;
       }
-      SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
+
+      //Printing a connetion error alongside the connection closed warning is both redunant and confusing
+      if (successfullyConnected)
+        SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
+
       if (Settings.RemoteFileApiReconnectionDelay > 0) {
         setTimeout(() => {
-          this.startConnection();
+          if (!autoConnectAttempt || successfullyConnected) {
+            SnackbarEvents.emit(`Attempting to auto connect Remote API`, ToastVariant.WARNING, 2000);
+          }
+
+          //reset attempts if a connection was established
+          const attempts = successfullyConnected ? 1 : autoConnectAttempt + 1;
+
+          this.startConnection(attempts);
         }, Settings.RemoteFileApiReconnectionDelay * 1000);
       }
     });
