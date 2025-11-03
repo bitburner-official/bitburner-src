@@ -428,13 +428,10 @@ export function refreshTheme(): void {
       .join(";") +
     "}";
 
-  //The test suite does not polyfill this property
-  themeStyleSheet.replaceSync?.(styleSheet);
+  themeStyleSheet.replaceSync(styleSheet);
 }
 
-//The test suite does not polyfill this property
-document.adoptedStyleSheets?.push(themeStyleSheet);
-
+document.adoptedStyleSheets.push(themeStyleSheet);
 refreshTheme();
 
 interface IProps {

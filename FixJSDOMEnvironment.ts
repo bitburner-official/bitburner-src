@@ -26,5 +26,13 @@ export default class FixJSDOMEnvironment extends JSDOMEnvironment {
     this.global.TextDecoderStream = TextDecoderStream;
     this.global.URL = URL;
     this.global.Response = Response;
+
+    /**
+    * https://github.com/jsdom/jsdom/issues/3766
+    * https://github.com/jsdom/jsdom/issues/3766
+    * 
+    */
+    this.global.document.adoptedStyleSheets = [];
+    this.global.CSSStyleSheet.prototype.replaceSync = () => {};
   }
 }
