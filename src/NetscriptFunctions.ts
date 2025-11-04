@@ -1611,7 +1611,7 @@ export const ns: InternalAPI<NSFull> = {
     ) {
       throw helpers.errorMessage(
         ctx,
-        `'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json)`,
+        `'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css)`,
       );
     }
     if (sourcePath === destinationPath) {
