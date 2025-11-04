@@ -29,7 +29,7 @@ export default class FixJSDOMEnvironment extends JSDOMEnvironment {
 
     /**
      * https://github.com/jsdom/jsdom/issues/3766
-     * https://github.com/jsdom/jsdom/issues/3766
+     * https://github.com/jsdom/jsdom/issues/3444
      *
      */
     this.global.document.adoptedStyleSheets = [];
