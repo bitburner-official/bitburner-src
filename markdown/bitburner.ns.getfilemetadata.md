@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx).
+Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script (.js, .jsx, .ts, .tsx).
 
 
 </td></tr>
