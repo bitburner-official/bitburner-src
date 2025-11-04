@@ -788,7 +788,7 @@ export const ns: InternalAPI<NSFull> = {
         continue;
       }
       if (!path.endsWith(".lit")) {
-        throw helpers.errorMessage(ctx, "Only works for scripts, .lit and .txt files.");
+        throw helpers.errorMessage(ctx, "Only works for script, text, and .lit files");
       }
       lits.push(path);
     }
