@@ -58,6 +58,9 @@ function makeModel(hostname: string, filename: string, code: string): editor.ITe
     case FileType.NS1:
       language = "javascript";
       break;
+    case FileType.CSS:
+      language = "css";
+      break;
     default:
       throwIfReachable(fileType);
   }
