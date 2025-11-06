@@ -24,7 +24,7 @@ export class Remote {
     this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
   }
 
-  public startConnection(autoConnectAttempt = 0): void {
+  public startConnection(autoConnectAttempt = 1): void {
     const address = (Settings.UseWssForRemoteFileApi ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
 
     //This tracks if a connection was established to prevent redundant toasts
