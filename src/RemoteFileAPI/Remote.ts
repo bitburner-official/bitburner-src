@@ -70,8 +70,9 @@ export class Remote {
       }
 
       //Printing a connetion error alongside the connection closed warning is both redunant and confusing
-      if (successfullyConnected)
+      if (successfullyConnected) {
         SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
+      }
 
       if (Settings.RemoteFileApiReconnectionDelay > 0) {
         setTimeout(() => {
