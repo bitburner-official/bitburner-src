@@ -55,10 +55,6 @@ export class Remote {
         2000,
       );
 
-      //enable error reports after a successfull auto connect
-      if (autoConnectAttempt > 2 && this.connection) {
-        this.connection.addEventListener("error", (e: Event) => showErrorMessage(address, JSON.stringify(e)));
-      }
     });
     this.connection.addEventListener("close", (event) => {
       /**
