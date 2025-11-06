@@ -54,7 +54,6 @@ export class Remote {
         ToastVariant.SUCCESS,
         2000,
       );
-
     });
     this.connection.addEventListener("close", (event) => {
       /**
