@@ -39,9 +39,11 @@ export class Remote {
     }
 
     //log connection errors on manual and the first auto connect attempts
-    if (autoConnectAttempt <= 1)
-      this.connection.addEventListener("error", (e: Event) => showErrorMessage(address, JSON.stringify(e)));
-
+    this.connection.addEventListener("error", (e: Event) => {
+      if (autoConnectAttempt <= 1 || successfullyConnected) {
+        showErrorMessage(address, JSON.stringify(e));
+      }
+    });
     this.connection.addEventListener("message", handleMessageEvent);
 
     this.connection.addEventListener("open", () => {
@@ -76,7 +78,7 @@ export class Remote {
 
       if (Settings.RemoteFileApiReconnectionDelay > 0) {
         setTimeout(() => {
-          if (!autoConnectAttempt || successfullyConnected) {
+          if (autoConnectAttempt === 1 && Settings.RemoteFileApiReconnectionDelay > 0) {
             SnackbarEvents.emit(`Attempting to auto connect Remote API`, ToastVariant.WARNING, 2000);
           }
 
