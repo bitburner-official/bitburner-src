@@ -44,7 +44,8 @@ export function getCloudServerCost(ram: number): number {
 export const getCloudServerUpgradeCost = (hostname: string, ram: number): number => {
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' not found.`);
-  if (!Player.purchasedServers.includes(server.hostname)) throw new Error(`Server '${hostname}' not a cloud server.`);
+  if (!Player.purchasedServers.includes(server.hostname))
+    throw new Error(`Server '${hostname}' is not a cloud server.`);
   if (isNaN(ram) || !isPowerOfTwo(ram) || !(Math.sign(ram) === 1))
     throw new Error(`${ram} is not a positive power of 2`);
   if (server.maxRam >= ram)

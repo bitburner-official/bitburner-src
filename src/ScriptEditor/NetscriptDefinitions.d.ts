@@ -4145,6 +4145,7 @@ export interface Cloud {
    * @returns The price to upgrade or -1 if either input is not valid, i.e. host is not the name of a cloud server or ram is not a valid amount.
    */
   getServerUpgradeCost(host: string, ram: number): number;
+
   /**
    * Upgrade a cloud server's RAM.
    * @remarks
@@ -4182,6 +4183,7 @@ export interface Cloud {
    * @returns True if successful, and false otherwise.
    */
   deleteServer(host: string): boolean;
+
   /**
    * Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
    * Returns hostnames by default.
