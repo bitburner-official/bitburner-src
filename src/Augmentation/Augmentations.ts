@@ -1471,7 +1471,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.SmartSonar]: {
       repCost: 2.25e4,
       moneyCost: 7.5e7,
-      info: "A cochlear implant that helps the player detect and locate enemies using sound propagation.",
+      info: "A cochlear implant that helps the user detect and locate enemies using sound propagation.",
       dexterity: 1.1,
       dexterity_exp: 1.15,
       crime_money: 1.25,

@@ -904,7 +904,7 @@ Get the ram cost of a script.
 
 </td><td>
 
-Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+Returns a server object for the given server.
 
 
 </td></tr>
@@ -1135,7 +1135,7 @@ Get the chance of successfully hacking a server.
 
 </td><td>
 
-Get the security increase for a number of threads.
+Get the security increase for a number of hack threads.
 
 
 </td></tr>

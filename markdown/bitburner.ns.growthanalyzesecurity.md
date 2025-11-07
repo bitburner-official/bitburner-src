@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname/IP of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money.
+_(Optional)_ Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to reach the specified server's maximum money.
 
 
 </td></tr>

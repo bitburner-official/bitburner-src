@@ -3968,8 +3968,7 @@ export interface CodingContract {
    *
    * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not
-   *   provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns A reward description string on success, or an empty string on failure.
    */
   attempt(answer: any, filename: string, host?: string): string;
@@ -3983,7 +3982,7 @@ export interface CodingContract {
    * (e.g. Find Largest Prime Factor, Total Ways to Sum, etc.)
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
   getContractType(filename: string, host?: string): CodingContractName;
@@ -3996,7 +3995,7 @@ export interface CodingContract {
    * Get the full text description for the problem posed by the Coding Contract.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns Contract’s text description.
    */
   getDescription(filename: string, host?: string): string;
@@ -4011,7 +4010,7 @@ export interface CodingContract {
    * This is just the data that the contract wants you to act on in order to solve the contract.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns The specified contract’s data, data type depends on contract type.
    */
   getData(filename: string, host?: string): any;
@@ -4035,7 +4034,7 @@ export interface CodingContract {
    * ```
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Default to the current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns An object containing various data about the contract specified.
    */
   getContract(filename: string, host?: string): CodingContractObject;
@@ -4048,7 +4047,7 @@ export interface CodingContract {
    * Get the number of tries remaining on the contract before it self-destructs.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns How many attempts are remaining for the contract.
    */
   getNumTriesRemaining(filename: string, host?: string): number;
@@ -5956,8 +5955,7 @@ interface Fragment {
 }
 
 /** @public */
-interface ActiveFragment {
-  id: number;
+interface ActiveFragment extends Fragment {
   highestCharge: number;
   numCharge: number;
   rotation: number;
@@ -6155,7 +6153,7 @@ interface UserInterface {
    * ns.ui.openTail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
-   * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server the calling script is running on.
    * @param args - Arguments for the script being tailed.
    */
   openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
@@ -6255,7 +6253,7 @@ interface UserInterface {
    *
    * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
    * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
-   * @param host - Optional. Hostname/IP of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param host - Optional. Hostname/IP of the target script. Defaults to the server the calling script is running on.
    * @param args - Arguments for the target script.
    */
   setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
@@ -6647,14 +6645,14 @@ export interface NS {
   hackAnalyze(host: string): number;
 
   /**
-   * Get the security increase for a number of threads.
+   * Get the security increase for a number of hack threads.
    * @remarks
    * RAM cost: 1 GB
    *
    * Returns the security increase that would occur if a hack with this many threads happened.
    *
    * @param threads - Amount of threads that will be used.
-   * @param host - Hostname/IP of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money.
+   * @param host - Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to hack the specified server's maximum amount of money.
    * @returns The security increase.
    */
   hackAnalyzeSecurity(threads: number, host?: string): number;
@@ -6716,7 +6714,7 @@ export interface NS {
    * Returns the security increase that would occur if a grow with this many threads happened.
    *
    * @param threads - Amount of threads that will be used.
-   * @param host - Optional. Hostname/IP of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money.
+   * @param host - Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to reach the specified server's maximum money.
    * @param cores - Optional. The number of cores of the server that would run grow.
    * @returns The security increase.
    */
@@ -6978,7 +6976,7 @@ export interface NS {
    * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of script to get logs from.
-   * @param host - Optional. Hostname/IP of the server that the script is on.
+   * @param host - Optional. Hostname/IP of the server that the script is on. Defaults to the server the calling script is running on.
    * @param args - Arguments to identify which scripts to get logs for.
    * @returns Returns a string array, where each line is an element in the array. The most recently logged line is at the end of the array.
    */
@@ -7064,7 +7062,7 @@ export interface NS {
    * }
    * ```
    *
-   * @param host - Optional. Hostname/IP of the server to scan, default to current server.
+   * @param host - Optional. Hostname/IP of the server to scan. Defaults to the server the calling script is running on.
    * @param returnOpts - Optional. Controls whether the function returns IPs.
    * @returns Returns an array of hostnames.
    */
@@ -7339,7 +7337,7 @@ export interface NS {
    * ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
    * ```
    * @param filename - Filename of the script to kill.
-   * @param host - Hostname/IP where the script to kill is running. Defaults to the current server.
+   * @param host - Hostname/IP where the script to kill is running. Optional. Defaults to the server the calling script is running on.
    * @param args - Arguments of the script to kill.
    * @returns True if the scripts were successfully killed, and false otherwise.
    */
@@ -7355,8 +7353,8 @@ export interface NS {
    * true if there are any scripts running on the target server.
    * If no host is defined, it will kill all scripts, where the script is running.
    *
-   * @param host - Hostname/IP of the server on which to kill all scripts.
-   * @param safetyGuard - Skips the script that calls this function
+   * @param host - Hostname/IP of the server on which to kill all scripts. Optional. Defaults to the server the calling script is running on.
+   * @param safetyGuard - Skips the script that calls this function. Optional. Defaults to false.
    * @returns True if any scripts were killed, and false otherwise.
    */
   killall(host?: string, safetyGuard?: boolean): boolean;
@@ -7427,7 +7425,7 @@ export interface NS {
    *   ns.tprint(script.args);
    * }
    * ```
-   * @param host - Hostname/IP of the target server. If not specified, it will be the current server’s IP by default.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to the server the calling script is running on.
    * @returns Array with general information about all scripts running on the specified target server.
    */
   ps(host?: string): ProcessInfo[];
@@ -7516,11 +7514,11 @@ export interface NS {
   getHacknetMultipliers(): HacknetMultipliers;
 
   /**
-   * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+   * Returns a server object for the given server.
    *
    * @remarks
    * RAM cost: 2 GB
-   * @param host - Optional. Hostname/IP for the requested server object.
+   * @param host - Optional. Hostname/IP for the requested server object. Defaults to the server the calling script is running on.
    * @returns The requested server object.
    */
   getServer(host?: string): Server;
@@ -7680,7 +7678,7 @@ export interface NS {
    * ns.fileExists("ftpcrack.exe");
    * ```
    * @param filename - Filename of file to check.
-   * @param host - Hostname/IP of target server. Optional, defaults to the server the script is running on.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns True if specified file exists, and false otherwise.
    */
   fileExists(filename: string, host?: string): boolean;
@@ -7709,7 +7707,7 @@ export interface NS {
    * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
    * @param script - Filename or PID of script to check. This is case-sensitive.
-   * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
@@ -7728,7 +7726,7 @@ export interface NS {
    * functions like this that check based on filename, the filename plus arguments forms the key.)
    *
    * @param filename - Optional. Filename or PID of the script.
-   * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @param args  - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns The info about the running script if found, and null otherwise.
    */
@@ -7758,7 +7756,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function can be used to write data to a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx).
+   * This function can be used to write data to a text file (.txt, .json, .css) or a script (.js, .jsx, .ts, .tsx).
    *
    * This function will write data to that file. If the specified file does not exist,
    * then it will be created. The third argument mode defines how the data will be written to
@@ -7806,7 +7804,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt, .json) or script (.js, .jsx, .ts, .tsx).
+   * This function is used to read data from a text file (.txt, .json, .css) or script (.js, .jsx, .ts, .tsx).
    *
    * This function will return the data in the specified file.
    * If the file does not exist, an empty string will be returned.
@@ -7823,7 +7821,7 @@ export interface NS {
    *
    * This function returns the metadata associated with the specified file.
    *
-   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script
+   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script
    * (.js, .jsx, .ts, .tsx).
    * @Returns The metadata of the file.
    */
@@ -7921,7 +7919,7 @@ export interface NS {
    * type except message (.msg) files.
    *
    * @param name - Filename of file to remove. Must include the extension.
-   * @param host - Hostname/IP of the server on which to delete the file. Optional. Defaults to current server.
+   * @param host - Hostname/IP of the server on which to delete the file. Optional. Defaults to the server the calling script is running on.
    * @returns True if it successfully deletes the file, and false otherwise.
    */
   rm(name: string, host?: string): boolean;
@@ -7982,7 +7980,7 @@ export interface NS {
    * Returns 0 if the script does not exist.
    *
    * @param script - Filename of script. This is case-sensitive.
-   * @param host - Hostname/IP of target server the script is located on. This is optional. If it is not specified then the function will use the current server as the target server.
+   * @param host - Hostname/IP of target server the script is located on. Optional. Defaults to the server the calling script is running on.
    * @returns Amount of RAM (in GB) required to run the specified script on the target server, and 0 if the script does not exist.
    */
   getScriptRam(script: string, host?: string): number;
@@ -7996,10 +7994,10 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function.
    */
-  getHackTime(host: string): number;
+  getHackTime(host?: string): number;
 
   /**
    * Get the execution time of a grow() call.
@@ -8009,10 +8007,10 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the grow Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns Returns the amount of time in milliseconds it takes to execute the grow Netscript function.
    */
-  getGrowTime(host: string): number;
+  getGrowTime(host?: string): number;
 
   /**
    * Get the execution time of a weaken() call.
@@ -8022,10 +8020,10 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function.
    */
-  getWeakenTime(host: string): number;
+  getWeakenTime(host?: string): number;
 
   /**
    * Get the income of all scripts.
@@ -8200,7 +8198,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Retrieves data from a URL and downloads it to a file on the specified server.
-   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json).
+   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css).
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
@@ -8211,7 +8209,7 @@ export interface NS {
    * ```
    * @param url - URL to pull data from.
    * @param target - Filename to write data to. Must be script or text file.
-   * @param host - Optional hostname/ip of server for target file.
+   * @param host - Hostname/IP of server for target file. Optional. Defaults to the server the calling script is running on.
    * @returns True if the data was successfully retrieved from the URL, false otherwise.
    */
   wget(url: string, target: string, host?: string): Promise<boolean>;
@@ -8292,7 +8290,7 @@ export interface NS {
    *
    * Move the source file to the specified destination on the target server.
    *
-   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json). It cannot, however, be
+   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). It cannot, however, be
    * used to convert from script to text file, or vice versa.
    *
    * This function can also be used to rename files.

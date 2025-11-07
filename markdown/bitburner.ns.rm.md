@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of the server on which to delete the file. Optional. Defaults to current server.
+_(Optional)_ Hostname/IP of the server on which to delete the file. Optional. Defaults to the server the calling script is running on.
 
 
 </td></tr>

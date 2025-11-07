@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of target server. Optional, defaults to the server the script is running on.
+_(Optional)_ Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
 
 
 </td></tr>

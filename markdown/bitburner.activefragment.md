@@ -8,8 +8,9 @@
 **Signature:**
 
 ```typescript
-interface ActiveFragment 
+interface ActiveFragment extends Fragment 
 ```
+**Extends:** [Fragment](./bitburner.fragment.md)
 
 ## Properties
 
@@ -37,23 +38,6 @@ Description
 <tbody><tr><td>
 
 [highestCharge](./bitburner.activefragment.highestcharge.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[id](./bitburner.activefragment.id.md)
 
 
 </td><td>
