@@ -349,9 +349,9 @@ describe("connect", () => {
     });
     test("Private server", () => {
       const ns = getNS();
-      ns.cloud.purchaseServer("pserver-0", 8);
+      ns.cloud.purchaseServer("cloud-server-0", 8);
       Terminal.connectToServer(SpecialServers.DaedalusServer);
-      expectConnectSuccessfully(ns, "pserver-0");
+      expectConnectSuccessfully(ns, "cloud-server-0");
     });
     test("Hacknet server", () => {
       const ns = getNS();

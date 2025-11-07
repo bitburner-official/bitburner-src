@@ -32,17 +32,20 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
 
       return cost;
     },
-    purchaseServer: (ctx) => (_name, _ram) => {
-      const name = helpers.string(ctx, "name", _name);
+    purchaseServer: (ctx) => (_hostname, _ram) => {
+      let hostname = helpers.string(ctx, "hostname", _hostname);
       const ram = helpers.number(ctx, "ram", _ram);
-      let hostnameStr = String(name);
-      hostnameStr = hostnameStr.replace(/\s+/g, "");
-      if (hostnameStr == "" || isIPAddress(hostnameStr)) {
-        helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}'`);
+      hostname = hostname.replace(/\s+/g, "");
+      if (hostname === "") {
+        helpers.log(ctx, () => `Invalid argument: hostname='${hostname}' is an empty string.`);
         return "";
       }
-      if (hostnameStr.startsWith("hacknet-node-") || hostnameStr.startsWith("hacknet-server-")) {
-        helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}' is a reserved hostname.`);
+      if (isIPAddress(hostname)) {
+        helpers.log(ctx, () => `Invalid argument: hostname='${hostname}' is an IP address.`);
+        return "";
+      }
+      if (hostname.startsWith("hacknet-node-") || hostname.startsWith("hacknet-server-")) {
+        helpers.log(ctx, () => `Invalid argument: hostname='${hostname}' is a reserved hostname.`);
         return "";
       }
 
@@ -72,7 +75,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       }
       const newServ = safelyCreateUniqueServer({
         ip: createUniqueRandomIp(),
-        hostname: hostnameStr,
+        hostname,
         organizationName: "",
         isConnectedTo: false,
         adminRights: true,
@@ -123,17 +126,20 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
     },
 
     deleteServer: (ctx) => (_name) => {
-      const name = helpers.string(ctx, "name", _name);
-      let hostnameStr = String(name);
-      hostnameStr = hostnameStr.replace(/\s\s+/g, "");
-      const server = helpers.getNormalServer(ctx, hostnameStr);
+      let host = helpers.string(ctx, "name", _name);
+      host = host.replace(/\s\s+/g, "");
+      const server = helpers.getNormalServer(ctx, host);
+      const hostname = server.hostname;
 
-      if (!server.purchasedByPlayer || server.hostname === "home") {
-        helpers.log(ctx, () => "Cannot delete non-purchased server.");
+      if (server.hostname === "home") {
+        helpers.log(ctx, () => "Cannot delete your home computer.");
         return false;
       }
 
-      const hostname = server.hostname;
+      if (!server.purchasedByPlayer) {
+        helpers.log(ctx, () => `Cannot delete ${hostname}. You do not own this server.`);
+        return false;
+      }
 
       // Can't delete server you're currently connected to
       if (server.isConnectedTo) {
@@ -180,7 +186,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       for (let i = 0; i < homeComputer.serversOnNetwork.length; ++i) {
         if (hostname == homeComputer.serversOnNetwork[i]) {
           homeComputer.serversOnNetwork.splice(i, 1);
-          helpers.log(ctx, () => `Deleted server '${hostnameStr}`);
+          helpers.log(ctx, () => `Deleted server '${hostname}'.`);
           return true;
         }
       }

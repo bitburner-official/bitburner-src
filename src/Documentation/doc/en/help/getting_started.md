@@ -384,7 +384,7 @@ Paste the following code into the [Script](../basic/scripts.md) editor:
                 //  2. Copy our hacking script onto the newly-purchased cloud server
                 //  3. Run our hacking script on the newly-purchased cloud server with 3 threads
                 //  4. Increment our iterator to indicate that we've bought a new server
-                let hostname = ns.cloud.purchaseServer("cloudServ-" + i, ram);
+                let hostname = ns.cloud.purchaseServer("cloud-server-" + i, ram);
                 ns.scp("early-hack-template.js", hostname);
                 ns.exec("early-hack-template.js", hostname, 3);
                 ++i;

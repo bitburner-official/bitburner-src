@@ -88,7 +88,7 @@ Returns the hostname of the new cloud server as a string. If the function fails 
 ```js
 // Attempt to purchase 5 cloud servers with 64GB of ram each
 const ram = 64;
-const prefix = "cloudServer-";
+const prefix = "cloud-server-";
 for (let i = 0; i < 5; ++i) {
    ns.cloud.purchaseServer(prefix + i, ram);
 }

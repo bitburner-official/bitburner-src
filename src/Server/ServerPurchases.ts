@@ -17,7 +17,7 @@ import { isIPAddress } from "../Types/strings";
 // Returns the cost of purchasing a server with the given RAM
 // Returns Infinity for invalid 'ram' arguments
 /**
- * @param ram Amount of RAM on purchased server (GB)
+ * @param ram Amount of RAM on cloud server (GB)
  * @returns Cost of purchasing the given server. Returns infinity for invalid arguments
  */
 export function getCloudServerCost(ram: number): number {

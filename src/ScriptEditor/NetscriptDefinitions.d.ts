@@ -636,7 +636,7 @@ export interface Server {
   /** Name of company/faction/etc. that this server belongs to, not applicable to all Servers */
   organizationName: string;
 
-  /** Flag indicating whether this is a purchased server */
+  /** Flag indicating whether this is a server owned by the player (e.g., home, cloud servers, hacknet servers) */
   purchasedByPlayer: boolean;
 
   /** Flag indicating whether this server has a backdoor installed by a player */
@@ -4123,7 +4123,7 @@ export interface Cloud {
    * ```js
    * // Attempt to purchase 5 cloud servers with 64GB of ram each
    * const ram = 64;
-   * const prefix = "cloudServer-";
+   * const prefix = "cloud-server-";
    * for (let i = 0; i < 5; ++i) {
    *    ns.cloud.purchaseServer(prefix + i, ram);
    * }

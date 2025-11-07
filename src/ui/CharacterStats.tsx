@@ -263,12 +263,12 @@ export function CharacterStats(): React.ReactElement {
                 <></>
               )}
               <StatsRow
-                name="Servers Owned"
+                name="Cloud Servers"
                 color={Settings.theme.primary}
                 data={{ content: `${Player.purchasedServers.length} / ${getCloudServerLimit()}` }}
               />
               <StatsRow
-                name={`Hacknet ${canAccessBitNodeFeature(9) ? "Servers" : "Nodes"} owned`}
+                name={`Hacknet ${canAccessBitNodeFeature(9) ? "Servers" : "Nodes"}`}
                 color={Settings.theme.primary}
                 data={{
                   content: `${Player.hacknetNodes.length}${
