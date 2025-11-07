@@ -73,7 +73,7 @@ export class Remote {
 
       if (Settings.RemoteFileApiReconnectionDelay > 0) {
         setTimeout(() => {
-          if (autoConnectAttempt === 1 && Settings.RemoteFileApiReconnectionDelay > 0) {
+          if (autoConnectAttempt === 1) {
             SnackbarEvents.emit(`Attempting to auto connect Remote API`, ToastVariant.WARNING, 2000);
           }
 
