@@ -318,7 +318,7 @@ export const breakingChanges300: VersionBreakingChange = {
         "- ns.getServerMaxMoney\n" +
         "- ns.getServerGrowth\n" +
         "- ns.getServerNumPortsRequired\n" +
-        "- ns.deleteServer\n" +
+        "- ns.cloud.deleteServer\n" +
         "- ns.getHackTime\n" +
         "- ns.getGrowTime\n" +
         "- ns.getWeakenTime\n",
@@ -389,6 +389,113 @@ export const breakingChanges300: VersionBreakingChange = {
       info:
         "You have to purchase a WSE account before purchasing 4S Market Data UI access via ns.stock.purchase4SMarketData().\n" +
         "Note that this change does not affect 4S Market Data TIX API access (ns.stock.purchase4SMarketDataTixApi()).",
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.getPurchasedServerCost",
+          migration: { searchValue: "ns.getPurchasedServerCost", replaceValue: "ns.cloud.getServerCost" },
+        },
+        {
+          name: "ns.purchaseServer",
+          migration: { searchValue: "ns.purchaseServer", replaceValue: "ns.cloud.purchaseServer" },
+        },
+        {
+          name: "ns.getPurchasedServerUpgradeCost",
+          migration: {
+            searchValue: "ns.getPurchasedServerUpgradeCost",
+            replaceValue: "ns.cloud.getServerUpgradeCost",
+          },
+        },
+        {
+          name: "ns.upgradePurchasedServer",
+          migration: { searchValue: "ns.upgradePurchasedServer", replaceValue: "ns.cloud.upgradeServer" },
+        },
+        {
+          name: "ns.renamePurchasedServer",
+          migration: { searchValue: "ns.renamePurchasedServer", replaceValue: "ns.cloud.renameServer" },
+        },
+        {
+          name: "ns.deleteServer",
+          migration: { searchValue: "ns.deleteServer", replaceValue: "ns.cloud.deleteServer" },
+        },
+        {
+          name: "ns.getPurchasedServers",
+          migration: { searchValue: "ns.getPurchasedServers", replaceValue: "ns.cloud.getServerNames" },
+        },
+        {
+          name: "ns.getPurchasedServerLimit",
+          migration: { searchValue: "ns.getPurchasedServerLimit", replaceValue: "ns.cloud.getServerLimit" },
+        },
+        {
+          name: "ns.getPurchasedServerMaxRam",
+          migration: { searchValue: "ns.getPurchasedServerMaxRam", replaceValue: "ns.cloud.getRamLimit" },
+        },
+      ],
+      info:
+        "The cloud server (purchased server) functions have been moved to their own interface, ns.cloud.\n" +
+        '"ns.getPurchasedServerCost()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerCost()"\n\n' +
+        '"ns.purchaseServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.purchaseServer()"\n\n' +
+        '"ns.getPurchasedServerUpgradeCost()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerUpgradeCost()"\n\n' +
+        '"ns.upgradePurchasedServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.upgradeServer()"\n\n' +
+        '"ns.renamePurchasedServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.renameServer()"\n\n' +
+        '"ns.deleteServer()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.deleteServer()"\n\n' +
+        '"ns.getPurchasedServers()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerNames()"\n\n' +
+        '"ns.getPurchasedServerLimit()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getServerLimit()"\n\n' +
+        '"ns.getPurchasedServerMaxRam()" was removed.\n' +
+        'It has been automatically replaced with "ns.cloud.getRamLimit()"',
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerCost",
+          migration: {
+            searchValue: "PurchasedServerCost",
+            replaceValue: "CloudServerCost",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerSoftcap",
+          migration: {
+            searchValue: "PurchasedServerSoftcap",
+            replaceValue: "CloudServerSoftcap",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerLimit",
+          migration: {
+            searchValue: "PurchasedServerLimit",
+            replaceValue: "CloudServerLimit",
+          },
+        },
+        {
+          name: "ns.getBitNodeMultipliers().PurchasedServerMaxRam",
+          migration: {
+            searchValue: "PurchasedServerMaxRam",
+            replaceValue: "CloudServerMaxRam",
+          },
+        },
+      ],
+      info:
+        "ns.getBitNodeMultipliers() Purchased Server properties have been renamed to CloudServers with the creation of the cloud API.\n" +
+        '"ns.getBitNodeMultipliers().PurchasedServerCost" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerCost".\n\n' +
+        '"ns.getBitNodeMultipliers().PurchasedServerSoftcap" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerSoftcap".\n\n' +
+        '"ns.getBitNodeMultipliers().PurchasedServerLimit" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerLimit".\n\n' +
+        '"ns.getBitNodeMultipliers().PurchasedServerMaxRam" was removed.\n' +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerMaxRam".',
       showWarning: false,
     },
   ],

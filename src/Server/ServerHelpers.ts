@@ -19,7 +19,7 @@ import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 export enum ServerOwnershipType {
   All = 0,
   Foreign = 1, // Non-owned servers
-  Owned = 2, // Home Computer, Purchased Servers, and Hacknet Servers
+  Owned = 2, // Home Computer, Cloud Servers, and Hacknet Servers
   Purchased = 3, // Everything from Owned except home computer
 }
 

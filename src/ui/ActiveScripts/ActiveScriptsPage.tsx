@@ -77,7 +77,7 @@ export function ActiveScriptsPage(): React.ReactElement {
         if (numA < numB) return -1;
         return 1;
       }
-      // Sorting for other purchased servers is alphabetical. There's probably a better way to do this.
+      // Sorting for other cloud servers is alphabetical. There's probably a better way to do this.
       const fakeArray = [serverA.hostname, serverB.hostname].sort();
       if (serverA.hostname === fakeArray[0]) return -1;
       return 1;
