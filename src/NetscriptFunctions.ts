@@ -34,23 +34,14 @@ import {
   SpecialBladeburnerActionTypeForSleeve,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
-import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
+import { GetServer } from "./Server/AllServers";
 import {
   getServerOnNetwork,
   numCycleForGrowth,
   numCycleForGrowthCorrected,
   processSingleServerGrowth,
-  safelyCreateUniqueServer,
   getWeakenEffect,
 } from "./Server/ServerHelpers";
-import {
-  getPurchasedServerUpgradeCost,
-  getPurchaseServerCost,
-  getPurchaseServerLimit,
-  getPurchaseServerMaxRam,
-  renamePurchasedServer,
-  upgradePurchasedServer,
-} from "./Server/ServerPurchases";
 import { influenceStockThroughServerGrow } from "./StockMarket/PlayerInfluencing";
 import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
@@ -85,6 +76,7 @@ import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
 import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
+import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { SnackbarEvents } from "./ui/React/Snackbar";
@@ -159,6 +151,7 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
+  cloud: NetscriptCloud(),
   sprintf:
     (ctx) =>
     (_format, ...args) => {
@@ -788,7 +781,7 @@ export const ns: InternalAPI<NSFull> = {
         continue;
       }
       if (!path.endsWith(".lit")) {
-        throw helpers.errorMessage(ctx, "Only works for scripts, .lit and .txt files.");
+        throw helpers.errorMessage(ctx, "Only works for script, text, and .lit files");
       }
       lits.push(path);
     }
@@ -1044,198 +1037,6 @@ export const ns: InternalAPI<NSFull> = {
     (fn, host, ...scriptArgs) => {
       const ident = helpers.scriptIdentifier(ctx, fn, host, scriptArgs);
       return helpers.getRunningScript(ctx, ident) !== null;
-    },
-  getPurchasedServerLimit: () => () => {
-    return getPurchaseServerLimit();
-  },
-  getPurchasedServerMaxRam: () => () => {
-    return getPurchaseServerMaxRam();
-  },
-  getPurchasedServerCost: (ctx) => (_ram) => {
-    const ram = helpers.number(ctx, "ram", _ram);
-
-    const cost = getPurchaseServerCost(ram);
-    if (cost === Infinity) {
-      if (ram > getPurchaseServerMaxRam()) {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
-      } else {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
-      }
-      return Infinity;
-    }
-
-    return cost;
-  },
-  purchaseServer: (ctx) => (_name, _ram) => {
-    const name = helpers.string(ctx, "name", _name);
-    const ram = helpers.number(ctx, "ram", _ram);
-    let hostnameStr = String(name);
-    hostnameStr = hostnameStr.replace(/\s+/g, "");
-    if (hostnameStr == "" || isIPAddress(hostnameStr)) {
-      helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}'`);
-      return "";
-    }
-    if (hostnameStr.startsWith("hacknet-node-") || hostnameStr.startsWith("hacknet-server-")) {
-      helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}' is a reserved hostname.`);
-      return "";
-    }
-
-    if (Player.purchasedServers.length >= getPurchaseServerLimit()) {
-      helpers.log(
-        ctx,
-        () =>
-          `You have reached the maximum limit of ${getPurchaseServerLimit()} servers. You cannot purchase any more.`,
-      );
-      return "";
-    }
-
-    const cost = getPurchaseServerCost(ram);
-    if (cost === Infinity) {
-      if (ram > getPurchaseServerMaxRam()) {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
-      } else {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
-      }
-
-      return "";
-    }
-
-    if (Player.money < cost) {
-      helpers.log(ctx, () => `Not enough money to purchase server. Need ${formatMoney(cost)}`);
-      return "";
-    }
-    const newServ = safelyCreateUniqueServer({
-      ip: createUniqueRandomIp(),
-      hostname: hostnameStr,
-      organizationName: "",
-      isConnectedTo: false,
-      adminRights: true,
-      purchasedByPlayer: true,
-      maxRam: ram,
-    });
-    AddToAllServers(newServ);
-
-    Player.purchasedServers.push(newServ.hostname);
-    const homeComputer = Player.getHomeComputer();
-    homeComputer.serversOnNetwork.push(newServ.hostname);
-    newServ.serversOnNetwork.push(homeComputer.hostname);
-    Player.loseMoney(cost, "servers");
-    helpers.log(ctx, () => `Purchased new server with hostname '${newServ.hostname}' for ${formatMoney(cost)}`);
-    return newServ.hostname;
-  },
-
-  getPurchasedServerUpgradeCost: (ctx) => (_host, _ram) => {
-    const host = helpers.string(ctx, "host", _host);
-    const ram = helpers.number(ctx, "ram", _ram);
-    try {
-      return getPurchasedServerUpgradeCost(host, ram);
-    } catch (err) {
-      helpers.log(ctx, () => String(err));
-      return -1;
-    }
-  },
-
-  upgradePurchasedServer: (ctx) => (_host, _ram) => {
-    const host = helpers.string(ctx, "host", _host);
-    const ram = helpers.number(ctx, "ram", _ram);
-    try {
-      upgradePurchasedServer(host, ram);
-      return true;
-    } catch (err) {
-      helpers.log(ctx, () => String(err));
-      return false;
-    }
-  },
-
-  renamePurchasedServer: (ctx) => (_hostname, _newName) => {
-    const hostname = helpers.string(ctx, "hostname", _hostname);
-    const newName = helpers.string(ctx, "newName", _newName);
-    try {
-      renamePurchasedServer(hostname, newName);
-      return true;
-    } catch (err) {
-      helpers.log(ctx, () => String(err));
-      return false;
-    }
-  },
-
-  deleteServer: (ctx) => (_name) => {
-    const name = helpers.string(ctx, "name", _name);
-    let hostnameStr = String(name);
-    hostnameStr = hostnameStr.replace(/\s\s+/g, "");
-    const server = helpers.getNormalServer(ctx, hostnameStr);
-
-    if (!server.purchasedByPlayer || server.hostname === "home") {
-      helpers.log(ctx, () => "Cannot delete non-purchased server.");
-      return false;
-    }
-
-    const hostname = server.hostname;
-
-    // Can't delete server you're currently connected to
-    if (server.isConnectedTo) {
-      helpers.log(ctx, () => "You are currently connected to the server you are trying to delete.");
-      return false;
-    }
-
-    // A server cannot delete itself
-    if (hostname === ctx.workerScript.hostname) {
-      helpers.log(ctx, () => "Cannot delete the server this script is running on.");
-      return false;
-    }
-
-    // Delete all scripts running on server
-    if (server.runningScriptMap.size > 0) {
-      helpers.log(ctx, () => `Cannot delete server '${hostname}' because it still has scripts running.`);
-      return false;
-    }
-
-    // Delete from player's purchasedServers array
-    let found = false;
-    for (let i = 0; i < Player.purchasedServers.length; ++i) {
-      if (hostname == Player.purchasedServers[i]) {
-        found = true;
-        Player.purchasedServers.splice(i, 1);
-        break;
-      }
-    }
-
-    if (!found) {
-      helpers.log(
-        ctx,
-        () => `Could not identify server ${hostname} as a purchased server. This is a bug. Report to dev.`,
-      );
-      return false;
-    }
-
-    // Delete from all servers
-    DeleteServer(hostname);
-
-    // Delete from home computer
-    found = false;
-    const homeComputer = Player.getHomeComputer();
-    for (let i = 0; i < homeComputer.serversOnNetwork.length; ++i) {
-      if (hostname == homeComputer.serversOnNetwork[i]) {
-        homeComputer.serversOnNetwork.splice(i, 1);
-        helpers.log(ctx, () => `Deleted server '${hostnameStr}`);
-        return true;
-      }
-    }
-    // Wasn't found on home computer
-    helpers.log(ctx, () => `Could not find server ${hostname} as a purchased server. This is a bug. Report to dev.`);
-    return false;
-  },
-  getPurchasedServers:
-    (ctx) =>
-    (_returnOpts): string[] => {
-      const returnOpts = helpers.hostReturnOptions(_returnOpts);
-      const res: string[] = [];
-      for (const hostname of Player.purchasedServers) {
-        const server = helpers.getServer(ctx, hostname);
-        const id = helpers.returnServerID(server, returnOpts);
-        res.push(id);
-      }
-      return res;
     },
   writePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
@@ -1611,7 +1412,7 @@ export const ns: InternalAPI<NSFull> = {
     ) {
       throw helpers.errorMessage(
         ctx,
-        `'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json)`,
+        `'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css)`,
       );
     }
     if (sourcePath === destinationPath) {
@@ -1724,6 +1525,42 @@ setRemovedFunctions(ns, {
   setTitle: {
     version: "3.0.0",
     replacement: "ns.ui.setTailTitle()",
+  },
+  getPurchasedServerCost: {
+    version: "3.0.0",
+    replacement: "ns.cloud.getServerCost()",
+  },
+  purchaseServer: {
+    version: "3.0.0",
+    replacement: "ns.cloud.purchaseServer()",
+  },
+  getPurchasedServerUpgradeCost: {
+    version: "3.0.0",
+    replacement: "ns.cloud.getServerUpgradeCost()",
+  },
+  upgradePurchasedServer: {
+    version: "3.0.0",
+    replacement: "ns.cloud.upgradeServer()",
+  },
+  renamePurchasedServer: {
+    version: "3.0.0",
+    replacement: "ns.cloud.renameServer()",
+  },
+  deleteServer: {
+    version: "3.0.0",
+    replacement: "ns.cloud.deleteServer()",
+  },
+  getPurchasedServers: {
+    version: "3.0.0",
+    replacement: "ns.cloud.getServerNames()",
+  },
+  getPurchasedServerLimit: {
+    version: "3.0.0",
+    replacement: "ns.cloud.getServerLimit()",
+  },
+  getPurchasedServerMaxRam: {
+    version: "3.0.0",
+    replacement: "ns.cloud.getRamLimit()",
   },
 });
 

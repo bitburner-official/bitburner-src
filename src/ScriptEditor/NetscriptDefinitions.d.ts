@@ -407,7 +407,7 @@ interface BasicHGWOptions {
 
 /**
  * Options to control how a server identifier (hostname or IP address) is returned.
- * Affects the behavior of {@link NS.scan | scan}, {@link NS.getPurchasedServers | getPurchasedServers}, and {@link Singularity.getCurrentServer | getCurrentServer}
+ * Affects the behavior of {@link NS.scan | scan}, {@link Cloud.getServerNames | getServerNames}, and {@link Singularity.getCurrentServer | getCurrentServer}
  * @public
  */
 interface HostReturnOptions {
@@ -636,7 +636,7 @@ export interface Server {
   /** Name of company/faction/etc. that this server belongs to, not applicable to all Servers */
   organizationName: string;
 
-  /** Flag indicating whether this is a purchased server */
+  /** Flag indicating whether this is a server owned by the player (e.g., home, cloud servers, hacknet servers) */
   purchasedByPlayer: boolean;
 
   /** Flag indicating whether this server has a backdoor installed by a player */
@@ -754,14 +754,14 @@ interface BitNodeMultipliers {
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerCost: number;
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerSoftcap: number;
-  /** Influences the maximum number of purchased servers you can have */
-  PurchasedServerLimit: number;
-  /** Influences the maximum allowed RAM for a purchased server */
-  PurchasedServerMaxRam: number;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerCost: number;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerSoftcap: number;
+  /** Influences the maximum number of cloud servers you can have */
+  CloudServerLimit: number;
+  /** Influences the maximum allowed RAM for a cloud server */
+  CloudServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction: number;
   /** Influences how much money is stolen from a server when the player performs a hack against it. */
@@ -4073,6 +4073,145 @@ export interface CodingContract {
 }
 
 /**
+ * Cloud API
+ * @public
+ */
+export interface Cloud {
+  /**
+   * Get cost of purchasing a cloud server.
+   * @remarks
+   * RAM cost: 0.25 GB
+   *
+   * Returns the cost to purchase a cloud server with the specified amount of ram.
+   *
+   * @example
+   * ```js
+   * const ram = 2 ** 20;
+   * const cost = ns.cloud.getServerCost(ram);
+   * ns.tprint(`A cloud server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
+   * ```
+   * @param ram - Amount of RAM of a potential cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns The cost to purchase a cloud server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
+   */
+  getServerCost(ram: number): number;
+
+  /**
+   * Purchase a cloud server.
+   * @remarks
+   * RAM cost: 2.25 GB
+   *
+   * Purchase a cloud server with the specified hostname and amount of RAM.
+   *
+   * The hostname argument can be any data type, but it will be converted to a string
+   * and have whitespace removed. Anything that resolves to an empty string or IP address
+   * will cause the function to fail. If there is already a cloud server with the specified
+   * hostname, then the function will automatically append a number at the end of the hostname
+   * argument value until it finds a unique hostname. For example, if the script calls
+   * `purchaseServer(“foo”, 4)` but a server named “foo” already exists, then it will
+   * automatically change the hostname to `foo-0`. If there is already a server with the
+   * hostname `foo-0`, then it will change the hostname to `foo-1`, and so on.
+   *
+   * Note that there is a maximum limit to the amount of cloud servers you can purchase.
+   *
+   * Returns the hostname of the new cloud server as a string. If the function
+   * fails to purchase a cloud server, then it will return an empty string. The function will
+   * fail if the arguments passed in are invalid, if the player does not have enough
+   * money to purchase the specified cloud server, or if the player has exceeded the maximum
+   * amount of cloud servers.
+   *
+   * @example
+   * ```js
+   * // Attempt to purchase 5 cloud servers with 64GB of ram each
+   * const ram = 64;
+   * const prefix = "cloud-server-";
+   * for (let i = 0; i < 5; ++i) {
+   *    ns.cloud.purchaseServer(prefix + i, ram);
+   * }
+   * ```
+   * @param hostname - Hostname of the cloud server.
+   * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns The hostname of the new cloud server.
+   */
+  purchaseServer(hostname: string, ram: number): string;
+
+  /**
+   * Get cost of upgrading a cloud server to the given RAM.
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @param host - Hostname/IP of the cloud server to upgrade.
+   * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns The price to upgrade or -1 if either input is not valid, i.e. host is not the name of a cloud server or ram is not a valid amount.
+   */
+  getServerUpgradeCost(host: string, ram: number): number;
+
+  /**
+   * Upgrade a cloud server's RAM.
+   * @remarks
+   * RAM cost: 0.25 GB
+   *
+   * @param host - Hostname/IP of the cloud server to upgrade.
+   * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns True if the upgrade succeeded, and false otherwise.
+   */
+  upgradeServer(host: string, ram: number): boolean;
+
+  /**
+   * Rename a cloud server.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param hostname - Current cloud server hostname.
+   * @param newName - New cloud server hostname.
+   * @returns True if successful, and false otherwise.
+   */
+  renameServer(hostname: string, newName: string): boolean;
+
+  /**
+   * Delete a cloud server.
+   * @remarks
+   * 2.25 GB
+   *
+   * Deletes one of your cloud servers, which is specified by its hostname/ip.
+   *
+   * The host argument can be any data type, but it will be converted to a string.
+   * Whitespace is automatically removed from the string. This function will not delete a
+   * cloud server that still has scripts running on it.
+   *
+   * @param host - Hostname/IP of the cloud server to delete.
+   * @returns True if successful, and false otherwise.
+   */
+  deleteServer(host: string): boolean;
+
+  /**
+   * Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
+   * Returns hostnames by default.
+   *
+   * @remarks 1.05 GB
+   *
+   * @param returnOpts - Optional. Controls whether the function returns IPs
+   * @returns Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
+   */
+  getServerNames(returnOpts?: HostReturnOptions): string[];
+
+  /**
+   * Returns the maximum number of cloud servers you can purchase.
+   *
+   * @remarks RAM cost: 0.05 GB
+   * @returns Returns the maximum number of cloud servers you can purchase.
+   */
+  getServerLimit(): number;
+
+  /**
+   * Returns the maximum RAM that a cloud server can have.
+   *
+   * @remarks RAM cost: 0.05 GB
+   * @returns Returns the maximum RAM (in GB) that a cloud server can have.
+   */
+  getRamLimit(): number;
+}
+
+/**
  * Format API
  * @public
  */
@@ -6237,6 +6376,12 @@ export interface NS {
   readonly codingcontract: CodingContract;
 
   /**
+   * Namespace for {@link Cloud | cloud} functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly cloud: Cloud;
+
+  /**
    * Namespace for {@link Format | formatting} functions.
    * @remarks RAM cost: 0 GB
    */
@@ -7607,144 +7752,11 @@ export interface NS {
   ramOverride(ram?: number): number;
 
   /**
-   * Get cost of purchasing a server.
-   * @remarks
-   * RAM cost: 0.25 GB
-   *
-   * Returns the cost to purchase a server with the specified amount of ram.
-   *
-   * @example
-   * ```js
-   * const ram = 2 ** 20;
-   * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
-   * ```
-   * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
-   */
-  getPurchasedServerCost(ram: number): number;
-
-  /**
-   * Purchase a server.
-   * @remarks
-   * RAM cost: 2.25 GB
-   *
-   * Purchase a server with the specified hostname and amount of RAM.
-   *
-   * The hostname argument can be any data type, but it will be converted to a string
-   * and have whitespace removed. Anything that resolves to an empty string or IP address
-   * will cause the function to fail. If there is already a server with the specified
-   * hostname, then the function will automatically append a number at the end of the hostname
-   * argument value until it finds a unique hostname. For example, if the script calls
-   * `purchaseServer(“foo”, 4)` but a server named “foo” already exists, then it will
-   * automatically change the hostname to `foo-0`. If there is already a server with the
-   * hostname `foo-0`, then it will change the hostname to `foo-1`, and so on.
-   *
-   * Note that there is a maximum limit to the amount of servers you can purchase.
-   *
-   * Returns the hostname of the newly purchased server as a string. If the function
-   * fails to purchase a server, then it will return an empty string. The function will
-   * fail if the arguments passed in are invalid, if the player does not have enough
-   * money to purchase the specified server, or if the player has exceeded the maximum
-   * amount of servers.
-   *
-   * @example
-   * ```js
-   * // Attempt to purchase 5 servers with 64GB of ram each
-   * const ram = 64;
-   * const prefix = "pserv-";
-   * for (let i = 0; i < 5; ++i) {
-   *    ns.purchaseServer(prefix + i, ram);
-   * }
-   * ```
-   * @param hostname - Hostname of the purchased server.
-   * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The hostname of the newly purchased server.
-   */
-  purchaseServer(hostname: string, ram: number): string;
-
-  /**
-   * Get cost of upgrading a purchased server to the given ram.
-   * @remarks
-   * RAM cost: 0.1 GB
-   *
-   * @param host - Hostname/IP of the server to upgrade.
-   * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The price to upgrade or -1 if either input is not valid, i.e. host is not the name of a purchased server or ram is not a valid amount.
-   */
-  getPurchasedServerUpgradeCost(host: string, ram: number): number;
-
-  /**
-   * Upgrade a purchased server's RAM.
-   * @remarks
-   * RAM cost: 0.25 GB
-   *
-   * @param host - Hostname/IP of the server to upgrade.
-   * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns True if the upgrade succeeded, and false otherwise.
-   */
-  upgradePurchasedServer(host: string, ram: number): boolean;
-
-  /**
-   * Rename a purchased server.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * @param hostname - Current server hostname.
-   * @param newName - New server hostname.
-   * @returns True if successful, and false otherwise.
-   */
-  renamePurchasedServer(hostname: string, newName: string): boolean;
-
-  /**
-   * Delete a purchased server.
-   * @remarks
-   * 2.25 GB
-   *
-   * Deletes one of your purchased servers, which is specified by its hostname/ip.
-   *
-   * The host argument can be any data type, but it will be converted to a string.
-   * Whitespace is automatically removed from the string. This function will not delete a
-   * server that still has scripts running on it.
-   *
-   * @param host - Hostname/IP of the server to delete.
-   * @returns True if successful, and false otherwise.
-   */
-  deleteServer(host: string): boolean;
-
-  /**
-   * Returns an array with the hostnames or IP addresses of all of the servers you have purchased.
-   * Returns hostnames by default.
-   *
-   * @remarks 1.05 GB
-   *
-   * @param returnOpts - Optional. Controls whether the function returns IPs
-   * @returns Returns an array with the hostnames or IP addresses of all of the servers you have purchased.
-   */
-  getPurchasedServers(returnOpts?: HostReturnOptions): string[];
-
-  /**
-   * Returns the maximum number of servers you can purchase.
-   *
-   * @remarks RAM cost: 0.05 GB
-   * @returns Returns the maximum number of servers you can purchase.
-   */
-  getPurchasedServerLimit(): number;
-
-  /**
-   * Returns the maximum RAM that a purchased server can have.
-   *
-   * @remarks RAM cost: 0.05 GB
-   * @returns Returns the maximum RAM (in GB) that a purchased server can have.
-   */
-  getPurchasedServerMaxRam(): number;
-
-  /**
    * Write data to a file.
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function can be used to write data to a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx).
+   * This function can be used to write data to a text file (.txt, .json, .css) or a script (.js, .jsx, .ts, .tsx).
    *
    * This function will write data to that file. If the specified file does not exist,
    * then it will be created. The third argument mode defines how the data will be written to
@@ -7792,7 +7804,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt, .json) or script (.js, .jsx, .ts, .tsx).
+   * This function is used to read data from a text file (.txt, .json, .css) or script (.js, .jsx, .ts, .tsx).
    *
    * This function will return the data in the specified file.
    * If the file does not exist, an empty string will be returned.
@@ -7809,7 +7821,7 @@ export interface NS {
    *
    * This function returns the metadata associated with the specified file.
    *
-   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script
+   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script
    * (.js, .jsx, .ts, .tsx).
    * @Returns The metadata of the file.
    */
@@ -7968,8 +7980,8 @@ export interface NS {
    * Returns 0 if the script does not exist.
    *
    * @param script - Filename of script. This is case-sensitive.
-   * @param host - Hostname/IP of target server the script is located on. Optional. Defaults to the server the calling script is running on.
-   * @returns Amount of RAM (in GB) required to run the specified script on the target server, and 0 if the script does not exist.
+   * @param host - Hostname/IP of the server the target script is located on. Optional. Defaults to the server the calling script is running on.
+   * @returns Amount of RAM (in GB) required to run the specified script, and 0 if the script does not exist.
    */
   getScriptRam(script: string, host?: string): number;
 
@@ -8186,7 +8198,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Retrieves data from a URL and downloads it to a file on the specified server.
-   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json).
+   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css).
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
@@ -8278,7 +8290,7 @@ export interface NS {
    *
    * Move the source file to the specified destination on the target server.
    *
-   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json). It cannot, however, be
+   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). It cannot, however, be
    * used to convert from script to text file, or vice versa.
    *
    * This function can also be used to rename files.

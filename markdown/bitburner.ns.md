@@ -94,6 +94,27 @@ Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. Contains spoi
 </td></tr>
 <tr><td>
 
+[cloud](./bitburner.ns.cloud.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[Cloud](./bitburner.cloud.md)
+
+
+</td><td>
+
+Namespace for [cloud](./bitburner.cloud.md) functions.
+
+
+</td></tr>
+<tr><td>
+
 [codingcontract](./bitburner.ns.codingcontract.md)
 
 
@@ -537,17 +558,6 @@ Clear data from a port.
 </td></tr>
 <tr><td>
 
-[deleteServer(host)](./bitburner.ns.deleteserver.md)
-
-
-</td><td>
-
-Delete a purchased server.
-
-
-</td></tr>
-<tr><td>
-
 [disableLog(fn)](./bitburner.ns.disablelog.md)
 
 
@@ -796,61 +806,6 @@ Get information about the player.
 </td><td>
 
 Get all data on a port.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServerCost(ram)](./bitburner.ns.getpurchasedservercost.md)
-
-
-</td><td>
-
-Get cost of purchasing a server.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServerLimit()](./bitburner.ns.getpurchasedserverlimit.md)
-
-
-</td><td>
-
-Returns the maximum number of servers you can purchase.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServerMaxRam()](./bitburner.ns.getpurchasedservermaxram.md)
-
-
-</td><td>
-
-Returns the maximum RAM that a purchased server can have.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServers(returnOpts)](./bitburner.ns.getpurchasedservers.md)
-
-
-</td><td>
-
-Returns an array with the hostnames or IP addresses of all of the servers you have purchased. Returns hostnames by default.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServerUpgradeCost(host, ram)](./bitburner.ns.getpurchasedserverupgradecost.md)
-
-
-</td><td>
-
-Get cost of upgrading a purchased server to the given ram.
 
 
 </td></tr>
@@ -1395,17 +1350,6 @@ List running scripts on a server.
 </td></tr>
 <tr><td>
 
-[purchaseServer(hostname, ram)](./bitburner.ns.purchaseserver.md)
-
-
-</td><td>
-
-Purchase a server.
-
-
-</td></tr>
-<tr><td>
-
 [ramOverride(ram)](./bitburner.ns.ramoverride.md)
 
 
@@ -1445,17 +1389,6 @@ Read data from a port.
 </td><td>
 
 Runs relaySMTP.exe on a server.
-
-
-</td></tr>
-<tr><td>
-
-[renamePurchasedServer(hostname, newName)](./bitburner.ns.renamepurchasedserver.md)
-
-
-</td><td>
-
-Rename a purchased server.
 
 
 </td></tr>
@@ -1654,17 +1587,6 @@ Prints a ReactNode to the terminal.
 </td><td>
 
 Attempt to write to a port.
-
-
-</td></tr>
-<tr><td>
-
-[upgradePurchasedServer(host, ram)](./bitburner.ns.upgradepurchasedserver.md)
-
-
-</td><td>
-
-Upgrade a purchased server's RAM.
 
 
 </td></tr>

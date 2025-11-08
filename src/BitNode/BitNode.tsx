@@ -558,7 +558,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ServerMaxMoney: 0.08,
         ServerStartingMoney: 0.4,
 
-        PurchasedServerSoftcap: 1.3,
+        CloudServerSoftcap: 1.3,
 
         CrimeMoney: 3,
 
@@ -584,8 +584,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         HomeComputerRamCost: 1.5,
 
-        PurchasedServerCost: 2,
-        PurchasedServerSoftcap: 1.3,
+        CloudServerCost: 2,
+        CloudServerSoftcap: 1.3,
 
         CompanyWorkMoney: 0.25,
         CrimeMoney: 0.25,
@@ -611,7 +611,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ServerMaxMoney: 0.1125,
         ServerStartingMoney: 0.75,
 
-        PurchasedServerSoftcap: 1.2,
+        CloudServerSoftcap: 1.2,
 
         CompanyWorkMoney: 0.1,
         CrimeMoney: 0.2,
@@ -639,7 +639,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ServerStartingSecurity: 2,
         ServerStartingMoney: 0.5,
 
-        PurchasedServerSoftcap: 1.2,
+        CloudServerSoftcap: 1.2,
 
         CrimeMoney: 0.5,
         HacknetNodeMoney: 0.2,
@@ -671,7 +671,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ServerStartingMoney: 0.5,
         ServerStartingSecurity: 1.5,
 
-        PurchasedServerSoftcap: 2,
+        CloudServerSoftcap: 2,
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 0.75,
@@ -705,7 +705,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ServerStartingMoney: 0.5,
         ServerStartingSecurity: 1.5,
 
-        PurchasedServerSoftcap: 2,
+        CloudServerSoftcap: 2,
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 0.75,
@@ -741,7 +741,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
     }
     case 8: {
       return new BitNodeMultipliers({
-        PurchasedServerSoftcap: 4,
+        CloudServerSoftcap: 4,
 
         CompanyWorkMoney: 0,
         CrimeMoney: 0,
@@ -782,7 +782,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         HomeComputerRamCost: 5,
 
-        PurchasedServerLimit: 0,
+        CloudServerLimit: 0,
 
         CrimeMoney: 0.5,
         ScriptHackMoney: 0.1,
@@ -819,10 +819,10 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         HomeComputerRamCost: 1.5,
 
-        PurchasedServerCost: 5,
-        PurchasedServerSoftcap: 1.1,
-        PurchasedServerLimit: 0.6,
-        PurchasedServerMaxRam: 0.5,
+        CloudServerCost: 5,
+        CloudServerSoftcap: 1.1,
+        CloudServerLimit: 0.6,
+        CloudServerMaxRam: 0.5,
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 0.5,
@@ -860,7 +860,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ServerStartingMoney: 0.1,
         ServerWeakenRate: 2,
 
-        PurchasedServerSoftcap: 2,
+        CloudServerSoftcap: 2,
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 3,
@@ -910,10 +910,10 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         HomeComputerRamCost: inc,
 
-        PurchasedServerCost: inc,
-        PurchasedServerSoftcap: inc,
-        PurchasedServerLimit: dec,
-        PurchasedServerMaxRam: dec,
+        CloudServerCost: inc,
+        CloudServerSoftcap: inc,
+        CloudServerLimit: dec,
+        CloudServerMaxRam: dec,
 
         CompanyWorkMoney: dec,
         CrimeMoney: dec,
@@ -965,7 +965,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         DexterityLevelMultiplier: 0.7,
         AgilityLevelMultiplier: 0.7,
 
-        PurchasedServerSoftcap: 1.6,
+        CloudServerSoftcap: 1.6,
 
         ServerMaxMoney: 0.3375,
         ServerStartingMoney: 0.75,
