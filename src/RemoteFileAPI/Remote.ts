@@ -27,7 +27,7 @@ export class Remote {
   public startConnection(autoConnectAttempt = 1): void {
     const address = (Settings.UseWssForRemoteFileApi ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
 
-    //This tracks if a connection was established to prevent redundant toasts
+    // This tracks if a connection was established to prevent redundant toasts
     let successfullyConnected = false;
 
     try {
@@ -38,7 +38,7 @@ export class Remote {
       return;
     }
 
-    //log connection errors on manual and the first auto connect attempts
+    // Log connection errors on manual and the first auto connect attempts
     this.connection.addEventListener("error", (e: Event) => {
       if (autoConnectAttempt <= 1 || successfullyConnected) {
         showErrorMessage(address, JSON.stringify(e));
@@ -66,7 +66,10 @@ export class Remote {
         return;
       }
 
-      //Printing a connetion error alongside the connection closed warning is both redunant and confusing
+      /**
+       * Only show the warning if the connection was established. Printing the connection error alongside the connection
+       * closed warning is both redundant and confusing.
+       */
       if (successfullyConnected) {
         SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
       }
@@ -77,7 +80,7 @@ export class Remote {
             SnackbarEvents.emit(`Attempting to auto connect Remote API`, ToastVariant.WARNING, 2000);
           }
 
-          //reset attempts if a connection was established
+          // Reset attempts if a connection was established
           const attempts = successfullyConnected ? 1 : autoConnectAttempt + 1;
 
           this.startConnection(attempts);
