@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, SvgIcon, Tooltip, Typography } from "@mui/material";
+import { SvgIcon, Tooltip, Typography } from "@mui/material";
 import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
 import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
@@ -123,8 +123,8 @@ export function ServerSummary({
   const componentsToShow = [...components.slice(0, maxIcons), runningScriptsComponent];
 
   return (
-    <Container className={`${classes.inlineFlexBox} ${classes.noPadding}`} disableGutters>
+    <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
       {componentsToShow}
-    </Container>
+    </div>
   );
 }

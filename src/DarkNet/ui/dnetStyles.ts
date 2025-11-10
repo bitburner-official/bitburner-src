@@ -12,27 +12,9 @@ export const MAP_BORDER_WIDTH = 300;
 
 export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" })((theme: Theme, __, __classes) => ({
   DWServer: {
-    width: `${DW_SERVER_WIDTH}px`,
-    height: `${DW_SERVER_HEIGHT}px`,
-    borderWidth: "1px",
-    borderStyle: "solid",
-    position: "absolute",
-    padding: "8px",
-    borderRadius: "4px",
-    zIndex: 10,
-    cursor: "auto",
-    backgroundColor: "#000",
-    ["&:hover"]: {
-      backgroundColor: "#333",
+    "&:hover": {
+      backgroundColor: "#333 !important",
     },
-  },
-  serverContainer: {
-    mx: 1,
-    padding: 0,
-    margin: 0,
-  },
-  ip: {
-    fontSize: "0.9em",
   },
   NetWrapper: {
     width: "100%",
@@ -40,13 +22,6 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     overflow: "scroll",
     position: "relative",
     border: "solid 1px slategray",
-  },
-  ServerName: {
-    padding: 0,
-    width: "86%",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
   },
   button: {
     color: theme.colors.white,
@@ -140,3 +115,46 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     color: "grey",
   },
 }));
+
+/*
+   React by default creates a new <style> element with duplicate css for each copy of each component that uses makeStyles.
+   To reduce the performance impact of that option, these styles are defined as an object literal and applied directly to
+   the element's style attribute. Also included is the relevant styles for Mui Button, for the same reason.
+
+   This is done instead of adding hundreds of <style> tags into the DOM, which in some cases took multiple seconds
+   waiting for insertBefore calls and reflowing the page when loading the darknet UI view.
+ */
+export const DWServerStyles = {
+  width: `${DW_SERVER_WIDTH}px`,
+  height: `${DW_SERVER_HEIGHT}px`,
+  borderWidth: "1px",
+  borderStyle: "solid",
+  padding: "8px",
+  borderRadius: "4px",
+  zIndex: 10,
+  cursor: "auto",
+  backgroundColor: "#000",
+
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  outline: 0,
+  margin: 0,
+  verticalAlign: "middle",
+  textDecoration: "none",
+  fontFamily: 'JetBrainsMono, "Courier New", monospace',
+  fontWeight: 500,
+  fontSize: "0.875rem",
+  lineHeight: 1.75,
+  transition:
+    "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+  color: "#0c0",
+};
+
+export const ServerName = {
+  padding: 0,
+  width: "86%",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+};

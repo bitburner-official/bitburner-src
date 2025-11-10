@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Container, Typography, SvgIcon } from "@mui/material";
+import { Typography, SvgIcon } from "@mui/material";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { getIcon } from "./ServerIcon";
 import { DarknetState } from "../models/DarknetState";
@@ -7,6 +7,7 @@ import { getPixelPosition } from "./networkCanvas";
 import { ServerSummary } from "./ServerSummary";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
+import { DWServerStyles, ServerName } from "./dnetStyles";
 
 export type DWServerProps = {
   server: DarknetServer;
@@ -18,7 +19,6 @@ export type DWServerProps = {
 
 export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const color = server.hasStasisLink ? classes.goldBorder : server.hasAdminRights ? classes.green : classes.grey;
   const icon = getIcon(server.icon);
 
   const authButtonHandler = () => {
@@ -31,37 +31,39 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
     setOpen(false);
   };
 
-  const getServerPositionStyles = (server: DarknetServer) => {
+  const getServerStyles = (server: DarknetServer) => {
     const position = getPixelPosition(server);
     return {
+      ...DWServerStyles,
       top: `${position.top}px`,
       left: `${position.left}px`,
+      borderColor: server.hasStasisLink ? "gold" : server.hasAdminRights ? "green" : "grey",
     };
   };
 
   return (
     <>
       {open ? <ServerDetailsModal open={open} onClose={handleClose} server={server} classes={classes} /> : ""}
-      <Button
-        sx={getServerPositionStyles(server)}
-        className={`${color} ${classes.DWServer}`}
+      <button
+        style={{ ...getServerStyles(server), position: "absolute", userSelect: "none" }}
+        className={classes.DWServer}
         onClick={authButtonHandler}
         disabled={!enableAuth}
       >
-        <Container maxWidth="lg" className={classes.serverContainer} disableGutters>
-          <Box className={classes.inlineFlexBox}>
+        <div style={{ padding: 0, margin: 0, width: "100%" }}>
+          <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
             <SvgIcon component={icon} color="secondary" />
-            <Typography color={server.hasAdminRights ? "primary" : "secondary"} className={classes.ServerName}>
+            <Typography color={server.hasAdminRights ? "primary" : "secondary"} sx={ServerName}>
               {server.hostname}
             </Typography>
-          </Box>
-          <Typography color="secondary" className={classes.ip}>
+          </div>
+          <Typography color="secondary" style={{ fontSize: "0.9em" }}>
             {server.ip} cha:{server.requiredCharismaSkill}
           </Typography>
           <br />
           <ServerSummary server={server} enableAuth={enableAuth} classes={classes} />
-        </Container>
-      </Button>
+        </div>
+      </button>
     </>
   );
 }

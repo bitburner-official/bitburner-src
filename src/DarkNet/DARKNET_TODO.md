@@ -4,8 +4,6 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
-- performance - move styles out of dnetStyles and into style tags
-
 - icon for stasis link
 
 - more hint notes
