@@ -69,7 +69,7 @@ export class Server extends BaseServer {
     //RAM, CPU speed and Scripts
     this.maxRam = params.maxRam != null ? params.maxRam : 0; //GB
 
-    /* Hacking information (only valid for "foreign" aka non-purchased servers) */
+    /* Hacking information (only valid for "foreign" aka non-owned servers) */
     this.requiredHackingSkill = params.requiredHackingSkill != null ? params.requiredHackingSkill : 1;
     const baseMoney = params.moneyAvailable ?? 0;
     this.moneyAvailable = baseMoney * currentNodeMults.ServerStartingMoney;

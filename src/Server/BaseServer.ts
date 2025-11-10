@@ -109,7 +109,7 @@ export abstract class BaseServer implements IServer {
   // Text files on this server
   textFiles = new JSONMap<TextFilePath, TextFile>();
 
-  // Flag indicating whether this is a purchased server
+  // Flag indicating whether this is a server owned by the player (e.g., home, cloud servers, hacknet servers)
   purchasedByPlayer = false;
 
   // Optional, listed just so they can be accessed on a BaseServer. These will be undefined for HacknetServers.

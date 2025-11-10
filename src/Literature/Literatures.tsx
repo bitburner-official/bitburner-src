@@ -28,8 +28,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
         this are getServerSecurityLevel() and getServerMinSecurityLevel()
         <br />
         <br />
-        -Purchase additional servers by visiting "Alpha Enterprises" in the city. They are relatively cheap and give you
-        valuable RAM to run more scripts early in the game
+        -Purchase additional cloud servers by visiting "Alpha Enterprises" in the city. They are relatively cheap and
+        give you valuable RAM to run more scripts early in the game
         <br />
         <br />
         -Prioritize upgrading the RAM on your home computer. This can also be done at "Alpha Enterprises"

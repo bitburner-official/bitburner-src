@@ -28,9 +28,9 @@ This means that if one server has the the hostname `some-server`, then no other 
 
 There are many `functions` and [terminal](terminal.md) commands in the game that will require you to target a specific server by hostname.
 
-## Player-owned Servers
+## Cloud Servers
 
-The player starts with a single server: his/her home computer.
+The player starts with a single server: their home computer.
 This server will have the hostname `home`.
 The player's home computer is special for a variety of reasons:
 
@@ -40,10 +40,10 @@ The player's home computer is special for a variety of reasons:
   This means that you will not lose any [RAM](ram.md) upgrades or [Scripts](scripts.md) on your home computer when you install [Augmentations](augmentations.md)
   (you will, however, lose programs and messages on your home computer).
 
-The player can also purchase additional servers.
-This can be done by visiting certain locations in the [World](world.md), or it can be done automatically through a script using the `purchaseServer` function.
-The advantage of purchased servers is that, in terms of [RAM](ram.md), they are cheaper than upgrading your home computer.
-The disadvantage is that your purchased servers are lost when you install [Augmentations](augmentations.md).
+The player can also purchase access to additional cloud servers for their use. These are virtual machines hosted remotely that the player has access to.
+This can be done by visiting certain locations in the [World](world.md), or it can be done automatically through a script using the `purchaseServer` function in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>).
+The advantage of cloud servers is that, in terms of [RAM](ram.md), they are cheaper than upgrading your home computer.
+The disadvantage is that access to your cloud servers is lost when you install [Augmentations](augmentations.md), and you will need to purchase access again.
 
 ## Hackable Servers
 

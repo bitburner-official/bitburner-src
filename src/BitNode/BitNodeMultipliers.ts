@@ -127,17 +127,17 @@ export class BitNodeMultipliers {
    */
   ManualHackMoney = 1;
 
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerCost = 1;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerCost = 1;
 
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerSoftcap = 1;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerSoftcap = 1;
 
-  /** Influences the maximum number of purchased servers you can have */
-  PurchasedServerLimit = 1;
+  /** Influences the maximum number of cloud servers you can have */
+  CloudServerLimit = 1;
 
-  /** Influences the maximum allowed RAM for a purchased server */
-  PurchasedServerMaxRam = 1;
+  /** Influences the maximum allowed RAM for a cloud server */
+  CloudServerMaxRam = 1;
 
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction = 1;

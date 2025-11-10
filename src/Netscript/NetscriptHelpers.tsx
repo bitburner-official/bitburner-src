@@ -64,9 +64,6 @@ import {
 } from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
 import { Settings } from "../Settings/Settings";
-import { hasTextExtension } from "../Paths/TextFilePath";
-import { ContentFilePath } from "../Paths/ContentFile";
-import { LiteratureName } from "@enums";
 import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
@@ -97,7 +94,6 @@ export const helpers = {
   portNumber,
   person,
   server,
-  scp,
   gang,
   gangMember,
   gangTask,
@@ -875,60 +871,4 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
   result.disableSleeveExpAndAugmentation = !!options.disableSleeveExpAndAugmentation;
 
   return result;
-}
-
-function scp(ctx: NetscriptContext, files: unknown[], sourceServer: BaseServer, destServer: BaseServer) {
-  const lits: FilePath[] = [];
-  const contentFiles: ContentFilePath[] = [];
-
-  //First loop through filenames to find all errors before moving anything.
-  for (const file of files) {
-    const path = helpers.filePath(ctx, "files", file);
-    if (hasScriptExtension(path) || hasTextExtension(path)) {
-      contentFiles.push(path);
-      continue;
-    }
-    if (!path.endsWith(".lit")) {
-      throw helpers.errorMessage(ctx, "Only works for scripts, .lit and .txt files.");
-    }
-    lits.push(path);
-  }
-
-  let noFailures = true;
-  // --- Scripts and Text Files---
-  for (const contentFilePath of contentFiles) {
-    const sourceContentFile = sourceServer.getContentFile(contentFilePath);
-    if (!sourceContentFile) {
-      helpers.log(ctx, () => `File '${contentFilePath}' does not exist.`);
-      noFailures = false;
-      continue;
-    }
-    // Overwrite script if it already exists
-    const result = destServer.writeToContentFile(contentFilePath, sourceContentFile.content);
-    helpers.log(ctx, () => `Copied file ${contentFilePath} from ${sourceServer.hostname} to ${destServer.hostname}`);
-    if (result.overwritten) {
-      helpers.log(ctx, () => `Warning: ${contentFilePath} was overwritten on ${destServer.hostname}`);
-    }
-  }
-
-  // --- Literature Files ---
-  for (const litFilePath of lits) {
-    const sourceMessage = sourceServer.messages.find((message) => message === litFilePath);
-    if (!sourceMessage) {
-      helpers.log(ctx, () => `File '${litFilePath}' does not exist.`);
-      noFailures = false;
-      continue;
-    }
-
-    const destMessage = destServer.messages.find((message) => message === litFilePath);
-    if (destMessage) {
-      helpers.log(ctx, () => `File '${litFilePath}' was already on '${destServer.hostname}'.`);
-      continue;
-    }
-
-    // It exists in sourceServer.messages, so it's a valid name.
-    destServer.messages.push(litFilePath as LiteratureName);
-    helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer.hostname}'.`);
-  }
-  return noFailures;
 }

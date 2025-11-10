@@ -5,8 +5,8 @@ import { canAcceptStaneksGift, staneksGift } from "../CotMG/Helper";
 import { Fragments, FragmentById } from "../CotMG/Fragment";
 import { FragmentTypeEnum } from "../CotMG/FragmentType";
 
-import { Stanek as IStanek } from "@nsdefs";
-import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
+import type { Stanek as IStanek } from "@nsdefs";
+import type { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
@@ -63,9 +63,9 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     activeFragments: (ctx) => () => {
       checkStanekAPIAccess(ctx);
       helpers.log(ctx, () => `Returned ${staneksGift.fragments.length} fragments`);
-      return staneksGift.fragments.map((af) => {
-        return { ...af.copy(), ...af.fragment().copy() };
-      });
+      return staneksGift.fragments.map((activeFragment) => {
+        return { ...activeFragment.copy(), ...activeFragment.fragment().copy() };
+      }) satisfies ReturnType<IStanek["activeFragments"]>;
     },
     clearGift: (ctx) => () => {
       checkStanekAPIAccess(ctx);
@@ -97,8 +97,12 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       const rootX = helpers.number(ctx, "rootX", _rootX);
       const rootY = helpers.number(ctx, "rootY", _rootY);
       checkStanekAPIAccess(ctx);
-      const fragment = staneksGift.findFragment(rootX, rootY);
-      if (fragment !== undefined) return fragment.copy();
+      const activeFragment = staneksGift.findFragment(rootX, rootY);
+      if (activeFragment !== undefined) {
+        return { ...activeFragment.copy(), ...activeFragment.fragment().copy() } satisfies ReturnType<
+          IStanek["getFragment"]
+        >;
+      }
       return undefined;
     },
     removeFragment: (ctx) => (_rootX, _rootY) => {

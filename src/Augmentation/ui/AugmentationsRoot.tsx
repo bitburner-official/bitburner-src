@@ -126,7 +126,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
                   <Typography>- Stats/Skill levels and Experience</Typography>
                   <Typography>- Money</Typography>
                   <Typography>- Scripts on every computer but your home computer</Typography>
-                  <Typography>- Purchased servers</Typography>
+                  <Typography>- Cloud servers</Typography>
                   <Typography>- Hacknet</Typography>
                   <Typography>- Faction/Company reputation</Typography>
                   <Typography>- Stocks</Typography>

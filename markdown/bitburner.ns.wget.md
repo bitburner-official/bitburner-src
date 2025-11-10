@@ -90,7 +90,7 @@ True if the data was successfully retrieved from the URL, false otherwise.
 
 RAM cost: 0 GB
 
-Retrieves data from a URL and downloads it to a file on the specified server. The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json). If the file already exists, it will be overwritten by this command. Note that it will not be possible to download data from many websites because they do not allow cross-origin resource sharing (CORS).
+Retrieves data from a URL and downloads it to a file on the specified server. The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css). If the file already exists, it will be overwritten by this command. Note that it will not be possible to download data from many websites because they do not allow cross-origin resource sharing (CORS).
 
 ## Example
 

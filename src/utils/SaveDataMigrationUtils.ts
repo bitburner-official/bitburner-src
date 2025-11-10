@@ -534,6 +534,7 @@ Error: ${e}`,
     }
     if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
   }
+  // Migrate save data related to the breaking changes in the first beta of v3.0.0.
   if (ver < 44) {
     try {
       /**
@@ -621,6 +622,8 @@ Error: ${e}`,
       unlocks.delete("VeChain");
     }
     initDarkwebServer();
+  }
+  if (ver < 45) {
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }

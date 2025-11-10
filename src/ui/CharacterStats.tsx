@@ -5,7 +5,7 @@ import { BitNodes } from "../BitNode/BitNode";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BitNodeMultipliersDisplay } from "../BitNode/ui/BitnodeMultipliersDescription";
 import { HacknetServerConstants } from "../Hacknet/data/Constants";
-import { getPurchaseServerLimit } from "../Server/ServerPurchases";
+import { getCloudServerLimit } from "../Server/ServerPurchases";
 import { Settings } from "../Settings/Settings";
 import { MoneySourceTracker } from "../utils/MoneySourceTracker";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
@@ -266,12 +266,12 @@ export function CharacterStats(): React.ReactElement {
                 <></>
               )}
               <StatsRow
-                name="Servers Owned"
+                name="Cloud Servers"
                 color={Settings.theme.primary}
-                data={{ content: `${Player.purchasedServers.length} / ${getPurchaseServerLimit()}` }}
+                data={{ content: `${Player.purchasedServers.length} / ${getCloudServerLimit()}` }}
               />
               <StatsRow
-                name={`Hacknet ${canAccessBitNodeFeature(9) ? "Servers" : "Nodes"} owned`}
+                name={`Hacknet ${canAccessBitNodeFeature(9) ? "Servers" : "Nodes"}`}
                 color={Settings.theme.primary}
                 data={{
                   content: `${Player.hacknetNodes.length}${

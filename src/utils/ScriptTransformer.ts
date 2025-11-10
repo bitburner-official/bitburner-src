@@ -16,6 +16,7 @@ export enum FileType {
   TS,
   TSX,
   NS1,
+  CSS,
 }
 
 export interface FileTypeFeature {
@@ -44,6 +45,8 @@ export function getFileType(filename: string): FileType {
       return FileType.TSX;
     case "script":
       return FileType.NS1;
+    case "css":
+      return FileType.CSS;
     default:
       throw new Error(`Invalid extension: ${extension}. Filename: ${filename}.`);
   }

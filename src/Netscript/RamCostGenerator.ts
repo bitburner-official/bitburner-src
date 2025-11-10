@@ -41,10 +41,6 @@ export const RamCostConstants = {
   HNUpgCore: 0.8,
   GetStock: 2.0,
   BuySellStock: 2.5,
-  GetPurchaseServer: 0.25,
-  PurchaseServer: 2.25,
-  GetPurchasedServerLimit: 0.05,
-  GetPurchasedServerMaxRam: 0.05,
   Round: 0.05,
   ReadWrite: 1.0,
   ArbScript: 1.0,
@@ -224,6 +220,18 @@ const singularity = {
   destroyW0r1dD43m0n: SF4Cost(32),
   getCurrentWork: SF4Cost(0.5),
   getUnlockedAchievements: SF4Cost(RamCostConstants.SingularityFn3),
+} as const;
+
+const cloud = {
+  getServerLimit: 0.05,
+  getRamLimit: 0.05,
+  getServerCost: 0.25,
+  getServerUpgradeCost: 0.1,
+  getServerNames: 1.05,
+  upgradeServer: 0.25,
+  renameServer: 0,
+  purchaseServer: 2.25,
+  deleteServer: 2.25,
 } as const;
 
 // Darknet API
@@ -524,6 +532,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stock,
   singularity,
   format,
+  cloud,
   gang,
   go,
   dnet,
@@ -602,15 +611,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   serverExists: RamCostConstants.GetServer,
   fileExists: RamCostConstants.FileExists,
   isRunning: RamCostConstants.IsRunning,
-  getPurchasedServerLimit: RamCostConstants.GetPurchasedServerLimit,
-  getPurchasedServerMaxRam: RamCostConstants.GetPurchasedServerMaxRam,
-  getPurchasedServerCost: RamCostConstants.GetPurchaseServer,
-  getPurchasedServerUpgradeCost: 0.1,
-  getPurchasedServers: 1.05,
-  upgradePurchasedServer: 0.25,
-  renamePurchasedServer: 0,
-  purchaseServer: RamCostConstants.PurchaseServer,
-  deleteServer: RamCostConstants.PurchaseServer,
   write: 0,
   tryWritePort: 0,
   read: 0,
