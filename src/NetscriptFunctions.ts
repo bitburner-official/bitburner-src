@@ -1675,7 +1675,10 @@ export const ns: InternalAPI<NSFull> = {
 
     const server = helpers.getServer(ctx, ctx.workerScript.hostname);
     const file = server.getContentFile(path);
-    if (!file) throw helpers.errorMessage(ctx, `File was not found\nPath: ${path}`);
+
+    if (!file) {
+      throw helpers.errorMessage(ctx, `File was not found\nPath: ${path}`);
+    }
 
     if (isScript) {
       //We validated the path as ScriptFilePath and made sure script is not null

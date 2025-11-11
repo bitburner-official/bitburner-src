@@ -41,7 +41,7 @@ function makeJSONBlob(code: string): Blob {
 // config object to provide a hook point.
 export const config = {
   doImport(url: ScriptURL, opts?: ImportCallOptions): Promise<ScriptModule> {
-    // @ts-ignore TS expects a certain module target before it allows import options
+    // @ts-expect-error TS expects a certain module target before it allows import options
     return import(/*webpackIgnore:true*/ url, opts) as Promise<ScriptModule>;
   },
 };
