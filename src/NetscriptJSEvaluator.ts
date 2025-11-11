@@ -40,8 +40,9 @@ function makeJSONBlob(code: string): Blob {
 // import() is not a function, so it can't be replaced. We need this separate
 // config object to provide a hook point.
 export const config = {
-  doImport(url: ScriptURL): Promise<ScriptModule> {
-    return import(/*webpackIgnore:true*/ url) as Promise<ScriptModule>;
+  doImport(url: ScriptURL, opts?: ImportCallOptions): Promise<ScriptModule> {
+    // @ts-ignore TS expects a certain module target before it allows import options
+    return import(/*webpackIgnore:true*/ url, opts) as Promise<ScriptModule>;
   },
 };
 
@@ -68,6 +69,40 @@ export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): P
     throw new Error(`Cannot generate module ${script.filename}`, { cause: error });
   }
   return script.mod.module;
+}
+
+export function generateLoadedNonScriptModule(moduleType: string, moduleContent: string): LoadedModule {
+  let blob: Blob;
+
+  const cachedModule = moduleCache.get(moduleContent)?.deref();
+
+  if (cachedModule) {
+    return cachedModule;
+  }
+
+  //switch case to make future module support easier
+  switch (moduleType) {
+    case "json":
+      blob = makeJSONBlob(moduleContent);
+      break;
+    default:
+      throw new ModuleResolutionError(`Unkown module type: '${moduleType}'`);
+  }
+
+  const url = URL.createObjectURL(blob) as ScriptURL;
+
+  const imported = config.doImport(url, {
+    with: {
+      type: moduleType,
+    },
+  });
+
+  const module = new LoadedModule(url, imported);
+
+  moduleCache.set(moduleContent, new WeakRef(module));
+  cleanup.register(module, moduleContent);
+
+  return module;
 }
 
 /** Add the necessary dependency relationships for a script.
@@ -204,21 +239,16 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
         throw new ModuleResolutionError(`File does not exist on '${script.server}': '${node.filename}'`);
       }
 
-      let module: Blob;
       const moduleType = path.split(".").at(-1);
 
-      //switch case to make future module support easier
-      switch (moduleType) {
-        case "json":
-          module = makeJSONBlob(moduleContent);
-          break;
-        default:
-          throw new ModuleResolutionError(`Unkown module type: '${moduleType}'`);
+      //`resolveTextFilePath` gurantees a file extension so this is just for TS really
+      if (!moduleType) {
+        throw new ModuleResolutionError(`File has no extension: '${node.filename}'`);
       }
 
-      const moduleURL = URL.createObjectURL(module);
+      const module = generateLoadedNonScriptModule(moduleType, moduleContent);
 
-      newCode = newCode.substring(0, node.start) + moduleURL + newCode.substring(node.end);
+      newCode = newCode.substring(0, node.start) + module.url + newCode.substring(node.end);
 
       continue;
     }
