@@ -604,8 +604,8 @@ describe("darkweb", () => {
   test("setStasisLink", async () => {
     const ns = getNsOnDarkWeb();
     const result = await ns.dnet.setStasisLink(true);
-    expect(result.success).toStrictEqual(false);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.StationaryServer);
+    expect(result.success).toStrictEqual(true);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
   test("getServer", () => {
     const ns = getNsOnDarkWeb();

@@ -363,15 +363,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           }));
         }
         const server = onlineConnectionCheck.server;
-        if (server.isStationary) {
-          helpers.log(ctx, () => `${server.hostname} cannot be stasis linked: it is a stationary server.`);
-          return helpers.netscriptDelay(ctx, 100).then(() => ({
-            success: false,
-            code: ResponseCodeEnum.StationaryServer,
-            message: GenericResponseMessage.StationaryServer,
-          }));
-        }
-
         const stasisLinkCount = getStasisLinkServers().length;
         const stasisLinkLimit = getStasisLinkLimit();
         if (shouldLink && stasisLinkCount >= stasisLinkLimit) {

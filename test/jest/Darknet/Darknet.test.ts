@@ -261,8 +261,9 @@ describe("Password Tests", () => {
     };
     const nonDivisibleResult = getAuthResult(server, `${server.password + 1}`, 1);
     expect(nonDivisibleResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(nonDivisibleResult.response.message).toContain("not divisible");
     const nonDivisibleLogs = DarknetState.serverState[server.hostname].serverLogs[0];
-    expect(nonDivisibleLogs).toContain("not divisible");
+    expect(nonDivisibleLogs.message).toContain("not divisible");
 
     let factor = 2;
     while (+server.password % factor !== 0) {
