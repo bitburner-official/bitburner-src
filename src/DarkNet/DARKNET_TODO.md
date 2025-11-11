@@ -10,6 +10,8 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 - access .lit and .data files from UI
 
+- simplify lab summary UI
+
 ## Post MVP:
 
 - Lab interactions: doors, chests, mimics, grue

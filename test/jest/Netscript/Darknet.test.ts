@@ -7,7 +7,7 @@ import { GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import {
-  fixDoImportIssue,
+  fixDoImportIssue, getMockedNetscriptContext,
   getNS,
   getWorkerScriptAndNS,
   initGameEnvironment,
@@ -18,6 +18,7 @@ import { DarknetState, getServerState } from "../../../src/DarkNet/models/Darkne
 import { getDarknetServerOrThrow } from "../../../src/DarkNet/utils/darknetServerUtils";
 import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
+import { expectRunningOnDarknetServer } from "../../../src/DarkNet/effects/offlineServerHandling";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Server ${hostnameOfNonExistentServer} does not exist.`;
@@ -75,7 +76,6 @@ describe("Common APIs", () => {
     expect(result2.success).toStrictEqual(true);
   });
   test("getDarknetInstability", () => {
-    // WIP: review as needed
     const ns = getNsOnDarkWeb();
     const initialResult = ns.dnet.getDarknetInstability();
 
@@ -550,10 +550,63 @@ describe("Non-existent server", () => {
 });
 
 describe("darkweb targets home", () => {
-  // WIP: Add more tests
+  test("authenticate from darkweb", async () => {
+    const ns = getNsOnDarkWeb();
+    await expect(async () => {
+      await ns.dnet.authenticate(SpecialServers.Home, "");
+    }).rejects.toContain("home is not a darknet server");
+  });
+  test("connectToSession", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => {
+      ns.dnet.connectToSession(SpecialServers.Home, "");
+    }).toThrow("home is not a darknet server");
+  });
+  test("heartbleed from darkweb", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => ns.dnet.heartbleed(SpecialServers.Home)).toThrow("home is not a darknet server");
+  });
+  test("packetCapture", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => ns.dnet.packetCapture(SpecialServers.Home)).toThrow("home is not a darknet server");
+  });
+  test("induceServerMigration", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => ns.dnet.induceServerMigration(SpecialServers.Home)).toThrow("home is not a darknet server");
+  });
+  test("isDarknetServer", () => {
+    const ns = getNsOnDarkWeb();
+    const result = ns.dnet.isDarknetServer(SpecialServers.Home);
+    expect(result).toStrictEqual(false);
+  });
+  test("memoryReallocation", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => ns.dnet.memoryReallocation(SpecialServers.Home)).toThrow("home is not a darknet server");
+  });
+  test("getBlockedRam", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => ns.dnet.getBlockedRam(SpecialServers.Home)).toThrow("home is not a darknet server");
+  });
+  test("getDepth", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => ns.dnet.getDepth(SpecialServers.Home)).toThrow("home is not a darknet server");
+  });
 });
 
-// WIP: test expectRunningOnDarknetServer
+describe("expectRunningOnDarknetServer", () => {
+  test("throws when called on non-darknet server", () => {
+    const logger = jest.fn();
+    const ctx = getMockedNetscriptContext(logger);
+    ctx.workerScript.hostname = SpecialServers.Home;
+    expect(() => expectRunningOnDarknetServer(ctx)).toThrow("This API can only be used on a darknet server");
+  });
+  test("does not throw when called on darknet server", () => {
+    const logger = jest.fn();
+    const ctx = getMockedNetscriptContext(logger);
+    ctx.workerScript.hostname = SpecialServers.DarkWeb;
+    expect(() => expectRunningOnDarknetServer(ctx)).not.toThrow();
+  });
+});
 
 describe("darkweb", () => {
   test("authenticate from home", async () => {
@@ -816,7 +869,6 @@ describe("Offline darknet server", () => {
   beforeEach(() => {
     DarknetState.offlineServers.push(hostnameForOfflineServer);
   });
-  // WIP: review as needed
   test("authenticate from home", async () => {
     const ns = getNsOnHome();
     const result = await ns.dnet.authenticate(hostnameForOfflineServer, "leekspin");
