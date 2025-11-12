@@ -7,7 +7,8 @@ import { GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import {
-  fixDoImportIssue, getMockedNetscriptContext,
+  fixDoImportIssue,
+  getMockedNetscriptContext,
   getNS,
   getWorkerScriptAndNS,
   initGameEnvironment,

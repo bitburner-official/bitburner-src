@@ -124,34 +124,37 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
         </div>
         <div style={{ width: "50%" }}>
           <Container disableGutters>
-            <div style={{ color: "white" }}>
-              <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                <span className={classes.serverDetailsText}>hint:</span> {server.staticPasswordHint}
-                <br />
-                {server.passwordHintData && (
-                  <>
-                    <span className={classes.serverDetailsText}>data: </span> {server.passwordHintData}
-                    <br />
-                  </>
-                )}
-                {!isLabServer && (
-                  <>
-                    <span className={classes.serverDetailsText}>length:</span> {server.password.length}
-                    <br />
-                    <span className={classes.serverDetailsText}>format:</span> {getPasswordType(server.password)}
-                    <br />
-                  </>
-                )}
-                <span className={classes.serverDetailsText}>model:</span> {server.modelId}
-                <br />
-                {isLabServer && (
-                  <>
-                    <span className={classes.serverDetailsText}>cha:</span> {server.requiredCharismaSkill}
-                    <br />
-                  </>
-                )}
-              </pre>
-            </div>
+            {isLabServer ? (
+              <div style={{ color: "white" }}>
+                <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
+                  <span className={classes.serverDetailsText}>hint:</span> {server.staticPasswordHint}
+                  <br />
+                  <span className={classes.serverDetailsText}>model:</span> {server.modelId}
+                  <br />
+                  <span className={classes.serverDetailsText}>cha:</span> {server.requiredCharismaSkill}
+                  <br />
+                </pre>
+              </div>
+            ) : (
+              <div style={{ color: "white" }}>
+                <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
+                  <span className={classes.serverDetailsText}>hint:</span> {server.staticPasswordHint}
+                  <br />
+                  {server.passwordHintData && (
+                    <>
+                      <span className={classes.serverDetailsText}>data: </span> {server.passwordHintData}
+                      <br />
+                    </>
+                  )}
+                  <span className={classes.serverDetailsText}>length:</span> {server.password.length}
+                  <br />
+                  <span className={classes.serverDetailsText}>format:</span> {getPasswordType(server.password)}
+                  <br />
+                  <span className={classes.serverDetailsText}>model:</span> {server.modelId}
+                  <br />
+                </pre>
+              </div>
+            )}
           </Container>
           <br />
           {!isLabServer && (
@@ -164,14 +167,12 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
         </div>
       </div>
       <br />
-      {isLabServer ? (
+      {isLabServer && (
         <LabyrinthSummary
           result={rawResponse?.result}
           lastMovementFeedback={rawResponse?.response?.message}
           loadingText={response}
         />
-      ) : (
-        ""
       )}
     </>
   );
