@@ -26,6 +26,7 @@ function handlePipe(): void {
     return;
   }
 
+  // TODO: skip outputs with their own pipes? TO make sure we don't collide?
   if (PipeState.outputToBeProcessed[0].pipeDestination && !PipeState.currentTerminalPipe) {
     PipeState.currentTerminalPipe = PipeState.outputToBeProcessed[0].pipeDestination;
   }
