@@ -31,10 +31,14 @@ export function ServerSummary({
   }
 
   const cacheCount = server.caches.length;
-  const dataFileCount = Array.from(server.textFiles.keys()).filter((f) =>
-    f.endsWith(DarknetConstants.DataFileSuffix),
-  ).length;
-  const fileCount = dataFileCount + server.messages.length;
+  const dataFiles = Array.from(server.textFiles.keys()).filter((f) => f.endsWith(DarknetConstants.DataFileSuffix));
+  const textFiles = [...dataFiles, ...server.messages];
+  const textFilesTooltip =
+    textFiles.length > 0
+      ? `Data files on server: ${textFiles.slice(0, 3).join(", ")}${
+          textFiles.length > 3 ? ` +${textFiles.length - 3}` : ""
+        }`
+      : "No data files on server";
   const contractCount = server.contracts.length;
   const runningScriptNames = Array.from(server.runningScriptMap.keys()).map((script) => script.replace("*[]", ""));
   const runningScriptsTooltip =
@@ -86,6 +90,22 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
+  if (server.hasStasisLink) {
+    components.push(
+      <Tooltip
+        key="backdoor"
+        title={
+          <>
+            Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance.
+          </>
+        }
+      >
+        <Typography>
+          <SvgIcon component={DoorBackSharp} className={`${classes.gold} ${classes.serverStatusIcon}`} />
+        </Typography>
+      </Tooltip>,
+    );
+  }
   if (contractCount) {
     components.push(
       <Tooltip key="contract" title={<>Coding contract count: {contractCount}</>}>
@@ -98,7 +118,7 @@ export function ServerSummary({
   }
   if (fileCount) {
     components.push(
-      <Tooltip key="file" title={<>Data files on server: {fileCount}</>}>
+      <Tooltip key="file" title={<>{textFilesTooltip}</>}>
         <Typography color={fileCount ? "primary" : "secondary"}>
           <SvgIcon component={Description} className={classes.serverStatusIcon} />
           {fileCount}

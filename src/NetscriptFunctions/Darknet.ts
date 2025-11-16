@@ -533,7 +533,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const server = ctx.workerScript.getServer();
       const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
       if (!hasStormSeed) {
-        const result = `No ${CompletedProgramName.stormSeed} found on ${server.hostname}`;
+        const result = `${CompletedProgramName.stormSeed} not found on ${server.hostname}`;
         logger(ctx)(result);
         return {
           success: false,
