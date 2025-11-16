@@ -4,11 +4,7 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
-- icon for stasis link
-
 - more hint notes
-
-- access .lit and .data files from UI
 
 - simplify lab summary UI
 

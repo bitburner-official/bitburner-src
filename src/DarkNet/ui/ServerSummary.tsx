@@ -33,6 +33,7 @@ export function ServerSummary({
   const cacheCount = server.caches.length;
   const dataFiles = Array.from(server.textFiles.keys()).filter((f) => f.endsWith(DarknetConstants.DataFileSuffix));
   const textFiles = [...dataFiles, ...server.messages];
+  const fileCount = textFiles.length;
   const textFilesTooltip =
     textFiles.length > 0
       ? `Data files on server: ${textFiles.slice(0, 3).join(", ")}${
