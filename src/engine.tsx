@@ -53,6 +53,7 @@ import { storeDarknetCycles } from "./DarkNet/models/DarknetState";
 import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
 import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
 import { initForeignServers } from "./Server/ServerHelpers";
+import { apr1 } from "./Terminal/commands/apr1";
 
 declare global {
   // This property is only available in the dev build
@@ -67,6 +68,8 @@ declare global {
       loadGame: typeof loadGame;
     };
   };
+  // eslint-disable-next-line no-var
+  var openDevMenu: () => void;
 }
 
 export const GameCycleEvents = new EventEmitter<[]>();
@@ -410,6 +413,7 @@ const Engine = {
         },
       };
     }
+    globalThis.openDevMenu = () => apr1();
   },
 
   start: function () {
