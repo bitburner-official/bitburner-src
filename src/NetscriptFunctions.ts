@@ -452,7 +452,7 @@ export const ns: InternalAPI<NSFull> = {
         Terminal.info(`${ctx.workerScript.name}: ${str}`);
         return;
       }
-      Terminal.print(`${ctx.workerScript.name}: ${str}`);
+      Terminal.print(`${ctx.workerScript.name}: ${str}`, ctx.workerScript.pid);
     },
   tprintf:
     (ctx) =>
@@ -476,7 +476,7 @@ export const ns: InternalAPI<NSFull> = {
         Terminal.info(`${str}`);
         return;
       }
-      Terminal.print(`${str}`);
+      Terminal.print(`${str}`, ctx.workerScript.pid);
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
@@ -1654,8 +1654,8 @@ export const ns: InternalAPI<NSFull> = {
     const name = helpers.string(ctx, "name", _name);
     return getRamCost(name.split("."), true);
   },
-  tprintRaw: () => (value) => {
-    Terminal.printRaw(wrapUserNode(value));
+  tprintRaw: (ctx) => (value) => {
+    Terminal.printRaw(wrapUserNode(value), ctx.workerScript.pid);
   },
   printRaw: (ctx) => (value) => {
     ctx.workerScript.print(wrapUserNode(value));

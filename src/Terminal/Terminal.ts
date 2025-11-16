@@ -88,7 +88,8 @@ import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { PipedCommand, PipedOutput, ScriptPipe, splitPipesFromFirstCommand } from "./Pipe";
+import { splitPipesFromFirstCommand } from "./Pipe";
+import { PipeState, pushPipedOutput } from "./PipeState";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -149,13 +150,6 @@ export class Terminal {
     new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary"),
   ];
 
-  outputToBeProcessed: (Output | Link | RawOutput)[] = [];
-  // outputToBeProcessed: PipedOutput[] = [];
-
-  currentTerminalPipe: PipedCommand | null = null;
-
-  scriptPipes: Map<number, ScriptPipe> = new Map();
-
   // True if a Coding Contract prompt is opened
   contractOpen = false;
 
@@ -170,20 +164,13 @@ export class Terminal {
 
   append(item: Output | Link | RawOutput, pid: number = -1): void {
     // If logging comes from a script, put the output to be processed in that script's pipe buffer
-    const script = findRunningScriptByPid(pid);
+    const script = pid > -1 ? findRunningScriptByPid(pid) : null;
     if (script?.pipeConfig) {
-      const scriptPipe = this.scriptPipes.get(pid) ?? { pipe: script?.pipeConfig, output: [] };
-      scriptPipe.output.push(item);
-      if (scriptPipe.output.length > Settings.MaxTerminalCapacity * 2) {
-        scriptPipe.output.splice(0, scriptPipe.output.length - Settings.MaxTerminalCapacity * 2);
-      }
+      pushPipedOutput(item, script.pipeConfig);
     }
     // If the terminal has pipes set up, queue the output for processing
-    else if (this.currentTerminalPipe !== null) {
-      this.outputToBeProcessed.push(item);
-      if (this.outputToBeProcessed.length > Settings.MaxTerminalCapacity * 2) {
-        this.outputToBeProcessed.splice(0, this.outputToBeProcessed.length - Settings.MaxTerminalCapacity * 2);
-      }
+    else if (PipeState.currentTerminalPipe !== null) {
+      pushPipedOutput(item, PipeState.currentTerminalPipe);
     } else {
       // Otherwise, simply push the output to stdout
       this.terminalOutput(item);
@@ -204,17 +191,17 @@ export class Terminal {
     TerminalEvents.emit();
   }
 
-  print(s: string): void {
-    this.append(new Output(s, "primary"));
+  print(s: string, pid = -1): void {
+    this.append(new Output(s, "primary"), pid);
   }
 
-  printRaw(node: React.ReactNode): void {
-    this.append(new RawOutput(node));
+  printRaw(node: React.ReactNode, pid = -1): void {
+    this.append(new RawOutput(node), pid);
   }
 
   error(s: string): void {
-    this.currentTerminalPipe = null;
-    this.outputToBeProcessed = [];
+    PipeState.currentTerminalPipe = null;
+    PipeState.outputToBeProcessed = [];
     this.terminalOutput(new Output(s, "error"));
   }
 

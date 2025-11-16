@@ -7,6 +7,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
 import { pipeContent, pipeLiterature, pipeMessage } from "../Pipe";
+import { PipeState } from "../PipeState";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
@@ -18,7 +19,9 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
     if (!file) return Terminal.error(`No file at path ${path}`);
-    return Terminal.currentTerminalPipe ? pipeContent(file.content) : dialogBoxCreate(`${file.filename}\n\n${file.content}`);
+    return PipeState.currentTerminalPipe
+      ? pipeContent(file.content)
+      : dialogBoxCreate(`${file.filename}\n\n${file.content}`);
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
     return Terminal.error(
@@ -29,12 +32,12 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
   // Message
   if (isMember("MessageFilename", path)) {
     if (server.messages.includes(path)) {
-      return Terminal.currentTerminalPipe ? pipeMessage(path) : showMessage(path);
+      return PipeState.currentTerminalPipe ? pipeMessage(path) : showMessage(path);
     }
   }
   if (isMember("LiteratureName", path)) {
     if (server.messages.includes(path)) {
-      return Terminal.currentTerminalPipe ? pipeLiterature(path) : showLiterature(path);
+      return PipeState.currentTerminalPipe ? pipeLiterature(path) : showLiterature(path);
     }
   }
   Terminal.error(`No file at path ${path}`);

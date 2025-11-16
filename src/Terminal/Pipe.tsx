@@ -15,20 +15,27 @@ import { Script } from "../Script/Script";
 import { LiteratureName, MessageFilename } from "@enums";
 import { Messages } from "../Message/MessageHelpers";
 import { Literatures } from "../Literature/Literatures";
+import { type PipedCommand, PipeState } from "./PipeState";
 
 const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
 TerminalEvents.subscribe(debouncedHandlePipe);
 
 function handlePipe(): void {
-  // TODO: handle pipes from scripts
-
-  if (Terminal.outputToBeProcessed.length === 0 || Terminal.action || !Terminal.currentTerminalPipe) {
+  if (PipeState.outputToBeProcessed.length === 0 || Terminal.action) {
     return;
   }
 
-  const commandString = Terminal.currentTerminalPipe.commandString;
-  const currentPipe = Terminal.currentTerminalPipe.pipeType;
+  if (PipeState.outputToBeProcessed[0].pipeDestination && !PipeState.currentTerminalPipe) {
+    PipeState.currentTerminalPipe = PipeState.outputToBeProcessed[0].pipeDestination;
+  }
+
+  if (!PipeState.currentTerminalPipe) {
+    return;
+  }
+
+  const commandString = PipeState.currentTerminalPipe.commandString;
+  const currentPipe = PipeState.currentTerminalPipe.pipeType;
 
   const parsedCommand = parseCommand(commandString);
   const command = parsedCommand[0]?.toString();
@@ -54,8 +61,8 @@ function handlePipe(): void {
   }
 
   // Pipe to the next terminal command
-  const output = Terminal.outputToBeProcessed
-    .map((o) => stringify(o))
+  const output = PipeState.outputToBeProcessed
+    .map((o) => stringify(o.output))
     .join("\n")
     .replaceAll('"', "'");
   advancePipe();
@@ -63,50 +70,59 @@ function handlePipe(): void {
 }
 
 export function splitPipesFromFirstCommand(commandString: string): string {
-  if (Terminal.currentTerminalPipe) {
+  if (PipeState.currentTerminalPipe) {
     return commandString;
   }
 
   const parsedCommands = parseCommand(commandString);
   const firstCommand = getFirstCommand(parsedCommands);
 
-  if (!parsedCommands.find(arg => `${arg}`.match(pipeMatcher()))) {
+  if (!parsedCommands.find((arg) => `${arg}`.match(pipeMatcher()))) {
     return commandString;
   }
 
-  Terminal.currentTerminalPipe = buildPipeChain(parsedCommands);
+  PipeState.currentTerminalPipe = buildPipeChain(parsedCommands);
 
   return firstCommand;
 }
 
 export function pipeContent(content: string) {
-  if (!Terminal.currentTerminalPipe) {
+  if (!PipeState.currentTerminalPipe) {
     return;
   }
 
-  Terminal.outputToBeProcessed.push(new Output(content, "primary"));
+  PipeState.outputToBeProcessed.push({
+    output: new Output(content, "primary"),
+    pipeDestination: PipeState.currentTerminalPipe,
+  });
   TerminalEvents.emit();
 }
 
 export function pipeMessage(message: MessageFilename) {
-  if (!Terminal.currentTerminalPipe) {
+  if (!PipeState.currentTerminalPipe) {
     return;
   }
   const messageDetails = Messages[message];
   const content = `${messageDetails.filename}\n${messageDetails.msg}`;
 
-  Terminal.outputToBeProcessed.push(new Output(content, "primary"));
+  PipeState.outputToBeProcessed.push({
+    output: new Output(content, "primary"),
+    pipeDestination: PipeState.currentTerminalPipe,
+  });
   TerminalEvents.emit();
 }
 
 export function pipeLiterature(message: LiteratureName) {
-  if (!Terminal.currentTerminalPipe) {
+  if (!PipeState.currentTerminalPipe) {
     return;
   }
   const messageDetails = Literatures[message];
   const content = `${messageDetails.filename}\n${stringify(messageDetails.text)}`;
 
-  Terminal.outputToBeProcessed.push(new Output(content, "primary"));
+  PipeState.outputToBeProcessed.push({
+    output: new Output(content, "primary"),
+    pipeDestination: PipeState.currentTerminalPipe,
+  });
   TerminalEvents.emit();
 }
 
@@ -136,25 +152,30 @@ function getFirstCommand(parsedCommands: (string | number | boolean)[]): string 
 }
 
 function handlePipeError(error: string) {
-  Terminal.outputToBeProcessed.length = 0;
-  Terminal.currentTerminalPipe = null;
+  clearPipe();
   Terminal.error(`Error in pipe command: ${error}`);
 }
 
+function clearPipe() {
+  PipeState.outputToBeProcessed.length = 0;
+  PipeState.currentTerminalPipe = null;
+}
+
 function advancePipe() {
-  Terminal.currentTerminalPipe = Terminal.currentTerminalPipe?.nextPipe ?? null;
-  Terminal.outputToBeProcessed.length = 0;
+  PipeState.currentTerminalPipe = PipeState.currentTerminalPipe?.nextPipe ?? null;
+  PipeState.outputToBeProcessed.length = 0;
   TerminalEvents.emit();
 }
 
 function handleEcho(): void {
-  if (Terminal.currentTerminalPipe?.nextPipe) {
-    Terminal.currentTerminalPipe = Terminal.currentTerminalPipe.nextPipe;
+  if (PipeState.currentTerminalPipe?.nextPipe) {
+    PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
     handlePipe();
     return;
   }
 
-  Terminal.outputHistory.push(...Terminal.outputToBeProcessed);
+  const output = PipeState.outputToBeProcessed.map((o) => o.output);
+  Terminal.outputHistory.push(...output);
   advancePipe();
 }
 
@@ -163,7 +184,7 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
     handlePipeError(
       `Invalid pipe to file command: ${commandString} . Only a single file can be specified; no flags are supported.`,
     );
-    Terminal.outputToBeProcessed.length = 0;
+    PipeState.outputToBeProcessed.length = 0;
     return;
   }
   const command = parsedCommand[0].toString();
@@ -174,13 +195,12 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
     writeToScriptFile(command);
   } else {
     handlePipeError(`Invalid file extension for pipe to file command: ${command}`);
-    Terminal.outputToBeProcessed.length = 0;
     return;
   }
 
   // If there are further pipes, pass the same output to them
-  if (Terminal.currentTerminalPipe?.nextPipe) {
-    Terminal.currentTerminalPipe = Terminal.currentTerminalPipe.nextPipe;
+  if (PipeState.currentTerminalPipe?.nextPipe) {
+    PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
     handlePipe();
   } else {
     advancePipe();
@@ -189,8 +209,8 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
 
 function writeToTextFile(filename: string) {
   const file = Terminal.getTextFile(filename);
-  const output = Terminal.outputToBeProcessed.map((o) => stringify(o, true)).join("\n");
-  const overwrite = Terminal.currentTerminalPipe?.pipeType === ">";
+  const output = PipeState.outputToBeProcessed.map((o) => stringify(o.output, true)).join("\n");
+  const overwrite = PipeState.currentTerminalPipe?.pipeType === ">";
   if (file && !overwrite) {
     file.text += `${file.text ? "\n" : ""}${output}`;
   } else if (file && overwrite) {
@@ -201,13 +221,13 @@ function writeToTextFile(filename: string) {
   }
 }
 
-function writeToScriptFile( filename: string): void {
+function writeToScriptFile(filename: string): void {
   const file = Terminal.getScript(filename);
-  const output = Terminal.outputToBeProcessed.map((o) => stringify(o, true)).join("\n");
-  const overwrite = Terminal.currentTerminalPipe?.pipeType === ">";
+  const output = PipeState.outputToBeProcessed.map((o) => stringify(o.output, true)).join("\n");
+  const overwrite = PipeState.currentTerminalPipe?.pipeType === ">";
 
   if (file && overwrite) {
-    file.content = output
+    file.content = output;
   } else if (file) {
     file.content += `${file.content ? "\n" : ""}${output}`;
   } else {
@@ -220,7 +240,10 @@ function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void 
   const command = parsedCommand[0].toString();
   const firstScriptArg = parsedCommand.find((arg) => hasScriptExtension(arg.toString()));
   const fileName = command.toLowerCase() === "run" && firstScriptArg ? firstScriptArg.toString() : command;
-  const scriptArgs = [...parsedCommand.slice(1), ...Terminal.outputToBeProcessed.map((o) => stringify(o, true))];
+  const scriptArgs = [
+    ...parsedCommand.slice(1),
+    ...PipeState.outputToBeProcessed.map((o) => stringify(o.output, true)),
+  ];
 
   const file = Terminal.getScript(fileName ?? "");
   if (!file) {
@@ -233,8 +256,9 @@ function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void 
     handlePipeError(`Failed to run script ${file.filename}.`);
     return;
   }
-  script.pipeConfig = Terminal.currentTerminalPipe?.nextPipe ?? null;
-  Terminal.currentTerminalPipe = null;
+
+  script.pipeConfig = PipeState.currentTerminalPipe?.nextPipe ?? null;
+  PipeState.currentTerminalPipe = null;
   advancePipe();
 }
 
@@ -254,20 +278,3 @@ function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape =
 function pipeMatcher(): RegExp {
   return /^(>>)|[|>]$/g;
 }
-
-export type PipedOutput = {
-  output: (Output | Link | RawOutput)[];
-  remainingPipe: PipedCommand | null;
-};
-
-export type PipedCommand = {
-  commandString: string;
-  pipeType: string;
-  nextPipe: PipedCommand | null;
-};
-
-export type ScriptPipe = {
-  pipe: PipedCommand;
-  output: (Output | Link | RawOutput)[];
-  //output: PipedOutput[];
-};
