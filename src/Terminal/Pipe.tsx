@@ -157,7 +157,7 @@ function handlePipeError(error: string) {
   Terminal.error(`Error in pipe command: ${error}`);
 }
 
-function clearPipe() {
+export function clearPipe() {
   PipeState.outputToBeProcessed.length = 0;
   PipeState.currentTerminalPipe = null;
 }
