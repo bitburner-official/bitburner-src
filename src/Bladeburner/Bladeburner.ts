@@ -50,7 +50,7 @@ import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
 import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
-import { shuffleArray } from "../Infiltration/ui/BribeGame";
+import { shuffle } from "lodash";
 import { assertObject } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
@@ -749,8 +749,7 @@ export class Bladeburner implements OperationTeam {
   }
 
   killRandomSupportingSleeves(n: number) {
-    const sup = [...Player.sleevesSupportingBladeburner()]; // Explicit shallow copy
-    shuffleArray(sup);
+    const sup = shuffle(Player.sleevesSupportingBladeburner()); // Makes a copy
     sup.slice(0, Math.min(sup.length, n)).forEach((sleeve) => sleeve.kill());
   }
 
