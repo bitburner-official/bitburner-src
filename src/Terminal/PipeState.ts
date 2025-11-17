@@ -6,21 +6,45 @@ export const PipeState = {
   currentTerminalPipe: null as PipedCommand | null,
 };
 
-// TODO: Pushing output should extend the existing output that uses a specific pipe, if present
-
 export function pushPipedOutput(output: Output | Link | RawOutput, pipeDestination: PipedCommand | null) {
-  PipeState.outputToBeProcessed.push({
-    output: output,
-    pipeDestination: pipeDestination,
-  });
+  addOutputToBeProcessed(output, pipeDestination);
 
   if (PipeState.outputToBeProcessed.length > Settings.MaxTerminalCapacity * 2) {
     PipeState.outputToBeProcessed.splice(0, PipeState.outputToBeProcessed.length - Settings.MaxTerminalCapacity * 2);
   }
 }
 
+export function addOutputToBeProcessed(output: Output | Link | RawOutput, pipeDestination: PipedCommand | null) {
+  const existingOutputRecord = PipeState.outputToBeProcessed.find((o) =>
+    pipeDestinationIsIdentical(o.pipeDestination, pipeDestination),
+  );
+  if (existingOutputRecord) {
+    // Append to existing output
+    existingOutputRecord.output.push(output);
+  } else {
+    PipeState.outputToBeProcessed.push({
+      output: [output],
+      pipeDestination: pipeDestination,
+    });
+  }
+}
+
+export function getNextOutput(): PipedOutput | null {
+  return PipeState.outputToBeProcessed[0] || null;
+}
+
+function pipeDestinationIsIdentical(a: PipedCommand | null, b: PipedCommand | null): boolean {
+  if (a === null && b === null) return true;
+  if (a === null || b === null) return false;
+  return (
+    a.commandString === b.commandString &&
+    a.pipeType === b.pipeType &&
+    pipeDestinationIsIdentical(a.nextPipe, b.nextPipe)
+  );
+}
+
 export type PipedOutput = {
-  output: Output | Link | RawOutput;
+  output: (Output | Link | RawOutput)[];
   pipeDestination: PipedCommand | null;
 };
 

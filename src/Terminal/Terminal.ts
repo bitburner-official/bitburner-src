@@ -88,7 +88,7 @@ import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { splitPipesFromFirstCommand } from "./Pipe";
+import { handlePipe, splitPipesFromFirstCommand } from "./Pipe";
 import { PipeState, pushPipedOutput } from "./PipeState";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
@@ -201,7 +201,7 @@ export class Terminal {
 
   error(s: string): void {
     PipeState.currentTerminalPipe = null;
-    PipeState.outputToBeProcessed = [];
+    PipeState.outputToBeProcessed.shift();
     this.terminalOutput(new Output(s, "error"));
   }
 
@@ -843,6 +843,8 @@ export class Terminal {
     }
 
     f(commandArray, currentServer);
+
+    handlePipe();
   }
 
   getProgressText(): string {

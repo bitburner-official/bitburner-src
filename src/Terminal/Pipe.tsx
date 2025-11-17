@@ -15,23 +15,21 @@ import { Script } from "../Script/Script";
 import { LiteratureName, MessageFilename } from "@enums";
 import { Messages } from "../Message/MessageHelpers";
 import { Literatures } from "../Literature/Literatures";
-import { type PipedCommand, PipeState } from "./PipeState";
+import { addOutputToBeProcessed, getNextOutput, type PipedCommand, PipeState } from "./PipeState";
 
 const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
 TerminalEvents.subscribe(debouncedHandlePipe);
 
-function handlePipe(): void {
-  if (PipeState.outputToBeProcessed.length === 0 || Terminal.action) {
-    return;
+export function handlePipe(): void {
+  const nextOutput = getNextOutput();
+  const nextDestination = nextOutput?.pipeDestination;
+
+  if (nextDestination && !PipeState.currentTerminalPipe) {
+    PipeState.currentTerminalPipe = nextDestination;
   }
 
-  // TODO: skip outputs with their own pipes? TO make sure we don't collide?
-  if (PipeState.outputToBeProcessed[0].pipeDestination && !PipeState.currentTerminalPipe) {
-    PipeState.currentTerminalPipe = PipeState.outputToBeProcessed[0].pipeDestination;
-  }
-
-  if (!PipeState.currentTerminalPipe) {
+  if (!nextOutput || Terminal.action || !PipeState.currentTerminalPipe) {
     return;
   }
 
@@ -52,18 +50,14 @@ function handlePipe(): void {
     return TerminalEvents.emit();
   }
 
-  // TODO: piped output should carry their remaining pipe chain with them - refactor outputToBeProcessed
-
-  // TODO: test piping to script - should it live here or in runScript?
-  // TODO: implement piping out of script - pid in tprint through append
   if (hasScriptExtension(command)) {
     handlePipeToScript(parsedCommand);
     return TerminalEvents.emit();
   }
 
   // Pipe to the next terminal command
-  const output = PipeState.outputToBeProcessed
-    .map((o) => stringify(o.output))
+  const output = getNextOutput()
+    ?.output.map((o) => stringify(o))
     .join("\n")
     .replaceAll('"', "'");
   advancePipe();
@@ -92,10 +86,7 @@ export function pipeContent(content: string) {
     return;
   }
 
-  PipeState.outputToBeProcessed.push({
-    output: new Output(content, "primary"),
-    pipeDestination: PipeState.currentTerminalPipe,
-  });
+  addOutputToBeProcessed(new Output(content, "primary"), PipeState.currentTerminalPipe);
   TerminalEvents.emit();
 }
 
@@ -106,10 +97,7 @@ export function pipeMessage(message: MessageFilename) {
   const messageDetails = Messages[message];
   const content = `${messageDetails.filename}\n${messageDetails.msg}`;
 
-  PipeState.outputToBeProcessed.push({
-    output: new Output(content, "primary"),
-    pipeDestination: PipeState.currentTerminalPipe,
-  });
+  addOutputToBeProcessed(new Output(content, "primary"), PipeState.currentTerminalPipe);
   TerminalEvents.emit();
 }
 
@@ -120,10 +108,7 @@ export function pipeLiterature(message: LiteratureName) {
   const messageDetails = Literatures[message];
   const content = `${messageDetails.filename}\n${stringify(messageDetails.text)}`;
 
-  PipeState.outputToBeProcessed.push({
-    output: new Output(content, "primary"),
-    pipeDestination: PipeState.currentTerminalPipe,
-  });
+  addOutputToBeProcessed(new Output(content, "primary"), PipeState.currentTerminalPipe);
   TerminalEvents.emit();
 }
 
@@ -158,13 +143,13 @@ function handlePipeError(error: string) {
 }
 
 export function clearPipe() {
-  PipeState.outputToBeProcessed.length = 0;
+  PipeState.outputToBeProcessed.shift();
   PipeState.currentTerminalPipe = null;
 }
 
 function advancePipe() {
   PipeState.currentTerminalPipe = PipeState.currentTerminalPipe?.nextPipe ?? null;
-  PipeState.outputToBeProcessed.length = 0;
+  PipeState.outputToBeProcessed.shift();
   TerminalEvents.emit();
 }
 
@@ -175,7 +160,7 @@ function handleEcho(): void {
     return;
   }
 
-  const output = PipeState.outputToBeProcessed.map((o) => o.output);
+  const output = getNextOutput()?.output ?? [];
   Terminal.outputHistory.push(...output);
   advancePipe();
 }
@@ -185,7 +170,6 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
     handlePipeError(
       `Invalid pipe to file command: ${commandString} . Only a single file can be specified; no flags are supported.`,
     );
-    PipeState.outputToBeProcessed.length = 0;
     return;
   }
   const command = parsedCommand[0].toString();
@@ -210,7 +194,7 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
 
 function writeToTextFile(filename: string) {
   const file = Terminal.getTextFile(filename);
-  const output = PipeState.outputToBeProcessed.map((o) => stringify(o.output, true)).join("\n");
+  const output = getNextOutputStringified(true).join("\n");
   const overwrite = PipeState.currentTerminalPipe?.pipeType === ">";
   if (file && !overwrite) {
     file.text += `${file.text ? "\n" : ""}${output}`;
@@ -224,7 +208,7 @@ function writeToTextFile(filename: string) {
 
 function writeToScriptFile(filename: string): void {
   const file = Terminal.getScript(filename);
-  const output = PipeState.outputToBeProcessed.map((o) => stringify(o.output, true)).join("\n");
+  const output = getNextOutputStringified(true).join("\n");
   const overwrite = PipeState.currentTerminalPipe?.pipeType === ">";
 
   if (file && overwrite) {
@@ -241,10 +225,7 @@ function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void 
   const command = parsedCommand[0].toString();
   const firstScriptArg = parsedCommand.find((arg) => hasScriptExtension(arg.toString()));
   const fileName = command.toLowerCase() === "run" && firstScriptArg ? firstScriptArg.toString() : command;
-  const scriptArgs = [
-    ...parsedCommand.slice(1),
-    ...PipeState.outputToBeProcessed.map((o) => stringify(o.output, true)),
-  ];
+  const scriptArgs = [...parsedCommand.slice(1), ...getNextOutputStringified(true)];
 
   const file = Terminal.getScript(fileName ?? "");
   if (!file) {
@@ -278,4 +259,8 @@ function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape =
 
 function pipeMatcher(): RegExp {
   return /^(>>)|[|>]$/g;
+}
+
+function getNextOutputStringified(stripAnsiEscape = false): string[] {
+  return getNextOutput()?.output.map((o) => stringify(o, stripAnsiEscape)) ?? [];
 }

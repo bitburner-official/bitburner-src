@@ -8,11 +8,11 @@ import { PipeState } from "../../../src/Terminal/PipeState";
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe("Terminal Pipes", () => {
-
   beforeEach(() => {
     prestigeAllServers();
     Player.init();
     clearPipe();
+    GetServer(Player.currentServer)?.textFiles.clear();
   });
 
   it("should correctly split the first command from later pipes", () => {
@@ -40,4 +40,18 @@ describe("Terminal Pipes", () => {
     expect(fileContent).toBe("Hello World");
   });
 
+  it("should handle multiple commands with distinct pipes", async () => {
+    const fileName1 = "output.txt";
+    const fileName2 = "output2.txt";
+    const commandString = `echo test | ${fileName1}; echo test2 | ${fileName2}`;
+
+    Terminal.executeCommands(commandString);
+    await sleep(200);
+
+    const server = GetServer(Player.currentServer);
+    const fileContent1 = server?.textFiles?.get(fileName1 as TextFilePath)?.text;
+    expect(fileContent1).toBe("test");
+    const fileContent2 = server?.textFiles?.get(fileName2 as TextFilePath)?.text;
+    expect(fileContent2).toBe("test2");
+  });
 });
