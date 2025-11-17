@@ -216,7 +216,7 @@ function writeToScriptFile(filename: string): void {
   } else if (file) {
     file.content += `${file.content ? "\n" : ""}${output}`;
   } else {
-    const newFile = new Script(filename as ScriptFilePath, output);
+    const newFile = new Script(filename as ScriptFilePath, output, Player.getCurrentServer().hostname);
     Player.getCurrentServer().scripts.set(filename as ScriptFilePath, newFile);
   }
 }
