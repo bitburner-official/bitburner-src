@@ -46,10 +46,20 @@ export class Infiltration {
   /** Used to avoid repeating games too quickly. gameIds[0] is the current (or last) game. */
   gameIds = [-1, -1, -1];
 
-  /** Invalid until infiltration is started, used to calculate rewards */
+  /**
+   * Invalid until infiltration is started, used to calculate rewards.
+   * Timestamp based on Date.now(), because it is compared against something
+   * stored in the savegame.
+   */
   gameStartTimestamp = -1;
-  /** undefined for timeouts that have finished. Typescript isn't happy with null. */
+
+  /** End of stage, based on performance.now() since it is never persisted. */
   stageEndTimestamp = -1;
+
+  /**
+   * Used to clean up pending stage timeouts if Infil is cancelled, undefined for
+   * timeouts that have finished. Typescript isn't happy with passing null to clearTimeout().
+   */
   timeoutIds: (ReturnType<typeof setTimeout> | undefined)[] = [];
 
   stage: InfiltrationStage;
