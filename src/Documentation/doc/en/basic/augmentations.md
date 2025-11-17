@@ -33,7 +33,7 @@ To summarize, here is a list of everything you will **LOSE** when you install an
 - Stats/Skills
 - Money
 - [Scripts](scripts.md) on all [servers](servers.md) EXCEPT your home computer
-- Purchased [servers](servers.md)
+- Cloud [servers](servers.md)
 - [Hacknet Nodes](hacknet_nodes.md)
 - [Company](companies.md) / [Faction](factions.md) [Reputation](reputation.md), but you gain [Favor](reputation.md).
 - Jobs and [Faction](factions.md) memberships

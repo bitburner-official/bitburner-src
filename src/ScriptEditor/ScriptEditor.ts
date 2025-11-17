@@ -130,6 +130,11 @@ export class ScriptEditor {
       //json language server tries to load a schema by default
       completionItems: false,
     });
+
+    monaco.languages.css.cssDefaults.setModeConfiguration({
+      ...monaco.languages.css.cssDefaults.modeConfiguration,
+    });
+
     // Load themes
     loadThemes(monaco.editor.defineTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));

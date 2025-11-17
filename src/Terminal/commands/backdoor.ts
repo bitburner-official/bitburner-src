@@ -15,7 +15,7 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
   }
   if (server.purchasedByPlayer) {
     Terminal.error(
-      "Cannot install a backdoor on your own machines! You are currently connected to your home PC or one of your purchased servers.",
+      "Cannot install a backdoor on your own machines! You are currently connected to your home PC or one of your cloud servers.",
     );
     return;
   }

@@ -91,7 +91,7 @@ module.exports = (env, argv) => {
 
   return {
     plugins: [
-      new MonacoWebpackPlugin({ languages: ["javascript", "typescript", "json"] }),
+      new MonacoWebpackPlugin({ languages: ["javascript", "typescript", "json", "css"] }),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": isDevelopment ? '"development"' : '"production"',
       }),
