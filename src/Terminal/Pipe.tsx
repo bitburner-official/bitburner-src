@@ -51,7 +51,11 @@ export function handlePipe(): void {
   }
 
   if (hasScriptExtension(command)) {
-    handlePipeToScript(parsedCommand);
+    handlePipeToScript(parsedCommand.slice());
+    return TerminalEvents.emit();
+  }
+  if (command.toLowerCase() === "run" && parsedCommand.length > 1 && hasScriptExtension(`${parsedCommand[1]}`)) {
+    handlePipeToScript(parsedCommand.slice(1));
     return TerminalEvents.emit();
   }
 

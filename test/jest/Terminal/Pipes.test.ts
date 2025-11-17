@@ -33,6 +33,7 @@ describe("Terminal Pipes", () => {
     clearPipe();
     Terminal.outputHistory = [];
     GetServer(Player.currentServer)?.textFiles.clear();
+    GetServer(Player.currentServer)?.scripts.clear();
   });
 
   it("should correctly split the first command from later pipes", () => {
@@ -72,8 +73,67 @@ describe("Terminal Pipes", () => {
     Terminal.executeCommand(command);
     await sleep(100);
 
-    expect(Terminal.outputHistory[0].text).toContain(`args: ["arguments"]`);
-    expect(Terminal.outputHistory[1].text).toContain(`Args received: ["arguments"]`);
+    expect(Terminal.outputHistory[0].text).toContain(`Args received: ["arguments"]`);
+  });
+
+  it("should piping content out of a script", async () => {
+    const outputFileName = "scriptOutput.txt" as TextFilePath;
+    const scriptName = "testScript.js" as ScriptFilePath;
+    const scriptContent = `export async function main(ns) { ns.tprint("Args received: ", ns.args); }`;
+
+    // Add script to server
+    Terminal.executeCommand(`echo '${scriptContent}' > ${scriptName}`);
+
+    // Pass arguments to script via pipe
+    const command = `echo 'arguments' | ${scriptName} > ${outputFileName}`;
+    Terminal.executeCommand(command);
+    await sleep(200);
+
+    const server = GetServer(Player.currentServer);
+    const fileContent = server?.textFiles?.get(outputFileName)?.text;
+
+    expect(fileContent).toContain(`Args received: ["arguments"]`);
+  });
+
+  it("should pipe content out of a script when the run command is used", async () => {
+    const outputFileName = "scriptOutput.txt" as TextFilePath;
+    const scriptName = "testScript.js" as ScriptFilePath;
+    const scriptContent = `export async function main(ns) { ns.tprint("Args received: ", ns.args); }`;
+
+    // Add script to server
+    Terminal.executeCommand(`echo '${scriptContent}' > ${scriptName}`);
+
+    // Pass arguments to script via pipe
+    const command = `echo 'arguments' | run ${scriptName} test1 > ${outputFileName}`;
+    Terminal.executeCommand(command);
+    await sleep(200);
+
+    const server = GetServer(Player.currentServer);
+    const fileContent = server?.textFiles?.get(outputFileName)?.text;
+
+    expect(fileContent).toContain(`Args received: ["test1","arguments"]`);
+  });
+
+  it("should append to a file when using >> operator", () => {
+    const fileName = "output.txt";
+    const commandString = `echo first line >> ${fileName}; echo second line >> ${fileName}`;
+
+    Terminal.executeCommands(commandString);
+
+    const server = GetServer(Player.currentServer);
+    const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
+    expect(fileContent).toBe("first line\nsecond line");
+  });
+
+  it("should overwrite a file when using > operator", () => {
+    const fileName = "output.txt";
+    const commandString = `echo first line > ${fileName}; echo second line > ${fileName}`;
+
+    Terminal.executeCommands(commandString);
+
+    const server = GetServer(Player.currentServer);
+    const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
+    expect(fileContent).toBe("second line");
   });
 
   it("should handle multiple commands with distinct pipes", () => {
