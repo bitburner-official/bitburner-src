@@ -34,6 +34,7 @@ export class Port {
     this.promise = null;
   }
 }
+
 export function portHandle(n: PortNumber): NetscriptPort {
   return {
     write: (value: unknown) => writePort(n, value),
