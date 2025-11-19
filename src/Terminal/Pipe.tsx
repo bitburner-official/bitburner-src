@@ -65,7 +65,11 @@ export function handlePipe(): void {
     .join("\n")
     .replaceAll('"', "'");
   advancePipe();
-  Terminal.executeCommand(`${commandString} "${output}"`);
+
+  const nextCommand = `${parsedCommand[0]}`.trim().toLowerCase();
+  const useQuotes = nextCommand === "grep";
+  const newCommand = `${commandString} ${useQuotes ? '"' : ""}${output}${useQuotes ? '"' : ""}`;
+  Terminal.executeCommand(newCommand);
 }
 
 export function splitPipesFromFirstCommand(commandString: string): string {
@@ -187,6 +191,10 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
     return;
   }
 
+  if (PipeState.currentTerminalPipe) {
+    PipeState.currentTerminalPipe.hasBeenEvaluated = true;
+  }
+
   // If there are further pipes, pass the same output to them
   if (PipeState.currentTerminalPipe?.nextPipe) {
     PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
@@ -197,9 +205,15 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
 }
 
 function writeToTextFile(filename: string) {
+  const pipe = PipeState.currentTerminalPipe;
+  if (!pipe) {
+    return;
+  }
+
   const file = Terminal.getTextFile(filename);
   const output = getNextOutputStringified(true).join("\n");
-  const overwrite = PipeState.currentTerminalPipe?.pipeType === ">";
+  const overwrite = !pipe.hasBeenEvaluated && pipe.pipeType === ">";
+
   if (file && !overwrite) {
     file.text += `${file.text ? "\n" : ""}${output}`;
   } else if (file && overwrite) {
@@ -211,9 +225,14 @@ function writeToTextFile(filename: string) {
 }
 
 function writeToScriptFile(filename: string): void {
+  const pipe = PipeState.currentTerminalPipe;
+  if (!pipe) {
+    return;
+  }
+
   const file = Terminal.getScript(filename);
   const output = getNextOutputStringified(true).join("\n");
-  const overwrite = PipeState.currentTerminalPipe?.pipeType === ">";
+  const overwrite = !pipe.hasBeenEvaluated && pipe.pipeType === ">";
 
   if (file && overwrite) {
     file.content = output;

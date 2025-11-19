@@ -52,4 +52,5 @@ export type PipedCommand = {
   commandString: string;
   pipeType: string;
   nextPipe: PipedCommand | null;
+  hasBeenEvaluated?: boolean;
 };
