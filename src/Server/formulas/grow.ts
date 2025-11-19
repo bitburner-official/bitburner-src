@@ -22,7 +22,7 @@ export function calculateServerGrowthLog(server: IServer, threads: number, p: IP
   const serverGrowthPercentageAdjusted = serverGrowthPercentage * currentNodeMults.ServerGrowthRate;
 
   //Apply serverGrowth for the calculated number of growth cycles
-  const coreBonus = getCoreBonus(cores - 1);
+  const coreBonus = getCoreBonus(cores);
   // It is critical that numServerGrowthCycles (aka threads) is multiplied last,
   // so that it rounds the same way as numCycleForGrowthCorrected.
   return adjGrowthLog * serverGrowthPercentageAdjusted * p.mults.hacking_grow * coreBonus * numServerGrowthCycles;
