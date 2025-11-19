@@ -2,6 +2,7 @@ import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Person as IPerson, Server as IServer } from "@nsdefs";
 import { ServerConstants } from "../data/Constants";
 import { isValidNumber } from "../../utils/helpers/isValidNumber";
+import { getCoreBonus } from "../ServerHelpers";
 
 // Returns the log of the growth rate. When passing 1 for threads, this gives a useful constant.
 export function calculateServerGrowthLog(server: IServer, threads: number, p: IPerson, cores = 1): number {
@@ -21,7 +22,7 @@ export function calculateServerGrowthLog(server: IServer, threads: number, p: IP
   const serverGrowthPercentageAdjusted = serverGrowthPercentage * currentNodeMults.ServerGrowthRate;
 
   //Apply serverGrowth for the calculated number of growth cycles
-  const coreBonus = 1 + (cores - 1) * (1 / 16);
+  const coreBonus = getCoreBonus(cores);
   // It is critical that numServerGrowthCycles (aka threads) is multiplied last,
   // so that it rounds the same way as numCycleForGrowthCorrected.
   return adjGrowthLog * serverGrowthPercentageAdjusted * p.mults.hacking_grow * coreBonus * numServerGrowthCycles;
