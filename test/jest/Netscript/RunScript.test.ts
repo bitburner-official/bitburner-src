@@ -2,12 +2,11 @@ import type { Script } from "../../../src/Script/Script";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { runScriptFromScript, startWorkerScript } from "../../../src/NetscriptWorker";
 import { workerScripts } from "../../../src/Netscript/WorkerScripts";
-import { config as EvaluatorConfig } from "../../../src/NetscriptJSEvaluator";
 import { Server } from "../../../src/Server/Server";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { AddToAllServers, DeleteServer, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
-import { initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { setupBasicTestingEnvironment, setupScriptTestEnvironment } from "./Utilities";
 import { Terminal } from "../../../src/Terminal";
 import { runScript } from "../../../src/Terminal/commands/runScript";
 import { Player } from "@player";
@@ -18,27 +17,7 @@ import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
 import type { PositiveInteger } from "../../../src/types";
 import { ErrorState } from "../../../src/ErrorHandling/ErrorState";
 
-declare const importActual: (typeof EvaluatorConfig)["doImport"];
-
-// Replace Blob/ObjectURL functions, because they don't work natively in Jest
-global.Blob = class extends Blob {
-  code: string;
-  constructor(blobParts?: BlobPart[], __options?: BlobPropertyBag) {
-    super();
-    this.code = String((blobParts ?? [])[0]);
-  }
-};
-global.URL.revokeObjectURL = function () {};
-// Critical: We have to overwrite this, otherwise we get Jest's hooked
-// implementation, which will not work without passing special flags to Node,
-// and tends to crash even if you do.
-EvaluatorConfig.doImport = importActual;
-
-global.URL.createObjectURL = function (blob) {
-  return "data:text/javascript," + encodeURIComponent((blob as unknown as { code: string }).code);
-};
-
-initGameEnvironment();
+setupScriptTestEnvironment();
 
 test.each([
   {

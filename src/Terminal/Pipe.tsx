@@ -7,7 +7,6 @@ import { hasTextExtension, TextFilePath } from "../Paths/TextFilePath";
 import { TextFile } from "../TextFile";
 import { Player } from "@player";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
-import { runScript } from "./commands/runScript";
 import { Link, Output, RawOutput } from "./OutputTypes";
 import { ANSI_ESCAPE } from "../ui/React/ANSIITypography";
 import { debounce } from "lodash";
@@ -15,11 +14,13 @@ import { Script } from "../Script/Script";
 import { LiteratureName, MessageFilename } from "@enums";
 import { Messages } from "../Message/MessageHelpers";
 import { Literatures } from "../Literature/Literatures";
-import { addOutputToBeProcessed, getNextOutput, type PipedCommand, PipeState } from "./PipeState";
+import { addOutputToBeProcessed, getNextOutput, handlePipeError, type PipedCommand, PipeState } from "./PipeState";
 
 const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
 TerminalEvents.subscribe(debouncedHandlePipe);
+
+// TODO-Fico : add pipe config option to script launcher to handle piping output from scripts
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
@@ -34,7 +35,7 @@ export function handlePipe(): void {
   }
 
   const commandString = PipeState.currentTerminalPipe.commandString;
-  const currentPipe = PipeState.currentTerminalPipe.pipeType;
+  const pipeType = PipeState.currentTerminalPipe.pipeType;
 
   const parsedCommand = parseCommand(commandString);
   const command = parsedCommand[0]?.toString();
@@ -45,17 +46,8 @@ export function handlePipe(): void {
   }
 
   // Pipe to file
-  if (hasTextExtension(command) || (hasScriptExtension(command) && currentPipe !== "|")) {
+  if (hasTextExtension(command) || (hasScriptExtension(command) && pipeType !== "|")) {
     handlePipeToFile(parsedCommand, commandString);
-    return TerminalEvents.emit();
-  }
-
-  if (hasScriptExtension(command)) {
-    handlePipeToScript(parsedCommand.slice());
-    return TerminalEvents.emit();
-  }
-  if (command.toLowerCase() === "run" && parsedCommand.length > 1 && hasScriptExtension(`${parsedCommand[1]}`)) {
-    handlePipeToScript(parsedCommand.slice(1));
     return TerminalEvents.emit();
   }
 
@@ -89,34 +81,24 @@ export function splitPipesFromFirstCommand(commandString: string): string {
   return firstCommand;
 }
 
-export function pipeContent(content: string) {
-  if (!PipeState.currentTerminalPipe) {
-    return;
-  }
-
-  addOutputToBeProcessed(new Output(content, "primary"), PipeState.currentTerminalPipe);
+export function pipeContent(content: string, command: PipedCommand) {
+  addOutputToBeProcessed(new Output(content, "primary"), command);
   TerminalEvents.emit();
 }
 
-export function pipeMessage(message: MessageFilename) {
-  if (!PipeState.currentTerminalPipe) {
-    return;
-  }
+export function pipeMessage(message: MessageFilename, command: PipedCommand) {
   const messageDetails = Messages[message];
   const content = `${messageDetails.filename}\n${messageDetails.msg}`;
 
-  addOutputToBeProcessed(new Output(content, "primary"), PipeState.currentTerminalPipe);
+  addOutputToBeProcessed(new Output(content, "primary"), command);
   TerminalEvents.emit();
 }
 
-export function pipeLiterature(message: LiteratureName) {
-  if (!PipeState.currentTerminalPipe) {
-    return;
-  }
+export function pipeLiterature(message: LiteratureName, command: PipedCommand) {
   const messageDetails = Literatures[message];
   const content = `${messageDetails.filename}\n${stringify(messageDetails.text)}`;
 
-  addOutputToBeProcessed(new Output(content, "primary"), PipeState.currentTerminalPipe);
+  addOutputToBeProcessed(new Output(content, "primary"), command);
   TerminalEvents.emit();
 }
 
@@ -143,16 +125,6 @@ function getFirstCommand(parsedCommands: (string | number | boolean)[]): string 
     firstCommand += arg + " ";
   }
   return firstCommand.trim();
-}
-
-function handlePipeError(error: string) {
-  clearPipe();
-  Terminal.error(`Error in pipe command: ${error}`);
-}
-
-export function clearPipe() {
-  PipeState.outputToBeProcessed.shift();
-  PipeState.currentTerminalPipe = null;
 }
 
 function advancePipe() {
@@ -242,29 +214,6 @@ function writeToScriptFile(filename: string): void {
     const newFile = new Script(filename as ScriptFilePath, output, Player.getCurrentServer().hostname);
     Player.getCurrentServer().scripts.set(filename as ScriptFilePath, newFile);
   }
-}
-
-function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void {
-  const command = parsedCommand[0].toString();
-  const firstScriptArg = parsedCommand.find((arg) => hasScriptExtension(arg.toString()));
-  const fileName = command.toLowerCase() === "run" && firstScriptArg ? firstScriptArg.toString() : command;
-  const scriptArgs = [...parsedCommand.slice(1), ...getNextOutputStringified(true)];
-
-  const file = Terminal.getScript(fileName ?? "");
-  if (!file) {
-    handlePipeError(`Script file ${fileName} not found.`);
-    return;
-  }
-
-  const script = runScript(file.filename, scriptArgs, Player.getCurrentServer());
-  if (!script) {
-    handlePipeError(`Failed to run script ${file.filename}.`);
-    return;
-  }
-
-  script.pipeConfig = PipeState.currentTerminalPipe?.nextPipe ?? null;
-  PipeState.currentTerminalPipe = null;
-  advancePipe();
 }
 
 function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape = false): string {

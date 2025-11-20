@@ -20,7 +20,7 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
     const file = server.getContentFile(path);
     if (!file) return Terminal.error(`No file at path ${path}`);
     return PipeState.currentTerminalPipe
-      ? pipeContent(file.content)
+      ? pipeContent(file.content, PipeState.currentTerminalPipe)
       : dialogBoxCreate(`${file.filename}\n\n${file.content}`);
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
@@ -32,12 +32,12 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
   // Message
   if (isMember("MessageFilename", path)) {
     if (server.messages.includes(path)) {
-      return PipeState.currentTerminalPipe ? pipeMessage(path) : showMessage(path);
+      return PipeState.currentTerminalPipe ? pipeMessage(path, PipeState.currentTerminalPipe) : showMessage(path);
     }
   }
   if (isMember("LiteratureName", path)) {
     if (server.messages.includes(path)) {
-      return PipeState.currentTerminalPipe ? pipeLiterature(path) : showLiterature(path);
+      return PipeState.currentTerminalPipe ? pipeLiterature(path, PipeState.currentTerminalPipe) : showLiterature(path);
     }
   }
   Terminal.error(`No file at path ${path}`);

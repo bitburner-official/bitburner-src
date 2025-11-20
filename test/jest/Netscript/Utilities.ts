@@ -9,6 +9,7 @@ import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initSourceFiles } from "../../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import { Router } from "../../../src/ui/GameRoot";
+import { config as EvaluatorConfig } from "../../../src/NetscriptJSEvaluator";
 
 export function initGameEnvironment() {
   // We need to patch this function. Some APIs call it, but it only works properly after the main UI is loaded.
@@ -47,4 +48,30 @@ export function getNS(): NSFull {
     throw new Error("Invalid NS instance");
   }
   return ns;
+}
+
+// Set up testing environment so that scripts can be run
+export function setupScriptTestEnvironment(): void {
+  declare const importActual: (typeof EvaluatorConfig)["doImport"];
+
+  // Replace Blob/ObjectURL functions, because they don't work natively in Jest
+  global.Blob = class extends Blob {
+    code: string;
+
+    constructor(blobParts?: BlobPart[], __options?: BlobPropertyBag) {
+      super();
+      this.code = String((blobParts ?? [])[0]);
+    }
+  };
+  global.URL.revokeObjectURL = function () {};
+  // Critical: We have to overwrite this, otherwise we get Jest's hooked
+  // implementation, which will not work without passing special flags to Node,
+  // and tends to crash even if you do.
+  EvaluatorConfig.doImport = importActual;
+
+  global.URL.createObjectURL = function (blob) {
+    return "data:text/javascript," + encodeURIComponent((blob as unknown as { code: string }).code);
+  };
+
+  initGameEnvironment();
 }

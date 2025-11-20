@@ -11,6 +11,7 @@ import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 import { pluralize } from "../../utils/I18nUtils";
 import { RunningScript } from "../../Script/RunningScript";
+import { PipeState } from "../PipeState";
 
 export function runScript(
   scriptPath: ScriptFilePath,
@@ -79,5 +80,10 @@ export function runScript(
   if (tailFlag) {
     LogBoxEvents.emit(runningScript);
   }
+
+  // Update script pipe config, if any is present from the terminal
+  runningScript.pipeConfig = PipeState.currentTerminalPipe ?? null;
+  PipeState.currentTerminalPipe = null;
+
   return runningScript;
 }
