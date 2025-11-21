@@ -1162,9 +1162,9 @@ export class Bladeburner implements OperationTeam {
             this.stamina = Math.min(this.maxStamina, this.stamina + staminaGain);
             if (this.logging.general) {
               let extraLog = "";
-              if (Player.hp.current > currentHp) {
+              if (person.hp.current > currentHp) {
                 extraLog += ` Restored ${formatHp(BladeburnerConstants.HrcHpGain)} HP. Current HP is ${formatHp(
-                  Player.hp.current,
+                  person.hp.current,
                 )}.`;
               }
               if (this.stamina > currentStamina) {
