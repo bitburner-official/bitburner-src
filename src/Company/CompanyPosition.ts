@@ -11,6 +11,7 @@ export interface CompanyPositionCtorParams {
   applyText?: string;
   hiredText?: string;
   isPartTime?: boolean;
+  isStartingJob?: boolean;
 
   reqdHacking?: number;
   reqdStrength?: number;
@@ -41,6 +42,9 @@ export class CompanyPosition {
 
   /** Field type of the position (software, it, business, etc) */
   field: JobField;
+
+  /** Whether this position is shown in the job list even when the player does not satisfy its requirements */
+  isStartingJob: boolean;
 
   /** Title of next position to be promoted to */
   nextPosition: JobName | null;
@@ -93,6 +97,7 @@ export class CompanyPosition {
   constructor(name: JobName, p: CompanyPositionCtorParams) {
     this.name = name;
     this.field = p.field;
+    this.isStartingJob = p.isStartingJob ?? false;
     this.nextPosition = p.nextPosition;
     this.baseSalary = p.baseSalary;
     this.repMultiplier = p.repMultiplier;
