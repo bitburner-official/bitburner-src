@@ -60,7 +60,6 @@ function Progress({ results }: { results: string }): React.ReactElement {
 
 export function InfiltrationRoot(): React.ReactElement {
   const state = Player.infiltration;
-  // WIP: Is there a reason we should not use the useRerender hook?
   const [__, setRefresh] = useState(0);
   const cancel = useCallback(() => state?.cancel?.(), [state]);
   // As a precaution, tear down infil if we leave the page. This covers us
