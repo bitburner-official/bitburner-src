@@ -603,6 +603,11 @@ export function focusPenalty(this: PlayerObject): number {
 }
 
 /** This doesn't change the current page; that is up to the caller. */
+/**
+ * WIP: What do you think about renaming this function to setInfiltration? "setInfiltration" is exactly what this
+ * function does. "startInfiltration" implies that the infiltration will be started, which is not true, and we have to
+ * add a comment to clarify this behavior.
+ */
 export function startInfiltration(this: PlayerObject, location: Location): void {
   if (!location.infiltrationData)
     throw new Error(`trying to start infiltration at ${location.name} but the infiltrationData is null`);
