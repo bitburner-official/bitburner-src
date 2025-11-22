@@ -7,6 +7,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.software0]: {
       nextPosition: JobName.software1, // Junior Software Engineer
       field: JobField.software,
+      isStartingJob: true,
       baseSalary: 33,
       charismaEffectiveness: 15,
       charismaExpGain: 0.02,
@@ -112,6 +113,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.IT0]: {
       nextPosition: JobName.IT1, // IT Analyst
       field: JobField.it,
+      isStartingJob: true,
       baseSalary: 26,
       charismaEffectiveness: 10,
       charismaExpGain: 0.01,
@@ -161,6 +163,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.securityEng]: {
       nextPosition: JobName.software5, // Head of Engineering
       field: JobField.securityEngineer,
+      isStartingJob: true,
       baseSalary: 121,
       charismaEffectiveness: 15,
       charismaExpGain: 0.05,
@@ -174,6 +177,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.networkEng0]: {
       nextPosition: JobName.networkEng1, // Network Administrator
       field: JobField.networkEngineer,
+      isStartingJob: true,
       baseSalary: 121,
       charismaEffectiveness: 15,
       charismaExpGain: 0.05,
@@ -200,6 +204,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.business0]: {
       nextPosition: JobName.business1, // Business Analyst
       field: JobField.business,
+      isStartingJob: true,
       baseSalary: 46,
       charismaEffectiveness: 90,
       charismaExpGain: 0.08,
@@ -279,6 +284,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.security0]: {
       nextPosition: JobName.security1, // Security Officer
       field: JobField.security,
+      isStartingJob: true,
       baseSalary: 50,
       hackingEffectiveness: 5,
       strengthEffectiveness: 20,
@@ -377,6 +383,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.agent0]: {
       nextPosition: JobName.agent1, // Secret Agent
       field: JobField.agent,
+      isStartingJob: true,
       baseSalary: 330,
       hackingEffectiveness: 10,
       strengthEffectiveness: 15,
@@ -452,6 +459,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.waiter]: {
       nextPosition: null,
       field: JobField.waiter,
+      isStartingJob: true,
       baseSalary: 22,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
@@ -469,6 +477,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.employee]: {
       nextPosition: null,
       field: JobField.employee,
+      isStartingJob: true,
       baseSalary: 22,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
@@ -486,6 +495,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.softwareConsult0]: {
       nextPosition: JobName.softwareConsult1, // Senior Software Consultant
       field: JobField.softwareConsultant,
+      isStartingJob: true,
       baseSalary: 66,
       hackingEffectiveness: 80,
       charismaEffectiveness: 20,
@@ -513,6 +523,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.businessConsult0]: {
       nextPosition: JobName.businessConsult1, // Senior Business Consultant
       field: JobField.businessConsultant,
+      isStartingJob: true,
       baseSalary: 66,
       hackingEffectiveness: 20,
       charismaEffectiveness: 80,
@@ -541,6 +552,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.waiterPT]: {
       nextPosition: null,
       field: JobField.waiter,
+      isStartingJob: true,
       baseSalary: 20,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
@@ -559,6 +571,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     [JobName.employeePT]: {
       nextPosition: null,
       field: JobField.employee,
+      isStartingJob: true,
       baseSalary: 20,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
