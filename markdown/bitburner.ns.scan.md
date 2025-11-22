@@ -42,7 +42,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ Optional. Hostname/IP of the server to scan, default to current server.
+_(Optional)_ Optional. Hostname/IP of the server to scan. Defaults to the server the calling script is running on.
 
 
 </td></tr>

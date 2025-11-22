@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-factions: string[];
+factions: FactionName[];
 ```

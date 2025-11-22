@@ -7,7 +7,7 @@ import { GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { Factions } from "../../../src/Faction/Factions";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { Terminal } from "../../../src/Terminal";
 import type { NSFull } from "../../../src/NetscriptFunctions";
 import { Companies } from "../../../src/Company/Companies";
@@ -349,9 +349,9 @@ describe("connect", () => {
     });
     test("Private server", () => {
       const ns = getNS();
-      ns.purchaseServer("pserver-0", 8);
+      ns.cloud.purchaseServer("cloud-server-0", 8);
       Terminal.connectToServer(SpecialServers.DaedalusServer);
-      expectConnectSuccessfully(ns, "pserver-0");
+      expectConnectSuccessfully(ns, "cloud-server-0");
     });
     test("Hacknet server", () => {
       const ns = getNS();

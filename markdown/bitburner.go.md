@@ -99,7 +99,19 @@ Retrieves a simplified version of the board state. "X" represents black pieces, 
 
 For example, a 5x5 board might look like this:
 
-\[<br/> "XX.O.",<br/> "X..OO",<br/> ".XO..",<br/> "XXO.\#",<br/> ".XO.\#",<br/> \]
+\[
+
+"XX.O.",
+
+"X..OO",
+
+".XO..",
+
+"XXO.\#",
+
+".XO.\#",
+
+\]
 
 Each string represents a vertical column on the board, and each character in the string represents a point.
 
@@ -142,7 +154,19 @@ Returns all the prior moves in the current game, as an array of simple board sta
 
 For example, a single 5x5 prior move board might look like this:
 
-\[<br/> "XX.O.",<br/> "X..OO",<br/> ".XO..",<br/> "XXO.\#",<br/> ".XO.\#",<br/> \]
+\[
+
+"XX.O.",
+
+"X..OO",
+
+".XO..",
+
+"XXO.\#",
+
+".XO.\#",
+
+\]
 
 
 </td></tr>

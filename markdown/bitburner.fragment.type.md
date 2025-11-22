@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-type: number;
+type: FragmentType;
 ```

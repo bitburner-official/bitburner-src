@@ -56,7 +56,7 @@ interface Player extends Person {
   numPeopleKilled: number;
   entropy: number;
   jobs: Partial<Record<CompanyName, JobName>>;
-  factions: string[];
+  factions: FactionName[];
   totalPlaytime: number;
   location: LocationName;
   karma: number;
@@ -264,7 +264,10 @@ interface RunningScript {
   onlineMoneyMade: number;
   /** Number of seconds that this script has been running online */
   onlineRunningTime: number;
-  /** Process ID. Must be an integer */
+  /** A Process ID unique to this script across all hosts. Must be an integer starting
+   * from 1 for the first process spawned at game launch and incrementing from there.
+   * Note that PIDs are not saved in the savegame and are regenerated at launch.
+   */
   pid: number;
   /**
    * Process ID of the parent process.
@@ -404,7 +407,7 @@ interface BasicHGWOptions {
 
 /**
  * Options to control how a server identifier (hostname or IP address) is returned.
- * Affects the behavior of {@link NS.scan | scan}, {@link NS.getPurchasedServers | getPurchasedServers}, and {@link Singularity.getCurrentServer | getCurrentServer}
+ * Affects the behavior of {@link NS.scan | scan}, {@link Cloud.getServerNames | getServerNames}, and {@link Singularity.getCurrentServer | getCurrentServer}
  * @public
  */
 interface HostReturnOptions {
@@ -633,7 +636,7 @@ export interface Server {
   /** Name of company/faction/etc. that this server belongs to, not applicable to all Servers */
   organizationName: string;
 
-  /** Flag indicating whether this is a purchased server */
+  /** Flag indicating whether this is a server owned by the player (e.g., home, cloud servers, hacknet servers) */
   purchasedByPlayer: boolean;
 
   /** Flag indicating whether this server has a backdoor installed by a player */
@@ -751,14 +754,14 @@ interface BitNodeMultipliers {
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerCost: number;
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerSoftcap: number;
-  /** Influences the maximum number of purchased servers you can have */
-  PurchasedServerLimit: number;
-  /** Influences the maximum allowed RAM for a purchased server */
-  PurchasedServerMaxRam: number;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerCost: number;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerSoftcap: number;
+  /** Influences the maximum number of cloud servers you can have */
+  CloudServerLimit: number;
+  /** Influences the maximum allowed RAM for a cloud server */
+  CloudServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction: number;
   /** Influences how much money is stolen from a server when the player performs a hack against it. */
@@ -841,7 +844,7 @@ interface BladeburnerCurAction {
  */
 interface GangGenInfo {
   /** Name of faction that the gang belongs to ("Slum Snakes", etc.) */
-  faction: string;
+  faction: FactionName;
   /** Indicating whether or not it's a hacking gang */
   isHacking: boolean;
   /** Money earned per game cycle */
@@ -1234,7 +1237,7 @@ export interface NetscriptPort {
  * Stock market API
  * @public
  */
-export interface TIX {
+export interface Stock {
   /**
    * Get game constants for the stock market mechanic.
    *
@@ -1632,28 +1635,44 @@ export interface TIX {
   getForecast(sym: string): number;
 
   /**
-   * Purchase 4S Market Data Access.
+   * Purchase 4S Market Data UI access (UI only).
+   *
+   * You need to have a WSE account. Note that this feature only unlocks access to 4S Market Data in the Stock Market
+   * UI. If you want to access 4S Market Data via NS APIs, you have to unlock "4S Market Data TIX API access" via
+   * {@link Stock.purchase4SMarketDataTixApi | purchase4SMarketDataTixApi}, which is unrelated to this feature.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchase4SMarketData(): boolean;
 
   /**
-   * Purchase 4S Market Data TIX API Access.
+   * Purchase 4S Market Data TIX API access (NS APIs only).
+   *
+   * You need to have TIX API access. Note that this feature only unlocks access to 4S Market Data via NS APIs.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchase4SMarketDataTixApi(): boolean;
 
   /**
-   * Purchase WSE Account.
+   * Purchase a WSE account.
+   *
+   * You need to have this account to perform actions via the Stock Market UI. Note that if you want to perform actions
+   * via NS APIs, you need to have TIX API access, not this account.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchaseWseAccount(): boolean;
 
   /**
-   * Purchase TIX API Access
+   * Purchase TIX API access.
+   *
+   * You need to have TIX API access to perform actions via NS APIs. Note that you can buy TIX API access without a WSE
+   * account.
+   *
    * @remarks RAM cost: 2.5 GB
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
@@ -3949,8 +3968,7 @@ export interface CodingContract {
    *
    * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not
-   *   provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns A reward description string on success, or an empty string on failure.
    */
   attempt(answer: any, filename: string, host?: string): string;
@@ -3964,7 +3982,7 @@ export interface CodingContract {
    * (e.g. Find Largest Prime Factor, Total Ways to Sum, etc.)
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
   getContractType(filename: string, host?: string): CodingContractName;
@@ -3977,7 +3995,7 @@ export interface CodingContract {
    * Get the full text description for the problem posed by the Coding Contract.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns Contract’s text description.
    */
   getDescription(filename: string, host?: string): string;
@@ -3992,7 +4010,7 @@ export interface CodingContract {
    * This is just the data that the contract wants you to act on in order to solve the contract.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns The specified contract’s data, data type depends on contract type.
    */
   getData(filename: string, host?: string): any;
@@ -4016,7 +4034,7 @@ export interface CodingContract {
    * ```
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Default to the current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns An object containing various data about the contract specified.
    */
   getContract(filename: string, host?: string): CodingContractObject;
@@ -4029,7 +4047,7 @@ export interface CodingContract {
    * Get the number of tries remaining on the contract before it self-destructs.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns How many attempts are remaining for the contract.
    */
   getNumTriesRemaining(filename: string, host?: string): number;
@@ -4052,6 +4070,145 @@ export interface CodingContract {
    * RAM cost: 0 GB
    */
   getContractTypes(): CodingContractName[];
+}
+
+/**
+ * Cloud API
+ * @public
+ */
+export interface Cloud {
+  /**
+   * Get cost of purchasing a cloud server.
+   * @remarks
+   * RAM cost: 0.25 GB
+   *
+   * Returns the cost to purchase a cloud server with the specified amount of ram.
+   *
+   * @example
+   * ```js
+   * const ram = 2 ** 20;
+   * const cost = ns.cloud.getServerCost(ram);
+   * ns.tprint(`A cloud server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
+   * ```
+   * @param ram - Amount of RAM of a potential cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns The cost to purchase a cloud server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
+   */
+  getServerCost(ram: number): number;
+
+  /**
+   * Purchase a cloud server.
+   * @remarks
+   * RAM cost: 2.25 GB
+   *
+   * Purchase a cloud server with the specified hostname and amount of RAM.
+   *
+   * The hostname argument can be any data type, but it will be converted to a string
+   * and have whitespace removed. Anything that resolves to an empty string or IP address
+   * will cause the function to fail. If there is already a cloud server with the specified
+   * hostname, then the function will automatically append a number at the end of the hostname
+   * argument value until it finds a unique hostname. For example, if the script calls
+   * `purchaseServer(“foo”, 4)` but a server named “foo” already exists, then it will
+   * automatically change the hostname to `foo-0`. If there is already a server with the
+   * hostname `foo-0`, then it will change the hostname to `foo-1`, and so on.
+   *
+   * Note that there is a maximum limit to the amount of cloud servers you can purchase.
+   *
+   * Returns the hostname of the new cloud server as a string. If the function
+   * fails to purchase a cloud server, then it will return an empty string. The function will
+   * fail if the arguments passed in are invalid, if the player does not have enough
+   * money to purchase the specified cloud server, or if the player has exceeded the maximum
+   * amount of cloud servers.
+   *
+   * @example
+   * ```js
+   * // Attempt to purchase 5 cloud servers with 64GB of ram each
+   * const ram = 64;
+   * const prefix = "cloud-server-";
+   * for (let i = 0; i < 5; ++i) {
+   *    ns.cloud.purchaseServer(prefix + i, ram);
+   * }
+   * ```
+   * @param hostname - Hostname of the cloud server.
+   * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns The hostname of the new cloud server.
+   */
+  purchaseServer(hostname: string, ram: number): string;
+
+  /**
+   * Get cost of upgrading a cloud server to the given RAM.
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @param host - Hostname/IP of the cloud server to upgrade.
+   * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns The price to upgrade or -1 if either input is not valid, i.e. host is not the name of a cloud server or ram is not a valid amount.
+   */
+  getServerUpgradeCost(host: string, ram: number): number;
+
+  /**
+   * Upgrade a cloud server's RAM.
+   * @remarks
+   * RAM cost: 0.25 GB
+   *
+   * @param host - Hostname/IP of the cloud server to upgrade.
+   * @param ram - Amount of RAM of the cloud server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @returns True if the upgrade succeeded, and false otherwise.
+   */
+  upgradeServer(host: string, ram: number): boolean;
+
+  /**
+   * Rename a cloud server.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param hostname - Current cloud server hostname.
+   * @param newName - New cloud server hostname.
+   * @returns True if successful, and false otherwise.
+   */
+  renameServer(hostname: string, newName: string): boolean;
+
+  /**
+   * Delete a cloud server.
+   * @remarks
+   * 2.25 GB
+   *
+   * Deletes one of your cloud servers, which is specified by its hostname/ip.
+   *
+   * The host argument can be any data type, but it will be converted to a string.
+   * Whitespace is automatically removed from the string. This function will not delete a
+   * cloud server that still has scripts running on it.
+   *
+   * @param host - Hostname/IP of the cloud server to delete.
+   * @returns True if successful, and false otherwise.
+   */
+  deleteServer(host: string): boolean;
+
+  /**
+   * Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
+   * Returns hostnames by default.
+   *
+   * @remarks 1.05 GB
+   *
+   * @param returnOpts - Optional. Controls whether the function returns IPs
+   * @returns Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
+   */
+  getServerNames(returnOpts?: HostReturnOptions): string[];
+
+  /**
+   * Returns the maximum number of cloud servers you can purchase.
+   *
+   * @remarks RAM cost: 0.05 GB
+   * @returns Returns the maximum number of cloud servers you can purchase.
+   */
+  getServerLimit(): number;
+
+  /**
+   * Returns the maximum RAM that a cloud server can have.
+   *
+   * @remarks RAM cost: 0.05 GB
+   * @returns Returns the maximum RAM (in GB) that a cloud server can have.
+   */
+  getRamLimit(): number;
 }
 
 /**
@@ -4916,13 +5073,19 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
-   ]
+   *[
+   *
+   *  "XX.O.",
+   *
+   *  "X..OO",
+   *
+   *  ".XO..",
+   *
+   *  "XXO.#",
+   *
+   *  ".XO.#",
+   *
+   *]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
    *
@@ -4942,13 +5105,19 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
-   ]
+   *[
+   *
+   *  "XX.O.",
+   *
+   *  "X..OO",
+   *
+   *  ".XO..",
+   *
+   *  "XXO.#",
+   *
+   *  ".XO.#",
+   *
+   *]
    */
   getMoveHistory(): string[][];
 
@@ -5753,18 +5922,40 @@ export interface Formulas {
 }
 
 /** @public */
+type FragmentEnumType = {
+  HackingSpeed: 3;
+  HackingMoney: 4;
+  HackingGrow: 5;
+  Hacking: 6;
+  Strength: 7;
+  Defense: 8;
+  Dexterity: 9;
+  Agility: 10;
+  Charisma: 11;
+  HacknetMoney: 12;
+  HacknetCost: 13;
+  Rep: 14;
+  WorkMoney: 15;
+  Crime: 16;
+  Bladeburner: 17;
+  Booster: 18;
+};
+
+/** @public */
+type FragmentType = _ValueOf<FragmentEnumType>;
+
+/** @public */
 interface Fragment {
   id: number;
   shape: boolean[][];
-  type: number;
+  type: FragmentType;
   power: number;
   limit: number;
   effect: string;
 }
 
 /** @public */
-interface ActiveFragment {
-  id: number;
+interface ActiveFragment extends Fragment {
   highestCharge: number;
   numCharge: number;
   rotation: number;
@@ -5962,7 +6153,7 @@ interface UserInterface {
    * ns.ui.openTail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
-   * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server the calling script is running on.
    * @param args - Arguments for the script being tailed.
    */
   openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
@@ -6062,7 +6253,7 @@ interface UserInterface {
    *
    * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
    * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
-   * @param host - Optional. Hostname/IP of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param host - Optional. Hostname/IP of the target script. Defaults to the server the calling script is running on.
    * @param args - Arguments for the target script.
    */
   setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
@@ -6185,6 +6376,12 @@ export interface NS {
   readonly codingcontract: CodingContract;
 
   /**
+   * Namespace for {@link Cloud | cloud} functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly cloud: Cloud;
+
+  /**
    * Namespace for {@link Format | formatting} functions.
    * @remarks RAM cost: 0 GB
    */
@@ -6209,10 +6406,10 @@ export interface NS {
   readonly sleeve: Sleeve;
 
   /**
-   * Namespace for {@link TIX | stock} functions.
+   * Namespace for {@link Stock | stock} functions.
    * @remarks RAM cost: 0 GB
    */
-  readonly stock: TIX;
+  readonly stock: Stock;
 
   /**
    * Namespace for {@link Formulas | formulas} functions.
@@ -6448,14 +6645,14 @@ export interface NS {
   hackAnalyze(host: string): number;
 
   /**
-   * Get the security increase for a number of threads.
+   * Get the security increase for a number of hack threads.
    * @remarks
    * RAM cost: 1 GB
    *
    * Returns the security increase that would occur if a hack with this many threads happened.
    *
    * @param threads - Amount of threads that will be used.
-   * @param host - Hostname/IP of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money.
+   * @param host - Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to hack the specified server's maximum amount of money.
    * @returns The security increase.
    */
   hackAnalyzeSecurity(threads: number, host?: string): number;
@@ -6517,7 +6714,7 @@ export interface NS {
    * Returns the security increase that would occur if a grow with this many threads happened.
    *
    * @param threads - Amount of threads that will be used.
-   * @param host - Optional. Hostname/IP of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money.
+   * @param host - Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to reach the specified server's maximum money.
    * @param cores - Optional. The number of cores of the server that would run grow.
    * @returns The security increase.
    */
@@ -6779,7 +6976,7 @@ export interface NS {
    * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of script to get logs from.
-   * @param host - Optional. Hostname/IP of the server that the script is on.
+   * @param host - Optional. Hostname/IP of the server that the script is on. Defaults to the server the calling script is running on.
    * @param args - Arguments to identify which scripts to get logs for.
    * @returns Returns a string array, where each line is an element in the array. The most recently logged line is at the end of the array.
    */
@@ -6865,7 +7062,7 @@ export interface NS {
    * }
    * ```
    *
-   * @param host - Optional. Hostname/IP of the server to scan, default to current server.
+   * @param host - Optional. Hostname/IP of the server to scan. Defaults to the server the calling script is running on.
    * @param returnOpts - Optional. Controls whether the function returns IPs.
    * @returns Returns an array of hostnames.
    */
@@ -7003,7 +7200,7 @@ export interface NS {
    * If the script was successfully started, then this functions returns the PID of that script.
    * Otherwise, it returns 0.
    *
-   * PID stands for Process ID. The PID is a unique identifier for each script.
+   * PID stands for Process ID. The PID is a unique identifier for each script across all hosts.
    * The PID will always be a positive integer.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
@@ -7037,7 +7234,7 @@ export interface NS {
    * If the script was successfully started, then this function returns the PID of that script.
    * Otherwise, it returns 0.
    *
-   * PID stands for Process ID. The PID is a unique identifier for each script.
+   * PID stands for Process ID. The PID is a unique identifier for each script across all hosts.
    * The PID will always be a positive integer.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
@@ -7106,7 +7303,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * Kills the script with the provided PID.
+   * Kills the script with the provided PID. PIDs are unique across all hosts.
    * To instead kill a script using its filename, host, and args, see {@link NS.(kill:2) | the other ns.kill entry}.
    *
    * @example
@@ -7140,7 +7337,7 @@ export interface NS {
    * ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
    * ```
    * @param filename - Filename of the script to kill.
-   * @param host - Hostname/IP where the script to kill is running. Defaults to the current server.
+   * @param host - Hostname/IP where the script to kill is running. Optional. Defaults to the server the calling script is running on.
    * @param args - Arguments of the script to kill.
    * @returns True if the scripts were successfully killed, and false otherwise.
    */
@@ -7156,8 +7353,8 @@ export interface NS {
    * true if there are any scripts running on the target server.
    * If no host is defined, it will kill all scripts, where the script is running.
    *
-   * @param host - Hostname/IP of the server on which to kill all scripts.
-   * @param safetyGuard - Skips the script that calls this function
+   * @param host - Hostname/IP of the server on which to kill all scripts. Optional. Defaults to the server the calling script is running on.
+   * @param safetyGuard - Skips the script that calls this function. Optional. Defaults to false.
    * @returns True if any scripts were killed, and false otherwise.
    */
   killall(host?: string, safetyGuard?: boolean): boolean;
@@ -7228,7 +7425,7 @@ export interface NS {
    *   ns.tprint(script.args);
    * }
    * ```
-   * @param host - Hostname/IP of the target server. If not specified, it will be the current server’s IP by default.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to the server the calling script is running on.
    * @returns Array with general information about all scripts running on the specified target server.
    */
   ps(host?: string): ProcessInfo[];
@@ -7317,11 +7514,11 @@ export interface NS {
   getHacknetMultipliers(): HacknetMultipliers;
 
   /**
-   * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+   * Returns a server object for the given server.
    *
    * @remarks
    * RAM cost: 2 GB
-   * @param host - Optional. Hostname/IP for the requested server object.
+   * @param host - Optional. Hostname/IP for the requested server object. Defaults to the server the calling script is running on.
    * @returns The requested server object.
    */
   getServer(host?: string): Server;
@@ -7481,7 +7678,7 @@ export interface NS {
    * ns.fileExists("ftpcrack.exe");
    * ```
    * @param filename - Filename of file to check.
-   * @param host - Hostname/IP of target server. Optional, defaults to the server the script is running on.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns True if specified file exists, and false otherwise.
    */
   fileExists(filename: string, host?: string): boolean;
@@ -7510,7 +7707,7 @@ export interface NS {
    * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
    * @param script - Filename or PID of script to check. This is case-sensitive.
-   * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
@@ -7529,7 +7726,7 @@ export interface NS {
    * functions like this that check based on filename, the filename plus arguments forms the key.)
    *
    * @param filename - Optional. Filename or PID of the script.
-   * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @param args  - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns The info about the running script if found, and null otherwise.
    */
@@ -7555,144 +7752,11 @@ export interface NS {
   ramOverride(ram?: number): number;
 
   /**
-   * Get cost of purchasing a server.
-   * @remarks
-   * RAM cost: 0.25 GB
-   *
-   * Returns the cost to purchase a server with the specified amount of ram.
-   *
-   * @example
-   * ```js
-   * const ram = 2 ** 20;
-   * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
-   * ```
-   * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
-   */
-  getPurchasedServerCost(ram: number): number;
-
-  /**
-   * Purchase a server.
-   * @remarks
-   * RAM cost: 2.25 GB
-   *
-   * Purchase a server with the specified hostname and amount of RAM.
-   *
-   * The hostname argument can be any data type, but it will be converted to a string
-   * and have whitespace removed. Anything that resolves to an empty string or IP address
-   * will cause the function to fail. If there is already a server with the specified
-   * hostname, then the function will automatically append a number at the end of the hostname
-   * argument value until it finds a unique hostname. For example, if the script calls
-   * `purchaseServer(“foo”, 4)` but a server named “foo” already exists, then it will
-   * automatically change the hostname to `foo-0`. If there is already a server with the
-   * hostname `foo-0`, then it will change the hostname to `foo-1`, and so on.
-   *
-   * Note that there is a maximum limit to the amount of servers you can purchase.
-   *
-   * Returns the hostname of the newly purchased server as a string. If the function
-   * fails to purchase a server, then it will return an empty string. The function will
-   * fail if the arguments passed in are invalid, if the player does not have enough
-   * money to purchase the specified server, or if the player has exceeded the maximum
-   * amount of servers.
-   *
-   * @example
-   * ```js
-   * // Attempt to purchase 5 servers with 64GB of ram each
-   * const ram = 64;
-   * const prefix = "pserv-";
-   * for (let i = 0; i < 5; ++i) {
-   *    ns.purchaseServer(prefix + i, ram);
-   * }
-   * ```
-   * @param hostname - Hostname of the purchased server.
-   * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The hostname of the newly purchased server.
-   */
-  purchaseServer(hostname: string, ram: number): string;
-
-  /**
-   * Get cost of upgrading a purchased server to the given ram.
-   * @remarks
-   * RAM cost: 0.1 GB
-   *
-   * @param host - Hostname/IP of the server to upgrade.
-   * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The price to upgrade or -1 if either input is not valid, i.e. host is not the name of a purchased server or ram is not a valid amount.
-   */
-  getPurchasedServerUpgradeCost(host: string, ram: number): number;
-
-  /**
-   * Upgrade a purchased server's RAM.
-   * @remarks
-   * RAM cost: 0.25 GB
-   *
-   * @param host - Hostname/IP of the server to upgrade.
-   * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns True if the upgrade succeeded, and false otherwise.
-   */
-  upgradePurchasedServer(host: string, ram: number): boolean;
-
-  /**
-   * Rename a purchased server.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * @param hostname - Current server hostname.
-   * @param newName - New server hostname.
-   * @returns True if successful, and false otherwise.
-   */
-  renamePurchasedServer(hostname: string, newName: string): boolean;
-
-  /**
-   * Delete a purchased server.
-   * @remarks
-   * 2.25 GB
-   *
-   * Deletes one of your purchased servers, which is specified by its hostname/ip.
-   *
-   * The host argument can be any data type, but it will be converted to a string.
-   * Whitespace is automatically removed from the string. This function will not delete a
-   * server that still has scripts running on it.
-   *
-   * @param host - Hostname/IP of the server to delete.
-   * @returns True if successful, and false otherwise.
-   */
-  deleteServer(host: string): boolean;
-
-  /**
-   * Returns an array with the hostnames or IP addresses of all of the servers you have purchased.
-   * Returns hostnames by default.
-   *
-   * @remarks 1.05 GB
-   *
-   * @param returnOpts - Optional. Controls whether the function returns IPs
-   * @returns Returns an array with the hostnames or IP addresses of all of the servers you have purchased.
-   */
-  getPurchasedServers(returnOpts?: HostReturnOptions): string[];
-
-  /**
-   * Returns the maximum number of servers you can purchase.
-   *
-   * @remarks RAM cost: 0.05 GB
-   * @returns Returns the maximum number of servers you can purchase.
-   */
-  getPurchasedServerLimit(): number;
-
-  /**
-   * Returns the maximum RAM that a purchased server can have.
-   *
-   * @remarks RAM cost: 0.05 GB
-   * @returns Returns the maximum RAM (in GB) that a purchased server can have.
-   */
-  getPurchasedServerMaxRam(): number;
-
-  /**
    * Write data to a file.
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function can be used to write data to a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx).
+   * This function can be used to write data to a text file (.txt, .json, .css) or a script (.js, .jsx, .ts, .tsx).
    *
    * This function will write data to that file. If the specified file does not exist,
    * then it will be created. The third argument mode defines how the data will be written to
@@ -7715,6 +7779,7 @@ export interface NS {
    * Attempts to write data to the specified Netscript port.
    * If the port is full, the data will not be written.
    * Otherwise, the data will be written normally.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to attempt to write to. Must be a positive integer.
    * @param data - Data to write, it's cloned with structuredClone().
@@ -7728,6 +7793,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Sleeps until the port is written to.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param port - Port to listen for a write on. Must be a positive integer.
    */
@@ -7738,7 +7804,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt, .json) or script (.js, .jsx, .ts, .tsx).
+   * This function is used to read data from a text file (.txt, .json, .css) or script (.js, .jsx, .ts, .tsx).
    *
    * This function will return the data in the specified file.
    * If the file does not exist, an empty string will be returned.
@@ -7755,7 +7821,7 @@ export interface NS {
    *
    * This function returns the metadata associated with the specified file.
    *
-   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script
+   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script
    * (.js, .jsx, .ts, .tsx).
    * @Returns The metadata of the file.
    */
@@ -7769,6 +7835,7 @@ export interface NS {
    * This function is used to peek at the data from a port. It returns the
    * first element in the specified port without removing that element. If
    * the port is empty, the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to peek. Must be a positive integer.
    * @returns Data in the specified port.
@@ -7808,6 +7875,7 @@ export interface NS {
    * usually means that there is a bug in your script that leaks port data. A port is freed when it does not have any
    * data in its underlying queue. `ns.clearPort` deletes all data on a port. `ns.readPort` reads the first element in
    * the port's queue, then removes it from the queue.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port to write to. Must be a positive integer.
    * @param data - Data to write, it's cloned with structuredClone().
@@ -7823,6 +7891,8 @@ export interface NS {
    * Read data from that port. A port is a serialized queue.
    * This function will remove the first element from that queue and return it.
    * If the queue is empty, then the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
    * @param portNumber - Port to read from. Must be a positive integer.
    * @returns The data read.
    */
@@ -7834,6 +7904,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Get a handle to a Netscript Port.
+   * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port number. Must be a positive integer.
    */
@@ -7848,7 +7919,7 @@ export interface NS {
    * type except message (.msg) files.
    *
    * @param name - Filename of file to remove. Must include the extension.
-   * @param host - Hostname/IP of the server on which to delete the file. Optional. Defaults to current server.
+   * @param host - Hostname/IP of the server on which to delete the file. Optional. Defaults to the server the calling script is running on.
    * @returns True if it successfully deletes the file, and false otherwise.
    */
   rm(name: string, host?: string): boolean;
@@ -7909,8 +7980,8 @@ export interface NS {
    * Returns 0 if the script does not exist.
    *
    * @param script - Filename of script. This is case-sensitive.
-   * @param host - Hostname/IP of target server the script is located on. This is optional. If it is not specified then the function will use the current server as the target server.
-   * @returns Amount of RAM (in GB) required to run the specified script on the target server, and 0 if the script does not exist.
+   * @param host - Hostname/IP of the server the target script is located on. Optional. Defaults to the server the calling script is running on.
+   * @returns Amount of RAM (in GB) required to run the specified script, and 0 if the script does not exist.
    */
   getScriptRam(script: string, host?: string): number;
 
@@ -7923,10 +7994,10 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function.
    */
-  getHackTime(host: string): number;
+  getHackTime(host?: string): number;
 
   /**
    * Get the execution time of a grow() call.
@@ -7936,10 +8007,10 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the grow Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns Returns the amount of time in milliseconds it takes to execute the grow Netscript function.
    */
-  getGrowTime(host: string): number;
+  getGrowTime(host?: string): number;
 
   /**
    * Get the execution time of a weaken() call.
@@ -7949,10 +8020,10 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
    * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function.
    */
-  getWeakenTime(host: string): number;
+  getWeakenTime(host?: string): number;
 
   /**
    * Get the income of all scripts.
@@ -8127,7 +8198,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Retrieves data from a URL and downloads it to a file on the specified server.
-   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json).
+   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css).
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
@@ -8138,7 +8209,7 @@ export interface NS {
    * ```
    * @param url - URL to pull data from.
    * @param target - Filename to write data to. Must be script or text file.
-   * @param host - Optional hostname/ip of server for target file.
+   * @param host - Hostname/IP of server for target file. Optional. Defaults to the server the calling script is running on.
    * @returns True if the data was successfully retrieved from the URL, false otherwise.
    */
   wget(url: string, target: string, host?: string): Promise<boolean>;
@@ -8219,7 +8290,7 @@ export interface NS {
    *
    * Move the source file to the specified destination on the target server.
    *
-   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json). It cannot, however, be
+   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). It cannot, however, be
    * used to convert from script to text file, or vice versa.
    *
    * This function can also be used to rename files.
@@ -8819,6 +8890,7 @@ type NSEnums = {
   OrderType: OrderEnumType;
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
+  FragmentType: FragmentEnumType;
 };
 
 /**
@@ -9893,7 +9965,7 @@ type CorpResearchName =
  */
 interface CorpMaterialConstantData {
   /** Name of the material */
-  name: string;
+  name: CorpMaterialName;
   /** Size of the material */
   size: number;
   demandBase: number;
@@ -9971,6 +10043,8 @@ interface Product {
   designInvestment: number;
   /** How much warehouse space is occupied per unit of this product */
   size: number;
+  /** A limit on the maximum amount to produce per second */
+  productionLimit: number | null;
 }
 
 /**
@@ -10004,6 +10078,8 @@ interface Material {
   desiredSellAmount: string | number;
   /** Export orders */
   exports: Export[];
+  /** A limit on the maximum amount to produce per second */
+  productionLimit: number | null;
 }
 
 /**

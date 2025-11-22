@@ -6,12 +6,12 @@ import { type TextFilePath } from "../../../src/Paths/TextFilePath";
 import { clearPipe, PipeState } from "../../../src/Terminal/PipeState";
 import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { LiteratureName, MessageFilename } from "@enums";
-
-import { setupScriptTestEnvironment } from "../Netscript/Utilities";
+import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-setupScriptTestEnvironment();
+fixDoImportIssue();
+initGameEnvironment();
 
 describe("Terminal Pipes", () => {
   beforeEach(() => {

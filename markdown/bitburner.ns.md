@@ -94,6 +94,27 @@ Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. Contains spoi
 </td></tr>
 <tr><td>
 
+[cloud](./bitburner.ns.cloud.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[Cloud](./bitburner.cloud.md)
+
+
+</td><td>
+
+Namespace for [cloud](./bitburner.cloud.md) functions.
+
+
+</td></tr>
+<tr><td>
+
 [codingcontract](./bitburner.ns.codingcontract.md)
 
 
@@ -413,12 +434,12 @@ Namespace for [Stanek](./bitburner.stanek.md) functions. Contains spoilers.
 
 </td><td>
 
-[TIX](./bitburner.tix.md)
+[Stock](./bitburner.stock.md)
 
 
 </td><td>
 
-Namespace for [stock](./bitburner.tix.md) functions.
+Namespace for [stock](./bitburner.stock.md) functions.
 
 
 </td></tr>
@@ -532,17 +553,6 @@ Clears the script’s logs.
 </td><td>
 
 Clear data from a port.
-
-
-</td></tr>
-<tr><td>
-
-[deleteServer(host)](./bitburner.ns.deleteserver.md)
-
-
-</td><td>
-
-Delete a purchased server.
 
 
 </td></tr>
@@ -801,61 +811,6 @@ Get all data on a port.
 </td></tr>
 <tr><td>
 
-[getPurchasedServerCost(ram)](./bitburner.ns.getpurchasedservercost.md)
-
-
-</td><td>
-
-Get cost of purchasing a server.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServerLimit()](./bitburner.ns.getpurchasedserverlimit.md)
-
-
-</td><td>
-
-Returns the maximum number of servers you can purchase.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServerMaxRam()](./bitburner.ns.getpurchasedservermaxram.md)
-
-
-</td><td>
-
-Returns the maximum RAM that a purchased server can have.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServers(returnOpts)](./bitburner.ns.getpurchasedservers.md)
-
-
-</td><td>
-
-Returns an array with the hostnames or IP addresses of all of the servers you have purchased. Returns hostnames by default.
-
-
-</td></tr>
-<tr><td>
-
-[getPurchasedServerUpgradeCost(host, ram)](./bitburner.ns.getpurchasedserverupgradecost.md)
-
-
-</td><td>
-
-Get cost of upgrading a purchased server to the given ram.
-
-
-</td></tr>
-<tr><td>
-
 [getRecentScripts()](./bitburner.ns.getrecentscripts.md)
 
 
@@ -949,7 +904,7 @@ Get the ram cost of a script.
 
 </td><td>
 
-Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+Returns a server object for the given server.
 
 
 </td></tr>
@@ -1180,7 +1135,7 @@ Get the chance of successfully hacking a server.
 
 </td><td>
 
-Get the security increase for a number of threads.
+Get the security increase for a number of hack threads.
 
 
 </td></tr>
@@ -1395,17 +1350,6 @@ List running scripts on a server.
 </td></tr>
 <tr><td>
 
-[purchaseServer(hostname, ram)](./bitburner.ns.purchaseserver.md)
-
-
-</td><td>
-
-Purchase a server.
-
-
-</td></tr>
-<tr><td>
-
 [ramOverride(ram)](./bitburner.ns.ramoverride.md)
 
 
@@ -1445,17 +1389,6 @@ Read data from a port.
 </td><td>
 
 Runs relaySMTP.exe on a server.
-
-
-</td></tr>
-<tr><td>
-
-[renamePurchasedServer(hostname, newName)](./bitburner.ns.renamepurchasedserver.md)
-
-
-</td><td>
-
-Rename a purchased server.
 
 
 </td></tr>
@@ -1654,17 +1587,6 @@ Prints a ReactNode to the terminal.
 </td><td>
 
 Attempt to write to a port.
-
-
-</td></tr>
-<tr><td>
-
-[upgradePurchasedServer(host, ram)](./bitburner.ns.upgradepurchasedserver.md)
-
-
-</td><td>
-
-Upgrade a purchased server's RAM.
 
 
 </td></tr>

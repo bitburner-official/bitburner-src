@@ -66,7 +66,7 @@ export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFea
       <FactionMults n={n} mults={mults} />
       <AugmentationMults n={n} mults={mults} />
       <HackingMults n={n} mults={mults} />
-      <PurchasedServersMults n={n} mults={mults} />
+      <CloudServersMults n={n} mults={mults} />
       <StockMults n={n} mults={mults} />
       <CrimeMults n={n} mults={mults} />
       <InfiltrationMults n={n} mults={mults} />
@@ -293,22 +293,22 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Hacking" rowData={rows} mults={mults} />;
 }
 
-function PurchasedServersMults({ mults }: IMultsProps): React.ReactElement {
+function CloudServersMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    PurchasedServerCost: {
+    CloudServerCost: {
       name: "Base Cost",
-      content: mults.PurchasedServerCost.toFixed(3),
+      content: mults.CloudServerCost.toFixed(3),
     },
-    PurchasedServerSoftcap: {
+    CloudServerSoftcap: {
       name: "Softcap Cost",
-      content: mults.PurchasedServerSoftcap.toFixed(3),
+      content: mults.CloudServerSoftcap.toFixed(3),
     },
-    PurchasedServerLimit: { name: "Server Limit" },
-    PurchasedServerMaxRam: { name: "Max RAM" },
+    CloudServerLimit: { name: "Server Limit" },
+    CloudServerMaxRam: { name: "Max RAM" },
     HomeComputerRamCost: { name: "Home RAM Cost" },
   };
 
-  return <BNMultTable sectionName="Purchased Servers" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="Cloud Servers" rowData={rows} mults={mults} />;
 }
 
 function InfiltrationMults({ mults }: IMultsProps): React.ReactElement {

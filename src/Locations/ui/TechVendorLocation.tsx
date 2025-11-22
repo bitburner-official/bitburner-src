@@ -12,7 +12,7 @@ import { RamButton } from "./RamButton";
 import { TorButton } from "./TorButton";
 import { CoresButton } from "./CoresButton";
 
-import { getPurchaseServerCost, getPurchaseServerLimit, getPurchaseServerMaxRam } from "../../Server/ServerPurchases";
+import { getCloudServerCost, getCloudServerLimit, getCloudServerMaxRam } from "../../Server/ServerPurchases";
 
 import { Money } from "../../ui/React/Money";
 import { Player } from "@player";
@@ -23,12 +23,12 @@ import { useCycleRerender } from "../../ui/React/hooks";
 
 function ServerButton(props: { ram: number }): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const cost = getPurchaseServerCost(props.ram);
-  const reachLimitOfPrivateServer = Player.purchasedServers.length >= getPurchaseServerLimit();
+  const cost = getCloudServerCost(props.ram);
+  const reachLimitOfPrivateServer = Player.purchasedServers.length >= getCloudServerLimit();
   return (
     <>
       <Button onClick={() => setOpen(true)} disabled={!Player.canAfford(cost) || reachLimitOfPrivateServer}>
-        Purchase {formatRam(props.ram)} Server -&nbsp;
+        Purchase {formatRam(props.ram)} Cloud Server -&nbsp;
         {reachLimitOfPrivateServer ? "Max" : <Money money={cost} forPurchase={true} />}
       </Button>
       <PurchaseServerModal open={open} onClose={() => setOpen(false)} ram={props.ram} cost={cost} />
@@ -41,7 +41,7 @@ export function TechVendorLocation(props: { loc: Location }): React.ReactElement
 
   const purchaseServerButtons: React.ReactNode[] = [];
   for (let ram = props.loc.techVendorMinRam; ram <= props.loc.techVendorMaxRam; ram *= 2) {
-    if (ram > getPurchaseServerMaxRam()) {
+    if (ram > getCloudServerMaxRam()) {
       break;
     }
     purchaseServerButtons.push(<ServerButton key={ram} ram={ram} />);
@@ -53,7 +53,7 @@ export function TechVendorLocation(props: { loc: Location }): React.ReactElement
       <Box sx={{ display: "grid", width: "fit-content" }}>{purchaseServerButtons}</Box>
       <br />
       <Typography>
-        <i>"You can order bigger servers via scripts. We don't take custom orders in person."</i>
+        <i>"You can order bigger cloud servers via scripts. We don't take custom orders in person."</i>
       </Typography>
       <br />
       <TorButton rerender={rerender} />

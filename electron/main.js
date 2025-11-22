@@ -27,8 +27,8 @@ const debounce = require("lodash/debounce");
 const Store = require("electron-store");
 const store = new Store();
 const path = require("path");
-const { realpathSync, readFileSync } = require("fs");
-const { fileURLToPath } = require("url");
+const { realpathSync } = require("fs");
+const { fileURLToPath, format } = require("url");
 
 log.transports.file.level = store.get("file-log-level", "info");
 log.transports.console.level = store.get("console-log-level", "debug");
@@ -219,11 +219,25 @@ app.on("ready", async () => {
       relativePath = path.relative(__dirname, realPath);
       // Only allow access to files in "dist" folder or html files in the same directory
       if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-        const customHeaders = {};
-        if (relativePath.endsWith(".wasm")) {
-          customHeaders["Content-Type"] = "application/wasm";
-        }
-        return new Response(readFileSync(realPath), { headers: new Headers(customHeaders) });
+        return net
+          .fetch(
+            /**
+             * On Windows, passing realPath (e.g., "C:\path") directly to net.fetch is okay, but on Linux, passing
+             * realPath (e.g., /path) like that throws an error (TypeError: Failed to parse URL from /path). We have to
+             * convert it to a file:// URL.
+             */
+            format({ pathname: realPath, protocol: "file" }),
+            {
+              /**
+               * By default, requests made by net.fetch go through custom protocol handlers, so we have to explicitly tell it
+               * to bypass those handlers; otherwise, it creates an infinite loop.
+               *
+               * Ref: https://github.com/electron/electron/issues/39402
+               */
+              bypassCustomProtocolHandlers: true,
+            },
+          )
+          .catch((error) => log.error(error));
       }
     } catch (error) {
       log.error(error);

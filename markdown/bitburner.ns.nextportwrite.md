@@ -56,5 +56,5 @@ Promise&lt;void&gt;
 
 RAM cost: 0 GB
 
-Sleeps until the port is written to.
+Sleeps until the port is written to. Ports are shared across all hosts and contents are reset on game restart.
 

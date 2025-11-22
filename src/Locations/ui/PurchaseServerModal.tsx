@@ -36,7 +36,7 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to purchase a new server with {formatRam(props.ram)} of RAM for{" "}
+        Would you like to purchase a new cloud server with {formatRam(props.ram)} of RAM for{" "}
         <Money money={props.cost} forPurchase={true} />?
       </Typography>
       <br />

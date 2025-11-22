@@ -281,7 +281,7 @@ export class Terminal {
     // Calculate whether hack was successful
     const hackChance = calculateHackingChance(server, Player);
     const rand = Math.random();
-    const expGainedOnSuccess = calculateHackingExpGain(server, Player);
+    let expGainedOnSuccess = calculateHackingExpGain(server, Player);
     const expGainedOnFailure = expGainedOnSuccess / 4;
     if (rand < hackChance) {
       // Success!
@@ -294,11 +294,19 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
+      let moneyDrained = server.moneyAvailable * calculatePercentMoneyHacked(server, Player);
 
-      if (moneyDrained <= 0) {
+      // Over-the-top safety checks
+      if (moneyDrained < 0) {
         moneyDrained = 0;
-      } // Safety check
+      }
+      if (moneyDrained > server.moneyAvailable) {
+        moneyDrained = server.moneyAvailable;
+      }
+
+      if (moneyDrained === 0) {
+        expGainedOnSuccess = expGainedOnFailure;
+      }
 
       server.moneyAvailable -= moneyDrained;
       if (server.moneyAvailable < 0) {
@@ -317,7 +325,7 @@ export class Terminal {
       const newSec = server.hackDifficulty;
 
       this.print(
-        `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained)} and ${formatExp(
+        `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained, true)} and ${formatExp(
           expGainedOnSuccess,
         )} hacking exp`,
       );
@@ -424,7 +432,9 @@ export class Terminal {
         this.print("Time to hack: " + (!isHacknet ? convertTimeMsToTimeElapsedString(hackingTime, true) : "N/A"));
       }
       this.print(
-        `Total money available on server: ${currServ instanceof Server ? formatMoney(currServ.moneyAvailable) : "N/A"}`,
+        `Total money available on server: ${
+          currServ instanceof Server ? formatMoney(currServ.moneyAvailable, true) : "N/A"
+        }`,
       );
       if (currServ instanceof Server) {
         const numPort = currServ.numOpenPortsRequired;

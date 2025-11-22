@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of target server the script is located on. This is optional. If it is not specified then the function will use the current server as the target server.
+_(Optional)_ Hostname/IP of the server the target script is located on. Optional. Defaults to the server the calling script is running on.
 
 
 </td></tr>
@@ -68,7 +68,7 @@ _(Optional)_ Hostname/IP of target server the script is located on. This is opti
 
 number
 
-Amount of RAM (in GB) required to run the specified script on the target server, and 0 if the script does not exist.
+Amount of RAM (in GB) required to run the specified script, and 0 if the script does not exist.
 
 ## Remarks
 

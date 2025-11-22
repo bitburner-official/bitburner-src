@@ -62,10 +62,9 @@ export function CompanyLocation(props: IProps): React.ReactElement {
     if (!e.isTrusted) {
       return;
     }
-    if (!location.infiltrationData)
-      throw new Error(`trying to start infiltration at ${props.companyName} but the infiltrationData is null`);
 
-    Router.toPage(Page.Infiltration, { location });
+    Player.startInfiltration(location);
+    Router.toPage(Page.Infiltration);
   }
 
   function work(e: React.MouseEvent<HTMLElement>): void {

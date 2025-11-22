@@ -110,7 +110,7 @@ Run a script as a separate process on a specified server. This is similar to the
 
 If the script was successfully started, then this function returns the PID of that script. Otherwise, it returns 0.
 
-PID stands for Process ID. The PID is a unique identifier for each script. The PID will always be a positive integer.
+PID stands for Process ID. The PID is a unique identifier for each script across all hosts. The PID will always be a positive integer.
 
 Running this function with 0 or fewer threads will cause a runtime error.
 

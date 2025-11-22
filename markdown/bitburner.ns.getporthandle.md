@@ -56,5 +56,5 @@ Port number. Must be a positive integer.
 
 RAM cost: 0 GB
 
-Get a handle to a Netscript Port.
+Get a handle to a Netscript Port. Ports are shared across all hosts and contents are reset on game restart.
 

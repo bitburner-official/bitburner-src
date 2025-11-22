@@ -24,11 +24,14 @@ import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
 import { newOpponentStats } from "../Constants";
+import { helpers } from "../../Netscript/NetscriptHelpers";
+import type { NetscriptContext } from "../../Netscript/APIWrapper";
+import { errorMessage } from "../../Netscript/ErrorMessages";
 
 /**
  * Check the move based on the current settings
  */
-export function validateMove(error: (s: string) => never, x: number, y: number, methodName = "", settings = {}): void {
+export function validateMove(ctx: NetscriptContext, x: number, y: number, methodName = "", settings = {}): void {
   Go.moveOrCheatViaApi = true;
   const check = {
     emptyNode: true,
@@ -46,9 +49,9 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
   const moveColor = check.playAsWhite ? GoColor.white : GoColor.black;
 
   if (check.playAsWhite) {
-    validatePlayAsWhite(error);
+    validatePlayAsWhite(ctx);
   }
-  validateTurn(error, moveString, moveColor);
+  validateTurn(ctx, moveString, moveColor);
 
   if (check.pass) {
     return;
@@ -56,16 +59,17 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
 
   const boardSize = Go.currentGame.board.length;
   if (x < 0 || x >= boardSize) {
-    error(`Invalid column number (x = ${x}), column must be a number 0 through ${boardSize - 1}`);
+    throw errorMessage(ctx, `Invalid column number (x = ${x}), column must be a number 0 through ${boardSize - 1}`);
   }
   if (y < 0 || y >= boardSize) {
-    error(`Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
+    throw errorMessage(ctx, `Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
   }
 
   const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, moveColor);
   const point = Go.currentGame.board[x][y];
   if (!point && check.onlineNode) {
-    error(
+    throw errorMessage(
+      ctx,
       `The node ${x},${y} is offline, so you cannot ${
         methodName === "removeRouter"
           ? "clear this point with removeRouter()"
@@ -76,17 +80,20 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
     );
   }
   if (validity === GoValidity.noSuicide && check.suicide) {
-    error(
+    throw errorMessage(
+      ctx,
       `${moveString} ${validity}. That point has no neighboring empty nodes, and is not connected to a network with access to empty nodes, meaning it would be instantly captured if played there.`,
     );
   }
   if (validity === GoValidity.boardRepeated && check.repeat) {
-    error(
+    throw errorMessage(
+      ctx,
       `${moveString} ${validity}. That move would repeat the previous board state, which is illegal as it leads to infinite loops.`,
     );
   }
   if (point?.color !== GoColor.empty && check.emptyNode) {
-    error(
+    throw errorMessage(
+      ctx,
       `The point ${x},${y} is occupied by a router, so you cannot ${
         methodName === "destroyNode" ? "destroy this node. (Attempted to destroyNode)" : "place a router there"
       }`,
@@ -94,31 +101,39 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
   }
 
   if (point?.color === GoColor.empty && check.requireNonEmptyNode) {
-    error(`The point ${x},${y} does not have a router on it, so you cannot clear this point with removeRouter().`);
+    throw errorMessage(
+      ctx,
+      `The point ${x},${y} does not have a router on it, so you cannot clear this point with removeRouter().`,
+    );
   }
   if (point && check.requireOfflineNode) {
-    error(`The node ${x},${y} is not offline, so you cannot repair the node.`);
+    throw errorMessage(ctx, `The node ${x},${y} is not offline, so you cannot repair the node.`);
   }
 }
 
-function validatePlayAsWhite(error: (s: string) => never) {
+function validatePlayAsWhite(ctx: NetscriptContext) {
   if (Go.currentGame.ai !== GoOpponent.none) {
-    error(`${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
+    throw errorMessage(ctx, `${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
   }
 
   if (Go.currentGame.previousPlayer === GoColor.white) {
-    error(`${GoValidity.notYourTurn}. You cannot play or pass as white until the opponent has played.`);
+    throw errorMessage(
+      ctx,
+      `${GoValidity.notYourTurn}. You cannot play or pass as white until the opponent has played.`,
+    );
   }
 }
 
-function validateTurn(error: (s: string) => never, moveString = "", color = GoColor.black) {
+function validateTurn(ctx: NetscriptContext, moveString = "", color = GoColor.black) {
   if (Go.currentGame.previousPlayer === color) {
-    error(
+    throw errorMessage(
+      ctx,
       `${moveString} ${GoValidity.notYourTurn}. Do you have multiple scripts running, or did you forget to await makeMove() or opponentNextTurn()`,
     );
   }
   if (Go.currentGame.previousPlayer === null) {
-    error(
+    throw errorMessage(
+      ctx,
       `${moveString} ${GoValidity.gameOver}. You cannot make more moves. Start a new game using resetBoardState().`,
     );
   }
@@ -127,12 +142,12 @@ function validateTurn(error: (s: string) => never, moveString = "", color = GoCo
 /**
  * Pass player's turn and await the opponent's response (or logs the end of the game if both players pass)
  */
-export function handlePassTurn(logger: (s: string) => void, passAsWhite = false) {
+export function handlePassTurn(ctx: NetscriptContext, passAsWhite = false) {
   const color = passAsWhite ? GoColor.white : GoColor.black;
   passTurn(Go.currentGame, color);
-  logger("Go turn passed.");
+  helpers.log(ctx, () => "Go turn passed.");
   if (Go.currentGame.previousPlayer === null) {
-    logEndGame(logger);
+    logEndGame(ctx);
   }
   return handleNextTurn(Go.currentGame, true);
 }
@@ -140,41 +155,35 @@ export function handlePassTurn(logger: (s: string) => void, passAsWhite = false)
 /**
  * Validates and applies the player's router placement
  */
-export function makePlayerMove(
-  logger: (s: string) => void,
-  error: (s: string) => never,
-  x: number,
-  y: number,
-  playAsWhite = false,
-) {
+export function makePlayerMove(ctx: NetscriptContext, x: number, y: number, playAsWhite = false) {
   const boardState = Go.currentGame;
   const color = playAsWhite ? GoColor.white : GoColor.black;
   const validity = evaluateIfMoveIsValid(boardState, x, y, color);
   const moveWasMade = makeMove(boardState, x, y, color);
 
   if (validity !== GoValidity.valid || !moveWasMade) {
-    error(`Invalid move: ${x} ${y}. ${validity}.`);
+    throw errorMessage(ctx, `Invalid move: ${x} ${y}. ${validity}.`);
   }
 
-  logger(`Go move played: ${x}, ${y}${playAsWhite ? " (White)" : ""}`);
+  helpers.log(ctx, () => `Go move played: ${x}, ${y}${playAsWhite ? " (White)" : ""}`);
   return handleNextTurn(boardState, true);
 }
 
 /**
   Returns the promise that provides the opponent's move, once it finishes thinking.
  */
-export function getOpponentNextMove(logger: (s: string) => void, logOpponentMove = true, playAsWhite = false) {
+export function getOpponentNextMove(ctx: NetscriptContext, logOpponentMove = true, playAsWhite = false) {
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
   const nextTurn = getNextTurn(playerColor);
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
     return nextTurn.then((move) => {
       if (move.type === GoPlayType.gameOver) {
-        logEndGame(logger);
+        logEndGame(ctx);
       } else if (move.type === GoPlayType.pass) {
-        logger(`Opponent passed their turn. You can end the game by passing as well.`);
+        helpers.log(ctx, () => `Opponent passed their turn. You can end the game by passing as well.`);
       } else if (move.type === GoPlayType.move) {
-        logger(`Opponent played move: ${move.x}, ${move.y}`);
+        helpers.log(ctx, () => `Opponent played move: ${move.x}, ${move.y}`);
       }
       return move;
     });
@@ -265,13 +274,12 @@ export function getControlledEmptyNodes(_board?: Board) {
   );
 }
 
-export function setTestingBoardState(board: Board, komi?: number) {
-  resetBoardState(
-    () => {},
-    () => {},
-    GoOpponent.none,
-    board.length,
-  );
+/**
+ * Resets the active game to be a new board with "No AI" as the opponent. Applies the specified board state and komi to the new game.
+ * Used for testing scenarios.
+ */
+export function setTestingBoardState(ctx: NetscriptContext, board: Board, komi?: number) {
+  resetBoardState(ctx, GoOpponent.none, board.length);
   Go.currentGame.board = board;
   if (komi != undefined) {
     Go.currentGame.komiOverride = komi;
@@ -325,31 +333,28 @@ export function getCurrentPlayer(): "None" | "White" | "Black" {
 /**
  * Handle post-game logging
  */
-function logEndGame(logger: (s: string) => void) {
+function logEndGame(ctx: NetscriptContext) {
   const boardState = Go.currentGame;
   const score = getScore(boardState);
-  logger(
-    `Subnet complete! Final score: ${boardState.ai}: ${score[GoColor.white].sum},  Player: ${score[GoColor.black].sum}`,
+  helpers.log(
+    ctx,
+    () =>
+      `Subnet complete! Final score: ${boardState.ai}: ${score[GoColor.white].sum},  Player: ${
+        score[GoColor.black].sum
+      }`,
   );
 }
 
 /**
  * Clears the board, resets winstreak if applicable
  */
-export function resetBoardState(
-  logger: (s: string) => void,
-  error: (s: string) => void,
-  opponent: GoOpponent,
-  boardSize: number,
-) {
+export function resetBoardState(ctx: NetscriptContext, opponent: GoOpponent, boardSize: number) {
   if (![5, 7, 9, 13].includes(boardSize) && opponent !== GoOpponent.w0r1d_d43m0n) {
-    error(`Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
-    return;
+    throw errorMessage(ctx, `Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
   }
 
   if (opponent === GoOpponent.w0r1d_d43m0n && !Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
-    error(`Invalid opponent requested (${opponent}), this opponent has not yet been discovered`);
-    return;
+    throw errorMessage(ctx, `Invalid opponent requested (${opponent}), this opponent has not yet been discovered`);
   }
 
   const oldBoardState = Go.currentGame;
@@ -360,7 +365,7 @@ export function resetBoardState(
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
   resetGoPromises();
   clearAllPointHighlights(Go.currentGame);
-  logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
+  helpers.log(ctx, () => `New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }
 
@@ -423,13 +428,13 @@ const boardValidity = {
  * Validate the given SimpleBoard and prior board state (if present) and turn it into a full BoardState with updated analytics
  */
 export function validateBoardState(
-  error: (s: string) => never,
+  ctx: NetscriptContext,
   _boardState?: unknown,
   _priorBoardState?: unknown,
   playAsWhite = false,
 ): BoardState | undefined {
-  const simpleBoard = getSimpleBoardFromUnknown(error, _boardState);
-  const priorSimpleBoard = getSimpleBoardFromUnknown(error, _priorBoardState);
+  const simpleBoard = getSimpleBoardFromUnknown(ctx, _boardState);
+  const priorSimpleBoard = getSimpleBoardFromUnknown(ctx, _priorBoardState);
 
   if (!_boardState || !simpleBoard) {
     return undefined;
@@ -443,44 +448,45 @@ export function validateBoardState(
       playAsWhite ? GoColor.black : GoColor.white,
     );
   } catch (e) {
-    error(boardValidity.failedToCreateBoard);
+    throw errorMessage(ctx, boardValidity.failedToCreateBoard);
   }
 }
 
 /**
  * Check that the given boardState is a valid SimpleBoard, and return it if it is.
  */
-function getSimpleBoardFromUnknown(error: (arg0: string) => never, _boardState: unknown): SimpleBoard | undefined {
+function getSimpleBoardFromUnknown(ctx: NetscriptContext, _boardState: unknown): SimpleBoard | undefined {
   if (!_boardState) {
     return undefined;
   }
   if (!Array.isArray(_boardState)) {
-    error(boardValidity.badType);
+    throw errorMessage(ctx, boardValidity.badType);
   }
   if ((_boardState as unknown[]).find((row) => typeof row !== "string")) {
-    error(boardValidity.badType);
+    throw errorMessage(ctx, boardValidity.badType);
   }
 
   const boardState = _boardState as string[];
 
   if (boardState.find((row) => row.length !== boardState.length)) {
-    error(boardValidity.badShape);
+    throw errorMessage(ctx, boardValidity.badShape);
   }
   if (![5, 7, 9, 13, 19].includes(boardState.length)) {
-    error(boardValidity.badSize);
+    throw errorMessage(ctx, boardValidity.badSize);
   }
   if (boardState.find((row) => row.match(/[^XO#.]/))) {
-    error(boardValidity.badCharacters);
+    throw errorMessage(ctx, boardValidity.badCharacters);
   }
   return boardState as SimpleBoard;
 }
 
 /** Validate singularity access by throwing an error if the player does not have access. */
-export function checkCheatApiAccess(error: (s: string) => never): void {
+export function checkCheatApiAccess(ctx: NetscriptContext): void {
   const hasSourceFile = Player.activeSourceFileLvl(14) > 1;
   const isBitnodeFourteenTwo = Player.activeSourceFileLvl(14) === 1 && Player.bitNodeN === 14;
   if (!hasSourceFile && !isBitnodeFourteenTwo) {
-    error(
+    throw errorMessage(
+      ctx,
       `The go.cheat API requires Source-File 14.2 to run, a power up you obtain later in the game.
       It will be very obvious when and how you can obtain it.`,
     );
@@ -493,7 +499,7 @@ export function checkCheatApiAccess(error: (s: string) => never): void {
  * If it fails, determines if the player's turn is skipped, or if the player is ejected from the subnet.
  */
 export function determineCheatSuccess(
-  logger: (s: string) => void,
+  ctx: NetscriptContext,
   callback: () => void,
   successRngOverride?: number,
   ejectRngOverride?: number,
@@ -511,13 +517,13 @@ export function determineCheatSuccess(
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly ending the game
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
-    logger(`Cheat failed! You have been ejected from the subnet.`);
+    helpers.log(ctx, () => `Cheat failed! You have been ejected from the subnet.`);
     forceEndGoGame(state);
     Player.giveAchievement("IPVGO_ANTICHEAT");
     return handleNextTurn(state, true);
   } else {
     // If the cheat fails, your turn is skipped
-    logger(`Cheat failed. Your turn has been skipped.`);
+    helpers.log(ctx, () => `Cheat failed. Your turn has been skipped.`);
     passTurn(state, playerColor, false);
   }
 
@@ -561,8 +567,7 @@ export function cheatSuccessChance(cheatCountOverride: number, playAsWhite = fal
  * Attempts to remove an existing router from the board. Can fail. If failed, can immediately end the game
  */
 export function cheatRemoveRouter(
-  logger: (s: string) => void,
-  error: (s: string) => never,
+  ctx: NetscriptContext,
   x: number,
   y: number,
   successRngOverride?: number,
@@ -571,13 +576,13 @@ export function cheatRemoveRouter(
 ): Promise<Play> {
   const point = Go.currentGame.board[x][y];
   if (!point) {
-    error(`Cheat failed. The point ${x},${y} is already offline.`);
+    throw errorMessage(ctx, `Cheat failed. The point ${x},${y} is already offline.`);
   }
   return determineCheatSuccess(
-    logger,
+    ctx,
     () => {
       point.color = GoColor.empty;
-      logger(`Cheat successful. The point ${x},${y} was cleared.`);
+      helpers.log(ctx, () => `Cheat successful. The point ${x},${y} was cleared.`);
     },
     successRngOverride,
     ejectRngOverride,
@@ -589,8 +594,7 @@ export function cheatRemoveRouter(
  * Attempts play two moves at once. Can fail. If failed, can immediately end the game
  */
 export function cheatPlayTwoMoves(
-  logger: (s: string) => void,
-  error: (s: string) => never,
+  ctx: NetscriptContext,
   x1: number,
   y1: number,
   x2: number,
@@ -603,17 +607,17 @@ export function cheatPlayTwoMoves(
   const point2 = Go.currentGame.board[x2][y2];
 
   if (!point1 || !point2) {
-    error(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
+    throw errorMessage(ctx, `Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
   }
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
 
   return determineCheatSuccess(
-    logger,
+    ctx,
     () => {
       point1.color = playerColor;
       point2.color = playerColor;
 
-      logger(`Cheat successful. Two go moves played: ${x1},${y1} and ${x2},${y2}`);
+      helpers.log(ctx, () => `Cheat successful. Two go moves played: ${x1},${y1} and ${x2},${y2}`);
     },
     successRngOverride,
     ejectRngOverride,
@@ -622,7 +626,7 @@ export function cheatPlayTwoMoves(
 }
 
 export function cheatRepairOfflineNode(
-  logger: (s: string) => void,
+  ctx: NetscriptContext,
   x: number,
   y: number,
   successRngOverride?: number,
@@ -630,7 +634,7 @@ export function cheatRepairOfflineNode(
   playAsWhite = false,
 ): Promise<Play> {
   return determineCheatSuccess(
-    logger,
+    ctx,
     () => {
       Go.currentGame.board[x][y] = {
         chain: "",
@@ -639,7 +643,7 @@ export function cheatRepairOfflineNode(
         color: GoColor.empty,
         x,
       };
-      logger(`Cheat successful. The point ${x},${y} was repaired.`);
+      helpers.log(ctx, () => `Cheat successful. The point ${x},${y} was repaired.`);
     },
     successRngOverride,
     ejectRngOverride,
@@ -648,7 +652,7 @@ export function cheatRepairOfflineNode(
 }
 
 export function cheatDestroyNode(
-  logger: (s: string) => void,
+  ctx: NetscriptContext,
   x: number,
   y: number,
   successRngOverride?: number,
@@ -656,10 +660,10 @@ export function cheatDestroyNode(
   playAsWhite = false,
 ): Promise<Play> {
   return determineCheatSuccess(
-    logger,
+    ctx,
     () => {
       Go.currentGame.board[x][y] = null;
-      logger(`Cheat successful. The point ${x},${y} was destroyed.`);
+      helpers.log(ctx, () => `Cheat successful. The point ${x},${y} was destroyed.`);
     },
     successRngOverride,
     ejectRngOverride,

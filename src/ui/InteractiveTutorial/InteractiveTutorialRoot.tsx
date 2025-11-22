@@ -42,14 +42,29 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
+function Example({ content }: { content: string }): React.ReactElement {
+  const { classes } = useStyles();
+  return (
+    <>
+      <br />
+      <Typography>
+        Example:{" "}
+        <Typography component="span" classes={{ root: classes.textfield }}>
+          {content}
+        </Typography>
+      </Typography>
+    </>
+  );
+}
+
 export function InteractiveTutorialRoot(): React.ReactElement {
   const { classes } = useStyles();
   const rerender = useRerender();
 
   const tutorialScriptName = `n00dles.js`;
 
-  const contents: Record<string, IContent | undefined> = {
-    [iTutorialSteps.Start as number]: {
+  const contents: Record<iTutorialSteps, IContent | undefined> = {
+    [iTutorialSteps.Start]: {
       content: (
         <>
           <Typography>
@@ -69,7 +84,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: true,
     },
-    [iTutorialSteps.GoToCharacterPage as number]: {
+    [iTutorialSteps.GoToCharacterPage]: {
       content: (
         <>
           <Typography>Let's start by heading to the Stats page. Click</Typography>
@@ -83,7 +98,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.CharacterPage as number]: {
+    [iTutorialSteps.CharacterPage]: {
       content: (
         <>
           <ListItem>
@@ -97,7 +112,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: true,
     },
-    [iTutorialSteps.CharacterGoToTerminalPage as number]: {
+    [iTutorialSteps.CharacterGoToTerminalPage]: {
       content: (
         <>
           <Typography>Let's head to your computer's terminal by clicking</Typography>
@@ -110,7 +125,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalIntro as number]: {
+    [iTutorialSteps.TerminalIntro]: {
       content: (
         <>
           <ListItem>
@@ -120,113 +135,107 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             is used to interface with your home computer as well as all of the other machines around the world.
           </Typography>
+          <br />
+          <Typography>
+            In the next steps, the tutorial will show you how to use the most basic commands. In each step, we may show
+            you an example of how the terminal should look when you enter the command.
+          </Typography>
         </>
       ),
       canNext: true,
     },
-    [iTutorialSteps.TerminalHelp as number]: {
+    [iTutorialSteps.TerminalHelp]: {
       content: (
         <>
-          <Typography>Let's try it out. Start by entering</Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
+          <Typography>Let's try it out. Start by entering "help" to the terminal</Typography>
           <Typography>(Don't forget to press Enter after typing the command)</Typography>
+          <Example content="[home /]> help" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalLs as number]: {
+    [iTutorialSteps.TerminalLs]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
           <Typography>
-            displays a list of all available Terminal commands, how to use them, and a description of what they do.{" "}
+            The "help" command displays a list of all available Terminal commands, how to use them, and a description of
+            what they do. <br />
             <br />
-            <br />
-            Let's try another command. Enter
+            Let's try another command. Enter "ls" ("ls" is short for "list" ).
           </Typography>
-
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
-          <Typography>
-            <br />( "ls" is short for "list" )
-          </Typography>
+          <Example content="[home /]> ls" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalScan as number]: {
+    [iTutorialSteps.TerminalScan]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
-            {" "}
-            is a basic command that lists the files on the computer. Right now, it shows that you have a program called{" "}
-            NUKE.exe on your computer. We'll get to what this does later. <br />
+            The "ls" command is a basic command that lists the files on the computer. Right now, it shows that you have
+            a program called NUKE.exe on your computer. We'll get to what this does later. <br />
             <br />
             Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
-            now by first entering
+            now by first entering "scan".
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
+          <Example content="[home /]> scan" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalScanAnalyze1 as number]: {
+    [iTutorialSteps.TerminalScanAnalyze1]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
           <Typography>
-            shows all available network connections. In other words, it displays a list of all servers that can be
-            connected to from your current machine. A server is identified by its hostname. <br />
+            The "scan" command shows all available network connections. In other words, it displays a list of all
+            servers that can be connected to from your current machine. A server is identified by its hostname. <br />
             <br />
-            That's great and all, but there's so many servers. Which one should you go to?{" "}
+            That's great and all, but there's so many servers. Which one should you go to?
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
-          <Typography>gives some more detailed information about servers on the network. Try it now!</Typography>
+          <Typography>
+            The "scan-analyze" command gives some more detailed information about servers on the network. Try it now!
+          </Typography>
+          <Example content="[home /]> scan-analyze" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalScanAnalyze2 as number]: {
+    [iTutorialSteps.TerminalScanAnalyze2]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
           <Typography>
-            shows more detailed information about each server that you can connect to (servers that are a distance of
-            one node away). <br />
+            The "scan-analyze" command shows more detailed information about each server that you can connect to
+            (servers that are a distance of one node away). <br />
             <br /> It is also possible to run scan-analyze with a higher depth. Let's try a depth of two with the
-            following command:{" "}
+            following command: "scan-analyze 2"
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
+          <Example content="[home /]> scan-analyze 2" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalConnect as number]: {
+    [iTutorialSteps.TerminalConnect]: {
       content: (
         <>
           <Typography>
             Now you can see information about all servers that are up to two nodes away, as well as figure out how to
             navigate to those servers through the network. You can only connect to a server that is one node away. To
-            connect to a machine, use
+            connect to a machine, use the "connect" command.
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect hostname"}</Typography>
-
-          <Typography>From the results of </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
 
           <Typography>
-            {" "}
-            we can see that the n00dles server is only one node away. Let's connect to it now using:
+            From the results of the "scan-analyze" command, we can see that the n00dles server is only one node away.
+            Let's connect to it now using "connect n00dles".
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect n00dles"}</Typography>
+          <Example content="[home /]> connect n00dles" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalAnalyze as number]: {
+    [iTutorialSteps.TerminalAnalyze]: {
       content: (
         <>
           <Typography>
@@ -236,52 +245,44 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             money on servers and computers. Using your hacking abilities, you can hack servers to steal money and gain
             experience. <br />
             <br />
-            Before you try to hack a server, you should run diagnostics using{" "}
+            Before you try to hack a server, you should run diagnostics using the "analyze" command.
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
+          <Example content="[n00dles /]> analyze" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalNuke as number]: {
+    [iTutorialSteps.TerminalNuke]: {
       content: (
         <>
-          <Typography>When </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
-
           <Typography>
-            finishes running it will show useful information about hacking the server. <br />
-            <br /> For this server, the required hacking skill is only 1, which means you can hack it right now.
-            However, in order to hack a server you must first gain root access. The NUKE.exe program that we saw earlier
-            on your home computer is a virus that will grant you root access to a machine if there are enough open
-            ports.
+            When the "analyze" command finishes running, it will show useful information about hacking the server.
+            <br />
+            For this server, the required hacking skill is only 1, which means you can hack it right now. However, in
+            order to hack a server you must first gain root access. The NUKE.exe program that we saw earlier on your
+            home computer is a virus that will grant you root access to a machine if there are enough open ports.
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
-
+          <br />
           <Typography>
-            {" "}
-            shows that there do not need to be any open ports on this machine for the NUKE virus to work, so go ahead
-            and run the virus using{" "}
+            The "analyze" command shows that there do not need to be any open ports on this machine for the NUKE program
+            to work, so go ahead and run the NUKE program using "run NUKE.exe".
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> run NUKE.exe"}</Typography>
-
-          <Typography></Typography>
+          <Example content="[n00dles /]> run NUKE.exe" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalManualHack as number]: {
+    [iTutorialSteps.TerminalManualHack]: {
       content: (
         <>
-          <Typography>You now have root access! You can hack the server using </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> hack"}</Typography>
-
+          <Typography>You now have root access! You can hack the server using the "hack" command.</Typography>
           <Typography> Try doing that now.</Typography>
+          <Example content="[n00dles /]> hack" />
         </>
       ),
       canNext: true,
     },
-    [iTutorialSteps.TerminalHackingMechanics as number]: {
+    [iTutorialSteps.TerminalHackingMechanics]: {
       content: (
         <Typography component="div">
           You are now attempting to hack the server. Performing a hack takes time and only has a certain percentage
@@ -294,27 +295,27 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           <br />
           The amount of money on a server is not limitless. So, if you constantly hack a server and deplete its money,
-          then you will encounter diminishing returns in your hacking. You will need to use{" "}
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> grow"}</Typography>
-          which tricks the company into adding money to their server and{" "}
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> weaken"}</Typography>
-          which increases the speed of hack and grow.
+          then you will encounter diminishing returns in your hacking. You will need to use the "grow" command which
+          tricks the company into adding money to their server and the "weaken" command which decreases the server's
+          security level.
+          <br />
+          <Example content="[n00dles /]> grow" />
+          <Example content="[n00dles /]> weaken" />
         </Typography>
       ),
       canNext: true,
     },
-    [iTutorialSteps.TerminalGoHome as number]: {
+    [iTutorialSteps.TerminalGoHome]: {
       content: (
         <>
-          <Typography>From any server you can get back home using</Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> home"}</Typography>
-
+          <Typography>From any server you can get back home using the "home" command.</Typography>
           <Typography>Let's head home before creating our first script!</Typography>
+          <Example content="[n00dles /]> home" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalCreateScript as number]: {
+    [iTutorialSteps.TerminalCreateScript]: {
       content: (
         <>
           <Typography>
@@ -322,19 +323,19 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             hacking manually the entire time. You can automate your hacking by writing scripts!
             <br />
             <br />
-            To create a new script or edit an existing one, you can use{" "}
+            To create a new script or edit an existing one, you can use the "nano" command.
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
           <Typography>
-            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering "
+            {`nano ${tutorialScriptName}`}"
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
+          <Example content={`[home /]> nano ${tutorialScriptName}`} />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalEditScript as number]: {
+    [iTutorialSteps.TerminalEditScript]: {
       content: (
         <>
           <Typography>
@@ -372,7 +373,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalFree as number]: {
+    [iTutorialSteps.TerminalFree]: {
       content: (
         <>
           <Typography>
@@ -381,25 +382,26 @@ export async function main(ns) {
             RAM for your home server.
             <br />
             <br />
-            To check how much RAM is available on this machine, enter
+            To check how much RAM is available on this machine, use the "free" command.
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> free"}</Typography>
+          <Example content="[home /]> free" />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalRunScript as number]: {
+    [iTutorialSteps.TerminalRunScript]: {
       content: (
         <>
           <Typography>
-            We have 8GB of free RAM on this machine, which is enough to run our script. Let's run our script using
+            We have 8GB of free RAM on this machine, which is enough to run our script. Let's run our script using "
+            {`run ${tutorialScriptName}`}"
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> run ${tutorialScriptName}`}</Typography>
+          <Example content={`[home /]> run ${tutorialScriptName}`} />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalGoToActiveScriptsPage as number]: {
+    [iTutorialSteps.TerminalGoToActiveScriptsPage]: {
       content: (
         <>
           <Typography>
@@ -419,7 +421,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.ActiveScriptsPage as number]: {
+    [iTutorialSteps.ActiveScriptsPage]: {
       content: (
         <>
           <Typography>
@@ -443,19 +445,20 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.ActiveScriptsToTerminal as number]: {
+    [iTutorialSteps.ActiveScriptsToTerminal]: {
       content: (
         <>
           <Typography>
             One last thing about scripts, each active script contains logs that detail what it's doing. We can check
-            these logs using the tail command. Do that now for the script we just ran by typing{" "}
+            these logs using the "tail" command. Do that now for the script we just ran by typing "
+            {`tail ${tutorialScriptName}`}"
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> tail ${tutorialScriptName}`}</Typography>
+          <Example content={`[home /]> tail ${tutorialScriptName}`} />
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalTailScript as number]: {
+    [iTutorialSteps.TerminalTailScript]: {
       content: (
         <>
           <Typography>
@@ -478,7 +481,7 @@ export async function main(ns) {
       ),
       canNext: true,
     },
-    [iTutorialSteps.GoToHacknetNodesPage as number]: {
+    [iTutorialSteps.GoToHacknetNodesPage]: {
       content: (
         <>
           <Typography>
@@ -494,7 +497,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.HacknetNodesIntroduction as number]: {
+    [iTutorialSteps.HacknetNodesIntroduction]: {
       content: (
         <Typography>
           Here you can purchase new Hacknet Nodes and upgrade your existing ones. Let's purchase a new one now.
@@ -502,7 +505,7 @@ export async function main(ns) {
       ),
       canNext: true,
     },
-    [iTutorialSteps.HacknetNodesGoToWorldPage as number]: {
+    [iTutorialSteps.HacknetNodesGoToWorldPage]: {
       content: (
         <>
           <Typography>
@@ -520,7 +523,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.WorldDescription as number]: {
+    [iTutorialSteps.WorldDescription]: {
       content: (
         <>
           <Typography>
@@ -538,7 +541,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.DocumentationPageInfo as number]: {
+    [iTutorialSteps.DocumentationPageInfo]: {
       content: (
         <Typography component="div">
           This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
@@ -571,7 +574,7 @@ export async function main(ns) {
       ),
       canNext: true,
     },
-    [iTutorialSteps.End as number]: {
+    [iTutorialSteps.End]: {
       content: <Typography></Typography>,
       canNext: true,
     },

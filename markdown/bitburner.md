@@ -195,6 +195,17 @@ Player must be located in this city.
 </td></tr>
 <tr><td>
 
+[Cloud](./bitburner.cloud.md)
+
+
+</td><td>
+
+Cloud API
+
+
+</td></tr>
+<tr><td>
+
 [CodingContract](./bitburner.codingcontract.md)
 
 
@@ -754,7 +765,7 @@ Hacknet Server formulas
 
 </td><td>
 
-Options to control how a server identifier (hostname or IP address) is returned. Affects the behavior of [scan](./bitburner.ns.scan.md)<!-- -->, [getPurchasedServers](./bitburner.ns.getpurchasedservers.md)<!-- -->, and [getCurrentServer](./bitburner.singularity.getcurrentserver.md)
+Options to control how a server identifier (hostname or IP address) is returned. Affects the behavior of [scan](./bitburner.ns.scan.md)<!-- -->, [getServerNames](./bitburner.cloud.getservernames.md)<!-- -->, and [getCurrentServer](./bitburner.singularity.getcurrentserver.md)
 
 
 </td></tr>
@@ -1261,6 +1272,17 @@ Stanek's Gift API.
 </td></tr>
 <tr><td>
 
+[Stock](./bitburner.stock.md)
+
+
+</td><td>
+
+Stock market API
+
+
+</td></tr>
+<tr><td>
+
 [StockMarketConstants](./bitburner.stockmarketconstants.md)
 
 
@@ -1298,17 +1320,6 @@ Study
 
 </td><td>
 
-
-
-</td></tr>
-<tr><td>
-
-[TIX](./bitburner.tix.md)
-
-
-</td><td>
-
-Stock market API
 
 
 </td></tr>
@@ -1796,6 +1807,26 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 <tr><td>
 
 [FilenameOrPID](./bitburner.filenameorpid.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FragmentEnumType](./bitburner.fragmentenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FragmentType](./bitburner.fragmenttype.md)
 
 
 </td><td>

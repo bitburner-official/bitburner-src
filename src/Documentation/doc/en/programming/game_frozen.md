@@ -36,9 +36,9 @@ Common infinite loop when translating the server purchasing script in starting g
     var ram = 8;
     var i = 0;
 
-    while (i < ns.getPurchasedServerLimit()) {
-        if (ns.getServerMoneyAvailable("home") > ns.getPurchasedServerCost(ram)) {
-            var hostname = ns.purchaseServer("pserv-" + i, ram);
+    while (i < ns.cloud.getServerLimit()) {
+        if (ns.getServerMoneyAvailable("home") > ns.cloud.getRamLimit(ram)) {
+            var hostname = ns.cloud.purchaseServer("cloud-server-" + i, ram);
             ns.scp("early-hack-template.js", hostname);
             ns.exec("early-hack-template.js", hostname, 3);
             ++i;

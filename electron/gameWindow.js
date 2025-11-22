@@ -5,6 +5,7 @@ const achievements = require("./achievements");
 const menu = require("./menu");
 const path = require("path");
 const { windowTracker } = require("./windowTracker");
+const storage = require("./storage");
 
 const debug = process.argv.includes("--debug");
 
@@ -18,12 +19,14 @@ async function createWindow(killall) {
   }
 
   const tracker = windowTracker("main");
+
   const window = new BrowserWindow({
     icon,
     show: false,
     backgroundThrottling: false,
     backgroundColor: "#000000",
     title: "Bitburner",
+    autoHideMenuBar: storage.isMenuHideEnabled(),
     x: tracker.state.x,
     y: tracker.state.y,
     width: tracker.state.width,
