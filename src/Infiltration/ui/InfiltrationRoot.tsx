@@ -51,7 +51,7 @@ const stages = new Map([
 function Progress({ results }: { results: string }): React.ReactElement {
   return (
     <Typography variant="h4">
-      {/* WIP: It seems that you want to display only 14 last results instead of the full history. Is that right? */}
+      {/* Only show the last 14 results instead of the full history. */}
       <span style={{ color: "gray" }}>{results.slice(-15, -1)}</span>
       {results[results.length - 1]}
     </Typography>
@@ -91,10 +91,6 @@ export function InfiltrationRoot(): React.ReactElement {
   }, [state]);
 
   if (!state) {
-    /**
-     * WIP: Should we auto-redirect to another tab and/or use exceptionAlert? If this happens, the player will only see
-     * an error message without a hint of what they should do (i.e., reload the game and report to us).
-     */
     // This shouldn't happen, but we can't completely rule it out due to React
     // timing weirdness. Show a basic message in case players actually see
     // this. Because the current page is not saved, reloading should always
@@ -112,8 +108,7 @@ export function InfiltrationRoot(): React.ReactElement {
   return (
     <div style={{ display: "flex", alignItems: "center", height: "calc(100vh - 16px)" }}>
       {state.stage instanceof IntroModel ? (
-        // WIP: stage is unused. Can I remove it?
-        <Intro state={state} stage={state.stage} />
+        <Intro state={state} />
       ) : (
         <Container>
           <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center", gap: 1 }}>

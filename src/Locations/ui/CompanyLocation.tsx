@@ -63,7 +63,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
       return;
     }
 
-    Player.startInfiltration(location);
+    Player.initInfiltration(location);
     Router.toPage(Page.Infiltration);
   }
 

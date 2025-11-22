@@ -41,8 +41,7 @@ function randomPositionQuestion(wires: Wire[]): Question {
   const index = Math.floor(Math.random() * wires.length);
   return {
     toString: (): string => {
-      // WIP: I reverted the string here to the previous code. It was "wires", not "wire". Is that okay?
-      return `Cut wires number ${index + 1}.`;
+      return `Cut wire number ${index + 1}.`;
     },
     shouldCut: (_wire: Wire, i: number): boolean => {
       return index === i;

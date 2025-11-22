@@ -26,10 +26,8 @@ export function GameTimer({ endTimestamp }: GameTimerProps): React.ReactElement 
     const startTimestamp = changeRef.current.startTimestamp;
     if (!ele) return;
     ele.animate([{ transform: "translateX(0%)" }, { transform: "translateX(-100%)" }], {
-      /**
-       * If duration is negative, ele.animate will throw "TypeError: duration must be non-negative or auto". It may
-       * happen when the player uses the debugger.
-       */
+      // If duration is negative, ele.animate will throw "TypeError: duration must be non-negative or auto". It may
+      // happen when the player uses the debugger.
       duration: clampNumber(endTimestamp - startTimestamp, 0),
       // The delay will be negative. This is because the animation starts
       // partway completed, due to the time taken to invoke the effect.
