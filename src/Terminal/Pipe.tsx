@@ -15,12 +15,13 @@ import { LiteratureName, MessageFilename } from "@enums";
 import { Messages } from "../Message/MessageHelpers";
 import { Literatures } from "../Literature/Literatures";
 import { addOutputToBeProcessed, getNextOutput, handlePipeError, type PipedCommand, PipeState } from "./PipeState";
+import { Settings } from "../Settings/Settings";
 
 const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
 TerminalEvents.subscribe(debouncedHandlePipe);
 
-// TODO-Fico : add pipe config option to script launcher to handle piping output from scripts
+// TODO-Fico : add pipe config options to script launcher to handle piping terminal and tail output from scripts
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
@@ -187,7 +188,7 @@ function writeToTextFile(filename: string) {
   const overwrite = !pipe.hasBeenEvaluated && pipe.pipeType === ">";
 
   if (file && !overwrite) {
-    file.text += `${file.text ? "\n" : ""}${output}`;
+    file.text = concatenateFileContents(file.text, output);
   } else if (file && overwrite) {
     file.text = output;
   } else {
@@ -209,11 +210,22 @@ function writeToScriptFile(filename: string): void {
   if (file && overwrite) {
     file.content = output;
   } else if (file) {
-    file.content += `${file.content ? "\n" : ""}${output}`;
+    file.content = concatenateFileContents(file.content, output);
   } else {
     const newFile = new Script(filename as ScriptFilePath, output, Player.getCurrentServer().hostname);
     Player.getCurrentServer().scripts.set(filename as ScriptFilePath, newFile);
   }
+}
+
+function concatenateFileContents(content: string, newContent: string): string {
+  const concatenatedContent = content + (content ? "\n" : "") + newContent;
+  const splitLines = concatenatedContent.split("\n");
+  if (splitLines.length > Settings.MaxTerminalCapacity * 5) {
+    const truncatedFileContent = splitLines.slice(-Settings.MaxTerminalCapacity * 5).join("\n");
+    return `(File truncated at ${Settings.MaxTerminalCapacity * 5} lines)\n${truncatedFileContent}`;
+  }
+
+  return concatenatedContent;
 }
 
 function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape = false): string {

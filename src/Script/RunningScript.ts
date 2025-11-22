@@ -19,7 +19,8 @@ import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
-import { type PipedCommand } from "../Terminal/PipeState";
+import { addOutputToBeProcessed, type PipedCommand } from "../Terminal/PipeState";
+import { RawOutput } from "../Terminal/OutputTypes";
 
 export class RunningScript {
   // Script arguments
@@ -63,7 +64,9 @@ export class RunningScript {
   // Process ID of the parent process. 0 indicates no parent (such as run from terminal).
   parent = 0;
 
-  pipeConfig: PipedCommand | null = null;
+  terminalOutputPipeConfig: PipedCommand | null = null;
+
+  tailOutputPipeConfig: PipedCommand | null = null;
 
   // How much RAM this script uses for ONE thread
   ramUsage: number = RamCostConstants.Base;
@@ -115,6 +118,10 @@ export class RunningScript {
 
     this.logs.push(logEntry);
     this.logUpd = true;
+
+    if (this.tailOutputPipeConfig) {
+      addOutputToBeProcessed(new RawOutput(logEntry), this.tailOutputPipeConfig);
+    }
   }
 
   displayLog(): void {

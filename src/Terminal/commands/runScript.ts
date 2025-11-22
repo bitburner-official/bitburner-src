@@ -82,7 +82,7 @@ export function runScript(
   }
 
   // Update script pipe config, if any is present from the terminal
-  runningScript.pipeConfig = PipeState.currentTerminalPipe ?? null;
+  runningScript.terminalOutputPipeConfig = PipeState.currentTerminalPipe ?? null;
   PipeState.currentTerminalPipe = null;
 
   return runningScript;

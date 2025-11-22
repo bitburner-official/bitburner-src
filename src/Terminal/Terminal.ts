@@ -165,8 +165,8 @@ export class Terminal {
   append(item: Output | Link | RawOutput, pid: number = -1): void {
     // If logging comes from a script, put the output to be processed in that script's pipe buffer
     const script = pid > -1 ? findRunningScriptByPid(pid) : null;
-    if (script?.pipeConfig) {
-      pushPipedOutput(item, script.pipeConfig);
+    if (script?.terminalOutputPipeConfig) {
+      pushPipedOutput(item, script.terminalOutputPipeConfig);
     }
     // If the terminal has pipes set up, queue the output for processing
     else if (PipeState.currentTerminalPipe !== null) {

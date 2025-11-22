@@ -1,6 +1,7 @@
 import { Link, Output, RawOutput } from "./OutputTypes";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
+import { TerminalEvents } from "./TerminalEvents";
 
 export const PipeState = {
   outputToBeProcessed: [] as PipedOutput[],
@@ -29,6 +30,7 @@ export function addOutputToBeProcessed(output: Output | Link | RawOutput, pipeDe
       pipeDestination: pipeDestination,
     });
   }
+  TerminalEvents.emit();
 }
 
 export function getNextOutput(): PipedOutput | null {

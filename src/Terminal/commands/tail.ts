@@ -3,6 +3,8 @@ import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScripts, findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { LogBoxEvents } from "../../ui/React/LogBoxManager";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import { PipeState } from "../PipeState";
+import { RunningScript } from "../../Script/RunningScript";
 
 export function tail(commandArray: (string | number | boolean)[], server: BaseServer): void {
   try {
@@ -21,11 +23,12 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
         Terminal.error(`No script named ${path} with args ${JSON.stringify(args)} is running on the server`);
         return;
       }
+
       // Just use the first one (if there are multiple with the same
       // arguments, they can't be distinguished except by pid).
       const next = candidates.values().next();
       if (!next.done) {
-        LogBoxEvents.emit(next.value);
+        handleTail(next.value);
       }
     } else if (typeof commandArray[0] === "number") {
       const runningScript = findRunningScriptByPid(commandArray[0]);
@@ -33,10 +36,19 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
         Terminal.error(`No script with PID ${commandArray[0]} is running`);
         return;
       }
-      LogBoxEvents.emit(runningScript);
+      handleTail(runningScript);
     }
   } catch (error) {
     console.error(error);
     Terminal.error(String(error));
   }
+}
+
+function handleTail(script: RunningScript): void {
+  if (!PipeState.currentTerminalPipe) {
+    return LogBoxEvents.emit(script);
+  }
+
+  script.tailOutputPipeConfig = PipeState.currentTerminalPipe ?? null;
+  PipeState.currentTerminalPipe = null;
 }
