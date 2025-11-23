@@ -6484,6 +6484,21 @@ export interface NS {
   readonly pid: number;
 
   /**
+   * A NetscriptPort handle used to get input piped to the script.
+   * Examples:
+   *
+   * If a script was run with data piped into it via the terminal:
+   * `echo input1 | run myScript.js`
+   *
+   * then `ns.stdIn.read()` inside `myScript.js` would return `"input1"`.
+   *
+   * If more data is added later (for example, if one script's terminal output is piped to another script),
+   * then the script can read that data from `ns.stdIn` as well.
+   * `await ns.stdIn.nextPortWrite()` can be used to wait until new data is available to read.
+   */
+  readonly stdIn: NetscriptPort;
+
+  /**
    * Steal a server's money.
    * @remarks
    * RAM cost: 0.1 GB

@@ -1038,6 +1038,7 @@ import nsDoc_bitburner_ns_spawn_md from "../../markdown/bitburner.ns.spawn.md?ra
 import nsDoc_bitburner_ns_sprintf_md from "../../markdown/bitburner.ns.sprintf.md?raw";
 import nsDoc_bitburner_ns_sqlinject_md from "../../markdown/bitburner.ns.sqlinject.md?raw";
 import nsDoc_bitburner_ns_stanek_md from "../../markdown/bitburner.ns.stanek.md?raw";
+import nsDoc_bitburner_ns_stdin_md from "../../markdown/bitburner.ns.stdin.md?raw";
 import nsDoc_bitburner_ns_stock_md from "../../markdown/bitburner.ns.stock.md?raw";
 import nsDoc_bitburner_ns_toast_md from "../../markdown/bitburner.ns.toast.md?raw";
 import nsDoc_bitburner_ns_tprint_md from "../../markdown/bitburner.ns.tprint.md?raw";
@@ -2547,6 +2548,7 @@ AllPages["nsDoc/bitburner.ns.spawn.md"] = nsDoc_bitburner_ns_spawn_md;
 AllPages["nsDoc/bitburner.ns.sprintf.md"] = nsDoc_bitburner_ns_sprintf_md;
 AllPages["nsDoc/bitburner.ns.sqlinject.md"] = nsDoc_bitburner_ns_sqlinject_md;
 AllPages["nsDoc/bitburner.ns.stanek.md"] = nsDoc_bitburner_ns_stanek_md;
+AllPages["nsDoc/bitburner.ns.stdin.md"] = nsDoc_bitburner_ns_stdin_md;
 AllPages["nsDoc/bitburner.ns.stock.md"] = nsDoc_bitburner_ns_stock_md;
 AllPages["nsDoc/bitburner.ns.toast.md"] = nsDoc_bitburner_ns_toast_md;
 AllPages["nsDoc/bitburner.ns.tprint.md"] = nsDoc_bitburner_ns_tprint_md;

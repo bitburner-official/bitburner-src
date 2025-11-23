@@ -424,6 +424,33 @@ Namespace for [Stanek](./bitburner.stanek.md) functions. Contains spoilers.
 </td></tr>
 <tr><td>
 
+[stdIn](./bitburner.ns.stdin.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[NetscriptPort](./bitburner.netscriptport.md)
+
+
+</td><td>
+
+A NetscriptPort handle used to get input piped to the script. Examples:
+
+If a script was run with data piped into it via the terminal: `echo input1 | run myScript.js`
+
+then `ns.stdIn.read()` inside `myScript.js` would return `"input1"`<!-- -->.
+
+If more data is added later (for example, if one script's terminal output is piped to another script), then the script can read that data from `ns.stdIn` as well. `await ns.stdIn.nextPortWrite()` can be used to wait until new data is available to read.
+
+
+</td></tr>
+<tr><td>
+
 [stock](./bitburner.ns.stock.md)
 
 

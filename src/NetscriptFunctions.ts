@@ -91,7 +91,16 @@ import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, assertArray, assertString, assertObject } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
-import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
+import {
+  clearPort,
+  peekPort,
+  portHandle,
+  readPort,
+  tryWritePort,
+  writePort,
+  nextPortWrite,
+  PortNumber,
+} from "./NetscriptPort";
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
@@ -133,7 +142,7 @@ export const enums: NSEnums = {
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
 
-export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums">>;
+export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums" | "stdIn">>;
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
@@ -1565,7 +1574,12 @@ setRemovedFunctions(ns, {
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {
-  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
+  return NSProxy(ws, ns, [], {
+    args: ws.args.slice(),
+    pid: ws.pid,
+    stdIn: portHandle((ws.pid * -1) as PortNumber),
+    enums,
+  });
 }
 
 const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));

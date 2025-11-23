@@ -10,7 +10,7 @@ import { Terminal } from "../Terminal";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { formatTime } from "../utils/helpers/formatTime";
-import { ScriptArg } from "@nsdefs";
+import { NetscriptPort, ScriptArg } from "@nsdefs";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
 import { getKeyList } from "../utils/helpers/getKeyList";
@@ -64,10 +64,6 @@ export class RunningScript {
   // Process ID of the parent process. 0 indicates no parent (such as run from terminal).
   parent = 0;
 
-  terminalOutputPipeConfig: PipedCommand | null = null;
-
-  tailOutputPipeConfig: PipedCommand | null = null;
-
   // How much RAM this script uses for ONE thread
   ramUsage: number = RamCostConstants.Base;
 
@@ -77,8 +73,16 @@ export class RunningScript {
   // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
   scriptKey = "" as ScriptKey;
 
+  stdIn = null as NetscriptPort | null;
+
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
+
+  // Configuration for piping the script's tail output
+  tailOutputPipeConfig: PipedCommand | null = null;
+
+  // Configuration for piping the script's terminal output
+  terminalOutputPipeConfig: PipedCommand | null = null;
 
   // The title, as shown in the script's log box. Defaults to the name + args,
   // but can be changed by the user. If it is set to a React element (only by the user),

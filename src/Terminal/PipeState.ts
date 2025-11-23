@@ -52,7 +52,7 @@ function pipeDestinationIsIdentical(a: PipedCommand | null, b: PipedCommand | nu
   if (a === null || b === null) return false;
   return (
     a.commandString === b.commandString &&
-    a.pipeType === b.pipeType &&
+    a.pipeSymbol === b.pipeSymbol &&
     pipeDestinationIsIdentical(a.nextPipe, b.nextPipe)
   );
 }
@@ -64,7 +64,8 @@ export type PipedOutput = {
 
 export type PipedCommand = {
   commandString: string;
-  pipeType: string;
+  pipeSymbol: string;
   nextPipe: PipedCommand | null;
   hasBeenEvaluated?: boolean;
+  stdInPort?: number;
 };

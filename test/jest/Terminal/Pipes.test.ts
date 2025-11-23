@@ -107,13 +107,13 @@ describe("Terminal Pipes", () => {
       Terminal.executeCommands(commandString);
 
       const scriptName = "testScript.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint(ns.args); await ns.sleep(100); ns.tprint(ns.args); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.stdIn.read()); await ns.sleep(100); ns.tprint(ns.stdIn.read()); }`;
 
       // Add script to server
       Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
 
       // Pass arguments to script via pipe
-      const command = `echo test1 | ${scriptName} test2 > ${outputFileName}`;
+      const command = `echo test1 test2 | ${scriptName} > ${outputFileName}`;
       Terminal.executeCommands(command);
       await sleep(200);
 
@@ -121,7 +121,7 @@ describe("Terminal Pipes", () => {
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
       expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
-      expect(fileContent).toContain(`${scriptName}: ["test2","test1"]\n${scriptName}: ["test2","test1"]`);
+      expect(fileContent).toContain(`${scriptName}: test1 test2\n${scriptName}: NULL PORT DATA`);
       expect(fileContent).not.toContain(startingData);
     });
 
@@ -223,30 +223,30 @@ describe("Terminal Pipes", () => {
   describe("piping to and from scripts", () => {
     it("should handle piping to a script file, and passing arguments into a script to run", async () => {
       const scriptName = "testScript2.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint("Args received: ", ns.args); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint("Input received: ", ns.stdIn.peek()); }`;
 
       // Add script to server
       Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
 
       // Pass arguments to script via pipe
-      const command = `echo 'arguments' | run ${scriptName}`;
+      const command = `echo 'data' | run ${scriptName}`;
       Terminal.executeCommands(command);
       await sleep(100);
 
-      expect(Terminal.outputHistory[0]?.text).toContain(`args: ["arguments"].`);
-      expect(Terminal.outputHistory[1]?.text).toContain(`Args received: ["arguments"]`);
+      expect(Terminal.outputHistory[0]?.text).toContain(`Running script with 1 thread`);
+      expect(Terminal.outputHistory[1]?.text).toEqual(`${scriptName}: Input received: data`);
     });
 
     it("should piping content out of a script", async () => {
       const outputFileName = "scriptOutput4.txt" as TextFilePath;
       const scriptName = "testScript.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint("Args received: ", ns.args); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint("Input received: ", ns.stdIn.peek()); }`;
 
       // Add script to server
       Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
 
       // Pass arguments to script via pipe
-      const command = `echo 'arguments' | ${scriptName} > ${outputFileName}`;
+      const command = `echo 'data' | ${scriptName} > ${outputFileName}`;
       Terminal.executeCommands(command);
       await sleep(200);
 
@@ -254,7 +254,7 @@ describe("Terminal Pipes", () => {
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
       expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
-      expect(fileContent).toContain(`Args received: ["arguments"]`);
+      expect(fileContent).toContain(`Input received: data`);
     });
 
     it("should pipe content out of a script when the run command is used", async () => {
@@ -308,14 +308,14 @@ describe("Terminal Pipes", () => {
     const command = "echo hello | grep h";
     let firstCommand = splitPipesFromFirstCommand(command);
     expect(firstCommand).toBe("echo hello");
-    expect(PipeState.currentTerminalPipe?.pipeType).toEqual("|");
+    expect(PipeState.currentTerminalPipe?.pipeSymbol).toEqual("|");
     expect(PipeState.currentTerminalPipe?.commandString).toBe("grep h");
 
     clearPipe();
     const command2 = "cat file.txt >> output.txt";
     firstCommand = splitPipesFromFirstCommand(command2);
     expect(firstCommand).toBe("cat file.txt");
-    expect(PipeState.currentTerminalPipe?.pipeType).toEqual(">>");
+    expect(PipeState.currentTerminalPipe?.pipeSymbol).toEqual(">>");
     expect(PipeState.currentTerminalPipe?.commandString).toBe("output.txt");
   });
 });
