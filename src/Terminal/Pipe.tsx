@@ -18,6 +18,7 @@ import { addOutputToBeProcessed, getNextOutput, handlePipeError, type PipedComma
 import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
 
 const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
@@ -58,6 +59,10 @@ export function handlePipe(): void {
   const scriptFromRunCommand = getScriptFromRunCommand(parsedCommand);
   if (scriptFromRunCommand) {
     return handlePipeToScript(scriptFromRunCommand, parsedCommand, PipeState.currentTerminalPipe);
+  }
+
+  if (command.toLowerCase() === "cat") {
+    return handlePipeToCat();
   }
 
   // Pipe to the next terminal command
@@ -136,13 +141,15 @@ function getFirstCommand(parsedCommands: (string | number | boolean)[]): string 
   return firstCommand.trim();
 }
 
-function advancePipe() {
+function advancePipe(shiftOutput = true): void {
   if (PipeState.currentTerminalPipe) {
     PipeState.currentTerminalPipe.hasBeenEvaluated = true;
     PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
   }
 
-  PipeState.outputToBeProcessed.shift();
+  if (shiftOutput) {
+    PipeState.outputToBeProcessed.shift();
+  }
   TerminalEvents.emit();
 }
 
@@ -176,14 +183,7 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
     return;
   }
 
-  // If there are further pipes, pass the same output to them
-  if (PipeState.currentTerminalPipe?.nextPipe) {
-    PipeState.currentTerminalPipe.hasBeenEvaluated = true;
-    PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
-    handlePipe();
-  } else {
-    advancePipe();
-  }
+  advancePipe(false);
 }
 
 function writeToTextFile(filename: string) {
@@ -289,6 +289,11 @@ function writeInputToScriptStdIn(scriptPid: number, input: string[]): void {
   input.forEach((line) => {
     script.stdIn?.write(line);
   });
+}
+
+function handlePipeToCat(): void {
+  dialogBoxCreate(getNextOutputStringified().join("\n"));
+  advancePipe(false);
 }
 
 function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape = false): string {

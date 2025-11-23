@@ -7,11 +7,13 @@ import { clearPipe, PipeState } from "../../../src/Terminal/PipeState";
 import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { LiteratureName, MessageFilename } from "@enums";
 import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
+import * as dialogBox from "../../../src/ui/React/DialogBox";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 fixDoImportIssue();
 initGameEnvironment();
+let dialogMock;
 
 describe("Terminal Pipes", () => {
   beforeEach(() => {
@@ -21,6 +23,7 @@ describe("Terminal Pipes", () => {
     Terminal.outputHistory = [];
     GetServer(Player.currentServer)?.textFiles.clear();
     GetServer(Player.currentServer)?.scripts.clear();
+    dialogMock = jest.spyOn(dialogBox, "dialogBoxCreate").mockImplementation(() => {});
   });
 
   describe("piping to files", () => {
@@ -32,7 +35,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toBe("Hello World");
     });
 
@@ -45,7 +48,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toBe("first line\nsecond line");
     });
 
@@ -69,7 +72,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.scripts?.get(fileName as ScriptFilePath)?.content;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toBe("second line");
     });
 
@@ -94,7 +97,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toContain(`${scriptName}: ["test1"]\n${scriptName}: ["test1"]`);
       expect(fileContent).not.toContain(startingData);
     });
@@ -120,7 +123,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toContain(`${scriptName}: test1 test2\n${scriptName}: NULL PORT DATA`);
       expect(fileContent).not.toContain(startingData);
     });
@@ -146,7 +149,7 @@ describe("Terminal Pipes", () => {
       const commandString = `echo test | ${fileName1}; echo test2 | ${fileName2}`;
       Terminal.executeCommands(commandString);
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
 
       const server = GetServer(Player.currentServer);
       const fileContent1 = server?.textFiles?.get(fileName1 as TextFilePath)?.text;
@@ -253,7 +256,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toContain(`Input received: data`);
     });
 
@@ -273,7 +276,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toContain(`Args received: ["test1","arguments"]`);
     });
 
@@ -298,10 +301,18 @@ describe("Terminal Pipes", () => {
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
       const fileContent2 = server?.textFiles?.get(outputFileName2)?.text;
 
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
+      expect(Terminal.outputHistory.length).toBe(0);
       expect(fileContent).toContain(`${scriptName}: ["test1","test2"]\n${scriptName}: ["test1","test2"]`);
       expect(fileContent2).toContain(`${scriptName}: ["test3","test4"]\n${scriptName}: ["test3","test4"]`);
     });
+  });
+
+  it("should handle piping content to cat", () => {
+    const testContent = "This is a test.";
+    const commandString = `echo "${testContent}" | cat`;
+    Terminal.executeCommands(commandString);
+    expect(Terminal.outputHistory.length).toBe(0);
+    expect(dialogMock).toHaveBeenCalledWith(testContent);
   });
 
   it("should correctly split the first command from later pipes", () => {
