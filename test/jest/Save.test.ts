@@ -53,12 +53,13 @@ function loadStandardServers() {
             "logUpd": true,
             "offlineRunningTime": 0.01,
             "onlineRunningTime": 7.210000000000004,
-            "terminalOutputPipeConfig": null,
-            "tailOutputPipeConfig": null,
             "pid": 3,
             "ramUsage": 1.6,
             "server": "home",
             "scriptKey": "script.js*[]",
+            "stdIn": null,
+            "tailOutputPipeConfig": null,
+            "terminalOutputPipeConfig": null,
             "temporary": true,
             "dependencies": [
               {
@@ -81,12 +82,13 @@ function loadStandardServers() {
             "logUpd": true,
             "offlineRunningTime": 0.01,
             "onlineRunningTime": 7.210000000000004,
-            "terminalOutputPipeConfig": null,
-            "tailOutputPipeConfig": null,
             "pid": 2,
             "ramUsage": 1.6,
             "server": "home",
             "scriptKey": "script.js*[]",
+            "stdIn": null,
+            "tailOutputPipeConfig": null,
+            "terminalOutputPipeConfig": null,
             "title": "Awesome Script",
             "dependencies": [
               {
