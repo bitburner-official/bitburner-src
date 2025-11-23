@@ -37,9 +37,12 @@ export function getNextOutput(): PipedOutput | null {
   return PipeState.outputToBeProcessed[0] || null;
 }
 
-export function handlePipeError(error: string) {
+export function handlePipeError(error: string, currentPipe = PipeState.currentTerminalPipe) {
+  if (currentPipe && !currentPipe?.hasShownError) {
+    currentPipe.hasShownError = true;
+    Terminal.error(`Error in pipe command: ${error}`);
+  }
   clearPipe();
-  Terminal.error(`Error in pipe command: ${error}`);
 }
 
 export function clearPipe() {
@@ -67,5 +70,6 @@ export type PipedCommand = {
   pipeSymbol: string;
   nextPipe: PipedCommand | null;
   hasBeenEvaluated?: boolean;
+  hasShownError?: boolean;
   stdInPort?: number;
 };

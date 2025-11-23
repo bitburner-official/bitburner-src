@@ -19,6 +19,7 @@ import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { RunningScript } from "../Script/RunningScript";
 
 const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
@@ -26,6 +27,9 @@ TerminalEvents.subscribe(debouncedHandlePipe);
 
 // TODO-Fico - add pipe documentation page
 // TODO: add unit test for multiple pipe inputs over time
+
+// TODO: handle pipe stream maintaining on restart? Mark scripts launched from pipe, exclude from save? save piped output stream on save?
+
 // TODO: support file input with <
 
 export function handlePipe(): void {
@@ -260,29 +264,27 @@ function handlePipeToScript(
   const currentInput = getNextOutputStringified();
 
   // If the script has already been launched in a prior evaluation of the pipe chain, just add to the script's stdIn
-  if (PipeState.currentTerminalPipe?.stdInPort) {
-    const existingScript = findRunningScriptByPid(+PipeState.currentTerminalPipe?.stdInPort);
-    return writeInputToScriptStdIn(existingScript?.pid ?? 0, currentInput);
+  if (currentPipe?.hasBeenEvaluated && currentPipe?.stdInPort) {
+    writeInputToScriptStdIn(currentPipe?.stdInPort, currentInput, currentPipe);
+    return advancePipe();
   }
 
-  // Prep the output for the next pipe and launch the script
-  PipeState.currentTerminalPipe = PipeState.currentTerminalPipe?.nextPipe ?? null;
-  PipeState.outputToBeProcessed.shift();
-  const runningScript = runScript(scriptName as ScriptFilePath, args, Player.getCurrentServer());
-
+  advancePipe();
+  const runningScript = runScript(scriptName as ScriptFilePath, args.slice(1), Player.getCurrentServer());
   if (!runningScript?.stdIn) {
     return;
   }
 
-  writeInputToScriptStdIn(runningScript?.pid ?? 0, currentInput);
-  currentPipe.stdInPort = runningScript.pid * -1;
+  writeInputToScriptStdIn(runningScript.pid, currentInput, currentPipe);
+  runningScript.temporary = true;
+  currentPipe.stdInPort = runningScript.pid;
   TerminalEvents.emit();
 }
 
-function writeInputToScriptStdIn(scriptPid: number, input: string[]): void {
-  const script = findRunningScriptByPid(scriptPid);
-  if (!script?.stdIn) {
-    handlePipeError(`Cannot pipe input to script pid ${scriptPid} - script is no longer running`);
+function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[], currentPipe: PipedCommand): void {
+  const script = scriptPid ? findRunningScriptByPid(scriptPid) : null;
+  if (!script || !script?.stdIn) {
+    handlePipeError(`Cannot pipe input to script pid ${scriptPid} - script is no longer running`, currentPipe);
     return;
   }
 
@@ -315,4 +317,17 @@ function pipeMatcher(): RegExp {
 
 function getNextOutputStringified(stripAnsiEscape = false): string[] {
   return getNextOutput()?.output.map((o) => stringify(o, stripAnsiEscape)) ?? [];
+}
+
+/**
+ * Ensures that pipe configurations on a saved script are properly reset when it starts up.
+ * @param runningScript
+ */
+export function cleanUpPipesOnSavedScript(runningScript: RunningScript): void {
+  if (runningScript.tailOutputPipeConfig) {
+    runningScript.tailOutputPipeConfig.hasBeenEvaluated = false;
+  }
+  if (runningScript.terminalOutputPipeConfig) {
+    runningScript.terminalOutputPipeConfig.hasBeenEvaluated = false;
+  }
 }

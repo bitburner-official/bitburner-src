@@ -34,6 +34,7 @@ import { UIEventEmitter, UIEventType } from "./ui/UIEventEmitter";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { Result } from "./types";
+import { cleanUpPipesOnSavedScript } from "./Terminal/Pipe";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -256,6 +257,7 @@ export function loadAllRunningScripts(): void {
         }
       }
       for (const runningScript of rsList) {
+        cleanUpPipesOnSavedScript(runningScript);
         startWorkerScript(runningScript, server);
         scriptCalculateOfflineProduction(runningScript, playerLastUpdate, playerPlaytimeSinceLastAug);
       }
