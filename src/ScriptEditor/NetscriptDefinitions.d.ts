@@ -3,6 +3,11 @@
  */
 type _ValueOf<T> = T[keyof T];
 
+type SuccessResult<T extends object> = { success: true; message?: string } & T;
+type FailureResult = { success: false; message: string };
+/** @public */
+type Result<T extends object = object> = SuccessResult<T> | FailureResult;
+
 /** All netscript definitions */
 
 /**
