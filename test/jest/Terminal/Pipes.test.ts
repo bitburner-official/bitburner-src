@@ -127,19 +127,6 @@ describe("Terminal Pipes", () => {
       expect(fileContent).toContain(`${scriptName}: test1 test2\n${scriptName}: NULL PORT DATA`);
       expect(fileContent).not.toContain(startingData);
     });
-
-    it("should pass along file contents if another pipe is included", () => {
-      const fileName = "output.txt";
-      const commandString = `echo data >> ${fileName} | echo`;
-
-      Terminal.executeCommands(commandString);
-
-      const server = GetServer(Player.currentServer);
-      const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
-      expect(fileContent).toBe("data");
-      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
-      expect(lastOutput.text).toBe("data");
-    });
   });
 
   describe("piping multiple inputs", () => {

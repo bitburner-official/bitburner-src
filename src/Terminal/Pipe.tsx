@@ -145,15 +145,13 @@ function getFirstCommand(parsedCommands: (string | number | boolean)[]): string 
   return firstCommand.trim();
 }
 
-function advancePipe(shiftOutput = true): void {
+function advancePipe(): void {
   if (PipeState.currentTerminalPipe) {
     PipeState.currentTerminalPipe.hasBeenEvaluated = true;
     PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
   }
 
-  if (shiftOutput) {
-    PipeState.outputToBeProcessed.shift();
-  }
+  PipeState.outputToBeProcessed.shift();
   TerminalEvents.emit();
 }
 
@@ -187,7 +185,7 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
     return;
   }
 
-  advancePipe(false);
+  advancePipe();
 }
 
 function writeToTextFile(filename: string) {
@@ -264,7 +262,7 @@ function handlePipeToScript(
   const currentInput = getNextOutputStringified();
 
   // If the script has already been launched in a prior evaluation of the pipe chain, just add to the script's stdIn
-  if (currentPipe?.hasBeenEvaluated && currentPipe?.stdInPort) {
+  if (currentPipe?.stdInPort) {
     writeInputToScriptStdIn(currentPipe?.stdInPort, currentInput, currentPipe);
     return advancePipe();
   }
@@ -295,7 +293,7 @@ function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[],
 
 function handlePipeToCat(): void {
   dialogBoxCreate(getNextOutputStringified().join("\n"));
-  advancePipe(false);
+  advancePipe();
 }
 
 function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape = false): string {
@@ -325,9 +323,9 @@ function getNextOutputStringified(stripAnsiEscape = false): string[] {
  */
 export function cleanUpPipesOnSavedScript(runningScript: RunningScript): void {
   if (runningScript.tailOutputPipeConfig) {
-    runningScript.tailOutputPipeConfig.hasBeenEvaluated = false;
+    runningScript.tailOutputPipeConfig.stdInPort = undefined;
   }
   if (runningScript.terminalOutputPipeConfig) {
-    runningScript.terminalOutputPipeConfig.hasBeenEvaluated = false;
+    runningScript.terminalOutputPipeConfig.stdInPort = undefined;
   }
 }
