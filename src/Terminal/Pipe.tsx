@@ -21,7 +21,8 @@ const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
 TerminalEvents.subscribe(debouncedHandlePipe);
 
-// TODO-Fico : add pipe config options to script launcher to handle piping terminal and tail output from scripts
+// TODO-Fico : refactor script input to use ns.stdout & pipe index 0
+// TODO: support file input with <
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
