@@ -23,7 +23,8 @@ const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
 TerminalEvents.subscribe(debouncedHandlePipe);
 
-// TODO-Fico : refactor script input to use ns.stdout & pipe index 0
+// TODO-Fico - add pipe documentation page
+// TODO: add unit test for multiple pipe inputs over time
 // TODO: support file input with <
 
 export function handlePipe(): void {

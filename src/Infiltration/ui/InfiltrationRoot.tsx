@@ -33,7 +33,7 @@ interface StageProps {
 }
 
 // The extra cast here is needed because otherwise it sees the more-specific
-// types of the components, and gets grumpy that they are not interconvertable.
+// types of the components, and gets grumpy that they are not interconvertible.
 const stages = new Map([
   [IntroModel, Intro],
   [CountdownModel, Countdown],
@@ -51,6 +51,7 @@ const stages = new Map([
 function Progress({ results }: { results: string }): React.ReactElement {
   return (
     <Typography variant="h4">
+      {/* Only show the last 14 results instead of the full history. */}
       <span style={{ color: "gray" }}>{results.slice(-15, -1)}</span>
       {results[results.length - 1]}
     </Typography>
@@ -106,7 +107,7 @@ export function InfiltrationRoot(): React.ReactElement {
   return (
     <div style={{ display: "flex", alignItems: "center", height: "calc(100vh - 16px)" }}>
       {state.stage instanceof IntroModel ? (
-        <Intro state={state} stage={state.stage} />
+        <Intro state={state} />
       ) : (
         <Container>
           <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center", gap: 1 }}>

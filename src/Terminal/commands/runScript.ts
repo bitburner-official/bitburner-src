@@ -12,7 +12,7 @@ import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 import { pluralize } from "../../utils/I18nUtils";
 import { RunningScript } from "../../Script/RunningScript";
 import { PipeState } from "../PipeState";
-import { portHandle, PortNumber } from "../../NetscriptPort";
+import { PortHandle, PortNumber } from "../../NetscriptPort";
 
 export function runScript(
   scriptPath: ScriptFilePath,
@@ -93,7 +93,7 @@ export function runScript(
   runningScript.terminalOutputPipeConfig = PipeState.currentTerminalPipe ?? null;
   PipeState.currentTerminalPipe = null;
 
-  runningScript.stdIn = portHandle((runningScript.pid * -1) as PortNumber);
+  runningScript.stdIn = new PortHandle((runningScript.pid * -1) as PortNumber);
 
   return runningScript;
 }

@@ -23,10 +23,10 @@ export function getPort(n: PortNumber) {
 }
 
 export class Port {
-  data: any[] = [];
+  data: unknown[] = [];
   resolver: Resolver | null = null;
   promise: Promise<void> | null = null;
-  add(data: any) {
+  add(data: unknown) {
     this.data.push(data);
     if (!this.resolver) return;
     this.resolver();
@@ -35,71 +35,66 @@ export class Port {
   }
 }
 
-export function portHandle(n: PortNumber): NetscriptPort {
-  return {
-    write: (value: unknown) => writePort(n, value),
-    tryWrite: (value: unknown) => tryWritePort(n, value),
-    read: () => readPort(n),
-    peek: () => peekPort(n),
-    nextWrite: () => nextPortWrite(n),
-    full: () => isFullPort(n),
-    empty: () => isEmptyPort(n),
-    clear: () => clearPort(n),
-  };
-}
+export class PortHandle implements NetscriptPort {
+  n: PortNumber;
 
-export function writePort(n: PortNumber, value: unknown): unknown {
-  const port = getPort(n);
-  // Primitives don't need to be cloned.
-  port.add(isObjectLike(value) ? structuredClone(value) : value);
-  if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
-  return null;
-}
+  constructor(n: PortNumber) {
+    this.n = n;
+  }
 
-export function tryWritePort(n: PortNumber, value: unknown): boolean {
-  const port = getPort(n);
-  if (port.data.length >= Settings.MaxPortCapacity) return false;
-  // Primitives don't need to be cloned.
-  port.add(isObjectLike(value) ? structuredClone(value) : value);
-  return true;
-}
+  write(value: unknown): unknown {
+    const port = getPort(this.n);
+    // Primitives don't need to be cloned.
+    port.add(isObjectLike(value) ? structuredClone(value) : value);
+    if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
+    return null;
+  }
 
-export function readPort(n: PortNumber): unknown {
-  const port = NetscriptPorts.get(n);
-  if (!port || !port.data.length) return emptyPortData;
-  const returnVal: unknown = port.data.shift();
-  if (!port.data.length && !port.resolver) NetscriptPorts.delete(n);
-  return returnVal;
-}
+  tryWrite(value: unknown): boolean {
+    const port = getPort(this.n);
+    if (port.data.length >= Settings.MaxPortCapacity) return false;
+    // Primitives don't need to be cloned.
+    port.add(isObjectLike(value) ? structuredClone(value) : value);
+    return true;
+  }
 
-export function peekPort(n: PortNumber): unknown {
-  const port = NetscriptPorts.get(n);
-  if (!port || !port.data.length) return emptyPortData;
-  // Needed to avoid exposing internal objects.
-  return isObjectLike(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
-}
+  read(): unknown {
+    const port = NetscriptPorts.get(this.n);
+    if (!port || !port.data.length) return emptyPortData;
+    const returnVal: unknown = port.data.shift();
+    if (!port.data.length && !port.resolver) NetscriptPorts.delete(this.n);
+    return returnVal;
+  }
 
-export function nextPortWrite(n: PortNumber) {
-  const port = getPort(n);
-  if (!port.promise) port.promise = new Promise<void>((res) => (port.resolver = res));
-  return port.promise;
-}
+  peek(): unknown {
+    const port = NetscriptPorts.get(this.n);
+    if (!port || !port.data.length) return emptyPortData;
+    // Needed to avoid exposing internal objects.
+    return isObjectLike(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
+  }
 
-function isFullPort(n: PortNumber) {
-  const port = NetscriptPorts.get(n);
-  if (!port) return false;
-  return port.data.length >= Settings.MaxPortCapacity;
-}
+  nextWrite(): Promise<void> {
+    const port = getPort(this.n);
+    if (!port.promise) port.promise = new Promise<void>((res) => (port.resolver = res));
+    return port.promise;
+  }
 
-function isEmptyPort(n: PortNumber) {
-  const port = NetscriptPorts.get(n);
-  if (!port) return true;
-  return port.data.length === 0;
-}
+  full(): boolean {
+    const port = NetscriptPorts.get(this.n);
+    if (!port) return false;
+    return port.data.length >= Settings.MaxPortCapacity;
+  }
 
-export function clearPort(n: PortNumber) {
-  const port = NetscriptPorts.get(n);
-  if (!port) return;
-  if (!port.resolver) NetscriptPorts.delete(n);
-  port.data.length = 0;
+  empty(): boolean {
+    const port = NetscriptPorts.get(this.n);
+    if (!port) return true;
+    return port.data.length === 0;
+  }
+
+  clear(): void {
+    const port = NetscriptPorts.get(this.n);
+    if (!port) return;
+    if (!port.resolver) NetscriptPorts.delete(this.n);
+    port.data.length = 0;
+  }
 }

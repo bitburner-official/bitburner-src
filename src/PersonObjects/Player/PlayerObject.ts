@@ -152,7 +152,7 @@ export class PlayerObject extends Person implements IPlayer {
   activeSourceFileLvl = generalMethods.activeSourceFileLvl;
   applyEntropy = augmentationMethods.applyEntropy;
   focusPenalty = generalMethods.focusPenalty;
-  startInfiltration = generalMethods.startInfiltration;
+  initInfiltration = generalMethods.initInfiltration;
 
   constructor() {
     super();
