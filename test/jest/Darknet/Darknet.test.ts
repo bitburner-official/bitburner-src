@@ -17,7 +17,7 @@ import {
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
-import { getAuthResult } from "../../../src/DarkNet/effects/authentication";
+import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
@@ -154,6 +154,7 @@ describe("Password Tests", () => {
 
     const result = getAuthResult(server, `${attemptedPassword}`, 1);
 
+    expect(isCloseToCorrectPassword(server.password, attemptedPassword, true)).toBe(true);
     expect(result.response.code).toBe(ResponseCodeEnum.Success);
   });
 
@@ -171,13 +172,14 @@ describe("Password Tests", () => {
 
     const result = getAuthResult(server, `${attemptedPassword}`, 1);
 
+    expect(isCloseToCorrectPassword(server.password, attemptedPassword)).toBe(true);
     expect(result.response.code).toBe(ResponseCodeEnum.Success);
   });
 
   test("encodeNumberInBaseN and parseBaseNNumberString encode/decode numbers correctly", () => {
     expect(encodeNumberInBaseN(15, 5.5)).toBe("24");
     expect(encodeNumberInBaseN(16, 5.5)).toBe("25");
-    expect(encodeNumberInBaseN(17, 5.5)).toBe("30.24");
+    expect(encodeNumberInBaseN(17, 5.5)).toBe("30.24034");
 
     expect(parseBaseNNumberString("24", 5.5)).toBe(15);
     expect(parseBaseNNumberString("25", 5.5)).toBe(16);

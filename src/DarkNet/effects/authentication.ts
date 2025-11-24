@@ -75,10 +75,7 @@ export const checkPassword = (
     case ModelIds.ConvertToBase10:
     case ModelIds.parsedExpression: {
       const parsedAttemptedPassword = parseFloat(attemptedPassword);
-      if (
-        !isNaN(parsedAttemptedPassword) &&
-        Math.abs((parsedAttemptedPassword - Number(server.password)) / Number(server.password)) < 0.005
-      ) {
+      if (!isNaN(parsedAttemptedPassword) && isCloseToCorrectPassword(server.password, parsedAttemptedPassword)) {
         // ignore small rounding errors during floating point operations
         return getGenericSuccess(attemptedPassword);
       }
@@ -92,6 +89,20 @@ export const checkPassword = (
     default:
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
   }
+};
+
+export const isCloseToCorrectPassword = (
+  correctPassword: string,
+  attemptedPassword: number,
+  logIfNotClose = false,
+): boolean => {
+  const difference = Math.abs(attemptedPassword - Number(correctPassword));
+  const result = difference < 0.01 || difference / Number(correctPassword) < 0.005;
+
+  if (logIfNotClose && !result) {
+    console.warn(`Attempted password ${attemptedPassword} is not close enough to correct password ${correctPassword}`);
+  }
+  return result;
 };
 
 export const getAuthResult = (

@@ -7,6 +7,7 @@ import {
   EUCountries,
   filler,
   letters,
+  lettersUppercase,
   numbers,
   special,
   unicode,
@@ -361,12 +362,12 @@ export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
 };
 
 export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
-  const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];
+  const characters = [...numbers.split(""), ...lettersUppercase.split("")];
   let digits = Math.floor(Math.log(decimalNumber) / Math.log(base));
   let remaining = decimalNumber;
   let result: string = "";
 
-  while (remaining >= 0.1 || digits >= 0) {
+  while (remaining >= 0.0001 || digits >= 0) {
     if (digits === -1) {
       result += ".";
     }
@@ -380,7 +381,7 @@ export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
 };
 
 export const parseBaseNNumberString = (numberString: string, base: number): number => {
-  const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];
+  const characters = [...numbers.split(""), ...lettersUppercase.split("")];
   let result = 0;
   let index = 0;
   let digit = numberString.split(".")[0].length - 1;

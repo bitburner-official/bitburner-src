@@ -1,7 +1,9 @@
 import { FactionName, LocationName } from "@enums";
 
 export const numbers = "0123456789";
-export const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+export const lettersLowercase = "abcdefghijklmnopqrstuvwxyz";
+export const lettersUppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+export const letters = lettersLowercase + lettersUppercase;
 export const special = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 export const unicode = "¼░╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿";
 export const filler = "/[]╬╸.-()*~:;><#\\";
