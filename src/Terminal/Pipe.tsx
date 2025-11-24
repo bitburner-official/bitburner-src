@@ -50,14 +50,19 @@ export function handlePipe(): void {
   const parsedCommand = parseCommand(commandString);
   const command = parsedCommand[0]?.toString();
 
-  // ECHO or empty command: Pipe to stout
-  if (!commandString || parsedCommand.length === 0 || command.toLowerCase() === "echo") {
-    return handleEcho();
-  }
-
   // Pipe to file
   if (hasTextExtension(command) || (hasScriptExtension(command) && pipeType !== "|")) {
     return handlePipeToFile(parsedCommand, commandString);
+  }
+
+  if (pipeType === ">" || pipeType === ">>") {
+    handlePipeError(`Invalid pipe symbol '${pipeType}' for command: ${commandString}. > and >> can only be used to pipe into files.`);
+    return;
+  }
+
+  // ECHO or empty command: Pipe to stout
+  if (!commandString || parsedCommand.length === 0 || command.toLowerCase() === "echo") {
+    return handleEcho();
   }
 
   const scriptFromRunCommand = getScriptFromRunCommand(parsedCommand);
@@ -191,6 +196,11 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
 function writeToTextFile(filename: string) {
   const pipe = PipeState.currentTerminalPipe;
   if (!pipe) {
+    return;
+  }
+
+  if (pipe.pipeSymbol === "|") {
+    handlePipeError(`Cannot pipe to text file with pipe symbol '|'. Use '>' to overwrite or '>>' to append instead.`);
     return;
   }
 
