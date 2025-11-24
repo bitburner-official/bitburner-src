@@ -133,7 +133,7 @@ describe("Terminal Pipes", () => {
     it("should handle multiple commands with distinct pipes", () => {
       const fileName1 = "output.txt";
       const fileName2 = "output2.txt";
-      const commandString = `echo test | ${fileName1}; echo test2 | ${fileName2}`;
+      const commandString = `echo test > ${fileName1}; echo test2 > ${fileName2}`;
       Terminal.executeCommands(commandString);
 
       expect(Terminal.outputHistory.length).toBe(0);
@@ -147,7 +147,7 @@ describe("Terminal Pipes", () => {
     });
 
     it("passes all piped inputs to the output command", async () => {
-      Terminal.executeCommands("echo 1337 | file1.txt");
+      Terminal.executeCommands("echo 1337 > file1.txt");
       const command = "echo file1.txt file2.txt | cp";
       Terminal.executeCommands(command);
       await sleep(100);

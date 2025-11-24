@@ -51,12 +51,14 @@ export function handlePipe(): void {
   const command = parsedCommand[0]?.toString();
 
   // Pipe to file
-  if (hasTextExtension(command) || (hasScriptExtension(command) && pipeType !== "|")) {
+  if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeType !== "|"))) {
     return handlePipeToFile(parsedCommand, commandString);
   }
 
   if (pipeType === ">" || pipeType === ">>") {
-    handlePipeError(`Invalid pipe symbol '${pipeType}' for command: ${commandString}. > and >> can only be used to pipe into files.`);
+    handlePipeError(
+      `Invalid pipe symbol '${pipeType}' for command: ${commandString}. > and >> can only be used to pipe into files.`,
+    );
     return;
   }
 
