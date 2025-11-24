@@ -304,7 +304,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Infiltration: {
-      mainPage = <InfiltrationRoot location={pageWithContext.location} />;
+      mainPage = <InfiltrationRoot />;
       withSidebar = false;
       break;
     }

@@ -1,32 +1,18 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import type { Infiltration } from "../Infiltration";
+import type { CountdownModel } from "../model/CountdownModel";
 
 interface IProps {
-  onFinish: () => void;
+  state: Infiltration;
+  stage: CountdownModel;
 }
 
-export function Countdown({ onFinish }: IProps): React.ReactElement {
-  const [x, setX] = useState(3);
-
-  useEffect(() => {
-    if (x === 0) {
-      onFinish();
-    }
-  }, [x, onFinish]);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setX((previousValue) => previousValue - 1);
-    }, 300);
-    return () => {
-      clearInterval(id);
-    };
-  }, []);
-
+export function Countdown({ stage }: IProps): React.ReactElement {
   return (
     <Paper sx={{ p: 1, textAlign: "center" }}>
       <Typography variant="h4">Get Ready!</Typography>
-      <Typography variant="h4">{x}</Typography>
+      <Typography variant="h4">{stage.count}</Typography>
     </Paper>
   );
 }

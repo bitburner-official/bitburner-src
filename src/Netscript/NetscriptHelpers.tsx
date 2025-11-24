@@ -26,7 +26,7 @@ import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
-import { PortNumber } from "../NetscriptPort";
+import { type PortNumber, PortHandle } from "../NetscriptPort";
 import { FormulaGang } from "../Gang/formulas/formulas";
 import { GangMember } from "../Gang/GangMember";
 import { GangMemberTask } from "../Gang/GangMemberTask";
@@ -91,7 +91,7 @@ export const helpers = {
   getServer,
   scriptIdentifier,
   hack,
-  portNumber,
+  portHandle,
   person,
   server,
   gang,
@@ -614,7 +614,7 @@ function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: un
   });
 }
 
-function portNumber(ctx: NetscriptContext, _n: unknown): PortNumber {
+function portHandle(ctx: NetscriptContext, _n: unknown): PortHandle {
   const n = positiveInteger(ctx, "portNumber", _n);
   if (n > CONSTANTS.NumNetscriptPorts) {
     throw errorMessage(
@@ -622,7 +622,7 @@ function portNumber(ctx: NetscriptContext, _n: unknown): PortNumber {
       `Trying to use an invalid port: ${n}. Must be less or equal to ${CONSTANTS.NumNetscriptPorts}.`,
     );
   }
-  return n as PortNumber;
+  return new PortHandle(n as PortNumber);
 }
 
 function person(ctx: NetscriptContext, p: unknown): IPerson {

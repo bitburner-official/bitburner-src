@@ -1,9 +1,9 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
-import React from "react";
-import type { Location } from "../../Locations/Location";
+import React, { useCallback } from "react";
 import { Settings } from "../../Settings/Settings";
 import { formatHp, formatMoney, formatNumberNoSuffix, formatPercent, formatReputation } from "../../ui/formatNumber";
 import { Player } from "@player";
+import type { Infiltration } from "../Infiltration";
 import { calculateDamageAfterFailingInfiltration } from "../utils";
 import {
   calculateInfiltratorsRepReward,
@@ -16,12 +16,7 @@ import { calculateMarketDemandMultiplier, calculateReward, MaxDifficultyForInfil
 import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
-  location: Location;
-  startingSecurityLevel: number;
-  difficulty: number;
-  maxLevel: number;
-  start: () => void;
-  cancel: () => void;
+  state: Infiltration;
 }
 
 function arrowPart(color: string, length: number): JSX.Element {
@@ -62,39 +57,45 @@ function coloredArrow(difficulty: number): JSX.Element {
   }
 }
 
-export function Intro({
-  location,
-  startingSecurityLevel,
-  difficulty,
-  maxLevel,
-  start,
-  cancel,
-}: IProps): React.ReactElement {
+export function Intro({ state }: IProps): React.ReactElement {
+  // We need to rerender ourselves based on things that change that aren't
+  // reflected in Infiltration itself.
   useRerender(1000);
 
   const timestampNow = Date.now();
 
-  const reward = calculateReward(startingSecurityLevel);
-  const repGain = calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel, timestampNow);
-  const moneyGain = calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel, timestampNow);
+  const reward = calculateReward(state.startingSecurityLevel);
+  const repGain = calculateTradeInformationRepReward(reward, state.maxLevel, state.startingSecurityLevel, timestampNow);
+  const moneyGain = calculateSellInformationCashReward(
+    reward,
+    state.maxLevel,
+    state.startingSecurityLevel,
+    timestampNow,
+  );
   const soaRepGain = calculateInfiltratorsRepReward(
     Factions[FactionName.ShadowsOfAnarchy],
-    maxLevel,
-    startingSecurityLevel,
+    state.maxLevel,
+    state.startingSecurityLevel,
     timestampNow,
   );
   const marketRateMultiplier = calculateMarketDemandMultiplier(timestampNow, false);
 
+  const start = useCallback(() => state.startInfiltration(), [state]);
+  const cancel = useCallback(() => state.cancel(), [state]);
+
   let warningMessage;
-  if (difficulty >= MaxDifficultyForInfiltration) {
+  if (state.startingDifficulty >= MaxDifficultyForInfiltration) {
     warningMessage = (
       <Typography color={Settings.theme.error} textAlign="center">
         This location is too secure for your current abilities. You cannot infiltrate it.
       </Typography>
     );
-  } else if (difficulty >= 1.5) {
+  } else if (state.startingDifficulty >= 1.5) {
     warningMessage = (
-      <Typography color={difficulty > 2 ? Settings.theme.error : Settings.theme.warning} textAlign="center">
+      <Typography
+        color={state.startingDifficulty > 2 ? Settings.theme.error : Settings.theme.warning}
+        textAlign="center"
+      >
         This location is too heavily guarded for your current stats. You should train more or find an easier location.
       </Typography>
     );
@@ -104,19 +105,21 @@ export function Intro({
     <Container sx={{ alignItems: "center" }}>
       <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">
-          Infiltrating <b>{location.name}</b>
+          Infiltrating <b>{state.location.name}</b>
         </Typography>
 
         <Typography variant="h6">
           <b>HP: {`${formatHp(Player.hp.current)} / ${formatHp(Player.hp.max)}`}</b>
         </Typography>
         <Typography variant="h6">
-          <b>Lose {formatHp(calculateDamageAfterFailingInfiltration(startingSecurityLevel))} HP for each failure</b>
+          <b>
+            Lose {formatHp(calculateDamageAfterFailingInfiltration(state.startingSecurityLevel))} HP for each failure
+          </b>
         </Typography>
 
         <Typography variant="h6">
           <b>Maximum clearance level: </b>
-          {maxLevel}
+          {state.maxLevel}
         </Typography>
 
         <br />
@@ -143,15 +146,21 @@ export function Intro({
           variant="h6"
           sx={{
             color:
-              difficulty > 2 ? Settings.theme.error : difficulty > 1 ? Settings.theme.warning : Settings.theme.primary,
+              state.startingDifficulty > 2
+                ? Settings.theme.error
+                : state.startingDifficulty > 1
+                ? Settings.theme.warning
+                : Settings.theme.primary,
             display: "flex",
             alignItems: "center",
           }}
         >
           <b>Difficulty:&nbsp;</b>
-          {formatNumberNoSuffix(difficulty * (100 / MaxDifficultyForInfiltration))} / 100
+          {formatNumberNoSuffix(state.startingDifficulty * (100 / MaxDifficultyForInfiltration))} / 100
         </Typography>
-        <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>[{coloredArrow(difficulty)}]</Typography>
+        <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
+          [{coloredArrow(state.startingDifficulty)}]
+        </Typography>
         <Typography
           sx={{ lineHeight: "1em", whiteSpace: "pre" }}
         >{`▲            ▲            ▲            ▲           ▲`}</Typography>
@@ -194,7 +203,7 @@ export function Intro({
         </ul>
 
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", width: "100%" }}>
-          <Button onClick={start} disabled={difficulty >= MaxDifficultyForInfiltration}>
+          <Button onClick={start} disabled={state.startingDifficulty >= MaxDifficultyForInfiltration}>
             Start
           </Button>
           <Button onClick={cancel}>Cancel</Button>

@@ -91,7 +91,6 @@ import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, assertArray, assertString, assertObject } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
-import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
@@ -1113,8 +1112,8 @@ export const ns: InternalAPI<NSFull> = {
       return helpers.getRunningScript(ctx, ident) !== null;
     },
   writePort: (ctx) => (_portNumber, data) => {
-    const portNumber = helpers.portNumber(ctx, _portNumber);
-    return writePort(portNumber, data);
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.write(data);
   },
   write: (ctx) => (_filename, _data, _mode) => {
     const filepath = helpers.filePath(ctx, "filename", _filename);
@@ -1145,16 +1144,16 @@ export const ns: InternalAPI<NSFull> = {
     server.writeToTextFile(filepath, mode === "w" ? data : existingText + data);
   },
   tryWritePort: (ctx) => (_portNumber, data) => {
-    const portNumber = helpers.portNumber(ctx, _portNumber);
-    return tryWritePort(portNumber, data);
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.tryWrite(data);
   },
   nextPortWrite: (ctx) => (_portNumber) => {
-    const portNumber = helpers.portNumber(ctx, _portNumber);
-    return nextPortWrite(portNumber);
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.nextWrite();
   },
   readPort: (ctx) => (_portNumber) => {
-    const portNumber = helpers.portNumber(ctx, _portNumber);
-    return readPort(portNumber);
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.read();
   },
   read: (ctx) => (_filename) => {
     const path = helpers.filePath(ctx, "filename", _filename);
@@ -1175,8 +1174,8 @@ export const ns: InternalAPI<NSFull> = {
     return contentFile.metadata.plain();
   },
   peek: (ctx) => (_portNumber) => {
-    const portNumber = helpers.portNumber(ctx, _portNumber);
-    return peekPort(portNumber);
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.peek();
   },
   clear: (ctx) => (_file) => {
     const path = helpers.filePath(ctx, "file", _file);
@@ -1190,12 +1189,12 @@ export const ns: InternalAPI<NSFull> = {
     file.content = "";
   },
   clearPort: (ctx) => (_portNumber) => {
-    const portNumber = helpers.portNumber(ctx, _portNumber);
-    return clearPort(portNumber);
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.clear();
   },
   getPortHandle: (ctx) => (_portNumber) => {
-    const portNumber = helpers.portNumber(ctx, _portNumber);
-    return portHandle(portNumber);
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle;
   },
   rm: (ctx) => (_fn, _host) => {
     const filepath = helpers.filePath(ctx, "fn", _fn);

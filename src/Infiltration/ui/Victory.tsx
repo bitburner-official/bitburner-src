@@ -4,10 +4,10 @@ import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } f
 import { Player } from "@player";
 import { FactionName } from "@enums";
 
+import type { Infiltration } from "../Infiltration";
+import type { VictoryModel } from "../model/VictoryModel";
 import { inviteToFaction } from "../../Faction/FactionHelpers";
 import { Factions } from "../../Faction/Factions";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
 import { Money } from "../../ui/React/Money";
 import { Reputation } from "../../ui/React/Reputation";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
@@ -18,20 +18,17 @@ import {
 } from "../formulas/victory";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
-import { decreaseMarketDemandMultiplier } from "../formulas/game";
+import { calculateReward, decreaseMarketDemandMultiplier } from "../formulas/game";
 
 interface IProps {
-  startingSecurityLevel: number;
-  difficulty: number;
-  reward: number;
-  timestamp: number;
-  maxLevel: number;
+  state: Infiltration;
+  stage: VictoryModel;
 }
 
 // Use a module-scope variable to save the faction choice.
 let defaultFactionChoice: FactionName | "none" = "none";
 
-export function Victory(props: IProps): React.ReactElement {
+export function Victory({ state }: IProps): React.ReactElement {
   /**
    * Use the working faction as the default choice in 2 cases:
    * - The player has not chosen a faction.
@@ -44,28 +41,29 @@ export function Victory(props: IProps): React.ReactElement {
 
   function quitInfiltration(): void {
     handleInfiltrators();
-    decreaseMarketDemandMultiplier(props.timestamp, props.maxLevel);
-    Router.toPage(Page.City);
+    decreaseMarketDemandMultiplier(state.gameStartTimestamp, state.maxLevel);
+    state.cancel();
   }
 
   const soa = Factions[FactionName.ShadowsOfAnarchy];
+  const reward = calculateReward(state.startingSecurityLevel);
   const repGain = calculateTradeInformationRepReward(
-    props.reward,
-    props.maxLevel,
-    props.startingSecurityLevel,
-    props.timestamp,
+    reward,
+    state.maxLevel,
+    state.startingSecurityLevel,
+    state.gameStartTimestamp,
   );
   const moneyGain = calculateSellInformationCashReward(
-    props.reward,
-    props.maxLevel,
-    props.startingSecurityLevel,
-    props.timestamp,
+    reward,
+    state.maxLevel,
+    state.startingSecurityLevel,
+    state.gameStartTimestamp,
   );
   const infiltrationRepGain = calculateInfiltratorsRepReward(
     soa,
-    props.maxLevel,
-    props.startingSecurityLevel,
-    props.timestamp,
+    state.maxLevel,
+    state.startingSecurityLevel,
+    state.gameStartTimestamp,
   );
 
   const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);

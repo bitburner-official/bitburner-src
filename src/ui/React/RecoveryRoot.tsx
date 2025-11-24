@@ -198,11 +198,14 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
               />
             </Paper>
           )}
+          <Typography variant="h4" color={Settings.theme.warning}>
+            Do NOT take a screenshot of this screen. You must post the bug report text below.
+          </Typography>
           <Paper sx={{ px: 2, pt: 1, pb: 2, mt: 2 }}>
             <Typography variant="h5">{crashReport.title}</Typography>
             <Box sx={{ my: 2 }}>
               <TextField
-                label="Bug Report Text"
+                label={<Typography sx={{ fontSize: "20px" }}>Bug Report Text</Typography>}
                 value={crashReport.body}
                 variant="outlined"
                 color="secondary"
@@ -210,7 +213,10 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
                 fullWidth
                 rows={40}
                 spellCheck={false}
-                sx={{ "& .MuiOutlinedInput-root": { color: Settings.theme.secondary } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": { color: Settings.theme.secondary },
+                  "& .MuiOutlinedInput-input": { scrollbarWidth: "thin" },
+                }}
               />
             </Box>
             <Tooltip title="Submitting an issue to GitHub really helps us improve the game!">
