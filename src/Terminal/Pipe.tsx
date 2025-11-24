@@ -26,9 +26,7 @@ const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 TerminalEvents.subscribe(debouncedHandlePipe);
 
 // TODO-Fico - add pipe documentation page
-// TODO: add unit test for multiple pipe inputs over time
-
-// TODO: handle pipe stream maintaining on restart? Mark scripts launched from pipe, exclude from save? save piped output stream on save?
+// TODO: add unit test for multiple pipe inputs over time between scripts
 
 // TODO: support file input with <
 
