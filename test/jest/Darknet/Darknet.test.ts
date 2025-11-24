@@ -150,6 +150,23 @@ describe("Password Tests", () => {
     const [base, numberString] = failedAttemptResponse.response.data.split(",");
     expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
+    const attemptedPassword = Number.parseInt(numberString, Number(base));
+
+    const result = getAuthResult(server, `${attemptedPassword}`, 1);
+
+    expect(result.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("getConvertToBase10Server creates a server with a correct password hint, and has a non-integer solution at higher difficulties ", () => {
+    const server = serverFactory(getConvertToBase10Config, 15, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    const [base, numberString] = failedAttemptResponse.response.data.split(",");
+    expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
+
+    // custom parser is used to handle non-integer answers
     const attemptedPassword = parseBaseNNumberString(numberString, Number(base));
 
     const result = getAuthResult(server, `${attemptedPassword}`, 1);
