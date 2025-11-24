@@ -6490,13 +6490,13 @@ export interface NS {
    * If a script was run with data piped into it via the terminal:
    * `echo input1 | run myScript.js`
    *
-   * then `ns.stdIn.read()` inside `myScript.js` would return `"input1"`.
+   * then `ns.stdin.read()` inside `myScript.js` would return `"input1"`.
    *
    * If more data is added later (for example, if one script's terminal output is piped to another script),
-   * then the script can read that data from `ns.stdIn` as well.
-   * `await ns.stdIn.nextPortWrite()` can be used to wait until new data is available to read.
+   * then the script can read that data from `ns.stdin` as well.
+   * `await ns.stdin.nextPortWrite()` can be used to wait until new data is available to read.
    */
-  readonly stdIn: NetscriptPort;
+  readonly stdin: NetscriptPort;
 
   /**
    * Steal a server's money.

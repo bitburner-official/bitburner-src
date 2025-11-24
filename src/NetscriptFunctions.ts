@@ -133,7 +133,7 @@ export const enums: NSEnums = {
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
 
-export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums" | "stdIn">>;
+export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums" | "stdin">>;
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
@@ -1568,7 +1568,7 @@ export function NetscriptFunctions(ws: WorkerScript): NSFull {
   return NSProxy(ws, ns, [], {
     args: ws.args.slice(),
     pid: ws.pid,
-    stdIn: new PortHandle((ws.pid * -1) as PortNumber),
+    stdin: new PortHandle((ws.pid * -1) as PortNumber),
     enums,
   });
 }

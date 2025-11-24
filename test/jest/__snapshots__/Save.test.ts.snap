@@ -82,7 +82,7 @@ exports[`load/saveAllServers 1`] = `
             "ramUsage": 1.6,
             "server": "home",
             "scriptKey": "script.js*[]",
-            "stdIn": null,
+            "stdin": null,
             "tailOutputPipeConfig": null,
             "terminalOutputPipeConfig": null,
             "title": "Awesome Script",

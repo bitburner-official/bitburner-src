@@ -261,7 +261,7 @@ function handlePipeToScript(
   const args = parsedCommand[0].toString().toLowerCase() === "run" ? parsedCommand.slice(1) : parsedCommand;
   const currentInput = getNextOutputStringified();
 
-  // If the script has already been launched in a prior evaluation of the pipe chain, just add to the script's stdIn
+  // If the script has already been launched in a prior evaluation of the pipe chain, just add to the script's stdin
   if (currentPipe?.stdInPort) {
     writeInputToScriptStdIn(currentPipe?.stdInPort, currentInput, currentPipe);
     return advancePipe();
@@ -269,7 +269,7 @@ function handlePipeToScript(
 
   advancePipe();
   const runningScript = runScript(scriptName as ScriptFilePath, args.slice(1), Player.getCurrentServer());
-  if (!runningScript?.stdIn) {
+  if (!runningScript?.stdin) {
     return;
   }
 
@@ -281,13 +281,13 @@ function handlePipeToScript(
 
 function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[], currentPipe: PipedCommand): void {
   const script = scriptPid ? findRunningScriptByPid(scriptPid) : null;
-  if (!script || !script?.stdIn) {
+  if (!script || !script?.stdin) {
     handlePipeError(`Cannot pipe input to script pid ${scriptPid} - script is no longer running`, currentPipe);
     return;
   }
 
   input.forEach((line) => {
-    script.stdIn?.write(line);
+    script.stdin?.write(line);
   });
 }
 

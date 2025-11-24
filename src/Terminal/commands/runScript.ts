@@ -93,7 +93,7 @@ export function runScript(
   runningScript.terminalOutputPipeConfig = PipeState.currentTerminalPipe ?? null;
   PipeState.currentTerminalPipe = null;
 
-  runningScript.stdIn = new PortHandle((runningScript.pid * -1) as PortNumber);
+  runningScript.stdin = new PortHandle((runningScript.pid * -1) as PortNumber);
 
   return runningScript;
 }
