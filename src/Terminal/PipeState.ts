@@ -6,6 +6,7 @@ import { TerminalEvents } from "./TerminalEvents";
 export const PipeState = {
   outputToBeProcessed: [] as PipedOutput[],
   currentTerminalPipe: null as PipedCommand | null,
+  pidOfLastScriptRun: null as number | null,
 };
 
 export function pushPipedOutput(output: Output | Link | RawOutput, pipeDestination: PipedCommand | null) {

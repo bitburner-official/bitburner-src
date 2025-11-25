@@ -855,6 +855,10 @@ export class Terminal {
     f(commandArray, currentServer);
 
     handlePipe();
+
+    if (commandName.toLowerCase() !== "run") {
+      PipeState.pidOfLastScriptRun = null;
+    }
   }
 
   getProgressText(): string {

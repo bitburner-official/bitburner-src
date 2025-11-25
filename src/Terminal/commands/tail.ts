@@ -1,6 +1,6 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { findRunningScripts, findRunningScriptByPid } from "../../Script/ScriptHelpers";
+import { findRunningScripts, findRunningScriptByPid, findRunningScriptsByFilename } from "../../Script/ScriptHelpers";
 import { LogBoxEvents } from "../../ui/React/LogBoxManager";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { PipeState } from "../PipeState";
@@ -16,18 +16,31 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       if (!path) return Terminal.error(`Invalid filename: ${rawName}`);
       if (!hasScriptExtension(path)) return Terminal.error(`Invalid file extension. Tail can only be used on scripts.`);
 
+      // Only select from name match if there is no ambiguity and no argument filter specified
+      const scriptsMatchingName = commandArray.length === 1 ? findRunningScriptsByFilename(path, server) : null;
+      const scriptMatchingName = scriptsMatchingName?.size === 1 ? scriptsMatchingName.values().next() : null;
+
+      // Check for exact matches with specified arguments
       const candidates = findRunningScripts(path, args, server);
 
+      if (candidates === null && (scriptsMatchingName?.size ?? 0) > 1) {
+        Terminal.error(
+          `Multiple scripts named ${path} are running on the server. ` +
+            `Specify arguments to pick which script to tail.`,
+        );
+        return;
+      }
+
       // if there's no candidate then we just don't know.
-      if (candidates === null) {
+      if (candidates === null && scriptMatchingName === null) {
         Terminal.error(`No script named ${path} with args ${JSON.stringify(args)} is running on the server`);
         return;
       }
 
       // Just use the first one (if there are multiple with the same
       // arguments, they can't be distinguished except by pid).
-      const next = candidates.values().next();
-      if (!next.done) {
+      const next = scriptMatchingName ?? candidates?.values().next();
+      if (next && !next.done) {
         handleTail(next.value);
       }
     } else if (typeof commandArray[0] === "number") {

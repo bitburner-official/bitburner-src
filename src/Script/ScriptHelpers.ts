@@ -115,3 +115,18 @@ export function findRunningScriptByPid(pid: number): RunningScript | null {
   if (!ws) return null;
   return ws.scriptRef;
 }
+
+export function findRunningScriptsByFilename(
+  path: ScriptFilePath,
+  server: BaseServer,
+): Map<number, RunningScript> | null {
+  const result = new Map<number, RunningScript>();
+  for (const [key, runningScriptMap] of server.runningScriptMap.entries()) {
+    if (key.startsWith(path + "*")) {
+      for (const [pid, runningScript] of runningScriptMap.entries()) {
+        result.set(pid, runningScript);
+      }
+    }
+  }
+  return result.size > 0 ? result : null;
+}

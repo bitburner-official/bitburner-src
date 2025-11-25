@@ -8,6 +8,7 @@ import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { LiteratureName, MessageFilename } from "@enums";
 import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
 import * as dialogBox from "../../../src/ui/React/DialogBox";
+import { runScript } from "../../../src/Terminal/commands/runScript";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -315,5 +316,46 @@ describe("Terminal Pipes", () => {
     expect(firstCommand).toBe("cat file.txt");
     expect(PipeState.currentTerminalPipe?.pipeSymbol).toEqual(">>");
     expect(PipeState.currentTerminalPipe?.commandString).toBe("output.txt");
+  });
+
+  it("should replace $! with the PID of the last script run", async () => {
+    const scriptName = "testScript.js" as ScriptFilePath;
+    const scriptContent = `export async function main(ns) { ns.print("Script is running"); await ns.sleep(100); }`;
+    const server = GetServer(Player.currentServer);
+
+    // Add script to server
+    Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
+
+    // Run the script to set PipeState.pidOfLastScriptRun
+    const runningScript = runScript(scriptName, [], server);
+    const expectedPid = runningScript?.pid;
+    await sleep(200);
+
+    const command = `echo $! > pidOutput.txt`;
+    Terminal.executeCommands(command);
+    const fileContent = server?.textFiles?.get("pidOutput.txt" as TextFilePath)?.text;
+
+    expect(Number(fileContent)).toBe(expectedPid);
+  });
+
+  it("should replace $! with -1 if the prior command was not a run", async () => {
+    const scriptName = "testScript.js" as ScriptFilePath;
+    const scriptContent = `export async function main(ns) { ns.print("Script is running"); await ns.sleep(100); }`;
+    const server = GetServer(Player.currentServer);
+
+    // Add script to server
+    Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
+
+    // Run the script to set PipeState.pidOfLastScriptRun
+    Terminal.executeCommand(`run ${scriptName}`);
+    await sleep(200);
+
+    Terminal.executeCommands(`echo "Not a run command"`);
+
+    const command = `echo $! > pidOutput.txt`;
+    Terminal.executeCommands(command);
+    const fileContent = server?.textFiles?.get("pidOutput.txt" as TextFilePath)?.text;
+
+    expect(Number(fileContent)).toBe(-1);
   });
 });

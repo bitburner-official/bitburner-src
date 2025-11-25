@@ -92,6 +92,7 @@ export function runScript(
   // Update script pipe config, if any is present from the terminal
   runningScript.terminalOutputPipeConfig = PipeState.currentTerminalPipe ?? null;
   PipeState.currentTerminalPipe = null;
+  PipeState.pidOfLastScriptRun = runningScript.pid;
 
   runningScript.stdin = new PortHandle((runningScript.pid * -1) as PortNumber);
 
