@@ -27,6 +27,7 @@ import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils
 import { getTorRouter } from "../../Server/ServerHelpers";
 import { DarknetConstants } from "../Constants";
 import { GetServer } from "../../Server/AllServers";
+import { isLabyrinthServer } from "./labyrinth";
 
 export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number) => {
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
@@ -44,7 +45,7 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
 
   // TODO: balance cache chance
   const chance = 0.1 * 1.05 ** server?.difficulty;
-  if (Math.random() < chance) {
+  if (Math.random() < chance && !isLabyrinthServer(server.hostname)) {
     addCacheToServer(server);
   }
 };

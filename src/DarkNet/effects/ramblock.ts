@@ -11,6 +11,7 @@ import { CompletedProgramName } from "@enums";
 import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { ResponseCodeEnum } from "../Enums";
+import { isLabyrinthServer } from "./labyrinth";
 
 /*
  * Handles the effects of removing some blocked RAM from a Darknet server.
@@ -46,7 +47,9 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
  * Handles the rewards for fully clearing a Darknet server's RAM block.
  */
 export const handleRamBlockClearedRewards = (server: DarknetServer) => {
-  addCacheToServer(server);
+  if (!isLabyrinthServer(server.hostname)) {
+    addCacheToServer(server);
+  }
   if (Math.random() < 0.3) {
     addClue(server);
   }

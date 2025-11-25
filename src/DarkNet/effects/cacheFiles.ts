@@ -1,7 +1,7 @@
 import { tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
 import { Player } from "@player";
 import { formatMoney, formatNumber } from "../../ui/formatNumber";
-import { getLabyrinthDetails, isLabyrinthServer, LAB_CACHE_NAME } from "./labyrinth";
+import { getLabAugReward, isLabyrinthServer, LAB_CACHE_NAME } from "./labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { AugmentationName, CompletedProgramName, ToastVariant } from "@enums";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
@@ -129,8 +129,7 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): stri
 };
 
 const getLabReward = (): string => {
-  const labDetails = getLabyrinthDetails();
-  let reward = labDetails.augReward;
+  let reward = getLabAugReward();
   if (!reward || Player.hasAugmentation(reward)) {
     reward = AugmentationName.NeuroFluxGovernor;
   }

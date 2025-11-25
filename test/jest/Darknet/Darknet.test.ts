@@ -180,6 +180,7 @@ describe("Password Tests", () => {
     expect(encodeNumberInBaseN(15, 5.5)).toBe("24");
     expect(encodeNumberInBaseN(16, 5.5)).toBe("25");
     expect(encodeNumberInBaseN(17, 5.5)).toBe("30.24034");
+    expect(encodeNumberInBaseN(264, 17.6)).toBe("EH.A9F");
 
     expect(parseBaseNNumberString("24", 5.5)).toBe(15);
     expect(parseBaseNNumberString("25", 5.5)).toBe(16);

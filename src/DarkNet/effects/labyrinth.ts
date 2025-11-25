@@ -26,7 +26,6 @@ type labDetails = {
   name: string;
   depth: number;
   cha: number;
-  augReward: AugmentationName;
   mazeWidth: number;
   mazeHeight: number;
   manual: boolean;
@@ -37,7 +36,6 @@ export const labData: Record<string, labDetails> = {
     name: SpecialServers.NormalLab,
     depth: 7,
     cha: 300,
-    augReward: AugmentationName.TheBrokenWings,
     mazeWidth: 20,
     mazeHeight: 14,
     manual: true,
@@ -46,7 +44,6 @@ export const labData: Record<string, labDetails> = {
     name: SpecialServers.CruelLab,
     depth: 12,
     cha: 600,
-    augReward: AugmentationName.TheBoots,
     mazeWidth: 30,
     mazeHeight: 20,
     manual: true,
@@ -55,7 +52,6 @@ export const labData: Record<string, labDetails> = {
     name: SpecialServers.MercilessLab,
     depth: 19,
     cha: 1500,
-    augReward: AugmentationName.TheHammer,
     mazeWidth: 40,
     mazeHeight: 26,
     manual: false,
@@ -64,7 +60,6 @@ export const labData: Record<string, labDetails> = {
     name: SpecialServers.UberLab,
     depth: 23,
     cha: 2500,
-    augReward: AugmentationName.TheRedPill,
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
@@ -73,7 +68,6 @@ export const labData: Record<string, labDetails> = {
     name: SpecialServers.EternalLab,
     depth: 29,
     cha: 2800,
-    augReward: AugmentationName.TheLaw,
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
@@ -82,7 +76,6 @@ export const labData: Record<string, labDetails> = {
     name: SpecialServers.FinalLab,
     depth: 31,
     cha: 3200,
-    augReward: AugmentationName.TheSword,
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
@@ -91,7 +84,6 @@ export const labData: Record<string, labDetails> = {
     name: SpecialServers.BonusLab,
     depth: 31,
     cha: 3200,
-    augReward: AugmentationName.NeuroFluxGovernor,
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
@@ -359,6 +351,34 @@ export const isLabyrinthServer = (hostName: string) => {
   return labHostnames.includes(hostName);
 };
 
+export const getLabAugReward = (): AugmentationName => {
+  const allowTRP = getBitNodeMultipliers(Player.bitNodeN, 1).DarknetLabyrinthRewardsTheRedPill;
+  const augmentOrder = [
+    AugmentationName.TheBrokenWings,
+    AugmentationName.TheBoots,
+    AugmentationName.TheHammer,
+    AugmentationName.TheLaw,
+    AugmentationName.TheSword,
+  ];
+  const nextAug = augmentOrder.find((aug) => !hasAugment(aug));
+
+  if (!nextAug && (hasAugment(AugmentationName.TheRedPill) || !allowTRP)) {
+    return AugmentationName.NeuroFluxGovernor;
+  }
+
+  // On BN15, the fourth lab has the Red Pill
+  if (Player.bitNodeN === 15 && nextAug === AugmentationName.TheLaw && !hasAugment(AugmentationName.TheRedPill)) {
+    return AugmentationName.TheRedPill;
+  }
+
+  // On BNs that allow TRP in Lab, the sixth lab has the red pill
+  if (!nextAug && allowTRP) {
+    return AugmentationName.TheRedPill;
+  }
+
+  return nextAug ?? AugmentationName.NeuroFluxGovernor;
+};
+
 const hasAugment = (aug: AugmentationName) => !!Player.augmentations.find((a) => a.name === aug);
 
 const getCurrentLabName = () => {
@@ -373,21 +393,34 @@ const getCurrentLabName = () => {
   if (!hasAugment(AugmentationName.TheHammer)) {
     return SpecialServers.MercilessLab;
   }
-  if (allowTRP && !hasAugment(AugmentationName.TheRedPill)) {
+  if (Player.bitNodeN === 15) {
+    if (!hasAugment(AugmentationName.TheRedPill)) {
+      return SpecialServers.UberLab;
+    }
+    if (!hasAugment(AugmentationName.TheLaw)) {
+      return SpecialServers.EternalLab;
+    }
+    if (!hasAugment(AugmentationName.TheSword)) {
+      return SpecialServers.FinalLab;
+    }
+    return SpecialServers.BonusLab;
+  }
+
+  if (!hasAugment(AugmentationName.TheLaw)) {
     return SpecialServers.UberLab;
   }
-  if (!hasAugment(AugmentationName.TheLaw)) {
+  if (!hasAugment(AugmentationName.TheSword)) {
     return SpecialServers.EternalLab;
   }
-  if (!hasAugment(AugmentationName.TheSword)) {
+  if (allowTRP && !hasAugment(AugmentationName.TheRedPill)) {
     return SpecialServers.FinalLab;
   }
+
   return SpecialServers.BonusLab;
 };
 
 export const getLabyrinthDetails = (): {
   lab: DarknetServer | null;
-  augReward: AugmentationName | null;
   depth: number;
   manual: boolean;
   mazeWidth: number;
@@ -398,7 +431,6 @@ export const getLabyrinthDetails = (): {
   // Lab not unlocked yet
   if (!hasFullDarknetAccess()) {
     return {
-      augReward: null,
       cha: 300,
       mazeHeight: 10,
       mazeWidth: 10,
@@ -414,7 +446,6 @@ export const getLabyrinthDetails = (): {
 
   return {
     lab: getDarknetServer(labName),
-    augReward: labDetails.augReward,
     depth: labDetails.depth,
     manual: labDetails.manual,
     mazeWidth: labDetails.mazeWidth,
