@@ -257,23 +257,21 @@ function getRandomFilename(
   reward: ICodingContractReward = { type: CodingContractRewardType.Money },
 ): ContractFilePath {
   let contractFn = `contract-${getRandomIntInclusive(0, 1e6)}`;
-
+  let contractSuffix = ".cct";
+  if ("name" in reward) {
+    // Only alphanumeric characters in the reward name.
+    contractSuffix = `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}` + contractSuffix;
+  }
   for (let i = 0; i < 1000; ++i) {
     if (
       server.contracts.filter((c: CodingContract) => {
         return c.fn === contractFn;
-      }).length <= 0
+      }).length == 0
     ) {
       break;
     }
-    contractFn = `contract-${getRandomIntInclusive(0, 1e6)}`;
+    contractFn = `contract-${getRandomIntInclusive(0, 1e6)}` + contractSuffix;
   }
-
-  if ("name" in reward) {
-    // Only alphanumeric characters in the reward name.
-    contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
-  }
-  contractFn += ".cct";
   const validatedPath = resolveContractFilePath(contractFn);
   if (!validatedPath) throw new Error(`Generated contract path could not be validated: ${contractFn}`);
   return validatedPath;
