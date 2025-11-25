@@ -1,6 +1,6 @@
 # FAQs for beginners
 
-This page is dedicated for questions often asked by beginners in Bitburner Discord server.
+This page is dedicated for questions often asked by beginners as they explore the game.
 
 The following are advice, not a bible, as this is a single-player game, so you are your own boss.
 
