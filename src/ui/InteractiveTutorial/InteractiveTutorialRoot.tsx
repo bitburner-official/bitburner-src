@@ -559,6 +559,7 @@ export async function main(ns) {
               The Beginner's guide contains the guide for new players, navigating you through most of the early game.
             </li>
             <li>The NS API documentation contains reference materials for all NS APIs.</li>
+            <li>The FAQ contains questions often asked in our Discord server.</li>
           </ul>
           <Typography fontWeight="fontWeightBold">
             This documentation page is the best place to get up-to-date information, especially when you get stuck. If
