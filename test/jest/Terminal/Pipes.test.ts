@@ -295,6 +295,35 @@ describe("Terminal Pipes", () => {
     });
   });
 
+  describe("input redirection", () => {
+    it("should use file contents as input stream if input redirection < is used", () => {
+      const fileContent = "File input data";
+      const fileName = "inputFile.txt";
+      Terminal.executeCommands(`echo '${fileContent}' > ${fileName}`);
+      const commandString = `cat < ${fileName} | echo `;
+      Terminal.executeCommands(commandString);
+
+      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      expect(lastOutput?.text).toBe(fileContent);
+    });
+
+    it("should return an error if input redirection file does not exist", () => {
+      const fileName = "nonExistentFile.txt";
+      const commandString = `cat < ${fileName} | echo `;
+      Terminal.executeCommands(commandString);
+
+      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      expect(lastOutput?.text).toBe(`No file at path ${fileName}`);
+    });
+
+    it("should return an error if the input redirection is not the first pipe in the chain", () => {
+      Terminal.executeCommands(`echo 'Some data' | echo < inputFile.txt`);
+
+      const error = Terminal.outputHistory[0];
+      expect(error?.text).toBe(`Error in pipe command: Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`);
+    })
+  });
+
   it("should handle piping content to cat", () => {
     const testContent = "This is a test.";
     const commandString = `echo "${testContent}" | cat`;

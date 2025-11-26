@@ -14,7 +14,14 @@ import { Script } from "../Script/Script";
 import { LiteratureName, MessageFilename } from "@enums";
 import { Messages } from "../Message/MessageHelpers";
 import { Literatures } from "../Literature/Literatures";
-import { addOutputToBeProcessed, getNextOutput, handlePipeError, type PipedCommand, PipeState } from "./PipeState";
+import {
+  addOutputToBeProcessed,
+  getNextOutput,
+  handlePipeError,
+  type PipedCommand,
+  PipeState,
+  PipeSymbols, PipeSymbolsList,
+} from "./PipeState";
 import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
@@ -27,8 +34,9 @@ TerminalEvents.subscribe(debouncedHandlePipe);
 
 // TODO-Fico - add pipe documentation page
 // TODO: add unit test for multiple pipe inputs over time between scripts
+// TODO: add unit tests for input redirection
 
-// TODO: support file input with <
+// TODO: fix autocomplete for pipes
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
@@ -49,11 +57,11 @@ export function handlePipe(): void {
   const command = parsedCommand[0]?.toString();
 
   // Pipe to file
-  if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeType !== "|"))) {
+  if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeType !== PipeSymbols.Pipe))) {
     return handlePipeToFile(parsedCommand, commandString);
   }
 
-  if (pipeType === ">" || pipeType === ">>") {
+  if (pipeType === PipeSymbols.OutputRedirection || pipeType === PipeSymbols.AppendOutputRedirection) {
     handlePipeError(
       `Invalid pipe symbol '${pipeType}' for command: ${commandString}. > and >> can only be used to pipe into files.`,
     );
@@ -95,13 +103,23 @@ export function splitPipesFromFirstCommand(commandString: string): string {
   const parsedCommands = parseCommand(commandString);
   const firstCommand = getFirstCommand(parsedCommands);
 
-  if (!parsedCommands.find((arg) => `${arg}`.match(pipeMatcher()))) {
+  if (!parsedCommands.find((arg) => PipeSymbolsList.includes(`${arg}`))) {
     return commandString;
   }
 
   PipeState.currentTerminalPipe = buildPipeChain(parsedCommands);
 
-  return firstCommand;
+  return validateInputRedirectionAndUpdateFirstCommandIfNeeded(firstCommand, PipeState.currentTerminalPipe);
+}
+
+export function getCommandAfterLastPipe(commandString: string): string {
+  const parsedCommands = parseCommand(commandString);
+  const lastPipeIndex = parsedCommands.findLastIndex(arg => PipeSymbolsList.includes(`${arg}`));
+  if (lastPipeIndex === -1) {
+    return commandString;
+  }
+
+  return parsedCommands.slice(lastPipeIndex + 1).join(" ");
 }
 
 export function pipeContent(content: string, command: PipedCommand) {
@@ -127,7 +145,7 @@ export function pipeLiterature(message: LiteratureName, command: PipedCommand) {
 
 function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCommand | null {
   const pipe = `${parsedCommands[0]}`;
-  if (!pipe || !pipe.match(pipeMatcher())) return null;
+  if (!pipe || !PipeSymbolsList.includes(pipe)) return null;
 
   parsedCommands.shift();
   const nextCommand = getFirstCommand(parsedCommands);
@@ -142,7 +160,7 @@ function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCom
 function getFirstCommand(parsedCommands: (string | number | boolean)[]): string {
   let firstCommand = "";
 
-  while (parsedCommands.length && !pipeMatcher().test(`${parsedCommands[0]}`)) {
+  while (parsedCommands.length && !PipeSymbolsList.includes(`${parsedCommands[0]}`)) {
     const arg = `${parsedCommands[0]}`;
     parsedCommands.shift();
     firstCommand += arg + " ";
@@ -199,19 +217,19 @@ function writeToTextFile(filename: string) {
     return;
   }
 
-  if (pipe.pipeSymbol === "|") {
+  if (pipe.pipeSymbol === PipeSymbols.Pipe) {
     handlePipeError(`Cannot pipe to text file with pipe symbol '|'. Use '>' to overwrite or '>>' to append instead.`);
     return;
   }
 
   const file = Terminal.getTextFile(filename);
   const output = getNextOutputStringified(true).join("\n");
-  const overwrite = !pipe.hasBeenEvaluated && pipe.pipeSymbol === ">";
+  const overwrite = !pipe.hasBeenEvaluated && pipe.pipeSymbol === PipeSymbols.OutputRedirection;
 
   if (file && !overwrite) {
-    file.text = concatenateFileContents(file.text, output);
+    file.content = concatenateFileContents(file.content, output);
   } else if (file && overwrite) {
-    file.text = output;
+    file.content = output;
   } else {
     const newFile = new TextFile(filename as TextFilePath, output);
     Player.getCurrentServer().textFiles.set(filename as TextFilePath, newFile);
@@ -226,7 +244,7 @@ function writeToScriptFile(filename: string): void {
 
   const file = Terminal.getScript(filename);
   const output = getNextOutputStringified(true).join("\n");
-  const overwrite = !pipe.hasBeenEvaluated && pipe.pipeSymbol === ">";
+  const overwrite = !pipe.hasBeenEvaluated && pipe.pipeSymbol === PipeSymbols.OutputRedirection;
 
   if (file && overwrite) {
     file.content = output;
@@ -302,12 +320,46 @@ function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[],
 }
 
 function handlePipeToCat(): void {
+  if(PipeState.currentTerminalPipe?.nextPipe) {
+    return handleEcho();
+  }
   dialogBoxCreate(getNextOutputStringified().join("\n"));
   advancePipe();
 }
 
+function validateInputRedirectionAndUpdateFirstCommandIfNeeded(firstCommand: string, pipe: PipedCommand | null): string {
+  const firstCommandHasInputRedirection = pipe?.pipeSymbol === PipeSymbols.InputRedirection;
+  const laterCommandsHaveInputRedirection = hasInputRedirection(pipe?.nextPipe);
+
+  if(laterCommandsHaveInputRedirection) {
+    handlePipeError(
+      `Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`,
+    );
+    return firstCommand;
+  }
+
+  if (!firstCommandHasInputRedirection) return firstCommand;
+
+  const newFirstCommand = `cat ${pipe?.commandString}`;
+
+  PipeState.currentTerminalPipe = {
+    commandString: firstCommand,
+    pipeSymbol: PipeSymbols.Pipe,
+    nextPipe: pipe?.nextPipe ?? null,
+  }
+  return newFirstCommand;
+}
+
+function hasInputRedirection(pipe: PipedCommand | null | undefined): boolean {
+  if (!pipe) return false;
+  if (pipe.pipeSymbol === PipeSymbols.InputRedirection) return true;
+  return hasInputRedirection(pipe.nextPipe);
+}
+
 function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape = false): string {
-  if (s instanceof Output) {
+  if (!s) {
+    return "";
+  } else if (s instanceof Output) {
     return stripAnsiEscape ? s.text.replaceAll(ANSI_ESCAPE, "") : s.text;
   } else if (s instanceof Link) {
     return `${s.dashes} ${s.hostname}`;
@@ -317,10 +369,6 @@ function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape =
     div.innerHTML = markup.replaceAll(">", "> ");
     return div.textContent ?? div.innerText ?? "";
   }
-}
-
-function pipeMatcher(): RegExp {
-  return /^(>>)|[|>]$/g;
 }
 
 function getNextOutputStringified(stripAnsiEscape = false): string[] {
