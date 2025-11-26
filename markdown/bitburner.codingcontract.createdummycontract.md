@@ -9,7 +9,7 @@ Generate a dummy contract.
 **Signature:**
 
 ```typescript
-createDummyContract(type: CodingContractName): string;
+createDummyContract(type: CodingContractName): string | null;
 ```
 
 ## Parameters
@@ -58,7 +58,5 @@ Filename of the contract.
 
 RAM cost: 2 GB
 
-Generate a dummy contract on the home computer with no reward. Used to test various algorithms.
-
-If a contract of the same name already exists on the home computer, fails to generate the contract and returns null.
+Generate a dummy contract on the home computer with no reward. Used to test various algorithms. If a contract of the same name already exists on the home computer, fails to generate the contract and returns null.
 
