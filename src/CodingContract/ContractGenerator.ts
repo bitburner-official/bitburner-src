@@ -252,25 +252,25 @@ function getRandomServer(): BaseServer | null {
   return randServer;
 }
 
+function getRandomB64String(length: number) {
+  const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  return Array(length)
+    .fill(0)
+    .map(() => b64[getRandomIntInclusive(0, 63)])
+    .join("");
+}
+
 function getRandomFilename(
   server: BaseServer,
   reward: ICodingContractReward = { type: CodingContractRewardType.Money },
-): ContractFilePath {
-  let contractFn: string,
-    i = 0;
-  let contractSuffix = ".cct";
+): ContractFilePath | null {
+  let contractFn = `contract-${getRandomB64String(6)}`;
   if ("name" in reward) {
     // Only alphanumeric characters in the reward name.
-    contractSuffix = `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}` + contractSuffix;
+    contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
   }
-  do {
-    contractFn = `contract-${getRandomIntInclusive(0, 1e6)}` + contractSuffix;
-  } while (
-    server.contracts.filter((c: CodingContract) => {
-      return c.fn === contractFn;
-    }).length != 0 &&
-    ++i < 1000
-  );
+  contractFn += ".cct";
+  if (server.contracts.filter((c: CodingContract) => c.fn === contractFn).length) return null;
   const validatedPath = resolveContractFilePath(contractFn);
   if (!validatedPath) throw new Error(`Generated contract path could not be validated: ${contractFn}`);
   return validatedPath;
