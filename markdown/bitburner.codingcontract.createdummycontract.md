@@ -58,5 +58,7 @@ Filename of the contract.
 
 RAM cost: 2 GB
 
-Generate a dummy contract on the home computer with no reward. Used to test various algorithms. If a contract of the same name already exists on the home computer, fails to generate the contract and returns null.
+Generate a dummy contract on the home computer with no reward. Used to test various algorithms.
+
+This function will return null and not generate a contract if the randomized contract name is the same as another contract's name.
 

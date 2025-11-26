@@ -498,5 +498,13 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.getBitNodeMultipliers().CloudServerMaxRam".',
       showWarning: false,
     },
+    {
+      brokenAPIs: [{ name: "createDummyContract" }],
+      info:
+        "ns.codingcontract.createDummyContract might generate a contract with the same name of another contract.\n" +
+        "This bug was fixed. Now this function will return null and not generate a contract if the randomized contract " +
+        "name is the same as another contract's name.",
+      showWarning: false,
+    },
   ],
 };

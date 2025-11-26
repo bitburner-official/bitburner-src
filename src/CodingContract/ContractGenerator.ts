@@ -86,7 +86,9 @@ export function generateRandomContract(): void {
   const problemType = getRandomProblemType(maxDif);
 
   const contractFn = getRandomFilename(randServer, reward);
-  if (contractFn == null) return; //Not generate the contract
+  if (contractFn == null) {
+    return;
+  }
   const contract = new CodingContract(contractFn, problemType, reward);
 
   randServer.addContract(contract);
@@ -103,7 +105,9 @@ export function generateRandomContractOnHome(): void {
   const serv = Player.getHomeComputer();
 
   const contractFn = getRandomFilename(serv, reward);
-  if (contractFn == null) return; //Not generate the contract
+  if (contractFn == null) {
+    return;
+  }
   const contract = new CodingContract(contractFn, problemType, reward);
 
   serv.addContract(contract);
@@ -114,7 +118,9 @@ export const generateDummyContract = (problemType: CodingContractName): string |
   const serv = Player.getHomeComputer();
 
   const contractFn = getRandomFilename(serv);
-  if (contractFn == null) return null; //Not generate the contract.
+  if (contractFn == null) {
+    return null;
+  }
   const contract = new CodingContract(contractFn, problemType, null);
   serv.addContract(contract);
 
@@ -155,7 +161,9 @@ export function generateContract(params: IGenerateContractParams): void {
   }
 
   const filename = params.fn ? params.fn : getRandomFilename(server, reward);
-  if (filename == null) return; //Not generate the contract
+  if (filename == null) {
+    return;
+  }
   const contract = new CodingContract(filename, problemType, reward);
   server.addContract(contract);
 }
@@ -263,6 +271,11 @@ function getRandomB62String(length: number) {
     .join("");
 }
 
+/**
+ * This function will return null if the randomized name collides with another contract's name on the specified server.
+ * Callers of this function must return early and not generate a contract when it happens. It likely happens when there
+ * are ~240k contracts on the specified server.
+ */
 function getRandomFilename(
   server: BaseServer,
   reward: ICodingContractReward = { type: CodingContractRewardType.Money },
@@ -273,9 +286,10 @@ function getRandomFilename(
     contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
   }
   contractFn += ".cct";
-  //Returns null sometimes. Code using this function should probably fail to generate their contract,
-  //and if they have a return value, their downstream has to be checked too.
-  if (server.contracts.filter((c: CodingContract) => c.fn === contractFn).length) return null;
+  // Return null if there is a contract with the same name.
+  if (server.contracts.filter((c: CodingContract) => c.fn === contractFn).length) {
+    return null;
+  }
   const validatedPath = resolveContractFilePath(contractFn);
   if (!validatedPath) throw new Error(`Generated contract path could not be validated: ${contractFn}`);
   return validatedPath;
