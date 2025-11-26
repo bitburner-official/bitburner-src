@@ -14,6 +14,7 @@ export const PipeSymbols = {
   OutputRedirection: ">",
   AppendOutputRedirection: ">>",
   InputRedirection: "<",
+  InputDocRedirection: "<<",
 };
 
 export const PipeSymbolsList = [
@@ -21,7 +22,9 @@ export const PipeSymbolsList = [
   PipeSymbols.OutputRedirection,
   PipeSymbols.AppendOutputRedirection,
   PipeSymbols.InputRedirection,
+  PipeSymbols.InputDocRedirection,
 ];
+export const inputRedirectionList = [PipeSymbols.InputRedirection, PipeSymbols.InputDocRedirection];
 
 export function pushPipedOutput(output: Output | Link | RawOutput, pipeDestination: PipedCommand | null) {
   addOutputToBeProcessed(output, pipeDestination);

@@ -18,6 +18,7 @@ import {
   addOutputToBeProcessed,
   getNextOutput,
   handlePipeError,
+  inputRedirectionList,
   type PipedCommand,
   PipeState,
   PipeSymbols,
@@ -332,29 +333,27 @@ function validateInputRedirectionAndUpdateFirstCommandIfNeeded(
   firstCommand: string,
   pipe: PipedCommand | null,
 ): string {
-  const firstCommandHasInputRedirection = pipe?.pipeSymbol === PipeSymbols.InputRedirection;
-  const laterCommandsHaveInputRedirection = hasInputRedirection(pipe?.nextPipe);
+  if (!pipe) return firstCommand;
 
-  if (laterCommandsHaveInputRedirection) {
+  if (hasInputRedirection(pipe.nextPipe)) {
     handlePipeError(`Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`);
     return firstCommand;
   }
 
+  const firstCommandHasInputRedirection = inputRedirectionList.includes(pipe.pipeSymbol);
   if (!firstCommandHasInputRedirection) return firstCommand;
-
-  const newFirstCommand = `cat ${pipe?.commandString}`;
 
   PipeState.currentTerminalPipe = {
     commandString: firstCommand,
     pipeSymbol: PipeSymbols.Pipe,
-    nextPipe: pipe?.nextPipe ?? null,
+    nextPipe: pipe.nextPipe,
   };
-  return newFirstCommand;
+  return `cat ${pipe.commandString}`;
 }
 
-function hasInputRedirection(pipe: PipedCommand | null | undefined): boolean {
+function hasInputRedirection(pipe: PipedCommand | null): boolean {
   if (!pipe) return false;
-  if (pipe.pipeSymbol === PipeSymbols.InputRedirection) return true;
+  if (inputRedirectionList.includes(pipe.pipeSymbol)) return true;
   return hasInputRedirection(pipe.nextPipe);
 }
 
