@@ -269,6 +269,7 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
           addGeneric({ iterable: options, usePathing: false });
         }
       } else {
+        // Add script names if you are in a command - scripts can be run by name
         addScripts();
       }
       return possibilities;
