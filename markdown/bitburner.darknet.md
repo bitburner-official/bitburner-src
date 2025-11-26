@@ -147,9 +147,9 @@ The speed of capture scales with the number of threads used. See formulas.dnet.g
 
 </td><td>
 
-Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server. It does not affect the current server, only nearby ones. Must be run from a darknet server.
+Increases the chance that target connected server will move to other parts of the darknet, by overloading the connections between it and the current server. Cannot target the current server. Must be run from a darknet server.
 
-Effect scales with threads.
+Effect scales with threads and charisma level.
 
 
 </td></tr>

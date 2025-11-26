@@ -3,7 +3,7 @@ import { Player } from "@player";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { addCacheToServer } from "../../../src/DarkNet/effects/cacheFiles";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
-import { GetServerOrThrow } from "../../../src/Server/AllServers";
+import { connectServers, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import {
@@ -34,6 +34,7 @@ beforeAll(() => {
 beforeEach(() => {
   DarknetState.offlineServers = [];
   setupBasicTestingEnvironment({ purchasePServer: true, purchaseHacknetServer: true });
+  Player.sourceFiles.set(15, 1);
   getDarkscapeNavigator();
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
   Player.gainCharismaExp(1e100);
@@ -56,6 +57,16 @@ function getFirstDarknetServerAdjacentToDarkWeb() {
 function getNsOnNonDarkwebDarknetServer() {
   const hostname = getFirstDarknetServerAdjacentToDarkWeb();
   return getNS(hostname);
+}
+
+function getRandomDarknetServer(excludedHostnames: string[] = []) {
+  const result = DarknetState.Network.flat().find(
+    (server) => server && !excludedHostnames.includes(server?.hostname ?? ""),
+  );
+  if (!result) {
+    throw new Error("No darknet server found");
+  }
+  return result;
 }
 
 describe("Common APIs", () => {
@@ -162,7 +173,7 @@ describe("home", () => {
   });
   test("induceServerMigration", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.induceServerMigration()).toThrow("home is not a darknet server");
+    expect(() => ns.dnet.induceServerMigration("home")).toThrow("home is not a darknet server");
   });
   test("isDarknetServer", () => {
     const ns = getNsOnHome();
@@ -319,7 +330,7 @@ describe("Normal NPC server", () => {
   });
   test("induceServerMigration", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.induceServerMigration()).toThrow("CSEC is not a darknet server");
+    expect(() => ns.dnet.induceServerMigration("CSEC")).toThrow("CSEC is not a darknet server");
   });
   test("isDarknetServer", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
@@ -394,7 +405,7 @@ describe("Private server", () => {
   });
   test("induceServerMigration", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.induceServerMigration()).toThrow("test-server-1 is not a darknet server");
+    expect(() => ns.dnet.induceServerMigration("test-server-1")).toThrow("test-server-1 is not a darknet server");
   });
   test("isDarknetServer", () => {
     const ns = getNS("test-server-1");
@@ -469,7 +480,7 @@ describe("Hashnet server", () => {
   });
   test("induceServerMigration", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.induceServerMigration()).toThrow("hacknet-server-0 is not a darknet server");
+    expect(() => ns.dnet.induceServerMigration("hacknet-server-0")).toThrow("hacknet-server-0 is not a darknet server");
   });
   test("isDarknetServer", () => {
     const ns = getNS("hacknet-server-0");
@@ -683,7 +694,9 @@ describe("darkweb", () => {
   });
   test("induceServerMigration", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.induceServerMigration()).toThrow("darkweb is not a valid target: it is a stationary server.");
+    expect(() => ns.dnet.induceServerMigration("darkweb")).toThrow(
+      "darkweb is not a valid target: it is a stationary server.",
+    );
   });
   test("isDarknetServer", () => {
     const ns = getNsOnDarkWeb();
@@ -816,11 +829,23 @@ describe("Non-darkweb darknet server", () => {
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
-  test("induceServerMigration", async () => {
+  test("induceServerMigration targeting connected server", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = await ns.dnet.induceServerMigration();
+    const targetServer = getRandomDarknetServer([SpecialServers.DarkWeb, ns.getHostname()]);
+    const hostServer = GetServerOrThrow(ns.getHostname());
+    connectServers(hostServer, targetServer);
+
+    const result = await ns.dnet.induceServerMigration(targetServer.hostname);
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
+  });
+  test("induceServerMigration targeting non-connected server", async () => {
+    const ns = getNsOnNonDarkwebDarknetServer();
+    const targetServer = getRandomDarknetServer([SpecialServers.DarkWeb, ns.getHostname(), ...ns.dnet.probe()]);
+
+    const result = await ns.dnet.induceServerMigration(targetServer.hostname);
+    expect(result.success).toStrictEqual(false);
+    expect(result.code).toStrictEqual(ResponseCodeEnum.DirectConnectionRequired);
   });
   test("isDarknetServer", () => {
     const ns = getNsOnNonDarkwebDarknetServer();

@@ -4563,18 +4563,18 @@ export interface Darknet {
   packetCapture(host: string): Promise<DarknetResult & { data: string }>;
 
   /**
-   * Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server.
-   * It does not affect the current server, only nearby ones. Must be run from a darknet server.
+   * Increases the chance that target connected server will move to other parts of the darknet, by overloading the connections between it and the current server.
+   * Cannot target the current server. Must be run from a darknet server.
    *
-   * Effect scales with threads.
+   * Effect scales with threads and charisma level.
    *
    * @remarks
-   * RAM cost: 0.5 GB
+   * RAM cost: 4 GB
    *
-   * @param hostname - Optional. Hostname of the connected server to migrate. Defaults to the running script's server.
+   * @param hostname - Hostname of the connected server to migrate.
    * @returns A promise that resolves to a {@link DarknetResult} object.
    */
-  induceServerMigration(hostname?: string): Promise<DarknetResult>;
+  induceServerMigration(hostname: string): Promise<DarknetResult>;
 
   // WIP: better doc
   /**

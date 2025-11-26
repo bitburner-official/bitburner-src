@@ -481,7 +481,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     induceServerMigration:
       (ctx) =>
       (_hostname): Promise<DarknetResult> => {
-        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        const hostname = helpers.string(ctx, "hostname", _hostname);
         const onlineConnectionCheck = getFailureResult(ctx, hostname, {
           requireDirectConnection: true,
           preventUseOnStationaryServers: true,
@@ -491,6 +491,15 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             success: false,
             code: onlineConnectionCheck.code,
             message: onlineConnectionCheck.message,
+          }));
+        }
+        if (hostname === ctx.workerScript.hostname) {
+          const message = `Cannot induce migration on a script's own server. induceServerMigration must target a neighboring connected server.`;
+          logger(ctx)(message);
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
+            success: false,
+            code: ResponseCodeEnum.DirectConnectionRequired,
+            message: message,
           }));
         }
         const server = onlineConnectionCheck.server;
