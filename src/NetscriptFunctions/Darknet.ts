@@ -37,6 +37,7 @@ import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 import { resolveCacheFilePath } from "../Paths/CacheFilePath";
 import { CacheResult } from "@nsdefs";
+import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -93,7 +94,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         if (additionalMsec < 0) {
           throw helpers.errorMessage(ctx, `Invalid arguments: "additionalMsec" is not a positive integer`);
         }
-        if (password.length > 100) {
+        if (password.length > MAX_PASSWORD_LENGTH * 2) {
+          // No password will ever be this long, and this prevents extremely long password attempts from causing performance issues,
+          // or feedback loops where longer and longer passwords are attempted due to player script bugs.
           throw helpers.errorMessage(
             ctx,
             `Invalid arguments: "password" is too long. Attempted length: ${

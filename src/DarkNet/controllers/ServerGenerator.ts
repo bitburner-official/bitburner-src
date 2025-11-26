@@ -14,6 +14,8 @@ import {
 } from "../models/dictionaryData";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, MinigamesType } from "../Enums";
+import { MAX_PASSWORD_LENGTH } from "../Constants";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 const getRandomServerConfigBuilder = (difficulty: number) => {
   const easyServers = [getEchoVulnConfig, getSortedEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
@@ -55,7 +57,8 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
 };
 
 export const createDarknetServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
-  return serverFactory(getRandomServerConfigBuilder(difficulty), difficulty, depth, leftOffset);
+  const cappedDifficulty = clampNumber(difficulty, 0, MAX_PASSWORD_LENGTH);
+  return serverFactory(getRandomServerConfigBuilder(cappedDifficulty), difficulty, depth, leftOffset);
 };
 
 type ServerConfig = {
@@ -512,7 +515,8 @@ export const getPassword = (
     (allowSpecial ? special : "") +
     (allowUnicode ? unicode : "");
   let password = "";
-  for (let i = 0; i < length; i++) {
+  const cappedLength = clampNumber(length, 1, MAX_PASSWORD_LENGTH);
+  for (let i = 0; i < cappedLength; i++) {
     password += characters[Math.floor(Math.random() * characters.length)];
   }
   return password;

@@ -42,7 +42,6 @@ export const checkPassword = (
     }
     case ModelIds.Yesn_t: {
       const response = attemptedPassword
-        .slice(0, 36)
         .split("")
         .map((char, i) => (char === server.password[i] ? "yes" : "yesn't"))
         .join(",");
