@@ -306,16 +306,6 @@ describe("Terminal Pipes", () => {
       const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
       expect(lastOutput?.text).toBe(fileContent);
     });
-    it("should use file contents as input stream if doc input redirection << is used", () => {
-      const fileContent = "File input data";
-      const fileName = "inputFile.txt";
-      Terminal.executeCommands(`echo '${fileContent}' > ${fileName}`);
-      const commandString = `cat << ${fileName} | echo `;
-      Terminal.executeCommands(commandString);
-
-      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
-      expect(lastOutput?.text).toBe(fileContent);
-    });
 
     it("should return an error if input redirection file does not exist", () => {
       const fileName = "nonExistentFile.txt";

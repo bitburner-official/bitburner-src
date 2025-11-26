@@ -18,7 +18,6 @@ import {
   addOutputToBeProcessed,
   getNextOutput,
   handlePipeError,
-  inputRedirectionList,
   type PipedCommand,
   PipeState,
   PipeSymbols,
@@ -340,7 +339,7 @@ function validateInputRedirectionAndUpdateFirstCommandIfNeeded(
     return firstCommand;
   }
 
-  const firstCommandHasInputRedirection = inputRedirectionList.includes(pipe.pipeSymbol);
+  const firstCommandHasInputRedirection = pipe.pipeSymbol === PipeSymbols.InputRedirection;
   if (!firstCommandHasInputRedirection) return firstCommand;
 
   PipeState.currentTerminalPipe = {
@@ -353,7 +352,7 @@ function validateInputRedirectionAndUpdateFirstCommandIfNeeded(
 
 function hasInputRedirection(pipe: PipedCommand | null): boolean {
   if (!pipe) return false;
-  if (inputRedirectionList.includes(pipe.pipeSymbol)) return true;
+  if (pipe.pipeSymbol === PipeSymbols.InputRedirection) return true;
   return hasInputRedirection(pipe.nextPipe);
 }
 
