@@ -86,6 +86,7 @@ export function generateRandomContract(): void {
   const problemType = getRandomProblemType(maxDif);
 
   const contractFn = getRandomFilename(randServer, reward);
+  if (contractFn == null) return; //Not generate the contract
   const contract = new CodingContract(contractFn, problemType, reward);
 
   randServer.addContract(contract);
@@ -102,16 +103,19 @@ export function generateRandomContractOnHome(): void {
   const serv = Player.getHomeComputer();
 
   const contractFn = getRandomFilename(serv, reward);
+  if (contractFn == null) return; //Not generate the contract
   const contract = new CodingContract(contractFn, problemType, reward);
 
   serv.addContract(contract);
 }
 
-export const generateDummyContract = (problemType: CodingContractName): string => {
+export const generateDummyContract = (problemType: CodingContractName): string | null => {
   if (!CodingContractTypes[problemType]) throw new Error(`Invalid problem type: '${problemType}'`);
   const serv = Player.getHomeComputer();
 
   const contractFn = getRandomFilename(serv);
+  if (contractFn == null) return null; //Not generate the contract.
+  //It seems that only src/NetscriptFunctions/CodingContract.ts#L132 calls this function, and it can probably return null just fine.
   const contract = new CodingContract(contractFn, problemType, null);
   serv.addContract(contract);
 
@@ -152,7 +156,7 @@ export function generateContract(params: IGenerateContractParams): void {
   }
 
   const filename = params.fn ? params.fn : getRandomFilename(server, reward);
-
+  if (contractFn == null) return; //Not generate the contract
   const contract = new CodingContract(filename, problemType, reward);
   server.addContract(contract);
 }
@@ -252,25 +256,27 @@ function getRandomServer(): BaseServer | null {
   return randServer;
 }
 
+function getRandomB62String(length: number) {
+  const b62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  return Array(length)
+    .fill(0)
+    .map(() => b62[getRandomIntInclusive(0, 61)])
+    .join("");
+}
+
 function getRandomFilename(
   server: BaseServer,
   reward: ICodingContractReward = { type: CodingContractRewardType.Money },
-): ContractFilePath {
-  let contractFn: string,
-    i = 0;
-  let contractSuffix = ".cct";
+): ContractFilePath | null {
+  let contractFn = `contract-${getRandomB62String(6)}`;
   if ("name" in reward) {
     // Only alphanumeric characters in the reward name.
-    contractSuffix = `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}` + contractSuffix;
+    contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
   }
-  do {
-    contractFn = `contract-${getRandomIntInclusive(0, 1e6)}` + contractSuffix;
-  } while (
-    server.contracts.filter((c: CodingContract) => {
-      return c.fn === contractFn;
-    }).length != 0 &&
-    ++i < 1000
-  );
+  contractFn += ".cct";
+  //Returns null sometimes. Code using this function should probably fail to generate their contract,
+  //and if they have a return value, their downstream has to be checked too.
+  if (server.contracts.filter((c: CodingContract) => c.fn === contractFn).length) return null;
   const validatedPath = resolveContractFilePath(contractFn);
   if (!validatedPath) throw new Error(`Generated contract path could not be validated: ${contractFn}`);
   return validatedPath;
