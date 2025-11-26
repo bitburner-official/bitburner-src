@@ -115,7 +115,6 @@ export const generateDummyContract = (problemType: CodingContractName): string |
 
   const contractFn = getRandomFilename(serv);
   if (contractFn == null) return null; //Not generate the contract.
-  //It seems that only src/NetscriptFunctions/CodingContract.ts#L132 calls this function, and it can probably return null just fine.
   const contract = new CodingContract(contractFn, problemType, null);
   serv.addContract(contract);
 
