@@ -156,7 +156,7 @@ export function generateContract(params: IGenerateContractParams): void {
   }
 
   const filename = params.fn ? params.fn : getRandomFilename(server, reward);
-  if (contractFn == null) return; //Not generate the contract
+  if (filename == null) return; //Not generate the contract
   const contract = new CodingContract(filename, problemType, reward);
   server.addContract(contract);
 }
