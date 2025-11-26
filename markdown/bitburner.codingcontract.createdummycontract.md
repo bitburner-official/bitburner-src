@@ -50,7 +50,7 @@ Type of contract to generate
 
 **Returns:**
 
-string | null
+string \| null
 
 Filename of the contract.
 
