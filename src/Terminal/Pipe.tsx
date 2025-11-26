@@ -20,7 +20,8 @@ import {
   handlePipeError,
   type PipedCommand,
   PipeState,
-  PipeSymbols, PipeSymbolsList,
+  PipeSymbols,
+  PipeSymbolsList,
 } from "./PipeState";
 import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
@@ -114,7 +115,7 @@ export function splitPipesFromFirstCommand(commandString: string): string {
 
 export function getCommandAfterLastPipe(commandString: string): string {
   const parsedCommands = parseCommand(commandString);
-  const lastPipeIndex = parsedCommands.findLastIndex(arg => PipeSymbolsList.includes(`${arg}`));
+  const lastPipeIndex = parsedCommands.findLastIndex((arg) => PipeSymbolsList.includes(`${arg}`));
   if (lastPipeIndex === -1) {
     return commandString;
   }
@@ -320,21 +321,22 @@ function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[],
 }
 
 function handlePipeToCat(): void {
-  if(PipeState.currentTerminalPipe?.nextPipe) {
+  if (PipeState.currentTerminalPipe?.nextPipe) {
     return handleEcho();
   }
   dialogBoxCreate(getNextOutputStringified().join("\n"));
   advancePipe();
 }
 
-function validateInputRedirectionAndUpdateFirstCommandIfNeeded(firstCommand: string, pipe: PipedCommand | null): string {
+function validateInputRedirectionAndUpdateFirstCommandIfNeeded(
+  firstCommand: string,
+  pipe: PipedCommand | null,
+): string {
   const firstCommandHasInputRedirection = pipe?.pipeSymbol === PipeSymbols.InputRedirection;
   const laterCommandsHaveInputRedirection = hasInputRedirection(pipe?.nextPipe);
 
-  if(laterCommandsHaveInputRedirection) {
-    handlePipeError(
-      `Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`,
-    );
+  if (laterCommandsHaveInputRedirection) {
+    handlePipeError(`Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`);
     return firstCommand;
   }
 
@@ -346,7 +348,7 @@ function validateInputRedirectionAndUpdateFirstCommandIfNeeded(firstCommand: str
     commandString: firstCommand,
     pipeSymbol: PipeSymbols.Pipe,
     nextPipe: pipe?.nextPipe ?? null,
-  }
+  };
   return newFirstCommand;
 }
 

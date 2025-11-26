@@ -320,8 +320,10 @@ describe("Terminal Pipes", () => {
       Terminal.executeCommands(`echo 'Some data' | echo < inputFile.txt`);
 
       const error = Terminal.outputHistory[0];
-      expect(error?.text).toBe(`Error in pipe command: Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`);
-    })
+      expect(error?.text).toBe(
+        `Error in pipe command: Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`,
+      );
+    });
   });
 
   it("should handle piping content to cat", () => {
