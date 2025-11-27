@@ -4059,10 +4059,12 @@ export interface CodingContract {
    *
    * Generate a dummy contract on the home computer with no reward. Used to test various algorithms.
    *
+   * This function will return null and not generate a contract if the randomized contract name is the same as another contract's name.
+   *
    * @param type - Type of contract to generate
    * @returns Filename of the contract.
    */
-  createDummyContract(type: CodingContractName): string;
+  createDummyContract(type: CodingContractName): string | null;
 
   /**
    * List all contract types.
