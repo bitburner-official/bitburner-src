@@ -263,12 +263,13 @@ function getRandomServer(): BaseServer | null {
   return randServer;
 }
 
-function getRandomB62String(length: number) {
-  const b62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  return Array(length)
-    .fill(0)
-    .map(() => b62[getRandomIntInclusive(0, 61)])
-    .join("");
+function getRandomAlphanumericString(length: number) {
+  const alphanumericChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; ++i) {
+    result += alphanumericChars.charAt(Math.random() * alphanumericChars.length);
+  }
+  return result;
 }
 
 /**
@@ -276,11 +277,11 @@ function getRandomB62String(length: number) {
  * Callers of this function must return early and not generate a contract when it happens. It likely happens when there
  * are ~240k contracts on the specified server.
  */
-function getRandomFilename(
+export function getRandomFilename(
   server: BaseServer,
   reward: ICodingContractReward = { type: CodingContractRewardType.Money },
 ): ContractFilePath | null {
-  let contractFn = `contract-${getRandomB62String(6)}`;
+  let contractFn = `contract-${getRandomAlphanumericString(6)}`;
   if ("name" in reward) {
     // Only alphanumeric characters in the reward name.
     contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
