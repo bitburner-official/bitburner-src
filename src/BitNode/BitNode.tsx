@@ -171,8 +171,8 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File lets you access and use the Singularity functions in other BitNodes. Each level of this
-        Source-File reduces the RAM cost of singularity functions:
+        This Source-File lets you access and use the Singularity functions outside of this BitNode. Each level of this
+        Source-File reduces the RAM cost of singularity functions in other BitNodes:
         <ul>
           <li>Level 1: 16x</li>
           <li>Level 2: 4x</li>
