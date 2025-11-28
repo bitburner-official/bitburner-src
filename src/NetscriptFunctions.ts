@@ -74,7 +74,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, ProcessInfo, NSEnums, NetscriptPort } from "@nsdefs";
+import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 

@@ -89,7 +89,7 @@ import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { handlePipe, splitPipesFromFirstCommand } from "./Pipe";
-import { PipeState, pushRedirectedOutput, queueTerminalEvent } from "./PipeState";
+import { PipeState, pushRedirectedOutput } from "./PipeState";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -156,6 +156,9 @@ export class Terminal {
   // Path of current directory
   currDir = "" as Directory;
 
+  // PID of the script run as part of the last executed command, if any
+  pidOfLastScriptRun: number | null = null;
+
   process(cycles: number): void {
     if (this.action === null) return;
     this.action.timeLeft -= (CONSTANTS.MilliPerCycle * cycles) / 1000;
@@ -176,7 +179,7 @@ export class Terminal {
       this.terminalOutput(item);
     }
 
-    queueTerminalEvent();
+    TerminalEvents.emit();
   }
 
   terminalOutput(item: Output | Link | RawOutput): void {
@@ -184,7 +187,7 @@ export class Terminal {
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
       this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
     }
-    queueTerminalEvent();
+    TerminalEvents.emit();
   }
 
   print(s: string, pid = -1): void {
@@ -857,7 +860,7 @@ export class Terminal {
     handlePipe();
 
     if (commandName.toLowerCase() !== "run") {
-      PipeState.pidOfLastScriptRun = null;
+      this.pidOfLastScriptRun = null;
     }
   }
 

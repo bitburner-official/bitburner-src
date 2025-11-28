@@ -21,7 +21,6 @@ import {
   type RedirectedCommand,
   PipeState,
   PipeSymbols,
-  queueTerminalEvent,
 } from "./PipeState";
 import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
@@ -119,7 +118,7 @@ export function getCommandAfterLastPipe(commandString: string): string {
 
 export function pipeContent(content: string, command: RedirectedCommand) {
   addOutputToBeProcessed(new Output(content, "primary"), command);
-  queueTerminalEvent();
+  TerminalEvents.emit();
 }
 
 export function pipeMessage(message: MessageFilename, command: RedirectedCommand) {
@@ -127,7 +126,7 @@ export function pipeMessage(message: MessageFilename, command: RedirectedCommand
   const content = `${messageDetails.filename}\n${messageDetails.msg}`;
 
   addOutputToBeProcessed(new Output(content, "primary"), command);
-  queueTerminalEvent();
+  TerminalEvents.emit();
 }
 
 export function pipeLiterature(message: LiteratureName, command: RedirectedCommand) {
@@ -135,7 +134,7 @@ export function pipeLiterature(message: LiteratureName, command: RedirectedComma
   const content = `${messageDetails.filename}\n${stringify(messageDetails.text)}`;
 
   addOutputToBeProcessed(new Output(content, "primary"), command);
-  queueTerminalEvent();
+  TerminalEvents.emit();
 }
 
 function buildPipeChain(parsedCommands: (string | number | boolean)[]): RedirectedCommand | null {
@@ -170,7 +169,7 @@ function advancePipe(): void {
   }
 
   PipeState.outputToBeProcessed.shift();
-  queueTerminalEvent();
+  TerminalEvents.emit();
 }
 
 function handleEcho(): void {
@@ -308,7 +307,7 @@ function handlePipeToScript(
   writeInputToScriptStdIn(runningScript.pid, currentInput, currentPipe);
   runningScript.temporary = true;
   currentPipe.stdInPort = runningScript.pid;
-  queueTerminalEvent();
+  TerminalEvents.emit();
 }
 
 function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[], currentPipe: RedirectedCommand): void {

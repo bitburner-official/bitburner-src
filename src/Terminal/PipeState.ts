@@ -6,7 +6,6 @@ import { TerminalEvents } from "./TerminalEvents";
 export const PipeState = {
   outputToBeProcessed: [] as RedirectedOutput[],
   currentTerminalPipe: null as RedirectedCommand | null,
-  pidOfLastScriptRun: null as number | null,
 };
 
 export const PipeSymbols = {
@@ -45,7 +44,7 @@ export function addOutputToBeProcessed(
       redirectDestination: redirectDestination,
     });
   }
-  queueTerminalEvent();
+  TerminalEvents.emit();
 }
 
 export function getNextOutput(): RedirectedOutput | null {
@@ -63,12 +62,6 @@ export function handlePipeError(error: string, currentPipe = PipeState.currentTe
 export function clearPipe() {
   PipeState.outputToBeProcessed.shift();
   PipeState.currentTerminalPipe = null;
-}
-
-export function queueTerminalEvent() {
-  setTimeout(() => {
-    TerminalEvents.emit();
-  }, 10);
 }
 
 function redirectDestinationIsIdentical(a: RedirectedCommand | null, b: RedirectedCommand | null): boolean {
