@@ -4,8 +4,8 @@ import { Terminal } from "../Terminal";
 import { TerminalEvents } from "./TerminalEvents";
 
 export const PipeState = {
-  outputToBeProcessed: [] as PipedOutput[],
-  currentTerminalPipe: null as PipedCommand | null,
+  outputToBeProcessed: [] as RedirectedOutput[],
+  currentTerminalPipe: null as RedirectedCommand | null,
   pidOfLastScriptRun: null as number | null,
 };
 
@@ -20,17 +20,20 @@ export function isPipeSymbol(symbol: string | number | boolean): symbol is keyof
   return Object.keys(PipeSymbols).some((key) => PipeSymbols[key as keyof typeof PipeSymbols] === symbol);
 }
 
-export function pushPipedOutput(output: Output | Link | RawOutput, pipeDestination: PipedCommand | null) {
-  addOutputToBeProcessed(output, pipeDestination);
+export function pushRedirectedOutput(output: Output | Link | RawOutput, redirectDestination: RedirectedCommand | null) {
+  addOutputToBeProcessed(output, redirectDestination);
 
   if (PipeState.outputToBeProcessed.length > Settings.MaxTerminalCapacity) {
     PipeState.outputToBeProcessed.splice(0, PipeState.outputToBeProcessed.length - Settings.MaxTerminalCapacity);
   }
 }
 
-export function addOutputToBeProcessed(output: Output | Link | RawOutput, pipeDestination: PipedCommand | null) {
+export function addOutputToBeProcessed(
+  output: Output | Link | RawOutput,
+  redirectDestination: RedirectedCommand | null,
+) {
   const existingOutputRecord = PipeState.outputToBeProcessed.find((o) =>
-    pipeDestinationIsIdentical(o.pipeDestination, pipeDestination),
+    redirectDestinationIsIdentical(o.redirectDestination, redirectDestination),
   );
   if (existingOutputRecord) {
     // Append to existing output
@@ -39,13 +42,13 @@ export function addOutputToBeProcessed(output: Output | Link | RawOutput, pipeDe
     // Create a new output record
     PipeState.outputToBeProcessed.push({
       output: [output],
-      pipeDestination: pipeDestination,
+      redirectDestination: redirectDestination,
     });
   }
   queueTerminalEvent();
 }
 
-export function getNextOutput(): PipedOutput | null {
+export function getNextOutput(): RedirectedOutput | null {
   return PipeState.outputToBeProcessed[0] || null;
 }
 
@@ -68,25 +71,25 @@ export function queueTerminalEvent() {
   }, 10);
 }
 
-function pipeDestinationIsIdentical(a: PipedCommand | null, b: PipedCommand | null): boolean {
+function redirectDestinationIsIdentical(a: RedirectedCommand | null, b: RedirectedCommand | null): boolean {
   if (a === null && b === null) return true;
   if (a === null || b === null) return false;
   return (
     a.commandString === b.commandString &&
     a.pipeSymbol === b.pipeSymbol &&
-    pipeDestinationIsIdentical(a.nextPipe, b.nextPipe)
+    redirectDestinationIsIdentical(a.nextPipe, b.nextPipe)
   );
 }
 
-export type PipedOutput = {
+export type RedirectedOutput = {
   output: (Output | Link | RawOutput)[];
-  pipeDestination: PipedCommand | null;
+  redirectDestination: RedirectedCommand | null;
 };
 
-export type PipedCommand = {
+export type RedirectedCommand = {
   commandString: string;
   pipeSymbol: string;
-  nextPipe: PipedCommand | null;
+  nextPipe: RedirectedCommand | null;
   hasBeenEvaluated?: boolean;
   hasShownError?: boolean;
   stdInPort?: number;

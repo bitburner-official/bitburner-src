@@ -18,7 +18,7 @@ import {
   getNextOutput,
   handlePipeError,
   isPipeSymbol,
-  type PipedCommand,
+  type RedirectedCommand,
   PipeState,
   PipeSymbols,
   queueTerminalEvent,
@@ -35,7 +35,7 @@ TerminalEvents.subscribe(handlePipe);
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
-  const nextDestination = nextOutput?.pipeDestination;
+  const nextDestination = nextOutput?.redirectDestination;
 
   if (nextDestination && !PipeState.currentTerminalPipe) {
     PipeState.currentTerminalPipe = nextDestination;
@@ -117,12 +117,12 @@ export function getCommandAfterLastPipe(commandString: string): string {
   return parsedCommands.slice(lastPipeIndex + 1).join(" ");
 }
 
-export function pipeContent(content: string, command: PipedCommand) {
+export function pipeContent(content: string, command: RedirectedCommand) {
   addOutputToBeProcessed(new Output(content, "primary"), command);
   queueTerminalEvent();
 }
 
-export function pipeMessage(message: MessageFilename, command: PipedCommand) {
+export function pipeMessage(message: MessageFilename, command: RedirectedCommand) {
   const messageDetails = Messages[message];
   const content = `${messageDetails.filename}\n${messageDetails.msg}`;
 
@@ -130,7 +130,7 @@ export function pipeMessage(message: MessageFilename, command: PipedCommand) {
   queueTerminalEvent();
 }
 
-export function pipeLiterature(message: LiteratureName, command: PipedCommand) {
+export function pipeLiterature(message: LiteratureName, command: RedirectedCommand) {
   const messageDetails = Literatures[message];
   const content = `${messageDetails.filename}\n${stringify(messageDetails.text)}`;
 
@@ -138,7 +138,7 @@ export function pipeLiterature(message: LiteratureName, command: PipedCommand) {
   queueTerminalEvent();
 }
 
-function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCommand | null {
+function buildPipeChain(parsedCommands: (string | number | boolean)[]): RedirectedCommand | null {
   const pipe = `${parsedCommands[0]}`;
   if (!pipe || !isPipeSymbol(pipe)) return null;
 
@@ -283,7 +283,7 @@ function getScriptFromRunCommand(parsedCommand: (string | number | boolean)[]): 
 function handlePipeToScript(
   scriptName: string,
   parsedCommand: (string | number | boolean)[],
-  currentPipe: PipedCommand,
+  currentPipe: RedirectedCommand,
 ): void {
   const args = parsedCommand[0].toString().toLowerCase() === "run" ? parsedCommand.slice(1) : parsedCommand;
   const currentInput = getNextOutputStringified();
@@ -311,7 +311,7 @@ function handlePipeToScript(
   queueTerminalEvent();
 }
 
-function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[], currentPipe: PipedCommand): void {
+function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[], currentPipe: RedirectedCommand): void {
   const script = scriptPid ? findRunningScriptByPid(scriptPid) : null;
   if (!script || !script?.stdin || scriptPid == null) {
     handlePipeError(`Cannot pipe input to script pid ${scriptPid} - script is no longer running`, currentPipe);
@@ -333,7 +333,7 @@ function handlePipeToCat(): void {
 
 function validateInputRedirectionAndUpdateFirstCommandIfNeeded(
   firstCommand: string,
-  pipe: PipedCommand | null,
+  pipe: RedirectedCommand | null,
 ): string {
   if (!pipe) return firstCommand;
 
@@ -353,7 +353,7 @@ function validateInputRedirectionAndUpdateFirstCommandIfNeeded(
   return `cat ${pipe.commandString}`;
 }
 
-function hasInputRedirection(pipe: PipedCommand | null): boolean {
+function hasInputRedirection(pipe: RedirectedCommand | null): boolean {
   if (!pipe) return false;
   if (pipe.pipeSymbol === PipeSymbols.InputRedirection) return true;
   return hasInputRedirection(pipe.nextPipe);

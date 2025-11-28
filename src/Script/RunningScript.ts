@@ -19,7 +19,7 @@ import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
-import { addOutputToBeProcessed, type PipedCommand } from "../Terminal/PipeState";
+import { addOutputToBeProcessed, type RedirectedCommand } from "../Terminal/PipeState";
 import { RawOutput } from "../Terminal/OutputTypes";
 
 export class RunningScript {
@@ -79,10 +79,10 @@ export class RunningScript {
   tailProps = null as LogBoxProperties | null;
 
   // Configuration for piping the script's tail output
-  tailOutputPipeConfig: PipedCommand | null = null;
+  tailOutputPipeConfig: RedirectedCommand | null = null;
 
   // Configuration for piping the script's terminal output
-  terminalOutputPipeConfig: PipedCommand | null = null;
+  terminalOutputPipeConfig: RedirectedCommand | null = null;
 
   // The title, as shown in the script's log box. Defaults to the name + args,
   // but can be changed by the user. If it is set to a React element (only by the user),

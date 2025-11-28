@@ -89,7 +89,7 @@ import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { handlePipe, splitPipesFromFirstCommand } from "./Pipe";
-import { PipeState, pushPipedOutput, queueTerminalEvent } from "./PipeState";
+import { PipeState, pushRedirectedOutput, queueTerminalEvent } from "./PipeState";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -166,11 +166,11 @@ export class Terminal {
     // If logging comes from a script, put the output to be processed in that script's pipe buffer
     const script = pid > -1 ? findRunningScriptByPid(pid) : null;
     if (script?.terminalOutputPipeConfig) {
-      pushPipedOutput(item, script.terminalOutputPipeConfig);
+      pushRedirectedOutput(item, script.terminalOutputPipeConfig);
     }
     // If the terminal has pipes set up, queue the output for processing
     else if (PipeState.currentTerminalPipe !== null) {
-      pushPipedOutput(item, PipeState.currentTerminalPipe);
+      pushRedirectedOutput(item, PipeState.currentTerminalPipe);
     } else {
       // Otherwise, simply push the output to stdout
       this.terminalOutput(item);
