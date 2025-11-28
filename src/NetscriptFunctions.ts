@@ -74,7 +74,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
+import { NS, RecentScript, ProcessInfo, NSEnums, NetscriptPort } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -133,7 +133,7 @@ export const enums: NSEnums = {
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
 
-export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums" | "stdin">>;
+export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums">>;
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
@@ -1474,6 +1474,9 @@ export const ns: InternalAPI<NSFull> = {
     //Script **must** be a script at this point
     return compile(script as Script, server.scripts);
   },
+  getStdin: (ctx) => () => {
+    return new PortHandle((ctx.workerScript.pid * -1) as PortNumber);
+  },
   flags: Flags,
   heart: { break: () => () => Player.karma },
   ...NetscriptExtra(),
@@ -1565,12 +1568,7 @@ setRemovedFunctions(ns, {
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {
-  return NSProxy(ws, ns, [], {
-    args: ws.args.slice(),
-    pid: ws.pid,
-    stdin: new PortHandle((ws.pid * -1) as PortNumber),
-    enums,
-  });
+  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 
 const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));

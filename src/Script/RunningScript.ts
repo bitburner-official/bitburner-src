@@ -73,7 +73,7 @@ export class RunningScript {
   // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
   scriptKey = "" as ScriptKey;
 
-  stdin = null as NetscriptPort | null;
+  stdin: NetscriptPort | null = null;
 
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
