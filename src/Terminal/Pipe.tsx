@@ -32,7 +32,6 @@ import { RunningScript } from "../Script/RunningScript";
 TerminalEvents.subscribe(handlePipe);
 
 // TODO-Fico - add pipe documentation page
-// TODO: prevent overwriting of scripts with content
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
@@ -241,6 +240,10 @@ function writeToScriptFile(filename: string): void {
   const file = Terminal.getScript(filename);
   const output = getNextOutputStringified(true).join("\n");
   const overwrite = !pipe.hasBeenEvaluated && pipe.pipeSymbol === PipeSymbols.OutputRedirection;
+
+  if(file?.content && overwrite) {
+    return handlePipeError(`Overwriting existing non-empty script files is forbidden. ('${filename}').`);
+  }
 
   if (file && overwrite) {
     file.content = output;

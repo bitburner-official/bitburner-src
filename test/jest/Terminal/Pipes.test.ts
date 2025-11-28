@@ -128,6 +128,18 @@ describe("Terminal Pipes", () => {
       expect(fileContent).toContain(`${scriptName}: test1 test2\n${scriptName}: NULL PORT DATA`);
       expect(fileContent).not.toContain(startingData);
     });
+
+    it("should not permit overwriting a script file with content", () => {
+      const fileName = "output.js";
+      const commandString = `echo 'console.log("Hello World")' > ${fileName}; echo 'Malicious Content' > ${fileName}`;
+
+      Terminal.executeCommands(commandString);
+
+      const server = GetServer(Player.currentServer);
+      const fileContent = server?.scripts?.get(fileName as ScriptFilePath)?.content;
+
+      expect(fileContent).toContain('"Hello World"');
+    });
   });
 
   describe("piping multiple inputs", () => {
