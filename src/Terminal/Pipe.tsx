@@ -241,7 +241,7 @@ function writeToScriptFile(filename: string): void {
   const output = getNextOutputStringified(true).join("\n");
   const overwrite = !pipe.hasBeenEvaluated && pipe.pipeSymbol === PipeSymbols.OutputRedirection;
 
-  if(file?.content && overwrite) {
+  if (file?.content && overwrite) {
     return handlePipeError(`Overwriting existing non-empty script files is forbidden. ('${filename}').`);
   }
 

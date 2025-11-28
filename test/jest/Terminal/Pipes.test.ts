@@ -64,19 +64,6 @@ describe("Terminal Pipes", () => {
       expect(fileContent).toBe("second line");
     });
 
-    it("should overwrite a script file when using > operator", () => {
-      const fileName = "output.js";
-      const commandString = `echo first line > ${fileName}; echo second line > ${fileName}`;
-
-      Terminal.executeCommands(commandString);
-
-      const server = GetServer(Player.currentServer);
-      const fileContent = server?.scripts?.get(fileName as ScriptFilePath)?.content;
-
-      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
-      expect(fileContent).toBe("second line");
-    });
-
     it("should only overwrite file contents once per > pipe", async () => {
       // Add file to server with content
       const outputFileName = "scriptOutput9.txt" as TextFilePath;
