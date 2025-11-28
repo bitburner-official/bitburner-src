@@ -36,7 +36,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
       expect(fileContent).toBe("Hello World");
     });
 
@@ -49,7 +49,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
       expect(fileContent).toBe("first line\nsecond line");
     });
 
@@ -73,7 +73,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.scripts?.get(fileName as ScriptFilePath)?.content;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
       expect(fileContent).toBe("second line");
     });
 
@@ -98,7 +98,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(Terminal.outputHistory.length).toBe(1);
       expect(fileContent).toContain(`${scriptName}: ["test1"]\n${scriptName}: ["test1"]`);
       expect(fileContent).not.toContain(startingData);
     });
@@ -124,7 +124,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(Terminal.outputHistory.length).toBe(1);
       expect(fileContent).toContain(`${scriptName}: test1 test2\n${scriptName}: NULL PORT DATA`);
       expect(fileContent).not.toContain(startingData);
     });
@@ -137,7 +137,7 @@ describe("Terminal Pipes", () => {
       const commandString = `echo test > ${fileName1}; echo test2 > ${fileName2}`;
       Terminal.executeCommands(commandString);
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
 
       const server = GetServer(Player.currentServer);
       const fileContent1 = server?.textFiles?.get(fileName1 as TextFilePath)?.text;
@@ -244,7 +244,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(Terminal.outputHistory.length).toBe(1);
       expect(fileContent).toContain(`Input received: data`);
     });
 
@@ -264,7 +264,7 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(Terminal.outputHistory.length).toBe(1);
       expect(fileContent).toContain(`Args received: ["test1","arguments"]`);
     });
 
@@ -272,7 +272,6 @@ describe("Terminal Pipes", () => {
       // Add file to server with content
       const outputFileName = "scriptOutput.txt" as TextFilePath;
       const outputFileName2 = "scriptOutput2.txt" as TextFilePath;
-      Terminal.executeCommands(`echo > ${outputFileName}; echo > ${outputFileName2}`);
 
       const scriptName = "testScript.js" as ScriptFilePath;
       const scriptContent = `export async function main(ns) { ns.tprint(ns.args); await ns.sleep(100); ns.tprint(ns.args); }`;
@@ -289,9 +288,63 @@ describe("Terminal Pipes", () => {
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
       const fileContent2 = server?.textFiles?.get(outputFileName2)?.text;
 
-      expect(Terminal.outputHistory.length).toBe(0);
+      expect(Terminal.outputHistory.length).toBe(2);
       expect(fileContent).toContain(`${scriptName}: ["test1","test2"]\n${scriptName}: ["test1","test2"]`);
       expect(fileContent2).toContain(`${scriptName}: ["test3","test4"]\n${scriptName}: ["test3","test4"]`);
+    });
+
+    it("should correctly pipe a script's async output to a specified destination script", async () => {
+      // Add file to server with content
+      const outputFileName = "scriptOutput.txt" as TextFilePath;
+
+      const scriptName = "testScript.js" as ScriptFilePath;
+      const scriptName2 = "testScript2.js" as ScriptFilePath;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.stdin.peek()); await ns.sleep(80); ns.tprint(ns.stdin.peek()); }`;
+      const scriptContent2 = `export async function main(ns) { ns.tprint(ns.stdin.read()); await ns.sleep(200); ns.tprint(ns.stdin.read()); ns.tprint(ns.stdin.read()); }`;
+
+      // Add script to server
+      Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}; echo '${scriptContent2}' > ${scriptName2}`);
+
+      // Pass arguments to script via pipe
+      const command = `echo 1 | ${scriptName} | ${scriptName2} > ${outputFileName}`;
+      Terminal.executeCommands(command);
+      await sleep(300);
+
+      const server = GetServer(Player.currentServer);
+      const fileContent = server?.textFiles?.get(outputFileName)?.text;
+
+      expect(Terminal.outputHistory.length).toBe(2);
+      expect(fileContent).toContain(`${scriptName2}: ${scriptName}: 1\n${scriptName2}: NULL PORT DATA`);
+    });
+
+    it("should correctly pipe each script's async output to its specified destination script", async () => {
+      // Add file to server with content
+      const outputFileName = "scriptOutput.txt" as TextFilePath;
+      const outputFileName2 = "scriptOutput2.txt" as TextFilePath;
+
+      const scriptName = "testScript.js" as ScriptFilePath;
+      const scriptName2 = "testScript2.js" as ScriptFilePath;
+      const scriptName3 = "testScript3.js" as ScriptFilePath;
+      const scriptName4 = "testScript4.js" as ScriptFilePath;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.stdin.peek()); await ns.sleep(80); ns.tprint(ns.stdin.peek()); }`;
+      const scriptContent2 = `export async function main(ns) { ns.tprint(ns.stdin.read()); await ns.sleep(200); ns.tprint(ns.stdin.read()); ns.tprint(ns.stdin.read()); }`;
+
+      // Add script to server
+      Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}; echo '${scriptContent2}' > ${scriptName2}`);
+      Terminal.executeCommands(`cat ${scriptName} > ${scriptName3}; cat ${scriptName2} > ${scriptName4};`);
+
+      // Pass arguments to script via pipe
+      const command = `echo 1 | ${scriptName} | ${scriptName2} > ${outputFileName}; echo 2 | ${scriptName3} | ${scriptName4} > ${outputFileName2}`;
+      Terminal.executeCommands(command);
+      await sleep(300);
+
+      const server = GetServer(Player.currentServer);
+      const fileContent = server?.textFiles?.get(outputFileName)?.text;
+      const fileContent2 = server?.textFiles?.get(outputFileName2)?.text;
+
+      expect(Terminal.outputHistory.length).toBe(4);
+      expect(fileContent).toContain(`${scriptName2}: ${scriptName}: 1\n${scriptName2}: NULL PORT DATA`);
+      expect(fileContent2).toContain(`${scriptName4}: ${scriptName3}: 2\n${scriptName4}: NULL PORT DATA`);
     });
   });
 
@@ -330,7 +383,7 @@ describe("Terminal Pipes", () => {
     const testContent = "This is a test.";
     const commandString = `echo "${testContent}" | cat`;
     Terminal.executeCommands(commandString);
-    expect(Terminal.outputHistory.length).toBe(0);
+    expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
     expect(dialogMock).toHaveBeenCalledWith(testContent);
   });
 

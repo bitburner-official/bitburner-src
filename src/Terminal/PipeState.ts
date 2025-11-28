@@ -45,7 +45,7 @@ export function addOutputToBeProcessed(output: Output | Link | RawOutput, pipeDe
       pipeDestination: pipeDestination,
     });
   }
-  TerminalEvents.emit();
+  queueTerminalEvent();
 }
 
 export function getNextOutput(): PipedOutput | null {
@@ -63,6 +63,12 @@ export function handlePipeError(error: string, currentPipe = PipeState.currentTe
 export function clearPipe() {
   PipeState.outputToBeProcessed.shift();
   PipeState.currentTerminalPipe = null;
+}
+
+export function queueTerminalEvent() {
+  setTimeout(() => {
+    TerminalEvents.emit();
+  }, 10);
 }
 
 function pipeDestinationIsIdentical(a: PipedCommand | null, b: PipedCommand | null): boolean {

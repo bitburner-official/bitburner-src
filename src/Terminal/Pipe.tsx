@@ -9,7 +9,6 @@ import { Player } from "@player";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { Link, Output, RawOutput } from "./OutputTypes";
 import { ANSI_ESCAPE } from "../ui/React/ANSIITypography";
-import { debounce } from "lodash";
 import { Script } from "../Script/Script";
 import { LiteratureName, MessageFilename } from "@enums";
 import { Messages } from "../Message/MessageHelpers";
@@ -22,6 +21,7 @@ import {
   PipeState,
   PipeSymbols,
   PipeSymbolsList,
+  queueTerminalEvent,
 } from "./PipeState";
 import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
@@ -29,15 +29,10 @@ import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { RunningScript } from "../Script/RunningScript";
 
-const debouncedHandlePipe = debounce(() => handlePipe(), 50);
-
-TerminalEvents.subscribe(debouncedHandlePipe);
+TerminalEvents.subscribe(handlePipe);
 
 // TODO-Fico - add pipe documentation page
-// TODO: add unit test for multiple pipe inputs over time between scripts
-// TODO: add unit tests for input redirection
-
-// TODO: fix autocomplete for pipes
+// TODO: prevent overwriting of scripts with content
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
@@ -125,7 +120,7 @@ export function getCommandAfterLastPipe(commandString: string): string {
 
 export function pipeContent(content: string, command: PipedCommand) {
   addOutputToBeProcessed(new Output(content, "primary"), command);
-  TerminalEvents.emit();
+  queueTerminalEvent();
 }
 
 export function pipeMessage(message: MessageFilename, command: PipedCommand) {
@@ -133,7 +128,7 @@ export function pipeMessage(message: MessageFilename, command: PipedCommand) {
   const content = `${messageDetails.filename}\n${messageDetails.msg}`;
 
   addOutputToBeProcessed(new Output(content, "primary"), command);
-  TerminalEvents.emit();
+  queueTerminalEvent();
 }
 
 export function pipeLiterature(message: LiteratureName, command: PipedCommand) {
@@ -141,7 +136,7 @@ export function pipeLiterature(message: LiteratureName, command: PipedCommand) {
   const content = `${messageDetails.filename}\n${stringify(messageDetails.text)}`;
 
   addOutputToBeProcessed(new Output(content, "primary"), command);
-  TerminalEvents.emit();
+  queueTerminalEvent();
 }
 
 function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCommand | null {
@@ -176,7 +171,7 @@ function advancePipe(): void {
   }
 
   PipeState.outputToBeProcessed.shift();
-  TerminalEvents.emit();
+  queueTerminalEvent();
 }
 
 function handleEcho(): void {
@@ -296,7 +291,12 @@ function handlePipeToScript(
     return advancePipe();
   }
 
-  advancePipe();
+  if (PipeState.currentTerminalPipe) {
+    PipeState.currentTerminalPipe.hasBeenEvaluated = true;
+    PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
+  }
+
+  PipeState.outputToBeProcessed.shift();
   const runningScript = runScript(scriptName as ScriptFilePath, args.slice(1), Player.getCurrentServer());
   if (!runningScript?.stdin) {
     return;
@@ -305,12 +305,12 @@ function handlePipeToScript(
   writeInputToScriptStdIn(runningScript.pid, currentInput, currentPipe);
   runningScript.temporary = true;
   currentPipe.stdInPort = runningScript.pid;
-  TerminalEvents.emit();
+  queueTerminalEvent();
 }
 
 function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[], currentPipe: PipedCommand): void {
   const script = scriptPid ? findRunningScriptByPid(scriptPid) : null;
-  if (!script || !script?.stdin) {
+  if (!script || !script?.stdin || scriptPid == null) {
     handlePipeError(`Cannot pipe input to script pid ${scriptPid} - script is no longer running`, currentPipe);
     return;
   }

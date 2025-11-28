@@ -80,7 +80,7 @@ export function runScript(
     return;
   }
 
-  Terminal.print(
+  Terminal.printAndBypassPipes(
     `Running script with ${pluralize(numThreads, "thread")}, pid ${runningScript.pid} and args: ${JSON.stringify(
       args,
     )}.`,

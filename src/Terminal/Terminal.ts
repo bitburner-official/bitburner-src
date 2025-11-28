@@ -89,7 +89,7 @@ import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { handlePipe, splitPipesFromFirstCommand } from "./Pipe";
-import { PipeState, pushPipedOutput } from "./PipeState";
+import { PipeState, pushPipedOutput, queueTerminalEvent } from "./PipeState";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -176,7 +176,7 @@ export class Terminal {
       this.terminalOutput(item);
     }
 
-    TerminalEvents.emit();
+    queueTerminalEvent();
   }
 
   logCommand(command: string): void {
@@ -188,7 +188,7 @@ export class Terminal {
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
       this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
     }
-    TerminalEvents.emit();
+    queueTerminalEvent();
   }
 
   print(s: string, pid = -1): void {
@@ -197,6 +197,10 @@ export class Terminal {
 
   printRaw(node: React.ReactNode, pid = -1): void {
     this.append(new RawOutput(node), pid);
+  }
+
+  printAndBypassPipes(s: string): void {
+    this.terminalOutput(new Output(s, "primary"));
   }
 
   error(s: string): void {
