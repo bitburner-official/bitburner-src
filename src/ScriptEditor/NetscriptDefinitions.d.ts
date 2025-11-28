@@ -6492,7 +6492,7 @@ export interface NS {
    *
    * then `ns.stdin.read()` inside `myScript.js` would return `"input1"`.
    *
-   * If more data is added later (for example, if one script's terminal output is piped to another script),
+   * If more data is added later (for example, if one script's terminal is piped to another script),
    * then the script can read that data from `ns.stdin` as well.
    * `await ns.stdin.nextPortWrite()` can be used to wait until new data is available to read.
    */

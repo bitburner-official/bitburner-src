@@ -14,14 +14,11 @@ export const PipeSymbols = {
   OutputRedirection: ">",
   AppendOutputRedirection: ">>",
   InputRedirection: "<",
-};
+} as const;
 
-export const PipeSymbolsList = [
-  PipeSymbols.Pipe,
-  PipeSymbols.OutputRedirection,
-  PipeSymbols.AppendOutputRedirection,
-  PipeSymbols.InputRedirection,
-];
+export function isPipeSymbol(symbol: string | number | boolean): symbol is keyof typeof PipeSymbols {
+  return Object.keys(PipeSymbols).some((key) => PipeSymbols[key as keyof typeof PipeSymbols] === symbol);
+}
 
 export function pushPipedOutput(output: Output | Link | RawOutput, pipeDestination: PipedCommand | null) {
   addOutputToBeProcessed(output, pipeDestination);

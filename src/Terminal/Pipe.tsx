@@ -17,10 +17,10 @@ import {
   addOutputToBeProcessed,
   getNextOutput,
   handlePipeError,
+  isPipeSymbol,
   type PipedCommand,
   PipeState,
   PipeSymbols,
-  PipeSymbolsList,
   queueTerminalEvent,
 } from "./PipeState";
 import { Settings } from "../Settings/Settings";
@@ -98,7 +98,7 @@ export function splitPipesFromFirstCommand(commandString: string): string {
   const parsedCommands = parseCommand(commandString);
   const firstCommand = getFirstCommand(parsedCommands);
 
-  if (!parsedCommands.find((arg) => PipeSymbolsList.includes(`${arg}`))) {
+  if (!parsedCommands.find(isPipeSymbol)) {
     return commandString;
   }
 
@@ -109,7 +109,7 @@ export function splitPipesFromFirstCommand(commandString: string): string {
 
 export function getCommandAfterLastPipe(commandString: string): string {
   const parsedCommands = parseCommand(commandString);
-  const lastPipeIndex = parsedCommands.findLastIndex((arg) => PipeSymbolsList.includes(`${arg}`));
+  const lastPipeIndex = parsedCommands.findLastIndex(isPipeSymbol);
   if (lastPipeIndex === -1) {
     return commandString;
   }
@@ -140,7 +140,7 @@ export function pipeLiterature(message: LiteratureName, command: PipedCommand) {
 
 function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCommand | null {
   const pipe = `${parsedCommands[0]}`;
-  if (!pipe || !PipeSymbolsList.includes(pipe)) return null;
+  if (!pipe || !isPipeSymbol(pipe)) return null;
 
   parsedCommands.shift();
   const nextCommand = getFirstCommand(parsedCommands);
@@ -155,7 +155,7 @@ function buildPipeChain(parsedCommands: (string | number | boolean)[]): PipedCom
 function getFirstCommand(parsedCommands: (string | number | boolean)[]): string {
   let firstCommand = "";
 
-  while (parsedCommands.length && !PipeSymbolsList.includes(`${parsedCommands[0]}`)) {
+  while (parsedCommands.length && !isPipeSymbol(parsedCommands[0])) {
     const arg = `${parsedCommands[0]}`;
     parsedCommands.shift();
     firstCommand += arg + " ";

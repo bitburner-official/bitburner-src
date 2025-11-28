@@ -179,10 +179,6 @@ export class Terminal {
     queueTerminalEvent();
   }
 
-  logCommand(command: string): void {
-    this.terminalOutput(new Output(command, "primary"));
-  }
-
   terminalOutput(item: Output | Link | RawOutput): void {
     this.outputHistory.push(item);
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {

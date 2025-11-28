@@ -1,10 +1,12 @@
+import { escapeRegExp } from "lodash";
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { findRunningScripts, findRunningScriptByPid, findRunningScriptsByFilename } from "../../Script/ScriptHelpers";
+import { findRunningScripts, findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { LogBoxEvents } from "../../ui/React/LogBoxManager";
-import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import { hasScriptExtension, ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { PipeState } from "../PipeState";
 import { RunningScript } from "../../Script/RunningScript";
+import { matchScriptPathExact } from "../../utils/helpers/scriptKey";
 
 export function tail(commandArray: (string | number | boolean)[], server: BaseServer): void {
   try {
@@ -64,4 +66,17 @@ function handleTail(script: RunningScript): void {
 
   script.tailOutputPipeConfig = PipeState.currentTerminalPipe ?? null;
   PipeState.currentTerminalPipe = null;
+}
+
+function findRunningScriptsByFilename(path: ScriptFilePath, server: BaseServer): Map<number, RunningScript> | null {
+  const result = new Map<number, RunningScript>();
+  const pattern = matchScriptPathExact(escapeRegExp(path));
+  for (const [key, runningScriptMap] of server.runningScriptMap.entries()) {
+    if (pattern.test(key)) {
+      for (const [pid, runningScript] of runningScriptMap.entries()) {
+        result.set(pid, runningScript);
+      }
+    }
+  }
+  return result.size > 0 ? result : null;
 }
