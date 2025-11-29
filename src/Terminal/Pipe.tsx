@@ -25,7 +25,6 @@ import {
 import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { RunningScript } from "../Script/RunningScript";
 
 TerminalEvents.subscribe(handlePipe);
@@ -62,18 +61,19 @@ export function handlePipe(): void {
     return;
   }
 
-  // ECHO or empty command: Pipe to stout
-  if (!commandString || parsedCommand.length === 0 || command.toLowerCase() === "echo") {
+  // echo, cat, or empty command: Pipe to stout
+  if (
+    !commandString ||
+    parsedCommand.length === 0 ||
+    command.toLowerCase() === "echo" ||
+    command.toLowerCase() === "cat"
+  ) {
     return handleEcho();
   }
 
   const scriptFromRunCommand = getScriptFromRunCommand(parsedCommand);
   if (scriptFromRunCommand) {
     return handlePipeToScript(scriptFromRunCommand, parsedCommand, PipeState.currentTerminalPipe);
-  }
-
-  if (command.toLowerCase() === "cat") {
-    return handlePipeToCat();
   }
 
   // Pipe to the next terminal command
@@ -320,14 +320,6 @@ function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[],
   input.forEach((line) => {
     script.stdin?.write(line);
   });
-}
-
-function handlePipeToCat(): void {
-  if (PipeState.currentTerminalPipe?.nextPipe) {
-    return handleEcho();
-  }
-  dialogBoxCreate(getNextOutputStringified().join("\n"));
-  advancePipe();
 }
 
 function validateInputRedirectionAndUpdateFirstCommandIfNeeded(

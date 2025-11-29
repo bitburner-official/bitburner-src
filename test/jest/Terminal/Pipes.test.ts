@@ -7,14 +7,12 @@ import { clearPipe, PipeState } from "../../../src/Terminal/PipeState";
 import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { LiteratureName, MessageFilename } from "@enums";
 import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
-import * as dialogBox from "../../../src/ui/React/DialogBox";
 import { runScript } from "../../../src/Terminal/commands/runScript";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 fixDoImportIssue();
 initGameEnvironment();
-let dialogMock;
 
 describe("Terminal Pipes", () => {
   beforeEach(() => {
@@ -24,7 +22,6 @@ describe("Terminal Pipes", () => {
     Terminal.outputHistory = [];
     GetServer(Player.currentServer)?.textFiles.clear();
     GetServer(Player.currentServer)?.scripts.clear();
-    dialogMock = jest.spyOn(dialogBox, "dialogBoxCreate").mockImplementation(() => {});
   });
 
   describe("piping to files", () => {
@@ -382,8 +379,8 @@ describe("Terminal Pipes", () => {
     const testContent = "This is a test.";
     const commandString = `echo "${testContent}" | cat`;
     Terminal.executeCommands(commandString);
-    expect(JSON.stringify(Terminal.outputHistory)).toBe("[]");
-    expect(dialogMock).toHaveBeenCalledWith(testContent);
+    expect(Terminal.outputHistory.length).toBe(1);
+    expect(Terminal.outputHistory[0].text).toBe(testContent);
   });
 
   it("should correctly split the first command from later pipes", () => {
