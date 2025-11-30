@@ -281,13 +281,13 @@ export const HelpTexts: Record<string, string[]> = {
     "Usage: grow",
     " ",
     "Spoof transactions in the current server. Increasing the money available by hacking. Requires root access.",
-    "For additional information please go to Documentation > Resources > NS API Documentation > Grow for more details",
+    "For additional information please go to Documentation > Resources > NS API Documentation > Grow.",
     " ",
   ],
   hack: [
     "Usage: hack",
     " ",
-    "For additional information please go to Documentation > Resources > NS API Documentation > Hack for more details",
+    "For additional information please go to Documentation > Resources > NS API Documentation > Hack.",
     " ",
   ],
   help: [
@@ -526,7 +526,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Reduces the security level of the current server. Decreasing the time it takes for all operations on this server.",
     "Requires root access.",
-    "For additional information please go to Documentation > Resources > NS API Documentation > Weaken for more details",
+    "For additional information please go to Documentation > Resources > NS API Documentation > Weaken.",
     " ",
   ],
   wget: [
