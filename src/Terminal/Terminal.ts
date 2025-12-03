@@ -88,7 +88,7 @@ import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { handlePipe, splitPipesFromFirstCommand } from "./Pipe";
+import { buildRedirectedCommandChain, handlePipe } from "./Pipe";
 import { PipeState, pushRedirectedOutput } from "./PipeState";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
@@ -689,8 +689,11 @@ export class Terminal {
 
   executeCommand(command: string): void {
     if (this.action !== null) return this.error(`Cannot execute command (${command}) while an action is in progress`);
+    if (buildRedirectedCommandChain(command)) {
+      return;
+    }
 
-    const commandArray = parseCommand(splitPipesFromFirstCommand(command));
+    const commandArray = parseCommand(command);
     if (!commandArray.length) return;
 
     const currentServer = Player.getCurrentServer();

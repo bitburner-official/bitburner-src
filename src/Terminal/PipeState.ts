@@ -2,10 +2,13 @@ import { Link, Output, RawOutput } from "./OutputTypes";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
 import { TerminalEvents } from "./TerminalEvents";
+import { PortHandle } from "../NetscriptPort";
 
 export const PipeState = {
-  outputToBeProcessed: [] as RedirectedOutput[],
+  currentRedirects: [] as RedirectedCommand[],
+  outputToBeProcessed: [] as RedirectedOutput[], // TODO: remove
   currentTerminalPipe: null as RedirectedCommand | null,
+  nextStdinPort: 1e7,
 };
 
 export const PipeSymbols = {
@@ -60,7 +63,6 @@ export function handlePipeError(error: string, currentPipe = PipeState.currentTe
 }
 
 export function clearPipe() {
-  PipeState.outputToBeProcessed.shift();
   PipeState.currentTerminalPipe = null;
 }
 
@@ -83,6 +85,7 @@ export type RedirectedCommand = {
   commandString: string;
   pipeSymbol: string;
   nextPipe: RedirectedCommand | null;
+  stdin: PortHandle;
   hasBeenEvaluated?: boolean;
   hasShownError?: boolean;
   stdInPort?: number;

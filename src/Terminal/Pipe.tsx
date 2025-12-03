@@ -26,10 +26,40 @@ import { Settings } from "../Settings/Settings";
 import { runScript } from "./commands/runScript";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { RunningScript } from "../Script/RunningScript";
+import { PortHandle, PortNumber } from "../NetscriptPort";
 
 TerminalEvents.subscribe(handlePipe);
 
 // TODO-Fico - add pipe documentation page
+
+/*
+- new class StdIO - stdin, stdout, onRead
+- read loop `for await (const line of stdin.readLines()) {`
+
+- new porthandle wrapper - closed state, close() function
+- pusher calls close()
+
+StdIO should always be constructed for terminal commands (no null). A default one has a closed stdin and stdout -> terminal
+StdIO has separated open/closed state for stdin and stdout
+print to closed stdout is a noop
+Required argument to Terminal.print
+weakref to your stdin
+
+by closing the stream, it causes the next thing in the chain to be able to exit, instead of just waiting
+
+
+- handle wget
+
+- pipes should send stdout through the chain
+
+- pipes should live until all output is clean and all scripts are done
+
+- cat should be a tail window
+- Cat should concatenate multiple inputs: "-" is stdin, use stdin if no args are present
+
+cut? https://www.geeksforgeeks.org/linux-unix/cut-command-linux-examples/
+sed? https://www.geeksforgeeks.org/linux-unix/sed-command-in-linux-unix-with-examples/
+ */
 
 export function handlePipe(): void {
   const nextOutput = getNextOutput();
@@ -47,7 +77,7 @@ export function handlePipe(): void {
   const pipeType = PipeState.currentTerminalPipe.pipeSymbol;
 
   const parsedCommand = parseCommand(commandString);
-  const command = parsedCommand[0]?.toString();
+  const command = `${parsedCommand[0]}`.trim().toLowerCase();
 
   // Pipe to file
   if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeType !== PipeSymbols.Pipe))) {
@@ -65,8 +95,8 @@ export function handlePipe(): void {
   if (
     !commandString ||
     parsedCommand.length === 0 ||
-    command.toLowerCase() === "echo" ||
-    command.toLowerCase() === "cat"
+    command === "echo" ||
+    command === "cat" // todo: implement cat tail window
   ) {
     return handleEcho();
   }
@@ -76,34 +106,37 @@ export function handlePipe(): void {
     return handlePipeToScript(scriptFromRunCommand, parsedCommand, PipeState.currentTerminalPipe);
   }
 
-  // Pipe to the next terminal command
-  const output = getNextOutput()
-    ?.output.map((o) => stringify(o))
-    .join("\n")
-    .replaceAll('"', "'");
-  advancePipe();
-
-  const nextCommand = `${parsedCommand[0]}`.trim().toLowerCase();
-  const useQuotes = nextCommand === "grep";
-  const newCommand = `${commandString} ${useQuotes ? '"' : ""}${output}${useQuotes ? '"' : ""}`;
-  Terminal.executeCommand(newCommand);
-}
-
-export function splitPipesFromFirstCommand(commandString: string): string {
-  if (PipeState.currentTerminalPipe) {
-    return commandString;
+  if (command === "grep") {
+    return handleGrep(commandString);
   }
 
+  // All other commands ignore stdin
+  Terminal.executeCommand(commandString);
+}
+
+export function buildRedirectedCommandChain(commandString: string): boolean {
   const parsedCommands = parseCommand(commandString);
   const firstCommand = getFirstCommand(parsedCommands);
 
   if (!parsedCommands.find(isPipeSymbol)) {
-    return commandString;
+    return false;
   }
 
-  PipeState.currentTerminalPipe = buildPipeChain(parsedCommands);
+  const pipeRoot: RedirectedCommand = {
+    commandString: firstCommand,
+    stdin: getNextStdinHandle(),
+    pipeSymbol: "",
+    nextPipe: buildPipeChain(parsedCommands),
+  };
 
-  return validateInputRedirectionAndUpdateFirstCommandIfNeeded(firstCommand, PipeState.currentTerminalPipe);
+  const updatedPipe = validateInputRedirectionAndConvertToCat(pipeRoot);
+  if (!updatedPipe) {
+    return true;
+  }
+
+  PipeState.currentRedirects.unshift(updatedPipe);
+  TerminalEvents.emit();
+  return true;
 }
 
 export function getCommandAfterLastPipe(commandString: string): string {
@@ -148,6 +181,7 @@ function buildPipeChain(parsedCommands: (string | number | boolean)[]): Redirect
     commandString: nextCommand,
     pipeSymbol: pipe,
     nextPipe: buildPipeChain(parsedCommands),
+    stdin: getNextStdinHandle(),
   };
 }
 
@@ -173,12 +207,6 @@ function advancePipe(): void {
 }
 
 function handleEcho(): void {
-  if (PipeState.currentTerminalPipe?.nextPipe) {
-    PipeState.currentTerminalPipe = PipeState.currentTerminalPipe.nextPipe;
-    handlePipe();
-    return;
-  }
-
   const output = getNextOutput()?.output ?? [];
   Terminal.outputHistory.push(...output);
   advancePipe();
@@ -322,46 +350,62 @@ function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[],
   });
 }
 
-function validateInputRedirectionAndUpdateFirstCommandIfNeeded(
-  firstCommand: string,
-  pipe: RedirectedCommand | null,
-): string {
-  if (!pipe) return firstCommand;
+function handleGrep(commandString: string) {
+  const output = getNextOutput()
+    ?.output.map((o) => stringify(o))
+    .join("\n")
+    .replaceAll('"', "'");
+  advancePipe();
 
-  if (hasInputRedirection(pipe.nextPipe)) {
+  const newCommand = `${commandString} "${output}"`;
+  Terminal.executeCommand(newCommand);
+}
+
+// TODO: document
+function validateInputRedirectionAndConvertToCat(pipe: RedirectedCommand | null): RedirectedCommand | null {
+  if (!pipe) return pipe;
+
+  if (hasInputRedirection(pipe.nextPipe?.nextPipe)) {
     handlePipeError(`Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`);
-    return firstCommand;
+    return null;
   }
 
   const firstCommandHasInputRedirection = pipe.pipeSymbol === PipeSymbols.InputRedirection;
-  if (!firstCommandHasInputRedirection) return firstCommand;
+  if (!firstCommandHasInputRedirection) return pipe;
 
-  PipeState.currentTerminalPipe = {
-    commandString: firstCommand,
+  return {
+    commandString: `cat ${pipe.commandString}`,
     pipeSymbol: PipeSymbols.Pipe,
-    nextPipe: pipe.nextPipe,
+    nextPipe: pipe.nextPipe?.nextPipe ?? null,
+    stdin: getNextStdinHandle(),
   };
-  return `cat ${pipe.commandString}`;
 }
 
-function hasInputRedirection(pipe: RedirectedCommand | null): boolean {
+function hasInputRedirection(pipe: RedirectedCommand | null | undefined): boolean {
   if (!pipe) return false;
   if (pipe.pipeSymbol === PipeSymbols.InputRedirection) return true;
   return hasInputRedirection(pipe.nextPipe);
 }
 
-function stringify(s: Output | Link | RawOutput | JSX.Element, stripAnsiEscape = false): string {
+export function getNextStdinHandle(): PortHandle {
+  return new PortHandle((++PipeState.nextStdinPort * -1) as PortNumber);
+}
+
+function stringify(s: unknown, stripAnsiEscape = false): string {
   if (!s) {
     return "";
   } else if (s instanceof Output) {
     return stripAnsiEscape ? s.text.replaceAll(ANSI_ESCAPE, "") : s.text;
   } else if (s instanceof Link) {
     return `${s.dashes} ${s.hostname}`;
-  } else {
+  } else if (s instanceof Element) {
+    // TODO: test
     const markup = renderToStaticMarkup(<>{s instanceof RawOutput ? s.raw : s}</>);
     const div = document.createElement("div");
     div.innerHTML = markup.replaceAll(">", "> ");
     return div.textContent ?? div.innerText ?? "";
+  } else {
+    return JSON.stringify(s);
   }
 }
 
