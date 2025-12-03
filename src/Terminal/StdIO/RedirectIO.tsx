@@ -1,86 +1,80 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { parseCommand } from "../Parser";
-import { isPipeSymbol } from "../PipeState";
-import { IOStream } from "./IOStream";
+import { isPipeSymbol, PipeSymbols } from "../PipeState";
+import { DATA_STREAM_CLOSED, IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
 import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
 import { Terminal } from "../../Terminal";
+import { hasTextExtension, TextFilePath } from "../../Paths/TextFilePath";
+import { hasScriptExtension, ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { TextFile } from "../../TextFile";
+import { Player } from "@player";
+import { Script } from "../../Script/Script";
 
-export function buildRedirectedCommandChain(commandString: string) {
-  let parsedCommands = parseCommand(commandString);
+type Args = string | number | boolean;
 
-  if (!parsedCommands.find(isPipeSymbol)) {
+export function parseRedirectedCommands(commandString: string) {
+  const parsed = parseCommand(commandString);
+  const commandSets = findCommandsSplitByRedirects(parsed);
+  if (commandSets.length <= 1) {
     return null;
   }
-
-  const redirectCommandChain: string[][] = [];
-  const redirectIOChain: StdIO[] = [];
-
-  let firstCommand;
-  while ((firstCommand = getFirstCommand(parsedCommands))) {
-    parsedCommands = parsedCommands.slice(firstCommand.length);
-    //redirectCommandChain.push(firstCommand); // TODO
+  let priorStdIO: StdIO | null = new StdIO(null);
+  for (const commandSet of commandSets) {
+    handleCommand(priorStdIO, commandSet);
+    priorStdIO = new StdIO(priorStdIO.stdout);
   }
-
-  // todo: validateInputRedirectionAndConvertToCat
-
-  for (let i = 0; i < redirectCommandChain.length - 1; i++) {
-    const cmd = redirectCommandChain[i];
-    const priorIO = redirectIOChain[i - 1];
-
-    // TODO: call the command with priorIO.stdin as its stdin
-
-    const stdIO = new StdIO(priorIO?.stdout ?? null);
-    // TODO: change this to handle commands individually. Not all need a call on read.
-    void callOnRead(stdIO, getCallbackForRedirectedCommand(cmd, stdIO.stdout));
-    redirectIOChain.push(stdIO);
-  }
-
-  getTerminalStdIO(redirectIOChain[redirectIOChain.length - 1].stdout);
 }
 
-function getCallbackForRedirectedCommand(
-  commandStrings: string[],
-  stdout: IOStream,
-): (data: unknown, stdout: IOStream) => Promise<void> | void {
-  const pipeSymbol = isPipeSymbol(commandStrings[0]) ? commandStrings[0] : null;
-  const command = commandStrings.find((cmd) => !isPipeSymbol(cmd));
+export function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
+  const pipeSymbol = isPipeSymbol(commandStrings[0]) ? `${commandStrings[0]}` : null;
+  const command = `${pipeSymbol ? commandStrings[1] : commandStrings[0]}`;
+  const args = pipeSymbol ? commandStrings.slice(2) : commandStrings.slice(1);
 
   if (!command) {
-    Terminal.error(`Invalid command: no command found after output redirect.`);
+    return handleIoError(stdIO, `Invalid command string: no command found after output redirect ${pipeSymbol}.`);
   }
 
+  // Pipe to file
+  if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeSymbol !== PipeSymbols.Pipe))) {
+    return handlePipeToFile(command, pipeSymbol, stdIO);
+  }
+
+  // > and >> are invalid pipes for commands that are not piping to files
+  if (pipeSymbol === PipeSymbols.OutputRedirection || pipeSymbol === PipeSymbols.AppendOutputRedirection) {
+    return handleIoError(
+      stdIO,
+      `Invalid pipe symbol '${pipeSymbol}' for command: ${command}. > and >> can only be used to pipe into files.`,
+    );
+  }
+
+  // Echo arguments to pipes
   if (command === "echo") {
-    // Echo ignores its stdin and just outputs its arguments
-    handleEcho(commandStrings, stdout);
-    return () => {};
+    return handleEcho(args, stdIO);
   }
-
-  return (data: unknown, stdout: IOStream) => {
-    stdout.write(data);
-  };
 }
 
-function getFirstCommand(parsedCommands: (string | number | boolean)[]): string {
-  let firstCommand = "";
-
-  while (parsedCommands.length && !isPipeSymbol(parsedCommands[0])) {
-    const arg = `${parsedCommands[0]}`;
-    parsedCommands.shift();
-    firstCommand += arg + " ";
+export function findCommandsSplitByRedirects(commands: Args[]) {
+  const result: Args[][] = [];
+  let currentCommand: Args[] = [];
+  for (const token of commands) {
+    if (isPipeSymbol(token)) {
+      result.push(currentCommand);
+      currentCommand = [token];
+    } else {
+      currentCommand.push(token);
+    }
   }
-  return firstCommand.trim();
+  result.push(currentCommand);
+  return result;
 }
 
-function handleEcho(commandStrings: string[], stdout: IOStream): void {
-  // TODO: close stdin
-  const args = commandStrings.slice(1);
-  for (const arg of args) {
-    stdout.write(arg);
-  }
-  stdout.close();
+function handleEcho(argList: Args[], stdIO: StdIO): void {
+  stdIO.stdout.write(argList.join(" "));
+  stdIO.stdout.close();
+  stdIO.stdin?.deref()?.close();
 }
 
 export function getTerminalStdIO(stdin: IOStream) {
@@ -90,6 +84,81 @@ export function getTerminalStdIO(stdin: IOStream) {
   void startTerminalOutputStream(stdIO);
 
   return stdIO;
+}
+
+function handlePipeToFile(fileName: string, pipeType: string | null, stdIO: StdIO) {
+  if (!pipeType) {
+    return handleIoError(stdIO, `Invalid command string: no pipe symbol found for piping to file ${fileName}.`);
+  }
+  if (pipeType !== PipeSymbols.OutputRedirection && pipeType !== PipeSymbols.AppendOutputRedirection) {
+    return handleIoError(
+      stdIO,
+      `Invalid pipe symbol '${pipeType}' for piping to file ${fileName}. Only > and >> are allowed.`,
+    );
+  }
+
+  // No output from writing to files
+  stdIO.stdout.close();
+
+  if (hasTextExtension(fileName)) {
+    writeToTextFile(fileName, pipeType, stdIO);
+  } else if (hasScriptExtension(fileName)) {
+    writeToScriptFile(fileName, pipeType, stdIO);
+  } else {
+    return handleIoError(stdIO, `Invalid file extension for piping to file: ${fileName}.`);
+  }
+}
+
+function writeToTextFile(filename: string, pipeType: string, stdIO: StdIO) {
+  let file = Terminal.getTextFile(filename);
+  const overwrite = pipeType === PipeSymbols.OutputRedirection;
+
+  if (!file) {
+    file = new TextFile(filename as TextFilePath, "");
+    Player.getCurrentServer().textFiles.set(filename as TextFilePath, file);
+  }
+
+  if (file?.content && overwrite) {
+    file.content = "";
+  }
+
+  void callOnRead(stdIO, (data: unknown) => {
+    const currentFile = Terminal.getTextFile(filename);
+    if (!currentFile) {
+      return;
+    }
+    const output = stringify(data);
+    if (currentFile.content) {
+      currentFile.content += "\n";
+    }
+    currentFile.content += output;
+  });
+}
+
+function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): void {
+  let file = Terminal.getScript(filename);
+  const overwrite = pipeType === PipeSymbols.OutputRedirection;
+
+  if (!file) {
+    file = new Script(filename as ScriptFilePath, "");
+    Player.getCurrentServer().scripts.set(filename as ScriptFilePath, file);
+  }
+
+  if (file?.content && overwrite) {
+    return handleIoError(stdIO, `Overwriting non-empty script files is forbidden. Attempted to overwrite ${filename}.`);
+  }
+
+  void callOnRead(stdIO, (data: unknown) => {
+    const currentFile = Terminal.getScript(filename);
+    if (!currentFile) {
+      return;
+    }
+    const output = stringify(data);
+    if (currentFile.content) {
+      currentFile.content += "\n";
+    }
+    currentFile.content += output;
+  });
 }
 
 async function startTerminalOutputStream(stdio: StdIO) {
@@ -104,8 +173,18 @@ async function startTerminalOutputStream(stdio: StdIO) {
 
 export async function callOnRead(stdio: StdIO, callback: (data: unknown, stout: IOStream) => Promise<void> | void) {
   for await (const data of stdio.read()) {
+    const streamIsCleared = stdio.stdin?.deref()?.isClosed && stdio.stdin?.deref()?.empty();
+    if (data === DATA_STREAM_CLOSED || streamIsCleared) {
+      return;
+    }
     await callback(data, stdio.stdout);
   }
+}
+
+function handleIoError(stdio: StdIO, error: string) {
+  stdio.stdout.close();
+  stdio.stdin?.deref()?.close();
+  Terminal.error(error);
 }
 
 function stringify(s: unknown, stripAnsiEscape = false): string {
@@ -121,6 +200,8 @@ function stringify(s: unknown, stripAnsiEscape = false): string {
     const div = document.createElement("div");
     div.innerHTML = markup.replaceAll(">", "> ");
     return div.textContent ?? div.innerText ?? "";
+  } else if (typeof s === "string" || typeof s === "number" || typeof s === "boolean") {
+    return s.toString();
   } else {
     return JSON.stringify(s);
   }

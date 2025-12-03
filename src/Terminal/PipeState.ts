@@ -18,7 +18,7 @@ export const PipeSymbols = {
   InputRedirection: "<",
 } as const;
 
-export function isPipeSymbol(symbol: string | number | boolean): symbol is keyof typeof PipeSymbols {
+export function isPipeSymbol(symbol: string | number | boolean): boolean {
   return Object.keys(PipeSymbols).some((key) => PipeSymbols[key as keyof typeof PipeSymbols] === symbol);
 }
 

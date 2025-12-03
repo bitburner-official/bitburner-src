@@ -23,11 +23,11 @@ export class StdIO {
   // Async iterator to read from stdin
   async *[Symbol.asyncIterator]() {
     const stdin = this.stdin?.deref();
-    if (!stdin || stdin.isClosed) {
+    if (!stdin || (stdin.isClosed && stdin.empty())) {
       return;
     }
-    while (!stdin.isClosed) {
-      if (stdin.empty()) {
+    while (!stdin.isClosed || !stdin.empty()) {
+      if (stdin.empty() && !stdin.isClosed) {
         await stdin.nextWrite();
       }
       yield stdin.read();
