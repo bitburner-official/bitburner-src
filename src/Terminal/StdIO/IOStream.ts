@@ -4,8 +4,8 @@ import { getNextStdinHandle } from "../Pipe";
 
 export const DATA_STREAM_CLOSED = "DATA_STREAM_CLOSED";
 
-export class DataStream implements NetscriptPort {
-  closed: boolean = false;
+export class IOStream implements NetscriptPort {
+  isClosed: boolean = false;
 
   handle: PortHandle = getNextStdinHandle();
 
@@ -14,17 +14,17 @@ export class DataStream implements NetscriptPort {
   }
 
   write(value: any): unknown {
-    if (this.closed) {
+    if (this.isClosed) {
       return;
     }
     if (value === DATA_STREAM_CLOSED) {
-      this.closed = true;
+      this.isClosed = true;
     }
     return this.handle.write(value);
   }
 
   tryWrite(value: any): boolean {
-    if (this.closed) {
+    if (this.isClosed) {
       return false;
     }
     this.write(value);

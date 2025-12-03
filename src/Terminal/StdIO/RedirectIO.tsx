@@ -2,7 +2,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { parseCommand } from "../Parser";
 import { isPipeSymbol } from "../PipeState";
-import { DataStream } from "./DataStream";
+import { IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
 import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
@@ -21,7 +21,7 @@ export function buildRedirectedCommandChain(commandString: string) {
   let firstCommand;
   while ((firstCommand = getFirstCommand(parsedCommands))) {
     parsedCommands = parsedCommands.slice(firstCommand.length);
-    redirectCommandChain.push(firstCommand);
+    //redirectCommandChain.push(firstCommand); // TODO
   }
 
   // todo: validateInputRedirectionAndConvertToCat
@@ -30,20 +30,35 @@ export function buildRedirectedCommandChain(commandString: string) {
     const cmd = redirectCommandChain[i];
     const priorIO = redirectIOChain[i - 1];
 
-    const callback = getCallbackForRedirectedCommand(cmd);
-
     // TODO: call the command with priorIO.stdin as its stdin
 
-    const stdIO = new StdIO(priorIO?.stdout ?? null, callback);
+    const stdIO = new StdIO(priorIO?.stdout ?? null);
+    // TODO: change this to handle commands individually. Not all need a call on read.
+    void callOnRead(stdIO, getCallbackForRedirectedCommand(cmd, stdIO.stdout));
     redirectIOChain.push(stdIO);
   }
 
   getTerminalStdIO(redirectIOChain[redirectIOChain.length - 1].stdout);
 }
 
-function getCallbackForRedirectedCommand(command: string[]): (data: unknown, stdout: DataStream) => Promise<void> | void {
-  // TODO - identify command and pipe type
-  return (data: unknown, stdout: DataStream) => {
+function getCallbackForRedirectedCommand(
+  commandStrings: string[],
+  stdout: IOStream,
+): (data: unknown, stdout: IOStream) => Promise<void> | void {
+  const pipeSymbol = isPipeSymbol(commandStrings[0]) ? commandStrings[0] : null;
+  const command = commandStrings.find((cmd) => !isPipeSymbol(cmd));
+
+  if (!command) {
+    Terminal.error(`Invalid command: no command found after output redirect.`);
+  }
+
+  if (command === "echo") {
+    // Echo ignores its stdin and just outputs its arguments
+    handleEcho(commandStrings, stdout);
+    return () => {};
+  }
+
+  return (data: unknown, stdout: IOStream) => {
     stdout.write(data);
   };
 }
@@ -59,17 +74,37 @@ function getFirstCommand(parsedCommands: (string | number | boolean)[]): string 
   return firstCommand.trim();
 }
 
-export function getTerminalStdIO(stdin: DataStream) {
-  const stdIO = new StdIO(stdin, terminalOutput);
+function handleEcho(commandStrings: string[], stdout: IOStream): void {
+  // TODO: close stdin
+  const args = commandStrings.slice(1);
+  for (const arg of args) {
+    stdout.write(arg);
+  }
+  stdout.close();
+}
+
+export function getTerminalStdIO(stdin: IOStream) {
+  const stdIO = new StdIO(stdin);
   stdIO.stdout.close();
+
+  void startTerminalOutputStream(stdIO);
+
   return stdIO;
 }
 
-function terminalOutput(data: unknown, __: DataStream): void {
-  if (data instanceof Output || data instanceof Link || data instanceof RawOutput) {
-    Terminal.terminalOutput(data);
-  } else {
-    Terminal.printAndBypassPipes(stringify(data));
+async function startTerminalOutputStream(stdio: StdIO) {
+  return callOnRead(stdio, (data: unknown) => {
+    if (data instanceof Output || data instanceof Link || data instanceof RawOutput) {
+      Terminal.terminalOutput(data);
+    } else {
+      Terminal.printAndBypassPipes(stringify(data));
+    }
+  });
+}
+
+export async function callOnRead(stdio: StdIO, callback: (data: unknown, stout: IOStream) => Promise<void> | void) {
+  for await (const data of stdio.read()) {
+    await callback(data, stdio.stdout);
   }
 }
 

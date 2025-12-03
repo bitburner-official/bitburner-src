@@ -1,4 +1,4 @@
-import { DATA_STREAM_CLOSED, DataStream } from "./DataStream";
+import { IOStream } from "./IOStream";
 
 // todo: registry
 export const StdIORegistry = new FinalizationRegistry((name: string) => {
@@ -6,39 +6,35 @@ export const StdIORegistry = new FinalizationRegistry((name: string) => {
 });
 
 export class StdIO {
-  stdin: WeakRef<DataStream> | null = null;
+  stdin: WeakRef<IOStream> | null = null;
 
-  stdout: DataStream;
+  stdout: IOStream;
 
-  constructor(
-    stdin: DataStream | null,
-    onRead: ((data: any, stdout: DataStream) => Promise<void> | void) | undefined,
-    stdout: DataStream = new DataStream(),
-  ) {
+  constructor(stdin: IOStream | null, stdout: IOStream = new IOStream()) {
     if (stdin) {
       this.stdin = new WeakRef(stdin);
     }
     this.stdout = stdout;
-    if (onRead) {
-      void PullData(this, onRead);
-    }
     const id = `StdIO-${Date.now()}`;
     StdIORegistry.register(this, id);
     //console.log(`Created StdIO instance ${id}`);
   }
-}
 
-// TODO: docs
-async function PullData(stdIO: StdIO, callback: (data: any, stdout: DataStream) => Promise<void> | void) {
-  while (stdIO?.stdin && stdIO.stdin.deref() && !stdIO.stdin?.deref()?.closed) {
-    while (!stdIO.stdin?.deref()?.empty()) {
-      const line = stdIO.stdin.deref()?.read();
-      if (line === DATA_STREAM_CLOSED) {
-        console.log("StdIO: Detected DATA_STREAM_CLOSED, stopping PullData.");
-        return;
-      }
-      await callback(line, stdIO.stdout);
+  // Async iterator to read from stdin
+  async *[Symbol.asyncIterator]() {
+    const stdin = this.stdin?.deref();
+    if (!stdin || stdin.isClosed) {
+      return;
     }
-    await stdIO.stdin.deref()?.nextWrite();
+    while (!stdin.isClosed) {
+      if (stdin.empty()) {
+        await stdin.nextWrite();
+      }
+      yield stdin.read();
+    }
+  }
+
+  read() {
+    return this[Symbol.asyncIterator]();
   }
 }

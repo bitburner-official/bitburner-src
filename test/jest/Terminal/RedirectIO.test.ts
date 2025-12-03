@@ -1,5 +1,5 @@
-import { DataStream } from "../../../src/Terminal/StdIO/DataStream";
-import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
+import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
+import { callOnRead, getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
 import { Terminal } from "../../../src/Terminal";
 import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
 import { GetServer, prestigeAllServers } from "../../../src/Server/AllServers";
@@ -22,7 +22,7 @@ describe("RedirectIOTests", () => {
 
   it("should redirect output to the terminal correctly from a TerminalStdIO", async () => {
     const data = "Hello, Terminal!";
-    const stdout = new DataStream();
+    const stdout = new IOStream();
     const terminalIO = getTerminalStdIO(stdout);
     expect(terminalIO.stdin.deref()).toBe(stdout);
     stdout.write(data);
@@ -34,10 +34,12 @@ describe("RedirectIOTests", () => {
 
   it("should pass along redirect output through a pass-through StdIO", async () => {
     const data = "Hello, Distant Terminal!";
-    const stdin = new DataStream();
-    const stdio = new StdIO(stdin, (data, out) => {
-      out.write(data);
+    const stdin = new IOStream();
+    const stdio = new StdIO(stdin);
+    void callOnRead(stdio, (data: unknown) => {
+      stdio.stdout.write(data);
     });
+
     getTerminalStdIO(stdio.stdout);
 
     stdin.write(data);
