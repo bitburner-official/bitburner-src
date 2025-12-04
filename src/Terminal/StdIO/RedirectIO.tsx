@@ -26,9 +26,10 @@ export function parseRedirectedCommands(commandString: string) {
     handleCommand(priorStdIO, commandSet);
     priorStdIO = new StdIO(priorStdIO.stdout);
   }
+  getTerminalStdIO(priorStdIO.stdout);
 }
 
-export function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
+export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPipe = true) {
   const pipeSymbol = isPipeSymbol(commandStrings[0]) ? `${commandStrings[0]}` : null;
   const command = `${pipeSymbol ? commandStrings[1] : commandStrings[0]}`;
   const args = pipeSymbol ? commandStrings.slice(2) : commandStrings.slice(1);
@@ -53,6 +54,10 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
   // Echo arguments to pipes
   if (command === "echo") {
     return handleEcho(args, stdIO);
+  }
+
+  if (command === "cat") {
+    return handleCat(args, stdIO, hasOutputPipe);
   }
 }
 
@@ -84,6 +89,16 @@ export function getTerminalStdIO(stdin: IOStream) {
   void startTerminalOutputStream(stdIO);
 
   return stdIO;
+}
+
+function handleCat(argList: Args[], stdIO: StdIO, hasOutputPipe: boolean): void {
+  if (!hasOutputPipe) {
+    // TODO: implement live cat window
+    return handleIoError(stdIO, `cat tail window is not yet implemented.`);
+  }
+
+  // TODO: call cat
+  // TODO: get output stream from cat
 }
 
 function handlePipeToFile(fileName: string, pipeType: string | null, stdIO: StdIO) {
@@ -144,14 +159,16 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
     Player.getCurrentServer().scripts.set(filename as ScriptFilePath, file);
   }
 
-  if (file?.content && overwrite) {
-    return handleIoError(stdIO, `Overwriting non-empty script files is forbidden. Attempted to overwrite ${filename}.`);
-  }
-
   void callOnRead(stdIO, (data: unknown) => {
     const currentFile = Terminal.getScript(filename);
     if (!currentFile) {
       return;
+    }
+    if (file?.content && overwrite) {
+      return handleIoError(
+        stdIO,
+        `Overwriting non-empty script files is forbidden. Attempted to overwrite ${filename}.`,
+      );
     }
     const output = stringify(data);
     if (currentFile.content) {

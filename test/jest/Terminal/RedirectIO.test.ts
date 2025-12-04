@@ -12,6 +12,7 @@ import { GetServer, prestigeAllServers } from "../../../src/Server/AllServers";
 import { Player } from "@player";
 import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
 import { TextFilePath } from "../../../src/Paths/TextFilePath";
+import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -108,6 +109,19 @@ describe("RedirectIOTests", () => {
       const file = server?.textFiles.get(filename as TextFilePath);
       expect(file).toBeDefined();
       expect(file?.content).toBe("First Line\nSecond Line");
+    });
+
+    it("should prevent overwriting non-empty script files", async () => {
+      const filename = "scriptOutput.js";
+      const commandString = `echo Hello > ${filename} | echo World > ${filename}`;
+
+      parseRedirectedCommands(commandString);
+      await sleep(50);
+
+      const server = GetServer(Player.currentServer);
+      const file = server?.scripts.get(filename as ScriptFilePath);
+      expect(file).toBeDefined();
+      expect(file?.content).toBe("Hello");
     });
   });
 });
