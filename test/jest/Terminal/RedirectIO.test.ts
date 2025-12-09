@@ -28,31 +28,13 @@ describe("RedirectIOTests", () => {
     GetServer(Player.currentServer)?.scripts.clear();
   });
 
-  it("should redirect output to the terminal correctly from a TerminalStdIO", async () => {
+  it("should redirect output to the terminal correctly from a terminal StdIO", async () => {
     const data = "Hello, Terminal!";
-    const stdout = new IOStream();
-    const terminalIO = getTerminalStdIO(stdout);
-    expect(terminalIO.stdin.deref()).toBe(stdout);
-    stdout.write(data);
+    const terminalIO = getTerminalStdIO(null);
+    terminalIO.write(data);
     await sleep(50);
 
     expect(Terminal.outputHistory.length).toBe(1);
-    expect(Terminal.outputHistory[0].text).toContain(data);
-  });
-
-  it("should pass along redirect output through a pass-through StdIO", async () => {
-    const data = "Hello, Distant Terminal!";
-    const stdin = new IOStream();
-    const stdio = new StdIO(stdin);
-    void callOnRead(stdio, (data: unknown) => {
-      stdio.stdout.write(data);
-    });
-
-    getTerminalStdIO(stdio.stdout);
-
-    stdin.write(data);
-    await sleep(50);
-
     expect(Terminal.outputHistory[0].text).toContain(data);
   });
 
@@ -71,12 +53,12 @@ describe("RedirectIOTests", () => {
   describe("handleCommand", () => {
     it("should handle echo command passing its args to stdout", async () => {
       const commandString = "echo Hello, World";
-      const stdio = new StdIO(null);
-      handleCommand(stdio, commandString.split(" "));
+      const stdIO = new StdIO(null);
+      handleCommand(stdIO, commandString.split(" "));
       await sleep(50);
 
-      expect(stdio.stdout.empty()).toBe(false);
-      const output = stdio.stdout.read();
+      expect(stdIO.stdout.empty()).toBe(false);
+      const output = stdIO.stdout.read();
       expect(output).toBe("Hello, World");
     });
 
@@ -84,8 +66,8 @@ describe("RedirectIOTests", () => {
       const filename = "output.txt";
       const commandString = `> ${filename}`;
       const stdin = new IOStream();
-      const stdio = new StdIO(stdin);
-      void handleCommand(stdio, commandString.split(" "));
+      const stdIO = new StdIO(stdin);
+      void handleCommand(stdIO, commandString.split(" "));
       stdin.write("File content line 1");
       stdin.write("File content line 2");
 

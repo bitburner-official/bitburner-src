@@ -26,8 +26,9 @@ import {
 import { isMember } from "../../utils/EnumHelper";
 import { Settings } from "../../Settings/Settings";
 import { formatBytes, formatRam } from "../../ui/formatNumber";
+import { StdIO } from "../StdIO/StdIO";
 
-export function ls(args: (string | number | boolean)[], server: BaseServer): void {
+export function ls(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   enum FileType {
     Folder,
     Message,
@@ -73,7 +74,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
 
   const numArgs = args.length;
   function incorrectUsage(): void {
-    Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]");
+    Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]", stdIO);
   }
 
   if (numArgs > 5) {
@@ -253,7 +254,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     })();
     function onClick(): void {
       if (!server.isConnectedTo) {
-        return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
+        return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`, stdIO);
       }
       // Message and lit files are always in root, no need to combine path with base directory
       if (isMember("MessageFilename", props.path)) {
@@ -318,6 +319,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
           >
             {nameElement}
           </LongListItem>,
+          stdIO,
         );
       }
     } else {
@@ -326,7 +328,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         return React.cloneElement(nameElement, { key: segmentPath.toString() });
       });
       const colSize = Math.ceil(Math.max(...segments.map((segment) => segment.length)) * 0.7) + "em";
-      Terminal.printRaw(<SegmentGrid colSize={colSize}>{segmentElements}</SegmentGrid>);
+      Terminal.printRaw(<SegmentGrid colSize={colSize}>{segmentElements}</SegmentGrid>, stdIO);
     }
   }
 

@@ -1,23 +1,31 @@
 import { IOStream } from "./IOStream";
+import { stringify } from "./RedirectIO";
+import { Terminal } from "../../Terminal";
+import { Output, RawOutput, Link } from "../OutputTypes";
 
-// todo: registry
+export let remaining = 0;
+export const registerStdIOInstance = (stdIO: StdIO) => {
+  const id = `StdIO-${Math.random().toString(16).slice(2)}`;
+  StdIORegistry.register(stdIO, id);
+  remaining++;
+  console.log(`Created StdIO instance ${id}`);
+};
 export const StdIORegistry = new FinalizationRegistry((name: string) => {
-  console.log(`StdIO instance ${name} has been garbage collected`);
+  remaining--;
+  console.log(`StdIO instance ${name} has been garbage collected. Remaining instances: ${remaining}`);
 });
 
 export class StdIO {
   stdin: WeakRef<IOStream> | null = null;
 
-  stdout: IOStream;
+  stdout: IOStream | null;
 
-  constructor(stdin: IOStream | null, stdout: IOStream = new IOStream()) {
+  constructor(stdin: IOStream | null, stdout: IOStream | null = new IOStream()) {
     if (stdin) {
       this.stdin = new WeakRef(stdin);
     }
     this.stdout = stdout;
-    const id = `StdIO-${Date.now()}`;
-    StdIORegistry.register(this, id);
-    //console.log(`Created StdIO instance ${id}`);
+    registerStdIOInstance(this);
   }
 
   // Async iterator to read from stdin
@@ -36,5 +44,20 @@ export class StdIO {
 
   read() {
     return this[Symbol.asyncIterator]();
+  }
+
+  write(data: unknown): unknown {
+    if (this.stdout) {
+      return this.stdout.write(stringify(data, true));
+    }
+    if (data instanceof Output || data instanceof Link || data instanceof RawOutput) {
+      return Terminal.terminalOutput(data);
+    }
+    Terminal.printAndBypassPipes(stringify(data));
+  }
+
+  close(): void {
+    this.stdout?.close();
+    this.stdin?.deref()?.close();
   }
 }

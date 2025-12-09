@@ -23,12 +23,10 @@ import {
   PipeSymbols,
 } from "./PipeState";
 import { Settings } from "../Settings/Settings";
-import { runScript } from "./commands/runScript";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { RunningScript } from "../Script/RunningScript";
 import { PortHandle, PortNumber } from "../NetscriptPort";
-
-TerminalEvents.subscribe(handlePipe);
+import { getTerminalStdIO } from "./StdIO/RedirectIO";
 
 // TODO-Fico - add pipe documentation page
 
@@ -111,7 +109,7 @@ export function handlePipe(): void {
   }
 
   // All other commands ignore stdin
-  Terminal.executeCommand(commandString);
+  Terminal.executeCommand(commandString, getTerminalStdIO(null));
 }
 
 export function buildRedirectedCommandChain(commandString: string): boolean {
@@ -312,7 +310,7 @@ function handlePipeToScript(
   parsedCommand: (string | number | boolean)[],
   currentPipe: RedirectedCommand,
 ): void {
-  const args = parsedCommand[0].toString().toLowerCase() === "run" ? parsedCommand.slice(1) : parsedCommand;
+  //const args = parsedCommand[0].toString().toLowerCase() === "run" ? parsedCommand.slice(1) : parsedCommand;
   const currentInput = getNextOutputStringified();
 
   // If the script has already been launched in a prior evaluation of the pipe chain, just add to the script's stdin
@@ -327,15 +325,15 @@ function handlePipeToScript(
   }
 
   PipeState.outputToBeProcessed.shift();
-  const runningScript = runScript(scriptName as ScriptFilePath, args.slice(1), Player.getCurrentServer());
-  if (!runningScript?.stdin) {
-    return;
-  }
-
-  writeInputToScriptStdIn(runningScript.pid, currentInput, currentPipe);
-  runningScript.temporary = true;
-  currentPipe.stdInPort = runningScript.pid;
-  TerminalEvents.emit();
+  //const runningScript = runScript(scriptName as ScriptFilePath, args.slice(1), Player.getCurrentServer());
+  // if (!runningScript?.stdin) {
+  //   return;
+  // }
+  //
+  // writeInputToScriptStdIn(runningScript.pid, currentInput, currentPipe);
+  // runningScript.temporary = true;
+  // currentPipe.stdInPort = runningScript.pid;
+  // TerminalEvents.emit();
 }
 
 function writeInputToScriptStdIn(scriptPid: number | undefined, input: string[], currentPipe: RedirectedCommand): void {
@@ -358,7 +356,7 @@ function handleGrep(commandString: string) {
   advancePipe();
 
   const newCommand = `${commandString} "${output}"`;
-  Terminal.executeCommand(newCommand);
+  Terminal.executeCommand(newCommand, getTerminalStdIO(null));
 }
 
 // TODO: document

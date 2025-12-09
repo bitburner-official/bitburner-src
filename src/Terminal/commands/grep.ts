@@ -6,6 +6,7 @@ import { Settings } from "../../Settings/Settings";
 import { help } from "../commands/help";
 import { Output } from "../OutputTypes";
 import { pluralize } from "../../utils/I18nUtils";
+import { StdIO } from "../StdIO/StdIO";
 
 type LineParser = (options: Options, filename: string, line: string, i: number) => ParsedLine;
 
@@ -20,7 +21,7 @@ const WHITE: string = "\x1b[37m";
 const ERR = {
   noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
   noSearchArg:
-    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server, or pass -p/--pipe-terminal to search terminal output, or pass a string to search in.",
+    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
   badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
   badParameter: (option: string, arg: string) =>
     `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
@@ -30,8 +31,6 @@ const ERR = {
     `grep file output failed: Invalid output file "${path}". Output file path must be a valid text file. (.txt, .json, .css)`,
   truncated: () =>
     `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
-  multipleInputTypes: () =>
-    "grep argument error: multiple source types indicated. Use only one of: -p/--pipe-terminal to search terminal output, or provide a file name, or provide a string to search.",
 } as const;
 
 type ArgStrings = {
@@ -375,25 +374,26 @@ function writeToTerminal(
   results: Results,
   files: ContentFile[],
   pattern: string | RegExp,
+  stdIO: StdIO,
 ): void {
   const printResult = prettyResult.slice(0, Math.min(prettyResult.length, Settings.MaxTerminalCapacity)); // limit printing to terminal
   const verboseInfo = results.getVerboseInfo(files, pattern, options);
   const truncateInfo = prettyResult.length !== printResult.length ? ERR.truncated() : "";
-  if (results.areEdited) Terminal.print(printResult.join("\n") + truncateInfo);
-  if (options.isVerbose) Terminal.print(verboseInfo);
+  if (results.areEdited) stdIO.write(printResult.join("\n") + truncateInfo);
+  if (options.isVerbose) stdIO.write(verboseInfo);
 }
 
-function checkOutFile(outFileStr: string, options: Options, server: BaseServer): ContentFilePath | null {
+function checkOutFile(outFileStr: string, options: Options, server: BaseServer, stdIO: StdIO): ContentFilePath | null {
   if (!outFileStr) {
     return null;
   }
   const outFilePath = Terminal.getFilepath(outFileStr);
   if (!outFilePath || !hasTextExtension(outFilePath)) {
-    Terminal.error(ERR.badOutFile(outFileStr));
+    Terminal.error(ERR.badOutFile(outFileStr), stdIO);
     return null;
   }
   if (!options.isOverWrite && server.textFiles.has(outFilePath)) {
-    Terminal.error(ERR.outFileExists(outFileStr));
+    Terminal.error(ERR.outFileExists(outFileStr), stdIO);
     return null;
   }
   return outFilePath;
@@ -403,68 +403,45 @@ function grabTerminal(): string[] {
   return Terminal.outputHistory.map((line) => (line as Output).text ?? "");
 }
 
-export function grep(args: (string | number | boolean)[], server: BaseServer): void {
-  if (!args.length) return Terminal.error(ERR.noArgs);
+// TODO-FICO: add support for grep stdin
+export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+  if (!args.length) return Terminal.error(ERR.noArgs, stdIO);
 
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
-  if (options.isHelp) return help(["grep"]);
+  if (options.isHelp) return help(["grep"], server, stdIO);
   options.hasContextFlag = !!params.context || !!params.preContext || !!params.postContext;
 
   const nContext = Math.max(Number(params.preContext), Number(params.context), Number(params.postContext));
   const nLimit = Number(params.maxMatches);
 
   if (options.hasContextFlag && (!nContext || isNaN(Number(params.context))))
-    return Terminal.error(ERR.badParameter("context", params.context));
+    return Terminal.error(ERR.badParameter("context", params.context), stdIO);
   if (params.maxMatches && (!nLimit || isNaN(Number(params.maxMatches))))
-    return Terminal.error(ERR.badParameter("limit", params.maxMatches));
+    return Terminal.error(ERR.badParameter("limit", params.maxMatches), stdIO);
 
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
-  if (notFiles.length > 1) return Terminal.error(ERR.badArgs(notFiles));
-  if (notFiles.length + files.length + +options.isSearchAll + +options.isPipeIn > 1)
-    return Terminal.error(ERR.multipleInputTypes());
-  if (!options.isPipeIn && !options.isSearchAll && !files.length && notFiles.length !== 1)
-    return Terminal.error(ERR.noSearchArg);
+  if (notFiles.length) return Terminal.error(ERR.badArgs(notFiles), stdIO);
+  if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg, stdIO);
 
   options.isMultiFile = files.length > 1;
-  const outFilePath = checkOutFile(params.outfile, options, server);
+  const outFilePath = checkOutFile(params.outfile, options, server, stdIO);
   if (params.outfile && !outFilePath) return; // associated errors are printed in checkOutFile
 
   try {
     const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
-    const contentToMatch = getContentToMatch(pattern, options, files, notFiles);
+    const lineParser = parseLine.bind(null, pattern);
+    const termParser = lineParser.bind(null, options, "Terminal");
+    const fileParser = parseFile.bind(null, lineParser, options);
+    const contentToMatch = options.isPipeIn ? grabTerminal().map(termParser) : files.flatMap(fileParser);
     const results = new Results(contentToMatch, options, params);
     const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
 
     if (options.isPipeIn) files.length = 0;
-    if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern);
+    if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern, stdIO);
     if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
   } catch (error) {
     console.error(error);
-    Terminal.error(`grep processing error: ${error}`);
+    Terminal.error(`grep processing error: ${error}`, stdIO);
   }
-}
-
-function getContentToMatch(
-  pattern: RegExp | string,
-  options: Options,
-  files: ContentFile[],
-  notFiles: string[],
-): ParsedLine[] {
-  if (notFiles.length) {
-    return notFiles
-      .join("\n")
-      .split("\n")
-      .map((c, i) => parseLine(pattern, options, "", c, i));
-  }
-
-  const lineParser = parseLine.bind(null, pattern);
-  const termParser = lineParser.bind(null, options, "Terminal");
-  const fileParser = parseFile.bind(null, lineParser, options);
-
-  if (options.isPipeIn) {
-    return grabTerminal().map(termParser);
-  }
-
-  return files.flatMap(fileParser);
 }

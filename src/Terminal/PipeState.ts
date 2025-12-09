@@ -1,6 +1,5 @@
 import { Link, Output, RawOutput } from "./OutputTypes";
 import { Settings } from "../Settings/Settings";
-import { Terminal } from "../Terminal";
 import { TerminalEvents } from "./TerminalEvents";
 import { PortHandle } from "../NetscriptPort";
 
@@ -57,7 +56,6 @@ export function getNextOutput(): RedirectedOutput | null {
 export function handlePipeError(error: string, currentPipe = PipeState.currentTerminalPipe) {
   if (currentPipe && !currentPipe?.hasShownError) {
     currentPipe.hasShownError = true;
-    Terminal.error(`Error in pipe command: ${error}`);
   }
   clearPipe();
 }

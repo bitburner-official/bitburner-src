@@ -2,23 +2,25 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
+import { StdIO } from "../StdIO/StdIO";
 
-export function wget(args: (string | number | boolean)[], server: BaseServer): void {
+// TODO-FICO: support STDIO
+export function wget(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 2 || typeof args[0] !== "string" || typeof args[1] !== "string") {
-    Terminal.error("Incorrect usage of wget command. Usage: wget [url] [target file]");
+    Terminal.error("Incorrect usage of wget command. Usage: wget [url] [target file]", stdIO);
     return;
   }
 
   const target = Terminal.getFilepath(args[1]);
   if (!target || (!hasScriptExtension(target) && !hasTextExtension(target))) {
-    Terminal.error(`wget failed: Invalid target file. Target file must be a script file or a text file.`);
+    Terminal.error(`wget failed: Invalid target file. Target file must be a script file or a text file.`, stdIO);
     return;
   }
 
   fetch(args[0])
     .then(async (response) => {
       if (response.status !== 200) {
-        Terminal.error(`wget failed. HTTP code: ${response.status}.`);
+        Terminal.error(`wget failed. HTTP code: ${response.status}.`, stdIO);
         return;
       }
       const writeResult = server.writeToContentFile(target, await response.text());
@@ -30,6 +32,6 @@ export function wget(args: (string | number | boolean)[], server: BaseServer): v
     })
     .catch((reason) => {
       // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
-      Terminal.error(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`);
+      Terminal.error(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`, stdIO);
     });
 }

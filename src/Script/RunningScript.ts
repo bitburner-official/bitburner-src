@@ -21,6 +21,7 @@ import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
 import { addOutputToBeProcessed, type RedirectedCommand } from "../Terminal/PipeState";
 import { RawOutput } from "../Terminal/OutputTypes";
+import { StdIO } from "../Terminal/StdIO/StdIO";
 
 export class RunningScript {
   // Script arguments
@@ -128,12 +129,12 @@ export class RunningScript {
     }
   }
 
-  displayLog(): void {
+  displayLog(stdIO: StdIO): void {
     for (const log of this.logs) {
       if (typeof log === "string") {
-        Terminal.print(log);
+        Terminal.print(log, stdIO);
       } else {
-        Terminal.printRaw(log);
+        Terminal.printRaw(log, stdIO);
       }
     }
   }

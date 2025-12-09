@@ -52,6 +52,7 @@ import { validBitNodes } from "../BitNode/Constants";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -465,7 +466,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const filename = helpers.string(ctx, "filename", _filename);
       const server = Player.getCurrentServer();
-      cat([filename], server);
+      cat([filename], server, getTerminalStdIO(null)); // TODO-FICO: pass in script stdout
     },
     connect: (ctx) => (_host) => {
       helpers.checkSingularityAccess(ctx);

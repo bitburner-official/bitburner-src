@@ -13,11 +13,14 @@ import { pluralize } from "../../utils/I18nUtils";
 import { RunningScript } from "../../Script/RunningScript";
 import { PipeState } from "../PipeState";
 import { PortHandle, PortNumber } from "../../NetscriptPort";
+import { StdIO } from "../StdIO/StdIO";
 
+// TODO-FICO: store stdio on script, mark script as temporary
 export function runScript(
   scriptPath: ScriptFilePath,
   commandArgs: (string | number | boolean)[],
   server: BaseServer,
+  stdIO: StdIO,
 ): RunningScript | undefined {
   if (isLegacyScript(scriptPath)) {
     sendDeprecationNotice();
@@ -38,19 +41,20 @@ export function runScript(
       argv: commandArgs,
     });
   } catch (error) {
-    Terminal.error(`Invalid arguments. ${error}.`);
+    Terminal.error(`Invalid arguments. ${error}.`, stdIO);
     return;
   }
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : undefined;
   if (!isPositiveInteger(numThreads)) {
-    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
+    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0", stdIO);
     return;
   }
   if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
     Terminal.error(
       `Invalid ram override specified. Ram override must be a number greater than ${RamCostConstants.Base}`,
+      stdIO,
     );
     return;
   }
@@ -66,7 +70,7 @@ export function runScript(
     args,
   );
   if (!result.success) {
-    Terminal.error(result.message);
+    Terminal.error(result.message, stdIO);
     return;
   }
 
@@ -76,7 +80,7 @@ export function runScript(
 
   const success = startWorkerScript(runningScript, server);
   if (!success) {
-    Terminal.error(`Failed to start script`);
+    Terminal.error(`Failed to start script`, stdIO);
     return;
   }
 

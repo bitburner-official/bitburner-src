@@ -19,14 +19,17 @@ export function parseRedirectedCommands(commandString: string) {
   const parsed = parseCommand(commandString);
   const commandSets = findCommandsSplitByRedirects(parsed);
   if (commandSets.length <= 1) {
-    return null;
+    return false;
   }
   let priorStdIO: StdIO | null = new StdIO(null);
   for (const commandSet of commandSets) {
     handleCommand(priorStdIO, commandSet);
     priorStdIO = new StdIO(priorStdIO.stdout);
   }
-  getTerminalStdIO(priorStdIO.stdout);
+  // Redirect last command's stdout to terminal
+  priorStdIO.stdout?.close();
+  priorStdIO.stdout = null;
+  return true;
 }
 
 export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPipe = true) {
@@ -39,6 +42,7 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPip
   }
 
   // Pipe to file
+  // TODO-FICO: this isn't working?
   if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeSymbol !== PipeSymbols.Pipe))) {
     return handlePipeToFile(command, pipeSymbol, stdIO);
   }
@@ -59,6 +63,8 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPip
   if (command === "cat") {
     return handleCat(args, stdIO, hasOutputPipe);
   }
+
+  Terminal.executeCommand([command, ...args].join(" "), stdIO);
 }
 
 export function findCommandsSplitByRedirects(commands: Args[]) {
@@ -77,18 +83,12 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
 }
 
 function handleEcho(argList: Args[], stdIO: StdIO): void {
-  stdIO.stdout.write(argList.join(" "));
-  stdIO.stdout.close();
-  stdIO.stdin?.deref()?.close();
+  stdIO.write(argList.join(" "));
+  stdIO.close();
 }
 
-export function getTerminalStdIO(stdin: IOStream) {
-  const stdIO = new StdIO(stdin);
-  stdIO.stdout.close();
-
-  void startTerminalOutputStream(stdIO);
-
-  return stdIO;
+export function getTerminalStdIO(stdin: IOStream | null = null) {
+  return new StdIO(stdin, null);
 }
 
 function handleCat(argList: Args[], stdIO: StdIO, hasOutputPipe: boolean): void {
@@ -113,7 +113,7 @@ function handlePipeToFile(fileName: string, pipeType: string | null, stdIO: StdI
   }
 
   // No output from writing to files
-  stdIO.stdout.close();
+  stdIO.stdout?.close();
 
   if (hasTextExtension(fileName)) {
     writeToTextFile(fileName, pipeType, stdIO);
@@ -178,33 +178,21 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
   });
 }
 
-async function startTerminalOutputStream(stdio: StdIO) {
-  return callOnRead(stdio, (data: unknown) => {
-    if (data instanceof Output || data instanceof Link || data instanceof RawOutput) {
-      Terminal.terminalOutput(data);
-    } else {
-      Terminal.printAndBypassPipes(stringify(data));
-    }
-  });
-}
-
-export async function callOnRead(stdio: StdIO, callback: (data: unknown, stout: IOStream) => Promise<void> | void) {
-  for await (const data of stdio.read()) {
-    const streamIsCleared = stdio.stdin?.deref()?.isClosed && stdio.stdin?.deref()?.empty();
-    if (data === DATA_STREAM_CLOSED || streamIsCleared) {
+export async function callOnRead(stdIO: StdIO, callback: (data: unknown, stout: IOStream) => Promise<void> | void) {
+  for await (const data of stdIO.read()) {
+    const streamIsCleared = stdIO.stdin?.deref()?.isClosed && stdIO.stdin?.deref()?.empty();
+    if (data === DATA_STREAM_CLOSED || streamIsCleared || !stdIO.stdout) {
       return;
     }
-    await callback(data, stdio.stdout);
+    await callback(data, stdIO.stdout);
   }
 }
 
-function handleIoError(stdio: StdIO, error: string) {
-  stdio.stdout.close();
-  stdio.stdin?.deref()?.close();
-  Terminal.error(error);
+function handleIoError(stdIO: StdIO, error: string) {
+  Terminal.error(error, stdIO);
 }
 
-function stringify(s: unknown, stripAnsiEscape = false): string {
+export function stringify(s: unknown, stripAnsiEscape = false): string {
   if (!s) {
     return "";
   } else if (s instanceof Output) {
@@ -218,8 +206,8 @@ function stringify(s: unknown, stripAnsiEscape = false): string {
     div.innerHTML = markup.replaceAll(">", "> ");
     return div.textContent ?? div.innerText ?? "";
   } else if (typeof s === "string" || typeof s === "number" || typeof s === "boolean") {
-    return s.toString();
+    return s.toString().replaceAll(ANSI_ESCAPE, "");
   } else {
-    return JSON.stringify(s);
+    return JSON.stringify(s).replaceAll(ANSI_ESCAPE, "");
   }
 }

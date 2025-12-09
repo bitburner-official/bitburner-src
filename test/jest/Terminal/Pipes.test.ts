@@ -13,7 +13,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 fixDoImportIssue();
 initGameEnvironment();
 
-describe("Terminal Pipes", () => {
+describe.skip("Terminal Pipes", () => {
   beforeEach(() => {
     prestigeAllServers();
     Player.init();

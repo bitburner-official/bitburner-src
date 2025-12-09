@@ -15,6 +15,7 @@ import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { StdIO } from "../Terminal/StdIO/StdIO";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -52,25 +53,25 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(1),
       time: CONSTANTS.MillisecondsPerFiveMinutes,
     },
-    run: (args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.nuke, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot nuke this kind of server.");
+        Terminal.error("Cannot nuke this kind of server.", stdIO);
         return;
       }
       if (server.hasAdminRights) {
-        Terminal.print("You already have root access to this computer. There is no reason to run NUKE.exe");
-        Terminal.print("You can now run scripts on this server.");
+        Terminal.print("You already have root access to this computer. There is no reason to run NUKE.exe", stdIO);
+        Terminal.print("You can now run scripts on this server.", stdIO);
         return;
       }
       if (server.openPortCount >= server.numOpenPortsRequired) {
         server.hasAdminRights = true;
-        Terminal.print("NUKE successful! Gained root access to " + server.hostname);
-        Terminal.print("You can now run scripts on this server.");
+        Terminal.print("NUKE successful! Gained root access to " + server.hostname, stdIO);
+        Terminal.print("You can now run scripts on this server.", stdIO);
         return;
       }
 
-      Terminal.print("NUKE unsuccessful. Not enough ports have been opened");
+      Terminal.print("NUKE unsuccessful. Not enough ports have been opened", stdIO);
     },
   }),
   [CompletedProgramName.bruteSsh]: new Program({
@@ -81,19 +82,19 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(50),
       time: CONSTANTS.MillisecondsPerFiveMinutes * 2,
     },
-    run: (args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.bruteSsh, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run BruteSSH.exe on this kind of server.");
+        Terminal.error("Cannot run BruteSSH.exe on this kind of server.", stdIO);
         return;
       }
       if (server.sshPortOpen) {
-        Terminal.print("SSH Port (22) is already open!");
+        Terminal.print("SSH Port (22) is already open!", stdIO);
         return;
       }
 
       server.sshPortOpen = true;
-      Terminal.print("Opened SSH Port(22)!");
+      Terminal.print("Opened SSH Port(22)!", stdIO);
       server.openPortCount++;
     },
   }),
@@ -105,19 +106,19 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(100),
       time: CONSTANTS.MillisecondsPerHalfHour,
     },
-    run: (args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.ftpCrack, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run FTPCrack.exe on this kind of server.");
+        Terminal.error("Cannot run FTPCrack.exe on this kind of server.", stdIO);
         return;
       }
       if (server.ftpPortOpen) {
-        Terminal.print("FTP Port (21) is already open!");
+        Terminal.print("FTP Port (21) is already open!", stdIO);
         return;
       }
 
       server.ftpPortOpen = true;
-      Terminal.print("Opened FTP Port (21)!");
+      Terminal.print("Opened FTP Port (21)!", stdIO);
       server.openPortCount++;
     },
   }),
@@ -129,19 +130,19 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(250),
       time: CONSTANTS.MillisecondsPer2Hours,
     },
-    run: (args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.relaySmtp, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run relaySMTP.exe on this kind of server.");
+        Terminal.error("Cannot run relaySMTP.exe on this kind of server.", stdIO);
         return;
       }
       if (server.smtpPortOpen) {
-        Terminal.print("SMTP Port (25) is already open!");
+        Terminal.print("SMTP Port (25) is already open!", stdIO);
         return;
       }
 
       server.smtpPortOpen = true;
-      Terminal.print("Opened SMTP Port (25)!");
+      Terminal.print("Opened SMTP Port (25)!", stdIO);
       server.openPortCount++;
     },
   }),
@@ -153,19 +154,19 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(500),
       time: CONSTANTS.MillisecondsPer4Hours,
     },
-    run: (args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.httpWorm, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run HTTPWorm.exe on this kind of server.");
+        Terminal.error("Cannot run HTTPWorm.exe on this kind of server.", stdIO);
         return;
       }
       if (server.httpPortOpen) {
-        Terminal.print("HTTP Port (80) is already open!");
+        Terminal.print("HTTP Port (80) is already open!", stdIO);
         return;
       }
 
       server.httpPortOpen = true;
-      Terminal.print("Opened HTTP Port (80)!");
+      Terminal.print("Opened HTTP Port (80)!", stdIO);
       server.openPortCount++;
     },
   }),
@@ -177,19 +178,19 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(750),
       time: CONSTANTS.MillisecondsPer8Hours,
     },
-    run: (args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.sqlInject, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run SQLInject.exe on this kind of server.");
+        Terminal.error("Cannot run SQLInject.exe on this kind of server.", stdIO);
         return;
       }
       if (server.sqlPortOpen) {
-        Terminal.print("SQL Port (1433) is already open!");
+        Terminal.print("SQL Port (1433) is already open!", stdIO);
         return;
       }
 
       server.sqlPortOpen = true;
-      Terminal.print("Opened SQL Port (1433)!");
+      Terminal.print("Opened SQL Port (1433)!", stdIO);
       server.openPortCount++;
     },
   }),
@@ -201,9 +202,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(75),
       time: CONSTANTS.MillisecondsPerQuarterHour,
     },
-    run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("DeepscanV1.exe lets you run 'scan-analyze' with a depth up to 5.");
+    run: (__, ___, stdIO: StdIO): void => {
+      Terminal.print("This executable cannot be run.", stdIO);
+      Terminal.print("DeepscanV1.exe lets you run 'scan-analyze' with a depth up to 5.", stdIO);
     },
   }),
   [CompletedProgramName.deepScan2]: new Program({
@@ -214,9 +215,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(400),
       time: CONSTANTS.MillisecondsPer2Hours,
     },
-    run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("DeepscanV2.exe lets you run 'scan-analyze' with a depth up to 10.");
+    run: (__, ___, stdIO: StdIO): void => {
+      Terminal.print("This executable cannot be run.", stdIO);
+      Terminal.print("DeepscanV2.exe lets you run 'scan-analyze' with a depth up to 10.", stdIO);
     },
   }),
   [CompletedProgramName.serverProfiler]: new Program({
@@ -227,44 +228,47 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(75),
       time: CONSTANTS.MillisecondsPerHalfHour,
     },
-    run: (args: string[]): void => {
+    run: (args: string[], __, stdIO: StdIO): void => {
       if (args.length !== 1) {
-        Terminal.error("Must pass a server hostname or IP as an argument for ServerProfiler.exe");
+        Terminal.error("Must pass a server hostname or IP as an argument for ServerProfiler.exe", stdIO);
         return;
       }
 
       const targetServer = GetServer(args[0]);
       if (targetServer == null) {
-        Terminal.error("Invalid server IP/hostname");
+        Terminal.error("Invalid server IP/hostname", stdIO);
         return;
       }
 
       if (!(targetServer instanceof Server)) {
-        Terminal.error(`ServerProfiler.exe can only be run on normal servers.`);
+        Terminal.error(`ServerProfiler.exe can only be run on normal servers.`, stdIO);
         return;
       }
 
-      Terminal.print(targetServer.hostname + ":");
-      Terminal.print("Server base security level: " + targetServer.baseDifficulty);
-      Terminal.print("Server current security level: " + targetServer.hackDifficulty);
-      Terminal.print("Server growth rate: " + targetServer.serverGrowth);
+      Terminal.print(targetServer.hostname + ":", stdIO);
+      Terminal.print("Server base security level: " + targetServer.baseDifficulty, stdIO);
+      Terminal.print("Server current security level: " + targetServer.hackDifficulty, stdIO);
+      Terminal.print("Server growth rate: " + targetServer.serverGrowth, stdIO);
       Terminal.print(
         `Netscript hack() execution time: ${convertTimeMsToTimeElapsedString(
           calculateHackingTime(targetServer, Player) * 1000,
           true,
         )}`,
+        stdIO,
       );
       Terminal.print(
         `Netscript grow() execution time: ${convertTimeMsToTimeElapsedString(
           calculateGrowTime(targetServer, Player) * 1000,
           true,
         )}`,
+        stdIO,
       );
       Terminal.print(
         `Netscript weaken() execution time: ${convertTimeMsToTimeElapsedString(
           calculateWeakenTime(targetServer, Player) * 1000,
           true,
         )}`,
+        stdIO,
       );
     },
   }),
@@ -276,10 +280,10 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(25),
       time: CONSTANTS.MillisecondsPerQuarterHour,
     },
-    run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("AutoLink.exe lets you automatically connect to other servers when using 'scan-analyze'.");
-      Terminal.print("When using scan-analyze, click on a server's hostname to connect to it.");
+    run: (__, ___, stdIO: StdIO): void => {
+      Terminal.print("This executable cannot be run.", stdIO);
+      Terminal.print("AutoLink.exe lets you automatically connect to other servers when using 'scan-analyze'.", stdIO);
+      Terminal.print("When using scan-analyze, click on a server's hostname to connect to it.", stdIO);
     },
   }),
   [CompletedProgramName.formulas]: new Program({
@@ -290,9 +294,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: requireHackingLevel(1000),
       time: CONSTANTS.MillisecondsPer4Hours,
     },
-    run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("Formulas.exe lets you use the formulas API.");
+    run: (__, ___, stdIO: StdIO): void => {
+      Terminal.print("This executable cannot be run.", stdIO);
+      Terminal.print("Formulas.exe lets you use the formulas API.", stdIO);
     },
   }),
   [CompletedProgramName.bitFlume]: new Program({
@@ -316,31 +320,31 @@ export const Programs: Record<CompletedProgramName, Program> = {
   [CompletedProgramName.flight]: new Program({
     name: CompletedProgramName.flight,
     create: null,
-    run: (): void => {
+    run: (__, ___, stdIO: StdIO): void => {
       const numAugReq = currentNodeMults.DaedalusAugsRequirement;
       const fulfilled =
         Player.augmentations.length >= numAugReq && Player.money >= 1e11 && Player.skills.hacking >= 2500;
       if (!fulfilled) {
         if (Player.augmentations.length >= numAugReq) {
-          Terminal.print(`[x] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+          Terminal.print(`[x] Augmentations: ${Player.augmentations.length} / ${numAugReq}`, stdIO);
         } else {
-          Terminal.print(`[ ] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+          Terminal.print(`[ ] Augmentations: ${Player.augmentations.length} / ${numAugReq}`, stdIO);
         }
         if (Player.money >= 1e11) {
-          Terminal.print(`[x] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
+          Terminal.print(`[x] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`, stdIO);
         } else {
-          Terminal.print(`[ ] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
+          Terminal.print(`[ ] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`, stdIO);
         }
         if (Player.skills.hacking >= 2500) {
-          Terminal.print(`[x] Hacking skill: ${Player.skills.hacking} / 2500`);
+          Terminal.print(`[x] Hacking skill: ${Player.skills.hacking} / 2500`, stdIO);
         } else {
-          Terminal.print(`[ ] Hacking skill: ${Player.skills.hacking} / 2500`);
+          Terminal.print(`[ ] Hacking skill: ${Player.skills.hacking} / 2500`, stdIO);
         }
         return;
       }
 
-      Terminal.print("We will contact you.");
-      Terminal.print(`-- ${FactionName.Daedalus} --`);
+      Terminal.print("We will contact you.", stdIO);
+      Terminal.print(`-- ${FactionName.Daedalus} --`, stdIO);
     },
   }),
 };

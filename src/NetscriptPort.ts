@@ -26,7 +26,6 @@ export class Port {
   data: unknown[] = [];
   resolver: Resolver | null = null;
   promise: Promise<void> | null = null;
-  subscribers: ((data: unknown) => void)[] = [];
   add(data: unknown) {
     this.data.push(data);
     if (!this.resolver) return;
@@ -47,8 +46,6 @@ export class PortHandle implements NetscriptPort {
     const port = getPort(this.n);
     // Primitives don't need to be cloned.
     port.add(isObjectLike(value) ? structuredClone(value) : value);
-    port.subscribers.forEach((callback) => callback(value));
-
     if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
     return null;
   }
@@ -80,11 +77,6 @@ export class PortHandle implements NetscriptPort {
     const port = getPort(this.n);
     if (!port.promise) port.promise = new Promise<void>((res) => (port.resolver = res));
     return port.promise;
-  }
-
-  subscribe(callback: (data: unknown) => void): void {
-    const port = getPort(this.n);
-    port.subscribers.push(callback);
   }
 
   full(): boolean {
