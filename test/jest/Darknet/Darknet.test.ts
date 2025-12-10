@@ -14,6 +14,7 @@ import {
   getDivisibilityTestConfig,
   getRomanNumeralConfig,
   romanNumeralDecoder,
+  cleanArithmeticExpression,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
@@ -228,11 +229,7 @@ describe("Password Tests", () => {
     ).toBeCloseTo(2319.425);
 
     const expression = generateSimpleArithmeticExpression(20);
-    const cleanedExpression = expression
-      .replaceAll("ҳ", "*")
-      .replaceAll("➕", "+")
-      .replaceAll("➖", "-")
-      .replaceAll("÷", "/");
+    const cleanedExpression = cleanArithmeticExpression(expression);
     expect(eval(cleanedExpression)).toBeCloseTo(parseSimpleArithmeticExpression(cleanedExpression));
   });
 

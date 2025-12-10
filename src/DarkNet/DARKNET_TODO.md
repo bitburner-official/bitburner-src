@@ -4,8 +4,6 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
-- change induceMigration: cannot target own server
-
 - lore dumps: accidentally made humans from sim
 
 - more hint notes

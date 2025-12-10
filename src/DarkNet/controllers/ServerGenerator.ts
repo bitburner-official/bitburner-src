@@ -480,8 +480,7 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
   const result = expression.join(" ");
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const calc = parseFloat(eval(result));
+    const calc = parseSimpleArithmeticExpression(cleanArithmeticExpression(result));
     if (Math.abs(calc) < 0.1) {
       return generateSimpleArithmeticExpression(difficulty);
     }
@@ -496,6 +495,15 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
   }
 
   return result;
+};
+
+export const cleanArithmeticExpression = (expression: string): string => {
+  const expressionWithFixedSymbols = expression
+    .replaceAll("ҳ", "*")
+    .replaceAll("÷", "/")
+    .replaceAll("➕", "+")
+    .replaceAll("➖", "-");
+  return expressionWithFixedSymbols.split(",")[0];
 };
 
 const getCodeInjection = () => {
