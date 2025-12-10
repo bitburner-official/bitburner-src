@@ -749,7 +749,7 @@ export class Terminal {
   executeCommand(command: string, stdIO: StdIO): void {
     if (this.action !== null)
       return this.error(`Cannot execute command (${command}) while an action is in progress`, stdIO);
-    if (parseRedirectedCommands(command)) {
+    if (parseRedirectedCommands(command)) { // TODO-fico: move this to executeCommands
       return;
     }
 
@@ -924,7 +924,7 @@ export class Terminal {
       this.pidOfLastScriptRun = null;
     }
 
-    if (!this.action && commandName.toLowerCase() !== "wget") {
+    if (!this.action && commandName.toLowerCase() !== "wget" && commandName.toLowerCase() !== "run") {
       stdIO.close();
     }
   }

@@ -3,16 +3,16 @@ import { stringify } from "./RedirectIO";
 import { Terminal } from "../../Terminal";
 import { Output, RawOutput, Link } from "../OutputTypes";
 
-export let remaining = 0;
-export const registerStdIOInstance = (stdIO: StdIO) => {
+let remaining = 0;
+const registerStdIOInstance = (stdIO: StdIO) => {
   const id = `StdIO-${Math.random().toString(16).slice(2)}`;
   StdIORegistry.register(stdIO, id);
   remaining++;
-  console.log(`Created StdIO instance ${id}`);
+  console.debug(`Created StdIO instance ${id}. Instances remaining: ${remaining}`);
 };
-export const StdIORegistry = new FinalizationRegistry((name: string) => {
+const StdIORegistry = new FinalizationRegistry((name: string) => {
   remaining--;
-  console.log(`StdIO instance ${name} has been garbage collected. Remaining instances: ${remaining}`);
+  console.debug(`StdIO instance ${name} has been garbage collected. Remaining instances: ${remaining}`);
 });
 
 export class StdIO {
@@ -42,6 +42,7 @@ export class StdIO {
     }
   }
 
+  // Read from stdin via the async iterator
   read() {
     return this[Symbol.asyncIterator]();
   }
@@ -50,6 +51,7 @@ export class StdIO {
     if (this.stdout) {
       return this.stdout.write(stringify(data, true));
     }
+    // If there is no stdout, write to the terminal
     if (data instanceof Output || data instanceof Link || data instanceof RawOutput) {
       return Terminal.terminalOutput(data);
     }

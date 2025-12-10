@@ -19,7 +19,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
   const path = Terminal.getFilepath(String(arg));
   if (!path) return Terminal.error(`${arg} is not a valid filepath.`, stdIO);
   if (hasScriptExtension(path)) {
-    // TODO: move script tail to here
+    // TODO-Fico: move script tail to here?
     runScript(path, args, server, stdIO);
     return;
   } else if (hasContractExtension(path)) {

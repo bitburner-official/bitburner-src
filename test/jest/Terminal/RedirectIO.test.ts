@@ -1,6 +1,5 @@
 import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
 import {
-  callOnRead,
   findCommandsSplitByRedirects,
   getTerminalStdIO,
   handleCommand,

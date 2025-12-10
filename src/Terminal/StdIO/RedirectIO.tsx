@@ -13,6 +13,8 @@ import { TextFile } from "../../TextFile";
 import { Player } from "@player";
 import { Script } from "../../Script/Script";
 
+// TODO-Fico - add pipe documentation page
+
 type Args = string | number | boolean;
 
 export function parseRedirectedCommands(commandString: string) {

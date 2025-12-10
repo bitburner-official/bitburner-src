@@ -28,7 +28,6 @@ import { RunningScript } from "../Script/RunningScript";
 import { PortHandle, PortNumber } from "../NetscriptPort";
 import { getTerminalStdIO } from "./StdIO/RedirectIO";
 
-// TODO-Fico - add pipe documentation page
 
 /*
 - new class StdIO - stdin, stdout, onRead

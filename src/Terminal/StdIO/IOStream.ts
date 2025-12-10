@@ -2,7 +2,7 @@ import { NetscriptPort } from "@nsdefs";
 import { PortHandle } from "../../NetscriptPort";
 import { getNextStdinHandle } from "../Pipe";
 
-export const DATA_STREAM_CLOSED = "DATA_STREAM_CLOSED";
+export const DATA_STREAM_CLOSED = "IO_STREAM_CLOSED";
 
 export class IOStream implements NetscriptPort {
   isClosed: boolean = false;
