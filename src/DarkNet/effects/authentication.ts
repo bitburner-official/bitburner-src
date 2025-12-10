@@ -40,6 +40,10 @@ export const checkPassword = (
       const hintData = Number(attemptedPassword) > Number(server.password) ? "Lower" : "Higher";
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, hintData);
     }
+    case ModelIds.RomanNumeral: {
+      const hintData = Number(attemptedPassword) > Number(server.password) ? "ALTUS NIMIS" : "PARUM BREVIS";
+      return getFailureResponse(attemptedPassword, server.staticPasswordHint, hintData);
+    }
     case ModelIds.Yesn_t: {
       const response = attemptedPassword
         .split("")

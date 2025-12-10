@@ -221,7 +221,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
       passwordHintData: encodedPassword,
     };
   } else {
-    const passwordRangeMin = 0;
+    const passwordRangeMin = Math.random() < 0.3 ? 0 : Math.floor(password * (Math.random() * 0.2 + 0.6));
     const passwordRangeMax = password + Math.floor(Math.random() * difficulty * 10 + 10);
     const encodedMin = romanNumeralEncoder(passwordRangeMin);
     const encodedMax = romanNumeralEncoder(passwordRangeMax);
