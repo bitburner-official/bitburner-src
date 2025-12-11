@@ -21,7 +21,6 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
   const easyServers = [getEchoVulnConfig, getSortedEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
   const mediumServers = [
     getMastermindHintConfig,
-    getDefaultPasswordConfig,
     getDogNameConfig,
     getRomanNumeralConfig,
     getGuessNumberConfig,
