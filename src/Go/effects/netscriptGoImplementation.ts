@@ -242,9 +242,11 @@ export function getChains(_board?: Board) {
 export function getLiberties(_board?: Board) {
   const board = _board || Go.currentGame.board;
   return board.map((column) =>
-    column.reduce((libertyArray: number[], point) => {
-      libertyArray.push(point?.liberties?.length || -1);
-      return libertyArray;
+    column.map((point) => {
+      if (!point || point.color === GoColor.empty) {
+        return -1;
+      }
+      return point.liberties.length;
     }, []),
   );
 }
