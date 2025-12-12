@@ -243,7 +243,7 @@ export function getLiberties(_board?: Board) {
   const board = _board || Go.currentGame.board;
   return board.map((column) =>
     column.map((point) => {
-      if (!point || point.color === GoColor.empty) {
+      if (!point?.liberties || point.color === GoColor.empty) {
         return -1;
       }
       return point.liberties.length;
