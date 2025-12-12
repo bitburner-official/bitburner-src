@@ -10,7 +10,7 @@ import { Terminal } from "../Terminal";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { formatTime } from "../utils/helpers/formatTime";
-import { NetscriptPort, ScriptArg } from "@nsdefs";
+import {ScriptArg } from "@nsdefs";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
 import { getKeyList } from "../utils/helpers/getKeyList";
@@ -19,9 +19,9 @@ import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
-import { addOutputToBeProcessed, type RedirectedCommand } from "../Terminal/PipeState";
-import { RawOutput } from "../Terminal/OutputTypes";
 import { StdIO } from "../Terminal/StdIO/StdIO";
+import { IOStream } from "../Terminal/StdIO/IOStream";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 export class RunningScript {
   // Script arguments
@@ -74,16 +74,16 @@ export class RunningScript {
   // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
   scriptKey = "" as ScriptKey;
 
-  stdin: NetscriptPort | null = null;
+  stdin: IOStream | null = null;
 
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
 
   // Configuration for piping the script's tail output
-  tailOutputPipeConfig: RedirectedCommand | null = null;
+  tailStdOut: StdIO | null = null;
 
   // Configuration for piping the script's terminal output
-  terminalOutputPipeConfig: RedirectedCommand | null = null;
+  terminalStdOut: StdIO = getTerminalStdIO(null);
 
   // The title, as shown in the script's log box. Defaults to the name + args,
   // but can be changed by the user. If it is set to a React element (only by the user),
@@ -124,9 +124,7 @@ export class RunningScript {
     this.logs.push(logEntry);
     this.logUpd = true;
 
-    if (this.tailOutputPipeConfig) {
-      addOutputToBeProcessed(new RawOutput(logEntry), this.tailOutputPipeConfig);
-    }
+    this.tailStdOut?.write(logEntry);
   }
 
   displayLog(stdIO: StdIO): void {

@@ -12,6 +12,7 @@ import { hasScriptExtension, ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { TextFile } from "../../TextFile";
 import { Player } from "@player";
 import { Script } from "../../Script/Script";
+import { Settings } from "../../Settings/Settings";
 
 // TODO-Fico - add pipe documentation page
 
@@ -21,14 +22,16 @@ export function parseRedirectedCommands(commandString: string) {
   const parsed = parseCommand(commandString);
   const commandSets = findCommandsSplitByRedirects(parsed);
   if (commandSets.length <= 1) {
-    return false;
+    return Terminal.executeCommand(commandString, getTerminalStdIO(null));
   }
+
   let priorStdIO: StdIO | null = new StdIO(null);
   for (const commandSet of commandSets) {
     handleCommand(priorStdIO, commandSet);
     priorStdIO = new StdIO(priorStdIO.stdout);
   }
   // Redirect last command's stdout to terminal
+  // TODO-Fico: this isnt working?
   priorStdIO.stdout?.close();
   priorStdIO.stdout = null;
   return true;
@@ -44,7 +47,6 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPip
   }
 
   // Pipe to file
-  // TODO-FICO: this isn't working?
   if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeSymbol !== PipeSymbols.Pipe))) {
     return handlePipeToFile(command, pipeSymbol, stdIO);
   }
@@ -145,26 +147,18 @@ function writeToTextFile(filename: string, pipeType: string, stdIO: StdIO) {
       return;
     }
     const output = stringify(data);
-    if (currentFile.content) {
-      currentFile.content += "\n";
-    }
-    currentFile.content += output;
+    currentFile.content = concatenateFileContents(currentFile.content, output)
   });
 }
 
 function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): void {
-  let file = Terminal.getScript(filename);
   const overwrite = pipeType === PipeSymbols.OutputRedirection;
 
-  if (!file) {
-    file = new Script(filename as ScriptFilePath, "");
-    Player.getCurrentServer().scripts.set(filename as ScriptFilePath, file);
-  }
-
   void callOnRead(stdIO, (data: unknown) => {
-    const currentFile = Terminal.getScript(filename);
-    if (!currentFile) {
-      return;
+    let file = Terminal.getScript(filename);
+    if (!file) {
+      file = new Script(filename as ScriptFilePath, "", Player.getCurrentServer().hostname);
+      Player.getCurrentServer().scripts.set(filename as ScriptFilePath, file)
     }
     if (file?.content && overwrite) {
       return handleIoError(
@@ -173,10 +167,7 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
       );
     }
     const output = stringify(data);
-    if (currentFile.content) {
-      currentFile.content += "\n";
-    }
-    currentFile.content += output;
+    file.content = concatenateFileContents(file.content, output);
   });
 }
 
@@ -192,6 +183,17 @@ export async function callOnRead(stdIO: StdIO, callback: (data: unknown, stout: 
 
 function handleIoError(stdIO: StdIO, error: string) {
   Terminal.error(error, stdIO);
+}
+
+function concatenateFileContents(content: string, newContent: string): string {
+  const concatenatedContent = content + (content ? "\n" : "") + newContent;
+  const splitLines = concatenatedContent.split("\n");
+  if (splitLines.length > Settings.MaxTerminalCapacity * 5) {
+    const truncatedFileContent = splitLines.slice(-Settings.MaxTerminalCapacity * 5).join("\n");
+    return `(File truncated at ${Settings.MaxTerminalCapacity * 5} lines)\n${truncatedFileContent}`;
+  }
+
+  return concatenatedContent;
 }
 
 export function stringify(s: unknown, stripAnsiEscape = false): string {

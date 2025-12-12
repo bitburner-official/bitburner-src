@@ -8431,7 +8431,7 @@ export interface NS {
    * then the script can read that data from `ns.getStdin()` as well.
    * `await ns.getStdin().nextPortWrite()` can be used to wait until new data is available to read.
    */
-  getStdin(): NetscriptPort;
+  getStdin(): NetscriptPort | null;
 
   enums: NSEnums;
 }

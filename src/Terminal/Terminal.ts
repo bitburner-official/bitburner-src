@@ -170,23 +170,6 @@ export class Terminal {
     if (this.action.timeLeft < 0.01) this.finishAction(false);
   }
 
-  append(item: Output | Link | RawOutput, pid: number = -1): void {
-    // If logging comes from a script, put the output to be processed in that script's pipe buffer
-    const script = pid > -1 ? findRunningScriptByPid(pid) : null;
-    if (script?.terminalOutputPipeConfig) {
-      pushRedirectedOutput(item, script.terminalOutputPipeConfig);
-    }
-    // If the terminal has pipes set up, queue the output for processing
-    else if (PipeState.currentTerminalPipe !== null) {
-      pushRedirectedOutput(item, PipeState.currentTerminalPipe);
-    } else {
-      // Otherwise, simply push the output to stdout
-      this.terminalOutput(item);
-    }
-
-    TerminalEvents.emit();
-  }
-
   terminalOutput(item: Output | Link | RawOutput): void {
     this.outputHistory.push(item);
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
@@ -732,7 +715,9 @@ export class Terminal {
     }
     this.commandHistoryIndex = this.commandHistory.length;
     const allCommands = parseCommands(commands);
-    for (const command of allCommands) this.executeCommand(command, getTerminalStdIO(null));
+    for (const command of allCommands) {
+      parseRedirectedCommands(command);
+    }
   }
 
   clear(): void {
@@ -749,9 +734,6 @@ export class Terminal {
   executeCommand(command: string, stdIO: StdIO): void {
     if (this.action !== null)
       return this.error(`Cannot execute command (${command}) while an action is in progress`, stdIO);
-    if (parseRedirectedCommands(command)) { // TODO-fico: move this to executeCommands
-      return;
-    }
 
     const commandArray = parseCommand(command);
     if (!commandArray.length) return;

@@ -414,11 +414,11 @@ function getNextOutputStringified(stripAnsiEscape = false): string[] {
  * Ensures that pipe configurations on a saved script are properly reset when it starts up.
  * @param runningScript
  */
-export function cleanUpPipesOnSavedScript(runningScript: RunningScript): void {
-  if (runningScript.tailOutputPipeConfig) {
-    runningScript.tailOutputPipeConfig.stdInPort = undefined;
-  }
-  if (runningScript.terminalOutputPipeConfig) {
-    runningScript.terminalOutputPipeConfig.stdInPort = undefined;
-  }
-}
+// export function cleanUpPipesOnSavedScript(runningScript: RunningScript): void {
+//   if (runningScript.tailOutputPipeConfig) {
+//     runningScript.tailOutputPipeConfig.stdInPort = undefined;
+//   }
+//   if (runningScript.terminalOutputPipeConfig) {
+//     runningScript.terminalOutputPipeConfig.stdInPort = undefined;
+//   }
+// }

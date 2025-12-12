@@ -432,23 +432,24 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
       }
       const str = helpers.argsToString(args);
+      const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
         Terminal.error(`${ctx.workerScript.name}: ${str}`);
         return;
       }
       if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${ctx.workerScript.name}: ${str}`);
+        Terminal.success(`${ctx.workerScript.name}: ${str}`, stdOut);
         return;
       }
       if (str.startsWith("WARN")) {
-        Terminal.warn(`${ctx.workerScript.name}: ${str}`);
+        Terminal.warn(`${ctx.workerScript.name}: ${str}`, stdOut);
         return;
       }
       if (str.startsWith("INFO")) {
-        Terminal.info(`${ctx.workerScript.name}: ${str}`);
+        Terminal.info(`${ctx.workerScript.name}: ${str}`, stdOut);
         return;
       }
-      Terminal.print(`${ctx.workerScript.name}: ${str}`, getTerminalStdIO(null));
+      Terminal.print(`${ctx.workerScript.name}: ${str}`, stdOut);
     },
   tprintf:
     (ctx) =>
@@ -472,7 +473,7 @@ export const ns: InternalAPI<NSFull> = {
         Terminal.info(`${str}`);
         return;
       }
-      Terminal.print(`${str}`, getTerminalStdIO(null)); // TODO-FICO: pass in script stdout
+      Terminal.print(`${str}`, ctx.workerScript.scriptRef.terminalStdOut);
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
@@ -1476,7 +1477,8 @@ export const ns: InternalAPI<NSFull> = {
     return compile(script as Script, server.scripts);
   },
   getStdin: (ctx) => () => {
-    return new PortHandle((ctx.workerScript.pid * -1) as PortNumber);
+    const stdinHandle = ctx.workerScript.scriptRef.stdin?.handle;
+    return stdinHandle ? new PortHandle(stdinHandle.n) : null;
   },
   flags: Flags,
   heart: { break: () => () => Player.karma },

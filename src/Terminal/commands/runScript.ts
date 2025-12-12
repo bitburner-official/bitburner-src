@@ -11,8 +11,6 @@ import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 import { pluralize } from "../../utils/I18nUtils";
 import { RunningScript } from "../../Script/RunningScript";
-import { PipeState } from "../PipeState";
-import { PortHandle, PortNumber } from "../../NetscriptPort";
 import { StdIO } from "../StdIO/StdIO";
 
 // TODO-FICO: store stdio on script, mark script as temporary
@@ -93,12 +91,16 @@ export function runScript(
     LogBoxEvents.emit(runningScript);
   }
 
-  // Update script pipe config, if any is present from the terminal
-  runningScript.terminalOutputPipeConfig = PipeState.currentTerminalPipe ?? null;
-  PipeState.currentTerminalPipe = null;
   Terminal.pidOfLastScriptRun = runningScript.pid;
 
-  runningScript.stdin = new PortHandle((runningScript.pid * -1) as PortNumber);
+  // Bind stdio to script
+  runningScript.stdin = stdIO.stdin?.deref() ?? null;
+  runningScript.terminalStdOut = stdIO;
+
+  // scripts interacting with terminal pipes are temporary, to avoid orphaned or partial pipelines on start
+  if (runningScript.stdin || stdIO.stdout) {
+    runningScript.temporary = true;
+  }
 
   return runningScript;
 }

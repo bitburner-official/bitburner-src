@@ -105,4 +105,53 @@ describe("RedirectIOTests", () => {
       expect(file?.content).toBe("Hello");
     });
   });
+
+  describe("stdout from scripts", () => {
+    it("should redirect tprint output from a running script to a file", async () => {
+      const scriptName = "testScript.js";
+      const filename = "scriptLog.txt";
+      const scriptContent = `export function main(ns) { ns.tprint('Logging to file'); }`;
+      Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
+      await sleep(50);
+
+      const currentScripts = GetServer(Player.currentServer)?.scripts;
+      const script = currentScripts?.get(scriptName as ScriptFilePath);
+      expect(script?.content).toBe(scriptContent);
+
+      Terminal.executeCommands(`run ${scriptName} >> ${filename}`);
+      await sleep(50);
+
+      const server = GetServer(Player.currentServer);
+      const file = server?.textFiles.get(filename as TextFilePath);
+      expect(file?.content).toBe("testScript.js: Logging to file");
+    });
+  });
+
+  describe("stdin to scripts", () => {
+    it("should provide stdin input to a running script", async () => {
+      const scriptName = "inputScript.js";
+      const scriptContent =
+        `export async function main(ns) {
+          const stdIn = await ns.getStdin();
+          if (stdIn?.empty()) {
+            ns.tprint('No input received yet');
+            await stdIn.nextWrite();
+          }
+          const input = stdIn?.read();
+          ns.tprint('Received input: ' + input);
+        };`
+      Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
+      await sleep(500);
+
+      const inputData = "Hello from stdin!";
+      Terminal.executeCommands(`echo "${inputData}" | run ${scriptName}`);
+      await sleep(50);
+
+      console.log(Terminal.outputHistory);
+      const outputLog = Terminal.outputHistory.find(
+        (entry) => entry.text.includes('Received input:')
+      );
+      expect(outputLog?.text).toContain(`Received input: ${inputData}`);
+    });
+  });
 });

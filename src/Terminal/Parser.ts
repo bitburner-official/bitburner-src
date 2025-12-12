@@ -16,7 +16,6 @@ function parseArg(arg: string): string | number | boolean {
 /** split a commands string into a commands array */
 export function splitCommands(commandsText: string): string[] {
   // regex to match each entire command separately, without the semicolon included.
-  // TODO-Fico: support && linking
   const commandRegex = /(?:'[^']*'|"[^"]*"|[^;])*/g;
   const commands = commandsText.match(commandRegex);
   if (!commands) return [];
