@@ -110,7 +110,7 @@ const decorateName = (name: string): string => {
     if (count++ > 20) {
       // Just in case we hit a lot of the same name mutations, or if the player
       // messes with Math.random(), prevent an infinite loop
-      updatedName += `/T${new Date.now()}`;
+      updatedName += `/T${Date.now()}`;
       break;
     }
 
