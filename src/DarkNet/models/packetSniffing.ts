@@ -179,6 +179,10 @@ const getLogNoise = (server: DarknetServer, logDate: Date): LogEntry => {
     return log(`--${randomServer.password}--`);
   }
 
+  if (server.modelId === ModelIds.packetSniffer && Math.random() < 0.5 / (server.difficulty + 1)) {
+    return log("Authentication successful: " + server.password);
+  }
+
   return log(`${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`);
 };
 

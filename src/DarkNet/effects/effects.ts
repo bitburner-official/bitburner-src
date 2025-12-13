@@ -150,18 +150,17 @@ export const addClue = (server: DarknetServer) => {
 
   // some entries from the common password dictionary
   if (Math.random() < 0.1) {
-    const hintFileName =
-      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
-    const start = Math.floor(Math.random() * (commonPasswordDictionary.length - 6));
-    const commonPasswords = commonPasswordDictionary.slice(start, start + 6).join(", ");
+    const length = 15;
+    const hintFileName = getClueFileName(passwordFileNames);
+    const start = Math.floor(Math.random() * (commonPasswordDictionary.length - length));
+    const commonPasswords = commonPasswordDictionary.slice(start, start + length).join(", ");
     server.writeToTextFile(hintFileName as TextFilePath, `Some common passwords include ${commonPasswords}`);
     return;
   }
 
   // connected neighboring server's password (does not include server name)
   if (Math.random() < 0.1) {
-    const passwordHintName =
-      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
+    const passwordHintName = getClueFileName(passwordFileNames);
     const neighboringServerName = server.serversOnNetwork.find((s) => {
       const server = getDarknetServer(s);
       return server && !server.hasAdminRights && server.password;
@@ -175,8 +174,7 @@ export const addClue = (server: DarknetServer) => {
 
   // non-connected nearby server's password (includes server name)
   if (Math.random() < 0.1) {
-    const hintFileName =
-      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
+    const hintFileName = getClueFileName(passwordFileNames);
     const targetServer = getNearbyNonEmptyPasswordServer(server, true);
     if (targetServer) {
       const contents = `Server: ${targetServer.hostname} Password: "${targetServer.password}"`;
@@ -186,16 +184,14 @@ export const addClue = (server: DarknetServer) => {
   }
 
   if (Math.random() < 0.4) {
-    const hintFileName =
-      notebookFileNames[Math.floor(Math.random() * notebookFileNames.length)] + DarknetConstants.DataFileSuffix;
+    const hintFileName = getClueFileName(notebookFileNames);
     const loreNote = packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
     server.writeToTextFile(hintFileName as TextFilePath, loreNote);
     return;
   }
 
   if (Math.random() < 0.7) {
-    const hintFileName =
-      passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + DarknetConstants.DataFileSuffix;
+    const hintFileName = getClueFileName(passwordFileNames);
     const targetServer = getNearbyNonEmptyPasswordServer(server);
     if (targetServer) {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);
@@ -204,6 +200,10 @@ export const addClue = (server: DarknetServer) => {
       return;
     }
   }
+};
+
+const getClueFileName = (fileNameList: string[]): string => {
+  return fileNameList[Math.floor(Math.random() * fileNameList.length)] + DarknetConstants.DataFileSuffix;
 };
 
 export const getDarknetVolatilityMult = (symbol: string) => {

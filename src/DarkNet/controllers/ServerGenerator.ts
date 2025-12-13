@@ -18,19 +18,19 @@ import { MAX_PASSWORD_LENGTH } from "../Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 
 const getRandomServerConfigBuilder = (difficulty: number) => {
-  const easyServers = [getEchoVulnConfig, getSortedEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
-  const mediumServers = [
+  const tier0Servers = [getNoPasswordConfig];
+  const tier1Servers = [getEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
+  const tier2Servers = [getSortedEchoVulnConfig, getDogNameConfig, getYesn_tConfig];
+  const tier3Servers = [
     getMastermindHintConfig,
-    getDogNameConfig,
     getRomanNumeralConfig,
     getGuessNumberConfig,
-    getYesn_tConfig,
     getSpiceLevelConfig,
     getConvertToBase10Config,
     getDivisibilityTestConfig,
     getPacketSnifferConfig,
   ];
-  const hardServers = [
+  const tier4Servers = [
     getLargestPrimeFactorConfig,
     getLargeDictionaryConfig,
     getEuCountryDictionaryConfig,
@@ -40,18 +40,22 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
   ];
 
   if (difficulty <= 2) {
-    const serverBuilders = [getNoPasswordConfig, ...easyServers];
+    const serverBuilders = [...tier0Servers, ...tier1Servers];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
   }
   if (difficulty <= 4) {
-    const serverBuilders = [getNoPasswordConfig, ...easyServers, ...easyServers, ...mediumServers];
+    const serverBuilders = [...tier0Servers, ...tier1Servers, ...tier1Servers, ...tier2Servers, ...tier3Servers];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
   }
   if (difficulty <= 8) {
-    const serverBuilders = [...easyServers, ...mediumServers];
+    const serverBuilders = [...tier1Servers, ...tier2Servers, ...tier3Servers];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
   }
-  const serverBuilders = [getSortedEchoVulnConfig, ...mediumServers, ...hardServers];
+  if (difficulty <= 18) {
+    const serverBuilders = [...tier2Servers, ...tier3Servers, ...tier4Servers];
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
+  }
+  const serverBuilders = [...tier3Servers, ...tier4Servers];
   return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
 };
 

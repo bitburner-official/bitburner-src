@@ -28,7 +28,7 @@ export const addCacheToServer: (
 
 export const getRewardFromCache = (server: DarknetServer, cacheName: string, suppressToast = false): CacheResult => {
   const difficulty = server.difficulty;
-  const karmaLoss = (difficulty + 1) * 2;
+  const karmaLoss = difficulty + 1;
   Player.karma -= karmaLoss;
   if (isLabyrinthServer(server.hostname) && cacheName.includes(LAB_CACHE_NAME)) {
     const labReward = getLabReward();

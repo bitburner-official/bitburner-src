@@ -105,7 +105,15 @@ const getBaseName = (): string => {
 
 const decorateName = (name: string): string => {
   let updatedName = name;
+  let count = 0;
   do {
+    if (count++ > 20) {
+      // Just in case we hit a lot of the same name mutations, or if the player
+      // messes with Math.random(), prevent an infinite loop
+      updatedName += `/T${new Date.now()}`;
+      break;
+    }
+
     const connector = connectors[Math.floor(Math.random() * connectors.length)];
 
     if (Math.random() < 0.3) {
