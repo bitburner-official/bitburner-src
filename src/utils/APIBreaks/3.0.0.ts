@@ -506,5 +506,15 @@ export const breakingChanges300: VersionBreakingChange = {
         "name is the same as another contract's name.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        { name: "ns.go.analysis.getValidMoves" },
+        { name: "ns.go.analysis.getChains" },
+        { name: "ns.go.analysis.getLiberties" },
+        { name: "ns.go.analysis.getControlledEmptyNodes" },
+      ],
+      info: "ns.go.analysis methods no longer apply captures to custom board states passed to them, and instead evaluate the given board exactly as-is.",
+      showWarning: false,
+    },
   ],
 };

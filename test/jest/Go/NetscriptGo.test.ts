@@ -156,6 +156,36 @@ describe("Netscript Go API unit tests", () => {
       ]);
     });
 
+    it("should correctly find available moves for a given board when playing as white", () => {
+      const boardState = ["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"];
+      const mockNetscriptContext = getMockedNetscriptContext();
+
+      const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext)(boardState, null, true);
+
+      expect(result).toEqual([
+        [false, false, false, true, true],
+        [false, false, false, true, false],
+        [true, false, true, true, false],
+        [true, true, true, false, false],
+        [true, true, false, false, false],
+      ]);
+    });
+
+    it("should correctly find available moves for a given board when playing as white and given a prior board", () => {
+      const boardState = ["#..##", ".....", "...O.", ".....", "....."];
+      const mockNetscriptContext = getMockedNetscriptContext();
+
+      const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext)(boardState, boardState, true);
+
+      expect(result).toEqual([
+        [false, true, true, false, false],
+        [true, true, true, true, true],
+        [true, true, true, false, true],
+        [true, true, true, true, true],
+        [true, true, true, true, true],
+      ]);
+    });
+
     it("should return all valid and invalid moves on the board, if a board is provided", () => {
       const currentBoard = [".....", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(currentBoard, GoOpponent.Daedalus, GoColor.white);
@@ -210,6 +240,21 @@ describe("Netscript Go API unit tests", () => {
         [3, -1, 3, -1, 3],
       ]);
     });
+
+    it("should show zero liberties for groups that would be captured and -1 for empty spaces or offline nodes", () => {
+      const boardState = [".XXX#", "XOOOX", "XOXOX", "XOOOX", "XXXX."];
+      const mockNetscriptContext = getMockedNetscriptContext();
+
+      const result = NetscriptGo().analysis.getLiberties(mockNetscriptContext)(boardState);
+
+      expect(result).toEqual([
+        [-1, 1, 1, 1, -1],
+        [2, 0, 0, 0, 1],
+        [2, 0, 0, 0, 1],
+        [2, 0, 0, 0, 1],
+        [2, 2, 2, 2, -1],
+      ]);
+    });
   });
   describe("getControlledEmptyNodes() unit tests", () => {
     it("should show the owner of each empty node, if a single player has fully encircled it", () => {
@@ -231,6 +276,34 @@ describe("Netscript Go API unit tests", () => {
       const result = getControlledEmptyNodes(board);
 
       expect(result).toEqual(["...O#", "..O.O", "?....", ".....", ".X.X."]);
+    });
+  });
+  describe("setTestingBoardState() tests", () => {
+    it("should set the board to the requested state", () => {
+      const board = ["OXX..", ".....", ".....", ".....", "....."];
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
+      resetAI();
+
+      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"]);
+
+      const newBoard = simpleBoardFromBoard(Go.currentGame.board);
+      expect(newBoard).toEqual(["XOX..", "X.X.X", ".X..X", "...XX", "..X.."]);
+      expect(Go.currentGame.previousPlayer).toEqual(GoColor.white);
+      expect(Go.currentGame.ai).toEqual(GoOpponent.none);
+    });
+
+    it("should set the board to the requested state, and set the last played color correctly", () => {
+      const board = ["OXX..", ".....", ".....", ".....", "....."];
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
+      resetAI();
+
+      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], 13, false);
+
+      const newBoard = simpleBoardFromBoard(Go.currentGame.board);
+      expect(newBoard).toEqual(["XOX..", "X.X.X", ".X..X", "...XX", "..X.."]);
+      expect(Go.currentGame.previousPlayer).toEqual(GoColor.black);
+      expect(Go.currentGame.komiOverride).toEqual(13);
+      expect(Go.currentGame.ai).toEqual(GoOpponent.none);
     });
   });
   describe("cheatPlayTwoMoves() tests", () => {
@@ -365,50 +438,5 @@ describe("Netscript Go API unit tests", () => {
 
       expect(cheatSuccessChance(4)).toEqual(0.6 * (0.7 - 0.08) ** 4 * Player.mults.crime_success);
     });
-  });
-
-  it("should correctly find available moves for a given board when playing as white", () => {
-    const boardState = ["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"];
-    const mockNetscriptContext = getMockedNetscriptContext();
-
-    const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext)(boardState, null, true);
-
-    expect(result).toEqual([
-      [false, false, false, true, true],
-      [false, false, false, true, false],
-      [true, false, true, true, false],
-      [true, true, true, false, false],
-      [true, true, false, false, false],
-    ]);
-  });
-
-  it("should correctly find available moves for a given board when playing as white and given a prior board", () => {
-    const boardState = ["#..##", ".....", "...O.", ".....", "....."];
-    const mockNetscriptContext = getMockedNetscriptContext();
-
-    const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext)(boardState, boardState, true);
-
-    expect(result).toEqual([
-      [false, true, true, false, false],
-      [true, true, true, true, true],
-      [true, true, true, false, true],
-      [true, true, true, true, true],
-      [true, true, true, true, true],
-    ]);
-  });
-
-  it("should show zero liberties for groups that would be captured and -1 for empty spaces or offline nodes", () => {
-    const boardState = [".XXX#", "XOOOX", "XOXOX", "XOOOX", "XXXX."];
-    const mockNetscriptContext = getMockedNetscriptContext();
-
-    const result = NetscriptGo().analysis.getLiberties(mockNetscriptContext)(boardState);
-
-    expect(result).toEqual([
-      [-1, 1, 1, 1, -1],
-      [2, 0, 0, 0, 1],
-      [2, 0, 0, 0, 1],
-      [2, 0, 0, 0, 1],
-      [2, 2, 2, 2, -1],
-    ]);
   });
 });

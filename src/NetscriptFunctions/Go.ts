@@ -114,13 +114,14 @@ export function NetscriptGo(): InternalAPI<NSGo> {
           const resetAll = helpers.boolean(ctx, "resetAll", _resetAll ?? false);
           resetStats(resetAll);
         },
-      setTestingBoardState: (ctx) => (_boardState, _komi) => {
-        const State = validateBoardState(ctx, _boardState);
+      setTestingBoardState: (ctx) => (_boardState, _komi, _nextPlayerIsWhite) => {
+        const nextPlayerIsWhite = helpers.boolean(ctx, "playAsWhite", _nextPlayerIsWhite ?? true);
+        const State = validateBoardState(ctx, _boardState, null, !nextPlayerIsWhite);
         if (!State) {
           throw errorMessage(ctx, "Invalid board state passed to setTestingBoardState()");
         }
         const komi: number | undefined = _komi !== undefined ? helpers.number(ctx, "komi", _komi) : undefined;
-        return setTestingBoardState(ctx, State.board, komi);
+        return setTestingBoardState(ctx, State, komi);
       },
       highlightPoint: (ctx) => (_x, _y, _color, _text) => {
         const x = helpers.number(ctx, "x", _x);
