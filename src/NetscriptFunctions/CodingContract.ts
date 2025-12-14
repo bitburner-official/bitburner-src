@@ -127,9 +127,11 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const contract = getCodingContract(ctx, host, filename);
       return contract.getMaxNumTries() - contract.tries;
     },
-    createDummyContract: (ctx) => (_type) => {
+    createDummyContract: (ctx) => (_type, _host?) => {
       const type = getEnumHelper("CodingContractName").nsGetMember(ctx, _type);
-      return generateDummyContract(type);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const server = helpers.getServer(ctx, host);
+      return generateDummyContract(type, server);
     },
     getContractTypes: () => () => Object.values(CodingContractName),
   };

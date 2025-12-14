@@ -113,16 +113,15 @@ export function generateRandomContractOnHome(): void {
   serv.addContract(contract);
 }
 
-export const generateDummyContract = (problemType: CodingContractName): string | null => {
+export const generateDummyContract = (problemType: CodingContractName, server: BaseServer): string | null => {
   if (!CodingContractTypes[problemType]) throw new Error(`Invalid problem type: '${problemType}'`);
-  const serv = Player.getHomeComputer();
 
-  const contractFn = getRandomFilename(serv);
+  const contractFn = getRandomFilename(server);
   if (contractFn == null) {
     return null;
   }
   const contract = new CodingContract(contractFn, problemType, null);
-  serv.addContract(contract);
+  server.addContract(contract);
 
   return contractFn;
 };
