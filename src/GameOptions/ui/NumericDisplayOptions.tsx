@@ -83,7 +83,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
         callback={handleFractionalDigitChange}
         step={1}
         min={0}
-        max={10}
+        max={5}
         tooltip={<>The number of digits of precision to display on small numbers.</>}
       />
       <Select startAdornment={<Typography>Locale&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
