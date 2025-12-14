@@ -4057,7 +4057,7 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 2 GB
    *
-   * Generate a dummy contract on the current computer with no reward. Used to test various algorithms.
+   * Generate a dummy contract on the current server with no reward. Used to test various algorithms.
    *
    * This function will return null and not generate a contract if the randomized contract name is the same as another contract's name.
    *
