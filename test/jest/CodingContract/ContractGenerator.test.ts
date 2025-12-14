@@ -35,7 +35,7 @@ describe("Generator", () => {
     assertNumberOfContracts(1, [Player.getHomeComputer()]);
   });
   test("generateDummyContract", () => {
-    generateDummyContract(CodingContractName.FindLargestPrimeFactor);
+    generateDummyContract(CodingContractName.FindLargestPrimeFactor, Player.getHomeComputer());
     assertNumberOfContracts(1, GetAllServers());
   });
   // generateContract is flexible. All properties in IGenerateContractParams are optional. This test checks the usage in
