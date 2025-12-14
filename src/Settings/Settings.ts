@@ -192,6 +192,8 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
+  /** The amount of digits displayed after the period '.' in a number. */
+  fractionalDigits: 3,
   /**
    * Player-defined key bindings. Don't use this property directly. It must be merged with DefaultKeyBindings in
    * src\utils\KeyBindingUtils.ts.
