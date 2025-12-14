@@ -4,10 +4,15 @@ import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { FormatsNeedToChange } from "../../ui/formatNumber";
+import { OptionsSlider } from "./OptionsSlider";
 
 export const NumericDisplayPage = (): React.ReactElement => {
   const [locale, setLocale] = useState(Settings.Locale);
 
+  function handleFractionalDigitChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
+    Settings.fractionalDigits = newValue as number;
+    FormatsNeedToChange.emit();
+  }
   function handleLocaleChange(event: SelectChangeEvent): void {
     setLocale(event.target.value);
     Settings.Locale = event.target.value;
@@ -71,6 +76,15 @@ export const NumericDisplayPage = (): React.ReactElement => {
         tooltip={
           <>If this is set all references to memory will use GiB instead of GB, in accordance with IEC 60027-2.</>
         }
+      />
+      <OptionsSlider
+        label="Fractional Digits"
+        initialValue={Settings.fractionalDigits}
+        callback={handleFractionalDigitChange}
+        step={1}
+        min={0}
+        max={10}
+        tooltip={<>The amount of digits displayed after the period '.' in a number.</>}
       />
       <Select startAdornment={<Typography>Locale&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
         <MenuItem value="en">en</MenuItem>
