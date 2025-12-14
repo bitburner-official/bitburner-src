@@ -26,6 +26,16 @@ export interface VersionBreakingChange {
   apiBreakingChanges: APIBreakInfo[];
 }
 
+type NormalMigration = {
+  replaceValue: string;
+  migrator?: never;
+};
+
+type MigrationWithCustomLogic = {
+  replaceValue?: never;
+  migrator: (line: string) => string;
+};
+
 export interface APIBreakInfo {
   /** The API functions impacted by the API break */
   brokenAPIs: {
@@ -33,8 +43,7 @@ export interface APIBreakInfo {
     migration?: {
       /** We may need to use a custom search value instead of name */
       searchValue: string | RegExp;
-      replaceValue: string;
-    };
+    } & (NormalMigration | MigrationWithCustomLogic);
   }[];
   /** Info that should be shown to the player, alongside the list of impacted scripts */
   info: string;
@@ -67,8 +76,13 @@ function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakIn
         continue;
       }
       impactedLines.push(i + 1);
-      if (brokenFunction.migration) {
+      if (!brokenFunction.migration) {
+        continue;
+      }
+      if (!brokenFunction.migration.migrator) {
         lines[i] = lines[i].replaceAll(brokenFunction.migration.searchValue, brokenFunction.migration.replaceValue);
+      } else {
+        lines[i] = brokenFunction.migration.migrator(lines[i]);
       }
     }
   }
