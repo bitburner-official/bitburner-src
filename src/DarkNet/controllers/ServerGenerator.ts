@@ -20,7 +20,7 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 const getRandomServerConfigBuilder = (difficulty: number) => {
   const tier0Servers = [getNoPasswordConfig];
   const tier1Servers = [getEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
-  const tier2Servers = [getSortedEchoVulnConfig, getDogNameConfig, getYesn_tConfig];
+  const tier2Servers = [getSortedEchoVulnConfig, getDogNameConfig, getYesn_tConfig, getBufferOverflowConfig];
   const tier3Servers = [
     getMastermindHintConfig,
     getRomanNumeralConfig,
@@ -278,6 +278,16 @@ export const getYesn_tConfig = (difficulty: number): ServerConfig => {
     modelId: ModelIds.Yesn_t,
     password,
     staticPasswordHint: "you are one who's'nt authorized",
+  };
+};
+
+export const getBufferOverflowConfig = (): ServerConfig => {
+  const length = Math.floor(4 + Math.random() * 4);
+  const password = getPassword(length, true, true);
+  return {
+    modelId: ModelIds.BufferOverflow,
+    password,
+    staticPasswordHint: `Warning: password buffer is ${length} bytes`,
   };
 };
 

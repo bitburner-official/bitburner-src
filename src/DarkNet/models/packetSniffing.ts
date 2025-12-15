@@ -108,15 +108,33 @@ export const logPasswordAttempt = (server: DarknetServer, passwordResponse: Pass
   const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
 
+  let message = JSON.stringify(passwordResponse, null, 2);
+
+  // buffer overflow servers have special logging: any characters beyond the password length start to overwrite the
+  // response code in the log, which can turn it into a 200
+  if (server.modelId === ModelIds.BufferOverflow && passwordResponse) {
+    const [passwordInBuffer, overflow] = (passwordResponse.data ?? "").split(",");
+    message = JSON.stringify(
+      {
+        passwordAttempted: passwordInBuffer,
+        passwordExpected: overflow,
+        code: passwordResponse.code,
+        message: passwordResponse.message,
+      },
+      null,
+      2,
+    );
+  }
+
   const logMessage = {
-    message: JSON.stringify(passwordResponse, null, 2),
+    message,
     pid,
   };
   serverState.serverLogs = [logMessage, ...serverLogs].slice(0, MAX_LOG_LINES); // Keep only the last 50 logs
 };
 
 export const populateServerLogsWithNoise = (server: DarknetServer) => {
-  if (isLabyrinthServer(server.hostname)) return;
+  if (isLabyrinthServer(server.hostname) || server.logTrafficInterval === -1) return;
 
   const serverState = getServerState(server.hostname);
   const interval = server.logTrafficInterval;

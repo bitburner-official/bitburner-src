@@ -15,6 +15,7 @@ import {
   getRomanNumeralConfig,
   romanNumeralDecoder,
   cleanArithmeticExpression,
+  getBufferOverflowConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
@@ -28,6 +29,7 @@ import * as UtilityModule from "../../../src/utils/Utility";
 import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 import { isNumber } from "../../../src/types";
+import { getServerLogs } from "../../../src/DarkNet/models/packetSniffing";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -293,6 +295,24 @@ describe("Password Tests", () => {
 
     const correctResult = getAuthResult(server, `${server.password}`, 1);
     expect(correctResult.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("bufferOverflow server creates valid password and hint", () => {
+    const bufferOverflowServer = serverFactory(getBufferOverflowConfig, 5, 0, 0);
+    bufferOverflowServer.logTrafficInterval = -1;
+    const passwordLength = bufferOverflowServer.password.length;
+    const failedResult = getAuthResult(bufferOverflowServer, "1", 1);
+    expect(failedResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    const mostRecentLog1 = getServerLogs(bufferOverflowServer, 1, true, true)[0];
+    const log = JSON.parse(mostRecentLog1.message) as PasswordResponse;
+    const received = "1".padEnd(passwordLength, "ˍ").slice(0, passwordLength);
+    const expected = "■".repeat(passwordLength);
+    expect(log.message).toBe(`auth failed: received '${received}', expected '${expected}'`);
+    expect(log.passwordAttempted).toBe("1".padEnd(passwordLength, "ˍ").slice(0, passwordLength));
+
+    const successResult = getAuthResult(bufferOverflowServer, "A".repeat(passwordLength * 2), 1);
+    expect(successResult.response.code).toBe(ResponseCodeEnum.Success);
   });
 });
 

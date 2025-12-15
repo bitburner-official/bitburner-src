@@ -21,6 +21,7 @@ import { hasFullDarknetAccess } from "../effects/effects";
 export type PasswordResponse = {
   code: DarknetResponseCode;
   passwordAttempted: string;
+  passwordExpected?: string;
   message: string;
   data?: string;
   responseTime?: number;

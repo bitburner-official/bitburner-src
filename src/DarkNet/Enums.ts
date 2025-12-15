@@ -16,6 +16,7 @@ export const ModelIds = {
   NoPassword: "ZeroLogon",
   Captcha: "CloudBlare(tm)",
   DefaultPassword: "FreshInstall_1.0",
+  BufferOverflow: "Pr0verFl0",
   MastermindHint: "DeepGreen",
   TimingAttack: "2G_cellular",
   LargestPrimeFactor: "PrimeTime 2",

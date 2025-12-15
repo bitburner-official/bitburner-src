@@ -89,6 +89,24 @@ export const checkPassword = (
         responseTime,
         ...getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData),
       };
+    case ModelIds.BufferOverflow: {
+      // If the attempted password is longer than the server's actual password, it starts overwriting the
+      // part of the "buffer" that holds the expected password, which can "trick" the comparison into matching
+      const maskCharacter = attemptedPassword === "■".repeat(server.password.length) ? "?" : "■";
+      const buffer = "ˍ".repeat(server.password.length) + maskCharacter.repeat(server.password.length);
+      const overwrittenBuffer = attemptedPassword.slice(0, buffer.length) + buffer.slice(attemptedPassword.length);
+
+      const receivedBuffer = overwrittenBuffer.slice(0, server.password.length);
+      const expectedValueBuffer = overwrittenBuffer.slice(server.password.length);
+
+      if (receivedBuffer === expectedValueBuffer) {
+        return getGenericSuccess(attemptedPassword);
+      }
+
+      const failureMessage = `auth failed: received '${receivedBuffer}', expected '${expectedValueBuffer}'`;
+      const data = `${receivedBuffer},${expectedValueBuffer}`;
+      return getFailureResponse(attemptedPassword, failureMessage, data);
+    }
     default:
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
   }

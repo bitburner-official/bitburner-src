@@ -4,7 +4,7 @@ https://discord.com/channels/415207508303544321/1358930422607642845/135893042428
 
 ## TODO:
 
-- lore dumps: accidentally made humans from sim
+- sql injection puzzle?
 
 - more hint notes
 
