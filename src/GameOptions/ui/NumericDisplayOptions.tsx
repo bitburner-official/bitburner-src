@@ -65,12 +65,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
         step={1}
         min={0}
         max={5}
-        tooltip={
-          <>
-            The default number of decimal places to display on small numbers.
-            Default value: 3
-          </>
-        }
+        tooltip={<>The default number of decimal places to display on small numbers. Default value: 3</>}
       />
       <OptionSwitch
         checked={Settings.hideTrailingDecimalZeros}
