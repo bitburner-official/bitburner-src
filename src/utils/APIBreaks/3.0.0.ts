@@ -499,11 +499,26 @@ export const breakingChanges300: VersionBreakingChange = {
       showWarning: false,
     },
     {
-      brokenAPIs: [{ name: "createDummyContract" }],
+      brokenAPIs: [
+        {
+          name: "createDummyContract",
+          migration: {
+            searchValue: "createDummyContract",
+            migrator: (line: string) => {
+              for (const match of line.matchAll(/createDummyContract\([^,]*?\)/g)) {
+                line = line.replace(match[0], match[0].slice(0, match[0].length - 1) + `, "home")`);
+              }
+              return line;
+            },
+          },
+        },
+      ],
       info:
         "ns.codingcontract.createDummyContract might generate a contract with the same name of another contract.\n" +
         "This bug was fixed. Now this function will return null and not generate a contract if the randomized contract " +
-        "name is the same as another contract's name.",
+        "name is the same as another contract's name.\n\n" +
+        "ns.codingcontract.createDummyContract generated a dummy contract on home. Now you can specify the host that \n" +
+        'gets the generated contract with a new optional parameter. Your code was migrated to specify "home" as the host.',
       showWarning: false,
     },
   ],
