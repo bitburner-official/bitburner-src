@@ -85,7 +85,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
         step={1}
         min={0}
         max={5}
-        tooltip={<>The number of digits of precision to display on small numbers.</>}
+        tooltip={<>The default number of decimal places to display on small numbers.</>}
       />
       <Select startAdornment={<Typography>Locale&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
         <MenuItem value="en">en</MenuItem>
