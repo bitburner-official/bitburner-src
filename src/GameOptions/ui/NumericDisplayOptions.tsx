@@ -13,6 +13,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
     Settings.fractionalDigits = newValue as number;
     FormatsNeedToChange.emit();
   }
+  
   function handleLocaleChange(event: SelectChangeEvent): void {
     setLocale(event.target.value);
     Settings.Locale = event.target.value;
