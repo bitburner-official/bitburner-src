@@ -192,7 +192,7 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
-  /** The default amount of digits displayed after the period '.' in a number. */
+  /** The default amount of digits displayed after the decimal separator. */
   fractionalDigits: 3,
   /**
    * Player-defined key bindings. Don't use this property directly. It must be merged with DefaultKeyBindings in
