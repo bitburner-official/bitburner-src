@@ -13,7 +13,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
     Settings.fractionalDigits = newValue as number;
     FormatsNeedToChange.emit();
   }
-  
+
   function handleLocaleChange(event: SelectChangeEvent): void {
     setLocale(event.target.value);
     Settings.Locale = event.target.value;
@@ -58,6 +58,20 @@ export const NumericDisplayPage = (): React.ReactElement => {
         text="Hide thousands separator"
         tooltip={<>If this is set, thousands separators will not be displayed.</>}
       />
+      <OptionsSlider
+        label="Fractional Digits"
+        initialValue={Settings.fractionalDigits}
+        callback={handleFractionalDigitChange}
+        step={1}
+        min={0}
+        max={5}
+        tooltip={
+          <>
+            The default number of decimal places to display on small numbers.
+            Default value: 3
+          </>
+        }
+      />
       <OptionSwitch
         checked={Settings.hideTrailingDecimalZeros}
         onChange={(newValue) => {
@@ -77,15 +91,6 @@ export const NumericDisplayPage = (): React.ReactElement => {
         tooltip={
           <>If this is set all references to memory will use GiB instead of GB, in accordance with IEC 60027-2.</>
         }
-      />
-      <OptionsSlider
-        label="Fractional Digits"
-        initialValue={Settings.fractionalDigits}
-        callback={handleFractionalDigitChange}
-        step={1}
-        min={0}
-        max={5}
-        tooltip={<>The default number of decimal places to display on small numbers.</>}
       />
       <Select startAdornment={<Typography>Locale&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
         <MenuItem value="en">en</MenuItem>
