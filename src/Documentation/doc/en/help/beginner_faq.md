@@ -2,7 +2,7 @@
 
 This page is dedicated for questions often asked by beginners as they explore the game.
 
-The following are advice, not a bible, as this is a single-player game, so you are your own boss.
+The following are advice, as this is a single-player game. However you are free to experiment to see what works best for you.
 
 #### How do I create directories/folders?
 
@@ -30,12 +30,10 @@ However, targetting multiple servers is not viable for batchers in particular du
 
 #### What are the differences between threads and processes?
 
-Threads are a part of a process, processes have their own thread count.
+When you run a script, you spawn a "process" that runs your code. With each process, you can specify a number of threads (default to 1).
 
-Picture this: Threads and processes are items in a container respectively.
+"Thread" is simply a multiplier applied to the effect of some actions (e.g., hack, grow, weaken). Using more threads multiplies the effect, but it also multiplies the RAM cost of running the script.
 
-As you run scripts, you effectively create a container, with threads being items of the aforementioned (defaulted to 1).
-
-#### Do in-game threads/processes have anything to do with the real life, actual computer threads/processes?
+#### Do in-game threads/processes have anything to do with the real life computer threads/processes?
 
 No, in fact the game is run in JavaScript which is single-threaded.
