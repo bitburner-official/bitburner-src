@@ -4057,14 +4057,15 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 2 GB
    *
-   * Generate a dummy contract on the home computer with no reward. Used to test various algorithms.
+   * Generate a dummy contract on the current server with no reward. Used to test various algorithms.
    *
    * This function will return null and not generate a contract if the randomized contract name is the same as another contract's name.
    *
    * @param type - Type of contract to generate
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns Filename of the contract.
    */
-  createDummyContract(type: CodingContractName): string | null;
+  createDummyContract(type: CodingContractName, host?: string): string | null;
 
   /**
    * List all contract types.
