@@ -61,6 +61,13 @@ export class RunningScript {
   // Process ID of the parent process. 0 indicates no parent (such as run from terminal).
   parent = 0;
 
+  // The UTC time code of when this script was started
+  startTime = -1;
+
+  // The UTC time code of when this script was killed.
+  // Will be -1 if the script is still running.
+  endTime = -1;
+
   // How much RAM this script uses for ONE thread
   ramUsage: number = RamCostConstants.Base;
 
@@ -73,7 +80,7 @@ export class RunningScript {
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
 
-  // The title, as shown in the script's log box. Defaults to the name + args,
+  // The , as shown in the script's log box. Defaults to the name + args,
   // but can be changed by the user. If it is set to a React element (only by the user),
   // that will not be persisted, and will be restored to default on load.
   title = "" as string | React.ReactElement;
@@ -97,6 +104,16 @@ export class RunningScript {
     this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;
     this.title = `${this.filename} ${args.join(" ")}`;
+  }
+
+  // Called by external methods that may start this script.
+  onScriptStart(): void {
+    this.startTime = Date.now();
+  }
+
+  // Called by external methods that may end this script.
+  onScriptEnd(): void {
+    this.endTime = Date.now();
   }
 
   log(txt: React.ReactNode): void {

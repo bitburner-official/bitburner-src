@@ -45,6 +45,8 @@ export const killAllScripts = () => {
 };
 
 function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
+  ws.scriptRef.onScriptEnd()
+
   // Only clean up once.
   // Important: Only this function can set stopFlag!
   if (ws.env.stopFlag) return;
