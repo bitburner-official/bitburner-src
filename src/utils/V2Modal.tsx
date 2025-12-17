@@ -1,6 +1,7 @@
 import { Button, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Modal } from "../ui/React/Modal";
+import { DocumentationLink } from "../ui/React/DocumentationLink";
 
 let v2ModalOpen = false;
 
@@ -20,20 +21,8 @@ export const V2Modal = (): React.ReactElement => {
       </Typography>{" "}
       <Typography>
         You should also take a look at{" "}
-        <a
-          target="_"
-          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/en/migrations/v2.md"
-        >
-          {" "}
-          the migration guide
-        </a>{" "}
-        as well as{" "}
-        <a
-          target="_"
-          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/en/changelog.md"
-        >
-          the changelog
-        </a>
+        <DocumentationLink page="migrations/v2.md">the migration guide</DocumentationLink> as well as{" "}
+        <DocumentationLink page="changelog.md">the changelog</DocumentationLink>.
       </Typography>
       <Button onClick={() => setOpen(false)}>I understand</Button>
     </Modal>
