@@ -276,6 +276,12 @@ interface RunningScript {
    * If this script was started directly through the terminal, the value will be 0.
    */
   parent: number;
+  /** The UTC time code of when this script was started. */
+  startTime: number;
+  /** The UTC time code of when this script has ended.
+   * Will be -1 while the script is still running.
+   */
+  endTime: number;
   /**
    * How much RAM this script uses for ONE thread.
    * Also known as "static RAM usage," this value does not change once the
