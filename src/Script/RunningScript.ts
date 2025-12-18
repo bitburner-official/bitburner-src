@@ -80,7 +80,7 @@ export class RunningScript {
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
 
-  // The , as shown in the script's log box. Defaults to the name + args,
+  // The title, as shown in the script's log box. Defaults to the name + args,
   // but can be changed by the user. If it is set to a React element (only by the user),
   // that will not be persisted, and will be restored to default on load.
   title = "" as string | React.ReactElement;
