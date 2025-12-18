@@ -13,8 +13,7 @@ export const V2Modal = (): React.ReactElement => {
   const [open, setOpen] = useState(v2ModalOpen);
   return (
     <Modal open={open} onClose={() => undefined}>
-      <Typography>Welcome to bitburner v2.0.0!</Typography>{" "}
-      <Typography>While this version does not change the game a lot, it does have quite a few API breaks.</Typography>{" "}
+      <Typography>NOTICE FOR BREAKING CHANGES IN V2</Typography>
       <Typography>
         A file was added to your home computer called V2_0_0_API_BREAK.txt and it is highly recommended you take a look
         at this file. It explains where most of the API break have occurred.
