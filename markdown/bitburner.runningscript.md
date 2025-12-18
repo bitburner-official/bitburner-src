@@ -76,6 +76,25 @@ Only set for scripts that are still running.
 </td></tr>
 <tr><td>
 
+[endTime](./bitburner.runningscript.endtime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The UTC time code of when this script has ended. Will be -1 while the script is still running.
+
+
+</td></tr>
+<tr><td>
+
 [filename](./bitburner.runningscript.filename.md)
 
 
@@ -301,6 +320,25 @@ string
 </td><td>
 
 Hostname of the server on which this script runs
+
+
+</td></tr>
+<tr><td>
+
+[startTime](./bitburner.runningscript.starttime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The UTC time code of when this script was started.
 
 
 </td></tr>
