@@ -1152,6 +1152,7 @@ import nsDoc_bitburner_resetinfo_ownedaugs_md from "../../markdown/bitburner.res
 import nsDoc_bitburner_resetinfo_ownedsf_md from "../../markdown/bitburner.resetinfo.ownedsf.md?raw";
 import nsDoc_bitburner_runningscript_args_md from "../../markdown/bitburner.runningscript.args.md?raw";
 import nsDoc_bitburner_runningscript_dynamicramusage_md from "../../markdown/bitburner.runningscript.dynamicramusage.md?raw";
+import nsDoc_bitburner_runningscript_endtime_md from "../../markdown/bitburner.runningscript.endtime.md?raw";
 import nsDoc_bitburner_runningscript_filename_md from "../../markdown/bitburner.runningscript.filename.md?raw";
 import nsDoc_bitburner_runningscript_logs_md from "../../markdown/bitburner.runningscript.logs.md?raw";
 import nsDoc_bitburner_runningscript_md from "../../markdown/bitburner.runningscript.md?raw";
@@ -1165,6 +1166,7 @@ import nsDoc_bitburner_runningscript_parent_md from "../../markdown/bitburner.ru
 import nsDoc_bitburner_runningscript_pid_md from "../../markdown/bitburner.runningscript.pid.md?raw";
 import nsDoc_bitburner_runningscript_ramusage_md from "../../markdown/bitburner.runningscript.ramusage.md?raw";
 import nsDoc_bitburner_runningscript_server_md from "../../markdown/bitburner.runningscript.server.md?raw";
+import nsDoc_bitburner_runningscript_starttime_md from "../../markdown/bitburner.runningscript.starttime.md?raw";
 import nsDoc_bitburner_runningscript_tailproperties_md from "../../markdown/bitburner.runningscript.tailproperties.md?raw";
 import nsDoc_bitburner_runningscript_temporary_md from "../../markdown/bitburner.runningscript.temporary.md?raw";
 import nsDoc_bitburner_runningscript_threads_md from "../../markdown/bitburner.runningscript.threads.md?raw";
@@ -2661,6 +2663,7 @@ AllPages["nsDoc/bitburner.resetinfo.ownedaugs.md"] = nsDoc_bitburner_resetinfo_o
 AllPages["nsDoc/bitburner.resetinfo.ownedsf.md"] = nsDoc_bitburner_resetinfo_ownedsf_md;
 AllPages["nsDoc/bitburner.runningscript.args.md"] = nsDoc_bitburner_runningscript_args_md;
 AllPages["nsDoc/bitburner.runningscript.dynamicramusage.md"] = nsDoc_bitburner_runningscript_dynamicramusage_md;
+AllPages["nsDoc/bitburner.runningscript.endtime.md"] = nsDoc_bitburner_runningscript_endtime_md;
 AllPages["nsDoc/bitburner.runningscript.filename.md"] = nsDoc_bitburner_runningscript_filename_md;
 AllPages["nsDoc/bitburner.runningscript.logs.md"] = nsDoc_bitburner_runningscript_logs_md;
 AllPages["nsDoc/bitburner.runningscript.md"] = nsDoc_bitburner_runningscript_md;
@@ -2674,6 +2677,7 @@ AllPages["nsDoc/bitburner.runningscript.parent.md"] = nsDoc_bitburner_runningscr
 AllPages["nsDoc/bitburner.runningscript.pid.md"] = nsDoc_bitburner_runningscript_pid_md;
 AllPages["nsDoc/bitburner.runningscript.ramusage.md"] = nsDoc_bitburner_runningscript_ramusage_md;
 AllPages["nsDoc/bitburner.runningscript.server.md"] = nsDoc_bitburner_runningscript_server_md;
+AllPages["nsDoc/bitburner.runningscript.starttime.md"] = nsDoc_bitburner_runningscript_starttime_md;
 AllPages["nsDoc/bitburner.runningscript.tailproperties.md"] = nsDoc_bitburner_runningscript_tailproperties_md;
 AllPages["nsDoc/bitburner.runningscript.temporary.md"] = nsDoc_bitburner_runningscript_temporary_md;
 AllPages["nsDoc/bitburner.runningscript.threads.md"] = nsDoc_bitburner_runningscript_threads_md;
