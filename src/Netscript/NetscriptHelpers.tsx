@@ -381,7 +381,7 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     const err = errorMessage(
       ctx,
       "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
-      `promise-returning function?\nCurrently running: ${ws.env.runningFn}\nTried to run: ${ctx.function}`,
+        `promise-returning function?\nCurrently running: ${ws.env.runningFn}\nTried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
@@ -392,7 +392,7 @@ function checkEnvFlags(ctx: NetscriptContext): void {
 /** Set a timeout for performing a task, mark the script as busy in the meantime. */
 function netscriptDelay(ctx: NetscriptContext, time: number): Promise<void> {
   const ws = ctx.workerScript;
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     ws.delay = window.setTimeout(() => {
       ws.delay = null;
       ws.delayReject = undefined;
@@ -532,7 +532,7 @@ function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: un
       )} (t=${formatThreads(threads)})`,
   );
 
-  return helpers.netscriptDelay(ctx, hackingTime * 1000).then(function() {
+  return helpers.netscriptDelay(ctx, hackingTime * 1000).then(function () {
     const hackChance = calculateHackingChance(server, Player);
     const rand = Math.random();
     let expGainedOnSuccess = calculateHackingExpGain(server, Player) * threads;
@@ -717,7 +717,7 @@ export function getRunningScriptsByArgs(
     throw helpers.errorMessage(
       ctx,
       "Invalid scriptArgs argument passed into getRunningScriptByArgs().\n" +
-      "This is probably a bug. Please report to game developer",
+        "This is probably a bug. Please report to game developer",
     );
   }
 
@@ -789,12 +789,12 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
       !logProps || !logProps.isVisible()
         ? null
         : {
-          x: logProps.x,
-          y: logProps.y,
-          width: logProps.width,
-          height: logProps.height,
-          fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
-        },
+            x: logProps.x,
+            y: logProps.y,
+            width: logProps.width,
+            height: logProps.height,
+            fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
+          },
     title: runningScript.title,
     threads: runningScript.threads,
     temporary: runningScript.temporary,

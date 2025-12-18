@@ -88,7 +88,7 @@ export function startWorkerScript(runningScript: RunningScript, server: BaseServ
     server.runScript(runningScript);
 
     // Call the scripts internal on start method to let it initialize some relevant values.
-    runningScript.onScriptStart()
+    runningScript.onScriptStart();
 
     // Once the WorkerScript is constructed in createAndAddWorkerScript(), the RunningScript
     // object should have a PID assigned to it, so we return that
@@ -129,7 +129,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
   if (pid === -1) {
     deferredError(
       `Failed to start script because could not find available PID. This is most ` +
-      `because you have too many scripts running.`,
+        `because you have too many scripts running.`,
     );
     return false;
   }
@@ -147,11 +147,11 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
   startNetscript2Script(workerScript)
     // Once the code finishes (either resolved or rejected, doesn't matter), set its
     // running status to false
-    .then(function() {
+    .then(function () {
       killWorkerScript(workerScript);
       workerScript.log("", () => "Script finished running");
     })
-    .catch(function(error) {
+    .catch(function (error) {
       handleUnknownError(error, workerScript);
       killWorkerScript(workerScript);
       workerScript.log("", () =>
