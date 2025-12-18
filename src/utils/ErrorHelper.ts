@@ -195,3 +195,18 @@ Copy your save here if possible
     issueUrl,
   };
 }
+
+export function isSaveDataFromNewerVersions(versionSave?: string): boolean {
+  if (versionSave == null) {
+    return false;
+  }
+  // x.y and x.y.z formats are from pre-v1 versions.
+  if (versionSave.includes(".")) {
+    return false;
+  }
+  const versionNumber = Number(versionSave);
+  if (!Number.isFinite(versionNumber) || versionNumber <= CONSTANTS.VersionNumber) {
+    return false;
+  }
+  return true;
+}

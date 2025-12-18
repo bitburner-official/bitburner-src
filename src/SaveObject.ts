@@ -160,6 +160,20 @@ function assertParsedSaveData(parsedSaveData: unknown): asserts parsedSaveData i
   }
 }
 
+/**
+ * We sometimes need the raw data in the loaded save object for debugging and showing useful error messages. This object
+ * contains only what we need.
+ */
+export const loadedSaveObjectMiniDump = {
+  /**
+   * If VersionSave exists, it is always a string. It has 3 formats:
+   * - x.y: Very early versions (0.1-0.17) used this format.
+   * - x.y.z: Starting from roughly 0.17, we used this format. Note that in some commits, we mistakenly used the x.y format.
+   * - x: Starting from v1, we used the version number instead of the version string.
+   */
+  VersionSave: undefined as string | undefined,
+};
+
 class BitburnerSaveObject implements BitburnerSaveObjectType {
   PlayerSave = "";
   AllServersSave = "";
@@ -426,6 +440,18 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   const jsonSaveString = await decodeSaveData(saveData);
 
   const saveObj: unknown = JSON.parse(jsonSaveString, Reviver);
+
+  // Extract VersionSave ASAP for debugging and showing useful error messages later. Some checks here are redundant (
+  // e.g., the object assertion) because we will do them again later, but that's okay.
+  if (
+    saveObj != null &&
+    typeof saveObj === "object" &&
+    "VersionSave" in saveObj &&
+    typeof saveObj.VersionSave === "string"
+  ) {
+    loadedSaveObjectMiniDump.VersionSave = saveObj.VersionSave;
+  }
+
   assertBitburnerSaveObjectType(saveObj);
 
   // "Mandatory"
