@@ -25,7 +25,8 @@ import {
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
 import { Settings } from "../../Settings/Settings";
-import { NsApiDocumentationLink } from "../React/NsApiDocumentationLink";
+import { DocumentationLink } from "../React/DocumentationLink";
+import { defaultNsApiPage } from "../React/Documentation";
 
 interface IContent {
   content: React.ReactElement;
@@ -364,7 +365,8 @@ export async function main(ns) {
             Use the search tool at the bottom to find and have a quick glance at documentation of any NS APIs.
             <br />
             <br />
-            To access <NsApiDocumentationLink />, press the link at the bottom.
+            To access <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, press the
+            link at the bottom.
             <br />
             <br />
             To save and close the script editor, press the button at the bottom.
@@ -556,10 +558,17 @@ export async function main(ns) {
           You should at least check these pages:
           <ul>
             <li>
-              The Beginner's guide contains the guide for new players, navigating you through most of the early game.
+              The <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink> contains the
+              guide for new players, navigating you through most of the early game.
             </li>
-            <li>The NS API documentation contains reference materials for all NS APIs.</li>
-            <li>The FAQ contains questions often asked by beginners of the game.</li>
+            <li>
+              The <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> contains reference
+              materials for all NS APIs.
+            </li>
+            <li>
+              The <DocumentationLink page="help/beginner_faq.md">FAQ</DocumentationLink> contains questions often asked
+              by beginners of the game.
+            </li>
           </ul>
           <Typography fontWeight="fontWeightBold">
             This documentation page is the best place to get up-to-date information, especially when you get stuck. If
