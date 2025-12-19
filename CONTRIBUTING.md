@@ -255,7 +255,7 @@ Update the following:
 - post to Discord
 - post to reddit.com/r/Bitburner
 
-## BN guideline
+## Adding a BN guidelines
 
 Promote:
 
