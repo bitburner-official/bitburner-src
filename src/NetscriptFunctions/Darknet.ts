@@ -350,7 +350,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           }
         }
         helpers.log(ctx, () => `returned ${out.length} connections for ${server.hostname}`);
-        return out;
+        // The order of results is shuffled. There's no anthropomorphic bias like in the standard network's scan results order.
+        const rotationPoint = Math.floor(Math.random() * out.length);
+        return out.slice(rotationPoint).concat(out.slice(0, rotationPoint));
       },
     setStasisLink:
       (ctx: NetscriptContext) =>

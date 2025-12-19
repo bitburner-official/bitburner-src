@@ -783,7 +783,8 @@ describe("Non-darkweb darknet server", () => {
   test("probe", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const servers = ns.dnet.probe();
-    expect(servers).toStrictEqual(GetServerOrThrow(ns.getHostname()).serversOnNetwork);
+    const expectedServers = getDarknetServerOrThrow(ns.getHostname()).serversOnNetwork;
+    expect(servers.sort()).toStrictEqual(expectedServers.sort());
   });
   test("setStasisLink+getStasisLinkedServers", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
