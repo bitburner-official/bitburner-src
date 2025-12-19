@@ -52,6 +52,7 @@
 - [Game frozen or stuck?](programming/game_frozen.md)
 - [TypeScript and React](programming/typescript_react.md)
 - [Tools & Resources](help/tools_and_resources.md)
+- [FAQ](help/faq.md)
 - [FAQs for beginners](help/beginner_faq.md)
 - [Changelog](changelog.md)
 - [Changelog - Legacy v1](changelog-v1.md)

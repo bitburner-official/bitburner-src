@@ -254,3 +254,17 @@ Update the following:
 - `doc/source/changelog.rst`
 - post to Discord
 - post to reddit.com/r/Bitburner
+
+## BN guideline
+
+Promote:
+
+- New mechanic.
+- Coding problems based on NP problems. This makes solutions that are easy to implement inefficient and solutions that are hard to implement efficient. (e.g., Stanek)
+- Inter-mechanic synergy.
+- Simplicity (e.g., Stanek, Hashnet. Bad example: Corp)
+
+Avoid:
+
+- Failure conditions. It's very frustrating to lose several days' worth of progress.
+- Making existing mechanics harder. This makes it hard to port the content to other BNs.

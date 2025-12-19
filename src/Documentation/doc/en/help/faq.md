@@ -43,7 +43,7 @@ Due to a limitation with the way Steam tracks the game, if you launch an externa
 
 ---
 
-## Steam: How do I get to the game files? <a name="game-files"></a>
+## Steam: How do I get to the game files?
 
 Right-click the game in your Steam library, then go into "Manage" -> "Browse Local Files". The game can be launched directly from that location if you're having issues with Steam.
 
@@ -82,9 +82,3 @@ Configuration files can be found in the application's data directory.
 - on Linux: `~/.config/bitburner/config.json`
 - on macOS: `~/Library/Application\ Support/bitburner/config.json`
 - on Windows: `%USERPROFILE%\AppData\Roaming\bitburner\config.json`
-
----
-
-## Steam: What is the API Server?
-
-The API Server allows the official [Visual Studio Code Extension](https://github.com/bitburner-official/bitburner-vscode) to push script files from VSCode to your in-game home.
