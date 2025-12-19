@@ -79,6 +79,8 @@ exports[`load/saveAllServers 1`] = `
             "onlineExpGained": 0,
             "onlineMoneyMade": 0,
             "onlineRunningTime": 7.210000000000004,
+            "startTime": 123456789000,
+            "endTime": -1,
             "ramUsage": 1.6,
             "server": "home",
             "scriptKey": "script.js*[]",
