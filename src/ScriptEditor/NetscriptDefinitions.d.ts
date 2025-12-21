@@ -4821,8 +4821,9 @@ export interface GoAnalysis {
    *
    * @param boardState - The initial board state to use for the new game, in the format used by getBoardState().
    * @param komi - Optional komi value to set for the game. Defaults to 5.5.
+   * @param nextPlayerIsWhite - Optional. Whether or not the next player to play is the white player. Defaults to false.
    */
-  setTestingBoardState(boardState: string[], komi?: number): void;
+  setTestingBoardState(boardState: string[], komi?: number, nextPlayerIsWhite?: boolean): void;
 
   /**
    * Adds a colored circle indicator to the specified point. These indicators are removed once a move is played.
