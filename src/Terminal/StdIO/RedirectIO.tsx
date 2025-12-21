@@ -25,15 +25,12 @@ export function parseRedirectedCommands(commandString: string) {
     return Terminal.executeCommand(commandString, getTerminalStdIO(null));
   }
 
-  let priorStdIO: StdIO | null = new StdIO(null);
-  for (const commandSet of commandSets) {
-    handleCommand(priorStdIO, commandSet);
-    priorStdIO = new StdIO(priorStdIO.stdout);
+  const stdIOChain = buildStdIOChain(commandSets.length);
+  for (let i = 0; i < commandSets.length; i++) {
+    const commandSet = commandSets[i];
+    const stdIO = stdIOChain[i];
+    handleCommand(stdIO, commandSet);
   }
-  // Redirect last command's stdout to terminal
-  // TODO-Fico: this isnt working?
-  priorStdIO.stdout?.close();
-  priorStdIO.stdout = null;
   return true;
 }
 
@@ -59,16 +56,25 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPip
     );
   }
 
-  // Echo arguments to pipes
-  if (command === "echo") {
-    return handleEcho(args, stdIO);
-  }
-
   if (command === "cat") {
     return handleCat(args, stdIO, hasOutputPipe);
   }
 
   Terminal.executeCommand([command, ...args].join(" "), stdIO);
+}
+
+export function buildStdIOChain(length: number, initialStdIO: StdIO | null = null): StdIO[] {
+  const stdIOs: StdIO[] = [];
+  let priorStdIO = initialStdIO;
+
+  for (let i = 0; i < length; i++) {
+    const newStdIO = new StdIO(priorStdIO?.stdout ?? null);
+    stdIOs.push(newStdIO);
+    priorStdIO = newStdIO;
+  }
+  stdIOs[stdIOs.length - 1].stdout = null; // Last StdIO writes to terminal
+
+  return stdIOs;
 }
 
 export function findCommandsSplitByRedirects(commands: Args[]) {
@@ -84,11 +90,6 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
   }
   result.push(currentCommand);
   return result;
-}
-
-function handleEcho(argList: Args[], stdIO: StdIO): void {
-  stdIO.write(argList.join(" "));
-  stdIO.close();
 }
 
 export function getTerminalStdIO(stdin: IOStream | null = null) {
@@ -171,13 +172,13 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
   });
 }
 
-export async function callOnRead(stdIO: StdIO, callback: (data: unknown, stout: IOStream) => Promise<void> | void) {
+export async function callOnRead(stdIO: StdIO, callback: (data: unknown, stdIO: StdIO) => Promise<void> | void) {
   for await (const data of stdIO.read()) {
     const streamIsCleared = stdIO.stdin?.deref()?.isClosed && stdIO.stdin?.deref()?.empty();
-    if (data === DATA_STREAM_CLOSED || streamIsCleared || !stdIO.stdout) {
+    if (data === DATA_STREAM_CLOSED || streamIsCleared) {
       return;
     }
-    await callback(data, stdIO.stdout);
+    await callback(data, stdIO);
   }
 }
 

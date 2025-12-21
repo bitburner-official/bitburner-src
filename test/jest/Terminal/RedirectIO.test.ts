@@ -110,7 +110,7 @@ describe("RedirectIOTests", () => {
     it("should redirect tprint output from a running script to a file", async () => {
       const scriptName = "testScript.js";
       const filename = "scriptLog.txt";
-      const scriptContent = `export function main(ns) { ns.tprint('Logging to file'); }`;
+      const scriptContent = `export function main(ns) { ns.tprint('Logging to file' ); }`;
       Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
       await sleep(50);
 
@@ -139,9 +139,9 @@ describe("RedirectIOTests", () => {
           }
           const input = stdIn?.read();
           ns.tprint('Received input: ' + input);
-        };`
+        }`
       Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
-      await sleep(500);
+      await sleep(50);
 
       const inputData = "Hello from stdin!";
       Terminal.executeCommands(`echo "${inputData}" | run ${scriptName}`);
@@ -149,7 +149,7 @@ describe("RedirectIOTests", () => {
 
       console.log(Terminal.outputHistory);
       const outputLog = Terminal.outputHistory.find(
-        (entry) => entry.text.includes('Received input:')
+        (entry: Output) => entry.text?.includes('Received input:')
       );
       expect(outputLog?.text).toContain(`Received input: ${inputData}`);
     });
