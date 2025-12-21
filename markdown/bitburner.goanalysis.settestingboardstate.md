@@ -74,7 +74,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ Optional. Whether or not the next player to play is the white player. Defaults to true.
+_(Optional)_ Optional. Whether or not the next player to play is the white player. Defaults to false.
 
 
 </td></tr>
