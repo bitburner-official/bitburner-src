@@ -185,7 +185,7 @@ export const Settings = {
   /** Control the cursor animation style */
   MonacoCursorBlinking: "blink" as CursorBlinking,
   /** Toggle use of Sticky Scroll in the Script Editor */
-  MonacoStickyScroll: { enabled: true } as StickyScroll,
+  MonacoStickyScroll: { enabled: false } as StickyScroll,
   /** Whether to hide trailing zeroes on fractional part of decimal */
   hideTrailingDecimalZeros: false,
   /** Whether to hide thousands separators. */

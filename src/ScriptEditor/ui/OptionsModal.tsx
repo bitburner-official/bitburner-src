@@ -11,7 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useBoolean } from "../../ui/React/hooks";
 import { Modal } from "../../ui/React/Modal";
 import { ThemeEditorModal } from "./ThemeEditorModal";
-import { CursorBlinking, CursorStyle, Options, StickyScroll } from "./Options";
+import { CursorBlinking, CursorStyle, Options } from "./Options";
 
 const CURSOR_STYLES: CursorStyle[] = ["line", "block", "underline", "line-thin", "block-outline", "underline-thin"];
 const CURSOR_BLINKING_MODES: CursorBlinking[] = ["blink", "smooth", "phase", "expand", "solid"];
@@ -132,7 +132,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Cursor blinking: </Typography>
         <Select
-          onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value as CursorBlinking)}
+          onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value)}
           value={props.options.cursorBlinking}
         >
           {CURSOR_BLINKING_MODES.map((cursorBlinking) => (
@@ -154,7 +154,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable Sticky Scroll: </Typography>
         <Switch
-          onChange={(e) => props.onOptionChange("stickyScroll", { enabled: e.target.checked } as StickyScroll)}
+          onChange={(e) => props.onOptionChange("stickyScroll", { enabled: e.target.checked })}
           checked={props.options.stickyScroll?.enabled}
         />
       </div>
