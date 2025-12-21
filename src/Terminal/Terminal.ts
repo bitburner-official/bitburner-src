@@ -87,8 +87,6 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
-import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { PipeState, pushRedirectedOutput } from "./PipeState";
 import { StdIO } from "./StdIO/StdIO";
 import { getTerminalStdIO, parseRedirectedCommands } from "./StdIO/RedirectIO";
 

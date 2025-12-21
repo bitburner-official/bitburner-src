@@ -19,15 +19,20 @@ import {
   handlePipeError,
   isPipeSymbol,
   type RedirectedCommand,
-  PipeState,
   PipeSymbols,
+  RedirectedOutput,
 } from "./PipeState";
 import { Settings } from "../Settings/Settings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { RunningScript } from "../Script/RunningScript";
 import { PortHandle, PortNumber } from "../NetscriptPort";
 import { getTerminalStdIO } from "./StdIO/RedirectIO";
 
+const PipeState = {
+  currentRedirects: [] as RedirectedCommand[],
+  outputToBeProcessed: [] as RedirectedOutput[], // TODO: remove
+  currentTerminalPipe: null as RedirectedCommand | null,
+  nextStdinPort: 1e7,
+};
 
 /*
 - new class StdIO - stdin, stdout, onRead

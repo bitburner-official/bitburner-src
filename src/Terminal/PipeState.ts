@@ -3,7 +3,7 @@ import { Settings } from "../Settings/Settings";
 import { TerminalEvents } from "./TerminalEvents";
 import { PortHandle } from "../NetscriptPort";
 
-export const PipeState = {
+const PipeState = {
   currentRedirects: [] as RedirectedCommand[],
   outputToBeProcessed: [] as RedirectedOutput[], // TODO: remove
   currentTerminalPipe: null as RedirectedCommand | null,
