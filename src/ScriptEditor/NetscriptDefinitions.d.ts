@@ -1861,7 +1861,7 @@ export interface BitNodeBooleanOptions {
 /**
  * Singularity API
  * @remarks
- * This API requires Source-File 4 to use. The RAM cost of all these functions is multiplied by 16/4/1 based on
+ * This API requires Source-File 4 to use outside of BitNode 4. Additionally, outside of BitNode 4 the RAM cost of all these functions is multiplied by 16/4/1 based on
  * Source-File 4 levels.
  * @public
  */
@@ -4058,12 +4058,15 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 2 GB
    *
-   * Generate a dummy contract on the home computer with no reward. Used to test various algorithms.
+   * Generate a dummy contract on the current server with no reward. Used to test various algorithms.
+   *
+   * This function will return null and not generate a contract if the randomized contract name is the same as another contract's name.
    *
    * @param type - Type of contract to generate
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
    * @returns Filename of the contract.
    */
-  createDummyContract(type: CodingContractName): string;
+  createDummyContract(type: CodingContractName, host?: string): string | null;
 
   /**
    * List all contract types.
@@ -7374,10 +7377,12 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Returns a script’s logs. The logs are returned as an array, where each line is an element in the array.
+   * Returns a running script’s logs. The logs are returned as an array, where each line is an element in the array.
    * The most recently logged line is at the end of the array.
    * Note that there is a maximum number of lines that a script stores in its logs. This is configurable in the game’s options.
    * If the function is called with no arguments, it will return the current script’s logs.
+   *
+   * This function only works for currently running scripts. Use {@link NS.getRecentScripts | getRecentScripts} to access logs from recently finished scripts.
    *
    * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get logs from another script.
    * Remember that scripts are uniquely identified by both their names and arguments.

@@ -85,6 +85,10 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
   }, [deepLink, history]);
 
   useEffect(() => {
+    setDeepLink(docPage);
+  }, [docPage]);
+
+  useEffect(() => {
     /**
      * Using setTimeout is a workaround. window.scrollTo does not work when we switch from Documentation tab to another
      * tab, then switch back.

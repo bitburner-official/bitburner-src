@@ -90,7 +90,9 @@ Returns a string array, where each line is an element in the array. The most rec
 
 RAM cost: 0 GB
 
-Returns a script’s logs. The logs are returned as an array, where each line is an element in the array. The most recently logged line is at the end of the array. Note that there is a maximum number of lines that a script stores in its logs. This is configurable in the game’s options. If the function is called with no arguments, it will return the current script’s logs.
+Returns a running script’s logs. The logs are returned as an array, where each line is an element in the array. The most recently logged line is at the end of the array. Note that there is a maximum number of lines that a script stores in its logs. This is configurable in the game’s options. If the function is called with no arguments, it will return the current script’s logs.
+
+This function only works for currently running scripts. Use [getRecentScripts](./bitburner.ns.getrecentscripts.md) to access logs from recently finished scripts.
 
 Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get logs from another script. Remember that scripts are uniquely identified by both their names and arguments.
 

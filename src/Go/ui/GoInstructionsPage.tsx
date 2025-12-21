@@ -5,9 +5,8 @@ import { GoOpponent, GoColor } from "@enums";
 import { boardStyles } from "../boardState/goStyles";
 import { boardStateFromSimpleBoard } from "../boardAnalysis/boardAnalysis";
 import { GoTutorialChallenge } from "./GoTutorialChallenge";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
 import { getMaxRep } from "../effects/effect";
+import { DocumentationLink } from "../../ui/React/DocumentationLink";
 
 const captureChallenge = (
   <GoTutorialChallenge
@@ -82,14 +81,9 @@ export const GoInstructionsPage = (): React.ReactElement => {
           subnets are very valuable in the right hands, if you can wrest them from their current owners.
           <br />
           <br />
-          (For details about how to automate with the API, and for a working starter script, visit the IPvGO section of
-          the in-game{" "}
-          <Link
-            style={{ cursor: "pointer" }}
-            onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/go_algorithms.md" })}
-          >
-            Bitburner Documentation)
-          </Link>
+          (For details about how to automate with the API, and for a working starter script, visit the{" "}
+          <DocumentationLink page="programming/go_algorithms.md">IPvGO</DocumentationLink> section of the in-game
+          documentation.)
         </Typography>
         <br />
         <br />
@@ -208,14 +202,9 @@ export const GoInstructionsPage = (): React.ReactElement => {
             <br />
             <br />
             <Typography>
-              * You can place routers and look at the board state via the "ns.go" api. For more details, go to the IPvGO
-              page in the{" "}
-              <Link
-                style={{ cursor: "pointer" }}
-                onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/go_algorithms.md" })}
-              >
-                Bitburner Documentation
-              </Link>
+              * You can place routers and look at the board state via the "ns.go" api. For more details, go to the{" "}
+              <DocumentationLink page="programming/go_algorithms.md">IPvGO</DocumentationLink> page in the documentation
+              tab.
               <br />
               <br />
               * If a network surrounds a single empty node, the opponent can eventually capture it by filling in that

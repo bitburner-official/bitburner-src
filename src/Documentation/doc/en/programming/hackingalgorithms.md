@@ -29,7 +29,7 @@ Cons:
 - Limits income generation
 - Extremely [RAM](../basic/ram.md) inefficient
 - Utilizes script online time poorly
-- Risk of over hacking
+- Risk of over-hacking
 - Slow to start producing money
 
 This is the self-contained algorithm implemented in `early-hack-template.js`. Each script is tasked with choosing which function to execute based on the status of the target server.
@@ -185,6 +185,23 @@ Shotgun batchers are not very RAM efficient because the scripts take up RAM duri
                             |=Grow===========|
                          |=Weaken=============|
                               |=Weaken=============|
+
+Or:
+
+                  |Hack=|
+    |=Weaken=============|
+         |=Grow===========|
+      |=Weaken=============|
+                      |Hack=|
+        |=Weaken=============|
+             |=Grow===========|
+          |=Weaken=============|
+                          |Hack=|
+            |=Weaken=============|
+                 |=Grow===========|
+              |=Weaken=============|
+
+\*For illustrative purposes only.
 
 By weaving batches between each other, JIT batchers maximise the effectiveness of the RAM at the cost of very precise timing constraints.
 Good communication between worker scripts and the controller is necessary to schedule the next batch at the right time.

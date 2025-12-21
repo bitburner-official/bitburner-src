@@ -195,3 +195,36 @@ Copy your save here if possible
     issueUrl,
   };
 }
+
+export function isSaveDataFromNewerVersions(versionSave?: string): boolean {
+  if (versionSave == null) {
+    return false;
+  }
+  // The empty string and the x.y.z format are from pre-v1 versions.
+  if (versionSave === "" || versionSave.includes(".")) {
+    return false;
+  }
+  const versionNumber = Number(versionSave);
+  if (!Number.isFinite(versionNumber) || versionNumber <= CONSTANTS.VersionNumber) {
+    return false;
+  }
+  return true;
+}
+
+export function isStanekGiftImplemented(versionSave?: string): boolean {
+  // It's debatable if we should return true or false here. If versionSave is undefined, there must be something wrong
+  // with the loading process. I think we should return true here and let the caller show the error popup.
+  if (versionSave == null) {
+    return true;
+  }
+  // The empty string and the x.y.z format are from pre-v1 versions.
+  if (versionSave === "" || versionSave.includes(".")) {
+    return false;
+  }
+  const versionNumber = Number(versionSave);
+  // Stanek's Gift was added in v1.1.0 (VersionNumber = 6).
+  if (!Number.isFinite(versionNumber) || versionNumber <= 5) {
+    return false;
+  }
+  return true;
+}
