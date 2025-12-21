@@ -284,11 +284,12 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
 
-      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"]);
+      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], null, true);
 
       const newBoard = simpleBoardFromBoard(Go.currentGame.board);
       expect(newBoard).toEqual(["XOX..", "X.X.X", ".X..X", "...XX", "..X.."]);
-      expect(Go.currentGame.previousPlayer).toEqual(GoColor.white);
+      expect(Go.currentGame.previousPlayer).toEqual(GoColor.black);
+      expect(Go.currentGame.komiOverride).toEqual(5.5);
       expect(Go.currentGame.ai).toEqual(GoOpponent.none);
     });
 
@@ -297,11 +298,11 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
 
-      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], 13, false);
+      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], 13);
 
       const newBoard = simpleBoardFromBoard(Go.currentGame.board);
       expect(newBoard).toEqual(["XOX..", "X.X.X", ".X..X", "...XX", "..X.."]);
-      expect(Go.currentGame.previousPlayer).toEqual(GoColor.black);
+      expect(Go.currentGame.previousPlayer).toEqual(GoColor.white);
       expect(Go.currentGame.komiOverride).toEqual(13);
       expect(Go.currentGame.ai).toEqual(GoOpponent.none);
     });
