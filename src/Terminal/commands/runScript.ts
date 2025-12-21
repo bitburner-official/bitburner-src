@@ -13,7 +13,6 @@ import { pluralize } from "../../utils/I18nUtils";
 import { RunningScript } from "../../Script/RunningScript";
 import { StdIO } from "../StdIO/StdIO";
 
-// TODO-FICO: store stdio on script, mark script as temporary
 export function runScript(
   scriptPath: ScriptFilePath,
   commandArgs: (string | number | boolean)[],

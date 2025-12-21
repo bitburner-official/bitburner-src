@@ -10,6 +10,7 @@ import { StdIO } from "../StdIO/StdIO";
 import { Literatures } from "../../Literature/Literatures";
 import { LiteratureName, MessageFilename } from "@enums";
 
+// TODO-Fico: support stdin, support "-" placeholder for stdin
 export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]", stdIO);
 

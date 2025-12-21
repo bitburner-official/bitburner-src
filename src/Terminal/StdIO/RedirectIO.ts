@@ -1,11 +1,6 @@
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import { parseCommand } from "../Parser";
-import { isPipeSymbol, PipeSymbols } from "../PipeState";
-import { DATA_STREAM_CLOSED, IOStream } from "./IOStream";
+import { IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
-import { Link, Output, RawOutput } from "../OutputTypes";
-import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
 import { Terminal } from "../../Terminal";
 import { hasTextExtension, TextFilePath } from "../../Paths/TextFilePath";
 import { hasScriptExtension, ScriptFilePath } from "../../Paths/ScriptFilePath";
@@ -13,10 +8,9 @@ import { TextFile } from "../../TextFile";
 import { Player } from "@player";
 import { Script } from "../../Script/Script";
 import { Settings } from "../../Settings/Settings";
+import { Args, DATA_STREAM_CLOSED, isPipeSymbol, PipeSymbols, stringify } from "./utils";
 
 // TODO-Fico - add pipe documentation page
-
-type Args = string | number | boolean;
 
 export function parseRedirectedCommands(commandString: string) {
   const parsed = parseCommand(commandString);
@@ -148,7 +142,7 @@ function writeToTextFile(filename: string, pipeType: string, stdIO: StdIO) {
       return;
     }
     const output = stringify(data);
-    currentFile.content = concatenateFileContents(currentFile.content, output)
+    currentFile.content = concatenateFileContents(currentFile.content, output);
   });
 }
 
@@ -159,7 +153,7 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
     let file = Terminal.getScript(filename);
     if (!file) {
       file = new Script(filename as ScriptFilePath, "", Player.getCurrentServer().hostname);
-      Player.getCurrentServer().scripts.set(filename as ScriptFilePath, file)
+      Player.getCurrentServer().scripts.set(filename as ScriptFilePath, file);
     }
     if (file?.content && overwrite) {
       return handleIoError(
@@ -195,24 +189,4 @@ function concatenateFileContents(content: string, newContent: string): string {
   }
 
   return concatenatedContent;
-}
-
-export function stringify(s: unknown, stripAnsiEscape = false): string {
-  if (!s) {
-    return "";
-  } else if (s instanceof Output) {
-    return stripAnsiEscape ? s.text.replaceAll(ANSI_ESCAPE, "") : s.text;
-  } else if (s instanceof Link) {
-    return `${s.dashes} ${s.hostname}`;
-  } else if (s instanceof RawOutput) {
-    // TODO: test
-    const markup = renderToStaticMarkup(<>{s.raw}</>);
-    const div = document.createElement("div");
-    div.innerHTML = markup.replaceAll(">", "> ");
-    return div.textContent ?? div.innerText ?? "";
-  } else if (typeof s === "string" || typeof s === "number" || typeof s === "boolean") {
-    return s.toString().replaceAll(ANSI_ESCAPE, "");
-  } else {
-    return JSON.stringify(s).replaceAll(ANSI_ESCAPE, "");
-  }
 }

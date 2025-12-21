@@ -17,15 +17,14 @@ import {
   addOutputToBeProcessed,
   getNextOutput,
   handlePipeError,
-  isPipeSymbol,
   type RedirectedCommand,
-  PipeSymbols,
   RedirectedOutput,
 } from "./PipeState";
 import { Settings } from "../Settings/Settings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { PortHandle, PortNumber } from "../NetscriptPort";
 import { getTerminalStdIO } from "./StdIO/RedirectIO";
+import { isPipeSymbol, PipeSymbols } from "./StdIO/utils";
 
 const PipeState = {
   currentRedirects: [] as RedirectedCommand[],

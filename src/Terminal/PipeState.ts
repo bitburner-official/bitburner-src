@@ -10,17 +10,6 @@ const PipeState = {
   nextStdinPort: 1e7,
 };
 
-export const PipeSymbols = {
-  Pipe: "|",
-  OutputRedirection: ">",
-  AppendOutputRedirection: ">>",
-  InputRedirection: "<",
-} as const;
-
-export function isPipeSymbol(symbol: string | number | boolean): boolean {
-  return Object.keys(PipeSymbols).some((key) => PipeSymbols[key as keyof typeof PipeSymbols] === symbol);
-}
-
 export function pushRedirectedOutput(output: Output | Link | RawOutput, redirectDestination: RedirectedCommand | null) {
   addOutputToBeProcessed(output, redirectDestination);
 

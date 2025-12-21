@@ -12,6 +12,7 @@ import { Player } from "@player";
 import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
 import { TextFilePath } from "../../../src/Paths/TextFilePath";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
+import { Output } from "../../../src/Terminal/OutputTypes";
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -130,8 +131,7 @@ describe("RedirectIOTests", () => {
   describe("stdin to scripts", () => {
     it("should provide stdin input to a running script", async () => {
       const scriptName = "inputScript.js";
-      const scriptContent =
-        `export async function main(ns) {
+      const scriptContent = `export async function main(ns) {
           const stdIn = await ns.getStdin();
           if (stdIn?.empty()) {
             ns.tprint('No input received yet');
@@ -139,7 +139,7 @@ describe("RedirectIOTests", () => {
           }
           const input = stdIn?.read();
           ns.tprint('Received input: ' + input);
-        }`
+        }`;
       Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
       await sleep(50);
 
@@ -148,10 +148,37 @@ describe("RedirectIOTests", () => {
       await sleep(50);
 
       console.log(Terminal.outputHistory);
-      const outputLog = Terminal.outputHistory.find(
-        (entry: Output) => entry.text?.includes('Received input:')
-      );
-      expect(outputLog?.text).toContain(`Received input: ${inputData}`);
+      const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
+      const outputText: Output = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
+      expect(outputText?.text).toEqual(`${scriptName}: Received input: ${inputData}`);
+    });
+
+    it("should provide stdin input from a script to a running script", async () => {
+      const scriptName = "inputScript.js";
+      const scriptContent = `export async function main(ns) {
+          const stdIn = await ns.getStdin();
+          if (stdIn?.empty()) {
+            ns.tprint('No input received yet');
+            await stdIn.nextWrite();
+          }
+          const input = stdIn?.read();
+          ns.tprint('Received input: ' + input);
+        }`;
+      Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
+      await sleep(50);
+
+      const inputData = "Hello from stdin!";
+      Terminal.executeCommands(`echo "${inputData}" | ${scriptName} | run ${scriptName}`);
+      await sleep(50);
+
+      console.log(Terminal.outputHistory);
+      const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
+      const outputText: Output = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
+      expect(outputText?.text).toEqual(`${scriptName}: Received input: ${scriptName}: Received input: ${inputData}`);
     });
   });
 });
+
+function isOutput(entry: unknown): entry is Output {
+  return !!entry && typeof entry === "object" && entry instanceof Output;
+}

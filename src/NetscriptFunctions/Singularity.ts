@@ -52,7 +52,6 @@ import { validBitNodes } from "../BitNode/Constants";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
-import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {

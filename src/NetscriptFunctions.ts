@@ -109,8 +109,7 @@ import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
-import { PortHandle, PortNumber } from "./NetscriptPort";
-import { getTerminalStdIO } from "./Terminal/StdIO/RedirectIO";
+import { PortHandle } from "./NetscriptPort";
 
 export const enums: NSEnums = {
   CityName,
@@ -456,24 +455,25 @@ export const ns: InternalAPI<NSFull> = {
     (_format, ...args) => {
       const format = helpers.string(ctx, "format", _format);
       const str = vsprintf(format, args);
+      const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
 
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
         Terminal.error(`${str}`);
         return;
       }
       if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${str}`);
+        Terminal.success(`${str}`, stdOut);
         return;
       }
       if (str.startsWith("WARN")) {
-        Terminal.warn(`${str}`);
+        Terminal.warn(`${str}`, stdOut);
         return;
       }
       if (str.startsWith("INFO")) {
-        Terminal.info(`${str}`);
+        Terminal.info(`${str}`, stdOut);
         return;
       }
-      Terminal.print(`${str}`, ctx.workerScript.scriptRef.terminalStdOut);
+      Terminal.print(`${str}`, stdOut);
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
@@ -1459,8 +1459,8 @@ export const ns: InternalAPI<NSFull> = {
     const name = helpers.string(ctx, "name", _name);
     return getRamCost(name.split("."), true);
   },
-  tprintRaw: () => (value) => {
-    Terminal.printRaw(wrapUserNode(value), getTerminalStdIO(null)); // TODO-FICO: pass in script stdout
+  tprintRaw: (ctx) => (value) => {
+    Terminal.printRaw(wrapUserNode(value), ctx.workerScript.scriptRef.terminalStdOut);
   },
   printRaw: (ctx) => (value) => {
     ctx.workerScript.print(wrapUserNode(value));

@@ -1,7 +1,7 @@
 import { IOStream } from "./IOStream";
-import { stringify } from "./RedirectIO";
 import { Terminal } from "../../Terminal";
 import { Output, RawOutput, Link } from "../OutputTypes";
+import { stringify } from "./utils";
 
 let remaining = 0;
 const registerStdIOInstance = (stdIO: StdIO) => {
