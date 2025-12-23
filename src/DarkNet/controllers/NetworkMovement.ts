@@ -5,7 +5,7 @@ import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
-import { NET_WIDTH, SERVER_DENSITY } from "../Enums";
+import { MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,
   getAllDarknetServers,
@@ -344,6 +344,21 @@ export const validateDarknetNetwork = (): void => {
         ),
         true,
       );
+    }
+  }
+  for (let i = 0; i < MAX_NET_DEPTH; i++) {
+    for (let j = 0; j < NET_WIDTH; j++) {
+      const serverInNetwork = DarknetState.Network[i]?.[j];
+      if (!serverInNetwork) {
+        continue;
+      }
+      const server = GetServer(serverInNetwork.hostname);
+      if (server == null) {
+        exceptionAlert(new Error(`${serverInNetwork.hostname} at [${i}][${j}] does not exist in AllServers`), true);
+      }
+      if (serverInNetwork !== server) {
+        exceptionAlert(new Error(`Invalid darknet server instance detected at [${i}][${j}]`), true);
+      }
     }
   }
 };

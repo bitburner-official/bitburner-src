@@ -11,6 +11,8 @@ import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { DarknetServer } from "./DarknetServer";
 import { applyRamBlocks } from "../DarkNet/effects/ramblock";
+import { DarknetState } from "../DarkNet/models/DarknetState";
+import { MAX_NET_DEPTH, NET_WIDTH } from "../DarkNet/Enums";
 
 /**
  * Map of all Servers that exist in the game
@@ -154,6 +156,10 @@ export function prestigeAllServers(): void {
     delete AllServers[member];
   }
   AllServers = {};
+  // WIP: Check other properties in DarknetState as well, then improve validateDarknetNetwork.
+  DarknetState.Network = new Array(MAX_NET_DEPTH)
+    .fill(null)
+    .map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null));
 }
 
 export function loadAllServers(saveString: string): void {
