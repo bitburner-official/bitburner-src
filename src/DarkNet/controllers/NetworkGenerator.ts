@@ -110,6 +110,7 @@ export const populateDarknet = () => {
   }
 };
 
+// WIP: Remove this function before we merge and release.
 export const migrateLegacyImmobileServers = () => {
   const darknetServers = getAllDarknetServers();
   for (const server of darknetServers) {

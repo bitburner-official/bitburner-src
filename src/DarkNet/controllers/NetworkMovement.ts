@@ -235,6 +235,11 @@ const disconnectionRandomServer = (): void => {
   disconnectServer(server);
 };
 
+/**
+ * By default, this function disconnects the specified server from its neighbors, unless the neighbor is darkweb. Use
+ * the second parameter to ignore the exception. We added this exception to improve the stability of the servers
+ * directly connected to darkweb.
+ */
 export const disconnectServer = (server: DarknetServer, disconnectFromDarkweb = false): void => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to disconnect darkweb"), true);

@@ -96,6 +96,8 @@ export const calculateAuthenticationTime = (
     bonusTimeFactor *
     threadsFactor;
 
+  // We need to call GetServer and check if it's a dnet server later because this function can be called by formulas
+  // APIs (darknetServerData.hostname may be an invalid hostname).
   const server = GetServer(darknetServerData.hostname);
   const password = server instanceof DarknetServer ? server.password : "";
   // Add extra time for timing attack server, per correct character
