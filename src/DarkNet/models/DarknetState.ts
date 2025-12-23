@@ -5,6 +5,7 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 import { MAX_NET_DEPTH, NET_WIDTH } from "../Enums";
 
 import { getDarknetCyclesPerMutation } from "../utils/darknetNetworkUtils";
+import type { PasswordResponse } from "./DarknetServerOptions";
 
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
@@ -17,7 +18,7 @@ export type ServerState = {
 
 export type LogEntry = {
   pid: number;
-  message: string;
+  message: string | PasswordResponse;
 };
 
 export const DarknetState = {

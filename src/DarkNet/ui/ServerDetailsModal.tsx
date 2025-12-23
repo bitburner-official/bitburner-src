@@ -7,7 +7,7 @@ import { ServerSummary } from "./ServerSummary";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
 import { isLabyrinthServer } from "../effects/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
-import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
+import { copyToClipboard, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
 import { sleep } from "../../utils/Utility";
 import type { DarknetServer } from "../../Server/DarknetServer";
@@ -51,9 +51,9 @@ export const ServerDetailsModal = ({
     <pre
       key={index}
       color="secondary"
-      style={{ borderLeft: "1px solid grey", paddingLeft: "3px", whiteSpace: "normal" }}
+      style={{ borderLeft: "1px solid grey", paddingLeft: "3px", whiteSpace: "pre-wrap" }}
     >
-      {decolorJsonProperties(log.message)}
+      {typeof log.message === "string" ? log.message : JSON.stringify(log.message, null, 2)}
     </pre>
   ));
 

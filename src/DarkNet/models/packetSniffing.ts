@@ -1,6 +1,6 @@
 import { commonPasswordDictionary, letters, packetSniffPhrases } from "./dictionaryData";
 import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } from "../controllers/ServerGenerator";
-import { generateDarknetServerName, type PasswordResponse } from "./DarknetServerOptions";
+import { generateDarknetServerName, isPasswordResponse, type PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
 import { getServerState, LogEntry } from "./DarknetState";
 import { ModelIds } from "../Enums";
@@ -56,8 +56,10 @@ const getRandomData = (server: DarknetServer, length: number) => {
     } else if (Math.random() < 0.3) {
       result += generateSimpleArithmeticExpression(Math.floor(Math.random() * 5 + 2));
     } else if (Math.random() < 0.33) {
-      const mostRecentAuthLog = getServerLogs(server, 1, true, true)[0]?.message || "";
-      result += " " + getExactCharactersHint(mostRecentAuthLog, password);
+      const mostRecentAuthLog = getMostRecentAuthLog(server.hostname);
+      if (mostRecentAuthLog) {
+        result += " " + getExactCharactersHint(mostRecentAuthLog.passwordAttempted, password);
+      }
     } else if (Math.random() < 0.6) {
       result += " " + generateDarknetServerName() + " ";
     } else if (Math.random() < 0.15) {
@@ -108,22 +110,18 @@ export const logPasswordAttempt = (server: DarknetServer, passwordResponse: Pass
   const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
 
-  let message = JSON.stringify(passwordResponse, null, 2);
+  let message = passwordResponse;
 
   // buffer overflow servers have special logging: any characters beyond the password length start to overwrite the
   // response code in the log, which can turn it into a 200
   if (server.modelId === ModelIds.BufferOverflow && passwordResponse) {
     const [passwordInBuffer, overflow] = (passwordResponse.data ?? "").split(",");
-    message = JSON.stringify(
-      {
-        passwordAttempted: passwordInBuffer,
-        passwordExpected: overflow,
-        code: passwordResponse.code,
-        message: passwordResponse.message,
-      },
-      null,
-      2,
-    );
+    message = {
+      code: passwordResponse.code,
+      passwordAttempted: passwordInBuffer,
+      passwordExpected: overflow,
+      message: passwordResponse.message,
+    } satisfies PasswordResponse;
   }
 
   const logMessage = {
@@ -176,14 +174,9 @@ const getLogNoise = (server: DarknetServer, logDate: Date): LogEntry => {
     return log(`[sending transaction details to ${connectedServerName}.]`);
   }
   if (Math.random() < 0.1) {
-    const serverState = getServerState(server.hostname);
-    const lastPasswordAttempt =
-      serverState.serverLogs.find((log) => log.message.includes("passwordAttempted"))?.message ?? "";
-    if (lastPasswordAttempt) {
-      const authLog = JSON.parse(lastPasswordAttempt) as PasswordResponse;
-      const password = authLog.passwordAttempted;
-      const mostRecentAuthLog = getServerLogs(server, 1, true, true)[0]?.message || "";
-      return log(getExactCharactersHint(mostRecentAuthLog, password));
+    const mostRecentAuthLog = getMostRecentAuthLog(server.hostname);
+    if (mostRecentAuthLog) {
+      return log(getExactCharactersHint(mostRecentAuthLog.passwordAttempted, server.password));
     }
   }
 
@@ -209,20 +202,20 @@ const log = (message: string, pid = -1) => ({
   pid,
 });
 
-export const getServerLogs = (server: DarknetServer, logLines: number, peek = false, requireAuthLog = false) => {
-  const serverState = getServerState(server.hostname);
-
-  if (requireAuthLog) {
-    const authLog = serverState.serverLogs.find((log) => log.message.includes("passwordAttempted"));
-    if (authLog) {
-      return [authLog];
-    } else {
-      return [];
+export const getMostRecentAuthLog = (hostname: string) => {
+  for (const log of getServerState(hostname).serverLogs) {
+    if (!isPasswordResponse(log.message)) {
+      continue;
     }
+    return log.message;
   }
+  return null;
+};
 
+export const getServerLogs = (server: DarknetServer, logLines: number, peek = false) => {
   populateServerLogsWithNoise(server);
 
+  const serverState = getServerState(server.hostname);
   if (peek) {
     return serverState.serverLogs.slice(0, logLines);
   }

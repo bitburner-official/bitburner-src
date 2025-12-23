@@ -27,6 +27,17 @@ export type PasswordResponse = {
   responseTime?: number;
 };
 
+export function isPasswordResponse(v: unknown): v is PasswordResponse {
+  return (
+    v != null &&
+    typeof v === "object" &&
+    "code" in v &&
+    "passwordAttempted" in v &&
+    "message" in v &&
+    typeof v.passwordAttempted === "string"
+  );
+}
+
 export type DarknetServerOptions = {
   icon?: Icon | typeof labIcon;
   password: string;

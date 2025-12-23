@@ -104,7 +104,7 @@ export const LabyrinthSummary = ({
     DarknetState.serverState[lab.name]?.serverLogs
       .filter((log) => log.pid === currentPerspective)
       .slice(0, 2)
-      .map((log) => log.message.replaceAll('\\"', "'"))
+      .map((log) => (typeof log.message === "string" ? log.message : JSON.stringify(log.message, null, 2)))
       .join("\n") || "(no response yet)";
 
   const getManualFeedback = () => {

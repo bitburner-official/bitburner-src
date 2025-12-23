@@ -17,7 +17,6 @@ import {
   cleanArithmeticExpression,
   getBufferOverflowConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
-import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
@@ -29,7 +28,7 @@ import * as UtilityModule from "../../../src/utils/Utility";
 import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 import { isNumber } from "../../../src/types";
-import { getServerLogs } from "../../../src/DarkNet/models/packetSniffing";
+import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -91,12 +90,14 @@ describe("Password Tests", () => {
     expect(server).toBeDefined();
 
     const getData = () => {
-      const responseLog = DarknetState.serverState[server.hostname].serverLogs.slice(0, 1)[0]?.message ?? "";
-      const feedback = JSON.parse(responseLog) as PasswordResponse;
-      if (!feedback.data) {
-        throw new Error(`Invalid responseLog: ${responseLog}`);
+      const authLog = getMostRecentAuthLog(server.hostname);
+      if (!authLog) {
+        throw new Error(`Cannot find the most recent auth log in ${server.hostname}`);
       }
-      return feedback.data.split(",").map((item) => item.trim());
+      if (!authLog.data) {
+        throw new Error(`Auth log does not contain data: ${JSON.stringify(authLog)}`);
+      }
+      return authLog.data.split(",").map((item) => item.trim());
     };
 
     const failedAttemptResponse1 = getAuthResult(server, "");
@@ -150,6 +151,9 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
+    if (!failedAttemptResponse.response.data) {
+      throw new Error(`Password response does not contain data: ${JSON.stringify(failedAttemptResponse.response)}`);
+    }
     const [base, numberString] = failedAttemptResponse.response.data.split(",");
     expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
@@ -167,6 +171,9 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
+    if (!failedAttemptResponse.response.data) {
+      throw new Error(`Password response does not contain data: ${JSON.stringify(failedAttemptResponse.response)}`);
+    }
     const [base, numberString] = failedAttemptResponse.response.data.split(",");
     expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
@@ -281,8 +288,11 @@ describe("Password Tests", () => {
     const nonDivisibleResult = getAuthResult(server, `${server.password + 1}`, 1);
     expect(nonDivisibleResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
     expect(nonDivisibleResult.response.message).toContain("not divisible");
-    const nonDivisibleLogs = DarknetState.serverState[server.hostname].serverLogs[0];
-    expect(nonDivisibleLogs.message).toContain("not divisible");
+    const authLog = getMostRecentAuthLog(server.hostname);
+    if (!authLog) {
+      throw new Error(`Cannot find the most recent auth log in ${server.hostname}`);
+    }
+    expect(authLog.message).toContain("not divisible");
 
     let factor = 2;
     while (+server.password % factor !== 0) {
@@ -304,12 +314,14 @@ describe("Password Tests", () => {
     const failedResult = getAuthResult(bufferOverflowServer, "1", 1);
     expect(failedResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
 
-    const mostRecentLog1 = getServerLogs(bufferOverflowServer, 1, true, true)[0];
-    const log = JSON.parse(mostRecentLog1.message) as PasswordResponse;
+    const authLog = getMostRecentAuthLog(bufferOverflowServer.hostname);
+    if (!authLog) {
+      throw new Error(`Cannot find the most recent auth log in ${bufferOverflowServer.hostname}`);
+    }
     const received = "1".padEnd(passwordLength, "ˍ").slice(0, passwordLength);
     const expected = "■".repeat(passwordLength);
-    expect(log.message).toBe(`auth failed: received '${received}', expected '${expected}'`);
-    expect(log.passwordAttempted).toBe("1".padEnd(passwordLength, "ˍ").slice(0, passwordLength));
+    expect(authLog.message).toBe(`auth failed: received '${received}', expected '${expected}'`);
+    expect(authLog.passwordAttempted).toBe("1".padEnd(passwordLength, "ˍ").slice(0, passwordLength));
 
     const successResult = getAuthResult(bufferOverflowServer, "A".repeat(passwordLength * 2), 1);
     expect(successResult.response.code).toBe(ResponseCodeEnum.Success);
