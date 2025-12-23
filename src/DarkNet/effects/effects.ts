@@ -9,7 +9,7 @@ import {
   passwordFileNames,
 } from "../models/dictionaryData";
 import { hintLiterature } from "../models/hintNotes";
-import { TextFilePath } from "../../Paths/TextFilePath";
+import { resolveTextFilePath, type TextFilePath } from "../../Paths/TextFilePath";
 import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
@@ -156,7 +156,7 @@ export const addClue = (server: DarknetServer) => {
     const hintFileName = getClueFileName(passwordFileNames);
     const start = Math.floor(Math.random() * (commonPasswordDictionary.length - length));
     const commonPasswords = commonPasswordDictionary.slice(start, start + length).join(", ");
-    server.writeToTextFile(hintFileName as TextFilePath, `Some common passwords include ${commonPasswords}`);
+    server.writeToTextFile(hintFileName, `Some common passwords include ${commonPasswords}`);
     return;
   }
 
@@ -169,7 +169,7 @@ export const addClue = (server: DarknetServer) => {
     });
     const neighboringServer = neighboringServerName ? getDarknetServer(neighboringServerName) : null;
     if (neighboringServer) {
-      server.writeToTextFile(passwordHintName as TextFilePath, `Remember this password: ${neighboringServer.password}`);
+      server.writeToTextFile(passwordHintName, `Remember this password: ${neighboringServer.password}`);
       return;
     }
   }
@@ -180,7 +180,7 @@ export const addClue = (server: DarknetServer) => {
     const targetServer = getNearbyNonEmptyPasswordServer(server, true);
     if (targetServer) {
       const contents = `Server: ${targetServer.hostname} Password: "${targetServer.password}"`;
-      server.writeToTextFile(hintFileName as TextFilePath, contents);
+      server.writeToTextFile(hintFileName, contents);
       return;
     }
   }
@@ -188,7 +188,7 @@ export const addClue = (server: DarknetServer) => {
   if (Math.random() < 0.4) {
     const hintFileName = getClueFileName(notebookFileNames);
     const loreNote = packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
-    server.writeToTextFile(hintFileName as TextFilePath, loreNote);
+    server.writeToTextFile(hintFileName, loreNote);
     return;
   }
 
@@ -198,14 +198,20 @@ export const addClue = (server: DarknetServer) => {
     if (targetServer) {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);
       const hint = `The password for ${targetServer.hostname} contains ${containedChar1} and ${containedChar2}`;
-      server.writeToTextFile(hintFileName as TextFilePath, hint);
+      server.writeToTextFile(hintFileName, hint);
       return;
     }
   }
 };
 
-const getClueFileName = (fileNameList: string[]): string => {
-  return fileNameList[Math.floor(Math.random() * fileNameList.length)] + DarknetConstants.DataFileSuffix;
+const getClueFileName = (fileNameList: string[]): TextFilePath => {
+  const filePath = resolveTextFilePath(
+    fileNameList[Math.floor(Math.random() * fileNameList.length)] + DarknetConstants.DataFileSuffix,
+  );
+  if (!filePath) {
+    throw new Error(`Invalid clue file name. fileNameList: ${fileNameList}`);
+  }
+  return filePath;
 };
 
 export const getDarknetVolatilityMult = (symbol: string) => {
