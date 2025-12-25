@@ -20,4 +20,5 @@ export enum LiteratureName {
   TheNewGod = "the-new-god.lit",
   NewTriads = "new-triads.lit",
   TheSecretWar = "the-secret-war.lit",
+  BeyondCyberpsychosis = "beyond-cyberpsychosis.lit",
 }

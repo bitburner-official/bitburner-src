@@ -1467,7 +1467,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 0,
     hostname: SpecialServers.NiteSecServer,
-    literature: [LiteratureName.DemocracyIsDead],
+    literature: [LiteratureName.DemocracyIsDead, LiteratureName.BeyondCyberpsychosis],
     maxRamExponent: {
       max: 7,
       min: 4,
