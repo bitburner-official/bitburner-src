@@ -72,6 +72,7 @@ import {
 import { PositiveInteger } from "../types";
 import { getRecordKeys } from "../Types/Record";
 import { setDeprecatedProperties } from "../utils/DeprecationHelper";
+import { CONSTANTS } from "../Constants";
 
 export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   function hasUnlock(unlockName: CorpUnlockName): boolean {
@@ -802,7 +803,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);
-      return getCorporation().storedCycles * 200;
+      return getCorporation().storedCycles * CONSTANTS.MilliPerCycle;
     },
     nextUpdate: (ctx) => () => {
       checkAccess(ctx);

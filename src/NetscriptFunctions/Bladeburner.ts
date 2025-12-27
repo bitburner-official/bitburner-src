@@ -20,6 +20,7 @@ import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperati
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 import { calculateActionRankGain, calculateActionReputationGain } from "../Bladeburner/Formulas";
+import { CONSTANTS } from "../Constants";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -348,7 +349,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getBonusTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return bladeburner.storedCycles * 200;
+      return bladeburner.storedCycles * CONSTANTS.MilliPerCycle;
     },
     nextUpdate: (ctx) => () => {
       checkBladeburnerAccess(ctx);
