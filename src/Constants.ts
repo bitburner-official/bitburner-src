@@ -170,7 +170,7 @@ export const CONSTANTS = {
 
 ### MISC
 
-- Fixed lack of exclamation mark when backdooring without admin rights (#2416) (@kordhell)
+- Fixed lack of exclamation mark when backdooring without admin rights (#2436) (@kordhell)
 - Ensure IPvGO board has at least 1 offline node (#2072) (@ficocelliguy)
 - Fix: Game crashes when generating CCT in weird case (#2077) (@catloversg)
 - Add ns.dynamicImport() to dynamically import a script (#2036) (@shyguy1412)
