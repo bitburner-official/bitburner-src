@@ -1986,7 +1986,7 @@ export interface Singularity {
    * if (!success) ns.tprint(`ERROR: Failed to purchase ${programName}`);
    * ```
    * @param programName - Name of program to purchase.
-   * @returns True if the specified program is purchased, and false otherwise.
+   * @returns True if the specified program is purchased or if you already own it, and false otherwise.
    */
   purchaseProgram(programName: string): boolean;
 
