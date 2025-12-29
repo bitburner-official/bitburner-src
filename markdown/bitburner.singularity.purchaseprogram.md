@@ -52,7 +52,7 @@ Name of program to purchase.
 
 boolean
 
-True if the specified program is purchased, and false otherwise.
+True if the specified program is purchased or if you already own it, and false otherwise.
 
 ## Remarks
 
