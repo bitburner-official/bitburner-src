@@ -162,6 +162,9 @@ export const getAuthResult = (
 };
 
 export const isAuthenticated = (server: DarknetServer, pid: number): boolean => {
+  if (!server.hasAdminRights) {
+    return false;
+  }
   const serverState = getServerState(server.hostname);
   return serverState.authenticatedPIDs.includes(pid) || server.hostname === SpecialServers.DarkWeb;
 };
