@@ -217,7 +217,7 @@ const getClueFileName = (fileNameList: string[]): TextFilePath => {
 export const getDarknetVolatilityMult = (symbol: string) => {
   const charges = DarknetState.stockPromotions[symbol] ?? 0;
   const growthRate = 0.001;
-  return 1 + (0.6 * (1 - Math.exp(-growthRate * charges)) + 1.4 * (1 - Math.exp(-growthRate * 0.15 * charges)));
+  return 1 + (1 - Math.exp(-growthRate * charges) + 2 * (1 - Math.exp(-growthRate * 0.15 * charges)));
 };
 
 export const scaleDarknetVolatilityIncreases = (scalar: number) => {
