@@ -68,10 +68,9 @@ export function initDarkwebServer(): void {
 
   const data: DarknetServerOptions = {
     icon: Icon.Terminal,
-    password: "leekspin",
-    modelId: ModelIds.EchoVuln,
-    staticPasswordHint: "The passkey is 'leekspin'",
-    passwordHintData: "leekspin",
+    password: "",
+    modelId: ModelIds.NoPassword,
+    staticPasswordHint: "There is no password",
     leftOffset: -1,
     depth: -1,
     difficulty: 0,

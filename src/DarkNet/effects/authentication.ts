@@ -13,6 +13,7 @@ import {
   getMisplacedCorrectCharsCount,
 } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 export const checkPassword = (
   server: DarknetServer,
@@ -162,7 +163,7 @@ export const getAuthResult = (
 
 export const isAuthenticated = (server: DarknetServer, pid: number): boolean => {
   const serverState = getServerState(server.hostname);
-  return serverState.authenticatedPIDs.includes(pid);
+  return serverState.authenticatedPIDs.includes(pid) || server.hostname === SpecialServers.DarkWeb;
 };
 
 export const getMastermindResponse = (password: string, attemptedPassword: string) => {

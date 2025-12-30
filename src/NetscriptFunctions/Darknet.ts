@@ -1,7 +1,6 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import type { Darknet as DarknetAPI, DarknetResult } from "@nsdefs";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { SpecialServers } from "../Server/data/SpecialServers";
 import {
   calculateAuthenticationTime,
   calculatePasswordAttemptChaGain,
@@ -18,7 +17,7 @@ import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkNet/effects/webstorm";
 import { getPasswordType } from "../DarkNet/controllers/ServerGenerator";
-import { checkPassword, getAuthResult } from "../DarkNet/effects/authentication";
+import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/effects/authentication";
 import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkNet/effects/labyrinth";
 import { getPhishingAttackSpeed, handlePhishingAttack } from "../DarkNet/effects/phishing";
 import { handleRamBlockRemoved } from "../DarkNet/effects/ramblock";
@@ -444,9 +443,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const targetServer = onlineConnectionCheck.server;
       const localServer = ctx.workerScript.getServer();
       const isConnected = isDirectConnected(localServer, targetServer);
-      const hasSession =
-        DarknetState.serverState[targetServer.hostname]?.authenticatedPIDs.includes(ctx.workerScript.pid) ||
-        hostname === SpecialServers.DarkWeb;
+      const hasSession = isAuthenticated(targetServer, ctx.workerScript.pid);
       return {
         isOnline: true,
         isConnectedToCurrentServer: isConnected,
