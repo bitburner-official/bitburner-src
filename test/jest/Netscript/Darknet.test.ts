@@ -15,11 +15,12 @@ import {
   setupBasicTestingEnvironment,
 } from "../Utilities";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
-import { DarknetState, getServerState } from "../../../src/DarkNet/models/DarknetState";
+import { DarknetState, getServerState, triggerNextUpdate } from "../../../src/DarkNet/models/DarknetState";
 import { getDarknetServerOrThrow } from "../../../src/DarkNet/utils/darknetServerUtils";
 import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { expectRunningOnDarknetServer } from "../../../src/DarkNet/effects/offlineServerHandling";
+import { sleep } from "../../../src/utils/Utility";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Server ${hostnameOfNonExistentServer} does not exist.`;
@@ -126,6 +127,17 @@ describe("Common APIs", () => {
     expect(resultAfterAllBackdoors.authenticateDurationMultiplier).toBeGreaterThan(
       resultAfterEightBackdoors.authenticateDurationMultiplier,
     );
+  });
+  test("nextUpdate", async () => {
+    const ns = getNsOnDarkWeb();
+    let resolved = false;
+    void ns.dnet.nextUpdate().then(() => {
+      resolved = true;
+    });
+    expect(resolved).toStrictEqual(false);
+    triggerNextUpdate();
+    await sleep(10);
+    expect(resolved).toStrictEqual(true);
   });
 });
 
@@ -286,6 +298,13 @@ describe("home", () => {
     // Can exec from home
     expect(ns.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
   });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNS(SpecialServers.Home);
+    const server = GetServerOrThrow(SpecialServers.Home);
+    expect(() => {
+      ns.dnet.getServerRequiredCharismaLevel(server.hostname);
+    }).toThrow("Home is not a darknet server");
+  });
 });
 
 describe("Normal NPC server", () => {
@@ -360,6 +379,13 @@ describe("Normal NPC server", () => {
     await expect(async () => {
       await ns.dnet.phishingAttack();
     }).rejects.toContain("This API can only be used on a darknet server");
+  });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNS(SpecialServers.CyberSecServer);
+    const server = GetServerOrThrow(SpecialServers.CyberSecServer);
+    expect(() => {
+      ns.dnet.getServerRequiredCharismaLevel(server.hostname);
+    }).toThrow("CSEC is not a darknet server");
   });
 });
 
@@ -436,6 +462,13 @@ describe("Private server", () => {
       await ns.dnet.phishingAttack();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNS("test-server-1");
+    const server = GetServerOrThrow("test-server-1");
+    expect(() => {
+      ns.dnet.getServerRequiredCharismaLevel(server.hostname);
+    }).toThrow("test-server-1 is not a darknet server");
+  });
 });
 
 describe("Hashnet server", () => {
@@ -511,6 +544,13 @@ describe("Hashnet server", () => {
       await ns.dnet.phishingAttack();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNS("hacknet-server-0");
+    const server = GetServerOrThrow("hacknet-server-0");
+    expect(() => {
+      ns.dnet.getServerRequiredCharismaLevel(server.hostname);
+    }).toThrow("hacknet-server-0 is not a darknet server");
+  });
 });
 
 describe("Non-existent server", () => {
@@ -560,6 +600,12 @@ describe("Non-existent server", () => {
     const ns = getNsOnDarkWeb();
     expect(() => ns.dnet.getBlockedRam(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => {
+      ns.dnet.getServerRequiredCharismaLevel(hostnameOfNonExistentServer);
+    }).toThrow(errorMessageForNonExistentServer);
+  });
 });
 
 describe("darkweb targets home", () => {
@@ -603,6 +649,10 @@ describe("darkweb targets home", () => {
   test("getDepth", () => {
     const ns = getNsOnDarkWeb();
     expect(() => ns.dnet.getDepth(SpecialServers.Home)).toThrow("home is not a darknet server");
+  });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNsOnDarkWeb();
+    expect(() => ns.dnet.getServerRequiredCharismaLevel(SpecialServers.Home)).toThrow("home is not a darknet server");
   });
 });
 
@@ -891,6 +941,11 @@ describe("Non-darkweb darknet server", () => {
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNsOnNonDarkwebDarknetServer();
+    const server = getDarknetServerOrThrow(SpecialServers.DarkWeb);
+    expect(ns.dnet.getServerRequiredCharismaLevel(SpecialServers.DarkWeb)).toStrictEqual(server.requiredCharismaSkill);
+  });
 });
 
 describe("Offline darknet server", () => {
@@ -965,6 +1020,11 @@ describe("Offline darknet server", () => {
   test("getDepth", () => {
     const ns = getNsOnDarkWeb();
     const result = ns.dnet.getDepth(hostnameForOfflineServer);
+    expect(result).toStrictEqual(-1);
+  });
+  test("getServerRequiredCharismaLevel", () => {
+    const ns = getNsOnDarkWeb();
+    const result = ns.dnet.getServerRequiredCharismaLevel(hostnameForOfflineServer);
     expect(result).toStrictEqual(-1);
   });
 });

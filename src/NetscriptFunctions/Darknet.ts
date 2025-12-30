@@ -693,11 +693,26 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return handlePhishingAttack(ctx, server);
       });
     },
-    getDarknetInstability: () => () => {
+    getDarknetInstability: (ctx) => () => {
+      expectDarknetAccess(ctx);
       return {
         authenticateDurationMultiplier: getBackdoorAuthTimeDebuff(),
         authenticateTimeoutChance: getTimeoutChance(),
       };
     },
+    nextUpdate: (ctx) => () => {
+      expectDarknetAccess(ctx);
+      return DarknetState.nextUpdate;
+    },
+    getServerRequiredCharismaLevel:
+      (ctx) =>
+      (_hostname): number => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const onlineConnectionCheck = getFailureResult(ctx, hostname);
+        if (!onlineConnectionCheck.success) {
+          return -1;
+        }
+        return onlineConnectionCheck.server.requiredCharismaSkill;
+      },
   };
 }

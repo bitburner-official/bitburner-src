@@ -425,6 +425,7 @@ import nsDoc_bitburner_darknet_getblockedram_md from "../../markdown/bitburner.d
 import nsDoc_bitburner_darknet_getdarknetinstability_md from "../../markdown/bitburner.darknet.getdarknetinstability.md?raw";
 import nsDoc_bitburner_darknet_getdepth_md from "../../markdown/bitburner.darknet.getdepth.md?raw";
 import nsDoc_bitburner_darknet_getserverauthdetails_md from "../../markdown/bitburner.darknet.getserverauthdetails.md?raw";
+import nsDoc_bitburner_darknet_getserverrequiredcharismalevel_md from "../../markdown/bitburner.darknet.getserverrequiredcharismalevel.md?raw";
 import nsDoc_bitburner_darknet_getstasislinkedservers_md from "../../markdown/bitburner.darknet.getstasislinkedservers.md?raw";
 import nsDoc_bitburner_darknet_getstasislinklimit_md from "../../markdown/bitburner.darknet.getstasislinklimit.md?raw";
 import nsDoc_bitburner_darknet_heartbleed_md from "../../markdown/bitburner.darknet.heartbleed.md?raw";
@@ -432,6 +433,7 @@ import nsDoc_bitburner_darknet_induceservermigration_md from "../../markdown/bit
 import nsDoc_bitburner_darknet_isdarknetserver_md from "../../markdown/bitburner.darknet.isdarknetserver.md?raw";
 import nsDoc_bitburner_darknet_md from "../../markdown/bitburner.darknet.md?raw";
 import nsDoc_bitburner_darknet_memoryreallocation_md from "../../markdown/bitburner.darknet.memoryreallocation.md?raw";
+import nsDoc_bitburner_darknet_nextupdate_md from "../../markdown/bitburner.darknet.nextupdate.md?raw";
 import nsDoc_bitburner_darknet_opencache_md from "../../markdown/bitburner.darknet.opencache.md?raw";
 import nsDoc_bitburner_darknet_packetcapture_md from "../../markdown/bitburner.darknet.packetcapture.md?raw";
 import nsDoc_bitburner_darknet_phishingattack_md from "../../markdown/bitburner.darknet.phishingattack.md?raw";
@@ -1987,6 +1989,7 @@ AllPages["nsDoc/bitburner.darknet.getblockedram.md"] = nsDoc_bitburner_darknet_g
 AllPages["nsDoc/bitburner.darknet.getdarknetinstability.md"] = nsDoc_bitburner_darknet_getdarknetinstability_md;
 AllPages["nsDoc/bitburner.darknet.getdepth.md"] = nsDoc_bitburner_darknet_getdepth_md;
 AllPages["nsDoc/bitburner.darknet.getserverauthdetails.md"] = nsDoc_bitburner_darknet_getserverauthdetails_md;
+AllPages["nsDoc/bitburner.darknet.getserverrequiredcharismalevel.md"] = nsDoc_bitburner_darknet_getserverrequiredcharismalevel_md;
 AllPages["nsDoc/bitburner.darknet.getstasislinkedservers.md"] = nsDoc_bitburner_darknet_getstasislinkedservers_md;
 AllPages["nsDoc/bitburner.darknet.getstasislinklimit.md"] = nsDoc_bitburner_darknet_getstasislinklimit_md;
 AllPages["nsDoc/bitburner.darknet.heartbleed.md"] = nsDoc_bitburner_darknet_heartbleed_md;
@@ -1994,6 +1997,7 @@ AllPages["nsDoc/bitburner.darknet.induceservermigration.md"] = nsDoc_bitburner_d
 AllPages["nsDoc/bitburner.darknet.isdarknetserver.md"] = nsDoc_bitburner_darknet_isdarknetserver_md;
 AllPages["nsDoc/bitburner.darknet.md"] = nsDoc_bitburner_darknet_md;
 AllPages["nsDoc/bitburner.darknet.memoryreallocation.md"] = nsDoc_bitburner_darknet_memoryreallocation_md;
+AllPages["nsDoc/bitburner.darknet.nextupdate.md"] = nsDoc_bitburner_darknet_nextupdate_md;
 AllPages["nsDoc/bitburner.darknet.opencache.md"] = nsDoc_bitburner_darknet_opencache_md;
 AllPages["nsDoc/bitburner.darknet.packetcapture.md"] = nsDoc_bitburner_darknet_packetcapture_md;
 AllPages["nsDoc/bitburner.darknet.phishingattack.md"] = nsDoc_bitburner_darknet_phishingattack_md;

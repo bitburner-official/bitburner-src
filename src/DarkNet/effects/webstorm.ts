@@ -1,4 +1,4 @@
-import { DarknetEvents, DarknetState } from "../models/DarknetState";
+import { DarknetEvents, DarknetState, triggerNextUpdate } from "../models/DarknetState";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { CompletedProgramName, ToastVariant } from "@enums";
 import {
@@ -32,22 +32,27 @@ export const launchWebstorm = async (suppressToast = false) => {
   moveRandomDarknetServers((getAllMovableDarknetServers().length - serversToDelete) * 0.6);
   restartAllDarknetServers();
   validateDarknetNetworkAndEmitDarknetEvent();
+  triggerNextUpdate();
 
   await sleep(4000);
   addRandomDarknetServers(NET_WIDTH);
   validateDarknetNetworkAndEmitDarknetEvent();
+  triggerNextUpdate();
 
   await sleep(4000);
   addRandomDarknetServers(NET_WIDTH * 2);
   validateDarknetNetworkAndEmitDarknetEvent();
+  triggerNextUpdate();
 
   await sleep(4000);
   addRandomDarknetServers(NET_WIDTH * 2);
   validateDarknetNetworkAndEmitDarknetEvent();
+  triggerNextUpdate();
 
   await sleep(8000);
   balanceDarknetServers();
   validateDarknetNetworkAndEmitDarknetEvent();
+  triggerNextUpdate();
 
   await sleep(5000);
   DarknetState.allowMutating = true;

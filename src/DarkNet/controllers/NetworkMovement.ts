@@ -1,5 +1,11 @@
 import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
-import { DarknetEvents, DarknetState, getServerState, storeDarknetCycles } from "../models/DarknetState";
+import {
+  DarknetEvents,
+  DarknetState,
+  getServerState,
+  storeDarknetCycles,
+  triggerNextUpdate,
+} from "../models/DarknetState";
 import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killScripts } from "../../Netscript/killWorkerScript";
@@ -44,6 +50,9 @@ export const mutateDarknet = (): void => {
   if (servers.length === 0) {
     return;
   }
+
+  // resolve pending update promise, and create a new one
+  triggerNextUpdate();
 
   // Limit mutation speed based on size of net
   const depth = getNetDepth();

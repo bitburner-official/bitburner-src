@@ -24,6 +24,8 @@ export type LogEntry = {
 export const DarknetState = {
   allowMutating: true,
   openServer: null as BaseServer | null,
+  nextUpdate: Promise.resolve(),
+  nextUpdateResolver: null as (() => void) | null,
 
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null)),
 
@@ -77,3 +79,13 @@ export const storeDarknetCycles = (cycles: number) => {
 };
 
 export const hasDarknetBonusTime = () => DarknetState.storedCycles > getDarknetCyclesPerMutation() * 2;
+
+export const triggerNextUpdate = () => {
+  DarknetState.nextUpdateResolver?.();
+  DarknetState.nextUpdate = new Promise((resolve) => {
+    DarknetState.nextUpdateResolver = resolve;
+  });
+};
+
+// Set up initial promises
+triggerNextUpdate();

@@ -56,5 +56,5 @@ An object containing the server's authentication protocol details.
 
 ## Remarks
 
-RAM cost: 0.05 GB
+RAM cost: 0.1 GB
 

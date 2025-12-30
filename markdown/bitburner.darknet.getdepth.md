@@ -58,5 +58,5 @@ The current depth of the server into the darknet.
 
 ## Remarks
 
-RAM cost: 0.05 GB
+RAM cost: 0.1 GB
 

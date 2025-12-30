@@ -4544,7 +4544,7 @@ export interface Darknet {
    * Returns the server's authentication protocol details.
    *
    * @remarks
-   * RAM cost: 0.05 GB
+   * RAM cost: 0.1 GB
    *
    * @param host - Hostname of the server to analyze. Defaults to the running script's server if not specified.
    * @returns An object containing the server's authentication protocol details.
@@ -4595,7 +4595,7 @@ export interface Darknet {
    * Returns false if the server does not exist or has gone offline recently. This function does not DarkscapeNavigator.exe.
    *
    * @remarks
-   * RAM cost: 0.05 GB
+   * RAM cost: 0.1 GB
    *
    * @param host - Optional. Hostname for the requested server object. Defaults to the running script's server.
    * @returns true if the server is a darknet server, false otherwise.
@@ -4631,7 +4631,7 @@ export interface Darknet {
    * Returns -1 if the server is offline, not found, or not a darkweb server.
    *
    * @remarks
-   * RAM cost: 0.05 GB
+   * RAM cost: 0.1 GB
    *
    * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
    * @returns The current depth of the server into the darknet.
@@ -4672,6 +4672,36 @@ export interface Darknet {
    *    authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
    */
   getDarknetInstability(): { authenticateDurationMultiplier: number; authenticateTimeoutChance: number };
+
+  /**
+   * Sleep until the next mutation of the network of darknet servers (which occur frequently).
+   * Note that in the majority of cases, whatever changed out on the net (if anything) will not be nearby to,
+   * or visible from, the current server.
+   *
+   * Some possible mutations that can occur somewhere on the dark net each cycle:
+   * - Nothing changes
+   * - Some servers move to other locations on the net, breaking existing connections and forming new ones
+   * - Some servers go offline, which in many cases is permanent - they are effectively deleted
+   * - Some servers restart, which kills all running scripts on the server
+   * - New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   */
+  nextUpdate(): Promise<void>;
+
+  /**
+   * Gets the required charisma level to target the server with dnet.heartbleed().
+   *
+   * Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep
+   * in the darknet, be impossible.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @param hostname - Hostname of the server to check.
+   */
+  getServerRequiredCharismaLevel(hostname: string): number;
 }
 
 /**
