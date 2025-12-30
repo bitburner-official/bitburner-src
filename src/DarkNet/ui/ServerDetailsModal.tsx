@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { Container, Card, SvgIcon, Typography, Tooltip } from "@mui/material";
 import { getIcon } from "./ServerIcon";
-import { DarknetEvents, getServerState } from "../models/DarknetState";
+import { getServerState } from "../models/DarknetState";
 import { ServerSummary } from "./ServerSummary";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
 import { isLabyrinthServer } from "../effects/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, formatToMaxDigits } from "./uiUtilities";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { sleep } from "../../utils/Utility";
 import type { DarknetServer } from "../../Server/DarknetServer";
 
@@ -27,15 +27,8 @@ export const ServerDetailsModal = ({
   server,
   classes,
 }: DWPasswordPromptModalProps): React.ReactElement => {
-  const rerender = useRerender();
+  useCycleRerender();
   const focusTarget = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const clearSubscription = DarknetEvents.subscribe(() => rerender());
-    return () => {
-      clearSubscription();
-    };
-  }, [rerender]);
 
   const icon = getIcon(server.icon);
   populateServerLogsWithNoise(server);
@@ -67,7 +60,7 @@ export const ServerDetailsModal = ({
     <Modal open={open} onClose={onClose} removeFocus={false}>
       <>
         <input ref={focusTarget} className={classes.hiddenInput}></input>
-        <Container sx={{ width: "calc(min(700px, 80vw))", minHeight: "500px" }}>
+        <Container sx={{ width: "calc(min(900px, 90vw))", minHeight: "500px" }}>
           <div className={classes.inlineFlexBox}>
             <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
               {server.hostname}

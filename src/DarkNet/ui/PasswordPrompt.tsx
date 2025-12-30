@@ -40,6 +40,8 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
       server.modelId === ModelIds.TimingAttack ? getSharedChars(server.password, passwordAttempted) : 0;
     const responseTime = 500 + sharedChars * 150;
     await sleep(responseTime);
+    // Cancel if the component unmounted while waiting
+    if (passwordInput.current === null) return;
 
     // Manual password entry counts as having two threads, to increase the cha xp slightly during early exploration
     const response = getAuthResult(server, passwordAttempted, 2, responseTime);
