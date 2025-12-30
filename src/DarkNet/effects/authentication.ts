@@ -32,9 +32,11 @@ export const checkPassword = (
   switch (server.modelId) {
     case ModelIds.MastermindHint: {
       const { exactCharacters, misplacedCharacters } = getMastermindResponse(server.password, attemptedPassword);
-      const message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
+      const exactCharsMessage = `${exactCharacters} symbol${exactCharacters == 1 ? " is" : "s are"} match exactly`;
+      const misplacedCharsMessage = `${misplacedCharacters} symbol${misplacedCharacters == 1 ? "" : "s"} match but ${
         misplacedCharacters == 1 ? "is" : "are"
-      } close.`;
+      } in the wrong place`;
+      const message = `Hint: ${exactCharsMessage},  and ${misplacedCharsMessage}.`;
       return getFailureResponse(attemptedPassword, message, `${exactCharacters},${misplacedCharacters}`);
     }
     case ModelIds.GuessNumber: {
