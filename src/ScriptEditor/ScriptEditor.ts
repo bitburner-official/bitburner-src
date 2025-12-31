@@ -62,8 +62,8 @@ export class ScriptEditor {
     })().catch((e) => exceptionAlert(e));
 
     for (const [language, languageDefaults, getLanguageWorker] of [
-      ["javascript", monaco.languages.typescript.javascriptDefaults, monaco.languages.typescript.getJavaScriptWorker],
-      ["typescript", monaco.languages.typescript.typescriptDefaults, monaco.languages.typescript.getTypeScriptWorker],
+      ["javascript", monaco.typescript.javascriptDefaults, monaco.typescript.getJavaScriptWorker],
+      ["typescript", monaco.typescript.typescriptDefaults, monaco.typescript.getTypeScriptWorker],
     ] as const) {
       languageDefaults.setCompilerOptions({
         ...languageDefaults.getCompilerOptions(),
@@ -72,7 +72,7 @@ export class ScriptEditor {
         // We use file-at-a-time transpiler. See https://www.typescriptlang.org/tsconfig/#isolatedModules
         isolatedModules: true,
         // We use the classic (i.e. `React.createElement`:) react runtime.
-        jsx: monaco.languages.typescript.JsxEmit.React,
+        jsx: monaco.typescript.JsxEmit.React,
         // We define `React` and `ReactDOM` as globals. Don't mark using them as errors.
         allowUmdGlobalAccess: true,
         // Enable strict typechecking.
@@ -124,15 +124,15 @@ export class ScriptEditor {
       });
     }
 
-    monaco.languages.json.jsonDefaults.setModeConfiguration({
-      ...monaco.languages.json.jsonDefaults.modeConfiguration,
+    monaco.json.jsonDefaults.setModeConfiguration({
+      ...monaco.json.jsonDefaults.modeConfiguration,
       //completion should be disabled because the
       //json language server tries to load a schema by default
       completionItems: false,
     });
 
-    monaco.languages.css.cssDefaults.setModeConfiguration({
-      ...monaco.languages.css.cssDefaults.modeConfiguration,
+    monaco.css.cssDefaults.setModeConfiguration({
+      ...monaco.css.cssDefaults.modeConfiguration,
     });
 
     // Load themes

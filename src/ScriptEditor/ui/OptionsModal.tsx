@@ -132,7 +132,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Cursor blinking: </Typography>
         <Select
-          onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value as CursorBlinking)}
+          onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value)}
           value={props.options.cursorBlinking}
         >
           {CURSOR_BLINKING_MODES.map((cursorBlinking) => (
@@ -148,6 +148,14 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
         <Switch
           onChange={(e) => props.onOptionChange("beautifyOnSave", e.target.checked)}
           checked={props.options.beautifyOnSave}
+        />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Enable Sticky Scroll: </Typography>
+        <Switch
+          onChange={(e) => props.onOptionChange("stickyScroll", { enabled: e.target.checked })}
+          checked={props.options.stickyScroll?.enabled}
         />
       </div>
     </Modal>

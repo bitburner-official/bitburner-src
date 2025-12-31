@@ -23,6 +23,7 @@ import { setRemovedFunctions, type InternalAPI, type NetscriptContext } from "..
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
 import { getEnumHelper } from "../utils/EnumHelper";
+import { CONSTANTS } from "../Constants";
 import { getDarknetVolatilityMult } from "../DarkNet/effects/effects";
 
 export function NetscriptStockMarket(): InternalAPI<StockAPI> {
@@ -334,7 +335,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
     },
     getBonusTime: (ctx) => () => {
       checkTixApiAccess(ctx);
-      return StockMarket.storedCycles * 200;
+      return StockMarket.storedCycles * CONSTANTS.MilliPerCycle;
     },
     nextUpdate: (ctx) => () => {
       checkTixApiAccess(ctx);

@@ -21,7 +21,7 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
     return;
   }
   if (!server.hasAdminRights) {
-    Terminal.error("You do not have admin rights for this machine");
+    Terminal.error("You do not have admin rights for this machine!");
     return;
   }
   if (server.requiredHackingSkill && server.requiredHackingSkill > Player.skills.hacking) {

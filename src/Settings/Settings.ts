@@ -1,7 +1,7 @@
 import { OwnedAugmentationsOrderSetting, PurchaseAugmentationsOrderSetting } from "./SettingEnums";
 import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
-import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
+import { CursorStyle, CursorBlinking, WordWrapOptions, StickyScroll } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { assertObject } from "../utils/TypeAssertion";
 import { Result } from "../types";
@@ -184,6 +184,8 @@ export const Settings = {
   MonacoCursorStyle: "line" as CursorStyle,
   /** Control the cursor animation style */
   MonacoCursorBlinking: "blink" as CursorBlinking,
+  /** Toggle use of Sticky Scroll in the Script Editor */
+  MonacoStickyScroll: { enabled: false } as StickyScroll,
   /** Whether to hide trailing zeroes on fractional part of decimal */
   hideTrailingDecimalZeros: false,
   /** Whether to hide thousands separators. */
