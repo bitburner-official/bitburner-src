@@ -303,7 +303,7 @@ describe("home", () => {
     const server = GetServerOrThrow(SpecialServers.Home);
     expect(() => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
-    }).toThrow("Home is not a darknet server");
+    }).toThrow("home is not a darknet server");
   });
 });
 
@@ -674,13 +674,13 @@ describe("expectRunningOnDarknetServer", () => {
 describe("darkweb", () => {
   test("authenticate from home", async () => {
     const ns = getNsOnHome();
-    const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "leekspin");
+    const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "");
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
   test("authenticate itself", async () => {
     const ns = getNsOnDarkWeb();
-    const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "leekspin");
+    const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "");
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
@@ -690,7 +690,7 @@ describe("darkweb", () => {
      * Special behavior: darkweb's "hasAdminRights" is always true, so "connectToSession" can be called without
      * calling "authenticate".
      */
-    const result = ns.dnet.connectToSession(SpecialServers.DarkWeb, "leekspin");
+    const result = ns.dnet.connectToSession(SpecialServers.DarkWeb, "");
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
@@ -729,12 +729,12 @@ describe("darkweb", () => {
     if (!("isOnline" in server)) {
       throw new Error("getServer does not return DarknetServerData");
     }
-    expect(server.passwordHintData).toStrictEqual("leekspin");
+    expect(server.passwordHintData).toStrictEqual("");
   });
   test("getServerAuthDetails", () => {
     const ns = getNsOnDarkWeb();
     const authDetails = ns.dnet.getServerAuthDetails();
-    expect(authDetails.data).toStrictEqual("leekspin");
+    expect(authDetails.data).toStrictEqual("");
   });
   test("packetCapture from home", async () => {
     const ns = getNsOnHome();
@@ -954,19 +954,19 @@ describe("Offline darknet server", () => {
   });
   test("authenticate from home", async () => {
     const ns = getNsOnHome();
-    const result = await ns.dnet.authenticate(hostnameForOfflineServer, "leekspin");
+    const result = await ns.dnet.authenticate(hostnameForOfflineServer, "");
     expect(result.success).toStrictEqual(false);
     expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
   });
   test("authenticate itself", async () => {
     const ns = getNsOnDarkWeb();
-    const result = await ns.dnet.authenticate(hostnameForOfflineServer, "leekspin");
+    const result = await ns.dnet.authenticate(hostnameForOfflineServer, "");
     expect(result.success).toStrictEqual(false);
     expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
   });
   test("connectToSession from home", () => {
     const ns = getNsOnHome();
-    const result = ns.dnet.connectToSession(hostnameForOfflineServer, "leekspin");
+    const result = ns.dnet.connectToSession(hostnameForOfflineServer, "");
     expect(result.success).toStrictEqual(false);
     expect(result.code).toStrictEqual(ResponseCodeEnum.ServiceUnavailable);
   });

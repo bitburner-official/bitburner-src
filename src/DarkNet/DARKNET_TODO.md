@@ -174,6 +174,14 @@ Design document and workspace
 
 ## patches:
 
+## User testing feedback from Sphyxis
+
+- Improve wording on the mastermind puzzle hint
+- Simplify "darkweb" server's auth to work with stock starter script
+- Add dnet.nextUpdate() to allow scripts to wait until the next mutation trigger. It includes documentation indicating that changes (if there were any) will usually not be visible from any given script, and are probably somewhere distant on the net
+- Added dnet.getServerRequiredCharismaLevel()
+- Ensure that servers do not preserve session PIDs if they go offline and then are re-created with the same hostname later
+
 ## PR feedback
 
 - remove getServerSafely and use GetServer
