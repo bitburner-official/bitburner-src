@@ -1,7 +1,7 @@
 import { IOStream } from "./IOStream";
 import { Terminal } from "../../Terminal";
 import { Output, RawOutput, Link } from "../OutputTypes";
-import { stringify } from "./utils";
+import { DATA_STREAM_CLOSED, stringify } from "./utils";
 
 let remaining = 0;
 const registerStdIOInstance = (stdIO: StdIO) => {
@@ -45,6 +45,22 @@ export class StdIO {
   // Read from stdin via the async iterator
   read() {
     return this[Symbol.asyncIterator]();
+  }
+
+  getAllCurrentStdin(): string[] {
+    const stdin = this.stdin?.deref();
+    if (!stdin) {
+      return [];
+    }
+    const inputs: string[] = [];
+    while (!stdin.empty()) {
+      const input = stdin.read();
+      if (input === DATA_STREAM_CLOSED) {
+        break;
+      }
+      inputs.push(stringify(input));
+    }
+    return inputs;
   }
 
   write(data: unknown): unknown {

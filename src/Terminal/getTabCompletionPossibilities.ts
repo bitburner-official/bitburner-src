@@ -162,12 +162,6 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
       addCodingContracts();
     }
   }
-
-  if (isInPipe) {
-    addTextFiles();
-    addScripts();
-  }
-
   switch (commandArray[0]) {
     case "buy":
       addDarkwebItems();
@@ -271,6 +265,11 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
       } else {
         // Add script names if you are in a command - scripts can be run by name
         addScripts();
+
+        // Include text files if the command is part of a pipe
+        if (isInPipe) {
+          addTextFiles();
+        }
       }
       return possibilities;
   }

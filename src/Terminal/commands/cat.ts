@@ -1,33 +1,71 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { Messages, showMessage } from "../../Message/MessageHelpers";
-import { showLiterature } from "../../Literature/LiteratureHelpers";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
 import { StdIO } from "../StdIO/StdIO";
 import { Literatures } from "../../Literature/Literatures";
 import { LiteratureName, MessageFilename } from "@enums";
+import { callOnRead } from "../StdIO/RedirectIO";
+import { stringify } from "../StdIO/utils";
+import { showLiterature } from "../../Literature/LiteratureHelpers";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-// TODO-Fico: support stdin, support "-" placeholder for stdin
+// TODO-Fico: update cat help docs
 export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
-  if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]", stdIO);
+  const initialStdIn = stdIO.getAllCurrentStdin();
+  const stdinIsClosed = stdIO.stdin?.deref()?.isClosed ?? true;
+  let initialStdOut = "";
 
-  const relative_filename = args[0] + "";
-  const path = Terminal.getFilepath(relative_filename);
-  if (!path) return Terminal.error(`Invalid filename: ${relative_filename}`, stdIO);
+  // If only a single file is being catted, and no stdin is being used, show the file dialog that cat has always used
+  const isBasicFileCat = args.length === 1 && args[0] !== "-" && !initialStdIn.length && stdinIsClosed;
+
+  if (args.length === 0 && initialStdIn.length === 0 && stdinIsClosed) {
+    return Terminal.error(
+      `Incorrect use of cat command: No files specified, and no stdin provided. Try "cat [filename]"`,
+      stdIO,
+    );
+  }
+
+  // TODO-Fico: support live stream view window?
+
+  for (const arg of args) {
+    if (arg === "-") {
+      initialStdOut += initialStdIn.join("\n") + "\n";
+    } else {
+      const content = getFileContents(String(arg), server, stdIO, isBasicFileCat);
+      if (typeof content !== "string") {
+        stdIO.close();
+        return;
+      }
+      initialStdOut += content + "\n";
+    }
+  }
+
+  if (!args.find((arg) => arg === "-")) {
+    // If stdin location is not specified, append it to the end by default
+    initialStdOut += initialStdIn.join("\n") + "\n";
+  }
+
+  stdIO.write(initialStdOut.trim());
+
+  void callOnRead(stdIO, (data: unknown, stdInOut) => {
+    stdInOut.write(stringify(data) + "\n");
+  });
+}
+
+function getFileContents(filename: string, server: BaseServer, stdIO: StdIO, isBasicFileCat: boolean) {
+  const path = Terminal.getFilepath(filename);
+  if (!path) return Terminal.error(`Invalid filename: ${filename}`, stdIO);
 
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
     if (!file) return Terminal.error(`No file at path ${path}`, stdIO);
-
-    if (stdIO.stdout?.isClosed) {
+    if (isBasicFileCat) {
       return dialogBoxCreate(`${file.filename}\n\n${file.content}`);
-    } else {
-      stdIO.write(file.content);
-      return;
     }
+    return file.content;
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
     return Terminal.error(
@@ -38,20 +76,16 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
 
   // Message
   if (isMember("MessageFilename", path) && server.messages.includes(path)) {
-    if (stdIO.stdout?.isClosed) {
+    if (isBasicFileCat) {
       return showMessage(path);
-    } else {
-      stdIO.write(Messages[path as MessageFilename]);
-      return;
     }
+    return stringify(Messages[path as MessageFilename]);
   }
   if (isMember("LiteratureName", path) && server.messages.includes(path)) {
-    if (stdIO.stdout?.isClosed) {
+    if (isBasicFileCat) {
       return showLiterature(path);
-    } else {
-      stdIO.write(Literatures[path as LiteratureName]);
-      return;
     }
+    return stringify(Literatures[path as LiteratureName]);
   }
   Terminal.error(`No file at path ${path}`, stdIO);
 }
