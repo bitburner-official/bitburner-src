@@ -1,4 +1,11 @@
-import { generateMaze, getLabAugReward, getLabyrinthDetails, labData } from "../../../src/DarkNet/effects/labyrinth";
+import {
+  generateMaze,
+  getLabAugReward,
+  getLabyrinthDetails,
+  handleLabyrinthPassword,
+  labData,
+  locationStatus,
+} from "../../../src/DarkNet/effects/labyrinth";
 import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { Player } from "@player";
@@ -81,6 +88,36 @@ describe("Labyrinth Tests", () => {
 
     expect(maze).toHaveLength(height + 1);
     expect(maze[0]).toHaveLength(width - 1);
+  });
+
+  it("should accept basic commands", () => {
+    setupBN15Environment(0);
+    const labDetails = getLabyrinthDetails();
+
+    expect(labDetails.lab).not.toBeNull();
+    if (labDetails.lab === null) return;
+
+    const result = handleLabyrinthPassword("go north", labDetails.lab, -1);
+    expect(result.message).toBe("You cannot go that way. You are still at 1,1.");
+    const data = JSON.parse(result.data ?? "") as locationStatus;
+    expect(data.coords).toEqual([1, 1]);
+    expect(data.north).toEqual(false);
+    expect(data.west).toEqual(false);
+  });
+
+  it("should give location for bad commands", () => {
+    setupBN15Environment(0);
+    const labDetails = getLabyrinthDetails();
+
+    expect(labDetails.lab).not.toBeNull();
+    if (labDetails.lab === null) return;
+
+    const result = handleLabyrinthPassword("1234", labDetails.lab, -1);
+    expect(result.message).toBe(`You don't know how to do that. Try a command such as "go north"`);
+    const data = JSON.parse(result.data ?? "") as locationStatus;
+    expect(data.coords).toEqual([1, 1]);
+    expect(data.north).toEqual(false);
+    expect(data.west).toEqual(false);
   });
 
   describe("non-bitnode 15 lab tests", () => {

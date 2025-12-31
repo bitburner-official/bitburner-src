@@ -14,6 +14,7 @@ type AutoCompleteSearchBoxProps = {
     options: string[],
     searchValue: string,
   ) => void;
+  width?: number;
 };
 
 type scoredItem = {
@@ -28,6 +29,7 @@ export function AutoCompleteSearchBox({
   suggestionList,
   ignoredTextRegex,
   onSelection,
+  width = 500,
 }: AutoCompleteSearchBoxProps) {
   const [options, setOptions] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -50,7 +52,7 @@ export function AutoCompleteSearchBox({
       renderInput={(params) => (
         <TextField
           {...params}
-          sx={{ minWidth: "500px" }}
+          sx={{ minWidth: `${width}px` }}
           placeholder={placeholder}
           onChange={(event) => {
             const value = event.target.value;

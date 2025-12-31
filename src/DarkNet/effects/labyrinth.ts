@@ -243,18 +243,17 @@ export const handleLabyrinthPassword = (
       message: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
     };
   }
+  const surroundings = getSurroundingsVisualized(maze, initialX, initialY);
+  const status: locationStatus = {
+    coords: [initialX, initialY],
+    north: surroundings[0][1] === PATH,
+    east: surroundings[1][2] === PATH,
+    south: surroundings[2][1] === PATH,
+    west: surroundings[1][0] === PATH,
+  };
 
   const potentialWall: [number, number] = [initialX + dx, initialY + dy];
   if (maze[potentialWall[1]]?.[potentialWall[0]] !== PATH) {
-    const surroundings = getSurroundingsVisualized(maze, initialX, initialY);
-    const status = {
-      coords: [initialX, initialY],
-      north: surroundings[0][1] === PATH,
-      east: surroundings[1][2] === PATH,
-      south: surroundings[2][1] === PATH,
-      west: surroundings[1][0] === PATH,
-    };
-
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
@@ -268,6 +267,7 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
       message: `You don't know how to do that. Try a command such as "go north"`,
+      data: JSON.stringify(status, null, 2),
     };
   }
 
@@ -290,15 +290,6 @@ export const handleLabyrinthPassword = (
     };
   }
 
-  const surroundings = getSurroundingsVisualized(maze, newLocation[0], newLocation[1]);
-  const status = {
-    coords: [newLocation[0], newLocation[1]],
-    north: surroundings[0][1] === PATH,
-    east: surroundings[1][2] === PATH,
-    south: surroundings[2][1] === PATH,
-    west: surroundings[1][0] === PATH,
-  };
-
   return {
     passwordAttempted: attemptedPassword,
     code: ResponseCodeEnum.AuthFailure,
@@ -307,7 +298,15 @@ export const handleLabyrinthPassword = (
   };
 };
 
-const getDirectionFromInput = (input: string) => {
+const getDirectionFromInput = (input: string): number[] => {
+  const direction = input
+    .split(" ")
+    .map((word) => getOrdinalInput(word))
+    .filter((d) => d);
+  return direction[0] ?? [0, 0];
+};
+
+const getOrdinalInput = (input: string): number[] | null => {
   if (["n", "north", "up"].find((i) => input.toLowerCase().trim() === i)) {
     return NORTH;
   }
@@ -320,8 +319,7 @@ const getDirectionFromInput = (input: string) => {
   if (["w", "west", "left"].find((i) => input.toLowerCase().trim() === i)) {
     return WEST;
   }
-
-  return [0, 0];
+  return null;
 };
 
 export const getLabMaze = (): string[] => {
@@ -454,3 +452,5 @@ export const getLabyrinthDetails = (): {
     name: labDetails.name,
   };
 };
+
+export type locationStatus = { east: boolean; south: boolean; north: boolean; west: boolean; coords: number[] };

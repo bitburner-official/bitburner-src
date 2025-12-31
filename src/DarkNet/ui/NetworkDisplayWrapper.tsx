@@ -7,7 +7,7 @@ import React, {
   type PointerEventHandler,
   type WheelEventHandler,
 } from "react";
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Typography, Button, Box, Tooltip } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { throttle } from "lodash";
 import { ServerStatusBox } from "./ServerStatusBox";
@@ -25,10 +25,11 @@ import { ServerDetailsModal } from "./ServerDetailsModal";
 import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
 import { getServerLogs } from "../models/packetSniffing";
+import { getTimeoutChance } from "../effects/offlineServerHandling";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
-const initialSearchLabel = `Search for server:`;
+const initialSearchLabel = `Search:`;
 
 export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
@@ -40,6 +41,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const [serverOpened, setServerOpened] = useState<DarknetServer | null>(null);
   const zoomOptions = useMemo(() => [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.3], []);
   const { classes } = dnetStyles({});
+  const instability = getTimeoutChance();
+  const instabilityText = instability > 0.01 ? `${(instability * 100).toFixed(1)}%` : "< 1%";
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => {
@@ -184,16 +187,21 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     );
   };
 
-  const search = (searchTerm: string) => {
+  const search = (selection: string, options: string[], searchTerm: string) => {
+    if (searchTerm.length === 1) {
+      return;
+    } // Ignore single character searches
     if (!searchTerm) {
       setSearchLabel(initialSearchLabel);
       return;
     }
-
-    const foundServer = getAllDarknetServers().find((s) => s.hostname.toLowerCase() === searchTerm.toLowerCase());
+    const servers = getAllDarknetServers();
+    const foundServer =
+      servers.find((s) => s.hostname.toLowerCase() === selection.toLowerCase()) ||
+      servers.find((s) => s.hostname.toLowerCase() === options[0]?.toLowerCase());
 
     if (!foundServer) {
-      setSearchLabel(`(No results for "${searchTerm}")`);
+      setSearchLabel(`(No results)`);
       return;
     } else {
       setSearchLabel(initialSearchLabel);
@@ -239,12 +247,31 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         ""
       )}
       {DarknetState.allowMutating ? (
-        <Typography variant={"h6"}>Dark Net</Typography>
+        <Box className={`${classes.inlineFlexBox}`}>
+          <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
+            Dark Net
+          </Typography>
+          <Tooltip
+            title={
+              <>
+                If too many darknet servers are backdoored, it will increase the chance that authentication <br />
+                attempts will return a 408 Request Timeout error (even if the password is correct). <br />
+                Most servers will eventually restart or go offline, which removes backdoors over time.
+              </>
+            }
+          >
+            <Typography variant={"subtitle1"} sx={{ fontStyle: "italic" }}>
+              {" "}
+              Instability: {instabilityText}
+            </Typography>
+          </Tooltip>
+        </Box>
       ) : (
         <Typography variant={"h6"} className={classes.gold}>
           [WEBSTORM WARNING]
         </Typography>
       )}
+
       <div
         className={classes.NetWrapper}
         ref={draggableBackground}
@@ -296,21 +323,21 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       </div>
       <Box className={`${classes.inlineFlexBox}`}>
         <Button onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/darknet.md" })}>
-          Darknet Documentation
+          Darknet Docs
         </Button>
         <Typography component="div" display="flex">
           <Typography display="flex" alignItems="center" paddingRight="1em">
             {searchLabel}
           </Typography>
           <AutoCompleteSearchBox
-            sx={{ maxWidth: "300px" }}
             placeholder="Search for server"
             maxSuggestions={6}
             suggestionList={getAutocompleteSuggestionList}
             ignoredTextRegex={/ /g}
-            onSelection={(_, selection) => {
-              search(selection);
+            onSelection={(_, selection, options, searchValue) => {
+              search(selection, options, searchValue);
             }}
+            width={300}
           />
         </Typography>
       </Box>
