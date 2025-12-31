@@ -28,7 +28,7 @@ export function parseRedirectedCommands(commandString: string) {
   return true;
 }
 
-export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPipe = true) {
+export function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
   const pipeSymbol = isPipeSymbol(commandStrings[0]) ? `${commandStrings[0]}` : null;
   const command = `${pipeSymbol ? commandStrings[1] : commandStrings[0]}`;
   const args = pipeSymbol ? commandStrings.slice(2) : commandStrings.slice(1);
@@ -48,10 +48,6 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[], hasOutputPip
       stdIO,
       `Invalid pipe symbol '${pipeSymbol}' for command: ${command}. > and >> can only be used to pipe into files.`,
     );
-  }
-
-  if (command === "cat") {
-    return handleCat(args, stdIO, hasOutputPipe);
   }
 
   Terminal.executeCommand([command, ...args].join(" "), stdIO);
@@ -88,16 +84,6 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
 
 export function getTerminalStdIO(stdin: IOStream | null = null) {
   return new StdIO(stdin, null);
-}
-
-function handleCat(argList: Args[], stdIO: StdIO, hasOutputPipe: boolean): void {
-  if (!hasOutputPipe) {
-    // TODO: implement live cat window
-    return handleIoError(stdIO, `cat tail window is not yet implemented.`);
-  }
-
-  // TODO: call cat
-  // TODO: get output stream from cat
 }
 
 function handlePipeToFile(fileName: string, pipeType: string | null, stdIO: StdIO) {

@@ -904,7 +904,7 @@ export class Terminal {
       this.pidOfLastScriptRun = null;
     }
 
-    if (!this.action && commandName.toLowerCase() !== "wget" && commandName.toLowerCase() !== "run") {
+    if (!this.action && !["wget", "run", "cat", "grep"].includes(commandName.toLowerCase())) {
       stdIO.close();
     }
   }

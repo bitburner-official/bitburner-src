@@ -12,7 +12,6 @@ import { stringify } from "../StdIO/utils";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-// TODO-Fico: update cat help docs
 export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   const initialStdIn = stdIO.getAllCurrentStdin();
   const stdinIsClosed = stdIO.stdin?.deref()?.isClosed ?? true;
@@ -27,8 +26,6 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
       stdIO,
     );
   }
-
-  // TODO-Fico: support live stream view window?
 
   for (const arg of args) {
     if (arg === "-") {
