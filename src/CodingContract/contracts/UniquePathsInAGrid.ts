@@ -58,7 +58,7 @@ export const uniquePathsInAGrid: Pick<
       return [
         "You are located in the top-left corner of the following grid:\n\n",
         `${gridString}\n`,
-        "You are trying reach the bottom-right corner of the grid, but you can only",
+        "You are trying to reach the bottom-right corner of the grid, but you can only",
         "move down or right on each step. Furthermore, there are obstacles on the grid",
         "that you cannot move onto. These obstacles are denoted by '1', while empty",
         "spaces are denoted by 0.\n\n",

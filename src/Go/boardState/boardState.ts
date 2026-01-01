@@ -90,8 +90,7 @@ export function getNewBoardStateFromSimpleBoard(
       newState.previousPlayer = GoColor.black;
     }
   }
-
-  updateCaptures(newState.board, newState.previousPlayer ?? GoColor.white);
+  updateChains(newState.board);
   return newState;
 }
 

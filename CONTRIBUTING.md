@@ -215,6 +215,16 @@ the following rules:
   and relate to the kind of change being implemented. Possible examples
   are UI, BUGFIX, SERVERS, NETSCRIPT... You get the idea.
 
+## Troubleshooting common issues
+
+### Unrelated changes in `package-lock.json`
+
+After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
+
+### Unrelated failed Jest tests
+
+Some Jest tests fail to run in Node 24. Those tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). If you do not change anything related to those tests, you can ignore them. This is not a problem with earlier Node versions.
+
 ## As a Documenter
 
 To contribute to and view your changes to the BitBurner documentation in-game, you will
@@ -244,3 +254,17 @@ Update the following:
 - `doc/source/changelog.rst`
 - post to Discord
 - post to reddit.com/r/Bitburner
+
+## Adding a BN guidelines
+
+Promote:
+
+- New mechanic.
+- Coding problems based on NP problems. This makes solutions that are easy to implement inefficient and solutions that are hard to implement efficient. (e.g., Stanek)
+- Inter-mechanic synergy.
+- Simplicity (e.g., Stanek, Hashnet. Bad example: Corp)
+
+Avoid:
+
+- Failure conditions. It's very frustrating to lose several days' worth of progress.
+- Making existing mechanics harder. This makes it hard to port the content to other BNs.
