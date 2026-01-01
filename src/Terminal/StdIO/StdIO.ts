@@ -60,7 +60,7 @@ export class StdIO {
       }
       inputs.push(stringify(input));
     }
-    return inputs.join("\n");
+    return inputs.map((i) => `${i}\n`).join("");
   }
 
   write(data: unknown): unknown {
