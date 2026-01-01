@@ -418,7 +418,7 @@ export const parseBaseNNumberString = (numberString: string, base: number): numb
 
 // example:  4 + 5 * ( 6 + 7 ) / 2
 export const parseSimpleArithmeticExpression = (expression: string): number => {
-  const tokens = expression.split("");
+  const tokens = cleanArithmeticExpression(expression).split("");
 
   // Identify parentheses
   let currentDepth = 0;

@@ -87,11 +87,14 @@ export const checkPassword = (
       }
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
     }
-    case ModelIds.TimingAttack:
+    case ModelIds.TimingAttack: {
+      const indexOfDifference = server.password.split("").findIndex((char, i) => char !== attemptedPassword[i]);
+      const hint = `Found a mismatch while checking each character (${indexOfDifference})`;
       return {
         responseTime,
-        ...getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData),
+        ...getFailureResponse(attemptedPassword, hint, server.passwordHintData),
       };
+    }
     case ModelIds.BufferOverflow: {
       // If the attempted password is longer than the server's actual password, it starts overwriting the
       // part of the "buffer" that holds the expected password, which can "trick" the comparison into matching

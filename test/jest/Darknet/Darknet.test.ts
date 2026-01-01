@@ -14,14 +14,21 @@ import {
   getDivisibilityTestConfig,
   getRomanNumeralConfig,
   romanNumeralDecoder,
-  cleanArithmeticExpression,
   getBufferOverflowConfig,
+  getParseArithmeticExpressionConfig,
+  getBinaryEncodedConfig,
+  getTimingAttackConfig,
+  getSpiceLevelConfig,
+  getGuessNumberConfig,
+  getCaptchaConfig,
+  getYesn_tConfig,
+  cleanArithmeticExpression,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
-import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
-import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { GenericResponseMessage, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
 import * as UtilityModule from "../../../src/utils/Utility";
@@ -29,6 +36,7 @@ import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement"
 import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 import { isNumber } from "../../../src/types";
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
+import { Player } from "@player";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -237,9 +245,126 @@ describe("Password Tests", () => {
       ),
     ).toBeCloseTo(2319.425);
 
+    const value = parseSimpleArithmeticExpression("76 + 30 * ( 3 * 10 + 14 ) - 83 / 47 + 16");
+    expect(isCloseToCorrectPassword(value.toString(), 1410.2340425531916)).toBe(true);
+
+    const value2 = parseSimpleArithmeticExpression(
+      " 5 ÷ ( 30 ➕ 64 ➕ 11 ) ҳ 98 ÷ 17 ➕ 20 ➕ 58 ➖ ( 64 ➖ 4 ҳ 80 ) ҳ 90",
+    );
+    expect(isCloseToCorrectPassword(value2.toString(), 23118.274509803923)).toBe(true);
+
     const expression = generateSimpleArithmeticExpression(20);
-    const cleanedExpression = cleanArithmeticExpression(expression);
-    expect(eval(cleanedExpression)).toBeCloseTo(parseSimpleArithmeticExpression(cleanedExpression));
+    expect(eval(cleanArithmeticExpression(expression))).toBeCloseTo(parseSimpleArithmeticExpression(expression));
+  });
+
+  test("getParseArithmeticExpressionConfig server creates a server with a correct password hint", () => {
+    const server = serverFactory(() => getParseArithmeticExpressionConfig(20), 20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    const expression = failedAttemptResponse.response.data;
+    const attemptedPassword = parseSimpleArithmeticExpression(`${expression}`);
+
+    const result = getAuthResult(server, `${attemptedPassword}`, 1);
+
+    expect(isCloseToCorrectPassword(server.password, attemptedPassword, true)).toBe(true);
+    expect(result.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("getBinaryEncodedConfig server creates a server with a correct password hint", () => {
+    const server = serverFactory(() => getBinaryEncodedConfig(20), 20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    const binaryString = failedAttemptResponse.response.data;
+
+    // convert each 8 bits to a character, then join
+    const attemptedPassword = String.fromCharCode(...`${binaryString}`.split(" ").map((byte) => parseInt(byte, 2)));
+    const result = getAuthResult(server, `${attemptedPassword}`, 1);
+    expect(attemptedPassword).toBe(server.password);
+    expect(result.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("getTimingAttackConfig server creates a server that takes longer the more correct characters are submitted, starting from the left", async () => {
+    Player.gainCharismaExp(1e200);
+    const server = serverFactory(() => getTimingAttackConfig(20), 20, 0, 0);
+    server.logTrafficInterval = -1;
+    const ns = getNS(server.hostname);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    const benchmark1 = performance.now();
+    const response1 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 1) + "%%%%", 0);
+    const benchmark2 = performance.now();
+    const response2 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 2) + "%%%", 0);
+    const benchmark3 = performance.now();
+    const response3 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 3) + "%%", 0);
+    const benchmark4 = performance.now();
+    const response4WithWorseGuess = await ns.dnet.authenticate(server.hostname, "%%%%%%", 0);
+    const benchmark5 = performance.now();
+
+    const firstAuthTime = benchmark2 - benchmark1;
+    const secondAuthTime = benchmark3 - benchmark2;
+    const thirdAuthTime = benchmark4 - benchmark3;
+    const badAuthTime = benchmark5 - benchmark4;
+
+    expect(badAuthTime).toBeLessThan(firstAuthTime);
+    expect(secondAuthTime).toBeGreaterThan(firstAuthTime);
+    expect(thirdAuthTime).toBeGreaterThan(secondAuthTime);
+
+    expect(response1.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(response2.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(response3.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(response4WithWorseGuess.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    expect(response1.message).toBe(GenericResponseMessage.AuthFailure);
+
+    const serverLogs = DarknetState.serverState[server.hostname].serverLogs;
+    expect(serverLogs.length).toBe(5);
+    expect(serverLogs[4].message.message).toBe("Found a mismatch while checking each character (0)");
+    expect(serverLogs[3].message.message).toBe("Found a mismatch while checking each character (1)");
+    expect(serverLogs[2].message.message).toBe("Found a mismatch while checking each character (2)");
+    expect(serverLogs[1].message.message).toBe("Found a mismatch while checking each character (3)");
+    expect(serverLogs[0].message.message).toBe("Found a mismatch while checking each character (0)");
+  });
+
+  test("getSpiceLevelConfig server creates a server with a correct password hint", () => {
+    const server = serverFactory(() => getSpiceLevelConfig(20), 20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    // TODO-Fico
+  });
+
+  test("getGuessNumberConfig server creates a server with a correct password hint", () => {
+    const server = serverFactory(() => getGuessNumberConfig(20), 20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    // TODO-Fico
+  });
+
+  test("getCaptchaConfig server creates a server with a correct password hint", () => {
+    const server = serverFactory(() => getCaptchaConfig(20), 20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    // TODO-Fico
+  });
+
+  test("getYesn_tConfig server creates a server with a correct password hint", () => {
+    const server = serverFactory(() => getYesn_tConfig(20), 20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    // TODO-Fico
   });
 
   test("getRomanNumeralsServer creates a server with a correct password hint", () => {
