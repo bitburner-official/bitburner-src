@@ -29,20 +29,20 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
 
   for (const arg of args) {
     if (arg === "-") {
-      initialStdOut += initialStdIn.join("\n") + "\n";
+      initialStdOut += initialStdIn;
     } else {
       const content = getFileContents(String(arg), server, stdIO, isBasicFileCat);
-      if (typeof content !== "string") {
+      if (content === undefined) {
         stdIO.close();
         return;
       }
-      initialStdOut += content + "\n";
+      initialStdOut += content;
     }
   }
 
   if (!args.find((arg) => arg === "-")) {
     // If stdin location is not specified, append it to the end by default
-    initialStdOut += initialStdIn.join("\n") + "\n";
+    initialStdOut += initialStdIn;
   }
 
   stdIO.write(initialStdOut.trim());

@@ -35,7 +35,7 @@ export function wget(args: (string | number | boolean)[], server: BaseServer, st
       }
       const content = await response.text();
       if (stdIO.stdout) {
-        Terminal.print(`wget successfully retrieved content`, stdIO);
+        Terminal.printAndBypassPipes(`wget successfully retrieved content`);
         stdIO.write(content);
         stdIO.close();
         return;

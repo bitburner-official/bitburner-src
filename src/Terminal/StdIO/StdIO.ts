@@ -47,10 +47,10 @@ export class StdIO {
     return this[Symbol.asyncIterator]();
   }
 
-  getAllCurrentStdin(): string[] {
+  getAllCurrentStdin(): string {
     const stdin = this.stdin?.deref();
     if (!stdin) {
-      return [];
+      return "";
     }
     const inputs: string[] = [];
     while (!stdin.empty()) {
@@ -60,7 +60,7 @@ export class StdIO {
       }
       inputs.push(stringify(input));
     }
-    return inputs;
+    return inputs.join("\n");
   }
 
   write(data: unknown): unknown {
