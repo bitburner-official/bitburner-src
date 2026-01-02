@@ -26,21 +26,26 @@ export const DarknetState = {
   openServer: null as BaseServer | null,
   nextUpdate: Promise.resolve(),
   nextUpdateResolver: null as (() => void) | null,
+  storedCycles: 0,
+  cyclesSinceLastMutation: 0,
 
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null)),
 
   labyrinth: null as string[] | null,
   labLocations: { "-1": [1, 1] } as Record<number, [number, number] | null>,
+
   lastPhishingCacheTime: new Date(),
   lastStormTime: new Date(),
+
   stockPromotions: {} as Record<string, number>,
   migrationInductionServers: {} as Record<string, number>,
-  webstormTokens: 0,
+
   serverState: {} as Record<string, ServerState>,
   offlineServers: [] as string[],
-  storedCycles: 0,
-  cyclesSinceLastMutation: 0,
   showFullNetwork: false,
+  zoomIndex: 7,
+  netViewTopScroll: 0,
+  netViewLeftScroll: 0,
 };
 
 export const getServerState = (hostname: string): ServerState => {

@@ -35,7 +35,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [zoomIndex, setZoomIndex] = useState(7);
+  const [zoomIndex, setZoomIndex] = useState(DarknetState.zoomIndex);
   const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
   const [searchLabel, setSearchLabel] = useState<string>(initialSearchLabel);
   const [serverOpened, setServerOpened] = useState<DarknetServer | null>(null);
@@ -43,6 +43,17 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const { classes } = dnetStyles({});
   const instability = getTimeoutChance();
   const instabilityText = instability > 0.01 ? `${(instability * 100).toFixed(1)}%` : "< 1%";
+
+  const scrollTo = useCallback((top: number, left: number) => {
+    DarknetState.netViewTopScroll = top;
+    DarknetState.netViewLeftScroll = left;
+
+    getBackground().scrollTo({
+      top: top,
+      left: left,
+      behavior: "instant",
+    });
+  }, []);
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => {
@@ -63,12 +74,13 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       }
     });
     canvas.current && drawOnCanvas(canvas.current);
-    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
+    getBackground().addEventListener("wheel", (e) => e.preventDefault());
+    scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
 
     return () => {
       clearSubscription();
     };
-  }, [rerender]);
+  }, [rerender, scrollTo]);
 
   useEffect(() => {
     DarknetEvents.emit();
@@ -87,22 +99,21 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
     if (target.id === "draggableBackgroundTarget") {
-      draggableBackground.current?.setPointerCapture(pointerEvent.pointerId);
+      getBackground().setPointerCapture(pointerEvent.pointerId);
     }
   };
 
   const handleDragEnd: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
     if (target.id === "draggableBackgroundTarget") {
-      draggableBackground.current?.releasePointerCapture(pointerEvent.pointerId);
+      getBackground().releasePointerCapture(pointerEvent.pointerId);
     }
     DarknetEvents.emit();
   };
 
   const handleDrag: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
-    if (draggableBackground.current?.hasPointerCapture(pointerEvent.pointerId)) {
-      draggableBackground.current.scrollLeft -= pointerEvent.movementX;
-      draggableBackground.current.scrollTop -= pointerEvent.movementY;
+    if (getBackground().hasPointerCapture(pointerEvent.pointerId)) {
+      scrollTo(getBackground().scrollTop - pointerEvent.movementY, getBackground().scrollLeft - pointerEvent.movementX);
     }
   };
 
@@ -110,25 +121,27 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     if (zoomIndex >= zoomOptions.length - 1) {
       return;
     }
-    setZoomIndex(Math.max(zoomIndex + 1, 0));
-    if (draggableBackground.current) {
-      const zoom = zoomOptions[zoomIndex];
-      draggableBackground.current.scrollLeft += (draggableBackground.current.clientWidth / 4) * zoom;
-      draggableBackground.current.scrollTop += (draggableBackground.current.clientHeight / 4) * zoom;
-    }
-  }, [zoomIndex, setZoomIndex, zoomOptions]);
+    DarknetState.zoomIndex = Math.max(zoomIndex + 1, 0);
+    setZoomIndex(DarknetState.zoomIndex);
+    const zoom = zoomOptions[zoomIndex];
+    scrollTo(
+      getBackground().scrollTop + (getBackground().clientHeight / 4) * zoom,
+      getBackground().scrollLeft + (getBackground().clientWidth / 4) * zoom,
+    );
+  }, [zoomIndex, setZoomIndex, zoomOptions, scrollTo]);
 
   const zoomOut = useCallback(() => {
     if (zoomIndex <= 0) {
       return;
     }
-    setZoomIndex(Math.min(zoomIndex - 1, zoomOptions.length - 1));
-    if (draggableBackground.current) {
-      const zoom = zoomOptions[zoomIndex];
-      draggableBackground.current.scrollLeft -= (draggableBackground.current.clientWidth / 4) * zoom;
-      draggableBackground.current.scrollTop -= (draggableBackground.current.clientHeight / 4) * zoom;
-    }
-  }, [zoomIndex, setZoomIndex, zoomOptions]);
+    DarknetState.zoomIndex = Math.min(zoomIndex - 1, zoomOptions.length - 1);
+    setZoomIndex(DarknetState.zoomIndex);
+    const zoom = zoomOptions[zoomIndex];
+    scrollTo(
+      getBackground().scrollTop - (getBackground().clientHeight / 4) * zoom,
+      getBackground().scrollLeft - (getBackground().clientWidth / 4) * zoom,
+    );
+  }, [zoomIndex, setZoomIndex, zoomOptions, scrollTo]);
 
   const zoom = useCallback(
     (wheelEvent: WheelEvent) => {
@@ -171,14 +184,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const isWithinScreen = (server: DarknetServer) => {
     const { left, top } = getPixelPosition(server, true);
     const buffer = 600;
-    const visibleAreaLeftEdge = (draggableBackground.current?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
-    const visibleAreaTopEdge = (draggableBackground.current?.scrollTop ?? 0) / zoomOptions[zoomIndex];
+    const visibleAreaLeftEdge = (getBackground().scrollLeft ?? 0) / zoomOptions[zoomIndex];
+    const visibleAreaTopEdge = (getBackground().scrollTop ?? 0) / zoomOptions[zoomIndex];
     const visibleAreaRightEdge =
-      visibleAreaLeftEdge +
-      ((draggableBackground.current?.clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
+      visibleAreaLeftEdge + ((getBackground().clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
     const visibleAreaBottomEdge =
-      visibleAreaTopEdge +
-      ((draggableBackground.current?.clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
+      visibleAreaTopEdge + ((getBackground().clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
     return (
       left >= visibleAreaLeftEdge - buffer &&
       left <= visibleAreaRightEdge + buffer &&
@@ -209,18 +220,17 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
     const position = getPixelPosition(foundServer, true);
 
-    if (draggableBackground.current) {
-      draggableBackground.current.scrollTo({
-        top: position.top * zoomOptions[zoomIndex] - (draggableBackground.current.clientHeight / 2 - 100),
-        left: position.left * zoomOptions[zoomIndex] - draggableBackground.current.clientWidth / 2,
-        behavior: "instant",
-      });
-    }
+    scrollTo(
+      position.top * zoomOptions[zoomIndex] - ((getBackground().clientHeight ?? 0) / 2 - 100),
+      position.left * zoomOptions[zoomIndex] - (getBackground().clientWidth ?? 0) / 2,
+    );
 
     if (allowAuth(foundServer)) {
       setServerOpened(foundServer);
     }
   };
+
+  const getBackground = () => draggableBackground.current ?? document.createElement("div");
 
   const getAutocompleteSuggestionList = (): string[] => {
     const servers = getAllDarknetServers()
@@ -251,20 +261,22 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
             Dark Net
           </Typography>
-          <Tooltip
-            title={
-              <>
-                If too many darknet servers are backdoored, it will increase the chance that authentication <br />
-                attempts will return a 408 Request Timeout error (even if the password is correct). <br />
-                Most servers will eventually restart or go offline, which removes backdoors over time.
-              </>
-            }
-          >
-            <Typography variant={"subtitle1"} sx={{ fontStyle: "italic" }}>
-              {" "}
-              Instability: {instabilityText}
-            </Typography>
-          </Tooltip>
+          {instability && (
+            <Tooltip
+              title={
+                <>
+                  If too many darknet servers are backdoored, it will increase the chance that authentication <br />
+                  attempts will return a 408 Request Timeout error (even if the password is correct). <br />
+                  Most servers will eventually restart or go offline, which removes backdoors over time.
+                </>
+              }
+            >
+              <Typography variant={"subtitle1"} sx={{ fontStyle: "italic" }}>
+                {" "}
+                Instability: {instabilityText}
+              </Typography>
+            </Tooltip>
+          )}
         </Box>
       ) : (
         <Typography variant={"h6"} className={classes.gold}>
