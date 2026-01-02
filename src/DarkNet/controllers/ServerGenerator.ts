@@ -193,7 +193,7 @@ export const getDogNameConfig = (difficulty: number): ServerConfig => {
 export const getMastermindHintConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.MastermindHint,
-    password: getPassword(Math.min(2 + difficulty / 4, 9)),
+    password: getPassword(Math.min(2 + difficulty / 5, 8)),
     staticPasswordHint: "Only a true master may pass",
   };
 };
