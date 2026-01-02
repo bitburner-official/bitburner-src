@@ -348,7 +348,7 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
 
 export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
   const scale = Math.min(difficulty / 2, 15);
-  let password = Math.floor(Math.random() * 8 * (scale + 1));
+  let password = Math.floor(Math.random() * 8 * (scale + 1)) + 1;
   for (let i = 0; i < scale / 3; i++) {
     if (Math.random() < 0.5) {
       password *= Math.ceil(Math.random() * 5);
@@ -539,6 +539,10 @@ export const getPassword = (
   const cappedLength = clampNumber(length, 1, MAX_PASSWORD_LENGTH);
   for (let i = 0; i < cappedLength; i++) {
     password += characters[Math.floor(Math.random() * characters.length)];
+  }
+  // prevent leading zeros in multi-digit numeric passwords
+  if (!allowLetters && !allowSpecial && !allowUnicode && length > 1 && password[0] === "0") {
+    return "1" + password.slice(1);
   }
   return password;
 };

@@ -337,7 +337,25 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
-    // TODO-Fico
+    const correctChars = server.password.slice(0, 3);
+
+    const result1 = getAuthResult(server, `${correctChars}%%%%%%`, 1);
+    expect(result1.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(result1.response.message).toBe("Not spicy enough");
+    expect(result1.response.data).toBe("🌶️🌶️🌶️/10");
+
+    const result2 = getAuthResult(server, `%%${correctChars.slice(0, 2)}%%%`, 1);
+    expect(result2.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(result2.response.message).toBe("Not spicy enough");
+    expect(result2.response.data).toBe("0/10");
+
+    const result3 = getAuthResult(server, `${correctChars.slice(0, 2)}%%%%`, 1);
+    expect(result3.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(result3.response.message).toBe("Not spicy enough");
+    expect(result3.response.data).toBe("🌶️🌶️/10");
+
+    const result4 = getAuthResult(server, server.password, 1);
+    expect(result4.response.code).toBe(ResponseCodeEnum.Success);
   });
 
   test("getGuessNumberConfig server creates a server with a correct password hint", () => {
@@ -346,7 +364,16 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
-    // TODO-Fico
+    const response1 = getAuthResult(server, `${+server.password - 10}`, 1);
+    expect(response1.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(response1.response.data).toBe("Higher");
+
+    const response2 = getAuthResult(server, `${+server.password + 10}`, 1);
+    expect(response2.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(response2.response.data).toBe("Lower");
+
+    const response3 = getAuthResult(server, server.password, 1);
+    expect(response3.response.code).toBe(ResponseCodeEnum.Success);
   });
 
   test("getCaptchaConfig server creates a server with a correct password hint", () => {
@@ -355,7 +382,12 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
-    // TODO-Fico
+    const password = server.passwordHintData
+      .split("")
+      .filter((c) => !isNaN(+c))
+      .join("");
+    const result = getAuthResult(server, `${password}`, 1);
+    expect(result.result.success).toBe(true);
   });
 
   test("getYesn_tConfig server creates a server with a correct password hint", () => {
@@ -364,7 +396,16 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
-    // TODO-Fico
+    const result1 = getAuthResult(server, server.password.slice(0, 2) + "%%%%%", 1);
+    expect(result1.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(result1.response.data).toBe("yes,yes,yesn't,yesn't,yesn't,yesn't,yesn't");
+
+    const result2 = getAuthResult(server, `%%%${server.password.slice(3, 5)}%%%%%`, 1);
+    expect(result2.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(result2.response.data).toBe("yesn't,yesn't,yesn't,yes,yes,yesn't,yesn't,yesn't,yesn't,yesn't");
+
+    const result3 = getAuthResult(server, server.password, 1);
+    expect(result3.response.code).toBe(ResponseCodeEnum.Success);
   });
 
   test("getRomanNumeralsServer creates a server with a correct password hint", () => {
