@@ -162,7 +162,11 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
           {!isLabServer && (
             <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
               <div style={{ color: "white" }}>
-                <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
+                {rawResponse ? (
+                  formatResultWithColoredKeys(rawResponse.result)
+                ) : (
+                  <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
+                )}
               </div>
             </Card>
           )}
@@ -177,5 +181,20 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
         />
       )}
     </>
+  );
+};
+
+export const formatResultWithColoredKeys = (log: DarknetResult) => {
+  return (
+    <span style={{ fontFamily: 'JetBrainsMono, "Courier New", monospace', fontSize: "12px" }}>
+      <span style={{ color: "grey" }}>success: </span>
+      {log.success ? "true" : "false"}
+      <br /> <span style={{ color: "grey" }}>message: </span>
+      {log.message}
+      <br />
+      <span style={{ color: "grey" }}>status: </span>
+      {log?.code ?? ""}
+      <br />
+    </span>
   );
 };
