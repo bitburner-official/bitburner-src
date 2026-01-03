@@ -1388,6 +1388,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 55,
     },
     hostname: "powerhouse-fitness",
+    literature: [LiteratureName.ABriefHistoryOfTranshumanism],
     maxRamExponent: {
       max: 6,
       min: 4,
@@ -1467,7 +1468,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 0,
     hostname: SpecialServers.NiteSecServer,
-    literature: [LiteratureName.DemocracyIsDead, LiteratureName.BeyondCyberpsychosis],
+    literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: {
       max: 7,
       min: 4,
