@@ -8,7 +8,7 @@ import {
 } from "../models/DarknetState";
 import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
-import { killScripts } from "../../Netscript/killWorkerScript";
+import { killServerScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
@@ -167,7 +167,7 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
   }
   const isLabyrinth = isLabyrinthServer(server.hostname);
   movePlayerIfNeeded(server);
-  killScripts(server);
+  killServerScripts(server, "Server shut down.");
   disconnectServer(server, true);
   if (DarknetState.Network[server.depth]?.[server.leftOffset]) {
     DarknetState.Network[server.depth][server.leftOffset] = null;
@@ -281,7 +281,7 @@ export const restartServer = (server: DarknetServer): void => {
   if (isImmutable(server)) {
     return;
   }
-  killScripts(server);
+  killServerScripts(server, "Server restarted.");
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
   serverState.serverLogs = [{ pid: -1, message: "Server restarted." }];

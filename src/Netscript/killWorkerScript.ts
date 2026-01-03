@@ -37,15 +37,30 @@ export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boole
 
 export const killAllScripts = () => {
   for (const server of GetAllServers(true)) {
-    for (const byPid of server.runningScriptMap.values()) {
-      for (const pid of byPid.keys()) {
-        killWorkerScriptByPid(pid);
-      }
+    killServerScripts(server);
+  }
+};
+
+export const killServerScripts = (server: BaseServer, message?: string) => {
+  const scripts = server.runningScriptMap.values();
+  for (const byPid of scripts) {
+    for (const runningScript of byPid.values()) {
+      killWorkerScriptWithMessage(runningScript.pid, message);
     }
   }
 };
 
-export function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
+function killWorkerScriptWithMessage(pid: number, message?: string): boolean {
+  const ws = workerScripts.get(pid);
+  if (ws) {
+    ws.log("", () => message ?? "Script killed.");
+    stopAndCleanUpWorkerScript(ws);
+    return true;
+  }
+  return false;
+}
+
+function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   // Only clean up once.
   // Important: Only this function can set stopFlag!
   if (ws.env.stopFlag) return;
@@ -112,26 +127,4 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   if (rs.temporary === false) {
     AddRecentScript(workerScript);
   }
-}
-
-export const killScripts = (server: BaseServer) => {
-  if (!server) {
-    return;
-  }
-  const scripts = server.runningScriptMap.values();
-  for (const byPid of scripts) {
-    for (const runningScript of byPid.values()) {
-      killWorkerScriptWithMessage(runningScript.pid, "Server shut down.");
-    }
-  }
-};
-
-export function killWorkerScriptWithMessage(pid: number, message: string): boolean {
-  const ws = workerScripts.get(pid);
-  if (ws) {
-    ws.log("", () => message ?? "Script killed.");
-    stopAndCleanUpWorkerScript(ws);
-    return true;
-  }
-  return false;
 }

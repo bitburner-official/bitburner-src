@@ -9,8 +9,6 @@ import {
   letters,
   lettersUppercase,
   numbers,
-  special,
-  unicode,
 } from "../models/dictionaryData";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, MinigamesType } from "../Enums";
@@ -193,7 +191,7 @@ export const getDogNameConfig = (difficulty: number): ServerConfig => {
 export const getMastermindHintConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.MastermindHint,
-    password: getPassword(Math.min(2 + difficulty / 5, 8)),
+    password: getPassword(Math.min(2 + difficulty / 5, 10)),
     staticPasswordHint: "Only a true master may pass",
   };
 };
@@ -208,7 +206,7 @@ export const getTimingAttackConfig = (difficulty: number): ServerConfig => {
   const length = 3 + difficulty / 3;
   return {
     modelId: ModelIds.TimingAttack,
-    password: getPassword(length, true, false),
+    password: getPassword(length),
     staticPasswordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
   };
 };
@@ -273,7 +271,7 @@ export const getEuCountryDictionaryConfig = (difficulty: number): ServerConfig =
 };
 
 export const getYesn_tConfig = (difficulty: number): ServerConfig => {
-  const password = getPassword(3 + difficulty / 2, true, difficulty > 8, false, false);
+  const password = getPassword(3 + difficulty / 2, difficulty > 8);
   return {
     modelId: ModelIds.Yesn_t,
     password,
@@ -283,7 +281,7 @@ export const getYesn_tConfig = (difficulty: number): ServerConfig => {
 
 export const getBufferOverflowConfig = (): ServerConfig => {
   const length = Math.floor(4 + Math.random() * 4);
-  const password = getPassword(length, true, true);
+  const password = getPassword(length, true);
   return {
     modelId: ModelIds.BufferOverflow,
     password,
@@ -292,7 +290,7 @@ export const getBufferOverflowConfig = (): ServerConfig => {
 };
 
 export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
-  const password = getPassword(2 + difficulty / 5, true, difficulty > 8, false, false);
+  const password = getPassword(2 + difficulty / 5, difficulty > 8);
   const binaryEncodedPassword = password
     .split("")
     .map((char) => char.charCodeAt(0).toString(2).padStart(8, "0"))
@@ -306,7 +304,7 @@ export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getSpiceLevelConfig = (difficulty: number): ServerConfig => {
-  const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
+  const password = getPassword(3 + difficulty / 3, difficulty > 8);
   return {
     modelId: ModelIds.SpiceLevel,
     password,
@@ -372,7 +370,7 @@ export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
 export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.packetSniffer,
-    password: getPassword(3 + difficulty / 3, true, difficulty > 8, false, false),
+    password: getPassword(3 + difficulty / 3, difficulty > 8),
     staticPasswordHint: "(I'm busy browsing social media at the cafe)",
   };
 };
@@ -523,25 +521,15 @@ const getCodeInjection = () => {
   return ` , !globalThis.pwn3d && (globalThis.pwn3d=true, alert("You've been hacked! You evaluated a string and let me inject code, didn't you? HAHAHAHA!") , globalThis.openDevMenu() ) , ns.exit()`;
 };
 
-export const getPassword = (
-  length: number,
-  allowNumbers = true,
-  allowLetters = false,
-  allowSpecial = false,
-  allowUnicode = false,
-): string => {
-  const characters =
-    (allowNumbers ? numbers : "") +
-    (allowLetters ? letters : "") +
-    (allowSpecial ? special : "") +
-    (allowUnicode ? unicode : "");
+export const getPassword = (length: number, allowLetters = false): string => {
+  const characters = numbers + (allowLetters ? letters : "");
   let password = "";
   const cappedLength = clampNumber(length, 1, MAX_PASSWORD_LENGTH);
   for (let i = 0; i < cappedLength; i++) {
     password += characters[Math.floor(Math.random() * characters.length)];
   }
   // prevent leading zeros in multi-digit numeric passwords
-  if (!allowLetters && !allowSpecial && !allowUnicode && length > 1 && password[0] === "0") {
+  if (!allowLetters && length > 1 && password[0] === "0") {
     return "1" + password.slice(1);
   }
   return password;

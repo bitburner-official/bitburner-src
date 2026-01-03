@@ -52,7 +52,7 @@ const getRandomData = (server: DarknetServer, length: number) => {
     } else if (Math.random() < 0.2) {
       result += " " + getRandomCharsInPassword(password);
     } else if (Math.random() < 0.8) {
-      result += getPassword(password.length, true, !!password.split("").find((c) => letters.includes(c)));
+      result += getPassword(password.length, !!password.split("").find((c) => letters.includes(c)));
     } else if (Math.random() < 0.3) {
       result += generateSimpleArithmeticExpression(Math.floor(Math.random() * 5 + 2));
     } else if (Math.random() < 0.33) {
