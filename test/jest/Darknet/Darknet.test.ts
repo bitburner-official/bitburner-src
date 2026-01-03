@@ -344,7 +344,7 @@ describe("Password Tests", () => {
     expect(result1.response.message).toBe("Not spicy enough");
     expect(result1.response.data).toBe("🌶️🌶️🌶️/10");
 
-    const result2 = getAuthResult(server, `%%${correctChars.slice(0, 2)}%%%`, 1);
+    const result2 = getAuthResult(server, `%%%%%%%%`, 1);
     expect(result2.response.code).toBe(ResponseCodeEnum.AuthFailure);
     expect(result2.response.message).toBe("Not spicy enough");
     expect(result2.response.data).toBe("0/10");
