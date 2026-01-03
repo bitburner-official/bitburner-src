@@ -687,16 +687,16 @@ export const Literatures: Record<LiteratureName, Literature> = {
         augmentation is also responsible for its great expense and exclusivity.
         <br />
         The early days of human augmentation were plagued with issues. Immunosuppressants were needed to keep people's
-        bodies from rejecting the foreign bodies being implanted, with the body constantly trying to "restore" itself
-        to its natural state. On top of that, with the messy nature of biology any replacement for a natural organ
-        would fall short of full functionality. The skeleton doesn't just provide structural support and anchors for
-        muscles; it also helps produce the blood in your body in the marrow. Even the fat in the body is a living organ
-        that produces hormones helping to regulate its activity.
+        bodies from rejecting the foreign bodies being implanted, with the body constantly trying to "restore" itself to
+        its natural state. On top of that, with the messy nature of biology any replacement for a natural organ would
+        fall short of full functionality. The skeleton doesn't just provide structural support and anchors for muscles;
+        it also helps produce the blood in your body in the marrow. Even the fat in the body is a living organ that
+        produces hormones helping to regulate its activity.
         <br />
         <br />
-        Thus, the process was limited by the capacity of the human body to accept and deal with these changes. Biology is redundant
-        and flexible, so replacing a few bones won't impact the body's functioning too badly. But every addition and
-        change would add up, ultimately severely limiting the body's capacity for augmentation.
+        Thus, the process was limited by the capacity of the human body to accept and deal with these changes. Biology
+        is redundant and flexible, so replacing a few bones won't impact the body's functioning too badly. But every
+        addition and change would add up, ultimately severely limiting the body's capacity for augmentation.
         <br />
         <br />
         Ultimately it was {CompanyName.VitaLife} who found a way around this limitation, though only at great expense...
@@ -714,8 +714,9 @@ export const Literatures: Record<LiteratureName, Literature> = {
         weeks or even months afterward.
         <br />
         <br />
-        In the end humanity is left with the theoretical capacity to transform themselves to the limits of their imagininations,
-        but the practical reality that the expense of even basic augmentations is beyond 95% of the population.
+        In the end humanity is left with the theoretical capacity to transform themselves to the limits of their
+        imagininations, but the practical reality that the expense of even basic augmentations is beyond 95% of the
+        population.
       </Typography>
     ),
   }),
