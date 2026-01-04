@@ -5,7 +5,7 @@ export const VERTICAL_CONNECTION_CHANCE = 0.3;
 export const AIR_GAP_DEPTH = 8;
 export const NET_WIDTH = 8;
 export const MAX_NET_DEPTH = 40;
-export const SERVER_DENSITY = 0.7;
+export const SERVER_DENSITY = 0.6;
 export const MS_PER_MUTATION_PER_ROW = 30_000; // 30 seconds
 
 // each minigame needs to have a name that sounds like a device or browser or language model and version

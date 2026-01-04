@@ -56,7 +56,7 @@ export const mutateDarknet = (): void => {
 
   // Limit mutation speed based on size of net
   const depth = getNetDepth();
-  const depthSpeedFactor = 12 / depth;
+  const depthSpeedFactor = 16 / depth;
   if (Math.random() > depthSpeedFactor) {
     return;
   }
@@ -67,6 +67,11 @@ export const mutateDarknet = (): void => {
     if (island) {
       moveDarknetServer(island);
     }
+  }
+
+  if (Math.random() < 0.1) {
+    // Ensure good density of low level servers for early progression
+    addLowLevelServersIfNeeded();
   }
 
   if (Math.random() < 0.1) {
@@ -193,6 +198,15 @@ export const addRandomDarknetServers = (count = 1, difficulty?: number): void =>
       DarknetState.offlineServers = DarknetState.offlineServers.filter((s) => s !== newServer.hostname);
     }
   }
+};
+
+export const addLowLevelServersIfNeeded = (): void => {
+  const lowLevelServers = getAllDarknetServers().filter((s) => s.depth <= 3);
+  if (lowLevelServers.length > NET_WIDTH * 2.5) {
+    return;
+  }
+
+  addRandomDarknetServers(2, Math.floor(Math.random() * 4));
 };
 
 export const balanceDarknetServers = (): void => {
