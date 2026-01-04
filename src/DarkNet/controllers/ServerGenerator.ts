@@ -155,7 +155,7 @@ export const getDefaultPasswordConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getCaptchaConfig = (difficulty: number): ServerConfig => {
-  const password = getPassword(Math.min(difficulty / 2 + 3, 7));
+  const password = getPassword(difficulty / 2 + 3);
   const filledPassword = password
     .split("")
     .map((char, i) => {
@@ -189,9 +189,11 @@ export const getDogNameConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getMastermindHintConfig = (difficulty: number): ServerConfig => {
+  const alphanumeric = difficulty > 16 && Math.random() < 0.3;
+  const passwordLength = Math.min((alphanumeric ? -1 : 2) + difficulty / 5, 10);
   return {
     modelId: ModelIds.MastermindHint,
-    password: getPassword(Math.min(2 + difficulty / 5, 10)),
+    password: getPassword(passwordLength, alphanumeric),
     staticPasswordHint: "Only a true master may pass",
   };
 };
@@ -203,10 +205,11 @@ export const getTimingAttackConfig = (difficulty: number): ServerConfig => {
     "I considered it for a bit, but that's not it",
     "I spent some time on it, but that's not the password",
   ];
-  const length = 3 + difficulty / 3;
+  const alphanumeric = difficulty > 16 && Math.random() < 0.3;
+  const length = (alphanumeric ? 0 : 3) + difficulty / 4;
   return {
     modelId: ModelIds.TimingAttack,
-    password: getPassword(length),
+    password: getPassword(length, alphanumeric),
     staticPasswordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
   };
 };
