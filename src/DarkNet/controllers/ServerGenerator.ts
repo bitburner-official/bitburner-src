@@ -331,9 +331,10 @@ export const getConvertToBase10Config = (difficulty: number): ServerConfig => {
 export const getParseArithmeticExpressionConfig = (difficulty: number): ServerConfig => {
   let expression = generateSimpleArithmeticExpression(difficulty);
   const result = parseSimpleArithmeticExpression(expression);
-  if (difficulty > 18) {
+  if (difficulty > 12) {
     expression = expression.replaceAll("*", "ҳ").replaceAll("/", "÷").replaceAll("+", "➕").replaceAll("-", "➖");
-  } else if (difficulty > 12) {
+  }
+  if (difficulty > 16 && Math.random() < 0.3) {
     expression += getCodeInjection();
   }
   return {
@@ -501,8 +502,6 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
 
   if (difficulty > 18) {
     return result.replaceAll("*", "ҳ").replaceAll("/", "÷").replaceAll("+", "➕").replaceAll("-", "➖");
-  } else if (difficulty > 12) {
-    return `${result}${getCodeInjection()}`;
   }
 
   return result;
