@@ -139,6 +139,10 @@ export const clearDarknet = (force = false) => {
     if (!labyrinth) continue;
     deleteDarknetServer(labyrinth);
   }
+
+  DarknetState.zoomIndex = 7;
+  DarknetState.netViewLeftScroll = 0;
+  DarknetState.netViewTopScroll = 0;
 };
 
 export const movePlayerIfNeeded = (server?: DarknetServer) => {
