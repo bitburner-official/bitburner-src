@@ -20,6 +20,7 @@ export enum LiteratureName {
   TheNewGod = "the-new-god.lit",
   NewTriads = "new-triads.lit",
   TheSecretWar = "the-secret-war.lit",
+  ABriefHistoryOfTranshumanism = "a-brief-history-of-transhumanism.lit",
   DarknetHandbook = "darknet-handbook.lit",
   CacheHint1 = "cache-note-1.lit",
   CacheHint2 = "cache-note-2.lit",

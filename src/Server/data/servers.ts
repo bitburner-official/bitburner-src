@@ -1388,6 +1388,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 55,
     },
     hostname: "powerhouse-fitness",
+    literature: [LiteratureName.ABriefHistoryOfTranshumanism],
     maxRamExponent: {
       max: 6,
       min: 4,
