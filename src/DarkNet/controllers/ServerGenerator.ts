@@ -528,8 +528,8 @@ export const getPassword = (length: number, allowLetters = false): string => {
     password += characters[Math.floor(Math.random() * characters.length)];
   }
   // prevent leading zeros in multi-digit numeric passwords
-  if (!allowLetters && length > 1 && password[0] === "0") {
-    return "1" + password.slice(1);
+  if (!allowLetters) {
+    return Number(password).toString();
   }
   return password;
 };

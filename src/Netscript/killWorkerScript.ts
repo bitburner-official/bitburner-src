@@ -37,11 +37,11 @@ export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boole
 
 export const killAllScripts = () => {
   for (const server of GetAllServers(true)) {
-    killServerScripts(server);
+    killServerScripts(server, "Script killed.");
   }
 };
 
-export const killServerScripts = (server: BaseServer, message?: string) => {
+export const killServerScripts = (server: BaseServer, message: string) => {
   const scripts = server.runningScriptMap.values();
   for (const byPid of scripts) {
     for (const runningScript of byPid.values()) {
@@ -50,10 +50,10 @@ export const killServerScripts = (server: BaseServer, message?: string) => {
   }
 };
 
-function killWorkerScriptWithMessage(pid: number, message?: string): boolean {
+function killWorkerScriptWithMessage(pid: number, message: string): boolean {
   const ws = workerScripts.get(pid);
   if (ws) {
-    ws.log("", () => message ?? "Script killed.");
+    ws.log("", () => message);
     stopAndCleanUpWorkerScript(ws);
     return true;
   }
