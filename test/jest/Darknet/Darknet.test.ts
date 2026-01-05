@@ -23,6 +23,7 @@ import {
   getCaptchaConfig,
   getYesn_tConfig,
   cleanArithmeticExpression,
+  getXorMaskEncryptedPasswordConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
@@ -287,6 +288,29 @@ describe("Password Tests", () => {
     expect(result.response.code).toBe(ResponseCodeEnum.Success);
   });
 
+  test("getXorMaskEncryptedPasswordConfig server creates a server with a correct password hint", () => {
+    const server = serverFactory(() => getXorMaskEncryptedPasswordConfig(20), 20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+
+    const xorData = failedAttemptResponse.response.data;
+    if (!xorData) {
+      throw new Error(`Password response does not contain data: ${JSON.stringify(failedAttemptResponse.response)}`);
+    }
+    const [encryptedPasswordString, maskString] = xorData.split(";");
+    const mask = maskString.split(" ").map((byte) => parseInt(byte, 2));
+    const encryptedPasswordChars = encryptedPasswordString.split("");
+
+    const attemptedPassword = encryptedPasswordChars
+      .map((char, i) => String.fromCharCode(char.charCodeAt(0) ^ mask[i]))
+      .join("");
+
+    const result = getAuthResult(server, `${attemptedPassword}`, 1);
+    expect(attemptedPassword).toBe(server.password);
+    expect(result.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
   test("getTimingAttackConfig server creates a server that takes longer the more correct characters are submitted, starting from the left", async () => {
     Player.gainCharismaExp(1e200);
     const server = serverFactory(() => getTimingAttackConfig(20), 20, 0, 0);
@@ -296,20 +320,22 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
-    const benchmark1 = performance.now();
-    const response1 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 1) + "%%%%", 0);
-    const benchmark2 = performance.now();
-    const response2 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 2) + "%%%", 0);
-    const benchmark3 = performance.now();
-    const response3 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 3) + "%%", 0);
-    const benchmark4 = performance.now();
-    const response4WithWorseGuess = await ns.dnet.authenticate(server.hostname, "%%%%%%", 0);
-    const benchmark5 = performance.now();
+    const getLatestResponseTime = () => {
+      const lastLog = DarknetState.serverState[server.hostname].serverLogs[0].message;
+      if (typeof lastLog === "string") {
+        throw new Error(`Latest log is a string and not a password response: ${lastLog}`);
+      }
+      return lastLog.responseTime ?? 0;
+    };
 
-    const firstAuthTime = benchmark2 - benchmark1;
-    const secondAuthTime = benchmark3 - benchmark2;
-    const thirdAuthTime = benchmark4 - benchmark3;
-    const badAuthTime = benchmark5 - benchmark4;
+    const response1 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 1) + "%%%%", 0);
+    const firstAuthTime = getLatestResponseTime();
+    const response2 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 2) + "%%%", 0);
+    const secondAuthTime = getLatestResponseTime();
+    const response3 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 3) + "%%", 0);
+    const thirdAuthTime = getLatestResponseTime();
+    const response4WithWorseGuess = await ns.dnet.authenticate(server.hostname, "%%%%%%", 0);
+    const badAuthTime = getLatestResponseTime();
 
     expect(badAuthTime).toBeLessThan(firstAuthTime);
     expect(secondAuthTime).toBeGreaterThan(firstAuthTime);
@@ -329,6 +355,9 @@ describe("Password Tests", () => {
     expect(serverLogs[2].message.message).toBe("Found a mismatch while checking each character (2)");
     expect(serverLogs[1].message.message).toBe("Found a mismatch while checking each character (3)");
     expect(serverLogs[0].message.message).toBe("Found a mismatch while checking each character (0)");
+
+    const successfulResponse = await ns.dnet.authenticate(server.hostname, server.password, 0);
+    expect(successfulResponse.code).toBe(ResponseCodeEnum.Success);
   });
 
   test("getSpiceLevelConfig server creates a server with a correct password hint", () => {

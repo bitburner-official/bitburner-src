@@ -61,7 +61,7 @@ export const ServerDetailsModal = ({
     <Modal open={open} onClose={onClose} removeFocus={false}>
       <>
         <input ref={focusTarget} className={classes.hiddenInput}></input>
-        <Container sx={{ width: "calc(min(900px, 90vw))", minHeight: "500px" }}>
+        <Container sx={{ width: "calc(min(900px, 80vw))", minHeight: "500px" }}>
           <div className={classes.inlineFlexBox}>
             <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
               {server.hostname}

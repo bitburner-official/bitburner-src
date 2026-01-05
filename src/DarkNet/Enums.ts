@@ -33,6 +33,7 @@ export const ModelIds = {
   parsedExpression: "MathML",
   divisibilityTest: "ModuloTerm",
   packetSniffer: "OpenWebAccessPoint",
+  encryptedPassword: "OrdoXenos",
   labyrinth: "(The Labyrinth)",
 } as const;
 

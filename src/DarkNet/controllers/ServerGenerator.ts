@@ -35,6 +35,7 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
     getTimingAttackConfig,
     getBinaryEncodedConfig,
     getParseArithmeticExpressionConfig,
+    getXorMaskEncryptedPasswordConfig,
   ];
 
   if (difficulty <= 2) {
@@ -303,6 +304,29 @@ export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
     password,
     staticPasswordHint: "beep boop",
     passwordHintData: binaryEncodedPassword,
+  };
+};
+
+export const getXorMaskEncryptedPasswordConfig = (): ServerConfig => {
+  const password = getPassword(4, true);
+
+  const xorMask: number[] = password.split("").map(() => Math.floor(Math.random() * 32));
+  const xorMaskString = xorMask.map((num) => num.toString(2).padStart(8, "0")).join(" ");
+
+  const passwordWithXorMaskApplied = password
+    .split("")
+    .map((char, i) => {
+      const charCode = char.charCodeAt(0);
+      const xoredCharCode = charCode ^ xorMask[i];
+      return String.fromCharCode(xoredCharCode);
+    })
+    .join("");
+
+  return {
+    modelId: ModelIds.encryptedPassword,
+    password,
+    staticPasswordHint: `XOR mask encrypted password: ${passwordWithXorMaskApplied}.`,
+    passwordHintData: `${passwordWithXorMaskApplied};${xorMaskString}`,
   };
 };
 
