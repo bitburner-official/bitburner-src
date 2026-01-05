@@ -57,13 +57,16 @@ export const encryption: Pick<
         Math.floor(Math.random() * 25 + 1),
       ];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       // data = [plaintext, shift value]
       // build char array, shifting via map and join to final results
       const cipher = [...data[0]]
         .map((a) => (a === " " ? a : String.fromCharCode(((a.charCodeAt(0) - 65 - data[1] + 26) % 26) + 65)))
         .join("");
-      return cipher === answer;
+      return cipher;
+    },
+    solver: (data, answer) => {
+      return encryption[CodingContractName.EncryptionICaesarCipher].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => ans,
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -222,7 +225,7 @@ export const encryption: Pick<
         keys.sort(() => Math.random() - 0.5)[0],
       ];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       // data = [plaintext, keyword]
       // build char array, shifting via map and corresponding keyword letter and join to final results
       const cipher = [...data[0]]
@@ -232,7 +235,10 @@ export const encryption: Pick<
             : String.fromCharCode(((a.charCodeAt(0) - 2 * 65 + data[1].charCodeAt(i % data[1].length)) % 26) + 65);
         })
         .join("");
-      return cipher === answer;
+      return cipher;
+    },
+    solver: (data, answer) => {
+      return encryption[CodingContractName.EncryptionIIVigenereCipher].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => ans,
     validateAnswer: (ans): ans is string => typeof ans === "string",

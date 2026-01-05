@@ -49,8 +49,8 @@ export const compression: Pick<
 
       return plain.substring(0, length);
     },
-    solver: (plain, answer) => {
-      if (plain.length === 0) return answer === "";
+    getAnswer: (plain) => {
+      if (plain.length === 0) return "";
 
       let out = "";
       let count = 1;
@@ -63,7 +63,10 @@ export const compression: Pick<
         count = 1;
       }
       out += count + plain[plain.length - 1];
-      return out === answer;
+      return out;
+    },
+    solver: (plain, answer) => {
+      return compression[CodingContractName.CompressionIRLECompression].getAnswer(plain) === answer;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -96,6 +99,9 @@ export const compression: Pick<
     },
     generate: (): string => {
       return comprLZEncode(comprLZGenerate());
+    },
+    getAnswer: (compr) => {
+      return comprLZDecode(compr) ?? "";
     },
     solver: (compr, answer) => {
       return (comprLZDecode(compr) ?? "") === answer;
@@ -134,6 +140,10 @@ export const compression: Pick<
     },
     generate: (): string => {
       return comprLZGenerate();
+    },
+    getAnswer: (plain) => {
+      const encode = comprLZEncode(plain);
+      return comprLZEncode(plain);
     },
     solver: (plain, answer) => {
       return answer.length <= comprLZEncode(plain).length && comprLZDecode(answer) === plain;

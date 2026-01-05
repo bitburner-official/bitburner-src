@@ -33,6 +33,8 @@ interface CodingContractType<Data, Answer, State = Data> {
   difficulty: number;
   /** Function that generates a valid 'state' for a contract type */
   generate: () => State;
+  /** Function that returns an answer, if possible, for a given contract */
+  getAnswer: (data: Data) => Answer | null;
   /**
    * Transforms the 'state' for a contract into its 'data'. The state is
    * stored persistently as JSON, so it must be serializable. The data is what
@@ -52,13 +54,18 @@ interface CodingContractType<Data, Answer, State = Data> {
   validateAnswer: (answer: unknown) => answer is Answer;
 }
 
+type CodingContractGetAnswerExtension<Data, Answer> =
+  | { getAnswer: (data: Data) => Answer | null }
+  | { getAnswer: never };
+
 // This simple alias uses State == Data, and omits getData since it won't be used in this case.
-type CodingContractSimpleType<Data, Answer> = Omit<CodingContractType<Data, Answer, Data>, "getData">;
+type CodingContractSimpleType<Data, Answer> = Omit<CodingContractType<Data, Answer, Data>, "getData"> &
+  CodingContractGetAnswerExtension<Data, Answer>;
 
 // This alias has unique State and Data, and requires getData.
 type CodingContractComplexType<Data, Answer, State> = Omit<CodingContractType<Data, Answer, State>, "getData"> & {
   getData: (state: State) => Data;
-};
+} & CodingContractGetAnswerExtension<Data, Answer>;
 
 type CodingContractDefinitions<Signatures extends Record<string, [unknown, unknown] | [unknown, unknown, unknown]>> = {
   [T in keyof Signatures]: Signatures[T] extends [unknown, unknown, unknown]

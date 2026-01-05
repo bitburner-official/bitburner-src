@@ -55,6 +55,11 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       case CodingContractResult.Failure: {
         if (++contract.tries >= contract.getMaxNumTries()) {
           helpers.log(ctx, () => `Coding Contract attempt '${contract.fn}' failed. Contract is now self-destructing`);
+          const solution = contract.getAnswer();
+          if (solution !== null) {
+            helpers.log(ctx, () => "Coding Contract solution was");
+            helpers.log(ctx, () => `${solution}`);
+          }
           server.removeContract(contract.fn);
         } else {
           helpers.log(
