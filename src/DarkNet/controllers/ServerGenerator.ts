@@ -364,6 +364,10 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
   if (difficulty > 16 && Math.random() < 0.3) {
     expression += getCodeInjection();
   }
+  const parenCount = expression.split("(").length - 1;
+  if (difficulty > 20 && Math.random() < 0.3 && parenCount > 1) {
+    expression = expression.replace("(", "(ns.exit(),");
+  }
   return {
     modelId: ModelIds.parsedExpression,
     password: `${result}`,
@@ -539,7 +543,8 @@ export const cleanArithmeticExpression = (expression: string): string => {
     .replaceAll("ҳ", "*")
     .replaceAll("÷", "/")
     .replaceAll("➕", "+")
-    .replaceAll("➖", "-");
+    .replaceAll("➖", "-")
+    .replaceAll("ns.exit(),", "");
   return expressionWithFixedSymbols.split(",")[0];
 };
 

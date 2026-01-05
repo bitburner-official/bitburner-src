@@ -259,7 +259,7 @@ describe("Password Tests", () => {
   });
 
   test("getParseArithmeticExpressionConfig server creates a server with a correct password hint", () => {
-    const server = serverFactory(() => getParseArithmeticExpressionConfig(20), 20, 0, 0);
+    const server = serverFactory(() => getParseArithmeticExpressionConfig(25), 25, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
