@@ -40,7 +40,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   zoomContainer: {
     position: "absolute",
     top: "calc(90vh - 38px)",
-    right: "7px",
+    marginLeft: "1px",
     display: "grid",
     zIndex: 20,
     ["& > button"]: {

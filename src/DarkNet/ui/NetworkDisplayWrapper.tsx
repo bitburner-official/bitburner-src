@@ -334,9 +334,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Button>
       </div>
       <Box className={`${classes.inlineFlexBox}`}>
-        <Button onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/darknet.md" })}>
-          Darknet Docs
-        </Button>
         <Typography component="div" display="flex">
           <Typography display="flex" alignItems="center" paddingRight="1em">
             {searchLabel}
@@ -352,6 +349,9 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             width={300}
           />
         </Typography>
+        <Button onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/darknet.md" })}>
+          Darknet Docs
+        </Button>
       </Box>
     </Container>
   );
