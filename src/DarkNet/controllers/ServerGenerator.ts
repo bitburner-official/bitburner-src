@@ -308,7 +308,7 @@ export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getXorMaskEncryptedPasswordConfig = (): ServerConfig => {
-  const password = getPassword(4, true);
+  const password = getPassword(3 + Math.random() * 3, true);
 
   const xorMask: number[] = password.split("").map(() => Math.floor(Math.random() * 32));
   const xorMaskString = xorMask.map((num) => num.toString(2).padStart(8, "0")).join(" ");
@@ -325,7 +325,7 @@ export const getXorMaskEncryptedPasswordConfig = (): ServerConfig => {
   return {
     modelId: ModelIds.encryptedPassword,
     password,
-    staticPasswordHint: `XOR mask encrypted password: ${passwordWithXorMaskApplied}.`,
+    staticPasswordHint: `XOR mask encrypted password: "${passwordWithXorMaskApplied}".`,
     passwordHintData: `${passwordWithXorMaskApplied};${xorMaskString}`,
   };
 };
