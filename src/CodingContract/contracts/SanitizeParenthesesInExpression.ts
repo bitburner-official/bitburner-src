@@ -45,7 +45,7 @@ export const sanitizeParenthesesInExpression: Pick<
 
       return chars.join("");
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       let left = 0;
       let right = 0;
       const res: string[] = [];
@@ -93,6 +93,13 @@ export const sanitizeParenthesesInExpression: Pick<
       }
 
       dfs(0, 0, left, right, data, "", res);
+
+      return res;
+    },
+    solver: (data, answer) => {
+      const res = sanitizeParenthesesInExpression[CodingContractName.SanitizeParenthesesInExpression].getAnswer(
+        data,
+      ) as string[];
 
       if (res.length !== answer.length) return false;
       return res.every((sol) => answer.includes(sol));

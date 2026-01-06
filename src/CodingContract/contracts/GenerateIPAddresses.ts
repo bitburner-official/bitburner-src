@@ -28,7 +28,7 @@ export const generateIPAddresses: Pick<CodingContractTypes, CodingContractName.G
 
       return str;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const ret: string[] = [];
       for (let a = 1; a <= 3; ++a) {
         for (let b = 1; b <= 3; ++b) {
@@ -51,6 +51,10 @@ export const generateIPAddresses: Pick<CodingContractTypes, CodingContractName.G
         }
       }
 
+      return ret;
+    },
+    solver: (data, answer) => {
+      const ret = generateIPAddresses[CodingContractName.GenerateIPAddresses].getAnswer(data) as string[];
       return ret.length === answer.length && ret.every((ip) => answer.includes(ip));
     },
     convertAnswer: (ans) => {

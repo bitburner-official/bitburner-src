@@ -142,7 +142,6 @@ export const compression: Pick<
       return comprLZGenerate();
     },
     getAnswer: (plain) => {
-      const encode = comprLZEncode(plain);
       return comprLZEncode(plain);
     },
     solver: (plain, answer) => {

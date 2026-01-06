@@ -55,7 +55,7 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
 
       return matrix;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const spiral: number[] = [];
       const m: number = data.length;
       const n: number = data[0].length;
@@ -107,6 +107,10 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
         }
       }
 
+      return spiral;
+    },
+    solver: (data, answer) => {
+      const spiral = spiralizeMatrix[CodingContractName.SpiralizeMatrix].getAnswer(data) as number[];
       return spiral.length === answer.length && spiral.every((n, i) => n === answer[i]);
     },
     convertAnswer: (ans) => {

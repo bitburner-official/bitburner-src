@@ -36,6 +36,9 @@ export const hammingCode: Pick<
       const y = Math.pow(2, getRandomIntInclusive(1, 57));
       return getRandomIntInclusive(Math.min(x, y), Math.max(x, y));
     },
+    getAnswer: (data) => {
+      return HammingEncode(data);
+    },
     solver: (data, answer) => {
       return HammingEncode(data) === answer;
     },
@@ -82,6 +85,9 @@ export const hammingCode: Pick<
         _buildArray[_randomIndex] = _buildArray[_randomIndex] == "0" ? "1" : "0";
       }
       return _buildArray.join("");
+    },
+    getAnswer: (data) => {
+      return HammingDecode(data);
     },
     solver: (data, answer) => {
       return HammingDecode(data) === answer;

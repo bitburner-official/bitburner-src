@@ -83,8 +83,7 @@ export class CodingContract {
   }
 
   getAnswer() {
-    const func = CodingContractTypes[this.type].getAnswer;
-    return func ? func(this.state) : null;
+    return CodingContractTypes[this.type].getAnswer(this.state);
   }
 
   getData(): unknown {

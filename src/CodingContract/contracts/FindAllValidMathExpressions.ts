@@ -47,7 +47,7 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
 
       return [digits, target];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const num = data[0];
       const target = data[1];
 
@@ -86,7 +86,12 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
       const result: string[] = [];
       helper(result, "", num, target, 0, 0, 0);
 
-      if (result.length !== answer.length) return false;
+      return result;
+    },
+    solver: (data, answer) => {
+      const result = findAllValidMathExpressions[CodingContractName.FindAllValidMathExpressions].getAnswer(data);
+
+      if (result === null || result.length !== answer.length) return false;
 
       const solutions = new Set(answer);
       return result.every((sol) => solutions.has(sol));

@@ -75,6 +75,10 @@ export const proper2ColoringOfAGraph: Pick<CodingContractTypes, CodingContractNa
 
       return [n + m, edges];
     },
+    getAnswer: () => {
+      // Not quite sure how we can use the below to generate a canonical "answer"
+      return null;
+    },
     solver: (data, answer) => {
       //Helper function to get neighbourhood of a vertex
       function neighbourhood(vertex: number): number[] {

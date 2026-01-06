@@ -21,7 +21,7 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
       const high = low + getRandomIntInclusive(1e5, 1e6);
       return [low, high];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       /** Simple implementation of Sieve of Eratosthenes
        * https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes*/
       function simpleSieve(max: number): number[] {
@@ -76,7 +76,11 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
 
       //We trust the player generated the appropriate list of primes (or is more accurate at guessing primes than Gauss was at this range) and as such they deserve the reward.
       const primes = primeSieve(data[0], data[1]);
-      return answer === primes;
+
+      return primes;
+    },
+    solver: (data, answer) => {
+      return totalPrimesInRange[CodingContractName.TotalPrimesInRange].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

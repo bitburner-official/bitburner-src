@@ -30,7 +30,7 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
       return intervals;
     },
     numTries: 15,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const intervals: [number, number][] = data.slice();
       intervals.sort((a: [number, number], b: [number, number]) => {
         return a[0] - b[0];
@@ -49,6 +49,14 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
         }
       }
       result.push([start, end]);
+
+      return result;
+    },
+    solver: (data, answer) => {
+      const result = mergeOverlappingIntervals[CodingContractName.MergeOverlappingIntervals].getAnswer(data) as [
+        number,
+        number,
+      ][];
 
       return result.length === answer.length && result.every((a, i) => a[0] === answer[i][0] && a[1] === answer[i][1]);
     },

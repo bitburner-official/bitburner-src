@@ -53,6 +53,10 @@ export const shortestPathInAGrid: Pick<CodingContractTypes, CodingContractName.S
 
       return grid;
     },
+    getAnswer: () => {
+      // Not sure if we can use the below to generate a canonical answer
+      return null;
+    },
     solver: (data, answer) => {
       const width = data[0].length;
       const height = data.length;
