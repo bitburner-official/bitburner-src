@@ -40,7 +40,7 @@ export const hammingCode: Pick<
       return HammingEncode(data);
     },
     solver: (data, answer) => {
-      return HammingEncode(data) === answer;
+      return hammingCode[CodingContractName.HammingCodesIntegerToEncodedBinary].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => ans,
     validateAnswer: (ans): ans is string => typeof ans === "string",
