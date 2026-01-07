@@ -111,7 +111,7 @@ export const arrayJumpingGame: Pick<
       return jumps;
     },
     solver: (data, answer) => {
-      return arrayJumpingGame[CodingContractName.ArrayJumpingGame].getAnswer(data) === answer;
+      return arrayJumpingGame[CodingContractName.ArrayJumpingGameII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
