@@ -1,4 +1,5 @@
 import { filterTruthy } from "../../utils/helpers/ArrayHelpers";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes, removeBracketsFromArrayString, removeQuotesFromString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
@@ -91,7 +92,12 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
     solver: (data, answer) => {
       const result = findAllValidMathExpressions[CodingContractName.FindAllValidMathExpressions].getAnswer(data);
 
-      if (result === null || result.length !== answer.length) return false;
+      if (result === null) {
+        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        return false;
+      }
+
+      if (result.length !== answer.length) return false;
 
       const solutions = new Set(answer);
       return result.every((sol) => solutions.has(sol));

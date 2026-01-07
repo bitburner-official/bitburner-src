@@ -90,7 +90,7 @@ export const hammingCode: Pick<
       return HammingDecode(data);
     },
     solver: (data, answer) => {
-      return HammingDecode(data) === answer;
+      return hammingCode[CodingContractName.HammingCodesEncodedBinaryToInteger].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

@@ -57,8 +57,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
           helpers.log(ctx, () => `Coding Contract attempt '${contract.fn}' failed. Contract is now self-destructing`);
           const solution = contract.getAnswer();
           if (solution !== null) {
-            helpers.log(ctx, () => "Coding Contract solution was");
-            helpers.log(ctx, () => `${solution}`);
+            helpers.log(ctx, () => `Coding Contract solution was: ${solution}`);
           }
           server.removeContract(contract.fn);
         } else {

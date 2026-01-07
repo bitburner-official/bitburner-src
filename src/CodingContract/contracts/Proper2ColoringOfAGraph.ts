@@ -76,7 +76,6 @@ export const proper2ColoringOfAGraph: Pick<CodingContractTypes, CodingContractNa
       return [n + m, edges];
     },
     getAnswer: () => {
-      // Not quite sure how we can use the below to generate a canonical "answer"
       return null;
     },
     solver: (data, answer) => {

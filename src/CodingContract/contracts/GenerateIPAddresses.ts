@@ -1,5 +1,6 @@
 import { CodingContractName } from "@enums";
 import { CodingContractTypes, removeBracketsFromArrayString } from "../ContractTypes";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 
 export const generateIPAddresses: Pick<CodingContractTypes, CodingContractName.GenerateIPAddresses> = {
@@ -54,7 +55,11 @@ export const generateIPAddresses: Pick<CodingContractTypes, CodingContractName.G
       return ret;
     },
     solver: (data, answer) => {
-      const ret = generateIPAddresses[CodingContractName.GenerateIPAddresses].getAnswer(data) as string[];
+      const ret = generateIPAddresses[CodingContractName.GenerateIPAddresses].getAnswer(data);
+      if (ret === null) {
+        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        return false;
+      }
       return ret.length === answer.length && ret.every((ip) => answer.includes(ip));
     },
     convertAnswer: (ans) => {

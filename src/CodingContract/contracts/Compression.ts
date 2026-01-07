@@ -1,4 +1,5 @@
 import { CodingContractTypes } from "../ContractTypes";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { CodingContractName } from "@enums";
 
 export const compression: Pick<
@@ -104,7 +105,7 @@ export const compression: Pick<
       return comprLZDecode(compr) ?? "";
     },
     solver: (compr, answer) => {
-      return (comprLZDecode(compr) ?? "") === answer;
+      return compression[CodingContractName.CompressionIILZDecompression].getAnswer(compr) === answer;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -145,7 +146,12 @@ export const compression: Pick<
       return comprLZEncode(plain);
     },
     solver: (plain, answer) => {
-      return answer.length <= comprLZEncode(plain).length && comprLZDecode(answer) === plain;
+      const encoded = compression[CodingContractName.CompressionIIILZCompression].getAnswer(plain);
+      if (encoded === null) {
+        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        return false;
+      }
+      return answer.length <= encoded.length && comprLZDecode(answer) === plain;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",

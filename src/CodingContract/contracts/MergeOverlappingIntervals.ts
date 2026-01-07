@@ -1,3 +1,4 @@
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes, convert2DArrayToString, removeBracketsFromArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
@@ -53,10 +54,12 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
       return result;
     },
     solver: (data, answer) => {
-      const result = mergeOverlappingIntervals[CodingContractName.MergeOverlappingIntervals].getAnswer(data) as [
-        number,
-        number,
-      ][];
+      const result = mergeOverlappingIntervals[CodingContractName.MergeOverlappingIntervals].getAnswer(data);
+
+      if (result === null) {
+        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        return false;
+      }
 
       return result.length === answer.length && result.every((a, i) => a[0] === answer[i][0] && a[1] === answer[i][1]);
     },
