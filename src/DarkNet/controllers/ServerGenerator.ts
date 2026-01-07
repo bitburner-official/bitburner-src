@@ -63,7 +63,7 @@ export const createDarknetServer = (difficulty: number, depth: number, leftOffse
   return serverFactory(getRandomServerConfigBuilder(cappedDifficulty), difficulty, depth, leftOffset);
 };
 
-type ServerConfig = {
+export type ServerConfig = {
   modelId: MinigamesType;
   password: string;
   staticPasswordHint: string;

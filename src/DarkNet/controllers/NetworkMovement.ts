@@ -69,7 +69,7 @@ export const mutateDarknet = (): void => {
     }
   }
 
-  if (Math.random() < 0.1) {
+  if (Math.random() < 0.3) {
     // Ensure good density of low level servers for early progression
     addLowLevelServersIfNeeded();
   }
@@ -190,10 +190,7 @@ export const addRandomDarknetServers = (count = 1, difficulty?: number): void =>
   for (let i = 0; i < count; i++) {
     const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
     const newServer = createDarknetServer(diff, -1, -1);
-    const success = moveDarknetServer(newServer);
-    if (!success) {
-      deleteDarknetServer(newServer);
-    }
+    moveDarknetServer(newServer);
     if (DarknetState.offlineServers.includes(newServer.hostname)) {
       DarknetState.offlineServers = DarknetState.offlineServers.filter((s) => s !== newServer.hostname);
     }
@@ -219,12 +216,18 @@ export const balanceDarknetServers = (): void => {
     const serversToAdd = netDepth * NET_WIDTH * SERVER_DENSITY - movableServers.length;
     addRandomDarknetServers(serversToAdd);
   }
+  addLowLevelServersIfNeeded();
 };
 
 const isImmutable = (server: DarknetServer): boolean =>
   server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;
 
-export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, maxDepthIncrease = 3): boolean => {
+export const moveDarknetServer = (
+  server: DarknetServer,
+  maxDepthDecrease = 3,
+  maxDepthIncrease = 3,
+  startingDepth = server.difficulty,
+): boolean => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to move darkweb"), true);
     return false;
@@ -234,11 +237,10 @@ export const moveDarknetServer = (server: DarknetServer, maxDepthDecrease = 3, m
     return false;
   }
 
-  const positionOptions = getAllOpenPositions(
-    server.difficulty - maxDepthDecrease,
-    server.difficulty + maxDepthIncrease,
-  );
+  const positionOptions = getAllOpenPositions(startingDepth - maxDepthDecrease, startingDepth + maxDepthIncrease);
   if (positionOptions.length === 0) {
+    // If server cannot be moved, do not leave it disconnected and floating
+    deleteDarknetServer(server);
     return false;
   }
 
