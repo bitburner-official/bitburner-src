@@ -17,6 +17,7 @@ import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import { getAllDarknetServers, getAllMovableDarknetServers } from "../../DarkNet/utils/darknetNetworkUtils";
+import { moveRandomDarknetServers } from "../../DarkNet/controllers/NetworkMovement";
 
 export function DarknetDev(): React.ReactElement {
   const toggleShowFullNetwork = (newValue: boolean): void => {
@@ -56,6 +57,18 @@ export function DarknetDev(): React.ReactElement {
             }}
           >
             Generate New Dark Network
+          </Button>
+        </Tooltip>
+        <br />
+        <br />
+        <Tooltip title={<Typography>Reposition the majority of servers in the darknet.</Typography>}>
+          <Button
+            onClick={() => {
+              moveRandomDarknetServers(Math.floor(getAllDarknetServers().length / 2));
+              SnackbarEvents.emit("Darknet servers shuffled", ToastVariant.SUCCESS, 2000);
+            }}
+          >
+            Shuffle Server Locations
           </Button>
         </Tooltip>
         <br />
