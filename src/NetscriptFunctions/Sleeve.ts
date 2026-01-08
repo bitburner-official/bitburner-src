@@ -15,6 +15,8 @@ import { Factions } from "../Faction/Factions";
 import { SleeveWorkType } from "../PersonObjects/Sleeve/Work/Work";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 import { Crimes } from "../Crime/Crimes";
+import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
+import { purchaseCost, MaxSleevesFromCovenant } from "../PersonObjects/Sleeve/SleeveCovenantPurchases";
 
 export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
   /**
@@ -228,6 +230,33 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
 
       return augs;
     },
+	purchaseSleeve: (ctx) => () => {
+      checkSleeveAPIAccess(ctx);
+	  if (!Factions['The Covenant'].isMember) {
+        throw helpers.errorMessage(ctx, `You need to be a member of The Covenant to purchase sleeves`);
+      }
+	  
+	  if (Player.sleevesFromCovenant >= MaxSleevesFromCovenant)
+	  {
+		  throw helpers.errorMessage(ctx, `You have the maximum amount of Sleeves purchasable from The Covenant`);
+	  }
+	  
+	  if(Player.canAfford(purchaseCost(Player.sleevesFromCovenant)))
+		  {
+			 Sleeve.purchaseSleeve()
+			 return true;			 
+		  }
+	  else {
+		  throw helpers.errorMessage(ctx, `Not enough money to purchase Sleeve`);
+	  }
+    },
+	getSleeveMemoryUpgradeCost: (ctx) => (_sleeveNumber, _amount) =>
+	
+	{
+	 const amount = helpers.number(ctx, "amount", _amount);
+	 const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+	 return Player.sleeves[sleeveNumber].getMemoryUpgradeCost(amount)
+	},
     purchaseSleeveAug: (ctx) => (_sleeveNumber, _augName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);

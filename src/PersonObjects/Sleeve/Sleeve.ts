@@ -50,6 +50,7 @@ import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 import type { MoneySource } from "../../utils/MoneySourceTracker";
+import { purchaseCost } from "./SleeveCovenantPurchases";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -363,6 +364,11 @@ export class Sleeve extends Person implements SleevePerson {
     this.memory = Math.min(100, Math.round(this.memory + n));
   }
 
+  static purchaseSleeve(): void {
+	  Player.loseMoney(purchaseCost(Player.sleevesFromCovenant), "sleeves");
+      Player.sleevesFromCovenant += 1;
+      Sleeve.recalculateNumOwned();
+  }
   /**
    * Start work for one of the player's companies
    * Returns boolean indicating success

@@ -384,6 +384,8 @@ const sleeve = {
   setToBladeburnerAction: RamCostConstants.SleeveBase,
   getSleeveAugmentationPrice: RamCostConstants.SleeveBase,
   getSleeveAugmentationRepReq: RamCostConstants.SleeveBase,
+  purchaseSleeve: RamCostConstants.SleeveBase,
+  getSleeveMemoryUpgradeCost: RamCostConstants.SleeveBase,
 } as const;
 
 // Stanek API

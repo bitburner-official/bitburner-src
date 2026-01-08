@@ -5,3 +5,7 @@
 
 export const MaxSleevesFromCovenant = 5;
 export const BaseCostPerSleeve = 10e12;
+export function purchaseCost(n: number): number {
+	const sleevesFromCovenant = n
+    return Math.pow(10, sleevesFromCovenant) * BaseCostPerSleeve;
+  }
