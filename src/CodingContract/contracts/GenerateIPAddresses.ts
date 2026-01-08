@@ -57,7 +57,11 @@ export const generateIPAddresses: Pick<CodingContractTypes, CodingContractName.G
     solver: (data, answer) => {
       const ret = generateIPAddresses[CodingContractName.GenerateIPAddresses].getAnswer(data);
       if (ret === null) {
-        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.GenerateIPAddresses} contract. Data: ${data}`,
+          ),
+        );
         return false;
       }
       return ret.length === answer.length && ret.every((ip) => answer.includes(ip));

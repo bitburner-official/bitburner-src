@@ -101,7 +101,11 @@ export const sanitizeParenthesesInExpression: Pick<
       const res = sanitizeParenthesesInExpression[CodingContractName.SanitizeParenthesesInExpression].getAnswer(data);
 
       if (res === null) {
-        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.SanitizeParenthesesInExpression} contract. Data: ${data}`,
+          ),
+        );
         return false;
       }
 

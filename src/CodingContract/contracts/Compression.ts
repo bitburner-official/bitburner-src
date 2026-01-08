@@ -148,7 +148,11 @@ export const compression: Pick<
     solver: (plain, answer) => {
       const encoded = compression[CodingContractName.CompressionIIILZCompression].getAnswer(plain);
       if (encoded === null) {
-        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.CompressionIIILZCompression} contract. Data: ${plain}`,
+          ),
+        );
         return false;
       }
       return answer.length <= encoded.length && comprLZDecode(answer) === plain;

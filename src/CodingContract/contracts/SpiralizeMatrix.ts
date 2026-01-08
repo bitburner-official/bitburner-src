@@ -114,7 +114,13 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
       const spiral = spiralizeMatrix[CodingContractName.SpiralizeMatrix].getAnswer(data);
 
       if (spiral === null) {
-        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${
+              CodingContractName.SpiralizeMatrix
+            } contract. Data: ${JSON.stringify(data)}`,
+          ),
+        );
         return false;
       }
 

@@ -93,7 +93,11 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
       const result = findAllValidMathExpressions[CodingContractName.FindAllValidMathExpressions].getAnswer(data);
 
       if (result === null) {
-        exceptionAlert("Unexpected null when calculating the answer for this contract.");
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.FindAllValidMathExpressions} contract. Data: ${data}`,
+          ),
+        );
         return false;
       }
 
