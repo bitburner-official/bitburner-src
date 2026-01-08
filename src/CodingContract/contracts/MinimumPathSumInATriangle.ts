@@ -56,7 +56,7 @@ export const minimumPathSumInATriangle: Pick<CodingContractTypes, CodingContract
 
       return triangle;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const n: number = data.length;
       const dp: number[] = data[n - 1].slice();
       for (let i = n - 2; i > -1; --i) {
@@ -65,7 +65,10 @@ export const minimumPathSumInATriangle: Pick<CodingContractTypes, CodingContract
         }
       }
 
-      return dp[0] === answer;
+      return dp[0];
+    },
+    solver: (data, answer) => {
+      return minimumPathSumInATriangle[CodingContractName.MinimumPathSumInATriangle].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
