@@ -365,9 +365,9 @@ export class Sleeve extends Person implements SleevePerson {
   }
 
   static purchaseSleeve(): void {
-	  Player.loseMoney(purchaseCost(Player.sleevesFromCovenant), "sleeves");
-      Player.sleevesFromCovenant += 1;
-      Sleeve.recalculateNumOwned();
+    Player.loseMoney(purchaseCost(Player.sleevesFromCovenant), "sleeves");
+    Player.sleevesFromCovenant += 1;
+    Sleeve.recalculateNumOwned();
   }
   /**
    * Start work for one of the player's companies

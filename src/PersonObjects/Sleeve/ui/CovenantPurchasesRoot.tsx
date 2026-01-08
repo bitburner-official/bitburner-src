@@ -7,7 +7,7 @@ import React from "react";
 import { CovenantSleeveMemoryUpgrade } from "./CovenantSleeveMemoryUpgrade";
 
 import { Sleeve } from "../Sleeve";
-import { BaseCostPerSleeve, MaxSleevesFromCovenant, purchaseCost } from "../SleeveCovenantPurchases";
+import { MaxSleevesFromCovenant, purchaseCost } from "../SleeveCovenantPurchases";
 
 import { Money } from "../../../ui/React/Money";
 import { Modal } from "../../../ui/React/Modal";
@@ -28,7 +28,6 @@ export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
   const rerender = useRerender();
 
   /** Get the cost to purchase a new Duplicate Sleeve */
-  
 
   // Purchasing a new Duplicate Sleeve
   let purchaseDisabled = false;

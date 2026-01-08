@@ -5424,9 +5424,9 @@ export interface Sleeve {
    * @param contract - Name of the contract if applicable.
    * @returns True if the sleeve started the given Bladeburner action, false otherwise.
    */
-   
-   purchaseSleeve(): void;
-   getSleeveMemoryUpgradeCost(sleeveNumber: number,amount: number): number;
+
+  purchaseSleeve(): void;
+  getSleeveMemoryUpgradeCost(sleeveNumber: number, amount: number): number;
   setToBladeburnerAction(
     sleeveNumber: number,
     action: BladeburnerActionTypeForSleeve,
