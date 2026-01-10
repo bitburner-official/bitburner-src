@@ -44,16 +44,19 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const instability = getTimeoutChance();
   const instabilityText = instability > 0.01 ? `${(instability * 100).toFixed(1)}%` : "< 1%";
 
-  const scrollTo = useCallback((top: number, left: number) => {
-    DarknetState.netViewTopScroll = top;
-    DarknetState.netViewLeftScroll = left;
+  const scrollTo = useCallback(
+    (top: number, left: number) => {
+      DarknetState.netViewTopScroll = top;
+      DarknetState.netViewLeftScroll = left;
 
-    getBackground().scrollTo({
-      top: top,
-      left: left,
-      behavior: "instant",
-    });
-  }, []);
+      draggableBackground?.current?.scrollTo({
+        top: top,
+        left: left,
+        behavior: "instant",
+      });
+    },
+    [draggableBackground],
+  );
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => {
@@ -74,7 +77,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       }
     });
     canvas.current && drawOnCanvas(canvas.current);
-    getBackground().addEventListener("wheel", (e) => e.preventDefault());
+    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
     scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
 
     return () => {
@@ -98,22 +101,25 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
+    const background = draggableBackground.current;
     if (target.id === "draggableBackgroundTarget") {
-      getBackground().setPointerCapture(pointerEvent.pointerId);
+      background?.setPointerCapture(pointerEvent.pointerId);
     }
   };
 
   const handleDragEnd: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
+    const background = draggableBackground.current;
     if (target.id === "draggableBackgroundTarget") {
-      getBackground().releasePointerCapture(pointerEvent.pointerId);
+      background?.releasePointerCapture(pointerEvent.pointerId);
     }
     DarknetEvents.emit();
   };
 
   const handleDrag: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
-    if (getBackground().hasPointerCapture(pointerEvent.pointerId)) {
-      scrollTo(getBackground().scrollTop - pointerEvent.movementY, getBackground().scrollLeft - pointerEvent.movementX);
+    const background = draggableBackground.current;
+    if (background?.hasPointerCapture(pointerEvent.pointerId)) {
+      scrollTo(background?.scrollTop - pointerEvent.movementY, (background?.scrollLeft ?? 0) - pointerEvent.movementX);
     }
   };
 
@@ -124,9 +130,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     DarknetState.zoomIndex = Math.max(zoomIndex + 1, 0);
     setZoomIndex(DarknetState.zoomIndex);
     const zoom = zoomOptions[zoomIndex];
+    const background = draggableBackground.current;
     scrollTo(
-      getBackground().scrollTop + (getBackground().clientHeight / 4) * zoom,
-      getBackground().scrollLeft + (getBackground().clientWidth / 4) * zoom,
+      (background?.scrollTop ?? 0) + ((background?.clientHeight ?? 0) / 4) * zoom,
+      (background?.scrollLeft ?? 0) + ((background?.clientWidth ?? 0) / 4) * zoom,
     );
   }, [zoomIndex, setZoomIndex, zoomOptions, scrollTo]);
 
@@ -137,9 +144,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     DarknetState.zoomIndex = Math.min(zoomIndex - 1, zoomOptions.length - 1);
     setZoomIndex(DarknetState.zoomIndex);
     const zoom = zoomOptions[zoomIndex];
+    const background = draggableBackground.current;
     scrollTo(
-      getBackground().scrollTop - (getBackground().clientHeight / 4) * zoom,
-      getBackground().scrollLeft - (getBackground().clientWidth / 4) * zoom,
+      (background?.scrollTop ?? 0) - ((background?.clientHeight ?? 0) / 4) * zoom,
+      (background?.scrollLeft ?? 0) - ((background?.clientWidth ?? 0) / 4) * zoom,
     );
   }, [zoomIndex, setZoomIndex, zoomOptions, scrollTo]);
 
@@ -183,13 +191,14 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
   const isWithinScreen = (server: DarknetServer) => {
     const { left, top } = getPixelPosition(server, true);
+    const background = draggableBackground.current;
     const buffer = 600;
-    const visibleAreaLeftEdge = (getBackground().scrollLeft ?? 0) / zoomOptions[zoomIndex];
-    const visibleAreaTopEdge = (getBackground().scrollTop ?? 0) / zoomOptions[zoomIndex];
+    const visibleAreaLeftEdge = (background?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
+    const visibleAreaTopEdge = (background?.scrollTop ?? 0) / zoomOptions[zoomIndex];
     const visibleAreaRightEdge =
-      visibleAreaLeftEdge + ((getBackground().clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
+      visibleAreaLeftEdge + ((background?.clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
     const visibleAreaBottomEdge =
-      visibleAreaTopEdge + ((getBackground().clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
+      visibleAreaTopEdge + ((background?.clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
     return (
       left >= visibleAreaLeftEdge - buffer &&
       left <= visibleAreaRightEdge + buffer &&
@@ -220,17 +229,16 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
     const position = getPixelPosition(foundServer, true);
 
+    const background = draggableBackground.current;
     scrollTo(
-      position.top * zoomOptions[zoomIndex] - ((getBackground().clientHeight ?? 0) / 2 - 100),
-      position.left * zoomOptions[zoomIndex] - (getBackground().clientWidth ?? 0) / 2,
+      position.top * zoomOptions[zoomIndex] - ((background?.clientHeight ?? 0) / 2 - 100),
+      position.left * zoomOptions[zoomIndex] - (background?.clientWidth ?? 0) / 2,
     );
 
     if (allowAuth(foundServer)) {
       setServerOpened(foundServer);
     }
   };
-
-  const getBackground = () => draggableBackground.current ?? document.createElement("div");
 
   const getAutocompleteSuggestionList = (): string[] => {
     const servers = getAllDarknetServers()
