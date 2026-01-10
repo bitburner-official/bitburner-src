@@ -174,6 +174,14 @@ Design document and workspace
 
 ## patches:
 
+## More user feedback testing
+
+Made stasis link application time decrease with cha level
+Fixed issues with zoom not working with scroll wheel on the darkweb UI (hopefully)
+prevented stasis locked servers from being targeted by disconnection mutations (though adjacent regular darknet servers still can be)
+New dev menu button to add servers of a specific type & difficulty for testing
+new dev menu button to shuffle servers for testing
+
 ## User testing feedback from Sphyxis
 
 - Improve wording on the mastermind puzzle hint
