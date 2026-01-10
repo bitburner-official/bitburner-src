@@ -236,7 +236,7 @@ export const getStasisLinkLimit = (): number => {
 };
 
 export const getSetStasisLinkDuration = (): number => {
-  if (!CONSTANTS.isInTestEnvironment) {
+  if (CONSTANTS.isInTestEnvironment) {
     return 0;
   }
   return (1000 / Player.skills.charisma + 1000) * 20_000 + 6_000;
