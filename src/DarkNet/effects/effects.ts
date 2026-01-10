@@ -28,6 +28,7 @@ import { getTorRouter } from "../../Server/ServerHelpers";
 import { DarknetConstants } from "../Constants";
 import { GetServer } from "../../Server/AllServers";
 import { isLabyrinthServer } from "./labyrinth";
+import { CONSTANTS } from "../../Constants";
 
 export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number) => {
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
@@ -232,6 +233,13 @@ export const getStasisLinkLimit = (): number => {
   const brokenWingLimitIncrease = Player.hasAugmentation(AugmentationName.TheBrokenWings) ? 1 : 0;
   const hammerLimitIncrease = Player.hasAugmentation(AugmentationName.TheHammer) ? 1 : 0;
   return 1 + brokenWingLimitIncrease + hammerLimitIncrease;
+};
+
+export const getSetStasisLinkDuration = (): number => {
+  if (!CONSTANTS.isInTestEnvironment) {
+    return 0;
+  }
+  return (1000 / Player.skills.charisma + 1000) * 20_000 + 6_000;
 };
 
 export const chargeServerMigration = (server: DarknetServer, threads = 1) => {

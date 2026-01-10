@@ -58,20 +58,26 @@ export const LabyrinthSummary = ({
     .join("");
 
   const getMenuItems = () => {
-    const scriptOptions = [
-      ...Object.entries(DarknetState.labLocations)
-        .filter(([key, __]) => findRunningScriptByPid(Number(key)))
-        .map(([key, __]) => {
-          const script = findRunningScriptByPid(Number(key));
-          const scriptServer = GetServer(script?.server ?? "");
-          const connectedToLab = scriptServer?.serversOnNetwork.includes(lab.name);
-          return (
-            <MenuItem key={key} value={Number(key)} disabled={!connectedToLab}>
-              {`PID ${key}: ${script?.server ?? ""} - ${!connectedToLab ? "(Not connected to lab)" : script?.filename}`}
-            </MenuItem>
-          );
-        }),
-    ];
+    const darknetScriptPIDs = Object.entries(DarknetState.labLocations)
+      .map(([key, __]) => key)
+      .filter((pid) => findRunningScriptByPid(Number(pid)));
+
+    const scriptOptions = darknetScriptPIDs.map((pid) => {
+      const script = findRunningScriptByPid(Number(pid));
+      const scriptServer = GetServer(script?.server ?? "");
+      const connectedToLab = scriptServer?.serversOnNetwork.includes(lab.name);
+      return (
+        <MenuItem key={pid} value={Number(pid)} disabled={!connectedToLab}>
+          {`PID ${pid}: ${script?.server ?? ""} - ${!connectedToLab ? "(Not connected to lab)" : script?.filename}`}
+        </MenuItem>
+      );
+    });
+
+    // Change selected option to manual solver perspective if the old selection is no longer valid
+    if (!darknetScriptPIDs.find((pid) => Number(pid) === currentPerspective)) {
+      setCurrentPerspective(-1);
+    }
+
     if (lab.manual) {
       return [
         <MenuItem key={-1} value={-1}>

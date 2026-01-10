@@ -67,7 +67,7 @@ export const getAllDarknetServers = (): DarknetServer[] => {
 export const getAllMovableDarknetServers = (): DarknetServer[] => {
   const movableDarknetServers = [];
   for (const server of GetAllServers(true)) {
-    if (!(server instanceof DarknetServer) || server.isStationary) {
+    if (!(server instanceof DarknetServer) || server.isStationary || server.hasStasisLink) {
       continue;
     }
     movableDarknetServers.push(server);
@@ -96,7 +96,7 @@ export const getNearbyNonEmptyPasswordServer = (server: DarknetServer, disconnec
   );
 };
 
-export const getStasisLinkServers = () => getAllMovableDarknetServers().filter((s) => s.hasStasisLink);
+export const getStasisLinkServers = () => getAllDarknetServers().filter((s) => s.hasStasisLink);
 
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 

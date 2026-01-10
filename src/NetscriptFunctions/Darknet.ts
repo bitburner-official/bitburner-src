@@ -6,6 +6,7 @@ import {
   calculatePasswordAttemptChaGain,
   chargeServerMigration,
   getBackdoorAuthTimeDebuff,
+  getSetStasisLinkDuration,
   getStasisLinkLimit,
 } from "../DarkNet/effects/effects";
 import { Player } from "@player";
@@ -386,7 +387,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           () => `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
         );
         // setStasisLink's delay is hardcoded at 30s. We should skip this delay in Jest tests.
-        return helpers.netscriptDelay(ctx, !CONSTANTS.isInTestEnvironment ? 30000 : 0).then(() => {
+        return helpers.netscriptDelay(ctx, getSetStasisLinkDuration()).then(() => {
           const stasisLinkCount = getStasisLinkServers().length;
           const stasisLinkLimit = getStasisLinkLimit();
           if (shouldLink && stasisLinkCount >= stasisLinkLimit) {

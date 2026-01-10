@@ -122,7 +122,7 @@ export const mutateDarknet = (): void => {
 
   if (Math.random() < 0.5) {
     // delink all connections from a server
-    disconnectionRandomServer();
+    disconnectRandomServer();
   }
 
   if (Math.random() < 0.1) {
@@ -254,7 +254,7 @@ export const moveDarknetServer = (
   return true;
 };
 
-const disconnectionRandomServer = (): void => {
+const disconnectRandomServer = (): void => {
   const servers = getAllMovableDarknetServers();
   if (servers.length === 0) {
     return;

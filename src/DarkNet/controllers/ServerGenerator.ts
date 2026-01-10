@@ -376,27 +376,20 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
 
 export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
   const scale = Math.min(difficulty / 2, 15);
-  let password;
-
-  do {
-    password = BigInt(Math.floor(Math.random() * 8 * (scale + 1)) + 1);
-    for (let i = 0; i < scale / 3; i++) {
-      if (Math.random() < 0.5) {
-        password *= BigInt(Math.ceil(Math.random() * 5));
-      } else {
-        password *= BigInt(smallPrimes[Math.floor(Math.random() * smallPrimes.length)]);
-      }
+  let password = BigInt(Math.floor(Math.random() * 8 * (scale + 1)) + 1);
+  for (let i = 0; i < scale / 3; i++) {
+    if (Math.random() < 0.5) {
+      password *= BigInt(Math.ceil(Math.random() * 5));
+    } else {
+      password *= BigInt(smallPrimes[Math.floor(Math.random() * smallPrimes.length)]);
     }
-    if (difficulty > 12) {
-      password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
-    }
-    if (difficulty > 24) {
-      password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
-    }
-  } while (
-    // If precision is lost when represented as just a Number, generate again
-    password.toString() !== Number(password).toString()
-  );
+  }
+  if (difficulty > 12) {
+    password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
+  }
+  if (difficulty > 24) {
+    password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
+  }
 
   return {
     modelId: ModelIds.divisibilityTest,
