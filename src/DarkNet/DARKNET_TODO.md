@@ -174,6 +174,10 @@ Design document and workspace
 
 ## patches:
 
+# Additional darknet server types
+- Added new triple modulo password puzzle server type
+- Renamed the getDivisibilityTestConfig server from "ModuloTerm" to "Factori-Os" to avoid theme confusion
+
 ## More user feedback testing
 
 Made stasis link application time decrease with cha level

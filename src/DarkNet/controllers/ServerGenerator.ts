@@ -36,6 +36,7 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
     getBinaryEncodedConfig,
     getParseArithmeticExpressionConfig,
     getXorMaskEncryptedPasswordConfig,
+    getTripleModuloConfig,
   ];
 
   if (difficulty <= 2) {
@@ -375,26 +376,20 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
 };
 
 export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
-  const scale = Math.min(difficulty / 2, 15);
-  let password = BigInt(Math.floor(Math.random() * 8 * (scale + 1)) + 1);
-  for (let i = 0; i < scale / 3; i++) {
-    if (Math.random() < 0.5) {
-      password *= BigInt(Math.ceil(Math.random() * 5));
-    } else {
-      password *= BigInt(smallPrimes[Math.floor(Math.random() * smallPrimes.length)]);
-    }
-  }
-  if (difficulty > 12) {
-    password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
-  }
-  if (difficulty > 24) {
-    password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
-  }
-
+  const password = getPasswordMadeUpOfPrimesProduct(difficulty);
   return {
     modelId: ModelIds.divisibilityTest,
     password: `${password}`,
     staticPasswordHint: `The password is divisible by 1 ;)`,
+  };
+};
+
+export const getTripleModuloConfig = (difficulty: number): ServerConfig => {
+  const password = getPasswordMadeUpOfPrimesProduct(difficulty);
+  return {
+    modelId: ModelIds.tripleModulo,
+    password: `${password}`,
+    staticPasswordHint: `(x % y) % y === (x % y)`,
   };
 };
 
@@ -675,4 +670,27 @@ const getLargestPrimeFactorPassword = (difficulty = 1) => {
     largestPrime: largestPrime,
     targetNumber: number,
   };
+};
+
+const getPasswordMadeUpOfPrimesProduct = (difficulty = 1) => {
+  const scale = Math.min(difficulty / 2, 15);
+  let password;
+
+  do {
+    password = BigInt(Math.floor(Math.random() * 8 * (scale + 1)) + 1);
+    for (let i = 0; i < scale / 3; i++) {
+      if (Math.random() < 0.5) {
+        password *= BigInt(Math.ceil(Math.random() * 5));
+      } else {
+        password *= BigInt(smallPrimes[Math.floor(Math.random() * smallPrimes.length)]);
+      }
+    }
+    if (difficulty > 12) {
+      password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
+    }
+    if (difficulty > 24) {
+      password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
+    }
+  } while (Number(password).toString() !== password.toString()); // ensure it fits in JS number precision
+  return password.toString();
 };

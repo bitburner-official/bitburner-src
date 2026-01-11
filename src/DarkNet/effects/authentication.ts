@@ -71,12 +71,23 @@ export const checkPassword = (
       );
     }
     case ModelIds.divisibilityTest: {
-      const password = Number(server.password);
-      const attemptedDivisor = Number(attemptedPassword);
-      if (isNaN(attemptedDivisor) || password % attemptedDivisor || attemptedPassword === "") {
+      const password = BigInt(server.password);
+      const attemptedDivisor = BigInt(attemptedPassword);
+      if (isNaN(+attemptedPassword) || password % attemptedDivisor || attemptedPassword === "") {
         return getFailureResponse(attemptedPassword, `Password is not divisible by '${attemptedPassword}'`, "false");
       }
       return getFailureResponse(attemptedPassword, `Password IS divisible by '${attemptedPassword}'`, "true");
+    }
+    case ModelIds.tripleModulo: {
+      const password = BigInt(server.password);
+      const input = BigInt(attemptedPassword);
+      const result = (password % input) % BigInt(((input - BigInt(1)) % BigInt(32)) + BigInt(1));
+      const message =
+        input % BigInt(32) === BigInt(0)
+          ? `(Password % ${input}) % ((${input - BigInt(1)}) % 32) + 1) = ${result}`
+          : `(Password % ${input}) % (${input} % 32) = ${result}`;
+
+      return getFailureResponse(attemptedPassword, message, result.toString());
     }
     case ModelIds.ConvertToBase10:
     case ModelIds.parsedExpression: {

@@ -24,6 +24,7 @@ import {
   getYesn_tConfig,
   cleanArithmeticExpression,
   getXorMaskEncryptedPasswordConfig,
+  getTripleModuloConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
@@ -497,6 +498,43 @@ describe("Password Tests", () => {
     const divisibleResult = getAuthResult(server, `${factor}`, 1);
     expect(divisibleResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
     expect(divisibleResult.response.message).toContain("IS divisible");
+
+    const correctResult = getAuthResult(server, `${server.password}`, 1);
+    expect(correctResult.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("getTripleModuloConfig server creates valid password and hint", () => {
+    const server = serverFactory(() => getTripleModuloConfig(60), 5, 0, 0);
+
+    const guess1 = server.password + 1;
+    const expectedResult1 = (+server.password % guess1) % (((guess1 - 1) % 32) + 1);
+    const result1 = getAuthResult(server, `${guess1}`, 1);
+    expect(result1.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(getMostRecentAuthLog(server.hostname)?.message).toContain(`= ${expectedResult1}`);
+    expect(getMostRecentAuthLog(server.hostname)?.data).toBe(`${expectedResult1}`);
+
+    const guess2 = +server.password - 1;
+    const expectedResult2 = (+server.password % guess2) % (((guess2 - 1) % 32) + 1);
+    const result2 = getAuthResult(server, `${guess2}`, 1);
+    expect(result2.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(getMostRecentAuthLog(server.hostname)?.message).toContain(`= ${expectedResult2}`);
+    expect(getMostRecentAuthLog(server.hostname)?.data).toBe(`${expectedResult2}`);
+
+    const guess3 = Math.floor(+server.password / 2);
+    const expectedResult3 = (+server.password % guess3) % (((guess3 - 1) % 32) + 1);
+    const result3 = getAuthResult(server, `${guess3}`, 1);
+    expect(result3.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(getMostRecentAuthLog(server.hostname)?.message).toContain(`= ${expectedResult3}`);
+    expect(getMostRecentAuthLog(server.hostname)?.data).toBe(`${expectedResult3}`);
+
+    // Check a known factor
+    server.password = (BigInt(server.password) * BigInt(2)).toString();
+    const guessOfFactor = 2;
+    const expectedResultOfFactor = 0;
+    const resultOfFactor = getAuthResult(server, `${guessOfFactor}`, 1);
+    expect(resultOfFactor.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    expect(getMostRecentAuthLog(server.hostname)?.message).toContain(`= ${expectedResultOfFactor}`);
+    expect(getMostRecentAuthLog(server.hostname)?.data).toBe(`${expectedResultOfFactor}`);
 
     const correctResult = getAuthResult(server, `${server.password}`, 1);
     expect(correctResult.response.code).toBe(ResponseCodeEnum.Success);
