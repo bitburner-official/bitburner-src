@@ -11,7 +11,7 @@ import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killServerScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
-import { MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
+import { LOW_LEVEL_SERVER_DENSITY, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,
   getAllDarknetServers,
@@ -186,11 +186,12 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
   serverState.serverLogs = [];
 };
 
-export const addRandomDarknetServers = (count = 1, difficulty?: number): void => {
+export const addRandomDarknetServers = (count = 1, difficulty?: number, fixedDepth?: boolean): void => {
   for (let i = 0; i < count; i++) {
     const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
     const newServer = createDarknetServer(diff, -1, -1);
-    moveDarknetServer(newServer);
+    const range = fixedDepth ? 0 : 3;
+    moveDarknetServer(newServer, range, range);
     if (DarknetState.offlineServers.includes(newServer.hostname)) {
       DarknetState.offlineServers = DarknetState.offlineServers.filter((s) => s !== newServer.hostname);
     }
@@ -199,11 +200,14 @@ export const addRandomDarknetServers = (count = 1, difficulty?: number): void =>
 
 export const addLowLevelServersIfNeeded = (): void => {
   const lowLevelServers = getAllDarknetServers().filter((s) => s.depth <= 3);
-  if (lowLevelServers.length > NET_WIDTH * 2.5) {
-    return;
+  const serversConnectedToDarkweb = getAllDarknetServers().filter((s) => s.depth === 0);
+  if (serversConnectedToDarkweb.length <= 3) {
+    addRandomDarknetServers(2, 0, true);
   }
-
-  addRandomDarknetServers(2, Math.floor(Math.random() * 4));
+  if (lowLevelServers.length / (4 * NET_WIDTH) < LOW_LEVEL_SERVER_DENSITY) {
+    addRandomDarknetServers(2, Math.floor(Math.random() * 4));
+    addLowLevelServersIfNeeded();
+  }
 };
 
 export const balanceDarknetServers = (): void => {

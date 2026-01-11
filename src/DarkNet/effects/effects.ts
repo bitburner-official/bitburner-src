@@ -14,7 +14,7 @@ import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { ModelIds, NET_WIDTH } from "../Enums";
+import { GenericResponseMessage, ModelIds, NET_WIDTH, ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
 import { getDarknetServer } from "../utils/darknetServerUtils";
@@ -22,13 +22,15 @@ import {
   getAllMovableDarknetServers,
   getBackdooredDarkwebServers,
   getNearbyNonEmptyPasswordServer,
+  getStasisLinkServers,
 } from "../utils/darknetNetworkUtils";
 import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import { getTorRouter } from "../../Server/ServerHelpers";
 import { DarknetConstants } from "../Constants";
 import { GetServer } from "../../Server/AllServers";
 import { isLabyrinthServer } from "./labyrinth";
-import { CONSTANTS } from "../../Constants";
+import { NetscriptContext } from "../../Netscript/APIWrapper";
+import { helpers } from "../../Netscript/NetscriptHelpers";
 
 export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid: number) => {
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
@@ -236,10 +238,30 @@ export const getStasisLinkLimit = (): number => {
 };
 
 export const getSetStasisLinkDuration = (): number => {
-  if (CONSTANTS.isInTestEnvironment) {
-    return 0;
+  return (1000 / (Player.skills.charisma + 1000)) * 30_000;
+};
+
+export const setStasisLink = (ctx: NetscriptContext, server: DarknetServer, shouldLink: boolean) => {
+  const stasisLinkCount = getStasisLinkServers().length;
+  const stasisLinkLimit = getStasisLinkLimit();
+  if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
+    helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
+    return {
+      success: false,
+      code: ResponseCodeEnum.StasisLinkLimitReached,
+      message: GenericResponseMessage.StasisLinkLimitReached,
+    };
   }
-  return (1000 / Player.skills.charisma + 1000) * 20_000 + 6_000;
+
+  server.hasStasisLink = shouldLink;
+  server.backdoorInstalled = shouldLink;
+  const message = `Stasis link ${shouldLink ? "applied to" : "removed from"} server ${server.hostname}.`;
+  helpers.log(ctx, () => `${message}. (${stasisLinkCount}/${stasisLinkLimit} links in use)`);
+  return {
+    success: true,
+    code: ResponseCodeEnum.Success,
+    message: GenericResponseMessage.Success,
+  };
 };
 
 export const chargeServerMigration = (server: DarknetServer, threads = 1) => {

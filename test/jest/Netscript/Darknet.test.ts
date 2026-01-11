@@ -21,6 +21,7 @@ import { ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { expectRunningOnDarknetServer } from "../../../src/DarkNet/effects/offlineServerHandling";
 import { sleep } from "../../../src/utils/Utility";
+import { addLowLevelServersIfNeeded } from "../../../src/DarkNet/controllers/NetworkMovement";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Server ${hostnameOfNonExistentServer} does not exist.`;
@@ -38,6 +39,7 @@ beforeEach(() => {
   Player.sourceFiles.set(15, 1);
   getDarkscapeNavigator();
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
+  Player.mults.charisma = 1e10;
   Player.gainCharismaExp(1e100);
 });
 
@@ -56,6 +58,7 @@ function getFirstDarknetServerAdjacentToDarkWeb() {
 }
 
 function getNsOnNonDarkwebDarknetServer() {
+  addLowLevelServersIfNeeded();
   const hostname = getFirstDarknetServerAdjacentToDarkWeb();
   return getNS(hostname);
 }
