@@ -7,7 +7,7 @@ import type { DarknetResult } from "@nsdefs";
 import { Player } from "@player";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
-import { GetServer } from "../../Server/AllServers";
+import { GetServerOrThrow } from "../../Server/AllServers";
 
 export type LabyrinthSummaryProps = {
   result: DarknetResult | undefined;
@@ -58,23 +58,22 @@ export const LabyrinthSummary = ({
     .join("");
 
   const getMenuItems = () => {
-    const darknetScriptPIDs = Object.entries(DarknetState.labLocations)
-      .map(([key, __]) => key)
-      .filter((pid) => findRunningScriptByPid(Number(pid)));
+    const darknetScripts = Object.keys(DarknetState.labLocations).map((pid) => findRunningScriptByPid(Number(pid)));
 
-    const scriptOptions = darknetScriptPIDs.map((pid) => {
-      const script = findRunningScriptByPid(Number(pid));
-      const scriptServer = GetServer(script?.server ?? "");
-      const connectedToLab = scriptServer?.serversOnNetwork.includes(lab.name);
-      return (
-        <MenuItem key={pid} value={Number(pid)} disabled={!connectedToLab}>
-          {`PID ${pid}: ${script?.server ?? ""} - ${!connectedToLab ? "(Not connected to lab)" : script?.filename}`}
-        </MenuItem>
+    const scriptOptions = [];
+    for (const script of darknetScripts) {
+      if (!script) continue;
+      const scriptServer = GetServerOrThrow(script.server);
+      const connectedToLab = scriptServer.serversOnNetwork.includes(lab.name);
+      scriptOptions.push(
+        <MenuItem key={script.pid} value={Number(script.pid)} disabled={!connectedToLab}>
+          {`PID ${script.pid}: ${script.server} - ${!connectedToLab ? "(Not connected to lab)" : script.filename}`}
+        </MenuItem>,
       );
-    });
+    }
 
     // Change selected option to manual solver perspective if the old selection is no longer valid
-    if (!darknetScriptPIDs.find((pid) => Number(pid) === currentPerspective)) {
+    if (!darknetScripts.find((script) => Number(script?.pid) === currentPerspective)) {
       setCurrentPerspective(-1);
     }
 
