@@ -84,7 +84,7 @@ export const checkPassword = (
       const result = (password % input) % BigInt(((input - BigInt(1)) % BigInt(32)) + BigInt(1));
       const message =
         input % BigInt(32) === BigInt(0)
-          ? `(Password % ${input}) % ((${input - BigInt(1)}) % 32) + 1) = ${result}`
+          ? `(Password % ${input}) % 32 = ${result}`
           : `(Password % ${input}) % (${input} % 32) = ${result}`;
 
       return getFailureResponse(attemptedPassword, message, result.toString());
