@@ -2,6 +2,12 @@
 
 ## Beginner questions
 
+### I don't have experience in JavaScript/programming experience, is that a problem?
+
+Not at all! In fact, this game is made with beginners in mind. Also, you'll want to refer to [MDN Web Docs](https://developer.mozilla.org/en-US/), and other JavaScript tutorials in case you get stuck while programming your scripts.
+
+---
+
 ### How do I create directories/folders?
 
 These are just a part of the filename. There is no explicit command to create them, rather files with the same prepending "directory" string are bundled together.
@@ -16,7 +22,7 @@ Time-consuming for minimal benefits.
 Long answer:
 Backdooring a server takes a certain amount of time, and the duration is dependent on your hacking level and the given server's at the time of sending backdoor command.
 
-Given the amount of servers in the network and how often you have to do so after installing augments, it is ill-advised to perform such potentially lengthy tasks unnecessarily.
+Given the number of servers in the network and how often you have to do so after installing augments, it is ill-advised to perform such potentially lengthy tasks unnecessarily.
 
 ---
 
