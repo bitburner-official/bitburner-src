@@ -385,13 +385,20 @@ export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getTripleModuloConfig = (difficulty: number): ServerConfig => {
-  const password = getPasswordMadeUpOfPrimesProduct(difficulty);
+  const password = getPassword(3 + difficulty / 5);
   return {
     modelId: ModelIds.tripleModulo,
     password: `${password}`,
-    staticPasswordHint: `(x % y) % y === (x % y)`,
+    staticPasswordHint: `(password % n) % (n % 32)`,
   };
 };
+
+// export const getKingOfTheHillConfig = (difficulty: number): ServerConfig => {
+//    // y=20*e^((-(x-30)^2)/10)
+//    // centered on 30
+//    // peak at 20
+//   // width controlled by 10
+// }
 
 export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
   return {

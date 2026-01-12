@@ -178,6 +178,8 @@ Design document and workspace
 
 - Added new triple modulo password puzzle server type
 - Renamed the getDivisibilityTestConfig server from "ModuloTerm" to "Factori-Os" to avoid theme confusion
+- Tweaked the generation of passwords for divisibility test puzzle to regenerate a different password if precision is lost when converting to a number
+- PR feedback/tweaks
 
 ## More user feedback testing
 
