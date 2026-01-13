@@ -47,6 +47,7 @@ import {
   getSortedEchoVulnConfig,
   getSpiceLevelConfig,
   getTimingAttackConfig,
+  getTripleModuloConfig,
   getYesn_tConfig,
   ServerConfig,
   serverFactory,
@@ -291,6 +292,7 @@ const serverTypeOptions: ServerTypeOption[] = [
   { label: ModelIds.ConvertToBase10, constructor: getConvertToBase10Config },
   { label: ModelIds.parsedExpression, constructor: getParseArithmeticExpressionConfig },
   { label: ModelIds.divisibilityTest, constructor: getDivisibilityTestConfig },
+  { label: ModelIds.tripleModulo, constructor: getTripleModuloConfig },
   { label: ModelIds.packetSniffer, constructor: getPacketSnifferConfig },
   { label: ModelIds.encryptedPassword, constructor: getBinaryEncodedConfig },
 ];
