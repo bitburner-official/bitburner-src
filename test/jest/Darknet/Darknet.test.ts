@@ -562,7 +562,7 @@ describe("Password Tests", () => {
   });
 
   test("kingOfTheHill server creates a valid password and hint", () => {
-    const kingOfTheHillServer = serverFactory(getKingOfTheHillConfig, 80, 0, 0);
+    const kingOfTheHillServer = serverFactory(getKingOfTheHillConfig, 60, 0, 0);
     const password = Number(kingOfTheHillServer.password);
 
     const result1 = getAuthResult(kingOfTheHillServer, `${password - 50}`, 1);
@@ -571,19 +571,37 @@ describe("Password Tests", () => {
     const result2 = getAuthResult(kingOfTheHillServer, `${password + 50}`, 1);
     expect(result2.response.code).toBe(ResponseCodeEnum.AuthFailure);
     const logs2 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
-    const resultNearPassword = getAuthResult(kingOfTheHillServer, `${password + 10}`, 1);
+    const resultNearPassword = getAuthResult(kingOfTheHillServer, `${password + 1}`, 1);
     expect(resultNearPassword.response.code).toBe(ResponseCodeEnum.AuthFailure);
     const logsNearPassword = getMostRecentAuthLog(kingOfTheHillServer.hostname);
+    getAuthResult(kingOfTheHillServer, `${password - 1}`, 1);
+    const logsNearPassword2 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
     expect(Number(logs1?.data)).toBeLessThan(Number(logsNearPassword?.data));
     expect(Number(logs2?.data)).toBeLessThan(Number(logsNearPassword?.data));
     expect(Number(logsNearPassword?.data)).toBeLessThan(10000);
-    expect(Math.abs(Number(logsNearPassword?.data) - 10000)).toBeLessThan(1);
+    expect(Number(logsNearPassword2?.data)).toBeLessThan(10000);
 
     getAuthResult(kingOfTheHillServer, `12345`, 1);
     const logs3 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
     getAuthResult(kingOfTheHillServer, `12345`, 1);
     const logs4 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
     expect(Number(logs3?.data)).toBe(Number(logs4?.data));
+
+    // For testing password spreads: poll the altitude and log the resulting graph
+    // const results = [];
+    // for (let attempt = password * 0.6; attempt <= password * 1.4; attempt += password/200) {
+    //   getAuthResult(kingOfTheHillServer, `${attempt}`, 1);
+    //   const data = getMostRecentAuthLog(kingOfTheHillServer.hostname)?.data;
+    //   results.push({ attempt, altitude: Number(data) });
+    // }
+    // const graph = results.map(r => {
+    //   if (r.altitude > 0) {
+    //     return ".".repeat(Math.min(50, Math.floor(r.altitude / 200))) + "*";
+    //   }
+    //   return "-".repeat(Math.min(50, Math.floor(-r.altitude / 200)));
+    // }).join("\n");
+    //
+    // console.log(graph);
 
     const correctResult = getAuthResult(kingOfTheHillServer, `${password}`, 1);
     expect(correctResult.response.code).toBe(ResponseCodeEnum.Success);

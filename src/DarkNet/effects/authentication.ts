@@ -207,16 +207,24 @@ export const getKingOfTheHillAltitude = (server: DarknetServer, attemptedPasswor
   const rng = new WHRNG(password);
   const hillCount = Math.min(Math.floor(server.difficulty / 8), 4) * 2 + 1;
   const passwordHillIndex = Math.floor(rng.random() * (hillCount - 2)) + 1;
-  const width = password / (hillCount * 50) + 2;
+  const width = 10 ** Math.max(server.password.length - 2, 0) + 1;
 
+  // As the player gets very close to the password, only consider the main hill
+  // This is to ensure the data is very clean as they approach, and that the peak is not
+  // moved off of the password value by some of the side hills
+  if (Math.abs((x - password) / password) < 0.03) {
+    return getAltitudeGivenHillSpecs(x, password, 10000, width);
+  }
+
+  // Otherwise, give them the full graph result with all hills
   let altitude = 0;
   for (let i = 0; i < hillCount; i++) {
-    const locationOffset = (i - passwordHillIndex) * Math.max(password / 20, 10) * (rng.random() * 0.2 + 0.9);
+    const locationOffset = (i - passwordHillIndex) * width * 3 * (rng.random() * 0.2 + 0.9);
     const heightOffset = Math.abs((i - passwordHillIndex) * 2600) * (rng.random() * 0.1 + 0.95);
     altitude += getAltitudeGivenHillSpecs(x, password + locationOffset, 10000 - heightOffset, width);
   }
 
-  return Math.abs(altitude) < 1e-10 ? 0 : altitude;
+  return altitude;
 };
 
 const getAltitudeGivenHillSpecs = (x: number, location: number, height: number, width: number) => {
