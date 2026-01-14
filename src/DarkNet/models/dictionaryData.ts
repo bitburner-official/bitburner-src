@@ -172,7 +172,7 @@ export const presetNames = [
   "echo_chamber",
   "firewall",
   "(╯°□°)╯︵┻━┻",
-  "¯\\_(ツ)_/¯",
+  "¯\\_(ツ)_⁄¯",
   "༼つ◕_◕༽つ",
   "茶店",
   "bungo",
@@ -254,7 +254,7 @@ export const ServerNameSuffixes = [
   "hub",
 ];
 
-export const connectors = ["", ".", "-", "_", "/", "~", ":", "*", "::"];
+export const connectors = ["", ".", "-", "_", "⁄", "~", ":", "*", "::"];
 
 export const l33t: Record<string, string> = {
   a: "4",

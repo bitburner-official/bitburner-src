@@ -362,7 +362,7 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
   if (difficulty > 12) {
     expression = expression.replaceAll("*", "ҳ").replaceAll("/", "÷").replaceAll("+", "➕").replaceAll("-", "➖");
   }
-  if (difficulty > 16 && Math.random() < 0.3) {
+  if ((difficulty > 16 && Math.random() < 0.3) || Math.random() < 0.01) {
     expression += getCodeInjection();
   }
   const parenCount = expression.split("(").length - 1;
@@ -688,7 +688,7 @@ const getPasswordMadeUpOfPrimesProduct = (difficulty = 1) => {
   let password;
 
   do {
-    password = BigInt(Math.floor(Math.random() * 6 * (scale + 1)) + 1);
+    password = BigInt(Math.floor(Math.random() * 5 * (scale + 1)) + 1);
     for (let i = 0; i < scale / 3; i++) {
       if (Math.random() < 0.5) {
         password *= BigInt(Math.ceil(Math.random() * 5));
