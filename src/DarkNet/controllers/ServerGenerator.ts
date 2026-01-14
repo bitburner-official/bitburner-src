@@ -684,7 +684,7 @@ const getPasswordMadeUpOfPrimesProduct = (difficulty = 1) => {
   let password;
 
   do {
-    password = BigInt(Math.floor(Math.random() * 8 * (scale + 1)) + 1);
+    password = BigInt(Math.floor(Math.random() * 6 * (scale + 1)) + 1);
     for (let i = 0; i < scale / 3; i++) {
       if (Math.random() < 0.5) {
         password *= BigInt(Math.ceil(Math.random() * 5));
@@ -698,6 +698,6 @@ const getPasswordMadeUpOfPrimesProduct = (difficulty = 1) => {
     if (difficulty > 24) {
       password *= BigInt(largePrimes[Math.floor(Math.random() * largePrimes.length)]);
     }
-  } while (Number(password).toString() !== password.toString()); // ensure it fits in JS number precision
+  } while (BigInt(Number(password)) !== password); // ensure it fits in JS number precision
   return password.toString();
 };

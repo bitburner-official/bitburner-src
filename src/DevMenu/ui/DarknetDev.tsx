@@ -142,7 +142,6 @@ export function DarknetDev(): React.ReactElement {
             onChange={updateDepth}
             type="number"
             label="Server starting depth"
-            defaultValue={1}
             inputProps={{ min: 1, step: 1, max: maxDepth }}
             sx={{ minWidth: `200px` }}
             id="darknet-dev-server-depth-input"
@@ -153,7 +152,6 @@ export function DarknetDev(): React.ReactElement {
             onChange={updateCount}
             type="number"
             label="Number of copies"
-            defaultValue={1}
             inputProps={{ min: 1, step: 1, max: maxDepth * 2 }}
             sx={{ minWidth: `200px` }}
             id="darknet-dev-server-depth-input"
