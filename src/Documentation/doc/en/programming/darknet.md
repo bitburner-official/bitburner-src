@@ -18,7 +18,7 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 
 **There is an example starter script at the bottom of this document, to see some of these API methods in action.**
 
-For the full NS docs for the api, you can go to the [API documentation page](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.darknet.md).
+For the full NS docs for the api, you can go to the [API documentation page](https://github.com/ficocelliguy/bitburner-src/blob/dev/markdown/bitburner.darknet.md).
 
 - `dnet.getServerAuthDetails(hostname)` tells you a server's password hint and format, and if the server is offline or connected to the current server.
 - `ns.dnet.probe()` lets you find darknet servers directly connected to your current server. Use this to find targets to crack and copy your script onto.
@@ -30,6 +30,8 @@ For the full NS docs for the api, you can go to the [API documentation page](htt
 - Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
 - Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
 - Using `ns.dnet.setStasisLink()` will stasis lock the current server. This prevents it from moving or going offline, and also allows getting a session on the server at a distance like backdooring does.
+- `ns.dnet.induceServerMigration()` can be used to target a connected server and, when used enough, will force it to move to a new location on the darknet.
+- `ns.dnet.promoteStock()` increases the volatility of the targeted stock via propaganda, which can increase the potential profits from trading it.
 
 ### Darknet script design considerations
 
@@ -147,6 +149,16 @@ Darknet servers belong to somebody already, and they are often already doing stu
 Servers on the darknet are notoriously unreliable. They may restart or go offline, killing all the running scripts on them. They also can move away from the area you are working on. To combat this problem, you have a limited number of "stasis links" available to you, which can be applied (or removed from) the current server using `dnet.setStasisLink`. Placing a stasis link on a server allows you to `dnet.connectToSession` and `exec`, and `connect` to it from the terminal, from any distance.
 
 You can see the currently stasis-linked servers with `dnet.getStasisLinkedServers`, and see the current limit using `dnet.getStasisLinkLimit`.
+
+### Moving servers with dnet.induceServerMigration
+
+Some parts of the darknet are disconnected from others, leaving "air gaps". These can only be crossed via riding a server as it moves. Waiting for a convenient movement may be inconsistent - but you can speed it along.
+
+Repeatedly calling `dnet.induceServerMigration` builds up a charge on the target server, eventually forcing it to move. (It often will move deeper into the net, but the direction of the movement is not guaranteed.) `dnet.induceServerMigration` can only target servers directly connected to the script's current server, but the effect stacks if multiple servers all target the same one.
+
+### Increasing stock volatility with dnet.promoteStock
+
+A stock's volatility is what determines how much the price can increase or decrease on each stock market update. Repeatedly calling `dnet.promoteStock` allows you to target a stock and increase this volatility greatly. This does not change its forecast the way using the stock options in hack() or grow() does - the stock will still be on the same general rising or falling trajectory. However, careful use of `dnet.promoteStock` on key stocks you hold (or want to buy, or have options on) can increase your profits from the stock market.
 
 ## Example Script
 
