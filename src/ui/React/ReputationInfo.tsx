@@ -1,5 +1,4 @@
 import React from "react";
-import { MathJax } from "better-react-mathjax";
 
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
@@ -8,6 +7,8 @@ import Typography from "@mui/material/Typography";
 import { addRepToFavor } from "../../Faction/formulas/favor";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "./Reputation";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { convertMathNotation } from "../../Documentation/root";
 
 export function ReputationInfo({
   favor,
@@ -26,8 +27,12 @@ export function ReputationInfo({
             You will have <Favor favor={addRepToFavor(favor, playerReputation)} /> faction favor after installing an
             Augmentation.
           </Typography>
-          <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
-          <MathJax>{"\\(\\huge{favor=\\log_{1.02}\\left(1+\\frac{r}{25000}\\right)}\\)"}</MathJax>
+          <Typography style={{ fontSize: "2rem" }}>r = Total faction reputation</Typography>
+          <Typography>
+            {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
+            MathNotationOutput.json. They are not user-provided data. */}
+            <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.RepToFavor) }} />
+          </Typography>
         </>
       }
     >

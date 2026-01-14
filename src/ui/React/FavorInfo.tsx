@@ -1,11 +1,11 @@
 import React from "react";
-import { MathJax } from "better-react-mathjax";
-
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { Favor } from "../../ui/React/Favor";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { convertMathNotation } from "../../Documentation/root";
 
 export function FavorInfo({ favor, boldLabel }: { favor: number; boldLabel?: boolean }): React.ReactElement {
   return (
@@ -17,8 +17,12 @@ export function FavorInfo({ favor, boldLabel }: { favor: number; boldLabel?: boo
             favor is gained whenever you install an Augmentation. The amount of favor you gain depends on the total
             amount of reputation you earned with this faction across all resets.
           </Typography>
-          <MathJax>{"\\(\\huge{r = reputation}\\)"}</MathJax>
-          <MathJax>{"\\(\\huge{\\Delta r = \\Delta r \\times \\frac{100+favor}{100}}\\)"}</MathJax>
+          <Typography style={{ fontSize: "2rem" }}>r = Reputation gain</Typography>
+          <Typography>
+            {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
+            MathNotationOutput.json. They are not user-provided data. */}
+            <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.FavorBonus) }} />
+          </Typography>
         </>
       }
     >

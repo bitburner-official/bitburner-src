@@ -6,7 +6,8 @@ import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 
 import { Money } from "../../ui/React/Money";
-import { MathJax } from "better-react-mathjax";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { convertMathNotation } from "../../Documentation/root";
 
 interface IProps {
   rerender: () => void;
@@ -32,7 +33,9 @@ export function CoresButton(props: IProps): React.ReactElement {
   }
 
   return (
-    <Tooltip title={<MathJax>{`\\(\\large{cost = 10^9 \\cdot 7.5 ^{\\text{cores}}}\\)`}</MathJax>}>
+    // It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
+    // MathNotationOutput.json. They are not user-provided data.
+    <Tooltip title={<span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.CoreCost) }} />}>
       <span>
         <br />
         <Typography>

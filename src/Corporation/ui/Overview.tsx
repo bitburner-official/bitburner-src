@@ -1,6 +1,5 @@
 // React Component for displaying Corporation Overview info
 import React, { useState } from "react";
-import { MathJax } from "better-react-mathjax";
 import { LevelableUpgrade } from "./LevelableUpgrade";
 import { Unlock } from "./Unlock";
 import { BribeFactionModal } from "./modals/BribeFactionModal";
@@ -36,6 +35,8 @@ import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { CreateCorporationModal } from "./modals/CreateCorporationModal";
 import InfoIcon from "@mui/icons-material/Info";
 import { CorruptibleText } from "../../ui/React/CorruptibleText";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { convertMathNotation } from "../../Documentation/root";
 
 interface IProps {
   rerender: () => void;
@@ -390,9 +391,17 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
                   "TributeModifier". Formulas:
                   <br />
                   <br />
-                  <MathJax>{`\\(TotalDividends = DividendRate\\ast(Revenue - Expenses)\\ast 10\\)`}</MathJax>
+                  <Typography>
+                    {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json
+                    and MathNotationOutput.json. They are not user-provided data. */}
+                    <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.CorpTotalDividends) }} />
+                  </Typography>
                   <br />
-                  <MathJax>{`\\(Dividend = \\left(OwnedShares\\ast\\frac{TotalDividends}{TotalShares}\\right)^{1 - TributeModifier}\\)`}</MathJax>
+                  <Typography>
+                    {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json
+                    and MathNotationOutput.json. They are not user-provided data. */}
+                    <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.CorpDividend) }} />
+                  </Typography>
                 </>
               }
             >
