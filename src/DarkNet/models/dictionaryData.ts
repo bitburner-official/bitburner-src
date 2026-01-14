@@ -171,9 +171,10 @@ export const presetNames = [
   "....",
   "echo_chamber",
   "firewall",
-  "(╯°□°)╯︵┻━┻",
-  "¯\\_(ツ)_⁄¯",
-  "༼つ◕_◕༽つ",
+  ":)",
+  "XD",
+  "UwU",
+  '");DROP TABLE SERVERS;--',
   "茶店",
   "bungo",
   "microhard",
@@ -254,7 +255,7 @@ export const ServerNameSuffixes = [
   "hub",
 ];
 
-export const connectors = ["", ".", "-", "_", "⁄", "~", ":", "*", "::"];
+export const connectors = ["", ".", "-", "_", "~", ";", ":", "*", "::"];
 
 export const l33t: Record<string, string> = {
   a: "4",

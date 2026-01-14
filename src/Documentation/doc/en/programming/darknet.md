@@ -4,6 +4,8 @@ Easy wealth... secret augments... The siren call of the so-called "dark net" has
 
 Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers on that unregulated network. A person like you, perhaps.
 
+For the full NS docs for the api, you can go to the [API documentation page](nsDoc/bitburner.darknet.md).
+
 ### Network structure
 
 Unlike the traditional BitBurner network, the darknet is constantly changing. Servers may sometimes restart, change its connections to other servers, or even go offline indefinitely. The network is also not a simple tree: it contains loops of connections, backtracks, and disconnected islands of servers to explore.
@@ -17,8 +19,6 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 ### TL;DR: Executive summary of the darknet API
 
 **There is an example starter script at the bottom of this document, to see some of these API methods in action.**
-
-For the full NS docs for the api, you can go to the [API documentation page](https://github.com/ficocelliguy/bitburner-src/blob/dev/markdown/bitburner.darknet.md).
 
 - `dnet.getServerAuthDetails(hostname)` tells you a server's password hint and format, and if the server is offline or connected to the current server.
 - `ns.dnet.probe()` lets you find darknet servers directly connected to your current server. Use this to find targets to crack and copy your script onto.
@@ -130,7 +130,7 @@ if (ns.dnet.getServerAuthDetails(hostname).isConnectedToCurrentServer) {
 
 ### Looting servers with dnet.openCache and dnet.phishingAttack
 
-Sometimes you will find valuable data in .cache files on servers you unlock. They can contain money or experience, programs, or even stock market access keys. They can be opened via `run` from the terminal, or `dnet.openCache` from a script on that server.
+Sometimes you will find valuable data in .cache files on servers you unlock. They can contain money or experience, programs, or even stock market access keys. They can be opened via `run` from the terminal, or `dnet.openCache` from a script on that server. You can use `ns.ls(ns.getHostname(), '.cache')` to identify if any .cache files exist on the current server.
 
 Once you have access to a darknet server, you can begin to use it for your own purposes. One option is to run `dnet.phishingAttack()` to raise your charisma levels and to try and con money out of the less tech-savvy middle managers out there. Occasionally you will even lift .cache data files from the attempt!
 
