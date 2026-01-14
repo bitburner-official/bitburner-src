@@ -25,6 +25,7 @@ import {
   cleanArithmeticExpression,
   getXorMaskEncryptedPasswordConfig,
   getTripleModuloConfig,
+  getKingOfTheHillConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
@@ -314,7 +315,7 @@ describe("Password Tests", () => {
 
   test("getTimingAttackConfig server creates a server that takes longer the more correct characters are submitted, starting from the left", async () => {
     Player.gainCharismaExp(1e200);
-    const server = serverFactory(() => getTimingAttackConfig(20), 20, 0, 0);
+    const server = serverFactory(getTimingAttackConfig, 20, 0, 0);
     server.logTrafficInterval = -1;
     const ns = getNS(server.hostname);
     expect(server).toBeDefined();
@@ -362,7 +363,7 @@ describe("Password Tests", () => {
   });
 
   test("getSpiceLevelConfig server creates a server with a correct password hint", () => {
-    const server = serverFactory(() => getSpiceLevelConfig(20), 20, 0, 0);
+    const server = serverFactory(getSpiceLevelConfig, 20, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
@@ -389,7 +390,7 @@ describe("Password Tests", () => {
   });
 
   test("getGuessNumberConfig server creates a server with a correct password hint", () => {
-    const server = serverFactory(() => getGuessNumberConfig(20), 20, 0, 0);
+    const server = serverFactory(getGuessNumberConfig, 20, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
@@ -407,7 +408,7 @@ describe("Password Tests", () => {
   });
 
   test("getCaptchaConfig server creates a server with a correct password hint", () => {
-    const server = serverFactory(() => getCaptchaConfig(20), 20, 0, 0);
+    const server = serverFactory(getCaptchaConfig, 20, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
@@ -421,7 +422,7 @@ describe("Password Tests", () => {
   });
 
   test("getYesn_tConfig server creates a server with a correct password hint", () => {
-    const server = serverFactory(() => getYesn_tConfig(20), 20, 0, 0);
+    const server = serverFactory(getYesn_tConfig, 20, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
@@ -439,7 +440,7 @@ describe("Password Tests", () => {
   });
 
   test("getRomanNumeralsServer creates a server with a correct password hint", () => {
-    const server = serverFactory(() => getRomanNumeralConfig(5), 5, 0, 0);
+    const server = serverFactory(getRomanNumeralConfig, 5, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
@@ -453,7 +454,7 @@ describe("Password Tests", () => {
   });
 
   test("getLargestPrimeFactor server creates valid password and hint", () => {
-    const server = serverFactory(() => getLargestPrimeFactorConfig(20), 5, 0, 0);
+    const server = serverFactory(getLargestPrimeFactorConfig, 20, 0, 0);
     const password = +server.password;
     const hint = +server.passwordHintData;
 
@@ -471,7 +472,7 @@ describe("Password Tests", () => {
   });
 
   test("getDivisibilityTestConfig server creates valid password and hint", () => {
-    const server = serverFactory(() => getDivisibilityTestConfig(100), 5, 0, 0);
+    const server = serverFactory(getDivisibilityTestConfig, 100, 0, 0);
 
     expect(server.password.includes("+")).toBe(false);
     expect(isNumber(+server.password)).toBe(true);
@@ -504,7 +505,7 @@ describe("Password Tests", () => {
   });
 
   test("getTripleModuloConfig server creates valid password and hint", () => {
-    const server = serverFactory(() => getTripleModuloConfig(60), 5, 0, 0);
+    const server = serverFactory(getTripleModuloConfig, 60, 0, 0);
 
     const guess1 = server.password + 1;
     const expectedResult1 = (+server.password % guess1) % (((guess1 - 1) % 32) + 1);
@@ -558,6 +559,34 @@ describe("Password Tests", () => {
 
     const successResult = getAuthResult(bufferOverflowServer, "A".repeat(passwordLength * 2), 1);
     expect(successResult.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("kingOfTheHill server creates a valid password and hint", () => {
+    const kingOfTheHillServer = serverFactory(getKingOfTheHillConfig, 80, 0, 0);
+    const password = Number(kingOfTheHillServer.password);
+
+    const result1 = getAuthResult(kingOfTheHillServer, `${password - 50}`, 1);
+    expect(result1.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    const logs1 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
+    const result2 = getAuthResult(kingOfTheHillServer, `${password + 50}`, 1);
+    expect(result2.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    const logs2 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
+    const resultNearPassword = getAuthResult(kingOfTheHillServer, `${password + 10}`, 1);
+    expect(resultNearPassword.response.code).toBe(ResponseCodeEnum.AuthFailure);
+    const logsNearPassword = getMostRecentAuthLog(kingOfTheHillServer.hostname);
+    expect(Number(logs1?.data)).toBeLessThan(Number(logsNearPassword?.data));
+    expect(Number(logs2?.data)).toBeLessThan(Number(logsNearPassword?.data));
+    expect(Number(logsNearPassword?.data)).toBeLessThan(10000);
+    expect(Math.abs(Number(logsNearPassword?.data) - 10000)).toBeLessThan(1);
+
+    getAuthResult(kingOfTheHillServer, `12345`, 1);
+    const logs3 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
+    getAuthResult(kingOfTheHillServer, `12345`, 1);
+    const logs4 = getMostRecentAuthLog(kingOfTheHillServer.hostname);
+    expect(Number(logs3?.data)).toBe(Number(logs4?.data));
+
+    const correctResult = getAuthResult(kingOfTheHillServer, `${password}`, 1);
+    expect(correctResult.response.code).toBe(ResponseCodeEnum.Success);
   });
 });
 

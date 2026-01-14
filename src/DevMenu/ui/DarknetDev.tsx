@@ -37,6 +37,7 @@ import {
   getEchoVulnConfig,
   getEuCountryDictionaryConfig,
   getGuessNumberConfig,
+  getKingOfTheHillConfig,
   getLargeDictionaryConfig,
   getLargestPrimeFactorConfig,
   getMastermindHintConfig,
@@ -291,6 +292,7 @@ const serverTypeOptions: ServerTypeOption[] = [
   { label: ModelIds.parsedExpression, constructor: getParseArithmeticExpressionConfig },
   { label: ModelIds.divisibilityTest, constructor: getDivisibilityTestConfig },
   { label: ModelIds.tripleModulo, constructor: getTripleModuloConfig },
+  { label: ModelIds.globalMaxima, constructor: getKingOfTheHillConfig },
   { label: ModelIds.packetSniffer, constructor: getPacketSnifferConfig },
   { label: ModelIds.encryptedPassword, constructor: getBinaryEncodedConfig },
 ];

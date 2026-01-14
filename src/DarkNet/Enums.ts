@@ -34,6 +34,7 @@ export const ModelIds = {
   parsedExpression: "MathML",
   divisibilityTest: "Factori-Os",
   tripleModulo: "BigMo%od",
+  globalMaxima: "KingOfTheHill",
   packetSniffer: "OpenWebAccessPoint",
   encryptedPassword: "OrdoXenos",
   labyrinth: "(The Labyrinth)",

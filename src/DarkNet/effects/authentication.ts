@@ -14,6 +14,7 @@ import {
 } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { WHRNG } from "../../Casino/RNG";
 
 export const checkPassword = (
   server: DarknetServer,
@@ -124,6 +125,14 @@ export const checkPassword = (
       const data = `${receivedBuffer},${expectedValueBuffer}`;
       return getFailureResponse(attemptedPassword, failureMessage, data);
     }
+    case ModelIds.globalMaxima: {
+      const altitude = getKingOfTheHillAltitude(server, attemptedPassword);
+      return getFailureResponse(
+        attemptedPassword,
+        `current altitude: ${altitude.toFixed(5)} m; highest peak: 10,000 m`,
+        `${altitude}`,
+      );
+    }
     default:
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
   }
@@ -190,4 +199,26 @@ export const getMastermindResponse = (password: string, attemptedPassword: strin
     exactCharacters: getExactCorrectCharsCount(password, attemptedPassword),
     misplacedCharacters: getMisplacedCorrectCharsCount(password, attemptedPassword),
   };
+};
+
+export const getKingOfTheHillAltitude = (server: DarknetServer, attemptedPassword: string) => {
+  const password = Number(server.password);
+  const x = Number(attemptedPassword);
+  const rng = new WHRNG(password);
+  const hillCount = Math.min(Math.floor(server.difficulty / 8), 4) * 2 + 1;
+  const passwordHillIndex = Math.floor(rng.random() * (hillCount - 2)) + 1;
+  const width = password / (hillCount * 50) + 2;
+
+  let altitude = 0;
+  for (let i = 0; i < hillCount; i++) {
+    const locationOffset = (i - passwordHillIndex) * Math.max(password / 20, 10) * (rng.random() * 0.2 + 0.9);
+    const heightOffset = Math.abs((i - passwordHillIndex) * 2600) * (rng.random() * 0.1 + 0.95);
+    altitude += getAltitudeGivenHillSpecs(x, password + locationOffset, 10000 - heightOffset, width);
+  }
+
+  return Math.abs(altitude) < 1e-10 ? 0 : altitude;
+};
+
+const getAltitudeGivenHillSpecs = (x: number, location: number, height: number, width: number) => {
+  return height * Math.exp(((x - location) ** 2 / width ** 2) * -1);
 };

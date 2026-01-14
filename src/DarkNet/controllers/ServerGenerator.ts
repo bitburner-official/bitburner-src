@@ -14,19 +14,21 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { ModelIds, MinigamesType } from "../Enums";
 import { MAX_PASSWORD_LENGTH } from "../Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { hasFullDarknetAccess } from "../effects/effects";
 
 const getRandomServerConfigBuilder = (difficulty: number) => {
   const tier0Servers = [getNoPasswordConfig];
   const tier1Servers = [getEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
   const tier2Servers = [getSortedEchoVulnConfig, getDogNameConfig, getYesn_tConfig, getBufferOverflowConfig];
+  const sf15UnlockedServers = hasFullDarknetAccess() ? [getKingOfTheHillConfig, getSpiceLevelConfig] : [];
   const tier3Servers = [
     getMastermindHintConfig,
     getRomanNumeralConfig,
     getGuessNumberConfig,
-    getSpiceLevelConfig,
     getConvertToBase10Config,
     getDivisibilityTestConfig,
     getPacketSnifferConfig,
+    ...sf15UnlockedServers,
   ];
   const tier4Servers = [
     getLargestPrimeFactorConfig,
@@ -393,12 +395,14 @@ export const getTripleModuloConfig = (difficulty: number): ServerConfig => {
   };
 };
 
-// export const getKingOfTheHillConfig = (difficulty: number): ServerConfig => {
-//    // y=20*e^((-(x-30)^2)/10)
-//    // centered on 30
-//    // peak at 20
-//   // width controlled by 10
-// }
+export const getKingOfTheHillConfig = (difficulty: number): ServerConfig => {
+  const password = getPassword(Math.min(1 + difficulty / 6, 10));
+  return {
+    modelId: ModelIds.globalMaxima,
+    password,
+    staticPasswordHint: "Ascend the highest mountain!",
+  };
+};
 
 export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
   return {
