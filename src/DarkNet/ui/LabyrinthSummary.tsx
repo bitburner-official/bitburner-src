@@ -30,17 +30,6 @@ export const LabyrinthSummary = ({
     return <Typography>{"You have successfully navigated the labyrinth! Congratulations."}</Typography>;
   }
 
-  // handle perspective changes
-  if (currentPerspective && !DarknetState.labLocations[currentPerspective]) {
-    setCurrentPerspective(-1);
-  }
-  if (currentPerspective === -1 && !lab.manual) {
-    const ids = Object.keys(DarknetState.labLocations)
-      .map((k) => Number(k))
-      .filter((k) => k !== -1);
-    setCurrentPerspective(ids[0]);
-  }
-
   // movement message
   const [x, y] =
     currentPerspective && DarknetState.labLocations[currentPerspective]
@@ -72,11 +61,6 @@ export const LabyrinthSummary = ({
       );
     }
 
-    // Change selected option to manual solver perspective if the old selection is no longer valid
-    if (!darknetScripts.find((script) => Number(script?.pid) === currentPerspective)) {
-      setCurrentPerspective(-1);
-    }
-
     if (lab.manual) {
       return [
         <MenuItem key={-1} value={-1}>
@@ -92,10 +76,21 @@ export const LabyrinthSummary = ({
     if (Object.keys(DarknetState.labLocations).length === 1 && !lab.manual) {
       return <Typography>(No scripts found)</Typography>;
     }
+    let perspective = currentPerspective ?? -1;
+    if (perspective && perspective !== -1 && !DarknetState.labLocations[perspective]) {
+      perspective = -1;
+    }
+    if (perspective === -1 && !lab.manual) {
+      const ids = Object.keys(DarknetState.labLocations)
+        .map((k) => Number(k))
+        .filter((k) => k !== -1);
+      perspective = ids[0];
+    }
+
     return (
       <Select
         id="select-pid"
-        value={currentPerspective}
+        value={perspective}
         label="Perspective to view"
         onChange={(val) => setCurrentPerspective(+val.target.value)}
         style={{ maxWidth: "250px" }}
