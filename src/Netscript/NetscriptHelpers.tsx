@@ -500,6 +500,8 @@ function getNormalServer(ctx: NetscriptContext, host: string): Server {
     let errorMessage = `Cannot be executed on ${host}.`;
     if (server instanceof HacknetServer) {
       errorMessage += " The server must not be a hacknet server.";
+    } else if (server instanceof DarknetServer) {
+      errorMessage += " The server must not be a darknet server.";
     }
     throw helpers.errorMessage(ctx, errorMessage);
   }
@@ -637,6 +639,9 @@ function person(ctx: NetscriptContext, p: unknown): IPerson {
   return p as IPerson;
 }
 
+/**
+ * This function is used by non-dnet formulas APIs to check if the server data contains properties of a normal server.
+ */
 function server(ctx: NetscriptContext, s: unknown): IServer {
   const fakeServer = {
     hostname: undefined,
@@ -655,7 +660,19 @@ function server(ctx: NetscriptContext, s: unknown): IServer {
     purchasedByPlayer: undefined,
   };
   const error = missingKey(fakeServer, s);
-  if (error) throw errorMessage(ctx, `server should be a Server.\n${error}`, "TYPE");
+  if (error) {
+    let errorMessagePrefix = "Server must be a normal server.";
+    if (s != null && typeof s === "object") {
+      if ("hostname" in s) {
+        errorMessagePrefix += ` Server's hostname is ${s.hostname}.`;
+      }
+      if ("modelId" in s) {
+        errorMessagePrefix += " Server data looks like darknet server data.";
+      }
+    }
+    // throw errorMessage(ctx, `Server should be a normal server.\n${error}`, "TYPE");
+    throw errorMessage(ctx, `${errorMessagePrefix}\n${error}`, "TYPE");
+  }
   return s as IServer;
 }
 
