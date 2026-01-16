@@ -104,7 +104,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "other Eastern countries.\n\n" +
       "Samizdat has done a good job of keeping hidden and anonymous. However, we've just received intelligence that " +
       `their base of operations is in ${CityName.Ishima}'s underground sewer systems. Your task is to investigate the ` +
-      "sewer systems, and eliminate Samizdat. They must never publish anything again.",
+      "sewer systems and eliminate Samizdat. They must never publish anything again.",
   }),
   [BladeburnerBlackOpName.OperationTitan]: new BlackOperation({
     name: BladeburnerBlackOpName.OperationTitan,
@@ -134,12 +134,12 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     },
     isKill: true,
     desc:
-      "Several months ago Titan Laboratories' Bioengineering department was infiltrated by Synthoids. As far as we " +
+      "Several months ago, Titan Laboratories' Bioengineering department was infiltrated by Synthoids. As far as we " +
       "know, Titan Laboratories' management has no knowledge about this. We don't know what the Synthoids are up to, " +
       "but the research that they could be conducting using Titan Laboratories' vast resources is potentially very " +
       "dangerous.\n\n" +
       `Your goal is to enter and destroy the Bioengineering department's facility in ${CityName.Aevum}. The task is not ` +
-      "just to retire the Synthoids there, but also to destroy any information or research at the facility that is " +
+      "just to retire the Synthoids there but also to destroy any information or research at the facility that is " +
       "relevant to the Synthoids and their goals.",
   }),
   [BladeburnerBlackOpName.OperationAres]: new BlackOperation({
@@ -237,11 +237,11 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     },
     isKill: true,
     desc:
-      "The CIA has just encountered a new security threat. A new criminal group, lead by a shadowy operative who calls " +
+      "The CIA has just encountered a new security threat. A new criminal group, led by a shadowy operative who calls " +
       "himself Juggernaut, has been smuggling drugs and weapons (including suspected bioweapons) into " +
       `${CityName.Sector12}. We also have reason to believe they tried to break into one of Universal Energy's ` +
-      "facilities in order to cause a city-wide blackout. The CIA suspects that Juggernaut is a heavily-augmented " +
-      "Synthoid, and have thus enlisted our help.\n\n" +
+      "facilities in order to cause a city-wide blackout. The CIA suspects that Juggernaut is a heavily augmented " +
+      "Synthoid and has thus enlisted our help.\n\n" +
       "Your mission is to eradicate Juggernaut and his followers.",
   }),
   [BladeburnerBlackOpName.OperationRedDragon]: new BlackOperation({
@@ -273,7 +273,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     isKill: true,
     desc:
       `The ${FactionName.Tetrads} criminal organization is suspected of reverse-engineering the MK-VI Synthoid design. ` +
-      "We believe they altered and possibly improved the design and began manufacturing their own Synthoid models in" +
+      "We believe they altered and possibly improved the design and began manufacturing their own Synthoid models in " +
       "order to bolster their criminal activities.\n\n" +
       `Your task is to infiltrate and destroy the ${FactionName.Tetrads}' base of operations in Los Angeles. ` +
       "Intelligence tells us that their base houses one of their Synthoid manufacturing units.",
@@ -309,7 +309,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "CODE RED SITUATION. Our intelligence tells us that VitaLife has discovered a new android cloning technology. " +
       "This technology is supposedly capable of cloning Synthoids, not only physically but also their advanced AI " +
       "modules. We do not believe that VitaLife is trying to use this technology illegally or maliciously, but if any " +
-      "Synthoids were able to infiltrate the corporation and take advantage of this technology then the results would " +
+      "Synthoids were able to infiltrate the corporation and take advantage of this technology, then the results would " +
       "be catastrophic.\n\n" +
       "We do not have the power or jurisdiction to shut this down through legal or political means, so we must resort " +
       "to a covert operation. Your goal is to destroy this technology and eliminate anyone who was involved in its " +
@@ -345,7 +345,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     desc:
       "Despite your success in eliminating VitaLife's new android-replicating technology in " +
       `${BladeburnerBlackOpName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off with ` +
-      "the schematics and design of the technology before the Operation. It is almost a certainty that these Synthoids " +
+      "the schematics and design of the technology before the operation. It is almost a certainty that these Synthoids " +
       "are some of the rogue MK-VI ones from the Synthoid Uprising.\n\n" +
       `The goal of ${BladeburnerBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. I don't need to ` +
       "tell you how critical this mission is.",
@@ -378,10 +378,10 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     },
     isKill: true,
     desc:
-      `A week ago ${FactionName.BladeIndustries} reported a small break-in at one of their ${CityName.Aevum} ` +
-      `Augmentation storage facilities. We figured out that ${FactionName.TheDarkArmy} was behind the heist, and didn't think ` +
+      `A week ago, ${FactionName.BladeIndustries} reported a small break-in at one of their ${CityName.Aevum} ` +
+      `Augmentation storage facilities. We figured out that ${FactionName.TheDarkArmy} was behind the heist and didn't think ` +
       "any more of it. However, we've just discovered that several known MK-VI Synthoids were part of that break-in group.\n\n" +
-      "We cannot have Synthoids upgrading their already-enhanced abilities with Augmentations. Your task is to hunt " +
+      "We cannot have Synthoids upgrading their already-enhanced abilities with augmentations. Your task is to hunt " +
       `down associated members of ${FactionName.TheDarkArmy} and eliminate them.`,
   }),
   [BladeburnerBlackOpName.OperationWallace]: new BlackOperation({
@@ -453,7 +453,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "China's Solaris Space Systems is secretly launching the first manned spacecraft in over a decade using " +
       "Synthoids. We believe China is trying to establish the first off-world colonies.\n\n" +
       "The mission is to prevent this launch without instigating an international conflict. When you accept this " +
-      "mission you will be officially disavowed by the NSA and the national government until after you successfully " +
+      "mission, you will be officially disavowed by the NSA and the national government until after you successfully " +
       "return. In the event of failure, all of the operation's team members must not let themselves be captured alive.",
   }),
   [BladeburnerBlackOpName.OperationHyron]: new BlackOperation({
@@ -627,7 +627,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "and seek out the destruction of humanity. They say that this bug affects all MK-VI Synthoids, not just the rogue " +
       "ones from the Uprising.\n\n" +
       `${FactionName.OmniTekIncorporated} has also told us they believe someone has triggered this malfunction in a ` +
-      "large group of MK-VI Synthoids, and that these newly-radicalized Synthoids are now amassing in " +
+      "large group of MK-VI Synthoids, and these newly radicalized Synthoids are now amassing in " +
       `${CityName.Volhaven} to form a terrorist group called Ultron.\n\n` +
       "Intelligence suggests Ultron is heavily armed and that their members are augmented. We believe Ultron is making " +
       "moves to take control of and weaponize DeltaOne's Tactical High-Energy Satellite Laser Array (THESLA).\n\n" +
@@ -662,7 +662,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     desc:
       "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)\n\n" +
       "Throughout all of humanity's history, we have relied on technology to survive, conquer, and progress. Its " +
-      "advancement became our primary goal. And at the peak of human civilization technology turned into power. Global, " +
+      "advancement became our primary goal. And at the peak of human civilization, technology turned into power. Global, " +
       "absolute power.\n\n" +
       "It seems that the universe is not without a sense of irony.\n\n" +
       "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)",
@@ -725,7 +725,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       charisma: 0,
       intelligence: 0.75,
     },
-    desc: "Yesterday we obeyed kings and bent our neck to emperors. Today we kneel only to truth.",
+    desc: "Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.",
   }),
 };
 
