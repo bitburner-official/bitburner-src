@@ -1,5 +1,4 @@
 import { DarknetState } from "../models/DarknetState";
-import { migrateLegacyImmobileServers } from "../controllers/NetworkGenerator";
 import { assertObject } from "../../utils/TypeAssertion";
 
 export type DarknetSaveFormat = {
@@ -13,7 +12,6 @@ export function getDarkNetSave(): DarknetSaveFormat {
 }
 
 export function loadDarkNet(saveString: unknown): void {
-  migrateLegacyImmobileServers();
   if (saveString == null || typeof saveString !== "string" || saveString === "") {
     return;
   }

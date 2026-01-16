@@ -36,7 +36,6 @@ import {
 } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
 import {
-  getAllDarknetServers,
   getAllMovableDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
@@ -106,16 +105,6 @@ export const populateDarknet = () => {
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
-  }
-};
-
-// WIP: Remove this function before we merge and release.
-export const migrateLegacyImmobileServers = () => {
-  const darknetServers = getAllDarknetServers();
-  for (const server of darknetServers) {
-    if (server.hostname === SpecialServers.DarkWeb || isLabyrinthServer(server.hostname)) {
-      server.isStationary = true;
-    }
   }
 };
 
