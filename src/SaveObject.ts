@@ -160,6 +160,28 @@ function assertParsedSaveData(parsedSaveData: unknown): asserts parsedSaveData i
   }
 }
 
+/**
+ * We sometimes need the raw data in the loaded save object for debugging and showing useful error messages. This object
+ * contains only what we need.
+ */
+export const loadedSaveObjectMiniDump = {
+  // VersionSave is always a string. It has 3 formats/possible values:
+  // - Empty string: Pre-v0.20.0.
+  // - '"x.y.z"': v0.20.0 to the last v0 version. Notice how I use both single quotes and double quotes. The double
+  // quotes are part of the string value. For example, with v0.20.0, the string value is "0.20.0" (8 chars, not 6 chars).
+  // - x: Starting from v1, we used the version number instead of the version string.
+  //
+  // The history of this property in the save data is complicated. In v0, we used the version string in src\Constants.ts,
+  // then we switched to the version number in v1. In v0, the version string has 2 formats:
+  // - x.y: Very early versions (v0.1 to roughly v0.17) used this format.
+  // - x.y.z: Starting from roughly v0.17, we used this format. Note that in some commits, we mistakenly used the x.y
+  // format.
+  //
+  // However, the save data only contains VersionSave starting from v0.20.0, so if we load a pre-v0.20.0 save file, this
+  // property will be an empty string.
+  VersionSave: undefined as string | undefined,
+};
+
 class BitburnerSaveObject implements BitburnerSaveObjectType {
   PlayerSave = "";
   AllServersSave = "";
@@ -426,6 +448,18 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   const jsonSaveString = await decodeSaveData(saveData);
 
   const saveObj: unknown = JSON.parse(jsonSaveString, Reviver);
+
+  // Extract VersionSave ASAP for debugging and showing useful error messages later. Some checks here are redundant (
+  // e.g., the object assertion) because we will do them again later, but that's okay.
+  if (
+    saveObj != null &&
+    typeof saveObj === "object" &&
+    "VersionSave" in saveObj &&
+    typeof saveObj.VersionSave === "string"
+  ) {
+    loadedSaveObjectMiniDump.VersionSave = saveObj.VersionSave;
+  }
+
   assertBitburnerSaveObjectType(saveObj);
 
   // "Mandatory"
@@ -447,7 +481,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   }
 
   // "Optional 1"
-  loadStaneksGift(saveObj.StaneksGiftSave);
+  loadStaneksGift(saveObj.StaneksGiftSave, loadedSaveObjectMiniDump.VersionSave);
   try {
     loadStockMarket(saveObj.StockMarketSave);
   } catch (e) {

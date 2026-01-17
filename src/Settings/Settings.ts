@@ -1,7 +1,7 @@
 import { OwnedAugmentationsOrderSetting, PurchaseAugmentationsOrderSetting } from "./SettingEnums";
 import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
-import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
+import { CursorStyle, CursorBlinking, WordWrapOptions, StickyScroll } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { assertObject } from "../utils/TypeAssertion";
 import type { Result } from "@nsdefs";
@@ -184,6 +184,8 @@ export const Settings = {
   MonacoCursorStyle: "line" as CursorStyle,
   /** Control the cursor animation style */
   MonacoCursorBlinking: "blink" as CursorBlinking,
+  /** Toggle use of Sticky Scroll in the Script Editor */
+  MonacoStickyScroll: { enabled: false } as StickyScroll,
   /** Whether to hide trailing zeroes on fractional part of decimal */
   hideTrailingDecimalZeros: false,
   /** Whether to hide thousands separators. */
@@ -192,6 +194,8 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
+  /** The default amount of digits displayed after the decimal separator. */
+  fractionalDigits: 3,
   /**
    * Player-defined key bindings. Don't use this property directly. It must be merged with DefaultKeyBindings in
    * src\utils\KeyBindingUtils.ts.

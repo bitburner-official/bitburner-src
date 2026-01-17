@@ -21,11 +21,11 @@ import { useBoolean } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
-import { NsApiDocumentationLink } from "../../ui/React/NsApiDocumentationLink";
 import { CurrentKeyBindings, parseKeyCombinationsToString, ScriptEditorAction } from "../../utils/KeyBindingUtils";
 import { DocumentationAutocomplete } from "../../Documentation/ui/DocumentationAutocomplete";
 import { openDocumentationPopUp } from "../../Documentation/root";
-import { openDocExternally } from "../../ui/React/Documentation";
+import { defaultNsApiPage, openDocExternally } from "../../ui/React/Documentation";
+import { DocumentationLink } from "../../ui/React/DocumentationLink";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
@@ -107,7 +107,16 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
           }}
         />
         <Typography>
-          <NsApiDocumentationLink />
+          <DocumentationLink
+            page={defaultNsApiPage}
+            fontSize="1.2rem"
+            sx={{
+              textDecorationThickness: "3px",
+              textUnderlineOffset: "5px",
+            }}
+          >
+            NS API documentation
+          </DocumentationLink>
         </Typography>
       </Box>
       <OptionsModal

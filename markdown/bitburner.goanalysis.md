@@ -156,7 +156,7 @@ Reset all win/loss and winstreak records for the No AI opponent.
 </td></tr>
 <tr><td>
 
-[setTestingBoardState(boardState, komi)](./bitburner.goanalysis.settestingboardstate.md)
+[setTestingBoardState(boardState, komi, nextPlayerIsWhite)](./bitburner.goanalysis.settestingboardstate.md)
 
 
 </td><td>

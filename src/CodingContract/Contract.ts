@@ -82,6 +82,10 @@ export class CodingContract {
     this.reward = reward;
   }
 
+  getAnswer() {
+    return CodingContractTypes[this.type].getAnswer(this.state);
+  }
+
   getData(): unknown {
     const func = CodingContractTypes[this.type].getData;
     return func ? func(this.state) : this.state;

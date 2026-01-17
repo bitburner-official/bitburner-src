@@ -5,7 +5,7 @@ import { Settings } from "../../Settings/Settings";
 import { load } from "../../db";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
-import { type CrashReport, newIssueUrl, getCrashReport } from "../../utils/ErrorHelper";
+import { type CrashReport, newIssueUrl, getCrashReport, isSaveDataFromNewerVersions } from "../../utils/ErrorHelper";
 import { DeleteGameButton } from "./DeleteGameButton";
 import { SoftResetButton } from "./SoftResetButton";
 
@@ -16,6 +16,9 @@ import { InvalidSaveData, UnsupportedSaveData } from "../../utils/SaveDataUtils"
 import { downloadContentAsFile } from "../../utils/FileUtils";
 import { debounce } from "lodash";
 import { Engine } from "../../engine";
+import { JSONReviverError } from "../../utils/GenericReviver";
+import { loadedSaveObjectMiniDump } from "../../SaveObject";
+import { CONSTANTS } from "../../Constants";
 
 export let RecoveryMode = false;
 let sourceError: unknown;
@@ -108,6 +111,19 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
         Your save data is invalid. Please import a valid backup save file.
       </Typography>
     );
+  } else if (
+    sourceError instanceof JSONReviverError &&
+    isSaveDataFromNewerVersions(loadedSaveObjectMiniDump.VersionSave)
+  ) {
+    instructions = (
+      <Typography variant="h5" color={Settings.theme.warning}>
+        Your save data is from a newer version (Version number: {loadedSaveObjectMiniDump.VersionSave}). The current
+        version number is {CONSTANTS.VersionNumber}.
+        <br />
+        Please check if you are using the correct build. This may happen when you load the save data of the dev build
+        (Steam Beta or https://bitburner-official.github.io/bitburner-src) on the stable build.
+      </Typography>
+    );
   } else {
     instructions = (
       <Box>
@@ -198,11 +214,14 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
               />
             </Paper>
           )}
+          <Typography variant="h4" color={Settings.theme.warning}>
+            Do NOT take a screenshot of this screen. You must post the bug report text below.
+          </Typography>
           <Paper sx={{ px: 2, pt: 1, pb: 2, mt: 2 }}>
             <Typography variant="h5">{crashReport.title}</Typography>
             <Box sx={{ my: 2 }}>
               <TextField
-                label="Bug Report Text"
+                label={<Typography sx={{ fontSize: "20px" }}>Bug Report Text</Typography>}
                 value={crashReport.body}
                 variant="outlined"
                 color="secondary"
@@ -210,7 +229,10 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
                 fullWidth
                 rows={40}
                 spellCheck={false}
-                sx={{ "& .MuiOutlinedInput-root": { color: Settings.theme.secondary } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": { color: Settings.theme.secondary },
+                  "& .MuiOutlinedInput-input": { scrollbarWidth: "thin" },
+                }}
               />
             </Box>
             <Tooltip title="Submitting an issue to GitHub really helps us improve the game!">

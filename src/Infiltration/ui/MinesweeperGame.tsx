@@ -18,7 +18,7 @@ export function MinesweeperGame({ stage }: IProps): React.ReactElement {
   const flatGrid: { flagged?: boolean; current?: boolean; marked?: boolean }[] = [];
 
   stage.minefield.map((line, y) =>
-    line.map((cell, x) => {
+    line.map((_cell, x) => {
       if (stage.memoryPhase) {
         flatGrid.push({ flagged: Boolean(stage.minefield[y][x]) });
         return;

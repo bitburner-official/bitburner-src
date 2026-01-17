@@ -4,7 +4,6 @@ import { Settings } from "../../Settings/Settings";
 import { formatHp, formatMoney, formatNumberNoSuffix, formatPercent, formatReputation } from "../../ui/formatNumber";
 import { Player } from "@player";
 import type { Infiltration } from "../Infiltration";
-import type { IntroModel } from "../model/IntroModel";
 import { calculateDamageAfterFailingInfiltration } from "../utils";
 import {
   calculateInfiltratorsRepReward,
@@ -18,7 +17,6 @@ import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   state: Infiltration;
-  stage: IntroModel;
 }
 
 function arrowPart(color: string, length: number): JSX.Element {

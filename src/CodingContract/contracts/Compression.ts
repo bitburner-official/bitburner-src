@@ -1,4 +1,5 @@
 import { CodingContractTypes } from "../ContractTypes";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { CodingContractName } from "@enums";
 
 export const compression: Pick<
@@ -49,8 +50,8 @@ export const compression: Pick<
 
       return plain.substring(0, length);
     },
-    solver: (plain, answer) => {
-      if (plain.length === 0) return answer === "";
+    getAnswer: (plain) => {
+      if (plain.length === 0) return "";
 
       let out = "";
       let count = 1;
@@ -63,7 +64,10 @@ export const compression: Pick<
         count = 1;
       }
       out += count + plain[plain.length - 1];
-      return out === answer;
+      return out;
+    },
+    solver: (plain, answer) => {
+      return compression[CodingContractName.CompressionIRLECompression].getAnswer(plain) === answer;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -97,8 +101,11 @@ export const compression: Pick<
     generate: (): string => {
       return comprLZEncode(comprLZGenerate());
     },
+    getAnswer: (compr) => {
+      return comprLZDecode(compr) ?? "";
+    },
     solver: (compr, answer) => {
-      return (comprLZDecode(compr) ?? "") === answer;
+      return compression[CodingContractName.CompressionIILZDecompression].getAnswer(compr) === answer;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -135,8 +142,20 @@ export const compression: Pick<
     generate: (): string => {
       return comprLZGenerate();
     },
+    getAnswer: (plain) => {
+      return comprLZEncode(plain);
+    },
     solver: (plain, answer) => {
-      return answer.length <= comprLZEncode(plain).length && comprLZDecode(answer) === plain;
+      const encoded = compression[CodingContractName.CompressionIIILZCompression].getAnswer(plain);
+      if (encoded === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.CompressionIIILZCompression} contract. Data: ${plain}`,
+          ),
+        );
+        return false;
+      }
+      return answer.length <= encoded.length && comprLZDecode(answer) === plain;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",

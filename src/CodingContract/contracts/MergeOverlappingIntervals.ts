@@ -1,3 +1,4 @@
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes, convert2DArrayToString, removeBracketsFromArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
@@ -30,7 +31,7 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
       return intervals;
     },
     numTries: 15,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const intervals: [number, number][] = data.slice();
       intervals.sort((a: [number, number], b: [number, number]) => {
         return a[0] - b[0];
@@ -49,6 +50,22 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
         }
       }
       result.push([start, end]);
+
+      return result;
+    },
+    solver: (data, answer) => {
+      const result = mergeOverlappingIntervals[CodingContractName.MergeOverlappingIntervals].getAnswer(data);
+
+      if (result === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${
+              CodingContractName.MergeOverlappingIntervals
+            } contract. Data: ${JSON.stringify(data)}`,
+          ),
+        );
+        return false;
+      }
 
       return result.length === answer.length && result.every((a, i) => a[0] === answer[i][0] && a[1] === answer[i][1]);
     },

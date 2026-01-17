@@ -603,7 +603,7 @@ export function focusPenalty(this: PlayerObject): number {
 }
 
 /** This doesn't change the current page; that is up to the caller. */
-export function startInfiltration(this: PlayerObject, location: Location): void {
+export function initInfiltration(this: PlayerObject, location: Location): void {
   if (!location.infiltrationData)
     throw new Error(`trying to start infiltration at ${location.name} but the infiltrationData is null`);
   this.infiltration = new Infiltration(location);

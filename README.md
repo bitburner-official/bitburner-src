@@ -9,7 +9,7 @@ that revolves around hacking and cyberpunk themes.
 The game can be played at https://bitburner-official.github.io/ (release build), https://bitburner-official.github.io/bitburner-src/ (development build), or installed through [Steam](https://store.steampowered.com/app/1812820/Bitburner/).
 The location of the release build may change in the near future.
 
-See the [frequently asked questions](./doc/FAQ.md) for more information. To discuss the game or get help, join the [official Discord server](https://discord.gg/TFc3hKD).
+See the [frequently asked questions](/src/Documentation/doc/en/help/faq.md) for more information. To discuss the game or get help, join the [official Discord server](https://discord.gg/TFc3hKD).
 
 # Documentation
 

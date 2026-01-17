@@ -1,6 +1,15 @@
 import { constructorsForReviver, isReviverValue } from "./JSONReviver";
 import { validateObject } from "./Validator";
 
+export class JSONReviverError extends Error {
+  ctor: string;
+  constructor(message: string, ctor: string) {
+    super(message);
+    this.name = this.constructor.name;
+    this.ctor = ctor;
+  }
+}
+
 /**
  * A generic "smart reviver" function.
  * Looks for object values with a `ctor` property and a `data` property.
@@ -25,7 +34,7 @@ export function Reviver(_key: string, value: unknown): any {
         return value.data;
     }
     // Missing constructor with no special handling. Throw error.
-    throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
+    throw new JSONReviverError(`Could not locate constructor named ${value.ctor}.`, value.ctor);
   }
 
   const obj = ctor.fromJSON(value);

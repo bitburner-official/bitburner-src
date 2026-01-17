@@ -38,7 +38,7 @@ Attempts a coding contract, returning a reward string on success or empty string
 </td></tr>
 <tr><td>
 
-[createDummyContract(type)](./bitburner.codingcontract.createdummycontract.md)
+[createDummyContract(type, host)](./bitburner.codingcontract.createdummycontract.md)
 
 
 </td><td>

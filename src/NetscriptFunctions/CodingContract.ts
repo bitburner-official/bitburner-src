@@ -55,6 +55,10 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       case CodingContractResult.Failure: {
         if (++contract.tries >= contract.getMaxNumTries()) {
           helpers.log(ctx, () => `Coding Contract attempt '${contract.fn}' failed. Contract is now self-destructing`);
+          const solution = contract.getAnswer();
+          if (solution !== null) {
+            helpers.log(ctx, () => `Coding Contract solution was: ${solution}`);
+          }
           server.removeContract(contract.fn);
         } else {
           helpers.log(
@@ -127,9 +131,11 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const contract = getCodingContract(ctx, host, filename);
       return contract.getMaxNumTries() - contract.tries;
     },
-    createDummyContract: (ctx) => (_type) => {
+    createDummyContract: (ctx) => (_type, _host?) => {
       const type = getEnumHelper("CodingContractName").nsGetMember(ctx, _type);
-      return generateDummyContract(type);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const server = helpers.getServer(ctx, host);
+      return generateDummyContract(type, server);
     },
     getContractTypes: () => () => Object.values(CodingContractName),
   };

@@ -119,7 +119,12 @@ export function formatPercent(n: number, fractionalDigits = 2, multStart = 1e6) 
   return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
 }
 
-export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000, isInteger = false) {
+export function formatNumber(
+  n: number,
+  fractionalDigits = Settings.fractionalDigits,
+  suffixStart = 1000,
+  isInteger = false,
+) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN";
   const nAbs = Math.abs(n);

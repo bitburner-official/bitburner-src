@@ -242,9 +242,11 @@ export function getChains(_board?: Board) {
 export function getLiberties(_board?: Board) {
   const board = _board || Go.currentGame.board;
   return board.map((column) =>
-    column.reduce((libertyArray: number[], point) => {
-      libertyArray.push(point?.liberties?.length || -1);
-      return libertyArray;
+    column.map((point) => {
+      if (!point?.liberties || point.color === GoColor.empty) {
+        return -1;
+      }
+      return point.liberties.length;
     }, []),
   );
 }
@@ -278,12 +280,13 @@ export function getControlledEmptyNodes(_board?: Board) {
  * Resets the active game to be a new board with "No AI" as the opponent. Applies the specified board state and komi to the new game.
  * Used for testing scenarios.
  */
-export function setTestingBoardState(ctx: NetscriptContext, board: Board, komi?: number) {
-  resetBoardState(ctx, GoOpponent.none, board.length);
-  Go.currentGame.board = board;
+export function setTestingBoardState(ctx: NetscriptContext, state: BoardState, komi?: number) {
+  resetBoardState(ctx, GoOpponent.none, state.board.length);
+  Go.currentGame = state;
   if (komi != undefined) {
     Go.currentGame.komiOverride = komi;
   }
+  updateCaptures(Go.currentGame.board, Go.currentGame.previousPlayer ?? GoColor.white, true);
   GoEvents.emit();
 }
 
@@ -444,7 +447,7 @@ export function validateBoardState(
     return getNewBoardStateFromSimpleBoard(
       simpleBoard,
       priorSimpleBoard,
-      undefined,
+      GoOpponent.none,
       playAsWhite ? GoColor.black : GoColor.white,
     );
   } catch (e) {
