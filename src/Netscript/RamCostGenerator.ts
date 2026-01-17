@@ -385,7 +385,9 @@ const sleeve = {
   getSleeveAugmentationPrice: RamCostConstants.SleeveBase,
   getSleeveAugmentationRepReq: RamCostConstants.SleeveBase,
   purchaseSleeve: RamCostConstants.SleeveBase,
-  getSleeveMemoryUpgradeCost: RamCostConstants.SleeveBase,
+  upgradeMemory: RamCostConstants.SleeveBase,
+  getSleeveCost: RamCostConstants.SleeveBase,
+  getMemoryUpgradeCost: RamCostConstants.SleeveBase,
 } as const;
 
 // Stanek API

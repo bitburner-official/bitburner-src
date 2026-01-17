@@ -50,7 +50,6 @@ import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 import type { MoneySource } from "../../utils/MoneySourceTracker";
-import { purchaseCost } from "./SleeveCovenantPurchases";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -196,13 +195,8 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Returns the cost of upgrading this sleeve's memory by a certain amount */
   getMemoryUpgradeCost(n: number): number {
-    const amt = Math.round(n);
-    if (amt < 0) {
-      return 0;
-    }
-
-    if (this.memory + amt > 100) {
-      return this.getMemoryUpgradeCost(100 - this.memory);
+    if (!Number.isInteger(n) || n < 0 || this.memory + n > 100) {
+      return Infinity;
     }
 
     const mult = 1.02;
@@ -364,11 +358,6 @@ export class Sleeve extends Person implements SleevePerson {
     this.memory = Math.min(100, Math.round(this.memory + n));
   }
 
-  static purchaseSleeve(): void {
-    Player.loseMoney(purchaseCost(Player.sleevesFromCovenant), "sleeves");
-    Player.sleevesFromCovenant += 1;
-    Sleeve.recalculateNumOwned();
-  }
   /**
    * Start work for one of the player's companies
    * Returns boolean indicating success
@@ -528,24 +517,6 @@ export class Sleeve extends Person implements SleevePerson {
     } else {
       return false;
     }
-  }
-
-  static recalculateNumOwned() {
-    /**
-     * Don't change sourceFileLvl to activeSourceFileLvl. The number of sleeves is a permanent effect. It's too
-     * troublesome for the player if they lose Sleeves and have to go BN10 to buy them again when they override the
-     * level of SF 10.
-     */
-    const numSleeves =
-      Math.min(3, Player.sourceFileLvl(10) + (Player.bitNodeN === 10 ? 1 : 0)) + Player.sleevesFromCovenant;
-    while (Player.sleeves.length > numSleeves) {
-      const destroyedSleeve = Player.sleeves.pop();
-      // This should not happen, but avoid an infinite loop in case sleevesFromCovenent or sf10 level are somehow negative
-      if (!destroyedSleeve) return;
-      // Stop work, to prevent destroyed sleeves from continuing their tasks in the void
-      destroyedSleeve.stopWork();
-    }
-    while (Player.sleeves.length < numSleeves) Player.sleeves.push(new Sleeve());
   }
 
   whoAmI(): string {
