@@ -1806,6 +1806,16 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 </td></tr>
 <tr><td>
 
+[FailureResult](./bitburner.failureresult.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [FilenameOrPID](./bitburner.filenameorpid.md)
 
 
@@ -2032,6 +2042,16 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 </td></tr>
 <tr><td>
 
+[Result](./bitburner.result.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [ScriptArg](./bitburner.scriptarg.md)
 
 
@@ -2165,6 +2185,16 @@ These special Bladeburner action types are only for Sleeve
 <tr><td>
 
 [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SuccessResult](./bitburner.successresult.md)
 
 
 </td><td>

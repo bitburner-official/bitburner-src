@@ -54,7 +54,7 @@ import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { AlertEvents } from "../../ui/React/AlertManager";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { PlayerEventType, PlayerEvents } from "./PlayerEvents";
-import { Result } from "../../types";
+import type { Result } from "@nsdefs";
 import type { AchievementId } from "../../Achievements/Types";
 import { Infiltration } from "../../Infiltration/Infiltration";
 

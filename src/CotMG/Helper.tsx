@@ -5,7 +5,7 @@ import { Reviver } from "../utils/GenericReviver";
 import { BaseGift } from "./BaseGift";
 
 import { StaneksGift } from "./StaneksGift";
-import { Result } from "../types";
+import type { Result } from "@nsdefs";
 import { isStanekGiftImplemented } from "../utils/ErrorHelper";
 
 export let staneksGift = new StaneksGift();

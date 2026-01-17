@@ -20,7 +20,7 @@ import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { getRecordKeys } from "../Types/Record";
-import type { Result } from "../types";
+import type { Result } from "@nsdefs";
 
 export function inviteToFaction(faction: Faction): void {
   if (faction.alreadyInvited || faction.isMember) return;

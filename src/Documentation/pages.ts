@@ -458,6 +458,7 @@ import nsDoc_bitburner_factionworktask_factionworktype_md from "../../markdown/b
 import nsDoc_bitburner_factionworktask_md from "../../markdown/bitburner.factionworktask.md?raw";
 import nsDoc_bitburner_factionworktask_type_md from "../../markdown/bitburner.factionworktask.type.md?raw";
 import nsDoc_bitburner_factionworktype_md from "../../markdown/bitburner.factionworktype.md?raw";
+import nsDoc_bitburner_failureresult_md from "../../markdown/bitburner.failureresult.md?raw";
 import nsDoc_bitburner_filemetadata_atime_md from "../../markdown/bitburner.filemetadata.atime.md?raw";
 import nsDoc_bitburner_filemetadata_btime_md from "../../markdown/bitburner.filemetadata.btime.md?raw";
 import nsDoc_bitburner_filemetadata_md from "../../markdown/bitburner.filemetadata.md?raw";
@@ -1151,6 +1152,7 @@ import nsDoc_bitburner_resetinfo_lastnodereset_md from "../../markdown/bitburner
 import nsDoc_bitburner_resetinfo_md from "../../markdown/bitburner.resetinfo.md?raw";
 import nsDoc_bitburner_resetinfo_ownedaugs_md from "../../markdown/bitburner.resetinfo.ownedaugs.md?raw";
 import nsDoc_bitburner_resetinfo_ownedsf_md from "../../markdown/bitburner.resetinfo.ownedsf.md?raw";
+import nsDoc_bitburner_result_md from "../../markdown/bitburner.result.md?raw";
 import nsDoc_bitburner_runningscript_args_md from "../../markdown/bitburner.runningscript.args.md?raw";
 import nsDoc_bitburner_runningscript_dynamicramusage_md from "../../markdown/bitburner.runningscript.dynamicramusage.md?raw";
 import nsDoc_bitburner_runningscript_filename_md from "../../markdown/bitburner.runningscript.filename.md?raw";
@@ -1388,6 +1390,7 @@ import nsDoc_bitburner_studytask_classtype_md from "../../markdown/bitburner.stu
 import nsDoc_bitburner_studytask_location_md from "../../markdown/bitburner.studytask.location.md?raw";
 import nsDoc_bitburner_studytask_md from "../../markdown/bitburner.studytask.md?raw";
 import nsDoc_bitburner_studytask_type_md from "../../markdown/bitburner.studytask.type.md?raw";
+import nsDoc_bitburner_successresult_md from "../../markdown/bitburner.successresult.md?raw";
 import nsDoc_bitburner_tailproperties_fontsize_md from "../../markdown/bitburner.tailproperties.fontsize.md?raw";
 import nsDoc_bitburner_tailproperties_height_md from "../../markdown/bitburner.tailproperties.height.md?raw";
 import nsDoc_bitburner_tailproperties_md from "../../markdown/bitburner.tailproperties.md?raw";
@@ -1968,6 +1971,7 @@ AllPages["nsDoc/bitburner.factionworktask.factionworktype.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.factionworktask.md"] = nsDoc_bitburner_factionworktask_md;
 AllPages["nsDoc/bitburner.factionworktask.type.md"] = nsDoc_bitburner_factionworktask_type_md;
 AllPages["nsDoc/bitburner.factionworktype.md"] = nsDoc_bitburner_factionworktype_md;
+AllPages["nsDoc/bitburner.failureresult.md"] = nsDoc_bitburner_failureresult_md;
 AllPages["nsDoc/bitburner.filemetadata.atime.md"] = nsDoc_bitburner_filemetadata_atime_md;
 AllPages["nsDoc/bitburner.filemetadata.btime.md"] = nsDoc_bitburner_filemetadata_btime_md;
 AllPages["nsDoc/bitburner.filemetadata.md"] = nsDoc_bitburner_filemetadata_md;
@@ -2661,6 +2665,7 @@ AllPages["nsDoc/bitburner.resetinfo.lastnodereset.md"] = nsDoc_bitburner_resetin
 AllPages["nsDoc/bitburner.resetinfo.md"] = nsDoc_bitburner_resetinfo_md;
 AllPages["nsDoc/bitburner.resetinfo.ownedaugs.md"] = nsDoc_bitburner_resetinfo_ownedaugs_md;
 AllPages["nsDoc/bitburner.resetinfo.ownedsf.md"] = nsDoc_bitburner_resetinfo_ownedsf_md;
+AllPages["nsDoc/bitburner.result.md"] = nsDoc_bitburner_result_md;
 AllPages["nsDoc/bitburner.runningscript.args.md"] = nsDoc_bitburner_runningscript_args_md;
 AllPages["nsDoc/bitburner.runningscript.dynamicramusage.md"] = nsDoc_bitburner_runningscript_dynamicramusage_md;
 AllPages["nsDoc/bitburner.runningscript.filename.md"] = nsDoc_bitburner_runningscript_filename_md;
@@ -2898,6 +2903,7 @@ AllPages["nsDoc/bitburner.studytask.classtype.md"] = nsDoc_bitburner_studytask_c
 AllPages["nsDoc/bitburner.studytask.location.md"] = nsDoc_bitburner_studytask_location_md;
 AllPages["nsDoc/bitburner.studytask.md"] = nsDoc_bitburner_studytask_md;
 AllPages["nsDoc/bitburner.studytask.type.md"] = nsDoc_bitburner_studytask_type_md;
+AllPages["nsDoc/bitburner.successresult.md"] = nsDoc_bitburner_successresult_md;
 AllPages["nsDoc/bitburner.tailproperties.fontsize.md"] = nsDoc_bitburner_tailproperties_fontsize_md;
 AllPages["nsDoc/bitburner.tailproperties.height.md"] = nsDoc_bitburner_tailproperties_height_md;
 AllPages["nsDoc/bitburner.tailproperties.md"] = nsDoc_bitburner_tailproperties_md;

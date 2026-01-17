@@ -4,7 +4,7 @@ import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions, StickyScroll } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { assertObject } from "../utils/TypeAssertion";
-import { Result } from "../types";
+import type { Result } from "@nsdefs";
 import {
   assertAndSanitizeEditorTheme,
   assertAndSanitizeKeyBindings,

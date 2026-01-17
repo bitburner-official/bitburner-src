@@ -10,7 +10,7 @@ import { HashUpgrades } from "./HashUpgrades";
 import { HashUpgrade } from "./HashUpgrade";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { Result } from "../types";
+import type { Result } from "@nsdefs";
 import { HashUpgradeEnum } from "./Enums";
 
 export class HashManager {
