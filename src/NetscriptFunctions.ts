@@ -111,7 +111,6 @@ import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
 import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
-import { SpecialServers } from "./Server/data/SpecialServers";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
 import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
@@ -179,7 +178,7 @@ export const ns: InternalAPI<NSFull> = {
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
-      if (s === null || (s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb)) continue;
+      if (s === null || s instanceof DarknetServer) continue;
       const entry = helpers.returnServerID(s, returnOpts);
       if (entry === null) continue;
       out.push(entry);
