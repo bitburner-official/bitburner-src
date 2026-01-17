@@ -53,6 +53,9 @@ export const shortestPathInAGrid: Pick<CodingContractTypes, CodingContractName.S
 
       return grid;
     },
+    getAnswer: () => {
+      return null;
+    },
     solver: (data, answer) => {
       const width = data[0].length;
       const height = data.length;

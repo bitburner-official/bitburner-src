@@ -25,7 +25,7 @@ import { roundToTwo } from "./utils/helpers/roundToTwo";
 
 import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
-import { ScriptArg } from "@nsdefs";
+import type { ScriptArg, Result } from "@nsdefs";
 import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
 import { handleUnknownError } from "./utils/ErrorHandler";
 import { isLegacyScript, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
@@ -33,7 +33,6 @@ import { Player } from "@player";
 import { UIEventEmitter, UIEventType } from "./ui/UIEventEmitter";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
-import { Result } from "./types";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 

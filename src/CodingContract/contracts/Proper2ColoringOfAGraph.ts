@@ -75,6 +75,9 @@ export const proper2ColoringOfAGraph: Pick<CodingContractTypes, CodingContractNa
 
       return [n + m, edges];
     },
+    getAnswer: () => {
+      return null;
+    },
     solver: (data, answer) => {
       //Helper function to get neighbourhood of a vertex
       function neighbourhood(vertex: number): number[] {

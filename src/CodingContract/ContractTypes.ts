@@ -33,11 +33,13 @@ interface CodingContractType<Data, Answer, State = Data> {
   difficulty: number;
   /** Function that generates a valid 'state' for a contract type */
   generate: () => State;
+  /** Function that returns an answer, if possible, for a given contract */
+  getAnswer: (data: Data) => Answer | null;
   /**
    * Transforms the 'state' for a contract into its 'data'. The state is
    * stored persistently as JSON, so it must be serializable. The data is what
    * is given to the user and shown in the description. If this function is
-   * ommitted, it will be the identity function (i.e. State == Data).
+   * omitted, it will be the identity function (i.e. State == Data).
    * You can use this to make problems where the "solver" is not a function
    * that can be copy-pasted to user code to solve the problem.
    */
