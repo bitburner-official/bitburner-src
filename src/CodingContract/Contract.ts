@@ -4,7 +4,7 @@ import { CodingContractTypes } from "./ContractTypes";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { assertObject } from "../utils/TypeAssertion";
-import { Result } from "@nsdefs";
+import type { Result } from "@nsdefs";
 import { CodingContractEventEmitter } from "./CodingContractEventEmitter";
 
 // Numeric enum
