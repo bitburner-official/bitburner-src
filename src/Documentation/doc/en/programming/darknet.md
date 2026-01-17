@@ -4,7 +4,7 @@ Easy wealth... secret augments... The siren call of the so-called "dark net" has
 
 Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers on that unregulated network. A person like you, perhaps.
 
-For the full NS docs for the api, you can go to the [API documentation page](nsDoc/bitburner.darknet.md).
+For the full NS docs for the api, you can go to the [API documentation page](../../../../../markdown/bitburner.darknet.md).
 
 ### Network structure
 
