@@ -139,7 +139,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "but the research that they could be conducting using Titan Laboratories' vast resources is potentially very " +
       "dangerous.\n\n" +
       `Your goal is to enter and destroy the Bioengineering department's facility in ${CityName.Aevum}. The task is not ` +
-      "just to retire the Synthoids there but also to destroy any information or research at the facility that is " +
+      "just to retire the Synthoids there, but also to destroy any information or research at the facility that is " +
       "relevant to the Synthoids and their goals.",
   }),
   [BladeburnerBlackOpName.OperationAres]: new BlackOperation({
