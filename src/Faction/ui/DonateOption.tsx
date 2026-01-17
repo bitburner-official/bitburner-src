@@ -15,7 +15,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { NumberInput } from "../../ui/React/NumberInput";
 import MathNotation from "../../Documentation/data/MathNotation.json";
-import { convertMathNotation } from "../../Documentation/root";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 type DonateOptionProps = {
   faction: Faction;
@@ -75,11 +75,7 @@ export function DonateOption({ faction, favorToDonate, disabled, rerender }: Don
               ),
             }}
           />
-          <Typography>
-            {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
-            MathNotationOutput.json. They are not user-provided data. */}
-            <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.RepDonation) }} />
-          </Typography>
+          <MathNotationOutput notation={MathNotation.RepDonation} />
         </>
       )}
     </Paper>

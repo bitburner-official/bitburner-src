@@ -8,7 +8,7 @@ import { addRepToFavor } from "../../Faction/formulas/favor";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "./Reputation";
 import MathNotation from "../../Documentation/data/MathNotation.json";
-import { convertMathNotation } from "../../Documentation/root";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 export function ReputationInfo({
   favor,
@@ -28,11 +28,7 @@ export function ReputationInfo({
             Augmentation.
           </Typography>
           <Typography style={{ fontSize: "2rem" }}>r = Total faction reputation</Typography>
-          <Typography>
-            {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
-            MathNotationOutput.json. They are not user-provided data. */}
-            <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.RepToFavor) }} />
-          </Typography>
+          <MathNotationOutput notation={MathNotation.RepToFavor} />
         </>
       }
     >

@@ -7,7 +7,7 @@ import { Player } from "@player";
 
 import { Money } from "../../ui/React/Money";
 import MathNotation from "../../Documentation/data/MathNotation.json";
-import { convertMathNotation } from "../../Documentation/root";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 interface IProps {
   rerender: () => void;
@@ -33,9 +33,7 @@ export function CoresButton(props: IProps): React.ReactElement {
   }
 
   return (
-    // It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
-    // MathNotationOutput.json. They are not user-provided data.
-    <Tooltip title={<span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.CoreCost) }} />}>
+    <Tooltip title={<MathNotationOutput notation={MathNotation.CoreCost} />}>
       <span>
         <br />
         <Typography>

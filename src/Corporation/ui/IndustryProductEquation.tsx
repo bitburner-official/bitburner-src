@@ -22,8 +22,7 @@ export function IndustryProductEquation(props: IProps): React.ReactElement {
 
   return (
     <Typography component="span">
-      {/* \u21D2 is the "⟹" character */}
-      {reqs.join(" + ")} {"\u27F9"} {prod.join(" + ")}
+      {reqs.join(" + ")} ⟹ {prod.join(" + ")}
     </Typography>
   );
 }

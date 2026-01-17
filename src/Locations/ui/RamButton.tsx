@@ -12,7 +12,7 @@ import { formatRam } from "../../ui/formatNumber";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "../../Server/data/Constants";
 import MathNotation from "../../Documentation/data/MathNotation.json";
-import { convertMathNotation } from "../../Documentation/root";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 interface IProps {
   rerender: () => void;
@@ -36,11 +36,7 @@ export function RamButton(props: IProps): React.ReactElement {
       title={
         <>
           <Typography>HomeRamCostMult = {currentNodeMults.HomeComputerRamCost}</Typography>
-          <Typography>
-            {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
-            MathNotationOutput.json. They are not user-provided data. */}
-            <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.HomeRAMCost) }} />
-          </Typography>
+          <MathNotationOutput notation={MathNotation.HomeRAMCost} />
         </>
       }
     >

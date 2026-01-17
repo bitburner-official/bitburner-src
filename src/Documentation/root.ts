@@ -42,8 +42,7 @@ export function convertMathNotation(value: string): string {
   // easier without fighting with the TS compiler.
   const output = (MathNotationOutput as Record<string, string>)[value];
   if (output == null) {
-    console.error(`Unknown math notation: ${value}`);
-    return value;
+    throw new Error(`Unknown math notation: ${value}`);
   }
   return output;
 }

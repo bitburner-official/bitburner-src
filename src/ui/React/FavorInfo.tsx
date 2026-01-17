@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 
 import { Favor } from "../../ui/React/Favor";
 import MathNotation from "../../Documentation/data/MathNotation.json";
-import { convertMathNotation } from "../../Documentation/root";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 export function FavorInfo({ favor, boldLabel }: { favor: number; boldLabel?: boolean }): React.ReactElement {
   return (
@@ -18,11 +18,7 @@ export function FavorInfo({ favor, boldLabel }: { favor: number; boldLabel?: boo
             amount of reputation you earned with this faction across all resets.
           </Typography>
           <Typography style={{ fontSize: "2rem" }}>r = Reputation gain</Typography>
-          <Typography>
-            {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
-            MathNotationOutput.json. They are not user-provided data. */}
-            <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.FavorBonus) }} />
-          </Typography>
+          <MathNotationOutput notation={MathNotation.FavorBonus} />
         </>
       }
     >

@@ -36,7 +36,7 @@ import { CreateCorporationModal } from "./modals/CreateCorporationModal";
 import InfoIcon from "@mui/icons-material/Info";
 import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import MathNotation from "../../Documentation/data/MathNotation.json";
-import { convertMathNotation } from "../../Documentation/root";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 interface IProps {
   rerender: () => void;
@@ -391,17 +391,9 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
                   "TributeModifier". Formulas:
                   <br />
                   <br />
-                  <Typography>
-                    {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json
-                    and MathNotationOutput.json. They are not user-provided data. */}
-                    <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.CorpTotalDividends) }} />
-                  </Typography>
+                  <MathNotationOutput notation={MathNotation.CorpTotalDividends} />
                   <br />
-                  <Typography>
-                    {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json
-                    and MathNotationOutput.json. They are not user-provided data. */}
-                    <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.CorpDividend) }} />
-                  </Typography>
+                  <MathNotationOutput notation={MathNotation.CorpDividend} />
                 </>
               }
             >

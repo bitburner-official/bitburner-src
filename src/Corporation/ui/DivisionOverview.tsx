@@ -23,7 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import HelpIcon from "@mui/icons-material/Help";
 import Box from "@mui/material/Box";
 import MathNotation from "../../Documentation/data/MathNotation.json";
-import { convertMathNotation } from "../../Documentation/root";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 function MakeProductButton(): React.ReactElement {
   const corp = useCorporation();
@@ -134,15 +134,10 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
             <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
             <br />
             <Typography>
-              {/* \u{1D7AA} is the alpha character */}
-              {division.industry} Industry: {"\u{1D7AA}"} = {division.advertisingFactor}
+              {division.industry} Industry: 𝞪 = {division.advertisingFactor}
             </Typography>
             <br />
-            <Typography>
-              {/* It's fine to use dangerouslySetInnerHTML here. We control the data in both MathNotation.json and
-              MathNotationOutput.json. They are not user-provided data. */}
-              <span dangerouslySetInnerHTML={{ __html: convertMathNotation(MathNotation.CorpAdvertFactor) }} />
-            </Typography>
+            <MathNotationOutput notation={MathNotation.CorpAdvertFactor} />
             <br />
             <StatsTable
               rows={[
