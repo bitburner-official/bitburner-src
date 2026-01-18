@@ -56,7 +56,7 @@ import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { errorMessage, log } from "./ErrorMessages";
-import { assertStringWithNSContext, debugType } from "./TypeAssertion";
+import { assertStringWithNSContext, debugType, userFriendlyString } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,
@@ -64,6 +64,7 @@ import {
 } from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
 import { Settings } from "../Settings/Settings";
+import { getFriendlyType } from "../utils/TypeAssertion";
 
 export const helpers = {
   string,
@@ -182,10 +183,31 @@ function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): Pos
   }
   return n;
 }
+
+function isScriptArg(arg: unknown): boolean {
+  return typeof arg === "string" || typeof arg === "number" || typeof arg === "boolean";
+}
+
+function isScriptArgs(args: unknown): args is ScriptArg[] {
+  return Array.isArray(args) && args.every(isScriptArg);
+}
+
 /** Returns args back if it is a ScriptArg[]. Throws an error if it is not. */
-function scriptArgs(ctx: NetscriptContext, args: unknown) {
-  if (!isScriptArgs(args)) throw errorMessage(ctx, "'args' is not an array of script args", "TYPE");
-  return args;
+function scriptArgs(ctx: NetscriptContext, args: unknown): ScriptArg[] {
+  if (isScriptArgs(args)) {
+    return args;
+  }
+  if (!Array.isArray(args)) {
+    throw errorMessage(ctx, `scriptArgs must be an array. Current type is ${getFriendlyType(args)}.`, "TYPE");
+  }
+  const nonValidArgument: unknown = args.find((arg) => !isScriptArg(arg));
+  throw errorMessage(
+    ctx,
+    `scriptArgs can only contain strings, numbers, or booleans.
+Found ${getFriendlyType(nonValidArgument)}: ${userFriendlyString(nonValidArgument)}
+Args passed: ${args.map((arg) => userFriendlyString(arg)).join(", ")}`,
+    "TYPE",
+  );
 }
 
 /** Converts the provided value for v to a boolean, throwing if it is not  */
@@ -501,11 +523,6 @@ function getNormalServer(ctx: NetscriptContext, host: string): Server {
     throw helpers.errorMessage(ctx, errorMessage);
   }
   return server;
-}
-
-function isScriptArgs(args: unknown): args is ScriptArg[] {
-  const isScriptArg = (arg: unknown) => typeof arg === "string" || typeof arg === "number" || typeof arg === "boolean";
-  return Array.isArray(args) && args.every(isScriptArg);
 }
 
 function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: unknown): Promise<number> {
