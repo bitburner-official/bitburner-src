@@ -35,7 +35,7 @@ export function assert<T>(
 }
 
 /** Returns the friendlyType of v. arrays are "array" and null is "null". */
-function getFriendlyType(v: unknown): string {
+export function getFriendlyType(v: unknown): string {
   return v === null ? "null" : Array.isArray(v) ? "array" : typeof v;
 }
 

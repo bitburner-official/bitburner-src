@@ -1,19 +1,36 @@
 import type { NetscriptContext } from "./APIWrapper";
 import { errorMessage } from "./ErrorMessages";
 
-const userFriendlyString = (v: unknown): string => {
-  const clip = (s: string): string => {
-    if (s.length > 15) return s.slice(0, 12) + "...";
-    return s;
-  };
-  if (typeof v === "number") return String(v);
+const clip = (s: string): string => {
+  if (s.length > 15) {
+    return s.slice(0, 12) + "...";
+  }
+  return s;
+};
+
+export const userFriendlyString = (v: unknown): string => {
+  if (typeof v === "number") {
+    return String(v);
+  }
   if (typeof v === "string") {
-    if (v === "") return "empty string";
+    if (v === "") {
+      return `'' (empty string)`;
+    }
     return `'${clip(v)}'`;
   }
-  const json = JSON.stringify(v);
-  if (!json) return "???";
-  return `'${clip(json)}'`;
+  // JSON.stringify does not handle undefined in arrays or objects well (e.g., [undefined] is stringified to [null]). We
+  // accept this drawback.
+  let stringValue = JSON.stringify(v);
+  if (!stringValue) {
+    if (typeof v === "function") {
+      // Special case for function.
+      stringValue = "(function)";
+    } else {
+      // Special case for undefined and Symbol.
+      stringValue = String(v);
+    }
+  }
+  return clip(stringValue);
 };
 
 export const debugType = (v: unknown): string => {
