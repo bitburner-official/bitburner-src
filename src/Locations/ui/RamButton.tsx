@@ -9,9 +9,10 @@ import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
 import { Money } from "../../ui/React/Money";
 import { formatRam } from "../../ui/formatNumber";
 
-import { MathJax } from "better-react-mathjax";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "../../Server/data/Constants";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 interface IProps {
   rerender: () => void;
@@ -30,12 +31,13 @@ export function RamButton(props: IProps): React.ReactElement {
     props.rerender();
   }
 
-  const bnMult = currentNodeMults.HomeComputerRamCost === 1 ? "" : `\\cdot ${currentNodeMults.HomeComputerRamCost}`;
-
   return (
     <Tooltip
       title={
-        <MathJax>{`\\(\\large{cost = ram \\cdot 3.2 \\cdot 10^4 \\cdot 1.58^{log_2{(ram)}}} ${bnMult}\\)`}</MathJax>
+        <>
+          <Typography>HomeRamCostMult = {currentNodeMults.HomeComputerRamCost}</Typography>
+          <MathNotationOutput notation={MathNotation.HomeRAMCost} />
+        </>
       }
     >
       <span>
