@@ -183,9 +183,25 @@ function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): Pos
   return n;
 }
 /** Returns args back if it is a ScriptArg[]. Throws an error if it is not. */
-function scriptArgs(ctx: NetscriptContext, args: unknown) {
-  if (!isScriptArgs(args)) throw errorMessage(ctx, "'args' is not an array of script args", "TYPE");
-  return args;
+function scriptArgs(ctx: NetscriptContext, args: unknown): ScriptArg[] {
+  if (isScriptArgs(args)) {
+    return args;
+  }
+  if (!Array.isArray(args)) {
+    throw errorMessage(ctx, `scriptArgs must be an array, was ${debugType(args)}`, "TYPE");
+  }
+  const isInvalid = (arg: unknown) => !["string", "number", "boolean"].includes(typeof arg);
+  const nonValidArgument: unknown = args.find(isInvalid) ?? undefined;
+  const type = Array.isArray(nonValidArgument) ? "array" : typeof nonValidArgument;
+  const formattedValue = JSON.stringify(nonValidArgument) ?? `(${type})`;
+  const argsList = args.map((arg) => JSON.stringify(arg) ?? `(${typeof arg})`).join(", ");
+  throw errorMessage(
+    ctx,
+    `scriptArgs can only contain strings, numbers, or booleans.
+   Found a ${type}: ${formattedValue} 
+   Args passed: ${argsList}`,
+    "TYPE",
+  );
 }
 
 /** Converts the provided value for v to a boolean, throwing if it is not  */
