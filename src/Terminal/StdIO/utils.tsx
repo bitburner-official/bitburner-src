@@ -19,21 +19,31 @@ export function isPipeSymbol(symbol: string | number | boolean): boolean {
 }
 
 export function stringify(s: unknown, stripAnsiEscape = false): string {
-  if (!s) {
+  if (s === undefined || s === null) {
     return "";
   } else if (s instanceof Output) {
-    return stripAnsiEscape ? s.text.replaceAll(ANSI_ESCAPE, "") : s.text;
+    return clean(s.text, stripAnsiEscape);
   } else if (s instanceof Link) {
     return `${s.dashes} ${s.hostname}`;
   } else if (s instanceof RawOutput) {
     // TODO: test
-    const markup = renderToStaticMarkup(<>{s.raw}</>);
-    const div = document.createElement("div");
-    div.innerHTML = markup.replaceAll(">", "> ");
-    return div.textContent ?? div.innerText ?? "";
-  } else if (typeof s === "string" || typeof s === "number" || typeof s === "boolean") {
-    return s.toString().replaceAll(ANSI_ESCAPE, "");
+    return stringifyReactElement(s.raw);
+  } else if (s instanceof HTMLElement) {
+    return s.innerText;
+  } else if (s === "string" || typeof s === "number" || typeof s === "boolean") {
+    return clean(s.toString(), stripAnsiEscape);
   } else {
-    return JSON.stringify(s).replaceAll(ANSI_ESCAPE, "");
+    return clean(JSON.stringify(s), stripAnsiEscape);
   }
+}
+
+function stringifyReactElement(element: React.ReactNode): string {
+  const markup = renderToStaticMarkup(<>{element}</>);
+  const div = document.createElement("div");
+  div.innerHTML = markup.replaceAll(">", "> ");
+  return div.textContent ?? div.innerText ?? "";
+}
+
+function clean(str: string, stripAnsiEscape: boolean) {
+  return stripAnsiEscape ? str.replaceAll(ANSI_ESCAPE, "") : str;
 }

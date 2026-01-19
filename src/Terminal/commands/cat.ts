@@ -76,13 +76,14 @@ function getFileContents(filename: string, server: BaseServer, stdIO: StdIO, isB
     if (isBasicFileCat) {
       return showMessage(path);
     }
-    return stringify(Messages[path as MessageFilename]);
+    return stringify(Messages[path as MessageFilename].msg);
   }
   if (isMember("LiteratureName", path) && server.messages.includes(path)) {
     if (isBasicFileCat) {
       return showLiterature(path);
     }
-    return stringify(Literatures[path as LiteratureName]);
+    const lit = Literatures[path as LiteratureName];
+    return `${lit.title}\n${stringify(lit.text)}`;
   }
   Terminal.error(`No file at path ${path}`, stdIO);
 }
