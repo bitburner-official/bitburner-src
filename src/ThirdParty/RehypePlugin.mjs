@@ -305,6 +305,8 @@ export function createPlugin(createRenderer) {
         try {
           result = renderer.render(text, { display });
         } catch (error) {
+          // Print the error to the console to debug the issue easier.
+          console.error(error);
           const cause = /** @type {Error} */ (error);
 
           file.message("Could not render math with mathjax", {

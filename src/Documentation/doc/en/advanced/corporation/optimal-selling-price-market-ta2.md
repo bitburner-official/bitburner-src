@@ -9,18 +9,24 @@ Market price:
   - $n = {Number\ of\ input\ materials}$
   - $ProductMarketPriceMult = 5$
 
-$$ProductMarketPrice = ProductMarketPriceMult\ast\sum_{i = 1}^{n}{MaterialMarketPrice_i\ast MaterialCoefficient_i}$$
+$$
+ProductMarketPrice = ProductMarketPriceMult\ast\sum_{i = 1}^{n}{MaterialMarketPrice_i\ast MaterialCoefficient_i}
+$$
 
 Markup limit: This is how high you can raise the price above the market price before the sales volume is affected negatively.
 For example: Let's say a product has MarketPrice = 5000 and MarkupLimit = 700. If you set the price smaller than or equal to 5700, the sales volume of this product will not be penalized.
 
 - Material:
 
-$$MaterialMarkupLimit = \frac{MaterialQuality}{MaterialMarkup}$$
+$$
+MaterialMarkupLimit = \frac{MaterialQuality}{MaterialMarkup}
+$$
 
 - Product:
 
-$$ProductMarkupLimit = \frac{Max(ProductEffectiveRating,0.001)}{ProductMarkup}$$
+$$
+ProductMarkupLimit = \frac{Max(ProductEffectiveRating,0.001)}{ProductMarkup}
+$$
 
 ## Sales volume
 
@@ -30,7 +36,9 @@ $$ProductMarkupLimit = \frac{Max(ProductEffectiveRating,0.001)}{ProductMarkup}$$
 
 `MarkupMultiplier` is defined by a piecewise function depending on selling price, market price, and markup limit.
 
-$$MaxSalesVolume = PotentialSalesVolume\ast MarkupMultiplier$$
+$$
+MaxSalesVolume = PotentialSalesVolume\ast MarkupMultiplier
+$$
 
 ### Potential sales volume
 
@@ -44,7 +52,9 @@ $$MaxSalesVolume = PotentialSalesVolume\ast MarkupMultiplier$$
 
 It is the product of 6 multipliers:
 
-$$PotentialSalesVolume = \ ItemMultiplier\ast BusinessFactor\ast AdvertFactor\ast MarketFactor\ast SaleBotsBonus\ast ResearchBonus$$
+$$
+PotentialSalesVolume = \ ItemMultiplier\ast BusinessFactor\ast AdvertFactor\ast MarketFactor\ast SaleBotsBonus\ast ResearchBonus
+$$
 
 - Quality/EffectiveRating multiplier:
   - Material:
@@ -54,28 +64,42 @@ $$PotentialSalesVolume = \ ItemMultiplier\ast BusinessFactor\ast AdvertFactor\as
 - Business factor:
   - `BusinessProduction = 1 + office.employeeProductionByJob["Business"]`
 
-$${BusinessFactor = (BusinessProduction)}^{0.26} + \left({BusinessProduction}\ast{0.0001}\right)$$
+$$
+{BusinessFactor = (BusinessProduction)}^{0.26} + \left({BusinessProduction}\ast{0.0001}\right)
+$$
 
 - Advert factor:
 
-$$AwarenessFactor = (Awareness + 1)^{IndustryAdvertisingFactor}$$
+$$
+AwarenessFactor = (Awareness + 1)^{IndustryAdvertisingFactor}
+$$
 
-$$PopularityFactor = (Popularity + 1)^{IndustryAdvertisingFactor}$$
+$$
+PopularityFactor = (Popularity + 1)^{IndustryAdvertisingFactor}
+$$
 
-$$RatioFactor = \begin{cases}Max(0.01,\frac{Popularity + 0.001}{Awareness}), & Awareness \neq 0 \newline 0.01, & Awareness = 0 \end{cases}$$
+$$
+RatioFactor = \begin{cases}Max(0.01,\frac{Popularity + 0.001}{Awareness}), & Awareness \neq 0 \newline 0.01, & Awareness = 0 \end{cases}
+$$
 
-$$AdvertFactor = (AwarenessFactor\ast PopularityFactor\ast RatioFactor)^{0.85}$$
+$$
+AdvertFactor = (AwarenessFactor\ast PopularityFactor\ast RatioFactor)^{0.85}
+$$
 
 - Market factor:
 
-$$MarketFactor = Max\left(0.1,{Demand\ast(100 - Competition)}\ast{0.01}\right)$$
+$$
+MarketFactor = Max\left(0.1,{Demand\ast(100 - Competition)}\ast{0.01}\right)
+$$
 
 - Corporation's upgrade bonus: `SalesBots` bonus.
 - Division's research bonus: this is always 1. Currently there is not any research that increases the sales bonus.
 
 ### Markup multiplier
 
-$$MarkupMultiplier = \begin{cases}10^{12} & SellingPrice \in (-\infty, 0] \newline \frac{MarketPrice}{SellingPrice} & SellingPrice \in (0, MarketPrice] \newline 1 & SellingPrice \in (MarketPrice, MarketPrice + MarkupLimit] \newline \left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2} & SellingPrice \in (MarketPrice + MarkupLimit, \infty) \end{cases}$$
+$$
+MarkupMultiplier = \begin{cases}10^{12} & SellingPrice \in (-\infty, 0] \newline \frac{MarketPrice}{SellingPrice} & SellingPrice \in (0, MarketPrice] \newline 1 & SellingPrice \in (MarketPrice, MarketPrice + MarkupLimit] \newline \left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2} & SellingPrice \in (MarketPrice + MarkupLimit, \infty) \end{cases}
+$$
 
 Analysis for 4 ranges, in the same order of the above formula:
 
@@ -98,27 +122,39 @@ In order to increase `MaxSalesVolume`, you can:
 
 Let's say that we want to sell all stored units. Define:
 
-$$ExpectedSalesVolume = \frac{StoredUnits}{10}$$
+$$
+ExpectedSalesVolume = \frac{StoredUnits}{10}
+$$
 
 Assume that we can sell all stored units.
 
-$$MaxSalesVolume = ExpectedSalesVolume$$
+$$
+MaxSalesVolume = ExpectedSalesVolume
+$$
 
 ≡
 
-$$PotentialSalesVolume\ast MarkupMultiplier = ExpectedSalesVolume$$
+$$
+PotentialSalesVolume\ast MarkupMultiplier = ExpectedSalesVolume
+$$
 
 ≡
 
-$$PotentialSalesVolume\ast\left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2} = ExpectedSalesVolume$$
+$$
+PotentialSalesVolume\ast\left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2} = ExpectedSalesVolume
+$$
 
 ≡
 
-$$\frac{MarkupLimit}{SellingPrice - MarketPrice} = \sqrt{\frac{ExpectedSalesVolume}{PotentialSalesVolume}}$$
+$$
+\frac{MarkupLimit}{SellingPrice - MarketPrice} = \sqrt{\frac{ExpectedSalesVolume}{PotentialSalesVolume}}
+$$
 
 ≡
 
-$$SellingPrice = \frac{MarkupLimit\ast\sqrt{PotentialSalesVolume}}{\sqrt{ExpectedSalesVolume}} + MarketPrice$$
+$$
+SellingPrice = \frac{MarkupLimit\ast\sqrt{PotentialSalesVolume}}{\sqrt{ExpectedSalesVolume}} + MarketPrice
+$$
 
 There are 2 cases:
 
