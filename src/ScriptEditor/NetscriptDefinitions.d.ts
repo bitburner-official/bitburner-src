@@ -5477,7 +5477,7 @@ export interface Sleeve {
    *
    * @param sleeveNumber - Index of the sleeve.
    * @param amount - Number of upgrades. Must be a positive integer.
-   * @returns - Cost of the upgrades. Return Infinity if the current memory plus the amount of upgrades is greater than
+   * @returns Cost of the upgrades. Return Infinity if the current memory plus the amount of upgrades is greater than
    * 100.
    */
   getMemoryUpgradeCost(sleeveNumber: number, amount: number): number;

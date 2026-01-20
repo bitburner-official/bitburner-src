@@ -68,7 +68,7 @@ Number of upgrades. Must be a positive integer.
 
 number
 
-- Cost of the upgrades. Return Infinity if the current memory plus the amount of upgrades is greater than 100.
+Cost of the upgrades. Return Infinity if the current memory plus the amount of upgrades is greater than 100.
 
 ## Remarks
 
