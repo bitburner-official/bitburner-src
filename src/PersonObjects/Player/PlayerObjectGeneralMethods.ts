@@ -28,7 +28,6 @@ import { Faction } from "../../Faction/Faction";
 import { Factions } from "../../Faction/Factions";
 import { FactionInvitationEvents } from "../../Faction/ui/FactionInvitationManager";
 import { resetGangs } from "../../Gang/AllGangs";
-import { Sleeve } from "../Sleeve/Sleeve";
 import { SleeveWorkType } from "../Sleeve/Work/Work";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
@@ -57,6 +56,7 @@ import { PlayerEventType, PlayerEvents } from "./PlayerEvents";
 import type { Result } from "@nsdefs";
 import type { AchievementId } from "../../Achievements/Types";
 import { Infiltration } from "../../Infiltration/Infiltration";
+import { recalculateNumberOfOwnedSleeves } from "../Sleeve/SleeveCovenantPurchases";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -114,7 +114,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.queuedAugmentations = [];
 
-  Sleeve.recalculateNumOwned();
+  recalculateNumberOfOwnedSleeves();
 
   this.sleeves.forEach((sleeve) => (sleeve.shock <= 0 ? sleeve.synchronize() : sleeve.shockRecovery()));
 

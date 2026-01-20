@@ -5436,6 +5436,51 @@ export interface Sleeve {
     action: BladeburnerActionTypeForSleeve,
     contract?: BladeburnerContractName,
   ): boolean;
+
+  /**
+   * Purchase a sleeve. You must be in BitNode 10 to use this API.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @returns Action result
+   */
+  purchaseSleeve(): Result;
+
+  /**
+   * Upgrade memory of a sleeve. You must be in BitNode 10 to use this API.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param sleeveNumber - Index of the sleeve.
+   * @param amount - Number of upgrades. Must be a positive integer.
+   * @returns Action result
+   */
+  upgradeMemory(sleeveNumber: number, amount: number): Result;
+
+  /**
+   * Get the cost of the next sleeve.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @returns Cost of the next sleeve. Return Infinity if you reach the maximum number of purchasable sleeves.
+   */
+  getSleeveCost(): number;
+
+  /**
+   * Get the cost of memory upgrades.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param sleeveNumber - Index of the sleeve.
+   * @param amount - Number of upgrades. Must be a positive integer.
+   * @returns Cost of the upgrades. Return Infinity if the current memory plus the amount of upgrades is greater than
+   * 100.
+   */
+  getMemoryUpgradeCost(sleeveNumber: number, amount: number): number;
 }
 
 /**
