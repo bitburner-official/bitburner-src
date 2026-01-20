@@ -24,11 +24,17 @@ Cost: use the formulas in this [section](./unlocks-upgrade-research.md) with `Ba
 
 Benefit:
 
-$$AdvertMultiplier = WilsonUpgradeBenefit\ast ResearchAdvertisingMultiplier$$
+$$
+AdvertMultiplier = WilsonUpgradeBenefit\ast ResearchAdvertisingMultiplier
+$$
 
-$$Awareness = (Awareness + 3\ast AdvertMultiplier)\ast(1.005*AdvertMultiplier)$$
+$$
+Awareness = (Awareness + 3\ast AdvertMultiplier)\ast(1.005*AdvertMultiplier)
+$$
 
-$$Popularity = (Popularity + AdvertMultiplier)\ast(1 + {Random(1,3)}\ast{0.005})\ast AdvertMultiplier$$
+$$
+Popularity = (Popularity + AdvertMultiplier)\ast(1 + {Random(1,3)}\ast{0.005})\ast AdvertMultiplier
+$$
 
 ## Advice
 

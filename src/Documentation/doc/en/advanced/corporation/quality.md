@@ -18,13 +18,17 @@ When you import/export your materials between different divisions, you can see q
 
 In PURCHASE state, material's quality is "diluted" by low-quality purchased material (quality 1).
 
-$$Quality = \frac{Quality\ast CurrentQuantity + BuyAmount}{CurrentQuantity + BuyAmount}$$
+$$
+Quality = \frac{Quality\ast CurrentQuantity + BuyAmount}{CurrentQuantity + BuyAmount}
+$$
 
 In PRODUCTION state, the "diluted" quality value is used for calculating `AvgInputQuality`.
 
 In EXPORT state:
 
-$$Quality = \frac{Quality\ast CurrentQuantity + ImportQuality\ast ImportAmount}{CurrentQuantity + ImportAmount}$$
+$$
+Quality = \frac{Quality\ast CurrentQuantity + ImportQuality\ast ImportAmount}{CurrentQuantity + ImportAmount}
+$$
 
 The production capability of support division should be balanced. The `ImportAmount` (the number of material units that the support division exports) does not need to equal the required number of input material units, but it should also not be too small.
 
@@ -35,19 +39,27 @@ The production capability of support division should be balanced. The `ImportAmo
 - Engineer summand:
   - `EngineerProduction = office.employeeProductionByJob["Engineer"]`
 
-$$EngineerSummand = \frac{EngineerProduction}{90}$$
+$$
+EngineerSummand = \frac{EngineerProduction}{90}
+$$
 
 - Research point summand:
 
-$$ResearchPointSummand = (RP)^{IndustryScienceFactor}$$
+$$
+ResearchPointSummand = (RP)^{IndustryScienceFactor}
+$$
 
 - AI Cores summand (if there is AI Cores in the warehouse):
 
-$$AICoresSummand = AICoresQuantity^{IndustryAICoreFactor}\ast{0.001}$$
+$$
+AICoresSummand = AICoresQuantity^{IndustryAICoreFactor}\ast{0.001}
+$$
 
 Output quality:
 
-$$OutputQuality = \sqrt{MaxOutputQuality}\ast AvgInputQuality$$
+$$
+OutputQuality = \sqrt{MaxOutputQuality}\ast AvgInputQuality
+$$
 
 With formulas above, we have these conclusions:
 
@@ -66,6 +78,8 @@ Game UI shows `OutputRating` as "Effective rating"
 
 Output rating:
 
-$$OutputRating = \sqrt{MaxOutputRating}\ast AvgInputQuality$$
+$$
+OutputRating = \sqrt{MaxOutputRating}\ast AvgInputQuality
+$$
 
 Use same strategy as material for checking `AvgInputQuality`.
