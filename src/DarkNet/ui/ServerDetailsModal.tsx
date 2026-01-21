@@ -7,11 +7,10 @@ import { ServerSummary } from "./ServerSummary";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
 import { isLabyrinthServer } from "../effects/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
-import { copyToClipboard, formatToMaxDigits } from "./uiUtilities";
+import { copyToClipboard, formatObjectWithColoredKeys, formatToMaxDigits } from "./uiUtilities";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { sleep } from "../../utils/Utility";
 import type { DarknetServer } from "../../Server/DarknetServer";
-import { PasswordResponse } from "../models/DarknetServerOptions";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -47,7 +46,15 @@ export const ServerDetailsModal = ({
       color="secondary"
       style={{ borderLeft: "1px solid grey", paddingLeft: "3px", whiteSpace: "pre-wrap" }}
     >
-      {formatPasswordResponseWithColoredKeys(log.message)}
+      {typeof log.message === "string"
+        ? log.message
+        : formatObjectWithColoredKeys(log.message, [
+            "message",
+            "data",
+            "passwordAttempted",
+            "passwordExpected",
+            "code",
+          ])}
     </pre>
   ));
 
@@ -116,39 +123,5 @@ export const ServerDetailsModal = ({
         </Container>
       </>
     </Modal>
-  );
-};
-
-export const formatPasswordResponseWithColoredKeys = (log: PasswordResponse | string) => {
-  if (typeof log === "string") {
-    return log;
-  }
-
-  return (
-    <span style={{ fontFamily: 'JetBrainsMono, "Courier New", monospace', fontSize: "12px" }}>
-      <span style={{ color: "grey" }}>message: </span>
-      {log.message}
-      <br />
-      {log.data && (
-        <>
-          <span style={{ color: "grey" }}>data: </span>
-          {log.data}
-          <br />
-        </>
-      )}
-      <span style={{ color: "grey" }}>passwordAttempted: </span>
-      {log.passwordAttempted}
-      <br />
-      {log?.passwordExpected && (
-        <>
-          <span style={{ color: "grey" }}>passwordExpected: </span>
-          {log?.passwordExpected ?? ""}
-          <br />
-        </>
-      )}
-      <span style={{ color: "grey" }}>status: </span>
-      {log?.code ?? ""}
-      <br />
-    </span>
   );
 };
