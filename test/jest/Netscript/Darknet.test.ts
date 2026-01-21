@@ -131,10 +131,10 @@ describe("Common APIs", () => {
       resultAfterEightBackdoors.authenticateDurationMultiplier,
     );
   });
-  test("nextUpdate", async () => {
+  test("nextMutation", async () => {
     const ns = getNsOnDarkWeb();
     let resolved = false;
-    void ns.dnet.nextUpdate().then(() => {
+    void ns.dnet.nextMutation().then(() => {
       resolved = true;
     });
     expect(resolved).toStrictEqual(false);
