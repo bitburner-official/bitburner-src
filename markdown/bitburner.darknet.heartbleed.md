@@ -13,7 +13,7 @@ The speed of capture scales with the number of threads used. See formulas.dnet.g
 **Signature:**
 
 ```typescript
-heartbleed(hostname: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;
+heartbleed(host: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;
 ```
 
 ## Parameters
@@ -36,7 +36,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -46,7 +46,7 @@ string
 
 </td><td>
 
-the server to target. Must be directly connected to the current server.
+Hostname/IP of the target server. Must be directly connected to the current server.
 
 
 </td></tr>
@@ -62,7 +62,7 @@ options
 
 </td><td>
 
-_(Optional)_ optional [HeartbleedOptions](./bitburner.heartbleedoptions.md) to modify how the exploit works. peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture. logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1. additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
+_(Optional)_ Optional [HeartbleedOptions](./bitburner.heartbleedoptions.md) to modify how the exploit works.
 
 
 </td></tr>

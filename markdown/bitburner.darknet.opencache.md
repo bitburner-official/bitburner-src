@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-the cache file to open.
+Name of the cache file to open.
 
 
 </td></tr>
@@ -58,7 +58,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
+_(Optional)_ Optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
 
 
 </td></tr>

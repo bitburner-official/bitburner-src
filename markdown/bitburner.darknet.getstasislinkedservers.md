@@ -4,7 +4,7 @@
 
 ## Darknet.getStasisLinkedServers() method
 
-Returns the hostnames of servers that have a stasis link applied.
+Returns the hostnames/IPs of servers that have a stasis link applied.
 
 **Signature:**
 
@@ -51,6 +51,8 @@ _(Optional)_ Optional. If true, returns IPs instead of hostnames. Defaults to fa
 **Returns:**
 
 string\[\]
+
+Hostnames/IPs
 
 ## Remarks
 

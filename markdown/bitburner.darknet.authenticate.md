@@ -11,7 +11,7 @@ If successful, grants the script a session, allowing it to exec() scripts on tha
 **Signature:**
 
 ```typescript
-authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
+authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 ```
 
 ## Parameters
@@ -34,7 +34,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-name of the target server (connected to the current server) to try a password.
+Hostname/IP of the target server (connected to the current server) to try a password.
 
 
 </td></tr>
@@ -60,7 +60,7 @@ string
 
 </td><td>
 
-password to attempt to authenticate with.
+Password to attempt to authenticate with.
 
 
 </td></tr>
@@ -76,7 +76,7 @@ number
 
 </td><td>
 
-_(Optional)_ optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
+_(Optional)_ Optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
 
 
 </td></tr>

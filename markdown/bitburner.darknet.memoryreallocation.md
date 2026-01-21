@@ -9,7 +9,7 @@ Spends some time freeing some of the RAM currently blocked by the server owner. 
 **Signature:**
 
 ```typescript
-memoryReallocation(hostname?: string): Promise<DarknetResult>;
+memoryReallocation(host?: string): Promise<DarknetResult>;
 ```
 
 ## Parameters
@@ -32,7 +32,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname of the connected server to free ram from. Defaults to the running script's server.
+_(Optional)_ Optional. Hostname/IP of the connected server to free ram from. Defaults to the running script's server.
 
 
 </td></tr>

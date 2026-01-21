@@ -96,8 +96,8 @@ describe("Common APIs", () => {
     const ns = getNsOnDarkWeb();
     const initialResult = ns.dnet.getDarknetInstability();
 
-    expect(initialResult.authenticateTimeoutChance).toStrictEqual(0);
-    expect(initialResult.authenticateDurationMultiplier).toStrictEqual(1);
+    expect(initialResult.authenticationTimeoutChance).toStrictEqual(0);
+    expect(initialResult.authenticationDurationMultiplier).toStrictEqual(1);
 
     const darknetServers = getAllMovableDarknetServers();
 
@@ -105,30 +105,30 @@ describe("Common APIs", () => {
     darknetServers.slice(0, 2).forEach((server) => (server.backdoorInstalled = true));
 
     const resultAfterTwoBackdoors = ns.dnet.getDarknetInstability();
-    expect(resultAfterTwoBackdoors.authenticateTimeoutChance).toStrictEqual(0);
-    expect(resultAfterTwoBackdoors.authenticateDurationMultiplier).toStrictEqual(1);
+    expect(resultAfterTwoBackdoors.authenticationTimeoutChance).toStrictEqual(0);
+    expect(resultAfterTwoBackdoors.authenticationDurationMultiplier).toStrictEqual(1);
 
     // Stasis linked servers do not increase instability
     darknetServers.slice(2, 5).forEach((server) => (server.backdoorInstalled = true));
     darknetServers.slice(2, 5).forEach((server) => (server.hasStasisLink = true));
 
     const resultAfterFiveBackdoorsAndThreeStasisLinks = ns.dnet.getDarknetInstability();
-    expect(resultAfterFiveBackdoorsAndThreeStasisLinks.authenticateTimeoutChance).toStrictEqual(0);
-    expect(resultAfterFiveBackdoorsAndThreeStasisLinks.authenticateDurationMultiplier).toStrictEqual(1);
+    expect(resultAfterFiveBackdoorsAndThreeStasisLinks.authenticationTimeoutChance).toStrictEqual(0);
+    expect(resultAfterFiveBackdoorsAndThreeStasisLinks.authenticationDurationMultiplier).toStrictEqual(1);
 
     // The rest of backdoors each increase instability
     darknetServers.slice(5, 8).forEach((server) => (server.backdoorInstalled = true));
     const resultAfterEightBackdoors = ns.dnet.getDarknetInstability();
-    expect(resultAfterEightBackdoors.authenticateTimeoutChance).toBeGreaterThan(0);
-    expect(resultAfterEightBackdoors.authenticateDurationMultiplier).toBeGreaterThan(1);
+    expect(resultAfterEightBackdoors.authenticationTimeoutChance).toBeGreaterThan(0);
+    expect(resultAfterEightBackdoors.authenticationDurationMultiplier).toBeGreaterThan(1);
 
     darknetServers.slice(8, 12).forEach((server) => (server.backdoorInstalled = true));
     const resultAfterAllBackdoors = ns.dnet.getDarknetInstability();
-    expect(resultAfterAllBackdoors.authenticateTimeoutChance).toBeGreaterThan(
-      resultAfterEightBackdoors.authenticateTimeoutChance,
+    expect(resultAfterAllBackdoors.authenticationTimeoutChance).toBeGreaterThan(
+      resultAfterEightBackdoors.authenticationTimeoutChance,
     );
-    expect(resultAfterAllBackdoors.authenticateDurationMultiplier).toBeGreaterThan(
-      resultAfterEightBackdoors.authenticateDurationMultiplier,
+    expect(resultAfterAllBackdoors.authenticationDurationMultiplier).toBeGreaterThan(
+      resultAfterEightBackdoors.authenticationDurationMultiplier,
     );
   });
   test("nextMutation", async () => {

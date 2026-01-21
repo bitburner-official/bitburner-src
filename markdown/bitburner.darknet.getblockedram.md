@@ -9,7 +9,7 @@ Gets the amount of RAM blocked by the server owner's processes. This ram can be 
 **Signature:**
 
 ```typescript
-getBlockedRam(hostname?: string): number;
+getBlockedRam(host?: string): number;
 ```
 
 ## Parameters
@@ -32,7 +32,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname of the server to check. Defaults to the running script's server.
+_(Optional)_ Optional. Hostname/IP of the server to check. Defaults to the running script's server.
 
 
 </td></tr>

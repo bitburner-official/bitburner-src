@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname of the server to analyze. Defaults to the running script's server if not specified.
+_(Optional)_ Hostname/IP of the server to analyze. Defaults to the running script's server if not specified.
 
 
 </td></tr>

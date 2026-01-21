@@ -52,7 +52,7 @@ _(Optional)_ Optional. Controls whether the function returns IPs instead of host
 
 string\[\]
 
-An array of strings containing the hostnames of all servers connected to the current server.
+An array of strings containing the hostnames/IPs of all servers connected to the current server.
 
 ## Remarks
 

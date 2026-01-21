@@ -1806,6 +1806,17 @@ Names of all companies
 </td></tr>
 <tr><td>
 
+[DarknetInstability](./bitburner.darknetinstability.md)
+
+
+</td><td>
+
+Instability of the darknet caused by excessive backdoor-ing of servers.
+
+
+</td></tr>
+<tr><td>
+
 [DarknetResponseCode](./bitburner.darknetresponsecode.md)
 
 

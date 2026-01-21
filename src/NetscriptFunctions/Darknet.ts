@@ -37,7 +37,7 @@ import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 import { resolveCacheFilePath } from "../Paths/CacheFilePath";
-import { CacheResult } from "@nsdefs";
+import type { CacheResult } from "@nsdefs";
 import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
 
 type CompleteHeartbleedOptions = {
@@ -676,8 +676,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     getDarknetInstability: (ctx) => () => {
       expectDarknetAccess(ctx);
       return {
-        authenticateDurationMultiplier: getBackdoorAuthTimeDebuff(),
-        authenticateTimeoutChance: getTimeoutChance(),
+        authenticationDurationMultiplier: getBackdoorAuthTimeDebuff(),
+        authenticationTimeoutChance: getTimeoutChance(),
       };
     },
     nextMutation: (ctx) => () => {

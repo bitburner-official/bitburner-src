@@ -11,7 +11,7 @@ Insufficient charisma will also cause authentication to take much longer - or, i
 **Signature:**
 
 ```typescript
-getServerRequiredCharismaLevel(hostname: string): number;
+getServerRequiredCharismaLevel(host: string): number;
 ```
 
 ## Parameters
@@ -34,7 +34,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-Hostname of the server to check.
+Hostname/IP of the server to check.
 
 
 </td></tr>

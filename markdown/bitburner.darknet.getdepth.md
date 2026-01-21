@@ -11,7 +11,7 @@ Returns -1 if the server is offline, not found, or not a darkweb server.
 **Signature:**
 
 ```typescript
-getDepth(hostname?: string): number;
+getDepth(host?: string): number;
 ```
 
 ## Parameters
@@ -34,7 +34,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname of the server to check. Defaults to the running script's server.
+_(Optional)_ Optional. Hostname/IP of the server to check. Defaults to the running script's server.
 
 
 </td></tr>

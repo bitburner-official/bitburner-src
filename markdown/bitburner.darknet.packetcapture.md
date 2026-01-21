@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-the hostname of the server to listen to.
+Hostname/IP of the server to listen to.
 
 
 </td></tr>

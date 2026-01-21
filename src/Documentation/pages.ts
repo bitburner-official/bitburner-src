@@ -445,6 +445,7 @@ import nsDoc_bitburner_darknetformulas_getauthenticatetime_md from "../../markdo
 import nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md from "../../markdown/bitburner.darknetformulas.getexpectedramblockremoved.md?raw";
 import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown/bitburner.darknetformulas.getheartbleedtime.md?raw";
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
+import nsDoc_bitburner_darknetinstability_md from "../../markdown/bitburner.darknetinstability.md?raw";
 import nsDoc_bitburner_darknetresponsecode_md from "../../markdown/bitburner.darknetresponsecode.md?raw";
 import nsDoc_bitburner_darknetresponsecodetype_md from "../../markdown/bitburner.darknetresponsecodetype.md?raw";
 import nsDoc_bitburner_darknetresult_md from "../../markdown/bitburner.darknetresult.md?raw";
@@ -2016,6 +2017,7 @@ AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] = nsDoc_bitbu
 AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
+AllPages["nsDoc/bitburner.darknetinstability.md"] = nsDoc_bitburner_darknetinstability_md;
 AllPages["nsDoc/bitburner.darknetresponsecode.md"] = nsDoc_bitburner_darknetresponsecode_md;
 AllPages["nsDoc/bitburner.darknetresponsecodetype.md"] = nsDoc_bitburner_darknetresponsecodetype_md;
 AllPages["nsDoc/bitburner.darknetresult.md"] = nsDoc_bitburner_darknetresult_md;

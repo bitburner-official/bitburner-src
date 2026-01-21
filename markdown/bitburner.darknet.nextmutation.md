@@ -6,7 +6,17 @@
 
 Sleep until the next mutation of the network of darknet servers (which occur frequently). Note that in the majority of cases, whatever changed out on the net (if anything) will not be nearby to, or visible from, the current server.
 
-Some possible mutations that can occur somewhere on the dark net each cycle: - Nothing changes - Some servers move to other locations on the net, breaking existing connections and forming new ones - Some servers go offline, which in many cases is permanent - they are effectively deleted - Some servers restart, which kills all running scripts on the server - New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
+Some possible mutations that can occur somewhere on the dark net each cycle:
+
+- Nothing changes
+
+- Some servers move to other locations on the net, breaking existing connections and forming new ones
+
+- Some servers go offline, which in many cases is permanent - they are effectively deleted
+
+- Some servers restart, which kills all running scripts on the server
+
+- New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
 
 **Signature:**
 

@@ -13,7 +13,7 @@ If unsuccessful, more detail may be able to be gathered by using heartbleed() to
 **Signature:**
 
 ```typescript
-connectToSession(hostname: string, password: string): DarknetResult;
+connectToSession(host: string, password: string): DarknetResult;
 ```
 
 ## Parameters
@@ -36,7 +36,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -46,7 +46,7 @@ string
 
 </td><td>
 
-name of the target server to connect to existing session
+Hostname/IP of the target server to connect to existing session
 
 
 </td></tr>
@@ -62,7 +62,7 @@ string
 
 </td><td>
 
-the server's password, to verify the session
+The server's password, to verify the session
 
 
 </td></tr>
