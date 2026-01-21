@@ -680,9 +680,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         authenticateTimeoutChance: getTimeoutChance(),
       };
     },
-    nextUpdate: (ctx) => () => {
+    nextMutation: (ctx) => () => {
       expectDarknetAccess(ctx);
-      return DarknetState.nextUpdate;
+      return DarknetState.nextMutation;
     },
     getServerRequiredCharismaLevel:
       (ctx) =>

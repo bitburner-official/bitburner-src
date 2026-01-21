@@ -256,7 +256,7 @@ const dnet = {
   promoteStock: 2,
   phishingAttack: 2,
   getDarknetInstability: 0,
-  nextUpdate: RamCostConstants.CycleTiming,
+  nextMutation: RamCostConstants.CycleTiming,
   getServerRequiredCharismaLevel: RamCostConstants.GetServer,
 } as const;
 

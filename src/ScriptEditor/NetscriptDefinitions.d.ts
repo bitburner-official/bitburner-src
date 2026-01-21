@@ -4695,7 +4695,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 1 GB
    */
-  nextUpdate(): Promise<void>;
+  nextMutation(): Promise<void>;
 
   /**
    * Gets the required charisma level to target the server with dnet.heartbleed().

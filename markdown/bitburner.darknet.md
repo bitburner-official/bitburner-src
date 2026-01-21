@@ -192,7 +192,7 @@ Spends some time freeing some of the RAM currently blocked by the server owner. 
 </td></tr>
 <tr><td>
 
-[nextUpdate()](./bitburner.darknet.nextupdate.md)
+[nextMutation()](./bitburner.darknet.nextmutation.md)
 
 
 </td><td>

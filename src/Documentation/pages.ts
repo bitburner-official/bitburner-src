@@ -433,7 +433,7 @@ import nsDoc_bitburner_darknet_induceservermigration_md from "../../markdown/bit
 import nsDoc_bitburner_darknet_isdarknetserver_md from "../../markdown/bitburner.darknet.isdarknetserver.md?raw";
 import nsDoc_bitburner_darknet_md from "../../markdown/bitburner.darknet.md?raw";
 import nsDoc_bitburner_darknet_memoryreallocation_md from "../../markdown/bitburner.darknet.memoryreallocation.md?raw";
-import nsDoc_bitburner_darknet_nextupdate_md from "../../markdown/bitburner.darknet.nextupdate.md?raw";
+import nsDoc_bitburner_darknet_nextmutation_md from "../../markdown/bitburner.darknet.nextmutation.md?raw";
 import nsDoc_bitburner_darknet_opencache_md from "../../markdown/bitburner.darknet.opencache.md?raw";
 import nsDoc_bitburner_darknet_packetcapture_md from "../../markdown/bitburner.darknet.packetcapture.md?raw";
 import nsDoc_bitburner_darknet_phishingattack_md from "../../markdown/bitburner.darknet.phishingattack.md?raw";
@@ -2004,7 +2004,7 @@ AllPages["nsDoc/bitburner.darknet.induceservermigration.md"] = nsDoc_bitburner_d
 AllPages["nsDoc/bitburner.darknet.isdarknetserver.md"] = nsDoc_bitburner_darknet_isdarknetserver_md;
 AllPages["nsDoc/bitburner.darknet.md"] = nsDoc_bitburner_darknet_md;
 AllPages["nsDoc/bitburner.darknet.memoryreallocation.md"] = nsDoc_bitburner_darknet_memoryreallocation_md;
-AllPages["nsDoc/bitburner.darknet.nextupdate.md"] = nsDoc_bitburner_darknet_nextupdate_md;
+AllPages["nsDoc/bitburner.darknet.nextmutation.md"] = nsDoc_bitburner_darknet_nextmutation_md;
 AllPages["nsDoc/bitburner.darknet.opencache.md"] = nsDoc_bitburner_darknet_opencache_md;
 AllPages["nsDoc/bitburner.darknet.packetcapture.md"] = nsDoc_bitburner_darknet_packetcapture_md;
 AllPages["nsDoc/bitburner.darknet.phishingattack.md"] = nsDoc_bitburner_darknet_phishingattack_md;
