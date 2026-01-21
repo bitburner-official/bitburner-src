@@ -7510,7 +7510,8 @@ export interface NS {
   getRecentScripts(): RecentScript[];
 
   /**
-   * Get the list of hostnames or IP addresses connected to a server.
+   * Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers
+   * (e.g., darkweb). Use {@link Darknet.probe | probe} if you want to list darknet servers.
    * @remarks
    * RAM cost: 0.2 GB
    *
