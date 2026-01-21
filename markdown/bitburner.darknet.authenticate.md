@@ -11,7 +11,7 @@ If successful, grants the script a session, allowing it to exec() scripts on tha
 **Signature:**
 
 ```typescript
-authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult>;
+authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 ```
 
 ## Parameters
@@ -84,9 +84,9 @@ _(Optional)_ optional. The number of additional milliseconds to add to the run t
 
 **Returns:**
 
-Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { data?: any }&gt;
 
-a promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object. The resolved object may contain an optional property. The type of this property is intentionaly not documented. You are supposed to experiment and discover the content of this property.
 
 ## Remarks
 

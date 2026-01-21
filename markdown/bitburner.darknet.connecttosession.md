@@ -72,7 +72,7 @@ the server's password, to verify the session
 
 [DarknetResult](./bitburner.darknetresult.md)
 
-a promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object. The response will have a `status` of "200 Success" \| "401 Not Authorized" \| "401 Hostname Not Found" \| "408 Request Timeout" \| "301 Server Has Moved"
+A [DarknetResult](./bitburner.darknetresult.md) object
 
 ## Remarks
 

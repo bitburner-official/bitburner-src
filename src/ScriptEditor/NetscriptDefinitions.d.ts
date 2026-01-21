@@ -4443,9 +4443,11 @@ export interface Darknet {
    * @param hostname - name of the target server (connected to the current server) to try a password.
    * @param password - password to attempt to authenticate with.
    * @param additionalMsec - optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
-   * @returns a promise that resolves to a {@link DarknetResult} object.
+   * @returns A promise that resolves to a {@link DarknetResult} object. The resolved object may contain an optional
+   * property. The type of this property is intentionaly not documented. You are supposed to experiment and discover the
+   * content of this property.
    */
-  authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult>;
+  authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 
   /**
    * Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`,
@@ -4462,7 +4464,7 @@ export interface Darknet {
    *
    * @param hostname - name of the target server to connect to existing session
    * @param password - the server's password, to verify the session
-   * @returns a promise that resolves to a {@link DarknetResult} object. The response will have a `status` of "200 Success" | "401 Not Authorized" | "401 Hostname Not Found" | "408 Request Timeout" | "301 Server Has Moved"
+   * @returns A {@link DarknetResult} object
    */
   connectToSession(hostname: string, password: string): DarknetResult;
 
@@ -4482,7 +4484,7 @@ export interface Darknet {
    *    peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture.
    *    logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1.
    *    additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
-   *  @returns a promise that resolves to a {@link DarknetResult} object, plus the scraped logs.
+   *  @returns A promise that resolves to a {@link DarknetResult} object, plus the scraped logs.
    *
    */
   heartbleed(hostname: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;

@@ -72,7 +72,7 @@ _(Optional)_ optional [HeartbleedOptions](./bitburner.heartbleedoptions.md) to m
 
 Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { logs: string\[\] }&gt;
 
-a promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object, plus the scraped logs.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object, plus the scraped logs.
 
 ## Remarks
 
