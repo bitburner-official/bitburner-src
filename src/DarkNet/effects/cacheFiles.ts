@@ -8,10 +8,9 @@ import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { initStockMarket, isStockMarketInitialized } from "../../StockMarket/StockMarket";
 import { cachePrefixes } from "../models/dictionaryData";
-import type { Result } from "../../types";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
-import type { CacheResult } from "@nsdefs";
+import type { CacheResult, Result } from "@nsdefs";
 
 export const addCacheToServer: (
   server: DarknetServer,
