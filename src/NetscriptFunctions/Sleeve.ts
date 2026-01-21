@@ -15,6 +15,17 @@ import { Factions } from "../Faction/Factions";
 import { SleeveWorkType } from "../PersonObjects/Sleeve/Work/Work";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 import { Crimes } from "../Crime/Crimes";
+import {
+  getSleeveCost,
+  purchaseSleeve,
+  purchaseSleeveMemoryUpgrade,
+} from "../PersonObjects/Sleeve/SleeveCovenantPurchases";
+
+export const checkBitNodeRequirement = function (ctx: NetscriptContext) {
+  if (Player.bitNodeN !== 10) {
+    throw helpers.errorMessage(ctx, "You must be in BitNode 10 to use this API.");
+  }
+};
 
 export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
   /**
@@ -289,6 +300,36 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
         }
       }
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
+    },
+    purchaseSleeve: (ctx) => () => {
+      checkBitNodeRequirement(ctx);
+      const result = purchaseSleeve();
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
+      }
+      return result;
+    },
+    upgradeMemory: (ctx) => (_sleeveNumber, _amount) => {
+      checkBitNodeRequirement(ctx);
+      const amount = helpers.positiveInteger(ctx, "amount", _amount);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
+      checkSleeveNumber(ctx, sleeveNumber);
+      const result = purchaseSleeveMemoryUpgrade(Player.sleeves[sleeveNumber], amount);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
+      }
+      return result;
+    },
+    getSleeveCost: (ctx) => () => {
+      checkSleeveAPIAccess(ctx);
+      return getSleeveCost(Player.sleevesFromCovenant);
+    },
+    getMemoryUpgradeCost: (ctx) => (_sleeveNumber, _amount) => {
+      checkSleeveAPIAccess(ctx);
+      const amount = helpers.positiveInteger(ctx, "amount", _amount);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
+      checkSleeveNumber(ctx, sleeveNumber);
+      return Player.sleeves[sleeveNumber].getMemoryUpgradeCost(amount);
     },
   };
 

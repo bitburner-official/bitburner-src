@@ -1,7 +1,6 @@
 // React Component for displaying an Division's overview information
 // (top-left panel in the Division UI)
 import React, { useState } from "react";
-import { MathJax } from "better-react-mathjax";
 
 import { IndustryType } from "@enums";
 import { hireAdVert } from "../Actions";
@@ -23,6 +22,8 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import HelpIcon from "@mui/icons-material/Help";
 import Box from "@mui/material/Box";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 function MakeProductButton(): React.ReactElement {
   const corp = useCorporation();
@@ -132,8 +133,11 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
           <>
             <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
             <br />
-            <MathJax>{`\\(\\text{${division.industry} Industry: }\\alpha = ${division.advertisingFactor}\\)`}</MathJax>
-            <MathJax>{`\\(\\text{multiplier} = \\left((\\text{awareness}+1)^{\\alpha} \\times (\\text{popularity}+1)^{\\alpha} \\times \\frac{\\text{popularity}+0.001}{\\text{awareness}}\\right)^{0.85}\\)`}</MathJax>
+            <Typography>
+              {division.industry} Industry: 𝞪 = {division.advertisingFactor}
+            </Typography>
+            <br />
+            <MathNotationOutput notation={MathNotation.CorpAdvertFactor} />
             <br />
             <StatsTable
               rows={[

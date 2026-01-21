@@ -672,4 +672,52 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.TheSecretWar,
     text: <Typography></Typography>,
   }),
+  [LiteratureName.ABriefHistoryOfTranshumanism]: new Literature({
+    title: "A Brief History of Transhumanism",
+    filename: LiteratureName.ABriefHistoryOfTranshumanism,
+    text: (
+      <Typography>
+        Human augmentation has come a long way since the first prosthetics and implants. Now any and all parts of the
+        human body are able to be improved by technology: strength, speed, perception, intelligence. A large variety of
+        powerful augmentations have been developed, but for most they may as well not exist. How did things end up like
+        this?
+        <br />
+        <br />
+        Part of the answer is, unfortunately, that the exact technology that has allowed us to come so far in human
+        augmentation is also responsible for its great expense and exclusivity.
+        <br />
+        The early days of human augmentation were plagued with issues. Immunosuppressants were needed to keep people's
+        bodies from rejecting the foreign bodies being implanted, with the body constantly trying to "restore" itself to
+        its natural state. On top of that, with the messy nature of biology any replacement for a natural organ would
+        fall short of full functionality. The skeleton doesn't just provide structural support and anchors for muscles;
+        it also helps produce the blood in your body in the marrow. Even the fat in the body is a living organ that
+        produces hormones helping to regulate its activity.
+        <br />
+        <br />
+        Thus, the process was limited by the capacity of the human body to accept and deal with these changes. Biology
+        is redundant and flexible, so replacing a few bones won't impact the body's functioning too badly. But every
+        addition and change would add up, ultimately severely limiting the body's capacity for augmentation.
+        <br />
+        <br />
+        Ultimately it was {CompanyName.VitaLife} who found a way around this limitation, though only at great expense...
+        They discovered that by using a radical new form of gene therapy to reshape a person's body to not only
+        accommodate but integrate the augmentations into their body at a cellular level, they could completely eliminate
+        the side-effects of augmenting.
+        <br />
+        <br />
+        The downside, of course, is the extreme expense and complexity of the process. Not only must each augment be
+        tailored for its intended recipient and a custom genetic therapy program developed, but to truly avoid any
+        side-effects this program must take into account the interactions between augmentations when multiple are
+        installed. The combinatoric explosion in complexity leads to exponentially increasing costs when more than one
+        augment is installed at the same time. Despite this most still prefer to install as many as possible at once,
+        because in addition the radical transformation their body undergoes leaves them relearning to use their body for
+        weeks or even months afterward.
+        <br />
+        <br />
+        In the end humanity is left with the theoretical capacity to transform themselves to the limits of their
+        imagininations, but the practical reality that the expense of even basic augmentations is beyond 95% of the
+        population.
+      </Typography>
+    ),
+  }),
 };

@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { Infiltration as NetscriptInfiltation, InfiltrationLocation } from "@nsdefs";
+import type { Infiltration as NetscriptInfiltation, InfiltrationLocation } from "@nsdefs";
 import { FactionName, LocationName } from "@enums";
 import { Location } from "../Locations/Location";
 import { Locations } from "../Locations/Locations";

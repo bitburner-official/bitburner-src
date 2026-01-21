@@ -1,4 +1,5 @@
 import { filterTruthy } from "../../utils/helpers/ArrayHelpers";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes, removeBracketsFromArrayString, removeQuotesFromString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
@@ -47,7 +48,7 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
 
       return [digits, target];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const num = data[0];
       const target = data[1];
 
@@ -85,6 +86,20 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
 
       const result: string[] = [];
       helper(result, "", num, target, 0, 0, 0);
+
+      return result;
+    },
+    solver: (data, answer) => {
+      const result = findAllValidMathExpressions[CodingContractName.FindAllValidMathExpressions].getAnswer(data);
+
+      if (result === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.FindAllValidMathExpressions} contract. Data: ${data}`,
+          ),
+        );
+        return false;
+      }
 
       if (result.length !== answer.length) return false;
 

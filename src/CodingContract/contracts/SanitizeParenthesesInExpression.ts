@@ -1,3 +1,4 @@
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes, removeBracketsFromArrayString, removeQuotesFromString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
@@ -45,7 +46,7 @@ export const sanitizeParenthesesInExpression: Pick<
 
       return chars.join("");
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       let left = 0;
       let right = 0;
       const res: string[] = [];
@@ -93,6 +94,20 @@ export const sanitizeParenthesesInExpression: Pick<
       }
 
       dfs(0, 0, left, right, data, "", res);
+
+      return res;
+    },
+    solver: (data, answer) => {
+      const res = sanitizeParenthesesInExpression[CodingContractName.SanitizeParenthesesInExpression].getAnswer(data);
+
+      if (res === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.SanitizeParenthesesInExpression} contract. Data: ${data}`,
+          ),
+        );
+        return false;
+      }
 
       if (res.length !== answer.length) return false;
       return res.every((sol) => answer.includes(sol));

@@ -25,43 +25,61 @@ Total experience is increased in these cases:
 - Hire a new employee. Each new employee increases total experience by `getRandomInt(50, 100)`.
 - In the START state. Gain per cycle:
 
-$$TotalExperienceGain = 0.0015\ast(TotalEmployees - UnassignedEmployees + InternEmployees\ast 9)$$
+$$
+TotalExperienceGain = 0.0015\ast(TotalEmployees - UnassignedEmployees + InternEmployees\ast 9)
+$$
 
 - If an office has 100 employees and all employees are assigned to non-intern positions, it gains 0.15 experience/cycle. It's 54 experience/hour without bonus time.
 
 Salary per cycle:
 
-$$Salary = 3\ast TotalEmployees\ast\left(AvgIntelligence+AvgCharisma+AvgCreativity+AvgEfficiency+\frac{TotalExperience}{TotalEmployees}\right)$$
+$$
+Salary = 3\ast TotalEmployees\ast\left(AvgIntelligence+AvgCharisma+AvgCreativity+AvgEfficiency+\frac{TotalExperience}{TotalEmployees}\right)
+$$
 
 ## Upgrade
 
 Upgrade cost:
 
-$$UpgradeCost = BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast{1.09}^{\frac{CurrentSize}{3}}$$
+$$
+UpgradeCost = BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast{1.09}^{\frac{CurrentSize}{3}}
+$$
 
 Upgrade cost from size 3 to size n:
 
-$$UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 3}^{n - 1}{BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast{1.09}^{\frac{k}{3}}}$$
+$$
+UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 3}^{n - 1}{BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast{1.09}^{\frac{k}{3}}}
+$$
 
 ≡
 
-$$UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 3}^{n - 1}{BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast\left( \sqrt[3]{1.09} \right)^{k}}$$
+$$
+UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 3}^{n - 1}{BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast\left( \sqrt[3]{1.09} \right)^{k}}
+$$
 
 ≡
 
-$$UpgradeCost_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast\left( \frac{\left( \sqrt[3]{1.09} \right)^{n} - 1.09}{\sqrt[3]{1.09} - 1} \right)$$
+$$
+UpgradeCost_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast\left( \frac{\left( \sqrt[3]{1.09} \right)^{n} - 1.09}{\sqrt[3]{1.09} - 1} \right)
+$$
 
 ≡
 
-$$UpgradeCost_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{{1.09}^{\frac{n}{3}} - 1.09}{0.09} \right)$$
+$$
+UpgradeCost_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{{1.09}^{\frac{n}{3}} - 1.09}{0.09} \right)
+$$
 
 Upgrade cost size a to size b:
 
-$$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{1.09}^{\frac{b}{3}} - {1.09}^{\frac{a}{3}}}{0.09} \right)$$
+$$
+UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{1.09}^{\frac{b}{3}} - {1.09}^{\frac{a}{3}}}{0.09} \right)
+$$
 
 Maximum size with a given `MaxCost`:
 
-$$MaxSize = 3\ast\log_{1.09}\left( MaxCost\ast\frac{0.09}{BasePrice} + {1.09}^{\frac{CurrentSize}{3}} \right)$$
+$$
+MaxSize = 3\ast\log_{1.09}\left( MaxCost\ast\frac{0.09}{BasePrice} + {1.09}^{\frac{CurrentSize}{3}} \right)
+$$
 
 ## Energy and morale
 
@@ -71,17 +89,25 @@ They start dropping when your office's number of employees is greater than or eq
 
 PerfMult is a multiplier that increases/decreases energy/morale.
 
-$$InternMultiplier = 0.002\ast Min\left(\frac{1}{9},\frac{InternEmployees}{TotalEmployees}-\frac{1}{9}\right)\ast 9$$
+$$
+InternMultiplier = 0.002\ast Min\left(\frac{1}{9},\frac{InternEmployees}{TotalEmployees}-\frac{1}{9}\right)\ast 9
+$$
 
-$$PenaltyMultiplier = \begin{cases}0, & (CorpFunds > 0) \vee (DivisionLastCycleRevenue > DivisionLastCycleExpenses) \newline 0.001, & (CorpFunds < 0) \land (DivisionLastCycleRevenue < DivisionLastCycleExpenses)\end{cases}$$
+$$
+PenaltyMultiplier = \begin{cases}0, & (CorpFunds > 0) \vee (DivisionLastCycleRevenue > DivisionLastCycleExpenses) \newline 0.001, & (CorpFunds < 0) \land (DivisionLastCycleRevenue < DivisionLastCycleExpenses)\end{cases}
+$$
 
-$$PerfMult = \begin{cases}1.002, & TotalEmployees < 9 \newline 1 + InternMultiplier - PenaltyMultiplier, & TotalEmployees \geq 9\end{cases}$$
+$$
+PerfMult = \begin{cases}1.002, & TotalEmployees < 9 \newline 1 + InternMultiplier - PenaltyMultiplier, & TotalEmployees \geq 9\end{cases}
+$$
 
 Buying tea gives a flat +2 to energy. It costs 500e3 per employee.
 
 When throwing party, `PartyMult` is calculated. It's used in the calculation of morale in the next cycle.
 
-$$PartyMult = 1 + \frac{PartyCostPerEmployee}{10^{7}}$$
+$$
+PartyMult = 1 + \frac{PartyCostPerEmployee}{10^{7}}
+$$
 
 `PartyMult` is not affected by the number of employees. Therefore, you can throw a "big party" (high `PartyCostPerEmployee`) when you have 1 employee at low total cost (due to having only 1 employee), then hire the rest of the employees later.
 
@@ -89,11 +115,15 @@ There is a flat randomized reduction of energy/morale per cycle. It's capped at 
 
 There is a flat increase of morale if `PartyMult` is greater than 1. `PartyMult` is based on `PartyCostPerEmployee`, so this increase is based on `PartyCostPerEmployee`.
 
-$$IncreaseOfMorale = (PartyMult - 1)\ast 10$$
+$$
+IncreaseOfMorale = (PartyMult - 1)\ast 10
+$$
 
 ≡
 
-$$IncreaseOfMorale = \frac{PartyCostPerEmployee}{10^{6}}$$
+$$
+IncreaseOfMorale = \frac{PartyCostPerEmployee}{10^{6}}
+$$
 
 ```typescript
 const reduction = 0.002 * marketCycles;
@@ -120,27 +150,43 @@ Optimal `PartyCostPerEmployee`:
 - The flat randomized reduction is tiny, so we can ignore it.
 - We want to increase `AvgMorale` from `CurrentMorale` to `MaxMorale`:
 
-$$\left( CurrentMorale\ast PerfMult + \frac{PartyCostPerEmployee}{10^{6}} \right)\ast\left( 1 + \frac{PartyCostPerEmployee}{10^{7}} \right) = MaxMorale$$
+$$
+\left( CurrentMorale\ast PerfMult + \frac{PartyCostPerEmployee}{10^{6}} \right)\ast\left( 1 + \frac{PartyCostPerEmployee}{10^{7}} \right) = MaxMorale
+$$
 
 - Define:
 
-$$a = CurrentMorale$$
+$$
+a = CurrentMorale
+$$
 
-$$b = MaxMorale$$
+$$
+b = MaxMorale
+$$
 
-$$k = PerfMult$$
+$$
+k = PerfMult
+$$
 
-$$x = PartyCostPerEmployee$$
+$$
+x = PartyCostPerEmployee
+$$
 
 - We have equation:
 
-$$\left( a\ast k + \frac{x}{10^{6}} \right)\ast\left( 1 + \frac{x}{10^{7}} \right) = b$$
+$$
+\left( a\ast k + \frac{x}{10^{6}} \right)\ast\left( 1 + \frac{x}{10^{7}} \right) = b
+$$
 
 ≡
 
-$$x_{1} = - 500000\ast\left( \sqrt{(a\ast k - 10)^{2} + 40\ast b} + a\ast k + 10 \right)$$
+$$
+x_{1} = - 500000\ast\left( \sqrt{(a\ast k - 10)^{2} + 40\ast b} + a\ast k + 10 \right)
+$$
 
-$$x_{2} = 500000\ast\left( \sqrt{(a\ast k - 10)^{2} + 40\ast b} - a\ast k - 10 \right)$$
+$$
+x_{2} = 500000\ast\left( \sqrt{(a\ast k - 10)^{2} + 40\ast b} - a\ast k - 10 \right)
+$$
 
 - $x_{1}$ is always negative. Therefore, $x_{2}$ is the only solution.
 
@@ -167,11 +213,15 @@ Formulas:
 - Calculate multipliers of Intelligence, Charisma, Creativity, and Efficiency. They are the product of average values, upgrade benefit and research benefit.
 - Production base:
 
-$$ProductionBase = AvgMorale\ast AvgEnergy\ast 10^{-4}$$
+$$
+ProductionBase = AvgMorale\ast AvgEnergy\ast 10^{-4}
+$$
 
 - Experience:
 
-$$Exp = \frac{TotalExperience}{TotalEmployees}$$
+$$
+Exp = \frac{TotalExperience}{TotalEmployees}
+$$
 
 - Production multiplier:
   - Operations: $$ProductionMultiplier = 0.6\ast IntelligenceMult + 0.1\ast CharismaMult + Exp + 0.5\ast CreativityMult + EfficiencyMult$$
@@ -182,7 +232,9 @@ $$Exp = \frac{TotalExperience}{TotalEmployees}$$
 - $EmployeesJobCount = office.employeeJobs[JobName]$
 - Employee production by job:
 
-$$EmployeeProductionByJob = EmployeesJobCount\ast ProductionMultiplier\ast ProductionBase$$
+$$
+EmployeeProductionByJob = EmployeesJobCount\ast ProductionMultiplier\ast ProductionBase
+$$
 
 ## Calculate employee's stat
 

@@ -5,9 +5,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { makeStyles } from "tss-react/mui";
 
 import { Player } from "@player";
-import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
+import {
+  MaxSleevesFromCovenant,
+  recalculateNumberOfOwnedSleeves,
+} from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
 import { validBitNodes } from "../../BitNode/Constants";
 import { DeleteServer, GetAllServers } from "../../Server/AllServers";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
@@ -48,7 +50,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
         Player.sourceFiles.delete(sfN);
         Player.bitNodeOptions.sourceFileOverrides.delete(sfN);
         if (sfN === 10) {
-          Sleeve.recalculateNumOwned();
+          recalculateNumberOfOwnedSleeves();
         }
         parentRerender();
         return;
@@ -56,7 +58,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
       Player.sourceFiles.set(sfN, sfLvl);
       Player.bitNodeOptions.sourceFileOverrides.set(sfN, sfLvl);
       if (sfN === 10) {
-        Sleeve.recalculateNumOwned();
+        recalculateNumberOfOwnedSleeves();
       }
       parentRerender();
     },
@@ -69,14 +71,14 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   const addSleeve = useCallback(() => {
     if (Player.sleevesFromCovenant >= 10) return;
     Player.sleevesFromCovenant += 1;
-    Sleeve.recalculateNumOwned();
+    recalculateNumberOfOwnedSleeves();
     parentRerender();
   }, [parentRerender]);
 
   const removeSleeve = useCallback(() => {
     if (Player.sleevesFromCovenant <= 0) return;
     Player.sleevesFromCovenant -= 1;
-    Sleeve.recalculateNumOwned();
+    recalculateNumberOfOwnedSleeves();
     parentRerender();
   }, [parentRerender]);
 

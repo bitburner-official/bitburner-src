@@ -3,6 +3,13 @@
  */
 type _ValueOf<T> = T[keyof T];
 
+/** @public */
+type SuccessResult<T extends object> = { success: true; message?: string } & T;
+/** @public */
+type FailureResult = { success: false; message: string };
+/** @public */
+type Result<T extends object = object> = SuccessResult<T> | FailureResult;
+
 /** All netscript definitions */
 
 /**
@@ -2659,7 +2666,7 @@ export interface Singularity {
    * RAM cost: 5 GB * 16/4/1
    *
    *
-   * This function will automatically install your Augmentations, resetting the game as usual. If you do not own uninstalled Augmentations then the game will not reset.
+   * This function will automatically install your Augmentations, resetting the game as usual. If you do not own any queued Augmentations then the game will not reset.
    *
    * @param cbScript - This is a script that will automatically be run after Augmentations are installed (after the reset). This script will be run with no arguments and 1 thread. It must be located on your home computer.
    */
@@ -5429,6 +5436,51 @@ export interface Sleeve {
     action: BladeburnerActionTypeForSleeve,
     contract?: BladeburnerContractName,
   ): boolean;
+
+  /**
+   * Purchase a sleeve. You must be in BitNode 10 to use this API.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @returns Action result
+   */
+  purchaseSleeve(): Result;
+
+  /**
+   * Upgrade memory of a sleeve. You must be in BitNode 10 to use this API.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param sleeveNumber - Index of the sleeve.
+   * @param amount - Number of upgrades. Must be a positive integer.
+   * @returns Action result
+   */
+  upgradeMemory(sleeveNumber: number, amount: number): Result;
+
+  /**
+   * Get the cost of the next sleeve.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @returns Cost of the next sleeve. Return Infinity if you reach the maximum number of purchasable sleeves.
+   */
+  getSleeveCost(): number;
+
+  /**
+   * Get the cost of memory upgrades.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param sleeveNumber - Index of the sleeve.
+   * @param amount - Number of upgrades. Must be a positive integer.
+   * @returns Cost of the upgrades. Return Infinity if the current memory plus the amount of upgrades is greater than
+   * 100.
+   */
+  getMemoryUpgradeCost(sleeveNumber: number, amount: number): number;
 }
 
 /**

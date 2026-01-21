@@ -615,6 +615,10 @@ export class Terminal {
         ++contract.tries;
         if (contract.tries >= contract.getMaxNumTries()) {
           this.error("Contract FAILED - Contract is now self-destructing", stdIO);
+          const solution = contract.getAnswer();
+          if (solution !== null) {
+            this.error(`Coding Contract solution was: ${solution}`, stdIO);
+          }
           server.removeContract(contract);
         } else {
           this.error(`Contract FAILED - ${contract.getMaxNumTries() - contract.tries} tries remaining`, stdIO);
