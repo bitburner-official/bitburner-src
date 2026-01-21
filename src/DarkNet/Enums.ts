@@ -27,7 +27,6 @@ export const ModelIds = {
   CommonPasswordDictionary: "TopPass",
   EUCountryDictionary: "EuroZone Free",
   Yesn_t: "NIL",
-  Synchronize: "",
   BinaryEncodedFeedback: "110100100",
   SpiceLevel: "RateMyPix.Auth",
   ConvertToBase10: "OctantVoxel",
