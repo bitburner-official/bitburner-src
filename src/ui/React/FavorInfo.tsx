@@ -1,11 +1,11 @@
 import React from "react";
-import { MathJax } from "better-react-mathjax";
-
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { Favor } from "../../ui/React/Favor";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 export function FavorInfo({ favor, boldLabel }: { favor: number; boldLabel?: boolean }): React.ReactElement {
   return (
@@ -17,8 +17,8 @@ export function FavorInfo({ favor, boldLabel }: { favor: number; boldLabel?: boo
             favor is gained whenever you install an Augmentation. The amount of favor you gain depends on the total
             amount of reputation you earned with this faction across all resets.
           </Typography>
-          <MathJax>{"\\(\\huge{r = reputation}\\)"}</MathJax>
-          <MathJax>{"\\(\\huge{\\Delta r = \\Delta r \\times \\frac{100+favor}{100}}\\)"}</MathJax>
+          <Typography style={{ fontSize: "2rem" }}>r = Reputation gain</Typography>
+          <MathNotationOutput notation={MathNotation.FavorBonus} />
         </>
       }
     >

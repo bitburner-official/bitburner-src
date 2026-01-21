@@ -33,7 +33,9 @@ Cycle's valuation:
 
 - AssetDelta:
 
-$$AssetDelta = \frac{TotalAssets - PreviousTotalAssets}{10}$$
+$$
+AssetDelta = \frac{TotalAssets - PreviousTotalAssets}{10}
+$$
 
 - Pre-IPO:
   - If `AssetDelta` is greater than 0, it's used for calculating valuation.
@@ -45,7 +47,9 @@ $$AssetDelta = \frac{TotalAssets - PreviousTotalAssets}{10}$$
     $$AssetDelta = AssetDelta\ast(1 - DividendRate)$$
   - Formula:
 
-$$Valuation = (Funds + AssetDelta\ast 85000)\ast\left(\sqrt[12]{1.1}\right)^{NumberOfOfficesAndWarehouses}$$
+$$
+Valuation = (Funds + AssetDelta\ast 85000)\ast\left(\sqrt[12]{1.1}\right)^{NumberOfOfficesAndWarehouses}
+$$
 
 - Minimum value of valuation is $10^{10}$.
 - Valuation is multiplied by `CorporationValuation`. Many BitNodes cripple Corporation via this multiplier.
@@ -65,7 +69,9 @@ Each round has its own `FundingRoundShares` and `FundingRoundMultiplier`.
 
 Formula:
 
-$$Offer = CorporationValuation\ast FundingRoundShares\ast FundingRoundMultiplier$$
+$$
+Offer = CorporationValuation\ast FundingRoundShares\ast FundingRoundMultiplier
+$$
 
 Analyses:
 
@@ -79,7 +85,9 @@ Analyses:
 
 Your dividend is negatively affected by a penalty modifier called `TributeModifier`. `TributeModifier` depends on `CorporationSoftcap`. In BN3, `CorporationSoftcap` is 1.
 
-$$TributeModifier = 1.15 - CorporationSoftcap$$
+$$
+TributeModifier = 1.15 - CorporationSoftcap
+$$
 
 `ShadyAccounting` reduces `TributeModifier` by 0.05.
 
@@ -87,13 +95,19 @@ $$TributeModifier = 1.15 - CorporationSoftcap$$
 
 Formula:
 
-$$TotalDividends = DividendRate\ast(Revenue - Expenses)\ast 10$$
+$$
+TotalDividends = DividendRate\ast(Revenue - Expenses)\ast 10
+$$
 
-$$Dividend = \left(OwnedShares\ast\frac{TotalDividends}{TotalShares}\right)^{1 - TributeModifier}$$
+$$
+Dividend = \left(OwnedShares\ast\frac{TotalDividends}{TotalShares}\right)^{1 - TributeModifier}
+$$
 
 Retained earning:
 
-$$RetainedEarning = (1 - DividendRate)\ast(Revenue - Expenses)\ast 10$$
+$$
+RetainedEarning = (1 - DividendRate)\ast(Revenue - Expenses)\ast 10
+$$
 
 Dividend is added to player's money. Retained earning is added to corporation's funds. This means if we increase `DividendRate`, corporation's valuation is dwindled.
 
@@ -117,15 +131,21 @@ If your corporation is self-funded and you sell CEO position, you only need 50b 
 
 `TargetSharePrice`:
 
-$$OwnershipPercentage = \frac{OwnedShares}{TotalShares}$$
+$$
+OwnershipPercentage = \frac{OwnedShares}{TotalShares}
+$$
 
-$$TargetSharePrice = \frac{CorporationValuation*\left(0.5+\sqrt{OwnershipPercentage}\right)}{TotalShares}$$
+$$
+TargetSharePrice = \frac{CorporationValuation*\left(0.5+\sqrt{OwnershipPercentage}\right)}{TotalShares}
+$$
 
 When corporation goes public, the initial share price is `TargetSharePrice`.
 
 Share price is updated in START state.
 
-$$SharePrice = \begin{cases} SharePrice\ast(1 + Math.random()\ast 0.01), & SharePrice \leq TargetSharePrice \newline SharePrice\ast(1 - Math.random()\ast 0.01), & SharePrice > TargetSharePrice\end{cases}$$
+$$
+SharePrice = \begin{cases} SharePrice\ast(1 + Math.random()\ast 0.01), & SharePrice \leq TargetSharePrice \newline SharePrice\ast(1 - Math.random()\ast 0.01), & SharePrice > TargetSharePrice\end{cases}
+$$
 
 Minimum share price is 0.01.
 
@@ -135,17 +155,28 @@ Issue new shares:
 - The number of new shares issued must be a multiple of 10 million.
 - New share price:
 
-$$NewOwnershipPercentage = \frac{OwnedShares}{TotalShares+NewShares}$$
+$$
+NewOwnershipPercentage = \frac{OwnedShares}{TotalShares+NewShares}
+$$
 
-$$NewSharePrice = \frac{CorporationValuation\ast\left(0.5+\sqrt{NewOwnershipPercentage}\right)}{TotalShares}$$
+$$
+NewSharePrice = \frac{CorporationValuation\ast\left(0.5+\sqrt{NewOwnershipPercentage}\right)}{TotalShares}
+$$
 
 - Profit:
 
-$$Profit = {NewShares\ast(SharePrice + NewSharePrice)}\ast{0.5}$$
+$$
+Profit = {NewShares\ast(SharePrice + NewSharePrice)}\ast{0.5}
+$$
 
 - Profit is added to corporation's funds.
 - `DefaultCooldown` is 4 hours.
-- Cooldown: $$Cooldown = DefaultCooldown\ast\frac{TotalShares}{10^{9}}$$
+- Cooldown:
+
+$$
+Cooldown = DefaultCooldown\ast\frac{TotalShares}{10^{9}}
+$$
+
 - Part of the new shares are added to `InvestorShares`. The remaining ones are added to `IssuedShares`.
   - `MaxPrivateShares`:
     $$MaxPrivateShares = {NewShares}\ast{0.5}\ast\frac{InvestorShares}{TotalShares}$$
@@ -174,8 +205,14 @@ Sold/bought back shares are processed in multiple "iterations".
 - Number of shares processed each iteration is shareSalesUntilPriceUpdate. Default value is $10^6$.
 - Share price is recalculated each iteration.
 
-$$OwnershipPercentage = \frac{OwnedShares - ProcessedShares}{TotalShares}$$
+$$
+OwnershipPercentage = \frac{OwnedShares - ProcessedShares}{TotalShares}
+$$
 
-$$TargetSharePrice = \frac{CorporationValuation\ast\left(0.5 + \sqrt{OwnershipPercentage}\right)}{TotalShares}$$
+$$
+TargetSharePrice = \frac{CorporationValuation\ast\left(0.5 + \sqrt{OwnershipPercentage}\right)}{TotalShares}
+$$
 
-$$SharePrice = \begin{cases} SharePrice\ast 1.005, SharePrice \leq TargetSharePrice \newline SharePrice\ast 0.995, SharePrice > TargetSharePrice\end{cases}$$
+$$
+SharePrice = \begin{cases} SharePrice\ast 1.005, SharePrice \leq TargetSharePrice \newline SharePrice\ast 0.995, SharePrice > TargetSharePrice\end{cases}
+$$

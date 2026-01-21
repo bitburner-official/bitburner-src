@@ -48,7 +48,9 @@ The optimal export string is `(IPROD+IINV/10)*(-1)`. For example: export "Chemic
   - IINV = 700
 - "Export" is expressed by number of units per second, so we want to export:
 
-$$\left(100-\frac{700}{10}\right)=\left(-100+\frac{700}{10}\right)\ast(-1)=\left(IPROD+\frac{IINV}{10}\right)\ast(-1)$$
+$$
+\left(100-\frac{700}{10}\right)=\left(-100+\frac{700}{10}\right)\ast(-1)=\left(IPROD+\frac{IINV}{10}\right)\ast(-1)
+$$
 
 Export route is FIFO. You can remove an export route by using `cancelExportMaterial` NS API.
 

@@ -40,7 +40,9 @@ During the START state, the game decreases `demand` and increases `competition` 
 
 - Amount of change:
 
-$$AmountOfChange = Random(0,3)*0.0004$$
+$$
+AmountOfChange = Random(0,3)*0.0004
+$$
 
 - This amount is multiplied by 3 if the industry is Pharmaceutical, Software or Robotics.
 

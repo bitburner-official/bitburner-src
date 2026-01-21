@@ -29,39 +29,57 @@ Normal upgrade's formulas:
 
 - Upgrade cost:
 
-$$UpgradeCost = BasePrice\ast{PriceMult}^{CurrentLevel}$$
+$$
+UpgradeCost = BasePrice\ast{PriceMult}^{CurrentLevel}
+$$
 
 - Upgrade cost from level 0 to level n:
 
-$$UpgradeCost_{From\ 0\ to\ n} = \sum_{k = 0}^{n - 1}{BasePrice\ast {PriceMult}^k}$$
+$$
+UpgradeCost_{From\ 0\ to\ n} = \sum_{k = 0}^{n - 1}{BasePrice\ast {PriceMult}^k}
+$$
 
 ≡
 
-$$UpgradeCost_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{1 - {PriceMult}^{n}}{1 - PriceMult} \right)$$
+$$
+UpgradeCost_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{1 - {PriceMult}^{n}}{1 - PriceMult} \right)
+$$
 
 ≡
 
-$$UpgradeCost_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{{PriceMult}^{n} - 1}{PriceMult - 1} \right)$$
+$$
+UpgradeCost_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{{PriceMult}^{n} - 1}{PriceMult - 1} \right)
+$$
 
 - Upgrade cost level a to level b:
 
-$$UpgradeCost_{From\ a\ to\ b} = \sum_{k = 0}^{b - 1}{BasePrice\ast {PriceMult}^k} - \sum_{k = 0}^{a - 1}{BasePrice\ast {PriceMult}^k}$$
+$$
+UpgradeCost_{From\ a\ to\ b} = \sum_{k = 0}^{b - 1}{BasePrice\ast {PriceMult}^k} - \sum_{k = 0}^{a - 1}{BasePrice\ast {PriceMult}^k}
+$$
 
 ≡
 
-$$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - 1}{PriceMult - 1} \right) - BasePrice\ast\left( \frac{{PriceMult}^{a} - 1}{PriceMult - 1} \right)$$
+$$
+UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - 1}{PriceMult - 1} \right) - BasePrice\ast\left( \frac{{PriceMult}^{a} - 1}{PriceMult - 1} \right)
+$$
 
 ≡
 
-$$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - {PriceMult}^{a}}{PriceMult - 1} \right)$$
+$$
+UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - {PriceMult}^{a}}{PriceMult - 1} \right)
+$$
 
 - Maximum upgrade level with a given `MaxCost`:
 
-$$MaxUpgradeLevel = \log_{PriceMult}\left( MaxCost\ast\frac{PriceMult - 1}{BasePrice} + (PriceMult)^{CurrentLevel} \right)$$
+$$
+MaxUpgradeLevel = \log_{PriceMult}\left( MaxCost\ast\frac{PriceMult - 1}{BasePrice} + (PriceMult)^{CurrentLevel} \right)
+$$
 
 - Benefit: All benefits are multipliers. `BaseBenefit` is 1.
 
-$$Benefit = BaseBenefit + Benefit\ast CurrentLevel$$
+$$
+Benefit = BaseBenefit + Benefit\ast CurrentLevel
+$$
 
 &nbsp;  
 Normal upgrades:
@@ -169,6 +187,8 @@ RP gain rate:
 - RP gain per city per state:
   - `RnDProduction = office.employeeProductionByJob["Research & Development"]`
 
-$$RPGain = 0.004\ast(RnDProduction)^{0.5}\ast UpgradeMultiplier\ast ResearchMultiplier$$
+$$
+RPGain = 0.004\ast(RnDProduction)^{0.5}\ast UpgradeMultiplier\ast ResearchMultiplier
+$$
 
 - Industry's `ScienceFactor` does not affect RP gain rate.

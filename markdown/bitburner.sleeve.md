@@ -31,6 +31,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[getMemoryUpgradeCost(sleeveNumber, amount)](./bitburner.sleeve.getmemoryupgradecost.md)
+
+
+</td><td>
+
+Get the cost of memory upgrades.
+
+
+</td></tr>
+<tr><td>
+
 [getNumSleeves()](./bitburner.sleeve.getnumsleeves.md)
 
 
@@ -86,6 +97,17 @@ Get augmentations installed on a sleeve.
 </td></tr>
 <tr><td>
 
+[getSleeveCost()](./bitburner.sleeve.getsleevecost.md)
+
+
+</td><td>
+
+Get the cost of the next sleeve.
+
+
+</td></tr>
+<tr><td>
+
 [getSleevePurchasableAugs(sleeveNumber)](./bitburner.sleeve.getsleevepurchasableaugs.md)
 
 
@@ -103,6 +125,17 @@ List purchasable augs for a sleeve.
 </td><td>
 
 Get task of a sleeve.
+
+
+</td></tr>
+<tr><td>
+
+[purchaseSleeve()](./bitburner.sleeve.purchasesleeve.md)
+
+
+</td><td>
+
+Purchase a sleeve. You must be in BitNode 10 to use this API.
 
 
 </td></tr>
@@ -224,6 +257,17 @@ Set a sleeve to take a class at a university.
 </td><td>
 
 Make a sleeve travel to another city. The cost for using this function is the same as for a player.
+
+
+</td></tr>
+<tr><td>
+
+[upgradeMemory(sleeveNumber, amount)](./bitburner.sleeve.upgradememory.md)
+
+
+</td><td>
+
+Upgrade memory of a sleeve. You must be in BitNode 10 to use this API.
 
 
 </td></tr>

@@ -22,7 +22,7 @@ export const totalWaysToSum: Pick<
     generate: (): number => {
       return getRandomIntInclusive(8, 100);
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       if (typeof data !== "number") throw new Error("solver expected number");
       const ways: number[] = [1];
       ways.length = data + 1;
@@ -33,7 +33,10 @@ export const totalWaysToSum: Pick<
         }
       }
 
-      return ways[data] === answer;
+      return ways[data];
+    },
+    solver: (data, answer) => {
+      return totalWaysToSum[CodingContractName.TotalWaysToSum].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
@@ -66,7 +69,7 @@ export const totalWaysToSum: Pick<
       }
       return [n, s];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       // https://www.geeksforgeeks.org/coin-change-dp-7/?ref=lbp
       const n = data[0];
       const s = data[1];
@@ -78,7 +81,10 @@ export const totalWaysToSum: Pick<
           ways[j] += ways[j - s[i]];
         }
       }
-      return ways[n] === answer;
+      return ways[n];
+    },
+    solver: (data, answer) => {
+      return totalWaysToSum[CodingContractName.TotalWaysToSumII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

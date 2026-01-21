@@ -29,7 +29,7 @@ export const uniquePathsInAGrid: Pick<
 
       return [numRows, numColumns];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const n: number = data[0]; // Number of rows
       const m: number = data[1]; // Number of columns
       const currentRow: number[] = [];
@@ -44,7 +44,10 @@ export const uniquePathsInAGrid: Pick<
         }
       }
 
-      return currentRow[n - 1] === answer;
+      return currentRow[n - 1];
+    },
+    solver: (data, answer) => {
+      return uniquePathsInAGrid[CodingContractName.UniquePathsInAGridI].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
@@ -97,7 +100,7 @@ export const uniquePathsInAGrid: Pick<
 
       return grid;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const obstacleGrid: number[][] = [];
       obstacleGrid.length = data.length;
       for (let i = 0; i < obstacleGrid.length; ++i) {
@@ -116,7 +119,10 @@ export const uniquePathsInAGrid: Pick<
         }
       }
 
-      return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1] === answer;
+      return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1];
+    },
+    solver: (data, answer) => {
+      return uniquePathsInAGrid[CodingContractName.UniquePathsInAGridII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
