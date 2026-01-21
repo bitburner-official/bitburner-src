@@ -14,11 +14,13 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   const initialStdIn = stdIO.getAllCurrentStdin();
-  const stdinIsClosed = stdIO.stdin?.deref()?.isClosed ?? true;
+  const stdin = stdIO.stdin?.deref();
+  const stdinIsClosed = !stdin || (stdin.isClosed && stdin.empty());
+  const hasStdOut = !!stdIO.stdout;
   let initialStdOut = "";
 
-  // If only a single file is being catted, and no stdin is being used, show the file dialog that cat has always used
-  const isBasicFileCat = args.length === 1 && args[0] !== "-" && !initialStdIn.length && stdinIsClosed;
+  // If only a single file is being catted, and no stdin/stdout redirects are being used, show the file dialog that cat has always used
+  const isBasicFileCat = args.length === 1 && args[0] !== "-" && !initialStdIn.length && stdinIsClosed && !hasStdOut;
 
   if (args.length === 0 && initialStdIn.length === 0 && stdinIsClosed) {
     return Terminal.error(
@@ -83,7 +85,7 @@ function getFileContents(filename: string, server: BaseServer, stdIO: StdIO, isB
       return showLiterature(path);
     }
     const lit = Literatures[path as LiteratureName];
-    return `${lit.title}\n${stringify(lit.text)}`;
+    return `${lit.title}\n\n${stringify(lit.text)}`;
   }
   Terminal.error(`No file at path ${path}`, stdIO);
 }

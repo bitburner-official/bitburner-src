@@ -1,4 +1,4 @@
-import React from "react";
+import React, { isValidElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
@@ -28,9 +28,11 @@ export function stringify(s: unknown, stripAnsiEscape = false): string {
   } else if (s instanceof RawOutput) {
     // TODO: test
     return stringifyReactElement(s.raw);
+  } else if (isValidElement(s)) {
+    return stringifyReactElement(s);
   } else if (s instanceof HTMLElement) {
     return s.innerText;
-  } else if (s === "string" || typeof s === "number" || typeof s === "boolean") {
+  } else if (typeof s === "string" || typeof s === "number" || typeof s === "boolean") {
     return clean(s.toString(), stripAnsiEscape);
   } else {
     return clean(JSON.stringify(s), stripAnsiEscape);
@@ -40,8 +42,8 @@ export function stringify(s: unknown, stripAnsiEscape = false): string {
 function stringifyReactElement(element: React.ReactNode): string {
   const markup = renderToStaticMarkup(<>{element}</>);
   const div = document.createElement("div");
-  div.innerHTML = markup.replaceAll(">", "> ");
-  return div.textContent ?? div.innerText ?? "";
+  div.innerHTML = markup.replaceAll(">", "> ").replaceAll("<br/>", "\n");
+  return div.innerText ?? div.textContent ?? "";
 }
 
 function clean(str: string, stripAnsiEscape: boolean) {

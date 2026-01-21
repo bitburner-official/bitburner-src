@@ -7,6 +7,8 @@ import { help } from "../commands/help";
 import { Output } from "../OutputTypes";
 import { pluralize } from "../../utils/I18nUtils";
 import { StdIO } from "../StdIO/StdIO";
+import { callOnRead } from "../StdIO/RedirectIO";
+import { stringify } from "../StdIO/utils";
 
 type LineParser = (options: Options, filename: string, line: string, i: number) => ParsedLine;
 
@@ -20,8 +22,7 @@ const WHITE: string = "\x1b[37m";
 
 const ERR = {
   noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
-  noSearchArg:
-    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
+  noSearchArg: `grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server, or pipe input into grep e.g. "echo test | grep t"`,
   badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
   badParameter: (option: string, arg: string) =>
     `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
@@ -31,6 +32,7 @@ const ERR = {
     `grep file output failed: Invalid output file "${path}". Output file path must be a valid text file. (.txt, .json, .css)`,
   truncated: () =>
     `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
+  tooManyInputs: () => `grep argument error. Cannot use both piped input and file arguments simultaneously.`,
 } as const;
 
 type ArgStrings = {
@@ -403,9 +405,11 @@ function grabTerminal(): string[] {
   return Terminal.outputHistory.map((line) => (line as Output).text ?? "");
 }
 
-// TODO-FICO: add support for grep stdin
+// TODO-FICO: add unit tests
 export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
-  if (!args.length) return Terminal.error(ERR.noArgs, stdIO);
+  const stdin = stdIO.stdin?.deref();
+  const noStdinProvided = !stdin || (stdin.isClosed && stdin.empty());
+  if (!args.length && noStdinProvided) return Terminal.error(ERR.noArgs, stdIO);
 
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
   if (options.isHelp) return help(["grep"], server, stdIO);
@@ -419,29 +423,69 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
   if (params.maxMatches && (!nLimit || isNaN(Number(params.maxMatches))))
     return Terminal.error(ERR.badParameter("limit", params.maxMatches), stdIO);
 
+  const stdinContent = stdIO.getAllCurrentStdin();
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
   if (notFiles.length) return Terminal.error(ERR.badArgs(notFiles), stdIO);
-  if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg, stdIO);
+  if (!options.isPipeIn && !options.isSearchAll && !files.length && noStdinProvided)
+    return Terminal.error(ERR.noSearchArg, stdIO);
+  if ((files.length || options.isPipeIn) && stdinContent.length) return Terminal.error(ERR.tooManyInputs(), stdIO);
 
   options.isMultiFile = files.length > 1;
   const outFilePath = checkOutFile(params.outfile, options, server, stdIO);
   if (params.outfile && !outFilePath) return; // associated errors are printed in checkOutFile
 
   try {
-    const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
-    const lineParser = parseLine.bind(null, pattern);
-    const termParser = lineParser.bind(null, options, "Terminal");
-    const fileParser = parseFile.bind(null, lineParser, options);
-    const contentToMatch = options.isPipeIn ? grabTerminal().map(termParser) : files.flatMap(fileParser);
-    const results = new Results(contentToMatch, options, params);
-    const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
-
-    if (options.isPipeIn) files.length = 0;
-    if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern, stdIO);
-    if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
+    applyFilters(options, params, otherArgs, files, server, stdinContent, stdIO);
   } catch (error) {
     console.error(error);
     Terminal.error(`grep processing error: ${error}`, stdIO);
   }
+
+  void callOnRead(stdIO, (data: unknown, stdInOut: StdIO) => {
+    applyFilters(options, params, otherArgs, files, server, stringify(data), stdInOut);
+  });
+}
+
+function applyFilters(
+  options: Options,
+  params: Parameters,
+  otherArgs: string[],
+  files: ContentFile[],
+  server: BaseServer,
+  stdinContent: string,
+  stdIO: StdIO,
+) {
+  const nContext = Math.max(Number(params.preContext), Number(params.context), Number(params.postContext));
+  const nLimit = Number(params.maxMatches);
+  const outFilePath = checkOutFile(params.outfile, options, server, stdIO);
+  const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
+  const contentToMatch = getContentToMatch(pattern, options, files, stdinContent.split("\n"));
+  const results = new Results(contentToMatch, options, params);
+  const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
+
+  if (options.isPipeIn) files.length = 0;
+  if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern, stdIO);
+  if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
+}
+
+function getContentToMatch(
+  pattern: RegExp | string,
+  options: Options,
+  files: ContentFile[],
+  stdinContent: string[],
+): ParsedLine[] {
+  const lineParser = parseLine.bind(null, pattern);
+  const termParser = lineParser.bind(null, options, "Terminal");
+  const fileParser = parseFile.bind(null, lineParser, options);
+
+  if (stdinContent.length) {
+    return stdinContent.map((line, i) => parseLine(pattern, options, "Terminal", line, i));
+  }
+
+  if (options.isPipeIn) {
+    return grabTerminal().map(termParser);
+  }
+
+  return files.flatMap(fileParser);
 }
