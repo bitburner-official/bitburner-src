@@ -286,7 +286,9 @@ There is a maximum of stasis links that can be applied globally, which can be se
 
 </td><td>
 
-Executes STORM\_SEED.exe, if it is present on the server the script is running on. Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
+Executes STORM\_SEED.exe, if it is present on the server the script is running on.
+
+Warning: That exe file creates a webstorm that can cause catastrophic damage to the darknet. Run at your own risk.
 
 
 </td></tr>

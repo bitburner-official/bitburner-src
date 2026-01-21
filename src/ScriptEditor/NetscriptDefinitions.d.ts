@@ -4586,10 +4586,10 @@ export interface Darknet {
    */
   induceServerMigration(hostname: string): Promise<DarknetResult>;
 
-  // WIP: better doc
   /**
    * Executes STORM_SEED.exe, if it is present on the server the script is running on.
-   * Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
+   *
+   * Warning: That exe file creates a webstorm that can cause catastrophic damage to the darknet. Run at your own risk.
    *
    * @remarks
    * RAM cost: 0.1 GB
