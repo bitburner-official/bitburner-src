@@ -405,7 +405,7 @@ function grabTerminal(): string[] {
   return Terminal.outputHistory.map((line) => (line as Output).text ?? "");
 }
 
-// TODO-FICO: add unit tests
+// TODO: add "-" support for stdin
 export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   const stdin = stdIO.stdin?.deref();
   const noStdinProvided = !stdin || (stdin.isClosed && stdin.empty());
@@ -460,7 +460,7 @@ function applyFilters(
   const nLimit = Number(params.maxMatches);
   const outFilePath = checkOutFile(params.outfile, options, server, stdIO);
   const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
-  const contentToMatch = getContentToMatch(pattern, options, files, stdinContent.split("\n"));
+  const contentToMatch = getContentToMatch(pattern, options, files, stdinContent);
   const results = new Results(contentToMatch, options, params);
   const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
 
@@ -473,14 +473,14 @@ function getContentToMatch(
   pattern: RegExp | string,
   options: Options,
   files: ContentFile[],
-  stdinContent: string[],
+  stdinContent: string,
 ): ParsedLine[] {
   const lineParser = parseLine.bind(null, pattern);
   const termParser = lineParser.bind(null, options, "Terminal");
   const fileParser = parseFile.bind(null, lineParser, options);
 
   if (stdinContent.length) {
-    return stdinContent.map((line, i) => parseLine(pattern, options, "Terminal", line, i));
+    return stdinContent.split("\n").map((line, i) => parseLine(pattern, options, "Terminal", line, i));
   }
 
   if (options.isPipeIn) {

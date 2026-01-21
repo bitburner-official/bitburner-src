@@ -6,6 +6,10 @@ import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
 import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
 import { TextFile } from "../../../src/TextFile";
 import { TextFilePath } from "../../../src/Paths/TextFilePath";
+import { LiteratureName, MessageFilename } from "@enums";
+import { Literatures } from "../../../src/Literature/Literatures";
+import { stringifyReactElement } from "../../../src/Terminal/StdIO/utils";
+import { Messages } from "../../../src/Message/MessageHelpers";
 
 const fileName = "example.txt" as TextFilePath;
 const fileName2 = "example2.txt" as TextFilePath;
@@ -20,6 +24,9 @@ describe("cat command", () => {
     const server = GetServerOrThrow(Player.currentServer);
     server.textFiles.clear();
     server.scripts.clear();
+    server.messages.length = 0; //Remove .lit and .msg files
+    server.messages.push(LiteratureName.HackersStartingHandbook);
+    server.messages.push(MessageFilename.Jumper0);
     const file = new TextFile(fileName, fileContent1);
     server.textFiles.set(fileName, file);
     const file2 = new TextFile(fileName2, fileContent2);
@@ -64,5 +71,71 @@ describe("cat command", () => {
     const output = stdOut.read();
 
     expect(output).toBe(`${fileContent1}\n${fileContent2}\nInput from stdin line 1`);
+  });
+
+  it("should be able to read .lit files", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(null, stdOut);
+
+    cat([`${LiteratureName.HackersStartingHandbook}`], server, stdIO);
+    const output = stdOut.read();
+
+    const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
+    const expectedOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}`;
+
+    expect(output).toBe(expectedOutput);
+    expect(output).toContain("When starting out, hacking is the most profitable way to earn money and progress.");
+  });
+
+  it("should be able to read msg files", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(null, stdOut);
+
+    cat([`${MessageFilename.Jumper0}`], server, stdIO);
+    const output = stdOut.read();
+
+    const text = Messages[MessageFilename.Jumper0].msg;
+
+    expect(output).toBe(text);
+  });
+
+  it("should be able to concatenate lit and msg files", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(null, stdOut);
+
+    cat([`${LiteratureName.HackersStartingHandbook}`, `${MessageFilename.Jumper0}`], server, stdIO);
+    const output = stdOut.read();
+
+    const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
+    const expectedLitOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}`;
+    const expectedMsgOutput = Messages[MessageFilename.Jumper0].msg;
+    const expectedOutput = `${expectedLitOutput}\n${expectedMsgOutput}`;
+
+    expect(output).toBe(expectedOutput);
+  });
+
+  it("should be able to concatenate lit and msg files with stdin", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+
+    const stdIn = new IOStream();
+    stdIn.write("Input from stdin line 1");
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(stdIn, stdOut);
+
+    cat([`${LiteratureName.HackersStartingHandbook}`, "-", `${MessageFilename.Jumper0}`], server, stdIO);
+    const output = stdOut.read();
+
+    const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
+    const expectedLitOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}`;
+    const expectedMsgOutput = Messages[MessageFilename.Jumper0].msg;
+    const expectedOutput = `${expectedLitOutput}\nInput from stdin line 1\n${expectedMsgOutput}`;
+
+    expect(output).toBe(expectedOutput);
   });
 });

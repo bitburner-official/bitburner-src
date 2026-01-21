@@ -13,6 +13,7 @@ import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
 import { TextFilePath } from "../../../src/Paths/TextFilePath";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { Output } from "../../../src/Terminal/OutputTypes";
+import { ANSI_ESCAPE } from "../../../src/ui/React/ANSIITypography";
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -175,6 +176,37 @@ describe("RedirectIOTests", () => {
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
       const outputText: Output = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
       expect(outputText?.text).toEqual(`${scriptName}: Received input: ${scriptName}: Received input: ${inputData}`);
+    });
+  });
+
+  describe("cat and grep with redirected IO", () => {
+    it("should be able to read files to the terminal", async () => {
+      const filename = "appendOutput.txt";
+      const setupCommandString = `echo First Line >> ${filename} | echo Second Line >> ${filename}`;
+
+      parseRedirectedCommands(setupCommandString);
+      await sleep(50);
+
+      parseRedirectedCommands(`echo 1 | cat ${filename}`);
+      await sleep(50);
+      expect(Terminal.outputHistory.length).toBe(1);
+      expect(Terminal.outputHistory[0].text).toBe("First Line\nSecond Line\n1");
+    });
+
+    it("should be able to grep files read by cat", async () => {
+      const filename = "appendOutput.txt";
+      const setupCommandString = `echo First Line >> ${filename} | echo Second Line >> ${filename}`;
+
+      parseRedirectedCommands(setupCommandString);
+      await sleep(50);
+
+      parseRedirectedCommands(`cat ${filename} | grep Second`);
+      await sleep(50);
+
+      expect(Terminal.outputHistory.length).toBe(1);
+      const log = Terminal.outputHistory[0];
+      if (!isOutput(log)) throw new Error("Expected output to be of type Output");
+      expect(log.text.replaceAll(ANSI_ESCAPE, "")).toBe("Second Line");
     });
   });
 });

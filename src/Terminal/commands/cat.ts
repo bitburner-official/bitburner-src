@@ -38,7 +38,7 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
         stdIO.close();
         return;
       }
-      initialStdOut += content;
+      initialStdOut += content + "\n";
     }
   }
 

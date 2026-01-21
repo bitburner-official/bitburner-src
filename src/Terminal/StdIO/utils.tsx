@@ -39,11 +39,11 @@ export function stringify(s: unknown, stripAnsiEscape = false): string {
   }
 }
 
-function stringifyReactElement(element: React.ReactNode): string {
+export function stringifyReactElement(element: React.ReactNode): string {
   const markup = renderToStaticMarkup(<>{element}</>);
   const div = document.createElement("div");
   div.innerHTML = markup.replaceAll(">", "> ").replaceAll("<br/>", "\n");
-  return div.innerText ?? div.textContent ?? "";
+  return (div.innerText ?? div.textContent ?? "").trim();
 }
 
 function clean(str: string, stripAnsiEscape: boolean) {
