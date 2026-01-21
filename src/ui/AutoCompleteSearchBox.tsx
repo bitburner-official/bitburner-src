@@ -17,7 +17,7 @@ type AutoCompleteSearchBoxProps = {
   width?: number;
 };
 
-type scoredItem = {
+type ScoredItem = {
   item: string;
   score: number;
 };
@@ -66,11 +66,11 @@ export function AutoCompleteSearchBox({
               setOptions([]);
               return;
             }
-            const scoredSuggestions: scoredItem[] = suggestionList().map((item) => ({
+            const scoredSuggestions: ScoredItem[] = suggestionList().map((item) => ({
               item,
               score: dice(value, item.replace(ignoredTextRegex, "")),
             }));
-            const sortByScore = (a: scoredItem, b: scoredItem) => b.score - a.score;
+            const sortByScore = (a: ScoredItem, b: ScoredItem) => b.score - a.score;
             const matchedSuggestions = scoredSuggestions.filter((v) => v.item.includes(value)).sort(sortByScore);
             const unmatchedSuggestions = scoredSuggestions.filter((v) => !v.item.includes(value)).sort(sortByScore);
             const results = [...matchedSuggestions, ...unmatchedSuggestions].map((v) => v.item);
