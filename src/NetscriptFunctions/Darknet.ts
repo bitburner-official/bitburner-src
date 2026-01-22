@@ -41,6 +41,7 @@ import type { CacheResult } from "@nsdefs";
 import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
 import { isIPAddress } from "../Types/strings";
 import { getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
+import { shuffle } from "lodash";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -358,8 +359,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         helpers.log(ctx, () => `Returned ${out.length} connections for ${server.hostname}`);
         // The order of results is shuffled. There's no anthropomorphic bias like in the standard network's scan results order.
-        const rotationPoint = Math.floor(Math.random() * out.length);
-        return out.slice(rotationPoint).concat(out.slice(0, rotationPoint));
+        return shuffle(out);
       },
     setStasisLink:
       (ctx: NetscriptContext) =>
