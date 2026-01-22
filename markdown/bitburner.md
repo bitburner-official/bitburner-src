@@ -2007,7 +2007,7 @@ Locations of gym
 
 </td><td>
 
-Response from attempting to scrape logs from a server
+Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
 
 
 </td></tr>

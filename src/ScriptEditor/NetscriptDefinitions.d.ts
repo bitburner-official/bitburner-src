@@ -4416,11 +4416,11 @@ export type ServerAuthDetails = {
  * @public
  */
 export type HeartbleedOptions = {
-  /** If true, looks at the most recent log line but does not extract it. (Overrides logsToCapture.) */
+  /** If true, looks at the most recent log line but does not extract it (overrides logsToCapture). Default is false. */
   peek?: boolean;
-  /** The number of log lines to remove from the server, up to a max of 8. Default is 1. */
+  /** The number of log lines to remove from the server, up to a max of 8. Default is 3. Must be a positive integer. */
   logsToCapture?: number;
-  /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. */
+  /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. Must be a non-negative integer. */
   additionalMsec?: number;
 };
 

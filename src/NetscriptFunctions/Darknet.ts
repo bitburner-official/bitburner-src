@@ -46,7 +46,7 @@ import { shuffle } from "lodash";
 type CompleteHeartbleedOptions = {
   peek: boolean;
   logsToCapture: number;
-  additionalMsec?: number;
+  additionalMsec: number;
 };
 
 function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartbleedOptions {
@@ -65,25 +65,25 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
     ...defaults,
     ...opts,
   };
-  if (typeof options.peek !== "boolean") {
-    throw helpers.errorMessage(ctx, `Invalid arguments: "options.peek" is not a boolean`);
-  }
-  if (typeof options.logsToCapture !== "number" || options.logsToCapture < 1) {
-    throw helpers.errorMessage(ctx, `Invalid arguments: "options.logsToCapture" is not a positive integer`);
-  }
-  if (options.logsToCapture > 8) {
+  const peek = helpers.boolean(ctx, "options.peek", options.peek);
+  const logsToCapture = helpers.positiveInteger(ctx, "options.logsToCapture", options.logsToCapture);
+  if (logsToCapture > 8) {
     throw helpers.errorMessage(
       ctx,
-      `Invalid arguments: "options.logsToCapture" (${options.logsToCapture}) is larger than 8`,
+      `Invalid arguments: "options.logsToCapture" (${options.logsToCapture}) must be smaller than or equal to 8`,
     );
   }
-  if (typeof options.additionalMsec !== "number" || options.additionalMsec < 0) {
-    throw helpers.errorMessage(ctx, `Invalid arguments: "options.additionalMsec" is not a positive integer`);
+  const additionalMsec = helpers.integer(ctx, "options.additionalMsec", options.additionalMsec);
+  if (additionalMsec < 0) {
+    throw helpers.errorMessage(
+      ctx,
+      `Invalid arguments: "options.additionalMsec" (${options.additionalMsec}) must be a non-negative integer`,
+    );
   }
   return {
-    peek: options.peek,
-    logsToCapture: options.logsToCapture,
-    additionalMsec: options.additionalMsec,
+    peek,
+    logsToCapture,
+    additionalMsec,
   };
 }
 
