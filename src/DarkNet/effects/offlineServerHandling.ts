@@ -12,6 +12,7 @@ import { hasDarknetAccess } from "../utils/darknetAuthUtils";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { CompletedProgramName } from "../../Enums";
 import type { DarknetResponseCode } from "@nsdefs";
+import { isIPAddress } from "../../Types/strings";
 
 type FailureResultOptions = {
   requireAdminRights?: boolean;
@@ -33,19 +34,19 @@ export function expectDarknetAccess(ctx: NetscriptContext): void {
 
 export function getFailureResult(
   ctx: NetscriptContext,
-  hostname: string,
+  host: string,
   options: FailureResultOptions = {},
 ):
   | { success: true; code: DarknetResponseCode; message: string; server: DarknetServer }
   | { success: false; code: DarknetResponseCode; message: string } {
   expectDarknetAccess(ctx);
   const currentServer = ctx.workerScript.getServer();
-  const targetServer = GetServer(hostname);
+  const targetServer = GetServer(host);
   // If the target server does not exist
   if (!targetServer) {
-    if (DarknetState.offlineServers.includes(hostname)) {
+    if (DarknetState.offlineServers.includes(host)) {
       // If the server is offline, return a dummy object with isOnline = false.
-      logger(ctx)(`Server ${hostname} is offline.`);
+      logger(ctx)(`Server ${host} is offline.`);
       return {
         success: false,
         code: ResponseCodeEnum.ServiceUnavailable,
@@ -53,7 +54,7 @@ export function getFailureResult(
       };
     } else {
       // Throw, otherwise.
-      throw errorMessage(ctx, `Server ${hostname} does not exist.`);
+      throw errorMessage(ctx, `Server ${host} does not exist.`);
     }
   }
   if (!(targetServer instanceof DarknetServer)) {
@@ -84,7 +85,7 @@ export function getFailureResult(
   }
   if (
     options.requireSession &&
-    hostname !== targetServer.hostname &&
+    host !== (!isIPAddress(host) ? currentServer.hostname : currentServer.ip) &&
     !isAuthenticated(targetServer, ctx.workerScript.pid)
   ) {
     const result = `${targetServer.hostname} requires a session to do that. Use ns.dnet.connectToSession() first to authenticate with that server.`;
