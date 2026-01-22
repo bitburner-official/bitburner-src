@@ -69,7 +69,6 @@ import { BypassWrapper } from "./React/BypassWrapper";
 
 import { Apr1 } from "./Apr1";
 import { V2Modal } from "../utils/V2Modal";
-import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
@@ -510,7 +509,7 @@ export function GameRoot(): React.ReactElement {
   }, []);
 
   return (
-    <MathJaxContext version={3} src={__webpack_public_path__ + "mathjax/tex-chtml.js"}>
+    <>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
           <HistoryProvider>
@@ -552,6 +551,6 @@ export function GameRoot(): React.ReactElement {
         </BypassWrapper>
       </ErrorBoundary>
       <V2Modal />
-    </MathJaxContext>
+    </>
   );
 }

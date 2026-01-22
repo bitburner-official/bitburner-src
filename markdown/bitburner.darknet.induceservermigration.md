@@ -11,7 +11,7 @@ Effect scales with threads and charisma level.
 **Signature:**
 
 ```typescript
-induceServerMigration(hostname: string): Promise<DarknetResult>;
+induceServerMigration(host: string): Promise<DarknetResult>;
 ```
 
 ## Parameters
@@ -34,7 +34,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-hostname
+host
 
 
 </td><td>
@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-Hostname of the connected server to migrate.
+Hostname/IP of the connected server to migrate.
 
 
 </td></tr>

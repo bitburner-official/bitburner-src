@@ -256,7 +256,7 @@ const dnet = {
   promoteStock: 2,
   phishingAttack: 2,
   getDarknetInstability: 0,
-  nextUpdate: RamCostConstants.CycleTiming,
+  nextMutation: RamCostConstants.CycleTiming,
   getServerRequiredCharismaLevel: RamCostConstants.GetServer,
 } as const;
 
@@ -410,6 +410,10 @@ const sleeve = {
   setToBladeburnerAction: RamCostConstants.SleeveBase,
   getSleeveAugmentationPrice: RamCostConstants.SleeveBase,
   getSleeveAugmentationRepReq: RamCostConstants.SleeveBase,
+  purchaseSleeve: RamCostConstants.SleeveBase,
+  upgradeMemory: RamCostConstants.SleeveBase,
+  getSleeveCost: RamCostConstants.SleeveBase,
+  getMemoryUpgradeCost: RamCostConstants.SleeveBase,
 } as const;
 
 // Stanek API

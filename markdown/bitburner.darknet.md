@@ -31,7 +31,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[authenticate(hostname, password, additionalMsec)](./bitburner.darknet.authenticate.md)
+[authenticate(host, password, additionalMsec)](./bitburner.darknet.authenticate.md)
 
 
 </td><td>
@@ -44,7 +44,7 @@ If successful, grants the script a session, allowing it to exec() scripts on tha
 </td></tr>
 <tr><td>
 
-[connectToSession(hostname, password)](./bitburner.darknet.connecttosession.md)
+[connectToSession(host, password)](./bitburner.darknet.connecttosession.md)
 
 
 </td><td>
@@ -59,7 +59,7 @@ If unsuccessful, more detail may be able to be gathered by using heartbleed() to
 </td></tr>
 <tr><td>
 
-[getBlockedRam(hostname)](./bitburner.darknet.getblockedram.md)
+[getBlockedRam(host)](./bitburner.darknet.getblockedram.md)
 
 
 </td><td>
@@ -81,7 +81,7 @@ Gets the current instability of the darknet caused by excessive backdoor-ing of 
 </td></tr>
 <tr><td>
 
-[getDepth(hostname)](./bitburner.darknet.getdepth.md)
+[getDepth(host)](./bitburner.darknet.getdepth.md)
 
 
 </td><td>
@@ -105,7 +105,7 @@ Returns the server's authentication protocol details.
 </td></tr>
 <tr><td>
 
-[getServerRequiredCharismaLevel(hostname)](./bitburner.darknet.getserverrequiredcharismalevel.md)
+[getServerRequiredCharismaLevel(host)](./bitburner.darknet.getserverrequiredcharismalevel.md)
 
 
 </td><td>
@@ -123,7 +123,7 @@ Insufficient charisma will also cause authentication to take much longer - or, i
 
 </td><td>
 
-Returns the hostnames of servers that have a stasis link applied.
+Returns the hostnames/IPs of servers that have a stasis link applied.
 
 
 </td></tr>
@@ -140,7 +140,7 @@ Returns the maximum number of stasis links that can be applied globally, based o
 </td></tr>
 <tr><td>
 
-[heartbleed(hostname, options)](./bitburner.darknet.heartbleed.md)
+[heartbleed(host, options)](./bitburner.darknet.heartbleed.md)
 
 
 </td><td>
@@ -155,7 +155,7 @@ The speed of capture scales with the number of threads used. See formulas.dnet.g
 </td></tr>
 <tr><td>
 
-[induceServerMigration(hostname)](./bitburner.darknet.induceservermigration.md)
+[induceServerMigration(host)](./bitburner.darknet.induceservermigration.md)
 
 
 </td><td>
@@ -181,7 +181,7 @@ Returns false if the server does not exist or has gone offline recently. This fu
 </td></tr>
 <tr><td>
 
-[memoryReallocation(hostname)](./bitburner.darknet.memoryreallocation.md)
+[memoryReallocation(host)](./bitburner.darknet.memoryreallocation.md)
 
 
 </td><td>
@@ -192,14 +192,24 @@ Spends some time freeing some of the RAM currently blocked by the server owner. 
 </td></tr>
 <tr><td>
 
-[nextUpdate()](./bitburner.darknet.nextupdate.md)
+[nextMutation()](./bitburner.darknet.nextmutation.md)
 
 
 </td><td>
 
 Sleep until the next mutation of the network of darknet servers (which occur frequently). Note that in the majority of cases, whatever changed out on the net (if anything) will not be nearby to, or visible from, the current server.
 
-Some possible mutations that can occur somewhere on the dark net each cycle: - Nothing changes - Some servers move to other locations on the net, breaking existing connections and forming new ones - Some servers go offline, which in many cases is permanent - they are effectively deleted - Some servers restart, which kills all running scripts on the server - New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
+Some possible mutations that can occur somewhere on the dark net each cycle:
+
+- Nothing changes
+
+- Some servers move to other locations on the net, breaking existing connections and forming new ones
+
+- Some servers go offline, which in many cases is permanent - they are effectively deleted
+
+- Some servers restart, which kills all running scripts on the server
+
+- New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
 
 
 </td></tr>
@@ -286,7 +296,9 @@ There is a maximum of stasis links that can be applied globally, which can be se
 
 </td><td>
 
-Executes STORM\_SEED.exe, if it is present on the server the script is running on. Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
+Executes STORM\_SEED.exe, if it is present on the server the script is running on.
+
+Warning: That exe file creates a webstorm that can cause catastrophic damage to the darknet. Run at your own risk.
 
 
 </td></tr>

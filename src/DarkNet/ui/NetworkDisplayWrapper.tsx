@@ -16,8 +16,6 @@ import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles } from "./dnetStyles";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
@@ -26,6 +24,8 @@ import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
 import { getServerLogs } from "../models/packetSniffing";
 import { getTimeoutChance } from "../effects/offlineServerHandling";
+import { DocumentationLink } from "../../ui/React/DocumentationLink";
+import { Settings } from "../../Settings/Settings";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -357,9 +357,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             width={300}
           />
         </Typography>
-        <Button onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/darknet.md" })}>
+        <DocumentationLink
+          page="programming/darknet.md"
+          style={{ fontSize: "22px", padding: "0 20px", backgroundColor: Settings.theme.button }}
+        >
           Darknet Docs
-        </Button>
+        </DocumentationLink>
       </Box>
     </Container>
   );

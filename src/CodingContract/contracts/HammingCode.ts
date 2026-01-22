@@ -36,8 +36,11 @@ export const hammingCode: Pick<
       const y = Math.pow(2, getRandomIntInclusive(1, 57));
       return getRandomIntInclusive(Math.min(x, y), Math.max(x, y));
     },
+    getAnswer: (data) => {
+      return HammingEncode(data);
+    },
     solver: (data, answer) => {
-      return HammingEncode(data) === answer;
+      return hammingCode[CodingContractName.HammingCodesIntegerToEncodedBinary].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => ans,
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -83,8 +86,11 @@ export const hammingCode: Pick<
       }
       return _buildArray.join("");
     },
+    getAnswer: (data) => {
+      return HammingDecode(data);
+    },
     solver: (data, answer) => {
-      return HammingDecode(data) === answer;
+      return hammingCode[CodingContractName.HammingCodesEncodedBinaryToInteger].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

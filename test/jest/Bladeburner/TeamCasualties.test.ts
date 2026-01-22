@@ -3,10 +3,10 @@ import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import type { ActionIdFor } from "../../../src/Bladeburner/Types";
 import type { Bladeburner } from "../../../src/Bladeburner/Bladeburner";
 import { BlackOperation, Contract, Operation } from "../../../src/Bladeburner/Actions";
-import { Sleeve } from "../../../src/PersonObjects/Sleeve/Sleeve";
 import { SleeveSupportWork } from "../../../src/PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { BladeburnerBlackOpName, BladeburnerContractName, BladeburnerOperationName } from "@enums";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
+import { recalculateNumberOfOwnedSleeves } from "../../../src/PersonObjects/Sleeve/SleeveCovenantPurchases";
 
 /**
  * You may want to use hook to help with debugging
@@ -40,7 +40,7 @@ describe("Bladeburner Team", () => {
 
     Player.sourceFiles.set(10, 3);
     Player.sleevesFromCovenant = 5;
-    Sleeve.recalculateNumOwned();
+    recalculateNumberOfOwnedSleeves();
     Player.sleeves.forEach((s) => (s.shock = 0));
   });
 

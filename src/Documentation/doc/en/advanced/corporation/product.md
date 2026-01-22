@@ -33,96 +33,150 @@ Office setup is important to efficiently develop new products. Check this [secti
 
 - Total employee production:
 
-$$TotalEmployeeProd = OperationsProd + EngineerProd + ManagementProd$$
+$$
+TotalEmployeeProd = OperationsProd + EngineerProd + ManagementProd
+$$
 
 - Management factor:
 
-$$ManagementFactor = 1 + \frac{ManagementProd}{1.2\ast TotalEmployeeProd}$$
+$$
+ManagementFactor = 1 + \frac{ManagementProd}{1.2\ast TotalEmployeeProd}
+$$
 
 - Product development multiplier:
 
-$$ProductDevelopmentMultiplier = \left( (EngineerProd)^{0.34} + (OperationsProd)^{0.2} \right)\ast ManagementFactor$$
+$$
+ProductDevelopmentMultiplier = \left( (EngineerProd)^{0.34} + (OperationsProd)^{0.2} \right)\ast ManagementFactor
+$$
 
 - Progress:
 
-$$Progress = 0.01\ast ProductDevelopmentMultiplier$$
+$$
+Progress = 0.01\ast ProductDevelopmentMultiplier
+$$
 
 - Development progress:
 
-$$DevelopmentProgress = DevelopmentProgress + Progress$$
+$$
+DevelopmentProgress = DevelopmentProgress + Progress
+$$
 
 - `CreationJobFactors[JobName]`:
 
-$$CreationJobFactors\lbrack JobName\rbrack = CreationJobFactors\lbrack JobName\rbrack + {\lbrace EmployeeJob\rbrace Prod\ast Progress}\ast{0.01}$$
+$$
+CreationJobFactors\lbrack JobName\rbrack = CreationJobFactors\lbrack JobName\rbrack + {\lbrace EmployeeJob\rbrace Prod\ast Progress}\ast{0.01}
+$$
 
 &nbsp;  
 When `DevelopmentProgress` reaches 100, product is finished.
 
 - Define:
 
-$$A = \ CreationJobFactors\lbrack Engineer\rbrack$$
+$$
+A = \ CreationJobFactors\lbrack Engineer\rbrack
+$$
 
-$$B = \ CreationJobFactors\lbrack Management\rbrack$$
+$$
+B = \ CreationJobFactors\lbrack Management\rbrack
+$$
 
-$$C = \ CreationJobFactors\lbrack RnD\rbrack$$
+$$
+C = \ CreationJobFactors\lbrack RnD\rbrack
+$$
 
-$$D = \ CreationJobFactors\lbrack Operations\rbrack$$
+$$
+D = \ CreationJobFactors\lbrack Operations\rbrack
+$$
 
-$$E = \ CreationJobFactors\lbrack Business\rbrack$$
+$$
+E = \ CreationJobFactors\lbrack Business\rbrack
+$$
 
-$$TotalCreationJobFactors = A + B + C + D + E$$
+$$
+TotalCreationJobFactors = A + B + C + D + E
+$$
 
 - {JobName}Ratio:
 
-$$EngineerRatio = \frac{A}{TotalCreationJobFactors}$$
+$$
+EngineerRatio = \frac{A}{TotalCreationJobFactors}
+$$
 
-$$ManagementRatio = \frac{B}{TotalCreationJobFactors}$$
+$$
+ManagementRatio = \frac{B}{TotalCreationJobFactors}
+$$
 
-$$RnDRatio = \frac{C}{TotalCreationJobFactors}$$
+$$
+RnDRatio = \frac{C}{TotalCreationJobFactors}
+$$
 
-$$OperationsRatio = \frac{D}{TotalCreationJobFactors}$$
+$$
+OperationsRatio = \frac{D}{TotalCreationJobFactors}
+$$
 
-$$BusinessRatio = \frac{E}{TotalCreationJobFactors}$$
+$$
+BusinessRatio = \frac{E}{TotalCreationJobFactors}
+$$
 
 - Design investment multiplier:
 
-$$DesignInvestMult = 1 + {(DesignInvestment)^{0.1}}\ast{0.01}$$
+$$
+DesignInvestMult = 1 + {(DesignInvestment)^{0.1}}\ast{0.01}
+$$
 
 - Science multiplier:
 
-$$ScienceMult = 1 + {(RP)^{ResearchFactor}}\ast{0.00125}$$
+$$
+ScienceMult = 1 + {(RP)^{ResearchFactor}}\ast{0.00125}
+$$
 
 - Balance multiplier:
 
-$$BalanceMult = 1.2\ast EngineerRatio + 0.9\ast ManagementRatio + 1.3\ast RnDRatio + 1.5\ast OperationsRatio + BusinessRatio$$
+$$
+BalanceMult = 1.2\ast EngineerRatio + 0.9\ast ManagementRatio + 1.3\ast RnDRatio + 1.5\ast OperationsRatio + BusinessRatio
+$$
 
 - Total multiplier:
 
-$$TotalMult = BalanceMult\ast DesignInvestMult\ast ScienceMult$$
+$$
+TotalMult = BalanceMult\ast DesignInvestMult\ast ScienceMult
+$$
 
 - Product's quality:
 
-$$TotalMult\ast (0.1\ast A + 0.05\ast B + 0.05\ast C + 0.02\ast D + 0.02\ast E)$$
+$$
+TotalMult\ast (0.1\ast A + 0.05\ast B + 0.05\ast C + 0.02\ast D + 0.02\ast E)
+$$
 
 - Product's performance:
 
-$$TotalMult\ast (0.15\ast A + 0.02\ast B + 0.02\ast C + 0.02\ast D + 0.02\ast E)$$
+$$
+TotalMult\ast (0.15\ast A + 0.02\ast B + 0.02\ast C + 0.02\ast D + 0.02\ast E)
+$$
 
 - Product's durability:
 
-$$TotalMult\ast (0.05\ast A + 0.02\ast B + 0.08\ast C + 0.05\ast D + 0.05\ast E)$$
+$$
+TotalMult\ast (0.05\ast A + 0.02\ast B + 0.08\ast C + 0.05\ast D + 0.05\ast E)
+$$
 
 - Product's reliability:
 
-$$TotalMult\ast (0.02\ast A + 0.08\ast B + 0.02\ast C + 0.05\ast D + 0.08\ast E)$$
+$$
+TotalMult\ast (0.02\ast A + 0.08\ast B + 0.02\ast C + 0.05\ast D + 0.08\ast E)
+$$
 
 - Product's aesthetics:
 
-$$TotalMult\ast (0.08\ast B + 0.05\ast C + 0.02\ast D + 0.1\ast E)$$
+$$
+TotalMult\ast (0.08\ast B + 0.05\ast C + 0.02\ast D + 0.1\ast E)
+$$
 
 - Product's features:
 
-$$TotalMult\ast (0.08\ast A + 0.05\ast B + 0.02\ast C + 0.05\ast D + 0.05\ast E)$$
+$$
+TotalMult\ast (0.08\ast A + 0.05\ast B + 0.02\ast C + 0.05\ast D + 0.05\ast E)
+$$
 
 - Product's rating:
   - If an industry produces product, it has its own `RatingWeights` for its product. `RatingWeights` contains coefficients of 6 stats: quality, performance, durability, reliability, aesthetics, features. For example: Tobacco's `RatingWeights`:
@@ -132,33 +186,47 @@ $$TotalMult\ast (0.08\ast A + 0.05\ast B + 0.02\ast C + 0.05\ast D + 0.05\ast E)
   - `RatingWeights` is `industryData.product.ratingWeights`.
   - Formula:
 
-$$ProductRating = \sum_{i = 1}^{6}{{ProductStat}_i\ast{StatCoefficient}_i}$$
+$$
+ProductRating = \sum_{i = 1}^{6}{{ProductStat}_i\ast{StatCoefficient}_i}
+$$
 
 - Advertising investment multiplier:
 
-$$AdvertInvestMult = 1 + {(AdvertisingInvestment)^{0.1}}\ast{0.01}$$
+$$
+AdvertInvestMult = 1 + {(AdvertisingInvestment)^{0.1}}\ast{0.01}
+$$
 
 - Business-Management ratio:
 
-$$BusinessManagementRatio = Max\left( BusinessRatio + ManagementRatio,\ \left( \frac{1}{TotalCreationJobFactors} \right) \right)$$
+$$
+BusinessManagementRatio = Max\left( BusinessRatio + ManagementRatio,\ \left( \frac{1}{TotalCreationJobFactors} \right) \right)
+$$
 
 - Product's markup:
 
-$$ProductMarkup = \frac{100}{AdvertInvestMult\ast(ProductQuality + 0.001)^{0.65}\ast BusinessManagementRatio}$$
+$$
+ProductMarkup = \frac{100}{AdvertInvestMult\ast(ProductQuality + 0.001)^{0.65}\ast BusinessManagementRatio}
+$$
 
 - Product's demand:
 
-$$Demand = \begin{cases}Min(100,AdvertInvestMult\ast(100\ast(Popularity/Awareness))), & Awareness \neq 0 \newline 20, & Awareness = 0 \end{cases}$$
+$$
+Demand = \begin{cases}Min(100,AdvertInvestMult\ast(100\ast(Popularity/Awareness))), & Awareness \neq 0 \newline 20, & Awareness = 0 \end{cases}
+$$
 
 - Product's competition:
 
-$$Competition = Random(0,70)$$
+$$
+Competition = Random(0,70)
+$$
 
 - Product's size:
   - It's `product.size`.
   - Formula:
 
-$$ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_i\ast{InputMaterialCoefficient}_i}$$
+$$
+ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_i\ast{InputMaterialCoefficient}_i}
+$$
 
 ## Approximation value of product markup
 

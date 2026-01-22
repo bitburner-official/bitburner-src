@@ -3,6 +3,13 @@
  */
 export type _ValueOf<T> = T[keyof T];
 
+/** @public */
+type SuccessResult<T extends object> = { success: true; message?: string } & T;
+/** @public */
+type FailureResult = { success: false; message: string };
+/** @public */
+type Result<T extends object = object> = SuccessResult<T> | FailureResult;
+
 /** All netscript definitions */
 
 /**
@@ -4385,7 +4392,7 @@ export type CacheResult = {
  * Details about a server's authentication schema
  * @public
  */
-export type ServerAuthDetails = {
+type ServerAuthDetails = {
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
@@ -4405,16 +4412,27 @@ export type ServerAuthDetails = {
 };
 
 /**
- * Response from attempting to scrape logs from a server
+ * Options to change the behavior of {@link Darknet.heartbleed | heartbleed} API.
  * @public
  */
-export type HeartbleedOptions = {
-  /** If true, looks at the most recent log line but does not extract it. (Overrides logsToCapture.) */
+type HeartbleedOptions = {
+  /** If true, looks at the most recent log line but does not extract it (overrides logsToCapture). Default is false. */
   peek?: boolean;
-  /** The number of log lines to remove from the server, up to a max of 8. Default is 1. */
+  /** The number of log lines to remove from the server, up to a max of 8. Default is 3. Must be a positive integer. */
   logsToCapture?: number;
-  /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. */
+  /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. Must be a non-negative integer. */
   additionalMsec?: number;
+};
+
+/**
+ * Instability of the darknet caused by excessive backdoor-ing of servers.
+ * @public
+ */
+type DarknetInstability = {
+  /** The increase in time that authentication takes, as a decimal */
+  authenticationDurationMultiplier: number;
+  /** The chance that authentication will time out instead of resolving, as a decimal */
+  authenticationTimeoutChance: number;
 };
 
 /**
@@ -4433,12 +4451,14 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.6 GB
    *
-   * @param hostname - name of the target server (connected to the current server) to try a password.
-   * @param password - password to attempt to authenticate with.
-   * @param additionalMsec - optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
-   * @returns a promise that resolves to a {@link DarknetResult} object.
+   * @param host - Hostname/IP of the target server (connected to the current server) to try a password.
+   * @param password - Password to attempt to authenticate with.
+   * @param additionalMsec - Optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
+   * @returns A promise that resolves to a {@link DarknetResult} object. The resolved object may contain an optional
+   * property. The type of this property is intentionaly not documented. You are supposed to experiment and discover the
+   * content of this property.
    */
-  authenticate(hostname: string, password: string, additionalMsec?: number): Promise<DarknetResult>;
+  authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 
   /**
    * Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`,
@@ -4453,11 +4473,11 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * @param hostname - name of the target server to connect to existing session
-   * @param password - the server's password, to verify the session
-   * @returns a promise that resolves to a {@link DarknetResult} object. The response will have a `status` of "200 Success" | "401 Not Authorized" | "401 Hostname Not Found" | "408 Request Timeout" | "301 Server Has Moved"
+   * @param host - Hostname/IP of the target server to connect to existing session
+   * @param password - The server's password, to verify the session
+   * @returns A {@link DarknetResult} object
    */
-  connectToSession(hostname: string, password: string): DarknetResult;
+  connectToSession(host: string, password: string): DarknetResult;
 
   /**
    * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
@@ -4470,15 +4490,12 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.6 GB
    *
-   * @param hostname - the server to target. Must be directly connected to the current server.
-   * @param options - optional {@link HeartbleedOptions} to modify how the exploit works.
-   *    peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture.
-   *    logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1.
-   *    additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
-   *  @returns a promise that resolves to a {@link DarknetResult} object, plus the scraped logs.
+   * @param host - Hostname/IP of the target server. Must be directly connected to the current server.
+   * @param options - Optional {@link HeartbleedOptions} to modify how the exploit works.
+   * @returns A promise that resolves to a {@link DarknetResult} object, plus the scraped logs.
    *
    */
-  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;
+  heartbleed(host: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;
 
   /**
    * Opens a .cache file on the current server to acquire its valuable contents.
@@ -4486,8 +4503,8 @@ export interface Darknet {
    * @remarks
    * RAM cost: 2 GB
    *
-   * @param filename - the cache file to open.
-   * @param suppressToast - optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
+   * @param filename - Name of the cache file to open.
+   * @param suppressToast - Optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
    * @returns An object containing the contents of the cache, and the karma lost.
    */
   openCache(filename: string, suppressToast?: boolean): CacheResult;
@@ -4499,7 +4516,7 @@ export interface Darknet {
    * RAM cost: 0.2 GB
    *
    * @param returnByIP - Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false.
-   * @returns An array of strings containing the hostnames of all servers connected to the current server.
+   * @returns An array of strings containing the hostnames/IPs of all servers connected to the current server.
    */
   probe(returnByIP?: boolean): string[];
 
@@ -4531,12 +4548,13 @@ export interface Darknet {
   getStasisLinkLimit(): number;
 
   /**
-   * Returns the hostnames of servers that have a stasis link applied.
+   * Returns the hostnames/IPs of servers that have a stasis link applied.
    *
    * @remarks
    * RAM cost: 0 GB
    *
    * @param returnByIP - Optional. If true, returns IPs instead of hostnames. Defaults to false.
+   * @returns Hostnames/IPs
    */
   getStasisLinkedServers(returnByIP?: boolean): string[];
 
@@ -4546,7 +4564,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    *
-   * @param host - Hostname of the server to analyze. Defaults to the running script's server if not specified.
+   * @param host - Hostname/IP of the server to analyze. Defaults to the running script's server if not specified.
    * @returns An object containing the server's authentication protocol details.
    */
   getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
@@ -4560,7 +4578,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 6 GB
    *
-   * @param host - the hostname of the server to listen to.
+   * @param host - Hostname/IP of the server to listen to.
    * @returns A promise that resolves to a {@link DarknetResult} object, plus the captured data.
    */
   packetCapture(host: string): Promise<DarknetResult & { data: string }>;
@@ -4574,15 +4592,15 @@ export interface Darknet {
    * @remarks
    * RAM cost: 4 GB
    *
-   * @param hostname - Hostname of the connected server to migrate.
+   * @param host - Hostname/IP of the connected server to migrate.
    * @returns A promise that resolves to a {@link DarknetResult} object.
    */
-  induceServerMigration(hostname: string): Promise<DarknetResult>;
+  induceServerMigration(host: string): Promise<DarknetResult>;
 
-  // WIP: better doc
   /**
    * Executes STORM_SEED.exe, if it is present on the server the script is running on.
-   * Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
+   *
+   * Warning: That exe file creates a webstorm that can cause catastrophic damage to the darknet. Run at your own risk.
    *
    * @remarks
    * RAM cost: 0.1 GB
@@ -4597,7 +4615,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    *
-   * @param host - Optional. Hostname for the requested server object. Defaults to the running script's server.
+   * @param host - Optional. Hostname/IP for the requested server object. Defaults to the running script's server.
    * @returns true if the server is a darknet server, false otherwise.
    */
   isDarknetServer(host?: string): boolean;
@@ -4609,9 +4627,9 @@ export interface Darknet {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @param hostname - Optional. Hostname of the connected server to free ram from. Defaults to the running script's server.
+   * @param host - Optional. Hostname/IP of the connected server to free ram from. Defaults to the running script's server.
    */
-  memoryReallocation(hostname?: string): Promise<DarknetResult>;
+  memoryReallocation(host?: string): Promise<DarknetResult>;
 
   /**
    * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
@@ -4619,10 +4637,10 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
+   * @param host - Optional. Hostname/IP of the server to check. Defaults to the running script's server.
    * @returns The amount of RAM blocked by the server owner's processes.
    */
-  getBlockedRam(hostname?: string): number;
+  getBlockedRam(host?: string): number;
 
   /**
    * Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and
@@ -4633,10 +4651,10 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    *
-   * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server.
+   * @param host - Optional. Hostname/IP of the server to check. Defaults to the running script's server.
    * @returns The current depth of the server into the darknet.
    */
-  getDepth(hostname?: string): number;
+  getDepth(host?: string): number;
 
   /**
    * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
@@ -4668,10 +4686,8 @@ export interface Darknet {
    * Ram cost: 0 GB
    *
    * @returns An object containing the current instability values.
-   *    authenticateDurationMultiplier: the increase in time that authentication takes, as a decimal
-   *    authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
    */
-  getDarknetInstability(): { authenticateDurationMultiplier: number; authenticateTimeoutChance: number };
+  getDarknetInstability(): DarknetInstability;
 
   /**
    * Sleep until the next mutation of the network of darknet servers (which occur frequently).
@@ -4679,16 +4695,21 @@ export interface Darknet {
    * or visible from, the current server.
    *
    * Some possible mutations that can occur somewhere on the dark net each cycle:
+   *
    * - Nothing changes
+   *
    * - Some servers move to other locations on the net, breaking existing connections and forming new ones
+   *
    * - Some servers go offline, which in many cases is permanent - they are effectively deleted
+   *
    * - Some servers restart, which kills all running scripts on the server
+   *
    * - New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
    *
    * @remarks
    * RAM cost: 1 GB
    */
-  nextUpdate(): Promise<void>;
+  nextMutation(): Promise<void>;
 
   /**
    * Gets the required charisma level to target the server with dnet.heartbleed().
@@ -4699,9 +4720,9 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    *
-   * @param hostname - Hostname of the server to check.
+   * @param host - Hostname/IP of the server to check.
    */
-  getServerRequiredCharismaLevel(hostname: string): number;
+  getServerRequiredCharismaLevel(host: string): number;
 }
 
 /**
@@ -5840,6 +5861,51 @@ export interface Sleeve {
     action: BladeburnerActionTypeForSleeve,
     contract?: BladeburnerContractName,
   ): boolean;
+
+  /**
+   * Purchase a sleeve. You must be in BitNode 10 to use this API.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @returns Action result
+   */
+  purchaseSleeve(): Result;
+
+  /**
+   * Upgrade memory of a sleeve. You must be in BitNode 10 to use this API.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param sleeveNumber - Index of the sleeve.
+   * @param amount - Number of upgrades. Must be a positive integer.
+   * @returns Action result
+   */
+  upgradeMemory(sleeveNumber: number, amount: number): Result;
+
+  /**
+   * Get the cost of the next sleeve.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @returns Cost of the next sleeve. Return Infinity if you reach the maximum number of purchasable sleeves.
+   */
+  getSleeveCost(): number;
+
+  /**
+   * Get the cost of memory upgrades.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param sleeveNumber - Index of the sleeve.
+   * @param amount - Number of upgrades. Must be a positive integer.
+   * @returns Cost of the upgrades. Return Infinity if the current memory plus the amount of upgrades is greater than
+   * 100.
+   */
+  getMemoryUpgradeCost(sleeveNumber: number, amount: number): number;
 }
 
 /**
@@ -7458,7 +7524,8 @@ export interface NS {
   getRecentScripts(): RecentScript[];
 
   /**
-   * Get the list of hostnames or IP addresses connected to a server.
+   * Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers
+   * (e.g., darkweb). Use {@link Darknet.probe | probe} if you want to list darknet servers.
    * @remarks
    * RAM cost: 0.2 GB
    *

@@ -1806,6 +1806,17 @@ Names of all companies
 </td></tr>
 <tr><td>
 
+[DarknetInstability](./bitburner.darknetinstability.md)
+
+
+</td><td>
+
+Instability of the darknet caused by excessive backdoor-ing of servers.
+
+
+</td></tr>
+<tr><td>
+
 [DarknetResponseCode](./bitburner.darknetresponsecode.md)
 
 
@@ -1881,6 +1892,16 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 <tr><td>
 
 [FactionWorkType](./bitburner.factionworktype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FailureResult](./bitburner.failureresult.md)
 
 
 </td><td>
@@ -1986,7 +2007,7 @@ Locations of gym
 
 </td><td>
 
-Response from attempting to scrape logs from a server
+Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
 
 
 </td></tr>
@@ -2122,6 +2143,16 @@ Structured interface to requirements for joining a faction or company. For field
 A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.
 
 Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.
+
+
+</td></tr>
+<tr><td>
+
+[Result](./bitburner.result.md)
+
+
+</td><td>
+
 
 
 </td></tr>
@@ -2271,6 +2302,16 @@ These special Bladeburner action types are only for Sleeve
 <tr><td>
 
 [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SuccessResult](./bitburner.successresult.md)
 
 
 </td><td>

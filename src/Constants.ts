@@ -29,6 +29,7 @@ export const CONSTANTS = {
 
   // Faction and Company favor-related things
   BaseFavorToDonate: 150,
+  // If we change this constant, we must update the "RepDonation" value in src/Documentation/data/MathNotation.json
   DonateMoneyToRepDivisor: 1e6,
 
   // NeuroFlux Governor Augmentation cost multiplier

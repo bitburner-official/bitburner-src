@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname for the requested server object. Defaults to the running script's server.
+_(Optional)_ Optional. Hostname/IP for the requested server object. Defaults to the running script's server.
 
 
 </td></tr>

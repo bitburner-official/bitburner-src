@@ -55,13 +55,6 @@ export const checkPassword = (
         .join(",");
       return getFailureResponse(attemptedPassword, "that wasn't right", response);
     }
-    case ModelIds.Synchronize: {
-      const exactChars = getExactCorrectCharsCount(server.password, attemptedPassword);
-      const closeChars = getMisplacedCorrectCharsCount(server.password, attemptedPassword);
-      const syncDecimal = ((exactChars + closeChars * 0.5) / server.password.length) * 100;
-      const responseData = `${Math.round(syncDecimal * 10) / 10}`;
-      return getFailureResponse(attemptedPassword, `Synchronization status: ${responseData}%`, responseData);
-    }
     case ModelIds.SpiceLevel: {
       const exactChars = getExactCorrectChars(server.password, attemptedPassword);
       const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";

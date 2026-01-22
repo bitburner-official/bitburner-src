@@ -507,7 +507,7 @@ describe("Password Tests", () => {
   test("getTripleModuloConfig server creates valid password and hint", () => {
     const server = serverFactory(getTripleModuloConfig, 60, 0, 0);
 
-    const guess1 = server.password + 1;
+    const guess1 = +server.password + 1;
     const expectedResult1 = (+server.password % guess1) % (((guess1 - 1) % 32) + 1);
     const result1 = getAuthResult(server, `${guess1}`, 1);
     expect(result1.response.code).toBe(ResponseCodeEnum.AuthFailure);

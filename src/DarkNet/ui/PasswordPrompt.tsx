@@ -12,6 +12,7 @@ import { ModelIds } from "../Enums";
 import { sleep } from "../../utils/Utility";
 import { getSharedChars } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
+import { formatObjectWithColoredKeys } from "./uiUtilities";
 
 export type PasswordPromptProps = {
   server: DarknetServer;
@@ -163,7 +164,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
             <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
               <div style={{ color: "white" }}>
                 {rawResponse ? (
-                  formatResultWithColoredKeys(rawResponse.result)
+                  formatObjectWithColoredKeys(rawResponse.result, ["success", "message", "code"])
                 ) : (
                   <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
                 )}
@@ -181,20 +182,5 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
         />
       )}
     </>
-  );
-};
-
-export const formatResultWithColoredKeys = (log: DarknetResult) => {
-  return (
-    <span style={{ fontFamily: 'JetBrainsMono, "Courier New", monospace', fontSize: "12px" }}>
-      <span style={{ color: "grey" }}>success: </span>
-      {log.success ? "true" : "false"}
-      <br /> <span style={{ color: "grey" }}>message: </span>
-      {log.message}
-      <br />
-      <span style={{ color: "grey" }}>status: </span>
-      {log?.code ?? ""}
-      <br />
-    </span>
   );
 };

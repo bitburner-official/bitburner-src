@@ -4,12 +4,12 @@
 
 ## HeartbleedOptions type
 
-Response from attempting to scrape logs from a server
+Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
 
 **Signature:**
 
 ```typescript
-export type HeartbleedOptions = {
+type HeartbleedOptions = {
   peek?: boolean;
   logsToCapture?: number;
   additionalMsec?: number;

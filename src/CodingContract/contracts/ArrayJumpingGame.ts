@@ -37,14 +37,17 @@ export const arrayJumpingGame: Pick<
       return arr;
     },
     numTries: 1,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const n: number = data.length;
       let i = 0;
       for (let reach = 0; i < n && i <= reach; ++i) {
         reach = Math.max(i + data[i], reach);
       }
       const solution: boolean = i === n;
-      return (solution ? 1 : 0) === answer;
+      return solution ? 1 : 0;
+    },
+    solver: (data, answer) => {
+      return arrayJumpingGame[CodingContractName.ArrayJumpingGame].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => {
       const num = parseInt(ans);
@@ -85,7 +88,7 @@ export const arrayJumpingGame: Pick<
       return arr;
     },
     numTries: 3,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const n: number = data.length;
       let reach = 0;
       let jumps = 0;
@@ -105,7 +108,10 @@ export const arrayJumpingGame: Pick<
         lastJump = jumpedFrom;
         jumps++;
       }
-      return jumps === answer;
+      return jumps;
+    },
+    solver: (data, answer) => {
+      return arrayJumpingGame[CodingContractName.ArrayJumpingGameII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

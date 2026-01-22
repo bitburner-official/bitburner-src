@@ -4,7 +4,7 @@ import { CodingContractTypes } from "./ContractTypes";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { assertObject } from "../utils/TypeAssertion";
-import { Result } from "../types";
+import type { Result } from "@nsdefs";
 import { CodingContractEventEmitter } from "./CodingContractEventEmitter";
 
 // Numeric enum
@@ -80,6 +80,10 @@ export class CodingContract {
     this.type = type;
     this.state = CodingContractTypes[type].generate();
     this.reward = reward;
+  }
+
+  getAnswer() {
+    return CodingContractTypes[this.type].getAnswer(this.state);
   }
 
   getData(): unknown {

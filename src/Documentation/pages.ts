@@ -433,7 +433,7 @@ import nsDoc_bitburner_darknet_induceservermigration_md from "../../markdown/bit
 import nsDoc_bitburner_darknet_isdarknetserver_md from "../../markdown/bitburner.darknet.isdarknetserver.md?raw";
 import nsDoc_bitburner_darknet_md from "../../markdown/bitburner.darknet.md?raw";
 import nsDoc_bitburner_darknet_memoryreallocation_md from "../../markdown/bitburner.darknet.memoryreallocation.md?raw";
-import nsDoc_bitburner_darknet_nextupdate_md from "../../markdown/bitburner.darknet.nextupdate.md?raw";
+import nsDoc_bitburner_darknet_nextmutation_md from "../../markdown/bitburner.darknet.nextmutation.md?raw";
 import nsDoc_bitburner_darknet_opencache_md from "../../markdown/bitburner.darknet.opencache.md?raw";
 import nsDoc_bitburner_darknet_packetcapture_md from "../../markdown/bitburner.darknet.packetcapture.md?raw";
 import nsDoc_bitburner_darknet_phishingattack_md from "../../markdown/bitburner.darknet.phishingattack.md?raw";
@@ -445,6 +445,7 @@ import nsDoc_bitburner_darknetformulas_getauthenticatetime_md from "../../markdo
 import nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md from "../../markdown/bitburner.darknetformulas.getexpectedramblockremoved.md?raw";
 import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown/bitburner.darknetformulas.getheartbleedtime.md?raw";
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
+import nsDoc_bitburner_darknetinstability_md from "../../markdown/bitburner.darknetinstability.md?raw";
 import nsDoc_bitburner_darknetresponsecode_md from "../../markdown/bitburner.darknetresponsecode.md?raw";
 import nsDoc_bitburner_darknetresponsecodetype_md from "../../markdown/bitburner.darknetresponsecodetype.md?raw";
 import nsDoc_bitburner_darknetresult_md from "../../markdown/bitburner.darknetresult.md?raw";
@@ -508,6 +509,7 @@ import nsDoc_bitburner_factionworktask_factionworktype_md from "../../markdown/b
 import nsDoc_bitburner_factionworktask_md from "../../markdown/bitburner.factionworktask.md?raw";
 import nsDoc_bitburner_factionworktask_type_md from "../../markdown/bitburner.factionworktask.type.md?raw";
 import nsDoc_bitburner_factionworktype_md from "../../markdown/bitburner.factionworktype.md?raw";
+import nsDoc_bitburner_failureresult_md from "../../markdown/bitburner.failureresult.md?raw";
 import nsDoc_bitburner_filemetadata_atime_md from "../../markdown/bitburner.filemetadata.atime.md?raw";
 import nsDoc_bitburner_filemetadata_btime_md from "../../markdown/bitburner.filemetadata.btime.md?raw";
 import nsDoc_bitburner_filemetadata_md from "../../markdown/bitburner.filemetadata.md?raw";
@@ -1204,6 +1206,7 @@ import nsDoc_bitburner_resetinfo_lastnodereset_md from "../../markdown/bitburner
 import nsDoc_bitburner_resetinfo_md from "../../markdown/bitburner.resetinfo.md?raw";
 import nsDoc_bitburner_resetinfo_ownedaugs_md from "../../markdown/bitburner.resetinfo.ownedaugs.md?raw";
 import nsDoc_bitburner_resetinfo_ownedsf_md from "../../markdown/bitburner.resetinfo.ownedsf.md?raw";
+import nsDoc_bitburner_result_md from "../../markdown/bitburner.result.md?raw";
 import nsDoc_bitburner_runningscript_args_md from "../../markdown/bitburner.runningscript.args.md?raw";
 import nsDoc_bitburner_runningscript_dynamicramusage_md from "../../markdown/bitburner.runningscript.dynamicramusage.md?raw";
 import nsDoc_bitburner_runningscript_filename_md from "../../markdown/bitburner.runningscript.filename.md?raw";
@@ -1335,14 +1338,17 @@ import nsDoc_bitburner_skills_strength_md from "../../markdown/bitburner.skills.
 import nsDoc_bitburner_skillsformulas_calculateexp_md from "../../markdown/bitburner.skillsformulas.calculateexp.md?raw";
 import nsDoc_bitburner_skillsformulas_calculateskill_md from "../../markdown/bitburner.skillsformulas.calculateskill.md?raw";
 import nsDoc_bitburner_skillsformulas_md from "../../markdown/bitburner.skillsformulas.md?raw";
+import nsDoc_bitburner_sleeve_getmemoryupgradecost_md from "../../markdown/bitburner.sleeve.getmemoryupgradecost.md?raw";
 import nsDoc_bitburner_sleeve_getnumsleeves_md from "../../markdown/bitburner.sleeve.getnumsleeves.md?raw";
 import nsDoc_bitburner_sleeve_getsleeve_md from "../../markdown/bitburner.sleeve.getsleeve.md?raw";
 import nsDoc_bitburner_sleeve_getsleeveaugmentationprice_md from "../../markdown/bitburner.sleeve.getsleeveaugmentationprice.md?raw";
 import nsDoc_bitburner_sleeve_getsleeveaugmentationrepreq_md from "../../markdown/bitburner.sleeve.getsleeveaugmentationrepreq.md?raw";
 import nsDoc_bitburner_sleeve_getsleeveaugmentations_md from "../../markdown/bitburner.sleeve.getsleeveaugmentations.md?raw";
+import nsDoc_bitburner_sleeve_getsleevecost_md from "../../markdown/bitburner.sleeve.getsleevecost.md?raw";
 import nsDoc_bitburner_sleeve_getsleevepurchasableaugs_md from "../../markdown/bitburner.sleeve.getsleevepurchasableaugs.md?raw";
 import nsDoc_bitburner_sleeve_gettask_md from "../../markdown/bitburner.sleeve.gettask.md?raw";
 import nsDoc_bitburner_sleeve_md from "../../markdown/bitburner.sleeve.md?raw";
+import nsDoc_bitburner_sleeve_purchasesleeve_md from "../../markdown/bitburner.sleeve.purchasesleeve.md?raw";
 import nsDoc_bitburner_sleeve_purchasesleeveaug_md from "../../markdown/bitburner.sleeve.purchasesleeveaug.md?raw";
 import nsDoc_bitburner_sleeve_settobladeburneraction_md from "../../markdown/bitburner.sleeve.settobladeburneraction.md?raw";
 import nsDoc_bitburner_sleeve_settocommitcrime_md from "../../markdown/bitburner.sleeve.settocommitcrime.md?raw";
@@ -1354,6 +1360,7 @@ import nsDoc_bitburner_sleeve_settoshockrecovery_md from "../../markdown/bitburn
 import nsDoc_bitburner_sleeve_settosynchronize_md from "../../markdown/bitburner.sleeve.settosynchronize.md?raw";
 import nsDoc_bitburner_sleeve_settouniversitycourse_md from "../../markdown/bitburner.sleeve.settouniversitycourse.md?raw";
 import nsDoc_bitburner_sleeve_travel_md from "../../markdown/bitburner.sleeve.travel.md?raw";
+import nsDoc_bitburner_sleeve_upgradememory_md from "../../markdown/bitburner.sleeve.upgradememory.md?raw";
 import nsDoc_bitburner_sleevebladeburnertask_md from "../../markdown/bitburner.sleevebladeburnertask.md?raw";
 import nsDoc_bitburner_sleeveclasstask_md from "../../markdown/bitburner.sleeveclasstask.md?raw";
 import nsDoc_bitburner_sleevecompanytask_md from "../../markdown/bitburner.sleevecompanytask.md?raw";
@@ -1442,6 +1449,7 @@ import nsDoc_bitburner_studytask_classtype_md from "../../markdown/bitburner.stu
 import nsDoc_bitburner_studytask_location_md from "../../markdown/bitburner.studytask.location.md?raw";
 import nsDoc_bitburner_studytask_md from "../../markdown/bitburner.studytask.md?raw";
 import nsDoc_bitburner_studytask_type_md from "../../markdown/bitburner.studytask.type.md?raw";
+import nsDoc_bitburner_successresult_md from "../../markdown/bitburner.successresult.md?raw";
 import nsDoc_bitburner_tailproperties_fontsize_md from "../../markdown/bitburner.tailproperties.fontsize.md?raw";
 import nsDoc_bitburner_tailproperties_height_md from "../../markdown/bitburner.tailproperties.height.md?raw";
 import nsDoc_bitburner_tailproperties_md from "../../markdown/bitburner.tailproperties.md?raw";
@@ -1997,7 +2005,7 @@ AllPages["nsDoc/bitburner.darknet.induceservermigration.md"] = nsDoc_bitburner_d
 AllPages["nsDoc/bitburner.darknet.isdarknetserver.md"] = nsDoc_bitburner_darknet_isdarknetserver_md;
 AllPages["nsDoc/bitburner.darknet.md"] = nsDoc_bitburner_darknet_md;
 AllPages["nsDoc/bitburner.darknet.memoryreallocation.md"] = nsDoc_bitburner_darknet_memoryreallocation_md;
-AllPages["nsDoc/bitburner.darknet.nextupdate.md"] = nsDoc_bitburner_darknet_nextupdate_md;
+AllPages["nsDoc/bitburner.darknet.nextmutation.md"] = nsDoc_bitburner_darknet_nextmutation_md;
 AllPages["nsDoc/bitburner.darknet.opencache.md"] = nsDoc_bitburner_darknet_opencache_md;
 AllPages["nsDoc/bitburner.darknet.packetcapture.md"] = nsDoc_bitburner_darknet_packetcapture_md;
 AllPages["nsDoc/bitburner.darknet.phishingattack.md"] = nsDoc_bitburner_darknet_phishingattack_md;
@@ -2009,6 +2017,7 @@ AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] = nsDoc_bitbu
 AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
+AllPages["nsDoc/bitburner.darknetinstability.md"] = nsDoc_bitburner_darknetinstability_md;
 AllPages["nsDoc/bitburner.darknetresponsecode.md"] = nsDoc_bitburner_darknetresponsecode_md;
 AllPages["nsDoc/bitburner.darknetresponsecodetype.md"] = nsDoc_bitburner_darknetresponsecodetype_md;
 AllPages["nsDoc/bitburner.darknetresult.md"] = nsDoc_bitburner_darknetresult_md;
@@ -2072,6 +2081,7 @@ AllPages["nsDoc/bitburner.factionworktask.factionworktype.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.factionworktask.md"] = nsDoc_bitburner_factionworktask_md;
 AllPages["nsDoc/bitburner.factionworktask.type.md"] = nsDoc_bitburner_factionworktask_type_md;
 AllPages["nsDoc/bitburner.factionworktype.md"] = nsDoc_bitburner_factionworktype_md;
+AllPages["nsDoc/bitburner.failureresult.md"] = nsDoc_bitburner_failureresult_md;
 AllPages["nsDoc/bitburner.filemetadata.atime.md"] = nsDoc_bitburner_filemetadata_atime_md;
 AllPages["nsDoc/bitburner.filemetadata.btime.md"] = nsDoc_bitburner_filemetadata_btime_md;
 AllPages["nsDoc/bitburner.filemetadata.md"] = nsDoc_bitburner_filemetadata_md;
@@ -2768,6 +2778,7 @@ AllPages["nsDoc/bitburner.resetinfo.lastnodereset.md"] = nsDoc_bitburner_resetin
 AllPages["nsDoc/bitburner.resetinfo.md"] = nsDoc_bitburner_resetinfo_md;
 AllPages["nsDoc/bitburner.resetinfo.ownedaugs.md"] = nsDoc_bitburner_resetinfo_ownedaugs_md;
 AllPages["nsDoc/bitburner.resetinfo.ownedsf.md"] = nsDoc_bitburner_resetinfo_ownedsf_md;
+AllPages["nsDoc/bitburner.result.md"] = nsDoc_bitburner_result_md;
 AllPages["nsDoc/bitburner.runningscript.args.md"] = nsDoc_bitburner_runningscript_args_md;
 AllPages["nsDoc/bitburner.runningscript.dynamicramusage.md"] = nsDoc_bitburner_runningscript_dynamicramusage_md;
 AllPages["nsDoc/bitburner.runningscript.filename.md"] = nsDoc_bitburner_runningscript_filename_md;
@@ -2899,14 +2910,17 @@ AllPages["nsDoc/bitburner.skills.strength.md"] = nsDoc_bitburner_skills_strength
 AllPages["nsDoc/bitburner.skillsformulas.calculateexp.md"] = nsDoc_bitburner_skillsformulas_calculateexp_md;
 AllPages["nsDoc/bitburner.skillsformulas.calculateskill.md"] = nsDoc_bitburner_skillsformulas_calculateskill_md;
 AllPages["nsDoc/bitburner.skillsformulas.md"] = nsDoc_bitburner_skillsformulas_md;
+AllPages["nsDoc/bitburner.sleeve.getmemoryupgradecost.md"] = nsDoc_bitburner_sleeve_getmemoryupgradecost_md;
 AllPages["nsDoc/bitburner.sleeve.getnumsleeves.md"] = nsDoc_bitburner_sleeve_getnumsleeves_md;
 AllPages["nsDoc/bitburner.sleeve.getsleeve.md"] = nsDoc_bitburner_sleeve_getsleeve_md;
 AllPages["nsDoc/bitburner.sleeve.getsleeveaugmentationprice.md"] = nsDoc_bitburner_sleeve_getsleeveaugmentationprice_md;
 AllPages["nsDoc/bitburner.sleeve.getsleeveaugmentationrepreq.md"] = nsDoc_bitburner_sleeve_getsleeveaugmentationrepreq_md;
 AllPages["nsDoc/bitburner.sleeve.getsleeveaugmentations.md"] = nsDoc_bitburner_sleeve_getsleeveaugmentations_md;
+AllPages["nsDoc/bitburner.sleeve.getsleevecost.md"] = nsDoc_bitburner_sleeve_getsleevecost_md;
 AllPages["nsDoc/bitburner.sleeve.getsleevepurchasableaugs.md"] = nsDoc_bitburner_sleeve_getsleevepurchasableaugs_md;
 AllPages["nsDoc/bitburner.sleeve.gettask.md"] = nsDoc_bitburner_sleeve_gettask_md;
 AllPages["nsDoc/bitburner.sleeve.md"] = nsDoc_bitburner_sleeve_md;
+AllPages["nsDoc/bitburner.sleeve.purchasesleeve.md"] = nsDoc_bitburner_sleeve_purchasesleeve_md;
 AllPages["nsDoc/bitburner.sleeve.purchasesleeveaug.md"] = nsDoc_bitburner_sleeve_purchasesleeveaug_md;
 AllPages["nsDoc/bitburner.sleeve.settobladeburneraction.md"] = nsDoc_bitburner_sleeve_settobladeburneraction_md;
 AllPages["nsDoc/bitburner.sleeve.settocommitcrime.md"] = nsDoc_bitburner_sleeve_settocommitcrime_md;
@@ -2918,6 +2932,7 @@ AllPages["nsDoc/bitburner.sleeve.settoshockrecovery.md"] = nsDoc_bitburner_sleev
 AllPages["nsDoc/bitburner.sleeve.settosynchronize.md"] = nsDoc_bitburner_sleeve_settosynchronize_md;
 AllPages["nsDoc/bitburner.sleeve.settouniversitycourse.md"] = nsDoc_bitburner_sleeve_settouniversitycourse_md;
 AllPages["nsDoc/bitburner.sleeve.travel.md"] = nsDoc_bitburner_sleeve_travel_md;
+AllPages["nsDoc/bitburner.sleeve.upgradememory.md"] = nsDoc_bitburner_sleeve_upgradememory_md;
 AllPages["nsDoc/bitburner.sleevebladeburnertask.md"] = nsDoc_bitburner_sleevebladeburnertask_md;
 AllPages["nsDoc/bitburner.sleeveclasstask.md"] = nsDoc_bitburner_sleeveclasstask_md;
 AllPages["nsDoc/bitburner.sleevecompanytask.md"] = nsDoc_bitburner_sleevecompanytask_md;
@@ -3006,6 +3021,7 @@ AllPages["nsDoc/bitburner.studytask.classtype.md"] = nsDoc_bitburner_studytask_c
 AllPages["nsDoc/bitburner.studytask.location.md"] = nsDoc_bitburner_studytask_location_md;
 AllPages["nsDoc/bitburner.studytask.md"] = nsDoc_bitburner_studytask_md;
 AllPages["nsDoc/bitburner.studytask.type.md"] = nsDoc_bitburner_studytask_type_md;
+AllPages["nsDoc/bitburner.successresult.md"] = nsDoc_bitburner_successresult_md;
 AllPages["nsDoc/bitburner.tailproperties.fontsize.md"] = nsDoc_bitburner_tailproperties_fontsize_md;
 AllPages["nsDoc/bitburner.tailproperties.height.md"] = nsDoc_bitburner_tailproperties_height_md;
 AllPages["nsDoc/bitburner.tailproperties.md"] = nsDoc_bitburner_tailproperties_md;

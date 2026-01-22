@@ -37,13 +37,16 @@ import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 import { resolveCacheFilePath } from "../Paths/CacheFilePath";
-import { CacheResult } from "@nsdefs";
+import type { CacheResult } from "@nsdefs";
 import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
+import { isIPAddress } from "../Types/strings";
+import { getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
+import { shuffle } from "lodash";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
   logsToCapture: number;
-  additionalMsec?: number;
+  additionalMsec: number;
 };
 
 function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartbleedOptions {
@@ -62,25 +65,25 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
     ...defaults,
     ...opts,
   };
-  if (typeof options.peek !== "boolean") {
-    throw helpers.errorMessage(ctx, `Invalid arguments: "options.peek" is not a boolean`);
-  }
-  if (typeof options.logsToCapture !== "number" || options.logsToCapture < 1) {
-    throw helpers.errorMessage(ctx, `Invalid arguments: "options.logsToCapture" is not a positive integer`);
-  }
-  if (options.logsToCapture > 8) {
+  const peek = helpers.boolean(ctx, "options.peek", options.peek);
+  const logsToCapture = helpers.positiveInteger(ctx, "options.logsToCapture", options.logsToCapture);
+  if (logsToCapture > 8) {
     throw helpers.errorMessage(
       ctx,
-      `Invalid arguments: "options.logsToCapture" (${options.logsToCapture}) is larger than 8`,
+      `Invalid arguments: "options.logsToCapture" (${options.logsToCapture}) must be smaller than or equal to 8`,
     );
   }
-  if (typeof options.additionalMsec !== "number" || options.additionalMsec < 0) {
-    throw helpers.errorMessage(ctx, `Invalid arguments: "options.additionalMsec" is not a positive integer`);
+  const additionalMsec = helpers.integer(ctx, "options.additionalMsec", options.additionalMsec);
+  if (additionalMsec < 0) {
+    throw helpers.errorMessage(
+      ctx,
+      `Invalid arguments: "options.additionalMsec" (${options.additionalMsec}) must be a non-negative integer`,
+    );
   }
   return {
-    peek: options.peek,
-    logsToCapture: options.logsToCapture,
-    additionalMsec: options.additionalMsec,
+    peek,
+    logsToCapture,
+    additionalMsec,
   };
 }
 
@@ -88,8 +91,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
   return {
     authenticate:
       (ctx: NetscriptContext) =>
-      (_hostname, _password, _additionalMsec): Promise<DarknetResult> => {
-        const targetHostname = helpers.string(ctx, "hostname", _hostname);
+      (_host, _password, _additionalMsec): Promise<DarknetResult> => {
+        const targetHost = helpers.string(ctx, "host", _host);
         const password = helpers.string(ctx, "password", _password);
         const additionalMsec = helpers.number(ctx, "additionalMsec", _additionalMsec ?? 0);
         if (additionalMsec < 0) {
@@ -105,7 +108,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             }. Attempted password starts with ${password.slice(0, 100)} `,
           );
         }
-        const onlineConnectionCheck = getFailureResult(ctx, targetHostname, {
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
           requireDirectConnection: true,
         });
         if (!onlineConnectionCheck.success) {
@@ -128,7 +131,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         );
 
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
-          const onlineConnectionCheck = getFailureResult(ctx, targetHostname, { requireDirectConnection: true });
+          const onlineConnectionCheck = getFailureResult(ctx, targetHost, { requireDirectConnection: true });
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({
               success: false,
@@ -137,9 +140,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             }));
           }
 
+          const server = onlineConnectionCheck.server;
           // Authentication has a chance to timeout based on darknet instability
           if (Math.random() < getTimeoutChance()) {
-            logger(ctx)(`Authentication to ${targetHostname} timed out due to network instability. Please try again.`);
+            logger(ctx)(`Authentication to ${server.hostname} timed out due to network instability. Please try again.`);
             return {
               success: false,
               code: ResponseCodeEnum.RequestTimeOut,
@@ -147,7 +151,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             };
           }
 
-          const server = onlineConnectionCheck.server;
           const authResult = getAuthResult(server, password, threads, networkDelay, ctx.workerScript.pid);
           const success = authResult.result.success;
           const xp = formatNumber(calculatePasswordAttemptChaGain(server, threads, success), 1);
@@ -155,7 +158,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             `Authentication on ${server.hostname} ${success ? "succeeded" : `failed. (Gained ${xp} cha xp)`}`,
           );
 
-          if (isLabyrinthServer(targetHostname)) {
+          if (isLabyrinthServer(server.hostname)) {
             return {
               success: success,
               code: success ? ResponseCodeEnum.Success : ResponseCodeEnum.AuthFailure,
@@ -173,8 +176,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       },
     connectToSession:
       (ctx: NetscriptContext) =>
-      (_hostname, _password): DarknetResult => {
-        const targetHostname = helpers.string(ctx, "hostname", _hostname);
+      (_host, _password): DarknetResult => {
+        const targetHost = helpers.string(ctx, "host", _host);
         const token = helpers.string(ctx, "password", _password);
         if (token.length > 100) {
           throw helpers.errorMessage(
@@ -184,7 +187,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             }. Attempted password starts with ${token.slice(0, 100)} `,
           );
         }
-        const onlineConnectionCheck = getFailureResult(ctx, targetHostname, {
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
           requireAdminRights: true,
         });
         if (!onlineConnectionCheck.success) {
@@ -199,7 +202,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const result = checkPassword(server, token, ctx.workerScript.scriptRef.threads, ctx.workerScript.pid);
         if (result.code !== ResponseCodeEnum.Success) {
           logger(ctx)(
-            `${targetHostname} does not recognise that password. Use ns.dnet.authenticate() to create a session.`,
+            `${server.hostname} does not recognise that password. Use ns.dnet.authenticate() to create a session.`,
           );
           return {
             success: false,
@@ -217,10 +220,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       },
     heartbleed:
       (ctx: NetscriptContext) =>
-      (_hostname, _opts): Promise<DarknetResult & { logs: string[] }> => {
-        const targetHostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+      (_host, _opts): Promise<DarknetResult & { logs: string[] }> => {
+        const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
         const options = heartbleedOptions(ctx, _opts);
-        const onlineConnectionCheck = getFailureResult(ctx, targetHostname, {
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
           requireDirectConnection: true,
         });
         if (!onlineConnectionCheck.success) {
@@ -236,12 +239,12 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 1.5 +
           (options.additionalMsec ?? 0);
         logger(ctx)(
-          `Attempting to extract data from ${targetHostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
+          `Attempting to extract data from ${server.hostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
         );
 
         if (Player.skills.charisma < server.requiredCharismaSkill) {
           logger(ctx)(
-            `You need a higher charisma level to extract data from ${targetHostname}. (${server.requiredHackingSkill} required)`,
+            `You need a higher charisma level to extract data from ${server.hostname}. (${server.requiredHackingSkill} required)`,
           );
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
@@ -254,7 +257,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
           const xpGained = Player.mults.charisma_exp * 50 * ((500 + Player.skills.charisma) / 500);
           Player.gainCharismaExp(xpGained);
-          const onlineConnectionCheck = getFailureResult(ctx, targetHostname, { requireDirectConnection: true });
+          const onlineConnectionCheck = getFailureResult(ctx, targetHost, { requireDirectConnection: true });
           if (!onlineConnectionCheck.success) {
             return {
               success: false,
@@ -263,11 +266,11 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
               logs: [],
             };
           }
-          const serverState = getServerState(targetHostname);
+          const serverState = getServerState(server.hostname);
 
-          logger(ctx)(`Extracted log data from ${targetHostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
+          logger(ctx)(`Extracted log data from ${server.hostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
 
-          if (isLabyrinthServer(targetHostname)) {
+          if (isLabyrinthServer(server.hostname)) {
             const location = DarknetState.labLocations[ctx.workerScript.pid];
             if (!location) {
               return {
@@ -354,17 +357,16 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             out.push(entry);
           }
         }
-        helpers.log(ctx, () => `returned ${out.length} connections for ${server.hostname}`);
+        helpers.log(ctx, () => `Returned ${out.length} connections for ${server.hostname}`);
         // The order of results is shuffled. There's no anthropomorphic bias like in the standard network's scan results order.
-        const rotationPoint = Math.floor(Math.random() * out.length);
-        return out.slice(rotationPoint).concat(out.slice(0, rotationPoint));
+        return shuffle(out);
       },
     setStasisLink:
       (ctx: NetscriptContext) =>
       (_shouldLink): Promise<DarknetResult> => {
         const shouldLink = helpers.boolean(ctx, "shouldLink", _shouldLink ?? true);
-        const hostname = ctx.workerScript.getServer().hostname;
-        const onlineConnectionCheck = getFailureResult(ctx, hostname);
+        const targetHost = ctx.workerScript.getServer().hostname;
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
@@ -406,9 +408,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         logger(ctx)(`Stasis linked servers: ${serverNames}`);
         return serverNames;
       },
-    getServerAuthDetails: (ctx) => (_hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const onlineConnectionCheck = getFailureResult(ctx, hostname);
+    getServerAuthDetails: (ctx) => (_host) => {
+      const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
+      const onlineConnectionCheck = getFailureResult(ctx, targetHost);
       if (!onlineConnectionCheck.success) {
         logger(ctx)(onlineConnectionCheck.message);
         return {
@@ -439,9 +441,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         passwordFormat: getPasswordType(targetServer.password),
       } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
     },
-    packetCapture: (ctx) => (_hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const onlineConnectionCheck = getFailureResult(ctx, hostname, {
+    packetCapture: (ctx) => (_host) => {
+      const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
+      const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
         requireDirectConnection: true,
       });
       if (!onlineConnectionCheck.success) {
@@ -457,7 +459,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const networkDelay = calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 4;
       const xp = formatNumber(calculatePasswordAttemptChaGain(server, ctx.workerScript.scriptRef.threads), 1);
 
-      logger(ctx)(`Captured some outgoing transmissions from ${hostname}. (Gained ${xp} cha xp)`);
+      logger(ctx)(`Captured some outgoing transmissions from ${server.hostname}. (Gained ${xp} cha xp)`);
       return helpers.netscriptDelay(ctx, networkDelay).then(() => {
         return {
           success: true,
@@ -469,9 +471,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     },
     induceServerMigration:
       (ctx) =>
-      (_hostname): Promise<DarknetResult> => {
-        const hostname = helpers.string(ctx, "hostname", _hostname);
-        const onlineConnectionCheck = getFailureResult(ctx, hostname, {
+      (_host): Promise<DarknetResult> => {
+        const targetHost = helpers.string(ctx, "host", _host);
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
           requireDirectConnection: true,
           preventUseOnStationaryServers: true,
         });
@@ -482,7 +484,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             message: onlineConnectionCheck.message,
           }));
         }
-        if (hostname === ctx.workerScript.hostname) {
+        const hostOfCurrentServer = !isIPAddress(targetHost)
+          ? ctx.workerScript.hostname
+          : getDarknetServerOrThrow(ctx.workerScript.hostname).ip;
+        if (targetHost === hostOfCurrentServer) {
           const message = `Cannot induce migration on a script's own server. induceServerMigration must target a neighboring connected server.`;
           logger(ctx)(message);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -496,7 +501,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
         // induceServerMigration's delay is hardcoded at 6s. We should skip this delay in Jest tests.
         return helpers.netscriptDelay(ctx, !CONSTANTS.isInTestEnvironment ? 6000 : 0).then(() => {
-          const onlineConnectionCheck = getFailureResult(ctx, hostname, {
+          const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
             requireDirectConnection: true,
             preventUseOnStationaryServers: true,
           });
@@ -549,9 +554,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         message: GenericResponseMessage.Success,
       };
     },
-    isDarknetServer: (ctx) => (_hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const server = GetServer(hostname);
+    isDarknetServer: (ctx) => (_host) => {
+      const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
+      const server = GetServer(targetHost);
       if (!server) {
         return false;
       }
@@ -562,9 +567,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     },
     memoryReallocation:
       (ctx) =>
-      (_hostname): Promise<DarknetResult> => {
-        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-        const onlineConnectionCheck = getFailureResult(ctx, hostname, {
+      (_host): Promise<DarknetResult> => {
+        const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
           requireDirectConnection: true,
           requireSession: true,
         });
@@ -590,7 +595,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const delayTime = Math.max(8000 * (500 / (500 + Player.skills.charisma)), 200);
 
         return helpers.netscriptDelay(ctx, delayTime).then(() => {
-          const onlineConnectionCheck = getFailureResult(ctx, hostname, {
+          const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
             requireDirectConnection: true,
             requireSession: true,
           });
@@ -615,10 +620,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       },
     getBlockedRam:
       (ctx) =>
-      (_hostname): number => {
-        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+      (_host): number => {
+        const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
         expectRunningOnDarknetServer(ctx);
-        const onlineConnectionCheck = getFailureResult(ctx, hostname);
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return 0;
         }
@@ -626,10 +631,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       },
     getDepth:
       (ctx) =>
-      (_hostname): number => {
-        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+      (_host): number => {
+        const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
         expectRunningOnDarknetServer(ctx);
-        const onlineConnectionCheck = getFailureResult(ctx, hostname);
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return -1;
         }
@@ -676,19 +681,19 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     getDarknetInstability: (ctx) => () => {
       expectDarknetAccess(ctx);
       return {
-        authenticateDurationMultiplier: getBackdoorAuthTimeDebuff(),
-        authenticateTimeoutChance: getTimeoutChance(),
+        authenticationDurationMultiplier: getBackdoorAuthTimeDebuff(),
+        authenticationTimeoutChance: getTimeoutChance(),
       };
     },
-    nextUpdate: (ctx) => () => {
+    nextMutation: (ctx) => () => {
       expectDarknetAccess(ctx);
-      return DarknetState.nextUpdate;
+      return DarknetState.nextMutation;
     },
     getServerRequiredCharismaLevel:
       (ctx) =>
-      (_hostname): number => {
-        const hostname = helpers.string(ctx, "hostname", _hostname);
-        const onlineConnectionCheck = getFailureResult(ctx, hostname);
+      (_host): number => {
+        const targetHost = helpers.string(ctx, "host", _host);
+        const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return -1;
         }
