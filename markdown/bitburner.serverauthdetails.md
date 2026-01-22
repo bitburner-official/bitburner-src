@@ -9,7 +9,7 @@ Details about a server's authentication schema
 **Signature:**
 
 ```typescript
-export type ServerAuthDetails = {
+type ServerAuthDetails = {
   isConnectedToCurrentServer: boolean;
   hasSession: boolean;
   modelId: string;

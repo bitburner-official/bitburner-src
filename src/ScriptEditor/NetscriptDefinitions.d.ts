@@ -4392,7 +4392,7 @@ export type CacheResult = {
  * Details about a server's authentication schema
  * @public
  */
-export type ServerAuthDetails = {
+type ServerAuthDetails = {
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
@@ -4412,10 +4412,10 @@ export type ServerAuthDetails = {
 };
 
 /**
- * Response from attempting to scrape logs from a server
+ * Options to change the behavior of {@link Darknet.heartbleed | heartbleed} API.
  * @public
  */
-export type HeartbleedOptions = {
+type HeartbleedOptions = {
   /** If true, looks at the most recent log line but does not extract it (overrides logsToCapture). Default is false. */
   peek?: boolean;
   /** The number of log lines to remove from the server, up to a max of 8. Default is 3. Must be a positive integer. */
