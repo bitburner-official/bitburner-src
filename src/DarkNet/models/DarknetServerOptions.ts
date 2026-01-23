@@ -10,20 +10,21 @@ import {
   ServerNamePrefixes,
   ServerNameSuffixes,
 } from "./dictionaryData";
-import { getLabyrinthDetails } from "../effects/labyrinth";
+import { getLabyrinthDetails, type LocationStatus } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import type { DarknetResponseCode } from "@nsdefs";
 import type { MinigamesType } from "../Enums";
 import { DarknetState } from "./DarknetState";
 import { getRamBlock } from "../effects/ramblock";
 import { hasFullDarknetAccess } from "../effects/effects";
+import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 
 export type PasswordResponse = {
   code: DarknetResponseCode;
   passwordAttempted: string;
   passwordExpected?: string;
   message: string;
-  data?: string;
+  data?: string | LocationStatus;
   responseTime?: number;
 };
 
@@ -36,6 +37,14 @@ export function isPasswordResponse(v: unknown): v is PasswordResponse {
     "message" in v &&
     typeof v.passwordAttempted === "string"
   );
+}
+
+export function assertPasswordResponse(v: unknown): asserts v is PasswordResponse {
+  const type = getFriendlyType(v);
+  if (!isPasswordResponse(v)) {
+    console.error("The value is not a PasswordResponse. Value:", v);
+    throw new TypeAssertionError(`The value is not a PasswordResponse. Its type is ${type}.`, type);
+  }
 }
 
 export type DarknetServerOptions = {

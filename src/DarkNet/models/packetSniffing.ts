@@ -8,7 +8,8 @@ import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 import { getExactCorrectChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
-import { isLabyrinthServer } from "../effects/labyrinth";
+import { isLabyrinthServer, isLocationStatus } from "../effects/labyrinth";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 const MAX_LOG_LINES = 32;
 
@@ -114,7 +115,19 @@ export const logPasswordAttempt = (server: DarknetServer, passwordResponse: Pass
 
   // buffer overflow servers have special logging: any characters beyond the password length start to overwrite the
   // response code in the log, which can turn it into a 200
-  if (server.modelId === ModelIds.BufferOverflow && passwordResponse) {
+  if (server.modelId === ModelIds.BufferOverflow) {
+    if (isLocationStatus(passwordResponse.data)) {
+      exceptionAlert(
+        new Error(
+          `Invalid password response data of model: ${ModelIds.BufferOverflow}. Got a location status instead of a ` +
+            `string or undefined. Server: ${server.hostname}. passwordAttempted: ${
+              passwordResponse.passwordAttempted
+            }. data: ${JSON.stringify(passwordResponse.data)}`,
+        ),
+        true,
+      );
+      return;
+    }
     const [passwordInBuffer, overflow] = (passwordResponse.data ?? "").split(",");
     message = {
       code: passwordResponse.code,

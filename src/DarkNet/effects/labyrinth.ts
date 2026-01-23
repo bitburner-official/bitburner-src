@@ -9,6 +9,7 @@ import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
+import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 
 export const LAB_CACHE_NAME = "the_great_work";
 
@@ -244,7 +245,7 @@ export const handleLabyrinthPassword = (
     };
   }
   const surroundings = getSurroundingsVisualized(maze, initialX, initialY);
-  const status: locationStatus = {
+  const status: LocationStatus = {
     coords: [initialX, initialY],
     north: surroundings[0][1] === PATH,
     east: surroundings[1][2] === PATH,
@@ -258,7 +259,7 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
       message: `You cannot go that way. You are still at ${initialX},${initialY}.`,
-      data: JSON.stringify(status, null, 2),
+      data: status,
     };
   }
 
@@ -267,7 +268,7 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
       message: `You don't know how to do that. Try a command such as "go north"`,
-      data: JSON.stringify(status, null, 2),
+      data: status,
     };
   }
 
@@ -294,7 +295,7 @@ export const handleLabyrinthPassword = (
     passwordAttempted: attemptedPassword,
     code: ResponseCodeEnum.AuthFailure,
     message: `You have moved to ${newLocation[0]},${newLocation[1]}.`,
-    data: JSON.stringify(status),
+    data: status,
   };
 };
 
@@ -453,4 +454,26 @@ export const getLabyrinthDetails = (): {
   };
 };
 
-export type locationStatus = { east: boolean; south: boolean; north: boolean; west: boolean; coords: number[] };
+export type LocationStatus = { east: boolean; south: boolean; north: boolean; west: boolean; coords: number[] };
+
+export function isLocationStatus(v: unknown): v is LocationStatus {
+  return (
+    v != null &&
+    typeof v === "object" &&
+    "east" in v &&
+    "south" in v &&
+    "north" in v &&
+    "west" in v &&
+    "coords" in v &&
+    Array.isArray(v.coords) &&
+    v.coords.every((coord) => Number.isInteger(coord))
+  );
+}
+
+export function assertLocationStatus(v: unknown): asserts v is LocationStatus {
+  const type = getFriendlyType(v);
+  if (!isLocationStatus(v)) {
+    console.error("The value is not a string. Value:", v);
+    throw new TypeAssertionError(`The value is not a LocationStatus. Its type is ${type}.`, type);
+  }
+}

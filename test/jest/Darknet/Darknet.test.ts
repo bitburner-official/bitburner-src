@@ -40,6 +40,8 @@ import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 import { isNumber } from "../../../src/types";
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 import { Player } from "@player";
+import { assertString } from "../../../src/utils/TypeAssertion";
+import { assertPasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -108,6 +110,7 @@ describe("Password Tests", () => {
       if (!authLog.data) {
         throw new Error(`Auth log does not contain data: ${JSON.stringify(authLog)}`);
       }
+      assertString(authLog.data);
       return authLog.data.split(",").map((item) => item.trim());
     };
 
@@ -165,6 +168,7 @@ describe("Password Tests", () => {
     if (!failedAttemptResponse.response.data) {
       throw new Error(`Password response does not contain data: ${JSON.stringify(failedAttemptResponse.response)}`);
     }
+    assertString(failedAttemptResponse.response.data);
     const [base, numberString] = failedAttemptResponse.response.data.split(",");
     expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
@@ -185,6 +189,7 @@ describe("Password Tests", () => {
     if (!failedAttemptResponse.response.data) {
       throw new Error(`Password response does not contain data: ${JSON.stringify(failedAttemptResponse.response)}`);
     }
+    assertString(failedAttemptResponse.response.data);
     const [base, numberString] = failedAttemptResponse.response.data.split(",");
     expect(numberString).toBe(encodeNumberInBaseN(+server.password, Number(base)));
 
@@ -300,6 +305,7 @@ describe("Password Tests", () => {
     if (!xorData) {
       throw new Error(`Password response does not contain data: ${JSON.stringify(failedAttemptResponse.response)}`);
     }
+    assertString(xorData);
     const [encryptedPasswordString, maskString] = xorData.split(";");
     const mask = maskString.split(" ").map((byte) => parseInt(byte, 2));
     const encryptedPasswordChars = encryptedPasswordString.split("");
@@ -352,6 +358,11 @@ describe("Password Tests", () => {
 
     const serverLogs = DarknetState.serverState[server.hostname].serverLogs;
     expect(serverLogs.length).toBe(5);
+    assertPasswordResponse(serverLogs[4].message);
+    assertPasswordResponse(serverLogs[3].message);
+    assertPasswordResponse(serverLogs[2].message);
+    assertPasswordResponse(serverLogs[1].message);
+    assertPasswordResponse(serverLogs[0].message);
     expect(serverLogs[4].message.message).toBe("Found a mismatch while checking each character (0)");
     expect(serverLogs[3].message.message).toBe("Found a mismatch while checking each character (1)");
     expect(serverLogs[2].message.message).toBe("Found a mismatch while checking each character (2)");
