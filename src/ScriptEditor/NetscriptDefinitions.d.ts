@@ -4363,7 +4363,10 @@ export interface DarknetServerData {
   hasStasisLink: boolean;
   /** The amount of ram blocked by the server owner */
   blockedRam: number;
-  /** The model of the server. Similar models have similar vulnerabilites. */
+  /**
+   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
+   * You are supposed to experiment and discover the models.
+   */
   modelId: string;
   /** The generic password prompt for the server */
   staticPasswordHint: string;
@@ -4455,7 +4458,7 @@ export interface Darknet {
    * @param password - Password to attempt to authenticate with.
    * @param additionalMsec - Optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
    * @returns A promise that resolves to a {@link DarknetResult} object. The resolved object may contain an optional
-   * property. The type of this property is intentionaly not documented. You are supposed to experiment and discover the
+   * property. The type of this property is intentionaly undocumented. You are supposed to experiment and discover the
    * content of this property.
    */
   authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;

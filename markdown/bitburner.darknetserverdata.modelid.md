@@ -4,7 +4,7 @@
 
 ## DarknetServerData.modelId property
 
-The model of the server. Similar models have similar vulnerabilites.
+The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented. You are supposed to experiment and discover the models.
 
 **Signature:**
 
