@@ -812,8 +812,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.StasisLinkHint,
     text: (
       <Typography>
-        Tired of the server you are on restarting or moving? You need to try our latest networking tool, the Stasis Link!{" "}
-        <br />
+        Tired of the server you are on restarting or moving? You need to try our latest networking tool, the Stasis
+        Link! <br />
         With the click of a `ns.dnet.setStasisLink()`, you, too, can sleep soundly knowing that that server is not gonna
         go anywhere. <br />
         <br />
