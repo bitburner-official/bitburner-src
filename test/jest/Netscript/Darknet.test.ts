@@ -916,14 +916,14 @@ describe("Non-darkweb darknet server", () => {
     const result = ns.dnet.isDarknetServer();
     expect(result).toStrictEqual(true);
   });
-  test("memoryReallocation", async () => {
-    const ns = getNsOnNonDarkwebDarknetServer();
+  test("memoryReallocation from darkweb", async () => {
+    const ns = getNsOnDarkWeb();
+    const target = getFirstDarknetServerAdjacentToDarkWeb();
 
-    const result1 = await ns.dnet.memoryReallocation();
+    const result1 = await ns.dnet.memoryReallocation(target);
     expect(result1.success).toStrictEqual(false);
     expect(result1.code).toStrictEqual(ResponseCodeEnum.AuthFailure);
 
-    const target = ns.getHostname();
     const server = getDarknetServerOrThrow(target);
     server.ramUsed = server.blockedRam = 1;
     const password = server.password;
@@ -932,48 +932,19 @@ describe("Non-darkweb darknet server", () => {
     expect(result2.success).toStrictEqual(true);
     expect(result2.code).toStrictEqual(ResponseCodeEnum.Success);
 
-    const result3 = await ns.dnet.memoryReallocation();
+    const result3 = await ns.dnet.memoryReallocation(target);
     expect(result3.success).toStrictEqual(true);
     expect(result3.code).toStrictEqual(ResponseCodeEnum.Success);
   });
-  test("memoryReallocation from darkweb - missing a session", async () => {
-    const ns = getNsOnDarkWeb();
-
-    const target = getFirstDarknetServerAdjacentToDarkWeb();
-    const result1 = await ns.dnet.memoryReallocation(target);
-    expect(result1.success).toStrictEqual(false);
-    expect(result1.code).toStrictEqual(ResponseCodeEnum.AuthFailure);
-
-    const server = getDarknetServerOrThrow(target);
-    // Set root access directly instead of calling the authenticate API
+  test("memoryReallocation itself", async () => {
+    const server = getDarknetServerOrThrow(getFirstDarknetServerAdjacentToDarkWeb());
     server.hasAdminRights = true;
     server.ramUsed = server.blockedRam = 1;
-    const password = server.password;
 
-    // Missing a session
-    const result2 = await ns.dnet.memoryReallocation(target);
-    expect(result2.success).toStrictEqual(false);
-    expect(result2.code).toStrictEqual(ResponseCodeEnum.AuthFailure);
-
-    const result3 = ns.dnet.connectToSession(target, password);
+    const ns = getNS(server.hostname);
+    const result3 = await ns.dnet.memoryReallocation(ns.getHostname());
     expect(result3.success).toStrictEqual(true);
     expect(result3.code).toStrictEqual(ResponseCodeEnum.Success);
-
-    const result4 = await ns.dnet.memoryReallocation(target);
-    expect(result4.success).toStrictEqual(true);
-    expect(result4.code).toStrictEqual(ResponseCodeEnum.Success);
-  });
-  test("memoryReallocation itself without a session", async () => {
-    const ns = getNsOnNonDarkwebDarknetServer();
-    const server = getDarknetServerOrThrow(ns.getHostname());
-    // Set root access directly instead of calling the authenticate API
-    server.hasAdminRights = true;
-    server.ramUsed = server.blockedRam = 1;
-
-    // Can reallocate memory without a session when targeting itself.
-    const result = await ns.dnet.memoryReallocation(ns.getHostname());
-    expect(result.success).toStrictEqual(true);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
   test("getBlockedRam", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
@@ -1191,43 +1162,15 @@ describe("Use IP instead of hostname", () => {
     expect(result3.success).toStrictEqual(true);
     expect(result3.code).toStrictEqual(ResponseCodeEnum.Success);
   });
-  test("memoryReallocation from darkweb - missing a session", async () => {
-    const ns = getNsOnDarkWeb();
-
-    const result1 = await ns.dnet.memoryReallocation(ip);
-    expect(result1.success).toStrictEqual(false);
-    expect(result1.code).toStrictEqual(ResponseCodeEnum.AuthFailure);
-
-    const server = getDarknetServerOrThrow(ip);
-    // Set root access directly instead of calling the authenticate API
+  test("memoryReallocation itself", async () => {
+    const server = getDarknetServerOrThrow(getFirstDarknetServerAdjacentToDarkWeb());
     server.hasAdminRights = true;
     server.ramUsed = server.blockedRam = 1;
-    const password = server.password;
 
-    // Missing a session
-    const result2 = await ns.dnet.memoryReallocation(ip);
-    expect(result2.success).toStrictEqual(false);
-    expect(result2.code).toStrictEqual(ResponseCodeEnum.AuthFailure);
-
-    const result3 = ns.dnet.connectToSession(ip, password);
+    const ns = getNS(server.hostname);
+    const result3 = await ns.dnet.memoryReallocation(ns.getIP());
     expect(result3.success).toStrictEqual(true);
     expect(result3.code).toStrictEqual(ResponseCodeEnum.Success);
-
-    const result4 = await ns.dnet.memoryReallocation(ip);
-    expect(result4.success).toStrictEqual(true);
-    expect(result4.code).toStrictEqual(ResponseCodeEnum.Success);
-  });
-  test("memoryReallocation itself without a session", async () => {
-    const ns = getNsOnNonDarkwebDarknetServer();
-    const server = getDarknetServerOrThrow(ns.getIP());
-    // Set root access directly instead of calling the authenticate API
-    server.hasAdminRights = true;
-    server.ramUsed = server.blockedRam = 1;
-
-    // Can reallocate memory without a session when targeting itself.
-    const result = await ns.dnet.memoryReallocation(ns.getIP());
-    expect(result.success).toStrictEqual(true);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
   test("getBlockedRam", () => {
     const ns = getNsOnNonDarkwebDarknetServer();

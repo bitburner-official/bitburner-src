@@ -571,7 +571,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
         const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
           requireDirectConnection: true,
-          requireSession: true,
+          requireAdminRights: true,
         });
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -597,7 +597,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return helpers.netscriptDelay(ctx, delayTime).then(() => {
           const onlineConnectionCheck = getFailureResult(ctx, targetHost, {
             requireDirectConnection: true,
-            requireSession: true,
+            requireAdminRights: true,
           });
           if (!onlineConnectionCheck.success) {
             return helpers.netscriptDelay(ctx, 100).then(() => ({

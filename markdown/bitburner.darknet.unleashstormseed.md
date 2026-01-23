@@ -17,6 +17,8 @@ unleashStormSeed(): DarknetResult;
 
 [DarknetResult](./bitburner.darknetresult.md)
 
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object.
+
 ## Remarks
 
 RAM cost: 0.1 GB

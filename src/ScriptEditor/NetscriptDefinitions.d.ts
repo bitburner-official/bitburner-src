@@ -4440,8 +4440,6 @@ type DarknetInstability = {
 
 /**
  * Darknet API
- * @remarks
- * If you are not in BitNode-15, then you must have Source-File 15 in order to use this API.
  * @public
  */
 export interface Darknet {
@@ -4547,6 +4545,8 @@ export interface Darknet {
    *
    * @remarks
    * RAM cost: 0 GB
+   *
+   * @returns Maximum number of stasis links.
    */
   getStasisLinkLimit(): number;
 
@@ -4607,6 +4607,8 @@ export interface Darknet {
    *
    * @remarks
    * RAM cost: 0.1 GB
+   *
+   * @returns A promise that resolves to a {@link DarknetResult} object.
    */
   unleashStormSeed(): DarknetResult;
 
@@ -4624,13 +4626,16 @@ export interface Darknet {
   isDarknetServer(host?: string): boolean;
 
   /**
-   * Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server.
+   * Spends some time freeing some of the RAM currently blocked by the server owner. Must target an authenticated and
+   * directly connected server.
+   *
    * The amount of ram recovered scales with charisma and the number of threads used.
    *
    * @remarks
    * RAM cost: 1 GB
    *
-   * @param host - Optional. Hostname/IP of the connected server to free ram from. Defaults to the running script's server.
+   * @param host - Optional. Hostname/IP of the authenticated and directly connected server to free ram from. Defaults to the running script's server.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
    */
   memoryReallocation(host?: string): Promise<DarknetResult>;
 
@@ -4667,6 +4672,7 @@ export interface Darknet {
    * RAM cost: 2 GB
    *
    * @param sym - Stock symbol.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
    */
   promoteStock(sym: string): Promise<DarknetResult>;
 
@@ -4680,6 +4686,8 @@ export interface Darknet {
    *
    * @remarks
    * RAM cost: 2 GB
+   *
+   * @returns A promise that resolves to a {@link DarknetResult} object.
    */
   phishingAttack(): Promise<DarknetResult>;
 
@@ -4697,17 +4705,17 @@ export interface Darknet {
    * Note that in the majority of cases, whatever changed out on the net (if anything) will not be nearby to,
    * or visible from, the current server.
    *
-   * Some possible mutations that can occur somewhere on the dark net each cycle:
+   * Some possible mutations that can occur somewhere on the darknet each cycle:
    *
-   * - Nothing changes
+   * - Nothing changes.
    *
-   * - Some servers move to other locations on the net, breaking existing connections and forming new ones
+   * - Some servers move to other locations on the net, breaking existing connections and forming new ones.
    *
-   * - Some servers go offline, which in many cases is permanent - they are effectively deleted
+   * - Some servers go offline, which in many cases is permanent - they are effectively deleted.
    *
-   * - Some servers restart, which kills all running scripts on the server
+   * - Some servers restart, which kills all running scripts on the server.
    *
-   * - New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
+   * - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
    *
    * @remarks
    * RAM cost: 1 GB
@@ -4724,6 +4732,7 @@ export interface Darknet {
    * RAM cost: 0.1 GB
    *
    * @param host - Hostname/IP of the server to check.
+   * @returns Required charisma level of the host.
    */
   getServerRequiredCharismaLevel(host: string): number;
 }

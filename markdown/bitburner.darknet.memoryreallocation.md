@@ -4,7 +4,9 @@
 
 ## Darknet.memoryReallocation() method
 
-Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server. The amount of ram recovered scales with charisma and the number of threads used.
+Spends some time freeing some of the RAM currently blocked by the server owner. Must target an authenticated and directly connected server.
+
+The amount of ram recovered scales with charisma and the number of threads used.
 
 **Signature:**
 
@@ -42,7 +44,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname/IP of the connected server to free ram from. Defaults to the running script's server.
+_(Optional)_ Optional. Hostname/IP of the authenticated and directly connected server to free ram from. Defaults to the running script's server.
 
 
 </td></tr>
@@ -51,6 +53,8 @@ _(Optional)_ Optional. Hostname/IP of the connected server to free ram from. Def
 **Returns:**
 
 Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
+
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object.
 
 ## Remarks
 

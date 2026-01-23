@@ -52,6 +52,8 @@ Stock symbol.
 
 Promise&lt;[DarknetResult](./bitburner.darknetresult.md)<!-- -->&gt;
 
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object.
+
 ## Remarks
 
 RAM cost: 2 GB

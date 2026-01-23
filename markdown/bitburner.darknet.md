@@ -12,10 +12,6 @@ Darknet API
 export interface Darknet 
 ```
 
-## Remarks
-
-If you are not in BitNode-15, then you must have Source-File 15 in order to use this API.
-
 ## Methods
 
 <table><thead><tr><th>
@@ -186,7 +182,9 @@ Returns false if the server does not exist or has gone offline recently. This fu
 
 </td><td>
 
-Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server. The amount of ram recovered scales with charisma and the number of threads used.
+Spends some time freeing some of the RAM currently blocked by the server owner. Must target an authenticated and directly connected server.
+
+The amount of ram recovered scales with charisma and the number of threads used.
 
 
 </td></tr>
@@ -199,17 +197,17 @@ Spends some time freeing some of the RAM currently blocked by the server owner. 
 
 Sleep until the next mutation of the network of darknet servers (which occur frequently). Note that in the majority of cases, whatever changed out on the net (if anything) will not be nearby to, or visible from, the current server.
 
-Some possible mutations that can occur somewhere on the dark net each cycle:
+Some possible mutations that can occur somewhere on the darknet each cycle:
 
-- Nothing changes
+- Nothing changes.
 
-- Some servers move to other locations on the net, breaking existing connections and forming new ones
+- Some servers move to other locations on the net, breaking existing connections and forming new ones.
 
-- Some servers go offline, which in many cases is permanent - they are effectively deleted
+- Some servers go offline, which in many cases is permanent - they are effectively deleted.
 
-- Some servers restart, which kills all running scripts on the server
+- Some servers restart, which kills all running scripts on the server.
 
-- New servers appear on the net (which may be previously-offline servers, but cleaned and with a new password)
+- New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
 
 
 </td></tr>

@@ -15,6 +15,8 @@ getStasisLinkLimit(): number;
 
 number
 
+Maximum number of stasis links.
+
 ## Remarks
 
 RAM cost: 0 GB

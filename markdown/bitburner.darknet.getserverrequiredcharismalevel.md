@@ -54,6 +54,8 @@ Hostname/IP of the server to check.
 
 number
 
+Required charisma level of the host.
+
 ## Remarks
 
 RAM cost: 0.1 GB
