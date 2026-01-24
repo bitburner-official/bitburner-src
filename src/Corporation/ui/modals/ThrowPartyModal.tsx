@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { KEY } from "../../../utils/KeyboardEventKey";
+import { Settings } from "../../../Settings/Settings";
 
 interface IProps {
   open: boolean;
@@ -76,7 +77,7 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
         <TextField
           autoFocus={true}
           type="number"
-          placeholder="$ / employee"
+          placeholder={`${Settings.CurrencySymbol} / employee`}
           value={cost}
           onChange={changeCost}
           onKeyDown={onKeyDown}
