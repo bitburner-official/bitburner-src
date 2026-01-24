@@ -112,14 +112,16 @@ export const NumericDisplayPage = (): React.ReactElement => {
         <MenuItem value="pl">pl</MenuItem>
         <MenuItem value="ru">ru</MenuItem>
       </Select>
-      <Select startAdornment={<Typography>Currency&nbsp;</Typography>} value={currencySymbol} onChange={handleCurrencySymbolChange}>
-        <MenuItem value="$">$ Dollar</MenuItem>
-        <MenuItem value="£">£ Pound</MenuItem>
-        <MenuItem value="€">€ Euro</MenuItem>
-        <MenuItem value="¥">¥ Yen</MenuItem>
-        <MenuItem value="₹">₹ Rupee</MenuItem>
-        <MenuItem value="₿">₿ Bitcoin</MenuItem>
-      </Select>
+      <div>
+        <Select startAdornment={<Typography>Currency&nbsp;</Typography>} value={currencySymbol} onChange={handleCurrencySymbolChange}>
+          <MenuItem value="$">$ Dollar</MenuItem>
+          <MenuItem value="£">£ Pound</MenuItem>
+          <MenuItem value="€">€ Euro</MenuItem>
+          <MenuItem value="¥">¥ Yen</MenuItem>
+          <MenuItem value="₹">₹ Rupee</MenuItem>
+          <MenuItem value="₿">₿ Bitcoin</MenuItem>
+        </Select>
+      </div>
     </GameOptionsPage>
   );
 };
