@@ -168,7 +168,7 @@ export function applySourceFile(bn: number, lvl: number): void {
       // Grants more space on Stanek's Gift.
       break;
     case 14: // IPvGO
-      // Grands increased buffs and favor limit from IPvGO
+      // Grants increased buffs and favor limit from IPvGO
       break;
     case 15: // The Dark Net
       // TODO: source files for 15

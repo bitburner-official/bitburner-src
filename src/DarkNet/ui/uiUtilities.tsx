@@ -1,6 +1,7 @@
 import React from "react";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
+import { DWServerLogStyles } from "./dnetStyles";
 
 export const formatToMaxDigits = (value: number, maxDigits: number): string => {
   if (value === 0) return "0";
@@ -24,9 +25,7 @@ export const formatObjectWithColoredKeys = (obj: Record<string, unknown>, filter
     Object.assign(filteredObject, obj);
   }
   return (
-    // WIP-@fico: Why do you hardcode the font family here? If there is a special reason for that, it should be
-    // documented with a comment here.
-    <span style={{ fontFamily: 'JetBrainsMono, "Courier New", monospace', fontSize: "12px" }}>
+    <span style={DWServerLogStyles}>
       {Object.entries(filteredObject).map(([key, value]) => {
         return (
           <React.Fragment key={key}>

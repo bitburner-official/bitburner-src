@@ -54,7 +54,6 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
 };
 
 export const handleFailedAuth = (server: DarknetServer, threads: number) => {
-  // TODO: chance to sever connection or crash script
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, false));
 };
 

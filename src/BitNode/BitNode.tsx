@@ -544,7 +544,7 @@ export function initBitNodes() {
     15,
     2,
     "The Secrets of the Dark Net",
-    "", // TODO
+    "The rules have changed",
     (
       <>
         <br />

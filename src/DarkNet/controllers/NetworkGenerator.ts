@@ -132,6 +132,11 @@ export const clearDarknet = (force = false) => {
   DarknetState.zoomIndex = 7;
   DarknetState.netViewLeftScroll = 0;
   DarknetState.netViewTopScroll = 0;
+  DarknetState.allowMutating = true;
+  DarknetState.openServer = null;
+  DarknetState.stockPromotions = {};
+  DarknetState.migrationInductionServers = {};
+  DarknetState.serverState = {};
 };
 
 export const movePlayerIfNeeded = (server?: DarknetServer) => {
