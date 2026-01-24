@@ -12,6 +12,50 @@ Darknet API
 export interface Darknet 
 ```
 
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[interface](./bitburner.darknet.interface.md)
+
+
+</td><td>
+
+
+</td><td>
+
+{ interact(input: string): Promise&lt;unknown&gt;; inspect(): unknown; }
+
+
+</td><td>
+
+\[REDACTED\] API
+
+
+</td></tr>
+</tbody></table>
+
 ## Methods
 
 <table><thead><tr><th>
@@ -141,7 +185,7 @@ Returns the maximum number of stasis links that can be applied globally, based o
 
 </td><td>
 
-Uses an exploit to extract log data from a server by sending a malformed heartbeat request. Retrieves and removes the most recent logs on the server. This can be used to get more feedback on authentication attempts.
+Uses an exploit to extract log data from a server by sending a malformed heartbeat request. Retrieves the most recent logs on the server. This can be used to get more feedback on authentication attempts. The retrieved logs are removed from the server, unless the "peek" flag is set to true in the provided HeartbleedOptions.
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
@@ -257,7 +301,7 @@ Phishing attacks can only be run from scripts on darknet servers.
 
 </td><td>
 
-Returns a list of all darknet servers connected to the script's current server.
+Returns a list of all darknet servers connected to the script's current server. For example, if called from a script running on `home`<!-- -->, it will return `["darkweb"]`<!-- -->. It will return an empty list if there are no darknet servers connected to the current server.
 
 
 </td></tr>

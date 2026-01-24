@@ -982,6 +982,7 @@ export const ns: InternalAPI<NSFull> = {
         requiredCharismaSkill: server.requiredCharismaSkill,
         logTrafficInterval: server.logTrafficInterval,
         isStationary: server.isStationary,
+        purchasedByPlayer: false,
       } satisfies DarknetServerData & { isOnline: boolean };
     }
     // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).

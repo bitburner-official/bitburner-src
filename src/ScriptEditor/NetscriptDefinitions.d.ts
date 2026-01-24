@@ -4382,6 +4382,8 @@ export interface DarknetServerData {
   logTrafficInterval: number;
   /** If this darknet server cannot be moved. True for fixed/story servers. */
   isStationary: boolean;
+  /** Whether this server was purchased by the player. Always false for darknet servers */
+  purchasedByPlayer: boolean;
 }
 
 /** @public */
@@ -4419,9 +4421,9 @@ type ServerAuthDetails = {
  * @public
  */
 type HeartbleedOptions = {
-  /** If true, looks at the most recent log line but does not extract it (overrides logsToCapture). Default is false. */
+  /** If true, looks at the most recent log lines but does not remove them. Default is false. */
   peek?: boolean;
-  /** The number of log lines to remove from the server, up to a max of 8. Default is 3. Must be a positive integer. */
+  /** The number of log lines to remove from the server, up to a max of 8. Default is 1. Must be a positive integer. */
   logsToCapture?: number;
   /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. Must be a non-negative integer. */
   additionalMsec?: number;
@@ -4482,7 +4484,8 @@ export interface Darknet {
 
   /**
    * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
-   * Retrieves and removes the most recent logs on the server. This can be used to get more feedback on authentication attempts.
+   * Retrieves the most recent logs on the server. This can be used to get more feedback on authentication attempts.
+   * The retrieved logs are removed from the server, unless the "peek" flag is set to true in the provided HeartbleedOptions.
    *
    * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
    *
@@ -4512,6 +4515,8 @@ export interface Darknet {
 
   /**
    * Returns a list of all darknet servers connected to the script's current server.
+   * For example, if called from a script running on `home`, it will return `["darkweb"]`.
+   * It will return an empty list if there are no darknet servers connected to the current server.
    *
    * @remarks
    * RAM cost: 0.2 GB
@@ -4735,6 +4740,20 @@ export interface Darknet {
    * @returns Required charisma level of the host.
    */
   getServerRequiredCharismaLevel(host: string): number;
+
+  /** [REDACTED] API */
+  interface: {
+    /**
+     * Interact with the L[REDACTED]th
+     * @param input
+     */
+    interact(input: string): Promise<unknown>;
+
+    /**
+     * See your current [REDACTED]
+     */
+    inspect(): unknown;
+  };
 }
 
 /**

@@ -430,6 +430,7 @@ import nsDoc_bitburner_darknet_getstasislinkedservers_md from "../../markdown/bi
 import nsDoc_bitburner_darknet_getstasislinklimit_md from "../../markdown/bitburner.darknet.getstasislinklimit.md?raw";
 import nsDoc_bitburner_darknet_heartbleed_md from "../../markdown/bitburner.darknet.heartbleed.md?raw";
 import nsDoc_bitburner_darknet_induceservermigration_md from "../../markdown/bitburner.darknet.induceservermigration.md?raw";
+import nsDoc_bitburner_darknet_interface_md from "../../markdown/bitburner.darknet.interface.md?raw";
 import nsDoc_bitburner_darknet_isdarknetserver_md from "../../markdown/bitburner.darknet.isdarknetserver.md?raw";
 import nsDoc_bitburner_darknet_md from "../../markdown/bitburner.darknet.md?raw";
 import nsDoc_bitburner_darknet_memoryreallocation_md from "../../markdown/bitburner.darknet.memoryreallocation.md?raw";
@@ -465,6 +466,7 @@ import nsDoc_bitburner_darknetserverdata_maxram_md from "../../markdown/bitburne
 import nsDoc_bitburner_darknetserverdata_md from "../../markdown/bitburner.darknetserverdata.md?raw";
 import nsDoc_bitburner_darknetserverdata_modelid_md from "../../markdown/bitburner.darknetserverdata.modelid.md?raw";
 import nsDoc_bitburner_darknetserverdata_passwordhintdata_md from "../../markdown/bitburner.darknetserverdata.passwordhintdata.md?raw";
+import nsDoc_bitburner_darknetserverdata_purchasedbyplayer_md from "../../markdown/bitburner.darknetserverdata.purchasedbyplayer.md?raw";
 import nsDoc_bitburner_darknetserverdata_ramused_md from "../../markdown/bitburner.darknetserverdata.ramused.md?raw";
 import nsDoc_bitburner_darknetserverdata_requiredcharismaskill_md from "../../markdown/bitburner.darknetserverdata.requiredcharismaskill.md?raw";
 import nsDoc_bitburner_darknetserverdata_staticpasswordhint_md from "../../markdown/bitburner.darknetserverdata.staticpasswordhint.md?raw";
@@ -2002,6 +2004,7 @@ AllPages["nsDoc/bitburner.darknet.getstasislinkedservers.md"] = nsDoc_bitburner_
 AllPages["nsDoc/bitburner.darknet.getstasislinklimit.md"] = nsDoc_bitburner_darknet_getstasislinklimit_md;
 AllPages["nsDoc/bitburner.darknet.heartbleed.md"] = nsDoc_bitburner_darknet_heartbleed_md;
 AllPages["nsDoc/bitburner.darknet.induceservermigration.md"] = nsDoc_bitburner_darknet_induceservermigration_md;
+AllPages["nsDoc/bitburner.darknet.interface.md"] = nsDoc_bitburner_darknet_interface_md;
 AllPages["nsDoc/bitburner.darknet.isdarknetserver.md"] = nsDoc_bitburner_darknet_isdarknetserver_md;
 AllPages["nsDoc/bitburner.darknet.md"] = nsDoc_bitburner_darknet_md;
 AllPages["nsDoc/bitburner.darknet.memoryreallocation.md"] = nsDoc_bitburner_darknet_memoryreallocation_md;
@@ -2037,6 +2040,7 @@ AllPages["nsDoc/bitburner.darknetserverdata.maxram.md"] = nsDoc_bitburner_darkne
 AllPages["nsDoc/bitburner.darknetserverdata.md"] = nsDoc_bitburner_darknetserverdata_md;
 AllPages["nsDoc/bitburner.darknetserverdata.modelid.md"] = nsDoc_bitburner_darknetserverdata_modelid_md;
 AllPages["nsDoc/bitburner.darknetserverdata.passwordhintdata.md"] = nsDoc_bitburner_darknetserverdata_passwordhintdata_md;
+AllPages["nsDoc/bitburner.darknetserverdata.purchasedbyplayer.md"] = nsDoc_bitburner_darknetserverdata_purchasedbyplayer_md;
 AllPages["nsDoc/bitburner.darknetserverdata.ramused.md"] = nsDoc_bitburner_darknetserverdata_ramused_md;
 AllPages["nsDoc/bitburner.darknetserverdata.requiredcharismaskill.md"] = nsDoc_bitburner_darknetserverdata_requiredcharismaskill_md;
 AllPages["nsDoc/bitburner.darknetserverdata.staticpasswordhint.md"] = nsDoc_bitburner_darknetserverdata_staticpasswordhint_md;

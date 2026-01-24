@@ -4,7 +4,7 @@
 
 ## Darknet.probe() method
 
-Returns a list of all darknet servers connected to the script's current server.
+Returns a list of all darknet servers connected to the script's current server. For example, if called from a script running on `home`<!-- -->, it will return `["darkweb"]`<!-- -->. It will return an empty list if there are no darknet servers connected to the current server.
 
 **Signature:**
 

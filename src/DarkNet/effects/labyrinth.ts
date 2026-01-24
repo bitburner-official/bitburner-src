@@ -194,6 +194,18 @@ export const getSurroundingsVisualized = (
   return result.split("\n");
 };
 
+export const getLocationStatus = (pid: number = -1) => {
+  const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
+  const surroundings = getSurroundingsVisualized(getLabMaze(), initialX, initialY);
+  return {
+    coords: [initialX, initialY],
+    north: surroundings[0][1] === PATH,
+    east: surroundings[1][2] === PATH,
+    south: surroundings[2][1] === PATH,
+    west: surroundings[1][0] === PATH,
+  };
+};
+
 export const handleLabyrinthPassword = (
   attemptedPassword: string,
   server: DarknetServer,
@@ -244,14 +256,7 @@ export const handleLabyrinthPassword = (
       message: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
     };
   }
-  const surroundings = getSurroundingsVisualized(maze, initialX, initialY);
-  const status: LocationStatus = {
-    coords: [initialX, initialY],
-    north: surroundings[0][1] === PATH,
-    east: surroundings[1][2] === PATH,
-    south: surroundings[2][1] === PATH,
-    west: surroundings[1][0] === PATH,
-  };
+  const status: LocationStatus = getLocationStatus(pid);
 
   const potentialWall: [number, number] = [initialX + dx, initialY + dy];
   if (maze[potentialWall[1]]?.[potentialWall[0]] !== PATH) {

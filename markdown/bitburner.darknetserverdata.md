@@ -322,6 +322,25 @@ Data associated with the password hint
 </td></tr>
 <tr><td>
 
+[purchasedByPlayer](./bitburner.darknetserverdata.purchasedbyplayer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether this server was purchased by the player. Always false for darknet servers
+
+
+</td></tr>
+<tr><td>
+
 [ramUsed](./bitburner.darknetserverdata.ramused.md)
 
 

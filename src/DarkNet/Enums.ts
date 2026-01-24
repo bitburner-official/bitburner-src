@@ -88,4 +88,5 @@ export const exampleDarknetServerData: DarknetServerData = {
   requiredCharismaSkill: 0,
   logTrafficInterval: -1,
   isStationary: false,
+  purchasedByPlayer: false,
 } as const;

@@ -20,7 +20,14 @@ import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkNet/effects/webstorm";
 import { getPasswordType } from "../DarkNet/controllers/ServerGenerator";
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/effects/authentication";
-import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkNet/effects/labyrinth";
+import {
+  getLabMaze,
+  getLabyrinthDetails,
+  getLocationStatus,
+  getSurroundingsVisualized,
+  handleLabyrinthPassword,
+  isLabyrinthServer,
+} from "../DarkNet/effects/labyrinth";
 import { getPhishingAttackSpeed, handlePhishingAttack } from "../DarkNet/effects/phishing";
 import { handleRamBlockRemoved } from "../DarkNet/effects/ramblock";
 import {
@@ -42,6 +49,7 @@ import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
 import { isIPAddress } from "../Types/strings";
 import { getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
 import { shuffle } from "lodash";
+import { sleep } from "../utils/Utility";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -52,7 +60,7 @@ type CompleteHeartbleedOptions = {
 function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartbleedOptions {
   const defaults = {
     peek: false,
-    logsToCapture: 3,
+    logsToCapture: 1,
     additionalMsec: 0,
   };
   if (opts == null) {
@@ -295,19 +303,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
               logs: [JSON.stringify(status)],
             };
           }
-
-          if (options.peek) {
-            return {
-              success: true,
-              code: ResponseCodeEnum.Success,
-              message: GenericResponseMessage.Success,
-              logs: serverState.serverLogs
-                .slice(0, 1)
-                .map((log) => (typeof log.message === "string" ? log.message : JSON.stringify(log.message))),
-            };
-          }
           const capturedLogs = serverState.serverLogs.slice(0, options.logsToCapture);
-          serverState.serverLogs = serverState.serverLogs.slice(options.logsToCapture);
+          if (!options.peek) {
+            serverState.serverLogs = serverState.serverLogs.slice(options.logsToCapture);
+          }
 
           return {
             success: true,
@@ -358,7 +357,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           }
         }
         helpers.log(ctx, () => `Returned ${out.length} connections for ${server.hostname}`);
-        // The order of results is shuffled. There's no anthropomorphic bias like in the standard network's scan results order.
+        // The order of results is shuffled. This is to avoid clues to the network structure
+        // like there are in the standard network's scan results order.
         return shuffle(out);
       },
     setStasisLink:
@@ -699,5 +699,52 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         return onlineConnectionCheck.server.requiredCharismaSkill;
       },
+    interface: {
+      interact:
+        (ctx) =>
+        async (_input): Promise<unknown> => {
+          expectDarknetAccess(ctx);
+          expectRunningOnDarknetServer(ctx);
+
+          const input = helpers.string(ctx, "input", _input);
+          const lab = getLabyrinthDetails().lab;
+          if (!lab) {
+            return "Nothing happens...";
+          }
+
+          const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
+          if (!isDirectConnected(currentServer, lab)) {
+            return "You can't do that from here.";
+          }
+
+          const pid = ctx.workerScript.pid;
+          const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
+          await sleep(authenticationTime);
+
+          const result = handleLabyrinthPassword(input, currentServer, pid);
+          if (result.code === ResponseCodeEnum.Success) {
+            return result;
+          }
+          return getLocationStatus(pid);
+        },
+      inspect: (ctx) => (): unknown => {
+        expectDarknetAccess(ctx);
+        expectRunningOnDarknetServer(ctx);
+
+        const lab = getLabyrinthDetails().lab;
+        if (!lab) {
+          return "You cannot see anything...";
+        }
+
+        const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
+        if (!isDirectConnected(currentServer, lab)) {
+          return "You can't do that from here.";
+        }
+
+        const pid = ctx.workerScript.pid;
+        const [x, y] = DarknetState.labLocations[pid] ?? [1, 1];
+        return getSurroundingsVisualized(getLabMaze(), x, y, 3).join("\n");
+      },
+    },
   };
 }

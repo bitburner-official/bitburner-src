@@ -4,7 +4,7 @@
 
 ## Darknet.heartbleed() method
 
-Uses an exploit to extract log data from a server by sending a malformed heartbeat request. Retrieves and removes the most recent logs on the server. This can be used to get more feedback on authentication attempts.
+Uses an exploit to extract log data from a server by sending a malformed heartbeat request. Retrieves the most recent logs on the server. This can be used to get more feedback on authentication attempts. The retrieved logs are removed from the server, unless the "peek" flag is set to true in the provided HeartbleedOptions.
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
