@@ -13,5 +13,5 @@ interface: {
     interact(input: string): Promise<unknown>;
 
     inspect(): unknown;
-  }
+  };
 ```
