@@ -22,13 +22,7 @@ class BitNode {
   // BitNode number
   number: number;
 
-  constructor(
-    n: number,
-    name: string,
-    tagline = "",
-    description: JSX.Element,
-    sfDescription: JSX.Element,
-  ) {
+  constructor(n: number, name: string, tagline = "", description: JSX.Element, sfDescription: JSX.Element) {
     this.number = n;
     this.name = name;
     this.tagline = tagline;
