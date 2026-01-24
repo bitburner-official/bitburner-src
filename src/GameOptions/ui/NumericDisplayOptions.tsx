@@ -8,7 +8,8 @@ import { OptionsSlider } from "./OptionsSlider";
 
 export const NumericDisplayPage = (): React.ReactElement => {
   const [locale, setLocale] = useState(Settings.Locale);
-
+  const [currencySymbol, setCurrencySymbol] = useState(Settings.CurrencySymbol);
+  
   function handleFractionalDigitChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     Settings.fractionalDigits = newValue as number;
     FormatsNeedToChange.emit();
@@ -19,6 +20,13 @@ export const NumericDisplayPage = (): React.ReactElement => {
     Settings.Locale = event.target.value;
     FormatsNeedToChange.emit();
   }
+
+  function handleCurrencySymbolChange(event: SelectChangeEvent): void {
+  setCurrencySymbol(event.target.value);
+  Settings.CurrencySymbol = event.target.value;
+  FormatsNeedToChange.emit();
+  }
+  
   return (
     <GameOptionsPage title="Numeric Display">
       <OptionSwitch
@@ -103,6 +111,14 @@ export const NumericDisplayPage = (): React.ReactElement => {
         <MenuItem value="no">no</MenuItem>
         <MenuItem value="pl">pl</MenuItem>
         <MenuItem value="ru">ru</MenuItem>
+      </Select>
+      <Select startAdornment={<Typography>Currency&nbsp;</Typography>} value={currencySymbol} onChange={handleCurrencySymbolChange}>
+        <MenuItem value="$">$ Dollar</MenuItem>
+        <MenuItem value="£">£ Pound</MenuItem>
+        <MenuItem value="€">€ Euro</MenuItem>
+        <MenuItem value="¥">¥ Yen</MenuItem>
+        <MenuItem value="₹">₹ Rupee</MenuItem>
+        <MenuItem value="₿">₿ Bitcoin</MenuItem>
       </Select>
     </GameOptionsPage>
   );
