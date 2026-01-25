@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { GameOptionsPage } from "./GameOptionsPage";
@@ -9,6 +9,7 @@ import { OptionsSlider } from "./OptionsSlider";
 export const NumericDisplayPage = (): React.ReactElement => {
   const [locale, setLocale] = useState(Settings.Locale);
   const [currencySymbol, setCurrencySymbol] = useState(Settings.CurrencySymbol);
+  const [currencyPosition, setCurrencyPosition] = useState(Settings.CurrencySymbolAfterValue ? "after" : "before");
 
   function handleFractionalDigitChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     Settings.fractionalDigits = newValue as number;
@@ -21,9 +22,17 @@ export const NumericDisplayPage = (): React.ReactElement => {
     FormatsNeedToChange.emit();
   }
 
-  function handleCurrencySymbolChange(event: SelectChangeEvent): void {
+  // Handler for the text field (Currency Symbol)
+  function handleCurrencySymbolChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setCurrencySymbol(event.target.value);
     Settings.CurrencySymbol = event.target.value;
+    FormatsNeedToChange.emit();
+  }
+
+  // Handler for the select (Currency Position)
+  function handleCurrencyPositionChange(event: SelectChangeEvent): void {
+    setCurrencyPosition(event.target.value);
+    Settings.CurrencySymbolAfterValue = event.target.value === "after";
     FormatsNeedToChange.emit();
   }
 
@@ -112,18 +121,23 @@ export const NumericDisplayPage = (): React.ReactElement => {
         <MenuItem value="pl">pl</MenuItem>
         <MenuItem value="ru">ru</MenuItem>
       </Select>
-      <div>
-        <Select
-          startAdornment={<Typography>Currency&nbsp;</Typography>}
+      <div style={{ marginTop: "16px" }}>
+        <TextField
+          InputProps={{
+            startAdornment: <Typography sx={{ whiteSpace: "nowrap" }}>Currency Symbol&nbsp;</Typography>,
+          }}
           value={currencySymbol}
           onChange={handleCurrencySymbolChange}
+          placeholder="$"
+          style={{ width: "220px", marginRight: "16px" }}
+        />
+        <Select
+          startAdornment={<Typography sx={{ whiteSpace: "nowrap" }}>Symbol Position&nbsp;</Typography>}
+          value={currencyPosition}
+          onChange={handleCurrencyPositionChange}
         >
-          <MenuItem value="$">$ Dollar</MenuItem>
-          <MenuItem value="£">£ Pound</MenuItem>
-          <MenuItem value="€">€ Euro</MenuItem>
-          <MenuItem value="¥">¥ Yen</MenuItem>
-          <MenuItem value="₹">₹ Rupee</MenuItem>
-          <MenuItem value="₿">₿ Bitcoin</MenuItem>
+          <MenuItem value="before">Before</MenuItem>
+          <MenuItem value="after">After</MenuItem>
         </Select>
       </div>
     </GameOptionsPage>

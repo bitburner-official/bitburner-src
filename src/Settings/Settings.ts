@@ -198,6 +198,8 @@ export const Settings = {
   fractionalDigits: 3,
   /** Currency symbol used for money display. */
   CurrencySymbol: "$",
+  /** Currency symbol before vs after value flag. */
+  CurrencySymbolAfterValue: false,
   /**
    * Player-defined key bindings. Don't use this property directly. It must be merged with DefaultKeyBindings in
    * src\utils\KeyBindingUtils.ts.
