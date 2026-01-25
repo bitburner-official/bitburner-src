@@ -2,6 +2,7 @@ import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
+import { formatMoney } from "../ui/formatNumber";
 
 export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HackersStartingHandbook]: new Literature({
@@ -50,12 +51,12 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         <u>Getting Started with Corporation</u>
         <br />
-        To get started, visit the city hall in Sector-12 in order to create a corporation. This requires $150b of your
-        own money, but this $150b will get put into your corporation's funds. If you're in BitNode 3, you also have the
-        option to get seed money from the government in exchange for 500m shares. Your corporation can have many
-        different divisions, each in a different industry. There are many different types of industries, each with
-        different properties. To create your first division, click the "Expand" button at the top of the management UI.
-        The agriculture industry is recommended for your first division.
+        To get started, visit the city hall in Sector-12 in order to create a corporation. This requires{" "}
+        {formatMoney(150e9)} of your own money, but this {formatMoney(150e9)} will get put into your corporation's
+        funds. If you're in BitNode 3, you also have the option to get seed money from the government in exchange for
+        500m shares. Your corporation can have many different divisions, each in a different industry. There are many
+        different types of industries, each with different properties. To create your first division, click the "Expand"
+        button at the top of the management UI. The agriculture industry is recommended for your first division.
         <br />
         <br />
         The first thing you'll need to do is hire some employees. Employees can be assigned to five different positions.

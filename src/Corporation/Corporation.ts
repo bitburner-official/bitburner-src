@@ -150,7 +150,7 @@ export class Corporation {
           dialogBoxCreate(
             "There was an error calculating your Corporations funds and they got reset to 0. " +
               "This is a bug. Please report to game developer.\n\n" +
-              "(Your funds have been set to 150b for the inconvenience)",
+              `(Your funds have been set to ${formatMoney(150e9)} for the inconvenience)`,
           );
           this.funds = 150e9;
         }
