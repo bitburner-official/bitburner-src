@@ -6,10 +6,13 @@ import { GameOptionsPage } from "./GameOptionsPage";
 import { FormatsNeedToChange } from "../../ui/formatNumber";
 import { OptionsSlider } from "./OptionsSlider";
 
+const DEFAULT_CURRENCY_SYMBOL = "$";
+
 export const NumericDisplayPage = (): React.ReactElement => {
   const [locale, setLocale] = useState(Settings.Locale);
-  const [currencySymbol, setCurrencySymbol] = useState(Settings.CurrencySymbol);
-  const [currencyPosition, setCurrencyPosition] = useState(Settings.CurrencySymbolAfterValue ? "after" : "before");
+  const [currencySymbol, setCurrencySymbol] = useState(
+    Settings.CurrencySymbol === DEFAULT_CURRENCY_SYMBOL ? "" : Settings.CurrencySymbol,
+  );
 
   function handleFractionalDigitChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     Settings.fractionalDigits = newValue as number;
@@ -24,15 +27,9 @@ export const NumericDisplayPage = (): React.ReactElement => {
 
   // Handler for the text field (Currency Symbol)
   function handleCurrencySymbolChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setCurrencySymbol(event.target.value);
-    Settings.CurrencySymbol = event.target.value;
-    FormatsNeedToChange.emit();
-  }
-
-  // Handler for the select (Currency Position)
-  function handleCurrencyPositionChange(event: SelectChangeEvent): void {
-    setCurrencyPosition(event.target.value);
-    Settings.CurrencySymbolAfterValue = event.target.value === "after";
+    const raw = event.target.value;
+    setCurrencySymbol(raw);
+    Settings.CurrencySymbol = raw.trim() === "" ? DEFAULT_CURRENCY_SYMBOL : raw;
     FormatsNeedToChange.emit();
   }
 
@@ -104,7 +101,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
           <>If this is set all references to memory will use GiB instead of GB, in accordance with IEC 60027-2.</>
         }
       />
-      <Select startAdornment={<Typography>Locale&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
+      <Select startAdornment={<Typography>Locale:&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
         <MenuItem value="en">en</MenuItem>
         <MenuItem value="bg">bg</MenuItem>
         <MenuItem value="cs">cs</MenuItem>
@@ -124,21 +121,22 @@ export const NumericDisplayPage = (): React.ReactElement => {
       <div style={{ marginTop: "16px" }}>
         <TextField
           InputProps={{
-            startAdornment: <Typography sx={{ whiteSpace: "nowrap" }}>Currency Symbol&nbsp;</Typography>,
+            startAdornment: <Typography sx={{ whiteSpace: "nowrap" }}>Currency Symbol:&nbsp;</Typography>,
           }}
           value={currencySymbol}
           onChange={handleCurrencySymbolChange}
-          placeholder="$"
-          style={{ width: "220px", marginRight: "16px" }}
+          placeholder={DEFAULT_CURRENCY_SYMBOL}
+          style={{ marginRight: "16px" }}
         />
-        <Select
-          startAdornment={<Typography sx={{ whiteSpace: "nowrap" }}>Symbol Position&nbsp;</Typography>}
-          value={currencyPosition}
-          onChange={handleCurrencyPositionChange}
-        >
-          <MenuItem value="before">Before</MenuItem>
-          <MenuItem value="after">After</MenuItem>
-        </Select>
+        <OptionSwitch
+          checked={Settings.CurrencySymbolAfterValue}
+          onChange={(newValue) => {
+            Settings.CurrencySymbolAfterValue = newValue;
+            FormatsNeedToChange.emit();
+          }}
+          text="Move the currency symbol to be after the value"
+          tooltip={<>If enabled, currency symbol appears after the number (e.g., 100€ instead of €100)</>}
+        />
       </div>
     </GameOptionsPage>
   );
