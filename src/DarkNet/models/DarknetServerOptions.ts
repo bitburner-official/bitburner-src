@@ -25,7 +25,6 @@ export type PasswordResponse = {
   passwordExpected?: string;
   message: string;
   data?: string | LocationStatus;
-  responseTime?: number;
 };
 
 export function isPasswordResponse(v: unknown): v is PasswordResponse {

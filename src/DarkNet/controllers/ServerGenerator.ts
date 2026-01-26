@@ -19,9 +19,10 @@ import { hasFullDarknetAccess } from "../effects/effects";
 const getRandomServerConfigBuilder = (difficulty: number) => {
   const tier0Servers = [getNoPasswordConfig];
   const tier1Servers = [getEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
-  const tier2Servers = [getSortedEchoVulnConfig, getDogNameConfig, getYesn_tConfig, getBufferOverflowConfig];
+  const tier2Servers = [getDogNameConfig, getYesn_tConfig, getBufferOverflowConfig];
   const sf15UnlockedServers = hasFullDarknetAccess() ? [getKingOfTheHillConfig, getSpiceLevelConfig] : [];
   const tier3Servers = [
+    getSortedEchoVulnConfig,
     getMastermindHintConfig,
     getRomanNumeralConfig,
     getGuessNumberConfig,
@@ -112,7 +113,7 @@ export const getSortedEchoVulnConfig = (difficulty: number): ServerConfig => {
     "I accidentally sorted the password:",
     "The PIN uses",
   ];
-  const password = getPassword(2 + difficulty / 6);
+  const password = getPassword(Math.min(2 + difficulty / 7, 9));
   const sortedPassword = password.split("").sort().join("");
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
   return {

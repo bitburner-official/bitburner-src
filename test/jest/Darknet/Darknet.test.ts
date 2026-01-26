@@ -329,11 +329,15 @@ describe("Password Tests", () => {
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
     const getLatestResponseTime = () => {
-      const lastLog = DarknetState.serverState[server.hostname].serverLogs[0].message;
-      if (typeof lastLog === "string") {
-        throw new Error(`Latest log is a string and not a password response: ${lastLog}`);
+      const lastLog = `${DarknetState.serverState[server.hostname].serverLogs[0].message.data}` ?? "";
+      if (!lastLog) {
+        throw new Error(`No logs found for server ${server.hostname}`);
       }
-      return lastLog.responseTime ?? 0;
+      const timeMatch = lastLog.match(/Response time: (\d+\.?\d*)ms/);
+      if (!timeMatch) {
+        throw new Error(`No response time found in log: ${lastLog}`);
+      }
+      return Number(timeMatch[1] ?? 0);
     };
 
     const response1 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 1) + "%%%%", 0);

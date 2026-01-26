@@ -174,6 +174,11 @@ Design document and workspace
 
 ## patches:
 
+## Playtesting feedback
+
+- remove `invalidCharacters` from server name filler list to prevent issues
+- timing attack - use data property for response time
+
 # Additional darknet server types
 
 - Added new triple modulo password puzzle server type

@@ -255,7 +255,7 @@ export const ServerNameSuffixes = [
   "hub",
 ];
 
-export const connectors = ["", ".", "-", "_", "~", ";", ":", "*", "::"];
+export const connectors = ["", ".", "-", "_", ";", ":", "::", "$", "^", "%", "@", "&"];
 
 export const l33t: Record<string, string> = {
   a: "4",
