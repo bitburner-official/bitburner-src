@@ -38,7 +38,7 @@ Some mechanics synergize well with other mechanics. For example, in order to cre
 
 Some mechanics have peculiarities that you should know beforehand. For example, enabling territory clashes too soon will make the player lose all territory and ruin their gang.
 
-All BitNodes have a unique set of multipliers that affect the difficulty of that BitNode. You can see these multipliers when choosing a BitNode in the BitVerse. [Source-File](./sourcefiles.md) 5 gives you access to these multipliers when you are already in a BitNode. Some BitNodes are much harder than others. It's recommended to unlock other Source-Files before trying to beat these hard BitNodes. Note that the "Difficulty" value of a BitNode in the BitVerse may be a bit misleading in some cases. Understanding the difficulty of a BitNode is much harder than just choosing between "easy", "normal" and "hard".
+All BitNodes have a unique set of multipliers that affect the difficulty of that BitNode. You can see these multipliers when choosing a BitNode in the BitVerse. [Source-File](./sourcefiles.md) 5 gives you access to these multipliers when you are already in a BitNode. Some BitNodes are much harder than others. It's recommended to unlock other Source-Files before trying to beat these hard BitNodes.
 
 # BitNode analysis
 
