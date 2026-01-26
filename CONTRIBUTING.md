@@ -155,7 +155,7 @@ upstream/master
 
 Install
 
-- `npm` (maybe via `nvm`)
+- NodeJS (maybe via `nvm`). When installing NodeJS, you also get a tool called `npm`. You can update `npm` to the latest version by running `npm install -g npm@latest`.
 - Github Desktop (Windows only)
 - Visual Studio Code (optional)
 
@@ -169,7 +169,7 @@ Saving a file will reload the game automatically.
 
 ### How to build the electron app
 
-Tested on Node v20.11.1 (LTS) on Windows.
+Tested on Node 24.13.0 (LTS) on Windows.
 These steps only work in a Bash-like environment, like MinGW for Windows.
 
 ```sh
@@ -220,10 +220,6 @@ the following rules:
 ### Unrelated changes in `package-lock.json`
 
 After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
-
-### Unrelated failed Jest tests
-
-Some Jest tests fail to run in Node 24. Those tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). If you do not change anything related to those tests, you can ignore them. This is not a problem with earlier Node versions.
 
 ## As a Documenter
 

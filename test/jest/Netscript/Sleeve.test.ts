@@ -51,7 +51,7 @@ describe("Cost", () => {
     expect(Player.sleeves[0].getMemoryUpgradeCost(0)).toStrictEqual(0);
     expect(Player.sleeves[0].getMemoryUpgradeCost(1)).toStrictEqual(1e12);
     expect(Player.sleeves[0].getMemoryUpgradeCost(10)).toStrictEqual(1.0949720999737857e13);
-    expect(Player.sleeves[0].getMemoryUpgradeCost(99)).toStrictEqual(3.051297116790363e14);
+    expect(Player.sleeves[0].getMemoryUpgradeCost(99)).toStrictEqual(3.051297116790364e14);
     Player.sleeves[0].memory = 50;
     expect(Player.sleeves[0].getMemoryUpgradeCost(0)).toStrictEqual(0);
     expect(Player.sleeves[0].getMemoryUpgradeCost(1)).toStrictEqual(2.6388117932094194e12);
