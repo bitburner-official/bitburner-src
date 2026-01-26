@@ -518,7 +518,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode15 = new BitNode(
     15,
-    2,
     "The Secrets of the Dark Net",
     "The rules have changed",
     (
