@@ -194,7 +194,7 @@ export const getSurroundingsVisualized = (
   return result.split("\n");
 };
 
-export const getLocationStatus = (pid: number = -1) => {
+export const getLocationStatus = (pid: number = -1): LocationStatus => {
   const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
   const surroundings = getSurroundingsVisualized(getLabMaze(), initialX, initialY);
   return {

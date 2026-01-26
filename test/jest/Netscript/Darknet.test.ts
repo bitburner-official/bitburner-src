@@ -23,6 +23,14 @@ import { expectRunningOnDarknetServer } from "../../../src/DarkNet/effects/offli
 import { sleep } from "../../../src/utils/Utility";
 import { addLowLevelServersIfNeeded } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { isIPAddress } from "../../../src/Types/strings";
+import { clearDarknet, populateDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
+import {
+  getLabMaze,
+  getLabyrinthDetails,
+  isLocationStatus,
+  LocationStatus,
+} from "../../../src/DarkNet/effects/labyrinth";
+import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Server ${hostnameOfNonExistentServer} does not exist.`;
@@ -42,6 +50,7 @@ beforeEach(() => {
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
   Player.mults.charisma = 1e10;
   Player.gainCharismaExp(1e100);
+  getNsOnServerNearLabyrinth();
 });
 
 function getNsOnHome() {
@@ -50,6 +59,21 @@ function getNsOnHome() {
 
 function getNsOnDarkWeb() {
   return getNS(SpecialServers.DarkWeb);
+}
+
+function getNsOnServerNearLabyrinth() {
+  let server = null;
+  while (!server) {
+    const labyrinth = getLabyrinthDetails().lab;
+    server = labyrinth.serversOnNetwork.find(
+      (hostname) => hostname !== SpecialServers.Home && hostname !== SpecialServers.DarkWeb,
+    );
+    if (!server) {
+      clearDarknet(true);
+      populateDarknet();
+    }
+  }
+  return getNS(server);
 }
 
 function getFirstDarknetServerAdjacentToDarkWeb() {
@@ -306,6 +330,18 @@ describe("home", () => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("home is not a darknet server");
   });
+  test("location.details", async () => {
+    const ns = getNsOnHome();
+    await expect(async () => {
+      await ns.dnet.location.details();
+    }).rejects.toContain("This API can only be used on a darknet server");
+  });
+  test("location.surroundings", async () => {
+    const ns = getNsOnHome();
+    await expect(async () => {
+      await ns.dnet.location.surroundings();
+    }).rejects.toContain("This API can only be used on a darknet server");
+  });
 });
 
 describe("Normal NPC server", () => {
@@ -387,6 +423,18 @@ describe("Normal NPC server", () => {
     expect(() => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("CSEC is not a darknet server");
+  });
+  test("location.details", async () => {
+    const ns = getNS(SpecialServers.CyberSecServer);
+    await expect(async () => {
+      await ns.dnet.location.details();
+    }).rejects.toContain("This API can only be used on a darknet server");
+  });
+  test("location.surroundings", async () => {
+    const ns = getNS(SpecialServers.CyberSecServer);
+    await expect(async () => {
+      await ns.dnet.location.surroundings();
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
 
@@ -470,6 +518,18 @@ describe("Private server", () => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("test-server-1 is not a darknet server");
   });
+  test("location.details", async () => {
+    const ns = getNS("test-server-1");
+    await expect(async () => {
+      await ns.dnet.location.details();
+    }).rejects.toContain("This API can only be used on a darknet server");
+  });
+  test("location.surroundings", async () => {
+    const ns = getNS("test-server-1");
+    await expect(async () => {
+      await ns.dnet.location.surroundings();
+    }).rejects.toContain("This API can only be used on a darknet server");
+  });
 });
 
 describe("Hashnet server", () => {
@@ -551,6 +611,18 @@ describe("Hashnet server", () => {
     expect(() => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("hacknet-server-0 is not a darknet server");
+  });
+  test("location.details", async () => {
+    const ns = getNS("hacknet-server-0");
+    await expect(async () => {
+      await ns.dnet.location.details();
+    }).rejects.toContain("This API can only be used on a darknet server");
+  });
+  test("location.surroundings", async () => {
+    const ns = getNS("hacknet-server-0");
+    await expect(async () => {
+      await ns.dnet.location.surroundings();
+    }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
 
@@ -787,6 +859,18 @@ describe("darkweb", () => {
     expect(ns.dnet.getServerRequiredCharismaLevel(SpecialServers.DarkWeb)).toStrictEqual(
       getDarknetServerOrThrow(SpecialServers.DarkWeb).requiredCharismaSkill,
     );
+  });
+  test("location.details", async () => {
+    const ns = getNsOnDarkWeb();
+    const details = `${await ns.dnet.location.details()}`;
+    // darknet is not connected to lab, so scripts on it cannot navigate the lab
+    expect(details).toEqual("You feel that you don't have the right connections...");
+  });
+  test("location.surroundings", async () => {
+    const ns = getNsOnDarkWeb();
+    const details = `${await ns.dnet.location.surroundings()}`;
+    // darknet is not connected to lab, so scripts on it cannot navigate the lab
+    expect(details).toEqual("You feel that you don't have the right connections...");
   });
 });
 
@@ -1185,5 +1269,44 @@ describe("Use IP instead of hostname", () => {
   test("getServerRequiredCharismaLevel", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     expect(ns.dnet.getServerRequiredCharismaLevel(ip)).toStrictEqual(getDarknetServerOrThrow(ip).requiredCharismaSkill);
+  });
+});
+
+describe("lab location methods", () => {
+  test("dnet.location.details", async () => {
+    const ns = getNsOnServerNearLabyrinth();
+    const labName = getLabyrinthDetails().name;
+
+    const details = (await ns.dnet.location.details()) as LocationStatus;
+    expect(isLocationStatus(details)).toBe(true);
+
+    const maze = getLabMaze();
+    expect(details).toMatchObject({
+      coords: [1, 1],
+      north: false,
+      east: maze[1][3] === " ",
+      south: maze[3][1] === " ",
+      west: false,
+    });
+
+    const directionToMove = details.east ? "east" : "south";
+    await ns.dnet.authenticate(labName, directionToMove);
+    const logs = getMostRecentAuthLog(labName);
+    expect(logs?.message).toContain("You have moved to");
+    const newDetails = (await ns.dnet.location.details()) as LocationStatus;
+    expect(isLocationStatus(newDetails)).toBe(true);
+    expect(newDetails.coords).toEqual(directionToMove === "east" ? [3, 1] : [1, 3]);
+  });
+  test("dnet.location.surroundings()", async () => {
+    const ns = getNsOnServerNearLabyrinth();
+    const surroundingsString = `${await ns.dnet.location.surroundings()}`.split("\n");
+    const maze = getLabMaze();
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        // location.surroundings gives a snapshot of the maze centered on the current script's location
+        // We have to offset it by its range to line it up with the maze data
+        expect(surroundingsString[i + 2][j + 2]).toBe(maze[i][j]);
+      }
+    }
   });
 });

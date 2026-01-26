@@ -37,7 +37,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[interface](./bitburner.darknet.interface.md)
+[location](./bitburner.darknet.location.md)
 
 
 </td><td>
@@ -45,12 +45,12 @@ Description
 
 </td><td>
 
-{ interact(input: string): Promise&lt;unknown&gt;; inspect(): unknown; }
+{ details(): Promise&lt;any&gt;; surroundings(): Promise&lt;any&gt;; }
 
 
 </td><td>
 
-\[REDACTED\] API
+Not all who wander are lost.
 
 
 </td></tr>

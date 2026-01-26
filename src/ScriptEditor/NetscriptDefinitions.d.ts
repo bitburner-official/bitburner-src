@@ -4741,18 +4741,13 @@ export interface Darknet {
    */
   getServerRequiredCharismaLevel(host: string): number;
 
-  /** [REDACTED] API */
-  interface: {
-    /**
-     * Interact with the L[REDACTED]th
-     * @param input
-     */
-    interact(input: string): Promise<unknown>;
+  /** Not all who wander are lost. */
+  location: {
+    /** Be in the place that you are. */
+    details(): Promise<any>;
 
-    /**
-     * See your current [REDACTED]
-     */
-    inspect(): unknown;
+    /** There is more than meets the eye. */
+    surroundings(): Promise<any>;
   };
 }
 
