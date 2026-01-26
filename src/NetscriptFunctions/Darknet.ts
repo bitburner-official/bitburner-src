@@ -49,7 +49,6 @@ import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
 import { isIPAddress } from "../Types/strings";
 import { getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
 import { shuffle } from "lodash";
-import { sleep } from "../utils/Utility";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -719,7 +718,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
           const pid = ctx.workerScript.pid;
           const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
-          await sleep(authenticationTime);
+          await helpers.netscriptDelay(ctx, authenticationTime);
 
           const result = handleLabyrinthPassword(input, currentServer, pid);
           if (result.code === ResponseCodeEnum.Success) {
