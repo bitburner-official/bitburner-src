@@ -296,6 +296,7 @@ describe("Password Tests", () => {
   });
 
   test("getXorMaskEncryptedPasswordConfig server creates a server with a correct password hint", () => {
+    // WIP-Fico: this is sometimes flaky, I need to look into why
     const server = serverFactory(() => getXorMaskEncryptedPasswordConfig(), 20, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
