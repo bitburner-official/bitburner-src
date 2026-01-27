@@ -714,8 +714,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
         const pid = ctx.workerScript.pid;
         const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
-
         await helpers.netscriptDelay(ctx, authenticationTime);
+
 
         return getLocationStatus(pid);
       },

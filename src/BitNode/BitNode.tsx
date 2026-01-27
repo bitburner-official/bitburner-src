@@ -22,18 +22,8 @@ class BitNode {
   // BitNode number
   number: number;
 
-  difficulty: 0 | 1 | 2;
-
-  constructor(
-    n: number,
-    difficulty: 0 | 1 | 2,
-    name: string,
-    tagline = "",
-    description: JSX.Element,
-    sfDescription: JSX.Element,
-  ) {
+  constructor(n: number, name: string, tagline = "", description: JSX.Element, sfDescription: JSX.Element) {
     this.number = n;
-    this.difficulty = difficulty;
     this.name = name;
     this.tagline = tagline;
     this.description = description;
@@ -50,7 +40,6 @@ export const BitNodes: Record<string, BitNode> = {};
 export function initBitNodes() {
   BitNodes.BitNode1 = new BitNode(
     1,
-    0,
     "Source Genesis",
     "The original BitNode",
     (
@@ -80,7 +69,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode2 = new BitNode(
     2,
-    0,
     "Rise of the Underworld",
     "From the shadows, they rose",
     (
@@ -115,7 +103,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode3 = new BitNode(
     3,
-    2,
     "Corporatocracy",
     "The Price of Civilization",
     (
@@ -151,7 +138,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode4 = new BitNode(
     4,
-    1,
     "The Singularity",
     "The Man and the Machine",
     (
@@ -183,7 +169,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode5 = new BitNode(
     5,
-    1,
     "Artificial Intelligence",
     "Posthuman",
     (
@@ -225,7 +210,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode6 = new BitNode(
     6,
-    1,
     FactionName.Bladeburners,
     "Like Tears in Rain",
     (
@@ -259,7 +243,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode7 = new BitNode(
     7,
-    2,
     `${FactionName.Bladeburners} 2079`,
     "More human than humans",
     (
@@ -296,7 +279,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode8 = new BitNode(
     8,
-    2,
     "Ghost of Wall Street",
     "Money never sleeps",
     (
@@ -333,7 +315,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode9 = new BitNode(
     9,
-    2,
     "Hacktocracy",
     "Hacknet Unleashed",
     (
@@ -375,7 +356,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode10 = new BitNode(
     10,
-    2,
     "Digital Carbon",
     "Your body is not who you are",
     (
@@ -410,7 +390,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode11 = new BitNode(
     11,
-    1,
     "The Big Crash",
     "Okay. Sell it all.",
     (
@@ -452,7 +431,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode12 = new BitNode(
     12,
-    0,
     "The Recursion",
     "Repeat.",
     (
@@ -469,7 +447,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode13 = new BitNode(
     13,
-    2,
     "They're lunatics",
     "1 step back, 2 steps forward",
     (
@@ -501,7 +478,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode14 = new BitNode(
     14,
-    1,
     "IPvGO Subnet Takeover",
     "Territory exists only in the 'net",
     (
@@ -542,7 +518,6 @@ export function initBitNodes() {
   );
   BitNodes.BitNode15 = new BitNode(
     15,
-    2,
     "The Secrets of the Dark Net",
     "The rules have changed",
     (
