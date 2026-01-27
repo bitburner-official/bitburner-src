@@ -1301,11 +1301,16 @@ describe("lab location methods", () => {
     const ns = getNsOnServerNearLabyrinth();
     const surroundingsString = `${await ns.dnet.location.surroundings()}`.split("\n");
     const maze = getLabMaze();
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        // location.surroundings gives a snapshot of the maze centered on the current script's location
-        // We have to offset it by its range to line it up with the maze data
-        expect(surroundingsString[i + 2][j + 2]).toBe(maze[i][j]);
+    for (let x = 0; x < 3; x++) {
+      for (let y = 0; y < 3; y++) {
+        if (x === 1 && y === 1) {
+          //The player icon is shown in the surroundings view
+          expect(surroundingsString[x + 2][y + 2]).toEqual("@");
+        } else {
+          // location.surroundings gives a snapshot of the maze centered on the current script's location
+          // We have to offset it by its range to line it up with the maze data
+          expect(surroundingsString[x + 2][y + 2]).toBe(maze[x][y]);
+        }
       }
     }
   });

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Typography, Select, MenuItem, Card } from "@mui/material";
-import { DarknetState } from "../models/DarknetState";
+import { Typography, Select, MenuItem, Card, Tooltip } from "@mui/material";
+import { DarknetState, LogEntry } from "../models/DarknetState";
 import { getLabMaze, getLabyrinthDetails, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
 import type { DarknetResult } from "@nsdefs";
@@ -36,7 +36,6 @@ export const LabyrinthSummary = ({
       ? DarknetState.labLocations[currentPerspective]
       : [1, 1];
   const surroundings = getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true)
-    .join("\n")
     .split("")
     .map((c) => `${c}${c}${c}`)
     .join("")
@@ -104,8 +103,15 @@ export const LabyrinthSummary = ({
     DarknetState.serverState[lab.name]?.serverLogs
       .filter((log) => log.pid === currentPerspective)
       .slice(0, 2)
-      .map((log) => (typeof log.message === "string" ? log.message : JSON.stringify(log.message, null, 2)))
+      .map(stringifyLog)
       .join("\n") || "(no response yet)";
+
+  const stringifyLog = (log: LogEntry) => {
+    if (typeof log.message === "string") return log.message;
+    const json = JSON.stringify(log.message, null, 2);
+    const surroundings = (log.message.data ?? "").replaceAll("\n", "\n           ");
+    return json.replace(/("data": )("[^"]*")/g, `$1"${surroundings}"`);
+  };
 
   const getManualFeedback = () => {
     if (currentPerspective !== -1) return " ";
@@ -144,11 +150,31 @@ export const LabyrinthSummary = ({
               )}
             </div>
             <div style={{ width: "50%" }}>
-              <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
+              <Typography variant="caption" color="secondary">
+                Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+              </Typography>
+              <Card style={{ padding: "8px", minHeight: "270px", marginBottom: "8px" }}>
                 <div style={{ color: "white" }}>
                   <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{getLogs()}</pre>
                 </div>
               </Card>
+              <Tooltip
+                title={
+                  <>
+                    dnet.location.details() gives the current script's location in the labyrinth, as well as which
+                    directions are valid movements.
+                    <br />
+                    <br />
+                    Example output:
+                    <pre>&#123; "coords": [1,2], "north": false, "east": true, "south": false, "west:" true &#125;</pre>
+                  </>
+                }
+              >
+                <Typography variant="caption" color="secondary">
+                  For more info on your current location in the labyrinth:
+                  <pre>ns.dnet.location.details()</pre>
+                </Typography>
+              </Tooltip>
             </div>
           </div>
 

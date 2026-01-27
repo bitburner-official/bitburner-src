@@ -286,7 +286,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
                 logs: ["A mysterious maze has appeared..."],
               };
             }
-            const surroundings = getSurroundingsVisualized(getLabMaze(), location[0], location[1]);
+            const surroundings = getSurroundingsVisualized(getLabMaze(), location[0], location[1]).split("\n");
             const status = {
               coords: [location[0], location[1]],
               north: surroundings[0][1] === " ",
@@ -738,7 +738,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         await helpers.netscriptDelay(ctx, authenticationTime);
 
         const [x, y] = DarknetState.labLocations[pid] ?? [1, 1];
-        return getSurroundingsVisualized(getLabMaze(), x, y, 3).join("\n");
+        return getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true);
       },
     },
   };

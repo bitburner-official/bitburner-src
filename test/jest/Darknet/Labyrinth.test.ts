@@ -1,8 +1,9 @@
 import {
-  assertLocationStatus,
   generateMaze,
   getLabAugReward,
+  getLabMaze,
   getLabyrinthDetails,
+  getSurroundingsVisualized,
   handleLabyrinthPassword,
   labData,
 } from "../../../src/DarkNet/effects/labyrinth";
@@ -99,10 +100,16 @@ describe("Labyrinth Tests", () => {
 
     const result = handleLabyrinthPassword("go north", labDetails.lab, -1);
     expect(result.message).toBe("You cannot go that way. You are still at 1,1.");
-    assertLocationStatus(result.data);
-    expect(result.data.coords).toEqual([1, 1]);
-    expect(result.data.north).toEqual(false);
-    expect(result.data.west).toEqual(false);
+
+    const surroundings = result.data ?? "";
+    const mazeData = getLabMaze();
+    const mazeSurroundings = mazeData
+      .slice(0, 3)
+      .map((row) => row.slice(0, 3))
+      .join("\n");
+    // Add the player icon at (1,1)
+    const expectedSurroundings = mazeSurroundings.slice(0, 5) + "@" + mazeSurroundings.slice(6, 11);
+    expect(surroundings).toEqual(expectedSurroundings);
   });
 
   it("should give location for bad commands", () => {
@@ -114,10 +121,33 @@ describe("Labyrinth Tests", () => {
 
     const result = handleLabyrinthPassword("1234", labDetails.lab, -1);
     expect(result.message).toBe(`You don't know how to do that. Try a command such as "go north"`);
-    assertLocationStatus(result.data);
-    expect(result.data.coords).toEqual([1, 1]);
-    expect(result.data.north).toEqual(false);
-    expect(result.data.west).toEqual(false);
+
+    const surroundings = result.data ?? "";
+    const mazeData = getLabMaze();
+    const mazeSurroundings = mazeData
+      .slice(0, 3)
+      .map((row) => row.slice(0, 3))
+      .join("\n");
+    // Add the player icon at (1,1)
+    const expectedSurroundings = mazeSurroundings.slice(0, 5) + "@" + mazeSurroundings.slice(6, 11);
+    expect(surroundings).toEqual(expectedSurroundings);
+  });
+
+  it("should give the new location after moving", () => {
+    setupBN15Environment(0);
+    const labDetails = getLabyrinthDetails();
+
+    expect(labDetails.lab).not.toBeNull();
+    if (labDetails.lab === null) return;
+    const mazeData = getLabMaze();
+    const direction = mazeData[1][2] === " " ? "east" : "south";
+    const [newX, newY] = direction === "east" ? [3, 1] : [1, 3];
+
+    const result = handleLabyrinthPassword(direction, labDetails.lab, -1);
+    expect(result.message).toBe(`You have moved to ${newX},${newY}.`);
+
+    const surroundings = result.data ?? "";
+    expect(surroundings).toEqual(getSurroundingsVisualized(mazeData, newX, newY, 1, true, true));
   });
 
   describe("non-bitnode 15 lab tests", () => {

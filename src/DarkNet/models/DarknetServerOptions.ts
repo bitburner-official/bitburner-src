@@ -10,7 +10,7 @@ import {
   ServerNamePrefixes,
   ServerNameSuffixes,
 } from "./dictionaryData";
-import { getLabyrinthDetails, type LocationStatus } from "../effects/labyrinth";
+import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import type { DarknetResponseCode } from "@nsdefs";
 import type { MinigamesType } from "../Enums";
@@ -24,7 +24,7 @@ export type PasswordResponse = {
   passwordAttempted: string;
   passwordExpected?: string;
   message: string;
-  data?: string | LocationStatus;
+  data?: string;
 };
 
 export function isPasswordResponse(v: unknown): v is PasswordResponse {

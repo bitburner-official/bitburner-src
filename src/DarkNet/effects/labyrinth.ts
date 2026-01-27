@@ -174,29 +174,30 @@ export const getSurroundingsVisualized = (
   range = 1,
   showPlayer = false,
   showEnd = false,
-) => {
-  let result = "";
+): string => {
+  const result: string[] = [];
   for (let i = y - range; i <= y + range; i++) {
+    let row = "";
     for (let j = x - range; j <= x + range; j++) {
       if (i === y && j === x && showPlayer) {
-        result += "@";
+        row += "@";
         continue;
       }
       if (i === maze.length - 2 && j === maze[0].length - 2 && showEnd) {
-        result += "X";
+        row += "X";
         continue;
       }
-      result += maze[i]?.[j] ?? PATH;
+      row += maze[i]?.[j] ?? PATH;
     }
-    result += "\n";
+    result.push(row);
   }
 
-  return result.split("\n");
+  return result.join("\n");
 };
 
 export const getLocationStatus = (pid: number = -1): LocationStatus => {
   const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
-  const surroundings = getSurroundingsVisualized(getLabMaze(), initialX, initialY);
+  const surroundings = getSurroundingsVisualized(getLabMaze(), initialX, initialY).split("\n");
   return {
     coords: [initialX, initialY],
     north: surroundings[0][1] === PATH,
@@ -256,7 +257,7 @@ export const handleLabyrinthPassword = (
       message: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
     };
   }
-  const status: LocationStatus = getLocationStatus(pid);
+  const initialSurroundings = getSurroundingsVisualized(maze, initialX, initialY, 1, true, false);
 
   const potentialWall: [number, number] = [initialX + dx, initialY + dy];
   if (maze[potentialWall[1]]?.[potentialWall[0]] !== PATH) {
@@ -264,7 +265,7 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
       message: `You cannot go that way. You are still at ${initialX},${initialY}.`,
-      data: status,
+      data: initialSurroundings,
     };
   }
 
@@ -273,7 +274,7 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
       message: `You don't know how to do that. Try a command such as "go north"`,
-      data: status,
+      data: initialSurroundings,
     };
   }
 
@@ -296,11 +297,12 @@ export const handleLabyrinthPassword = (
     };
   }
 
+  const newSurroundings = getSurroundingsVisualized(maze, newLocation[0], newLocation[1], 1, true, false);
   return {
     passwordAttempted: attemptedPassword,
     code: ResponseCodeEnum.AuthFailure,
     message: `You have moved to ${newLocation[0]},${newLocation[1]}.`,
-    data: status,
+    data: newSurroundings,
   };
 };
 
