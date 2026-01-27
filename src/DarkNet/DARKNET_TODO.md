@@ -178,6 +178,9 @@ Design document and workspace
 
 - remove `invalidCharacters` from server name filler list to prevent issues
 - timing attack - use data property for response time
+- added new api `ns.dnet.location.details()` to get lab coordinates and valid moves
+- added new api `ns.dnet.location.surroundings()` to get a view of the lab area where your script is, like in the UI
+- simplify heartbleed logs to be a string (a snippet of the visual map). You can still parse the heartbleed log data to get your current coords and valid directions if you want:
 
 # Additional darknet server types
 

@@ -172,7 +172,7 @@ export const LabyrinthSummary = ({
               >
                 <Typography variant="caption" color="secondary">
                   For more info on your current location in the labyrinth:
-                  <pre>ns.dnet.location.details()</pre>
+                  <pre>await ns.dnet.location.details()</pre>
                 </Typography>
               </Tooltip>
             </div>
