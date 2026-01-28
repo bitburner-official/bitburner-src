@@ -133,7 +133,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
             FormatsNeedToChange.emit();
           }}
           text="Move the currency symbol to be after the value"
-          tooltip={<>If enabled, currency symbol appears after the number (e.g., 100€ instead of €100)</>}
+          tooltip={<>If enabled, the currency symbol appears after the number (e.g., 100€ instead of €100)</>}
         />
       </div>
     </GameOptionsPage>
