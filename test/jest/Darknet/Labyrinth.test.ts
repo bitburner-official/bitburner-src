@@ -17,6 +17,8 @@ import { MAX_NET_DEPTH, NET_WIDTH } from "../../../src/DarkNet/Enums";
 import type { DarknetServer } from "../../../src/Server/DarknetServer";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName } from "@enums";
+import { getAuthResult } from "../../../src/DarkNet/effects/authentication";
+import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -133,7 +135,7 @@ describe("Labyrinth Tests", () => {
     expect(surroundings).toEqual(expectedSurroundings);
   });
 
-  it("should give the new location after moving", () => {
+  it("should give the new location after moving and log it", () => {
     setupBN15Environment(0);
     const labDetails = getLabyrinthDetails();
 
@@ -143,11 +145,17 @@ describe("Labyrinth Tests", () => {
     const direction = mazeData[1][2] === " " ? "east" : "south";
     const [newX, newY] = direction === "east" ? [3, 1] : [1, 3];
 
-    const result = handleLabyrinthPassword(direction, labDetails.lab, -1);
-    expect(result.message).toBe(`You have moved to ${newX},${newY}.`);
+    const result = getAuthResult(labDetails.lab, direction);
+    expect(result.response.message).toBe(`You have moved to ${newX},${newY}.`);
 
-    const surroundings = result.data ?? "";
+    const surroundings = result.response.data ?? "";
     expect(surroundings).toEqual(getSurroundingsVisualized(mazeData, newX, newY, 1, true, true));
+
+    const log = getMostRecentAuthLog(labDetails.name);
+    expect(log).not.toBeNull();
+    if (log === null) return;
+    expect(log.message).toEqual(result.response.message);
+    expect(log.data).toEqual(surroundings);
   });
 
   describe("non-bitnode 15 lab tests", () => {

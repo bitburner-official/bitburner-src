@@ -27,7 +27,12 @@ import {
   getTripleModuloConfig,
   getKingOfTheHillConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
-import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
+import {
+  defaultSettingsDictionary,
+  lettersLowercase,
+  lettersUppercase,
+  numbers,
+} from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 import { GenericResponseMessage, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
@@ -38,10 +43,11 @@ import * as UtilityModule from "../../../src/utils/Utility";
 import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 import { isNumber } from "../../../src/types";
-import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
+import { getMostRecentAuthLog, getServerLogs } from "../../../src/DarkNet/models/packetSniffing";
 import { Player } from "@player";
 import { assertString } from "../../../src/utils/TypeAssertion";
 import { assertPasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
+import { DarknetServer } from "../../../src/Server/DarknetServer";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -329,26 +335,14 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
-    const getLatestResponseTime = () => {
-      const lastLog = `${DarknetState.serverState[server.hostname].serverLogs[0].message.data}` ?? "";
-      if (!lastLog) {
-        throw new Error(`No logs found for server ${server.hostname}`);
-      }
-      const timeMatch = lastLog.match(/Response time: (\d+\.?\d*)ms/);
-      if (!timeMatch) {
-        throw new Error(`No response time found in log: ${lastLog}`);
-      }
-      return Number(timeMatch[1] ?? 0);
-    };
-
     const response1 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 1) + "%%%%", 0);
-    const firstAuthTime = getLatestResponseTime();
+    const firstAuthTime = getLatestResponseTime(server);
     const response2 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 2) + "%%%", 0);
-    const secondAuthTime = getLatestResponseTime();
+    const secondAuthTime = getLatestResponseTime(server);
     const response3 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 3) + "%%", 0);
-    const thirdAuthTime = getLatestResponseTime();
+    const thirdAuthTime = getLatestResponseTime(server);
     const response4WithWorseGuess = await ns.dnet.authenticate(server.hostname, "%%%%%%", 0);
-    const badAuthTime = getLatestResponseTime();
+    const badAuthTime = getLatestResponseTime(server);
 
     expect(badAuthTime).toBeLessThan(firstAuthTime);
     expect(secondAuthTime).toBeGreaterThan(firstAuthTime);
@@ -376,6 +370,24 @@ describe("Password Tests", () => {
 
     const successfulResponse = await ns.dnet.authenticate(server.hostname, server.password, 0);
     expect(successfulResponse.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("getTimingAttackConfig server only gives response time improvements on the exact correct character", () => {
+    const server = serverFactory(getTimingAttackConfig, 20, 0, 0);
+    server.logTrafficInterval = -1;
+    expect(server).toBeDefined();
+
+    getAuthResult(server, server.password.slice(0, 3), 0);
+    const baseAuthTime = getLatestResponseTime(server);
+    expect(getServerLogs(server, 10).length).toBe(1);
+
+    for (const char of [...lettersUppercase, ...lettersLowercase, ...numbers]) {
+      if (char === server.password[1]) continue;
+      getAuthResult(server, server.password.slice(0, 3) + char, 0);
+      const testAuthTime = getLatestResponseTime(server);
+      expect(testAuthTime).toBe(baseAuthTime);
+      expect(getServerLogs(server, 10).length).toBe(1);
+    }
   });
 
   test("getSpiceLevelConfig server creates a server with a correct password hint", () => {
@@ -645,3 +657,15 @@ describe("mutateDarknet and webstorm", () => {
     expect(spiedConsoleError).not.toHaveBeenCalled();
   });
 });
+
+const getLatestResponseTime = (server: DarknetServer) => {
+  const lastLog = `${DarknetState.serverState[server.hostname].serverLogs[0].message.data}` ?? "";
+  if (!lastLog) {
+    throw new Error(`No logs found for server ${server.hostname}`);
+  }
+  const timeMatch = lastLog.match(/Response time: (\d+\.?\d*)ms/);
+  if (!timeMatch) {
+    throw new Error(`No response time found in log: ${lastLog}`);
+  }
+  return Number(timeMatch[1] ?? 0);
+};

@@ -276,31 +276,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
           logger(ctx)(`Extracted log data from ${server.hostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
 
-          if (isLabyrinthServer(server.hostname)) {
-            const location = DarknetState.labLocations[ctx.workerScript.pid];
-            if (!location) {
-              return {
-                success: true,
-                code: ResponseCodeEnum.Success,
-                message: GenericResponseMessage.Success,
-                logs: ["A mysterious maze has appeared..."],
-              };
-            }
-            const surroundings = getSurroundingsVisualized(getLabMaze(), location[0], location[1]).split("\n");
-            const status = {
-              coords: [location[0], location[1]],
-              north: surroundings[0][1] === " ",
-              east: surroundings[1][2] === " ",
-              south: surroundings[2][1] === " ",
-              west: surroundings[1][0] === " ",
-            };
-            return {
-              success: true,
-              code: ResponseCodeEnum.Success,
-              message: GenericResponseMessage.Success,
-              logs: [JSON.stringify(status)],
-            };
-          }
           const capturedLogs = serverState.serverLogs.slice(0, options.logsToCapture);
           if (!options.peek) {
             serverState.serverLogs = serverState.serverLogs.slice(options.logsToCapture);
