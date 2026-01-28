@@ -27,6 +27,7 @@ import { moveDarknetServer, moveRandomDarknetServers } from "../../DarkNet/contr
 import { Modal } from "../../ui/React/Modal";
 import { ModelIds } from "../../DarkNet/Enums";
 import {
+  createDarknetServer,
   getBinaryEncodedConfig,
   getBufferOverflowConfig,
   getCaptchaConfig,
@@ -91,12 +92,15 @@ export function DarknetDev(): React.ReactElement {
     const range = Math.max(3, Math.ceil(count / 4));
     let successCount = 0;
     for (let i = 0; i < count; i++) {
-      const newServer = serverFactory(selectedServerType.constructor, difficulty, depth, -1);
+      const newServer =
+        selectedServerType.label === "Random"
+          ? createDarknetServer(difficulty, depth, -1)
+          : serverFactory(selectedServerType.constructor, difficulty, depth, -1);
       successCount += +moveDarknetServer(newServer, range, range, depth);
     }
     if (successCount !== count) {
       SnackbarEvents.emit(
-        `Failed to create new ${selectedServerType.label} darknet servers at depth ${depth}: Not enough open positions available`,
+        `Only created ${successCount} ${selectedServerType.label} darknet servers at depth ${depth}. Not enough open positions available`,
         ToastVariant.ERROR,
         4000,
       );
@@ -106,8 +110,8 @@ export function DarknetDev(): React.ReactElement {
         ToastVariant.SUCCESS,
         2000,
       );
-      setOpen(false);
     }
+    setOpen(false);
   };
 
   return (
@@ -271,6 +275,7 @@ export function DarknetDev(): React.ReactElement {
 type ServerTypeOption = { label: string; constructor: (d: number) => ServerConfig };
 
 const serverTypeOptions: ServerTypeOption[] = [
+  { label: "Random", constructor: getNoPasswordConfig },
   { label: ModelIds.NoPassword, constructor: getNoPasswordConfig },
   { label: ModelIds.DefaultPassword, constructor: getDefaultPasswordConfig },
   { label: ModelIds.EchoVuln, constructor: getEchoVulnConfig },
