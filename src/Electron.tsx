@@ -10,6 +10,7 @@ import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
 import { commitHash } from "./utils/helpers/commitHash";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
+import { assertSaveData } from "./utils/TypeAssertion";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
@@ -122,9 +123,7 @@ function initElectronBridge(): void {
       });
   });
   bridge.receive("get-save-info-request", (saveData: unknown) => {
-    if (typeof saveData !== "string" && !(saveData instanceof Uint8Array)) {
-      throw new Error("Error while trying to get save info");
-    }
+    assertSaveData(saveData);
     window.appSaveFns
       .getSaveInfo(saveData)
       .then((saveInfo) => {

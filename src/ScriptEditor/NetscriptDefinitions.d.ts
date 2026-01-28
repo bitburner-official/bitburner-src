@@ -1879,7 +1879,7 @@ export interface Singularity {
    * @remarks
    * RAM cost: 1 GB * 16/4/1
    */
-  getSaveData(): Promise<Uint8Array>;
+  getSaveData(): Promise<Uint8Array<ArrayBuffer>>;
 
   /**
    * Backup game save.
