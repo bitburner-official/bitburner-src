@@ -288,7 +288,7 @@ export function initBitNodes() {
         <br />
         In this BitNode:
         <ul>
-          <li>You start with $250 million.</li>
+          <li>Your starting money is 250e6.</li>
           <li>You start with a WSE membership and access to the TIX API.</li>
           <li>You can short stocks and place different types of orders (limit/stop).</li>
         </ul>

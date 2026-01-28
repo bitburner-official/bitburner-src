@@ -196,6 +196,10 @@ export const Settings = {
   disableSuffixes: false,
   /** The default amount of digits displayed after the decimal separator. */
   fractionalDigits: 3,
+  /** Currency symbol used for displaying money. */
+  CurrencySymbol: "$",
+  /** Whether to show the currency symbol after the money value. */
+  CurrencySymbolAfterValue: false,
   /**
    * Player-defined key bindings. Don't use this property directly. It must be merged with DefaultKeyBindings in
    * src\utils\KeyBindingUtils.ts.
