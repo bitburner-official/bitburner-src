@@ -672,48 +672,54 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         return onlineConnectionCheck.server.requiredCharismaSkill;
       },
-    location: {
-      details: (ctx) => async (): Promise<any> => {
-        expectDarknetAccess(ctx);
-        expectRunningOnDarknetServer(ctx);
+    labreport: (ctx) => async (): Promise<any> => {
+      expectDarknetAccess(ctx);
+      expectRunningOnDarknetServer(ctx);
 
-        const lab = getLabyrinthDetails().lab;
-        if (!lab) {
-          return "Nothing happens...";
-        }
+      const lab = getLabyrinthDetails().lab;
+      if (!lab) {
+        const status = "You feel lost...";
+        logger(ctx)(status);
+        return status;
+      }
 
-        const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
-        if (!isDirectConnected(currentServer, lab)) {
-          return "You feel that you don't have the right connections...";
-        }
+      const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
+      if (!isDirectConnected(currentServer, lab)) {
+        const status = "You feel disconnected...";
+        logger(ctx)(status);
+        return status;
+      }
 
-        const pid = ctx.workerScript.pid;
-        const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
-        await helpers.netscriptDelay(ctx, authenticationTime);
+      const pid = ctx.workerScript.pid;
+      const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
+      await helpers.netscriptDelay(ctx, authenticationTime);
 
-        return getLocationStatus(pid);
-      },
-      surroundings: (ctx) => async (): Promise<any> => {
-        expectDarknetAccess(ctx);
-        expectRunningOnDarknetServer(ctx);
+      return getLocationStatus(pid);
+    },
+    labradar: (ctx) => async (): Promise<any> => {
+      expectDarknetAccess(ctx);
+      expectRunningOnDarknetServer(ctx);
 
-        const lab = getLabyrinthDetails().lab;
-        if (!lab) {
-          return "You cannot see anything...";
-        }
+      const lab = getLabyrinthDetails().lab;
+      if (!lab) {
+        const status = "You feel blind...";
+        logger(ctx)(status);
+        return status;
+      }
 
-        const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
-        if (!isDirectConnected(currentServer, lab)) {
-          return "You feel that you don't have the right connections...";
-        }
+      const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
+      if (!isDirectConnected(currentServer, lab)) {
+        const status = "You feel disconnected...";
+        logger(ctx)(status);
+        return status;
+      }
 
-        const pid = ctx.workerScript.pid;
-        const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
-        await helpers.netscriptDelay(ctx, authenticationTime);
+      const pid = ctx.workerScript.pid;
+      const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
+      await helpers.netscriptDelay(ctx, authenticationTime);
 
-        const [x, y] = DarknetState.labLocations[pid] ?? [1, 1];
-        return getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true);
-      },
+      const [x, y] = DarknetState.labLocations[pid] ?? [1, 1];
+      return getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true);
     },
   };
 }

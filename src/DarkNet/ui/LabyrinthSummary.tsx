@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Typography, Select, MenuItem, Card, Tooltip } from "@mui/material";
+import { Typography, Select, MenuItem, Card } from "@mui/material";
 import { DarknetState, LogEntry } from "../models/DarknetState";
-import { getLabMaze, getLabyrinthDetails, getSurroundingsVisualized } from "../effects/labyrinth";
+import { getLabMaze, getLabyrinthDetails, getLocationStatus, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
 import type { DarknetResult } from "@nsdefs";
 import { Player } from "@player";
@@ -158,23 +158,17 @@ export const LabyrinthSummary = ({
                   <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{getLogs()}</pre>
                 </div>
               </Card>
-              <Tooltip
-                title={
-                  <>
-                    dnet.location.details() gives the current script's location in the labyrinth, as well as which
-                    directions are valid movements.
-                    <br />
-                    <br />
-                    Example output:
-                    <pre>&#123; "coords": [1,2], "north": false, "east": true, "south": false, "west:" true &#125;</pre>
-                  </>
-                }
-              >
-                <Typography variant="caption" color="secondary">
-                  For more info on your current location in the labyrinth:
-                  <pre>await ns.dnet.location.details()</pre>
-                </Typography>
-              </Tooltip>
+
+              <Typography variant="caption" color="secondary">
+                <pre>ns.dnet.labreport()</pre>
+              </Typography>
+              <Card style={{ padding: "8px" }}>
+                <div style={{ color: "white" }}>
+                  <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontSize: "10.5px" }}>
+                    {JSON.stringify(getLocationStatus(currentPerspective))}
+                  </pre>
+                </div>
+              </Card>
             </div>
           </div>
 

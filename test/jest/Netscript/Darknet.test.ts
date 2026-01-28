@@ -330,16 +330,16 @@ describe("home", () => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("home is not a darknet server");
   });
-  test("location.details", async () => {
+  test("labreport", async () => {
     const ns = getNsOnHome();
     await expect(async () => {
-      await ns.dnet.location.details();
+      await ns.dnet.labreport();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
-  test("location.surroundings", async () => {
+  test("labradar", async () => {
     const ns = getNsOnHome();
     await expect(async () => {
-      await ns.dnet.location.surroundings();
+      await ns.dnet.labradar();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
@@ -424,16 +424,16 @@ describe("Normal NPC server", () => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("CSEC is not a darknet server");
   });
-  test("location.details", async () => {
+  test("labreport", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     await expect(async () => {
-      await ns.dnet.location.details();
+      await ns.dnet.labreport();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
-  test("location.surroundings", async () => {
+  test("labradar", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     await expect(async () => {
-      await ns.dnet.location.surroundings();
+      await ns.dnet.labradar();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
@@ -518,16 +518,16 @@ describe("Private server", () => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("test-server-1 is not a darknet server");
   });
-  test("location.details", async () => {
+  test("labreport", async () => {
     const ns = getNS("test-server-1");
     await expect(async () => {
-      await ns.dnet.location.details();
+      await ns.dnet.labreport();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
-  test("location.surroundings", async () => {
+  test("labradar", async () => {
     const ns = getNS("test-server-1");
     await expect(async () => {
-      await ns.dnet.location.surroundings();
+      await ns.dnet.labradar();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
@@ -612,16 +612,16 @@ describe("Hashnet server", () => {
       ns.dnet.getServerRequiredCharismaLevel(server.hostname);
     }).toThrow("hacknet-server-0 is not a darknet server");
   });
-  test("location.details", async () => {
+  test("labreport", async () => {
     const ns = getNS("hacknet-server-0");
     await expect(async () => {
-      await ns.dnet.location.details();
+      await ns.dnet.labreport();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
-  test("location.surroundings", async () => {
+  test("labradar", async () => {
     const ns = getNS("hacknet-server-0");
     await expect(async () => {
-      await ns.dnet.location.surroundings();
+      await ns.dnet.labradar();
     }).rejects.toContain("This API can only be used on a darknet server");
   });
 });
@@ -860,15 +860,15 @@ describe("darkweb", () => {
       getDarknetServerOrThrow(SpecialServers.DarkWeb).requiredCharismaSkill,
     );
   });
-  test("location.details", async () => {
+  test("labreport", async () => {
     const ns = getNsOnDarkWeb();
-    const details = `${await ns.dnet.location.details()}`;
+    const details = `${await ns.dnet.labreport()}`;
     // darknet is not connected to lab, so scripts on it cannot navigate the lab
     expect(details).toEqual("You feel that you don't have the right connections...");
   });
-  test("location.surroundings", async () => {
+  test("labradar", async () => {
     const ns = getNsOnDarkWeb();
-    const details = `${await ns.dnet.location.surroundings()}`;
+    const details = `${await ns.dnet.labradar()}`;
     // darknet is not connected to lab, so scripts on it cannot navigate the lab
     expect(details).toEqual("You feel that you don't have the right connections...");
   });
@@ -1273,11 +1273,11 @@ describe("Use IP instead of hostname", () => {
 });
 
 describe("lab location methods", () => {
-  test("dnet.location.details", async () => {
+  test("dnet.labreport", async () => {
     const ns = getNsOnServerNearLabyrinth();
     const labName = getLabyrinthDetails().name;
 
-    const details = (await ns.dnet.location.details()) as LocationStatus;
+    const details = (await ns.dnet.labreport()) as LocationStatus;
     expect(isLocationStatus(details)).toBe(true);
 
     const maze = getLabMaze();
@@ -1293,13 +1293,13 @@ describe("lab location methods", () => {
     await ns.dnet.authenticate(labName, directionToMove);
     const logs = getMostRecentAuthLog(labName);
     expect(logs?.message).toContain("You have moved to");
-    const newDetails = (await ns.dnet.location.details()) as LocationStatus;
+    const newDetails = (await ns.dnet.labreport()) as LocationStatus;
     expect(isLocationStatus(newDetails)).toBe(true);
     expect(newDetails.coords).toEqual(directionToMove === "east" ? [3, 1] : [1, 3]);
   });
-  test("dnet.location.surroundings()", async () => {
+  test("dnet.labradar()", async () => {
     const ns = getNsOnServerNearLabyrinth();
-    const surroundingsString = `${await ns.dnet.location.surroundings()}`.split("\n");
+    const surroundingsString = `${await ns.dnet.labradar()}`.split("\n");
     const maze = getLabMaze();
     for (let x = 0; x < 3; x++) {
       for (let y = 0; y < 3; y++) {
@@ -1307,7 +1307,7 @@ describe("lab location methods", () => {
           //The player icon is shown in the surroundings view
           expect(surroundingsString[x + 2][y + 2]).toEqual("@");
         } else {
-          // location.surroundings gives a snapshot of the maze centered on the current script's location
+          // labradar gives a snapshot of the maze centered on the current script's location
           // We have to offset it by its range to line it up with the maze data
           expect(surroundingsString[x + 2][y + 2]).toBe(maze[x][y]);
         }

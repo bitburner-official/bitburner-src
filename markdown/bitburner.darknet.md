@@ -12,50 +12,6 @@ Darknet API
 export interface Darknet 
 ```
 
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[location](./bitburner.darknet.location.md)
-
-
-</td><td>
-
-
-</td><td>
-
-{ details(): Promise&lt;any&gt;; surroundings(): Promise&lt;any&gt;; }
-
-
-</td><td>
-
-Not all who wander are lost.
-
-
-</td></tr>
-</tbody></table>
-
 ## Methods
 
 <table><thead><tr><th>
@@ -216,6 +172,28 @@ Effect scales with threads and charisma level.
 Returns whether the server is a darknet server.
 
 Returns false if the server does not exist or has gone offline recently. This function does not DarkscapeNavigator.exe.
+
+
+</td></tr>
+<tr><td>
+
+[labradar()](./bitburner.darknet.labradar.md)
+
+
+</td><td>
+
+There is more than meets the eye.
+
+
+</td></tr>
+<tr><td>
+
+[labreport()](./bitburner.darknet.labreport.md)
+
+
+</td><td>
+
+Not all who wander are lost.
 
 
 </td></tr>

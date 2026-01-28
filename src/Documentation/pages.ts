@@ -431,7 +431,8 @@ import nsDoc_bitburner_darknet_getstasislinklimit_md from "../../markdown/bitbur
 import nsDoc_bitburner_darknet_heartbleed_md from "../../markdown/bitburner.darknet.heartbleed.md?raw";
 import nsDoc_bitburner_darknet_induceservermigration_md from "../../markdown/bitburner.darknet.induceservermigration.md?raw";
 import nsDoc_bitburner_darknet_isdarknetserver_md from "../../markdown/bitburner.darknet.isdarknetserver.md?raw";
-import nsDoc_bitburner_darknet_location_md from "../../markdown/bitburner.darknet.location.md?raw";
+import nsDoc_bitburner_darknet_labradar_md from "../../markdown/bitburner.darknet.labradar.md?raw";
+import nsDoc_bitburner_darknet_labreport_md from "../../markdown/bitburner.darknet.labreport.md?raw";
 import nsDoc_bitburner_darknet_md from "../../markdown/bitburner.darknet.md?raw";
 import nsDoc_bitburner_darknet_memoryreallocation_md from "../../markdown/bitburner.darknet.memoryreallocation.md?raw";
 import nsDoc_bitburner_darknet_nextmutation_md from "../../markdown/bitburner.darknet.nextmutation.md?raw";
@@ -2005,7 +2006,8 @@ AllPages["nsDoc/bitburner.darknet.getstasislinklimit.md"] = nsDoc_bitburner_dark
 AllPages["nsDoc/bitburner.darknet.heartbleed.md"] = nsDoc_bitburner_darknet_heartbleed_md;
 AllPages["nsDoc/bitburner.darknet.induceservermigration.md"] = nsDoc_bitburner_darknet_induceservermigration_md;
 AllPages["nsDoc/bitburner.darknet.isdarknetserver.md"] = nsDoc_bitburner_darknet_isdarknetserver_md;
-AllPages["nsDoc/bitburner.darknet.location.md"] = nsDoc_bitburner_darknet_location_md;
+AllPages["nsDoc/bitburner.darknet.labradar.md"] = nsDoc_bitburner_darknet_labradar_md;
+AllPages["nsDoc/bitburner.darknet.labreport.md"] = nsDoc_bitburner_darknet_labreport_md;
 AllPages["nsDoc/bitburner.darknet.md"] = nsDoc_bitburner_darknet_md;
 AllPages["nsDoc/bitburner.darknet.memoryreallocation.md"] = nsDoc_bitburner_darknet_memoryreallocation_md;
 AllPages["nsDoc/bitburner.darknet.nextmutation.md"] = nsDoc_bitburner_darknet_nextmutation_md;

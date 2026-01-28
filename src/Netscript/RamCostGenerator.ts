@@ -258,10 +258,8 @@ const dnet = {
   getDarknetInstability: 0,
   nextMutation: RamCostConstants.CycleTiming,
   getServerRequiredCharismaLevel: RamCostConstants.GetServer,
-  location: {
-    details: 0,
-    surroundings: 0,
-  },
+  labreport: 0,
+  labradar: 0,
 } as const;
 
 const format = {

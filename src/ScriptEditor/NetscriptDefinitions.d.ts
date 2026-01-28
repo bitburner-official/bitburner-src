@@ -4742,13 +4742,10 @@ export interface Darknet {
   getServerRequiredCharismaLevel(host: string): number;
 
   /** Not all who wander are lost. */
-  location: {
-    /** Be in the place that you are. */
-    details(): Promise<any>;
+  labreport(): Promise<any>;
 
-    /** There is more than meets the eye. */
-    surroundings(): Promise<any>;
-  };
+  /** There is more than meets the eye. */
+  labradar(): Promise<any>;
 }
 
 /**
