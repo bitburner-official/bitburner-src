@@ -529,6 +529,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         throw helpers.errorMessage(ctx, canHack.msg || "");
       }
 
+      if (server.backdoorInstalled) {
+        helpers.log(
+          ctx,
+          () =>
+            "You have already installed a backdoor on this server. You can check if the server has a backdoor installed " +
+            "with ns.getServer().backdoorInstalled.",
+        );
+      }
       helpers.log(
         ctx,
         () => `Installing backdoor on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(installTime, true)}`,
