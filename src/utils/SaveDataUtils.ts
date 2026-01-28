@@ -15,12 +15,12 @@ export function canUseBinaryFormat(): boolean {
   return "CompressionStream" in globalThis;
 }
 
-async function compress(dataString: string): Promise<Uint8Array> {
+async function compress(dataString: string): Promise<Uint8Array<ArrayBuffer>> {
   const compressedReadableStream = new Blob([dataString]).stream().pipeThrough(new CompressionStream("gzip"));
   return new Uint8Array(await new Response(compressedReadableStream).arrayBuffer());
 }
 
-async function decompress(binaryData: Uint8Array): Promise<string> {
+async function decompress(binaryData: Uint8Array<ArrayBuffer>): Promise<string> {
   const decompressedReadableStream = new Blob([binaryData]).stream().pipeThrough(new DecompressionStream("gzip"));
   const reader = decompressedReadableStream.pipeThrough(new TextDecoderStream("utf-8", { fatal: true })).getReader();
   let result = "";
