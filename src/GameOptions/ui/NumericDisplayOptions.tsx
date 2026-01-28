@@ -10,9 +10,7 @@ const DEFAULT_CURRENCY_SYMBOL = "$";
 
 export const NumericDisplayPage = (): React.ReactElement => {
   const [locale, setLocale] = useState(Settings.Locale);
-  const [currencySymbol, setCurrencySymbol] = useState(
-    Settings.CurrencySymbol === DEFAULT_CURRENCY_SYMBOL ? "" : Settings.CurrencySymbol,
-  );
+  const [currencySymbol, setCurrencySymbol] = useState(Settings.CurrencySymbol);
 
   function handleFractionalDigitChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     Settings.fractionalDigits = newValue as number;
