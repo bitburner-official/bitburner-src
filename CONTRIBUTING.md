@@ -221,6 +221,10 @@ the following rules:
 
 After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
 
+### Unrelated failed Jest tests
+
+Some Jest tests fail to run in Node versions older than v24. On those versions, these tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). You need to use Node v24+ to run these tests.
+
 ## As a Documenter
 
 To contribute to and view your changes to the BitBurner documentation in-game, you will
