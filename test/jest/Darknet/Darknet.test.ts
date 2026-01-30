@@ -663,13 +663,16 @@ describe("mutateDarknet and webstorm", () => {
 });
 
 const getLatestResponseTime = (server: DarknetServer) => {
-  const lastLog = `${DarknetState.serverState[server.hostname].serverLogs[0].message.data}` ?? "";
-  if (!lastLog) {
-    throw new Error(`No logs found for server ${server.hostname}`);
-  }
-  const timeMatch = lastLog.match(/Response time: (\d+\.?\d*)ms/);
+  const lastPasswordResponse = DarknetState.serverState[server.hostname].serverLogs[0].message;
+  assertPasswordResponse(lastPasswordResponse);
+  assertString(lastPasswordResponse.data);
+  const timeMatch = lastPasswordResponse.data.match(/Response time: (\d+\.?\d*)ms/);
   if (!timeMatch) {
-    throw new Error(`No response time found in log: ${lastLog}`);
+    throw new Error(`No response time found in log: ${JSON.stringify(lastPasswordResponse)}`);
   }
-  return Number(timeMatch[1] ?? 0);
+  const responseTime = Number(timeMatch[1]);
+  if (!Number.isFinite(responseTime)) {
+    throw new Error(`No response time found in log: ${JSON.stringify(lastPasswordResponse)}`);
+  }
+  return responseTime;
 };

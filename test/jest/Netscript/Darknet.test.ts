@@ -65,7 +65,7 @@ function getNsOnServerNearLabyrinth() {
   let server = null;
   while (!server) {
     const labyrinth = getLabyrinthDetails().lab;
-    server = labyrinth.serversOnNetwork.find(
+    server = labyrinth?.serversOnNetwork.find(
       (hostname) => hostname !== SpecialServers.Home && hostname !== SpecialServers.DarkWeb,
     );
     if (!server) {
