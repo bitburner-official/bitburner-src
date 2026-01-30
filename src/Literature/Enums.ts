@@ -28,9 +28,9 @@ export enum LiteratureName {
   DarkWebRebootHint = "darkweb-rebooted-again.lit",
   PasswordServerHint = "partial-password-jutsu.lit",
   TimingServerHint = "timing-attack.lit",
-  BinaryServerHint = "raw_data.lit",
+  BinaryServerHint = "raw-data.lit",
   DogNameHint = "dog-name-ideas.lit",
   FactoryDefaultHint = "factory-default.lit",
   StasisLinkHint = "stasis-link.lit",
-  LabHint = "secrets_in_the_depths.lit",
+  LabHint = "secrets-in-the-depths.lit",
 }
