@@ -206,7 +206,7 @@ export const addClue = (server: DarknetServer) => {
   }
 };
 
-const getClueFileName = (fileNameList: string[]): TextFilePath => {
+export const getClueFileName = (fileNameList: readonly string[]): TextFilePath => {
   const filePath = resolveTextFilePath(
     fileNameList[Math.floor(Math.random() * fileNameList.length)] + DarknetConstants.DataFileSuffix,
   );

@@ -12,14 +12,18 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import type { CacheResult, Result } from "@nsdefs";
 
-export const addCacheToServer: (
-  server: DarknetServer,
-  filename?: string,
-) => Result<{ cacheFilename: CacheFilePath }> = (server, filename) => {
-  const prefix = filename ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
-  const cacheFilename = resolveCacheFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache`);
+export const generateCacheFilename: (prefix?: string) => CacheFilePath | null = (prefix) => {
+  const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
+  return resolveCacheFilePath(`${filenamePrefix}_${Math.random().toString().substring(2, 5)}.cache`);
+};
+
+export const addCacheToServer: (server: DarknetServer, prefix?: string) => Result<{ cacheFilename: CacheFilePath }> = (
+  server,
+  prefix,
+) => {
+  const cacheFilename = generateCacheFilename(prefix);
   if (!cacheFilename) {
-    return { success: false, message: `Cannot generate path. filename: ${filename}` };
+    return { success: false, message: `Cannot generate path. prefix: ${prefix}` };
   }
   server.caches.push(cacheFilename);
   return { success: true, cacheFilename };

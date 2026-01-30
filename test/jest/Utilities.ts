@@ -111,3 +111,12 @@ export function getMockedNetscriptContext(
     } as unknown as WorkerScript,
   };
 }
+
+// WIP: Improve this function to get a better stack trace or use jest-expect-message
+export function expectWithMessage(actual: unknown, expected: unknown, customMessage: string) {
+  try {
+    expect(actual).toStrictEqual(expected);
+  } catch (error) {
+    throw new Error(customMessage, { cause: error });
+  }
+}

@@ -125,8 +125,8 @@ export const getSortedEchoVulnConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getDictionaryAttackConfig = (
-  difficulty: number,
-  dictionary: string[],
+  __difficulty: number,
+  dictionary: readonly string[],
   hintTemplates: string[],
   minigameType: MinigamesType,
 ): ServerConfig => {

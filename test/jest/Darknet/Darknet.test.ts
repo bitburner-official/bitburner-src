@@ -28,16 +28,25 @@ import {
   getKingOfTheHillConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import {
+  commonPasswordDictionary,
+  connectors,
   defaultSettingsDictionary,
+  l33t,
   lettersLowercase,
   lettersUppercase,
+  loreNames,
+  notebookFileNames,
   numbers,
+  passwordFileNames,
+  presetNames,
+  ServerNamePrefixes,
+  ServerNameSuffixes,
 } from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 import { GenericResponseMessage, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
-import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
+import { expectWithMessage, getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { getClueFileName, getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
 import * as UtilityModule from "../../../src/utils/Utility";
 import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
@@ -46,8 +55,12 @@ import { isNumber } from "../../../src/types";
 import { getMostRecentAuthLog, getServerLogs } from "../../../src/DarkNet/models/packetSniffing";
 import { Player } from "@player";
 import { assertString } from "../../../src/utils/TypeAssertion";
-import { assertPasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
+import { assertPasswordResponse, generateDarknetServerName } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { DarknetServer } from "../../../src/Server/DarknetServer";
+import { isDirectoryPath } from "../../../src/Paths/Directory";
+import { isFilePath } from "../../../src/Paths/FilePath";
+import { LAB_CACHE_NAME } from "../../../src/DarkNet/effects/labyrinth";
+import { generateCacheFilename } from "../../../src/DarkNet/effects/cacheFiles";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -61,6 +74,21 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks();
 });
+
+const getLatestResponseTime = (server: DarknetServer) => {
+  const lastPasswordResponse = DarknetState.serverState[server.hostname].serverLogs[0].message;
+  assertPasswordResponse(lastPasswordResponse);
+  assertString(lastPasswordResponse.data);
+  const timeMatch = lastPasswordResponse.data.match(/Response time: (\d+\.?\d*)ms/);
+  if (!timeMatch) {
+    throw new Error(`No response time found in log: ${JSON.stringify(lastPasswordResponse)}`);
+  }
+  const responseTime = Number(timeMatch[1]);
+  if (!Number.isFinite(responseTime)) {
+    throw new Error(`No response time found in log: ${JSON.stringify(lastPasswordResponse)}`);
+  }
+  return responseTime;
+};
 
 describe("Password Tests", () => {
   const difficulty = 1;
@@ -96,7 +124,7 @@ describe("Password Tests", () => {
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(defaultSettingsDictionary.includes(server.password)).toBe(true);
+    expect((defaultSettingsDictionary as unknown as string[]).includes(server.password)).toBe(true);
 
     expect(getAuthResult(server, server.password, 1).result.code).toBe(ResponseCodeEnum.Success);
     expect(server.hasAdminRights).toBe(true);
@@ -662,17 +690,67 @@ describe("mutateDarknet and webstorm", () => {
   });
 });
 
-const getLatestResponseTime = (server: DarknetServer) => {
-  const lastPasswordResponse = DarknetState.serverState[server.hostname].serverLogs[0].message;
-  assertPasswordResponse(lastPasswordResponse);
-  assertString(lastPasswordResponse.data);
-  const timeMatch = lastPasswordResponse.data.match(/Response time: (\d+\.?\d*)ms/);
-  if (!timeMatch) {
-    throw new Error(`No response time found in log: ${JSON.stringify(lastPasswordResponse)}`);
-  }
-  const responseTime = Number(timeMatch[1]);
-  if (!Number.isFinite(responseTime)) {
-    throw new Error(`No response time found in log: ${JSON.stringify(lastPasswordResponse)}`);
-  }
-  return responseTime;
-};
+function validatePath(hostname: string): void {
+  expectWithMessage(isDirectoryPath(`${hostname}/`), true, `Invalid hostname: ${hostname}`);
+  expectWithMessage(isFilePath(`${hostname}/data.txt`), true, `Invalid hostname: ${hostname}`);
+}
+
+describe("Darknet server name generator", () => {
+  test("Base name and l33t", () => {
+    for (const name of commonPasswordDictionary) {
+      validatePath(name);
+    }
+    for (const name of loreNames) {
+      validatePath(name);
+    }
+    for (const name of presetNames) {
+      validatePath(name);
+    }
+    for (const prefix of ServerNamePrefixes) {
+      for (const connector of connectors) {
+        for (const suffix of ServerNameSuffixes) {
+          validatePath(`${prefix}${connector}${suffix}`);
+        }
+      }
+    }
+    for (const name of Object.values(l33t)) {
+      validatePath(name);
+    }
+  });
+  test("generateDarknetServerName", () => {
+    DarknetState.offlineServers = [];
+    for (let i = 0; i < 1000; ++i) {
+      validatePath(generateDarknetServerName());
+    }
+  });
+});
+
+describe("Cache filename generator", () => {
+  test("Random prefix", () => {
+    for (let i = 0; i < 10000; ++i) {
+      const cacheFilename = generateCacheFilename();
+      if (!cacheFilename) {
+        throw new Error("Invalid cache filename");
+      }
+      validatePath(cacheFilename);
+    }
+  });
+  test("Cache file in labyrinth server", () => {
+    const cacheFilename = generateCacheFilename(LAB_CACHE_NAME);
+    if (!cacheFilename) {
+      throw new Error("Invalid cache filename");
+    }
+    validatePath(cacheFilename);
+  });
+});
+
+describe("Clue filename generator", () => {
+  test("getClueFileName", () => {
+    for (let i = 0; i < 10000; ++i) {
+      expect(() => {
+        getClueFileName(passwordFileNames);
+        getClueFileName(notebookFileNames);
+      }).not.toThrow();
+    }
+  });
+});

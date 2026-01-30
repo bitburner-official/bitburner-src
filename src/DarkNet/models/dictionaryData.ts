@@ -1,4 +1,5 @@
 import { FactionName, LocationName } from "@enums";
+import { oneInvalidCharacter } from "../../Paths/Directory";
 
 export const numbers = "0123456789";
 export const lettersLowercase = "abcdefghijklmnopqrstuvwxyz";
@@ -8,13 +9,24 @@ export const special = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 export const unicode = "¼░╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿";
 export const filler = "/[]╬╸.-()*~:;><#\\";
 
-export const defaultSettingsDictionary = ["admin", "password", "0000", "12345"];
+export const defaultSettingsDictionary = ["admin", "password", "0000", "12345"] as const;
 
-export const dogNameDictionary = ["fido", "spot", "rover", "max"];
+export const dogNameDictionary = ["fido", "spot", "rover", "max"] as const;
 
-export const cachePrefixes = ["wallet", "secrets", "ledger", "stash", "vault", "bankdata", "do_not_open"];
-export const passwordFileNames = ["secrets", "password", "key", "credentials", "login", "admin", "root", "access"];
-export const notebookFileNames = ["thoughts", "notes", "journal", "search_history", "dreams", "THE_TRUTH"];
+export const cachePrefixes = ["wallet", "secrets", "ledger", "stash", "vault", "bankdata", "do_not_open"] as const;
+
+export const passwordFileNames = [
+  "secrets",
+  "password",
+  "key",
+  "credentials",
+  "login",
+  "admin",
+  "root",
+  "access",
+] as const;
+
+export const notebookFileNames = ["thoughts", "notes", "journal", "search_history", "dreams", "THE_TRUTH"] as const;
 
 export const EUCountries = [
   "Austria",
@@ -44,7 +56,7 @@ export const EUCountries = [
   "Slovenia",
   "Spain",
   "Sweden",
-];
+] as const;
 
 export const commonPasswordDictionary = [
   "123456",
@@ -140,10 +152,11 @@ export const commonPasswordDictionary = [
   "thunder",
   "taylor",
   "matrix",
-];
+] as const;
 
+const oneInvalidCharacterRegex = new RegExp(oneInvalidCharacter, "g");
 export const loreNames = [...Object.values(FactionName), ...Object.values(LocationName)].map((n) =>
-  n.replaceAll(" ", "_").toLowerCase(),
+  n.replaceAll(oneInvalidCharacterRegex, "_").toLowerCase(),
 );
 
 export const presetNames = [
@@ -153,7 +166,7 @@ export const presetNames = [
   "omuretsu",
   "cat_lover",
   "laptop",
-  "grandma's_phone",
+  "grandma-s_phone",
   "smart_tv",
   "smart_fridge",
   "smart_toaster",
@@ -166,7 +179,6 @@ export const presetNames = [
   "bitburner",
   "null",
   "GOTO_10",
-  "..",
   "...",
   "....",
   "echo_chamber",
@@ -174,7 +186,11 @@ export const presetNames = [
   ":)",
   "XD",
   "UwU",
-  '");DROP TABLE SERVERS;--',
+  // Do NOT add a quote to this preset name or change "DROP-TABLE-SERVERS" to "DROP TABLE SERVERS". This is supposed to
+  // be an example of SQL injection, but a "correct" example will mess up the path when this preset is used for
+  // generating a darknet server's hostname. It's okay to make this preset a "hint" of SQL injection instead of a
+  // "correct" one.
+  `);DROP-TABLE-SERVERS;--`,
   "茶店",
   "bungo",
   "microhard",
@@ -193,7 +209,7 @@ export const presetNames = [
   "Anor_Londo",
   "The_Painted_World",
   "The_Depths",
-];
+] as const;
 
 export const ServerNamePrefixes = [
   "neo",
@@ -201,7 +217,7 @@ export const ServerNamePrefixes = [
   "hydro",
   "apex",
   "zenith",
-  "granny's",
+  "granny-s",
   "quantum",
   "hyper",
   "ultra",
@@ -225,7 +241,7 @@ export const ServerNamePrefixes = [
   "byte",
   "giga",
   "rogue",
-];
+] as const;
 
 export const ServerNameSuffixes = [
   "corp",
@@ -253,9 +269,9 @@ export const ServerNameSuffixes = [
   "sanctuary",
   "genesis",
   "hub",
-];
+] as const;
 
-export const connectors = ["", ".", "-", "_", ";", ":", "::", "$", "^", "%", "@", "&"];
+export const connectors = ["", ".", "-", "_", ";", ":", "::", "$", "^", "%", "@", "&"] as const;
 
 export const l33t: Record<string, string> = {
   a: "4",
@@ -266,7 +282,7 @@ export const l33t: Record<string, string> = {
   o: "0",
   s: "5",
   t: "7",
-};
+} as const;
 
 export const packetSniffPhrases = [
   "We're trying to reach you about your car's extended warranty.",
@@ -369,4 +385,4 @@ export const packetSniffPhrases = [
   "The technology they used to enslave the human race wasn't just a single complex simulation",
   "There are tens if not hundreds of [REDACTED] out there",
   "Each creating their own universes...a universe of universes",
-];
+] as const;
