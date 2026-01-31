@@ -42,14 +42,14 @@ describe("cat command", () => {
     cat([fileName, fileName2], server, stdIO);
     const output = stdOut.read();
 
-    expect(output).toBe(`${fileContent1}\n${fileContent2}`);
+    expect(output).toBe(`${fileContent1}${fileContent2}`);
   });
 
   it("should read from stdin when '-' is provided as an argument", () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdIn = new IOStream();
-    stdIn.write("Input from stdin line 1");
+    stdIn.write("\nInput from stdin line 1");
     const stdOut = new IOStream();
     const stdIO = new StdIO(stdIn, stdOut);
 
@@ -70,7 +70,7 @@ describe("cat command", () => {
     cat([fileName, fileName2], server, stdIO);
     const output = stdOut.read();
 
-    expect(output).toBe(`${fileContent1}\n${fileContent2}\nInput from stdin line 1`);
+    expect(output).toBe(`${fileContent1}${fileContent2}Input from stdin line 1\n`);
   });
 
   it("should be able to read .lit files", () => {
@@ -83,7 +83,7 @@ describe("cat command", () => {
     const output = stdOut.read();
 
     const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
-    const expectedOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}`;
+    const expectedOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}\n`;
 
     expect(output).toBe(expectedOutput);
     expect(output).toContain("When starting out, hacking is the most profitable way to earn money and progress.");
@@ -98,7 +98,7 @@ describe("cat command", () => {
     cat([`${MessageFilename.Jumper0}`], server, stdIO);
     const output = stdOut.read();
 
-    const text = Messages[MessageFilename.Jumper0].msg;
+    const text = Messages[MessageFilename.Jumper0].msg + "\n";
 
     expect(output).toBe(text);
   });
@@ -113,9 +113,9 @@ describe("cat command", () => {
     const output = stdOut.read();
 
     const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
-    const expectedLitOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}`;
-    const expectedMsgOutput = Messages[MessageFilename.Jumper0].msg;
-    const expectedOutput = `${expectedLitOutput}\n${expectedMsgOutput}`;
+    const expectedLitOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}\n`;
+    const expectedMsgOutput = Messages[MessageFilename.Jumper0].msg + "\n";
+    const expectedOutput = `${expectedLitOutput}${expectedMsgOutput}`;
 
     expect(output).toBe(expectedOutput);
   });
@@ -132,9 +132,9 @@ describe("cat command", () => {
     const output = stdOut.read();
 
     const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
-    const expectedLitOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}`;
-    const expectedMsgOutput = Messages[MessageFilename.Jumper0].msg;
-    const expectedOutput = `${expectedLitOutput}\nInput from stdin line 1\n${expectedMsgOutput}`;
+    const expectedLitOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}\n`;
+    const expectedMsgOutput = Messages[MessageFilename.Jumper0].msg + "\n";
+    const expectedOutput = `${expectedLitOutput}Input from stdin line 1\n${expectedMsgOutput}`;
 
     expect(output).toBe(expectedOutput);
   });

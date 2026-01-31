@@ -49,8 +49,10 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
       `Invalid pipe symbol '${pipeSymbol}' for command: ${command}. > and >> can only be used to pipe into files.`,
     );
   }
+  const commandArgs = args.map((arg) => (`${arg}`.includes(" ") ? `"${arg}"` : `${arg}`));
+  const commandString = [command, ...commandArgs].join(" ");
 
-  Terminal.executeCommand([command, ...args].join(" "), stdIO);
+  Terminal.executeCommand(commandString, stdIO);
 }
 
 export function buildStdIOChain(length: number, initialStdIO: StdIO | null = null): StdIO[] {

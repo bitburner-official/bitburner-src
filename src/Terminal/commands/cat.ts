@@ -17,10 +17,6 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
   const stdin = stdIO.stdin?.deref();
   const stdinIsClosed = !stdin || (stdin.isClosed && stdin.empty());
   const hasStdOut = !!stdIO.stdout;
-  let initialStdOut = "";
-
-  // If only a single file is being catted, and no stdin/stdout redirects are being used, show the file dialog that cat has always used
-  const isBasicFileCat = args.length === 1 && args[0] !== "-" && !initialStdIn.length && stdinIsClosed && !hasStdOut;
 
   if (args.length === 0 && initialStdIn.length === 0 && stdinIsClosed) {
     return Terminal.error(
@@ -28,64 +24,117 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
       stdIO,
     );
   }
-
-  for (const arg of args) {
-    if (arg === "-") {
-      initialStdOut += initialStdIn;
-    } else {
-      const content = getFileContents(String(arg), server, stdIO, isBasicFileCat);
-      if (content === undefined) {
-        stdIO.close();
-        return;
-      }
-      initialStdOut += content + "\n";
-    }
+  if (!validateFilenames(args, server, stdIO)) {
+    return;
   }
 
-  if (!args.find((arg) => arg === "-")) {
-    // If stdin location is not specified, append it to the end by default
-    initialStdOut += initialStdIn;
+  // If only a single file is being catted, and no stdin/stdout redirects are being used, show the file dialog
+  if (args.length === 1 && args[0] !== "-" && !initialStdIn.length && stdinIsClosed && !hasStdOut) {
+    return showFileContentDialog(String(args[0]), server, stdIO);
   }
 
-  stdIO.write(initialStdOut.trim());
+  const output = concatenateFileContents(args, server, initialStdIn, stdIO);
+
+  stdIO.write(output);
 
   void callOnRead(stdIO, (data: unknown, stdInOut) => {
-    stdInOut.write(stringify(data) + "\n");
+    stdInOut.write(stringify(data));
   });
 }
 
-function getFileContents(filename: string, server: BaseServer, stdIO: StdIO, isBasicFileCat: boolean) {
+export function concatenateFileContents(
+  filenames: (string | number | boolean)[],
+  server: BaseServer,
+  initialStdin: string,
+): string {
+  let result = "";
+  for (const arg of filenames) {
+    const filename = String(arg);
+    if (filename === "-") {
+      result += initialStdin;
+    } else {
+      result += getFileContents(filename, server);
+    }
+  }
+  if (!filenames.find((arg) => arg === "-")) {
+    // If stdin location is not specified, append it to the end by default
+    result += initialStdin;
+  }
+  return result;
+}
+
+export function getFileContents(filename: string, server: BaseServer): string {
+  const path = Terminal.getFilepath(filename);
+  if (!path) return "";
+
+  if (hasScriptExtension(path) || hasTextExtension(path)) {
+    const file = server.getContentFile(path);
+    if (!file) return "";
+    return file.content ?? "";
+  }
+  if (isMember("MessageFilename", path) && server.messages.includes(path)) {
+    return stringify(Messages[path as MessageFilename].msg) + "\n";
+  }
+  if (isMember("LiteratureName", path) && server.messages.includes(path)) {
+    const lit = Literatures[path as LiteratureName];
+    return `${lit.title}\n\n${stringify(lit.text)}\n`;
+  }
+  return "";
+}
+
+function showFileContentDialog(filename: string, server: BaseServer, stdIO: StdIO) {
   const path = Terminal.getFilepath(filename);
   if (!path) return Terminal.error(`Invalid filename: ${filename}`, stdIO);
 
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
     if (!file) return Terminal.error(`No file at path ${path}`, stdIO);
-    if (isBasicFileCat) {
-      return dialogBoxCreate(`${file.filename}\n\n${file.content}`);
-    }
-    return file.content;
+    return dialogBoxCreate(`${file.filename}\n\n${file.content}`);
   }
-  if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
-    return Terminal.error(
-      "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx) or a text extension (.txt, .json, .css)",
-      stdIO,
-    );
-  }
-
-  // Message
   if (isMember("MessageFilename", path) && server.messages.includes(path)) {
-    if (isBasicFileCat) {
-      return showMessage(path);
-    }
-    return stringify(Messages[path as MessageFilename].msg);
+    return showMessage(path);
   }
   if (isMember("LiteratureName", path) && server.messages.includes(path)) {
-    if (isBasicFileCat) {
-      return showLiterature(path);
-    }
-    const lit = Literatures[path as LiteratureName];
-    return `${lit.title}\n\n${stringify(lit.text)}`;
+    return showLiterature(path);
   }
-  Terminal.error(`No file at path ${path}`, stdIO);
+}
+
+export function validateFilenames(filenames: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): boolean {
+  for (const filename of filenames) {
+    if (filename === "-") continue;
+    if (typeof filename !== "string") {
+      Terminal.error(`Invalid filename: ${filename}`, stdIO);
+      return false;
+    }
+    const path = Terminal.getFilepath(filename);
+    if (!path) {
+      Terminal.error(`Invalid filename: ${filename}`, stdIO);
+      return false;
+    }
+
+    if (hasScriptExtension(path) || hasTextExtension(path)) {
+      const file = server.getContentFile(path);
+      if (!file) {
+        Terminal.error(`No file at path ${path}`, stdIO);
+        return false;
+      }
+    } else if (path.endsWith(".msg")) {
+      if (!isMember("MessageFilename", path) || !server.messages.includes(path)) {
+        Terminal.error(`No file at path ${path}`, stdIO);
+        return false;
+      }
+    } else if (path.endsWith(".lit")) {
+      if (!isMember("LiteratureName", path) || !server.messages.includes(path)) {
+        Terminal.error(`No file at path ${path}`, stdIO);
+        return false;
+      }
+    } else {
+      Terminal.error(
+        "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx) or a text extension (.txt, .json, .css)",
+        stdIO,
+      );
+      return false;
+    }
+  }
+  return true;
 }

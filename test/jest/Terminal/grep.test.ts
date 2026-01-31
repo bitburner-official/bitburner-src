@@ -8,6 +8,7 @@ import { TextFilePath } from "../../../src/Paths/TextFilePath";
 import { grep } from "../../../src/Terminal/commands/grep";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { Script } from "../../../src/Script/Script";
+import { stringify } from "../../../src/Terminal/StdIO/utils";
 
 const fileName = "example.txt" as TextFilePath;
 const fileName2 = "example2.txt" as TextFilePath;
@@ -38,7 +39,7 @@ describe("grep command", () => {
     const output = stdOut.read();
 
     expect(Terminal.outputHistory).toEqual([]);
-    expect(output).toBe(`This is line 2 of file 1`);
+    expect(output).toBe(`example.txt:This is line 2 of file 1`);
   });
 
   it("should retrieve lines matching the pattern from the specified script file", () => {
@@ -54,7 +55,7 @@ describe("grep command", () => {
     const output = stdOut.read();
 
     expect(Terminal.outputHistory).toEqual([]);
-    expect(output).toBe(`// This is line 2 of the script`);
+    expect(output).toBe(`script.js:// This is line 2 of the script`);
   });
 
   it("should retrieve lines matching the pattern from stdin", () => {
@@ -71,5 +72,14 @@ describe("grep command", () => {
 
     expect(Terminal.outputHistory).toEqual([]);
     expect(output).toBe(`This is line 2 from stdin`);
+  });
+
+  it("should grep input piped from cat", () => {
+    Terminal.executeCommands(`cat ${fileName} ${fileName2} | grep "line 2"`);
+    const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+    // Output from cat will not have filenames, and will not add additional newlines between file contents
+    expect(stringify(lastOutput.text, true)).toBe(
+      `This is line 2 of file 1This is another example text file.\nThis is line 2 of file 2`,
+    );
   });
 });

@@ -19,7 +19,7 @@ export function isPipeSymbol(symbol: string | number | boolean): boolean {
 }
 
 export function stringify(s: unknown, stripAnsiEscape = false): string {
-  if (s === undefined || s === null) {
+  if (s == null) {
     return "";
   } else if (s instanceof Output) {
     return clean(s.text, stripAnsiEscape);
