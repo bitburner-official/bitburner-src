@@ -3,8 +3,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
 
-export const DATA_STREAM_CLOSED = "IO_STREAM_CLOSED";
-
 export type Args = string | number | boolean;
 
 export const PipeSymbols = {

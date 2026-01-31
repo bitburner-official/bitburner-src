@@ -15,9 +15,9 @@ If more data is added later (for example, if one script's terminal is piped to a
 **Signature:**
 
 ```typescript
-getStdin(): NetscriptPort;
+getStdin(): NetscriptPort | null;
 ```
 **Returns:**
 
-[NetscriptPort](./bitburner.netscriptport.md)
+[NetscriptPort](./bitburner.netscriptport.md) \| null
 

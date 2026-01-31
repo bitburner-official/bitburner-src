@@ -32,6 +32,7 @@ import {
   OrderType,
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
+  Redirect,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer } from "./Server/AllServers";
@@ -74,7 +75,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
+import { NS, RecentScript, ProcessInfo, NSEnums, RedirectEnumType } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -129,6 +130,7 @@ export const enums: NSEnums = {
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
   FragmentType: FragmentTypeEnum,
+  Redirect: Redirect as unknown as RedirectEnumType,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);

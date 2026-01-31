@@ -33,7 +33,7 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
     return showFileContentDialog(String(args[0]), server, stdIO);
   }
 
-  const output = concatenateFileContents(args, server, initialStdIn, stdIO);
+  const output = concatenateFileContents(args, server, initialStdIn);
 
   stdIO.write(output);
 

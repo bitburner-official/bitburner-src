@@ -4,6 +4,31 @@
 
 ## bitburner package
 
+## Enumerations
+
+<table><thead><tr><th>
+
+Enumeration
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[RedirectEnumType](./bitburner.redirectenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+</tbody></table>
+
 ## Interfaces
 
 <table><thead><tr><th>
