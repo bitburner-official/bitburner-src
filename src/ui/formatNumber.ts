@@ -200,9 +200,12 @@ export const formatThreads = formatHp;
 /** Display an integer up to 999,999,999 before collapsing to suffixed form with 3 fractional digits */
 export const formatSkill = (n: number) => formatNumber(n, 3, 1e9, true);
 
-/** Display standard money formatting, including the preceding $. */
+/** Display standard money formatting, including the currency symbol. */
 export const formatMoney = (n: number, useExponentialFormForSmallValue = false): string => {
-  return `$${!useExponentialFormForSmallValue || n === 0 || n >= 0.001 ? formatNumber(n) : n.toExponential(3)}`;
+  const value = !useExponentialFormForSmallValue || n === 0 || n >= 0.001 ? formatNumber(n) : n.toExponential(3);
+  return Settings.CurrencySymbolAfterValue
+    ? `${value}${Settings.CurrencySymbol}`
+    : `${Settings.CurrencySymbol}${value}`;
 };
 
 /** Display a decimal number with increased precision (5 fractional digits) */

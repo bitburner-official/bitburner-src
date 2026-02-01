@@ -1,4 +1,4 @@
-import type { Unknownify } from "../types";
+import type { SaveData, Unknownify } from "../types";
 
 // This function is empty because Unknownify<T> is a typesafe assertion on any object with no runtime checks needed.
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -87,6 +87,17 @@ export function assertNumberArray(unknownData: unknown, assertFinite = false): a
         throw new Error(`${value} is not a number.`);
       }
     }
+  }
+}
+
+export function assertSaveData(unknownData: unknown): asserts unknownData is SaveData {
+  if (typeof unknownData !== "string" && !(unknownData instanceof Uint8Array)) {
+    console.error(unknownData);
+    throw new Error(`Invalid save data. Its type is ${getFriendlyType(unknownData)}.`);
+  }
+  if (unknownData instanceof Uint8Array && !(unknownData.buffer instanceof ArrayBuffer)) {
+    console.error(unknownData);
+    throw new Error("Invalid save data. It's Uint8Array, but its buffer is not ArrayBuffer.");
   }
 }
 

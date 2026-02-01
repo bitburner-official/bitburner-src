@@ -51,8 +51,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         <u>Getting Started with Corporation</u>
         <br />
-        To get started, visit the city hall in Sector-12 in order to create a corporation. This requires $150b of your
-        own money, but this $150b will get put into your corporation's funds. If you're in BitNode 3, you also have the
+        To get started, visit the city hall in Sector-12 in order to create a corporation. This requires 150e9 of your
+        own money, but this money will get put into your corporation's funds. If you're in BitNode 3, you also have the
         option to get seed money from the government in exchange for 500m shares. Your corporation can have many
         different divisions, each in a different industry. There are many different types of industries, each with
         different properties. To create your first division, click the "Expand" button at the top of the management UI.

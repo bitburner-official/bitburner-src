@@ -1,1 +1,1 @@
-export declare const isBinaryFormat: (saveData: string | Uint8Array) => boolean;
+export declare const isBinaryFormat: (saveData: string | Uint8Array<ArrayBuffer>) => boolean;
