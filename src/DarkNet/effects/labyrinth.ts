@@ -229,8 +229,10 @@ export const handleLabyrinthPassword = (
   }
 
   const maze = getLabMaze();
-  const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
-  DarknetState.labLocations[pid] ??= [initialX, initialY];
+  if (!DarknetState.labLocations[pid]) {
+    DarknetState.labLocations[pid] = [1, 1];
+  }
+  const [initialX, initialY] = DarknetState.labLocations[pid];
   const end = [maze[0].length - 2, maze.length - 2];
   const [dx, dy] = getDirectionFromInput(attemptedPassword);
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];

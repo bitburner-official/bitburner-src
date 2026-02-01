@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Modal } from "../../ui/React/Modal";
 import { Container, Card, SvgIcon, Typography, Tooltip } from "@mui/material";
 import { getIcon } from "./ServerIcon";
@@ -9,8 +9,8 @@ import { isLabyrinthServer } from "../effects/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, formatObjectWithColoredKeys, formatToMaxDigits } from "./uiUtilities";
 import { useCycleRerender } from "../../ui/React/hooks";
-import { sleep } from "../../utils/Utility";
 import type { DarknetServer } from "../../Server/DarknetServer";
+import { logBoxBaseZIndex } from "../../ui/React/Constants";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -28,7 +28,6 @@ export const ServerDetailsModal = ({
   classes,
 }: DWPasswordPromptModalProps): React.ReactElement => {
   useCycleRerender();
-  const focusTarget = useRef<HTMLInputElement>(null);
 
   const icon = getIcon(server.icon);
   populateServerLogsWithNoise(server);
@@ -38,7 +37,7 @@ export const ServerDetailsModal = ({
   const ramBlock = server.blockedRam;
   const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
   const usedRamString = formatToMaxDigits(server.ramUsed - ramBlock, 1);
-  const serverRamString = `ram in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`;
+  const serverRamString = `RAM in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`;
 
   const logContent = recentLogs.map((log, index) => (
     <pre
@@ -58,16 +57,11 @@ export const ServerDetailsModal = ({
     </pre>
   ));
 
-  const onSuccess = async () => {
-    await sleep(50);
-    focusTarget.current?.focus();
-  };
   const copyHostname = () => copyToClipboard(server.hostname);
 
   return (
-    <Modal open={open} onClose={onClose} removeFocus={false}>
+    <Modal open={open} onClose={onClose} removeFocus={false} sx={{ zIndex: logBoxBaseZIndex - 1 }}>
       <>
-        <input ref={focusTarget} className={classes.hiddenInput}></input>
         <Container sx={{ width: "calc(min(900px, 80vw))", minHeight: "500px" }}>
           <div className={classes.inlineFlexBox}>
             <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
@@ -80,9 +74,8 @@ export const ServerDetailsModal = ({
             <>
               <Typography>Password: "{server.password}"</Typography>
               <br />
-              <Typography color="secondary">
-                {server.ip} cha:{server.requiredCharismaSkill}
-              </Typography>
+              <Typography color="secondary">IP: {server.ip}</Typography>
+              <Typography color="secondary">Required charisma: {server.requiredCharismaSkill}</Typography>
               <Tooltip
                 title={`Ram blocked by server owner: ${ramBlock} GB. Ram in use by scripts: ${
                   server.ramUsed - ramBlock
@@ -90,12 +83,11 @@ export const ServerDetailsModal = ({
               >
                 <Typography color="secondary">{serverRamString}</Typography>
               </Tooltip>
-              <Typography color="secondary">model:{server.modelId}</Typography>
+              <Typography color="secondary">Model: {server.modelId}</Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>
                 <ServerSummary server={server} enableAuth={true} showDetails={true} classes={classes} />
-              </div>{" "}
-              <br />
+              </div>
               <br />
               {isLabServer && (
                 <>
@@ -105,13 +97,7 @@ export const ServerDetailsModal = ({
               )}
             </>
           ) : (
-            <PasswordPrompt
-              server={server}
-              onClose={onClose}
-              onSuccess={() => {
-                onSuccess().catch((error) => console.error(error));
-              }}
-            />
+            <PasswordPrompt server={server} onClose={onClose} />
           )}
           {!isLabServer && (
             <>

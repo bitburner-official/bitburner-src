@@ -6,6 +6,7 @@ import { MAX_NET_DEPTH, NET_WIDTH } from "../Enums";
 
 import { getDarknetCyclesPerMutation } from "../utils/darknetNetworkUtils";
 import type { PasswordResponse } from "./DarknetServerOptions";
+import { assertFiniteNumber, assertNonNullish } from "../../utils/TypeAssertion";
 
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
@@ -32,7 +33,11 @@ export const DarknetState = {
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null)),
 
   labyrinth: null as string[] | null,
-  labLocations: { "-1": [1, 1] } as Record<number, [number, number] | null>,
+  /**
+   * This property may contain data of dead PIDs. Call cleanUpLabyrinthLocations before using this property if you
+   * want to get data of alive PIDs.
+   */
+  labLocations: { "-1": [1, 1] } as Record<number, [number, number] | undefined>,
 
   lastPhishingCacheTime: new Date(),
   lastStormTime: new Date(),
@@ -40,6 +45,9 @@ export const DarknetState = {
   stockPromotions: {} as Record<string, number>,
   migrationInductionServers: {} as Record<string, number>,
 
+  /**
+   * Do NOT access the server state directly via this property. You must call getServerState.
+   */
   serverState: {} as Record<string, ServerState>,
   offlineServers: [] as string[],
   showFullNetwork: false,
@@ -48,6 +56,9 @@ export const DarknetState = {
   netViewLeftScroll: 0,
 };
 
+/**
+ * Get the server state. It will initialize the state if it does not exist in DarknetState.serverState.
+ */
 export const getServerState = (hostname: string): ServerState => {
   if (!DarknetState.serverState[hostname]) {
     DarknetState.serverState[hostname] = {
@@ -57,6 +68,25 @@ export const getServerState = (hostname: string): ServerState => {
     };
   }
   return DarknetState.serverState[hostname];
+};
+
+/**
+ * Clean data of dead PIDs in DarknetState.labLocations.
+ */
+export const cleanUpLabyrinthLocations = (): void => {
+  for (const [pidAsString, location] of Object.entries(DarknetState.labLocations)) {
+    const pid = Number(pidAsString);
+    assertFiniteNumber(pid);
+    assertNonNullish(location);
+    // PID -1 is the manual mode.
+    if (pid === -1) {
+      continue;
+    }
+    if (!findRunningScriptByPid(pid)) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete DarknetState.labLocations[pid];
+    }
+  }
 };
 
 export const addSessionToServer = (server: DarknetServer, pid: number) => {

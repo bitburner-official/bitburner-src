@@ -312,7 +312,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         >
           <canvas
             ref={canvas}
-            id="dwebCanvas"
             width={DW_NET_WIDTH}
             height={DW_NET_HEIGHT}
             style={{ position: "absolute", zIndex: -1 }}

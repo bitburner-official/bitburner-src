@@ -863,13 +863,13 @@ describe("darkweb", () => {
   test("labreport", async () => {
     const ns = getNsOnDarkWeb();
     const details = `${await ns.dnet.labreport()}`;
-    // darknet is not connected to lab, so scripts on it cannot navigate the lab
+    // darkweb is not connected to lab, so scripts on it cannot navigate the lab
     expect(details).toEqual("You feel disconnected...");
   });
   test("labradar", async () => {
     const ns = getNsOnDarkWeb();
     const details = `${await ns.dnet.labradar()}`;
-    // darknet is not connected to lab, so scripts on it cannot navigate the lab
+    // darkweb is not connected to lab, so scripts on it cannot navigate the lab
     expect(details).toEqual("You feel disconnected...");
   });
 });

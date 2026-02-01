@@ -1,40 +1,30 @@
 import React, { useState } from "react";
 import { Typography, Select, MenuItem, Card } from "@mui/material";
-import { DarknetState, LogEntry } from "../models/DarknetState";
+import { cleanUpLabyrinthLocations, DarknetState, getServerState, LogEntry } from "../models/DarknetState";
 import { getLabMaze, getLabyrinthDetails, getLocationStatus, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
-import type { DarknetResult } from "@nsdefs";
 import { Player } from "@player";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { GetServerOrThrow } from "../../Server/AllServers";
+import { assertPasswordResponse, isPasswordResponse } from "../models/DarknetServerOptions";
 
 export type LabyrinthSummaryProps = {
-  result: DarknetResult | undefined;
-  lastMovementFeedback: string | undefined;
-  loadingText?: string;
+  isAuthenticating: boolean;
 };
 
-export const LabyrinthSummary = ({
-  result,
-  lastMovementFeedback,
-  loadingText,
-}: LabyrinthSummaryProps): React.ReactElement => {
-  const [currentPerspective, setCurrentPerspective] = useState<number | undefined>(-1);
+export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): React.ReactElement => {
+  const [currentPerspective, setCurrentPerspective] = useState<number>(-1);
   const { classes } = dnetStyles({});
-  const lab = getLabyrinthDetails();
   useCycleRerender();
 
-  // victory message
-  if (result?.success) {
-    return <Typography>{"You have successfully navigated the labyrinth! Congratulations."}</Typography>;
+  const lab = getLabyrinthDetails();
+  if (lab.cha > Player.skills.charisma) {
+    return <Typography color="error">You don't yet have the wits needed to attempt the labyrinth.</Typography>;
   }
 
-  // movement message
-  const [x, y] =
-    currentPerspective && DarknetState.labLocations[currentPerspective]
-      ? DarknetState.labLocations[currentPerspective]
-      : [1, 1];
+  cleanUpLabyrinthLocations();
+  const [x, y] = DarknetState.labLocations[currentPerspective] ? DarknetState.labLocations[currentPerspective] : [1, 1];
   const surroundings = getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true)
     .split("")
     .map((c) => `${c}${c}${c}`)
@@ -50,7 +40,9 @@ export const LabyrinthSummary = ({
 
     const scriptOptions = [];
     for (const script of darknetScripts) {
-      if (!script) continue;
+      if (!script) {
+        continue;
+      }
       const scriptServer = GetServerOrThrow(script.server);
       const connectedToLab = scriptServer.serversOnNetwork.includes(lab.name);
       scriptOptions.push(
@@ -72,26 +64,33 @@ export const LabyrinthSummary = ({
   };
 
   const getMenu = () => {
+    // With non-manual labyrinth, return immediately if there are no pids navigating the labyrinth.
     if (Object.keys(DarknetState.labLocations).length === 1 && !lab.manual) {
       return <Typography>(No scripts found)</Typography>;
     }
-    let perspective = currentPerspective ?? -1;
-    if (perspective && perspective !== -1 && !DarknetState.labLocations[perspective]) {
+    let perspective = currentPerspective;
+    // This happens when a script navigating the labyrinth dies.
+    if (perspective !== -1 && !DarknetState.labLocations[perspective]) {
       perspective = -1;
     }
+    // With non-manual labyrinth, if there are pids navigating the labyrinth and the perspective is not one of them, set
+    // the perspective to one of those pids.
     if (perspective === -1 && !lab.manual) {
-      const ids = Object.keys(DarknetState.labLocations)
-        .map((k) => Number(k))
-        .filter((k) => k !== -1);
-      perspective = ids[0];
+      const ids = Object.keys(DarknetState.labLocations).filter((k) => Number(k) !== -1);
+      perspective = Number(ids[0]);
+    }
+    // Set the React state if necessary.
+    if (perspective !== currentPerspective) {
+      setCurrentPerspective(perspective);
     }
 
     return (
       <Select
-        id="select-pid"
         value={perspective}
         label="Perspective to view"
-        onChange={(val) => setCurrentPerspective(+val.target.value)}
+        onChange={(val) => {
+          setCurrentPerspective(Number(val.target.value));
+        }}
         style={{ maxWidth: "250px" }}
       >
         {getMenuItems()}
@@ -100,8 +99,8 @@ export const LabyrinthSummary = ({
   };
 
   const getLogs = () =>
-    DarknetState.serverState[lab.name]?.serverLogs
-      .filter((log) => log.pid === currentPerspective)
+    getServerState(lab.name)
+      .serverLogs.filter((log) => log.pid === currentPerspective)
       .slice(0, 2)
       .map(stringifyLog)
       .join("\n") || "(no response yet)";
@@ -114,72 +113,74 @@ export const LabyrinthSummary = ({
   };
 
   const getManualFeedback = () => {
-    if (currentPerspective !== -1) return " ";
-    if (loadingText?.includes("{") || loadingText?.includes("(")) {
-      return lastMovementFeedback ?? "";
+    if (isAuthenticating) {
+      return "Travelling...";
     }
-    return "Travelling...";
+    if (currentPerspective !== -1) {
+      return `You are following the progress of pid ${currentPerspective} instead of the manual mode.`;
+    }
+    const lastLog = getServerState(lab.name).serverLogs.find(
+      (log) => log.pid === -1 && isPasswordResponse(log.message),
+    );
+    if (lastLog == null) {
+      return "";
+    }
+    assertPasswordResponse(lastLog.message);
+    return lastLog.message.message;
   };
 
   return (
     <>
-      {lab.cha > Player.skills.charisma ? (
-        <Typography color="error">You dont yet have the wits needed to attempt the labyrinth.</Typography>
-      ) : (
-        <>
-          <div className={classes.inlineFlexBox}>
-            <div style={{ width: "50%" }}>
-              {currentPerspective === undefined ? (
-                <>
-                  <Typography style={{ fontStyle: "italic" }}>
-                    This lab cannot be completed manually. Select a script PID that is attempting the labyrinth from the
-                    options below to view its progress.
-                  </Typography>
-                  <br />
-                  <br />
-                </>
-              ) : (
-                <>
-                  <Typography>{getManualFeedback()}</Typography>
-                  <Typography>Current Surroundings:</Typography>
-                  <pre className={classes.maze}>{surroundings}</pre>
-                  <Typography>
-                    Current Coordinates: {x},{y}
-                  </Typography>
-                </>
-              )}
-            </div>
-            <div style={{ width: "50%" }}>
-              <Typography variant="caption" color="secondary">
-                Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+      <div className={classes.inlineFlexBox}>
+        <div style={{ width: "50%" }}>
+          {!lab.manual ? (
+            <Typography style={{ fontStyle: "italic", paddingRight: "10px" }}>
+              This lab cannot be completed manually. Select a script PID that is attempting the labyrinth from the
+              options below to view its progress.
+            </Typography>
+          ) : (
+            <>
+              <Typography>
+                Manual mode feedback: <br />
+                {getManualFeedback()}
               </Typography>
-              <Card style={{ padding: "8px", minHeight: "270px", marginBottom: "8px" }}>
-                <div style={{ color: "white" }}>
-                  <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{getLogs()}</pre>
-                </div>
-              </Card>
-
-              <Typography variant="caption" color="secondary">
-                <pre>ns.dnet.labreport()</pre>
+              <Typography>Current Surroundings:</Typography>
+              <pre className={classes.maze}>{surroundings}</pre>
+              <Typography>
+                Current Coordinates: {x},{y}
               </Typography>
-              <Card style={{ padding: "8px" }}>
-                <div style={{ color: "white" }}>
-                  <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontSize: "10.5px" }}>
-                    {JSON.stringify(getLocationStatus(currentPerspective))}
-                  </pre>
-                </div>
-              </Card>
+            </>
+          )}
+        </div>
+        <div style={{ width: "50%" }}>
+          <Typography variant="caption" color="secondary">
+            Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+          </Typography>
+          <Card style={{ padding: "8px", minHeight: "270px", marginBottom: "8px" }}>
+            <div style={{ color: "white" }}>
+              <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{getLogs()}</pre>
             </div>
-          </div>
+          </Card>
 
-          <br />
-          <br />
-          <div style={{ display: "inline-flex", alignItems: "left", gap: "8px" }}>
-            <Typography>Script/perspective to follow: </Typography>
-            {getMenu()}
-          </div>
-        </>
-      )}
+          <Typography variant="caption" color="secondary">
+            <pre>ns.dnet.labreport()</pre>
+          </Typography>
+          <Card style={{ padding: "8px" }}>
+            <div style={{ color: "white" }}>
+              <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontSize: "10.5px" }}>
+                {JSON.stringify(getLocationStatus(currentPerspective))}
+              </pre>
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      <br />
+      <br />
+      <div style={{ display: "inline-flex", alignItems: "left", gap: "8px" }}>
+        <Typography>Script/perspective to follow: </Typography>
+        {getMenu()}
+      </div>
     </>
   );
 };

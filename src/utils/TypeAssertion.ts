@@ -89,3 +89,23 @@ export function assertNumberArray(unknownData: unknown, assertFinite = false): a
     }
   }
 }
+
+/**
+ * This function only narrows down the type to "number" at compile time, but it guarantees the value is a finite number
+ * at runtime.
+ */
+export function assertFiniteNumber(v: unknown): asserts v is number {
+  if (!Number.isFinite(v)) {
+    console.error("The value is not a finite number. Value:", v);
+    const type = getFriendlyType(v);
+    throw new TypeAssertionError(`The value is not a finite number. Its type is ${type}.`, type);
+  }
+}
+
+export function assertNonNullish<T>(v: unknown): asserts v is NonNullable<T> {
+  if (v === null || v === undefined) {
+    console.error("The value is nullish. Value:", v);
+    const type = getFriendlyType(v);
+    throw new TypeAssertionError(`The value is nullish. Its type is ${type}.`, type);
+  }
+}

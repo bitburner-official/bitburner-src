@@ -103,7 +103,7 @@ describe("Labyrinth Tests", () => {
     const result = handleLabyrinthPassword("go north", labDetails.lab, -1);
     expect(result.message).toBe("You cannot go that way. You are still at 1,1.");
 
-    const surroundings = result.data ?? "";
+    const surroundings = result.data;
     const mazeData = getLabMaze();
     const mazeSurroundings = mazeData
       .slice(0, 3)
@@ -124,7 +124,7 @@ describe("Labyrinth Tests", () => {
     const result = handleLabyrinthPassword("1234", labDetails.lab, -1);
     expect(result.message).toBe(`You don't know how to do that. Try a command such as "go north"`);
 
-    const surroundings = result.data ?? "";
+    const surroundings = result.data;
     const mazeData = getLabMaze();
     const mazeSurroundings = mazeData
       .slice(0, 3)
@@ -148,7 +148,7 @@ describe("Labyrinth Tests", () => {
     const result = getAuthResult(labDetails.lab, direction);
     expect(result.response.message).toBe(`You have moved to ${newX},${newY}.`);
 
-    const surroundings = result.response.data ?? "";
+    const surroundings = result.response.data;
     expect(surroundings).toEqual(getSurroundingsVisualized(mazeData, newX, newY, 1, true, true));
 
     const log = getMostRecentAuthLog(labDetails.name);
