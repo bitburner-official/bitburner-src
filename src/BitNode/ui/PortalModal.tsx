@@ -101,8 +101,6 @@ export function PortalModal(props: IProps): React.ReactElement {
         Source-File Level: {props.level} / {maxSourceFileLevel}
       </Typography>
       <br />
-      <Typography> Difficulty: {["easy", "normal", "hard"][bitNode.difficulty]}</Typography>
-      <br />
       <br />
       <Typography component="div">{bitNode.info}</Typography>
       <BitNodeMultiplierDescription n={props.n} level={newLevel} hideMultsIfCannotAccessFeature={false} />

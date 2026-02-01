@@ -1879,7 +1879,7 @@ export interface Singularity {
    * @remarks
    * RAM cost: 1 GB * 16/4/1
    */
-  getSaveData(): Promise<Uint8Array>;
+  getSaveData(): Promise<Uint8Array<ArrayBuffer>>;
 
   /**
    * Backup game save.
@@ -7862,10 +7862,13 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt, .json, .css) or script (.js, .jsx, .ts, .tsx).
+   * This function is used to read data from a text file (.txt, .json, .css), a script (.js, .jsx, .ts, .tsx), a
+   * literature file (.lit), or a message (.msg).
    *
-   * This function will return the data in the specified file.
-   * If the file does not exist, an empty string will be returned.
+   * This function will return the data in the specified file. If the file does not exist, an empty string will be
+   * returned.
+   *
+   * With literature files, the returned data is a raw HTML string.
    *
    * @param filename - Name of the file to be read.
    * @returns Data in the specified text file.

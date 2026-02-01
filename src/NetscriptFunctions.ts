@@ -111,6 +111,9 @@ import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
 import { PortHandle } from "./NetscriptPort";
+import { renderToStaticMarkup } from "react-dom/server";
+import { Literatures } from "./Literature/Literatures";
+import { Messages } from "./Message/MessageHelpers";
 
 export const enums: NSEnums = {
   CityName,
@@ -1088,8 +1091,23 @@ export const ns: InternalAPI<NSFull> = {
   },
   read: (ctx) => (_filename) => {
     const path = helpers.filePath(ctx, "filename", _filename);
-    if (!hasScriptExtension(path) && !hasTextExtension(path)) return "";
     const server = ctx.workerScript.getServer();
+    const isLiterature = path.endsWith(".lit");
+    const isMessage = path.endsWith(".msg");
+    if (isLiterature || isMessage) {
+      if (!server.messages.includes(path as LiteratureName | MessageFilename)) {
+        helpers.log(ctx, () => `${path} does not exist on ${server.hostname}.`);
+        return "";
+      }
+      return isLiterature
+        ? renderToStaticMarkup(Literatures[path as LiteratureName].text)
+        : Messages[path as MessageFilename].msg;
+    }
+
+    if (!hasScriptExtension(path) && !hasTextExtension(path)) {
+      helpers.log(ctx, () => `${path} does not exist on ${server.hostname}.`);
+      return "";
+    }
     return server.getContentFile(path)?.content ?? "";
   },
   getFileMetadata: (ctx) => (_filename) => {
