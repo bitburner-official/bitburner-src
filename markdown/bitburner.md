@@ -4,31 +4,6 @@
 
 ## bitburner package
 
-## Enumerations
-
-<table><thead><tr><th>
-
-Enumeration
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[RedirectEnumType](./bitburner.redirectenumtype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-</tbody></table>
-
 ## Interfaces
 
 <table><thead><tr><th>
@@ -2062,6 +2037,26 @@ Structured interface to requirements for joining a faction or company. For field
 A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.
 
 Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.
+
+
+</td></tr>
+<tr><td>
+
+[Redirect](./bitburner.redirect.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RedirectEnumType](./bitburner.redirectenumtype.md)
+
+
+</td><td>
+
 
 
 </td></tr>

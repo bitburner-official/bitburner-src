@@ -1140,6 +1140,7 @@ import nsDoc_bitburner_reactelement_type_md from "../../markdown/bitburner.react
 import nsDoc_bitburner_reactnode_md from "../../markdown/bitburner.reactnode.md?raw";
 import nsDoc_bitburner_recentscript_md from "../../markdown/bitburner.recentscript.md?raw";
 import nsDoc_bitburner_recentscript_timeofdeath_md from "../../markdown/bitburner.recentscript.timeofdeath.md?raw";
+import nsDoc_bitburner_redirect_md from "../../markdown/bitburner.redirect.md?raw";
 import nsDoc_bitburner_redirectenumtype_md from "../../markdown/bitburner.redirectenumtype.md?raw";
 import nsDoc_bitburner_reputationformulas_calculatefavortorep_md from "../../markdown/bitburner.reputationformulas.calculatefavortorep.md?raw";
 import nsDoc_bitburner_reputationformulas_calculatereptofavor_md from "../../markdown/bitburner.reputationformulas.calculatereptofavor.md?raw";
@@ -2659,6 +2660,7 @@ AllPages["nsDoc/bitburner.reactelement.type.md"] = nsDoc_bitburner_reactelement_
 AllPages["nsDoc/bitburner.reactnode.md"] = nsDoc_bitburner_reactnode_md;
 AllPages["nsDoc/bitburner.recentscript.md"] = nsDoc_bitburner_recentscript_md;
 AllPages["nsDoc/bitburner.recentscript.timeofdeath.md"] = nsDoc_bitburner_recentscript_timeofdeath_md;
+AllPages["nsDoc/bitburner.redirect.md"] = nsDoc_bitburner_redirect_md;
 AllPages["nsDoc/bitburner.redirectenumtype.md"] = nsDoc_bitburner_redirectenumtype_md;
 AllPages["nsDoc/bitburner.reputationformulas.calculatefavortorep.md"] = nsDoc_bitburner_reputationformulas_calculatefavortorep_md;
 AllPages["nsDoc/bitburner.reputationformulas.calculatereptofavor.md"] = nsDoc_bitburner_reputationformulas_calculatereptofavor_md;

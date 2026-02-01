@@ -2,64 +2,14 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [RedirectEnumType](./bitburner.redirectenumtype.md)
 
-## RedirectEnumType enum
+## RedirectEnumType type
 
 
 **Signature:**
 
 ```typescript
-export enum RedirectEnumType 
+type RedirectEnumType = {
+  EmptyPortData: "NULL PORT DATA";
+  IOStreamClosed: "IO_STREAM_CLOSED";
+};
 ```
-
-## Enumeration Members
-
-<table><thead><tr><th>
-
-Member
-
-
-</th><th>
-
-Value
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-EmptyPortData
-
-
-</td><td>
-
-`"NULL PORT DATA"`
-
-
-</td><td>
-
-Returned from ns.readPort when the port is empty.
-
-
-</td></tr>
-<tr><td>
-
-IOStreamClosed
-
-
-</td><td>
-
-`"IO_STREAM_CLOSED"`
-
-
-</td><td>
-
-Returned from ns.getStdin().read() if the input pipe is closed and empty.
-
-
-</td></tr>
-</tbody></table>
-
