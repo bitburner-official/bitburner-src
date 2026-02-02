@@ -281,6 +281,8 @@ Phishing attacks can only be run from scripts on darknet servers.
 
 Returns a list of all darknet servers connected to the script's current server. For example, if called from a script running on `home`<!-- -->, it will return `["darkweb"]`<!-- -->. It will return an empty list if there are no darknet servers connected to the current server.
 
+Note that there is no guarantee about the order of servers in the returned list.
+
 
 </td></tr>
 <tr><td>

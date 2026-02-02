@@ -4518,6 +4518,8 @@ export interface Darknet {
    * For example, if called from a script running on `home`, it will return `["darkweb"]`.
    * It will return an empty list if there are no darknet servers connected to the current server.
    *
+   * Note that there is no guarantee about the order of servers in the returned list.
+   *
    * @remarks
    * RAM cost: 0.2 GB
    *
@@ -4741,10 +4743,20 @@ export interface Darknet {
    */
   getServerRequiredCharismaLevel(host: string): number;
 
-  /** Not all who wander are lost. */
+  /**
+   * Not all who wander are lost.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
   labreport(): Promise<any>;
 
-  /** There is more than meets the eye. */
+  /**
+   * There is more than meets the eye.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
   labradar(): Promise<any>;
 }
 

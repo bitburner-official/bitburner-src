@@ -15,3 +15,7 @@ labreport(): Promise<any>;
 
 Promise&lt;any&gt;
 
+## Remarks
+
+RAM cost: 0 GB
+
