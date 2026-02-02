@@ -452,7 +452,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       );
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 5000);
 
-      if (programName === CompletedProgramName.darkscape) {
+      if (item.program === CompletedProgramName.darkscape) {
         populateDarknet();
       }
 
