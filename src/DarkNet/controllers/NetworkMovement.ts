@@ -332,11 +332,13 @@ export const addGuaranteedConnection = (server: DarknetServer): void => {
   connectServers(server, neighbor);
 };
 
-export const validateDarknetNetwork = (): void => {
+export const validateDarknetNetwork = (): boolean => {
+  let isValid = true;
   const servers = getAllDarknetServers();
   // The darknet should have at least darkweb and labyrinth servers.
   if (servers.length < getLabyrinthServerNames().length + 1) {
     exceptionAlert(new Error(`There are too few darknet servers. servers.length: ${servers.length}`), true);
+    isValid = false;
   }
   for (const server of servers) {
     if (server.depth !== -1 && DarknetState.Network[server.depth]?.[server.leftOffset]?.hostname !== server.hostname) {
@@ -346,6 +348,7 @@ export const validateDarknetNetwork = (): void => {
         ),
         true,
       );
+      isValid = false;
     }
     for (const neighborHostname of server.serversOnNetwork) {
       const neighbor = GetServer(neighborHostname);
@@ -357,6 +360,7 @@ export const validateDarknetNetwork = (): void => {
           ),
           true,
         );
+        isValid = false;
         continue;
       }
       if (!neighbor.serversOnNetwork.includes(server.hostname)) {
@@ -367,6 +371,7 @@ export const validateDarknetNetwork = (): void => {
           ),
           true,
         );
+        isValid = false;
       }
     }
     if (server.depth === 0 && !server.serversOnNetwork.includes(SpecialServers.DarkWeb)) {
@@ -377,6 +382,7 @@ export const validateDarknetNetwork = (): void => {
         ),
         true,
       );
+      isValid = false;
     }
   }
   for (let i = 0; i < MAX_NET_DEPTH; i++) {
@@ -388,10 +394,13 @@ export const validateDarknetNetwork = (): void => {
       const server = GetServer(serverInNetwork.hostname);
       if (server == null) {
         exceptionAlert(new Error(`${serverInNetwork.hostname} at [${i}][${j}] does not exist in AllServers`), true);
+        isValid = false;
       }
       if (serverInNetwork !== server) {
         exceptionAlert(new Error(`Invalid darknet server instance detected at [${i}][${j}]`), true);
+        isValid = false;
       }
     }
   }
+  return isValid;
 };

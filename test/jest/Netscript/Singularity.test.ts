@@ -1,6 +1,6 @@
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
 import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
-import { AugmentationName, CompanyName, FactionName, JobField, JobName } from "@enums";
+import { AugmentationName, CompanyName, CompletedProgramName, FactionName, JobField, JobName } from "@enums";
 import { Player } from "@player";
 import { prestigeSourceFile } from "../../../src/Prestige";
 import { GetServerOrThrow } from "../../../src/Server/AllServers";
@@ -12,6 +12,8 @@ import { Terminal } from "../../../src/Terminal";
 import type { NSFull } from "../../../src/NetscriptFunctions";
 import { Companies } from "../../../src/Company/Companies";
 import { CompanyPositions } from "../../../src/Company/CompanyPositions";
+import { getTorRouter, removeTorRouter } from "../../../src/Server/ServerHelpers";
+import { validateDarknetNetwork } from "../../../src/DarkNet/controllers/NetworkMovement";
 
 const nextBN = 3;
 
@@ -443,6 +445,72 @@ describe("applyToCompany", () => {
       const ns = getNS();
       expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software0);
       expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(null);
+    });
+  });
+});
+
+describe("purchaseProgram", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    prestigeSourceFile(true);
+    Player.money = 1e15;
+    getTorRouter();
+  });
+
+  describe("Success", () => {
+    beforeEach(() => {
+      const ns = getNS();
+      expect(ns.singularity.purchaseTor()).toStrictEqual(true);
+    });
+    test("return true if already bought", () => {
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      Player.getHomeComputer().pushProgram(CompletedProgramName.bruteSsh);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+    });
+    test("bruteSsh", () => {
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+    });
+    test("darkscape", () => {
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
+      expect(validateDarknetNetwork()).toStrictEqual(true);
+    });
+    test("darkscape with lowercase program name", () => {
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.darkscape.toLowerCase())).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
+      expect(validateDarknetNetwork()).toStrictEqual(true);
+    });
+  });
+
+  describe("Failure", () => {
+    test("No TOR", () => {
+      const ns = getNS();
+      removeTorRouter();
+      expect(Player.hasTorRouter()).toStrictEqual(false);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+    });
+    test("Invalid program name", () => {
+      const ns = getNS();
+      expect(ns.singularity.purchaseProgram("InvalidProgram.exe")).toStrictEqual(false);
+    });
+    test("Not enough money", () => {
+      const ns = getNS();
+      Player.money = 0;
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
     });
   });
 });
