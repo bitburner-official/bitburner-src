@@ -621,9 +621,9 @@ Error: ${e}`,
       }
       unlocks.delete("VeChain");
     }
-    initDarkwebServer();
   }
   if (ver < 45) {
+    initDarkwebServer();
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }
