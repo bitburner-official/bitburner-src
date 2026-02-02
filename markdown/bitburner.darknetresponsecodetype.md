@@ -27,7 +27,6 @@ type DarknetResponseCodeType = {
   NotFound: 404;
   RequestTimeOut: 408;
   NotEnoughCharisma: 451;
-  StationaryServer: 452; // WIP: Experimental. May be changed later.
   StasisLinkLimitReached: 453;
   NoBlockRAM: 454;
   PhishingFailed: 455;

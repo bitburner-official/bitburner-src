@@ -48,7 +48,6 @@ export const GenericResponseMessage = {
   NotFound: "Not Found",
   RequestTimeOut: "Request Timeout",
   NotEnoughCharisma: "Not Enough Charisma",
-  StationaryServer: "Stationary Server", // WIP: Experimental. May be changed later.
   StasisLinkLimitReached: "Stasis Link Limit Reached",
   NoBlockRAM: "No Host-owned RAM Left To Reallocate",
   ServiceUnavailable: "Service Unavailable",
@@ -62,7 +61,6 @@ export const ResponseCodeEnum = {
   NotFound: 404,
   RequestTimeOut: 408,
   NotEnoughCharisma: 451,
-  StationaryServer: 452,
   StasisLinkLimitReached: 453,
   NoBlockRAM: 454,
   PhishingFailed: 455,
