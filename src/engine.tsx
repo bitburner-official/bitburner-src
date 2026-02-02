@@ -387,9 +387,6 @@ const Engine = {
       Player.reapplyAllAugmentations();
       resetGoPromises();
 
-      // TODO: remove after testing is done
-      Player.sourceFiles.set(1, 3);
-
       // Start interactive tutorial
       iTutorialStart();
 
