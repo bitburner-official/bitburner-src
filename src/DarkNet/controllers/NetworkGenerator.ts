@@ -15,7 +15,6 @@ import {
   disconnectServer,
 } from "./NetworkMovement";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { Icon, labIcon } from "../ui/ServerIcon";
 import { Player } from "@player";
 import { Terminal } from "../../Terminal";
 import {
@@ -66,7 +65,6 @@ export function initDarkwebServer(): void {
   }
 
   const data: DarknetServerOptions = {
-    icon: Icon.Terminal,
     password: "",
     modelId: ModelIds.NoPassword,
     staticPasswordHint: "There is no password",
@@ -231,7 +229,6 @@ export const addServerToNetwork = (server: DarknetServer, x: number, y: number) 
 export const addLabyrinth = () => {
   const commonData: Omit<DarknetServerConstructorParams, "hostname" | "ip" | "password" | "requiredCharismaSkill"> = {
     maxRam: 128,
-    icon: labIcon,
     modelId: ModelIds.labyrinth,
     staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
     passwordHintData: "",

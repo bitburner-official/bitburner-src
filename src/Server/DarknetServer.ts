@@ -1,4 +1,3 @@
-import { Icon, labIcon } from "../DarkNet/ui/ServerIcon";
 import { BaseServer } from "./BaseServer";
 import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
 import type { DarknetServerData } from "@nsdefs";
@@ -13,7 +12,6 @@ export interface DarknetServerConstructorParams {
   ip: IPAddress;
   maxRam: number;
   // Properties of DarknetServer
-  icon: Icon | typeof labIcon;
   password: string;
   modelId: string;
   staticPasswordHint: string;
@@ -34,8 +32,6 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
 
   /** Random reward caches on this server */
   caches: CacheFilePath[] = [];
-  /** The icon of the server, used for display */
-  icon: Icon | typeof labIcon;
   /** The password for the server, used for authentication */
   password: string;
   /** The model of the server. Similar models have similar vulnerabilities. */
@@ -67,14 +63,12 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
     params: DarknetServerConstructorParams = {
       ...exampleDarknetServerData,
       ip: createRandomIp(),
-      icon: Icon.Terminal,
       password: "",
       leftOffset: 0,
       isStationary: false,
     },
   ) {
     super(params);
-    this.icon = params.icon;
     this.password = params.password;
     this.modelId = params.modelId;
     this.maxRam = params.maxRam;

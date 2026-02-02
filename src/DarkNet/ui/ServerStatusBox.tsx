@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, SvgIcon } from "@mui/material";
+import { Typography, SvgIcon, Tooltip } from "@mui/material";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { getIcon } from "./ServerIcon";
 import { DarknetState } from "../models/DarknetState";
@@ -19,7 +19,7 @@ export type DWServerProps = {
 
 export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const icon = getIcon(server.icon);
+  const icon = getIcon(server.modelId);
 
   const authButtonHandler = () => {
     DarknetState.openServer = server;
@@ -52,7 +52,9 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
       >
         <div style={{ padding: 0, margin: 0, width: "100%" }}>
           <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
-            <SvgIcon component={icon} color="secondary" />
+            <Tooltip title={`Server Model: ${server.modelId}`}>
+              <SvgIcon component={icon} color="secondary" />
+            </Tooltip>
             <Typography color={server.hasAdminRights ? "primary" : "secondary"} sx={ServerName}>
               {server.hostname}
             </Typography>

@@ -1,5 +1,4 @@
 import { DnetServerBuilder } from "../models/DarknetServerOptions";
-import { Icon } from "../ui/ServerIcon";
 import {
   commonPasswordDictionary,
   defaultSettingsDictionary,
@@ -591,11 +590,6 @@ export const getPasswordType = (password: string): "numeric" | "alphabetic" | "a
     return "ASCII";
   }
   return "unicode";
-};
-
-export const getRandomIcon = (): Icon => {
-  const icons = Object.values(Icon);
-  return <Icon>icons[Math.floor(Math.random() * icons.length)];
 };
 
 export const romanNumeralEncoder = (input: number): string => {

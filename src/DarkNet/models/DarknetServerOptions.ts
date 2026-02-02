@@ -1,5 +1,3 @@
-import { getRandomIcon } from "../controllers/ServerGenerator";
-import { Icon, labIcon } from "../ui/ServerIcon";
 import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import {
   commonPasswordDictionary,
@@ -47,7 +45,6 @@ export function assertPasswordResponse(v: unknown): asserts v is PasswordRespons
 }
 
 export type DarknetServerOptions = {
-  icon?: Icon | typeof labIcon;
   password: string;
   modelId: MinigamesType;
   staticPasswordHint: string;
@@ -72,7 +69,6 @@ export const DnetServerBuilder = (options: DarknetServerOptions, name = generate
     hostname: name,
     ip: createUniqueRandomIp(),
     maxRam,
-    icon: options.icon ?? getRandomIcon(),
     password: options.password,
     modelId: options.modelId,
     staticPasswordHint: options.staticPasswordHint,

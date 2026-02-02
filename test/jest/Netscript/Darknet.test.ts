@@ -31,6 +31,7 @@ import {
   LocationStatus,
 } from "../../../src/DarkNet/effects/labyrinth";
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
+import { Result } from "@nsdefs";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Server ${hostnameOfNonExistentServer} does not exist.`;
@@ -862,15 +863,15 @@ describe("darkweb", () => {
   });
   test("labreport", async () => {
     const ns = getNsOnDarkWeb();
-    const details = `${await ns.dnet.labreport()}`;
+    const details = (await ns.dnet.labreport()) as LocationStatus;
     // darkweb is not connected to lab, so scripts on it cannot navigate the lab
-    expect(details).toEqual("You feel disconnected...");
+    expect(details.message).toEqual("You feel disconnected...");
   });
   test("labradar", async () => {
     const ns = getNsOnDarkWeb();
-    const details = `${await ns.dnet.labradar()}`;
+    const details: Result = (await ns.dnet.labradar()) as Result;
     // darkweb is not connected to lab, so scripts on it cannot navigate the lab
-    expect(details).toEqual("You feel disconnected...");
+    expect(details.message).toEqual("You feel disconnected...");
   });
 });
 
@@ -1299,7 +1300,8 @@ describe("lab location methods", () => {
   });
   test("dnet.labradar()", async () => {
     const ns = getNsOnServerNearLabyrinth();
-    const surroundingsString = `${await ns.dnet.labradar()}`.split("\n");
+    const response = (await ns.dnet.labradar()) as Result;
+    const surroundingsString = `${response?.message}`.split("\n");
     const maze = getLabMaze();
     for (let x = 0; x < 3; x++) {
       for (let y = 0; y < 3; y++) {

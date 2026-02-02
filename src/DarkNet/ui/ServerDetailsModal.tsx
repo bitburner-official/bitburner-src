@@ -29,7 +29,7 @@ export const ServerDetailsModal = ({
 }: DWPasswordPromptModalProps): React.ReactElement => {
   useCycleRerender();
 
-  const icon = getIcon(server.icon);
+  const icon = getIcon(server.modelId);
   populateServerLogsWithNoise(server);
   const serverState = getServerState(server.hostname);
   const isLabServer = isLabyrinthServer(server.hostname);
@@ -67,7 +67,9 @@ export const ServerDetailsModal = ({
             <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
               {server.hostname}
             </Typography>
-            <SvgIcon component={icon} color="secondary" />
+            <Tooltip title={`Server Model: ${server.modelId}`}>
+              <SvgIcon component={icon} color="secondary" />
+            </Tooltip>
           </div>
           <br />
           {server.hasAdminRights ? (
