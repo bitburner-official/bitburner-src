@@ -330,11 +330,8 @@ describe("Password Tests", () => {
   });
 
   test("getXorMaskEncryptedPasswordConfig server creates a server with a correct password hint", () => {
-    // WIP-Fico: this is sometimes flaky, I need to look into why
     const server = serverFactory(() => getXorMaskEncryptedPasswordConfig(), 20, 0, 0);
     expect(server).toBeDefined();
-    // WIP-@fico: Uncomment this line to see the error.
-    // server.password = "Wo0K";
     const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
@@ -360,11 +357,9 @@ describe("Password Tests", () => {
     Player.gainCharismaExp(1e200);
     const server = serverFactory(getTimingAttackConfig, 20, 0, 0);
     server.logTrafficInterval = -1;
-    // WIP-@fico: Uncomment this line to see the error.
-    // server.password = "wIO0y";
     const ns = getNS(server.hostname);
     expect(server).toBeDefined();
-    const failedAttemptResponse = getAuthResult(server, "wrongPassword", 1);
+    const failedAttemptResponse = getAuthResult(server, "$$$$$$$", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
 
     const response1 = await ns.dnet.authenticate(server.hostname, server.password.slice(0, 1) + "%%%%", 0);

@@ -312,22 +312,26 @@ export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
 
 export const getXorMaskEncryptedPasswordConfig = (): ServerConfig => {
   const password = getPassword(3 + Math.random() * 3, true);
+  let passwordWithXorMaskApplied: string;
+  let xorMaskStrings: string[];
 
-  let passwordWithXorMaskApplied = "";
-  const xorMaskStrings = [];
-  for (const c of password) {
-    const charCode = c.charCodeAt(0);
-    const xorMask = Math.floor(Math.random() * 32);
-    xorMaskStrings.push(xorMask.toString(2).padStart(8, "0"));
-    passwordWithXorMaskApplied += String.fromCharCode(charCode ^ xorMask);
-  }
-  const xorMaskString = xorMaskStrings.join(" ");
+  do {
+    passwordWithXorMaskApplied = "";
+    xorMaskStrings = [];
+    for (const c of password) {
+      const charCode = c.charCodeAt(0);
+      const xorMask = Math.floor(Math.random() * 32);
+      xorMaskStrings.push(xorMask.toString(2).padStart(8, "0"));
+      passwordWithXorMaskApplied += String.fromCharCode(charCode ^ xorMask);
+    }
+    // Prevent characters that would break parsing in encoded output
+  } while (passwordWithXorMaskApplied.includes(";") || passwordWithXorMaskApplied.includes(" "));
 
   return {
     modelId: ModelIds.encryptedPassword,
     password,
     staticPasswordHint: `XOR mask encrypted password: "${passwordWithXorMaskApplied}".`,
-    passwordHintData: `${passwordWithXorMaskApplied};${xorMaskString}`,
+    passwordHintData: `${passwordWithXorMaskApplied};${xorMaskStrings.join(" ")}`,
   };
 };
 
