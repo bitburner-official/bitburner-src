@@ -589,6 +589,7 @@ export const achievements: Record<AchievementId, Achievement> = {
     Icon: "locked",
     Visible: knowAboutBitverse,
     Condition: () => getAllMovableDarknetServers().filter((s) => s.backdoorInstalled).length >= 50,
+    NotInSteam: true,
   },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
