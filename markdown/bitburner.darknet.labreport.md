@@ -9,11 +9,11 @@ Not all who wander are lost.
 **Signature:**
 
 ```typescript
-labreport(): Promise<any>;
+labreport(): Promise<Result<any>>;
 ```
 **Returns:**
 
-Promise&lt;any&gt;
+Promise&lt;[Result](./bitburner.result.md)<!-- -->&lt;any&gt;&gt;
 
 ## Remarks
 

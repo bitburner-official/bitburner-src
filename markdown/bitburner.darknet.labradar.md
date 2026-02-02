@@ -9,11 +9,11 @@ There is more than meets the eye.
 **Signature:**
 
 ```typescript
-labradar(): Promise<any>;
+labradar(): Promise<Result<any>>;
 ```
 **Returns:**
 
-Promise&lt;any&gt;
+Promise&lt;[Result](./bitburner.result.md)<!-- -->&lt;any&gt;&gt;
 
 ## Remarks
 

@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import type { Darknet as DarknetAPI, DarknetResult } from "@nsdefs";
+import type { Darknet as DarknetAPI, DarknetResult, Result } from "@nsdefs";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import {
   calculateAuthenticationTime,
@@ -672,7 +672,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         return onlineConnectionCheck.server.requiredCharismaSkill;
       },
-    labreport: (ctx) => async (): Promise<any> => {
+    labreport: (ctx) => async (): Promise<Result<any>> => {
       expectDarknetAccess(ctx);
       expectRunningOnDarknetServer(ctx);
 
@@ -680,14 +680,20 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       if (!lab) {
         const status = "You feel lost...";
         logger(ctx)(status);
-        return status;
+        return {
+          success: false,
+          message: status,
+        };
       }
 
       const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
       if (!isDirectConnected(currentServer, lab)) {
         const status = "You feel disconnected...";
         logger(ctx)(status);
-        return status;
+        return {
+          success: false,
+          message: status,
+        };
       }
 
       const pid = ctx.workerScript.pid;
@@ -696,7 +702,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
       return getLocationStatus(pid);
     },
-    labradar: (ctx) => async (): Promise<any> => {
+    labradar: (ctx) => async (): Promise<Result<any>> => {
       expectDarknetAccess(ctx);
       expectRunningOnDarknetServer(ctx);
 
@@ -704,14 +710,20 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       if (!lab) {
         const status = "You feel blind...";
         logger(ctx)(status);
-        return status;
+        return {
+          success: false,
+          message: status,
+        };
       }
 
       const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
       if (!isDirectConnected(currentServer, lab)) {
         const status = "You feel disconnected...";
         logger(ctx)(status);
-        return status;
+        return {
+          success: false,
+          message: status,
+        };
       }
 
       const pid = ctx.workerScript.pid;
@@ -719,7 +731,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       await helpers.netscriptDelay(ctx, authenticationTime);
 
       const [x, y] = DarknetState.labLocations[pid] ?? [1, 1];
-      return getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true);
+      return {
+        success: true,
+        message: getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true),
+      };
     },
   };
 }

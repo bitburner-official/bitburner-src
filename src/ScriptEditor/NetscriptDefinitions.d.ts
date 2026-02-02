@@ -4748,7 +4748,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0 GB
    */
-  labreport(): Promise<any>;
+  labreport(): Promise<Result<any>>;
 
   /**
    * There is more than meets the eye.
@@ -4756,7 +4756,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0 GB
    */
-  labradar(): Promise<any>;
+  labradar(): Promise<Result<any>>;
 }
 
 /**

@@ -204,6 +204,7 @@ export const getLocationStatus = (pid: number = -1): LocationStatus => {
     east: surroundings[1][2] === PATH,
     south: surroundings[2][1] === PATH,
     west: surroundings[1][0] === PATH,
+    success: true,
   };
 };
 
@@ -463,7 +464,14 @@ export const getLabyrinthDetails = (): {
   };
 };
 
-export type LocationStatus = { east: boolean; south: boolean; north: boolean; west: boolean; coords: number[] };
+export type LocationStatus = {
+  east: boolean;
+  south: boolean;
+  north: boolean;
+  west: boolean;
+  coords: number[];
+  success: true;
+};
 
 export function isLocationStatus(v: unknown): v is LocationStatus {
   return (

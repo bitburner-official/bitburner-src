@@ -129,6 +129,12 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
     return lastLog.message.message;
   };
 
+  const getLocationStatusString = () => {
+    const dataString = JSON.stringify(getLocationStatus(currentPerspective));
+    // Add a space before the success flag so the text can wrap for better readability
+    return dataString.replace(`,"success"`, `, "success"`);
+  };
+
   return (
     <>
       <div className={classes.inlineFlexBox}>
@@ -163,13 +169,11 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
           </Card>
 
           <Typography variant="caption" color="secondary">
-            <pre>ns.dnet.labreport()</pre>
+            ns.dnet.labreport:
           </Typography>
           <Card style={{ padding: "8px" }}>
             <div style={{ color: "white" }}>
-              <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontSize: "10.5px" }}>
-                {JSON.stringify(getLocationStatus(currentPerspective))}
-              </pre>
+              <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontSize: "10.5px" }}>{getLocationStatusString()}</pre>
             </div>
           </Card>
         </div>
