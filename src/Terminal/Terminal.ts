@@ -596,19 +596,27 @@ export class Terminal {
       (!all && s.purchasedByPlayer && s.hostname != "home") ||
       d > depth ||
       (!all && s instanceof HacknetServer) ||
-      (s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
+      (!all && s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
 
-    const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
-      hostname: s.hostname,
-      children: s.serversOnNetwork
-        .filter((h) => h != parent)
-        .map((s) => GetServer(s))
-        .filter((v): v is BaseServer => !!v)
-        .filter((v) => !ignoreServer(v, d))
-        .map((h) => makeNode(s.hostname, h, d + 1)),
-    });
+    const makeNode = (root: BaseServer = Player.getCurrentServer()) => {
+      // Keep track of previously seen servers to prevent backtracking (since darknet can be cyclical)
+      const seenServers = [root.hostname];
+      const populateNode = (s: BaseServer, d = 1): Node => {
+        seenServers.push(s.hostname);
+        return {
+          hostname: s.hostname,
+          children: s.serversOnNetwork
+            .filter((h) => !seenServers.includes(h))
+            .map((s) => GetServer(s))
+            .filter((v): v is BaseServer => !!v)
+            .filter((v) => !ignoreServer(v, d))
+            .map((h) => populateNode(h, d + 1)),
+        };
+      };
+      return populateNode(root);
+    };
 
-    const root = makeNode(Player.getCurrentServer().hostname, Player.getCurrentServer());
+    const root = makeNode();
 
     const printOutput = (node: Node, prefix = ["  "], last = true) => {
       const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");

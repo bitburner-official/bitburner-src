@@ -171,7 +171,9 @@ export function applySourceFile(bn: number, lvl: number): void {
       // Grants increased buffs and favor limit from IPvGO
       break;
     case 15: // The Dark Net
-      // TODO: source files for 15
+      // Level 1: grants permanent access to the Tor router and DarkscapeNavigator.exe
+      // Level 2: grants a slight buff to company work rep gain based on charisma level
+      // Level 3: grants a slight buff to faction work rep gain based on charisma level
       break;
     default:
       console.error(`Invalid source file number: ${bn}`);

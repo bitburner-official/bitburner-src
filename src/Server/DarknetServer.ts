@@ -60,6 +60,8 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
   requiredCharismaSkill: number;
   /** If this darknet server cannot be moved. True for fixed/story servers. */
   isStationary: boolean;
+  /** The number of CPU cores on the server. Included to make sure that grow etc on the server work as expected */
+  cpuCores: number = 1;
 
   constructor(
     params: DarknetServerConstructorParams = {
