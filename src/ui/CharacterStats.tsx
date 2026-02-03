@@ -568,7 +568,7 @@ export function CharacterStats(): React.ReactElement {
                     value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
-                    mult: "IPvGO Max Favor",
+                    mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
                   },
