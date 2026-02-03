@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of the server on which to kill all scripts. Optional. Defaults to the server the calling script is running on.
+_(Optional)_ Hostname/IP of the server on which to kill all scripts.
 
 
 </td></tr>
@@ -58,7 +58,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ Skips the script that calls this function. Optional. Defaults to false.
+_(Optional)_ Skips the script that calls this function
 
 
 </td></tr>

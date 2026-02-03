@@ -12,7 +12,8 @@ export function runProgram(path: ProgramFilePath, args: (string | number | boole
   // Support lowercase even though it's an enum
 
   const realProgramName = getRecordKeys(Programs).find((name) => name.toLowerCase() === programLowered);
-  if (!realProgramName || !Player.hasProgram(realProgramName)) {
+  const programPresentOnServer = server.programs.find((name) => name.toLowerCase() === programLowered);
+  if (!realProgramName || (!Player.hasProgram(realProgramName) && !programPresentOnServer)) {
     Terminal.error(
       `No such (js, jsx, ts, tsx, script, cct, or exe) file! (Only finished programs that exist on your home computer or scripts on ${server.hostname} can be run)`,
     );

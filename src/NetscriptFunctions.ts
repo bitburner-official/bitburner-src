@@ -74,7 +74,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
+import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer, DarknetServerData } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -102,13 +102,18 @@ import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
+import { NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { validBitNodes } from "./BitNode/Constants";
 import { isIPAddress } from "./Types/strings";
 import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
+import { DarknetState } from "./DarkNet/models/DarknetState";
+import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
+import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
+import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
@@ -131,6 +136,7 @@ export const enums: NSEnums = {
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
   FragmentType: FragmentTypeEnum,
+  DarknetResponseCode: ResponseCodeEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -142,6 +148,7 @@ export const ns: InternalAPI<NSFull> = {
   format: NetscriptFormat(),
   gang: NetscriptGang(),
   go: NetscriptGo(),
+  dnet: NetscriptDarknet(),
   bladeburner: NetscriptBladeburner(),
   codingcontract: NetscriptCodingContract(),
   sleeve: NetscriptSleeve(),
@@ -174,16 +181,12 @@ export const ns: InternalAPI<NSFull> = {
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
-      if (s === null) continue;
+      if (s === null || s instanceof DarknetServer) continue;
       const entry = helpers.returnServerID(s, returnOpts);
       if (entry === null) continue;
       out.push(entry);
     }
-    helpers.log(
-      ctx,
-      () =>
-        `returned ${server.serversOnNetwork.length} connections for ${isIPAddress(host) ? server.ip : server.hostname}`,
-    );
+    helpers.log(ctx, () => `returned ${out.length} connections for ${isIPAddress(host) ? server.ip : server.hostname}`);
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),
@@ -636,7 +639,7 @@ export const ns: InternalAPI<NSFull> = {
   run:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname, true);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const scriptServer = ctx.workerScript.getServer();
@@ -646,17 +649,30 @@ export const ns: InternalAPI<NSFull> = {
   exec:
     (ctx) =>
     (_scriptname, _host, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname, true);
       const host = helpers.string(ctx, "host", _host);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
+      if (DarknetState.offlineServers.includes(host)) {
+        helpers.log(ctx, () => `Script execution failed, because ${host} is offline.`);
+        return 0;
+      }
       const server = helpers.getServer(ctx, host);
+      if (server instanceof DarknetServer && !hasExecConnection(ctx, server)) {
+        const currentHostname = ctx.workerScript.getServer().hostname;
+        helpers.log(
+          ctx,
+          () =>
+            `The current server ${currentHostname} is not connected to ${host}. exec() to a password-protected server requires a direct connection, a stasis link, or a backdoor. Use exec() from an adjacent server, or set a stasis link on the target server.`,
+        );
+        return 0;
+      }
       return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname, true);
       const runOpts = helpers.spawnOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const spawnCb = () => {
@@ -748,7 +764,6 @@ export const ns: InternalAPI<NSFull> = {
       const host = helpers.string(ctx, "host", _host);
       const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, host);
-
       let scriptsKilled = 0;
 
       for (const byPid of server.runningScriptMap.values()) {
@@ -770,8 +785,19 @@ export const ns: InternalAPI<NSFull> = {
   scp: (ctx) => (_files, _destination, _source) => {
     const destination = helpers.string(ctx, "destination", _destination);
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
-    const destServer = helpers.getServer(ctx, destination);
+    if (DarknetState.offlineServers.includes(destination)) {
+      helpers.log(ctx, () => `scp failed, because ${destination} is offline.`);
+      return false;
+    }
+    if (DarknetState.offlineServers.includes(source)) {
+      helpers.log(ctx, () => `scp failed, because ${source} is offline.`);
+      return false;
+    }
     const sourceServer = helpers.getServer(ctx, source);
+    const destServer = helpers.getServer(ctx, destination);
+    if (destServer instanceof DarknetServer) {
+      expectAuthenticated(ctx, destServer);
+    }
     const files = Array.isArray(_files) ? _files : [_files];
     const lits: FilePath[] = [];
     const contentFiles: ContentFilePath[] = [];
@@ -830,10 +856,15 @@ export const ns: InternalAPI<NSFull> = {
   ls: (ctx) => (_host, _substring) => {
     const host = helpers.string(ctx, "host", _host);
     const substring = helpers.string(ctx, "substring", _substring ?? "");
+    if (DarknetState.offlineServers.includes(host)) {
+      helpers.log(ctx, () => `ls failed, because ${host} is offline.`);
+      return [];
+    }
     const server = helpers.getServer(ctx, host);
 
     const allFilenames = [
       ...server.contracts.map((contract) => contract.fn),
+      ...(server instanceof DarknetServer ? server.caches : []),
       ...server.messages,
       ...server.programs,
       ...server.scripts.keys(),
@@ -917,7 +948,50 @@ export const ns: InternalAPI<NSFull> = {
     },
   getServer: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-    const server = helpers.getServer(ctx, host);
+    const server = GetServer(host);
+    // If the target server does not exist
+    if (!server) {
+      if (DarknetState.offlineServers.includes(host)) {
+        // If the server is offline, return a dummy object with isOnline = false.
+        helpers.log(ctx, () => `Server ${host} is offline.`);
+        return {
+          isOnline: false,
+          ...exampleDarknetServerData,
+          hostname: host,
+        } satisfies DarknetServerData & { isOnline: boolean };
+      } else {
+        // Throw, otherwise.
+        throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
+      }
+    }
+    if (server instanceof DarknetServer) {
+      return {
+        isOnline: true,
+        hostname: server.hostname,
+        ip: server.ip,
+        hasAdminRights: server.hasAdminRights,
+        isConnectedTo: server.isConnectedTo,
+        cpuCores: server.cpuCores,
+        ramUsed: server.ramUsed,
+        maxRam: server.maxRam,
+        backdoorInstalled: server.backdoorInstalled,
+        depth: server.depth,
+        modelId: server.modelId,
+        hasStasisLink: server.hasStasisLink,
+        blockedRam: server.blockedRam,
+        staticPasswordHint: server.staticPasswordHint,
+        passwordHintData: server.passwordHintData,
+        difficulty: server.difficulty,
+        requiredCharismaSkill: server.requiredCharismaSkill,
+        logTrafficInterval: server.logTrafficInterval,
+        isStationary: server.isStationary,
+        purchasedByPlayer: false,
+      } satisfies DarknetServerData & { isOnline: boolean };
+    }
+    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
+    if (server.serversOnNetwork.length === 0) {
+      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
+    }
     return {
       hostname: server.hostname,
       ip: server.ip,
@@ -943,7 +1017,7 @@ export const ns: InternalAPI<NSFull> = {
       openPortCount: server.openPortCount,
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
-    };
+    } satisfies NSInterfaceServer;
   },
   getServerMoneyAvailable: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
@@ -1018,7 +1092,7 @@ export const ns: InternalAPI<NSFull> = {
   serverExists: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
     const server = GetServer(host);
-    return server !== null && server.serversOnNetwork.length > 0;
+    return server !== null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer);
   },
   fileExists: (ctx) => (_filename, _host) => {
     const filename = helpers.string(ctx, "filename", _filename);

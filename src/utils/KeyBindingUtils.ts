@@ -32,6 +32,7 @@ export const GoToPageKeyBindingTypes = [
   SimplePage.Job,
   SimplePage.StockMarket,
   SimplePage.Go,
+  SimplePage.DarkNet,
   SimplePage.Milestones,
   ComplexPage.Documentation,
   SimplePage.Achievements,
@@ -199,6 +200,7 @@ export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, 
     null,
   ],
   [SimplePage.Go]: [null, null],
+  [SimplePage.DarkNet]: [null, null],
   [SimplePage.Milestones]: [null, null],
   [ComplexPage.Documentation]: [
     {

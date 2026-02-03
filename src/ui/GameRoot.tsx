@@ -78,6 +78,7 @@ import { UIEventEmitter, UIEventType } from "./UIEventEmitter";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { ErrorModal } from "../ErrorHandling/ErrorModal";
+import { DWRoot } from "../DarkNet/DWRoot";
 import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
 
 const htmlLocation = location;
@@ -217,7 +218,7 @@ export function GameRoot(): React.ReactElement {
   }, [rerender]);
 
   function killAllScripts(): void {
-    for (const server of GetAllServers()) {
+    for (const server of GetAllServers(true)) {
       server.runningScriptMap.clear();
     }
     saveObject
@@ -458,6 +459,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Go: {
       mainPage = <GoRoot />;
+      break;
+    }
+    case Page.DarkNet: {
+      mainPage = <DWRoot />;
       break;
     }
     case Page.Achievements: {

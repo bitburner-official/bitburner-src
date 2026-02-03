@@ -12,6 +12,7 @@ import { ITutorial } from "../InteractiveTutorial";
 import { AlertEvents } from "../ui/React/AlertManager";
 import { handleUnknownError } from "../utils/ErrorHandler";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
+import { BaseServer } from "../Server/BaseServer";
 
 export function killWorkerScript(ws: WorkerScript): boolean {
   if (ITutorial.isRunning) {
@@ -35,14 +36,29 @@ export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boole
 }
 
 export const killAllScripts = () => {
-  for (const server of GetAllServers()) {
-    for (const byPid of server.runningScriptMap.values()) {
-      for (const pid of byPid.keys()) {
-        killWorkerScriptByPid(pid);
-      }
+  for (const server of GetAllServers(true)) {
+    killServerScripts(server, "Script killed.");
+  }
+};
+
+export const killServerScripts = (server: BaseServer, message: string) => {
+  const scripts = server.runningScriptMap.values();
+  for (const byPid of scripts) {
+    for (const runningScript of byPid.values()) {
+      killWorkerScriptWithMessage(runningScript.pid, message);
     }
   }
 };
+
+function killWorkerScriptWithMessage(pid: number, message: string): boolean {
+  const ws = workerScripts.get(pid);
+  if (ws) {
+    ws.log("", () => message);
+    stopAndCleanUpWorkerScript(ws);
+    return true;
+  }
+  return false;
+}
 
 function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   // Only clean up once.

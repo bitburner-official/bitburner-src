@@ -4,13 +4,17 @@ import type { ScriptFilePath } from "../../src/Paths/ScriptFilePath";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import { Player, setPlayer } from "../../src/Player";
 import { RunningScript } from "../../src/Script/RunningScript";
-import { GetServerOrThrow, initForeignServers, prestigeAllServers } from "../../src/Server/AllServers";
+import { GetServerOrThrow, prestigeAllServers } from "../../src/Server/AllServers";
 import { SpecialServers } from "../../src/Server/data/SpecialServers";
 import { initSourceFiles } from "../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../src/ui/formatNumber";
 import { Router } from "../../src/ui/GameRoot";
 import { config } from "../../src/NetscriptJSEvaluator";
 import type { NetscriptContext } from "../../src/Netscript/APIWrapper";
+import { purchaseServer } from "../../src/Server/ServerPurchases";
+import { purchaseHacknet } from "../../src/Hacknet/HacknetHelpers";
+import { initForeignServers } from "../../src/Server/ServerHelpers";
+import { generateNextPid } from "../../src/Netscript/Pid";
 
 declare const importActual: (typeof config)["doImport"];
 
@@ -47,16 +51,29 @@ export function initGameEnvironment() {
   initSourceFiles();
 }
 
-export function setupBasicTestingEnvironment(): void {
+export function setupBasicTestingEnvironment(
+  { purchaseHacknetServer, purchasePServer } = { purchasePServer: false, purchaseHacknetServer: false },
+): void {
   prestigeAllServers();
   setPlayer(new PlayerObject());
   Player.init();
   Player.sourceFiles.set(4, 3);
+  Player.money = 1e15;
   initForeignServers(Player.getHomeComputer());
+  if (purchasePServer) {
+    purchaseServer("test-server-1", 2);
+  }
+  if (purchaseHacknetServer) {
+    Player.sourceFiles.set(9, 3);
+    purchaseHacknet();
+  }
 }
 
-export function getNS(): NSFull {
-  const home = GetServerOrThrow(SpecialServers.Home);
+export function getWorkerScriptAndNS(hostname: string = SpecialServers.Home): {
+  ws: WorkerScript;
+  ns: NSFull;
+} {
+  const home = GetServerOrThrow(hostname);
   home.maxRam = 1024;
   const filePath = "test.js" as ScriptFilePath;
   home.writeToScriptFile(filePath, "");
@@ -65,12 +82,19 @@ export function getNS(): NSFull {
     throw new Error("Invalid script");
   }
   const runningScript = new RunningScript(script, 1024);
-  const workerScript = new WorkerScript(runningScript, 1, NetscriptFunctions);
+  const workerScript = new WorkerScript(runningScript, generateNextPid(), NetscriptFunctions);
   const ns = workerScript.env.vars;
   if (!ns) {
     throw new Error("Invalid NS instance");
   }
-  return ns;
+  return {
+    ws: workerScript,
+    ns,
+  };
+}
+
+export function getNS(hostname: string = SpecialServers.Home): NSFull {
+  return getWorkerScriptAndNS(hostname).ns;
 }
 
 export function getMockedNetscriptContext(
@@ -86,4 +110,13 @@ export function getMockedNetscriptContext(
       },
     } as unknown as WorkerScript,
   };
+}
+
+// WIP: Improve this function to get a better stack trace or use jest-expect-message
+export function expectWithMessage(actual: unknown, expected: unknown, customMessage: string) {
+  try {
+    expect(actual).toStrictEqual(expected);
+  } catch (error) {
+    throw new Error(customMessage, { cause: error });
+  }
 }

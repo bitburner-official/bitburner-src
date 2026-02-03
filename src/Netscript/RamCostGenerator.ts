@@ -234,6 +234,34 @@ const cloud = {
   deleteServer: 2.25,
 } as const;
 
+// Darknet API
+const dnet = {
+  authenticate: 0.4,
+  connectToSession: 0.05,
+  heartbleed: 0.6,
+  openCache: 2,
+  probe: RamCostConstants.Scan,
+  setStasisLink: 12,
+  getStasisLinkLimit: 0,
+  getStasisLinkedServers: 0,
+  getServer: 2,
+  getServerAuthDetails: RamCostConstants.GetServer,
+  packetCapture: 6,
+  induceServerMigration: 4,
+  unleashStormSeed: 0.1,
+  isDarknetServer: RamCostConstants.GetServer,
+  memoryReallocation: 1,
+  getBlockedRam: 0,
+  getDepth: RamCostConstants.GetServer,
+  promoteStock: 2,
+  phishingAttack: 2,
+  getDarknetInstability: 0,
+  nextMutation: RamCostConstants.CycleTiming,
+  getServerRequiredCharismaLevel: RamCostConstants.GetServer,
+  labreport: 0,
+  labradar: 0,
+} as const;
+
 const format = {
   number: 0,
   ram: 0,
@@ -515,6 +543,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   cloud,
   gang,
   go,
+  dnet,
   bladeburner,
   infiltration,
   codingcontract,
@@ -698,6 +727,11 @@ export const RamCosts: RamCostTree<NSFull> = {
     },
     bladeburner: {
       skillMaxUpgradeCount: 0,
+    },
+    dnet: {
+      getAuthenticateTime: 0,
+      getHeartbleedTime: 0,
+      getExpectedRamBlockRemoved: 0,
     },
   },
 } as const;

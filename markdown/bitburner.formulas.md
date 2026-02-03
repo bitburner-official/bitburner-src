@@ -60,6 +60,25 @@ Bladeburner formulas
 </td></tr>
 <tr><td>
 
+[dnet](./bitburner.formulas.dnet.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DarknetFormulas](./bitburner.darknetformulas.md)
+
+
+</td><td>
+
+Darknet formulas
+
+
+</td></tr>
+<tr><td>
+
 [gang](./bitburner.formulas.gang.md)
 
 

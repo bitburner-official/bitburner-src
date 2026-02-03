@@ -4,7 +4,7 @@
 
 ## NS.scan() method
 
-Get the list of hostnames or IP addresses connected to a server.
+Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers (e.g., darkweb). Use [probe](./bitburner.darknet.probe.md) if you want to list darknet servers.
 
 **Signature:**
 
@@ -42,7 +42,7 @@ string \| null
 
 </td><td>
 
-_(Optional)_ Optional. Hostname/IP of the server to scan. Defaults to the server the calling script is running on.
+_(Optional)_ Optional. Hostname/IP of the server to scan, default to current server.
 
 
 </td></tr>

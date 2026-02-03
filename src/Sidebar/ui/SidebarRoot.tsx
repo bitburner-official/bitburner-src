@@ -38,6 +38,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox"; // Character
 import PublicIcon from "@mui/icons-material/Public"; // World
 import LiveHelpIcon from "@mui/icons-material/LiveHelp"; // Help
 import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvGO
+import ShareIcon from "@mui/icons-material/Share"; // DarkWeb
 import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
 import { Router } from "../../ui/GameRoot";
@@ -69,6 +70,8 @@ import {
 } from "../../utils/KeyBindingUtils";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 import { ErrorState } from "../../ErrorHandling/ErrorState";
+
+import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -174,6 +177,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
   const canIPvGO = playerHasDiscoveredGo();
+  const canDarkNet = hasDarknetAccess();
 
   const clickPage = useCallback(
     (page: Page) => {
@@ -232,6 +236,8 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           return canGang;
         case SimplePage.Go:
           return canIPvGO;
+        case SimplePage.DarkNet:
+          return canDarkNet;
         case ScriptEditorAction.Save:
         case ScriptEditorAction.GoToTerminal:
         case ScriptEditorAction.Run:
@@ -253,6 +259,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       canCorporation,
       canGang,
       canIPvGO,
+      canDarkNet,
     ],
   );
 
@@ -400,6 +407,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
             canIPvGO && { key_: Page.Go, icon: BorderInnerSharpIcon },
+            canDarkNet && { key_: Page.DarkNet, icon: ShareIcon },
           ]}
         />
         <Divider />

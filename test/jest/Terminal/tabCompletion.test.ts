@@ -68,6 +68,7 @@ describe("getTabCompletionPossibilities", function () {
     expect(options.sort()).toEqual(
       [
         "BruteSSH.exe",
+        "DarkscapeNavigator.exe",
         "FTPCrack.exe",
         "relaySMTP.exe",
         "HTTPWorm.exe",

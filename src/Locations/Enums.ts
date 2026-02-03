@@ -18,6 +18,7 @@ export enum LocationName {
   ChongqingKuaiGongInternational = "KuaiGong International",
   ChongqingSolarisSpaceSystems = "Solaris Space Systems",
   ChongqingChurchOfTheMachineGod = "Church of the Machine God",
+  ChongqingShadowedWalkway = "Shadowed Walkway",
 
   Sector12AlphaEnterprises = "Alpha Enterprises",
   Sector12BladeIndustries = "Blade Industries",

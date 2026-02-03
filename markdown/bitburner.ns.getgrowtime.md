@@ -9,7 +9,7 @@ Get the execution time of a grow() call.
 **Signature:**
 
 ```typescript
-getGrowTime(host?: string): number;
+getGrowTime(host: string): number;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+Hostname/IP of target server.
 
 
 </td></tr>

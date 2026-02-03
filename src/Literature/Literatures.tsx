@@ -2,6 +2,7 @@ import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
+import { defaultSettingsDictionary, dogNameDictionary } from "../DarkNet/models/dictionaryData";
 
 export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HackersStartingHandbook]: new Literature({
@@ -717,6 +718,119 @@ export const Literatures: Record<LiteratureName, Literature> = {
         In the end humanity is left with the theoretical capacity to transform themselves to the limits of their
         imagininations, but the practical reality that the expense of even basic augmentations is beyond 95% of the
         population.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.DarknetHandbook]: new Literature({
+    title: LiteratureName.DarknetHandbook,
+    filename: LiteratureName.DarknetHandbook,
+    text: (
+      <Typography>
+        There is a legend of a powerful augment, known as the <span style={{ color: "red" }}>"Red Pill"</span>, that can
+        only be found deep within the darknet. The mysterious faction {FactionName.Daedalus} has been searching for it
+        for years, hoping to monopolize it one day.
+        <br />
+        <br />
+        However, the legendary augment is hidden in the depths of a labyrinth. You will need to delve far into the dark
+        in order to find these mysterious servers, and defeat their protections to gain their secret augments.
+        <br />
+        <br />
+        The darknet itself is an extremely unstable network of servers. They will continually shift locations, restart,
+        or even go offline. Some parts of the net are islands that can only be reached by riding on a moving server. In
+        addition, these darknet servers cannot be accessed from a distance: you must build a script that can copy itself
+        - or bring code along from home - in order to progress into the deeper layers of the 'net.
+        <br />
+        <br />
+        You now have permanent access to the Darknet Navigator, allowing exploration of the 'net manually via the UI.
+        But beware: the labyrinths further into the deep are said to only be accessible via script! Do you have the
+        charisma and the scripting skills needed to conquer the dark?
+        <br />
+        <br />
+        For more details on the darknet and its API, see the Darknet page under Documentation {">"} Advanced.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.CacheHint1]: new Literature({
+    title: "eGeoCacheing?",
+    filename: LiteratureName.CacheHint1,
+    text: <Typography>I've heard there are valuable .cache files to find out in the dark net.</Typography>,
+  }),
+  [LiteratureName.CacheHint2]: new Literature({
+    title: "Cache the Flag",
+    filename: LiteratureName.CacheHint2,
+    text: <Typography>I ran this .cache file I found and it had crazy stuff in it!</Typography>,
+  }),
+  [LiteratureName.ServerOfflineHint]: new Literature({
+    title: "Server offline again",
+    filename: LiteratureName.ServerOfflineHint,
+    text: (
+      <Typography>
+        My scripts went down again when their server went offline. I'll have to do something about that.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.DarkWebRebootHint]: new Literature({
+    title: "Darkweb server rebooted",
+    filename: LiteratureName.DarkWebRebootHint,
+    text: <Typography>Darkweb servers are known to reboot sometimes, requiring scripts to be restarted.</Typography>,
+  }),
+  [LiteratureName.PasswordServerHint]: new Literature({
+    title: "Partial Password Jutsu",
+    filename: LiteratureName.PasswordServerHint,
+    text: (
+      <Typography>
+        There is a type of server that will tell you if you get some parts of the password correct.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.TimingServerHint]: new Literature({
+    title: "Timing Attack",
+    filename: LiteratureName.TimingServerHint,
+    text: (
+      <Typography>
+        I found a server that takes much longer to respond if you get some characters in the password correct.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.BinaryServerHint]: new Literature({
+    title: "Raw Data?",
+    filename: LiteratureName.BinaryServerHint,
+    text: <Typography>Some servers only respond with raw binary data. I wonder what each bit represents?</Typography>,
+  }),
+  [LiteratureName.DogNameHint]: new Literature({
+    title: "Dog Name Ideas",
+    filename: LiteratureName.DogNameHint,
+    text: <Typography>What should I name my dog? Maybe {dogNameDictionary.join(", ")}?</Typography>,
+  }),
+  [LiteratureName.FactoryDefaultHint]: new Literature({
+    title: "Factory Default",
+    filename: LiteratureName.FactoryDefaultHint,
+    text: <Typography>The factory default is usually one of {defaultSettingsDictionary.join(", ")}.</Typography>,
+  }),
+  [LiteratureName.StasisLinkHint]: new Literature({
+    title: "Try the best new thing in web surfing: the Stasis Link!",
+    filename: LiteratureName.StasisLinkHint,
+    text: (
+      <Typography>
+        Tired of the server you are on restarting or moving? You need to try our latest networking tool, the Stasis
+        Link! <br />
+        With the click of a `ns.dnet.setStasisLink()`, you, too, can sleep soundly knowing that that server is not gonna
+        go anywhere. <br />
+        <br />
+        Limited time only! While `ns.dnet.getStasisLinkLimit()` lasts!
+      </Typography>
+    ),
+  }),
+  [LiteratureName.LabHint]: new Literature({
+    title: "There's something out there",
+    filename: LiteratureName.LabHint,
+    text: (
+      <Typography>
+        If you go deep enough into the dark net, they say there's a lost server out there with special files on it. I
+        wonder how you can get there? It may even be deeper than the airgaps around this IP block...
+        <br />
+        <br />
+        If I ever find it, I'll set down a stasis link next to it and charge tickets for admission!
       </Typography>
     ),
   }),

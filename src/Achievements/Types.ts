@@ -16,5 +16,6 @@ export const SFAchievementIds = [
   "SF12.1",
   "SF13.1",
   "SF14.1",
+  "SF15.1",
 ] as const;
 export type SFAchievementId = (typeof SFAchievementIds)[number];

@@ -19,11 +19,14 @@ export function ServerAccordion({ server, scripts }: ServerAccordionProps): Reac
   const [open, setOpen] = React.useState(false);
 
   // Accordion's header text
-  // TODO: calculate the longest hostname length rather than hard coding it
-  const longestHostnameLength = 18;
-  const paddedName = `${server.hostname}${" ".repeat(longestHostnameLength)}`.slice(
+  const longestHostnameLength = 26;
+  const truncatedHostname =
+    server.hostname.length > longestHostnameLength - 2
+      ? server.hostname.slice(0, longestHostnameLength) + "..."
+      : server.hostname;
+  const paddedName = `${truncatedHostname}${" ".repeat(longestHostnameLength)}`.slice(
     0,
-    Math.max(server.hostname.length, longestHostnameLength),
+    Math.max(truncatedHostname.length, longestHostnameLength),
   );
   const barOptions = {
     progress: server.ramUsed / server.maxRam,
