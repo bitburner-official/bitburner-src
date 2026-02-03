@@ -105,7 +105,7 @@ export const calculateAuthenticationTime = (
   // Add extra time for timing attack server, per correct character
   const sharedChars =
     darknetServerData.modelId === ModelIds.TimingAttack ? getSharedChars(password, attemptedPassword) : 0;
-  const sharedCharsExtraTime = sharedChars * 50;
+  const sharedCharsExtraTime = sharedChars * 50 * threadsFactor;
 
   return time * calculateIntelligenceBonus(person.skills.intelligence, 0.25) + sharedCharsExtraTime;
 };
