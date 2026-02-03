@@ -414,7 +414,7 @@
     "DARKNET_BACKDOOR": {
       "ID": "DARKNET_BACKDOOR",
       "Name": "Make your Own Network",
-      "Description": "Apply a backdoor to 50 or more darknet servers at once."
+      "Description": "Install a backdoor on 50 or more darknet servers at once."
     },
     "CHALLENGE_BN1": {
       "ID": "CHALLENGE_BN1",
