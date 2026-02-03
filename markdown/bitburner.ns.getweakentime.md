@@ -9,7 +9,7 @@ Get the execution time of a weaken() call.
 **Signature:**
 
 ```typescript
-getWeakenTime(host?: string): number;
+getWeakenTime(host: string): number;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+Hostname/IP of target server.
 
 
 </td></tr>

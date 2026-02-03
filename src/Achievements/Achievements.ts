@@ -37,6 +37,8 @@ import { activateSteamAchievements } from "../Electron";
 import { Go } from "../Go/Go";
 import { type AchievementId, type SFAchievementId, SFAchievementIds } from "./Types";
 
+import { getAllMovableDarknetServers } from "../DarkNet/utils/darknetNetworkUtils";
+
 function assertAchievements(
   achievements: typeof data.achievements,
 ): asserts achievements is AchievementDataJson["achievements"] {
@@ -66,7 +68,7 @@ function assertAchievements(
  * - Typechecking at compile time: ID must be AchievementId, not string.
  * - Runtime check: The value of ID must be the same as the key of the achievement. For example, with "CYBERSEC"
  * achievement, the key is "CYBERSEC", so its ID must also be "CYBERSEC".
- * 
+ *
  * We use assertAchievements to do the runtime check and assert the type.
  */
 const achievementData = data.achievements;
@@ -582,6 +584,13 @@ export const achievements: Record<AchievementId, Achievement> = {
     Condition: () => false,
     NotInSteam: true,
   },
+  DARKNET_BACKDOOR: {
+    ...achievementData.DARKNET_BACKDOOR,
+    Icon: "darknet-backdoor",
+    Visible: knowAboutBitverse,
+    Condition: () => getAllMovableDarknetServers().filter((s) => s.backdoorInstalled).length >= 50,
+    NotInSteam: true,
+  },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
@@ -670,6 +679,13 @@ export const achievements: Record<AchievementId, Achievement> = {
     Icon: "BN14+",
     Visible: knowAboutBitverse,
     Condition: () => Player.bitNodeN === 14 && isBitNodeFinished() && !Go.moveOrCheatViaApi,
+    NotInSteam: true,
+  },
+  CHALLENGE_BN15: {
+    ...achievementData.CHALLENGE_BN15,
+    Icon: "BN15+",
+    Visible: knowAboutBitverse,
+    Condition: () => Player.augmentations.some((a) => a.name === AugmentationName.TheSword),
     NotInSteam: true,
   },
   BYPASS: {

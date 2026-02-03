@@ -68,7 +68,7 @@ Cities[CityName.Chongqing].asciiArt = `
                                     |                                           
                                  75 o                                           
                                      \\                                         
-                                      o 76                                      
+                                      H [shadowed walkway]                                      
                             7 |       |                                         
                               |       + 77                                      
        [world stock exchange] F       |                                         

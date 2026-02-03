@@ -8,7 +8,7 @@ import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { IPAddress } from "../Types/strings";
 
-export interface IConstructorParams {
+export interface StandardServerConstructorParams {
   adminRights?: boolean;
   hackDifficulty?: number;
   hostname: string;
@@ -56,7 +56,7 @@ export class Server extends BaseServer {
   // be increased using the grow() Netscript function
   serverGrowth = 1;
 
-  constructor(params: IConstructorParams = { hostname: "", ip: createRandomIp() }) {
+  constructor(params: StandardServerConstructorParams = { hostname: "", ip: createRandomIp() }) {
     super(params);
 
     // "hacknet-node-X" hostnames are reserved for Hacknet Servers

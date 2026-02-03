@@ -2,13 +2,12 @@ import React from "react";
 import Button from "@mui/material/Button";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { GetServer } from "../../Server/AllServers";
-import { SpecialServers } from "../../Server/data/SpecialServers";
 
 import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
 
 import { Money } from "../../ui/React/Money";
+import { getTorRouter } from "../../Server/ServerHelpers";
 
 /** Attempt to purchase a TOR router using the button. */
 export function purchaseTorRouter(): void {
@@ -22,13 +21,7 @@ export function purchaseTorRouter(): void {
   }
   Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
-  const darkweb = GetServer(SpecialServers.DarkWeb);
-  if (!darkweb) {
-    throw new Error("Dark web is not a server.");
-  }
-
-  Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
-  darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);
+  getTorRouter();
   dialogBoxCreate(
     "You have purchased a TOR router!\n" +
       "You now have access to the dark web from your home computer.\n" +

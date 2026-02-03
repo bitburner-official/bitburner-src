@@ -19,4 +19,5 @@ export function initSourceFiles() {
   SourceFiles.SourceFile12 = new SourceFile(12, BitNodes.BitNode12.sfDescription);
   SourceFiles.SourceFile13 = new SourceFile(13, BitNodes.BitNode13.sfDescription);
   SourceFiles.SourceFile14 = new SourceFile(14, BitNodes.BitNode14.sfDescription);
+  SourceFiles.SourceFile15 = new SourceFile(15, BitNodes.BitNode15.sfDescription);
 }

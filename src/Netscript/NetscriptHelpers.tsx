@@ -56,7 +56,7 @@ import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { errorMessage, log } from "./ErrorMessages";
-import { assertStringWithNSContext, debugType, userFriendlyString } from "./TypeAssertion";
+import { assertStringWithNSContext, debugType, missingKey, userFriendlyString } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,
@@ -64,6 +64,9 @@ import {
 } from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
 import { Settings } from "../Settings/Settings";
+import { Programs } from "../Programs/Programs";
+import { getRecordKeys } from "../Types/Record";
+import { DarknetServer } from "../Server/DarknetServer";
 import { getFriendlyType } from "../utils/TypeAssertion";
 
 export const helpers = {
@@ -494,16 +497,16 @@ function scriptIdentifier(
 }
 
 /**
- * Gets the server with a specific hostname/ip. Throw an error if the server does not exist or it is an isolated
+ * Gets the server with a specific hostname/ip. Throw an error if the server does not exist or is an isolated non-dnet
  * server (e.g., pre-TOR darkweb, pre-TRP WD).
  *
  * @param {NetscriptContext} ctx - Context from which getServer is being called. For logging purposes.
  * @param {string} hostname - Hostname of the server
  * @returns {BaseServer} The specified server as a BaseServer
  */
-function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
+export function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
   const server = GetServer(hostname);
-  if (server == null || server.serversOnNetwork.length === 0) {
+  if (server == null || (server.serversOnNetwork.length == 0 && !(server instanceof DarknetServer))) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw errorMessage(ctx, `Invalid hostname: ${str}`);
   }
@@ -519,6 +522,8 @@ function getNormalServer(ctx: NetscriptContext, host: string): Server {
     let errorMessage = `Cannot be executed on ${host}.`;
     if (server instanceof HacknetServer) {
       errorMessage += " The server must not be a hacknet server.";
+    } else if (server instanceof DarknetServer) {
+      errorMessage += " The server must not be a darknet server.";
     }
     throw helpers.errorMessage(ctx, errorMessage);
   }
@@ -651,6 +656,9 @@ function person(ctx: NetscriptContext, p: unknown): IPerson {
   return p as IPerson;
 }
 
+/**
+ * This function is used by non-dnet formulas APIs to check if the server data contains properties of a normal server.
+ */
 function server(ctx: NetscriptContext, s: unknown): IServer {
   const fakeServer = {
     hostname: undefined,
@@ -669,18 +677,20 @@ function server(ctx: NetscriptContext, s: unknown): IServer {
     purchasedByPlayer: undefined,
   };
   const error = missingKey(fakeServer, s);
-  if (error) throw errorMessage(ctx, `server should be a Server.\n${error}`, "TYPE");
+  if (error) {
+    let errorMessagePrefix = "Server must be a normal server.";
+    if (s != null && typeof s === "object") {
+      if ("hostname" in s) {
+        errorMessagePrefix += ` Server's hostname is ${s.hostname}.`;
+      }
+      if ("modelId" in s) {
+        errorMessagePrefix += " Server data looks like darknet server data.";
+      }
+    }
+    // throw errorMessage(ctx, `Server should be a normal server.\n${error}`, "TYPE");
+    throw errorMessage(ctx, `${errorMessagePrefix}\n${error}`, "TYPE");
+  }
   return s as IServer;
-}
-
-function missingKey(expect: object, actual: unknown): string | false {
-  if (typeof actual !== "object" || actual === null) {
-    return `Expected to be an object, was ${actual === null ? "null" : typeof actual}.`;
-  }
-  for (const key in expect) {
-    if (!(key in actual)) return `Property ${key} was expected but not present.`;
-  }
-  return false;
 }
 
 function gang(ctx: NetscriptContext, g: unknown): FormulaGang {
@@ -708,10 +718,19 @@ export function filePath(ctx: NetscriptContext, argName: string, filename: unkno
   throw errorMessage(ctx, `Invalid ${argName}, was not a valid path: ${filename}`);
 }
 
-export function scriptPath(ctx: NetscriptContext, argName: string, filename: unknown): ScriptFilePath {
+export function scriptPath(
+  ctx: NetscriptContext,
+  argName: string,
+  filename: unknown,
+  showExeErrorHint = false,
+): ScriptFilePath {
   const path = filePath(ctx, argName, filename);
   if (hasScriptExtension(path)) return path;
-  throw errorMessage(ctx, `Invalid ${argName}, must be a script: ${filename}`);
+
+  const programName = getRecordKeys(Programs).find((name) => name.toLowerCase() === path.toLowerCase());
+  const nsMethod = programName ? Programs[programName].nsMethod : "";
+  const hint = nsMethod && showExeErrorHint ? `Did you mean to use ns.${nsMethod} ?` : "";
+  throw errorMessage(ctx, `Invalid ${argName}, must be a script (js, jsx, ts, tsx): ${filename} ${hint}`);
 }
 
 /**

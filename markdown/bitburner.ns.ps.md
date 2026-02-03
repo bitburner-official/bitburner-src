@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of the target server. Optional. Defaults to the server the calling script is running on.
+_(Optional)_ Hostname/IP of the target server. If not specified, it will be the current server’s IP by default.
 
 
 </td></tr>

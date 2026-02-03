@@ -11,8 +11,8 @@ import { Player } from "@player";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { resetPidCounter } from "./Netscript/Pid";
 
-import { GetServer, AddToAllServers, initForeignServers, prestigeAllServers } from "./Server/AllServers";
-import { prestigeHomeComputer } from "./Server/ServerHelpers";
+import { GetServer, AddToAllServers, prestigeAllServers } from "./Server/AllServers";
+import { initForeignServers, prestigeHomeComputer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { canAccessStockMarket, deleteStockMarket, initStockMarket } from "./StockMarket/StockMarket";
 import { Terminal } from "./Terminal";
@@ -30,7 +30,9 @@ import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
+import { getDarkscapeNavigator } from "./DarkNet/effects/effects";
 import { CodingContractEventEmitter } from "./CodingContract/CodingContractEventEmitter";
+import { showLiterature } from "./Literature/LiteratureHelpers";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -94,6 +96,10 @@ export function prestigeAugmentation(): void {
 
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
+
+  if (canAccessBitNodeFeature(15)) {
+    getDarkscapeNavigator();
+  }
 
   // Gain favor for Companies and Factions
   for (const company of Object.values(Companies)) company.prestigeAugmentation();
@@ -340,6 +346,13 @@ export function prestigeSourceFile(isFlume: boolean): void {
     Player.money = CONSTANTS.TravelCost;
   }
   staneksGift.prestigeSourceFile();
+
+  if (Player.bitNodeN === 15 && !homeComp.messages.includes(LiteratureName.DarknetHandbook)) {
+    homeComp.messages.push(LiteratureName.DarknetHandbook);
+  }
+  if (Player.bitNodeN === 15 && Player.sourceFileLvl(15) === 0) {
+    showLiterature(LiteratureName.DarknetHandbook);
+  }
 
   // Gain int exp
   if (Player.activeSourceFileLvl(5) !== 0 && !isFlume) {

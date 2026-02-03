@@ -60,6 +60,12 @@ export class BitNodeMultipliers {
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement = 30;
 
+  /** If true, TRP can be found in the fourth lab deep in the darknet. */
+  DarknetLabyrinthRewardsTheRedPill = 1;
+
+  /** Influences how much money the player gains from darknet mechanics (phishing and reward caches). */
+  DarknetMoneyMultiplier = 1;
+
   /** Influences how quickly the player's defense level (not exp) scales */
   DefenseLevelMultiplier = 1;
 

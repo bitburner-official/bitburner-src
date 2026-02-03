@@ -151,6 +151,9 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     if (src.crime) {
       parts.push([`Crimes:`, <Money key="crime" money={src.crime} />]);
     }
+    if (src.darknet) {
+      parts.push([`Darknet:`, <Money key="darknet" money={src.darknet} />]);
+    }
     if (src.gang) {
       parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }

@@ -245,7 +245,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
       <BitVerseMapRow>                          O                          </BitVerseMapRow>
       <BitVerseMapRow>             |  O  O      |      O  O  |             </BitVerseMapRow>
       <BitVerseMapRow>        O    |  | /     __|       \ |  |    O        </BitVerseMapRow>
-      <BitVerseMapRow>      O |    O  | |  O /  |  O    | |  O    | O      </BitVerseMapRow>
+      <BitVerseMapRow>      O |    O  | |  <BitNodePortal n={15} level={n(15)} flume={props.flume} destroyedBitNode={destroyed} /> /  |  O    | |  O    | O      </BitVerseMapRow>
       <BitVerseMapRow>    | | |    |  |_/  |/   |   \_  \_|  |    | | |    </BitVerseMapRow>
       <BitVerseMapRow>  O | | | <BitNodePortal n={14} level={n(14)} flume={props.flume} destroyedBitNode={destroyed} />  |  | O__/    |   / \__ |  |  O | | | O  </BitVerseMapRow>
       <BitVerseMapRow>  | | | | |  |  |   /    /|  O  /  \|  |  | | | | |  </BitVerseMapRow>

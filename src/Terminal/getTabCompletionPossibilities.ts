@@ -14,6 +14,7 @@ import { enums } from "../NetscriptFunctions";
 import { TerminalCommands } from "./Terminal";
 import { Terminal } from "../Terminal";
 import { parseUnknownError } from "../utils/ErrorHelper";
+import { DarknetServer } from "../Server/DarknetServer";
 import { CompletedProgramName } from "@enums";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
@@ -107,7 +108,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   const addReachableServerNames = () => {
     addGeneric({
-      iterable: GetAllServers()
+      iterable: GetAllServers(true)
         .filter(
           (server) =>
             server !== currServ &&
@@ -124,6 +125,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     const programs = homeComputer.programs.filter((name) => name.endsWith(".exe"));
     // At all times, programs can be accessed without pathing
     addGeneric({ iterable: programs });
+
+    const currentServer = Player.getCurrentServer();
+    if (currentServer !== homeComputer) {
+      const localPrograms = currentServer.programs.filter((name) => name.endsWith(".exe"));
+      addGeneric({ iterable: localPrograms, usePathing: true });
+    }
+
     // If we're on home and a path is being used, also include pathing results
     if (homeComputer.isConnectedTo && relativeDir) addGeneric({ iterable: programs, usePathing: true });
   };
@@ -231,6 +239,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg) {
         addPrograms();
         addCodingContracts();
+        if (currServ instanceof DarknetServer) {
+          addGeneric({ iterable: currServ.caches, usePathing: true });
+        }
         addScripts();
       } else if (commandArray[1] === CompletedProgramName.serverProfiler) {
         addServerNames();

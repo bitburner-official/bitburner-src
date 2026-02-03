@@ -531,5 +531,15 @@ export const breakingChanges300: VersionBreakingChange = {
       info: "ns.go.analysis methods no longer apply captures to custom board states passed to them, and instead evaluate the given board exactly as-is.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [],
+      info:
+        `We added a new feature called Dark Net. The "darkweb" server is a darknet server now.\n` +
+        "Some APIs that require the target host to be a normal server do not work with darkweb. This should not be a \n" +
+        `problem with most scripts. The most potentially affected API is "ns.scan()". Darkweb does not appear in the \n` +
+        `result of this API anymore. If you want to find darknet servers, you need to use "ns.dnet.probe()".`,
+      showWarning: false,
+      doNotSkip: true,
+    },
   ],
 };

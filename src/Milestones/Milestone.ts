@@ -1,4 +1,4 @@
 export interface Milestone {
-  title: string;
+  title: () => string;
   fulfilled: () => boolean;
 }

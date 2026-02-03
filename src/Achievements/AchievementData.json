@@ -136,6 +136,11 @@
       "Name": "IPvGO Subnet Takeover",
       "Description": "Acquire SF14.1"
     },
+    "SF15.1": {
+      "ID": "SF15.1",
+      "Name": "The Secrets of the Dark Net",
+      "Description": "Acquire SF15.1"
+    },
     "MONEY_1Q": {
       "ID": "MONEY_1Q",
       "Name": "Here comes the money!",
@@ -406,6 +411,11 @@
       "Name": "Ten Steps Ahead",
       "Description": "Get a winning streak of 10 against Illuminati."
     },
+    "DARKNET_BACKDOOR": {
+      "ID": "DARKNET_BACKDOOR",
+      "Name": "Make your Own Network",
+      "Description": "Install a backdoor on 50 or more darknet servers at once."
+    },
     "CHALLENGE_BN1": {
       "ID": "CHALLENGE_BN1",
       "Name": "BN1: Challenge",
@@ -460,6 +470,11 @@
       "ID": "CHALLENGE_BN14",
       "Name": "BN14: Challenge",
       "Description": "Destroy BN14 without making a move or cheating via IPvGO APIs."
+    },
+    "CHALLENGE_BN15": {
+      "ID": "CHALLENGE_BN15",
+      "Name": "BN15: Challenge",
+      "Description": "Open the cache on the final lab in the darknet."
     },
     "BYPASS": {
       "ID": "BYPASS",

@@ -20,7 +20,7 @@ export function MilestonesRoot(): JSX.Element {
     if (i <= n + 1) {
       return (
         <Typography key={i}>
-          [{milestone.fulfilled() ? "x" : " "}] {milestone.title}
+          [{milestone.fulfilled() ? "x" : " "}] {milestone.title()}
         </Typography>
       );
     }
