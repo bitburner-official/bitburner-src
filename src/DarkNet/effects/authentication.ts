@@ -124,6 +124,23 @@ export const checkPassword = (
         `${altitude}`,
       );
     }
+    case ModelIds.SortedEchoVuln: {
+      if (server.password.length < 5 || attemptedPassword.length !== server.password.length) {
+        return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
+      }
+      let squaredError = 0;
+      for (let i = 0; i < attemptedPassword.length; i++) {
+        const attempted = Number(attemptedPassword[i]);
+        const actual = Number(server.password[i]);
+        if (isNaN(attempted) || isNaN(actual)) {
+          return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
+        }
+        squaredError += (attempted - actual) ** 2;
+      }
+      const rmsd = Math.sqrt(squaredError / attemptedPassword.length);
+      const rmsdMessage = `${server.passwordHintData};RMS Deviation:${rmsd.toFixed(3)}`;
+      return getFailureResponse(attemptedPassword, server.staticPasswordHint, rmsdMessage);
+    }
     default:
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
   }
