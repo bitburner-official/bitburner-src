@@ -3,7 +3,7 @@ import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
 import { AugmentationName, CompanyName, CompletedProgramName, FactionName, JobField, JobName } from "@enums";
 import { Player } from "@player";
 import { prestigeSourceFile } from "../../../src/Prestige";
-import { GetServerOrThrow } from "../../../src/Server/AllServers";
+import { disconnectServers, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { Factions } from "../../../src/Faction/Factions";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
@@ -12,8 +12,8 @@ import { Terminal } from "../../../src/Terminal";
 import type { NSFull } from "../../../src/NetscriptFunctions";
 import { Companies } from "../../../src/Company/Companies";
 import { CompanyPositions } from "../../../src/Company/CompanyPositions";
-import { getTorRouter, removeTorRouter } from "../../../src/Server/ServerHelpers";
-import { validateDarknetNetwork } from "../../../src/DarkNet/controllers/NetworkMovement";
+import { getTorRouter } from "../../../src/Server/ServerHelpers";
+import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
 
 const nextBN = 3;
 
@@ -477,25 +477,29 @@ describe("purchaseProgram", () => {
       expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
     });
     test("darkscape", () => {
+      const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
       const ns = getNS();
       expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(false);
       expect(ns.singularity.purchaseProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
       expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
-      expect(validateDarknetNetwork()).toStrictEqual(true);
+      expect(spiedExceptionAlert).not.toHaveBeenCalled();
     });
     test("darkscape with lowercase program name", () => {
+      const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
       const ns = getNS();
       expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(false);
       expect(ns.singularity.purchaseProgram(CompletedProgramName.darkscape.toLowerCase())).toStrictEqual(true);
       expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
-      expect(validateDarknetNetwork()).toStrictEqual(true);
+      expect(spiedExceptionAlert).not.toHaveBeenCalled();
     });
   });
 
   describe("Failure", () => {
     test("No TOR", () => {
+      // Remove TOR router
+      disconnectServers(Player.getHomeComputer(), GetServerOrThrow(SpecialServers.DarkWeb));
+
       const ns = getNS();
-      removeTorRouter();
       expect(Player.hasTorRouter()).toStrictEqual(false);
       expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
       expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);

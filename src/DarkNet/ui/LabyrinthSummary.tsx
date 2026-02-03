@@ -136,8 +136,8 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
 
   const getLocationStatusString = () => {
     const dataString = JSON.stringify(getLabyrinthLocationReport(currentPerspective));
-    // Add a space before the success flag so the text can wrap for better readability
-    return dataString.replace(`,"success"`, `, "success"`);
+    // Add a zero width space before the success flag so the text can wrap for better readability
+    return dataString.replace(`,"success"`, `,\u200B"success"`);
   };
 
   return (

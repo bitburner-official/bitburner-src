@@ -4,7 +4,6 @@ import {
   GetServerOrThrow,
   connectServers,
   createUniqueRandomIp,
-  disconnectServers,
   ipExists,
 } from "./AllServers";
 import { Server, StandardServerConstructorParams } from "./Server";
@@ -326,10 +325,6 @@ export function checkServerOwnership(baseServer: BaseServer, serverType: ServerO
 
 export function getTorRouter() {
   connectServers(Player.getHomeComputer(), GetServerOrThrow(SpecialServers.DarkWeb));
-}
-
-export function removeTorRouter() {
-  disconnectServers(Player.getHomeComputer(), GetServerOrThrow(SpecialServers.DarkWeb));
 }
 
 interface IServerParams {
