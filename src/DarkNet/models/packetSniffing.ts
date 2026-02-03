@@ -11,7 +11,7 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 import { isLabyrinthServer, isLocationStatus } from "../effects/labyrinth";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
-const MAX_LOG_LINES = 32;
+const MAX_LOG_LINES = 200;
 
 export const capturePackets = (server: DarknetServer) => {
   const BASE_PASSWORD_INCLUSION_RATE = 0.18;
@@ -141,7 +141,7 @@ export const logPasswordAttempt = (server: DarknetServer, passwordResponse: Pass
     message,
     pid,
   };
-  serverState.serverLogs = [logMessage, ...serverLogs].slice(0, MAX_LOG_LINES); // Keep only the last 50 logs
+  serverState.serverLogs = [logMessage, ...serverLogs].slice(0, MAX_LOG_LINES);
 };
 
 export const populateServerLogsWithNoise = (server: DarknetServer) => {
