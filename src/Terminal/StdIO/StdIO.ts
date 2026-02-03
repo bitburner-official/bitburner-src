@@ -1,8 +1,7 @@
 import { IOStream } from "./IOStream";
 import { Terminal } from "../../Terminal";
 import { Output, RawOutput, Link } from "../OutputTypes";
-import { stringify } from "./utils";
-import { Redirect } from "./enums";
+import { IO_STREAM_CLOSED, stringify } from "./utils";
 
 let remaining = 0;
 const registerStdIOInstance = (stdIO: StdIO) => {
@@ -56,7 +55,7 @@ export class StdIO {
     const inputs: string[] = [];
     while (!stdin.empty()) {
       const input = stdin.read();
-      if (input === Redirect.IOStreamClosed) {
+      if (input === IO_STREAM_CLOSED) {
         break;
       }
       inputs.push(stringify(input));

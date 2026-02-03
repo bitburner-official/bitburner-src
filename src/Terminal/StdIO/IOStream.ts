@@ -1,7 +1,6 @@
 import { NetscriptPort } from "@nsdefs";
 import { PortHandle } from "../../NetscriptPort";
-import { getNextStdinHandle } from "../Pipe";
-import { Redirect } from "@enums";
+import { getNextStdinHandle, IO_STREAM_CLOSED } from "./utils";
 
 export class IOStream implements NetscriptPort {
   isClosed: boolean = false;
@@ -9,14 +8,14 @@ export class IOStream implements NetscriptPort {
   handle: PortHandle = getNextStdinHandle();
 
   close(): void {
-    this.write(Redirect.IOStreamClosed);
+    this.write(IO_STREAM_CLOSED);
   }
 
   write(value: any): unknown {
     if (this.isClosed) {
       return;
     }
-    if (value === Redirect.IOStreamClosed) {
+    if (value === IO_STREAM_CLOSED) {
       this.isClosed = true;
     }
     return this.handle.write(value);

@@ -32,7 +32,6 @@ import {
   OrderType,
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
-  Redirect,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer } from "./Server/AllServers";
@@ -133,7 +132,6 @@ export const enums: NSEnums = {
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
   FragmentType: FragmentTypeEnum,
-  Redirect,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);

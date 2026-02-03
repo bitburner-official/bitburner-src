@@ -2,9 +2,9 @@ import { Settings } from "./Settings/Settings";
 import { NetscriptPort } from "@nsdefs";
 import { NetscriptPorts } from "./NetscriptWorker";
 import { PositiveInteger } from "./types";
-import { Redirect } from "./Terminal/StdIO/enums";
 
 type Resolver = () => void;
+const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
 export type PortNumber = PositiveInteger & { __PortNumber: true };
 
@@ -60,7 +60,7 @@ export class PortHandle implements NetscriptPort {
 
   read(): unknown {
     const port = NetscriptPorts.get(this.n);
-    if (!port || !port.data.length) return Redirect.EmptyPortData;
+    if (!port || !port.data.length) return emptyPortData;
     const returnVal: unknown = port.data.shift();
     if (!port.data.length && !port.resolver) NetscriptPorts.delete(this.n);
     return returnVal;
@@ -68,7 +68,7 @@ export class PortHandle implements NetscriptPort {
 
   peek(): unknown {
     const port = NetscriptPorts.get(this.n);
-    if (!port || !port.data.length) return Redirect.EmptyPortData;
+    if (!port || !port.data.length) return emptyPortData;
     // Needed to avoid exposing internal objects.
     return isObjectLike(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
   }

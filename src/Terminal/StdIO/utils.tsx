@@ -2,7 +2,10 @@ import React, { isValidElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
+import { PortHandle, PortNumber } from "../../NetscriptPort";
+import { parseCommand } from "../Parser";
 
+export const IO_STREAM_CLOSED = null;
 export type Args = string | number | boolean;
 
 export const PipeSymbols = {
@@ -44,6 +47,21 @@ export function stringifyReactElement(element: React.ReactNode): string {
   return (div.innerText ?? div.textContent ?? "").trim();
 }
 
+export function getCommandAfterLastPipe(commandString: string): string {
+  const parsedCommands = parseCommand(commandString);
+  const lastPipeIndex = parsedCommands.findLastIndex(isPipeSymbol);
+  if (lastPipeIndex === -1) {
+    return commandString;
+  }
+
+  return parsedCommands.slice(lastPipeIndex + 1).join(" ");
+}
+
 function clean(str: string, stripAnsiEscape: boolean) {
   return stripAnsiEscape ? str.replaceAll(ANSI_ESCAPE, "") : str;
+}
+
+let nextStdinPort = 1e7;
+export function getNextStdinHandle(): PortHandle {
+  return new PortHandle((++nextStdinPort * -1) as PortNumber);
 }

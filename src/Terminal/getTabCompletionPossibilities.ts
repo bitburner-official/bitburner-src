@@ -15,7 +15,7 @@ import { TerminalCommands } from "./Terminal";
 import { Terminal } from "../Terminal";
 import { parseUnknownError } from "../utils/ErrorHelper";
 import { CompletedProgramName } from "@enums";
-import { getCommandAfterLastPipe } from "./Pipe";
+import { getCommandAfterLastPipe } from "./StdIO/utils";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal

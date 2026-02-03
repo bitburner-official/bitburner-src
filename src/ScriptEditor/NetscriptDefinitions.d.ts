@@ -8949,17 +8949,6 @@ export type CodingContractObject = {
 }[keyof CodingContractSignatures];
 
 /** @public */
-type RedirectEnumType = {
-  /** Returned from ns.readPort when the port is empty. */
-  EmptyPortData: "NULL PORT DATA";
-  /** Returned from ns.getStdin().read() if the input pipe is closed and empty.  */
-  IOStreamClosed: "IO_STREAM_CLOSED";
-};
-
-/** @public */
-type Redirect = _ValueOf<RedirectEnumType>;
-
-/** @public */
 type NSEnums = {
   CityName: CityNameEnumType;
   CrimeType: CrimeEnumType;
@@ -8978,7 +8967,6 @@ type NSEnums = {
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
   FragmentType: FragmentEnumType;
-  Redirect: RedirectEnumType;
 };
 
 /**

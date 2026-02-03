@@ -8,8 +8,7 @@ import { TextFile } from "../../TextFile";
 import { Player } from "@player";
 import { Script } from "../../Script/Script";
 import { Settings } from "../../Settings/Settings";
-import { Args, isPipeSymbol, PipeSymbols, stringify } from "./utils";
-import { Redirect } from "./enums";
+import { Args, IO_STREAM_CLOSED, isPipeSymbol, PipeSymbols, stringify } from "./utils";
 
 // TODO-Fico - add pipe documentation page
 
@@ -158,7 +157,7 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
 export async function callOnRead(stdIO: StdIO, callback: (data: unknown, stdIO: StdIO) => Promise<void> | void) {
   for await (const data of stdIO.read()) {
     const streamIsCleared = stdIO.stdin?.deref()?.isClosed && stdIO.stdin?.deref()?.empty();
-    if (data === Redirect.IOStreamClosed || streamIsCleared) {
+    if (data === IO_STREAM_CLOSED || streamIsCleared) {
       return;
     }
     await callback(data, stdIO);
