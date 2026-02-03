@@ -10,6 +10,7 @@ import { ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
+import type { SuccessResult } from "@nsdefs";
 
 export const LAB_CACHE_NAME = "the_great_work";
 
@@ -195,7 +196,7 @@ export const getSurroundingsVisualized = (
   return result.join("\n");
 };
 
-export const getLocationStatus = (pid: number = -1): LocationStatus => {
+const getLocationStatus = (pid: number): LocationStatus => {
   const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
   const surroundings = getSurroundingsVisualized(getLabMaze(), initialX, initialY).split("\n");
   return {
@@ -204,6 +205,12 @@ export const getLocationStatus = (pid: number = -1): LocationStatus => {
     east: surroundings[1][2] === PATH,
     south: surroundings[2][1] === PATH,
     west: surroundings[1][0] === PATH,
+  };
+};
+
+export const getLabyrinthLocationReport = (pid: number): SuccessResult<LocationStatus> => {
+  return {
+    ...getLocationStatus(pid),
     success: true,
   };
 };
@@ -470,7 +477,6 @@ export type LocationStatus = {
   north: boolean;
   west: boolean;
   coords: number[];
-  success: true;
 };
 
 export function isLocationStatus(v: unknown): v is LocationStatus {

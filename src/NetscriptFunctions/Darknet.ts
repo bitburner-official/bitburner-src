@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import type { Darknet as DarknetAPI, DarknetResult, Result } from "@nsdefs";
+import type { Darknet as DarknetAPI, DarknetResult } from "@nsdefs";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import {
   calculateAuthenticationTime,
@@ -23,7 +23,7 @@ import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/effect
 import {
   getLabMaze,
   getLabyrinthDetails,
-  getLocationStatus,
+  getLabyrinthLocationReport,
   getSurroundingsVisualized,
   isLabyrinthServer,
 } from "../DarkNet/effects/labyrinth";
@@ -672,7 +672,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         return onlineConnectionCheck.server.requiredCharismaSkill;
       },
-    labreport: (ctx) => async (): Promise<Result<any>> => {
+    labreport: (ctx) => async () => {
       expectDarknetAccess(ctx);
       expectRunningOnDarknetServer(ctx);
 
@@ -700,9 +700,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
       await helpers.netscriptDelay(ctx, authenticationTime);
 
-      return getLocationStatus(pid);
+      return getLabyrinthLocationReport(pid);
     },
-    labradar: (ctx) => async (): Promise<Result<any>> => {
+    labradar: (ctx) => async () => {
       expectDarknetAccess(ctx);
       expectRunningOnDarknetServer(ctx);
 

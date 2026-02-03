@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Typography, Select, MenuItem, Card } from "@mui/material";
 import { cleanUpLabyrinthLocations, DarknetState, getServerState, LogEntry } from "../models/DarknetState";
-import { getLabMaze, getLabyrinthDetails, getLocationStatus, getSurroundingsVisualized } from "../effects/labyrinth";
+import { getLabMaze, getLabyrinthDetails, getLabyrinthLocationReport, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
 import { Player } from "@player";
 import { useCycleRerender } from "../../ui/React/hooks";
@@ -130,7 +130,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
   };
 
   const getLocationStatusString = () => {
-    const dataString = JSON.stringify(getLocationStatus(currentPerspective));
+    const dataString = JSON.stringify(getLabyrinthLocationReport(currentPerspective));
     // Add a space before the success flag so the text can wrap for better readability
     return dataString.replace(`,"success"`, `, "success"`);
   };

@@ -31,7 +31,8 @@ import {
   LocationStatus,
 } from "../../../src/DarkNet/effects/labyrinth";
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
-import { Result } from "@nsdefs";
+import type { Result } from "@nsdefs";
+import { assertNonNullish } from "../../../src/utils/TypeAssertion";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Server ${hostnameOfNonExistentServer} does not exist.`;
@@ -863,7 +864,7 @@ describe("darkweb", () => {
   });
   test("labreport", async () => {
     const ns = getNsOnDarkWeb();
-    const details = (await ns.dnet.labreport()) as LocationStatus;
+    const details = (await ns.dnet.labreport()) as Result;
     // darkweb is not connected to lab, so scripts on it cannot navigate the lab
     expect(details.message).toEqual("You feel disconnected...");
   });
@@ -1293,7 +1294,8 @@ describe("lab location methods", () => {
     const directionToMove = details.east ? "east" : "south";
     await ns.dnet.authenticate(labName, directionToMove);
     const logs = getMostRecentAuthLog(labName);
-    expect(logs?.message).toContain("You have moved to");
+    assertNonNullish(logs);
+    expect(logs.message).toContain("You have moved to");
     const newDetails = (await ns.dnet.labreport()) as LocationStatus;
     expect(isLocationStatus(newDetails)).toBe(true);
     expect(newDetails.coords).toEqual(directionToMove === "east" ? [3, 1] : [1, 3]);
@@ -1301,7 +1303,8 @@ describe("lab location methods", () => {
   test("dnet.labradar()", async () => {
     const ns = getNsOnServerNearLabyrinth();
     const response = (await ns.dnet.labradar()) as Result;
-    const surroundingsString = `${response?.message}`.split("\n");
+    assertNonNullish(response.message);
+    const surroundingsString = response.message.split("\n");
     const maze = getLabMaze();
     for (let x = 0; x < 3; x++) {
       for (let y = 0; y < 3; y++) {
