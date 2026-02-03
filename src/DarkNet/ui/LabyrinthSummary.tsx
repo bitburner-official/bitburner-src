@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Typography, Select, MenuItem, Card } from "@mui/material";
 import { cleanUpLabyrinthLocations, DarknetState, getServerState, LogEntry } from "../models/DarknetState";
-import { getLabMaze, getLabyrinthDetails, getLabyrinthLocationReport, getSurroundingsVisualized } from "../effects/labyrinth";
+import {
+  getLabMaze,
+  getLabyrinthDetails,
+  getLabyrinthLocationReport,
+  getSurroundingsVisualized,
+} from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
 import { Player } from "@player";
 import { useCycleRerender } from "../../ui/React/hooks";
