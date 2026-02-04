@@ -26,14 +26,14 @@ jobs:
       - name: Build the Electron app
         shell: bash
         run: npm run electron-win
-      - name: Upload artifact
+      - name: Upload x64 artifact
         uses: actions/upload-artifact@v4
         with:
           name: bitburner-win32-x64
           include-hidden-files: true
           path: .build/bitburner-win32-x64/*
           if-no-files-found: error
-      - name: Upload arm artifact
+      - name: Upload arm64 artifact
         uses: actions/upload-artifact@v4
         with:
           name: bitburner-win32-arm64
@@ -57,14 +57,14 @@ jobs:
         run: npm run build
       - name: Build the Electron app
         run: npm run electron-linux
-      - name: Upload artifact
+      - name: Upload x64 artifact
         uses: actions/upload-artifact@v4
         with:
           name: bitburner-linux-x64
           include-hidden-files: true
           path: .build/bitburner-linux-x64/*
           if-no-files-found: error
-      - name: Upload arm artifact
+      - name: Upload arm64 artifact
         uses: actions/upload-artifact@v4
         with:
           name: bitburner-linux-arm64
@@ -88,7 +88,7 @@ jobs:
         run: npm run build
       - name: Build the Electron app
         run: npm run electron-mac
-      - name: Upload artifact
+      - name: Upload darwin-universal artifact
         uses: actions/upload-artifact@v4
         with:
           name: bitburner-darwin-universal
