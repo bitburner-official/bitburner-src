@@ -26,15 +26,12 @@ jobs:
       - name: Build the Electron app
         shell: bash
         run: npm run electron-win
-      - name: Zip
-        shell: bash
-        run: cd .build; 7z a "bitburner-win32-x64.zip" "bitburner-win32-x64/*"; cd ../;
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-win
           include-hidden-files: true
-          path: .build/*.zip
+          path: .build/bitburner-win32-x64/*
           if-no-files-found: error
 
   build-linux:
@@ -53,14 +50,12 @@ jobs:
         run: npm run build
       - name: Build the Electron app
         run: npm run electron-linux
-      - name: Zip
-        run: cd .build; zip -r "bitburner-linux-x64.zip" "bitburner-linux-x64/*"; cd ../;
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-linux
           include-hidden-files: true
-          path: .build/*.zip
+          path: .build/bitburner-linux-x64/*
           if-no-files-found: error
 
   build-mac:
@@ -79,12 +74,10 @@ jobs:
         run: npm run build
       - name: Build the Electron app
         run: npm run electron-mac
-      - name: Zip
-        run: cd .build; zip -r "bitburner-darwin-universal.zip" "bitburner-darwin-universal/*"; cd ../;
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-mac
           include-hidden-files: true
-          path: .build/*.zip
+          path: .build/bitburner-darwin-universal/*
           if-no-files-found: error
