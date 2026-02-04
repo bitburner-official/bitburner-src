@@ -29,9 +29,16 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts-win
+          name: bitburner-win32-x64
           include-hidden-files: true
           path: .build/bitburner-win32-x64/*
+          if-no-files-found: error
+      - name: Upload arm artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitburner-win32-arm
+          include-hidden-files: true
+          path: .build/bitburner-win32-arm/*
           if-no-files-found: error
 
   build-linux:
@@ -53,9 +60,16 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts-linux
+          name: bitburner-linux-x64
           include-hidden-files: true
           path: .build/bitburner-linux-x64/*
+          if-no-files-found: error
+      - name: Upload arm artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitburner-linux-arm
+          include-hidden-files: true
+          path: .build/bitburner-linux-arm/*
           if-no-files-found: error
 
   build-mac:
@@ -77,7 +91,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts-mac
+          name: bitburner-darwin-universal
           include-hidden-files: true
           path: .build/bitburner-darwin-universal/*
           if-no-files-found: error
