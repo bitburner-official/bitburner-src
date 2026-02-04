@@ -56,6 +56,7 @@ import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 import { pluralize } from "../utils/I18nUtils";
 import { calculateActionRankGain, calculateActionReputationGain } from "./Formulas";
+import { processWorkStats } from "../Work/Formulas";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -1204,7 +1205,8 @@ export class Bladeburner implements OperationTeam {
         const __a: never = action;
       }
     }
-    return retValue;
+
+    return processWorkStats(person, retValue);
   }
 
   infiltrateSynthoidCommunities(): void {
