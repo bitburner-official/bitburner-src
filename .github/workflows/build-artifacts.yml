@@ -28,7 +28,7 @@ jobs:
         run: npm run electron-win
       - name: Zip
         shell: bash
-        run: cd .build; for i in bitburner-*; do 7z a "$i.zip" "$i"; done; cd ../;
+        run: cd .build; 7z a "bitburner-win32-x64.zip" "bitburner-win32-x64/*"; cd ../;
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -54,7 +54,7 @@ jobs:
       - name: Build the Electron app
         run: npm run electron-linux
       - name: Zip
-        run: cd .build; for i in bitburner-*; do zip -r "$i.zip" "$i"; done; cd ../;
+        run: cd .build; zip -r "bitburner-linux-x64.zip" "bitburner-linux-x64/*"; cd ../;
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -80,7 +80,7 @@ jobs:
       - name: Build the Electron app
         run: npm run electron-mac
       - name: Zip
-        run: cd .build; for i in bitburner-*; do zip -r "$i.zip" "$i"; done; cd ../;
+        run: cd .build; zip -r "bitburner-darwin-universal.zip" "bitburner-darwin-universal/*"; cd ../;
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
