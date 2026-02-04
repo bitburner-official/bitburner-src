@@ -29,7 +29,7 @@ jobs:
       - name: List files
         run: ls -la .build
       - name: Zip
-        run: cd .build; for i in bitburner-*; do zip -r "$i.zip" "$i"; done; cd ../;
+        run: cd .build; for i in bitburner-*; do cd "$i"; zip -r "../$i.zip" *; cd ../; done; cd ../;
       - name: List files
         run: |
           ls -la .build
