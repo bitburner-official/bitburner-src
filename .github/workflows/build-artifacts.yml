@@ -36,9 +36,9 @@ jobs:
       - name: Upload arm artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bitburner-win32-arm
+          name: bitburner-win32-arm64
           include-hidden-files: true
-          path: .build/bitburner-win32-arm/*
+          path: .build/bitburner-win32-arm64/*
           if-no-files-found: error
 
   build-linux:
@@ -67,9 +67,9 @@ jobs:
       - name: Upload arm artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bitburner-linux-arm
+          name: bitburner-linux-arm64
           include-hidden-files: true
-          path: .build/bitburner-linux-arm/*
+          path: .build/bitburner-linux-arm64/*
           if-no-files-found: error
 
   build-mac:
