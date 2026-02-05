@@ -132,7 +132,7 @@ export const checkPassword = (
       for (let i = 0; i < attemptedPassword.length; i++) {
         const attempted = Number(attemptedPassword[i]);
         const actual = Number(server.password[i]);
-        if (isNaN(attempted) || isNaN(actual)) {
+        if (!isFinite(attempted)) {
           return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);
         }
         squaredError += (attempted - actual) ** 2;
