@@ -138,7 +138,7 @@ export const checkPassword = (
         squaredError += (attempted - actual) ** 2;
       }
       const rmsd = Math.sqrt(squaredError / attemptedPassword.length);
-      const rmsdMessage = `${server.passwordHintData};RMS Deviation:${rmsd.toFixed(3)}`;
+      const rmsdMessage = `${server.passwordHintData}; RMS Deviation:${rmsd.toFixed(3)}`;
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, rmsdMessage);
     }
     default:
