@@ -284,6 +284,7 @@ export function CharacterStats(): React.ReactElement {
                 color={Settings.theme.primary}
                 data={{ content: String(Player.augmentations.length) }}
               />
+              <StatsRow name="Karma" color={Settings.theme.primary} data={{ content: formatNumber(Player.karma, 3) }} />
             </TableBody>
           </Table>
         </Paper>
