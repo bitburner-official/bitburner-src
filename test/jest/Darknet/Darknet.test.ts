@@ -626,17 +626,17 @@ describe("Password Tests", () => {
     const failedAttemptResponse = getAuthResult(sortedEchoVulnServer, "23456", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
     const logs1 = getMostRecentAuthLog(sortedEchoVulnServer.hostname);
-    expect(logs1?.data).toBe(`${sortedEchoVulnServer.passwordHintData};RMS Deviation:1.000`);
+    expect(logs1?.data).toBe(`${sortedEchoVulnServer.passwordHintData}; RMS Deviation:1.000`);
 
     getAuthResult(sortedEchoVulnServer, "23579", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
     const logs2 = getMostRecentAuthLog(sortedEchoVulnServer.hostname);
-    expect(logs2?.data).toBe(`${sortedEchoVulnServer.passwordHintData};RMS Deviation:2.490`);
+    expect(logs2?.data).toBe(`${sortedEchoVulnServer.passwordHintData}; RMS Deviation:2.490`);
 
     getAuthResult(sortedEchoVulnServer, "12355", 1);
     expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
     const logs3 = getMostRecentAuthLog(sortedEchoVulnServer.hostname);
-    expect(logs3?.data).toBe(`${sortedEchoVulnServer.passwordHintData};RMS Deviation:0.447`);
+    expect(logs3?.data).toBe(`${sortedEchoVulnServer.passwordHintData}; RMS Deviation:0.447`);
 
     expect(getAuthResult(sortedEchoVulnServer, sortedEchoVulnServer.password, 1).result.code).toBe(
       ResponseCodeEnum.Success,
