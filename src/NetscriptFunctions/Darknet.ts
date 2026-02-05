@@ -595,7 +595,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx) =>
       (_host): number => {
         const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-        expectRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return 0;
@@ -606,7 +605,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx) =>
       (_host): number => {
         const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-        expectRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return -1;

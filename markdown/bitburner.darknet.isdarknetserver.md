@@ -6,7 +6,7 @@
 
 Returns whether the server is a darknet server.
 
-Returns false if the server does not exist or has gone offline recently. This function does not DarkscapeNavigator.exe.
+Returns false if the server does not exist or has gone offline recently. This function does not require DarkscapeNavigator.exe.
 
 **Signature:**
 
