@@ -4,7 +4,7 @@
 
 ## Darknet.getBlockedRam() method
 
-Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
 
 **Signature:**
 

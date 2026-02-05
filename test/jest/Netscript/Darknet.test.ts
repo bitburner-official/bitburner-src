@@ -225,11 +225,11 @@ describe("home", () => {
   });
   test("getBlockedRam", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("home is not a darknet server");
   });
   test("getDepth", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("home is not a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNsOnHome();
@@ -401,11 +401,11 @@ describe("Normal NPC server", () => {
   });
   test("getBlockedRam", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("CSEC is not a darknet server");
   });
   test("getDepth", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("CSEC is not a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
@@ -495,11 +495,11 @@ describe("Private server", () => {
   });
   test("getBlockedRam", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("test-server-1 is not a darknet server");
   });
   test("getDepth", () => {
     const ns = getNS("test-server-1");
-    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("test-server-1 is not a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS("test-server-1");
@@ -589,11 +589,11 @@ describe("Hashnet server", () => {
   });
   test("getBlockedRam", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.getBlockedRam()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getBlockedRam()).toThrow("hacknet-server-0 is not a darknet server");
   });
   test("getDepth", () => {
     const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.getDepth()).toThrow("This API can only be used on a darknet server");
+    expect(() => ns.dnet.getDepth()).toThrow("hacknet-server-0 is not a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNS("hacknet-server-0");

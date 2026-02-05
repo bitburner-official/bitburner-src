@@ -4593,8 +4593,8 @@ export interface Darknet {
   packetCapture(host: string): Promise<DarknetResult & { data: string }>;
 
   /**
-   * Increases the chance that target connected server will move to other parts of the darknet, by overloading the connections between it and the current server.
-   * Cannot target the current server. Must be run from a darknet server.
+   * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
+   * The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
    *
    * Effect scales with threads and charisma level.
    *
@@ -4621,7 +4621,7 @@ export interface Darknet {
   /**
    * Returns whether the server is a darknet server.
    *
-   * Returns false if the server does not exist or has gone offline recently. This function does not DarkscapeNavigator.exe.
+   * Returns false if the server does not exist or has gone offline recently. This function does not require DarkscapeNavigator.exe.
    *
    * @remarks
    * RAM cost: 0.1 GB
@@ -4646,7 +4646,7 @@ export interface Darknet {
   memoryReallocation(host?: string): Promise<DarknetResult>;
 
   /**
-   * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+   * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
    *
    * @remarks
    * RAM cost: 0 GB

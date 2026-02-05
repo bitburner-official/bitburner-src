@@ -4,7 +4,7 @@
 
 ## Darknet.induceServerMigration() method
 
-Increases the chance that target connected server will move to other parts of the darknet, by overloading the connections between it and the current server. Cannot target the current server. Must be run from a darknet server.
+Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server. The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
 
 Effect scales with threads and charisma level.
 
