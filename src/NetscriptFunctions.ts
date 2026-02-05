@@ -110,7 +110,7 @@ import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
-import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
+import { getFailureResult } from "./DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
 import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
@@ -653,20 +653,18 @@ export const ns: InternalAPI<NSFull> = {
       const host = helpers.string(ctx, "host", _host);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
-      if (DarknetState.offlineServers.includes(host)) {
-        helpers.log(ctx, () => `Script execution failed, because ${host} is offline.`);
+      if (
+        !getFailureResult(ctx, host, {
+          allowNonDarknet: true,
+          requireAdminRights: true,
+          requireSession: true,
+          requireDirectConnection: true,
+          backdoorBypasses: true,
+        }).success
+      ) {
         return 0;
       }
       const server = helpers.getServer(ctx, host);
-      if (server instanceof DarknetServer && !hasExecConnection(ctx, server)) {
-        const currentHostname = ctx.workerScript.getServer().hostname;
-        helpers.log(
-          ctx,
-          () =>
-            `The current server ${currentHostname} is not connected to ${host}. exec() to a password-protected server requires a direct connection, a stasis link, or a backdoor. Use exec() from an adjacent server, or set a stasis link on the target server.`,
-        );
-        return 0;
-      }
       return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
@@ -785,19 +783,20 @@ export const ns: InternalAPI<NSFull> = {
   scp: (ctx) => (_files, _destination, _source) => {
     const destination = helpers.string(ctx, "destination", _destination);
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
-    if (DarknetState.offlineServers.includes(destination)) {
-      helpers.log(ctx, () => `scp failed, because ${destination} is offline.`);
+    if (
+      !getFailureResult(ctx, destination, {
+        allowNonDarknet: true,
+        requireAdminRights: true,
+        requireSession: true,
+      }).success
+    ) {
       return false;
     }
-    if (DarknetState.offlineServers.includes(source)) {
-      helpers.log(ctx, () => `scp failed, because ${source} is offline.`);
+    if (!getFailureResult(ctx, source, { allowNonDarknet: true }).success) {
       return false;
     }
     const sourceServer = helpers.getServer(ctx, source);
     const destServer = helpers.getServer(ctx, destination);
-    if (destServer instanceof DarknetServer) {
-      expectAuthenticated(ctx, destServer);
-    }
     const files = Array.isArray(_files) ? _files : [_files];
     const lits: FilePath[] = [];
     const contentFiles: ContentFilePath[] = [];

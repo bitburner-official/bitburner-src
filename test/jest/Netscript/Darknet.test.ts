@@ -273,14 +273,10 @@ describe("home", () => {
 
     // Cannot scp before authenticating
     expect(dnetServer.hasAdminRights).toStrictEqual(false);
-    expect(() => {
-      ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home);
-    }).toThrow(`Server ${dnetServerHostname} is password-protected`);
+    expect(ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home)).toStrictEqual(false);
     expect(dnetServer.scripts.size).toStrictEqual(0);
     // Cannot exec before authenticating
-    expect(() => {
-      ns.exec(scriptPath, dnetServerHostname);
-    }).toThrow(`Server ${dnetServerHostname} is password-protected`);
+    expect(ns.exec(scriptPath, dnetServerHostname)).toStrictEqual(0);
 
     const { ws, ns: nsDarkWeb } = getWorkerScriptAndNS(SpecialServers.DarkWeb);
     // Authenticate from darkweb
@@ -300,14 +296,10 @@ describe("home", () => {
     dnetServer.scripts.clear();
 
     // Cannot scp from home without a session
-    expect(() => {
-      ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home);
-    }).toThrow(`Server ${dnetServerHostname} requires a session`);
+    expect(ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home)).toStrictEqual(false);
     expect(dnetServer.scripts.size).toStrictEqual(0);
     // Cannot exec from home without a session
-    expect(() => {
-      ns.exec(scriptPath, dnetServerHostname);
-    }).toThrow(`Server ${dnetServerHostname} requires a session`);
+    expect(ns.exec(scriptPath, dnetServerHostname)).toStrictEqual(0);
 
     // Create a session from home to dnet server
     expect(ns.dnet.connectToSession(dnetServerHostname, dnetServer.password).success).toStrictEqual(true);
