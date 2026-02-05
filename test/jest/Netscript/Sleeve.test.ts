@@ -1,4 +1,4 @@
-import { FactionName } from "@enums";
+import { AugmentationName, FactionName } from "@enums";
 import { Player } from "@player";
 import { joinFaction } from "../../../src/Faction/FactionHelpers";
 import { Factions } from "../../../src/Faction/Factions";
@@ -7,7 +7,7 @@ import {
   MaxSleevesFromCovenant,
   recalculateNumberOfOwnedSleeves,
 } from "../../../src/PersonObjects/Sleeve/SleeveCovenantPurchases";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { getNS, getWorkerScriptAndNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { prestigeSourceFile } from "../../../src/Prestige";
 
 beforeAll(() => {
@@ -100,6 +100,15 @@ describe("Success", () => {
     expect(sleeve.memory).toStrictEqual(100);
     expect(Player.money).toStrictEqual(0);
   });
+  test("purchaseSleeveAug", () => {
+    const ns = getNS();
+    const augName = AugmentationName.BitWire;
+    Player.sleeves[0].shock = 0;
+    // CyberSec offers BitWire.
+    joinFaction(Factions.CyberSec);
+    Factions.CyberSec.playerReputation = 1e10;
+    expect(ns.sleeve.purchaseSleeveAug(0, augName)).toStrictEqual(true);
+  });
 });
 
 describe("Failure", () => {
@@ -168,5 +177,40 @@ describe("Failure", () => {
     result = ns.sleeve.upgradeMemory(0, 1);
     expect(result.success).toStrictEqual(false);
     expect(result.message).toContain("You must have at least");
+  });
+
+  test("purchaseSleeveAug", () => {
+    // Set BN10 and recalculate to get the first sleeve.
+    Player.bitNodeN = 10;
+    recalculateNumberOfOwnedSleeves();
+    const { ws, ns } = getWorkerScriptAndNS();
+    const augName = AugmentationName.BitWire;
+
+    // disableSleeveExpAndAugmentation = true
+    Player.bitNodeOptions.disableSleeveExpAndAugmentation = true;
+    expect(ns.sleeve.purchaseSleeveAug(0, augName)).toStrictEqual(false);
+    expect(ws.scriptRef.logs[0]).toMatch(`The "Disable Sleeves' experience and augmentation" option was enabled`);
+
+    // shock > 0
+    Player.bitNodeOptions.disableSleeveExpAndAugmentation = false;
+    expect(ns.sleeve.purchaseSleeveAug(0, augName)).toStrictEqual(false);
+    expect(ws.scriptRef.logs[1]).toMatch("You must reduce the sleeve shock to 0");
+
+    // Not enough money
+    Player.sleeves[0].shock = 0;
+    Player.money = 0;
+    expect(ns.sleeve.purchaseSleeveAug(0, augName)).toStrictEqual(false);
+    expect(ws.scriptRef.logs[2]).toMatch("You must have at least");
+
+    // Already have the augmentation
+    Player.money = 1e15;
+    Player.sleeves[0].augmentations.push({ name: augName, level: 1 });
+    expect(ns.sleeve.purchaseSleeveAug(0, augName)).toStrictEqual(false);
+    expect(ws.scriptRef.logs[3]).toMatch(`This sleeve already has "${augName}" augmentation`);
+
+    // Non-purchasable augmentation
+    Player.sleeves[0].augmentations = [];
+    expect(ns.sleeve.purchaseSleeveAug(0, augName)).toStrictEqual(false);
+    expect(ws.scriptRef.logs[4]).toMatch(`"${augName}" is not in the list of purchasable augmentations`);
   });
 });
