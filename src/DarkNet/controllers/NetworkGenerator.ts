@@ -71,9 +71,11 @@ export function initDarkwebServer(): void {
     leftOffset: -1,
     depth: -1,
     difficulty: 0,
+    name: SpecialServers.DarkWeb,
+    preventBlockedRam: true,
   };
 
-  const darkweb = DnetServerBuilder(data, SpecialServers.DarkWeb);
+  const darkweb = DnetServerBuilder(data);
   darkweb.isStationary = true;
   darkweb.hasAdminRights = true;
   darkweb.blockedRam = 0;

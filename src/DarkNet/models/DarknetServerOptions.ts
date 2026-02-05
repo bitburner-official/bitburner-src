@@ -52,11 +52,14 @@ export type DarknetServerOptions = {
   difficulty: number;
   depth: number;
   leftOffset: number;
+  name?: string;
+  preventBlockedRam?: boolean;
 };
 
-export const DnetServerBuilder = (options: DarknetServerOptions, name = generateDarknetServerName()): DarknetServer => {
+export const DnetServerBuilder = (options: DarknetServerOptions): DarknetServer => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
-  const ramBlock = getRamBlock(maxRam);
+  const ramBlock = options.preventBlockedRam ? 0 : getRamBlock(maxRam);
+  const name = options.name ?? generateDarknetServerName();
 
   const labDetails = getLabyrinthDetails();
   const labDifficulty = labDetails.cha;
