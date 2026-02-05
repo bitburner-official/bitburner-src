@@ -20,19 +20,19 @@ jobs:
     needs: [build]
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: "npm"
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: .build
-          pattern: build-artifacts-*
-          merge-multiple: true
+          pattern: bitburner-*
+          merge-multiple: false
       - name: List files
         run: ls -la .build
+      - name: Zip
+        run: cd .build; for i in bitburner-*; do cd "$i"; zip -r "../$i.zip" *; cd ../; done; cd ../;
+      - name: List files
+        run: |
+          ls -la .build
       - name: Upload to release
         env:
           GH_REF_NAME: ${{ github.ref_name }}
