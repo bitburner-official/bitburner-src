@@ -37,7 +37,7 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 
 **Authenticated** - When a script calls dnet.authenticate with the correct password, two things happen. Firstly, you are given admin rights to the server (the same as nuking). Second, the script that called authenticate gets a session with the target server. A session on the target server is required for some dnet API methods.
 
-**Session** - A script needs a session on a darknet server in order to scp or exec targeting that server, or to use most of the darknet api targeting that server. Sessions are per-script. A script gets a session if it calls authenticate with the correct password. If another script already has done that, scripts can also get a session by calling dnet.connectToSession with the correct password.
+**Session** - **Session** - A script needs a session on a darknet server in order to scp or exec targeting that server. A script gets a session after it calls `dnet.authenticate` with the correct password. Scripts can also get a session by calling `dnet.connectToSession` (a sync API with low RAM cost) after any script authenticates successfully on that server at least once. Note that sessions are per-script - each script needs to individually get a session with a specific darknet server in order to exec or scp to that server.
 
 **Connected** - Each server on the network has specific other servers it is linked to. These connected servers are the servers that appear when using "scan" in the terminal, or that can be seen by calling dnet.probe. This kind of direct connection is required for most dnet API methods. ns.exec requires either a direct connection, or a backdoor, or a stasis link to target a darknet server.
 
