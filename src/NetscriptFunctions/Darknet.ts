@@ -247,6 +247,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         logger(ctx)(
           `Attempting to extract data from ${server.hostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
         );
+        DarknetState.hasUsedHeartbleed = true;
 
         if (Player.skills.charisma < server.requiredCharismaSkill) {
           logger(ctx)(
@@ -263,7 +264,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
           const xpGained = Player.mults.charisma_exp * 50 * ((500 + Player.skills.charisma) / 500);
           Player.gainCharismaExp(xpGained);
-          DarknetState.hasUsedHeartbleed = true;
 
           const onlineConnectionCheck = getFailureResult(ctx, targetHost, { requireDirectConnection: true });
           if (!onlineConnectionCheck.success) {
