@@ -39,7 +39,7 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 
 **Session** - A script needs a session on a darknet server in order to scp or exec targeting that server. A script gets a session after it calls `dnet.authenticate` with the correct password. Scripts can also get a session by calling `dnet.connectToSession` (a sync API with low RAM cost) after any script authenticates successfully on that server at least once. Note that sessions are per-pid (running instance of a script) - each script needs to individually get a session with a specific darknet server in order to exec or scp to that server.
 
-**Connected** - Each server on the network has specific other servers it is linked to. These connected servers are the servers that appear when using "scan" in the terminal, or that can be seen by calling dnet.probe. This kind of direct connection is required for most dnet API methods. ns.exec requires either a direct connection, or a backdoor, or a stasis link to target a darknet server.
+**Connected** - Each server on the network has specific other servers it is linked to. These are the links seen in the UI, the servers that appear when using "scan" in the terminal, or that can be seen by calling dnet.probe. This kind of direct connection is required for most dnet API methods. ns.exec requires either a direct connection, or a backdoor, or a stasis link (which also sets a backdoor) to target a darknet server.
 
 **Offline** - Sometimes darknet servers will go offline. Effectively, the server is deleted, and any running scripts that were on it are killed. Eventually, the server may come back online, but it will have a different password, and will be fully cleaned and cleared of scripts.
 
