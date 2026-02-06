@@ -263,6 +263,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
           const xpGained = Player.mults.charisma_exp * 50 * ((500 + Player.skills.charisma) / 500);
           Player.gainCharismaExp(xpGained);
+          DarknetState.hasUsedHeartbleed = true;
+
           const onlineConnectionCheck = getFailureResult(ctx, targetHost, { requireDirectConnection: true });
           if (!onlineConnectionCheck.success) {
             return {
