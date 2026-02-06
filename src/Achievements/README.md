@@ -16,7 +16,7 @@ Note:
 - You should **NOT** use the option "Save and restore window geometry for each document" (Edit -> Preferences -> Interface -> Windows).
 - The previous steps are not mandatory, but you should follow them. Doing them helps you catch potential visual issues.
 
-Tips for reviewers of the PR that adds new svg files: Check "sodipodi:docname" in the new svg file. If it does not match the filename, it's very likely the svg file was cloned from another file, but the contributor did not open and double-check it in Inkscape (Inkscape automatically updates "sodipodi:docname" when saving, so if they opened the new file, realigned the position, and saved it, "sodipodi:docname" would match the filename).
+Tips for checking new svg files: Check "sodipodi:docname" in the new svg file. If it does not match the filename, it's very likely the svg file was cloned from another file, but it was not realigned and double-checked in Inkscape (Inkscape automatically updates "sodipodi:docname" when saving, so if you open the new file, realign the position, and save it, "sodipodi:docname" will match the filename).
 
 # Add achievements
 
