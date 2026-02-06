@@ -179,13 +179,14 @@ function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContrac
       return false;
     }
   });
+  if (type === CodingContractRewardType.CompanyReputation && Object.keys(Player.jobs).length === 0) {
+    type =
+      Math.random() < 0.5 ? CodingContractRewardType.FactionReputation : CodingContractRewardType.FactionReputationAll;
+  }
   if (type === CodingContractRewardType.FactionReputation && factionsThatAllowHacking.length === 0) {
-    type = CodingContractRewardType.CompanyReputation;
+    type = CodingContractRewardType.Money;
   }
   if (type === CodingContractRewardType.FactionReputationAll && factionsThatAllowHacking.length === 0) {
-    type = CodingContractRewardType.CompanyReputation;
-  }
-  if (type === CodingContractRewardType.CompanyReputation && Object.keys(Player.jobs).length === 0) {
     type = CodingContractRewardType.Money;
   }
 
