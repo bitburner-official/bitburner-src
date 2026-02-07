@@ -267,16 +267,17 @@ export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
   const chargeIncrease = ((Player.skills.charisma + 500) / (server.difficulty * 200 + 1000)) * 0.01 * threads;
   const xpGained = Player.mults.charisma_exp * 50 * ((200 + Player.skills.charisma) / 200) * threads;
   Player.gainCharismaExp(xpGained);
-  DarknetState.migrationInductionServers[server.hostname] =
-    (DarknetState.migrationInductionServers[server.hostname] ?? 0) + chargeIncrease;
+  const currentCharge = DarknetState.migrationInductionServers.get(server.hostname) ?? 0;
+  const newCharge = Math.min(currentCharge + chargeIncrease, 1);
+  DarknetState.migrationInductionServers.set(server.hostname, newCharge);
   const result = {
     chargeIncrease,
-    newCharge: Math.min(DarknetState.migrationInductionServers[server.hostname], 1),
+    newCharge: newCharge,
     xpGained: xpGained,
   };
-  if (DarknetState.migrationInductionServers[server.hostname] >= 1) {
+  if (newCharge >= 1) {
     moveDarknetServer(server, -2, 4);
-    DarknetState.migrationInductionServers[server.hostname] = 0;
+    DarknetState.migrationInductionServers.set(server.hostname, 0);
   }
   return result;
 };

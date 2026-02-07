@@ -77,7 +77,7 @@ afterEach(() => {
 });
 
 const getLatestResponseTime = (server: DarknetServer) => {
-  const lastPasswordResponse = DarknetState.serverState[server.hostname].serverLogs[0].message;
+  const lastPasswordResponse = getServerLogs(server, 1, true)[0].message;
   assertPasswordResponse(lastPasswordResponse);
   assertString(lastPasswordResponse.data);
   const timeMatch = lastPasswordResponse.data.match(/Response time: (\d+\.?\d*)ms/);
@@ -383,7 +383,7 @@ describe("Password Tests", () => {
 
     expect(response1.message).toBe(GenericResponseMessage.AuthFailure);
 
-    const serverLogs = DarknetState.serverState[server.hostname].serverLogs;
+    const serverLogs = getServerLogs(server, 5, true);
     expect(serverLogs.length).toBe(5);
     assertPasswordResponse(serverLogs[4].message);
     assertPasswordResponse(serverLogs[3].message);

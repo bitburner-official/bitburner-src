@@ -135,8 +135,8 @@ export const clearDarknet = (force = false) => {
   DarknetState.allowMutating = true;
   DarknetState.openServer = null;
   DarknetState.stockPromotions = {};
-  DarknetState.migrationInductionServers = {};
-  DarknetState.serverState = {};
+  DarknetState.migrationInductionServers = new Map();
+  DarknetState.serverState = new Map();
 };
 
 export const movePlayerIfNeeded = (server?: DarknetServer) => {
