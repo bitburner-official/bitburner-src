@@ -593,8 +593,8 @@ export const achievements: Record<AchievementId, Achievement> = {
     NotInSteam: true,
   },
   DARKNET_DEPTHS: {
-    ...achievementData.CHALLENGE_BN15,
-    Icon: "darknet-backdoor",
+    ...achievementData.DARKNET_DEPTHS,
+    Icon: "darknet-depths",
     Visible: knowAboutBitverse,
     Condition: () => Player.augmentations.some((a) => a.name === AugmentationName.TheSword),
     NotInSteam: true,
