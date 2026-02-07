@@ -358,7 +358,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Typography>
         <DocumentationLink
           page="programming/darknet.md"
-          style={{ ...DWServerLogStyles, fontSize: "18px", padding: "2px 20px", backgroundColor: Settings.theme.button }}
+          style={{
+            ...DWServerLogStyles,
+            fontSize: "18px",
+            padding: "2px 20px",
+            backgroundColor: Settings.theme.button,
+          }}
         >
           Darknet Docs
         </DocumentationLink>
