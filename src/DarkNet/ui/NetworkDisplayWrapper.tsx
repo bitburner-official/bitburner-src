@@ -15,7 +15,7 @@ import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
-import { dnetStyles } from "./dnetStyles";
+import { dnetStyles, DWServerLogStyles } from "./dnetStyles";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
@@ -358,7 +358,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Typography>
         <DocumentationLink
           page="programming/darknet.md"
-          style={{ fontSize: "22px", padding: "0 20px", backgroundColor: Settings.theme.button }}
+          style={{ ...DWServerLogStyles, fontSize: "18px", padding: "2px 20px", backgroundColor: Settings.theme.button }}
         >
           Darknet Docs
         </DocumentationLink>
