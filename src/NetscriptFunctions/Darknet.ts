@@ -73,12 +73,6 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
   };
   const peek = helpers.boolean(ctx, "options.peek", options.peek);
   const logsToCapture = helpers.positiveInteger(ctx, "options.logsToCapture", options.logsToCapture);
-  if (logsToCapture > 8) {
-    throw helpers.errorMessage(
-      ctx,
-      `Invalid arguments: "options.logsToCapture" (${options.logsToCapture}) must be smaller than or equal to 8`,
-    );
-  }
   const additionalMsec = helpers.integer(ctx, "options.additionalMsec", options.additionalMsec);
   if (additionalMsec < 0) {
     throw helpers.errorMessage(

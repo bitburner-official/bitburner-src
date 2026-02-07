@@ -547,7 +547,10 @@ export function initBitNodes() {
       <>
         This Source-File grants the following benefits:
         <ul>
-          <li>Level 1: Permanently start with the TOR router and {CompletedProgramName.darkscape}</li>
+          <li>
+            Level 1: Permanently start with the TOR router and {CompletedProgramName.darkscape}, and unlock the full
+            dark web on all Bitnodes.
+          </li>
           <li>
             Level 2: Your charisma level increases job salary and rep gain. Also increases authentication speed by 20%
           </li>

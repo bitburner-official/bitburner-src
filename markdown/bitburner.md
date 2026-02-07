@@ -371,6 +371,17 @@ Darknet formulas
 </td></tr>
 <tr><td>
 
+[DarknetInstability](./bitburner.darknetinstability.md)
+
+
+</td><td>
+
+Instability of the darknet caused by excessive backdoor-ing of servers.
+
+
+</td></tr>
+<tr><td>
+
 [DarknetServerData](./bitburner.darknetserverdata.md)
 
 
@@ -793,6 +804,17 @@ Hacknet Server formulas
 </td></tr>
 <tr><td>
 
+[HeartbleedOptions](./bitburner.heartbleedoptions.md)
+
+
+</td><td>
+
+Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
+
+
+</td></tr>
+<tr><td>
+
 [HostReturnOptions](./bitburner.hostreturnoptions.md)
 
 
@@ -1183,6 +1205,17 @@ Various info about resets
 </td><td>
 
 A server. Not all servers have all of these properties - optional properties are missing on certain servers.
+
+
+</td></tr>
+<tr><td>
+
+[ServerAuthDetails](./bitburner.serverauthdetails.md)
+
+
+</td><td>
+
+Details about a server's authentication schema
 
 
 </td></tr>
@@ -1806,17 +1839,6 @@ Names of all companies
 </td></tr>
 <tr><td>
 
-[DarknetInstability](./bitburner.darknetinstability.md)
-
-
-</td><td>
-
-Instability of the darknet caused by excessive backdoor-ing of servers.
-
-
-</td></tr>
-<tr><td>
-
 [DarknetResponseCode](./bitburner.darknetresponsecode.md)
 
 
@@ -2002,17 +2024,6 @@ Locations of gym
 </td></tr>
 <tr><td>
 
-[HeartbleedOptions](./bitburner.heartbleedoptions.md)
-
-
-</td><td>
-
-Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
-
-
-</td></tr>
-<tr><td>
-
 [JobField](./bitburner.jobfield.md)
 
 
@@ -2163,17 +2174,6 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 
 </td><td>
 
-
-
-</td></tr>
-<tr><td>
-
-[ServerAuthDetails](./bitburner.serverauthdetails.md)
-
-
-</td><td>
-
-Details about a server's authentication schema
 
 
 </td></tr>
