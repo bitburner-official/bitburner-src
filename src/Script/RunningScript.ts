@@ -25,7 +25,7 @@ export class RunningScript {
 
   // Map of [key: hostname] -> Hacking data. Used for offline progress calculations.
   // Hacking data format: [MoneyStolen, NumTimesHacked, NumTimesGrown, NumTimesWeaken]
-  dataMap: Record<string, number[]> = {};
+  dataMap: Map<string, number[]> = new Map();
 
   // Script filename
   filename = "default.js" as ScriptFilePath;
@@ -129,32 +129,29 @@ export class RunningScript {
 
   // Update the moneyStolen and numTimesHack maps when hacking
   recordHack(hostname: string, moneyGained: number, n = 1): void {
-    if (this.dataMap[hostname] == null || this.dataMap[hostname].constructor !== Array) {
-      this.dataMap[hostname] = [0, 0, 0, 0];
-    }
-    this.dataMap[hostname][0] += moneyGained;
-    this.dataMap[hostname][1] += n;
+    this.initDataMapIfNeeded(hostname);
+    const [hackMoney, hackCount, growCount, weakenCount] = this.dataMap.get(hostname) ?? [];
+    this.dataMap.set(hostname, [hackMoney + moneyGained, hackCount + n, growCount, weakenCount]);
   }
 
   // Update the grow map when calling grow()
   recordGrow(hostname: string, n = 1): void {
-    if (this.dataMap[hostname] == null || this.dataMap[hostname].constructor !== Array) {
-      this.dataMap[hostname] = [0, 0, 0, 0];
-    }
-    this.dataMap[hostname][2] += n;
+    this.initDataMapIfNeeded(hostname);
+    const [hackMoney, hackCount, growCount, weakenCount] = this.dataMap.get(hostname) ?? [];
+    this.dataMap.set(hostname, [hackMoney, hackCount, growCount + n, weakenCount]);
   }
 
   // Update the weaken map when calling weaken() {
   recordWeaken(hostname: string, n = 1): void {
-    if (this.dataMap[hostname] == null || this.dataMap[hostname].constructor !== Array) {
-      this.dataMap[hostname] = [0, 0, 0, 0];
-    }
-    this.dataMap[hostname][3] += n;
+    this.initDataMapIfNeeded(hostname);
+    const [hackMoney, hackCount, growCount, weakenCount] = this.dataMap.get(hostname) ?? [];
+    this.dataMap.set(hostname, [hackMoney, hackCount, growCount, weakenCount + n]);
   }
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
     // Omit the title if it's a ReactNode, it will be filled in with the default on load.
+    // TODO: convert dataMap to an object for serialization
     return Generic_toJSON(
       "RunningScript",
       this,
@@ -164,10 +161,17 @@ export class RunningScript {
 
   // Initializes a RunningScript Object from a JSON save state
   static fromJSON(value: IReviverValue): RunningScript {
+    // TODO: convert data back to a Map after parsing
     const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
     if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
     if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
     return runningScript;
+  }
+
+  initDataMapIfNeeded(hostname: string) {
+    if (!this.dataMap.has(hostname)) {
+      this.dataMap.set(hostname, [0, 0, 0, 0]);
+    }
   }
 }
 const includedProperties = getKeyList(RunningScript, {
