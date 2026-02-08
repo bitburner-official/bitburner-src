@@ -275,15 +275,15 @@ describe("home", () => {
     expect(dnetServer.hasAdminRights).toStrictEqual(false);
     expect(ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home)).toStrictEqual(false);
     expect(dnetServer.scripts.size).toStrictEqual(0);
-    // Cannot exec before authenticating
+    // Cannot exec from home because there is no direct connection
     expect(ns.exec(scriptPath, dnetServerHostname)).toStrictEqual(0);
 
-    const { ws, ns: nsDarkWeb } = getWorkerScriptAndNS(SpecialServers.DarkWeb);
+    const { ws: wsDarkWeb, ns: nsDarkWeb } = getWorkerScriptAndNS(SpecialServers.DarkWeb);
     // Authenticate from darkweb
     expect((await nsDarkWeb.dnet.authenticate(dnetServerHostname, dnetServer.password)).success).toStrictEqual(true);
     expect(dnetServer.hasAdminRights).toStrictEqual(true);
     // Check session created after successfully calling authenticate API
-    expect(getServerState(dnetServerHostname).authenticatedPIDs.includes(ws.pid)).toStrictEqual(true);
+    expect(getServerState(dnetServerHostname).authenticatedPIDs.includes(wsDarkWeb.pid)).toStrictEqual(true);
     // Write the test script to darkweb
     nsDarkWeb.write(scriptPath, scriptContent);
     // scp from darkweb
@@ -298,7 +298,7 @@ describe("home", () => {
     // Cannot scp from home without a session
     expect(ns.scp(scriptPath, dnetServerHostname, SpecialServers.Home)).toStrictEqual(false);
     expect(dnetServer.scripts.size).toStrictEqual(0);
-    // Cannot exec from home without a session
+    // Cannot exec from home because there is no direct connection
     expect(ns.exec(scriptPath, dnetServerHostname)).toStrictEqual(0);
 
     // Create a session from home to dnet server
