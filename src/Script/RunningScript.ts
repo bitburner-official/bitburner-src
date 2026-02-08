@@ -151,18 +151,21 @@ export class RunningScript {
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
     // Omit the title if it's a ReactNode, it will be filled in with the default on load.
-    // TODO: convert dataMap to an object for serialization
     return Generic_toJSON(
       "RunningScript",
-      this,
+      {
+        ...this,
+        dataMap: Array.from(this.dataMap.entries()),
+      },
       typeof this.title === "string" ? includedProperties : includedPropsNoTitle,
     );
   }
 
   // Initializes a RunningScript Object from a JSON save state
   static fromJSON(value: IReviverValue): RunningScript {
-    // TODO: convert data back to a Map after parsing
     const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
+    const validEntries = Object.entries(runningScript.dataMap).filter(isValidDataMapEntry);
+    runningScript.dataMap = new Map(validEntries);
     if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
     if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
     return runningScript;
@@ -178,5 +181,10 @@ const includedProperties = getKeyList(RunningScript, {
   removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
 });
 const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");
+
+function isValidDataMapEntry(entry: [string, unknown]): entry is [string, number[]] {
+  const [, value] = entry;
+  return Array.isArray(value) && value.length === 4 && value.every((v) => typeof v === "number");
+}
 
 constructorsForReviver.RunningScript = RunningScript;
