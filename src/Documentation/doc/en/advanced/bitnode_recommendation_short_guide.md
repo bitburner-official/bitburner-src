@@ -62,7 +62,11 @@ BN13 introduces [Stanek's Gift](stanek.md), a powerful augmentation that can pro
 These bonuses are versatile but not enough to offset the challenge of the BitNode itself.
 
 BN14 is a relatively new BitNode focused on [IPvGO](../programming/go_algorithms.md).
-Automating the mechanic is challenging but it provides a wide variety of bonuses.
+Automating the mechanic is challenging, but it provides a wide variety of bonuses.
+
+BN15 expands on the darknet mechanic unlocked via the DarkscapeNavigator.exe program.
+It encourages solving a number of practical problems (e.g. passing data around between scripts, handling servers disappearing) as well as solving many small programming puzzles to get servers' passwords. The deeper levels of the darknet have significantly more complex puzzles.
+It provides a variety of useful bonuses.
 
 ## Save these for later
 

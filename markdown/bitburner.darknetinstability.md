@@ -2,15 +2,76 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [DarknetInstability](./bitburner.darknetinstability.md)
 
-## DarknetInstability type
+## DarknetInstability interface
 
 Instability of the darknet caused by excessive backdoor-ing of servers.
 
 **Signature:**
 
 ```typescript
-type DarknetInstability = {
-  authenticationDurationMultiplier: number;
-  authenticationTimeoutChance: number;
-};
+interface DarknetInstability 
 ```
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[authenticationDurationMultiplier](./bitburner.darknetinstability.authenticationdurationmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The increase in time that authentication takes, as a decimal
+
+
+</td></tr>
+<tr><td>
+
+[authenticationTimeoutChance](./bitburner.darknetinstability.authenticationtimeoutchance.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The chance that authentication will time out instead of resolving, as a decimal
+
+
+</td></tr>
+</tbody></table>
+

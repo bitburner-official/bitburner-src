@@ -416,6 +416,11 @@
       "Name": "Make your Own Network",
       "Description": "Install a backdoor on 50 or more darknet servers at once."
     },
+    "DARKNET_DEPTHS": {
+      "ID": "DARKNET_DEPTHS",
+      "Name": "Into the Depths",
+      "Description": "Install the augment from the deepest server."
+    },
     "CHALLENGE_BN1": {
       "ID": "CHALLENGE_BN1",
       "Name": "BN1: Challenge",
@@ -474,7 +479,7 @@
     "CHALLENGE_BN15": {
       "ID": "CHALLENGE_BN15",
       "Name": "BN15: Challenge",
-      "Description": "Open the cache on the final lab in the darknet."
+      "Description": "Complete BN15 without ever calling dnet.heartbleed."
     },
     "BYPASS": {
       "ID": "BYPASS",

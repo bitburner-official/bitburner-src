@@ -38,6 +38,7 @@ import { Go } from "../Go/Go";
 import { type AchievementId, type SFAchievementId, SFAchievementIds } from "./Types";
 
 import { getAllMovableDarknetServers } from "../DarkNet/utils/darknetNetworkUtils";
+import { DarknetState } from "../DarkNet/models/DarknetState";
 
 function assertAchievements(
   achievements: typeof data.achievements,
@@ -591,6 +592,13 @@ export const achievements: Record<AchievementId, Achievement> = {
     Condition: () => getAllMovableDarknetServers().filter((s) => s.backdoorInstalled).length >= 50,
     NotInSteam: true,
   },
+  DARKNET_DEPTHS: {
+    ...achievementData.DARKNET_DEPTHS,
+    Icon: "darknet-depths",
+    Visible: knowAboutBitverse,
+    Condition: () => Player.augmentations.some((a) => a.name === AugmentationName.TheSword),
+    NotInSteam: true,
+  },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
@@ -685,7 +693,7 @@ export const achievements: Record<AchievementId, Achievement> = {
     ...achievementData.CHALLENGE_BN15,
     Icon: "BN15+",
     Visible: knowAboutBitverse,
-    Condition: () => Player.augmentations.some((a) => a.name === AugmentationName.TheSword),
+    Condition: () => Player.bitNodeN === 15 && isBitNodeFinished() && !DarknetState.hasUsedHeartbleed,
     NotInSteam: true,
   },
   BYPASS: {
