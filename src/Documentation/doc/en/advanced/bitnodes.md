@@ -251,3 +251,20 @@ and increases the reputation converted to favor for winning two games in a row t
 - Level 1: 1000 rep to favor
 - Level 2: 1500 rep to favor
 - Level 3: 2000 rep to favor
+
+### Bitnode 15: The Secrets of the Dark Net
+
+Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive authority and surveillance. Leaving stability behind and turning to the dark web comes with risks... but also rewards. Unlike the traditional network of servers, the "dark" net is a constantly shifting, complex, unreliable place
+where servers can move or disappear at any moment. Long-distance communication is often impossible, requiring scripts to be self-sufficient and durable, and spread themselves to stay alive.
+
+If you can take advantage of the darknet servers' weak passwords and leaky logs, you will be able to gain access to the deepest parts of the darknet and its secrets. In this Bitnode, the Daedalus faction has not yet found and monopolized the fabled Red Pill augmentation.
+Legends say it can be found somewhere, out there in the dark...
+
+Destroying this BitNode will give you Source-File 15, or if you already have this Source-File, it will upgrade
+its level up to a maximum of 3.
+
+This Source-File grants the following benefits:
+
+- Level 1: Permanently start with the TOR router and DarkscapeNavigator.exe, and unlock the full dark web on all Bitnodes.
+- Level 2: Your charisma level increases job salary and rep gain. Also increases authentication speed by 20%
+- Level 3: Your charisma level increases faction work rep gain. Also increases the xp and money gained from .cache files by 50%.

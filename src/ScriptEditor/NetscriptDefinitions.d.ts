@@ -4396,7 +4396,7 @@ export type CacheResult = {
  * Details about a server's authentication schema
  * @public
  */
-type ServerAuthDetails = {
+interface ServerAuthDetails {
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
@@ -4413,31 +4413,31 @@ type ServerAuthDetails = {
   passwordLength: number;
   /** The character set used in the password */
   passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
-};
+}
 
 /**
  * Options to change the behavior of {@link Darknet.heartbleed | heartbleed} API.
  * @public
  */
-type HeartbleedOptions = {
+interface HeartbleedOptions {
   /** If true, looks at the most recent log lines but does not remove them. Default is false. */
   peek?: boolean;
-  /** The number of log lines to remove from the server, up to a max of 8. Default is 1. Must be a positive integer. */
+  /** The number of log lines to remove from the server. Default is 1. Must be a positive integer. */
   logsToCapture?: number;
   /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. Must be a non-negative integer. */
   additionalMsec?: number;
-};
+}
 
 /**
  * Instability of the darknet caused by excessive backdoor-ing of servers.
  * @public
  */
-type DarknetInstability = {
+interface DarknetInstability {
   /** The increase in time that authentication takes, as a decimal */
   authenticationDurationMultiplier: number;
   /** The chance that authentication will time out instead of resolving, as a decimal */
   authenticationTimeoutChance: number;
-};
+}
 
 /**
  * Darknet API
