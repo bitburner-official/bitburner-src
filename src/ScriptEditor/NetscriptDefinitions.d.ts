@@ -8983,7 +8983,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    */
-  dynamicImport(path: string): Promise<any>;
+  dynamicImport(path: string, opts?: ImportCallOptions): Promise<any>;
 
   enums: NSEnums;
 }

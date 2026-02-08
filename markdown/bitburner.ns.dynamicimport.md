@@ -9,7 +9,7 @@ Dynamically import a script. Only scripts located on the same server can be impo
 **Signature:**
 
 ```typescript
-dynamicImport(path: string): Promise<any>;
+dynamicImport(path: string, opts?: ImportCallOptions): Promise<any>;
 ```
 
 ## Parameters
@@ -41,6 +41,22 @@ string
 
 
 </td><td>
+
+
+</td></tr>
+<tr><td>
+
+opts
+
+
+</td><td>
+
+ImportCallOptions
+
+
+</td><td>
+
+_(Optional)_
 
 
 </td></tr>

@@ -601,7 +601,7 @@ Given a hostname, returns its IP address; or given an IP address, returns its ho
 </td></tr>
 <tr><td>
 
-[dynamicImport(path)](./bitburner.ns.dynamicimport.md)
+[dynamicImport(path, opts)](./bitburner.ns.dynamicimport.md)
 
 
 </td><td>

@@ -9,12 +9,24 @@ import { fromObject } from "convert-source-map";
 
 import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
 import type { Script } from "./Script/Script";
-import type { ScriptFilePath } from "./Paths/ScriptFilePath";
-import { FileType, getFileType, getModuleScript, transformScript } from "./utils/ScriptTransformer";
+import { resolveScriptFilePath, validScriptExtensions, type ScriptFilePath } from "./Paths/ScriptFilePath";
+import {
+  FileType,
+  getFileType,
+  getModuleScript,
+  ModuleResolutionError,
+  transformScript,
+} from "./utils/ScriptTransformer";
+import { GetServer } from "./Server/AllServers";
+import { resolveTextFilePath } from "./Paths/TextFilePath";
 
 // Makes a blob that contains the code of a given script.
 function makeScriptBlob(code: string): Blob {
   return new Blob([code], { type: "text/javascript" });
+}
+
+function makeJSONBlob(code: string): Blob {
+  return new Blob([code], { type: "application/json" });
 }
 
 // Webpack likes to turn the import into a require, which sort of
@@ -28,8 +40,9 @@ function makeScriptBlob(code: string): Blob {
 // import() is not a function, so it can't be replaced. We need this separate
 // config object to provide a hook point.
 export const config = {
-  doImport(url: ScriptURL): Promise<ScriptModule> {
-    return import(/*webpackIgnore:true*/ url) as Promise<ScriptModule>;
+  doImport(url: ScriptURL, opts?: ImportCallOptions): Promise<ScriptModule> {
+    // @ts-expect-error TS expects a certain module target before it allows import options
+    return import(/*webpackIgnore:true*/ url, opts) as Promise<ScriptModule>;
   },
 };
 
@@ -56,6 +69,40 @@ export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): P
     throw new Error(`Cannot generate module ${script.filename}`, { cause: error });
   }
   return script.mod.module;
+}
+
+export function generateLoadedNonScriptModule(moduleType: string, moduleContent: string): LoadedModule {
+  let blob: Blob;
+
+  const cachedModule = moduleCache.get(moduleContent)?.deref();
+
+  if (cachedModule) {
+    return cachedModule;
+  }
+
+  //switch case to make future module support easier
+  switch (moduleType) {
+    case "json":
+      blob = makeJSONBlob(moduleContent);
+      break;
+    default:
+      throw new ModuleResolutionError(`Unkown module type: '${moduleType}'`);
+  }
+
+  const url = URL.createObjectURL(blob) as ScriptURL;
+
+  const imported = config.doImport(url, {
+    with: {
+      type: moduleType,
+    },
+  });
+
+  const module = new LoadedModule(url, imported);
+
+  moduleCache.set(moduleContent, new WeakRef(module));
+  cleanup.register(module, moduleContent);
+
+  return module;
 }
 
 /** Add the necessary dependency relationships for a script.
@@ -168,6 +215,44 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   let newCode = scriptCode;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
+    const isScriptImport = validScriptExtensions.some((extension) =>
+      resolveScriptFilePath(node.filename, script.filename, extension),
+    );
+
+    //if import is not a script
+    if (!isScriptImport) {
+      const hasImportAttribute = /^\s*with/.test(script.code.substring(node.end + 1));
+
+      if (!hasImportAttribute) {
+        throw new ModuleResolutionError(`Non-Script imports **must** have an import attribute`);
+      }
+
+      const path = resolveTextFilePath(node.filename, script.filename);
+
+      if (!path) {
+        throw new ModuleResolutionError(`Module can not be resolved: '${node.filename}'`);
+      }
+
+      const moduleContent = GetServer(script.server)?.getContentFile(path)?.content;
+
+      if (!moduleContent) {
+        throw new ModuleResolutionError(`File does not exist on '${script.server}': '${node.filename}'`);
+      }
+
+      const moduleType = path.split(".").at(-1);
+
+      //`resolveTextFilePath` gurantees a file extension so this is just for TS really
+      if (!moduleType) {
+        throw new ModuleResolutionError(`File has no extension: '${node.filename}'`);
+      }
+
+      const module = generateLoadedNonScriptModule(moduleType, moduleContent);
+
+      newCode = newCode.substring(0, node.start) + module.url + newCode.substring(node.end);
+
+      continue;
+    }
+
     const importedScript = getModuleScript(node.filename, script.filename, scripts);
     for (const scriptInSeenStack of seenStack) {
       if (scriptInSeenStack.filename === script.filename) {

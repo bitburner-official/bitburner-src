@@ -106,7 +106,7 @@ import { NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { validBitNodes } from "./BitNode/Constants";
 import { isIPAddress } from "./Types/strings";
-import { compile } from "./NetscriptJSEvaluator";
+import { compile, generateLoadedNonScriptModule } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
@@ -1556,16 +1556,35 @@ export const ns: InternalAPI<NSFull> = {
   printRaw: (ctx) => (value) => {
     ctx.workerScript.print(wrapUserNode(value));
   },
-  dynamicImport: (ctx) => async (value) => {
-    const path = helpers.scriptPath(ctx, "path", value);
+  dynamicImport: (ctx) => async (value, opts) => {
+    const path = helpers.filePath(ctx, "path", value);
+    const type = ((opts ?? {}) as ImportCallOptions)?.with?.type;
+
+    const isScript = hasScriptExtension(path);
+    const isTextFile = hasTextExtension(path);
+
+    if (!isScript && !isTextFile) {
+      throw helpers.errorMessage(ctx, "Only content files can be imported");
+    }
+
     const server = helpers.getServer(ctx, ctx.workerScript.hostname);
-    const script = server.getContentFile(path);
+    const file = server.getContentFile(path);
 
-    if (!script) throw helpers.errorMessage(ctx, `Script was not found\nPath: ${path}`);
+    if (!file) {
+      throw helpers.errorMessage(ctx, `File was not found\nPath: ${path}`);
+    }
 
-    //We validated the path as ScriptFilePath and made sure script is not null
-    //Script **must** be a script at this point
-    return compile(script as Script, server.scripts);
+    if (isScript) {
+      //We validated the path as ScriptFilePath and made sure script is not null
+      //Script **must** be a script at this point
+      return compile(file as Script, server.scripts);
+    }
+
+    if (!type) {
+      throw helpers.errorMessage(ctx, "Text file imports need import attributes");
+    }
+
+    return generateLoadedNonScriptModule(type, file.content);
   },
   flags: Flags,
   heart: { break: () => () => Player.karma },
