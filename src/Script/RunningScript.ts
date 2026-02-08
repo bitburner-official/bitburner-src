@@ -155,7 +155,7 @@ export class RunningScript {
       "RunningScript",
       {
         ...this,
-        dataMap: Array.from(this.dataMap.entries()),
+        dataMap: Object.fromEntries(this.dataMap.entries()),
       },
       typeof this.title === "string" ? includedProperties : includedPropsNoTitle,
     );
