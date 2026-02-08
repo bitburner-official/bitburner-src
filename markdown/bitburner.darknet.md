@@ -60,7 +60,7 @@ If unsuccessful, more detail may be able to be gathered by using heartbleed() to
 
 </td><td>
 
-Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
 
 
 </td></tr>
@@ -156,7 +156,7 @@ The speed of capture scales with the number of threads used. See formulas.dnet.g
 
 </td><td>
 
-Increases the chance that target connected server will move to other parts of the darknet, by overloading the connections between it and the current server. Cannot target the current server. Must be run from a darknet server.
+Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server. The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
 
 Effect scales with threads and charisma level.
 
@@ -171,7 +171,7 @@ Effect scales with threads and charisma level.
 
 Returns whether the server is a darknet server.
 
-Returns false if the server does not exist or has gone offline recently. This function does not DarkscapeNavigator.exe.
+Returns false if the server does not exist or has gone offline recently. This function does not require DarkscapeNavigator.exe.
 
 
 </td></tr>

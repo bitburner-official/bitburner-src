@@ -73,12 +73,6 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
   };
   const peek = helpers.boolean(ctx, "options.peek", options.peek);
   const logsToCapture = helpers.positiveInteger(ctx, "options.logsToCapture", options.logsToCapture);
-  if (logsToCapture > 8) {
-    throw helpers.errorMessage(
-      ctx,
-      `Invalid arguments: "options.logsToCapture" (${options.logsToCapture}) must be smaller than or equal to 8`,
-    );
-  }
   const additionalMsec = helpers.integer(ctx, "options.additionalMsec", options.additionalMsec);
   if (additionalMsec < 0) {
     throw helpers.errorMessage(
@@ -247,6 +241,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         logger(ctx)(
           `Attempting to extract data from ${server.hostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
         );
+        DarknetState.hasUsedHeartbleed = true;
 
         if (Player.skills.charisma < server.requiredCharismaSkill) {
           logger(ctx)(
@@ -263,6 +258,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
           const xpGained = Player.mults.charisma_exp * 50 * ((500 + Player.skills.charisma) / 500);
           Player.gainCharismaExp(xpGained);
+
           const onlineConnectionCheck = getFailureResult(ctx, targetHost, { requireDirectConnection: true });
           if (!onlineConnectionCheck.success) {
             return {
@@ -595,7 +591,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx) =>
       (_host): number => {
         const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-        expectRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return 0;
@@ -606,7 +601,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx) =>
       (_host): number => {
         const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-        expectRunningOnDarknetServer(ctx);
         const onlineConnectionCheck = getFailureResult(ctx, targetHost);
         if (!onlineConnectionCheck.success) {
           return -1;

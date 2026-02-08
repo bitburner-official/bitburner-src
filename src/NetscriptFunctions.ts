@@ -808,7 +808,10 @@ export const ns: InternalAPI<NSFull> = {
         continue;
       }
       if (!path.endsWith(".lit")) {
-        throw helpers.errorMessage(ctx, "Only works for script, text, and .lit files");
+        throw helpers.errorMessage(
+          ctx,
+          `Cannot transfer ${path}: scp only can be used with script, text, and .lit files`,
+        );
       }
       lits.push(path);
     }

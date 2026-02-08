@@ -19,9 +19,6 @@ import { isLabyrinthServer } from "./labyrinth";
 export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServer) => {
   const threads = ctx.workerScript.scriptRef.threads;
   const difficulty = server.difficulty + 1;
-  const xpGained =
-    Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty * ((200 + Player.skills.charisma) / 200);
-  Player.gainCharismaExp(xpGained);
 
   const ramBlockRemoved = getRamBlockRemoved(server, threads);
   server.blockedRam -= ramBlockRemoved;
@@ -30,6 +27,9 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   if (server.blockedRam <= 0) {
     handleRamBlockClearedRewards(server);
   }
+  const xpGained =
+    Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty * ((200 + Player.skills.charisma) / 200);
+  Player.gainCharismaExp(xpGained);
 
   const result = `Liberated ${formatNumber(
     ramBlockRemoved,

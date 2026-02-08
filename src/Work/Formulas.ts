@@ -21,7 +21,7 @@ import { CompanyPosition } from "../Company/CompanyPosition";
 import { isMember } from "../utils/EnumHelper";
 import { getMultiplierFromCharisma } from "../DarkNet/effects/effects";
 
-function processWorkStats(person: IPerson, workStats: WorkStats): WorkStats {
+export function processWorkStats(person: IPerson, workStats: WorkStats): WorkStats {
   // "person" can be a normal object that the player passes to NS APIs, so we cannot use `person instanceof Sleeve`.
   if (Player.bitNodeOptions.disableSleeveExpAndAugmentation && "shock" in person) {
     workStats.hackExp = 0;

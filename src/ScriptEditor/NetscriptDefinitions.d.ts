@@ -4396,7 +4396,7 @@ export type CacheResult = {
  * Details about a server's authentication schema
  * @public
  */
-type ServerAuthDetails = {
+interface ServerAuthDetails {
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
@@ -4413,31 +4413,31 @@ type ServerAuthDetails = {
   passwordLength: number;
   /** The character set used in the password */
   passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
-};
+}
 
 /**
  * Options to change the behavior of {@link Darknet.heartbleed | heartbleed} API.
  * @public
  */
-type HeartbleedOptions = {
+interface HeartbleedOptions {
   /** If true, looks at the most recent log lines but does not remove them. Default is false. */
   peek?: boolean;
-  /** The number of log lines to remove from the server, up to a max of 8. Default is 1. Must be a positive integer. */
+  /** The number of log lines to remove from the server. Default is 1. Must be a positive integer. */
   logsToCapture?: number;
   /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. Must be a non-negative integer. */
   additionalMsec?: number;
-};
+}
 
 /**
  * Instability of the darknet caused by excessive backdoor-ing of servers.
  * @public
  */
-type DarknetInstability = {
+interface DarknetInstability {
   /** The increase in time that authentication takes, as a decimal */
   authenticationDurationMultiplier: number;
   /** The chance that authentication will time out instead of resolving, as a decimal */
   authenticationTimeoutChance: number;
-};
+}
 
 /**
  * Darknet API
@@ -4593,8 +4593,8 @@ export interface Darknet {
   packetCapture(host: string): Promise<DarknetResult & { data: string }>;
 
   /**
-   * Increases the chance that target connected server will move to other parts of the darknet, by overloading the connections between it and the current server.
-   * Cannot target the current server. Must be run from a darknet server.
+   * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
+   * The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
    *
    * Effect scales with threads and charisma level.
    *
@@ -4621,7 +4621,7 @@ export interface Darknet {
   /**
    * Returns whether the server is a darknet server.
    *
-   * Returns false if the server does not exist or has gone offline recently. This function does not DarkscapeNavigator.exe.
+   * Returns false if the server does not exist or has gone offline recently. This function does not require DarkscapeNavigator.exe.
    *
    * @remarks
    * RAM cost: 0.1 GB
@@ -4646,7 +4646,7 @@ export interface Darknet {
   memoryReallocation(host?: string): Promise<DarknetResult>;
 
   /**
-   * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+   * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
    *
    * @remarks
    * RAM cost: 0 GB

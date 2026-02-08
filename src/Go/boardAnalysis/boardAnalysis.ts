@@ -116,10 +116,10 @@ export function evaluateMoveResult(board: Board, x: number, y: number, player: G
 export function getControlledSpace(board: Board) {
   const chains = getAllChains(board);
   const length = board[0].length;
-  const whiteControlledEmptyNodes = getAllPotentialEyes(board, chains, GoColor.white, length * 2)
+  const whiteControlledEmptyNodes = getAllPotentialEyes(board, chains, GoColor.white, 99)
     .map((eye) => eye.chain)
     .flat();
-  const blackControlledEmptyNodes = getAllPotentialEyes(board, chains, GoColor.black, length * 2)
+  const blackControlledEmptyNodes = getAllPotentialEyes(board, chains, GoColor.black, 99)
     .map((eye) => eye.chain)
     .flat();
 

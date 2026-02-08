@@ -26,6 +26,7 @@ import {
   getXorMaskEncryptedPasswordConfig,
   getTripleModuloConfig,
   getKingOfTheHillConfig,
+  getSortedEchoVulnConfig,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
 import {
   commonPasswordDictionary,
@@ -614,6 +615,33 @@ describe("Password Tests", () => {
 
     const successResult = getAuthResult(bufferOverflowServer, "A".repeat(passwordLength * 2), 1);
     expect(successResult.response.code).toBe(ResponseCodeEnum.Success);
+  });
+
+  test("sortedEchoVuln creates a valid password and hint", () => {
+    const sortedEchoVulnServer = serverFactory(getSortedEchoVulnConfig, 20, 0, 0);
+    sortedEchoVulnServer.password = "12345";
+    sortedEchoVulnServer.passwordHintData = "41532";
+
+    expect(sortedEchoVulnServer).toBeDefined();
+    const failedAttemptResponse = getAuthResult(sortedEchoVulnServer, "23456", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+    const logs1 = getMostRecentAuthLog(sortedEchoVulnServer.hostname);
+    expect(logs1?.data).toBe(`${sortedEchoVulnServer.passwordHintData}; RMS Deviation:1.000`);
+
+    getAuthResult(sortedEchoVulnServer, "23579", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+    const logs2 = getMostRecentAuthLog(sortedEchoVulnServer.hostname);
+    expect(logs2?.data).toBe(`${sortedEchoVulnServer.passwordHintData}; RMS Deviation:2.490`);
+
+    getAuthResult(sortedEchoVulnServer, "12355", 1);
+    expect(failedAttemptResponse.result.code).toBe(ResponseCodeEnum.AuthFailure);
+    const logs3 = getMostRecentAuthLog(sortedEchoVulnServer.hostname);
+    expect(logs3?.data).toBe(`${sortedEchoVulnServer.passwordHintData}; RMS Deviation:0.447`);
+
+    expect(getAuthResult(sortedEchoVulnServer, sortedEchoVulnServer.password, 1).result.code).toBe(
+      ResponseCodeEnum.Success,
+    );
+    expect(sortedEchoVulnServer.hasAdminRights).toBe(true);
   });
 
   test("kingOfTheHill server creates a valid password and hint", () => {

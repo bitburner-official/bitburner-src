@@ -1,10 +1,13 @@
 import type { BoardState, OpponentStats } from "./Types";
 
-import type { GoOpponent } from "@enums";
+import { GoOpponent } from "@enums";
 import { getRecordKeys, PartialRecord } from "../Types/Record";
 import { resetGoPromises } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
+import { Player } from "@player";
+import { AugmentationName } from "@enums";
+import { newOpponentStats } from "./Constants";
 
 export const getEmptyHighlightedPoints = (size: number = 7) => {
   return Array.from({ length: size }, () => Array.from({ length: size }, () => null));
@@ -20,6 +23,15 @@ export class GoObject {
   moveOrCheatViaApi = false;
 
   prestigeAugmentation() {
+    if (
+      Player.bitNodeN === 14 &&
+      Player.hasAugmentation(AugmentationName.TheRedPill) &&
+      !Go.stats[GoOpponent.w0r1d_d43m0n]
+    ) {
+      // Show the secret opponent on the go stats page in BN14 if the player has TRP
+      Go.stats[GoOpponent.w0r1d_d43m0n] = newOpponentStats();
+    }
+    // Clear out stats except for reputation as favor from winstreaks on prestige
     for (const opponent of getRecordKeys(Go.stats)) {
       const stats = Go.stats[opponent];
       if (!stats) {

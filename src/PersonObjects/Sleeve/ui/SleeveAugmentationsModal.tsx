@@ -1,10 +1,10 @@
 import { Container, Typography, Paper } from "@mui/material";
 import React from "react";
 import { PurchasableAugmentations } from "../../../Augmentation/ui/PurchasableAugmentations";
-import { Player } from "@player";
 import { Modal } from "../../../ui/React/Modal";
 import { Sleeve } from "../Sleeve";
 import { useRerender } from "../../../ui/React/hooks";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 
 interface IProps {
   open: boolean;
@@ -43,10 +43,14 @@ export function SleeveAugmentationsModal(props: IProps): React.ReactElement {
         augNames={availableAugs.map((aug) => aug.name)}
         ownedAugNames={ownedAugNames}
         canPurchase={(aug) => {
-          return Player.money >= aug.baseCost;
+          return props.sleeve.canPurchaseAugmentation(aug).success;
         }}
         purchaseAugmentation={(aug) => {
-          props.sleeve.tryBuyAugmentation(aug);
+          const result = props.sleeve.purchaseAugmentation(aug);
+          if (!result.success) {
+            dialogBoxCreate(result.message);
+            return;
+          }
           rerender();
         }}
         rerender={rerender}

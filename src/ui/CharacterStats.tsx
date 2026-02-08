@@ -284,6 +284,7 @@ export function CharacterStats(): React.ReactElement {
                 color={Settings.theme.primary}
                 data={{ content: String(Player.augmentations.length) }}
               />
+              <StatsRow name="Karma" color={Settings.theme.primary} data={{ content: formatNumber(Player.karma, 3) }} />
             </TableBody>
           </Table>
         </Paper>
@@ -568,7 +569,7 @@ export function CharacterStats(): React.ReactElement {
                     value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
-                    mult: "IPvGO Max Favor",
+                    mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
                   },

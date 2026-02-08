@@ -28,6 +28,7 @@ export const DarknetState = {
   nextMutation: Promise.resolve(),
   nextMutationResolver: null as (() => void) | null,
   storedCycles: 0,
+  hasUsedHeartbleed: false,
   cyclesSinceLastMutation: 0,
 
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null)),
