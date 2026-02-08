@@ -70,7 +70,7 @@ export const getServerState = (hostname: string): ServerState => {
     authenticatedPIDs: [],
   };
   DarknetState.serverState.set(hostname, newState);
-  return DarknetState.serverState.get(hostname) ?? newState;
+  return newState;
 };
 
 /**

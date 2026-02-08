@@ -19,7 +19,7 @@ import { MAX_NET_DEPTH, NET_WIDTH } from "../DarkNet/Enums";
  *  Key (string) = IP
  *  Value = Server object
  */
-let AllServers: Map<string, BaseServer> = new Map();
+const AllServers: Map<string, BaseServer> = new Map();
 
 function GetServerByIP(ip: string): BaseServer | undefined {
   for (const server of AllServers.values()) {
@@ -30,8 +30,9 @@ function GetServerByIP(ip: string): BaseServer | undefined {
 
 //Get server by IP or hostname. Returns null if invalid
 export function GetServer(s: string): BaseServer | null {
-  if (AllServers.has(s)) {
-    return AllServers.get(s) ?? null;
+  const server = AllServers.get(s);
+  if (server) {
+    return server;
   }
   if (!isIPAddress(s)) return null;
   return GetServerByIP(s) ?? null;
@@ -148,10 +149,7 @@ export const renameServer = (hostname: string, newName: string): void => {
 };
 
 export function prestigeAllServers(): void {
-  for (const member of Object.keys(AllServers)) {
-    AllServers.delete(member);
-  }
-  AllServers = new Map();
+  AllServers.clear();
   // WIP: Check other properties in DarknetState as well, then improve validateDarknetNetwork.
   DarknetState.Network = new Array(MAX_NET_DEPTH)
     .fill(null)
@@ -164,6 +162,7 @@ export function loadAllServers(saveString: string): void {
   if (Object.keys(allServersData).length === 0) {
     throw new Error("Server list is empty.");
   }
+  AllServers.clear();
   for (const [serverName, server] of Object.entries(allServersData)) {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
