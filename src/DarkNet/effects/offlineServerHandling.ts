@@ -89,7 +89,7 @@ export function getFailureResult(
   ) {
     let result = `${targetServer.hostname} is not connected to the current server ${currentServer.hostname}. It may have moved.`;
     if (options.backdoorBypasses) {
-      result += " You can use also use a backdoor or stasis link on the target to allow remote access.";
+      result += " You can also use a backdoor or stasis link on the target to allow remote access.";
     }
     logger(ctx)(result);
     return {
