@@ -23,6 +23,7 @@ export const capturePackets = (server: DarknetServer) => {
   let captureServer: DarknetServer | null = null;
   if (Math.random() < passwordInclusionChance) {
     captureServer = server;
+    // eslint-disable-next-line no-dupe-else-if
   } else if (Math.random() < passwordInclusionChance) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
     captureServer = getDarknetServer(connectedServerName);
