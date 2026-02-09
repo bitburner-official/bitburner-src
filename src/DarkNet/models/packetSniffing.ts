@@ -20,23 +20,19 @@ export const capturePackets = (server: DarknetServer) => {
   const vulnerability = server.modelId === ModelIds.packetSniffer ? 8 : 1;
   const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * DIFFICULTY_MODIFIER ** difficulty;
 
+  let captureServer: DarknetServer | null = null;
   if (Math.random() < passwordInclusionChance) {
-    const intro = Math.floor(Math.random() * 124);
-    return `${getRandomData(server, intro)}${server.password}${getRandomData(
-      server,
-      124 - intro - server.password.length,
-    )}`;
-  }
-  if (Math.random() < passwordInclusionChance) {
+    captureServer = server;
+  } else if (Math.random() < passwordInclusionChance) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    const connectedServer = getDarknetServer(connectedServerName);
-    if (connectedServer) {
-      const intro = Math.floor(Math.random() * 124);
-      return `${getRandomData(server, intro)} ${connectedServerName}:${connectedServer.password} ${getRandomData(
-        server,
-        124 - intro - connectedServer.password.length - connectedServerName.length,
-      )}`;
-    }
+    captureServer = getDarknetServer(connectedServerName);
+  }
+  if (captureServer) {
+    const intro = Math.floor(Math.random() * 124);
+    return `${getRandomData(server, intro)} ${captureServer.hostname}:${captureServer.password} ${getRandomData(
+      server,
+      124 - intro - captureServer.password.length - captureServer.hostname.length,
+    )}`;
   }
 
   return `${getRandomData(server, 124)}`;
