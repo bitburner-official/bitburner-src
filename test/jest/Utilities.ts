@@ -15,6 +15,10 @@ import { purchaseServer } from "../../src/Server/ServerPurchases";
 import { purchaseHacknet } from "../../src/Hacknet/HacknetHelpers";
 import { initForeignServers } from "../../src/Server/ServerHelpers";
 import { generateNextPid } from "../../src/Netscript/Pid";
+import { initBitNodeMultipliers } from "../../src/BitNode/BitNode";
+import { resetGoPromises } from "../../src/Go/boardAnalysis/goAI";
+import { enterBitNode } from "../../src/RedPill";
+import { getDefaultBitNodeOptions } from "../../src/BitNode/BitNodeUtils";
 
 declare const importActual: (typeof config)["doImport"];
 
@@ -54,12 +58,26 @@ export function initGameEnvironment() {
 export function setupBasicTestingEnvironment(
   { purchaseHacknetServer, purchasePServer } = { purchasePServer: false, purchaseHacknetServer: false },
 ): void {
+  // We need to delete all servers before calling initForeignServers.
   prestigeAllServers();
   setPlayer(new PlayerObject());
+
+  // Basic steps of initializing a new save file. These are the steps that we do in Engine.load() when there is no save
+  // data.
+  initBitNodeMultipliers();
   Player.init();
-  Player.sourceFiles.set(4, 3);
-  Player.money = 1e15;
   initForeignServers(Player.getHomeComputer());
+  Player.reapplyAllAugmentations();
+  resetGoPromises();
+
+  // Grant SF4 for conveniently using Singularity APIs in tests.
+  Player.sourceFiles.set(4, 3);
+  // Simulate bitflume. This step is very important. It ensures all global states (e.g., Factions, Companies, BN mults)
+  // are reset.
+  enterBitNode(true, Player.bitNodeN, 1, getDefaultBitNodeOptions());
+  // Get some money.
+  Player.money = 1e15;
+
   if (purchasePServer) {
     purchaseServer("test-server-1", 2);
   }
