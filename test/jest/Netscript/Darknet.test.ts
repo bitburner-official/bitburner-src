@@ -81,7 +81,11 @@ function getNsOnServerNearLabyrinth() {
 function getFirstDarknetServerAdjacentToDarkWeb() {
   addLowLevelServersIfNeeded();
   const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
-  return darkweb.serversOnNetwork.filter((hostname) => hostname !== SpecialServers.Home)[0];
+  const result = darkweb.serversOnNetwork.filter((hostname) => hostname !== SpecialServers.Home)[0];
+  if (!result) {
+    throw new Error("No darknet server adjacent to darkweb found");
+  }
+  return result;
 }
 
 function getNsOnNonDarkwebDarknetServer() {

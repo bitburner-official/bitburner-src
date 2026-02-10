@@ -19,10 +19,10 @@ import { MAX_NET_DEPTH, NET_WIDTH } from "../DarkNet/Enums";
  *  Key (string) = IP
  *  Value = Server object
  */
-let AllServers: Record<string, Server | HacknetServer | DarknetServer> = {};
+const AllServers: Map<string, BaseServer> = new Map();
 
 function GetServerByIP(ip: string): BaseServer | undefined {
-  for (const server of Object.values(AllServers)) {
+  for (const server of AllServers.values()) {
     if (server.ip !== ip) continue;
     return server;
   }
@@ -30,17 +30,12 @@ function GetServerByIP(ip: string): BaseServer | undefined {
 
 //Get server by IP or hostname. Returns null if invalid
 export function GetServer(s: string): BaseServer | null {
-  if (Object.hasOwn(AllServers, s)) {
-    const server = AllServers[s];
-    if (server) return server;
+  const server = AllServers.get(s);
+  if (server) {
+    return server;
   }
   if (!isIPAddress(s)) return null;
-  const ipserver = GetServerByIP(s);
-  if (ipserver !== undefined) {
-    return ipserver;
-  }
-
-  return null;
+  return GetServerByIP(s) ?? null;
 }
 
 /**
@@ -70,24 +65,24 @@ export function GetReachableServer(s: string): BaseServer | null {
   return server;
 }
 
+// Get all servers. Only includes darknet servers if showDarkweb is true.
 export function GetAllServers(showDarkweb = false): BaseServer[] {
   const servers: BaseServer[] = [];
-  for (const key of Object.keys(AllServers)) {
-    if (!showDarkweb && AllServers[key] instanceof DarknetServer) {
+  for (const server of AllServers.values()) {
+    if (!showDarkweb && server instanceof DarknetServer) {
       continue;
     }
-    servers.push(AllServers[key]);
+    servers.push(server);
   }
   return servers;
 }
 
 export function DeleteServer(serverkey: string): void {
-  for (const key of Object.keys(AllServers)) {
-    const server = AllServers[key];
-    if (server.ip !== serverkey && server.hostname !== serverkey) continue;
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete AllServers[key];
-    break;
+  for (const server of AllServers.values()) {
+    if (server.ip === serverkey || server.hostname === serverkey) {
+      AllServers.delete(server.hostname);
+      break;
+    }
   }
 }
 
@@ -106,8 +101,8 @@ export const disconnectServers = (server1: BaseServer, server2: BaseServer) => {
 };
 
 export function ipExists(ip: string): boolean {
-  for (const hostName in AllServers) {
-    if (AllServers[hostName].ip === ip) {
+  for (const server of AllServers.values()) {
+    if (server.ip === ip) {
       return true;
     }
   }
@@ -141,21 +136,20 @@ export function AddToAllServers(server: Server | HacknetServer | DarknetServer):
     );
   }
 
-  AllServers[server.hostname] = server;
+  AllServers.set(server.hostname, server);
 }
 
 export const renameServer = (hostname: string, newName: string): void => {
-  AllServers[newName] = AllServers[hostname];
-  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-  delete AllServers[hostname];
+  const existingServer = AllServers.get(hostname);
+  if (!existingServer) {
+    throw new Error(`Cannot rename server. No server found with hostname ${hostname}`);
+  }
+  AllServers.set(newName, existingServer);
+  AllServers.delete(hostname);
 };
 
 export function prestigeAllServers(): void {
-  for (const member of Object.keys(AllServers)) {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete AllServers[member];
-  }
-  AllServers = {};
+  AllServers.clear();
   // WIP: Check other properties in DarknetState as well, then improve validateDarknetNetwork.
   DarknetState.Network = new Array(MAX_NET_DEPTH)
     .fill(null)
@@ -168,18 +162,19 @@ export function loadAllServers(saveString: string): void {
   if (Object.keys(allServersData).length === 0) {
     throw new Error("Server list is empty.");
   }
+  AllServers.clear();
   for (const [serverName, server] of Object.entries(allServersData)) {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
-      throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);
+      throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
+    } else {
+      AllServers.set(serverName, server);
     }
   }
-  // We validated the data above, so it's safe to typecast here.
-  AllServers = allServersData as typeof AllServers;
 
   // Apply blocked ram for darknet servers
   applyRamBlocks();
 }
 
 export function saveAllServers(): string {
-  return JSON.stringify(AllServers);
+  return JSON.stringify(Object.fromEntries(AllServers.entries()));
 }

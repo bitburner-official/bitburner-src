@@ -232,7 +232,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
       }
       // Reset some things, because we're reusing the RunningScript instance
       script.ramUsage = ramUsage;
-      script.dataMap = {};
+      script.dataMap = new Map();
       script.onlineExpGained = 0;
       script.onlineMoneyMade = 0;
       script.onlineRunningTime = 0.01;

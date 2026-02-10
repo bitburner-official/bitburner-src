@@ -44,12 +44,12 @@ export const DarknetState = {
   lastStormTime: new Date(),
 
   stockPromotions: {} as Record<string, number>,
-  migrationInductionServers: {} as Record<string, number>,
+  migrationInductionServers: new Map<string, number>(),
 
   /**
    * Do NOT access the server state directly via this property. You must call getServerState.
    */
-  serverState: {} as Record<string, ServerState>,
+  serverState: new Map<string, ServerState>(),
   offlineServers: [] as string[],
   showFullNetwork: false,
   zoomIndex: 7,
@@ -61,14 +61,17 @@ export const DarknetState = {
  * Get the server state. It will initialize the state if it does not exist in DarknetState.serverState.
  */
 export const getServerState = (hostname: string): ServerState => {
-  if (!DarknetState.serverState[hostname]) {
-    DarknetState.serverState[hostname] = {
-      serverLogs: [],
-      lastLogTime: undefined,
-      authenticatedPIDs: [],
-    };
+  const currentState = DarknetState.serverState.get(hostname);
+  if (currentState) {
+    return currentState;
   }
-  return DarknetState.serverState[hostname];
+  const newState = {
+    serverLogs: [],
+    lastLogTime: undefined,
+    authenticatedPIDs: [],
+  };
+  DarknetState.serverState.set(hostname, newState);
+  return newState;
 };
 
 /**
