@@ -1298,6 +1298,12 @@ describe("lab location methods", () => {
   });
   test("dnet.labradar()", async () => {
     const ns = getNsOnServerNearLabyrinth();
+
+    // Make sure we are at the starting point.
+    const locationStatus = (await ns.dnet.labreport()) as LocationStatus;
+    expect(isLocationStatus(locationStatus)).toBe(true);
+    expect(locationStatus.coords).toStrictEqual([1, 1]);
+
     const response = (await ns.dnet.labradar()) as Result;
     assertNonNullish(response.message);
     const surroundingsString = response.message.split("\n");

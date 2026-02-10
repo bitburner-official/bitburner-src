@@ -11,8 +11,6 @@ import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { DarknetServer } from "./DarknetServer";
 import { applyRamBlocks } from "../DarkNet/effects/ramblock";
-import { DarknetState } from "../DarkNet/models/DarknetState";
-import { MAX_NET_DEPTH, NET_WIDTH } from "../DarkNet/Enums";
 
 /**
  * Map of all Servers that exist in the game
@@ -150,10 +148,6 @@ export const renameServer = (hostname: string, newName: string): void => {
 
 export function prestigeAllServers(): void {
   AllServers.clear();
-  // WIP: Check other properties in DarknetState as well, then improve validateDarknetNetwork.
-  DarknetState.Network = new Array(MAX_NET_DEPTH)
-    .fill(null)
-    .map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null));
 }
 
 export function loadAllServers(saveString: string): void {
@@ -166,9 +160,8 @@ export function loadAllServers(saveString: string): void {
   for (const [serverName, server] of Object.entries(allServersData)) {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
-    } else {
-      AllServers.set(serverName, server);
     }
+    AllServers.set(serverName, server);
   }
 
   // Apply blocked ram for darknet servers

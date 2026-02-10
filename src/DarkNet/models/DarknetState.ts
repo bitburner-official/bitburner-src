@@ -22,6 +22,9 @@ export type LogEntry = {
   message: string | PasswordResponse;
 };
 
+/**
+ * If you add a new property to this global state, you must check if you need to reset it in prestigeDarknetState.
+ */
 export const DarknetState = {
   allowMutating: true,
   openServer: null as BaseServer | null,
@@ -56,6 +59,25 @@ export const DarknetState = {
   netViewTopScroll: 0,
   netViewLeftScroll: 0,
 };
+
+export function prestigeDarknetState(prestigeSourceFile: boolean): void {
+  DarknetState.allowMutating = true;
+  DarknetState.openServer = null;
+  DarknetState.storedCycles = 0;
+  if (prestigeSourceFile) {
+    DarknetState.hasUsedHeartbleed = false;
+  }
+  DarknetState.cyclesSinceLastMutation = 0;
+  DarknetState.Network = new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<null>(NET_WIDTH).fill(null));
+  DarknetState.labyrinth = null;
+  DarknetState.labLocations = { "-1": [1, 1] };
+  DarknetState.lastPhishingCacheTime = new Date();
+  DarknetState.lastStormTime = new Date();
+  DarknetState.stockPromotions = {};
+  DarknetState.migrationInductionServers.clear();
+  DarknetState.serverState.clear();
+  DarknetState.offlineServers = [];
+}
 
 /**
  * Get the server state. It will initialize the state if it does not exist in DarknetState.serverState.
