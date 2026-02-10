@@ -33,6 +33,7 @@ import { pendingUIShareJobIds } from "./NetworkShare/Share";
 import { getDarkscapeNavigator } from "./DarkNet/effects/effects";
 import { CodingContractEventEmitter } from "./CodingContract/CodingContractEventEmitter";
 import { showLiterature } from "./Literature/LiteratureHelpers";
+import { prestigeDarknetState } from "./DarkNet/models/DarknetState";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -74,6 +75,8 @@ export function prestigeAugmentation(): void {
   const homeComp = Player.getHomeComputer();
   // Delete all servers except home computer
   prestigeAllServers();
+
+  prestigeDarknetState(false);
 
   // Reset home computer (only the programs) and add to AllServers
   AddToAllServers(homeComp);
@@ -224,6 +227,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Delete all servers except home computer
   prestigeAllServers(); // Must be done before initForeignServers()
+
+  prestigeDarknetState(true);
 
   // Reset home computer (only the programs) and add to AllServers
   AddToAllServers(homeComp);

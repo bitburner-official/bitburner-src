@@ -24,7 +24,7 @@ const PATH = " ";
 
 const MULTI_MAZE_THRESHOLD = 5;
 
-type labDetails = {
+type LabDetails = {
   name: string;
   depth: number;
   cha: number;
@@ -33,7 +33,7 @@ type labDetails = {
   manual: boolean;
 };
 
-export const labData: Record<string, labDetails> = {
+export const labData: Record<string, LabDetails> = {
   [SpecialServers.NormalLab]: {
     name: SpecialServers.NormalLab,
     depth: 7,
