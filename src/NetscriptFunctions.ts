@@ -110,7 +110,7 @@ import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
-import { getFailureResult } from "./DarkNet/effects/offlineServerHandling";
+import { checkDarknetServer } from "./DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
 import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
@@ -654,7 +654,7 @@ export const ns: InternalAPI<NSFull> = {
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       if (
-        !getFailureResult(ctx, host, {
+        !checkDarknetServer(ctx, host, {
           allowNonDarknet: true,
           requireAdminRights: true,
           requireSession: true,
@@ -784,7 +784,7 @@ export const ns: InternalAPI<NSFull> = {
     const destination = helpers.string(ctx, "destination", _destination);
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
     if (
-      !getFailureResult(ctx, destination, {
+      !checkDarknetServer(ctx, destination, {
         allowNonDarknet: true,
         requireAdminRights: true,
         requireSession: true,
@@ -792,7 +792,7 @@ export const ns: InternalAPI<NSFull> = {
     ) {
       return false;
     }
-    if (!getFailureResult(ctx, source, { allowNonDarknet: true }).success) {
+    if (!checkDarknetServer(ctx, source, { allowNonDarknet: true }).success) {
       return false;
     }
     const sourceServer = helpers.getServer(ctx, source);
