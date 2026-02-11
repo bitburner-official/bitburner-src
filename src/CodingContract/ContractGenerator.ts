@@ -1,7 +1,6 @@
 import { CodingContract, CodingContractRewardType, ICodingContractReward } from "./Contract";
 import { CodingContractTypes } from "./ContractTypes";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { Factions } from "../Faction/Factions";
 import { Player } from "@player";
 import { CodingContractName } from "@enums";
 import { GetServer, GetAllServers } from "../Server/AllServers";
@@ -85,7 +84,7 @@ export function generateRandomContract(): void {
 
   const problemType = getRandomProblemType(maxDif);
 
-  const contractFn = getRandomFilename(randServer, reward);
+  const contractFn = getRandomFilename(randServer);
   if (contractFn == null) {
     return;
   }
@@ -104,7 +103,7 @@ export function generateRandomContractOnHome(): void {
   // Choose random server
   const serv = Player.getHomeComputer();
 
-  const contractFn = getRandomFilename(serv, reward);
+  const contractFn = getRandomFilename(serv);
   if (contractFn == null) {
     return;
   }
@@ -129,7 +128,8 @@ export const generateDummyContract = (problemType: CodingContractName, server: B
 interface IGenerateContractParams {
   problemType?: CodingContractName;
   server?: string;
-  fn?: ContractFilePath;
+  filename?: ContractFilePath;
+  reward?: ICodingContractReward;
 }
 
 export function generateContract(params: IGenerateContractParams): void {
@@ -142,8 +142,8 @@ export function generateContract(params: IGenerateContractParams): void {
     problemType = getRandomProblemType();
   }
 
-  // Reward Type - This is always random for now
-  const reward = getRandomReward();
+  // Reward Type
+  const reward = params.reward ?? getRandomReward();
 
   // Server
   let server;
@@ -159,38 +159,12 @@ export function generateContract(params: IGenerateContractParams): void {
     return;
   }
 
-  const filename = params.fn ? params.fn : getRandomFilename(server, reward);
+  const filename = params.filename ? params.filename : getRandomFilename(server);
   if (filename == null) {
     return;
   }
   const contract = new CodingContract(filename, problemType, reward);
   server.addContract(contract);
-}
-
-// Ensures that a contract's reward type is valid
-function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContractRewardType {
-  let type = rewardType; // Create copy
-
-  const factionsThatAllowHacking = Player.factions.filter((fac) => {
-    try {
-      return Factions[fac].getInfo().offerHackingWork;
-    } catch (e) {
-      console.error("Error when trying to filter Hacking Factions for Coding Contract Generation", e);
-      return false;
-    }
-  });
-  if (type === CodingContractRewardType.CompanyReputation && Object.keys(Player.jobs).length === 0) {
-    type =
-      Math.random() < 0.5 ? CodingContractRewardType.FactionReputation : CodingContractRewardType.FactionReputationAll;
-  }
-  if (type === CodingContractRewardType.FactionReputation && factionsThatAllowHacking.length === 0) {
-    type = CodingContractRewardType.Money;
-  }
-  if (type === CodingContractRewardType.FactionReputationAll && factionsThatAllowHacking.length === 0) {
-    type = CodingContractRewardType.Money;
-  }
-
-  return type;
 }
 
 function getRandomProblemType(maxDif = 10): CodingContractName {
@@ -200,42 +174,17 @@ function getRandomProblemType(maxDif = 10): CodingContractName {
   return problemTypes[randIndex];
 }
 
-function getRandomReward(): ICodingContractReward {
+export function getRandomReward(): ICodingContractReward {
+  const validRewardTypes = [
+    CodingContractRewardType.FactionReputation,
+    CodingContractRewardType.FactionReputationAll,
+    CodingContractRewardType.CompanyReputation,
+  ];
   // Don't offer money reward by default if BN multiplier is 0 (e.g. BN8)
-  const rewardTypeUpperBound =
-    currentNodeMults.CodingContractMoney === 0 ? CodingContractRewardType.Money - 1 : CodingContractRewardType.Money;
-  const rewardType = sanitizeRewardType(getRandomIntInclusive(0, rewardTypeUpperBound));
-
-  // Add additional information based on the reward type
-  const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
-
-  switch (rewardType) {
-    case CodingContractRewardType.FactionReputation: {
-      // Get a random faction that player is a part of. That
-      // faction must allow hacking contracts
-      const numFactions = factionsThatAllowHacking.length;
-      // This check is unnecessary because sanitizeRewardType ensures that it won't happen. However, I'll still leave
-      // it here, just in case somebody else changes sanitizeRewardType without taking account of this check.
-      if (numFactions > 0) {
-        const randFaction = factionsThatAllowHacking[getRandomIntInclusive(0, numFactions - 1)];
-        return { type: rewardType, name: randFaction };
-      }
-      return { type: CodingContractRewardType.Money };
-    }
-    case CodingContractRewardType.CompanyReputation: {
-      const allJobs = Object.keys(Player.jobs);
-      // This check is also unnecessary. Check the comment above.
-      if (allJobs.length > 0) {
-        return {
-          type: CodingContractRewardType.CompanyReputation,
-          name: allJobs[getRandomIntInclusive(0, allJobs.length - 1)],
-        };
-      }
-      return { type: CodingContractRewardType.Money };
-    }
-    default:
-      return { type: rewardType };
+  if (currentNodeMults.CodingContractMoney > 0) {
+    validRewardTypes.push(CodingContractRewardType.Money);
   }
+  return { type: getRandomIntInclusive(0, validRewardTypes.length - 1) };
 }
 
 function getRandomServer(): BaseServer | null {
@@ -277,16 +226,8 @@ function getRandomAlphanumericString(length: number) {
  * Callers of this function must return early and not generate a contract when it happens. It likely happens when there
  * are ~240k contracts on the specified server.
  */
-export function getRandomFilename(
-  server: BaseServer,
-  reward: ICodingContractReward = { type: CodingContractRewardType.Money },
-): ContractFilePath | null {
-  let contractFn = `contract-${getRandomAlphanumericString(6)}`;
-  if ("name" in reward) {
-    // Only alphanumeric characters in the reward name.
-    contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
-  }
-  contractFn += ".cct";
+export function getRandomFilename(server: BaseServer): ContractFilePath | null {
+  const contractFn = `contract-${getRandomAlphanumericString(6)}.cct`;
   // Return null if there is a contract with the same name.
   if (server.contracts.filter((c: CodingContract) => c.fn === contractFn).length) {
     return null;

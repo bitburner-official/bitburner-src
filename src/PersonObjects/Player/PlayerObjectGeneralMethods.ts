@@ -48,7 +48,6 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
-import { isMember } from "../../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { AlertEvents } from "../../ui/React/AlertManager";
 import { Augmentations } from "../../Augmentation/Augmentations";
@@ -57,6 +56,9 @@ import type { Result } from "@nsdefs";
 import type { AchievementId } from "../../Achievements/Types";
 import { Infiltration } from "../../Infiltration/Infiltration";
 import { recalculateNumberOfOwnedSleeves } from "../Sleeve/SleeveCovenantPurchases";
+import { Player } from "@player";
+import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
+import { getRecordKeys } from "../../Types/Record";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -495,57 +497,65 @@ export function gainCodingContractReward(
   reward: ICodingContractReward | null,
   difficulty = 1,
 ): string {
-  if (!reward) return `No reward for this contract`;
+  if (!reward) {
+    return `No reward for this contract`;
+  }
 
   switch (reward.type) {
     case CodingContractRewardType.FactionReputation: {
-      if (!Factions[reward.name]) {
-        return this.gainCodingContractReward({ type: CodingContractRewardType.FactionReputationAll });
+      const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
+      if (factionsThatAllowHacking.length === 0) {
+        return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty);
       }
+      const randomFaction = factionsThatAllowHacking[getRandomIntInclusive(0, factionsThatAllowHacking.length - 1)];
       const repGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
-      Factions[reward.name].playerReputation += repGain;
-      return `Gained ${repGain} faction reputation for ${reward.name}`;
+      Factions[randomFaction].playerReputation += repGain;
+      return `Gained ${repGain} faction reputation for ${randomFaction}`;
     }
     case CodingContractRewardType.FactionReputationAll: {
-      const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
-
-      // Ignore Bladeburners and other special factions for this calculation
-      const specialFactions = [
-        FactionName.Bladeburners,
-        FactionName.ShadowsOfAnarchy,
-        FactionName.ChurchOfTheMachineGod,
-      ];
-      const factions = this.factions.slice().filter((f) => {
-        return !specialFactions.includes(f);
-      });
-
-      // If the player was only part of the special factions, we'll just give money
-      if (factions.length == 0) {
+      const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
+      if (factionsThatAllowHacking.length === 0) {
         return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty);
       }
 
-      const gainPerFaction = Math.floor(totalGain / factions.length);
-      for (const facName of factions) {
-        if (!Factions[facName]) continue;
+      const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
+      const gainPerFaction = Math.floor(totalGain / factionsThatAllowHacking.length);
+      for (const facName of factionsThatAllowHacking) {
         Factions[facName].playerReputation += gainPerFaction;
       }
-      return `Gained ${gainPerFaction} reputation for each of the following factions: ${factions.join(", ")}`;
+      return `Gained ${gainPerFaction} reputation for each of the following factions: ${factionsThatAllowHacking.join(
+        ", ",
+      )}`;
     }
     case CodingContractRewardType.CompanyReputation: {
-      if (!isMember("CompanyName", reward.name)) {
-        return this.gainCodingContractReward({ type: CodingContractRewardType.FactionReputationAll });
+      const companies = getRecordKeys(Player.jobs);
+      if (companies.length === 0) {
+        return this.gainCodingContractReward(
+          {
+            type:
+              Math.random() < 0.5
+                ? CodingContractRewardType.FactionReputation
+                : CodingContractRewardType.FactionReputationAll,
+          },
+          difficulty,
+        );
       }
+      const randomCompany = companies[getRandomIntInclusive(0, companies.length - 1)];
       const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty;
-      Companies[reward.name].playerReputation += repGain;
-      return `Gained ${repGain} company reputation for ${reward.name}`;
+      Companies[randomCompany].playerReputation += repGain;
+      return `Gained ${repGain} company reputation for ${randomCompany}`;
     }
-    case CodingContractRewardType.Money:
-    default: {
+    case CodingContractRewardType.Money: {
       const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * currentNodeMults.CodingContractMoney;
       this.gainMoney(moneyGain, "codingcontract");
       return `Gained ${formatMoney(moneyGain)}`;
     }
+    default: {
+      // Verify type switch statement is exhaustive
+      const __a: never = reward;
+    }
   }
+  throw new Error("Invalid coding contract reward type");
 }
 
 export function gotoLocation(this: PlayerObject, to: LocationName): boolean {
