@@ -43,7 +43,7 @@ describe("renameServer tests", () => {
     prestigeAllServers();
     expect(GetAllServers(true)).toEqual([]);
 
-    const home = new Server({ hostname: "home", ip: "1.2.3.4" });
+    const home = new Server({ hostname: "home", ip: "1.2.3.4" as IPAddress });
     AddToAllServers(home);
     // Failures of toEqual will report badly, due to a Jest bug involving our use of JSONMap.
     expect(GetAllServers(true)).toEqual([home]);
