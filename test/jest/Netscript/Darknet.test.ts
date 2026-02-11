@@ -1094,9 +1094,13 @@ describe("Offline darknet server", () => {
     const ns = getNsOnDarkWeb();
     let server = ns.getServer(hostnameForOfflineServer);
     expect(server).toHaveProperty("isOnline", false);
+    expect(server.hostname).toBe(hostnameForOfflineServer);
+    expect(server.ip).toBe("");
 
     server = ns.getServer(ipForOfflineServer);
     expect(server).toHaveProperty("isOnline", false);
+    expect(server.hostname).toBe("");
+    expect(server.ip).toBe(ipForOfflineServer);
   });
   test("getServerAuthDetails", () => {
     const ns = getNsOnDarkWeb();

@@ -951,10 +951,12 @@ export const ns: InternalAPI<NSFull> = {
     const [server, host] = helpers.getServer(ctx, _host);
     if (!server) {
       // If the server is offline, return a dummy object with isOnline = false.
+      const isIp = isIPAddress(host);
       return {
         isOnline: false,
         ...exampleDarknetServerData,
-        hostname: host,
+        hostname: isIp ? "" : host,
+        ip: isIp ? host : "",
       } satisfies DarknetServerData & { isOnline: boolean };
     }
     if (server instanceof DarknetServer) {
