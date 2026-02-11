@@ -153,7 +153,7 @@ export function loadAllServers(saveString: string): void {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
     }
-    AllServers.set(serverName, server);
+    AllServers.set(server.hostname, server);
     AllServers.set(server.ip, server);
   }
 
@@ -163,34 +163,4 @@ export function loadAllServers(saveString: string): void {
 
 export function saveAllServers(): string {
   return JSON.stringify(Object.fromEntries(GetAllServers(true).map((s) => [s.hostname, s])));
-}
-
-/**
- * In older versions, keys of AllServers are IP addresses instead of hostnames.
- */
-export function migrateAllServersData(): void {
-  let useIPAsKey = false;
-  let useHostnameAsKey = false;
-  for (const key of AllServers.keys()) {
-    if (isIPAddress(key)) {
-      useIPAsKey = true;
-    } else {
-      useHostnameAsKey = true;
-    }
-  }
-  // This should never happen.
-  if (useIPAsKey && useHostnameAsKey) {
-    throw new Error("Keys of AllServers contain both IPs and hostnames.");
-  }
-  // Nothing to do. Keys of AllServers contain only hostnames.
-  if (useHostnameAsKey) {
-    return;
-  }
-
-  for (const server of AllServers.values()) {
-    if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
-      throw new Error(`Server ${server.hostname} is not an instance of Server or HacknetServer or DarknetServer.`);
-    }
-    AllServers.set(server.hostname, server);
-  }
 }

@@ -46,6 +46,9 @@ describe("renameServer tests", () => {
     const home = new Server({ hostname: "home", ip: "1.2.3.4" as IPAddress });
     AddToAllServers(home);
     // Failures of toEqual will report badly, due to a Jest bug involving our use of JSONMap.
+    // The context is similar to this issue: https://github.com/hapijs/joi/issues/2350
+    // I didn't run it all the way down, because it only affects error-reporting, not the comparison,
+    // so everything is fine when tests are passing.
     expect(GetAllServers(true)).toEqual([home]);
 
     renameServer("home", "home");
