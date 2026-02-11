@@ -4450,6 +4450,9 @@ export interface Darknet {
    *
    * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
    *
+   * Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer
+   * if the player's charisma is below the server's charisma level.
+   *
    * @remarks
    * RAM cost: 0.6 GB
    *
@@ -4489,6 +4492,7 @@ export interface Darknet {
    * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
    *
    * The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
+   * Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
    *
    * @remarks
    * RAM cost: 0.6 GB
