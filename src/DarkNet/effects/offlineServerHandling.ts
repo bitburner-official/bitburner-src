@@ -14,7 +14,7 @@ import { CompletedProgramName } from "../../Enums";
 import type { DarknetResponseCode } from "@nsdefs";
 import { isIPAddress } from "../../Types/strings";
 
-type FailureResultOptions = {
+type CheckDarknetServerOptions = {
   requireAdminRights?: boolean;
   requireSession?: boolean;
   requireDirectConnection?: boolean;
@@ -34,10 +34,10 @@ export function expectDarknetAccess(ctx: NetscriptContext): void {
   }
 }
 
-export function getFailureResult(
+export function checkDarknetServer(
   ctx: NetscriptContext,
   host: string,
-  options: FailureResultOptions = {},
+  options: CheckDarknetServerOptions = {},
 ):
   | { success: true; code: DarknetResponseCode; message: string; server: DarknetServer }
   | { success: false; code: DarknetResponseCode; message: string } {
