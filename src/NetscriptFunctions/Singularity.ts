@@ -470,16 +470,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const server = Player.getCurrentServer();
       cat([filename], server);
     },
-    connect: (ctx) => (_host) => {
+    connect: (ctx) => (_host?) => {
       helpers.checkSingularityAccess(ctx);
-      const host = helpers.string(ctx, "host", _host);
-      if (!host) {
-        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
-      }
-
-      const target = GetServer(host);
+      const [target, host] = helpers.getServer(ctx, _host);
       if (target == null) {
-        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
+        return false;
       }
 
       // Adjacent servers

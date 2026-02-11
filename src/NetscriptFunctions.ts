@@ -191,16 +191,14 @@ export const ns: InternalAPI<NSFull> = {
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),
-  hack: (ctx) => (_host, opts?) => {
-    const host = helpers.string(ctx, "host", _host);
-    return helpers.hack(ctx, host, false, opts);
+  hack: (ctx) => (_host?, opts?) => {
+    return helpers.hack(ctx, _host, false, opts);
   },
   hackAnalyzeThreads: (ctx) => (_host, _hackAmount) => {
-    const host = helpers.string(ctx, "host", _host);
     const hackAmount = helpers.number(ctx, "hackAmount", _hackAmount);
 
     // Check argument validity
-    const server = helpers.getNormalServer(ctx, host);
+    const server = helpers.getNormalServer(ctx, _host);
     if (isNaN(hackAmount)) {
       throw helpers.errorMessage(
         ctx,
@@ -222,18 +220,15 @@ export const ns: InternalAPI<NSFull> = {
 
     return hackAmount / (server.moneyAvailable * percentHacked);
   },
-  hackAnalyze: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-
-    const server = helpers.getNormalServer(ctx, host);
+  hackAnalyze: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
 
     return calculatePercentMoneyHacked(server, Player);
   },
   hackAnalyzeSecurity: (ctx) => (_threads, _host?) => {
     let threads = helpers.number(ctx, "threads", _threads);
     if (_host) {
-      const host = helpers.string(ctx, "host", _host);
-      const server = helpers.getNormalServer(ctx, host);
+      const server = helpers.getNormalServer(ctx, _host);
 
       const percentHacked = calculatePercentMoneyHacked(server, Player);
 
@@ -245,10 +240,8 @@ export const ns: InternalAPI<NSFull> = {
 
     return ServerConstants.ServerFortifyAmount * threads;
   },
-  hackAnalyzeChance: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-
-    const server = helpers.getNormalServer(ctx, host);
+  hackAnalyzeChance: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
 
     return calculateHackingChance(server, Player);
   },
@@ -269,10 +262,9 @@ export const ns: InternalAPI<NSFull> = {
       return new Promise((resolve) => setTimeout(() => resolve(true), time));
     },
   grow: (ctx) => (_host, opts?) => {
-    const host = helpers.string(ctx, "host", _host);
     const { threads, stock, additionalMsec } = helpers.validateHGWOptions(ctx, opts);
 
-    const server = helpers.getNormalServer(ctx, host);
+    const server = helpers.getNormalServer(ctx, _host);
 
     // No root access or skill level too low
     const canHack = netscriptCanGrow(server);
@@ -317,12 +309,11 @@ export const ns: InternalAPI<NSFull> = {
   growthAnalyze:
     (ctx) =>
     (_host, _multiplier, _cores = 1) => {
-      const host = helpers.string(ctx, "hostname", _host);
       const mult = helpers.number(ctx, "multiplier", _multiplier);
       const cores = helpers.positiveInteger(ctx, "cores", _cores);
 
       // Check argument validity
-      const server = helpers.getNormalServer(ctx, host);
+      const server = helpers.getNormalServer(ctx, _host);
       if (!Number.isFinite(mult) || mult < 1) {
         throw helpers.errorMessage(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
       }
@@ -335,8 +326,7 @@ export const ns: InternalAPI<NSFull> = {
       let threads = helpers.number(ctx, "threads", _threads);
       if (_host) {
         const cores = helpers.number(ctx, "cores", _cores);
-        const host = helpers.string(ctx, "host", _host);
-        const server = helpers.getNormalServer(ctx, host);
+        const server = helpers.getNormalServer(ctx, _host);
 
         const maxThreadsNeeded = Math.ceil(
           numCycleForGrowthCorrected(server, server.moneyMax, server.moneyAvailable, cores),
@@ -347,11 +337,10 @@ export const ns: InternalAPI<NSFull> = {
 
       return 2 * ServerConstants.ServerFortifyAmount * threads;
     },
-  weaken: (ctx) => async (_host, opts?) => {
-    const host = helpers.string(ctx, "host", _host);
+  weaken: (ctx) => async (_host?, opts?) => {
     const { threads, additionalMsec } = helpers.validateHGWOptions(ctx, opts);
 
-    const server = helpers.getNormalServer(ctx, host);
+    const server = helpers.getNormalServer(ctx, _host);
 
     // No root access or skill level too low
     const canHack = netscriptCanWeaken(server);
@@ -537,10 +526,8 @@ export const ns: InternalAPI<NSFull> = {
 
       return runningScriptObj.logs.map((x) => String(x));
     },
-  nuke: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-
-    const server = helpers.getNormalServer(ctx, host);
+  nuke: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
     if (server.hasAdminRights) {
       helpers.log(ctx, () => `Already have root access to '${server.hostname}'.`);
       return true;
@@ -557,9 +544,8 @@ export const ns: InternalAPI<NSFull> = {
     helpers.log(ctx, () => `Executed NUKE.exe virus on '${server.hostname}' to gain root access.`);
     return true;
   },
-  brutessh: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getNormalServer(ctx, host);
+  brutessh: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
     if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
       helpers.log(ctx, () => "You do not have the BruteSSH.exe program!");
       return false;
@@ -573,9 +559,8 @@ export const ns: InternalAPI<NSFull> = {
     }
     return true;
   },
-  ftpcrack: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getNormalServer(ctx, host);
+  ftpcrack: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
     if (!Player.hasProgram(CompletedProgramName.ftpCrack)) {
       helpers.log(ctx, () => "You do not have the FTPCrack.exe program!");
       return false;
@@ -590,8 +575,7 @@ export const ns: InternalAPI<NSFull> = {
     return true;
   },
   relaysmtp: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getNormalServer(ctx, host);
+    const server = helpers.getNormalServer(ctx, _host);
     if (!Player.hasProgram(CompletedProgramName.relaySmtp)) {
       helpers.log(ctx, () => "You do not have the relaySMTP.exe program!");
       return false;
@@ -605,9 +589,8 @@ export const ns: InternalAPI<NSFull> = {
     }
     return true;
   },
-  httpworm: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getNormalServer(ctx, host);
+  httpworm: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
     if (!Player.hasProgram(CompletedProgramName.httpWorm)) {
       helpers.log(ctx, () => "You do not have the HTTPWorm.exe program!");
       return false;
@@ -621,9 +604,8 @@ export const ns: InternalAPI<NSFull> = {
     }
     return true;
   },
-  sqlinject: (ctx) => (_host) => {
-    const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getNormalServer(ctx, host);
+  sqlinject: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
     if (!Player.hasProgram(CompletedProgramName.sqlInject)) {
       helpers.log(ctx, () => "You do not have the SQLInject.exe program!");
       return false;
@@ -762,7 +744,7 @@ export const ns: InternalAPI<NSFull> = {
     },
   killall:
     (ctx) =>
-    (_host, _safetyGuard = true) => {
+    (_host?, _safetyGuard = true) => {
       const safetyGuard = !!_safetyGuard;
       const [server, host] = helpers.getServer(ctx, _host);
       if (!server) return false;
@@ -884,7 +866,7 @@ export const ns: InternalAPI<NSFull> = {
       ...helpers.createPublicRunningScript(rs.runningScript),
     }));
   },
-  ps: (ctx) => (_host) => {
+  ps: (ctx) => (_host?) => {
     const [server] = helpers.getServer(ctx, _host);
     const processes: ProcessInfo[] = [];
     if (!server) return processes;
@@ -901,7 +883,7 @@ export const ns: InternalAPI<NSFull> = {
     }
     return processes;
   },
-  hasRootAccess: (ctx) => (_host) => {
+  hasRootAccess: (ctx) => (_host?) => {
     const [server] = helpers.getServer(ctx, _host);
     if (!server) return false;
     return server.hasAdminRights;
@@ -947,7 +929,7 @@ export const ns: InternalAPI<NSFull> = {
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));
     },
-  getServer: (ctx) => (_host) => {
+  getServer: (ctx) => (_host?) => {
     const [server, host] = helpers.getServer(ctx, _host);
     if (!server) {
       // If the server is offline, return a dummy object with isOnline = false.
@@ -1014,7 +996,7 @@ export const ns: InternalAPI<NSFull> = {
       serverGrowth: server.serverGrowth,
     } satisfies NSInterfaceServer;
   },
-  getServerMoneyAvailable: (ctx) => (_host) => {
+  getServerMoneyAvailable: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     if (server.hostname == "home") {
       // Return player's money
@@ -1024,54 +1006,54 @@ export const ns: InternalAPI<NSFull> = {
     helpers.log(ctx, () => `returned ${formatMoney(server.moneyAvailable)} for '${server.hostname}'`);
     return server.moneyAvailable;
   },
-  getServerSecurityLevel: (ctx) => (_host) => {
+  getServerSecurityLevel: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     helpers.log(ctx, () => `returned ${formatSecurity(server.hackDifficulty)} for '${server.hostname}'`);
     return server.hackDifficulty;
   },
-  getServerBaseSecurityLevel: (ctx) => (_host) => {
+  getServerBaseSecurityLevel: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     helpers.log(ctx, () => `returned ${formatSecurity(server.baseDifficulty)} for '${server.hostname}'`);
     return server.baseDifficulty;
   },
-  getServerMinSecurityLevel: (ctx) => (_host) => {
+  getServerMinSecurityLevel: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     helpers.log(ctx, () => `returned ${formatSecurity(server.minDifficulty)} for ${server.hostname}`);
     return server.minDifficulty;
   },
-  getServerRequiredHackingLevel: (ctx) => (_host) => {
+  getServerRequiredHackingLevel: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     helpers.log(ctx, () => `returned ${formatNumberNoSuffix(server.requiredHackingSkill, 0)} for '${server.hostname}'`);
     return server.requiredHackingSkill;
   },
-  getServerMaxMoney: (ctx) => (_host) => {
+  getServerMaxMoney: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     helpers.log(ctx, () => `returned ${formatMoney(server.moneyMax)} for '${server.hostname}'`);
     return server.moneyMax;
   },
-  getServerGrowth: (ctx) => (_host) => {
+  getServerGrowth: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     helpers.log(ctx, () => `returned ${server.serverGrowth} for '${server.hostname}'`);
     return server.serverGrowth;
   },
-  getServerNumPortsRequired: (ctx) => (_host) => {
+  getServerNumPortsRequired: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
     helpers.log(ctx, () => `returned ${server.numOpenPortsRequired} for '${server.hostname}'`);
     return server.numOpenPortsRequired;
   },
-  getServerMaxRam: (ctx) => (_host) => {
+  getServerMaxRam: (ctx) => (_host?) => {
     const [server] = helpers.getServer(ctx, _host);
     if (!server) return 0;
     helpers.log(ctx, () => `returned ${formatRam(server.maxRam)}`);
     return server.maxRam;
   },
-  getServerUsedRam: (ctx) => (_host) => {
+  getServerUsedRam: (ctx) => (_host?) => {
     const [server] = helpers.getServer(ctx, _host);
     if (!server) return 0;
     helpers.log(ctx, () => `returned ${formatRam(server.ramUsed)}`);
     return server.ramUsed;
   },
-  dnsLookup: (ctx) => (_host) => {
+  dnsLookup: (ctx) => (_host?) => {
     const [server, host] = helpers.getServer(ctx, _host);
     if (!server) return "";
     return isIPAddress(host) ? server.hostname : server.ip;
@@ -1081,7 +1063,7 @@ export const ns: InternalAPI<NSFull> = {
     const server = GetServer(host);
     return server !== null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer);
   },
-  fileExists: (ctx) => (_filename, _host) => {
+  fileExists: (ctx) => (_filename, _host?) => {
     const filename = helpers.string(ctx, "filename", _filename);
     const [server] = helpers.getServer(ctx, _host);
     if (!server) return false;
@@ -1097,7 +1079,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   isRunning:
     (ctx) =>
-    (fn, host, ...scriptArgs) => {
+    (fn, host?, ...scriptArgs) => {
       const ident = helpers.scriptIdentifier(ctx, fn, host, scriptArgs);
       return helpers.getRunningScript(ctx, ident) !== null;
     },
@@ -1201,7 +1183,7 @@ export const ns: InternalAPI<NSFull> = {
     const portHandle = helpers.portHandle(ctx, _portNumber);
     return portHandle;
   },
-  rm: (ctx) => (_fn, _host) => {
+  rm: (ctx) => (_fn, _host?) => {
     const filepath = helpers.filePath(ctx, "fn", _fn);
     const [s] = helpers.getServer(ctx, _host);
     if (!s) return false;
@@ -1217,13 +1199,13 @@ export const ns: InternalAPI<NSFull> = {
 
     return status.res;
   },
-  scriptRunning: (ctx) => (_scriptname, _host) => {
+  scriptRunning: (ctx) => (_scriptname, _host?) => {
     const scriptname = helpers.scriptPath(ctx, "scriptname", _scriptname);
     const [server] = helpers.getServer(ctx, _host);
     if (!server) return false;
     return server.isRunning(scriptname);
   },
-  scriptKill: (ctx) => (_scriptname, _host) => {
+  scriptKill: (ctx) => (_scriptname, _host?) => {
     const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
     const [server] = helpers.getServer(ctx, _host);
     if (!server) return false;
@@ -1240,7 +1222,7 @@ export const ns: InternalAPI<NSFull> = {
     return suc;
   },
   getScriptName: (ctx) => () => ctx.workerScript.name,
-  getScriptRam: (ctx) => (_scriptname, _host) => {
+  getScriptRam: (ctx) => (_scriptname, _host?) => {
     const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
     const [server, host] = helpers.getServer(ctx, _host);
     if (!server) return 0;
@@ -1255,7 +1237,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getRunningScript:
     (ctx) =>
-    (fn, host, ...args) => {
+    (fn, host?, ...args) => {
       const ident = helpers.scriptIdentifier(ctx, fn, host, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript === null) return null;
@@ -1288,30 +1270,21 @@ export const ns: InternalAPI<NSFull> = {
     rs.ramUsage = newRam;
     return rs.ramUsage;
   },
-  getHackTime:
-    (ctx) =>
-    (_host = ctx.workerScript.hostname) => {
-      const host = helpers.string(ctx, "hostname", _host);
-      const server = helpers.getNormalServer(ctx, host);
+  getHackTime: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
 
-      return calculateHackingTime(server, Player) * 1000;
-    },
-  getGrowTime:
-    (ctx) =>
-    (_host = ctx.workerScript.hostname) => {
-      const host = helpers.string(ctx, "host", _host);
-      const server = helpers.getNormalServer(ctx, host);
+    return calculateHackingTime(server, Player) * 1000;
+  },
+  getGrowTime: (ctx) => (_host?) => {
+    const server = helpers.getNormalServer(ctx, _host);
 
-      return calculateGrowTime(server, Player) * 1000;
-    },
-  getWeakenTime:
-    (ctx) =>
-    (_host = ctx.workerScript.hostname) => {
-      const host = helpers.string(ctx, "hostname", _host);
-      const server = helpers.getNormalServer(ctx, host);
+    return calculateGrowTime(server, Player) * 1000;
+  },
+  getWeakenTime: (ctx) => (_host) => {
+    const server = helpers.getNormalServer(ctx, _host);
 
-      return calculateWeakenTime(server, Player) * 1000;
-    },
+    return calculateWeakenTime(server, Player) * 1000;
+  },
   getTotalScriptIncome: () => () => {
     // First element is total income of all currently running scripts
     let total = 0;
@@ -1327,7 +1300,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getScriptIncome:
     (ctx) =>
-    (fn, host, ...args) => {
+    (fn, host?, ...args) => {
       const ident = helpers.scriptIdentifier(ctx, fn, host, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript == null) {
@@ -1345,7 +1318,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getScriptExpGain:
     (ctx) =>
-    (fn, host, ...args) => {
+    (fn, host?, ...args) => {
       const ident = helpers.scriptIdentifier(ctx, fn, host, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript == null) {
@@ -1409,7 +1382,7 @@ export const ns: InternalAPI<NSFull> = {
       });
     });
   },
-  wget: (ctx) => async (_url, _target, _host) => {
+  wget: (ctx) => async (_url, _target, _host?) => {
     const url = helpers.string(ctx, "url", _url);
     const target = helpers.filePath(ctx, "target", _target);
     const [server, host] = helpers.getServer(ctx, _host);

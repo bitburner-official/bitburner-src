@@ -539,10 +539,10 @@ function getNormalServer(ctx: NetscriptContext, _host?: unknown): Server {
   return server;
 }
 
-function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: unknown): Promise<number> {
+function hack(ctx: NetscriptContext, _host: unknown, manual: boolean, opts: unknown): Promise<number> {
   const ws = ctx.workerScript;
   const { threads, stock, additionalMsec } = validateHGWOptions(ctx, opts);
-  const server = getNormalServer(ctx, hostname);
+  const server = getNormalServer(ctx, _host);
 
   // Calculate the hacking time
   // This is in seconds
