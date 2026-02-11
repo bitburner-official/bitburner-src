@@ -10,9 +10,9 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { NET_WIDTH } from "../Enums";
 import type { DarknetServer } from "../../Server/DarknetServer";
-import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
+import { getDarknetServer } from "../utils/darknetServerUtils";
 
-export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
+export const drawOnCanvas = (canvas: HTMLCanvasElement, isWithinScreen: (server: DarknetServer) => boolean) => {
   const ctx = canvas?.getContext("2d");
   if (!ctx || !canvas) {
     console.error("Could not get canvas context");
@@ -23,17 +23,19 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   for (const server of DarknetState.Network.flat()) {
     if (
       !server ||
-      (!server.hasAdminRights && !server.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights))
+      !isWithinScreen(server) ||
+      (!server.hasAdminRights && !server.serversOnNetwork.find((s) => getDarknetServer(s)?.hasAdminRights))
     ) {
       continue;
     }
 
     // draw a line between each server and its connected servers
     for (const connectedServerName of server.serversOnNetwork) {
-      const connectedServer = getDarknetServerOrThrow(connectedServerName);
+      const connectedServer = getDarknetServer(connectedServerName);
       if (
-        !connectedServer.hasAdminRights &&
-        !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights)
+        !connectedServer ||
+        (!connectedServer.hasAdminRights &&
+          !connectedServer.serversOnNetwork.find((s) => getDarknetServer(s)?.hasAdminRights))
       ) {
         continue;
       }

@@ -58,36 +58,57 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     [draggableBackground],
   );
 
-  useEffect(() => {
-    const clearSubscription = DarknetEvents.subscribe(() => {
-      if (canvas.current) {
-        const lab = getLabyrinthDetails().lab;
-        const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
-        const deepestServer = DarknetState.Network.flat().reduce((deepest, server) => {
-          if (server?.hasAdminRights && server.depth > deepest) {
-            return server.depth;
-          }
-          return deepest;
-        }, startingDepth);
-        const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
-        setNetDisplayDepth(deepestServer + visibilityMargin);
+  const isWithinScreen = useCallback(
+    (server: DarknetServer) => {
+      const { left, top } = getPixelPosition(server, true);
+      const background = draggableBackground.current;
+      const buffer = 600;
+      const visibleAreaLeftEdge = (background?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
+      const visibleAreaTopEdge = (background?.scrollTop ?? 0) / zoomOptions[zoomIndex];
+      const visibleAreaRightEdge =
+        visibleAreaLeftEdge + ((background?.clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
+      const visibleAreaBottomEdge =
+        visibleAreaTopEdge + ((background?.clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
+      return (
+        left >= visibleAreaLeftEdge - buffer &&
+        left <= visibleAreaRightEdge + buffer &&
+        top >= visibleAreaTopEdge - buffer &&
+        top <= visibleAreaBottomEdge + buffer
+      );
+    },
+    [zoomIndex, zoomOptions],
+  );
 
-        rerender();
-        drawOnCanvas(canvas.current);
-      }
-    });
-    canvas.current && drawOnCanvas(canvas.current);
+  const updateDisplay = useCallback(() => {
+    if (!canvas.current) {
+      return;
+    }
+    const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
+    setNetDisplayDepth(getDeepestServerDepth() + visibilityMargin);
+
+    rerender();
+    drawOnCanvas(canvas.current, isWithinScreen);
+  }, [isWithinScreen, rerender]);
+
+  useEffect(() => {
+    const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
     draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
     scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
+    updateDisplay();
 
     return () => {
       clearSubscription();
     };
-  }, [rerender, scrollTo]);
+  }, [isWithinScreen, updateDisplay, rerender, scrollTo]);
 
-  useEffect(() => {
-    DarknetEvents.emit();
-  }, []);
+  const getDeepestServerDepth = () => {
+    const lab = getLabyrinthDetails().lab;
+    const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
+    return DarknetState.Network.flat().reduce(
+      (deepest, server) => (server?.hasAdminRights && server.depth > deepest ? server.depth : deepest),
+      startingDepth,
+    );
+  };
 
   const allowAuth = (server: DarknetServer | null) =>
     !!server &&
@@ -189,24 +210,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     throttledZoom(wheelEvent as unknown as WheelEvent);
   };
 
-  const isWithinScreen = (server: DarknetServer) => {
-    const { left, top } = getPixelPosition(server, true);
-    const background = draggableBackground.current;
-    const buffer = 600;
-    const visibleAreaLeftEdge = (background?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
-    const visibleAreaTopEdge = (background?.scrollTop ?? 0) / zoomOptions[zoomIndex];
-    const visibleAreaRightEdge =
-      visibleAreaLeftEdge + ((background?.clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
-    const visibleAreaBottomEdge =
-      visibleAreaTopEdge + ((background?.clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
-    return (
-      left >= visibleAreaLeftEdge - buffer &&
-      left <= visibleAreaRightEdge + buffer &&
-      top >= visibleAreaTopEdge - buffer &&
-      top <= visibleAreaBottomEdge + buffer
-    );
-  };
-
   const search = (selection: string, options: string[], searchTerm: string) => {
     if (searchTerm.length === 1) {
       return;
@@ -250,6 +253,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     }
 
     return servers;
+  };
+
+  const getServerKey = (server: DarknetServer, x: number, y: number) => {
+    return `${x} ${y} ${server.hostname} ${server.hasAdminRights}`;
   };
 
   return (
@@ -322,7 +329,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
               (server, j) =>
                 server &&
                 isWithinScreen(server) && (
-                  <ServerStatusBox server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} classes={classes} />
+                  <ServerStatusBox
+                    server={server}
+                    key={getServerKey(server, i, j)}
+                    enableAuth={allowAuth(server)}
+                    classes={classes}
+                  />
                 ),
             ),
           )}
