@@ -16,6 +16,7 @@ import { DarknetState } from "./DarknetState";
 import { getRamBlock } from "../effects/ramblock";
 import { hasFullDarknetAccess } from "../effects/effects";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
+import { isIPAddress } from "../../Types/strings";
 
 export type PasswordResponse = {
   code: DarknetResponseCode;
@@ -86,21 +87,41 @@ export const DnetServerBuilder = (options: DarknetServerOptions): DarknetServer 
     isStationary: false,
   });
   server.updateRamUsed(ramBlock);
-  removeFromOfflineServers(name);
+  DarknetState.offlineServers.delete(name);
+  DarknetState.offlineServers.delete(server.ip);
   AddToAllServers(server);
 
   return server;
 };
 
 export const generateDarknetServerName = (): string => {
-  if (Math.random() < 0.03 && DarknetState.offlineServers.length > 0 && hasFullDarknetAccess()) {
-    return DarknetState.offlineServers[Math.floor(Math.random() * DarknetState.offlineServers.length)];
+  if (Math.random() < 0.03 && DarknetState.offlineServers.size > 0 && hasFullDarknetAccess()) {
+    // Reuse a hostname that went offline. Note that we're only reusing hostnames,
+    // not IPs. This asymmetry is intentional - people find hostnames easier to
+    // work with, and this adds a bit of friction to compensate.
+
+    // Use an iterator to directly skip to the appropriate position. Sets don't
+    // have a way to index by offset, and converting to an array would be wasteful.
+    const offset = Math.floor(Math.random() * DarknetState.offlineServers.size);
+    const it = DarknetState.offlineServers.values();
+    for (let i = 0; i < offset; ++i) {
+      it.next();
+    }
+    // The set contains both IPs and hostnames. If we hit an IP, keep going
+    // forward until we find a hostname. *If* the Set implements traversal in
+    // the same order as insertion, then the fact that we insert IPs first
+    // means that we will always find a hostname and the sampling will be
+    // unbiased. Otherwise, it will be Mostly Unbiased(TM), and in rare cases
+    // we will fall off the end without reusing a name.
+    let serverName = it.next().value;
+    while (serverName != null && isIPAddress(serverName)) {
+      serverName = it.next().value;
+    }
+    if (serverName != null) {
+      return serverName;
+    }
   }
   return decorateName(getBaseName());
-};
-
-export const removeFromOfflineServers = (hostname: string): void => {
-  DarknetState.offlineServers = DarknetState.offlineServers.filter((server) => server !== hostname);
 };
 
 const getBaseName = (): string => {

@@ -53,7 +53,23 @@ export const DarknetState = {
    * Do NOT access the server state directly via this property. You must call getServerState.
    */
   serverState: new Map<string, ServerState>(),
-  offlineServers: [] as string[],
+  /**
+   * Much like AllServers, this contains both hostnames and IP addresses in a single set.
+   *
+   * A note about memory use: On Chrome 144.0.7559.133, memory tests indicate that a
+   * dense array takes ~4 bytes/entry. A Set takes ~10.24 bytes/entry. And the
+   * strings we are storing inside take 14 + length bytes each. Random IPs
+   * average (10+90*2+156*3)*4/256+3 = 13.28 chars, so 27.28 bytes. The
+   * hostnames I don't know how to estimate, but same ballpark.
+   *
+   * There's two points to this:
+   * 1. Most of the cost comes from the strings, so using an array won't save
+   *    much compared to a Set. It's better to use a Set for fast lookups.
+   * 2. The size of this Set can grow without bound over time, so it's
+   *    important that servers not get deleted too aggressively. A
+   *    conservative estimate is 80 bytes/server, since there are two entries.
+   */
+  offlineServers: new Set<string>(),
   showFullNetwork: false,
   zoomIndex: 7,
   netViewTopScroll: 0,
@@ -76,7 +92,7 @@ export function prestigeDarknetState(prestigeSourceFile: boolean): void {
   DarknetState.stockPromotions = {};
   DarknetState.migrationInductionServers.clear();
   DarknetState.serverState.clear();
-  DarknetState.offlineServers = [];
+  DarknetState.offlineServers.clear();
 }
 
 /**

@@ -67,6 +67,7 @@ import { Settings } from "../Settings/Settings";
 import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
+import { DarknetState } from "../DarkNet/models/DarknetState";
 import { getFriendlyType } from "../utils/TypeAssertion";
 
 export const helpers = {
@@ -501,26 +502,34 @@ function scriptIdentifier(
  * server (e.g., pre-TOR darkweb, pre-TRP WD).
  *
  * @param {NetscriptContext} ctx - Context from which getServer is being called. For logging purposes.
- * @param {string} hostname - Hostname of the server
- * @returns {BaseServer} The specified server as a BaseServer
+ * @param {unknown} _host - Hostname or ip of the server, defaults to current server
+ * @returns {[BaseServer | null, string]} A pair containing the specified server as a BaseServer, or
+ *    null if the server is offline. The second part is the resolved hostname/ip.
  */
-export function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
-  const server = GetServer(hostname);
-  if (server == null || (server.serversOnNetwork.length == 0 && !(server instanceof DarknetServer))) {
-    const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
-    throw errorMessage(ctx, `Invalid hostname: ${str}`);
+export function getServer(ctx: NetscriptContext, _host?: unknown): [BaseServer | null, string] {
+  const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
+  const server = GetServer(host);
+  if (server != null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer)) {
+    return [server, host];
   }
-  return server;
+  if (DarknetState.offlineServers.has(host)) {
+    log(ctx, () => `Server ${host} is offline.`);
+    return [null, host];
+  }
+  const str = host === "" ? "'' (empty string)" : "'" + host + "'";
+  throw errorMessage(ctx, `Invalid hostname: ${str}`);
 }
 
 /**
  * A "normal server" is an instance of the Server class in src/Server/Server.ts.
  */
-function getNormalServer(ctx: NetscriptContext, host: string): Server {
-  const server = getServer(ctx, host);
+function getNormalServer(ctx: NetscriptContext, _host?: unknown): Server {
+  const [server, host] = getServer(ctx, _host);
   if (!(server instanceof Server)) {
     let errorMessage = `Cannot be executed on ${host}.`;
-    if (server instanceof HacknetServer) {
+    if (server == null) {
+      errorMessage += " The server was offline (and thus a darknet server).";
+    } else if (server instanceof HacknetServer) {
       errorMessage += " The server must not be a hacknet server.";
     } else if (server instanceof DarknetServer) {
       errorMessage += " The server must not be a darknet server.";
@@ -762,7 +771,8 @@ export function getRunningScriptsByArgs(
   if (hostname == null) {
     hostname = ctx.workerScript.hostname;
   }
-  const server = helpers.getServer(ctx, hostname);
+  const [server] = helpers.getServer(ctx, hostname);
+  if (!server) return null;
 
   return findRunningScripts(path, scriptArgs, server);
 }
