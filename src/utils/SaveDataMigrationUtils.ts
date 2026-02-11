@@ -13,7 +13,7 @@
 
 import { Player } from "@player";
 import { AugmentationName, CityName, CodingContractName, LocationName } from "@enums";
-import { GetAllServers, renameServer } from "../Server/AllServers";
+import { GetAllServers, migrateAllServersData } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
 import { Settings } from "../Settings/Settings";
@@ -89,10 +89,7 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
       delete anyPlayer.companyPosition;
     }
     if (ver < "0.56.0") {
-      // In older versions, keys of AllServers are IP addresses instead of hostnames.
-      for (const server of GetAllServers()) {
-        renameServer(server.ip, server.hostname);
-      }
+      migrateAllServersData();
       for (const q of anyPlayer.queuedAugmentations) {
         if (q.name === "Graphene BranchiBlades Upgrade") {
           q.name = "Graphene BrachiBlades Upgrade";
