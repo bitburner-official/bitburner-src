@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money.
+_(Optional)_ Hostname/IP of the target server. Optional. If unspecified, the threads are not capped.
 
 
 </td></tr>
@@ -74,5 +74,5 @@ The security increase.
 
 RAM cost: 1 GB
 
-Returns the security increase that would occur if a hack with this many threads happened.
+Returns the security increase that would occur if a hack with this many threads happened. The number of threads is limited to the number needed to hack the server's maximum amount of money.
 

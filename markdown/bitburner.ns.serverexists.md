@@ -9,7 +9,7 @@ Returns a boolean denoting whether or not the specified server exists.
 **Signature:**
 
 ```typescript
-serverExists(host: string): boolean;
+serverExists(host?: string): boolean;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

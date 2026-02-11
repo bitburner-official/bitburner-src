@@ -9,7 +9,7 @@ Reduce a server's security level.
 **Signature:**
 
 ```typescript
-weaken(host: string, opts?: BasicHGWOptions): Promise<number>;
+weaken(host?: string, opts?: BasicHGWOptions): Promise<number>;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of the target server to weaken.
+_(Optional)_ Hostname/IP of the target server to weaken. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

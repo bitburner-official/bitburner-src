@@ -9,7 +9,7 @@ Check if any script with a filename is running.
 **Signature:**
 
 ```typescript
-scriptRunning(script: string, host: string): boolean;
+scriptRunning(script: string, host?: string): boolean;
 ```
 
 ## Parameters
@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-Hostname/IP of target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>
