@@ -14,6 +14,7 @@ export class Remote {
   connection?: WebSocket;
   ipaddr: string;
   port: number;
+  reconnecting = false;
 
   constructor(ip: string, port: number) {
     this.ipaddr = ip;
@@ -75,6 +76,7 @@ export class Remote {
       }
 
       if (Settings.RemoteFileApiReconnectionDelay > 0) {
+        this.reconnecting = true;
         setTimeout(() => {
           if (autoConnectAttempt === 1) {
             SnackbarEvents.emit(`Attempting to auto connect Remote API`, ToastVariant.WARNING, 2000);
@@ -85,6 +87,8 @@ export class Remote {
 
           this.startConnection(attempts);
         }, Settings.RemoteFileApiReconnectionDelay * 1000);
+      } else {
+        this.reconnecting = false;
       }
     });
   }
