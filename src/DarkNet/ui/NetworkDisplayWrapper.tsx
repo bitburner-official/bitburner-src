@@ -58,27 +58,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     [draggableBackground],
   );
 
-  const isWithinScreen = useCallback(
-    (server: DarknetServer) => {
-      const { left, top } = getPixelPosition(server, true);
-      const background = draggableBackground.current;
-      const buffer = 600;
-      const visibleAreaLeftEdge = (background?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
-      const visibleAreaTopEdge = (background?.scrollTop ?? 0) / zoomOptions[zoomIndex];
-      const visibleAreaRightEdge =
-        visibleAreaLeftEdge + ((background?.clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
-      const visibleAreaBottomEdge =
-        visibleAreaTopEdge + ((background?.clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
-      return (
-        left >= visibleAreaLeftEdge - buffer &&
-        left <= visibleAreaRightEdge + buffer &&
-        top >= visibleAreaTopEdge - buffer &&
-        top <= visibleAreaBottomEdge + buffer
-      );
-    },
-    [zoomIndex, zoomOptions],
-  );
-
   const updateDisplay = useCallback(() => {
     if (!canvas.current) {
       return;
@@ -87,8 +66,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     setNetDisplayDepth(getDeepestServerDepth() + visibilityMargin);
 
     rerender();
-    drawOnCanvas(canvas.current, isWithinScreen);
-  }, [isWithinScreen, rerender]);
+    drawOnCanvas(canvas.current);
+  }, [rerender]);
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
@@ -99,7 +78,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     return () => {
       clearSubscription();
     };
-  }, [isWithinScreen, updateDisplay, rerender, scrollTo]);
+  }, [updateDisplay, rerender, scrollTo]);
 
   const getDeepestServerDepth = () => {
     const lab = getLabyrinthDetails().lab;
@@ -327,8 +306,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           {DarknetState.Network.slice(0, netDisplayDepth).map((row, i) =>
             row.map(
               (server, j) =>
-                server &&
-                isWithinScreen(server) && (
+                server && (
                   <ServerStatusBox
                     server={server}
                     key={getServerKey(server, i, j)}
