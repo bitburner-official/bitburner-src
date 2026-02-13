@@ -50,7 +50,7 @@ Description
 
 </td><td>
 
-string
+[ProgramName](./bitburner.programname.md)
 
 
 </td><td>

@@ -1,4 +1,4 @@
-import { FactionName, CodingContractName } from "@enums";
+import { CodingContractName } from "@enums";
 import { CodingContractTypes } from "./ContractTypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -13,7 +13,7 @@ export enum CodingContractRewardType {
   FactionReputation,
   FactionReputationAll,
   CompanyReputation,
-  Money, // This must always be the last reward type
+  Money,
 }
 
 // Numeric enum
@@ -35,11 +35,9 @@ export type ICodingContractReward =
     }
   | {
       type: CodingContractRewardType.CompanyReputation;
-      name: string;
     }
   | {
       type: CodingContractRewardType.FactionReputation;
-      name: FactionName;
     };
 
 /**

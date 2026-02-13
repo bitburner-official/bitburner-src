@@ -72,4 +72,4 @@ The `amount` of the reward varies based on the difficulty of the problem posed b
 
 ## Notes
 
-- The `scp` [Terminal](terminal.md) command does not work on Coding Contracts
+- The `scp` CLI command and the `ns.scp` API do not work on Coding Contracts.

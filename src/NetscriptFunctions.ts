@@ -136,6 +136,7 @@ export const enums: NSEnums = {
   SpecialBladeburnerActionTypeForSleeve,
   FragmentType: FragmentTypeEnum,
   DarknetResponseCode: ResponseCodeEnum,
+  ProgramName: CompletedProgramName,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);

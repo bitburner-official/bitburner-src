@@ -3,7 +3,6 @@ import type { Person } from "../../PersonObjects/Person";
 import type { Availability, SuccessChanceParams } from "../Types";
 import type { Skills as PersonSkills } from "../../PersonObjects/Skills";
 
-import { addOffset } from "../../utils/helpers/addOffset";
 import { BladeburnerConstants } from "../data/Constants";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { BladeburnerMultName } from "../Enums";
@@ -67,7 +66,7 @@ export abstract class ActionClass {
     this.desc = params.desc;
     if (params.warning) this.warning = params.warning;
     if (params.successScaling) this.successScaling = params.successScaling;
-    if (params.baseDifficulty) this.baseDifficulty = addOffset(params.baseDifficulty, 10);
+    if (params.baseDifficulty) this.baseDifficulty = params.baseDifficulty;
 
     if (params.rankGain) this.rankGain = params.rankGain;
     if (params.rankLoss) this.rankLoss = params.rankLoss;

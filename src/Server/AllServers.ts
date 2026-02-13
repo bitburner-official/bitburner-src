@@ -14,26 +14,17 @@ import { applyRamBlocks } from "../DarkNet/effects/ramblock";
 
 /**
  * Map of all Servers that exist in the game
- *  Key (string) = IP
+ *  Key (string) = Hostname or IP (there are two entries per server)
  *  Value = Server object
+ *
+ * Having two entries per server is a bit awkward, but it is optimized for the
+ * most common and speed-critical case, which is lookups by hostname/ip.
  */
 const AllServers: Map<string, BaseServer> = new Map();
 
-function GetServerByIP(ip: string): BaseServer | undefined {
-  for (const server of AllServers.values()) {
-    if (server.ip !== ip) continue;
-    return server;
-  }
-}
-
 //Get server by IP or hostname. Returns null if invalid
 export function GetServer(s: string): BaseServer | null {
-  const server = AllServers.get(s);
-  if (server) {
-    return server;
-  }
-  if (!isIPAddress(s)) return null;
-  return GetServerByIP(s) ?? null;
+  return AllServers.get(s) ?? null;
 }
 
 /**
@@ -66,8 +57,8 @@ export function GetReachableServer(s: string): BaseServer | null {
 // Get all servers. Only includes darknet servers if showDarkweb is true.
 export function GetAllServers(showDarkweb = false): BaseServer[] {
   const servers: BaseServer[] = [];
-  for (const server of AllServers.values()) {
-    if (!showDarkweb && server instanceof DarknetServer) {
+  for (const [host, server] of AllServers.entries()) {
+    if (isIPAddress(host) || (!showDarkweb && server instanceof DarknetServer)) {
       continue;
     }
     servers.push(server);
@@ -76,11 +67,10 @@ export function GetAllServers(showDarkweb = false): BaseServer[] {
 }
 
 export function DeleteServer(serverkey: string): void {
-  for (const server of AllServers.values()) {
-    if (server.ip === serverkey || server.hostname === serverkey) {
-      AllServers.delete(server.hostname);
-      break;
-    }
+  const server = GetServer(serverkey);
+  if (server) {
+    AllServers.delete(server.hostname);
+    AllServers.delete(server.ip);
   }
 }
 
@@ -135,6 +125,7 @@ export function AddToAllServers(server: Server | HacknetServer | DarknetServer):
   }
 
   AllServers.set(server.hostname, server);
+  AllServers.set(server.ip, server);
 }
 
 export const renameServer = (hostname: string, newName: string): void => {
@@ -142,8 +133,9 @@ export const renameServer = (hostname: string, newName: string): void => {
   if (!existingServer) {
     throw new Error(`Cannot rename server. No server found with hostname ${hostname}`);
   }
-  AllServers.set(newName, existingServer);
   AllServers.delete(hostname);
+  AllServers.set(newName, existingServer);
+  // No need to touch the entry keyed by IP
 };
 
 export function prestigeAllServers(): void {
@@ -161,7 +153,8 @@ export function loadAllServers(saveString: string): void {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
     }
-    AllServers.set(serverName, server);
+    AllServers.set(server.hostname, server);
+    AllServers.set(server.ip, server);
   }
 
   // Apply blocked ram for darknet servers
@@ -169,5 +162,5 @@ export function loadAllServers(saveString: string): void {
 }
 
 export function saveAllServers(): string {
-  return JSON.stringify(Object.fromEntries(AllServers.entries()));
+  return JSON.stringify(Object.fromEntries(GetAllServers(true).map((s) => [s.hostname, s])));
 }

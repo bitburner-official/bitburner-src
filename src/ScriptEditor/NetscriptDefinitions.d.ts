@@ -1769,7 +1769,7 @@ export interface CompanyWorkTask extends BaseTask {
  */
 export interface CreateProgramWorkTask extends BaseTask {
   type: "CREATE_PROGRAM";
-  programName: string;
+  programName: ProgramName;
 }
 
 /**
@@ -1988,14 +1988,14 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * const programName = "BruteSSH.exe";
+   * const programName = ns.enums.ProgramName.bruteSsh;
    * const success = ns.singularity.purchaseProgram(programName);
    * if (!success) ns.tprint(`ERROR: Failed to purchase ${programName}`);
    * ```
    * @param programName - Name of program to purchase.
    * @returns True if the specified program is purchased or if you already own it, and false otherwise.
    */
-  purchaseProgram(programName: string): boolean;
+  purchaseProgram(programName: ProgramName): boolean;
 
   /**
    * Check if the player is busy.
@@ -2456,11 +2456,11 @@ export interface Singularity {
    * const success = ns.singularity.createProgram(programName);
    * if (!success) ns.tprint(`ERROR: Failed to start working on ${programName}`);
    * ```
-   * @param program - Name of program to create.
+   * @param programName - Name of program to create.
    * @param focus - Acquire player focus on this program creation. Optional. Defaults to true.
    * @returns True if you successfully start working on the specified program, and false otherwise.
    */
-  createProgram(program: string, focus?: boolean): boolean;
+  createProgram(programName: ProgramName, focus?: boolean): boolean;
 
   /**
    * Get the hacking level requirement of a program.
@@ -2470,10 +2470,10 @@ export interface Singularity {
    * In order to create a program via UI or {@link Singularity.createProgram | createProgram}, your hacking level must
    * meet the requirement of that program. This API returns that value.
    *
-   * @param program - Name of program to create.
+   * @param programName - Name of program to create.
    * @returns Hacking level requirement. Return Infinity if the specified program cannot be created.
    */
-  getHackingLevelRequirementOfProgram(program: string): number;
+  getHackingLevelRequirementOfProgram(programName: ProgramName): number;
 
   /**
    * Commit a crime.
@@ -2823,7 +2823,7 @@ export interface Singularity {
    * (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been
    * purchased. Throws an error if the specified program/exploit does not exist
    */
-  getDarkwebProgramCost(programName: string): number;
+  getDarkwebProgramCost(programName: ProgramName): number;
 
   /**
    * b1t_flum3 into a different BN.
@@ -7289,7 +7289,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Note that the actual delay may be longer than intended. For more information, please check
-   * https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay.
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay}.
    *
    * @param millis - Number of milliseconds to sleep. Default to 0.
    * @example
@@ -7310,7 +7310,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Note that the actual delay may be longer than intended. For more information, please check
-   * https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay.
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay}.
    *
    * @param millis - Number of milliseconds to sleep. Default to 0.
    * @returns A promise that resolves to true when the sleep is completed.
@@ -9362,6 +9362,28 @@ type FactionNameEnumType = {
 type FactionName = _ValueOf<FactionNameEnumType>;
 
 /** @public */
+type ProgramNameEnumType = {
+  nuke: "NUKE.exe";
+  bruteSsh: "BruteSSH.exe";
+  ftpCrack: "FTPCrack.exe";
+  relaySmtp: "relaySMTP.exe";
+  httpWorm: "HTTPWorm.exe";
+  sqlInject: "SQLInject.exe";
+  deepScan1: "DeepscanV1.exe";
+  deepScan2: "DeepscanV2.exe";
+  serverProfiler: "ServerProfiler.exe";
+  autoLink: "AutoLink.exe";
+  formulas: "Formulas.exe";
+  bitFlume: "b1t_flum3.exe";
+  flight: "fl1ght.exe";
+  darkscape: "DarkscapeNavigator.exe";
+  stormSeed: "STORM_SEED.exe";
+};
+
+/** @public */
+type ProgramName = _ValueOf<ProgramNameEnumType>;
+
+/** @public */
 type CodingContractNameEnumType = {
   FindLargestPrimeFactor: "Find Largest Prime Factor";
   SubarrayWithMaximumSum: "Subarray with Maximum Sum";
@@ -9462,6 +9484,7 @@ type NSEnums = {
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
   FragmentType: FragmentEnumType;
   DarknetResponseCode: DarknetResponseCodeType;
+  ProgramName: ProgramNameEnumType;
 };
 
 /**
