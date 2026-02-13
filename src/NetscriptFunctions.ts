@@ -724,10 +724,7 @@ export const ns: InternalAPI<NSFull> = {
         if (killByPid) {
           helpers.log(ctx, () => `Killing script with PID ${ident}`);
         } else {
-          helpers.log(
-            ctx,
-            () => `Killing '${scriptID}' on '${ident.host}' with args: ${arrayToString(scriptArgs)}.`,
-          );
+          helpers.log(ctx, () => `Killing '${scriptID}' on '${ident.host}' with args: ${arrayToString(scriptArgs)}.`);
         }
         return true;
       } else {
