@@ -23,7 +23,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   for (const server of DarknetState.Network.flat()) {
     if (
       !server ||
-      (!server.hasAdminRights && !server.serversOnNetwork.find((s) => getDarknetServerOrThrow(s)?.hasAdminRights))
+      (!server.hasAdminRights && !server.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights))
     ) {
       continue;
     }
@@ -34,7 +34,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
       if (
         !connectedServer ||
         (!connectedServer.hasAdminRights &&
-          !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s)?.hasAdminRights))
+          !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights))
       ) {
         continue;
       }

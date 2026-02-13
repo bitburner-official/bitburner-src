@@ -35,6 +35,7 @@ import {
 } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
 import {
+  getAllDarknetServers,
   getAllMovableDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
@@ -156,9 +157,9 @@ export const loadDarknet = () => {
     return;
   }
 
-  const darkNetServers = getAllMovableDarknetServers();
+  const darkNetServers = getAllDarknetServers();
   for (const server of darkNetServers) {
-    if (isLabyrinthServer(server.hostname)) {
+    if (isLabyrinthServer(server.hostname) || server.hostname === SpecialServers.DarkWeb) {
       continue;
     }
     disconnectServer(server, true);
