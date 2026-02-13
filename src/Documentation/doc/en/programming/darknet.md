@@ -41,7 +41,7 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 
 **Connected** - Each server on the network has specific other servers it is linked to. These are the links seen in the UI, the servers that appear when using "scan" in the terminal, or that can be seen by calling dnet.probe. This kind of direct connection is required for most dnet API methods. ns.exec requires either a direct connection, or a backdoor, or a stasis link (which also sets a backdoor) to target a darknet server.
 
-**Offline** - Sometimes darknet servers will go offline. Effectively, the server is deleted, and any running scripts that were on it are killed. Eventually, a server with the same name may come back online, but it will have a different password, and will be fully cleaned and cleared of scripts. Using an API call targetting an offline server will produce a default/failed response, instead of the exception you typically get with non-existant servers. Take care with this, since the list of offline servers is cleared on prestige and game reload.
+**Offline** - Sometimes darknet servers will go offline. Effectively, the server is deleted, and any running scripts that were on it are killed. Eventually, a server with the same name may come back online, but it will have a different password, and will be fully cleaned and cleared of scripts. Using an API call targeting an offline server will produce a default/failed response instead of the exception you typically get with non-existent servers. Take care with this, since the list of offline servers is cleared on prestige and game reload.
 
 ### Darknet script design considerations
 
