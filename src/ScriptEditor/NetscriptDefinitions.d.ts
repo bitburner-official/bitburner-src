@@ -4067,7 +4067,8 @@ export interface CodingContract {
    *
    * Generate a dummy contract on the current server with no reward. Used to test various algorithms.
    *
-   * This function will return null and not generate a contract if the randomized contract name is the same as another contract's name.
+   * This function will return null and not generate a contract if the randomized contract name is the same as another
+   * contract's name or the host is offline.
    *
    * @param type - Type of contract to generate
    * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
@@ -7812,7 +7813,7 @@ export interface NS {
    * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
    * @param script - Filename of script to execute. This file must already exist on the target server.
-   * @param host - Hostname/IP of the `target server` on which to execute the script.
+   * @param host - Hostname/IP of the target server on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
