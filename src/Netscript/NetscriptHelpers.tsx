@@ -501,7 +501,7 @@ function scriptIdentifier(ctx: NetscriptContext, scriptID: unknown, _host: unkno
  * @returns {[BaseServer | null, string]} A pair containing the specified server as a BaseServer, or
  *    null if the server is offline. The second part is the resolved hostname/ip.
  */
-export function getServer(ctx: NetscriptContext, _host?: unknown): [BaseServer | null, string] {
+export function getServer(ctx: NetscriptContext, _host: unknown): [BaseServer | null, string] {
   const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
   const server = GetServer(host);
   if (server != null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer)) {
@@ -518,7 +518,7 @@ export function getServer(ctx: NetscriptContext, _host?: unknown): [BaseServer |
 /**
  * A "normal server" is an instance of the Server class in src/Server/Server.ts.
  */
-function getNormalServer(ctx: NetscriptContext, _host?: unknown): Server {
+function getNormalServer(ctx: NetscriptContext, _host: unknown): Server {
   const [server, host] = getServer(ctx, _host);
   if (!(server instanceof Server)) {
     let errorMessage = `Cannot be executed on ${host}.`;

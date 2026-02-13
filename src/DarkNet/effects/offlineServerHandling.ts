@@ -61,9 +61,8 @@ export function checkDarknetServer(
   if (!(targetServer instanceof DarknetServer)) {
     if (options.allowNonDarknet) {
       // The return is off-shape here: server is of type DarknetServer, but
-      // we've explicitly validated that it's only a BaseServer. Callers
-      // using allowNonDarknet should call GetServer on their own for proper
-      // type-safety, instead of using the server field.
+      // we've explicitly validated that it's only a BaseServer. It's still OK
+      // for callers to use this, as long as they are only expecting a BaseServer.
       return success;
     }
     const result = `${host} is not a darknet server.`;

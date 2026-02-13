@@ -34,7 +34,7 @@ import {
   SpecialBladeburnerActionTypeForSleeve,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
-import { GetServer, GetServerOrThrow } from "./Server/AllServers";
+import { GetServer } from "./Server/AllServers";
 import {
   getServerOnNetwork,
   numCycleForGrowth,
@@ -636,19 +636,17 @@ export const ns: InternalAPI<NSFull> = {
       const host = helpers.string(ctx, "host", _host);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
-      if (
-        !checkDarknetServer(ctx, host, {
-          allowNonDarknet: true,
-          requireAdminRights: true,
-          requireSession: true,
-          requireDirectConnection: true,
-          backdoorBypasses: true,
-        }).success
-      ) {
+      const serverCheck = checkDarknetServer(ctx, host, {
+        allowNonDarknet: true,
+        requireAdminRights: true,
+        requireSession: true,
+        requireDirectConnection: true,
+        backdoorBypasses: true,
+      });
+      if (!serverCheck.success) {
         return 0;
       }
-      const server = GetServerOrThrow(host);
-      return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
+      return runScriptFromScript("exec", serverCheck.server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
     (ctx) =>
@@ -766,18 +764,17 @@ export const ns: InternalAPI<NSFull> = {
   scp: (ctx) => (_files, _destination, _source) => {
     const destination = helpers.string(ctx, "destination", _destination);
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
-    if (
-      !checkDarknetServer(ctx, destination, {
-        allowNonDarknet: true,
-        requireAdminRights: true,
-        requireSession: true,
-      }).success
-    ) {
+    const destinationCheck = checkDarknetServer(ctx, destination, {
+      allowNonDarknet: true,
+      requireAdminRights: true,
+      requireSession: true,
+    });
+    if (!destinationCheck.success) {
       return false;
     }
+    const destServer = destinationCheck.server;
     const [sourceServer] = helpers.getServer(ctx, source);
-    const [destServer] = helpers.getServer(ctx, destination);
-    if (!sourceServer || !destServer) {
+    if (!sourceServer) {
       return false;
     }
     const files = Array.isArray(_files) ? _files : [_files];
