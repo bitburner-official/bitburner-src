@@ -63,7 +63,13 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       return;
     }
     const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
-    setNetDisplayDepth(getDeepestServerDepth() + visibilityMargin);
+    const lab = getLabyrinthDetails().lab;
+    const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
+    const deepestServerDepth = DarknetState.Network.flat().reduce(
+      (deepest, server) => (server?.hasAdminRights && server.depth > deepest ? server.depth : deepest),
+      startingDepth,
+    );
+    setNetDisplayDepth(deepestServerDepth + visibilityMargin);
 
     rerender();
     drawOnCanvas(canvas.current);
@@ -79,15 +85,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       clearSubscription();
     };
   }, [updateDisplay, rerender, scrollTo]);
-
-  const getDeepestServerDepth = () => {
-    const lab = getLabyrinthDetails().lab;
-    const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
-    return DarknetState.Network.flat().reduce(
-      (deepest, server) => (server?.hasAdminRights && server.depth > deepest ? server.depth : deepest),
-      startingDepth,
-    );
-  };
 
   const allowAuth = (server: DarknetServer | null) =>
     !!server &&
@@ -234,10 +231,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     return servers;
   };
 
-  const getServerKey = (server: DarknetServer, x: number, y: number) => {
-    return `${x} ${y} ${server.hostname} ${server.hasAdminRights}`;
-  };
-
   return (
     <Container maxWidth={false} disableGutters>
       {serverOpened ? (
@@ -303,16 +296,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
           {darkWebRoot && <ServerStatusBox server={darkWebRoot} enableAuth={true} classes={classes} />}
-          {DarknetState.Network.slice(0, netDisplayDepth).map((row, i) =>
+          {DarknetState.Network.slice(0, netDisplayDepth).map((row) =>
             row.map(
-              (server, j) =>
+              (server) =>
                 server && (
-                  <ServerStatusBox
-                    server={server}
-                    key={getServerKey(server, i, j)}
-                    enableAuth={allowAuth(server)}
-                    classes={classes}
-                  />
+                  <ServerStatusBox server={server} key={server.ip} enableAuth={allowAuth(server)} classes={classes} />
                 ),
             ),
           )}
