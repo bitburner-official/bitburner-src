@@ -1195,6 +1195,8 @@ import nsDoc_bitburner_product_rating_md from "../../markdown/bitburner.product.
 import nsDoc_bitburner_product_size_md from "../../markdown/bitburner.product.size.md?raw";
 import nsDoc_bitburner_product_stats_md from "../../markdown/bitburner.product.stats.md?raw";
 import nsDoc_bitburner_product_stored_md from "../../markdown/bitburner.product.stored.md?raw";
+import nsDoc_bitburner_programname_md from "../../markdown/bitburner.programname.md?raw";
+import nsDoc_bitburner_programnameenumtype_md from "../../markdown/bitburner.programnameenumtype.md?raw";
 import nsDoc_bitburner_reactelement_key_md from "../../markdown/bitburner.reactelement.key.md?raw";
 import nsDoc_bitburner_reactelement_md from "../../markdown/bitburner.reactelement.md?raw";
 import nsDoc_bitburner_reactelement_props_md from "../../markdown/bitburner.reactelement.props.md?raw";
@@ -2784,6 +2786,8 @@ AllPages["nsDoc/bitburner.product.rating.md"] = nsDoc_bitburner_product_rating_m
 AllPages["nsDoc/bitburner.product.size.md"] = nsDoc_bitburner_product_size_md;
 AllPages["nsDoc/bitburner.product.stats.md"] = nsDoc_bitburner_product_stats_md;
 AllPages["nsDoc/bitburner.product.stored.md"] = nsDoc_bitburner_product_stored_md;
+AllPages["nsDoc/bitburner.programname.md"] = nsDoc_bitburner_programname_md;
+AllPages["nsDoc/bitburner.programnameenumtype.md"] = nsDoc_bitburner_programnameenumtype_md;
 AllPages["nsDoc/bitburner.reactelement.key.md"] = nsDoc_bitburner_reactelement_key_md;
 AllPages["nsDoc/bitburner.reactelement.md"] = nsDoc_bitburner_reactelement_md;
 AllPages["nsDoc/bitburner.reactelement.props.md"] = nsDoc_bitburner_reactelement_props_md;
