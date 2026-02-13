@@ -36,7 +36,7 @@ import type { Result } from "@nsdefs";
 import { assertNonNullish } from "../../../src/utils/TypeAssertion";
 
 const hostnameOfNonExistentServer = "fake-server";
-const errorMessageForNonExistentServer = `Invalid hostname: '${hostnameOfNonExistentServer}'`;
+const errorMessageForNonExistentServer = `Invalid host: '${hostnameOfNonExistentServer}'`;
 const hostnameForOfflineServer = "darknet-offline-server";
 const ipForOfflineServer = "0.0.0.0";
 
