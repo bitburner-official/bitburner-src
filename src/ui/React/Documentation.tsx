@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { type FilePath, asFilePath } from "../../Paths/FilePath";
+import { type FilePath, asFilePath, resolveFilePath } from "../../Paths/FilePath";
 import { CONSTANTS } from "../../Constants";
 import { resolvePage } from "../../Documentation/root";
 
@@ -30,6 +30,8 @@ export const defaultNsApiPage = asFilePath("nsDoc/bitburner.ns.md");
 export const externalUrlOfNsApiPage =
   "https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md";
 export const prefixOfHttpUrlOfNsDocs = "https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/";
+
+const prefixOfRelativeUrlOfNSDoc = "../../../../markdown/bitburner.";
 
 const HistoryContext = React.createContext<History>({
   page: defaultPage,
@@ -92,7 +94,7 @@ export const HistoryProvider = (props: React.PropsWithChildren<object>): React.R
   return <Provider value={history}>{props.children}</Provider>;
 };
 
-export function openDocExternally(path: string) {
+export function openDocExternally(path: string): void {
   const ver = CONSTANTS.isDevBranch ? "dev" : "stable";
   let url;
   if (path.startsWith("http://") || path.startsWith("https://")) {
@@ -110,4 +112,59 @@ export function openDocExternally(path: string) {
     }
   }
   window.open(url, "_newtab");
+}
+
+/**
+ * Href can be:
+ * - Relative URL from non-NS docs pointing to markdown folder: Open "../../../../markdown/bitburner.ns.md" from "index.md"
+ * - Relative URL from NS docs to other NS docs (e.g., click the links in NS docs viewer): Open "./bitburner.ns.cloud.md" from "nsDoc/bitburner.ns.md"
+ * - Internal NS docs (e.g., choose a dropdown option in DocumentationAutocomplete): nsDoc/bitburner.ns.md
+ * - Internal non-NS docs: help/getting_started.md
+ * - HTTP URL:
+ *   - Point to NS docs. Some non-NS docs pages include links to NS docs. For example: basic/scripts.md has a
+ * link to https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.flags.md. In
+ * these cases, the link always points to a file at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/
+ *   - Point to other places.
+ */
+export function convertNavigatorHref(
+  href: string,
+  currentPage: FilePath,
+): { path: string | FilePath | null; forceOpenExternally: boolean } {
+  let forceOpenExternally = false;
+  let path;
+  if (href.includes(prefixOfRelativeUrlOfNSDoc)) {
+    // Relative URL from non-NS docs pointing to markdown folder
+    path = asFilePath(
+      // Convert "../../../../markdown/bitburner.foo.md" and "deeper" URLs (i.e., having more "../") to "nsDoc/bitburner.foo.md"
+      href.replace(
+        href.substring(0, href.indexOf(prefixOfRelativeUrlOfNSDoc) + prefixOfRelativeUrlOfNSDoc.length),
+        "nsDoc/bitburner.",
+      ),
+    );
+  }
+  // Relative URL from NS docs to other NS docs. The URL is always ./bitburner.foo.md
+  // - Start with "./bitburner."
+  // - End with ".md"
+  // - Never have "/" between "./bitburner." and ".md"
+  else if (/^\.\/bitburner\.[^/]*\.md$/.test(href)) {
+    path = resolveFilePath(href, defaultNsApiPage);
+  } else if (href.startsWith("nsDoc/")) {
+    // Internal NS docs
+    path = asFilePath(href);
+  } else if (href.startsWith("https://") || href.startsWith("http://")) {
+    // TODO: Remove this case after converting all these links to relative links.
+    // HTTP URL pointing to NS docs.
+    // Convert https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.foo.md to nsDoc/bitburner.foo.md
+    if (href.startsWith(prefixOfHttpUrlOfNsDocs)) {
+      path = asFilePath(`nsDoc/${href.replace(prefixOfHttpUrlOfNsDocs, "")}`);
+    } else {
+      // HTTP URL pointing to other places.
+      forceOpenExternally = true;
+      path = href;
+    }
+  } else {
+    // Internal non-NS docs
+    path = resolveFilePath("./" + href, currentPage);
+  }
+  return { path, forceOpenExternally };
 }
