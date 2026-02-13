@@ -475,22 +475,17 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   }
 }
 
-function scriptIdentifier(
-  ctx: NetscriptContext,
-  scriptID: unknown,
-  _hostname: unknown,
-  _args: unknown,
-): ScriptIdentifier {
+function scriptIdentifier(ctx: NetscriptContext, scriptID: unknown, _host: unknown, _args: unknown): ScriptIdentifier {
   const ws = ctx.workerScript;
   // Provide the pid for the current script if no identifier provided
   if (scriptID === undefined) return ws.pid;
   if (typeof scriptID === "number") return scriptID;
   if (typeof scriptID === "string") {
-    const hostname = _hostname === undefined ? ctx.workerScript.hostname : string(ctx, "hostname", _hostname);
+    const host = _host === undefined ? ctx.workerScript.hostname : string(ctx, "host", _host);
     const args = _args === undefined ? [] : scriptArgs(ctx, _args);
     return {
       scriptname: scriptID,
-      hostname,
+      host,
       args,
     };
   }
@@ -517,7 +512,7 @@ export function getServer(ctx: NetscriptContext, _host?: unknown): [BaseServer |
     return [null, host];
   }
   const str = host === "" ? "'' (empty string)" : "'" + host + "'";
-  throw errorMessage(ctx, `Invalid hostname: ${str}`);
+  throw errorMessage(ctx, `Invalid host: ${str}`);
 }
 
 /**
@@ -746,7 +741,7 @@ export function scriptPath(
  * Searches for and returns the RunningScript objects for the specified script.
  * If the 'fn' argument is not specified, this returns the current RunningScript.
  * @param fn - Filename of script
- * @param hostname - Hostname/ip of the server on which the script resides
+ * @param host - Hostname/ip of the server on which the script resides
  * @param scriptArgs - Running script's arguments
  * @returns Running scripts identified by the parameters, or empty if no such script
  *   exists, or only the current running script if the first argument 'fn'
@@ -755,7 +750,7 @@ export function scriptPath(
 export function getRunningScriptsByArgs(
   ctx: NetscriptContext,
   fn: string,
-  hostname: string,
+  host: string,
   scriptArgs: ScriptArg[],
 ): Map<number, RunningScript> | null {
   if (!Array.isArray(scriptArgs)) {
@@ -768,10 +763,10 @@ export function getRunningScriptsByArgs(
 
   const path = scriptPath(ctx, "filename", fn);
   // Lookup server to scope search
-  if (hostname == null) {
-    hostname = ctx.workerScript.hostname;
+  if (host == null) {
+    host = ctx.workerScript.hostname;
   }
-  const [server] = helpers.getServer(ctx, hostname);
+  const [server] = helpers.getServer(ctx, host);
   if (!server) return null;
 
   return findRunningScripts(path, scriptArgs, server);
@@ -781,7 +776,7 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
   if (typeof ident === "number") {
     return findRunningScriptByPid(ident);
   } else {
-    const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
+    const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.host, ident.args);
     if (scripts === null) {
       return null;
     }
@@ -799,7 +794,7 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
 function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string {
   if (typeof ident === "number") return `Cannot find running script with pid: ${ident}`;
 
-  return `Cannot find running script ${ident.scriptname} on server ${ident.hostname} with args: ${arrayToString(
+  return `Cannot find running script ${ident.scriptname} on server ${ident.host} with args: ${arrayToString(
     ident.args,
   )}`;
 }

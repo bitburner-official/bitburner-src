@@ -703,12 +703,12 @@ export const ns: InternalAPI<NSFull> = {
         // Kill by pid
         res = killWorkerScriptByPid(ident, ctx.workerScript);
       } else {
-        // Kill by filename/hostname
+        // Kill by filename/host
         if (scriptID === undefined) {
           throw helpers.errorMessage(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
         }
 
-        const byPid = helpers.getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
+        const byPid = helpers.getRunningScriptsByArgs(ctx, ident.scriptname, ident.host, ident.args);
         if (byPid === null) {
           helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
           return false;
@@ -726,7 +726,7 @@ export const ns: InternalAPI<NSFull> = {
         } else {
           helpers.log(
             ctx,
-            () => `Killing '${scriptID}' on '${ident.hostname}' with args: ${arrayToString(scriptArgs)}.`,
+            () => `Killing '${scriptID}' on '${ident.host}' with args: ${arrayToString(scriptArgs)}.`,
           );
         }
         return true;
@@ -736,7 +736,7 @@ export const ns: InternalAPI<NSFull> = {
         } else {
           helpers.log(
             ctx,
-            () => `Internal error killing '${scriptID}' on '${ident.hostname}' with args: ${arrayToString(scriptArgs)}`,
+            () => `Internal error killing '${scriptID}' on '${ident.host}' with args: ${arrayToString(scriptArgs)}`,
           );
         }
         return false;
