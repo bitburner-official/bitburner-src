@@ -21,7 +21,7 @@ interface History {
   home(): void;
 }
 
-const defaultPage = asFilePath("index.md");
+export const defaultPage = asFilePath("index.md");
 export const defaultNsApiPage = asFilePath("nsDoc/bitburner.ns.md");
 /**
  * If we move or rename "bitburner.ns.md", we must update this constant, "defaultNsApiPage", "openDocExternally", and
@@ -129,8 +129,7 @@ export function openDocExternally(path: string): void {
 export function convertNavigatorHref(
   href: string,
   currentPage: FilePath,
-): { path: string | FilePath | null; forceOpenExternally: boolean } {
-  let forceOpenExternally = false;
+): { path: FilePath | null; forceOpenExternally: false } | { path: string; forceOpenExternally: true } {
   let path;
   if (href.includes(prefixOfRelativeUrlOfNSDoc)) {
     // Relative URL from non-NS docs pointing to markdown folder
@@ -159,12 +158,11 @@ export function convertNavigatorHref(
       path = asFilePath(`nsDoc/${href.replace(prefixOfHttpUrlOfNsDocs, "")}`);
     } else {
       // HTTP URL pointing to other places.
-      forceOpenExternally = true;
-      path = href;
+      return { path: href, forceOpenExternally: true };
     }
   } else {
     // Internal non-NS docs
     path = resolveFilePath("./" + href, currentPage);
   }
-  return { path, forceOpenExternally };
+  return { path, forceOpenExternally: false };
 }

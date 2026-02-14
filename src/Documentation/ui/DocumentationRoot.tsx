@@ -11,7 +11,7 @@ import {
   openDocExternally,
   convertNavigatorHref,
 } from "../../ui/React/Documentation";
-import { asFilePath, isFilePath } from "../../Paths/FilePath";
+import { asFilePath } from "../../Paths/FilePath";
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -34,9 +34,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
         openDocExternally(path);
         return;
       }
-      if (isFilePath(path)) {
-        history.push(path);
-      }
+      history.push(path);
     },
   };
 

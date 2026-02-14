@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { convertNavigatorHref, Navigator, openDocExternally } from "../../ui/React/Documentation";
 import { MD } from "../../ui/MD/MD";
-import { asFilePath, type FilePath, isFilePath } from "../../Paths/FilePath";
+import { asFilePath, type FilePath } from "../../Paths/FilePath";
 import { DocumentationPopUpEvents } from "../root";
 
 export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
@@ -45,9 +45,7 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
         openDocExternally(newPath);
         return;
       }
-      if (isFilePath(newPath)) {
-        setPath(newPath);
-      }
+      setPath(newPath);
     },
   };
   return (
