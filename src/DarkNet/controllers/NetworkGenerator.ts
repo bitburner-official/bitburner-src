@@ -35,6 +35,7 @@ import {
 } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
 import {
+  getAllDarknetServers,
   getAllMovableDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
@@ -94,7 +95,7 @@ export const populateDarknet = () => {
     return;
   }
 
-  clearDarknet(true);
+  clearDarknet();
   addLabyrinth();
   addRandomDarknetServers(getNetDepth() * NET_WIDTH * SERVER_DENSITY - 10);
   addRandomDarknetServers(5 - DarknetState.Network[0].length);
@@ -108,13 +109,13 @@ export const populateDarknet = () => {
   }
 };
 
-export const clearDarknet = (force = false) => {
+export const clearDarknet = () => {
   movePlayerIfNeeded();
   for (let i = 0; i < MAX_NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
       const server = DarknetState.Network[i]?.[j];
       if (!server) continue;
-      deleteDarknetServer(server, force);
+      deleteDarknetServer(server, true);
       DarknetState.Network[i][j] = null;
     }
   }
@@ -156,9 +157,9 @@ export const loadDarknet = () => {
     return;
   }
 
-  const darkNetServers = getAllMovableDarknetServers();
+  const darkNetServers = getAllDarknetServers();
   for (const server of darkNetServers) {
-    if (isLabyrinthServer(server.hostname)) {
+    if (isLabyrinthServer(server.hostname) || server.hostname === SpecialServers.DarkWeb) {
       continue;
     }
     disconnectServer(server, true);

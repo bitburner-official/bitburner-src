@@ -8,7 +8,7 @@ Uses an exploit to extract log data from a server by sending a malformed heartbe
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
-The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
+The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information. Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
 
 **Signature:**
 

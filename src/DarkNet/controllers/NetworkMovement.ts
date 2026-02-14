@@ -203,6 +203,7 @@ export const addLowLevelServersIfNeeded = (): void => {
   const serversConnectedToDarkweb = getAllDarknetServers().filter((s) => s.depth === 0);
   if (serversConnectedToDarkweb.length <= 3) {
     addRandomDarknetServers(2, 0, true);
+    addLowLevelServersIfNeeded();
   }
   if (lowLevelServers.length / (4 * NET_WIDTH) < LOW_LEVEL_SERVER_DENSITY) {
     addRandomDarknetServers(2, Math.floor(Math.random() * 4));

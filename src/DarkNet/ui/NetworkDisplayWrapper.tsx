@@ -58,36 +58,33 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     [draggableBackground],
   );
 
-  useEffect(() => {
-    const clearSubscription = DarknetEvents.subscribe(() => {
-      if (canvas.current) {
-        const lab = getLabyrinthDetails().lab;
-        const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
-        const deepestServer = DarknetState.Network.flat().reduce((deepest, server) => {
-          if (server?.hasAdminRights && server.depth > deepest) {
-            return server.depth;
-          }
-          return deepest;
-        }, startingDepth);
-        const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
-        setNetDisplayDepth(deepestServer + visibilityMargin);
+  const updateDisplay = useCallback(() => {
+    if (!canvas.current) {
+      return;
+    }
+    const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
+    const lab = getLabyrinthDetails().lab;
+    const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
+    const deepestServerDepth = DarknetState.Network.flat().reduce(
+      (deepest, server) => (server?.hasAdminRights && server.depth > deepest ? server.depth : deepest),
+      startingDepth,
+    );
+    setNetDisplayDepth(deepestServerDepth + visibilityMargin);
 
-        rerender();
-        drawOnCanvas(canvas.current);
-      }
-    });
-    canvas.current && drawOnCanvas(canvas.current);
+    rerender();
+    drawOnCanvas(canvas.current);
+  }, [rerender]);
+
+  useEffect(() => {
+    const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
     draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
     scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
+    updateDisplay();
 
     return () => {
       clearSubscription();
     };
-  }, [rerender, scrollTo]);
-
-  useEffect(() => {
-    DarknetEvents.emit();
-  }, []);
+  }, [updateDisplay, rerender, scrollTo]);
 
   const allowAuth = (server: DarknetServer | null) =>
     !!server &&
@@ -187,24 +184,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const handleZoom: WheelEventHandler<HTMLDivElement> = (wheelEvent) => {
     wheelEvent.stopPropagation();
     throttledZoom(wheelEvent as unknown as WheelEvent);
-  };
-
-  const isWithinScreen = (server: DarknetServer) => {
-    const { left, top } = getPixelPosition(server, true);
-    const background = draggableBackground.current;
-    const buffer = 600;
-    const visibleAreaLeftEdge = (background?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
-    const visibleAreaTopEdge = (background?.scrollTop ?? 0) / zoomOptions[zoomIndex];
-    const visibleAreaRightEdge =
-      visibleAreaLeftEdge + ((background?.clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
-    const visibleAreaBottomEdge =
-      visibleAreaTopEdge + ((background?.clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
-    return (
-      left >= visibleAreaLeftEdge - buffer &&
-      left <= visibleAreaRightEdge + buffer &&
-      top >= visibleAreaTopEdge - buffer &&
-      top <= visibleAreaBottomEdge + buffer
-    );
   };
 
   const search = (selection: string, options: string[], searchTerm: string) => {
@@ -317,12 +296,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
           {darkWebRoot && <ServerStatusBox server={darkWebRoot} enableAuth={true} classes={classes} />}
-          {DarknetState.Network.slice(0, netDisplayDepth).map((row, i) =>
+          {DarknetState.Network.slice(0, netDisplayDepth).map((row) =>
             row.map(
-              (server, j) =>
-                server &&
-                isWithinScreen(server) && (
-                  <ServerStatusBox server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} classes={classes} />
+              (server) =>
+                server && (
+                  <ServerStatusBox server={server} key={server.ip} enableAuth={allowAuth(server)} classes={classes} />
                 ),
             ),
           )}

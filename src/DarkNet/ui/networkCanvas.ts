@@ -32,8 +32,9 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
     for (const connectedServerName of server.serversOnNetwork) {
       const connectedServer = getDarknetServerOrThrow(connectedServerName);
       if (
-        !connectedServer.hasAdminRights &&
-        !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights)
+        !connectedServer ||
+        (!connectedServer.hasAdminRights &&
+          !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights))
       ) {
         continue;
       }
@@ -51,40 +52,26 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
 };
 
 export const getPixelPosition = (server: DarknetServer, centered = false) => {
+  return getPixelPositionFromCoords(server.hostname, server.leftOffset, server.depth, centered);
+};
+
+export const getPixelPositionFromCoords = (hostname: string, x: number, y: number, centered = false) => {
+  if (hostname === SpecialServers.DarkWeb) {
+    x = (NET_WIDTH - 1) * 0.5;
+    y = -1;
+  } else if (isLabyrinthServer(hostname)) {
+    x = (NET_WIDTH - 1) * 0.5;
+    y = getNetDepth() + 0.5;
+  }
   const centeredOffsetHorizontal = centered ? DW_SERVER_WIDTH / 2 : 0;
   const centeredOffsetVertical = centered ? DW_SERVER_HEIGHT / 2 : 0;
 
-  if (server.hostname === SpecialServers.DarkWeb) {
-    return {
-      top: MAP_BORDER_WIDTH * 0.2 + (centered ? centeredOffsetVertical : 0),
-      left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
-    };
-  } else if (isLabyrinthServer(server.hostname)) {
-    return {
-      top:
-        MAP_BORDER_WIDTH +
-        centeredOffsetVertical +
-        (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * getNetDepth() +
-        DW_SERVER_GAP_TOP,
-      left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
-    };
-  }
-
-  const coords = getCoordinates(server);
-
-  const widthOfServers = (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * coords.y;
-  const staggeredHorizontalOffset = coords.x % 2 ? DW_SERVER_WIDTH / 2 : 0;
-  const heightOfServers = (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * coords.x;
+  const widthOfServers = (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * x;
+  const staggeredHorizontalOffset = y >= 0 && y < getNetDepth() && y % 2 ? DW_SERVER_WIDTH / 2 : 0;
+  const heightOfServers = (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * y;
 
   return {
     top: heightOfServers + MAP_BORDER_WIDTH + centeredOffsetVertical,
     left: widthOfServers + MAP_BORDER_WIDTH + centeredOffsetHorizontal + staggeredHorizontalOffset,
-  };
-};
-
-const getCoordinates = (server: DarknetServer) => {
-  return {
-    x: server.depth,
-    y: server.leftOffset,
   };
 };

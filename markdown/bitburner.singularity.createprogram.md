@@ -9,7 +9,7 @@ Create a program.
 **Signature:**
 
 ```typescript
-createProgram(program: string, focus?: boolean): boolean;
+createProgram(programName: ProgramName, focus?: boolean): boolean;
 ```
 
 ## Parameters
@@ -32,12 +32,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-program
+programName
 
 
 </td><td>
 
-string
+[ProgramName](./bitburner.programname.md)
 
 
 </td><td>

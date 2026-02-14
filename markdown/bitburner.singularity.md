@@ -97,7 +97,7 @@ Connect to a server.
 </td></tr>
 <tr><td>
 
-[createProgram(program, focus)](./bitburner.singularity.createprogram.md)
+[createProgram(programName, focus)](./bitburner.singularity.createprogram.md)
 
 
 </td><td>
@@ -416,7 +416,7 @@ Get the work types of a faction.
 </td></tr>
 <tr><td>
 
-[getHackingLevelRequirementOfProgram(program)](./bitburner.singularity.gethackinglevelrequirementofprogram.md)
+[getHackingLevelRequirementOfProgram(programName)](./bitburner.singularity.gethackinglevelrequirementofprogram.md)
 
 
 </td><td>
