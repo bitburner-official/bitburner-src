@@ -18,6 +18,10 @@ type CheckDarknetServerOptions = {
   requireSession?: boolean;
   requireDirectConnection?: boolean;
   preventUseOnStationaryServers?: boolean;
+  /**
+   * If you use this option, the server property in the result object is only guaranteed to be a BaseServer, not a
+   * DarknetServer as the result type shows.
+   */
   allowNonDarknet?: boolean;
   backdoorBypasses?: boolean;
 };
