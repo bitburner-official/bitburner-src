@@ -32,8 +32,9 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
     for (const connectedServerName of server.serversOnNetwork) {
       const connectedServer = getDarknetServerOrThrow(connectedServerName);
       if (
-        !connectedServer.hasAdminRights &&
-        !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights)
+        !connectedServer ||
+        (!connectedServer.hasAdminRights &&
+          !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights))
       ) {
         continue;
       }

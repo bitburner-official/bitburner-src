@@ -191,7 +191,7 @@ export function DarknetDev(): React.ReactElement {
           <Tooltip title={<Typography>Create a new darkweb network.</Typography>}>
             <Button
               onClick={() => {
-                clearDarknet(true);
+                clearDarknet();
                 populateDarknet();
                 SnackbarEvents.emit("New dark network generated", ToastVariant.SUCCESS, 2000);
               }}

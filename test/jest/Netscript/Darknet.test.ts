@@ -71,7 +71,7 @@ function getNsOnServerNearLabyrinth() {
       (hostname) => hostname !== SpecialServers.Home && hostname !== SpecialServers.DarkWeb,
     );
     if (!server) {
-      clearDarknet(true);
+      clearDarknet();
       populateDarknet();
     }
   }

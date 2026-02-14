@@ -36,6 +36,8 @@ Sends a network request to try to authenticate on a darkweb server. The target s
 
 If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
 
+Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer if the player's charisma is below the server's charisma level.
+
 
 </td></tr>
 <tr><td>
@@ -145,7 +147,7 @@ Uses an exploit to extract log data from a server by sending a malformed heartbe
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
-The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
+The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information. Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
 
 
 </td></tr>
