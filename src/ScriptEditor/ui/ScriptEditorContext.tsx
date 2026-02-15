@@ -93,6 +93,7 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     cursorBlinking: Settings.MonacoCursorBlinking,
     beautifyOnSave: Settings.MonacoBeautifyOnSave,
     stickyScroll: Settings.MonacoStickyScroll,
+    minimap: Settings.MonacoMinimap,
   });
 
   function saveOptions(options: Options) {
@@ -109,6 +110,7 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     Settings.MonacoWordWrap = options.wordWrap;
     Settings.MonacoBeautifyOnSave = options.beautifyOnSave;
     Settings.MonacoStickyScroll = options.stickyScroll;
+    Settings.MonacoMinimap = options.minimap;
   }
 
   return (

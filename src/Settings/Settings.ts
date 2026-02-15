@@ -1,7 +1,7 @@
 import { OwnedAugmentationsOrderSetting, PurchaseAugmentationsOrderSetting } from "./SettingEnums";
 import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
-import { CursorStyle, CursorBlinking, WordWrapOptions, StickyScroll } from "../ScriptEditor/ui/Options";
+import type { CursorStyle, CursorBlinking, WordWrapOptions, StickyScroll, Minimap } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { assertObject } from "../utils/TypeAssertion";
 import type { Result } from "@nsdefs";
@@ -186,6 +186,8 @@ export const Settings = {
   MonacoCursorBlinking: "blink" as CursorBlinking,
   /** Toggle use of Sticky Scroll in the Script Editor */
   MonacoStickyScroll: { enabled: false } as StickyScroll,
+  /** Whether to show minimap in the script editor */
+  MonacoMinimap: { enabled: true } as Minimap,
   /** Whether to hide trailing zeroes on fractional part of decimal */
   hideTrailingDecimalZeros: false,
   /** Whether to hide thousands separators. */
