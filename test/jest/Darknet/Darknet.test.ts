@@ -534,10 +534,10 @@ describe("Password Tests", () => {
     expect(isNumber(+server.password)).toBe(true);
     expect(isNumber(+server.passwordHintData)).toBe(true);
 
-    DarknetState.serverState[server.hostname] = {
+    DarknetState.serverState.set(server.hostname, {
       serverLogs: [],
       authenticatedPIDs: [],
-    };
+    });
     const nonDivisibleResult = getAuthResult(server, `${server.password + 1}`, 1);
     expect(nonDivisibleResult.response.code).toBe(ResponseCodeEnum.AuthFailure);
     expect(nonDivisibleResult.response.message).toContain("not divisible");
@@ -741,7 +741,7 @@ describe("Darknet server name generator", () => {
     }
   });
   test("generateDarknetServerName", () => {
-    DarknetState.offlineServers = [];
+    DarknetState.offlineServers = new Set();
     for (let i = 0; i < 1000; ++i) {
       validatePath(generateDarknetServerName());
     }

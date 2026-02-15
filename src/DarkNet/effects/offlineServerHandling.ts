@@ -5,7 +5,6 @@ import { helpers } from "../../Netscript/NetscriptHelpers";
 import { errorMessage } from "../../Netscript/ErrorMessages";
 import type { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
-import { DarknetState } from "../models/DarknetState";
 import { GenericResponseMessage, ResponseCodeEnum } from "../Enums";
 import { getBackdooredDarkwebServers } from "../utils/darknetNetworkUtils";
 import { hasDarknetAccess } from "../utils/darknetAuthUtils";
@@ -19,6 +18,10 @@ type CheckDarknetServerOptions = {
   requireSession?: boolean;
   requireDirectConnection?: boolean;
   preventUseOnStationaryServers?: boolean;
+  /**
+   * If you use this option, the server property in the result object is only guaranteed to be a BaseServer, not a
+   * DarknetServer as the result type shows.
+   */
   allowNonDarknet?: boolean;
   backdoorBypasses?: boolean;
 };
@@ -36,27 +39,22 @@ export function expectDarknetAccess(ctx: NetscriptContext): void {
 
 export function checkDarknetServer(
   ctx: NetscriptContext,
-  host: string,
+  _host: string,
   options: CheckDarknetServerOptions = {},
 ):
   | { success: true; code: DarknetResponseCode; message: string; server: DarknetServer }
   | { success: false; code: DarknetResponseCode; message: string } {
   const currentServer = ctx.workerScript.getServer();
-  const targetServer = GetServer(host);
+  const [targetServer, host] = helpers.getServer(ctx, _host);
   if (!targetServer) {
-    if (DarknetState.offlineServers.includes(host)) {
-      // Because servers going offline is timing-sensitive, it is outside of
-      // player's control. So we don't want to throw for "server does not exist" in this case,
-      // despite throwing being the usual doctrine.
-      logger(ctx)(`Server ${host} is offline.`);
-      return {
-        success: false,
-        code: ResponseCodeEnum.ServiceUnavailable,
-        message: GenericResponseMessage.ServiceUnavailable,
-      };
-    } else {
-      throw errorMessage(ctx, `Server ${host} does not exist.`);
-    }
+    // Because servers going offline is timing-sensitive, it is outside of
+    // player's control. So we don't want to throw for "server does not exist" in this case,
+    // despite throwing being the usual doctrine.
+    return {
+      success: false,
+      code: ResponseCodeEnum.ServiceUnavailable,
+      message: GenericResponseMessage.ServiceUnavailable,
+    };
   }
   const success = {
     success: true,
@@ -67,19 +65,18 @@ export function checkDarknetServer(
   if (!(targetServer instanceof DarknetServer)) {
     if (options.allowNonDarknet) {
       // The return is off-shape here: server is of type DarknetServer, but
-      // we've explicitly validated that it's only a BaseServer. Callers
-      // using allowNonDarknet should call GetServer on their own for proper
-      // type-safety, instead of using the server field.
+      // we've explicitly validated that it's only a BaseServer. It's still OK
+      // for callers to use this, as long as they are only expecting a BaseServer.
       return success;
     }
-    const result = `${targetServer.hostname} is not a darknet server.`;
+    const result = `${host} is not a darknet server.`;
     throw errorMessage(ctx, result);
   }
   // This is down here because we don't require darknet access for using
   // allowNonDarknet APIs on non-darknet servers.
   expectDarknetAccess(ctx);
   if (options.preventUseOnStationaryServers && targetServer.isStationary) {
-    const result = `${targetServer.hostname} is not a valid target: it is a stationary server.`;
+    const result = `${host} is not a valid target: it is a stationary server.`;
     throw errorMessage(ctx, result);
   }
   if (
@@ -87,7 +84,7 @@ export function checkDarknetServer(
     !isDirectConnected(currentServer, targetServer) &&
     !(options.backdoorBypasses && targetServer.backdoorInstalled)
   ) {
-    let result = `${targetServer.hostname} is not connected to the current server ${currentServer.hostname}. It may have moved.`;
+    let result = `${host} is not connected to the current server ${currentServer.hostname}. It may have moved.`;
     if (options.backdoorBypasses) {
       result += " You can also use a backdoor or stasis link on the target to allow remote access.";
     }
@@ -103,7 +100,7 @@ export function checkDarknetServer(
     return success;
   }
   if (options.requireAdminRights && !targetServer.hasAdminRights) {
-    const result = `${targetServer.hostname} requires root access. Use ns.dnet.authenticate() to gain access.`;
+    const result = `${host} requires root access. Use ns.dnet.authenticate() to gain access.`;
     logger(ctx)(result);
     return {
       success: false,
@@ -116,7 +113,7 @@ export function checkDarknetServer(
     host !== (!isIPAddress(host) ? currentServer.hostname : currentServer.ip) &&
     !isAuthenticated(targetServer, ctx.workerScript.pid)
   ) {
-    const result = `${targetServer.hostname} requires a session to do that. Use ns.dnet.connectToSession() first to authenticate with that server.`;
+    const result = `${host} requires a session to do that. Use ns.dnet.connectToSession() first to authenticate with that server.`;
     logger(ctx)(result);
     return {
       success: false,
