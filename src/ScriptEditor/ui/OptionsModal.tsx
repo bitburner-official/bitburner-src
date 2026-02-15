@@ -158,6 +158,14 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
           checked={props.options.stickyScroll?.enabled}
         />
       </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Enable Minimap: </Typography>
+        <Switch
+          onChange={(e) => props.onOptionChange("minimap", { enabled: e.target.checked })}
+          checked={props.options.minimap?.enabled}
+        />
+      </div>
     </Modal>
   );
 }
