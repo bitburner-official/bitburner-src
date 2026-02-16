@@ -567,7 +567,7 @@ export const breakingChanges300: VersionBreakingChange = {
       ],
       info:
         "Accessing the hacknet namespace incurred a one-time cost of 4 GB of RAM, and each hacknet API did not incur \n" +
-        "RAM cost. Now the hacknet namespace does not incur RAM cost, but each hacknet API incurs small RAM cost.",
+        "RAM cost. Now the hacknet namespace does not incur RAM cost, but each hacknet API incurs a 0.5GB RAM cost.",
       showWarning: false,
     },
   ],

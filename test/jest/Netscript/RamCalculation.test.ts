@@ -140,11 +140,8 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
             const expectedRam = grabCost(ramLayer[key]);
             it(`${fnName}()`, () => combinedRamCheck(fn, newPath, expectedRam, extraLayerCost));
           }
-          //A layer should be the only other option.
-          else if (typeof val === "object" && key !== "enums") {
-            // We don't have any layers with a layer cost, so this is an empty block.
-          }
-          // Other things like args, enums, etc. have no cost
+          // A layer should be the only other option, but we don't have any of those with a cost.
+          // Other things like args, enums, etc. have no cost.
         }
       });
     }
