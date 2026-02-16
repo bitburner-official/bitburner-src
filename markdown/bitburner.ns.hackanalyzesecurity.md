@@ -4,7 +4,7 @@
 
 ## NS.hackAnalyzeSecurity() method
 
-Get the security increase for a number of hack threads.
+Get the security increase for a number of threads.
 
 **Signature:**
 
@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to hack the specified server's maximum amount of money.
+_(Optional)_ Hostname/IP of the target server. Optional. If unspecified, the threads are not capped.
 
 
 </td></tr>
@@ -74,5 +74,5 @@ The security increase.
 
 RAM cost: 1 GB
 
-Returns the security increase that would occur if a hack with this many threads happened.
+Returns the security increase that would occur if a hack with this many threads happened. The number of threads is limited to the number needed to hack the server's maximum amount of money.
 

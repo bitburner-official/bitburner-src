@@ -157,6 +157,27 @@ Namespace for [corporation](./bitburner.corporation.md) functions. Contains spoi
 </td></tr>
 <tr><td>
 
+[dnet](./bitburner.ns.dnet.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[Darknet](./bitburner.darknet.md)
+
+
+</td><td>
+
+Namespace for darknet functions. Contains spoilers.
+
+
+</td></tr>
+<tr><td>
+
 [enums](./bitburner.ns.enums.md)
 
 
@@ -904,7 +925,9 @@ Get the ram cost of a script.
 
 </td><td>
 
-Returns a server object for the given server.
+Returns data of a server.
+
+If the server is a darknet server and has recently gone offline, it will return a dummy server object with `isOnline: false`<!-- -->.
 
 
 </td></tr>
@@ -1152,7 +1175,7 @@ Get the chance of successfully hacking a server.
 
 </td><td>
 
-Get the security increase for a number of hack threads.
+Get the security increase for a number of threads.
 
 
 </td></tr>
@@ -1438,7 +1461,7 @@ Start another script on the current server.
 
 </td><td>
 
-Get the list of hostnames or IP addresses connected to a server.
+Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers (e.g., darkweb). Use [probe](./bitburner.darknet.probe.md) if you want to list darknet servers.
 
 
 </td></tr>

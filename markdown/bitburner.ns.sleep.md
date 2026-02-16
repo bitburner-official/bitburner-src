@@ -58,7 +58,7 @@ A promise that resolves to true when the sleep is completed.
 
 RAM cost: 0 GB
 
-Note that the actual delay may be longer than intended. For more information, please check https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout\#delay.
+Note that the actual delay may be longer than intended. For more information, please check [https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout\#delay](https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay)<!-- -->.
 
 ## Example
 

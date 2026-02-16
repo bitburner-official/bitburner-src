@@ -7,6 +7,9 @@ import { TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
 import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
+import { hasContractExtension } from "../../../Paths/ContractFilePath";
+
+import { hasCacheExtension } from "../../../Paths/CacheFilePath";
 
 interface EditorParameters {
   args: (string | number | boolean)[];
@@ -56,7 +59,8 @@ export function commonEditor(
     const path = Terminal.getFilepath(pattern);
     if (!path) return Terminal.error(`Invalid file path ${arg}`);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-      return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}`);
+      const hint = hasContractExtension(path) || hasCacheExtension(path) ? " (Try using 'run')" : "";
+      return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`);
     }
     if (isLegacyScript(path)) {
       hasLegacyScript = true;

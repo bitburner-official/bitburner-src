@@ -33,6 +33,7 @@ Some BitNodes unlock new mechanics, while others improve or change original mech
   - BitNode 11: It gives some rewards, but they are not very interesting.
   - BitNode 12: Grant free NeuroFlux Governor (NFG) based on the Source-File level.
   - BitNode 14: Enhance IPvGO.
+  - Bitnode 15: Enhanced darknet.
 
 Some mechanics synergize well with other mechanics. For example, in order to create a gang outside of BitNode 2, you need to "farm karma" (more about this later), and Sleeves can help you do it faster.
 
@@ -192,6 +193,18 @@ The last reward is pretty interesting. If you can consistently win several games
 
 This BitNode's multipliers are fairly harsh, but IPvGO's multipliers are buffed significantly. If you use IPvGO, even a slightly improved version of the tutorial script will help you complete this BitNode without much trouble.
 
+## Bitnode 15
+
+This bitnode increases the size and depth of the dark net. This increases the reward potential from the darknet in general. Since there are more servers, there is more opportunities for reward caches, and more ram to run phishingAttack for money and promoteStock for boosting a stock with a good forecast. The Source-File's rewards:
+
+- Permanently unlock the TOR router and DarkscapeNavigator.exe, and unlock the full dark web on all Bitnodes.
+- Your charisma level increases job salary and rep gain; increased authentication speed
+- Your charisma level increases faction work rep gain; increased xp and money gained from .caches.
+
+The first Source-File also allows the use of the dark net to get The Red Pill from the final lab in all Bitnodes (except for BN8), which in some cases may be quicker than unlocking it via Daedalus.
+
+However, the complexity of dealing with the deep 'net, and the number of different puzzles to solve, make BN15 not a simple bitnode to approach. Before tackling BN15, you will want to experiment with the basic version in other nodes to get a feel for it.
+
 # Order advice
 
 ## The first choice
@@ -220,6 +233,8 @@ BitNode 10 unlocks 2 strong mechanics at the same time. Sleeves synergize well w
 BitNode 14 enhances IPvGO. IPvGO is _not_ locked behind this BitNode. It's available at the start of the game. You can play it by going to CIA (Sector-12) or using APIs in `ns.go`. If you have not touched that mechanic, you should do it now. IPvGO is tuned so that it still gives adequate benefits even if your script is only a slightly improved version of the tutorial script. Source-File 14 improves IPvGO's benefits and unlocks cheat APIs, which you can use to improve your win rate.
 
 BitNode 9 and BitNode 13 unlock HackNet server and Stanek's Gift, respectively. They are powerful mechanics that buff other mechanics, but these BitNodes are extremely hard. You should prepare carefully before entering them.
+
+Bitnode 15 enhances the dark net. Darknet is _not_ locked behind this BitNode. It's available at the start of the game. You can unlock it by buying the DarkscapeNavigator.exe from the terminal once you have a TOR router. If you haven't experimented with the mechanic, you should do so before entering BN15. You _can_ complete BN15 with a simple script that uses dnet.packetCapture to get passwords and copies itself around, but it will be much slower than going through and solving a good fraction of the authentication puzzles.
 
 ## Challenging BitNodes
 

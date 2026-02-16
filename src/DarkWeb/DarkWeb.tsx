@@ -8,6 +8,8 @@ import { Money } from "../ui/React/Money";
 import { DarkWebItem } from "./DarkWebItem";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
 import { StdIO } from "../Terminal/StdIO/StdIO";
+import { CompletedProgramName } from "@enums";
+import { getDarkscapeNavigator } from "../DarkNet/effects/effects";
 
 //Posts a "help" message if connected to DarkWeb
 export function checkIfConnectedToDarkweb(): void {
@@ -85,6 +87,10 @@ export function buyDarkwebItem(itemName: string, stdIO: StdIO): void {
     "You have purchased the " + item.program + " program. The new program can be found on your home computer.",
     stdIO,
   );
+
+  if (item.program === CompletedProgramName.darkscape) {
+    getDarkscapeNavigator();
+  }
 }
 
 export function buyAllDarkwebItems(stdIO: StdIO): void {

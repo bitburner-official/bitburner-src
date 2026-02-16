@@ -9,7 +9,7 @@ Returns the minimum security level of the target server.
 **Signature:**
 
 ```typescript
-getServerMinSecurityLevel(host: string): number;
+getServerMinSecurityLevel(host?: string): number;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

@@ -13,14 +13,12 @@
 
 import { Player } from "@player";
 import { AugmentationName, CityName, CodingContractName, LocationName } from "@enums";
-import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer, renameServer } from "../Server/AllServers";
+import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
 import { Settings } from "../Settings/Settings";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { SpecialServers } from "../Server/data/SpecialServers";
-import { safelyCreateUniqueServer } from "../Server/ServerHelpers";
 import { v2APIBreak } from "./v2APIBreak";
 import { Terminal } from "../Terminal";
 import { getRecordValues } from "../Types/Record";
@@ -36,6 +34,7 @@ import type { PositiveInteger } from "../types";
 import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../Corporation/data/Constants";
 import { load } from "../db";
 import { downloadContentAsFile } from "./FileUtils";
+import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -90,10 +89,6 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
       delete anyPlayer.companyPosition;
     }
     if (ver < "0.56.0") {
-      // In older versions, keys of AllServers are IP addresses instead of hostnames.
-      for (const server of GetAllServers()) {
-        renameServer(server.ip, server.hostname);
-      }
       for (const q of anyPlayer.queuedAugmentations) {
         if (q.name === "Graphene BranchiBlades Upgrade") {
           q.name = "Graphene BrachiBlades Upgrade";
@@ -240,22 +235,6 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
     Player.reapplyAllSourceFiles();
   }
 
-  if (ver < 20) {
-    // Create the darkweb for everyone but it won't be linked
-    const dw = GetServer(SpecialServers.DarkWeb);
-    if (!dw) {
-      const darkweb = safelyCreateUniqueServer({
-        ip: createUniqueRandomIp(),
-        hostname: SpecialServers.DarkWeb,
-        organizationName: "",
-        isConnectedTo: false,
-        adminRights: false,
-        purchasedByPlayer: false,
-        maxRam: 1,
-      });
-      AddToAllServers(darkweb);
-    }
-  }
   if (ver < 21) {
     // 2.0.0 work rework
     AwardNFG(10);
@@ -640,6 +619,9 @@ Error: ${e}`,
     }
   }
   if (ver < 45) {
+    initDarkwebServer();
+  }
+  if (ver < 46) {
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }

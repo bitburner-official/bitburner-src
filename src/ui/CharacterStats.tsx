@@ -151,6 +151,9 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     if (src.crime) {
       parts.push([`Crimes:`, <Money key="crime" money={src.crime} />]);
     }
+    if (src.darknet) {
+      parts.push([`Darknet:`, <Money key="darknet" money={src.darknet} />]);
+    }
     if (src.gang) {
       parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }
@@ -281,6 +284,7 @@ export function CharacterStats(): React.ReactElement {
                 color={Settings.theme.primary}
                 data={{ content: String(Player.augmentations.length) }}
               />
+              <StatsRow name="Karma" color={Settings.theme.primary} data={{ content: formatNumber(Player.karma, 3) }} />
             </TableBody>
           </Table>
         </Paper>
@@ -565,7 +569,7 @@ export function CharacterStats(): React.ReactElement {
                     value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
-                    mult: "IPvGO Max Favor",
+                    mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
                   },

@@ -43,6 +43,7 @@
 - [Grafting](advanced/grafting.md)
 - [Stanek's Gift](advanced/stanek.md)
 - [IPvGO](programming/go_algorithms.md)
+- [Darkweb Network](programming/darknet.md)
 
 ## Resources
 
@@ -54,6 +55,7 @@
 - [Tools & Resources](help/tools_and_resources.md)
 - [FAQ](help/faq.md)
 - [Changelog](changelog.md)
+- [Changelog - Legacy v2](changelog-v2.md)
 - [Changelog - Legacy v1](changelog-v1.md)
 - [Changelog - Legacy v0](changelog-v0.md)
 

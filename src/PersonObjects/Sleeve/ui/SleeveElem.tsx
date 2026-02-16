@@ -212,6 +212,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
     }
   }
   const desc = getWorkDescription(props.sleeve, progress);
+  const checkingPreconditionsResult = props.sleeve.checkPreconditionsOfPurchasingAugmentations();
   return (
     <>
       <Paper sx={{ p: 1, display: "grid", gridTemplateColumns: "1fr 1fr", width: "auto", gap: 1 }}>
@@ -231,12 +232,14 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
               </span>
             </Tooltip>
             <Tooltip
-              title={props.sleeve.shock > 0 ? <Typography>Unlocked when sleeve has fully recovered</Typography> : ""}
+              title={
+                !checkingPreconditionsResult.success && <Typography>{checkingPreconditionsResult.message}</Typography>
+              }
             >
               <span>
                 <Button
                   onClick={() => setAugmentationsOpen(true)}
-                  disabled={props.sleeve.shock > 0}
+                  disabled={!checkingPreconditionsResult.success}
                   sx={{ width: "100%", height: "100%" }}
                 >
                   Manage Augmentations

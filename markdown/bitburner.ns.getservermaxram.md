@@ -9,7 +9,7 @@ Get the maximum amount of RAM on a server.
 **Signature:**
 
 ```typescript
-getServerMaxRam(host: string): number;
+getServerMaxRam(host?: string): number;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of the target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

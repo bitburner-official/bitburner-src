@@ -27,6 +27,8 @@ import { isMember } from "../../utils/EnumHelper";
 import { Settings } from "../../Settings/Settings";
 import { formatBytes, formatRam } from "../../ui/formatNumber";
 import { StdIO } from "../StdIO/StdIO";
+import { DarknetServer } from "../../Server/DarknetServer";
+import type { CacheFilePath } from "../../Paths/CacheFilePath";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   enum FileType {
@@ -35,13 +37,14 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
     TextFile,
     Program,
     Contract,
+    Cache,
     Script,
   }
 
   type FileGroup =
     | {
         // Types that are not clickable only need to be string[]
-        type: FileType.Folder | FileType.Program | FileType.Contract;
+        type: FileType.Folder | FileType.Program | FileType.Contract | FileType.Cache;
         segments: string[];
       }
     | { type: FileType.Message; segments: FilePath[] }
@@ -95,6 +98,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
   const allScripts: ScriptFilePath[] = [];
   const allTextFiles: TextFilePath[] = [];
   const allContracts: ContractFilePath[] = [];
+  const allCaches: CacheFilePath[] = [];
   const allMessages: FilePath[] = [];
   const folders: Directory[] = [];
 
@@ -122,6 +126,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
   for (const scriptFilename of server.scripts.keys()) handlePath(scriptFilename, allScripts);
   for (const txtFilename of server.textFiles.keys()) handlePath(txtFilename, allTextFiles);
   for (const contract of server.contracts) handlePath(contract.fn, allContracts);
+  if (server instanceof DarknetServer) {
+    for (const cache of server.caches) handlePath(cache, allCaches);
+  }
   for (const msgOrLit of server.messages) handlePath(msgOrLit as FilePath, allMessages);
 
   // Sort the files/folders alphabetically then print each
@@ -129,6 +136,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
   allScripts.sort();
   allTextFiles.sort();
   allContracts.sort();
+  allCaches.sort();
   allMessages.sort();
   folders.sort();
 
@@ -143,6 +151,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
     allScripts.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Script }));
     allPrograms.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Program }));
     allContracts.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Contract }));
+    allCaches.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Cache }));
 
     for (const item of allDisplayableItems) {
       const { ramDisplay, sizeDisplay } = getItemNumericData(item.path, item.type);
@@ -338,6 +347,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
     { type: FileType.TextFile, segments: allTextFiles },
     { type: FileType.Program, segments: allPrograms },
     { type: FileType.Contract, segments: allContracts },
+    { type: FileType.Cache, segments: allCaches },
     { type: FileType.Script, segments: allScripts },
   ];
   for (const group of groups) {

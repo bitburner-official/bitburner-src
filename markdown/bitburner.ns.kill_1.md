@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP where the script to kill is running. Optional. Defaults to the server the calling script is running on.
+_(Optional)_ Hostname/IP where the script to kill is running. Defaults to the current server.
 
 
 </td></tr>

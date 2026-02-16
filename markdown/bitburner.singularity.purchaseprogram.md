@@ -9,7 +9,7 @@ Purchase a program from the dark web.
 **Signature:**
 
 ```typescript
-purchaseProgram(programName: string): boolean;
+purchaseProgram(programName: ProgramName): boolean;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ programName
 
 </td><td>
 
-string
+[ProgramName](./bitburner.programname.md)
 
 
 </td><td>
@@ -64,7 +64,7 @@ This function allows you to automatically purchase programs. You MUST have a TOR
 
 
 ```js
-const programName = "BruteSSH.exe";
+const programName = ns.enums.ProgramName.bruteSsh;
 const success = ns.singularity.purchaseProgram(programName);
 if (!success) ns.tprint(`ERROR: Failed to purchase ${programName}`);
 ```

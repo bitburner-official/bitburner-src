@@ -64,7 +64,7 @@ import { ActivateRecoveryMode, RecoveryMode, RecoveryRoot } from "./React/Recove
 import { AchievementsRoot } from "../Achievements/AchievementsRoot";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ThemeBrowser } from "../Themes/ui/ThemeBrowser";
-import { ImportSave } from "./React/ImportSave";
+import { ImportSaveComparison } from "./React/ImportSaveComparison";
 import { BypassWrapper } from "./React/BypassWrapper";
 
 import { Apr1 } from "./Apr1";
@@ -78,6 +78,7 @@ import { UIEventEmitter, UIEventType } from "./UIEventEmitter";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { ErrorModal } from "../ErrorHandling/ErrorModal";
+import { DWRoot } from "../DarkNet/DWRoot";
 import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
 
 const htmlLocation = location;
@@ -217,7 +218,7 @@ export function GameRoot(): React.ReactElement {
   }, [rerender]);
 
   function killAllScripts(): void {
-    for (const server of GetAllServers()) {
+    for (const server of GetAllServers(true)) {
       server.runningScriptMap.clear();
     }
     saveObject
@@ -460,6 +461,10 @@ export function GameRoot(): React.ReactElement {
       mainPage = <GoRoot />;
       break;
     }
+    case Page.DarkNet: {
+      mainPage = <DWRoot />;
+      break;
+    }
     case Page.Achievements: {
       mainPage = <AchievementsRoot />;
       break;
@@ -469,7 +474,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ImportSave: {
-      mainPage = <ImportSave saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
+      mainPage = <ImportSaveComparison saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
       bypassGame = true;
       break;

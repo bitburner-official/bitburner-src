@@ -14,6 +14,7 @@ import { CompletedProgramName, FactionName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { handleStormSeed } from "../DarkNet/effects/webstorm";
 import { clampNumber } from "../utils/helpers/clampNumber";
 import { StdIO } from "../Terminal/StdIO/StdIO";
 
@@ -47,6 +48,7 @@ function warnIfNonArgProgramIsRunWithArgs(name: CompletedProgramName, args: stri
 export const Programs: Record<CompletedProgramName, Program> = {
   [CompletedProgramName.nuke]: new Program({
     name: CompletedProgramName.nuke,
+    nsMethod: "nuke",
     create: {
       level: 1,
       tooltip: "This virus is used to gain root access to a machine if enough ports are opened.",
@@ -76,6 +78,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.bruteSsh]: new Program({
     name: CompletedProgramName.bruteSsh,
+    nsMethod: "brutessh",
     create: {
       level: 50,
       tooltip: "This program executes a brute force attack that opens SSH ports",
@@ -100,6 +103,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.ftpCrack]: new Program({
     name: CompletedProgramName.ftpCrack,
+    nsMethod: "ftpcrack",
     create: {
       level: 100,
       tooltip: "This program cracks open FTP ports",
@@ -124,6 +128,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.relaySmtp]: new Program({
     name: CompletedProgramName.relaySmtp,
+    nsMethod: "relaysmtp",
     create: {
       level: 250,
       tooltip: "This program opens SMTP ports by redirecting data",
@@ -148,6 +153,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.httpWorm]: new Program({
     name: CompletedProgramName.httpWorm,
+    nsMethod: "httpworm",
     create: {
       level: 500,
       tooltip: "This virus opens up HTTP ports",
@@ -172,6 +178,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.sqlInject]: new Program({
     name: CompletedProgramName.sqlInject,
+    nsMethod: "sqlinject",
     create: {
       level: 750,
       tooltip: "This virus opens SQL ports",
@@ -222,6 +229,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.serverProfiler]: new Program({
     name: CompletedProgramName.serverProfiler,
+    nsMethod: "getServer",
     create: {
       level: 75,
       tooltip: "This program is used to display hacking and Netscript-related information about servers",
@@ -345,6 +353,29 @@ export const Programs: Record<CompletedProgramName, Program> = {
 
       Terminal.print("We will contact you.", stdIO);
       Terminal.print(`-- ${FactionName.Daedalus} --`, stdIO);
+    },
+  }),
+  [CompletedProgramName.darkscape]: new Program({
+    name: CompletedProgramName.darkscape,
+    create: null,
+    run: (): void => {
+      Terminal.print("This program gives access to the dark net.");
+      Terminal.print(
+        "The dark net is an unstable, constantly shifting network of servers that are only connected to the normal network through the darkweb server.",
+      );
+      Terminal.print(
+        "This network can be accessed using the `ns.dnet` api functions, or the DarkNet UI on the left-hand panel.",
+      );
+    },
+  }),
+  [CompletedProgramName.stormSeed]: new Program({
+    name: CompletedProgramName.stormSeed,
+    nsMethod: "dnet.unleashStormSeed",
+    create: null,
+    run: (): void => {
+      Terminal.print("You can feel a storm approaching...");
+      const connectedServer = Player.getCurrentServer();
+      handleStormSeed(connectedServer);
     },
   }),
 };

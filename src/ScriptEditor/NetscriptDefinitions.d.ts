@@ -1,7 +1,7 @@
 /**
  * @public
  */
-type _ValueOf<T> = T[keyof T];
+export type _ValueOf<T> = T[keyof T];
 
 /** @public */
 type SuccessResult<T extends object> = { success: true; message?: string } & T;
@@ -1769,7 +1769,7 @@ export interface CompanyWorkTask extends BaseTask {
  */
 export interface CreateProgramWorkTask extends BaseTask {
   type: "CREATE_PROGRAM";
-  programName: string;
+  programName: ProgramName;
 }
 
 /**
@@ -1988,14 +1988,14 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * const programName = "BruteSSH.exe";
+   * const programName = ns.enums.ProgramName.bruteSsh;
    * const success = ns.singularity.purchaseProgram(programName);
    * if (!success) ns.tprint(`ERROR: Failed to purchase ${programName}`);
    * ```
    * @param programName - Name of program to purchase.
    * @returns True if the specified program is purchased or if you already own it, and false otherwise.
    */
-  purchaseProgram(programName: string): boolean;
+  purchaseProgram(programName: ProgramName): boolean;
 
   /**
    * Check if the player is busy.
@@ -2456,11 +2456,11 @@ export interface Singularity {
    * const success = ns.singularity.createProgram(programName);
    * if (!success) ns.tprint(`ERROR: Failed to start working on ${programName}`);
    * ```
-   * @param program - Name of program to create.
+   * @param programName - Name of program to create.
    * @param focus - Acquire player focus on this program creation. Optional. Defaults to true.
    * @returns True if you successfully start working on the specified program, and false otherwise.
    */
-  createProgram(program: string, focus?: boolean): boolean;
+  createProgram(programName: ProgramName, focus?: boolean): boolean;
 
   /**
    * Get the hacking level requirement of a program.
@@ -2470,10 +2470,10 @@ export interface Singularity {
    * In order to create a program via UI or {@link Singularity.createProgram | createProgram}, your hacking level must
    * meet the requirement of that program. This API returns that value.
    *
-   * @param program - Name of program to create.
+   * @param programName - Name of program to create.
    * @returns Hacking level requirement. Return Infinity if the specified program cannot be created.
    */
-  getHackingLevelRequirementOfProgram(program: string): number;
+  getHackingLevelRequirementOfProgram(programName: ProgramName): number;
 
   /**
    * Commit a crime.
@@ -2823,7 +2823,7 @@ export interface Singularity {
    * (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been
    * purchased. Throws an error if the specified program/exploit does not exist
    */
-  getDarkwebProgramCost(programName: string): number;
+  getDarkwebProgramCost(programName: ProgramName): number;
 
   /**
    * b1t_flum3 into a different BN.
@@ -3975,7 +3975,8 @@ export interface CodingContract {
    *
    * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not
+   *   provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
   attempt(answer: any, filename: string, host?: string): string;
@@ -3989,7 +3990,7 @@ export interface CodingContract {
    * (e.g. Find Largest Prime Factor, Total Ways to Sum, etc.)
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
   getContractType(filename: string, host?: string): CodingContractName;
@@ -4002,7 +4003,7 @@ export interface CodingContract {
    * Get the full text description for the problem posed by the Coding Contract.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Contract’s text description.
    */
   getDescription(filename: string, host?: string): string;
@@ -4017,7 +4018,7 @@ export interface CodingContract {
    * This is just the data that the contract wants you to act on in order to solve the contract.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns The specified contract’s data, data type depends on contract type.
    */
   getData(filename: string, host?: string): any;
@@ -4041,7 +4042,7 @@ export interface CodingContract {
    * ```
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Default to the current server if not provided.
    * @returns An object containing various data about the contract specified.
    */
   getContract(filename: string, host?: string): CodingContractObject;
@@ -4054,7 +4055,7 @@ export interface CodingContract {
    * Get the number of tries remaining on the contract before it self-destructs.
    *
    * @param filename - Filename of the contract.
-   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns How many attempts are remaining for the contract.
    */
   getNumTriesRemaining(filename: string, host?: string): number;
@@ -4066,7 +4067,8 @@ export interface CodingContract {
    *
    * Generate a dummy contract on the current server with no reward. Used to test various algorithms.
    *
-   * This function will return null and not generate a contract if the randomized contract name is the same as another contract's name.
+   * This function will return null and not generate a contract if the randomized contract name is the same as another
+   * contract's name or the host is offline.
    *
    * @param type - Type of contract to generate
    * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
@@ -4298,6 +4300,468 @@ export interface Format {
    * @returns The formatted time.
    */
   time(milliseconds: number, milliPrecision?: boolean): string;
+}
+
+/**
+ * Errors:
+ *
+ * - DirectConnectionRequired: The target server is not directly connected to the current server. This may be caused
+ * by a user error (specifying the wrong neighbor host's hostname) or a network change (the target server was moved).
+ *
+ * - AuthFailure: Authentication failed. The password is incorrect.
+ *
+ * - NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
+ *
+ * - RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+ *
+ * - ServiceUnavailable: The server is offline.
+ *
+ * @public
+ */
+type DarknetResponseCodeType = {
+  Success: 200;
+  DirectConnectionRequired: 351;
+  AuthFailure: 401;
+  Forbidden: 403;
+  NotFound: 404;
+  RequestTimeOut: 408;
+  NotEnoughCharisma: 451;
+  StasisLinkLimitReached: 453;
+  NoBlockRAM: 454;
+  PhishingFailed: 455;
+  ServiceUnavailable: 503;
+};
+
+/** @public */
+type DarknetResponseCode = _ValueOf<DarknetResponseCodeType>;
+
+/** @public */
+export type DarknetResult = { success: boolean; code: DarknetResponseCode; message: string };
+
+/**
+ * Darknet server data.
+ * @public
+ */
+export interface DarknetServerData {
+  /** Hostname. Must be unique */
+  hostname: string;
+  /** IP Address. Must be unique */
+  ip: string;
+  /** Flag indicating whether the player has admin/root access to this server */
+  hasAdminRights: boolean;
+  /** Flag indicating whether the player's terminal is currently connected to this server */
+  isConnectedTo: boolean;
+  /** Number of CPU cores */
+  cpuCores: number;
+  /** Used RAM (GB). i.e. unavailable RAM */
+  ramUsed: number;
+  /** Max RAM (GB) of this server */
+  maxRam: number;
+  /** Flag indicating whether this server has a backdoor installed by the player */
+  backdoorInstalled: boolean;
+  /** If the server has a stasis link applied */
+  hasStasisLink: boolean;
+  /** The amount of ram blocked by the server owner */
+  blockedRam: number;
+  /**
+   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
+   * You are supposed to experiment and discover the models.
+   */
+  modelId: string;
+  /** The generic password prompt for the server */
+  staticPasswordHint: string;
+  /** Data associated with the password hint */
+  passwordHintData: string;
+  /** The difficulty rating of the server, associated with its original depth in the net */
+  difficulty: number;
+  /** The depth of the server in the net */
+  depth: number;
+  /** The charisma skill required to heartbleed the server */
+  requiredCharismaSkill: number;
+  /** The interval at which the server periodically adds to its logs, in seconds. */
+  logTrafficInterval: number;
+  /** If this darknet server cannot be moved. True for fixed/story servers. */
+  isStationary: boolean;
+  /** Whether this server was purchased by the player. Always false for darknet servers */
+  purchasedByPlayer: boolean;
+}
+
+/** @public */
+export type CacheResult = {
+  success: boolean;
+  message: string;
+  karmaLoss: number;
+};
+
+/**
+ * Details about a server's authentication schema
+ * @public
+ */
+interface ServerAuthDetails {
+  /** True if the server is directly connected to the current server */
+  isConnectedToCurrentServer: boolean;
+  /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
+  hasSession: boolean;
+  /** The model ID of the server. Similar models share vulnerabilities. */
+  modelId: string;
+  /** Static password reminder text set for this server. */
+  passwordHint: string;
+  /** Data from the passwordHint, if any. */
+  data: string;
+  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with heartBleed(). */
+  logTrafficInterval: number;
+  /** The number of characters in the password */
+  passwordLength: number;
+  /** The character set used in the password */
+  passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
+}
+
+/**
+ * Options to change the behavior of {@link Darknet.heartbleed | heartbleed} API.
+ * @public
+ */
+interface HeartbleedOptions {
+  /** If true, looks at the most recent log lines but does not remove them. Default is false. */
+  peek?: boolean;
+  /** The number of log lines to remove from the server. Default is 1. Must be a positive integer. */
+  logsToCapture?: number;
+  /** The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. Must be a non-negative integer. */
+  additionalMsec?: number;
+}
+
+/**
+ * Instability of the darknet caused by excessive backdoor-ing of servers.
+ * @public
+ */
+interface DarknetInstability {
+  /** The increase in time that authentication takes, as a decimal */
+  authenticationDurationMultiplier: number;
+  /** The chance that authentication will time out instead of resolving, as a decimal */
+  authenticationTimeoutChance: number;
+}
+
+/**
+ * Darknet API
+ * @public
+ */
+export interface Darknet {
+  /**
+   * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
+   * to the server that the script is running on. The speed of authentication scales with the number of threads used.
+   *
+   * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
+   *
+   * Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer
+   * if the player's charisma is below the server's charisma level.
+   *
+   * @remarks
+   * RAM cost: 0.6 GB
+   *
+   * @param host - Hostname/IP of the target server (connected to the current server) to try a password.
+   * @param password - Password to attempt to authenticate with.
+   * @param additionalMsec - Optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
+   * @returns A promise that resolves to a {@link DarknetResult} object. The resolved object may contain an optional
+   * property. The type of this property is intentionaly undocumented. You are supposed to experiment and discover the
+   * content of this property.
+   */
+  authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
+
+  /**
+   * Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`,
+   * connectToSession can be used to get a session on servers at any distance.
+   *
+   * If successful, grants the script a session, allowing it to scp() files from that target. It also allows starting scripts
+   * with exec() on that target, if the target is directly connected to the server that the script is running on,
+   * or has a backdoor or stasis link.
+   *
+   * If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+   *
+   * @remarks
+   * RAM cost: 0.05 GB
+   *
+   * @param host - Hostname/IP of the target server to connect to existing session
+   * @param password - The server's password, to verify the session
+   * @returns A {@link DarknetResult} object
+   */
+  connectToSession(host: string, password: string): DarknetResult;
+
+  /**
+   * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
+   * Retrieves the most recent logs on the server. This can be used to get more feedback on authentication attempts.
+   * The retrieved logs are removed from the server, unless the "peek" flag is set to true in the provided HeartbleedOptions.
+   *
+   * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
+   *
+   * The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
+   * Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
+   *
+   * @remarks
+   * RAM cost: 0.6 GB
+   *
+   * @param host - Hostname/IP of the target server. Must be directly connected to the current server.
+   * @param options - Optional {@link HeartbleedOptions} to modify how the exploit works.
+   * @returns A promise that resolves to a {@link DarknetResult} object, plus the scraped logs.
+   *
+   */
+  heartbleed(host: string, options?: HeartbleedOptions): Promise<DarknetResult & { logs: string[] }>;
+
+  /**
+   * Opens a .cache file on the current server to acquire its valuable contents.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @param filename - Name of the cache file to open.
+   * @param suppressToast - Optional. If true, suppresses the toast notification that appears when opening a cache file. Defaults to false.
+   * @returns An object containing the contents of the cache, and the karma lost.
+   */
+  openCache(filename: string, suppressToast?: boolean): CacheResult;
+
+  /**
+   * Returns a list of all darknet servers connected to the script's current server.
+   * For example, if called from a script running on `home`, it will return `["darkweb"]`.
+   * It will return an empty list if there are no darknet servers connected to the current server.
+   *
+   * Note that there is no guarantee about the order of servers in the returned list.
+   *
+   * @remarks
+   * RAM cost: 0.2 GB
+   *
+   * @param returnByIP - Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false.
+   * @returns An array of strings containing the hostnames/IPs of all servers connected to the current server.
+   */
+  probe(returnByIP?: boolean): string[];
+
+  /**
+   * Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is
+   * not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
+   *
+   * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
+   * going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
+   *
+   * There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit().
+   * This limit can be increased by finding special augmentations in the deep darknet.
+   *
+   * @remarks
+   * RAM cost: 12 GB
+   *
+   * @param shouldLink - true to apply a stasis link, false to remove it. Optional. Defaults to true.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
+   */
+  setStasisLink(shouldLink?: boolean): Promise<DarknetResult>;
+
+  /**
+   * Returns the maximum number of stasis links that can be applied globally, based on the player's current status.
+   * Stasis link limit can be increased by finding special augmentations in the deep darknet.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns Maximum number of stasis links.
+   */
+  getStasisLinkLimit(): number;
+
+  /**
+   * Returns the hostnames/IPs of servers that have a stasis link applied.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param returnByIP - Optional. If true, returns IPs instead of hostnames. Defaults to false.
+   * @returns Hostnames/IPs
+   */
+  getStasisLinkedServers(returnByIP?: boolean): string[];
+
+  /**
+   * Returns the server's authentication protocol details.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @param host - Hostname/IP of the server to analyze. Defaults to the running script's server if not specified.
+   * @returns An object containing the server's authentication protocol details.
+   */
+  getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
+
+  /**
+   * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
+   * The target server must be directly connected to the server that the script is running on.
+   *
+   * Using multiple threads speeds up the capture process.
+   *
+   * @remarks
+   * RAM cost: 6 GB
+   *
+   * @param host - Hostname/IP of the server to listen to.
+   * @returns A promise that resolves to a {@link DarknetResult} object, plus the captured data.
+   */
+  packetCapture(host: string): Promise<DarknetResult & { data: string }>;
+
+  /**
+   * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
+   * The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
+   *
+   * Effect scales with threads and charisma level.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param host - Hostname/IP of the connected server to migrate.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
+   */
+  induceServerMigration(host: string): Promise<DarknetResult>;
+
+  /**
+   * Executes STORM_SEED.exe, if it is present on the server the script is running on.
+   *
+   * Warning: That exe file creates a webstorm that can cause catastrophic damage to the darknet. Run at your own risk.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @returns A promise that resolves to a {@link DarknetResult} object.
+   */
+  unleashStormSeed(): DarknetResult;
+
+  /**
+   * Returns whether the server is a darknet server.
+   *
+   * Returns false if the server does not exist or has gone offline recently. This function does not require DarkscapeNavigator.exe.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @param host - Optional. Hostname/IP for the requested server object. Defaults to the running script's server.
+   * @returns true if the server is a darknet server, false otherwise.
+   */
+  isDarknetServer(host?: string): boolean;
+
+  /**
+   * Spends some time freeing some of the RAM currently blocked by the server owner. Must target an authenticated and
+   * directly connected server.
+   *
+   * The amount of ram recovered scales with charisma and the number of threads used.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @param host - Optional. Hostname/IP of the authenticated and directly connected server to free ram from. Defaults to the running script's server.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
+   */
+  memoryReallocation(host?: string): Promise<DarknetResult>;
+
+  /**
+   * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param host - Optional. Hostname/IP of the server to check. Defaults to the running script's server.
+   * @returns The amount of RAM blocked by the server owner's processes.
+   */
+  getBlockedRam(host?: string): number;
+
+  /**
+   * Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and
+   * each visual row in the UI below that increases the depth of the server.
+   *
+   * Returns -1 if the server is offline, not found, or not a darkweb server.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @param host - Optional. Hostname/IP of the server to check. Defaults to the running script's server.
+   * @returns The current depth of the server into the darknet.
+   */
+  getDepth(host?: string): number;
+
+  /**
+   * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
+   * a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @param sym - Stock symbol.
+   * @returns A promise that resolves to a {@link DarknetResult} object.
+   */
+  promoteStock(sym: string): Promise<DarknetResult>;
+
+  /**
+   * Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charisma.
+   * Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
+   *
+   * The amount of money lifted scales with the number of threads used, if successful. Very occasionally you can retrieve a cache file from the attempt.
+   *
+   * Phishing attacks can only be run from scripts on darknet servers.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @returns A promise that resolves to a {@link DarknetResult} object.
+   */
+  phishingAttack(): Promise<DarknetResult>;
+
+  /**
+   * Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+   * @remarks
+   * Ram cost: 0 GB
+   *
+   * @returns An object containing the current instability values.
+   */
+  getDarknetInstability(): DarknetInstability;
+
+  /**
+   * Sleep until the next mutation of the network of darknet servers (which occur frequently).
+   * Note that in the majority of cases, whatever changed out on the net (if anything) will not be nearby to,
+   * or visible from, the current server.
+   *
+   * Some possible mutations that can occur somewhere on the darknet each cycle:
+   *
+   * - Nothing changes.
+   *
+   * - Some servers move to other locations on the net, breaking existing connections and forming new ones.
+   *
+   * - Some servers go offline, which in many cases is permanent - they are effectively deleted.
+   *
+   * - Some servers restart, which kills all running scripts on the server.
+   *
+   * - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   */
+  nextMutation(): Promise<void>;
+
+  /**
+   * Gets the required charisma level to target the server with dnet.heartbleed().
+   *
+   * Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep
+   * in the darknet, be impossible.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @param host - Hostname/IP of the server to check.
+   * @returns Required charisma level of the host.
+   */
+  getServerRequiredCharismaLevel(host: string): number;
+
+  /**
+   * Not all who wander are lost.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  labreport(): Promise<Result<any>>;
+
+  /**
+   * There is more than meets the eye.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  labradar(): Promise<Result<any>>;
 }
 
 /**
@@ -5950,6 +6414,35 @@ interface BladeburnerFormulas {
 }
 
 /**
+ * Darknet formulas
+ * @public
+ */
+interface DarknetFormulas {
+  /**
+   * Gets the time it will take to authenticate a server.
+   * @param darknetServerData - The server to check authentication time on.
+   * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
+   * @param player - The player object. Optional, defaults to the current player status
+   */
+  getAuthenticateTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  /**
+   * Gets the time it will take to scrape logs from a server.
+   * @param darknetServerData - The server to check heartbleed log scraping time on.
+   * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
+   * @param player - The player object. Optional, defaults to the current player status
+   */
+  getHeartbleedTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+
+  /**
+   * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+   * @param darknetServerData - The server to check ram freed on.
+   * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
+   * @param player - The player object. Optional, defaults to the current player status
+   */
+  getExpectedRamBlockRemoved(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+}
+
+/**
  * Formulas API
  * @remarks
  * You need Formulas.exe on your home computer to use this API.
@@ -5975,6 +6468,8 @@ export interface Formulas {
   work: WorkFormulas;
   /** Bladeburner formulas */
   bladeburner: BladeburnerFormulas;
+  /** Darknet formulas */
+  dnet: DarknetFormulas;
 }
 
 /** @public */
@@ -6209,7 +6704,7 @@ interface UserInterface {
    * ns.ui.openTail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
-   * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server the calling script is running on.
+   * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
    * @param args - Arguments for the script being tailed.
    */
   openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
@@ -6309,7 +6804,7 @@ interface UserInterface {
    *
    * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
    * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
-   * @param host - Optional. Hostname/IP of the target script. Defaults to the server the calling script is running on.
+   * @param host - Optional. Hostname/IP of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
    * @param args - Arguments for the target script.
    */
   setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
@@ -6438,6 +6933,12 @@ export interface NS {
   readonly cloud: Cloud;
 
   /**
+   * Namespace for darknet functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly dnet: Darknet;
+
+  /**
    * Namespace for {@link Format | formatting} functions.
    * @remarks RAM cost: 0 GB
    */
@@ -6560,11 +7061,11 @@ export interface NS {
    * ```js
    * let earnedMoney = await ns.hack("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server to hack.
+   * @param host - Hostname/IP of the target server to hack. Optional. Defaults to current server if not provided.
    * @param opts - Optional parameters for configuring function behavior.
    * @returns A promise that resolves to the amount of money stolen (which is zero if the hack is unsuccessful).
    */
-  hack(host: string, opts?: BasicHGWOptions): Promise<number>;
+  hack(host?: string, opts?: BasicHGWOptions): Promise<number>;
 
   /**
    * Spoof money in a server's bank account, increasing the amount available.
@@ -6606,11 +7107,11 @@ export interface NS {
    * let currentMoney = ns.getServerMoneyAvailable("n00dles");
    * currentMoney *= await ns.grow("n00dles");
    * ```
-   * @param host - Hostname/IP of the target server to grow.
+   * @param host - Hostname/IP of the target server to grow. Optional. Defaults to current server if not provided.
    * @param opts - Optional parameters for configuring function behavior.
    * @returns The total effective multiplier that was applied to the server's money (after both additive and multiplicative growth).
    */
-  grow(host: string, opts?: BasicHGWOptions): Promise<number>;
+  grow(host?: string, opts?: BasicHGWOptions): Promise<number>;
 
   /**
    * Reduce a server's security level.
@@ -6633,11 +7134,11 @@ export interface NS {
    * let currentSecurity = ns.getServerSecurityLevel("foodnstuff");
    * currentSecurity -= await ns.weaken("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server to weaken.
+   * @param host - Hostname/IP of the target server to weaken. Optional. Defaults to current server if not provided.
    * @param opts - Optional parameters for configuring function behavior.
    * @returns A promise that resolves to the value by which security was reduced.
    */
-  weaken(host: string, opts?: BasicHGWOptions): Promise<number>;
+  weaken(host?: string, opts?: BasicHGWOptions): Promise<number>;
 
   /**
    * Predict the effect of weaken.
@@ -6673,7 +7174,7 @@ export interface NS {
    * ns.run("noodleHack.js", Math.floor(hackThreads));
    *
    * ```
-   * @param host - Hostname of the target server to analyze.
+   * @param host - Hostname/IP of the target server to analyze.
    * @param hackAmount - Amount of money you want to hack from the server.
    * @returns The number of threads needed to hack the server for hackAmount money.
    */
@@ -6701,14 +7202,15 @@ export interface NS {
   hackAnalyze(host: string): number;
 
   /**
-   * Get the security increase for a number of hack threads.
+   * Get the security increase for a number of threads.
    * @remarks
    * RAM cost: 1 GB
    *
    * Returns the security increase that would occur if a hack with this many threads happened.
+   * The number of threads is limited to the number needed to hack the server's maximum amount of money.
    *
    * @param threads - Amount of threads that will be used.
-   * @param host - Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to hack the specified server's maximum amount of money.
+   * @param host - Hostname/IP of the target server. Optional. If unspecified, the threads are not capped.
    * @returns The security increase.
    */
   hackAnalyzeSecurity(threads: number, host?: string): number;
@@ -6725,10 +7227,10 @@ export interface NS {
    * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
    * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackChance | formulas.hacking.hackChance}.
    *
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns The chance you have of successfully hacking the target server.
    */
-  hackAnalyzeChance(host: string): number;
+  hackAnalyzeChance(host?: string): number;
 
   /**
    * Calculate the number of grow threads needed for a given multiplicative growth factor.
@@ -6770,7 +7272,7 @@ export interface NS {
    * Returns the security increase that would occur if a grow with this many threads happened.
    *
    * @param threads - Amount of threads that will be used.
-   * @param host - Optional. Hostname/IP of the target server. If specified, the value of the "threads" parameter is limited to the number of threads needed to reach the specified server's maximum money.
+   * @param host - Optional. Hostname/IP of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money.
    * @param cores - Optional. The number of cores of the server that would run grow.
    * @returns The security increase.
    */
@@ -6791,7 +7293,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Note that the actual delay may be longer than intended. For more information, please check
-   * https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay.
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay}.
    *
    * @param millis - Number of milliseconds to sleep. Default to 0.
    * @example
@@ -6812,7 +7314,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Note that the actual delay may be longer than intended. For more information, please check
-   * https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay.
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay}.
    *
    * @param millis - Number of milliseconds to sleep. Default to 0.
    * @returns A promise that resolves to true when the sleep is completed.
@@ -7034,7 +7536,7 @@ export interface NS {
    * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of script to get logs from.
-   * @param host - Optional. Hostname/IP of the server that the script is on. Defaults to the server the calling script is running on.
+   * @param host - Optional. Hostname/IP of the server that the script is on.
    * @param args - Arguments to identify which scripts to get logs for.
    * @returns Returns a string array, where each line is an element in the array. The most recently logged line is at the end of the array.
    */
@@ -7062,7 +7564,8 @@ export interface NS {
   getRecentScripts(): RecentScript[];
 
   /**
-   * Get the list of hostnames or IP addresses connected to a server.
+   * Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers
+   * (e.g., darkweb). Use {@link Darknet.probe | probe} if you want to list darknet servers.
    * @remarks
    * RAM cost: 0.2 GB
    *
@@ -7120,7 +7623,7 @@ export interface NS {
    * }
    * ```
    *
-   * @param host - Optional. Hostname/IP of the server to scan. Defaults to the server the calling script is running on.
+   * @param host - Optional. Hostname/IP of the server to scan, default to current server.
    * @param returnOpts - Optional. Controls whether the function returns IPs.
    * @returns Returns an array of hostnames.
    */
@@ -7158,10 +7661,10 @@ export interface NS {
    * ```js
    * ns.nuke("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the player runs the program successfully, and false otherwise.
    */
-  nuke(host: string): boolean;
+  nuke(host?: string): boolean;
 
   /**
    * Runs BruteSSH.exe on a server.
@@ -7174,10 +7677,10 @@ export interface NS {
    * ```js
    * ns.brutessh("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the player runs the program successfully, and false otherwise.
    */
-  brutessh(host: string): boolean;
+  brutessh(host?: string): boolean;
 
   /**
    * Runs FTPCrack.exe on a server.
@@ -7190,10 +7693,10 @@ export interface NS {
    * ```js
    * ns.ftpcrack("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the player runs the program successfully, and false otherwise.
    */
-  ftpcrack(host: string): boolean;
+  ftpcrack(host?: string): boolean;
 
   /**
    * Runs relaySMTP.exe on a server.
@@ -7206,10 +7709,10 @@ export interface NS {
    * ```js
    * ns.relaysmtp("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the player runs the program successfully, and false otherwise.
    */
-  relaysmtp(host: string): boolean;
+  relaysmtp(host?: string): boolean;
 
   /**
    * Runs HTTPWorm.exe on a server.
@@ -7222,10 +7725,10 @@ export interface NS {
    * ```js
    * ns.httpworm("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the player runs the program successfully, and false otherwise.
    */
-  httpworm(host: string): boolean;
+  httpworm(host?: string): boolean;
 
   /**
    * Runs SQLInject.exe on a server.
@@ -7238,10 +7741,10 @@ export interface NS {
    * ```js
    * ns.sqlinject("foodnstuff");
    * ```
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the player runs the program successfully, and false otherwise.
    */
-  sqlinject(host: string): boolean;
+  sqlinject(host?: string): boolean;
 
   /**
    * Start another script on the current server.
@@ -7286,7 +7789,7 @@ export interface NS {
    * @remarks
    * RAM cost: 1.3 GB
    *
-   * Run a script as a separate process on a specified server. This is similar to the function {@link NS.run | run}
+   * Run a script as a separate process on a specified server. This is similar to the function {@link NS.run | run},
    * except that it can be used to run a script that already exists on any server, instead of just the current server.
    *
    * If the script was successfully started, then this function returns the PID of that script.
@@ -7314,7 +7817,7 @@ export interface NS {
    * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
    * @param script - Filename of script to execute. This file must already exist on the target server.
-   * @param host - Hostname/IP of the `target server` on which to execute the script.
+   * @param host - Hostname/IP of the target server on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
@@ -7337,6 +7840,8 @@ export interface NS {
    * Because this function immediately terminates the script, it does not have a return value.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
+   *
+   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
    *
    * @example
    * ```js
@@ -7395,7 +7900,7 @@ export interface NS {
    * ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
    * ```
    * @param filename - Filename of the script to kill.
-   * @param host - Hostname/IP where the script to kill is running. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP where the script to kill is running. Defaults to the current server.
    * @param args - Arguments of the script to kill.
    * @returns True if the scripts were successfully killed, and false otherwise.
    */
@@ -7411,8 +7916,8 @@ export interface NS {
    * true if there are any scripts running on the target server.
    * If no host is defined, it will kill all scripts, where the script is running.
    *
-   * @param host - Hostname/IP of the server on which to kill all scripts. Optional. Defaults to the server the calling script is running on.
-   * @param safetyGuard - Skips the script that calls this function. Optional. Defaults to false.
+   * @param host - Hostname/IP of the server on which to kill all scripts. Optional. Defaults to current server if not provided.
+   * @param safetyGuard - Skips the script that calls this function
    * @returns True if any scripts were killed, and false otherwise.
    */
   killall(host?: string, safetyGuard?: boolean): boolean;
@@ -7447,6 +7952,9 @@ export interface NS {
    * const files = ["hack.js", "weaken.js", "grow.js"];
    * ns.scp(files, server, "home");
    * ```
+   *
+   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
+   *
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.
    * @param source - Hostname/IP of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server.
@@ -7483,7 +7991,7 @@ export interface NS {
    *   ns.tprint(script.args);
    * }
    * ```
-   * @param host - Hostname/IP of the target server. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the target server. If not specified, it will be the current server’s IP by default.
    * @returns Array with general information about all scripts running on the specified target server.
    */
   ps(host?: string): ProcessInfo[];
@@ -7501,10 +8009,10 @@ export interface NS {
    *   ns.nuke("foodnstuff");
    * }
    * ```
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if player has root access to the specified target server, and false otherwise.
    */
-  hasRootAccess(host: string): boolean;
+  hasRootAccess(host?: string): boolean;
 
   /**
    * Returns a string with the hostname of the server that the script is running on.
@@ -7572,14 +8080,18 @@ export interface NS {
   getHacknetMultipliers(): HacknetMultipliers;
 
   /**
-   * Returns a server object for the given server.
+   * Returns data of a server.
+   *
+   * If the server is a darknet server and has recently gone offline, it will return a dummy server object with
+   * `isOnline: false`.
    *
    * @remarks
    * RAM cost: 2 GB
-   * @param host - Optional. Hostname/IP for the requested server object. Defaults to the server the calling script is running on.
-   * @returns The requested server object.
+   *
+   * @param host - Optional. Hostname/IP of the server. Defaults to the hostname of the running script's server.
+   * @returns Data of the server.
    */
-  getServer(host?: string): Server;
+  getServer(host?: string): Server | (DarknetServerData & { isOnline: boolean });
 
   /**
    * Get money available on a server.
@@ -7594,10 +8106,10 @@ export interface NS {
    * ns.getServerMoneyAvailable("foodnstuff");
    * ns.getServerMoneyAvailable("home"); // Returns player's money
    * ```
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Amount of money available on the server.
    */
-  getServerMoneyAvailable(host: string): number;
+  getServerMoneyAvailable(host?: string): number;
 
   /**
    * Get the maximum money available on a server.
@@ -7606,10 +8118,10 @@ export interface NS {
    *
    * Returns the maximum amount of money that can be available on a server.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Maximum amount of money available on the server.
    */
-  getServerMaxMoney(host: string): number;
+  getServerMaxMoney(host?: string): number;
 
   /**
    * Get a server growth parameter.
@@ -7623,10 +8135,10 @@ export interface NS {
    * grow function. A higher growth parameter will result in a
    * higher percentage increase from grow.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Parameter that affects the percentage by which the server’s money is increased when using the grow function.
    */
-  getServerGrowth(host: string): number;
+  getServerGrowth(host?: string): number;
 
   /**
    * Get server security level.
@@ -7637,19 +8149,19 @@ export interface NS {
    * level is denoted by a number, typically between 1 and 100
    * (but it can go above 100).
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Security level of the target server.
    */
-  getServerSecurityLevel(host: string): number;
+  getServerSecurityLevel(host?: string): number;
 
   /**
    * Returns the minimum security level of the target server.
    *
    * @remarks RAM cost: 0.1 GB
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Minimum security level of the target server.
    */
-  getServerMinSecurityLevel(host: string): number;
+  getServerMinSecurityLevel(host?: string): number;
 
   /**
    * Get the base security level of a server.
@@ -7658,64 +8170,64 @@ export interface NS {
    * Returns the base security level of the target server.
    * For the server's actual security level, use {@link NS.getServerSecurityLevel | ns.getServerSecurityLevel}.
    *
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Base security level of the target server.
    */
-  getServerBaseSecurityLevel(host: string): number;
+  getServerBaseSecurityLevel(host?: string): number;
 
   /**
    * Get the maximum amount of RAM on a server.
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns The maximum amount of RAM (GB) a server can have.
    */
-  getServerMaxRam(host: string): number;
+  getServerMaxRam(host?: string): number;
   /**
    * Get the used RAM on a server.
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns The amount of used RAM (GB) on the specified server.
    */
-  getServerUsedRam(host: string): number;
+  getServerUsedRam(host?: string): number;
 
   /**
    * Returns the required hacking level of the target server.
    *
    * @remarks RAM cost: 0.1 GB
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns The required hacking level of the target server.
    */
-  getServerRequiredHackingLevel(host: string): number;
+  getServerRequiredHackingLevel(host?: string): number;
 
   /**
    * Returns the number of open ports required to successfully run NUKE.exe on the specified server.
    *
    * @remarks RAM cost: 0.1 GB
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns The number of open ports required to successfully run NUKE.exe on the specified server.
    */
-  getServerNumPortsRequired(host: string): number;
+  getServerNumPortsRequired(host?: string): number;
 
   /**
    * Given a hostname, returns its IP address; or given an IP address, returns its hostname.
    *
    * @remarks RAM cost: 0.05 GB
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    */
-  dnsLookup(host: string): string;
+  dnsLookup(host?: string): string;
 
   /**
    * Returns a boolean denoting whether or not the specified server exists.
    *
    * @remarks RAM cost: 0.1 GB
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the specified server exists, and false otherwise.
    */
-  serverExists(host: string): boolean;
+  serverExists(host?: string): boolean;
 
   /**
    * Check if a file exists.
@@ -7736,7 +8248,7 @@ export interface NS {
    * ns.fileExists("ftpcrack.exe");
    * ```
    * @param filename - Filename of file to check.
-   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of target server. Optional, defaults to the server the script is running on.
    * @returns True if specified file exists, and false otherwise.
    */
   fileExists(filename: string, host?: string): boolean;
@@ -7765,7 +8277,7 @@ export interface NS {
    * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
    * @param script - Filename or PID of script to check. This is case-sensitive.
-   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
    * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
@@ -7784,7 +8296,7 @@ export interface NS {
    * functions like this that check based on filename, the filename plus arguments forms the key.)
    *
    * @param filename - Optional. Filename or PID of the script.
-   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
    * @param args  - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns The info about the running script if found, and null otherwise.
    */
@@ -7980,7 +8492,7 @@ export interface NS {
    * type except message (.msg) files.
    *
    * @param name - Filename of file to remove. Must include the extension.
-   * @param host - Hostname/IP of the server on which to delete the file. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the server on which to delete the file. Optional. Defaults to current server.
    * @returns True if it successfully deletes the file, and false otherwise.
    */
   rm(name: string, host?: string): boolean;
@@ -8005,10 +8517,10 @@ export interface NS {
    * ns.scriptRunning("foo.js", ns.getHostname());
    * ```
    * @param script - Filename of script to check. This is case-sensitive.
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if the specified script is running, and false otherwise.
    */
-  scriptRunning(script: string, host: string): boolean;
+  scriptRunning(script: string, host?: string): boolean;
 
   /**
    * Kill all scripts with a filename.
@@ -8019,10 +8531,10 @@ export interface NS {
    * regardless of arguments.
    *
    * @param script - Filename of script to kill. This is case-sensitive.
-   * @param host - Hostname/IP of target server.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns True if one or more scripts were successfully killed, and false if none were.
    */
-  scriptKill(script: string, host: string): boolean;
+  scriptKill(script: string, host?: string): boolean;
 
   /**
    * Returns the current script name.
@@ -8055,7 +8567,7 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function.
    */
   getHackTime(host?: string): number;
@@ -8068,7 +8580,7 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the grow Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Returns the amount of time in milliseconds it takes to execute the grow Netscript function.
    */
   getGrowTime(host?: string): number;
@@ -8081,7 +8593,7 @@ export interface NS {
    * Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
-   * @param host - Hostname/IP of target server. Optional. Defaults to the server the calling script is running on.
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function.
    */
   getWeakenTime(host?: string): number;
@@ -8112,11 +8624,11 @@ export interface NS {
    * those same arguments in the same order in this function call.
    *
    * @param script - Filename of script.
-   * @param host - Hostname/IP of the server on which script is running.
+   * @param host - Hostname/IP of the server on which the script is running. Optional. Defaults to current server if not provided.
    * @param args - Arguments that the script is running with.
    * @returns Amount of income the specified script generates while online.
    */
-  getScriptIncome(script: string, host: string, ...args: ScriptArg[]): number;
+  getScriptIncome(script: string, host?: string, ...args: ScriptArg[]): number;
 
   /**
    * Get the exp gain of all scripts.
@@ -8140,11 +8652,11 @@ export interface NS {
    * scripts by running the function with no arguments.
    *
    * @param script - Filename of script.
-   * @param host - Hostname/IP of the server on which script is running.
+   * @param host - Hostname/IP of the server on which the script is running. Optional. Defaults to current server if not provided.
    * @param args - Arguments that the script is running with.
    * @returns Amount of hacking experience the specified script generates while online.
    */
-  getScriptExpGain(script: string, host: string, ...args: ScriptArg[]): number;
+  getScriptExpGain(script: string, host?: string, ...args: ScriptArg[]): number;
 
   /**
    * Format a string.
@@ -8270,7 +8782,7 @@ export interface NS {
    * ```
    * @param url - URL to pull data from.
    * @param target - Filename to write data to. Must be script or text file.
-   * @param host - Hostname/IP of server for target file. Optional. Defaults to the server the calling script is running on.
+   * @param host - Optional hostname/ip of server for target file.
    * @returns True if the data was successfully retrieved from the URL, false otherwise.
    */
   wget(url: string, target: string, host?: string): Promise<boolean>;
@@ -8694,6 +9206,7 @@ type LocationNameEnumType = {
   ChongqingKuaiGongInternational: "KuaiGong International";
   ChongqingSolarisSpaceSystems: "Solaris Space Systems";
   ChongqingChurchOfTheMachineGod: "Church of the Machine God";
+  ChongqingShadowedWalkway: "Shadowed Walkway";
 
   Sector12AlphaEnterprises: "Alpha Enterprises";
   Sector12BladeIndustries: "Blade Industries";
@@ -8868,6 +9381,28 @@ type FactionNameEnumType = {
 type FactionName = _ValueOf<FactionNameEnumType>;
 
 /** @public */
+type ProgramNameEnumType = {
+  nuke: "NUKE.exe";
+  bruteSsh: "BruteSSH.exe";
+  ftpCrack: "FTPCrack.exe";
+  relaySmtp: "relaySMTP.exe";
+  httpWorm: "HTTPWorm.exe";
+  sqlInject: "SQLInject.exe";
+  deepScan1: "DeepscanV1.exe";
+  deepScan2: "DeepscanV2.exe";
+  serverProfiler: "ServerProfiler.exe";
+  autoLink: "AutoLink.exe";
+  formulas: "Formulas.exe";
+  bitFlume: "b1t_flum3.exe";
+  flight: "fl1ght.exe";
+  darkscape: "DarkscapeNavigator.exe";
+  stormSeed: "STORM_SEED.exe";
+};
+
+/** @public */
+type ProgramName = _ValueOf<ProgramNameEnumType>;
+
+/** @public */
 type CodingContractNameEnumType = {
   FindLargestPrimeFactor: "Find Largest Prime Factor";
   SubarrayWithMaximumSum: "Subarray with Maximum Sum";
@@ -8967,6 +9502,8 @@ type NSEnums = {
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
   FragmentType: FragmentEnumType;
+  DarknetResponseCode: DarknetResponseCodeType;
+  ProgramName: ProgramNameEnumType;
 };
 
 /**

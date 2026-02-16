@@ -32,29 +32,25 @@ export function scriptCalculateOfflineProduction(
   //Data map: [MoneyStolen, NumTimesHacked, NumTimesGrown, NumTimesWeaken]
 
   // Grow
-  for (const hostname of Object.keys(runningScript.dataMap)) {
-    if (Object.hasOwn(runningScript.dataMap, hostname)) {
-      if (runningScript.dataMap[hostname][2] == 0 || runningScript.dataMap[hostname][2] == null) {
-        continue;
-      }
-      const server = GetServer(hostname);
-      if (server == null) {
-        continue;
-      }
-      const timesGrown = Math.round(
-        ((0.5 * runningScript.dataMap[hostname][2]) / runningScript.onlineRunningTime) * timePassed,
-      );
-      runningScript.log(`Called on ${server.hostname} ${timesGrown} times while offline`);
-      const host = GetServer(runningScript.server);
-      if (host === null) {
-        throw new Error("getServer of null key?");
-      }
-      if (!(server instanceof Server)) {
-        throw new Error("trying to grow a non-normal server");
-      }
-      const growth = processSingleServerGrowth(server, timesGrown, host.cpuCores);
-      runningScript.log(`'${server.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
+  for (const [hostname, [, , growCount]] of runningScript.dataMap.entries()) {
+    if (growCount == 0 || growCount == null) {
+      continue;
     }
+    const server = GetServer(hostname);
+    if (server == null) {
+      continue;
+    }
+    const timesGrown = Math.round(((0.5 * growCount) / runningScript.onlineRunningTime) * timePassed);
+    runningScript.log(`Called on ${server.hostname} ${timesGrown} times while offline`);
+    const host = GetServer(runningScript.server);
+    if (host === null) {
+      throw new Error("getServer of null key?");
+    }
+    if (!(server instanceof Server)) {
+      throw new Error("trying to grow a non-normal server");
+    }
+    const growth = processSingleServerGrowth(server, timesGrown, host.cpuCores);
+    runningScript.log(`'${server.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
   }
 
   // Offline EXP gain
@@ -76,26 +72,22 @@ export function scriptCalculateOfflineProduction(
   runningScript.offlineMoneyMade += moneyGain;
 
   // Weaken
-  for (const hostname of Object.keys(runningScript.dataMap)) {
-    if (Object.hasOwn(runningScript.dataMap, hostname)) {
-      if (runningScript.dataMap[hostname][3] == 0 || runningScript.dataMap[hostname][3] == null) {
-        continue;
-      }
-      const serv = GetServer(hostname);
-      if (serv == null) {
-        continue;
-      }
-
-      if (!(serv instanceof Server)) throw new Error("trying to weaken a non-normal server");
-      const host = GetServer(runningScript.server);
-      if (host === null) throw new Error("getServer of null key?");
-      const timesWeakened = Math.round(
-        ((0.5 * runningScript.dataMap[hostname][3]) / runningScript.onlineRunningTime) * timePassed,
-      );
-      runningScript.log(`Called weaken() on ${serv.hostname} ${timesWeakened} times while offline`);
-      const weakenAmount = getWeakenEffect(runningScript.threads, host.cpuCores);
-      serv.weaken(weakenAmount * timesWeakened);
+  for (const [hostname, [, , , weakenCount]] of runningScript.dataMap.entries()) {
+    if (weakenCount == 0 || weakenCount == null) {
+      continue;
     }
+    const serv = GetServer(hostname);
+    if (serv == null) {
+      continue;
+    }
+
+    if (!(serv instanceof Server)) throw new Error("trying to weaken a non-normal server");
+    const host = GetServer(runningScript.server);
+    if (host === null) throw new Error("getServer of null key?");
+    const timesWeakened = Math.round(((0.5 * weakenCount) / runningScript.onlineRunningTime) * timePassed);
+    runningScript.log(`Called weaken() on ${serv.hostname} ${timesWeakened} times while offline`);
+    const weakenAmount = getWeakenEffect(runningScript.threads, host.cpuCores);
+    serv.weaken(weakenAmount * timesWeakened);
   }
 }
 

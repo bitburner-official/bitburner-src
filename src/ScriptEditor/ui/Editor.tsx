@@ -42,7 +42,7 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
      * check: https://github.com/microsoft/monaco-editor/issues/3580 and https://github.com/microsoft/monaco-editor/pull/4544.
      */
     monaco.editor.createModel(
-      netscriptDefinitions.replace(/export /g, ""),
+      netscriptDefinitions.replace(/^export /gm, ""),
       "typescript",
       monaco.Uri.file("netscript.d.ts"),
     );

@@ -31,7 +31,7 @@ export const getPage = (title: string): string => {
   return resolvePage(title).pageContent;
 };
 
-export const DocumentationPopUpEvents = new EventEmitter<[string | undefined]>();
+export const DocumentationPopUpEvents = new EventEmitter<[string]>();
 
 export function openDocumentationPopUp(path: string): void {
   DocumentationPopUpEvents.emit(path);

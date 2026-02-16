@@ -6,6 +6,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasContractExtension } from "../../Paths/ContractFilePath";
 import { hasProgramExtension } from "../../Paths/ProgramFilePath";
 import { StdIO } from "../StdIO/StdIO";
+import { hasCacheExtension } from "../../Paths/CacheFilePath";
 
 export function run(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   // Run a program or a script
@@ -29,6 +30,8 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
     return;
   } else if (hasProgramExtension(path)) {
     return runProgram(path, args, server, stdIO);
+  } else if (hasCacheExtension(path)) {
+    return Terminal.startAction(4, "c", stdIO, server);
   }
   Terminal.error(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .cct, and .exe files can be run.`, stdIO);
 }

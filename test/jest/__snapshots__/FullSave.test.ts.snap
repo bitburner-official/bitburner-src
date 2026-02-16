@@ -157,7 +157,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 105,
+              "count": 97,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -168,7 +168,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 113,
+              "count": 101,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -179,7 +179,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 105,
+              "count": 101,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -204,7 +204,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 11,
+              "count": 124,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -216,7 +216,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 80,
+              "count": 69,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -228,7 +228,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 144,
+              "count": 116,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -240,7 +240,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 3,
+              "count": 120,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -252,7 +252,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 136,
+              "count": 112,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -264,7 +264,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 86,
+              "count": 72,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -448,7 +448,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",
-    "money": 1212,
+    "money": 1262,
     "moneySourceA": {
       "ctor": "MoneySourceTracker",
       "data": {
@@ -459,6 +459,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "codingcontract": 0,
         "corporation": 0,
         "crime": 0,
+        "darknet": 0,
         "gang": 0,
         "gang_expenses": 0,
         "hacking": 0,
@@ -484,6 +485,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "codingcontract": 0,
         "corporation": 0,
         "crime": 0,
+        "darknet": 0,
         "gang": 0,
         "gang_expenses": 0,
         "hacking": 0,

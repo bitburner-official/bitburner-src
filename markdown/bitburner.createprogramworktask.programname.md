@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-programName: string;
+programName: ProgramName;
 ```

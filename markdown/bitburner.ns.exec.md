@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-Hostname/IP of the `target server` on which to execute the script.
+Hostname/IP of the target server on which to execute the script.
 
 
 </td></tr>
@@ -106,7 +106,7 @@ Returns the PID of a successfully started script, and 0 otherwise.
 
 RAM cost: 1.3 GB
 
-Run a script as a separate process on a specified server. This is similar to the function [run](./bitburner.ns.run.md) except that it can be used to run a script that already exists on any server, instead of just the current server.
+Run a script as a separate process on a specified server. This is similar to the function [run](./bitburner.ns.run.md)<!-- -->, except that it can be used to run a script that already exists on any server, instead of just the current server.
 
 If the script was successfully started, then this function returns the PID of that script. Otherwise, it returns 0.
 

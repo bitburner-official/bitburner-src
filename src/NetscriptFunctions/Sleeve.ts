@@ -245,16 +245,16 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
-      if (Player.sleeves[sleeveNumber].shock > 0) {
-        throw helpers.errorMessage(ctx, `Sleeve shock too high: Sleeve ${sleeveNumber}`);
-      }
-
       const aug = Augmentations[augName];
       if (!aug) {
         throw helpers.errorMessage(ctx, `Invalid aug: ${augName}`);
       }
 
-      return Player.sleeves[sleeveNumber].tryBuyAugmentation(aug);
+      const result = Player.sleeves[sleeveNumber].purchaseAugmentation(aug);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
+      }
+      return result.success;
     },
     getSleeveAugmentationPrice: (ctx) => (_augName) => {
       checkSleeveAPIAccess(ctx);

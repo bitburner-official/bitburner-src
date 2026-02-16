@@ -23,7 +23,7 @@ import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { getServerOnNetwork } from "../Server/ServerHelpers";
+import { getServerOnNetwork, getTorRouter } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
 import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
@@ -52,6 +52,8 @@ import { validBitNodes } from "../BitNode/Constants";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
+import { DarknetServer } from "../Server/DarknetServer";
+import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -407,11 +409,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
-      const darkweb = GetServer(SpecialServers.DarkWeb);
-      if (!darkweb) throw helpers.errorMessage(ctx, "DarkWeb was not a server but should have been");
-
-      Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
-      darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);
+      getTorRouter();
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 500);
       helpers.log(ctx, () => "You have purchased a Tor router!");
       return true;
@@ -453,6 +451,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         () => `You have purchased the '${item.program}' program. The new program can be found on your home computer.`,
       );
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 5000);
+
+      if (item.program === CompletedProgramName.darkscape) {
+        populateDarknet();
+      }
+
       return true;
     },
     getCurrentServer: (ctx) => (_returnOpts) => {
@@ -467,16 +470,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const server = Player.getCurrentServer();
       cat([filename], server, ctx.workerScript.scriptRef.terminalStdOut);
     },
-    connect: (ctx) => (_host) => {
+    connect: (ctx) => (_host?) => {
       helpers.checkSingularityAccess(ctx);
-      const host = helpers.string(ctx, "host", _host);
-      if (!host) {
-        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
-      }
-
-      const target = GetServer(host);
+      const [target, host] = helpers.getServer(ctx, _host);
       if (target == null) {
-        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
+        return false;
       }
 
       // Adjacent servers
@@ -517,16 +515,18 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     installBackdoor: (ctx) => async (): Promise<void> => {
       helpers.checkSingularityAccess(ctx);
       const baseserver = Player.getCurrentServer();
-      if (!(baseserver instanceof Server)) {
+      if (!(baseserver instanceof Server || baseserver instanceof DarknetServer)) {
         throw helpers.errorMessage(ctx, "Cannot backdoor this kind of server.");
       }
       const server = baseserver;
       const installTime = (calculateHackingTime(server, Player) / 4) * 1000;
 
-      // No root access or skill level too low
-      const canHack = netscriptCanHack(server, "backdoor");
-      if (!canHack.res) {
-        throw helpers.errorMessage(ctx, canHack.msg || "");
+      if (server instanceof Server) {
+        // No root access or skill level too low
+        const canHack = netscriptCanHack(server, "backdoor");
+        if (!canHack.res) {
+          throw helpers.errorMessage(ctx, canHack.msg || "");
+        }
       }
 
       if (server.backdoorInstalled) {

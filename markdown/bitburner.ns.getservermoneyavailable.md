@@ -9,7 +9,7 @@ Get money available on a server.
 **Signature:**
 
 ```typescript
-getServerMoneyAvailable(host: string): number;
+getServerMoneyAvailable(host?: string): number;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

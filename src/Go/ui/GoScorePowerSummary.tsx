@@ -100,7 +100,7 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
           title={
             <>
               Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor with that
-              faction (up to a max of {getMaxRep()} favor), if you are a member of that faction.
+              faction (up to a max of {getMaxRep()} reputation), if you are a member of that faction.
               <br />
               The rep is immediately applied as favor, meaning it will increase reputation gain right away without
               needing an install.
@@ -109,9 +109,7 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
         >
           <Typography className={`${classes.inlineFlexBox} ${classes.keyText}`}>
             <span>Winstreak Bonus: </span>
-            <span>
-              {getMaxRep() / 200} reputation converted to favor with {opponent}
-            </span>
+            <span>{getMaxRep() / 200} reputation converted to favor</span>
           </Typography>
         </Tooltip>
       ) : (

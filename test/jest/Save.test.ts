@@ -23,6 +23,8 @@ fixDoImportIssue();
 //
 // Most of the Servers have been removed to reduce space. Default values have
 // been removed both for space, and to test that they are added correctly.
+// The one remaining server has been renamed to "__proto__" to test the
+// handling of darknet servers with unusual hostnames.
 function loadStandardServers() {
   loadAllServers(String.raw`{
   "home": {
@@ -134,15 +136,15 @@ function loadStandardServers() {
         ]
       },
       "serversOnNetwork": [
-        "n00dles"
+        "__proto__"
       ],
       "purchasedByPlayer": true
     }
   },
-  "n00dles": {
+  "__proto__": {
     "ctor": "Server",
     "data": {
-      "hostname": "n00dles",
+      "hostname": "__proto__",
       "ip": "61.6.6.2",
       "maxRam": 4,
       "organizationName": "Noodle Bar",

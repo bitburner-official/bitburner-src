@@ -6,7 +6,8 @@
 export const CONSTANTS = {
   VersionString: "3.0.0dev",
   isDevBranch: true,
-  VersionNumber: 44,
+  isInTestEnvironment: globalThis.process?.env?.JEST_WORKER_ID !== undefined,
+  VersionNumber: 46,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -103,14 +104,14 @@ export const CONSTANTS = {
   EntropyEffect: 0.98,
 
   // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
-  Donations: 212,
+  Donations: 262,
 
   // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.0 development version: last updated 24 July 2025
+## v3.0.0 development version: last updated 17 February 2026
 
 ### BREAKING CHANGES
 
@@ -133,12 +134,19 @@ export const CONSTANTS = {
 - Remove VeChain (#2245) (@catloversg)
 - Make some APIs throw error when server is invalid (#2261) (@catloversg)
 - Rename equipment that uses real brand names (#2293) (@catloversg)
+- Make TIX access independent from WSE account (#2342) (@catloversg)
+- Move and rename purchased server functions to cloud API (#2367) (@gmcew)
+- Fix: Coding contracts may have duplicate names (#2399) (@aaaa-imcute)
+- Generate test contracts on executing host by default. Add support for optional parameter to specify the server (#2417) (@1337JiveTurkey)
+- The "darkweb" server becomes a darknet server (Check new Dark Net feature in #2139) (@ficocelliguy)
+- Remove RAM cost of hacknet namespace and set RAM cost of each hacknet API (#2502) (@catloversg)
 
 ### MAJOR CHANGES
 
 - Balance change: IPvGO: Improve favor gain from wins to balance around the rep value of favor (#2131) (@ficocelliguy)
 - Search and read NS API docs in editor tab and documentation tab (#2163) (@catloversg)
 - Balance change: Infiltration: Rebalance rewards, add min stat requirement, add market demand (#2210) (@ficocelliguy, @d0sboots, @catloversg)
+- Add Dark Net (#2139) (@ficocelliguy)
 
 ### UI
 
@@ -168,6 +176,37 @@ export const CONSTANTS = {
 - Close coding contract popup on prestige (#2285) (@catloversg)
 - Add "Run Beautify on Save" option for built-in editor (#2287) (@TheCleric)
 - Add configurable option for auto-reconnecting to RFA client (#2297) (@catloversg)
+- Fix: Active Scripts page may mix up UI after prestige (#2303) (@catloversg)
+- Better status bar animations (#2317) (@d0sboots)
+- Prevent text from overflowing when script's args are too long in Active Scripts page (#2324) (@catloversg)
+- Print error detail to terminal if script cannot be compiled or there is runtime error while autocompleting (#2328) (@catloversg)
+- Fix: Color picker appears behind theme editor (#2321) (@catloversg)
+- Allow automatically hiding the top menu in Electron (#2325) (@femboyfireball)
+- Clarify why you can't buy 4S when disabled (#2311) (@femboyfireball)
+- Warn player if they run no-arg programs with arguments (#2338) (@catloversg)
+- Show server's money in exponential form if it's too small (#2343) (@catloversg)
+- Format the shared RAM multipler on the factions (#2355) (@mctylr-gh)
+- Fix: Electron app does not show achievement icons (#2362) (@catloversg)
+- Reword tutorial steps to distinguish between instruction and example (#2370) (@catloversg)
+- Prevent showing redundant error toasts on failed RFA auto connect attempts (#2381) (@shyguy1412)
+- Fix: Company's job list shows wrong starting jobs (#2391) (@catloversg)
+- Improve instructions in recovery mode (#2394) (@catloversg)
+- Add option to set fractional digits (#2419) (@CTNOriginals)
+- Add links to documentation pages in tutorial's last step (#2424) (@catloversg)
+- Show useful error messages when loading unsupported save data from newer versions (#2425) (@catloversg)
+- Change notice for breaking changes in v2 (#2426) (@catloversg)
+- Do not show error popup related to Stanek's Gift data when loading save files from pre-v1.1.0 (#2429) (@catloversg)
+- Add Script Editor toggle for Sticky Scroll (#2431) (@gmcew)
+- Display contract answers on completely failed contracts (#2440) (@TheCleric)
+- Remove BitNode's difficulty in BitNode selection popup (#2454) (@catloversg)
+- Add settings to change currency symbol and whether to show it after money value (#2453) (@kaoticengineering)
+- Fix: Monaco shows wrong TSDoc of APIs that have "export" word (#2473) (@catloversg)
+- Show karma in Stats page and explain what it is in documentation (#2475) (@catloversg)
+- Update icon of DARKNET_BACKDOOR and DARKNET_DEPTHS achievements (#2480) (@catloversg)
+- Update incorrect ps command shown in help (#2484) (@Groot-0909)
+- Improve help text of scp and run (#2493) (@catloversg)
+- Add option to disable minimap in script editor (#2504) (@catloversg)
+- Improve navigation system of in-game documentation viewer (#2499) (@catloversg)
 
 ### MISC
 
@@ -189,7 +228,7 @@ export const CONSTANTS = {
 - Add "Total Number of Primes" contract (#2116) (@gmcew)
 - Make IP addresses use the full 32 bit space (#2113) (@whiskeyfur)
 - Add "--tail" to default autocomplete options (#2103) (@catloversg)
-- Update blood donation (#2151, #2216) (@catloversg, @hydroflame)
+- Update blood donation (#2151, #2216, #2508) (@catloversg, @hydroflame, @d0sboots)
 - Fix typo in sector-12-crime.lit (#2159) (@Boingostarr)
 - Add versionNumber to ns.ui.getGameInfo() (#2155) (@catloversg)
 - Fix typos in literature files (#2164) (@catloversg)
@@ -219,6 +258,36 @@ export const CONSTANTS = {
 - Fix: Coding contract can be solved manually via UI after it is removed on prestige (#2281) (@TheCleric)
 - Ensure ns.go.analysis.getValidMoves correctly handles playing as white (#2292) (@ficocelliguy)
 - Ensure that player's promises are changed to "gameOver" once the game is over (#2198) (@ficocelliguy)
+- Export save data before migrating to v3 (#2304) (@catloversg)
+- Prevent tiny islands surrounded by offline nodes during initial board generation (#2310) (@ficocelliguy)
+- Add FragmentType to NS Enums (#2341) (@TheCleric)
+- Do not round down amount of hacked money in "hack" CLI (#2344, #2345) (@catloversg)
+- Rename "TIX" interface to "Stock" (#2351) (@catloversg)
+- Add --temporary flag to run command (#2354) (@catloversg)
+- Let ServerProfiler.exe autocomplete servers (#2356) (@rladenson)
+- Correct phrasing in SmartSonar description (#2368) (@The-Chaddeus)
+- Make ActiveFragment extend Fragment (#2373) (@catloversg)
+- Expose theme as css custom props (#2380) (@shyguy1412)
+- Support css file type (#2378) (@shyguy1412)
+- Do not update captures on passed analysis boards (#2415) (@ficocelliguy)
+- Update error message when backdooring without admin rights (#2435) (@CicaProductions)
+- Add literature expanding the augment prestige lore (#2433) (@Nick-Colclasure)
+- Improve script args validation message (#2451) (@ficocelliguy)
+- Add sleeve commands to purchase sleeves and memory via the API (#2443) (@TheAimMan)
+- Allow ns.read to read .msg and .lit files (#2455) (@catloversg)
+- Fix scoring of very large open areas in IPvGO (#2464) (@ficocelliguy)
+- Make threads' bonus apply to timing attack puzzle's extra time per char (#2466) (@ficocelliguy)
+- Improve documentation; remove requirement that getBlockedRam and getDepth be called on a darknet server (#2472) (@ficocelliguy)
+- Prevent blocked ram on the "darkweb" server (#2468) (@ficocelliguy)
+- Add extra hint to sorted echo puzzle at high levels (#2465) (@ficocelliguy)
+- Change coding contract's fallback reward priorities (#2481) (@gmcew)
+- Add JS object properties as server names; refactor save/load/server storage to support this (#2482) (@ficocelliguy)
+- Buff packet sniffing slightly (#2485) (@d0sboots)
+- Fix: Darknet state is not reset properly on prestige (#2486) (@catloversg)
+- Change how coding contract rewards are randomized (#2490) (@catloversg)
+- Expose ProgramName enum (#2492) (@catloversg)
+- More fixes and feedback in darknet (#2489) (@ficocelliguy)
+- Fix missed cases in offline server handling (#2495) (@d0sboots)
 
 ### DOCUMENTATION
 
@@ -245,11 +314,33 @@ export const CONSTANTS = {
 - Clarify description of ArrayJumpingGame contract (#2277) (@acidduk)
 - Update 'Hacking Algorithms' page (#2288) (@gmcew)
 - Reword HammingCode contracts and mention dummy contract API (#2296) (@gmcew)
+- Clarify cross-host characteristic of PID and port (#2336) (@Thaccus)
+- Fix wrong commands in getting_started.md (#2349) (@catloversg)
+- Use alternative fix for newline issue in IPvGO docs (#2350) (@catloversg)
+- Fix missing/wrong TSDoc of APIs having optional host parameter (#2371) (@catloversg)
+- Fix typo in README.md (#2375) (@HolyNaet)
+- Improve wording around host argument of getScriptRam (#2374) (@nickmshelley)
+- Remove references to defunct wiki from Hack/Weaken/Grow (#2404) (@maglinvinn)
+- Clarify behavior of NS.getScriptLogs() for running scripts (#2408) (@sg673)
+- Add instructions to troubleshoot common issues for contributors to CONTRIBUTING.md (#2420) (@catloversg)
+- Add FAQ and another JIT batcher illustration to documentation (#2400) (@HolyNaet)
+- Change wording in Singularity.installAugmentation (#2439) (@HolyNaet)
+- Update README.md to correct Frequently Asked Questions link. (#2444) (@jonathonchase)
+- Add a question and a grammatical fix in faq.md (#2446) (@HolyNaet)
+- Move current changelog to changelog-v2.md (#2461) (@catloversg)
+- Fix some IPvGO docs that do not reflect winstreak rep converted to favor (#2463) (@ficocelliguy)
+- Add glossary of darknet terms to the documentation page (#2469) (@ficocelliguy)
+- Add a note to CONTRIBUTING.md about the npm peer dep issue (#2474) (@d0sboots)
+- Update darknet documentation (#2483) (@ficocelliguy)
+- Fix invalid links in ns.sleep and ns.asleep (#2496) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
 - Fix: BitVerse does not show all BN multipliers in some cases (#2045) (@catloversg)
 - Add UI hint about scripting tea/party and using Intern (#2179) (@catloversg)
+- Fix: Bladeburner console prints main body's HP instead of sleeve's HP (#2390) (@catloversg)
+- Reduce threshold of showing warning of low population (#2450) (@catloversg)
+- Fix: Hacknet server UI shows NaN hash rate when 100% RAM is being used (#2500) (@catloversg)
 
 ### SPOILER CHANGES - MISC
 
@@ -265,6 +356,13 @@ export const CONSTANTS = {
 - Add ns.singularity.getHackingLevelRequirementOfProgram (#2271) (@catloversg)
 - Expose gang's discount rate (#2272) (@catloversg)
 - Prevent purchasing product-only research for material industries (#2283) (@catloversg)
+- Fix: Stat levels are not recalculated after grafting augs or accepting Stanek's Gift (#2322) (@catloversg)
+- Expose production limit of material and product (#2330) (@AnteIndustrial)
+- Make some editorial changes in Black Operations' description (#2449) (@catloversg)
+- Add warning when installing backdoor on backdoored server with Singularity API (#2458) (@catloversg)
+- Fix: Sleeves can earn exp and purchase augmentations when enabling disableSleeveExpAndAugmentation (#2467) (@catloversg)
+- Add improved challenge achievement for BN15 (#2479) (@ficocelliguy)
+- Stop randomizing Bladeburner's action difficulty (#2491) (@catloversg)
 
 ### SPOILER CHANGES - DOCUMENTATION
 
@@ -278,8 +376,11 @@ export const CONSTANTS = {
 - Clarify advice about Smart Supply in round 1 (#2233) (@catloversg)
 - Fix wrong param/return type and clarify ns.sleep, ns.asleep, ns.singularity.exportGame (#2242) (@catloversg)
 - Clarify ns.gang.getOtherGangInformation (#2289) (@acidduk)
+- Update type of Player.factions, GangGenInfo.faction and CorpMaterialConstantData.name (#2347) (@catloversg)
+- Clarification of Singularity costs inside BN4 (#2403) (@gmcew)
+- Update math notations in corporation docs (#2452) (@catloversg)
 
-### CODEBASE/REFACTOR
+### CODEBASE/REFACTOR/WORKFLOW/JEST/TOOL/DEPS
 
 - Electron: Use steamworks.js to integrate with Steamworks SDK (#1563) (@catloversg)
 - Electron: Replace deprecated protocol.interceptFileProtocol with protocol.handle (#2100) (@catloversg)
@@ -301,5 +402,49 @@ export const CONSTANTS = {
 - Move all docs into en/ subdirectory (#1505) (@d0sboots)
 - Fix ctrl-clicking after the doc_en refactor (#2256) (@d0sboots)
 - Electron: Specify mime type when loading wasm files (#2262) (@catloversg)
+- Electron: Build universal macOS binary (#2306) (@Snarling)
+- Add Jest test to test migration from v2 to v3 (#2305) (@catloversg)
+- Workflow: Split build-artifacts.yml into 2 workflows (#2309) (@catloversg)
+- Workflow: Update NodeJs version in workflows (#2319) (@catloversg)
+- Update NodeJS to v22 (#2318) (@mctylr-gh)
+- Update api-documentor and api-extractor (#2320) (@mctylr-gh)
+- Improve dev menu for augmentations (#2315) (@d0sboots)
+- Add more debug info for troubleshooting corporation issues (#2327) (@catloversg)
+- Update doc.sh (#2331) (@catloversg)
+- Enable restoreMocks option and fix lint errors (#2333) (@catloversg)
+- Workflow: Add new job to check generated docs (#2329) (@catloversg)
+- Quiet Jest tests output on expected failures (#2332) (@mctylr-gh)
+- Standardize error handling in netscriptGoImplementation.ts (#2335) (@ficocelliguy)
+- Enable linting in test folder (#2337) (@catloversg)
+- Update minor version of material UI and Emotion packages (#2339) (@mctylr-gh)
+- Refactor Stanek's Gift UI code and change internal FragmentType enum (#2346) (@catloversg)
+- Minor React related packages update (#2353) (@mctylr-gh)
+- Remove redundant check in getServer utility function and serverExists API (#2357) (@catloversg)
+- Refactor tests that add home server manually (#2358) (@catloversg)
+- Update Electron version (#2360) (@catloversg)
+- Prepare for save data migration of next beta version (#2369) (@catloversg)
+- Rewrite infiltration to pull state out of React (#2316, #2393) (@d0sboots)
+- Use getCoreBonus function when calculating server growth (#2387) (@aaaa-imcute)
+- Refactor implementation of ports (#2396) (@d0sboots)
+- Avoid re-entrancy issues with EventEmitter (#2397) (@d0sboots)
+- Update packages-lock.json to not use vulnerable versions (#2405) (@mctylr-gh)
+- Allow specifying migrator when migrating player's scripts (#2418) (@catloversg)
+- Refactor code related to in-game documentation link (#2422) (@catloversg)
+- Clean up "doc" folder (#2427) (@catloversg)
+- Update dependencies related to monaco (#2432) (@catloversg)
+- Fix typos and duplicating ms per cycle constant (#2436) (@gmcew)
+- Update dependencies to fix vulnerability warnings (#2445) (@catloversg)
+- Move Result to the public API (#2398) (@d0sboots)
+- Generate display data for math notation at built time and remove runtime mathjax dependency (#2447) (@catloversg)
+- Update SaveData type to be compatible with TS 5.9 and upgrade TS (#2457) (@catloversg)
+- Update NodeJS to v24 (#2456) (@catloversg)
+- Update format created by "build artifacts" workflows (#2470) (@Snarling)
+- Consolidate checks under getFailureResult() (#2476) (@d0sboots)
+- Fix: Global states are not reset properly between each Jest test (#2487) (@catloversg)
+- Change getFailureResult to checkDarknetServer (#2494) (@d0sboots)
+- Speed up by-ip lookups by introducing a new map entry (#2488) (@d0sboots)
+- Refactor/adjust getPixelPosition in darknet UI code (#2501) (@d0sboots)
+- Add tests for checking getAnswer and solver of coding contracts (#2503) (@catloversg)
+- Refactor ImportSave component (#2505) (@catloversg)
 `,
 } as const;

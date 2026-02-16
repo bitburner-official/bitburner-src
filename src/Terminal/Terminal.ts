@@ -89,6 +89,8 @@ import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { StdIO } from "./StdIO/StdIO";
 import { getTerminalStdIO, parseRedirectedCommands } from "./StdIO/RedirectIO";
+import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
+import { DarknetServer } from "../Server/DarknetServer";
 
 export const TerminalCommands: Record<
   string,
@@ -213,7 +215,7 @@ export class Terminal {
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
-    this.startAction(calculateHackingTime(server, Player) / 4, "h", server, stdIO);
+    this.startAction(calculateHackingTime(server, Player) / 4, "h", stdIO, server);
   }
 
   startGrow(stdIO: StdIO): void {
@@ -223,7 +225,7 @@ export class Terminal {
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
-    this.startAction(calculateGrowTime(server, Player) / 16, "g", server, stdIO);
+    this.startAction(calculateGrowTime(server, Player) / 16, "g", stdIO, server);
   }
   startWeaken(stdIO: StdIO): void {
     const server = Player.getCurrentServer();
@@ -232,7 +234,7 @@ export class Terminal {
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
-    this.startAction(calculateWeakenTime(server, Player) / 16, "w", server, stdIO);
+    this.startAction(calculateWeakenTime(server, Player) / 16, "w", stdIO, server);
   }
 
   startBackdoor(stdIO: StdIO): void {
@@ -242,17 +244,18 @@ export class Terminal {
       this.error("Cannot backdoor this kind of server", stdIO);
       return;
     }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
-    this.startAction(calculateHackingTime(server, Player) / 4, "b", server, stdIO);
+    if (!(server instanceof Server || server instanceof DarknetServer))
+      throw new Error("server should be normal server");
+    this.startAction(calculateHackingTime(server, Player) / 4, "b", stdIO, server);
   }
 
   startAnalyze(stdIO: StdIO): void {
     this.print("Analyzing system...", stdIO);
     const server = Player.getCurrentServer();
-    this.startAction(1, "a", server, stdIO);
+    this.startAction(1, "a", stdIO, server);
   }
 
-  startAction(n: number, action: "h" | "b" | "a" | "g" | "w", server: BaseServer, stdIO: StdIO): void {
+  startAction(n: number, action: "h" | "b" | "a" | "g" | "w" | "c", stdIO: StdIO, server?: BaseServer): void {
     this.action = new TTimer(n, action, server);
     this.actionStdIO = stdIO;
   }
@@ -405,7 +408,8 @@ export class Terminal {
         this.error("Cannot hack this kind of server", this.actionStdIO);
         return;
       }
-      if (!(server instanceof Server)) throw new Error("server should be normal server");
+      if (!(server instanceof Server || server instanceof DarknetServer))
+        throw new Error("server should be normal server");
       if (!this.actionStdIO) {
         throw new Error("Missing stdIO for backdoor action");
       }
@@ -442,6 +446,11 @@ export class Terminal {
       const canRunScripts = hasAdminRights && currServ.maxRam > 0;
       this.print("Can run scripts on this host: " + (canRunScripts ? "YES" : "NO"), this.actionStdIO);
       this.print("RAM: " + formatRam(currServ.maxRam), this.actionStdIO);
+      if (currServ instanceof DarknetServer && currServ.blockedRam) {
+        this.print("RAM blocked by owner: " + formatRam(currServ.blockedRam), this.actionStdIO);
+        this.print("Stasis link: " + (currServ.hasStasisLink ? "YES" : "NO"), this.actionStdIO);
+        this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"), this.actionStdIO);
+      }
       if (currServ instanceof Server) {
         this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"), this.actionStdIO);
         const hackingSkill = currServ.requiredHackingSkill;
@@ -501,6 +510,14 @@ export class Terminal {
       this.finishBackdoor(this.action.server, cancelled);
     } else if (this.action.action === "a") {
       this.finishAnalyze(this.action.server, cancelled);
+    } else if (this.action.action === "c" && this.action.server instanceof DarknetServer) {
+      const cache = this.action.server.caches.pop();
+      if (!cache) {
+        this.print("No cache files found.");
+      } else {
+        const result = getRewardFromCache(this.action.server, cache, true);
+        this.print(result.message);
+      }
     }
 
     if (cancelled) {
@@ -641,19 +658,30 @@ export class Terminal {
     }
 
     const ignoreServer = (s: BaseServer, d: number): boolean =>
-      (!all && s.purchasedByPlayer && s.hostname != "home") || d > depth || (!all && s instanceof HacknetServer);
+      (!all && s.purchasedByPlayer && s.hostname != "home") ||
+      d > depth ||
+      (!all && s instanceof HacknetServer) ||
+      (!all && s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
 
-    const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
-      hostname: s.hostname,
-      children: s.serversOnNetwork
-        .filter((h) => h != parent)
-        .map((s) => GetServer(s))
-        .filter((v): v is BaseServer => !!v)
-        .filter((v) => !ignoreServer(v, d))
-        .map((h) => makeNode(s.hostname, h, d + 1)),
-    });
+    const makeNode = (root: BaseServer = Player.getCurrentServer()) => {
+      // Keep track of previously seen servers to prevent backtracking (since darknet can be cyclical)
+      const seenServers = [root.hostname];
+      const populateNode = (s: BaseServer, d = 1): Node => {
+        seenServers.push(s.hostname);
+        return {
+          hostname: s.hostname,
+          children: s.serversOnNetwork
+            .filter((h) => !seenServers.includes(h))
+            .map((s) => GetServer(s))
+            .filter((v): v is BaseServer => !!v)
+            .filter((v) => !ignoreServer(v, d))
+            .map((h) => populateNode(h, d + 1)),
+        };
+      };
+      return populateNode(root);
+    };
 
-    const root = makeNode(Player.getCurrentServer().hostname, Player.getCurrentServer());
+    const root = makeNode();
 
     const printOutput = (node: Node, stdIO: StdIO, prefix = ["  "], last = true) => {
       const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
@@ -666,13 +694,15 @@ export class Terminal {
 
       const server = GetServer(node.hostname);
       if (!server) return;
+      const hasRoot = server.hasAdminRights ? "YES" : "NO";
       if (server instanceof Server) {
-        const hasRoot = server.hasAdminRights ? "YES" : "NO";
         this.print(
           `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
           stdIO,
         );
         this.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n", stdIO);
+      } else {
+        this.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n", stdIO);
       }
       this.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n", stdIO);
       node.children.forEach((n, i) =>

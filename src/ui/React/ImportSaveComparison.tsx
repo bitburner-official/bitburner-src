@@ -23,23 +23,31 @@ import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ThumbUpAlt from "@mui/icons-material/ThumbUpAlt";
+import ThumbDownAlt from "@mui/icons-material/ThumbDownAlt";
 
 import { Skills } from "@nsdefs";
 
-import { ImportData, saveObject } from "../../../SaveObject";
-import { Settings } from "../../../Settings/Settings";
-import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
-import { formatMoney, formatNumberNoSuffix } from "../../formatNumber";
-import { ConfirmationModal } from "../ConfirmationModal";
-import { pushImportResult } from "../../../Electron";
-import { Router } from "../../GameRoot";
-import { Page } from "../../Router";
-import { useBoolean } from "../hooks";
+import { ImportData, saveObject } from "../../SaveObject";
+import { Settings } from "../../Settings/Settings";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
+import { ConfirmationModal } from "./ConfirmationModal";
+import { pushImportResult } from "../../Electron";
+import { Router } from "../GameRoot";
+import { Page } from "../Router";
+import { useBoolean } from "./hooks";
 
-import { ComparisonIcon } from "./ComparisonIcon";
-import { SaveData } from "../../../types";
-import { handleGetSaveDataInfoError } from "../../../utils/ErrorHandler";
-import { OptionSwitch } from "../OptionSwitch";
+import { SaveData } from "../../types";
+import { handleGetSaveDataInfoError } from "../../utils/ErrorHandler";
+import { OptionSwitch } from "./OptionSwitch";
+
+const ComparisonIcon = ({ isBetter }: { isBetter: boolean }): JSX.Element => {
+  const title = isBetter ? "Imported value is larger!" : "Imported value is smaller!";
+  const icon = isBetter ? <ThumbUpAlt color="success" /> : <ThumbDownAlt color="error" />;
+
+  return <Tooltip title={title}>{icon}</Tooltip>;
+};
 
 const useStyles = makeStyles()((theme: Theme) => ({
   root: {
@@ -93,7 +101,7 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 
 let initialAutosave = 0;
 
-export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
+export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
   const { classes } = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();

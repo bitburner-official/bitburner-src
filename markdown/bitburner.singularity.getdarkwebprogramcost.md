@@ -9,7 +9,7 @@ Check the price of an exploit on the dark web
 **Signature:**
 
 ```typescript
-getDarkwebProgramCost(programName: string): number;
+getDarkwebProgramCost(programName: ProgramName): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ programName
 
 </td><td>
 
-string
+[ProgramName](./bitburner.programname.md)
 
 
 </td><td>

@@ -2,16 +2,16 @@ import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Faction } from "./Faction";
 
 import { Augmentations } from "../Augmentation/Augmentations";
-import { AugmentationName, FactionDiscovery } from "@enums";
+import { AugmentationName, FactionDiscovery, FactionName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { Player } from "@player";
 import { Factions } from "./Factions";
 import { Settings } from "../Settings/Settings";
 import {
-  getHackingWorkRepGain,
-  getFactionSecurityWorkRepGain,
   getFactionFieldWorkRepGain,
+  getFactionSecurityWorkRepGain,
+  getHackingWorkRepGain,
 } from "../PersonObjects/formulas/reputation";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -201,6 +201,11 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
     augs = augs.filter(uniqueFilter);
 
     return augs.map((a) => a.name);
+  }
+
+  // Remove TRP from daedalus in BN15
+  if (Player.bitNodeN === 15 && faction.name == FactionName.Daedalus) {
+    return faction.augmentations.filter((aug) => aug !== AugmentationName.TheRedPill);
   }
 
   return faction.augmentations.slice();

@@ -6,7 +6,9 @@ Seen by most of the population as nihilistic, murderous and vile, occasional rum
 
 ## Starting and Recruiting
 
-Outside of [BitNode-2](bitnodes.md) gangs require much more crime and heartbreak to create, but can still be a great help. Creating a Gang in other [BitNodes](bitnodes.md) will offer more [Augmentations](../basic/augmentations.md) than other [Factions](../basic/factions.md), but they will not be a way to destroy the [BitNode](bitnodes.md) alone.
+Outside of [BitNode-2](bitnodes.md), you need to have -54000 karma or lower to create a Gang. It takes a long time to reduce your karma, but Gang is a great help. If you have access to [Sleeves](sleeves.md), you can make them commit crimes and "farm karma" for you.
+
+Creating a Gang in other [BitNodes](bitnodes.md) will offer more [Augmentations](../basic/augmentations.md) than other [Factions](../basic/factions.md), but they will not be a way to destroy the [BitNode](bitnodes.md) alone.
 
 After creating a gang, you will be able to start recruiting, adding members to your gang as you gain Respect. While in a BitNode, your gang and gang member stats will not reset if you install augmentations.
 

@@ -349,6 +349,50 @@ Crime
 </td></tr>
 <tr><td>
 
+[Darknet](./bitburner.darknet.md)
+
+
+</td><td>
+
+Darknet API
+
+
+</td></tr>
+<tr><td>
+
+[DarknetFormulas](./bitburner.darknetformulas.md)
+
+
+</td><td>
+
+Darknet formulas
+
+
+</td></tr>
+<tr><td>
+
+[DarknetInstability](./bitburner.darknetinstability.md)
+
+
+</td><td>
+
+Instability of the darknet caused by excessive backdoor-ing of servers.
+
+
+</td></tr>
+<tr><td>
+
+[DarknetServerData](./bitburner.darknetserverdata.md)
+
+
+</td><td>
+
+Darknet server data.
+
+
+</td></tr>
+<tr><td>
+
 [Division](./bitburner.division.md)
 
 
@@ -760,6 +804,17 @@ Hacknet Server formulas
 </td></tr>
 <tr><td>
 
+[HeartbleedOptions](./bitburner.heartbleedoptions.md)
+
+
+</td><td>
+
+Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
+
+
+</td></tr>
+<tr><td>
+
 [HostReturnOptions](./bitburner.hostreturnoptions.md)
 
 
@@ -1150,6 +1205,17 @@ Various info about resets
 </td><td>
 
 A server. Not all servers have all of these properties - optional properties are missing on certain servers.
+
+
+</td></tr>
+<tr><td>
+
+[ServerAuthDetails](./bitburner.serverauthdetails.md)
+
+
+</td><td>
+
+Details about a server's authentication schema
 
 
 </td></tr>
@@ -1561,6 +1627,16 @@ Skill names type of Bladeburner
 </td></tr>
 <tr><td>
 
+[CacheResult](./bitburner.cacheresult.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [CityName](./bitburner.cityname.md)
 
 
@@ -1754,6 +1830,47 @@ Names of all companies
 <tr><td>
 
 [CrimeType](./bitburner.crimetype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DarknetResponseCode](./bitburner.darknetresponsecode.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DarknetResponseCodeType](./bitburner.darknetresponsecodetype.md)
+
+
+</td><td>
+
+Errors:
+
+- DirectConnectionRequired: The target server is not directly connected to the current server. This may be caused by a user error (specifying the wrong neighbor host's hostname) or a network change (the target server was moved).
+
+- AuthFailure: Authentication failed. The password is incorrect.
+
+- NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
+
+- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+
+- ServiceUnavailable: The server is offline.
+
+
+</td></tr>
+<tr><td>
+
+[DarknetResult](./bitburner.darknetresult.md)
 
 
 </td><td>
@@ -2020,6 +2137,26 @@ Structured interface to requirements for joining a faction or company. For field
 <tr><td>
 
 [PositionType](./bitburner.positiontype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ProgramName](./bitburner.programname.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ProgramNameEnumType](./bitburner.programnameenumtype.md)
 
 
 </td><td>

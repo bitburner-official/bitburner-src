@@ -1,6 +1,7 @@
 # Crimes
 
-Committing crimes is an active gameplay mechanic that allows the player to train their [Stats](stats.md) and potentially earn money.
+Committing crimes is an active gameplay mechanic that allows the player to train their [Stats](stats.md) and potentially earn money. It also reduces your karma, and having low karma is a requirement of some factions.
+
 The player can attempt to commit crimes by visiting `The Slums` through the `City` tab (Alt + w).
 `The Slums` is available in every city.
 

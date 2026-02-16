@@ -7,7 +7,7 @@
  * Sleeves are unlocked in BitNode-10.
  */
 
-import type { SleevePerson } from "@nsdefs";
+import type { Result, SleevePerson } from "@nsdefs";
 import type { Augmentation } from "../../Augmentation/Augmentation";
 import type { SleeveWork } from "./Work/Work";
 
@@ -50,6 +50,7 @@ import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 import type { MoneySource } from "../../utils/MoneySourceTracker";
+import { formatMoney, formatSleeveShock } from "../../ui/formatNumber";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -338,20 +339,62 @@ export class Sleeve extends Person implements SleevePerson {
     return true;
   }
 
-  tryBuyAugmentation(aug: Augmentation): boolean {
+  /**
+   * This function is only used in UI code for checking whether the "Manage Augmentations" button can be enabled. If you
+   * want to check if the player can purchase a specific augmentation, you need to call canPurchaseAugmentation.
+   */
+  checkPreconditionsOfPurchasingAugmentations(): Result {
+    if (Player.bitNodeOptions.disableSleeveExpAndAugmentation) {
+      return {
+        success: false,
+        message: `The "Disable Sleeves' experience and augmentation" option was enabled. You cannot purchase augmentations for your sleeves.`,
+      };
+    }
+
+    if (this.shock > 0) {
+      return {
+        success: false,
+        message: `You must reduce the sleeve shock to 0. The current shock is ${formatSleeveShock(this.shock)}.`,
+      };
+    }
+
+    return { success: true };
+  }
+
+  canPurchaseAugmentation(aug: Augmentation): Result {
+    const checkingPreconditions = this.checkPreconditionsOfPurchasingAugmentations();
+    if (!checkingPreconditions.success) {
+      return checkingPreconditions;
+    }
+
     if (!Player.canAfford(aug.baseCost)) {
-      return false;
+      return {
+        success: false,
+        message: `You must have at least ${formatMoney(aug.baseCost)}.`,
+      };
     }
 
     // Verify that this sleeve does not already have that augmentation.
-    if (this.hasAugmentation(aug.name)) return false;
+    if (this.hasAugmentation(aug.name)) {
+      return { success: false, message: `This sleeve already has "${aug.name}" augmentation.` };
+    }
 
     // Verify that the augmentation is available for purchase.
-    if (!this.findPurchasableAugs().includes(aug)) return false;
+    if (!this.findPurchasableAugs().includes(aug)) {
+      return { success: false, message: `"${aug.name}" is not in the list of purchasable augmentations.` };
+    }
 
+    return { success: true };
+  }
+
+  purchaseAugmentation(aug: Augmentation): Result {
+    const validationResult = this.canPurchaseAugmentation(aug);
+    if (!validationResult.success) {
+      return validationResult;
+    }
     Player.loseMoney(aug.baseCost, "sleeves");
     this.installAugmentation(aug);
-    return true;
+    return { success: true };
   }
 
   upgradeMemory(n: number): void {

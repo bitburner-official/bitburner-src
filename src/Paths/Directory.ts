@@ -30,6 +30,8 @@ const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "#", '"
 /** A valid character is any character that is not one of the invalid characters */
 export const oneValidCharacter = `[^${escapeRegExp(invalidCharacters.join(""))}\\s]`;
 
+export const oneInvalidCharacter = `[${escapeRegExp(invalidCharacters.join(""))}\\s]`;
+
 /** Regex string for matching the directory part of a valid filepath */
 export const directoryRegexString = `^(?<directory>(?:${oneValidCharacter}+\\/)*)`;
 

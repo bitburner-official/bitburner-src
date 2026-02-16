@@ -5,12 +5,20 @@ import {
   generateRandomContract,
   generateRandomContractOnHome,
   getRandomFilename,
+  getRandomReward,
 } from "../../../src/CodingContract/ContractGenerator";
-import { CodingContractName } from "../../../src/Enums";
+import { CodingContractName, CompanyName, JobField, JobName } from "../../../src/Enums";
 import { GetAllServers } from "../../../src/Server/AllServers";
 import type { BaseServer } from "../../../src/Server/BaseServer";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
-import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { prestigeSourceFile } from "../../../src/Prestige";
+import { CodingContractRewardType } from "../../../src/CodingContract/Contract";
+import { joinFaction } from "../../../src/Faction/FactionHelpers";
+import { Factions } from "../../../src/Faction/Factions";
+import { Companies } from "../../../src/Company/Companies";
+import { CodingContractTypes } from "../../../src/CodingContract/ContractTypes";
+import { getRecordEntries } from "../../../src/Types/Record";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -73,4 +81,144 @@ describe("getRandomFilename", () => {
     // should point that out immediately.
     expect(set.size).toStrictEqual(maxIter);
   });
+});
+
+describe("getRandomReward", () => {
+  test("Disable money reward when CodingContractMoney BN multiplier is 0", () => {
+    Player.bitNodeN = 8;
+    prestigeSourceFile(true);
+    for (let i = 0; i < 1000; ++i) {
+      expect(getRandomReward().type).not.toStrictEqual(CodingContractRewardType.Money);
+    }
+  });
+  test("Have all valid reward types", () => {
+    const rewardTypeCounts = [0, 0, 0, 0];
+    for (let i = 0; i < 1000; ++i) {
+      ++rewardTypeCounts[getRandomReward().type];
+    }
+    expect(rewardTypeCounts.length).toStrictEqual(4);
+    expect(rewardTypeCounts[CodingContractRewardType.FactionReputation]).toBeGreaterThan(0);
+    expect(rewardTypeCounts[CodingContractRewardType.FactionReputationAll]).toBeGreaterThan(0);
+    expect(rewardTypeCounts[CodingContractRewardType.CompanyReputation]).toBeGreaterThan(0);
+    expect(rewardTypeCounts[CodingContractRewardType.Money]).toBeGreaterThan(0);
+  });
+});
+
+describe("Receive correct reward", () => {
+  test("FactionReputation", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.FactionReputation },
+    });
+    joinFaction(Factions.CyberSec);
+    expect(Factions.CyberSec.playerReputation).toStrictEqual(0);
+    const contract = Player.getHomeComputer().contracts[0];
+    ns.codingcontract.attempt(contract.getAnswer(), contract.fn);
+    expect(Factions.CyberSec.playerReputation).toBeGreaterThan(0);
+  });
+  test("FactionReputationAll", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.FactionReputationAll },
+    });
+    joinFaction(Factions.CyberSec);
+    joinFaction(Factions.NiteSec);
+    expect(Factions.CyberSec.playerReputation).toStrictEqual(0);
+    expect(Factions.NiteSec.playerReputation).toStrictEqual(0);
+    const contract = Player.getHomeComputer().contracts[0];
+    ns.codingcontract.attempt(contract.getAnswer(), contract.fn);
+    expect(Factions.CyberSec.playerReputation).toBeGreaterThan(0);
+    expect(Factions.NiteSec.playerReputation).toBeGreaterThan(0);
+  });
+  test("CompanyReputation", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.CompanyReputation },
+    });
+    expect(ns.singularity.applyToCompany(CompanyName.JoesGuns, JobField.employee)).toStrictEqual(JobName.employee);
+    expect(Companies[CompanyName.JoesGuns].playerReputation).toStrictEqual(0);
+    const contract = Player.getHomeComputer().contracts[0];
+    ns.codingcontract.attempt(contract.getAnswer(), contract.fn);
+    expect(Companies[CompanyName.JoesGuns].playerReputation).toBeGreaterThan(0);
+  });
+  test("Money", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.Money },
+    });
+    Player.money = 0;
+    const contract = Player.getHomeComputer().contracts[0];
+    ns.codingcontract.attempt(contract.getAnswer(), contract.fn);
+    expect(Player.money).toBeGreaterThan(0);
+  });
+});
+
+describe("Receive fallback reward", () => {
+  test("FactionReputation", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.FactionReputation },
+    });
+    expect(Player.factions.length).toStrictEqual(0);
+    Player.money = 0;
+    const contract = Player.getHomeComputer().contracts[0];
+    ns.codingcontract.attempt(contract.getAnswer(), contract.fn);
+    expect(Player.money).toBeGreaterThan(0);
+  });
+  test("FactionReputationAll", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.FactionReputationAll },
+    });
+    expect(Player.factions.length).toStrictEqual(0);
+    Player.money = 0;
+    const contract = Player.getHomeComputer().contracts[0];
+    ns.codingcontract.attempt(contract.getAnswer(), contract.fn);
+    expect(Player.money).toBeGreaterThan(0);
+  });
+  test("CompanyReputation", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.CompanyReputation },
+    });
+    expect(Object.keys(Player.jobs).length).toStrictEqual(0);
+    joinFaction(Factions.CyberSec);
+    expect(Factions.CyberSec.playerReputation).toStrictEqual(0);
+    const contract = Player.getHomeComputer().contracts[0];
+    ns.codingcontract.attempt(contract.getAnswer(), contract.fn);
+    expect(Factions.CyberSec.playerReputation).toBeGreaterThan(0);
+  });
+});
+
+describe("Check getAnswer and solver", () => {
+  // These contracts do not give a way to generate the answer.
+  const skippedContractTypes = [
+    CodingContractName.Proper2ColoringOfAGraph,
+    CodingContractName.ShortestPathInAGrid,
+    CodingContractName.SquareRoot,
+  ];
+  for (const [name, cct] of getRecordEntries(CodingContractTypes)) {
+    if (skippedContractTypes.includes(name)) {
+      continue;
+    }
+    const state = cct.generate();
+    const data = cct.getData ? cct.getData(state) : state;
+    const answer = cct.getAnswer(data);
+    expect(answer).not.toBeNull();
+    expect(cct.solver(state, answer)).toStrictEqual(true);
+  }
 });

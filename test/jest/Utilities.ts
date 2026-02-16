@@ -4,13 +4,21 @@ import type { ScriptFilePath } from "../../src/Paths/ScriptFilePath";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import { Player, setPlayer } from "../../src/Player";
 import { RunningScript } from "../../src/Script/RunningScript";
-import { GetServerOrThrow, initForeignServers, prestigeAllServers } from "../../src/Server/AllServers";
+import { GetServerOrThrow, prestigeAllServers } from "../../src/Server/AllServers";
 import { SpecialServers } from "../../src/Server/data/SpecialServers";
 import { initSourceFiles } from "../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../src/ui/formatNumber";
 import { Router } from "../../src/ui/GameRoot";
 import { config } from "../../src/NetscriptJSEvaluator";
 import type { NetscriptContext } from "../../src/Netscript/APIWrapper";
+import { purchaseServer } from "../../src/Server/ServerPurchases";
+import { purchaseHacknet } from "../../src/Hacknet/HacknetHelpers";
+import { initForeignServers } from "../../src/Server/ServerHelpers";
+import { generateNextPid } from "../../src/Netscript/Pid";
+import { initBitNodeMultipliers } from "../../src/BitNode/BitNode";
+import { resetGoPromises } from "../../src/Go/boardAnalysis/goAI";
+import { enterBitNode } from "../../src/RedPill";
+import { getDefaultBitNodeOptions } from "../../src/BitNode/BitNodeUtils";
 
 declare const importActual: (typeof config)["doImport"];
 
@@ -47,16 +55,43 @@ export function initGameEnvironment() {
   initSourceFiles();
 }
 
-export function setupBasicTestingEnvironment(): void {
+export function setupBasicTestingEnvironment(
+  { purchaseHacknetServer, purchasePServer } = { purchasePServer: false, purchaseHacknetServer: false },
+): void {
+  // We need to delete all servers before calling initForeignServers.
   prestigeAllServers();
   setPlayer(new PlayerObject());
+
+  // Basic steps of initializing a new save file. These are the steps that we do in Engine.load() when there is no save
+  // data.
+  initBitNodeMultipliers();
   Player.init();
-  Player.sourceFiles.set(4, 3);
   initForeignServers(Player.getHomeComputer());
+  Player.reapplyAllAugmentations();
+  resetGoPromises();
+
+  // Grant SF4 for conveniently using Singularity APIs in tests.
+  Player.sourceFiles.set(4, 3);
+  // Simulate bitflume. This step is very important. It ensures all global states (e.g., Factions, Companies, BN mults)
+  // are reset.
+  enterBitNode(true, Player.bitNodeN, 1, getDefaultBitNodeOptions());
+  // Get some money.
+  Player.money = 1e15;
+
+  if (purchasePServer) {
+    purchaseServer("test-server-1", 2);
+  }
+  if (purchaseHacknetServer) {
+    Player.sourceFiles.set(9, 3);
+    purchaseHacknet();
+  }
 }
 
-export function getNS(): NSFull {
-  const home = GetServerOrThrow(SpecialServers.Home);
+export function getWorkerScriptAndNS(hostname: string = SpecialServers.Home): {
+  ws: WorkerScript;
+  ns: NSFull;
+} {
+  const home = GetServerOrThrow(hostname);
   home.maxRam = 1024;
   const filePath = "test.js" as ScriptFilePath;
   home.writeToScriptFile(filePath, "");
@@ -65,12 +100,19 @@ export function getNS(): NSFull {
     throw new Error("Invalid script");
   }
   const runningScript = new RunningScript(script, 1024);
-  const workerScript = new WorkerScript(runningScript, 1, NetscriptFunctions);
+  const workerScript = new WorkerScript(runningScript, generateNextPid(), NetscriptFunctions);
   const ns = workerScript.env.vars;
   if (!ns) {
     throw new Error("Invalid NS instance");
   }
-  return ns;
+  return {
+    ws: workerScript,
+    ns,
+  };
+}
+
+export function getNS(hostname: string = SpecialServers.Home): NSFull {
+  return getWorkerScriptAndNS(hostname).ns;
 }
 
 export function getMockedNetscriptContext(
@@ -86,4 +128,13 @@ export function getMockedNetscriptContext(
       },
     } as unknown as WorkerScript,
   };
+}
+
+// WIP: Improve this function to get a better stack trace or use jest-expect-message
+export function expectWithMessage(actual: unknown, expected: unknown, customMessage: string) {
+  try {
+    expect(actual).toStrictEqual(expected);
+  } catch (error) {
+    throw new Error(customMessage, { cause: error });
+  }
 }

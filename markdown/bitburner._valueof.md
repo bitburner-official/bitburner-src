@@ -8,5 +8,5 @@
 **Signature:**
 
 ```typescript
-type _ValueOf<T> = T[keyof T];
+export type _ValueOf<T> = T[keyof T];
 ```
