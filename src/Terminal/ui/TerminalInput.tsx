@@ -233,7 +233,7 @@ export function TerminalInput(): React.ReactElement {
       const command = searchResults.length ? searchResults[searchResultsIndex] : value;
       Terminal.printAndBypassPipes(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
       if (command) {
-        Terminal.executeCommands(command);
+        await Terminal.executeCommands(command);
         saveValue("");
         resetSearch();
       }

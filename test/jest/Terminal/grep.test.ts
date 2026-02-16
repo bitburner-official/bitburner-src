@@ -74,8 +74,8 @@ describe("grep command", () => {
     expect(output).toBe(`This is line 2 from stdin`);
   });
 
-  it("should grep input piped from cat", () => {
-    Terminal.executeCommands(`cat ${fileName} ${fileName2} | grep "line 2"`);
+  it("should grep input piped from cat", async () => {
+    await Terminal.executeCommands(`cat ${fileName} ${fileName2} | grep "line 2"`);
     const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
     // Output from cat will not have filenames, and will not add additional newlines between file contents
     expect(stringify(lastOutput.text, true)).toBe(

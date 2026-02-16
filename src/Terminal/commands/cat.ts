@@ -13,7 +13,7 @@ import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
-  const initialStdIn = stdIO.getAllCurrentStdin();
+  const initialStdIn = stdIO.getAllCurrentStdin(false);
   const stdin = stdIO.stdin?.deref();
   const stdinIsClosed = !stdin || (stdin.isClosed && stdin.empty());
   const hasStdOut = !!stdIO.stdout;

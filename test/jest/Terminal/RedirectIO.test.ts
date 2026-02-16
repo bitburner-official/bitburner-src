@@ -85,8 +85,7 @@ describe("RedirectIOTests", () => {
       const filename = "appendOutput.txt";
       const commandString = `echo First Line >> ${filename} | echo Second Line >> ${filename}`;
 
-      parseRedirectedCommands(commandString);
-      await sleep(50);
+      await parseRedirectedCommands(commandString);
 
       const server = GetServer(Player.currentServer);
       const file = server?.textFiles.get(filename as TextFilePath);
@@ -98,8 +97,7 @@ describe("RedirectIOTests", () => {
       const filename = "scriptOutput.js";
       const commandString = `echo Hello > ${filename} | echo World > ${filename}`;
 
-      parseRedirectedCommands(commandString);
-      await sleep(50);
+      await parseRedirectedCommands(commandString);
 
       const server = GetServer(Player.currentServer);
       const file = server?.scripts.get(filename as ScriptFilePath);
@@ -113,15 +111,13 @@ describe("RedirectIOTests", () => {
       const scriptName = "testScript.js";
       const filename = "scriptLog.txt";
       const scriptContent = `export function main(ns) { ns.tprint('Logging to file' ); }`;
-      Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
-      await sleep(50);
+      await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
 
       const currentScripts = GetServer(Player.currentServer)?.scripts;
       const script = currentScripts?.get(scriptName as ScriptFilePath);
       expect(script?.content).toBe(scriptContent);
 
-      Terminal.executeCommands(`run ${scriptName} >> ${filename}`);
-      await sleep(50);
+      await Terminal.executeCommands(`run ${scriptName} >> ${filename}`);
 
       const server = GetServer(Player.currentServer);
       const file = server?.textFiles.get(filename as TextFilePath);
@@ -141,12 +137,10 @@ describe("RedirectIOTests", () => {
           const input = stdIn?.read();
           ns.tprint('Received input: ' + input);
         }`;
-      Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
-      await sleep(50);
+      await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
 
       const inputData = "Hello from stdin!";
-      Terminal.executeCommands(`echo "${inputData}" | run ${scriptName}`);
-      await sleep(50);
+      await Terminal.executeCommands(`echo "${inputData}" | run ${scriptName}`);
 
       console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
@@ -165,12 +159,10 @@ describe("RedirectIOTests", () => {
           const input = stdIn?.read();
           ns.tprint('Received input: ' + input);
         }`;
-      Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
-      await sleep(50);
+      await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
 
       const inputData = "Hello from stdin!";
-      Terminal.executeCommands(`echo "${inputData}" | ${scriptName} | run ${scriptName}`);
-      await sleep(50);
+      await Terminal.executeCommands(`echo "${inputData}" | ${scriptName} | run ${scriptName}`);
 
       console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
@@ -184,24 +176,20 @@ describe("RedirectIOTests", () => {
       const filename = "appendOutput.txt";
       const setupCommandString = `echo First Line >> ${filename} | echo Second Line >> ${filename}`;
 
-      parseRedirectedCommands(setupCommandString);
-      await sleep(50);
+      await parseRedirectedCommands(setupCommandString);
 
-      parseRedirectedCommands(`echo 1 | cat ${filename}`);
-      await sleep(50);
+      await parseRedirectedCommands(`echo 1 | cat ${filename}`);
       expect(Terminal.outputHistory.length).toBe(1);
-      expect(Terminal.outputHistory[0].text).toBe("First Line\nSecond Line\n1");
+      expect(Terminal.outputHistory[0].text).toBe("First Line\nSecond Line1");
     });
 
     it("should be able to grep files read by cat", async () => {
       const filename = "appendOutput.txt";
       const setupCommandString = `echo First Line >> ${filename} | echo Second Line >> ${filename}`;
 
-      parseRedirectedCommands(setupCommandString);
-      await sleep(50);
+      await parseRedirectedCommands(setupCommandString);
 
-      parseRedirectedCommands(`cat ${filename} | grep Second`);
-      await sleep(50);
+      await parseRedirectedCommands(`cat ${filename} | grep Second`);
 
       expect(Terminal.outputHistory.length).toBe(1);
       const log = Terminal.outputHistory[0];

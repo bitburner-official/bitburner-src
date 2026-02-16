@@ -736,7 +736,7 @@ export class Terminal {
     }
   }
 
-  executeCommands(commands: string): void {
+  async executeCommands(commands: string): Promise<void> {
     // Handle Terminal History - multiple commands should be saved as one
     if (this.commandHistory[this.commandHistory.length - 1] != commands) {
       this.commandHistory.push(commands);
@@ -748,7 +748,7 @@ export class Terminal {
     this.commandHistoryIndex = this.commandHistory.length;
     const allCommands = parseCommands(commands);
     for (const command of allCommands) {
-      parseRedirectedCommands(command);
+      await parseRedirectedCommands(command);
     }
   }
 

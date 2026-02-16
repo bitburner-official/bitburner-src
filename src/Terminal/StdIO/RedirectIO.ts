@@ -9,10 +9,11 @@ import { Player } from "@player";
 import { Script } from "../../Script/Script";
 import { Settings } from "../../Settings/Settings";
 import { Args, isPipeSymbol, PipeSymbols, stringify } from "./utils";
+import { sleep } from "../../utils/Utility";
 
 // TODO-Fico - add pipe documentation page
 
-export function parseRedirectedCommands(commandString: string) {
+export async function parseRedirectedCommands(commandString: string) {
   const parsed = parseCommand(commandString);
   const commandSets = findCommandsSplitByRedirects(parsed);
   if (commandSets.length <= 1) {
@@ -25,6 +26,9 @@ export function parseRedirectedCommands(commandString: string) {
     const stdIO = stdIOChain[i];
     handleCommand(stdIO, commandSet);
   }
+
+  // Allow the IO chain to pass data through its async iterators
+  await sleep(50);
   return true;
 }
 
@@ -81,6 +85,24 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
     }
   }
   result.push(currentCommand);
+
+  for (const [index, commandGroup] of result.entries()) {
+    if (index !== 1 && commandGroup[0] === PipeSymbols.InputRedirection) {
+      handleIoError(
+        getTerminalStdIO(),
+        `Error in pipe command: Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`,
+      );
+      return [];
+    }
+  }
+
+  // If the second command starts with an input redirection, convert it to a simple pipe.
+  if (result[1]?.[0] === PipeSymbols.InputRedirection) {
+    const inputRedirectCommand = result.splice(1, 1)[0];
+    result.unshift(["cat", ...inputRedirectCommand.slice(1)]);
+    result[1].unshift(PipeSymbols.Pipe);
+  }
+
   return result;
 }
 
