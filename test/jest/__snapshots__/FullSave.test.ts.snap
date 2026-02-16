@@ -448,7 +448,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",
-    "money": 1212,
+    "money": 1262,
     "moneySourceA": {
       "ctor": "MoneySourceTracker",
       "data": {
