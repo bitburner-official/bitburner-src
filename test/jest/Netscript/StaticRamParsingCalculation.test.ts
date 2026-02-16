@@ -10,7 +10,7 @@ const BaseCost = 1.6;
 const HackCost = 0.1;
 const GrowCost = 0.15;
 const SleeveGetTaskCost = 4;
-const HacknetCost = 4;
+const Hacknet = 0.5;
 const MaxCost = 1024;
 
 const filename = "testfile.js" as ScriptFilePath;
@@ -148,18 +148,6 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, 0);
     });
 
-    it("Function 'purchaseNode' that can be confused with Hacknet.purchaseNode", function () {
-      const code = `
-        export async function main(ns) {
-          purchaseNode();
-        }
-        function purchaseNode() { return 0; }
-      `;
-      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
-      // Works at present, because the parser checks the namespace only, not the function name
-      expectCost(calculated, 0);
-    });
-
     // TODO: once we fix static parsing this should pass
     it.skip("Function 'getTask' that can be confused with Sleeve.getTask", function () {
       const code = `
@@ -174,14 +162,14 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
   });
 
   describe("Single files with non-core NS functions", function () {
-    it("Hacknet NS function with a cost from namespace", function () {
+    it("Hacknet NS functions with an individual cost", function () {
       const code = `
         export async function main(ns) {
           ns.hacknet.purchaseNode(0);
         }
       `;
       const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
-      expectCost(calculated, HacknetCost);
+      expectCost(calculated, Hacknet);
     });
 
     it("Sleeve functions with an individual cost", function () {
