@@ -83,8 +83,11 @@ exports[`load/saveAllServers 1`] = `
             "server": "home",
             "scriptKey": "script.js*[]",
             "stdin": null,
-            "tailOutputPipeConfig": null,
-            "terminalOutputPipeConfig": null,
+            "tailStdOut": null,
+            "terminalStdOut": {
+              "stdin": null,
+              "stdout": null
+            },
             "title": "Awesome Script",
             "threads": 1,
             "temporary": false

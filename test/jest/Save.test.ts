@@ -60,8 +60,11 @@ function loadStandardServers() {
             "server": "home",
             "scriptKey": "script.js*[]",
             "stdin": null,
-            "tailOutputPipeConfig": null,
-            "terminalOutputPipeConfig": null,
+            "tailStdOut": null,
+            "terminalStdOut": {
+              "stdin": null,
+              "stdout": null
+            },
             "temporary": true,
             "dependencies": [
               {
@@ -89,8 +92,11 @@ function loadStandardServers() {
             "server": "home",
             "scriptKey": "script.js*[]",
             "stdin": null,
-            "tailOutputPipeConfig": null,
-            "terminalOutputPipeConfig": null,
+            "tailStdOut": null,
+            "terminalStdOut": {
+              "stdin": null,
+              "stdout": null
+            },
             "title": "Awesome Script",
             "dependencies": [
               {

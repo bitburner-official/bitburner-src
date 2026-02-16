@@ -47,16 +47,17 @@ describe("cat command", () => {
 
   it("should read from stdin when '-' is provided as an argument", () => {
     const server = GetServerOrThrow(Player.currentServer);
+    const stdinStuff = "\nInput from stdin line 1";
 
     const stdIn = new IOStream();
-    stdIn.write("\nInput from stdin line 1");
+    stdIn.write(stdinStuff);
     const stdOut = new IOStream();
     const stdIO = new StdIO(stdIn, stdOut);
 
     cat([fileName, "-", fileName2], server, stdIO);
     const output = stdOut.read();
 
-    expect(output).toBe(`${fileContent1}\nInput from stdin line 1\n${fileContent2}`);
+    expect(output).toBe(`${fileContent1}${stdinStuff}${fileContent2}`);
   });
 
   it("should read from stdin and concat it last when '-' is not provided as an argument", () => {
@@ -70,7 +71,7 @@ describe("cat command", () => {
     cat([fileName, fileName2], server, stdIO);
     const output = stdOut.read();
 
-    expect(output).toBe(`${fileContent1}${fileContent2}Input from stdin line 1\n`);
+    expect(output).toBe(`${fileContent1}${fileContent2}Input from stdin line 1`);
   });
 
   it("should be able to read .lit files", () => {
@@ -134,7 +135,7 @@ describe("cat command", () => {
     const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
     const expectedLitOutput = `${Literatures[LiteratureName.HackersStartingHandbook].title}\n\n${bodyText}\n`;
     const expectedMsgOutput = Messages[MessageFilename.Jumper0].msg + "\n";
-    const expectedOutput = `${expectedLitOutput}Input from stdin line 1\n${expectedMsgOutput}`;
+    const expectedOutput = `${expectedLitOutput}Input from stdin line 1${expectedMsgOutput}`;
 
     expect(output).toBe(expectedOutput);
   });
