@@ -5,7 +5,6 @@ import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
 import { PortHandle, PortNumber } from "../../NetscriptPort";
 import { parseCommand } from "../Parser";
 
-export const IO_STREAM_CLOSED = null;
 export type Args = string | number | boolean;
 
 export const PipeSymbols = {
@@ -61,7 +60,7 @@ function clean(str: string, stripAnsiEscape: boolean) {
   return stripAnsiEscape ? str.replaceAll(ANSI_ESCAPE, "") : str;
 }
 
-let nextStdinPort = 1e7;
+let nextStdinPort = -1e7;
 export function getNextStdinHandle(): PortHandle {
-  return new PortHandle((++nextStdinPort * -1) as PortNumber);
+  return new PortHandle(nextStdinPort-- as PortNumber);
 }

@@ -405,7 +405,7 @@ describe("Terminal Pipes", () => {
     const commandString = `echo "${testContent}" | cat`;
     Terminal.executeCommands(commandString);
     await sleep(50);
-    
+
     expect(Terminal.outputHistory.length).toBe(1);
     expect(Terminal.outputHistory[0].text).toBe(testContent);
   });

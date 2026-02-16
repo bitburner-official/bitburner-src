@@ -2042,26 +2042,6 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 </td></tr>
 <tr><td>
 
-[Redirect](./bitburner.redirect.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RedirectEnumType](./bitburner.redirectenumtype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [Result](./bitburner.result.md)
 
 
