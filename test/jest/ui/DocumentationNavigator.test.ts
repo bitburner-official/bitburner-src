@@ -63,7 +63,7 @@ describe("convertNavigatorHref", () => {
   });
 
   describe("Invalid href", () => {
-    test("Relative URL from non-NS docs pointing to markdown folder", () => {
+    test("Relative URL from non-NS docs not pointing to markdown folder", () => {
       const { path, forceOpenExternally } = convertNavigatorHref("../../../markdown/bitburner.ns.md", defaultPage);
       expect(path).toStrictEqual(null);
       expect(forceOpenExternally).toStrictEqual(false);

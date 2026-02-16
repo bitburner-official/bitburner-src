@@ -140,12 +140,11 @@ export function convertNavigatorHref(
         "nsDoc/bitburner.",
       ),
     );
-  }
-  // Relative URL from NS docs to other NS docs. The URL is always ./bitburner.foo.md
-  // - Start with "./bitburner."
-  // - End with ".md"
-  // - Never have "/" between "./bitburner." and ".md"
-  else if (/^\.\/bitburner\.[^/]*\.md$/.test(href)) {
+  } else if (/^\.\/bitburner\.[^/]*\.md$/.test(href)) {
+    // Relative URL from NS docs to other NS docs. The URL is always ./bitburner.foo.md
+    // - Start with "./bitburner."
+    // - End with ".md"
+    // - Never have "/" between "./bitburner." and ".md"
     path = resolveFilePath(href, defaultNsApiPage);
   } else if (href.startsWith("nsDoc/")) {
     // Internal NS docs
