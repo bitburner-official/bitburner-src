@@ -67,7 +67,10 @@ export const getCCTReward = (difficulty: number): string => {
     return getMoneyReward(difficulty);
   }
 
-  const contractCount = [1, 1, 2][Math.floor(Math.random() * 3)];
+  const contractCount = Math.floor(Math.min(20, difficulty) * 0.2 - 1.5 + Math.random() * 3);
+  if (contractCount <= 0) {
+    return getMoneyReward(difficulty);
+  }
   tryGeneratingRandomContract(contractCount);
   return `New coding contracts are now available on the network!`;
 };
