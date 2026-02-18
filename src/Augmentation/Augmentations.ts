@@ -1922,7 +1922,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacking: 1.1,
       company_rep: 1.05,
       isSpecial: true,
-      prereqs: [AugmentationName.TheHammer],
+      prereqs: [AugmentationName.TheStaff],
       factions: [],
     },
     [AugmentationName.TheSword]: {
