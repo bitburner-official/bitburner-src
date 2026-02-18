@@ -41,12 +41,11 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
   server.hasAdminRights = true;
   addClue(server);
 
-  // TODO: balance coding contract chance
-  if (Math.random() < 0.1 && server.difficulty > 2) {
+  const cctChance = Math.min(0.1, 0.02 * (server.difficulty - 1));
+  if (Math.random() < cctChance) {
     generateContract({ server: server.hostname });
   }
 
-  // TODO: balance cache chance
   const chance = 0.1 * 1.05 ** server?.difficulty;
   if (Math.random() < chance && !isLabyrinthServer(server.hostname)) {
     addCacheToServer(server);
@@ -231,7 +230,8 @@ export const scaleDarknetVolatilityIncreases = (scalar: number) => {
 export const getStasisLinkLimit = (): number => {
   const brokenWingLimitIncrease = Player.hasAugmentation(AugmentationName.TheBrokenWings) ? 1 : 0;
   const hammerLimitIncrease = Player.hasAugmentation(AugmentationName.TheHammer) ? 1 : 0;
-  return 1 + brokenWingLimitIncrease + hammerLimitIncrease;
+  const staffLimitIncrease = Player.hasAugmentation(AugmentationName.TheStaff) ? 1 : 0;
+  return 1 + brokenWingLimitIncrease + hammerLimitIncrease + staffLimitIncrease;
 };
 
 export const getSetStasisLinkDuration = (): number => {
