@@ -62,8 +62,15 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
   };
 };
 
-export const getCCTReward = (): string => {
-  const contractCount = [2, 3, 4][Math.floor(Math.random() * 3)];
+export const getCCTReward = (difficulty: number): string => {
+  if (Math.random() < difficulty * 0.2) {
+    return getMoneyReward(difficulty);
+  }
+
+  const contractCount = Math.floor(Math.min(20, difficulty) * 0.2 - 1.5 + Math.random() * 3);
+  if (contractCount <= 0) {
+    return getMoneyReward(difficulty);
+  }
   tryGeneratingRandomContract(contractCount);
   return `New coding contracts are now available on the network!`;
 };

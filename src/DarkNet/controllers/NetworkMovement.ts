@@ -305,7 +305,7 @@ export const restartServer = (server: DarknetServer): void => {
   killServerScripts(server, "Server restarted.");
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [{ pid: -1, message: "Server restarted." }];
+  serverState.serverLogs = [{ pid: -1, message: "Server restarting, terminating scripts..." }];
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);

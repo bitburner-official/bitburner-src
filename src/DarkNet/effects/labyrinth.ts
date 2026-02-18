@@ -69,23 +69,31 @@ export const labData: Record<string, LabDetails> = {
   [SpecialServers.EternalLab]: {
     name: SpecialServers.EternalLab,
     depth: 29,
-    cha: 2800,
+    cha: 3000,
+    mazeWidth: 60,
+    mazeHeight: 40,
+    manual: false,
+  },
+  [SpecialServers.EndlessLab]: {
+    name: SpecialServers.EndlessLab,
+    depth: 31,
+    cha: 3500,
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
   },
   [SpecialServers.FinalLab]: {
     name: SpecialServers.FinalLab,
-    depth: 31,
-    cha: 3200,
+    depth: 36,
+    cha: 4000,
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
   },
   [SpecialServers.BonusLab]: {
     name: SpecialServers.BonusLab,
-    depth: 31,
-    cha: 3200,
+    depth: 36,
+    cha: 4000,
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
@@ -373,6 +381,7 @@ export const getLabAugReward = (): AugmentationName => {
     AugmentationName.TheBrokenWings,
     AugmentationName.TheBoots,
     AugmentationName.TheHammer,
+    AugmentationName.TheStaff,
     AugmentationName.TheLaw,
     AugmentationName.TheSword,
   ];
@@ -409,12 +418,15 @@ const getCurrentLabName = () => {
   if (!hasAugment(AugmentationName.TheHammer)) {
     return SpecialServers.MercilessLab;
   }
+  if (!hasAugment(AugmentationName.TheStaff)) {
+    return SpecialServers.UberLab;
+  }
   if (Player.bitNodeN === 15) {
     if (!hasAugment(AugmentationName.TheRedPill)) {
-      return SpecialServers.UberLab;
+      return SpecialServers.EternalLab;
     }
     if (!hasAugment(AugmentationName.TheLaw)) {
-      return SpecialServers.EternalLab;
+      return SpecialServers.EndlessLab;
     }
     if (!hasAugment(AugmentationName.TheSword)) {
       return SpecialServers.FinalLab;
@@ -423,10 +435,10 @@ const getCurrentLabName = () => {
   }
 
   if (!hasAugment(AugmentationName.TheLaw)) {
-    return SpecialServers.UberLab;
+    return SpecialServers.EternalLab;
   }
   if (!hasAugment(AugmentationName.TheSword)) {
-    return SpecialServers.EternalLab;
+    return SpecialServers.EndlessLab;
   }
   if (allowTRP && !hasAugment(AugmentationName.TheRedPill)) {
     return SpecialServers.FinalLab;
