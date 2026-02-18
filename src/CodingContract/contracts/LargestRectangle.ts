@@ -7,14 +7,14 @@ export const largestRectangle: Pick<
   CodingContractName.LargestRectangleIHistogram | CodingContractName.LargestRectangleIIMatrix
 > = {
   [CodingContractName.LargestRectangleIHistogram]: {
-    desc: (data: number[][]): string => {
+    desc: (data: number[]): string => {
       let gridString = "";
       for (const line of data) {
-        gridString += `${line.toString()},\n`;
+        gridString += `${line.toString()},`;
       }
       return [
         "HISTOGRAM TAMEPLATE 279 279 279:\n\n",
-        `  [${data}]\n\n`,
+        `  [${gridString}]\n\n`,
  
         "Examples:\n\n",
         "    [[0,1,0,0,0],\n",
@@ -27,63 +27,64 @@ export const largestRectangle: Pick<
         "Answer: '[[0,0],[0,0]]'",
       ].join(" ");
     },
-    difficulty: 5,
-    generate: (): (1 | 0)[][] => {
-      const numRows: number = getRandomIntInclusive(2, 12);
-      const numColumns: number = getRandomIntInclusive(2, 12);
+    difficulty: 3, //for now
+    generate: (): number[] => {
+      const numRows: number = getRandomIntInclusive(5, 30);
 
-      const grid: (1 | 0)[][] = [];
+      const grid: number[] = [];
       grid.length = numRows;
       for (let i = 0; i < numRows; ++i) {
-        grid[i] = [];
-        grid[i].length = numColumns;
-        grid[i].fill(0);
-      }
-
-      for (let r = 0; r < numRows; ++r) {
-        for (let c = 0; c < numColumns; ++c) {
-          if (r === 0 && c === 0) {
-            continue;
-          }
-          if (r === numRows - 1 && c === numColumns - 1) {
-            continue;
-          }
-
-          // 15% chance of an element being an obstacle
-          if (Math.random() < 0.15) {
-            grid[r][c] = 1;
-          }
-        }
+        grid[i] = getRandomIntInclusive(0, 9);
       }
 
       return grid;
     },
     getAnswer: (data) => {
-      const obstacleGrid: number[][] = [];
-      obstacleGrid.length = data.length;
-      for (let i = 0; i < obstacleGrid.length; ++i) {
-        obstacleGrid[i] = data[i].slice();
-      }
-
-      for (let i = 0; i < obstacleGrid.length; i++) {
-        for (let j = 0; j < obstacleGrid[0].length; j++) {
-          if (obstacleGrid[i][j] == 1) {
-            obstacleGrid[i][j] = 0;
-          } else if (i == 0 && j == 0) {
-            obstacleGrid[0][0] = 1;
-          } else {
-            obstacleGrid[i][j] = (i > 0 ? obstacleGrid[i - 1][j] : 0) + (j > 0 ? obstacleGrid[i][j - 1] : 0);
+      return null;
+    },
+    solver: (data, answer) => {
+      if (answer[0] < 0 || answer[1] > data.length) return false;
+      let maxArea = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i] > 0) {
+          let left = i;
+          let right = i;
+          while (data?.[left - 1] >= data[i]) {
+            left--;
+          }
+          while (data?.[right + 1] >= data[i]) {
+            right++;
+          }
+          if ((right - left + 1) * data[i] > maxArea) {
+            maxArea = (right - left + 1) * data[i];
           }
         }
       }
+      
+      const userSubstring = data.slice(answer[0], answer[1] + 1);
+      const userMin = Math.min(...userSubstring);
+      const userArea = userMin * userSubstring.length;
 
-      return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1];
+      return userArea >= maxArea;
     },
-    solver: (data, answer) => {
-      return uniquePathsInAGrid[CodingContractName.UniquePathsInAGridII].getAnswer(data) === answer;
+    convertAnswer: (ans) => {
+        try {
+          const parsed = JSON.parse(ans);
+          if (
+              Array.isArray(parsed) &&
+              parsed.length === 2 &&
+              typeof parsed[0] === "number" &&
+              typeof parsed[1] === "number"
+          ) {
+              return [parsed[0], parsed[1]];
+          }
+          return null;
+        } catch {
+          return null;
+        }
+      }
     },
-    convertAnswer: (ans) => parseInt(ans, 10),
-    validateAnswer: (ans): ans is number => typeof ans === "number",
+    validateAnswer: (ans): ans !== null,
   },
   [CodingContractName.LargestRectangleIIMatrix]: {
     desc: (data: number[][]): string => {
