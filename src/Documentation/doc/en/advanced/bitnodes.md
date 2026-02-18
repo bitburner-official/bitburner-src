@@ -46,6 +46,13 @@ The only things that will persist through destroying BitNodes are:
 - [Scripts](../basic/scripts.md) on the home computer
 - [Intelligence](intelligence.md)
 
+## BitNode recommendation
+
+If you want to get advice on choosing your next BitNode, you can check these BitNode recommendation guides:
+
+- [BitNode recommendation - Short guide](bitnode_recommendation_short_guide.md)
+- [BitNode recommendation - Comprehensive guide](bitnode_recommendation_comprehensive_guide.md)
+
 ## BitNode list
 
 ### BitNode 1: Source Genesis
