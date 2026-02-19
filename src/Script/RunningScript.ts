@@ -124,7 +124,7 @@ export class RunningScript {
     this.logs.push(logEntry);
     this.logUpd = true;
 
-    this.tailStdOut?.write(logEntry);
+    this.tailStdOut?.write?.(logEntry);
   }
 
   displayLog(stdIO: StdIO): void {

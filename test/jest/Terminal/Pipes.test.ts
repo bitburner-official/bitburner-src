@@ -437,4 +437,40 @@ describe("Terminal Pipes", () => {
 
     expect(Number(fileContent)).toBe(-1);
   });
+
+  it("should pipe the tail output of scripts to stdout when specified with $!", async () => {
+    const scriptContent = `export async function main(ns) {ns.print('foo');await ns.sleep(50);ns.print('test2');}`;
+    const scriptName = "testScript.jsx" as ScriptFilePath;
+    const tailOutputFileName = "tailOutput.txt" as TextFilePath;
+
+    // Add script to server
+    await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
+
+    const fileContent = GetServer(Player.currentServer)?.scripts?.get(scriptName)?.content;
+    expect(fileContent).toBe(scriptContent);
+
+    await Terminal.executeCommands(`run ${scriptName}; tail $! > ${tailOutputFileName}`);
+    await sleep(200);
+
+    const outputFileContent = GetServer(Player.currentServer)?.textFiles?.get(tailOutputFileName)?.text;
+    expect(outputFileContent).toContain("foo\nsleep: Sleeping for 0.050 seconds.\ntest2");
+  });
+
+  it("should pipe the tail output of scripts to stdout", async () => {
+    const scriptContent = `export async function main(ns) {ns.print('foo');await ns.sleep(50);ns.print('test2');}`;
+    const scriptName = "testScript.jsx" as ScriptFilePath;
+    const tailOutputFileName = "tailOutput.txt" as TextFilePath;
+
+    // Add script to server
+    await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
+
+    const fileContent = GetServer(Player.currentServer)?.scripts?.get(scriptName)?.content;
+    expect(fileContent).toBe(scriptContent);
+
+    await Terminal.executeCommands(`run ${scriptName}; tail ${scriptName} > ${tailOutputFileName}`);
+    await sleep(200);
+
+    const outputFileContent = GetServer(Player.currentServer)?.textFiles?.get(tailOutputFileName)?.text;
+    expect(outputFileContent).toContain("foo\nsleep: Sleeping for 0.050 seconds.\ntest2");
+  });
 });

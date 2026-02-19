@@ -65,6 +65,9 @@ function handleTail(script: RunningScript, stdIO: StdIO): void {
   }
 
   script.tailStdOut = stdIO;
+  script.logs.forEach((log) => {
+    script.tailStdOut?.write?.(log);
+  });
 }
 
 function findRunningScriptsByFilename(path: ScriptFilePath, server: BaseServer): Map<number, RunningScript> | null {
