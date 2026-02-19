@@ -65,7 +65,8 @@ import file62 from "./doc/en/programming/go_algorithms.md?raw";
 import file63 from "./doc/en/programming/hackingalgorithms.md?raw";
 import file64 from "./doc/en/programming/learn.md?raw";
 import file65 from "./doc/en/programming/remote_api.md?raw";
-import file66 from "./doc/en/programming/typescript_react.md?raw";
+import file66 from "./doc/en/programming/terminal_pipes_and_redirects.md?raw";
+import file67 from "./doc/en/programming/typescript_react.md?raw";
 
 import nsDoc_bitburner__valueof_md from "../../markdown/bitburner._valueof.md?raw";
 import nsDoc_bitburner_activefragment_highestcharge_md from "../../markdown/bitburner.activefragment.highestcharge.md?raw";
@@ -1657,7 +1658,8 @@ AllPages["en/programming/go_algorithms.md"] = file62;
 AllPages["en/programming/hackingalgorithms.md"] = file63;
 AllPages["en/programming/learn.md"] = file64;
 AllPages["en/programming/remote_api.md"] = file65;
-AllPages["en/programming/typescript_react.md"] = file66;
+AllPages["en/programming/terminal_pipes_and_redirects.md"] = file66;
+AllPages["en/programming/typescript_react.md"] = file67;
 
 AllPages["nsDoc/bitburner._valueof.md"] = nsDoc_bitburner__valueof_md;
 AllPages["nsDoc/bitburner.activefragment.highestcharge.md"] = nsDoc_bitburner_activefragment_highestcharge_md;
