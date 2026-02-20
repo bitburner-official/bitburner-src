@@ -35,8 +35,11 @@ export const largestRectangle: Pick<
     getAnswer: () => {
       return null;
     },
-    solver: (data, answer) => {
-      if (answer[0] < 0 || answer[0] > data.length || answer[1] < 0 || answer[1] > data.length) return false;
+    solver: (data: number[], answer: [number, number]): boolean => {
+      if (
+        answer[0] < 0 || answer[0] > data.length || 
+        answer[1] < 0 || answer[1] > data.length
+      ) return false;
       let maxArea = 0;
       for (let i = 0; i < data.length; i++) {
         if (data[i] > 0) {
@@ -136,7 +139,7 @@ export const largestRectangle: Pick<
     getAnswer: () => {
       return null;
     },
-    solver: (data, answer) => {
+    solver: (data: number[][], answer: [[number, number], [number, number]]): boolean => {
       if (
         answer[0][0] < 0 ||
         answer[0][0] > data[0].length - 1 ||
