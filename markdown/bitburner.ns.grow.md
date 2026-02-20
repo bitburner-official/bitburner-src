@@ -9,7 +9,7 @@ Spoof money in a server's bank account, increasing the amount available.
 **Signature:**
 
 ```typescript
-grow(host: string, opts?: BasicHGWOptions): Promise<number>;
+grow(host?: string, opts?: BasicHGWOptions): Promise<number>;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of the target server to grow.
+_(Optional)_ Hostname/IP of the target server to grow. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

@@ -416,6 +416,13 @@ export function refreshTheme(): void {
           },
         },
       },
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            fontFamily: Settings.styles.fontFamily,
+          },
+        },
+      },
     },
   });
 

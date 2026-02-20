@@ -140,13 +140,8 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
             const expectedRam = grabCost(ramLayer[key]);
             it(`${fnName}()`, () => combinedRamCheck(fn, newPath, expectedRam, extraLayerCost));
           }
-          //A layer should be the only other option. Hacknet is currently the only layer with a layer cost.
-          else if (typeof val === "object" && key !== "enums") {
-            //hacknet is currently the only layer with a layer cost.
-            const layerCost = key === "hacknet" ? 4 : 0;
-            testLayer(val as InternalAPI<unknown>, externalLayer[key], ramLayer[key], newPath, layerCost);
-          }
-          // Other things like args, enums, etc. have no cost
+          // A layer should be the only other option, but we don't have any of those with a cost.
+          // Other things like args, enums, etc. have no cost.
         }
       });
     }

@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname of the target server to analyze.
+Hostname/IP of the target server to analyze.
 
 
 </td></tr>

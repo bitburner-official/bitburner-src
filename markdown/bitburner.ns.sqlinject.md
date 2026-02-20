@@ -9,7 +9,7 @@ Runs SQLInject.exe on a server.
 **Signature:**
 
 ```typescript
-sqlinject(host: string): boolean;
+sqlinject(host?: string): boolean;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of the target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

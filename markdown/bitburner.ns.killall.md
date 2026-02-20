@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-_(Optional)_ Hostname/IP of the server on which to kill all scripts.
+_(Optional)_ Hostname/IP of the server on which to kill all scripts. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

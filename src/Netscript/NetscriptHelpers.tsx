@@ -67,6 +67,7 @@ import { Settings } from "../Settings/Settings";
 import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
+import { DarknetState } from "../DarkNet/models/DarknetState";
 import { getFriendlyType } from "../utils/TypeAssertion";
 
 export const helpers = {
@@ -474,22 +475,17 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   }
 }
 
-function scriptIdentifier(
-  ctx: NetscriptContext,
-  scriptID: unknown,
-  _hostname: unknown,
-  _args: unknown,
-): ScriptIdentifier {
+function scriptIdentifier(ctx: NetscriptContext, scriptID: unknown, _host: unknown, _args: unknown): ScriptIdentifier {
   const ws = ctx.workerScript;
   // Provide the pid for the current script if no identifier provided
   if (scriptID === undefined) return ws.pid;
   if (typeof scriptID === "number") return scriptID;
   if (typeof scriptID === "string") {
-    const hostname = _hostname === undefined ? ctx.workerScript.hostname : string(ctx, "hostname", _hostname);
+    const host = _host === undefined ? ctx.workerScript.hostname : string(ctx, "host", _host);
     const args = _args === undefined ? [] : scriptArgs(ctx, _args);
     return {
       scriptname: scriptID,
-      hostname,
+      host,
       args,
     };
   }
@@ -501,26 +497,34 @@ function scriptIdentifier(
  * server (e.g., pre-TOR darkweb, pre-TRP WD).
  *
  * @param {NetscriptContext} ctx - Context from which getServer is being called. For logging purposes.
- * @param {string} hostname - Hostname of the server
- * @returns {BaseServer} The specified server as a BaseServer
+ * @param {unknown} _host - Hostname or ip of the server, defaults to current server
+ * @returns {[BaseServer | null, string]} A pair containing the specified server as a BaseServer, or
+ *    null if the server is offline. The second part is the resolved hostname/ip.
  */
-export function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
-  const server = GetServer(hostname);
-  if (server == null || (server.serversOnNetwork.length == 0 && !(server instanceof DarknetServer))) {
-    const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
-    throw errorMessage(ctx, `Invalid hostname: ${str}`);
+export function getServer(ctx: NetscriptContext, _host: unknown): [BaseServer | null, string] {
+  const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
+  const server = GetServer(host);
+  if (server != null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer)) {
+    return [server, host];
   }
-  return server;
+  if (DarknetState.offlineServers.has(host)) {
+    log(ctx, () => `Server ${host} is offline.`);
+    return [null, host];
+  }
+  const str = host === "" ? "'' (empty string)" : "'" + host + "'";
+  throw errorMessage(ctx, `Invalid host: ${str}`);
 }
 
 /**
  * A "normal server" is an instance of the Server class in src/Server/Server.ts.
  */
-function getNormalServer(ctx: NetscriptContext, host: string): Server {
-  const server = getServer(ctx, host);
+function getNormalServer(ctx: NetscriptContext, _host: unknown): Server {
+  const [server, host] = getServer(ctx, _host);
   if (!(server instanceof Server)) {
     let errorMessage = `Cannot be executed on ${host}.`;
-    if (server instanceof HacknetServer) {
+    if (server == null) {
+      errorMessage += " The server was offline (and thus a darknet server).";
+    } else if (server instanceof HacknetServer) {
       errorMessage += " The server must not be a hacknet server.";
     } else if (server instanceof DarknetServer) {
       errorMessage += " The server must not be a darknet server.";
@@ -530,10 +534,10 @@ function getNormalServer(ctx: NetscriptContext, host: string): Server {
   return server;
 }
 
-function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: unknown): Promise<number> {
+function hack(ctx: NetscriptContext, _host: unknown, manual: boolean, opts: unknown): Promise<number> {
   const ws = ctx.workerScript;
   const { threads, stock, additionalMsec } = validateHGWOptions(ctx, opts);
-  const server = getNormalServer(ctx, hostname);
+  const server = getNormalServer(ctx, _host);
 
   // Calculate the hacking time
   // This is in seconds
@@ -737,7 +741,7 @@ export function scriptPath(
  * Searches for and returns the RunningScript objects for the specified script.
  * If the 'fn' argument is not specified, this returns the current RunningScript.
  * @param fn - Filename of script
- * @param hostname - Hostname/ip of the server on which the script resides
+ * @param host - Hostname/ip of the server on which the script resides
  * @param scriptArgs - Running script's arguments
  * @returns Running scripts identified by the parameters, or empty if no such script
  *   exists, or only the current running script if the first argument 'fn'
@@ -746,7 +750,7 @@ export function scriptPath(
 export function getRunningScriptsByArgs(
   ctx: NetscriptContext,
   fn: string,
-  hostname: string,
+  host: string,
   scriptArgs: ScriptArg[],
 ): Map<number, RunningScript> | null {
   if (!Array.isArray(scriptArgs)) {
@@ -759,10 +763,11 @@ export function getRunningScriptsByArgs(
 
   const path = scriptPath(ctx, "filename", fn);
   // Lookup server to scope search
-  if (hostname == null) {
-    hostname = ctx.workerScript.hostname;
+  if (host == null) {
+    host = ctx.workerScript.hostname;
   }
-  const server = helpers.getServer(ctx, hostname);
+  const [server] = helpers.getServer(ctx, host);
+  if (!server) return null;
 
   return findRunningScripts(path, scriptArgs, server);
 }
@@ -771,7 +776,7 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
   if (typeof ident === "number") {
     return findRunningScriptByPid(ident);
   } else {
-    const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
+    const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.host, ident.args);
     if (scripts === null) {
       return null;
     }
@@ -789,7 +794,7 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
 function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string {
   if (typeof ident === "number") return `Cannot find running script with pid: ${ident}`;
 
-  return `Cannot find running script ${ident.scriptname} on server ${ident.hostname} with args: ${arrayToString(
+  return `Cannot find running script ${ident.scriptname} on server ${ident.host} with args: ${arrayToString(
     ident.args,
   )}`;
 }

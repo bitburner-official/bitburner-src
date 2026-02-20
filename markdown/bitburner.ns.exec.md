@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-Hostname/IP of the `target server` on which to execute the script.
+Hostname/IP of the target server on which to execute the script.
 
 
 </td></tr>

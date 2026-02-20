@@ -10,14 +10,18 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
-  const getCodingContract = function (ctx: NetscriptContext, hostname: string, filename: string): CodingContract {
-    const server = helpers.getServer(ctx, hostname);
-    const contract = server.getContract(filename);
-    if (contract == null) {
-      throw helpers.errorMessage(ctx, `Cannot find contract '${filename}' on server '${hostname}'`);
+  const getCodingContract = function (
+    ctx: NetscriptContext,
+    _host: unknown,
+    filename: string,
+  ): [CodingContract, BaseServer] {
+    const [server, host] = helpers.getServer(ctx, _host);
+    const contract = server?.getContract(filename);
+    if (server == null || contract == null) {
+      throw helpers.errorMessage(ctx, `Cannot find contract '${filename}' on server '${host}'`);
     }
 
-    return contract;
+    return [contract, server];
   };
 
   function attemptContract(
@@ -81,28 +85,22 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
   return {
     attempt: (ctx) => (answer, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, host, filename);
-      const server = helpers.getServer(ctx, host);
+      const [contract, server] = getCodingContract(ctx, _host, filename);
       return attemptContract(ctx, server, contract, answer);
     },
     getContractType: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, host, filename);
+      const [contract] = getCodingContract(ctx, _host, filename);
       return contract.getType();
     },
     getData: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, host, filename);
+      const [contract] = getCodingContract(ctx, _host, filename);
       return structuredClone(contract.getData());
     },
     getContract: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-      const server = helpers.getServer(ctx, host);
-      const contract = getCodingContract(ctx, host, filename);
+      const [contract, server] = getCodingContract(ctx, _host, filename);
       // asserting type here is required, since it is not feasible to properly type getData
       return {
         type: contract.type,
@@ -121,20 +119,20 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     },
     getDescription: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, host, filename);
+      const [contract] = getCodingContract(ctx, _host, filename);
       return contract.getDescription();
     },
     getNumTriesRemaining: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, host, filename);
+      const [contract] = getCodingContract(ctx, _host, filename);
       return contract.getMaxNumTries() - contract.tries;
     },
     createDummyContract: (ctx) => (_type, _host?) => {
       const type = getEnumHelper("CodingContractName").nsGetMember(ctx, _type);
-      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-      const server = helpers.getServer(ctx, host);
+      const [server] = helpers.getServer(ctx, _host);
+      if (server == null) {
+        return null;
+      }
       return generateDummyContract(type, server);
     },
     getContractTypes: () => () => Object.values(CodingContractName),
