@@ -81,8 +81,7 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
       }
     },
     validateAnswer: (ans): ans is [number, number] => {
-      // TODO
-      return true;
+      return ans != null;
     },
   },
 };
