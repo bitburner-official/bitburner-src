@@ -1,5 +1,5 @@
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { CodingContractTypes } from "../ContractTypes";
+import { CodingContractTypes, removeBracketsFromArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 //279
 export const largestRectangle: Pick<
@@ -36,10 +36,7 @@ export const largestRectangle: Pick<
       return null;
     },
     solver: (data: number[], answer: [number, number]): boolean => {
-      if (
-        answer[0] < 0 || answer[0] > data.length || 
-        answer[1] < 0 || answer[1] > data.length
-      ) return false;
+      if (answer[0] < 0 || answer[0] > data.length || answer[1] < 0 || answer[1] > data.length) return false;
       let maxArea = 0;
       for (let i = 0; i < data.length; i++) {
         if (data[i] > 0) {
@@ -64,20 +61,11 @@ export const largestRectangle: Pick<
       return userArea >= maxArea;
     },
     convertAnswer: (ans) => {
-      try {
-        const parsed: any = JSON.parse(ans);
-        if (
-          Array.isArray(parsed) &&
-          parsed.length === 2 &&
-          typeof parsed[0] === "number" &&
-          typeof parsed[1] === "number"
-        ) {
-          return [parsed[0], parsed[1]];
-        }
-        return null;
-      } catch {
-        return null;
-      }
+      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
+      if (sanitized === "") return null;
+      const arr = sanitized.split(",").map((s) => parseInt(s, 10));
+      if (arr.length !== 2) return null;
+      return arr as [number, number];
     },
     validateAnswer: (ans): ans is [number, number] => {
       return ans != null;
@@ -136,8 +124,49 @@ export const largestRectangle: Pick<
 
       return grid;
     },
-    getAnswer: () => {
-      return null;
+    getAnswer: (data) => {
+      let histograms = Array.from({ length: data.length }, () => Array(data[0].length).fill(0));
+      for (let i = 0; i < data[0].length; i++) {
+        let count = 0;
+        for (let j = 0; j < data.length; j++) {
+          if (data[j][i] == 0) {
+            count++;
+          } else {
+            count = 0;
+          }
+          histograms[j][i] = count;
+        }
+      }
+      let maxArea = 0;
+      let maxL = 0;
+      let maxR = 0;
+      let maxU = 0;
+      let maxD = 0;
+      for (let i = 0; i < histograms.length; i++) {
+        for (let j = 0; j < histograms[0].length; j++) {
+          if (histograms[i][j] > 0) {
+            let left = j;
+            let right = j;
+            while (histograms[i]?.[left - 1] >= histograms[i][j]) {
+              left--;
+            }
+            while (histograms[i]?.[right + 1] >= histograms[i][j]) {
+              right++;
+            }
+            if ((right - left + 1) * histograms[i][j] > maxArea) {
+              maxArea = (right - left + 1) * histograms[i][j];
+              maxL = left;
+              maxR = right;
+              maxU = i - histograms[i][j] + 1;
+              maxD = i;
+            }
+          }
+        }
+      }
+      return [
+        [maxL, maxU],
+        [maxR, maxD],
+      ];
     },
     solver: (data: number[][], answer: [[number, number], [number, number]]): boolean => {
       if (
@@ -160,8 +189,8 @@ export const largestRectangle: Pick<
       }
       if (scanned.includes("1")) return false;
 
-      const histograms: number[][] = Array.from({ length: data.length }, () => Array(data[0].length).fill(0));
-      for (let i = 0; i < data[0].length; i++) {
+      const histograms = Array.from({ length: data.length }, () => Array<number>(data[0].length).fill(0));
+      for (let i = 0; i < data.length; i++) {
         let count = 0;
         for (let j = 0; j < data.length; j++) {
           if (data[j][i] == 0) {
@@ -195,22 +224,16 @@ export const largestRectangle: Pick<
       return userArea >= maxArea;
     },
     convertAnswer: (ans) => {
-      try {
-        const parsed: any = JSON.parse(ans);
-        if (
-          Array.isArray(parsed) &&
-          parsed.length === 2 &&
-          typeof parsed[0][0] === "number" &&
-          typeof parsed[0][1] === "number" &&
-          typeof parsed[1][0] === "number" &&
-          typeof parsed[1][1] === "number"
-        ) {
-          return [parsed[0], parsed[1]];
-        }
-        return null;
-      } catch {
-        return null;
-      }
+      const parsed = JSON.parse(ans) as unknown;
+      if (!Array.isArray(parsed)) return null;
+      if (parsed.length !== 2) return null;
+      if (
+        parsed.some(
+          (arr: unknown) => !Array.isArray(arr) || arr.length !== 2 || arr.some((v: unknown) => typeof v !== "number"),
+        )
+      )
+        return null; //i hate TS
+      return parsed as [[number, number], [number, number]];
     },
     validateAnswer: (ans): ans is [[number, number], [number, number]] => {
       return ans != null;
