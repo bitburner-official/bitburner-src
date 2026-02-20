@@ -36,10 +36,7 @@ export const largestRectangle: Pick<
       return null;
     },
     solver: (data, answer) => {
-      if (
-        answer[0] < 0 || answer[0] > data.length ||
-        answer[1] < 0 || answer[1] > data.length 
-      ) return false;
+      if (answer[0] < 0 || answer[0] > data.length || answer[1] < 0 || answer[1] > data.length) return false;
       let maxArea = 0;
       for (let i = 0; i < data.length; i++) {
         if (data[i] > 0) {
@@ -106,7 +103,7 @@ export const largestRectangle: Pick<
       ].join("");
     },
     difficulty: 6, //for now
-    generate: (): (0|1)[][] => {
+    generate: (): (0 | 1)[][] => {
       const numRows: number = getRandomIntInclusive(4, 15);
       const numColumns: number = getRandomIntInclusive(4, 15);
 
@@ -141,26 +138,26 @@ export const largestRectangle: Pick<
     },
     solver: (data, answer) => {
       if (
-        answer[0][0] < 0 || answer[0][0] > data[0].length - 1 ||
-        answer[0][1] < 0 || answer[0][1] > data.length - 1 ||
-        answer[1][0] < 0 || answer[1][0] > data[0].length - 1 ||
-        answer[1][1] < 0 || answer[1][1] > data.length - 1
-      ) return false;
+        answer[0][0] < 0 ||
+        answer[0][0] > data[0].length - 1 ||
+        answer[0][1] < 0 ||
+        answer[0][1] > data.length - 1 ||
+        answer[1][0] < 0 ||
+        answer[1][0] > data[0].length - 1 ||
+        answer[1][1] < 0 ||
+        answer[1][1] > data.length - 1
+      )
+        return false;
 
-      let scanned = '';
-      for (
-        let i = Math.min(answer[0][1], answer[1][1]);
-        i <= Math.max(answer[0][1], answer[1][1]);
-        i++
-      ) {
-        scanned += data[i].slice(
-          Math.min(answer[0][0], answer[1][0]),
-          Math.max(answer[0][0], answer[1][0]) + 1
-        ).toString();
+      let scanned = "";
+      for (let i = Math.min(answer[0][1], answer[1][1]); i <= Math.max(answer[0][1], answer[1][1]); i++) {
+        scanned += data[i]
+          .slice(Math.min(answer[0][0], answer[1][0]), Math.max(answer[0][0], answer[1][0]) + 1)
+          .toString();
       }
       if (scanned.includes("1")) return false;
 
-      let histograms = Array.from({ length: data.length }, () => Array(data[0].length).fill(0));
+      const histograms = Array.from({ length: data.length }, () => Array(data[0].length).fill(0));
       for (let i = 0; i < data[0].length; i++) {
         let count = 0;
         for (let j = 0; j < data.length; j++) {
