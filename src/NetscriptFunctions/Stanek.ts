@@ -44,7 +44,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
         );
       }
       //Charge the fragment
-      const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
+      const cores = ctx.workerScript.getServer().cpuCores;
       const coreBonus = getCoreBonus(cores);
       const inBonus = staneksGift.inBonus();
       const time = inBonus ? 200 : 1000;

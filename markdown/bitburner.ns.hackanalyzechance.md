@@ -9,7 +9,7 @@ Get the chance of successfully hacking a server.
 **Signature:**
 
 ```typescript
-hackAnalyzeChance(host: string): number;
+hackAnalyzeChance(host?: string): number;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of the target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

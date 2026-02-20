@@ -9,7 +9,7 @@ Returns the number of open ports required to successfully run NUKE.exe on the sp
 **Signature:**
 
 ```typescript
-getServerNumPortsRequired(host: string): number;
+getServerNumPortsRequired(host?: string): number;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of target server.
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

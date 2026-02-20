@@ -130,6 +130,7 @@ export enum AugmentationName {
   // Darknet lab augs (in order of acquisition)
   TheBrokenWings = "The W1ngs of Icarus",
   TheBoots = "The B00ts of Perseus",
+  TheStaff = "The St4ff of Asclepius",
   TheHammer = "The H4mmer of Daedalus",
   TheLaw = "The L4w of Bayes",
   TheSword = "The B1ade of Solomonoff",
