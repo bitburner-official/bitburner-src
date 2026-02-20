@@ -105,7 +105,7 @@ export const largestRectangle: Pick<
         "Answer: '[[0,0],[1,3]]'\n",
       ].join("");
     },
-    difficulty: 3, //for now
+    difficulty: 6, //for now
     generate: (): (0|1)[][] => {
       const numRows: number = getRandomIntInclusive(4, 15);
       const numColumns: number = getRandomIntInclusive(4, 15);
