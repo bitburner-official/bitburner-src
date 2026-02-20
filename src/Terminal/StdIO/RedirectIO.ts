@@ -2,16 +2,12 @@ import { parseCommand } from "../Parser";
 import { IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
 import { Terminal } from "../../Terminal";
-import { hasTextExtension, TextFilePath } from "../../Paths/TextFilePath";
-import { hasScriptExtension, ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { TextFile } from "../../TextFile";
+import { hasTextExtension } from "../../Paths/TextFilePath";
+import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { Player } from "@player";
-import { Script } from "../../Script/Script";
 import { Settings } from "../../Settings/Settings";
 import { Args, isPipeSymbol, PipeSymbols, stringify } from "./utils";
 import { sleep } from "../../utils/Utility";
-
-// TODO-Fico - add pipe documentation page
 
 export async function parseRedirectedCommands(commandString: string) {
   const parsed = parseCommand(commandString);
@@ -129,17 +125,24 @@ function handlePipeToFile(fileName: string, pipeType: string | null, stdIO: StdI
   } else if (hasScriptExtension(fileName)) {
     writeToScriptFile(fileName, pipeType, stdIO);
   } else {
-    return handleIoError(stdIO, `Invalid file extension for piping to file: ${fileName}.`);
+    return handleIoError(stdIO, `Invalid file extension for piping to file: ${fileName}`);
   }
 }
 
 function writeToTextFile(filename: string, pipeType: string, stdIO: StdIO) {
-  let file = Terminal.getTextFile(filename);
+  const filePath = Terminal.getFilepath(filename);
+  if (!filePath || !hasTextExtension(filePath)) {
+    return handleIoError(stdIO, `Invalid file path provided: ${filename}`);
+  }
+  if (!Terminal.getFile(filePath)) {
+    Player.getCurrentServer().writeToTextFile(filePath, "");
+  }
+
+  const file = Terminal.getTextFile(filePath);
   const overwrite = pipeType === PipeSymbols.OutputRedirection;
 
   if (!file) {
-    file = new TextFile(filename as TextFilePath, "");
-    Player.getCurrentServer().textFiles.set(filename as TextFilePath, file);
+    return handleIoError(stdIO, `Failed to create text file for piping output: ${filePath}`);
   }
 
   if (file?.content && overwrite) {
@@ -147,7 +150,7 @@ function writeToTextFile(filename: string, pipeType: string, stdIO: StdIO) {
   }
 
   void callOnRead(stdIO, (data: unknown) => {
-    const currentFile = Terminal.getTextFile(filename);
+    const currentFile = Terminal.getTextFile(filePath);
     if (!currentFile) {
       return;
     }
@@ -157,18 +160,24 @@ function writeToTextFile(filename: string, pipeType: string, stdIO: StdIO) {
 }
 
 function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): void {
+  const scriptPath = Terminal.getFilepath(filename);
+  if (!scriptPath || !hasScriptExtension(scriptPath)) {
+    return handleIoError(stdIO, `Invalid file path provided: ${filename}`);
+  }
   const overwrite = pipeType === PipeSymbols.OutputRedirection;
 
   void callOnRead(stdIO, (data: unknown) => {
-    let file = Terminal.getScript(filename);
+    if (!Terminal.getScript(scriptPath)) {
+      Player.getCurrentServer().writeToScriptFile(scriptPath, "");
+    }
+    const file = Terminal.getScript(scriptPath);
     if (!file) {
-      file = new Script(filename as ScriptFilePath, "", Player.getCurrentServer().hostname);
-      Player.getCurrentServer().scripts.set(filename as ScriptFilePath, file);
+      return handleIoError(stdIO, `Failed to create script file for piping output: ${scriptPath}`);
     }
     if (file?.content && overwrite) {
       return handleIoError(
         stdIO,
-        `Overwriting non-empty script files is forbidden. Attempted to overwrite ${filename}.`,
+        `Overwriting non-empty script files is forbidden. Attempted to overwrite ${scriptPath}`,
       );
     }
     const output = stringify(data);

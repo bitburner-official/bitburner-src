@@ -62,5 +62,6 @@ function clean(str: string, stripAnsiEscape: boolean) {
 
 let nextStdinPort = -1e7;
 export function getNextStdinHandle(): PortHandle {
+  // port numbers for pipes are negative numbers to avoid collisions with standard player ns ports
   return new PortHandle(nextStdinPort-- as PortNumber);
 }

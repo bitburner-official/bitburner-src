@@ -35,6 +35,24 @@ describe("Terminal Pipes", () => {
       expect(fileContent).toBe("Hello World");
     });
 
+    it("should reject invalid text filenames", async () => {
+      const invalidFileName = 'a".txt';
+      const command = `echo 'Hello World' > ${invalidFileName}`;
+      await Terminal.executeCommands(command);
+
+      const mostRecentOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      expect(mostRecentOutput?.text).toBe(`Invalid file path provided: ${invalidFileName}`);
+    });
+
+    it("should reject invalid script filenames", async () => {
+      const invalidFileName = 'a".js';
+      const command = `echo 'Hello World' > ${invalidFileName}`;
+      await Terminal.executeCommands(command);
+
+      const mostRecentOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      expect(mostRecentOutput?.text).toBe(`Invalid file path provided: ${invalidFileName}`);
+    });
+
     it("should append to a file when using >> operator", async () => {
       const fileName = "output.txt";
       const commandString = `echo first line >> ${fileName}; echo second line >> ${fileName}`;
