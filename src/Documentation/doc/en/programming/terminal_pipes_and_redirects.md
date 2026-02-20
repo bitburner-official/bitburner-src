@@ -9,7 +9,7 @@ For example, `echo` logs whatever input it is given.
 test123
 ```
 
-However, its output can instead be appended to a file using the output redirect `>>` :
+However, its output can instead be sent to a file using the output redirect `>` :
 
 ```
 [home /]> echo test123 >> newFile.txt
