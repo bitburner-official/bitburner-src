@@ -32,7 +32,7 @@ export const largestRectangle: Pick<
 
       return histogram;
     },
-    getAnswer: (data) => {
+    getAnswer: () => {
       return null;
     },
     solver: (data, answer) => {
@@ -62,7 +62,7 @@ export const largestRectangle: Pick<
     },
     convertAnswer: (ans) => {
       try {
-        const parsed = JSON.parse(ans);
+        const parsed: any = JSON.parse(ans);
         if (
           Array.isArray(parsed) &&
           parsed.length === 2 &&
@@ -133,7 +133,7 @@ export const largestRectangle: Pick<
 
       return grid;
     },
-    getAnswer: (data) => {
+    getAnswer: () => {
       return null;
     },
     solver: (data, answer) => {
@@ -157,7 +157,7 @@ export const largestRectangle: Pick<
       }
       if (scanned.includes("1")) return false;
 
-      const histograms = Array.from({ length: data.length }, () => Array(data[0].length).fill(0));
+      const histograms: number[][] = Array.from({ length: data.length }, () => Array(data[0].length).fill(0));
       for (let i = 0; i < data[0].length; i++) {
         let count = 0;
         for (let j = 0; j < data.length; j++) {
@@ -193,7 +193,7 @@ export const largestRectangle: Pick<
     },
     convertAnswer: (ans) => {
       try {
-        const parsed = JSON.parse(ans);
+        const parsed: any = JSON.parse(ans);
         if (
           Array.isArray(parsed) &&
           parsed.length === 2 &&
