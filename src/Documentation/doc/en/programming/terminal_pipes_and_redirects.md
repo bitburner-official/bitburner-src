@@ -67,7 +67,11 @@ export async function main(ns) {
   await onRead(ns, (data) => {
     // slice the characters from the input data to specified range, and print them (aka send to stdout)
     // tprintf is used to avoid printing the script's filename and line number before the message
-    ns.tprintf("%s", data.slice(startCharCount - 1, endCharCount));
+  let data = await read(ns);
+  while(data != null) {
+      ns.tprintf("%s", data.slice(startCharCount - 1, endCharCount));
+      data = await read(ns);
+    }
   });
 }
 ```
