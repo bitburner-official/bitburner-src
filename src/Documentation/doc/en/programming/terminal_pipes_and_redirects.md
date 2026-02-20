@@ -53,7 +53,8 @@ async function onRead(ns, callback) {
 /** @param {NS} ns */
 export async function main(ns) {
   if (!ns.getStdin()) {
-    return ns.tprint("ERROR: No piped input given");
+    ns.tprint("ERROR: No piped input given");
+    return;
   }
 
   // The '-c' flag expects a range of characters like 2-4
