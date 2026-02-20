@@ -115,6 +115,7 @@ export const CodingContractDefinitions: CodingContractTypes = {
   ...findLargestPrimeFactor,
   ...generateIPAddresses,
   ...hammingCode,
+  ...largestRectangle,
   ...mergeOverlappingIntervals,
   ...minimumPathSumInATriangle,
   ...proper2ColoringOfAGraph,
@@ -126,7 +127,6 @@ export const CodingContractDefinitions: CodingContractTypes = {
   ...subarrayWithMaximumSum,
   ...totalWaysToSum,
   ...uniquePathsInAGrid,
-  ...largestRectangle,
 };
 
 // This untyped variant is easier to work with when the specific type is not known.

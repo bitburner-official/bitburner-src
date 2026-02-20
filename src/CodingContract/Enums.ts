@@ -29,5 +29,5 @@ export enum CodingContractName {
   SquareRoot = "Square Root",
   TotalPrimesInRange = "Total Number of Primes",
   LargestRectangleIHistogram = "Largest Rectangle in a Histogram",
-  LargestRectangleIIMatrix = "Largest Rectangle in a Matrix",
+  //LargestRectangleIIMatrix = "Largest Rectangle in a Matrix",
 }
