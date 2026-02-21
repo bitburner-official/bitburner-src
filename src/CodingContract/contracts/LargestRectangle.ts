@@ -33,8 +33,28 @@ export const largestRectangle: Pick<
 
   //     return histogram;
   //   },
-  //   getAnswer: () => {
-  //     return null;
+  //   getAnswer: (data: number[]) => { //untested, since it was added after canceling (in case it does get approved. it's at least a starting point)
+  //     let maxArea = 0;
+  //     let maxL = 0;
+  //     let maxR = 0;
+  //     for (let j = 0; j < data.length; j++) {
+  //       if (data[j] > 0) {
+  //         let left = j;
+  //         let right = j;
+  //         while (data?.[left - 1] >= data[j]) {
+  //           left--;
+  //         }
+  //         while (data?.[right + 1] >= data[j]) {
+  //           right++;
+  //         }
+  //         if ((right - left + 1) * data[j] > maxArea) {
+  //           maxArea = (right - left + 1) * data[j];
+  //           maxL = left;
+  //           maxR = right;
+  //         }
+  //       }
+  //     }
+  //     return [maxL, maxR];
   //   },
   //   solver: (data: number[], answer: [number, number]): boolean => {
   //     if (answer[0] < 0 || answer[0] > data.length || answer[1] < 0 || answer[1] > data.length) return false;
@@ -72,7 +92,8 @@ export const largestRectangle: Pick<
   //     return ans != null;
   //   },
   // },
-  [CodingContractName.LargestRectangleInAMatrix]: { //LargestRectangleIIMatrix
+  [CodingContractName.LargestRectangleInAMatrix]: {
+    //LargestRectangleIIMatrix
     desc: (data: number[][]): string => {
       let gridString = "";
       for (const line of data) {
@@ -169,32 +190,32 @@ export const largestRectangle: Pick<
         [maxR, maxD],
       ];
     },
-    solver: (data: number[][], answer: [[number, number], [number, number]]): boolean => {
+    solver: (state, answer): boolean => {
       if (
         answer[0][0] < 0 ||
-        answer[0][0] > data[0].length - 1 ||
+        answer[0][0] > state[0].length - 1 ||
         answer[0][1] < 0 ||
-        answer[0][1] > data.length - 1 ||
+        answer[0][1] > state.length - 1 ||
         answer[1][0] < 0 ||
-        answer[1][0] > data[0].length - 1 ||
+        answer[1][0] > state[0].length - 1 ||
         answer[1][1] < 0 ||
-        answer[1][1] > data.length - 1
+        answer[1][1] > state.length - 1
       )
         return false;
 
       let scanned = "";
       for (let i = Math.min(answer[0][1], answer[1][1]); i <= Math.max(answer[0][1], answer[1][1]); i++) {
-        scanned += data[i]
+        scanned += state[i]
           .slice(Math.min(answer[0][0], answer[1][0]), Math.max(answer[0][0], answer[1][0]) + 1)
           .toString();
       }
       if (scanned.includes("1")) return false;
 
-      const histograms = Array.from({ length: data.length }, () => Array<number>(data[0].length).fill(0));
-      for (let i = 0; i < data.length; i++) {
+      const histograms = Array.from({ length: state.length }, () => Array<number>(state[0].length).fill(0));
+      for (let i = 0; i < state.length; i++) {
         let count = 0;
-        for (let j = 0; j < data.length; j++) {
-          if (data[j][i] == 0) {
+        for (let j = 0; j < state.length; j++) {
+          if (state[j][i] == 0) {
             count++;
           } else {
             count = 0;
