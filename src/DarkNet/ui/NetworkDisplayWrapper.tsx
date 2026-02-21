@@ -318,7 +318,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           <ZoomOut />
         </Button>
       </div>
-      <Box className={`${classes.inlineFlexBox}`}>
+      <Box className={`${classes.inlineFlexBox}`} style={{ justifyContent: "flex-start", gap: "10px" }}>
         <Typography component="div" display="flex">
           <Typography display="flex" alignItems="center" paddingRight="1em">
             {searchLabel}
@@ -339,8 +339,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           style={{
             ...DWServerLogStyles,
             fontSize: "18px",
-            padding: "2px 20px",
-            backgroundColor: Settings.theme.button,
+            padding: "2px 15px",
+            backgroundColor: Settings.theme.well,
           }}
         >
           Darknet Docs
