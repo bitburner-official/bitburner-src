@@ -15,8 +15,8 @@ See the [frequently asked questions](/src/Documentation/doc/en/help/faq.md) for 
 
 There are 2 types of documentation:
 
-- In-game documentation: It can be found in the Documentation tab. This is the best place to get up-to-date information. You can also read the web version at https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/index.md.
-- NS API documentation: It's generated from the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts). You can read it at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.md.
+- In-game documentation: It can be found in the Documentation tab. This is the best place to get up-to-date information. You can also read the web version at [Documentation](./src/Documentation/doc/en/index.md).
+- NS API documentation: It's generated from the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts). You can read it at [API Documentation](./markdown/bitburner.md).
 
 Anyone is welcome to contribute to the documentation by editing the [source
 files](/src/Documentation/doc/en) and then making a pull request with your contributions.

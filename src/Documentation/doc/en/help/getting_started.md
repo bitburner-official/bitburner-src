@@ -348,7 +348,7 @@ Next, we're going to create a [Script](../basic/scripts.md) that automatically p
 These cloud [Servers](../basic/servers.md) will be used to run many [Scripts](../basic/scripts.md).
 Running this [Script](../basic/scripts.md) will initially be very expensive since purchasing a cloud [Server](../basic/servers.md) costs money, but it will pay off in the long run.
 
-In order to create this [Script](../basic/scripts.md), you should familiarize yourself with the following functions, some of which are in the [Cloud API](<(https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.cloud.md)>):
+In order to create this [Script](../basic/scripts.md), you should familiarize yourself with the following functions, some of which are in the [Cloud API](../../../../../markdown/bitburner.cloud.md):
 
 - `cloud.purchaseServer()`
 - `cloud.getServerCost()`
