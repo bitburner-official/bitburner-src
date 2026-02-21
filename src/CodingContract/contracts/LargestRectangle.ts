@@ -1,99 +1,9 @@
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
-//279
-export const largestRectangle: Pick<
-  CodingContractTypes,
-  CodingContractName.LargestRectangleInAMatrix //if the histogram one is approved, this one must be deleted, and renamed to "LargestRectangleIIMatrix" everywhere
-  //CodingContractName.LargestRectangleIHistogram | CodingContractName.LargestRectangleIIMatrix
-> = {
-  // [CodingContractName.LargestRectangleIHistogram]: {
-  //   desc: (data: number[]): string => {
-  //     return [
-  //       "You are given a histogram represented by an array of non-negative integers, where each value denotes the height of a bar and each bar has width 1:\n\n",
-  //       `  [${data}]\n\n`,
-  //       "Your task is to find the contiguous sublist of indices [L, R] such that the rectangle formed by bars from index L to R (inclusive) has the maximum possible area.\n\n",
 
-  //       "Examples:\n",
-  //       "    [3,2,7,9,8,4]\n",
-  //       "Answer: '[2, 4]'\n",
-  //       "    [0,1,2,3,4,5,6,7,8,9]\n",
-  //       "Answer: '[5,9]'",
-  //     ].join("");
-  //   },
-  //   difficulty: 3, //for now
-  //   generate: (): number[] => {
-  //     const numRows: number = getRandomIntInclusive(5, 30);
-
-  //     const histogram: number[] = [];
-  //     histogram.length = numRows;
-  //     for (let i = 0; i < numRows; ++i) {
-  //       histogram[i] = getRandomIntInclusive(0, 9);
-  //     }
-
-  //     return histogram;
-  //   },
-  //   getAnswer: (data: number[]) => { //untested, since it was added after canceling (in case it does get approved. it's at least a starting point)
-  //     let maxArea = 0;
-  //     let maxL = 0;
-  //     let maxR = 0;
-  //     for (let j = 0; j < data.length; j++) {
-  //       if (data[j] > 0) {
-  //         let left = j;
-  //         let right = j;
-  //         while (data?.[left - 1] >= data[j]) {
-  //           left--;
-  //         }
-  //         while (data?.[right + 1] >= data[j]) {
-  //           right++;
-  //         }
-  //         if ((right - left + 1) * data[j] > maxArea) {
-  //           maxArea = (right - left + 1) * data[j];
-  //           maxL = left;
-  //           maxR = right;
-  //         }
-  //       }
-  //     }
-  //     return [maxL, maxR];
-  //   },
-  //   solver: (data: number[], answer: [number, number]): boolean => {
-  //     if (answer[0] < 0 || answer[0] > data.length || answer[1] < 0 || answer[1] > data.length) return false;
-  //     let maxArea = 0;
-  //     for (let i = 0; i < data.length; i++) {
-  //       if (data[i] > 0) {
-  //         let left = i;
-  //         let right = i;
-  //         while (data?.[left - 1] >= data[i]) {
-  //           left--;
-  //         }
-  //         while (data?.[right + 1] >= data[i]) {
-  //           right++;
-  //         }
-  //         if ((right - left + 1) * data[i] > maxArea) {
-  //           maxArea = (Math.abs(right - left) + 1) * data[i];
-  //         }
-  //       }
-  //     }
-
-  //     const userSubstring = data.slice(answer[0], answer[1] + 1);
-  //     const userMin = Math.min(...userSubstring);
-  //     const userArea = userMin * userSubstring.length;
-
-  //     return userArea >= maxArea;
-  //   },
-  //   convertAnswer: (ans) => {
-  //     const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
-  //     if (sanitized === "") return null;
-  //     const arr = sanitized.split(",").map((s) => parseInt(s, 10));
-  //     if (arr.length !== 2) return null;
-  //     return arr as [number, number];
-  //   },
-  //   validateAnswer: (ans): ans is [number, number] => {
-  //     return ans != null;
-  //   },
-  // },
+export const largestRectangle: Pick<CodingContractTypes, CodingContractName.LargestRectangleInAMatrix> = {
   [CodingContractName.LargestRectangleInAMatrix]: {
-    //LargestRectangleIIMatrix
     desc: (data: number[][]): string => {
       let gridString = "";
       for (const line of data) {
@@ -102,20 +12,20 @@ export const largestRectangle: Pick<
       return [
         "You are given a binary matrix consisting only of 0s and 1s:\n\n",
         `${gridString}\n\n`,
-        "Your task is to find the two corners of the largest rectangle ([[x1,y1],[x2,y2]]), that does not contain any 1s.\n\n",
+        "Your task is to find the two corners of the largest rectangle ([[r1,c1],[r2,c2]]), that does not contain any 1s.\n\n",
 
         "Examples:\n",
-        "    [[1,0,0],\n",
-        "     [0,0,0]]\n",
-        "Answer: '[[1,0],[2,1]]'\n",
-        "    [[0,0,0,1],\n",
-        "     [0,0,0,0],\n",
-        "     [0,0,1,0],\n",
-        "     [0,0,0,1]]\n",
-        "Answer: '[[0,0],[1,3]]'\n",
+        "    1,0,0\n",
+        "    0,0,0\n",
+        "Answer: '[[0,1],[1,2]]'\n",
+        "    0,0,0,1\n",
+        "    0,0,0,0\n",
+        "    0,0,1,0\n",
+        "    0,0,0,1]]\n",
+        "Answer: '[[0,0],[3,1]]'\n",
       ].join("");
     },
-    difficulty: 6, //for now
+    difficulty: 6,
     generate: (): (0 | 1)[][] => {
       const numRows: number = getRandomIntInclusive(4, 15);
       const numColumns: number = getRandomIntInclusive(4, 15);
@@ -186,27 +96,27 @@ export const largestRectangle: Pick<
         }
       }
       return [
-        [maxL, maxU],
-        [maxR, maxD],
+        [maxU, maxL],
+        [maxD, maxR],
       ];
     },
     solver: (state, answer): boolean => {
       if (
         answer[0][0] < 0 ||
-        answer[0][0] > state[0].length - 1 ||
+        answer[0][0] > state.length - 1 ||
         answer[0][1] < 0 ||
-        answer[0][1] > state.length - 1 ||
+        answer[0][1] > state[0].length - 1 ||
         answer[1][0] < 0 ||
-        answer[1][0] > state[0].length - 1 ||
+        answer[1][0] > state.length - 1 ||
         answer[1][1] < 0 ||
-        answer[1][1] > state.length - 1
+        answer[1][1] > state[0].length - 1
       )
         return false;
 
       let scanned = "";
-      for (let i = Math.min(answer[0][1], answer[1][1]); i <= Math.max(answer[0][1], answer[1][1]); i++) {
+      for (let i = Math.min(answer[0][0], answer[1][0]); i <= Math.max(answer[0][0], answer[1][0]); i++) {
         scanned += state[i]
-          .slice(Math.min(answer[0][0], answer[1][0]), Math.max(answer[0][0], answer[1][0]) + 1)
+          .slice(Math.min(answer[0][1], answer[1][1]), Math.max(answer[0][1], answer[1][1]) + 1)
           .toString();
       }
       if (scanned.includes("1")) return false;
@@ -254,11 +164,13 @@ export const largestRectangle: Pick<
           (arr: unknown) => !Array.isArray(arr) || arr.length !== 2 || arr.some((v: unknown) => typeof v !== "number"),
         )
       )
-        return null; //i hate TS
+        return null;
       return parsed as [[number, number], [number, number]];
     },
-    validateAnswer: (ans): ans is [[number, number], [number, number]] => {
-      return ans != null;
-    },
+    validateAnswer: (ans): ans is [[number, number], [number, number]] =>
+      typeof ans === "object" &&
+      Array.isArray(ans) &&
+      ans.length === 2 &&
+      ans.every((a) => Array.isArray(a) && a.length === 2 && a.every((n) => typeof n === "number")),
   },
 };
