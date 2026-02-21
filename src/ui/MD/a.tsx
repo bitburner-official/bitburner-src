@@ -27,13 +27,17 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
   const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     navigator.navigate(href, event.ctrlKey);
   };
-  const sx = href.includes(relativeUrlOfNsApiPage)
-    ? {
-        textDecorationThickness: "3px",
-        textUnderlineOffset: "5px",
-        color: Settings.theme.info,
-      }
-    : {};
+  // In the in-game doc viewer, links are highlighted with an underline, but the color is the same as the normal text.
+  // In order to improve the discoverability of NS API documentation and external links, we change the text color and
+  // make the underline stand out a bit more.
+  const sx =
+    href.includes(relativeUrlOfNsApiPage) || href.startsWith("https://") || href.startsWith("http://")
+      ? {
+          textDecorationThickness: "3px",
+          textUnderlineOffset: "5px",
+          color: Settings.theme.info,
+        }
+      : {};
   return (
     <Link onClick={onClick} component="button" variant="body1" fontSize="inherit" sx={sx}>
       {props.children}
