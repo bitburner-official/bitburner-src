@@ -70,7 +70,7 @@ It provides a variety of useful bonuses.
 
 ## Save these for later
 
-BN7 used to give access to the Bladeburner API, but now it doesn't.
+BN7 used to give access to the [Bladeburner API](../../../../../markdown/bitburner.bladeburner.md), but now it doesn't.
 Because of that change this [BitNode](bitnodes.md) is relatively low priority and should definitely happen after BN6.
 The benefit for completing BN7.3 is an aug that lets the player perform [Bladeburner](bladeburners.md) and non-Bladeburner actions at the same time.
 
