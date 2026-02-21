@@ -6,8 +6,10 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
   [CodingContractName.LargestRectangleInAMatrix]: {
     desc: (data: number[][]): string => {
       let gridString = "";
-      for (const line of data) {
-        gridString += `${line.toString()},\n`;
+      for (let i = 0; i < data.length; i++) {
+        let start = i == 0 ? '[' : ' '
+        let end = i == data.length - 1 ? ']' : ','
+        gridString += `${start}[${data[i]}]${end}\n`;
       }
       return [
         "You are given a binary matrix consisting only of 0s and 1s:\n\n",
@@ -15,13 +17,13 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
         "Your task is to find the two corners of the largest rectangle ([[r1,c1],[r2,c2]]), that does not contain any 1s.\n\n",
 
         "Examples:\n",
-        "    1,0,0\n",
-        "    0,0,0\n",
+        "    [[1,0,0],\n",
+        "     [0,0,0]]\n",
         "Answer: '[[0,1],[1,2]]'\n",
-        "    0,0,0,1\n",
-        "    0,0,0,0\n",
-        "    0,0,1,0\n",
-        "    0,0,0,1]]\n",
+        "    [[0,0,0,1],\n",
+        "     [0,0,0,0],\n",
+        "     [0,0,1,0],\n",
+        "     [0,0,0,1]]\n",
         "Answer: '[[0,0],[3,1]]'\n",
       ].join("");
     },
