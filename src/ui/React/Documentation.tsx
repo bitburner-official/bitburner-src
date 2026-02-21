@@ -118,7 +118,7 @@ export function openDocExternally(path: string): void {
  * - Relative URL from NS docs to other NS docs (e.g., click the links in NS docs viewer): Open "./bitburner.ns.cloud.md" from "nsDoc/bitburner.ns.md"
  * - Internal NS docs (e.g., choose a dropdown option in DocumentationAutocomplete): nsDoc/bitburner.ns.md
  * - Internal non-NS docs: help/getting_started.md
- * - HTTP URL: Point to other places.
+ * - HTTP URL
  */
 export function convertNavigatorHref(
   href: string,
@@ -144,7 +144,11 @@ export function convertNavigatorHref(
     // Internal NS docs
     path = asFilePath(href);
   } else if (href.startsWith("https://") || href.startsWith("http://")) {
-    // HTTP URL pointing to other places.
+    // There are 2 types of HTTP URLs:
+    // - URL pointing to NS docs (e.g., https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.foo.md)
+    // - URL pointing to other places (e.g., https://github.com/bitburner-official/bitburner-src, MDN, other websites)
+    // Most URLs pointing to NS docs were converted to relative links. There are rare/historical usages of links
+    // pointing to our own docs that still use this format, and we're OK with them being external links.
     return { path: href, forceOpenExternally: true };
   } else {
     // Internal non-NS docs
