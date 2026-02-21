@@ -9418,8 +9418,8 @@ type CodingContractNameEnumType = {
   EncryptionIIVigenereCipher: "Encryption II: Vigenère Cipher";
   SquareRoot: "Square Root";
   TotalPrimesInRange: "Total Number of Primes";
-  LargestRectangleIHistogram: "Largest Rectangle in a Histogram";
-  LargestRectangleIIMatrix: "Largest Rectangle in a Matrix";
+  //LargestRectangleIHistogram: "Largest Rectangle in a Histogram";
+  LargestRectangleInAMatrix: "Largest Rectangle in a Matrix"; //LargestRectangleIIMatrix
 };
 
 /** @public */
@@ -9456,7 +9456,7 @@ export type CodingContractSignatures = {
   "Encryption II: Vigenère Cipher": [[string, string], string];
   "Square Root": [bigint, bigint, [string, string]];
   "Total Number of Primes": [number[], number];
-  "Largest Rectangle in a Histogram": [number[], [number, number]];
+  //"Largest Rectangle in a Histogram": [number[], [number, number]];
   "Largest Rectangle in a Matrix": [(1 | 0)[][], [[number, number], [number, number]]];
 };
 

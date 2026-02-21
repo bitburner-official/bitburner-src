@@ -1,77 +1,78 @@
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { CodingContractTypes, removeBracketsFromArrayString } from "../ContractTypes";
+import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 //279
 export const largestRectangle: Pick<
   CodingContractTypes,
-  CodingContractName.LargestRectangleIHistogram | CodingContractName.LargestRectangleIIMatrix
+  CodingContractName.LargestRectangleInAMatrix //if the histogram one is approved, this one must be deleted, and renamed to "LargestRectangleIIMatrix" everywhere
+  //CodingContractName.LargestRectangleIHistogram | CodingContractName.LargestRectangleIIMatrix
 > = {
-  [CodingContractName.LargestRectangleIHistogram]: {
-    desc: (data: number[]): string => {
-      return [
-        "You are given a histogram represented by an array of non-negative integers, where each value denotes the height of a bar and each bar has width 1:\n\n",
-        `  [${data}]\n\n`,
-        "Your task is to find the contiguous sublist of indices [L, R] such that the rectangle formed by bars from index L to R (inclusive) has the maximum possible area.\n\n",
+  // [CodingContractName.LargestRectangleIHistogram]: {
+  //   desc: (data: number[]): string => {
+  //     return [
+  //       "You are given a histogram represented by an array of non-negative integers, where each value denotes the height of a bar and each bar has width 1:\n\n",
+  //       `  [${data}]\n\n`,
+  //       "Your task is to find the contiguous sublist of indices [L, R] such that the rectangle formed by bars from index L to R (inclusive) has the maximum possible area.\n\n",
 
-        "Examples:\n",
-        "    [3,2,7,9,8,4]\n",
-        "Answer: '[2, 4]'\n",
-        "    [0,1,2,3,4,5,6,7,8,9]\n",
-        "Answer: '[5,9]'",
-      ].join("");
-    },
-    difficulty: 3, //for now
-    generate: (): number[] => {
-      const numRows: number = getRandomIntInclusive(5, 30);
+  //       "Examples:\n",
+  //       "    [3,2,7,9,8,4]\n",
+  //       "Answer: '[2, 4]'\n",
+  //       "    [0,1,2,3,4,5,6,7,8,9]\n",
+  //       "Answer: '[5,9]'",
+  //     ].join("");
+  //   },
+  //   difficulty: 3, //for now
+  //   generate: (): number[] => {
+  //     const numRows: number = getRandomIntInclusive(5, 30);
 
-      const histogram: number[] = [];
-      histogram.length = numRows;
-      for (let i = 0; i < numRows; ++i) {
-        histogram[i] = getRandomIntInclusive(0, 9);
-      }
+  //     const histogram: number[] = [];
+  //     histogram.length = numRows;
+  //     for (let i = 0; i < numRows; ++i) {
+  //       histogram[i] = getRandomIntInclusive(0, 9);
+  //     }
 
-      return histogram;
-    },
-    getAnswer: () => {
-      return null;
-    },
-    solver: (data: number[], answer: [number, number]): boolean => {
-      if (answer[0] < 0 || answer[0] > data.length || answer[1] < 0 || answer[1] > data.length) return false;
-      let maxArea = 0;
-      for (let i = 0; i < data.length; i++) {
-        if (data[i] > 0) {
-          let left = i;
-          let right = i;
-          while (data?.[left - 1] >= data[i]) {
-            left--;
-          }
-          while (data?.[right + 1] >= data[i]) {
-            right++;
-          }
-          if ((right - left + 1) * data[i] > maxArea) {
-            maxArea = (Math.abs(right - left) + 1) * data[i];
-          }
-        }
-      }
+  //     return histogram;
+  //   },
+  //   getAnswer: () => {
+  //     return null;
+  //   },
+  //   solver: (data: number[], answer: [number, number]): boolean => {
+  //     if (answer[0] < 0 || answer[0] > data.length || answer[1] < 0 || answer[1] > data.length) return false;
+  //     let maxArea = 0;
+  //     for (let i = 0; i < data.length; i++) {
+  //       if (data[i] > 0) {
+  //         let left = i;
+  //         let right = i;
+  //         while (data?.[left - 1] >= data[i]) {
+  //           left--;
+  //         }
+  //         while (data?.[right + 1] >= data[i]) {
+  //           right++;
+  //         }
+  //         if ((right - left + 1) * data[i] > maxArea) {
+  //           maxArea = (Math.abs(right - left) + 1) * data[i];
+  //         }
+  //       }
+  //     }
 
-      const userSubstring = data.slice(answer[0], answer[1] + 1);
-      const userMin = Math.min(...userSubstring);
-      const userArea = userMin * userSubstring.length;
+  //     const userSubstring = data.slice(answer[0], answer[1] + 1);
+  //     const userMin = Math.min(...userSubstring);
+  //     const userArea = userMin * userSubstring.length;
 
-      return userArea >= maxArea;
-    },
-    convertAnswer: (ans) => {
-      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
-      if (sanitized === "") return null;
-      const arr = sanitized.split(",").map((s) => parseInt(s, 10));
-      if (arr.length !== 2) return null;
-      return arr as [number, number];
-    },
-    validateAnswer: (ans): ans is [number, number] => {
-      return ans != null;
-    },
-  },
-  [CodingContractName.LargestRectangleIIMatrix]: {
+  //     return userArea >= maxArea;
+  //   },
+  //   convertAnswer: (ans) => {
+  //     const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
+  //     if (sanitized === "") return null;
+  //     const arr = sanitized.split(",").map((s) => parseInt(s, 10));
+  //     if (arr.length !== 2) return null;
+  //     return arr as [number, number];
+  //   },
+  //   validateAnswer: (ans): ans is [number, number] => {
+  //     return ans != null;
+  //   },
+  // },
+  [CodingContractName.LargestRectangleInAMatrix]: { //LargestRectangleIIMatrix
     desc: (data: number[][]): string => {
       let gridString = "";
       for (const line of data) {
@@ -125,7 +126,7 @@ export const largestRectangle: Pick<
       return grid;
     },
     getAnswer: (data) => {
-      let histograms = Array.from({ length: data.length }, () => Array(data[0].length).fill(0));
+      const histograms = Array.from({ length: data.length }, () => Array<number>(data[0].length).fill(0));
       for (let i = 0; i < data[0].length; i++) {
         let count = 0;
         for (let j = 0; j < data.length; j++) {

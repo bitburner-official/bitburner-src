@@ -28,6 +28,6 @@ export enum CodingContractName {
   EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
   SquareRoot = "Square Root",
   TotalPrimesInRange = "Total Number of Primes",
-  LargestRectangleIHistogram = "Largest Rectangle in a Histogram",
-  LargestRectangleIIMatrix = "Largest Rectangle in a Matrix",
+  //LargestRectangleIHistogram = "Largest Rectangle in a Histogram",
+  LargestRectangleInAMatrix = "Largest Rectangle in a Matrix", //LargestRectangleIIMatrix
 }
