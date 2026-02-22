@@ -28,26 +28,11 @@ async function read(ns) {
   }
   return stdin.read();
 }
-
-/**
- * Each time that data comes in through stdin, call callback with it as input, until stdin is closed
- * @param {function (string): void} callback
- * @param {NS} ns
- */
-async function onRead(ns, callback) {
-  while (true) {
-    const input = await read(ns);
-    if (input === null) {
-      return; // If we get a null, stdin is closed: stop reading
-    }
-    callback(input);
-  }
-}
 ```
 
 ### Creating your own command line utilities
 
-`cut.js` using `onRead()` from the snippet above
+`cut.js` using `read()` from the snippet above
 
 ```js
 /** @param {NS} ns */
@@ -64,14 +49,12 @@ export async function main(ns) {
   const startCharCount = Number(charCountRange[0]?.trim());
   const endCharCount = Number(charCountRange[1]?.trim() ?? startCharCount);
 
-  await onRead(ns, (data) => {
+  let data = await read(ns);
+  while (data != null) {
     // slice the characters from the input data to specified range, and print them (aka send to stdout)
     // tprintf is used to avoid printing the script's filename and line number before the message
-  let data = await read(ns);
-  while(data != null) {
-      ns.tprintf("%s", data.slice(startCharCount - 1, endCharCount));
-      data = await read(ns);
-    }
-  });
+    ns.tprintf("%s", data.slice(startCharCount - 1, endCharCount));
+    data = await read(ns);
+  }
 }
 ```

@@ -37,9 +37,13 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
 
   stdIO.write(output);
 
-  void callOnRead(stdIO, (data: unknown, stdInOut) => {
-    stdInOut.write(stringify(data));
-  });
+  if (stdinIsClosed) {
+    stdIO.close();
+  } else {
+    void callOnRead(stdIO, (data: unknown, stdInOut) => {
+      stdInOut.write(stringify(data));
+    });
+  }
 }
 
 export function concatenateFileContents(

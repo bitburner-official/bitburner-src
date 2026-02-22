@@ -118,6 +118,7 @@ describe("RedirectIOTests", () => {
       expect(script?.content).toBe(scriptContent);
 
       await Terminal.executeCommands(`run ${scriptName} >> ${filename}`);
+      await sleep(50);
 
       const server = GetServer(Player.currentServer);
       const file = server?.textFiles.get(filename as TextFilePath);
@@ -141,6 +142,7 @@ describe("RedirectIOTests", () => {
 
       const inputData = "Hello from stdin!";
       await Terminal.executeCommands(`echo "${inputData}" | run ${scriptName}`);
+      await sleep(50);
 
       console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
@@ -163,6 +165,7 @@ describe("RedirectIOTests", () => {
 
       const inputData = "Hello from stdin!";
       await Terminal.executeCommands(`echo "${inputData}" | ${scriptName} | run ${scriptName}`);
+      await sleep(50);
 
       console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);

@@ -3,7 +3,7 @@ import { IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
 import { Terminal } from "../../Terminal";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import { hasScriptExtension, resolveScriptFilePath } from "../../Paths/ScriptFilePath";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { Args, isPipeSymbol, PipeSymbols, stringify } from "./utils";
@@ -17,14 +17,18 @@ export async function parseRedirectedCommands(commandString: string) {
   }
 
   const stdIOChain = buildStdIOChain(commandSets.length);
+  const openPipes: Promise<void>[] = [];
+  let longRunningCommandUsed = false;
   for (let i = 0; i < commandSets.length; i++) {
     const commandSet = commandSets[i];
     const stdIO = stdIOChain[i];
     handleCommand(stdIO, commandSet);
+    longRunningCommandUsed ||= isLongRunningCommand(commandSet);
+    openPipes.push(longRunningCommandUsed ? sleep(0) : waitUntilClosed(stdIO));
   }
 
   // Allow the IO chain to pass data through its async iterators
-  await sleep(50);
+  await Promise.all(openPipes);
   return true;
 }
 
@@ -199,6 +203,12 @@ function handleIoError(stdIO: StdIO, error: string) {
   Terminal.error(error, stdIO);
 }
 
+function isLongRunningCommand(commandSet: Args[]) {
+  const pipeSymbol = isPipeSymbol(commandSet[0]) ? `${commandSet[0]}` : null;
+  const command = `${pipeSymbol ? commandSet[1] : commandSet[0]}`;
+  return ["wget", "tail", "run"].includes(command) || !!resolveScriptFilePath(command);
+}
+
 function concatenateFileContents(content: string, newContent: string): string {
   const concatenatedContent = content + (content ? "\n" : "") + newContent;
   const splitLines = concatenatedContent.split("\n");
@@ -208,4 +218,10 @@ function concatenateFileContents(content: string, newContent: string): string {
   }
 
   return concatenatedContent;
+}
+
+async function waitUntilClosed(stdio: StdIO): Promise<void> {
+  while (stdio.stdout && !stdio.stdout?.isClosed) {
+    await stdio.stdout.nextWrite();
+  }
 }
