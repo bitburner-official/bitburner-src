@@ -27,9 +27,7 @@ export const defaultNsApiPage = asFilePath("nsDoc/bitburner.ns.md");
  * If we move or rename "bitburner.ns.md", we must update this constant, "defaultNsApiPage", "openDocExternally", and
  * the URL in src/Documentation/doc/en/index.md.
  */
-export const externalUrlOfNsApiPage =
-  "https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md";
-export const prefixOfHttpUrlOfNsDocs = "https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/";
+export const relativeUrlOfNsApiPage = "../../../../markdown/bitburner.ns.md";
 
 const prefixOfRelativeUrlOfNSDoc = "../../../../markdown/bitburner.";
 
@@ -120,11 +118,7 @@ export function openDocExternally(path: string): void {
  * - Relative URL from NS docs to other NS docs (e.g., click the links in NS docs viewer): Open "./bitburner.ns.cloud.md" from "nsDoc/bitburner.ns.md"
  * - Internal NS docs (e.g., choose a dropdown option in DocumentationAutocomplete): nsDoc/bitburner.ns.md
  * - Internal non-NS docs: help/getting_started.md
- * - HTTP URL:
- *   - Point to NS docs. Some non-NS docs pages include links to NS docs. For example: basic/scripts.md has a
- * link to https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.flags.md. In
- * these cases, the link always points to a file at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/
- *   - Point to other places.
+ * - HTTP URL
  */
 export function convertNavigatorHref(
   href: string,
@@ -150,15 +144,12 @@ export function convertNavigatorHref(
     // Internal NS docs
     path = asFilePath(href);
   } else if (href.startsWith("https://") || href.startsWith("http://")) {
-    // TODO: Remove this case after converting all these links to relative links.
-    // HTTP URL pointing to NS docs.
-    // Convert https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.foo.md to nsDoc/bitburner.foo.md
-    if (href.startsWith(prefixOfHttpUrlOfNsDocs)) {
-      path = asFilePath(`nsDoc/${href.replace(prefixOfHttpUrlOfNsDocs, "")}`);
-    } else {
-      // HTTP URL pointing to other places.
-      return { path: href, forceOpenExternally: true };
-    }
+    // There are 2 types of HTTP URLs:
+    // - URL pointing to NS docs (e.g., https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.foo.md)
+    // - URL pointing to other places (e.g., https://github.com/bitburner-official/bitburner-src, MDN, other websites)
+    // Most URLs pointing to NS docs were converted to relative links. There are rare/historical usages of links
+    // pointing to our own docs that still use this format, and we're OK with them being external links.
+    return { path: href, forceOpenExternally: true };
   } else {
     // Internal non-NS docs
     path = resolveFilePath("./" + href, currentPage);

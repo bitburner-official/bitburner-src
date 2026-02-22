@@ -111,7 +111,7 @@ This means we must implement a delay into the scripts.
 
 In older versions of the game, this required using `sleep` or `asleep` functions, which have a RAM cost of zero.
 However, due to JavaScript limitations, the delay duration is not millisecond-precise and can cause the functions to finish out of order.
-Instead, the hack, grow and weaken functions have a special [option](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.basichgwoptions.md) called `additionalMsec` that allows more precise delays.
+Instead, the hack, grow and weaken functions have a special [option](../../../../../markdown/bitburner.basichgwoptions.md) called `additionalMsec` that allows more precise delays.
 
 As well as the run time for each function, we also need information on the impact of a hack, grow or weaken thread on the target's security and/or money to optimise the thread ratios between the functions.
 This information can come from `formulas.exe` and use of the `getPlayer` and `getServer` functions, but cheaper functions such as `hackAnalyze`, `hackAnalyzeSecurity`, `getHackTime`, `growthAnalyze` and `growthAnalyzeSecurity` can still be used.

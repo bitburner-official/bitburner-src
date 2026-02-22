@@ -24,7 +24,7 @@ In this BitNode, most forms of income such as working at a [Company](../basic/co
 [Servers](../basic/servers.md) have less money on them and lowered growth rates, but it is easier to lower their security level using the `weaken` function.
 
 Furthermore, some BitNodes introduce new content and mechanics.
-For example, there is one BitNode that grants access to the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.singularity.md).
+For example, there is one BitNode that grants access to the [Singularity API](../../../../../markdown/bitburner.singularity.md).
 There is another BitNode in which you can manage a [Gang](gang.md) to earn money and [Reputation](../basic/reputation.md).
 
 ## How to destroy a BitNode
@@ -45,6 +45,13 @@ The only things that will persist through destroying BitNodes are:
 - [Source-Files](sourcefiles.md)
 - [Scripts](../basic/scripts.md) on the home computer
 - [Intelligence](intelligence.md)
+
+## BitNode recommendation
+
+If you want to get advice on choosing your next BitNode, you can check these BitNode recommendation guides:
+
+- [BitNode recommendation - Short guide](bitnode_recommendation_short_guide.md)
+- [BitNode recommendation - Comprehensive guide](bitnode_recommendation_comprehensive_guide.md)
 
 ## BitNode list
 

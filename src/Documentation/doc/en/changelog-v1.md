@@ -553,10 +553,7 @@ Stanek Gift
 
 ** Documentation **
 
-- The new documentation for the netscript API is available at
-  https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
-  This documentation is used in-game to validate the code, in-editor to autocomplete, and
-  for users to reference. This is a huge quality of life improvements for me.
+- The new documentation for the netscript API is available [here](../../../../markdown/bitburner.ns.md). This documentation is used in-game to validate the code, in-editor to autocomplete, and for users to reference. This is a huge quality of life improvements for me.
 
 ** Reputation **
 

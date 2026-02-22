@@ -544,7 +544,8 @@ export function GameRoot(): React.ReactElement {
               <PromptManager hidden={hidePopups} />
               <FactionInvitationManager hidden={hidePopups} />
               <Snackbar hidden={hidePopups} />
-              <DocumentationPopUp hidden={hidePopups} />
+              {/* Allow opening the documentation popup in the BitVerse */}
+              <DocumentationPopUp hidden={hidePopups && pageWithContext.page !== Page.BitVerse} />
               <Apr1 />
             </SnackbarProvider>
           </HistoryProvider>

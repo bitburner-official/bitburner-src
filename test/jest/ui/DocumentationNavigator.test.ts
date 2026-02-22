@@ -47,15 +47,7 @@ describe("convertNavigatorHref", () => {
       expect(forceOpenExternally).toStrictEqual(false);
     });
 
-    test("HTTP/HTTPS URL - Point to NS docs", () => {
-      const { path, forceOpenExternally } = convertNavigatorHref(
-        "https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md",
-        defaultPage,
-      );
-      expect(path).toStrictEqual("nsDoc/bitburner.ns.md");
-      expect(forceOpenExternally).toStrictEqual(false);
-    });
-    test("HTTP/HTTPS URL - Point to other places", () => {
+    test("HTTP/HTTPS URL", () => {
       const { path, forceOpenExternally } = convertNavigatorHref("https://bitburner-official.github.io", defaultPage);
       expect(path).toStrictEqual("https://bitburner-official.github.io");
       expect(forceOpenExternally).toStrictEqual(true);
