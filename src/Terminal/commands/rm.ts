@@ -6,7 +6,7 @@ import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import type { IReturnStatus } from "../../types";
 import type { FilePath } from "../../Paths/FilePath";
 
-export function rm(args: (string | number | boolean)[], server: BaseServer): void {
+export function rm(args: (string | number | boolean)[], server: BaseServer): undefined {
   const errors = {
     arg: (reason: string) => `Incorrect usage of rm command. ${reason}. Usage: rm [OPTION]... [FILE]...`,
     dirsProvided: (name: string) =>

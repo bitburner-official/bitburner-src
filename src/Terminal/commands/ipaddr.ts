@@ -1,7 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 
-export function ipaddr(args: (string | number | boolean)[], server: BaseServer): void {
+export function ipaddr(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 0) {
     Terminal.error("Incorrect usage of hostname command. Usage: ipaddr");
     return;

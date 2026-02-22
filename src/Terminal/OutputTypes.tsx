@@ -1,7 +1,6 @@
 import React from "react";
 import { Settings } from "../Settings/Settings";
 import { formatTime } from "../utils/helpers/formatTime";
-import { BaseServer } from "../Server/BaseServer";
 
 export class Output {
   text: string;
@@ -33,19 +32,5 @@ export class Link {
     if (Settings.TimestampsFormat) dashes = "[" + formatTime(Settings.TimestampsFormat) + "] " + dashes;
     this.hostname = hostname;
     this.dashes = dashes;
-  }
-}
-
-export class TTimer {
-  time: number;
-  timeLeft: number;
-  action: "h" | "b" | "a" | "g" | "w" | "c";
-  server?: BaseServer;
-
-  constructor(time: number, action: "h" | "b" | "a" | "g" | "w" | "c", server?: BaseServer) {
-    this.time = time;
-    this.timeLeft = time;
-    this.action = action;
-    this.server = server;
   }
 }

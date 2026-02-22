@@ -401,7 +401,7 @@ function grabTerminal(): string[] {
   return Terminal.outputHistory.map((line) => (line as Output).text ?? "");
 }
 
-export function grep(args: (string | number | boolean)[], server: BaseServer): void {
+export function grep(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (!args.length) return Terminal.error(ERR.noArgs);
 
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();

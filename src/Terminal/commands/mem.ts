@@ -3,7 +3,7 @@ import { formatRam } from "../../ui/formatNumber";
 import { Settings } from "../../Settings/Settings";
 import { BaseServer } from "../../Server/BaseServer";
 
-export function mem(args: (string | number | boolean)[], server: BaseServer): void {
+export function mem(args: (string | number | boolean)[], server: BaseServer): undefined {
   try {
     if (args.length !== 1 && args.length !== 3) {
       Terminal.error("Incorrect usage of mem command. usage: mem [scriptname] [-t] [number threads]");

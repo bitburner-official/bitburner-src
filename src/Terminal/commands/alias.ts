@@ -1,7 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { parseAliasDeclaration, printAliases } from "../../Alias";
 
-export function alias(args: (string | number | boolean)[]): void {
+export function alias(args: (string | number | boolean)[]): undefined {
   if (args.length === 0) {
     printAliases();
     return;

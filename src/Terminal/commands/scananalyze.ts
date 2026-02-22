@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { CompletedProgramName } from "@enums";
 import { Terminal } from "../../Terminal";
 
-export function scananalyze(args: (string | number | boolean)[]): void {
+export function scananalyze(args: (string | number | boolean)[]): undefined {
   if (args.length === 0) {
     Terminal.executeScanAnalyzeCommand();
   } else {

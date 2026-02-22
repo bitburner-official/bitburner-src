@@ -4,7 +4,7 @@ import { combinePath, getFilenameOnly } from "../../Paths/FilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 
-export function cp(args: (string | number | boolean)[], server: BaseServer): void {
+export function cp(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 2) {
     return Terminal.error("Incorrect usage of cp command. Usage: cp [source filename] [destination]");
   }

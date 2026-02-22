@@ -1,4 +1,5 @@
 import { Terminal } from "../../Terminal";
+import type { TerminalAction } from "../TerminalAction";
 import { BaseServer } from "../../Server/BaseServer";
 import { runScript } from "./runScript";
 import { runProgram } from "./runProgram";
@@ -6,8 +7,10 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasContractExtension } from "../../Paths/ContractFilePath";
 import { hasProgramExtension } from "../../Paths/ProgramFilePath";
 import { hasCacheExtension } from "../../Paths/CacheFilePath";
+import { DarknetServer } from "../../Server/DarknetServer";
+import { getRewardFromCache } from "../../DarkNet/effects/cacheFiles";
 
-export function run(args: (string | number | boolean)[], server: BaseServer): void {
+export function run(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   // Run a program or a script
   const arg = args.shift();
   if (!arg)
@@ -18,7 +21,8 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   const path = Terminal.getFilepath(String(arg));
   if (!path) return Terminal.error(`${arg} is not a valid filepath.`);
   if (hasScriptExtension(path)) {
-    return runScript(path, args, server);
+    runScript(path, args, server);
+    return;
   } else if (hasContractExtension(path)) {
     Terminal.runContract(path).catch((error) => {
       console.error(error);
@@ -26,9 +30,23 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
     });
     return;
   } else if (hasProgramExtension(path)) {
-    return runProgram(path, args, server);
+    runProgram(path, args, server);
+    return;
   } else if (hasCacheExtension(path)) {
-    return Terminal.startAction(4, "c", server);
+    if (!(server instanceof DarknetServer) || !server.caches.includes(path)) {
+      Terminal.error(`Cache file not found: ${path} on server ${server.hostname}`);
+      return;
+    }
+    return Terminal.timedAction(4, "run", () => {
+      // Check again, it may have been used
+      if (!server.caches.includes(path)) {
+        Terminal.error(`Cache file not found: ${path} on server ${server.hostname}`);
+        return;
+      }
+      server.caches = server.caches.filter((cache) => cache !== path);
+      const result = getRewardFromCache(server, path, true);
+      Terminal.print(result.message);
+    });
   }
-  Terminal.error(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .cct, and .exe files can be run.`);
+  Terminal.error(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .cct, .cache, and .exe files can be run.`);
 }

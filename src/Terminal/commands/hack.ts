@@ -1,8 +1,9 @@
 import { Terminal } from "../../Terminal";
+import type { TerminalAction } from "../TerminalAction";
 import { Player } from "@player";
 import { BaseServer } from "../../Server/BaseServer";
 
-export function hack(args: (string | number | boolean)[], server: BaseServer): void {
+export function hack(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   if (args.length !== 0) return Terminal.error("Incorrect usage of hack command. Usage: hack");
   if (server.purchasedByPlayer) return Terminal.error("Cannot hack your own machines!");
   if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
@@ -13,5 +14,5 @@ export function hack(args: (string | number | boolean)[], server: BaseServer): v
       "Your hacking skill is not high enough to hack this machine. Try analyzing the machine to determine the required hacking skill",
     );
   }
-  Terminal.startHack();
+  return Terminal.startHack();
 }

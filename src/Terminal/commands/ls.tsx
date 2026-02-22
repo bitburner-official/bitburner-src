@@ -29,7 +29,7 @@ import { formatBytes, formatRam } from "../../ui/formatNumber";
 import { DarknetServer } from "../../Server/DarknetServer";
 import type { CacheFilePath } from "../../Paths/CacheFilePath";
 
-export function ls(args: (string | number | boolean)[], server: BaseServer): void {
+export function ls(args: (string | number | boolean)[], server: BaseServer): undefined {
   enum FileType {
     Folder,
     Message,
@@ -75,7 +75,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   const filter = flags["--grep"] ?? "";
 
   const numArgs = args.length;
-  function incorrectUsage(): void {
+  function incorrectUsage(): undefined {
     Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]");
   }
 

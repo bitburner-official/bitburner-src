@@ -1,10 +1,11 @@
 import { Terminal } from "../../Terminal";
+import type { TerminalAction } from "../TerminalAction";
 import { Player } from "@player";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
 import { DarknetServer } from "../../Server/DarknetServer";
 
-export function backdoor(args: (string | number | boolean)[], server: BaseServer): void {
+export function backdoor(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   if (args.length !== 0) {
     Terminal.error("Incorrect usage of backdoor command. Usage: backdoor");
     return;
@@ -37,5 +38,5 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
     );
   }
 
-  Terminal.startBackdoor();
+  return Terminal.startBackdoor();
 }
