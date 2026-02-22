@@ -79,7 +79,7 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
       for (let i = 0; i < histograms.length; i++) {
         const row = histograms[i];
         for (let j = 0; j < row.length; j++) {
-          if (row[j] != 0) continue;
+          if (row[j] == 0) continue;
           let left = j;
           let right = j;
           //if the index is -1/row.length (out of bounds), it will return undefined, that when compared to a number also returns false
@@ -93,7 +93,7 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
             maxArea = (right - left + 1) * row[j];
             maxL = left;
             maxR = right;
-            maxU = i - histograms[i][j] + 1;
+            maxU = i - row[j] + 1;
             maxD = i;
           }
         }
@@ -116,48 +116,20 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
       )
         return false;
 
-      let scanned = "";
-      for (let i = Math.min(answer[0][0], answer[1][0]); i <= Math.max(answer[0][0], answer[1][0]); i++) {
-        scanned += state[i]
-          .slice(Math.min(answer[0][1], answer[1][1]), Math.max(answer[0][1], answer[1][1]) + 1)
-          .toString();
-      }
-      if (scanned.includes("1")) return false;
-
-      const histograms = Array.from({ length: state.length }, () => Array<number>(state[0].length).fill(0));
-      for (let i = 0; i < state.length; i++) {
-        let count = 0;
-        for (let j = 0; j < state.length; j++) {
-          if (state[j][i] == 0) {
-            count++;
-          } else {
-            count = 0;
-          }
-          histograms[j][i] = count;
-        }
-      }
-      let maxArea = 0;
-      for (let i = 0; i < histograms.length; i++) {
-        const row = histograms[i];
-        for (let j = 0; j < row.length; j++) {
-          if (row[j] != 0) continue;
-          let left = j;
-          let right = j;
-          //if the index is -1/row.length (out of bounds), it will return undefined, that when compared to a number also returns false
-          while (row[left - 1] >= row[j]) {  
-            left--;
-          }
-          while (row[right + 1] >= row[j]) {
-            right++;
-          }
-          if ((right - left + 1) * row[j] > maxArea) {
-            maxArea = (right - left + 1) * row[j];
-          }
+      const minR = Math.min(answer[0][0], answer[1][0]);
+      const maxR = Math.max(answer[0][0], answer[1][0]);
+      const minC = Math.min(answer[0][1], answer[1][1]);
+      const maxC = Math.max(answer[0][1], answer[1][1]);
+      for (let i = minR; i <= maxR; i++) {
+        if (state[i].slice(minC, maxC + 1).includes(1)) {
+          return false;
         }
       }
 
-      const userArea = Math.abs(answer[1][0] - answer[0][0] + 1) * Math.abs(answer[1][1] - answer[0][1] + 1);
-      return userArea >= maxArea;
+      const solution = largestRectangle[CodingContractName.LargestRectangleInAMatrix].getAnswer(state);
+
+      const userArea = (maxR - minR + 1) * (maxC - minC + 1);
+      return userArea === (solution[1][0] - solution[0][0] + 1) * (solution[1][1] - solution[0][1] + 1);
     },
     convertAnswer: (ans) => {
       const parsed = JSON.parse(ans) as unknown;
