@@ -41,8 +41,11 @@ BN6 introduces the [Bladeburner](bladeburners.md) mechanic and its corresponding
 Bladeburner is an alternative method to beat BitNodes which doesn't rely on money or hacking skill.
 [Sleeves](sleeves.md) help complete BN6 more quickly since they can share some Bladeburner tasks with the player but aren't a requirement.
 
+BN7 unlocks Bladeburner and gives access to the Bladeburner APIs like BN6, but it's a bit harder than BN6 while giving more Bladeburner-specific rewards.
+Source-File 7 buffs Bladeburner's multipliers, and Source-File 7.3 gives free access to an augmentation that lets you perform Bladeburner and non-Bladeburner actions at the same time.
+
 BN10 unlocks two new mechanics: [Sleeves](sleeves.md) and [Grafting](grafting.md).
-[Sleeves](sleeves.md) act as additional players and can perform tasks like studying, training, crime and working for factions independently of the player.
+[Sleeves](sleeves.md) act as additional players and can perform tasks like studying, training, committing crime and working for factions independently of the player.
 [Grafting](grafting.md) installs augmentations without a soft reset.
 Both are very useful to have but require large amounts of money to use to their fullest extent.
 Each [Source-File](sourcefiles.md) grants an additional sleeve and up to five additional sleeves may be purchased from a faction only in this BitNode.
@@ -56,7 +59,7 @@ Overall, this [BitNode](bitnodes.md) is considered an advanced one even if there
 
 BN9 introduces the [Hacknet Server](hacknetservers.md) mechanic to replace the [Hacknet Nodes](../basic/hacknet_nodes.md) mechanic.
 [Hacknet Servers](hacknetservers.md) generate hashes instead of money directly and these hashes can be traded for various benefits.
-Players who find [RAM](../basic/ram.md) tight at the beginning of a [BitNode](bitnodes.md) will find BN9.2's bonus to start with 128GiB in their home machine.
+Players who find [RAM](../basic/ram.md) tight at the beginning of a [BitNode](bitnodes.md) will find BN9.2's bonus to start with 128GiB in their home machine useful.
 
 BN13 introduces [Stanek's Gift](stanek.md), a powerful augmentation that can provide bonuses to skills, [hacknet](../basic/hacknet_nodes.md) production and costs, working and [crime](../basic/crimes.md) gains, and [hacking](../basic/hacking.md) power and speed.
 These bonuses are versatile but not enough to offset the challenge of the BitNode itself.
@@ -69,10 +72,6 @@ It encourages solving a number of practical problems (e.g. passing data around b
 It provides a variety of useful bonuses.
 
 ## Save these for later
-
-BN7 used to give access to the [Bladeburner API](../../../../../markdown/bitburner.bladeburner.md), but now it doesn't.
-Because of that change this [BitNode](bitnodes.md) is relatively low priority and should definitely happen after BN6.
-The benefit for completing BN7.3 is an aug that lets the player perform [Bladeburner](bladeburners.md) and non-Bladeburner actions at the same time.
 
 BN8 focuses on the stock market to the point that there's no other way to make money.
 Completing at least BN10.1 is highly recommended in order to have [Grafting](grafting.md).
