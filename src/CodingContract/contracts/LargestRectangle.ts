@@ -82,6 +82,7 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
           if (row[j] != 0) continue;
           let left = j;
           let right = j;
+          //if the index is -1/row.length (out of bounds), it will return undefined, that when compared to a number also returns false
           while (row[left - 1] >= row[j]) {
             left--;
           }
@@ -142,7 +143,8 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
           if (row[j] != 0) continue;
           let left = j;
           let right = j;
-          while (row[left - 1] >= row[j]) {
+          //if the index is -1/row.length (out of bounds), it will return undefined, that when compared to a number also returns false
+          while (row[left - 1] >= row[j]) {  
             left--;
           }
           while (row[right + 1] >= row[j]) {
