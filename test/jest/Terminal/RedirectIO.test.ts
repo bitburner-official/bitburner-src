@@ -31,7 +31,7 @@ describe("RedirectIOTests", () => {
 
   it("should redirect output to the terminal correctly from a terminal StdIO", async () => {
     const data = "Hello, Terminal!";
-    const terminalIO = getTerminalStdIO(null);
+    const terminalIO = getTerminalStdIO();
     terminalIO.write(data);
     await sleep(50);
 

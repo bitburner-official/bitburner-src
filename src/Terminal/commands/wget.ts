@@ -44,9 +44,9 @@ export function wget(args: (string | number | boolean)[], server: BaseServer, st
       if (target && (hasScriptExtension(target) || hasTextExtension(target))) {
         const writeResult = server.writeToContentFile(target, content);
         if (writeResult.overwritten) {
-          Terminal.print(`wget successfully retrieved content and overwrote ${target}`);
+          Terminal.printAndBypassPipes(`wget successfully retrieved content and overwrote ${target}`);
         } else {
-          Terminal.print(`wget successfully retrieved content to new file ${target}`);
+          Terminal.printAndBypassPipes(`wget successfully retrieved content to new file ${target}`);
         }
       }
     })

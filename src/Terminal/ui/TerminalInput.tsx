@@ -358,7 +358,7 @@ export function TerminalInput(): React.ReactElement {
     if (Settings.EnableBashHotkeys) {
       if (event.key === KEY.C && event.ctrlKey && ref && ref.selectionStart === ref.selectionEnd) {
         event.preventDefault();
-        Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
+        Terminal.printAndBypassPipes(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
         modifyInput("clearall");
       }
 

@@ -5,7 +5,7 @@ import { StdIO } from "../StdIO/StdIO";
 
 export function alias(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length === 0) {
-    printAliases();
+    printAliases(stdIO);
     return;
   }
   if (args[0] === "--all") {

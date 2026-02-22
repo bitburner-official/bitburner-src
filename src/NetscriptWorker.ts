@@ -34,6 +34,7 @@ import { UIEventEmitter, UIEventType } from "./ui/UIEventEmitter";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { DarknetServer } from "./Server/DarknetServer";
+import { getTerminalStdIO } from "./Terminal/StdIO/RedirectIO";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -235,7 +236,7 @@ export function loadAllRunningScripts(): void {
      */
     const skipScriptLoad = window.location.href.toLowerCase().includes("?noscript");
     if (skipScriptLoad) {
-      Terminal.warn("Skipped loading player scripts during startup");
+      Terminal.warn("Skipped loading player scripts during startup", getTerminalStdIO());
       console.info("Skipping the load of any scripts during startup");
     }
     for (const server of GetAllServers(true)) {

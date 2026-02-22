@@ -83,7 +83,7 @@ export class RunningScript {
   tailStdOut: StdIO | null = null;
 
   // Configuration for piping the script's terminal output
-  terminalStdOut: StdIO = getTerminalStdIO(null);
+  terminalStdOut: StdIO = getTerminalStdIO();
 
   // The title, as shown in the script's log box. Defaults to the name + args,
   // but can be changed by the user. If it is set to a React element (only by the user),

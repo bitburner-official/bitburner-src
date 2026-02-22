@@ -13,7 +13,7 @@ export async function parseRedirectedCommands(commandString: string) {
   const parsed = parseCommand(commandString);
   const commandSets = findCommandsSplitByRedirects(parsed);
   if (commandSets.length <= 1) {
-    return Terminal.executeCommand(commandString, getTerminalStdIO(null));
+    return Terminal.executeCommand(commandString, getTerminalStdIO());
   }
 
   const stdIOChain = buildStdIOChain(commandSets.length);

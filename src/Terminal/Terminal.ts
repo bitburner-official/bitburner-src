@@ -88,7 +88,7 @@ import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { StdIO } from "./StdIO/StdIO";
-import { getTerminalStdIO, parseRedirectedCommands } from "./StdIO/RedirectIO";
+import { parseRedirectedCommands } from "./StdIO/RedirectIO";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { DarknetServer } from "../Server/DarknetServer";
 
@@ -178,11 +178,11 @@ export class Terminal {
     TerminalEvents.emit();
   }
 
-  print(s: string, stdIO: StdIO = getTerminalStdIO(null)): void {
+  print(s: string, stdIO: StdIO): void {
     stdIO.write(s);
   }
 
-  printRaw(node: React.ReactNode, stdIO: StdIO = getTerminalStdIO(null)): void {
+  printRaw(node: React.ReactNode, stdIO: StdIO): void {
     stdIO.write(new RawOutput(node));
   }
 
@@ -195,15 +195,15 @@ export class Terminal {
     this.terminalOutput(new Output(s, "error"));
   }
 
-  success(s: string, stdIO: StdIO = getTerminalStdIO(null)): void {
+  success(s: string, stdIO: StdIO): void {
     stdIO.write(new Output(s, "success"));
   }
 
-  info(s: string, stdIO: StdIO = getTerminalStdIO(null)): void {
+  info(s: string, stdIO: StdIO): void {
     stdIO.write(new Output(s, "info"));
   }
 
-  warn(s: string, stdIO: StdIO = getTerminalStdIO(null)): void {
+  warn(s: string, stdIO: StdIO): void {
     stdIO.write(new Output(s, "warn"));
   }
 
@@ -513,10 +513,10 @@ export class Terminal {
     } else if (this.action.action === "c" && this.action.server instanceof DarknetServer) {
       const cache = this.action.server.caches.pop();
       if (!cache) {
-        this.print("No cache files found.");
+        this.print("No cache files found.", this.actionStdIO);
       } else {
         const result = getRewardFromCache(this.action.server, cache, true);
-        this.print(result.message);
+        this.print(result.message, this.actionStdIO);
       }
     }
 
