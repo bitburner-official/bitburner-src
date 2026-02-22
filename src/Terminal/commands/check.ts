@@ -2,29 +2,28 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScripts } from "../../Script/ScriptHelpers";
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
-import { StdIO } from "../StdIO/StdIO";
 
-export function check(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function check(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length < 1) {
-    Terminal.error(`Incorrect number of arguments. Usage: check [script] [arg1] [arg2]...`, stdIO);
+    Terminal.error(`Incorrect number of arguments. Usage: check [script] [arg1] [arg2]...`);
   } else {
     const scriptName = Terminal.getFilepath(args[0] + "");
-    if (!scriptName) return Terminal.error(`Invalid filename: ${args[0]}`, stdIO);
+    if (!scriptName) return Terminal.error(`Invalid filename: ${args[0]}`);
 
     // Can only tail script files
     if (!hasScriptExtension(scriptName)) {
-      return Terminal.error(`check: File extension must be one of ${validScriptExtensions.join(", ")})`, stdIO);
+      return Terminal.error(`check: File extension must be one of ${validScriptExtensions.join(", ")})`);
     }
 
     // Check that the script is running on this machine
     const runningScripts = findRunningScripts(scriptName, args.slice(1), server);
     if (runningScripts === null) {
-      Terminal.error(`No script named ${scriptName} is running on the server`, stdIO);
+      Terminal.error(`No script named ${scriptName} is running on the server`);
       return;
     }
     const next = runningScripts.values().next();
     if (!next.done) {
-      next.value.displayLog(stdIO);
+      next.value.displayLog();
     }
   }
 }

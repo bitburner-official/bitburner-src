@@ -1,16 +1,15 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { StdIO } from "../StdIO/StdIO";
 
-export function sudov(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function sudov(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 0) {
-    Terminal.error("Incorrect number of arguments. Usage: sudov", stdIO);
+    Terminal.error("Incorrect number of arguments. Usage: sudov");
     return;
   }
 
   if (server.hasAdminRights) {
-    Terminal.print("You have ROOT access to this machine", stdIO);
+    Terminal.print("You have ROOT access to this machine");
   } else {
-    Terminal.print("You do NOT have root access to this machine", stdIO);
+    Terminal.print("You do NOT have root access to this machine");
   }
 }

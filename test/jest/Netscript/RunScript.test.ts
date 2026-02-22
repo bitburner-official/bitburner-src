@@ -14,7 +14,6 @@ import { WorkerScript } from "../../../src/Netscript/WorkerScript";
 import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
 import type { PositiveInteger } from "../../../src/types";
 import { ErrorState } from "../../../src/ErrorHandling/ErrorState";
-import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
 
 fixDoImportIssue();
 
@@ -37,7 +36,7 @@ async function expectErrorWhenRunningScript(
   for (const script of scripts) {
     Player.getHomeComputer().writeToScriptFile(script.filePath, script.code);
   }
-  runScript(testScriptPath, [], Player.getHomeComputer(), getTerminalStdIO());
+  runScript(testScriptPath, [], Player.getHomeComputer());
   const workerScript = workerScripts.get(1);
   if (!workerScript) {
     throw new Error(`Invalid worker script`);
@@ -146,7 +145,7 @@ describe("runScript and runScriptFromScript", () => {
              ns.print(server.hostname);
            }`,
         );
-        runScript(testScriptPath, [], Player.getHomeComputer(), getTerminalStdIO());
+        runScript(testScriptPath, [], Player.getHomeComputer());
         const workerScript = workerScripts.get(1);
         if (!workerScript) {
           throw new Error(`Invalid worker script`);
@@ -161,7 +160,7 @@ describe("runScript and runScriptFromScript", () => {
     });
     describe("Failure", () => {
       test("Script does not exist", () => {
-        runScript(testScriptPath, [], Player.getHomeComputer(), getTerminalStdIO());
+        runScript(testScriptPath, [], Player.getHomeComputer());
         expect((Terminal.outputHistory[1] as { text: string }).text).toContain(
           `Script ${testScriptPath} does not exist on home`,
         );
@@ -173,7 +172,7 @@ describe("runScript and runScriptFromScript", () => {
           `export async function main(ns) {
            }`,
         );
-        runScript(testScriptPath, [], server, getTerminalStdIO());
+        runScript(testScriptPath, [], server);
         expect((Terminal.outputHistory[1] as { text: string }).text).toContain(
           `You do not have root access on ${server.hostname}`,
         );
@@ -185,7 +184,7 @@ describe("runScript and runScriptFromScript", () => {
              {
            }`,
         );
-        runScript(testScriptPath, [], Player.getHomeComputer(), getTerminalStdIO());
+        runScript(testScriptPath, [], Player.getHomeComputer());
         expect((Terminal.outputHistory[1] as { text: string }).text).toContain(
           `Cannot calculate RAM usage of ${testScriptPath}`,
         );
@@ -197,7 +196,7 @@ describe("runScript and runScriptFromScript", () => {
              ns.ramOverride(1024);
            }`,
         );
-        runScript(testScriptPath, [], Player.getHomeComputer(), getTerminalStdIO());
+        runScript(testScriptPath, [], Player.getHomeComputer());
         expect((Terminal.outputHistory[1] as { text: string }).text).toContain("This script requires 1.02TB of RAM");
       });
       test("Thrown error in main function", async () => {

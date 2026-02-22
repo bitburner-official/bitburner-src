@@ -5,9 +5,8 @@ import { getAllDirectories, type Directory } from "../../Paths/Directory";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import type { IReturnStatus } from "../../types";
 import type { FilePath } from "../../Paths/FilePath";
-import { StdIO } from "../StdIO/StdIO";
 
-export function rm(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function rm(args: (string | number | boolean)[], server: BaseServer): void {
   const errors = {
     arg: (reason: string) => `Incorrect usage of rm command. ${reason}. Usage: rm [OPTION]... [FILE]...`,
     dirsProvided: (name: string) =>
@@ -20,7 +19,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
       "You are trying to delete all files within the root directory. If this is intentional, use the --no-preserve-root flag",
   } as const;
 
-  if (args.length === 0) return Terminal.error(errors["arg"]("No arguments provided"), stdIO);
+  if (args.length === 0) return Terminal.error(errors["arg"]("No arguments provided"));
 
   const recursive = args.includes("-r") || args.includes("-R") || args.includes("--recursive") || args.includes("-rf");
   const force = args.includes("-f") || args.includes("--force") || args.includes("-rf");
@@ -34,8 +33,8 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
     typeof arg === "string" && (!arg.startsWith("-") || (index - 1 >= 0 && array[index - 1] === "--"));
   const targets = args.filter(isTargetString);
 
-  if (targets.length === 0) return Terminal.error(errors["arg"]("No targets provided"), stdIO);
-  if (!ignoreSpecialRoot && targets.includes("/")) return Terminal.error(errors["rootDeletion"](), stdIO);
+  if (targets.length === 0) return Terminal.error(errors["arg"]("No targets provided"));
+  if (!ignoreSpecialRoot && targets.includes("/")) return Terminal.error(errors["rootDeletion"]());
 
   const directories: Directory[] = [];
   const files: FilePath[] = [];
@@ -63,7 +62,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
 
     const fileExists = file !== null && allFiles.has(file);
 
-    if (fileDir === null) return Terminal.error(errors.invalidFile(target), stdIO);
+    if (fileDir === null) return Terminal.error(errors.invalidFile(target));
     const dirExists = allDirs.has(fileDir);
     if (file === null || dirExists) {
       // If file === null, it means we specified a trailing-slash directory/,
@@ -83,11 +82,11 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
           continue;
         } else {
           // Only exists as a directory (maybe).
-          return Terminal.error(errors.dirsProvided(target), stdIO);
+          return Terminal.error(errors.dirsProvided(target));
         }
       }
       if (!dirExists && !force) {
-        return Terminal.error(errors.noSuchDir(target), stdIO);
+        return Terminal.error(errors.noSuchDir(target));
       }
       // If we pass -f and pass a non-existing directory, we will add it
       // here and then it will match no files, producing no errors. This
@@ -97,7 +96,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
     }
     if (!force && !allFiles.has(file)) {
       // With -f, we ignore file-not-found and try to delete everything at the end.
-      return Terminal.error(errors.noSuchFile(target), stdIO);
+      return Terminal.error(errors.noSuchFile(target));
     }
     files.push(file);
   }
@@ -121,9 +120,9 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
 
     for (const report of reports) {
       if (report.result.res) {
-        Terminal.success(`Deleted: ${report.target}`, stdIO);
+        Terminal.success(`Deleted: ${report.target}`);
       } else {
-        Terminal.error(errors.deleteFailed(report.target, report.result.msg), stdIO);
+        Terminal.error(errors.deleteFailed(report.target, report.result.msg));
       }
     }
   };

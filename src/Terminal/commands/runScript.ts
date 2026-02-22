@@ -10,15 +10,12 @@ import { sendDeprecationNotice } from "./common/deprecation";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 import { pluralize } from "../../utils/I18nUtils";
-import { RunningScript } from "../../Script/RunningScript";
-import { StdIO } from "../StdIO/StdIO";
 
 export function runScript(
   scriptPath: ScriptFilePath,
   commandArgs: (string | number | boolean)[],
   server: BaseServer,
-  stdIO: StdIO,
-): RunningScript | undefined {
+): void {
   if (isLegacyScript(scriptPath)) {
     sendDeprecationNotice();
     return;
@@ -38,20 +35,18 @@ export function runScript(
       argv: commandArgs,
     });
   } catch (error) {
-    Terminal.error(`Invalid arguments. ${error}.`, stdIO);
+    Terminal.error(`Invalid arguments. ${error}.`);
     return;
   }
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : undefined;
   if (!isPositiveInteger(numThreads)) {
-    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0", stdIO);
-    return;
+    return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
   }
   if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
     Terminal.error(
       `Invalid ram override specified. Ram override must be a number greater than ${RamCostConstants.Base}`,
-      stdIO,
     );
     return;
   }
@@ -67,7 +62,7 @@ export function runScript(
     args,
   );
   if (!result.success) {
-    Terminal.error(result.message, stdIO);
+    Terminal.error(result.message);
     return;
   }
 
@@ -77,11 +72,11 @@ export function runScript(
 
   const success = startWorkerScript(runningScript, server);
   if (!success) {
-    Terminal.error(`Failed to start script`, stdIO);
+    Terminal.error(`Failed to start script`);
     return;
   }
 
-  Terminal.printAndBypassPipes(
+  Terminal.print(
     `Running script with ${pluralize(numThreads, "thread")}, pid ${runningScript.pid} and args: ${JSON.stringify(
       args,
     )}.`,
@@ -89,17 +84,5 @@ export function runScript(
   if (tailFlag) {
     LogBoxEvents.emit(runningScript);
   }
-
-  Terminal.pidOfLastScriptRun = runningScript.pid;
-
-  // Bind stdio to script
-  runningScript.stdin = stdIO.stdin?.deref() ?? null;
-  runningScript.terminalStdOut = stdIO;
-
-  // scripts interacting with terminal pipes are temporary, to avoid orphaned or partial pipelines on start
-  if (runningScript.stdin || stdIO.stdout) {
-    runningScript.temporary = true;
-  }
-
-  return runningScript;
+  return;
 }
