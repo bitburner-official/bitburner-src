@@ -48,8 +48,8 @@ already been reported as an [Issue](https://github.com/bitburner-official/bitbur
 ## As a Developer
 
 Anyone is welcome to contribute to Bitburner code. However, please read
-the [license](https://github.com/bitburner-official/bitburner-src/blob/dev/license.txt)
-and the [readme](https://github.com/bitburner-official/bitburner-src/blob/dev/README.md)
+the [license](./license.txt)
+and the [readme](./README.md)
 before doing so.
 
 To contribute to Bitburner code, you will need to have

@@ -7,7 +7,7 @@ import { SpecialServers } from "../Server/data/SpecialServers";
 import { Money } from "../ui/React/Money";
 import { DarkWebItem } from "./DarkWebItem";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
-import { StdIO } from "../Terminal/StdIO/StdIO";
+import type { StdIO } from "../Terminal/StdIO/StdIO";
 import { CompletedProgramName } from "@enums";
 import { getDarkscapeNavigator } from "../DarkNet/effects/effects";
 

@@ -526,7 +526,7 @@
 - (Corporation) Add a missing check on exportMaterial (@catloversg)
 - (Corporation) Add ns.corporation.sellDivision (@catloversg)
 - (Formulas) Add ns.formulas.hacking.growAmount (@d0sboots)
-- (Go) Some changes to the Go API, including some minor breaking changes. Please refer to the API documentation in the script editor or at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.go.md (@ficocelliguy)
+- (Go) Some changes to the Go API, including some minor breaking changes. Please refer to the [IPvGO API documentation](../../../../markdown/bitburner.go.md) (@ficocelliguy)
 - (Go) Added ns.go.analysis.getStats (@ficocelliguy)
 - (Go) Fix a bug that allowed facing secret opponent early or with wrong board size (@ficoccelliguy)
 - (Infiltration) More information is provided on ns.infiltration.getInfiltration (@catloversg)
@@ -1176,8 +1176,8 @@ GRAFTING:
 DOCUMENTATION
 
 - Many documentation updates (@Mughur, @d0sboots, @Snarling, @teauxfu).
-- Official non-markdown docs are at https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc
-- Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
+- Official dev version non-markdown docs are at https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc/en
+- Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
 - Official stable version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
 - Dev version documentation is now kept up to date as changes are made. (@Snarling)
 
@@ -1202,7 +1202,7 @@ Hotfix / bugfix:
 - Fixed an issue with sleeve HP calculation
 - Possible fix for MathJax "Typesetting Failed" errors
 - There was an issue with Corporations decaying their employees to 0 stats, even though the minimum was supposed to be 5. Moved the variable storing the min decay value to corporation constants, and raised it to 10.
-- Regenerated documentation at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md due to corporation changes related to min decay stats.
+- Regenerated [documentation](../../../../markdown/bitburner.ns.md) due to corporation changes related to min decay stats.
 - Faction XP was unintentionally providing 20x the experience gain as it did prior to v2.0. This caused faction work to exceed gym/university as the optimal way to gain experience. Values have been reduced to only about 2x what they were prior to v2.0, and they are no longer better than gym/university.
 - Fixed an issue where the overview skill bars could be displayed inaccurately based on player multipliers.
 

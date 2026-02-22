@@ -4,6 +4,7 @@ import { Settings } from "../../Settings/Settings";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
 import { openDocExternally } from "./Documentation";
+import { openDocumentationPopUp } from "../../Documentation/root";
 
 export function DocumentationLink(
   props: React.PropsWithChildren<
@@ -19,6 +20,10 @@ export function DocumentationLink(
       onClick={(event) => {
         if (event.ctrlKey) {
           openDocExternally(props.page);
+          return;
+        }
+        if (Router.page() === Page.BitVerse) {
+          openDocumentationPopUp(props.page);
           return;
         }
         Router.toPage(Page.Documentation, { docPage: props.page });

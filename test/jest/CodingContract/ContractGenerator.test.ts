@@ -215,10 +215,12 @@ describe("Check getAnswer and solver", () => {
     if (skippedContractTypes.includes(name)) {
       continue;
     }
-    const state = cct.generate();
-    const data = cct.getData ? cct.getData(state) : state;
-    const answer = cct.getAnswer(data);
-    expect(answer).not.toBeNull();
-    expect(cct.solver(state, answer)).toStrictEqual(true);
+    test(name, () => {
+      const state = cct.generate();
+      const data = cct.getData ? cct.getData(state) : state;
+      const answer = cct.getAnswer(data);
+      expect(answer).not.toBeNull();
+      expect(cct.solver(state, answer)).toStrictEqual(true);
+    });
   }
 });

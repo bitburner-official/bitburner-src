@@ -111,7 +111,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.0 development version: last updated 17 February 2026
+## v3.0.0 development version: last updated 18 February 2026
 
 ### BREAKING CHANGES
 
@@ -207,6 +207,8 @@ export const CONSTANTS = {
 - Improve help text of scp and run (#2493) (@catloversg)
 - Add option to disable minimap in script editor (#2504) (@catloversg)
 - Improve navigation system of in-game documentation viewer (#2499) (@catloversg)
+- Use font family setting when rendering MUI Link component (#2511) (@catloversg)
+- Show hints of BitNode documentation and allow opening it in BitVerse (#2513) (@catloversg)
 
 ### MISC
 
@@ -288,6 +290,7 @@ export const CONSTANTS = {
 - Expose ProgramName enum (#2492) (@catloversg)
 - More fixes and feedback in darknet (#2489) (@ficocelliguy)
 - Fix missed cases in offline server handling (#2495) (@d0sboots)
+- Adjust darknet balance from player feedback (#2512) (@ficocelliguy)
 
 ### DOCUMENTATION
 

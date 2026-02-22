@@ -30,6 +30,7 @@
 - [Hacking algorithms](programming/hackingalgorithms.md)
 - [IPvGO](programming/go_algorithms.md)
 - [Darkweb Network](programming/darknet.md)
+- [Terminal Pipes and Redirects](programming/terminal_pipes_and_redirects.md)
 - [List of factions and their requirements](advanced/faction_list.md)
 - [Offline scripts and bonus time](advanced/offlineandbonustime.md)
 - [BitNodes](advanced/bitnodes.md)
@@ -44,11 +45,10 @@
 - [Sleeves](advanced/sleeves.md)
 - [Grafting](advanced/grafting.md)
 - [Stanek's Gift](advanced/stanek.md)
-- [Terminal Pipes and Redirects](programming/terminal_pipes_and_redirects.md)
 
 ## Resources
 
-- [NS API documentation](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md)
+- [NS API documentation](../../../../markdown/bitburner.ns.md)
 - [Learn to program](programming/learn.md)
 - [Remote API](programming/remote_api.md)
 - [Game frozen or stuck?](programming/game_frozen.md)
