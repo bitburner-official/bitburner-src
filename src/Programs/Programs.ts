@@ -16,7 +16,7 @@ import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 import { handleStormSeed } from "../DarkNet/effects/webstorm";
 import { clampNumber } from "../utils/helpers/clampNumber";
-import { StdIO } from "../Terminal/StdIO/StdIO";
+import type { StdIO } from "../Terminal/StdIO/StdIO";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -34,7 +34,7 @@ function bitFlumeRequirements() {
   };
 }
 
-function warnIfNonArgProgramIsRunWithArgs(name: CompletedProgramName, args: string[]): void {
+function warnIfNonArgProgramIsRunWithArgs(name: CompletedProgramName, args: string[], stdIO: StdIO): void {
   if (args.length === 0) {
     return;
   }
@@ -42,6 +42,7 @@ function warnIfNonArgProgramIsRunWithArgs(name: CompletedProgramName, args: stri
     `You are running ${name} with arguments, but ${name} does not accept arguments. These arguments will be ignored. ` +
       `${name} only affects the server ('${Player.currentServer}') that you are connecting via the terminal. ` +
       "If you want to pass the target's hostname as an argument, you have to use the respective NS API.",
+    stdIO,
   );
 }
 
@@ -56,7 +57,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPerFiveMinutes,
     },
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
-      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.nuke, args);
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.nuke, args, stdIO);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot nuke this kind of server.", stdIO);
         return;
@@ -86,7 +87,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPerFiveMinutes * 2,
     },
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
-      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.bruteSsh, args);
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.bruteSsh, args, stdIO);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run BruteSSH.exe on this kind of server.", stdIO);
         return;
@@ -111,7 +112,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPerHalfHour,
     },
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
-      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.ftpCrack, args);
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.ftpCrack, args, stdIO);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run FTPCrack.exe on this kind of server.", stdIO);
         return;
@@ -136,7 +137,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPer2Hours,
     },
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
-      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.relaySmtp, args);
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.relaySmtp, args, stdIO);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run relaySMTP.exe on this kind of server.", stdIO);
         return;
@@ -161,7 +162,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPer4Hours,
     },
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
-      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.httpWorm, args);
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.httpWorm, args, stdIO);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run HTTPWorm.exe on this kind of server.", stdIO);
         return;
@@ -186,7 +187,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPer8Hours,
     },
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
-      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.sqlInject, args);
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.sqlInject, args, stdIO);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run SQLInject.exe on this kind of server.", stdIO);
         return;
@@ -358,13 +359,15 @@ export const Programs: Record<CompletedProgramName, Program> = {
   [CompletedProgramName.darkscape]: new Program({
     name: CompletedProgramName.darkscape,
     create: null,
-    run: (): void => {
-      Terminal.print("This program gives access to the dark net.");
+    run: (__, ___, stdIO: StdIO): void => {
+      Terminal.print("This program gives access to the dark net.", stdIO);
       Terminal.print(
         "The dark net is an unstable, constantly shifting network of servers that are only connected to the normal network through the darkweb server.",
+        stdIO,
       );
       Terminal.print(
         "This network can be accessed using the `ns.dnet` api functions, or the DarkNet UI on the left-hand panel.",
+        stdIO,
       );
     },
   }),
@@ -372,8 +375,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
     name: CompletedProgramName.stormSeed,
     nsMethod: "dnet.unleashStormSeed",
     create: null,
-    run: (): void => {
-      Terminal.print("You can feel a storm approaching...");
+    run: (__, ___, stdIO: StdIO): void => {
+      Terminal.print("You can feel a storm approaching...", stdIO);
       const connectedServer = Player.getCurrentServer();
       handleStormSeed(connectedServer);
     },

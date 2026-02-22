@@ -1,7 +1,7 @@
 import type { CompletedProgramName } from "@enums";
 import { ProgramFilePath, asProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
-import { StdIO } from "../Terminal/StdIO/StdIO";
+import type { StdIO } from "../Terminal/StdIO/StdIO";
 
 export interface IProgramCreate {
   level: number;
