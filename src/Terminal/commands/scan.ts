@@ -2,11 +2,10 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { getServerOnNetwork } from "../../Server/ServerHelpers";
 import { IPAddress } from "../../Types/strings";
-import { StdIO } from "../StdIO/StdIO";
 
-export function scan(args: (string | number | boolean)[], currServ: BaseServer, stdIO: StdIO): void {
+export function scan(args: (string | number | boolean)[], currServ: BaseServer): void {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of scan command. Usage: scan", stdIO);
+    Terminal.error("Incorrect usage of scan command. Usage: scan");
     return;
   }
   // Displays available network connections using TCP
@@ -33,6 +32,6 @@ export function scan(args: (string | number | boolean)[], currServ: BaseServer, 
     entry += server.ip;
     entry += " ".repeat(maxIP - server.ip.length + 1);
     entry += server.hasRoot;
-    Terminal.print(entry, stdIO);
+    Terminal.print(entry);
   }
 }

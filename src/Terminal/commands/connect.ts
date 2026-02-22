@@ -3,12 +3,11 @@ import { BaseServer } from "../../Server/BaseServer";
 import { getServerOnNetwork } from "../../Server/ServerHelpers";
 import { GetServer } from "../../Server/AllServers";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
-import { StdIO } from "../StdIO/StdIO";
 
-export function connect(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function connect(args: (string | number | boolean)[], server: BaseServer): void {
   // Disconnect from current server in Terminal and connect to new one
   if (args.length !== 1) {
-    Terminal.error("Incorrect usage of connect command. Usage: connect [hostname]", stdIO);
+    Terminal.error("Incorrect usage of connect command. Usage: connect [hostname]");
     return;
   }
 
@@ -16,7 +15,7 @@ export function connect(args: (string | number | boolean)[], server: BaseServer,
 
   const target = GetServer(hostname);
   if (target === null) {
-    Terminal.error(`Invalid hostname: '${hostname}'`, stdIO);
+    Terminal.error(`Invalid hostname: '${hostname}'`);
     return;
   }
 
@@ -48,6 +47,5 @@ export function connect(args: (string | number | boolean)[], server: BaseServer,
 
   Terminal.error(
     `Cannot directly connect to ${hostname}. Make sure the server is backdoored or adjacent to your current server`,
-    stdIO,
   );
 }
