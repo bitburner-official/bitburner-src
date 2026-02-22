@@ -664,6 +664,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   tprintRaw: 0,
   printRaw: 0,
   dynamicImport: 0,
+  getStdin: 0,
 
   formulas: {
     mockServer: 0,

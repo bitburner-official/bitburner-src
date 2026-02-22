@@ -112,6 +112,7 @@ import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { checkDarknetServer } from "./DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
+import { PortHandle } from "./NetscriptPort";
 import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
@@ -427,47 +428,49 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
       }
       const str = helpers.argsToString(args);
+      const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
         Terminal.error(`${ctx.workerScript.name}: ${str}`);
         return;
       }
       if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${ctx.workerScript.name}: ${str}`);
+        Terminal.success(`${ctx.workerScript.name}: ${str}`, stdOut);
         return;
       }
       if (str.startsWith("WARN")) {
-        Terminal.warn(`${ctx.workerScript.name}: ${str}`);
+        Terminal.warn(`${ctx.workerScript.name}: ${str}`, stdOut);
         return;
       }
       if (str.startsWith("INFO")) {
-        Terminal.info(`${ctx.workerScript.name}: ${str}`);
+        Terminal.info(`${ctx.workerScript.name}: ${str}`, stdOut);
         return;
       }
-      Terminal.print(`${ctx.workerScript.name}: ${str}`);
+      Terminal.print(`${ctx.workerScript.name}: ${str}`, stdOut);
     },
   tprintf:
     (ctx) =>
     (_format, ...args) => {
       const format = helpers.string(ctx, "format", _format);
       const str = vsprintf(format, args);
+      const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
 
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
         Terminal.error(`${str}`);
         return;
       }
       if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${str}`);
+        Terminal.success(`${str}`, stdOut);
         return;
       }
       if (str.startsWith("WARN")) {
-        Terminal.warn(`${str}`);
+        Terminal.warn(`${str}`, stdOut);
         return;
       }
       if (str.startsWith("INFO")) {
-        Terminal.info(`${str}`);
+        Terminal.info(`${str}`, stdOut);
         return;
       }
-      Terminal.print(`${str}`);
+      Terminal.print(`${str}`, stdOut);
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
@@ -1507,8 +1510,8 @@ export const ns: InternalAPI<NSFull> = {
     const name = helpers.string(ctx, "name", _name);
     return getRamCost(name.split("."), true);
   },
-  tprintRaw: () => (value) => {
-    Terminal.printRaw(wrapUserNode(value));
+  tprintRaw: (ctx) => (value) => {
+    Terminal.printRaw(wrapUserNode(value), ctx.workerScript.scriptRef.terminalStdOut);
   },
   printRaw: (ctx) => (value) => {
     ctx.workerScript.print(wrapUserNode(value));
@@ -1523,6 +1526,10 @@ export const ns: InternalAPI<NSFull> = {
     //We validated the path as ScriptFilePath and made sure script is not null
     //Script **must** be a script at this point
     return compile(script as Script, server.scripts);
+  },
+  getStdin: (ctx) => () => {
+    const stdinHandle = ctx.workerScript.scriptRef.stdin?.handle;
+    return stdinHandle ? new PortHandle(stdinHandle.n) : null;
   },
   flags: Flags,
   heart: { break: () => () => Player.karma },

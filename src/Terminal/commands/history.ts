@@ -1,10 +1,12 @@
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
+import { BaseServer } from "../../Server/BaseServer";
+import { StdIO } from "../StdIO/StdIO";
 
-export function history(args: (string | number | boolean)[]): void {
+export function history(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length === 0) {
     Terminal.commandHistory.forEach((command, index) => {
-      Terminal.print(`${index.toString().padStart(2)} ${command}`);
+      Terminal.print(`${index.toString().padStart(2)} ${command}`, stdIO);
     });
     return;
   }
@@ -14,6 +16,6 @@ export function history(args: (string | number | boolean)[]): void {
     Terminal.commandHistory = [];
     Terminal.commandHistoryIndex = 1;
   } else {
-    Terminal.error("Incorrect usage of history command. usage: history [-c]");
+    Terminal.error("Incorrect usage of history command. usage: history [-c]", stdIO);
   }
 }

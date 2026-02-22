@@ -28,6 +28,9 @@
 ## Advanced Mechanics
 
 - [Hacking algorithms](programming/hackingalgorithms.md)
+- [IPvGO](programming/go_algorithms.md)
+- [Darkweb Network](programming/darknet.md)
+- [Terminal Pipes and Redirects](programming/terminal_pipes_and_redirects.md)
 - [List of factions and their requirements](advanced/faction_list.md)
 - [Offline scripts and bonus time](advanced/offlineandbonustime.md)
 - [BitNodes](advanced/bitnodes.md)
@@ -42,8 +45,6 @@
 - [Sleeves](advanced/sleeves.md)
 - [Grafting](advanced/grafting.md)
 - [Stanek's Gift](advanced/stanek.md)
-- [IPvGO](programming/go_algorithms.md)
-- [Darkweb Network](programming/darknet.md)
 
 ## Resources
 

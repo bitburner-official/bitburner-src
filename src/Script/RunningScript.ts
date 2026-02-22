@@ -19,6 +19,10 @@ import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
+import { StdIO } from "../Terminal/StdIO/StdIO";
+import { IOStream } from "../Terminal/StdIO/IOStream";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
+
 export class RunningScript {
   // Script arguments
   args: ScriptArg[] = [];
@@ -70,8 +74,16 @@ export class RunningScript {
   // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
   scriptKey = "" as ScriptKey;
 
+  stdin: IOStream | null = null;
+
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
+
+  // Configuration for piping the script's tail output
+  tailStdOut: StdIO | null = null;
+
+  // Configuration for piping the script's terminal output
+  terminalStdOut: StdIO = getTerminalStdIO(null);
 
   // The title, as shown in the script's log box. Defaults to the name + args,
   // but can be changed by the user. If it is set to a React element (only by the user),
@@ -111,14 +123,16 @@ export class RunningScript {
 
     this.logs.push(logEntry);
     this.logUpd = true;
+
+    this.tailStdOut?.write?.(logEntry);
   }
 
-  displayLog(): void {
+  displayLog(stdIO: StdIO): void {
     for (const log of this.logs) {
       if (typeof log === "string") {
-        Terminal.print(log);
+        Terminal.print(log, stdIO);
       } else {
-        Terminal.printRaw(log);
+        Terminal.printRaw(log, stdIO);
       }
     }
   }

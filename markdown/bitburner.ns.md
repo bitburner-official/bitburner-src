@@ -1054,6 +1054,23 @@ Share power has a multiplicative effect on rep/second while doing work for a fac
 </td></tr>
 <tr><td>
 
+[getStdin()](./bitburner.ns.getstdin.md)
+
+
+</td><td>
+
+Retrieves the NetscriptPort handle used to get input piped to the script. Examples:
+
+If a script was run with data piped into it via the terminal: `echo input1 | run myScript.js`
+
+then `ns.getStdin().read()` inside `myScript.js` would return `"input1"`<!-- -->.
+
+If more data is added later (for example, if one script's terminal is piped to another script), then the script can read that data from `ns.getStdin()` as well. `await ns.getStdin().nextPortWrite()` can be used to wait until new data is available to read.
+
+
+</td></tr>
+<tr><td>
+
 [getTotalScriptExpGain()](./bitburner.ns.gettotalscriptexpgain.md)
 
 

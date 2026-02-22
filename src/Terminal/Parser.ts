@@ -1,11 +1,15 @@
 import { trimQuotes } from "../utils/helpers/string";
 import { substituteAliases } from "../Alias";
+import { Terminal } from "../Terminal";
 // Helper function to parse individual arguments into number/boolean/string as appropriate
 function parseArg(arg: string): string | number | boolean {
   if (arg === "true") return true;
   if (arg === "false") return false;
   const argAsNumber = Number(arg);
   if (!isNaN(argAsNumber)) return argAsNumber;
+  if (arg === "$!") {
+    return Terminal.pidOfLastScriptRun ?? -1;
+  }
   return trimQuotes(arg);
 }
 

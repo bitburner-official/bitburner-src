@@ -16,13 +16,19 @@ import { Terminal } from "../Terminal";
 import { parseUnknownError } from "../utils/ErrorHelper";
 import { DarknetServer } from "../Server/DarknetServer";
 import { CompletedProgramName } from "@enums";
+import { getCommandAfterLastPipe } from "./StdIO/utils";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
  * @param baseDir The current working directory.
  * @returns Array of possible string replacements for the current text being autocompleted.
  */
-export async function getTabCompletionPossibilities(terminalText: string, baseDir = root): Promise<string[]> {
+export async function getTabCompletionPossibilities(fullTerminalText: string, baseDir = root): Promise<string[]> {
+  // Get the text in the terminal after the most recent pipe character
+  const terminalText = getCommandAfterLastPipe(fullTerminalText);
+  // True if there is a pipe in the terminal text
+  const isInPipe = fullTerminalText !== terminalText;
+
   // Get the current command text
   const currentText = /[^ ]*$/.exec(terminalText)?.[0] ?? "";
   // Remove the current text from the commands string
@@ -75,9 +81,10 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   function addGeneric({ iterable, usePathing, ignoreCurrent }: AddAllGenericOptions) {
     const requiredStart = usePathing ? pathingRequiredMatch : requiredMatch;
     for (const member of iterable) {
-      if (ignoreCurrent && member.length <= requiredStart.length) continue;
+      const itemToAdd = usePathing ? relativeDir + member.substring(baseDir.length) : member;
+      if ((ignoreCurrent && member.length <= requiredStart.length) || possibilities.includes(itemToAdd)) continue;
       if (member.toLowerCase().startsWith(requiredStart)) {
-        possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+        possibilities.push(itemToAdd);
       }
     }
   }
@@ -163,7 +170,6 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       addCodingContracts();
     }
   }
-
   switch (commandArray[0]) {
     case "buy":
       addDarkwebItems();
@@ -266,6 +272,14 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         const options = await scriptAutocomplete();
         if (options) {
           addGeneric({ iterable: options, usePathing: false });
+        }
+      } else {
+        // Add script names if you are in a command - scripts can be run by name
+        addScripts();
+
+        // Include text files if the command is part of a pipe
+        if (isInPipe) {
+          addTextFiles();
         }
       }
       return possibilities;
