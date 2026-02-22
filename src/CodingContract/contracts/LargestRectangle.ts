@@ -7,8 +7,8 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
     desc: (data: number[][]): string => {
       let gridString = "";
       for (let i = 0; i < data.length; i++) {
-        let start = i == 0 ? '[' : ' '
-        let end = i == data.length - 1 ? ']' : ','
+        const start = i == 0 ? "[" : " ";
+        const end = i == data.length - 1 ? "]" : ",";
         gridString += `${start}[${data[i]}]${end}\n`;
       }
       return [
@@ -77,23 +77,23 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
       let maxU = 0;
       let maxD = 0;
       for (let i = 0; i < histograms.length; i++) {
-        for (let j = 0; j < histograms[0].length; j++) {
-          if (histograms[i][j] > 0) {
-            let left = j;
-            let right = j;
-            while (histograms[i]?.[left - 1] >= histograms[i][j]) {
-              left--;
-            }
-            while (histograms[i]?.[right + 1] >= histograms[i][j]) {
-              right++;
-            }
-            if ((right - left + 1) * histograms[i][j] > maxArea) {
-              maxArea = (right - left + 1) * histograms[i][j];
-              maxL = left;
-              maxR = right;
-              maxU = i - histograms[i][j] + 1;
-              maxD = i;
-            }
+        const row = histograms[i];
+        for (let j = 0; j < row.length; j++) {
+          if (row[j] != 0) continue;
+          let left = j;
+          let right = j;
+          while (row[left - 1] >= row[j]) {
+            left--;
+          }
+          while (row[right + 1] >= row[j]) {
+            right++;
+          }
+          if ((right - left + 1) * row[j] > maxArea) {
+            maxArea = (right - left + 1) * row[j];
+            maxL = left;
+            maxR = right;
+            maxU = i - histograms[i][j] + 1;
+            maxD = i;
           }
         }
       }
@@ -137,19 +137,19 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
       }
       let maxArea = 0;
       for (let i = 0; i < histograms.length; i++) {
-        for (let j = 0; j < histograms[0].length; j++) {
-          if (histograms[i][j] > 0) {
-            let left = j;
-            let right = j;
-            while (histograms[i]?.[left - 1] >= histograms[i][j]) {
-              left--;
-            }
-            while (histograms[i]?.[right + 1] >= histograms[i][j]) {
-              right++;
-            }
-            if ((right - left + 1) * histograms[i][j] > maxArea) {
-              maxArea = (right - left + 1) * histograms[i][j];
-            }
+        const row = histograms[i];
+        for (let j = 0; j < row.length; j++) {
+          if (row[j] != 0) continue;
+          let left = j;
+          let right = j;
+          while (row[left - 1] >= row[j]) {
+            left--;
+          }
+          while (row[right + 1] >= row[j]) {
+            right++;
+          }
+          if ((right - left + 1) * row[j] > maxArea) {
+            maxArea = (right - left + 1) * row[j];
           }
         }
       }
