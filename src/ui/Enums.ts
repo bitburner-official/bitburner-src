@@ -12,6 +12,7 @@ export enum ToastVariant {
  * transition to. You can use setPage() with these.
  */
 export enum SimplePage {
+  LoadingScreen = "Loading Screen",
   ActiveScripts = "Active Scripts",
   RecentlyKilledScripts = "Recently Killed Scripts",
   RecentErrors = "Recent Errors",
@@ -53,5 +54,4 @@ export enum ComplexPage {
   Location = "Location",
   ImportSave = "Import Save",
   Documentation = "Documentation",
-  LoadingScreen = "Loading Screen", // Has no PageContext, and thus toPage() cannot be used
 }

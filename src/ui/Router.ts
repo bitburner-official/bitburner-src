@@ -34,7 +34,6 @@ export type PageWithContext =
   | ({ page: ComplexPage.Location } & PageContext<ComplexPage.Location>)
   | ({ page: ComplexPage.ImportSave } & PageContext<ComplexPage.ImportSave>)
   | ({ page: ComplexPage.Documentation } & PageContext<ComplexPage.Documentation>)
-  | { page: ComplexPage.LoadingScreen }
   | { page: SimplePage };
 
 export interface ScriptEditorRouteOptions {
