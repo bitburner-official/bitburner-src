@@ -125,38 +125,6 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
         }
       }
 
-      const histograms = Array.from({ length: state.length }, () => Array<number>(state[0].length).fill(0));
-      for (let i = 0; i < state.length; i++) {
-        let count = 0;
-        for (let j = 0; j < state.length; j++) {
-          if (state[j][i] == 0) {
-            count++;
-          } else {
-            count = 0;
-          }
-          histograms[j][i] = count;
-        }
-      }
-      let maxArea = 0;
-      for (let i = 0; i < histograms.length; i++) {
-        const row = histograms[i];
-        for (let j = 0; j < row.length; j++) {
-          if (row[j] != 0) continue;
-          let left = j;
-          let right = j;
-          //if the index is -1/row.length (out of bounds), it will return undefined, that when compared to a number also returns false
-          while (row[left - 1] >= row[j]) {
-            left--;
-          }
-          while (row[right + 1] >= row[j]) {
-            right++;
-          }
-          if ((right - left + 1) * row[j] > maxArea) {
-            maxArea = (right - left + 1) * row[j];
-          }
-        }
-      }
-
       const solution = largestRectangle[CodingContractName.LargestRectangleInAMatrix].getAnswer(state);
 
       const userArea = (maxR - minR + 1) * (maxC - minC + 1);
