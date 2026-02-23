@@ -54,13 +54,6 @@ Answer: [[0,0],[3,1]]
 
       for (let r = 0; r < numRows; ++r) {
         for (let c = 0; c < numColumns; ++c) {
-          if (r === 0 && c === 0) {
-            continue;
-          }
-          if (r === numRows - 1 && c === numColumns - 1) {
-            continue;
-          }
-
           // 15% chance of an element being an obstacle
           if (Math.random() < 0.15) {
             grid[r][c] = 1;
