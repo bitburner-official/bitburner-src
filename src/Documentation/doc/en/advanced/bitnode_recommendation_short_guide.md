@@ -41,8 +41,8 @@ BN6 introduces the [Bladeburner](bladeburners.md) mechanic and its corresponding
 Bladeburner is an alternative method to beat BitNodes which doesn't rely on money or hacking skill.
 [Sleeves](sleeves.md) help complete BN6 more quickly since they can share some Bladeburner tasks with the player but aren't a requirement.
 
-BN7 unlocks Bladeburner and gives access to the Bladeburner APIs like BN6, but it's a bit harder than BN6 while giving more Bladeburner-specific rewards.
-Source-File 7 buffs Bladeburner's multipliers, and Source-File 7.3 gives free access to an augmentation that lets you perform Bladeburner and non-Bladeburner actions at the same time.
+BN7 also unlocks Bladeburner like BN6, but it's a bit harder than BN6 while giving more Bladeburner-specific rewards,
+such as an augmentation that lets you perform Bladeburner and non-Bladeburner actions at the same time.
 
 BN10 unlocks two new mechanics: [Sleeves](sleeves.md) and [Grafting](grafting.md).
 [Sleeves](sleeves.md) act as additional players and can perform tasks like studying, training, committing crime and working for factions independently of the player.
