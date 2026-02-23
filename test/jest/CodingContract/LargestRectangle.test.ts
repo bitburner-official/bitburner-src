@@ -1,17 +1,19 @@
 import { CodingContractName } from "../../../src/Enums";
-import { largestRectangle } from "../../../src/CodingContract/contracts/LargestRectangle.ts";
+import { largestRectangle } from "../../../src/CodingContract/contracts/LargestRectangle";
 
 const contract = largestRectangle[CodingContractName.LargestRectangleInAMatrix];
 
 describe("LargestRectangle", () => {
   test("empty matrix", () => {
-    const data = Array.from({ length: 5 }, () => Array<number>(3).fill(0));
+    const data = Array.from({ length: 5 }, () => Array<0>(3).fill(0));
     expect(contract.desc(data)).toContain(`
-[[0,0,0],
- [0,0,0],
- [0,0,0],
- [0,0,0],
- [0,0,0]]
+[
+  [0,0,0],
+  [0,0,0],
+  [0,0,0],
+  [0,0,0],
+  [0,0,0]
+]
 `);
     expect(contract.getAnswer(data)).toEqual([
       [0, 0],
@@ -56,14 +58,16 @@ describe("LargestRectangle", () => {
   });
 
   test("single one", () => {
-    const data = Array.from({ length: 5 }, () => Array<number>(5).fill(0));
+    const data = Array.from({ length: 5 }, () => Array<0 | 1>(5).fill(0));
     data[1][1] = 1;
     expect(contract.desc(data)).toContain(`
-[[0,0,0,0,0],
- [0,1,0,0,0],
- [0,0,0,0,0],
- [0,0,0,0,0],
- [0,0,0,0,0]]
+[
+  [0,0,0,0,0],
+  [0,1,0,0,0],
+  [0,0,0,0,0],
+  [0,0,0,0,0],
+  [0,0,0,0,0]
+]
 `);
     expect(contract.getAnswer(data)).toEqual([
       [2, 0],
@@ -119,10 +123,12 @@ describe("LargestRectangle", () => {
     ).toBe(false);
   });
   test("single zero", () => {
-    const data = Array.from({ length: 1 }, () => Array<number>(8).fill(1));
+    const data = Array.from({ length: 1 }, () => Array<0 | 1>(8).fill(1));
     data[0][3] = 0;
     expect(contract.desc(data)).toContain(`
-[[1,1,1,0,1,1,1,1]]
+[
+  [1,1,1,0,1,1,1,1]
+]
 `);
     expect(contract.getAnswer(data)).toEqual([
       [0, 3],
