@@ -1,3 +1,4 @@
+//import { ro, tr } from "date-fns/locale"; idk why this was added
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes } from "../ContractTypes";
@@ -60,6 +61,11 @@ Answer: [[0,0],[3,1]]
           }
         }
       }
+
+      // in case of 1 in ~2e188 avrg chance that all cells end up being a 1
+      const r = getRandomIntInclusive(0, grid.length - 1);
+      const c = getRandomIntInclusive(0, grid[0].length - 1);
+      grid[r][c] = 0;
 
       return grid;
     },
