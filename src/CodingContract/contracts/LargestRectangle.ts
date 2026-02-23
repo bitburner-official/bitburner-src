@@ -153,19 +153,19 @@ Answer: [[0,0],[3,1]]
       return userArea === (solution[1][0] - solution[0][0] + 1) * (solution[1][1] - solution[0][1] + 1);
     },
     convertAnswer: (ans) => {
-      const parsed = JSON.parse(ans) as unknown;
-      if (!Array.isArray(parsed)) return null;
-      if (parsed.length !== 2) return null;
-      if (
-        parsed.some(
-          (arr: unknown) => !Array.isArray(arr) || arr.length !== 2 || arr.some((v: unknown) => typeof v !== "number"),
-        )
-      )
+      let parsedAnswer: unknown;
+      try {
+        parsedAnswer = JSON.parse(ans);
+      } catch (error) {
+        console.error("Invalid answer:", error);
         return null;
-      return parsed as [[number, number], [number, number]];
+      }
+      if (!largestRectangle[CodingContractName.LargestRectangleInAMatrix].validateAnswer(parsedAnswer)) {
+        return null;
+      }
+      return parsedAnswer;
     },
     validateAnswer: (ans): ans is [[number, number], [number, number]] =>
-      typeof ans === "object" &&
       Array.isArray(ans) &&
       ans.length === 2 &&
       ans.every((a) => Array.isArray(a) && a.length === 2 && a.every((n) => typeof n === "number")),
