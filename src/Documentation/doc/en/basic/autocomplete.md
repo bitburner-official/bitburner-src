@@ -29,7 +29,7 @@ Running this script from the terminal like `run script.js` or `./script.js` and 
 
 ## AutocompleteData
 
-To make this feature more useful, an [AutocompleteData](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.autocompletedata.md) object is provided to the autocomplete function that holds information commonly passed as arguments to scripts, such as server names and filenames.
+To make this feature more useful, an [AutocompleteData](../../../../../markdown/bitburner.autocompletedata.md) object is provided to the autocomplete function that holds information commonly passed as arguments to scripts, such as server names and filenames.
 
 AutocompleteData is an object with the following properties;
 

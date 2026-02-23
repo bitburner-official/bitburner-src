@@ -1895,6 +1895,20 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       prereqs: [AugmentationName.TheBoots],
       factions: [],
     },
+    [AugmentationName.TheStaff]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info:
+        "This skeletal augmentation greatly enhances the users durability and health. Inspired by the original Staff of Medicine that is said to " +
+        "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. ",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma xp by 20% and defense by 30%.",
+      charisma_exp: 1.2,
+      defense: 1.3,
+      isSpecial: true,
+      prereqs: [AugmentationName.TheHammer],
+      factions: [],
+    },
     [AugmentationName.TheLaw]: {
       repCost: 1e4,
       moneyCost: 1e6,
@@ -1908,7 +1922,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacking: 1.1,
       company_rep: 1.05,
       isSpecial: true,
-      prereqs: [AugmentationName.TheHammer],
+      prereqs: [AugmentationName.TheStaff],
       factions: [],
     },
     [AugmentationName.TheSword]: {

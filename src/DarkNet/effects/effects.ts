@@ -41,12 +41,11 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
   server.hasAdminRights = true;
   addClue(server);
 
-  // TODO: balance coding contract chance
-  if (Math.random() < 0.1 && server.difficulty > 2) {
+  const cctChance = Math.min(0.12, 0.02 * (server.difficulty - 1));
+  if (Math.random() < cctChance) {
     generateContract({ server: server.hostname });
   }
 
-  // TODO: balance cache chance
   const chance = 0.1 * 1.05 ** server?.difficulty;
   if (Math.random() < chance && !isLabyrinthServer(server.hostname)) {
     addCacheToServer(server);
@@ -79,10 +78,9 @@ export const calculateAuthenticationTime = (
 
   const threadsFactor = 1 / (1 + 0.2 * (threads - 1));
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
-  const noobFactor = Math.min(0.5 + difficulty / 4, 1);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
-  const underleveledFactor =
-    person.skills.charisma >= chaRequired ? 1 : 1.5 + (chaRequired + 50) / (person.skills.charisma + 50);
+  const applyUnderleveledFactor = person.skills.charisma <= chaRequired && darknetServerData.depth > 1;
+  const underleveledFactor = applyUnderleveledFactor ? 1.5 + (chaRequired + 50) / (person.skills.charisma + 50) : 1;
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
   const hasSf15_2Factor = Player.activeSourceFileLvl(15) > 2 ? 0.8 : 1;
   const bonusTimeFactor = hasDarknetBonusTime() ? 0.75 : 1;
@@ -90,7 +88,6 @@ export const calculateAuthenticationTime = (
   const time =
     baseTime *
     skillFactor *
-    noobFactor *
     backdoorFactor *
     underleveledFactor *
     hasBootsFactor *
@@ -233,7 +230,8 @@ export const scaleDarknetVolatilityIncreases = (scalar: number) => {
 export const getStasisLinkLimit = (): number => {
   const brokenWingLimitIncrease = Player.hasAugmentation(AugmentationName.TheBrokenWings) ? 1 : 0;
   const hammerLimitIncrease = Player.hasAugmentation(AugmentationName.TheHammer) ? 1 : 0;
-  return 1 + brokenWingLimitIncrease + hammerLimitIncrease;
+  const staffLimitIncrease = Player.hasAugmentation(AugmentationName.TheStaff) ? 1 : 0;
+  return 1 + brokenWingLimitIncrease + hammerLimitIncrease + staffLimitIncrease;
 };
 
 export const getSetStasisLinkDuration = (): number => {

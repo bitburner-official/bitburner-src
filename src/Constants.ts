@@ -7,7 +7,7 @@ export const CONSTANTS = {
   VersionString: "3.0.0dev",
   isDevBranch: true,
   isInTestEnvironment: globalThis.process?.env?.JEST_WORKER_ID !== undefined,
-  VersionNumber: 45,
+  VersionNumber: 46,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -104,14 +104,14 @@ export const CONSTANTS = {
   EntropyEffect: 0.98,
 
   // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
-  Donations: 212,
+  Donations: 262,
 
   // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.0 development version: last updated 1 February 2026
+## v3.0.0 development version: last updated 18 February 2026
 
 ### BREAKING CHANGES
 
@@ -138,12 +138,15 @@ export const CONSTANTS = {
 - Move and rename purchased server functions to cloud API (#2367) (@gmcew)
 - Fix: Coding contracts may have duplicate names (#2399) (@aaaa-imcute)
 - Generate test contracts on executing host by default. Add support for optional parameter to specify the server (#2417) (@1337JiveTurkey)
+- The "darkweb" server becomes a darknet server (Check new Dark Net feature in #2139) (@ficocelliguy)
+- Remove RAM cost of hacknet namespace and set RAM cost of each hacknet API (#2502) (@catloversg)
 
 ### MAJOR CHANGES
 
 - Balance change: IPvGO: Improve favor gain from wins to balance around the rep value of favor (#2131) (@ficocelliguy)
 - Search and read NS API docs in editor tab and documentation tab (#2163) (@catloversg)
 - Balance change: Infiltration: Rebalance rewards, add min stat requirement, add market demand (#2210) (@ficocelliguy, @d0sboots, @catloversg)
+- Add Dark Net (#2139) (@ficocelliguy)
 
 ### UI
 
@@ -197,6 +200,15 @@ export const CONSTANTS = {
 - Display contract answers on completely failed contracts (#2440) (@TheCleric)
 - Remove BitNode's difficulty in BitNode selection popup (#2454) (@catloversg)
 - Add settings to change currency symbol and whether to show it after money value (#2453) (@kaoticengineering)
+- Fix: Monaco shows wrong TSDoc of APIs that have "export" word (#2473) (@catloversg)
+- Show karma in Stats page and explain what it is in documentation (#2475) (@catloversg)
+- Update icon of DARKNET_BACKDOOR and DARKNET_DEPTHS achievements (#2480) (@catloversg)
+- Update incorrect ps command shown in help (#2484) (@Groot-0909)
+- Improve help text of scp and run (#2493) (@catloversg)
+- Add option to disable minimap in script editor (#2504) (@catloversg)
+- Improve navigation system of in-game documentation viewer (#2499) (@catloversg)
+- Use font family setting when rendering MUI Link component (#2511) (@catloversg)
+- Show hints of BitNode documentation and allow opening it in BitVerse (#2513) (@catloversg)
 
 ### MISC
 
@@ -218,7 +230,7 @@ export const CONSTANTS = {
 - Add "Total Number of Primes" contract (#2116) (@gmcew)
 - Make IP addresses use the full 32 bit space (#2113) (@whiskeyfur)
 - Add "--tail" to default autocomplete options (#2103) (@catloversg)
-- Update blood donation (#2151, #2216) (@catloversg, @hydroflame)
+- Update blood donation (#2151, #2216, #2508) (@catloversg, @hydroflame, @d0sboots)
 - Fix typo in sector-12-crime.lit (#2159) (@Boingostarr)
 - Add versionNumber to ns.ui.getGameInfo() (#2155) (@catloversg)
 - Fix typos in literature files (#2164) (@catloversg)
@@ -265,6 +277,20 @@ export const CONSTANTS = {
 - Improve script args validation message (#2451) (@ficocelliguy)
 - Add sleeve commands to purchase sleeves and memory via the API (#2443) (@TheAimMan)
 - Allow ns.read to read .msg and .lit files (#2455) (@catloversg)
+- Fix scoring of very large open areas in IPvGO (#2464) (@ficocelliguy)
+- Make threads' bonus apply to timing attack puzzle's extra time per char (#2466) (@ficocelliguy)
+- Improve documentation; remove requirement that getBlockedRam and getDepth be called on a darknet server (#2472) (@ficocelliguy)
+- Prevent blocked ram on the "darkweb" server (#2468) (@ficocelliguy)
+- Add extra hint to sorted echo puzzle at high levels (#2465) (@ficocelliguy)
+- Change coding contract's fallback reward priorities (#2481) (@gmcew)
+- Add JS object properties as server names; refactor save/load/server storage to support this (#2482) (@ficocelliguy)
+- Buff packet sniffing slightly (#2485) (@d0sboots)
+- Fix: Darknet state is not reset properly on prestige (#2486) (@catloversg)
+- Change how coding contract rewards are randomized (#2490) (@catloversg)
+- Expose ProgramName enum (#2492) (@catloversg)
+- More fixes and feedback in darknet (#2489) (@ficocelliguy)
+- Fix missed cases in offline server handling (#2495) (@d0sboots)
+- Adjust darknet balance from player feedback (#2512) (@ficocelliguy)
 
 ### DOCUMENTATION
 
@@ -304,6 +330,12 @@ export const CONSTANTS = {
 - Change wording in Singularity.installAugmentation (#2439) (@HolyNaet)
 - Update README.md to correct Frequently Asked Questions link. (#2444) (@jonathonchase)
 - Add a question and a grammatical fix in faq.md (#2446) (@HolyNaet)
+- Move current changelog to changelog-v2.md (#2461) (@catloversg)
+- Fix some IPvGO docs that do not reflect winstreak rep converted to favor (#2463) (@ficocelliguy)
+- Add glossary of darknet terms to the documentation page (#2469) (@ficocelliguy)
+- Add a note to CONTRIBUTING.md about the npm peer dep issue (#2474) (@d0sboots)
+- Update darknet documentation (#2483) (@ficocelliguy)
+- Fix invalid links in ns.sleep and ns.asleep (#2496) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
@@ -311,6 +343,7 @@ export const CONSTANTS = {
 - Add UI hint about scripting tea/party and using Intern (#2179) (@catloversg)
 - Fix: Bladeburner console prints main body's HP instead of sleeve's HP (#2390) (@catloversg)
 - Reduce threshold of showing warning of low population (#2450) (@catloversg)
+- Fix: Hacknet server UI shows NaN hash rate when 100% RAM is being used (#2500) (@catloversg)
 
 ### SPOILER CHANGES - MISC
 
@@ -330,6 +363,9 @@ export const CONSTANTS = {
 - Expose production limit of material and product (#2330) (@AnteIndustrial)
 - Make some editorial changes in Black Operations' description (#2449) (@catloversg)
 - Add warning when installing backdoor on backdoored server with Singularity API (#2458) (@catloversg)
+- Fix: Sleeves can earn exp and purchase augmentations when enabling disableSleeveExpAndAugmentation (#2467) (@catloversg)
+- Add improved challenge achievement for BN15 (#2479) (@ficocelliguy)
+- Stop randomizing Bladeburner's action difficulty (#2491) (@catloversg)
 
 ### SPOILER CHANGES - DOCUMENTATION
 
@@ -405,5 +441,13 @@ export const CONSTANTS = {
 - Generate display data for math notation at built time and remove runtime mathjax dependency (#2447) (@catloversg)
 - Update SaveData type to be compatible with TS 5.9 and upgrade TS (#2457) (@catloversg)
 - Update NodeJS to v24 (#2456) (@catloversg)
+- Update format created by "build artifacts" workflows (#2470) (@Snarling)
+- Consolidate checks under getFailureResult() (#2476) (@d0sboots)
+- Fix: Global states are not reset properly between each Jest test (#2487) (@catloversg)
+- Change getFailureResult to checkDarknetServer (#2494) (@d0sboots)
+- Speed up by-ip lookups by introducing a new map entry (#2488) (@d0sboots)
+- Refactor/adjust getPixelPosition in darknet UI code (#2501) (@d0sboots)
+- Add tests for checking getAnswer and solver of coding contracts (#2503) (@catloversg)
+- Refactor ImportSave component (#2505) (@catloversg)
 `,
 } as const;

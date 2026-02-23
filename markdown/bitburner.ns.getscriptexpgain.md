@@ -9,7 +9,7 @@ Get the exp gain of a script.
 **Signature:**
 
 ```typescript
-getScriptExpGain(script: string, host: string, ...args: ScriptArg[]): number;
+getScriptExpGain(script: string, host?: string, ...args: ScriptArg[]): number;
 ```
 
 ## Parameters
@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-Hostname/IP of the server on which script is running.
+_(Optional)_ Hostname/IP of the server on which the script is running. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

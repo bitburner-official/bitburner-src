@@ -178,7 +178,10 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
     DarknetState.Network[server.depth][server.leftOffset] = null;
   }
   if (!isLabyrinth) {
-    DarknetState.offlineServers.push(server.hostname);
+    // Adding the ip first is an optimization to improve the random distribution
+    // of reused hostnames slightly. See the comment in generateDarknetServerName.
+    DarknetState.offlineServers.add(server.ip);
+    DarknetState.offlineServers.add(server.hostname);
   }
   DeleteServer(server.hostname);
   const serverState = getServerState(server.hostname);
@@ -192,9 +195,6 @@ export const addRandomDarknetServers = (count = 1, difficulty?: number, fixedDep
     const newServer = createDarknetServer(diff, -1, -1);
     const range = fixedDepth ? 0 : 3;
     moveDarknetServer(newServer, range, range);
-    if (DarknetState.offlineServers.includes(newServer.hostname)) {
-      DarknetState.offlineServers = DarknetState.offlineServers.filter((s) => s !== newServer.hostname);
-    }
   }
 };
 
@@ -203,6 +203,7 @@ export const addLowLevelServersIfNeeded = (): void => {
   const serversConnectedToDarkweb = getAllDarknetServers().filter((s) => s.depth === 0);
   if (serversConnectedToDarkweb.length <= 3) {
     addRandomDarknetServers(2, 0, true);
+    addLowLevelServersIfNeeded();
   }
   if (lowLevelServers.length / (4 * NET_WIDTH) < LOW_LEVEL_SERVER_DENSITY) {
     addRandomDarknetServers(2, Math.floor(Math.random() * 4));
@@ -304,7 +305,7 @@ export const restartServer = (server: DarknetServer): void => {
   killServerScripts(server, "Server restarted.");
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [{ pid: -1, message: "Server restarted." }];
+  serverState.serverLogs = [{ pid: -1, message: "Server restarting, terminating scripts..." }];
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);

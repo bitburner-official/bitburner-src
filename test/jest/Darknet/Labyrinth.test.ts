@@ -33,6 +33,7 @@ const setupBN15Environment = (labAugCount: number) => {
     AugmentationName.TheBrokenWings,
     AugmentationName.TheBoots,
     AugmentationName.TheHammer,
+    AugmentationName.TheStaff,
     AugmentationName.TheRedPill,
     AugmentationName.TheLaw,
     AugmentationName.TheSword,
@@ -54,6 +55,7 @@ const setupNonBN15Environment = (labAugCount: number, hasSf15 = false, allowTRPI
     AugmentationName.TheBrokenWings,
     AugmentationName.TheBoots,
     AugmentationName.TheHammer,
+    AugmentationName.TheStaff,
     AugmentationName.TheLaw,
     AugmentationName.TheSword,
     AugmentationName.TheRedPill,
@@ -200,7 +202,7 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.name).toEqual(SpecialServers.UberLab);
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.UberLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.UberLab].cha);
-      expect(getLabAugReward()).toEqual(AugmentationName.TheLaw);
+      expect(getLabAugReward()).toEqual(AugmentationName.TheStaff);
     });
     it("should attach eternal lab if the player has SF15 access and uber lab aug", () => {
       setupNonBN15Environment(4, true);
@@ -209,10 +211,19 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.name).toEqual(SpecialServers.EternalLab);
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.EternalLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.EternalLab].cha);
+      expect(getLabAugReward()).toEqual(AugmentationName.TheLaw);
+    });
+    it("should attach endless lab if the player has SF15 access and endless lab aug", () => {
+      setupNonBN15Environment(5, true);
+      const labDetails = getLabyrinthDetails();
+
+      expect(labDetails.name).toEqual(SpecialServers.EndlessLab);
+      expect(labDetails.lab?.hostname).toEqual(SpecialServers.EndlessLab);
+      expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.EndlessLab].cha);
       expect(getLabAugReward()).toEqual(AugmentationName.TheSword);
     });
     it("should attach bonus lab, but not offer TRP, if the player has SF15 access and eternal lab aug, but the bitnode disables TRP in lab", () => {
-      setupNonBN15Environment(5, true, false);
+      setupNonBN15Environment(6, true, false);
       const labDetails = getLabyrinthDetails();
 
       expect(labDetails.name).toEqual(SpecialServers.BonusLab);
@@ -221,7 +232,7 @@ describe("Labyrinth Tests", () => {
       expect(getLabAugReward()).toEqual(AugmentationName.NeuroFluxGovernor);
     });
     it("should attach bonus lab if the player has SF15 access and final lab aug", () => {
-      setupNonBN15Environment(5, true, true);
+      setupNonBN15Environment(6, true, true);
       const labDetails = getLabyrinthDetails();
 
       expect(labDetails.name).toEqual(SpecialServers.FinalLab);
@@ -230,7 +241,7 @@ describe("Labyrinth Tests", () => {
       expect(getLabAugReward()).toEqual(AugmentationName.TheRedPill);
     });
     it("should attach bonus lab if the player has SF15 access and final lab aug", () => {
-      setupNonBN15Environment(6, true, true);
+      setupNonBN15Environment(7, true, true);
       const labDetails = getLabyrinthDetails();
 
       expect(labDetails.name).toEqual(SpecialServers.BonusLab);
@@ -275,7 +286,7 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.name).toEqual(SpecialServers.UberLab);
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.UberLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.UberLab].cha);
-      expect(getLabAugReward()).toEqual(AugmentationName.TheRedPill);
+      expect(getLabAugReward()).toEqual(AugmentationName.TheStaff);
     });
     it("should attach eternal lab if the player has SF15 access and uber lab aug", () => {
       setupBN15Environment(4);
@@ -284,10 +295,19 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.name).toEqual(SpecialServers.EternalLab);
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.EternalLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.EternalLab].cha);
+      expect(getLabAugReward()).toEqual(AugmentationName.TheRedPill);
+    });
+    it("should attach endless lab if the player has SF15 access and endless lab aug", () => {
+      setupBN15Environment(5);
+      const labDetails = getLabyrinthDetails();
+
+      expect(labDetails.name).toEqual(SpecialServers.EndlessLab);
+      expect(labDetails.lab?.hostname).toEqual(SpecialServers.EndlessLab);
+      expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.EndlessLab].cha);
       expect(getLabAugReward()).toEqual(AugmentationName.TheLaw);
     });
     it("should attach final lab if the player has SF15 access and eternal lab aug", () => {
-      setupBN15Environment(5);
+      setupBN15Environment(6);
       const labDetails = getLabyrinthDetails();
 
       expect(labDetails.name).toEqual(SpecialServers.FinalLab);
@@ -296,7 +316,7 @@ describe("Labyrinth Tests", () => {
       expect(getLabAugReward()).toEqual(AugmentationName.TheSword);
     });
     it("should attach bonus lab if the player has SF15 access and final lab aug", () => {
-      setupBN15Environment(6);
+      setupBN15Environment(7);
       const labDetails = getLabyrinthDetails();
 
       expect(labDetails.name).toEqual(SpecialServers.BonusLab);

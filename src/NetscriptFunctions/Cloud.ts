@@ -10,7 +10,7 @@ import {
   renameCloudServer,
   upgradeCloudServer,
 } from "../Server/ServerPurchases";
-import { DeleteServer, AddToAllServers, createUniqueRandomIp } from "../Server/AllServers";
+import { DeleteServer, AddToAllServers, createUniqueRandomIp, GetServerOrThrow } from "../Server/AllServers";
 import { safelyCreateUniqueServer } from "../Server/ServerHelpers";
 import { formatMoney } from "../ui/formatNumber";
 import { isIPAddress } from "../Types/strings";
@@ -195,12 +195,12 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       return false;
     },
     getServerNames:
-      (ctx) =>
+      () =>
       (_returnOpts): string[] => {
         const returnOpts = helpers.hostReturnOptions(_returnOpts);
         const res: string[] = [];
         for (const hostname of Player.purchasedServers) {
-          const server = helpers.getServer(ctx, hostname);
+          const server = GetServerOrThrow(hostname);
           const id = helpers.returnServerID(server, returnOpts);
           res.push(id);
         }

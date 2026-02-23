@@ -32,12 +32,12 @@ Because of all the benefits this [BitNode](bitnodes.md) provides, it's definitel
 
 ## Depends on your priorities
 
-BN4 gives access to the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.singularity.md).
+BN4 gives access to the [Singularity API](../../../../../markdown/bitburner.singularity.md).
 This mechanic allows the automation of many actions directly affecting the player.
 If this appeals to you then you should prioritize this BitNode.
-Due to the [RAM](../basic/ram.md) cost, it's strongly recommended to complete BN4.3 before using the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.singularity.md) in other [BitNodes](bitnodes.md).
+Due to the [RAM](../basic/ram.md) cost, it's strongly recommended to complete BN4.3 before using the Singularity API in other [BitNodes](bitnodes.md).
 
-BN6 introduces the [Bladeburner](bladeburners.md) mechanic and its corresponding [Bladeburner API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.bladeburner.md).
+BN6 introduces the [Bladeburner](bladeburners.md) mechanic and its corresponding [Bladeburner API](../../../../../markdown/bitburner.bladeburner.md).
 Bladeburner is an alternative method to beat BitNodes which doesn't rely on money or hacking skill.
 [Sleeves](sleeves.md) help complete BN6 more quickly since they can share some Bladeburner tasks with the player but aren't a requirement.
 
@@ -70,7 +70,7 @@ It provides a variety of useful bonuses.
 
 ## Save these for later
 
-BN7 used to give access to the [Bladeburner API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.bladeburner.md), but now it doesn't.
+BN7 used to give access to the [Bladeburner API](../../../../../markdown/bitburner.bladeburner.md), but now it doesn't.
 Because of that change this [BitNode](bitnodes.md) is relatively low priority and should definitely happen after BN6.
 The benefit for completing BN7.3 is an aug that lets the player perform [Bladeburner](bladeburners.md) and non-Bladeburner actions at the same time.
 

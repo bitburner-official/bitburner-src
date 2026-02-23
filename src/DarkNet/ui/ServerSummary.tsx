@@ -48,6 +48,9 @@ export function ServerSummary({
           runningScriptNames.length > 3 ? ` +${runningScriptNames.length - 3}` : ""
         }`
       : "No running scripts on server";
+  const dataCacheTooltip = `Reward caches on server: ${server.caches.slice(0, 3).join(", ")}${
+    server.caches.length > 3 ? ` +${server.caches.length - 3}` : ""
+  }`;
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
   const hasBackdoor = server.backdoorInstalled && !server.hasStasisLink;
   const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";
@@ -65,7 +68,7 @@ export function ServerSummary({
   const components = [];
   if (cacheCount) {
     components.push(
-      <Tooltip key="cache" title={<>Reward cache count: {cacheCount}</>}>
+      <Tooltip key="cache" title={<>{dataCacheTooltip}</>}>
         <Typography>
           <SvgIcon component={Inventory2} className={`${classes.gold} ${classes.serverStatusIcon}`} />
           {cacheCount}

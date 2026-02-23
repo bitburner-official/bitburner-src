@@ -9,7 +9,7 @@ Steal a server's money.
 **Signature:**
 
 ```typescript
-hack(host: string, opts?: BasicHGWOptions): Promise<number>;
+hack(host?: string, opts?: BasicHGWOptions): Promise<number>;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of the target server to hack.
+_(Optional)_ Hostname/IP of the target server to hack. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

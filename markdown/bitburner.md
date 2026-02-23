@@ -2146,6 +2146,26 @@ Structured interface to requirements for joining a faction or company. For field
 </td></tr>
 <tr><td>
 
+[ProgramName](./bitburner.programname.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ProgramNameEnumType](./bitburner.programnameenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [ReactNode](./bitburner.reactnode.md)
 
 

@@ -3,7 +3,7 @@
 Coding Contracts are a mechanic that lets players earn rewards in exchange for solving programming problems.
 
 Coding Contracts are files with the `.cct` extension.
-They can be accessed through the [Terminal](terminal.md) or through [Scripts](scripts.md) using the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
+They can be accessed through the [Terminal](terminal.md) or through [Scripts](scripts.md) using the [Coding Contract API](../../../../../markdown/bitburner.codingcontract.md).
 
 Each contract has a limited number of attempts.
 If you provide the wrong answer too many times and exceed the number of attempts, the contract will self destruct (delete itself).
@@ -22,21 +22,21 @@ The popup will display the contract's problem, the number of attempts remaining,
 
 ## Interacting through Scripts
 
-See the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
+See the [Coding Contract API](../../../../../markdown/bitburner.codingcontract.md).
 Interacting with Coding Contracts via the [Terminal](terminal.md) can be tedious the more contracts you solve.
-Consider using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate various aspects of your solution.
+Consider using the APIs to automate various aspects of your solution.
 For example, some contracts have long solutions while others have even longer solutions.
-You might want to use the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate the process of submitting your solution rather than copy and paste a long solution into an answer box.
-The [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) can also be used to find out useful information about a contract including the number of attempts you have left, the type of contract and its difficulty.
-It can also be used to test your algorithm for a specific contract type by [spawning dummy contracts](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.createdummycontract.md).
+You might want to use the APIs to automate the process of submitting your solution rather than copy and paste a long solution into an answer box.
+The APIs can also be used to find out useful information about a contract including the number of attempts you have left, the type of contract and its difficulty.
+It can also be used to test your algorithm for a specific contract type by [spawning dummy contracts](../../../../../markdown/bitburner.codingcontract.createdummycontract.md).
 
-However, using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) comes at a cost.
-Like most functions in other APIs, almost all of the functions in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) have a RAM cost.
+However, using the APIs comes at a cost.
+Like most functions in other APIs, almost all of the functions in the APIs have a RAM cost.
 
-Depending on which function you use, the initial [RAM](ram.md) on your home server might not be enough to allow you to use various [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) functions.
-Plan on upgrading the [RAM](ram.md) on your home server if you want to use the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
+Depending on which function you use, the initial [RAM](ram.md) on your home server might not be enough to allow you to use various API functions.
+Plan on upgrading the [RAM](ram.md) on your home server if you want to use the APIs.
 
-The [`getContractTypes`](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.getcontracttypes.md) function is free, and returns a list of all of the contract types currently in the game.
+The [`getContractTypes`](../../../../../markdown/bitburner.codingcontract.getcontracttypes.md) function is free, and returns a list of all of the contract types currently in the game.
 
 ## Submitting Solutions
 

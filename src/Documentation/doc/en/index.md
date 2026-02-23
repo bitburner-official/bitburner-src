@@ -47,7 +47,7 @@
 
 ## Resources
 
-- [NS API documentation](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md)
+- [NS API documentation](../../../../markdown/bitburner.ns.md)
 - [Learn to program](programming/learn.md)
 - [Remote API](programming/remote_api.md)
 - [Game frozen or stuck?](programming/game_frozen.md)

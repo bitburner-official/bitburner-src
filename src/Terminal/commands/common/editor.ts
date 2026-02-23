@@ -46,7 +46,12 @@ export function commonEditor(
 
     // Glob of existing files
     if (pattern.includes("*") || pattern.includes("?")) {
-      for (const [path, file] of getGlobbedFileMap(pattern, server, Terminal.currDir)) {
+      const globbedFileMap = getGlobbedFileMap(pattern, server, Terminal.currDir);
+      if (globbedFileMap.size === 0) {
+        Terminal.error(`No files matching ${pattern}`);
+        return;
+      }
+      for (const [path, file] of globbedFileMap) {
         if (isLegacyScript(path)) {
           hasLegacyScript = true;
         }
