@@ -5,32 +5,44 @@ import { CodingContractName } from "@enums";
 
 export const largestRectangle: Pick<CodingContractTypes, CodingContractName.LargestRectangleInAMatrix> = {
   [CodingContractName.LargestRectangleInAMatrix]: {
-    desc: (data: number[][]): string => {
+    desc: (data): string => {
       let gridString = "";
       for (let i = 0; i < data.length; i++) {
-        const start = i == 0 ? "[" : " ";
-        const end = i == data.length - 1 ? "]" : ",";
-        gridString += `${start}[${data[i]}]${end}\n`;
+        gridString += `  [${data[i]}]${i !== data.length - 1 ? ",\n" : ""}`;
       }
-      return [
-        "You are given a binary matrix consisting only of 0s and 1s:\n\n",
-        `${gridString}\n\n`,
-        "Your task is to find the two corners of the largest rectangle ([[r1,c1],[r2,c2]]), that does not contain any 1s.\n\n",
-        "Examples:\n",
-        "    [[1,0,0],\n",
-        "     [0,0,0]]\n",
-        "Answer: [[0,1],[1,2]]\n",
-        "    [[0,0,0,1],\n",
-        "     [0,0,0,0],\n",
-        "     [0,0,1,0],\n",
-        "     [0,0,0,1]]\n",
-        "Answer: [[0,0],[3,1]]\n",
-      ].join("");
+      return `You are given a binary matrix consisting only of 0s and 1s:
+
+[
+${gridString}
+]
+
+Your task is to find the two corners of the largest rectangle ([[r1,c1],[r2,c2]]) that does not contain any 1s.
+
+Example 1:
+Data:
+[
+  [1,0,0],
+  [0,0,0]
+]
+
+Answer:[[0,1],[1,2]]
+
+Example 2:
+Data:
+[
+  [0,0,0,1],
+  [0,0,0,0],
+  [0,0,1,0],
+  [0,0,0,1]
+]
+
+Answer: [[0,0],[3,1]]
+`;
     },
     difficulty: 6,
-    generate: (): (0 | 1)[][] => {
-      const numRows: number = getRandomIntInclusive(4, 15);
-      const numColumns: number = getRandomIntInclusive(4, 15);
+    generate: () => {
+      const numRows = getRandomIntInclusive(4, 15);
+      const numColumns = getRandomIntInclusive(4, 15);
 
       const grid: (1 | 0)[][] = [];
       grid.length = numRows;
