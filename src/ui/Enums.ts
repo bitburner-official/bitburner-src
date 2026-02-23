@@ -5,7 +5,6 @@ export enum ToastVariant {
   INFO = "info",
 }
 
-// This enum doesn't need enum helper support for now
 /**
  * The full-screen page the player is currently be on.
  * These are "simple" pages that don't require any extra parameters to
