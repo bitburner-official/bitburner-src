@@ -1,3 +1,4 @@
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
@@ -126,6 +127,14 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
       }
 
       const solution = largestRectangle[CodingContractName.LargestRectangleInAMatrix].getAnswer(state);
+      if (solution === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.LargestRectangleInAMatrix} contract. Data: ${state}`,
+          ),
+        );
+        return false;
+      }
 
       const userArea = (maxR - minR + 1) * (maxC - minC + 1);
       return userArea === (solution[1][0] - solution[0][0] + 1) * (solution[1][1] - solution[0][1] + 1);
