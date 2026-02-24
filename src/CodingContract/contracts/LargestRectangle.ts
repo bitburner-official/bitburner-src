@@ -46,6 +46,9 @@ Answer: [[0,0],[3,1]]
 
       const grid: (1 | 0)[][] = [];
       grid.length = numRows;
+  let allOnes: boolean;
+  do {
+      allOnes = true;
       for (let i = 0; i < numRows; ++i) {
         grid[i] = [];
         grid[i].length = numColumns;
@@ -57,9 +60,12 @@ Answer: [[0,0],[3,1]]
           // 15% chance of an element being an obstacle
           if (Math.random() < 0.15) {
             grid[r][c] = 1;
+          } else {
+            allOnes = false;
           }
         }
       }
+  } while (allOnes);
 
       // in case of 1 in ~2e188 avrg chance that all cells end up being a 1
       const r = getRandomIntInclusive(0, grid.length - 1);
