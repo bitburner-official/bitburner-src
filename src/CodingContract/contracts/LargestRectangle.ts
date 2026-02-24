@@ -67,11 +67,6 @@ Answer: [[0,0],[3,1]]
       }
   } while (allOnes);
 
-      // in case of 1 in ~2e188 avrg chance that all cells end up being a 1
-      const r = getRandomIntInclusive(0, grid.length - 1);
-      const c = getRandomIntInclusive(0, grid[0].length - 1);
-      grid[r][c] = 0;
-
       return grid;
     },
     getAnswer: (data) => {
