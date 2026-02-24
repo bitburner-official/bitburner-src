@@ -36,7 +36,7 @@ export const GoToPageKeyBindingTypes = [
   SimplePage.Milestones,
   ComplexPage.Documentation,
   SimplePage.Achievements,
-  SimplePage.Options,
+  ComplexPage.Options,
   ...SpoilerKeyBindingTypes,
 ] as const;
 
@@ -213,7 +213,7 @@ export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, 
     null,
   ],
   [SimplePage.Achievements]: [null, null],
-  [SimplePage.Options]: [
+  [ComplexPage.Options]: [
     {
       control: false,
       alt: true,

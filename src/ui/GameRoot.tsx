@@ -29,7 +29,7 @@ import { CorporationRoot } from "../Corporation/ui/CorporationRoot";
 import { InfiltrationRoot } from "../Infiltration/ui/InfiltrationRoot";
 import { GraftingRoot } from "../PersonObjects/Grafting/ui/GraftingRoot";
 import { WorkInProgressRoot } from "./WorkInProgressRoot";
-import { GameOptionsRoot } from "../GameOptions/ui/GameOptionsRoot";
+import { GameOptionsPageEvents, GameOptionsRoot } from "../GameOptions/ui/GameOptionsRoot";
 import { SleeveRoot } from "../PersonObjects/Sleeve/ui/SleeveRoot";
 import { HacknetRoot } from "../Hacknet/ui/HacknetRoot";
 import { GenericLocation } from "../Locations/ui/GenericLocation";
@@ -257,6 +257,14 @@ export function GameRoot(): React.ReactElement {
           prestigeWorkerScripts();
           calculateAchievements();
           break;
+        case Page.Options:
+          // If the current page is "Options" and something calls Router.toPage("Options", { tab: "Foo" }) to switch the
+          // tab, we need to emit an event to tell GameOptionsRoot to set its currentTab state. Changing the tab in the
+          // properties of GameOptionsRoot does not set the state.
+          if (Router.page() === Page.Options && context && "tab" in context && context.tab != null) {
+            GameOptionsPageEvents.emit(context.tab);
+          }
+          break;
       }
       setNextPage({ page, ...context } as PageWithContext);
     },
@@ -425,6 +433,7 @@ export function GameRoot(): React.ReactElement {
     case Page.Options: {
       mainPage = (
         <GameOptionsRoot
+          tab={pageWithContext.tab}
           save={() => {
             saveObject.saveGame().catch((error) => exceptionAlert(error));
           }}

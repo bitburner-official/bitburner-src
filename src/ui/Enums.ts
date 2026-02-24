@@ -27,7 +27,6 @@ export enum SimplePage {
   Hacknet = "Hacknet",
   Infiltration = "Infiltration",
   Milestones = "Milestones",
-  Options = "Options",
   Grafting = "Grafting",
   Sleeves = "Sleeves",
   Stats = "Stats",
@@ -52,6 +51,7 @@ export enum ComplexPage {
   Location = "Location",
   ImportSave = "Import Save",
   Documentation = "Documentation",
+  Options = "Options",
   // LoadingScreen is a special state that should never be returned to after the initial game load. To enforce this, it
   // is constructed as a ComplexPage with no PageContext, and thus toPage() cannot be used (since no overload will fit
   // it).

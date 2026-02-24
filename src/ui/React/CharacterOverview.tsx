@@ -29,6 +29,7 @@ import { isCompanyWork } from "../../Work/CompanyWork";
 import { isCrimeWork } from "../../Work/CrimeWork";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { useRerender } from "./hooks";
+import { RemoteFileApiConnectionStatus } from "../../GameOptions/ui/RemoteFileApiConnectionStatus";
 
 export const OverviewEventEmitter = new EventEmitter();
 
@@ -183,6 +184,7 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
             </Tooltip>
           </IconButton>
         </Box>
+        <RemoteFileApiConnectionStatus showIcon={true} />
         <Box sx={{ display: "flex", flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
           <IconButton aria-label="kill all scripts" onClick={() => setKillOpen(true)}>
             <Tooltip title="Kill all running scripts">
