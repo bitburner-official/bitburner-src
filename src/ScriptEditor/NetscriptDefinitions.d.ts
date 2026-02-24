@@ -8913,6 +8913,9 @@ export interface NS {
    *
    * - Long form: the flag contains more than 1 character, e.g. --version.
    *
+   * Note that if an argument is given and its default value is nullish, the parsed value will be a string. This may
+   * cause subtle issues if you are not careful with type coercion.
+   *
    * @example
    * ```js
    * export async function main(ns) {
@@ -8941,6 +8944,24 @@ export interface NS {
    * // [home /]> run example.js -v
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":true}
    * ```
+   *
+   * ```js
+   * export async function main(ns) {
+   *   const data = ns.flags([
+   *     ["foo", null],
+   *     ["bar", undefined],
+   *   ]);
+   *   console.log(data);
+   * }
+   *
+   * // [home /]> run example.js
+   * // { _: [], foo: null, bar: undefined }
+   * // [home /]> run example.js --foo 1000
+   * // { _: [], foo: "1000", bar: undefined }
+   * // [home /]> run example.js --foo 1000 --bar false
+   * // { _: [], foo: "1000", bar: "false" }
+   * ```
+   * `bar` in the last example is `"false"` (a string), not `false` (a boolean). `data.bar` is truthy, not falsy.
    */
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 
