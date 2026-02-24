@@ -5,7 +5,6 @@ export enum ToastVariant {
   INFO = "info",
 }
 
-// This enum doesn't need enum helper support for now
 /**
  * The full-screen page the player is currently be on.
  * These are "simple" pages that don't require any extra parameters to
@@ -53,5 +52,8 @@ export enum ComplexPage {
   Location = "Location",
   ImportSave = "Import Save",
   Documentation = "Documentation",
-  LoadingScreen = "Loading Screen", // Has no PageContext, and thus toPage() cannot be used
+  // LoadingScreen is a special state that should never be returned to after the initial game load. To enforce this, it
+  // is constructed as a ComplexPage with no PageContext, and thus toPage() cannot be used (since no overload will fit
+  // it).
+  LoadingScreen = "Loading Screen",
 }
