@@ -165,4 +165,20 @@ describe("LargestRectangle", () => {
       ]),
     ).toBe(false);
   });
+  test("generate doesn't return all ones", () => {
+    const origRandom = Math.random;
+    let calls = 0;
+    const mockRandom = () => {
+      if (calls++ < 100) {
+        return 0;
+      }
+      return origRandom();
+    };
+    try {
+      Math.random = mockRandom;
+      expect(contract.generate().flat()).toContain(0);
+    } finally {
+      Math.random = origRandom;
+    }
+  });
 });
