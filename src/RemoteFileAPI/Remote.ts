@@ -27,6 +27,7 @@ export class Remote {
 
   public stopConnection(): void {
     this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
+    RemoteFileApiConnectionEvents.emit("Offline");
   }
 
   public startConnection(autoConnectAttempt = 1): void {
