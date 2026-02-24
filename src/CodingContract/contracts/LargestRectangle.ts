@@ -1,4 +1,3 @@
-//import { ro, tr } from "date-fns/locale"; idk why this was added
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractTypes } from "../ContractTypes";
