@@ -5,17 +5,18 @@ import OnlinePredictionIcon from "@mui/icons-material/OnlinePrediction";
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
+import { RemoteFileApiConnectionEvents } from "../../RemoteFileAPI/Remote";
 
 export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
   const [rfaConnectionStatus, setRfaConnectionStatus] = useState(getRemoteFileApiConnectionStatus());
-  getRemoteFileApiConnectionStatus;
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setRfaConnectionStatus(getRemoteFileApiConnectionStatus());
-    }, 500);
-    return () => clearInterval(timer);
-  }, []);
+  useEffect(
+    () =>
+      RemoteFileApiConnectionEvents.subscribe((status) => {
+        setRfaConnectionStatus(status);
+      }),
+    [],
+  );
 
   let color;
   switch (rfaConnectionStatus) {

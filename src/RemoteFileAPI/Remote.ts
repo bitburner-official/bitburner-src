@@ -3,12 +3,16 @@ import { RFARequestHandler } from "./MessageHandlers";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { Settings } from "../Settings/Settings";
+import { EventEmitter } from "../utils/EventEmitter";
+import type { getRemoteFileApiConnectionStatus } from "./RemoteFileAPI";
 
 function showErrorMessage(address: string, detail: string) {
   SnackbarEvents.emit(`Error with websocket ${address}, details: ${detail}`, ToastVariant.ERROR, 5000);
 }
 
 const eventCodeWhenIntentionallyStoppingConnection = 3000;
+
+export const RemoteFileApiConnectionEvents = new EventEmitter<[ReturnType<typeof getRemoteFileApiConnectionStatus>]>();
 
 export class Remote {
   connection?: WebSocket;
@@ -55,6 +59,7 @@ export class Remote {
         ToastVariant.SUCCESS,
         2000,
       );
+      RemoteFileApiConnectionEvents.emit("Online");
     });
     this.connection.addEventListener("close", (event) => {
       /**
@@ -87,8 +92,10 @@ export class Remote {
 
           this.startConnection(attempts);
         }, Settings.RemoteFileApiReconnectionDelay * 1000);
+        RemoteFileApiConnectionEvents.emit("Reconnecting");
       } else {
         this.reconnecting = false;
+        RemoteFileApiConnectionEvents.emit("Offline");
       }
     });
   }
