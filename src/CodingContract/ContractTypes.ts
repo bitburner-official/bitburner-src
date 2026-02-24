@@ -20,6 +20,7 @@ import { subarrayWithMaximumSum } from "./contracts/SubarrayWithMaximumSum";
 import { totalPrimesInRange } from "./contracts/TotalPrimesInRange";
 import { totalWaysToSum } from "./contracts/TotalWaysToSum";
 import { uniquePathsInAGrid } from "./contracts/UniquePathsInAGrid";
+import { largestRectangle } from "./contracts/LargestRectangle";
 
 // This is the base interface, but should not be used for
 // typechecking individual entries. Use the two types below for that.
@@ -114,6 +115,7 @@ export const CodingContractDefinitions: CodingContractTypes = {
   ...findLargestPrimeFactor,
   ...generateIPAddresses,
   ...hammingCode,
+  ...largestRectangle,
   ...mergeOverlappingIntervals,
   ...minimumPathSumInATriangle,
   ...proper2ColoringOfAGraph,
