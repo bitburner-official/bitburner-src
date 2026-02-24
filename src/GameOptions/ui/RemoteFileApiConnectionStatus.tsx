@@ -33,7 +33,7 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
   return (
     <Box style={{ display: "flex", flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
       {showIcon ? (
-        <IconButton aria-label="kill all scripts" onClick={() => Router.toPage(Page.Options, { tab: "Remote API" })}>
+        <IconButton aria-label="Remote API status" onClick={() => Router.toPage(Page.Options, { tab: "Remote API" })}>
           <Tooltip title={`Remote API: ${rfaConnectionStatus}`}>
             <OnlinePredictionIcon style={{ fontSize: "30px", color }} />
           </Tooltip>
