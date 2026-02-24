@@ -8,13 +8,13 @@ The "best" order can vary between players, depending on what you like to do any 
 
 ## tl;dr
 
-BN1, BN2 and BN5 are great starters.
-BN4 and BN6 are also good to do early if their mechanics appeal to you.
-BN10 has interesting mechanics if you can generate lots of money.
-BN9, BN13 and BN14 are tough but have interesting new mechanics
-BN3 has a very tough mechanic to automate with unparalleled power.
-BN7, BN8 and BN11 are tough with little to benefit newer players.
-BN12 is easy to start but quickly ramps up in difficulty.
+- BN1, BN2, and BN5 are great starters.
+- BN4 and BN6/BN7 are also good to do early if their mechanics appeal to you.
+- BN10 has interesting mechanics if you can generate lots of money.
+- BN9, BN13, BN14, and BN15 are tough but have interesting new mechanics.
+- BN3 has a very tough mechanic to automate but gives unparalleled power.
+- BN8 and BN11 are tough but offer little benefit to new players.
+- BN12 is easy to start but quickly ramps up in difficulty.
 
 ## Good early BitNodes
 
