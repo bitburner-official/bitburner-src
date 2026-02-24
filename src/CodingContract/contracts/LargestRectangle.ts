@@ -46,26 +46,26 @@ Answer: [[0,0],[3,1]]
 
       const grid: (1 | 0)[][] = [];
       grid.length = numRows;
-  let allOnes: boolean;
-  do {
-      allOnes = true;
-      for (let i = 0; i < numRows; ++i) {
-        grid[i] = [];
-        grid[i].length = numColumns;
-        grid[i].fill(0);
-      }
+      let allOnes: boolean;
+      do {
+        allOnes = true;
+        for (let i = 0; i < numRows; ++i) {
+          grid[i] = [];
+          grid[i].length = numColumns;
+          grid[i].fill(0);
+        }
 
-      for (let r = 0; r < numRows; ++r) {
-        for (let c = 0; c < numColumns; ++c) {
-          // 15% chance of an element being an obstacle
-          if (Math.random() < 0.15) {
-            grid[r][c] = 1;
-          } else {
-            allOnes = false;
+        for (let r = 0; r < numRows; ++r) {
+          for (let c = 0; c < numColumns; ++c) {
+            // 15% chance of an element being an obstacle
+            if (Math.random() < 0.15) {
+              grid[r][c] = 1;
+            } else {
+              allOnes = false;
+            }
           }
         }
-      }
-  } while (allOnes);
+      } while (allOnes);
 
       return grid;
     },
