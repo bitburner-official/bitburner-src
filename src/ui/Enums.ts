@@ -11,7 +11,6 @@ export enum ToastVariant {
  * transition to. You can use setPage() with these.
  */
 export enum SimplePage {
-  LoadingScreen = "Loading Screen",
   ActiveScripts = "Active Scripts",
   RecentlyKilledScripts = "Recently Killed Scripts",
   RecentErrors = "Recent Errors",
@@ -53,4 +52,8 @@ export enum ComplexPage {
   Location = "Location",
   ImportSave = "Import Save",
   Documentation = "Documentation",
+  // LoadingScreen is a special state that should never be returned to after the initial game load. To enforce this, it
+  // is constructed as a ComplexPage with no PageContext, and thus toPage() cannot be used (since no overload will fit
+  // it).
+  LoadingScreen = "Loading Screen",
 }
