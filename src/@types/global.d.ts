@@ -21,6 +21,10 @@ declare interface Document {
   achievements: string[];
 }
 
+declare interface WebSocket {
+  intentionallyClosed?: boolean;
+}
+
 declare global {
   /**
    * "loader" is not exposed in the public API.
