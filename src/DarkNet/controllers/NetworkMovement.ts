@@ -111,7 +111,7 @@ export const mutateDarknet = (): void => {
     restartRandomServer();
   }
 
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.3) {
     moveRandomDarknetServers(3);
   }
 

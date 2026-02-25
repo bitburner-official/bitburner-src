@@ -4,11 +4,13 @@ import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH } from "../Enums";
 import { GetAllServers } from "../../Server/AllServers";
 import { getNetDepth } from "../effects/labyrinth";
 import { CONSTANTS } from "../../Constants";
+import { Player } from "@player";
 
 export const getDarknetCyclesPerMutation = () => {
   const depth = getNetDepth();
   const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
-  return cycleRate / depth;
+  const rateMultiplier = Player.bitNodeN !== 15 ? 0.5 : 1;
+  return (rateMultiplier * cycleRate) / depth;
 };
 
 export const getAllOpenPositions = (minDepth: number, maxDepth: number): [number, number][] => {

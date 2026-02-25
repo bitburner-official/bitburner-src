@@ -4,7 +4,7 @@
 
 ## NS.getServerUsedRam() method
 
-Get the used RAM on a server.
+Get the used RAM on a server. This includes ram used by running scripts as well as blocked ram on darknet servers.
 
 **Signature:**
 

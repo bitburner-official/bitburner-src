@@ -8185,7 +8185,7 @@ export interface NS {
    */
   getServerMaxRam(host?: string): number;
   /**
-   * Get the used RAM on a server.
+   * Get the used RAM on a server. This includes ram used by running scripts as well as blocked ram on darknet servers.
    * @remarks
    * RAM cost: 0.05 GB
    *

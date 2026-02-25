@@ -62,12 +62,14 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
  * @param person - the player's character
  * @param attemptedPassword - the password being attempted
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
+ * @param linear - if true, the time scaling is linear with the number of threads instead of having diminishing returns
  */
 export const calculateAuthenticationTime = (
   darknetServerData: DarknetServerData,
   person: IPerson = Player,
   threads = 1,
   attemptedPassword = "",
+  linear = false,
 ) => {
   const chaRequired = darknetServerData.requiredCharismaSkill;
   const difficulty = darknetServerData.difficulty;
@@ -76,7 +78,7 @@ export const calculateAuthenticationTime = (
   const diffFactor = 5;
   const baseTime = 500;
 
-  const threadsFactor = 1 / (1 + 0.2 * (threads - 1));
+  const threadsFactor = linear ? threads : 1 / (1 + 0.2 * (threads - 1));
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
   const applyUnderleveledFactor = person.skills.charisma <= chaRequired && darknetServerData.depth > 1;

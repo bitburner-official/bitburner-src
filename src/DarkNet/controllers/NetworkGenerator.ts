@@ -181,17 +181,19 @@ export const addRandomConnections = (server: DarknetServer) => {
   const x = server.depth;
   const y = server.leftOffset;
   const horizontalNeighbors = getNeighborsOnRow(x, y);
+  const lateralConnectionChance = HORIZONTAL_CONNECTION_CHANCE * (1.1 - server.depth * 0.01);
   horizontalNeighbors.forEach((neighbor) => {
-    if (Math.random() < HORIZONTAL_CONNECTION_CHANCE) {
+    if (Math.random() < lateralConnectionChance) {
       connectServers(server, neighbor);
     }
   });
 
   const serversAbove = getServersOnRowAbove(x);
   const serversBelow = getServersOnRowBelow(x);
+  const verticalConnectionChance = VERTICAL_CONNECTION_CHANCE * (1.1 - server.depth * 0.01);
   [...serversAbove, ...serversBelow].forEach((neighbor) => {
     const distance = Math.abs(neighbor.depth ?? x - x) + 1;
-    if (Math.random() < VERTICAL_CONNECTION_CHANCE / distance) {
+    if (Math.random() < verticalConnectionChance / distance) {
       connectServers(server, neighbor);
     }
   });
