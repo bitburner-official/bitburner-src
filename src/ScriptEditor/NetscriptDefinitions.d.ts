@@ -4619,7 +4619,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    *
-   * @returns A promise that resolves to a {@link DarknetResult} object.
+   * @returns A {@link DarknetResult} object.
    */
   unleashStormSeed(): DarknetResult;
 

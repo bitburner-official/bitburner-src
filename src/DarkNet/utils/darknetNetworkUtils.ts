@@ -9,7 +9,7 @@ import { Player } from "@player";
 export const getDarknetCyclesPerMutation = () => {
   const depth = getNetDepth();
   const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
-  const rateMultiplier = Player.bitNodeN !== 15 ? 0.5 : 1;
+  const rateMultiplier = Player.bitNodeN !== 15 ? 2 : 1;
   return (rateMultiplier * cycleRate) / depth;
 };
 
