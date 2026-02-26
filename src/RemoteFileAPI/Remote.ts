@@ -6,11 +6,11 @@ import { Settings } from "../Settings/Settings";
 import { EventEmitter } from "../utils/EventEmitter";
 import type { getRemoteFileApiConnectionStatus } from "./RemoteFileAPI";
 
+const timeOutIds = new Set<number>();
+
 function showErrorMessage(address: string, detail: string) {
   SnackbarEvents.emit(`Error with websocket ${address}, details: ${detail}`, ToastVariant.ERROR, 5000);
 }
-
-const eventCodeWhenIntentionallyStoppingConnection = 3000;
 
 export const RemoteFileApiConnectionEvents = new EventEmitter<[ReturnType<typeof getRemoteFileApiConnectionStatus>]>();
 
@@ -26,7 +26,15 @@ export class Remote {
   }
 
   public stopConnection(): void {
-    this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
+    // Cancel all pending retries immediately. This function is only called when we intentionally close the current
+    // connection before starting a new one. The new connection will retry on its own if needed.
+    timeOutIds.forEach((id) => window.clearTimeout(id));
+    timeOutIds.clear();
+
+    if (this.connection) {
+      this.connection.intentionallyClosed = true;
+    }
+    this.connection?.close();
     RemoteFileApiConnectionEvents.emit("Offline");
   }
 
@@ -69,7 +77,7 @@ export class Remote {
        * unexpectedly (e.g., show a warning, reconnect after a delay), so we need to check whether the close event is
        * unexpected.
        */
-      if (event.code === eventCodeWhenIntentionallyStoppingConnection) {
+      if (event.currentTarget instanceof WebSocket && event.currentTarget.intentionallyClosed) {
         return;
       }
 
@@ -83,7 +91,8 @@ export class Remote {
 
       if (Settings.RemoteFileApiReconnectionDelay > 0) {
         this.reconnecting = true;
-        setTimeout(() => {
+        const timeOutId = window.setTimeout(() => {
+          timeOutIds.delete(timeOutId);
           if (autoConnectAttempt === 1) {
             SnackbarEvents.emit(`Attempting to auto connect Remote API`, ToastVariant.WARNING, 2000);
           }
@@ -93,6 +102,7 @@ export class Remote {
 
           this.startConnection(attempts);
         }, Settings.RemoteFileApiReconnectionDelay * 1000);
+        timeOutIds.add(timeOutId);
         RemoteFileApiConnectionEvents.emit("Reconnecting");
       } else {
         this.reconnecting = false;
