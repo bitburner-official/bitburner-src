@@ -76,10 +76,10 @@ export const calculateAuthenticationTime = (
 
   const baseDiff = (difficulty + 1) * 100;
   const diffFactor = 5;
-  const baseTime = 600;
+  const baseTime = 850;
 
   const threadsFactor = linear ? 1 / threads : 1 / (1 + 0.2 * (threads - 1));
-  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma * 0.7 + 100);
+  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 150);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
   const applyUnderleveledFactor = person.skills.charisma <= chaRequired && darknetServerData.depth > 1;
   const underleveledFactor = applyUnderleveledFactor ? 1.5 + (chaRequired + 50) / (person.skills.charisma + 50) : 1;
