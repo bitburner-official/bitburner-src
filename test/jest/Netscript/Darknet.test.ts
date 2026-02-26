@@ -17,7 +17,7 @@ import {
 } from "../Utilities";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { DarknetState, getServerState, triggerNextUpdate } from "../../../src/DarkNet/models/DarknetState";
-import { getDarknetServerOrThrow } from "../../../src/DarkNet/utils/darknetServerUtils";
+import { getDarknetServer, getDarknetServerOrThrow } from "../../../src/DarkNet/utils/darknetServerUtils";
 import { ModelIds, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { expectRunningOnDarknetServer } from "../../../src/DarkNet/effects/offlineServerHandling";
@@ -48,6 +48,7 @@ beforeAll(() => {
 });
 beforeEach(() => {
   DarknetState.offlineServers = new Set();
+  DarknetState.allowMutating = false;
   setupBasicTestingEnvironment({ purchasePServer: true, purchaseHacknetServer: true });
   Player.sourceFiles.set(15, 1);
   getDarkscapeNavigator();
@@ -878,9 +879,19 @@ describe("Non-darkweb darknet server", () => {
   test("authenticate from darkweb", async () => {
     const ns = getNsOnDarkWeb();
     const target = getFirstDarknetServerAdjacentToDarkWeb();
-    const result = await ns.dnet.authenticate(target, getDarknetServerOrThrow(target).password);
-    expect(result.success).toStrictEqual(true);
+    const server = getDarknetServerOrThrow(target);
+    const result = await ns.dnet.authenticate(target, server.password);
+    // Logging details for debugging flaky test
+    if (!result.success) {
+      console.log("Server details grabbed before auth:");
+      console.log(server);
+      console.log("result:");
+      console.log(result);
+      console.log("currentServerDetails:");
+      console.log(getDarknetServer(target));
+    }
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
+    expect(result.success).toStrictEqual(true);
   });
   test("authenticate itself", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
