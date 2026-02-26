@@ -70,9 +70,6 @@ export class Remote {
       );
       RemoteFileApiConnectionEvents.emit("Online");
     });
-    // "Capture" this.connection to use in its event handler later. this.connection will be assigned a new value when
-    // startConnection is called.
-    const thisConnection = this.connection;
     this.connection.addEventListener("close", (event) => {
       /**
        * On Bitburner side, we may intentionally close the connection. For example, we do that before starting a new
@@ -80,7 +77,7 @@ export class Remote {
        * unexpectedly (e.g., show a warning, reconnect after a delay), so we need to check whether the close event is
        * unexpected.
        */
-      if (thisConnection.intentionallyClosed) {
+      if (event.currentTarget instanceof WebSocket && event.currentTarget.intentionallyClosed) {
         return;
       }
 
