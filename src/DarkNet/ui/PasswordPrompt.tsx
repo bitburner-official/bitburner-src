@@ -67,7 +67,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
     setLastDarknetResultFromAuth(authResult.result);
 
     if (authResult.result.success) {
-      DarknetEvents.emit("server-unlocked", server);
+      DarknetEvents.emit("RefreshUI");
     } else {
       // This selects the text inside the password input field so that the player can immediately start typing a new
       // guess without needing to clear out the old one.
@@ -75,7 +75,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
       // passwordInput.current may become null unexpectedly. Using the optional chaining operator for accessing
       // passwordInput.current is specifically for the case in which somebody mistakenly moves this line.
       passwordInput.current?.querySelector("input")?.select();
-      DarknetEvents.emit();
+      DarknetEvents.emit("RefreshUI");
     }
   }
 

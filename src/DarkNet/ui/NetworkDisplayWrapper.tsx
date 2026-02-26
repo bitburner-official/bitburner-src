@@ -76,7 +76,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   }, [rerender]);
 
   useEffect(() => {
-    const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
+    const clearSubscription = DarknetEvents.subscribe((eventType) => {
+      if (eventType !== "RefreshUI") {
+        return;
+      }
+      updateDisplay();
+    });
     draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
     scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
     updateDisplay();
@@ -110,7 +115,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     if (target.id === "draggableBackgroundTarget") {
       background?.releasePointerCapture(pointerEvent.pointerId);
     }
-    DarknetEvents.emit();
+    DarknetEvents.emit("RefreshUI");
   };
 
   const handleDrag: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {

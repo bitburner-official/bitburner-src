@@ -8,8 +8,11 @@ import { getDarknetCyclesPerMutation } from "../utils/darknetNetworkUtils";
 import type { PasswordResponse } from "./DarknetServerOptions";
 import { assertFiniteNumber, assertNonNullish } from "../../utils/TypeAssertion";
 
-/** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
-export const DarknetEvents = new EventEmitter();
+/**
+ * - Trigger UI rerender when there are Darknet updates.
+ * - Cancel webstorm on prestige.
+ */
+export const DarknetEvents = new EventEmitter<["RefreshUI" | "Prestige"]>();
 
 export type ServerState = {
   lastLogTime?: Date;
@@ -77,6 +80,7 @@ export const DarknetState = {
 };
 
 export function prestigeDarknetState(prestigeSourceFile: boolean): void {
+  DarknetEvents.emit("Prestige");
   DarknetState.allowMutating = true;
   DarknetState.openServer = null;
   DarknetState.storedCycles = 0;

@@ -69,7 +69,7 @@ export function DarknetDev(): React.ReactElement {
 
   const toggleShowFullNetwork = (newValue: boolean): void => {
     DarknetState.showFullNetwork = newValue;
-    DarknetEvents.emit();
+    DarknetEvents.emit("RefreshUI");
   };
 
   const changeSelectedServerType = (event: SelectChangeEvent<string>): void => {

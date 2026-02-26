@@ -17,15 +17,31 @@ import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 
 const validateDarknetNetworkAndEmitDarknetEvent = (): void => {
   validateDarknetNetwork();
-  DarknetEvents.emit();
+  DarknetEvents.emit("RefreshUI");
 };
 
 export const launchWebstorm = async (suppressToast = false) => {
+  if (!DarknetState.allowMutating) {
+    return;
+  }
+  // Exit immediately if receivedPrestigeEvent is true. There is no need to set DarknetState.allowMutating to true in
+  // that case. That will be done in prestigeDarknetState.
+  let receivedPrestigeEvent = false;
+  const unsubscribe = DarknetEvents.subscribe((eventType) => {
+    if (eventType !== "Prestige") {
+      return;
+    }
+    receivedPrestigeEvent = true;
+  });
   DarknetState.allowMutating = false;
   if (!suppressToast) {
     SnackbarEvents.emit(`DARKNET WEBSTORM APPROACHING`, ToastVariant.ERROR, 5000);
   }
   await sleep(5000);
+  if (receivedPrestigeEvent) {
+    unsubscribe();
+    return;
+  }
 
   const serversToDelete = getAllMovableDarknetServers().length * 0.6 + (Math.random() * getNetDepth() - 6);
   deleteRandomDarknetServers(serversToDelete);
@@ -35,26 +51,43 @@ export const launchWebstorm = async (suppressToast = false) => {
   triggerNextUpdate();
 
   await sleep(4000);
+  if (receivedPrestigeEvent) {
+    unsubscribe();
+    return;
+  }
   addRandomDarknetServers(NET_WIDTH);
   validateDarknetNetworkAndEmitDarknetEvent();
   triggerNextUpdate();
 
   await sleep(4000);
+  if (receivedPrestigeEvent) {
+    unsubscribe();
+    return;
+  }
   addRandomDarknetServers(NET_WIDTH * 2);
   validateDarknetNetworkAndEmitDarknetEvent();
   triggerNextUpdate();
 
   await sleep(4000);
+  if (receivedPrestigeEvent) {
+    unsubscribe();
+    return;
+  }
   addRandomDarknetServers(NET_WIDTH * 2);
   validateDarknetNetworkAndEmitDarknetEvent();
   triggerNextUpdate();
 
   await sleep(8000);
+  if (receivedPrestigeEvent) {
+    unsubscribe();
+    return;
+  }
   balanceDarknetServers();
   validateDarknetNetworkAndEmitDarknetEvent();
   triggerNextUpdate();
 
   await sleep(5000);
+  unsubscribe();
   DarknetState.allowMutating = true;
 };
 
