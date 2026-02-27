@@ -214,6 +214,8 @@ const log = (message: string, pid = -1) => ({
 
 const addPacketSnifferNoise = (server: DarknetServer) => {
   const connectedServers = server.serversOnNetwork;
+  // If the server becomes disconnected while the UI is open and has no neighbors but still
+  // has logs being populated, fall back to showing the current password
   if (Math.random() < 0.3 || connectedServers.length === 0) {
     return log(`Logging in with passcode: ${server.password} ...`);
   }

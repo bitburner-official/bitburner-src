@@ -48,7 +48,6 @@ beforeAll(() => {
 });
 beforeEach(() => {
   DarknetState.offlineServers = new Set();
-  DarknetState.allowMutating = false;
   setupBasicTestingEnvironment({ purchasePServer: true, purchaseHacknetServer: true });
   Player.sourceFiles.set(15, 1);
   getDarkscapeNavigator();
