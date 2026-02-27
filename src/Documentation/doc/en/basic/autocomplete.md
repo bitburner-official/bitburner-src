@@ -66,6 +66,35 @@ export function autocomplete(data, args) {
 }
 ```
 
+## data.flags
+
+This is a function that works nearly identical to `ns.flags()`. The only difference is that it allows unknown options. For example:
+
+```js
+export function autocomplete(data, args) {
+  const parsedFlags = data.flags([["foo", true]]);
+  return [];
+}
+
+/** @param {NS} ns */
+export async function main(ns) {
+  const parsedFlags = ns.flags([["foo", true]]);
+}
+```
+
+If you type `run a.js --f` in the terminal and press tab, `parsedFlags` in `autocomplete` is `{_: ["--f"], foo: true}`.
+
+- `f` is not defined in the schema, so it's added to `_`.
+- The command does not specify `foo`, so `foo` is set to the default value.
+
+If you type `run a.js --f` in the terminal and press enter, an error will be thrown:
+
+```
+ArgError: unknown or unexpected option: --f
+```
+
+This is because `f` is not defined in the schema, and `ns.flags` does not allow unknown options.
+
 ## args
 
 The args array is also passed to the autocomplete function as a second parameter. Similar to ns.args passed to `main` in normal scripts, this array contains the arguments currently inputted into the terminal.

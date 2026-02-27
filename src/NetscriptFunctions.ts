@@ -1524,7 +1524,7 @@ export const ns: InternalAPI<NSFull> = {
     //Script **must** be a script at this point
     return compile(script as Script, server.scripts);
   },
-  flags: Flags,
+  flags: (ctx) => Flags(ctx, false),
   heart: { break: () => () => Player.karma },
   ...NetscriptExtra(),
 };
