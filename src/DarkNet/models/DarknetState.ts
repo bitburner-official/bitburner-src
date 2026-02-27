@@ -9,7 +9,7 @@ import type { PasswordResponse } from "./DarknetServerOptions";
 import { assertFiniteNumber, assertNonNullish } from "../../utils/TypeAssertion";
 
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
-export const DarknetEvents = new EventEmitter();
+export const DarknetEvents = new EventEmitter<[]>();
 
 export type ServerState = {
   lastLogTime?: Date;
@@ -26,7 +26,10 @@ export type LogEntry = {
  * If you add a new property to this global state, you must check if you need to reset it in prestigeDarknetState.
  */
 export const DarknetState = {
-  allowMutating: true,
+  // If this is null, network mutation is allowed. If this is a function,
+  // mutation is frozen and calling the function releases the lock.
+  // *Only* the lock function may reset this to null.
+  mutationLock: null as (() => void) | null,
   openServer: null as BaseServer | null,
   nextMutation: Promise.resolve(),
   nextMutationResolver: null as (() => void) | null,
@@ -77,7 +80,7 @@ export const DarknetState = {
 };
 
 export function prestigeDarknetState(prestigeSourceFile: boolean): void {
-  DarknetState.allowMutating = true;
+  DarknetState.mutationLock?.();
   DarknetState.openServer = null;
   DarknetState.storedCycles = 0;
   if (prestigeSourceFile) {
