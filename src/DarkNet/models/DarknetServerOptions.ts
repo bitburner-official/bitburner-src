@@ -151,7 +151,7 @@ const decorateName = (name: string): string => {
       // Just in case we hit a lot of the same name mutations, or if the player
       // messes with Math.random(), prevent an infinite loop
       updatedName += `/T${Date.now()}`;
-      break;
+      continue;
     }
 
     const connector = connectors[Math.floor(Math.random() * connectors.length)];
