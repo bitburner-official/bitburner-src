@@ -355,7 +355,25 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         try {
           return flagFunc(schema);
         } catch (error) {
-          throw new Error("Cannot parse the schema passed to AutocompleteData.flags", { cause: error });
+          // Let's say the autocomplete function is defined like this:
+          // export function autocomplete(data, args) {
+          //   data.flags([
+          //     ["foo", true],
+          //   ]);
+          //   return [];
+          // }
+          // If the command is "run test.js --f[tab]", the expected behavior is "--foo" being shown in the autocomplete
+          // result. However, the schema defines "foo", not "f", so the arg library throws the ARG_UNKNOWN_OPTION error.
+          // This is the expected behavior of this library, but when it happens in the autocomplete function, it makes
+          // data.flags become useless. We should suppress the error in this case.
+          // Note that it means we also suppress legit error cases like "run test.js --bar[tab]" ("bar" is not defined
+          // in the schema). Handling all these cases is possible, but it's unnecessarily complicated.
+          if (error instanceof Error && "code" in error && error.code === "ARG_UNKNOWN_OPTION") {
+            return {};
+          }
+          throw new Error("Cannot parse the arguments with the schema passed to AutocompleteData.flags", {
+            cause: error,
+          });
         }
       },
       hostname: currServ.hostname,
