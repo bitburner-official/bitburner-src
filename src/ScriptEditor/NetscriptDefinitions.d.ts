@@ -8977,7 +8977,9 @@ export interface NS {
   share(): Promise<void>;
 
   /**
-   * Share power has a multiplicative effect on rep/second while doing work for a faction.
+   * Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking
+   * work, share power still increases the reputation gain rate, but the effect is non-linear.
+   *
    * Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
    * @remarks
    * RAM cost: 0.2 GB
