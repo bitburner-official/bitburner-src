@@ -691,6 +691,28 @@ describe("Password Tests", () => {
   });
 });
 
+describe("mutateDarknet and webstorm", () => {
+  test("mutateDarknet", () => {
+    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
+    for (let i = 0; i < 5000; ++i) {
+      mutateDarknet();
+    }
+    expect(spiedExceptionAlert).not.toHaveBeenCalled();
+    expect(spiedConsoleError).not.toHaveBeenCalled();
+  });
+  test("webstorm", async () => {
+    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
+    jest.spyOn(UtilityModule, "sleep").mockImplementation();
+    for (let i = 0; i < 100; ++i) {
+      await launchWebstorm();
+    }
+    expect(spiedExceptionAlert).not.toHaveBeenCalled();
+    expect(spiedConsoleError).not.toHaveBeenCalled();
+  });
+});
+
 function validatePath(hostname: string): void {
   expectWithMessage(isDirectoryPath(`${hostname}/`), true, `Invalid hostname: ${hostname}`);
   expectWithMessage(isFilePath(`${hostname}/data.txt`), true, `Invalid hostname: ${hostname}`);
@@ -753,27 +775,5 @@ describe("Clue filename generator", () => {
         getClueFileName(notebookFileNames);
       }).not.toThrow();
     }
-  });
-});
-
-describe("mutateDarknet and webstorm", () => {
-  test("mutateDarknet", () => {
-    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
-    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
-    for (let i = 0; i < 5000; ++i) {
-      mutateDarknet();
-    }
-    expect(spiedExceptionAlert).not.toHaveBeenCalled();
-    expect(spiedConsoleError).not.toHaveBeenCalled();
-  });
-  test("webstorm", async () => {
-    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
-    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
-    jest.spyOn(UtilityModule, "sleep").mockImplementation();
-    for (let i = 0; i < 100; ++i) {
-      await launchWebstorm();
-    }
-    expect(spiedExceptionAlert).not.toHaveBeenCalled();
-    expect(spiedConsoleError).not.toHaveBeenCalled();
   });
 });
