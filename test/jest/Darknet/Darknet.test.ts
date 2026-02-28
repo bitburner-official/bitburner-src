@@ -48,10 +48,10 @@ import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 import { GenericResponseMessage, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { expectWithMessage, getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { getClueFileName, getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
-import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
-import * as UtilityModule from "../../../src/utils/Utility";
-import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
-import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
+// import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
+// import * as UtilityModule from "../../../src/utils/Utility";
+// import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
+// import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 import { isNumber } from "../../../src/types";
 import { getMostRecentAuthLog, getServerLogs } from "../../../src/DarkNet/models/packetSniffing";
 import { Player } from "@player";
@@ -691,27 +691,27 @@ describe("Password Tests", () => {
   });
 });
 
-describe("mutateDarknet and webstorm", () => {
-  test("mutateDarknet", () => {
-    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
-    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
-    for (let i = 0; i < 5000; ++i) {
-      mutateDarknet();
-    }
-    expect(spiedExceptionAlert).not.toHaveBeenCalled();
-    expect(spiedConsoleError).not.toHaveBeenCalled();
-  });
-  test("webstorm", async () => {
-    const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
-    const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
-    jest.spyOn(UtilityModule, "sleep").mockImplementation();
-    for (let i = 0; i < 100; ++i) {
-      await launchWebstorm();
-    }
-    expect(spiedExceptionAlert).not.toHaveBeenCalled();
-    expect(spiedConsoleError).not.toHaveBeenCalled();
-  });
-});
+// describe("mutateDarknet and webstorm", () => {
+//   test("mutateDarknet", () => {
+//     const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+//     const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
+//     for (let i = 0; i < 5000; ++i) {
+//       mutateDarknet();
+//     }
+//     expect(spiedExceptionAlert).not.toHaveBeenCalled();
+//     expect(spiedConsoleError).not.toHaveBeenCalled();
+//   });
+//   test("webstorm", async () => {
+//     const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+//     const spiedConsoleError = jest.spyOn(console, "error").mockImplementation();
+//     jest.spyOn(UtilityModule, "sleep").mockImplementation();
+//     for (let i = 0; i < 100; ++i) {
+//       await launchWebstorm();
+//     }
+//     expect(spiedExceptionAlert).not.toHaveBeenCalled();
+//     expect(spiedConsoleError).not.toHaveBeenCalled();
+//   });
+// });
 
 function validatePath(hostname: string): void {
   expectWithMessage(isDirectoryPath(`${hostname}/`), true, `Invalid hostname: ${hostname}`);

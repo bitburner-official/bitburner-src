@@ -34,6 +34,7 @@ import {
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 import type { Result } from "@nsdefs";
 import { assertNonNullish } from "../../../src/utils/TypeAssertion";
+import { isInWebstorm } from "../../../src/DarkNet/effects/webstorm";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Invalid host: '${hostnameOfNonExistentServer}'`;
@@ -116,11 +117,11 @@ describe("Common APIs", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const result1 = ns.dnet.unleashStormSeed();
     expect(result1.success).toStrictEqual(false);
-    expect(DarknetState.allowMutating).toStrictEqual(true);
+    expect(isInWebstorm()).toStrictEqual(false);
     getDarknetServerOrThrow(ns.getHostname()).programs.push(CompletedProgramName.stormSeed);
     const result2 = ns.dnet.unleashStormSeed();
     expect(result2.success).toStrictEqual(true);
-    expect(DarknetState.allowMutating).toStrictEqual(false);
+    expect(isInWebstorm()).toStrictEqual(true);
   });
   test("getDarknetInstability", () => {
     const ns = getNsOnDarkWeb();

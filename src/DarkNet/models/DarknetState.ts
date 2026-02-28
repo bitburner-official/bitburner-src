@@ -7,6 +7,7 @@ import { MAX_NET_DEPTH, NET_WIDTH } from "../Enums";
 import { getDarknetCyclesPerMutation } from "../utils/darknetNetworkUtils";
 import type { PasswordResponse } from "./DarknetServerOptions";
 import { assertFiniteNumber, assertNonNullish } from "../../utils/TypeAssertion";
+import { resetWebstorm } from "../effects/webstorm";
 
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
@@ -26,7 +27,14 @@ export type LogEntry = {
  * If you add a new property to this global state, you must check if you need to reset it in prestigeDarknetState.
  */
 export const DarknetState = {
-  allowMutating: true,
+  /**
+   * Do NOT use this property directly. You must use functions in src/DarkNet/effects/webstorm.ts.
+   */
+  webStormStage: 0,
+  /**
+   * Do NOT use this property directly. You must use functions in src/DarkNet/effects/webstorm.ts.
+   */
+  nextWebStormStageStartTimestamp: 0,
   openServer: null as BaseServer | null,
   nextMutation: Promise.resolve(),
   nextMutationResolver: null as (() => void) | null,
@@ -77,7 +85,7 @@ export const DarknetState = {
 };
 
 export function prestigeDarknetState(prestigeSourceFile: boolean): void {
-  DarknetState.allowMutating = true;
+  resetWebstorm();
   DarknetState.openServer = null;
   DarknetState.storedCycles = 0;
   if (prestigeSourceFile) {

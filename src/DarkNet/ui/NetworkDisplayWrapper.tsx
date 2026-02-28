@@ -26,6 +26,7 @@ import { getServerLogs } from "../models/packetSniffing";
 import { getTimeoutChance } from "../effects/offlineServerHandling";
 import { DocumentationLink } from "../../ui/React/DocumentationLink";
 import { Settings } from "../../Settings/Settings";
+import { isInWebstorm } from "../effects/webstorm";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -243,7 +244,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       ) : (
         ""
       )}
-      {DarknetState.allowMutating ? (
+      {!isInWebstorm() ? (
         <Box className={`${classes.inlineFlexBox}`}>
           <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
             Dark Net

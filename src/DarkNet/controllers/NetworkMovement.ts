@@ -24,6 +24,7 @@ import {
 import { DarknetConstants } from "../Constants";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { isInWebstorm, processWebstorm } from "../effects/webstorm";
 
 export const processDarknet = (cycles: number): void => {
   storeDarknetCycles(cycles);
@@ -36,14 +37,16 @@ export const processDarknet = (cycles: number): void => {
   DarknetState.storedCycles -= cyclesToProcess;
 
   const cyclesPerMutation = getDarknetCyclesPerMutation();
-  if (DarknetState.cyclesSinceLastMutation > cyclesPerMutation) {
+  if (isInWebstorm()) {
+    processWebstorm();
+  } else if (DarknetState.cyclesSinceLastMutation > cyclesPerMutation) {
     DarknetState.cyclesSinceLastMutation = 0;
     mutateDarknet();
   }
 };
 
 export const mutateDarknet = (): void => {
-  if (!DarknetState.allowMutating) {
+  if (isInWebstorm()) {
     return;
   }
   const servers = getAllMovableDarknetServers();

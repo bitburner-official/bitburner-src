@@ -48,6 +48,7 @@ import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import type { Script } from "../../Script/Script";
 import type { CodingContract } from "../../CodingContract/Contract";
 import { getTorRouter } from "../../Server/ServerHelpers";
+import { resetWebstorm } from "../effects/webstorm";
 
 export function initDarkwebServer(): void {
   const existingServer = GetServer(SpecialServers.DarkWeb);
@@ -130,10 +131,10 @@ export const clearDarknet = () => {
     deleteDarknetServer(labyrinth);
   }
 
+  resetWebstorm();
   DarknetState.zoomIndex = 7;
   DarknetState.netViewLeftScroll = 0;
   DarknetState.netViewTopScroll = 0;
-  DarknetState.allowMutating = true;
   DarknetState.openServer = null;
   DarknetState.stockPromotions = {};
   DarknetState.migrationInductionServers = new Map();

@@ -259,7 +259,7 @@ export function DarknetDev(): React.ReactElement {
           >
             <Button
               onClick={() => {
-                void launchWebstorm();
+                launchWebstorm();
                 Router.toPage(SimplePage.DarkNet);
               }}
             >
