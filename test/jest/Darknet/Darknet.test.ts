@@ -723,10 +723,10 @@ describe("mutateDarknet and webstorm", () => {
     try {
       jest.useFakeTimers();
       const promise = launchWebstorm();
-      expect(DarknetState.allowMutating).toBe(false);
+      expect(DarknetState.mutationLock).toBeTruthy();
 
       await jest.advanceTimersByTimeAsync(10000);
-      expect(DarknetState.allowMutating).toBe(false);
+      expect(DarknetState.mutationLock).toBeTruthy();
 
       const initialServers = serverSnapshot();
       // Low rolls cause stuff to happen, we want deterministic testing.
@@ -739,7 +739,7 @@ describe("mutateDarknet and webstorm", () => {
 
       await jest.runAllTimersAsync();
       await promise; // Should immediately finish
-      expect(DarknetState.allowMutating).toBe(true);
+      expect(DarknetState.mutationLock).toBeNull();
 
       mutateDarknet();
       expect(serverSnapshot()).not.toEqual(initialServers);
@@ -753,12 +753,12 @@ describe("mutateDarknet and webstorm", () => {
       jest.useFakeTimers();
       const promise = launchWebstorm();
       await jest.advanceTimersByTimeAsync(0); // Finish any promises
-      expect(DarknetState.allowMutating).toBe(false);
+      expect(DarknetState.mutationLock).toBeTruthy();
 
       const beforePrestige = serverSnapshot();
       prestigeAugmentation();
 
-      expect(DarknetState.allowMutating).toBe(true);
+      expect(DarknetState.mutationLock).toBeNull();
       const initialServers = serverSnapshot();
       // Validate that prestige changed the network
       expect(initialServers).not.toEqual(beforePrestige);
@@ -766,7 +766,7 @@ describe("mutateDarknet and webstorm", () => {
       await jest.runAllTimersAsync();
       await promise; // Should immediately finish
 
-      expect(DarknetState.allowMutating).toBe(true);
+      expect(DarknetState.mutationLock).toBeNull();
       // Webstorm should not have changed anything
       expect(serverSnapshot()).toEqual(initialServers);
     } finally {
