@@ -93,12 +93,6 @@ export const operationSkillSuccessBonus = (inst: Bladeburner) => {
   return inst.getSkillMult(BladeburnerMultName.SuccessChanceOperation);
 };
 
-export function operationTeamSuccessBonus(this: Operation | BlackOperation, inst: Bladeburner) {
-  if (this.teamCount && this.teamCount > 0) {
-    this.teamCount = Math.min(this.teamCount, inst.teamSize);
-    const teamMultiplier = Math.pow(this.teamCount, 0.05);
-    return teamMultiplier;
-  }
-
-  return 1;
+export function operationTeamSuccessBonus(this: Operation | BlackOperation) {
+  return Math.pow(this.teamCount + 1, 0.05);
 }
