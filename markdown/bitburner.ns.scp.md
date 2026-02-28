@@ -112,5 +112,5 @@ const server = ns.args[0];
 const files = ["hack.js", "weaken.js", "grow.js"];
 ns.scp(files, server, "home");
 ```
-For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
+For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
 
