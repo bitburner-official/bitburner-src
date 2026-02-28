@@ -4619,7 +4619,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    *
-   * @returns A promise that resolves to a {@link DarknetResult} object.
+   * @returns A {@link DarknetResult} object.
    */
   unleashStormSeed(): DarknetResult;
 
@@ -7953,7 +7953,7 @@ export interface NS {
    * ns.scp(files, server, "home");
    * ```
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
+   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
    *
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.
@@ -8185,7 +8185,7 @@ export interface NS {
    */
   getServerMaxRam(host?: string): number;
   /**
-   * Get the used RAM on a server.
+   * Get the used RAM on a server. This includes ram used by running scripts as well as blocked ram on darknet servers.
    * @remarks
    * RAM cost: 0.05 GB
    *

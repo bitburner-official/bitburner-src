@@ -425,7 +425,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       }
 
       const server = serverCheck.server;
-      const networkDelay = calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 4;
+      const networkDelay =
+        calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads, "", true) * 4;
       const xp = formatNumber(calculatePasswordAttemptChaGain(server, ctx.workerScript.scriptRef.threads), 1);
 
       logger(ctx)(`Captured some outgoing transmissions from ${server.hostname}. (Gained ${xp} cha xp)`);

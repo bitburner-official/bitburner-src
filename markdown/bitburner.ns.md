@@ -1037,7 +1037,7 @@ Get server security level.
 
 </td><td>
 
-Get the used RAM on a server.
+Get the used RAM on a server. This includes ram used by running scripts as well as blocked ram on darknet servers.
 
 
 </td></tr>

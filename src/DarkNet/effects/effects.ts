@@ -62,22 +62,24 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
  * @param person - the player's character
  * @param attemptedPassword - the password being attempted
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
+ * @param linear - if true, the time scaling is linear with the number of threads instead of having diminishing returns
  */
 export const calculateAuthenticationTime = (
   darknetServerData: DarknetServerData,
   person: IPerson = Player,
   threads = 1,
   attemptedPassword = "",
+  linear = false,
 ) => {
   const chaRequired = darknetServerData.requiredCharismaSkill;
   const difficulty = darknetServerData.difficulty;
 
   const baseDiff = (difficulty + 1) * 100;
   const diffFactor = 5;
-  const baseTime = 500;
+  const baseTime = 850;
 
-  const threadsFactor = 1 / (1 + 0.2 * (threads - 1));
-  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
+  const threadsFactor = 1 / (linear ? threads : 1 + 0.2 * (threads - 1));
+  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 150);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
   const applyUnderleveledFactor = person.skills.charisma <= chaRequired && darknetServerData.depth > 1;
   const underleveledFactor = applyUnderleveledFactor ? 1.5 + (chaRequired + 50) / (person.skills.charisma + 50) : 1;
@@ -128,10 +130,9 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
   );
 };
 
-// TODO: balance xp gain
 export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threads: number = 1, success = false) => {
   const baseXpGain = 3;
-  const difficultyBase = 1.12;
+  const difficultyBase = 0.8;
   const xpGain = baseXpGain + difficultyBase ** server.difficulty;
   const alreadyHackedMult = server.hasAdminRights ? 0.2 : 1;
   const successMult = success && !server.hasAdminRights ? 10 : 1;
