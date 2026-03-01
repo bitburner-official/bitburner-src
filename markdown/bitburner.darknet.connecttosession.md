@@ -10,6 +10,8 @@ If successful, grants the script a session, allowing it to scp() files from that
 
 If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
 
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
+
 **Signature:**
 
 ```typescript

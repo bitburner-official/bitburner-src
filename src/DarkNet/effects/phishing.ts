@@ -14,19 +14,19 @@ const getPhishingCacheCooldownDuration = () => (hasDarknetBonusTime() ? 12_000 :
 
 export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServer) => {
   const threads = ctx.workerScript.scriptRef.threads;
-  const xpGained = Player.mults.charisma_exp * threads * 50 * ((200 + Player.skills.charisma) / 200);
-  Player.gainCharismaExp(xpGained);
+  const xpReward = Player.mults.charisma_exp * threads * 50 * ((200 + Player.skills.charisma) / 200);
 
   const timeSinceLastRewardCache = new Date().getTime() - DarknetState.lastPhishingCacheTime.getTime();
   const rewardCacheChance = 0.005 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
-  const moneyRewardChance = 0.05 * Player.mults.crime_success * ((100 + Player.skills.charisma) / 100);
+  const moneyRewardChance = 0.05 * Player.mults.crime_success * ((200 + Player.skills.charisma) / 200);
   const cooldown = getPhishingCacheCooldownDuration();
   const isLabServer = isLabyrinthServer(server.hostname);
 
   if (timeSinceLastRewardCache > cooldown && Math.random() < rewardCacheChance && !isLabServer) {
     addCacheToServer(server);
+    Player.gainCharismaExp(xpReward);
     DarknetState.lastPhishingCacheTime = new Date();
-    const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
+    const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(xpReward, 1)} cha xp)`;
     helpers.log(ctx, () => result);
     return {
       success: true,
@@ -38,17 +38,18 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
     const bonusTimeFactor = hasDarknetBonusTime() ? 1.3 : 1;
     const depthFactor = 0.1 + server.depth * 0.05;
     const moneyReward =
-      2000 *
+      1000 *
       Player.mults.crime_money *
       depthFactor *
       threads *
-      ((200 + Player.skills.charisma) / 200) *
+      ((400 + Player.skills.charisma) / 400) *
       bonusTimeFactor *
       randomFactor *
       currentNodeMults.DarknetMoneyMultiplier;
     Player.gainMoney(moneyReward, "darknet");
+    Player.gainCharismaExp(xpReward);
     const result = `Phishing attack succeeded! $${formatNumber(moneyReward, 2)} retrieved. (Gained ${formatNumber(
-      xpGained,
+      xpReward,
       1,
     )} cha xp)`;
     helpers.log(ctx, () => result);
@@ -58,7 +59,8 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
       message: result,
     };
   }
-  const result = `There were no takers on that phishing attempt. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
+  Player.gainCharismaExp(xpReward / 4);
+  const result = `There were no takers on that phishing attempt. (Gained ${formatNumber(xpReward / 4, 1)} cha xp)`;
   helpers.log(ctx, () => result);
   return {
     success: false,

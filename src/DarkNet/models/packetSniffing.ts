@@ -14,7 +14,7 @@ import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 const MAX_LOG_LINES = 200;
 
 export const capturePackets = (server: DarknetServer) => {
-  const BASE_PASSWORD_INCLUSION_RATE = 0.18;
+  const BASE_PASSWORD_INCLUSION_RATE = 0.12;
   const DIFFICULTY_MODIFIER = 0.88;
   const difficulty = server.difficulty * 1.3;
   const vulnerability = server.modelId === ModelIds.packetSniffer ? 8 : 1;
