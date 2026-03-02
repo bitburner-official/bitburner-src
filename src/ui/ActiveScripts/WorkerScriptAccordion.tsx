@@ -69,7 +69,8 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
         <ListItemText
           primary={
             <Typography sx={{ overflowWrap: "break-word" }}>
-              └ {props.workerScript.name} {JSON.stringify(props.workerScript.args)}
+              └ {props.workerScript.name} {formatRam(scriptRef.ramUsage * scriptRef.threads)}{" "}
+              {JSON.stringify(props.workerScript.args)}
             </Typography>
           }
         />
@@ -81,18 +82,13 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
             <TableBody>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ RAM Usage:</Typography>
-                </TableCell>
-                <TableCell className={classes.noborder}>
-                  <Typography>{formatRam(props.workerScript.scriptRef.ramUsage)}</Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className={classes.noborder}>
                   <Typography>└ Threads:</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
-                  <Typography>{formatThreads(props.workerScript.scriptRef.threads)}</Typography>
+                  <Typography>
+                    {formatThreads(scriptRef.threads)}{" "}
+                    {scriptRef.threads > 1 ? `(${formatRam(scriptRef.ramUsage)} each)` : ``}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
