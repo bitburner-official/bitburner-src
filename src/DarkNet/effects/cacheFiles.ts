@@ -11,6 +11,7 @@ import { cachePrefixes } from "../models/dictionaryData";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import type { CacheResult, Result } from "@nsdefs";
+import { DarknetState } from "../models/DarknetState";
 
 export const generateCacheFilename: (prefix?: string) => CacheFilePath | null = (prefix) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -63,16 +64,12 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
 };
 
 export const getCCTReward = (difficulty: number): string => {
-  if (Math.random() < difficulty * 0.2) {
+  const timeSinceLastCCTReward = new Date().getTime() - DarknetState.lastCctRewardTime.getTime();
+  if (Math.random() < difficulty * 0.2 || timeSinceLastCCTReward > 5 * 60 * 1000) {
     return getMoneyReward(difficulty);
   }
-
-  const contractCount = Math.floor(Math.min(20, difficulty) * 0.2 - 1.5 + Math.random() * 3);
-  if (contractCount <= 0) {
-    return getMoneyReward(difficulty);
-  }
-  tryGeneratingRandomContract(contractCount);
-  return `New coding contracts are now available on the network!`;
+  tryGeneratingRandomContract(1);
+  return `A new coding contract is now available on the network!`;
 };
 
 export const getMoneyReward = (difficulty: number): string => {

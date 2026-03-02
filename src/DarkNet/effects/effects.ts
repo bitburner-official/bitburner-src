@@ -41,7 +41,7 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
   server.hasAdminRights = true;
   addClue(server);
 
-  const cctChance = Math.min(0.12, 0.02 * (server.difficulty - 1));
+  const cctChance = Math.min(0.12, 0.01 * (server.difficulty - 1));
   if (Math.random() < cctChance) {
     generateContract({ server: server.hostname });
   }
