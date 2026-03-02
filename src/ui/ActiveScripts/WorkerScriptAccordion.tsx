@@ -4,7 +4,7 @@
  */
 import * as React from "react";
 
-import { formatExp, formatThreads, formatRam } from "../formatNumber";
+import { formatExp, formatThreads } from "../formatNumber";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
@@ -33,6 +33,7 @@ import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFuncti
 import { arrayToString } from "../../utils/helpers/ArrayHelpers";
 import { Money } from "../React/Money";
 import { MoneyRate } from "../React/MoneyRate";
+import { roundToTwo } from "../../utils/helpers/roundToTwo";
 
 const useStyles = makeStyles()({
   noborder: {
@@ -69,7 +70,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
         <ListItemText
           primary={
             <Typography sx={{ overflowWrap: "break-word" }}>
-              └ {props.workerScript.name} {formatRam(scriptRef.ramUsage * scriptRef.threads)}{" "}
+              └ {props.workerScript.name} ({roundToTwo(scriptRef.ramUsage * scriptRef.threads)}GB){" "}
               {JSON.stringify(props.workerScript.args)}
             </Typography>
           }
@@ -87,7 +88,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
                 <TableCell className={classes.noborder}>
                   <Typography>
                     {formatThreads(scriptRef.threads)}{" "}
-                    {scriptRef.threads > 1 ? `(${formatRam(scriptRef.ramUsage)} each)` : ``}
+                    {scriptRef.threads > 1 ? `(${roundToTwo(scriptRef.ramUsage)}GB each)` : ``}
                   </Typography>
                 </TableCell>
               </TableRow>
