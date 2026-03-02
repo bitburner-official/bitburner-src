@@ -4,7 +4,7 @@
  */
 import * as React from "react";
 
-import { formatExp, formatThreads } from "../formatNumber";
+import { formatExp, formatThreads, formatRam } from "../formatNumber";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
@@ -79,6 +79,14 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
         <Box mx={6}>
           <Table padding="none" size="small">
             <TableBody>
+              <TableRow>
+                <TableCell className={classes.noborder}>
+                  <Typography>└ RAM Usage:</Typography>
+                </TableCell>
+                <TableCell className={classes.noborder}>
+                  <Typography>{formatRam(props.workerScript.scriptRef.ramUsage)}</Typography>
+                </TableCell>
+              </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder}>
                   <Typography>└ Threads:</Typography>
