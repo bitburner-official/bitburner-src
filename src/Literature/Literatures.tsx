@@ -400,7 +400,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.TheSyndicate, FactionName.SlumSnakes],
     text: (
       <Typography>
-        A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in{" "}
+        A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in {" "}
         {CityName.Sector12}. Perhaps the most alarming part of the statistic is that most of the rise is in violent
         crime such as homicide and assault. According to the study, the city saw a total of 21,406 reported homicides in
         2076, which is over a 20% increase compared to 2075.
