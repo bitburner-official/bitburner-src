@@ -17,6 +17,7 @@ import { getRamBlock } from "../effects/ramblock";
 import { hasFullDarknetAccess } from "../effects/effects";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 import { isIPAddress } from "../../Types/strings";
+import { roundToTwo } from "../../utils/helpers/roundToTwo";
 
 export type PasswordResponse = {
   code: DarknetResponseCode;
@@ -58,7 +59,7 @@ export type DarknetServerOptions = {
 };
 
 export const DnetServerBuilder = (options: DarknetServerOptions): DarknetServer => {
-  const maxRam = 16 * 2 ** Math.floor(options.difficulty / 6) * [1, 1, 1.1, 1.4][Math.random() * 4];
+  const maxRam = roundToTwo(16 * 2 ** Math.floor(options.difficulty / 6) * [1, 1, 1.1, 1.4][Math.random() * 4]);
   const ramBlock = options.preventBlockedRam ? 0 : getRamBlock(maxRam);
   const name = options.name ?? generateDarknetServerName();
 
