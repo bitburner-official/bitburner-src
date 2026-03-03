@@ -24,8 +24,8 @@ test("getPlayer", () => {
     "factions",
     "entropy",
     "karma",
-  ];
-  const expected = Object.fromEntries(props.map((k) => [k, (Player as unknown as { [key: string]: unknown })[k]]));
+  ] as const;
+  const expected = Object.fromEntries(props.map((k) => [k, Player[k]]));
   expect(ns.getPlayer()).toEqual(expected);
 });
 // Benchmarks shouldn't waste time on every test run. Un-skip this when evaluating changes.
