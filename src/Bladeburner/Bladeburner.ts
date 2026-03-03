@@ -1116,9 +1116,14 @@ export class Bladeburner implements OperationTeam {
             break;
           }
           case BladeburnerGeneralActionName.Recruitment: {
-            const actionTime = action.getActionTime(this, person) * 1000;
+            const actionTime = action.getActionTime(this, person);
+            // Without dnet, the best way to gain charisma in the early part of a BN run is to take uni course at zb.
+            // With only SF1.3, the "Leadership" course gives ~20.5exp/s. With this exponential saturation curve, the
+            // action gives worse exp than the course at first, but it becomes better later while never being
+            // overpowered. The gain rate is soft-capped at ~60exp/s, which is ~3x the uni course.
+            const charismaGainRate = clampNumber(60 * (1 - Math.exp(-Math.pow(person.exp.charisma / 216000, 1.3))), 1);
             if (action.attempt(this, person)) {
-              const expGain = 2 * BladeburnerConstants.BaseStatGain * actionTime;
+              const expGain = charismaGainRate * actionTime;
               retValue.chaExp = expGain;
               ++this.teamSize;
               if (this.logging.general) {
@@ -1130,7 +1135,7 @@ export class Bladeburner implements OperationTeam {
                 );
               }
             } else {
-              const expGain = BladeburnerConstants.BaseStatGain * actionTime;
+              const expGain = (charismaGainRate * actionTime) / 2;
               retValue.chaExp = expGain;
               if (this.logging.general) {
                 this.log(
