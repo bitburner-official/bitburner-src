@@ -22,7 +22,7 @@ I'm going to assume you followed the introductory tutorial when you first began 
 In this introductory tutorial, you created a [Script](../basic/scripts.md) called `n00dles.js` and ran it on the `n00dles` server.
 Now, we'll kill this [Script](../basic/scripts.md). There are two ways to do this:
 
-- You can go to the Terminal and enter: `$ kill n00dles.js`
+- You can go to the Terminal and enter: `kill n00dles.js`
 - You can go to the `Active Scripts` page (Alt + s) and press the `Kill Script` button for `n00dles.js`.
 
 If you skipped the introductory tutorial, then ignore the part above.
