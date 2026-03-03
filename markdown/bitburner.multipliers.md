@@ -321,6 +321,25 @@ Multiplier to dexterity skill
 </td></tr>
 <tr><td>
 
+[dnet\_money](./bitburner.multipliers.dnet_money.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Multiplier to amount of money gained from phishing and caches on darknet servers
+
+
+</td></tr>
+<tr><td>
+
 [faction\_rep](./bitburner.multipliers.faction_rep.md)
 
 

@@ -948,6 +948,7 @@ import nsDoc_bitburner_multipliers_defense_exp_md from "../../markdown/bitburner
 import nsDoc_bitburner_multipliers_defense_md from "../../markdown/bitburner.multipliers.defense.md?raw";
 import nsDoc_bitburner_multipliers_dexterity_exp_md from "../../markdown/bitburner.multipliers.dexterity_exp.md?raw";
 import nsDoc_bitburner_multipliers_dexterity_md from "../../markdown/bitburner.multipliers.dexterity.md?raw";
+import nsDoc_bitburner_multipliers_dnet_money_md from "../../markdown/bitburner.multipliers.dnet_money.md?raw";
 import nsDoc_bitburner_multipliers_faction_rep_md from "../../markdown/bitburner.multipliers.faction_rep.md?raw";
 import nsDoc_bitburner_multipliers_hacking_chance_md from "../../markdown/bitburner.multipliers.hacking_chance.md?raw";
 import nsDoc_bitburner_multipliers_hacking_exp_md from "../../markdown/bitburner.multipliers.hacking_exp.md?raw";
@@ -2539,6 +2540,7 @@ AllPages["nsDoc/bitburner.multipliers.defense_exp.md"] = nsDoc_bitburner_multipl
 AllPages["nsDoc/bitburner.multipliers.defense.md"] = nsDoc_bitburner_multipliers_defense_md;
 AllPages["nsDoc/bitburner.multipliers.dexterity_exp.md"] = nsDoc_bitburner_multipliers_dexterity_exp_md;
 AllPages["nsDoc/bitburner.multipliers.dexterity.md"] = nsDoc_bitburner_multipliers_dexterity_md;
+AllPages["nsDoc/bitburner.multipliers.dnet_money.md"] = nsDoc_bitburner_multipliers_dnet_money_md;
 AllPages["nsDoc/bitburner.multipliers.faction_rep.md"] = nsDoc_bitburner_multipliers_faction_rep_md;
 AllPages["nsDoc/bitburner.multipliers.hacking_chance.md"] = nsDoc_bitburner_multipliers_hacking_chance_md;
 AllPages["nsDoc/bitburner.multipliers.hacking_exp.md"] = nsDoc_bitburner_multipliers_hacking_exp_md;
