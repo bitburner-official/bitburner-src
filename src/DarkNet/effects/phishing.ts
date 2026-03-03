@@ -8,6 +8,7 @@ import { addCacheToServer } from "./cacheFiles";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { ResponseCodeEnum } from "../Enums";
 import { isLabyrinthServer } from "./labyrinth";
+import { phishingRewardCooldownReached } from "./effects";
 
 export const getPhishingAttackSpeed = () => Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
 const getPhishingCacheCooldownDuration = () => (hasDarknetBonusTime() ? 12_000 : 24_000);
@@ -19,10 +20,11 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
   const timeSinceLastRewardCache = new Date().getTime() - DarknetState.lastPhishingCacheTime.getTime();
   const rewardCacheChance = 0.005 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
   const moneyRewardChance = 0.05 * Player.mults.crime_success * ((200 + Player.skills.charisma) / 200);
-  const cooldown = getPhishingCacheCooldownDuration();
+  const cacheCooldown = getPhishingCacheCooldownDuration();
+  const rewardCooldown = phishingRewardCooldownReached();
   const isLabServer = isLabyrinthServer(server.hostname);
 
-  if (timeSinceLastRewardCache > cooldown && Math.random() < rewardCacheChance && !isLabServer) {
+  if (timeSinceLastRewardCache > cacheCooldown && Math.random() < rewardCacheChance && !isLabServer) {
     addCacheToServer(server);
     Player.gainCharismaExp(xpReward);
     DarknetState.lastPhishingCacheTime = new Date();
@@ -33,7 +35,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
       code: ResponseCodeEnum.Success,
       message: result,
     };
-  } else if (Math.random() < moneyRewardChance) {
+  } else if (Math.random() < moneyRewardChance && rewardCooldown) {
     const randomFactor = Math.random() * 0.3 + 0.9;
     const bonusTimeFactor = hasDarknetBonusTime() ? 1.3 : 1;
     const depthFactor = 0.1 + server.depth * 0.05;

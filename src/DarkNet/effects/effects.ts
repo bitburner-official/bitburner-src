@@ -42,7 +42,7 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
   addClue(server);
 
   const cctChance = Math.min(0.12, 0.01 * (server.difficulty - 1));
-  if (Math.random() < cctChance) {
+  if (Math.random() < cctChance && cctCooldownReached()) {
     generateContract({ server: server.hostname });
   }
 
@@ -290,6 +290,20 @@ export const getDarkscapeNavigator = () => {
     Player.getHomeComputer().pushProgram(CompletedProgramName.darkscape);
   }
   populateDarknet();
+};
+
+export const cctCooldownReached = () => {
+  const timeSinceLastCCT = new Date().getTime() - DarknetState.lastCctRewardTime.getTime();
+  return timeSinceLastCCT > 10 * 60 * 1000;
+};
+
+export const phishingRewardCooldownReached = () => {
+  const timeSinceLastPhishingReward = new Date().getTime() - DarknetState.lastPhishingRewardTime.getTime();
+  const cooldownReached = timeSinceLastPhishingReward > (60 - DarknetState.phishingRewardCount * 3) * 1000;
+  if (cooldownReached) {
+    DarknetState.lastPhishingRewardTime = new Date();
+  }
+  return cooldownReached;
 };
 
 export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.activeSourceFileLvl(15) > 0;

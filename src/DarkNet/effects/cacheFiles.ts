@@ -11,7 +11,7 @@ import { cachePrefixes } from "../models/dictionaryData";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import type { CacheResult, Result } from "@nsdefs";
-import { DarknetState } from "../models/DarknetState";
+import { cctCooldownReached } from "./effects";
 
 export const generateCacheFilename: (prefix?: string) => CacheFilePath | null = (prefix) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -64,8 +64,7 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
 };
 
 export const getCCTReward = (difficulty: number): string => {
-  const timeSinceLastCCTReward = new Date().getTime() - DarknetState.lastCctRewardTime.getTime();
-  if (Math.random() < difficulty * 0.2 || timeSinceLastCCTReward > 5 * 60 * 1000) {
+  if (Math.random() < difficulty * 0.2 || !cctCooldownReached()) {
     return getMoneyReward(difficulty);
   }
   tryGeneratingRandomContract(1);
