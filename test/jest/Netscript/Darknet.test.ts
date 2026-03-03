@@ -55,7 +55,6 @@ beforeEach(() => {
   Player.mults.charisma = 1e10;
   Player.gainCharismaExp(1e100);
   getNsOnServerNearLabyrinth();
-  DarknetState.phishingRewardCount = 999;
 });
 
 function getNsOnHome() {
@@ -854,13 +853,6 @@ describe("darkweb", () => {
     const result = await ns.dnet.phishingAttack();
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
-  });
-  test("phishingAttack with low phishing success count", async () => {
-    const ns = getNsOnDarkWeb();
-    DarknetState.phishingRewardCount = 0;
-    const result = await ns.dnet.phishingAttack();
-    expect(result.success).toStrictEqual(false);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.PhishingFailed);
   });
   test("getServerRequiredCharismaLevel", () => {
     const ns = getNsOnDarkWeb();

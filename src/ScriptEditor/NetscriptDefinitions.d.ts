@@ -178,6 +178,8 @@ interface Multipliers {
   crime_money: number;
   /** Multiplier to crime success rate */
   crime_success: number;
+  /** Multiplier to amount of money gained from phishing and caches on darknet servers */
+  dnet_money: number;
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */

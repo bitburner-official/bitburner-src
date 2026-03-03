@@ -297,13 +297,4 @@ export const cctCooldownReached = () => {
   return timeSinceLastCCT > 10 * 60 * 1000;
 };
 
-export const phishingRewardCooldownReached = () => {
-  const timeSinceLastPhishingReward = new Date().getTime() - DarknetState.lastPhishingRewardTime.getTime();
-  const cooldownReached = timeSinceLastPhishingReward > (40 - DarknetState.phishingRewardCount * 2) * 1000;
-  if (cooldownReached) {
-    DarknetState.lastPhishingRewardTime = new Date();
-  }
-  return cooldownReached;
-};
-
 export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.activeSourceFileLvl(15) > 0;

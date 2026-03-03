@@ -43,8 +43,6 @@ export const DarknetState = {
    */
   labLocations: { "-1": [1, 1] } as Record<number, [number, number] | undefined>,
 
-  phishingRewardCount: 0,
-  lastPhishingRewardTime: new Date(),
   lastPhishingCacheTime: new Date(),
   lastCctRewardTime: new Date(),
   lastStormTime: new Date(),
@@ -90,8 +88,6 @@ export function prestigeDarknetState(prestigeSourceFile: boolean): void {
   DarknetState.Network = new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<null>(NET_WIDTH).fill(null));
   DarknetState.labyrinth = null;
   DarknetState.labLocations = { "-1": [1, 1] };
-  DarknetState.phishingRewardCount = 0;
-  DarknetState.lastPhishingRewardTime = new Date();
   DarknetState.lastPhishingCacheTime = new Date();
   DarknetState.lastStormTime = new Date();
   DarknetState.stockPromotions = {};

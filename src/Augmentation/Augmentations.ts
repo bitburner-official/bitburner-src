@@ -1859,9 +1859,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
         "metallic patterns on the user's upper back and shoulders. " +
         "Awarded to those who discover the secrets of the labyrinth.",
-      stats: "This augmentation increases the stasis link limit by one, and raises charisma by 5% and agility by 10%.",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma by 5% and agility by 10%, and darknet money by 30%.",
       charisma: 1.05,
       agility: 1.1,
+      dnet_money: 1.3,
       isSpecial: true,
       factions: [],
     },
@@ -1887,9 +1889,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
         "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
         "Awarded to those who discover the secrets of the labyrinth.",
-      stats: "This augmentation increases the stasis link limit by one, and raises charisma by 7% and strength by 10%.",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma by 7%, strength by 10%, and darknet money by 10%.",
       charisma: 1.07,
       strength: 1.1,
+      dnet_money: 1.1,
       isSpecial: true,
       prereqs: [AugmentationName.TheBoots],
       factions: [],
@@ -1901,9 +1905,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This skeletal augmentation greatly enhances the users durability and health. Inspired by the original Staff of Medicine that is said to " +
         "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. ",
       stats:
-        "This augmentation increases the stasis link limit by one, and raises charisma xp by 10% and defense by 10%.",
+        "This augmentation increases the stasis link limit by one, and raises charisma xp, defense, and darknet money by 10%.",
       charisma_exp: 1.1,
       defense: 1.1,
+      dnet_money: 1.1,
       isSpecial: true,
       prereqs: [AugmentationName.TheHammer],
       factions: [],
@@ -1916,9 +1921,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
         "making them exceptionally persuasive and confident in negotiations and social interactions. " +
         "Awarded to those who discover the secrets of the labyrinth.",
-      stats: "This augmentation raises charisma by 9% and company rep by 5%.",
+      stats: "This augmentation raises charisma by 9%, company rep by 5%, and darknet money by 15%.",
       charisma: 1.09,
       company_rep: 1.05,
+      dnet_money: 1.15,
       isSpecial: true,
       prereqs: [AugmentationName.TheStaff],
       factions: [],
@@ -1932,10 +1938,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
         "more powerful version of Occam's razor. " +
         "The final augment awarded to those who discover the secrets of the labyrinth.",
-      stats: "This augmentation raises charisma, hacking, and company rep by 10%.",
+      stats: "This augmentation raises charisma, hacking, darknet money, and company rep by 10%.",
       charisma: 1.1,
       hacking: 1.1,
       company_rep: 1.1,
+      dnet_money: 1.1,
       isSpecial: true,
       prereqs: [AugmentationName.TheLaw],
       factions: [],

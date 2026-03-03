@@ -67,7 +67,11 @@ export const getCCTReward = (difficulty: number): string => {
   if (Math.random() < difficulty * 0.2 || !cctCooldownReached()) {
     return getMoneyReward(difficulty);
   }
-  tryGeneratingRandomContract(1);
+  const contractCount = Math.floor(Math.min(20, difficulty) * 0.2 - 1.5 + Math.random() * 3);
+  if (contractCount < 1) {
+    return getMoneyReward(difficulty);
+  }
+  tryGeneratingRandomContract(contractCount);
   return `A new coding contract is now available on the network!`;
 };
 
@@ -79,6 +83,7 @@ export const getMoneyReward = (difficulty: number): string => {
     ((200 + Player.skills.charisma) / 200) *
     sf15_3Factor *
     Player.mults.crime_money *
+    Player.mults.dnet_money *
     currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");
   return `You have discovered a cache with ${formatMoney(reward)}.`;
