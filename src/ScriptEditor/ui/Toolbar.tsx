@@ -69,7 +69,11 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
         >
           Beautify
         </Button>
-        <Button color={isUpdatingRAM ? "secondary" : "primary"} sx={{ mx: 1 }} onClick={openRAMInfo}>
+        <Button
+          color={isUpdatingRAM ? "secondary" : "primary"}
+          sx={{ mx: 1, whiteSpace: "nowrap" }}
+          onClick={openRAMInfo}
+        >
           {ram}
         </Button>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Save])}>
@@ -105,6 +109,7 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
             }
             openDocumentationPopUp(path);
           }}
+          width={350}
         />
         <Typography>
           <DocumentationLink
