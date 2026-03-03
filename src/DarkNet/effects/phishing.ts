@@ -40,11 +40,11 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
     const bonusTimeFactor = hasDarknetBonusTime() ? 1.3 : 1;
     const depthFactor = 0.1 + server.depth * 0.05;
     const moneyReward =
-      1000 *
+      2000 *
       Player.mults.crime_money *
       depthFactor *
       threads *
-      ((400 + Player.skills.charisma) / 400) *
+      ((200 + Player.skills.charisma) / 200) *
       bonusTimeFactor *
       randomFactor *
       currentNodeMults.DarknetMoneyMultiplier;

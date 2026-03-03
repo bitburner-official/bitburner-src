@@ -956,6 +956,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ManualHackMoney: dec,
         ScriptHackMoney: dec,
         CodingContractMoney: dec,
+        DarknetMoneyMultiplier: dec,
 
         ClassGymExpGain: dec,
         CompanyWorkExpGain: dec,
@@ -988,8 +989,6 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         StaneksGiftPowerMultiplier: inc,
         StaneksGiftExtraSize: inc,
-
-        DarknetMoneyMultiplier: dec,
 
         WorldDaemonDifficulty: inc,
       });
