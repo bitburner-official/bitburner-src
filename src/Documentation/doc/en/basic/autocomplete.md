@@ -35,15 +35,15 @@ AutocompleteData is an object with the following properties;
 
 ```javascript
   {
-    command:    // the command being run, as seen on the terminal.
-    enums:      // the ns.enums object with various in-game strings.
-    filename:   // the name of the script file containing the autocomplete function.
-    hostname:   // the name of the host server the script would be running on.
-    processes:  // list of all processes running on the current server.
-    servers:    // list of all servers in the game. Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do not satisfy their requirements.
-    txts:       // list of all text files on the current server.
-    scripts:    // list of all scripts on the current server.
-    flags:      // the same flags function as passed with ns. Calling this function adds all the flags as autocomplete arguments.
+    command:    // The command being run, as seen on the terminal.
+    enums:      // The ns.enums object with various in-game strings.
+    filename:   // The name of the script file containing the autocomplete function.
+    hostname:   // The name of the host server the script would be running on.
+    processes:  // List of all processes running on the current server.
+    servers:    // List of all servers in the game. Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do not satisfy their requirements.
+    txts:       // List of all text files on the current server.
+    scripts:    // List of all scripts on the current server.
+    flags:      // A function similar to ns.flags(). Calling this function adds all the flags as autocomplete arguments.
   }
 ```
 
@@ -66,9 +66,33 @@ export function autocomplete(data, args) {
 }
 ```
 
+## args
+
+The args array is also passed to the autocomplete function as a second parameter. Similar to ns.args passed to `main` in normal scripts, this array contains the arguments currently inputted into the terminal.
+
+This can be used to remove already passed arguments from the autocomplete suggestions.
+
+For example;
+
+```javascript
+/**
+ * @param {AutocompleteData} data - context about the game, useful when autocompleting
+ * @param {string[]} args - current arguments, not including "run script.js"
+ * @returns {string[]} - the array of possible autocomplete options
+ */
+export function autocomplete(data, args) {
+  const servers = data.servers;
+  const serversWithArgsRemoved = servers.filter((server) => !args.includes(server));
+
+  return serversWithArgsRemoved;
+}
+```
+
+In that example typing `run script.js` and pressing tab would initially suggest every server for autocomplete. Then if "n00dles" is added to the arguments and tab is pressed again, "n00dles" would no longer be suggested in subsequent autocomplete calls.
+
 ## data.flags
 
-This is a function that works nearly identical to `ns.flags()`. The only difference is that it allows unknown options. For example:
+This is a function that works nearly identically to `ns.flags()`. The only difference is that it allows unknown options. For example:
 
 ```js
 export function autocomplete(data, args) {
@@ -94,30 +118,6 @@ ArgError: unknown or unexpected option: --f
 ```
 
 This is because `f` is not defined in the schema, and `ns.flags` does not allow unknown options.
-
-## args
-
-The args array is also passed to the autocomplete function as a second parameter. Similar to ns.args passed to `main` in normal scripts, this array contains the arguments currently inputted into the terminal.
-
-This can be used to remove already passed arguments from the autocomplete suggestions.
-
-For example;
-
-```javascript
-/**
- * @param {AutocompleteData} data - context about the game, useful when autocompleting
- * @param {string[]} args - current arguments, not including "run script.js"
- * @returns {string[]} - the array of possible autocomplete options
- */
-export function autocomplete(data, args) {
-  const servers = data.servers;
-  const serversWithArgsRemoved = servers.filter((server) => !args.includes(server));
-
-  return serversWithArgsRemoved;
-}
-```
-
-In that example typing `run script.js` and pressing tab would initially suggest every server for autocomplete. Then if "n00dles" is added to the arguments and tab is pressed again, "n00dles" would no longer be suggested in subsequent autocomplete calls.
 
 # Notes
 
