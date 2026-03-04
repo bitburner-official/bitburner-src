@@ -132,7 +132,7 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
 
 export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threads: number = 1, success = false) => {
   const baseXpGain = 3;
-  const difficultyBase = 0.8;
+  const difficultyBase = 1.1;
   const xpGain = baseXpGain + difficultyBase ** server.difficulty;
   const alreadyHackedMult = server.hasAdminRights ? 0.2 : 1;
   const successMult = success && !server.hasAdminRights ? 10 : 1;
