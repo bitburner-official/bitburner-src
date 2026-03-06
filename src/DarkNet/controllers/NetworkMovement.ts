@@ -43,7 +43,7 @@ export const processDarknet = (cycles: number): void => {
 };
 
 export const mutateDarknet = (): void => {
-  if (!DarknetState.allowMutating) {
+  if (DarknetState.mutationLock) {
     return;
   }
   const servers = getAllMovableDarknetServers();
