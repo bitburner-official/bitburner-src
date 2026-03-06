@@ -6,11 +6,11 @@ export type ErrorRecord = {
   errorType: string;
   message: string;
   scriptName: string;
-  pid: number;
+  pid?: number;
   occurrences: number;
   time: Date;
   unread: boolean;
-  force?: boolean;
+  force: boolean;
 };
 
 export const ErrorState = {
