@@ -210,8 +210,10 @@ interface TailProperties {
   width: number;
   /** Height of the log window content area */
   height: number;
-  /** The font size of the tail window. Defaults to the font size set in the style editor. */
+  /** The font size of the log window. Defaults to the font size set in the style editor. */
   fontSize: number;
+  /** Whether the log window is minimized. */
+  minimized: boolean;
 }
 
 /**
@@ -6765,6 +6767,36 @@ interface UserInterface {
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
   closeTail(pid?: number): void;
+
+  /**
+   * Minimize the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Equivalent to pressing the "Minimize" button on the tail window.
+   *
+   * If called without arguments, this function minimizes the tail window of the current script. If a PID is provided,
+   * it minimizes the tail window of the specified script instead.
+   *
+   * @param pid - Optional. The PID of the script. If omitted, the current script is used.
+   */
+  minimizeTail(pid?: number): void;
+
+  /**
+   * Expand the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Equivalent to pressing the "Expand" button on the tail window.
+   *
+   * If called without arguments, this function expands the tail window of the current script. If a PID is provided,
+   * it expands the tail window of the specified script instead.
+   *
+   * @param pid - Optional. The PID of the script. If omitted, the current script is used.
+   */
+  expandTail(pid?: number): void;
 
   /**
    * Set the title of the tail window of a script.

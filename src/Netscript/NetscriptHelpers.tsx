@@ -833,6 +833,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
             width: logProps.width,
             height: logProps.height,
             fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
+            minimized: logProps.minimized,
           },
     title: runningScript.title,
     threads: runningScript.threads,

@@ -440,6 +440,8 @@ const ui = {
   moveTail: 0,
   resizeTail: 0,
   closeTail: 0,
+  minimizeTail: 0,
+  expandTail: 0,
   setTailTitle: 0,
   setTailFontSize: 0,
   getTheme: 0,

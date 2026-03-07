@@ -9,7 +9,7 @@ import { InternalAPI } from "../Netscript/APIWrapper";
 import { Terminal } from "../../src/Terminal";
 import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
 import { assertAndSanitizeMainTheme, assertAndSanitizeStyles } from "../JsonSchema/JSONSchemaAssertion";
-import { LogBoxCloserEvents, LogBoxEvents } from "../ui/React/LogBoxManager";
+import { LogBoxCloserEvents, LogBoxEvents, LogBoxWindowMinimizationEvents } from "../ui/React/LogBoxManager";
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
@@ -72,6 +72,30 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         const pid = helpers.number(ctx, "pid", _pid);
         //Emit an event to tell the game to close the tail window if it exists
         LogBoxCloserEvents.emit(pid);
+      },
+
+    minimizeTail:
+      (ctx) =>
+      (_pid = ctx.workerScript.scriptRef.pid) => {
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        LogBoxWindowMinimizationEvents.emit(pid, true);
+      },
+
+    expandTail:
+      (ctx) =>
+      (_pid = ctx.workerScript.scriptRef.pid) => {
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        LogBoxWindowMinimizationEvents.emit(pid, false);
       },
 
     setTailTitle:

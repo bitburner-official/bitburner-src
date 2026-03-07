@@ -31,6 +31,7 @@ let layerCounter = 0;
 
 export const LogBoxEvents = new EventEmitter<[RunningScript]>();
 export const LogBoxCloserEvents = new EventEmitter<[number]>();
+export const LogBoxWindowMinimizationEvents = new EventEmitter<[number, boolean]>();
 export const LogBoxClearEvents = new EventEmitter<[]>();
 
 // Dynamic properties (size, position) bound to a specific rendered instance of a LogBox
@@ -40,6 +41,7 @@ export class LogBoxProperties {
   width = 500;
   height = 500;
   fontSize: number | undefined = undefined;
+  minimized = false;
 
   rerender: () => void;
   rootRef: React.RefObject<Draggable>;
@@ -71,6 +73,11 @@ export class LogBoxProperties {
 
   setFontSize(size?: number): void {
     this.fontSize = size;
+    this.rerender();
+  }
+
+  setMinimized(minimized: boolean): void {
+    this.minimized = minimized;
     this.rerender();
   }
 
@@ -178,7 +185,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   const rerender = useRerender(Settings.TailRenderInterval);
   const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
   script.tailProps = propsRef.current;
-  const [minimized, setMinimized] = useState(false);
+  const [minimized, setMinimized] = useState(propsRef.current.minimized);
 
   const textAreaKeyDown = (e: React.KeyboardEvent) => {
     if (e.ctrlKey && e.key === "a") {
@@ -193,7 +200,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     }
   };
 
-  const onResize = (e: React.SyntheticEvent, { size }: ResizeCallbackData) => {
+  const onResize = (_: React.SyntheticEvent, { size }: ResizeCallbackData) => {
     propsRef.current.setSize(size.width, size.height);
   };
 
@@ -204,6 +211,22 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     layerCounter++;
     rerender();
   }, [rerender]);
+
+  const toggleMinimized = useCallback((minimized: boolean) => {
+    propsRef.current.setMinimized(minimized);
+    setMinimized(minimized);
+  }, []);
+
+  useEffect(
+    () =>
+      LogBoxWindowMinimizationEvents.subscribe((pid, minimized) => {
+        if (pid !== script.pid) {
+          return;
+        }
+        toggleMinimized(minimized);
+      }),
+    [script, toggleMinimized],
+  );
 
   useEffect(() => {
     propsRef.current.updateDOM();
@@ -258,7 +281,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   }
 
   function minimize(): void {
-    setMinimized(!minimized);
+    toggleMinimized(!minimized);
   }
 
   function lineColor(s: string): "error" | "success" | "warn" | "info" | "primary" {
@@ -390,7 +413,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                   </IconButton>
                 )}
                 <IconButton
-                  title={minimized ? "Expand" : "Collapse"}
+                  title={minimized ? "Expand" : "Minimize"}
                   className={classes.titleButton}
                   onClick={minimize}
                   onTouchEnd={minimize}
