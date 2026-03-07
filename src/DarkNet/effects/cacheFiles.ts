@@ -1,28 +1,26 @@
-import { tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
+import { generateContract } from "../../CodingContract/ContractGenerator";
 import { Player } from "@player";
-import { formatMoney, formatNumber } from "../../ui/formatNumber";
+import { formatMoney } from "../../ui/formatNumber";
 import { getLabAugReward, isLabyrinthServer, LAB_CACHE_NAME } from "./labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { AugmentationName, CompletedProgramName, ToastVariant } from "@enums";
+import { AugmentationName, CompletedProgramName, StockSymbol, ToastVariant } from "@enums";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
-import { initStockMarket, isStockMarketInitialized } from "../../StockMarket/StockMarket";
+import { initStockMarket, isStockMarketInitialized, StockMarket } from "../../StockMarket/StockMarket";
 import { cachePrefixes } from "../models/dictionaryData";
 import type { DarknetServer } from "../../Server/DarknetServer";
-import { type CacheFilePath, resolveCacheFilePath } from "../../Paths/CacheFilePath";
-import type { CacheResult, Result } from "@nsdefs";
-import { cctCooldownReached } from "./effects";
+import { resolveCacheFilePath } from "../../Paths/CacheFilePath";
+import type { CacheResult } from "@nsdefs";
+import { addClue, cctCooldownReached } from "./effects";
 
-export const generateCacheFilename: (prefix?: string) => CacheFilePath | null = (prefix) => {
+export const generateCacheFilename = (prefix?: string, isPhishingCache?: boolean) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
-  return resolveCacheFilePath(`${filenamePrefix}_${Math.random().toString().substring(2, 5)}.cache`);
+  const suffix = isPhishingCache ? ".d.cache" : ".cache";
+  return resolveCacheFilePath(`${filenamePrefix}_${Math.random().toString().substring(2, 5)}${suffix}`);
 };
 
-export const addCacheToServer: (server: DarknetServer, prefix?: string) => Result<{ cacheFilename: CacheFilePath }> = (
-  server,
-  prefix,
-) => {
-  const cacheFilename = generateCacheFilename(prefix);
+export const addCacheToServer = (server: DarknetServer, prefix?: string, isPhishingCache?: boolean) => {
+  const cacheFilename = generateCacheFilename(prefix, isPhishingCache);
   if (!cacheFilename) {
     return { success: false, message: `Cannot generate path. prefix: ${prefix}` };
   }
@@ -43,9 +41,13 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
     };
   }
 
-  const rewards = [getMoneyReward, getXpReward, getProgramAndStockMarketRelatedRewards, getCCTReward];
+  const rewards = [getMoneyReward, getProgramAndStockMarketRelatedRewards, getStockReward, getDataFileReward];
+  if (cacheName.endsWith(".d.cache")) {
+    // only include ccts from caches generated from phishing attacks
+    rewards.push(getCCTReward);
+  }
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
-  const result = reward(difficulty);
+  const result = reward(difficulty, server);
 
   if (!suppressToast) {
     SnackbarEvents.emit(
@@ -63,16 +65,18 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
   };
 };
 
-export const getCCTReward = (difficulty: number): string => {
+export const getCCTReward = (difficulty: number, server: DarknetServer): string => {
   if (Math.random() < difficulty * 0.2 || !cctCooldownReached()) {
     return getMoneyReward(difficulty);
   }
-  const contractCount = Math.floor(Math.min(20, difficulty) * 0.2 - 1.5 + Math.random() * 3);
+  const contractCount = Math.floor(Math.min(30, difficulty) * 0.1 - 1.5 + Math.random() * 3);
   if (contractCount < 1) {
     return getMoneyReward(difficulty);
   }
-  tryGeneratingRandomContract(contractCount);
-  return `A new coding contract is now available on the network!`;
+  for (let i = 0; i < contractCount; i++) {
+    generateContract({ server: server.hostname });
+  }
+  return `New coding contracts are now available on the network!`;
 };
 
 export const getMoneyReward = (difficulty: number): string => {
@@ -89,11 +93,26 @@ export const getMoneyReward = (difficulty: number): string => {
   return `You have discovered a cache with ${formatMoney(reward)}.`;
 };
 
-export const getXpReward = (difficulty: number): string => {
-  const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
-  const reward = 1.2 ** difficulty * 500 * sf15_3Factor * Player.mults.charisma_exp; // TODO: adjust balance
-  Player.gainCharismaExp(reward);
-  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
+export const getStockReward = (difficulty: number): string => {
+  if (!isStockMarketInitialized()) {
+    initStockMarket();
+  }
+  const stockSymbols = Object.values(StockSymbol);
+  const randomStock = stockSymbols[Math.floor(Math.random() * stockSymbols.length)];
+  const shares = Math.floor(1 + difficulty * 5 + Math.random() * 10);
+  StockMarket[randomStock].playerShares += shares;
+  return `You have discovered a stock option cache containing ${shares} shares of ${randomStock}!`;
+};
+
+export const getDataFileReward = (difficulty: number, server: DarknetServer): string => {
+  const currentDataFiles = server.textFiles.size;
+  addClue(server);
+  addClue(server);
+  const dataFilesGained = server.textFiles.size - currentDataFiles;
+  if (dataFilesGained === 0) {
+    return getMoneyReward(difficulty);
+  }
+  return `You have discovered a data file cache!`;
 };
 
 export const getProgramAndStockMarketRelatedRewards = (difficulty: number): string => {
@@ -136,7 +155,7 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): stri
     return `You have discovered a cache of stolen 4S Data!`;
   }
 
-  return getXpReward(difficulty);
+  return getMoneyReward(difficulty);
 };
 
 const getLabReward = (): string => {

@@ -27,8 +27,7 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   if (server.blockedRam <= 0) {
     handleRamBlockClearedRewards(server);
   }
-  const xpGained =
-    Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty * ((200 + Player.skills.charisma) / 200);
+  const xpGained = Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty;
   Player.gainCharismaExp(xpGained);
 
   const result = `Liberated ${formatNumber(

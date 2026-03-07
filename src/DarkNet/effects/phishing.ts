@@ -14,7 +14,7 @@ const getPhishingCacheCooldownDuration = () => (hasDarknetBonusTime() ? 12_000 :
 
 export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServer) => {
   const threads = ctx.workerScript.scriptRef.threads;
-  const xpReward = Player.mults.charisma_exp * threads * 50 * ((200 + Player.skills.charisma) / 200);
+  const xpReward = Player.mults.charisma_exp * threads * 50;
 
   const timeSinceLastRewardCache = new Date().getTime() - DarknetState.lastPhishingCacheTime.getTime();
   const rewardCacheChance = 0.005 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
