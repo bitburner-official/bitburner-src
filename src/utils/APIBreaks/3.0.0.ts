@@ -570,5 +570,10 @@ export const breakingChanges300: VersionBreakingChange = {
         "RAM cost. Now the hacknet namespace does not incur RAM cost, but each hacknet API incurs a 0.5GB RAM cost.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [{ name: "ns.sleeve.travel" }],
+      info: "ns.sleeve.travel() did not cancel the sleeve's current task. It does now.",
+      showWarning: false,
+    },
   ],
 };
