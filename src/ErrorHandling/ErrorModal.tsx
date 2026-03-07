@@ -73,7 +73,7 @@ export function ErrorModal(): React.ReactElement {
             <p>
               Script: {error.scriptName}
               <br />
-              PID: {error.pid ?? "Unknown"}
+              PID: {error.pid ?? "undefined"}
             </p>
             {!Settings.SuppressErrorModals && (
               <OptionSwitch
