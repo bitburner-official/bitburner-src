@@ -537,6 +537,14 @@ export class Sleeve extends Person implements SleevePerson {
     return false;
   }
 
+  travel(cityName: CityName): boolean {
+    if (!super.travel(cityName)) {
+      return false;
+    }
+    this.stopWork();
+    return true;
+  }
+
   travelCostMoneySource(): MoneySource {
     return "sleeves";
   }
