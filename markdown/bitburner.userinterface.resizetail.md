@@ -42,7 +42,7 @@ number
 
 </td><td>
 
-Width of the window.
+Width of the window. The minimum value is 150.
 
 
 </td></tr>
@@ -58,7 +58,7 @@ number
 
 </td><td>
 
-Height of the window.
+Height of the window. The minimum value is 30.
 
 
 </td></tr>
