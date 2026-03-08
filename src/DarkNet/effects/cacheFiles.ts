@@ -19,7 +19,7 @@ export const generateCacheFilename = (prefix?: string, isPhishingCache?: boolean
   return resolveCacheFilePath(`${filenamePrefix}_${Math.random().toString().substring(2, 5)}${suffix}`);
 };
 
-export const addCacheToServer = (server: DarknetServer, prefix?: string, isPhishingCache?: boolean) => {
+export const addCacheToServer = (server: DarknetServer, isPhishingCache?: boolean, prefix?: string) => {
   const cacheFilename = generateCacheFilename(prefix, isPhishingCache);
   if (!cacheFilename) {
     return { success: false, message: `Cannot generate path. prefix: ${prefix}` };

@@ -23,7 +23,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
   const isLabServer = isLabyrinthServer(server.hostname);
 
   if (timeSinceLastRewardCache > cacheCooldown && Math.random() < rewardCacheChance && !isLabServer) {
-    addCacheToServer(server);
+    addCacheToServer(server, true);
     Player.gainCharismaExp(xpReward);
     DarknetState.lastPhishingCacheTime = new Date();
     const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(xpReward, 1)} cha xp)`;
