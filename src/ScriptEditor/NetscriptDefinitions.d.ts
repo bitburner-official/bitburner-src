@@ -6769,36 +6769,6 @@ interface UserInterface {
   closeTail(pid?: number): void;
 
   /**
-   * Minimize the tail window of a script.
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Equivalent to pressing the "Minimize" button on the tail window.
-   *
-   * If called without arguments, this function minimizes the tail window of the current script. If a PID is provided,
-   * it minimizes the tail window of the specified script instead.
-   *
-   * @param pid - Optional. The PID of the script. If omitted, the current script is used.
-   */
-  minimizeTail(pid?: number): void;
-
-  /**
-   * Expand the tail window of a script.
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Equivalent to pressing the "Expand" button on the tail window.
-   *
-   * If called without arguments, this function expands the tail window of the current script. If a PID is provided,
-   * it expands the tail window of the specified script instead.
-   *
-   * @param pid - Optional. The PID of the script. If omitted, the current script is used.
-   */
-  expandTail(pid?: number): void;
-
-  /**
    * Set the title of the tail window of a script.
    *
    * @remarks
@@ -6840,6 +6810,21 @@ interface UserInterface {
    * @param args - Arguments for the target script.
    */
   setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
+   * Minimize or expand the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Equivalent to pressing the "Minimize"/"Expand" button on the tail window.
+   *
+   * If called without arguments, this function minimizes/expands the tail window of the current script. If a PID is
+   * provided, it minimizes/expands the tail window of the specified script instead.
+   *
+   * @param pid - Optional. The PID of the script. If omitted, the current script is used.
+   */
+  setTailMinimized(minimized: boolean, pid?: number): void;
 
   /**
    * Get the current window size

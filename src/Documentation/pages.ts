@@ -1485,12 +1485,10 @@ import nsDoc_bitburner_universitylocationname_md from "../../markdown/bitburner.
 import nsDoc_bitburner_universitylocationnameenumtype_md from "../../markdown/bitburner.universitylocationnameenumtype.md?raw";
 import nsDoc_bitburner_userinterface_clearterminal_md from "../../markdown/bitburner.userinterface.clearterminal.md?raw";
 import nsDoc_bitburner_userinterface_closetail_md from "../../markdown/bitburner.userinterface.closetail.md?raw";
-import nsDoc_bitburner_userinterface_expandtail_md from "../../markdown/bitburner.userinterface.expandtail.md?raw";
 import nsDoc_bitburner_userinterface_getgameinfo_md from "../../markdown/bitburner.userinterface.getgameinfo.md?raw";
 import nsDoc_bitburner_userinterface_getstyles_md from "../../markdown/bitburner.userinterface.getstyles.md?raw";
 import nsDoc_bitburner_userinterface_gettheme_md from "../../markdown/bitburner.userinterface.gettheme.md?raw";
 import nsDoc_bitburner_userinterface_md from "../../markdown/bitburner.userinterface.md?raw";
-import nsDoc_bitburner_userinterface_minimizetail_md from "../../markdown/bitburner.userinterface.minimizetail.md?raw";
 import nsDoc_bitburner_userinterface_movetail_md from "../../markdown/bitburner.userinterface.movetail.md?raw";
 import nsDoc_bitburner_userinterface_opentail_md from "../../markdown/bitburner.userinterface.opentail.md?raw";
 import nsDoc_bitburner_userinterface_rendertail_md from "../../markdown/bitburner.userinterface.rendertail.md?raw";
@@ -1499,6 +1497,7 @@ import nsDoc_bitburner_userinterface_resettheme_md from "../../markdown/bitburne
 import nsDoc_bitburner_userinterface_resizetail_md from "../../markdown/bitburner.userinterface.resizetail.md?raw";
 import nsDoc_bitburner_userinterface_setstyles_md from "../../markdown/bitburner.userinterface.setstyles.md?raw";
 import nsDoc_bitburner_userinterface_settailfontsize_md from "../../markdown/bitburner.userinterface.settailfontsize.md?raw";
+import nsDoc_bitburner_userinterface_settailminimized_md from "../../markdown/bitburner.userinterface.settailminimized.md?raw";
 import nsDoc_bitburner_userinterface_settailtitle_md from "../../markdown/bitburner.userinterface.settailtitle.md?raw";
 import nsDoc_bitburner_userinterface_settheme_md from "../../markdown/bitburner.userinterface.settheme.md?raw";
 import nsDoc_bitburner_userinterface_windowsize_md from "../../markdown/bitburner.userinterface.windowsize.md?raw";
@@ -3079,12 +3078,10 @@ AllPages["nsDoc/bitburner.universitylocationname.md"] = nsDoc_bitburner_universi
 AllPages["nsDoc/bitburner.universitylocationnameenumtype.md"] = nsDoc_bitburner_universitylocationnameenumtype_md;
 AllPages["nsDoc/bitburner.userinterface.clearterminal.md"] = nsDoc_bitburner_userinterface_clearterminal_md;
 AllPages["nsDoc/bitburner.userinterface.closetail.md"] = nsDoc_bitburner_userinterface_closetail_md;
-AllPages["nsDoc/bitburner.userinterface.expandtail.md"] = nsDoc_bitburner_userinterface_expandtail_md;
 AllPages["nsDoc/bitburner.userinterface.getgameinfo.md"] = nsDoc_bitburner_userinterface_getgameinfo_md;
 AllPages["nsDoc/bitburner.userinterface.getstyles.md"] = nsDoc_bitburner_userinterface_getstyles_md;
 AllPages["nsDoc/bitburner.userinterface.gettheme.md"] = nsDoc_bitburner_userinterface_gettheme_md;
 AllPages["nsDoc/bitburner.userinterface.md"] = nsDoc_bitburner_userinterface_md;
-AllPages["nsDoc/bitburner.userinterface.minimizetail.md"] = nsDoc_bitburner_userinterface_minimizetail_md;
 AllPages["nsDoc/bitburner.userinterface.movetail.md"] = nsDoc_bitburner_userinterface_movetail_md;
 AllPages["nsDoc/bitburner.userinterface.opentail.md"] = nsDoc_bitburner_userinterface_opentail_md;
 AllPages["nsDoc/bitburner.userinterface.rendertail.md"] = nsDoc_bitburner_userinterface_rendertail_md;
@@ -3093,6 +3090,7 @@ AllPages["nsDoc/bitburner.userinterface.resettheme.md"] = nsDoc_bitburner_userin
 AllPages["nsDoc/bitburner.userinterface.resizetail.md"] = nsDoc_bitburner_userinterface_resizetail_md;
 AllPages["nsDoc/bitburner.userinterface.setstyles.md"] = nsDoc_bitburner_userinterface_setstyles_md;
 AllPages["nsDoc/bitburner.userinterface.settailfontsize.md"] = nsDoc_bitburner_userinterface_settailfontsize_md;
+AllPages["nsDoc/bitburner.userinterface.settailminimized.md"] = nsDoc_bitburner_userinterface_settailminimized_md;
 AllPages["nsDoc/bitburner.userinterface.settailtitle.md"] = nsDoc_bitburner_userinterface_settailtitle_md;
 AllPages["nsDoc/bitburner.userinterface.settheme.md"] = nsDoc_bitburner_userinterface_settheme_md;
 AllPages["nsDoc/bitburner.userinterface.windowsize.md"] = nsDoc_bitburner_userinterface_windowsize_md;

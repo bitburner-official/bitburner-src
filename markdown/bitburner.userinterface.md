@@ -49,17 +49,6 @@ Close the tail window of a script.
 </td></tr>
 <tr><td>
 
-[expandTail(pid)](./bitburner.userinterface.expandtail.md)
-
-
-</td><td>
-
-Expand the tail window of a script.
-
-
-</td></tr>
-<tr><td>
-
 [getGameInfo()](./bitburner.userinterface.getgameinfo.md)
 
 
@@ -88,17 +77,6 @@ Get the current styles
 </td><td>
 
 Get the current theme
-
-
-</td></tr>
-<tr><td>
-
-[minimizeTail(pid)](./bitburner.userinterface.minimizetail.md)
-
-
-</td><td>
-
-Minimize the tail window of a script.
 
 
 </td></tr>
@@ -187,6 +165,17 @@ Sets the current styles
 </td><td>
 
 Set the font size of the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[setTailMinimized(minimized, pid)](./bitburner.userinterface.settailminimized.md)
+
+
+</td><td>
+
+Minimize or expand the tail window of a script.
 
 
 </td></tr>

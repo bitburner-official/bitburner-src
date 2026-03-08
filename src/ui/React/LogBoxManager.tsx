@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
@@ -33,7 +33,6 @@ let layerCounter = 0;
 
 export const LogBoxEvents = new EventEmitter<[RunningScript]>();
 export const LogBoxCloserEvents = new EventEmitter<[number]>();
-export const LogBoxWindowMinimizationEvents = new EventEmitter<[number, boolean]>();
 export const LogBoxClearEvents = new EventEmitter<[]>();
 
 // Min width/height of a log window
@@ -190,7 +189,6 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   const rerender = useRerender(Settings.TailRenderInterval);
   const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
   script.tailProps = propsRef.current;
-  const [minimized, setMinimized] = useState(propsRef.current.minimized);
 
   const textAreaKeyDown = (e: React.KeyboardEvent) => {
     if (e.ctrlKey && e.key === "a") {
@@ -216,22 +214,6 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     layerCounter++;
     rerender();
   }, [rerender]);
-
-  const toggleMinimized = useCallback((minimized: boolean) => {
-    propsRef.current.setMinimized(minimized);
-    setMinimized(minimized);
-  }, []);
-
-  useEffect(
-    () =>
-      LogBoxWindowMinimizationEvents.subscribe((pid, minimized) => {
-        if (pid !== script.pid) {
-          return;
-        }
-        toggleMinimized(minimized);
-      }),
-    [script, toggleMinimized],
-  );
 
   useEffect(() => {
     propsRef.current.updateDOM();
@@ -286,7 +268,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   }
 
   function minimize(): void {
-    toggleMinimized(!minimized);
+    propsRef.current.setMinimized(!propsRef.current.minimized);
   }
 
   function lineColor(s: string): "error" | "success" | "warn" | "info" | "primary" {
@@ -368,7 +350,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
           zIndex: 1400,
           minWidth: `${minWindowSize[0]}px`,
           minHeight: `${minWindowSize[1]}px`,
-          ...(minimized
+          ...(propsRef.current.minimized
             ? {
                 border: "none",
                 margin: 0,
@@ -393,7 +375,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                 right: "-10px",
                 bottom: "-16px",
                 cursor: "nw-resize",
-                display: minimized ? "none" : "inline-block",
+                display: propsRef.current.minimized ? "none" : "inline-block",
               }}
             >
               <ArrowForwardIosIcon color="primary" style={{ transform: "rotate(45deg)", fontSize: "1.75rem" }} />
@@ -415,12 +397,12 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                   </IconButton>
                 )}
                 <IconButton
-                  title={minimized ? "Expand" : "Minimize"}
+                  title={propsRef.current.minimized ? "Expand" : "Minimize"}
                   className={classes.titleButton}
                   onClick={minimize}
                   onTouchEnd={minimize}
                 >
-                  {minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                  {propsRef.current.minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                 </IconButton>
                 <IconButton title="Close window" className={classes.titleButton} onClick={onClose} onTouchEnd={onClose}>
                   <CloseIcon />
@@ -430,7 +412,10 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
 
             <Paper
               className={classes.logs}
-              style={{ height: `calc(100% - ${minWindowSize[1]}px)`, display: minimized ? "none" : "flex" }}
+              style={{
+                height: `calc(100% - ${minWindowSize[1]}px)`,
+                display: propsRef.current.minimized ? "none" : "flex",
+              }}
               tabIndex={-1}
               ref={textArea}
               onKeyDown={textAreaKeyDown}
