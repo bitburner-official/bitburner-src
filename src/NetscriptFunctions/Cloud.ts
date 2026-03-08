@@ -33,9 +33,8 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       return cost;
     },
     purchaseServer: (ctx) => (_hostname, _ram) => {
-      let hostname = helpers.string(ctx, "hostname", _hostname);
+      const hostname = helpers.string(ctx, "hostname", _hostname);
       const ram = helpers.number(ctx, "ram", _ram);
-      hostname = hostname.replace(/\s+/g, "");
       if (hostname === "") {
         helpers.log(ctx, () => `Invalid argument: hostname='${hostname}' is an empty string.`);
         return "";
@@ -126,8 +125,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
     },
 
     deleteServer: (ctx) => (_name) => {
-      let host = helpers.string(ctx, "name", _name);
-      host = host.replace(/\s\s+/g, "");
+      const host = helpers.string(ctx, "name", _name);
       const server = helpers.getNormalServer(ctx, host);
       const hostname = server.hostname;
 
