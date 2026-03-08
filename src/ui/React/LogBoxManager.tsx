@@ -27,12 +27,17 @@ import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
 import { makeStyles } from "tss-react/mui";
 import { logBoxBaseZIndex } from "./Constants";
+import { clampNumber } from "../../utils/helpers/clampNumber";
+
 let layerCounter = 0;
 
 export const LogBoxEvents = new EventEmitter<[RunningScript]>();
 export const LogBoxCloserEvents = new EventEmitter<[number]>();
 export const LogBoxWindowMinimizationEvents = new EventEmitter<[number, boolean]>();
 export const LogBoxClearEvents = new EventEmitter<[]>();
+
+// Min width/height of a log window
+const minWindowSize: [number, number] = [150, 33];
 
 // Dynamic properties (size, position) bound to a specific rendered instance of a LogBox
 export class LogBoxProperties {
@@ -66,8 +71,8 @@ export class LogBoxProperties {
   }
 
   setSize(width: number, height: number): void {
-    this.width = width;
-    this.height = height;
+    this.width = clampNumber(width, minWindowSize[0]);
+    this.height = clampNumber(height, minWindowSize[1]);
     this.rerender();
   }
 
@@ -353,9 +358,6 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     }
   };
 
-  // Max [width, height]
-  const minConstraints: [number, number] = [150, 33];
-
   return (
     <Draggable handle=".drag" onDrag={onDrag} ref={rootRef} onMouseDown={updateLayer}>
       <Box
@@ -364,8 +366,8 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
           flexFlow: "column",
           position: "fixed",
           zIndex: 1400,
-          minWidth: `${minConstraints[0]}px`,
-          minHeight: `${minConstraints[1]}px`,
+          minWidth: `${minWindowSize[0]}px`,
+          minHeight: `${minWindowSize[1]}px`,
           ...(minimized
             ? {
                 border: "none",
@@ -383,7 +385,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
           width={propsRef.current.width}
           height={propsRef.current.height}
           onResize={onResize}
-          minConstraints={minConstraints}
+          minConstraints={minWindowSize}
           handle={
             <span
               style={{
@@ -402,7 +404,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
             <Paper className="drag" sx={{ display: "flex", alignItems: "center", cursor: "grab" }} ref={draggableRef}>
               {title()}
 
-              <span style={{ minWidth: "fit-content", height: `${minConstraints[1]}px` }}>
+              <span style={{ minWidth: "fit-content", height: `${minWindowSize[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
                   <IconButton title="Re-run script" className={classes.titleButton} onClick={run} onTouchEnd={run}>
                     <PlayCircleIcon />
@@ -428,7 +430,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
 
             <Paper
               className={classes.logs}
-              style={{ height: `calc(100% - ${minConstraints[1]}px)`, display: minimized ? "none" : "flex" }}
+              style={{ height: `calc(100% - ${minWindowSize[1]}px)`, display: minimized ? "none" : "flex" }}
               tabIndex={-1}
               ref={textArea}
               onKeyDown={textAreaKeyDown}

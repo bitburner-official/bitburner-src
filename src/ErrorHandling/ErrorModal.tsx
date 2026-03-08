@@ -73,7 +73,7 @@ export function ErrorModal(): React.ReactElement {
             <p>
               Script: {error.scriptName}
               <br />
-              PID: {error.pid}
+              PID: {String(error.pid)}
             </p>
             {!Settings.SuppressErrorModals && (
               <OptionSwitch
@@ -92,7 +92,7 @@ export function ErrorModal(): React.ReactElement {
           <Box className={classes.inlineFlexBox}>
             <Button onClick={() => onClose()}>Close</Button>
             <div>
-              <Button disabled={error.pid === -1} onClick={viewLogs}>
+              <Button disabled={error.pid === undefined} onClick={viewLogs}>
                 View Script Logs
               </Button>
               <Button onClick={goToErrorPage}>Errors Page</Button>

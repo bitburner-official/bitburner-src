@@ -6746,8 +6746,8 @@ interface UserInterface {
    *
    * Resize a tail window. Size are in pixel.
    *
-   * @param width - Width of the window.
-   * @param height - Height of the window.
+   * @param width - Width of the window. The minimum value is 150.
+   * @param height - Height of the window. The minimum value is 30.
    * @param pid - Optional. PID of the script having its tail resized. If omitted, the current script is used.
    */
   resizeTail(width: number, height: number, pid?: number): void;

@@ -243,7 +243,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       ) : (
         ""
       )}
-      {DarknetState.allowMutating ? (
+      {DarknetState.mutationLock ? (
+        <Typography variant={"h6"} className={classes.gold}>
+          [WEBSTORM WARNING]
+        </Typography>
+      ) : (
         <Box className={`${classes.inlineFlexBox}`}>
           <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
             Dark Net
@@ -265,10 +269,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             </Tooltip>
           )}
         </Box>
-      ) : (
-        <Typography variant={"h6"} className={classes.gold}>
-          [WEBSTORM WARNING]
-        </Typography>
       )}
 
       <div

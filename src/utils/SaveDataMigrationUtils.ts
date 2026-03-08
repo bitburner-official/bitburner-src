@@ -621,7 +621,7 @@ Error: ${e}`,
   if (ver < 45) {
     initDarkwebServer();
   }
-  if (ver < 46) {
+  if (ver < 47) {
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }
