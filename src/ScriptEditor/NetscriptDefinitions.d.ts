@@ -4460,7 +4460,7 @@ export interface Darknet {
    * use connectToSession with the correct password to also get a session with the target server.
    *
    * @remarks
-   * RAM cost: 0.6 GB
+   * RAM cost: 0.4 GB
    *
    * @param host - Hostname/IP of the target server (connected to the current server) to try a password.
    * @param password - Password to attempt to authenticate with.

@@ -94,5 +94,5 @@ A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) objec
 
 ## Remarks
 
-RAM cost: 0.6 GB
+RAM cost: 0.4 GB
 
