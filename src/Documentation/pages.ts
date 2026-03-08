@@ -1472,6 +1472,7 @@ import nsDoc_bitburner_successresult_md from "../../markdown/bitburner.successre
 import nsDoc_bitburner_tailproperties_fontsize_md from "../../markdown/bitburner.tailproperties.fontsize.md?raw";
 import nsDoc_bitburner_tailproperties_height_md from "../../markdown/bitburner.tailproperties.height.md?raw";
 import nsDoc_bitburner_tailproperties_md from "../../markdown/bitburner.tailproperties.md?raw";
+import nsDoc_bitburner_tailproperties_minimized_md from "../../markdown/bitburner.tailproperties.minimized.md?raw";
 import nsDoc_bitburner_tailproperties_width_md from "../../markdown/bitburner.tailproperties.width.md?raw";
 import nsDoc_bitburner_tailproperties_x_md from "../../markdown/bitburner.tailproperties.x.md?raw";
 import nsDoc_bitburner_tailproperties_y_md from "../../markdown/bitburner.tailproperties.y.md?raw";
@@ -1496,6 +1497,7 @@ import nsDoc_bitburner_userinterface_resettheme_md from "../../markdown/bitburne
 import nsDoc_bitburner_userinterface_resizetail_md from "../../markdown/bitburner.userinterface.resizetail.md?raw";
 import nsDoc_bitburner_userinterface_setstyles_md from "../../markdown/bitburner.userinterface.setstyles.md?raw";
 import nsDoc_bitburner_userinterface_settailfontsize_md from "../../markdown/bitburner.userinterface.settailfontsize.md?raw";
+import nsDoc_bitburner_userinterface_settailminimized_md from "../../markdown/bitburner.userinterface.settailminimized.md?raw";
 import nsDoc_bitburner_userinterface_settailtitle_md from "../../markdown/bitburner.userinterface.settailtitle.md?raw";
 import nsDoc_bitburner_userinterface_settheme_md from "../../markdown/bitburner.userinterface.settheme.md?raw";
 import nsDoc_bitburner_userinterface_windowsize_md from "../../markdown/bitburner.userinterface.windowsize.md?raw";
@@ -3063,6 +3065,7 @@ AllPages["nsDoc/bitburner.successresult.md"] = nsDoc_bitburner_successresult_md;
 AllPages["nsDoc/bitburner.tailproperties.fontsize.md"] = nsDoc_bitburner_tailproperties_fontsize_md;
 AllPages["nsDoc/bitburner.tailproperties.height.md"] = nsDoc_bitburner_tailproperties_height_md;
 AllPages["nsDoc/bitburner.tailproperties.md"] = nsDoc_bitburner_tailproperties_md;
+AllPages["nsDoc/bitburner.tailproperties.minimized.md"] = nsDoc_bitburner_tailproperties_minimized_md;
 AllPages["nsDoc/bitburner.tailproperties.width.md"] = nsDoc_bitburner_tailproperties_width_md;
 AllPages["nsDoc/bitburner.tailproperties.x.md"] = nsDoc_bitburner_tailproperties_x_md;
 AllPages["nsDoc/bitburner.tailproperties.y.md"] = nsDoc_bitburner_tailproperties_y_md;
@@ -3087,6 +3090,7 @@ AllPages["nsDoc/bitburner.userinterface.resettheme.md"] = nsDoc_bitburner_userin
 AllPages["nsDoc/bitburner.userinterface.resizetail.md"] = nsDoc_bitburner_userinterface_resizetail_md;
 AllPages["nsDoc/bitburner.userinterface.setstyles.md"] = nsDoc_bitburner_userinterface_setstyles_md;
 AllPages["nsDoc/bitburner.userinterface.settailfontsize.md"] = nsDoc_bitburner_userinterface_settailfontsize_md;
+AllPages["nsDoc/bitburner.userinterface.settailminimized.md"] = nsDoc_bitburner_userinterface_settailminimized_md;
 AllPages["nsDoc/bitburner.userinterface.settailtitle.md"] = nsDoc_bitburner_userinterface_settailtitle_md;
 AllPages["nsDoc/bitburner.userinterface.settheme.md"] = nsDoc_bitburner_userinterface_settheme_md;
 AllPages["nsDoc/bitburner.userinterface.windowsize.md"] = nsDoc_bitburner_userinterface_windowsize_md;

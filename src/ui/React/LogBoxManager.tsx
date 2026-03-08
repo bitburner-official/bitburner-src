@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
@@ -45,6 +45,7 @@ export class LogBoxProperties {
   width = 500;
   height = 500;
   fontSize: number | undefined = undefined;
+  minimized = false;
 
   rerender: () => void;
   rootRef: React.RefObject<Draggable>;
@@ -76,6 +77,11 @@ export class LogBoxProperties {
 
   setFontSize(size?: number): void {
     this.fontSize = size;
+    this.rerender();
+  }
+
+  setMinimized(minimized: boolean): void {
+    this.minimized = minimized;
     this.rerender();
   }
 
@@ -183,7 +189,6 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   const rerender = useRerender(Settings.TailRenderInterval);
   const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
   script.tailProps = propsRef.current;
-  const [minimized, setMinimized] = useState(false);
 
   const textAreaKeyDown = (e: React.KeyboardEvent) => {
     if (e.ctrlKey && e.key === "a") {
@@ -198,7 +203,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     }
   };
 
-  const onResize = (e: React.SyntheticEvent, { size }: ResizeCallbackData) => {
+  const onResize = (_: React.SyntheticEvent, { size }: ResizeCallbackData) => {
     propsRef.current.setSize(size.width, size.height);
   };
 
@@ -263,7 +268,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   }
 
   function minimize(): void {
-    setMinimized(!minimized);
+    propsRef.current.setMinimized(!propsRef.current.minimized);
   }
 
   function lineColor(s: string): "error" | "success" | "warn" | "info" | "primary" {
@@ -345,7 +350,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
           zIndex: 1400,
           minWidth: `${minWindowSize[0]}px`,
           minHeight: `${minWindowSize[1]}px`,
-          ...(minimized
+          ...(propsRef.current.minimized
             ? {
                 border: "none",
                 margin: 0,
@@ -370,7 +375,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                 right: "-10px",
                 bottom: "-16px",
                 cursor: "nw-resize",
-                display: minimized ? "none" : "inline-block",
+                display: propsRef.current.minimized ? "none" : "inline-block",
               }}
             >
               <ArrowForwardIosIcon color="primary" style={{ transform: "rotate(45deg)", fontSize: "1.75rem" }} />
@@ -392,12 +397,12 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                   </IconButton>
                 )}
                 <IconButton
-                  title={minimized ? "Expand" : "Collapse"}
+                  title={propsRef.current.minimized ? "Expand" : "Minimize"}
                   className={classes.titleButton}
                   onClick={minimize}
                   onTouchEnd={minimize}
                 >
-                  {minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                  {propsRef.current.minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                 </IconButton>
                 <IconButton title="Close window" className={classes.titleButton} onClick={onClose} onTouchEnd={onClose}>
                   <CloseIcon />
@@ -407,7 +412,10 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
 
             <Paper
               className={classes.logs}
-              style={{ height: `calc(100% - ${minWindowSize[1]}px)`, display: minimized ? "none" : "flex" }}
+              style={{
+                height: `calc(100% - ${minWindowSize[1]}px)`,
+                display: propsRef.current.minimized ? "none" : "flex",
+              }}
               tabIndex={-1}
               ref={textArea}
               onKeyDown={textAreaKeyDown}

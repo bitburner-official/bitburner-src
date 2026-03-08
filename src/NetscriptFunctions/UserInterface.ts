@@ -105,6 +105,19 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
       },
 
+    setTailMinimized:
+      (ctx) =>
+      (_minimized, _pid = ctx.workerScript.scriptRef.pid) => {
+        const minimized = helpers.boolean(ctx, "minimized", _minimized);
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.setMinimized(minimized);
+      },
+
     windowSize: () => () => {
       return [window.innerWidth, window.innerHeight];
     },

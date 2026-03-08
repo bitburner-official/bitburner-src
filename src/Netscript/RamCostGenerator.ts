@@ -442,6 +442,7 @@ const ui = {
   closeTail: 0,
   setTailTitle: 0,
   setTailFontSize: 0,
+  setTailMinimized: 0,
   getTheme: 0,
   setTheme: 0,
   resetTheme: 0,
