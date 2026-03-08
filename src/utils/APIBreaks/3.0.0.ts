@@ -575,5 +575,12 @@ export const breakingChanges300: VersionBreakingChange = {
       info: "ns.sleeve.travel() did not cancel the sleeve's current task. It does now.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [{ name: "ns.cloud.purchaseServer" }, { name: "ns.cloud.deleteServer" }],
+      info:
+        "ns.cloud.purchaseServer() and ns.cloud.deleteServer() previously removed whitespace from the provided hostname inconsistently.\n" +
+        "They now use the hostname as provided.",
+      showWarning: false,
+    },
   ],
 };
