@@ -4,7 +4,7 @@ import { Person as IPerson } from "@nsdefs";
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { CrimeType } from "@enums";
 import { CrimeWork } from "../Work/CrimeWork";
-import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { calculateIntelligenceBonus, getEffectiveIntelligence } from "../PersonObjects/formulas/intelligence";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 interface IConstructorParams {
@@ -125,12 +125,12 @@ export class Crime {
       this.dexterity_success_weight * p.skills.dexterity +
       this.agility_success_weight * p.skills.agility +
       this.charisma_success_weight * p.skills.charisma +
-      CONSTANTS.IntelligenceCrimeWeight * p.skills.intelligence;
+      CONSTANTS.IntelligenceCrimeWeight * getEffectiveIntelligence(p);
     chance /= CONSTANTS.MaxSkillLevel;
     chance /= this.difficulty;
     chance *= p.mults.crime_success;
     chance *= currentNodeMults.CrimeSuccessRate;
-    chance *= calculateIntelligenceBonus(p.skills.intelligence, 1);
+    chance *= calculateIntelligenceBonus(p, 1);
 
     return Math.min(chance, 1);
   }

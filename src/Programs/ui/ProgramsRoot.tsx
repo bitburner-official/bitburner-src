@@ -12,6 +12,7 @@ import { Settings } from "../../Settings/Settings";
 import { Programs } from "../Programs";
 import { CreateProgramWork, isCreateProgramWork } from "../../Work/CreateProgramWork";
 import { useCycleRerender } from "../../ui/React/hooks";
+import { getEffectiveIntelligence } from "../../PersonObjects/formulas/intelligence";
 
 export const ProgramsSeen = new Set<string>();
 
@@ -40,7 +41,7 @@ export function ProgramsRoot(): React.ReactElement {
   });
 
   const getHackingLevelRemaining = (lvl: number): number => {
-    return Math.ceil(Math.max(lvl - (Player.skills.hacking + Player.skills.intelligence / 2), 0));
+    return Math.ceil(Math.max(lvl - (Player.skills.hacking + getEffectiveIntelligence(Player) / 2), 0));
   };
 
   const getProgCompletion = (name: string): number => {

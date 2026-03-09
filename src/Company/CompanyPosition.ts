@@ -2,6 +2,7 @@ import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
 import { JobName, JobField } from "@enums";
 import type { Skills } from "../PersonObjects/Skills";
+import { getEffectiveIntelligence } from "../PersonObjects/formulas/intelligence";
 
 export interface CompanyPositionCtorParams {
   nextPosition: JobName | null;
@@ -167,7 +168,7 @@ export class CompanyPosition {
       console.error("Company reputation gain calculated to be NaN");
       reputationGain = 0;
     }
-    reputationGain += worker.skills.intelligence / CONSTANTS.MaxSkillLevel;
+    reputationGain += getEffectiveIntelligence(worker) / CONSTANTS.MaxSkillLevel;
     return reputationGain;
   }
 }

@@ -2,7 +2,7 @@ import { CONSTANTS } from "../../Constants";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { calculateCurrentShareBonus } from "../../NetworkShare/Share";
 import { Person as IPerson } from "@nsdefs";
-import { calculateIntelligenceBonus } from "./intelligence";
+import { calculateIntelligenceBonus, getEffectiveIntelligence } from "./intelligence";
 import { Player } from "@player";
 
 function mult(favor: number): number {
@@ -15,9 +15,10 @@ function mult(favor: number): number {
 
 export function getHackingWorkRepGain(p: IPerson, favor: number): number {
   return (
-    ((p.skills.hacking + p.skills.intelligence + getDarknetCharismaBonus(p, 0.15) / 3) / CONSTANTS.MaxSkillLevel) *
+    ((p.skills.hacking + getEffectiveIntelligence(p) + getDarknetCharismaBonus(p, 0.15) / 3) /
+      CONSTANTS.MaxSkillLevel) *
     p.mults.faction_rep *
-    calculateIntelligenceBonus(p.skills.intelligence, 1) *
+    calculateIntelligenceBonus(p, 1) *
     mult(favor) *
     calculateCurrentShareBonus()
   );
@@ -30,10 +31,11 @@ export function getFactionSecurityWorkRepGain(p: IPerson, favor: number): number
         p.skills.defense +
         p.skills.dexterity +
         p.skills.agility +
-        (p.skills.hacking + p.skills.intelligence + getDarknetCharismaBonus(p, 0.3)) * calculateCurrentShareBonus())) /
+        (p.skills.hacking + getEffectiveIntelligence(p) + getDarknetCharismaBonus(p, 0.3)) *
+          calculateCurrentShareBonus())) /
     CONSTANTS.MaxSkillLevel /
     4.5;
-  return t * p.mults.faction_rep * mult(favor) * calculateIntelligenceBonus(p.skills.intelligence, 1);
+  return t * p.mults.faction_rep * mult(favor) * calculateIntelligenceBonus(p, 1);
 }
 
 export function getFactionFieldWorkRepGain(p: IPerson, favor: number): number {
@@ -44,10 +46,11 @@ export function getFactionFieldWorkRepGain(p: IPerson, favor: number): number {
         p.skills.dexterity +
         p.skills.agility +
         p.skills.charisma +
-        (p.skills.hacking + p.skills.intelligence + getDarknetCharismaBonus(p, 0.3)) * calculateCurrentShareBonus())) /
+        (p.skills.hacking + getEffectiveIntelligence(p) + getDarknetCharismaBonus(p, 0.3)) *
+          calculateCurrentShareBonus())) /
     CONSTANTS.MaxSkillLevel /
     5.5;
-  return t * p.mults.faction_rep * mult(favor) * calculateIntelligenceBonus(p.skills.intelligence, 1);
+  return t * p.mults.faction_rep * mult(favor) * calculateIntelligenceBonus(p, 1);
 }
 
 function getDarknetCharismaBonus(p: IPerson, scalar: number = 1): number {

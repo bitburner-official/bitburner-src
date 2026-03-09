@@ -10,10 +10,7 @@ export class SleeveRecoveryWork extends SleeveWorkClass {
   type: SleeveWorkType.RECOVERY = SleeveWorkType.RECOVERY;
 
   process(sleeve: Sleeve, cycles: number) {
-    sleeve.shock = Math.max(
-      0,
-      sleeve.shock - 0.0002 * calculateIntelligenceBonus(sleeve.skills.intelligence, 0.75) * cycles,
-    );
+    sleeve.shock = Math.max(0, sleeve.shock - 0.0002 * calculateIntelligenceBonus(sleeve, 0.75) * cycles);
     if (sleeve.shock <= 0) sleeve.stopWork();
   }
 

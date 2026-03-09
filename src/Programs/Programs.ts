@@ -16,6 +16,7 @@ import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 import { handleStormSeed } from "../DarkNet/effects/webstorm";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { getEffectiveIntelligence } from "../PersonObjects/formulas/intelligence";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -24,7 +25,7 @@ function requireHackingLevel(lvl: number) {
 }
 
 export function getEffectiveHackingLevelRequirement(level: number): number {
-  return clampNumber(level - Player.skills.intelligence / 2, 1);
+  return clampNumber(level - getEffectiveIntelligence(Player) / 2, 1);
 }
 
 function bitFlumeRequirements() {

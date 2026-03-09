@@ -59,7 +59,7 @@ export class CreateProgramWork extends Work {
     const focusBonus = Player.focusPenalty();
     //Higher hacking skill will allow you to create programs faster
     const reqLvl = this.getProgram().create?.level ?? 0;
-    let skillMult = (Player.skills.hacking / reqLvl) * calculateIntelligenceBonus(Player.skills.intelligence, 3); //This should always be greater than 1;
+    let skillMult = (Player.skills.hacking / reqLvl) * calculateIntelligenceBonus(Player, 3); //This should always be greater than 1;
     skillMult = 1 + (skillMult - 1) / 5; //The divider constant can be adjusted as necessary
     skillMult *= focusBonus;
     //Skill multiplier directly applied to "time worked"

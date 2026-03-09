@@ -15,11 +15,7 @@ export function calculateHackingChance(server: IServer, person: IPerson): number
   const difficultyMult = (100 - hackDifficulty) / 100;
   const skillMult = clampNumber(hackFactor * person.skills.hacking, 1);
   const skillChance = (skillMult - requiredHackingSkill) / skillMult;
-  const chance =
-    skillChance *
-    difficultyMult *
-    person.mults.hacking_chance *
-    calculateIntelligenceBonus(person.skills.intelligence, 1);
+  const chance = skillChance * difficultyMult * person.mults.hacking_chance * calculateIntelligenceBonus(person, 1);
   return clampNumber(chance, 0, 1);
 }
 
@@ -72,9 +68,7 @@ export function calculateHackingTime(server: IServer, person: IPerson): number {
   const hackTimeMultiplier = 5;
   const hackingTime =
     (hackTimeMultiplier * skillFactor) /
-    (person.mults.hacking_speed *
-      currentNodeMults.HackingSpeedMultiplier *
-      calculateIntelligenceBonus(person.skills.intelligence, 1));
+    (person.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier * calculateIntelligenceBonus(person, 1));
 
   return hackingTime;
 }

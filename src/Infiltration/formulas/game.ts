@@ -1,5 +1,6 @@
 import { Player } from "@player";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { getEffectiveIntelligence } from "../../PersonObjects/formulas/intelligence";
 
 export const MaxDifficultyForInfiltration = 3.5;
 // This value is typically denoted "lambda," and is the instantaneous rate of decay.
@@ -39,7 +40,7 @@ export function decreaseMarketDemandMultiplier(timestamp: number, floors: number
 }
 
 function calculateRawDiff(stats: number, startingDifficulty: number): number {
-  return clampNumber(startingDifficulty - Math.pow(stats, 0.9) / 250 - Player.skills.intelligence / 1600, 0);
+  return clampNumber(startingDifficulty - Math.pow(stats, 0.9) / 250 - getEffectiveIntelligence(Player) / 1600, 0);
 }
 
 export function calculateDifficulty(startingSecurityLevel: number): number {

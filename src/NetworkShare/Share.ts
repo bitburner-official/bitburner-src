@@ -21,7 +21,7 @@ export const pendingUIShareJobIds: number[] = [];
 
 export function calculateEffectiveSharedThreads(threads: number, cpuCores: number): number {
   const coreBonus = getCoreBonus(cpuCores);
-  return threads * calculateIntelligenceBonus(Player.skills.intelligence, 2) * coreBonus;
+  return threads * calculateIntelligenceBonus(Player, 2) * coreBonus;
 }
 
 export function startSharing(threads: number, cpuCores: number): () => void {

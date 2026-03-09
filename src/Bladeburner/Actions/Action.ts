@@ -172,7 +172,7 @@ export abstract class ActionClass {
     for (const stat of getRecordKeys(person.skills)) {
       competence += this.weights[stat] * Math.pow(inst.getEffectiveSkillLevel(person, stat), this.decays[stat]);
     }
-    competence *= calculateIntelligenceBonus(person.skills.intelligence, 0.75);
+    competence *= calculateIntelligenceBonus(person, 0.75);
     competence *= inst.calculateStaminaPenalty();
 
     competence *= this.getTeamSuccessBonus(inst);

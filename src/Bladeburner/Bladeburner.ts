@@ -57,6 +57,7 @@ import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 import { pluralize } from "../utils/I18nUtils";
 import { calculateActionRankGain, calculateActionReputationGain } from "./Formulas";
 import { processWorkStats } from "../Work/Formulas";
+import { getEffectiveIntelligence } from "../PersonObjects/formulas/intelligence";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -1089,7 +1090,7 @@ export class Bladeburner implements OperationTeam {
             // Does not use stamina. Effectiveness depends on hacking, int, and cha
             let eff =
               0.04 * Math.pow(person.skills.hacking, 0.3) +
-              0.04 * Math.pow(person.skills.intelligence, 0.9) +
+              0.04 * Math.pow(getEffectiveIntelligence(person), 0.9) +
               0.02 * Math.pow(person.skills.charisma, 0.3);
             eff *= person.mults.bladeburner_analysis;
             if (isNaN(eff) || eff < 0) {

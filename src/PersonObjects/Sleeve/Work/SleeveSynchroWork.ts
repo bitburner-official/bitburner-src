@@ -11,10 +11,7 @@ export class SleeveSynchroWork extends SleeveWorkClass {
   type: SleeveWorkType.SYNCHRO = SleeveWorkType.SYNCHRO;
 
   process(sleeve: Sleeve, cycles: number) {
-    sleeve.sync = Math.min(
-      100,
-      sleeve.sync + calculateIntelligenceBonus(Player.skills.intelligence, 0.5) * 0.0002 * cycles,
-    );
+    sleeve.sync = Math.min(100, sleeve.sync + calculateIntelligenceBonus(Player, 0.5) * 0.0002 * cycles);
     if (sleeve.sync >= 100) sleeve.stopWork();
   }
 
