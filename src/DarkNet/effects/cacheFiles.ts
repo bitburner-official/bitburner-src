@@ -69,7 +69,7 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): string 
   if (Math.random() < difficulty * 0.2 || !cctCooldownReached()) {
     return getMoneyReward(difficulty);
   }
-  const contractCount = Math.floor(Math.min(30, difficulty) * 0.1 - 1.5 + Math.random() * 3);
+  const contractCount = Math.min(Math.floor(Math.min(20, difficulty) * 0.1 - 1.5 + Math.random() * 3), 3);
   if (contractCount < 1) {
     return getMoneyReward(difficulty);
   }
@@ -97,7 +97,7 @@ export const getStockReward = (difficulty: number): string => {
   if (!isStockMarketInitialized()) {
     initStockMarket();
   }
-  const stockSymbols = Object.values(StockSymbol);
+  const stockSymbols = Object.keys(StockSymbol);
   const randomStock = stockSymbols[Math.floor(Math.random() * stockSymbols.length)];
   const shares = Math.floor(1 + difficulty * 5 + Math.random() * 10);
   StockMarket[randomStock].playerShares += shares;
