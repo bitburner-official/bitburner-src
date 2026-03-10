@@ -59,9 +59,7 @@ export type DarknetServerOptions = {
 };
 
 export const DnetServerBuilder = (options: DarknetServerOptions): DarknetServer => {
-  const maxRam = roundToTwo(
-    16 * 2 ** Math.floor(options.difficulty / 6) * [0.5, 1, 1, 1.15, 1.4][Math.floor(Math.random() * 5)],
-  );
+  const maxRam = getMaxRam(options.difficulty);
   const ramBlock = options.preventBlockedRam ? 0 : getRamBlock(maxRam);
   const name = options.name ?? generateDarknetServerName();
 
@@ -194,4 +192,11 @@ const l33tifyName = (name: string): string => {
     updatedName = updatedName.replaceAll(char, replacement);
   }
   return updatedName;
+};
+
+const getMaxRam = (difficulty: number): number => {
+  const baseRam = Math.min(16 * 2 ** Math.floor(difficulty / 6), 256);
+  const sizeMutations = baseRam === 16 ? [0.85, 1, 1, 1.3] : [0.5, 1, 1, 1.15, 1.4];
+  const mutation = sizeMutations[Math.floor(Math.random() * sizeMutations.length)];
+  return roundToTwo(baseRam * mutation);
 };
