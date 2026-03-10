@@ -51,7 +51,7 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
 
     // Initialize monaco editor
     editorRef.current = monaco.editor.create(containerDiv.current, {
-      value: "",
+      model: null,
       automaticLayout: true,
       language: "javascript",
       ...options,
