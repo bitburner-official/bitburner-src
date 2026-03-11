@@ -108,7 +108,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Enable font ligatures: </Typography>
+        <Typography marginRight={"auto"}>Font ligatures: </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("fontLigatures", e.target.checked)}
           checked={props.options.fontLigatures}
@@ -152,7 +152,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Enable Sticky Scroll: </Typography>
+        <Typography marginRight={"auto"}>Sticky Scroll: </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("stickyScroll", { enabled: e.target.checked })}
           checked={props.options.stickyScroll?.enabled}
@@ -160,7 +160,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Enable Minimap: </Typography>
+        <Typography marginRight={"auto"}>Minimap: </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("minimap", { enabled: e.target.checked })}
           checked={props.options.minimap?.enabled}
