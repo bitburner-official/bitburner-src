@@ -71,25 +71,25 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves.length;
     },
     setToIdle: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
       Player.sleeves[sleeveNumber].stopWork();
     },
     setToShockRecovery: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
       return Player.sleeves[sleeveNumber].shockRecovery();
     },
     setToSynchronize: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
       return Player.sleeves[sleeveNumber].synchronize();
     },
     setToCommitCrime: (ctx) => (_sleeveNumber, _crimeType) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const crimeType = getEnumHelper("CrimeType").nsGetMember(ctx, _crimeType);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
@@ -98,7 +98,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves[sleeveNumber].commitCrime(crime.type);
     },
     setToUniversityCourse: (ctx) => (_sleeveNumber, _universityName, _className) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const universityName = helpers.string(ctx, "universityName", _universityName);
       const className = getEnumHelper("UniversityClassType").nsGetMember(ctx, _className);
       checkSleeveAPIAccess(ctx);
@@ -106,7 +106,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves[sleeveNumber].takeUniversityCourse(universityName, className);
     },
     travel: (ctx) => (_sleeveNumber, _cityName) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
@@ -117,7 +117,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return true;
     },
     setToCompanyWork: (ctx) => (_sleeveNumber, _companyName) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
@@ -139,7 +139,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves[sleeveNumber].workForCompany(companyName);
     },
     setToFactionWork: (ctx) => (_sleeveNumber, _factionName, _workType) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
       const workType = getEnumHelper("FactionWorkType").nsGetMember(ctx, _workType);
       checkSleeveAPIAccess(ctx);
@@ -173,7 +173,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves[sleeveNumber].workForFaction(factionName, workType);
     },
     setToGymWorkout: (ctx) => (_sleeveNumber, _gymName, _stat) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const gymName = helpers.string(ctx, "gymName", _gymName);
       const stat = getEnumHelper("GymType").nsGetMember(ctx, _stat);
       checkSleeveAPIAccess(ctx);
@@ -182,7 +182,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves[sleeveNumber].workoutAtGym(gymName, stat);
     },
     getTask: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -191,7 +191,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return sl.currentWork.APICopy(sl);
     },
     getSleeve: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -212,7 +212,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return data;
     },
     getSleeveAugmentations: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -223,7 +223,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return augs;
     },
     getSleevePurchasableAugs: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -240,7 +240,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return augs;
     },
     purchaseSleeveAug: (ctx) => (_sleeveNumber, _augName) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
@@ -269,7 +269,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return getAugCost(aug).repCost;
     },
     setToBladeburnerAction: (ctx) => (_sleeveNumber, _action, _contract?) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const sleeveNumber = helpers.integer(ctx, "sleeveNumber", _sleeveNumber);
       const action = helpers.string(ctx, "action", _action);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
