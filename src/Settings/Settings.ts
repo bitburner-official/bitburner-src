@@ -188,6 +188,8 @@ export const Settings = {
   MonacoStickyScroll: { enabled: false } as StickyScroll,
   /** Whether to show minimap in the script editor */
   MonacoMinimap: { enabled: true } as Minimap,
+  /** Whether to autosave on focus change */
+  MonacoAutoSaveOnFocusChange: true,
   /** Whether to hide trailing zeroes on fractional part of decimal */
   hideTrailingDecimalZeros: false,
   /** Whether to hide thousands separators. */

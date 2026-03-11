@@ -13,6 +13,9 @@ import reactDomTypes from "../../../node_modules/@types/react-dom/index.d.ts?raw
 
 import { useScriptEditorContext } from "./ScriptEditorContext";
 import { scriptEditor } from "../ScriptEditor";
+import { Settings } from "../../Settings/Settings";
+import { openScripts } from "../EditorData";
+import { isUnsavedFile, saveScript } from "./utils";
 
 interface EditorProps {
   /** Function to be ran after mounting editor */
@@ -62,6 +65,17 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
     onMount(editorRef.current);
     subscription.current = editorRef.current.onDidChangeModelContent(() => {
       onChange(editorRef.current?.getValue());
+    });
+    editorRef.current.onDidBlurEditorWidget(() => {
+      if (!Settings.MonacoAutoSaveOnFocusChange) {
+        return;
+      }
+      for (let i = 0; i < openScripts.length; ++i) {
+        if (!isUnsavedFile(openScripts, i)) {
+          continue;
+        }
+        saveScript(openScripts[i]);
+      }
     });
 
     // Unmounting
