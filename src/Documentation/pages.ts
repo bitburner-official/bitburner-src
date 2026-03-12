@@ -169,6 +169,8 @@ import nsDoc_bitburner_bladeburner_getactioncurrentlevel_md from "../../markdown
 import nsDoc_bitburner_bladeburner_getactioncurrenttime_md from "../../markdown/bitburner.bladeburner.getactioncurrenttime.md?raw";
 import nsDoc_bitburner_bladeburner_getactionestimatedsuccesschance_md from "../../markdown/bitburner.bladeburner.getactionestimatedsuccesschance.md?raw";
 import nsDoc_bitburner_bladeburner_getactionmaxlevel_md from "../../markdown/bitburner.bladeburner.getactionmaxlevel.md?raw";
+import nsDoc_bitburner_bladeburner_getactionrankgain_md from "../../markdown/bitburner.bladeburner.getactionrankgain.md?raw";
+import nsDoc_bitburner_bladeburner_getactionrankloss_md from "../../markdown/bitburner.bladeburner.getactionrankloss.md?raw";
 import nsDoc_bitburner_bladeburner_getactionrepgain_md from "../../markdown/bitburner.bladeburner.getactionrepgain.md?raw";
 import nsDoc_bitburner_bladeburner_getactionsuccesses_md from "../../markdown/bitburner.bladeburner.getactionsuccesses.md?raw";
 import nsDoc_bitburner_bladeburner_getactiontime_md from "../../markdown/bitburner.bladeburner.getactiontime.md?raw";
@@ -1762,6 +1764,8 @@ AllPages["nsDoc/bitburner.bladeburner.getactioncurrentlevel.md"] = nsDoc_bitburn
 AllPages["nsDoc/bitburner.bladeburner.getactioncurrenttime.md"] = nsDoc_bitburner_bladeburner_getactioncurrenttime_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionestimatedsuccesschance.md"] = nsDoc_bitburner_bladeburner_getactionestimatedsuccesschance_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionmaxlevel.md"] = nsDoc_bitburner_bladeburner_getactionmaxlevel_md;
+AllPages["nsDoc/bitburner.bladeburner.getactionrankgain.md"] = nsDoc_bitburner_bladeburner_getactionrankgain_md;
+AllPages["nsDoc/bitburner.bladeburner.getactionrankloss.md"] = nsDoc_bitburner_bladeburner_getactionrankloss_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionrepgain.md"] = nsDoc_bitburner_bladeburner_getactionrepgain_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionsuccesses.md"] = nsDoc_bitburner_bladeburner_getactionsuccesses_md;
 AllPages["nsDoc/bitburner.bladeburner.getactiontime.md"] = nsDoc_bitburner_bladeburner_getactiontime_md;

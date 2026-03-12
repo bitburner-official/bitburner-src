@@ -55,7 +55,7 @@ import { assertObject } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 import { pluralize } from "../utils/I18nUtils";
-import { calculateActionRankGain, calculateActionReputationGain } from "./Formulas";
+import { calculateActionRankGain, calculateActionRankLoss, calculateActionReputationGain } from "./Formulas";
 import { processWorkStats } from "../Work/Formulas";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
@@ -941,7 +941,7 @@ export class Bladeburner implements OperationTeam {
             let loss = 0,
               damage = 0;
             if (action.rankLoss) {
-              loss = addOffset(action.rankLoss * rewardMultiplier, 10);
+              loss = addOffset(calculateActionRankLoss(action), 10);
               this.changeRank(person, -1 * loss);
             }
             if (action.hpLoss) {
@@ -1019,7 +1019,7 @@ export class Bladeburner implements OperationTeam {
           let rankLoss = 0;
           let damage = 0;
           if (action.rankLoss) {
-            rankLoss = addOffset(action.rankLoss, 10);
+            rankLoss = addOffset(calculateActionRankLoss(action), 10);
             this.changeRank(person, -1 * rankLoss);
           }
           if (action.hpLoss) {
