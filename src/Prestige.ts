@@ -58,14 +58,11 @@ export function prestigeAugmentation(): void {
 
   initBitNodeMultipliers();
 
-  // Maintain invites to factions with the 'keepOnInstall' flag, and rumors about others
+  // Maintain invites to factions with the 'keepOnInstall' flag
   const maintainInvites = new Set<FactionName>();
-  const maintainRumors = new Set<FactionName>();
   for (const facName of [...Player.factions, ...Player.factionInvitations]) {
     if (Factions[facName].getInfo().keep) {
       maintainInvites.add(facName);
-    } else {
-      maintainRumors.add(facName);
     }
   }
 
@@ -192,9 +189,6 @@ export function prestigeAugmentation(): void {
       Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
     }
   }
-
-  // Hear rumors after all invites/bans
-  for (const factionName of maintainRumors) Player.receiveRumor(factionName);
 
   resetPidCounter();
   ProgramsSeen.clear();
