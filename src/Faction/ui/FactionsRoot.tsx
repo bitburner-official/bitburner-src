@@ -135,6 +135,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                     overflow: "hidden",
                     whiteSpace: "nowrap",
                     textOverflow: "ellipsis",
+                    color: Factions[props.faction.name].isBanned ? Settings.theme.error : "inherit",
                     textDecorationLine: Factions[props.faction.name].isBanned ? "line-through" : "none",
                   }}
                 >
@@ -148,6 +149,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                     overflow: "hidden",
                     whiteSpace: "nowrap",
                     textOverflow: "ellipsis",
+                    color: Factions[props.faction.name].isBanned ? Settings.theme.error : "inherit",
                     textDecorationLine: Factions[props.faction.name].isBanned ? "line-through" : "none",
                   }}
                 >
