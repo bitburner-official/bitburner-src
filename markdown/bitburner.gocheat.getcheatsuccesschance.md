@@ -74,5 +74,7 @@ Your chance of successfully playing a cheat move.
 
 ## Remarks
 
-RAM cost: 1 GB Requires BitNode 14.2 to use
+RAM cost: 1 GB
+
+Requires Source-File 14.2 to use
 

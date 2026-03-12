@@ -62,5 +62,7 @@ A 2D array of characters indicating the player who controls each empty point.
 
 ## Remarks
 
-RAM cost: 16 GB (This is intentionally expensive; you can derive this info from just getBoardState() )
+RAM cost: 16 GB
+
+(This is intentionally expensive; you can derive this info from just getBoardState() )
 

@@ -69,7 +69,7 @@ Tools to analyze the IPvGO subnet.
 
 </td><td>
 
-Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
+Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
 
 
 </td></tr>

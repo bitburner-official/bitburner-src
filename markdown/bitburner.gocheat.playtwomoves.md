@@ -134,5 +134,7 @@ a promise that contains the opponent move's x and y coordinates (or pass) in res
 
 ## Remarks
 
-RAM cost: 8 GB Requires BitNode 14.2 to use
+RAM cost: 8 GB
+
+Requires Source-File 14.2 to use
 
