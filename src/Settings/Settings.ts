@@ -275,5 +275,10 @@ export const Settings = {
 
     // Set up initial state for error modal suppression
     toggleSuppressErrorModals(Settings.SuppressErrorModals, true);
+
+    // Disable this feature for existing save files.
+    if (save.MonacoAutoSaveOnFocusChange === undefined) {
+      Settings.MonacoAutoSaveOnFocusChange = false;
+    }
   },
 };
