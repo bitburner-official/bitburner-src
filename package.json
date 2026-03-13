@@ -88,9 +88,11 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
     "html-webpack-plugin": "^5.6.3",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jsdom": "^26.1.0",
+    "lint-staged": "^16.2.1",
     "lodash": "^4.17.21",
     "monaco-editor": "^0.55.1",
     "monaco-editor-webpack-plugin": "^7.1.1",
@@ -139,6 +141,7 @@
     "preversion": "npm install && npm run test",
     "version": "sh ./tools/build-release.sh && git add --all",
     "postversion": "git push -u origin dev && git push --tags",
-    "changelog": "node tools/fetch-changelog/index.js --from=$(cat last_changelog_hash) > changelog.md"
+    "changelog": "node tools/fetch-changelog/index.js --from=$(cat last_changelog_hash) > changelog.md",
+    "prepare": "husky"
   }
 }

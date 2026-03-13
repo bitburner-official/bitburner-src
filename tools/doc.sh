@@ -26,3 +26,7 @@ node tools/bundle-doc/generate-math-notation-output.mjs
 
 echo ""
 echo "Documentation build completed."
+
+echo ""
+echo "Bundling ingame documentation..."
+node tools/bundle-doc/index.js
