@@ -229,7 +229,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     `Except for the dot ("."), parentheses ("(" and ")"), and the letters "e" and "E" (used for scientific notation), `,
     `most non-digit characters are not allowed and will be removed from the input.`,
-    `If the input contains whitespace, it must be enclosed in single quotes ('), double quotes ("), or backticks (\`).`,
+    "Some edge cases may need to be enclosed in quotes to evaluate correctly.",
     " ",
   ],
   free: [
