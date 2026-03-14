@@ -72,7 +72,9 @@ The stock price at which each share was sold, otherwise 0 if the shares weren't 
 
 ## Remarks
 
-RAM cost: 2.5 GB Attempts to sell a short position of a stock using a Market Order.
+RAM cost: 2.5 GB
+
+Attempts to sell a short position of a stock using a Market Order.
 
 The ability to short a stock is \*\*not\*\* immediately available to the player and must be unlocked later on in the game.
 

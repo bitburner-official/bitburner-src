@@ -56,5 +56,7 @@ The number of times you've attempted to cheat in the current game.
 
 ## Remarks
 
-RAM cost: 1 GB Requires BitNode 14.2 to use
+RAM cost: 1 GB
+
+Requires Source-File 14.2 to use
 
