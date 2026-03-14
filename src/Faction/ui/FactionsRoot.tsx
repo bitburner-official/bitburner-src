@@ -58,6 +58,16 @@ const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   );
 };
 
+function getStylesForFactionName(faction: Faction) {
+  return {
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    color: faction.isBanned ? Settings.theme.error : "inherit",
+    textDecorationLine: faction.isBanned ? "line-through" : "none",
+  };
+}
+
 interface FactionElementProps {
   faction: Faction;
   /** Rerender function to force the entire FactionsRoot to rerender */
@@ -130,29 +140,11 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                   </>
                 }
               >
-                <span
-                  style={{
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    color: Factions[props.faction.name].isBanned ? Settings.theme.error : "inherit",
-                    textDecorationLine: Factions[props.faction.name].isBanned ? "line-through" : "none",
-                  }}
-                >
-                  {props.faction.name}
-                </span>
+                <span style={getStylesForFactionName(props.faction)}>{props.faction.name}</span>
               </Tooltip>
             ) : (
               <Tooltip title={"Rumored Faction"}>
-                <span
-                  style={{
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    color: Factions[props.faction.name].isBanned ? Settings.theme.error : "inherit",
-                    textDecorationLine: Factions[props.faction.name].isBanned ? "line-through" : "none",
-                  }}
-                >
+                <span style={getStylesForFactionName(props.faction)}>
                   <CorruptibleText content={props.faction.name} spoiler={false} />
                 </span>
               </Tooltip>
