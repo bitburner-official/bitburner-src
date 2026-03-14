@@ -10,7 +10,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { Player } from "../Player";
 import { defaultMultipliers } from "./Multipliers";
-import { calculateSkill } from "./formulas/skill";
+import { calculateExp, calculateSkill } from "./formulas/skill";
 
 // Base class representing a person-like object
 export abstract class Person implements IPerson {
@@ -32,6 +32,10 @@ export abstract class Person implements IPerson {
     agility: 0,
     charisma: 0,
     intelligence: 0,
+  };
+
+  persistentIntelligenceData = {
+    exp: 0,
   };
 
   mults = defaultMultipliers();
@@ -142,6 +146,21 @@ export abstract class Person implements IPerson {
     );
   }
 
+  overrideIntelligence(): void {
+    const persistentIntelligenceSkill = this.calculateSkill(this.persistentIntelligenceData.exp, 1);
+    // If there is no intelligenceOverride, reset exp/skill to persistent values
+    if (Player.bitNodeOptions.intelligenceOverride === undefined) {
+      this.exp.intelligence = this.persistentIntelligenceData.exp;
+      this.skills.intelligence = persistentIntelligenceSkill;
+      return;
+    }
+    // Limit exp/skill based on intelligenceOverride
+    if (Player.bitNodeOptions.intelligenceOverride < persistentIntelligenceSkill) {
+      this.exp.intelligence = calculateExp(Player.bitNodeOptions.intelligenceOverride, 1);
+      this.skills.intelligence = Player.bitNodeOptions.intelligenceOverride;
+    }
+  }
+
   gainIntelligenceExp(exp: number): void {
     if (isNaN(exp)) {
       console.error("ERROR: NaN passed into Player.gainIntelligenceExp()");
@@ -154,6 +173,7 @@ export abstract class Person implements IPerson {
     if (Player.sourceFileLvl(5) > 0 || this.skills.intelligence > 0 || Player.bitNodeN === 5) {
       this.exp.intelligence += exp;
       this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, 1));
+      this.persistentIntelligenceData.exp += exp;
     }
   }
 

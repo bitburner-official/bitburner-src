@@ -155,6 +155,7 @@ function enableIntelligence(): void {
 function disableIntelligence(): void {
   Player.exp.intelligence = 0;
   Player.skills.intelligence = 0;
+  Player.persistentIntelligenceData.exp = 0;
   Player.updateSkillLevels();
 }
 

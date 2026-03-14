@@ -71,15 +71,11 @@ export function Val({ name, color }: ValProps): React.ReactElement {
     return clearSubscription;
   }, [name]);
 
-  if (
-    name === "Int" &&
-    Player.bitNodeOptions.intelligenceOverride !== undefined &&
-    Player.bitNodeOptions.intelligenceOverride < Player.skills.intelligence
-  ) {
+  if (name === "Int" && Player.bitNodeOptions.intelligenceOverride !== undefined) {
     return (
-      <Tooltip title={`Intelligence: ${formatSkill(Player.skills.intelligence)}`}>
+      <Tooltip title={`Intelligence: ${formatSkill(Player.calculateSkill(Player.persistentIntelligenceData.exp, 1))}`}>
         <Typography color={color}>
-          {formatSkill(Player.bitNodeOptions.intelligenceOverride)}
+          {formatSkill(Player.skills.intelligence)}
           <sup>*</sup>
         </Typography>
       </Tooltip>
@@ -127,6 +123,8 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
   const [killOpen, setKillOpen] = useState(false);
   const [hasIntelligence, setHasIntelligence] = useState(Player.skills.intelligence > 0);
   const [showBars, setShowBars] = useState(!Settings.DisableOverviewProgressBars);
+  // const [width, setWidth] = useState(145);
+  // const [height, __setHeight] = useState(360);
   useEffect(() => {
     if (!parentOpen) return; // No rerendering if overview is hidden, for performance
     const interval = setInterval(() => {
@@ -138,10 +136,17 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
   }, [parentOpen]);
   const { classes } = useStyles();
   const theme = useTheme();
+  // const resize = useCallback((_: React.SyntheticEvent, { size }: ResizeCallbackData) => {
+  //   console.log(size);
+  //   setWidth(size.width);
+  //   // setHeight(size.height);
+  // }, []);
   return (
     <>
-      <Table sx={{ display: "block", m: 1 }}>
-        <TableBody>
+      <Table sx={{ display: "block", p: 1, width: "215px" }}>
+        <TableBody sx={{ display: "table", width: "100%" }}>
+          {/* <Table sx={{ display: "block", m: 1, width: "215px" }}>
+        <TableBody> */}
           <DataRow name="HP" showBar={false} color={theme.colors.hp} cellType={"cellNone"} />
           <DataRow name="Money" showBar={false} color={theme.colors.money} cellType={"cell"} />
           <DataRow name="Hack" showBar={showBars} color={theme.colors.hack} cellType={"cell"} />

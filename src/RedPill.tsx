@@ -66,6 +66,7 @@ export function enterBitNode(
   } else if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
     Player.skills.intelligence = 0;
     Player.exp.intelligence = 0;
+    Player.persistentIntelligenceData.exp = 0;
   }
   if (newBitNode === 5 && Player.skills.intelligence === 0) {
     Player.skills.intelligence = 1;

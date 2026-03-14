@@ -622,6 +622,10 @@ Error: ${e}`,
     initDarkwebServer();
   }
   if (ver < 47) {
+    for (const person of [Player, ...Player.sleeves]) {
+      person.persistentIntelligenceData.exp = person.exp.intelligence;
+      person.overrideIntelligence();
+    }
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }

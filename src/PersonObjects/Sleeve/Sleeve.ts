@@ -251,6 +251,8 @@ export class Sleeve extends Person implements SleevePerson {
     this.shock = 100;
     this.storedCycles = 0;
     this.sync = Math.max(this.memory, 1);
+
+    this.overrideIntelligence();
   }
 
   /**

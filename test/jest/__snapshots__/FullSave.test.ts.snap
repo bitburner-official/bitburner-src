@@ -534,6 +534,9 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       "work_money": 1,
     },
     "numPeopleKilled": 0,
+    "persistentIntelligenceData": {
+      "exp": 0,
+    },
     "playtimeSinceLastAug": 0,
     "playtimeSinceLastBitnode": 0,
     "purchasedServers": [],
@@ -614,6 +617,9 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "strength_exp": 1,
             "work_money": 1,
           },
+          "persistentIntelligenceData": {
+            "exp": 0,
+          },
           "queuedAugmentations": [],
           "shock": 100,
           "skills": {
@@ -685,6 +691,9 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "strength": 1,
             "strength_exp": 1,
             "work_money": 1,
+          },
+          "persistentIntelligenceData": {
+            "exp": 0,
           },
           "queuedAugmentations": [],
           "shock": 100,
