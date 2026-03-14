@@ -75,11 +75,11 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
     Router.toPage(Page.FactionAugmentations, { faction });
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: Faction): void {
-    if (!event.isTrusted || !faction.alreadyInvited || faction.isBanned) {
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, factionName: FactionName): void {
+    if (!event.isTrusted || !Factions[factionName].alreadyInvited || Factions[factionName].isBanned) {
       return;
     }
-    joinFaction(faction);
+    joinFaction(Factions[factionName]);
     props.rerender();
   }
 
@@ -108,7 +108,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             <Button onClick={() => openFactionAugPage(props.faction)}>Augments</Button>
           </Box>
         ) : props.faction.alreadyInvited ? (
-          <Button sx={{ height: "48px", mr: 1 }} onClick={(e) => acceptInvitation(e, props.faction)}>
+          <Button sx={{ height: "48px", mr: 1 }} onClick={(e) => acceptInvitation(e, props.faction.name)}>
             Join!
           </Button>
         ) : null}
