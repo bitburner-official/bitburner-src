@@ -349,6 +349,8 @@ const bladeburner = {
   getActionCurrentTime: RamCostConstants.BladeburnerApiBase,
   getActionEstimatedSuccessChance: RamCostConstants.BladeburnerApiBase,
   getActionRepGain: RamCostConstants.BladeburnerApiBase,
+  getActionRankGain: RamCostConstants.BladeburnerApiBase,
+  getActionRankLoss: RamCostConstants.BladeburnerApiBase,
   getActionCountRemaining: RamCostConstants.BladeburnerApiBase,
   getActionMaxLevel: RamCostConstants.BladeburnerApiBase,
   getActionCurrentLevel: RamCostConstants.BladeburnerApiBase,

@@ -97,6 +97,28 @@ Get the maximum level of an action.
 </td></tr>
 <tr><td>
 
+[getActionRankGain(type, name, level)](./bitburner.bladeburner.getactionrankgain.md)
+
+
+</td><td>
+
+Get the rank gain of an action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionRankLoss(type, name, level)](./bitburner.bladeburner.getactionrankloss.md)
+
+
+</td><td>
+
+Get the rank loss of an action.
+
+
+</td></tr>
+<tr><td>
+
 [getActionRepGain(type, name, level)](./bitburner.bladeburner.getactionrepgain.md)
 
 
