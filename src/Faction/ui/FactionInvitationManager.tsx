@@ -52,7 +52,7 @@ export function FactionInvitationManager({ hidden }: { hidden: boolean }): React
   const enemies = faction?.getInfo().enemies ?? [];
 
   function join(): void {
-    if (faction === null || !faction.alreadyInvited || faction.isBanned) {
+    if (faction === null || !faction.alreadyInvited) {
       return;
     }
     joinFaction(faction);
