@@ -140,7 +140,6 @@ export function prestigeAugmentation(this: PlayerObject): void {
 export function prestigeSourceFile(this: PlayerObject): void {
   this.entropy = 0;
   this.prestigeAugmentation();
-  this.factionRumors.clear();
   this.karma = 0;
   // Duplicate sleeves are reset to level 1 every Bit Node (but the number of sleeves you have persists)
   this.sleeves.forEach((sleeve) => sleeve.prestige());
