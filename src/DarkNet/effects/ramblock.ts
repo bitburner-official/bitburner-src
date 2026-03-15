@@ -46,8 +46,8 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
  * Handles the rewards for fully clearing a Darknet server's RAM block.
  */
 export const handleRamBlockClearedRewards = (server: DarknetServer) => {
-  if (!isLabyrinthServer(server.hostname) && Math.random() < 0.3) {
-    addCacheToServer(server);
+  if (!isLabyrinthServer(server.hostname)) {
+    addCacheToServer(server, false);
   }
   if (Math.random() < 0.3) {
     addClue(server);

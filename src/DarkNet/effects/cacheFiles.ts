@@ -13,14 +13,14 @@ import { resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import type { CacheResult } from "@nsdefs";
 import { addClue, cctCooldownReached } from "./effects";
 
-export const generateCacheFilename = (prefix?: string, isPhishingCache?: boolean) => {
+export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
   const suffix = isPhishingCache ? ".d.cache" : ".cache";
   return resolveCacheFilePath(`${filenamePrefix}_${Math.random().toString().substring(2, 5)}${suffix}`);
 };
 
-export const addCacheToServer = (server: DarknetServer, isPhishingCache?: boolean, prefix?: string) => {
-  const cacheFilename = generateCacheFilename(prefix, isPhishingCache);
+export const addCacheToServer = (server: DarknetServer, isPhishingCache: boolean, prefix?: string) => {
+  const cacheFilename = generateCacheFilename(isPhishingCache, prefix);
   if (!cacheFilename) {
     return { success: false, message: `Cannot generate path. prefix: ${prefix}` };
   }

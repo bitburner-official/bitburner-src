@@ -48,7 +48,7 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
 
   const chance = 0.1 * 1.05 ** server?.difficulty;
   if (Math.random() < chance && !isLabyrinthServer(server.hostname)) {
-    addCacheToServer(server);
+    addCacheToServer(server, false);
   }
 };
 
