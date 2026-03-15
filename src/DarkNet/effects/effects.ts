@@ -1,7 +1,6 @@
 import { Player } from "@player";
 import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
-import { generateContract } from "../../CodingContract/ContractGenerator";
 import {
   commonPasswordDictionary,
   notebookFileNames,
@@ -40,11 +39,6 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
 
   server.hasAdminRights = true;
   addClue(server);
-
-  const cctChance = Math.min(0.12, 0.01 * (server.difficulty - 1));
-  if (Math.random() < cctChance && cctCooldownReached()) {
-    generateContract({ server: server.hostname });
-  }
 
   const chance = 0.1 * 1.05 ** server?.difficulty;
   if (Math.random() < chance && !isLabyrinthServer(server.hostname)) {
@@ -290,11 +284,6 @@ export const getDarkscapeNavigator = () => {
     Player.getHomeComputer().pushProgram(CompletedProgramName.darkscape);
   }
   populateDarknet();
-};
-
-export const cctCooldownReached = () => {
-  const timeSinceLastCCT = new Date().getTime() - DarknetState.lastCctRewardTime.getTime();
-  return timeSinceLastCCT > 10 * 60 * 1000;
 };
 
 export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.activeSourceFileLvl(15) > 0;

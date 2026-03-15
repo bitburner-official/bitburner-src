@@ -551,7 +551,11 @@ export class Terminal {
     switch (promptResult.result) {
       case CodingContractResult.Success:
         if (contract.reward !== null) {
-          const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
+          const reward = Player.gainCodingContractReward(
+            contract.reward,
+            contract.getDifficulty(),
+            contract.rewardScaling,
+          );
           this.print(`Contract SUCCESS - ${reward}`);
         }
         server.removeContract(contract);

@@ -55,6 +55,9 @@ export class CodingContract {
        processed outside of this file */
   reward: ICodingContractReward | null;
 
+  /* Scalar for the reward, used to generate lower-value CCTs more frequently */
+  rewardScaling: number = 1;
+
   /* Number of times the Contract has been attempted */
   tries = 0;
 
@@ -65,6 +68,7 @@ export class CodingContract {
     fn = "default.cct",
     type = CodingContractName.FindLargestPrimeFactor,
     reward: ICodingContractReward | null = null,
+    rewardScaling: number = 1,
   ) {
     const path = resolveContractFilePath(fn);
     if (!path) {
@@ -78,6 +82,7 @@ export class CodingContract {
     this.type = type;
     this.state = CodingContractTypes[type].generate();
     this.reward = reward;
+    this.rewardScaling = rewardScaling;
   }
 
   getAnswer() {
