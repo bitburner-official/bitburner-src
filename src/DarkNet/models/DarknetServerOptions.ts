@@ -197,6 +197,6 @@ const l33tifyName = (name: string): string => {
 const getMaxRam = (difficulty: number): number => {
   const baseRam = 16 * 2 ** Math.floor(difficulty / 6);
   const sizeMutations = [0.5, 1, 1, 1.15, 1.4];
-  const mutation = Math.max(sizeMutations[Math.floor(Math.random() * sizeMutations.length)], 16);
-  return roundToTwo(baseRam * mutation);
+  const mutation = sizeMutations[Math.floor(Math.random() * sizeMutations.length)];
+  return roundToTwo(Math.max(baseRam * mutation, 16));
 };
