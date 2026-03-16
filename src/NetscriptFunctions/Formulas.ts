@@ -274,12 +274,14 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           checkFormulasAccess(ctx);
           return calculateCoreUpgradeCost(startingCore, extraCores, costMult);
         },
-      hacknetNodeCost: (ctx) => (_n, _mult) => {
-        const n = helpers.number(ctx, "n", _n);
-        const mult = helpers.number(ctx, "mult", _mult);
-        checkFormulasAccess(ctx);
-        return calculateNodeCost(n, mult);
-      },
+      hacknetNodeCost:
+        (ctx) =>
+        (_n, _mult = 1) => {
+          const n = helpers.number(ctx, "n", _n);
+          const mult = helpers.number(ctx, "mult", _mult);
+          checkFormulasAccess(ctx);
+          return calculateNodeCost(n, mult);
+        },
       constants: (ctx) => () => {
         checkFormulasAccess(ctx);
         return Object.assign({}, HacknetNodeConstants);
