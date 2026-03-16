@@ -157,6 +157,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canOpenFactions =
     Player.factionInvitations.length > 0 ||
     Player.factions.length > 0 ||
+    Player.factionRumors.size > 0 ||
     Player.augmentations.length > 0 ||
     Player.queuedAugmentations.length > 0 ||
     knowAboutBitverse();

@@ -622,6 +622,9 @@ Error: ${e}`,
     initDarkwebServer();
   }
   if (ver < 47) {
+    for (const faction of [...Player.factions, ...Player.factionInvitations]) {
+      Player.factionRumors.add(faction);
+    }
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }
