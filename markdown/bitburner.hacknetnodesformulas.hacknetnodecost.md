@@ -9,7 +9,7 @@ Calculate the cost of a hacknet node.
 **Signature:**
 
 ```typescript
-hacknetNodeCost(n: number, mult: number): number;
+hacknetNodeCost(n: number, mult?: number): number;
 ```
 
 ## Parameters
@@ -58,7 +58,7 @@ number
 
 </td><td>
 
-player cost reduction (defaults to 1)
+_(Optional)_ player cost reduction (defaults to 1)
 
 
 </td></tr>
