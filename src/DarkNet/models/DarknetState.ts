@@ -44,6 +44,7 @@ export const DarknetState = {
   labLocations: { "-1": [1, 1] } as Record<number, [number, number] | undefined>,
 
   lastPhishingCacheTime: new Date(),
+  lastCctRewardTime: new Date(),
   lastStormTime: new Date(),
 
   stockPromotions: {} as Record<string, number>,

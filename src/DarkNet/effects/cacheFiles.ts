@@ -11,7 +11,7 @@ import { cachePrefixes } from "../models/dictionaryData";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import type { CacheResult } from "@nsdefs";
-import { addClue } from "./effects";
+import { addClue, cctCooldownReached } from "./effects";
 
 export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -66,6 +66,9 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
 };
 
 export const getCCTReward = (difficulty: number, server: DarknetServer): string => {
+  if (!cctCooldownReached()) {
+    return getMoneyReward(difficulty);
+  }
   const contractCount = Math.min(Math.floor(Math.min(20, difficulty) * 0.1 - 1.5 + Math.random() * 3), 3);
   if (contractCount < 1) {
     return getMoneyReward(difficulty);

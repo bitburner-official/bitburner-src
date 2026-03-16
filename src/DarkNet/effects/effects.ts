@@ -286,4 +286,9 @@ export const getDarkscapeNavigator = () => {
   populateDarknet();
 };
 
+export const cctCooldownReached = () => {
+  const timeSinceLastCCT = new Date().getTime() - DarknetState.lastCctRewardTime.getTime();
+  return timeSinceLastCCT > 10 * 60 * 1000;
+};
+
 export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.activeSourceFileLvl(15) > 0;
