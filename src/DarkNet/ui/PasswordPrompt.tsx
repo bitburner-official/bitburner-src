@@ -149,7 +149,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
                 <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
                   <span className={classes.serverDetailsText}>Hint:</span> {server.staticPasswordHint}
                   <br />
-                  {server.passwordHintData && (
+                  {!!server.passwordHintData && (
                     <>
                       <span className={classes.serverDetailsText}>Data: </span> {server.passwordHintData}
                       <br />
