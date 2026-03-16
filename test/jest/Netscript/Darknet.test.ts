@@ -116,11 +116,11 @@ describe("Common APIs", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const result1 = ns.dnet.unleashStormSeed();
     expect(result1.success).toStrictEqual(false);
-    expect(DarknetState.allowMutating).toStrictEqual(true);
+    expect(DarknetState.mutationLock).toBeNull();
     getDarknetServerOrThrow(ns.getHostname()).programs.push(CompletedProgramName.stormSeed);
     const result2 = ns.dnet.unleashStormSeed();
     expect(result2.success).toStrictEqual(true);
-    expect(DarknetState.allowMutating).toStrictEqual(false);
+    expect(DarknetState.mutationLock).toBeTruthy();
   });
   test("getDarknetInstability", () => {
     const ns = getNsOnDarkWeb();

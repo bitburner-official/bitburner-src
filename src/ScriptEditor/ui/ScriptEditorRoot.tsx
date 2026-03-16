@@ -18,14 +18,13 @@ import { checkInfiniteLoop } from "../../Script/RamCalculations";
 import { Settings } from "../../Settings/Settings";
 import { iTutorialNextStep, ITutorial, iTutorialSteps } from "../../InteractiveTutorial";
 import { debounce } from "lodash";
-import { saveObject } from "../../SaveObject";
 import { GetServer } from "../../Server/AllServers";
 
 import { PromptEvent } from "../../ui/React/PromptManager";
 
 import { useRerender } from "../../ui/React/hooks";
 
-import { isUnsavedFile, getServerCode, makeModel } from "./utils";
+import { isUnsavedFile, getServerCode, makeModel, saveScript } from "./utils";
 import { OpenScript } from "./OpenScript";
 import { Tabs } from "./Tabs";
 import { Toolbar } from "./Toolbar";
@@ -36,7 +35,6 @@ import { useCallback } from "react";
 import { type AST, getFileType, getModuleScript, parseAST } from "../../utils/ScriptTransformer";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { hasScriptExtension, isLegacyScript, type ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import type { BaseServer } from "../../Server/BaseServer";
 import {
   convertKeyboardEventToKeyCombination,
@@ -44,11 +42,9 @@ import {
   determineKeyBindingTypes,
   ScriptEditorAction,
 } from "../../utils/KeyBindingUtils";
-import { SpecialServers } from "../../Server/data/SpecialServers";
-import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { ToastVariant } from "@enums";
 import { createRunningScriptInstance, startWorkerScript } from "../../NetscriptWorker";
 import type { PositiveInteger } from "../../types";
+import { openScripts } from "../EditorData";
 
 // Extend acorn-walk to support TypeScript nodes.
 extendAcornWalkForTypeScriptNodes(walk.base);
@@ -64,7 +60,7 @@ interface IProps {
   hostname: string;
   vim: boolean;
 }
-const openScripts: OpenScript[] = [];
+
 let currentScript: OpenScript | null = null;
 
 function Root(props: IProps): React.ReactElement {
@@ -412,23 +408,6 @@ function Root(props: IProps): React.ReactElement {
     if (currentScript !== null) {
       currentScript.code = newCode;
       currentScript.lastPosition = newPos;
-    }
-  }
-
-  function saveScript(scriptToSave: OpenScript): void {
-    const server = GetServer(scriptToSave.hostname);
-    if (!server) {
-      dialogBoxCreate(`Server ${scriptToSave.hostname} does not exist.`);
-      return;
-    }
-    // Show a warning message if the file is on a non-home server.
-    if (scriptToSave.hostname !== SpecialServers.Home) {
-      SnackbarEvents.emit("You saved a file on a non-home server!", ToastVariant.WARNING, 3000);
-    }
-    // This server helper already handles overwriting, etc.
-    server.writeToContentFile(scriptToSave.path, scriptToSave.code);
-    if (Settings.SaveGameOnFileSave) {
-      saveObject.saveGame().catch((error) => exceptionAlert(error));
     }
   }
 

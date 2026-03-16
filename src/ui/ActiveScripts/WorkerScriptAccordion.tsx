@@ -4,7 +4,7 @@
  */
 import * as React from "react";
 
-import { formatExp, formatThreads } from "../formatNumber";
+import { formatExp, formatThreads, formatRam } from "../formatNumber";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
@@ -69,7 +69,8 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
         <ListItemText
           primary={
             <Typography sx={{ overflowWrap: "break-word" }}>
-              └ {props.workerScript.name} {JSON.stringify(props.workerScript.args)}
+              └ {props.workerScript.name} ({formatRam(scriptRef.ramUsage * scriptRef.threads)}){" "}
+              {JSON.stringify(props.workerScript.args)}
             </Typography>
           }
         />
@@ -84,7 +85,9 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
                   <Typography>└ Threads:</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
-                  <Typography>{formatThreads(props.workerScript.scriptRef.threads)}</Typography>
+                  <Typography>
+                    {formatThreads(scriptRef.threads)} {`(${formatRam(scriptRef.ramUsage)} each)`}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>

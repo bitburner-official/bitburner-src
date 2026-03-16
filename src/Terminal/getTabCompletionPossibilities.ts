@@ -325,7 +325,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
        */
       console.warn(error);
     }
-    const flagFunc = Flags(flags._);
+    const flagFunc = Flags(flags._, true);
     const autocompleteData: AutocompleteData = {
       servers: GetAllServers()
         .filter((server) => server.serversOnNetwork.length !== 0)
@@ -355,7 +355,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         try {
           return flagFunc(schema);
         } catch (error) {
-          throw new Error("Cannot parse the schema passed to AutocompleteData.flags", { cause: error });
+          throw new Error("Cannot parse the arguments with the schema passed to AutocompleteData.flags", {
+            cause: error,
+          });
         }
       },
       hostname: currServ.hostname,

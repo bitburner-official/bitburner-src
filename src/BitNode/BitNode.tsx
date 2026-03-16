@@ -535,7 +535,7 @@ export function initBitNodes() {
         darknet and its secrets.
         <br />
         <br />
-        In this Bitnode, the Daedalus faction has not yet found and monopolized the fabled Red Pill augmentation.
+        In this BitNode, the Daedalus faction has not yet found and monopolized the fabled Red Pill augmentation.
         Legends say it can be found somewhere, out there in the dark...
         <br />
         <br />
@@ -549,7 +549,7 @@ export function initBitNodes() {
         <ul>
           <li>
             Level 1: Permanently start with the TOR router and {CompletedProgramName.darkscape}, and unlock the full
-            dark web on all Bitnodes.
+            dark web on all BitNodes.
           </li>
           <li>
             Level 2: Your charisma level increases job salary and rep gain. Also increases authentication speed by 20%

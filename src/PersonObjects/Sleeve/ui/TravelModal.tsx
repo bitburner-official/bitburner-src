@@ -22,7 +22,6 @@ export function TravelModal(props: TravelModalProps): React.ReactElement {
       dialogBoxCreate("You cannot afford to have this sleeve travel to another city");
       return;
     }
-    props.sleeve.stopWork();
     props.rerender();
     props.onClose();
   }

@@ -53,7 +53,7 @@ export class Location {
 
   /**
    * Tech vendors allow you to purchase servers.
-   * This property defines the max RAM server you can purchase from this vendor
+   * This property defines the min RAM server you can purchase from this vendor
    */
   techVendorMinRam = 0;
 

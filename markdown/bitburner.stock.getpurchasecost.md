@@ -88,5 +88,7 @@ Cost to buy a given number of shares of a stock.
 
 ## Remarks
 
-RAM cost: 2 GB Calculates and returns how much it would cost to buy a given number of shares of a stock. This takes into account spread, large transactions influencing the price of the stock and commission fees.
+RAM cost: 2 GB
+
+Calculates and returns how much it would cost to buy a given number of shares of a stock. This takes into account spread, large transactions influencing the price of the stock and commission fees.
 

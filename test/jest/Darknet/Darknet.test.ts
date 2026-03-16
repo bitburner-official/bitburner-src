@@ -62,6 +62,8 @@ import { isDirectoryPath } from "../../../src/Paths/Directory";
 import { isFilePath } from "../../../src/Paths/FilePath";
 import { LAB_CACHE_NAME } from "../../../src/DarkNet/effects/labyrinth";
 import { generateCacheFilename } from "../../../src/DarkNet/effects/cacheFiles";
+import { getAllDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
+import { prestigeAugmentation } from "../../../src/Prestige";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -691,6 +693,11 @@ describe("Password Tests", () => {
   });
 });
 
+const serverSnapshot = () =>
+  getAllDarknetServers()
+    .map((s) => ({ hostname: s.hostname, depth: s.depth, leftOffset: s.leftOffset }))
+    .sort((a, b) => (a.hostname < b.hostname ? -1 : a.hostname === b.hostname ? 0 : 1));
+
 describe("mutateDarknet and webstorm", () => {
   test("mutateDarknet", () => {
     const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
@@ -710,6 +717,61 @@ describe("mutateDarknet and webstorm", () => {
     }
     expect(spiedExceptionAlert).not.toHaveBeenCalled();
     expect(spiedConsoleError).not.toHaveBeenCalled();
+  });
+  test("mutation during webstorm", async () => {
+    const realRandom = Math.random;
+    try {
+      jest.useFakeTimers();
+      const promise = launchWebstorm();
+      expect(DarknetState.mutationLock).toBeTruthy();
+
+      await jest.advanceTimersByTimeAsync(10000);
+      expect(DarknetState.mutationLock).toBeTruthy();
+
+      const initialServers = serverSnapshot();
+      // Low rolls cause stuff to happen, we want deterministic testing.
+      // Jest spies keep state, make our own mock so it doesn't eat memory in
+      // case something goes wrong.
+      let count = 0;
+      Math.random = () => count++ * (Number.EPSILON * 1024);
+      mutateDarknet();
+      expect(serverSnapshot()).toEqual(initialServers);
+
+      await jest.runAllTimersAsync();
+      await promise; // Should immediately finish
+      expect(DarknetState.mutationLock).toBeNull();
+
+      mutateDarknet();
+      expect(serverSnapshot()).not.toEqual(initialServers);
+    } finally {
+      jest.useRealTimers();
+      Math.random = realRandom;
+    }
+  });
+  test("prestige during webstorm", async () => {
+    try {
+      jest.useFakeTimers();
+      const promise = launchWebstorm();
+      await jest.advanceTimersByTimeAsync(0); // Finish any promises
+      expect(DarknetState.mutationLock).toBeTruthy();
+
+      const beforePrestige = serverSnapshot();
+      prestigeAugmentation();
+
+      expect(DarknetState.mutationLock).toBeNull();
+      const initialServers = serverSnapshot();
+      // Validate that prestige changed the network
+      expect(initialServers).not.toEqual(beforePrestige);
+
+      await jest.runAllTimersAsync();
+      await promise; // Should immediately finish
+
+      expect(DarknetState.mutationLock).toBeNull();
+      // Webstorm should not have changed anything
+      expect(serverSnapshot()).toEqual(initialServers);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });
 

@@ -72,7 +72,9 @@ The stock price at which each share was purchased, otherwise 0 if the shares wer
 
 ## Remarks
 
-RAM cost: 2.5 GB Attempts to purchase shares of a stock using a Market Order.
+RAM cost: 2.5 GB
+
+Attempts to purchase shares of a stock using a Market Order.
 
 If the player does not have enough money to purchase the specified number of shares, then no shares will be purchased. Remember that every transaction on the stock exchange costs a certain commission fee.
 

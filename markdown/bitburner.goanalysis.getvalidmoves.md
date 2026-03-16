@@ -98,5 +98,7 @@ A 2D array of booleans indicating the validity of each move.
 
 ## Remarks
 
-RAM cost: 8 GB (This is intentionally expensive; you can derive this info from just getBoardState() and getMoveHistory() )
+RAM cost: 8 GB
+
+(This is intentionally expensive; you can derive this info from just getBoardState() and getMoveHistory() )
 

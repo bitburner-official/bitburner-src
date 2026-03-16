@@ -56,5 +56,7 @@ Maximum number of shares that the stock has.
 
 ## Remarks
 
-RAM cost: 2 GB This is the maximum amount of the stock that can be purchased in both the Long and Short positions combined.
+RAM cost: 2 GB
+
+This is the maximum amount of the stock that can be purchased in both the Long and Short positions combined.
 

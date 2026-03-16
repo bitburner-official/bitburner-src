@@ -19,7 +19,9 @@ Object containing information for all the Limit and Stop Orders you have in the 
 
 ## Remarks
 
-RAM cost: 2.5 GB This is an object containing information for all the Limit and Stop Orders you have in the stock market. For each symbol you have a position in, the returned object will have a key with that symbol's name. The object's properties are each an array of [StockOrder](./bitburner.stockorder.md) The object has the following structure:
+RAM cost: 2.5 GB
+
+This is an object containing information for all the Limit and Stop Orders you have in the stock market. For each symbol you have a position in, the returned object will have a key with that symbol's name. The object's properties are each an array of [StockOrder](./bitburner.stockorder.md) The object has the following structure:
 
 ```js
 {
