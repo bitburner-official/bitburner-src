@@ -49,7 +49,7 @@ Both the forecast and the second-order forecast change over time.
 
 A stock's forecast can be viewed after purchasing Four Sigma (4S) Market Data access.
 This lets you see the forecast info on the Stock Market UI.
-If you also purchase access to the 4S Market Data TIX API, then you can view a stock's forecast using the `getStockForecast` function.
+If you also purchase access to the 4S Market Data TIX API, then you can view a stock's forecast using the `stock.getForecast` function.
 
 A stock's second-order forecast is always hidden.
 
