@@ -85,9 +85,11 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
     Router.toPage(Page.FactionAugmentations, { faction });
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: FactionName): void {
-    if (!event.isTrusted) return;
-    joinFaction(Factions[faction]);
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, factionName: FactionName): void {
+    if (!event.isTrusted || !Factions[factionName].alreadyInvited || Factions[factionName].isBanned) {
+      return;
+    }
+    joinFaction(Factions[factionName]);
     props.rerender();
   }
 
