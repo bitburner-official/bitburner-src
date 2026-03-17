@@ -100,7 +100,8 @@ function testIntelligenceOverride(
   expect(Player.skills.intelligence).toStrictEqual(255);
   expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2 + intExpGain);
 
-  // Prestige with intelligenceOverride higher than current values and check if int levels are set to that value.
+  // Prestige with intelligenceOverride set higher than the persistent int skill and check if the int skill is
+  // incorrectly set to that value.
   setUpBeforePrestige();
   ns.singularity[prestigeAPI](nextBN, undefined, {
     ...ns.getResetInfo().bitNodeOptions,
@@ -111,6 +112,51 @@ function testIntelligenceOverride(
   expect(Player.exp.intelligence).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 3 + intExpGain);
   expect(Player.skills.intelligence).toStrictEqual(255);
   expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 3 + intExpGain);
+
+  // Start testing another scenario.
+  // Set the initial state (int exp = 1e6, skill = 242) and bitflume.
+  Player.exp.intelligence = 1e6;
+  Player.skills.intelligence = 242;
+  Player.persistentIntelligenceData.exp = 1e6;
+  ns.singularity.b1tflum3(nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: undefined,
+  });
+
+  // Double-check the initial state.
+  expect(Player.exp.intelligence).toStrictEqual(1e6);
+  expect(Player.skills.intelligence).toStrictEqual(242);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6);
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(undefined);
+
+  // Limit int skill to 100.
+  setUpBeforePrestige();
+  ns.singularity[prestigeAPI](nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: 100,
+  });
+  expectSuccessPrestige();
+
+  // Check if int is overridden correctly.
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(100);
+  expect(Player.exp.intelligence).toStrictEqual(11255.317546552918 + intelligenceExpGainOnPrestige);
+  expect(Player.skills.intelligence).toStrictEqual(100);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige);
+
+  // Limit int skill to 1000.
+  setUpBeforePrestige();
+  ns.singularity[prestigeAPI](nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: 1000,
+  });
+  expectSuccessPrestige();
+
+  // The limit is higher than the persistent int skill, so it's not applied. Exp and skill are reset back to the initial
+  // state, plus the int exp gained from prestige.
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(1000);
+  expect(Player.exp.intelligence).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2);
+  expect(Player.skills.intelligence).toStrictEqual(242);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2);
 }
 
 function setUpBeforeDestroyingWD(): void {

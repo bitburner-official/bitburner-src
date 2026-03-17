@@ -148,17 +148,19 @@ export abstract class Person implements IPerson {
 
   overrideIntelligence(): void {
     const persistentIntelligenceSkill = this.calculateSkill(this.persistentIntelligenceData.exp, 1);
-    // If there is no intelligenceOverride, reset exp/skill to persistent values
-    if (Player.bitNodeOptions.intelligenceOverride === undefined) {
+    // Reset exp and skill to the persistent values if there is no limit (intelligenceOverride) or the limit is greater
+    // than or equal to the persistent skill.
+    if (
+      Player.bitNodeOptions.intelligenceOverride === undefined ||
+      Player.bitNodeOptions.intelligenceOverride >= persistentIntelligenceSkill
+    ) {
       this.exp.intelligence = this.persistentIntelligenceData.exp;
       this.skills.intelligence = persistentIntelligenceSkill;
       return;
     }
-    // Limit exp/skill based on intelligenceOverride
-    if (Player.bitNodeOptions.intelligenceOverride < persistentIntelligenceSkill) {
-      this.exp.intelligence = calculateExp(Player.bitNodeOptions.intelligenceOverride, 1);
-      this.skills.intelligence = Player.bitNodeOptions.intelligenceOverride;
-    }
+    // Limit exp and skill based on intelligenceOverride only if it's smaller than the persistent skill.
+    this.exp.intelligence = calculateExp(Player.bitNodeOptions.intelligenceOverride, 1);
+    this.skills.intelligence = Player.bitNodeOptions.intelligenceOverride;
   }
 
   gainIntelligenceExp(exp: number): void {
