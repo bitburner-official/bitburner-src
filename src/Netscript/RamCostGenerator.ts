@@ -272,7 +272,7 @@ const format = {
 // Gang API
 const gang = {
   createGang: RamCostConstants.GangApiBase / 4,
-  inGang: RamCostConstants.GangApiBase / 4,
+  inGang: 0,
   getMemberNames: RamCostConstants.GangApiBase / 4,
   renameMember: 0,
   getGangInformation: RamCostConstants.GangApiBase / 2,
@@ -334,7 +334,7 @@ const go = {
 
 // Bladeburner API
 const bladeburner = {
-  inBladeburner: RamCostConstants.BladeburnerApiBase / 4,
+  inBladeburner: 0,
   getContractNames: 0,
   getOperationNames: 0,
   getBlackOpNames: 0,

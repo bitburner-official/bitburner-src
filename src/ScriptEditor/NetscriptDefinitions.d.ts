@@ -3988,9 +3988,10 @@ export interface Bladeburner {
    */
   nextUpdate(): Promise<number>;
 
-  /** Returns whether player is a member of Bladeburner division. Does not require API access.
+  /**
+   * Returns whether player is a member of Bladeburner division. Does not require API access.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * @returns whether player is a member of Bladeburner division. */
   inBladeburner(): boolean;
@@ -4833,9 +4834,10 @@ export interface Gang {
   createGang(faction: FactionName): boolean;
 
   /**
-   * Check if you're in a gang.
+   * Check if you're in a gang. Does not require API access.
    * @remarks
-   * RAM cost: 1GB
+   * RAM cost: 0GB
+   *
    * @returns True if you're in a gang, false otherwise.
    */
   inGang(): boolean;

@@ -234,7 +234,7 @@ Get stats of a task.
 
 </td><td>
 
-Check if you're in a gang.
+Check if you're in a gang. Does not require API access.
 
 
 </td></tr>
