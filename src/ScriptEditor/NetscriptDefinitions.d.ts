@@ -6328,7 +6328,7 @@ interface HacknetNodesFormulas {
    * @param mult - player cost reduction (defaults to 1)
    * @returns The calculated cost.
    */
-  hacknetNodeCost(n: number, mult: number): number;
+  hacknetNodeCost(n: number, mult?: number): number;
   /**
    * All constants used by the game.
    * @returns An object with all hacknet node constants used by the game.

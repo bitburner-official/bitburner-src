@@ -110,7 +110,6 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.factions = [];
   this.factionInvitations = [];
-  this.factionRumors.clear();
   // Clear any pending invitation modals
   FactionInvitationEvents.emit({ type: "ClearAll" });
 
@@ -175,17 +174,22 @@ export function prestigeSourceFile(this: PlayerObject): void {
 
 export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
   const faction = Factions[factionName];
-  if (this.factionInvitations.includes(factionName) || faction.alreadyInvited || faction.isMember || faction.isBanned)
+  if (this.factionInvitations.includes(factionName) || faction.alreadyInvited || faction.isMember || faction.isBanned) {
     return;
+  }
   this.factionInvitations.push(factionName);
-  this.factionRumors.delete(factionName);
   faction.discovery = FactionDiscovery.known;
 }
 
 export function receiveRumor(this: PlayerObject, factionName: FactionName): void {
   const faction = Factions[factionName];
-  if (faction.discovery === FactionDiscovery.unknown) faction.discovery = FactionDiscovery.rumored;
-  if (this.factionRumors.has(factionName) || faction.isMember || faction.isBanned || faction.alreadyInvited) return;
+  if (faction.discovery === FactionDiscovery.unknown) {
+    faction.discovery = FactionDiscovery.rumored;
+  }
+  if (this.factionRumors.has(factionName) || faction.isMember || faction.alreadyInvited) {
+    return;
+  }
+
   this.factionRumors.add(factionName);
 }
 
@@ -447,12 +451,11 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
 export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   const invitedFactions = [];
   for (const faction of Object.values(Factions)) {
-    if (faction.isBanned) continue;
     if (faction.isMember) continue;
     if (faction.alreadyInvited) continue;
     // Handle invites
     const { inviteReqs, rumorReqs } = faction.getInfo();
-    if (inviteReqs.isSatisfied(this)) invitedFactions.push(faction);
+    if (!faction.isBanned && inviteReqs.isSatisfied(this)) invitedFactions.push(faction);
     // Handle rumors
     if (this.factionRumors.has(faction.name)) continue;
     if (rumorReqs.isSatisfied(this)) this.receiveRumor(faction.name);
