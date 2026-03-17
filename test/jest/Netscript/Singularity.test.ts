@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
 import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
 import { AugmentationName, CompanyName, CompletedProgramName, FactionName, JobField, JobName } from "@enums";
