@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 0 to 1 1`] = `1000000000`;
 
