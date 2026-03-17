@@ -1,7 +1,9 @@
 import { Bladeburner } from "../../../src/Bladeburner/Bladeburner";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { Player, setPlayer } from "@player";
-import { BlackOperation, Contract, GeneralAction, Operation } from "../../../src/Bladeburner/Actions";
+import { Contract } from "../../../src/Bladeburner/Actions/Contract";
+import { GeneralAction } from "../../../src/Bladeburner/Actions/GeneralAction";
+import { Operation } from "../../../src/Bladeburner/Actions/Operation";
 import {
   AugmentationName,
   BladeburnerActionType,
@@ -336,7 +338,7 @@ describe("Bladeburner Actions", () => {
     const action = bb.getActionObject(id);
     if ("count" in action) action.count = 1;
     if (action.type === BladeburnerActionType.Operation) action.autoLevel = true;
-    if (id.type === "Black Operations") bb.numBlackOpsComplete = (<BlackOperation>action).n;
+    if (action.type === BladeburnerActionType.BlackOp) bb.numBlackOpsComplete = action.n;
     bb.startAction(id);
   }
 
