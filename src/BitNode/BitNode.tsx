@@ -625,6 +625,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftPowerMultiplier: 0.75,
         StaneksGiftExtraSize: -2,
 
+        DarknetMoneyMultiplier: 0.4,
+
         WorldDaemonDifficulty: 2,
       });
     }
@@ -652,6 +654,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         StaneksGiftPowerMultiplier: 1.5,
         StaneksGiftExtraSize: 0,
+
+        DarknetMoneyMultiplier: 0.4,
 
         WorldDaemonDifficulty: 3,
       });
@@ -681,6 +685,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         StaneksGiftPowerMultiplier: 1.3,
         StaneksGiftExtraSize: 0,
+
+        DarknetMoneyMultiplier: 0.7,
 
         WorldDaemonDifficulty: 1.5,
       });
@@ -830,6 +836,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftPowerMultiplier: 0.5,
         StaneksGiftExtraSize: 2,
 
+        DarknetMoneyMultiplier: 0.5,
+
         WorldDaemonDifficulty: 2,
       });
     }
@@ -872,6 +880,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         StaneksGiftPowerMultiplier: 0.75,
         StaneksGiftExtraSize: -3,
+
+        DarknetMoneyMultiplier: 0.4,
 
         WorldDaemonDifficulty: 2,
       });
@@ -946,6 +956,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ManualHackMoney: dec,
         ScriptHackMoney: dec,
         CodingContractMoney: dec,
+        DarknetMoneyMultiplier: dec,
 
         ClassGymExpGain: dec,
         CompanyWorkExpGain: dec,
@@ -1025,6 +1036,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         StaneksGiftPowerMultiplier: 2,
         StaneksGiftExtraSize: 1,
+        DarknetMoneyMultiplier: 0.5,
 
         WorldDaemonDifficulty: 3,
       });

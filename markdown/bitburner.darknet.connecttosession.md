@@ -6,9 +6,11 @@
 
 Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`<!-- -->, connectToSession can be used to get a session on servers at any distance.
 
-If successful, grants the script a session, allowing it to scp() files from that target. It also allows starting scripts with exec() on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
+If successful, grants the script a session, allowing it to scp() files to that target. It also allows starting scripts with exec() on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
 
 If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
 
 **Signature:**
 

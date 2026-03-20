@@ -303,7 +303,7 @@ export const handleLabyrinthPassword = (
     server.hasAdminRights = true;
     const cacheCount = getLabyrinthDetails().name === SpecialServers.BonusLab ? 3 : 1;
     for (let i = 0; i < cacheCount; i++) {
-      addCacheToServer(server, LAB_CACHE_NAME);
+      addCacheToServer(server, false, LAB_CACHE_NAME);
     }
     addSessionToServer(labServer, pid);
 

@@ -80,6 +80,7 @@ export function initDarkwebServer(): void {
   darkweb.isStationary = true;
   darkweb.hasAdminRights = true;
   darkweb.blockedRam = 0;
+  darkweb.maxRam = 16;
   darkweb.scripts = scripts;
   darkweb.contracts = contracts;
   if (hasTOR) {

@@ -774,7 +774,7 @@ describe("darkweb", () => {
   test("openCache", () => {
     const ns = getNsOnDarkWeb();
     const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
-    const result = addCacheToServer(darkweb, "test");
+    const result = addCacheToServer(darkweb, false, "test");
     if (!result.success) {
       throw new Error("Cannot add cache");
     }

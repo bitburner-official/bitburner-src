@@ -6,7 +6,7 @@ import { errorMessage } from "../../Netscript/ErrorMessages";
 import type { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { GenericResponseMessage, ResponseCodeEnum } from "../Enums";
-import { getBackdooredDarkwebServers } from "../utils/darknetNetworkUtils";
+import { getBackdooredDarknetServers } from "../utils/darknetNetworkUtils";
 import { hasDarknetAccess } from "../utils/darknetAuthUtils";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { CompletedProgramName } from "../../Enums";
@@ -149,6 +149,6 @@ export function expectRunningOnDarknetServer(ctx: NetscriptContext): DarknetServ
 }
 
 export function getTimeoutChance() {
-  const backdooredDarknetServerCount = getBackdooredDarkwebServers().length - 2;
+  const backdooredDarknetServerCount = getBackdooredDarknetServers().length - 2;
   return Math.max(Math.min(backdooredDarknetServerCount * 0.03, 0.5), 0);
 }

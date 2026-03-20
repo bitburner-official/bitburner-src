@@ -15,7 +15,7 @@ function mult(favor: number): number {
 
 export function getHackingWorkRepGain(p: IPerson, favor: number): number {
   return (
-    ((p.skills.hacking + p.skills.intelligence + getDarknetCharismaBonus(p, 0.15) / 3) / CONSTANTS.MaxSkillLevel) *
+    ((p.skills.hacking + p.skills.intelligence / 3 + getDarknetCharismaBonus(p, 0.1)) / CONSTANTS.MaxSkillLevel) *
     p.mults.faction_rep *
     calculateIntelligenceBonus(p.skills.intelligence, 1) *
     mult(favor) *
@@ -30,7 +30,8 @@ export function getFactionSecurityWorkRepGain(p: IPerson, favor: number): number
         p.skills.defense +
         p.skills.dexterity +
         p.skills.agility +
-        (p.skills.hacking + p.skills.intelligence + getDarknetCharismaBonus(p, 0.3)) * calculateCurrentShareBonus())) /
+        getDarknetCharismaBonus(p, 0.3) +
+        (p.skills.hacking + p.skills.intelligence) * calculateCurrentShareBonus())) /
     CONSTANTS.MaxSkillLevel /
     4.5;
   return t * p.mults.faction_rep * mult(favor) * calculateIntelligenceBonus(p.skills.intelligence, 1);

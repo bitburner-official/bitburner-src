@@ -17,7 +17,7 @@ import {
   getAllDarknetServers,
   getAllMovableDarknetServers,
   getAllOpenPositions,
-  getBackdooredDarkwebServers,
+  getBackdooredDarknetServers,
   getDarknetCyclesPerMutation,
   getIslands,
 } from "../utils/darknetNetworkUtils";
@@ -89,7 +89,7 @@ export const mutateDarknet = (): void => {
   }
 
   if (Math.random() < 0.1) {
-    const backdooredServers = getBackdooredDarkwebServers();
+    const backdooredServers = getBackdooredDarknetServers();
     const server = backdooredServers[Math.floor(Math.random() * backdooredServers.length)];
     if (server) {
       restartServer(server);
@@ -98,7 +98,7 @@ export const mutateDarknet = (): void => {
   }
 
   if (Math.random() < 0.05) {
-    const backdooredServers = getBackdooredDarkwebServers();
+    const backdooredServers = getBackdooredDarknetServers();
     const server = backdooredServers[Math.floor(Math.random() * backdooredServers.length)];
     if (server) {
       deleteDarknetServer(server);

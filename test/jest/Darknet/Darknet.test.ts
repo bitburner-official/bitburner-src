@@ -813,7 +813,7 @@ describe("Darknet server name generator", () => {
 describe("Cache filename generator", () => {
   test("Random prefix", () => {
     for (let i = 0; i < 10000; ++i) {
-      const cacheFilename = generateCacheFilename();
+      const cacheFilename = generateCacheFilename(false);
       if (!cacheFilename) {
         throw new Error("Invalid cache filename");
       }
@@ -821,7 +821,7 @@ describe("Cache filename generator", () => {
     }
   });
   test("Cache file in labyrinth server", () => {
-    const cacheFilename = generateCacheFilename(LAB_CACHE_NAME);
+    const cacheFilename = generateCacheFilename(false, LAB_CACHE_NAME);
     if (!cacheFilename) {
       throw new Error("Invalid cache filename");
     }
