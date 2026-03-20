@@ -71,15 +71,15 @@ export function Val({ name, color }: ValProps): React.ReactElement {
     return clearSubscription;
   }, [name]);
 
-  if (
-    name === "Int" &&
-    Player.bitNodeOptions.intelligenceOverride !== undefined &&
-    Player.bitNodeOptions.intelligenceOverride < Player.skills.intelligence
-  ) {
+  if (name === "Int" && Player.bitNodeOptions.intelligenceOverride !== undefined) {
     return (
-      <Tooltip title={`Intelligence: ${formatSkill(Player.skills.intelligence)}`}>
+      <Tooltip
+        title={`Persistent Intelligence: ${formatSkill(
+          Player.calculateSkill(Player.persistentIntelligenceData.exp, 1),
+        )}`}
+      >
         <Typography color={color}>
-          {formatSkill(Player.bitNodeOptions.intelligenceOverride)}
+          {formatSkill(Player.skills.intelligence)}
           <sup>*</sup>
         </Typography>
       </Tooltip>
@@ -140,7 +140,7 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
   const theme = useTheme();
   return (
     <>
-      <Table sx={{ display: "block", m: 1 }}>
+      <Table sx={{ display: "block", p: 1 }}>
         <TableBody>
           <DataRow name="HP" showBar={false} color={theme.colors.hp} cellType={"cellNone"} />
           <DataRow name="Money" showBar={false} color={theme.colors.money} cellType={"cell"} />

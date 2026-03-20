@@ -625,6 +625,10 @@ Error: ${e}`,
     for (const faction of [...Player.factions, ...Player.factionInvitations]) {
       Player.factionRumors.add(faction);
     }
+    for (const person of [Player, ...Player.sleeves]) {
+      person.persistentIntelligenceData.exp = person.exp.intelligence;
+      person.overrideIntelligence();
+    }
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }

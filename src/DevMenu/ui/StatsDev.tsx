@@ -76,6 +76,7 @@ function setStatLevel(stat: string, level: number): void {
       break;
     case "Intelligence":
       Player.exp.intelligence = 0;
+      Player.persistentIntelligenceData.exp = 0;
       Player.gainIntelligenceExp(calculateExp(level, 1));
       break;
   }
@@ -107,6 +108,7 @@ function resetAllExp(): void {
   Player.exp.agility = 0;
   Player.exp.charisma = 0;
   Player.exp.intelligence = 0;
+  Player.persistentIntelligenceData.exp = 0;
   Player.updateSkillLevels();
 }
 
@@ -133,6 +135,7 @@ function resetExperience(stat: string): () => void {
         break;
       case "Intelligence":
         Player.exp.intelligence = 0;
+        Player.persistentIntelligenceData.exp = 0;
         break;
     }
     Player.updateSkillLevels();
@@ -155,6 +158,7 @@ function enableIntelligence(): void {
 function disableIntelligence(): void {
   Player.exp.intelligence = 0;
   Player.skills.intelligence = 0;
+  Player.persistentIntelligenceData.exp = 0;
   Player.updateSkillLevels();
 }
 
