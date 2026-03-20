@@ -1,5 +1,8 @@
 import type { PromisePair } from "../Types/Promises";
-import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
+import type { BlackOperation } from "./Actions/BlackOperation";
+import type { Contract } from "./Actions/Contract";
+import type { GeneralAction } from "./Actions/GeneralAction";
+import type { Operation } from "./Actions/Operation";
 import type { Action, ActionIdFor, ActionIdentifier, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
 import type { Skills as PersonSkills } from "../PersonObjects/Skills";
