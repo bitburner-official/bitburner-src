@@ -29,6 +29,7 @@
     "bcryptjs": "^2.4.3",
     "clsx": "^1.2.1",
     "convert-source-map": "^2.0.0",
+    "core-js": "^3.49.0",
     "date-fns": "^2.30.0",
     "fast-dice-coefficient": "1.0.3",
     "hast-util-from-dom": "^5.0.1",
