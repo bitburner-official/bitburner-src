@@ -7,7 +7,7 @@ const path = require("path");
 const { windowTracker } = require("./windowTracker");
 const storage = require("./storage");
 
-const debug = process.argv.includes("--debug");
+const openDevtools = process.argv.includes("--dev");
 
 async function createWindow(killall) {
   const setStopProcessHandler = global.app_handlers.stopProcess;
@@ -49,7 +49,7 @@ async function createWindow(killall) {
     utils.setZoomFactor(window, utils.getZoomFactor());
   });
   window.show();
-  if (debug) window.webContents.openDevTools();
+  if (openDevtools) window.webContents.openDevTools();
 
   window.webContents.setWindowOpenHandler(({ url }) => {
     // File protocol is allowed because it will use the file protocol intercept from main.js
