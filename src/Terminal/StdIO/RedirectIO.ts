@@ -25,6 +25,11 @@ export async function parseRedirectedCommands(commandString: string) {
     handleCommand(stdIO, commandSet);
     longRunningCommandUsed ||= isLongRunningCommand(commandSet);
     openPipes.push(longRunningCommandUsed ? sleep(0) : waitUntilClosed(stdIO));
+
+    if (Terminal.actionStdIO) {
+      // Blocking terminal actions must complete one at a time
+      await waitUntilClosed(Terminal.actionStdIO);
+    }
   }
 
   // Allow the IO chain to pass data through its async iterators

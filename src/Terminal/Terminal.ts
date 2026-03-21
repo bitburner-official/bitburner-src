@@ -337,7 +337,7 @@ export class Terminal {
         this.actionStdIO,
       );
     }
-    this.actionStdIO.close();
+    this.actionStdIO?.close();
     this.actionStdIO = null;
   }
 
@@ -369,7 +369,7 @@ export class Terminal {
       `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,
       this.actionStdIO,
     );
-    this.actionStdIO.close();
+    this.actionStdIO?.close();
     this.actionStdIO = null;
   }
 
@@ -398,7 +398,7 @@ export class Terminal {
         ` and Gained ${formatExp(expGain)} hacking exp.`,
       this.actionStdIO,
     );
-    this.actionStdIO.close();
+    this.actionStdIO?.close();
     this.actionStdIO = null;
   }
 
@@ -427,7 +427,7 @@ export class Terminal {
       Engine.checkCounters();
 
       this.print(`Backdoor on '${server.hostname}' successful!`, this.actionStdIO);
-      this.actionStdIO.close();
+      this.actionStdIO?.close();
       this.actionStdIO = null;
     }
   }
@@ -483,7 +483,7 @@ export class Terminal {
         this.print("HTTP port: " + (currServ.httpPortOpen ? "Open" : "Closed"), this.actionStdIO);
         this.print("SQL port: " + (currServ.sqlPortOpen ? "Open" : "Closed"), this.actionStdIO);
       }
-      this.actionStdIO.close();
+      this.actionStdIO?.close();
       this.actionStdIO = null;
     }
   }
@@ -524,7 +524,7 @@ export class Terminal {
       this.print("Cancelled", this.actionStdIO);
     }
     this.action = null;
-    this.actionStdIO.close();
+    this.actionStdIO?.close();
     this.actionStdIO = null;
     TerminalEvents.emit();
   }
