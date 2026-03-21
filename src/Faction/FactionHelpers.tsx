@@ -41,16 +41,14 @@ export function joinFaction(faction: Faction): void {
   // Add this faction to player's faction list, keeping it in standard order
   Player.factions = getRecordKeys(Factions).filter((facName) => Factions[facName].isMember);
 
-  // Ban player from this faction's enemies
+  // Ban player from joining this faction's enemies
   for (const enemy of faction.getInfo().enemies) {
     if (Factions[enemy]) Factions[enemy].isBanned = true;
-    Player.factionRumors.delete(enemy);
   }
-  // Remove invalid invites and rumors
+  // Remove invalid invites
   Player.factionInvitations = Player.factionInvitations.filter((factionName) => {
     return !Factions[factionName].isMember && !Factions[factionName].isBanned;
   });
-  Player.factionRumors.delete(faction.name);
 }
 
 //Returns a boolean indicating whether the player has the prerequisites for the

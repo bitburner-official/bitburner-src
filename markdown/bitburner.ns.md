@@ -1037,7 +1037,7 @@ Get server security level.
 
 </td><td>
 
-Get the used RAM on a server.
+Get the used RAM on a server. This includes ram used by running scripts as well as blocked ram on darknet servers.
 
 
 </td></tr>
@@ -1048,7 +1048,9 @@ Get the used RAM on a server.
 
 </td><td>
 
-Share power has a multiplicative effect on rep/second while doing work for a faction. Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking work, share power still increases the reputation gain rate, but the effect is non-linear.
+
+Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
 
 
 </td></tr>

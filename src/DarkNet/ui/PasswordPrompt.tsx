@@ -67,7 +67,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
     setLastDarknetResultFromAuth(authResult.result);
 
     if (authResult.result.success) {
-      DarknetEvents.emit("server-unlocked", server);
+      DarknetEvents.emit();
     } else {
       // This selects the text inside the password input field so that the player can immediately start typing a new
       // guess without needing to clear out the old one.
@@ -149,7 +149,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
                 <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
                   <span className={classes.serverDetailsText}>Hint:</span> {server.staticPasswordHint}
                   <br />
-                  {server.passwordHintData && (
+                  {!!server.passwordHintData && (
                     <>
                       <span className={classes.serverDetailsText}>Data: </span> {server.passwordHintData}
                       <br />

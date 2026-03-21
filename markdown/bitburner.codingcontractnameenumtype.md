@@ -38,5 +38,6 @@ type CodingContractNameEnumType = {
   EncryptionIIVigenereCipher: "Encryption II: Vigenère Cipher";
   SquareRoot: "Square Root";
   TotalPrimesInRange: "Total Number of Primes";
+  LargestRectangleInAMatrix: "Largest Rectangle in a Matrix";
 };
 ```

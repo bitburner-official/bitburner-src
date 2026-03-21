@@ -9,7 +9,7 @@ let currentId = 0;
 export const DisplayError = (message: string, errorType: string, ws: WorkerScript | null = null) => {
   const scriptName = ws?.scriptRef?.filename ?? "";
   const hostname = ws?.hostname ?? "";
-  const pid = ws?.pid ?? -1;
+  const pid = ws?.pid;
   const parsedMessage = ws ? parseBlobUrlInMessage(ws, message) : message;
   const errorPageOpen = Router.page() === SimplePage.RecentErrors;
   if (!errorPageOpen) {
@@ -19,7 +19,7 @@ export const DisplayError = (message: string, errorType: string, ws: WorkerScrip
   if (prior) {
     prior.occurrences++;
     prior.time = new Date();
-    if (pid !== -1) {
+    if (pid !== undefined) {
       prior.pid = pid;
     }
     prior.server = hostname;
@@ -37,6 +37,7 @@ export const DisplayError = (message: string, errorType: string, ws: WorkerScrip
       occurrences: 1,
       time: new Date(),
       unread: !errorPageOpen,
+      force: false,
     });
     while (ErrorState.Errors.length > 100) {
       ErrorState.Errors.pop();

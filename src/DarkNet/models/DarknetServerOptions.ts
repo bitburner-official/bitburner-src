@@ -17,6 +17,7 @@ import { getRamBlock } from "../effects/ramblock";
 import { hasFullDarknetAccess } from "../effects/effects";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 import { isIPAddress } from "../../Types/strings";
+import { roundToTwo } from "../../utils/helpers/roundToTwo";
 
 export type PasswordResponse = {
   code: DarknetResponseCode;
@@ -58,7 +59,7 @@ export type DarknetServerOptions = {
 };
 
 export const DnetServerBuilder = (options: DarknetServerOptions): DarknetServer => {
-  const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
+  const maxRam = getMaxRam(options.difficulty);
   const ramBlock = options.preventBlockedRam ? 0 : getRamBlock(maxRam);
   const name = options.name ?? generateDarknetServerName();
 
@@ -151,7 +152,7 @@ const decorateName = (name: string): string => {
       // Just in case we hit a lot of the same name mutations, or if the player
       // messes with Math.random(), prevent an infinite loop
       updatedName += `/T${Date.now()}`;
-      break;
+      continue;
     }
 
     const connector = connectors[Math.floor(Math.random() * connectors.length)];
@@ -191,4 +192,11 @@ const l33tifyName = (name: string): string => {
     updatedName = updatedName.replaceAll(char, replacement);
   }
   return updatedName;
+};
+
+const getMaxRam = (difficulty: number): number => {
+  const baseRam = 16 * 2 ** Math.floor(difficulty / 6);
+  const sizeMutations = [0.5, 1, 1, 1.15, 1.4];
+  const mutation = sizeMutations[Math.floor(Math.random() * sizeMutations.length)];
+  return roundToTwo(Math.max(baseRam * mutation, 16));
 };

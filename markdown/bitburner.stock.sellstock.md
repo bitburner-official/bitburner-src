@@ -72,7 +72,9 @@ The stock price at which each share was sold, otherwise 0 if the shares weren't 
 
 ## Remarks
 
-RAM cost: 2.5 GB Attempts to sell shares of a stock using a Market Order.
+RAM cost: 2.5 GB
+
+Attempts to sell shares of a stock using a Market Order.
 
 If the specified number of shares in the function exceeds the amount that the player actually owns, then this function will sell all owned shares. Remember that every transaction on the stock exchange costs a certain commission fee.
 

@@ -21,4 +21,5 @@ export interface Options {
   beautifyOnSave: boolean;
   stickyScroll: StickyScroll;
   minimap: Minimap;
+  autoSaveOnFocusChange: boolean;
 }

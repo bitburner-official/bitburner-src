@@ -74,7 +74,7 @@ number
 
 </td><td>
 
-_(Optional)_ Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
+_(Optional)_ Optional. Action level at which to calculate the gain. Defaults to the action's current level if not specified.
 
 
 </td></tr>
@@ -84,11 +84,11 @@ _(Optional)_ Optional number. Action level at which to calculate the gain. Will 
 
 number
 
-Average Bladeburner reputation gain for successfully completing the specified action.
+Average reputation gain for successfully completing the specified action.
 
 ## Remarks
 
 RAM cost: 4 GB
 
-Returns the average Bladeburner reputation gain for successfully completing the specified action. Note that this value is an ‘average’ and the real reputation gain may vary slightly from this value.
+Returns the average reputation gain for successfully completing the specified action. Note that this value is an "average" and the actual reputation gain may vary slightly from this value.
 

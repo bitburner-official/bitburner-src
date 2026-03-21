@@ -70,7 +70,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       (ctx) =>
       (_pid = ctx.workerScript.scriptRef.pid) => {
         const pid = helpers.number(ctx, "pid", _pid);
-        //Emit an event to tell the game to close the tail window if it exists
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        // Emit an event to tell the game to close the tail window if it exists.
         LogBoxCloserEvents.emit(pid);
       },
 
@@ -98,6 +103,19 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         }
         if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
         else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
+      },
+
+    setTailMinimized:
+      (ctx) =>
+      (_minimized, _pid = ctx.workerScript.scriptRef.pid) => {
+        const minimized = helpers.boolean(ctx, "minimized", _minimized);
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.setMinimized(minimized);
       },
 
     windowSize: () => () => {

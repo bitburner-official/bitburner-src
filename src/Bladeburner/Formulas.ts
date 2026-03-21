@@ -27,6 +27,22 @@ export function calculateActionRankGain(action: Action, level?: number): number 
   return 0;
 }
 
+export function calculateActionRankLoss(action: Action, level?: number): number {
+  switch (action.type) {
+    case BladeburnerActionType.Contract:
+    case BladeburnerActionType.Operation: {
+      if (level == null) {
+        level = action.level;
+      }
+      const rewardMultiplier = Math.pow(action.rewardFac, level - 1);
+      return action.rankLoss * rewardMultiplier;
+    }
+    case BladeburnerActionType.BlackOp:
+      return action.rankLoss;
+  }
+  return 0;
+}
+
 export function calculateActionReputationGain(person: Person, rankGain: number): number {
   const favorBonus = 1 + Factions[FactionName.Bladeburners].favor / 100;
   return BladeburnerConstants.RankToFactionRepFactor * rankGain * person.mults.faction_rep * favorBonus;

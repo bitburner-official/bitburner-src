@@ -10,7 +10,8 @@ import { StopButton } from "./StopButton";
 import { TeamSizeButton } from "./TeamSizeButton";
 
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
-import { BlackOperation, Operation } from "../Actions";
+import { BlackOperation } from "../Actions/BlackOperation";
+import { Operation } from "../Actions/Operation";
 import { BladeburnerConstants } from "../data/Constants";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import WarningIcon from "@mui/icons-material/Warning";

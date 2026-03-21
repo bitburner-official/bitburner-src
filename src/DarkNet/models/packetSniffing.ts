@@ -4,7 +4,7 @@ import { generateDarknetServerName, isPasswordResponse, type PasswordResponse } 
 import { LocationName } from "@enums";
 import { getServerState, LogEntry } from "./DarknetState";
 import { ModelIds } from "../Enums";
-import { getDarknetServer } from "../utils/darknetServerUtils";
+import { getDarknetServer, getDarknetServerOrThrow } from "../utils/darknetServerUtils";
 import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 import { getExactCorrectChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
@@ -14,7 +14,7 @@ import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 const MAX_LOG_LINES = 200;
 
 export const capturePackets = (server: DarknetServer) => {
-  const BASE_PASSWORD_INCLUSION_RATE = 0.18;
+  const BASE_PASSWORD_INCLUSION_RATE = 0.12;
   const DIFFICULTY_MODIFIER = 0.88;
   const difficulty = server.difficulty * 1.3;
   const vulnerability = server.modelId === ModelIds.packetSniffer ? 8 : 1;
@@ -200,8 +200,8 @@ const getLogNoise = (server: DarknetServer, logDate: Date): LogEntry => {
     return log(`--${randomServer.password}--`);
   }
 
-  if (server.modelId === ModelIds.packetSniffer && Math.random() < 0.5 / (server.difficulty + 1)) {
-    return log("Authentication successful: " + server.password);
+  if (server.modelId === ModelIds.packetSniffer && Math.random() < 0.7 - server.difficulty * 0.01) {
+    return addPacketSnifferNoise(server);
   }
 
   return log(`${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`);
@@ -211,6 +211,18 @@ const log = (message: string, pid = -1) => ({
   message,
   pid,
 });
+
+const addPacketSnifferNoise = (server: DarknetServer) => {
+  const connectedServers = server.serversOnNetwork;
+  // If the server becomes disconnected while the UI is open and has no neighbors but still
+  // has logs being populated, fall back to showing the current password
+  if (Math.random() < 0.3 || connectedServers.length === 0) {
+    return log(`Logging in with passcode: ${server.password} ...`);
+  }
+  const randomServerName = connectedServers[Math.floor(Math.random() * connectedServers.length)];
+  const randomServer = getDarknetServerOrThrow(randomServerName);
+  return log(`Connecting to ${randomServer.hostname}:${randomServer.password} ...`);
+};
 
 export const getMostRecentAuthLog = (hostname: string) => {
   for (const log of getServerState(hostname).serverLogs) {

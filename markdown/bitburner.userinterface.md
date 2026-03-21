@@ -170,6 +170,17 @@ Set the font size of the tail window of a script.
 </td></tr>
 <tr><td>
 
+[setTailMinimized(minimized, pid)](./bitburner.userinterface.settailminimized.md)
+
+
+</td><td>
+
+Minimize or expand the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
 [setTailTitle(title, pid)](./bitburner.userinterface.settailtitle.md)
 
 

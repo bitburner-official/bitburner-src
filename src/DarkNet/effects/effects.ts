@@ -1,7 +1,6 @@
 import { Player } from "@player";
 import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
-import { generateContract } from "../../CodingContract/ContractGenerator";
 import {
   commonPasswordDictionary,
   notebookFileNames,
@@ -20,7 +19,7 @@ import { populateDarknet } from "../controllers/NetworkGenerator";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import {
   getAllMovableDarknetServers,
-  getBackdooredDarkwebServers,
+  getBackdooredDarknetServers,
   getNearbyNonEmptyPasswordServer,
   getStasisLinkServers,
 } from "../utils/darknetNetworkUtils";
@@ -41,14 +40,9 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
   server.hasAdminRights = true;
   addClue(server);
 
-  const cctChance = Math.min(0.12, 0.02 * (server.difficulty - 1));
-  if (Math.random() < cctChance) {
-    generateContract({ server: server.hostname });
-  }
-
   const chance = 0.1 * 1.05 ** server?.difficulty;
   if (Math.random() < chance && !isLabyrinthServer(server.hostname)) {
-    addCacheToServer(server);
+    addCacheToServer(server, false);
   }
 };
 
@@ -62,22 +56,24 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
  * @param person - the player's character
  * @param attemptedPassword - the password being attempted
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
+ * @param linear - if true, the time scaling is linear with the number of threads instead of having diminishing returns
  */
 export const calculateAuthenticationTime = (
   darknetServerData: DarknetServerData,
   person: IPerson = Player,
   threads = 1,
   attemptedPassword = "",
+  linear = false,
 ) => {
   const chaRequired = darknetServerData.requiredCharismaSkill;
   const difficulty = darknetServerData.difficulty;
 
   const baseDiff = (difficulty + 1) * 100;
   const diffFactor = 5;
-  const baseTime = 500;
+  const baseTime = 850;
 
-  const threadsFactor = 1 / (1 + 0.2 * (threads - 1));
-  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
+  const threadsFactor = 1 / (linear ? threads : 1 + 0.2 * (threads - 1));
+  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 150);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
   const applyUnderleveledFactor = person.skills.charisma <= chaRequired && darknetServerData.depth > 1;
   const underleveledFactor = applyUnderleveledFactor ? 1.5 + (chaRequired + 50) / (person.skills.charisma + 50) : 1;
@@ -108,7 +104,7 @@ export const calculateAuthenticationTime = (
 };
 
 export const getBackdoorAuthTimeDebuff = () => {
-  const backdooredServerCount = getBackdooredDarkwebServers().length;
+  const backdooredServerCount = getBackdooredDarknetServers().length;
   const serverCount = getAllMovableDarknetServers().filter((s) => s.hasAdminRights).length;
   const safeBackdoors = Math.max(serverCount / (NET_WIDTH * 3), 2);
   const backdoorSurplus = Math.max(0, backdooredServerCount - safeBackdoors);
@@ -128,10 +124,9 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
   );
 };
 
-// TODO: balance xp gain
 export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threads: number = 1, success = false) => {
   const baseXpGain = 3;
-  const difficultyBase = 1.12;
+  const difficultyBase = 1.1;
   const xpGain = baseXpGain + difficultyBase ** server.difficulty;
   const alreadyHackedMult = server.hasAdminRights ? 0.2 : 1;
   const successMult = success && !server.hasAdminRights ? 10 : 1;
@@ -263,7 +258,7 @@ export const setStasisLink = (ctx: NetscriptContext, server: DarknetServer, shou
 
 export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
   const chargeIncrease = ((Player.skills.charisma + 500) / (server.difficulty * 200 + 1000)) * 0.01 * threads;
-  const xpGained = Player.mults.charisma_exp * 50 * ((200 + Player.skills.charisma) / 200) * threads;
+  const xpGained = Player.mults.charisma_exp * 5 * threads * server.difficulty;
   Player.gainCharismaExp(xpGained);
   const currentCharge = DarknetState.migrationInductionServers.get(server.hostname) ?? 0;
   const newCharge = Math.min(currentCharge + chargeIncrease, 1);
@@ -289,6 +284,11 @@ export const getDarkscapeNavigator = () => {
     Player.getHomeComputer().pushProgram(CompletedProgramName.darkscape);
   }
   populateDarknet();
+};
+
+export const cctCooldownReached = () => {
+  const timeSinceLastCCT = new Date().getTime() - DarknetState.lastCctRewardTime.getTime();
+  return timeSinceLastCCT > 10 * 60 * 1000;
 };
 
 export const hasFullDarknetAccess = (): boolean => Player.bitNodeN === 15 || Player.activeSourceFileLvl(15) > 0;

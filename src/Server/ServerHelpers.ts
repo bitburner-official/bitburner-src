@@ -40,7 +40,7 @@ export enum ServerOwnershipType {
  * does not have a duplicate hostname/ip.
  */
 export function safelyCreateUniqueServer(params: StandardServerConstructorParams): Server {
-  let hostname: string = params.hostname.replace(/ /g, `-`);
+  let hostname = params.hostname;
 
   if (params.ip != null && ipExists(params.ip)) {
     params.ip = createUniqueRandomIp();

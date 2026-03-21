@@ -272,7 +272,7 @@ const format = {
 // Gang API
 const gang = {
   createGang: RamCostConstants.GangApiBase / 4,
-  inGang: RamCostConstants.GangApiBase / 4,
+  inGang: 0,
   getMemberNames: RamCostConstants.GangApiBase / 4,
   renameMember: 0,
   getGangInformation: RamCostConstants.GangApiBase / 2,
@@ -334,7 +334,7 @@ const go = {
 
 // Bladeburner API
 const bladeburner = {
-  inBladeburner: RamCostConstants.BladeburnerApiBase / 4,
+  inBladeburner: 0,
   getContractNames: 0,
   getOperationNames: 0,
   getBlackOpNames: 0,
@@ -349,6 +349,8 @@ const bladeburner = {
   getActionCurrentTime: RamCostConstants.BladeburnerApiBase,
   getActionEstimatedSuccessChance: RamCostConstants.BladeburnerApiBase,
   getActionRepGain: RamCostConstants.BladeburnerApiBase,
+  getActionRankGain: RamCostConstants.BladeburnerApiBase,
+  getActionRankLoss: RamCostConstants.BladeburnerApiBase,
   getActionCountRemaining: RamCostConstants.BladeburnerApiBase,
   getActionMaxLevel: RamCostConstants.BladeburnerApiBase,
   getActionCurrentLevel: RamCostConstants.BladeburnerApiBase,
@@ -442,6 +444,7 @@ const ui = {
   closeTail: 0,
   setTailTitle: 0,
   setTailFontSize: 0,
+  setTailMinimized: 0,
   getTheme: 0,
   setTheme: 0,
   resetTheme: 0,

@@ -6,9 +6,11 @@
 
 Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.
 
-If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
+If successful, grants the current script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
 
 Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer if the player's charisma is below the server's charisma level.
+
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
 
 **Signature:**
 
@@ -92,5 +94,5 @@ A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) objec
 
 ## Remarks
 
-RAM cost: 0.6 GB
+RAM cost: 0.4 GB
 

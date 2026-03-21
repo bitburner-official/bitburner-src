@@ -4,11 +4,13 @@ import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH } from "../Enums";
 import { GetAllServers } from "../../Server/AllServers";
 import { getNetDepth } from "../effects/labyrinth";
 import { CONSTANTS } from "../../Constants";
+import { Player } from "@player";
 
 export const getDarknetCyclesPerMutation = () => {
   const depth = getNetDepth();
   const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
-  return cycleRate / depth;
+  const rateMultiplier = Player.bitNodeN !== 15 ? 2 : 1;
+  return (rateMultiplier * cycleRate) / depth;
 };
 
 export const getAllOpenPositions = (minDepth: number, maxDepth: number): [number, number][] => {
@@ -84,7 +86,7 @@ export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] =
 
 export const getIslands = () => getAllMovableDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
-export const getBackdooredDarkwebServers = (): DarknetServer[] =>
+export const getBackdooredDarknetServers = (): DarknetServer[] =>
   getAllMovableDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
 
 export const getNearbyNonEmptyPasswordServer = (server: DarknetServer, disconnected = false) => {

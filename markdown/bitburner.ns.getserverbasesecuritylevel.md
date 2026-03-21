@@ -56,5 +56,7 @@ Base security level of the target server.
 
 ## Remarks
 
-RAM cost: 0.1 GB Returns the base security level of the target server. For the server's actual security level, use [ns.getServerSecurityLevel](./bitburner.ns.getserversecuritylevel.md)<!-- -->.
+RAM cost: 0.1 GB
+
+Returns the base security level of the target server. For the server's actual security level, use [ns.getServerSecurityLevel](./bitburner.ns.getserversecuritylevel.md)<!-- -->.
 

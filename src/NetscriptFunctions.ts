@@ -1425,17 +1425,17 @@ export const ns: InternalAPI<NSFull> = {
   getPlayer: () => () => {
     const data = {
       // Person
-      hp: structuredClone(Player.hp),
-      skills: structuredClone(Player.skills),
-      exp: structuredClone(Player.exp),
-      mults: structuredClone(Player.mults),
+      hp: { ...Player.hp },
+      skills: { ...Player.skills },
+      exp: { ...Player.exp },
+      mults: { ...Player.mults },
       city: Player.city,
       // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
       money: Player.money,
       location: Player.location,
       totalPlaytime: Player.totalPlaytime,
-      jobs: structuredClone(Player.jobs),
+      jobs: { ...Player.jobs },
       factions: Player.factions.slice(),
       entropy: Player.entropy,
       karma: Player.karma,
@@ -1531,7 +1531,7 @@ export const ns: InternalAPI<NSFull> = {
     const stdinHandle = ctx.workerScript.scriptRef.stdin?.handle;
     return stdinHandle ? new PortHandle(stdinHandle.n) : null;
   },
-  flags: Flags,
+  flags: (ctx) => Flags(ctx, false),
   heart: { break: () => () => Player.karma },
   ...NetscriptExtra(),
 };

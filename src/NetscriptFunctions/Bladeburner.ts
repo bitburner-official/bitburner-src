@@ -19,7 +19,11 @@ import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
-import { calculateActionRankGain, calculateActionReputationGain } from "../Bladeburner/Formulas";
+import {
+  calculateActionRankGain,
+  calculateActionRankLoss,
+  calculateActionReputationGain,
+} from "../Bladeburner/Formulas";
 import { CONSTANTS } from "../Constants";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
@@ -155,6 +159,18 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
       const rankGain = calculateActionRankGain(action, level);
       return calculateActionReputationGain(Player, rankGain);
+    },
+    getActionRankGain: (ctx) => (type, name, _level) => {
+      checkBladeburnerAccess(ctx);
+      const action = getAction(ctx, type, name);
+      const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
+      return calculateActionRankGain(action, level);
+    },
+    getActionRankLoss: (ctx) => (type, name, _level) => {
+      checkBladeburnerAccess(ctx);
+      const action = getAction(ctx, type, name);
+      const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
+      return calculateActionRankLoss(action, level);
     },
     getActionCountRemaining: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);

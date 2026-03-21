@@ -243,12 +243,16 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       ) : (
         ""
       )}
-      {DarknetState.allowMutating ? (
+      {DarknetState.mutationLock ? (
+        <Typography variant={"h6"} className={classes.gold}>
+          [WEBSTORM WARNING]
+        </Typography>
+      ) : (
         <Box className={`${classes.inlineFlexBox}`}>
           <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
             Dark Net
           </Typography>
-          {instability && (
+          {instability > 0 && (
             <Tooltip
               title={
                 <>
@@ -265,10 +269,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             </Tooltip>
           )}
         </Box>
-      ) : (
-        <Typography variant={"h6"} className={classes.gold}>
-          [WEBSTORM WARNING]
-        </Typography>
       )}
 
       <div
@@ -299,13 +299,13 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           {DarknetState.Network.slice(0, netDisplayDepth).map((row) =>
             row.map(
               (server) =>
-                server && (
+                !!server && (
                   <ServerStatusBox server={server} key={server.ip} enableAuth={allowAuth(server)} classes={classes} />
                 ),
             ),
           )}
 
-          {labyrinth && netDisplayDepth > depth && (
+          {!!labyrinth && netDisplayDepth > depth && (
             <ServerStatusBox server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
           )}
         </div>

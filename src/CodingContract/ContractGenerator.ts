@@ -130,6 +130,7 @@ interface IGenerateContractParams {
   server?: string;
   filename?: ContractFilePath;
   reward?: ICodingContractReward;
+  rewardScaling?: number;
 }
 
 export function generateContract(params: IGenerateContractParams): void {
@@ -163,7 +164,7 @@ export function generateContract(params: IGenerateContractParams): void {
   if (filename == null) {
     return;
   }
-  const contract = new CodingContract(filename, problemType, reward);
+  const contract = new CodingContract(filename, problemType, reward, params.rewardScaling);
   server.addContract(contract);
 }
 

@@ -19,9 +19,10 @@ type DocumentationAutocompleteProps = {
    * "path" is always "nsDoc/filename.md"
    */
   onChange: (path: string, external: boolean) => void;
+  width?: number;
 };
 
-export function DocumentationAutocomplete({ sx, onChange }: DocumentationAutocompleteProps) {
+export function DocumentationAutocomplete({ sx, onChange, width }: DocumentationAutocompleteProps) {
   return (
     <AutoCompleteSearchBox
       sx={sx}
@@ -45,6 +46,7 @@ export function DocumentationAutocomplete({ sx, onChange }: DocumentationAutocom
           onChange(`nsDoc/${path}`, external);
         }
       }}
+      width={width}
     />
   );
 }

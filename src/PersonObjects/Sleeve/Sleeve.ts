@@ -251,6 +251,8 @@ export class Sleeve extends Person implements SleevePerson {
     this.shock = 100;
     this.storedCycles = 0;
     this.sync = Math.max(this.memory, 1);
+
+    this.overrideIntelligence();
   }
 
   /**
@@ -535,6 +537,14 @@ export class Sleeve extends Person implements SleevePerson {
         return true;
     }
     return false;
+  }
+
+  travel(cityName: CityName): boolean {
+    if (!super.travel(cityName)) {
+      return false;
+    }
+    this.stopWork();
+    return true;
   }
 
   travelCostMoneySource(): MoneySource {

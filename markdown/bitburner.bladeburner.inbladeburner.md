@@ -19,5 +19,5 @@ whether player is a member of Bladeburner division.
 
 ## Remarks
 
-RAM cost: 1 GB
+RAM cost: 0 GB
 

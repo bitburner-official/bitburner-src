@@ -38,7 +38,11 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     const resultOfCheckingSolution = contract.isSolution(answer);
     switch (resultOfCheckingSolution.result) {
       case CodingContractResult.Success: {
-        const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
+        const reward = Player.gainCodingContractReward(
+          contract.reward,
+          contract.getDifficulty(),
+          contract.rewardScaling,
+        );
         helpers.log(ctx, () => `Successfully completed Coding Contract '${contract.fn}'. Reward: ${reward}`);
         server.removeContract(contract.fn);
         return reward;

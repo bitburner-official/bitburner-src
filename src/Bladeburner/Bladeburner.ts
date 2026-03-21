@@ -1,5 +1,8 @@
 import type { PromisePair } from "../Types/Promises";
-import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
+import type { BlackOperation } from "./Actions/BlackOperation";
+import type { Contract } from "./Actions/Contract";
+import type { GeneralAction } from "./Actions/GeneralAction";
+import type { Operation } from "./Actions/Operation";
 import type { Action, ActionIdFor, ActionIdentifier, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
 import type { Skills as PersonSkills } from "../PersonObjects/Skills";
@@ -55,7 +58,7 @@ import { assertObject } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 import { pluralize } from "../utils/I18nUtils";
-import { calculateActionRankGain, calculateActionReputationGain } from "./Formulas";
+import { calculateActionRankGain, calculateActionRankLoss, calculateActionReputationGain } from "./Formulas";
 import { processWorkStats } from "../Work/Formulas";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
@@ -941,7 +944,7 @@ export class Bladeburner implements OperationTeam {
             let loss = 0,
               damage = 0;
             if (action.rankLoss) {
-              loss = addOffset(action.rankLoss * rewardMultiplier, 10);
+              loss = addOffset(calculateActionRankLoss(action), 10);
               this.changeRank(person, -1 * loss);
             }
             if (action.hpLoss) {
@@ -1019,7 +1022,7 @@ export class Bladeburner implements OperationTeam {
           let rankLoss = 0;
           let damage = 0;
           if (action.rankLoss) {
-            rankLoss = addOffset(action.rankLoss, 10);
+            rankLoss = addOffset(calculateActionRankLoss(action), 10);
             this.changeRank(person, -1 * rankLoss);
           }
           if (action.hpLoss) {
@@ -1116,9 +1119,14 @@ export class Bladeburner implements OperationTeam {
             break;
           }
           case BladeburnerGeneralActionName.Recruitment: {
-            const actionTime = action.getActionTime(this, person) * 1000;
+            const actionTime = action.getActionTime(this, person);
+            // Without dnet, the best way to gain charisma in the early part of a BN run is to take uni course at zb.
+            // With only SF1.3, the "Leadership" course gives ~20.5exp/s. With this exponential saturation curve, the
+            // action gives worse exp than the course at first, but it becomes better later while never being
+            // overpowered. The gain rate is soft-capped at ~60exp/s, which is ~3x the uni course.
+            const charismaGainRate = clampNumber(60 * (1 - Math.exp(-Math.pow(person.exp.charisma / 216000, 1.3))), 1);
             if (action.attempt(this, person)) {
-              const expGain = 2 * BladeburnerConstants.BaseStatGain * actionTime;
+              const expGain = charismaGainRate * actionTime;
               retValue.chaExp = expGain;
               ++this.teamSize;
               if (this.logging.general) {
@@ -1130,7 +1138,7 @@ export class Bladeburner implements OperationTeam {
                 );
               }
             } else {
-              const expGain = BladeburnerConstants.BaseStatGain * actionTime;
+              const expGain = (charismaGainRate * actionTime) / 2;
               retValue.chaExp = expGain;
               if (this.logging.general) {
                 this.log(

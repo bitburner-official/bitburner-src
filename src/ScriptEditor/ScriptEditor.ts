@@ -1,6 +1,3 @@
-import type { ContentFilePath } from "../Paths/ContentFile";
-
-import { EventEmitter } from "../utils/EventEmitter";
 import * as monaco from "monaco-editor";
 import { loadThemes, makeTheme } from "./ui/themes";
 import { Settings } from "../Settings/Settings";
@@ -10,14 +7,7 @@ import { ns } from "../NetscriptFunctions";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
-/** Event emitter used for tracking when changes have been made to a content file. */
-export const fileEditEvents = new EventEmitter<[hostname: string, filename: ContentFilePath]>();
-
 export class ScriptEditor {
-  // TODO: This will store info about currently open scripts.
-  // Among other things, this will allow informing the script editor of changes made elsewhere, even if the script editor is not being rendered.
-  // openScripts: OpenScript[] = [];
-
   // Currently, this object is only used for initialization.
   isInitialized = false;
   initialize() {

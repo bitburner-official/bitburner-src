@@ -157,6 +157,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canOpenFactions =
     Player.factionInvitations.length > 0 ||
     Player.factions.length > 0 ||
+    Player.factionRumors.size > 0 ||
     Player.augmentations.length > 0 ||
     Player.queuedAugmentations.length > 0 ||
     knowAboutBitverse();
@@ -181,7 +182,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
   const clickPage = useCallback(
     (page: Page) => {
-      if (page == Page.ScriptEditor || page == Page.Documentation) {
+      if (page == Page.ScriptEditor || page == Page.Documentation || page == Page.Options) {
         Router.toPage(page, {});
       } else if (isSimplePage(page)) {
         Router.toPage(page);
@@ -212,7 +213,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         case SimplePage.Milestones:
         case ComplexPage.Documentation:
         case SimplePage.Achievements:
-        case SimplePage.Options:
+        case ComplexPage.Options:
           return true;
         case SimplePage.StaneksGift:
           return canStaneksGift;

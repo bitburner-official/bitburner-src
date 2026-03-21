@@ -94,6 +94,7 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     beautifyOnSave: Settings.MonacoBeautifyOnSave,
     stickyScroll: Settings.MonacoStickyScroll,
     minimap: Settings.MonacoMinimap,
+    autoSaveOnFocusChange: Settings.MonacoAutoSaveOnFocusChange,
   });
 
   function saveOptions(options: Options) {
@@ -111,6 +112,7 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     Settings.MonacoBeautifyOnSave = options.beautifyOnSave;
     Settings.MonacoStickyScroll = options.stickyScroll;
     Settings.MonacoMinimap = options.minimap;
+    Settings.MonacoAutoSaveOnFocusChange = options.autoSaveOnFocusChange;
   }
 
   return (

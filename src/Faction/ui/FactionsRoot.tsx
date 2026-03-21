@@ -58,6 +58,16 @@ const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   );
 };
 
+function getStylesForFactionName(faction: Faction) {
+  return {
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    color: faction.isBanned ? Settings.theme.error : "inherit",
+    textDecorationLine: faction.isBanned ? "line-through" : "none",
+  };
+}
+
 interface FactionElementProps {
   faction: Faction;
   /** Rerender function to force the entire FactionsRoot to rerender */
@@ -75,9 +85,11 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
     Router.toPage(Page.FactionAugmentations, { faction });
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: FactionName): void {
-    if (!event.isTrusted) return;
-    joinFaction(Factions[faction]);
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, factionName: FactionName): void {
+    if (!event.isTrusted || !Factions[factionName].alreadyInvited || Factions[factionName].isBanned) {
+      return;
+    }
+    joinFaction(Factions[factionName]);
     props.rerender();
   }
 
@@ -121,7 +133,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
               alignItems: "center",
             }}
           >
-            {props.faction.discovery == FactionDiscovery.known ? (
+            {props.faction.discovery === FactionDiscovery.known ? (
               <Tooltip
                 title={
                   <>
@@ -130,13 +142,11 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                   </>
                 }
               >
-                <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
-                  {props.faction.name}
-                </span>
+                <span style={getStylesForFactionName(props.faction)}>{props.faction.name}</span>
               </Tooltip>
             ) : (
               <Tooltip title={"Rumored Faction"}>
-                <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+                <span style={getStylesForFactionName(props.faction)}>
                   <CorruptibleText content={props.faction.name} spoiler={false} />
                 </span>
               </Tooltip>
@@ -217,7 +227,9 @@ export function FactionsRoot(): React.ReactElement {
   const joinedFactions = Object.values(Factions).filter((faction) => faction.isMember);
   // Display invitations and rumors in the order they were received
   const invitedFactions = Player.factionInvitations.map((facName) => Factions[facName]).filter((faction) => !!faction);
-  const rumoredFactions = [...Player.factionRumors].map((facName) => Factions[facName]).filter((faction) => !!faction);
+  const rumoredFactions = [...Player.factionRumors]
+    .map((facName) => Factions[facName])
+    .filter((faction) => !!faction && !faction.isMember && !faction.alreadyInvited);
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0, mb: 10 }}>

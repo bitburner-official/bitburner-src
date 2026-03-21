@@ -166,6 +166,14 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
           checked={props.options.minimap?.enabled}
         />
       </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Autosave on focus change: </Typography>
+        <Switch
+          onChange={(e) => props.onOptionChange("autoSaveOnFocusChange", e.target.checked)}
+          checked={props.options.autoSaveOnFocusChange}
+        />
+      </div>
     </Modal>
   );
 }

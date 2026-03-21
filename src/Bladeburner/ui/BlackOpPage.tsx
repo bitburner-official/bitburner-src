@@ -9,6 +9,7 @@ import { Page } from "../../ui/Router";
 import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { blackOpsArray } from "../data/BlackOperations";
 import { finishBitNode } from "../../BitNode/BitNodeUtils";
+import { Player } from "@player";
 
 interface BlackOpPageProps {
   bladeburner: Bladeburner;
@@ -38,6 +39,9 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
         <Button
           sx={{ my: 1, p: 1 }}
           onClick={() => {
+            if (!Player.bladeburner || Player.bladeburner.numBlackOpsComplete < blackOpsArray.length) {
+              return;
+            }
             finishBitNode();
             Router.toPage(Page.BitVerse, { flume: false, quick: false });
           }}

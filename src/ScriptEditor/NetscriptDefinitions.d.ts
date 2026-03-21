@@ -178,6 +178,8 @@ interface Multipliers {
   crime_money: number;
   /** Multiplier to crime success rate */
   crime_success: number;
+  /** Multiplier to amount of money gained from phishing and caches on darknet servers */
+  dnet_money: number;
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
@@ -210,8 +212,10 @@ interface TailProperties {
   width: number;
   /** Height of the log window content area */
   height: number;
-  /** The font size of the tail window. Defaults to the font size set in the style editor. */
+  /** The font size of the log window. Defaults to the font size set in the style editor. */
   fontSize: number;
+  /** Whether the log window is minimized. */
+  minimized: boolean;
 }
 
 /**
@@ -1357,6 +1361,7 @@ export interface Stock {
    * Returns the player’s position in a stock.
    * @remarks
    * RAM cost: 2 GB
+   *
    * Returns an array of four elements that represents the player’s position in a stock.
    *
    * The first element in the returned array is the number of shares the player owns of
@@ -1382,6 +1387,7 @@ export interface Stock {
    * Returns the maximum number of shares of a stock.
    * @remarks
    * RAM cost: 2 GB
+   *
    * This is the maximum amount of the stock that can be purchased
    * in both the Long and Short positions combined.
    *
@@ -1394,6 +1400,7 @@ export interface Stock {
    * Calculates cost of buying stocks.
    * @remarks
    * RAM cost: 2 GB
+   *
    * Calculates and returns how much it would cost to buy a given number of shares of a stock.
    * This takes into account spread, large transactions influencing the price of the stock and commission fees.
    *
@@ -1408,6 +1415,7 @@ export interface Stock {
    * Calculate profit of selling stocks.
    * @remarks
    * RAM cost: 2 GB
+   *
    * Calculates and returns how much you would gain from selling a given number of shares of a stock.
    * This takes into account spread, large transactions influencing the price of the stock and commission fees.
    *
@@ -1422,6 +1430,7 @@ export interface Stock {
    * Buy stocks.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * Attempts to purchase shares of a stock using a Market Order.
    *
    * If the player does not have enough money to purchase the specified number of shares,
@@ -1441,6 +1450,7 @@ export interface Stock {
    * Sell stocks.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * Attempts to sell shares of a stock using a Market Order.
    *
    * If the specified number of shares in the function exceeds the amount that the player
@@ -1465,6 +1475,7 @@ export interface Stock {
    * Short stocks.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * Attempts to purchase a short position of a stock using a Market Order.
    *
    * The ability to short a stock is **not** immediately available to the player and
@@ -1487,6 +1498,7 @@ export interface Stock {
    * Sell short stock.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * Attempts to sell a short position of a stock using a Market Order.
    *
    * The ability to short a stock is **not** immediately available to the player and
@@ -1509,6 +1521,7 @@ export interface Stock {
    * Place order for stocks.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * Places an order on the stock market. This function only works for Limit and Stop Orders.
    *
    * The ability to place limit and stop orders is **not** immediately available to the player and
@@ -1529,6 +1542,7 @@ export interface Stock {
    * Cancel order for stocks.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * Cancels an outstanding Limit or Stop order on the stock market.
    *
    * The ability to use limit and stop orders is **not** immediately available to the player and
@@ -1546,6 +1560,7 @@ export interface Stock {
    * Returns your order book for the stock market.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * This is an object containing information for all the Limit and Stop Orders you have in the stock market.
    * For each symbol you have a position in, the returned object will have a key with that symbol's name.
    * The object's properties are each an array of {@link StockOrder}
@@ -1612,6 +1627,7 @@ export interface Stock {
    * Returns the volatility of the specified stock.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * Volatility represents the maximum percentage by which a stock’s price can change every tick.
    * The volatility is returned in the range 0-1.
    * (e.g. if a stock has a volatility of 3%, then this function will return 0.03, NOT 3).
@@ -1628,6 +1644,7 @@ export interface Stock {
    * tick.
    * @remarks
    * RAM cost: 2.5 GB
+   *
    * The probability is returned in the range 0-1.
    * (e.g. if a stock has a 60% chance of increasing, then this function will return 0.6, NOT 60).
    *
@@ -3549,16 +3566,45 @@ export interface Bladeburner {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Returns the average Bladeburner reputation gain for successfully
-   * completing the specified action.
-   * Note that this value is an ‘average’ and the real reputation gain may vary slightly from this value.
+   * Returns the average reputation gain for successfully completing the specified action.
+   * Note that this value is an "average" and the actual reputation gain may vary slightly from this value.
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
-   * @param level - Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
-   * @returns Average Bladeburner reputation gain for successfully completing the specified action.
+   * @param level - Optional. Action level at which to calculate the gain. Defaults to the action's current level if not specified.
+   * @returns Average reputation gain for successfully completing the specified action.
    */
   getActionRepGain(type: BladeburnerActionType, name: BladeburnerActionName, level?: number): number;
+
+  /**
+   * Get the rank gain of an action.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Returns the average rank gain for successfully completing the specified action.
+   * Note that this value is an "average" and the actual rank gain may vary slightly from this value.
+   *
+   * @param type - Type of action.
+   * @param name - Name of action. Must be an exact match.
+   * @param level - Optional. Action level at which to calculate the gain. Defaults to the action's current level if not specified.
+   * @returns Average rank gain for successfully completing the specified action.
+   */
+  getActionRankGain(type: BladeburnerActionType, name: BladeburnerActionName, level?: number): number;
+
+  /**
+   * Get the rank loss of an action.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Returns the average rank loss for failing to complete the specified action.
+   * Note that this value is an "average" and the actual rank loss may vary slightly from this value.
+   *
+   * @param type - Type of action.
+   * @param name - Name of action. Must be an exact match.
+   * @param level - Optional. Action level at which to calculate the loss. Defaults to the action's current level if not specified.
+   * @returns Average rank loss for failing to complete the specified action.
+   */
+  getActionRankLoss(type: BladeburnerActionType, name: BladeburnerActionName, level?: number): number;
 
   /**
    * Get action count remaining.
@@ -3841,6 +3887,7 @@ export interface Bladeburner {
    * Travel to another city in Bladeburner.
    * @remarks
    * RAM cost: 4 GB
+   *
    * Attempts to switch to the specified city (for Bladeburner only).
    *
    * Returns true if successful, and false otherwise
@@ -3854,6 +3901,7 @@ export interface Bladeburner {
    * Get Bladeburner stamina.
    * @remarks
    * RAM cost: 4 GB
+   *
    * Returns an array with two elements:
    * * [Current stamina, Max stamina]
    * @example
@@ -3871,6 +3919,7 @@ export interface Bladeburner {
    * Join the Bladeburner faction.
    * @remarks
    * RAM cost: 4 GB
+   *
    * Attempts to join the Bladeburner faction.
    *
    * Returns true if you successfully join the Bladeburner faction, or if you are already a member.
@@ -3941,9 +3990,10 @@ export interface Bladeburner {
    */
   nextUpdate(): Promise<number>;
 
-  /** Returns whether player is a member of Bladeburner division. Does not require API access.
+  /**
+   * Returns whether player is a member of Bladeburner division. Does not require API access.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * @returns whether player is a member of Bladeburner division. */
   inBladeburner(): boolean;
@@ -4449,13 +4499,16 @@ export interface Darknet {
    * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
    * to the server that the script is running on. The speed of authentication scales with the number of threads used.
    *
-   * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
+   * If successful, grants the current script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
    *
    * Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer
    * if the player's charisma is below the server's charisma level.
    *
+   * Note that the session granted is only for the current script instance (by PID) - other running scripts will need to
+   * use connectToSession with the correct password to also get a session with the target server.
+   *
    * @remarks
-   * RAM cost: 0.6 GB
+   * RAM cost: 0.4 GB
    *
    * @param host - Hostname/IP of the target server (connected to the current server) to try a password.
    * @param password - Password to attempt to authenticate with.
@@ -4470,11 +4523,14 @@ export interface Darknet {
    * Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`,
    * connectToSession can be used to get a session on servers at any distance.
    *
-   * If successful, grants the script a session, allowing it to scp() files from that target. It also allows starting scripts
+   * If successful, grants the script a session, allowing it to scp() files to that target. It also allows starting scripts
    * with exec() on that target, if the target is directly connected to the server that the script is running on,
    * or has a backdoor or stasis link.
    *
    * If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+   *
+   * Note that the session granted is only for the current script instance (by PID) - other running scripts will need to
+   * use connectToSession with the correct password to also get a session with the target server.
    *
    * @remarks
    * RAM cost: 0.05 GB
@@ -4619,7 +4675,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.1 GB
    *
-   * @returns A promise that resolves to a {@link DarknetResult} object.
+   * @returns A {@link DarknetResult} object.
    */
   unleashStormSeed(): DarknetResult;
 
@@ -4786,9 +4842,10 @@ export interface Gang {
   createGang(faction: FactionName): boolean;
 
   /**
-   * Check if you're in a gang.
+   * Check if you're in a gang. Does not require API access.
    * @remarks
-   * RAM cost: 1GB
+   * RAM cost: 0GB
+   *
    * @returns True if you're in a gang, false otherwise.
    */
   inGang(): boolean;
@@ -5159,6 +5216,7 @@ export interface GoAnalysis {
    *
    * @remarks
    * RAM cost: 8 GB
+   *
    * (This is intentionally expensive; you can derive this info from just getBoardState() and getMoveHistory() )
    *
    *  @param boardState - Optional. The board state to analyze, in the string[] format used by getBoardState(). Defaults to the current board state. Alternatively can be simply "true" to get current valid moves for white.
@@ -5190,6 +5248,7 @@ export interface GoAnalysis {
    *
    * @remarks
    * RAM cost: 16 GB
+   *
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    *
    * @param boardState - Optional. The current board state, as an array of strings. Defaults to the current board state.
@@ -5218,6 +5277,7 @@ export interface GoAnalysis {
    *
    * @remarks
    * RAM cost: 16 GB
+   *
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    *
    * @param boardState - Optional. The current board state, as an array of strings. Defaults to the current board state.
@@ -5247,6 +5307,7 @@ export interface GoAnalysis {
    *
    * @remarks
    * RAM cost: 16 GB
+   *
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    *
    * @param boardState - Optional. The current board state, as an array of strings. Defaults to the current board state.
@@ -5328,7 +5389,7 @@ export interface GoAnalysis {
 }
 
 /**
- * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
+ * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
  *
  * @public
  */
@@ -5343,7 +5404,8 @@ export interface GoCheat {
    *
    * @remarks
    * RAM cost: 1 GB
-   * Requires BitNode 14.2 to use
+   *
+   * Requires Source-File 14.2 to use
    *
    * @param cheatCount - Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
    * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
@@ -5355,7 +5417,8 @@ export interface GoCheat {
    *
    * @remarks
    * RAM cost: 1 GB
-   * Requires BitNode 14.2 to use
+   *
+   * Requires Source-File 14.2 to use
    *
    * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    * @returns The number of times you've attempted to cheat in the current game.
@@ -5371,7 +5434,8 @@ export interface GoCheat {
    *
    * @remarks
    * RAM cost: 8 GB
-   * Requires BitNode 14.2 to use
+   *
+   * Requires Source-File 14.2 to use
    *
    * @param x - x coordinate of router to remove
    * @param y - y coordinate of router to remove
@@ -5398,7 +5462,8 @@ export interface GoCheat {
    *
    * @remarks
    * RAM cost: 8 GB
-   * Requires BitNode 14.2 to use
+   *
+   * Requires Source-File 14.2 to use
    *
    * @param x1 - x coordinate of first move to make
    * @param y1 - y coordinate of first move to make
@@ -5429,7 +5494,8 @@ export interface GoCheat {
    *
    * @remarks
    * RAM cost: 8 GB
-   * Requires BitNode 14.2 to use
+   *
+   * Requires Source-File 14.2 to use
    *
    * @param x - x coordinate of offline node to repair
    * @param y - y coordinate of offline node to repair
@@ -5457,7 +5523,8 @@ export interface GoCheat {
    *
    * @remarks
    * RAM cost: 8 GB
-   * Requires BitNode 14.2 to use
+   *
+   * Requires Source-File 14.2 to use
    *
    * @param x - x coordinate of empty node to destroy
    * @param y - y coordinate of empty node to destroy
@@ -5642,7 +5709,7 @@ export interface Go {
   analysis: GoAnalysis;
 
   /**
-   * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
+   * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
    */
   cheat: GoCheat;
 }
@@ -6271,7 +6338,7 @@ interface HacknetNodesFormulas {
    * @param mult - player cost reduction (defaults to 1)
    * @returns The calculated cost.
    */
-  hacknetNodeCost(n: number, mult: number): number;
+  hacknetNodeCost(n: number, mult?: number): number;
   /**
    * All constants used by the game.
    * @returns An object with all hacknet node constants used by the game.
@@ -6744,8 +6811,8 @@ interface UserInterface {
    *
    * Resize a tail window. Size are in pixel.
    *
-   * @param width - Width of the window.
-   * @param height - Height of the window.
+   * @param width - Width of the window. The minimum value is 150.
+   * @param height - Height of the window. The minimum value is 30.
    * @param pid - Optional. PID of the script having its tail resized. If omitted, the current script is used.
    */
   resizeTail(width: number, height: number, pid?: number): void;
@@ -6808,6 +6875,21 @@ interface UserInterface {
    * @param args - Arguments for the target script.
    */
   setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
+   * Minimize or expand the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Equivalent to pressing the "Minimize"/"Expand" button on the tail window.
+   *
+   * If called without arguments, this function minimizes/expands the tail window of the current script. If a PID is
+   * provided, it minimizes/expands the tail window of the specified script instead.
+   *
+   * @param pid - Optional. The PID of the script. If omitted, the current script is used.
+   */
+  setTailMinimized(minimized: boolean, pid?: number): void;
 
   /**
    * Get the current window size
@@ -7953,7 +8035,7 @@ export interface NS {
    * ns.scp(files, server, "home");
    * ```
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
+   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
    *
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.
@@ -8167,6 +8249,7 @@ export interface NS {
    * Get the base security level of a server.
    * @remarks
    * RAM cost: 0.1 GB
+   *
    * Returns the base security level of the target server.
    * For the server's actual security level, use {@link NS.getServerSecurityLevel | ns.getServerSecurityLevel}.
    *
@@ -8185,7 +8268,7 @@ export interface NS {
    */
   getServerMaxRam(host?: string): number;
   /**
-   * Get the used RAM on a server.
+   * Get the used RAM on a server. This includes ram used by running scripts as well as blocked ram on darknet servers.
    * @remarks
    * RAM cost: 0.05 GB
    *
@@ -8913,6 +8996,9 @@ export interface NS {
    *
    * - Long form: the flag contains more than 1 character, e.g. --version.
    *
+   * Note that if an argument is given and its default value is nullish, the parsed value will be a string. This may
+   * cause subtle issues if you are not careful with type coercion.
+   *
    * @example
    * ```js
    * export async function main(ns) {
@@ -8941,6 +9027,24 @@ export interface NS {
    * // [home /]> run example.js -v
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":true}
    * ```
+   *
+   * ```js
+   * export async function main(ns) {
+   *   const data = ns.flags([
+   *     ["foo", null],
+   *     ["bar", undefined],
+   *   ]);
+   *   console.log(data);
+   * }
+   *
+   * // [home /]> run example.js
+   * // { _: [], foo: null, bar: undefined }
+   * // [home /]> run example.js --foo 1000
+   * // { _: [], foo: "1000", bar: undefined }
+   * // [home /]> run example.js --foo 1000 --bar false
+   * // { _: [], foo: "1000", bar: "false" }
+   * ```
+   * `bar` in the last example is `"false"` (a string), not `false` (a boolean). `data.bar` is truthy, not falsy.
    */
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 
@@ -8956,7 +9060,9 @@ export interface NS {
   share(): Promise<void>;
 
   /**
-   * Share power has a multiplicative effect on rep/second while doing work for a faction.
+   * Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking
+   * work, share power still increases the reputation gain rate, but the effect is non-linear.
+   *
    * Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
    * @remarks
    * RAM cost: 0.2 GB
@@ -9433,6 +9539,7 @@ type CodingContractNameEnumType = {
   EncryptionIIVigenereCipher: "Encryption II: Vigenère Cipher";
   SquareRoot: "Square Root";
   TotalPrimesInRange: "Total Number of Primes";
+  LargestRectangleInAMatrix: "Largest Rectangle in a Matrix";
 };
 
 /** @public */
@@ -9469,6 +9576,7 @@ export type CodingContractSignatures = {
   "Encryption II: Vigenère Cipher": [[string, string], string];
   "Square Root": [bigint, bigint, [string, string]];
   "Total Number of Primes": [number[], number];
+  "Largest Rectangle in a Matrix": [(1 | 0)[][], [[number, number], [number, number]]];
 };
 
 /** @public */

@@ -3,6 +3,7 @@ import type { TextFilePath } from "../Paths/TextFilePath";
 import type { Faction } from "../Faction/Faction";
 import type { Location } from "../Locations/Location";
 import type { SaveData } from "../types";
+import type { OptionsTabName } from "../GameOptions/ui/GameOptionsRoot";
 import { ComplexPage, SimplePage } from "./Enums";
 
 // Using the same name as both type and object to mimic enum-like behavior.
@@ -24,6 +25,8 @@ export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   ? { saveData: SaveData; automatic?: boolean }
   : T extends ComplexPage.Documentation
   ? { docPage?: string }
+  : T extends ComplexPage.Options
+  ? { tab?: OptionsTabName }
   : never;
 
 export type PageWithContext =
@@ -34,6 +37,7 @@ export type PageWithContext =
   | ({ page: ComplexPage.Location } & PageContext<ComplexPage.Location>)
   | ({ page: ComplexPage.ImportSave } & PageContext<ComplexPage.ImportSave>)
   | ({ page: ComplexPage.Documentation } & PageContext<ComplexPage.Documentation>)
+  | ({ page: ComplexPage.Options } & PageContext<ComplexPage.Options>)
   | { page: ComplexPage.LoadingScreen }
   | { page: SimplePage };
 

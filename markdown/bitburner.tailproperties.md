@@ -49,7 +49,7 @@ number
 
 </td><td>
 
-The font size of the tail window. Defaults to the font size set in the style editor.
+The font size of the log window. Defaults to the font size set in the style editor.
 
 
 </td></tr>
@@ -69,6 +69,25 @@ number
 </td><td>
 
 Height of the log window content area
+
+
+</td></tr>
+<tr><td>
+
+[minimized](./bitburner.tailproperties.minimized.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether the log window is minimized.
 
 
 </td></tr>
