@@ -25,5 +25,62 @@
     <div>
       <h1>Close me when operation is completed.</h1>
     </div>
+    <script>
+      const dbRequest = window.indexedDB.open("bitburnerSave", 2);
+      dbRequest.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (db.objectStoreNames.contains("savestring")) {
+          return;
+        }
+        db.createObjectStore("savestring");
+      };
+      dbRequest.onerror = (event) => {
+        console.error(event.target.error);
+        alert(event.target.error);
+      };
+      dbRequest.onsuccess = () => {
+        const db = dbRequest.result;
+        try {
+          const transaction = db.transaction(["savestring"], "readonly");
+          const objectStore = transaction.objectStore("savestring");
+          const request = objectStore.get("save");
+          request.onsuccess = () => {
+            if (request.result == null) {
+              alert("There is no save data");
+              return;
+            }
+            let isBinaryFormat;
+            if (request.result instanceof Uint8Array) {
+              // All modules in the Electron folder are CommonJS, so importing them here would be really difficult. The
+              // isBinaryFormat function is very small, so let's inline it here.
+              isBinaryFormat = true;
+              const magicBytesOfDeflateGzip = [0x1f, 0x8b, 0x08];
+              for (let i = 0; i < magicBytesOfDeflateGzip.length; ++i) {
+                if (magicBytesOfDeflateGzip[i] !== request.result[i]) {
+                  isBinaryFormat = false;
+                  break;
+                }
+              }
+            } else {
+              isBinaryFormat = false;
+            }
+            const extension = isBinaryFormat ? "json.gz" : "json";
+            const filename = `bitburnerSave_${Date.now()}.${extension}`;
+            const blob = new Blob([request.result]);
+            const anchorElement = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            anchorElement.href = url;
+            anchorElement.download = filename;
+            anchorElement.click();
+            setTimeout(function () {
+              URL.revokeObjectURL(url);
+            }, 0);
+          };
+        } catch (error) {
+          console.error(error);
+          alert(error);
+        }
+      };
+    </script>
   </body>
 </html>
