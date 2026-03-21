@@ -4,7 +4,7 @@ import { StdIO } from "../StdIO/StdIO";
 
 export function hostname(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of hostname command. Usage: hostname", stdIO);
+    Terminal.fatal("Incorrect usage of hostname command. Usage: hostname", stdIO);
     return;
   }
   Terminal.print(server.hostname, stdIO);

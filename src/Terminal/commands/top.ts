@@ -5,7 +5,7 @@ import { StdIO } from "../StdIO/StdIO";
 
 export function top(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of top command. Usage: top", stdIO);
+    Terminal.fatal("Incorrect usage of top command. Usage: top", stdIO);
     return;
   }
 

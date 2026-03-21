@@ -6,7 +6,7 @@ import { BaseServer } from "../../Server/BaseServer";
 
 export function buy(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (!Player.hasTorRouter()) {
-    Terminal.error(
+    Terminal.fatal(
       `You need to be able to connect to the Dark Web to use the "buy" command. (Maybe there's a TOR router you can buy somewhere)`,
       stdIO,
     );

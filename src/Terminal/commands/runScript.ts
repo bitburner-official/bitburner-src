@@ -38,18 +38,18 @@ export function runScript(
       argv: commandArgs,
     });
   } catch (error) {
-    Terminal.error(`Invalid arguments. ${error}.`, stdIO);
+    Terminal.fatal(`Invalid arguments. ${error}.`, stdIO);
     return;
   }
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : undefined;
   if (!isPositiveInteger(numThreads)) {
-    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0", stdIO);
+    Terminal.fatal("Invalid number of threads specified. Number of threads must be an integer greater than 0", stdIO);
     return;
   }
   if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
-    Terminal.error(
+    Terminal.fatal(
       `Invalid ram override specified. Ram override must be a number greater than ${RamCostConstants.Base}`,
       stdIO,
     );
@@ -67,7 +67,7 @@ export function runScript(
     args,
   );
   if (!result.success) {
-    Terminal.error(result.message, stdIO);
+    Terminal.fatal(result.message, stdIO);
     return;
   }
 
@@ -77,7 +77,7 @@ export function runScript(
 
   const success = startWorkerScript(runningScript, server);
   if (!success) {
-    Terminal.error(`Failed to start script`, stdIO);
+    Terminal.fatal(`Failed to start script`, stdIO);
     return;
   }
 

@@ -19,7 +19,7 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
   const hasStdOut = !!stdIO.stdout;
 
   if (args.length === 0 && initialStdIn.length === 0 && stdinIsClosed) {
-    return Terminal.error(
+    return Terminal.fatal(
       `Incorrect use of cat command: No files specified, and no stdin provided. Try "cat [filename]"`,
       stdIO,
     );
@@ -88,11 +88,11 @@ export function getFileContents(filename: string, server: BaseServer): string {
 
 function showFileContentDialog(filename: string, server: BaseServer, stdIO: StdIO) {
   const path = Terminal.getFilepath(filename);
-  if (!path) return Terminal.error(`Invalid filename: ${filename}`, stdIO);
+  if (!path) return Terminal.fatal(`Invalid filename: ${filename}`, stdIO);
 
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
-    if (!file) return Terminal.error(`No file at path ${path}`, stdIO);
+    if (!file) return Terminal.fatal(`No file at path ${path}`, stdIO);
     return dialogBoxCreate(`${file.filename}\n\n${file.content}`);
   }
   if (isMember("MessageFilename", path) && server.messages.includes(path)) {
@@ -107,33 +107,33 @@ export function validateFilenames(filenames: (string | number | boolean)[], serv
   for (const filename of filenames) {
     if (filename === "-") continue;
     if (typeof filename !== "string") {
-      Terminal.error(`Invalid filename: ${filename}`, stdIO);
+      Terminal.fatal(`Invalid filename: ${filename}`, stdIO);
       return false;
     }
     const path = Terminal.getFilepath(filename);
     if (!path) {
-      Terminal.error(`Invalid filename: ${filename}`, stdIO);
+      Terminal.fatal(`Invalid filename: ${filename}`, stdIO);
       return false;
     }
 
     if (hasScriptExtension(path) || hasTextExtension(path)) {
       const file = server.getContentFile(path);
       if (!file) {
-        Terminal.error(`No file at path ${path}`, stdIO);
+        Terminal.fatal(`No file at path ${path}`, stdIO);
         return false;
       }
     } else if (path.endsWith(".msg")) {
       if (!isMember("MessageFilename", path) || !server.messages.includes(path)) {
-        Terminal.error(`No file at path ${path}`, stdIO);
+        Terminal.fatal(`No file at path ${path}`, stdIO);
         return false;
       }
     } else if (path.endsWith(".lit")) {
       if (!isMember("LiteratureName", path) || !server.messages.includes(path)) {
-        Terminal.error(`No file at path ${path}`, stdIO);
+        Terminal.fatal(`No file at path ${path}`, stdIO);
         return false;
       }
     } else {
-      Terminal.error(
+      Terminal.fatal(
         "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx) or a text extension (.txt, .json, .css)",
         stdIO,
       );

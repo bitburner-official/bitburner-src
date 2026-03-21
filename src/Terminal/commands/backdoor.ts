@@ -7,27 +7,27 @@ import { DarknetServer } from "../../Server/DarknetServer";
 
 export function backdoor(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of backdoor command. Usage: backdoor", stdIO);
+    Terminal.fatal("Incorrect usage of backdoor command. Usage: backdoor", stdIO);
     return;
   }
 
   if (!(server instanceof Server) && !(server instanceof DarknetServer)) {
-    Terminal.error("Can only install a backdoor on normal servers", stdIO);
+    Terminal.fatal("Can only install a backdoor on normal servers", stdIO);
     return;
   }
   if (server.purchasedByPlayer) {
-    Terminal.error(
+    Terminal.fatal(
       "Cannot install a backdoor on your own machines! You are currently connected to your home PC or one of your cloud servers.",
       stdIO,
     );
     return;
   }
   if (!server.hasAdminRights) {
-    Terminal.error("You do not have admin rights for this machine!", stdIO);
+    Terminal.fatal("You do not have admin rights for this machine!", stdIO);
     return;
   }
   if (server.requiredHackingSkill && server.requiredHackingSkill > Player.skills.hacking) {
-    Terminal.error(
+    Terminal.fatal(
       "Your hacking skill is not high enough to install a backdoor on this machine. Try analyzing the machine to determine the required hacking skill.",
       stdIO,
     );

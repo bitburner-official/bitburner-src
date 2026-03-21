@@ -19,7 +19,7 @@ export function ps(args: (string | number | boolean)[], server: BaseServer, stdI
     );
   } catch (e) {
     // catch passing only -g / --grep with no string to use as the search
-    Terminal.error("Incorrect usage of ps command. Usage: ps [-g, --grep pattern]", stdIO);
+    Terminal.fatal("Incorrect usage of ps command. Usage: ps [-g, --grep pattern]", stdIO);
     return;
   }
   let pattern = flags["--grep"];

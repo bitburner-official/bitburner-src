@@ -77,7 +77,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
 
   const numArgs = args.length;
   function incorrectUsage(): void {
-    Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]", stdIO);
+    Terminal.fatal("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]", stdIO);
   }
 
   if (numArgs > 5) {
@@ -263,7 +263,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
     })();
     function onClick(): void {
       if (!server.isConnectedTo) {
-        return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`, stdIO);
+        return Terminal.fatal(`File is not on this server, connect to ${server.hostname} and try again`, stdIO);
       }
       // Message and lit files are always in root, no need to combine path with base directory
       if (isMember("MessageFilename", props.path)) {

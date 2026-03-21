@@ -11,12 +11,13 @@ import { StdIO } from "../StdIO/StdIO";
 export function tail(commandArray: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   try {
     if (commandArray.length < 1) {
-      Terminal.error("Incorrect number of arguments. Usage: tail [pid] or tail [scriptname] [arg1] [arg2]...");
+      Terminal.fatal("Incorrect number of arguments. Usage: tail [pid] or tail [scriptname] [arg1] [arg2]...");
+      return;
     } else if (typeof commandArray[0] === "string") {
       const [rawName, ...args] = commandArray;
       const path = Terminal.getFilepath(rawName);
-      if (!path) return Terminal.error(`Invalid filename: ${rawName}`);
-      if (!hasScriptExtension(path)) return Terminal.error(`Invalid file extension. Tail can only be used on scripts.`);
+      if (!path) return Terminal.fatal(`Invalid filename: ${rawName}`);
+      if (!hasScriptExtension(path)) return Terminal.fatal(`Invalid file extension. Tail can only be used on scripts.`);
 
       // Only select from name match if there is no ambiguity and no argument filter specified
       const scriptsMatchingName = commandArray.length === 1 ? findRunningScriptsByFilename(path, server) : null;
@@ -26,7 +27,7 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       const candidates = findRunningScripts(path, args, server);
 
       if (candidates === null && (scriptsMatchingName?.size ?? 0) > 1) {
-        Terminal.error(
+        Terminal.fatal(
           `Multiple scripts named ${path} are running on the server. ` +
             `Specify arguments to pick which script to tail.`,
         );
@@ -35,7 +36,7 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
 
       // if there's no candidate then we just don't know.
       if (candidates === null && scriptMatchingName === null) {
-        Terminal.error(`No script named ${path} with args ${JSON.stringify(args)} is running on the server`);
+        Terminal.fatal(`No script named ${path} with args ${JSON.stringify(args)} is running on the server`);
         return;
       }
 
@@ -48,14 +49,14 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
     } else if (typeof commandArray[0] === "number") {
       const runningScript = findRunningScriptByPid(commandArray[0]);
       if (runningScript == null) {
-        Terminal.error(`No script with PID ${commandArray[0]} is running`);
+        Terminal.fatal(`No script with PID ${commandArray[0]} is running`);
         return;
       }
       handleTail(runningScript, stdIO);
     }
   } catch (error) {
     console.error(error);
-    Terminal.error(String(error));
+    Terminal.fatal(String(error));
   }
 }
 

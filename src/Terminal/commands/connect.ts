@@ -8,7 +8,7 @@ import { StdIO } from "../StdIO/StdIO";
 export function connect(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   // Disconnect from current server in Terminal and connect to new one
   if (args.length !== 1) {
-    Terminal.error("Incorrect usage of connect command. Usage: connect [hostname]", stdIO);
+    Terminal.fatal("Incorrect usage of connect command. Usage: connect [hostname]", stdIO);
     return;
   }
 
@@ -16,7 +16,7 @@ export function connect(args: (string | number | boolean)[], server: BaseServer,
 
   const target = GetServer(hostname);
   if (target === null) {
-    Terminal.error(`Invalid hostname: '${hostname}'`, stdIO);
+    Terminal.fatal(`Invalid hostname: '${hostname}'`, stdIO);
     return;
   }
 
@@ -46,7 +46,7 @@ export function connect(args: (string | number | boolean)[], server: BaseServer,
     return;
   }
 
-  Terminal.error(
+  Terminal.fatal(
     `Cannot directly connect to ${hostname}. Make sure the server is backdoored or adjacent to your current server`,
     stdIO,
   );

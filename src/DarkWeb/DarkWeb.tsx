@@ -58,7 +58,7 @@ export function buyDarkwebItem(itemName: string, stdIO: StdIO): void {
 
   // return if invalid
   if (item === null) {
-    Terminal.error("Unrecognized item: " + itemName, stdIO);
+    Terminal.fatal("Unrecognized item: " + itemName, stdIO);
     return;
   }
 
@@ -70,7 +70,7 @@ export function buyDarkwebItem(itemName: string, stdIO: StdIO): void {
 
   // return if the player doesn't have enough money
   if (Player.money < item.price) {
-    Terminal.error("Not enough money to purchase " + item.program, stdIO);
+    Terminal.fatal("Not enough money to purchase " + item.program, stdIO);
     return;
   }
 
@@ -101,7 +101,7 @@ export function buyAllDarkwebItems(stdIO: StdIO): void {
     if (!Player.hasProgram(item.program)) {
       itemsToBuy.push(item);
       if (item.price > Player.money) {
-        Terminal.error("Need " + formatMoney(item.price - Player.money) + " more to purchase " + item.program, stdIO);
+        Terminal.fatal("Need " + formatMoney(item.price - Player.money) + " more to purchase " + item.program, stdIO);
         return;
       } else {
         buyDarkwebItem(item.program, stdIO);

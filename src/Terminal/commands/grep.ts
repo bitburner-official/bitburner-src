@@ -356,11 +356,11 @@ function checkOutFile(outFileStr: string, options: Options, server: BaseServer, 
   }
   const outFilePath = Terminal.getFilepath(outFileStr);
   if (!outFilePath || !hasTextExtension(outFilePath)) {
-    Terminal.error(ERR.badOutFile(outFileStr), stdIO);
+    Terminal.fatal(ERR.badOutFile(outFileStr), stdIO);
     return null;
   }
   if (!options.isOverWrite && server.textFiles.has(outFilePath)) {
-    Terminal.error(ERR.outFileExists(outFileStr), stdIO);
+    Terminal.fatal(ERR.outFileExists(outFileStr), stdIO);
     return null;
   }
   return outFilePath;
@@ -373,7 +373,7 @@ function grabTerminal(): string[] {
 export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   const stdin = stdIO.stdin?.deref();
   const noStdinProvided = !stdin || (stdin.isClosed && stdin.empty());
-  if (!args.length && noStdinProvided) return Terminal.error(ERR.noArgs, stdIO);
+  if (!args.length && noStdinProvided) return Terminal.fatal(ERR.noArgs, stdIO);
 
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
   if (options.isHelp) return help(["grep"], server, stdIO);
@@ -383,15 +383,15 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
   const nLimit = Number(params.maxMatches);
 
   if (options.hasContextFlag && (!nContext || isNaN(Number(params.context))))
-    return Terminal.error(ERR.badParameter("context", params.context), stdIO);
+    return Terminal.fatal(ERR.badParameter("context", params.context), stdIO);
   if (params.maxMatches && (!nLimit || isNaN(Number(params.maxMatches))))
-    return Terminal.error(ERR.badParameter("limit", params.maxMatches), stdIO);
+    return Terminal.fatal(ERR.badParameter("limit", params.maxMatches), stdIO);
 
   const stdinContent = stdIO.getAllCurrentStdin();
 
   if (!options.isPipeIn && !options.isSearchAll && !otherArgs.length && noStdinProvided)
-    return Terminal.error(ERR.noSearchArg, stdIO);
-  if (options.isPipeIn && stdinContent.length) return Terminal.error(ERR.tooManyInputs(), stdIO);
+    return Terminal.fatal(ERR.noSearchArg, stdIO);
+  if (options.isPipeIn && stdinContent.length) return Terminal.fatal(ERR.tooManyInputs(), stdIO);
 
   options.isMultiFile = otherArgs.length > 1;
   const outFilePath = checkOutFile(params.outfile, options, server, stdIO);
@@ -406,7 +406,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
     applyFilters(options, params, otherArgs, fileContent, server, stdIO);
   } catch (error) {
     console.error(error);
-    Terminal.error(`grep processing error: ${error}`, stdIO);
+    Terminal.fatal(`grep processing error: ${error}`, stdIO);
   }
 
   void callOnRead(stdIO, (data: unknown, stdInOut: StdIO) => {

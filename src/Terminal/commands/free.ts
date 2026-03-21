@@ -5,7 +5,7 @@ import { StdIO } from "../StdIO/StdIO";
 
 export function free(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of free command. Usage: free", stdIO);
+    Terminal.fatal("Incorrect usage of free command. Usage: free", stdIO);
     return;
   }
   const ram = formatRam(server.maxRam);

@@ -6,6 +6,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../Paths/GlobbedFiles";
 import { downloadContentAsFile } from "../../utils/FileUtils";
+import { getTerminalStdIO } from "../StdIO/RedirectIO";
 
 // Basic globbing implementation only supporting * and ?. Can be broken out somewhere else later.
 export function exportScripts(pattern: string, server: BaseServer, currDir = root): void {
@@ -25,13 +26,16 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
     .then((content: Blob) => downloadContentAsFile(content, filename))
     .catch((error) => {
       console.error(error);
-      Terminal.error(`Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
+      Terminal.error(
+        `Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`,
+        getTerminalStdIO(),
+      );
     });
 }
 
 export function download(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of download command. Usage: download [script/text file]");
+    return Terminal.fatal("Incorrect usage of download command. Usage: download [script/text file]");
   }
   const pattern = String(args[0]);
   // If the path contains a * or ?, treat as glob
@@ -41,16 +45,16 @@ export function download(args: (string | number | boolean)[], server: BaseServer
       return;
     } catch (error) {
       console.error(error);
-      Terminal.error(`Cannot export scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
+      Terminal.fatal(`Cannot export scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
       return;
     }
   }
   const path = Terminal.getFilepath(pattern);
-  if (!path) return Terminal.error(`Could not resolve path ${pattern}`);
+  if (!path) return Terminal.fatal(`Could not resolve path ${pattern}`);
   if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-    return Terminal.error("Can only download script and text files");
+    return Terminal.fatal("Can only download script and text files");
   }
   const file = server.getContentFile(path);
-  if (!file) return Terminal.error(`File not found: ${path}`);
+  if (!file) return Terminal.fatal(`File not found: ${path}`);
   return downloadContentAsFile(file.content, file.filename);
 }

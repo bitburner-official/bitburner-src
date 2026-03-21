@@ -64,11 +64,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     if (!script) return;
     const ramUsage = script.getRamUsage(home.scripts);
     if (!ramUsage) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
+      return Terminal.fatal(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
     }
     const ramAvailable = home.maxRam - home.ramUsed;
     if (ramUsage > ramAvailable + 0.001) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
+      return Terminal.fatal(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
     }
     // Start script with no args and 1 thread (default).
     const runningScriptObj = new RunningScript(script, ramUsage, []);

@@ -10,7 +10,7 @@ export function scananalyze(args: (string | number | boolean)[], server: BaseSer
   } else {
     // # of args must be 2 or 3
     if (args.length > 2) {
-      Terminal.error("Incorrect usage of scan-analyze command. usage: scan-analyze [depth]", stdIO);
+      Terminal.fatal("Incorrect usage of scan-analyze command. usage: scan-analyze [depth]", stdIO);
       return;
     }
     let all = false;
@@ -21,18 +21,18 @@ export function scananalyze(args: (string | number | boolean)[], server: BaseSer
     const depth = parseInt(args[0] + "");
 
     if (isNaN(depth) || depth < 0) {
-      return Terminal.error("Incorrect usage of scan-analyze command. depth argument must be positive numeric", stdIO);
+      return Terminal.fatal("Incorrect usage of scan-analyze command. depth argument must be positive numeric", stdIO);
     }
     if (
       depth > 3 &&
       !Player.hasProgram(CompletedProgramName.deepScan1) &&
       !Player.hasProgram(CompletedProgramName.deepScan2)
     ) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 3", stdIO);
+      return Terminal.fatal("You cannot scan-analyze with that high of a depth. Maximum depth is 3", stdIO);
     } else if (depth > 5 && !Player.hasProgram(CompletedProgramName.deepScan2)) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 5", stdIO);
+      return Terminal.fatal("You cannot scan-analyze with that high of a depth. Maximum depth is 5", stdIO);
     } else if (depth > 10) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 10", stdIO);
+      return Terminal.fatal("You cannot scan-analyze with that high of a depth. Maximum depth is 10", stdIO);
     }
     Terminal.executeScanAnalyzeCommand(depth, all, stdIO);
   }

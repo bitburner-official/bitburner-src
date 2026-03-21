@@ -4,7 +4,7 @@ import { StdIO } from "../StdIO/StdIO";
 
 export function sudov(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 0) {
-    Terminal.error("Incorrect number of arguments. Usage: sudov", stdIO);
+    Terminal.fatal("Incorrect number of arguments. Usage: sudov", stdIO);
     return;
   }
 

@@ -16,6 +16,6 @@ export function history(args: (string | number | boolean)[], server: BaseServer,
     Terminal.commandHistory = [];
     Terminal.commandHistoryIndex = 1;
   } else {
-    Terminal.error("Incorrect usage of history command. usage: history [-c]", stdIO);
+    Terminal.fatal("Incorrect usage of history command. usage: history [-c]", stdIO);
   }
 }

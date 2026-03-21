@@ -5,7 +5,7 @@ import { StdIO } from "../StdIO/StdIO";
 
 export function unalias(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length !== 1) {
-    Terminal.error("Incorrect usage of unalias name. Usage: unalias [alias] or unalias --all", stdIO);
+    Terminal.fatal("Incorrect usage of unalias name. Usage: unalias [alias] or unalias --all", stdIO);
     return;
   } else if (args[0] === "--all") {
     for (const alias of Aliases) {
@@ -21,6 +21,6 @@ export function unalias(args: (string | number | boolean)[], server: BaseServer,
   } else if (removeAlias(args[0] + "")) {
     Terminal.printAndBypassPipes(`Removed alias ${args[0]}`);
   } else {
-    Terminal.error(`No such alias exists: ${args[0]}`, stdIO);
+    Terminal.fatal(`No such alias exists: ${args[0]}`, stdIO);
   }
 }

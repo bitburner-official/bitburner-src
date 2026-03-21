@@ -20,7 +20,7 @@ export function runProgram(
   const realProgramName = getRecordKeys(Programs).find((name) => name.toLowerCase() === programLowered);
   const programPresentOnServer = server.programs.find((name) => name.toLowerCase() === programLowered);
   if (!realProgramName || (!Player.hasProgram(realProgramName) && !programPresentOnServer)) {
-    Terminal.error(
+    Terminal.fatal(
       `No such (js, jsx, ts, tsx, script, cct, or exe) file! (Only finished programs that exist on your home computer or scripts on ${server.hostname} can be run)`,
       stdIO,
     );

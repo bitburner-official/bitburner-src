@@ -430,7 +430,7 @@ export const ns: InternalAPI<NSFull> = {
       const str = helpers.argsToString(args);
       const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${ctx.workerScript.name}: ${str}`);
+        Terminal.fatal(`${ctx.workerScript.name}: ${str}`);
         return;
       }
       if (str.startsWith("SUCCESS")) {
@@ -455,7 +455,7 @@ export const ns: InternalAPI<NSFull> = {
       const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
 
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${str}`);
+        Terminal.fatal(`${str}`);
         return;
       }
       if (str.startsWith("SUCCESS")) {

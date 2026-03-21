@@ -7,7 +7,7 @@ import { StdIO } from "../StdIO/StdIO";
 // TODO-FICO: unit tests
 export function wget(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   if (args.length === 2 && stdIO.stdout) {
-    Terminal.error(
+    Terminal.fatal(
       "Incorrect use of wget command. Either specify a destination file or redirect the output with a pipe, not both.",
     );
     return;
@@ -18,19 +18,19 @@ export function wget(args: (string | number | boolean)[], server: BaseServer, st
   const arg1IsValid = typeof source === "string";
   const arg2IsValid = (args.length === 1 && stdIO.stdout) || typeof fileName === "string";
   if (!argCountIsValid || !arg1IsValid || !arg2IsValid) {
-    Terminal.error("Incorrect usage of wget command. Usage: wget [url] [target file]", stdIO);
+    Terminal.fatal("Incorrect usage of wget command. Usage: wget [url] [target file]", stdIO);
     return;
   }
   const target = Terminal.getFilepath(`${fileName}`);
   if (args.length === 2 && (!target || (!hasScriptExtension(target) && !hasTextExtension(target)))) {
-    Terminal.error(`wget failed: Invalid target file. Target file must be a script file or a text file.`, stdIO);
+    Terminal.fatal(`wget failed: Invalid target file. Target file must be a script file or a text file.`, stdIO);
     return;
   }
 
   fetch(source)
     .then(async (response) => {
       if (response.status !== 200) {
-        Terminal.error(`wget failed. HTTP code: ${response.status}.`, stdIO);
+        Terminal.fatal(`wget failed. HTTP code: ${response.status}.`, stdIO);
         return;
       }
       const content = await response.text();
@@ -52,6 +52,6 @@ export function wget(args: (string | number | boolean)[], server: BaseServer, st
     })
     .catch((reason) => {
       // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
-      Terminal.error(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`, stdIO);
+      Terminal.fatal(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`, stdIO);
     });
 }

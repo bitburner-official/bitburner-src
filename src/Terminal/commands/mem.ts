@@ -7,7 +7,7 @@ import { StdIO } from "../StdIO/StdIO";
 export function mem(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
   try {
     if (args.length !== 1 && args.length !== 3) {
-      Terminal.error("Incorrect usage of mem command. usage: mem [scriptname] [-t] [number threads]", stdIO);
+      Terminal.fatal("Incorrect usage of mem command. usage: mem [scriptname] [-t] [number threads]", stdIO);
       return;
     }
 
@@ -16,19 +16,19 @@ export function mem(args: (string | number | boolean)[], server: BaseServer, std
     if (args.length === 3 && args[1] === "-t") {
       numThreads = Math.round(parseInt(args[2] + ""));
       if (isNaN(numThreads) || numThreads < 1) {
-        Terminal.error("Invalid number of threads specified. Number of threads must be greater than 1", stdIO);
+        Terminal.fatal("Invalid number of threads specified. Number of threads must be greater than 1", stdIO);
         return;
       }
     }
 
     const script = Terminal.getScript(scriptName);
     if (script == null) {
-      Terminal.error("mem failed. No such script exists!", stdIO);
+      Terminal.fatal("mem failed. No such script exists!", stdIO);
       return;
     }
 
     const singleRamUsage = script.getRamUsage(server.scripts);
-    if (!singleRamUsage) return Terminal.error(`Could not calculate ram usage for ${scriptName}`, stdIO);
+    if (!singleRamUsage) return Terminal.fatal(`Could not calculate ram usage for ${scriptName}`, stdIO);
 
     const ramUsage = singleRamUsage * numThreads;
 
@@ -46,6 +46,6 @@ export function mem(args: (string | number | boolean)[], server: BaseServer, std
     }
   } catch (error) {
     console.error(error);
-    Terminal.error(String(error), stdIO);
+    Terminal.fatal(String(error), stdIO);
   }
 }

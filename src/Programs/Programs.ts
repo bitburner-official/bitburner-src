@@ -59,7 +59,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.nuke, args, stdIO);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot nuke this kind of server.", stdIO);
+        Terminal.fatal("Cannot nuke this kind of server.", stdIO);
         return;
       }
       if (server.hasAdminRights) {
@@ -89,7 +89,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.bruteSsh, args, stdIO);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run BruteSSH.exe on this kind of server.", stdIO);
+        Terminal.fatal("Cannot run BruteSSH.exe on this kind of server.", stdIO);
         return;
       }
       if (server.sshPortOpen) {
@@ -114,7 +114,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.ftpCrack, args, stdIO);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run FTPCrack.exe on this kind of server.", stdIO);
+        Terminal.fatal("Cannot run FTPCrack.exe on this kind of server.", stdIO);
         return;
       }
       if (server.ftpPortOpen) {
@@ -139,7 +139,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.relaySmtp, args, stdIO);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run relaySMTP.exe on this kind of server.", stdIO);
+        Terminal.fatal("Cannot run relaySMTP.exe on this kind of server.", stdIO);
         return;
       }
       if (server.smtpPortOpen) {
@@ -164,7 +164,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.httpWorm, args, stdIO);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run HTTPWorm.exe on this kind of server.", stdIO);
+        Terminal.fatal("Cannot run HTTPWorm.exe on this kind of server.", stdIO);
         return;
       }
       if (server.httpPortOpen) {
@@ -189,7 +189,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer, stdIO: StdIO): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.sqlInject, args, stdIO);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run SQLInject.exe on this kind of server.", stdIO);
+        Terminal.fatal("Cannot run SQLInject.exe on this kind of server.", stdIO);
         return;
       }
       if (server.sqlPortOpen) {
@@ -239,18 +239,18 @@ export const Programs: Record<CompletedProgramName, Program> = {
     },
     run: (args: string[], __, stdIO: StdIO): void => {
       if (args.length !== 1) {
-        Terminal.error("Must pass a server hostname or IP as an argument for ServerProfiler.exe", stdIO);
+        Terminal.fatal("Must pass a server hostname or IP as an argument for ServerProfiler.exe", stdIO);
         return;
       }
 
       const targetServer = GetServer(args[0]);
       if (targetServer == null) {
-        Terminal.error("Invalid server IP/hostname", stdIO);
+        Terminal.fatal("Invalid server IP/hostname", stdIO);
         return;
       }
 
       if (!(targetServer instanceof Server)) {
-        Terminal.error(`ServerProfiler.exe can only be run on normal servers.`, stdIO);
+        Terminal.fatal(`ServerProfiler.exe can only be run on normal servers.`, stdIO);
         return;
       }
 

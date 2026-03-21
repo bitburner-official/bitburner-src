@@ -190,9 +190,15 @@ export class Terminal {
     this.terminalOutput(new Output(s, "primary"));
   }
 
-  error(s: string, stdIO: StdIO | null = null): void {
+  // Used for logging when a process is ending with an error. Prints directly to terminal so
+  // the error isn't lost due to redirects. Closes the stdIO, if provided
+  fatal(s: string, stdIO: StdIO | null = null): void {
     stdIO?.close();
     this.terminalOutput(new Output(s, "error"));
+  }
+
+  error(s: string, stdIO: StdIO): void {
+    stdIO.write(new Output(s, "error"));
   }
 
   success(s: string, stdIO: StdIO): void {
@@ -211,7 +217,7 @@ export class Terminal {
     // Hacking through Terminal should be faster than hacking through a script
     const server = Player.getCurrentServer();
     if (server instanceof HacknetServer) {
-      this.error("Cannot hack this kind of server");
+      this.fatal("Cannot hack this kind of server");
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -221,7 +227,7 @@ export class Terminal {
   startGrow(stdIO: StdIO): void {
     const server = Player.getCurrentServer();
     if (server instanceof HacknetServer) {
-      this.error("Cannot grow this kind of server");
+      this.fatal("Cannot grow this kind of server");
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -230,7 +236,7 @@ export class Terminal {
   startWeaken(stdIO: StdIO): void {
     const server = Player.getCurrentServer();
     if (server instanceof HacknetServer) {
-      this.error("Cannot weaken this kind of server");
+      this.fatal("Cannot weaken this kind of server");
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -241,7 +247,7 @@ export class Terminal {
     // Backdoor should take the same amount of time as hack
     const server = Player.getCurrentServer();
     if (server instanceof HacknetServer) {
-      this.error("Cannot backdoor this kind of server", stdIO);
+      this.fatal("Cannot backdoor this kind of server", stdIO);
       return;
     }
     if (!(server instanceof Server || server instanceof DarknetServer))
@@ -265,7 +271,7 @@ export class Terminal {
     if (cancelled) return;
 
     if (server instanceof HacknetServer) {
-      this.error("Cannot hack this kind of server");
+      this.fatal("Cannot hack this kind of server");
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -345,7 +351,7 @@ export class Terminal {
     if (cancelled) return;
 
     if (server instanceof HacknetServer) {
-      this.error("Cannot grow this kind of server", this.actionStdIO);
+      this.fatal("Cannot grow this kind of server", this.actionStdIO);
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -377,7 +383,7 @@ export class Terminal {
     if (cancelled) return;
 
     if (server instanceof HacknetServer) {
-      this.error("Cannot weaken this kind of server", this.actionStdIO);
+      this.fatal("Cannot weaken this kind of server", this.actionStdIO);
       return;
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -405,7 +411,7 @@ export class Terminal {
   finishBackdoor(server: BaseServer, cancelled = false): void {
     if (!cancelled) {
       if (server instanceof HacknetServer) {
-        this.error("Cannot hack this kind of server", this.actionStdIO);
+        this.fatal("Cannot hack this kind of server", this.actionStdIO);
         return;
       }
       if (!(server instanceof Server || server instanceof DarknetServer))
@@ -591,13 +597,13 @@ export class Terminal {
   async runContract(contractPath: ContractFilePath, stdIO: StdIO): Promise<void> {
     // There's already an opened contract
     if (this.contractOpen) {
-      return this.error("There's already a Coding Contract in Progress", stdIO);
+      return this.fatal("There's already a Coding Contract in Progress", stdIO);
     }
 
     const server = Player.getCurrentServer();
     const contract = server.getContract(contractPath);
     if (!contract) {
-      return this.error("No such contract", stdIO);
+      return this.fatal("No such contract", stdIO);
     }
 
     this.contractOpen = true;
@@ -609,7 +615,7 @@ export class Terminal {
     // Check if the contract still exists by the time the promise is fulfilled
     if (postPromptServer?.getContract(contractPath) == null) {
       this.contractOpen = false;
-      return this.error("Contract no longer exists (Was it solved by a script?)", stdIO);
+      return this.fatal("Contract no longer exists (Was it solved by a script?)", stdIO);
     }
 
     switch (promptResult.result) {
@@ -725,7 +731,7 @@ export class Terminal {
   connectToServer(hostname: string, singularity = false): void {
     const server = GetServer(hostname);
     if (server === null) {
-      this.error("Invalid server. Connection failed.");
+      this.fatal("Invalid server. Connection failed.");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
@@ -769,7 +775,7 @@ export class Terminal {
 
   executeCommand(command: string, stdIO: StdIO): void {
     if (this.action !== null)
-      return this.error(`Cannot execute command (${command}) while an action is in progress`, stdIO);
+      return this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
 
     const commandArray = parseCommand(command);
     if (!commandArray.length) return;
@@ -788,7 +794,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "help") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -796,10 +802,10 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
           } else if (commandArray[0] === "1s") {
-            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            this.fatal("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
             return;
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -807,7 +813,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "scan") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -815,7 +821,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -823,7 +829,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -835,11 +841,11 @@ export class Terminal {
             ) {
               iTutorialNextStep();
             } else {
-              this.error("Wrong command! Try again!");
+              this.fatal("Wrong command! Try again!");
               return;
             }
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -847,7 +853,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "analyze") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -855,7 +861,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -863,13 +869,13 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "hack") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalHackingMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -877,7 +883,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -885,7 +891,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -893,7 +899,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "free") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -901,7 +907,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
@@ -909,12 +915,12 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.fatal(errorMessageForBadCommand);
             return;
           }
           break;
         default:
-          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
+          this.fatal("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
           return;
       }
     }
@@ -922,7 +928,7 @@ export class Terminal {
     /* Command parser */
 
     const commandName = commandArray[0];
-    if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`, stdIO);
+    if (typeof commandName !== "string") return this.fatal(`${commandName} is not a valid command.`, stdIO);
     // run by path command
     if (isBasicFilePath(commandName)) return run(commandArray, currentServer, stdIO);
 
@@ -933,7 +939,7 @@ export class Terminal {
     if (!f) {
       const similarCommands = findSimilarCommands(commandName);
       const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
-      return this.error(`Command ${commandName} not found.${didYouMeanString}`, stdIO);
+      return this.fatal(`Command ${commandName} not found.${didYouMeanString}`, stdIO);
     }
 
     f(commandArray, currentServer, stdIO);

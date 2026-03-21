@@ -17,6 +17,7 @@ import { parseUnknownError } from "../utils/ErrorHelper";
 import { DarknetServer } from "../Server/DarknetServer";
 import { CompletedProgramName } from "@enums";
 import { getCommandAfterLastPipe } from "./StdIO/utils";
+import { getTerminalStdIO } from "./StdIO/RedirectIO";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -307,7 +308,7 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
       loadedModule = await compile(script, currServ.scripts);
     } catch (e) {
       const errorData = parseUnknownError(e);
-      Terminal.error(
+      Terminal.fatal(
         `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
           errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
         }`,
@@ -397,10 +398,11 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
       pos = pos.concat(options.map((x) => String(x)));
     } catch (error) {
       const errorData = parseUnknownError(error);
-      Terminal.error(
+      Terminal.fatal(
         `The autocomplete function in ${filepath} throws an error. Reason: ${errorData.errorAsString}.${
           errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
         }`,
+        getTerminalStdIO(),
       );
     }
     return pos.concat(pos2);

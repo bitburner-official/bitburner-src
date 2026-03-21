@@ -9,7 +9,7 @@ export function alias(args: (string | number | boolean)[], server: BaseServer, s
     return;
   }
   if (args[0] === "--all") {
-    Terminal.error(`--all is reserved for removal`, stdIO);
+    Terminal.fatal(`--all is reserved for removal`, stdIO);
     return;
   }
   if (args.length === 1) {
@@ -26,5 +26,5 @@ export function alias(args: (string | number | boolean)[], server: BaseServer, s
       }
     }
   }
-  Terminal.error('Incorrect usage of alias command. Usage: alias [-g] [aliasname="value"]', stdIO);
+  Terminal.fatal('Incorrect usage of alias command. Usage: alias [-g] [aliasname="value"]', stdIO);
 }

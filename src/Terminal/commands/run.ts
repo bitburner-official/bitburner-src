@@ -12,20 +12,20 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
   // Run a program or a script
   const arg = args.shift();
   if (!arg)
-    return Terminal.error(
+    return Terminal.fatal(
       "Usage: run [program/script] [-t num_threads] [--tail] [--ram-override ram_in_GBs] [--temporary] [args...]",
       stdIO,
     );
 
   const path = Terminal.getFilepath(String(arg));
-  if (!path) return Terminal.error(`${arg} is not a valid filepath.`, stdIO);
+  if (!path) return Terminal.fatal(`${arg} is not a valid filepath.`, stdIO);
   if (hasScriptExtension(path)) {
     runScript(path, args, server, stdIO);
     return;
   } else if (hasContractExtension(path)) {
     Terminal.runContract(path, stdIO).catch((error) => {
       console.error(error);
-      Terminal.error(`Cannot run contract ${path} on ${server.hostname}. Error: ${error}.`, stdIO);
+      Terminal.fatal(`Cannot run contract ${path} on ${server.hostname}. Error: ${error}.`, stdIO);
     });
     return;
   } else if (hasProgramExtension(path)) {
@@ -33,5 +33,5 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
   } else if (hasCacheExtension(path)) {
     return Terminal.startAction(4, "c", stdIO, server);
   }
-  Terminal.error(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .cct, and .exe files can be run.`, stdIO);
+  Terminal.fatal(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .cct, and .exe files can be run.`, stdIO);
 }
