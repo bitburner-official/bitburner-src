@@ -246,7 +246,6 @@ const dnet = {
   getStasisLinkedServers: 0,
   getServer: 2,
   getServerAuthDetails: RamCostConstants.GetServer,
-  packetCapture: 6,
   induceServerMigration: 4,
   unleashStormSeed: 0.1,
   isDarknetServer: RamCostConstants.GetServer,

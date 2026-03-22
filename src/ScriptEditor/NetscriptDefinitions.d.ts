@@ -4640,20 +4640,6 @@ export interface Darknet {
   getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
 
   /**
-   * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
-   * The target server must be directly connected to the server that the script is running on.
-   *
-   * Using multiple threads speeds up the capture process.
-   *
-   * @remarks
-   * RAM cost: 6 GB
-   *
-   * @param host - Hostname/IP of the server to listen to.
-   * @returns A promise that resolves to a {@link DarknetResult} object, plus the captured data.
-   */
-  packetCapture(host: string): Promise<DarknetResult & { data: string }>;
-
-  /**
    * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
    * The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
    *
