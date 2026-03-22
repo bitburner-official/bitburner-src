@@ -23,7 +23,7 @@ import { pushGameSaved, pushImportResult } from "./Electron";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
-import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
+import { decodeBase64BytesToBytes, isBinaryFormat, isSteamCloudFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
@@ -259,9 +259,11 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     const rawData = new Uint8Array(await file.arrayBuffer());
     if (isBinaryFormat(rawData)) {
       return rawData;
-    } else {
-      return new TextDecoder().decode(rawData);
     }
+    if (isSteamCloudFormat(rawData)) {
+      return decodeBase64BytesToBytes(rawData);
+    }
+    return new TextDecoder().decode(rawData);
   }
 
   async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {

@@ -11,7 +11,7 @@ const greenworks = require("./greenworks");
 const log = require("electron-log");
 const flatten = require("lodash/flatten");
 const Store = require("electron-store");
-const { isBinaryFormat } = require("./saveDataBinaryFormat");
+const { decodeBase64BytesToBytes, isBinaryFormat, isSteamCloudFormat } = require("./saveDataBinaryFormat");
 const store = new Store();
 
 // https://stackoverflow.com/a/69418940
@@ -222,7 +222,7 @@ async function getSteamCloudSaveData() {
 async function saveGameToDisk(window, electronGameData) {
   const currentFolder = await getSaveFolder(window);
   let saveFolderSizeBytes = await getFolderSizeInBytes(currentFolder);
-  const maxFolderSizeBytes = store.get("autosave-quota", 1e8); // 100Mb per playerIndentifier
+  const maxFolderSizeBytes = store.get("autosave-quota", 1e8); // 100Mb
   const remainingSpaceBytes = maxFolderSizeBytes - saveFolderSizeBytes;
   log.debug(`Folder Usage: ${saveFolderSizeBytes} bytes`);
   log.debug(`Folder Capacity: ${maxFolderSizeBytes} bytes`);
@@ -280,6 +280,9 @@ async function loadFileFromDisk(path) {
   if (isBinaryFormat(buffer)) {
     // Save file is in the binary format.
     content = buffer;
+  } else if (isSteamCloudFormat(buffer)) {
+    // Save file is in the Steam Cloud format.
+    content = decodeBase64BytesToBytes(buffer);
   } else {
     // Save file is in the base64 format.
     content = buffer.toString("utf8");
