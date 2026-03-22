@@ -27,9 +27,8 @@ export const capturePackets = (server: DarknetServer) => {
     const data = getRandomAlphaneumericNoiseData(124 + Math.random() * 20);
     const insertIndex = Math.floor(Math.random() * (data.length - captureServer.password.length));
     return data.slice(0, insertIndex) + captureServer.password + data.slice(insertIndex);
-
   }
-  const passwordData =` ${captureServer.hostname}:${captureServer.password} `;
+  const passwordData = ` ${captureServer.hostname}:${captureServer.password} `;
   const randomData = getRandomData(server, 124 + Math.random() * 20);
   const insertIndex = Math.floor(Math.random() * (randomData.length - passwordData.length));
   return randomData.slice(0, insertIndex) + passwordData + randomData.slice(insertIndex);
