@@ -20,13 +20,16 @@ export const capturePackets = (server: DarknetServer) => {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
     captureServer = getDarknetServer(connectedServerName) ?? server;
   }
-  // For higher difficulty servers, if the current server's password was chosen rather than a nearby server,
-  // the data simply contains the password without spaces or nice labels to make it trickier to parse
-  const passwordData =
-    server.difficulty > 16 && captureServer === server
-      ? captureServer.password
-      : ` ${captureServer.hostname}:${captureServer.password} `;
 
+  if (server.difficulty > 16 && captureServer === server) {
+    // For higher difficulty servers, if the current server's password was chosen rather than a nearby server,
+    // the data simply contains the password among alphanumeric noise without spaces or nice labels to make it trickier to parse
+    const data = getRandomAlphaneumericNoiseData(124 + Math.random() * 20);
+    const insertIndex = Math.floor(Math.random() * (data.length - captureServer.password.length));
+    return data.slice(0, insertIndex) + captureServer.password + data.slice(insertIndex);
+
+  }
+  const passwordData =` ${captureServer.hostname}:${captureServer.password} `;
   const randomData = getRandomData(server, 124 + Math.random() * 20);
   const insertIndex = Math.floor(Math.random() * (randomData.length - passwordData.length));
   return randomData.slice(0, insertIndex) + passwordData + randomData.slice(insertIndex);
@@ -62,6 +65,15 @@ const getRandomData = (server: DarknetServer, length: number) => {
     } else {
       result += romanNumeralEncoder(Math.floor(Math.random() * 5000));
     }
+  }
+  return result;
+};
+
+const getRandomAlphaneumericNoiseData = (length: number) => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
 };
