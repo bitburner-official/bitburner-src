@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { dialog } = require("electron");
+const { app, dialog } = require("electron");
 const log = require("electron-log");
 
 const Store = require("electron-store");
@@ -9,10 +9,26 @@ function reloadAndKill(window, killScripts) {
   log.info("Reloading & Killing all scripts...");
   const zoomFactor = getZoomFactor();
   window.webContents.forcefullyCrashRenderer();
-  window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
-  window.once("ready-to-show", () => {
-    setZoomFactor(window, zoomFactor);
-  });
+  // Delay the loading to mitigate the issue of forcefullyCrashRenderer.
+  // Check https://github.com/electron/electron/issues/48661 for more information.
+  setTimeout(() => {
+    window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
+    // The first delay may not work, so we try to load again after another delay.
+    const timeoutId = setTimeout(() => {
+      const appMetrics = app.getAppMetrics();
+      // Only reload if the renderer process was not spawned.
+      if (appMetrics.filter((processMetric) => processMetric.type === "Tab").length > 0) {
+        return;
+      }
+      log.warn("Cannot find the renderer process");
+      log.debug(appMetrics);
+      window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
+    }, 2000);
+    window.once("ready-to-show", () => {
+      clearTimeout(timeoutId);
+      setZoomFactor(window, zoomFactor);
+    });
+  }, 1000);
 }
 
 function promptForReload(window) {
