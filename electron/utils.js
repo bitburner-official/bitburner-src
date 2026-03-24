@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { dialog } = require("electron");
 const log = require("electron-log");
-
 const Store = require("electron-store");
 const store = new Store();
+const arg = require("arg");
 
 function reloadAndKill(window, killScripts) {
   log.info("Reloading & Killing all scripts...");
@@ -105,6 +105,47 @@ function setZoomFactor(window, zoom = null) {
   window.webContents.setZoomFactor(zoom);
 }
 
+function initializeLogLevelConfig() {
+  /**
+   * @type {{
+   *  ["--file-log-level"]?: string,
+   *  ["--console-log-level"]?: string,
+   * }}
+   */
+  let args = {};
+  try {
+    args = arg(
+      {
+        "--file-log-level": String,
+        "--console-log-level": String,
+      },
+      { permissive: true, argv: process.argv.slice(1) },
+    );
+  } catch (error) {
+    log.error("Cannot parse arguments", process.argv, error);
+  }
+
+  // Set default log levels if no stored config exists.
+  if (store.get("file-log-level") === undefined) {
+    store.set("file-log-level", "info");
+  }
+  if (store.get("console-log-level") === undefined) {
+    store.set("console-log-level", "debug");
+  }
+
+  const validLogLevels = ["error", "warn", "info", "verbose", "debug", "silly"];
+
+  // Override log levels if relevant arguments are provided.
+  const parsedFileLogLevel = args["--file-log-level"];
+  if (parsedFileLogLevel !== undefined && validLogLevels.includes(parsedFileLogLevel)) {
+    store.set("file-log-level", parsedFileLogLevel);
+  }
+  const parsedConsoleLogLevel = args["--console-log-level"];
+  if (parsedConsoleLogLevel !== undefined && validLogLevels.includes(parsedConsoleLogLevel)) {
+    store.set("console-log-level", parsedConsoleLogLevel);
+  }
+}
+
 module.exports = {
   reloadAndKill,
   showErrorBox,
@@ -115,4 +156,5 @@ module.exports = {
   writeToast,
   getZoomFactor,
   setZoomFactor,
+  initializeLogLevelConfig,
 };
