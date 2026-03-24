@@ -429,7 +429,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       achievements: importedPlayer.achievements?.length ?? 0,
 
       bitNode: importedPlayer.bitNodeN,
-      bitNodeLevel: importedPlayer.sourceFileLvl(Player.bitNodeN) + 1,
+      bitNodeLevel: importedPlayer.sourceFileLvl(importedPlayer.bitNodeN) + 1,
       sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
       exploits: importedPlayer.exploits.length,
 
