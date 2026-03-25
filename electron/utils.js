@@ -1,3 +1,4 @@
+/** @import { BrowserWindow } from "electron" */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, dialog } = require("electron");
 const log = require("electron-log");
@@ -5,30 +6,50 @@ const log = require("electron-log");
 const Store = require("electron-store");
 const store = new Store();
 
+/** @param {BrowserWindow} window */
+function getRendererProcessUniqueId(window) {
+  const rendererProcesses = app
+    .getAppMetrics()
+    .filter((processMetric) => processMetric.pid === window.webContents.getOSProcessId());
+  if (rendererProcesses.length === 0) {
+    return null;
+  }
+  // This should never happen.
+  if (rendererProcesses.length > 1) {
+    log.error("Found more than 1 renderer process");
+    log.info(rendererProcesses);
+  }
+  const rendererProcess = rendererProcesses[0];
+  // Pid may be reused, so we need to use both pid and creationTime to uniquely identify the process.
+  return `${rendererProcess.pid}-${rendererProcess.creationTime}`;
+}
+
+/**
+ * @param {BrowserWindow} window
+ * @param {boolean} killScripts
+ */
 function reloadAndKill(window, killScripts) {
   log.info("Reloading & Killing all scripts...");
   const zoomFactor = getZoomFactor();
+  const currentRendererProcessUniqueId = getRendererProcessUniqueId(window);
+  log.debug(`Current renderer process unique id: ${currentRendererProcessUniqueId}`);
   window.webContents.forcefullyCrashRenderer();
-  // Delay the loading to mitigate the issue of forcefullyCrashRenderer.
+  window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
+  window.once("ready-to-show", () => {
+    setZoomFactor(window, zoomFactor);
+  });
+  // Keep checking whether a new renderer process has been spawned. If not, call loadFile. We need to do this to
+  // mitigate the issue of forcefullyCrashRenderer.
   // Check https://github.com/electron/electron/issues/48661 for more information.
-  setTimeout(() => {
+  const intervalId = setInterval(() => {
+    const rendererProcessUniqueId = getRendererProcessUniqueId(window);
+    log.debug(`Renderer process unique id: ${rendererProcessUniqueId}`);
+    if (rendererProcessUniqueId !== null && rendererProcessUniqueId !== currentRendererProcessUniqueId) {
+      clearInterval(intervalId);
+      return;
+    }
     window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
-    // The first delay may not work, so we try to load again after another delay.
-    const timeoutId = setTimeout(() => {
-      const appMetrics = app.getAppMetrics();
-      // Only reload if the renderer process was not spawned.
-      if (appMetrics.filter((processMetric) => processMetric.type === "Tab").length > 0) {
-        return;
-      }
-      log.warn("Cannot find the renderer process");
-      log.debug(appMetrics);
-      window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
-    }, 2000);
-    window.once("ready-to-show", () => {
-      clearTimeout(timeoutId);
-      setZoomFactor(window, zoomFactor);
-    });
-  }, 1000);
+  }, 0);
 }
 
 function promptForReload(window) {
