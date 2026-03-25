@@ -334,7 +334,7 @@ export const handleLabyrinthPassword = (
 export const getPositionInLab = (pid: number): [number, number] => {
   const offsetStartAndEnd = getLabyrinthDetails().offsetStartAndEnd;
   if (!DarknetState.labLocations[pid]) {
-    const offsetX = offsetStartAndEnd ? [0, 2, 4][Math.floor(Math.random() * 3)] : 0;
+    const offsetX = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
     const offsetY = offsetStartAndEnd ? [0, 2, 4][Math.floor(Math.random() * 3)] : 0;
     DarknetState.labLocations[pid] = [1 + offsetX, 1 + offsetY];
   }
