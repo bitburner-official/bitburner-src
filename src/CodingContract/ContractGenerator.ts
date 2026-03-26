@@ -11,6 +11,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { getRandomAlphanumericString } from "../utils/StringHelperFunctions";
 
 export function tryGeneratingRandomContract(numberOfTries: number): void {
   /**
@@ -211,15 +212,6 @@ function getRandomServer(): BaseServer | null {
   }
 
   return randServer;
-}
-
-function getRandomAlphanumericString(length: number) {
-  const alphanumericChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < length; ++i) {
-    result += alphanumericChars.charAt(Math.random() * alphanumericChars.length);
-  }
-  return result;
 }
 
 /**
