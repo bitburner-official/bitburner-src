@@ -332,13 +332,8 @@ export const handleLabyrinthPassword = (
 };
 
 export const getPositionInLab = (pid: number): [number, number] => {
-  const offsetStartAndEnd = getLabyrinthDetails().offsetStartAndEnd;
-  if (!DarknetState.labLocations[pid]) {
-    const offsetX = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
-    const offsetY = offsetStartAndEnd ? [0, 2, 4][Math.floor(Math.random() * 3)] : 0;
-    DarknetState.labLocations[pid] = [1 + offsetX, 1 + offsetY];
-  }
-
+  const [offsetX, offsetY] = getRandomOffset();
+  DarknetState.labLocations[pid] ??= [1 + offsetX, 1 + offsetY];
   return DarknetState.labLocations[pid];
 };
 
@@ -368,20 +363,22 @@ const getOrdinalInput = (input: string): number[] | null => {
 
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
-    const { mazeWidth, mazeHeight, offsetStartAndEnd } = getLabyrinthDetails();
+    const { mazeWidth, mazeHeight } = getLabyrinthDetails();
     DarknetState.labyrinth = generateMaze(mazeWidth, mazeHeight);
-    if (offsetStartAndEnd) {
-      const offsetX = [0, 2, 4][Math.floor(Math.random() * 3)];
-      const offsetY = [0, 2, 4][Math.floor(Math.random() * 3)];
-      DarknetState.labEndpoint = [
-        DarknetState.labyrinth[0].length - 2 - offsetX,
-        DarknetState.labyrinth.length - 2 - offsetY,
-      ];
-    } else {
-      DarknetState.labEndpoint = [DarknetState.labyrinth[0].length - 2, DarknetState.labyrinth.length - 2];
-    }
+    const [offsetX, offsetY] = getRandomOffset();
+    DarknetState.labEndpoint = [
+      DarknetState.labyrinth[0].length - 2 - offsetX,
+      DarknetState.labyrinth.length - 2 - offsetY,
+    ];
   }
   return DarknetState.labyrinth;
+};
+
+const getRandomOffset = () => {
+  const { offsetStartAndEnd } = getLabyrinthDetails();
+  const offsetX = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
+  const offsetY = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
+  return [offsetX, offsetY];
 };
 
 export const getLabyrinthServerNames = () => {
