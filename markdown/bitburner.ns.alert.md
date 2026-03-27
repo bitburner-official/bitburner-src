@@ -52,3 +52,7 @@ Value(s) to be alerted.
 
 void
 
+## Remarks
+
+RAM cost: 0 GB
+

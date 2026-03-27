@@ -56,7 +56,7 @@ True if successful, and false otherwise.
 
 ## Remarks
 
-2.25 GB
+RAM cost: 2.25 GB
 
 Deletes one of your cloud servers, which is specified by its hostname/ip.
 

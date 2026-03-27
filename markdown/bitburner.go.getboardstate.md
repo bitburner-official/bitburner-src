@@ -8,20 +8,15 @@ Retrieves a simplified version of the board state. "X" represents black pieces, 
 
 For example, a 5x5 board might look like this:
 
-\[
-
-"XX.O.",
-
-"X..OO",
-
-".XO..",
-
-"XXO.\#",
-
-".XO.\#",
-
-\]
-
+```
+[
+  "XX.O.",
+  "X..OO",
+  ".XO..",
+  "XXO.#",
+  ".XO.#",
+]
+```
 Each string represents a vertical column on the board, and each character in the string represents a point.
 
 Traditional notation for Go is e.g. "B,1" referring to second ("B") column, first rank. This is the equivalent of index \[1\]\[0\].

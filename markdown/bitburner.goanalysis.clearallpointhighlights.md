@@ -15,3 +15,7 @@ clearAllPointHighlights(): void;
 
 void
 
+## Remarks
+
+RAM cost: 0 GB
+
