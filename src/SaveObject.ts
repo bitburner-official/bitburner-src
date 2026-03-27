@@ -35,6 +35,7 @@ import { giveExportBonus } from "./ExportBonus";
 import { loadInfiltrations } from "./Infiltration/SaveLoadInfiltration";
 import { InfiltrationState } from "./Infiltration/formulas/game";
 import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
+import { loadSettings } from "./Settings/SettingsUtils";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -504,7 +505,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   if (saveObj.SettingsSave) {
     try {
       // Try to set saved settings.
-      Settings.load(saveObj.SettingsSave);
+      loadSettings(saveObj.SettingsSave);
     } catch (e) {
       console.error("SettingsSave was present but an error occurred while loading:");
       console.error(e);
