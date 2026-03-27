@@ -209,7 +209,7 @@ const Engine = {
     }
 
     if (Engine.Counters.contractGeneration <= 0) {
-      tryGeneratingRandomContract(1);
+      tryGeneratingRandomContract(3, 1 / 3);
       Engine.Counters.contractGeneration = 3000;
     }
 
