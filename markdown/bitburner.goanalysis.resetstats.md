@@ -52,3 +52,7 @@ _(Optional)_ Optional. if true, reset win/loss records for all opponents. Leaves
 
 void
 
+## Remarks
+
+RAM cost: 0 GB
+

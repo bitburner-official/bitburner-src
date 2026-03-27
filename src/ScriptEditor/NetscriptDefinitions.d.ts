@@ -3902,8 +3902,7 @@ export interface Bladeburner {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Returns an array with two elements:
-   * * [Current stamina, Max stamina]
+   * Returns an array with two elements: [Current stamina, Max stamina]
    * @example
    * ```js
    * function getStaminaPercentage() {
@@ -4232,7 +4231,7 @@ export interface Cloud {
   /**
    * Delete a cloud server.
    * @remarks
-   * 2.25 GB
+   * RAM cost: 2.25 GB
    *
    * Deletes one of your cloud servers, which is specified by its hostname/ip.
    *
@@ -4249,7 +4248,8 @@ export interface Cloud {
    * Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
    * Returns hostnames by default.
    *
-   * @remarks 1.05 GB
+   * @remarks
+   * RAM cost: 1.05 GB
    *
    * @param returnOpts - Optional. Controls whether the function returns IPs
    * @returns Returns an array with the hostnames or IP addresses of all of the cloud servers you have purchased.
@@ -5187,18 +5187,20 @@ export interface GoAnalysis {
    * Takes an optional boardState (and an optional prior-move boardState, if desired) to analyze a custom board.
    *
    * The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
-   *      `const validMoves = ns.go.analysis.getValidMoves();`
    *
-   *      `const moveIsValid = validMoves[x][y];`
+   * ```js
+   * const validMoves = ns.go.analysis.getValidMoves();
+   * const moveIsValid = validMoves[x][y];
+   * ```
    *
    * Note that the [0][0] point is shown on the bottom-left on the visual board (as is traditional), and each
    * string represents a vertical column on the board. In other words, the printed example above can be understood to
    * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
    *
    * Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules
-   *  (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
+   * (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
    *
-   *  The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)` .
+   * The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)`.
    *
    * @remarks
    * RAM cost: 8 GB
@@ -5214,7 +5216,7 @@ export interface GoAnalysis {
 
   /**
    * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
-   * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
+   * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null`.
    *
    * Takes an optional boardState argument; by default uses the current board state.
    *
@@ -5222,15 +5224,16 @@ export interface GoAnalysis {
    *
    * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
    * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
-   * <pre lang="javascript">
-   *       [
-   *         [   0,0,0,3,4],
-   *         [   1,0,0,3,3],
-   *         [   1,1,0,0,0],
-   *         [null,1,0,2,2],
-   *         [null,1,0,2,5],
-   *       ]
-   * </pre>
+   *
+   * ```
+   * [
+   *   [   0,0,0,3,4],
+   *   [   1,0,0,3,3],
+   *   [   1,1,0,0,0],
+   *   [null,1,0,2,2],
+   *   [null,1,0,2,5],
+   * ]
+   * ```
    *
    * @remarks
    * RAM cost: 16 GB
@@ -5251,15 +5254,16 @@ export interface GoAnalysis {
    *
    * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
    * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
-   * <pre lang="javascript">
-   *      [
-   *         [-1, 5,-1,-1, 2],
-   *         [ 5, 5,-1,-1,-1],
-   *         [-1,-1, 4,-1,-1],
-   *         [ 3,-1,-1, 3, 1],
-   *         [ 3,-1,-1, 3, 1],
-   *      ]
-   * </pre>
+   *
+   * ```
+   * [
+   *   [-1, 5,-1,-1, 2],
+   *   [ 5, 5,-1,-1,-1],
+   *   [-1,-1, 4,-1,-1],
+   *   [ 3,-1,-1, 3, 1],
+   *   [ 3,-1,-1, 3, 1],
+   * ]
+   * ```
    *
    * @remarks
    * RAM cost: 16 GB
@@ -5281,15 +5285,16 @@ export interface GoAnalysis {
    * Filled points of any color are indicated with '.'
    *
    * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
-   * <pre lang="javascript">
-   *   [
-   *      "OO..?",
-   *      "OO.?.",
-   *      "O.?.X",
-   *      ".?.XX",
-   *      "?..X#",
-   *   ]
-   * </pre>
+   *
+   * ```
+   * [
+   *   "OO..?",
+   *   "OO.?.",
+   *   "O.?.X",
+   *   ".?.XX",
+   *   "?..X#",
+   * ]
+   * ```
    *
    * @remarks
    * RAM cost: 16 GB
@@ -5306,9 +5311,9 @@ export interface GoAnalysis {
    *
    * The details are keyed by opponent name, in this structure:
    *
-   * <pre lang="javascript">
-   * \{
-   *   <OpponentName>: \{
+   * ```
+   * {
+   *   <OpponentName>: {
    *     wins: number,
    *     losses: number,
    *     winStreak: number,
@@ -5316,9 +5321,12 @@ export interface GoAnalysis {
    *     favor: number,
    *     bonusPercent: number,
    *     bonusDescription: string,
-   *   \}
-   * \}
-   * </pre>
+   *   }
+   * }
+   * ```
+   *
+   * @remarks
+   * RAM cost: 0 GB
    *
    * @returns A dictionary of opponent stats keyed by opponent name.
    */
@@ -5326,6 +5334,10 @@ export interface GoAnalysis {
 
   /**
    * Reset all win/loss and winstreak records for the No AI opponent.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
    * @param resetAll - Optional. if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged. Defaults to false.
    */
   resetStats(resetAll?: boolean): void;
@@ -5370,7 +5382,12 @@ export interface GoAnalysis {
    */
   clearPointHighlight(x: number, y: number): void;
 
-  /** Removes all highlights from the board. */
+  /**
+   * Removes all highlights from the board.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
   clearAllPointHighlights(): void;
 }
 
@@ -5601,19 +5618,15 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   *[
-   *
-   *  "XX.O.",
-   *
-   *  "X..OO",
-   *
-   *  ".XO..",
-   *
-   *  "XXO.#",
-   *
-   *  ".XO.#",
-   *
-   *]
+   * ```
+   * [
+   *   "XX.O.",
+   *   "X..OO",
+   *   ".XO..",
+   *   "XXO.#",
+   *   ".XO.#",
+   * ]
+   * ```
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
    *
@@ -5633,19 +5646,15 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   *[
-   *
-   *  "XX.O.",
-   *
-   *  "X..OO",
-   *
-   *  ".XO..",
-   *
-   *  "XXO.#",
-   *
-   *  ".XO.#",
-   *
-   *]
+   * ```
+   * [
+   *   "XX.O.",
+   *   "X..OO",
+   *   ".XO..",
+   *   "XXO.#",
+   *   ".XO.#",
+   * ]
+   * ```
    *
    * @remarks
    * RAM cost: 0 GB
@@ -8834,12 +8843,20 @@ export interface NS {
 
   /**
    * Open up a message box.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
    * @param args - Value(s) to be alerted.
    */
   alert(...args: any[]): void;
 
   /**
    * Queue a toast (bottom-right notification).
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
    * @param msg - Message in the toast.
    * @param variant - Type of toast. Must be one of success, info, warning, error. Defaults to success.
    * @param duration - Duration of toast in ms. Can also be `null` to create a persistent toast. Defaults to 2000.

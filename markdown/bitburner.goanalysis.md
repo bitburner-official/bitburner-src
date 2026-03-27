@@ -54,13 +54,23 @@ Removes the highlight color and text from the specified node.
 
 </td><td>
 
-Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
+Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null`<!-- -->.
 
 Takes an optional boardState argument; by default uses the current board state.
 
 The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
 
-For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board. <pre lang="javascript"> \[ \[ 0,0,0,3,4\], \[ 1,0,0,3,3\], \[ 1,1,0,0,0\], \[null,1,0,2,2\], \[null,1,0,2,5\], \] </pre>
+For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board.
+
+```
+[
+  [   0,0,0,3,4],
+  [   1,0,0,3,3],
+  [   1,1,0,0,0],
+  [null,1,0,2,2],
+  [null,1,0,2,5],
+]
+```
 
 
 </td></tr>
@@ -77,7 +87,17 @@ Takes an optional boardState argument; by default uses the current board state.
 
 Filled points of any color are indicated with '.'
 
-In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center: <pre lang="javascript"> \[ "OO..?", "OO.?.", "O.?.X", ".?.XX", "?..X\#", \] </pre>
+In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
+
+```
+[
+  "OO..?",
+  "OO.?.",
+  "O.?.X",
+  ".?.XX",
+  "?..X#",
+]
+```
 
 
 </td></tr>
@@ -92,7 +112,17 @@ Returns a number for each point, representing how many open nodes its network/ch
 
 Takes an optional boardState argument; by default uses the current board state.
 
-For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured! <pre lang="javascript"> \[ \[-1, 5,-1,-1, 2\], \[ 5, 5,-1,-1,-1\], \[-1,-1, 4,-1,-1\], \[ 3,-1,-1, 3, 1\], \[ 3,-1,-1, 3, 1\], \] </pre>
+For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
+
+```
+[
+  [-1, 5,-1,-1, 2],
+  [ 5, 5,-1,-1,-1],
+  [-1,-1, 4,-1,-1],
+  [ 3,-1,-1, 3, 1],
+  [ 3,-1,-1, 3, 1],
+]
+```
 
 
 </td></tr>
@@ -107,7 +137,19 @@ Displays the game history, captured nodes, and gained bonuses for each opponent 
 
 The details are keyed by opponent name, in this structure:
 
-<pre lang="javascript"> { <OpponentName>: { wins: number, losses: number, winStreak: number, highestWinStreak: number, favor: number, bonusPercent: number, bonusDescription: string, } } </pre>
+```
+{
+  <OpponentName>: {
+    wins: number,
+    losses: number,
+    winStreak: number,
+    highestWinStreak: number,
+    favor: number,
+    bonusPercent: number,
+    bonusDescription: string,
+  }
+}
+```
 
 
 </td></tr>
@@ -120,15 +162,17 @@ The details are keyed by opponent name, in this structure:
 
 Shows if each point on the board is a valid move for the player. By default, analyzes the current board state. Takes an optional boardState (and an optional prior-move boardState, if desired) to analyze a custom board.
 
-The true/false validity of each move can be retrieved via the X and Y coordinates of the move. `const validMoves = ns.go.analysis.getValidMoves();`
+The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
 
-`const moveIsValid = validMoves[x][y];`
-
+```js
+const validMoves = ns.go.analysis.getValidMoves();
+const moveIsValid = validMoves[x][y];
+```
 Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
 
 Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
 
-The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)` .
+The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)`<!-- -->.
 
 
 </td></tr>
