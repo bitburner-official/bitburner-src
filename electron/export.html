@@ -26,6 +26,8 @@
       <h1>Close me when operation is completed.</h1>
     </div>
     <script>
+      // Check src/db.ts to see why the version is 2. When increasing the version, remember to update the code in that
+      // file.
       const dbRequest = window.indexedDB.open("bitburnerSave", 2);
       dbRequest.onupgradeneeded = (event) => {
         const db = event.target.result;
