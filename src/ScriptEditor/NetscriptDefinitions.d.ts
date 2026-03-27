@@ -5646,12 +5646,18 @@ export interface Go {
    *  ".XO.#",
    *
    *]
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getMoveHistory(): string[][];
 
   /**
    * Returns the color of the current player, or 'None' if the game is over.
    * @returns "White" | "Black" | "None"
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getCurrentPlayer(): "White" | "Black" | "None";
 
@@ -5659,6 +5665,9 @@ export interface Go {
    * Gets the status of the current game.
    * Shows the current player, current score, and the previous move coordinates.
    * Previous move will be null for a pass, or if there are no prior moves.
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getGameState(): {
     currentPlayer: "White" | "Black" | "None";
@@ -5671,6 +5680,9 @@ export interface Go {
 
   /**
    * Returns the name of the opponent faction in the current subnet.
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getOpponent(): GoOpponent;
 

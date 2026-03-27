@@ -21,6 +21,7 @@ import { getPasswordType } from "../DarkNet/controllers/ServerGenerator";
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/effects/authentication";
 import {
   getLabMaze,
+  getPositionInLab,
   getLabyrinthDetails,
   getLabyrinthLocationReport,
   getSurroundingsVisualized,
@@ -695,7 +696,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
       await helpers.netscriptDelay(ctx, authenticationTime);
 
-      const [x, y] = DarknetState.labLocations[pid] ?? [1, 1];
+      const [x, y] = getPositionInLab(pid);
       return {
         success: true,
         message: getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true),

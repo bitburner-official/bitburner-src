@@ -17,3 +17,7 @@ getCurrentPlayer(): "White" | "Black" | "None";
 
 "White" \| "Black" \| "None"
 
+## Remarks
+
+RAM cost: 0 GB
+
