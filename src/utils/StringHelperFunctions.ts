@@ -78,15 +78,15 @@ export function containsAllStrings(arr: string[]): boolean {
 }
 
 // Generates a random alphanumeric string with N characters
-export function getRandomAlphanumericString(length: number): string {
+export function getRandomAlphanumericString(n: number): string {
+  let str = "";
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const result = [];
 
-  for (let i = 0; i < length; i++) {
-    result.push(chars.charAt(Math.floor(Math.random() * chars.length)));
+  for (let i = 0; i < n; i++) {
+    str += chars.charAt(Math.floor(Math.random() * chars.length));
   }
 
-  return result.join("");
+  return str;
 }
 
 export function capitalizeFirstLetter(s: string): string {
