@@ -14,29 +14,13 @@ import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 const MAX_LOG_LINES = 200;
 
 export const capturePackets = (server: DarknetServer) => {
-  const BASE_PASSWORD_INCLUSION_RATE = 0.12;
-  const DIFFICULTY_MODIFIER = 0.88;
-  const difficulty = server.difficulty * 1.3;
-  const vulnerability = server.modelId === ModelIds.packetSniffer ? 8 : 1;
-  const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * DIFFICULTY_MODIFIER ** difficulty;
-
-  let captureServer: DarknetServer | null = null;
-  if (Math.random() < passwordInclusionChance) {
-    captureServer = server;
-    // eslint-disable-next-line no-dupe-else-if
-  } else if (Math.random() < passwordInclusionChance) {
-    const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    captureServer = getDarknetServer(connectedServerName);
-  }
-  if (captureServer) {
-    const intro = Math.floor(Math.random() * 124);
-    return `${getRandomData(server, intro)} ${captureServer.hostname}:${captureServer.password} ${getRandomData(
-      server,
-      124 - intro - captureServer.password.length - captureServer.hostname.length,
-    )}`;
-  }
-
-  return `${getRandomData(server, 124)}`;
+  const passwordData = server.difficulty > 16 ? server.password : ` ${server.hostname}:${server.password} `;
+  const randomData =
+    server.difficulty > 16
+      ? getPassword(124 + Math.random() * 20, true)
+      : getRandomData(server, 124 + Math.random() * 20);
+  const insertIndex = Math.floor(Math.random() * (randomData.length - passwordData.length));
+  return randomData.slice(0, insertIndex) + passwordData + randomData.slice(insertIndex);
 };
 
 const getRandomData = (server: DarknetServer, length: number) => {

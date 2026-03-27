@@ -2,7 +2,7 @@ import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
 import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
 import type { DarknetResult } from "@nsdefs";
 import { PasswordResponse } from "../models/DarknetServerOptions";
-import { logPasswordAttempt } from "../models/packetSniffing";
+import { capturePackets, logPasswordAttempt } from "../models/packetSniffing";
 import { getServerState } from "../models/DarknetState";
 import { GenericResponseMessage, ModelIds, ResponseCodeEnum } from "../Enums";
 import {
@@ -140,6 +140,9 @@ export const checkPassword = (
       const rmsd = Math.sqrt(squaredError / attemptedPassword.length);
       const rmsdMessage = `${server.passwordHintData}; RMS Deviation:${rmsd.toFixed(3)}`;
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, rmsdMessage);
+    }
+    case ModelIds.packetSniffer: {
+      return getFailureResponse(attemptedPassword, server.staticPasswordHint, capturePackets(server));
     }
     default:
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData);

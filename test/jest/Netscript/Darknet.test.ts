@@ -212,10 +212,6 @@ describe("home", () => {
     const ns = getNsOnHome();
     expect(() => ns.dnet.getServerAuthDetails()).toThrow("home is not a darknet server");
   });
-  test("packetCapture", () => {
-    const ns = getNsOnHome();
-    expect(() => ns.dnet.packetCapture(SpecialServers.Home)).toThrow("home is not a darknet server");
-  });
   test("induceServerMigration", () => {
     const ns = getNsOnHome();
     expect(() => ns.dnet.induceServerMigration("home")).toThrow("home is not a darknet server");
@@ -380,10 +376,6 @@ describe("Normal NPC server", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     expect(() => ns.dnet.getServerAuthDetails()).toThrow("CSEC is not a darknet server");
   });
-  test("packetCapture", () => {
-    const ns = getNS(SpecialServers.CyberSecServer);
-    expect(() => ns.dnet.packetCapture(SpecialServers.CyberSecServer)).toThrow("CSEC is not a darknet server");
-  });
   test("induceServerMigration", () => {
     const ns = getNS(SpecialServers.CyberSecServer);
     expect(() => ns.dnet.induceServerMigration("CSEC")).toThrow("CSEC is not a darknet server");
@@ -473,10 +465,6 @@ describe("Private server", () => {
   test("getServerAuthDetails", () => {
     const ns = getNS("test-server-1");
     expect(() => ns.dnet.getServerAuthDetails()).toThrow("test-server-1 is not a darknet server");
-  });
-  test("packetCapture", () => {
-    const ns = getNS("test-server-1");
-    expect(() => ns.dnet.packetCapture("test-server-1")).toThrow("test-server-1 is not a darknet server");
   });
   test("induceServerMigration", () => {
     const ns = getNS("test-server-1");
@@ -568,10 +556,6 @@ describe("Hashnet server", () => {
     const ns = getNS("hacknet-server-0");
     expect(() => ns.dnet.getServerAuthDetails()).toThrow("hacknet-server-0 is not a darknet server");
   });
-  test("packetCapture", () => {
-    const ns = getNS("hacknet-server-0");
-    expect(() => ns.dnet.packetCapture("hacknet-server-0")).toThrow("hacknet-server-0 is not a darknet server");
-  });
   test("induceServerMigration", () => {
     const ns = getNS("hacknet-server-0");
     expect(() => ns.dnet.induceServerMigration("hacknet-server-0")).toThrow("hacknet-server-0 is not a darknet server");
@@ -656,10 +640,6 @@ describe("Non-existent server", () => {
     const ns = getNsOnDarkWeb();
     expect(() => ns.dnet.getServerAuthDetails(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
   });
-  test("packetCapture", () => {
-    const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.packetCapture(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
-  });
   test("induceServerMigration", () => {
     const ns = getNsOnDarkWeb();
     expect(() => ns.dnet.induceServerMigration(hostnameOfNonExistentServer)).toThrow(errorMessageForNonExistentServer);
@@ -697,10 +677,6 @@ describe("darkweb targets home", () => {
   test("heartbleed from darkweb", () => {
     const ns = getNsOnDarkWeb();
     expect(() => ns.dnet.heartbleed(SpecialServers.Home)).toThrow("home is not a darknet server");
-  });
-  test("packetCapture", () => {
-    const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.packetCapture(SpecialServers.Home)).toThrow("home is not a darknet server");
   });
   test("induceServerMigration", () => {
     const ns = getNsOnDarkWeb();
@@ -808,12 +784,6 @@ describe("darkweb", () => {
     const authDetails = ns.dnet.getServerAuthDetails();
     expect(authDetails.isOnline).toStrictEqual(true);
     expect(authDetails.modelId).toStrictEqual(ModelIds.NoPassword);
-  });
-  test("packetCapture from home", async () => {
-    const ns = getNsOnHome();
-    const result = await ns.dnet.packetCapture(SpecialServers.DarkWeb);
-    expect(result.success).toStrictEqual(true);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
   test("induceServerMigration", () => {
     const ns = getNsOnDarkWeb();
@@ -967,20 +937,6 @@ describe("Non-darkweb darknet server", () => {
     const authDetails = ns.dnet.getServerAuthDetails();
     expect(authDetails.modelId).toStrictEqual(getDarknetServerOrThrow(ns.getHostname()).modelId);
   });
-  test("packetCapture from home", async () => {
-    const ns = getNsOnHome();
-    const target = getFirstDarknetServerAdjacentToDarkWeb();
-    const result = await ns.dnet.packetCapture(target);
-    expect(result.success).toStrictEqual(false);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.DirectConnectionRequired);
-  });
-  test("packetCapture from darkweb", async () => {
-    const ns = getNsOnDarkWeb();
-    const target = getFirstDarknetServerAdjacentToDarkWeb();
-    const result = await ns.dnet.packetCapture(target);
-    expect(result.success).toStrictEqual(true);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
-  });
   test("induceServerMigration targeting connected server", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
     const targetServer = getRandomDarknetServer([SpecialServers.DarkWeb, ns.getHostname()]);
@@ -1120,10 +1076,6 @@ describe("Offline darknet server", () => {
     authDetails = ns.dnet.getServerAuthDetails(ipForOfflineServer);
     expect(authDetails.isOnline).toStrictEqual(false);
   });
-  test("packetCapture from home", async () => {
-    const ns = getNsOnHome();
-    await testIpAndHostname((host) => ns.dnet.packetCapture(host));
-  });
   test("induceServerMigration", async () => {
     const ns = getNsOnDarkWeb();
     await testIpAndHostname((host) => ns.dnet.induceServerMigration(host));
@@ -1224,12 +1176,6 @@ describe("Use IP instead of hostname", () => {
     const authDetails = ns.dnet.getServerAuthDetails(ip);
     expect(authDetails.isOnline).toStrictEqual(true);
     expect(authDetails.modelId).toStrictEqual(getDarknetServerOrThrow(ip).modelId);
-  });
-  test("packetCapture from darkweb", async () => {
-    const ns = getNsOnDarkWeb();
-    const result = await ns.dnet.packetCapture(ip);
-    expect(result.success).toStrictEqual(true);
-    expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
   });
   test("induceServerMigration targeting connected server", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
