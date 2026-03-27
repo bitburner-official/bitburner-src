@@ -4640,20 +4640,6 @@ export interface Darknet {
   getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
 
   /**
-   * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
-   * The target server must be directly connected to the server that the script is running on.
-   *
-   * Using multiple threads speeds up the capture process.
-   *
-   * @remarks
-   * RAM cost: 6 GB
-   *
-   * @param host - Hostname/IP of the server to listen to.
-   * @returns A promise that resolves to a {@link DarknetResult} object, plus the captured data.
-   */
-  packetCapture(host: string): Promise<DarknetResult & { data: string }>;
-
-  /**
    * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
    * The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
    *
@@ -5660,12 +5646,18 @@ export interface Go {
    *  ".XO.#",
    *
    *]
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getMoveHistory(): string[][];
 
   /**
    * Returns the color of the current player, or 'None' if the game is over.
    * @returns "White" | "Black" | "None"
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getCurrentPlayer(): "White" | "Black" | "None";
 
@@ -5673,6 +5665,9 @@ export interface Go {
    * Gets the status of the current game.
    * Shows the current player, current score, and the previous move coordinates.
    * Previous move will be null for a pass, or if there are no prior moves.
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getGameState(): {
     currentPlayer: "White" | "Black" | "None";
@@ -5685,6 +5680,9 @@ export interface Go {
 
   /**
    * Returns the name of the opponent faction in the current subnet.
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getOpponent(): GoOpponent;
 

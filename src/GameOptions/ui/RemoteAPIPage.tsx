@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Button, TextField, Tooltip, Typography } from "@mui/material";
 import { GameOptionsPage } from "./GameOptionsPage";
-import { isValidConnectionHostname, isValidConnectionPort, Settings } from "../../Settings/Settings";
+import { Settings } from "../../Settings/Settings";
+import { isValidConnectionHostname, isValidConnectionPort } from "../../Settings/SettingsUtils";
 import { RemoteFileApiConnectionStatus } from "./RemoteFileApiConnectionStatus";
 import { newRemoteFileApiConnection } from "../../RemoteFileAPI/RemoteFileAPI";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";

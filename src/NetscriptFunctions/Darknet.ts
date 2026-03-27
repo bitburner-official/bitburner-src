@@ -13,7 +13,6 @@ import {
 import { Player } from "@player";
 import { formatNumber } from "../ui/formatNumber";
 import { GetServer } from "../Server/AllServers";
-import { capturePackets } from "../DarkNet/models/packetSniffing";
 import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
@@ -22,6 +21,7 @@ import { getPasswordType } from "../DarkNet/controllers/ServerGenerator";
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/effects/authentication";
 import {
   getLabMaze,
+  getPositionInLab,
   getLabyrinthDetails,
   getLabyrinthLocationReport,
   getSurroundingsVisualized,
@@ -410,35 +410,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         passwordFormat: getPasswordType(targetServer.password),
       } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
     },
-    packetCapture: (ctx) => (_host) => {
-      const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-      const serverCheck = checkDarknetServer(ctx, targetHost, {
-        requireDirectConnection: true,
-      });
-      if (!serverCheck.success) {
-        return helpers.netscriptDelay(ctx, 100).then(() => ({
-          success: false,
-          code: serverCheck.code,
-          message: serverCheck.message,
-          data: "",
-        }));
-      }
-
-      const server = serverCheck.server;
-      const networkDelay =
-        calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads, "", true) * 6;
-      const xp = formatNumber(calculatePasswordAttemptChaGain(server, ctx.workerScript.scriptRef.threads), 1);
-
-      logger(ctx)(`Captured some outgoing transmissions from ${server.hostname}. (Gained ${xp} cha xp)`);
-      return helpers.netscriptDelay(ctx, networkDelay).then(() => {
-        return {
-          success: true,
-          code: ResponseCodeEnum.Success,
-          message: GenericResponseMessage.Success,
-          data: capturePackets(server),
-        };
-      });
-    },
     induceServerMigration:
       (ctx) =>
       (_host): Promise<DarknetResult> => {
@@ -725,7 +696,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const authenticationTime = calculateAuthenticationTime(lab, Player, ctx.workerScript.scriptRef.threads);
       await helpers.netscriptDelay(ctx, authenticationTime);
 
-      const [x, y] = DarknetState.labLocations[pid] ?? [1, 1];
+      const [x, y] = getPositionInLab(pid);
       return {
         success: true,
         message: getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true),

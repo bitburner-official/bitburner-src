@@ -78,7 +78,7 @@ export function containsAllStrings(arr: string[]): boolean {
 }
 
 // Generates a random alphanumeric string with N characters
-export function generateRandomString(n: number): string {
+export function getRandomAlphanumericString(n: number): string {
   let str = "";
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 

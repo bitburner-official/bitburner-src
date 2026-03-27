@@ -411,7 +411,7 @@ export const getKingOfTheHillConfig = (difficulty: number): ServerConfig => {
 export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.packetSniffer,
-    password: getPassword(3 + difficulty / 3, difficulty > 8),
+    password: getPassword(3 + Math.random() * 6, difficulty > 8),
     staticPasswordHint: "(I'm busy browsing social media at the cafe)",
   };
 };

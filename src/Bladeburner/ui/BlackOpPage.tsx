@@ -35,7 +35,8 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
         losses. Black Ops success significantly affected by combat stats. Many Ops benefit from Hacking skill.
         Unaffected by Charisma.
       </Typography>
-      {bladeburner.numBlackOpsComplete >= blackOpsArray.length ? (
+
+      {bladeburner.numBlackOpsComplete >= blackOpsArray.length && (
         <Button
           sx={{ my: 1, p: 1 }}
           onClick={() => {
@@ -48,13 +49,11 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
         >
           <CorruptibleText content="Destroy w0r1d_d43m0n" spoiler={false}></CorruptibleText>
         </Button>
-      ) : (
-        <>
-          {blackOperations.map((blackOperation) => (
-            <BlackOpElem key={blackOperation.name} bladeburner={bladeburner} action={blackOperation} />
-          ))}
-        </>
       )}
+
+      {blackOperations.map((blackOperation) => (
+        <BlackOpElem key={blackOperation.name} bladeburner={bladeburner} action={blackOperation} />
+      ))}
     </>
   );
 }

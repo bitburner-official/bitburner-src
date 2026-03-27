@@ -31,3 +31,7 @@ getMoveHistory(): string[][];
 
 string\[\]\[\]
 
+## Remarks
+
+RAM cost: 0 GB
+

@@ -7,6 +7,30 @@ const storage = require("./storage");
 const store = new Store();
 const { steamworksClient } = require("./steamworksUtils");
 
+/** @import {LogLevel} from "electron-log" */
+/**
+ * @param {*} window
+ * @param {"file-log-level" | "console-log-level"} configKey
+ * @param {LogLevel} logLevel
+ * @returns {*}
+ */
+function createLogLevelMenuItem(window, configKey, logLevel) {
+  return {
+    label: logLevel,
+    type: "checkbox",
+    checked: store.get(configKey) === logLevel,
+    click: () => {
+      if (configKey === "file-log-level") {
+        log.transports.file.level = logLevel;
+      } else {
+        log.transports.console.level = logLevel;
+      }
+      store.set(configKey, logLevel);
+      refreshMenu(window);
+    },
+  };
+}
+
 function getMenu(window) {
   const canZoomIn = utils.getZoomFactor() <= 2;
   const zoomIn = () => {
@@ -300,6 +324,31 @@ function getMenu(window) {
       label: "Debug",
       submenu: [
         {
+          label: "File Log Level",
+          submenu: [
+            createLogLevelMenuItem(window, "file-log-level", "error"),
+            createLogLevelMenuItem(window, "file-log-level", "warn"),
+            createLogLevelMenuItem(window, "file-log-level", "info"),
+            createLogLevelMenuItem(window, "file-log-level", "verbose"),
+            createLogLevelMenuItem(window, "file-log-level", "debug"),
+            createLogLevelMenuItem(window, "file-log-level", "silly"),
+          ],
+        },
+        {
+          label: "Console Log Level",
+          submenu: [
+            createLogLevelMenuItem(window, "console-log-level", "error"),
+            createLogLevelMenuItem(window, "console-log-level", "warn"),
+            createLogLevelMenuItem(window, "console-log-level", "info"),
+            createLogLevelMenuItem(window, "console-log-level", "verbose"),
+            createLogLevelMenuItem(window, "console-log-level", "debug"),
+            createLogLevelMenuItem(window, "console-log-level", "silly"),
+          ],
+        },
+        {
+          type: "separator",
+        },
+        {
           label: "Activate",
           accelerator: "f12",
           click: () => window.webContents.openDevTools(),
@@ -308,13 +357,12 @@ function getMenu(window) {
           label: "Delete Steam Cloud Data",
           enabled: steamworksClient !== undefined,
           click: () => {
-            if (steamworksClient.cloud.listFiles().length === 0) {
+            if (steamworksClient === undefined || steamworksClient.cloud.listFiles().length === 0) {
+              log.info("There is no Steam cloud file");
               return;
             }
             try {
-              if (!storage.deleteCloudFile()) {
-                log.warn("Cannot delete Steam Cloud data");
-              }
+              storage.deleteCloudFiles();
             } catch (error) {
               log.error(error);
             }

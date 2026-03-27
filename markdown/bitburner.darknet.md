@@ -252,19 +252,6 @@ Opens a .cache file on the current server to acquire its valuable contents.
 </td></tr>
 <tr><td>
 
-[packetCapture(host)](./bitburner.darknet.packetcapture.md)
-
-
-</td><td>
-
-Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise. The target server must be directly connected to the server that the script is running on.
-
-Using multiple threads speeds up the capture process.
-
-
-</td></tr>
-<tr><td>
-
 [phishingAttack()](./bitburner.darknet.phishingattack.md)
 
 

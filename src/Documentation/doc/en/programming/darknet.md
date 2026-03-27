@@ -25,7 +25,6 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 - `await ns.dnet.authenticate(hostname, password)` lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `exec` and `scp` to move scripts onto that server.
 - Some servers require interactive feedback to guess their password. Use `await ns.dnet.heartbleed(hostname)` to check that server's logs and get clues after you attempt a password.
 - `ns.dnet.connectToSession(hostName, password)` lets you use a password you already know to log in to a darknet server at a distance. This is required to scp files there.
-- `await ns.dnet.packetCapture(hostName)` allows you to sometimes find passwords amongst the (mostly) noise coming out of a server.
 - Some servers will have part of their max ram blocked off. Use `ns.dnet.influence.memoryReallocation()` to free it.
 - Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
 - Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
@@ -143,12 +142,6 @@ if (ns.dnet.getServerAuthDetails(hostname).isConnectedToCurrentServer) {
 Sometimes you will find valuable data in .cache files on servers you unlock. They can contain money or experience, programs, or even stock market access keys. They can be opened via `run` from the terminal, or `dnet.openCache` from a script on that server. You can use `ns.ls(ns.getHostname(), '.cache')` to identify if any .cache files exist on the current server.
 
 Once you have access to a darknet server, you can begin to use it for your own purposes. One option is to run `dnet.phishingAttack()` to raise your charisma levels and to try and con money out of the less tech-savvy middle managers out there. Occasionally you will even lift .cache data files from the attempt!
-
-### Password stealing with dnet.packetCapture
-
-If you get stuck on a puzzle, you can try to brute-force it. Most servers will tell you their password length and format, allowing you to try each of the possibilities. It's not likely to be fast, but it's an option.
-
-If you don't want to wait on that, you can social-engineer your way around it. Not everyone uses secure internet connections, and a lot of interesting things can be pulled from their network traffic... including passwords. `dnet.packetCapture` will let you spend some time scraping data from outgoing packets from that server. Most of what you overhear will be useless, but the password will eventually show up inside some of that noise, sooner or later. (It may take a long time to stumble upon the password on higher-difficulty servers, though!)
 
 ### Freeing up more ram with dnet.memoryReallocation
 

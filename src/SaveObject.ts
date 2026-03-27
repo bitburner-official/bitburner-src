@@ -23,7 +23,7 @@ import { pushGameSaved, pushImportResult } from "./Electron";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
-import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
+import { decodeBase64BytesToBytes, isBinaryFormat, isSteamCloudFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
@@ -35,6 +35,7 @@ import { giveExportBonus } from "./ExportBonus";
 import { loadInfiltrations } from "./Infiltration/SaveLoadInfiltration";
 import { InfiltrationState } from "./Infiltration/formulas/game";
 import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
+import { loadSettings } from "./Settings/SettingsUtils";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -346,6 +347,9 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     if (isBinaryFormat(rawData)) {
       return rawData;
     }
+    if (isSteamCloudFormat(rawData)) {
+      return decodeBase64BytesToBytes(rawData);
+    }
     return new TextDecoder().decode(rawData);
   }
 
@@ -426,7 +430,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       achievements: importedPlayer.achievements?.length ?? 0,
 
       bitNode: importedPlayer.bitNodeN,
-      bitNodeLevel: importedPlayer.sourceFileLvl(Player.bitNodeN) + 1,
+      bitNodeLevel: importedPlayer.sourceFileLvl(importedPlayer.bitNodeN) + 1,
       sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
       exploits: importedPlayer.exploits.length,
 
@@ -501,7 +505,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   if (saveObj.SettingsSave) {
     try {
       // Try to set saved settings.
-      Settings.load(saveObj.SettingsSave);
+      loadSettings(saveObj.SettingsSave);
     } catch (e) {
       console.error("SettingsSave was present but an error occurred while loading:");
       console.error(e);
