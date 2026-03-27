@@ -357,13 +357,12 @@ function getMenu(window) {
           label: "Delete Steam Cloud Data",
           enabled: steamworksClient !== undefined,
           click: () => {
-            if (steamworksClient.cloud.listFiles().length === 0) {
+            if (steamworksClient === undefined || steamworksClient.cloud.listFiles().length === 0) {
+              log.info("There is no Steam cloud file");
               return;
             }
             try {
-              if (!storage.deleteCloudFile()) {
-                log.warn("Cannot delete Steam Cloud data");
-              }
+              storage.deleteCloudFiles();
             } catch (error) {
               log.error(error);
             }
