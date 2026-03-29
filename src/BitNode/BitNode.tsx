@@ -370,7 +370,7 @@ export function initBitNodes() {
         <ul>
           <li>
             Sleeve: Duplicate your consciousness into Synthoids, allowing you to perform different tasks asynchronously.
-            You cannot buy Sleeves outside this BitNode.
+            You cannot buy Sleeves or upgrade them outside this BitNode.
           </li>
           <li>
             Grafting: Visit VitaLife in New Tokyo to get access to this technology. It allows you to graft
