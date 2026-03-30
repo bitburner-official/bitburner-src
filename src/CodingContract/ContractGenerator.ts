@@ -13,7 +13,7 @@ import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFile
 import { clampNumber } from "../utils/helpers/clampNumber";
 import { getRandomAlphanumericString } from "../utils/StringHelperFunctions";
 
-export function tryGeneratingRandomContract(numberOfTries: number, rewardScaling: number = 1): void {
+export function tryGeneratingRandomContract(numberOfTries: number): void {
   /**
    * We try to generate a contract every 10 minutes. 525600 is the number of tries in 10 years. There is no reason to
    * support anything above that. We tested this number (525600) on a very old machine. It took only 300-350ms to
@@ -64,12 +64,12 @@ export function tryGeneratingRandomContract(numberOfTries: number, rewardScaling
     if (random > 100 / (399 + Math.exp(0.0012 * currentNumberOfContracts))) {
       continue;
     }
-    generateRandomContract(rewardScaling);
+    generateRandomContract();
     ++currentNumberOfContracts;
   }
 }
 
-export function generateRandomContract(rewardScaling: number = 1): void {
+export function generateRandomContract(): void {
   // Choose random server
   const randServer = getRandomServer();
   if (randServer === null) {
@@ -89,7 +89,7 @@ export function generateRandomContract(rewardScaling: number = 1): void {
   if (contractFn == null) {
     return;
   }
-  const contract = new CodingContract(contractFn, problemType, reward, rewardScaling);
+  const contract = new CodingContract(contractFn, problemType, reward);
 
   randServer.addContract(contract);
 }
