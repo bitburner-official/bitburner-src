@@ -44,7 +44,7 @@ export function CodingContractsDev(): React.ReactElement {
           <tbody>
             <tr>
               <td>
-                <Button onClick={() => generateRandomContract()}>Generate Random Contract</Button>
+                <Button onClick={generateRandomContract}>Generate Random Contract</Button>
                 <Button onClick={generateRandomContractOnHome}>Generate Random Contract on Home Comp</Button>
               </td>
             </tr>
