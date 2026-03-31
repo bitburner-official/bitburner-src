@@ -9,32 +9,19 @@ import { FactionInfo } from "../FactionInfo";
 
 import Typography from "@mui/material/Typography";
 import { useCycleRerender } from "../../ui/React/hooks";
-import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 import { ReputationInfo } from "../../ui/React/ReputationInfo";
 import { FavorInfo } from "../../ui/React/FavorInfo";
+import Tooltip from "@mui/material/Tooltip";
+import InfoIcon from "@mui/icons-material/Info";
+import Grade from "@mui/icons-material/Grade";
 
 interface IProps {
   faction: Faction;
   factionInfo: FactionInfo;
 }
 
-function DefaultAssignment(): React.ReactElement {
-  return (
-    <Typography>
-      Perform work/carry out assignments for your faction to help further its cause! By doing so, you will earn
-      reputation for your faction. You will also gain reputation passively over time, although at a very slow
-      rate.&nbsp;
-      {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in some BitNodes. </>}
-      Earning reputation will allow you to purchase augmentations through this faction, which are powerful upgrades that
-      enhance your abilities.
-    </Typography>
-  );
-}
-
 export function Info(props: IProps): React.ReactElement {
   useCycleRerender();
-
-  const Assignment = props.factionInfo.assignment ?? DefaultAssignment;
 
   return (
     <>
@@ -50,7 +37,23 @@ export function Info(props: IProps): React.ReactElement {
       <Typography>-------------------------</Typography>
       <FavorInfo favor={props.faction.favor} />
       <Typography>-------------------------</Typography>
-      <Assignment />
+      <Typography variant="h5" style={{ display: "flex", alignItems: "center" }}>
+        <Grade style={{ fontSize: "1.1em", marginRight: "10px" }} />
+        Special Campaign
+        <Tooltip
+          title={
+            <>
+              Some factions are developing special campaigns for researching breakthrough technology or executing
+              initiatives. Some campaigns may be complete, while others remain unfinished. Explore them now, and return
+              later if a campaign is not yet complete to see what unfolds.
+            </>
+          }
+        >
+          <InfoIcon sx={{ fontSize: "0.8em", marginLeft: "10px" }} />
+        </Tooltip>
+      </Typography>
+      {props.factionInfo.campaign ? props.factionInfo.campaign() : <Typography>None</Typography>}
+      <Typography>-------------------------</Typography>
     </>
   );
 }

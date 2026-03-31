@@ -196,7 +196,7 @@ achieved immortality - at least for those that could afford it.
 
 This BitNode unlocks Sleeve and Grafting technology:
 
-- Sleeve: Duplicate your consciousness into Synthoids, allowing you to perform different tasks asynchronously. You cannot buy Sleeves outside this BitNode.
+- Sleeve: Duplicate your consciousness into Synthoids, allowing you to perform different tasks asynchronously. You cannot buy Sleeves or upgrade them outside this BitNode.
 - Grafting: Visit VitaLife in New Tokyo to get access to this technology. It allows you to graft augmentations, which is an alternative way of installing augmentations.
 
 Destroying this BitNode will give you Source-File 10, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File unlocks Sleeve and Grafting API in other BitNodes. Each level of this Source-File also grants you a Sleeve.
