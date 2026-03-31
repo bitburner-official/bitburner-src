@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPurchasesRoot";
 import { Modal } from "../../ui/React/Modal";
 import { Option } from "./Option";
+import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 function CovenantIncompleteCampaign() {
   const [open, setOpen] = useState(false);
@@ -16,8 +17,26 @@ function CovenantIncompleteCampaign() {
       ></Option>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Typography component="div">
-          The research team does not want to reveal their goal at this moment. It's best to leave now and come back
-          later.
+          You tried your best to help the research team, but this research isn't making any progress.
+          <br />
+          <br />
+          {knowAboutBitverse() ? (
+            "Maybe this research can only be completed in BitNode 10?"
+          ) : (
+            <>
+              Research data is always randomly corrupted for unknown reasons, and a weird message is sent to you every
+              time it happens:
+              <br />
+              <br />
+              #@)($*&@__Y0U__^%$#@&*()__HAV3__(&@#*$%(@
+              <br />
+              ()@#*$%(__N0T__@&$#)@*(__S33N__)(*@#&$)(
+              <br />
+              @&*($#@&__TH3__#@A&#@*)(@$#@)*
+              <br />
+              %$#@&()@__TRU1H__()*@#$&()@#$
+            </>
+          )}
         </Typography>
       </Modal>
     </>
