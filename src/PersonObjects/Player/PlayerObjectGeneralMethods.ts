@@ -505,25 +505,27 @@ export function gainCodingContractReward(
   if (!reward) {
     return `No reward for this contract`;
   }
+  // The new standard is smaller, more frequent rewards - a third of the reward size of the previous
+  const adjustedScaling = rewardScaling / 3;
 
   switch (reward.type) {
     case CodingContractRewardType.FactionReputation: {
       const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
       if (factionsThatAllowHacking.length === 0) {
-        return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty, rewardScaling);
+        return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty, adjustedScaling);
       }
       const randomFaction = factionsThatAllowHacking[getRandomIntInclusive(0, factionsThatAllowHacking.length - 1)];
-      const repGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty * rewardScaling;
+      const repGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty * adjustedScaling;
       Factions[randomFaction].playerReputation += repGain;
       return `Gained ${repGain} faction reputation for ${randomFaction}`;
     }
     case CodingContractRewardType.FactionReputationAll: {
       const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
       if (factionsThatAllowHacking.length === 0) {
-        return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty, rewardScaling);
+        return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty, adjustedScaling);
       }
 
-      const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty * rewardScaling;
+      const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty * adjustedScaling;
       const gainPerFaction = Math.floor(totalGain / factionsThatAllowHacking.length);
       for (const facName of factionsThatAllowHacking) {
         Factions[facName].playerReputation += gainPerFaction;
@@ -543,17 +545,17 @@ export function gainCodingContractReward(
                 : CodingContractRewardType.FactionReputationAll,
           },
           difficulty,
-          rewardScaling,
+          adjustedScaling,
         );
       }
       const randomCompany = companies[getRandomIntInclusive(0, companies.length - 1)];
-      const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty * rewardScaling;
+      const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty * adjustedScaling;
       Companies[randomCompany].playerReputation += repGain;
       return `Gained ${repGain} company reputation for ${randomCompany}`;
     }
     case CodingContractRewardType.Money: {
       const moneyGain =
-        CONSTANTS.CodingContractBaseMoneyGain * difficulty * currentNodeMults.CodingContractMoney * rewardScaling;
+        CONSTANTS.CodingContractBaseMoneyGain * difficulty * currentNodeMults.CodingContractMoney * adjustedScaling;
       this.gainMoney(moneyGain, "codingcontract");
       return `Gained ${formatMoney(moneyGain)}`;
     }

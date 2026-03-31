@@ -209,7 +209,7 @@ const Engine = {
     }
 
     if (Engine.Counters.contractGeneration <= 0) {
-      tryGeneratingRandomContract(1);
+      tryGeneratingRandomContract(3);
       Engine.Counters.contractGeneration = 3000;
     }
 
@@ -265,7 +265,7 @@ const Engine = {
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
       // Generate bonus CCTs
-      tryGeneratingRandomContract(timeOffline / CONSTANTS.MillisecondsPerTenMinutes);
+      tryGeneratingRandomContract((timeOffline * 3) / CONSTANTS.MillisecondsPerTenMinutes);
 
       let offlineReputation = 0;
       let offlineHackingIncome =

@@ -74,7 +74,7 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): string 
     return getMoneyReward(difficulty);
   }
   for (let i = 0; i < contractCount; i++) {
-    generateContract({ server: server.hostname, rewardScaling: 1 / 5 });
+    generateContract({ server: server.hostname, rewardScaling: 1 / 2 });
   }
   return `New coding contracts are now available on the network!`;
 };
