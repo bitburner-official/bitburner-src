@@ -32,7 +32,7 @@
       // means that the code in this file is outdated.
       const maxDatabaseVersion = 2;
       const databases = await window.indexedDB.databases();
-      const database = databases.find(info => info.name === databaseName);
+      const database = databases.find((info) => info.name === databaseName);
       if (!database) {
         alert("There is no save data");
         // This is the simplest way to stop execution in top-level code without using a labeled block or IIFE.
