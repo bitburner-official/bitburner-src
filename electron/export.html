@@ -25,17 +25,26 @@
     <div>
       <h1>Close me when operation is completed.</h1>
     </div>
-    <script>
-      // Check src/db.ts to see why the version is 2. When increasing the version, remember to update the code in that
-      // file.
-      const dbRequest = window.indexedDB.open("bitburnerSave", 2);
-      dbRequest.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        if (db.objectStoreNames.contains("savestring")) {
-          return;
-        }
-        db.createObjectStore("savestring");
-      };
+    <!-- Use esm for top-level await -->
+    <script type="module">
+      const databaseName = "bitburnerSave";
+      // Check src/db.ts to see why the current max version is 2. If the database version is greater than this value, it
+      // means that the code in this file is outdated.
+      const maxDatabaseVersion = 2;
+      const databases = await window.indexedDB.databases();
+      const database = databases.find(info => info.name === databaseName);
+      if (!database) {
+        alert("There is no save data");
+        // This is the simplest way to stop execution in top-level code without using a labeled block or IIFE.
+        throw new Error("There is no save data");
+      }
+      if (database.version === undefined || database.version > maxDatabaseVersion) {
+        alert(`Invalid database version: ${database.version}`);
+        throw new Error(`Invalid database version: ${database.version}`);
+      }
+      // Do NOT specify the version. We must open the database at the current version; otherwise, we will trigger
+      // onupgradeneeded.
+      const dbRequest = window.indexedDB.open(databaseName);
       dbRequest.onerror = (event) => {
         console.error(event.target.error);
         alert(event.target.error);
@@ -43,6 +52,10 @@
       dbRequest.onsuccess = () => {
         const db = dbRequest.result;
         try {
+          if (!db.objectStoreNames.contains("savestring")) {
+            alert("There is no save data");
+            return;
+          }
           const transaction = db.transaction(["savestring"], "readonly");
           const objectStore = transaction.objectStore("savestring");
           const request = objectStore.get("save");
