@@ -1,9 +1,42 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { combinePath, isFilePath } from "../../Paths/FilePath";
+import { Directory } from "../../Paths/Directory";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import JSZip from "jszip";
+
+async function importZip(server: BaseServer, destination: Directory, blob: Blob) {
+    // TODO: handle file name encodings?
+    const zip = await JSZip.loadAsync(blob);
+    const files:[string, JSZip.JSZipObject][] = [];
+    zip.forEach((path, zipObj) => {
+        if(zipObj.dir) {
+            return;
+        }
+        files.push([path, zipObj]);
+    });
+    for(const [path, zipObj] of files) {
+        if(!isFilePath(path)) {
+            Terminal.warn(`Skipping ${path}: bad file path`);
+            continue;
+        }
+        const destFilePath = combinePath(destination, path);
+        if (!hasTextExtension(destFilePath) && !hasScriptExtension(destFilePath)) {
+            Terminal.warn(`Skipping ${path}: bad file extension`);
+            continue;
+        }
+        let text: string | undefined = undefined;
+        try {
+            text = await zipObj.async('text');
+        } catch(error) {
+            console.error(error);
+            Terminal.error(`Skipping ${path}: failed to unpack. Error: ${error}`);
+            continue;
+        }
+        server.writeToContentFile(destFilePath, text);
+    }
+}
 
 export function import_(args: (string | number | boolean)[], server: BaseServer): void {
     if (args.length !== 1) {
@@ -18,28 +51,22 @@ export function import_(args: (string | number | boolean)[], server: BaseServer)
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.zip';
-    input.click();
-    input.onchange = async (e) => {
+    input.onchange = () => {
         const {files} = input;
         if(files === null || files.length === 0) {
             return;
         }
-        const file = files[0];
-        // TODO: handle file name encodings?
-        const zip = await JSZip.loadAsync(file);
-        zip.forEach(async (relativePath, file) => {
-            if(file.dir) {
-                return;
+        const {name} = files[0];
+        Terminal.print(`Starting to unzip ${name} into {destination}`);
+        importZip(server, destination, files[0]).then(
+            () => {
+                Terminal.print(`Successfully unzipped ${name}`);
+            },
+            (error) => {
+                console.error(error);
+                Terminal.error(`Error while unzipping ${name}. Error: ${error}`);
             }
-            if(!isFilePath(relativePath)) {
-                return; // TODO: error?
-            }
-            const destFilePath = combinePath(destination, relativePath);
-            if (!hasTextExtension(destFilePath) && !hasScriptExtension(destFilePath)) {
-                return; // TODO: error?
-            }
-            const text = await file.async('text');
-            server.writeToContentFile(destFilePath, text);
-        });
-    }
+        );
+    };
+    input.click();
 }
