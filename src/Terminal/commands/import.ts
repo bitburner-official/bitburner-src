@@ -57,7 +57,8 @@ export function import_(args: (string | number | boolean)[], server: BaseServer)
             return;
         }
         const {name} = files[0];
-        Terminal.print(`Starting to unzip ${name} into {destination}`);
+        const destOrRoot = destination === '' ? '/' : destination;
+        Terminal.print(`Starting to unzip ${name} into ${destOrRoot}`);
         importZip(server, destination, files[0]).then(
             () => {
                 Terminal.print(`Successfully unzipped ${name}`);
