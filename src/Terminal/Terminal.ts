@@ -44,6 +44,7 @@ import { check } from "./commands/check";
 import { connect } from "./commands/connect";
 import { cp } from "./commands/cp";
 import { download } from "./commands/download";
+import { import_ } from "./commands/import";
 import { expr } from "./commands/expr";
 import { free } from "./commands/free";
 import { grep } from "./commands/grep";
@@ -104,6 +105,7 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   connect: connect,
   cp: cp,
   download: download,
+  import: import_,
   expr: expr,
   free: free,
   grep: grep,
