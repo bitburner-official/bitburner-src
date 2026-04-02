@@ -12,7 +12,7 @@ export function import_(args: (string | number | boolean)[], server: BaseServer)
     const destinationInput = String(args[0]);
     const destination = Terminal.getDirectory(destinationInput);
     if (destination === null) {
-        return Terminal.error(`Could not resolve ${destinationInput} as a FilePath or Directory`);
+        return Terminal.error(`Could not resolve ${destinationInput} as a Directory`);
     }
 
     const input = document.createElement('input');
