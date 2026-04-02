@@ -285,7 +285,7 @@ export function GameRoot(): React.ReactElement {
 
   useEffect(() => {
     if (pageWithContext.page !== Page.Terminal) window.scrollTo(0, 0);
-  });
+  }, [pageWithContext.page]);
 
   function softReset(): void {
     dialogBoxCreate("Soft Reset!");
