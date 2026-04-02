@@ -26,7 +26,10 @@ export function import_(args: (string | number | boolean)[], server: BaseServer)
         }
         const file = files[0];
         const zip = await JSZip.loadAsync(file);
-        zip.forEach((relativePath, file) => {
+        zip.forEach(async (relativePath, file) => {
+            if(file.dir) {
+                return;
+            }
             if(!isFilePath(relativePath)) {
                 return; // TODO: error?
             }
@@ -34,7 +37,8 @@ export function import_(args: (string | number | boolean)[], server: BaseServer)
             if (!hasTextExtension(destFilePath) && !hasScriptExtension(destFilePath)) {
                 return; // TODO: error?
             }
-            server.writeToContentFile(destFilePath, 'hello world');
+            const text = await file.async('text');
+            server.writeToContentFile(destFilePath, text);
         });
     }
 }
