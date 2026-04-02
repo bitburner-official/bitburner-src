@@ -103,7 +103,7 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   cls: clear,
   connect: connect,
   cp: cp,
-  download: download,
+  export: download,
   expr: expr,
   free: free,
   grep: grep,

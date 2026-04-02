@@ -168,11 +168,11 @@ describe("getTabCompletionPossibilities", function () {
     expect(options.sort()).toEqual(cattableFilePaths);
   });
 
-  it("completes the download and mv commands", async () => {
+  it("completes the export and mv commands", async () => {
     writeFiles();
     writeFiles();
     const contentFilePaths = [...scriptFilePaths, ...textFilePaths].sort();
-    for (const command of ["download", "mv"]) {
+    for (const command of ["export", "mv"]) {
       const options = await getTabCompletionPossibilities(`${command} `, root);
       expect(options.sort()).toEqual(contentFilePaths);
     }

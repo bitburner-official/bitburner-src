@@ -197,9 +197,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       }
       return possibilities;
 
-    case "download":
+    case "export":
     case "mv":
-      // download only takes one arg, and for mv we only want to autocomplete the first one
+      // export only takes one arg, and for mv we only want to autocomplete the first one
       if (onFirstCommandArg) {
         addScripts();
         addTextFiles();

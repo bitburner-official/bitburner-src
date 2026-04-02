@@ -31,7 +31,7 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
 
 export function download(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of download command. Usage: download [script/text file]");
+    return Terminal.error("Incorrect usage of export command. Usage: export [script/text file]");
   }
   const pattern = String(args[0]);
   // If the path contains a * or ?, treat as glob
@@ -48,7 +48,7 @@ export function download(args: (string | number | boolean)[], server: BaseServer
   const path = Terminal.getFilepath(pattern);
   if (!path) return Terminal.error(`Could not resolve path ${pattern}`);
   if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-    return Terminal.error("Can only download script and text files");
+    return Terminal.error("Can only export script and text files");
   }
   const file = server.getContentFile(path);
   if (!file) return Terminal.error(`File not found: ${path}`);
