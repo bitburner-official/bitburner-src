@@ -222,7 +222,7 @@ export function TerminalInput(): React.ReactElement {
     }
     document.addEventListener("keydown", keyDown);
     return () => document.removeEventListener("keydown", keyDown);
-  });
+  }, []);
 
   async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> {
     const ref = terminalInput.current;
