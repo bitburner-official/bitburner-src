@@ -25,6 +25,7 @@ export function import_(args: (string | number | boolean)[], server: BaseServer)
             return;
         }
         const file = files[0];
+        // TODO: handle file name encodings?
         const zip = await JSZip.loadAsync(file);
         zip.forEach(async (relativePath, file) => {
             if(file.dir) {
