@@ -24,7 +24,7 @@ export const shortestPathInAGrid: Pick<CodingContractTypes, CodingContractName.S
         "    [[0,1],\n",
         "     [1,0]]\n",
         "\n",
-        "Answer: ''",
+        `Answer: ""`,
       ].join(" ");
     },
     difficulty: 7,

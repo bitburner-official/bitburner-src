@@ -629,6 +629,8 @@ Error: ${e}`,
       person.persistentIntelligenceData.exp = person.exp.intelligence;
       person.overrideIntelligence();
     }
+  }
+  if (ver < 48) {
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }

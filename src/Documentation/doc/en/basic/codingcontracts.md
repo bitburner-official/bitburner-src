@@ -40,24 +40,91 @@ The [`getContractTypes`](../../../../../markdown/bitburner.codingcontract.getcon
 
 ## Submitting Solutions
 
+### General rules
+
 Different contract problem types will require different types of solutions.
 Some may be numbers, others may be strings or arrays.
+
 If a contract asks for a specific solution format, then use that.
 Otherwise, follow these rules when submitting solutions:
 
-- String-type solutions should **not** have quotation marks surrounding the string (unless specifically asked for).
+- String-type solutions (e.g., Shortest Path in a Grid) should **not** have quotation marks surrounding the string (unless specifically asked for). For example, if your answer is `foo` (3 characters: f, o, o), just submit those 3 characters. Don't submit `"foo"` (5 characters).
   Only quotation marks that are part of the actual string solution should be included.
+- With array-of-strings solutions (e.g., Generate IP Addresses), you need to use double quotes surrounding the string values. Don't use single quotes (`''`) or backticks (\`\`). For example, if your answer is an array containing `foo` (3 characters: f, o, o) and `bar` (3 characters: b, a, r), you should submit `["foo", "bar"]`. Don't submit `['foo', 'bar']`.
 - Array-type solutions should be submitted with each element in the array separated by commas.
-  Brackets are optional.
-  For example, both of the following are valid solution formats:
-  - `1,2,3`
-  - `[1,2,3]`
-- If the solution is a multidimensional array, then all arrays that are not the outer-most array DO require the brackets.
-  For example, an array of arrays can be submitted as one of the following:
+- Numeric solutions should be submitted normally, as expected.
+- Read the description carefully. Some contracts (e.g., the "Square Root" contract) clearly specify the expected solution format.
+- If the solution format is not a string, you should not convert the answer to a string. Read the next sections carefully if you do so.
+
+### String conversion
+
+For convenience (e.g., submitting the answer via the UI) and backward compatibility, the game accepts a string answer even when
+the solution format is not a string. In these cases, the game converts your string answer to the expected format. However,
+this conversion has many pitfalls.
+
+String conversion only matters when you submit the answer via the UI (your answer, typed in the text box, is always a string). When you call the `ns.codingcontract.attempt` API, you should never convert your non-string answer to a string unless specifically asked for.
+
+First, with arrays, the outermost pair of brackets is optional. For example, both of the following are valid solution formats:
+
+- `1,2,3`
+- `[1,2,3]`
+
+Note:
+
+- If the solution is a multidimensional array, then all arrays that are not the outermost array DO require the brackets. For example, an array of arrays can be submitted as one of the following:
   - `[1,2],[3,4]`
   - `[[1,2],[3,4]]`
+- The empty string is converted to an empty array.
+- `"[]"` (the string that contains only 2 bracket characters; the double quotes are not part of that string) is converted to an empty array.
 
-Numeric solutions should be submitted normally, as expected
+Second, in the UI:
+
+- If your answer is an empty string, you must leave the text box empty. Do NOT use `""`, `''`, or \`\`.
+- If the answer is a non-empty string, type it as is. For example, if your answer is the word `foo`, type `foo` (3 characters: f, o, o). Do NOT add any types of quotes.
+- If the answer is an array that contains strings, use double quotes for strings. Do NOT use single quotes or backticks. For example, if your answer is an array containing the word `foo`, type `["foo"]` (7 characters: square bracket, double quote, f, o, o, double quote, square bracket). The brackets are optional, as stated above, but we recommend including them.
+
+### Tips
+
+If a contract does not expect a string, you should not submit a string. For contracts that do not expect a string
+solution, your answer should never be a string, so if you submit a string, it means that you converted your non-string
+answer to a string. This is usually the wrong thing to do.
+
+Remember, string conversion is for UI convenience and backward compatibility. If you use NS APIs, do not perform any
+string conversion unless specifically asked for.
+
+For example, suppose a contract requires the answer to be an array containing strings, and you determine that those
+strings are `foo` and `bar`. Your code should look like this:
+
+```js
+const firstString = "foo";
+const secondString = "bar";
+const answer = [firstString, secondString];
+ns.codingcontract.attempt(answer, "filename.cct");
+```
+
+There is no conversion!
+
+In the "General rules" section above, with array-of-strings solutions, we say `Don't use single quotes or backticks`.
+However, this code works:
+
+```js
+const firstString = "foo"; // Single quotes
+const secondString = "bar"; // Single quotes
+const answer = [firstString, secondString];
+ns.codingcontract.attempt(answer, "filename.cct");
+```
+
+Why is that?
+
+In this code, you submit an array containing 2 strings. In JS, `"foo"` and `'foo'` are the same string. However, if you
+submit your answer as a string, you need to convert your array to a string, and the string `["foo", "bar"]` is not the
+same as the string `['foo', 'bar']`.
+
+Internally, we use `JSON.parse` to convert the string answer, and `['foo', 'bar']` is not a valid string representation
+of an array. In JSON, a string needs to be enclosed by double quotes. Using single quotes or backticks is not allowed.
+
+This is another example of why you should not convert your answer to a string when not requested. If you submit your
+array as it is, you do not need to care about the quote types.
 
 ## Rewards
 
