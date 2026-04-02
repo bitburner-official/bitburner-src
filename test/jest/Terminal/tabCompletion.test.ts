@@ -178,6 +178,21 @@ describe("getTabCompletionPossibilities", function () {
     }
   });
 
+  it("corrects folder casing in tab completion", async () => {
+    writeFiles();
+    // Typing "Folder1/" (wrong case) should still return correctly-cased paths
+    let options = await getTabCompletionPossibilities("run Folder1/", root);
+    expect(options).toEqual(["folder1/test.js"]);
+
+    // Typing "ANOTHERFOLDER/" (wrong case) should correct to "anotherFolder/"
+    options = await getTabCompletionPossibilities("nano ANOTHERFOLDER/", root);
+    expect(options).toEqual(["anotherFolder/win.js"]);
+
+    // Typing "FOLDER1/" with ./ prefix should preserve ./ but correct folder casing
+    options = await getTabCompletionPossibilities("./FOLDER1/", root);
+    expect(options.sort()).toEqual(["./folder1/test.js"]);
+  });
+
   it("completes the ls and cd commands", async () => {
     writeFiles();
     for (const command of ["ls", "cd"]) {

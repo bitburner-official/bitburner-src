@@ -60,7 +60,24 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     // No valid terminal inputs contain a / that does not indicate a path
     if (path === null) return [];
     baseDir = path;
-    pathingRequiredMatch = currentText.replace(/^.*\//, path).toLowerCase();
+    // Correct folder casing: resolveDirectory is purely syntactic and preserves user's casing.
+    // Look up the canonical directory from the server's actual files.
+    // Prefer an exact case match first — only fall back to case-insensitive when no exact match
+    // exists. This handles the edge case where two directories differ only in case (e.g., both
+    // Tasks/ and tasks/ exist) — we respect the user's typed casing if it matches a real directory.
+    if (path !== root) {
+      const allDirs = getAllDirectories(Player.getCurrentServer());
+      const canonical = allDirs.has(path) ? path : [...allDirs].find((d) => d.toLowerCase() === path.toLowerCase());
+      if (canonical && canonical !== path) {
+        baseDir = canonical;
+        // Fix relativeDir: replace the resolved directory suffix with canonical casing,
+        // preserving any navigation prefix (e.g., "../" or "./")
+        if (relativeDir.toLowerCase().endsWith(path.toLowerCase())) {
+          relativeDir = relativeDir.substring(0, relativeDir.length - path.length) + canonical;
+        }
+      }
+    }
+    pathingRequiredMatch = currentText.replace(/^.*\//, baseDir).toLowerCase();
   } else if (baseDir !== root) {
     pathingRequiredMatch = (baseDir + currentText).toLowerCase();
   }
