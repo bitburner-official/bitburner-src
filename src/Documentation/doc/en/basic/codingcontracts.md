@@ -1,15 +1,31 @@
 # Coding Contracts
 
-Coding Contracts are a mechanic that lets players earn rewards in exchange for solving programming problems.
+Coding Contract is a mechanic that lets players earn rewards in exchange for solving programming problems.
 
 Coding Contracts are files with the `.cct` extension.
 They can be accessed through the [Terminal](terminal.md) or through [Scripts](scripts.md) using the [Coding Contract API](../../../../../markdown/bitburner.codingcontract.md).
 
 Each contract has a limited number of attempts.
-If you provide the wrong answer too many times and exceed the number of attempts, the contract will self destruct (delete itself).
+If you provide the wrong answer too many times and exceed the number of attempts, the contract will self-destruct (delete itself).
 
 Coding Contracts are randomly generated and spawn over time. Initially, you'll only see a small range of the easier contracts, but as you progress further through the game more challenging ones will unlock.
 They can appear on any [server](servers.md) (including your home computer), except for your purchased [servers](servers.md).
+
+## Contract generation
+
+### Online
+
+Every 10 minutes, the game makes three independent attempts to generate a contract, each with a base 25% chance. This
+probability decreases based on the total number of contracts across all servers. In most cases, you can assume a ~25%
+success rate per attempt.
+
+### Offline
+
+When the game is launched after being offline, the offline time is used to calculate the number of generation attempts. The same rules and probabilities from the online generation process apply.
+
+### Dark Net
+
+Opening cache files on [darknet](../programming/darknet.md) servers also has a chance to generate a contract.
 
 ## Running in Terminal
 
@@ -136,7 +152,19 @@ There are currently four possible rewards for solving a Coding Contract:
 - [Company](companies.md) [Reputation](reputation.md) for a specific [Company](companies.md)
 - Money
 
-The `amount` of the reward varies based on the difficulty of the problem posed by the Coding Contract.
+The reward type is randomly chosen at spawn time. If the chosen reward is invalid upon completion (e.g., requirements
+are not met), it falls back to an alternative type:
+
+- Specific faction reputation ⇒ Money
+- All factions' reputation ⇒ Money
+- Company reputation ⇒ Specific faction reputation or all factions' reputation (50% chance for each).
+  If the fallback reward is also invalid, the reward defaults to Money.
+
+For example, if a contract is set to reward "All Factions' Reputation" but you have not joined any factions at the time
+of submission, you will receive Money instead.
+
+The amount of the reward varies based on the difficulty of the problem posed by the Coding Contract. Additionally,
+contracts generated on darknet servers grant 50% lower rewards than those found on normal servers.
 
 ## Notes
 
