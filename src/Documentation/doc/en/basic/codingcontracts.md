@@ -107,9 +107,10 @@ There is no conversion!
 In the "General rules" section above, with array-of-strings solutions, we say `Don't use single quotes or backticks`.
 However, this code works:
 
+<!-- prettier-ignore -->
 ```js
-const firstString = "foo"; // Single quotes
-const secondString = "bar"; // Single quotes
+const firstString = 'foo'; // Single quotes
+const secondString = 'bar'; // Single quotes
 const answer = [firstString, secondString];
 ns.codingcontract.attempt(answer, "filename.cct");
 ```
