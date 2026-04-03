@@ -582,5 +582,47 @@ export const breakingChanges300: VersionBreakingChange = {
         "They now use the hostname as provided.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        { name: "ns.codingcontract.attempt" },
+
+        { name: "FindAllValidMathExpressions" },
+        { name: "GenerateIPAddresses" },
+        { name: "LargestRectangleInAMatrix" },
+        { name: "MergeOverlappingIntervals" },
+        { name: "Proper2ColoringOfAGraph" },
+        { name: "SanitizeParenthesesInExpression" },
+        { name: "SpiralizeMatrix" },
+
+        { name: "Find All Valid Math Expressions" },
+        { name: "Generate IP Addresses" },
+        { name: "Largest Rectangle in a Matrix" },
+        { name: "Merge Overlapping Intervals" },
+        { name: "Proper 2-Coloring of a Graph" },
+        { name: "Sanitize Parentheses in Expression" },
+        { name: "Spiralize Matrix" },
+      ],
+      info:
+        "If you pass a string to ns.codingcontract.attempt() for contracts that require a non-string answer, the\n" +
+        "game will convert that string to the expected format. This string conversion was inconsistent and had many\n" +
+        `undocumented behaviors. Now the rules are consistent and well-documented. Please check the "Coding Contracts"\n` +
+        "page for more information.\n" +
+        "There are 7 contracts that are affected by this change:\n" +
+        "- Find All Valid Math Expressions\n" +
+        "- Generate IP Addresses\n" +
+        "- Largest Rectangle in a Matrix\n" +
+        "- Merge Overlapping Intervals\n" +
+        "- Proper 2-Coloring of a Graph\n" +
+        "- Sanitize Parentheses in Expression\n" +
+        "- Spiralize Matrix\n" +
+        "Note that this change only affects the string conversion. The solution format of these contracts is an array,\n" +
+        "so if you pass the solution, which is an array, as is, you will not have any problems.\n" +
+        `If your code converts the array to a string, you should check these contracts, especially the "Sanitize\n` +
+        `Parentheses in Expression" contract and others that require a string array.\n` +
+        `- Sanitize Parentheses in Expression: Previously, if you passed an empty string to this contract, it was\n` +
+        "converted to an array containing an empty string. Now, it's converted to an empty array.\n" +
+        `- Read the "General rules", "String conversion", and "Tips" sections on the "Coding Contracts" page carefully.`,
+      showWarning: false,
+    },
   ],
 };
