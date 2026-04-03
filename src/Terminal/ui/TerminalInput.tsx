@@ -217,7 +217,11 @@ export function TerminalInput(): React.ReactElement {
       const ref = terminalInput.current;
       if (event.ctrlKey || event.metaKey) return;
       if (event.key === KEY.C && (event.ctrlKey || event.metaKey)) return; // trying to copy
-
+      // Don't steal focus from other input elements (e.g., prompt dialogs)
+      const target = event.target;
+      if ((target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) && target !== ref) {
+        return;
+      }
       if (ref) ref.focus();
     }
     document.addEventListener("keydown", keyDown);
