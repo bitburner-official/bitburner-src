@@ -1,5 +1,12 @@
 import type { SaveData } from "./types";
 
+export class IndexedDBVersionError extends Error {
+  constructor(message: string, options: ErrorOptions) {
+    super(message, options);
+    this.name = this.constructor.name;
+  }
+}
+
 function getDB(): Promise<IDBObjectStore> {
   return new Promise((resolve, reject) => {
     if (!window.indexedDB) {
@@ -9,18 +16,29 @@ function getDB(): Promise<IDBObjectStore> {
      * DB is called bitburnerSave
      * Object store is called savestring
      * key for the Object store is called save
-     * Version `1` is important
+     * Version `2` is important. When increasing the version, remember to update the code in electron/export.html.
+     *
+     * Version 1 is the initial version. We found a bug that caused the database to be missing the expected object
+     * store. In order to add the missing object store, we need to either increase the database version or delete and
+     * recreate the database. Increasing the version number is simpler. For more information, please check
+     * https://github.com/bitburner-official/bitburner-src/pull/2590
      */
-    const indexedDbRequest: IDBOpenDBRequest = window.indexedDB.open("bitburnerSave", 1);
+    const indexedDbRequest: IDBOpenDBRequest = window.indexedDB.open("bitburnerSave", 2);
 
     // This is called when there's no db to begin with. It's important, don't remove it.
     indexedDbRequest.onupgradeneeded = function (this: IDBRequest<IDBDatabase>) {
       const db = this.result;
+      if (db.objectStoreNames.contains("savestring")) {
+        return;
+      }
       db.createObjectStore("savestring");
     };
 
     indexedDbRequest.onerror = function (this: IDBRequest<IDBDatabase>) {
-      reject(new Error("Failed to get IDB", { cause: this.error }));
+      if (this.error?.name === "VersionError") {
+        reject(new IndexedDBVersionError(this.error.message, { cause: this.error }));
+      }
+      reject(this.error ?? new Error("Failed to get IDB"));
     };
 
     indexedDbRequest.onsuccess = function (this: IDBRequest<IDBDatabase>) {
