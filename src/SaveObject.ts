@@ -453,6 +453,9 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
 async function loadGame(saveData: SaveData): Promise<boolean> {
   createScamUpdateText();
   if (!saveData) {
+    console.error(
+      `Invalid save data. typeof saveData: ${typeof saveData}. saveData is an empty string: ${saveData === ""}`,
+    );
     return false;
   }
   const jsonSaveString = await decodeSaveData(saveData);
