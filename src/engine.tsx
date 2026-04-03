@@ -237,7 +237,7 @@ const Engine = {
     }
   },
 
-  load: async function (saveData: SaveData) {
+  load: async function (saveData?: SaveData) {
     startExploits();
     setupUncaughtPromiseHandler();
     // Source files must be initialized early because save-game translation in
@@ -245,7 +245,7 @@ const Engine = {
     initSourceFiles();
     // Load game from save or create new game
 
-    if (await loadGame(saveData)) {
+    if (saveData !== undefined && (await loadGame(saveData))) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
       if (canAccessStockMarket()) {

@@ -537,8 +537,12 @@ Error: ${e}`,
        * Backup pre-v3 save data. We must use the data in IndexedDB instead of calling saveObject.getSaveData().
        * getSaveData() returns data in v3 format, so the exported data will not be importable in pre-v3.
        */
-      const saveData = await load();
-      downloadContentAsFile(saveData, `bitburnerSave_backup_2.8.1_${Math.round(Player.lastUpdate / 1000)}.json.gz`);
+      const saveData = await load(true);
+      if (saveData !== undefined) {
+        downloadContentAsFile(saveData, `bitburnerSave_backup_2.8.1_${Math.round(Player.lastUpdate / 1000)}.json.gz`);
+      } else {
+        console.error("Cannot back up save data before migrating to v3. The save data is somehow undefined.");
+      }
     } catch (error) {
       console.error("Cannot export pre-v3 save data", error);
     }

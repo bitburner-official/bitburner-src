@@ -35,11 +35,15 @@ interface IProps {
 }
 
 function exportSaveFile(): void {
-  load()
-    .then((content) => {
-      const extension = isBinaryFormat(content) ? "json.gz" : "json";
+  load(true)
+    .then((saveData) => {
+      if (saveData === undefined) {
+        console.error("There is no save data, but the recovery mode was activated.");
+        return;
+      }
+      const extension = isBinaryFormat(saveData) ? "json.gz" : "json";
       const filename = `RECOVERY_BITBURNER_${Date.now()}.${extension}`;
-      downloadContentAsFile(content, filename);
+      downloadContentAsFile(saveData, filename);
     })
     .catch((err) => {
       console.error(err);

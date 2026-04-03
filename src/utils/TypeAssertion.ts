@@ -90,6 +90,14 @@ export function assertNumberArray(unknownData: unknown, assertFinite = false): a
   }
 }
 
+export function isSaveData(unknownData: unknown): unknownData is SaveData {
+  if (typeof unknownData === "string") {
+    return true;
+  }
+
+  return unknownData instanceof Uint8Array && unknownData.buffer instanceof ArrayBuffer;
+}
+
 export function assertSaveData(unknownData: unknown): asserts unknownData is SaveData {
   if (typeof unknownData !== "string" && !(unknownData instanceof Uint8Array)) {
     console.error(unknownData);
