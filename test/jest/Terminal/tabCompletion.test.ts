@@ -178,9 +178,9 @@ describe("getTabCompletionPossibilities", function () {
     }
   });
 
-  it("completes the ls, cd and import commands", async () => {
+  it("completes the ls, cd and upload commands", async () => {
     writeFiles();
-    for (const command of ["ls", "cd", "import"]) {
+    for (const command of ["ls", "cd", "upload"]) {
       const options = await getTabCompletionPossibilities(`${command} `, root);
       expect(options.sort()).toEqual(["folder1/", "anotherFolder/"].sort());
     }

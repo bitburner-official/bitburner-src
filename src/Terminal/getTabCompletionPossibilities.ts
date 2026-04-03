@@ -178,7 +178,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
     case "cd":
     case "ls":
-    case "import":
+    case "upload":
       if (onFirstCommandArg && !relativeDir) addDirectories();
       return possibilities;
 

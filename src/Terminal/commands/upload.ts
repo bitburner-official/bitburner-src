@@ -6,7 +6,7 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import JSZip from "jszip";
 
-async function importZip(server: BaseServer, destination: Directory, blob: Blob) {
+async function unzip(server: BaseServer, destination: Directory, blob: Blob) {
   // TODO: handle file name encodings?
   const zip = await JSZip.loadAsync(blob);
   const files: [string, JSZip.JSZipObject][] = [];
@@ -38,9 +38,9 @@ async function importZip(server: BaseServer, destination: Directory, blob: Blob)
   }
 }
 
-export function import_(args: (string | number | boolean)[], server: BaseServer): void {
+export function upload(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of import command. Usage: import [dir]");
+    return Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
   }
   const destinationInput = String(args[0]);
   const destination = Terminal.getDirectory(destinationInput);
@@ -59,7 +59,7 @@ export function import_(args: (string | number | boolean)[], server: BaseServer)
     const { name } = files[0];
     const destOrRoot = destination === "" ? "/" : destination;
     Terminal.print(`Starting to unzip ${name} into ${destOrRoot}`);
-    importZip(server, destination, files[0]).then(
+    unzip(server, destination, files[0]).then(
       () => {
         Terminal.print(`Successfully unzipped ${name}`);
       },
