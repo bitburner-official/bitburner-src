@@ -54,7 +54,9 @@ beforeEach(() => {
   getDarkscapeNavigator();
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
   Player.mults.charisma = 1e10;
+  Player.mults.hacking = 1e10;
   Player.gainCharismaExp(1e100);
+  Player.gainHackingExp(1e100);
   getNsOnServerNearLabyrinth();
 });
 
