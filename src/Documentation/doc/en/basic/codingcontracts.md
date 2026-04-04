@@ -1,6 +1,6 @@
 # Coding Contracts
 
-Coding Contract is a mechanic that lets players earn rewards in exchange for solving programming problems.
+Coding Contracts are a mechanic that lets players earn rewards in exchange for solving programming problems.
 
 Coding Contracts are files with the `.cct` extension.
 They can be accessed through the [Terminal](terminal.md) or through [Scripts](scripts.md) using the [Coding Contract API](../../../../../markdown/bitburner.codingcontract.md).
@@ -15,17 +15,19 @@ They can appear on any [server](servers.md) (including your home computer), exce
 
 ### Online
 
-Every 10 minutes, the game makes three independent attempts to generate a contract, each with a base 25% chance. This
-probability decreases based on the total number of contracts across all servers. In most cases, you can assume a ~25%
-success rate per attempt.
+Every 10 minutes, the game makes three independent attempts to generate a contract on normal servers, each with a base
+25% chance. This probability decreases based on the total number of contracts across all servers. In most cases, you can
+assume a ~25% success rate per attempt.
 
 ### Offline
 
-When the game is launched after being offline, the offline time is used to calculate the number of generation attempts. The same rules and probabilities from the online generation process apply.
+When the game is launched after being offline, the offline time is used to calculate the number of generation attempts.
+The same rules and probabilities from the online generation process apply.
 
 ### Dark Net
 
-Opening cache files on [darknet](../programming/darknet.md) servers also has a chance to generate a contract.
+Opening cache files on [darknet](../programming/darknet.md) servers also has a chance to generate a contract, but with
+lower rewards. Contracts generated this way grant 50% lower rewards than those generated randomly on normal servers.
 
 ## Running in Terminal
 
@@ -163,8 +165,7 @@ are not met), it falls back to an alternative type:
 For example, if a contract is set to reward "All Factions' Reputation" but you have not joined any factions at the time
 of submission, you will receive Money instead.
 
-The amount of the reward varies based on the difficulty of the problem posed by the Coding Contract. Additionally,
-contracts generated on darknet servers grant 50% lower rewards than those found on normal servers.
+The amount of the reward varies based on the difficulty of the problem posed by the Coding Contract.
 
 ## Notes
 
