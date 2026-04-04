@@ -14,6 +14,7 @@ import { validBitNodes } from "../../BitNode/Constants";
 import { DeleteServer, GetAllServers } from "../../Server/AllServers";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
 
 const useStyles = makeStyles()({
   group: {
@@ -45,6 +46,9 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
           // Make sure that Player.hacknetNodes contains only the hostnames of hacknet servers.
           Player.hacknetNodes = Player.hacknetNodes.filter((node) => typeof node === "string");
         }
+      }
+      if (sfN === 15 && sfLvl !== 0) {
+        getDarkscapeNavigator();
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
