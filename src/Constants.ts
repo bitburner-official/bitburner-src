@@ -7,7 +7,7 @@ export const CONSTANTS = {
   VersionString: "3.0.0dev",
   isDevBranch: true,
   isInTestEnvironment: globalThis.process?.env?.JEST_WORKER_ID !== undefined,
-  VersionNumber: 47,
+  VersionNumber: 48,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -140,6 +140,9 @@ export const CONSTANTS = {
 - Generate test contracts on executing host by default. Add support for optional parameter to specify the server (#2417) (@1337JiveTurkey)
 - The "darkweb" server becomes a darknet server (Check new Dark Net feature in #2139) (@ficocelliguy)
 - Remove RAM cost of hacknet namespace and set RAM cost of each hacknet API (#2502) (@catloversg)
+- Cancel sleeve's current task when calling ns.sleeve.travel() (#2559) (@catloversg)
+- Make ns.cloud.purchaseServer() and ns.cloud.deleteServer() use hostname as provided (#2560) (@catloversg)
+- Make implicit string conversion consistent across all coding contracts (#2608) (@catloversg)
 
 ### MAJOR CHANGES
 
@@ -209,6 +212,18 @@ export const CONSTANTS = {
 - Improve navigation system of in-game documentation viewer (#2499) (@catloversg)
 - Use font family setting when rendering MUI Link component (#2511) (@catloversg)
 - Show hints of BitNode documentation and allow opening it in BitVerse (#2513) (@catloversg)
+- Show errors if using nano/vim with patterns that do not match any files (#2515) (@catloversg)
+- Tweak CSS/Position of Darknet Docs link (#2517) (@d0sboots)
+- Add indicator of RFA connection status to overview panel (#2497) (@catloversg)
+- Fix issues with RFA auto-reconnecting feature (#2535) (@catloversg)
+- Add inline script RAM usage text to each active script (#2546) (@vadien)
+- Update toolbar of in-game editor (#2551) (@catloversg)
+- Show "undefined" instead of -1 as pid in error popup when catching promise errors (#2555) (@catloversg)
+- Add option to autosave scripts on focus change (#2565) (@catloversg)
+- Prevent joining banned factions via UI (#2573) (@catloversg)
+- Fix: Import save comparison popup shows wrong BN level (#2595) (@catloversg)
+- Fix: Cannot type in text boxes rendered by players' scripts when terminal tab is shown (#2615, #2622) (@lstutzman, @catloversg)
+- Navigate to gym/university instead of city when stopping focusing on gym/class work (#2613) (@lstutzman)
 
 ### MISC
 
@@ -291,6 +306,25 @@ export const CONSTANTS = {
 - More fixes and feedback in darknet (#2489) (@ficocelliguy)
 - Fix missed cases in offline server handling (#2495) (@d0sboots)
 - Adjust darknet balance from player feedback (#2512) (@ficocelliguy)
+- Add "Find Largest Rectangle in a Matrix" coding contract (#2519) (@Misha279-UA)
+- Tweak Dnet based on player feedback (#2533, #2545, #2593) (@ficocelliguy)
+- Allow parsing unknown options with data.flags in autocomplete (#2539) (@catloversg)
+- Fix webstorm by using a mutationLock (#2542) (@d0sboots)
+- Print error message when calling ns.ui.closeTail with nonexistent pid or pid of stopped scripts (#2557) (@catloversg)
+- Add minimum width/height constraints to ns.ui.resizeTail (#2558) (@catloversg)
+- Add API to minimize and expand tail windows (#2556) (@catloversg)
+- Improve error messages for invalid sleeve numbers (#2567) (@catloversg)
+- Improve help text of expr command (#2561) (@catloversg)
+- Rework faction rumor (#2569) (@catloversg)
+- Fix: hacknetNodeCost formula API throws when using documented optional parameter (#2577) (@catloversg)
+- Rework intelligence override (#2575) (@catloversg)
+- Electron: Allow opening dev tools via CLI arguments (#2589) (@catloversg)
+- Support importing Steam Cloud save file manually (#2583) (@catloversg)
+- Electron: Add UI menus and CLI flags to change log levels (#2596) (@catloversg)
+- Import correct cloud file when multiple exist (#2599) (@catloversg)
+- Dnet: Remove packet capture (#2594) (@ficocelliguy)
+- Generate more frequent and lower-reward coding contracts (#2603) (@ficocelliguy)
+- Electron: Fix issues in edge cases of using --export-save (#2590) (@catloversg)
 
 ### DOCUMENTATION
 
@@ -336,6 +370,14 @@ export const CONSTANTS = {
 - Add a note to CONTRIBUTING.md about the npm peer dep issue (#2474) (@d0sboots)
 - Update darknet documentation (#2483) (@ficocelliguy)
 - Fix invalid links in ns.sleep and ns.asleep (#2496) (@catloversg)
+- Use relative links instead of absolute links (#2521) (@catloversg)
+- Document quirky behavior of ns.flags when default value is nullish (#2528) (@catloversg)
+- Clarify how share power affects reputation gain rate of non-hacking work (#2544) (@catloversg)
+- Update guides (#2550) (@catloversg)
+- Add missing newline after RAM cost (#2570) (@catloversg)
+- Update mention of outdated getStockForecast API (#2578) (@catloversg)
+- Fix newline issues in IPvGO docs and add missing RAM cost (#2602) (@catloversg)
+- Document coding contract's generation and rewards (#2624) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
@@ -344,6 +386,9 @@ export const CONSTANTS = {
 - Fix: Bladeburner console prints main body's HP instead of sleeve's HP (#2390) (@catloversg)
 - Reduce threshold of showing warning of low population (#2450) (@catloversg)
 - Fix: Hacknet server UI shows NaN hash rate when 100% RAM is being used (#2500) (@catloversg)
+- Prevent ending BNs through reuse of Bladeburner UI event handler (#2574) (@catloversg)
+- Always show Black Operations list (#2592) (@catloversg)
+- Show hints of Sleeves mechanic in pre-endgame (#2605) (@catloversg)
 
 ### SPOILER CHANGES - MISC
 
@@ -366,6 +411,11 @@ export const CONSTANTS = {
 - Fix: Sleeves can earn exp and purchase augmentations when enabling disableSleeveExpAndAugmentation (#2467) (@catloversg)
 - Add improved challenge achievement for BN15 (#2479) (@ficocelliguy)
 - Stop randomizing Bladeburner's action difficulty (#2491) (@catloversg)
+- Adjusted Bladeburner's team bonus computation to make one member help (#2541) (@JoshuaCF)
+- Rebalance charisma exp gain of Recruitment action (#2549) (@catloversg)
+- Add APIs to get rank gain and rank loss of an action (#2572) (@catloversg)
+- Reduce RAM cost of inGang and inBladeburner APIs (#2582) (@catloversg)
+- Fix skillMaxUpgradeCount returning 1 at extreme skill levels (#2611) (@lstutzman)
 
 ### SPOILER CHANGES - DOCUMENTATION
 
@@ -382,6 +432,7 @@ export const CONSTANTS = {
 - Update type of Player.factions, GangGenInfo.faction and CorpMaterialConstantData.name (#2347) (@catloversg)
 - Clarification of Singularity costs inside BN4 (#2403) (@gmcew)
 - Update math notations in corporation docs (#2452) (@catloversg)
+- Update BitNode recommendation short guide (#2523, #2529) (@catloversg)
 
 ### CODEBASE/REFACTOR/WORKFLOW/JEST/TOOL/DEPS
 
@@ -449,5 +500,24 @@ export const CONSTANTS = {
 - Refactor/adjust getPixelPosition in darknet UI code (#2501) (@d0sboots)
 - Add tests for checking getAnswer and solver of coding contracts (#2503) (@catloversg)
 - Refactor ImportSave component (#2505) (@catloversg)
+- Show coding contract names when their tests failed (#2520) (@catloversg)
+- Workflow: Fix wrong instruction of generating docs (#2522) (@catloversg)
+- Update comment of LoadingScreen of ComplexPage enum (#2527) (@catloversg)
+- Make getPlayer 10x faster (#2548) (@d0sboots)
+- Create monaco editor instance with null model (#2563) (@catloversg)
+- Update dependencies (#2576) (@catloversg)
+- Remove barrel imports in Bladeburner code (#2580) (@catloversg)
+- Fix React warning in IPvGO scoring explanation popup (#2581) (@catloversg)
+- Update Babel core, presets and module loader for webpack (#2585) (@catloversg)
+- Add script to generate webpack bundle report (#2587) (@catloversg)
+- Update Electron (#2591) (@catloversg)
+- Mitigate issue of forcefullyCrashRenderer (#2597) (@catloversg)
+- Split Settings.ts to reduce number of imports (#2600) (@catloversg)
+- Remove duplicate random alphanumeric string functions (#2601) (@catloversg)
+- Update comments to reflect changes in #2603 (#2606) (@catloversg)
+- Replace ipExists() linear scan with O(1) Map.has() (#2621) (@lstutzman)
+- Refactor and fix issues in db.ts (#2623) (@catloversg)
+- Add dependency array to TerminalInput keydown useEffect (#2620) (@lstutzman)
+- Add dependency array to GameRoot useEffect (#2617) (@lstutzman)
 `,
 } as const;
