@@ -12,7 +12,7 @@ import type { DarknetServerData, Person as IPerson } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { ResponseCodeEnum } from "../Enums";
 import { isLabyrinthServer } from "./labyrinth";
-import { roundToN } from "../../utils/helpers/roundToTwo";
+import { roundToTwo } from "../../utils/helpers/roundToTwo";
 
 /*
  * Handles the effects of removing some blocked RAM from a Darknet server.
@@ -22,7 +22,7 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   const difficulty = server.difficulty + 1;
 
   const ramBlockRemoved = getRamBlockRemoved(server, threads);
-  server.blockedRam = roundToN(server.blockedRam - ramBlockRemoved, 4);
+  server.blockedRam = roundToTwo(server.blockedRam - ramBlockRemoved);
   server.updateRamUsed(server.ramUsed - ramBlockRemoved);
 
   if (server.blockedRam <= 0) {
