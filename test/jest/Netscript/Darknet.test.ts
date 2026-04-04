@@ -34,6 +34,7 @@ import {
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 import type { Result } from "@nsdefs";
 import { assertNonNullish } from "../../../src/utils/TypeAssertion";
+import { roundToN } from "../../../src/utils/helpers/roundToTwo";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Invalid host: '${hostnameOfNonExistentServer}'`;
@@ -1223,9 +1224,13 @@ describe("Use IP instead of hostname", () => {
     server.ramUsed = server.blockedRam = 1;
 
     const ns = getNS(server.hostname);
+    const initialBlockedRam = server.blockedRam;
     const result3 = await ns.dnet.memoryReallocation(ns.getIP());
+    const updatedBlockedRam = getDarknetServerOrThrow(server.hostname).blockedRam;
     expect(result3.success).toStrictEqual(true);
     expect(result3.code).toStrictEqual(ResponseCodeEnum.Success);
+    expect(updatedBlockedRam).toBeLessThan(initialBlockedRam);
+    expect(updatedBlockedRam).toEqual(roundToN(updatedBlockedRam, 4));
   });
   test("getBlockedRam", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
