@@ -149,6 +149,8 @@ export class Terminal {
 
   // True if a Coding Contract prompt is opened
   contractOpen = false;
+  // True if a prompt is opened via the ns.prompt() API
+  nsPromptApiOpen = false;
 
   // Path of current directory
   currDir = "" as Directory;

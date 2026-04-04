@@ -209,7 +209,9 @@ export function TerminalInput(): React.ReactElement {
   // Catch all key inputs and redirect them to the terminal.
   useEffect(() => {
     function keyDown(this: Document, event: KeyboardEvent): void {
-      if (Terminal.contractOpen) return;
+      if (Terminal.contractOpen || Terminal.nsPromptApiOpen) {
+        return;
+      }
       if (Terminal.action !== null && event.key === KEY.C && event.ctrlKey) {
         Terminal.finishAction(true);
         return;
