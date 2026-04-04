@@ -62,9 +62,13 @@ export function removeAlias(name: string): boolean {
   return hadAlias;
 }
 
+export function clearAliases(): void {
+  Aliases.clear();
+  GlobalAliases.clear();
+}
+
 /**
  * Returns the original string with any aliases substituted in.
- * Aliases are only applied to "whole words", one level deep
  * @param origCommand the original command string
  */
 export function substituteAliases(origCommand: string): string {
@@ -79,7 +83,7 @@ export function substituteAliases(origCommand: string): string {
  * @param currentlyProcessingAliases any aliases that have been applied in the recursive evaluation leading to this point
  * @return { string } the provided command with all of its referenced aliases evaluated
  */
-function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases: string[] = []) {
+function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases: Set<string> = new Set()) {
   if (!origCommand) {
     return origCommand;
   }
@@ -93,16 +97,18 @@ function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases
   // First get non-global aliases, and recursively apply them
   // (unless there are any reference loops or the reference chain is too deep)
   const localAlias = Aliases.get(commandArray[0]);
-  if (localAlias && !currentlyProcessingAliases.includes(localAlias)) {
-    const appliedAlias = applyAliases(localAlias, depth + 1, [commandArray[0], ...currentlyProcessingAliases]);
+  const localrule = commandArray[0] + "->" + localAlias + "(l)";
+  if (localAlias && !currentlyProcessingAliases.has(localrule)) {
+    const appliedAlias = applyAliases(localAlias, depth + 1, new Set([localrule, ...currentlyProcessingAliases]));
     commandArray.splice(0, 1, ...appliedAlias.split(" "));
   }
 
   // Once local aliasing is complete (or if none are present) handle any global aliases
   const processedCommands = commandArray.reduce((resolvedCommandArray: string[], command) => {
     const globalAlias = GlobalAliases.get(command);
-    if (globalAlias && !currentlyProcessingAliases.includes(globalAlias)) {
-      const appliedAlias = applyAliases(globalAlias, depth + 1, [command, ...currentlyProcessingAliases]);
+    const globalrule = command + "->" + globalAlias + "(g)";
+    if (globalAlias && !currentlyProcessingAliases.has(globalrule)) {
+      const appliedAlias = applyAliases(globalAlias, depth + 1, new Set([globalrule, ...currentlyProcessingAliases]));
       resolvedCommandArray.push(appliedAlias);
     } else {
       // If there is no alias, or if the alias has a circular reference, leave the command as-is
