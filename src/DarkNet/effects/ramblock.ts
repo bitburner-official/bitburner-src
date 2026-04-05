@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { addClue } from "./effects";
-import { formatNumber } from "../../ui/formatNumber";
+import { formatNumber, formatRam } from "../../ui/formatNumber";
 import { logger } from "./offlineServerHandling";
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
 import type { DarknetServer } from "../../Server/DarknetServer";
@@ -31,10 +31,10 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   const xpGained = Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty;
   Player.gainCharismaExp(xpGained);
 
-  const result = `Liberated ${formatNumber(
+  const result = `Liberated ${formatRam(
     ramBlockRemoved,
     4,
-  )}gb of RAM from the server owner's processes. (Gained ${formatNumber(xpGained, 1)} cha xp.)`;
+  )} of RAM from the server owner's processes. (Gained ${formatNumber(xpGained, 1)} cha xp.)`;
   logger(ctx)(result);
   return {
     success: true,
