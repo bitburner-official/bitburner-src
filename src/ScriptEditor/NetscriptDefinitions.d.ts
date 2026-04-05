@@ -7905,6 +7905,11 @@ export interface NS {
    * // arguments to the script.
    * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
+   *
+   * For darknet servers: A session must be established with the target server, and the script must be
+   * running on a server that is directly connected to the target, or the target must have a backdoor or
+   * stasis link installed.
+   *
    * @param script - Filename of script to execute. This file must already exist on the target server.
    * @param host - Hostname/IP of the target server on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
@@ -8042,7 +8047,11 @@ export interface NS {
    * ns.scp(files, server, "home");
    * ```
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
+   * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec}, does not
+   * require a direct connection — scp works at any distance. The source server has no darknet requirements
+   * (no session, no connection). Use {@link Darknet.authenticate | dnet.authenticate} (requires direct
+   * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (works at any distance) to
+   * establish a session.
    *
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.
