@@ -101,5 +101,5 @@ export const getRamBlock = (maxRam: number): number => {
     return [16, 32, maxRam - 8][Math.floor(Math.random() * 3)];
   }
 
-  return [maxRam, maxRam - 8, maxRam - 64, maxRam / 2][Math.floor(Math.random() * 4)];
+  return roundToTwo([maxRam, maxRam - 8, maxRam - 64, maxRam / 2][Math.floor(Math.random() * 4)]);
 };
