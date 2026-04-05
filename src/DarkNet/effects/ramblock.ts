@@ -73,7 +73,7 @@ export const getRamBlockRemoved = (darknetServerData: DarknetServerData, threads
   const charismaFactor = 1 + player.skills.charisma / 100;
   const difficultyFactor = 2 * 0.92 ** (difficulty + 1);
   const baseAmount = 0.02;
-  return clampNumber(baseAmount * difficultyFactor * threads * charismaFactor, 0, remainingRamBlock);
+  return roundToTwo(clampNumber(baseAmount * difficultyFactor * threads * charismaFactor, 0, remainingRamBlock));
 };
 
 /*
