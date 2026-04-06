@@ -125,6 +125,7 @@ export const CONSTANTS = {
 - Rename setAutoJobAssignment API to setJobAssignment (#2146) (@catloversg)
 - Make nuke and port cracking APIs return false instead of throwing error (#1023, #2153) (@Hydrogeniouss, @catloversg)
 - Standardize names of Stock APIs (#2173) (@catloversg)
+- Rename ns.gang.getOtherGangInformation to ns.gang.getAllGangInformation (#2547)
 - Rename BN multiplier RepToDonateToFaction to FavorToDonateToFaction (#2178) (@catloversg)
 - Make ns.bladeburner.getActionRepGain return the expected reputation gain (#2186) (@catloversg)
 - Rename FactionName.BachmanAssociates to FactionName.BachmanAndAssociates (#2048, #2183) (@masarakki, @catloversg)

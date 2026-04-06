@@ -385,6 +385,21 @@ export const breakingChanges300: VersionBreakingChange = {
       showWarning: false,
     },
     {
+      brokenAPIs: [
+        {
+          name: "ns.gang.getOtherGangInformation",
+          migration: {
+            searchValue: "getOtherGangInformation",
+            replaceValue: "getAllGangInformation",
+          },
+        },
+      ],
+      info:
+        "ns.gang.getOtherGangInformation() was renamed to ns.gang.getAllGangInformation().\n" +
+        "The function was renamed because it returns information about all gangs, including the player's own gang.",
+      showWarning: false,
+    },
+    {
       brokenAPIs: [{ name: "purchase4SMarketData" }],
       info:
         "You have to purchase a WSE account before purchasing 4S Market Data UI access via ns.stock.purchase4SMarketData().\n" +

@@ -64,6 +64,17 @@ Create a gang.
 </td></tr>
 <tr><td>
 
+[getAllGangInformation()](./bitburner.gang.getallganginformation.md)
+
+
+</td><td>
+
+Get information about all gangs.
+
+
+</td></tr>
+<tr><td>
+
 [getAscensionResult(memberName)](./bitburner.gang.getascensionresult.md)
 
 
@@ -180,17 +191,6 @@ Get information about a specific gang member.
 </td><td>
 
 List all gang members.
-
-
-</td></tr>
-<tr><td>
-
-[getOtherGangInformation()](./bitburner.gang.getotherganginformation.md)
-
-
-</td><td>
-
-Get information about all gangs.
 
 
 </td></tr>
