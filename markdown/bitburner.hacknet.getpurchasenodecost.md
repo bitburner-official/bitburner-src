@@ -19,7 +19,7 @@ Cost of purchasing a new Hacknet Node.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Returns the cost of purchasing a new Hacknet Node.
 

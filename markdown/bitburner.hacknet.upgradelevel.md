@@ -72,7 +72,7 @@ True if the Hacknet Node’s level is successfully upgraded, false otherwise.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Tries to upgrade the level of the specified Hacknet Node by n.
 

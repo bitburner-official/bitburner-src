@@ -19,7 +19,7 @@ Number of hacknet nodes.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Returns the number of Hacknet Nodes you own.
 
