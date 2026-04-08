@@ -8049,8 +8049,8 @@ export interface NS {
    *
    * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec}, does not
    * require a direct connection — scp works at any distance. The source server has no darknet requirements
-   * (no session, no connection). Use {@link Darknet.authenticate | dnet.authenticate} (requires direct
-   * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (works at any distance) to
+   * (no session or connection needed). Use {@link Darknet.authenticate | dnet.authenticate} (requires direct
+   * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (at any distance) to
    * establish a session.
    *
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
