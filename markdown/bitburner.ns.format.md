@@ -11,8 +11,3 @@ Namespace for [formatting](./bitburner.format.md) functions.
 ```typescript
 readonly format: Format;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-
