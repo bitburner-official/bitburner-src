@@ -93,3 +93,12 @@ export function finishBitNode() {
   }
   wd.backdoorInstalled = true;
 }
+
+/**
+ * Strictly speaking, there is no BitNode "level". However, saying "Enter BN1.2" is shorter than saying "Enter BN1 with
+ * SF1.1". This is how we display it in the BitVerse UI and other places. This function is used to consistently
+ * calculate this "level".
+ */
+export function getBitNodeLevel(bn = Player.bitNodeN, sfLevel = Player.activeSourceFileLvl(bn)): number {
+  return Math.min(sfLevel + 1, bn === 12 ? Number.MAX_VALUE : 3);
+}

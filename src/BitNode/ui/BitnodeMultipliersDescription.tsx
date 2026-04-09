@@ -20,7 +20,7 @@ import { StatsRow } from "../../ui/React/StatsRow";
 import { defaultMultipliers, getBitNodeMultipliers } from "../BitNode";
 import { BitNodeMultipliers } from "../BitNodeMultipliers";
 import { PartialRecord, getRecordEntries } from "../../Types/Record";
-import { canAccessBitNodeFeature } from "../BitNodeUtils";
+import { canAccessBitNodeFeature, getBitNodeLevel } from "../BitNodeUtils";
 
 interface IProps {
   n: number;
@@ -56,8 +56,7 @@ export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFea
   // If not, then we have to assume that we want the next level up from the
   // current node's source file, so we get the min of that, the SF's max level,
   // or if it's BN12, ∞
-  const maxSfLevel = n === 12 ? Number.MAX_VALUE : 3;
-  const mults = getBitNodeMultipliers(n, level ?? Math.min(Player.activeSourceFileLvl(n) + 1, maxSfLevel));
+  const mults = getBitNodeMultipliers(n, level ?? getBitNodeLevel(n, Player.activeSourceFileLvl(n)));
 
   return (
     <Box sx={{ columnCount: 2, columnGap: 1, mb: n === 1 ? 0 : -2 }}>
