@@ -78,6 +78,7 @@ import { commitHash } from "../utils/helpers/commitHash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
+import { mkdir } from "./commands/mkdir";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
@@ -134,7 +135,11 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   vim: vim,
   weaken: weaken,
   wget: wget,
+  mkdir: mkdir,
 };
+
+// "mkdir" is a "hidden" command; i.e., it is not shown in help text or autocomplete.
+export const supportedCommands = Object.keys(TerminalCommands).filter((command) => command !== "mkdir");
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -877,7 +882,7 @@ export class Terminal {
 }
 
 function findSimilarCommands(command: string): string[] {
-  const commands = Object.keys(TerminalCommands);
+  const commands = supportedCommands.slice();
   const offByOneLetter = commands.filter((c) => {
     if (c.length !== command.length) return false;
     let diff = 0;
