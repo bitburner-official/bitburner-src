@@ -26,6 +26,7 @@ import { Settings } from "../Settings/Settings";
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 
 export interface BaseServerConstructorParams {
   adminRights?: boolean;
@@ -233,7 +234,7 @@ export abstract class BaseServer implements IServer {
   }
 
   updateRamUsed(ram: number): void {
-    this.ramUsed = clampNumber(ram, 0, this.maxRam);
+    this.ramUsed = roundToTwo(clampNumber(ram, 0, this.maxRam));
   }
 
   pushProgram(program: ProgramFilePath | CompletedProgramName): void {

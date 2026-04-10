@@ -79,17 +79,9 @@ export const calculateAuthenticationTime = (
   const underleveledFactor = applyUnderleveledFactor ? 1.5 + (chaRequired + 50) / (person.skills.charisma + 50) : 1;
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
   const hasSf15_2Factor = Player.activeSourceFileLvl(15) > 2 ? 0.8 : 1;
-  const bonusTimeFactor = hasDarknetBonusTime() ? 0.75 : 1;
 
   const time =
-    baseTime *
-    skillFactor *
-    backdoorFactor *
-    underleveledFactor *
-    hasBootsFactor *
-    hasSf15_2Factor *
-    bonusTimeFactor *
-    threadsFactor;
+    baseTime * skillFactor * backdoorFactor * underleveledFactor * hasBootsFactor * hasSf15_2Factor * threadsFactor;
 
   // We need to call GetServer and check if it's a dnet server later because this function can be called by formulas
   // APIs (darknetServerData.hostname may be an invalid hostname).
