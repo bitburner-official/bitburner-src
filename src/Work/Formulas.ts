@@ -130,7 +130,7 @@ export const calculateCompanyWorkStats = (
   // If player has SF-11, calculate salary multiplier from favor
   const favorMult = isNaN(favor) ? 1 : 1 + favor / 100;
   const bn11Mult = Player.activeSourceFileLvl(11) > 0 ? favorMult : 1;
-  const sf15Mult = Player.sourceFileLvl(15) > 1 ? getMultiplierFromCharisma(1.5) : 1;
+  const sf15Mult = Player.activeSourceFileLvl(15) > 1 ? getMultiplierFromCharisma(1.5) : 1;
 
   const gains = scaleWorkStats(
     multWorkStats(

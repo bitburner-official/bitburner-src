@@ -602,6 +602,10 @@ export function canAccessCotMG(this: PlayerObject): boolean {
   return canAccessBitNodeFeature(13);
 }
 
+/**
+ * To ensure the "SF override" option work properly, this function should only be used in special cases. In most cases,
+ * activeSourceFileLvl should be used instead.
+ */
 export function sourceFileLvl(this: PlayerObject, n: number): number {
   return this.sourceFiles.get(n) ?? 0;
 }
