@@ -17,14 +17,21 @@ import { parseUnknownError } from "../utils/ErrorHelper";
 import { DarknetServer } from "../Server/DarknetServer";
 import { CompletedProgramName } from "@enums";
 
+/** Extract the text being autocompleted, handling unclosed double quotes as a single token */
+export function extractCurrentText(terminalText: string): string {
+  const quoteCount = (terminalText.match(/"/g) || []).length;
+  if (quoteCount % 2 === 1) return terminalText.substring(terminalText.lastIndexOf('"'));
+  return /[^ ]*$/.exec(terminalText)?.[0] ?? "";
+}
+
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
  * @param baseDir The current working directory.
  * @returns Array of possible string replacements for the current text being autocompleted.
  */
 export async function getTabCompletionPossibilities(terminalText: string, baseDir = root): Promise<string[]> {
-  // Get the current command text
-  const currentText = /[^ ]*$/.exec(terminalText)?.[0] ?? "";
+  // Get the current command text, treating unclosed quotes as a single token
+  const currentText = extractCurrentText(terminalText);
   // Remove the current text from the commands string
   const valueWithoutCurrent = terminalText.substring(0, terminalText.length - currentText.length);
   // Parse the commands string, this handles alias replacement as well.
