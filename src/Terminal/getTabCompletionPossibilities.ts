@@ -84,7 +84,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   const addAliases = () => addGeneric({ iterable: Aliases.keys() });
   const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
-  const addCommands = () => addGeneric({ iterable: supportedCommands.slice() });
+  const addCommands = () => addGeneric({ iterable: supportedCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
   const addServerNames = () =>
     addGeneric({

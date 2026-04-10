@@ -882,8 +882,7 @@ export class Terminal {
 }
 
 function findSimilarCommands(command: string): string[] {
-  const commands = supportedCommands.slice();
-  const offByOneLetter = commands.filter((c) => {
+  const offByOneLetter = supportedCommands.filter((c) => {
     if (c.length !== command.length) return false;
     let diff = 0;
     for (let i = 0; i < c.length; i++) {
@@ -891,6 +890,6 @@ function findSimilarCommands(command: string): string[] {
     }
     return diff === 1;
   });
-  const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
+  const subset = supportedCommands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
   return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }
