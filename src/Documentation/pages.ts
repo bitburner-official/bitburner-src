@@ -746,6 +746,7 @@ import nsDoc_bitburner_hackingformulas_hackexp_md from "../../markdown/bitburner
 import nsDoc_bitburner_hackingformulas_hackpercent_md from "../../markdown/bitburner.hackingformulas.hackpercent.md?raw";
 import nsDoc_bitburner_hackingformulas_hacktime_md from "../../markdown/bitburner.hackingformulas.hacktime.md?raw";
 import nsDoc_bitburner_hackingformulas_md from "../../markdown/bitburner.hackingformulas.md?raw";
+import nsDoc_bitburner_hackingformulas_weakeneffect_md from "../../markdown/bitburner.hackingformulas.weakeneffect.md?raw";
 import nsDoc_bitburner_hackingformulas_weakentime_md from "../../markdown/bitburner.hackingformulas.weakentime.md?raw";
 import nsDoc_bitburner_hackingmultipliers_chance_md from "../../markdown/bitburner.hackingmultipliers.chance.md?raw";
 import nsDoc_bitburner_hackingmultipliers_growth_md from "../../markdown/bitburner.hackingmultipliers.growth.md?raw";
@@ -2342,6 +2343,7 @@ AllPages["nsDoc/bitburner.hackingformulas.hackexp.md"] = nsDoc_bitburner_hacking
 AllPages["nsDoc/bitburner.hackingformulas.hackpercent.md"] = nsDoc_bitburner_hackingformulas_hackpercent_md;
 AllPages["nsDoc/bitburner.hackingformulas.hacktime.md"] = nsDoc_bitburner_hackingformulas_hacktime_md;
 AllPages["nsDoc/bitburner.hackingformulas.md"] = nsDoc_bitburner_hackingformulas_md;
+AllPages["nsDoc/bitburner.hackingformulas.weakeneffect.md"] = nsDoc_bitburner_hackingformulas_weakeneffect_md;
 AllPages["nsDoc/bitburner.hackingformulas.weakentime.md"] = nsDoc_bitburner_hackingformulas_weakentime_md;
 AllPages["nsDoc/bitburner.hackingmultipliers.chance.md"] = nsDoc_bitburner_hackingmultipliers_chance_md;
 AllPages["nsDoc/bitburner.hackingmultipliers.growth.md"] = nsDoc_bitburner_hackingmultipliers_growth_md;
