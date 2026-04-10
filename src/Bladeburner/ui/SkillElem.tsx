@@ -3,7 +3,7 @@ import type { Bladeburner } from "../Bladeburner";
 import React, { useMemo } from "react";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { formatBigNumber } from "../../ui/formatNumber";
-import { Box, IconButton, Paper, Typography } from "@mui/material";
+import { Box, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { Skill } from "../Skill";
@@ -18,10 +18,8 @@ export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): Re
   const skillName = skill.name;
   const skillLevel = bladeburner.getSkillLevel(skillName);
   const pointCost = useMemo(() => skill.calculateCost(skillLevel), [skill, skillLevel]);
-  // No need to support "+1" button when the skill level reaches Number.MAX_SAFE_INTEGER.
-  const isSupported = skillLevel < Number.MAX_SAFE_INTEGER;
   // Use skill.canUpgrade() instead of reimplementing all conditional checks.
-  const canLevel = isSupported && skill.canUpgrade(bladeburner, 1).available;
+  const check = skill.canUpgrade(bladeburner, 1);
   /**
    * maxLvl is only useful when we check if we should show "MAX LEVEL". For the check of the icon button, we don't need
    * it. This condition is checked in skill.canUpgrade().
@@ -37,10 +35,14 @@ export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): Re
     <Paper sx={{ my: 1, p: 1 }}>
       <Box display="flex" flexDirection="row" alignItems="center">
         <CopyableText variant="h6" color="primary" value={skillName} />
-        {!canLevel ? (
-          <IconButton disabled>
-            <CloseIcon />
-          </IconButton>
+        {!check.available ? (
+          <Tooltip title={check.error}>
+            <span>
+              <IconButton disabled>
+                <CloseIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
         ) : (
           <IconButton onClick={onClick}>
             <AddIcon />
@@ -51,7 +53,7 @@ export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): Re
       {maxLvl ? (
         <Typography>MAX LEVEL</Typography>
       ) : (
-        <Typography>Skill Points required: {isSupported ? formatBigNumber(pointCost) : "N/A"}</Typography>
+        <Typography>Skill Points required: {formatBigNumber(pointCost)}</Typography>
       )}
       <Typography>{skill.desc}</Typography>
     </Paper>
