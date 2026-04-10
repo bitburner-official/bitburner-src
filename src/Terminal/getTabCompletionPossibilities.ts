@@ -11,7 +11,7 @@ import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
-import { TerminalCommands } from "./Terminal";
+import { supportedCommands } from "./Terminal";
 import { Terminal } from "../Terminal";
 import { parseUnknownError } from "../utils/ErrorHelper";
 import { DarknetServer } from "../Server/DarknetServer";
@@ -84,7 +84,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   const addAliases = () => addGeneric({ iterable: Aliases.keys() });
   const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
-  const addCommands = () => addGeneric({ iterable: Object.keys(TerminalCommands) });
+  const addCommands = () => addGeneric({ iterable: supportedCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
   const addServerNames = () =>
     addGeneric({
