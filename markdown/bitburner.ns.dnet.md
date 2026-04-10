@@ -11,8 +11,3 @@ Namespace for darknet functions. Contains spoilers.
 ```typescript
 readonly dnet: Darknet;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

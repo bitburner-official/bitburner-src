@@ -2925,7 +2925,7 @@ export interface Hacknet {
   /**
    * Get the number of hacknet nodes you own.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the number of Hacknet Nodes you own.
    *
@@ -2936,7 +2936,7 @@ export interface Hacknet {
   /**
    * Get the maximum number of hacknet nodes.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * @returns Maximum number of hacknet nodes.
    */
@@ -2945,7 +2945,7 @@ export interface Hacknet {
   /**
    * Purchase a new hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Purchases a new Hacknet Node. Returns a number with the index of the
    * Hacknet Node. This index is equivalent to the number at the end of
@@ -2961,7 +2961,7 @@ export interface Hacknet {
   /**
    * Get the price of the next hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of purchasing a new Hacknet Node.
    *
@@ -2972,7 +2972,7 @@ export interface Hacknet {
   /**
    * Get the stats of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns an object containing a variety of stats about the specified Hacknet Node.
    *
@@ -2988,7 +2988,7 @@ export interface Hacknet {
   /**
    * Upgrade the level of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to upgrade the level of the specified Hacknet Node by n.
    *
@@ -3006,7 +3006,7 @@ export interface Hacknet {
   /**
    * Upgrade the RAM of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to upgrade the specified Hacknet Node’s RAM n times.
    * Note that each upgrade doubles the Node’s RAM.
@@ -3026,7 +3026,7 @@ export interface Hacknet {
   /**
    * Upgrade the core of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to purchase n cores for the specified Hacknet Node.
    *
@@ -3044,7 +3044,7 @@ export interface Hacknet {
   /**
    * Upgrade the cache of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3064,7 +3064,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node levels.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the specified Hacknet Node by n levels.
    *
@@ -3080,7 +3080,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node RAM.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the RAM of the specified Hacknet Node n times.
    *
@@ -3096,7 +3096,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node cores.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the number of cores of the specified Hacknet Node by n.
    *
@@ -3112,7 +3112,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node cache.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3130,7 +3130,7 @@ export interface Hacknet {
   /**
    * Get the total number of hashes stored.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3143,7 +3143,7 @@ export interface Hacknet {
   /**
    * Get the maximum number of hashes you can store.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3156,7 +3156,7 @@ export interface Hacknet {
   /**
    * Get the cost of a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3178,7 +3178,7 @@ export interface Hacknet {
   /**
    * Purchase a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3207,7 +3207,7 @@ export interface Hacknet {
   /**
    * Get the list of hash upgrades
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3223,7 +3223,7 @@ export interface Hacknet {
   /**
    * Get the level of a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3234,7 +3234,7 @@ export interface Hacknet {
   /**
    * Get the multiplier to study.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3245,7 +3245,7 @@ export interface Hacknet {
   /**
    * Get the multiplier to training.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -7014,113 +7014,93 @@ interface UserInterface {
 export interface NS {
   /**
    * Namespace for {@link Hacknet | hacknet} functions. Some of this API contains spoilers.
-   * @remarks RAM cost: 4 GB.
    */
   readonly hacknet: Hacknet;
 
   /**
    * Namespace for {@link Bladeburner | Bladeburner} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly bladeburner: Bladeburner;
 
   /**
    * Namespace for {@link CodingContract | coding contract} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly codingcontract: CodingContract;
 
   /**
    * Namespace for {@link Cloud | cloud} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly cloud: Cloud;
 
   /**
    * Namespace for darknet functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly dnet: Darknet;
 
   /**
    * Namespace for {@link Format | formatting} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly format: Format;
 
   /**
    * Namespace for {@link Gang | gang} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly gang: Gang;
 
   /**
    * Namespace for {@link Go | Go} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly go: Go;
 
   /**
    * Namespace for {@link Sleeve | sleeve} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly sleeve: Sleeve;
 
   /**
    * Namespace for {@link Stock | stock} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly stock: Stock;
 
   /**
    * Namespace for {@link Formulas | formulas} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly formulas: Formulas;
 
   /**
    * Namespace for {@link Stanek | Stanek} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly stanek: Stanek;
 
   /**
    * Namespace for {@link Infiltration | infiltration} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly infiltration: Infiltration;
 
   /**
    * Namespace for {@link Corporation | corporation} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly corporation: Corporation;
 
   /**
    * Namespace for {@link UserInterface | user interface} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly ui: UserInterface;
 
   /**
    * Namespace for {@link Singularity | singularity} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly singularity: Singularity;
 
   /**
    * Namespace for {@link Grafting | grafting} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;
 
   /**
    * Arguments passed into the script.
    *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Arguments passed into a script can be accessed as a normal array by using the `[]` operator
+   * These arguments can be accessed as a normal array by using the `[]` operator
    * (`args[0]`, `args[1]`, etc...).
    * Arguments can be string, number, or boolean.
    * Use `args.length` to get the number of arguments that were passed into a script.
