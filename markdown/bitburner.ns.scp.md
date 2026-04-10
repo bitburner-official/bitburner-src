@@ -112,5 +112,5 @@ const server = ns.args[0];
 const files = ["hack.js", "weaken.js", "grow.js"];
 ns.scp(files, server, "home");
 ```
-For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
+For darknet servers: The destination requires a session, but unlike [exec](./bitburner.ns.exec.md)<!-- -->, does not require a direct connection — scp works at any distance. The source server has no darknet requirements (no session or connection needed). Use [dnet.authenticate](./bitburner.darknet.authenticate.md) (requires direct connection) or [dnet.connectToSession](./bitburner.darknet.connecttosession.md) (at any distance) to establish a session.
 
