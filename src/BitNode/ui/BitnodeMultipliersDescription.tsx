@@ -56,7 +56,7 @@ export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFea
   // If not, then we have to assume that we want the next level up from the
   // current node's source file, so we get the min of that, the SF's max level,
   // or if it's BN12, ∞
-  const mults = getBitNodeMultipliers(n, level ?? getBitNodeLevel(n, Player.activeSourceFileLvl(n)));
+  const mults = getBitNodeMultipliers(n, level ?? getBitNodeLevel(n));
 
   return (
     <Box sx={{ columnCount: 2, columnGap: 1, mb: n === 1 ? 0 : -2 }}>
