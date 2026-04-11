@@ -215,7 +215,7 @@ const Engine = {
 
     if (Engine.Counters.achievementsCounter <= 0) {
       calculateAchievements();
-      Engine.Counters.achievementsCounter = 300;
+      Engine.Counters.achievementsCounter = 25;
     }
 
     // This **MUST** remain the last block in the function!
