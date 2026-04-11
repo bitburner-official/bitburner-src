@@ -61,19 +61,33 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     if (path === null) return [];
     baseDir = path;
     // Correct folder casing: resolveDirectory is purely syntactic and preserves user's casing.
-    // Look up the canonical directory from the server's actual files.
-    // Prefer an exact case match first — only fall back to case-insensitive when no exact match
-    // exists. This handles the edge case where two directories differ only in case (e.g., both
-    // Tasks/ and tasks/ exist) — we respect the user's typed casing if it matches a real directory.
+    // Look up the canonical directory from the server's actual files. Prefer an exact case match
+    // first, falling back to case-insensitive, so existing correctly-cased paths are respected.
     if (path !== root) {
       const allDirs = getAllDirectories(Player.getCurrentServer());
       const canonical = allDirs.has(path) ? path : [...allDirs].find((d) => d.toLowerCase() === path.toLowerCase());
       if (canonical && canonical !== path) {
         baseDir = canonical;
-        // Fix relativeDir: replace the resolved directory suffix with canonical casing,
-        // preserving any navigation prefix (e.g., "../" or "./")
-        if (relativeDir.toLowerCase().endsWith(path.toLowerCase())) {
-          relativeDir = relativeDir.substring(0, relativeDir.length - path.length) + canonical;
+        // Rebuild relativeDir with canonical casing while preserving the user's navigation style.
+        // path is absolute-from-server-root; relativeDir is user-relative, so they cannot be
+        // compared by string suffix — peel the navigation prefix (leading "/" and any run of
+        // "./"/"../") off relativeDir, count the typed directory segments that follow, and
+        // replace them with the trailing N segments of the canonical path.
+        let navPrefix = "";
+        let rest = relativeDir;
+        if (rest.startsWith("/")) {
+          navPrefix = "/";
+          rest = rest.substring(1);
+        }
+        while (rest.startsWith("./") || rest.startsWith("../")) {
+          const len = rest.startsWith("../") ? 3 : 2;
+          navPrefix += rest.substring(0, len);
+          rest = rest.substring(len);
+        }
+        const typedSegmentCount = rest.match(/[^/]+\//g)?.length ?? 0;
+        if (typedSegmentCount > 0) {
+          const canonicalSegments = canonical.match(/[^/]+\//g) ?? [];
+          relativeDir = navPrefix + canonicalSegments.slice(-typedSegmentCount).join("");
         }
       }
     }

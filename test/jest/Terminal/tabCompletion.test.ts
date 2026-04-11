@@ -193,6 +193,38 @@ describe("getTabCompletionPossibilities", function () {
     expect(options.sort()).toEqual(["./folder1/test.js"]);
   });
 
+  it("corrects folder casing for forward paths from a non-root cwd", async () => {
+    const home = Player.getHomeComputer();
+    home.writeToScriptFile(asFilePath("foo/Bar/task.js"), "// content");
+
+    // From foo/, typing "bar/" (wrong case) should output "Bar/task.js".
+    // Regression test: previously the correction block bailed out because
+    // relativeDir="bar/" does not endsWith path="foo/bar/".
+    const options = await getTabCompletionPossibilities("nano bar/", asDirectory("foo/"));
+    expect(options).toEqual(["Bar/task.js"]);
+  });
+
+  it("corrects folder casing through ../ navigation", async () => {
+    const home = Player.getHomeComputer();
+    home.writeToScriptFile(asFilePath("foo/baz/anchor.js"), "// content");
+    home.writeToScriptFile(asFilePath("foo/Bar/task.js"), "// content");
+
+    // From foo/baz/, typing "../bar/" (wrong case) should output "../Bar/task.js".
+    // Regression test: resolved path "foo/bar/" is longer than relativeDir "../bar/",
+    // so the previous endsWith check never fired.
+    const options = await getTabCompletionPossibilities("nano ../bar/", asDirectory("foo/baz/"));
+    expect(options).toEqual(["../Bar/task.js"]);
+  });
+
+  it("corrects folder casing across multiple nested segments", async () => {
+    const home = Player.getHomeComputer();
+    home.writeToScriptFile(asFilePath("Src/Components/Button.js"), "// content");
+
+    // From root, typing "src/components/B" should correct both segments.
+    const options = await getTabCompletionPossibilities("nano src/components/B", root);
+    expect(options).toEqual(["Src/Components/Button.js"]);
+  });
+
   it("completes the ls and cd commands", async () => {
     writeFiles();
     for (const command of ["ls", "cd"]) {
