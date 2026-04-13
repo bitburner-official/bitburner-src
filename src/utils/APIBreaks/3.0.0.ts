@@ -385,21 +385,6 @@ export const breakingChanges300: VersionBreakingChange = {
       showWarning: false,
     },
     {
-      brokenAPIs: [
-        {
-          name: "ns.gang.getOtherGangInformation",
-          migration: {
-            searchValue: "getOtherGangInformation",
-            replaceValue: "getAllGangInformation",
-          },
-        },
-      ],
-      info:
-        "ns.gang.getOtherGangInformation() was renamed to ns.gang.getAllGangInformation().\n" +
-        "The function was renamed because it returns information about all gangs, including the player's own gang.",
-      showWarning: false,
-    },
-    {
       brokenAPIs: [{ name: "purchase4SMarketData" }],
       info:
         "You have to purchase a WSE account before purchasing 4S Market Data UI access via ns.stock.purchase4SMarketData().\n" +
@@ -637,6 +622,21 @@ export const breakingChanges300: VersionBreakingChange = {
         `- Sanitize Parentheses in Expression: Previously, if you passed an empty string to this contract, it was\n` +
         "converted to an array containing an empty string. Now, it's converted to an empty array.\n" +
         `- Read the "General rules", "String conversion", and "Tips" sections on the "Coding Contracts" page carefully.`,
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.gang.getOtherGangInformation",
+          migration: {
+            searchValue: "getOtherGangInformation",
+            replaceValue: "getAllGangInformation",
+          },
+        },
+      ],
+      info:
+        "ns.gang.getOtherGangInformation() was renamed to ns.gang.getAllGangInformation().\n" +
+        "The function was renamed because it returns information about all gangs, including the player's own gang.",
       showWarning: false,
     },
   ],
