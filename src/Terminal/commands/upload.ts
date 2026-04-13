@@ -14,6 +14,9 @@ function pickDirectory(): Promise<null | FileList> {
     input.onchange = () => {
       resolve(input.files);
     };
+    input.oncancel = () => {
+      resolve(null);
+    };
     input.click();
   });
 }
