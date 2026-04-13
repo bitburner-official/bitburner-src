@@ -5,9 +5,11 @@ import { FilePath, resolveFilePath } from "./FilePath";
 type WithTextExtension = string & { __fileType: "Text" };
 export type TextFilePath = FilePath & WithTextExtension;
 
+export const validTextExtensions = [".txt", ".json", ".css"];
+
 /** Check extension only */
 export function hasTextExtension(path: string): path is WithTextExtension {
-  return path.endsWith(".txt") || path.endsWith(".json") || path.endsWith(".css");
+  return validTextExtensions.some((extension) => path.endsWith(extension));
 }
 
 /** Sanitize a player input, resolve any relative paths, and for imports add the correct extension if missing */
