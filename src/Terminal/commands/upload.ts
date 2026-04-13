@@ -97,14 +97,14 @@ async function uploadAsync(args: (string | number | boolean)[], server: BaseServ
   if (skipped.length !== 0) {
     const extensions = [...validScriptExtensions, ...validTextExtensions];
     const last = extensions.pop() as string;
-    const allValid = extensions.join(', ') + ' and ' + last;
+    const allValid = extensions.join(", ") + " and " + last;
     lines = [
       ...lines,
       "",
-      'Characters * ? [ ] ! \\ ~ | # " \' and whitespace are not allowed in file paths.',
+      "Characters * ? [ ] ! \\ ~ | # \" ' and whitespace are not allowed in file paths.",
       `Only file extensions ${allValid} are allowed.`,
-      'A file name must have at least one character before the extension.',
-      '',
+      "A file name must have at least one character before the extension.",
+      "",
       `${skipped.length} files will be skipped due to prohibited file paths:`,
       ...skipped.map(({ badPath }) => `S ${badPath}`),
     ];
