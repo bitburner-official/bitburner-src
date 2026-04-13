@@ -143,6 +143,7 @@ export const CONSTANTS = {
 - Cancel sleeve's current task when calling ns.sleeve.travel() (#2559) (@catloversg)
 - Make ns.cloud.purchaseServer() and ns.cloud.deleteServer() use hostname as provided (#2560) (@catloversg)
 - Make implicit string conversion consistent across all coding contracts (#2608) (@catloversg)
+- Rename ns.gang.getOtherGangInformation to getAllGangInformation (#2635) (@lstutzman)
 
 ### MAJOR CHANGES
 
@@ -224,6 +225,10 @@ export const CONSTANTS = {
 - Fix: Import save comparison popup shows wrong BN level (#2595) (@catloversg)
 - Fix: Cannot type in text boxes rendered by players' scripts when terminal tab is shown (#2615, #2622) (@lstutzman, @catloversg)
 - Navigate to gym/university instead of city when stopping focusing on gym/class work (#2613) (@lstutzman)
+- Ensure prompts shown by ns.prompt do not lose focus in the terminal tab (#2631) (@catloversg)
+- Remove unnecessary max-width of tab list in in-game editor (#2643) (@catloversg)
+- Add hooks to sidebar for players to attach custom content (#2651) (@catloversg)
+- Use exponential notation when formatting very small HP or thread values (#2656) (@catloversg)
 
 ### MISC
 
@@ -325,6 +330,12 @@ export const CONSTANTS = {
 - Dnet: Remove packet capture (#2594) (@ficocelliguy)
 - Generate more frequent and lower-reward coding contracts (#2603) (@ficocelliguy)
 - Electron: Fix issues in edge cases of using --export-save (#2590) (@catloversg)
+- Fix recursive alias detection causing infinite recursion (#2610) (@lstutzman)
+- Add "hidden" mkdir command (#2646) (@catloversg)
+- Dnet: Remove bonus time effect on authentication and heartbleed speed; fix ram rounding (#2627) (@ficocelliguy)
+- Fix tab completion for multi-word quoted autocomplete options (#2612) (@lstutzman)
+- Add weakenEffect to formulas.hacking namespace (#2626) (@lstutzman)
+- Update description of "cat" in "help" command (#2654) (@catloversg)
 
 ### DOCUMENTATION
 
@@ -378,6 +389,9 @@ export const CONSTANTS = {
 - Update mention of outdated getStockForecast API (#2578) (@catloversg)
 - Fix newline issues in IPvGO docs and add missing RAM cost (#2602) (@catloversg)
 - Document coding contract's generation and rewards (#2624) (@catloversg)
+- Clarify scp and exec darknet permissions in API docs (#2634) (@lstutzman)
+- Update RAM cost of hacknet APIs and remove unnecessary RAM cost docs (#2639) (@catloversg)
+- Update tutorial script for buying cloud servers (#2653) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
@@ -389,6 +403,8 @@ export const CONSTANTS = {
 - Prevent ending BNs through reuse of Bladeburner UI event handler (#2574) (@catloversg)
 - Always show Black Operations list (#2592) (@catloversg)
 - Show hints of Sleeves mechanic in pre-endgame (#2605) (@catloversg)
+- Consistently calculate BitNode "level" (#2645) (@catloversg)
+- Add tooltips explaining why Bladeburner skill upgrades are disabled (#2648) (@catloversg)
 
 ### SPOILER CHANGES - MISC
 
@@ -416,6 +432,9 @@ export const CONSTANTS = {
 - Add APIs to get rank gain and rank loss of an action (#2572) (@catloversg)
 - Reduce RAM cost of inGang and inBladeburner APIs (#2582) (@catloversg)
 - Fix skillMaxUpgradeCount returning 1 at extreme skill levels (#2611) (@lstutzman)
+- API: Expose charged effects of Stanek's Gift active fragments (#2638) (@catloversg)
+- Apply SF override to charisma calculations (#2642) (@catloversg)
+- Update description of "BN9: Challenge" achievement (#2647) (@catloversg)
 
 ### SPOILER CHANGES - DOCUMENTATION
 
@@ -519,5 +538,9 @@ export const CONSTANTS = {
 - Refactor and fix issues in db.ts (#2623) (@catloversg)
 - Add dependency array to TerminalInput keydown useEffect (#2620) (@lstutzman)
 - Add dependency array to GameRoot useEffect (#2617) (@lstutzman)
+- Dev menu: Initialize dark net data when setting SF15 level (#2632) (@catloversg)
+- Use type-only imports in ArrayHelpers.ts (#2630) (@catloversg)
+- Remove redundant "$" from JS/TS regex in webpack config (#2649) (@catloversg)
+- Allow specifying commit hash id when building artifacts (#2652) (@catloversg)
 `,
 } as const;
