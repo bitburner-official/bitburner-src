@@ -8,7 +8,8 @@ import { Directory } from "src/Paths/Directory";
 async function uploadDir(server: BaseServer, destination: Directory, files: FileList): Promise<number> {
   let success = 0;
   for (const f of files) {
-    const path = f.webkitRelativePath;
+    const {webkitRelativePath} = f;
+    const path = webkitRelativePath.substring(1 + webkitRelativePath.indexOf('/'));
     if (!isFilePath(path)) {
       Terminal.warn(`Skipping ${path}: bad file path`);
       continue;
