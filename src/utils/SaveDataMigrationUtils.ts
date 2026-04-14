@@ -637,4 +637,11 @@ Error: ${e}`,
   if (ver < 48) {
     showAPIBreaks("3.0.0", breakingChanges300);
   }
+  if (ver < 49 && Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
+    for (const person of [Player, ...Player.sleeves]) {
+      person.persistentIntelligenceData.exp = 0;
+      person.exp.intelligence = 0;
+      person.skills.intelligence = 0;
+    }
+  }
 }
