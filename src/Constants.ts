@@ -7,7 +7,7 @@ export const CONSTANTS = {
   VersionString: "3.0.0dev",
   isDevBranch: true,
   isInTestEnvironment: globalThis.process?.env?.JEST_WORKER_ID !== undefined,
-  VersionNumber: 48,
+  VersionNumber: 49,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
