@@ -262,10 +262,10 @@ export function WorkInProgressRoot(): React.ReactElement {
       buttons: {
         cancel: () => {
           Player.finishWork(true);
-          Router.toPage(Page.City);
+          Router.toPage(Page.Location, { location: Locations[classWork.location] });
         },
         unfocus: () => {
-          Router.toPage(Page.City);
+          Router.toPage(Page.Location, { location: Locations[classWork.location] });
           Player.stopFocusing();
         },
       },

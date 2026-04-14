@@ -93,7 +93,7 @@ function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases
   // First get non-global aliases, and recursively apply them
   // (unless there are any reference loops or the reference chain is too deep)
   const localAlias = Aliases.get(commandArray[0]);
-  if (localAlias && !currentlyProcessingAliases.includes(localAlias)) {
+  if (localAlias && !currentlyProcessingAliases.includes(commandArray[0])) {
     const appliedAlias = applyAliases(localAlias, depth + 1, [commandArray[0], ...currentlyProcessingAliases]);
     commandArray.splice(0, 1, ...appliedAlias.split(" "));
   }
@@ -101,7 +101,7 @@ function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases
   // Once local aliasing is complete (or if none are present) handle any global aliases
   const processedCommands = commandArray.reduce((resolvedCommandArray: string[], command) => {
     const globalAlias = GlobalAliases.get(command);
-    if (globalAlias && !currentlyProcessingAliases.includes(globalAlias)) {
+    if (globalAlias && !currentlyProcessingAliases.includes(command)) {
       const appliedAlias = applyAliases(globalAlias, depth + 1, [command, ...currentlyProcessingAliases]);
       resolvedCommandArray.push(appliedAlias);
     } else {

@@ -68,6 +68,7 @@ import file65 from "./doc/en/programming/remote_api.md?raw";
 import file66 from "./doc/en/programming/typescript_react.md?raw";
 
 import nsDoc_bitburner__valueof_md from "../../markdown/bitburner._valueof.md?raw";
+import nsDoc_bitburner_activefragment_chargedeffect_md from "../../markdown/bitburner.activefragment.chargedeffect.md?raw";
 import nsDoc_bitburner_activefragment_highestcharge_md from "../../markdown/bitburner.activefragment.highestcharge.md?raw";
 import nsDoc_bitburner_activefragment_md from "../../markdown/bitburner.activefragment.md?raw";
 import nsDoc_bitburner_activefragment_numcharge_md from "../../markdown/bitburner.activefragment.numcharge.md?raw";
@@ -560,6 +561,7 @@ import nsDoc_bitburner_gameinfo_versionnumber_md from "../../markdown/bitburner.
 import nsDoc_bitburner_gang_ascendmember_md from "../../markdown/bitburner.gang.ascendmember.md?raw";
 import nsDoc_bitburner_gang_canrecruitmember_md from "../../markdown/bitburner.gang.canrecruitmember.md?raw";
 import nsDoc_bitburner_gang_creategang_md from "../../markdown/bitburner.gang.creategang.md?raw";
+import nsDoc_bitburner_gang_getallganginformation_md from "../../markdown/bitburner.gang.getallganginformation.md?raw";
 import nsDoc_bitburner_gang_getascensionresult_md from "../../markdown/bitburner.gang.getascensionresult.md?raw";
 import nsDoc_bitburner_gang_getbonustime_md from "../../markdown/bitburner.gang.getbonustime.md?raw";
 import nsDoc_bitburner_gang_getchancetowinclash_md from "../../markdown/bitburner.gang.getchancetowinclash.md?raw";
@@ -571,7 +573,6 @@ import nsDoc_bitburner_gang_getganginformation_md from "../../markdown/bitburner
 import nsDoc_bitburner_gang_getinstallresult_md from "../../markdown/bitburner.gang.getinstallresult.md?raw";
 import nsDoc_bitburner_gang_getmemberinformation_md from "../../markdown/bitburner.gang.getmemberinformation.md?raw";
 import nsDoc_bitburner_gang_getmembernames_md from "../../markdown/bitburner.gang.getmembernames.md?raw";
-import nsDoc_bitburner_gang_getotherganginformation_md from "../../markdown/bitburner.gang.getotherganginformation.md?raw";
 import nsDoc_bitburner_gang_getrecruitsavailable_md from "../../markdown/bitburner.gang.getrecruitsavailable.md?raw";
 import nsDoc_bitburner_gang_gettasknames_md from "../../markdown/bitburner.gang.gettasknames.md?raw";
 import nsDoc_bitburner_gang_gettaskstats_md from "../../markdown/bitburner.gang.gettaskstats.md?raw";
@@ -745,6 +746,7 @@ import nsDoc_bitburner_hackingformulas_hackexp_md from "../../markdown/bitburner
 import nsDoc_bitburner_hackingformulas_hackpercent_md from "../../markdown/bitburner.hackingformulas.hackpercent.md?raw";
 import nsDoc_bitburner_hackingformulas_hacktime_md from "../../markdown/bitburner.hackingformulas.hacktime.md?raw";
 import nsDoc_bitburner_hackingformulas_md from "../../markdown/bitburner.hackingformulas.md?raw";
+import nsDoc_bitburner_hackingformulas_weakeneffect_md from "../../markdown/bitburner.hackingformulas.weakeneffect.md?raw";
 import nsDoc_bitburner_hackingformulas_weakentime_md from "../../markdown/bitburner.hackingformulas.weakentime.md?raw";
 import nsDoc_bitburner_hackingmultipliers_chance_md from "../../markdown/bitburner.hackingmultipliers.chance.md?raw";
 import nsDoc_bitburner_hackingmultipliers_growth_md from "../../markdown/bitburner.hackingmultipliers.growth.md?raw";
@@ -1663,6 +1665,7 @@ AllPages["en/programming/remote_api.md"] = file65;
 AllPages["en/programming/typescript_react.md"] = file66;
 
 AllPages["nsDoc/bitburner._valueof.md"] = nsDoc_bitburner__valueof_md;
+AllPages["nsDoc/bitburner.activefragment.chargedeffect.md"] = nsDoc_bitburner_activefragment_chargedeffect_md;
 AllPages["nsDoc/bitburner.activefragment.highestcharge.md"] = nsDoc_bitburner_activefragment_highestcharge_md;
 AllPages["nsDoc/bitburner.activefragment.md"] = nsDoc_bitburner_activefragment_md;
 AllPages["nsDoc/bitburner.activefragment.numcharge.md"] = nsDoc_bitburner_activefragment_numcharge_md;
@@ -2155,6 +2158,7 @@ AllPages["nsDoc/bitburner.gameinfo.versionnumber.md"] = nsDoc_bitburner_gameinfo
 AllPages["nsDoc/bitburner.gang.ascendmember.md"] = nsDoc_bitburner_gang_ascendmember_md;
 AllPages["nsDoc/bitburner.gang.canrecruitmember.md"] = nsDoc_bitburner_gang_canrecruitmember_md;
 AllPages["nsDoc/bitburner.gang.creategang.md"] = nsDoc_bitburner_gang_creategang_md;
+AllPages["nsDoc/bitburner.gang.getallganginformation.md"] = nsDoc_bitburner_gang_getallganginformation_md;
 AllPages["nsDoc/bitburner.gang.getascensionresult.md"] = nsDoc_bitburner_gang_getascensionresult_md;
 AllPages["nsDoc/bitburner.gang.getbonustime.md"] = nsDoc_bitburner_gang_getbonustime_md;
 AllPages["nsDoc/bitburner.gang.getchancetowinclash.md"] = nsDoc_bitburner_gang_getchancetowinclash_md;
@@ -2166,7 +2170,6 @@ AllPages["nsDoc/bitburner.gang.getganginformation.md"] = nsDoc_bitburner_gang_ge
 AllPages["nsDoc/bitburner.gang.getinstallresult.md"] = nsDoc_bitburner_gang_getinstallresult_md;
 AllPages["nsDoc/bitburner.gang.getmemberinformation.md"] = nsDoc_bitburner_gang_getmemberinformation_md;
 AllPages["nsDoc/bitburner.gang.getmembernames.md"] = nsDoc_bitburner_gang_getmembernames_md;
-AllPages["nsDoc/bitburner.gang.getotherganginformation.md"] = nsDoc_bitburner_gang_getotherganginformation_md;
 AllPages["nsDoc/bitburner.gang.getrecruitsavailable.md"] = nsDoc_bitburner_gang_getrecruitsavailable_md;
 AllPages["nsDoc/bitburner.gang.gettasknames.md"] = nsDoc_bitburner_gang_gettasknames_md;
 AllPages["nsDoc/bitburner.gang.gettaskstats.md"] = nsDoc_bitburner_gang_gettaskstats_md;
@@ -2340,6 +2343,7 @@ AllPages["nsDoc/bitburner.hackingformulas.hackexp.md"] = nsDoc_bitburner_hacking
 AllPages["nsDoc/bitburner.hackingformulas.hackpercent.md"] = nsDoc_bitburner_hackingformulas_hackpercent_md;
 AllPages["nsDoc/bitburner.hackingformulas.hacktime.md"] = nsDoc_bitburner_hackingformulas_hacktime_md;
 AllPages["nsDoc/bitburner.hackingformulas.md"] = nsDoc_bitburner_hackingformulas_md;
+AllPages["nsDoc/bitburner.hackingformulas.weakeneffect.md"] = nsDoc_bitburner_hackingformulas_weakeneffect_md;
 AllPages["nsDoc/bitburner.hackingformulas.weakentime.md"] = nsDoc_bitburner_hackingformulas_weakentime_md;
 AllPages["nsDoc/bitburner.hackingmultipliers.chance.md"] = nsDoc_bitburner_hackingmultipliers_chance_md;
 AllPages["nsDoc/bitburner.hackingmultipliers.growth.md"] = nsDoc_bitburner_hackingmultipliers_growth_md;

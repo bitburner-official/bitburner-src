@@ -18,7 +18,6 @@ import { OpenScript } from "./OpenScript";
 import { Tab } from "./Tab";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
-const tabsMaxWidth = 1640;
 const searchWidth = 180;
 
 interface IProps {
@@ -101,7 +100,6 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
         <Droppable droppableId="tabs" direction="horizontal">
           {(provided, snapshot) => (
             <Box
-              maxWidth={`${tabsMaxWidth}px`}
               display="flex"
               flexGrow="1"
               flexDirection="row"

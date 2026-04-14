@@ -6,17 +6,13 @@
 
 Arguments passed into the script.
 
+These arguments can be accessed as a normal array by using the `[]` operator (`args[0]`<!-- -->, `args[1]`<!-- -->, etc...). Arguments can be string, number, or boolean. Use `args.length` to get the number of arguments that were passed into a script.
+
 **Signature:**
 
 ```typescript
 readonly args: ScriptArg[];
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-
-Arguments passed into a script can be accessed as a normal array by using the `[]` operator (`args[0]`<!-- -->, `args[1]`<!-- -->, etc...). Arguments can be string, number, or boolean. Use `args.length` to get the number of arguments that were passed into a script.
 
 ## Example
 

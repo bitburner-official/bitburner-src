@@ -69,6 +69,8 @@ Description
 
 Arguments passed into the script.
 
+These arguments can be accessed as a normal array by using the `[]` operator (`args[0]`<!-- -->, `args[1]`<!-- -->, etc...). Arguments can be string, number, or boolean. Use `args.length` to get the number of arguments that were passed into a script.
+
 
 </td></tr>
 <tr><td>

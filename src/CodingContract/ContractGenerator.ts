@@ -15,11 +15,11 @@ import { getRandomAlphanumericString } from "../utils/StringHelperFunctions";
 
 export function tryGeneratingRandomContract(numberOfTries: number): void {
   /**
-   * We try to generate a contract every 10 minutes. 525600 is the number of tries in 10 years. There is no reason to
-   * support anything above that. We tested this number (525600) on a very old machine. It took only 300-350ms to
-   * loop 525600 times and generate ~9137 contracts on that machine.
+   * We try to generate contracts three times every 10 minutes. 1576800 is the number of tries in 10 years. There is no
+   * reason to support anything above that. We tested this number (1576800) on a very old machine. It took only ~300ms
+   * to loop 1576800 times and generate ~10103 contracts on that machine.
    */
-  numberOfTries = clampNumber(Math.floor(numberOfTries), 0, 525600);
+  numberOfTries = clampNumber(Math.floor(numberOfTries), 0, 1576800);
   if (numberOfTries < 1) {
     return;
   }
@@ -47,19 +47,19 @@ export function tryGeneratingRandomContract(numberOfTries: number): void {
      * - If the offline time is unusually large (being offline for years, editing save file, tampering function prototype,
      * etc.), the game will not hang when it tries to generate contracts.
      *
-     * These are some data for reference:
-     * - 1 month: ~1077 contracts.
-     * - 3 months: ~3157 contracts.
-     * - 6 months: ~5296 contracts.
-     * - 12 months: ~6678 contracts.
-     * - 2 years: ~7570 contracts.
-     * - 5 years: ~8504 contracts.
-     * - 10 years: ~9137 contracts.
-     * - 25 years: ~9936 contracts.
-     * - 50 years: ~10526 contracts.
+     * These are some data points for reference:
+     * - 1 month: ~3157 contracts.
+     * - 3 months: ~6198 contracts.
+     * - 6 months: ~7231 contracts.
+     * - 12 months: ~8003 contracts.
+     * - 2 years: ~8687 contracts.
+     * - 5 years: ~9506 contracts.
+     * - 10 years: ~10103 contracts.
+     * - 25 years: ~10879 contracts.
+     * - 50 years: ~11461 contracts.
      *
-     * Those numbers mean: If the player does not have any contracts and is online (or loads a save file with equivalent
-     * offline time) for X months/years, they will have ~Y contracts.
+     * Those numbers mean that if the player does not have any contracts and is online (or loads a save file with
+     * equivalent offline time) for X months/years, they will have ~Y contracts.
      */
     if (random > 100 / (399 + Math.exp(0.0012 * currentNumberOfContracts))) {
       continue;

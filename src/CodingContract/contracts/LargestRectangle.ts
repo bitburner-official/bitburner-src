@@ -1,6 +1,6 @@
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { CodingContractTypes } from "../ContractTypes";
+import { parseArrayString, CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
 export const largestRectangle: Pick<CodingContractTypes, CodingContractName.LargestRectangleInAMatrix> = {
@@ -152,13 +152,7 @@ Answer: [[0,0],[3,1]]
       return userArea === (solution[1][0] - solution[0][0] + 1) * (solution[1][1] - solution[0][1] + 1);
     },
     convertAnswer: (ans) => {
-      let parsedAnswer: unknown;
-      try {
-        parsedAnswer = JSON.parse(ans);
-      } catch (error) {
-        console.error("Invalid answer:", error);
-        return null;
-      }
+      const parsedAnswer = parseArrayString(ans.replace(/\s/g, ""), true);
       if (!largestRectangle[CodingContractName.LargestRectangleInAMatrix].validateAnswer(parsedAnswer)) {
         return null;
       }

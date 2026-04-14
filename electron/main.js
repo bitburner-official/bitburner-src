@@ -258,7 +258,6 @@ app.on("ready", async () => {
     await window.loadFile("export.html");
     window.show();
     setStopProcessHandler(window);
-    await utils.exportSave(window);
   } else {
     window = await startWindow(process.argv.includes("--no-scripts"));
     if (global.steamworksError) {

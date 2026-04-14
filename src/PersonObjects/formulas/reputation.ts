@@ -52,7 +52,7 @@ export function getFactionFieldWorkRepGain(p: IPerson, favor: number): number {
 }
 
 function getDarknetCharismaBonus(p: IPerson, scalar: number = 1): number {
-  if (Player.sourceFileLvl(15) >= 3) {
+  if (Player.activeSourceFileLvl(15) >= 3) {
     return p.skills.charisma * scalar;
   }
   return 0;

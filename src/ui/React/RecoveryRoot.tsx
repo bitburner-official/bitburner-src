@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { Typography, Link, Button, ButtonGroup, Tooltip, Box, Paper, TextField } from "@mui/material";
 import { Settings } from "../../Settings/Settings";
-import { load } from "../../db";
+import { IndexedDBVersionError, load } from "../../db";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
 import { type CrashReport, newIssueUrl, getCrashReport, isSaveDataFromNewerVersions } from "../../utils/ErrorHelper";
@@ -35,11 +35,15 @@ interface IProps {
 }
 
 function exportSaveFile(): void {
-  load()
-    .then((content) => {
-      const extension = isBinaryFormat(content) ? "json.gz" : "json";
+  load(true)
+    .then((saveData) => {
+      if (saveData === undefined) {
+        console.error("There is no save data, but the recovery mode was activated.");
+        return;
+      }
+      const extension = isBinaryFormat(saveData) ? "json.gz" : "json";
       const filename = `RECOVERY_BITBURNER_${Date.now()}.${extension}`;
-      downloadContentAsFile(content, filename);
+      downloadContentAsFile(saveData, filename);
     })
     .catch((err) => {
       console.error(err);
@@ -112,14 +116,18 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
       </Typography>
     );
   } else if (
-    sourceError instanceof JSONReviverError &&
-    isSaveDataFromNewerVersions(loadedSaveObjectMiniDump.VersionSave)
+    (sourceError instanceof JSONReviverError && isSaveDataFromNewerVersions(loadedSaveObjectMiniDump.VersionSave)) ||
+    sourceError instanceof IndexedDBVersionError
   ) {
     instructions = (
       <Typography variant="h5" color={Settings.theme.warning}>
-        Your save data is from a newer version (Version number: {loadedSaveObjectMiniDump.VersionSave}). The current
-        version number is {CONSTANTS.VersionNumber}.
-        <br />
+        {loadedSaveObjectMiniDump.VersionSave !== undefined && (
+          <>
+            Your save data is from a newer version (Version number: {loadedSaveObjectMiniDump.VersionSave}). The current
+            version number is {CONSTANTS.VersionNumber}.
+            <br />
+          </>
+        )}
         Please check if you are using the correct build. This may happen when you load the save data of the dev build
         (Steam Beta or https://bitburner-official.github.io/bitburner-src) on the stable build.
       </Typography>

@@ -89,12 +89,7 @@ export const disconnectServers = (server1: BaseServer, server2: BaseServer) => {
 };
 
 export function ipExists(ip: string): boolean {
-  for (const server of AllServers.values()) {
-    if (server.ip === ip) {
-      return true;
-    }
-  }
-  return false;
+  return AllServers.has(ip);
 }
 
 export function createUniqueRandomIp(): IPAddress {

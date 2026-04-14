@@ -72,7 +72,7 @@ True if the Hacknet Node’s cores are successfully purchased, false otherwise.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Tries to purchase n cores for the specified Hacknet Node.
 

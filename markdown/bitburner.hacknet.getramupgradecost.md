@@ -72,7 +72,7 @@ Cost of upgrading the specified Hacknet Node's RAM.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Returns the cost of upgrading the RAM of the specified Hacknet Node n times.
 

@@ -132,4 +132,5 @@ ns.exec("generic-hack.js", "joesguns", {threads: 10});
 // arguments to the script.
 ns.exec("foo.js", "foodnstuff", 5, 1, "test");
 ```
+For darknet servers: A session must be established with the target server, and the script must be running on a server that is directly connected to the target, or the target must have a backdoor or stasis link installed.
 

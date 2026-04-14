@@ -210,7 +210,7 @@ export const getTimingAttackConfig = (difficulty: number): ServerConfig => {
     "I spent some time on it, but that's not the password",
   ];
   const alphanumeric = difficulty > 16 && Math.random() < 0.3;
-  const length = (alphanumeric ? 0 : 3) + difficulty / 4;
+  const length = Math.min((alphanumeric ? 0 : 3) + difficulty / 4, 8);
   return {
     modelId: ModelIds.TimingAttack,
     password: getPassword(length, alphanumeric),

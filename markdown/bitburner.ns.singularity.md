@@ -11,8 +11,3 @@ Namespace for [singularity](./bitburner.singularity.md) functions. Contains spoi
 ```typescript
 readonly singularity: Singularity;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

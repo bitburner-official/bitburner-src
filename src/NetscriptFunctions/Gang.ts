@@ -2,7 +2,7 @@ import type { Gang as IGang, EquipmentStats, GangOtherInfoObject } from "@nsdefs
 import type { Gang } from "../Gang/Gang";
 import type { GangMember } from "../Gang/GangMember";
 import type { GangMemberTask } from "../Gang/GangMemberTask";
-import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { type InternalAPI, type NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 
 import { GangPromise, RecruitmentResult } from "../Gang/Gang";
 import { Player } from "@player";
@@ -37,7 +37,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     return task;
   };
 
-  return {
+  const gangFunctions: InternalAPI<IGang> = {
     createGang: (ctx) => (_faction) => {
       const faction = getEnumHelper("FactionName").nsGetMember(ctx, _faction);
       if (Player.gang) {
@@ -117,7 +117,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         equipmentCostMult: 1 / gang.getDiscount(),
       };
     },
-    getOtherGangInformation: (ctx) => () => {
+    getAllGangInformation: (ctx) => () => {
       getGang(ctx);
       const cpy: Record<string, GangOtherInfoObject> = {};
       for (const gang of Object.keys(AllGangs)) {
@@ -362,4 +362,10 @@ export function NetscriptGang(): InternalAPI<IGang> {
       return GangPromise.promise;
     },
   };
+
+  // Removed functions
+  setRemovedFunctions(gangFunctions, {
+    getOtherGangInformation: { version: "3.0.0", replacement: "gang.getAllGangInformation" },
+  });
+  return gangFunctions;
 }

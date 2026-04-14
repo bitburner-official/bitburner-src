@@ -6,6 +6,7 @@ import {
   saveAllServers,
   renameServer,
   GetServer,
+  ipExists,
 } from "../../../src/Server/AllServers";
 import { Server } from "../../../src/Server/Server";
 import { IPAddress } from "../../../src/Types/strings";
@@ -35,6 +36,40 @@ describe("AllServers can be saved and loaded", () => {
     expect(loadedServer.hostname).toEqual(server1.hostname);
     expect(loadedServer.ip).toEqual(server1.ip);
     expect(loadedServer.numOpenPortsRequired).toEqual(server1.numOpenPortsRequired);
+  });
+});
+
+describe("ipExists", () => {
+  beforeEach(() => {
+    prestigeAllServers();
+  });
+
+  it("returns true for an IP that exists in AllServers", () => {
+    const server = new Server({ hostname: "test-server", ip: "10.20.30.40" as IPAddress });
+    AddToAllServers(server);
+    expect(ipExists("10.20.30.40")).toBe(true);
+  });
+
+  it("returns false for an IP that does not exist", () => {
+    expect(ipExists("99.99.99.99")).toBe(false);
+  });
+
+  it("does not use linear scan (performance: uses Map.has, not iteration)", () => {
+    // Add a server so the map is non-empty
+    const server = new Server({ hostname: "perf-test", ip: "1.1.1.1" as IPAddress });
+    AddToAllServers(server);
+
+    // Spy on Map.prototype.values to detect if ipExists iterates
+    const valuesSpy = jest.spyOn(Map.prototype, "values");
+
+    ipExists("1.1.1.1");
+    ipExists("2.2.2.2");
+
+    // With the fix (Map.has), values() should NOT be called by ipExists
+    // With the bug (for...of iteration), values() WOULD be called
+    expect(valuesSpy).not.toHaveBeenCalled();
+
+    valuesSpy.mockRestore();
   });
 });
 

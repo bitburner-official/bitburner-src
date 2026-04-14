@@ -11,8 +11,3 @@ Namespace for [hacknet](./bitburner.hacknet.md) functions. Some of this API cont
 ```typescript
 readonly hacknet: Hacknet;
 ```
-
-## Remarks
-
-RAM cost: 4 GB.
-

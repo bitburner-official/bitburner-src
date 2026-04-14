@@ -2,7 +2,17 @@ name: Build artifacts
 
 on:
   workflow_dispatch:
+    inputs:
+      git-sha:
+        description: "Commit SHA-1 to checkout"
+        required: false
+        default: ""
   workflow_call:
+    inputs:
+      git-sha:
+        type: string
+        required: false
+        default: ""
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -13,6 +23,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.git-sha || inputs.git-sha || github.sha }}
       - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
@@ -46,6 +58,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.git-sha || inputs.git-sha || github.sha }}
       - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
@@ -77,6 +91,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.git-sha || inputs.git-sha || github.sha }}
       - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:

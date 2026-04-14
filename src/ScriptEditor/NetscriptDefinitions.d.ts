@@ -2925,7 +2925,7 @@ export interface Hacknet {
   /**
    * Get the number of hacknet nodes you own.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the number of Hacknet Nodes you own.
    *
@@ -2936,7 +2936,7 @@ export interface Hacknet {
   /**
    * Get the maximum number of hacknet nodes.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * @returns Maximum number of hacknet nodes.
    */
@@ -2945,7 +2945,7 @@ export interface Hacknet {
   /**
    * Purchase a new hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Purchases a new Hacknet Node. Returns a number with the index of the
    * Hacknet Node. This index is equivalent to the number at the end of
@@ -2961,7 +2961,7 @@ export interface Hacknet {
   /**
    * Get the price of the next hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of purchasing a new Hacknet Node.
    *
@@ -2972,7 +2972,7 @@ export interface Hacknet {
   /**
    * Get the stats of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns an object containing a variety of stats about the specified Hacknet Node.
    *
@@ -2988,7 +2988,7 @@ export interface Hacknet {
   /**
    * Upgrade the level of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to upgrade the level of the specified Hacknet Node by n.
    *
@@ -3006,7 +3006,7 @@ export interface Hacknet {
   /**
    * Upgrade the RAM of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to upgrade the specified Hacknet Node’s RAM n times.
    * Note that each upgrade doubles the Node’s RAM.
@@ -3026,7 +3026,7 @@ export interface Hacknet {
   /**
    * Upgrade the core of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to purchase n cores for the specified Hacknet Node.
    *
@@ -3044,7 +3044,7 @@ export interface Hacknet {
   /**
    * Upgrade the cache of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3064,7 +3064,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node levels.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the specified Hacknet Node by n levels.
    *
@@ -3080,7 +3080,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node RAM.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the RAM of the specified Hacknet Node n times.
    *
@@ -3096,7 +3096,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node cores.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the number of cores of the specified Hacknet Node by n.
    *
@@ -3112,7 +3112,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node cache.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3130,7 +3130,7 @@ export interface Hacknet {
   /**
    * Get the total number of hashes stored.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3143,7 +3143,7 @@ export interface Hacknet {
   /**
    * Get the maximum number of hashes you can store.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3156,7 +3156,7 @@ export interface Hacknet {
   /**
    * Get the cost of a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3178,7 +3178,7 @@ export interface Hacknet {
   /**
    * Purchase a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3207,7 +3207,7 @@ export interface Hacknet {
   /**
    * Get the list of hash upgrades
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3223,7 +3223,7 @@ export interface Hacknet {
   /**
    * Get the level of a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3234,7 +3234,7 @@ export interface Hacknet {
   /**
    * Get the multiplier to study.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3245,7 +3245,7 @@ export interface Hacknet {
   /**
    * Get the multiplier to training.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -4879,7 +4879,7 @@ export interface Gang {
    *
    * @returns Object containing territory and power information about all gangs, including the player's gang, if any.
    */
-  getOtherGangInformation(): Record<string, GangOtherInfoObject>;
+  getAllGangInformation(): Record<string, GangOtherInfoObject>;
 
   /**
    * Get information about a specific gang member.
@@ -6299,6 +6299,16 @@ interface HackingFormulas {
    * @returns The calculated weaken time, in milliseconds.
    */
   weakenTime(server: Server, player: Person): number;
+  /**
+   * Calculate the security decrease from a weaken operation.
+   * Unlike other hacking formulas, weaken effect depends only on thread count and
+   * core count, not on server or player properties. The core bonus formula is
+   * {@code 1 + (cores - 1) / 16}.
+   * @param threads - Number of threads running weaken.
+   * @param cores - Number of cores on the host server. Default 1.
+   * @returns The security decrease amount.
+   */
+  weakenEffect(threads: number, cores?: number): number;
 }
 
 /**
@@ -6586,6 +6596,21 @@ interface ActiveFragment extends Fragment {
   rotation: number;
   x: number;
   y: number;
+  /**
+   * This is the raw value of the modifier used to calculate the effect on your multipliers. It may not be a multiplier.
+   *
+   * With fragments that increase a multiplier, this value is a multiplier. For example, with "+x% hacknet production"
+   * fragment, a value of 1.25 will multiply the "hacknet_node_money" multiplier by 1.25. The UI will show "+25% hacknet
+   * production".
+   *
+   * With fragments that decrease a multiplier, you need to invert this value. For example, with "-x% cheaper hacknet
+   * costs" fragment, a value of 1.25 means the "hacknet_node_purchase_cost" (and other relevant cost multipliers) will
+   * be multiplied by 0.8 (1 / 1.25). The UI will show "20% cheaper hacknet costs".
+   *
+   * With booster fragments, this value is always 1. Booster fragments only boost non-booster fragments. They don't
+   * directly boost your multipliers.
+   */
+  chargedEffect: number;
 }
 
 /**
@@ -6999,113 +7024,93 @@ interface UserInterface {
 export interface NS {
   /**
    * Namespace for {@link Hacknet | hacknet} functions. Some of this API contains spoilers.
-   * @remarks RAM cost: 4 GB.
    */
   readonly hacknet: Hacknet;
 
   /**
    * Namespace for {@link Bladeburner | Bladeburner} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly bladeburner: Bladeburner;
 
   /**
    * Namespace for {@link CodingContract | coding contract} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly codingcontract: CodingContract;
 
   /**
    * Namespace for {@link Cloud | cloud} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly cloud: Cloud;
 
   /**
    * Namespace for darknet functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly dnet: Darknet;
 
   /**
    * Namespace for {@link Format | formatting} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly format: Format;
 
   /**
    * Namespace for {@link Gang | gang} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly gang: Gang;
 
   /**
    * Namespace for {@link Go | Go} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly go: Go;
 
   /**
    * Namespace for {@link Sleeve | sleeve} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly sleeve: Sleeve;
 
   /**
    * Namespace for {@link Stock | stock} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly stock: Stock;
 
   /**
    * Namespace for {@link Formulas | formulas} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly formulas: Formulas;
 
   /**
    * Namespace for {@link Stanek | Stanek} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly stanek: Stanek;
 
   /**
    * Namespace for {@link Infiltration | infiltration} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly infiltration: Infiltration;
 
   /**
    * Namespace for {@link Corporation | corporation} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly corporation: Corporation;
 
   /**
    * Namespace for {@link UserInterface | user interface} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly ui: UserInterface;
 
   /**
    * Namespace for {@link Singularity | singularity} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly singularity: Singularity;
 
   /**
    * Namespace for {@link Grafting | grafting} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;
 
   /**
    * Arguments passed into the script.
    *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Arguments passed into a script can be accessed as a normal array by using the `[]` operator
+   * These arguments can be accessed as a normal array by using the `[]` operator
    * (`args[0]`, `args[1]`, etc...).
    * Arguments can be string, number, or boolean.
    * Use `args.length` to get the number of arguments that were passed into a script.
@@ -7905,6 +7910,11 @@ export interface NS {
    * // arguments to the script.
    * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
+   *
+   * For darknet servers: A session must be established with the target server, and the script must be
+   * running on a server that is directly connected to the target, or the target must have a backdoor or
+   * stasis link installed.
+   *
    * @param script - Filename of script to execute. This file must already exist on the target server.
    * @param host - Hostname/IP of the target server on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
@@ -8042,7 +8052,11 @@ export interface NS {
    * ns.scp(files, server, "home");
    * ```
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
+   * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec}, does not
+   * require a direct connection — scp works at any distance. The source server has no darknet requirements
+   * (no session or connection needed). Use {@link Darknet.authenticate | dnet.authenticate} (requires direct
+   * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (at any distance) to
+   * establish a session.
    *
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.

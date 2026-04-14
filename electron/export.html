@@ -25,5 +25,77 @@
     <div>
       <h1>Close me when operation is completed.</h1>
     </div>
+    <!-- Use esm for top-level await -->
+    <script type="module">
+      const databaseName = "bitburnerSave";
+      // Check src/db.ts to see why the current max version is 2. If the database version is greater than this value, it
+      // means that the code in this file is outdated.
+      const maxDatabaseVersion = 2;
+      const databases = await window.indexedDB.databases();
+      const database = databases.find((info) => info.name === databaseName);
+      if (!database) {
+        alert("There is no save data");
+        // This is the simplest way to stop execution in top-level code without using a labeled block or IIFE.
+        throw new Error("There is no save data");
+      }
+      if (database.version === undefined || database.version > maxDatabaseVersion) {
+        alert(`Invalid database version: ${database.version}`);
+        throw new Error(`Invalid database version: ${database.version}`);
+      }
+      // Do NOT specify the version. We must open the database at the current version; otherwise, we will trigger
+      // onupgradeneeded.
+      const dbRequest = window.indexedDB.open(databaseName);
+      dbRequest.onerror = (event) => {
+        console.error(event.target.error);
+        alert(event.target.error);
+      };
+      dbRequest.onsuccess = () => {
+        const db = dbRequest.result;
+        try {
+          if (!db.objectStoreNames.contains("savestring")) {
+            alert("There is no save data");
+            return;
+          }
+          const transaction = db.transaction(["savestring"], "readonly");
+          const objectStore = transaction.objectStore("savestring");
+          const request = objectStore.get("save");
+          request.onsuccess = () => {
+            if (request.result == null) {
+              alert("There is no save data");
+              return;
+            }
+            let isBinaryFormat;
+            if (request.result instanceof Uint8Array) {
+              // All modules in the Electron folder are CommonJS, so importing them here would be really difficult. The
+              // isBinaryFormat function is very small, so let's inline it here.
+              isBinaryFormat = true;
+              const magicBytesOfDeflateGzip = [0x1f, 0x8b, 0x08];
+              for (let i = 0; i < magicBytesOfDeflateGzip.length; ++i) {
+                if (magicBytesOfDeflateGzip[i] !== request.result[i]) {
+                  isBinaryFormat = false;
+                  break;
+                }
+              }
+            } else {
+              isBinaryFormat = false;
+            }
+            const extension = isBinaryFormat ? "json.gz" : "json";
+            const filename = `bitburnerSave_${Date.now()}.${extension}`;
+            const blob = new Blob([request.result]);
+            const anchorElement = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            anchorElement.href = url;
+            anchorElement.download = filename;
+            anchorElement.click();
+            setTimeout(function () {
+              URL.revokeObjectURL(url);
+            }, 0);
+          };
+        } catch (error) {
+          console.error(error);
+          alert(error);
+        }
+      };
+    </script>
   </body>
 </html>

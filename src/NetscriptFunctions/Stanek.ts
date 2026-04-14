@@ -64,7 +64,11 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       checkStanekAPIAccess(ctx);
       helpers.log(ctx, () => `Returned ${staneksGift.fragments.length} fragments`);
       return staneksGift.fragments.map((activeFragment) => {
-        return { ...activeFragment.copy(), ...activeFragment.fragment().copy() };
+        return {
+          ...activeFragment.copy(),
+          ...activeFragment.fragment().copy(),
+          chargedEffect: staneksGift.effect(activeFragment),
+        };
       }) satisfies ReturnType<IStanek["activeFragments"]>;
     },
     clearGift: (ctx) => () => {
@@ -99,9 +103,11 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       checkStanekAPIAccess(ctx);
       const activeFragment = staneksGift.findFragment(rootX, rootY);
       if (activeFragment !== undefined) {
-        return { ...activeFragment.copy(), ...activeFragment.fragment().copy() } satisfies ReturnType<
-          IStanek["getFragment"]
-        >;
+        return {
+          ...activeFragment.copy(),
+          ...activeFragment.fragment().copy(),
+          chargedEffect: staneksGift.effect(activeFragment),
+        } satisfies ReturnType<IStanek["getFragment"]>;
       }
       return undefined;
     },
