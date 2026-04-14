@@ -26,6 +26,7 @@ import { formatRam } from "../../ui/formatNumber";
 import { resetGangs } from "../../Gang/AllGangs";
 import { finishBitNode } from "../../BitNode/BitNodeUtils";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { exposeInternalObjects } from "../Tools";
 
 export function GeneralDev({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
   const rerender = useRerender(400);
@@ -209,6 +210,7 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
         <br />
         <Button onClick={() => setError(true)}>Throw Error</Button>
         <Button onClick={checkMessages}>Check Messages</Button>
+        <Button onClick={exposeInternalObjects}>Expose internal objects</Button>
       </AccordionDetails>
     </AutoExpandAccordion>
   );
