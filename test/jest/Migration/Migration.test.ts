@@ -120,9 +120,7 @@ describe("v3", () => {
       expect(mockedDownload).toHaveBeenCalledWith(saveData, "bitburnerSave_backup_2.8.1_1776173824.json.gz");
     });
     test("Reset wrong exp and skill level", async () => {
-      const saveData = new Uint8Array(
-        fs.readFileSync("test/jest/Migration/save-files/v3.0.0_int_migration_bug.gz"),
-      );
+      const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v3.0.0_int_migration_bug.gz"));
       const mockedDownload = await loadGameFromSaveData(saveData);
 
       for (const person of [Player, ...Player.sleeves]) {

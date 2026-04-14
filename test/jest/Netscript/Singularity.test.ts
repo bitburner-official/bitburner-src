@@ -55,8 +55,12 @@ function testIntelligenceOverride(
   setUpBeforePrestige = () => {},
 ): void {
   Player.sourceFiles.set(5, 1);
+  // The intelligence skill level starts at 0.
+  expect(Player.skills.intelligence).toStrictEqual(0);
+  prestigeSourceFile(true);
   // Start without exp.
   expect(Player.exp.intelligence).toStrictEqual(0);
+  // When having SF5 and the skill level is 0, it's set to 1.
   expect(Player.skills.intelligence).toStrictEqual(1);
   expect(Player.persistentIntelligenceData.exp).toStrictEqual(0);
   // Gain 1e6 exp (skill = 242).
