@@ -1,10 +1,10 @@
 import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
+import type { BaseServer } from "../../Server/BaseServer";
 import { combinePath, isFilePath } from "../../Paths/FilePath";
 import { hasTextExtension, validTextExtensions } from "../../Paths/TextFilePath";
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
 import { PromptEvent } from "../../ui/React/PromptManager";
-import { ContentFilePath } from "src/Paths/ContentFile";
+import type { ContentFilePath } from "../../Paths/ContentFile";
 
 function pickDirectory(): Promise<null | FileList> {
   return new Promise((resolve) => {
@@ -36,14 +36,6 @@ function askConfirm(txt: string): Promise<boolean> {
   });
 }
 
-function isFileExists(server: BaseServer, file: ContentFilePath): boolean {
-  if (hasTextExtension(file)) {
-    return server.textFiles.has(file);
-  } else {
-    return server.scripts.has(file);
-  }
-}
-
 async function uploadAsync(args: (string | number | boolean)[], server: BaseServer) {
   if (args.length !== 1) {
     return Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
@@ -63,15 +55,34 @@ async function uploadAsync(args: (string | number | boolean)[], server: BaseServ
     | { create: ContentFilePath; file: File }
   )[] = [...files].map((f) => {
     const { webkitRelativePath } = f;
+    /*
+     If the player has a directory /home/alice/foo/bar on her computer
+     and wants to upload the contents of the directory
+     and if the directory hierarchy looks like this:
+     /home/alice/foo/bar
+     ├── hello
+     │   └── world.js
+     └── more
+         └── files.txt
+      `webkitRelativePath` for world.js will be "bar/hello/world.js"
+      `path` will be "hello/world.js"
+      `webkitRelativePath` for files.txt will "bar/more/files.txt"
+      `path` will be "more/files.txt"
+     */
     const path = webkitRelativePath.substring(1 + webkitRelativePath.indexOf("/"));
     if (!isFilePath(path)) {
       return { badPath: path };
     }
     const destFilePath = combinePath(destination, path);
-    if (!hasTextExtension(destFilePath) && !hasScriptExtension(destFilePath)) {
+    let fileExists: boolean;
+    if (hasTextExtension(destFilePath)) {
+      fileExists = server.textFiles.has(destFilePath);
+    } else if (hasScriptExtension(destFilePath)) {
+      fileExists = server.scripts.has(destFilePath);
+    } else {
       return { badPath: path };
     }
-    if (isFileExists(server, destFilePath)) {
+    if (fileExists) {
       return {
         overwrite: destFilePath,
         file: f,
@@ -85,37 +96,35 @@ async function uploadAsync(args: (string | number | boolean)[], server: BaseServ
   const overwrite = withPath.filter((item) => "overwrite" in item);
   const skipped = withPath.filter((item) => "badPath" in item);
   const create = withPath.filter((item) => "create" in item);
-  let lines = [`Upload files to ${destination}?`];
+  const destForPrint = destination === "" ? "/" : destination;
+  let lines = [`Upload files to ${destForPrint}?`];
   if (overwrite.length !== 0) {
     lines = [
       ...lines,
       "",
       `${overwrite.length} files will be overwritten:`,
-      ...overwrite.map(({ overwrite }) => `O ${overwrite}`),
+      ...overwrite.map(({ overwrite }) => overwrite),
     ];
   }
   if (skipped.length !== 0) {
     const extensions = [...validScriptExtensions, ...validTextExtensions];
-    const last = extensions.pop() as string;
-    const allValid = extensions.join(", ") + " and " + last;
     lines = [
       ...lines,
       "",
       "Characters * ? [ ] ! \\ ~ | # \" ' and whitespace are not allowed in file paths.",
-      `Only file extensions ${allValid} are allowed.`,
+      `Only file extensions ${extensions.join(", ")} are allowed.`,
       "A file name must have at least one character before the extension.",
       "",
       `${skipped.length} files will be skipped due to prohibited file paths:`,
-      ...skipped.map(({ badPath }) => `S ${badPath}`),
+      ...skipped.map(({ badPath }) => badPath),
     ];
   }
   if (create.length !== 0) {
-    lines = [...lines, "", `${create.length} new files will be created:`, ...create.map(({ create }) => `C ${create}`)];
+    lines = [...lines, "", `${create.length} new files will be created:`, ...create.map(({ create }) => create)];
   }
   if (!(await askConfirm(lines.join("\n")))) {
     return;
   }
-  const destForPrint = destination === "" ? "/" : destination;
   Terminal.print(`Starting to upload files to ${destForPrint}`);
   for (const item of [...overwrite, ...create]) {
     const destFilePath = "create" in item ? item.create : item.overwrite;
