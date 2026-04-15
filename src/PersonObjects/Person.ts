@@ -147,6 +147,10 @@ export abstract class Person implements IPerson {
   }
 
   overrideIntelligence(): void {
+    // Do not set anything if the player has not unlocked Intelligence.
+    if (Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
+      return;
+    }
     const persistentIntelligenceSkill = this.calculateSkill(this.persistentIntelligenceData.exp, 1);
     // Reset exp and skill to the persistent values if there is no limit (intelligenceOverride) or the limit is greater
     // than or equal to the persistent skill.
@@ -172,7 +176,7 @@ export abstract class Person implements IPerson {
      * Don't change sourceFileLvl to activeSourceFileLvl. When the player has int level, the ability to gain more int is
      * a permanent benefit.
      */
-    if (Player.sourceFileLvl(5) > 0 || this.skills.intelligence > 0 || Player.bitNodeN === 5) {
+    if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
       this.exp.intelligence += exp;
       this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, 1));
       this.persistentIntelligenceData.exp += exp;

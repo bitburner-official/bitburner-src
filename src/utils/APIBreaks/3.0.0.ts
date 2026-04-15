@@ -624,5 +624,20 @@ export const breakingChanges300: VersionBreakingChange = {
         `- Read the "General rules", "String conversion", and "Tips" sections on the "Coding Contracts" page carefully.`,
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.gang.getOtherGangInformation",
+          migration: {
+            searchValue: "getOtherGangInformation",
+            replaceValue: "getAllGangInformation",
+          },
+        },
+      ],
+      info:
+        "ns.gang.getOtherGangInformation() was renamed to ns.gang.getAllGangInformation().\n" +
+        "The function was renamed because it returns information about all gangs, including the player's own gang.",
+      showWarning: false,
+    },
   ],
 };

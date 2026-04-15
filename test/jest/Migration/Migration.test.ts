@@ -105,4 +105,31 @@ describe("v3", () => {
       `bitburnerSave_backup_2.8.1_${Math.round(lastUpdate / 1000)}.json.gz`,
     );
   });
+
+  describe("Intelligence migration bug", () => {
+    test("No change in exp and skill level", async () => {
+      const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v2.8.1_SF1.1_SF10.3.gz"));
+      const mockedDownload = await loadGameFromSaveData(saveData);
+
+      for (const person of [Player, ...Player.sleeves]) {
+        expect(person.persistentIntelligenceData.exp).toStrictEqual(0);
+        expect(person.exp.intelligence).toStrictEqual(0);
+        expect(person.skills.intelligence).toStrictEqual(0);
+      }
+
+      expect(mockedDownload).toHaveBeenCalledWith(saveData, "bitburnerSave_backup_2.8.1_1776173824.json.gz");
+    });
+    test("Reset wrong exp and skill level", async () => {
+      const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v3.0.0_int_migration_bug.gz"));
+      const mockedDownload = await loadGameFromSaveData(saveData);
+
+      for (const person of [Player, ...Player.sleeves]) {
+        expect(person.persistentIntelligenceData.exp).toStrictEqual(0);
+        expect(person.exp.intelligence).toStrictEqual(0);
+        expect(person.skills.intelligence).toStrictEqual(0);
+      }
+
+      expect(mockedDownload).not.toHaveBeenCalled();
+    });
+  });
 });

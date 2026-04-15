@@ -36,6 +36,7 @@ import { loadInfiltrations } from "./Infiltration/SaveLoadInfiltration";
 import { InfiltrationState } from "./Infiltration/formulas/game";
 import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
 import { loadSettings } from "./Settings/SettingsUtils";
+import { getBitNodeLevel } from "./BitNode/BitNodeUtils";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -270,7 +271,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
      * - Base64 format: save file uses .json extension. Save data is the base64-encoded json save string.
      */
     const extension = canUseBinaryFormat() ? "json.gz" : "json";
-    return `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.${extension}`;
+    return `bitburnerSave_${epochTime}_BN${bn}x${getBitNodeLevel()}.${extension}`;
   }
 
   async exportGame(): Promise<void> {
@@ -430,7 +431,10 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       achievements: importedPlayer.achievements?.length ?? 0,
 
       bitNode: importedPlayer.bitNodeN,
-      bitNodeLevel: importedPlayer.sourceFileLvl(importedPlayer.bitNodeN) + 1,
+      bitNodeLevel: getBitNodeLevel(
+        importedPlayer.bitNodeN,
+        importedPlayer.activeSourceFileLvl(importedPlayer.bitNodeN),
+      ),
       sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
       exploits: importedPlayer.exploits.length,
 

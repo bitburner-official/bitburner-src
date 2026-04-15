@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import { BitNodeMultiplierDescription } from "./BitnodeMultipliersDescription";
 import { BitNodeAdvancedOptions } from "./BitNodeAdvancedOptions";
 import { JSONMap } from "../../Types/Jsonable";
+import { getBitNodeLevel } from "../BitNodeUtils";
 
 interface IProps {
   open: boolean;
@@ -37,7 +38,7 @@ export function PortalModal(props: IProps): React.ReactElement {
   const bitNode = BitNodes[bitNodeKey];
   if (bitNode == null) throw new Error(`Could not find BitNode object for number: ${props.n}`);
   const maxSourceFileLevel = props.n === 12 ? "∞" : "3";
-  const newLevel = Math.min(props.level + 1, props.n === 12 ? Number.MAX_VALUE : 3);
+  const newLevel = getBitNodeLevel(props.n, props.level);
 
   let currentSourceFiles = new Map(Player.sourceFiles);
   if (!props.flume) {

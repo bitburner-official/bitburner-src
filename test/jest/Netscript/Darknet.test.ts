@@ -34,6 +34,7 @@ import {
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 import type { Result } from "@nsdefs";
 import { assertNonNullish } from "../../../src/utils/TypeAssertion";
+import { roundToTwo } from "../../../src/utils/helpers/roundToTwo";
 
 const hostnameOfNonExistentServer = "fake-server";
 const errorMessageForNonExistentServer = `Invalid host: '${hostnameOfNonExistentServer}'`;
@@ -53,7 +54,9 @@ beforeEach(() => {
   getDarkscapeNavigator();
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
   Player.mults.charisma = 1e10;
+  Player.mults.hacking = 1e10;
   Player.gainCharismaExp(1e100);
+  Player.gainHackingExp(1e100);
   getNsOnServerNearLabyrinth();
 });
 
@@ -1223,9 +1226,13 @@ describe("Use IP instead of hostname", () => {
     server.ramUsed = server.blockedRam = 1;
 
     const ns = getNS(server.hostname);
+    const initialBlockedRam = server.blockedRam;
     const result3 = await ns.dnet.memoryReallocation(ns.getIP());
+    const updatedBlockedRam = getDarknetServerOrThrow(server.hostname).blockedRam;
     expect(result3.success).toStrictEqual(true);
     expect(result3.code).toStrictEqual(ResponseCodeEnum.Success);
+    expect(updatedBlockedRam).toBeLessThan(initialBlockedRam);
+    expect(updatedBlockedRam).toEqual(roundToTwo(updatedBlockedRam));
   });
   test("getBlockedRam", () => {
     const ns = getNsOnNonDarkwebDarknetServer();

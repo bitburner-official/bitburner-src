@@ -134,7 +134,7 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.(js$|jsx|ts|tsx)$/,
+          test: /\.(js|jsx|ts|tsx)$/,
           exclude: /node_modules/,
           resourceQuery: { not: /raw/ },
           use: {
