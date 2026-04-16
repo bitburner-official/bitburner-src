@@ -14,9 +14,39 @@ canCreateCorporation(selfFund: boolean): CreatingCorporationCheckResult;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  selfFund | boolean | true if you want to self-fund, false otherwise |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+selfFund
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+true if you want to self-fund, false otherwise
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

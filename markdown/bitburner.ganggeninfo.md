@@ -14,19 +14,292 @@ interface GangGenInfo
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [faction](./bitburner.ganggeninfo.faction.md) |  | string | Name of faction that the gang belongs to ("Slum Snakes", etc.) |
-|  [isHacking](./bitburner.ganggeninfo.ishacking.md) |  | boolean | Indicating whether or not it's a hacking gang |
-|  [moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md) |  | number | Money earned per game cycle |
-|  [power](./bitburner.ganggeninfo.power.md) |  | number | Gang's power for territory warfare |
-|  [respect](./bitburner.ganggeninfo.respect.md) |  | number | Gang's respect |
-|  [respectForNextRecruit](./bitburner.ganggeninfo.respectfornextrecruit.md) |  | number | Amount of Respect needed for next gang recruit, if possible |
-|  [respectGainRate](./bitburner.ganggeninfo.respectgainrate.md) |  | number | Respect earned per game cycle |
-|  [territory](./bitburner.ganggeninfo.territory.md) |  | number | Amount of territory held, in the range 0-1 |
-|  [territoryClashChance](./bitburner.ganggeninfo.territoryclashchance.md) |  | number | Clash chance |
-|  [territoryWarfareEngaged](./bitburner.ganggeninfo.territorywarfareengaged.md) |  | boolean | Indicating if territory clashes are enabled |
-|  [wantedLevel](./bitburner.ganggeninfo.wantedlevel.md) |  | number | Gang's wanted level |
-|  [wantedLevelGainRate](./bitburner.ganggeninfo.wantedlevelgainrate.md) |  | number | Wanted level gained/lost per game cycle (negative for losses) |
-|  [wantedPenalty](./bitburner.ganggeninfo.wantedpenalty.md) |  | number | Number indicating the current wanted penalty |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[equipmentCostMult](./bitburner.ganggeninfo.equipmentcostmult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Gang gives a discount on all equipment. This multiplier is applied to the equipment cost.
+
+
+</td></tr>
+<tr><td>
+
+[faction](./bitburner.ganggeninfo.faction.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of faction that the gang belongs to ("Slum Snakes", etc.)
+
+
+</td></tr>
+<tr><td>
+
+[isHacking](./bitburner.ganggeninfo.ishacking.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Indicating whether or not it's a hacking gang
+
+
+</td></tr>
+<tr><td>
+
+[moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Money earned per game cycle
+
+
+</td></tr>
+<tr><td>
+
+[power](./bitburner.ganggeninfo.power.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Gang's power for territory warfare
+
+
+</td></tr>
+<tr><td>
+
+[respect](./bitburner.ganggeninfo.respect.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Gang's respect
+
+
+</td></tr>
+<tr><td>
+
+[respectForNextRecruit](./bitburner.ganggeninfo.respectfornextrecruit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of Respect needed for next gang recruit, if possible
+
+
+</td></tr>
+<tr><td>
+
+[respectGainRate](./bitburner.ganggeninfo.respectgainrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Respect earned per game cycle
+
+
+</td></tr>
+<tr><td>
+
+[territory](./bitburner.ganggeninfo.territory.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of territory held, in the range 0-1
+
+
+</td></tr>
+<tr><td>
+
+[territoryClashChance](./bitburner.ganggeninfo.territoryclashchance.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Clash chance
+
+
+</td></tr>
+<tr><td>
+
+[territoryWarfareEngaged](./bitburner.ganggeninfo.territorywarfareengaged.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Indicating if territory clashes are enabled
+
+
+</td></tr>
+<tr><td>
+
+[wantedLevel](./bitburner.ganggeninfo.wantedlevel.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Gang's wanted level
+
+
+</td></tr>
+<tr><td>
+
+[wantedLevelGainRate](./bitburner.ganggeninfo.wantedlevelgainrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Wanted level gained/lost per game cycle (negative for losses)
+
+
+</td></tr>
+<tr><td>
+
+[wantedPenalty](./bitburner.ganggeninfo.wantedpenalty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number indicating the current wanted penalty
+
+
+</td></tr>
+</tbody></table>
 

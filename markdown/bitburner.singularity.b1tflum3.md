@@ -14,11 +14,71 @@ b1tflum3(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOption
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  nextBN | number | BN number to jump to |
-|  callbackScript | string | _(Optional)_ Name of the script to launch in the next BN. |
-|  bitNodeOptions | [BitNodeOptions](./bitburner.bitnodeoptions.md) | _(Optional)_ BitNode options for the next BN. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+nextBN
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+BN number to jump to
+
+
+</td></tr>
+<tr><td>
+
+callbackScript
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Name of the script to launch in the next BN.
+
+
+</td></tr>
+<tr><td>
+
+bitNodeOptions
+
+
+</td><td>
+
+[BitNodeOptions](./bitburner.bitnodeoptions.md)
+
+
+</td><td>
+
+_(Optional)_ BitNode options for the next BN.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

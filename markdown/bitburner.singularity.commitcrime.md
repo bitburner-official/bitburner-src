@@ -9,15 +9,60 @@ Commit a crime.
 **Signature:**
 
 ```typescript
-commitCrime(crime: CrimeType | `${CrimeType}`, focus?: boolean): number;
+commitCrime(crime: CrimeType, focus?: boolean): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  crime | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` | Name of crime to attempt. |
-|  focus | boolean | _(Optional)_ Acquire player focus on this crime. Optional. Defaults to true. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+crime
+
+
+</td><td>
+
+[CrimeType](./bitburner.crimetype.md)
+
+
+</td><td>
+
+Name of crime to attempt.
+
+
+</td></tr>
+<tr><td>
+
+focus
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Acquire player focus on this crime. Optional. Defaults to true.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -16,10 +16,55 @@ getCheatSuccessChance(cheatCount?: number, playAsWhite?: boolean): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  cheatCount | number | _(Optional)_ Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game. |
-|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+cheatCount
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
+
+
+</td></tr>
+<tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -29,5 +74,7 @@ Your chance of successfully playing a cheat move.
 
 ## Remarks
 
-RAM cost: 1 GB Requires BitNode 14.2 to use
+RAM cost: 1 GB
+
+Requires Source-File 14.2 to use
 

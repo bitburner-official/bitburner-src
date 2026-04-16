@@ -14,30 +14,482 @@ export interface Server
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [backdoorInstalled?](./bitburner.server.backdoorinstalled.md) |  | boolean | _(Optional)_ Flag indicating whether this server has a backdoor installed by a player |
-|  [baseDifficulty?](./bitburner.server.basedifficulty.md) |  | number | _(Optional)_ Server's initial server security level at creation. |
-|  [cpuCores](./bitburner.server.cpucores.md) |  | number | How many CPU cores this server has. Affects magnitude of grow and weaken ran from this server. |
-|  [ftpPortOpen](./bitburner.server.ftpportopen.md) |  | boolean | Whether or not the FTP port is open |
-|  [hackDifficulty?](./bitburner.server.hackdifficulty.md) |  | number | _(Optional)_ Server Security Level |
-|  [hasAdminRights](./bitburner.server.hasadminrights.md) |  | boolean | Flag indicating whether player has admin/root access to this server |
-|  [hostname](./bitburner.server.hostname.md) |  | string | Hostname. Must be unique |
-|  [httpPortOpen](./bitburner.server.httpportopen.md) |  | boolean | Whether or not the HTTP Port is open |
-|  [ip](./bitburner.server.ip.md) |  | string | IP Address. Must be unique |
-|  [isConnectedTo](./bitburner.server.isconnectedto.md) |  | boolean | Flag indicating whether player is currently connected to this server |
-|  [maxRam](./bitburner.server.maxram.md) |  | number | RAM (GB) available on this server |
-|  [minDifficulty?](./bitburner.server.mindifficulty.md) |  | number | _(Optional)_ Minimum server security level that this server can be weakened to |
-|  [moneyAvailable?](./bitburner.server.moneyavailable.md) |  | number | _(Optional)_ How much money currently resides on the server and can be hacked |
-|  [moneyMax?](./bitburner.server.moneymax.md) |  | number | _(Optional)_ Maximum amount of money that this server can hold |
-|  [numOpenPortsRequired?](./bitburner.server.numopenportsrequired.md) |  | number | _(Optional)_ Number of open ports required in order to gain admin/root access |
-|  [openPortCount?](./bitburner.server.openportcount.md) |  | number | _(Optional)_ How many ports are currently opened on the server |
-|  [organizationName](./bitburner.server.organizationname.md) |  | string | Name of company/faction/etc. that this server belongs to, not applicable to all Servers |
-|  [purchasedByPlayer](./bitburner.server.purchasedbyplayer.md) |  | boolean | Flag indicating whether this is a purchased server |
-|  [ramUsed](./bitburner.server.ramused.md) |  | number | RAM (GB) used. i.e. unavailable RAM |
-|  [requiredHackingSkill?](./bitburner.server.requiredhackingskill.md) |  | number | _(Optional)_ Hacking level required to hack this server |
-|  [serverGrowth?](./bitburner.server.servergrowth.md) |  | number | _(Optional)_ Growth effectiveness statistic. Higher values produce more growth with ns.grow() |
-|  [smtpPortOpen](./bitburner.server.smtpportopen.md) |  | boolean | Whether or not the SMTP Port is open |
-|  [sqlPortOpen](./bitburner.server.sqlportopen.md) |  | boolean | Whether or not the SQL Port is open |
-|  [sshPortOpen](./bitburner.server.sshportopen.md) |  | boolean | Whether or not the SSH Port is open |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[backdoorInstalled?](./bitburner.server.backdoorinstalled.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Flag indicating whether this server has a backdoor installed by a player
+
+
+</td></tr>
+<tr><td>
+
+[baseDifficulty?](./bitburner.server.basedifficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Server's initial server security level at creation.
+
+
+</td></tr>
+<tr><td>
+
+[cpuCores](./bitburner.server.cpucores.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+How many CPU cores this server has. Affects magnitude of grow and weaken ran from this server.
+
+
+</td></tr>
+<tr><td>
+
+[ftpPortOpen](./bitburner.server.ftpportopen.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether or not the FTP port is open
+
+
+</td></tr>
+<tr><td>
+
+[hackDifficulty?](./bitburner.server.hackdifficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Server Security Level
+
+
+</td></tr>
+<tr><td>
+
+[hasAdminRights](./bitburner.server.hasadminrights.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Flag indicating whether player has admin/root access to this server
+
+
+</td></tr>
+<tr><td>
+
+[hostname](./bitburner.server.hostname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname. Must be unique
+
+
+</td></tr>
+<tr><td>
+
+[httpPortOpen](./bitburner.server.httpportopen.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether or not the HTTP Port is open
+
+
+</td></tr>
+<tr><td>
+
+[ip](./bitburner.server.ip.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+IP Address. Must be unique
+
+
+</td></tr>
+<tr><td>
+
+[isConnectedTo](./bitburner.server.isconnectedto.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Flag indicating whether player is currently connected to this server
+
+
+</td></tr>
+<tr><td>
+
+[maxRam](./bitburner.server.maxram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+RAM (GB) available on this server
+
+
+</td></tr>
+<tr><td>
+
+[minDifficulty?](./bitburner.server.mindifficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Minimum server security level that this server can be weakened to
+
+
+</td></tr>
+<tr><td>
+
+[moneyAvailable?](./bitburner.server.moneyavailable.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ How much money currently resides on the server and can be hacked
+
+
+</td></tr>
+<tr><td>
+
+[moneyMax?](./bitburner.server.moneymax.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Maximum amount of money that this server can hold
+
+
+</td></tr>
+<tr><td>
+
+[numOpenPortsRequired?](./bitburner.server.numopenportsrequired.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of open ports required in order to gain admin/root access
+
+
+</td></tr>
+<tr><td>
+
+[openPortCount?](./bitburner.server.openportcount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ How many ports are currently opened on the server
+
+
+</td></tr>
+<tr><td>
+
+[organizationName](./bitburner.server.organizationname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of company/faction/etc. that this server belongs to, not applicable to all Servers
+
+
+</td></tr>
+<tr><td>
+
+[purchasedByPlayer](./bitburner.server.purchasedbyplayer.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Flag indicating whether this is a server owned by the player (e.g., home, cloud servers, hacknet servers)
+
+
+</td></tr>
+<tr><td>
+
+[ramUsed](./bitburner.server.ramused.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+RAM (GB) used. i.e. unavailable RAM
+
+
+</td></tr>
+<tr><td>
+
+[requiredHackingSkill?](./bitburner.server.requiredhackingskill.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Hacking level required to hack this server
+
+
+</td></tr>
+<tr><td>
+
+[serverGrowth?](./bitburner.server.servergrowth.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Growth effectiveness statistic. Higher values produce more growth with ns.grow()
+
+
+</td></tr>
+<tr><td>
+
+[smtpPortOpen](./bitburner.server.smtpportopen.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether or not the SMTP Port is open
+
+
+</td></tr>
+<tr><td>
+
+[sqlPortOpen](./bitburner.server.sqlportopen.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether or not the SQL Port is open
+
+
+</td></tr>
+<tr><td>
+
+[sshPortOpen](./bitburner.server.sshportopen.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether or not the SSH Port is open
+
+
+</td></tr>
+</tbody></table>
 

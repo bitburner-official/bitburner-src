@@ -14,13 +14,159 @@ interface IndustryData
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cost](./bitburner.industrydata.cost.md) |  | number | Cost to make a new division of this industry type |
-|  [makesMaterials](./bitburner.industrydata.makesmaterials.md) |  | boolean | Whether the division makes materials |
-|  [makesProducts](./bitburner.industrydata.makesproducts.md) |  | boolean | Whether the division makes products |
-|  [producedMaterials?](./bitburner.industrydata.producedmaterials.md) |  | string\[\] | _(Optional)_ Materials produced |
-|  [productType?](./bitburner.industrydata.producttype.md) |  | string | _(Optional)_ Product type |
-|  [requiredMaterials](./bitburner.industrydata.requiredmaterials.md) |  | Record&lt;string, number&gt; | Materials required for production and their amounts |
-|  [type](./bitburner.industrydata.type.md) |  | [CorpIndustryName](./bitburner.corpindustryname.md) | Industry type |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cost](./bitburner.industrydata.cost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cost to make a new division of this industry type
+
+
+</td></tr>
+<tr><td>
+
+[makesMaterials](./bitburner.industrydata.makesmaterials.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether the division makes materials
+
+
+</td></tr>
+<tr><td>
+
+[makesProducts](./bitburner.industrydata.makesproducts.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether the division makes products
+
+
+</td></tr>
+<tr><td>
+
+[producedMaterials?](./bitburner.industrydata.producedmaterials.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+_(Optional)_ Materials produced
+
+
+</td></tr>
+<tr><td>
+
+[productType?](./bitburner.industrydata.producttype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Product type
+
+
+</td></tr>
+<tr><td>
+
+[requiredMaterials](./bitburner.industrydata.requiredmaterials.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Record&lt;string, number&gt;
+
+
+</td><td>
+
+Materials required for production and their amounts
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.industrydata.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpIndustryName](./bitburner.corpindustryname.md)
+
+
+</td><td>
+
+Industry type
+
+
+</td></tr>
+</tbody></table>
 

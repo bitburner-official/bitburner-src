@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -11,6 +10,9 @@ import { GetServer, GetAllServers } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { DarknetServer } from "../../Server/DarknetServer";
 
 export function ServersDev(): React.ReactElement {
   const [server, setServer] = useState<string>("home");
@@ -30,7 +32,7 @@ export function ServersDev(): React.ReactElement {
   }
 
   function rootAllServers(): void {
-    for (const s of GetAllServers()) {
+    for (const s of GetAllServers(true)) {
       if (!(s instanceof Server)) return;
       s.hasAdminRights = true;
       s.sshPortOpen = true;
@@ -50,8 +52,8 @@ export function ServersDev(): React.ReactElement {
   }
 
   function backdoorAllServers(): void {
-    for (const s of GetAllServers()) {
-      if (!(s instanceof Server)) return;
+    for (const s of GetAllServers(true)) {
+      if (!(s instanceof Server || s instanceof DarknetServer) || s.hostname === SpecialServers.WorldDaemon) continue;
       s.backdoorInstalled = true;
     }
   }
@@ -99,7 +101,7 @@ export function ServersDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_ServersDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Servers</Typography>
       </AccordionSummary>
@@ -178,6 +180,6 @@ export function ServersDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

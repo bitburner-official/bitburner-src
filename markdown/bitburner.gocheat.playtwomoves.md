@@ -28,13 +28,103 @@ playTwoMoves(
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  x1 | number | x coordinate of first move to make |
-|  y1 | number | y coordinate of first move to make |
-|  x2 | number | x coordinate of second move to make |
-|  y2 | number | y coordinate of second move to make |
-|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+x1
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+x coordinate of first move to make
+
+
+</td></tr>
+<tr><td>
+
+y1
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+y coordinate of first move to make
+
+
+</td></tr>
+<tr><td>
+
+x2
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+x coordinate of second move to make
+
+
+</td></tr>
+<tr><td>
+
+y2
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+y coordinate of second move to make
+
+
+</td></tr>
+<tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -44,5 +134,7 @@ a promise that contains the opponent move's x and y coordinates (or pass) in res
 
 ## Remarks
 
-RAM cost: 8 GB Requires BitNode 14.2 to use
+RAM cost: 8 GB
+
+Requires Source-File 14.2 to use
 

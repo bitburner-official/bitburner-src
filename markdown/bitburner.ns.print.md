@@ -14,9 +14,39 @@ print(...args: any[]): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  args | any\[\] | Value(s) to be printed. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+Value(s) to be printed.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -58,6 +88,6 @@ const reset = "\u001b[0m";
 ns.print(`${red}Ugh! What a mess.${reset}`);
 ns.print(`${green}Well done!${reset}`);
 ns.print(`${cyan}ERROR Should this be in red?${reset}`);
-ns.tail();
+ns.ui.openTail();
 ```
 

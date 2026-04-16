@@ -9,15 +9,60 @@ Set a sleeve to commit crime.
 **Signature:**
 
 ```typescript
-setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): boolean;
+setToCommitCrime(sleeveNumber: number, crimeType: CrimeType): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sleeveNumber | number | Index of the sleeve to start committing crime. Sleeves are numbered starting from 0. |
-|  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` | Name of the crime. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sleeveNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index of the sleeve to start committing crime. Sleeves are numbered starting from 0.
+
+
+</td></tr>
+<tr><td>
+
+crimeType
+
+
+</td><td>
+
+[CrimeType](./bitburner.crimetype.md)
+
+
+</td><td>
+
+Name of the crime.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

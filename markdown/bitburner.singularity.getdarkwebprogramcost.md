@@ -9,14 +9,44 @@ Check the price of an exploit on the dark web
 **Signature:**
 
 ```typescript
-getDarkwebProgramCost(programName: string): number;
+getDarkwebProgramCost(programName: ProgramName): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  programName | string | Name of program to check the price of |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+programName
+
+
+</td><td>
+
+[ProgramName](./bitburner.programname.md)
+
+
+</td><td>
+
+Name of program to check the price of
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -38,6 +68,6 @@ If the program does not exist, an error is thrown.
 ```js
 const programName = "BruteSSH.exe";
 const cost = ns.singularity.getDarkwebProgramCost(programName);
-if (cost > 0) ns.tprint(`${programName} costs $${ns.formatNumber(cost)}`);
+if (cost > 0) ns.tprint(`${programName} costs $${ns.format.number(cost)}`);
 ```
 

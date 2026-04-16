@@ -9,20 +9,76 @@ Take university class.
 **Signature:**
 
 ```typescript
-universityCourse(
-    universityName: UniversityLocationName | `${UniversityLocationName}`,
-    courseName: UniversityClassType | `${UniversityClassType}`,
-    focus?: boolean,
-  ): boolean;
+universityCourse(universityName: UniversityLocationName, courseName: UniversityClassType, focus?: boolean): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  universityName | [UniversityLocationName](./bitburner.universitylocationname.md) \| \`${[UniversityLocationName](./bitburner.universitylocationname.md)<!-- -->}\` | Name of university. You must be in the correct city for whatever university you specify. |
-|  courseName | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` | Name of course. |
-|  focus | boolean | _(Optional)_ Acquire player focus on this class. Optional. Defaults to true. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+universityName
+
+
+</td><td>
+
+[UniversityLocationName](./bitburner.universitylocationname.md)
+
+
+</td><td>
+
+Name of university. You must be in the correct city for whatever university you specify.
+
+
+</td></tr>
+<tr><td>
+
+courseName
+
+
+</td><td>
+
+[UniversityClassType](./bitburner.universityclasstype.md)
+
+
+</td><td>
+
+Name of course.
+
+
+</td></tr>
+<tr><td>
+
+focus
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Acquire player focus on this class. Optional. Defaults to true.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

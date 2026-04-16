@@ -14,22 +14,203 @@ interface UserInterface
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [clearTerminal()](./bitburner.userinterface.clearterminal.md) | Clear the Terminal window, as if the player ran <code>clear</code> in the terminal |
-|  [closeTail(pid)](./bitburner.userinterface.closetail.md) | Close the tail window of a script. |
-|  [getGameInfo()](./bitburner.userinterface.getgameinfo.md) | Gets the current game information (version, commit, ...) |
-|  [getStyles()](./bitburner.userinterface.getstyles.md) | Get the current styles |
-|  [getTheme()](./bitburner.userinterface.gettheme.md) | Get the current theme |
-|  [moveTail(x, y, pid)](./bitburner.userinterface.movetail.md) | Move a tail window. |
-|  [openTail(fn, host, args)](./bitburner.userinterface.opentail.md) | Open the tail window of a script. |
-|  [renderTail(pid)](./bitburner.userinterface.rendertail.md) | Render a tail window. |
-|  [resetStyles()](./bitburner.userinterface.resetstyles.md) | Resets the player's styles to the default values |
-|  [resetTheme()](./bitburner.userinterface.resettheme.md) | Resets the player's theme to the default values |
-|  [resizeTail(width, height, pid)](./bitburner.userinterface.resizetail.md) | Resize a tail window. |
-|  [setStyles(newStyles)](./bitburner.userinterface.setstyles.md) | Sets the current styles |
-|  [setTailFontSize(pixel, fn, host, args)](./bitburner.userinterface.settailfontsize.md) | Set the font size of the tail window of a script. |
-|  [setTailTitle(title, pid)](./bitburner.userinterface.settailtitle.md) | Set the title of the tail window of a script. |
-|  [setTheme(newTheme)](./bitburner.userinterface.settheme.md) | Sets the current theme |
-|  [windowSize()](./bitburner.userinterface.windowsize.md) | Get the current window size |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[clearTerminal()](./bitburner.userinterface.clearterminal.md)
+
+
+</td><td>
+
+Clear the Terminal window, as if the player ran `clear` in the terminal
+
+
+</td></tr>
+<tr><td>
+
+[closeTail(pid)](./bitburner.userinterface.closetail.md)
+
+
+</td><td>
+
+Close the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[getGameInfo()](./bitburner.userinterface.getgameinfo.md)
+
+
+</td><td>
+
+Gets the current game information (version, commit, ...)
+
+
+</td></tr>
+<tr><td>
+
+[getStyles()](./bitburner.userinterface.getstyles.md)
+
+
+</td><td>
+
+Get the current styles
+
+
+</td></tr>
+<tr><td>
+
+[getTheme()](./bitburner.userinterface.gettheme.md)
+
+
+</td><td>
+
+Get the current theme
+
+
+</td></tr>
+<tr><td>
+
+[moveTail(x, y, pid)](./bitburner.userinterface.movetail.md)
+
+
+</td><td>
+
+Move a tail window.
+
+
+</td></tr>
+<tr><td>
+
+[openTail(fn, host, args)](./bitburner.userinterface.opentail.md)
+
+
+</td><td>
+
+Open the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[renderTail(pid)](./bitburner.userinterface.rendertail.md)
+
+
+</td><td>
+
+Render a tail window.
+
+
+</td></tr>
+<tr><td>
+
+[resetStyles()](./bitburner.userinterface.resetstyles.md)
+
+
+</td><td>
+
+Resets the player's styles to the default values
+
+
+</td></tr>
+<tr><td>
+
+[resetTheme()](./bitburner.userinterface.resettheme.md)
+
+
+</td><td>
+
+Resets the player's theme to the default values
+
+
+</td></tr>
+<tr><td>
+
+[resizeTail(width, height, pid)](./bitburner.userinterface.resizetail.md)
+
+
+</td><td>
+
+Resize a tail window.
+
+
+</td></tr>
+<tr><td>
+
+[setStyles(newStyles)](./bitburner.userinterface.setstyles.md)
+
+
+</td><td>
+
+Sets the current styles
+
+
+</td></tr>
+<tr><td>
+
+[setTailFontSize(pixel, fn, host, args)](./bitburner.userinterface.settailfontsize.md)
+
+
+</td><td>
+
+Set the font size of the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[setTailMinimized(minimized, pid)](./bitburner.userinterface.settailminimized.md)
+
+
+</td><td>
+
+Minimize or expand the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[setTailTitle(title, pid)](./bitburner.userinterface.settailtitle.md)
+
+
+</td><td>
+
+Set the title of the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[setTheme(newTheme)](./bitburner.userinterface.settheme.md)
+
+
+</td><td>
+
+Sets the current theme
+
+
+</td></tr>
+<tr><td>
+
+[windowSize()](./bitburner.userinterface.windowsize.md)
+
+
+</td><td>
+
+Get the current window size
+
+
+</td></tr>
+</tbody></table>
 

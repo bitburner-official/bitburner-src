@@ -21,6 +21,7 @@ import { findAnyMatchedPatterns } from "./patternMatching";
 import { WHRNG } from "../../Casino/RNG";
 import { Go, GoEvents } from "../Go";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { sleep } from "../../utils/Utility";
 
 type PlayerPromise = {
   nextTurn: Promise<Play>;
@@ -138,7 +139,9 @@ export function resetAI(endOfGame = false): void {
       playerPromise.resolver(gameOver);
       playerPromise.resolver = null;
     }
-    if (!endOfGame && !playerPromise.resolver) {
+    if (endOfGame) {
+      playerPromise.nextTurn = Promise.resolve(gameOver);
+    } else {
       createPromise(playerPromise);
     }
   }
@@ -865,13 +868,6 @@ export function getKomi(state: BoardState): number {
     return state.komiOverride;
   }
   return opponentDetails[state.ai].komi;
-}
-
-/**
- * Allows time to pass
- */
-export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**

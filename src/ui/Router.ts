@@ -3,6 +3,7 @@ import type { TextFilePath } from "../Paths/TextFilePath";
 import type { Faction } from "../Faction/Faction";
 import type { Location } from "../Locations/Location";
 import type { SaveData } from "../types";
+import type { OptionsTabName } from "../GameOptions/ui/GameOptionsRoot";
 import { ComplexPage, SimplePage } from "./Enums";
 
 // Using the same name as both type and object to mimic enum-like behavior.
@@ -12,8 +13,6 @@ export const Page = { ...SimplePage, ...ComplexPage };
 
 export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   ? { flume: boolean; quick: boolean }
-  : T extends ComplexPage.Infiltration
-  ? { location: Location }
   : T extends ComplexPage.Faction
   ? { faction: Faction }
   : T extends ComplexPage.FactionAugmentations
@@ -26,17 +25,19 @@ export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   ? { saveData: SaveData; automatic?: boolean }
   : T extends ComplexPage.Documentation
   ? { docPage?: string }
+  : T extends ComplexPage.Options
+  ? { tab?: OptionsTabName }
   : never;
 
 export type PageWithContext =
   | ({ page: ComplexPage.BitVerse } & PageContext<ComplexPage.BitVerse>)
-  | ({ page: ComplexPage.Infiltration } & PageContext<ComplexPage.Infiltration>)
   | ({ page: ComplexPage.Faction } & PageContext<ComplexPage.Faction>)
   | ({ page: ComplexPage.FactionAugmentations } & PageContext<ComplexPage.FactionAugmentations>)
   | ({ page: ComplexPage.ScriptEditor } & PageContext<ComplexPage.ScriptEditor>)
   | ({ page: ComplexPage.Location } & PageContext<ComplexPage.Location>)
   | ({ page: ComplexPage.ImportSave } & PageContext<ComplexPage.ImportSave>)
   | ({ page: ComplexPage.Documentation } & PageContext<ComplexPage.Documentation>)
+  | ({ page: ComplexPage.Options } & PageContext<ComplexPage.Options>)
   | { page: ComplexPage.LoadingScreen }
   | { page: SimplePage };
 

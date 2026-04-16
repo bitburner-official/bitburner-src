@@ -65,7 +65,7 @@ export function IssueDividendsModal(props: IProps): React.ReactElement {
         <b>Example:</b> Assume your corporation makes <MoneyRate money={100e6} /> in profit and you allocate 40% of that
         towards dividends. That means your corporation will gain <MoneyRate money={60e6} /> in funds and the remaining{" "}
         <MoneyRate money={40e6} /> will be paid as dividends. Since your corporation starts with 1 billion shares, every
-        shareholder will be paid <Money money={0.04} /> per share per second before taxes.
+        shareholder will be paid <Money money={0.04} /> per share per second before tribute.
       </Typography>
       <br />
       <TextField

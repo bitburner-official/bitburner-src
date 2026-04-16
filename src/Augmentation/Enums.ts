@@ -94,6 +94,13 @@ export enum AugmentationName {
   HydroflameLeftArm = "Hydroflame Left Arm",
   BigDsBigBrain = "BigD's Big ... Brain",
   ZOE = "Z.O.Ë.",
+  Eloquence = "Eloquence Module",
+  GoldenTongue = "Golden Tongue Module",
+  Glib = "Glibness Enhancement",
+  Magnetism = "Magnetism Amplifier",
+  Primer = "The Illustrated Primer",
+  SocialDynamo = "Social Dynamics Processor",
+  Wit = "Neural Wit Amplifier",
   // UnnamedAug2 = "UnnamedAug2",
 
   // Bladeburner augs
@@ -115,9 +122,18 @@ export enum AugmentationName {
   BladeArmorIPU = "BLADE-51b Tesla Armor: IPU Upgrade",
   BladesSimulacrum = "The Blade's Simulacrum",
 
+  // Stanek Augs
   StaneksGift1 = "Stanek's Gift - Genesis",
   StaneksGift2 = "Stanek's Gift - Awakening",
   StaneksGift3 = "Stanek's Gift - Serenity",
+
+  // Darknet lab augs (in order of acquisition)
+  TheBrokenWings = "The W1ngs of Icarus",
+  TheBoots = "The B00ts of Perseus",
+  TheStaff = "The St4ff of Asclepius",
+  TheHammer = "The H4mmer of Daedalus",
+  TheLaw = "The L4w of Bayes",
+  TheSword = "The B1ade of Solomonoff",
 
   // Infiltrators MiniGames
   MightOfAres = "SoA - Might of Ares", // slash

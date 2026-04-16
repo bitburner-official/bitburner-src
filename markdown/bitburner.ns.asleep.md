@@ -9,14 +9,44 @@ Suspends the script for n milliseconds. Doesn't block with concurrent calls.
 **Signature:**
 
 ```typescript
-asleep(millis: number): Promise<true>;
+asleep(millis?: number): Promise<true>;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  millis | number | Number of milliseconds to sleep. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+millis
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of milliseconds to sleep. Default to 0.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -27,4 +57,6 @@ A promise that resolves to true when the sleep is completed.
 ## Remarks
 
 RAM cost: 0 GB
+
+Note that the actual delay may be longer than intended. For more information, please check [https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout\#delay](https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay)<!-- -->.
 

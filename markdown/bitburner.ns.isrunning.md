@@ -14,11 +14,71 @@ isRunning(script: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  script | [FilenameOrPID](./bitburner.filenameorpid.md) | Filename or PID of script to check. This is case-sensitive. |
-|  host | string | _(Optional)_ Hostname of target server. Optional, defaults to the server the calling script is running on. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments to specify/identify the script. Optional, when looking for scripts run without arguments. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+script
+
+
+</td><td>
+
+[FilenameOrPID](./bitburner.filenameorpid.md)
+
+
+</td><td>
+
+Filename or PID of script to check. This is case-sensitive.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -30,7 +90,7 @@ True if the specified script is running on the target server, and false otherwis
 
 RAM cost: 0.1 GB
 
-Returns a boolean indicating whether the specified script is running on the target server. If you use a PID instead of a filename, the hostname and args parameters are unnecessary. If hostname is omitted while filename is used as the first parameter, hostname defaults to the server the calling script is running on. Remember that a script is semi-uniquely identified by both its name and its arguments. (You can run multiple copies of scripts with the same arguments, but for the purposes of functions like this that check based on filename, the filename plus arguments forms the key.)
+Returns a boolean indicating whether the specified script is running on the target server. If you use a PID instead of a filename, the host and args parameters are unnecessary. If host is omitted while filename is used as the first parameter, host defaults to the server the calling script is running on. Remember that a script is semi-uniquely identified by both its name and its arguments. (You can run multiple copies of scripts with the same arguments, but for the purposes of functions like this that check based on filename, the filename plus arguments forms the key.)
 
 ## Example
 

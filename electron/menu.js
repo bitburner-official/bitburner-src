@@ -1,11 +1,35 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, Menu, clipboard, dialog, shell } = require("electron");
+const { app, Menu, dialog, shell } = require("electron");
 const log = require("electron-log");
 const Store = require("electron-store");
-const api = require("./api-server");
 const utils = require("./utils");
 const storage = require("./storage");
 const store = new Store();
+const { steamworksClient } = require("./steamworksUtils");
+
+/** @import {LogLevel} from "electron-log" */
+/**
+ * @param {*} window
+ * @param {"file-log-level" | "console-log-level"} configKey
+ * @param {LogLevel} logLevel
+ * @returns {*}
+ */
+function createLogLevelMenuItem(window, configKey, logLevel) {
+  return {
+    label: logLevel,
+    type: "checkbox",
+    checked: store.get(configKey) === logLevel,
+    click: () => {
+      if (configKey === "file-log-level") {
+        log.transports.file.level = logLevel;
+      } else {
+        log.transports.console.level = logLevel;
+      }
+      store.set(configKey, logLevel);
+      refreshMenu(window);
+    },
+  };
+}
 
 function getMenu(window) {
   const canZoomIn = utils.getZoomFactor() <= 2;
@@ -55,7 +79,7 @@ function getMenu(window) {
         },
         {
           label: "Export Scripts",
-          click: async () => window.webContents.send("trigger-scripts-export"),
+          click: () => window.webContents.send("trigger-scripts-export"),
         },
         {
           type: "separator",
@@ -75,7 +99,7 @@ function getMenu(window) {
         {
           label: "Load From File",
           click: async () => {
-            const defaultPath = await storage.getSaveFolder(window);
+            const defaultPath = storage.getSaveFolder(window);
             const result = await dialog.showOpenDialog(window, {
               title: "Load From File",
               defaultPath: defaultPath,
@@ -104,7 +128,7 @@ function getMenu(window) {
           click: async () => {
             try {
               const saveData = await storage.getSteamCloudSaveData();
-              await storage.pushSaveGameForImport(window, saveData, false);
+              storage.pushSaveGameForImport(window, saveData, false);
             } catch (error) {
               log.error(error);
               utils.writeToast(window, "Could not load from Steam Cloud", "error", 5000);
@@ -127,7 +151,7 @@ function getMenu(window) {
         {
           label: "Auto-Save to Steam Cloud",
           type: "checkbox",
-          enabled: !global.greenworksError,
+          enabled: steamworksClient !== undefined,
           checked: storage.isCloudEnabled(),
           click: (menuItem) => {
             storage.setCloudEnabledConfig(menuItem.checked);
@@ -167,8 +191,8 @@ function getMenu(window) {
             },
             {
               label: "Open Saves Directory",
-              click: async () => {
-                const path = await storage.getSaveFolder(window);
+              click: () => {
+                const path = storage.getSaveFolder(window);
                 shell.openPath(path);
               },
             },
@@ -204,24 +228,10 @@ function getMenu(window) {
       ],
     },
     {
-      label: "Reloads",
+      label: "View",
       submenu: [
         {
-          label: "Reload",
-          accelerator: "f5",
-          click: () => window.loadFile("index.html"),
-        },
-        {
-          label: "Reload && Kill All Scripts",
-          click: () => utils.reloadAndKill(window, true),
-        },
-      ],
-    },
-    {
-      label: "Fullscreen",
-      submenu: [
-        {
-          label: "Toggle",
+          label: "Fullscreen",
           accelerator: "f9",
           click: (() => {
             let full = false;
@@ -231,88 +241,9 @@ function getMenu(window) {
             };
           })(),
         },
-      ],
-    },
-    {
-      label: "API Server",
-      submenu: [
-        {
-          label: api.isListening() ? "Disable Server" : "Enable Server",
-          click: async () => {
-            let success = false;
-            try {
-              await api.toggleServer();
-              success = true;
-            } catch (error) {
-              log.error(error);
-              utils.showErrorBox("Error Toggling Server", error);
-            }
-            if (success && api.isListening()) {
-              utils.writeToast(window, "Started API Server", "success");
-            } else if (success && !api.isListening()) {
-              utils.writeToast(window, "Stopped API Server", "success");
-            } else {
-              utils.writeToast(window, "Error Toggling Server", "error");
-            }
-            refreshMenu(window);
-          },
-        },
-        {
-          label: api.isAutostart() ? "Disable Autostart" : "Enable Autostart",
-          click: async () => {
-            api.toggleAutostart();
-            if (api.isAutostart()) {
-              utils.writeToast(window, "Enabled API Server Autostart", "success");
-            } else {
-              utils.writeToast(window, "Disabled API Server Autostart", "success");
-            }
-            refreshMenu(window);
-          },
-        },
-        {
-          label: "Copy Auth Token",
-          click: async () => {
-            const token = api.getAuthenticationToken();
-            log.log("Wrote authentication token to clipboard");
-            clipboard.writeText(token);
-            utils.writeToast(window, "Copied Authentication Token to Clipboard", "info");
-          },
-        },
         {
           type: "separator",
         },
-        {
-          label: "Information",
-          click: () => {
-            dialog
-              .showMessageBox({
-                type: "warning",
-                title: "Bitburner > API Server Information",
-                message: "The API Server is used to write script files to your in-game home.",
-                detail:
-                  `WARNING: This feature is deprecated. It may be removed in future versions.\n\n` +
-                  `You should use external tools that support our Remote API feature. For details, please check the "Remote API" page in the in-game documentation. You can also check the "external-editors" channel in our Discord server for more information and support.\n\n` +
-                  "--------------------------------------------------------------------------------\n\n" +
-                  "There is an official Visual Studio Code extension that makes use of the API Server feature.\n\n" +
-                  "It allows you to write your script file in an external IDE and have them pushed over to the game automatically.\n" +
-                  "If you want more information, head over to: https://github.com/bitburner-official/bitburner-vscode.",
-                buttons: ["Dismiss", "Open Extension Link (GitHub)"],
-                defaultId: 0,
-                cancelId: 0,
-                noLink: true,
-              })
-              .then(({ response }) => {
-                if (response === 1) {
-                  shell.openExternal("https://github.com/bitburner-official/bitburner-vscode");
-                }
-              });
-          },
-        },
-      ],
-    },
-    {
-      label: "Zoom",
-      submenu: [
         {
           label: "Zoom In",
           enabled: canZoomIn,
@@ -355,11 +286,68 @@ function getMenu(window) {
           acceleratorWorksWhenHidden: true,
           click: resetZoom,
         },
+        {
+          type: "separator",
+        },
+        {
+          label: "Autohide top menu",
+          type: "checkbox",
+          checked: storage.isMenuHideEnabled(),
+          click: (menuItem) => {
+            storage.setMenuHideConfig(menuItem.checked);
+            window.setAutoHideMenuBar(menuItem.checked);
+            if (menuItem.checked) {
+              window.setMenuBarVisibility(false);
+            } else {
+              window.setMenuBarVisibility(true);
+            }
+            refreshMenu(window);
+          },
+        },
+      ],
+    },
+    {
+      label: "Reloads",
+      submenu: [
+        {
+          label: "Reload",
+          accelerator: "f5",
+          click: () => window.loadFile("index.html"),
+        },
+        {
+          label: "Reload && Kill All Scripts",
+          click: () => utils.reloadAndKill(window, true),
+        },
       ],
     },
     {
       label: "Debug",
       submenu: [
+        {
+          label: "File Log Level",
+          submenu: [
+            createLogLevelMenuItem(window, "file-log-level", "error"),
+            createLogLevelMenuItem(window, "file-log-level", "warn"),
+            createLogLevelMenuItem(window, "file-log-level", "info"),
+            createLogLevelMenuItem(window, "file-log-level", "verbose"),
+            createLogLevelMenuItem(window, "file-log-level", "debug"),
+            createLogLevelMenuItem(window, "file-log-level", "silly"),
+          ],
+        },
+        {
+          label: "Console Log Level",
+          submenu: [
+            createLogLevelMenuItem(window, "console-log-level", "error"),
+            createLogLevelMenuItem(window, "console-log-level", "warn"),
+            createLogLevelMenuItem(window, "console-log-level", "info"),
+            createLogLevelMenuItem(window, "console-log-level", "verbose"),
+            createLogLevelMenuItem(window, "console-log-level", "debug"),
+            createLogLevelMenuItem(window, "console-log-level", "silly"),
+          ],
+        },
+        {
+          type: "separator",
+        },
         {
           label: "Activate",
           accelerator: "f12",
@@ -367,10 +355,14 @@ function getMenu(window) {
         },
         {
           label: "Delete Steam Cloud Data",
-          enabled: !global.greenworksError,
-          click: async () => {
+          enabled: steamworksClient !== undefined,
+          click: () => {
+            if (steamworksClient === undefined || steamworksClient.cloud.listFiles().length === 0) {
+              log.info("There is no Steam cloud file");
+              return;
+            }
             try {
-              await storage.deleteCloudFile();
+              storage.deleteCloudFiles();
             } catch (error) {
               log.error(error);
             }

@@ -9,14 +9,44 @@ Unlock an upgrade.
 **Signature:**
 
 ```typescript
-purchaseUnlock(upgradeName: string): void;
+purchaseUnlock(upgradeName: CorpUnlockName): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  upgradeName | string | Name of the upgrade |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+upgradeName
+
+
+</td><td>
+
+[CorpUnlockName](./bitburner.corpunlockname.md)
+
+
+</td><td>
+
+Name of the upgrade
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

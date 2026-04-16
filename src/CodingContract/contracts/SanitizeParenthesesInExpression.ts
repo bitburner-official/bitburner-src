@@ -1,5 +1,6 @@
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { CodingContractTypes, removeBracketsFromArrayString, removeQuotesFromString } from "../ContractTypes";
+import { CodingContractTypes, parseArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
 export const sanitizeParenthesesInExpression: Pick<
@@ -45,7 +46,7 @@ export const sanitizeParenthesesInExpression: Pick<
 
       return chars.join("");
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       let left = 0;
       let right = 0;
       const res: string[] = [];
@@ -94,14 +95,34 @@ export const sanitizeParenthesesInExpression: Pick<
 
       dfs(0, 0, left, right, data, "", res);
 
+      return res;
+    },
+    solver: (data, answer) => {
+      const res = sanitizeParenthesesInExpression[CodingContractName.SanitizeParenthesesInExpression].getAnswer(data);
+
+      if (res === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.SanitizeParenthesesInExpression} contract. Data: ${data}`,
+          ),
+        );
+        return false;
+      }
+
       if (res.length !== answer.length) return false;
       return res.every((sol) => answer.includes(sol));
     },
     convertAnswer: (ans) => {
-      const sanitized = removeBracketsFromArrayString(ans).split(",");
-      return sanitized.map((s) => removeQuotesFromString(s.replace(/\s/g, "")));
+      const parsedAnswer = parseArrayString(ans);
+      if (
+        !sanitizeParenthesesInExpression[CodingContractName.SanitizeParenthesesInExpression].validateAnswer(
+          parsedAnswer,
+        )
+      ) {
+        return null;
+      }
+      return parsedAnswer;
     },
-    validateAnswer: (ans): ans is string[] =>
-      typeof ans === "object" && Array.isArray(ans) && ans.every((s) => typeof s === "string"),
+    validateAnswer: (ans): ans is string[] => Array.isArray(ans) && ans.every((s) => typeof s === "string"),
   },
 };

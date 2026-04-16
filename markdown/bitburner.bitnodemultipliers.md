@@ -14,58 +14,1014 @@ interface BitNodeMultipliers
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [AgilityLevelMultiplier](./bitburner.bitnodemultipliers.agilitylevelmultiplier.md) |  | number | Influences how quickly the player's agility level (not exp) scales |
-|  [AugmentationMoneyCost](./bitburner.bitnodemultipliers.augmentationmoneycost.md) |  | number | Influences the base cost to purchase an augmentation. |
-|  [AugmentationRepCost](./bitburner.bitnodemultipliers.augmentationrepcost.md) |  | number | Influences the base rep the player must have with a faction to purchase an augmentation. |
-|  [BladeburnerRank](./bitburner.bitnodemultipliers.bladeburnerrank.md) |  | number | Influences how quickly the player can gain rank within Bladeburner. |
-|  [BladeburnerSkillCost](./bitburner.bitnodemultipliers.bladeburnerskillcost.md) |  | number | Influences the cost of skill levels from Bladeburner. |
-|  [CharismaLevelMultiplier](./bitburner.bitnodemultipliers.charismalevelmultiplier.md) |  | number | Influences how quickly the player's charisma level (not exp) scales |
-|  [ClassGymExpGain](./bitburner.bitnodemultipliers.classgymexpgain.md) |  | number | Influences the experience gained for each ability when a player completes a class. |
-|  [CodingContractMoney](./bitburner.bitnodemultipliers.codingcontractmoney.md) |  | number | Influences the amount of money gained from completing Coding Contracts. |
-|  [CompanyWorkExpGain](./bitburner.bitnodemultipliers.companyworkexpgain.md) |  | number | Influences the experience gained for each ability when the player completes working their job. |
-|  [CompanyWorkMoney](./bitburner.bitnodemultipliers.companyworkmoney.md) |  | number | Influences how much money the player earns when completing working their job. |
-|  [CompanyWorkRepGain](./bitburner.bitnodemultipliers.companyworkrepgain.md) |  | number | Influences how much rep the player gains when performing work for a company. |
-|  [CorporationDivisions](./bitburner.bitnodemultipliers.corporationdivisions.md) |  | number | Influences the amount of divisions a corporation can have at the same time. |
-|  [CorporationSoftcap](./bitburner.bitnodemultipliers.corporationsoftcap.md) |  | number | Influences profits from corporation dividends and selling shares. |
-|  [CorporationValuation](./bitburner.bitnodemultipliers.corporationvaluation.md) |  | number | Influences the valuation of corporations created by the player. |
-|  [CrimeExpGain](./bitburner.bitnodemultipliers.crimeexpgain.md) |  | number | Influences the base experience gained for each ability when the player commits a crime. |
-|  [CrimeMoney](./bitburner.bitnodemultipliers.crimemoney.md) |  | number | Influences the base money gained when the player commits a crime. |
-|  [CrimeSuccessRate](./bitburner.bitnodemultipliers.crimesuccessrate.md) |  | number | Influences the success chance of committing crimes |
-|  [DaedalusAugsRequirement](./bitburner.bitnodemultipliers.daedalusaugsrequirement.md) |  | number | Influences how many Augmentations you need in order to get invited to the Daedalus faction |
-|  [DefenseLevelMultiplier](./bitburner.bitnodemultipliers.defenselevelmultiplier.md) |  | number | Influences how quickly the player's defense level (not exp) scales |
-|  [DexterityLevelMultiplier](./bitburner.bitnodemultipliers.dexteritylevelmultiplier.md) |  | number | Influences how quickly the player's dexterity level (not exp) scales |
-|  [FactionPassiveRepGain](./bitburner.bitnodemultipliers.factionpassiverepgain.md) |  | number | Influences how much rep the player gains in each faction simply by being a member. |
-|  [FactionWorkExpGain](./bitburner.bitnodemultipliers.factionworkexpgain.md) |  | number | Influences the experience gained for each ability when the player completes work for a Faction. |
-|  [FactionWorkRepGain](./bitburner.bitnodemultipliers.factionworkrepgain.md) |  | number | Influences how much rep the player gains when performing work for a faction or donating to it. |
-|  [FourSigmaMarketDataApiCost](./bitburner.bitnodemultipliers.foursigmamarketdataapicost.md) |  | number | Influences how much it costs to unlock the stock market's 4S Market Data API |
-|  [FourSigmaMarketDataCost](./bitburner.bitnodemultipliers.foursigmamarketdatacost.md) |  | number | Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) |
-|  [GangSoftcap](./bitburner.bitnodemultipliers.gangsoftcap.md) |  | number | Influences the respect gain and money gain of your gang. |
-|  [GangUniqueAugs](./bitburner.bitnodemultipliers.ganguniqueaugs.md) |  | number | Percentage of unique augs that the gang has. |
-|  [GoPower](./bitburner.bitnodemultipliers.gopower.md) |  | number | Percentage multiplier on the effect of the IPvGO rewards \* |
-|  [HackExpGain](./bitburner.bitnodemultipliers.hackexpgain.md) |  | number | Influences the experienced gained when hacking a server. |
-|  [HackingLevelMultiplier](./bitburner.bitnodemultipliers.hackinglevelmultiplier.md) |  | number | Influences how quickly the player's hacking level (not experience) scales |
-|  [HackingSpeedMultiplier](./bitburner.bitnodemultipliers.hackingspeedmultiplier.md) |  | number | Influences how quickly the player's hack(), grow() and weaken() calls run |
-|  [HacknetNodeMoney](./bitburner.bitnodemultipliers.hacknetnodemoney.md) |  | number | Influences how much money is produced by Hacknet Nodes. Influences the hash rate of Hacknet Servers (unlocked in BitNode-9) |
-|  [HomeComputerRamCost](./bitburner.bitnodemultipliers.homecomputerramcost.md) |  | number | Influences how much money it costs to upgrade your home computer's RAM |
-|  [InfiltrationMoney](./bitburner.bitnodemultipliers.infiltrationmoney.md) |  | number | Influences how much money is gained when the player infiltrates a company. |
-|  [InfiltrationRep](./bitburner.bitnodemultipliers.infiltrationrep.md) |  | number | Influences how much rep the player can gain from factions when selling stolen documents and secrets |
-|  [ManualHackMoney](./bitburner.bitnodemultipliers.manualhackmoney.md) |  | number | Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hack a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount. |
-|  [PurchasedServerCost](./bitburner.bitnodemultipliers.purchasedservercost.md) |  | number | Influence how much it costs to purchase a server |
-|  [PurchasedServerLimit](./bitburner.bitnodemultipliers.purchasedserverlimit.md) |  | number | Influences the maximum number of purchased servers you can have |
-|  [PurchasedServerMaxRam](./bitburner.bitnodemultipliers.purchasedservermaxram.md) |  | number | Influences the maximum allowed RAM for a purchased server |
-|  [PurchasedServerSoftcap](./bitburner.bitnodemultipliers.purchasedserversoftcap.md) |  | number | Influence how much it costs to purchase a server |
-|  [RepToDonateToFaction](./bitburner.bitnodemultipliers.reptodonatetofaction.md) |  | number | Influences the minimum favor the player must have with a faction before they can donate to gain rep. |
-|  [ScriptHackMoney](./bitburner.bitnodemultipliers.scripthackmoney.md) |  | number | Influences how much money is stolen from a server when the player performs a hack against it. |
-|  [ScriptHackMoneyGain](./bitburner.bitnodemultipliers.scripthackmoneygain.md) |  | number | Influences how much money the player actually gains when a script hacks a server. This is different from ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount. |
-|  [ServerGrowthRate](./bitburner.bitnodemultipliers.servergrowthrate.md) |  | number | Influences the growth percentage per cycle against a server. |
-|  [ServerMaxMoney](./bitburner.bitnodemultipliers.servermaxmoney.md) |  | number | Influences the maximum money that a server can grow to. |
-|  [ServerStartingMoney](./bitburner.bitnodemultipliers.serverstartingmoney.md) |  | number | Influences the initial money that a server starts with. |
-|  [ServerStartingSecurity](./bitburner.bitnodemultipliers.serverstartingsecurity.md) |  | number | Influences the initial security level (hackDifficulty) of a server. |
-|  [ServerWeakenRate](./bitburner.bitnodemultipliers.serverweakenrate.md) |  | number | Influences the weaken amount per invocation against a server. |
-|  [StaneksGiftExtraSize](./bitburner.bitnodemultipliers.staneksgiftextrasize.md) |  | number | Influences the size of the gift. |
-|  [StaneksGiftPowerMultiplier](./bitburner.bitnodemultipliers.staneksgiftpowermultiplier.md) |  | number | Influences the power of the gift. |
-|  [StrengthLevelMultiplier](./bitburner.bitnodemultipliers.strengthlevelmultiplier.md) |  | number | Influences how quickly the player's strength level (not exp) scales |
-|  [WorldDaemonDifficulty](./bitburner.bitnodemultipliers.worlddaemondifficulty.md) |  | number | Influences the hacking skill required to backdoor the world daemon. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[AgilityLevelMultiplier](./bitburner.bitnodemultipliers.agilitylevelmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player's agility level (not exp) scales
+
+
+</td></tr>
+<tr><td>
+
+[AugmentationMoneyCost](./bitburner.bitnodemultipliers.augmentationmoneycost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the base cost to purchase an augmentation.
+
+
+</td></tr>
+<tr><td>
+
+[AugmentationRepCost](./bitburner.bitnodemultipliers.augmentationrepcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the base rep the player must have with a faction to purchase an augmentation.
+
+
+</td></tr>
+<tr><td>
+
+[BladeburnerRank](./bitburner.bitnodemultipliers.bladeburnerrank.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player can gain rank within Bladeburner.
+
+
+</td></tr>
+<tr><td>
+
+[BladeburnerSkillCost](./bitburner.bitnodemultipliers.bladeburnerskillcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the cost of skill levels from Bladeburner.
+
+
+</td></tr>
+<tr><td>
+
+[CharismaLevelMultiplier](./bitburner.bitnodemultipliers.charismalevelmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player's charisma level (not exp) scales
+
+
+</td></tr>
+<tr><td>
+
+[ClassGymExpGain](./bitburner.bitnodemultipliers.classgymexpgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the experience gained for each ability when a player completes a class.
+
+
+</td></tr>
+<tr><td>
+
+[CloudServerCost](./bitburner.bitnodemultipliers.cloudservercost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influence how much it costs to purchase a cloud server
+
+
+</td></tr>
+<tr><td>
+
+[CloudServerLimit](./bitburner.bitnodemultipliers.cloudserverlimit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the maximum number of cloud servers you can have
+
+
+</td></tr>
+<tr><td>
+
+[CloudServerMaxRam](./bitburner.bitnodemultipliers.cloudservermaxram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the maximum allowed RAM for a cloud server
+
+
+</td></tr>
+<tr><td>
+
+[CloudServerSoftcap](./bitburner.bitnodemultipliers.cloudserversoftcap.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influence how much it costs to purchase a cloud server
+
+
+</td></tr>
+<tr><td>
+
+[CodingContractMoney](./bitburner.bitnodemultipliers.codingcontractmoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the amount of money gained from completing Coding Contracts.
+
+
+</td></tr>
+<tr><td>
+
+[CompanyWorkExpGain](./bitburner.bitnodemultipliers.companyworkexpgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the experience gained for each ability when the player completes working their job.
+
+
+</td></tr>
+<tr><td>
+
+[CompanyWorkMoney](./bitburner.bitnodemultipliers.companyworkmoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much money the player earns when completing working their job.
+
+
+</td></tr>
+<tr><td>
+
+[CompanyWorkRepGain](./bitburner.bitnodemultipliers.companyworkrepgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much rep the player gains when performing work for a company.
+
+
+</td></tr>
+<tr><td>
+
+[CorporationDivisions](./bitburner.bitnodemultipliers.corporationdivisions.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the amount of divisions a corporation can have at the same time.
+
+
+</td></tr>
+<tr><td>
+
+[CorporationSoftcap](./bitburner.bitnodemultipliers.corporationsoftcap.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences profits from corporation dividends and selling shares.
+
+
+</td></tr>
+<tr><td>
+
+[CorporationValuation](./bitburner.bitnodemultipliers.corporationvaluation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the valuation of corporations created by the player.
+
+
+</td></tr>
+<tr><td>
+
+[CrimeExpGain](./bitburner.bitnodemultipliers.crimeexpgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the base experience gained for each ability when the player commits a crime.
+
+
+</td></tr>
+<tr><td>
+
+[CrimeMoney](./bitburner.bitnodemultipliers.crimemoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the base money gained when the player commits a crime.
+
+
+</td></tr>
+<tr><td>
+
+[CrimeSuccessRate](./bitburner.bitnodemultipliers.crimesuccessrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the success chance of committing crimes
+
+
+</td></tr>
+<tr><td>
+
+[DaedalusAugsRequirement](./bitburner.bitnodemultipliers.daedalusaugsrequirement.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how many Augmentations you need in order to get invited to the Daedalus faction
+
+
+</td></tr>
+<tr><td>
+
+[DefenseLevelMultiplier](./bitburner.bitnodemultipliers.defenselevelmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player's defense level (not exp) scales
+
+
+</td></tr>
+<tr><td>
+
+[DexterityLevelMultiplier](./bitburner.bitnodemultipliers.dexteritylevelmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player's dexterity level (not exp) scales
+
+
+</td></tr>
+<tr><td>
+
+[FactionPassiveRepGain](./bitburner.bitnodemultipliers.factionpassiverepgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much rep the player gains in each faction simply by being a member.
+
+
+</td></tr>
+<tr><td>
+
+[FactionWorkExpGain](./bitburner.bitnodemultipliers.factionworkexpgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the experience gained for each ability when the player completes work for a Faction.
+
+
+</td></tr>
+<tr><td>
+
+[FactionWorkRepGain](./bitburner.bitnodemultipliers.factionworkrepgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much rep the player gains when performing work for a faction or donating to it.
+
+
+</td></tr>
+<tr><td>
+
+[FavorToDonateToFaction](./bitburner.bitnodemultipliers.favortodonatetofaction.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the minimum favor the player must have with a faction before they can donate to gain rep.
+
+
+</td></tr>
+<tr><td>
+
+[FourSigmaMarketDataApiCost](./bitburner.bitnodemultipliers.foursigmamarketdataapicost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much it costs to unlock the stock market's 4S Market Data API
+
+
+</td></tr>
+<tr><td>
+
+[FourSigmaMarketDataCost](./bitburner.bitnodemultipliers.foursigmamarketdatacost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much it costs to unlock the stock market's 4S Market Data (NOT API)
+
+
+</td></tr>
+<tr><td>
+
+[GangSoftcap](./bitburner.bitnodemultipliers.gangsoftcap.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the respect gain and money gain of your gang.
+
+
+</td></tr>
+<tr><td>
+
+[GangUniqueAugs](./bitburner.bitnodemultipliers.ganguniqueaugs.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Percentage of unique augs that the gang has.
+
+
+</td></tr>
+<tr><td>
+
+[GoPower](./bitburner.bitnodemultipliers.gopower.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Percentage multiplier on the effect of the IPvGO rewards \*
+
+
+</td></tr>
+<tr><td>
+
+[HackExpGain](./bitburner.bitnodemultipliers.hackexpgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the experienced gained when hacking a server.
+
+
+</td></tr>
+<tr><td>
+
+[HackingLevelMultiplier](./bitburner.bitnodemultipliers.hackinglevelmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player's hacking level (not experience) scales
+
+
+</td></tr>
+<tr><td>
+
+[HackingSpeedMultiplier](./bitburner.bitnodemultipliers.hackingspeedmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player's hack(), grow() and weaken() calls run
+
+
+</td></tr>
+<tr><td>
+
+[HacknetNodeMoney](./bitburner.bitnodemultipliers.hacknetnodemoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much money is produced by Hacknet Nodes. Influences the hash rate of Hacknet Servers (unlocked in BitNode-9)
+
+
+</td></tr>
+<tr><td>
+
+[HomeComputerRamCost](./bitburner.bitnodemultipliers.homecomputerramcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much money it costs to upgrade your home computer's RAM
+
+
+</td></tr>
+<tr><td>
+
+[InfiltrationMoney](./bitburner.bitnodemultipliers.infiltrationmoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much money is gained when the player infiltrates a company.
+
+
+</td></tr>
+<tr><td>
+
+[InfiltrationRep](./bitburner.bitnodemultipliers.infiltrationrep.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much rep the player can gain from factions when selling stolen documents and secrets
+
+
+</td></tr>
+<tr><td>
+
+[ManualHackMoney](./bitburner.bitnodemultipliers.manualhackmoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.
+
+
+</td></tr>
+<tr><td>
+
+[ScriptHackMoney](./bitburner.bitnodemultipliers.scripthackmoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much money is stolen from a server when the player performs a hack against it.
+
+
+</td></tr>
+<tr><td>
+
+[ScriptHackMoneyGain](./bitburner.bitnodemultipliers.scripthackmoneygain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how much money the player actually gains when a script hacks a server. This is different from ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.
+
+
+</td></tr>
+<tr><td>
+
+[ServerGrowthRate](./bitburner.bitnodemultipliers.servergrowthrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the growth percentage per cycle against a server.
+
+
+</td></tr>
+<tr><td>
+
+[ServerMaxMoney](./bitburner.bitnodemultipliers.servermaxmoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the maximum money that a server can grow to.
+
+
+</td></tr>
+<tr><td>
+
+[ServerStartingMoney](./bitburner.bitnodemultipliers.serverstartingmoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the initial money that a server starts with.
+
+
+</td></tr>
+<tr><td>
+
+[ServerStartingSecurity](./bitburner.bitnodemultipliers.serverstartingsecurity.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the initial security level (hackDifficulty) of a server.
+
+
+</td></tr>
+<tr><td>
+
+[ServerWeakenRate](./bitburner.bitnodemultipliers.serverweakenrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the weaken amount per invocation against a server.
+
+
+</td></tr>
+<tr><td>
+
+[StaneksGiftExtraSize](./bitburner.bitnodemultipliers.staneksgiftextrasize.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the size of the gift.
+
+
+</td></tr>
+<tr><td>
+
+[StaneksGiftPowerMultiplier](./bitburner.bitnodemultipliers.staneksgiftpowermultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the power of the gift.
+
+
+</td></tr>
+<tr><td>
+
+[StrengthLevelMultiplier](./bitburner.bitnodemultipliers.strengthlevelmultiplier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences how quickly the player's strength level (not exp) scales
+
+
+</td></tr>
+<tr><td>
+
+[WorldDaemonDifficulty](./bitburner.bitnodemultipliers.worlddaemondifficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Influences the hacking skill required to backdoor the world daemon.
+
+
+</td></tr>
+</tbody></table>
 

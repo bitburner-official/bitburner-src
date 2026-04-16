@@ -2,6 +2,7 @@ import type { BitNodeOptions, Player as IPlayer } from "@nsdefs";
 import type { PlayerAchievement } from "../../Achievements/Achievements";
 import type { Bladeburner } from "../../Bladeburner/Bladeburner";
 import type { Corporation } from "../../Corporation/Corporation";
+import type { Infiltration } from "../../Infiltration/Infiltration";
 import type { Exploit } from "../../Exploits/Exploit";
 import type { Gang } from "../../Gang/Gang";
 import type { HacknetNode } from "../../Hacknet/HacknetNode";
@@ -24,6 +25,7 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { JSONMap, JSONSet } from "../../Types/Jsonable";
 import { cyrb53 } from "../../utils/HashUtils";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
+import { getKeyList } from "../../utils/helpers/getKeyList";
 import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
@@ -36,6 +38,7 @@ export class PlayerObject extends Person implements IPlayer {
   corporation: Corporation | null = null;
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
+  infiltration: Infiltration | null = null;
   currentServer = "";
   factions: FactionName[] = [];
   factionInvitations: FactionName[] = [];
@@ -149,6 +152,7 @@ export class PlayerObject extends Person implements IPlayer {
   activeSourceFileLvl = generalMethods.activeSourceFileLvl;
   applyEntropy = augmentationMethods.applyEntropy;
   focusPenalty = generalMethods.focusPenalty;
+  initInfiltration = generalMethods.initInfiltration;
 
   constructor() {
     super();
@@ -178,7 +182,8 @@ export class PlayerObject extends Person implements IPlayer {
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("PlayerObject", this);
+    // For the time being, infiltration is not part of the save.
+    return Generic_toJSON("PlayerObject", this, getKeyList(PlayerObject, { removedKeys: ["infiltration"] }));
   }
 
   /** Initializes a PlayerObject object from a JSON save state. */

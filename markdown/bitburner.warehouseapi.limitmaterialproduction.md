@@ -9,22 +9,92 @@ Limit material production.
 **Signature:**
 
 ```typescript
-limitMaterialProduction(
-    divisionName: string,
-    city: CityName | `${CityName}`,
-    materialName: string,
-    qty: number,
-  ): void;
+limitMaterialProduction(divisionName: string, city: CityName, materialName: CorpMaterialName, qty: number): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division. |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city. |
-|  materialName | string | Name of the material. |
-|  qty | number | Amount to limit to. Pass a negative value to remove the limit instead. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division.
+
+
+</td></tr>
+<tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of the city.
+
+
+</td></tr>
+<tr><td>
+
+materialName
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material.
+
+
+</td></tr>
+<tr><td>
+
+qty
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount to limit to. Pass a negative value to remove the limit instead.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

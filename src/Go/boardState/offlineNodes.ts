@@ -3,6 +3,9 @@ import type { Board, BoardState, PointState } from "../Types";
 import { Player } from "@player";
 import { boardSizes } from "../Constants";
 import { WHRNG } from "../../Casino/RNG";
+import { getAllChains } from "../boardAnalysis/boardAnalysis";
+import { updateChains } from "./boardState";
+import { GoColor } from "@enums";
 
 type rand = (n1: number, n2: number) => number;
 
@@ -33,7 +36,11 @@ export function addObstacles(boardState: BoardState) {
 
   boardState.board = addDeadNodesToEdge(boardState.board, random, edgeDeadCount);
 
+  boardState.board = ensureOfflineNodes(boardState.board);
+
   boardState.board = resetCoordinates(boardState.board);
+
+  boardState.board = removeIslands(boardState.board);
 }
 
 export function resetCoordinates(board: Board) {
@@ -44,6 +51,24 @@ export function resetCoordinates(board: Board) {
       if (point) {
         point.x = x;
         point.y = y;
+      }
+    }
+  }
+  return board;
+}
+
+/**
+ * Removes all tiny islands of empty points (2 or fewer) from the board
+ * @param board
+ */
+export function removeIslands(board: Board) {
+  updateChains(board, true);
+  const chains = getAllChains(board);
+
+  for (const chain of chains) {
+    if (chain.length <= 2 && chain[0]?.color === GoColor.empty) {
+      for (const point of chain) {
+        board[point.x][point.y] = null;
       }
     }
   }
@@ -110,6 +135,14 @@ function addCenterBreak(board: Board, random: rand) {
   board[xIndex] = board[xIndex].map((point, index) => (index < length ? null : point));
 
   return randomizeRotation(board, random);
+}
+
+function ensureOfflineNodes(board: Board) {
+  if (board.flat().some((point) => !point)) {
+    return board;
+  }
+  board[0][0] = null;
+  return board;
 }
 
 function randomizeRotation(board: Board, random: rand) {

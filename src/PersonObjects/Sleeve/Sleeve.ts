@@ -7,7 +7,7 @@
  * Sleeves are unlocked in BitNode-10.
  */
 
-import type { SleevePerson } from "@nsdefs";
+import type { Result, SleevePerson } from "@nsdefs";
 import type { Augmentation } from "../../Augmentation/Augmentation";
 import type { SleeveWork } from "./Work/Work";
 
@@ -28,6 +28,7 @@ import {
   BladeburnerActionType,
   BladeburnerGeneralActionName,
   AugmentationName,
+  SpecialBladeburnerActionTypeForSleeve,
 } from "@enums";
 
 import { Factions } from "../../Faction/Factions";
@@ -49,6 +50,7 @@ import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 import type { MoneySource } from "../../utils/MoneySourceTracker";
+import { formatMoney, formatSleeveShock } from "../../ui/formatNumber";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -194,13 +196,8 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Returns the cost of upgrading this sleeve's memory by a certain amount */
   getMemoryUpgradeCost(n: number): number {
-    const amt = Math.round(n);
-    if (amt < 0) {
-      return 0;
-    }
-
-    if (this.memory + amt > 100) {
-      return this.getMemoryUpgradeCost(100 - this.memory);
+    if (!Number.isInteger(n) || n < 0 || this.memory + n > 100) {
+      return Infinity;
     }
 
     const mult = 1.02;
@@ -254,6 +251,8 @@ export class Sleeve extends Person implements SleevePerson {
     this.shock = 100;
     this.storedCycles = 0;
     this.sync = Math.max(this.memory, 1);
+
+    this.overrideIntelligence();
   }
 
   /**
@@ -286,22 +285,22 @@ export class Sleeve extends Person implements SleevePerson {
   }
 
   /** Take a course at a university */
-  takeUniversityCourse(universityName: string, className: string): boolean {
+  takeUniversityCourse(universityName: string, className: UniversityClassType): boolean {
     // Set exp/money multipliers based on which university.
     // Also check that the sleeve is in the right city
     let loc: LocationName | undefined;
-    switch (universityName.toLowerCase()) {
-      case LocationName.AevumSummitUniversity.toLowerCase(): {
+    switch (universityName) {
+      case LocationName.AevumSummitUniversity: {
         if (this.city !== CityName.Aevum) return false;
         loc = LocationName.AevumSummitUniversity;
         break;
       }
-      case LocationName.Sector12RothmanUniversity.toLowerCase(): {
+      case LocationName.Sector12RothmanUniversity: {
         if (this.city !== CityName.Sector12) return false;
         loc = LocationName.Sector12RothmanUniversity;
         break;
       }
-      case LocationName.VolhavenZBInstituteOfTechnology.toLowerCase(): {
+      case LocationName.VolhavenZBInstituteOfTechnology: {
         if (this.city !== CityName.Volhaven) return false;
         loc = LocationName.VolhavenZBInstituteOfTechnology;
         break;
@@ -311,25 +310,23 @@ export class Sleeve extends Person implements SleevePerson {
 
     // Set experience/money gains based on class
     let classType: ClassType | undefined;
-    // TODO: why lower case??? It's not effecient, not typesafe and in general a bad idea
-    switch (className.toLowerCase()) {
-      case "study computer science": // deprecated, leave it here for backwards compatibility
-      case ClassType.computerScience.toLowerCase():
+    switch (className) {
+      case ClassType.computerScience:
         classType = UniversityClassType.computerScience;
         break;
-      case ClassType.dataStructures.toLowerCase():
+      case ClassType.dataStructures:
         classType = UniversityClassType.dataStructures;
         break;
-      case ClassType.networks.toLowerCase():
+      case ClassType.networks:
         classType = UniversityClassType.networks;
         break;
-      case ClassType.algorithms.toLowerCase():
+      case ClassType.algorithms:
         classType = UniversityClassType.algorithms;
         break;
-      case ClassType.management.toLowerCase():
+      case ClassType.management:
         classType = UniversityClassType.management;
         break;
-      case ClassType.leadership.toLowerCase():
+      case ClassType.leadership:
         classType = UniversityClassType.leadership;
         break;
     }
@@ -344,20 +341,62 @@ export class Sleeve extends Person implements SleevePerson {
     return true;
   }
 
-  tryBuyAugmentation(aug: Augmentation): boolean {
+  /**
+   * This function is only used in UI code for checking whether the "Manage Augmentations" button can be enabled. If you
+   * want to check if the player can purchase a specific augmentation, you need to call canPurchaseAugmentation.
+   */
+  checkPreconditionsOfPurchasingAugmentations(): Result {
+    if (Player.bitNodeOptions.disableSleeveExpAndAugmentation) {
+      return {
+        success: false,
+        message: `The "Disable Sleeves' experience and augmentation" option was enabled. You cannot purchase augmentations for your sleeves.`,
+      };
+    }
+
+    if (this.shock > 0) {
+      return {
+        success: false,
+        message: `You must reduce the sleeve shock to 0. The current shock is ${formatSleeveShock(this.shock)}.`,
+      };
+    }
+
+    return { success: true };
+  }
+
+  canPurchaseAugmentation(aug: Augmentation): Result {
+    const checkingPreconditions = this.checkPreconditionsOfPurchasingAugmentations();
+    if (!checkingPreconditions.success) {
+      return checkingPreconditions;
+    }
+
     if (!Player.canAfford(aug.baseCost)) {
-      return false;
+      return {
+        success: false,
+        message: `You must have at least ${formatMoney(aug.baseCost)}.`,
+      };
     }
 
     // Verify that this sleeve does not already have that augmentation.
-    if (this.hasAugmentation(aug.name)) return false;
+    if (this.hasAugmentation(aug.name)) {
+      return { success: false, message: `This sleeve already has "${aug.name}" augmentation.` };
+    }
 
     // Verify that the augmentation is available for purchase.
-    if (!this.findPurchasableAugs().includes(aug)) return false;
+    if (!this.findPurchasableAugs().includes(aug)) {
+      return { success: false, message: `"${aug.name}" is not in the list of purchasable augmentations.` };
+    }
 
+    return { success: true };
+  }
+
+  purchaseAugmentation(aug: Augmentation): Result {
+    const validationResult = this.canPurchaseAugmentation(aug);
+    if (!validationResult.success) {
+      return validationResult;
+    }
     Player.loseMoney(aug.baseCost, "sleeves");
     this.installAugmentation(aug);
-    return true;
+    return { success: true };
   }
 
   upgradeMemory(n: number): void {
@@ -376,17 +415,8 @@ export class Sleeve extends Person implements SleevePerson {
     return true;
   }
 
-  /** TODO 2.4: Make this take in type correct data */
-  workForFaction(factionName: FactionName, _workType: string): boolean {
-    const workTypeConversion: Record<string, string> = {
-      "Hacking Contracts": "hacking",
-      "Field Work": "field",
-      "Security Work": "security",
-    };
-    if (workTypeConversion[_workType]) _workType = workTypeConversion[_workType];
+  workForFaction(factionName: FactionName, workType: FactionWorkType): boolean {
     const faction = Factions[factionName];
-    const workType = getEnumHelper("FactionWorkType").getMember(_workType, { fuzzy: true });
-    if (!workType) return false;
     const factionInfo = faction.getInfo();
 
     switch (workType) {
@@ -412,62 +442,41 @@ export class Sleeve extends Person implements SleevePerson {
   }
 
   /** Begin a gym workout task */
-  workoutAtGym(gymName: string, stat: string): boolean {
-    // Set exp/money multipliers based on which university.
-    // Also check that the sleeve is in the right city
+  workoutAtGym(gymName: string, stat: GymType): boolean {
+    // Check that the sleeve is in the right city
     let loc: LocationName | undefined;
-    switch (gymName.toLowerCase()) {
-      case LocationName.AevumCrushFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Aevum) return false;
+    switch (gymName) {
+      case LocationName.AevumCrushFitnessGym: {
+        if (this.city !== CityName.Aevum) return false;
         loc = LocationName.AevumCrushFitnessGym;
         break;
       }
-      case LocationName.AevumSnapFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Aevum) return false;
+      case LocationName.AevumSnapFitnessGym: {
+        if (this.city !== CityName.Aevum) return false;
         loc = LocationName.AevumSnapFitnessGym;
         break;
       }
-      case LocationName.Sector12IronGym.toLowerCase(): {
-        if (this.city != CityName.Sector12) return false;
+      case LocationName.Sector12IronGym: {
+        if (this.city !== CityName.Sector12) return false;
         loc = LocationName.Sector12IronGym;
         break;
       }
-      case LocationName.Sector12PowerhouseGym.toLowerCase(): {
-        if (this.city != CityName.Sector12) return false;
+      case LocationName.Sector12PowerhouseGym: {
+        if (this.city !== CityName.Sector12) return false;
         loc = LocationName.Sector12PowerhouseGym;
         break;
       }
-      case LocationName.VolhavenMilleniumFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Volhaven) return false;
+      case LocationName.VolhavenMilleniumFitnessGym: {
+        if (this.city !== CityName.Volhaven) return false;
         loc = LocationName.VolhavenMilleniumFitnessGym;
         break;
       }
     }
     if (!loc) return false;
 
-    // Set experience/money gains based on class
-    const sanitizedStat: string = stat.toLowerCase();
-
-    // set stat to a default value.
-    let classType: ClassType | undefined;
-    if (sanitizedStat.includes("str")) {
-      classType = GymType.strength;
-    }
-    if (sanitizedStat.includes("def")) {
-      classType = GymType.defense;
-    }
-    if (sanitizedStat.includes("dex")) {
-      classType = GymType.dexterity;
-    }
-    if (sanitizedStat.includes("agi")) {
-      classType = GymType.agility;
-    }
-    // if stat is still equals its default value, then validation has failed.
-    if (!classType) return false;
-
     this.startWork(
       new SleeveClassWork({
-        classType: classType,
+        classType: stat,
         location: loc,
       }),
     );
@@ -479,50 +488,48 @@ export class Sleeve extends Person implements SleevePerson {
   bladeburner(action: string, contract?: string): boolean {
     if (!Player.bladeburner) return false;
     switch (action) {
-      case "Training":
+      case BladeburnerGeneralActionName.Training:
         this.startWork(
           new SleeveBladeburnerWork({
             actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Training },
           }),
         );
         return true;
-      case "Field analysis":
-      case "Field Analysis":
+      case BladeburnerGeneralActionName.FieldAnalysis:
         this.startWork(
           new SleeveBladeburnerWork({
             actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.FieldAnalysis },
           }),
         );
         return true;
-      case "Recruitment":
+      case BladeburnerGeneralActionName.Recruitment:
         this.startWork(
           new SleeveBladeburnerWork({
             actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Recruitment },
           }),
         );
         return true;
-      case "Diplomacy":
+      case BladeburnerGeneralActionName.Diplomacy:
         this.startWork(
           new SleeveBladeburnerWork({
             actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Diplomacy },
           }),
         );
         return true;
-      case "Hyperbolic Regeneration Chamber":
+      case BladeburnerGeneralActionName.HyperbolicRegen:
         this.startWork(
           new SleeveBladeburnerWork({
             actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.HyperbolicRegen },
           }),
         );
         return true;
-      case "Infiltrate synthoids":
-      case "Infiltrate Synthoids":
+      case SpecialBladeburnerActionTypeForSleeve.InfiltrateSynthoids:
         this.startWork(new SleeveInfiltrateWork());
         return true;
-      case "Support main sleeve":
+      case SpecialBladeburnerActionTypeForSleeve.SupportMainSleeve:
         this.startWork(new SleeveSupportWork());
         return true;
-      case "Take on contracts":
+      case SpecialBladeburnerActionTypeForSleeve.TakeOnContracts:
         if (!getEnumHelper("BladeburnerContractName").isMember(contract)) return false;
         this.startWork(
           new SleeveBladeburnerWork({ actionId: { type: BladeburnerActionType.Contract, name: contract } }),
@@ -530,6 +537,14 @@ export class Sleeve extends Person implements SleevePerson {
         return true;
     }
     return false;
+  }
+
+  travel(cityName: CityName): boolean {
+    if (!super.travel(cityName)) {
+      return false;
+    }
+    this.stopWork();
+    return true;
   }
 
   travelCostMoneySource(): MoneySource {
@@ -555,24 +570,6 @@ export class Sleeve extends Person implements SleevePerson {
     } else {
       return false;
     }
-  }
-
-  static recalculateNumOwned() {
-    /**
-     * Don't change sourceFileLvl to activeSourceFileLvl. The number of sleeves is a permanent effect. It's too
-     * troublesome for the player if they lose Sleeves and have to go BN10 to buy them again when they override the
-     * level of SF 10.
-     */
-    const numSleeves =
-      Math.min(3, Player.sourceFileLvl(10) + (Player.bitNodeN === 10 ? 1 : 0)) + Player.sleevesFromCovenant;
-    while (Player.sleeves.length > numSleeves) {
-      const destroyedSleeve = Player.sleeves.pop();
-      // This should not happen, but avoid an infinite loop in case sleevesFromCovenent or sf10 level are somehow negative
-      if (!destroyedSleeve) return;
-      // Stop work, to prevent destroyed sleeves from continuing their tasks in the void
-      destroyedSleeve.stopWork();
-    }
-    while (Player.sleeves.length < numSleeves) Player.sleeves.push(new Sleeve());
   }
 
   whoAmI(): string {

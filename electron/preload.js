@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld("electronBridge", {
       "push-game-ready",
       "push-import-result",
       "push-disable-restore",
+      "activate-achievements",
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);

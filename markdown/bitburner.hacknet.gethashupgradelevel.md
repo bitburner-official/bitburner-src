@@ -9,14 +9,42 @@ Get the level of a hash upgrade.
 **Signature:**
 
 ```typescript
-getHashUpgradeLevel(upgName: string): number;
+getHashUpgradeLevel(upgName: HacknetServerHashUpgrade): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  upgName | string |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+upgName
+
+
+</td><td>
+
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

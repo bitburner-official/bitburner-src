@@ -1,5 +1,6 @@
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { CodingContractTypes, convert2DArrayToString, removeBracketsFromArrayString } from "../ContractTypes";
+import { CodingContractTypes, convert2DArrayToString, parseArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
 export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContractName.MergeOverlappingIntervals> = {
@@ -30,7 +31,7 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
       return intervals;
     },
     numTries: 15,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const intervals: [number, number][] = data.slice();
       intervals.sort((a: [number, number], b: [number, number]) => {
         return a[0] - b[0];
@@ -50,23 +51,32 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
       }
       result.push([start, end]);
 
+      return result;
+    },
+    solver: (data, answer) => {
+      const result = mergeOverlappingIntervals[CodingContractName.MergeOverlappingIntervals].getAnswer(data);
+
+      if (result === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${
+              CodingContractName.MergeOverlappingIntervals
+            } contract. Data: ${JSON.stringify(data)}`,
+          ),
+        );
+        return false;
+      }
+
       return result.length === answer.length && result.every((a, i) => a[0] === answer[i][0] && a[1] === answer[i][1]);
     },
     convertAnswer: (ans) => {
-      const arrayRegex = /\[\d+,\d+\]/g;
-      const matches = ans.replace(/\s/g, "").match(arrayRegex);
-      if (matches === null) return null;
-      const arr = matches.map((a) =>
-        removeBracketsFromArrayString(a)
-          .split(",")
-          .map((n) => parseInt(n)),
-      );
-      // An inline function is needed here, so that TS knows this returns true if it matches the type
-      if (((a: number[][]): a is [number, number][] => a.every((n) => n.length === 2))(arr)) return arr;
-      return null;
+      const parsedAnswer = parseArrayString(ans.replace(/\s/g, ""), true);
+      if (!mergeOverlappingIntervals[CodingContractName.MergeOverlappingIntervals].validateAnswer(parsedAnswer)) {
+        return null;
+      }
+      return parsedAnswer;
     },
     validateAnswer: (ans): ans is [number, number][] =>
-      typeof ans === "object" &&
       Array.isArray(ans) &&
       ans.every((a) => Array.isArray(a) && a.length === 2 && a.every((n) => typeof n === "number")),
   },

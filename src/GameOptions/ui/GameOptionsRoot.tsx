@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GameOptionsSidebar } from "./GameOptionsSidebar";
 import { GameplayPage } from "./GameplayPage";
 import { InterfacePage } from "./InterfacePage";
@@ -8,14 +8,7 @@ import { NumericDisplayPage } from "./NumericDisplayOptions";
 import { RemoteAPIPage } from "./RemoteAPIPage";
 import { SystemPage } from "./SystemPage";
 import { KeyBindingPage } from "./KeyBindingPage";
-
-interface IProps {
-  save: () => void;
-  export: () => void;
-  forceKill: () => void;
-  softReset: () => void;
-  reactivateTutorial: () => void;
-}
+import { EventEmitter } from "../../utils/EventEmitter";
 
 export type OptionsTabName =
   | "System"
@@ -25,6 +18,15 @@ export type OptionsTabName =
   | "Misc"
   | "Remote API"
   | "Key Binding";
+
+interface IProps {
+  tab?: OptionsTabName;
+  save: () => void;
+  export: () => void;
+  forceKill: () => void;
+  softReset: () => void;
+  reactivateTutorial: () => void;
+}
 
 const tabs: Record<OptionsTabName, React.ReactNode> = {
   System: <SystemPage />,
@@ -36,8 +38,19 @@ const tabs: Record<OptionsTabName, React.ReactNode> = {
   "Key Binding": <KeyBindingPage />,
 };
 
+export const GameOptionsPageEvents = new EventEmitter<[OptionsTabName]>();
+
 export function GameOptionsRoot(props: IProps): React.ReactElement {
-  const [currentTab, setCurrentTab] = useState<OptionsTabName>("System");
+  const [currentTab, setCurrentTab] = useState<OptionsTabName>(props.tab ?? "System");
+
+  useEffect(
+    () =>
+      GameOptionsPageEvents.subscribe((tab: OptionsTabName) => {
+        setCurrentTab(tab);
+      }),
+    [],
+  );
+
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
       <Typography variant="h4">Options</Typography>

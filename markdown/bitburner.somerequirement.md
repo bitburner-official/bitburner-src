@@ -14,8 +14,60 @@ interface SomeRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [conditions](./bitburner.somerequirement.conditions.md) |  | [PlayerRequirement](./bitburner.playerrequirement.md)<!-- -->\[\] |  |
-|  [type](./bitburner.somerequirement.type.md) |  | "someCondition" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[conditions](./bitburner.somerequirement.conditions.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PlayerRequirement](./bitburner.playerrequirement.md)<!-- -->\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.somerequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"someCondition"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

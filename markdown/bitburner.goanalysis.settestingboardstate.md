@@ -9,15 +9,76 @@ Starts a new game against the "No AI" opponent, and sets the initial board size,
 **Signature:**
 
 ```typescript
-setTestingBoardState(boardState: string[], komi?: number): void;
+setTestingBoardState(boardState: string[], komi?: number, nextPlayerIsWhite?: boolean): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  boardState | string\[\] | The initial board state to use for the new game, in the format used by getBoardState(). |
-|  komi | number | _(Optional)_ Optional komi value to set for the game. Defaults to 5.5. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+boardState
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+The initial board state to use for the new game, in the format used by getBoardState().
+
+
+</td></tr>
+<tr><td>
+
+komi
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional komi value to set for the game. Defaults to 5.5.
+
+
+</td></tr>
+<tr><td>
+
+nextPlayerIsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional. Whether or not the next player to play is the white player. Defaults to false.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

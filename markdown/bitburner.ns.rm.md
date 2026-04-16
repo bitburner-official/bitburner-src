@@ -14,10 +14,55 @@ rm(name: string, host?: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  name | string | Filename of file to remove. Must include the extension. |
-|  host | string | _(Optional)_ Hostname of the server on which to delete the file. Optional. Defaults to current server. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+name
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of file to remove. Must include the extension.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the server on which to delete the file. Optional. Defaults to current server.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

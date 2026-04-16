@@ -9,20 +9,76 @@ Set team size.
 **Signature:**
 
 ```typescript
-setTeamSize(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    size: number,
-  ): number;
+setTeamSize(type: BladeburnerActionType, name: BladeburnerActionName, size: number): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
-|  size | number | Number of team members to set. Must be a non-negative integer. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[BladeburnerActionType](./bitburner.bladeburneractiontype.md)
+
+
+</td><td>
+
+Type of action.
+
+
+</td></tr>
+<tr><td>
+
+name
+
+
+</td><td>
+
+[BladeburnerActionName](./bitburner.bladeburneractionname.md)
+
+
+</td><td>
+
+Name of action. Must be an exact match.
+
+
+</td></tr>
+<tr><td>
+
+size
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of team members to set. Must be a non-negative integer.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

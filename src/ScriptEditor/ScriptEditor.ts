@@ -1,6 +1,3 @@
-import type { ContentFilePath } from "../Paths/ContentFile";
-
-import { EventEmitter } from "../utils/EventEmitter";
 import * as monaco from "monaco-editor";
 import { loadThemes, makeTheme } from "./ui/themes";
 import { Settings } from "../Settings/Settings";
@@ -10,14 +7,7 @@ import { ns } from "../NetscriptFunctions";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
-/** Event emitter used for tracking when changes have been made to a content file. */
-export const fileEditEvents = new EventEmitter<[hostname: string, filename: ContentFilePath]>();
-
 export class ScriptEditor {
-  // TODO: This will store info about currently open scripts.
-  // Among other things, this will allow informing the script editor of changes made elsewhere, even if the script editor is not being rendered.
-  // openScripts: OpenScript[] = [];
-
   // Currently, this object is only used for initialization.
   isInitialized = false;
   initialize() {
@@ -62,8 +52,8 @@ export class ScriptEditor {
     })().catch((e) => exceptionAlert(e));
 
     for (const [language, languageDefaults, getLanguageWorker] of [
-      ["javascript", monaco.languages.typescript.javascriptDefaults, monaco.languages.typescript.getJavaScriptWorker],
-      ["typescript", monaco.languages.typescript.typescriptDefaults, monaco.languages.typescript.getTypeScriptWorker],
+      ["javascript", monaco.typescript.javascriptDefaults, monaco.typescript.getJavaScriptWorker],
+      ["typescript", monaco.typescript.typescriptDefaults, monaco.typescript.getTypeScriptWorker],
     ] as const) {
       languageDefaults.setCompilerOptions({
         ...languageDefaults.getCompilerOptions(),
@@ -72,7 +62,7 @@ export class ScriptEditor {
         // We use file-at-a-time transpiler. See https://www.typescriptlang.org/tsconfig/#isolatedModules
         isolatedModules: true,
         // We use the classic (i.e. `React.createElement`:) react runtime.
-        jsx: monaco.languages.typescript.JsxEmit.React,
+        jsx: monaco.typescript.JsxEmit.React,
         // We define `React` and `ReactDOM` as globals. Don't mark using them as errors.
         allowUmdGlobalAccess: true,
         // Enable strict typechecking.
@@ -124,12 +114,17 @@ export class ScriptEditor {
       });
     }
 
-    monaco.languages.json.jsonDefaults.setModeConfiguration({
-      ...monaco.languages.json.jsonDefaults.modeConfiguration,
+    monaco.json.jsonDefaults.setModeConfiguration({
+      ...monaco.json.jsonDefaults.modeConfiguration,
       //completion should be disabled because the
       //json language server tries to load a schema by default
       completionItems: false,
     });
+
+    monaco.css.cssDefaults.setModeConfiguration({
+      ...monaco.css.cssDefaults.modeConfiguration,
+    });
+
     // Load themes
     loadThemes(monaco.editor.defineTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));

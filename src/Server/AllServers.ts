@@ -1,47 +1,30 @@
 import { Server } from "./Server";
 import { BaseServer } from "./BaseServer";
-import { serverMetadata } from "./data/servers";
 
 import { HacknetServer } from "../Hacknet/HacknetServer";
 
-import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
-import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { Reviver } from "../utils/GenericReviver";
-import { SpecialServers } from "./data/SpecialServers";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
+import { DarknetServer } from "./DarknetServer";
+import { applyRamBlocks } from "../DarkNet/effects/ramblock";
 
 /**
  * Map of all Servers that exist in the game
- *  Key (string) = IP
+ *  Key (string) = Hostname or IP (there are two entries per server)
  *  Value = Server object
+ *
+ * Having two entries per server is a bit awkward, but it is optimized for the
+ * most common and speed-critical case, which is lookups by hostname/ip.
  */
-let AllServers: Record<string, Server | HacknetServer> = {};
-
-function GetServerByIP(ip: string): BaseServer | undefined {
-  for (const server of Object.values(AllServers)) {
-    if (server.ip !== ip) continue;
-    return server;
-  }
-}
+const AllServers: Map<string, BaseServer> = new Map();
 
 //Get server by IP or hostname. Returns null if invalid
 export function GetServer(s: string): BaseServer | null {
-  if (Object.hasOwn(AllServers, s)) {
-    const server = AllServers[s];
-    if (server) return server;
-  }
-  if (!isIPAddress(s)) return null;
-  const ipserver = GetServerByIP(s);
-  if (ipserver !== undefined) {
-    return ipserver;
-  }
-
-  return null;
+  return AllServers.get(s) ?? null;
 }
 
 /**
@@ -71,31 +54,42 @@ export function GetReachableServer(s: string): BaseServer | null {
   return server;
 }
 
-export function GetAllServers(): BaseServer[] {
+// Get all servers. Only includes darknet servers if showDarkweb is true.
+export function GetAllServers(showDarkweb = false): BaseServer[] {
   const servers: BaseServer[] = [];
-  for (const key of Object.keys(AllServers)) {
-    servers.push(AllServers[key]);
+  for (const [host, server] of AllServers.entries()) {
+    if (isIPAddress(host) || (!showDarkweb && server instanceof DarknetServer)) {
+      continue;
+    }
+    servers.push(server);
   }
   return servers;
 }
 
 export function DeleteServer(serverkey: string): void {
-  for (const key of Object.keys(AllServers)) {
-    const server = AllServers[key];
-    if (server.ip !== serverkey && server.hostname !== serverkey) continue;
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete AllServers[key];
-    break;
+  const server = GetServer(serverkey);
+  if (server) {
+    AllServers.delete(server.hostname);
+    AllServers.delete(server.ip);
   }
 }
 
-export function ipExists(ip: string): boolean {
-  for (const hostName in AllServers) {
-    if (AllServers[hostName].ip === ip) {
-      return true;
-    }
+export const connectServers = (server1: BaseServer, server2: BaseServer) => {
+  if (!server1.serversOnNetwork.includes(server2.hostname)) {
+    server1.serversOnNetwork.push(server2.hostname);
   }
-  return false;
+  if (!server2.serversOnNetwork.includes(server1.hostname)) {
+    server2.serversOnNetwork.push(server1.hostname);
+  }
+};
+
+export const disconnectServers = (server1: BaseServer, server2: BaseServer) => {
+  server1.serversOnNetwork = server1.serversOnNetwork.filter((conn) => conn !== server2.hostname);
+  server2.serversOnNetwork = server2.serversOnNetwork.filter((conn) => conn !== server1.hostname);
+};
+
+export function ipExists(ip: string): boolean {
+  return AllServers.has(ip);
 }
 
 export function createUniqueRandomIp(): IPAddress {
@@ -109,125 +103,59 @@ export function createUniqueRandomIp(): IPAddress {
 }
 
 // Safely add a Server to the AllServers map
-export function AddToAllServers(server: Server | HacknetServer): void {
-  if (GetServer(server.hostname)) {
-    console.warn(`Hostname of the server thats being added: ${server.hostname}`);
-    console.warn(`The server that already has this IP is: ${AllServers[server.hostname].hostname}`);
-    throw new Error("Error: Trying to add a server with an existing IP");
+export function AddToAllServers(server: Server | HacknetServer | DarknetServer): void {
+  let existingServer = GetServer(server.hostname);
+  if (existingServer) {
+    throw new Error(
+      `Trying to add a server with an existing hostname. New server: ${server.hostname} (${server.ip}). ` +
+        `Existing server: ${existingServer.hostname} (IP: ${existingServer.ip}).`,
+    );
+  }
+  existingServer = GetServer(server.ip);
+  if (existingServer) {
+    throw new Error(
+      `Trying to add a server with an existing IP. New server: ${server.hostname} (${server.ip}). ` +
+        `Existing server: ${existingServer.hostname} (IP: ${existingServer.ip}).`,
+    );
   }
 
-  AllServers[server.hostname] = server;
+  AllServers.set(server.hostname, server);
+  AllServers.set(server.ip, server);
 }
 
 export const renameServer = (hostname: string, newName: string): void => {
-  AllServers[newName] = AllServers[hostname];
-  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-  delete AllServers[hostname];
+  const existingServer = AllServers.get(hostname);
+  if (!existingServer) {
+    throw new Error(`Cannot rename server. No server found with hostname ${hostname}`);
+  }
+  AllServers.delete(hostname);
+  AllServers.set(newName, existingServer);
+  // No need to touch the entry keyed by IP
 };
 
-interface IServerParams {
-  hackDifficulty?: number;
-  hostname: string;
-  ip: IPAddress;
-  maxRam?: number;
-  moneyAvailable?: number;
-  numOpenPortsRequired: number;
-  organizationName: string;
-  requiredHackingSkill?: number;
-  serverGrowth?: number;
-}
-
-export function initForeignServers(homeComputer: Server): void {
-  /* Create a randomized network for all the foreign servers */
-  //Groupings for creating a randomized network
-  const networkLayers: Server[][] = [];
-  for (let i = 0; i < 15; i++) {
-    networkLayers.push([]);
-  }
-
-  const toNumber = (value: number | IMinMaxRange): number => {
-    if (typeof value === "number") return value;
-    else return getRandomIntInclusive(value.min, value.max);
-  };
-
-  for (const metadata of serverMetadata) {
-    const serverParams: IServerParams = {
-      hostname: metadata.hostname,
-      ip: createUniqueRandomIp(),
-      numOpenPortsRequired: metadata.numOpenPortsRequired,
-      organizationName: metadata.organizationName,
-    };
-
-    if (metadata.maxRamExponent !== undefined) {
-      serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
-    }
-
-    if (metadata.hackDifficulty) serverParams.hackDifficulty = toNumber(metadata.hackDifficulty);
-    if (metadata.moneyAvailable) serverParams.moneyAvailable = toNumber(metadata.moneyAvailable);
-    if (metadata.requiredHackingSkill) serverParams.requiredHackingSkill = toNumber(metadata.requiredHackingSkill);
-    if (metadata.serverGrowth) serverParams.serverGrowth = toNumber(metadata.serverGrowth);
-
-    const server = new Server(serverParams);
-
-    if (metadata.networkLayer) {
-      const layer = toNumber(metadata.networkLayer);
-      server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
-    }
-
-    for (const filename of metadata.literature || []) {
-      server.messages.push(filename);
-    }
-
-    if (server.hostname === SpecialServers.WorldDaemon) {
-      server.requiredHackingSkill *= currentNodeMults.WorldDaemonDifficulty;
-    }
-    AddToAllServers(server);
-    if (metadata.networkLayer !== undefined) {
-      networkLayers[toNumber(metadata.networkLayer) - 1].push(server);
-    }
-  }
-
-  /* Create a randomized network for all the foreign servers */
-  const linkComputers = (server1: Server, server2: Server): void => {
-    server1.serversOnNetwork.push(server2.hostname);
-    server2.serversOnNetwork.push(server1.hostname);
-  };
-
-  const getRandomArrayItem = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
-
-  const linkNetworkLayers = (network1: Server[], selectServer: () => Server): void => {
-    for (const server of network1) {
-      linkComputers(server, selectServer());
-    }
-  };
-
-  // Connect the first tier of servers to the player's home computer
-  linkNetworkLayers(networkLayers[0], () => homeComputer);
-  for (let i = 1; i < networkLayers.length; i++) {
-    linkNetworkLayers(networkLayers[i], () => getRandomArrayItem(networkLayers[i - 1]));
-  }
-}
-
 export function prestigeAllServers(): void {
-  for (const member of Object.keys(AllServers)) {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete AllServers[member];
-  }
-  AllServers = {};
+  AllServers.clear();
 }
 
 export function loadAllServers(saveString: string): void {
   const allServersData: unknown = JSON.parse(saveString, Reviver);
   assertObject(allServersData);
-  for (const [serverName, server] of Object.entries(allServersData)) {
-    if (!(server instanceof Server) && !(server instanceof HacknetServer)) {
-      throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);
-    }
+  if (Object.keys(allServersData).length === 0) {
+    throw new Error("Server list is empty.");
   }
-  // We validated the data above, so it's safe to typecast here.
-  AllServers = allServersData as typeof AllServers;
+  AllServers.clear();
+  for (const [serverName, server] of Object.entries(allServersData)) {
+    if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
+      throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
+    }
+    AllServers.set(server.hostname, server);
+    AllServers.set(server.ip, server);
+  }
+
+  // Apply blocked ram for darknet servers
+  applyRamBlocks();
 }
 
 export function saveAllServers(): string {
-  return JSON.stringify(AllServers);
+  return JSON.stringify(Object.fromEntries(GetAllServers(true).map((s) => [s.hostname, s])));
 }

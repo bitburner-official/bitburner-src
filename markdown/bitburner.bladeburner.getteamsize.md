@@ -9,18 +9,60 @@ Get team size.
 **Signature:**
 
 ```typescript
-getTeamSize(
-    type?: BladeburnerActionType | `${BladeburnerActionType}`,
-    name?: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+getTeamSize(type?: BladeburnerActionType, name?: BladeburnerActionName): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | _(Optional)_ Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | _(Optional)_ Name of action. Must be an exact match. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[BladeburnerActionType](./bitburner.bladeburneractiontype.md)
+
+
+</td><td>
+
+_(Optional)_ Type of action.
+
+
+</td></tr>
+<tr><td>
+
+name
+
+
+</td><td>
+
+[BladeburnerActionName](./bitburner.bladeburneractionname.md)
+
+
+</td><td>
+
+_(Optional)_ Name of action. Must be an exact match.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,10 +14,55 @@ tryWritePort(portNumber: number, data: any): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  portNumber | number | Port to attempt to write to. Must be a positive integer. |
-|  data | any | Data to write, it's cloned with structuredClone(). |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+portNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Port to attempt to write to. Must be a positive integer.
+
+
+</td></tr>
+<tr><td>
+
+data
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+Data to write, it's cloned with structuredClone().
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -29,5 +74,5 @@ True if the data is successfully written to the port, and false otherwise.
 
 RAM cost: 0 GB
 
-Attempts to write data to the specified Netscript port. If the port is full, the data will not be written. Otherwise, the data will be written normally.
+Attempts to write data to the specified Netscript port. If the port is full, the data will not be written. Otherwise, the data will be written normally. Ports are shared across all hosts and contents are reset on game restart.
 

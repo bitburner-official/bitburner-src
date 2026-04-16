@@ -29,25 +29,22 @@ interface BrowserFeatures {
   indexedDb: boolean;
 }
 
-interface IErrorMetadata {
+interface CrashReportMetadata {
   error: Record<string, unknown>;
-  errorInfo?: React.ErrorInfo;
+  reactErrorInfo?: React.ErrorInfo;
   page?: Page;
 
   environment: GameEnv;
   platform: Platform;
   version: GameVersion;
-  features: BrowserFeatures;
+  browserFeatures: BrowserFeatures;
 }
 
-export interface IErrorData {
-  metadata: IErrorMetadata;
+export interface CrashReport {
+  metadata: CrashReportMetadata;
 
   title: string;
   body: string;
-
-  features: string;
-  fileName?: string;
 
   issueUrl: string;
 }
@@ -85,7 +82,7 @@ export function getErrorMessageWithStackAndCause(error: unknown, prefix = ""): s
   const errorData = parseUnknownError(error);
   let errorMessage = `${prefix}${errorData.errorAsString}`;
   if (errorData.stack) {
-    errorMessage += `\nStack: ${errorData.stack}`;
+    errorMessage += `\n\nStack: ${errorData.stack}`;
   }
   if (errorData.causeAsString) {
     errorMessage += `\nError cause: ${errorData.causeAsString}`;
@@ -96,15 +93,19 @@ export function getErrorMessageWithStackAndCause(error: unknown, prefix = ""): s
   return errorMessage;
 }
 
-export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
+export function getCrashReportMetadata(
+  error: unknown,
+  reactErrorInfo?: React.ErrorInfo,
+  page?: Page,
+): CrashReportMetadata {
   const isElectron = navigator.userAgent.toLowerCase().includes(" electron/");
   const env = process.env.NODE_ENV === "development" ? GameEnv.Development : GameEnv.Production;
-  const version: GameVersion = {
+  const version = {
     version: CONSTANTS.VersionString,
     commitHash: commitHash(),
     toDisplay: () => `v${CONSTANTS.VersionString} (${commitHash()})`,
   };
-  const features: BrowserFeatures = {
+  const browserFeatures = {
     userAgent: navigator.userAgent,
 
     language: navigator.language,
@@ -113,25 +114,26 @@ export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, pa
     indexedDb: !!window.indexedDB,
   };
   const errorObj = typeof error === "object" && error !== null ? (error as Record<string, unknown>) : {};
-  const metadata: IErrorMetadata = {
+  return {
     platform: isElectron ? Platform.Steam : Platform.Browser,
     environment: env,
     version,
-    features,
+    browserFeatures,
     error: errorObj,
-    errorInfo,
+    reactErrorInfo,
     page,
   };
-  return metadata;
 }
 
-export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
-  const metadata = getErrorMetadata(error, errorInfo, page);
+export function getCrashReport(error: unknown, reactErrorInfo?: React.ErrorInfo, page?: Page): CrashReport {
+  const metadata = getCrashReportMetadata(error, reactErrorInfo, page);
   const errorData = parseUnknownError(error);
   const fileName = String(metadata.error.fileName);
   const features =
-    `lang=${metadata.features.language} cookiesEnabled=${metadata.features.cookiesEnabled.toString()}` +
-    ` doNotTrack=${metadata.features.doNotTrack ?? "null"} indexedDb=${metadata.features.indexedDb.toString()}`;
+    `lang=${metadata.browserFeatures.language} cookiesEnabled=${metadata.browserFeatures.cookiesEnabled.toString()}` +
+    ` doNotTrack=${
+      metadata.browserFeatures.doNotTrack ?? "null"
+    } indexedDb=${metadata.browserFeatures.indexedDb.toString()}`;
 
   const title = `${metadata.error.name}: ${metadata.error.message} (at "${metadata.page}")`;
   let causeAndCauseStack = errorData.causeAsString
@@ -175,7 +177,7 @@ ${errorData.stack}
 ${causeAndCauseStack}
 ### React Component Stack
 \`\`\`
-${metadata.errorInfo?.componentStack}
+${metadata.reactErrorInfo?.componentStack}
 \`\`\`
 
 ### Save
@@ -186,13 +188,43 @@ Copy your save here if possible
 
   const issueUrl = `${newIssueUrl}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 
-  const data: IErrorData = {
+  return {
     metadata,
-    fileName,
-    features,
     title,
     body,
     issueUrl,
   };
-  return data;
+}
+
+export function isSaveDataFromNewerVersions(versionSave?: string): boolean {
+  if (versionSave == null) {
+    return false;
+  }
+  // The empty string and the x.y.z format are from pre-v1 versions.
+  if (versionSave === "" || versionSave.includes(".")) {
+    return false;
+  }
+  const versionNumber = Number(versionSave);
+  if (!Number.isFinite(versionNumber) || versionNumber <= CONSTANTS.VersionNumber) {
+    return false;
+  }
+  return true;
+}
+
+export function isStanekGiftImplemented(versionSave?: string): boolean {
+  // It's debatable if we should return true or false here. If versionSave is undefined, there must be something wrong
+  // with the loading process. I think we should return true here and let the caller show the error popup.
+  if (versionSave == null) {
+    return true;
+  }
+  // The empty string and the x.y.z format are from pre-v1 versions.
+  if (versionSave === "" || versionSave.includes(".")) {
+    return false;
+  }
+  const versionNumber = Number(versionSave);
+  // Stanek's Gift was added in v1.1.0 (VersionNumber = 6).
+  if (!Number.isFinite(versionNumber) || versionNumber <= 5) {
+    return false;
+  }
+  return true;
 }

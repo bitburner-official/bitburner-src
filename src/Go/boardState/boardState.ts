@@ -71,11 +71,16 @@ export function getNewBoardStateFromSimpleBoard(
   simpleBoard: SimpleBoard,
   priorSimpleBoard?: SimpleBoard,
   ai: GoOpponent = GoOpponent.Netburners,
+  priorColor: GoColor | undefined = undefined,
 ): BoardState {
   const newState = getNewBoardState(simpleBoard.length, ai, false, updatedBoardFromSimpleBoard(simpleBoard));
   if (priorSimpleBoard) {
     newState.previousBoards.push(priorSimpleBoard.join(""));
+  }
 
+  if (priorColor) {
+    newState.previousPlayer = priorColor;
+  } else if (priorSimpleBoard) {
     // Identify the previous player based on the difference in pieces
     const priorWhitePieces = priorSimpleBoard.join("").match(/O/g)?.length ?? 0;
     const priorBlackPieces = priorSimpleBoard.join("").match(/X/g)?.length ?? 0;
@@ -85,8 +90,7 @@ export function getNewBoardStateFromSimpleBoard(
       newState.previousPlayer = GoColor.black;
     }
   }
-
-  updateCaptures(newState.board, newState.previousPlayer ?? GoColor.white);
+  updateChains(newState.board);
   return newState;
 }
 

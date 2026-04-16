@@ -14,11 +14,71 @@ mv(host: string, source: string, destination: string): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname of target server. |
-|  source | string | Filename of the source file. |
-|  destination | string | Filename of the destination file. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of target server.
+
+
+</td></tr>
+<tr><td>
+
+source
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of the source file.
+
+
+</td></tr>
+<tr><td>
+
+destination
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of the destination file.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -30,7 +90,9 @@ RAM cost: 0 GB
 
 Move the source file to the specified destination on the target server.
 
-This command only works for scripts and text files (.txt). It cannot, however, be used to convert from script to text file, or vice versa.
+This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). It cannot, however, be used to convert from script to text file, or vice versa.
 
 This function can also be used to rename files.
+
+This function is not able to remove running scripts from their original locations. Make sure to stop any scripts before using this function on them.
 

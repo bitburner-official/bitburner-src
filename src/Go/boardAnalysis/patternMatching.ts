@@ -3,7 +3,7 @@ import type { Board, PointState } from "../Types";
 
 import { GoColor } from "@enums";
 import { findEffectiveLibertiesOfNewMove } from "./boardAnalysis";
-import { sleep } from "./goAI";
+import { sleep } from "../../utils/Utility";
 
 export const threeByThreePatterns = [
   // 3x3 piece patterns; X,O are color pieces; x,o are any state except the opposite color piece;

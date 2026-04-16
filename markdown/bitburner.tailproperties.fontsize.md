@@ -4,7 +4,7 @@
 
 ## TailProperties.fontSize property
 
-The font size of the tail window. Defaults to the font size set in the style editor.
+The font size of the log window. Defaults to the font size set in the style editor.
 
 **Signature:**
 

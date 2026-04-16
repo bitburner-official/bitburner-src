@@ -14,11 +14,71 @@ growthAnalyze(host: string, multiplier: number, cores?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname of the target server. |
-|  multiplier | number | Multiplier that will be applied to a server's money after applying additive growth. Decimal form. |
-|  cores | number | _(Optional)_ Number of cores on the host running the grow function. Optional, defaults to 1. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of the target server.
+
+
+</td></tr>
+<tr><td>
+
+multiplier
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Multiplier that will be applied to a server's money after applying additive growth. Decimal form.
+
+
+</td></tr>
+<tr><td>
+
+cores
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of cores on the host running the grow function. Optional, defaults to 1.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

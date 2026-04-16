@@ -30,13 +30,15 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
   }
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setHostname(event.target.value);
+    // Players may accidentally include whitespace in the hostname and later wonder why they cannot use the cloud APIs.
+    // For example, they intend the hostname to be "foobar", but type "foobar " or "foo bar" instead.
+    setHostname(event.target.value.replace(/\s+/g, ""));
   }
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to purchase a new server with {formatRam(props.ram)} of RAM for{" "}
+        Would you like to purchase a new cloud server with {formatRam(props.ram)} of RAM for{" "}
         <Money money={props.cost} forPurchase={true} />?
       </Typography>
       <br />

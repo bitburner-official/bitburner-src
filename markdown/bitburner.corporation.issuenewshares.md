@@ -14,9 +14,39 @@ issueNewShares(amount?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  amount | number | _(Optional)_ Number of new shares to issue. It will be rounded to nearest 10 million. Defaults to max amount. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+amount
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of new shares to issue. It will be rounded to nearest 10 million. Defaults to max amount.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

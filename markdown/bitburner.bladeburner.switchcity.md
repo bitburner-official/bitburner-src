@@ -9,14 +9,44 @@ Travel to another city in Bladeburner.
 **Signature:**
 
 ```typescript
-switchCity(city: CityName | `${CityName}`): boolean;
+switchCity(city: CityName): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of city. Case-sensitive |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of city. Case-sensitive
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -26,7 +56,9 @@ true if successful, and false otherwise
 
 ## Remarks
 
-RAM cost: 4 GB Attempts to switch to the specified city (for Bladeburner only).
+RAM cost: 4 GB
+
+Attempts to switch to the specified city (for Bladeburner only).
 
 Returns true if successful, and false otherwise
 

@@ -14,14 +14,178 @@ interface StockMarketConstants
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [MarketData4SCost](./bitburner.stockmarketconstants.marketdata4scost.md) |  | number | Cost of the 4S Market Data |
-|  [MarketDataTixApi4SCost](./bitburner.stockmarketconstants.marketdatatixapi4scost.md) |  | number | Cost of the 4S Market Data TIX API integration |
-|  [msPerStockUpdate](./bitburner.stockmarketconstants.msperstockupdate.md) |  | number | Normal time in ms between stock market updates |
-|  [msPerStockUpdateMin](./bitburner.stockmarketconstants.msperstockupdatemin.md) |  | number | Minimum time in ms between stock market updates if there is stored offline/bonus time |
-|  [StockMarketCommission](./bitburner.stockmarketconstants.stockmarketcommission.md) |  | number | Commission fee for transactions |
-|  [TicksPerCycle](./bitburner.stockmarketconstants.tickspercycle.md) |  | number | An internal constant used while determining when to flip a stock's forecast |
-|  [TIXAPICost](./bitburner.stockmarketconstants.tixapicost.md) |  | number | Cost of the TIX API |
-|  [WSEAccountCost](./bitburner.stockmarketconstants.wseaccountcost.md) |  | number | Cost of the WSE account |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[MarketData4SCost](./bitburner.stockmarketconstants.marketdata4scost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cost of the 4S Market Data
+
+
+</td></tr>
+<tr><td>
+
+[MarketDataTixApi4SCost](./bitburner.stockmarketconstants.marketdatatixapi4scost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cost of the 4S Market Data TIX API integration
+
+
+</td></tr>
+<tr><td>
+
+[msPerStockUpdate](./bitburner.stockmarketconstants.msperstockupdate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Normal time in ms between stock market updates
+
+
+</td></tr>
+<tr><td>
+
+[msPerStockUpdateMin](./bitburner.stockmarketconstants.msperstockupdatemin.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Minimum time in ms between stock market updates if there is stored offline/bonus time
+
+
+</td></tr>
+<tr><td>
+
+[StockMarketCommission](./bitburner.stockmarketconstants.stockmarketcommission.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Commission fee for transactions
+
+
+</td></tr>
+<tr><td>
+
+[TicksPerCycle](./bitburner.stockmarketconstants.tickspercycle.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+An internal constant used while determining when to flip a stock's forecast
+
+
+</td></tr>
+<tr><td>
+
+[TixApiCost](./bitburner.stockmarketconstants.tixapicost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cost of the TIX API
+
+
+</td></tr>
+<tr><td>
+
+[WseAccountCost](./bitburner.stockmarketconstants.wseaccountcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cost of the WSE account
+
+
+</td></tr>
+</tbody></table>
 

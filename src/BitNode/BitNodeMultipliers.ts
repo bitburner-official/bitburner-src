@@ -60,6 +60,12 @@ export class BitNodeMultipliers {
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement = 30;
 
+  /** If true, TRP can be found in the fourth lab deep in the darknet. */
+  DarknetLabyrinthRewardsTheRedPill = 1;
+
+  /** Influences how much money the player gains from darknet mechanics (phishing and reward caches). */
+  DarknetMoneyMultiplier = 1;
+
   /** Influences how quickly the player's defense level (not exp) scales */
   DefenseLevelMultiplier = 1;
 
@@ -116,25 +122,25 @@ export class BitNodeMultipliers {
 
   /**
    * Influences how much money the player actually gains when they hack a server via the terminal. This is different
-   * from ScriptHackMoney. When the player hack a server via the terminal, the amount of money in that server is
+   * from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney = 1;
 
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerCost = 1;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerCost = 1;
 
-  /** Influence how much it costs to purchase a server */
-  PurchasedServerSoftcap = 1;
+  /** Influence how much it costs to purchase a cloud server */
+  CloudServerSoftcap = 1;
 
-  /** Influences the maximum number of purchased servers you can have */
-  PurchasedServerLimit = 1;
+  /** Influences the maximum number of cloud servers you can have */
+  CloudServerLimit = 1;
 
-  /** Influences the maximum allowed RAM for a purchased server */
-  PurchasedServerMaxRam = 1;
+  /** Influences the maximum allowed RAM for a cloud server */
+  CloudServerMaxRam = 1;
 
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
-  RepToDonateToFaction = 1;
+  FavorToDonateToFaction = 1;
 
   /** Influences how much money is stolen from a server when the player performs a hack against it. */
   ScriptHackMoney = 1;

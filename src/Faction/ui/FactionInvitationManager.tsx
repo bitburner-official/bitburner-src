@@ -44,7 +44,7 @@ export function FactionInvitationManager({ hidden }: { hidden: boolean }): React
 
   function close(): void {
     setFactions((currentFactions) => {
-      return currentFactions.slice(1);
+      return currentFactions.slice(1).filter((name) => !Factions[name].isBanned);
     });
   }
 
@@ -52,7 +52,7 @@ export function FactionInvitationManager({ hidden }: { hidden: boolean }): React
   const enemies = faction?.getInfo().enemies ?? [];
 
   function join(): void {
-    if (faction === null || !faction.alreadyInvited) {
+    if (faction === null || !faction.alreadyInvited || faction.isBanned) {
       return;
     }
     joinFaction(faction);

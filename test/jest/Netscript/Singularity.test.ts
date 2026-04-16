@@ -1,19 +1,21 @@
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
 import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
-import { AugmentationName, CompanyName, FactionName, JobField, JobName } from "@enums";
+import { AugmentationName, CompanyName, CompletedProgramName, FactionName, JobField, JobName } from "@enums";
 import { Player } from "@player";
 import { prestigeSourceFile } from "../../../src/Prestige";
-import { GetServerOrThrow } from "../../../src/Server/AllServers";
+import { disconnectServers, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { Factions } from "../../../src/Faction/Factions";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { Terminal } from "../../../src/Terminal";
 import type { NSFull } from "../../../src/NetscriptFunctions";
 import { Companies } from "../../../src/Company/Companies";
 import { CompanyPositions } from "../../../src/Company/CompanyPositions";
+import { getTorRouter } from "../../../src/Server/ServerHelpers";
+import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
 
-const nextBN = 3;
+const nextBN = 4;
 
 function setNumBlackOpsComplete(value: number): void {
   if (!Player.bladeburner) {
@@ -46,19 +48,139 @@ beforeAll(() => {
   initGameEnvironment();
 });
 
+function testIntelligenceOverride(
+  ns: NSFull,
+  prestigeAPI: "b1tflum3" | "destroyW0r1dD43m0n",
+  expectSuccessPrestige: () => void,
+  setUpBeforePrestige = () => {},
+): void {
+  Player.sourceFiles.set(5, 1);
+  // Start without exp.
+  expect(Player.exp.intelligence).toStrictEqual(0);
+  expect(Player.skills.intelligence).toStrictEqual(1);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(0);
+  // Gain 1e6 exp (skill = 242).
+  Player.gainIntelligenceExp(1e6);
+  expect(Player.exp.intelligence).toStrictEqual(1e6);
+  expect(Player.skills.intelligence).toStrictEqual(242);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6);
+
+  // Prestige and check if intelligenceOverride works (exp is set to 11255, skill = 100, and
+  // persistentIntelligenceData.exp is still 1e6).
+  const intelligenceExpGainOnPrestige = prestigeAPI === "destroyW0r1dD43m0n" ? 300 : 0;
+  setUpBeforePrestige();
+  ns.singularity[prestigeAPI](nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: 100,
+  });
+  expectSuccessPrestige();
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(100);
+  expect(Player.exp.intelligence).toStrictEqual(11255.317546552918 + intelligenceExpGainOnPrestige);
+  expect(Player.skills.intelligence).toStrictEqual(100);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige);
+
+  // Gain 500e3 exp.
+  const intExpGain = 500e3;
+  Player.gainIntelligenceExp(intExpGain);
+  // Check if int gain is accumulated correctly in both Player.exp.intelligence and
+  // Player.persistentIntelligenceData.exp.
+  expect(Player.exp.intelligence).toStrictEqual(11255.317546552918 + intelligenceExpGainOnPrestige + intExpGain);
+  expect(Player.skills.intelligence).toStrictEqual(220);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige + intExpGain);
+
+  // Prestige and check if int gain is still retained correctly.
+  setUpBeforePrestige();
+  ns.singularity[prestigeAPI](nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: undefined,
+  });
+  expectSuccessPrestige();
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(undefined);
+  expect(Player.exp.intelligence).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2 + intExpGain);
+  expect(Player.skills.intelligence).toStrictEqual(255);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2 + intExpGain);
+
+  // Prestige with intelligenceOverride set higher than the persistent int skill and check if the int skill is
+  // incorrectly set to that value.
+  setUpBeforePrestige();
+  ns.singularity[prestigeAPI](nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: 1000,
+  });
+  expectSuccessPrestige();
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(1000);
+  expect(Player.exp.intelligence).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 3 + intExpGain);
+  expect(Player.skills.intelligence).toStrictEqual(255);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 3 + intExpGain);
+
+  // Start testing another scenario.
+  // Set the initial state (int exp = 1e6, skill = 242) and bitflume.
+  Player.exp.intelligence = 1e6;
+  Player.skills.intelligence = 242;
+  Player.persistentIntelligenceData.exp = 1e6;
+  ns.singularity.b1tflum3(nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: undefined,
+  });
+
+  // Double-check the initial state.
+  expect(Player.exp.intelligence).toStrictEqual(1e6);
+  expect(Player.skills.intelligence).toStrictEqual(242);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6);
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(undefined);
+
+  // Limit int skill to 100.
+  setUpBeforePrestige();
+  ns.singularity[prestigeAPI](nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: 100,
+  });
+  expectSuccessPrestige();
+
+  // Check if int is overridden correctly.
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(100);
+  expect(Player.exp.intelligence).toStrictEqual(11255.317546552918 + intelligenceExpGainOnPrestige);
+  expect(Player.skills.intelligence).toStrictEqual(100);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige);
+
+  // Limit int skill to 1000.
+  setUpBeforePrestige();
+  ns.singularity[prestigeAPI](nextBN, undefined, {
+    ...ns.getResetInfo().bitNodeOptions,
+    intelligenceOverride: 1000,
+  });
+  expectSuccessPrestige();
+
+  // The limit is higher than the persistent int skill, so it's not applied. Exp and skill are reset back to the initial
+  // state, plus the int exp gained from prestige.
+  expect(Player.bitNodeOptions.intelligenceOverride).toStrictEqual(1000);
+  expect(Player.exp.intelligence).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2);
+  expect(Player.skills.intelligence).toStrictEqual(242);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2);
+}
+
+function setUpBeforeDestroyingWD(): void {
+  Player.queueAugmentation(AugmentationName.TheRedPill);
+  installAugmentations();
+  Player.gainHackingExp(1e100);
+  const wdServer = GetServerOrThrow(SpecialServers.WorldDaemon);
+  wdServer.hasAdminRights = true;
+  Player.startBladeburner();
+  setNumBlackOpsComplete(blackOpsArray.length);
+}
+
 describe("b1tflum3", () => {
   beforeEach(() => {
     setupBasicTestingEnvironment();
-    Player.queueAugmentation(AugmentationName.TheRedPill);
+    Player.queueAugmentation(AugmentationName.Targeting1);
     installAugmentations();
     Player.gainHackingExp(1e100);
-    const wdServer = GetServerOrThrow(SpecialServers.WorldDaemon);
-    wdServer.hasAdminRights = true;
   });
   // Make sure that the player is in the next BN without SF rewards.
   const expectSucceedInB1tflum3 = () => {
     expect(Player.bitNodeN).toStrictEqual(nextBN);
     expect(Player.augmentations.length).toStrictEqual(0);
+    expect(Player.exp.hacking).toStrictEqual(0);
     expect(Player.sourceFileLvl(1)).toStrictEqual(0);
   };
 
@@ -77,15 +199,20 @@ describe("b1tflum3", () => {
       });
       expectSucceedInB1tflum3();
     });
+    test("intelligenceOverride", () => {
+      testIntelligenceOverride(getNS(), "b1tflum3", expectSucceedInB1tflum3);
+    });
   });
 
+  // Make sure that the player is still in the same BN without SF rewards.
+  const expectFailToB1tflum3 = () => {
+    expect(Player.bitNodeN).toStrictEqual(1);
+    expect(Player.augmentations.length).toStrictEqual(1);
+    expect(Player.augmentations[0].name).toStrictEqual(AugmentationName.Targeting1);
+    expect(Player.exp.hacking).toStrictEqual(1e100);
+    expect(Player.sourceFileLvl(1)).toStrictEqual(0);
+  };
   describe("Failure", () => {
-    // Make sure that the player is still in the same BN without SF rewards.
-    const expectFailToB1tflum3 = () => {
-      expect(Player.bitNodeN).toStrictEqual(1);
-      expect(Player.augmentations.length).toStrictEqual(1);
-      expect(Player.sourceFileLvl(1)).toStrictEqual(0);
-    };
     test("Invalid intelligenceOverride", () => {
       const ns = getNS();
       expect(() => {
@@ -112,13 +239,7 @@ describe("b1tflum3", () => {
 describe("destroyW0r1dD43m0n", () => {
   beforeEach(() => {
     setupBasicTestingEnvironment();
-    Player.queueAugmentation(AugmentationName.TheRedPill);
-    installAugmentations();
-    Player.gainHackingExp(1e100);
-    const wdServer = GetServerOrThrow(SpecialServers.WorldDaemon);
-    wdServer.hasAdminRights = true;
-    Player.startBladeburner();
-    setNumBlackOpsComplete(blackOpsArray.length);
+    setUpBeforeDestroyingWD();
   });
 
   describe("Success", () => {
@@ -159,6 +280,9 @@ describe("destroyW0r1dD43m0n", () => {
         intelligenceOverride: 1,
       });
       expectSucceedInDestroyingWD();
+    });
+    test("intelligenceOverride", () => {
+      testIntelligenceOverride(getNS(), "destroyW0r1dD43m0n", expectSucceedInDestroyingWD, setUpBeforeDestroyingWD);
     });
   });
 
@@ -349,9 +473,9 @@ describe("connect", () => {
     });
     test("Private server", () => {
       const ns = getNS();
-      ns.purchaseServer("pserver-0", 8);
+      ns.cloud.purchaseServer("cloud-server-0", 8);
       Terminal.connectToServer(SpecialServers.DaedalusServer);
-      expectConnectSuccessfully(ns, "pserver-0");
+      expectConnectSuccessfully(ns, "cloud-server-0");
     });
     test("Hacknet server", () => {
       const ns = getNS();
@@ -443,6 +567,78 @@ describe("applyToCompany", () => {
       const ns = getNS();
       expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software0);
       expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(null);
+    });
+  });
+});
+
+describe("purchaseProgram", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    prestigeSourceFile(true);
+    Player.money = 1e15;
+    getTorRouter();
+  });
+
+  describe("Success", () => {
+    beforeEach(() => {
+      const ns = getNS();
+      expect(ns.singularity.purchaseTor()).toStrictEqual(true);
+    });
+    test("return true if already bought", () => {
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      Player.getHomeComputer().pushProgram(CompletedProgramName.bruteSsh);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+    });
+    test("bruteSsh", () => {
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+    });
+    test("darkscape", () => {
+      const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
+      expect(spiedExceptionAlert).not.toHaveBeenCalled();
+    });
+    test("darkscape with lowercase program name", () => {
+      const spiedExceptionAlert = jest.spyOn(exceptionAlertModule, "exceptionAlert");
+      const ns = getNS();
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(false);
+      // @ts-expect-error - Intentionally use lowercase program name
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.darkscape.toLowerCase())).toStrictEqual(true);
+      expect(Player.hasProgram(CompletedProgramName.darkscape)).toStrictEqual(true);
+      expect(spiedExceptionAlert).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("Failure", () => {
+    test("No TOR", () => {
+      // Remove TOR router
+      disconnectServers(Player.getHomeComputer(), GetServerOrThrow(SpecialServers.DarkWeb));
+
+      const ns = getNS();
+      expect(Player.hasTorRouter()).toStrictEqual(false);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+    });
+    test("Invalid program name", () => {
+      const ns = getNS();
+      // @ts-expect-error - Intentionally use invalid program name
+      expect(ns.singularity.purchaseProgram("InvalidProgram.exe")).toStrictEqual(false);
+    });
+    test("Not enough money", () => {
+      const ns = getNS();
+      Player.money = 0;
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
+      expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
     });
   });
 });

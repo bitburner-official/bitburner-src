@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, shell, BrowserWindow } = require("electron");
-const log = require("electron-log");
 const utils = require("./utils");
 const achievements = require("./achievements");
 const menu = require("./menu");
-const api = require("./api-server");
 const path = require("path");
 const { windowTracker } = require("./windowTracker");
+const storage = require("./storage");
 
-const debug = process.argv.includes("--debug");
+const openDevtools = process.argv.includes("--dev");
 
 async function createWindow(killall) {
   const setStopProcessHandler = global.app_handlers.stopProcess;
@@ -20,12 +19,14 @@ async function createWindow(killall) {
   }
 
   const tracker = windowTracker("main");
+
   const window = new BrowserWindow({
     icon,
     show: false,
     backgroundThrottling: false,
     backgroundColor: "#000000",
     title: "Bitburner",
+    autoHideMenuBar: storage.isMenuHideEnabled(),
     x: tracker.state.x,
     y: tracker.state.y,
     width: tracker.state.width,
@@ -42,13 +43,13 @@ async function createWindow(killall) {
   if (tracker.state.isMaximized) window.maximize();
 
   window.removeMenu();
-  noScripts = killall ? { query: { noScripts: killall } } : {};
+  const noScripts = killall ? { query: { noScripts: killall } } : {};
   window.loadFile("index.html", noScripts);
   window.once("ready-to-show", () => {
     utils.setZoomFactor(window, utils.getZoomFactor());
   });
   window.show();
-  if (debug) window.webContents.openDevTools();
+  if (openDevtools) window.webContents.openDevTools();
 
   window.webContents.setWindowOpenHandler(({ url }) => {
     // File protocol is allowed because it will use the file protocol intercept from main.js
@@ -61,18 +62,11 @@ async function createWindow(killall) {
 
   window.webContents.backgroundThrottling = false;
 
-  achievements.enableAchievementsInterval(window);
+  achievements.enableSyncingAchievements();
   utils.attachUnresponsiveAppHandler(window);
 
-  try {
-    await api.initialize(window);
-  } catch (error) {
-    log.error(error);
-    utils.showErrorBox("Error starting http server", error);
-  }
-
   menu.refreshMenu(window);
-  setStopProcessHandler(app, window);
+  setStopProcessHandler(window);
 
   return window;
 }

@@ -18,11 +18,71 @@ This API requires Source-File 10 to use.
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [getAugmentationGraftPrice(augName)](./bitburner.grafting.getaugmentationgraftprice.md) | Retrieve the grafting cost of an aug. |
-|  [getAugmentationGraftTime(augName)](./bitburner.grafting.getaugmentationgrafttime.md) | Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes. The ongoing grafting is affected by current intelligence level and focus bonus. You should use [waitForOngoingGrafting](./bitburner.grafting.waitforongoinggrafting.md) for that purpose. |
-|  [getGraftableAugmentations()](./bitburner.grafting.getgraftableaugmentations.md) | Retrieves a list of augmentations that can be grafted. |
-|  [graftAugmentation(augName, focus)](./bitburner.grafting.graftaugmentation.md) | Begins grafting the named aug. You must be in New Tokyo to use this. When you call this API, the current work (grafting or other actions) will be canceled. |
-|  [waitForOngoingGrafting()](./bitburner.grafting.waitforongoinggrafting.md) | Wait until the ongoing grafting finishes or is canceled. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[getAugmentationGraftPrice(augName)](./bitburner.grafting.getaugmentationgraftprice.md)
+
+
+</td><td>
+
+Retrieve the grafting cost of an aug.
+
+
+</td></tr>
+<tr><td>
+
+[getAugmentationGraftTime(augName)](./bitburner.grafting.getaugmentationgrafttime.md)
+
+
+</td><td>
+
+Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes. The ongoing grafting is affected by current intelligence level and focus bonus. You should use [waitForOngoingGrafting](./bitburner.grafting.waitforongoinggrafting.md) for that purpose.
+
+
+</td></tr>
+<tr><td>
+
+[getGraftableAugmentations()](./bitburner.grafting.getgraftableaugmentations.md)
+
+
+</td><td>
+
+Retrieves a list of augmentations that can be grafted.
+
+
+</td></tr>
+<tr><td>
+
+[graftAugmentation(augName, focus)](./bitburner.grafting.graftaugmentation.md)
+
+
+</td><td>
+
+Begins grafting the named aug. You must be in New Tokyo to use this. When you call this API, the current work (grafting or other actions) will be canceled.
+
+
+</td></tr>
+<tr><td>
+
+[waitForOngoingGrafting()](./bitburner.grafting.waitforongoinggrafting.md)
+
+
+</td><td>
+
+Wait until the ongoing grafting finishes or is canceled.
+
+
+</td></tr>
+</tbody></table>
 

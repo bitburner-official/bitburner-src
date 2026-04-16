@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 
 import { Location } from "../Location";
 import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
-import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
+import { AugmentationName, CompletedProgramName, FactionName, LocationName, ToastVariant } from "@enums";
 import { Factions } from "../../Faction/Factions";
 import { joinFaction } from "../../Faction/FactionHelpers";
 
@@ -29,7 +29,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { N00dles } from "../../utils/helpers/N00dles";
 import { Exploit } from "../../Exploits/Exploit";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
@@ -39,6 +39,10 @@ import { canAccessBitNodeFeature, knowAboutBitverse } from "../../BitNode/BitNod
 import { useRerender } from "../../ui/React/hooks";
 import { PromptEvent } from "../../ui/React/PromptManager";
 import { canAcceptStaneksGift } from "../../CotMG/Helper";
+import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
+import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
+import { DarknetConstants } from "../../DarkNet/Constants";
+import { formatMoney } from "../../ui/formatNumber";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -329,7 +333,58 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     return (
       <>
         <Typography>
-          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
+          <CorruptibleText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
+        </Typography>
+      </>
+    );
+  }
+
+  function renderShadowedWalkway(): React.ReactElement {
+    function handleDarknetNavigator(): void {
+      if (Player.money < DarknetConstants.DarkscapeNavigatorDiscountedPrice) {
+        dialogBoxCreate(`You don't have enough money to buy ${CompletedProgramName.darkscape}`);
+        return;
+      }
+      Player.loseMoney(DarknetConstants.DarkscapeNavigatorDiscountedPrice, "other");
+      getDarkscapeNavigator();
+      dialogBoxCreate(
+        `You bought ${CompletedProgramName.darkscape} for ${formatMoney(
+          DarknetConstants.DarkscapeNavigatorDiscountedPrice,
+        )}.`,
+      );
+      rerender();
+    }
+    const canBuyDarknetNavigator =
+      Player.money >= DarknetConstants.DarkscapeNavigatorDiscountedPrice && !hasDarknetAccess();
+    return (
+      <>
+        <Typography>
+          <br />
+          <br />
+          The city is dark and quiet. It stretches out below this decrepit walkway, a seemingly endless expanse of
+          decaying concrete and rusted metal.
+          <br />
+          <br />
+          Nearby, an ancient automat sits askew, its screen flickering with static, still covered with ads for the
+          compact disks it sells for credits.
+          <br />
+          <br />
+          On it, a faded sign reads:
+          <br />
+          <br />
+          <i>
+            Resistance, change, & freedom: powered by privacy. Darkscape Navigator is the only way to escape the
+            oppression of the Great Firewall.
+          </i>
+          <br />
+          <br />
+          <br />
+          <Button onClick={handleDarknetNavigator} disabled={!canBuyDarknetNavigator}>
+            Buy {CompletedProgramName.darkscape}{" "}
+            {hasDarknetAccess()
+              ? " - Purchased"
+              : `(${formatMoney(DarknetConstants.DarkscapeNavigatorDiscountedPrice)})`}
+          </Button>
         </Typography>
       </>
     );
@@ -367,6 +422,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <Button onClick={() => Router.toPage(Page.Go)}>IPvGO Subnet Takeover</Button>
         </>
       );
+    }
+    case LocationName.ChongqingShadowedWalkway: {
+      return renderShadowedWalkway();
     }
     default:
       console.error(`Location ${props.loc.name} doesn't have any special properties`);

@@ -33,6 +33,10 @@ import { getRecordKeys } from "../../Types/Record";
 import { PositiveInteger } from "../../types";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { CreateCorporationModal } from "./modals/CreateCorporationModal";
+import InfoIcon from "@mui/icons-material/Info";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 interface IProps {
   rerender: () => void;
@@ -361,8 +365,51 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
       rows={[
         ["Retained Profits (after dividends):", <MoneyRate key="profits" money={retainedEarnings} />],
         ["Dividend Percentage:", formatPercent(corp.dividendRate, 0)],
-        ["Dividends per share:", <MoneyRate key="dividends" money={dividendsPerShare} />],
-        ["Your earnings as a shareholder:", <MoneyRate key="earnings" money={playerEarnings} />],
+        [
+          "Dividends per share:",
+          <MoneyRate key="dividends" money={dividendsPerShare} useExponentialFormForSmallValue={true} />,
+        ],
+        [
+          <>
+            <Tooltip
+              title={
+                <>
+                  Everything comes with a price.
+                  <br />
+                  <br />
+                  Although your corporation grants you unlimited wealth, nobody dares try to sabotage your corporation
+                  and take that wealth away from you. Why? All (alive) CEOs know this unspoken rule: If you pay a
+                  "small" tribute to "them", "they" will protect you. Just pay a small fee, and you are safe.
+                  Guaranteed.
+                  <br />
+                  <br />
+                  Who are "they"? Nobody knows for certain. There is a rumour that they are{" "}
+                  <CorruptibleText content={"||| BUFFER OVERFLOW DETECTED |||"} spoiler={true} />.
+                  <br />
+                  <br />
+                  Due to this tribute, your dividend is negatively affected by a penalty modifier called
+                  "TributeModifier". Formulas:
+                  <br />
+                  <br />
+                  <MathNotationOutput notation={MathNotation.CorpTotalDividends} />
+                  <br />
+                  <MathNotationOutput notation={MathNotation.CorpDividend} />
+                </>
+              }
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Your earnings as a shareholder:
+                <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />
+              </div>
+            </Tooltip>
+          </>,
+          <MoneyRate key="earnings" money={playerEarnings} />,
+        ],
       ]}
     />
   );

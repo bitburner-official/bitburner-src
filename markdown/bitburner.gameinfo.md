@@ -14,9 +14,104 @@ interface GameInfo
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [commit](./bitburner.gameinfo.commit.md) |  | string |  |
-|  [platform](./bitburner.gameinfo.platform.md) |  | string |  |
-|  [version](./bitburner.gameinfo.version.md) |  | string |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[commit](./bitburner.gameinfo.commit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Git commit hash that the release was built from. E.g.: "d0d776700"
+
+
+</td></tr>
+<tr><td>
+
+[platform](./bitburner.gameinfo.platform.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"Browser" \| "Steam"
+
+
+</td><td>
+
+Platform that the game is running on
+
+
+</td></tr>
+<tr><td>
+
+[version](./bitburner.gameinfo.version.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Version as shown in release notes and in the UI. E.g.: "2.8.1"
+
+Note that this property does not have the prefix "v". For example, with v2.8.1, this property is "2.8.1".
+
+
+</td></tr>
+<tr><td>
+
+[versionNumber](./bitburner.gameinfo.versionnumber.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Internal version number that increments during releases. E.g.: 43
+
+
+</td></tr>
+</tbody></table>
 

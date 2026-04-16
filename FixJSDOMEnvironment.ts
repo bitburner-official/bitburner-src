@@ -14,5 +14,24 @@ export default class FixJSDOMEnvironment extends JSDOMEnvironment {
     // Wrap the construction of the function in eval, so that transpilers
     // don't touch the import() call.
     this.global.importActual = eval("url => import(url)");
+
+    /**
+     * By default, Jest only passes a limited number of global objects to the test environment. We need these global
+     * objects when testing code that loads save data.
+     */
+    this.global.Uint8Array = Uint8Array;
+    this.global.Blob = Blob;
+    this.global.CompressionStream = CompressionStream;
+    this.global.DecompressionStream = DecompressionStream;
+    this.global.TextDecoderStream = TextDecoderStream;
+    this.global.URL = URL;
+    this.global.Response = Response;
+
+    /**
+     * https://github.com/jsdom/jsdom/issues/3766
+     * https://github.com/jsdom/jsdom/issues/3444
+     */
+    this.global.document.adoptedStyleSheets = [];
+    this.global.CSSStyleSheet.prototype.replaceSync = () => {};
   }
 }

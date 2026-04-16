@@ -9,18 +9,64 @@ Generate a dummy contract.
 **Signature:**
 
 ```typescript
-createDummyContract(type: string): string;
+createDummyContract(type: CodingContractName, host?: string): string | null;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | string | Type of contract to generate |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[CodingContractName](./bitburner.codingcontractname.md)
+
+
+</td><td>
+
+Type of contract to generate
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the server containing the contract. Optional. Defaults to the server the calling script is running on.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
-string
+string \| null
 
 Filename of the contract.
 
@@ -28,5 +74,7 @@ Filename of the contract.
 
 RAM cost: 2 GB
 
-Generate a dummy contract on the home computer with no reward. Used to test various algorithms.
+Generate a dummy contract on the current server with no reward. Used to test various algorithms.
+
+This function will return null and not generate a contract if the randomized contract name is the same as another contract's name or the host is offline.
 

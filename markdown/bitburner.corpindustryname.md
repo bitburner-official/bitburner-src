@@ -9,7 +9,6 @@
 
 ```typescript
 type CorpIndustryName =
-  | "Spring Water"
   | "Water Utilities"
   | "Agriculture"
   | "Fishing"

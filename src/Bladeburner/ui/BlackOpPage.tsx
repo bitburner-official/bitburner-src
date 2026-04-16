@@ -6,23 +6,13 @@ import { FactionName } from "@enums";
 import { BlackOpElem } from "./BlackOpElem";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { blackOpsArray } from "../data/BlackOperations";
-import { GetServer } from "../../Server/AllServers";
-import { SpecialServers } from "../../Server/data/SpecialServers";
-import { Server } from "../../Server/Server";
+import { finishBitNode } from "../../BitNode/BitNodeUtils";
+import { Player } from "@player";
 
 interface BlackOpPageProps {
   bladeburner: Bladeburner;
-}
-
-function finishBitNode() {
-  const wd = GetServer(SpecialServers.WorldDaemon);
-  if (!(wd instanceof Server)) {
-    throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
-  }
-  wd.backdoorInstalled = true;
-  Router.toPage(Page.BitVerse, { flume: false, quick: false });
 }
 
 export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactElement {
@@ -45,17 +35,25 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
         losses. Black Ops success significantly affected by combat stats. Many Ops benefit from Hacking skill.
         Unaffected by Charisma.
       </Typography>
-      {bladeburner.numBlackOpsComplete >= blackOpsArray.length ? (
-        <Button sx={{ my: 1, p: 1 }} onClick={finishBitNode}>
-          <CorruptableText content="Destroy w0r1d_d43m0n" spoiler={false}></CorruptableText>
+
+      {bladeburner.numBlackOpsComplete >= blackOpsArray.length && (
+        <Button
+          sx={{ my: 1, p: 1 }}
+          onClick={() => {
+            if (!Player.bladeburner || Player.bladeburner.numBlackOpsComplete < blackOpsArray.length) {
+              return;
+            }
+            finishBitNode();
+            Router.toPage(Page.BitVerse, { flume: false, quick: false });
+          }}
+        >
+          <CorruptibleText content="Destroy w0r1d_d43m0n" spoiler={false}></CorruptibleText>
         </Button>
-      ) : (
-        <>
-          {blackOperations.map((blackOperation) => (
-            <BlackOpElem key={blackOperation.name} bladeburner={bladeburner} action={blackOperation} />
-          ))}
-        </>
       )}
+
+      {blackOperations.map((blackOperation) => (
+        <BlackOpElem key={blackOperation.name} bladeburner={bladeburner} action={blackOperation} />
+      ))}
     </>
   );
 }

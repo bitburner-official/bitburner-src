@@ -1,7 +1,7 @@
 import type { CompanyPosition } from "./CompanyPosition";
 
 import { CompanyName, JobName, FactionName } from "@enums";
-import { MaxFavor, calculateFavorAfterResetting } from "../Faction/formulas/favor";
+import { MaxFavor, addRepToFavor } from "../Faction/formulas/favor";
 import { clampNumber } from "../utils/helpers/clampNumber";
 
 export interface CompanyCtorParams {
@@ -75,7 +75,7 @@ export class Company {
   }
 
   prestigeAugmentation(): void {
-    this.setFavor(calculateFavorAfterResetting(this.favor, this.playerReputation));
+    this.setFavor(addRepToFavor(this.favor, this.playerReputation));
     this.playerReputation = 0;
   }
 

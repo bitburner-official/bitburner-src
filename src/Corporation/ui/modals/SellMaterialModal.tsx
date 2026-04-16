@@ -9,6 +9,8 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import * as actions from "../../Actions";
 import { KEY } from "../../../utils/KeyboardEventKey";
 
+import { formatMoney } from "../../../ui/formatNumber";
+
 interface IProps {
   open: boolean;
   onClose: () => void;
@@ -62,8 +64,8 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
         <br />
         <br />
         When setting the sell price, you can use the 'MP' variable to designate a dynamically changing price that
-        depends on the market price. For example, if you set the sell price to 'MP+10' then it will always be sold at
-        $10 above the market price.
+        depends on the market price. For example, if you set the sell price to 'MP+10' then it will always be sold at{" "}
+        {formatMoney(10)} above the market price.
       </Typography>
       <br />
       <TextField

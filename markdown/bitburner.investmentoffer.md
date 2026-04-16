@@ -14,9 +14,83 @@ interface InvestmentOffer
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [funds](./bitburner.investmentoffer.funds.md) |  | number | Amount of funds you will get from this investment |
-|  [round](./bitburner.investmentoffer.round.md) |  | number | Current round of funding (max 4) |
-|  [shares](./bitburner.investmentoffer.shares.md) |  | number | Amount of share you will give in exchange for this investment |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[funds](./bitburner.investmentoffer.funds.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of funds you will get from this investment
+
+
+</td></tr>
+<tr><td>
+
+[round](./bitburner.investmentoffer.round.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current round of funding (max 4)
+
+
+</td></tr>
+<tr><td>
+
+[shares](./bitburner.investmentoffer.shares.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of share you will give in exchange for this investment
+
+
+</td></tr>
+</tbody></table>
 

@@ -11,18 +11,78 @@ Set a sleeve to perform Bladeburner actions.
 ```typescript
 setToBladeburnerAction(
     sleeveNumber: number,
-    action: BladeburnerActionTypeForSleeve | `${BladeburnerActionTypeForSleeve}`,
+    action: BladeburnerActionTypeForSleeve,
     contract?: BladeburnerContractName,
   ): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sleeveNumber | number | Index of the sleeve to perform a Bladeburner action. |
-|  action | [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) \| \`${[BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md)<!-- -->}\` | Name of the action to be performed. |
-|  contract | [BladeburnerContractName](./bitburner.bladeburnercontractname.md) | _(Optional)_ Name of the contract if applicable. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sleeveNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index of the sleeve to perform a Bladeburner action.
+
+
+</td></tr>
+<tr><td>
+
+action
+
+
+</td><td>
+
+[BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md)
+
+
+</td><td>
+
+Name of the action to be performed.
+
+
+</td></tr>
+<tr><td>
+
+contract
+
+
+</td><td>
+
+[BladeburnerContractName](./bitburner.bladeburnercontractname.md)
+
+
+</td><td>
+
+_(Optional)_ Name of the contract if applicable.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

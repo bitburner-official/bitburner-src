@@ -4,39 +4,40 @@
 
 ## CodingContractSignatures type
 
+
 **Signature:**
 
 ```typescript
 export type CodingContractSignatures = {
-  [CodingContractName.FindLargestPrimeFactor]: [number, number];
-  [CodingContractName.SubarrayWithMaximumSum]: [number[], number];
-  [CodingContractName.TotalWaysToSum]: [number, number];
-  [CodingContractName.TotalWaysToSumII]: [[number, number[]], number];
-  [CodingContractName.SpiralizeMatrix]: [number[][], number[]];
-  [CodingContractName.ArrayJumpingGame]: [number[], 1 | 0];
-  [CodingContractName.ArrayJumpingGameII]: [number[], number];
-  [CodingContractName.MergeOverlappingIntervals]: [[number, number][], [number, number][]];
-  [CodingContractName.GenerateIPAddresses]: [string, string[]];
-  [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderIV]: [[number, number[]], number];
-  [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
-  [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
-  [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
-  [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
-  [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
-  [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
-  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [number, string];
-  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, number];
-  [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
-  [CodingContractName.CompressionIRLECompression]: [string, string];
-  [CodingContractName.CompressionIILZDecompression]: [string, string];
-  [CodingContractName.CompressionIIILZCompression]: [string, string];
-  [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
-  [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
-  [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
+  "Find Largest Prime Factor": [number, number];
+  "Subarray with Maximum Sum": [number[], number];
+  "Total Ways to Sum": [number, number];
+  "Total Ways to Sum II": [[number, number[]], number];
+  "Spiralize Matrix": [number[][], number[]];
+  "Array Jumping Game": [number[], 1 | 0];
+  "Array Jumping Game II": [number[], number];
+  "Merge Overlapping Intervals": [[number, number][], [number, number][]];
+  "Generate IP Addresses": [string, string[]];
+  "Algorithmic Stock Trader I": [number[], number];
+  "Algorithmic Stock Trader II": [number[], number];
+  "Algorithmic Stock Trader III": [number[], number];
+  "Algorithmic Stock Trader IV": [[number, number[]], number];
+  "Minimum Path Sum in a Triangle": [number[][], number];
+  "Unique Paths in a Grid I": [[number, number], number];
+  "Unique Paths in a Grid II": [(1 | 0)[][], number];
+  "Shortest Path in a Grid": [(1 | 0)[][], string];
+  "Sanitize Parentheses in Expression": [string, string[]];
+  "Find All Valid Math Expressions": [[string, number], string[]];
+  "HammingCodes: Integer to Encoded Binary": [number, string];
+  "HammingCodes: Encoded Binary to Integer": [string, number];
+  "Proper 2-Coloring of a Graph": [[number, [number, number][]], (1 | 0)[]];
+  "Compression I: RLE Compression": [string, string];
+  "Compression II: LZ Decompression": [string, string];
+  "Compression III: LZ Compression": [string, string];
+  "Encryption I: Caesar Cipher": [[string, number], string];
+  "Encryption II: Vigenère Cipher": [[string, string], string];
+  "Square Root": [bigint, bigint, [string, string]];
+  "Total Number of Primes": [number[], number];
+  "Largest Rectangle in a Matrix": [(1 | 0)[][], [[number, number], [number, number]]];
 };
 ```
-**References:** [CodingContractName.FindLargestPrimeFactor](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.SubarrayWithMaximumSum](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.TotalWaysToSum](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.TotalWaysToSumII](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.SpiralizeMatrix](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.ArrayJumpingGame](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.ArrayJumpingGameII](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.MergeOverlappingIntervals](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.GenerateIPAddresses](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.AlgorithmicStockTraderI](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.AlgorithmicStockTraderII](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.AlgorithmicStockTraderIII](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.AlgorithmicStockTraderIV](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.MinimumPathSumInATriangle](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.UniquePathsInAGridI](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.UniquePathsInAGridII](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.ShortestPathInAGrid](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.SanitizeParenthesesInExpression](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.FindAllValidMathExpressions](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.HammingCodesIntegerToEncodedBinary](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.HammingCodesEncodedBinaryToInteger](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.Proper2ColoringOfAGraph](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.CompressionIRLECompression](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.CompressionIILZDecompression](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.CompressionIIILZCompression](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.EncryptionICaesarCipher](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.EncryptionIIVigenereCipher](./bitburner.codingcontractname.md)<!-- -->, [CodingContractName.SquareRoot](./bitburner.codingcontractname.md)
-

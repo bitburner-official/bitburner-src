@@ -5,7 +5,7 @@ import { BitNodes } from "../BitNode/BitNode";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BitNodeMultipliersDisplay } from "../BitNode/ui/BitnodeMultipliersDescription";
 import { HacknetServerConstants } from "../Hacknet/data/Constants";
-import { getPurchaseServerLimit } from "../Server/ServerPurchases";
+import { getCloudServerLimit } from "../Server/ServerPurchases";
 import { Settings } from "../Settings/Settings";
 import { MoneySourceTracker } from "../utils/MoneySourceTracker";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
@@ -16,7 +16,7 @@ import { Money } from "./React/Money";
 import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
 import { useCycleRerender } from "./React/hooks";
-import { getMaxFavor } from "../Go/effects/effect";
+import { getMaxRep } from "../Go/effects/effect";
 import { canAccessBitNodeFeature, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 interface EmployersModalProps {
@@ -151,6 +151,9 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     if (src.crime) {
       parts.push([`Crimes:`, <Money key="crime" money={src.crime} />]);
     }
+    if (src.darknet) {
+      parts.push([`Darknet:`, <Money key="darknet" money={src.darknet} />]);
+    }
     if (src.gang) {
       parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }
@@ -263,12 +266,12 @@ export function CharacterStats(): React.ReactElement {
                 <></>
               )}
               <StatsRow
-                name="Servers Owned"
+                name="Cloud Servers"
                 color={Settings.theme.primary}
-                data={{ content: `${Player.purchasedServers.length} / ${getPurchaseServerLimit()}` }}
+                data={{ content: `${Player.purchasedServers.length} / ${getCloudServerLimit()}` }}
               />
               <StatsRow
-                name={`Hacknet ${canAccessBitNodeFeature(9) ? "Servers" : "Nodes"} owned`}
+                name={`Hacknet ${canAccessBitNodeFeature(9) ? "Servers" : "Nodes"}`}
                 color={Settings.theme.primary}
                 data={{
                   content: `${Player.hacknetNodes.length}${
@@ -281,6 +284,7 @@ export function CharacterStats(): React.ReactElement {
                 color={Settings.theme.primary}
                 data={{ content: String(Player.augmentations.length) }}
               />
+              <StatsRow name="Karma" color={Settings.theme.primary} data={{ content: formatNumber(Player.karma, 3) }} />
             </TableBody>
           </Table>
         </Paper>
@@ -530,6 +534,12 @@ export function CharacterStats(): React.ReactElement {
                   effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
                   color: Settings.theme.money,
                 },
+                {
+                  mult: "Darknet Money",
+                  value: Player.mults.dnet_money,
+                  effValue: Player.mults.dnet_money * currentNodeMults.DarknetMoneyMultiplier,
+                  color: Settings.theme.money,
+                },
               ]}
               color={Settings.theme.combat}
             />
@@ -565,8 +575,8 @@ export function CharacterStats(): React.ReactElement {
                     value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
-                    mult: "IPvGO Max Favor",
-                    value: getMaxFavor(),
+                    mult: "IPvGO Max Rep Converted to Favor",
+                    value: getMaxRep(),
                     isNumber: true,
                   },
                 ]}
@@ -594,7 +604,7 @@ export function CharacterStats(): React.ReactElement {
       {canAccessBitNodeFeature(5) && (
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography variant="h5">BitNode Multipliers</Typography>
-          <BitNodeMultipliersDisplay n={Player.bitNodeN} />
+          <BitNodeMultipliersDisplay n={Player.bitNodeN} hideMultsIfCannotAccessFeature={true} />
         </Paper>
       )}
 

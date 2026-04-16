@@ -14,49 +14,471 @@ export interface Bladeburner
 
 ## Remarks
 
-You have to be employed in the Bladeburner division and be in BitNode-7 or have Source-File 7 in order to use this API.
+You have to be employed in the Bladeburner division and be in BitNode 6/7 or have Source-File 6/7 in order to use this API.
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [getActionAutolevel(type, name)](./bitburner.bladeburner.getactionautolevel.md) | Get whether an action is set to autolevel. |
-|  [getActionCountRemaining(type, name)](./bitburner.bladeburner.getactioncountremaining.md) | Get action count remaining. |
-|  [getActionCurrentLevel(type, name)](./bitburner.bladeburner.getactioncurrentlevel.md) | Get the current level of an action. |
-|  [getActionCurrentTime()](./bitburner.bladeburner.getactioncurrenttime.md) | Get the time elapsed on current action. |
-|  [getActionEstimatedSuccessChance(type, name, sleeveNumber)](./bitburner.bladeburner.getactionestimatedsuccesschance.md) | Get estimate success chance of an action. |
-|  [getActionMaxLevel(type, name)](./bitburner.bladeburner.getactionmaxlevel.md) | Get the maximum level of an action. |
-|  [getActionRepGain(type, name, level)](./bitburner.bladeburner.getactionrepgain.md) | Get the reputation gain of an action. |
-|  [getActionSuccesses(type, name)](./bitburner.bladeburner.getactionsuccesses.md) | Get action successes. |
-|  [getActionTime(type, name)](./bitburner.bladeburner.getactiontime.md) | Get the time to complete an action. |
-|  [getBlackOpNames()](./bitburner.bladeburner.getblackopnames.md) | List all black ops. |
-|  [getBlackOpRank(name)](./bitburner.bladeburner.getblackoprank.md) | Get black op required rank. |
-|  [getBonusTime()](./bitburner.bladeburner.getbonustime.md) | Get Bladeburner bonus time. |
-|  [getCity()](./bitburner.bladeburner.getcity.md) | Get current city. |
-|  [getCityChaos(city)](./bitburner.bladeburner.getcitychaos.md) | Get chaos of a city. |
-|  [getCityCommunities(city)](./bitburner.bladeburner.getcitycommunities.md) | Get number of communities in a city. |
-|  [getCityEstimatedPopulation(city)](./bitburner.bladeburner.getcityestimatedpopulation.md) | Get estimated population in city. |
-|  [getContractNames()](./bitburner.bladeburner.getcontractnames.md) | List all contracts. |
-|  [getCurrentAction()](./bitburner.bladeburner.getcurrentaction.md) | Get current action. |
-|  [getGeneralActionNames()](./bitburner.bladeburner.getgeneralactionnames.md) | List all general actions. |
-|  [getNextBlackOp()](./bitburner.bladeburner.getnextblackop.md) | Get an object with the name and rank requirement of the next BlackOp that can be completed. |
-|  [getOperationNames()](./bitburner.bladeburner.getoperationnames.md) | List all operations. |
-|  [getRank()](./bitburner.bladeburner.getrank.md) | Get player bladeburner rank. |
-|  [getSkillLevel(skillName)](./bitburner.bladeburner.getskilllevel.md) | Get skill level. |
-|  [getSkillNames()](./bitburner.bladeburner.getskillnames.md) | List all skills. |
-|  [getSkillPoints()](./bitburner.bladeburner.getskillpoints.md) | Get bladeburner skill points. |
-|  [getSkillUpgradeCost(skillName, count)](./bitburner.bladeburner.getskillupgradecost.md) | Get cost to upgrade skill. |
-|  [getStamina()](./bitburner.bladeburner.getstamina.md) | Get Bladeburner stamina. |
-|  [getTeamSize(type, name)](./bitburner.bladeburner.getteamsize.md) | Get team size. |
-|  [inBladeburner()](./bitburner.bladeburner.inbladeburner.md) | Returns whether player is a member of Bladeburner division. Does not require API access. |
-|  [joinBladeburnerDivision()](./bitburner.bladeburner.joinbladeburnerdivision.md) | Join the Bladeburner division. |
-|  [joinBladeburnerFaction()](./bitburner.bladeburner.joinbladeburnerfaction.md) | Join the Bladeburner faction. |
-|  [nextUpdate()](./bitburner.bladeburner.nextupdate.md) | Sleep until the next Bladeburner update has happened. |
-|  [setActionAutolevel(type, name, autoLevel)](./bitburner.bladeburner.setactionautolevel.md) | Set an action autolevel. |
-|  [setActionLevel(type, name, level)](./bitburner.bladeburner.setactionlevel.md) | Set the level of an action. |
-|  [setTeamSize(type, name, size)](./bitburner.bladeburner.setteamsize.md) | Set team size. |
-|  [startAction(type, name)](./bitburner.bladeburner.startaction.md) | Start an action. |
-|  [stopBladeburnerAction()](./bitburner.bladeburner.stopbladeburneraction.md) | Stop current action. |
-|  [switchCity(city)](./bitburner.bladeburner.switchcity.md) | Travel to another city in Bladeburner. |
-|  [upgradeSkill(skillName, count)](./bitburner.bladeburner.upgradeskill.md) | Upgrade skill. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[getActionAutolevel(type, name)](./bitburner.bladeburner.getactionautolevel.md)
+
+
+</td><td>
+
+Get whether an action is set to autolevel.
+
+
+</td></tr>
+<tr><td>
+
+[getActionCountRemaining(type, name)](./bitburner.bladeburner.getactioncountremaining.md)
+
+
+</td><td>
+
+Get action count remaining.
+
+
+</td></tr>
+<tr><td>
+
+[getActionCurrentLevel(type, name)](./bitburner.bladeburner.getactioncurrentlevel.md)
+
+
+</td><td>
+
+Get the current level of an action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionCurrentTime()](./bitburner.bladeburner.getactioncurrenttime.md)
+
+
+</td><td>
+
+Get the time elapsed on current action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionEstimatedSuccessChance(type, name, sleeveNumber)](./bitburner.bladeburner.getactionestimatedsuccesschance.md)
+
+
+</td><td>
+
+Get estimate success chance of an action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionMaxLevel(type, name)](./bitburner.bladeburner.getactionmaxlevel.md)
+
+
+</td><td>
+
+Get the maximum level of an action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionRankGain(type, name, level)](./bitburner.bladeburner.getactionrankgain.md)
+
+
+</td><td>
+
+Get the rank gain of an action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionRankLoss(type, name, level)](./bitburner.bladeburner.getactionrankloss.md)
+
+
+</td><td>
+
+Get the rank loss of an action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionRepGain(type, name, level)](./bitburner.bladeburner.getactionrepgain.md)
+
+
+</td><td>
+
+Get the reputation gain of an action.
+
+
+</td></tr>
+<tr><td>
+
+[getActionSuccesses(type, name)](./bitburner.bladeburner.getactionsuccesses.md)
+
+
+</td><td>
+
+Get action successes.
+
+
+</td></tr>
+<tr><td>
+
+[getActionTime(type, name)](./bitburner.bladeburner.getactiontime.md)
+
+
+</td><td>
+
+Get the time to complete an action.
+
+
+</td></tr>
+<tr><td>
+
+[getBlackOpNames()](./bitburner.bladeburner.getblackopnames.md)
+
+
+</td><td>
+
+List all black ops.
+
+
+</td></tr>
+<tr><td>
+
+[getBlackOpRank(name)](./bitburner.bladeburner.getblackoprank.md)
+
+
+</td><td>
+
+Get black op required rank.
+
+
+</td></tr>
+<tr><td>
+
+[getBonusTime()](./bitburner.bladeburner.getbonustime.md)
+
+
+</td><td>
+
+Get Bladeburner bonus time.
+
+
+</td></tr>
+<tr><td>
+
+[getCity()](./bitburner.bladeburner.getcity.md)
+
+
+</td><td>
+
+Get current city.
+
+
+</td></tr>
+<tr><td>
+
+[getCityChaos(city)](./bitburner.bladeburner.getcitychaos.md)
+
+
+</td><td>
+
+Get chaos of a city.
+
+
+</td></tr>
+<tr><td>
+
+[getCityCommunities(city)](./bitburner.bladeburner.getcitycommunities.md)
+
+
+</td><td>
+
+Get number of communities in a city.
+
+
+</td></tr>
+<tr><td>
+
+[getCityEstimatedPopulation(city)](./bitburner.bladeburner.getcityestimatedpopulation.md)
+
+
+</td><td>
+
+Get estimated population in city.
+
+
+</td></tr>
+<tr><td>
+
+[getContractNames()](./bitburner.bladeburner.getcontractnames.md)
+
+
+</td><td>
+
+List all contracts.
+
+
+</td></tr>
+<tr><td>
+
+[getCurrentAction()](./bitburner.bladeburner.getcurrentaction.md)
+
+
+</td><td>
+
+Get current action.
+
+
+</td></tr>
+<tr><td>
+
+[getGeneralActionNames()](./bitburner.bladeburner.getgeneralactionnames.md)
+
+
+</td><td>
+
+List all general actions.
+
+
+</td></tr>
+<tr><td>
+
+[getNextBlackOp()](./bitburner.bladeburner.getnextblackop.md)
+
+
+</td><td>
+
+Get an object with the name and rank requirement of the next BlackOp that can be completed.
+
+
+</td></tr>
+<tr><td>
+
+[getOperationNames()](./bitburner.bladeburner.getoperationnames.md)
+
+
+</td><td>
+
+List all operations.
+
+
+</td></tr>
+<tr><td>
+
+[getRank()](./bitburner.bladeburner.getrank.md)
+
+
+</td><td>
+
+Get player bladeburner rank.
+
+
+</td></tr>
+<tr><td>
+
+[getSkillLevel(skillName)](./bitburner.bladeburner.getskilllevel.md)
+
+
+</td><td>
+
+Get skill level.
+
+
+</td></tr>
+<tr><td>
+
+[getSkillNames()](./bitburner.bladeburner.getskillnames.md)
+
+
+</td><td>
+
+List all skills.
+
+
+</td></tr>
+<tr><td>
+
+[getSkillPoints()](./bitburner.bladeburner.getskillpoints.md)
+
+
+</td><td>
+
+Get bladeburner skill points.
+
+
+</td></tr>
+<tr><td>
+
+[getSkillUpgradeCost(skillName, count)](./bitburner.bladeburner.getskillupgradecost.md)
+
+
+</td><td>
+
+Get cost to upgrade skill.
+
+
+</td></tr>
+<tr><td>
+
+[getStamina()](./bitburner.bladeburner.getstamina.md)
+
+
+</td><td>
+
+Get Bladeburner stamina.
+
+
+</td></tr>
+<tr><td>
+
+[getTeamSize(type, name)](./bitburner.bladeburner.getteamsize.md)
+
+
+</td><td>
+
+Get team size.
+
+
+</td></tr>
+<tr><td>
+
+[inBladeburner()](./bitburner.bladeburner.inbladeburner.md)
+
+
+</td><td>
+
+Returns whether player is a member of Bladeburner division. Does not require API access.
+
+
+</td></tr>
+<tr><td>
+
+[joinBladeburnerDivision()](./bitburner.bladeburner.joinbladeburnerdivision.md)
+
+
+</td><td>
+
+Join the Bladeburner division.
+
+
+</td></tr>
+<tr><td>
+
+[joinBladeburnerFaction()](./bitburner.bladeburner.joinbladeburnerfaction.md)
+
+
+</td><td>
+
+Join the Bladeburner faction.
+
+
+</td></tr>
+<tr><td>
+
+[nextUpdate()](./bitburner.bladeburner.nextupdate.md)
+
+
+</td><td>
+
+Sleep until the next Bladeburner update has happened.
+
+
+</td></tr>
+<tr><td>
+
+[setActionAutolevel(type, name, autoLevel)](./bitburner.bladeburner.setactionautolevel.md)
+
+
+</td><td>
+
+Set an action autolevel.
+
+
+</td></tr>
+<tr><td>
+
+[setActionLevel(type, name, level)](./bitburner.bladeburner.setactionlevel.md)
+
+
+</td><td>
+
+Set the level of an action.
+
+
+</td></tr>
+<tr><td>
+
+[setTeamSize(type, name, size)](./bitburner.bladeburner.setteamsize.md)
+
+
+</td><td>
+
+Set team size.
+
+
+</td></tr>
+<tr><td>
+
+[startAction(type, name)](./bitburner.bladeburner.startaction.md)
+
+
+</td><td>
+
+Start an action.
+
+
+</td></tr>
+<tr><td>
+
+[stopBladeburnerAction()](./bitburner.bladeburner.stopbladeburneraction.md)
+
+
+</td><td>
+
+Stop current action.
+
+
+</td></tr>
+<tr><td>
+
+[switchCity(city)](./bitburner.bladeburner.switchcity.md)
+
+
+</td><td>
+
+Travel to another city in Bladeburner.
+
+
+</td></tr>
+<tr><td>
+
+[upgradeSkill(skillName, count)](./bitburner.bladeburner.upgradeskill.md)
+
+
+</td><td>
+
+Upgrade skill.
+
+
+</td></tr>
+</tbody></table>
 

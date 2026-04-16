@@ -1,5 +1,5 @@
 import { FormControlLabel, Switch, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type OptionSwitchProps = {
   checked: boolean;
@@ -7,6 +7,7 @@ type OptionSwitchProps = {
   onChange: (newValue: boolean, error?: string) => void;
   text: React.ReactNode;
   tooltip: React.ReactNode;
+  wrapperStyles?: React.CSSProperties;
 };
 
 export function OptionSwitch({
@@ -15,6 +16,7 @@ export function OptionSwitch({
   onChange,
   text,
   tooltip,
+  wrapperStyles,
 }: OptionSwitchProps): React.ReactElement {
   const [value, setValue] = useState(checked);
 
@@ -24,8 +26,12 @@ export function OptionSwitch({
     onChange(newValue);
   }
 
+  useEffect(() => {
+    setValue(checked);
+  }, [checked]);
+
   return (
-    <>
+    <div style={wrapperStyles}>
       <FormControlLabel
         disabled={disabled}
         control={<Switch checked={value} onChange={handleSwitchChange} />}
@@ -35,7 +41,6 @@ export function OptionSwitch({
           </Tooltip>
         }
       />
-      <br />
-    </>
+    </div>
   );
 }

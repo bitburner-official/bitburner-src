@@ -9,16 +9,76 @@ Get the cost to upgrade an office.
 **Signature:**
 
 ```typescript
-getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, size: number): number;
+getOfficeSizeUpgradeCost(divisionName: string, city: CityName, size: number): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
-|  size | number | Amount of positions to open |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of the city
+
+
+</td></tr>
+<tr><td>
+
+size
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of positions to open
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

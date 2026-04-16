@@ -17,8 +17,10 @@ import { shortestPathInAGrid } from "./contracts/ShortestPathInAGrid";
 import { spiralizeMatrix } from "./contracts/SpiralizeMatrix";
 import { squareRoot } from "./contracts/SquareRoot";
 import { subarrayWithMaximumSum } from "./contracts/SubarrayWithMaximumSum";
+import { totalPrimesInRange } from "./contracts/TotalPrimesInRange";
 import { totalWaysToSum } from "./contracts/TotalWaysToSum";
 import { uniquePathsInAGrid } from "./contracts/UniquePathsInAGrid";
+import { largestRectangle } from "./contracts/LargestRectangle";
 
 // This is the base interface, but should not be used for
 // typechecking individual entries. Use the two types below for that.
@@ -32,11 +34,13 @@ interface CodingContractType<Data, Answer, State = Data> {
   difficulty: number;
   /** Function that generates a valid 'state' for a contract type */
   generate: () => State;
+  /** Function that returns an answer, if possible, for a given contract */
+  getAnswer: (data: Data) => Answer | null;
   /**
    * Transforms the 'state' for a contract into its 'data'. The state is
    * stored persistently as JSON, so it must be serializable. The data is what
    * is given to the user and shown in the description. If this function is
-   * ommitted, it will be the identity function (i.e. State == Data).
+   * omitted, it will be the identity function (i.e. State == Data).
    * You can use this to make problems where the "solver" is not a function
    * that can be copy-pasted to user code to solve the problem.
    */
@@ -79,6 +83,41 @@ export function removeBracketsFromArrayString(str: string): string {
   return strCpy;
 }
 
+/**
+ * This function only performs very simple checks to add the outermost optional brackets. Callers must perform other
+ * preprocessing steps and postprocessing validations. For example:
+ * - "[ [0, 1]]" will be incorrectly wrapped and converted to "[[[0,1]]]". Callers need to remove redundant whitespace.
+ * - "[[1,2],3]" is not an array of arrays, but this function will return it as is. Callers need to call validateAnswer.
+ *
+ * Note:
+ * - "" will always be converted to an empty array ([]).
+ * - When parsing an array of arrays (isArrayOfArray = true), "[]" will be converted to an empty array ([]), not an
+ * array containing an empty array ([[]]).
+ */
+export function parseArrayString(answer: string, isArrayOfArray = false): unknown {
+  let modifiedAnswer = answer.trim();
+
+  if (isArrayOfArray && modifiedAnswer === "[]") {
+    return [];
+  }
+
+  // If it doesn't start with any bracket, it's definitely "naked".
+  if (!modifiedAnswer.startsWith("[")) {
+    modifiedAnswer = `[${modifiedAnswer}]`;
+  } else if (isArrayOfArray && !modifiedAnswer.startsWith("[[")) {
+    // If it's supposed to be an array of arrays but only has one "[".
+    modifiedAnswer = `[${modifiedAnswer}]`;
+  }
+
+  try {
+    return JSON.parse(modifiedAnswer);
+  } catch (error) {
+    console.error(`Invalid answer: ${answer}`);
+    console.error(error);
+    return null;
+  }
+}
+
 export function removeQuotesFromString(str: string): string {
   let strCpy: string = str;
   if (strCpy.startsWith('"') || strCpy.startsWith("'")) {
@@ -102,9 +141,6 @@ export function convert2DArrayToString(arr: number[][]): string {
   return components.join(",").replace(/\s/g, "");
 }
 
-export const isCodingContractName = (v: unknown): v is CodingContractName =>
-  Object.values(CodingContractName).some((a) => a === v);
-
 export const CodingContractDefinitions: CodingContractTypes = {
   ...algorithmicStockTrader,
   ...arrayJumpingGame,
@@ -114,9 +150,11 @@ export const CodingContractDefinitions: CodingContractTypes = {
   ...findLargestPrimeFactor,
   ...generateIPAddresses,
   ...hammingCode,
+  ...largestRectangle,
   ...mergeOverlappingIntervals,
   ...minimumPathSumInATriangle,
   ...proper2ColoringOfAGraph,
+  ...totalPrimesInRange,
   ...sanitizeParenthesesInExpression,
   ...shortestPathInAGrid,
   ...spiralizeMatrix,

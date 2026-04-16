@@ -9,15 +9,60 @@ Donate to a faction.
 **Signature:**
 
 ```typescript
-donateToFaction(faction: string, amount: number): boolean;
+donateToFaction(faction: FactionName, amount: number): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  faction | string | Name of faction to donate to. |
-|  amount | number | Amount of money to donate. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+faction
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of faction to donate to.
+
+
+</td></tr>
+<tr><td>
+
+amount
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of money to donate.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

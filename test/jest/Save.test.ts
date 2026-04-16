@@ -5,7 +5,12 @@ import { loadAllRunningScripts } from "../../src/NetscriptWorker";
 import { Settings } from "../../src/Settings/Settings";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
+import { UIEventEmitter, UIEventType } from "../../src/ui/UIEventEmitter";
+import { fixDoImportIssue } from "./Utilities";
+
 jest.useFakeTimers();
+
+fixDoImportIssue();
 
 // Direct tests of loading and saving.
 // Tests here should try to be comprehensive (cover as much stuff as possible)
@@ -18,6 +23,8 @@ jest.useFakeTimers();
 //
 // Most of the Servers have been removed to reduce space. Default values have
 // been removed both for space, and to test that they are added correctly.
+// The one remaining server has been renamed to "__proto__" to test the
+// handling of darknet servers with unusual hostnames.
 function loadStandardServers() {
   loadAllServers(String.raw`{
   "home": {
@@ -97,7 +104,7 @@ function loadStandardServers() {
             {
               "ctor": "Script",
               "data": {
-                "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
+                "code": "/** @param {NS} ns */\nexport async function main(ns) {\n  return ns.asleep(1000000);\n}",
                 "filename": "script.js",
                 "module": {},
                 "dependencies": [
@@ -123,15 +130,15 @@ function loadStandardServers() {
         ]
       },
       "serversOnNetwork": [
-        "n00dles"
+        "__proto__"
       ],
       "purchasedByPlayer": true
     }
   },
-  "n00dles": {
+  "__proto__": {
     "ctor": "Server",
     "data": {
-      "hostname": "n00dles",
+      "hostname": "__proto__",
       "ip": "61.6.6.2",
       "maxRam": 4,
       "organizationName": "Noodle Bar",
@@ -146,6 +153,7 @@ function loadStandardServers() {
   }
 }`); // Fix confused highlighting `
   loadAllRunningScripts();
+  UIEventEmitter.emit(UIEventType.MainUILoaded);
 }
 
 test("load/saveAllServers", () => {

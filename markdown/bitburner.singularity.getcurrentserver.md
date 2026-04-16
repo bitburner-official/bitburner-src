@@ -4,18 +4,55 @@
 
 ## Singularity.getCurrentServer() method
 
-Get the current server.
+Get the current server. Returns the hostname by default.
 
 **Signature:**
 
 ```typescript
-getCurrentServer(): string;
+getCurrentServer(returnOpts?: HostReturnOptions): string;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+returnOpts
+
+
+</td><td>
+
+[HostReturnOptions](./bitburner.hostreturnoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Optional. Controls whether the function returns an IP.
+
+
+</td></tr>
+</tbody></table>
+
 **Returns:**
 
 string
 
-Name of the current server.
+Hostname or IP address of the current server.
 
 ## Remarks
 

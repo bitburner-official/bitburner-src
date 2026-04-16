@@ -50,7 +50,11 @@ export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): P
   // Return the module if it already exists
   if (script.mod) return script.mod.module;
 
-  script.mod = generateLoadedModule(script, scripts, []);
+  try {
+    script.mod = generateLoadedModule(script, scripts, []);
+  } catch (error) {
+    throw new Error(`Cannot generate module ${script.filename}`, { cause: error });
+  }
   return script.mod.module;
 }
 
@@ -165,7 +169,14 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
     const importedScript = getModuleScript(node.filename, script.filename, scripts);
-
+    for (const scriptInSeenStack of seenStack) {
+      if (scriptInSeenStack.filename === script.filename) {
+        throw new Error(
+          `Circular dependencies detected. ${script.filename} imports ${importedScript.filename}, but ` +
+            `${importedScript.filename} or its dependencies import ${script.filename}.`,
+        );
+      }
+    }
     seenStack.push(script);
     importedScript.mod = generateLoadedModule(importedScript, scripts, seenStack);
     seenStack.pop();

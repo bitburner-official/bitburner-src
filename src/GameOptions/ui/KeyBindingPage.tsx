@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Settings } from "../../Settings/Settings";
 import { getRecordKeys } from "../../Types/Record";
 import { Modal } from "../../ui/React/Modal";
-import { SimplePage } from "../../ui/Enums";
+import { ComplexPage } from "../../ui/Enums";
 import { KEY } from "../../utils/KeyboardEventKey";
 import {
   areDifferentKeyCombinations,
@@ -248,7 +248,7 @@ function SettingUpKeyBindingModal({
 
 export function KeyBindingPage(): React.ReactElement {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [keyBindingType, setKeyBindingType] = useState<KeyBindingType>(SimplePage.Options);
+  const [keyBindingType, setKeyBindingType] = useState<KeyBindingType>(ComplexPage.Options);
   const [isPrimary, setIsPrimary] = useState(true);
 
   const showModal = (keyBindingType: KeyBindingType, isPrimary: boolean) => {

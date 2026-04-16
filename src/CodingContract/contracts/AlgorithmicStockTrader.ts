@@ -33,15 +33,17 @@ export const algorithmicStockTrader: Pick<
       return arr;
     },
     numTries: 5,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       let maxCur = 0;
       let maxSoFar = 0;
       for (let i = 1; i < data.length; ++i) {
         maxCur = Math.max(0, (maxCur += data[i] - data[i - 1]));
         maxSoFar = Math.max(maxCur, maxSoFar);
       }
-
-      return maxSoFar === answer;
+      return maxSoFar;
+    },
+    solver: (data, answer) => {
+      return algorithmicStockTrader[CodingContractName.AlgorithmicStockTraderI].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
@@ -71,13 +73,16 @@ export const algorithmicStockTrader: Pick<
 
       return arr;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       let profit = 0;
       for (let p = 1; p < data.length; ++p) {
         profit += Math.max(data[p] - data[p - 1], 0);
       }
 
-      return profit === answer;
+      return profit;
+    },
+    solver: (data, answer) => {
+      return algorithmicStockTrader[CodingContractName.AlgorithmicStockTraderII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
@@ -96,7 +101,7 @@ export const algorithmicStockTrader: Pick<
         "If no profit can be made, then the answer should be 0.",
       ].join(" ");
     },
-    difficulty: 5,
+    difficulty: 4,
     generate: (): number[] => {
       const len: number = getRandomIntInclusive(3, 50);
       const arr: number[] = [];
@@ -107,7 +112,7 @@ export const algorithmicStockTrader: Pick<
 
       return arr;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       let hold1 = Number.MIN_SAFE_INTEGER;
       let hold2 = Number.MIN_SAFE_INTEGER;
       let release1 = 0;
@@ -119,7 +124,10 @@ export const algorithmicStockTrader: Pick<
         hold1 = Math.max(hold1, price * -1);
       }
 
-      return release2 === answer;
+      return release2;
+    },
+    solver: (data, answer) => {
+      return algorithmicStockTrader[CodingContractName.AlgorithmicStockTraderIII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
@@ -154,13 +162,13 @@ export const algorithmicStockTrader: Pick<
 
       return [k, prices];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const k: number = data[0];
       const prices: number[] = data[1];
 
       const len = prices.length;
       if (len < 2) {
-        return answer === 0;
+        return 0;
       }
       if (k > len / 2) {
         let res = 0;
@@ -168,7 +176,7 @@ export const algorithmicStockTrader: Pick<
           res += Math.max(prices[i] - prices[i - 1], 0);
         }
 
-        return res === answer;
+        return res;
       }
 
       const hold: number[] = [];
@@ -189,7 +197,10 @@ export const algorithmicStockTrader: Pick<
         }
       }
 
-      return rele[k] === answer;
+      return rele[k];
+    },
+    solver: (data, answer) => {
+      return algorithmicStockTrader[CodingContractName.AlgorithmicStockTraderIV].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

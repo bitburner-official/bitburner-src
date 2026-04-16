@@ -9,15 +9,60 @@ Get the cost of a hash upgrade.
 **Signature:**
 
 ```typescript
-hashCost(upgName: string, count?: number): number;
+hashCost(upgName: HacknetServerHashUpgrade, count?: number): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  upgName | string | Name of the upgrade of Hacknet Node. |
-|  count | number | _(Optional)_ Number of upgrades to buy at once. Defaults to 1 if not specified. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+upgName
+
+
+</td><td>
+
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
+
+
+</td><td>
+
+Name of the upgrade using hash of Hacknet Server.
+
+
+</td></tr>
+<tr><td>
+
+count
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of upgrades to buy at once. Defaults to 1 if not specified.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

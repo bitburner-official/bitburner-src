@@ -18,24 +18,258 @@ If you are not in BitNode-10, then you must have Source-File 10 in order to use 
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [getNumSleeves()](./bitburner.sleeve.getnumsleeves.md) | Get the number of sleeves you own. |
-|  [getSleeve(sleeveNumber)](./bitburner.sleeve.getsleeve.md) | Get information about a sleeve. |
-|  [getSleeveAugmentationPrice(augName)](./bitburner.sleeve.getsleeveaugmentationprice.md) | Get price of an augmentation. |
-|  [getSleeveAugmentationRepReq(augName)](./bitburner.sleeve.getsleeveaugmentationrepreq.md) | Get reputation requirement of an augmentation. |
-|  [getSleeveAugmentations(sleeveNumber)](./bitburner.sleeve.getsleeveaugmentations.md) | Get augmentations installed on a sleeve. |
-|  [getSleevePurchasableAugs(sleeveNumber)](./bitburner.sleeve.getsleevepurchasableaugs.md) | List purchasable augs for a sleeve. |
-|  [getTask(sleeveNumber)](./bitburner.sleeve.gettask.md) | Get task of a sleeve. |
-|  [purchaseSleeveAug(sleeveNumber, augName)](./bitburner.sleeve.purchasesleeveaug.md) | Purchase an aug for a sleeve. |
-|  [setToBladeburnerAction(sleeveNumber, action, contract)](./bitburner.sleeve.settobladeburneraction.md) | Set a sleeve to perform Bladeburner actions. |
-|  [setToCommitCrime(sleeveNumber, crimeType)](./bitburner.sleeve.settocommitcrime.md) | Set a sleeve to commit crime. |
-|  [setToCompanyWork(sleeveNumber, companyName)](./bitburner.sleeve.settocompanywork.md) | Set a sleeve to work for a company. |
-|  [setToFactionWork(sleeveNumber, factionName, factionWorkType)](./bitburner.sleeve.settofactionwork.md) | Set a sleeve to work for a faction. |
-|  [setToGymWorkout(sleeveNumber, gymName, stat)](./bitburner.sleeve.settogymworkout.md) | Set a sleeve to workout at the gym. |
-|  [setToIdle(sleeveNumber)](./bitburner.sleeve.settoidle.md) | Set a sleeve to idle. |
-|  [setToShockRecovery(sleeveNumber)](./bitburner.sleeve.settoshockrecovery.md) | Set a sleeve to shock recovery. |
-|  [setToSynchronize(sleeveNumber)](./bitburner.sleeve.settosynchronize.md) | Set a sleeve to synchronize. |
-|  [setToUniversityCourse(sleeveNumber, universityName, courseName)](./bitburner.sleeve.settouniversitycourse.md) | Set a sleeve to take a class at a university. |
-|  [travel(sleeveNumber, city)](./bitburner.sleeve.travel.md) | Make a sleeve travel to another city. The cost for using this function is the same as for a player. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[getMemoryUpgradeCost(sleeveNumber, amount)](./bitburner.sleeve.getmemoryupgradecost.md)
+
+
+</td><td>
+
+Get the cost of memory upgrades.
+
+
+</td></tr>
+<tr><td>
+
+[getNumSleeves()](./bitburner.sleeve.getnumsleeves.md)
+
+
+</td><td>
+
+Get the number of sleeves you own.
+
+
+</td></tr>
+<tr><td>
+
+[getSleeve(sleeveNumber)](./bitburner.sleeve.getsleeve.md)
+
+
+</td><td>
+
+Get information about a sleeve.
+
+
+</td></tr>
+<tr><td>
+
+[getSleeveAugmentationPrice(augName)](./bitburner.sleeve.getsleeveaugmentationprice.md)
+
+
+</td><td>
+
+Get price of an augmentation.
+
+
+</td></tr>
+<tr><td>
+
+[getSleeveAugmentationRepReq(augName)](./bitburner.sleeve.getsleeveaugmentationrepreq.md)
+
+
+</td><td>
+
+Get reputation requirement of an augmentation.
+
+
+</td></tr>
+<tr><td>
+
+[getSleeveAugmentations(sleeveNumber)](./bitburner.sleeve.getsleeveaugmentations.md)
+
+
+</td><td>
+
+Get augmentations installed on a sleeve.
+
+
+</td></tr>
+<tr><td>
+
+[getSleeveCost()](./bitburner.sleeve.getsleevecost.md)
+
+
+</td><td>
+
+Get the cost of the next sleeve.
+
+
+</td></tr>
+<tr><td>
+
+[getSleevePurchasableAugs(sleeveNumber)](./bitburner.sleeve.getsleevepurchasableaugs.md)
+
+
+</td><td>
+
+List purchasable augs for a sleeve.
+
+
+</td></tr>
+<tr><td>
+
+[getTask(sleeveNumber)](./bitburner.sleeve.gettask.md)
+
+
+</td><td>
+
+Get task of a sleeve.
+
+
+</td></tr>
+<tr><td>
+
+[purchaseSleeve()](./bitburner.sleeve.purchasesleeve.md)
+
+
+</td><td>
+
+Purchase a sleeve. You must be in BitNode 10 to use this API.
+
+
+</td></tr>
+<tr><td>
+
+[purchaseSleeveAug(sleeveNumber, augName)](./bitburner.sleeve.purchasesleeveaug.md)
+
+
+</td><td>
+
+Purchase an aug for a sleeve.
+
+
+</td></tr>
+<tr><td>
+
+[setToBladeburnerAction(sleeveNumber, action, contract)](./bitburner.sleeve.settobladeburneraction.md)
+
+
+</td><td>
+
+Set a sleeve to perform Bladeburner actions.
+
+
+</td></tr>
+<tr><td>
+
+[setToCommitCrime(sleeveNumber, crimeType)](./bitburner.sleeve.settocommitcrime.md)
+
+
+</td><td>
+
+Set a sleeve to commit crime.
+
+
+</td></tr>
+<tr><td>
+
+[setToCompanyWork(sleeveNumber, companyName)](./bitburner.sleeve.settocompanywork.md)
+
+
+</td><td>
+
+Set a sleeve to work for a company.
+
+
+</td></tr>
+<tr><td>
+
+[setToFactionWork(sleeveNumber, factionName, factionWorkType)](./bitburner.sleeve.settofactionwork.md)
+
+
+</td><td>
+
+Set a sleeve to work for a faction.
+
+
+</td></tr>
+<tr><td>
+
+[setToGymWorkout(sleeveNumber, gymName, stat)](./bitburner.sleeve.settogymworkout.md)
+
+
+</td><td>
+
+Set a sleeve to workout at the gym.
+
+
+</td></tr>
+<tr><td>
+
+[setToIdle(sleeveNumber)](./bitburner.sleeve.settoidle.md)
+
+
+</td><td>
+
+Set a sleeve to idle.
+
+
+</td></tr>
+<tr><td>
+
+[setToShockRecovery(sleeveNumber)](./bitburner.sleeve.settoshockrecovery.md)
+
+
+</td><td>
+
+Set a sleeve to shock recovery.
+
+
+</td></tr>
+<tr><td>
+
+[setToSynchronize(sleeveNumber)](./bitburner.sleeve.settosynchronize.md)
+
+
+</td><td>
+
+Set a sleeve to synchronize.
+
+
+</td></tr>
+<tr><td>
+
+[setToUniversityCourse(sleeveNumber, universityName, courseName)](./bitburner.sleeve.settouniversitycourse.md)
+
+
+</td><td>
+
+Set a sleeve to take a class at a university.
+
+
+</td></tr>
+<tr><td>
+
+[travel(sleeveNumber, city)](./bitburner.sleeve.travel.md)
+
+
+</td><td>
+
+Make a sleeve travel to another city. The cost for using this function is the same as for a player.
+
+
+</td></tr>
+<tr><td>
+
+[upgradeMemory(sleeveNumber, amount)](./bitburner.sleeve.upgradememory.md)
+
+
+</td><td>
+
+Upgrade memory of a sleeve. You must be in BitNode 10 to use this API.
+
+
+</td></tr>
+</tbody></table>
 

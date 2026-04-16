@@ -1,8 +1,3 @@
-/**
- * React Subcomponent for displaying a location's UI, when that location is a gym
- *
- * This subcomponent renders all of the buttons for training at the gym
- */
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { Blackjack, DECK_COUNT } from "../../Casino/Blackjack";

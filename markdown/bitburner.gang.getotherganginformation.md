@@ -4,7 +4,7 @@
 
 ## Gang.getOtherGangInformation() method
 
-Get information about the other gangs.
+Get information about all gangs.
 
 **Signature:**
 
@@ -15,7 +15,7 @@ getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 
 Record&lt;string, [GangOtherInfoObject](./bitburner.gangotherinfoobject.md)<!-- -->&gt;
 
-Object containing territory and power information about all gangs.
+Object containing territory and power information about all gangs, including the player's gang, if any.
 
 ## Remarks
 

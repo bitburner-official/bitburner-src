@@ -14,10 +14,55 @@ atExit(f: () => void, id?: string): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  f | () =&gt; void | A function to execute when the script dies. |
-|  id | string | _(Optional)_ Callback ID. Optional, defaults to <code>&quot;default&quot;</code>. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+f
+
+
+</td><td>
+
+() =&gt; void
+
+
+</td><td>
+
+A function to execute when the script dies.
+
+
+</td></tr>
+<tr><td>
+
+id
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Callback ID. Optional, defaults to `"default"`<!-- -->.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -26,8 +71,6 @@ void
 ## Remarks
 
 RAM cost: 0 GB
-
-NS2 exclusive
 
 Each script can only register one callback per callback ID. If another callback is registered with the same callback ID the previous callback with that ID is forgotten and will not be executed when the script dies.
 

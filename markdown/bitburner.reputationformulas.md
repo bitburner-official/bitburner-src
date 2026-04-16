@@ -14,10 +14,71 @@ interface ReputationFormulas
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [calculateFavorToRep(favor)](./bitburner.reputationformulas.calculatefavortorep.md) | Calculate the total required amount of faction reputation to reach a target favor. |
-|  [calculateRepToFavor(rep)](./bitburner.reputationformulas.calculatereptofavor.md) | Calculate the resulting faction favor of a total amount of reputation. (Faction favor is gained whenever you install an Augmentation.) |
-|  [donationForRep(reputation, player)](./bitburner.reputationformulas.donationforrep.md) | Calculate the donation needed to gain an amount of reputation. |
-|  [repFromDonation(amount, player)](./bitburner.reputationformulas.repfromdonation.md) | Calculate how much rep would be gained. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[calculateFavorToRep(favor)](./bitburner.reputationformulas.calculatefavortorep.md)
+
+
+</td><td>
+
+Calculate the total required amount of faction reputation to reach a target favor.
+
+
+</td></tr>
+<tr><td>
+
+[calculateRepToFavor(rep)](./bitburner.reputationformulas.calculatereptofavor.md)
+
+
+</td><td>
+
+Calculate the resulting faction favor of a total amount of reputation. (Faction favor is gained whenever you install an Augmentation.)
+
+
+</td></tr>
+<tr><td>
+
+[donationForRep(reputation, player)](./bitburner.reputationformulas.donationforrep.md)
+
+
+</td><td>
+
+Calculate the donation needed to gain an amount of reputation.
+
+
+</td></tr>
+<tr><td>
+
+[repFromDonation(amount, player)](./bitburner.reputationformulas.repfromdonation.md)
+
+
+</td><td>
+
+Calculate how much rep would be gained.
+
+
+</td></tr>
+<tr><td>
+
+[sharePower(threads, cpuCores)](./bitburner.reputationformulas.sharepower.md)
+
+
+</td><td>
+
+Calculate the share power if you call [ns.share](./bitburner.ns.share.md) with the specified number of threads on a server having the specified number of CPU cores.
+
+
+</td></tr>
+</tbody></table>
 

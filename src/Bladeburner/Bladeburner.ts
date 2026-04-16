@@ -1,5 +1,8 @@
 import type { PromisePair } from "../Types/Promises";
-import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
+import type { BlackOperation } from "./Actions/BlackOperation";
+import type { Contract } from "./Actions/Contract";
+import type { GeneralAction } from "./Actions/GeneralAction";
+import type { Operation } from "./Actions/Operation";
 import type { Action, ActionIdFor, ActionIdentifier, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
 import type { Skills as PersonSkills } from "../PersonObjects/Skills";
@@ -7,6 +10,7 @@ import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 import {
   AugmentationName,
   BladeburnerActionType,
+  type BladeburnerBlackOpName,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
   BladeburnerMultName,
@@ -28,7 +32,6 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { BladeburnerConstants } from "./data/Constants";
 import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions } from "../Faction/Factions";
 import { calculateHospitalizationCost } from "../Hospital/Hospital";
@@ -50,11 +53,13 @@ import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
 import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
-import { shuffleArray } from "../Infiltration/ui/BribeGame";
+import { shuffle } from "lodash";
 import { assertObject } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 import { pluralize } from "../utils/I18nUtils";
+import { calculateActionRankGain, calculateActionRankLoss, calculateActionReputationGain } from "./Formulas";
+import { processWorkStats } from "../Work/Formulas";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -246,7 +251,7 @@ export class Bladeburner implements OperationTeam {
     }
     const type = args[1];
     const name = args[2];
-    const action = this.getActionFromTypeAndName(type, name);
+    const action = this.guessActionFromTypeAndName(type, name);
     if (!action) {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
@@ -748,8 +753,7 @@ export class Bladeburner implements OperationTeam {
   }
 
   killRandomSupportingSleeves(n: number) {
-    const sup = [...Player.sleevesSupportingBladeburner()]; // Explicit shallow copy
-    shuffleArray(sup);
+    const sup = shuffle(Player.sleevesSupportingBladeburner()); // Makes a copy
     sup.slice(0, Math.min(sup.length, n)).forEach((sleeve) => sleeve.kill());
   }
 
@@ -911,7 +915,7 @@ export class Bladeburner implements OperationTeam {
               action.setMaxLevel(BladeburnerConstants.ContractSuccessesPerLevel);
             }
             if (action.rankGain) {
-              const gain = addOffset(action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank, 10);
+              const gain = addOffset(calculateActionRankGain(action), 10);
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
@@ -940,7 +944,7 @@ export class Bladeburner implements OperationTeam {
             let loss = 0,
               damage = 0;
             if (action.rankLoss) {
-              loss = addOffset(action.rankLoss * rewardMultiplier, 10);
+              loss = addOffset(calculateActionRankLoss(action), 10);
               this.changeRank(person, -1 * loss);
             }
             if (action.hpLoss) {
@@ -993,7 +997,7 @@ export class Bladeburner implements OperationTeam {
           this.numBlackOpsComplete++;
           let rankGain = 0;
           if (action.rankGain) {
-            rankGain = addOffset(action.rankGain * currentNodeMults.BladeburnerRank, 10);
+            rankGain = addOffset(calculateActionRankGain(action), 10);
             this.changeRank(person, rankGain);
           }
 
@@ -1018,7 +1022,7 @@ export class Bladeburner implements OperationTeam {
           let rankLoss = 0;
           let damage = 0;
           if (action.rankLoss) {
-            rankLoss = addOffset(action.rankLoss, 10);
+            rankLoss = addOffset(calculateActionRankLoss(action), 10);
             this.changeRank(person, -1 * rankLoss);
           }
           if (action.hpLoss) {
@@ -1096,7 +1100,7 @@ export class Bladeburner implements OperationTeam {
             }
             const hackingExpGain = 20 * person.mults.hacking_exp;
             const charismaExpGain = 20 * person.mults.charisma_exp;
-            const rankGain = 0.1 * currentNodeMults.BladeburnerRank;
+            const rankGain = calculateActionRankGain(action);
             retValue.hackExp = hackingExpGain;
             retValue.chaExp = charismaExpGain;
             retValue.intExp = BladeburnerConstants.BaseIntGain;
@@ -1115,9 +1119,14 @@ export class Bladeburner implements OperationTeam {
             break;
           }
           case BladeburnerGeneralActionName.Recruitment: {
-            const actionTime = action.getActionTime(this, person) * 1000;
+            const actionTime = action.getActionTime(this, person);
+            // Without dnet, the best way to gain charisma in the early part of a BN run is to take uni course at zb.
+            // With only SF1.3, the "Leadership" course gives ~20.5exp/s. With this exponential saturation curve, the
+            // action gives worse exp than the course at first, but it becomes better later while never being
+            // overpowered. The gain rate is soft-capped at ~60exp/s, which is ~3x the uni course.
+            const charismaGainRate = clampNumber(60 * (1 - Math.exp(-Math.pow(person.exp.charisma / 216000, 1.3))), 1);
             if (action.attempt(this, person)) {
-              const expGain = 2 * BladeburnerConstants.BaseStatGain * actionTime;
+              const expGain = charismaGainRate * actionTime;
               retValue.chaExp = expGain;
               ++this.teamSize;
               if (this.logging.general) {
@@ -1129,7 +1138,7 @@ export class Bladeburner implements OperationTeam {
                 );
               }
             } else {
-              const expGain = BladeburnerConstants.BaseStatGain * actionTime;
+              const expGain = (charismaGainRate * actionTime) / 2;
               retValue.chaExp = expGain;
               if (this.logging.general) {
                 this.log(
@@ -1162,9 +1171,9 @@ export class Bladeburner implements OperationTeam {
             this.stamina = Math.min(this.maxStamina, this.stamina + staminaGain);
             if (this.logging.general) {
               let extraLog = "";
-              if (Player.hp.current > currentHp) {
+              if (person.hp.current > currentHp) {
                 extraLog += ` Restored ${formatHp(BladeburnerConstants.HrcHpGain)} HP. Current HP is ${formatHp(
-                  Player.hp.current,
+                  person.hp.current,
                 )}.`;
               }
               if (this.stamina > currentStamina) {
@@ -1204,7 +1213,8 @@ export class Bladeburner implements OperationTeam {
         const __a: never = action;
       }
     }
-    return retValue;
+
+    return processWorkStats(person, retValue);
   }
 
   infiltrateSynthoidCommunities(): void {
@@ -1231,12 +1241,9 @@ export class Bladeburner implements OperationTeam {
     }
     this.maxRank = Math.max(this.rank, this.maxRank);
 
-    const bladeburnersFactionName = FactionName.Bladeburners;
-    const bladeburnerFac = Factions[bladeburnersFactionName];
-    if (bladeburnerFac.isMember) {
-      const favorBonus = 1 + bladeburnerFac.favor / 100;
-      bladeburnerFac.playerReputation +=
-        BladeburnerConstants.RankToFactionRepFactor * change * person.mults.faction_rep * favorBonus;
+    const bladeburnerFaction = Factions[FactionName.Bladeburners];
+    if (bladeburnerFaction.isMember) {
+      bladeburnerFaction.playerReputation += calculateActionReputationGain(person, change);
     }
 
     // Gain skill points
@@ -1406,8 +1413,25 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
-  getActionFromTypeAndName(type: string, name: string): Action | null {
+  getActionFromTypeAndName(type: BladeburnerActionType, name: string): Action | undefined {
+    /**
+     * Typecasting "name" instead of checking it with getEnumHelper().isMember() is intentional. The callers will handle
+     * the undefined value if "name" is invalid.
+     */
+    switch (type) {
+      case BladeburnerActionType.General:
+        return GeneralActions[name as BladeburnerGeneralActionName];
+      case BladeburnerActionType.Contract:
+        return this.contracts[name as BladeburnerContractName];
+      case BladeburnerActionType.Operation:
+        return this.operations[name as BladeburnerOperationName];
+      case BladeburnerActionType.BlackOp:
+        return BlackOperations[name as BladeburnerBlackOpName];
+    }
+  }
+
+  /** Fuzzy matching for action identifiers. Do not use this function for anything except BB console. */
+  guessActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
     const id = autoCompleteTypeShorthand(type, name);
     return id ? this.getActionObject(id) : null;

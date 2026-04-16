@@ -19,7 +19,7 @@ export function mv(args: (string | number | boolean)[], server: BaseServer): voi
     (!hasScriptExtension(sourcePath) && !hasTextExtension(sourcePath)) ||
     (!hasScriptExtension(destinationPath) && !hasTextExtension(destinationPath))
   ) {
-    return Terminal.error(`'mv' can only be used on scripts and text files (.txt)`);
+    return Terminal.error(`'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css)`);
   }
 
   // Allow content to be moved between scripts and textfiles, no need to limit this.
@@ -27,7 +27,9 @@ export function mv(args: (string | number | boolean)[], server: BaseServer): voi
   if (!sourceContentFile) return Terminal.error(`Source file ${sourcePath} does not exist`);
 
   if (!sourceContentFile.deleteFromServer(server)) {
-    return Terminal.error(`Could not remove source file ${sourcePath} from existing location.`);
+    return Terminal.error(
+      `Could not remove source file ${sourcePath} from existing location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
+    );
   }
   Terminal.print(`Moved ${sourcePath} to ${destinationPath}`);
   const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);

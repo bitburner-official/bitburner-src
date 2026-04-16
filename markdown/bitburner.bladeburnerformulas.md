@@ -14,7 +14,27 @@ interface BladeburnerFormulas
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [skillMaxUpgradeCount(name, level, skillPoints)](./bitburner.bladeburnerformulas.skillmaxupgradecount.md) | Calculate the number of times that you can upgrade a skill. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[skillMaxUpgradeCount(name, level, skillPoints)](./bitburner.bladeburnerformulas.skillmaxupgradecount.md)
+
+
+</td><td>
+
+Calculate the number of times that you can upgrade a skill.
+
+
+</td></tr>
+</tbody></table>
 

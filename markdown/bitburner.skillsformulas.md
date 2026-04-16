@@ -14,8 +14,38 @@ interface SkillsFormulas
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [calculateExp(skill, skillMult)](./bitburner.skillsformulas.calculateexp.md) | Calculate exp for skill level. |
-|  [calculateSkill(exp, skillMult)](./bitburner.skillsformulas.calculateskill.md) | Calculate skill level. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[calculateExp(skill, skillMult)](./bitburner.skillsformulas.calculateexp.md)
+
+
+</td><td>
+
+Calculate exp for skill level.
+
+
+</td></tr>
+<tr><td>
+
+[calculateSkill(exp, skillMult)](./bitburner.skillsformulas.calculateskill.md)
+
+
+</td><td>
+
+Calculate skill level.
+
+
+</td></tr>
+</tbody></table>
 

@@ -9,17 +9,92 @@ Set Market-TA2 for a material.
 **Signature:**
 
 ```typescript
-setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
+setMaterialMarketTA2(divisionName: string, city: CityName, materialName: CorpMaterialName, on: boolean): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
-|  materialName | string | Name of the material |
-|  on | boolean | Use true to enable, false otherwise. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of the city
+
+
+</td></tr>
+<tr><td>
+
+materialName
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material
+
+
+</td></tr>
+<tr><td>
+
+on
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Use true to enable, false otherwise.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

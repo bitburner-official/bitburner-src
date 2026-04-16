@@ -9,15 +9,60 @@ Reduce a server's security level.
 **Signature:**
 
 ```typescript
-weaken(host: string, opts?: BasicHGWOptions): Promise<number>;
+weaken(host?: string, opts?: BasicHGWOptions): Promise<number>;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname of the target server to weaken. |
-|  opts | [BasicHGWOptions](./bitburner.basichgwoptions.md) | _(Optional)_ Optional parameters for configuring function behavior. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the target server to weaken. Optional. Defaults to current server if not provided.
+
+
+</td></tr>
+<tr><td>
+
+opts
+
+
+</td><td>
+
+[BasicHGWOptions](./bitburner.basichgwoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Optional parameters for configuring function behavior.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

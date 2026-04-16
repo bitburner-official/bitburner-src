@@ -9,17 +9,66 @@ Removes the highlight color and text from the specified node.
 **Signature:**
 
 ```typescript
-clearPointHighlight(x, y): void;
+clearPointHighlight(x: number, y: number): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  x | (not declared) | the x coordinate to remove highlight from |
-|  y | (not declared) | the y coordinate to remove highlight from |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+x
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+the x coordinate to remove highlight from
+
+
+</td></tr>
+<tr><td>
+
+y
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+the y coordinate to remove highlight from
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 0 GB
 

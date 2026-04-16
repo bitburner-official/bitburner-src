@@ -1,7 +1,7 @@
 import { Settings } from "../Settings/Settings";
 import { Remote } from "./Remote";
 
-let server: Remote;
+let server: Remote | undefined;
 
 export function newRemoteFileApiConnection(): void {
   if (server) server.stopConnection();
@@ -14,5 +14,15 @@ export function newRemoteFileApiConnection(): void {
 }
 
 export function isRemoteFileApiConnectionLive(): boolean {
-  return server && server.connection != undefined && server.connection.readyState == 1;
+  return server !== undefined && server.connection !== undefined && server.connection.readyState === 1;
+}
+
+export function getRemoteFileApiConnectionStatus(): "Online" | "Offline" | "Reconnecting" {
+  if (isRemoteFileApiConnectionLive()) {
+    return "Online";
+  }
+  if (server?.reconnecting) {
+    return "Reconnecting";
+  }
+  return "Offline";
 }

@@ -1,10 +1,11 @@
-import { FactionName, CodingContractName } from "@enums";
+import { CodingContractName } from "@enums";
 import { CodingContractTypes } from "./ContractTypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { CodingContractEvent } from "../ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { assertObject } from "../utils/TypeAssertion";
+import type { Result } from "@nsdefs";
+import { CodingContractEventEmitter } from "./CodingContractEventEmitter";
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
@@ -12,7 +13,7 @@ export enum CodingContractRewardType {
   FactionReputation,
   FactionReputationAll,
   CompanyReputation,
-  Money, // This must always be the last reward type
+  Money,
 }
 
 // Numeric enum
@@ -21,6 +22,7 @@ export enum CodingContractResult {
   Success,
   Failure,
   Cancelled,
+  InvalidFormat,
 }
 
 /** A class that represents the type of reward a contract gives */
@@ -33,11 +35,9 @@ export type ICodingContractReward =
     }
   | {
       type: CodingContractRewardType.CompanyReputation;
-      name: string;
     }
   | {
       type: CodingContractRewardType.FactionReputation;
-      name: FactionName;
     };
 
 /**
@@ -55,6 +55,9 @@ export class CodingContract {
        processed outside of this file */
   reward: ICodingContractReward | null;
 
+  /* Scalar for the reward, used to generate lower-value CCTs more frequently */
+  rewardScaling: number = 1;
+
   /* Number of times the Contract has been attempted */
   tries = 0;
 
@@ -65,9 +68,12 @@ export class CodingContract {
     fn = "default.cct",
     type = CodingContractName.FindLargestPrimeFactor,
     reward: ICodingContractReward | null = null,
+    rewardScaling: number = 1,
   ) {
     const path = resolveContractFilePath(fn);
-    if (!path) throw new Error(`Bad file path while creating a coding contract: ${fn}`);
+    if (!path) {
+      throw new Error(`Bad file path while creating a coding contract: ${fn}`);
+    }
     if (!CodingContractTypes[type]) {
       throw new Error(`Error: invalid contract type: ${type} please contact developer`);
     }
@@ -76,6 +82,11 @@ export class CodingContract {
     this.type = type;
     this.state = CodingContractTypes[type].generate();
     this.reward = reward;
+    this.rewardScaling = rewardScaling;
+  }
+
+  getAnswer() {
+    return CodingContractTypes[this.type].getAnswer(this.state);
   }
 
   getData(): unknown {
@@ -84,7 +95,7 @@ export class CodingContract {
   }
 
   getDescription(): string {
-    return CodingContractTypes[this.type].desc(this.getData()).replaceAll("&nbsp;", " ");
+    return CodingContractTypes[this.type].desc(this.getData());
   }
 
   getDifficulty(): number {
@@ -100,33 +111,62 @@ export class CodingContract {
   }
 
   /** Checks if the answer is in the correct format. */
-  isValid(answer: unknown): boolean {
-    if (typeof answer === "string") answer = CodingContractTypes[this.type].convertAnswer(answer);
-    return CodingContractTypes[this.type].validateAnswer(answer);
+  isValid(answer: unknown): Result<{ answer: unknown }> {
+    if (typeof answer === "string") {
+      try {
+        answer = CodingContractTypes[this.type].convertAnswer(answer);
+      } catch (error) {
+        return {
+          success: false,
+          message: `The answer is not in the right format for contract '${this.type}'. Reason: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        };
+      }
+    }
+    const result = CodingContractTypes[this.type].validateAnswer(answer);
+    if (!result) {
+      return {
+        success: false,
+        message: `The answer is not in the right format for contract '${this.type}'. Got: ${answer}`,
+      };
+    }
+    return { success: true, answer };
   }
 
-  isSolution(solution: unknown): boolean {
-    const type = CodingContractTypes[this.type];
-    if (typeof solution === "string") solution = type.convertAnswer(solution);
-    if (!this.isValid(solution)) return false;
-
-    return type.solver(this.state, solution);
+  isSolution(solution: unknown): {
+    result: Exclude<CodingContractResult, CodingContractResult.Cancelled>;
+    message?: string;
+  } {
+    const validationResult = this.isValid(solution);
+    if (!validationResult.success) {
+      return { result: CodingContractResult.InvalidFormat, message: validationResult.message };
+    }
+    /**
+     * We sometimes need to convert the given solution by calling CodingContractType.convertAnswer() (e.g., Square Root
+     * contract) before using it. The conversion is done in CodingContract.isValid().
+     */
+    solution = validationResult.answer;
+    return {
+      result: CodingContractTypes[this.type].solver(this.state, solution)
+        ? CodingContractResult.Success
+        : CodingContractResult.Failure,
+    };
   }
 
   /** Creates a popup to prompt the player to solve the problem */
-  async prompt(): Promise<CodingContractResult> {
-    return new Promise<CodingContractResult>((resolve) => {
-      CodingContractEvent.emit({
-        c: this,
-        onClose: () => {
-          resolve(CodingContractResult.Cancelled);
-        },
-        onAttempt: (val: string) => {
-          if (this.isSolution(val)) {
-            resolve(CodingContractResult.Success);
-          } else {
-            resolve(CodingContractResult.Failure);
-          }
+  async prompt(): Promise<{ result: CodingContractResult; message?: string }> {
+    return new Promise((resolve) => {
+      CodingContractEventEmitter.emit({
+        type: "run",
+        data: {
+          codingContract: this,
+          onClose: () => {
+            resolve({ result: CodingContractResult.Cancelled });
+          },
+          onAttempt: (val: string) => {
+            resolve(this.isSolution(val));
+          },
         },
       });
     });

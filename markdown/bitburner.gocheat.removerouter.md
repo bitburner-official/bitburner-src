@@ -26,11 +26,71 @@ removeRouter(
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  x | number | x coordinate of router to remove |
-|  y | number | y coordinate of router to remove |
-|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+x
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+x coordinate of router to remove
+
+
+</td></tr>
+<tr><td>
+
+y
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+y coordinate of router to remove
+
+
+</td></tr>
+<tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -40,5 +100,7 @@ a promise that contains the opponent move's x and y coordinates (or pass) in res
 
 ## Remarks
 
-RAM cost: 8 GB Requires BitNode 14.2 to use
+RAM cost: 8 GB
+
+Requires Source-File 14.2 to use
 

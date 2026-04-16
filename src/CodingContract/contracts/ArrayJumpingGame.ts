@@ -21,7 +21,7 @@ export const arrayJumpingGame: Pick<
         "Your answer should be submitted as 1 or 0, representing true and false respectively.",
       ].join(" ");
     },
-    difficulty: 2.5,
+    difficulty: 2,
     generate: (): number[] => {
       const len: number = getRandomIntInclusive(3, 25);
       const arr: number[] = [];
@@ -37,14 +37,17 @@ export const arrayJumpingGame: Pick<
       return arr;
     },
     numTries: 1,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const n: number = data.length;
       let i = 0;
       for (let reach = 0; i < n && i <= reach; ++i) {
         reach = Math.max(i + data[i], reach);
       }
       const solution: boolean = i === n;
-      return (solution ? 1 : 0) === answer;
+      return solution ? 1 : 0;
+    },
+    solver: (data, answer) => {
+      return arrayJumpingGame[CodingContractName.ArrayJumpingGame].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => {
       const num = parseInt(ans);
@@ -64,8 +67,8 @@ export const arrayJumpingGame: Pick<
         "i to i+n.",
         "\n\nAssuming you are initially positioned",
         "at the start of the array, determine the minimum number of",
-        "jumps to reach the end of the array.\n\n",
-        "If it's impossible to reach the end, then the answer should be 0.",
+        "jumps to reach the last index.\n\n",
+        "If it's impossible to reach the last index, then the answer should be 0.",
       ].join(" ");
     },
     difficulty: 3,
@@ -85,7 +88,7 @@ export const arrayJumpingGame: Pick<
       return arr;
     },
     numTries: 3,
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const n: number = data.length;
       let reach = 0;
       let jumps = 0;
@@ -105,7 +108,10 @@ export const arrayJumpingGame: Pick<
         lastJump = jumpedFrom;
         jumps++;
       }
-      return jumps === answer;
+      return jumps;
+    },
+    solver: (data, answer) => {
+      return arrayJumpingGame[CodingContractName.ArrayJumpingGameII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

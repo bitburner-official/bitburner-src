@@ -14,10 +14,55 @@ hackTime(server: Server, player: Person): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  server | [Server](./bitburner.server.md) | Server info, typically from [getServer](./bitburner.ns.getserver.md) |
-|  player | [Person](./bitburner.person.md) | Player info, typically from [getPlayer](./bitburner.ns.getplayer.md) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+server
+
+
+</td><td>
+
+[Server](./bitburner.server.md)
+
+
+</td><td>
+
+Server info, typically from [getServer](./bitburner.ns.getserver.md)
+
+
+</td></tr>
+<tr><td>
+
+player
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+Player info, typically from [getPlayer](./bitburner.ns.getplayer.md)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

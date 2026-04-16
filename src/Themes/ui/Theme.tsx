@@ -51,6 +51,7 @@ declare module "@mui/material/styles" {
 }
 
 let theme: Theme;
+const themeStyleSheet = new CSSStyleSheet();
 
 export function refreshTheme(): void {
   theme = createTheme({
@@ -259,6 +260,9 @@ export function refreshTheme(): void {
             border: "2px solid " + Settings.theme.white,
             maxWidth: "100vh",
           },
+          popper: {
+            zIndex: 25000,
+          },
         },
         defaultProps: {
           disableInteractive: true,
@@ -405,11 +409,36 @@ export function refreshTheme(): void {
           },
         },
       },
+      MuiModal: {
+        styleOverrides: {
+          root: {
+            zIndex: 20000,
+          },
+        },
+      },
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            fontFamily: Settings.styles.fontFamily,
+          },
+        },
+      },
     },
   });
 
   document.body.style.backgroundColor = theme.colors.backgroundprimary?.toString() ?? "black";
+
+  const styleSheet =
+    ":root {" +
+    Object.entries(Settings.theme)
+      .map(([k, v]) => `--bb-theme-${k}: ${v}`)
+      .join(";") +
+    "}";
+
+  themeStyleSheet.replaceSync(styleSheet);
 }
+
+document.adoptedStyleSheets.push(themeStyleSheet);
 refreshTheme();
 
 interface IProps {

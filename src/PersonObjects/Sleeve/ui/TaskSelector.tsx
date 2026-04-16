@@ -4,33 +4,35 @@ import React from "react";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 import { Player } from "@player";
-import { BladeburnerActionType, BladeburnerContractName, CityName, FactionName, LocationName } from "@enums";
+import {
+  BladeburnerActionType,
+  BladeburnerContractName,
+  BladeburnerGeneralActionName,
+  CityName,
+  FactionName,
+  LocationName,
+  SpecialBladeburnerActionTypeForSleeve,
+  UniversityClassType,
+} from "@enums";
 import { Crimes } from "../../../Crime/Crimes";
 import { Factions } from "../../../Faction/Factions";
 import { getEnumHelper } from "../../../utils/EnumHelper";
 import { SleeveWorkType } from "../Work/Work";
 import { getRecordKeys } from "../../../Types/Record";
 
-const universitySelectorOptions: string[] = [
-  "Computer Science",
-  "Data Structures",
-  "Networks",
-  "Algorithms",
-  "Management",
-  "Leadership",
-];
+const universitySelectorOptions = Object.values(UniversityClassType);
 
 const gymSelectorOptions: string[] = ["Train Strength", "Train Defense", "Train Dexterity", "Train Agility"];
 
 const bladeburnerSelectorOptions: string[] = [
-  "Training",
-  "Field Analysis",
-  "Recruitment",
-  "Diplomacy",
-  "Hyperbolic Regeneration Chamber",
-  "Infiltrate Synthoids",
-  "Support main sleeve",
-  "Take on contracts",
+  BladeburnerGeneralActionName.Training,
+  BladeburnerGeneralActionName.FieldAnalysis,
+  BladeburnerGeneralActionName.Recruitment,
+  BladeburnerGeneralActionName.Diplomacy,
+  BladeburnerGeneralActionName.HyperbolicRegen,
+  SpecialBladeburnerActionTypeForSleeve.InfiltrateSynthoids,
+  SpecialBladeburnerActionTypeForSleeve.SupportMainSleeve,
+  SpecialBladeburnerActionTypeForSleeve.TakeOnContracts,
 ];
 
 interface IProps {
@@ -201,7 +203,7 @@ const tasks: {
     return {
       first: bladeburnerSelectorOptions,
       second: (s1: string) => {
-        if (s1 === "Take on contracts") {
+        if (s1 === SpecialBladeburnerActionTypeForSleeve.TakeOnContracts) {
           return possibleContracts(sleeve);
         } else {
           return ["------"];

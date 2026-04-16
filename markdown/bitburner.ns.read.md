@@ -14,9 +14,39 @@ read(filename: string): string;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  filename | string | Name of the file to be read. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+filename
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the file to be read.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -28,7 +58,9 @@ Data in the specified text file.
 
 RAM cost: 0 GB
 
-This function is used to read data from a text file (.txt, .json) or script (.js, .jsx, .ts, .tsx, .script).
+This function is used to read data from a text file (.txt, .json, .css), a script (.js, .jsx, .ts, .tsx), a literature file (.lit), or a message (.msg).
 
 This function will return the data in the specified file. If the file does not exist, an empty string will be returned.
+
+With literature files, the returned data is a raw HTML string.
 

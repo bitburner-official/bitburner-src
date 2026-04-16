@@ -4,7 +4,7 @@
 
 ## Go.getGameState() method
 
-Gets the status of the current game. Shows the current player, current score, and the previous move coordinates. Previous move coordinates will be \[-1, -1\] for a pass, or if there are no prior moves.
+Gets the status of the current game. Shows the current player, current score, and the previous move coordinates. Previous move will be null for a pass, or if there are no prior moves.
 
 **Signature:**
 
@@ -21,4 +21,8 @@ getGameState(): {
 **Returns:**
 
 { currentPlayer: "White" \| "Black" \| "None"; whiteScore: number; blackScore: number; previousMove: \[number, number\] \| null; komi: number; bonusCycles: number; }
+
+## Remarks
+
+RAM cost: 0 GB
 

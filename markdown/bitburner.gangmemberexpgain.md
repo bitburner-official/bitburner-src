@@ -13,12 +13,140 @@ interface GangMemberExpGain
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [agi\_exp](./bitburner.gangmemberexpgain.agi_exp.md) |  | number | Agi EXP gain for a member after a given task |
-|  [cha\_exp](./bitburner.gangmemberexpgain.cha_exp.md) |  | number | Cha EXP gain for a member after a given task |
-|  [def\_exp](./bitburner.gangmemberexpgain.def_exp.md) |  | number | Def EXP gain for a member after a given task |
-|  [dex\_exp](./bitburner.gangmemberexpgain.dex_exp.md) |  | number | Dex EXP gain for a member after a given task |
-|  [hack\_exp](./bitburner.gangmemberexpgain.hack_exp.md) |  | number | Hack EXP gain for a member after a given task |
-|  [str\_exp](./bitburner.gangmemberexpgain.str_exp.md) |  | number | Str EXP gain for a member after a given task |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[agi\_exp](./bitburner.gangmemberexpgain.agi_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Agi EXP gain for a member after a given task
+
+
+</td></tr>
+<tr><td>
+
+[cha\_exp](./bitburner.gangmemberexpgain.cha_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cha EXP gain for a member after a given task
+
+
+</td></tr>
+<tr><td>
+
+[def\_exp](./bitburner.gangmemberexpgain.def_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Def EXP gain for a member after a given task
+
+
+</td></tr>
+<tr><td>
+
+[dex\_exp](./bitburner.gangmemberexpgain.dex_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Dex EXP gain for a member after a given task
+
+
+</td></tr>
+<tr><td>
+
+[hack\_exp](./bitburner.gangmemberexpgain.hack_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Hack EXP gain for a member after a given task
+
+
+</td></tr>
+<tr><td>
+
+[str\_exp](./bitburner.gangmemberexpgain.str_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Str EXP gain for a member after a given task
+
+
+</td></tr>
+</tbody></table>
 

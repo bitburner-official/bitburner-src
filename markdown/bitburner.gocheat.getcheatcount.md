@@ -14,9 +14,39 @@ getCheatCount(playAsWhite?: boolean): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -26,5 +56,7 @@ The number of times you've attempted to cheat in the current game.
 
 ## Remarks
 
-RAM cost: 1 GB Requires BitNode 14.2 to use
+RAM cost: 1 GB
+
+Requires Source-File 14.2 to use
 
