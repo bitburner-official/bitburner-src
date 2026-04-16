@@ -1,5 +1,5 @@
 import { workerScripts } from "./WorkerScripts";
-import { recentScripts } from "./Netscript/RecentScripts";
+import { recentScripts } from "../Netscript/RecentScripts";
 
 let pidCounter = 1;
 
@@ -19,11 +19,11 @@ export function generateNextPid(): number {
       continue;
     }
     /* Also check the recentScripts: The function `AddRecentScript` de-duplicates scripts by PID.
-       * Therefore scripts which re-use a PID from that list do not show up the list of recent scripts
-       * upon termination (if the previous script with that PID is still in the list at that point).
-       * Such a PID re-use could happen after installing augmentations, which resets the PID counter
-       * but does not clear the list recent scripts. */
-    if(recentScripts.some((r) => (r.runningScript.pid === pidCandidate))) {
+     * Therefore scripts which re-use a PID from that list do not show up the list of recent scripts
+     * upon termination (if the previous script with that PID is still in the list at that point).
+     * Such a PID re-use could happen after installing augmentations, which resets the PID counter
+     * but does not clear the list recent scripts. */
+    if (recentScripts.some((r) => r.runningScript.pid === pidCandidate)) {
       continue;
     }
     // found a PID that's not in use
