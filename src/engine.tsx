@@ -157,7 +157,7 @@ const Engine = {
     messages: 150,
     mechanicProcess: 5, // Process Bladeburner
     contractGeneration: 3000, // Generate Coding Contracts
-    achievementsCounter: 60, // Check if we have new achievements
+    achievementsCounter: 5, // Check if we have new achievements
   },
 
   decrementAllCounters: function (numCycles = 1) {
@@ -215,7 +215,7 @@ const Engine = {
 
     if (Engine.Counters.achievementsCounter <= 0) {
       calculateAchievements();
-      Engine.Counters.achievementsCounter = 300;
+      Engine.Counters.achievementsCounter = 5;
     }
 
     // This **MUST** remain the last block in the function!
