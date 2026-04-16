@@ -163,6 +163,30 @@ function testIntelligenceOverride(
   expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2);
 }
 
+/** Sets intelligence exp while bypassing the requirements (SF5 or being in BN5). */
+function manuallySetIntelligenceExp(exp: number): void {
+  Player.exp.intelligence = exp;
+  Player.skills.intelligence = Math.floor(Player.calculateSkill(Player.exp.intelligence, 1));
+  Player.persistentIntelligenceData.exp = exp;
+}
+
+function expectIntelligenceExp(exp: number): void {
+  expect(Player.exp.intelligence).toStrictEqual(exp);
+  expect(Player.skills.intelligence).toStrictEqual(Math.floor(Player.calculateSkill(exp, 1)));
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(exp);
+}
+
+/**
+ * This function is not equivalent to expectIntelligenceExp(0). The intelligence skill level starts at 0, not 1 like
+ * other stats. This function specifically verifies the initial state of intelligence data (before entering BN5).
+ */
+function expectInitialIntelligenceData(): void {
+  expect(Player.exp.intelligence).toStrictEqual(0);
+  // The intelligence skill level starts at 0.
+  expect(Player.skills.intelligence).toStrictEqual(0);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(0);
+}
+
 function setUpBeforeDestroyingWD(): void {
   Player.queueAugmentation(AugmentationName.TheRedPill);
   installAugmentations();
@@ -644,5 +668,124 @@ describe("purchaseProgram", () => {
       expect(ns.singularity.purchaseProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
       expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
     });
+  });
+});
+
+describe("Intelligence", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    expect(Player.bitNodeN).toStrictEqual(1);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(0);
+    expectInitialIntelligenceData();
+  });
+  test("Get SF5", () => {
+    // This is the most common scenario. Some checks in this test will be repeated in other tests.
+    const ns = getNS();
+    ns.singularity.b1tflum3(5);
+    expectIntelligenceExp(0);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(1000);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(5);
+    expectIntelligenceExp(1300);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(1);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(5);
+    expectIntelligenceExp(1600);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(2);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(1);
+    expectIntelligenceExp(1900);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(3);
+  });
+  test("Can gain intelligence exp with SF5", () => {
+    Player.sourceFiles.set(5, 1);
+    const ns = getNS();
+    ns.singularity.b1tflum3(1);
+    expectIntelligenceExp(0);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(1000);
+
+    ns.singularity.b1tflum3(1);
+    expectIntelligenceExp(1000);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(1);
+    expectIntelligenceExp(1300);
+  });
+  test("Can gain intelligence exp in BN5", () => {
+    const ns = getNS();
+    ns.singularity.b1tflum3(5);
+    expectIntelligenceExp(0);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(1000);
+
+    // WIP: Not lose exp when bitfluming from BN5 to BN5 again.
+    expect(Player.bitNodeN).toStrictEqual(5);
+    ns.singularity.b1tflum3(5);
+    expectIntelligenceExp(1000);
+  });
+  describe("Reset intelligence data", () => {
+    test("Bitflume", () => {
+      const ns = getNS();
+
+      // Bitflume to non-BN5.
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      ns.singularity.b1tflum3(1);
+      expectInitialIntelligenceData();
+
+      // Bitflume to BN5.
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      ns.singularity.b1tflum3(5);
+      // WIP
+      expectIntelligenceExp(0);
+      // expectIntelligenceExp(50);
+    });
+    test("Destroy WD", () => {
+      const ns = getNS();
+
+      // Destroy WD and jump to non-BN5.
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      setUpBeforeDestroyingWD();
+      ns.singularity.destroyW0r1dD43m0n(1);
+      expectInitialIntelligenceData();
+
+      // Destroy WD and jump to BN5.
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      setUpBeforeDestroyingWD();
+      ns.singularity.destroyW0r1dD43m0n(5);
+      // WIP
+      expectIntelligenceExp(0);
+      // expectIntelligenceExp(50);
+    });
+  });
+  test("Cannot gain intelligence exp without SF5 or being in BN5", () => {
+    const ns = getNS();
+    Player.gainIntelligenceExp(1000);
+    expectInitialIntelligenceData();
+
+    ns.singularity.b1tflum3(1);
+    expectInitialIntelligenceData();
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(1);
+    expectInitialIntelligenceData();
+  });
+  test("Cannot gain intelligence exp even with intelligence skill > 0", () => {
+    manuallySetIntelligenceExp(50);
+    expectIntelligenceExp(50);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(50);
   });
 });

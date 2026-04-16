@@ -63,7 +63,10 @@ export function enterBitNode(
 
   if (!isFlume) {
     giveSourceFile(destroyedBitNode);
-  } else if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
+  }
+  // WIP
+  if (Player.sourceFileLvl(5) === 0 && destroyedBitNode !== 5) {
+    // if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
     Player.skills.intelligence = 0;
     Player.exp.intelligence = 0;
     Player.persistentIntelligenceData.exp = 0;
