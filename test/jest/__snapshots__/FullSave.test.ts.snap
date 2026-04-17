@@ -75,6 +75,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "bladeburner": {
       "ctor": "Bladeburner",
       "data": {
+        "_teamSize": 0,
         "action": null,
         "actionTimeCurrent": 0,
         "actionTimeOverflow": 0,
@@ -281,7 +282,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "staminaBonus": 0,
         "storedCycles": 0,
         "teamLost": 0,
-        "teamSize": 0,
         "totalSkillPoints": 666,
       },
     },
