@@ -18,14 +18,6 @@ export function generateNextPid(): number {
     if (workerScripts.has(pidCandidate)) {
       continue;
     }
-    /* Also check the recentScripts: The function `AddRecentScript` de-duplicates scripts by PID.
-     * Therefore scripts which re-use a PID from that list do not show up the list of recent scripts
-     * upon termination (if the previous script with that PID is still in the list at that point).
-     * Such a PID re-use could happen after installing augmentations, which resets the PID counter
-     * but does not clear the list recent scripts. */
-    if (recentScripts.some((r) => r.runningScript.pid === pidCandidate)) {
-      continue;
-    }
     // found a PID that's not in use
     pidCounter = pidCandidate + 1;
     return pidCandidate;
@@ -35,5 +27,11 @@ export function generateNextPid(): number {
 }
 
 export function resetPidCounter(): void {
+  /* The function `AddRecentScript` de-duplicates scripts by PID.
+   * Therefore the list has to be cleared when resetting the PID counter.
+   * Otherwise scripts which re-use a PID from the list of recent scripts
+   * do not show up there when they finish (if the previous script with
+   * that PID is still in the list at that point). */
+  recentScripts.splice(0);
   pidCounter = 1;
 }
