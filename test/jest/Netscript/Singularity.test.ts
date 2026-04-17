@@ -725,48 +725,84 @@ describe("Intelligence", () => {
 
     Player.gainIntelligenceExp(1000);
     expectIntelligenceExp(1000);
-
-    // WIP: Not lose exp when bitfluming from BN5 to BN5 again.
-    expect(Player.bitNodeN).toStrictEqual(5);
-    ns.singularity.b1tflum3(5);
-    expectIntelligenceExp(1000);
   });
   describe("Reset intelligence data", () => {
     test("Bitflume", () => {
       const ns = getNS();
 
-      // Bitflume to non-BN5.
+      // Bitflume from non-BN5 to non-BN5.
+      expect(Player.bitNodeN).toStrictEqual(1);
       manuallySetIntelligenceExp(50);
       expectIntelligenceExp(50);
       ns.singularity.b1tflum3(1);
+      // Reset intelligence data
       expectInitialIntelligenceData();
 
-      // Bitflume to BN5.
+      // Bitflume from non-BN5 to BN5.
+      expect(Player.bitNodeN).toStrictEqual(1);
       manuallySetIntelligenceExp(50);
       expectIntelligenceExp(50);
       ns.singularity.b1tflum3(5);
-      // WIP
+      // Reset intelligence data and skill = 1
       expectIntelligenceExp(0);
-      // expectIntelligenceExp(50);
+
+      // Bitflume from BN5 to BN5.
+      expect(Player.bitNodeN).toStrictEqual(5);
+      Player.gainIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      // Bitflume to BN5 again.
+      ns.singularity.b1tflum3(5);
+      // Not lose exp when bitfluming from BN5 to BN5.
+      expectIntelligenceExp(50);
+
+      // Bitflume from BN5 to non-BN5.
+      expect(Player.bitNodeN).toStrictEqual(5);
+      Player.gainIntelligenceExp(50);
+      // 50 exp from the previous scenario + 50 exp from this scenario.
+      expectIntelligenceExp(100);
+      ns.singularity.b1tflum3(1);
+      // Reset intelligence data
+      expectInitialIntelligenceData();
     });
     test("Destroy WD", () => {
       const ns = getNS();
 
-      // Destroy WD and jump to non-BN5.
+      // Destroy WD of non-BN5 and jump to non-BN5.
+      expect(Player.bitNodeN).toStrictEqual(1);
       manuallySetIntelligenceExp(50);
       expectIntelligenceExp(50);
       setUpBeforeDestroyingWD();
       ns.singularity.destroyW0r1dD43m0n(1);
+      // Reset intelligence data
       expectInitialIntelligenceData();
 
-      // Destroy WD and jump to BN5.
+      // Destroy WD of non-BN5 and jump to BN5.
+      expect(Player.bitNodeN).toStrictEqual(1);
       manuallySetIntelligenceExp(50);
       expectIntelligenceExp(50);
       setUpBeforeDestroyingWD();
       ns.singularity.destroyW0r1dD43m0n(5);
-      // WIP
+      // Reset intelligence data and skill = 1
       expectIntelligenceExp(0);
-      // expectIntelligenceExp(50);
+
+      // Destroy WD of BN5 and jump to BN5.
+      // Check the initial state that we want to test: in BN5 and do not have SF5.
+      expect(Player.bitNodeN).toStrictEqual(5);
+      expect(Player.sourceFileLvl(5)).toStrictEqual(0);
+      Player.gainIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      setUpBeforeDestroyingWD();
+      ns.singularity.destroyW0r1dD43m0n(5);
+      // 50 exp from Player.gainIntelligenceExp() + 300 exp reward of destroying WD.
+      expectIntelligenceExp(350);
+
+      // Destroy WD of BN5 and jump to non-BN5.
+      Player.gainIntelligenceExp(50);
+      // 350 exp from the previous scenario + 50 exp from Player.gainIntelligenceExp().
+      expectIntelligenceExp(400);
+      setUpBeforeDestroyingWD();
+      ns.singularity.destroyW0r1dD43m0n(1);
+      expectIntelligenceExp(700);
     });
   });
   test("Cannot gain intelligence exp without SF5 or being in BN5", () => {

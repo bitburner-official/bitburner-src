@@ -149,6 +149,14 @@ export abstract class Person implements IPerson {
   overrideIntelligence(): void {
     // Do not set anything if the player has not unlocked Intelligence.
     if (Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
+      // WIP: This is not enough. Try disabling the code in RedPill.tsx, enabling this code, then running tests.
+      // At this point, "bitNodeN" is "newBitNode", but we need both "newBitNode" and "destroyedBitNode".
+      // this.skills.intelligence = 0;
+      // this.exp.intelligence = 0;
+      // this.persistentIntelligenceData.exp = 0;
+      // if (Player.bitNodeN === 5 && Player.skills.intelligence === 0) {
+      //   Player.skills.intelligence = 1;
+      // }
       return;
     }
     const persistentIntelligenceSkill = this.calculateSkill(this.persistentIntelligenceData.exp, 1);
