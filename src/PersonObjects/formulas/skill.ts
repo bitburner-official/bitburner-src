@@ -5,6 +5,11 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
  * stat level. Stat-agnostic (same formula for every stat)
  */
 export function calculateSkill(exp: number, mult = 1): number {
+  // Mult can be 0 in BN12 when the player has a very high SF12 level. In this case, the skill level will never change
+  // from its initial value (1 for most stats, except intelligence).
+  if (mult === 0) {
+    return 1;
+  }
   const value = Math.floor(mult * (32 * Math.log(exp + 534.6) - 200));
   return clampNumber(value, 1);
 }
