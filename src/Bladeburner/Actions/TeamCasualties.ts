@@ -51,7 +51,7 @@ export function resolveTeamCasualties(action: TeamActionWithCasualties, team: Op
   // (team.teamSize - losses) will set teamCount of ops/blackOps to 0 while it should be 8.
   let newTeamSize = team.teamSize - losses;
   if (newTeamSize < team.sleeveSize) {
-    team.killRandomSupportingSleeves(team.sleeveSize - team.teamSize);
+    team.killRandomSupportingSleeves(team.sleeveSize - newTeamSize);
     // If this happens, all team members died and some sleeves took damage. In this case, teamSize = sleeveSize.
     newTeamSize = team.sleeveSize;
   }
