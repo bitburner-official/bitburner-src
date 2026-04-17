@@ -190,6 +190,8 @@ export function prestigeAugmentation(): void {
     }
   }
 
+  // clear recent scripts
+  recentScripts.splice(0);
   resetPidCounter();
   ProgramsSeen.clear();
   InvitationsSeen.clear();

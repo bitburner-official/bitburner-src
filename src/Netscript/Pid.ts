@@ -1,5 +1,4 @@
 import { workerScripts } from "./WorkerScripts";
-import { recentScripts } from "../Netscript/RecentScripts";
 
 let pidCounter = 1;
 
@@ -26,12 +25,16 @@ export function generateNextPid(): number {
   return -1;
 }
 
+/**
+ * Reset the PID counter to 1.
+ *
+ * Note that the list of recently finished scripts has to be
+ * cleared (`recentScripts.splice(0)`) when resetting the PID counter.
+ * Otherwise scripts which re-use a PID that is still in the
+ * list of recent scripts do not show up there when they finish
+ * (if the previous script with that PID is still in the list at that point),
+ * because the function `AddRecentScript` de-duplicates scripts by PID.
+ */
 export function resetPidCounter(): void {
-  /* The function `AddRecentScript` de-duplicates scripts by PID.
-   * Therefore the list has to be cleared when resetting the PID counter.
-   * Otherwise scripts which re-use a PID from the list of recent scripts
-   * do not show up there when they finish (if the previous script with
-   * that PID is still in the list at that point). */
-  recentScripts.splice(0);
   pidCounter = 1;
 }
