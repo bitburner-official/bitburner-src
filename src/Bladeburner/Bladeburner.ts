@@ -72,7 +72,31 @@ export class Bladeburner implements OperationTeam {
   skillPoints = 0;
   totalSkillPoints = 0;
 
-  teamSize = 0;
+  /**
+   * Do NOT directly read and write this field. You must use the getter/setter.
+   * We use _teamSize instead of a private field #teamSize to reduce the complexity of saving/loading code.
+   */
+  _teamSize = 0;
+  get teamSize() {
+    return this._teamSize;
+  }
+  set teamSize(value: number) {
+    // Ensure teamSize is a non-negative integer.
+    let newSize = value;
+    if (!Number.isInteger(newSize) || newSize < 0) {
+      newSize = 0;
+    }
+    // Early return if there is no change.
+    if (this._teamSize === newSize) {
+      return;
+    }
+    this._teamSize = newSize;
+    // Reduce teamCount of actions if it's greater than the team size.
+    for (const action of [...Object.values(this.operations), ...Object.values(BlackOperations)]) {
+      action.teamCount = Math.min(action.teamCount, this._teamSize);
+    }
+  }
+
   get sleeveSize() {
     return Player.sleevesSupportingBladeburner().length;
   }
@@ -1487,6 +1511,10 @@ export class Bladeburner implements OperationTeam {
       bladeburner.stamina = 1;
       bladeburner.maxStamina = 1;
       bladeburner.calculateMaxStamina();
+    }
+    // "_teamSize" was "teamSize" in pre-v3 versions.
+    if ("teamSize" in value.data && Number.isFinite(value.data.teamSize)) {
+      bladeburner.teamSize = value.data.teamSize as number;
     }
     return bladeburner;
   }
