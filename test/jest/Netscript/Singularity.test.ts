@@ -727,6 +727,13 @@ describe("Intelligence", () => {
     expectIntelligenceExp(1000);
   });
   describe("Reset intelligence data", () => {
+    test("Install augmentations", () => {
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      Player.queueAugmentation(AugmentationName.Targeting1);
+      expect(installAugmentations()).toStrictEqual(true);
+      expectInitialIntelligenceData();
+    });
     test("Bitflume", () => {
       const ns = getNS();
 
@@ -738,12 +745,19 @@ describe("Intelligence", () => {
       // Reset intelligence data
       expectInitialIntelligenceData();
 
+      // We intentionally skip this scenario.
+      // For more information, please check https://github.com/bitburner-official/bitburner-src/pull/2666
+      // // Bitflume from non-BN5 to BN5.
+      // expect(Player.bitNodeN).toStrictEqual(1);
+      // manuallySetIntelligenceExp(50);
+      // expectIntelligenceExp(50);
+      // ns.singularity.b1tflum3(5);
+      // // Reset intelligence data and skill = 1
+      // expectIntelligenceExp(0);
+
       // Bitflume from non-BN5 to BN5.
-      expect(Player.bitNodeN).toStrictEqual(1);
-      manuallySetIntelligenceExp(50);
-      expectIntelligenceExp(50);
       ns.singularity.b1tflum3(5);
-      // Reset intelligence data and skill = 1
+      // Check if skill is set to 1.
       expectIntelligenceExp(0);
 
       // Bitflume from BN5 to BN5.
@@ -776,19 +790,24 @@ describe("Intelligence", () => {
       // Reset intelligence data
       expectInitialIntelligenceData();
 
-      // Destroy WD of non-BN5 and jump to BN5.
-      expect(Player.bitNodeN).toStrictEqual(1);
-      manuallySetIntelligenceExp(50);
-      expectIntelligenceExp(50);
-      setUpBeforeDestroyingWD();
-      ns.singularity.destroyW0r1dD43m0n(5);
-      // Reset intelligence data and skill = 1
-      expectIntelligenceExp(0);
+      // We intentionally skip this scenario.
+      // For more information, please check https://github.com/bitburner-official/bitburner-src/pull/2666
+      // // Destroy WD of non-BN5 and jump to BN5.
+      // expect(Player.bitNodeN).toStrictEqual(1);
+      // manuallySetIntelligenceExp(50);
+      // expectIntelligenceExp(50);
+      // setUpBeforeDestroyingWD();
+      // ns.singularity.destroyW0r1dD43m0n(5);
+      // // Reset intelligence data and skill = 1
+      // expectIntelligenceExp(0);
 
       // Destroy WD of BN5 and jump to BN5.
+      ns.singularity.b1tflum3(5);
       // Check the initial state that we want to test: in BN5 and do not have SF5.
       expect(Player.bitNodeN).toStrictEqual(5);
       expect(Player.sourceFileLvl(5)).toStrictEqual(0);
+      // Check if skill is set to 1.
+      expectIntelligenceExp(0);
       Player.gainIntelligenceExp(50);
       expectIntelligenceExp(50);
       setUpBeforeDestroyingWD();

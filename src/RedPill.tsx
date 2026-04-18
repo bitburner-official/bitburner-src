@@ -35,9 +35,6 @@ function giveSourceFile(bitNodeNumber: number): void {
     }
   } else {
     Player.sourceFiles.set(bitNodeNumber, 1);
-    if (bitNodeNumber === 5 && Player.skills.intelligence === 0) {
-      Player.skills.intelligence = 1;
-    }
     dialogBoxCreate(
       <>
         You received a Source-File for destroying a BitNode!
@@ -63,14 +60,6 @@ export function enterBitNode(
 
   if (!isFlume) {
     giveSourceFile(destroyedBitNode);
-  }
-  if (Player.sourceFileLvl(5) === 0 && (destroyedBitNode !== 5 || newBitNode !== 5)) {
-    Player.skills.intelligence = 0;
-    Player.exp.intelligence = 0;
-    Player.persistentIntelligenceData.exp = 0;
-  }
-  if (newBitNode === 5 && Player.skills.intelligence === 0) {
-    Player.skills.intelligence = 1;
   }
   // Set new Bit Node
   Player.bitNodeN = newBitNode;
