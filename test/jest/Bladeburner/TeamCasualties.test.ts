@@ -9,7 +9,6 @@ import { BladeburnerBlackOpName, BladeburnerContractName, BladeburnerOperationNa
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { recalculateNumberOfOwnedSleeves } from "../../../src/PersonObjects/Sleeve/SleeveCovenantPurchases";
 import { initGameEnvironment } from "../Utilities";
-import { BlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
 
 initGameEnvironment();
 
@@ -132,17 +131,17 @@ describe("Bladeburner Team", () => {
   });
 
   describe("Check teamSize and teamCount", () => {
-    test("Failing actions", () => {
+    test("Failed action", () => {
       teamSize(10);
       startAction(OP);
       forceMaxCasualties();
-      for (const action of [...Object.values(inst.operations), ...Object.values(BlackOperations)]) {
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
         action.teamCount = 10;
         expect(action.teamCount).toStrictEqual(10);
       }
       actionFails();
       expect(inst.teamSize).toStrictEqual(0);
-      for (const action of [...Object.values(inst.operations), ...Object.values(BlackOperations)]) {
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
         expect(action.teamCount).toStrictEqual(0);
       }
     });
@@ -152,7 +151,7 @@ describe("Bladeburner Team", () => {
       expect(inst.teamSize).toStrictEqual(9);
       startAction(OP);
       forceMaxCasualties();
-      for (const action of [...Object.values(inst.operations), ...Object.values(BlackOperations)]) {
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
         action.teamCount = 9;
         expect(action.teamCount).toStrictEqual(9);
       }
@@ -160,17 +159,17 @@ describe("Bladeburner Team", () => {
       // The teamCount of all operations/black operations should be 8, not 0.
       assertSleevesHaveBeenShocked();
       expect(inst.teamSize).toStrictEqual(8);
-      for (const action of [...Object.values(inst.operations), ...Object.values(BlackOperations)]) {
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
         expect(action.teamCount).toStrictEqual(8);
       }
       Player.sleeves[0].stopWork();
       expect(inst.teamSize).toStrictEqual(7);
-      for (const action of [...Object.values(inst.operations), ...Object.values(BlackOperations)]) {
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
         expect(action.teamCount).toStrictEqual(7);
       }
       Player.sleeves[0].startWork(new SleeveSupportWork());
       expect(inst.teamSize).toStrictEqual(8);
-      for (const action of [...Object.values(inst.operations), ...Object.values(BlackOperations)]) {
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
         expect(action.teamCount).toStrictEqual(7);
       }
     });
