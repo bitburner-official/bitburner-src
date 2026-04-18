@@ -77,7 +77,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
-    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
+    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault(), { passive: false });
     scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
     updateDisplay();
 
