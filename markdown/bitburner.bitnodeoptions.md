@@ -12,7 +12,7 @@ Default value:
 
 - All boolean options: false
 
-If you specify intelligenceOverride, it must be a non-negative integer.
+If you specify intelligenceOverride, it must be a positive integer.
 
 **Signature:**
 
