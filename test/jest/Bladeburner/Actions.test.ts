@@ -141,16 +141,13 @@ describe("Bladeburner Actions", () => {
       });
     });
 
-    describe.each([SampleContract, SampleOperation, SampleBlackOp])(
-      "non-general actions increase rank",
-      (id) => {
-        it(`${id.type}`, () => {
-          before = bb.rank;
-          complete(id, forceSuccess);
-          expect(bb.rank).toBeGreaterThan(before);
-        });
-      },
-    );
+    describe.each([SampleContract, SampleOperation, SampleBlackOp])("non-general actions increase rank", (id) => {
+      it(`${id.type}`, () => {
+        before = bb.rank;
+        complete(id, forceSuccess);
+        expect(bb.rank).toBeGreaterThan(before);
+      });
+    });
 
     describe("non-general actions increase rank", () => {
       let beforeMinor, minorGain, beforeMajor, majorGain;
