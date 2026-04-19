@@ -45,7 +45,7 @@ import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { getRecordEntries } from "../Types/Record";
 import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
-import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
+import { numberOfBlackOperations } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { addRepToFavor } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/Constants";
@@ -1176,7 +1176,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         if (!Player.bladeburner) {
           return false;
         }
-        return Player.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
+        return Player.bladeburner.numBlackOpsComplete >= numberOfBlackOperations;
       };
 
       if (!hackingRequirements() && !bladeburnerRequirements()) {

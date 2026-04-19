@@ -113,7 +113,9 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
 export function loadContractsData(data: unknown, contracts: Record<BladeburnerContractName, Contract>) {
   // loading data as "unknown" and typechecking it down is probably not necessary
   // but this will prevent crashes even with malformed savedata
-  if (!data || typeof data !== "object") return;
+  if (data == null || typeof data !== "object" || Array.isArray(data)) {
+    return;
+  }
   assertLoadingType<Record<BladeburnerContractName, unknown>>(data);
   for (const contractName of Object.values(BladeburnerContractName)) {
     const loadedContract = data[contractName];

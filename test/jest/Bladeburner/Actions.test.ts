@@ -7,6 +7,7 @@ import { Operation } from "../../../src/Bladeburner/Actions/Operation";
 import {
   AugmentationName,
   BladeburnerActionType,
+  BladeburnerBlackOpName,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
   BladeburnerOperationName,
@@ -17,15 +18,15 @@ import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import { CrimeWork } from "../../../src/Work/CrimeWork";
 import type { Action, ActionIdentifier } from "../../../src/Bladeburner/Types";
 import type { Skills } from "@nsdefs";
-import { BlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
 import { applyAugmentation } from "../../../src/Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
+import { BlackOperation } from "../../../src/Bladeburner/Actions/BlackOperation";
 
 describe("Bladeburner Actions", () => {
   const SampleContract = Contract.createId(BladeburnerContractName.Tracking);
   const SampleGeneralAction = GeneralAction.createId(BladeburnerGeneralActionName.Diplomacy);
   const SampleOperation = Operation.createId(BladeburnerOperationName.Assassination);
-  const SampleBlackOp = BlackOperations["Operation Centurion"].id;
+  const SampleBlackOp = BlackOperation.createId(BladeburnerBlackOpName.OperationCenturion);
 
   const ENOUGH_TIME_TO_FINISH_ACTION = 1e5;
   const BASE_STAT_EXP = 1e6;
@@ -37,7 +38,8 @@ describe("Bladeburner Actions", () => {
 
   const contracts = Object.values(new Bladeburner().contracts);
   const operations = Object.values(new Bladeburner().operations);
-  const nonGeneralActions = [contracts, operations, Object.values(BlackOperations)].flat();
+  const blackOperations = Object.values(new Bladeburner().blackOperations);
+  const nonGeneralActions = [contracts, operations, blackOperations].flat();
 
   describe("Without Simulacrum", () => {
     it("Starting an action cancels player's work immediately", () => {
@@ -139,16 +141,13 @@ describe("Bladeburner Actions", () => {
       });
     });
 
-    describe.each([SampleContract, SampleOperation, BlackOperations["Operation Archangel"].id])(
-      "non-general actions increase rank",
-      (id) => {
-        it(`${id.type}`, () => {
-          before = bb.rank;
-          complete(id, forceSuccess);
-          expect(bb.rank).toBeGreaterThan(before);
-        });
-      },
-    );
+    describe.each([SampleContract, SampleOperation, SampleBlackOp])("non-general actions increase rank", (id) => {
+      it(`${id.type}`, () => {
+        before = bb.rank;
+        complete(id, forceSuccess);
+        expect(bb.rank).toBeGreaterThan(before);
+      });
+    });
 
     describe("non-general actions increase rank", () => {
       let beforeMinor, minorGain, beforeMajor, majorGain;

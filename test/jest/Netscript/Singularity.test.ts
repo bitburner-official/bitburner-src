@@ -1,5 +1,4 @@
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
-import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
 import { AugmentationName, CompanyName, CompletedProgramName, FactionName, JobField, JobName } from "@enums";
 import { Player } from "@player";
 import { prestigeSourceFile } from "../../../src/Prestige";
@@ -14,6 +13,7 @@ import { Companies } from "../../../src/Company/Companies";
 import { CompanyPositions } from "../../../src/Company/CompanyPositions";
 import { getTorRouter } from "../../../src/Server/ServerHelpers";
 import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
+import { numberOfBlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
 
 const nextBN = 4;
 
@@ -194,7 +194,7 @@ function setUpBeforeDestroyingWD(): void {
   const wdServer = GetServerOrThrow(SpecialServers.WorldDaemon);
   wdServer.hasAdminRights = true;
   Player.startBladeburner();
-  setNumBlackOpsComplete(blackOpsArray.length);
+  setNumBlackOpsComplete(numberOfBlackOperations);
 }
 
 describe("b1tflum3", () => {

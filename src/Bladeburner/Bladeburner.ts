@@ -47,7 +47,7 @@ import { createContracts, loadContractsData } from "./data/Contracts";
 import { createOperations, loadOperationsData } from "./data/Operations";
 import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
 import { parseCommand } from "../Terminal/Parser";
-import { BlackOperations } from "./data/BlackOperations";
+import { createBlackOperations, loadBlackOperationsData } from "./data/BlackOperations";
 import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
@@ -92,7 +92,7 @@ export class Bladeburner implements OperationTeam {
     }
     this._teamSize = newSize;
     // Reduce teamCount of actions if it's greater than the team size.
-    for (const action of [...Object.values(this.operations), ...Object.values(BlackOperations)]) {
+    for (const action of [...Object.values(this.operations), ...Object.values(this.blackOperations)]) {
       action.teamCount = Math.min(action.teamCount, this._teamSize);
     }
   }
@@ -120,9 +120,13 @@ export class Bladeburner implements OperationTeam {
   staminaBonus = 0;
   maxStamina = 1;
   stamina = 1;
-  // Contracts and operations are stored on the Bladeburner object even though they are global so that they can utilize save/load of the main bladeburner object
+  // Contracts, operations and blackOps are stored on the Bladeburner object even though they are global so that they
+  // can utilize save/load of the main bladeburner object
   contracts: Record<BladeburnerContractName, Contract>;
   operations: Record<BladeburnerOperationName, Operation>;
+  blackOperations: Record<BladeburnerBlackOpName, BlackOperation>;
+  // Array for quick lookup by BlackOp number
+  blackOperationArray: BlackOperation[];
   numBlackOpsComplete = 0;
   logging = {
     general: true,
@@ -143,6 +147,11 @@ export class Bladeburner implements OperationTeam {
   constructor() {
     this.contracts = createContracts();
     this.operations = createOperations();
+    this.blackOperations = createBlackOperations();
+    this.blackOperationArray = Object.values(this.blackOperations).sort((a, b) => (a.n < b.n ? -1 : 1));
+    if (!this.blackOperationArray.every((blackOp, i) => blackOp.n === i)) {
+      throw new Error("blackOperationArray is not initialized with correct indices");
+    }
   }
 
   // Initialization code that is dependent on Player is here instead of in the constructor
@@ -1431,7 +1440,7 @@ export class Bladeburner implements OperationTeam {
       case BladeburnerActionType.Operation:
         return this.operations[actionId.name];
       case BladeburnerActionType.BlackOp:
-        return BlackOperations[actionId.name];
+        return this.blackOperations[actionId.name];
       case BladeburnerActionType.General:
         return GeneralActions[actionId.name];
     }
@@ -1450,7 +1459,7 @@ export class Bladeburner implements OperationTeam {
       case BladeburnerActionType.Operation:
         return this.operations[name as BladeburnerOperationName];
       case BladeburnerActionType.BlackOp:
-        return BlackOperations[name as BladeburnerBlackOpName];
+        return this.blackOperations[name as BladeburnerBlackOpName];
     }
   }
 
@@ -1461,9 +1470,11 @@ export class Bladeburner implements OperationTeam {
     return id ? this.getActionObject(id) : null;
   }
 
-  static keysToSave = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers"] });
+  static keysToSave = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers", "blackOperationArray"] });
   // Don't load contracts or operations because of the special loading method they use, see fromJSON
-  static keysToLoad = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers", "contracts", "operations"] });
+  static keysToLoad = getKeyList(Bladeburner, {
+    removedKeys: ["skillMultipliers", "contracts", "operations", "blackOperations", "blackOperationArray"],
+  });
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
@@ -1473,9 +1484,10 @@ export class Bladeburner implements OperationTeam {
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
     assertObject(value.data);
-    // operations and contracts are not loaded directly from the save, we load them in using a different method
+    // Contracts, operations, and black ops are not loaded directly from the save; they are loaded via a different method.
     const contractsData = value.data.contracts;
     const operationsData = value.data.operations;
+    const blackOperationsData = value.data.blackOperations;
     const bladeburner = Generic_fromJSON(Bladeburner, value.data, Bladeburner.keysToLoad);
 
     /**
@@ -1496,10 +1508,11 @@ export class Bladeburner implements OperationTeam {
         bladeburner.automateActionLow = loadActionIdentifier(bladeburner.automateActionLow);
       }
     }
-    // Loading this way allows better typesafety and also allows faithfully reconstructing contracts/operations
+    // Loading this way allows better typesafety and also allows faithfully reconstructing contracts/operations/blackOps
     // even from save data that is missing a lot of static info about the objects.
     loadContractsData(contractsData, bladeburner.contracts);
     loadOperationsData(operationsData, bladeburner.operations);
+    loadBlackOperationsData(blackOperationsData, bladeburner.blackOperations);
     // Regenerate skill multiplier data, which is not included in savedata
     bladeburner.updateSkillMultipliers();
     // If stamina or maxStamina is invalid, we set both of them to 1 and recalculate them.
