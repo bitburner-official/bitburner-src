@@ -147,8 +147,14 @@ export abstract class Person implements IPerson {
   }
 
   overrideIntelligence(): void {
-    // Do not set anything if the player has not unlocked Intelligence.
+    // Reset intelligence data if the player has not unlocked Intelligence.
+    // Note that this check cannot reset intelligence data in some edge cases (e.g., bitflume from non-BN5 to BN5). This
+    // is an accepted limitation.
+    // For more information, please check https://github.com/bitburner-official/bitburner-src/pull/2666
     if (Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
+      this.skills.intelligence = 0;
+      this.exp.intelligence = 0;
+      this.persistentIntelligenceData.exp = 0;
       return;
     }
     const persistentIntelligenceSkill = this.calculateSkill(this.persistentIntelligenceData.exp, 1);
