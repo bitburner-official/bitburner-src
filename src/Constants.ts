@@ -147,10 +147,10 @@ export const CONSTANTS = {
 
 ### MAJOR CHANGES
 
+- Added Darknet, a new mechanic based on spreading through an unstable network and cracking passwords. Purchase DarkscapeNavigator.exe in the terminal to unlock access. (#2139) (@ficocelliguy)
 - Balance change: IPvGO: Improve favor gain from wins to balance around the rep value of favor (#2131) (@ficocelliguy)
 - Search and read NS API docs in editor tab and documentation tab (#2163) (@catloversg)
 - Balance change: Infiltration: Rebalance rewards, add min stat requirement, add market demand (#2210) (@ficocelliguy, @d0sboots, @catloversg)
-- Add Dark Net (#2139) (@ficocelliguy)
 
 ### UI
 
