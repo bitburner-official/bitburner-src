@@ -24,14 +24,6 @@ export class GraftingWork extends Work {
   augmentation: AugmentationName;
   unitCompleted: number;
   unitRate: number;
-  completionPromisePair: PromisePair<void> = { promise: null, resolve: null };
-
-  get completion(): Promise<void> {
-    if (!this.completionPromisePair.promise) {
-      this.completionPromisePair.promise = new Promise((r) => (this.completionPromisePair.resolve = r));
-    }
-    return this.completionPromisePair.promise;
-  }
 
   constructor(params?: GraftingWorkParams) {
     super(WorkType.GRAFTING, params?.singularity ?? true);
@@ -97,12 +89,6 @@ export class GraftingWork extends Work {
         (CONSTANTS.IntelligenceGraftBaseExpGain * this.cyclesWorked * CONSTANTS.MilliPerCycle) / 10000,
       );
     }
-
-    if (this.completionPromisePair.resolve) {
-      this.completionPromisePair.resolve();
-      this.completionPromisePair.resolve = null;
-      this.completionPromisePair.promise = null;
-    }
   }
 
   APICopy() {
@@ -110,11 +96,10 @@ export class GraftingWork extends Work {
       type: WorkType.GRAFTING as const,
       cyclesWorked: this.cyclesWorked,
       augmentation: this.augmentation,
-      completion: this.completion,
     };
   }
 
-  static savedKeys = getKeyList(GraftingWork, { removedKeys: ["completionPromisePair"] });
+  static savedKeys = getKeyList(GraftingWork);
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
