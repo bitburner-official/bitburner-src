@@ -87,7 +87,7 @@ For products, this value is stored as `product.productionCost` for the current c
 
 ### Markup limit
 
-Material's markup is a constant stat per material.
+Material's markup is a constant stat per material. In NS API, it is available as `getMaterialData(..).baseMarkup`. (Although it's called `baseMarkup`, it is always used as-is for determining markup limit.)
 
 ```javascript
 const markupLimit = materialQuality / materialMarkup;

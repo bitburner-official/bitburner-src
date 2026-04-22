@@ -1,6 +1,6 @@
 # Product
 
-In some industries, you can develop new products. This takes some time. After development, the product can be produced and sold.
+In some industries, you can develop new products. This takes some time. After development, the product can be produced and sold. Products are produced using the industry's input materials.
 
 Each product has rating and quality stats, which are based on the stats of the office over time as the office develops the product. The rating and quality stats factor into the max sale volume and markup for the product when you try to sell it.
 
