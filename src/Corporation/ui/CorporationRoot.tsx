@@ -27,7 +27,7 @@ export function CorporationRoot(): React.ReactElement {
 
   return (
     <Context.Corporation.Provider value={corporation}>
-      <Tabs variant="scrollable" value={divisionName} onChange={handleChange} sx={{ maxWidth: "65vw" }} scrollButtons>
+      <Tabs variant="scrollable" value={divisionName} onChange={handleChange} scrollButtons>
         <Tab label={corporation.name} value={"Overview"} />
         {[...corporation.divisions.values()].map((div) => (
           <Tab key={div.name} label={div.name} value={div.name} />
