@@ -144,14 +144,18 @@ export function getModuleScript(
       throw new ModuleResolutionError(`Invalid module: "${moduleName}". Base module: "${baseModule}".`);
     }
     script = scripts.get(filename);
-    if (script) {
-      break;
+    if (script) return script;
+  }
+  // If no script was found with the base name, check for a folder with index file
+  for (const extension of validScriptExtensions) {
+    const filename = resolveScriptFilePath(`${moduleName}/index`, baseModule, extension);
+    if (!filename) {
+      throw new ModuleResolutionError(`Invalid module: "${moduleName}". Base module: "${baseModule}".`);
     }
+    script = scripts.get(filename);
+    if (script) return script;
   }
-  if (!script) {
-    throw new ModuleResolutionError(`Invalid module: "${moduleName}". Base module: "${baseModule}".`);
-  }
-  return script;
+  throw new ModuleResolutionError(`Invalid module: "${moduleName}". Base module: "${baseModule}".`);
 }
 
 /**
