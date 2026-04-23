@@ -43,7 +43,7 @@ const wilsonUpgradeBenefit = 1 + 0.005 * currentLevel;
 
 ## Research
 
-Research Points (RP) are gained in the states PURCHASE, PRODUCTION, EXPORT, and SALE.
+Research Points (RP) is a division-level value. Each office contributes an RP gain to its division's research pool in the states PURCHASE, PRODUCTION, EXPORT, and SALE.
 
 ```javascript
 const rndProduction = office.employeeProductionByJob["Research & Development"];
