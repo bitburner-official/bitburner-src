@@ -70,7 +70,7 @@ const effectiveEfficiency =
 Energy and morale are applied through the production base:
 
 ```javascript
-const productionBase = avgMorale * avgEnergy * 0.0001;
+const productionBase = (avgMorale / 100) * (avgEnergy / 100);
 ```
 
 Experience is average experience per employee. With no employees, it is 0:
