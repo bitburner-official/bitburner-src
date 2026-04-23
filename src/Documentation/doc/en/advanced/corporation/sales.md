@@ -21,7 +21,7 @@ const maxSellPerSecond =
   advertisingMultiplier;
 ```
 
-This amount is capped by requested sell amount and your warehouse stored quantites. Revenue is `price * quantity`.
+This max sale volume is per-warehouse. It is capped by requested sell amount and your warehouse stored quantites. Revenue is `price * quantity`.
 
 ## Item multiplier
 
