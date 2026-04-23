@@ -14,6 +14,9 @@ const markdownRoot = resolve(__dirname, "../../markdown");
 const docImagesRoot = resolve(__dirname, "../../src/Documentation/images");
 
 function addFileToListOfDocPages(files, root, filePath) {
+  if (filePath.endsWith(".DS_Store")) {
+    return;
+  }
   // Windows path uses "\", so we need to replace it with "/".
   files.push(relative(root, filePath).replace(/\\/g, "/"));
 }
