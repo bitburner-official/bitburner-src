@@ -24,13 +24,13 @@ export class GraftingWork extends Work {
   augmentation: AugmentationName;
   unitCompleted: number;
   unitRate: number;
-  completionPromisePair: PromisePair<void> = { promise: null, resolve: null };
+  nextCompletionPromisePair: PromisePair<void> = { promise: null, resolve: null };
 
-  get completion(): Promise<void> {
-    if (!this.completionPromisePair.promise) {
-      this.completionPromisePair.promise = new Promise((r) => (this.completionPromisePair.resolve = r));
+  get nextCompletion(): Promise<void> {
+    if (!this.nextCompletionPromisePair.promise) {
+      this.nextCompletionPromisePair.promise = new Promise((r) => (this.nextCompletionPromisePair.resolve = r));
     }
-    return this.completionPromisePair.promise;
+    return this.nextCompletionPromisePair.promise;
   }
 
   constructor(params?: GraftingWorkParams) {
@@ -98,10 +98,10 @@ export class GraftingWork extends Work {
       );
     }
 
-    if (this.completionPromisePair.resolve) {
-      this.completionPromisePair.resolve();
-      this.completionPromisePair.resolve = null;
-      this.completionPromisePair.promise = null;
+    if (this.nextCompletionPromisePair.resolve) {
+      this.nextCompletionPromisePair.resolve();
+      this.nextCompletionPromisePair.resolve = null;
+      this.nextCompletionPromisePair.promise = null;
     }
   }
 
@@ -110,11 +110,11 @@ export class GraftingWork extends Work {
       type: WorkType.GRAFTING as const,
       cyclesWorked: this.cyclesWorked,
       augmentation: this.augmentation,
-      completion: this.completion,
+      nextCompletion: this.nextCompletion,
     };
   }
 
-  static savedKeys = getKeyList(GraftingWork, { removedKeys: ["completionPromisePair"] });
+  static savedKeys = getKeyList(GraftingWork, { removedKeys: ["nextCompletionPromisePair"] });
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {

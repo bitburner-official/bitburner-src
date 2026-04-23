@@ -137,6 +137,7 @@ export class ClassWork extends Work {
       cyclesWorked: this.cyclesWorked,
       classType: this.classType,
       location: this.location,
+      nextCompletion: Promise.resolve(),
     };
   }
 

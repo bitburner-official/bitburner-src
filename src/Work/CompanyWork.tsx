@@ -66,6 +66,7 @@ export class CompanyWork extends Work {
       type: WorkType.COMPANY as const,
       cyclesWorked: this.cyclesWorked,
       companyName: this.companyName,
+      nextCompletion: Promise.resolve(),
     };
   }
 

@@ -51,6 +51,7 @@ export class SleeveCompanyWork extends SleeveWorkClass {
     return {
       type: SleeveWorkType.COMPANY as const,
       companyName: this.companyName,
+      nextCompletion: Promise.resolve(),
     };
   }
 

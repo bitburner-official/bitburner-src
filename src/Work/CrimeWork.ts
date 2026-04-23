@@ -93,6 +93,7 @@ export class CrimeWork extends Work {
       type: WorkType.CRIME as const,
       cyclesWorked: this.cyclesWorked,
       crimeType: this.crimeType,
+      nextCompletion: Promise.resolve(),
     };
   }
 

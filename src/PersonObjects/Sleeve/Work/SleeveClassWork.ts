@@ -46,6 +46,7 @@ export class SleeveClassWork extends SleeveWorkClass {
       type: SleeveWorkType.CLASS as const,
       classType: this.classType,
       location: this.location,
+      nextCompletion: Promise.resolve(),
     };
   }
   /** Serialize the current object to a JSON save state. */

@@ -73,6 +73,7 @@ export class FactionWork extends Work {
       cyclesWorked: this.cyclesWorked,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,
+      nextCompletion: Promise.resolve(),
     };
   }
 

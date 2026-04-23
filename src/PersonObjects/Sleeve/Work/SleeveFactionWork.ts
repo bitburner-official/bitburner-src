@@ -56,6 +56,7 @@ export class SleeveFactionWork extends SleeveWorkClass {
       type: SleeveWorkType.FACTION as const,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,
+      nextCompletion: Promise.resolve(),
     };
   }
 

@@ -2,13 +2,72 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveCompanyTask](./bitburner.sleevecompanytask.md)
 
-## SleeveCompanyTask type
+## SleeveCompanyTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
+interface SleeveCompanyTask extends SleeveBaseTask 
 ```
-**References:** [CompanyName](./bitburner.companyname.md)
+**Extends:** [SleeveBaseTask](./bitburner.sleevebasetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[companyName](./bitburner.sleevecompanytask.companyname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CompanyName](./bitburner.companyname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.sleevecompanytask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"COMPANY"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

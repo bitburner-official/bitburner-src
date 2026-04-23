@@ -1100,58 +1100,80 @@ interface GangMemberAscension {
 }
 
 /** @public */
-type SleeveBladeburnerTask = {
+interface SleeveBaseTask {
+  /**
+   * This promise resolves when the task completes or is canceled.
+   *
+   * Currently, this promise resolves immediately for most tasks, except
+   * {@link SleeveBladeburnerTask | SleeveBladeburnerTask} and {@link SleeveInfiltrateTask | SleeveInfiltrateTask}.
+   * Support for other tasks will be added in future versions.
+   *
+   * Note that this promise always resolves immediately for tasks that do not track progress (e.g., SleeveClassTask,
+   * SleeveCompanyTask, SleeveFactionTask).
+   */
+  nextCompletion: Promise<void>;
+}
+
+/** @public */
+interface SleeveBladeburnerTask extends SleeveBaseTask {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
   cyclesWorked: number;
   cyclesNeeded: number;
-  nextCompletion: Promise<void>;
   tasksCompleted: number;
-};
+}
 
 /** @public */
-type SleeveClassTask = {
+interface SleeveClassTask extends SleeveBaseTask {
   type: "CLASS";
   classType: UniversityClassType | GymType;
   location: LocationName;
-};
+}
 
 /** @public */
-type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
+interface SleeveCompanyTask extends SleeveBaseTask {
+  type: "COMPANY";
+  companyName: CompanyName;
+}
 
 /** @public */
-type SleeveCrimeTask = {
+interface SleeveCrimeTask extends SleeveBaseTask {
   type: "CRIME";
   crimeType: CrimeType;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;
-};
+}
 
 /** @public */
-type SleeveFactionTask = {
+interface SleeveFactionTask extends SleeveBaseTask {
   type: "FACTION";
   factionWorkType: FactionWorkType;
   factionName: FactionName;
-};
+}
 
 /** @public */
-type SleeveInfiltrateTask = {
+interface SleeveInfiltrateTask extends SleeveBaseTask {
   type: "INFILTRATE";
   cyclesWorked: number;
   cyclesNeeded: number;
-  nextCompletion: Promise<void>;
-};
+}
 
 /** @public */
-type SleeveRecoveryTask = { type: "RECOVERY" };
+interface SleeveRecoveryTask extends SleeveBaseTask {
+  type: "RECOVERY";
+}
 
 /** @public */
-type SleeveSupportTask = { type: "SUPPORT" };
+interface SleeveSupportTask extends SleeveBaseTask {
+  type: "SUPPORT";
+}
 
 /** @public */
-type SleeveSynchroTask = { type: "SYNCHRO" };
+interface SleeveSynchroTask extends SleeveBaseTask {
+  type: "SYNCHRO";
+}
 
 /** Object representing a sleeve current task.
  * @public */
@@ -1747,6 +1769,16 @@ export interface BaseTask {
    * The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
    */
   cyclesWorked: number;
+  /**
+   * This promise resolves when the task completes or is canceled.
+   *
+   * Currently, this promise resolves immediately for most tasks, except {@link GraftingTask | GraftingTask}. Support
+   * for other tasks will be added in future versions.
+   *
+   * Note that this promise always resolves immediately for tasks that do not track progress (e.g., StudyTask,
+   * CompanyWorkTask, FactionWorkTask).
+   */
+  nextCompletion: Promise<void>;
 }
 
 /**
@@ -1827,10 +1859,6 @@ export interface FactionWorkTask extends BaseTask {
 export interface GraftingTask extends BaseTask {
   type: "GRAFTING";
   augmentation: string;
-  /**
-   * This promise resolves when the task is complete.
-   */
-  completion: Promise<void>;
 }
 
 /**

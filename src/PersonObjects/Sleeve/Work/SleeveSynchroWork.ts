@@ -19,7 +19,10 @@ export class SleeveSynchroWork extends SleeveWorkClass {
   }
 
   APICopy() {
-    return { type: SleeveWorkType.SYNCHRO as const };
+    return {
+      type: SleeveWorkType.SYNCHRO as const,
+      nextCompletion: Promise.resolve(),
+    };
   }
 
   /** Serialize the current object to a JSON save state. */

@@ -59,6 +59,7 @@ export class SleeveCrimeWork extends SleeveWorkClass {
       tasksCompleted: this.tasksCompleted,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(),
+      nextCompletion: Promise.resolve(),
     };
   }
 

@@ -54,5 +54,28 @@ The number of game engine cycles has passed since this task started. 1 engine cy
 
 
 </td></tr>
+<tr><td>
+
+[nextCompletion](./bitburner.basetask.nextcompletion.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Promise&lt;void&gt;
+
+
+</td><td>
+
+This promise resolves when the task completes or is canceled.
+
+Currently, this promise resolves immediately for most tasks, except [GraftingTask](./bitburner.graftingtask.md)<!-- -->. Support for other tasks will be added in future versions.
+
+Note that this promise always resolves immediately for tasks that do not track progress (e.g., StudyTask, CompanyWorkTask, FactionWorkTask).
+
+
+</td></tr>
 </tbody></table>
 

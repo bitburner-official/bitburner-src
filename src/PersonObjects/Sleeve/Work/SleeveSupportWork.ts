@@ -19,7 +19,10 @@ export class SleeveSupportWork extends SleeveWorkClass {
   }
 
   APICopy() {
-    return { type: SleeveWorkType.SUPPORT as const };
+    return {
+      type: SleeveWorkType.SUPPORT as const,
+      nextCompletion: Promise.resolve(),
+    };
   }
 
   /** Serialize the current object to a JSON save state. */

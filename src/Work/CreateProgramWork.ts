@@ -101,6 +101,7 @@ export class CreateProgramWork extends Work {
       type: WorkType.CREATE_PROGRAM as const,
       cyclesWorked: this.cyclesWorked,
       programName: this.programName,
+      nextCompletion: Promise.resolve(),
     };
   }
 
