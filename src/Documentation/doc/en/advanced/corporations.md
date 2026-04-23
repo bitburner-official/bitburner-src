@@ -38,6 +38,7 @@ Grow profits. Increase your corporation's valuation and pay yourself from corpor
 
 - [Financials](./corporation/financials.md) - Valuation, investors, IPO
 - [Office](./corporation/office.md) - Employees, office stats
+- [Warehouse](./corporation/warehouse.md)
 - [Production rates](./corporation/production-rates.md)
 - [Sales](./corporation/sales.md) - How to sell for higher prices
 - [Products](./corporation/product.md) - Product stats
