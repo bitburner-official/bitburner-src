@@ -32,7 +32,9 @@ export class Port {
       try {
         value = structuredClone(data);
       } catch (ex) {
-        throw new Error("You can't send Functions, Promises, NS, or other unserializable data through ports!", {cause: ex});
+        throw new Error("You can't send Functions, Promises, NS, or other unserializable data through ports!", {
+          cause: ex,
+        });
       }
     }
     this.data.push(value);
