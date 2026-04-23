@@ -5,12 +5,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { KEY } from "../../../utils/KeyboardEventKey";
-import { Material } from "../../Material";
+import type { Warehouse } from "../../Warehouse";
 
 interface IProps {
   open: boolean;
   onClose: () => void;
-  material: Material;
+  warehouse: Warehouse;
 }
 
 // Create a popup that lets the player limit the production of a product
@@ -27,7 +27,7 @@ export function LimitMaterialProductionModal(props: IProps): React.ReactElement 
   function limitMaterialProduction(): void {
     let qty = limit;
     if (qty === null) qty = -1;
-    actions.limitMaterialProduction(props.material, qty);
+    actions.limitMaterialProduction(props.warehouse, qty);
     props.onClose();
   }
 
@@ -43,11 +43,11 @@ export function LimitMaterialProductionModal(props: IProps): React.ReactElement 
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter a limit to the amount of this material you would like to produce per second. Leave the box empty to set no
+        Enter a limit to the amount of material you would like to produce per second. Leave the box empty to set no
         limit.
       </Typography>
       <TextField autoFocus={true} placeholder="Limit" type="number" onChange={onChange} onKeyDown={onKeyDown} />
-      <Button onClick={limitMaterialProduction}>Limit production</Button>
+      <Button onClick={limitMaterialProduction}>Limit material production</Button>
     </Modal>
   );
 }

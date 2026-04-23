@@ -639,5 +639,41 @@ export const breakingChanges300: VersionBreakingChange = {
         "The function was renamed because it returns information about all gangs, including the player's own gang.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "limitMaterialProduction",
+          migration: {
+            searchValue: "limitMaterialProduction",
+            migrator: (line: string) => {
+              return line.replace(
+                // Use \b to prevent matching fooLimitMaterialProduction() or bar_limitMaterialProduction()
+                // Use \s* before the first "(" to match `limitMaterialProduction ("foo","","",0)`
+                // In order to extract 4 params:
+                // - First three params: [^,]+ (stop at commas)
+                // - Last param: [^)]+ (stop at closing parenthesis)
+                // This regex does not support complex cases such as limitMaterialProduction("a","b", foo("c","d"), 0).
+                // This API is rarely used, so it's not worth the effort to write a more complex regex or parser.
+                /\blimitMaterialProduction\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\s*\)/g,
+                (_, arg1, arg2, _removed, arg4) => {
+                  return `limitMaterialProduction(${arg1}, ${arg2}, ${arg4})`;
+                },
+              );
+            },
+          },
+        },
+        {
+          name: "productionLimit",
+        },
+      ],
+      info:
+        "ns.corporation.limitMaterialProduction previously required you to specify a material name, but it did not\n" +
+        "work as expected. While the production limit appeared to be applied per material, only the limit of the\n" +
+        "first output material was actually considered in calculations. This means the limit was effectively applied\n" +
+        "per warehouse, using the value taken from the first output material.\n" +
+        "To reflect this behavior accurately, the third parameter of limitMaterialProduction (materialName) was removed." +
+        "The productionLimit property was also moved from Material to Warehouse.",
+      showWarning: false,
+    },
   ],
 };

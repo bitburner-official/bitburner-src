@@ -6,6 +6,7 @@ import * as db from "../../../src/db";
 import * as FileUtils from "../../../src/utils/FileUtils";
 import type { SaveData } from "../../../src/types";
 import { calculateExp } from "../../../src/PersonObjects/formulas/skill";
+import { IndustryType } from "../../../src/Enums";
 
 async function loadGameFromSaveData(saveData: SaveData) {
   // Simulate loading the data in IndexedDB
@@ -40,10 +41,18 @@ describe("v3", () => {
       throw new Error("The save file does not have corporation data");
     }
     expect(Object.keys(Player.corporation.upgrades).includes("DreamSense")).toStrictEqual(false);
-    expect(Player.corporation.funds).toStrictEqual(110e9);
+    expect(Player.corporation.funds).toStrictEqual(90e9);
+
+    expect(
+      Player.corporation.divisions.get("Agriculture")?.warehouses["Sector-12"]?.materialProductionLimit,
+    ).toStrictEqual(300);
+    expect(Player.corporation.divisions.get("Tobacco")?.industry).toStrictEqual(IndustryType.Tobacco);
+    expect(Player.corporation.divisions.get("Tobacco")?.warehouses["Sector-12"]?.materialProductionLimit).toStrictEqual(
+      null,
+    );
 
     // Check if evaluateVersionCompatibility correctly loads the data in IndexedDB and passes it to downloadContentAsFile
-    expect(mockedDownload).toHaveBeenCalledWith(saveData, "bitburnerSave_backup_2.8.1_1756913326.json.gz");
+    expect(mockedDownload).toHaveBeenCalledWith(saveData, "bitburnerSave_backup_2.8.1_1776914291.json.gz");
   });
 
   test.each([

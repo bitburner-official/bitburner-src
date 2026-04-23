@@ -1,5 +1,5 @@
-// React Component for displaying an Industry's OfficeSpace information
-// (bottom-left panel in the Industry UI)
+// React Component for displaying a Division's OfficeSpace information
+// (bottom-left panel in the Division UI)
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";

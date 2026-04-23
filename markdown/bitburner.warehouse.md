@@ -75,6 +75,25 @@ Amount of size upgrade bought
 </td></tr>
 <tr><td>
 
+[materialProductionLimit](./bitburner.warehouse.materialproductionlimit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| null
+
+
+</td><td>
+
+A limit on the maximum amount to produce per second
+
+
+</td></tr>
+<tr><td>
+
 [size](./bitburner.warehouse.size.md)
 
 

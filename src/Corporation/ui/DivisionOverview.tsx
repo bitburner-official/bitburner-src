@@ -1,4 +1,4 @@
-// React Component for displaying an Division's overview information
+// React Component for displaying a Division's overview information
 // (top-left panel in the Division UI)
 import React, { useState } from "react";
 

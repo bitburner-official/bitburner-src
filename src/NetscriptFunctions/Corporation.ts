@@ -224,6 +224,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         size: warehouse.size,
         sizeUsed: warehouse.sizeUsed,
         smartSupplyEnabled: warehouse.smartSupplyEnabled,
+        materialProductionLimit: warehouse.materialProductionLimit,
       };
     },
     getMaterial: (ctx) => (_divisionName, _cityName, _materialName) => {
@@ -248,7 +249,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         importAmount: material.importAmount,
         actualSellAmount: material.actualSellAmount,
         exports: exports,
-        productionLimit: material.productionLimit,
       };
     },
     getProduct: (ctx) => (_divisionName, _cityName, _productName) => {
@@ -424,13 +424,12 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
         cancelExportMaterial(targetDivision, targetCity, getMaterial(sourceDivision, sourceCity, materialName));
       },
-    limitMaterialProduction: (ctx) => (_divisionName, _cityName, _materialName, _qty) => {
+    limitMaterialProduction: (ctx) => (_divisionName, _cityName, _qty) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
-      const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const qty = helpers.number(ctx, "qty", _qty);
-      limitMaterialProduction(getMaterial(divisionName, cityName, materialName), qty);
+      limitMaterialProduction(getWarehouse(divisionName, cityName), qty);
     },
     setMaterialMarketTA1: (ctx) => (_divisionName, _cityName, _materialName, _on) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);

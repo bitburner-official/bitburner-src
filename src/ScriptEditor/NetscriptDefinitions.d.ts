@@ -10090,15 +10090,19 @@ export interface WarehouseAPI {
   /**
    * Limit material production.
    *
+   * The limit is applied to all output materials per warehouse, identified by the division and the city.
+   *
+   * You can set the limit on any warehouse. If the specified division's industry does not produce materials, the limit
+   * has no effect.
+   *
    * @remarks
    * RAM cost: 20 GB
    *
    * @param divisionName - Name of the division.
    * @param city - Name of the city.
-   * @param materialName - Name of the material.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitMaterialProduction(divisionName: string, city: CityName, materialName: CorpMaterialName, qty: number): void;
+  limitMaterialProduction(divisionName: string, city: CityName, qty: number): void;
 
   /**
    * Limit product production.
@@ -10813,8 +10817,6 @@ interface Material {
   desiredSellAmount: string | number;
   /** Export orders */
   exports: Export[];
-  /** A limit on the maximum amount to produce per second */
-  productionLimit: number | null;
 }
 
 /**
@@ -10845,6 +10847,8 @@ interface Warehouse {
   sizeUsed: number;
   /** Smart Supply status in the warehouse */
   smartSupplyEnabled: boolean;
+  /** A limit on the maximum amount to produce per second */
+  materialProductionLimit: number | null;
 }
 
 /**

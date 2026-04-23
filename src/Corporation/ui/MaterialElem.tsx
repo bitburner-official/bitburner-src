@@ -1,4 +1,4 @@
-// React Component for displaying an Industry's warehouse information
+// React Component for displaying material information
 // (right-side panel in the Industry UI)
 import React, { useState } from "react";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
@@ -11,7 +11,6 @@ import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
 import { formatBigNumber, formatCorpStat, formatQuality } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
-import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
 import { StatsTable } from "../../ui/React/StatsTable";
 
 interface IMaterialProps {
@@ -28,7 +27,6 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   const [purchaseMaterialOpen, setPurchaseMaterialOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [sellMaterialOpen, setSellMaterialOpen] = useState(false);
-  const [limitProductionOpen, setLimitProductionOpen] = useState(false);
 
   const warehouse = props.warehouse;
   const city = props.city;
@@ -71,12 +69,6 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     </>;
   } else {
     sellButtonText = <>Sell (0.000/0.000)</>;
-  }
-
-  // Limit Production button
-  let limitMaterialButtonText = "Limit Material";
-  if (mat.productionLimit !== null) {
-    limitMaterialButtonText += " (" + formatCorpStat(mat.productionLimit) + ")";
   }
 
   // Material Gain details
@@ -157,14 +149,6 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             div={division}
             open={sellMaterialOpen}
             onClose={() => setSellMaterialOpen(false)}
-          />
-          <Button color={tutorial ? "error" : "primary"} onClick={() => setLimitProductionOpen(true)}>
-            {limitMaterialButtonText}
-          </Button>
-          <LimitMaterialProductionModal
-            material={mat}
-            open={limitProductionOpen}
-            onClose={() => setLimitProductionOpen(false)}
           />
         </Box>
       </Box>

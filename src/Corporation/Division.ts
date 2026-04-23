@@ -592,7 +592,6 @@ export class Division {
 
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
-            const mat = warehouse.materials[this.producedMaterials[0]];
             //Calculate the maximum production of this material based
             //on the office's productivity
             const maxProd =
@@ -603,7 +602,10 @@ export class Division {
             let prod;
 
             // If there is a limit set on production, apply the limit
-            prod = mat.productionLimit === null ? maxProd : Math.min(maxProd, mat.productionLimit);
+            prod =
+              warehouse.materialProductionLimit === null
+                ? maxProd
+                : Math.min(maxProd, warehouse.materialProductionLimit);
 
             prod *= corpConstants.secondsPerMarketCycle * marketCycles; //Convert production from per second to per market cycle
 

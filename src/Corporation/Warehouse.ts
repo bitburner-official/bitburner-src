@@ -45,6 +45,9 @@ export class Warehouse {
   // so it will always trail the "true" production by 1 cycle
   smartSupplyStore = 0;
 
+  /** null if there is no limit set on production. 0 actually limits production to 0. */
+  materialProductionLimit: number | null = null;
+
   constructor(params: IConstructorParams | null = null) {
     const corp = Player.corporation;
     if (!corp || params === null) return;
