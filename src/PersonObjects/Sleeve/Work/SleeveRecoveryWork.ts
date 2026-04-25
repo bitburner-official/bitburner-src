@@ -1,12 +1,12 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { SleeveWorkClass, SleeveWorkType } from "./Work";
+import { SleeveBaseWork, SleeveWorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
 
-export const isSleeveRecoveryWork = (w: SleeveWorkClass | null): w is SleeveRecoveryWork =>
+export const isSleeveRecoveryWork = (w: SleeveBaseWork | null): w is SleeveRecoveryWork =>
   w !== null && w.type === SleeveWorkType.RECOVERY;
 
-export class SleeveRecoveryWork extends SleeveWorkClass {
+export class SleeveRecoveryWork extends SleeveBaseWork {
   type: SleeveWorkType.RECOVERY = SleeveWorkType.RECOVERY;
 
   process(sleeve: Sleeve, cycles: number) {
@@ -20,7 +20,7 @@ export class SleeveRecoveryWork extends SleeveWorkClass {
   APICopy() {
     return {
       type: SleeveWorkType.RECOVERY as const,
-      nextCompletion: Promise.resolve(),
+      nextCompletion: this.nextCompletion,
     };
   }
 

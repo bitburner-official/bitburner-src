@@ -67,8 +67,6 @@ Player must have installed a backdoor on this server.
 
 </td><td>
 
-Base interface of all tasks.
-
 
 </td></tr>
 <tr><td>
@@ -1114,6 +1112,17 @@ Player must have killed at least this many people.
 </td></tr>
 <tr><td>
 
+[PlayerBaseTask](./bitburner.playerbasetask.md)
+
+
+</td><td>
+
+Base interface of all player tasks.
+
+
+</td></tr>
+<tr><td>
+
 [ProcessInfo](./bitburner.processinfo.md)
 
 
@@ -1270,16 +1279,6 @@ Skills formulas
 </td><td>
 
 Sleeve API
-
-
-</td></tr>
-<tr><td>
-
-[SleeveBaseTask](./bitburner.sleevebasetask.md)
-
-
-</td><td>
-
 
 
 </td></tr>

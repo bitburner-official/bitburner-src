@@ -9,9 +9,9 @@ Grafting Work
 **Signature:**
 
 ```typescript
-export interface GraftingTask extends BaseTask 
+interface GraftingTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 

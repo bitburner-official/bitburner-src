@@ -8,9 +8,9 @@
 **Signature:**
 
 ```typescript
-interface SleeveFactionTask extends SleeveBaseTask 
+interface SleeveFactionTask extends BaseTask 
 ```
-**Extends:** [SleeveBaseTask](./bitburner.sleevebasetask.md)
+**Extends:** [BaseTask](./bitburner.basetask.md)
 
 ## Properties
 

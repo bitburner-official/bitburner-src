@@ -9,9 +9,9 @@ Crime
 **Signature:**
 
 ```typescript
-export interface CrimeTask extends BaseTask 
+interface CrimeTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
