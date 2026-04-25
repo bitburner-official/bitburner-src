@@ -65,7 +65,11 @@ const productRating =
   productFeatures * ratingWeights.features;
 ```
 
-Product markup is used to determine how far above market price you can sell a product before sales volume gets penalized.
+Effective rating and product markup are used to determine how far above market price you can sell a product before sales volume gets penalized.
+
+```javascript
+const effectiveRating = Math.min(productRating, avgInputQuality * Math.sqrt(productRating));
+```
 
 ```javascript
 const advertInvestMult = 1 + Math.pow(advertisingInvestment, 0.1) * 0.01;
