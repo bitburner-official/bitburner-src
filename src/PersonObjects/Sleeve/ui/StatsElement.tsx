@@ -25,7 +25,6 @@ import { isSleeveClassWork } from "../Work/SleeveClassWork";
 import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
-import { canAccessBitNodeFeature } from "../../../BitNode/BitNodeUtils";
 import { getKeyFromReactElements } from "../../../utils/StringHelperFunctions";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
@@ -78,7 +77,7 @@ export function StatsElement(props: IProps): React.ReactElement {
           color={Settings.theme.cha}
           data={{ level: props.sleeve.skills.charisma, exp: props.sleeve.exp.charisma }}
         />
-        {canAccessBitNodeFeature(5) && (
+        {props.sleeve.skills.intelligence > 0 && (
           <StatsRow
             name="Intelligence"
             color={Settings.theme.int}
