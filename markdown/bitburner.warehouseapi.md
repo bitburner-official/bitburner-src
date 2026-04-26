@@ -141,16 +141,12 @@ Check if you have a warehouse in city.
 </td></tr>
 <tr><td>
 
-[limitMaterialProduction(divisionName, city, qty)](./bitburner.warehouseapi.limitmaterialproduction.md)
+[limitMaterialProduction(divisionName, city, materialName, qty)](./bitburner.warehouseapi.limitmaterialproduction.md)
 
 
 </td><td>
 
 Limit material production.
-
-The limit is applied to all output materials per warehouse, identified by the division and the city.
-
-You can set the limit on any warehouse. If the specified division's industry does not produce materials, the limit has no effect.
 
 
 </td></tr>

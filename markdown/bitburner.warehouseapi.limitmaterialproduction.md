@@ -6,14 +6,10 @@
 
 Limit material production.
 
-The limit is applied to all output materials per warehouse, identified by the division and the city.
-
-You can set the limit on any warehouse. If the specified division's industry does not produce materials, the limit has no effect.
-
 **Signature:**
 
 ```typescript
-limitMaterialProduction(divisionName: string, city: CityName, qty: number): void;
+limitMaterialProduction(divisionName: string, city: CityName, materialName: CorpMaterialName, qty: number): void;
 ```
 
 ## Parameters
@@ -63,6 +59,22 @@ city
 </td><td>
 
 Name of the city.
+
+
+</td></tr>
+<tr><td>
+
+materialName
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material.
 
 
 </td></tr>

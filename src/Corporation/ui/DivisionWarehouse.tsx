@@ -1,5 +1,5 @@
-// React Component for displaying a Division's warehouse information
-// (right-side panel in the Division UI)
+// React Component for displaying an Industry's warehouse information
+// (right-side panel in the Industry UI)
 import React, { useState } from "react";
 import { makeStyles } from "tss-react/mui";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
@@ -23,7 +23,6 @@ import { useCorporation, useDivision } from "./Context";
 import { gameCyclesPerCorpStateCycle } from "../data/Constants";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { StatsTable } from "../../ui/React/StatsTable";
-import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
 
 interface WarehouseProps {
   corp: Corporation;
@@ -44,7 +43,6 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const [smartSupplyOpen, setSmartSupplyOpen] = useState(false);
-  const [limitMaterialProductionOpen, setLimitMaterialProductionOpen] = useState(false);
   if (!props.warehouse) return <></>;
 
   // Upgrade Warehouse size button
@@ -124,12 +122,6 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
   const breakdown =
     breakdownItems.length > 0 ? <StatsTable rows={breakdownItems} paddingLeft="1em" /> : <>No items in storage.</>;
 
-  // Limit material production button
-  let limitMaterialButtonText = "Limit material production";
-  if (props.warehouse.materialProductionLimit !== null) {
-    limitMaterialButtonText += " (" + formatBigNumber(props.warehouse.materialProductionLimit) + ")";
-  }
-
   return (
     <Paper>
       <Box display="flex" alignItems="center">
@@ -169,16 +161,6 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
             open={smartSupplyOpen}
             onClose={() => setSmartSupplyOpen(false)}
             warehouse={props.warehouse}
-          />
-        </>
-      )}
-      {props.division.producedMaterials.length > 0 && (
-        <>
-          <Button onClick={() => setLimitMaterialProductionOpen(true)}>{limitMaterialButtonText}</Button>
-          <LimitMaterialProductionModal
-            warehouse={props.warehouse}
-            open={limitMaterialProductionOpen}
-            onClose={() => setLimitMaterialProductionOpen(false)}
           />
         </>
       )}

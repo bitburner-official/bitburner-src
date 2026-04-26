@@ -634,32 +634,14 @@ Error: ${e}`,
       person.overrideIntelligence();
     }
   }
-  if (ver < 49) {
-    if (Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
-      for (const person of [Player, ...Player.sleeves]) {
-        person.persistentIntelligenceData.exp = 0;
-        person.exp.intelligence = 0;
-        person.skills.intelligence = 0;
-      }
-    }
-    if (Player.corporation) {
-      for (const division of Player.corporation.divisions.values()) {
-        if (division.producedMaterials.length === 0) {
-          continue;
-        }
-        const firstOutputMaterial = division.producedMaterials[0];
-        for (const warehouse of Object.values(division.warehouses)) {
-          if (!("productionLimit" in warehouse.materials[firstOutputMaterial])) {
-            continue;
-          }
-          const productionLimit = warehouse.materials[firstOutputMaterial].productionLimit as number;
-          if (!Number.isFinite(productionLimit) || productionLimit < 0) {
-            continue;
-          }
-          warehouse.materialProductionLimit = productionLimit;
-        }
-      }
-    }
+  if (ver < 48) {
     showAPIBreaks("3.0.0", breakingChanges300);
+  }
+  if (ver < 49 && Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
+    for (const person of [Player, ...Player.sleeves]) {
+      person.persistentIntelligenceData.exp = 0;
+      person.exp.intelligence = 0;
+      person.skills.intelligence = 0;
+    }
   }
 }

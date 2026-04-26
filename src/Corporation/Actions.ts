@@ -606,11 +606,11 @@ export function limitProductProduction(product: Product, cityName: CityName, qua
   }
 }
 
-export function limitMaterialProduction(warehouse: Warehouse, quantity: number): void {
+export function limitMaterialProduction(material: Material, quantity: number): void {
   if (quantity < 0 || isNaN(quantity)) {
-    warehouse.materialProductionLimit = null;
+    material.productionLimit = null;
   } else {
-    warehouse.materialProductionLimit = quantity;
+    material.productionLimit = quantity;
   }
 }
 
