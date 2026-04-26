@@ -19,7 +19,7 @@ import {
   CorpBaseResearchName,
   CorpProductResearchName,
 } from "@enums";
-import { PositiveInteger } from "../../types";
+import type { PositiveInteger } from "../../types";
 
 /** Names of all corporation game states */
 export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "EXPORT", "SALE"],
@@ -30,6 +30,8 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   industryNames: CorpIndustryName[] = Object.values(IndustryType),
   /** Names of all materials */
   materialNames: APIMaterialName[] = Object.values(CorpMaterialName),
+  /** Names of all boost materials */
+  boostMaterials: CorpMaterialName[] = ["Hardware", "Robots", "AI Cores", "Real Estate"],
   /** Names of all one-time corporation-wide unlocks */
   unlockNames: APIUnlockName[] = Object.values(CorpUnlockName),
   upgradeNames: APIUpgradeName[] = Object.values(CorpUpgradeName),
