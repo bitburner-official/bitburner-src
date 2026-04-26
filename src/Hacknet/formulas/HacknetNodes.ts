@@ -16,7 +16,7 @@ export function calculateLevelUpgradeCost(startingLevel: number, extraLevels = 1
     return 0;
   }
 
-  if (startingLevel >= HacknetNodeConstants.MaxLevel) {
+  if (startingLevel >= HacknetNodeConstants.MaxLevel || startingLevel + extraLevels > HacknetNodeConstants.MaxLevel) {
     return Infinity;
   }
 
@@ -37,7 +37,10 @@ export function calculateRamUpgradeCost(startingRam: number, extraLevels = 1, co
     return 0;
   }
 
-  if (startingRam >= HacknetNodeConstants.MaxRam) {
+  if (
+    startingRam >= HacknetNodeConstants.MaxRam ||
+    startingRam * Math.pow(2, extraLevels) > HacknetNodeConstants.MaxRam
+  ) {
     return Infinity;
   }
 
@@ -60,20 +63,20 @@ export function calculateRamUpgradeCost(startingRam: number, extraLevels = 1, co
   return totalCost;
 }
 
-export function calculateCoreUpgradeCost(startingCore: number, extraLevels = 1, costMult = 1): number {
+export function calculateCoreUpgradeCost(startingCores: number, extraLevels = 1, costMult = 1): number {
   const sanitizedCores = Math.round(extraLevels);
   if (isNaN(sanitizedCores) || sanitizedCores < 1) {
     return 0;
   }
 
-  if (startingCore >= HacknetNodeConstants.MaxCores) {
+  if (startingCores >= HacknetNodeConstants.MaxCores || startingCores + extraLevels > HacknetNodeConstants.MaxCores) {
     return Infinity;
   }
 
   const coreBaseCost = HacknetNodeConstants.CoreBaseCost;
   const mult = HacknetNodeConstants.UpgradeCoreMult;
   let totalCost = 0;
-  let currentCores = startingCore;
+  let currentCores = startingCores;
   for (let i = 0; i < sanitizedCores; ++i) {
     totalCost += coreBaseCost * Math.pow(mult, currentCores - 1);
     ++currentCores;
