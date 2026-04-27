@@ -121,8 +121,8 @@ export const HelpTexts: Record<string, string[]> = {
   backdoor: [
     "Usage: backdoor",
     " ",
-    "Installs a backdoor on the current machine, which allows the player to connect to it from any machine and grants a secret bonus, ",
-    "such as store discounts, depending on the machine.",
+    "Installs a backdoor on the current server, which allows the player to connect to it from any ",
+    "server. It may also grant a secret bonus, such as store discounts, depending on the server.",
     " ",
     "Requires root access to run.",
     " ",
