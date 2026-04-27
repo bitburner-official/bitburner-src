@@ -11,6 +11,7 @@ import { prestigeSourceFile } from "./Prestige";
 import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUtils";
 import { prestigeWorkerScripts } from "./NetscriptWorker";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
+import { ActivateRecoveryMode } from "./ui/React/RecoveryRoot";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -73,7 +74,16 @@ export function enterBitNode(
     setBitNodeOptions(getDefaultBitNodeOptions());
   }
 
-  prestigeSourceFile(isFlume);
+  try {
+    prestigeSourceFile(isFlume);
+  } catch (error) {
+    // prestigeSourceFile only throws on critical bugs. In these cases, we must activate recovery mode to ensure the
+    // player knows something went wrong and can notify us. Recovery mode also disables autosave, which may prevent the
+    // error from corrupting the save data.
+    ActivateRecoveryMode(error);
+    Router.toPage(Page.Recovery);
+    return;
+  }
 
   if (newBitNode === 6) {
     Router.toPage(Page.BladeburnerCinematic);
