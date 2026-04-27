@@ -37,7 +37,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration, approval, and respect in others.",
       company_rep: 1.2,
       faction_rep: 1.2,
-      charisma: 1.2,
+      charisma: 1.1,
       factions: [
         FactionName.Silhouette,
         FactionName.FourSigma,
@@ -517,7 +517,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "millions of nanobots capable of projecting high-density muon beams, " +
         "creating an energy barrier around the user.",
       defense: 1.4,
-      charisma: 1.1,
+      charisma: 1.05,
       factions: [FactionName.Volhaven],
     },
     // === E === //
@@ -528,7 +528,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "A neural implant that enhances the user's ability to resonate with others. " +
         "It is capable of analyzing and interpreting the emotions of those nearby, allowing " +
         "the user to better understand and influence them.",
-      charisma: 1.1,
+      charisma: 1.05,
       crime_success: 1.1,
       work_money: 1.2,
       factions: [FactionName.SpeakersForTheDead],
@@ -772,7 +772,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "An aural implant that enhances the user's ability to communicate and persuade others. " +
         "The implant uses a predictive model that lets the user say precisely what their audience " +
         "wants to hear. This implant is commonly used by many high-level executives and government officials.",
-      charisma: 1.2,
+      charisma: 1.1,
       charisma_exp: 1.3,
       factions: [FactionName.SpeakersForTheDead],
     },
@@ -945,7 +945,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Even though it contains no weapons, the advanced tungsten titanium " +
         "alloy increases the user's strength to unbelievable levels.",
       strength: 2.8,
-      charisma: 1.4,
       factions: [FactionName.NWO],
     },
     [AugmentationName.HyperionV1]: {
@@ -985,7 +984,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       dexterity: 1.4,
       hacking_speed: 1.03,
       hacking_money: 1.1,
-      charisma: 1.05,
+      charisma: 1.03,
       factions: [FactionName.BladeIndustries, FactionName.KuaiGongInternational],
     },
     // === I === //
@@ -1033,7 +1032,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "cells, when powered, have a negative refractive index. As a result, they bend light " +
         "around the skin, making the user much harder to see with the naked eye.",
       agility: 1.05,
-      charisma: 1.05,
+      charisma: 1.03,
       crime_money: 1.1,
       factions: [FactionName.SlumSnakes, FactionName.Tetrads],
     },
@@ -1057,7 +1056,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e4,
       moneyCost: 2.5e8,
       info: "A cranial implant that increases the attractive force of the wearer. (Even its inventor isn't quite sure how it works).",
-      charisma: 1.1,
+      charisma: 1.05,
       company_rep: 1.1,
       factions: [FactionName.TheBlackHand, FactionName.TheDarkArmy],
     },
@@ -1081,7 +1080,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "which improves its regenerative and extracellular homeostasis abilities.",
       strength: 1.2,
       defense: 1.2,
-      charisma: 1.1,
+      charisma: 1.05,
       factions: [
         FactionName.TheDarkArmy,
         FactionName.TheSyndicate,
@@ -1134,7 +1133,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacking_speed: 1.02,
       hacking_chance: 1.1,
       hacking_exp: 1.12,
-      charisma: 1.05,
       factions: [
         FactionName.TheBlackHand,
         FactionName.Chongqing,
@@ -1294,7 +1292,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "the bloodstream to improve memory, increase focus, and provide other " +
         "cognitive enhancements.",
       company_rep: 1.2,
-      charisma: 1.05,
+      charisma: 1.03,
       factions: [
         FactionName.TianDiHui,
         FactionName.Volhaven,
@@ -1432,7 +1430,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       strength: 1.4,
       defense: 1.4,
       agility: 1.4,
-      charisma: 1.4,
+      charisma: 1.2,
       factions: [FactionName.KuaiGongInternational],
     },
     [AugmentationName.PowerRecirculator]: {
@@ -1462,7 +1460,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
         "Thought to be stolen technology, its existance has been a secret until recently.",
-      charisma: 1.2,
+      charisma: 1.1,
       charisma_exp: 1.4,
       factions: [FactionName.TheDarkArmy, FactionName.TheSyndicate],
     },
@@ -1500,7 +1498,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "Makes the wearer a better leader and mentor by greatly increasing their awareness of social dynamics. " +
         "Not actually a standard implant, but rather a series of training courses and seminars, led by a famous speaker named Denis.",
-      charisma: 1.3,
+      charisma: 1.1,
       company_rep: 1.3,
       factions: [FactionName.MegaCorp, FactionName.ECorp, FactionName.OmniTekIncorporated],
     },
@@ -1528,7 +1526,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "criminal organizations and allows the user to project and control holographic " +
         "simulacrums within a large radius. These simulacrums are commonly used for " +
         "espionage and surveillance work.",
-      charisma: 1.15,
       company_rep: 1.15,
       faction_rep: 1.15,
       factions: [FactionName.TheSyndicate, FactionName.TheDarkArmy, FactionName.SpeakersForTheDead],
@@ -1743,7 +1740,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Scientists have named these artificially enhanced units 'synfibrils'.",
       strength: 1.3,
       defense: 1.3,
-      charisma: 1.15,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,
@@ -1763,7 +1759,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "more efficiently than an organic heart.",
       agility: 1.5,
       strength: 1.5,
-      charisma: 1.5,
+      charisma: 1.3,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,
@@ -2042,8 +2038,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A connective brain implant that greatly increases the user's speech reaction time. " +
         "This allows the user to think faster and respond quicker in negotiations, and always have the last word.",
-      charisma: 1.08,
-      charisma_exp: 1.1,
+      charisma: 1.03,
+      charisma_exp: 1.05,
       company_rep: 1.05,
       factions: [FactionName.SlumSnakes, FactionName.BitRunners],
     },
