@@ -16,7 +16,7 @@ export function calculateLevelUpgradeCost(startingLevel: number, extraLevels = 1
     return 0;
   }
 
-  if (startingLevel >= HacknetNodeConstants.MaxLevel || startingLevel + extraLevels > HacknetNodeConstants.MaxLevel) {
+  if (startingLevel + sanitizedLevels > HacknetNodeConstants.MaxLevel) {
     return Infinity;
   }
 
@@ -39,7 +39,7 @@ export function calculateRamUpgradeCost(startingRam: number, extraLevels = 1, co
 
   if (
     startingRam >= HacknetNodeConstants.MaxRam ||
-    startingRam * Math.pow(2, extraLevels) > HacknetNodeConstants.MaxRam
+    startingRam * Math.pow(2, sanitizedLevels) > HacknetNodeConstants.MaxRam
   ) {
     return Infinity;
   }
@@ -69,7 +69,7 @@ export function calculateCoreUpgradeCost(startingCores: number, extraLevels = 1,
     return 0;
   }
 
-  if (startingCores >= HacknetNodeConstants.MaxCores || startingCores + extraLevels > HacknetNodeConstants.MaxCores) {
+  if (startingCores >= HacknetNodeConstants.MaxCores || startingCores + sanitizedCores > HacknetNodeConstants.MaxCores) {
     return Infinity;
   }
 
