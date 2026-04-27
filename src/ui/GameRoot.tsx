@@ -224,7 +224,7 @@ export function GameRoot(): React.ReactElement {
     saveObject
       .saveGame()
       .then(() => {
-        setTimeout(() => htmlLocation.reload(), 2000);
+        setTimeout(() => htmlLocation.reload(), 0);
       })
       .catch((error) => {
         exceptionAlert(error);
