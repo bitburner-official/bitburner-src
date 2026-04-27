@@ -15,13 +15,15 @@ describe("HacknetNode calculations", () => {
     it("bails out for NaN", () => {
       expect(calculateLevelUpgradeCostNode(1, NaN, 1)).toBe(0);
     });
-    it("fails for extraLevels < 1", () => {
+    it("fails for invalid extraLevels", () => {
       expect(calculateLevelUpgradeCostNode(1, -1, 1)).toBe(0);
       expect(calculateLevelUpgradeCostNode(1, 0, 1)).toBe(0);
+      expect(calculateLevelUpgradeCostNode(1, 1, 1)).toBeGreaterThan(0);
+    });
+    it("correctly rounds values between 0.5 and 1", () => {
       expect(calculateLevelUpgradeCostNode(1, 0.4, 1)).toBe(0);
       expect(calculateLevelUpgradeCostNode(1, 0.5, 1)).toBeGreaterThan(0);
       expect(calculateLevelUpgradeCostNode(1, 0.9999999999999999, 1)).toBeGreaterThan(0);
-      expect(calculateLevelUpgradeCostNode(1, 1, 1)).toBeGreaterThan(0);
     });
     it("limits maximum level correctly", () => {
       expect(calculateLevelUpgradeCostNode(HacknetNodeConstants.MaxLevel, 1, 1)).toBe(Infinity);
@@ -35,13 +37,15 @@ describe("HacknetNode calculations", () => {
     it("bails out for NaN", () => {
       expect(calculateRamUpgradeCostNode(1, NaN, 1)).toBe(0);
     });
-    it("fails for extraLevels < 1", () => {
+    it("fails for invalid extraLevels", () => {
       expect(calculateRamUpgradeCostNode(1, -1, 1)).toBe(0);
       expect(calculateRamUpgradeCostNode(1, 0, 1)).toBe(0);
+      expect(calculateRamUpgradeCostNode(1, 1, 1)).toBeGreaterThan(0);
+    });
+    it("correctly rounds values between 0.5 and 1", () => {
       expect(calculateRamUpgradeCostNode(1, 0.4, 1)).toBe(0);
       expect(calculateRamUpgradeCostNode(1, 0.5, 1)).toBeGreaterThan(0);
       expect(calculateRamUpgradeCostNode(1, 0.9999999999999999, 1)).toBeGreaterThan(0);
-      expect(calculateRamUpgradeCostNode(1, 1, 1)).toBeGreaterThan(0);
     });
     it("limits maximum level correctly", () => {
       expect(calculateRamUpgradeCostNode(HacknetNodeConstants.MaxRam, 1, 1)).toBe(Infinity);
@@ -55,13 +59,15 @@ describe("HacknetNode calculations", () => {
     it("bails out for NaN", () => {
       expect(calculateCoreUpgradeCostNode(1, NaN, 1)).toBe(0);
     });
-    it("fails for extraLevels < 1", () => {
+    it("fails for invalid extraLevels", () => {
       expect(calculateCoreUpgradeCostNode(1, -1, 1)).toBe(0);
       expect(calculateCoreUpgradeCostNode(1, 0, 1)).toBe(0);
+      expect(calculateCoreUpgradeCostNode(1, 1, 1)).toBeGreaterThan(0);
+    });
+    it("correctly rounds values between 0.5 and 1", () => {
       expect(calculateCoreUpgradeCostNode(1, 0.4, 1)).toBe(0);
       expect(calculateCoreUpgradeCostNode(1, 0.5, 1)).toBeGreaterThan(0);
       expect(calculateCoreUpgradeCostNode(1, 0.9999999999999999, 1)).toBeGreaterThan(0);
-      expect(calculateCoreUpgradeCostNode(1, 1, 1)).toBeGreaterThan(0);
     });
     it("limits maximum level correctly", () => {
       expect(calculateCoreUpgradeCostNode(HacknetNodeConstants.MaxCores, 1, 1)).toBe(Infinity);
@@ -77,13 +83,15 @@ describe("HacknetServer calculations", () => {
     it("bails out for NaN", () => {
       expect(calculateLevelUpgradeCostServer(1, NaN, 1)).toBe(0);
     });
-    it("fails for extraLevels < 1", () => {
+    it("fails for invalid extraLevels", () => {
       expect(calculateLevelUpgradeCostServer(1, -1, 1)).toBe(0);
       expect(calculateLevelUpgradeCostServer(1, 0, 1)).toBe(0);
+      expect(calculateLevelUpgradeCostServer(1, 1, 1)).toBeGreaterThan(0);
+    });
+    it("correctly rounds values between 0.5 and 1", () => {
       expect(calculateLevelUpgradeCostServer(1, 0.4, 1)).toBe(0);
       expect(calculateLevelUpgradeCostServer(1, 0.5, 1)).toBeGreaterThan(0);
       expect(calculateLevelUpgradeCostServer(1, 0.9999999999999999, 1)).toBeGreaterThan(0);
-      expect(calculateLevelUpgradeCostServer(1, 1, 1)).toBeGreaterThan(0);
     });
     it("limits maximum level correctly", () => {
       expect(calculateLevelUpgradeCostServer(HacknetServerConstants.MaxLevel, 1, 1)).toBe(Infinity);
@@ -97,13 +105,15 @@ describe("HacknetServer calculations", () => {
     it("bails out for NaN", () => {
       expect(calculateRamUpgradeCostServer(1, NaN, 1)).toBe(0);
     });
-    it("fails for extraLevels < 1", () => {
+    it("fails for invalid extraLevels", () => {
       expect(calculateRamUpgradeCostServer(1, -1, 1)).toBe(0);
       expect(calculateRamUpgradeCostServer(1, 0, 1)).toBe(0);
+      expect(calculateRamUpgradeCostServer(1, 1, 1)).toBeGreaterThan(0);
+    });
+    it("correctly rounds values between 0.5 and 1", () => {
       expect(calculateRamUpgradeCostServer(1, 0.4, 1)).toBe(0);
       expect(calculateRamUpgradeCostServer(1, 0.5, 1)).toBeGreaterThan(0);
       expect(calculateRamUpgradeCostServer(1, 0.9999999999999999, 1)).toBeGreaterThan(0);
-      expect(calculateRamUpgradeCostServer(1, 1, 1)).toBeGreaterThan(0);
     });
     it("limits maximum level correctly", () => {
       expect(calculateRamUpgradeCostServer(HacknetServerConstants.MaxRam, 1, 1)).toBe(Infinity);
@@ -117,13 +127,15 @@ describe("HacknetServer calculations", () => {
     it("bails out for NaN", () => {
       expect(calculateCoreUpgradeCostServer(1, NaN, 1)).toBe(0);
     });
-    it("fails for extraLevels < 1", () => {
+    it("fails for invalid extraLevels", () => {
       expect(calculateCoreUpgradeCostServer(1, -1, 1)).toBe(0);
       expect(calculateCoreUpgradeCostServer(1, 0, 1)).toBe(0);
+      expect(calculateCoreUpgradeCostServer(1, 1, 1)).toBeGreaterThan(0);
+    });
+    it("correctly rounds values between 0.5 and 1", () => {
       expect(calculateCoreUpgradeCostServer(1, 0.4, 1)).toBe(0);
       expect(calculateCoreUpgradeCostServer(1, 0.5, 1)).toBeGreaterThan(0);
       expect(calculateCoreUpgradeCostServer(1, 0.9999999999999999, 1)).toBeGreaterThan(0);
-      expect(calculateCoreUpgradeCostServer(1, 1, 1)).toBeGreaterThan(0);
     });
     it("limits maximum level correctly", () => {
       expect(calculateCoreUpgradeCostServer(HacknetServerConstants.MaxCores, 1, 1)).toBe(Infinity);
