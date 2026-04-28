@@ -1725,7 +1725,7 @@ export interface Stock {
   /**
    * Sleep until the next Stock Market price update has happened.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time"
    * (usually 4 seconds - 6 seconds).
@@ -3993,7 +3993,7 @@ export interface Bladeburner {
   /**
    * Sleep until the next Bladeburner update has happened.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time"
    * (usually 1 second).
@@ -4795,7 +4795,7 @@ export interface Darknet {
    * - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
    *
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    */
   nextMutation(): Promise<void>;
 
@@ -5150,7 +5150,7 @@ export interface Gang {
   /**
    * Sleeps until the next Gang update has happened.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time".
    *
@@ -6115,7 +6115,7 @@ export interface Grafting {
    * Wait until the ongoing grafting finishes or is canceled.
    *
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * @returns A promise that resolves when the current grafting finishes or is canceled. If there is no current work,
    * the promise resolves immediately. If the current work is not a grafting work, the promise rejects immediately.
@@ -10465,7 +10465,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * Sleep until the next Corporation update happens.
    *
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time"
    * (usually 200 milliseconds - 2 seconds).

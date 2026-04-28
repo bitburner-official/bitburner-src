@@ -77,7 +77,7 @@ export const RamCostConstants = {
   InfiltrationCalculateRewards: 2.5,
   InfiltrationGetInfiltrations: 15,
 
-  CycleTiming: 1,
+  CycleTiming: 0,
 } as const;
 
 function SF4Cost(cost: number): () => number {
@@ -461,7 +461,7 @@ const grafting = {
   getAugmentationGraftTime: 3.75,
   getGraftableAugmentations: 5,
   graftAugmentation: 7.5,
-  waitForOngoingGrafting: 1,
+  waitForOngoingGrafting: 0,
 } as const;
 
 const corporation = {
