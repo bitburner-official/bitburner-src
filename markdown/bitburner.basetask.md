@@ -4,6 +4,8 @@
 
 ## BaseTask interface
 
+Base interface of all tasks.
+
 **Signature:**
 
 ```typescript
