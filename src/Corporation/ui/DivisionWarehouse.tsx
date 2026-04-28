@@ -73,6 +73,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     const isInStock = props.warehouse.materials[matName].stored > 0;
     const isRelevant = isRelevantMaterial(matName, division);
     if (!isInStock && !isRelevant) continue;
+    const isOutputMaterial = division.producedMaterials.includes(matName);
     mats.push(
       <MaterialElem
         rerender={props.rerender}
@@ -80,6 +81,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
         key={matName}
         mat={props.warehouse.materials[matName]}
         warehouse={props.warehouse}
+        isOutputMaterial={isOutputMaterial}
       />,
     );
   }

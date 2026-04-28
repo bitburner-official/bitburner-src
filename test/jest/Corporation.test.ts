@@ -6,8 +6,7 @@ import {
   calculateUpgradeCost,
   calculateOfficeSizeUpgradeCost,
 } from "../../src/Corporation/helpers";
-import { Player, setPlayer } from "../../src/Player";
-import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
+import { Player } from "../../src/Player";
 import {
   acceptInvestmentOffer,
   buyBackShares,
@@ -17,16 +16,49 @@ import {
   issueNewShares,
   sellShares,
 } from "../../src/Corporation/Actions";
+import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { enterBitNode } from "../../src/RedPill";
+import { getDefaultBitNodeOptions } from "../../src/BitNode/BitNodeUtils";
+import type { NSFull } from "../../src/NetscriptFunctions";
+import { CityName, IndustryType } from "../../src/Enums";
 
-describe("Corporation", () => {
-  let corporation: Corporation;
+initGameEnvironment();
 
-  beforeEach(() => {
-    setPlayer(new PlayerObject());
-    Player.init();
-    corporation = new Corporation({ name: "Test" });
-  });
+let corporation: Corporation;
 
+function getCorp() {
+  if (!Player.corporation) {
+    throw new Error("Corporation was not initialized");
+  }
+  return Player.corporation;
+}
+
+function getDivision(divisionName: string) {
+  const corp = getCorp();
+  const division = corp.divisions.get(divisionName);
+  if (!division) {
+    throw new Error(`Division ${divisionName} does not exist`);
+  }
+  return division;
+}
+
+function getOffice(divisionName: string, city: CityName) {
+  const division = getDivision(divisionName);
+  const office = division.offices[city];
+  if (!office) {
+    throw new Error(`Division ${divisionName} has not expanded to ${city}`);
+  }
+  return office;
+}
+
+beforeEach(() => {
+  setupBasicTestingEnvironment();
+  enterBitNode(true, Player.bitNodeN, 3, getDefaultBitNodeOptions());
+  getNS().corporation.createCorporation("Test", false);
+  corporation = getCorp();
+});
+
+describe("Formulas", () => {
   describe("helpers.calculateUpgradeCost", () => {
     it("should have fixed formula", () => {
       for (let currentUpgradeLevel = 0; currentUpgradeLevel < 5; currentUpgradeLevel++) {
@@ -86,53 +118,6 @@ describe("Corporation", () => {
     });
   });
 
-  describe("Corporation totalShares", () => {
-    function expectSharesToAddUp(corp: Corporation) {
-      expect(corp.totalShares).toEqual(corp.numShares + corp.investorShares + corp.issuedShares);
-    }
-
-    it("should equal the sum of each kind of shares", () => {
-      expectSharesToAddUp(corporation);
-    });
-    it("should be preserved by seed funding", () => {
-      const seedFunded = true;
-      Player.startCorporation("TestCorp", seedFunded);
-      if (!Player.corporation) {
-        throw new Error("Player.startCorporation failed to create a corporation.");
-      }
-      expectSharesToAddUp(Player.corporation);
-    });
-    it("should be preserved by acceptInvestmentOffer", () => {
-      acceptInvestmentOffer(corporation);
-      expectSharesToAddUp(corporation);
-    });
-    it("should be preserved by goPublic", () => {
-      const numShares = 1e8;
-      goPublic(corporation, numShares);
-      expectSharesToAddUp(corporation);
-    });
-    it("should be preserved by IssueNewShares", () => {
-      const numShares = 1e8;
-      goPublic(corporation, numShares);
-      corporation.issueNewSharesCooldown = 0;
-      issueNewShares(corporation, numShares);
-      expectSharesToAddUp(corporation);
-    });
-    it("should be preserved by BuyBackShares", () => {
-      const numShares = 1e8;
-      goPublic(corporation, numShares);
-      buyBackShares(corporation, numShares);
-      expectSharesToAddUp(corporation);
-    });
-    it("should be preserved by SellShares", () => {
-      const numShares = 1e8;
-      goPublic(corporation, numShares);
-      corporation.shareSaleCooldown = 0;
-      sellShares(corporation, numShares);
-      expectSharesToAddUp(corporation);
-    });
-  });
-
   describe("helpers.calculateOfficeSizeUpgradeCost matches documented formula", () => {
     // for discussion and computation of these test values, see:
     // https://github.com/bitburner-official/bitburner-src/pull/1179#discussion_r1534948725
@@ -153,7 +138,56 @@ describe("Corporation", () => {
       },
     );
   });
+});
 
+describe("totalShares", () => {
+  function expectSharesToAddUp(corp: Corporation) {
+    expect(corp.totalShares).toEqual(corp.numShares + corp.investorShares + corp.issuedShares);
+  }
+
+  it("should equal the sum of each kind of shares", () => {
+    expectSharesToAddUp(corporation);
+  });
+  it("should be preserved by seed funding", () => {
+    const seedFunded = true;
+    Player.startCorporation("TestCorp", seedFunded);
+    if (!Player.corporation) {
+      throw new Error("Player.startCorporation failed to create a corporation.");
+    }
+    expectSharesToAddUp(Player.corporation);
+  });
+  it("should be preserved by acceptInvestmentOffer", () => {
+    acceptInvestmentOffer(corporation);
+    expectSharesToAddUp(corporation);
+  });
+  it("should be preserved by goPublic", () => {
+    const numShares = 1e8;
+    goPublic(corporation, numShares);
+    expectSharesToAddUp(corporation);
+  });
+  it("should be preserved by IssueNewShares", () => {
+    const numShares = 1e8;
+    goPublic(corporation, numShares);
+    corporation.issueNewSharesCooldown = 0;
+    issueNewShares(corporation, numShares);
+    expectSharesToAddUp(corporation);
+  });
+  it("should be preserved by BuyBackShares", () => {
+    const numShares = 1e8;
+    goPublic(corporation, numShares);
+    buyBackShares(corporation, numShares);
+    expectSharesToAddUp(corporation);
+  });
+  it("should be preserved by SellShares", () => {
+    const numShares = 1e8;
+    goPublic(corporation, numShares);
+    corporation.shareSaleCooldown = 0;
+    sellShares(corporation, numShares);
+    expectSharesToAddUp(corporation);
+  });
+});
+
+describe("String conversion", () => {
   describe("convertPriceString", () => {
     it("should pass normally", () => {
       expect(convertPriceString("MP")).toStrictEqual("MP");
@@ -193,5 +227,109 @@ describe("Corporation", () => {
       expect(() => convertAmountString("Infinity")).toThrow();
       expect(() => convertAmountString("abc")).toThrow();
     });
+  });
+});
+
+function setUpCorp(ns: NSFull): void {
+  const corp = getCorp();
+  corp.funds = 1e100;
+  corp.storedCycles = 1e10;
+  ns.corporation.purchaseUnlock("Smart Supply");
+}
+
+function setUpDivision(ns: NSFull, divisionName: string): void {
+  const division = getDivision(divisionName);
+  division.researchPoints = 1e6;
+  for (const researchName of ns.corporation.getConstants().researchNamesBase) {
+    ns.corporation.research(divisionName, researchName);
+  }
+  ns.corporation.hireAdVert(divisionName);
+  setUpOffice(ns, divisionName, CityName.Sector12);
+  for (const materialName of division.producedMaterials) {
+    ns.corporation.sellMaterial(divisionName, CityName.Sector12, materialName, "MAX", "MP");
+  }
+}
+
+function setUpOffice(ns: NSFull, divisionName: string, city: CityName): void {
+  ns.corporation.upgradeOfficeSize(divisionName, city, 4000 - 3);
+  for (let i = 0; i < 1000; ++i) {
+    ns.corporation.hireEmployee(divisionName, city, "Operations");
+    ns.corporation.hireEmployee(divisionName, city, "Engineer");
+    ns.corporation.hireEmployee(divisionName, city, "Business");
+    ns.corporation.hireEmployee(divisionName, city, "Management");
+  }
+  const office = getOffice(divisionName, city);
+  office.avgCharisma = 75;
+  office.avgCreativity = 75;
+  office.avgEfficiency = 75;
+  office.avgIntelligence = 75;
+}
+
+describe("production", () => {
+  test("limitMaterialProduction", () => {
+    const ns = getNS();
+    setUpCorp(ns);
+    for (const industry of Object.values(IndustryType)) {
+      if (!ns.corporation.getIndustryData(industry).makesMaterials) {
+        continue;
+      }
+      ns.corporation.expandIndustry(industry, industry);
+      setUpDivision(ns, industry);
+    }
+    const corp = getCorp();
+    // Process 1 market cycle to purchase input materials.
+    corp.process();
+    corp.process();
+    corp.process();
+    corp.process();
+    corp.process();
+    expect(corp.getNextState()).toStrictEqual("START");
+    corp.process();
+    corp.process();
+    expect(corp.getNextState()).toStrictEqual("PRODUCTION");
+    corp.process();
+    for (const division of corp.divisions.values()) {
+      for (const city of Object.values(CityName)) {
+        const warehouse = division.warehouses[city];
+        if (!warehouse) {
+          continue;
+        }
+        for (let i = 0; i < division.producedMaterials.length; ++i) {
+          const materialName = division.producedMaterials[i];
+          // Without a limit, the production amount should always be higher than this value.
+          expect(warehouse.materials[materialName].productionAmount).toBeGreaterThan(10);
+          // Set a deterministic production limit.
+          const productionLimit = i + 1;
+          ns.corporation.limitMaterialProduction(division.name, city, materialName, productionLimit);
+          expect(warehouse.materials[materialName].productionLimit).toStrictEqual(productionLimit);
+        }
+      }
+    }
+    corp.process();
+    corp.process();
+    corp.process();
+    corp.process();
+    expect(corp.getNextState()).toStrictEqual("PRODUCTION");
+    corp.process();
+    for (const division of corp.divisions.values()) {
+      for (const city of Object.values(CityName)) {
+        const warehouse = division.warehouses[city];
+        if (!warehouse) {
+          continue;
+        }
+        for (let i = 0; i < division.producedMaterials.length; ++i) {
+          const materialName = division.producedMaterials[i];
+          // Verify the deterministic production limit.
+          const productionLimit = i + 1;
+          expect(warehouse.materials[materialName].productionLimit).toStrictEqual(productionLimit);
+          // Verify the stored amount.
+          // productionLimit is per second, so we need to multiply it with 10. Due to floating-point imprecision, we
+          // need to check with toBeCloseTo instead of toStrictEqual.
+          expect(warehouse.materials[materialName].stored).toBeCloseTo(productionLimit * 10, 5);
+          // Verify the production amount.
+          expect(warehouse.materials[materialName].productionAmount).toStrictEqual(productionLimit);
+        }
+      }
+    }
   });
 });
