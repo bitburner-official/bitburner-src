@@ -45,7 +45,16 @@ export function LimitMaterialProductionModal(props: IProps): React.ReactElement 
       <Typography>
         Enter a limit to the amount of this material you would like to produce per second. Leave the box empty to set no
         limit.
+        <br />
+        <br />
+        This limit applies only to output; it does not affect input consumption.
+        <br />
+        <br />
+        For example, in Agriculture, assume the division's raw production is 1000. You need to consume 500 Water and 200
+        Chemicals to produce 1000 Plants and 1000 Food. If you set the limits for Plants and Food to 200 and 100
+        respectively, you will still consume 500 Water and 200 Chemicals, but only produce 200 Plants and 100 Food.
       </Typography>
+      <br />
       <TextField autoFocus={true} placeholder="Limit" type="number" onChange={onChange} onKeyDown={onKeyDown} />
       <Button onClick={limitMaterialProduction}>Limit production</Button>
     </Modal>

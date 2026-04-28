@@ -19,6 +19,7 @@ interface IMaterialProps {
   city: CityName;
   mat: Material;
   rerender: () => void;
+  isOutputMaterial: boolean;
 }
 
 // Creates the UI for a single Material type
@@ -74,7 +75,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   }
 
   // Limit Production button
-  let limitMaterialButtonText = "Limit Material";
+  let limitMaterialButtonText = "Limit Material Production";
   if (mat.productionLimit !== null) {
     limitMaterialButtonText += " (" + formatCorpStat(mat.productionLimit) + ")";
   }
@@ -158,14 +159,18 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             open={sellMaterialOpen}
             onClose={() => setSellMaterialOpen(false)}
           />
-          <Button color={tutorial ? "error" : "primary"} onClick={() => setLimitProductionOpen(true)}>
-            {limitMaterialButtonText}
-          </Button>
-          <LimitMaterialProductionModal
-            material={mat}
-            open={limitProductionOpen}
-            onClose={() => setLimitProductionOpen(false)}
-          />
+          {props.isOutputMaterial && (
+            <>
+              <Button color={tutorial ? "error" : "primary"} onClick={() => setLimitProductionOpen(true)}>
+                {limitMaterialButtonText}
+              </Button>
+              <LimitMaterialProductionModal
+                material={mat}
+                open={limitProductionOpen}
+                onClose={() => setLimitProductionOpen(false)}
+              />
+            </>
+          )}
         </Box>
       </Box>
     </Paper>
