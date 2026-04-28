@@ -1744,6 +1744,11 @@ export interface Stock {
   nextUpdate(): Promise<number>;
 }
 
+/**
+ * Base interface of all tasks.
+ *
+ * @public
+ */
 interface BaseTask {
   /**
    * This promise resolves when the task completes or is canceled.
@@ -6320,7 +6325,7 @@ interface HackingFormulas {
    * Calculate the security decrease from a weaken operation.
    * Unlike other hacking formulas, weaken effect depends only on thread count and
    * core count, not on server or player properties. The core bonus formula is
-   * {@code 1 + (cores - 1) / 16}.
+   * `1 + (cores - 1) / 16}`.
    * @param threads - Number of threads running weaken.
    * @param cores - Number of cores on the host server. Default 1.
    * @returns The security decrease amount.
