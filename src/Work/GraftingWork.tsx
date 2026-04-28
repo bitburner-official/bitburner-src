@@ -3,35 +3,26 @@ import { CONSTANTS } from "../Constants";
 import { AugmentationName } from "@enums";
 import { GraftableAugmentations } from "../PersonObjects/Grafting/ui/GraftingRoot";
 import { Player } from "@player";
-import { Work, WorkType } from "./Work";
+import { PlayerBaseWork, WorkType } from "./Work";
 import { graftingIntBonus } from "../PersonObjects/Grafting/GraftingHelpers";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { PromisePair } from "../Types/Promises";
-import { getKeyList } from "../utils/helpers/getKeyList";
 
-export const isGraftingWork = (w: Work | null): w is GraftingWork => w !== null && w.type === WorkType.GRAFTING;
+export const isGraftingWork = (w: PlayerBaseWork | null): w is GraftingWork =>
+  w !== null && w.type === WorkType.GRAFTING;
 
 interface GraftingWorkParams {
   augmentation: AugmentationName;
   singularity: boolean;
 }
 
-export class GraftingWork extends Work {
+export class GraftingWork extends PlayerBaseWork {
   augmentation: AugmentationName;
   unitCompleted: number;
   unitRate: number;
-  completionPromisePair: PromisePair<void> = { promise: null, resolve: null };
-
-  get completion(): Promise<void> {
-    if (!this.completionPromisePair.promise) {
-      this.completionPromisePair.promise = new Promise((r) => (this.completionPromisePair.resolve = r));
-    }
-    return this.completionPromisePair.promise;
-  }
 
   constructor(params?: GraftingWorkParams) {
     super(WorkType.GRAFTING, params?.singularity ?? true);
@@ -98,11 +89,7 @@ export class GraftingWork extends Work {
       );
     }
 
-    if (this.completionPromisePair.resolve) {
-      this.completionPromisePair.resolve();
-      this.completionPromisePair.resolve = null;
-      this.completionPromisePair.promise = null;
-    }
+    this.resolveNextCompletion();
   }
 
   APICopy() {
@@ -110,20 +97,18 @@ export class GraftingWork extends Work {
       type: WorkType.GRAFTING as const,
       cyclesWorked: this.cyclesWorked,
       augmentation: this.augmentation,
-      completion: this.completion,
+      nextCompletion: this.nextCompletion,
     };
   }
 
-  static savedKeys = getKeyList(GraftingWork, { removedKeys: ["completionPromisePair"] });
-
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("GraftingWork", this, GraftingWork.savedKeys);
+    return Generic_toJSON("GraftingWork", this);
   }
 
   /** Initializes a GraftingWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): GraftingWork {
-    return Generic_fromJSON(GraftingWork, value.data, GraftingWork.savedKeys);
+    return Generic_fromJSON(GraftingWork, value.data);
   }
 }
 

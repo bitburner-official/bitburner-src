@@ -2,19 +2,140 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md)
 
-## SleeveBladeburnerTask type
+## SleeveBladeburnerTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveBladeburnerTask = {
-  type: "BLADEBURNER";
-  actionType: "General" | "Contracts";
-  actionName: string;
-  cyclesWorked: number;
-  cyclesNeeded: number;
-  nextCompletion: Promise<void>;
-  tasksCompleted: number;
-};
+interface SleeveBladeburnerTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[actionName](./bitburner.sleevebladeburnertask.actionname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[actionType](./bitburner.sleevebladeburnertask.actiontype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"General" \| "Contracts"
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cyclesNeeded](./bitburner.sleevebladeburnertask.cyclesneeded.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cyclesWorked](./bitburner.sleevebladeburnertask.cyclesworked.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[tasksCompleted](./bitburner.sleevebladeburnertask.taskscompleted.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.sleevebladeburnertask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"BLADEBURNER"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
+

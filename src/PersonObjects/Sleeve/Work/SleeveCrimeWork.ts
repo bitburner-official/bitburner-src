@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
+import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { CrimeType } from "@enums";
 import { Crimes } from "../../../Crime/Crimes";
 import { Crime } from "../../../Crime/Crime";
@@ -9,10 +9,10 @@ import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { CONSTANTS } from "../../../Constants";
 import { calculateCrimeWorkStats } from "../../../Work/Formulas";
 
-export const isSleeveCrimeWork = (w: SleeveWorkClass | null): w is SleeveCrimeWork =>
+export const isSleeveCrimeWork = (w: SleeveBaseWork | null): w is SleeveCrimeWork =>
   w !== null && w.type === SleeveWorkType.CRIME;
 
-export class SleeveCrimeWork extends SleeveWorkClass {
+export class SleeveCrimeWork extends SleeveBaseWork {
   type: SleeveWorkType.CRIME = SleeveWorkType.CRIME;
   crimeType: CrimeType;
   tasksCompleted = 0;
@@ -49,6 +49,7 @@ export class SleeveCrimeWork extends SleeveWorkClass {
       applySleeveGains(sleeve, gains, success ? 1 : 0.25);
       this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded();
+      this.resolveNextCompletion();
     }
   }
 
@@ -59,6 +60,7 @@ export class SleeveCrimeWork extends SleeveWorkClass {
       tasksCompleted: this.tasksCompleted,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(),
+      nextCompletion: this.nextCompletion,
     };
   }
 

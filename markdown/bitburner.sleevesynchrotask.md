@@ -2,11 +2,55 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveSynchroTask](./bitburner.sleevesynchrotask.md)
 
-## SleeveSynchroTask type
+## SleeveSynchroTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveSynchroTask = { type: "SYNCHRO" };
+interface SleeveSynchroTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[type](./bitburner.sleevesynchrotask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"SYNCHRO"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
+

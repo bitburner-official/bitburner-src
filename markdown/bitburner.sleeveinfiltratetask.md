@@ -2,16 +2,89 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveInfiltrateTask](./bitburner.sleeveinfiltratetask.md)
 
-## SleeveInfiltrateTask type
+## SleeveInfiltrateTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveInfiltrateTask = {
-  type: "INFILTRATE";
-  cyclesWorked: number;
-  cyclesNeeded: number;
-  nextCompletion: Promise<void>;
-};
+interface SleeveInfiltrateTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cyclesNeeded](./bitburner.sleeveinfiltratetask.cyclesneeded.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cyclesWorked](./bitburner.sleeveinfiltratetask.cyclesworked.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.sleeveinfiltratetask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"INFILTRATE"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
+

@@ -9,9 +9,9 @@ Faction Work
 **Signature:**
 
 ```typescript
-export interface FactionWorkTask extends BaseTask 
+interface FactionWorkTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 

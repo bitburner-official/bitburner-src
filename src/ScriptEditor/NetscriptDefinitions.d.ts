@@ -1100,58 +1100,65 @@ interface GangMemberAscension {
 }
 
 /** @public */
-type SleeveBladeburnerTask = {
+interface SleeveBladeburnerTask extends BaseTask {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
   cyclesWorked: number;
   cyclesNeeded: number;
-  nextCompletion: Promise<void>;
   tasksCompleted: number;
-};
+}
 
 /** @public */
-type SleeveClassTask = {
+interface SleeveClassTask extends BaseTask {
   type: "CLASS";
   classType: UniversityClassType | GymType;
   location: LocationName;
-};
+}
 
 /** @public */
-type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
+interface SleeveCompanyTask extends BaseTask {
+  type: "COMPANY";
+  companyName: CompanyName;
+}
 
 /** @public */
-type SleeveCrimeTask = {
+interface SleeveCrimeTask extends BaseTask {
   type: "CRIME";
   crimeType: CrimeType;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;
-};
+}
 
 /** @public */
-type SleeveFactionTask = {
+interface SleeveFactionTask extends BaseTask {
   type: "FACTION";
   factionWorkType: FactionWorkType;
   factionName: FactionName;
-};
+}
 
 /** @public */
-type SleeveInfiltrateTask = {
+interface SleeveInfiltrateTask extends BaseTask {
   type: "INFILTRATE";
   cyclesWorked: number;
   cyclesNeeded: number;
-  nextCompletion: Promise<void>;
-};
+}
 
 /** @public */
-type SleeveRecoveryTask = { type: "RECOVERY" };
+interface SleeveRecoveryTask extends BaseTask {
+  type: "RECOVERY";
+}
 
 /** @public */
-type SleeveSupportTask = { type: "SUPPORT" };
+interface SleeveSupportTask extends BaseTask {
+  type: "SUPPORT";
+}
 
 /** @public */
-type SleeveSynchroTask = { type: "SYNCHRO" };
+interface SleeveSynchroTask extends BaseTask {
+  type: "SYNCHRO";
+}
 
 /** Object representing a sleeve current task.
  * @public */
@@ -1737,12 +1744,26 @@ export interface Stock {
   nextUpdate(): Promise<number>;
 }
 
+interface BaseTask {
+  /**
+   * This promise resolves when the task completes or is canceled.
+   *
+   * Tasks that do not track progress, such as studying or working for a company, are non-completable, i.e., they
+   * continue indefinitely until canceled. The `nextCompletion` promise of these tasks resolves only when they are
+   * canceled.
+   *
+   * Among completable tasks, some are repeatable, i.e., they automatically restart after completion. The
+   * `nextCompletion` promise of these tasks resolves on the next completion or when they are canceled.
+   */
+  nextCompletion: Promise<void>;
+}
+
 /**
- * Base interface of all tasks.
+ * Base interface of all player tasks.
  *
  * @public
  */
-export interface BaseTask {
+interface PlayerBaseTask extends BaseTask {
   /**
    * The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
    */
@@ -1757,7 +1778,7 @@ export interface BaseTask {
  *
  * @public
  */
-export interface StudyTask extends BaseTask {
+interface StudyTask extends PlayerBaseTask {
   type: "CLASS";
   classType: string;
   location: LocationName;
@@ -1771,7 +1792,7 @@ export interface StudyTask extends BaseTask {
  *
  * @public
  */
-export interface CompanyWorkTask extends BaseTask {
+interface CompanyWorkTask extends PlayerBaseTask {
   type: "COMPANY";
   companyName: CompanyName;
 }
@@ -1784,7 +1805,7 @@ export interface CompanyWorkTask extends BaseTask {
  *
  * @public
  */
-export interface CreateProgramWorkTask extends BaseTask {
+interface CreateProgramWorkTask extends PlayerBaseTask {
   type: "CREATE_PROGRAM";
   programName: ProgramName;
 }
@@ -1797,7 +1818,7 @@ export interface CreateProgramWorkTask extends BaseTask {
  *
  * @public
  */
-export interface CrimeTask extends BaseTask {
+interface CrimeTask extends PlayerBaseTask {
   type: "CRIME";
   crimeType: CrimeType;
 }
@@ -1810,7 +1831,7 @@ export interface CrimeTask extends BaseTask {
  *
  * @public
  */
-export interface FactionWorkTask extends BaseTask {
+interface FactionWorkTask extends PlayerBaseTask {
   type: "FACTION";
   factionWorkType: FactionWorkType;
   factionName: FactionName;
@@ -1824,13 +1845,9 @@ export interface FactionWorkTask extends BaseTask {
  *
  * @public
  */
-export interface GraftingTask extends BaseTask {
+interface GraftingTask extends PlayerBaseTask {
   type: "GRAFTING";
   augmentation: string;
-  /**
-   * This promise resolves when the task is complete.
-   */
-  completion: Promise<void>;
 }
 
 /**

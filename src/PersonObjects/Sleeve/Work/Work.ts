@@ -12,6 +12,7 @@ import { SleeveSynchroWork } from "./SleeveSynchroWork";
 import { SleeveBladeburnerWork } from "./SleeveBladeburnerWork";
 import { SleeveInfiltrateWork } from "./SleeveInfiltrateWork";
 import { SleeveSupportWork } from "./SleeveSupportWork";
+import { BaseWork } from "../../../Work/Work";
 
 export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult = 1): void => {
   applyWorkStatsExp(sleeve, shockedStats, mult);
@@ -23,13 +24,17 @@ export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult =
   Player.sleeves.forEach((s) => s !== sleeve && applyWorkStatsExp(s, shockedStats, mult * sync * s.shockBonus()));
 };
 
-export abstract class SleeveWorkClass {
+export abstract class SleeveBaseWork extends BaseWork {
   abstract type: SleeveWorkType;
   abstract process(sleeve: Sleeve, cycles: number): void;
   abstract APICopy(sleeve: Sleeve): SleeveTask;
   abstract toJSON(): IReviverValue;
+  /**
+   * Child classes that override this function must call `this.resolveNextCompletion()` when appropriate to ensure the
+   * completion promise is resolved.
+   */
   finish(): void {
-    /* left for children to implement */
+    this.resolveNextCompletion();
   }
 }
 
