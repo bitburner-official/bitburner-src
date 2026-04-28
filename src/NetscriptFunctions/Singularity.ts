@@ -779,6 +779,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
 
+      if (Player.factions.includes(facName)) {
+        helpers.log(ctx, () => `You are already a member of faction '${facName}'`);
+        return false;
+      }
+
       if (!Player.factionInvitations.includes(facName)) {
         helpers.log(ctx, () => `You have not been invited by faction '${facName}'`);
         return false;
