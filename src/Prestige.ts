@@ -239,6 +239,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
 
+  if (canAccessBitNodeFeature(15)) {
+    getDarkscapeNavigator();
+  }
+
   if (Player.activeSourceFileLvl(9) >= 2) {
     homeComp.setMaxRam(128);
   } else if (Player.activeSourceFileLvl(1) > 0) {

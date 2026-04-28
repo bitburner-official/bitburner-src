@@ -9,9 +9,9 @@ Study
 **Signature:**
 
 ```typescript
-export interface StudyTask extends BaseTask 
+interface StudyTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 

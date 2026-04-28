@@ -9,9 +9,9 @@ Grafting Work
 **Signature:**
 
 ```typescript
-export interface GraftingTask extends BaseTask 
+interface GraftingTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
@@ -54,25 +54,6 @@ string
 
 
 </td><td>
-
-
-</td></tr>
-<tr><td>
-
-[completion](./bitburner.graftingtask.completion.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Promise&lt;void&gt;
-
-
-</td><td>
-
-This promise resolves when the task is complete.
 
 
 </td></tr>

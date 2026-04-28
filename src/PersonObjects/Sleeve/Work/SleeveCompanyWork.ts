@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { CompanyName, JobName } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
+import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { Companies } from "../../../Company/Companies";
 import { Company } from "../../../Company/Company";
 import { calculateCompanyWorkStats } from "../../../Work/Formulas";
@@ -12,10 +12,10 @@ import { CompanyPositions } from "../../../Company/CompanyPositions";
 import { isMember } from "../../../utils/EnumHelper";
 import { invalidWork } from "../../../Work/InvalidWork";
 
-export const isSleeveCompanyWork = (w: SleeveWorkClass | null): w is SleeveCompanyWork =>
+export const isSleeveCompanyWork = (w: SleeveBaseWork | null): w is SleeveCompanyWork =>
   w !== null && w.type === SleeveWorkType.COMPANY;
 
-export class SleeveCompanyWork extends SleeveWorkClass {
+export class SleeveCompanyWork extends SleeveBaseWork {
   type: SleeveWorkType.COMPANY = SleeveWorkType.COMPANY;
   companyName: CompanyName;
 
@@ -51,6 +51,7 @@ export class SleeveCompanyWork extends SleeveWorkClass {
     return {
       type: SleeveWorkType.COMPANY as const,
       companyName: this.companyName,
+      nextCompletion: this.nextCompletion,
     };
   }
 

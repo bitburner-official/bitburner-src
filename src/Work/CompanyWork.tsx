@@ -1,7 +1,7 @@
 import React from "react";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
-import { Work, WorkType } from "./Work";
+import { PlayerBaseWork, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
 import { CompanyName, JobName } from "@enums";
 import { calculateCompanyWorkStats } from "./Formulas";
@@ -19,9 +19,9 @@ interface CompanyWorkParams {
   singularity: boolean;
 }
 
-export const isCompanyWork = (w: Work | null): w is CompanyWork => w !== null && w.type === WorkType.COMPANY;
+export const isCompanyWork = (w: PlayerBaseWork | null): w is CompanyWork => w !== null && w.type === WorkType.COMPANY;
 
-export class CompanyWork extends Work {
+export class CompanyWork extends PlayerBaseWork {
   companyName: CompanyName;
   constructor(params?: CompanyWorkParams) {
     super(WorkType.COMPANY, params?.singularity ?? false);
@@ -49,7 +49,7 @@ export class CompanyWork extends Work {
     influenceStockThroughCompanyWork(company, gains.reputation, cycles);
     return false;
   }
-  finish(cancelled: boolean, suppressDialog?: boolean): void {
+  finish(__cancelled: boolean, suppressDialog?: boolean): void {
     if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
@@ -59,6 +59,7 @@ export class CompanyWork extends Work {
         </>,
       );
     }
+    this.resolveNextCompletion();
   }
 
   APICopy() {
@@ -66,6 +67,7 @@ export class CompanyWork extends Work {
       type: WorkType.COMPANY as const,
       cyclesWorked: this.cyclesWorked,
       companyName: this.companyName,
+      nextCompletion: this.nextCompletion,
     };
   }
 

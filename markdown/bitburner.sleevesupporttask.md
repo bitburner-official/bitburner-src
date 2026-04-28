@@ -2,11 +2,55 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveSupportTask](./bitburner.sleevesupporttask.md)
 
-## SleeveSupportTask type
+## SleeveSupportTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveSupportTask = { type: "SUPPORT" };
+interface SleeveSupportTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[type](./bitburner.sleevesupporttask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"SUPPORT"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
+

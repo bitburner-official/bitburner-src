@@ -1,7 +1,7 @@
 import type { Faction } from "../Faction/Faction";
 
 import React from "react";
-import { Work, WorkType } from "./Work";
+import { PlayerBaseWork, WorkType } from "./Work";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
 import { FactionName, FactionWorkType } from "@enums";
@@ -18,9 +18,9 @@ interface FactionWorkParams {
   faction: FactionName;
 }
 
-export const isFactionWork = (w: Work | null): w is FactionWork => w !== null && w.type === WorkType.FACTION;
+export const isFactionWork = (w: PlayerBaseWork | null): w is FactionWork => w !== null && w.type === WorkType.FACTION;
 
-export class FactionWork extends Work {
+export class FactionWork extends PlayerBaseWork {
   factionWorkType: FactionWorkType;
   factionName: FactionName;
 
@@ -55,7 +55,7 @@ export class FactionWork extends Work {
     return false;
   }
 
-  finish(cancelled: boolean, suppressDialog?: boolean): void {
+  finish(__cancelled: boolean, suppressDialog?: boolean): void {
     if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
@@ -65,6 +65,7 @@ export class FactionWork extends Work {
         </>,
       );
     }
+    this.resolveNextCompletion();
   }
 
   APICopy() {
@@ -73,6 +74,7 @@ export class FactionWork extends Work {
       cyclesWorked: this.cyclesWorked,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,
+      nextCompletion: this.nextCompletion,
     };
   }
 

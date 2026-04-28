@@ -215,32 +215,25 @@ export class Division {
     }
   }
 
-  // Process change in demand and competition for this industry's materials
+  // Process demand, competition, and market price changes for this division's materials
   processMaterialMarket(): void {
-    //References to prodMats and reqMats
-    const reqMats = this.requiredMaterials,
-      prodMats = this.producedMaterials;
+    // Relevant materials:
+    // - All materials this division requires or produces
+    // - Boost materials
+    const materials = new Set([
+      ...getRecordKeys(this.requiredMaterials),
+      ...this.producedMaterials,
+      ...corpConstants.boostMaterials,
+    ]);
 
-    //Only 'process the market' for materials that this industry deals with
     for (const city of Object.values(CityName)) {
-      //If this industry has a warehouse in this city, process the market
-      //for every material this industry requires or produces
-      if (this.warehouses[city]) {
-        const wh = this.warehouses[city];
-        for (const name of Object.keys(reqMats) as CorpMaterialName[]) {
-          if (Object.hasOwn(reqMats, name)) {
-            wh.materials[name].processMarket();
-          }
-        }
-
-        //Produced materials are stored in an array
-        for (const matName of prodMats) wh.materials[matName].processMarket();
-
-        //Process these twice because these boost production ??????
-        wh.materials.Hardware.processMarket();
-        wh.materials.Robots.processMarket();
-        wh.materials["AI Cores"].processMarket();
-        wh.materials["Real Estate"].processMarket();
+      const warehouse = this.warehouses[city];
+      // If this division has a warehouse in this city, process the relevant materials
+      if (warehouse == null) {
+        continue;
+      }
+      for (const materialName of materials) {
+        warehouse.materials[materialName].processMarket();
       }
     }
   }
