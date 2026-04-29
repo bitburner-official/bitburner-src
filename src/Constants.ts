@@ -111,7 +111,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.0 development version: last updated 13 April 2026
+## v3.0.0 development version: last updated 29 April 2026
 
 ### BREAKING CHANGES
 
@@ -144,6 +144,7 @@ export const CONSTANTS = {
 - Make ns.cloud.purchaseServer() and ns.cloud.deleteServer() use hostname as provided (#2560) (@catloversg)
 - Make implicit string conversion consistent across all coding contracts (#2608) (@catloversg)
 - Rename ns.gang.getOtherGangInformation to getAllGangInformation (#2635) (@lstutzman)
+- Standardize "nextCompletion" promise in tasks (#2687) (@catloversg)
 
 ### MAJOR CHANGES
 
@@ -229,6 +230,10 @@ export const CONSTANTS = {
 - Remove unnecessary max-width of tab list in in-game editor (#2643) (@catloversg)
 - Add hooks to sidebar for players to attach custom content (#2651) (@catloversg)
 - Use exponential notation when formatting very small HP or thread values (#2656) (@catloversg)
+- Show effective amount of shared RAM when using UI (#2691) (@catloversg)
+- Use "success" theme color for low infiltration difficulty instead of "primary" (#2693) (@catloversg)
+- Reload immediately after importing, deleting save data or killing all scripts (#2697) (@catloversg)
+- Activate recovery mode on critical BN prestige bugs (#2699) (@catloversg)
 
 ### MISC
 
@@ -336,6 +341,13 @@ export const CONSTANTS = {
 - Fix tab completion for multi-word quoted autocomplete options (#2612) (@lstutzman)
 - Add weakenEffect to formulas.hacking namespace (#2626) (@lstutzman)
 - Update description of "cat" in "help" command (#2654) (@catloversg)
+- Reduce achievements check interval (#2650) (@catloversg)
+- Fix: calculateExp throws errors in edge cases (#2667) (@catloversg)
+- Clear recent scripts when installing augmentations (#2670) (@Mathekatze)
+- Better error message for port serialization failure (#2688) (@d0sboots)
+- Adjust charisma augmentation power (#2698) (@ficocelliguy)
+- Clarify what "backdoor" does in "help" command (#2694) (@abbyintheattic)
+- Fix: Hacknet upgrade cost formulas ignore upgrade level when enforcing max level (#2696) (@lucebac)
 
 ### DOCUMENTATION
 
@@ -392,6 +404,7 @@ export const CONSTANTS = {
 - Clarify scp and exec darknet permissions in API docs (#2634) (@lstutzman)
 - Update RAM cost of hacknet APIs and remove unnecessary RAM cost docs (#2639) (@catloversg)
 - Update tutorial script for buying cloud servers (#2653) (@catloversg)
+- Improve coding contract documentation (#2689) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
@@ -405,6 +418,9 @@ export const CONSTANTS = {
 - Show hints of Sleeves mechanic in pre-endgame (#2605) (@catloversg)
 - Consistently calculate BitNode "level" (#2645) (@catloversg)
 - Add tooltips explaining why Bladeburner skill upgrades are disabled (#2648) (@catloversg)
+- Add button to open Faction page from Gang UI (#2655) (@catloversg)
+- Ensure intelligence override is a positive integer (#2673) (@catloversg)
+- Remove max width of corporation division list (#2686) (@catloversg)
 
 ### SPOILER CHANGES - MISC
 
@@ -435,6 +451,14 @@ export const CONSTANTS = {
 - API: Expose charged effects of Stanek's Gift active fragments (#2638) (@catloversg)
 - Apply SF override to charisma calculations (#2642) (@catloversg)
 - Update description of "BN9: Challenge" achievement (#2647) (@catloversg)
+- Fix: Intelligence data is incorrectly migrated when Intelligence is not unlocked (#2660, #2666) (@catloversg)
+- Restrict team count of Ops/BlackOps to total team size (#2672) (@catloversg)
+- Fix: DarkscapeNavigator program is not granted on BN prestige when having SF15 (#2690) (@catloversg)
+- Prevent duplicate processing of boost materials (#2695) (@catloversg)
+- Update error message of ns.singularity.joinFaction (#2700) (@catloversg)
+- Update RAM cost of nextUpdate and similar APIs (#2702) (@catloversg)
+- Update description of "You and what army?" achievement (#2703) (@catloversg)
+- Rework material production limit (#2683) (@catloversg)
 
 ### SPOILER CHANGES - DOCUMENTATION
 
@@ -542,5 +566,9 @@ export const CONSTANTS = {
 - Use type-only imports in ArrayHelpers.ts (#2630) (@catloversg)
 - Remove redundant "$" from JS/TS regex in webpack config (#2649) (@catloversg)
 - Allow specifying commit hash id when building artifacts (#2652) (@catloversg)
+- Fix passive event listener warning (#2671) (@catloversg)
+- Ignore .DS_Store files when generating pages.ts (#2685) (@catloversg)
+- Consistently check when to show intelligence skill (#2692) (@catloversg)
+- Fix api-extractor warnings (#2701) (@catloversg)
 `,
 } as const;
