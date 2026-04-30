@@ -873,6 +873,18 @@ export class Division {
           }
           prod *= corpConstants.secondsPerMarketCycle * marketCycles;
 
+          //Calculate net change in warehouse storage making the Products will cost
+          let netStorageSize = product.size;
+          for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
+            netStorageSize -= MaterialInfo[reqMatName].size * reqQty;
+          }
+
+          //If there's not enough space in warehouse, limit the amount of Product
+          if (netStorageSize > 0) {
+            const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / netStorageSize);
+            prod = Math.min(maxAmt, prod);
+          }
+
           warehouse.smartSupplyStore += prod / (corpConstants.secondsPerMarketCycle * marketCycles);
 
           //Make sure we have enough resources to make our Products
