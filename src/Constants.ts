@@ -111,7 +111,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.0 development version: last updated 29 April 2026
+## v3.0.0 development version: last updated 30 April 2026
 
 ### BREAKING CHANGES
 
@@ -348,6 +348,7 @@ export const CONSTANTS = {
 - Adjust charisma augmentation power (#2698) (@ficocelliguy)
 - Clarify what "backdoor" does in "help" command (#2694) (@abbyintheattic)
 - Fix: Hacknet upgrade cost formulas ignore upgrade level when enforcing max level (#2696) (@lucebac)
+- Improve error messages for invalid module parsing (#2707) (@catloversg)
 
 ### DOCUMENTATION
 
@@ -459,6 +460,7 @@ export const CONSTANTS = {
 - Update RAM cost of nextUpdate and similar APIs (#2702) (@catloversg)
 - Update description of "You and what army?" achievement (#2703) (@catloversg)
 - Rework material production limit (#2683) (@catloversg)
+- Remove references to "sudo.Assist" research (#2709) (@catloversg)
 
 ### SPOILER CHANGES - DOCUMENTATION
 
@@ -570,5 +572,6 @@ export const CONSTANTS = {
 - Ignore .DS_Store files when generating pages.ts (#2685) (@catloversg)
 - Consistently check when to show intelligence skill (#2692) (@catloversg)
 - Fix api-extractor warnings (#2701) (@catloversg)
+- Add comments explaining redundant check in product calculation (#2705) (@catloversg)
 `,
 } as const;
