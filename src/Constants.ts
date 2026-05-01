@@ -4,10 +4,10 @@
  * Constants for specific mechanics or features will NOT be here.
  */
 export const CONSTANTS = {
-  VersionString: "3.0.0dev",
-  isDevBranch: true,
+  VersionString: "3.0.0",
+  isDevBranch: false,
   isInTestEnvironment: globalThis.process?.env?.JEST_WORKER_ID !== undefined,
-  VersionNumber: 49,
+  VersionNumber: 50,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -111,7 +111,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.0 development version: last updated 30 April 2026
+## v3.0.0 Release: 1 May 2026
 
 ### BREAKING CHANGES
 
