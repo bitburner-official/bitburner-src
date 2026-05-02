@@ -14,11 +14,71 @@ spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: ScriptAr
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  script | string | Filename of script to execute. |
-|  threadOrOptions | number \| [SpawnOptions](./bitburner.spawnoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [SpawnOptions](./bitburner.spawnoptions.md) object. Threads defaults to 1 and spawnDelay defaults to 10,000 ms. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Additional arguments to pass into the new script that is being run. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+script
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of script to execute.
+
+
+</td></tr>
+<tr><td>
+
+threadOrOptions
+
+
+</td><td>
+
+number \| [SpawnOptions](./bitburner.spawnoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Either an integer number of threads for new script, or a [SpawnOptions](./bitburner.spawnoptions.md) object. Threads defaults to 1 and spawnDelay defaults to 10,000 ms.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Additional arguments to pass into the new script that is being run.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -35,6 +95,8 @@ The delay specified can be 0; in this case the new script will synchronously rep
 Because this function immediately terminates the script, it does not have a return value.
 
 Running this function with 0 or fewer threads will cause a runtime error.
+
+For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
 
 ## Example
 

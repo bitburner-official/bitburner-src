@@ -8,20 +8,27 @@
 **Signature:**
 
 ```typescript
-export type NSEnums = {
-  CityName: typeof CityName;
-  CrimeType: typeof CrimeType;
-  FactionWorkType: typeof FactionWorkType;
-  GymType: typeof GymType;
-  JobName: typeof JobName;
-  JobField: typeof JobField;
-  LocationName: typeof LocationName;
-  ToastVariant: typeof ToastVariant;
-  UniversityClassType: typeof UniversityClassType;
-  CompanyName: typeof CompanyName;
-  FactionName: typeof FactionName;
-  CodingContractName: typeof CodingContractName;
+type NSEnums = {
+  CityName: CityNameEnumType;
+  CrimeType: CrimeEnumType;
+  FactionWorkType: FactionWorkEnumType;
+  GymType: GymEnumType;
+  JobName: JobNameEnumType;
+  JobField: JobFieldEnumType;
+  LocationName: LocationNameEnumType;
+  ToastVariant: ToastVariantEnumType;
+  UniversityClassType: UniversityClassEnumType;
+  CompanyName: CompanyNameEnumType;
+  FactionName: FactionNameEnumType;
+  CodingContractName: CodingContractNameEnumType;
+  PositionType: PositionEnumType;
+  OrderType: OrderEnumType;
+  BladeburnerActionType: BladeburnerActionEnumType;
+  SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
+  FragmentType: FragmentEnumType;
+  DarknetResponseCode: DarknetResponseCodeType;
+  ProgramName: ProgramNameEnumType;
 };
 ```
-**References:** [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [JobField](./bitburner.jobfield.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [CompanyName](./bitburner.companyname.md)<!-- -->, [FactionName](./bitburner.factionname.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
+**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobNameEnumType](./bitburner.jobnameenumtype.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)<!-- -->, [LocationNameEnumType](./bitburner.locationnameenumtype.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyNameEnumType](./bitburner.companynameenumtype.md)<!-- -->, [FactionNameEnumType](./bitburner.factionnameenumtype.md)<!-- -->, [CodingContractNameEnumType](./bitburner.codingcontractnameenumtype.md)<!-- -->, [PositionEnumType](./bitburner.positionenumtype.md)<!-- -->, [OrderEnumType](./bitburner.orderenumtype.md)<!-- -->, [BladeburnerActionEnumType](./bitburner.bladeburneractionenumtype.md)<!-- -->, [SpecialBladeburnerActionEnumTypeForSleeve](./bitburner.specialbladeburneractionenumtypeforsleeve.md)<!-- -->, [FragmentEnumType](./bitburner.fragmentenumtype.md)<!-- -->, [DarknetResponseCodeType](./bitburner.darknetresponsecodetype.md)<!-- -->, [ProgramNameEnumType](./bitburner.programnameenumtype.md)
 

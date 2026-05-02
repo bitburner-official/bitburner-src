@@ -40,7 +40,7 @@ export function MakeProductModal(props: IProps): React.ReactElement {
   const [name, setName] = useState("");
   const [design, setDesign] = useState<number>(NaN);
   const [marketing, setMarketing] = useState<number>(NaN);
-  const data = IndustriesData[division.type];
+  const data = IndustriesData[division.industry];
   if (division.hasMaximumNumberProducts() || !data.product) return <></>;
 
   function makeProduct(): void {
@@ -87,7 +87,7 @@ export function MakeProductModal(props: IProps): React.ReactElement {
           </MenuItem>
         ))}
       </Select>
-      <TextField onChange={onProductNameChange} placeholder={productPlaceholder(division.type)} />
+      <TextField onChange={onProductNameChange} placeholder={productPlaceholder(division.industry)} />
       <br />
       <NumberInput onChange={setDesign} autoFocus={true} placeholder={"Design investment"} />
       <NumberInput onChange={setMarketing} onKeyDown={onKeyDown} placeholder={"Marketing investment"} />

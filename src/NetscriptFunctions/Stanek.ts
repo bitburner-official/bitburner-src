@@ -3,10 +3,10 @@ import { AugmentationName, FactionName } from "@enums";
 
 import { canAcceptStaneksGift, staneksGift } from "../CotMG/Helper";
 import { Fragments, FragmentById } from "../CotMG/Fragment";
-import { FragmentType } from "../CotMG/FragmentType";
+import { FragmentTypeEnum } from "../CotMG/FragmentType";
 
-import { Stanek as IStanek } from "@nsdefs";
-import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
+import type { Stanek as IStanek } from "@nsdefs";
+import type { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
@@ -37,14 +37,14 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       const fragment = staneksGift.findFragment(rootX, rootY);
       //Check whether the selected fragment can ge charged
       if (!fragment) throw helpers.errorMessage(ctx, `No fragment with root (${rootX}, ${rootY}).`);
-      if (fragment.fragment().type == FragmentType.Booster) {
+      if (fragment.fragment().type == FragmentTypeEnum.Booster) {
         throw helpers.errorMessage(
           ctx,
           `The fragment with root (${rootX}, ${rootY}) is a Booster Fragment and thus cannot be charged.`,
         );
       }
       //Charge the fragment
-      const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
+      const cores = ctx.workerScript.getServer().cpuCores;
       const coreBonus = getCoreBonus(cores);
       const inBonus = staneksGift.inBonus();
       const time = inBonus ? 200 : 1000;
@@ -63,9 +63,13 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     activeFragments: (ctx) => () => {
       checkStanekAPIAccess(ctx);
       helpers.log(ctx, () => `Returned ${staneksGift.fragments.length} fragments`);
-      return staneksGift.fragments.map((af) => {
-        return { ...af.copy(), ...af.fragment().copy() };
-      });
+      return staneksGift.fragments.map((activeFragment) => {
+        return {
+          ...activeFragment.copy(),
+          ...activeFragment.fragment().copy(),
+          chargedEffect: staneksGift.effect(activeFragment),
+        };
+      }) satisfies ReturnType<IStanek["activeFragments"]>;
     },
     clearGift: (ctx) => () => {
       checkStanekAPIAccess(ctx);
@@ -97,8 +101,14 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       const rootX = helpers.number(ctx, "rootX", _rootX);
       const rootY = helpers.number(ctx, "rootY", _rootY);
       checkStanekAPIAccess(ctx);
-      const fragment = staneksGift.findFragment(rootX, rootY);
-      if (fragment !== undefined) return fragment.copy();
+      const activeFragment = staneksGift.findFragment(rootX, rootY);
+      if (activeFragment !== undefined) {
+        return {
+          ...activeFragment.copy(),
+          ...activeFragment.fragment().copy(),
+          chargedEffect: staneksGift.effect(activeFragment),
+        } satisfies ReturnType<IStanek["getFragment"]>;
+      }
       return undefined;
     },
     removeFragment: (ctx) => (_rootX, _rootY) => {

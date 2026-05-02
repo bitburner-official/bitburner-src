@@ -9,9 +9,9 @@ Faction Work
 **Signature:**
 
 ```typescript
-export interface FactionWorkTask extends BaseTask 
+interface FactionWorkTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
@@ -19,9 +19,77 @@ An object representing the current work for a faction
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [factionName](./bitburner.factionworktask.factionname.md) |  | string |  |
-|  [factionWorkType](./bitburner.factionworktask.factionworktype.md) |  | [FactionWorkType](./bitburner.factionworktype.md) |  |
-|  [type](./bitburner.factionworktask.type.md) |  | "FACTION" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[factionName](./bitburner.factionworktask.factionname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[factionWorkType](./bitburner.factionworktask.factionworktype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FactionWorkType](./bitburner.factionworktype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.factionworktask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"FACTION"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

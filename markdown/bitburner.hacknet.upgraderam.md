@@ -14,10 +14,55 @@ upgradeRam(index: number, n?: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  index | number | Index/Identifier of Hacknet Node. |
-|  n | number | _(Optional)_ Number of times to upgrade RAM. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+index
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index/Identifier of Hacknet Node.
+
+
+</td></tr>
+<tr><td>
+
+n
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of times to upgrade RAM. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -27,7 +72,7 @@ True if the Hacknet Node’s RAM is successfully upgraded, false otherwise.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Tries to upgrade the specified Hacknet Node’s RAM n times. Note that each upgrade doubles the Node’s RAM. So this is equivalent to multiplying the Node’s RAM by 2 n.
 

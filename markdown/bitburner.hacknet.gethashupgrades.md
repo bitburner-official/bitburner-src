@@ -9,17 +9,17 @@ Get the list of hash upgrades
 **Signature:**
 
 ```typescript
-getHashUpgrades(): string[];
+getHashUpgrades(): HacknetServerHashUpgrade[];
 ```
 **Returns:**
 
-string\[\]
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)<!-- -->\[\]
 
 An array containing the available upgrades
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
 

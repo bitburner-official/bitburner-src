@@ -14,10 +14,55 @@ hackAnalyzeThreads(host: string, hackAmount: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname of the target server to analyze. |
-|  hackAmount | number | Amount of money you want to hack from the server. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of the target server to analyze.
+
+
+</td></tr>
+<tr><td>
+
+hackAmount
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of money you want to hack from the server.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

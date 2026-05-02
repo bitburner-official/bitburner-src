@@ -14,10 +14,55 @@ setTailTitle(title: string | ReactNode, pid?: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  title | string \| [ReactNode](./bitburner.reactnode.md) | The new title for the tail window. |
-|  pid | number | _(Optional)_ Optional. PID of the script having its tail closed. If omitted, the current script is used. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+title
+
+
+</td><td>
+
+string \| [ReactNode](./bitburner.reactnode.md)
+
+
+</td><td>
+
+The new title for the tail window.
+
+
+</td></tr>
+<tr><td>
+
+pid
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional. PID of the script having its tail closed. If omitted, the current script is used.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

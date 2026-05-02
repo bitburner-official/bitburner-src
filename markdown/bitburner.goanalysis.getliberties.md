@@ -8,7 +8,17 @@ Returns a number for each point, representing how many open nodes its network/ch
 
 Takes an optional boardState argument; by default uses the current board state.
 
-For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured! <pre lang="javascript"> \[ \[-1, 5,-1,-1, 2\], \[ 5, 5,-1,-1,-1\], \[-1,-1, 4,-1,-1\], \[ 3,-1,-1, 3, 1\], \[ 3,-1,-1, 3, 1\], \] </pre>
+For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
+
+```
+[
+  [-1, 5,-1,-1, 2],
+  [ 5, 5,-1,-1,-1],
+  [-1,-1, 4,-1,-1],
+  [ 3,-1,-1, 3, 1],
+  [ 3,-1,-1, 3, 1],
+]
+```
 
 **Signature:**
 
@@ -18,9 +28,39 @@ getLiberties(boardState?: string[]): number[][];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  boardState | string\[\] | _(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+boardState
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+_(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -30,5 +70,7 @@ A 2D array of numbers counting the liberties of each point.
 
 ## Remarks
 
-RAM cost: 16 GB (This is intentionally expensive; you can derive this info from just getBoardState() )
+RAM cost: 16 GB
+
+(This is intentionally expensive; you can derive this info from just getBoardState() )
 

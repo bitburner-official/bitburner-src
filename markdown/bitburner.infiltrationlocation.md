@@ -13,11 +13,111 @@ interface InfiltrationLocation
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [difficulty](./bitburner.infiltrationlocation.difficulty.md) |  | number |  |
-|  [location](./bitburner.infiltrationlocation.location.md) |  | [ILocation](./bitburner.ilocation.md) |  |
-|  [maxClearanceLevel](./bitburner.infiltrationlocation.maxclearancelevel.md) |  | number |  |
-|  [reward](./bitburner.infiltrationlocation.reward.md) |  | [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
-|  [startingSecurityLevel](./bitburner.infiltrationlocation.startingsecuritylevel.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[difficulty](./bitburner.infiltrationlocation.difficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[location](./bitburner.infiltrationlocation.location.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ILocation](./bitburner.ilocation.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[maxClearanceLevel](./bitburner.infiltrationlocation.maxclearancelevel.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[reward](./bitburner.infiltrationlocation.reward.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[InfiltrationReward](./bitburner.infiltrationreward.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[startingSecurityLevel](./bitburner.infiltrationlocation.startingsecuritylevel.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

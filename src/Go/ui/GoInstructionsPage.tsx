@@ -5,9 +5,8 @@ import { GoOpponent, GoColor } from "@enums";
 import { boardStyles } from "../boardState/goStyles";
 import { boardStateFromSimpleBoard } from "../boardAnalysis/boardAnalysis";
 import { GoTutorialChallenge } from "./GoTutorialChallenge";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { getMaxFavor } from "../effects/effect";
+import { getMaxRep } from "../effects/effect";
+import { DocumentationLink } from "../../ui/React/DocumentationLink";
 
 const captureChallenge = (
   <GoTutorialChallenge
@@ -82,14 +81,9 @@ export const GoInstructionsPage = (): React.ReactElement => {
           subnets are very valuable in the right hands, if you can wrest them from their current owners.
           <br />
           <br />
-          (For details about how to automate with the API, and for a working starter script, visit the IPvGO section of
-          the in-game{" "}
-          <Link
-            style={{ cursor: "pointer" }}
-            onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/go_algorithms.md" })}
-          >
-            Bitburner Documentation)
-          </Link>
+          (For details about how to automate with the API, and for a working starter script, visit the{" "}
+          <DocumentationLink page="programming/go_algorithms.md">IPvGO</DocumentationLink> section of the in-game
+          documentation.)
         </Typography>
         <br />
         <br />
@@ -149,8 +143,11 @@ export const GoInstructionsPage = (): React.ReactElement => {
               will increase the amount gained, but is not required.
               <br />
               <br />
-              Two wins in a row against a faction will give you +1 favor to that faction (up to a max of
-              {getMaxFavor()} favor), if you are a member of that faction.
+              Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor with that
+              faction (up to a max of {getMaxRep()} reputation), if you are a member of that faction.
+              <br />
+              The rep is immediately applied as favor, meaning it will increase reputation gain right away without
+              needing an install.
               <br />
               <br />
               For experienced Go players: IPvGO uses the old traditional Go score rules, area scoring, rather than the
@@ -205,14 +202,9 @@ export const GoInstructionsPage = (): React.ReactElement => {
             <br />
             <br />
             <Typography>
-              * You can place routers and look at the board state via the "ns.go" api. For more details, go to the IPvGO
-              page in the{" "}
-              <Link
-                style={{ cursor: "pointer" }}
-                onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/go_algorithms.md" })}
-              >
-                Bitburner Documentation
-              </Link>
+              * You can place routers and look at the board state via the "ns.go" api. For more details, go to the{" "}
+              <DocumentationLink page="programming/go_algorithms.md">IPvGO</DocumentationLink> page in the documentation
+              tab.
               <br />
               <br />
               * If a network surrounds a single empty node, the opponent can eventually capture it by filling in that

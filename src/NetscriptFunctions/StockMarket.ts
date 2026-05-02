@@ -7,27 +7,28 @@ import {
   cancelOrder,
   initStockMarket,
   StockMarketPromise,
+  isStockMarketInitialized,
 } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
-import { PositionType, OrderType, StockSymbol } from "@enums";
+import { StockSymbol } from "@enums";
 import {
   getStockMarket4SDataCost,
   getStockMarket4STixApiCost,
   getStockMarketWseCost,
   getStockMarketTixApiCost,
 } from "../StockMarket/StockMarketCosts";
-import { Stock } from "../StockMarket/Stock";
-import { StockOrder, TIX } from "@nsdefs";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import type { Stock } from "../StockMarket/Stock";
+import type { StockOrder, Stock as StockAPI } from "@nsdefs";
+import { setRemovedFunctions, type InternalAPI, type NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
+import { getEnumHelper } from "../utils/EnumHelper";
+import { CONSTANTS } from "../Constants";
+import { getDarknetVolatilityMult } from "../DarkNet/effects/effects";
 
-export function NetscriptStockMarket(): InternalAPI<TIX> {
+export function NetscriptStockMarket(): InternalAPI<StockAPI> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
   const checkTixApiAccess = function (ctx: NetscriptContext): void {
-    if (!Player.hasWseAccount) {
-      throw helpers.errorMessage(ctx, `You don't have WSE Access! Cannot use ${ctx.function}()`);
-    }
     if (!Player.hasTixApiAccess) {
       throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
     }
@@ -42,12 +43,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     return stock;
   };
 
-  return {
+  const stockFunctions: InternalAPI<StockAPI> = {
     getConstants: () => () => structuredClone(StockMarketConstants),
-    hasWSEAccount: () => () => Player.hasWseAccount,
-    hasTIXAPIAccess: () => () => Player.hasTixApiAccess,
+    hasWseAccount: () => () => Player.hasWseAccount,
+    hasTixApiAccess: () => () => Player.hasTixApiAccess,
     has4SData: () => () => Player.has4SData,
-    has4SDataTIXAPI: () => () => Player.has4SDataTixApi,
+    has4SDataTixApi: () => () => Player.has4SDataTixApi,
     getSymbols: (ctx) => () => {
       checkTixApiAccess(ctx);
       return Object.values(StockSymbol);
@@ -99,22 +100,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     getPurchaseCost: (ctx) => (_symbol, _shares, _posType) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       let shares = helpers.number(ctx, "shares", _shares);
-      const posType = helpers.string(ctx, "posType", _posType);
+      const posType = getEnumHelper("PositionType").nsGetMember(ctx, _posType);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
       shares = Math.round(shares);
 
-      let pos;
-      const sanitizedPosType = posType.toLowerCase();
-      if (sanitizedPosType.includes("l")) {
-        pos = PositionType.Long;
-      } else if (sanitizedPosType.includes("s")) {
-        pos = PositionType.Short;
-      } else {
-        return Infinity;
-      }
-
-      const res = getBuyTransactionCost(stock, shares, pos);
+      const res = getBuyTransactionCost(stock, shares, posType);
       if (res == null) {
         return Infinity;
       }
@@ -124,22 +115,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     getSaleGain: (ctx) => (_symbol, _shares, _posType) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       let shares = helpers.number(ctx, "shares", _shares);
-      const posType = helpers.string(ctx, "posType", _posType);
+      const posType = getEnumHelper("PositionType").nsGetMember(ctx, _posType);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
       shares = Math.round(shares);
 
-      let pos;
-      const sanitizedPosType = posType.toLowerCase();
-      if (sanitizedPosType.includes("l")) {
-        pos = PositionType.Long;
-      } else if (sanitizedPosType.includes("s")) {
-        pos = PositionType.Short;
-      } else {
-        return 0;
-      }
-
-      const res = getSellTransactionGain(stock, shares, pos);
+      const res = getSellTransactionGain(stock, shares, posType);
       if (res == null) {
         return 0;
       }
@@ -191,46 +172,22 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       const price = helpers.number(ctx, "price", _price);
-      const type = helpers.string(ctx, "type", _type);
-      const pos = helpers.string(ctx, "pos", _pos);
+      const type = getEnumHelper("OrderType").nsGetMember(ctx, _type);
+      const pos = getEnumHelper("PositionType").nsGetMember(ctx, _pos);
       checkTixApiAccess(ctx);
       if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
         throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
       }
       const stock = getStockFromSymbol(ctx, symbol);
 
-      let orderType;
-      let orderPos;
-      const ltype = type.toLowerCase();
-      if (ltype.includes("limit") && ltype.includes("buy")) {
-        orderType = OrderType.LimitBuy;
-      } else if (ltype.includes("limit") && ltype.includes("sell")) {
-        orderType = OrderType.LimitSell;
-      } else if (ltype.includes("stop") && ltype.includes("buy")) {
-        orderType = OrderType.StopBuy;
-      } else if (ltype.includes("stop") && ltype.includes("sell")) {
-        orderType = OrderType.StopSell;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid order type: ${type}`);
-      }
-
-      const lpos = pos.toLowerCase();
-      if (lpos.includes("l")) {
-        orderPos = PositionType.Long;
-      } else if (lpos.includes("s")) {
-        orderPos = PositionType.Short;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid position type: ${pos}`);
-      }
-
-      return placeOrder(stock, shares, price, orderType, orderPos, ctx);
+      return placeOrder(stock, shares, price, type, pos, ctx);
     },
     cancelOrder: (ctx) => (_symbol, _shares, _price, _type, _pos) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       const price = helpers.number(ctx, "price", _price);
-      const type = helpers.string(ctx, "type", _type);
-      const pos = helpers.string(ctx, "pos", _pos);
+      const type = getEnumHelper("OrderType").nsGetMember(ctx, _type);
+      const pos = getEnumHelper("PositionType").nsGetMember(ctx, _pos);
       checkTixApiAccess(ctx);
       if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
         throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
@@ -239,37 +196,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       if (isNaN(shares) || isNaN(price)) {
         throw helpers.errorMessage(ctx, `Invalid shares or price. Must be numeric. shares=${shares}, price=${price}`);
       }
-      let orderType;
-      let orderPos;
-      const ltype = type.toLowerCase();
-      if (ltype.includes("limit") && ltype.includes("buy")) {
-        orderType = OrderType.LimitBuy;
-      } else if (ltype.includes("limit") && ltype.includes("sell")) {
-        orderType = OrderType.LimitSell;
-      } else if (ltype.includes("stop") && ltype.includes("buy")) {
-        orderType = OrderType.StopBuy;
-      } else if (ltype.includes("stop") && ltype.includes("sell")) {
-        orderType = OrderType.StopSell;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid order type: ${type}`);
-      }
 
-      const lpos = pos.toLowerCase();
-      if (lpos.includes("l")) {
-        orderPos = PositionType.Long;
-      } else if (lpos.includes("s")) {
-        orderPos = PositionType.Short;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid position type: ${pos}`);
-      }
-      const params = {
-        stock: stock,
-        shares: shares,
-        price: price,
-        type: orderType,
-        pos: orderPos,
-      };
-      return cancelOrder(params, ctx);
+      return cancelOrder({ stock, shares, price, type, pos }, ctx);
     },
     getOrders: (ctx) => () => {
       checkTixApiAccess(ctx);
@@ -277,7 +205,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
         throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or have Source-File 8 Level 3.");
       }
 
-      const orders: StockOrder = {};
+      const orders: Record<string, StockOrder[]> = {};
 
       const stockMarketOrders = StockMarket.Orders;
       for (const symbol of Object.keys(stockMarketOrders)) {
@@ -303,8 +231,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
         throw helpers.errorMessage(ctx, "You don't have 4S Market Data TIX API Access!");
       }
       const stock = getStockFromSymbol(ctx, symbol);
+      const volatility = stock.mv * getDarknetVolatilityMult(symbol);
 
-      return stock.mv / 100; // Convert from percentage to decimal
+      return volatility / 100; // Convert from percentage to decimal
     },
     getForecast: (ctx) => (_symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
@@ -319,13 +248,18 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketData: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
       }
 
       if (Player.has4SData) {
         helpers.log(ctx, () => "Already purchased 4S Market Data.");
         return true;
+      }
+
+      if (!Player.hasWseAccount) {
+        helpers.log(ctx, () => "You need to have a WSE account.");
+        return false;
       }
 
       if (Player.money < getStockMarket4SDataCost()) {
@@ -340,7 +274,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketDataTixApi: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
       }
 
@@ -373,7 +307,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       }
 
       Player.hasWseAccount = true;
-      initStockMarket();
+      if (!isStockMarketInitialized()) {
+        initStockMarket();
+      }
       Player.loseMoney(getStockMarketWseCost(), "stock");
       helpers.log(ctx, () => "Purchased WSE Account Access");
       return true;
@@ -390,13 +326,16 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       }
 
       Player.hasTixApiAccess = true;
+      if (!isStockMarketInitialized()) {
+        initStockMarket();
+      }
       Player.loseMoney(getStockMarketTixApiCost(), "stock");
       helpers.log(ctx, () => "Purchased TIX API");
       return true;
     },
     getBonusTime: (ctx) => () => {
       checkTixApiAccess(ctx);
-      return StockMarket.storedCycles * 200;
+      return StockMarket.storedCycles * CONSTANTS.MilliPerCycle;
     },
     nextUpdate: (ctx) => () => {
       checkTixApiAccess(ctx);
@@ -405,4 +344,21 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       return StockMarketPromise.promise;
     },
   };
+
+  setRemovedFunctions(stockFunctions, {
+    hasWSEAccount: { version: "3.0.0", replacement: "stock.hasWseAccount()" },
+    hasTIXAPIAccess: { version: "3.0.0", replacement: "stock.hasTixApiAccess()" },
+    has4SDataTIXAPI: { version: "3.0.0", replacement: "stock.has4SDataTixApi()" },
+  });
+
+  return stockFunctions;
 }
+
+export const getStockFromSymbol = function (ctx: NetscriptContext, symbol: string): Stock {
+  const stock = SymbolToStockMap[symbol];
+  if (stock == null) {
+    throw helpers.errorMessage(ctx, `Invalid stock symbol: '${symbol}'`);
+  }
+
+  return stock;
+};

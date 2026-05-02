@@ -7,9 +7,10 @@ import { BitNodes } from "../BitNode";
 import { Modal } from "../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { BitnodeMultiplierDescription } from "./BitnodeMultipliersDescription";
+import { BitNodeMultiplierDescription } from "./BitnodeMultipliersDescription";
 import { BitNodeAdvancedOptions } from "./BitNodeAdvancedOptions";
 import { JSONMap } from "../../Types/Jsonable";
+import { getBitNodeLevel } from "../BitNodeUtils";
 
 interface IProps {
   open: boolean;
@@ -37,7 +38,7 @@ export function PortalModal(props: IProps): React.ReactElement {
   const bitNode = BitNodes[bitNodeKey];
   if (bitNode == null) throw new Error(`Could not find BitNode object for number: ${props.n}`);
   const maxSourceFileLevel = props.n === 12 ? "∞" : "3";
-  const newLevel = Math.min(props.level + 1, props.n === 12 ? Number.MAX_VALUE : 3);
+  const newLevel = getBitNodeLevel(props.n, props.level);
 
   let currentSourceFiles = new Map(Player.sourceFiles);
   if (!props.flume) {
@@ -101,11 +102,9 @@ export function PortalModal(props: IProps): React.ReactElement {
         Source-File Level: {props.level} / {maxSourceFileLevel}
       </Typography>
       <br />
-      <Typography> Difficulty: {["easy", "normal", "hard"][bitNode.difficulty]}</Typography>
-      <br />
       <br />
       <Typography component="div">{bitNode.info}</Typography>
-      <BitnodeMultiplierDescription n={props.n} level={newLevel} />
+      <BitNodeMultiplierDescription n={props.n} level={newLevel} hideMultsIfCannotAccessFeature={false} />
       <BitNodeAdvancedOptions
         targetBitNode={props.n}
         currentSourceFiles={currentSourceFiles}

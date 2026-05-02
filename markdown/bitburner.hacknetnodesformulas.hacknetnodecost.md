@@ -9,15 +9,60 @@ Calculate the cost of a hacknet node.
 **Signature:**
 
 ```typescript
-hacknetNodeCost(n: number, mult: number): number;
+hacknetNodeCost(n: number, mult?: number): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  n | number | number of the hacknet node |
-|  mult | number | player cost reduction (defaults to 1) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+n
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+number of the hacknet node
+
+
+</td></tr>
+<tr><td>
+
+mult
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ player cost reduction (defaults to 1)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

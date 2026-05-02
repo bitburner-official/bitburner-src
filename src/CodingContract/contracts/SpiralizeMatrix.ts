@@ -1,5 +1,6 @@
 import { CodingContractName } from "@enums";
-import { removeBracketsFromArrayString, type CodingContractTypes } from "../ContractTypes";
+import { parseArrayString, type CodingContractTypes } from "../ContractTypes";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 
 export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.SpiralizeMatrix> = {
@@ -12,30 +13,25 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
       // for (const line of n) {
       //   d += `${line.toString()},\n`;
       // }
-      d += "&nbsp;&nbsp;&nbsp;&nbsp;[\n";
+      d += "    [\n";
       d += n
-        .map(
-          (line: number[]) =>
-            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[" +
-            line.map((x: number) => `${x}`.padStart(2, " ")).join(",") +
-            "]",
-        )
+        .map((line: number[]) => "        [" + line.map((x: number) => `${x}`.padStart(2, " ")).join(",") + "]")
         .join("\n");
-      d += "\n&nbsp;&nbsp;&nbsp;&nbsp;]\n";
+      d += "\n    ]\n";
       d += [
         "\nHere is an example of what spiral order should be:\n\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;[\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1, 2, 3]\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4, 5, 6]\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7, 8, 9]\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;]\n\n",
+        "    [\n",
+        "        [1, 2, 3]\n",
+        "        [4, 5, 6]\n",
+        "        [7, 8, 9]\n",
+        "    ]\n\n",
         "Answer: [1, 2, 3, 6, 9, 8 ,7, 4, 5]\n\n",
         "Note that the matrix will not always be square:\n\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;[\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1,&nbsp;&nbsp;2,&nbsp;&nbsp;3,&nbsp;&nbsp;4]\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5,&nbsp;&nbsp;6,&nbsp;&nbsp;7,&nbsp;&nbsp;8]\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[9,&nbsp;10,&nbsp;11,&nbsp;12]\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;]\n\n",
+        "    [\n",
+        "        [1,  2,  3,  4]\n",
+        "        [5,  6,  7,  8]\n",
+        "        [9, 10, 11, 12]\n",
+        "    ]\n\n",
         "Answer: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]",
       ].join(" ");
 
@@ -60,7 +56,7 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
 
       return matrix;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const spiral: number[] = [];
       const m: number = data.length;
       const n: number = data[0].length;
@@ -112,13 +108,31 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
         }
       }
 
+      return spiral;
+    },
+    solver: (data, answer) => {
+      const spiral = spiralizeMatrix[CodingContractName.SpiralizeMatrix].getAnswer(data);
+
+      if (spiral === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${
+              CodingContractName.SpiralizeMatrix
+            } contract. Data: ${JSON.stringify(data)}`,
+          ),
+        );
+        return false;
+      }
+
       return spiral.length === answer.length && spiral.every((n, i) => n === answer[i]);
     },
     convertAnswer: (ans) => {
-      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "").split(",");
-      return sanitized.map((s) => parseInt(s));
+      const parsedAnswer = parseArrayString(ans);
+      if (!spiralizeMatrix[CodingContractName.SpiralizeMatrix].validateAnswer(parsedAnswer)) {
+        return null;
+      }
+      return parsedAnswer;
     },
-    validateAnswer: (ans): ans is number[] =>
-      typeof ans === "object" && Array.isArray(ans) && ans.every((n) => typeof n === "number"),
+    validateAnswer: (ans): ans is number[] => Array.isArray(ans) && ans.every((n) => typeof n === "number"),
   },
 };

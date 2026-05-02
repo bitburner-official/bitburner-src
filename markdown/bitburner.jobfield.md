@@ -2,30 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [JobField](./bitburner.jobfield.md)
 
-## JobField enum
+## JobField type
 
 
 **Signature:**
 
 ```typescript
-declare enum JobField 
+type JobField = _ValueOf<JobFieldEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  agent | <code>&quot;Agent&quot;</code> |  |
-|  business | <code>&quot;Business&quot;</code> |  |
-|  businessConsultant | <code>&quot;Business Consultant&quot;</code> |  |
-|  employee | <code>&quot;Employee&quot;</code> |  |
-|  it | <code>&quot;IT&quot;</code> |  |
-|  networkEngineer | <code>&quot;Network Engineer&quot;</code> |  |
-|  partTimeEmployee | <code>&quot;Part-time Employee&quot;</code> |  |
-|  partTimeWaiter | <code>&quot;Part-time Waiter&quot;</code> |  |
-|  security | <code>&quot;Security&quot;</code> |  |
-|  securityEngineer | <code>&quot;Security Engineer&quot;</code> |  |
-|  software | <code>&quot;Software&quot;</code> |  |
-|  softwareConsultant | <code>&quot;Software Consultant&quot;</code> |  |
-|  waiter | <code>&quot;Waiter&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)
 

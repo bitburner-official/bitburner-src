@@ -14,9 +14,39 @@ getAugmentationPrereq(augName: string): string[];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  augName | string | Name of Augmentation. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+augName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of Augmentation.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

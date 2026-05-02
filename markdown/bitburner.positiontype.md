@@ -2,19 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [PositionType](./bitburner.positiontype.md)
 
-## PositionType enum
+## PositionType type
 
 
 **Signature:**
 
 ```typescript
-declare enum PositionType 
+type PositionType = _ValueOf<PositionEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Long | <code>&quot;L&quot;</code> |  |
-|  Short | <code>&quot;S&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [PositionEnumType](./bitburner.positionenumtype.md)
 

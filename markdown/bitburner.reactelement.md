@@ -14,9 +14,77 @@ interface ReactElement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [key](./bitburner.reactelement.key.md) |  | string \| number \| null |  |
-|  [props](./bitburner.reactelement.props.md) |  | any |  |
-|  [type](./bitburner.reactelement.type.md) |  | string \| ((props: any) =&gt; [ReactElement](./bitburner.reactelement.md) \| null) \| (new (props: any) =&gt; object) |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[key](./bitburner.reactelement.key.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string \| number \| null
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[props](./bitburner.reactelement.props.md)
+
+
+</td><td>
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.reactelement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string \| ((props: any) =&gt; [ReactElement](./bitburner.reactelement.md) \| null) \| (new (props: any) =&gt; object)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -14,12 +14,128 @@ export interface CompanyPositionInfo
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [field](./bitburner.companypositioninfo.field.md) |  | [JobField](./bitburner.jobfield.md) |  |
-|  [name](./bitburner.companypositioninfo.name.md) |  | [JobName](./bitburner.jobname.md) |  |
-|  [nextPosition](./bitburner.companypositioninfo.nextposition.md) |  | [JobName](./bitburner.jobname.md) \| null |  |
-|  [requiredReputation](./bitburner.companypositioninfo.requiredreputation.md) |  | number |  |
-|  [requiredSkills](./bitburner.companypositioninfo.requiredskills.md) |  | [Skills](./bitburner.skills.md) |  |
-|  [salary](./bitburner.companypositioninfo.salary.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[field](./bitburner.companypositioninfo.field.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[JobField](./bitburner.jobfield.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.companypositioninfo.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[JobName](./bitburner.jobname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[nextPosition](./bitburner.companypositioninfo.nextposition.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[JobName](./bitburner.jobname.md) \| null
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[requiredReputation](./bitburner.companypositioninfo.requiredreputation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[requiredSkills](./bitburner.companypositioninfo.requiredskills.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Skills](./bitburner.skills.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[salary](./bitburner.companypositioninfo.salary.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

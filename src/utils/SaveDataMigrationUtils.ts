@@ -12,24 +12,29 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { Player } from "@player";
-import { AugmentationName, CodingContractName, LocationName } from "@enums";
-import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer, renameServer } from "../Server/AllServers";
+import { AugmentationName, CityName, CodingContractName, LocationName } from "@enums";
+import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
 import { Settings } from "../Settings/Settings";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { SpecialServers } from "../Server/data/SpecialServers";
-import { safelyCreateUniqueServer } from "../Server/ServerHelpers";
 import { v2APIBreak } from "./v2APIBreak";
 import { Terminal } from "../Terminal";
 import { getRecordValues } from "../Types/Record";
 import { ServerName } from "../Types/strings";
 import { ContentFilePath, ContentFile, ContentFileMap } from "../Paths/ContentFile";
-import { exportMaterial } from "../Corporation/Actions";
+import { exportMaterial, upgradeWarehouseCost } from "../Corporation/Actions";
 import { getGoSave, loadGo } from "../Go/SaveLoad";
 import { showAPIBreaks } from "./APIBreaks/APIBreak";
 import { breakInfos261 } from "./APIBreaks/2.6.1";
+import { breakingChanges300 } from "./APIBreaks/3.0.0";
+import { calculateOfficeSizeUpgradeCost, calculateUpgradeCost } from "../Corporation/helpers";
+import type { PositiveInteger } from "../types";
+import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../Corporation/data/Constants";
+import { load } from "../db";
+import { downloadContentAsFile } from "./FileUtils";
+import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -60,7 +65,7 @@ function removeWhitespace(hostname: ServerName, file: ContentFile, files: Conten
 
 // Makes necessary changes to the loaded/imported data to ensure
 // the game stills works with new versions
-export function evaluateVersionCompatibility(ver: string | number): void {
+export async function evaluateVersionCompatibility(ver: string | number): Promise<void> {
   // We have to do this because ts won't let us otherwise
   const anyPlayer = Player as any;
   if (typeof ver === "string") {
@@ -84,10 +89,6 @@ export function evaluateVersionCompatibility(ver: string | number): void {
       delete anyPlayer.companyPosition;
     }
     if (ver < "0.56.0") {
-      // In older versions, keys of AllServers are IP addresses instead of hostnames.
-      for (const server of GetAllServers()) {
-        renameServer(server.ip, server.hostname);
-      }
       for (const q of anyPlayer.queuedAugmentations) {
         if (q.name === "Graphene BranchiBlades Upgrade") {
           q.name = "Graphene BrachiBlades Upgrade";
@@ -234,22 +235,6 @@ export function evaluateVersionCompatibility(ver: string | number): void {
     Player.reapplyAllSourceFiles();
   }
 
-  if (ver < 20) {
-    // Create the darkweb for everyone but it won't be linked
-    const dw = GetServer(SpecialServers.DarkWeb);
-    if (!dw) {
-      const darkweb = safelyCreateUniqueServer({
-        ip: createUniqueRandomIp(),
-        hostname: SpecialServers.DarkWeb,
-        organizationName: "",
-        isConnectedTo: false,
-        adminRights: false,
-        purchasedByPlayer: false,
-        maxRam: 1,
-      });
-      AddToAllServers(darkweb);
-    }
-  }
   if (ver < 21) {
     // 2.0.0 work rework
     AwardNFG(10);
@@ -526,7 +511,7 @@ Error: ${e}`,
     loadGo(JSON.stringify(freshSaveData));
   }
   if (ver < 39) {
-    showAPIBreaks("2.6.1", ...breakInfos261);
+    showAPIBreaks("2.6.1", breakInfos261);
   }
   if (ver < 42) {
     // All whitespace except for spaces was allowed in filenames
@@ -544,5 +529,119 @@ Error: ${e}`,
       }
     }
     if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
+  }
+  // Migrate save data related to the breaking changes in the first beta of v3.0.0.
+  if (ver < 44) {
+    try {
+      /**
+       * Backup pre-v3 save data. We must use the data in IndexedDB instead of calling saveObject.getSaveData().
+       * getSaveData() returns data in v3 format, so the exported data will not be importable in pre-v3.
+       */
+      const saveData = await load(true);
+      if (saveData !== undefined) {
+        downloadContentAsFile(saveData, `bitburnerSave_backup_2.8.1_${Math.round(Player.lastUpdate / 1000)}.json.gz`);
+      } else {
+        console.error("Cannot back up save data before migrating to v3. The save data is somehow undefined.");
+      }
+    } catch (error) {
+      console.error("Cannot export pre-v3 save data", error);
+    }
+    if (Player.corporation) {
+      // Remove and refund DreamSense
+      for (const [name, upgrade] of Object.entries(Player.corporation.upgrades)) {
+        if (name !== "DreamSense") {
+          continue;
+        }
+        const cost = calculateUpgradeCost(4e9, 1.1, 0, upgrade.level as PositiveInteger);
+        Player.corporation.gainFunds(cost, "force majeure");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete (Player.corporation.upgrades as Record<string, unknown>)["DreamSense"];
+
+      // Remove and refund Spring Water divisions
+      for (const division of Player.corporation.divisions.values()) {
+        if ((division.industry as string) === "Spring Water") {
+          // Refund division
+          let refund = 0;
+          refund += 10e9;
+          for (const office of Object.values(division.offices)) {
+            // Refund office
+            if (office.city !== CityName.Sector12) {
+              refund += officeInitialCost;
+            }
+            if (office.size > officeInitialSize) {
+              refund += calculateOfficeSizeUpgradeCost(
+                officeInitialSize,
+                (office.size - officeInitialSize) as PositiveInteger,
+              );
+            }
+          }
+          for (const warehouse of Object.values(division.warehouses)) {
+            // Refund warehouse
+            if (warehouse.city !== CityName.Sector12) {
+              refund += warehouseInitialCost;
+            }
+            if (warehouse.level > 1) {
+              refund += upgradeWarehouseCost(1, warehouse.level - 1);
+            }
+            // Refund material
+            for (const material of Object.values(warehouse.materials)) {
+              if (material.stored <= 0) {
+                continue;
+              }
+              refund += material.stored * material.marketPrice;
+            }
+          }
+          Player.corporation.gainFunds(refund, "force majeure");
+          Player.corporation.divisions.delete(division.name);
+        } else {
+          // Remove export routes
+          for (const warehouse of Object.values(division.warehouses)) {
+            for (const material of Object.values(warehouse.materials)) {
+              for (let i = 0; i < material.exports.length; ++i) {
+                const exportRoute = material.exports[i];
+                const targetDivision = Player.corporation.divisions.get(exportRoute.division);
+                if (targetDivision && (targetDivision.industry as string) !== "Spring Water") {
+                  continue;
+                }
+                material.exports.splice(i, 1);
+              }
+            }
+          }
+        }
+      }
+
+      // Remove and refund VeChain
+      const unlocks: Set<string> = Player.corporation.unlocks;
+      for (const upgrade of unlocks) {
+        if (upgrade !== "VeChain") {
+          continue;
+        }
+        Player.corporation.gainFunds(10e9, "force majeure");
+      }
+      unlocks.delete("VeChain");
+    }
+  }
+  if (ver < 45) {
+    initDarkwebServer();
+  }
+  if (ver < 47) {
+    for (const faction of [...Player.factions, ...Player.factionInvitations]) {
+      Player.factionRumors.add(faction);
+    }
+    for (const person of [Player, ...Player.sleeves]) {
+      person.persistentIntelligenceData.exp = person.exp.intelligence;
+      person.overrideIntelligence();
+    }
+  }
+  if (ver < 49) {
+    if (Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
+      for (const person of [Player, ...Player.sleeves]) {
+        person.persistentIntelligenceData.exp = 0;
+        person.exp.intelligence = 0;
+        person.skills.intelligence = 0;
+      }
+    }
+    showAPIBreaks("3.0.0", breakingChanges300);
   }
 }

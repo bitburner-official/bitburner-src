@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -11,6 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Player } from "@player";
 import MenuItem from "@mui/material/MenuItem";
 import { CompletedProgramName } from "@enums";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function ProgramsDev(): React.ReactElement {
   const [program, setProgram] = useState(CompletedProgramName.bruteSsh);
@@ -29,7 +29,7 @@ export function ProgramsDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_ProgramsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Programs</Typography>
       </AccordionSummary>
@@ -62,6 +62,6 @@ export function ProgramsDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

@@ -33,10 +33,6 @@ import {
 } from "../../src/StockMarket/StockMarketHelpers";
 import { CompanyName, LocationName, OrderType, PositionType } from "../../src/Enums";
 
-// jest.mock("../src/ui/React/createPopup.tsx", () => ({
-//   createPopup: jest.fn(),
-// }));
-
 describe("Stock Market Tests", function () {
   const commission = StockMarketConstants.StockMarketCommission;
 
@@ -386,6 +382,7 @@ describe("Stock Market Tests", function () {
       const stocks: string[] = [];
 
       beforeEach(function () {
+        expect(deleteStockMarket).not.toThrow();
         expect(initStockMarket).not.toThrow();
         expect(initSymbolToStockMap).not.toThrow();
       });
@@ -417,7 +414,7 @@ describe("Stock Market Tests", function () {
         expect(StockMarket).toHaveProperty("storedCycles");
         expect(StockMarket["storedCycles"]).toEqual(0);
         expect(StockMarket).toHaveProperty("lastUpdate");
-        expect(StockMarket["lastUpdate"]).toEqual(0);
+        expect(StockMarket["lastUpdate"]).toBeGreaterThan(0);
         expect(StockMarket).toHaveProperty("ticksUntilCycle");
         expect(typeof StockMarket["ticksUntilCycle"]).toBe("number");
       });
@@ -451,7 +448,7 @@ describe("Stock Market Tests", function () {
 
       it("should trigger a price update when it has enough cycles", function () {
         // Get the initial prices
-        const initialValues: Record<string, any> = {};
+        const initialValues: Record<string, { price: number; otlkMag: number; b: boolean }> = {};
         for (const stockName in StockMarket) {
           const stock = StockMarket[stockName];
           if (!(stock instanceof Stock)) {
@@ -1073,6 +1070,7 @@ describe("Stock Market Tests", function () {
 
   describe("Order Placing & Processing", function () {
     beforeEach(function () {
+      expect(deleteStockMarket).not.toThrow();
       expect(initStockMarket).not.toThrow();
       expect(initSymbolToStockMap).not.toThrow();
 
@@ -1159,6 +1157,7 @@ describe("Stock Market Tests", function () {
       let processOrdersRefs: IProcessOrderRefs;
 
       beforeEach(function () {
+        expect(deleteStockMarket).not.toThrow();
         expect(initStockMarket).not.toThrow();
         expect(initSymbolToStockMap).not.toThrow();
 
@@ -1293,6 +1292,7 @@ describe("Stock Market Tests", function () {
     });
 
     beforeEach(function () {
+      expect(deleteStockMarket).not.toThrow();
       expect(initStockMarket).not.toThrow();
       expect(initSymbolToStockMap).not.toThrow();
 

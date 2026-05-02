@@ -14,14 +14,162 @@ interface Player extends Person
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [entropy](./bitburner.player.entropy.md) |  | number |  |
-|  [factions](./bitburner.player.factions.md) |  | string\[\] |  |
-|  [jobs](./bitburner.player.jobs.md) |  | Partial&lt;Record&lt;[CompanyName](./bitburner.companyname.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->&gt;&gt; |  |
-|  [karma](./bitburner.player.karma.md) |  | number |  |
-|  [location](./bitburner.player.location.md) |  | [LocationName](./bitburner.locationname.md) |  |
-|  [money](./bitburner.player.money.md) |  | number |  |
-|  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) |  | number |  |
-|  [totalPlaytime](./bitburner.player.totalplaytime.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[entropy](./bitburner.player.entropy.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[factions](./bitburner.player.factions.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)<!-- -->\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[jobs](./bitburner.player.jobs.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Partial&lt;Record&lt;[CompanyName](./bitburner.companyname.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->&gt;&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[karma](./bitburner.player.karma.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[location](./bitburner.player.location.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[money](./bitburner.player.money.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[numPeopleKilled](./bitburner.player.numpeoplekilled.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[totalPlaytime](./bitburner.player.totalplaytime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

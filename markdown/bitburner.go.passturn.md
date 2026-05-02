@@ -20,9 +20,39 @@ passTurn(passAsWhite?: boolean): Promise<{
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  passAsWhite | boolean | _(Optional)_ optional. If true, attempts to pass as white and then wait for black's move. Only can be used when playing against "No AI". |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+passAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ optional. If true, attempts to pass as white and then wait for black's move. Only can be used when playing against "No AI".
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

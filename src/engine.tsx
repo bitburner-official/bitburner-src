@@ -22,10 +22,10 @@ import { checkForMessagesToSend } from "./Message/MessageHelpers";
 import { loadAllRunningScripts, updateOnlineScriptTimes } from "./NetscriptWorker";
 import { Player } from "@player";
 import { saveObject, loadGame } from "./SaveObject";
-import { GetAllServers, initForeignServers } from "./Server/AllServers";
+import { GetAllServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
-import { initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
+import { canAccessStockMarket, initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
 import { Terminal } from "./Terminal";
 
 import { Money } from "./ui/React/Money";
@@ -48,6 +48,12 @@ import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
+import { getRecordEntries } from "./Types/Record";
+import { storeDarknetCycles } from "./DarkNet/models/DarknetState";
+import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
+import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
+import { initForeignServers } from "./Server/ServerHelpers";
+import { apr1 } from "./Terminal/commands/apr1";
 
 declare global {
   // This property is only available in the dev build
@@ -62,35 +68,15 @@ declare global {
       loadGame: typeof loadGame;
     };
   };
+  // eslint-disable-next-line no-var
+  var openDevMenu: () => void;
 }
 
 export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
-const Engine: {
-  _lastUpdate: number;
-  updateGame: (numCycles?: number) => void;
-  Counters: {
-    [key: string]: number | undefined;
-    autoSaveCounter: number;
-    updateSkillLevelsCounter: number;
-    updateDisplays: number;
-    updateDisplaysLong: number;
-    updateActiveScriptsDisplay: number;
-    createProgramNotifications: number;
-    augmentationsNotifications: number;
-    checkFactionInvitations: number;
-    passiveFactionGrowth: number;
-    messages: number;
-    mechanicProcess: number;
-    contractGeneration: number;
-    achievementsCounter: number;
-  };
-  decrementAllCounters: (numCycles?: number) => void;
-  checkCounters: () => void;
-  load: (saveData: SaveData) => Promise<void>;
-  start: () => void;
-} = {
+const Engine = {
+  isRunning: false,
   // Time variables (milliseconds unix epoch time)
   _lastUpdate: new Date().getTime(),
   updateGame: function (numCycles = 1) {
@@ -113,7 +99,7 @@ const Engine: {
     Player.processWork(numCycles);
 
     // Update stock prices
-    if (Player.hasWseAccount) {
+    if (canAccessStockMarket()) {
       processStockPrices(numCycles);
     }
 
@@ -134,6 +120,11 @@ const Engine: {
 
     // Sleeves
     Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
+
+    // Darknet
+    if (hasDarknetAccess()) {
+      processDarknet(numCycles);
+    }
 
     // Update the running time of all active scripts
     updateOnlineScriptTimes(numCycles);
@@ -166,11 +157,11 @@ const Engine: {
     messages: 150,
     mechanicProcess: 5, // Process Bladeburner
     contractGeneration: 3000, // Generate Coding Contracts
-    achievementsCounter: 60, // Check if we have new achievements
+    achievementsCounter: 5, // Check if we have new achievements
   },
 
   decrementAllCounters: function (numCycles = 1) {
-    for (const [counterName, counter] of Object.entries(Engine.Counters)) {
+    for (const [counterName, counter] of getRecordEntries(Engine.Counters)) {
       if (counter === undefined) {
         exceptionAlert(new Error(`counter value is undefined. counterName: ${counterName}.`), true);
         continue;
@@ -218,13 +209,13 @@ const Engine: {
     }
 
     if (Engine.Counters.contractGeneration <= 0) {
-      tryGeneratingRandomContract(1);
+      tryGeneratingRandomContract(3);
       Engine.Counters.contractGeneration = 3000;
     }
 
     if (Engine.Counters.achievementsCounter <= 0) {
       calculateAchievements();
-      Engine.Counters.achievementsCounter = 300;
+      Engine.Counters.achievementsCounter = 5;
     }
 
     // This **MUST** remain the last block in the function!
@@ -246,7 +237,7 @@ const Engine: {
     }
   },
 
-  load: async function (saveData) {
+  load: async function (saveData?: SaveData) {
     startExploits();
     setupUncaughtPromiseHandler();
     // Source files must be initialized early because save-game translation in
@@ -254,10 +245,10 @@ const Engine: {
     initSourceFiles();
     // Load game from save or create new game
 
-    if (await loadGame(saveData)) {
+    if (saveData !== undefined && (await loadGame(saveData))) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      if (Player.hasWseAccount) {
+      if (canAccessStockMarket()) {
         initSymbolToStockMap();
       }
 
@@ -274,7 +265,7 @@ const Engine: {
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
       // Generate bonus CCTs
-      tryGeneratingRandomContract(timeOffline / CONSTANTS.MillisecondsPerTenMinutes);
+      tryGeneratingRandomContract((timeOffline * 3) / CONSTANTS.MillisecondsPerTenMinutes);
 
       let offlineReputation = 0;
       let offlineHackingIncome =
@@ -283,10 +274,10 @@ const Engine: {
         offlineHackingIncome = 0;
       }
       Player.gainMoney(offlineHackingIncome, "hacking");
-      // Process offline progress
 
       loadAllRunningScripts(); // This also takes care of offline production for those scripts
 
+      // Process offline progress
       if (Player.currentWork !== null) {
         Player.focus = true;
         Player.processWork(numCyclesOffline);
@@ -328,7 +319,7 @@ const Engine: {
       processPassiveFactionRepGain(numCyclesOffline);
 
       // Stock Market offline progress
-      if (Player.hasWseAccount) {
+      if (canAccessStockMarket()) {
         processStockPrices(numCyclesOffline);
       }
 
@@ -342,6 +333,8 @@ const Engine: {
       if (Player.bladeburner) Player.bladeburner.storeCycles(numCyclesOffline);
 
       Go.storeCycles(numCyclesOffline);
+
+      storeDarknetCycles(numCyclesOffline);
 
       staneksGift.process(numCyclesOffline);
 
@@ -417,9 +410,11 @@ const Engine: {
         },
       };
     }
+    globalThis.openDevMenu = () => apr1();
   },
 
   start: function () {
+    this.isRunning = true;
     // Get time difference
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
@@ -438,7 +433,7 @@ const Engine: {
       Engine._lastUpdate = _thisUpdate - offset;
       Player.lastUpdate = _thisUpdate - offset;
       Engine.updateGame(diff);
-      if (GameCycleEvents.hasSubscibers()) {
+      if (GameCycleEvents.hasSubscribers()) {
         ReactDOM.unstable_batchedUpdates(() => {
           GameCycleEvents.emit();
         });

@@ -13,8 +13,60 @@ interface MoneySources
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [sinceInstall](./bitburner.moneysources.sinceinstall.md) |  | [MoneySource](./bitburner.moneysource.md) |  |
-|  [sinceStart](./bitburner.moneysources.sincestart.md) |  | [MoneySource](./bitburner.moneysource.md) |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[sinceInstall](./bitburner.moneysources.sinceinstall.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[MoneySource](./bitburner.moneysource.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[sinceStart](./bitburner.moneysources.sincestart.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[MoneySource](./bitburner.moneysource.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -9,16 +9,50 @@ Open up a message box.
 **Signature:**
 
 ```typescript
-alert(msg: string): void;
+alert(...args: any[]): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  msg | string | Message to alert. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+Value(s) to be alerted.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 0 GB
 

@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { calculateServerGrowth, calculateGrowMoney } from "../Server/formulas/grow";
-import { numCycleForGrowthCorrected } from "../Server/ServerHelpers";
+import { getWeakenEffect, numCycleForGrowthCorrected } from "../Server/ServerHelpers";
 import {
   calculateMoneyGainRate,
   calculateLevelUpgradeCost,
@@ -26,7 +26,7 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import { CityName, CompletedProgramName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
+import { CityName, CompletedProgramName, LocationName } from "@enums";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
@@ -47,12 +47,15 @@ import { calculateClassEarnings } from "../Work/Formulas";
 import { calculateFactionExp, calculateFactionRep } from "../Work/Formulas";
 
 import { defaultMultipliers } from "../PersonObjects/Multipliers";
-import { findEnumMember } from "../utils/helpers/enum";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CompanyPositions } from "../Company/CompanyPositions";
-import { findCrime } from "../Crime/CrimeHelpers";
 import { Skills } from "../Bladeburner/data/Skills";
 import type { PositiveNumber } from "../types";
+import { Crimes } from "../Crime/Crimes";
+import { calculateEffectiveSharedThreads, calculateShareBonus } from "../NetworkShare/Share";
+import { calculateAuthenticationTime } from "../DarkNet/effects/effects";
+import { assertDarknetServerData } from "../Netscript/TypeAssertion";
+import { getRamBlockRemoved } from "../DarkNet/effects/ramblock";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -134,6 +137,14 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         return donationForRep(reputation, person);
       },
+      sharePower:
+        (ctx) =>
+        (_threads, _cpuCores = 1) => {
+          const threads = helpers.positiveInteger(ctx, "threads", _threads);
+          const cpuCores = helpers.positiveInteger(ctx, "cpuCores", _cpuCores);
+          checkFormulasAccess(ctx);
+          return calculateShareBonus(calculateEffectiveSharedThreads(threads, cpuCores));
+        },
     },
     skills: {
       calculateSkill:
@@ -224,6 +235,14 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         return calculateWeakenTime(server, person) * 1000;
       },
+      weakenEffect:
+        (ctx) =>
+        (_threads, _cores = 1) => {
+          const threads = helpers.number(ctx, "threads", _threads);
+          const cores = helpers.number(ctx, "cores", _cores);
+          checkFormulasAccess(ctx);
+          return getWeakenEffect(threads, cores);
+        },
     },
     hacknetNodes: {
       moneyGainRate:
@@ -263,12 +282,14 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           checkFormulasAccess(ctx);
           return calculateCoreUpgradeCost(startingCore, extraCores, costMult);
         },
-      hacknetNodeCost: (ctx) => (_n, _mult) => {
-        const n = helpers.number(ctx, "n", _n);
-        const mult = helpers.number(ctx, "mult", _mult);
-        checkFormulasAccess(ctx);
-        return calculateNodeCost(n, mult);
-      },
+      hacknetNodeCost:
+        (ctx) =>
+        (_n, _mult = 1) => {
+          const n = helpers.number(ctx, "n", _n);
+          const mult = helpers.number(ctx, "mult", _mult);
+          checkFormulasAccess(ctx);
+          return calculateNodeCost(n, mult);
+        },
       constants: (ctx) => () => {
         checkFormulasAccess(ctx);
         return Object.assign({}, HacknetNodeConstants);
@@ -322,7 +343,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           return HScalculateCacheUpgradeCost(startingCache, extraCache);
         },
       hashUpgradeCost: (ctx) => (_upgName, _level) => {
-        const upgName = helpers.string(ctx, "upgName", _upgName);
+        const upgName = getEnumHelper("HashUpgradeEnum").nsGetMember(ctx, _upgName);
         const level = helpers.number(ctx, "level", _level);
         checkFormulasAccess(ctx);
         const upg = Player.hashManager.getUpgrade(upgName);
@@ -386,38 +407,39 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       crimeSuccessChance: (ctx) => (_person, _crimeType) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const crime = findCrime(helpers.string(ctx, "crimeType", _crimeType));
-        if (!crime) throw new Error(`Invalid crime type: ${_crimeType}`);
+        const crime = Crimes[getEnumHelper("CrimeType").nsGetMember(ctx, _crimeType)];
+        if (!crime) {
+          throw new Error(`Invalid crime type: ${_crimeType}`);
+        }
         return crime.successRate(person);
       },
       crimeGains: (ctx) => (_person, _crimeType) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const crime = findCrime(helpers.string(ctx, "crimeType", _crimeType));
-        if (!crime) throw new Error(`Invalid crime type: ${_crimeType}`);
+        const crime = Crimes[getEnumHelper("CrimeType").nsGetMember(ctx, _crimeType)];
+        if (!crime) {
+          throw new Error(`Invalid crime type: ${_crimeType}`);
+        }
         return calculateCrimeWorkStats(person, crime);
       },
       gymGains: (ctx) => (_person, _classType, _locationName) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const classType = findEnumMember(GymType, helpers.string(ctx, "classType", _classType));
-        if (!classType) throw new Error(`Invalid gym training type: ${_classType}`);
+        const classType = getEnumHelper("GymType").nsGetMember(ctx, _classType);
         const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
         return calculateClassEarnings(person, classType, locationName);
       },
       universityGains: (ctx) => (_person, _classType, _locationName) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const classType = findEnumMember(UniversityClassType, helpers.string(ctx, "classType", _classType));
-        if (!classType) throw new Error(`Invalid university class type: ${_classType}`);
+        const classType = getEnumHelper("UniversityClassType").nsGetMember(ctx, _classType);
         const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
         return calculateClassEarnings(person, classType, locationName);
       },
       factionGains: (ctx) => (_player, _workType, _favor) => {
         checkFormulasAccess(ctx);
         const player = helpers.person(ctx, _player);
-        const workType = findEnumMember(FactionWorkType, helpers.string(ctx, "_workType", _workType));
-        if (!workType) throw new Error(`Invalid faction work type: ${_workType}`);
+        const workType = getEnumHelper("FactionWorkType").nsGetMember(ctx, _workType);
         const favor = helpers.number(ctx, "favor", _favor);
         const exp = calculateFactionExp(player, workType);
         const rep = calculateFactionRep(player, workType, favor);
@@ -456,6 +478,32 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         }
         return skill.calculateMaxUpgradeCount(level, skillPoints as PositiveNumber);
       },
+    },
+    dnet: {
+      getAuthenticateTime:
+        (ctx) =>
+        (_darknetServerData, _threads, _player): number => {
+          assertDarknetServerData(ctx, _darknetServerData);
+          const threads = helpers.number(ctx, "threads", _threads ?? 1);
+          const person = helpers.person(ctx, _player ?? Player);
+          return calculateAuthenticationTime(_darknetServerData, person, threads);
+        },
+      getHeartbleedTime:
+        (ctx) =>
+        (_darknetServerData, _threads, _player): number => {
+          assertDarknetServerData(ctx, _darknetServerData);
+          const threads = helpers.number(ctx, "threads", _threads ?? 1);
+          const person = helpers.person(ctx, _player ?? Player);
+          return calculateAuthenticationTime(_darknetServerData, person, threads) * 1.5;
+        },
+      getExpectedRamBlockRemoved:
+        (ctx) =>
+        (_darknetServerData, _threads, _person): number => {
+          assertDarknetServerData(ctx, _darknetServerData);
+          const threads = helpers.number(ctx, "threads", _threads ?? 1);
+          const person = helpers.person(ctx, _person ?? Player);
+          return getRamBlockRemoved(_darknetServerData, threads, person);
+        },
     },
   };
 

@@ -6,15 +6,17 @@
 
 Shows if each point on the board is a valid move for the player. By default, analyzes the current board state. Takes an optional boardState (and an optional prior-move boardState, if desired) to analyze a custom board.
 
-The true/false validity of each move can be retrieved via the X and Y coordinates of the move. `const validMoves = ns.go.analysis.getValidMoves();`
+The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
 
-`const moveIsValid = validMoves[x][y];`
-
+```js
+const validMoves = ns.go.analysis.getValidMoves();
+const moveIsValid = validMoves[x][y];
+```
 Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
 
 Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
 
-The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)` .
+The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)`<!-- -->.
 
 **Signature:**
 
@@ -24,11 +26,71 @@ getValidMoves(boardState?: string[] | boolean, priorBoardState?: string[], playA
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  boardState | string\[\] \| boolean | _(Optional)_ Optional. The board state to analyze, in the string\[\] format used by getBoardState(). Defaults to the current board state. Alternatively can be simply "true" to get current valid moves for white. |
-|  priorBoardState | string\[\] | _(Optional)_ Optional. The move before the board state to analyze, in the format used by getBoardState(). Defaults to the current board's prior move state. |
-|  playAsWhite | boolean | _(Optional)_ Optional. Whether to analyze the board state as if the white player is the current player. Defaults to false. Intended to be used when playing as white when the opponent is set to "No AI". |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+boardState
+
+
+</td><td>
+
+string\[\] \| boolean
+
+
+</td><td>
+
+_(Optional)_ Optional. The board state to analyze, in the string\[\] format used by getBoardState(). Defaults to the current board state. Alternatively can be simply "true" to get current valid moves for white.
+
+
+</td></tr>
+<tr><td>
+
+priorBoardState
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+_(Optional)_ Optional. The move before the board state to analyze, in the format used by getBoardState(). Defaults to the current board's prior move state.
+
+
+</td></tr>
+<tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional. Whether to analyze the board state as if the white player is the current player. Defaults to false. Intended to be used when playing as white when the opponent is set to "No AI".
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -38,5 +100,7 @@ A 2D array of booleans indicating the validity of each move.
 
 ## Remarks
 
-RAM cost: 8 GB (This is intentionally expensive; you can derive this info from just getBoardState() and getMoveHistory() )
+RAM cost: 8 GB
+
+(This is intentionally expensive; you can derive this info from just getBoardState() and getMoveHistory() )
 

@@ -19,6 +19,6 @@ export function repToFavor(r: number): number {
   return clampNumber(Math.log1p(r / 25000) / log1point02, 0, MaxFavor);
 }
 
-export function calculateFavorAfterResetting(favor: number, playerReputation: number) {
+export function addRepToFavor(favor: number, playerReputation: number) {
   return repToFavor(favorToRep(favor) + playerReputation);
 }

@@ -13,12 +13,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useBoolean, useRerender } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 
-import { isUnsavedFile, reorder } from "./utils";
+import { getTabId, isUnsavedFile, reorder } from "./utils";
 import { OpenScript } from "./OpenScript";
 import { Tab } from "./Tab";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
-const tabsMaxWidth = 1640;
 const searchWidth = 180;
 
 interface IProps {
@@ -101,7 +100,6 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
         <Droppable droppableId="tabs" direction="horizontal">
           {(provided, snapshot) => (
             <Box
-              maxWidth={`${tabsMaxWidth}px`}
               display="flex"
               flexGrow="1"
               flexDirection="row"
@@ -118,18 +116,18 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
               onWheel={handleScroll}
             >
               {filteredScripts.map(({ script, originalIndex }, index) => {
-                const { path: fileName, hostname } = script;
+                const { path, hostname } = script;
                 const isActive = currentScript?.path === script.path && currentScript.hostname === script.hostname;
-                const fullPath = `${hostname}:/${fileName}`;
+                const tabId = getTabId(hostname, path);
                 return (
-                  <Draggable key={fullPath} draggableId={fullPath} index={index} disableInteractiveElementBlocking>
+                  <Draggable key={tabId} draggableId={tabId} index={index} disableInteractiveElementBlocking>
                     {(provided) => (
                       <Tab
                         provided={provided}
-                        fullPath={fullPath}
+                        tabId={tabId}
                         isActive={isActive}
                         isExternal={hostname !== SpecialServers.Home}
-                        isUnsaved={isUnsavedFile(scripts, index)}
+                        isUnsaved={() => isUnsavedFile(scripts, index)}
                         onClick={() => onTabClick(originalIndex)}
                         onClose={() => onTabClose(originalIndex)}
                         onUpdate={() => onTabUpdate(originalIndex)}

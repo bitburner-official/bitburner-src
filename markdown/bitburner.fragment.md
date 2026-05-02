@@ -13,12 +13,128 @@ interface Fragment
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [effect](./bitburner.fragment.effect.md) |  | string |  |
-|  [id](./bitburner.fragment.id.md) |  | number |  |
-|  [limit](./bitburner.fragment.limit.md) |  | number |  |
-|  [power](./bitburner.fragment.power.md) |  | number |  |
-|  [shape](./bitburner.fragment.shape.md) |  | boolean\[\]\[\] |  |
-|  [type](./bitburner.fragment.type.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[effect](./bitburner.fragment.effect.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[id](./bitburner.fragment.id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[limit](./bitburner.fragment.limit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[power](./bitburner.fragment.power.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[shape](./bitburner.fragment.shape.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean\[\]\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.fragment.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FragmentType](./bitburner.fragmenttype.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

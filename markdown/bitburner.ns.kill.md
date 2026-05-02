@@ -14,9 +14,39 @@ kill(pid: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  pid | number | The PID of the script to kill. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+pid
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The PID of the script to kill.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -28,7 +58,7 @@ True if the script is successfully killed, and false otherwise.
 
 RAM cost: 0.5 GB
 
-Kills the script with the provided PID. To instead kill a script using its filename, hostname, and args, see [the other ns.kill entry](./bitburner.ns.kill_1.md)<!-- -->.
+Kills the script with the provided PID. PIDs are unique across all hosts. To instead kill a script using its filename, host, and args, see [the other ns.kill entry](./bitburner.ns.kill_1.md)<!-- -->.
 
 ## Example
 

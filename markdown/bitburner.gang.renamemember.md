@@ -14,10 +14,55 @@ renameMember(memberName: string, newName: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  memberName | string | Name of the member to change. |
-|  newName | string | New name for that gang member. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+memberName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the member to change.
+
+
+</td></tr>
+<tr><td>
+
+newName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+New name for that gang member.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

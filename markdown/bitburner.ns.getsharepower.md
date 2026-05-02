@@ -4,7 +4,9 @@
 
 ## NS.getSharePower() method
 
-Share Power has a multiplicative effect on rep/second while doing work for a faction. Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking work, share power still increases the reputation gain rate, but the effect is non-linear.
+
+Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
 
 **Signature:**
 

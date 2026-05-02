@@ -14,12 +14,140 @@ interface EquipmentStats
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [agi?](./bitburner.equipmentstats.agi.md) |  | number | _(Optional)_ Agility multiplier |
-|  [cha?](./bitburner.equipmentstats.cha.md) |  | number | _(Optional)_ Charisma multiplier |
-|  [def?](./bitburner.equipmentstats.def.md) |  | number | _(Optional)_ Defense multiplier |
-|  [dex?](./bitburner.equipmentstats.dex.md) |  | number | _(Optional)_ Dexterity multiplier |
-|  [hack?](./bitburner.equipmentstats.hack.md) |  | number | _(Optional)_ Hacking multiplier |
-|  [str?](./bitburner.equipmentstats.str.md) |  | number | _(Optional)_ Strength multiplier |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[agi?](./bitburner.equipmentstats.agi.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Agility multiplier
+
+
+</td></tr>
+<tr><td>
+
+[cha?](./bitburner.equipmentstats.cha.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Charisma multiplier
+
+
+</td></tr>
+<tr><td>
+
+[def?](./bitburner.equipmentstats.def.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Defense multiplier
+
+
+</td></tr>
+<tr><td>
+
+[dex?](./bitburner.equipmentstats.dex.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Dexterity multiplier
+
+
+</td></tr>
+<tr><td>
+
+[hack?](./bitburner.equipmentstats.hack.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Hacking multiplier
+
+
+</td></tr>
+<tr><td>
+
+[str?](./bitburner.equipmentstats.str.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Strength multiplier
+
+
+</td></tr>
+</tbody></table>
 

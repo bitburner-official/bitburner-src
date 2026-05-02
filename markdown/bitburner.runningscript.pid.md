@@ -4,7 +4,7 @@
 
 ## RunningScript.pid property
 
-Process ID. Must be an integer
+A Process ID unique to this script across all hosts. Must be an integer starting from 1 for the first process spawned at game launch and incrementing from there. Note that PIDs are not saved in the savegame and are regenerated at launch.
 
 **Signature:**
 

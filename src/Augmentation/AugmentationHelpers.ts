@@ -48,6 +48,9 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false)
     Player.applyEntropy(Player.entropy);
   }
 
+  // Recalculate skill levels after applying multipliers.
+  Player.updateSkillLevels();
+
   // Special logic for NeuroFlux Governor
   const ownedNfg = Player.augmentations.find((pAug) => pAug.name === AugmentationName.NeuroFluxGovernor);
   if (aug.name === AugmentationName.NeuroFluxGovernor && !reapply && ownedNfg) {

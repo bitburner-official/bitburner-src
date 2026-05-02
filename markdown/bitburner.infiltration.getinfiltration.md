@@ -9,14 +9,42 @@ Get all infiltrations with difficulty, location and rewards.
 **Signature:**
 
 ```typescript
-getInfiltration(location: LocationName | `${LocationName}`): InfiltrationLocation;
+getInfiltration(location: LocationName): InfiltrationLocation;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  location | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+location
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

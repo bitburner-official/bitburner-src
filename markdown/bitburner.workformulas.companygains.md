@@ -7,22 +7,84 @@
 **Signature:**
 
 ```typescript
-companyGains(
-    person: Person,
-    companyName: CompanyName | `${CompanyName}`,
-    workType: JobName | `${JobName}`,
-    favor: number,
-  ): WorkStats;
+companyGains(person: Person, companyName: CompanyName, workType: JobName, favor: number): WorkStats;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  person | [Person](./bitburner.person.md) |  |
-|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` |  |
-|  workType | [JobName](./bitburner.jobname.md) \| \`${[JobName](./bitburner.jobname.md)<!-- -->}\` |  |
-|  favor | number |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+person
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+companyName
+
+
+</td><td>
+
+[CompanyName](./bitburner.companyname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+workType
+
+
+</td><td>
+
+[JobName](./bitburner.jobname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+favor
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

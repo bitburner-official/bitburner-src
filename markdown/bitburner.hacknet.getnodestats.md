@@ -14,9 +14,39 @@ getNodeStats(index: number): NodeStats;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  index | number | Index/Identifier of Hacknet Node |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+index
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index/Identifier of Hacknet Node
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -26,7 +56,7 @@ Object containing a variety of stats about the specified Hacknet Node.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Returns an object containing a variety of stats about the specified Hacknet Node.
 

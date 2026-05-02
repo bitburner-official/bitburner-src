@@ -21,4 +21,5 @@ module.exports = {
     "/utils/Protections$": "<rootDir>/test/__mocks__/NullMock.js",
     "@swc/wasm-web": "@swc/core",
   },
+  restoreMocks: true,
 };

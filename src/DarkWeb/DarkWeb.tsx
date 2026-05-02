@@ -7,6 +7,8 @@ import { SpecialServers } from "../Server/data/SpecialServers";
 import { Money } from "../ui/React/Money";
 import { DarkWebItem } from "./DarkWebItem";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
+import { CompletedProgramName } from "@enums";
+import { getDarkscapeNavigator } from "../DarkNet/effects/effects";
 
 //Posts a "help" message if connected to DarkWeb
 export function checkIfConnectedToDarkweb(): void {
@@ -82,6 +84,10 @@ export function buyDarkwebItem(itemName: string): void {
   Terminal.print(
     "You have purchased the " + item.program + " program. The new program can be found on your home computer.",
   );
+
+  if (item.program === CompletedProgramName.darkscape) {
+    getDarkscapeNavigator();
+  }
 }
 
 export function buyAllDarkwebItems(): void {

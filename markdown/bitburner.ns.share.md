@@ -4,7 +4,7 @@
 
 ## NS.share() method
 
-Share the server's ram with your factions.
+Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is applied to all faction work of all factions.
 
 **Signature:**
 

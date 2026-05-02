@@ -4,21 +4,81 @@
 
 ## NS.kill() method
 
-Terminate the script(s) with the provided filename, hostname, and script arguments.
+Terminate the script(s) with the provided filename, host, and script arguments.
 
 **Signature:**
 
 ```typescript
-kill(filename: string, hostname?: string, ...args: ScriptArg[]): boolean;
+kill(filename: string, host?: string, ...args: ScriptArg[]): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  filename | string | Filename of the script to kill. |
-|  hostname | string | _(Optional)_ Hostname where the script to kill is running. Defaults to the current server. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments of the script to kill. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+filename
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of the script to kill.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP where the script to kill is running. Defaults to the current server.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments of the script to kill.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

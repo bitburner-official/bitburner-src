@@ -13,9 +13,83 @@ interface GangTerritory
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [money](./bitburner.gangterritory.money.md) |  | number | Money gain impact on task scaling |
-|  [respect](./bitburner.gangterritory.respect.md) |  | number | Respect gain impact on task scaling |
-|  [wanted](./bitburner.gangterritory.wanted.md) |  | number | Wanted gain impact on task scaling |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[money](./bitburner.gangterritory.money.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Money gain impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[respect](./bitburner.gangterritory.respect.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Respect gain impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[wanted](./bitburner.gangterritory.wanted.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Wanted gain impact on task scaling
+
+
+</td></tr>
+</tbody></table>
 

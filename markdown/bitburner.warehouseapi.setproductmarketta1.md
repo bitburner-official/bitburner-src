@@ -14,11 +14,71 @@ setProductMarketTA1(divisionName: string, productName: string, on: boolean): voi
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  productName | string | Name of the product |
-|  on | boolean | Use true to enable, false otherwise. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+productName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the product
+
+
+</td></tr>
+<tr><td>
+
+on
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Use true to enable, false otherwise.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

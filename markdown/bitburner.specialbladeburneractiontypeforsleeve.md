@@ -2,21 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md)
 
-## SpecialBladeburnerActionTypeForSleeve enum
+## SpecialBladeburnerActionTypeForSleeve type
 
-These special Bladeburner action types are only for Sleeve
 
 **Signature:**
 
 ```typescript
-declare enum SpecialBladeburnerActionTypeForSleeve 
+type SpecialBladeburnerActionTypeForSleeve = _ValueOf<SpecialBladeburnerActionEnumTypeForSleeve>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  InfiltrateSynthoids | <code>&quot;Infiltrate Synthoids&quot;</code> |  |
-|  SupportMainSleeve | <code>&quot;Support main sleeve&quot;</code> |  |
-|  TakeOnContracts | <code>&quot;Take on contracts&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [SpecialBladeburnerActionEnumTypeForSleeve](./bitburner.specialbladeburneractionenumtypeforsleeve.md)
 

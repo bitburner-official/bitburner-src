@@ -14,9 +14,39 @@ buyBackShares(amount: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  amount | number | Amount of shares to buy back, must be integer and larger than 0 |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+amount
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of shares to buy back, must be integer and larger than 0
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

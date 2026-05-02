@@ -1,15 +1,16 @@
 import type { Board, BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
-import { GoOpponent, GoColor } from "@enums";
+import { GoOpponent, GoColor, FactionName } from "@enums";
 import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi, resetAI } from "./goAI";
-import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
+import { getDifficultyMultiplier, getMaxRep, getWinstreakMultiplier } from "../effects/effect";
 import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { Go, GoEvents } from "../Go";
+import { addRepToFavor } from "../../Faction/formulas/favor";
 
 /**
  * Returns the score of the current board.
@@ -49,7 +50,7 @@ export function endGoGame(boardState: BoardState) {
 
   boardState.previousPlayer = null;
   const statusToUpdate = getOpponentStats(boardState.ai);
-  statusToUpdate.favor = statusToUpdate.favor ?? 0;
+  statusToUpdate.rep = statusToUpdate.rep ?? 0;
   const score = getScore(boardState);
 
   if (score[GoColor.black].sum < score[GoColor.white].sum) {
@@ -68,10 +69,17 @@ export function endGoGame(boardState: BoardState) {
       factionName &&
       statusToUpdate.winStreak % 2 === 0 &&
       Player.factions.includes(factionName) &&
-      statusToUpdate.favor < getMaxFavor()
+      statusToUpdate.rep < getMaxRep()
     ) {
-      Factions[factionName].setFavor(Factions[factionName].favor + 1);
-      statusToUpdate.favor++;
+      const currentFavor = Factions[factionName].favor;
+      const repToAdd = getMaxRep() / 200;
+      const newFavor = addRepToFavor(currentFavor, repToAdd);
+      Factions[factionName].setFavor(newFavor);
+      statusToUpdate.rep += repToAdd;
+    }
+
+    if (factionName === FactionName.Illuminati && statusToUpdate.winStreak >= 10) {
+      Player.giveAchievement("IPVGO_WINNING_STREAK");
     }
   }
 
@@ -88,6 +96,20 @@ export function endGoGame(boardState: BoardState) {
 
   // Update multipliers with new bonuses, once at the end of the game
   Player.applyEntropy(Player.entropy);
+}
+
+/**
+ * Forcefully ends the game, resetting the winstreak (if any) and ending the game without applying node power bonuses.
+ * Used for critically failing a cheat attempt.
+ * @param boardState - the boardstate to reset
+ */
+export function forceEndGoGame(boardState: BoardState) {
+  resetWinstreak(boardState.ai, false);
+  boardState.previousPlayer = null;
+  Go.currentGame = boardState;
+  Go.previousGame = boardState;
+  resetAI(true);
+  GoEvents.emit();
 }
 
 /**
@@ -119,9 +141,7 @@ function getColoredPieceCount(boardState: BoardState, color: GoColor) {
  * Finds all empty spaces fully surrounded by a single player's stones
  */
 function getTerritoryScores(board: Board) {
-  const emptyTerritoryChains = getAllChains(board).filter(
-    (chain) => chain?.[0]?.color === GoColor.empty && chain.length <= board.length * 2,
-  );
+  const emptyTerritoryChains = getAllChains(board).filter((chain) => chain?.[0]?.color === GoColor.empty);
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {

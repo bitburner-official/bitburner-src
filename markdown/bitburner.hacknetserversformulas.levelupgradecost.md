@@ -14,11 +14,71 @@ levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number)
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  startingLevel | number | starting level |
-|  extraLevels | number | _(Optional)_ amount of level to purchase (defaults to 1) |
-|  costMult | number | _(Optional)_ player cost reduction (default to 1) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+startingLevel
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+starting level
+
+
+</td></tr>
+<tr><td>
+
+extraLevels
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ amount of level to purchase (defaults to 1)
+
+
+</td></tr>
+<tr><td>
+
+costMult
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ player cost reduction (default to 1)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

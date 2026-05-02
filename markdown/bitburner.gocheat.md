@@ -4,7 +4,7 @@
 
 ## GoCheat interface
 
-Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
+Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
 
 **Signature:**
 
@@ -14,12 +14,100 @@ export interface GoCheat
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [destroyNode(x, y, playAsWhite)](./bitburner.gocheat.destroynode.md) | <p>Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or provide open node access to adjacent routers.</p><p>Success chance can be seen via ns.go.getCheatSuccessChance()</p><p>Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.</p> |
-|  [getCheatCount(playAsWhite)](./bitburner.gocheat.getcheatcount.md) | Returns the number of times you've attempted to cheat in the current game. |
-|  [getCheatSuccessChance(cheatCount, playAsWhite)](./bitburner.gocheat.getcheatsuccesschance.md) | <p>Returns your chance of successfully playing one of the special moves in the ns.go.cheat API. Scales up with your crime success rate stat. Scales down with the number of times you've attempted to cheat in the current game.</p><p>Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.</p> |
-|  [playTwoMoves(x1, y1, x2, y2, playAsWhite)](./bitburner.gocheat.playtwomoves.md) | <p>Attempts to place two routers at once on empty nodes. Note that this ignores other move restrictions, so you can suicide your own routers if they have no access to empty ports and do not capture any enemy routers.</p><p>Success chance can be seen via ns.go.getCheatSuccessChance()</p><p>Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.</p> |
-|  [removeRouter(x, y, playAsWhite)](./bitburner.gocheat.removerouter.md) | <p>Attempts to remove an existing router, leaving an empty node behind.</p><p>Success chance can be seen via ns.go.getCheatSuccessChance()</p><p>Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.</p> |
-|  [repairOfflineNode(x, y, playAsWhite)](./bitburner.gocheat.repairofflinenode.md) | <p>Attempts to repair an offline node, leaving an empty playable node behind.</p><p>Success chance can be seen via ns.go.getCheatSuccessChance()</p><p>Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.</p> |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[destroyNode(x, y, playAsWhite)](./bitburner.gocheat.destroynode.md)
+
+
+</td><td>
+
+Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or provide open node access to adjacent routers.
+
+Success chance can be seen via ns.go.getCheatSuccessChance()
+
+Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
+
+
+</td></tr>
+<tr><td>
+
+[getCheatCount(playAsWhite)](./bitburner.gocheat.getcheatcount.md)
+
+
+</td><td>
+
+Returns the number of times you've attempted to cheat in the current game.
+
+
+</td></tr>
+<tr><td>
+
+[getCheatSuccessChance(cheatCount, playAsWhite)](./bitburner.gocheat.getcheatsuccesschance.md)
+
+
+</td><td>
+
+Returns your chance of successfully playing one of the special moves in the ns.go.cheat API. Scales up with your crime success rate stat. Scales down with the number of times you've attempted to cheat in the current game.
+
+Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
+
+
+</td></tr>
+<tr><td>
+
+[playTwoMoves(x1, y1, x2, y2, playAsWhite)](./bitburner.gocheat.playtwomoves.md)
+
+
+</td><td>
+
+Attempts to place two routers at once on empty nodes. Note that this ignores other move restrictions, so you can suicide your own routers if they have no access to empty ports and do not capture any enemy routers.
+
+Success chance can be seen via ns.go.getCheatSuccessChance()
+
+Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
+
+
+</td></tr>
+<tr><td>
+
+[removeRouter(x, y, playAsWhite)](./bitburner.gocheat.removerouter.md)
+
+
+</td><td>
+
+Attempts to remove an existing router, leaving an empty node behind.
+
+Success chance can be seen via ns.go.getCheatSuccessChance()
+
+Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
+
+
+</td></tr>
+<tr><td>
+
+[repairOfflineNode(x, y, playAsWhite)](./bitburner.gocheat.repairofflinenode.md)
+
+
+</td><td>
+
+Attempts to repair an offline node, leaving an empty playable node behind.
+
+Success chance can be seen via ns.go.getCheatSuccessChance()
+
+Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
+
+
+</td></tr>
+</tbody></table>
 

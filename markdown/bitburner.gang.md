@@ -18,32 +18,302 @@ If you are not in BitNode-2, then you must have Source-File 2 in order to use th
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [ascendMember(memberName)](./bitburner.gang.ascendmember.md) | Ascend a gang member. |
-|  [canRecruitMember()](./bitburner.gang.canrecruitmember.md) | Check if you can recruit a new gang member. |
-|  [createGang(faction)](./bitburner.gang.creategang.md) | Create a gang. |
-|  [getAscensionResult(memberName)](./bitburner.gang.getascensionresult.md) | Get the result of an ascension without ascending. |
-|  [getBonusTime()](./bitburner.gang.getbonustime.md) | Get bonus time. |
-|  [getChanceToWinClash(gangName)](./bitburner.gang.getchancetowinclash.md) | Get chance to win clash with other gang. |
-|  [getEquipmentCost(equipName)](./bitburner.gang.getequipmentcost.md) | Get cost of equipment. |
-|  [getEquipmentNames()](./bitburner.gang.getequipmentnames.md) | List equipment names. |
-|  [getEquipmentStats(equipName)](./bitburner.gang.getequipmentstats.md) | Get stats of an equipment. |
-|  [getEquipmentType(equipName)](./bitburner.gang.getequipmenttype.md) | Get type of an equipment. |
-|  [getGangInformation()](./bitburner.gang.getganginformation.md) | Get information about your gang. |
-|  [getInstallResult(memberName)](./bitburner.gang.getinstallresult.md) | Get the effect of an install on ascension multipliers without installing. |
-|  [getMemberInformation(name)](./bitburner.gang.getmemberinformation.md) | Get information about a specific gang member. |
-|  [getMemberNames()](./bitburner.gang.getmembernames.md) | List all gang members. |
-|  [getOtherGangInformation()](./bitburner.gang.getotherganginformation.md) | Get information about the other gangs. |
-|  [getRecruitsAvailable()](./bitburner.gang.getrecruitsavailable.md) | Check how many gang members you can currently recruit. |
-|  [getTaskNames()](./bitburner.gang.gettasknames.md) | List member task names. |
-|  [getTaskStats(name)](./bitburner.gang.gettaskstats.md) | Get stats of a task. |
-|  [inGang()](./bitburner.gang.ingang.md) | Check if you're in a gang. |
-|  [nextUpdate()](./bitburner.gang.nextupdate.md) | Sleeps until the next Gang update has happened. |
-|  [purchaseEquipment(memberName, equipName)](./bitburner.gang.purchaseequipment.md) | Purchase an equipment for a gang member. |
-|  [recruitMember(name)](./bitburner.gang.recruitmember.md) | Recruit a new gang member. |
-|  [renameMember(memberName, newName)](./bitburner.gang.renamemember.md) | Rename a Gang member to a new unique name. |
-|  [respectForNextRecruit()](./bitburner.gang.respectfornextrecruit.md) | Check the amount of Respect needed for your next gang recruit. |
-|  [setMemberTask(memberName, taskName)](./bitburner.gang.setmembertask.md) | Set gang member to task. |
-|  [setTerritoryWarfare(engage)](./bitburner.gang.setterritorywarfare.md) | Enable/Disable territory clashes. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[ascendMember(memberName)](./bitburner.gang.ascendmember.md)
+
+
+</td><td>
+
+Ascend a gang member.
+
+
+</td></tr>
+<tr><td>
+
+[canRecruitMember()](./bitburner.gang.canrecruitmember.md)
+
+
+</td><td>
+
+Check if you can recruit a new gang member.
+
+
+</td></tr>
+<tr><td>
+
+[createGang(faction)](./bitburner.gang.creategang.md)
+
+
+</td><td>
+
+Create a gang.
+
+
+</td></tr>
+<tr><td>
+
+[getAllGangInformation()](./bitburner.gang.getallganginformation.md)
+
+
+</td><td>
+
+Get information about all gangs.
+
+
+</td></tr>
+<tr><td>
+
+[getAscensionResult(memberName)](./bitburner.gang.getascensionresult.md)
+
+
+</td><td>
+
+Get the result of an ascension without ascending.
+
+
+</td></tr>
+<tr><td>
+
+[getBonusTime()](./bitburner.gang.getbonustime.md)
+
+
+</td><td>
+
+Get bonus time.
+
+
+</td></tr>
+<tr><td>
+
+[getChanceToWinClash(gangName)](./bitburner.gang.getchancetowinclash.md)
+
+
+</td><td>
+
+Get chance to win clash with other gang.
+
+
+</td></tr>
+<tr><td>
+
+[getEquipmentCost(equipName)](./bitburner.gang.getequipmentcost.md)
+
+
+</td><td>
+
+Get cost of equipment.
+
+
+</td></tr>
+<tr><td>
+
+[getEquipmentNames()](./bitburner.gang.getequipmentnames.md)
+
+
+</td><td>
+
+List equipment names.
+
+
+</td></tr>
+<tr><td>
+
+[getEquipmentStats(equipName)](./bitburner.gang.getequipmentstats.md)
+
+
+</td><td>
+
+Get stats of an equipment.
+
+
+</td></tr>
+<tr><td>
+
+[getEquipmentType(equipName)](./bitburner.gang.getequipmenttype.md)
+
+
+</td><td>
+
+Get type of an equipment.
+
+
+</td></tr>
+<tr><td>
+
+[getGangInformation()](./bitburner.gang.getganginformation.md)
+
+
+</td><td>
+
+Get information about your gang.
+
+
+</td></tr>
+<tr><td>
+
+[getInstallResult(memberName)](./bitburner.gang.getinstallresult.md)
+
+
+</td><td>
+
+Get the effect of an install on ascension multipliers without installing.
+
+
+</td></tr>
+<tr><td>
+
+[getMemberInformation(name)](./bitburner.gang.getmemberinformation.md)
+
+
+</td><td>
+
+Get information about a specific gang member.
+
+
+</td></tr>
+<tr><td>
+
+[getMemberNames()](./bitburner.gang.getmembernames.md)
+
+
+</td><td>
+
+List all gang members.
+
+
+</td></tr>
+<tr><td>
+
+[getRecruitsAvailable()](./bitburner.gang.getrecruitsavailable.md)
+
+
+</td><td>
+
+Check how many gang members you can currently recruit.
+
+
+</td></tr>
+<tr><td>
+
+[getTaskNames()](./bitburner.gang.gettasknames.md)
+
+
+</td><td>
+
+List member task names.
+
+
+</td></tr>
+<tr><td>
+
+[getTaskStats(name)](./bitburner.gang.gettaskstats.md)
+
+
+</td><td>
+
+Get stats of a task.
+
+
+</td></tr>
+<tr><td>
+
+[inGang()](./bitburner.gang.ingang.md)
+
+
+</td><td>
+
+Check if you're in a gang. Does not require API access.
+
+
+</td></tr>
+<tr><td>
+
+[nextUpdate()](./bitburner.gang.nextupdate.md)
+
+
+</td><td>
+
+Sleeps until the next Gang update has happened.
+
+
+</td></tr>
+<tr><td>
+
+[purchaseEquipment(memberName, equipName)](./bitburner.gang.purchaseequipment.md)
+
+
+</td><td>
+
+Purchase an equipment for a gang member.
+
+
+</td></tr>
+<tr><td>
+
+[recruitMember(name)](./bitburner.gang.recruitmember.md)
+
+
+</td><td>
+
+Recruit a new gang member.
+
+
+</td></tr>
+<tr><td>
+
+[renameMember(memberName, newName)](./bitburner.gang.renamemember.md)
+
+
+</td><td>
+
+Rename a Gang member to a new unique name.
+
+
+</td></tr>
+<tr><td>
+
+[respectForNextRecruit()](./bitburner.gang.respectfornextrecruit.md)
+
+
+</td><td>
+
+Check the amount of Respect needed for your next gang recruit.
+
+
+</td></tr>
+<tr><td>
+
+[setMemberTask(memberName, taskName)](./bitburner.gang.setmembertask.md)
+
+
+</td><td>
+
+Set gang member to task.
+
+
+</td></tr>
+<tr><td>
+
+[setTerritoryWarfare(engage)](./bitburner.gang.setterritorywarfare.md)
+
+
+</td><td>
+
+Enable/Disable territory clashes.
+
+
+</td></tr>
+</tbody></table>
 

@@ -1,6 +1,5 @@
-import { FilePath, isFilePath } from "../../../src/Paths/FilePath";
+import { isBasicFilePath } from "../../../src/Paths/FilePath";
 import {
-  Directory,
   getFirstDirectoryInPath,
   isAbsolutePath,
   isDirectoryPath,
@@ -17,7 +16,7 @@ function isValidDirectory(name: string) {
   return isAbsolutePath(name) && isDirectoryPath(name);
 }
 function isValidFilePath(name: string) {
-  return isAbsolutePath(name) && isFilePath(name);
+  return isAbsolutePath(name) && isBasicFilePath(name);
 }
 
 describe("Terminal Directory Tests", function () {
@@ -42,37 +41,37 @@ describe("Terminal Directory Tests", function () {
     });
   });
 
-  describe("isFilePath()", function () {
+  describe("isBasicFilePath()", function () {
     // Actual validation occurs in two steps, validating the filepath structure and then validating that it's not a relative path
     it("should return true for valid filenames", function () {
-      expect(isFilePath("test.txt")).toBe(true);
-      expect(isFilePath("123.script")).toBe(true);
-      expect(isFilePath("foo123.b")).toBe(true);
-      expect(isFilePath("my_script.script")).toBe(true);
-      expect(isFilePath("my-script.script")).toBe(true);
-      expect(isFilePath("_foo.lit")).toBe(true);
-      expect(isFilePath("mult.periods.script")).toBe(true);
-      expect(isFilePath("mult.per-iods.again.script")).toBe(true);
-      expect(isFilePath("BruteSSH.exe-50%-INC")).toBe(true);
-      expect(isFilePath("DeepscanV1.exe-1.01%-INC")).toBe(true);
-      expect(isFilePath("DeepscanV2.exe-1.00%-INC")).toBe(true);
-      expect(isFilePath("AutoLink.exe-1.%-INC")).toBe(true);
+      expect(isBasicFilePath("test.txt")).toBe(true);
+      expect(isBasicFilePath("123.script")).toBe(true);
+      expect(isBasicFilePath("foo123.b")).toBe(true);
+      expect(isBasicFilePath("my_script.script")).toBe(true);
+      expect(isBasicFilePath("my-script.script")).toBe(true);
+      expect(isBasicFilePath("_foo.lit")).toBe(true);
+      expect(isBasicFilePath("mult.periods.script")).toBe(true);
+      expect(isBasicFilePath("mult.per-iods.again.script")).toBe(true);
+      expect(isBasicFilePath("BruteSSH.exe-50%-INC")).toBe(true);
+      expect(isBasicFilePath("DeepscanV1.exe-1.01%-INC")).toBe(true);
+      expect(isBasicFilePath("DeepscanV2.exe-1.00%-INC")).toBe(true);
+      expect(isBasicFilePath("AutoLink.exe-1.%-INC")).toBe(true);
     });
 
     it("should return false for invalid filenames", function () {
-      expect(isFilePath("foo")).toBe(false);
-      expect(isFilePath("my script.script")).toBe(false);
-      //expect(isFilePath("a^.txt")).toBe(false);
-      //expect(isFilePath("b#.lit")).toBe(false);
-      //expect(isFilePath("lib().js")).toBe(false);
-      //expect(isFilePath("foo.script_")).toBe(false);
-      //expect(isFilePath("foo._script")).toBe(false);
-      //expect(isFilePath("foo.hyphened-ext")).toBe(false);
-      expect(isFilePath("")).toBe(false);
-      //expect(isFilePath("AutoLink-1.%-INC.exe")).toBe(false);
-      //expect(isFilePath("AutoLink.exe-1.%-INC.exe")).toBe(false);
-      //expect(isFilePath("foo%.exe")).toBe(false);
-      //expect(isFilePath("-1.00%-INC")).toBe(false);
+      expect(isBasicFilePath("foo")).toBe(false);
+      expect(isBasicFilePath("my script.script")).toBe(false);
+      //expect(isBasicFilePath("a^.txt")).toBe(false);
+      //expect(isBasicFilePath("b#.lit")).toBe(false);
+      //expect(isBasicFilePath("lib().js")).toBe(false);
+      //expect(isBasicFilePath("foo.script_")).toBe(false);
+      //expect(isBasicFilePath("foo._script")).toBe(false);
+      //expect(isBasicFilePath("foo.hyphened-ext")).toBe(false);
+      expect(isBasicFilePath("")).toBe(false);
+      //expect(isBasicFilePath("AutoLink-1.%-INC.exe")).toBe(false);
+      //expect(isBasicFilePath("AutoLink.exe-1.%-INC.exe")).toBe(false);
+      //expect(isBasicFilePath("foo%.exe")).toBe(false);
+      //expect(isBasicFilePath("-1.00%-INC")).toBe(false);
     });
   });
 
@@ -185,14 +184,14 @@ describe("Terminal Directory Tests", function () {
 
     it("should return true for valid filepaths", function () {
       // Some of these include relative paths, will not check absoluteness
-      expect(isFilePath("foo/test.txt")).toBe(true);
-      expect(isFilePath("../123.script")).toBe(true);
-      expect(isFilePath("./foo123.b")).toBe(true);
-      expect(isFilePath("dir/my_script.script")).toBe(true);
-      expect(isFilePath("dir1/dir2/dir3/my-script.script")).toBe(true);
-      expect(isFilePath("dir1/dir2/././../_foo.lit")).toBe(true);
-      expect(isFilePath(".dir1/./../.dir2/mult.periods.script")).toBe(true);
-      expect(isFilePath("_dir/../dir2/mult.per-iods.again.script")).toBe(true);
+      expect(isBasicFilePath("foo/test.txt")).toBe(true);
+      expect(isBasicFilePath("../123.script")).toBe(true);
+      expect(isBasicFilePath("./foo123.b")).toBe(true);
+      expect(isBasicFilePath("dir/my_script.script")).toBe(true);
+      expect(isBasicFilePath("dir1/dir2/dir3/my-script.script")).toBe(true);
+      expect(isBasicFilePath("dir1/dir2/././../_foo.lit")).toBe(true);
+      expect(isBasicFilePath(".dir1/./../.dir2/mult.periods.script")).toBe(true);
+      expect(isBasicFilePath("_dir/../dir2/mult.per-iods.again.script")).toBe(true);
     });
 
     it("should return false for strings that begin with a slash", function () {
@@ -214,7 +213,7 @@ describe("Terminal Directory Tests", function () {
     // Strings cannot be passed in directly, so we'll wrap some typechecking
     function firstDirectory(path: string): string | null | undefined {
       if (!isAbsolutePath(path)) return undefined;
-      if (!isFilePath(path) && !isDirectoryPath(path)) return undefined;
+      if (!isBasicFilePath(path) && !isDirectoryPath(path)) return undefined;
       return getFirstDirectoryInPath(path);
     }
 

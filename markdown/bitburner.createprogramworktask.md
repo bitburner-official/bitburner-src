@@ -9,9 +9,9 @@ Create Program
 **Signature:**
 
 ```typescript
-export interface CreateProgramWorkTask extends BaseTask 
+interface CreateProgramWorkTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
@@ -19,8 +19,60 @@ An object representing the status of the program being created
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [programName](./bitburner.createprogramworktask.programname.md) |  | string |  |
-|  [type](./bitburner.createprogramworktask.type.md) |  | "CREATE\_PROGRAM" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[programName](./bitburner.createprogramworktask.programname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ProgramName](./bitburner.programname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.createprogramworktask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"CREATE\_PROGRAM"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

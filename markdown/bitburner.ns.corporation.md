@@ -4,15 +4,10 @@
 
 ## NS.corporation property
 
-Namespace for corporation functions. Contains spoilers.
+Namespace for [corporation](./bitburner.corporation.md) functions. Contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly corporation: Corporation;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

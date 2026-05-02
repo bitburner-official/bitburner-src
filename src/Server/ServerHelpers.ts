@@ -1,24 +1,46 @@
-import { GetServer, createUniqueRandomIp, ipExists } from "./AllServers";
-import { Server, IConstructorParams } from "./Server";
+import {
+  AddToAllServers,
+  GetServer,
+  GetServerOrThrow,
+  connectServers,
+  createUniqueRandomIp,
+  ipExists,
+} from "./AllServers";
+import { Server, StandardServerConstructorParams } from "./Server";
 import { BaseServer } from "./BaseServer";
 import { calculateGrowMoney, calculateServerGrowthLog } from "./formulas/grow";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
-import { CompletedProgramName, LiteratureName } from "@enums";
+import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import { Person as IPerson } from "@nsdefs";
 import { Server as IServer } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { HacknetServer } from "../Hacknet/HacknetServer";
+import { SpecialServers } from "./data/SpecialServers";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { initDarkwebServer, populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
+import { hasDarknetAccess } from "../DarkNet/utils/darknetAuthUtils";
+import type { IMinMaxRange } from "../types";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
+import type { IPAddress } from "../Types/strings";
+
+export enum ServerOwnershipType {
+  All = 0,
+  Foreign = 1, // Non-owned servers
+  Owned = 2, // Home Computer, Cloud Servers, and Hacknet Servers
+  Purchased = 3, // Everything from Owned except home computer
+}
 
 /**
  * Constructs a new server, while also ensuring that the new server
  * does not have a duplicate hostname/ip.
  */
-export function safelyCreateUniqueServer(params: IConstructorParams): Server {
-  let hostname: string = params.hostname.replace(/ /g, `-`);
+export function safelyCreateUniqueServer(params: StandardServerConstructorParams): Server {
+  let hostname = params.hostname;
 
   if (params.ip != null && ipExists(params.ip)) {
     params.ip = createUniqueRandomIp();
@@ -270,4 +292,122 @@ export function getCoreBonus(cores = 1): number {
 export function getWeakenEffect(threads: number, cores: number): number {
   const coreBonus = getCoreBonus(cores);
   return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
+}
+
+export function checkServerOwnership(baseServer: BaseServer, serverType: ServerOwnershipType): boolean {
+  /**
+   * isOwnedServer is true if baseServer is home, private servers, or hacknet servers. Note that, with home computer,
+   * baseServer.purchasedByPlayer is true.
+   */
+  const isOwnedServer =
+    (baseServer instanceof Server && baseServer.purchasedByPlayer) || baseServer instanceof HacknetServer;
+  switch (serverType) {
+    case ServerOwnershipType.All:
+      return true;
+    case ServerOwnershipType.Foreign:
+      // Exclude home, private servers, hacknet servers.
+      if (isOwnedServer) {
+        return false;
+      }
+      // If the player has not installed TRP, exclude WD server.
+      return (
+        Player.hasAugmentation(AugmentationName.TheRedPill, true) || baseServer.hostname !== SpecialServers.WorldDaemon
+      );
+    case ServerOwnershipType.Owned:
+      return isOwnedServer;
+    case ServerOwnershipType.Purchased:
+      return isOwnedServer && baseServer.hostname !== SpecialServers.Home;
+    default:
+      throwIfReachable(serverType);
+  }
+  return false;
+}
+
+export function getTorRouter() {
+  connectServers(Player.getHomeComputer(), GetServerOrThrow(SpecialServers.DarkWeb));
+}
+
+interface IServerParams {
+  hackDifficulty?: number;
+  hostname: string;
+  ip: IPAddress;
+  maxRam?: number;
+  moneyAvailable?: number;
+  numOpenPortsRequired: number;
+  organizationName: string;
+  requiredHackingSkill?: number;
+  serverGrowth?: number;
+}
+
+export function initForeignServers(homeComputer: Server): void {
+  /* Create a randomized network for all the foreign servers */
+  //Groupings for creating a randomized network
+  const networkLayers: Server[][] = [];
+  for (let i = 0; i < 15; i++) {
+    networkLayers.push([]);
+  }
+
+  const toNumber = (value: number | IMinMaxRange): number => {
+    if (typeof value === "number") return value;
+    else return getRandomIntInclusive(value.min, value.max);
+  };
+
+  for (const metadata of serverMetadata) {
+    const serverParams: IServerParams = {
+      hostname: metadata.hostname,
+      ip: createUniqueRandomIp(),
+      numOpenPortsRequired: metadata.numOpenPortsRequired,
+      organizationName: metadata.organizationName,
+    };
+
+    if (metadata.maxRamExponent !== undefined) {
+      serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
+    }
+
+    if (metadata.hackDifficulty) serverParams.hackDifficulty = toNumber(metadata.hackDifficulty);
+    if (metadata.moneyAvailable) serverParams.moneyAvailable = toNumber(metadata.moneyAvailable);
+    if (metadata.requiredHackingSkill) serverParams.requiredHackingSkill = toNumber(metadata.requiredHackingSkill);
+    if (metadata.serverGrowth) serverParams.serverGrowth = toNumber(metadata.serverGrowth);
+
+    const server = new Server(serverParams);
+
+    if (metadata.networkLayer) {
+      const layer = toNumber(metadata.networkLayer);
+      server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
+    }
+
+    for (const filename of metadata.literature || []) {
+      server.messages.push(filename);
+    }
+
+    if (server.hostname === SpecialServers.WorldDaemon) {
+      server.requiredHackingSkill *= currentNodeMults.WorldDaemonDifficulty;
+    }
+    AddToAllServers(server);
+    if (metadata.networkLayer !== undefined) {
+      networkLayers[toNumber(metadata.networkLayer) - 1].push(server);
+    }
+  }
+
+  /* Create a randomized network for all the foreign servers */
+
+  const getRandomArrayItem = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+
+  const linkNetworkLayers = (network1: Server[], selectServer: () => Server): void => {
+    for (const server of network1) {
+      connectServers(server, selectServer());
+    }
+  };
+
+  // Connect the first tier of servers to the player's home computer
+  linkNetworkLayers(networkLayers[0], () => homeComputer);
+  for (let i = 1; i < networkLayers.length; i++) {
+    linkNetworkLayers(networkLayers[i], () => getRandomArrayItem(networkLayers[i - 1]));
+  }
+
+  initDarkwebServer();
+  if (hasDarknetAccess()) {
+    getTorRouter();
+    populateDarknet();
+  }
 }

@@ -14,9 +14,39 @@ clear(handle: string): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  handle | string | Text file to clear. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+handle
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Text file to clear.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

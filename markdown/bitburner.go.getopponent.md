@@ -15,3 +15,7 @@ getOpponent(): GoOpponent;
 
 [GoOpponent](./bitburner.goopponent.md)
 
+## Remarks
+
+RAM cost: 0 GB
+

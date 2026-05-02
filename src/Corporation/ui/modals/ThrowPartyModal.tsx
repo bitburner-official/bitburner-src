@@ -73,14 +73,7 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
       <Typography>Enter the amount of money you would like to spend PER EMPLOYEE on this office party</Typography>
       <EffectText />
       <Box display="flex" alignItems="center">
-        <TextField
-          autoFocus={true}
-          type="number"
-          placeholder="$ / employee"
-          value={cost}
-          onChange={changeCost}
-          onKeyDown={onKeyDown}
-        />
+        <TextField autoFocus={true} type="number" value={cost} onChange={changeCost} onKeyDown={onKeyDown} />
         <Button disabled={!canParty} onClick={throwParty}>
           Throw Party
         </Button>

@@ -14,8 +14,60 @@ interface LocationRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [location](./bitburner.locationrequirement.location.md) |  | [LocationName](./bitburner.locationname.md) |  |
-|  [type](./bitburner.locationrequirement.type.md) |  | "location" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[location](./bitburner.locationrequirement.location.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.locationrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"location"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -16,12 +16,17 @@ export function runScript(
   commandArgs: (string | number | boolean)[],
   server: BaseServer,
 ): void {
-  const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
+  if (isLegacyScript(scriptPath)) {
+    sendDeprecationNotice();
+    return;
+  }
+  const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number, "--temporary": Boolean };
   let flags: {
     _: ScriptArg[];
     "--tail": boolean;
     "-t": string;
     "--ram-override": string;
+    "--temporary": boolean;
   };
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
@@ -35,7 +40,7 @@ export function runScript(
   }
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
-  const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : null;
+  const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : undefined;
   if (!isPositiveInteger(numThreads)) {
     return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
   }
@@ -45,11 +50,17 @@ export function runScript(
     );
     return;
   }
+  const tempFlag = flags["--temporary"] === true;
 
   // Todo: Switch out arg for something with typescript support
   const args = flags._;
 
-  const result = createRunningScriptInstance(server, scriptPath, ramOverride, numThreads, args);
+  const result = createRunningScriptInstance(
+    server,
+    scriptPath,
+    { threads: numThreads, temporary: tempFlag, ramOverride, preventDuplicates: false },
+    args,
+  );
   if (!result.success) {
     Terminal.error(result.message);
     return;
@@ -65,9 +76,6 @@ export function runScript(
     return;
   }
 
-  if (isLegacyScript(scriptPath)) {
-    sendDeprecationNotice();
-  }
   Terminal.print(
     `Running script with ${pluralize(numThreads, "thread")}, pid ${runningScript.pid} and args: ${JSON.stringify(
       args,

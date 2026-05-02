@@ -18,16 +18,17 @@ import { getKeyList } from "../utils/helpers/getKeyList";
 import { calculateMarkupMultiplier } from "./helpers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { assertObject } from "../utils/TypeAssertion";
 
 interface DivisionParams {
   name: string;
   corp: Corporation;
-  type: IndustryType;
+  industry: IndustryType;
 }
 
 export class Division {
   name = "DefaultDivisionName";
-  type = IndustryType.Agriculture;
+  industry = IndustryType.Agriculture;
   researchPoints = 0;
   researched = new JSONSet<CorpResearchName>();
   requiredMaterials: PartialRecord<CorpMaterialName, number> = {};
@@ -86,7 +87,7 @@ export class Division {
   constructor(params: DivisionParams | null = null) {
     if (!params) return;
     // Must be initialized inside the constructor because it references the industry
-    this.type = params.type;
+    this.industry = params.industry;
     this.name = params.name;
     // Add default starting
     this.warehouses[CityName.Sector12] = new Warehouse({
@@ -100,7 +101,7 @@ export class Division {
     });
 
     // Loading data based on this division's industry type
-    const data = IndustriesData[this.type];
+    const data = IndustriesData[this.industry];
     this.startingCost = data.startingCost;
     this.makesProducts = data.makesProducts;
     this.realEstateFactor = data.realEstateFactor ?? 0;
@@ -160,9 +161,11 @@ export class Division {
     //Then calculate salaries and process the markets
     if (state === "START") {
       if (isNaN(this.thisCycleRevenue) || isNaN(this.thisCycleExpenses)) {
-        console.error("NaN in Corporation's computed revenue/expenses");
-        dialogBoxCreate(
-          "Something went wrong when compting Corporation's revenue/expenses. This is a bug. Please report to game developer",
+        exceptionAlert(
+          new Error(
+            `Invalid revenue/expenses. thisCycleRevenue: ${this.thisCycleRevenue}. thisCycleExpenses: ${this.thisCycleExpenses}`,
+          ),
+          true,
         );
         this.thisCycleRevenue = 0;
         this.thisCycleExpenses = 0;
@@ -194,17 +197,6 @@ export class Division {
       this.popularity -= marketCycles * 0.0001;
       this.popularity = Math.max(0, this.popularity);
 
-      // Process Dreamsense gains
-      const popularityGain = corporation.getDreamSenseGain(),
-        awarenessGain = popularityGain * 4;
-      if (popularityGain > 0) {
-        const awareness = this.awareness + awarenessGain * marketCycles;
-        this.awareness = Math.min(awareness, Number.MAX_VALUE);
-
-        const popularity = this.popularity + popularityGain * marketCycles;
-        this.popularity = Math.min(popularity, Number.MAX_VALUE);
-      }
-
       return;
     }
 
@@ -223,32 +215,25 @@ export class Division {
     }
   }
 
-  // Process change in demand and competition for this industry's materials
+  // Process demand, competition, and market price changes for this division's materials
   processMaterialMarket(): void {
-    //References to prodMats and reqMats
-    const reqMats = this.requiredMaterials,
-      prodMats = this.producedMaterials;
+    // Relevant materials:
+    // - All materials this division requires or produces
+    // - Boost materials
+    const materials = new Set([
+      ...getRecordKeys(this.requiredMaterials),
+      ...this.producedMaterials,
+      ...corpConstants.boostMaterials,
+    ]);
 
-    //Only 'process the market' for materials that this industry deals with
     for (const city of Object.values(CityName)) {
-      //If this industry has a warehouse in this city, process the market
-      //for every material this industry requires or produces
-      if (this.warehouses[city]) {
-        const wh = this.warehouses[city];
-        for (const name of Object.keys(reqMats) as CorpMaterialName[]) {
-          if (Object.hasOwn(reqMats, name)) {
-            wh.materials[name].processMarket();
-          }
-        }
-
-        //Produced materials are stored in an array
-        for (const matName of prodMats) wh.materials[matName].processMarket();
-
-        //Process these twice because these boost production ??????
-        wh.materials.Hardware.processMarket();
-        wh.materials.Robots.processMarket();
-        wh.materials["AI Cores"].processMarket();
-        wh.materials["Real Estate"].processMarket();
+      const warehouse = this.warehouses[city];
+      // If this division has a warehouse in this city, process the relevant materials
+      if (warehouse == null) {
+        continue;
+      }
+      for (const materialName of materials) {
+        warehouse.materials[materialName].processMarket();
       }
     }
   }
@@ -261,9 +246,9 @@ export class Division {
       if (change === 0) continue;
 
       if (
-        this.type === IndustryType.Pharmaceutical ||
-        this.type === IndustryType.Software ||
-        this.type === IndustryType.Robotics
+        this.industry === IndustryType.Pharmaceutical ||
+        this.industry === IndustryType.Software ||
+        this.industry === IndustryType.Robotics
       ) {
         change *= 3;
       }
@@ -600,20 +585,16 @@ export class Division {
 
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
-            const mat = warehouse.materials[this.producedMaterials[0]];
             //Calculate the maximum production of this material based
             //on the office's productivity
             const maxProd =
               this.getOfficeProductivity(office) *
-              this.productionMult * // Multiplier from materials
+              this.productionMult * // Multiplier from boost materials
               corporation.getProductionMultiplier() *
               this.getProductionMultiplier(); // Multiplier from Research
-            let prod;
 
-            // If there is a limit set on production, apply the limit
-            prod = mat.productionLimit === null ? maxProd : Math.min(maxProd, mat.productionLimit);
-
-            prod *= corpConstants.secondsPerMarketCycle * marketCycles; //Convert production from per second to per market cycle
+            // Convert production from per second to per market cycle
+            let prod = maxProd * corpConstants.secondsPerMarketCycle * marketCycles;
 
             // Calculate net change in warehouse storage making the produced materials will cost
             let totalMatSize = 0;
@@ -685,6 +666,14 @@ export class Division {
               }
               avgQlt = Math.max(avgQlt, 1);
               for (let j = 0; j < this.producedMaterials.length; ++j) {
+                let outputAmount = prod * producableFrac;
+                const productionLimit = warehouse.materials[this.producedMaterials[j]].productionLimit;
+                if (productionLimit !== null) {
+                  // productionLimit is per second, so we need to convert it to per market cycle.
+                  const effectiveLimitValue = productionLimit * corpConstants.secondsPerMarketCycle * marketCycles;
+                  outputAmount = Math.min(outputAmount, effectiveLimitValue);
+                }
+
                 let tempQlt =
                   office.employeeProductionByJob[CorpEmployeeJob.Engineer] / 90 +
                   Math.pow(this.researchPoints, this.researchFactor) +
@@ -695,26 +684,23 @@ export class Division {
                   1,
                   (warehouse.materials[this.producedMaterials[j]].quality *
                     warehouse.materials[this.producedMaterials[j]].stored +
-                    tempQlt * prod * producableFrac) /
-                    (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac),
+                    tempQlt * outputAmount) /
+                    (warehouse.materials[this.producedMaterials[j]].stored + outputAmount),
                 );
                 warehouse.materials[this.producedMaterials[j]].averagePrice =
                   (warehouse.materials[this.producedMaterials[j]].averagePrice *
                     warehouse.materials[this.producedMaterials[j]].stored +
-                    warehouse.materials[this.producedMaterials[j]].marketPrice * prod * producableFrac) /
-                  (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac);
-                warehouse.materials[this.producedMaterials[j]].stored += prod * producableFrac;
+                    warehouse.materials[this.producedMaterials[j]].marketPrice * outputAmount) /
+                  (warehouse.materials[this.producedMaterials[j]].stored + outputAmount);
+
+                warehouse.materials[this.producedMaterials[j]].stored += outputAmount;
+                warehouse.materials[this.producedMaterials[j]].productionAmount =
+                  outputAmount / (corpConstants.secondsPerMarketCycle * marketCycles);
               }
             } else {
               for (const reqMatName of getRecordKeys(this.requiredMaterials)) {
                 warehouse.materials[reqMatName].productionAmount = 0;
               }
-            }
-
-            //Per second
-            const materialProduction = (prod * producableFrac) / (corpConstants.secondsPerMarketCycle * marketCycles);
-            for (const prodMatName of this.producedMaterials) {
-              warehouse.materials[prodMatName].productionAmount = materialProduction;
             }
           } else {
             //If this doesn't produce any materials, then it only creates
@@ -868,12 +854,12 @@ export class Division {
       if (!warehouse) continue;
       switch (state) {
         case "PRODUCTION": {
-          //Calculate the maximum production of this material based
+          //Calculate the maximum production of this product based
           //on the office's productivity
           const maxProd =
             this.getOfficeProductivity(office, { forProduct: true }) *
             corporation.getProductionMultiplier() *
-            this.productionMult * // Multiplier from materials
+            this.productionMult * // Multiplier from boost materials
             this.getProductionMultiplier() * // Multiplier from research
             this.getProductProductionMultiplier(); // Multiplier from research
           let prod;
@@ -887,12 +873,12 @@ export class Division {
           }
           prod *= corpConstants.secondsPerMarketCycle * marketCycles;
 
+          // The "netStorageSize" check is redundant, but retained in case the product size calculation changes.
           //Calculate net change in warehouse storage making the Products will cost
           let netStorageSize = product.size;
           for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
             netStorageSize -= MaterialInfo[reqMatName].size * reqQty;
           }
-
           //If there's not enough space in warehouse, limit the amount of Product
           if (netStorageSize > 0) {
             const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / netStorageSize);
@@ -1063,7 +1049,7 @@ export class Division {
 
   updateResearchTree(): void {
     if (this.treeInitialized) return;
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     // Need to populate the tree in case we are loading a game.
     for (const research of this.researched) researchTree.research(research);
     // Also need to load researches from the tree in case we are making a new division.
@@ -1073,61 +1059,61 @@ export class Division {
 
   // Get multipliers from Research
   getAdvertisingMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getAdvertisingMultiplier();
   }
 
   getEmployeeChaMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getEmployeeChaMultiplier();
   }
 
   getEmployeeCreMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getEmployeeCreMultiplier();
   }
 
   getEmployeeEffMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getEmployeeEffMultiplier();
   }
 
   getEmployeeIntMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getEmployeeIntMultiplier();
   }
 
   getProductionMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getProductionMultiplier();
   }
 
   getProductProductionMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getProductProductionMultiplier();
   }
 
   getSalesMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getSalesMultiplier();
   }
 
   getScientificResearchMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getScientificResearchMultiplier();
   }
 
   getStorageMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.type];
+    const researchTree = IndustryResearchTrees[this.industry];
     this.updateResearchTree();
     return researchTree.getStorageMultiplier();
   }
@@ -1137,9 +1123,15 @@ export class Division {
     return Generic_toJSON("Division", this, Division.includedKeys);
   }
 
-  /** Initializes a Industry object from a JSON save state. */
+  /** Initializes a Division object from a JSON save state. */
   static fromJSON(value: IReviverValue): Division {
-    return Generic_fromJSON(Division, value.data, Division.includedKeys);
+    const division = Generic_fromJSON(Division, value.data, Division.includedKeys);
+    // division.type was renamed to division.industry in v3.0.0.
+    assertObject(value.data);
+    if ("type" in value.data) {
+      division.industry = value.data.type as IndustryType;
+    }
+    return division;
   }
 
   static includedKeys = getKeyList(Division, { removedKeys: ["treeInitialized"] });

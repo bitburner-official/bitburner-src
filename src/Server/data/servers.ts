@@ -1388,6 +1388,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 55,
     },
     hostname: "powerhouse-fitness",
+    literature: [LiteratureName.ABriefHistoryOfTranshumanism],
     maxRamExponent: {
       max: 6,
       min: 4,
@@ -1535,13 +1536,5 @@ export const serverMetadata: IServerMetadata[] = [
     requiredHackingSkill: 3000,
     serverGrowth: 0,
     specialName: SpecialServers.WorldDaemon,
-  },
-  {
-    hostname: SpecialServers.DarkWeb,
-    moneyAvailable: 0,
-    numOpenPortsRequired: 5,
-    organizationName: SpecialServers.DarkWeb,
-    requiredHackingSkill: 1,
-    specialName: SpecialServers.DarkWeb,
   },
 ];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
@@ -6,8 +6,7 @@ import { makeStyles } from "tss-react/mui";
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
-import { onExport } from "../ExportBonus";
-import { CompletedProgramName, LocationName } from "@enums";
+import { CompletedProgramName, LocationName, SimplePage } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
@@ -18,8 +17,8 @@ import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
 import type { ComplexPage } from "./Enums";
-import type { PageWithContext, IRouter, PageContext } from "./Router";
-import { Page } from "./Router";
+import type { IRouter, PageContext, PageWithContext } from "./Router";
+import { isSimplePage, Page } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
 import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
@@ -30,7 +29,7 @@ import { CorporationRoot } from "../Corporation/ui/CorporationRoot";
 import { InfiltrationRoot } from "../Infiltration/ui/InfiltrationRoot";
 import { GraftingRoot } from "../PersonObjects/Grafting/ui/GraftingRoot";
 import { WorkInProgressRoot } from "./WorkInProgressRoot";
-import { GameOptionsRoot } from "../GameOptions/ui/GameOptionsRoot";
+import { GameOptionsPageEvents, GameOptionsRoot } from "../GameOptions/ui/GameOptionsRoot";
 import { SleeveRoot } from "../PersonObjects/Sleeve/ui/SleeveRoot";
 import { HacknetRoot } from "../Hacknet/ui/HacknetRoot";
 import { GenericLocation } from "../Locations/ui/GenericLocation";
@@ -61,23 +60,26 @@ import { AlertManager } from "./React/AlertManager";
 import { PromptManager } from "./React/PromptManager";
 import { FactionInvitationManager } from "../Faction/ui/FactionInvitationManager";
 import { calculateAchievements } from "../Achievements/Achievements";
-import { RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
+import { ActivateRecoveryMode, RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
 import { AchievementsRoot } from "../Achievements/AchievementsRoot";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ThemeBrowser } from "../Themes/ui/ThemeBrowser";
-import { ImportSave } from "./React/ImportSave";
+import { ImportSaveComparison } from "./React/ImportSaveComparison";
 import { BypassWrapper } from "./React/BypassWrapper";
 
 import { Apr1 } from "./Apr1";
 import { V2Modal } from "../utils/V2Modal";
-import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
+import { UIEventEmitter, UIEventType } from "./UIEventEmitter";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { ErrorModal } from "../ErrorHandling/ErrorModal";
+import { DWRoot } from "../DarkNet/DWRoot";
+import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
 
 const htmlLocation = location;
 
@@ -96,19 +98,54 @@ const useStyles = makeStyles()((theme: Theme) => ({
 
 const MAX_PAGES_IN_HISTORY = 10;
 
+type RouterAction = (
+  | {
+      type: "toPage";
+      page: Page;
+      context?: PageContext<ComplexPage>;
+    }
+  | {
+      type: "back";
+    }
+) & { stackTrace: string | undefined };
+
+/**
+ * When the main UI is not loaded, all router actions ("toPage" and "back") are stored in this array. After that, we
+ * will run them and show a warning popup. This queue is empty in a normal situation. If it has items, there are bugs
+ * that try to route the main UI when it's not loaded.
+ */
+const pendingRouterActions: RouterAction[] = [];
+
 export let Router: IRouter = {
   page: () => {
     return Page.LoadingScreen;
   },
+  /**
+   * This function is only called in ImportSave.tsx. That component is only used when the main UI shows Page.ImportSave,
+   * so it's impossible for this function to run before the main UI is loaded. If it happens, it's a fatal error. In
+   * that case, throwing an error is the only option.
+   */
   allowRouting: () => {
-    throw new Error("Router called before initialization - allowRouting");
+    throw new Error("Router.allowRouting() was called before initialization.");
   },
   hidingMessages: () => true,
-  toPage: (page: Page) => {
-    throw new Error(`Router called before initialization - toPage(${page})`);
+  toPage: (page: Page, context?: PageContext<ComplexPage>) => {
+    const stackTrace = new Error().stack;
+    console.error("Router.toPage() was called before initialization.", page, context, stackTrace);
+    pendingRouterActions.push({
+      type: "toPage",
+      page,
+      context,
+      stackTrace,
+    });
   },
   back: () => {
-    throw new Error("Router called before initialization - back");
+    const stackTrace = new Error().stack;
+    console.error("Default Router.back() was called before initialization.", stackTrace);
+    pendingRouterActions.push({
+      type: "back",
+      stackTrace,
+    });
   },
 };
 
@@ -116,9 +153,18 @@ function determineStartPage(): PageWithContext {
   if (RecoveryMode) {
     return { page: Page.Recovery };
   }
-  if (isBitNodeFinished()) {
-    // Go to BitVerse UI without animation.
-    return { page: Page.BitVerse, flume: false, quick: true };
+  /**
+   * If the save data contains the server list, but WD data is invalid, isBitNodeFinished() will throw an error, and the
+   * main UI will show a black screen instead of the recovery screen.
+   */
+  try {
+    if (isBitNodeFinished()) {
+      // Go to BitVerse UI without animation.
+      return { page: Page.BitVerse, flume: false, quick: true };
+    }
+  } catch (error) {
+    ActivateRecoveryMode(error);
+    return { page: Page.Recovery };
   }
   if (Player.currentWork !== null) {
     return { page: Page.Work };
@@ -130,7 +176,25 @@ export function GameRoot(): React.ReactElement {
   const { classes } = useStyles();
 
   const [pages, setPages] = useState<PageWithContext[]>(() => [determineStartPage()]);
-  const pageWithContext = pages[0];
+  let pageWithContext = pages[0];
+
+  /**
+   * Theoretically, this case cannot happen because of the check in Router.back(). Nevertheless, we should still check
+   * it. In the future, if we call "setPages" and remove items in the "pages" array without checking it properly,
+   * this case can still happen.
+   */
+  if (pageWithContext === undefined) {
+    /**
+     * We have to delay showing the warning popup due to these reasons:
+     * - React will complain: "Warning: Cannot update a component (`AlertManager`) while rendering a different
+     * component (`GameRoot`)".
+     * - There is a potential problem in AlertManager.tsx. Please check the comment there for more information.
+     */
+    setTimeout(() => {
+      exceptionAlert(new Error(`pageWithContext is undefined`));
+    }, 1000);
+    pageWithContext = { page: Page.Terminal };
+  }
 
   const setNextPage = (pageWithContext: PageWithContext) =>
     setPages((prev) => {
@@ -154,13 +218,13 @@ export function GameRoot(): React.ReactElement {
   }, [rerender]);
 
   function killAllScripts(): void {
-    for (const server of GetAllServers()) {
+    for (const server of GetAllServers(true)) {
       server.runningScriptMap.clear();
     }
     saveObject
       .saveGame()
       .then(() => {
-        setTimeout(() => htmlLocation.reload(), 2000);
+        setTimeout(() => htmlLocation.reload(), 0);
       })
       .catch((error) => {
         exceptionAlert(error);
@@ -193,18 +257,35 @@ export function GameRoot(): React.ReactElement {
           prestigeWorkerScripts();
           calculateAchievements();
           break;
+        case Page.Options:
+          // If the current page is "Options" and something calls Router.toPage("Options", { tab: "Foo" }) to switch the
+          // tab, we need to emit an event to tell GameOptionsRoot to set its currentTab state. Changing the tab in the
+          // properties of GameOptionsRoot does not set the state.
+          if (Router.page() === Page.Options && context && "tab" in context && context.tab != null) {
+            GameOptionsPageEvents.emit(context.tab);
+          }
+          break;
       }
       setNextPage({ page, ...context } as PageWithContext);
     },
     back: () => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("back");
+      if (!allowRoutingCalls) {
+        return attemptedForbiddenRouting("back");
+      }
+      /**
+       * If something calls Router.back() when the "pages" array has only 1 item, that array will be empty when the UI
+       * is rerendered, and pageWithContext will be undefined. To avoid this problem, we return immediately in that case.
+       */
+      if (pages.length === 1) {
+        return;
+      }
       setPages((pages) => pages.slice(1));
     },
   };
 
   useEffect(() => {
     if (pageWithContext.page !== Page.Terminal) window.scrollTo(0, 0);
-  });
+  }, [pageWithContext.page]);
 
   function softReset(): void {
     dialogBoxCreate("Soft Reset!");
@@ -230,7 +311,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Infiltration: {
-      mainPage = <InfiltrationRoot location={pageWithContext.location} />;
+      mainPage = <InfiltrationRoot />;
       withSidebar = false;
       break;
     }
@@ -271,7 +352,15 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ActiveScripts: {
-      mainPage = <ActiveScriptsRoot />;
+      mainPage = <ActiveScriptsRoot page={SimplePage.ActiveScripts} />;
+      break;
+    }
+    case Page.RecentlyKilledScripts: {
+      mainPage = <ActiveScriptsRoot page={SimplePage.RecentlyKilledScripts} />;
+      break;
+    }
+    case Page.RecentErrors: {
+      mainPage = <ActiveScriptsRoot page={SimplePage.RecentErrors} />;
       break;
     }
     case Page.Hacknet: {
@@ -344,12 +433,11 @@ export function GameRoot(): React.ReactElement {
     case Page.Options: {
       mainPage = (
         <GameOptionsRoot
+          tab={pageWithContext.tab}
           save={() => {
             saveObject.saveGame().catch((error) => exceptionAlert(error));
           }}
           export={() => {
-            // Apply the export bonus before saving the game
-            onExport();
             saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           forceKill={killAllScripts}
@@ -369,8 +457,6 @@ export function GameRoot(): React.ReactElement {
       mainPage = (
         <AugmentationsRoot
           exportGameFn={() => {
-            // Apply the export bonus before saving the game
-            onExport();
             saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           installAugmentationsFn={() => {
@@ -384,6 +470,10 @@ export function GameRoot(): React.ReactElement {
       mainPage = <GoRoot />;
       break;
     }
+    case Page.DarkNet: {
+      mainPage = <DWRoot />;
+      break;
+    }
     case Page.Achievements: {
       mainPage = <AchievementsRoot />;
       break;
@@ -393,14 +483,42 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ImportSave: {
-      mainPage = <ImportSave saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
+      mainPage = <ImportSaveComparison saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
       bypassGame = true;
+      break;
     }
   }
 
+  useEffect(() => {
+    if (pendingRouterActions.length > 0) {
+      // Run all pending actions and show a warning popup.
+      for (const action of pendingRouterActions) {
+        if (action.type === "toPage") {
+          if (isSimplePage(action.page)) {
+            Router.toPage(action.page);
+          } else {
+            Router.toPage(action.page, action.context ?? {});
+          }
+        } else {
+          Router.back();
+        }
+      }
+      exceptionAlert(
+        new Error(
+          `Router was used before the main UI is loaded. pendingRouterActions: ${JSON.stringify(
+            pendingRouterActions,
+          )}.`,
+        ),
+      );
+      pendingRouterActions.length = 0;
+    }
+    // Emit an event to notify subscribers that the main UI is loaded.
+    UIEventEmitter.emit(UIEventType.MainUILoaded);
+  }, []);
+
   return (
-    <MathJaxContext version={3} src={__webpack_public_path__ + "mathjax/tex-chtml.js"}>
+    <>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
           <HistoryProvider>
@@ -431,15 +549,18 @@ export function GameRoot(): React.ReactElement {
               <Unclickable />
               <LogBoxManager hidden={hidePopups} />
               <AlertManager hidden={hidePopups} />
+              <ErrorModal />
               <PromptManager hidden={hidePopups} />
               <FactionInvitationManager hidden={hidePopups} />
               <Snackbar hidden={hidePopups} />
+              {/* Allow opening the documentation popup in the BitVerse */}
+              <DocumentationPopUp hidden={hidePopups && pageWithContext.page !== Page.BitVerse} />
               <Apr1 />
             </SnackbarProvider>
           </HistoryProvider>
         </BypassWrapper>
       </ErrorBoundary>
       <V2Modal />
-    </MathJaxContext>
+    </>
   );
 }

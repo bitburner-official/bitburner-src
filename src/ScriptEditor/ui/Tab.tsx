@@ -9,14 +9,18 @@ import SyncIcon from "@mui/icons-material/Sync";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { Settings } from "../../Settings/Settings";
+import { EditorEvents } from "../EditorData";
+import { useRerender } from "../../ui/React/hooks";
+import { getTabId } from "./utils";
+import type { ContentFilePath } from "../../Paths/ContentFile";
 
 interface IProps {
   provided: DraggableProvided;
-  fullPath: string;
+  tabId: string;
   isActive: boolean;
   isExternal: boolean;
-  isUnsaved: boolean;
 
+  isUnsaved: () => boolean;
   onClick: () => void;
   onClose: () => void;
   onUpdate: () => void;
@@ -26,7 +30,8 @@ const tabMargin = 5;
 const tabIconWidth = 25;
 const tabIconHeight = 38.5;
 
-export function Tab({ provided, fullPath, isActive, isExternal, isUnsaved, onClick, onClose, onUpdate }: IProps) {
+export function Tab({ provided, tabId, isActive, isExternal, isUnsaved, onClick, onClose, onUpdate }: IProps) {
+  const rerender = useRerender();
   const colorProps = isActive
     ? {
         background: Settings.theme.button,
@@ -41,18 +46,18 @@ export function Tab({ provided, fullPath, isActive, isExternal, isUnsaved, onCli
 
   let tabTitle;
   let tooltipTitle;
-  if (isUnsaved) {
-    // Show a blinking "*" character to notify the player that this file is dirtied.
+  if (isUnsaved()) {
+    // Show a "*" character to notify the player that this file is dirtied.
     tabTitle = (
       <>
         <Typography component="span" color={Settings.theme.warning}>
           *{" "}
         </Typography>
-        {fullPath}
+        {tabId}
       </>
     );
   } else {
-    tabTitle = fullPath;
+    tabTitle = tabId;
   }
 
   if (isExternal) {
@@ -84,6 +89,17 @@ export function Tab({ provided, fullPath, isActive, isExternal, isUnsaved, onCli
       tabRef.current?.scrollIntoView();
     }
   }, [isActive]);
+
+  useEffect(
+    () =>
+      EditorEvents.subscribe((hostname: string, filePath: ContentFilePath) => {
+        if (tabId !== getTabId(hostname, filePath)) {
+          return;
+        }
+        rerender();
+      }),
+    [rerender, tabId],
+  );
 
   return (
     <div

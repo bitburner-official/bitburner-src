@@ -13,45 +13,769 @@ interface GangMemberInfo
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [agi\_asc\_mult](./bitburner.gangmemberinfo.agi_asc_mult.md) |  | number | Agility multiplier from ascensions |
-|  [agi\_asc\_points](./bitburner.gangmemberinfo.agi_asc_points.md) |  | number | Total Agility Ascension points accumulated |
-|  [agi\_exp](./bitburner.gangmemberinfo.agi_exp.md) |  | number | Current agility experience |
-|  [agi\_mult](./bitburner.gangmemberinfo.agi_mult.md) |  | number | Agility multiplier from equipment |
-|  [agi](./bitburner.gangmemberinfo.agi.md) |  | number | Agility skill level |
-|  [augmentations](./bitburner.gangmemberinfo.augmentations.md) |  | string\[\] | List of all Augmentations currently installed on gang member |
-|  [cha\_asc\_mult](./bitburner.gangmemberinfo.cha_asc_mult.md) |  | number | Charisma multiplier from ascensions |
-|  [cha\_asc\_points](./bitburner.gangmemberinfo.cha_asc_points.md) |  | number | Total Charisma Ascension points accumulated |
-|  [cha\_exp](./bitburner.gangmemberinfo.cha_exp.md) |  | number | Current charisma experience |
-|  [cha\_mult](./bitburner.gangmemberinfo.cha_mult.md) |  | number | Charisma multiplier from equipment |
-|  [cha](./bitburner.gangmemberinfo.cha.md) |  | number | Charisma skill level |
-|  [def\_asc\_mult](./bitburner.gangmemberinfo.def_asc_mult.md) |  | number | Defense multiplier from ascensions |
-|  [def\_asc\_points](./bitburner.gangmemberinfo.def_asc_points.md) |  | number | Total Defense Ascension points accumulated |
-|  [def\_exp](./bitburner.gangmemberinfo.def_exp.md) |  | number | Current defense experience |
-|  [def\_mult](./bitburner.gangmemberinfo.def_mult.md) |  | number | Defense multiplier from equipment |
-|  [def](./bitburner.gangmemberinfo.def.md) |  | number | Defense skill level |
-|  [dex\_asc\_mult](./bitburner.gangmemberinfo.dex_asc_mult.md) |  | number | Dexterity multiplier from ascensions |
-|  [dex\_asc\_points](./bitburner.gangmemberinfo.dex_asc_points.md) |  | number | Total Dexterity Ascension points accumulated |
-|  [dex\_exp](./bitburner.gangmemberinfo.dex_exp.md) |  | number | Current dexterity experience |
-|  [dex\_mult](./bitburner.gangmemberinfo.dex_mult.md) |  | number | Dexterity multiplier from equipment |
-|  [dex](./bitburner.gangmemberinfo.dex.md) |  | number | Dexterity skill level |
-|  [earnedRespect](./bitburner.gangmemberinfo.earnedrespect.md) |  | number | Amount of Respect earned by member since they last Ascended |
-|  [expGain](./bitburner.gangmemberinfo.expgain.md) |  | [GangMemberExpGain](./bitburner.gangmemberexpgain.md) \| null | <p>Per Cycle Exp object for each stat for this gang member.</p><p>null in the event that the member does not have a given task.</p> |
-|  [hack\_asc\_mult](./bitburner.gangmemberinfo.hack_asc_mult.md) |  | number | Hack multiplier from ascensions |
-|  [hack\_asc\_points](./bitburner.gangmemberinfo.hack_asc_points.md) |  | number | Total Hack Ascension points accumulated |
-|  [hack\_exp](./bitburner.gangmemberinfo.hack_exp.md) |  | number | Current hack experience |
-|  [hack\_mult](./bitburner.gangmemberinfo.hack_mult.md) |  | number | Hack multiplier from equipment |
-|  [hack](./bitburner.gangmemberinfo.hack.md) |  | number | Hack skill level |
-|  [moneyGain](./bitburner.gangmemberinfo.moneygain.md) |  | number | Per Cycle Income for this gang member |
-|  [name](./bitburner.gangmemberinfo.name.md) |  | string | Name of the gang member |
-|  [respectGain](./bitburner.gangmemberinfo.respectgain.md) |  | number | Per Cycle Rate this member is currently gaining Respect |
-|  [str\_asc\_mult](./bitburner.gangmemberinfo.str_asc_mult.md) |  | number | Strength multiplier from ascensions |
-|  [str\_asc\_points](./bitburner.gangmemberinfo.str_asc_points.md) |  | number | Total Strength Ascension points accumulated |
-|  [str\_exp](./bitburner.gangmemberinfo.str_exp.md) |  | number | Current strength experience |
-|  [str\_mult](./bitburner.gangmemberinfo.str_mult.md) |  | number | Strength multiplier from equipment |
-|  [str](./bitburner.gangmemberinfo.str.md) |  | number | Strength skill level |
-|  [task](./bitburner.gangmemberinfo.task.md) |  | string | Currently assigned task |
-|  [upgrades](./bitburner.gangmemberinfo.upgrades.md) |  | string\[\] | List of all non-Augmentation Equipment owned by gang member |
-|  [wantedLevelGain](./bitburner.gangmemberinfo.wantedlevelgain.md) |  | number | Per Cycle Rate by which this member is affecting your gang's Wanted Level |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[agi\_asc\_mult](./bitburner.gangmemberinfo.agi_asc_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Agility multiplier from ascensions
+
+
+</td></tr>
+<tr><td>
+
+[agi\_asc\_points](./bitburner.gangmemberinfo.agi_asc_points.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total Agility Ascension points accumulated
+
+
+</td></tr>
+<tr><td>
+
+[agi\_exp](./bitburner.gangmemberinfo.agi_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current agility experience
+
+
+</td></tr>
+<tr><td>
+
+[agi\_mult](./bitburner.gangmemberinfo.agi_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Agility multiplier from equipment
+
+
+</td></tr>
+<tr><td>
+
+[agi](./bitburner.gangmemberinfo.agi.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Agility skill level
+
+
+</td></tr>
+<tr><td>
+
+[augmentations](./bitburner.gangmemberinfo.augmentations.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+List of all Augmentations currently installed on gang member
+
+
+</td></tr>
+<tr><td>
+
+[cha\_asc\_mult](./bitburner.gangmemberinfo.cha_asc_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Charisma multiplier from ascensions
+
+
+</td></tr>
+<tr><td>
+
+[cha\_asc\_points](./bitburner.gangmemberinfo.cha_asc_points.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total Charisma Ascension points accumulated
+
+
+</td></tr>
+<tr><td>
+
+[cha\_exp](./bitburner.gangmemberinfo.cha_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current charisma experience
+
+
+</td></tr>
+<tr><td>
+
+[cha\_mult](./bitburner.gangmemberinfo.cha_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Charisma multiplier from equipment
+
+
+</td></tr>
+<tr><td>
+
+[cha](./bitburner.gangmemberinfo.cha.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Charisma skill level
+
+
+</td></tr>
+<tr><td>
+
+[def\_asc\_mult](./bitburner.gangmemberinfo.def_asc_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Defense multiplier from ascensions
+
+
+</td></tr>
+<tr><td>
+
+[def\_asc\_points](./bitburner.gangmemberinfo.def_asc_points.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total Defense Ascension points accumulated
+
+
+</td></tr>
+<tr><td>
+
+[def\_exp](./bitburner.gangmemberinfo.def_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current defense experience
+
+
+</td></tr>
+<tr><td>
+
+[def\_mult](./bitburner.gangmemberinfo.def_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Defense multiplier from equipment
+
+
+</td></tr>
+<tr><td>
+
+[def](./bitburner.gangmemberinfo.def.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Defense skill level
+
+
+</td></tr>
+<tr><td>
+
+[dex\_asc\_mult](./bitburner.gangmemberinfo.dex_asc_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Dexterity multiplier from ascensions
+
+
+</td></tr>
+<tr><td>
+
+[dex\_asc\_points](./bitburner.gangmemberinfo.dex_asc_points.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total Dexterity Ascension points accumulated
+
+
+</td></tr>
+<tr><td>
+
+[dex\_exp](./bitburner.gangmemberinfo.dex_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current dexterity experience
+
+
+</td></tr>
+<tr><td>
+
+[dex\_mult](./bitburner.gangmemberinfo.dex_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Dexterity multiplier from equipment
+
+
+</td></tr>
+<tr><td>
+
+[dex](./bitburner.gangmemberinfo.dex.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Dexterity skill level
+
+
+</td></tr>
+<tr><td>
+
+[earnedRespect](./bitburner.gangmemberinfo.earnedrespect.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of Respect earned by member since they last Ascended
+
+
+</td></tr>
+<tr><td>
+
+[expGain](./bitburner.gangmemberinfo.expgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[GangMemberExpGain](./bitburner.gangmemberexpgain.md) \| null
+
+
+</td><td>
+
+Per Cycle Exp object for each stat for this gang member.
+
+null in the event that the member does not have a given task.
+
+
+</td></tr>
+<tr><td>
+
+[hack\_asc\_mult](./bitburner.gangmemberinfo.hack_asc_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Hack multiplier from ascensions
+
+
+</td></tr>
+<tr><td>
+
+[hack\_asc\_points](./bitburner.gangmemberinfo.hack_asc_points.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total Hack Ascension points accumulated
+
+
+</td></tr>
+<tr><td>
+
+[hack\_exp](./bitburner.gangmemberinfo.hack_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current hack experience
+
+
+</td></tr>
+<tr><td>
+
+[hack\_mult](./bitburner.gangmemberinfo.hack_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Hack multiplier from equipment
+
+
+</td></tr>
+<tr><td>
+
+[hack](./bitburner.gangmemberinfo.hack.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Hack skill level
+
+
+</td></tr>
+<tr><td>
+
+[moneyGain](./bitburner.gangmemberinfo.moneygain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Per Cycle Income for this gang member
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.gangmemberinfo.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the gang member
+
+
+</td></tr>
+<tr><td>
+
+[respectGain](./bitburner.gangmemberinfo.respectgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Per Cycle Rate this member is currently gaining Respect
+
+
+</td></tr>
+<tr><td>
+
+[str\_asc\_mult](./bitburner.gangmemberinfo.str_asc_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Strength multiplier from ascensions
+
+
+</td></tr>
+<tr><td>
+
+[str\_asc\_points](./bitburner.gangmemberinfo.str_asc_points.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total Strength Ascension points accumulated
+
+
+</td></tr>
+<tr><td>
+
+[str\_exp](./bitburner.gangmemberinfo.str_exp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current strength experience
+
+
+</td></tr>
+<tr><td>
+
+[str\_mult](./bitburner.gangmemberinfo.str_mult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Strength multiplier from equipment
+
+
+</td></tr>
+<tr><td>
+
+[str](./bitburner.gangmemberinfo.str.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Strength skill level
+
+
+</td></tr>
+<tr><td>
+
+[task](./bitburner.gangmemberinfo.task.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Currently assigned task
+
+
+</td></tr>
+<tr><td>
+
+[upgrades](./bitburner.gangmemberinfo.upgrades.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+List of all non-Augmentation Equipment owned by gang member
+
+
+</td></tr>
+<tr><td>
+
+[wantedLevelGain](./bitburner.gangmemberinfo.wantedlevelgain.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Per Cycle Rate by which this member is affecting your gang's Wanted Level
+
+
+</td></tr>
+</tbody></table>
 

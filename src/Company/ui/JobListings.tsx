@@ -23,7 +23,7 @@ export function JobListings({ company, currentPosition }: JobListingsProps): Rea
     // Don't show a job if we already qualify for a later job offered by this company
     if (nextJobName && qualifiedJobs.has(nextJobName)) continue;
     // Don't show a job if we don't qualify for it, unless it's a starting job or a promotion from current job
-    if (!qualifiedJobs.has(jobName) && job.requiredReputation > 0 && jobName !== currentPosition?.nextPosition) {
+    if (!qualifiedJobs.has(jobName) && !job.isStartingJob && jobName !== currentPosition?.nextPosition) {
       continue;
     }
     jobsToShow.push(job);

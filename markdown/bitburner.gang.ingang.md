@@ -4,7 +4,7 @@
 
 ## Gang.inGang() method
 
-Check if you're in a gang.
+Check if you're in a gang. Does not require API access.
 
 **Signature:**
 
@@ -19,5 +19,5 @@ True if you're in a gang, false otherwise.
 
 ## Remarks
 
-RAM cost: 1GB
+RAM cost: 0GB
 

@@ -22,6 +22,8 @@ jobs:
         with:
           files: |
             dist/**
+          files_ignore: |
+            dist/icons/achievements/*.svg
 
       - name: Warn when dist was changed or title is invalid
         id: warn-bundles-changed

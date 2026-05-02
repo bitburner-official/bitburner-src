@@ -29,7 +29,7 @@ export const uniquePathsInAGrid: Pick<
 
       return [numRows, numColumns];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const n: number = data[0]; // Number of rows
       const m: number = data[1]; // Number of columns
       const currentRow: number[] = [];
@@ -44,7 +44,10 @@ export const uniquePathsInAGrid: Pick<
         }
       }
 
-      return currentRow[n - 1] === answer;
+      return currentRow[n - 1];
+    },
+    solver: (data, answer) => {
+      return uniquePathsInAGrid[CodingContractName.UniquePathsInAGridI].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
@@ -58,7 +61,7 @@ export const uniquePathsInAGrid: Pick<
       return [
         "You are located in the top-left corner of the following grid:\n\n",
         `${gridString}\n`,
-        "You are trying reach the bottom-right corner of the grid, but you can only",
+        "You are trying to reach the bottom-right corner of the grid, but you can only",
         "move down or right on each step. Furthermore, there are obstacles on the grid",
         "that you cannot move onto. These obstacles are denoted by '1', while empty",
         "spaces are denoted by 0.\n\n",
@@ -97,7 +100,7 @@ export const uniquePathsInAGrid: Pick<
 
       return grid;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const obstacleGrid: number[][] = [];
       obstacleGrid.length = data.length;
       for (let i = 0; i < obstacleGrid.length; ++i) {
@@ -116,7 +119,10 @@ export const uniquePathsInAGrid: Pick<
         }
       }
 
-      return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1] === answer;
+      return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1];
+    },
+    solver: (data, answer) => {
+      return uniquePathsInAGrid[CodingContractName.UniquePathsInAGridII].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

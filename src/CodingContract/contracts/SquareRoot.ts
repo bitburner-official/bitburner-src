@@ -34,6 +34,9 @@ ${data}`;
       const ans = BigInt(state[0]);
       return ans * ans + BigInt(state[1]);
     },
+    getAnswer: () => {
+      return null;
+    },
     solver: (state, answer) => {
       return state[0] === answer.toString();
     },

@@ -1,5 +1,22 @@
-import { substituteAliases, parseAliasDeclaration } from "../../../src/Alias";
+import { Aliases, GlobalAliases, substituteAliases, parseAliasDeclaration } from "../../../src/Alias";
 describe("substituteAliases Tests", () => {
+  beforeEach(() => {
+    Aliases.clear();
+    GlobalAliases.clear();
+  });
+
+  it("Should not infinitely recurse when alias value contains the alias name", () => {
+    parseAliasDeclaration("buy=buy -l");
+    const result = substituteAliases("buy");
+    expect(result).toEqual("buy -l");
+  });
+
+  it("Should not infinitely recurse when global alias value contains the alias name", () => {
+    parseAliasDeclaration("scan=scan -d 5", true);
+    const result = substituteAliases("scan");
+    expect(result).toEqual("scan -d 5");
+  });
+
   it("Should gracefully handle recursive local aliases", () => {
     parseAliasDeclaration("recursiveAlias=b");
     parseAliasDeclaration("b=c");
@@ -7,7 +24,7 @@ describe("substituteAliases Tests", () => {
     parseAliasDeclaration("d=recursiveAlias");
 
     const result = substituteAliases("recursiveAlias");
-    expect(result).toEqual("d");
+    expect(result).toEqual("recursiveAlias");
   });
 
   it("Should only change local aliases if they are the start of the command", () => {
@@ -27,7 +44,7 @@ describe("substituteAliases Tests", () => {
     parseAliasDeclaration("d=a", true);
 
     const result = substituteAliases("a b c d");
-    expect(result).toEqual("d a b c");
+    expect(result).toEqual("a b c d");
   });
 
   it("Should gracefully handle recursive mixed local and global aliases", () => {
@@ -37,7 +54,7 @@ describe("substituteAliases Tests", () => {
     parseAliasDeclaration("d=recursiveAlias", false);
 
     const result = substituteAliases("recursiveAlias");
-    expect(result).toEqual("d");
+    expect(result).toEqual("recursiveAlias");
   });
 
   it("Should replace chained aliases", () => {

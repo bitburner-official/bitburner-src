@@ -18,12 +18,87 @@ growAmount(server: Server, player: Person, threads: number, cores?: number): num
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  server | [Server](./bitburner.server.md) | Server info, typically from [getServer](./bitburner.ns.getserver.md) |
-|  player | [Person](./bitburner.person.md) | Player info, typically from [getPlayer](./bitburner.ns.getplayer.md) |
-|  threads | number | Number of threads to grow with. Can be fractional. |
-|  cores | number | _(Optional)_ Number of cores on the computer that will execute grow. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+server
+
+
+</td><td>
+
+[Server](./bitburner.server.md)
+
+
+</td><td>
+
+Server info, typically from [getServer](./bitburner.ns.getserver.md)
+
+
+</td></tr>
+<tr><td>
+
+player
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+Player info, typically from [getPlayer](./bitburner.ns.getplayer.md)
+
+
+</td></tr>
+<tr><td>
+
+threads
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of threads to grow with. Can be fractional.
+
+
+</td></tr>
+<tr><td>
+
+cores
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of cores on the computer that will execute grow.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

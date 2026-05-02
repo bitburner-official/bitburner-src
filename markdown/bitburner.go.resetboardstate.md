@@ -16,10 +16,55 @@ resetBoardState(opponent: GoOpponent, boardSize: 5 | 7 | 9 | 13): string[] | und
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  opponent | [GoOpponent](./bitburner.goopponent.md) | The opponent faction to play against. "Netburners" \| "Slum Snakes" \| "The Black Hand" \| "Tetrads" \| "Daedalus" \| "Illuminati" \| "????????????" \| "No AI" |
-|  boardSize | 5 \| 7 \| 9 \| 13 | The size of the board to play on. Must be 5, 7, 9, or 13. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+opponent
+
+
+</td><td>
+
+[GoOpponent](./bitburner.goopponent.md)
+
+
+</td><td>
+
+The opponent faction to play against. "Netburners" \| "Slum Snakes" \| "The Black Hand" \| "Tetrads" \| "Daedalus" \| "Illuminati" \| "????????????" \| "No AI"
+
+
+</td></tr>
+<tr><td>
+
+boardSize
+
+
+</td><td>
+
+5 \| 7 \| 9 \| 13
+
+
+</td><td>
+
+The size of the board to play on. Must be 5, 7, 9, or 13.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

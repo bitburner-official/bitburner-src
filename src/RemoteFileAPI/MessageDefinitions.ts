@@ -1,15 +1,17 @@
-import { SaveData } from "../types";
+import type { SaveData } from "../types";
 import type { BaseServer } from "../Server/BaseServer";
 
 export class RFAMessage {
   jsonrpc = "2.0"; // Transmits version of JSON-RPC. Compliance maybe allows some funky interaction with external tools?
   public method?: string; // Is defined when it's a request/notification, otherwise undefined
   public result?: ResultType; // Is defined when it's a response, otherwise undefined
-  public params?: FileMetadata; // Optional parameters to method
+  public params?: FileDescription; // Optional parameters to method
   public error?: string; // Only defined on error
   public id?: number; // ID to keep track of request -> response interaction, undefined with notifications, defined with request/response
 
-  constructor(obj: { method?: string; result?: ResultType; params?: FileMetadata; error?: string; id?: number } = {}) {
+  constructor(
+    obj: { method?: string; result?: ResultType; params?: FileDescription; error?: string; id?: number } = {},
+  ) {
     this.method = obj.method;
     this.result = obj.result;
     this.params = obj.params;
@@ -28,8 +30,10 @@ type ResultType =
       identifier: string;
       binary: boolean;
       save: SaveData;
-    };
-type FileMetadata = FileData | FileContent | FileLocation | FileServer;
+    }
+  | FileMetadata
+  | FileMetadata[];
+type FileDescription = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {
   filename: string;
@@ -49,6 +53,13 @@ export interface FileLocation {
 
 export interface FileServer {
   server: string;
+}
+
+export interface FileMetadata {
+  filename: string;
+  atime: number;
+  mtime: number;
+  btime: number;
 }
 
 export type RFAServerData = Pick<BaseServer, "hostname" | "hasAdminRights" | "purchasedByPlayer">;

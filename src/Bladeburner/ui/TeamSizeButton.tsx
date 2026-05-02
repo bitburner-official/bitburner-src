@@ -1,5 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { BlackOperation, Operation } from "../Actions";
+import type { BlackOperation } from "../Actions/BlackOperation";
+import type { Operation } from "../Actions/Operation";
 
 import React, { useState } from "react";
 import { TeamSizeModal } from "./TeamSizeModal";

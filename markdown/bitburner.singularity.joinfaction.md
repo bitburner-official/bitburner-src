@@ -9,24 +9,56 @@ Join a faction.
 **Signature:**
 
 ```typescript
-joinFaction(faction: string): boolean;
+joinFaction(faction: FactionName): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  faction | string | Name of faction to join. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+faction
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of faction to join.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
 boolean
 
-True if player joined the faction, and false otherwise.
+True if the player successfully accepts an invitation, and false otherwise.
 
 ## Remarks
 
 RAM cost: 3 GB \* 16/4/1
 
 This function will automatically accept an invitation from a faction and join it.
+
+Note that this function returns false if you are already a member of the specified faction.
 

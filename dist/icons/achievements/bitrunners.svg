@@ -7,8 +7,8 @@
    viewBox="0 0 67.733332 67.733335"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.1 (c3084ef, 2021-09-22)"
-   sodipodi:docname="bitrunners.svg.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="bitrunners.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -32,10 +32,17 @@
      inkscape:window-x="101"
      inkscape:window-y="106"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid824" />
+       id="grid824"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
   </sodipodi:namedview>
   <defs
      id="defs2" />
@@ -57,14 +64,14 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:9.86318px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke-width:0.132095"
-       x="2.8813558"
-       y="37.776012"
+       style="font-weight:bold;font-size:10.5833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke-width:0.132095"
+       x="33.734894"
+       y="37.592525"
        id="text8876"><tspan
          sodipodi:role="line"
          id="tspan8874"
-         style="fill:#000000;fill-opacity:1;stroke-width:0.132095"
-         x="2.8813558"
-         y="37.776012">BitRunners</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.5833px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.132095"
+         x="33.734894"
+         y="37.592525">BitRunners</tspan></text>
   </g>
 </svg>

@@ -14,22 +14,211 @@ export interface Go
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [analysis](./bitburner.go.analysis.md) |  | [GoAnalysis](./bitburner.goanalysis.md) | Tools to analyze the IPvGO subnet. |
-|  [cheat](./bitburner.go.cheat.md) |  | [GoCheat](./bitburner.gocheat.md) | Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[analysis](./bitburner.go.analysis.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[GoAnalysis](./bitburner.goanalysis.md)
+
+
+</td><td>
+
+Tools to analyze the IPvGO subnet.
+
+
+</td></tr>
+<tr><td>
+
+[cheat](./bitburner.go.cheat.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[GoCheat](./bitburner.gocheat.md)
+
+
+</td><td>
+
+Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [getBoardState()](./bitburner.go.getboardstate.md) | <p>Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points. "\#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)</p><p>For example, a 5x5 board might look like this:</p><p>\[<br/> "XX.O.",<br/> "X..OO",<br/> ".XO..",<br/> "XXO.\#",<br/> ".XO.\#",<br/> \]</p><p>Each string represents a vertical column on the board, and each character in the string represents a point.</p><p>Traditional notation for Go is e.g. "B,1" referring to second ("B") column, first rank. This is the equivalent of index \[1\]\[0\].</p><p>Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.</p> |
-|  [getCurrentPlayer()](./bitburner.go.getcurrentplayer.md) | Returns the color of the current player, or 'None' if the game is over. |
-|  [getGameState()](./bitburner.go.getgamestate.md) | Gets the status of the current game. Shows the current player, current score, and the previous move coordinates. Previous move coordinates will be \[-1, -1\] for a pass, or if there are no prior moves. |
-|  [getMoveHistory()](./bitburner.go.getmovehistory.md) | <p>Returns all the prior moves in the current game, as an array of simple board states.</p><p>For example, a single 5x5 prior move board might look like this:</p><p>\[<br/> "XX.O.",<br/> "X..OO",<br/> ".XO..",<br/> "XXO.\#",<br/> ".XO.\#",<br/> \]</p> |
-|  [getOpponent()](./bitburner.go.getopponent.md) | Returns the name of the opponent faction in the current subnet. |
-|  [makeMove(x, y, playAsWhite)](./bitburner.go.makemove.md) | Make a move on the IPvGO subnet game board, and await the opponent's response. x:0 y:0 represents the bottom-left corner of the board in the UI. |
-|  [opponentNextTurn(logOpponentMove, playAsWhite)](./bitburner.go.opponentnextturn.md) | Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable. x:0 y:0 represents the bottom-left corner of the board in the UI. |
-|  [passTurn(passAsWhite)](./bitburner.go.passturn.md) | <p>Pass the player's turn rather than making a move, and await the opponent's response. This ends the game if the opponent passed on the previous turn, or if the opponent passes on their following turn.</p><p>This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.</p> |
-|  [resetBoardState(opponent, boardSize)](./bitburner.go.resetboardstate.md) | <p>Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move. This will reset your win streak if the current game is not complete and you have already made moves.</p><p>Note that some factions will have a few routers already on the subnet after a reset.</p> |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[getBoardState()](./bitburner.go.getboardstate.md)
+
+
+</td><td>
+
+Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points. "\#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)
+
+For example, a 5x5 board might look like this:
+
+```
+[
+  "XX.O.",
+  "X..OO",
+  ".XO..",
+  "XXO.#",
+  ".XO.#",
+]
+```
+Each string represents a vertical column on the board, and each character in the string represents a point.
+
+Traditional notation for Go is e.g. "B,1" referring to second ("B") column, first rank. This is the equivalent of index \[1\]\[0\].
+
+Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
+
+
+</td></tr>
+<tr><td>
+
+[getCurrentPlayer()](./bitburner.go.getcurrentplayer.md)
+
+
+</td><td>
+
+Returns the color of the current player, or 'None' if the game is over.
+
+
+</td></tr>
+<tr><td>
+
+[getGameState()](./bitburner.go.getgamestate.md)
+
+
+</td><td>
+
+Gets the status of the current game. Shows the current player, current score, and the previous move coordinates. Previous move will be null for a pass, or if there are no prior moves.
+
+
+</td></tr>
+<tr><td>
+
+[getMoveHistory()](./bitburner.go.getmovehistory.md)
+
+
+</td><td>
+
+Returns all the prior moves in the current game, as an array of simple board states.
+
+For example, a single 5x5 prior move board might look like this:
+
+```
+[
+  "XX.O.",
+  "X..OO",
+  ".XO..",
+  "XXO.#",
+  ".XO.#",
+]
+```
+
+
+</td></tr>
+<tr><td>
+
+[getOpponent()](./bitburner.go.getopponent.md)
+
+
+</td><td>
+
+Returns the name of the opponent faction in the current subnet.
+
+
+</td></tr>
+<tr><td>
+
+[makeMove(x, y, playAsWhite)](./bitburner.go.makemove.md)
+
+
+</td><td>
+
+Make a move on the IPvGO subnet game board, and await the opponent's response. x:0 y:0 represents the bottom-left corner of the board in the UI.
+
+
+</td></tr>
+<tr><td>
+
+[opponentNextTurn(logOpponentMove, playAsWhite)](./bitburner.go.opponentnextturn.md)
+
+
+</td><td>
+
+Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable. x:0 y:0 represents the bottom-left corner of the board in the UI.
+
+
+</td></tr>
+<tr><td>
+
+[passTurn(passAsWhite)](./bitburner.go.passturn.md)
+
+
+</td><td>
+
+Pass the player's turn rather than making a move, and await the opponent's response. This ends the game if the opponent passed on the previous turn, or if the opponent passes on their following turn.
+
+This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
+
+
+</td></tr>
+<tr><td>
+
+[resetBoardState(opponent, boardSize)](./bitburner.go.resetboardstate.md)
+
+
+</td><td>
+
+Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move. This will reset your win streak if the current game is not complete and you have already made moves.
+
+Note that some factions will have a few routers already on the subnet after a reset.
+
+
+</td></tr>
+</tbody></table>
 

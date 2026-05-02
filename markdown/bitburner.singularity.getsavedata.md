@@ -9,11 +9,11 @@ This function returns the save data.
 **Signature:**
 
 ```typescript
-getSaveData(): Promise<Uint8Array>;
+getSaveData(): Promise<Uint8Array<ArrayBuffer>>;
 ```
 **Returns:**
 
-Promise&lt;Uint8Array&gt;
+Promise&lt;Uint8Array&lt;ArrayBuffer&gt;&gt;
 
 ## Remarks
 

@@ -21,10 +21,55 @@ opponentNextTurn(
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  logOpponentMove | boolean | _(Optional)_ optional, defaults to true. if false prevents logging opponent move |
-|  playAsWhite | boolean | _(Optional)_ optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI" |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+logOpponentMove
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ optional, defaults to true. if false prevents logging opponent move
+
+
+</td></tr>
+<tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI"
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

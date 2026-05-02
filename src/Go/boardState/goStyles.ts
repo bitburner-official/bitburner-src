@@ -625,7 +625,7 @@ export const boardStyles = makeStyles<unknown, Size | "background">({ uniqId: "b
       width: "400px",
     },
     scoreExplanationModal: {
-      width: "80vw",
+      width: "600px",
     },
     centeredText: {
       textAlign: "center",

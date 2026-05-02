@@ -1,5 +1,5 @@
-import { comprGenChar, comprLZDecode, comprLZEncode, comprLZGenerate } from "../../utils/CompressionContracts";
 import { CodingContractTypes } from "../ContractTypes";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { CodingContractName } from "@enums";
 
 export const compression: Pick<
@@ -17,13 +17,13 @@ export const compression: Pick<
         "are encoded as a single ASCII digit; runs of 10 characters or more are encoded by splitting them",
         "into multiple runs.\n\n",
         "You are given the following input string:\n",
-        `&nbsp; &nbsp; ${plaintext}\n`,
+        `    ${plaintext}\n`,
         "Encode it using run-length encoding with the minimum possible output length.\n\n",
         "Examples:\n\n",
-        "&nbsp; &nbsp; aaaaabccc &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-> &nbsp;5a1b3c\n",
-        "&nbsp; &nbsp; aAaAaA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -> &nbsp;1a1A1a1A1a1A\n",
-        "&nbsp; &nbsp; 111112333 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-> &nbsp;511233\n",
-        "&nbsp; &nbsp; zzzzzzzzzzzzzzzzzzz &nbsp;-> &nbsp;9z9z1z &nbsp;(or 9z8z2z, etc.)",
+        "    aaaaabccc            ->  5a1b3c\n",
+        "    aAaAaA               ->  1a1A1a1A1a1A\n",
+        "    111112333            ->  511233\n",
+        "    zzzzzzzzzzzzzzzzzzz  ->  9z9z1z  (or 9z8z2z, etc.)",
       ].join(" ");
     },
     generate: (): string => {
@@ -50,8 +50,8 @@ export const compression: Pick<
 
       return plain.substring(0, length);
     },
-    solver: (plain, answer) => {
-      if (plain.length === 0) return answer === "";
+    getAnswer: (plain) => {
+      if (plain.length === 0) return "";
 
       let out = "";
       let count = 1;
@@ -64,7 +64,10 @@ export const compression: Pick<
         count = 1;
       }
       out += count + plain[plain.length - 1];
-      return out === answer;
+      return out;
+    },
+    solver: (plain, answer) => {
+      return compression[CodingContractName.CompressionIRLECompression].getAnswer(plain) === answer;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -85,21 +88,24 @@ export const compression: Pick<
         "is the start of a new chunk. The two chunk types alternate, starting with type 1, and the final",
         "chunk may be of either type.\n\n",
         "You are given the following LZ-encoded string:\n",
-        `&nbsp; &nbsp; ${compressed}\n`,
+        `    ${compressed}\n`,
         "Decode it and output the original string.\n\n",
         "Example: decoding '5aaabb450723abb' chunk-by-chunk\n\n",
-        "&nbsp; &nbsp; 5aaabb &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -> &nbsp;aaabb\n",
-        "&nbsp; &nbsp; 5aaabb45 &nbsp; &nbsp; &nbsp; &nbsp; -> &nbsp;aaabbaaab\n",
-        "&nbsp; &nbsp; 5aaabb450 &nbsp; &nbsp; &nbsp; &nbsp;-> &nbsp;aaabbaaab\n",
-        "&nbsp; &nbsp; 5aaabb45072 &nbsp; &nbsp; &nbsp;-> &nbsp;aaabbaaababababa\n",
-        "&nbsp; &nbsp; 5aaabb450723abb &nbsp;-> &nbsp;aaabbaaababababaabb",
+        "    5aaabb           ->  aaabb\n",
+        "    5aaabb45         ->  aaabbaaab\n",
+        "    5aaabb450        ->  aaabbaaab\n",
+        "    5aaabb45072      ->  aaabbaaababababa\n",
+        "    5aaabb450723abb  ->  aaabbaaababababaabb",
       ].join(" ");
     },
     generate: (): string => {
       return comprLZEncode(comprLZGenerate());
     },
+    getAnswer: (compr) => {
+      return comprLZDecode(compr) ?? "";
+    },
     solver: (compr, answer) => {
-      return (comprLZDecode(compr) ?? "") === answer;
+      return compression[CodingContractName.CompressionIILZDecompression].getAnswer(compr) === answer;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",
@@ -120,26 +126,239 @@ export const compression: Pick<
         "is the start of a new chunk. The two chunk types alternate, starting with type 1, and the final",
         "chunk may be of either type.\n\n",
         "You are given the following input string:\n",
-        `&nbsp; &nbsp; ${plaintext}\n`,
+        `    ${plaintext}\n`,
         "Encode it using Lempel-Ziv encoding with the minimum possible output length.\n\n",
         "Examples (some have other possible encodings of minimal length):\n",
-        "&nbsp; &nbsp; abracadabra &nbsp; &nbsp; -> &nbsp;7abracad47\n",
-        "&nbsp; &nbsp; mississippi &nbsp; &nbsp; -> &nbsp;4miss433ppi\n",
-        "&nbsp; &nbsp; aAAaAAaAaAA &nbsp; &nbsp; -> &nbsp;3aAA53035\n",
-        "&nbsp; &nbsp; 2718281828 &nbsp; &nbsp; &nbsp;-> &nbsp;627182844\n",
-        "&nbsp; &nbsp; abcdefghijk &nbsp; &nbsp; -> &nbsp;9abcdefghi02jk\n",
-        "&nbsp; &nbsp; aaaaaaaaaaaa &nbsp; &nbsp;-> &nbsp;3aaa91\n",
-        "&nbsp; &nbsp; aaaaaaaaaaaaa &nbsp; -> &nbsp;1a91031\n",
-        "&nbsp; &nbsp; aaaaaaaaaaaaaa &nbsp;-> &nbsp;1a91041",
+        "    abracadabra     ->  7abracad47\n",
+        "    mississippi     ->  4miss433ppi\n",
+        "    aAAaAAaAaAA     ->  3aAA53035\n",
+        "    2718281828      ->  627182844\n",
+        "    abcdefghijk     ->  9abcdefghi02jk\n",
+        "    aaaaaaaaaaaa    ->  3aaa91\n",
+        "    aaaaaaaaaaaaa   ->  1a91031\n",
+        "    aaaaaaaaaaaaaa  ->  1a91041",
       ].join(" ");
     },
     generate: (): string => {
       return comprLZGenerate();
     },
+    getAnswer: (plain) => {
+      return comprLZEncode(plain);
+    },
     solver: (plain, answer) => {
-      return answer.length <= comprLZEncode(plain).length && comprLZDecode(answer) === plain;
+      const encoded = compression[CodingContractName.CompressionIIILZCompression].getAnswer(plain);
+      if (encoded === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.CompressionIIILZCompression} contract. Data: ${plain}`,
+          ),
+        );
+        return false;
+      }
+      return answer.length <= encoded.length && comprLZDecode(answer) === plain;
     },
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string => typeof ans === "string",
   },
 };
+
+// choose random characters for generating plaintext to compress
+function comprGenChar(): string {
+  const r = Math.random();
+  if (r < 0.4) {
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(26 * Math.random())];
+  } else if (r < 0.8) {
+    return "abcdefghijklmnopqrstuvwxyz"[Math.floor(26 * Math.random())];
+  } else {
+    return "01234567689"[Math.floor(10 * Math.random())];
+  }
+}
+
+// generate plaintext which is amenable to LZ encoding
+function comprLZGenerate(): string {
+  const length = 50 + Math.floor(25 * (Math.random() + Math.random()));
+  let plain = "";
+
+  while (plain.length < length) {
+    if (Math.random() < 0.8) {
+      plain += comprGenChar();
+    } else {
+      const length = 1 + Math.floor(9 * Math.random());
+      const offset = 1 + Math.floor(9 * Math.random());
+      if (offset > plain.length) {
+        continue;
+      }
+
+      for (let i = 0; i < length; ++i) {
+        plain += plain[plain.length - offset];
+      }
+    }
+  }
+
+  return plain.substring(0, length);
+}
+
+// compress plaintext string
+function comprLZEncode(plain: string): string {
+  // for state[i][j]:
+  //      if i is 0, we're adding a literal of length j
+  //      else, we're adding a backreference of offset i and length j
+  let cur_state: (string | null)[][] = Array.from(Array(10), () => Array<string | null>(10).fill(null));
+  let new_state: (string | null)[][] = Array.from(Array(10), () => Array<string | null>(10));
+
+  function set(state: (string | null)[][], i: number, j: number, str: string): void {
+    const current = state[i][j];
+    if (current == null || str.length < current.length) {
+      state[i][j] = str;
+    } else if (str.length === current.length && Math.random() < 0.5) {
+      // if two strings are the same length, pick randomly so that
+      // we generate more possible inputs to Compression II
+      state[i][j] = str;
+    }
+  }
+
+  // initial state is a literal of length 1
+  cur_state[0][1] = "";
+
+  for (let i = 1; i < plain.length; ++i) {
+    for (const row of new_state) {
+      row.fill(null);
+    }
+    const c = plain[i];
+
+    // handle literals
+    for (let length = 1; length <= 9; ++length) {
+      const string = cur_state[0][length];
+      if (string == null) {
+        continue;
+      }
+
+      if (length < 9) {
+        // extend current literal
+        set(new_state, 0, length + 1, string);
+      } else {
+        // start new literal
+        set(new_state, 0, 1, string + "9" + plain.substring(i - 9, i) + "0");
+      }
+
+      for (let offset = 1; offset <= Math.min(9, i); ++offset) {
+        if (plain[i - offset] === c) {
+          // start new backreference
+          set(new_state, offset, 1, string + String(length) + plain.substring(i - length, i));
+        }
+      }
+    }
+
+    // handle backreferences
+    for (let offset = 1; offset <= 9; ++offset) {
+      for (let length = 1; length <= 9; ++length) {
+        const string = cur_state[offset][length];
+        if (string == null) {
+          continue;
+        }
+
+        if (plain[i - offset] === c) {
+          if (length < 9) {
+            // extend current backreference
+            set(new_state, offset, length + 1, string);
+          } else {
+            // start new backreference
+            set(new_state, offset, 1, string + "9" + String(offset) + "0");
+          }
+        }
+
+        // start new literal
+        set(new_state, 0, 1, string + String(length) + String(offset));
+
+        // end current backreference and start new backreference
+        for (let new_offset = 1; new_offset <= Math.min(9, i); ++new_offset) {
+          if (plain[i - new_offset] === c) {
+            set(new_state, new_offset, 1, string + String(length) + String(offset) + "0");
+          }
+        }
+      }
+    }
+
+    const tmp_state = new_state;
+    new_state = cur_state;
+    cur_state = tmp_state;
+  }
+
+  let result = null;
+
+  for (let len = 1; len <= 9; ++len) {
+    let string = cur_state[0][len];
+    if (string == null) {
+      continue;
+    }
+
+    string += String(len) + plain.substring(plain.length - len, plain.length);
+    if (result == null || string.length < result.length) {
+      result = string;
+    } else if (string.length == result.length && Math.random() < 0.5) {
+      result = string;
+    }
+  }
+
+  for (let offset = 1; offset <= 9; ++offset) {
+    for (let len = 1; len <= 9; ++len) {
+      let string = cur_state[offset][len];
+      if (string == null) {
+        continue;
+      }
+
+      string += String(len) + "" + String(offset);
+      if (result == null || string.length < result.length) {
+        result = string;
+      } else if (string.length == result.length && Math.random() < 0.5) {
+        result = string;
+      }
+    }
+  }
+
+  return result ?? "";
+}
+
+// decompress LZ-compressed string, or return null if input is invalid
+function comprLZDecode(compr: string): string | null {
+  let plain = "";
+
+  for (let i = 0; i < compr.length; ) {
+    const literal_length = compr.charCodeAt(i) - 0x30;
+
+    if (literal_length < 0 || literal_length > 9 || i + 1 + literal_length > compr.length) {
+      return null;
+    }
+
+    plain += compr.substring(i + 1, i + 1 + literal_length);
+    i += 1 + literal_length;
+
+    if (i >= compr.length) {
+      break;
+    }
+    const backref_length = compr.charCodeAt(i) - 0x30;
+
+    if (backref_length < 0 || backref_length > 9) {
+      return null;
+    } else if (backref_length === 0) {
+      ++i;
+    } else {
+      if (i + 1 >= compr.length) {
+        return null;
+      }
+
+      const backref_offset = compr.charCodeAt(i + 1) - 0x30;
+      if ((backref_length > 0 && (backref_offset < 1 || backref_offset > 9)) || backref_offset > plain.length) {
+        return null;
+      }
+
+      for (let j = 0; j < backref_length; ++j) {
+        plain += plain[plain.length - backref_offset];
+      }
+
+      i += 2;
+    }
+  }
+
+  return plain;
+}

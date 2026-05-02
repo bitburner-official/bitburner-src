@@ -4,15 +4,10 @@
 
 ## NS.stanek property
 
-Namespace for stanek functions. Contains spoilers.
+Namespace for [Stanek](./bitburner.stanek.md) functions. Contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly stanek: Stanek;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

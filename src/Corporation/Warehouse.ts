@@ -65,7 +65,10 @@ export class Warehouse {
       this.sizeUsed += mat.stored * MaterialInfo[matName].size;
     }
     if (this.sizeUsed > this.size) {
-      console.warn("Warehouse size used greater than capacity, something went wrong");
+      console.warn(
+        `Warehouse size used greater than capacity, something went wrong. sizeUsed: ${this.sizeUsed}. size: ${this.size}`,
+        this,
+      );
     }
   }
 

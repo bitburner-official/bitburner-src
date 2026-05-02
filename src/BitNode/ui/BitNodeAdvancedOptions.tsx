@@ -271,13 +271,13 @@ function IntelligenceOverride({
               disabled={!enabled}
               value={intelligenceOverride !== undefined ? intelligenceOverride : ""}
               onChange={(event) => {
-                // Empty string will be automatically changed to "0".
+                // Empty string will be automatically changed to "1".
                 if (event.target.value === "") {
-                  callbacks.setIntelligenceOverride(0);
+                  callbacks.setIntelligenceOverride(1);
                   return;
                 }
                 const value = Number.parseInt(event.target.value);
-                if (!Number.isInteger(value) || value < 0) {
+                if (!Number.isInteger(value) || value < 1) {
                   return;
                 }
                 callbacks.setIntelligenceOverride(value);
@@ -289,26 +289,35 @@ function IntelligenceOverride({
       tooltip={
         <>
           <Typography component="div">
-            The Intelligence bonuses for you and your Sleeves will be limited by this value. For example:
+            Your intelligence and your Sleeves' intelligence will be temporarily set to this value if it is lower than
+            their current values. For example:
             <ul>
               <li>
-                If your Intelligence is 1000 and you set this value to 500, the "effective" Intelligence, which is used
-                for bonus calculation, is only 500.
+                If your intelligence is 1000 and you set this value to 500, your intelligence will be temporarily set to
+                500.
               </li>
               <li>
-                If a Sleeve's Intelligence is 200 and you set this value to 500, the "effective" Intelligence, which is
-                used for bonus calculation, is still 200.
+                If a Sleeve's intelligence is 200 and you set this value to 500, that Sleeve's intelligence is still
+                200.
               </li>
             </ul>
           </Typography>
           <Typography>
-            You will still gain Intelligence experience as normal. Intelligence Override only affects the Intelligence
-            bonus.
+            Note that you still gain intelligence experience as normal.
+            <br />
+            For example, suppose you have 1e6 intelligence exp (intelligence skill = 242) and set the intelligence
+            override to 100. At the start of the BitNode, your intelligence skill will be set to 100 (equivalent to
+            ~11255.318 intelligence exp).
+            <br />
+            If you gain 500e3 intelligence exp during the BitNode, your intelligence skill will increase to 220 (total
+            intelligence exp = 11255 + 500e3 = 511255). After performing bitflume, the exp gained during the BitNode is
+            added to your original exp. Your intelligence skill will then become 255 (total intelligence exp = 1e6 +
+            500e3 = 1.5e6).
           </Typography>
           <br />
           <Typography>
-            The "effective" Intelligence will be shown in the character overview. If the effective value is different
-            from the original value, you can hover your mouse over it to see the original value.
+            The overridden intelligence will be shown in the character overview. You can hover your mouse over it to see
+            the original value.
           </Typography>
         </>
       }

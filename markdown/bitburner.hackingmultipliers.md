@@ -14,10 +14,102 @@ interface HackingMultipliers
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [chance](./bitburner.hackingmultipliers.chance.md) |  | number | Player's hacking chance multiplier. |
-|  [growth](./bitburner.hackingmultipliers.growth.md) |  | number | Player's hacking growth multiplier |
-|  [money](./bitburner.hackingmultipliers.money.md) |  | number | Player's hacking money stolen multiplier. |
-|  [speed](./bitburner.hackingmultipliers.speed.md) |  | number | Player's hacking speed multiplier. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[chance](./bitburner.hackingmultipliers.chance.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacking chance multiplier.
+
+
+</td></tr>
+<tr><td>
+
+[growth](./bitburner.hackingmultipliers.growth.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacking growth multiplier
+
+
+</td></tr>
+<tr><td>
+
+[money](./bitburner.hackingmultipliers.money.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacking money stolen multiplier.
+
+
+</td></tr>
+<tr><td>
+
+[speed](./bitburner.hackingmultipliers.speed.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacking speed multiplier.
+
+
+</td></tr>
+</tbody></table>
 

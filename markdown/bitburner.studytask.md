@@ -9,9 +9,9 @@ Study
 **Signature:**
 
 ```typescript
-export interface StudyTask extends BaseTask 
+interface StudyTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
@@ -19,9 +19,77 @@ An object representing the current study task
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [classType](./bitburner.studytask.classtype.md) |  | string |  |
-|  [location](./bitburner.studytask.location.md) |  | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
-|  [type](./bitburner.studytask.type.md) |  | "CLASS" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[classType](./bitburner.studytask.classtype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[location](./bitburner.studytask.location.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.studytask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"CLASS"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -8,17 +8,142 @@
 **Signature:**
 
 ```typescript
-interface ActiveFragment 
+interface ActiveFragment extends Fragment 
 ```
+**Extends:** [Fragment](./bitburner.fragment.md)
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [highestCharge](./bitburner.activefragment.highestcharge.md) |  | number |  |
-|  [id](./bitburner.activefragment.id.md) |  | number |  |
-|  [numCharge](./bitburner.activefragment.numcharge.md) |  | number |  |
-|  [rotation](./bitburner.activefragment.rotation.md) |  | number |  |
-|  [x](./bitburner.activefragment.x.md) |  | number |  |
-|  [y](./bitburner.activefragment.y.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[chargedEffect](./bitburner.activefragment.chargedeffect.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+This is the raw value of the modifier used to calculate the effect on your multipliers. It may not be a multiplier.
+
+With fragments that increase a multiplier, this value is a multiplier. For example, with "+x% hacknet production" fragment, a value of 1.25 will multiply the "hacknet\_node\_money" multiplier by 1.25. The UI will show "+25% hacknet production".
+
+With fragments that decrease a multiplier, you need to invert this value. For example, with "-x% cheaper hacknet costs" fragment, a value of 1.25 means the "hacknet\_node\_purchase\_cost" (and other relevant cost multipliers) will be multiplied by 0.8 (1 / 1.25). The UI will show "20% cheaper hacknet costs".
+
+With booster fragments, this value is always 1. Booster fragments only boost non-booster fragments. They don't directly boost your multipliers.
+
+
+</td></tr>
+<tr><td>
+
+[highestCharge](./bitburner.activefragment.highestcharge.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[numCharge](./bitburner.activefragment.numcharge.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[rotation](./bitburner.activefragment.rotation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[x](./bitburner.activefragment.x.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[y](./bitburner.activefragment.y.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

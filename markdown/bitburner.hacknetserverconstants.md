@@ -14,21 +14,311 @@ interface HacknetServerConstants
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [BaseCost](./bitburner.hacknetserverconstants.basecost.md) |  | number | Base cost for a new server |
-|  [CacheBaseCost](./bitburner.hacknetserverconstants.cachebasecost.md) |  | number | Base cost to upgrade cache |
-|  [CoreBaseCost](./bitburner.hacknetserverconstants.corebasecost.md) |  | number | Base cost to increase cores |
-|  [HashesPerLevel](./bitburner.hacknetserverconstants.hashesperlevel.md) |  | number | Number of hashes calculated per level |
-|  [MaxCache](./bitburner.hacknetserverconstants.maxcache.md) |  | number | Max cache size |
-|  [MaxCores](./bitburner.hacknetserverconstants.maxcores.md) |  | number | Max number of cores |
-|  [MaxLevel](./bitburner.hacknetserverconstants.maxlevel.md) |  | number | Max level for a server |
-|  [MaxRam](./bitburner.hacknetserverconstants.maxram.md) |  | number | Max amount of RAM in GB |
-|  [MaxServers](./bitburner.hacknetserverconstants.maxservers.md) |  | number | Max number of servers |
-|  [PurchaseMult](./bitburner.hacknetserverconstants.purchasemult.md) |  | number | Multiplier to purchase a new server |
-|  [RamBaseCost](./bitburner.hacknetserverconstants.rambasecost.md) |  | number | Base cost to increase RAM |
-|  [UpgradeCacheMult](./bitburner.hacknetserverconstants.upgradecachemult.md) |  | number | Multiplier to upgrade cache |
-|  [UpgradeCoreMult](./bitburner.hacknetserverconstants.upgradecoremult.md) |  | number | Multiplier to increase cores |
-|  [UpgradeLevelMult](./bitburner.hacknetserverconstants.upgradelevelmult.md) |  | number | Multiplier to increase server level |
-|  [UpgradeRamMult](./bitburner.hacknetserverconstants.upgraderammult.md) |  | number | Multiplier to increase RAM |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[BaseCost](./bitburner.hacknetserverconstants.basecost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Base cost for a new server
+
+
+</td></tr>
+<tr><td>
+
+[CacheBaseCost](./bitburner.hacknetserverconstants.cachebasecost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Base cost to upgrade cache
+
+
+</td></tr>
+<tr><td>
+
+[CoreBaseCost](./bitburner.hacknetserverconstants.corebasecost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Base cost to increase cores
+
+
+</td></tr>
+<tr><td>
+
+[HashesPerLevel](./bitburner.hacknetserverconstants.hashesperlevel.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of hashes calculated per level
+
+
+</td></tr>
+<tr><td>
+
+[MaxCache](./bitburner.hacknetserverconstants.maxcache.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Max cache size
+
+
+</td></tr>
+<tr><td>
+
+[MaxCores](./bitburner.hacknetserverconstants.maxcores.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Max number of cores
+
+
+</td></tr>
+<tr><td>
+
+[MaxLevel](./bitburner.hacknetserverconstants.maxlevel.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Max level for a server
+
+
+</td></tr>
+<tr><td>
+
+[MaxRam](./bitburner.hacknetserverconstants.maxram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Max amount of RAM in GB
+
+
+</td></tr>
+<tr><td>
+
+[MaxServers](./bitburner.hacknetserverconstants.maxservers.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Max number of servers
+
+
+</td></tr>
+<tr><td>
+
+[PurchaseMult](./bitburner.hacknetserverconstants.purchasemult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Multiplier to purchase a new server
+
+
+</td></tr>
+<tr><td>
+
+[RamBaseCost](./bitburner.hacknetserverconstants.rambasecost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Base cost to increase RAM
+
+
+</td></tr>
+<tr><td>
+
+[UpgradeCacheMult](./bitburner.hacknetserverconstants.upgradecachemult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Multiplier to upgrade cache
+
+
+</td></tr>
+<tr><td>
+
+[UpgradeCoreMult](./bitburner.hacknetserverconstants.upgradecoremult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Multiplier to increase cores
+
+
+</td></tr>
+<tr><td>
+
+[UpgradeLevelMult](./bitburner.hacknetserverconstants.upgradelevelmult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Multiplier to increase server level
+
+
+</td></tr>
+<tr><td>
+
+[UpgradeRamMult](./bitburner.hacknetserverconstants.upgraderammult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Multiplier to increase RAM
+
+
+</td></tr>
+</tbody></table>
 

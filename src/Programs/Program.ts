@@ -12,16 +12,19 @@ interface ProgramConstructorParams {
   name: CompletedProgramName;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
+  nsMethod?: string;
 }
 
 export class Program {
   name: ProgramFilePath & CompletedProgramName;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
+  nsMethod?: string;
 
-  constructor({ name, create, run }: ProgramConstructorParams) {
+  constructor({ name, create, run, nsMethod }: ProgramConstructorParams) {
     this.name = asProgramFilePath(name);
     this.create = create;
     this.run = run;
+    this.nsMethod = nsMethod ?? "";
   }
 }

@@ -14,9 +14,39 @@ calculateFavorToRep(favor: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  favor | number | target faction favor. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+favor
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+target faction favor.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

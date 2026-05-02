@@ -19,7 +19,9 @@ Array containing current stamina and max stamina.
 
 ## Remarks
 
-RAM cost: 4 GB Returns an array with two elements: \* \[Current stamina, Max stamina\]
+RAM cost: 4 GB
+
+Returns an array with two elements: \[Current stamina, Max stamina\]
 
 ## Example
 

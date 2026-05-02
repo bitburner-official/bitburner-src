@@ -13,8 +13,60 @@ interface ILocation
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [city](./bitburner.ilocation.city.md) |  | [CityName](./bitburner.cityname.md) |  |
-|  [name](./bitburner.ilocation.name.md) |  | [LocationName](./bitburner.locationname.md) |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[city](./bitburner.ilocation.city.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.ilocation.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

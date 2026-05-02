@@ -5,13 +5,24 @@ import { GetAllServers } from "../Server/AllServers";
 import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
-import { Flags, type Schema } from "../NetscriptFunctions/Flags";
+import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
-import { TerminalCommands } from "./Terminal";
+import { supportedCommands } from "./Terminal";
+import { Terminal } from "../Terminal";
+import { parseUnknownError } from "../utils/ErrorHelper";
+import { DarknetServer } from "../Server/DarknetServer";
+import { CompletedProgramName } from "@enums";
+
+/** Extract the text being autocompleted, handling unclosed double quotes as a single token */
+export function extractCurrentText(terminalText: string): string {
+  const quoteCount = (terminalText.match(/"/g) || []).length;
+  if (quoteCount % 2 === 1) return terminalText.substring(terminalText.lastIndexOf('"'));
+  return /[^ ]*$/.exec(terminalText)?.[0] ?? "";
+}
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -19,8 +30,8 @@ import { TerminalCommands } from "./Terminal";
  * @returns Array of possible string replacements for the current text being autocompleted.
  */
 export async function getTabCompletionPossibilities(terminalText: string, baseDir = root): Promise<string[]> {
-  // Get the current command text
-  const currentText = /[^ ]*$/.exec(terminalText)?.[0] ?? "";
+  // Get the current command text, treating unclosed quotes as a single token
+  const currentText = extractCurrentText(terminalText);
   // Remove the current text from the commands string
   const valueWithoutCurrent = terminalText.substring(0, terminalText.length - currentText.length);
   // Parse the commands string, this handles alias replacement as well.
@@ -80,7 +91,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   const addAliases = () => addGeneric({ iterable: Aliases.keys() });
   const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
-  const addCommands = () => addGeneric({ iterable: Object.keys(TerminalCommands) });
+  const addCommands = () => addGeneric({ iterable: supportedCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
   const addServerNames = () =>
     addGeneric({
@@ -104,8 +115,14 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   const addReachableServerNames = () => {
     addGeneric({
-      iterable: GetAllServers()
-        .filter((server) => server.backdoorInstalled || currServ.serversOnNetwork.includes(server.hostname))
+      iterable: GetAllServers(true)
+        .filter(
+          (server) =>
+            server !== currServ &&
+            (server.backdoorInstalled ||
+              server.purchasedByPlayer ||
+              currServ.serversOnNetwork.includes(server.hostname)),
+        )
         .map((server) => server.hostname),
     });
   };
@@ -115,6 +132,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     const programs = homeComputer.programs.filter((name) => name.endsWith(".exe"));
     // At all times, programs can be accessed without pathing
     addGeneric({ iterable: programs });
+
+    const currentServer = Player.getCurrentServer();
+    if (currentServer !== homeComputer) {
+      const localPrograms = currentServer.programs.filter((name) => name.endsWith(".exe"));
+      addGeneric({ iterable: localPrograms, usePathing: true });
+    }
+
     // If we're on home and a path is being used, also include pathing results
     if (homeComputer.isConnectedTo && relativeDir) addGeneric({ iterable: programs, usePathing: true });
   };
@@ -222,7 +246,12 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg) {
         addPrograms();
         addCodingContracts();
+        if (currServ instanceof DarknetServer) {
+          addGeneric({ iterable: currServ.caches, usePathing: true });
+        }
         addScripts();
+      } else if (commandArray[1] === CompletedProgramName.serverProfiler) {
+        addServerNames();
       } else {
         const options = await scriptAutocomplete();
         if (options) addGeneric({ iterable: options, usePathing: false });
@@ -270,12 +299,23 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       //Will return the already compiled module if recompilation not needed.
       loadedModule = await compile(script, currServ.scripts);
     } catch (e) {
-      //fail silently if the script fails to compile (e.g. syntax error)
+      const errorData = parseUnknownError(e);
+      Terminal.error(
+        `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
+          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+        }`,
+      );
       return;
     }
-    if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
+    if (!loadedModule) {
+      return;
+    }
+    // Return "--tail" if the player does not define the autocomplete function.
+    if (!loadedModule.autocomplete) {
+      return ["--tail"];
+    }
 
-    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
+    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number, "--temporary": Boolean };
     let flags = {
       _: [],
     };
@@ -292,7 +332,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
        */
       console.warn(error);
     }
-    const flagFunc = Flags(flags._);
+    const flagFunc = Flags(flags._, true);
     const autocompleteData: AutocompleteData = {
       servers: GetAllServers()
         .filter((server) => server.serversOnNetwork.length !== 0)
@@ -300,17 +340,31 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
       enums: enums,
-      flags: (schema: Schema) => {
-        if (!Array.isArray(schema)) throw new Error("flags require an array of array");
-        pos2 = schema.map((f) => {
-          if (!Array.isArray(f)) throw new Error("flags require an array of array");
-          if (f[0].length === 1) return "-" + f[0];
-          return "--" + f[0];
+      flags: (schema: unknown) => {
+        if (!Array.isArray(schema)) {
+          throw new Error("The schema passed to AutocompleteData.flags must be an array of arrays");
+        }
+        pos2 = schema.map((flag: unknown) => {
+          if (!Array.isArray(flag) || flag.length === 0) {
+            throw new Error("Each flag in the schema passed to AutocompleteData.flags must be a non-empty array");
+          }
+          const flagName: unknown = flag[0];
+          if (typeof flagName !== "string") {
+            throw new Error("The flag name must be a string");
+          }
+          // Short form
+          if (flagName.length === 1) {
+            return "-" + flagName;
+          }
+          // Long form
+          return "--" + flagName;
         });
         try {
           return flagFunc(schema);
-        } catch (err) {
-          return {};
+        } catch (error) {
+          throw new Error("Cannot parse the arguments with the schema passed to AutocompleteData.flags", {
+            cause: error,
+          });
         }
       },
       hostname: currServ.hostname,
@@ -328,9 +382,20 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     };
     let pos: string[] = [];
     let pos2: string[] = [];
-    const options = loadedModule.autocomplete(autocompleteData, flags._);
-    if (!Array.isArray(options)) throw new Error("autocomplete did not return list of strings");
-    pos = pos.concat(options.map((x) => String(x)));
+    try {
+      const options = loadedModule.autocomplete(autocompleteData, flags._);
+      if (!Array.isArray(options)) {
+        throw new Error("The autocomplete function must return an array");
+      }
+      pos = pos.concat(options.map((x) => String(x)));
+    } catch (error) {
+      const errorData = parseUnknownError(error);
+      Terminal.error(
+        `The autocomplete function in ${filepath} throws an error. Reason: ${errorData.errorAsString}.${
+          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+        }`,
+      );
+    }
     return pos.concat(pos2);
   }
 }

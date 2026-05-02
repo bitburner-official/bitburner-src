@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 
 interface IProps {
   lines: string[];
+  additionalElement?: React.ReactElement;
   auto?: boolean;
   onDone?: () => void;
 }
@@ -29,6 +30,7 @@ export function CinematicText(props: IProps): React.ReactElement {
         <Typography key={i}>{line}</Typography>
       ))}
       {props.lines.length > i && <CinematicLine key={i} text={props.lines[i]} onDone={advance} />}
+      {done && props.additionalElement}
       {!props.auto && props.onDone && done && <Button onClick={props.onDone}>Continue ...</Button>}
     </>
   );

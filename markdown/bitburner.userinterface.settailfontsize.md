@@ -14,12 +14,87 @@ setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: Scri
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  pixel | number | _(Optional)_ Optional. The new font size in pixels. If omitted, the default tail font size is used. |
-|  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the target script. If omitted, the current script is used. |
-|  host | string | _(Optional)_ Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments for the target script. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+pixel
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional. The new font size in pixels. If omitted, the default tail font size is used.
+
+
+</td></tr>
+<tr><td>
+
+fn
+
+
+</td><td>
+
+[FilenameOrPID](./bitburner.filenameorpid.md)
+
+
+</td><td>
+
+_(Optional)_ Optional. Filename or PID of the target script. If omitted, the current script is used.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname/IP of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments for the target script.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

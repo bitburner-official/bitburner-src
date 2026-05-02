@@ -1,7 +1,7 @@
 import React from "react";
 import { Division } from "../Division";
-import { MathJax } from "better-react-mathjax";
 import { getRecordEntries } from "../../Types/Record";
+import Typography from "@mui/material/Typography";
 
 interface IProps {
   division: Division;
@@ -10,13 +10,19 @@ interface IProps {
 export function IndustryProductEquation(props: IProps): React.ReactElement {
   const reqs = [];
   for (const [reqMat, reqAmt] of getRecordEntries(props.division.requiredMaterials)) {
-    if (!reqAmt) continue;
-    reqs.push(String.raw`${reqAmt}\;\textit{${reqMat}}`);
+    if (!reqAmt) {
+      continue;
+    }
+    reqs.push(`${reqAmt} ${reqMat}`);
   }
-  const prod = props.division.producedMaterials.map((p) => `1\\;\\textit{${p}}`);
+  const prod = props.division.producedMaterials.map((materialName) => `1 ${materialName}`);
   if (props.division.makesProducts) {
-    prod.push("\\textit{Products}");
+    prod.push("Products");
   }
 
-  return <MathJax>{"\\(" + reqs.join("+") + `\\Rightarrow ` + prod.join("+") + "\\)"}</MathJax>;
+  return (
+    <Typography component="span">
+      {reqs.join(" + ")} ⟹ {prod.join(" + ")}
+    </Typography>
+  );
 }

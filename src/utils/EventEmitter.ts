@@ -11,12 +11,16 @@ export class EventEmitter<T extends any[]> {
   }
 
   emit(...args: [...T]): void {
-    for (const sub of this.subscribers) {
+    // It is necessary to make a copy of the subscribers list, because since
+    // the subscribers call arbitrary code, it can eventually call back in and
+    // subscribe or unsubscribe new listeners. We must only dispatch to the
+    // ones that were active at the time the event came in.
+    for (const sub of [...this.subscribers]) {
       sub(...args);
     }
   }
 
-  hasSubscibers(): boolean {
+  hasSubscribers(): boolean {
     return this.subscribers.size > 0;
   }
 }

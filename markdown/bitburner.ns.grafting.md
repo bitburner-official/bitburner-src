@@ -4,15 +4,10 @@
 
 ## NS.grafting property
 
-Namespace for grafting functions. Contains spoilers.
+Namespace for [grafting](./bitburner.grafting.md) functions. Contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly grafting: Grafting;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

@@ -25,7 +25,8 @@ import {
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
 import { Settings } from "../../Settings/Settings";
-import { NsApiDocumentationLink } from "../React/NsApiDocumentationLink";
+import { DocumentationLink } from "../React/DocumentationLink";
+import { defaultNsApiPage } from "../React/Documentation";
 
 interface IContent {
   content: React.ReactElement;
@@ -283,7 +284,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     },
     [iTutorialSteps.TerminalHackingMechanics as number]: {
       content: (
-        <Typography>
+        <Typography component="div">
           You are now attempting to hack the server. Performing a hack takes time and only has a certain percentage
           chance of success. This time and success chance is determined by a variety of factors, including your hacking
           skill and the server's security level.
@@ -327,23 +328,22 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
           <Typography>
-            Scripts must end with a script extension (.js, .jsx, .ts, .tsx, .script). Let's make a script now by
-            entering
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalTypeScript as number]: {
+    [iTutorialSteps.TerminalEditScript as number]: {
       content: (
         <>
           <Typography>
             This is the script editor. You can use it to program your scripts. Click this text to copy it and paste it
-            into the text editor: <br />
+            into the text editor:
           </Typography>
-
-          <Typography classes={{ root: classes.code }}>
+          <br />
+          <Typography component="div" classes={{ root: classes.code }}>
             {
               <CopyableText
                 value={`/** @param {NS} ns */
@@ -355,12 +355,17 @@ export async function main(ns) {
               />
             }
           </Typography>
+          <br />
           <Typography>
             For anyone with basic programming experience, this code should be straightforward. This script will
             continuously hack the n00dles server.
             <br />
             <br />
-            To access <NsApiDocumentationLink />, press the link at the bottom.
+            Use the search tool at the bottom to find and have a quick glance at documentation of any NS APIs.
+            <br />
+            <br />
+            To access <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, press the
+            link at the bottom.
             <br />
             <br />
             To save and close the script editor, press the button at the bottom.
@@ -543,12 +548,24 @@ export async function main(ns) {
           inaccessible at the start and will be unlocked later.
           <br />
           <br />
+          If you click a link in these pages while holding Ctrl key (Control key on Mac keyboard), it will be opened in
+          a new tab. If you play the Steam version, that link will be opened in your default browser.
+          <br />
+          <br />
           You should at least check these pages:
           <ul>
             <li>
-              The Beginner's guide contains the guide for new players, navigating you through most of the early game.
+              The <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink> contains the
+              guide for new players, navigating you through most of the early game.
             </li>
-            <li>The NS API documentation contains reference materials for all NS APIs.</li>
+            <li>
+              The <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> contains reference
+              materials for all NS APIs.
+            </li>
+            <li>
+              The <DocumentationLink page="help/beginner_faq.md">FAQ</DocumentationLink> contains questions often asked
+              by beginners of the game.
+            </li>
           </ul>
           <Typography fontWeight="fontWeightBold">
             This documentation page is the best place to get up-to-date information, especially when you get stuck. If

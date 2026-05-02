@@ -14,9 +14,37 @@ setStyles(newStyles: IStyleSettings): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  newStyles | [IStyleSettings](./bitburner.istylesettings.md) |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+newStyles
+
+
+</td><td>
+
+[IStyleSettings](./bitburner.istylesettings.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -28,7 +56,6 @@ RAM cost: 0 GB
 
 ## Example
 
-Usage example (NS2)
 
 ```js
 const styles = ns.ui.getStyles();

@@ -9,30 +9,86 @@ Get the reputation gain of an action.
 **Signature:**
 
 ```typescript
-getActionRepGain(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    level?: number,
-  ): number;
+getActionRepGain(type: BladeburnerActionType, name: BladeburnerActionName, level?: number): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
-|  level | number | _(Optional)_ Optional number. Action level at which to calculate the gain. Will be the action's current level if not given. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[BladeburnerActionType](./bitburner.bladeburneractiontype.md)
+
+
+</td><td>
+
+Type of action.
+
+
+</td></tr>
+<tr><td>
+
+name
+
+
+</td><td>
+
+[BladeburnerActionName](./bitburner.bladeburneractionname.md)
+
+
+</td><td>
+
+Name of action. Must be an exact match.
+
+
+</td></tr>
+<tr><td>
+
+level
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional. Action level at which to calculate the gain. Defaults to the action's current level if not specified.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
 number
 
-Average Bladeburner reputation gain for successfully completing the specified action.
+Average reputation gain for successfully completing the specified action.
 
 ## Remarks
 
 RAM cost: 4 GB
 
-Returns the average Bladeburner reputation gain for successfully completing the specified action. Note that this value is an ‘average’ and the real reputation gain may vary slightly from this value.
+Returns the average reputation gain for successfully completing the specified action. Note that this value is an "average" and the actual reputation gain may vary slightly from this value.
 

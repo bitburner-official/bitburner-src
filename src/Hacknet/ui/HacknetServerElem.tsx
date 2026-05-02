@@ -266,7 +266,15 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
                     <HashRate hashes={node.hashRate} /> current production rate.
                     <br />
                     <span style={{ opacity: 0.5 }}>
-                      <HashRate hashes={(node.hashRate * node.maxRam) / (node.maxRam - node.ramUsed)} />
+                      <HashRate
+                        hashes={calculateHashGainRate(
+                          node.level,
+                          0,
+                          node.maxRam,
+                          node.cores,
+                          Player.mults.hacknet_node_money,
+                        )}
+                      />
                     </span>{" "}
                     max production rate. (achieved when 100% RAM is allocated to it)
                     <br />

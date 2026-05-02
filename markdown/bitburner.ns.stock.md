@@ -4,15 +4,10 @@
 
 ## NS.stock property
 
-Namespace for stock functions.
+Namespace for [stock](./bitburner.stock.md) functions.
 
 **Signature:**
 
 ```typescript
-readonly stock: TIX;
+readonly stock: Stock;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

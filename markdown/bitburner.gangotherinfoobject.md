@@ -13,8 +13,64 @@ interface GangOtherInfoObject
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [power](./bitburner.gangotherinfoobject.power.md) |  | number | Gang power |
-|  [territory](./bitburner.gangotherinfoobject.territory.md) |  | number | Gang territory, in the range 0-1 |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[power](./bitburner.gangotherinfoobject.power.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Gang power
+
+
+</td></tr>
+<tr><td>
+
+[territory](./bitburner.gangotherinfoobject.territory.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Gang territory, in the range 0-1
+
+
+</td></tr>
+</tbody></table>
 

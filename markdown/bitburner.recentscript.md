@@ -14,7 +14,45 @@ interface RecentScript extends RunningScript
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [timeOfDeath](./bitburner.recentscript.timeofdeath.md) |  | Date | Timestamp of when the script was killed |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[timeOfDeath](./bitburner.recentscript.timeofdeath.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Date
+
+
+</td><td>
+
+Timestamp of when the script was killed
+
+
+</td></tr>
+</tbody></table>
 

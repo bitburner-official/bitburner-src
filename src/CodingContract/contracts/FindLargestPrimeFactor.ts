@@ -13,7 +13,7 @@ export const findLargestPrimeFactor: Pick<CodingContractTypes, CodingContractNam
     generate: (): number => {
       return getRandomIntInclusive(500, 1e9);
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       let fac = 2;
       let n: number = data;
       while (n > (fac - 1) * (fac - 1)) {
@@ -23,7 +23,10 @@ export const findLargestPrimeFactor: Pick<CodingContractTypes, CodingContractNam
         ++fac;
       }
 
-      return (n === 1 ? fac - 1 : n) === answer;
+      return n === 1 ? fac - 1 : n;
+    },
+    solver: (data, answer) => {
+      return findLargestPrimeFactor[CodingContractName.FindLargestPrimeFactor].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

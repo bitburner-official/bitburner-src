@@ -231,7 +231,7 @@ export function EquipmentsSubpage(): React.ReactElement {
           </Typography>
         }
       >
-        <Typography sx={{ m: 1 }}>Discount: -{formatPercent(1 - 1 / gang.getDiscount())}</Typography>
+        <Typography sx={{ m: 1 }}>Discount: {formatPercent(1 - 1 / gang.getDiscount())}</Typography>
       </Tooltip>
 
       <TextField

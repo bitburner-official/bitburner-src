@@ -9,15 +9,60 @@ Create a program.
 **Signature:**
 
 ```typescript
-createProgram(program: string, focus?: boolean): boolean;
+createProgram(programName: ProgramName, focus?: boolean): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  program | string | Name of program to create. |
-|  focus | boolean | _(Optional)_ Acquire player focus on this program creation. Optional. Defaults to true. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+programName
+
+
+</td><td>
+
+[ProgramName](./bitburner.programname.md)
+
+
+</td><td>
+
+Name of program to create.
+
+
+</td></tr>
+<tr><td>
+
+focus
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Acquire player focus on this program creation. Optional. Defaults to true.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -33,7 +78,7 @@ This function will automatically set you to start working on creating the specif
 
 This function returns true if you successfully start working on the specified program, and false otherwise.
 
-Note that creating a program using this function has the same hacking level requirements as it normally would. These level requirements are:<br/> - BruteSSH.exe: 50<br/> - FTPCrack.exe: 100<br/> - relaySMTP.exe: 250<br/> - HTTPWorm.exe: 500<br/> - SQLInject.exe: 750<br/> - DeepscanV1.exe: 75<br/> - DeepscanV2.exe: 400<br/> - ServerProfiler.exe: 75<br/> - AutoLink.exe: 25
+Note that creating a program using this function has the same hacking level requirements as it normally would. You can call [getHackingLevelRequirementOfProgram](./bitburner.singularity.gethackinglevelrequirementofprogram.md) to get that value.
 
 ## Example
 

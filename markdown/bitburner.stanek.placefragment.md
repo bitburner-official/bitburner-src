@@ -14,12 +14,87 @@ placeFragment(rootX: number, rootY: number, rotation: number, fragmentId: number
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  rootX | number | X against which to align the top left of the fragment. |
-|  rootY | number | Y against which to align the top left of the fragment. |
-|  rotation | number | A number from 0 to 3, the mount of 90 degree turn to take. |
-|  fragmentId | number | ID of the fragment to place. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+rootX
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+X against which to align the top left of the fragment.
+
+
+</td></tr>
+<tr><td>
+
+rootY
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Y against which to align the top left of the fragment.
+
+
+</td></tr>
+<tr><td>
+
+rotation
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+A number from 0 to 3, the mount of 90 degree turn to take.
+
+
+</td></tr>
+<tr><td>
+
+fragmentId
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+ID of the fragment to place.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

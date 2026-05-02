@@ -13,7 +13,7 @@ type SimpleOpponentStats = {
   losses: number;
   winStreak: number;
   highestWinStreak: number;
-  favor: number;
+  rep: number;
   bonusPercent: number;
   bonusDescription: string;
 };

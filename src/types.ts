@@ -31,10 +31,6 @@ export interface IReturnStatus {
   msg?: string;
 }
 
-type SuccessResult<T extends object> = { success: true; message?: string } & T;
-type FailureResult = { success: false; message: string };
-export type Result<T extends object = object> = SuccessResult<T> | FailureResult;
-
 /** Defines the minimum and maximum values for a range.
  * It is up to the consumer if these values are inclusive or exclusive.
  * It is up to the implementor to ensure max > min. */
@@ -50,4 +46,4 @@ export interface IMinMaxRange {
 }
 
 // Type of save data. The base64 format is string, the binary format is Uint8Array.
-export type SaveData = string | Uint8Array;
+export type SaveData = string | Uint8Array<ArrayBuffer>;

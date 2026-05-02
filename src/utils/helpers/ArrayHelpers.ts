@@ -1,4 +1,4 @@
-import { Truthy } from "lodash";
+import type { Truthy } from "lodash";
 
 /**
  * Returns the input array as a comma separated string.

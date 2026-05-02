@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -12,6 +11,7 @@ import { Money } from "../../ui/React/Money";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { StockMarket as SM } from "../../StockMarket/StockMarket";
 import { Stock } from "../../StockMarket/Stock";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function StockMarketDev(): React.ReactElement {
   const [stockPrice, setStockPrice] = useState(0);
@@ -81,7 +81,7 @@ export function StockMarketDev(): React.ReactElement {
     );
   }
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_StockMarketDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Stock Market</Typography>
       </AccordionSummary>
@@ -116,6 +116,6 @@ export function StockMarketDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

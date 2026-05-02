@@ -14,11 +14,71 @@ scp(files: string | string[], destination: string, source?: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  files | string \| string\[\] | Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading <code>/</code>. |
-|  destination | string | Hostname of the destination server, which is the server to which the file will be copied. |
-|  source | string | _(Optional)_ Hostname of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+files
+
+
+</td><td>
+
+string \| string\[\]
+
+
+</td><td>
+
+Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
+destination
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of the destination server, which is the server to which the file will be copied.
+
+
+</td></tr>
+<tr><td>
+
+source
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -52,4 +112,5 @@ const server = ns.args[0];
 const files = ["hack.js", "weaken.js", "grow.js"];
 ns.scp(files, server, "home");
 ```
+For darknet servers: The destination requires a session, but unlike [exec](./bitburner.ns.exec.md)<!-- -->, does not require a direct connection — scp works at any distance. The source server has no darknet requirements (no session or connection needed). Use [dnet.authenticate](./bitburner.darknet.authenticate.md) (requires direct connection) or [dnet.connectToSession](./bitburner.darknet.connecttosession.md) (at any distance) to establish a session.
 

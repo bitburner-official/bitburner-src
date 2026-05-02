@@ -17,3 +17,11 @@ export function reachedLimit(): boolean {
   }
   return reached;
 }
+
+export function hasEnoughMoney(bet: number): boolean {
+  const result = Player.canAfford(bet);
+  if (!result) {
+    dialogBoxCreate("You do not have enough money.");
+  }
+  return result;
+}

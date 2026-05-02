@@ -4,15 +4,10 @@
 
 ## NS.sleeve property
 
-Namespace for sleeve functions. Contains spoilers.
+Namespace for [sleeve](./bitburner.sleeve.md) functions. Contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly sleeve: Sleeve;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

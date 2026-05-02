@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Typography, Button } from "@mui/material";
 
 import { GoColor, GoValidity, ToastVariant } from "@enums";
@@ -65,12 +65,17 @@ export function GoTutorialChallenge({
     }
   };
 
-  const reset = () => {
+  const reset = useCallback(() => {
     stateRef.current = getStateCopy(state);
     stateRef.current.previousBoards = [];
     setDisplayText(description);
     setShowReset(false);
-  };
+  }, [state, description]);
+
+  // Ensure that the challenge is reset on unmount / mount
+  useEffect(() => {
+    reset();
+  }, [reset]);
 
   return (
     <div>

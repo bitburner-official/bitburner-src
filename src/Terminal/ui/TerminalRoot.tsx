@@ -87,12 +87,12 @@ export function TerminalRoot(): React.ReactElement {
           <li key={i}>
             {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
             {item instanceof RawOutput && (
-              <Typography classes={{ root: classes.preformatted }} paragraph={false}>
+              <Typography component="div" classes={{ root: classes.preformatted }} paragraph={false}>
                 {item.raw}
               </Typography>
             )}
             {item instanceof Link && (
-              <Typography classes={{ root: classes.preformatted }}>
+              <Typography component="div" classes={{ root: classes.preformatted }}>
                 {item.dashes}
                 <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
               </Typography>

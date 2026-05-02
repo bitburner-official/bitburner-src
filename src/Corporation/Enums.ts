@@ -2,7 +2,6 @@ import type { Member } from "../types";
 
 export enum IndustryType {
   Water = "Water Utilities",
-  Spring = "Spring Water",
   Agriculture = "Agriculture",
   Fishing = "Fishing",
   Mining = "Mining",
@@ -33,7 +32,6 @@ export enum CorpUnlockName {
   SmartSupply = "Smart Supply",
   MarketResearchDemand = "Market Research - Demand",
   MarketDataCompetition = "Market Data - Competition",
-  VeChain = "VeChain",
   ShadyAccounting = "Shady Accounting",
   GovernmentPartnership = "Government Partnership",
   WarehouseAPI = "Warehouse API",
@@ -43,7 +41,6 @@ export enum CorpUnlockName {
 export enum CorpUpgradeName {
   SmartFactories = "Smart Factories",
   SmartStorage = "Smart Storage",
-  DreamSense = "DreamSense",
   WilsonAnalytics = "Wilson Analytics",
   NuoptimalNootropicInjectorImplants = "Nuoptimal Nootropic Injector Implants",
   SpeechProcessorImplants = "Speech Processor Implants",
@@ -110,10 +107,10 @@ export type CorpProductResearchName = Member<typeof CorpProductResearchName>;
 export const CorpResearchName = { ...CorpProductResearchName, ...CorpBaseResearchName };
 export type CorpResearchName = Member<typeof CorpResearchName>;
 
-export enum CreatingCorporationCheckResult {
-  Success = "Success",
-  NoSf3OrDisabled = "NoSf3OrDisabled",
-  CorporationExists = "CorporationExists",
-  UseSeedMoneyOutsideBN3 = "UseSeedMoneyOutsideBN3",
-  DisabledBySoftCap = "DisabledBySoftCap",
-}
+export const CreatingCorporationCheckResultEnum = {
+  Success: "Success",
+  NoSf3OrDisabled: "NoSf3OrDisabled",
+  CorporationExists: "CorporationExists",
+  UseSeedMoneyOutsideBN3: "UseSeedMoneyOutsideBN3",
+  DisabledBySoftCap: "DisabledBySoftCap",
+} as const;

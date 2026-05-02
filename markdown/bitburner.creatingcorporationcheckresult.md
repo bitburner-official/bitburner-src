@@ -2,22 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [CreatingCorporationCheckResult](./bitburner.creatingcorporationcheckresult.md)
 
-## CreatingCorporationCheckResult enum
+## CreatingCorporationCheckResult type
 
 
 **Signature:**
 
 ```typescript
-declare enum CreatingCorporationCheckResult 
+type CreatingCorporationCheckResult = _ValueOf<CreatingCorporationCheckResultEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  CorporationExists | <code>&quot;CorporationExists&quot;</code> |  |
-|  DisabledBySoftCap | <code>&quot;DisabledBySoftCap&quot;</code> |  |
-|  NoSf3OrDisabled | <code>&quot;NoSf3OrDisabled&quot;</code> |  |
-|  Success | <code>&quot;Success&quot;</code> |  |
-|  UseSeedMoneyOutsideBN3 | <code>&quot;UseSeedMoneyOutsideBN3&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [CreatingCorporationCheckResultEnumType](./bitburner.creatingcorporationcheckresultenumtype.md)
 

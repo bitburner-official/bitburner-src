@@ -14,11 +14,121 @@ interface HacknetMultipliers
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [coreCost](./bitburner.hacknetmultipliers.corecost.md) |  | number | Player's hacknet core cost multiplier |
-|  [levelCost](./bitburner.hacknetmultipliers.levelcost.md) |  | number | Player's hacknet level cost multiplier |
-|  [production](./bitburner.hacknetmultipliers.production.md) |  | number | Player's hacknet production multiplier |
-|  [purchaseCost](./bitburner.hacknetmultipliers.purchasecost.md) |  | number | Player's hacknet purchase cost multiplier |
-|  [ramCost](./bitburner.hacknetmultipliers.ramcost.md) |  | number | Player's hacknet ram cost multiplier |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[coreCost](./bitburner.hacknetmultipliers.corecost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacknet core cost multiplier
+
+
+</td></tr>
+<tr><td>
+
+[levelCost](./bitburner.hacknetmultipliers.levelcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacknet level cost multiplier
+
+
+</td></tr>
+<tr><td>
+
+[production](./bitburner.hacknetmultipliers.production.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacknet production multiplier
+
+
+</td></tr>
+<tr><td>
+
+[purchaseCost](./bitburner.hacknetmultipliers.purchasecost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacknet purchase cost multiplier
+
+
+</td></tr>
+<tr><td>
+
+[ramCost](./bitburner.hacknetmultipliers.ramcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Player's hacknet ram cost multiplier
+
+
+</td></tr>
+</tbody></table>
 

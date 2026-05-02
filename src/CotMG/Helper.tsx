@@ -5,11 +5,12 @@ import { Reviver } from "../utils/GenericReviver";
 import { BaseGift } from "./BaseGift";
 
 import { StaneksGift } from "./StaneksGift";
-import { Result } from "../types";
+import type { Result } from "@nsdefs";
+import { isStanekGiftImplemented } from "../utils/ErrorHelper";
 
 export let staneksGift = new StaneksGift();
 
-export function loadStaneksGift(saveString: string): void {
+export function loadStaneksGift(saveString: string, versionSave?: string): void {
   let staneksGiftData: unknown;
   try {
     staneksGiftData = JSON.parse(saveString, Reviver);
@@ -20,9 +21,11 @@ export function loadStaneksGift(saveString: string): void {
     console.error(error);
     console.error("Invalid StaneksGiftSave:", saveString);
     staneksGift = new StaneksGift();
-    setTimeout(() => {
-      dialogBoxCreate(`Cannot load data of Stanek's Gift. Stanek's Gift is reset. Error: ${error}.`);
-    }, 1000);
+    if (isStanekGiftImplemented(versionSave)) {
+      setTimeout(() => {
+        dialogBoxCreate(`Cannot load data of Stanek's Gift. Stanek's Gift is reset. Error: ${error}.`);
+      }, 1000);
+    }
     return;
   }
   staneksGift = staneksGiftData;

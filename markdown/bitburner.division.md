@@ -14,21 +14,311 @@ interface Division
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [awareness](./bitburner.division.awareness.md) |  | number | Awareness of the division |
-|  [cities](./bitburner.division.cities.md) |  | [CityName](./bitburner.cityname.md)<!-- -->\[\] | Cities in which this division has expanded |
-|  [lastCycleExpenses](./bitburner.division.lastcycleexpenses.md) |  | number | Expenses last cycle |
-|  [lastCycleRevenue](./bitburner.division.lastcyclerevenue.md) |  | number | Revenue last cycle |
-|  [makesProducts](./bitburner.division.makesproducts.md) |  | boolean | Whether the industry of this division is capable of developing and producing products |
-|  [maxProducts](./bitburner.division.maxproducts.md) |  | number | How many products this division can support |
-|  [name](./bitburner.division.name.md) |  | string | Name of the division |
-|  [numAdVerts](./bitburner.division.numadverts.md) |  | number | Number of times AdVert has been bought |
-|  [popularity](./bitburner.division.popularity.md) |  | number | Popularity of the division |
-|  [productionMult](./bitburner.division.productionmult.md) |  | number | Production multiplier |
-|  [products](./bitburner.division.products.md) |  | string\[\] | Names of Products developed by this division |
-|  [researchPoints](./bitburner.division.researchpoints.md) |  | number | Amount of research in that division |
-|  [thisCycleExpenses](./bitburner.division.thiscycleexpenses.md) |  | number | Expenses this cycle |
-|  [thisCycleRevenue](./bitburner.division.thiscyclerevenue.md) |  | number | Revenue this cycle |
-|  [type](./bitburner.division.type.md) |  | [CorpIndustryName](./bitburner.corpindustryname.md) | Type of division, like Agriculture |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[awareness](./bitburner.division.awareness.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Awareness of the division
+
+
+</td></tr>
+<tr><td>
+
+[cities](./bitburner.division.cities.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)<!-- -->\[\]
+
+
+</td><td>
+
+Cities in which this division has expanded
+
+
+</td></tr>
+<tr><td>
+
+[industry](./bitburner.division.industry.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpIndustryName](./bitburner.corpindustryname.md)
+
+
+</td><td>
+
+Industry of division, like Agriculture
+
+
+</td></tr>
+<tr><td>
+
+[lastCycleExpenses](./bitburner.division.lastcycleexpenses.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Expenses last cycle
+
+
+</td></tr>
+<tr><td>
+
+[lastCycleRevenue](./bitburner.division.lastcyclerevenue.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Revenue last cycle
+
+
+</td></tr>
+<tr><td>
+
+[makesProducts](./bitburner.division.makesproducts.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether the industry of this division is capable of developing and producing products
+
+
+</td></tr>
+<tr><td>
+
+[maxProducts](./bitburner.division.maxproducts.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+How many products this division can support
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.division.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+[numAdVerts](./bitburner.division.numadverts.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of times AdVert has been bought
+
+
+</td></tr>
+<tr><td>
+
+[popularity](./bitburner.division.popularity.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Popularity of the division
+
+
+</td></tr>
+<tr><td>
+
+[productionMult](./bitburner.division.productionmult.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Production multiplier
+
+
+</td></tr>
+<tr><td>
+
+[products](./bitburner.division.products.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+Names of Products developed by this division
+
+
+</td></tr>
+<tr><td>
+
+[researchPoints](./bitburner.division.researchpoints.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of research in that division
+
+
+</td></tr>
+<tr><td>
+
+[thisCycleExpenses](./bitburner.division.thiscycleexpenses.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Expenses this cycle
+
+
+</td></tr>
+<tr><td>
+
+[thisCycleRevenue](./bitburner.division.thiscyclerevenue.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Revenue this cycle
+
+
+</td></tr>
+</tbody></table>
 

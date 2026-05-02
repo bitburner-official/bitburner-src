@@ -4,9 +4,15 @@
 
 ## BitNodeOptions interface
 
-Default value: - sourceFileOverrides: an empty Map - intelligenceOverride: undefined - All boolean options: false
+Default value:
 
-If you specify intelligenceOverride, it must be a non-negative integer.
+- sourceFileOverrides: an empty Map
+
+- intelligenceOverride: undefined
+
+- All boolean options: false
+
+If you specify intelligenceOverride, it must be a positive integer.
 
 **Signature:**
 
@@ -17,8 +23,60 @@ export interface BitNodeOptions extends BitNodeBooleanOptions
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [intelligenceOverride](./bitburner.bitnodeoptions.intelligenceoverride.md) |  | number \| undefined |  |
-|  [sourceFileOverrides](./bitburner.bitnodeoptions.sourcefileoverrides.md) |  | Map&lt;number, number&gt; |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[intelligenceOverride](./bitburner.bitnodeoptions.intelligenceoverride.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| undefined
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[sourceFileOverrides](./bitburner.bitnodeoptions.sourcefileoverrides.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Map&lt;number, number&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -9,11 +9,11 @@ Backup game save.
 **Signature:**
 
 ```typescript
-exportGame(): void;
+exportGame(): Promise<void>;
 ```
 **Returns:**
 
-void
+Promise&lt;void&gt;
 
 ## Remarks
 

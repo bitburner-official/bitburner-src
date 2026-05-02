@@ -19,6 +19,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration and approval in other people.",
       company_rep: 1.1,
       faction_rep: 1.1,
+      charisma_exp: 1.05,
       factions: [
         FactionName.TianDiHui,
         FactionName.TheSyndicate,
@@ -36,10 +37,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration, approval, and respect in others.",
       company_rep: 1.2,
       faction_rep: 1.2,
+      charisma: 1.1,
       factions: [
         FactionName.Silhouette,
         FactionName.FourSigma,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.ClarkeIncorporated,
       ],
     },
@@ -76,6 +78,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Pheromone extruder injected in the thoracodorsal nerve. Emits pleasing scent guaranteed to " +
         "make conversational partners more agreeable.",
       stats: "This augmentation makes the Bribe minigame easier by indicating the incorrect paths.",
+      charisma: 1.1,
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -514,9 +517,22 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "millions of nanobots capable of projecting high-density muon beams, " +
         "creating an energy barrier around the user.",
       defense: 1.4,
+      charisma: 1.05,
       factions: [FactionName.Volhaven],
     },
     // === E === //
+    [AugmentationName.Eloquence]: {
+      repCost: 2.5e4,
+      moneyCost: 2.5e8,
+      info:
+        "A neural implant that enhances the user's ability to resonate with others. " +
+        "It is capable of analyzing and interpreting the emotions of those nearby, allowing " +
+        "the user to better understand and influence them.",
+      charisma: 1.05,
+      crime_success: 1.1,
+      work_money: 1.2,
+      factions: [FactionName.SpeakersForTheDead],
+    },
     [AugmentationName.EMS4Recombination]: {
       repCost: 2.5e3,
       moneyCost: 2.75e8,
@@ -685,7 +701,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       charisma: 1.6,
       charisma_exp: 1.6,
       factions: [
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.NWO,
         FactionName.ClarkeIncorporated,
         FactionName.OmniTekIncorporated,
@@ -731,13 +747,35 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       company_rep: 1.1,
       work_money: 1.2,
       factions: [
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.ClarkeIncorporated,
         FactionName.FourSigma,
         FactionName.KuaiGongInternational,
       ],
     },
     // === G === //
+    [AugmentationName.Glib]: {
+      repCost: 4.05e4,
+      moneyCost: 2.5e9,
+      info:
+        "An implant that, when activated, makes the speaker sound unbelievably reasonable and plausible to listeners " +
+        "for the next hour. It requires no concentration from the user, and only a verbal activation component. It even affects " +
+        "most electronic detection methods.",
+      charisma_exp: 1.2,
+      company_rep: 1.1,
+      factions: [FactionName.Tetrads, FactionName.Bladeburners],
+    },
+    [AugmentationName.GoldenTongue]: {
+      repCost: 1.25e5,
+      moneyCost: 1.25e8,
+      info:
+        "An aural implant that enhances the user's ability to communicate and persuade others. " +
+        "The implant uses a predictive model that lets the user say precisely what their audience " +
+        "wants to hear. This implant is commonly used by many high-level executives and government officials.",
+      charisma: 1.1,
+      charisma_exp: 1.3,
+      factions: [FactionName.SpeakersForTheDead],
+    },
     [AugmentationName.GolemSerum]: {
       repCost: 3.125e4,
       moneyCost: 1.1e10,
@@ -873,6 +911,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       defense: 1.08,
       agility: 1.08,
       dexterity: 1.08,
+      charisma: 1.08,
       factions: [FactionName.Tetrads, FactionName.TheDarkArmy, FactionName.TheSyndicate],
     },
     [AugmentationName.HiveMind]: {
@@ -945,6 +984,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       dexterity: 1.4,
       hacking_speed: 1.03,
       hacking_money: 1.1,
+      charisma: 1.03,
       factions: [FactionName.BladeIndustries, FactionName.KuaiGongInternational],
     },
     // === I === //
@@ -992,6 +1032,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "cells, when powered, have a negative refractive index. As a result, they bend light " +
         "around the skin, making the user much harder to see with the naked eye.",
       agility: 1.05,
+      charisma: 1.03,
       crime_money: 1.1,
       factions: [FactionName.SlumSnakes, FactionName.Tetrads],
     },
@@ -1006,10 +1047,19 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       prereqs: [AugmentationName.LuminCloaking1],
       agility: 1.1,
       defense: 1.1,
+      charisma_exp: 1.1,
       crime_money: 1.25,
       factions: [FactionName.SlumSnakes, FactionName.Tetrads],
     },
     // === M === //
+    [AugmentationName.Magnetism]: {
+      repCost: 1.5e4,
+      moneyCost: 2.5e8,
+      info: "A cranial implant that increases the attractive force of the wearer. (Even its inventor isn't quite sure how it works).",
+      charisma: 1.05,
+      company_rep: 1.1,
+      factions: [FactionName.TheBlackHand, FactionName.TheDarkArmy],
+    },
     [AugmentationName.MightOfAres]: {
       repCost: 1e4,
       moneyCost: 1e6,
@@ -1030,6 +1080,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "which improves its regenerative and extracellular homeostasis abilities.",
       strength: 1.2,
       defense: 1.2,
+      charisma: 1.05,
       factions: [
         FactionName.TheDarkArmy,
         FactionName.TheSyndicate,
@@ -1050,6 +1101,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "and restructure themselves.",
       strength: 1.55,
       defense: 1.55,
+      charisma: 1.55,
       factions: [FactionName.BladeIndustries],
     },
     [AugmentationName.NeuralAccelerator]: {
@@ -1089,7 +1141,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         FactionName.Aevum,
         FactionName.Ishima,
         FactionName.Volhaven,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.ClarkeIncorporated,
         FactionName.FourSigma,
       ],
@@ -1240,6 +1292,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "the bloodstream to improve memory, increase focus, and provide other " +
         "cognitive enhancements.",
       company_rep: 1.2,
+      charisma: 1.03,
       factions: [
         FactionName.TianDiHui,
         FactionName.Volhaven,
@@ -1247,7 +1300,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         FactionName.Chongqing,
         FactionName.ClarkeIncorporated,
         FactionName.FourSigma,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
       ],
     },
     [AugmentationName.NutriGen]: {
@@ -1377,6 +1430,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       strength: 1.4,
       defense: 1.4,
       agility: 1.4,
+      charisma: 1.2,
       factions: [FactionName.KuaiGongInternational],
     },
     [AugmentationName.PowerRecirculator]: {
@@ -1400,6 +1454,16 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       charisma_exp: 1.1,
       factions: [FactionName.Tetrads, FactionName.TheDarkArmy, FactionName.TheSyndicate, FactionName.NWO],
     },
+    [AugmentationName.Primer]: {
+      repCost: 1.875e5,
+      moneyCost: 3.375e9,
+      info:
+        "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
+        "Thought to be stolen technology, its existance has been a secret until recently.",
+      charisma: 1.1,
+      charisma_exp: 1.4,
+      factions: [FactionName.TheDarkArmy, FactionName.TheSyndicate],
+    },
     // === Q === //
     [AugmentationName.QLink]: {
       repCost: 1.875e6,
@@ -1422,10 +1486,21 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A cranial implant that affects the user's personality, making them better " +
         "at negotiation in social situations.",
+      charisma_exp: 1.15,
       work_money: 1.1,
       company_rep: 1.15,
       faction_rep: 1.15,
       factions: [FactionName.TianDiHui],
+    },
+    [AugmentationName.SocialDynamo]: {
+      repCost: 2.25e5,
+      moneyCost: 1.2e9,
+      info:
+        "Makes the wearer a better leader and mentor by greatly increasing their awareness of social dynamics. " +
+        "Not actually a standard implant, but rather a series of training courses and seminars, led by a famous speaker named Denis.",
+      charisma: 1.1,
+      company_rep: 1.3,
+      factions: [FactionName.MegaCorp, FactionName.ECorp, FactionName.OmniTekIncorporated],
     },
     [AugmentationName.SPTN97]: {
       repCost: 1.25e6,
@@ -1466,7 +1541,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       charisma_exp: 1.5,
       company_rep: 1.25,
       faction_rep: 1.25,
-      factions: [FactionName.BachmanAssociates],
+      factions: [FactionName.BachmanAndAssociates],
     },
     [AugmentationName.SmartSonar]: {
       repCost: 2.25e4,
@@ -1492,7 +1567,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         FactionName.FourSigma,
         FactionName.KuaiGongInternational,
         FactionName.ClarkeIncorporated,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
       ],
     },
     [AugmentationName.SpeechProcessor]: {
@@ -1684,6 +1759,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "more efficiently than an organic heart.",
       agility: 1.5,
       strength: 1.5,
+      charisma: 1.3,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,
@@ -1771,6 +1847,102 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacking_money: 1.1,
       factions: [FactionName.TheBlackHand],
     },
+    [AugmentationName.TheBrokenWings]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info:
+        "An experimental augmentation that lets the user make incredible leaps of insight and flights of fancy. " +
+        "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
+        "metallic patterns on the user's upper back and shoulders. " +
+        "Awarded to those who discover the secrets of the labyrinth.",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma by 5% and agility by 10%, and darknet money by 30%.",
+      charisma: 1.05,
+      agility: 1.1,
+      dnet_money: 1.3,
+      isSpecial: true,
+      factions: [],
+    },
+    [AugmentationName.TheBoots]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info:
+        "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
+        "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
+        "Awarded to those who discover the secrets of the labyrinth.",
+      stats:
+        "This augmentation increases the speed of authentication and heartbleed by 20%, and raises charisma and dexterity by 6%.",
+      charisma: 1.06,
+      dexterity: 1.06,
+      isSpecial: true,
+      prereqs: [AugmentationName.TheBrokenWings],
+      factions: [],
+    },
+    [AugmentationName.TheHammer]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info:
+        "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
+        "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
+        "Awarded to those who discover the secrets of the labyrinth.",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma by 7%, strength by 10%, and darknet money by 10%.",
+      charisma: 1.07,
+      strength: 1.1,
+      dnet_money: 1.1,
+      isSpecial: true,
+      prereqs: [AugmentationName.TheBoots],
+      factions: [],
+    },
+    [AugmentationName.TheStaff]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info:
+        "This skeletal augmentation greatly enhances the users durability and health. Inspired by the original Staff of Medicine that is said to " +
+        "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. ",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma xp, defense, and darknet money by 10%.",
+      charisma_exp: 1.1,
+      defense: 1.1,
+      dnet_money: 1.1,
+      isSpecial: true,
+      prereqs: [AugmentationName.TheHammer],
+      factions: [],
+    },
+    [AugmentationName.TheLaw]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info:
+        "An advanced neural implant that integrates Bayesian inference algorithms into the brain's decision-making processes. " +
+        "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
+        "making them exceptionally persuasive and confident in negotiations and social interactions. " +
+        "Awarded to those who discover the secrets of the labyrinth.",
+      stats: "This augmentation raises charisma by 9%, company rep by 5%, and darknet money by 15%.",
+      charisma: 1.09,
+      company_rep: 1.05,
+      dnet_money: 1.15,
+      isSpecial: true,
+      prereqs: [AugmentationName.TheStaff],
+      factions: [],
+    },
+    [AugmentationName.TheSword]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info:
+        "A cutting-edge neural implant that leverages Solomonoff induction to analyze and predict patterns with unparalleled precision. " +
+        "This augmentation enhances the user's ability to deduce optimal strategies and make compelling arguments, " +
+        "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
+        "more powerful version of Occam's razor. " +
+        "The final augment awarded to those who discover the secrets of the labyrinth.",
+      stats: "This augmentation raises charisma, hacking, darknet money, and company rep by 10%.",
+      charisma: 1.1,
+      hacking: 1.1,
+      company_rep: 1.1,
+      dnet_money: 1.1,
+      isSpecial: true,
+      prereqs: [AugmentationName.TheLaw],
+      factions: [],
+    },
     [AugmentationName.TheRedPill]: {
       repCost: 2.5e6,
       moneyCost: 0,
@@ -1797,6 +1969,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "A synthetic symbiotic virus that is injected into human brain tissue. The Vangelis virus " +
         "heightens the senses and focus of its host while also enhancing their intuition.",
       dexterity_exp: 1.1,
+      charisma_exp: 1.1,
       bladeburner_analysis: 1.1,
       bladeburner_success_chance: 1.04,
       isSpecial: true,
@@ -1813,6 +1986,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       prereqs: [AugmentationName.VangelisVirus],
       defense_exp: 1.1,
       dexterity_exp: 1.1,
+      charisma_exp: 1.1,
       bladeburner_analysis: 1.15,
       bladeburner_success_chance: 1.05,
       isSpecial: true,
@@ -1857,6 +2031,17 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       stats: "This augmentation makes the Bracket minigame easier by removing all '[' ']'.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
+    },
+    [AugmentationName.Wit]: {
+      repCost: 5e3,
+      moneyCost: 1e7,
+      info:
+        "A connective brain implant that greatly increases the user's speech reaction time. " +
+        "This allows the user to think faster and respond quicker in negotiations, and always have the last word.",
+      charisma: 1.03,
+      charisma_exp: 1.05,
+      company_rep: 1.05,
+      factions: [FactionName.SlumSnakes, FactionName.BitRunners],
     },
     // === X === //
     [AugmentationName.Xanipher]: {

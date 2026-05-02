@@ -14,10 +14,55 @@ ls(host: string, substring?: string): string[];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname of the target server. |
-|  substring | string | _(Optional)_ A substring to search for in the filename. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of the target server.
+
+
+</td></tr>
+<tr><td>
+
+substring
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ A substring to search for in the filename.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

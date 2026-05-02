@@ -14,11 +14,71 @@ moveTail(x: number, y: number, pid?: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  x | number | x coordinate. |
-|  y | number | y coordinate. |
-|  pid | number | _(Optional)_ Optional. PID of the script having its tail moved. If omitted, the current script is used. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+x
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+x coordinate.
+
+
+</td></tr>
+<tr><td>
+
+y
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+y coordinate.
+
+
+</td></tr>
+<tr><td>
+
+pid
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional. PID of the script having its tail moved. If omitted, the current script is used.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

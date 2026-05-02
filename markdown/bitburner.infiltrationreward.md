@@ -13,9 +13,77 @@ interface InfiltrationReward
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [sellCash](./bitburner.infiltrationreward.sellcash.md) |  | number |  |
-|  [SoARep](./bitburner.infiltrationreward.soarep.md) |  | number |  |
-|  [tradeRep](./bitburner.infiltrationreward.traderep.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[sellCash](./bitburner.infiltrationreward.sellcash.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[SoARep](./bitburner.infiltrationreward.soarep.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[tradeRep](./bitburner.infiltrationreward.traderep.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

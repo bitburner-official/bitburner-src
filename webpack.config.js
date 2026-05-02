@@ -5,7 +5,6 @@ const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 
 /** @type {import("webpack-cli").CallableOption} */
 module.exports = (env, argv) => {
@@ -91,7 +90,7 @@ module.exports = (env, argv) => {
 
   return {
     plugins: [
-      new MonacoWebpackPlugin({ languages: ["javascript", "typescript", "json"] }),
+      new MonacoWebpackPlugin({ languages: ["javascript", "typescript", "json", "css"] }),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": isDevelopment ? '"development"' : '"production"',
       }),
@@ -124,15 +123,6 @@ module.exports = (env, argv) => {
           module: true,
         }),
       enableReactRefresh && new ReactRefreshWebpackPlugin(),
-      new CopyPlugin({
-        patterns: [
-          {
-            from: "{tex-chtml.js,*/**/*}",
-            to: "mathjax",
-            context: "node_modules/mathjax-full/es5",
-          },
-        ],
-      }),
     ].filter(Boolean),
     target: "web",
     entry: entry,
@@ -144,7 +134,7 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.(js$|jsx|ts|tsx)$/,
+          test: /\.(js|jsx|ts|tsx)$/,
           exclude: /node_modules/,
           resourceQuery: { not: /raw/ },
           use: {
@@ -155,7 +145,7 @@ module.exports = (env, argv) => {
             },
           },
         },
-        { test: /\.(ttf|woff2|png|jpe?g|gif|jp2|webp)$/, type: "asset/resource" },
+        { test: /\.(ttf|woff2|png|jpe?g|gif|jp2|webp|svg)$/, type: "asset/resource" },
         {
           test: /\.s?css$/,
           use: ["style-loader", "css-loader"],

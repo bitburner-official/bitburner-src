@@ -14,19 +14,292 @@ interface Material
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [actualSellAmount](./bitburner.material.actualsellamount.md) |  | number | Amount of material sold last cycle |
-|  [buyAmount](./bitburner.material.buyamount.md) |  | number | Amount of material purchased from the market last cycle |
-|  [competition](./bitburner.material.competition.md) |  | number \| undefined | Competition for the material, only present if "Market Research - Competition" unlocked |
-|  [demand](./bitburner.material.demand.md) |  | number \| undefined | Demand for the material, only present if "Market Research - Demand" unlocked |
-|  [desiredSellAmount](./bitburner.material.desiredsellamount.md) |  | string \| number | Sell amount, can be "PROD/2" |
-|  [desiredSellPrice](./bitburner.material.desiredsellprice.md) |  | string \| number | Sell cost, can be "MP+5" |
-|  [exports](./bitburner.material.exports.md) |  | [Export](./bitburner.export.md)<!-- -->\[\] | Export orders |
-|  [importAmount](./bitburner.material.importamount.md) |  | number | Amount of material imported from other divisions last cycle |
-|  [marketPrice](./bitburner.material.marketprice.md) |  | number | Cost to buy material |
-|  [name](./bitburner.material.name.md) |  | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
-|  [productionAmount](./bitburner.material.productionamount.md) |  | number | Amount of material produced last cycle |
-|  [quality](./bitburner.material.quality.md) |  | number | Quality of the material |
-|  [stored](./bitburner.material.stored.md) |  | number | Amount of material |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[actualSellAmount](./bitburner.material.actualsellamount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of material sold last cycle
+
+
+</td></tr>
+<tr><td>
+
+[buyAmount](./bitburner.material.buyamount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of material purchased from the market last cycle
+
+
+</td></tr>
+<tr><td>
+
+[competition](./bitburner.material.competition.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| undefined
+
+
+</td><td>
+
+Competition for the material, only present if "Market Research - Competition" unlocked
+
+
+</td></tr>
+<tr><td>
+
+[demand](./bitburner.material.demand.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| undefined
+
+
+</td><td>
+
+Demand for the material, only present if "Market Research - Demand" unlocked
+
+
+</td></tr>
+<tr><td>
+
+[desiredSellAmount](./bitburner.material.desiredsellamount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string \| number
+
+
+</td><td>
+
+Sell amount, can be "PROD/2"
+
+
+</td></tr>
+<tr><td>
+
+[desiredSellPrice](./bitburner.material.desiredsellprice.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string \| number
+
+
+</td><td>
+
+Sell cost, can be "MP+5"
+
+
+</td></tr>
+<tr><td>
+
+[exports](./bitburner.material.exports.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Export](./bitburner.export.md)<!-- -->\[\]
+
+
+</td><td>
+
+Export orders
+
+
+</td></tr>
+<tr><td>
+
+[importAmount](./bitburner.material.importamount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of material imported from other divisions last cycle
+
+
+</td></tr>
+<tr><td>
+
+[marketPrice](./bitburner.material.marketprice.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cost to buy material
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.material.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material
+
+
+</td></tr>
+<tr><td>
+
+[productionAmount](./bitburner.material.productionamount.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of material produced last cycle
+
+
+</td></tr>
+<tr><td>
+
+[productionLimit](./bitburner.material.productionlimit.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| null
+
+
+</td><td>
+
+A limit on the maximum amount to produce per second
+
+
+</td></tr>
+<tr><td>
+
+[quality](./bitburner.material.quality.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Quality of the material
+
+
+</td></tr>
+<tr><td>
+
+[stored](./bitburner.material.stored.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of material
+
+
+</td></tr>
+</tbody></table>
 

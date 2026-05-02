@@ -9,16 +9,76 @@ Set smart supply.
 **Signature:**
 
 ```typescript
-setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: boolean): void;
+setSmartSupply(divisionName: string, city: CityName, enabled: boolean): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
-|  enabled | boolean | Use true to enable, false otherwise. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of the city
+
+
+</td></tr>
+<tr><td>
+
+enabled
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Use true to enable, false otherwise.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

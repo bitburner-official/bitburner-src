@@ -1,9 +1,13 @@
 import { Bladeburner } from "../../../src/Bladeburner/Bladeburner";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { Player, setPlayer } from "@player";
-import { BlackOperation, Contract, GeneralAction, Operation } from "../../../src/Bladeburner/Actions";
+import { Contract } from "../../../src/Bladeburner/Actions/Contract";
+import { GeneralAction } from "../../../src/Bladeburner/Actions/GeneralAction";
+import { Operation } from "../../../src/Bladeburner/Actions/Operation";
 import {
+  AugmentationName,
   BladeburnerActionType,
+  BladeburnerBlackOpName,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
   BladeburnerOperationName,
@@ -14,16 +18,19 @@ import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import { CrimeWork } from "../../../src/Work/CrimeWork";
 import type { Action, ActionIdentifier } from "../../../src/Bladeburner/Types";
 import type { Skills } from "@nsdefs";
-import { BlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
+import { applyAugmentation } from "../../../src/Augmentation/AugmentationHelpers";
+import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
+import { BlackOperation } from "../../../src/Bladeburner/Actions/BlackOperation";
 
 describe("Bladeburner Actions", () => {
   const SampleContract = Contract.createId(BladeburnerContractName.Tracking);
   const SampleGeneralAction = GeneralAction.createId(BladeburnerGeneralActionName.Diplomacy);
   const SampleOperation = Operation.createId(BladeburnerOperationName.Assassination);
-  const SampleBlackOp = BlackOperations["Operation Centurion"].id;
+  const SampleBlackOp = BlackOperation.createId(BladeburnerBlackOpName.OperationCenturion);
 
   const ENOUGH_TIME_TO_FINISH_ACTION = 1e5;
   const BASE_STAT_EXP = 1e6;
+  const HIGH_CHAOS = 1e12;
 
   let bb: Bladeburner;
 
@@ -31,7 +38,8 @@ describe("Bladeburner Actions", () => {
 
   const contracts = Object.values(new Bladeburner().contracts);
   const operations = Object.values(new Bladeburner().operations);
-  const nonGeneralActions = [contracts, operations, Object.values(BlackOperations)].flat();
+  const blackOperations = Object.values(new Bladeburner().blackOperations);
+  const nonGeneralActions = [contracts, operations, blackOperations].flat();
 
   describe("Without Simulacrum", () => {
     it("Starting an action cancels player's work immediately", () => {
@@ -83,26 +91,30 @@ describe("Bladeburner Actions", () => {
 
       it("mildly reduces chaos in the current city", () => {
         allCitiesHighChaos();
-        let { chaos } = bb.getCurrentCity();
+        const { chaos } = bb.getCurrentCity();
         complete(diplomacy);
         expect(bb.getCurrentCity().chaos).toBeGreaterThan(chaos * 0.9);
         expect(bb.getCurrentCity().chaos).toBeLessThan(chaos);
       });
 
       it("effect scales significantly with player charisma", () => {
-        Player.gainCharismaExp(1e500);
+        gainHighCharismaLevel();
         allCitiesHighChaos();
         complete(diplomacy);
-        expect(bb.getCurrentCity().chaos).toBe(0);
+        expect(bb.getCurrentCity().chaos).toStrictEqual(0);
       });
 
       it("does NOT affect chaos in other cities", () => {
-        const otherCity = <CityName>cities.find((c) => c !== bb.getCurrentCity().name);
+        const otherCity = cities.find((c) => c !== bb.getCurrentCity().name);
+        if (!otherCity) {
+          throw new Error("Invalid otherCity");
+        }
         /** Testing against a guaranteed 0-chaos level of charisma */
-        Player.gainCharismaExp(1e500);
+        gainHighCharismaLevel();
         allCitiesHighChaos();
         complete(diplomacy);
-        expect(bb.cities[otherCity].chaos).toBeGreaterThan(0);
+        expect(bb.getCurrentCity().chaos).toStrictEqual(0);
+        expect(bb.cities[otherCity].chaos).toStrictEqual(HIGH_CHAOS);
       });
     });
 
@@ -129,16 +141,13 @@ describe("Bladeburner Actions", () => {
       });
     });
 
-    describe.each([SampleContract, SampleOperation, BlackOperations["Operation Archangel"].id])(
-      "non-general actions increase rank",
-      (id) => {
-        it(`${id.type}`, () => {
-          before = bb.rank;
-          complete(id, forceSuccess);
-          expect(bb.rank).toBeGreaterThan(before);
-        });
-      },
-    );
+    describe.each([SampleContract, SampleOperation, SampleBlackOp])("non-general actions increase rank", (id) => {
+      it(`${id.type}`, () => {
+        before = bb.rank;
+        complete(id, forceSuccess);
+        expect(bb.rank).toBeGreaterThan(before);
+      });
+    });
 
     describe("non-general actions increase rank", () => {
       let beforeMinor, minorGain, beforeMajor, majorGain;
@@ -284,6 +293,15 @@ describe("Bladeburner Actions", () => {
     resetCity();
   }
 
+  function gainHighCharismaLevel() {
+    for (let i = 1; i <= 1000; ++i) {
+      const aug = new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor);
+      aug.level = i;
+      applyAugmentation(aug);
+    }
+    Player.gainCharismaExp(1e6);
+  }
+
   function resetCity() {
     bb.cities[bb.city].chaos = 0;
     bb.cities[bb.city].comms = 100;
@@ -295,7 +313,7 @@ describe("Bladeburner Actions", () => {
 
   function allCitiesHighChaos() {
     for (const city of Object.values(bb.cities)) {
-      city.chaos = 1e12;
+      city.chaos = HIGH_CHAOS;
     }
   }
 
@@ -319,7 +337,7 @@ describe("Bladeburner Actions", () => {
     const action = bb.getActionObject(id);
     if ("count" in action) action.count = 1;
     if (action.type === BladeburnerActionType.Operation) action.autoLevel = true;
-    if (id.type === "Black Operations") bb.numBlackOpsComplete = (<BlackOperation>action).n;
+    if (action.type === BladeburnerActionType.BlackOp) bb.numBlackOpsComplete = action.n;
     bb.startAction(id);
   }
 

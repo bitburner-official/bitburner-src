@@ -18,7 +18,7 @@ import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { Player } from "@player";
 
-interface IConstructorParams {
+interface HacknetServerConstructorParams {
   adminRights?: boolean;
   hostname: string;
   ip?: IPAddress;
@@ -50,12 +50,12 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
   // Total number of hashes earned by this server
   totalHashesGenerated = 0;
 
-  // Flag indicating whether this is a purchased server
+  // Flag indicating whether this is a server owned by the player (e.g., home, cloud servers, hacknet servers)
   purchasedByPlayer = true;
 
   isHacknetServer = true;
 
-  constructor(params: IConstructorParams = { hostname: "", ip: createRandomIp() }) {
+  constructor(params: HacknetServerConstructorParams = { hostname: "", ip: createRandomIp() }) {
     super(params);
 
     this.maxRam = 1;

@@ -14,9 +14,39 @@ setTerritoryWarfare(engage: boolean): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  engage | boolean | Whether or not to engage in territory clashes. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+engage
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether or not to engage in territory clashes.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

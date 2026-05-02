@@ -14,8 +14,60 @@ interface PeopleKilledRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [numPeopleKilled](./bitburner.peoplekilledrequirement.numpeoplekilled.md) |  | number |  |
-|  [type](./bitburner.peoplekilledrequirement.type.md) |  | "numPeopleKilled" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[numPeopleKilled](./bitburner.peoplekilledrequirement.numpeoplekilled.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.peoplekilledrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"numPeopleKilled"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

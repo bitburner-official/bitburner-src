@@ -14,10 +14,94 @@ interface IStyleSettings
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [fontFamily](./bitburner.istylesettings.fontfamily.md) |  | string |  |
-|  [fontSize](./bitburner.istylesettings.fontsize.md) |  | number |  |
-|  [lineHeight](./bitburner.istylesettings.lineheight.md) |  | number |  |
-|  [tailFontSize](./bitburner.istylesettings.tailfontsize.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[fontFamily](./bitburner.istylesettings.fontfamily.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[fontSize](./bitburner.istylesettings.fontsize.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[lineHeight](./bitburner.istylesettings.lineheight.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[tailFontSize](./bitburner.istylesettings.tailfontsize.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

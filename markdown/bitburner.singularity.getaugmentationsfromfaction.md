@@ -9,14 +9,44 @@ Get a list of augmentation available from a faction.
 **Signature:**
 
 ```typescript
-getAugmentationsFromFaction(faction: string): string[];
+getAugmentationsFromFaction(faction: FactionName): string[];
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  faction | string | Name of faction. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+faction
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of faction.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -1,9 +1,8 @@
 // React Component for displaying an Division's overview information
 // (top-left panel in the Division UI)
 import React, { useState } from "react";
-import { MathJax } from "better-react-mathjax";
 
-import { CorpUnlockName, IndustryType } from "@enums";
+import { IndustryType } from "@enums";
 import { hireAdVert } from "../Actions";
 import { formatBigNumber, formatCorpMultiplier } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
@@ -23,6 +22,8 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import HelpIcon from "@mui/icons-material/Help";
 import Box from "@mui/material/Box";
+import MathNotation from "../../Documentation/data/MathNotation.json";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
 
 function MakeProductButton(): React.ReactElement {
   const corp = useCorporation();
@@ -41,7 +42,7 @@ function MakeProductButton(): React.ReactElement {
   }
 
   let createProductButtonText = "";
-  switch (division.type) {
+  switch (division.industry) {
     case IndustryType.Restaurant:
       createProductButtonText = "Build Restaurant";
       break;
@@ -102,15 +103,11 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
   const [researchOpen, setResearchOpen] = useState(false);
   const profit = division.lastCycleRevenue - division.lastCycleExpenses;
 
-  let advertisingInfo = false;
   const advertisingFactors = division.getAdvertisingFactors();
   const awarenessFac = advertisingFactors[1];
   const popularityFac = advertisingFactors[2];
   const ratioFac = advertisingFactors[3];
   const totalAdvertisingFac = advertisingFactors[0];
-  if (corp.unlocks.has(CorpUnlockName.VeChain)) {
-    advertisingInfo = true;
-  }
 
   function convertEffectFacToGraphic(fac: number): string {
     return createProgressBarText({
@@ -122,7 +119,7 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
   return (
     <Paper>
       <Typography>
-        Industry: {division.type} (Corp Funds: <Money money={corp.funds} />)
+        Industry: {division.industry} (Corp Funds: <Money money={corp.funds} />)
       </Typography>
       <br />
       <StatsTable
@@ -131,29 +128,30 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
           ["Popularity:", formatBigNumber(division.popularity)],
         ]}
       />
-      {advertisingInfo && (
-        <Tooltip
-          title={
-            <>
-              <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
-              <br />
-              <MathJax>{`\\(\\text{${division.type} Industry: }\\alpha = ${division.advertisingFactor}\\)`}</MathJax>
-              <MathJax>{`\\(\\text{multiplier} = \\left((\\text{awareness}+1)^{\\alpha} \\times (\\text{popularity}+1)^{\\alpha} \\times \\frac{\\text{popularity}+0.001}{\\text{awareness}}\\right)^{0.85}\\)`}</MathJax>
-              <br />
-              <StatsTable
-                rows={[
-                  ["Awareness Bonus:", formatCorpMultiplier(Math.pow(awarenessFac, 0.85))],
-                  ["Popularity Bonus:", formatCorpMultiplier(Math.pow(popularityFac, 0.85))],
-                  ["Ratio Multiplier:", formatCorpMultiplier(Math.pow(ratioFac, 0.85))],
-                  [<b key={1}>Total:</b>, <b key={2}>{formatCorpMultiplier(totalAdvertisingFac)}</b>],
-                ]}
-              />
-            </>
-          }
-        >
-          <Typography>Advertising Multiplier: {formatCorpMultiplier(totalAdvertisingFac)}</Typography>
-        </Tooltip>
-      )}
+      <Tooltip
+        title={
+          <>
+            <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
+            <br />
+            <Typography>
+              {division.industry} Industry: 𝞪 = {division.advertisingFactor}
+            </Typography>
+            <br />
+            <MathNotationOutput notation={MathNotation.CorpAdvertFactor} />
+            <br />
+            <StatsTable
+              rows={[
+                ["Awareness Bonus:", formatCorpMultiplier(Math.pow(awarenessFac, 0.85))],
+                ["Popularity Bonus:", formatCorpMultiplier(Math.pow(popularityFac, 0.85))],
+                ["Ratio Multiplier:", formatCorpMultiplier(Math.pow(ratioFac, 0.85))],
+                [<b key={1}>Total:</b>, <b key={2}>{formatCorpMultiplier(totalAdvertisingFac)}</b>],
+              ]}
+            />
+          </>
+        }
+      >
+        <Typography>Advertising Multiplier: {formatCorpMultiplier(totalAdvertisingFac)}</Typography>
+      </Tooltip>
       <br />
       <StatsTable
         rows={[

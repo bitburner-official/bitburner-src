@@ -14,8 +14,64 @@ interface AugmentPair
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cost](./bitburner.augmentpair.cost.md) |  | number | augmentation cost |
-|  [name](./bitburner.augmentpair.name.md) |  | string | augmentation name |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cost](./bitburner.augmentpair.cost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+augmentation cost
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.augmentpair.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+augmentation name
+
+
+</td></tr>
+</tbody></table>
 

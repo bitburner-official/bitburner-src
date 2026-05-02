@@ -1,3 +1,4 @@
+import { DarknetConstants } from "../DarkNet/Constants";
 import { DarkWebItem } from "./DarkWebItem";
 import { CompletedProgramName } from "@enums";
 
@@ -11,5 +12,10 @@ export const DarkWebItems = {
   DeepscanV1: new DarkWebItem(CompletedProgramName.deepScan1, 500000, "Enables 'scan-analyze' with a depth up to 5."),
   DeepscanV2: new DarkWebItem(CompletedProgramName.deepScan2, 25e6, "Enables 'scan-analyze' with a depth up to 10."),
   AutolinkProgram: new DarkWebItem(CompletedProgramName.autoLink, 1e6, "Enables direct connect via 'scan-analyze'."),
+  DarkScapeProgram: new DarkWebItem(
+    CompletedProgramName.darkscape,
+    DarknetConstants.DarkscapeNavigatorPrice,
+    "Unlock access to the Dark Net.",
+  ),
   FormulasProgram: new DarkWebItem(CompletedProgramName.formulas, 5e9, "Unlock access to the formulas API."),
 };

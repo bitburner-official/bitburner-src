@@ -14,9 +14,39 @@ getOwnedAugmentations(purchased?: boolean): string[];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  purchased | boolean | _(Optional)_ Specifies whether the returned array should include Augmentations you have purchased but not yet installed. By default, this argument is false which means that the return value will NOT have the purchased Augmentations. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+purchased
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Specifies whether the returned array should include Augmentations you have purchased but not yet installed. By default, this argument is false which means that the return value will NOT have the purchased Augmentations.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

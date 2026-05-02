@@ -2,21 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [GymType](./bitburner.gymtype.md)
 
-## GymType enum
+## GymType type
 
 
 **Signature:**
 
 ```typescript
-declare enum GymType 
+type GymType = _ValueOf<GymEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  agility | <code>&quot;agi&quot;</code> |  |
-|  defense | <code>&quot;def&quot;</code> |  |
-|  dexterity | <code>&quot;dex&quot;</code> |  |
-|  strength | <code>&quot;str&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)
 

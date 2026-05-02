@@ -22,11 +22,71 @@ makeMove(
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  x | number | x coordinate of move to make |
-|  y | number | y coordinate of move to make |
-|  playAsWhite | boolean | _(Optional)_ optional. If true, attempts to play as white and then wait for black's move. Can only be used when playing as white when the opponent is set to "No AI" |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+x
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+x coordinate of move to make
+
+
+</td></tr>
+<tr><td>
+
+y
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+y coordinate of move to make
+
+
+</td></tr>
+<tr><td>
+
+playAsWhite
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ optional. If true, attempts to play as white and then wait for black's move. Can only be used when playing as white when the opponent is set to "No AI"
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

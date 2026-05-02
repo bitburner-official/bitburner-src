@@ -1,5 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { BlackOperation, Operation } from "../Actions";
+import type { BlackOperation } from "../Actions/BlackOperation";
+import type { Operation } from "../Actions/Operation";
 
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
@@ -14,25 +15,26 @@ interface TeamSizeModalProps {
 }
 
 export function TeamSizeModal({ bladeburner, action, open, onClose }: TeamSizeModalProps): React.ReactElement {
-  const [teamSize, setTeamSize] = useState<number | undefined>();
+  const [teamSize, setTeamSize] = useState(0);
 
   function confirmTeamSize(event: React.FormEvent): void {
     // Prevent reloading page when submitting form
     event.preventDefault();
-    if (teamSize === undefined) return;
-    const num = Math.round(teamSize);
-    if (isNaN(num) || num < 0) {
-      dialogBoxCreate("Invalid value entered for number of Team Members (must be numeric and non-negative)");
-    } else {
-      action.teamCount = num;
+    if (!Number.isInteger(teamSize) || teamSize < 0) {
+      dialogBoxCreate("Invalid value entered for number of Team Members (must be a non-negative integer)");
+      return;
     }
+    action.teamCount = teamSize;
     onClose();
   }
 
   function onTeamSize(event: React.ChangeEvent<HTMLInputElement>): void {
-    const x = parseFloat(event.target.value);
-    if (x > bladeburner.teamSize) setTeamSize(bladeburner.teamSize);
-    else setTeamSize(x);
+    const newTeamSize = Number(event.target.value);
+    if (newTeamSize > bladeburner.teamSize) {
+      setTeamSize(bladeburner.teamSize);
+    } else {
+      setTeamSize(newTeamSize);
+    }
   }
 
   return (

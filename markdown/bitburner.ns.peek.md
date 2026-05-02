@@ -14,9 +14,39 @@ peek(portNumber: number): any;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  portNumber | number | Port to peek. Must be a positive integer. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+portNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Port to peek. Must be a positive integer.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -28,5 +58,5 @@ Data in the specified port.
 
 RAM cost: 0 GB
 
-This function is used to peek at the data from a port. It returns the first element in the specified port without removing that element. If the port is empty, the string “NULL PORT DATA” will be returned.
+This function is used to peek at the data from a port. It returns the first element in the specified port without removing that element. If the port is empty, the string “NULL PORT DATA” will be returned. Ports are shared across all hosts and contents are reset on game restart.
 

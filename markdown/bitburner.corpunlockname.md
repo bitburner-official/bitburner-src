@@ -13,7 +13,6 @@ type CorpUnlockName =
   | "Smart Supply"
   | "Market Research - Demand"
   | "Market Data - Competition"
-  | "VeChain"
   | "Shady Accounting"
   | "Government Partnership"
   | "Warehouse API"

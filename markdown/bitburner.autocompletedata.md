@@ -14,20 +14,208 @@ interface AutocompleteData
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [command](./bitburner.autocompletedata.command.md) |  | string | <p>The raw command string that you have typed until you press \[Tab\] to use the autocomplete feature.</p><p>For example, if you type <code>[Space]run test.js[Space][Space][Space][Press tab to use autocomplete]</code>, "command" will contain all space characters (1 space character before "run" and 3 space characters after ".js").</p> |
-|  [enums](./bitburner.autocompletedata.enums.md) |  | [NSEnums](./bitburner.nsenums.md) | Netscript Enums |
-|  [filename](./bitburner.autocompletedata.filename.md) |  | string | The filename of the script about to be run |
-|  [hostname](./bitburner.autocompletedata.hostname.md) |  | string | The hostname of the server the script would be running on |
-|  [processes](./bitburner.autocompletedata.processes.md) |  | [ProcessInfo](./bitburner.processinfo.md)<!-- -->\[\] | The processes running on the host |
-|  [scripts](./bitburner.autocompletedata.scripts.md) |  | string\[\] | All scripts on the current server |
-|  [servers](./bitburner.autocompletedata.servers.md) |  | string\[\] | <p>All server hostnames.</p><p>Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do not satisfy their requirements.</p> |
-|  [txts](./bitburner.autocompletedata.txts.md) |  | string\[\] | All text files on the current server |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[command](./bitburner.autocompletedata.command.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The raw command string that you have typed until you press \[Tab\] to use the autocomplete feature.
+
+For example, if you type `[Space]run test.js[Space][Space][Space][Press tab to use autocomplete]`<!-- -->, "command" will contain all space characters (1 space character before "run" and 3 space characters after ".js").
+
+
+</td></tr>
+<tr><td>
+
+[enums](./bitburner.autocompletedata.enums.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[NSEnums](./bitburner.nsenums.md)
+
+
+</td><td>
+
+Netscript Enums
+
+
+</td></tr>
+<tr><td>
+
+[filename](./bitburner.autocompletedata.filename.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The filename of the script about to be run
+
+
+</td></tr>
+<tr><td>
+
+[hostname](./bitburner.autocompletedata.hostname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The hostname of the server the script would be running on
+
+
+</td></tr>
+<tr><td>
+
+[processes](./bitburner.autocompletedata.processes.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ProcessInfo](./bitburner.processinfo.md)<!-- -->\[\]
+
+
+</td><td>
+
+The processes running on the host
+
+
+</td></tr>
+<tr><td>
+
+[scripts](./bitburner.autocompletedata.scripts.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+All scripts on the current server
+
+
+</td></tr>
+<tr><td>
+
+[servers](./bitburner.autocompletedata.servers.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+All server hostnames.
+
+Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do not satisfy their requirements.
+
+
+</td></tr>
+<tr><td>
+
+[txts](./bitburner.autocompletedata.txts.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+All text files on the current server
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [flags(schema)](./bitburner.autocompletedata.flags.md) | Parses the flags schema on the already inputted flags |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[flags(schema)](./bitburner.autocompletedata.flags.md)
+
+
+</td><td>
+
+Parses the flags schema on the already inputted flags
+
+
+</td></tr>
+</tbody></table>
 

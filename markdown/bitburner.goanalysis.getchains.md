@@ -4,13 +4,23 @@
 
 ## GoAnalysis.getChains() method
 
-Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
+Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null`<!-- -->.
 
 Takes an optional boardState argument; by default uses the current board state.
 
 The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
 
-For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board. <pre lang="javascript"> \[ \[ 0,0,0,3,4\], \[ 1,0,0,3,3\], \[ 1,1,0,0,0\], \[null,1,0,2,2\], \[null,1,0,2,5\], \] </pre>
+For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board.
+
+```
+[
+  [   0,0,0,3,4],
+  [   1,0,0,3,3],
+  [   1,1,0,0,0],
+  [null,1,0,2,2],
+  [null,1,0,2,5],
+]
+```
 
 **Signature:**
 
@@ -20,9 +30,39 @@ getChains(boardState?: string[]): (number | null)[][];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  boardState | string\[\] | _(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+boardState
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+_(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -32,5 +72,7 @@ A 2D array of numbers identifying the chain ID of each point.
 
 ## Remarks
 
-RAM cost: 16 GB (This is intentionally expensive; you can derive this info from just getBoardState() )
+RAM cost: 16 GB
+
+(This is intentionally expensive; you can derive this info from just getBoardState() )
 

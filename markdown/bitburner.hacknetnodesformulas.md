@@ -14,12 +14,82 @@ interface HacknetNodesFormulas
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [constants()](./bitburner.hacknetnodesformulas.constants.md) | All constants used by the game. |
-|  [coreUpgradeCost(startingCore, extraCores, costMult)](./bitburner.hacknetnodesformulas.coreupgradecost.md) | Calculate cost of upgrading hacknet node cores. |
-|  [hacknetNodeCost(n, mult)](./bitburner.hacknetnodesformulas.hacknetnodecost.md) | Calculate the cost of a hacknet node. |
-|  [levelUpgradeCost(startingLevel, extraLevels, costMult)](./bitburner.hacknetnodesformulas.levelupgradecost.md) | Calculate cost of upgrading hacknet node level. |
-|  [moneyGainRate(level, ram, cores, mult)](./bitburner.hacknetnodesformulas.moneygainrate.md) | Calculate money gain rate. |
-|  [ramUpgradeCost(startingRam, extraLevels, costMult)](./bitburner.hacknetnodesformulas.ramupgradecost.md) | Calculate cost of upgrading hacknet node ram. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[constants()](./bitburner.hacknetnodesformulas.constants.md)
+
+
+</td><td>
+
+All constants used by the game.
+
+
+</td></tr>
+<tr><td>
+
+[coreUpgradeCost(startingCore, extraCores, costMult)](./bitburner.hacknetnodesformulas.coreupgradecost.md)
+
+
+</td><td>
+
+Calculate cost of upgrading hacknet node cores.
+
+
+</td></tr>
+<tr><td>
+
+[hacknetNodeCost(n, mult)](./bitburner.hacknetnodesformulas.hacknetnodecost.md)
+
+
+</td><td>
+
+Calculate the cost of a hacknet node.
+
+
+</td></tr>
+<tr><td>
+
+[levelUpgradeCost(startingLevel, extraLevels, costMult)](./bitburner.hacknetnodesformulas.levelupgradecost.md)
+
+
+</td><td>
+
+Calculate cost of upgrading hacknet node level.
+
+
+</td></tr>
+<tr><td>
+
+[moneyGainRate(level, ram, cores, mult)](./bitburner.hacknetnodesformulas.moneygainrate.md)
+
+
+</td><td>
+
+Calculate money gain rate.
+
+
+</td></tr>
+<tr><td>
+
+[ramUpgradeCost(startingRam, extraLevels, costMult)](./bitburner.hacknetnodesformulas.ramupgradecost.md)
+
+
+</td><td>
+
+Calculate cost of upgrading hacknet node ram.
+
+
+</td></tr>
+</tbody></table>
 

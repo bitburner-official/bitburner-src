@@ -9,9 +9,9 @@ Company Work
 **Signature:**
 
 ```typescript
-export interface CompanyWorkTask extends BaseTask 
+interface CompanyWorkTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
@@ -19,8 +19,60 @@ An object representing the current work for a company
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [companyName](./bitburner.companyworktask.companyname.md) |  | [CompanyName](./bitburner.companyname.md) |  |
-|  [type](./bitburner.companyworktask.type.md) |  | "COMPANY" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[companyName](./bitburner.companyworktask.companyname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CompanyName](./bitburner.companyname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.companyworktask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"COMPANY"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

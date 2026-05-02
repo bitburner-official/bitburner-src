@@ -9,11 +9,11 @@ List all current faction invitations.
 **Signature:**
 
 ```typescript
-checkFactionInvitations(): string[];
+checkFactionInvitations(): FactionName[];
 ```
 **Returns:**
 
-string\[\]
+[FactionName](./bitburner.factionname.md)<!-- -->\[\]
 
 Array with the name of all Factions you currently have outstanding invitations from.
 

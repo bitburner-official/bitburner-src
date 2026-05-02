@@ -14,9 +14,39 @@ getBlackOpRank(name: BladeburnerBlackOpName): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  name | [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md) | Name of BlackOp. Must be an exact match. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+name
+
+
+</td><td>
+
+[BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md)
+
+
+</td><td>
+
+Name of BlackOp. Must be an exact match.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

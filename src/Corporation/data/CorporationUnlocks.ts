@@ -46,29 +46,20 @@ export const CorpUnlocks: Record<CorpUnlockName, CorpUnlock> = {
       "every material and product.",
   },
 
-  [CorpUnlockName.VeChain]: {
-    name: CorpUnlockName.VeChain,
-    price: 10e9,
-    desc:
-      "Use AI and blockchain technology to identify where you can improve your supply chain systems. " +
-      "This upgrade will allow you to view a wide array of useful statistics about your " +
-      "Corporation.",
-  },
-
   [CorpUnlockName.ShadyAccounting]: {
     name: CorpUnlockName.ShadyAccounting,
     price: 500e12,
     desc:
       "Utilize unscrupulous accounting practices and pay off government officials to save money " +
-      "on taxes. This reduces the dividend tax rate by 5%.",
+      "on tribute. This reduces the tribute modifier by 0.05.",
   },
 
   [CorpUnlockName.GovernmentPartnership]: {
     name: CorpUnlockName.GovernmentPartnership,
     price: 2e15,
     desc:
-      "Help national governments further their agendas in exchange for lowered taxes. " +
-      "This reduces the dividend tax rate by 10%",
+      "Help national governments further their agendas in exchange for lowered tribute. " +
+      "This reduces the tribute modifier by 0.1",
   },
 
   [CorpUnlockName.WarehouseAPI]: {

@@ -18,14 +18,13 @@ import { checkInfiniteLoop } from "../../Script/RamCalculations";
 import { Settings } from "../../Settings/Settings";
 import { iTutorialNextStep, ITutorial, iTutorialSteps } from "../../InteractiveTutorial";
 import { debounce } from "lodash";
-import { saveObject } from "../../SaveObject";
 import { GetServer } from "../../Server/AllServers";
 
 import { PromptEvent } from "../../ui/React/PromptManager";
 
 import { useRerender } from "../../ui/React/hooks";
 
-import { isUnsavedFile, getServerCode, makeModel } from "./utils";
+import { isUnsavedFile, getServerCode, makeModel, saveScript } from "./utils";
 import { OpenScript } from "./OpenScript";
 import { Tabs } from "./Tabs";
 import { Toolbar } from "./Toolbar";
@@ -36,7 +35,6 @@ import { useCallback } from "react";
 import { type AST, getFileType, getModuleScript, parseAST } from "../../utils/ScriptTransformer";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { hasScriptExtension, isLegacyScript, type ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import type { BaseServer } from "../../Server/BaseServer";
 import {
   convertKeyboardEventToKeyCombination,
@@ -44,10 +42,9 @@ import {
   determineKeyBindingTypes,
   ScriptEditorAction,
 } from "../../utils/KeyBindingUtils";
-import { SpecialServers } from "../../Server/data/SpecialServers";
-import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { ToastVariant } from "@enums";
 import { createRunningScriptInstance, startWorkerScript } from "../../NetscriptWorker";
+import type { PositiveInteger } from "../../types";
+import { openScripts } from "../EditorData";
 
 // Extend acorn-walk to support TypeScript nodes.
 extendAcornWalkForTypeScriptNodes(walk.base);
@@ -63,7 +60,7 @@ interface IProps {
   hostname: string;
   vim: boolean;
 }
-const openScripts: OpenScript[] = [];
+
 let currentScript: OpenScript | null = null;
 
 function Root(props: IProps): React.ReactElement {
@@ -176,31 +173,42 @@ function Root(props: IProps): React.ReactElement {
     reloadModelOfCurrentScript();
   }
 
-  const { showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
+  const { options, showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
-  const save = useCallback(() => {
+  const beautify = useCallback(async (): Promise<void> => {
+    const action = editorRef.current?.getAction("editor.action.formatDocument");
+    if (action == null) {
+      return;
+    }
+    return action.run().catch((error) => console.error(error));
+  }, []);
+
+  const save = useCallback(async () => {
     if (currentScript === null) {
       console.error("currentScript is null when it shouldn't be. Unable to save script");
       return;
     }
+
+    const preSave = options.beautifyOnSave ? beautify : () => Promise.resolve();
+
     // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
       //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
+      if (currentScript.path !== "n00dles.js") {
         dialogBoxCreate("Don't change the script name for now.");
         return;
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
-      const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
-      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
+      const expectedCleanCode = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
+      if (!cleanCode.includes(expectedCleanCode)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
       }
 
       //Save the script
+      await preSave();
       saveScript(currentScript);
       Router.toPage(Page.Terminal);
 
@@ -208,11 +216,12 @@ function Root(props: IProps): React.ReactElement {
 
       return;
     }
+    await preSave();
     saveScript(currentScript);
     rerender();
-  }, [rerender]);
+  }, [rerender, options.beautifyOnSave, beautify]);
 
-  const run = useCallback(() => {
+  const run = useCallback(async () => {
     if (currentScript === null) {
       return;
     }
@@ -228,9 +237,14 @@ function Root(props: IProps): React.ReactElement {
     }
 
     // Always save before doing anything else.
-    save();
+    await save();
 
-    const result = createRunningScriptInstance(server, currentScript.path, null, 1, []);
+    const result = createRunningScriptInstance(
+      server,
+      currentScript.path,
+      { threads: 1 as PositiveInteger, temporary: false, preventDuplicates: false },
+      [],
+    );
     if (!result.success) {
       dialogBoxCreate(result.message);
       return;
@@ -239,7 +253,7 @@ function Root(props: IProps): React.ReactElement {
   }, [save]);
 
   useEffect(() => {
-    function keydown(event: KeyboardEvent): void {
+    async function keydown(event: KeyboardEvent) {
       if (Settings.DisableHotkeys) {
         return;
       }
@@ -247,7 +261,7 @@ function Root(props: IProps): React.ReactElement {
       if (keyBindingTypes.has(ScriptEditorAction.Save)) {
         event.preventDefault();
         event.stopPropagation();
-        save();
+        await save();
       }
       if (keyBindingTypes.has(ScriptEditorAction.GoToTerminal)) {
         event.preventDefault();
@@ -255,11 +269,14 @@ function Root(props: IProps): React.ReactElement {
       }
       if (keyBindingTypes.has(ScriptEditorAction.Run)) {
         event.preventDefault();
-        run();
+        await run();
       }
     }
-    document.addEventListener("keydown", keydown);
-    return () => document.removeEventListener("keydown", keydown);
+    const listener = (event: KeyboardEvent) => {
+      keydown(event).catch((error) => console.error(error));
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
   }, [save, run]);
 
   function infLoop(ast: AST, code: string): void {
@@ -391,23 +408,6 @@ function Root(props: IProps): React.ReactElement {
     if (currentScript !== null) {
       currentScript.code = newCode;
       currentScript.lastPosition = newPos;
-    }
-  }
-
-  function saveScript(scriptToSave: OpenScript): void {
-    const server = GetServer(scriptToSave.hostname);
-    if (!server) {
-      dialogBoxCreate(`Server ${scriptToSave.hostname} does not exist.`);
-      return;
-    }
-    // Show a warning message if the file is on a non-home server.
-    if (scriptToSave.hostname !== SpecialServers.Home) {
-      SnackbarEvents.emit("You saved a file on a non-home server!", ToastVariant.WARNING, 3000);
-    }
-    // This server helper already handles overwriting, etc.
-    server.writeToContentFile(scriptToSave.path, scriptToSave.code);
-    if (Settings.SaveGameOnFileSave) {
-      saveObject.saveGame().catch((error) => exceptionAlert(error));
     }
   }
 
@@ -599,7 +599,7 @@ function Root(props: IProps): React.ReactElement {
 
         {statusBarRef.current}
 
-        <Toolbar onSave={save} onRun={run} editor={editorRef.current} />
+        <Toolbar onSave={save} onRun={run} editor={editorRef.current} onBeautify={beautify} />
       </div>
       {!currentScript && <NoOpenScripts />}
     </>

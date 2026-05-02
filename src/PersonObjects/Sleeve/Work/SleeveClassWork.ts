@@ -1,6 +1,6 @@
 import { ClassType, LocationName, UniversityClassType } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
-import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
+import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { Classes } from "../../../Work/ClassWork";
 import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
@@ -9,7 +9,7 @@ import { Locations } from "../../../Locations/Locations";
 import { isMember } from "../../../utils/EnumHelper";
 import { assertObject } from "../../../utils/TypeAssertion";
 
-export const isSleeveClassWork = (w: SleeveWorkClass | null): w is SleeveClassWork =>
+export const isSleeveClassWork = (w: SleeveBaseWork | null): w is SleeveClassWork =>
   w !== null && w.type === SleeveWorkType.CLASS;
 
 interface ClassWorkParams {
@@ -17,7 +17,7 @@ interface ClassWorkParams {
   location: LocationName;
 }
 
-export class SleeveClassWork extends SleeveWorkClass {
+export class SleeveClassWork extends SleeveBaseWork {
   type: SleeveWorkType.CLASS = SleeveWorkType.CLASS;
   classType: ClassType;
   location: LocationName;
@@ -46,6 +46,7 @@ export class SleeveClassWork extends SleeveWorkClass {
       type: SleeveWorkType.CLASS as const,
       classType: this.classType,
       location: this.location,
+      nextCompletion: this.nextCompletion,
     };
   }
   /** Serialize the current object to a JSON save state. */

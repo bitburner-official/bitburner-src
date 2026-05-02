@@ -14,10 +14,55 @@ fileExists(filename: string, host?: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  filename | string | Filename of file to check. |
-|  host | string | _(Optional)_ Host of target server. Optional, defaults to the server the script is running on. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+filename
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of file to check.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of target server. Optional, defaults to the server the script is running on.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

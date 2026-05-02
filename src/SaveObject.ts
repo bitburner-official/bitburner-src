@@ -23,12 +23,20 @@ import { pushGameSaved, pushImportResult } from "./Electron";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
-import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
+import { decodeBase64BytesToBytes, isBinaryFormat, isSteamCloudFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
+import { populateDarknet } from "./DarkNet/controllers/NetworkGenerator";
+import { getDarkNetSave, loadDarkNet } from "./DarkNet/effects/SaveLoad";
+import { giveExportBonus } from "./ExportBonus";
+import { loadInfiltrations } from "./Infiltration/SaveLoadInfiltration";
+import { InfiltrationState } from "./Infiltration/formulas/game";
+import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
+import { loadSettings } from "./Settings/SettingsUtils";
+import { getBitNodeLevel } from "./BitNode/BitNodeUtils";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -65,6 +73,7 @@ export interface ImportPlayerData {
   bitNodeLevel: number;
   sourceFiles: number;
   exploits: number;
+  syncSteamAchievements: boolean;
 }
 
 export type BitburnerSaveObjectType = {
@@ -81,6 +90,15 @@ export type BitburnerSaveObjectType = {
   LastExportBonus?: string;
   StaneksGiftSave: string;
   GoSave: unknown; // "loadGo" function can process unknown data
+  DarknetSave: unknown;
+  InfiltrationsSave: unknown;
+};
+
+type ParsedSaveData = {
+  data: {
+    PlayerSave: string;
+    SettingsSave: unknown;
+  };
 };
 
 /**
@@ -136,6 +154,40 @@ function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject 
   }
 }
 
+function assertParsedSaveData(parsedSaveData: unknown): asserts parsedSaveData is ParsedSaveData {
+  if (
+    !isObject(parsedSaveData) ||
+    parsedSaveData.ctor !== "BitburnerSaveObject" ||
+    !isObject(parsedSaveData.data) ||
+    typeof parsedSaveData.data.PlayerSave !== "string"
+  ) {
+    console.error("parsedSaveData:", parsedSaveData);
+    throw new Error("The parsed save data is not valid.");
+  }
+}
+
+/**
+ * We sometimes need the raw data in the loaded save object for debugging and showing useful error messages. This object
+ * contains only what we need.
+ */
+export const loadedSaveObjectMiniDump = {
+  // VersionSave is always a string. It has 3 formats/possible values:
+  // - Empty string: Pre-v0.20.0.
+  // - '"x.y.z"': v0.20.0 to the last v0 version. Notice how I use both single quotes and double quotes. The double
+  // quotes are part of the string value. For example, with v0.20.0, the string value is "0.20.0" (8 chars, not 6 chars).
+  // - x: Starting from v1, we used the version number instead of the version string.
+  //
+  // The history of this property in the save data is complicated. In v0, we used the version string in src\Constants.ts,
+  // then we switched to the version number in v1. In v0, the version string has 2 formats:
+  // - x.y: Very early versions (v0.1 to roughly v0.17) used this format.
+  // - x.y.z: Starting from roughly v0.17, we used this format. Note that in some commits, we mistakenly used the x.y
+  // format.
+  //
+  // However, the save data only contains VersionSave starting from v0.20.0, so if we load a pre-v0.20.0 save file, this
+  // property will be an empty string.
+  VersionSave: undefined as string | undefined,
+};
+
 class BitburnerSaveObject implements BitburnerSaveObjectType {
   PlayerSave = "";
   AllServersSave = "";
@@ -150,6 +202,8 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   LastExportBonus = "0";
   StaneksGiftSave = "";
   GoSave = "";
+  DarknetSave = "";
+  InfiltrationsSave = "";
 
   async getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
     this.PlayerSave = JSON.stringify(Player);
@@ -170,6 +224,8 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
     this.GoSave = JSON.stringify(getGoSave());
+    this.DarknetSave = JSON.stringify(getDarkNetSave());
+    this.InfiltrationsSave = JSON.stringify(InfiltrationState);
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
@@ -215,10 +271,12 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
      * - Base64 format: save file uses .json extension. Save data is the base64-encoded json save string.
      */
     const extension = canUseBinaryFormat() ? "json.gz" : "json";
-    return `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.${extension}`;
+    return `bitburnerSave_${epochTime}_BN${bn}x${getBitNodeLevel()}.${extension}`;
   }
 
   async exportGame(): Promise<void> {
+    // Give the export bonus before exporting the save data
+    giveExportBonus();
     let saveData;
     try {
       saveData = await this.getSaveData();
@@ -230,9 +288,37 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     downloadContentAsFile(saveData, filename);
   }
 
-  async importGame(saveData: SaveData, reload = true): Promise<void> {
+  async importGame(
+    saveData: SaveData,
+    overrideSettings?: {
+      SyncSteamAchievements: boolean;
+    },
+  ): Promise<void> {
     if (!saveData || saveData.length === 0) {
-      throw new Error("Invalid import string");
+      dialogBoxCreate("Invalid save data");
+      return;
+    }
+    // Modify settings in save data if needed (i.e., toggle SyncSteamAchievements before importing).
+    if (overrideSettings) {
+      let parsedSaveData;
+      try {
+        parsedSaveData = await this.getParsedSaveData(saveData);
+        // Validate SettingsSave
+        if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
+          // Parse settings from data.SettingsSave
+          const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
+          assertObject(settings);
+          // Modify setting
+          settings.SyncSteamAchievements = overrideSettings.SyncSteamAchievements;
+          // Save modified data back to saveData
+          parsedSaveData.data.SettingsSave = JSON.stringify(settings);
+          saveData = await encodeJsonSaveString(JSON.stringify(parsedSaveData));
+        }
+      } catch (error) {
+        console.error(error);
+        dialogBoxCreate(`Cannot override settings: ${error}`);
+        return;
+      }
     }
     try {
       await save(saveData);
@@ -246,64 +332,91 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       dialogBoxCreate(`Cannot import save data: ${error}`);
       return;
     }
-    if (reload) {
-      setTimeout(() => location.reload(), 1000);
-    }
+    setTimeout(() => location.reload(), 0);
   }
 
   async getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
-    if (files === null) return Promise.reject(new Error("No file selected"));
+    if (files === null) {
+      throw new Error("No file selected");
+    }
     const file = files[0];
-    if (!file) return Promise.reject(new Error("Invalid file selected"));
+    if (!file) {
+      throw new Error("Invalid file selected");
+    }
 
     const rawData = new Uint8Array(await file.arrayBuffer());
     if (isBinaryFormat(rawData)) {
       return rawData;
-    } else {
-      return new TextDecoder().decode(rawData);
     }
+    if (isSteamCloudFormat(rawData)) {
+      return decodeBase64BytesToBytes(rawData);
+    }
+    return new TextDecoder().decode(rawData);
   }
 
-  async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
-    if (!saveData || saveData.length === 0) throw new Error("Invalid save data");
+  async getParsedSaveData(saveData: SaveData): Promise<ParsedSaveData> {
+    if (!saveData || saveData.length === 0) {
+      throw new Error("Invalid save data");
+    }
+
+    if (typeof saveData === "string" && saveData.startsWith(`{"ctor"`)) {
+      throw new Error(
+        "The save data is invalid. You must import the original save file. If it's a .gz file, don't decompress it.",
+      );
+    }
 
     let decodedSaveData;
     try {
       decodedSaveData = await decodeSaveData(saveData);
     } catch (error) {
       console.error(error);
+      // Rethrow immediately if the error is SaveDataError; otherwise, handle it below.
       if (error instanceof SaveDataError) {
-        return Promise.reject(error);
+        throw error;
       }
     }
 
     if (!decodedSaveData || decodedSaveData === "") {
       console.error("decodedSaveData:", decodedSaveData);
-      return Promise.reject(new Error("Save game is invalid. The save data cannot be decoded."));
+      console.error("saveData:", saveData);
+      throw new Error("The save data cannot be decoded.");
     }
 
     let parsedSaveData: unknown;
     try {
       parsedSaveData = JSON.parse(decodedSaveData);
     } catch (error) {
-      console.error(error); // We'll handle below
+      console.error("decodedSaveData:", decodedSaveData);
+      throw new Error("The decoded save data is not valid.");
     }
 
-    if (
-      !isObject(parsedSaveData) ||
-      parsedSaveData.ctor !== "BitburnerSaveObject" ||
-      !isObject(parsedSaveData.data) ||
-      typeof parsedSaveData.data.PlayerSave !== "string"
-    ) {
-      console.error("decodedSaveData:", decodedSaveData);
-      return Promise.reject(new Error("Save game is invalid. The decoded save data is not valid."));
-    }
+    assertParsedSaveData(parsedSaveData);
+
+    return parsedSaveData;
+  }
+
+  async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
+    const parsedSaveData = await this.getParsedSaveData(saveData);
 
     const data: ImportData = {
       saveData: saveData,
     };
 
     const importedPlayer = loadPlayer(parsedSaveData.data.PlayerSave);
+
+    let syncSteamAchievements = true;
+    // Parse data.SettingsSave to get syncSteamAchievements.
+    if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
+      try {
+        const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
+        assertObject(settings);
+        if (typeof settings.SyncSteamAchievements === "boolean") {
+          syncSteamAchievements = settings.SyncSteamAchievements;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     const playerData: ImportPlayerData = {
       identifier: importedPlayer.identifier,
@@ -318,13 +431,18 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       achievements: importedPlayer.achievements?.length ?? 0,
 
       bitNode: importedPlayer.bitNodeN,
-      bitNodeLevel: importedPlayer.sourceFileLvl(Player.bitNodeN) + 1,
+      bitNodeLevel: getBitNodeLevel(
+        importedPlayer.bitNodeN,
+        importedPlayer.activeSourceFileLvl(importedPlayer.bitNodeN),
+      ),
       sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
       exploits: importedPlayer.exploits.length,
+
+      syncSteamAchievements,
     };
 
     data.playerData = playerData;
-    return Promise.resolve(data);
+    return data;
   }
 
   toJSON(): IReviverValue {
@@ -339,11 +457,26 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
 async function loadGame(saveData: SaveData): Promise<boolean> {
   createScamUpdateText();
   if (!saveData) {
+    console.error(
+      `Invalid save data. typeof saveData: ${typeof saveData}. saveData is an empty string: ${saveData === ""}`,
+    );
     return false;
   }
   const jsonSaveString = await decodeSaveData(saveData);
 
   const saveObj: unknown = JSON.parse(jsonSaveString, Reviver);
+
+  // Extract VersionSave ASAP for debugging and showing useful error messages later. Some checks here are redundant (
+  // e.g., the object assertion) because we will do them again later, but that's okay.
+  if (
+    saveObj != null &&
+    typeof saveObj === "object" &&
+    "VersionSave" in saveObj &&
+    typeof saveObj.VersionSave === "string"
+  ) {
+    loadedSaveObjectMiniDump.VersionSave = saveObj.VersionSave;
+  }
+
   assertBitburnerSaveObjectType(saveObj);
 
   // "Mandatory"
@@ -352,6 +485,9 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
   loadGo(saveObj.GoSave);
+  loadDarkNet(saveObj.DarknetSave);
+  loadInfiltrations(saveObj.InfiltrationsSave);
+
   try {
     loadAliases(saveObj.AliasesSave);
   } catch (e) {
@@ -364,7 +500,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   }
 
   // "Optional 1"
-  loadStaneksGift(saveObj.StaneksGiftSave);
+  loadStaneksGift(saveObj.StaneksGiftSave, loadedSaveObjectMiniDump.VersionSave);
   try {
     loadStockMarket(saveObj.StockMarketSave);
   } catch (e) {
@@ -376,7 +512,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   if (saveObj.SettingsSave) {
     try {
       // Try to set saved settings.
-      Settings.load(saveObj.SettingsSave);
+      loadSettings(saveObj.SettingsSave);
     } catch (e) {
       console.error("SettingsSave was present but an error occurred while loading:");
       console.error(e);
@@ -407,7 +543,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
       if (typeof ver !== "string" && typeof ver !== "number") {
         throw new Error(`Invalid VersionSave: ${saveObj.VersionSave}`);
       }
-      evaluateVersionCompatibility(ver);
+      await evaluateVersionCompatibility(ver);
       if (CONSTANTS.isDevBranch) {
         // Beta branch, always show changes
         createBetaUpdateText();
@@ -421,6 +557,11 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   } else {
     createNewUpdateText();
   }
+
+  if (hasDarknetAccess()) {
+    populateDarknet();
+  }
+
   return true;
 }
 
@@ -437,8 +578,8 @@ function createNewUpdateText() {
     () =>
       dialogBoxCreate(
         "New update!\n" +
-          "Please report any bugs/issues through the GitHub repository " +
-          "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
+          "Please report any bugs/issues through the GitHub repository (https://github.com/bitburner-official/bitburner-src/issues) " +
+          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
           CONSTANTS.LatestUpdate,
       ),
     1000,
@@ -452,7 +593,7 @@ function createBetaUpdateText() {
         "You are playing on the beta environment! This branch of the game " +
           "features the latest developments in the game. This version may be unstable.\n" +
           "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-          "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
+          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
           CONSTANTS.LatestUpdate,
       ),
     1000,

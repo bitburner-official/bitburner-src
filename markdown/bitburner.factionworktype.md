@@ -2,20 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [FactionWorkType](./bitburner.factionworktype.md)
 
-## FactionWorkType enum
+## FactionWorkType type
 
 
 **Signature:**
 
 ```typescript
-declare enum FactionWorkType 
+type FactionWorkType = _ValueOf<FactionWorkEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  field | <code>&quot;field&quot;</code> |  |
-|  hacking | <code>&quot;hacking&quot;</code> |  |
-|  security | <code>&quot;security&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)
 

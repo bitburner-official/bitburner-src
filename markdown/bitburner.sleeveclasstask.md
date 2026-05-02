@@ -2,17 +2,89 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveClassTask](./bitburner.sleeveclasstask.md)
 
-## SleeveClassTask type
+## SleeveClassTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveClassTask = {
-  type: "CLASS";
-  classType: UniversityClassType | GymType | `${UniversityClassType}` | `${GymType}`;
-  location: LocationName | `${LocationName}`;
-};
+interface SleeveClassTask extends BaseTask 
 ```
-**References:** [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [LocationName](./bitburner.locationname.md)
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[classType](./bitburner.sleeveclasstask.classtype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[UniversityClassType](./bitburner.universityclasstype.md) \| [GymType](./bitburner.gymtype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[location](./bitburner.sleeveclasstask.location.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.sleeveclasstask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"CLASS"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

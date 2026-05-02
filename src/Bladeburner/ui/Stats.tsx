@@ -44,7 +44,7 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
   if (bladeburner.getCurrentCity().pop <= 1e8) {
     populationTextColor = Settings.theme.error;
     populationWarning = "extremely low";
-  } else if (bladeburner.getCurrentCity().pop < 9e8) {
+  } else if (bladeburner.getCurrentCity().pop < 8e8) {
     populationTextColor = Settings.theme.warning;
     populationWarning = "low";
   }

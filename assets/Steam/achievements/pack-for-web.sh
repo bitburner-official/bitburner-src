@@ -5,7 +5,7 @@ ROOTDIR=$BASEDIR/../../..
 echo $ROOTDIR
 rm -rf $ROOTDIR/dist/icons/achievements
 mkdir -p $ROOTDIR/dist/icons
-cp -r $BASEDIR/real $ROOTDIR/dist/icons/achievements
+cp -r $BASEDIR/icons $ROOTDIR/dist/icons/achievements
 for i in $ROOTDIR/dist/icons/achievements/*.svg; do
   echo $i
   # Make background transparent and replace green with black

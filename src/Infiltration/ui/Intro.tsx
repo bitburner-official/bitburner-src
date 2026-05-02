@@ -1,10 +1,9 @@
-import { Report } from "@mui/icons-material";
-import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/material";
-import React from "react";
-import { Location } from "../../Locations/Location";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import React, { useCallback } from "react";
 import { Settings } from "../../Settings/Settings";
-import { formatHp, formatMoney, formatNumberNoSuffix, formatReputation } from "../../ui/formatNumber";
+import { formatHp, formatMoney, formatNumberNoSuffix, formatPercent, formatReputation } from "../../ui/formatNumber";
 import { Player } from "@player";
+import type { Infiltration } from "../Infiltration";
 import { calculateDamageAfterFailingInfiltration } from "../utils";
 import {
   calculateInfiltratorsRepReward,
@@ -13,15 +12,11 @@ import {
 } from "../formulas/victory";
 import { Factions } from "../../Faction/Factions";
 import { FactionName } from "../../Faction/Enums";
+import { calculateMarketDemandMultiplier, calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
-  Location: Location;
-  StartingDifficulty: number;
-  Difficulty: number;
-  MaxLevel: number;
-  Reward: number;
-  start: () => void;
-  cancel: () => void;
+  state: Infiltration;
 }
 
 function arrowPart(color: string, length: number): JSX.Element {
@@ -42,46 +37,89 @@ function arrowPart(color: string, length: number): JSX.Element {
 }
 
 function coloredArrow(difficulty: number): JSX.Element {
-  if (difficulty === 0) {
+  const cappedDifficulty = Math.min(difficulty, MaxDifficultyForInfiltration);
+  if (cappedDifficulty === 0) {
     return (
       <span style={{ color: "white" }}>
         {">"}
-        {" ".repeat(38)}
+        {" ".repeat(51)}
       </span>
     );
   } else {
     return (
       <>
-        {arrowPart(Settings.theme.primary, difficulty * 13)}
-        {arrowPart(Settings.theme.warning, (difficulty - 1) * 13)}
-        {arrowPart(Settings.theme.error, (difficulty - 2) * 13)}
+        {arrowPart(Settings.theme.success, cappedDifficulty * 13)}
+        {arrowPart(Settings.theme.warning, (cappedDifficulty - 1) * 13)}
+        {arrowPart(Settings.theme.warning, (cappedDifficulty - 2) * 13)}
+        {arrowPart(Settings.theme.error, (cappedDifficulty - 3) * 26)}
       </>
     );
   }
 }
 
-export function Intro(props: IProps): React.ReactElement {
-  const repGain = calculateTradeInformationRepReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
-  const moneyGain = calculateSellInformationCashReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
-  const soaRepGain = calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], props.StartingDifficulty);
+export function Intro({ state }: IProps): React.ReactElement {
+  // We need to rerender ourselves based on things that change that aren't
+  // reflected in Infiltration itself.
+  useRerender(1000);
+
+  const timestampNow = Date.now();
+
+  const reward = calculateReward(state.startingSecurityLevel);
+  const repGain = calculateTradeInformationRepReward(reward, state.maxLevel, state.startingSecurityLevel, timestampNow);
+  const moneyGain = calculateSellInformationCashReward(
+    reward,
+    state.maxLevel,
+    state.startingSecurityLevel,
+    timestampNow,
+  );
+  const soaRepGain = calculateInfiltratorsRepReward(
+    Factions[FactionName.ShadowsOfAnarchy],
+    state.maxLevel,
+    state.startingSecurityLevel,
+    timestampNow,
+  );
+  const marketRateMultiplier = calculateMarketDemandMultiplier(timestampNow, false);
+
+  const start = useCallback(() => state.startInfiltration(), [state]);
+  const cancel = useCallback(() => state.cancel(), [state]);
+
+  let warningMessage;
+  if (state.startingDifficulty >= MaxDifficultyForInfiltration) {
+    warningMessage = (
+      <Typography color={Settings.theme.error} textAlign="center">
+        This location is too secure for your current abilities. You cannot infiltrate it.
+      </Typography>
+    );
+  } else if (state.startingDifficulty >= 1.5) {
+    warningMessage = (
+      <Typography
+        color={state.startingDifficulty > 2 ? Settings.theme.error : Settings.theme.warning}
+        textAlign="center"
+      >
+        This location is too heavily guarded for your current stats. You should train more or find an easier location.
+      </Typography>
+    );
+  }
 
   return (
     <Container sx={{ alignItems: "center" }}>
       <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">
-          Infiltrating <b>{props.Location.name}</b>
+          Infiltrating <b>{state.location.name}</b>
         </Typography>
 
         <Typography variant="h6">
           <b>HP: {`${formatHp(Player.hp.current)} / ${formatHp(Player.hp.max)}`}</b>
         </Typography>
         <Typography variant="h6">
-          <b>Lose {formatHp(calculateDamageAfterFailingInfiltration(props.StartingDifficulty))} HP for each failure</b>
+          <b>
+            Lose {formatHp(calculateDamageAfterFailingInfiltration(state.startingSecurityLevel))} HP for each failure
+          </b>
         </Typography>
 
         <Typography variant="h6">
           <b>Maximum clearance level: </b>
-          {props.MaxLevel}
+          {state.maxLevel}
         </Typography>
 
         <br />
@@ -95,6 +133,12 @@ export function Intro(props: IProps): React.ReactElement {
             {Player.factions.includes(FactionName.ShadowsOfAnarchy) && (
               <li>SoA reputation: {formatReputation(soaRepGain)}</li>
             )}
+            <li>
+              Market demand:{" "}
+              {marketRateMultiplier >= 0
+                ? formatPercent(marketRateMultiplier, marketRateMultiplier !== 100 ? 3 : 0)
+                : `0% (${formatPercent(marketRateMultiplier)})`}
+            </li>
           </ul>
         </Typography>
 
@@ -102,9 +146,9 @@ export function Intro(props: IProps): React.ReactElement {
           variant="h6"
           sx={{
             color:
-              props.Difficulty > 2
+              state.startingDifficulty > 2
                 ? Settings.theme.error
-                : props.Difficulty > 1
+                : state.startingDifficulty > 1
                 ? Settings.theme.warning
                 : Settings.theme.primary,
             display: "flex",
@@ -112,28 +156,24 @@ export function Intro(props: IProps): React.ReactElement {
           }}
         >
           <b>Difficulty:&nbsp;</b>
-          {formatNumberNoSuffix(props.Difficulty * 33.3333)} / 100
-          {props.Difficulty > 1.5 && (
-            <Tooltip
-              title={
-                <Typography color="error">
-                  This location is too heavily guarded for your current stats. It is recommended that you try training
-                  or finding an easier location.
-                </Typography>
-              }
-            >
-              <Report sx={{ ml: 1 }} />
-            </Tooltip>
-          )}
+          {formatNumberNoSuffix(state.startingDifficulty * (100 / MaxDifficultyForInfiltration))} / 100
         </Typography>
+        <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
+          [{coloredArrow(state.startingDifficulty)}]
+        </Typography>
+        <Typography
+          sx={{ lineHeight: "1em", whiteSpace: "pre" }}
+        >{`▲            ▲            ▲            ▲           ▲`}</Typography>
+        <Typography
+          sx={{ lineHeight: "1em", whiteSpace: "pre" }}
+        >{`  Trivial       Normal        Hard        Brutal    Impossible`}</Typography>
 
-        <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>[{coloredArrow(props.Difficulty)}]</Typography>
-        <Typography
-          sx={{ lineHeight: "1em", whiteSpace: "pre" }}
-        >{`▲            ▲            ▲           ▲`}</Typography>
-        <Typography
-          sx={{ lineHeight: "1em", whiteSpace: "pre" }}
-        >{` Trivial       Normal        Hard     Impossible`}</Typography>
+        {warningMessage && (
+          <>
+            <br />
+            {warningMessage}
+          </>
+        )}
       </Paper>
 
       <Paper sx={{ p: 1, display: "grid", justifyItems: "center" }}>
@@ -163,8 +203,10 @@ export function Intro(props: IProps): React.ReactElement {
         </ul>
 
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", width: "100%" }}>
-          <Button onClick={props.start}>Start</Button>
-          <Button onClick={props.cancel}>Cancel</Button>
+          <Button onClick={start} disabled={state.startingDifficulty >= MaxDifficultyForInfiltration}>
+            Start
+          </Button>
+          <Button onClick={cancel}>Cancel</Button>
         </Box>
       </Paper>
     </Container>

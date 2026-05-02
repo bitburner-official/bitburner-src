@@ -7,7 +7,7 @@
    viewBox="0 0 67.733332 67.733335"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.1 (c3084ef, 2021-09-22)"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="p3.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -32,10 +32,17 @@
      inkscape:window-x="96"
      inkscape:window-y="79"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid824" />
+       id="grid824"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
   </sodipodi:namedview>
   <defs
      id="defs2" />
@@ -57,14 +64,14 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:41.3704px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke-width:0.554058"
-       x="4.0280304"
-       y="48.20945"
+       style="font-weight:bold;font-size:42.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke-width:0.554058"
+       x="33.236214"
+       y="48.821815"
        id="text8876"><tspan
          sodipodi:role="line"
          id="tspan8874"
-         style="fill:#000000;fill-opacity:1;stroke-width:0.554058"
-         x="4.0280304"
-         y="48.20945">P3</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:42.3333px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.554058"
+         x="33.236214"
+         y="48.821815">P3</tspan></text>
   </g>
 </svg>

@@ -1,6 +1,6 @@
-import { filterTruthy } from "../../utils/helpers/ArrayHelpers";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { CodingContractTypes, removeBracketsFromArrayString, removeQuotesFromString } from "../ContractTypes";
+import { CodingContractTypes, parseArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
 export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContractName.FindAllValidMathExpressions> = {
@@ -47,7 +47,7 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
 
       return [digits, target];
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const num = data[0];
       const target = data[1];
 
@@ -86,16 +86,32 @@ export const findAllValidMathExpressions: Pick<CodingContractTypes, CodingContra
       const result: string[] = [];
       helper(result, "", num, target, 0, 0, 0);
 
+      return result;
+    },
+    solver: (data, answer) => {
+      const result = findAllValidMathExpressions[CodingContractName.FindAllValidMathExpressions].getAnswer(data);
+
+      if (result === null) {
+        exceptionAlert(
+          new Error(
+            `Unexpected null when calculating the answer for ${CodingContractName.FindAllValidMathExpressions} contract. Data: ${data}`,
+          ),
+        );
+        return false;
+      }
+
       if (result.length !== answer.length) return false;
 
       const solutions = new Set(answer);
       return result.every((sol) => solutions.has(sol));
     },
     convertAnswer: (ans) => {
-      const sanitized = removeBracketsFromArrayString(ans).split(",");
-      return filterTruthy(sanitized).map((s) => removeQuotesFromString(s.replace(/\s/g, "")));
+      const parsedAnswer = parseArrayString(ans);
+      if (!findAllValidMathExpressions[CodingContractName.FindAllValidMathExpressions].validateAnswer(parsedAnswer)) {
+        return null;
+      }
+      return parsedAnswer;
     },
-    validateAnswer: (ans): ans is string[] =>
-      typeof ans === "object" && Array.isArray(ans) && ans.every((s) => typeof s === "string"),
+    validateAnswer: (ans): ans is string[] => Array.isArray(ans) && ans.every((s) => typeof s === "string"),
   },
 };

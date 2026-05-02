@@ -14,15 +14,140 @@ interface HackingFormulas
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [growAmount(server, player, threads, cores)](./bitburner.hackingformulas.growamount.md) | <p>Calculate the amount of money a grow action will leave a server with. Starting money is server.moneyAvailable. Note that when simulating the effect of [grow](./bitburner.ns.grow.md)<!-- -->, what matters is the state of the server and player when the grow \*finishes\*, not when it is started.</p><p>The growth amount depends both linearly \*and\* exponentially on threads; see [grow](./bitburner.ns.grow.md) for more details.</p><p>The inverse of this function is [formulas.hacking.growThreads](./bitburner.hackingformulas.growthreads.md)<!-- -->, although it rounds up to integer threads.</p> |
-|  [growPercent(server, threads, player, cores)](./bitburner.hackingformulas.growpercent.md) | <p>Calculate the growth multiplier constant for a given server and threads.</p><p>The actual amount of money grown depends both linearly \*and\* exponentially on threads; this is only giving the exponential part that is used for the multiplier. See [grow](./bitburner.ns.grow.md) for more details.</p><p>As a result of the above, this multiplier does \*not\* depend on the amount of money on the server. Changing server.moneyAvailable and server.moneyMax will have no effect.</p><p>For the most common use-cases, you probably want either [formulas.hacking.growThreads](./bitburner.hackingformulas.growthreads.md) or [formulas.hacking.growAmount](./bitburner.hackingformulas.growamount.md) instead.</p> |
-|  [growThreads(server, player, targetMoney, cores)](./bitburner.hackingformulas.growthreads.md) | <p>Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable. Note that when simulating the effect of [grow](./bitburner.ns.grow.md)<!-- -->, what matters is the state of the server and player when the grow \*finishes\*, not when it is started.</p><p>The growth amount depends both linearly \*and\* exponentially on threads; see [grow](./bitburner.ns.grow.md) for more details.</p><p>The inverse of this function is [formulas.hacking.growAmount](./bitburner.hackingformulas.growamount.md)<!-- -->, although it can work with fractional threads.</p> |
-|  [growTime(server, player)](./bitburner.hackingformulas.growtime.md) | Calculate grow time. |
-|  [hackChance(server, player)](./bitburner.hackingformulas.hackchance.md) | Calculate hack chance. (Ex: 0.25 would indicate a 25% chance of success.) |
-|  [hackExp(server, player)](./bitburner.hackingformulas.hackexp.md) | Calculate hack exp for one thread. |
-|  [hackPercent(server, player)](./bitburner.hackingformulas.hackpercent.md) | Calculate hack percent for one thread. (Ex: 0.25 would steal 25% of the server's current value.) |
-|  [hackTime(server, player)](./bitburner.hackingformulas.hacktime.md) | Calculate hack time. |
-|  [weakenTime(server, player)](./bitburner.hackingformulas.weakentime.md) | Calculate weaken time. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[growAmount(server, player, threads, cores)](./bitburner.hackingformulas.growamount.md)
+
+
+</td><td>
+
+Calculate the amount of money a grow action will leave a server with. Starting money is server.moneyAvailable. Note that when simulating the effect of [grow](./bitburner.ns.grow.md)<!-- -->, what matters is the state of the server and player when the grow \*finishes\*, not when it is started.
+
+The growth amount depends both linearly \*and\* exponentially on threads; see [grow](./bitburner.ns.grow.md) for more details.
+
+The inverse of this function is [formulas.hacking.growThreads](./bitburner.hackingformulas.growthreads.md)<!-- -->, although it rounds up to integer threads.
+
+
+</td></tr>
+<tr><td>
+
+[growPercent(server, threads, player, cores)](./bitburner.hackingformulas.growpercent.md)
+
+
+</td><td>
+
+Calculate the growth multiplier constant for a given server and threads.
+
+The actual amount of money grown depends both linearly \*and\* exponentially on threads; this is only giving the exponential part that is used for the multiplier. See [grow](./bitburner.ns.grow.md) for more details.
+
+As a result of the above, this multiplier does \*not\* depend on the amount of money on the server. Changing server.moneyAvailable and server.moneyMax will have no effect.
+
+For the most common use-cases, you probably want either [formulas.hacking.growThreads](./bitburner.hackingformulas.growthreads.md) or [formulas.hacking.growAmount](./bitburner.hackingformulas.growamount.md) instead.
+
+
+</td></tr>
+<tr><td>
+
+[growThreads(server, player, targetMoney, cores)](./bitburner.hackingformulas.growthreads.md)
+
+
+</td><td>
+
+Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable. Note that when simulating the effect of [grow](./bitburner.ns.grow.md)<!-- -->, what matters is the state of the server and player when the grow \*finishes\*, not when it is started.
+
+The growth amount depends both linearly \*and\* exponentially on threads; see [grow](./bitburner.ns.grow.md) for more details.
+
+The inverse of this function is [formulas.hacking.growAmount](./bitburner.hackingformulas.growamount.md)<!-- -->, although it can work with fractional threads.
+
+
+</td></tr>
+<tr><td>
+
+[growTime(server, player)](./bitburner.hackingformulas.growtime.md)
+
+
+</td><td>
+
+Calculate grow time.
+
+
+</td></tr>
+<tr><td>
+
+[hackChance(server, player)](./bitburner.hackingformulas.hackchance.md)
+
+
+</td><td>
+
+Calculate hack chance. (Ex: 0.25 would indicate a 25% chance of success.)
+
+
+</td></tr>
+<tr><td>
+
+[hackExp(server, player)](./bitburner.hackingformulas.hackexp.md)
+
+
+</td><td>
+
+Calculate hack exp for one thread.
+
+
+</td></tr>
+<tr><td>
+
+[hackPercent(server, player)](./bitburner.hackingformulas.hackpercent.md)
+
+
+</td><td>
+
+Calculate hack percent for one thread. (Ex: 0.25 would steal 25% of the server's current value.)
+
+
+</td></tr>
+<tr><td>
+
+[hackTime(server, player)](./bitburner.hackingformulas.hacktime.md)
+
+
+</td><td>
+
+Calculate hack time.
+
+
+</td></tr>
+<tr><td>
+
+[weakenEffect(threads, cores)](./bitburner.hackingformulas.weakeneffect.md)
+
+
+</td><td>
+
+Calculate the security decrease from a weaken operation. Unlike other hacking formulas, weaken effect depends only on thread count and core count, not on server or player properties. The core bonus formula is `1 + (cores - 1) / 16}`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
+[weakenTime(server, player)](./bitburner.hackingformulas.weakentime.md)
+
+
+</td><td>
+
+Calculate weaken time.
+
+
+</td></tr>
+</tbody></table>
 

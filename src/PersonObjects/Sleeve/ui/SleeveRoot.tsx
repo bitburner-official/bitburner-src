@@ -7,6 +7,7 @@ import { Player } from "@player";
 import { SleeveElem } from "./SleeveElem";
 import { FAQModal } from "./FAQModal";
 import { useCycleRerender } from "../../../ui/React/hooks";
+import { Settings } from "../../../Settings/Settings";
 
 export function SleeveRoot(): React.ReactElement {
   const [FAQOpen, setFAQOpen] = useState(false);
@@ -25,6 +26,14 @@ export function SleeveRoot(): React.ReactElement {
           <br />
           <br />
         </Typography>
+        {Player.bitNodeOptions.disableSleeveExpAndAugmentation && (
+          <Typography color={Settings.theme.warning}>
+            You enabled the "Disable Sleeves' experience and augmentation" option. Your sleeves will not gain
+            experience, and they won't be able to install augmentations.
+            <br />
+            <br />
+          </Typography>
+        )}
       </Container>
 
       <Button onClick={() => setFAQOpen(true)}>FAQ</Button>

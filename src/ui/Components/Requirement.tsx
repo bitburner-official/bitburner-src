@@ -3,8 +3,6 @@ import { Typography } from "@mui/material";
 import React from "react";
 import { Settings } from "../../Settings/Settings";
 
-Settings.theme.primary;
-
 export interface IReqProps {
   value: string;
   color?: string;

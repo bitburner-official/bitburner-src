@@ -9,14 +9,44 @@ Get the base security level of a server.
 **Signature:**
 
 ```typescript
-getServerBaseSecurityLevel(host: string): number;
+getServerBaseSecurityLevel(host?: string): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Host of target server. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -26,5 +56,7 @@ Base security level of the target server.
 
 ## Remarks
 
-RAM cost: 0.1 GB Returns the base security level of the target server. For the server's actual security level, use [ns.getServerSecurityLevel](./bitburner.ns.getserversecuritylevel.md)<!-- -->.
+RAM cost: 0.1 GB
+
+Returns the base security level of the target server. For the server's actual security level, use [ns.getServerSecurityLevel](./bitburner.ns.getserversecuritylevel.md)<!-- -->.
 

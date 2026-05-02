@@ -19,7 +19,9 @@ True if you successfully join the Bladeburner faction, or if you are already a m
 
 ## Remarks
 
-RAM cost: 4 GB Attempts to join the Bladeburner faction.
+RAM cost: 4 GB
+
+Attempts to join the Bladeburner faction.
 
 Returns true if you successfully join the Bladeburner faction, or if you are already a member.
 

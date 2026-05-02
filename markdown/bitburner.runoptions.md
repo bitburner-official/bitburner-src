@@ -13,10 +13,108 @@ interface RunOptions
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [preventDuplicates?](./bitburner.runoptions.preventduplicates.md) |  | boolean | _(Optional)_ Should we fail to run if another instance is running with the exact same arguments? This used to be the default behavior, now defaults to false. |
-|  [ramOverride?](./bitburner.runoptions.ramoverride.md) |  | number | <p>_(Optional)_ The RAM allocation to launch each thread of the script with.</p><p>Lowering this will <i>not</i> automatically let you get away with using less RAM: the dynamic RAM check enforces that all [NS](./bitburner.ns.md) functions actually called incur their cost. However, if you know that certain functions that are statically present (and thus included in the static RAM cost) will never be called in a particular circumstance, you can use this to avoid paying for them.</p><p>You can also use this to <i>increase</i> the RAM if the static RAM checker has missed functions that you need to call.</p><p>Must be greater-or-equal to the base RAM cost. Will be rounded to the nearest hundredth-of-a-GB, which is the granularity of all RAM calculations. Defaults to the statically calculated cost.</p> |
-|  [temporary?](./bitburner.runoptions.temporary.md) |  | boolean | _(Optional)_ Whether this script is excluded from saves, defaults to false |
-|  [threads?](./bitburner.runoptions.threads.md) |  | number | _(Optional)_ Number of threads that the script will run with, defaults to 1 |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[preventDuplicates?](./bitburner.runoptions.preventduplicates.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Should we fail to run if another instance is running with the exact same arguments? This used to be the default behavior, now defaults to false.
+
+
+</td></tr>
+<tr><td>
+
+[ramOverride?](./bitburner.runoptions.ramoverride.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ The RAM allocation to launch each thread of the script with.
+
+Lowering this will <i>not</i> automatically let you get away with using less RAM: the dynamic RAM check enforces that all [NS](./bitburner.ns.md) functions actually called incur their cost. However, if you know that certain functions that are statically present (and thus included in the static RAM cost) will never be called in a particular circumstance, you can use this to avoid paying for them.
+
+You can also use this to <i>increase</i> the RAM if the static RAM checker has missed functions that you need to call.
+
+Must be greater-or-equal to the base RAM cost. Will be rounded to the nearest hundredth-of-a-GB, which is the granularity of all RAM calculations. Defaults to the statically calculated cost.
+
+
+</td></tr>
+<tr><td>
+
+[temporary?](./bitburner.runoptions.temporary.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Whether this script is excluded from saves, defaults to false
+
+
+</td></tr>
+<tr><td>
+
+[threads?](./bitburner.runoptions.threads.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of threads that the script will run with, defaults to 1
+
+
+</td></tr>
+</tbody></table>
 

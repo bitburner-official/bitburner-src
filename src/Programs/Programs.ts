@@ -14,11 +14,17 @@ import { CompletedProgramName, FactionName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { handleStormSeed } from "../DarkNet/effects/webstorm";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 function requireHackingLevel(lvl: number) {
   return function () {
-    return Player.skills.hacking + Player.skills.intelligence / 2 >= lvl;
+    return Player.skills.hacking >= getEffectiveHackingLevelRequirement(lvl);
   };
+}
+
+export function getEffectiveHackingLevelRequirement(level: number): number {
+  return clampNumber(level - Player.skills.intelligence / 2, 1);
 }
 
 function bitFlumeRequirements() {
@@ -27,16 +33,29 @@ function bitFlumeRequirements() {
   };
 }
 
+function warnIfNonArgProgramIsRunWithArgs(name: CompletedProgramName, args: string[]): void {
+  if (args.length === 0) {
+    return;
+  }
+  Terminal.warn(
+    `You are running ${name} with arguments, but ${name} does not accept arguments. These arguments will be ignored. ` +
+      `${name} only affects the server ('${Player.currentServer}') that you are connecting via the terminal. ` +
+      "If you want to pass the target's hostname as an argument, you have to use the respective NS API.",
+  );
+}
+
 export const Programs: Record<CompletedProgramName, Program> = {
   [CompletedProgramName.nuke]: new Program({
     name: CompletedProgramName.nuke,
+    nsMethod: "nuke",
     create: {
       level: 1,
       tooltip: "This virus is used to gain root access to a machine if enough ports are opened.",
       req: requireHackingLevel(1),
       time: CONSTANTS.MillisecondsPerFiveMinutes,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.nuke, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot nuke this kind of server.");
         return;
@@ -58,13 +77,15 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.bruteSsh]: new Program({
     name: CompletedProgramName.bruteSsh,
+    nsMethod: "brutessh",
     create: {
       level: 50,
       tooltip: "This program executes a brute force attack that opens SSH ports",
       req: requireHackingLevel(50),
       time: CONSTANTS.MillisecondsPerFiveMinutes * 2,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.bruteSsh, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run BruteSSH.exe on this kind of server.");
         return;
@@ -81,13 +102,15 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.ftpCrack]: new Program({
     name: CompletedProgramName.ftpCrack,
+    nsMethod: "ftpcrack",
     create: {
       level: 100,
       tooltip: "This program cracks open FTP ports",
       req: requireHackingLevel(100),
       time: CONSTANTS.MillisecondsPerHalfHour,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.ftpCrack, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run FTPCrack.exe on this kind of server.");
         return;
@@ -104,13 +127,15 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.relaySmtp]: new Program({
     name: CompletedProgramName.relaySmtp,
+    nsMethod: "relaysmtp",
     create: {
       level: 250,
       tooltip: "This program opens SMTP ports by redirecting data",
       req: requireHackingLevel(250),
       time: CONSTANTS.MillisecondsPer2Hours,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.relaySmtp, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run relaySMTP.exe on this kind of server.");
         return;
@@ -127,13 +152,15 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.httpWorm]: new Program({
     name: CompletedProgramName.httpWorm,
+    nsMethod: "httpworm",
     create: {
       level: 500,
       tooltip: "This virus opens up HTTP ports",
       req: requireHackingLevel(500),
       time: CONSTANTS.MillisecondsPer4Hours,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.httpWorm, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run HTTPWorm.exe on this kind of server.");
         return;
@@ -150,13 +177,15 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.sqlInject]: new Program({
     name: CompletedProgramName.sqlInject,
+    nsMethod: "sqlinject",
     create: {
       level: 750,
       tooltip: "This virus opens SQL ports",
       req: requireHackingLevel(750),
       time: CONSTANTS.MillisecondsPer8Hours,
     },
-    run: (_args: string[], server: BaseServer): void => {
+    run: (args: string[], server: BaseServer): void => {
+      warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.sqlInject, args);
       if (!(server instanceof Server)) {
         Terminal.error("Cannot run SQLInject.exe on this kind of server.");
         return;
@@ -199,6 +228,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.serverProfiler]: new Program({
     name: CompletedProgramName.serverProfiler,
+    nsMethod: "getServer",
     create: {
       level: 75,
       tooltip: "This program is used to display hacking and Netscript-related information about servers",
@@ -319,6 +349,29 @@ export const Programs: Record<CompletedProgramName, Program> = {
 
       Terminal.print("We will contact you.");
       Terminal.print(`-- ${FactionName.Daedalus} --`);
+    },
+  }),
+  [CompletedProgramName.darkscape]: new Program({
+    name: CompletedProgramName.darkscape,
+    create: null,
+    run: (): void => {
+      Terminal.print("This program gives access to the dark net.");
+      Terminal.print(
+        "The dark net is an unstable, constantly shifting network of servers that are only connected to the normal network through the darkweb server.",
+      );
+      Terminal.print(
+        "This network can be accessed using the `ns.dnet` api functions, or the DarkNet UI on the left-hand panel.",
+      );
+    },
+  }),
+  [CompletedProgramName.stormSeed]: new Program({
+    name: CompletedProgramName.stormSeed,
+    nsMethod: "dnet.unleashStormSeed",
+    create: null,
+    run: (): void => {
+      Terminal.print("You can feel a storm approaching...");
+      const connectedServer = Player.getCurrentServer();
+      handleStormSeed(connectedServer);
     },
   }),
 };

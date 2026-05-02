@@ -2,6 +2,7 @@ import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
+import { defaultSettingsDictionary, dogNameDictionary } from "../DarkNet/models/dictionaryData";
 
 export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HackersStartingHandbook]: new Literature({
@@ -27,8 +28,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
         this are getServerSecurityLevel() and getServerMinSecurityLevel()
         <br />
         <br />
-        -Purchase additional servers by visiting "Alpha Enterprises" in the city. They are relatively cheap and give you
-        valuable RAM to run more scripts early in the game
+        -Purchase additional cloud servers by visiting "Alpha Enterprises" in the city. They are relatively cheap and
+        give you valuable RAM to run more scripts early in the game
         <br />
         <br />
         -Prioritize upgrading the RAM on your home computer. This can also be done at "Alpha Enterprises"
@@ -50,8 +51,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         <u>Getting Started with Corporation</u>
         <br />
-        To get started, visit the city hall in Sector-12 in order to create a corporation. This requires $150b of your
-        own money, but this $150b will get put into your corporation's funds. If you're in BitNode 3, you also have the
+        To get started, visit the city hall in Sector-12 in order to create a corporation. This requires 150e9 of your
+        own money, but this money will get put into your corporation's funds. If you're in BitNode 3, you also have the
         option to get seed money from the government in exchange for 500m shares. Your corporation can have many
         different divisions, each in a different industry. There are many different types of industries, each with
         different properties. To create your first division, click the "Expand" button at the top of the management UI.
@@ -193,7 +194,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         round up and shut down the remaining rogue MK-VI Synthoids, ending the Synthoid Uprising.
         <br />
         <br />
-        In the aftermath of the bloodshed, the Synthoid Accords were drawn up. These Accords banned
+        In the aftermath of the bloodshed, the Synthoid Accords were drawn up. These Accords banned{" "}
         {FactionName.OmniTekIncorporated} from manufacturing any Synthoids beyond the MK-III series. They also banned
         any other corporation from constructing androids with advanced, near-sentient AI. MK-VI Synthoids that did not
         have the rogue Ascendis Totalis AI were allowed to continue their existence, but they were stripped of all
@@ -204,9 +205,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         Unfortunately, many believe that not all of the rogue MK-VI Synthoids from the Uprising were found and
         destroyed, and that many of them are blending in as normal humans in society today. In response, many nations
-        have created
-        {FactionName.Bladeburners} divisions, special military branches that are tasked with investigating and dealing
-        with any Synthoid threats.
+        have created {FactionName.Bladeburners} divisions, special military branches that are tasked with investigating
+        and dealing with any Synthoid threats.
         <br />
         <br />
         To this day, tensions still exist between the remaining Synthoids and humans as a result of the Uprising.
@@ -330,12 +330,11 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.KuaiGongInternational, FactionName.OmniTekIncorporated],
     text: (
       <Typography>
-        When people think about the corporations that dominate the East, they typically think of
+        When people think about the corporations that dominate the East, they typically think of{" "}
         {CompanyName.KuaiGongInternational}, which holds a complete monopoly for manufacturing and commerce in Asia, or{" "}
-        {CompanyName.GlobalPharmaceuticals}, the world's largest drug company, or
-        {CompanyName.OmniTekIncorporated}, the global leader in intelligent and autonomous robots. But there's one
-        company that has seen a rapid rise in the last year and is poised to dominate not only the East, but the entire
-        world: TaiYang Digital.
+        {CompanyName.GlobalPharmaceuticals}, the world's largest drug company, or {CompanyName.OmniTekIncorporated}, the
+        global leader in intelligent and autonomous robots. But there's one company that has seen a rapid rise in the
+        last year and is poised to dominate not only the East, but the entire world: TaiYang Digital.
         <br />
         <br />
         TaiYang Digital is a Chinese internet-technology corporation that provides services such as online advertising,
@@ -352,7 +351,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         TaiYang Digital's meteoric rise is extremely surprising in modern society. This sort of growth is something
         you'd commonly see in the first half of the century, especially for tech companies. However in the last two
         decades the number of corporations has significantly declined as the largest entities quickly took over the
-        economy. Corporations such as {CompanyName.ECorp}, {CompanyName.MegaCorp}, and
+        economy. Corporations such as {CompanyName.ECorp}, {CompanyName.MegaCorp}, and{" "}
         {CompanyName.KuaiGongInternational} have established such strong monopolies in their market sectors that they
         have effectively killed off all of the smaller and new corporations that have tried to start up over the years.
         This is what makes the rise of TaiYang Digital so impressive. And if TaiYang continues down this path, then they
@@ -401,7 +400,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.TheSyndicate, FactionName.SlumSnakes],
     text: (
       <Typography>
-        A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in
+        A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in{" "}
         {CityName.Sector12}. Perhaps the most alarming part of the statistic is that most of the rise is in violent
         crime such as homicide and assault. According to the study, the city saw a total of 21,406 reported homicides in
         2076, which is over a 20% increase compared to 2075.
@@ -411,8 +410,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         sustained increase in crime rates, or whether the year was just an unfortunate outlier. He states that many
         intelligence and law enforcement agents have noticed an increase in organized crime activities, and believes
         that these figures may be the result of an uprising from criminal organizations such as{" "}
-        {FactionName.TheSyndicate} or the
-        {FactionName.SlumSnakes}.
+        {FactionName.TheSyndicate} or the {FactionName.SlumSnakes}.
       </Typography>
     ),
   }),
@@ -460,7 +458,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         Commonly called "hacker groups", Internet-based secret societies have become well-known in today's world. Some
         of these, such as {FactionName.TheBlackHand}, are black hat groups that claim they are trying to help the
         oppressed by attacking the elite and powerful. Others, such as {FactionName.NiteSec}, are hacktivist groups that
-        try to push political and social agendas. Perhaps the most intriguing hacker group is the mysterious
+        try to push political and social agendas. Perhaps the most intriguing hacker group is the mysterious{" "}
         {FactionName.BitRunners}, whose purpose still remains unknown.
       </Typography>
     ),
@@ -502,7 +500,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         to re-create human intelligence.
         <br />
         <br />
-        We've certainly come close to artificial intelligence that is similar to humans. For example
+        We've certainly come close to artificial intelligence that is similar to humans. For example,{" "}
         {CompanyName.OmniTekIncorporated}'s CompanionBot, a robot meant to act as a comforting friend for lonely and
         grieving people, is eerily human-like in its appearance, speech, mannerisms, and even movement. However its
         artificial intelligence isn't the same as that of humans. Not yet. It doesn't have sentience or self-awareness
@@ -544,7 +542,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         After rumors came out that {CompanyName.OmniTekIncorporated} had begun developing advanced robotic
         supersoldiers, geopolitical tensions quickly flared between the USA, Russia, and several Asian superpowers. In a
         rare show of cooperation between corporations, {CompanyName.MegaCorp} and {CompanyName.ECorp} have reportedly
-        launched hundreds of new surveillance and espionage satellites. Defense contractors such as
+        launched hundreds of new surveillance and espionage satellites. Defense contractors such as{" "}
         {CompanyName.DeltaOne} and {CompanyName.AeroCorp} have been working with the CIA and NSA to prepare for
         conflict. Meanwhile, the rest of the world sits in earnest hoping that it never reaches full-scale war. With
         today's technology and firepower, a World War would assuredly mean the end of human civilization.
@@ -652,8 +650,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         The Triads were an ancient transnational crime syndicate based in China, Hong Kong, and other Asian territories.
         They were often considered one of the first and biggest criminal secret societies. While most of the branches of
         the Triads have been destroyed over the past few decades, the crime faction has spawned and inspired a number of
-        other Asian crime organizations over the past few years. The most notable of these is the
-        {FactionName.Tetrads}.
+        other Asian crime organizations over the past few years. The most notable of these is the {FactionName.Tetrads}.
         <br />
         <br />
         It is widely believed that the {FactionName.Tetrads} are a rogue group that splintered off from the Triads
@@ -665,7 +662,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         <br />
         Not much else is known about the {FactionName.Tetrads}, or about the efforts the Asian governments and
-        corporations are making to take down this large new crime organization. Many believe that the
+        corporations are making to take down this large new crime organization. Many believe that the{" "}
         {FactionName.Tetrads} have infiltrated the governments and powerful corporations in Asia, which has helped
         facilitate their recent rapid rise.
       </Typography>
@@ -675,5 +672,166 @@ export const Literatures: Record<LiteratureName, Literature> = {
     title: "The Secret War",
     filename: LiteratureName.TheSecretWar,
     text: <Typography></Typography>,
+  }),
+  [LiteratureName.ABriefHistoryOfTranshumanism]: new Literature({
+    title: "A Brief History of Transhumanism",
+    filename: LiteratureName.ABriefHistoryOfTranshumanism,
+    text: (
+      <Typography>
+        Human augmentation has come a long way since the first prosthetics and implants. Now any and all parts of the
+        human body are able to be improved by technology: strength, speed, perception, intelligence. A large variety of
+        powerful augmentations have been developed, but for most they may as well not exist. How did things end up like
+        this?
+        <br />
+        <br />
+        Part of the answer is, unfortunately, that the exact technology that has allowed us to come so far in human
+        augmentation is also responsible for its great expense and exclusivity.
+        <br />
+        The early days of human augmentation were plagued with issues. Immunosuppressants were needed to keep people's
+        bodies from rejecting the foreign bodies being implanted, with the body constantly trying to "restore" itself to
+        its natural state. On top of that, with the messy nature of biology any replacement for a natural organ would
+        fall short of full functionality. The skeleton doesn't just provide structural support and anchors for muscles;
+        it also helps produce the blood in your body in the marrow. Even the fat in the body is a living organ that
+        produces hormones helping to regulate its activity.
+        <br />
+        <br />
+        Thus, the process was limited by the capacity of the human body to accept and deal with these changes. Biology
+        is redundant and flexible, so replacing a few bones won't impact the body's functioning too badly. But every
+        addition and change would add up, ultimately severely limiting the body's capacity for augmentation.
+        <br />
+        <br />
+        Ultimately it was {CompanyName.VitaLife} who found a way around this limitation, though only at great expense...
+        They discovered that by using a radical new form of gene therapy to reshape a person's body to not only
+        accommodate but integrate the augmentations into their body at a cellular level, they could completely eliminate
+        the side-effects of augmenting.
+        <br />
+        <br />
+        The downside, of course, is the extreme expense and complexity of the process. Not only must each augment be
+        tailored for its intended recipient and a custom genetic therapy program developed, but to truly avoid any
+        side-effects this program must take into account the interactions between augmentations when multiple are
+        installed. The combinatoric explosion in complexity leads to exponentially increasing costs when more than one
+        augment is installed at the same time. Despite this most still prefer to install as many as possible at once,
+        because in addition the radical transformation their body undergoes leaves them relearning to use their body for
+        weeks or even months afterward.
+        <br />
+        <br />
+        In the end humanity is left with the theoretical capacity to transform themselves to the limits of their
+        imagininations, but the practical reality that the expense of even basic augmentations is beyond 95% of the
+        population.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.DarknetHandbook]: new Literature({
+    title: LiteratureName.DarknetHandbook,
+    filename: LiteratureName.DarknetHandbook,
+    text: (
+      <Typography>
+        There is a legend of a powerful augment, known as the <span style={{ color: "red" }}>"Red Pill"</span>, that can
+        only be found deep within the darknet. The mysterious faction {FactionName.Daedalus} has been searching for it
+        for years, hoping to monopolize it one day.
+        <br />
+        <br />
+        However, the legendary augment is hidden in the depths of a labyrinth. You will need to delve far into the dark
+        in order to find these mysterious servers, and defeat their protections to gain their secret augments.
+        <br />
+        <br />
+        The darknet itself is an extremely unstable network of servers. They will continually shift locations, restart,
+        or even go offline. Some parts of the net are islands that can only be reached by riding on a moving server. In
+        addition, these darknet servers cannot be accessed from a distance: you must build a script that can copy itself
+        - or bring code along from home - in order to progress into the deeper layers of the 'net.
+        <br />
+        <br />
+        You now have permanent access to the Darknet Navigator, allowing exploration of the 'net manually via the UI.
+        But beware: the labyrinths further into the deep are said to only be accessible via script! Do you have the
+        charisma and the scripting skills needed to conquer the dark?
+        <br />
+        <br />
+        For more details on the darknet and its API, see the Darknet page under Documentation {">"} Advanced.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.CacheHint1]: new Literature({
+    title: "eGeoCacheing?",
+    filename: LiteratureName.CacheHint1,
+    text: <Typography>I've heard there are valuable .cache files to find out in the dark net.</Typography>,
+  }),
+  [LiteratureName.CacheHint2]: new Literature({
+    title: "Cache the Flag",
+    filename: LiteratureName.CacheHint2,
+    text: <Typography>I ran this .cache file I found and it had crazy stuff in it!</Typography>,
+  }),
+  [LiteratureName.ServerOfflineHint]: new Literature({
+    title: "Server offline again",
+    filename: LiteratureName.ServerOfflineHint,
+    text: (
+      <Typography>
+        My scripts went down again when their server went offline. I'll have to do something about that.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.DarkWebRebootHint]: new Literature({
+    title: "Darkweb server rebooted",
+    filename: LiteratureName.DarkWebRebootHint,
+    text: <Typography>Darkweb servers are known to reboot sometimes, requiring scripts to be restarted.</Typography>,
+  }),
+  [LiteratureName.PasswordServerHint]: new Literature({
+    title: "Partial Password Jutsu",
+    filename: LiteratureName.PasswordServerHint,
+    text: (
+      <Typography>
+        There is a type of server that will tell you if you get some parts of the password correct.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.TimingServerHint]: new Literature({
+    title: "Timing Attack",
+    filename: LiteratureName.TimingServerHint,
+    text: (
+      <Typography>
+        I found a server that takes much longer to respond if you get some characters in the password correct.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.BinaryServerHint]: new Literature({
+    title: "Raw Data?",
+    filename: LiteratureName.BinaryServerHint,
+    text: <Typography>Some servers only respond with raw binary data. I wonder what each bit represents?</Typography>,
+  }),
+  [LiteratureName.DogNameHint]: new Literature({
+    title: "Dog Name Ideas",
+    filename: LiteratureName.DogNameHint,
+    text: <Typography>What should I name my dog? Maybe {dogNameDictionary.join(", ")}?</Typography>,
+  }),
+  [LiteratureName.FactoryDefaultHint]: new Literature({
+    title: "Factory Default",
+    filename: LiteratureName.FactoryDefaultHint,
+    text: <Typography>The factory default is usually one of {defaultSettingsDictionary.join(", ")}.</Typography>,
+  }),
+  [LiteratureName.StasisLinkHint]: new Literature({
+    title: "Try the best new thing in web surfing: the Stasis Link!",
+    filename: LiteratureName.StasisLinkHint,
+    text: (
+      <Typography>
+        Tired of the server you are on restarting or moving? You need to try our latest networking tool, the Stasis
+        Link! <br />
+        With the click of a `ns.dnet.setStasisLink()`, you, too, can sleep soundly knowing that that server is not gonna
+        go anywhere. <br />
+        <br />
+        Limited time only! While `ns.dnet.getStasisLinkLimit()` lasts!
+      </Typography>
+    ),
+  }),
+  [LiteratureName.LabHint]: new Literature({
+    title: "There's something out there",
+    filename: LiteratureName.LabHint,
+    text: (
+      <Typography>
+        If you go deep enough into the dark net, they say there's a lost server out there with special files on it. I
+        wonder how you can get there? It may even be deeper than the airgaps around this IP block...
+        <br />
+        <br />
+        If I ever find it, I'll set down a stasis link next to it and charge tickets for admission!
+      </Typography>
+    ),
   }),
 };

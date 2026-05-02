@@ -2,17 +2,89 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveFactionTask](./bitburner.sleevefactiontask.md)
 
-## SleeveFactionTask type
+## SleeveFactionTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveFactionTask = {
-  type: "FACTION";
-  factionWorkType: FactionWorkType | `${FactionWorkType}`;
-  factionName: string;
-};
+interface SleeveFactionTask extends BaseTask 
 ```
-**References:** [FactionWorkType](./bitburner.factionworktype.md)
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[factionName](./bitburner.sleevefactiontask.factionname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[factionWorkType](./bitburner.sleevefactiontask.factionworktype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FactionWorkType](./bitburner.factionworktype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.sleevefactiontask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"FACTION"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -4,7 +4,7 @@
  */
 import * as React from "react";
 
-import { formatExp, formatThreads } from "../formatNumber";
+import { formatExp, formatThreads, formatRam } from "../formatNumber";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
@@ -68,8 +68,9 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
       <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper}>
         <ListItemText
           primary={
-            <Typography style={{ wordWrap: "break-word" }}>
-              └ {props.workerScript.name} {JSON.stringify(props.workerScript.args)}
+            <Typography sx={{ overflowWrap: "break-word" }}>
+              └ {props.workerScript.name} ({formatRam(scriptRef.ramUsage * scriptRef.threads)}){" "}
+              {JSON.stringify(props.workerScript.args)}
             </Typography>
           }
         />
@@ -84,12 +85,16 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
                   <Typography>└ Threads:</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
-                  <Typography>{formatThreads(props.workerScript.scriptRef.threads)}</Typography>
+                  <Typography>
+                    {formatThreads(scriptRef.threads)} {`(${formatRam(scriptRef.ramUsage)} each)`}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={2}>
-                  <Typography>└ Args: {arrayToString(props.workerScript.args)}</Typography>
+                  <Typography sx={{ overflowWrap: "anywhere" }}>
+                    └ Args: {arrayToString(props.workerScript.args)}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>

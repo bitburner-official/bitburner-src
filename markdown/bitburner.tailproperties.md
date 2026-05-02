@@ -13,11 +13,140 @@ interface TailProperties
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [fontSize](./bitburner.tailproperties.fontsize.md) |  | number | The font size of the tail window. Defaults to the font size set in the style editor. |
-|  [height](./bitburner.tailproperties.height.md) |  | number | Height of the log window content area |
-|  [width](./bitburner.tailproperties.width.md) |  | number | Width of the log window content area |
-|  [x](./bitburner.tailproperties.x.md) |  | number | X-coordinate of the log window |
-|  [y](./bitburner.tailproperties.y.md) |  | number | Y-coordinate of the log window |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[fontSize](./bitburner.tailproperties.fontsize.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The font size of the log window. Defaults to the font size set in the style editor.
+
+
+</td></tr>
+<tr><td>
+
+[height](./bitburner.tailproperties.height.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Height of the log window content area
+
+
+</td></tr>
+<tr><td>
+
+[minimized](./bitburner.tailproperties.minimized.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether the log window is minimized.
+
+
+</td></tr>
+<tr><td>
+
+[width](./bitburner.tailproperties.width.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Width of the log window content area
+
+
+</td></tr>
+<tr><td>
+
+[x](./bitburner.tailproperties.x.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+X-coordinate of the log window
+
+
+</td></tr>
+<tr><td>
+
+[y](./bitburner.tailproperties.y.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Y-coordinate of the log window
+
+
+</td></tr>
+</tbody></table>
 

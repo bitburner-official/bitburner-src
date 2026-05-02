@@ -1,5 +1,4 @@
 import type { WorkerScript } from "./WorkerScript";
-import { ScriptDeath } from "./ScriptDeath";
 import type { NetscriptContext } from "./APIWrapper";
 
 /** Log a message to a script's logs */
@@ -7,14 +6,17 @@ export function log(ctx: NetscriptContext, message: () => string) {
   ctx.workerScript.log(ctx.functionPath, message);
 }
 
-/** Creates an error message string containing hostname, scriptname, and the error message msg */
-export function basicErrorMessage(ws: WorkerScript | ScriptDeath, msg: string, type = "RUNTIME"): string {
-  if (!(ws instanceof ScriptDeath)) {
-    for (const [scriptUrl, script] of ws.scriptRef.dependencies) {
-      msg = msg.replace(new RegExp(scriptUrl, "g"), script.filename);
-    }
+/** Error messages may contain blob URLs (). This function replaces those URLs with the script names. */
+export function parseBlobUrlInMessage(ws: WorkerScript, msg: string): string {
+  for (const [scriptUrl, script] of ws.scriptRef.dependencies) {
+    msg = msg.replaceAll(scriptUrl, script.filename);
   }
-  return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${msg}`;
+  return msg;
+}
+
+/** Creates an error message string containing hostname, scriptname, and the error message msg */
+export function basicErrorMessage(ws: WorkerScript, msg: string, type = "RUNTIME"): string {
+  return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${parseBlobUrlInMessage(ws, msg)}`;
 }
 
 /**

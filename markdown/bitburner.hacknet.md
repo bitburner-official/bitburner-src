@@ -18,27 +18,247 @@ Not all these functions are immediately available.
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [getCacheUpgradeCost(index, n)](./bitburner.hacknet.getcacheupgradecost.md) | Calculate the cost of upgrading hacknet node cache. |
-|  [getCoreUpgradeCost(index, n)](./bitburner.hacknet.getcoreupgradecost.md) | Calculate the cost of upgrading hacknet node cores. |
-|  [getHashUpgradeLevel(upgName)](./bitburner.hacknet.gethashupgradelevel.md) | Get the level of a hash upgrade. |
-|  [getHashUpgrades()](./bitburner.hacknet.gethashupgrades.md) | Get the list of hash upgrades |
-|  [getLevelUpgradeCost(index, n)](./bitburner.hacknet.getlevelupgradecost.md) | Calculate the cost of upgrading hacknet node levels. |
-|  [getNodeStats(index)](./bitburner.hacknet.getnodestats.md) | Get the stats of a hacknet node. |
-|  [getPurchaseNodeCost()](./bitburner.hacknet.getpurchasenodecost.md) | Get the price of the next hacknet node. |
-|  [getRamUpgradeCost(index, n)](./bitburner.hacknet.getramupgradecost.md) | Calculate the cost of upgrading hacknet node RAM. |
-|  [getStudyMult()](./bitburner.hacknet.getstudymult.md) | Get the multiplier to study. |
-|  [getTrainingMult()](./bitburner.hacknet.gettrainingmult.md) | Get the multiplier to training. |
-|  [hashCapacity()](./bitburner.hacknet.hashcapacity.md) | Get the maximum number of hashes you can store. |
-|  [hashCost(upgName, count)](./bitburner.hacknet.hashcost.md) | Get the cost of a hash upgrade. |
-|  [maxNumNodes()](./bitburner.hacknet.maxnumnodes.md) | Get the maximum number of hacknet nodes. |
-|  [numHashes()](./bitburner.hacknet.numhashes.md) | Get the total number of hashes stored. |
-|  [numNodes()](./bitburner.hacknet.numnodes.md) | Get the number of hacknet nodes you own. |
-|  [purchaseNode()](./bitburner.hacknet.purchasenode.md) | Purchase a new hacknet node. |
-|  [spendHashes(upgName, upgTarget, count)](./bitburner.hacknet.spendhashes.md) | Purchase a hash upgrade. |
-|  [upgradeCache(index, n)](./bitburner.hacknet.upgradecache.md) | Upgrade the cache of a hacknet node. |
-|  [upgradeCore(index, n)](./bitburner.hacknet.upgradecore.md) | Upgrade the core of a hacknet node. |
-|  [upgradeLevel(index, n)](./bitburner.hacknet.upgradelevel.md) | Upgrade the level of a hacknet node. |
-|  [upgradeRam(index, n)](./bitburner.hacknet.upgraderam.md) | Upgrade the RAM of a hacknet node. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[getCacheUpgradeCost(index, n)](./bitburner.hacknet.getcacheupgradecost.md)
+
+
+</td><td>
+
+Calculate the cost of upgrading hacknet node cache.
+
+
+</td></tr>
+<tr><td>
+
+[getCoreUpgradeCost(index, n)](./bitburner.hacknet.getcoreupgradecost.md)
+
+
+</td><td>
+
+Calculate the cost of upgrading hacknet node cores.
+
+
+</td></tr>
+<tr><td>
+
+[getHashUpgradeLevel(upgName)](./bitburner.hacknet.gethashupgradelevel.md)
+
+
+</td><td>
+
+Get the level of a hash upgrade.
+
+
+</td></tr>
+<tr><td>
+
+[getHashUpgrades()](./bitburner.hacknet.gethashupgrades.md)
+
+
+</td><td>
+
+Get the list of hash upgrades
+
+
+</td></tr>
+<tr><td>
+
+[getLevelUpgradeCost(index, n)](./bitburner.hacknet.getlevelupgradecost.md)
+
+
+</td><td>
+
+Calculate the cost of upgrading hacknet node levels.
+
+
+</td></tr>
+<tr><td>
+
+[getNodeStats(index)](./bitburner.hacknet.getnodestats.md)
+
+
+</td><td>
+
+Get the stats of a hacknet node.
+
+
+</td></tr>
+<tr><td>
+
+[getPurchaseNodeCost()](./bitburner.hacknet.getpurchasenodecost.md)
+
+
+</td><td>
+
+Get the price of the next hacknet node.
+
+
+</td></tr>
+<tr><td>
+
+[getRamUpgradeCost(index, n)](./bitburner.hacknet.getramupgradecost.md)
+
+
+</td><td>
+
+Calculate the cost of upgrading hacknet node RAM.
+
+
+</td></tr>
+<tr><td>
+
+[getStudyMult()](./bitburner.hacknet.getstudymult.md)
+
+
+</td><td>
+
+Get the multiplier to study.
+
+
+</td></tr>
+<tr><td>
+
+[getTrainingMult()](./bitburner.hacknet.gettrainingmult.md)
+
+
+</td><td>
+
+Get the multiplier to training.
+
+
+</td></tr>
+<tr><td>
+
+[hashCapacity()](./bitburner.hacknet.hashcapacity.md)
+
+
+</td><td>
+
+Get the maximum number of hashes you can store.
+
+
+</td></tr>
+<tr><td>
+
+[hashCost(upgName, count)](./bitburner.hacknet.hashcost.md)
+
+
+</td><td>
+
+Get the cost of a hash upgrade.
+
+
+</td></tr>
+<tr><td>
+
+[maxNumNodes()](./bitburner.hacknet.maxnumnodes.md)
+
+
+</td><td>
+
+Get the maximum number of hacknet nodes.
+
+
+</td></tr>
+<tr><td>
+
+[numHashes()](./bitburner.hacknet.numhashes.md)
+
+
+</td><td>
+
+Get the total number of hashes stored.
+
+
+</td></tr>
+<tr><td>
+
+[numNodes()](./bitburner.hacknet.numnodes.md)
+
+
+</td><td>
+
+Get the number of hacknet nodes you own.
+
+
+</td></tr>
+<tr><td>
+
+[purchaseNode()](./bitburner.hacknet.purchasenode.md)
+
+
+</td><td>
+
+Purchase a new hacknet node.
+
+
+</td></tr>
+<tr><td>
+
+[spendHashes(upgName, upgTarget, count)](./bitburner.hacknet.spendhashes.md)
+
+
+</td><td>
+
+Purchase a hash upgrade.
+
+
+</td></tr>
+<tr><td>
+
+[upgradeCache(index, n)](./bitburner.hacknet.upgradecache.md)
+
+
+</td><td>
+
+Upgrade the cache of a hacknet node.
+
+
+</td></tr>
+<tr><td>
+
+[upgradeCore(index, n)](./bitburner.hacknet.upgradecore.md)
+
+
+</td><td>
+
+Upgrade the core of a hacknet node.
+
+
+</td></tr>
+<tr><td>
+
+[upgradeLevel(index, n)](./bitburner.hacknet.upgradelevel.md)
+
+
+</td><td>
+
+Upgrade the level of a hacknet node.
+
+
+</td></tr>
+<tr><td>
+
+[upgradeRam(index, n)](./bitburner.hacknet.upgraderam.md)
+
+
+</td><td>
+
+Upgrade the RAM of a hacknet node.
+
+
+</td></tr>
+</tbody></table>
 

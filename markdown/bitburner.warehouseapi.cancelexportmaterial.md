@@ -11,22 +11,112 @@ Cancel material export.
 ```typescript
 cancelExportMaterial(
     sourceDivision: string,
-    sourceCity: CityName | `${CityName}`,
+    sourceCity: CityName,
     targetDivision: string,
-    targetCity: CityName | `${CityName}`,
-    materialName: string,
+    targetCity: CityName,
+    materialName: CorpMaterialName,
   ): void;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sourceDivision | string | Source division |
-|  sourceCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Source city |
-|  targetDivision | string | Target division |
-|  targetCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Target city |
-|  materialName | string | Name of the material |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sourceDivision
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Source division
+
+
+</td></tr>
+<tr><td>
+
+sourceCity
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Source city
+
+
+</td></tr>
+<tr><td>
+
+targetDivision
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Target division
+
+
+</td></tr>
+<tr><td>
+
+targetCity
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Target city
+
+
+</td></tr>
+<tr><td>
+
+materialName
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

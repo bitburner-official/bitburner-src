@@ -7,7 +7,7 @@ import { boardSizes, opponentDetails } from "../Constants";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
 import { getHandicap } from "../boardState/boardState";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { Settings } from "../../Settings/Settings";
 import { getOpponentStats } from "../boardAnalysis/scoring";
 import { showWorldDemon } from "../boardAnalysis/goAI";
@@ -75,7 +75,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
             {opponentFactions.map((faction) => (
               <MenuItem key={faction} value={faction}>
                 {faction === GoOpponent.w0r1d_d43m0n ? (
-                  <CorruptableText content="???????????????" spoiler={false} />
+                  <CorruptibleText content="???????????????" spoiler={false} />
                 ) : (
                   `${faction} (${opponentDetails[faction].description})`
                 )}
@@ -122,8 +122,8 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
           <Typography>
             {opponent === GoOpponent.w0r1d_d43m0n ? (
               <>
-                <CorruptableText content={opponentDetails[opponent].flavorText.slice(0, 40)} spoiler={false} />
-                <CorruptableText content={opponentDetails[opponent].flavorText.slice(40)} spoiler={false} />
+                <CorruptibleText content={opponentDetails[opponent].flavorText.slice(0, 40)} spoiler={false} />
+                <CorruptibleText content={opponentDetails[opponent].flavorText.slice(40)} spoiler={false} />
               </>
             ) : (
               opponentDetails[opponent].flavorText

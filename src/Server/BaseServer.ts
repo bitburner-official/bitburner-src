@@ -26,8 +26,9 @@ import { Settings } from "../Settings/Settings";
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 
-interface IConstructorParams {
+export interface BaseServerConstructorParams {
   adminRights?: boolean;
   hostname: string;
   ip?: IPAddress;
@@ -73,7 +74,7 @@ export abstract class BaseServer implements IServer {
   messages: (MessageFilename | LiteratureName)[] = [];
 
   // Name of company/faction/etc. that this server belongs to.
-  // Optional, not applicable to all Servers
+  // Optional, not applicable to all Servers (e.g., pserver, hacknet server, and dnet server)
   organizationName = "";
 
   // Programs on this servers. Contains only the names of the programs
@@ -109,7 +110,7 @@ export abstract class BaseServer implements IServer {
   // Text files on this server
   textFiles = new JSONMap<TextFilePath, TextFile>();
 
-  // Flag indicating whether this is a purchased server
+  // Flag indicating whether this is a server owned by the player (e.g., home, cloud servers, hacknet servers)
   purchasedByPlayer = false;
 
   // Optional, listed just so they can be accessed on a BaseServer. These will be undefined for HacknetServers.
@@ -125,7 +126,7 @@ export abstract class BaseServer implements IServer {
   serverGrowth?: number;
   isHacknetServer?: boolean;
 
-  constructor(params: IConstructorParams = { hostname: "", ip: createRandomIp() }) {
+  constructor(params: BaseServerConstructorParams = { hostname: "", ip: createRandomIp() }) {
     this.ip = params.ip ? params.ip : createRandomIp();
 
     this.hostname = params.hostname;
@@ -233,7 +234,7 @@ export abstract class BaseServer implements IServer {
   }
 
   updateRamUsed(ram: number): void {
-    this.ramUsed = clampNumber(ram, 0, this.maxRam);
+    this.ramUsed = roundToTwo(clampNumber(ram, 0, this.maxRam));
   }
 
   pushProgram(program: ProgramFilePath | CompletedProgramName): void {
@@ -273,7 +274,7 @@ export abstract class BaseServer implements IServer {
     const existingFile = this.textFiles.get(textPath);
     // overWrite if already exists
     if (existingFile) {
-      existingFile.text = txt;
+      existingFile.content = txt;
       return { overwritten: true };
     }
 

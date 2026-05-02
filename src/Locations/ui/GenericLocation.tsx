@@ -24,7 +24,7 @@ import { LocationType } from "@enums";
 import { isBackdoorInstalled } from "../../Server/ServerHelpers";
 import { GetServer } from "../../Server/AllServers";
 
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { serverMetadata } from "../../Server/data/servers";
@@ -118,7 +118,7 @@ export function GenericLocation({ location, showBackButton }: IProps): React.Rea
         {backdoorInstalled && serverMeta ? (
           <Tooltip title={`Backdoor installed on ${serverMeta.hostname}.`}>
             <span>
-              <CorruptableText content={location.name} spoiler={false} />
+              <CorruptibleText content={location.name} spoiler={false} />
             </span>
           </Tooltip>
         ) : (

@@ -45,6 +45,7 @@ exports[`Check Save File Continuity GoSave continuity 1`] = `
     "previousBoard": "",
     "previousPlayer": "White",
   },
+  "moveOrCheatViaApi": false,
   "previousGame": null,
   "stats": {},
   "storedCycles": 0,
@@ -74,6 +75,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "bladeburner": {
       "ctor": "Bladeburner",
       "data": {
+        "_teamSize": 0,
         "action": null,
         "actionTimeCurrent": 0,
         "actionTimeOverflow": 0,
@@ -83,65 +85,193 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "automateEnabled": false,
         "automateThreshHigh": 0,
         "automateThreshLow": 0,
+        "blackOperations": {
+          "Operation Annihilus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Archangel": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Ares": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Centurion": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Daedalus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Deckard": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Hyron": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Ion Storm": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Juggernaut": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation K": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Morpheus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Red Dragon": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Shoulder of Orion": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Titan": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Typhoon": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Tyrell": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Ultron": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Vindictus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Wallace": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation X": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Zero": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+        },
         "cities": {
           "Aevum": {
             "ctor": "City",
             "data": {
               "chaos": 0,
-              "comms": 42,
+              "comms": 30,
               "name": "Aevum",
-              "pop": 1101351351,
-              "popEst": 803688823.7027026,
+              "pop": 1060810810,
+              "popEst": 688093498.3783784,
             },
           },
           "Chongqing": {
             "ctor": "City",
             "data": {
               "chaos": 0,
-              "comms": 54,
+              "comms": 42,
               "name": "Chongqing",
-              "pop": 1141891892,
-              "popEst": 925858290.8108107,
+              "pop": 1101351351,
+              "popEst": 803688823.7027026,
             },
           },
           "Ishima": {
             "ctor": "City",
             "data": {
               "chaos": 0,
-              "comms": 89,
+              "comms": 78,
               "name": "Ishima",
-              "pop": 1263513514,
-              "popEst": 1331811541.7837837,
+              "pop": 1222972973,
+              "popEst": 1189919649.4054055,
             },
           },
           "New Tokyo": {
             "ctor": "City",
             "data": {
               "chaos": 0,
-              "comms": 78,
+              "comms": 66,
               "name": "New Tokyo",
-              "pop": 1222972973,
-              "popEst": 1189919649.4054055,
+              "pop": 1182432432,
+              "popEst": 1054601898.8108108,
             },
           },
           "Sector-12": {
             "ctor": "City",
             "data": {
               "chaos": 0,
-              "comms": 66,
+              "comms": 54,
               "name": "Sector-12",
-              "pop": 1182432432,
-              "popEst": 1054601898.8108108,
+              "pop": 1141891892,
+              "popEst": 925858290.8108107,
             },
           },
           "Volhaven": {
             "ctor": "City",
             "data": {
               "chaos": 0,
-              "comms": 101,
+              "comms": 89,
               "name": "Volhaven",
-              "pop": 1304054054,
-              "popEst": 1480277574.8108108,
+              "pop": 1263513514,
+              "popEst": 1331811541.7837837,
             },
           },
         },
@@ -156,7 +286,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 117,
+              "count": 97,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -167,7 +297,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 125,
+              "count": 101,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -178,7 +308,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 115,
+              "count": 101,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -203,7 +333,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 23,
+              "count": 124,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -215,7 +345,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 88,
+              "count": 69,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -227,7 +357,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 7,
+              "count": 116,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -239,7 +369,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 15,
+              "count": 120,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -251,7 +381,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 148,
+              "count": 112,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -263,7 +393,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "count": 94,
+              "count": 72,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -272,7 +402,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             },
           },
         },
-        "randomEventCounter": 303,
+        "randomEventCounter": 274,
         "rank": 2000,
         "skillPoints": 666,
         "skills": {},
@@ -280,7 +410,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "staminaBonus": 0,
         "storedCycles": 0,
         "teamLost": 0,
-        "teamSize": 0,
         "totalSkillPoints": 666,
       },
     },
@@ -290,7 +419,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       "data": {
         "cycleValuation": 0,
         "dividendRate": 0,
-        "dividendTax": 0.15,
         "divisions": {
           "ctor": "JSONMap",
           "data": [],
@@ -320,6 +448,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "storedCycles": 0,
         "totalAssets": 150000000000,
         "totalShares": 1000000000,
+        "tributeModifier": 0.15,
         "unlocks": {
           "ctor": "JSONSet",
           "data": [],
@@ -328,10 +457,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
           "ABC SalesBots": {
             "level": 0,
             "value": 1,
-          },
-          "DreamSense": {
-            "level": 0,
-            "value": 0,
           },
           "FocusWires": {
             "level": 0,
@@ -451,7 +576,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",
-    "money": 1179,
+    "money": 1262,
     "moneySourceA": {
       "ctor": "MoneySourceTracker",
       "data": {
@@ -462,6 +587,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "codingcontract": 0,
         "corporation": 0,
         "crime": 0,
+        "darknet": 0,
         "gang": 0,
         "gang_expenses": 0,
         "hacking": 0,
@@ -487,6 +613,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "codingcontract": 0,
         "corporation": 0,
         "crime": 0,
+        "darknet": 0,
         "gang": 0,
         "gang_expenses": 0,
         "hacking": 0,
@@ -518,6 +645,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       "defense_exp": 1,
       "dexterity": 1,
       "dexterity_exp": 1,
+      "dnet_money": 1,
       "faction_rep": 1,
       "hacking": 1,
       "hacking_chance": 1,
@@ -535,6 +663,9 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       "work_money": 1,
     },
     "numPeopleKilled": 0,
+    "persistentIntelligenceData": {
+      "exp": 0,
+    },
     "playtimeSinceLastAug": 0,
     "playtimeSinceLastBitnode": 0,
     "purchasedServers": [],
@@ -599,6 +730,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "defense_exp": 1,
             "dexterity": 1.3,
             "dexterity_exp": 1,
+            "dnet_money": 1,
             "faction_rep": 1,
             "hacking": 1,
             "hacking_chance": 1,
@@ -614,6 +746,9 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "strength": 1.3,
             "strength_exp": 1,
             "work_money": 1,
+          },
+          "persistentIntelligenceData": {
+            "exp": 0,
           },
           "queuedAugmentations": [],
           "shock": 100,
@@ -671,6 +806,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "defense_exp": 1,
             "dexterity": 1,
             "dexterity_exp": 1,
+            "dnet_money": 1,
             "faction_rep": 1,
             "hacking": 1,
             "hacking_chance": 1,
@@ -686,6 +822,9 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "strength": 1,
             "strength_exp": 1,
             "work_money": 1,
+          },
+          "persistentIntelligenceData": {
+            "exp": 0,
           },
           "queuedAugmentations": [],
           "shock": 100,

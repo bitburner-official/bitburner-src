@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import { TableHead } from "@mui/material";
 import remarkGfm from "remark-gfm";
@@ -6,20 +6,34 @@ import { h1, h2, h3, h4, h5, h6, li, Td, Th, table, tr, Blockquote, p } from "./
 import { code, Pre } from "./code";
 import { A } from "./a";
 import remarkMath from "remark-math";
-import rehypeMathjax from "rehype-mathjax/svg";
+import rehypeRaw from "rehype-raw";
 import { FilePath } from "../../Paths/FilePath";
-import { getPage } from "../../Documentation/root";
+import { convertMathNotation, getPage } from "../../Documentation/root";
+import { DocImages } from "../../Documentation/pages";
+import { createPlugin } from "../../ThirdParty/RehypePlugin.mjs";
+import { Settings } from "../../Settings/Settings";
+import { fromDom } from "hast-util-from-dom";
 
-export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactElement {
-  const pageContent = getPage(props.pageFilePath);
+const rehypePlugin = createPlugin(function () {
+  return {
+    render(value: string, { display }: { display: boolean }) {
+      const mml = convertMathNotation(value);
+      const element = document.createElement(display ? "div" : "span");
+      if (display) {
+        element.style.textAlign = "center";
+      }
+      element.style.fontFamily = Settings.styles.fontFamily;
+      // Check the comment in src/Themes/ui/StyleEditorModal.tsx to see why we need to convert the font size.
+      element.style.fontSize = `${Settings.styles.fontSize * (16 / 14)}px`;
+      element.style.color = Settings.theme.primary;
+      element.innerHTML = mml;
+      return [fromDom(element)];
+    },
+  };
+});
 
-  useEffect(() => {
-    // This is a workaround. window.scrollTo does not work when we switch from Documentation tab to another tab, then
-    // switch back.
-    setTimeout(() => {
-      window.scrollTo({ top: props.top, behavior: "instant" });
-    }, 0);
-  });
+export function MD({ pageFilePath }: { pageFilePath: FilePath }): React.ReactElement {
+  const pageContent = getPage(pageFilePath);
 
   return (
     <ReactMarkdown
@@ -44,7 +58,12 @@ export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactE
         a: A,
       }}
       remarkPlugins={[remarkGfm, remarkMath]}
-      rehypePlugins={[rehypeMathjax]}
+      // Use a custom rehype plugin to render LaTeX notation in md files. Use rehypeRaw to support HTML content in NS
+      // API docs.
+      rehypePlugins={[rehypePlugin, rehypeRaw]}
+      transformImageUri={(__src, alt) => {
+        return DocImages[alt];
+      }}
     >
       {pageContent}
     </ReactMarkdown>

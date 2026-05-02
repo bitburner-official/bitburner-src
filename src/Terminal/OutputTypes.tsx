@@ -39,10 +39,10 @@ export class Link {
 export class TTimer {
   time: number;
   timeLeft: number;
-  action: "h" | "b" | "a" | "g" | "w";
+  action: "h" | "b" | "a" | "g" | "w" | "c";
   server?: BaseServer;
 
-  constructor(time: number, action: "h" | "b" | "a" | "g" | "w", server?: BaseServer) {
+  constructor(time: number, action: "h" | "b" | "a" | "g" | "w" | "c", server?: BaseServer) {
     this.time = time;
     this.timeLeft = time;
     this.action = action;

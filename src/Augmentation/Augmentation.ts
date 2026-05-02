@@ -40,6 +40,7 @@ export interface AugmentationCtorParams {
   faction_rep?: number;
   crime_money?: number;
   crime_success?: number;
+  dnet_money?: number;
   work_money?: number;
   hacknet_node_money?: number;
   hacknet_node_purchase_cost?: number;

@@ -2,19 +2,123 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveCrimeTask](./bitburner.sleevecrimetask.md)
 
-## SleeveCrimeTask type
+## SleeveCrimeTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveCrimeTask = {
-  type: "CRIME";
-  crimeType: CrimeType | `${CrimeType}`;
-  cyclesWorked: number;
-  cyclesNeeded: number;
-  tasksCompleted: number;
-};
+interface SleeveCrimeTask extends BaseTask 
 ```
-**References:** [CrimeType](./bitburner.crimetype.md)
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[crimeType](./bitburner.sleevecrimetask.crimetype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CrimeType](./bitburner.crimetype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cyclesNeeded](./bitburner.sleevecrimetask.cyclesneeded.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cyclesWorked](./bitburner.sleevecrimetask.cyclesworked.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[tasksCompleted](./bitburner.sleevecrimetask.taskscompleted.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.sleevecrimetask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"CRIME"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

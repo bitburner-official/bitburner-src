@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 
 import { Player } from "../../../src/Player";
-import { getTabCompletionPossibilities } from "../../../src/Terminal/getTabCompletionPossibilities";
+import { getTabCompletionPossibilities, extractCurrentText } from "../../../src/Terminal/getTabCompletionPossibilities";
 import { Server } from "../../../src/Server/Server";
 import { AddToAllServers, prestigeAllServers } from "../../../src/Server/AllServers";
 import { LocationName } from "../../../src/Enums";
@@ -68,6 +68,7 @@ describe("getTabCompletionPossibilities", function () {
     expect(options.sort()).toEqual(
       [
         "BruteSSH.exe",
+        "DarkscapeNavigator.exe",
         "FTPCrack.exe",
         "relaySMTP.exe",
         "HTTPWorm.exe",
@@ -183,6 +184,27 @@ describe("getTabCompletionPossibilities", function () {
       const options = await getTabCompletionPossibilities(`${command} `, root);
       expect(options.sort()).toEqual(["folder1/", "anotherFolder/"].sort());
     }
+  });
+});
+
+describe("extractCurrentText", () => {
+  it("returns last word for unquoted input", () => {
+    expect(extractCurrentText("run myscript.js foo")).toBe("foo");
+  });
+  it("returns empty string for input ending with space", () => {
+    expect(extractCurrentText("run myscript.js ")).toBe("");
+  });
+  it("returns text from opening quote for unclosed double quote", () => {
+    expect(extractCurrentText('run myscript.js "nonunique se')).toBe('"nonunique se');
+  });
+  it("returns last word when all quotes are closed", () => {
+    expect(extractCurrentText('run myscript.js "arg1" foo')).toBe("foo");
+  });
+  it("handles empty input", () => {
+    expect(extractCurrentText("")).toBe("");
+  });
+  it("returns text from opening quote with one word inside", () => {
+    expect(extractCurrentText('run "partial')).toBe('"partial');
   });
 });
 

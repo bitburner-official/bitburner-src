@@ -9,9 +9,9 @@ Grafting Work
 **Signature:**
 
 ```typescript
-export interface GraftingTask extends BaseTask 
+interface GraftingTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
@@ -19,9 +19,60 @@ An object representing the current grafting task
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [augmentation](./bitburner.graftingtask.augmentation.md) |  | string |  |
-|  [completion](./bitburner.graftingtask.completion.md) |  | Promise&lt;void&gt; | This promise resolves when the task is complete. |
-|  [type](./bitburner.graftingtask.type.md) |  | "GRAFTING" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[augmentation](./bitburner.graftingtask.augmentation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.graftingtask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"GRAFTING"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

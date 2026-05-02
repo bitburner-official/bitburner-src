@@ -14,8 +14,60 @@ interface HacknetRAMRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [hacknetRAM](./bitburner.hacknetramrequirement.hacknetram.md) |  | number |  |
-|  [type](./bitburner.hacknetramrequirement.type.md) |  | "hacknetRAM" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[hacknetRAM](./bitburner.hacknetramrequirement.hacknetram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.hacknetramrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"hacknetRAM"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

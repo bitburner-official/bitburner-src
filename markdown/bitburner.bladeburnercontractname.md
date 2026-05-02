@@ -2,21 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [BladeburnerContractName](./bitburner.bladeburnercontractname.md)
 
-## BladeburnerContractName enum
+## BladeburnerContractName type
 
-Contract names of Bladeburner
 
 **Signature:**
 
 ```typescript
-declare enum BladeburnerContractName 
+type BladeburnerContractName = _ValueOf<BladeburnerContractNameEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  BountyHunter | <code>&quot;Bounty Hunter&quot;</code> |  |
-|  Retirement | <code>&quot;Retirement&quot;</code> |  |
-|  Tracking | <code>&quot;Tracking&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerContractNameEnumType](./bitburner.bladeburnercontractnameenumtype.md)
 

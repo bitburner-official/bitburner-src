@@ -9,12 +9,54 @@ Base interface of all tasks.
 **Signature:**
 
 ```typescript
-export interface BaseTask 
+interface BaseTask 
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cyclesWorked](./bitburner.basetask.cyclesworked.md) |  | number | The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[nextCompletion](./bitburner.basetask.nextcompletion.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Promise&lt;void&gt;
+
+
+</td><td>
+
+This promise resolves when the task completes or is canceled.
+
+Tasks that do not track progress, such as studying or working for a company, are non-completable, i.e., they continue indefinitely until canceled. The `nextCompletion` promise of these tasks resolves only when they are canceled.
+
+Among completable tasks, some are repeatable, i.e., they automatically restart after completion. The `nextCompletion` promise of these tasks resolves on the next completion or when they are canceled.
+
+
+</td></tr>
+</tbody></table>
 

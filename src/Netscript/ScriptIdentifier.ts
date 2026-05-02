@@ -5,6 +5,6 @@ export type ScriptIdentifier =
   | number
   | {
       scriptname: string;
-      hostname: string;
+      host: string;
       args: ScriptArg[];
     };

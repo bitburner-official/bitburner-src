@@ -263,6 +263,13 @@ export function PlayerMultipliers(): React.ReactElement {
       bnMult: currentNodeMults.CrimeMoney,
       color: Settings.theme.money,
     },
+    {
+      mult: "Darknet Money",
+      current: Player.mults.dnet_money,
+      augmented: Player.mults.dnet_money * mults.dnet_money,
+      bnMult: currentNodeMults.DarknetMoneyMultiplier,
+      color: Settings.theme.money,
+    },
   ];
 
   if (Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0) {

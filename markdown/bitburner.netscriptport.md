@@ -14,14 +14,104 @@ export interface NetscriptPort
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [clear()](./bitburner.netscriptport.clear.md) | Empties all data from the port. |
-|  [empty()](./bitburner.netscriptport.empty.md) | Check if the port is empty. |
-|  [full()](./bitburner.netscriptport.full.md) | Check if the port is full. |
-|  [nextWrite()](./bitburner.netscriptport.nextwrite.md) | Waits until the port is written to. |
-|  [peek()](./bitburner.netscriptport.peek.md) | Retrieve the first element from the port without removing it. |
-|  [read()](./bitburner.netscriptport.read.md) | Shift an element out of the port. |
-|  [tryWrite(value)](./bitburner.netscriptport.trywrite.md) | Attempt to write data to the port. |
-|  [write(value)](./bitburner.netscriptport.write.md) | Write data to a port. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[clear()](./bitburner.netscriptport.clear.md)
+
+
+</td><td>
+
+Empties all data from the port.
+
+
+</td></tr>
+<tr><td>
+
+[empty()](./bitburner.netscriptport.empty.md)
+
+
+</td><td>
+
+Check if the port is empty.
+
+
+</td></tr>
+<tr><td>
+
+[full()](./bitburner.netscriptport.full.md)
+
+
+</td><td>
+
+Check if the port is full.
+
+
+</td></tr>
+<tr><td>
+
+[nextWrite()](./bitburner.netscriptport.nextwrite.md)
+
+
+</td><td>
+
+Waits until the port is written to.
+
+
+</td></tr>
+<tr><td>
+
+[peek()](./bitburner.netscriptport.peek.md)
+
+
+</td><td>
+
+Retrieve the first element from the port without removing it.
+
+
+</td></tr>
+<tr><td>
+
+[read()](./bitburner.netscriptport.read.md)
+
+
+</td><td>
+
+Shift an element out of the port.
+
+
+</td></tr>
+<tr><td>
+
+[tryWrite(value)](./bitburner.netscriptport.trywrite.md)
+
+
+</td><td>
+
+Attempt to write data to the port.
+
+
+</td></tr>
+<tr><td>
+
+[write(value)](./bitburner.netscriptport.write.md)
+
+
+</td><td>
+
+Write data to a port.
+
+
+</td></tr>
+</tbody></table>
 

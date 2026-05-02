@@ -13,7 +13,7 @@ interface IProps {
   editor: IStandaloneCodeEditor | null;
   onOpenNextTab: (step: number) => void;
   onOpenPreviousTab: (step: number) => void;
-  onSave: () => void;
+  onSave: () => Promise<void>;
 }
 
 export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, onSave }: IProps) {
@@ -32,7 +32,7 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         setVimEditor(MonacoVim.initVimMode(editor, statusBarRef, StatusBar, rerender));
         MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
           // your own implementation on what you want to do when :w is pressed
-          actionsRef.current.save();
+          actionsRef.current.save().catch((error) => console.error(error));
         });
         MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
           Router.toPage(Page.Terminal);
@@ -43,8 +43,12 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         MonacoVim.VimMode.Vim.mapCommand("@", "", "", null, { context: "normal" });
 
         const saveNQuit = (): void => {
-          actionsRef.current.save();
-          Router.toPage(Page.Terminal);
+          actionsRef.current
+            .save()
+            .then(() => {
+              Router.toPage(Page.Terminal);
+            })
+            .catch((error) => console.error(error));
         };
         // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
         MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);

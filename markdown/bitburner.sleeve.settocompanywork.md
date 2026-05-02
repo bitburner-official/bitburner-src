@@ -9,15 +9,60 @@ Set a sleeve to work for a company.
 **Signature:**
 
 ```typescript
-setToCompanyWork(sleeveNumber: number, companyName: CompanyName | `${CompanyName}`): boolean;
+setToCompanyWork(sleeveNumber: number, companyName: CompanyName): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sleeveNumber | number | Index of the sleeve to work for the company. |
-|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of the company to work for. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sleeveNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index of the sleeve to work for the company.
+
+
+</td></tr>
+<tr><td>
+
+companyName
+
+
+</td><td>
+
+[CompanyName](./bitburner.companyname.md)
+
+
+</td><td>
+
+Name of the company to work for.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

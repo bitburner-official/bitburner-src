@@ -14,8 +14,60 @@ interface FileRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [file](./bitburner.filerequirement.file.md) |  | string |  |
-|  [type](./bitburner.filerequirement.type.md) |  | "file" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[file](./bitburner.filerequirement.file.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.filerequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"file"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

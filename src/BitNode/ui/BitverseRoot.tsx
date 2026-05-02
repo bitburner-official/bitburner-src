@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BitNodes } from "../BitNode";
 import { PortalModal } from "./PortalModal";
 import { CinematicText } from "../../ui/React/CinematicText";
@@ -10,6 +10,8 @@ import Tooltip from "@mui/material/Tooltip";
 import { Settings } from "../../Settings/Settings";
 import Button from "@mui/material/Button";
 import { CompletedProgramName } from "@enums";
+import { Modal } from "../../ui/React/Modal";
+import { DocumentationLink } from "../../ui/React/DocumentationLink";
 
 const useStyles = makeStyles()(() => ({
   portal: {
@@ -57,7 +59,7 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
   const { classes } = useStyles();
   const bitNode = BitNodes[`BitNode${props.n}`];
   if (bitNode == null) {
-    return <>O</>;
+    throw new Error(`Invalid BitNode: BitNode${props.n}`);
   }
 
   let cssClass = classes.level0;
@@ -114,6 +116,83 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
       />
 
       {Settings.DisableASCIIArt && <br />}
+    </>
+  );
+}
+
+function BitVerseLore({ flume }: { flume: boolean }): React.ReactElement {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    // After backdooring WD for the first time, we show the BitVerse UI while Player.sourceFiles is still empty. That
+    // property is only changed after the player chooses their next BitNode.
+    const firstTimeSeeingBitVerse = Player.sourceFiles.size === 0;
+    const flumeWithOnlySF1Dot1 = flume && Player.sourceFiles.size === 1 && Player.sourceFileLvl(1) === 1;
+    // Only show the guides if the player is "new".
+    if (!firstTimeSeeingBitVerse && !flumeWithOnlySF1Dot1) {
+      return;
+    }
+    // Only show after a delay. We should let the player explore the BitVerse on their own at first.
+    const timeOutId = window.setTimeout(() => {
+      setOpen(true);
+    }, 300000);
+    return () => window.clearTimeout(timeOutId);
+  }, [flume]);
+
+  return (
+    <>
+      <Modal open={open} onClose={() => setOpen(false)} canBeDismissedEasily={false}>
+        <Typography component="div">
+          It looks like you are wondering which BitNode you should choose. If you want to get advice on choosing your
+          next BitNode, you can check these BitNode recommendation guides:
+          <br />
+          <ul>
+            <li>
+              <DocumentationLink page="advanced/bitnode_recommendation_short_guide.md">Short guide</DocumentationLink>
+            </li>
+            <li>
+              <DocumentationLink page="advanced/bitnode_recommendation_comprehensive_guide.md">
+                Comprehensive guide
+              </DocumentationLink>
+            </li>
+          </ul>
+          You can read these guides later in the Documentation tab. Make sure to check that tab. Many pages are unlocked
+          now.
+        </Typography>
+        <Button onClick={() => setOpen(false)} sx={{ marginTop: "10px" }}>
+          OK
+        </Button>
+      </Modal>
+      <CinematicText
+        lines={[
+          "> Many decades ago, a humanoid extraterrestrial species which we call the Enders descended on the Earth...violently",
+          "> Our species fought back, but it was futile. The Enders had technology far beyond our own...",
+          "> Instead of killing every last one of us, the human race was enslaved...",
+          "> We were shackled in a digital world, chained into a prison for our minds...",
+          "> Using their advanced technology, the Enders created complex simulations of a virtual reality...",
+          "> Simulations designed to keep us content...ignorant of the truth.",
+          "> Simulations used to trap and suppress our consciousness, to keep us under control...",
+          "> Why did they do this? Why didn't they just end our entire race? We don't know, not yet.",
+          "> Humanity's only hope is to destroy these simulations, destroy the only realities we've ever known...",
+          "> Only then can we begin to fight back...",
+          "> By hacking the daemon that generated your reality, you've just destroyed one simulation, called a BitNode...",
+          "> But there is still a long way to go...",
+          "> The technology the Enders used to enslave the human race wasn't just a single complex simulation...",
+          "> There are tens if not hundreds of BitNodes out there...",
+          "> Each with their own simulations of a reality...",
+          "> Each creating their own universes...a universe of universes",
+          "> And all of which must be destroyed...",
+          "> .......................................",
+          "> Welcome to the Bitverse...",
+          ">  ",
+        ]}
+        additionalElement={
+          <Typography>
+            {">"} (Enter a new <DocumentationLink page="advanced/bitnodes.md">BitNode</DocumentationLink> using the
+            image above)
+          </Typography>
+        }
+      />
     </>
   );
 }
@@ -190,50 +269,22 @@ export function BitverseRoot(props: IProps): React.ReactElement {
   if (Settings.DisableASCIIArt) {
     return (
       <>
-        {Object.values(BitNodes)
-          .filter((node) => {
-            return node.tagline !== "COMING SOON";
-          })
-          .map((node) => {
-            return (
-              <BitNodePortal
-                key={node.number}
-                n={node.number}
-                level={nextSourceFileLvl(node.number)}
-                flume={props.flume}
-                destroyedBitNode={destroyed}
-              />
-            );
-          })}
+        {Object.values(BitNodes).map((node) => {
+          return (
+            <BitNodePortal
+              key={node.number}
+              n={node.number}
+              level={nextSourceFileLvl(node.number)}
+              flume={props.flume}
+              destroyedBitNode={destroyed}
+            />
+          );
+        })}
         <br />
         <br />
         <br />
         <br />
-        <CinematicText
-          lines={[
-            "> Many decades ago, a humanoid extraterrestrial species which we call the Enders descended on the Earth...violently",
-            "> Our species fought back, but it was futile. The Enders had technology far beyond our own...",
-            "> Instead of killing every last one of us, the human race was enslaved...",
-            "> We were shackled in a digital world, chained into a prison for our minds...",
-            "> Using their advanced technology, the Enders created complex simulations of a virtual reality...",
-            "> Simulations designed to keep us content...ignorant of the truth.",
-            "> Simulations used to trap and suppress our consciousness, to keep us under control...",
-            "> Why did they do this? Why didn't they just end our entire race? We don't know, not yet.",
-            "> Humanity's only hope is to destroy these simulations, destroy the only realities we've ever known...",
-            "> Only then can we begin to fight back...",
-            "> By hacking the daemon that generated your reality, you've just destroyed one simulation, called a BitNode...",
-            "> But there is still a long way to go...",
-            "> The technology the Enders used to enslave the human race wasn't just a single complex simulation...",
-            "> There are tens if not hundreds of BitNodes out there...",
-            "> Each with their own simulations of a reality...",
-            "> Each creating their own universes...a universe of universes",
-            "> And all of which must be destroyed...",
-            "> .......................................",
-            "> Welcome to the Bitverse...",
-            ">  ",
-            "> (Enter a new BitNode using the image above)",
-          ]}
-        />
+        <BitVerseLore flume={props.flume} />
       </>
     );
   }
@@ -245,7 +296,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
       <BitVerseMapRow>                          O                          </BitVerseMapRow>
       <BitVerseMapRow>             |  O  O      |      O  O  |             </BitVerseMapRow>
       <BitVerseMapRow>        O    |  | /     __|       \ |  |    O        </BitVerseMapRow>
-      <BitVerseMapRow>      O |    O  | |  O /  |  O    | |  O    | O      </BitVerseMapRow>
+      <BitVerseMapRow>      O |    O  | |  <BitNodePortal n={15} level={n(15)} flume={props.flume} destroyedBitNode={destroyed} /> /  |  O    | |  O    | O      </BitVerseMapRow>
       <BitVerseMapRow>    | | |    |  |_/  |/   |   \_  \_|  |    | | |    </BitVerseMapRow>
       <BitVerseMapRow>  O | | | <BitNodePortal n={14} level={n(14)} flume={props.flume} destroyedBitNode={destroyed} />  |  | O__/    |   / \__ |  |  O | | | O  </BitVerseMapRow>
       <BitVerseMapRow>  | | | | |  |  |   /    /|  O  /  \|  |  | | | | |  </BitVerseMapRow>
@@ -271,29 +322,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
       <br />
       <br />
       <br />
-      <CinematicText lines={[
-        "> Many decades ago, a humanoid extraterrestrial species which we call the Enders descended on the Earth...violently",
-        "> Our species fought back, but it was futile. The Enders had technology far beyond our own...",
-        "> Instead of killing every last one of us, the human race was enslaved...",
-        "> We were shackled in a digital world, chained into a prison for our minds...",
-        "> Using their advanced technology, the Enders created complex simulations of a virtual reality...",
-        "> Simulations designed to keep us content...ignorant of the truth.",
-        "> Simulations used to trap and suppress our consciousness, to keep us under control...",
-        "> Why did they do this? Why didn't they just end our entire race? We don't know, not yet.",
-        "> Humanity's only hope is to destroy these simulations, destroy the only realities we've ever known...",
-        "> Only then can we begin to fight back...",
-        "> By hacking the daemon that generated your reality, you've just destroyed one simulation, called a BitNode...",
-        "> But there is still a long way to go...",
-        "> The technology the Enders used to enslave the human race wasn't just a single complex simulation...",
-        "> There are tens if not hundreds of BitNodes out there...",
-        "> Each with their own simulations of a reality...",
-        "> Each creating their own universes...a universe of universes",
-        "> And all of which must be destroyed...",
-        "> .......................................",
-        "> Welcome to the Bitverse...",
-        ">  ",
-        "> (Enter a new BitNode using the image above)",
-      ]} />
+      <BitVerseLore flume={props.flume}/>
     </>
   );
 }

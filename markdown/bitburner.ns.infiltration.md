@@ -4,15 +4,10 @@
 
 ## NS.infiltration property
 
-Namespace for infiltration functions.
+Namespace for [infiltration](./bitburner.infiltration.md) functions.
 
 **Signature:**
 
 ```typescript
 readonly infiltration: Infiltration;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

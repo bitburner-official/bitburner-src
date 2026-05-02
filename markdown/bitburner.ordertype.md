@@ -2,21 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [OrderType](./bitburner.ordertype.md)
 
-## OrderType enum
+## OrderType type
 
 
 **Signature:**
 
 ```typescript
-declare enum OrderType 
+type OrderType = _ValueOf<OrderEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  LimitBuy | <code>&quot;Limit Buy Order&quot;</code> |  |
-|  LimitSell | <code>&quot;Limit Sell Order&quot;</code> |  |
-|  StopBuy | <code>&quot;Stop Buy Order&quot;</code> |  |
-|  StopSell | <code>&quot;Stop Sell Order&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [OrderEnumType](./bitburner.orderenumtype.md)
 

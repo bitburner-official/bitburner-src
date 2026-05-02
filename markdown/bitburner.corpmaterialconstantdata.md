@@ -14,15 +14,185 @@ interface CorpMaterialConstantData
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [baseCost](./bitburner.corpmaterialconstantdata.basecost.md) |  | number |  |
-|  [baseMarkup](./bitburner.corpmaterialconstantdata.basemarkup.md) |  | number |  |
-|  [competitionBase](./bitburner.corpmaterialconstantdata.competitionbase.md) |  | number |  |
-|  [competitionRange](./bitburner.corpmaterialconstantdata.competitionrange.md) |  | \[min: number, max: number\] |  |
-|  [demandBase](./bitburner.corpmaterialconstantdata.demandbase.md) |  | number |  |
-|  [demandRange](./bitburner.corpmaterialconstantdata.demandrange.md) |  | \[min: number, max: number\] | Min and max demand |
-|  [maxVolatility](./bitburner.corpmaterialconstantdata.maxvolatility.md) |  | number |  |
-|  [name](./bitburner.corpmaterialconstantdata.name.md) |  | string | Name of the material |
-|  [size](./bitburner.corpmaterialconstantdata.size.md) |  | number | Size of the material |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[baseCost](./bitburner.corpmaterialconstantdata.basecost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[baseMarkup](./bitburner.corpmaterialconstantdata.basemarkup.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[competitionBase](./bitburner.corpmaterialconstantdata.competitionbase.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[competitionRange](./bitburner.corpmaterialconstantdata.competitionrange.md)
+
+
+</td><td>
+
+
+</td><td>
+
+\[min: number, max: number\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[demandBase](./bitburner.corpmaterialconstantdata.demandbase.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[demandRange](./bitburner.corpmaterialconstantdata.demandrange.md)
+
+
+</td><td>
+
+
+</td><td>
+
+\[min: number, max: number\]
+
+
+</td><td>
+
+Min and max demand
+
+
+</td></tr>
+<tr><td>
+
+[maxVolatility](./bitburner.corpmaterialconstantdata.maxvolatility.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.corpmaterialconstantdata.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material
+
+
+</td></tr>
+<tr><td>
+
+[size](./bitburner.corpmaterialconstantdata.size.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Size of the material
+
+
+</td></tr>
+</tbody></table>
 

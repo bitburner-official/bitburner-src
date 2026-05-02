@@ -1,9 +1,8 @@
 import * as React from "react";
-import { Fragment, NoneFragment } from "../Fragment";
-import { FragmentType } from "../FragmentType";
+import { type Fragment } from "../Fragment";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentInspector } from "./FragmentInspector";
-import { FragmentSelector } from "./FragmentSelector";
+import { FragmentSelector, isUIFragment, NoneFragment, type UIFragment } from "./FragmentSelector";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Table } from "../../ui/React/Table";
@@ -21,11 +20,13 @@ export function MainBoard(props: IProps): React.ReactElement {
   const [ghostGrid, setGhostGrid] = React.useState(zeros(props.gift.width(), props.gift.height()));
   const [pos, setPos] = React.useState([0, 0]);
   const [rotation, setRotation] = React.useState(0);
-  const [selectedFragment, setSelectedFragment] = React.useState(NoneFragment);
+  const [selectedFragment, setSelectedFragment] = React.useState<UIFragment | Fragment>(NoneFragment);
 
   function moveGhost(worldX: number, worldY: number, rotation: number): void {
     setPos([worldX, worldY]);
-    if (selectedFragment.type === FragmentType.None || selectedFragment.type === FragmentType.Delete) return;
+    if (isUIFragment(selectedFragment)) {
+      return;
+    }
     const newgrid = zeros(props.gift.width(), props.gift.height());
     for (let y = 0; y < selectedFragment.height(rotation); y++) {
       for (let x = 0; x < selectedFragment.width(rotation); x++) {
@@ -46,20 +47,23 @@ export function MainBoard(props: IProps): React.ReactElement {
   }
 
   function clickAt(worldX: number, worldY: number): void {
-    if (selectedFragment.type == FragmentType.None) return;
-    if (selectedFragment.type == FragmentType.Delete) {
-      deleteAt(worldX, worldY);
-    } else {
-      if (!props.gift.canPlace(worldX, worldY, rotation, selectedFragment)) return;
-      props.gift.place(worldX, worldY, rotation, selectedFragment);
+    if (isUIFragment(selectedFragment)) {
+      if (selectedFragment.type === "Delete") {
+        deleteAt(worldX, worldY);
+      }
+      return;
     }
+    if (!props.gift.canPlace(worldX, worldY, rotation, selectedFragment)) {
+      return;
+    }
+    props.gift.place(worldX, worldY, rotation, selectedFragment);
   }
 
   function clear(): void {
     props.gift.clear();
   }
 
-  function updateSelectedFragment(fragment: Fragment): void {
+  function updateSelectedFragment(fragment: UIFragment | Fragment): void {
     setSelectedFragment(fragment);
     const newgrid = zeros(props.gift.width(), props.gift.height());
     setGhostGrid(newgrid);

@@ -6,9 +6,10 @@ import { Paper, Popper, TextField, Typography } from "@mui/material";
 import { KEY } from "../../utils/KeyboardEventKey";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
-import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
+import { extractCurrentText, getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   input: {
@@ -62,6 +63,23 @@ export function TerminalInput(): React.ReactElement {
   }, [postUpdateValue]);
 
   function saveValue(newValue: string, postUpdate?: () => void): void {
+    /**
+     * There are reports of a crash caused by "value" (the React state) being undefined. It means that a caller of this
+     * function passes undefined to the first parameter. Currently, we don't know which caller does that, so we put this
+     * safety check here to mitigate the crash and gather more debug information.
+     */
+    if (newValue == null) {
+      exceptionAlert(
+        new Error(
+          `saveValue was called with invalid value.\n` +
+            `command: ${command}\nterminalInput.current.value: ${terminalInput.current?.value}\nvalue: ${value}\n` +
+            `possibilities: ${possibilities}\nsearchResults: ${searchResults}\nsearchResultsIndex: ${searchResultsIndex}\n` +
+            `Terminal.commandHistory: ${Terminal.commandHistory}\nTerminal.commandHistoryIndex: ${Terminal.commandHistoryIndex}`,
+        ),
+        true,
+      );
+      return;
+    }
     command = newValue;
     setValue(newValue);
 
@@ -191,7 +209,9 @@ export function TerminalInput(): React.ReactElement {
   // Catch all key inputs and redirect them to the terminal.
   useEffect(() => {
     function keyDown(this: Document, event: KeyboardEvent): void {
-      if (Terminal.contractOpen) return;
+      if (Terminal.contractOpen || Terminal.nsPromptApiOpen) {
+        return;
+      }
       if (Terminal.action !== null && event.key === KEY.C && event.ctrlKey) {
         Terminal.finishAction(true);
         return;
@@ -199,12 +219,21 @@ export function TerminalInput(): React.ReactElement {
       const ref = terminalInput.current;
       if (event.ctrlKey || event.metaKey) return;
       if (event.key === KEY.C && (event.ctrlKey || event.metaKey)) return; // trying to copy
-
+      // Don't steal focus from other input elements
+      const target = event.target;
+      if (
+        (target instanceof HTMLInputElement ||
+          target instanceof HTMLTextAreaElement ||
+          (target instanceof HTMLElement && target.isContentEditable)) &&
+        target !== ref
+      ) {
+        return;
+      }
       if (ref) ref.focus();
     }
     document.addEventListener("keydown", keyDown);
     return () => document.removeEventListener("keydown", keyDown);
-  });
+  }, []);
 
   async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> {
     const ref = terminalInput.current;
@@ -237,13 +266,16 @@ export function TerminalInput(): React.ReactElement {
       if (possibilities.length === 0) return;
 
       setSearchResults([]);
+      // Use quote-aware replacement: if mid-quote, replace from the opening quote
+      const currentText = extractCurrentText(value);
+      const replacePattern = currentText.startsWith('"') ? /"[^"]*$/ : /[^ ]*$/;
       if (possibilities.length === 1) {
-        saveValue(value.replace(/[^ ]*$/, possibilities[0]) + " ");
+        saveValue(value.replace(replacePattern, possibilities[0]) + " ");
         return;
       }
       // More than one possibility, check to see if there is a longer common string than currentText.
       const longestMatch = longestCommonStart(possibilities);
-      saveValue(value.replace(/[^ ]*$/, longestMatch));
+      saveValue(value.replace(replacePattern, longestMatch));
       setPossibilities(possibilities);
     }
 

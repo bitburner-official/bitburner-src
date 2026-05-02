@@ -2,22 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [BladeburnerActionType](./bitburner.bladeburneractiontype.md)
 
-## BladeburnerActionType enum
+## BladeburnerActionType type
 
-Action types of Bladeburner
 
 **Signature:**
 
 ```typescript
-declare enum BladeburnerActionType 
+type BladeburnerActionType = _ValueOf<BladeburnerActionEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  BlackOp | <code>&quot;Black Operations&quot;</code> |  |
-|  Contract | <code>&quot;Contracts&quot;</code> |  |
-|  General | <code>&quot;General&quot;</code> |  |
-|  Operation | <code>&quot;Operations&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerActionEnumType](./bitburner.bladeburneractionenumtype.md)
 

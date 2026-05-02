@@ -21,7 +21,7 @@ function allFactionAugs(faction: Faction): boolean {
 
 export const Milestones: Milestone[] = [
   {
-    title: "Gain root access on CSEC",
+    title: () => "Gain root access on CSEC",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
       if (!server || !Object.hasOwn(server, "hasAdminRights")) return false;
@@ -29,7 +29,7 @@ export const Milestones: Milestone[] = [
     },
   },
   {
-    title: "Install the backdoor on CSEC",
+    title: () => "Install the backdoor on CSEC",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
       if (!server || !Object.hasOwn(server, "backdoorInstalled")) return false;
@@ -37,68 +37,71 @@ export const Milestones: Milestone[] = [
     },
   },
   {
-    title: "Join the faction hinted at in csec-test.msg",
+    title: () => "Join the faction hinted at in csec-test.msg",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.CyberSec);
     },
   },
   {
-    title: `Install all the Augmentations from ${FactionName.CyberSec}`,
+    title: () => `Install all the Augmentations from ${FactionName.CyberSec}`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.CyberSec]);
     },
   },
   {
-    title: "Join the faction hinted at in nitesec-test.msg",
+    title: () => "Join the faction hinted at in nitesec-test.msg",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.NiteSec);
     },
   },
   {
-    title: `Install all the Augmentations from ${FactionName.NiteSec}`,
+    title: () => `Install all the Augmentations from ${FactionName.NiteSec}`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.NiteSec]);
     },
   },
   {
-    title: "Join the faction hinted at in j3.msg",
+    title: () => "Join the faction hinted at in j3.msg",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.TheBlackHand);
     },
   },
   {
-    title: `Install all the Augmentations from ${FactionName.TheBlackHand}`,
+    title: () => `Install all the Augmentations from ${FactionName.TheBlackHand}`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.TheBlackHand]);
     },
   },
   {
-    title: "Join the faction hinted at in 19dfj3l1nd.msg",
+    title: () => "Join the faction hinted at in 19dfj3l1nd.msg",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.BitRunners);
     },
   },
   {
-    title: `Install all the Augmentations from ${FactionName.BitRunners}`,
+    title: () => `Install all the Augmentations from ${FactionName.BitRunners}`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.BitRunners]);
     },
   },
   {
-    title: "Complete fl1ght.exe",
+    title: () => "Complete fl1ght.exe",
     fulfilled: (): boolean => {
       // technically wrong but whatever
       return Player.factions.includes(FactionName.Daedalus);
     },
   },
   {
-    title: `Install the special Augmentation from ${FactionName.Daedalus}`,
+    title: () =>
+      Player.bitNodeN === 15
+        ? `Find The Red Pill somewhere in the dark net`
+        : `Install the special Augmentation from ${FactionName.Daedalus}`,
     fulfilled: (): boolean => {
       return Player.augmentations.some((aug) => aug.name == "The Red Pill");
     },
   },
   {
-    title: "Install the final backdoor and free yourself.",
+    title: () => "Install the final backdoor and free yourself.",
     fulfilled: (): boolean => {
       return false;
     },

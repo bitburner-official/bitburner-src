@@ -14,11 +14,45 @@ resetStats(resetAll?: boolean): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  resetAll | boolean | _(Optional)_ Optional. if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged. Defaults to false. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+resetAll
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_ Optional. if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged. Defaults to false.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 0 GB
 

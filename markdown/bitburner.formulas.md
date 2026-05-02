@@ -18,22 +18,239 @@ You need Formulas.exe on your home computer to use this API.
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [bladeburner](./bitburner.formulas.bladeburner.md) |  | [BladeburnerFormulas](./bitburner.bladeburnerformulas.md) | Bladeburner formulas |
-|  [gang](./bitburner.formulas.gang.md) |  | [GangFormulas](./bitburner.gangformulas.md) | Gang formulas |
-|  [hacking](./bitburner.formulas.hacking.md) |  | [HackingFormulas](./bitburner.hackingformulas.md) | Hacking formulas |
-|  [hacknetNodes](./bitburner.formulas.hacknetnodes.md) |  | [HacknetNodesFormulas](./bitburner.hacknetnodesformulas.md) | Hacknet Nodes formulas |
-|  [hacknetServers](./bitburner.formulas.hacknetservers.md) |  | [HacknetServersFormulas](./bitburner.hacknetserversformulas.md) | Hacknet Servers formulas |
-|  [reputation](./bitburner.formulas.reputation.md) |  | [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
-|  [skills](./bitburner.formulas.skills.md) |  | [SkillsFormulas](./bitburner.skillsformulas.md) | Skills formulas |
-|  [work](./bitburner.formulas.work.md) |  | [WorkFormulas](./bitburner.workformulas.md) | Work formulas |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[bladeburner](./bitburner.formulas.bladeburner.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[BladeburnerFormulas](./bitburner.bladeburnerformulas.md)
+
+
+</td><td>
+
+Bladeburner formulas
+
+
+</td></tr>
+<tr><td>
+
+[dnet](./bitburner.formulas.dnet.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DarknetFormulas](./bitburner.darknetformulas.md)
+
+
+</td><td>
+
+Darknet formulas
+
+
+</td></tr>
+<tr><td>
+
+[gang](./bitburner.formulas.gang.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[GangFormulas](./bitburner.gangformulas.md)
+
+
+</td><td>
+
+Gang formulas
+
+
+</td></tr>
+<tr><td>
+
+[hacking](./bitburner.formulas.hacking.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[HackingFormulas](./bitburner.hackingformulas.md)
+
+
+</td><td>
+
+Hacking formulas
+
+
+</td></tr>
+<tr><td>
+
+[hacknetNodes](./bitburner.formulas.hacknetnodes.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[HacknetNodesFormulas](./bitburner.hacknetnodesformulas.md)
+
+
+</td><td>
+
+Hacknet Nodes formulas
+
+
+</td></tr>
+<tr><td>
+
+[hacknetServers](./bitburner.formulas.hacknetservers.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[HacknetServersFormulas](./bitburner.hacknetserversformulas.md)
+
+
+</td><td>
+
+Hacknet Servers formulas
+
+
+</td></tr>
+<tr><td>
+
+[reputation](./bitburner.formulas.reputation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ReputationFormulas](./bitburner.reputationformulas.md)
+
+
+</td><td>
+
+Reputation formulas
+
+
+</td></tr>
+<tr><td>
+
+[skills](./bitburner.formulas.skills.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[SkillsFormulas](./bitburner.skillsformulas.md)
+
+
+</td><td>
+
+Skills formulas
+
+
+</td></tr>
+<tr><td>
+
+[work](./bitburner.formulas.work.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[WorkFormulas](./bitburner.workformulas.md)
+
+
+</td><td>
+
+Work formulas
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [mockPerson()](./bitburner.formulas.mockperson.md) |  |
-|  [mockPlayer()](./bitburner.formulas.mockplayer.md) |  |
-|  [mockServer()](./bitburner.formulas.mockserver.md) |  |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[mockPerson()](./bitburner.formulas.mockperson.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[mockPlayer()](./bitburner.formulas.mockplayer.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[mockServer()](./bitburner.formulas.mockserver.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

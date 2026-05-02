@@ -4,15 +4,10 @@
 
 ## NS.formulas property
 
-Namespace for formulas functions.
+Namespace for [formulas](./bitburner.formulas.md) functions.
 
 **Signature:**
 
 ```typescript
 readonly formulas: Formulas;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

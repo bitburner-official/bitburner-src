@@ -9,9 +9,9 @@ Crime
 **Signature:**
 
 ```typescript
-export interface CrimeTask extends BaseTask 
+interface CrimeTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 
@@ -19,8 +19,60 @@ An object representing the crime being committed
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [crimeType](./bitburner.crimetask.crimetype.md) |  | [CrimeType](./bitburner.crimetype.md) |  |
-|  [type](./bitburner.crimetask.type.md) |  | "CRIME" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[crimeType](./bitburner.crimetask.crimetype.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CrimeType](./bitburner.crimetype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.crimetask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"CRIME"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

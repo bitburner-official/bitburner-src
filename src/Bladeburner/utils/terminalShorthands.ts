@@ -1,6 +1,9 @@
 import { ActionIdentifier } from "../Types";
 import { BladeburnerActionType } from "@enums";
-import { BlackOperation, Contract, GeneralAction, Operation } from "../Actions";
+import { BlackOperation } from "../Actions/BlackOperation";
+import { Contract } from "../Actions/Contract";
+import { GeneralAction } from "../Actions/GeneralAction";
+import { Operation } from "../Actions/Operation";
 
 const resolveActionIdentifierFromName = (name: unknown): ActionIdentifier | null => {
   if (Contract.IsAcceptedName(name)) return Contract.createId(name);

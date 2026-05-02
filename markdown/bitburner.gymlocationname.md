@@ -2,23 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [GymLocationName](./bitburner.gymlocationname.md)
 
-## GymLocationName enum
+## GymLocationName type
 
-Locations of gym
 
 **Signature:**
 
 ```typescript
-declare enum GymLocationName 
+type GymLocationName = _ValueOf<GymLocationNameEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  AevumCrushFitnessGym | <code>LocationName.AevumCrushFitnessGym</code> |  |
-|  AevumSnapFitnessGym | <code>LocationName.AevumSnapFitnessGym</code> |  |
-|  Sector12IronGym | <code>LocationName.Sector12IronGym</code> |  |
-|  Sector12PowerhouseGym | <code>LocationName.Sector12PowerhouseGym</code> |  |
-|  VolhavenMilleniumFitnessGym | <code>LocationName.VolhavenMilleniumFitnessGym</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [GymLocationNameEnumType](./bitburner.gymlocationnameenumtype.md)
 

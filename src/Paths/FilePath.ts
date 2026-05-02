@@ -29,12 +29,18 @@ const basicFilePathRegex = new RegExp(directoryRegexString + filenameRegexString
 };
 
 /** Simple validation function with no modification. Can be combined with isAbsolutePath to get a real FilePath */
-export function isFilePath(path: string): path is BasicFilePath {
+export function isBasicFilePath(path: string): path is BasicFilePath {
   return basicFilePathRegex.test(path);
 }
 
+export function isFilePath(path: string): path is FilePath {
+  return isBasicFilePath(path) && isAbsolutePath(path);
+}
+
 export function asFilePath<T extends string>(input: T): T & FilePath {
-  if (isFilePath(input) && isAbsolutePath(input)) return input;
+  if (isFilePath(input)) {
+    return input;
+  }
   throw new Error(`${input} failed to validate as a FilePath.`);
 }
 
@@ -56,7 +62,7 @@ export function resolveFilePath(path: string, base = "" as FilePath | Directory)
   if (isAbsolutePath(path)) {
     if (path.startsWith("/")) path = path.substring(1);
     // Because we modified the string since checking absoluteness, we have to assert that it's still absolute here.
-    return isFilePath(path) ? (path as FilePath) : null;
+    return isBasicFilePath(path) ? (path as FilePath) : null;
   }
   // Turn base into a DirectoryName in case it was not
   base = getBaseDirectory(base);

@@ -4,9 +4,11 @@
 
 ## BitNodeBooleanOptions interface
 
-restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1.
+Note:
 
-disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy augmentations for them.
+- restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1.
+
+- disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy augmentations for them.
 
 **Signature:**
 
@@ -16,13 +18,145 @@ export interface BitNodeBooleanOptions
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [disable4SData](./bitburner.bitnodebooleanoptions.disable4sdata.md) |  | boolean |  |
-|  [disableBladeburner](./bitburner.bitnodebooleanoptions.disablebladeburner.md) |  | boolean |  |
-|  [disableCorporation](./bitburner.bitnodebooleanoptions.disablecorporation.md) |  | boolean |  |
-|  [disableGang](./bitburner.bitnodebooleanoptions.disablegang.md) |  | boolean |  |
-|  [disableHacknetServer](./bitburner.bitnodebooleanoptions.disablehacknetserver.md) |  | boolean |  |
-|  [disableSleeveExpAndAugmentation](./bitburner.bitnodebooleanoptions.disablesleeveexpandaugmentation.md) |  | boolean |  |
-|  [restrictHomePCUpgrade](./bitburner.bitnodebooleanoptions.restricthomepcupgrade.md) |  | boolean |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[disable4SData](./bitburner.bitnodebooleanoptions.disable4sdata.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableBladeburner](./bitburner.bitnodebooleanoptions.disablebladeburner.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableCorporation](./bitburner.bitnodebooleanoptions.disablecorporation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableGang](./bitburner.bitnodebooleanoptions.disablegang.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableHacknetServer](./bitburner.bitnodebooleanoptions.disablehacknetserver.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableSleeveExpAndAugmentation](./bitburner.bitnodebooleanoptions.disablesleeveexpandaugmentation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[restrictHomePCUpgrade](./bitburner.bitnodebooleanoptions.restricthomepcupgrade.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

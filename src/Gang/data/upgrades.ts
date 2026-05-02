@@ -47,37 +47,37 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 25e6,
     mults: { str: 1.1, def: 1.1, dex: 1.1, agi: 1.1 },
-    name: "Glock 18C",
+    name: "Malorian-3516",
     upgType: UpgradeType.Weapon,
   },
   {
     cost: 50e6,
     mults: { str: 1.12, def: 1.1, agi: 1.1 },
-    name: "P90C",
+    name: "Hansen-HA7",
     upgType: UpgradeType.Weapon,
   },
   {
     cost: 60e6,
     mults: { str: 1.2, def: 1.15 },
-    name: "Steyr AUG",
+    name: "Arasaka-HJSH18",
     upgType: UpgradeType.Weapon,
   },
   {
     cost: 100e6,
     mults: { str: 1.25, def: 1.2 },
-    name: "AK-47",
+    name: "Militech-M251s",
     upgType: UpgradeType.Weapon,
   },
   {
     cost: 150e6,
     mults: { str: 1.3, def: 1.25 },
-    name: "M15A10 Assault Rifle",
+    name: "Nokota-D5",
     upgType: UpgradeType.Weapon,
   },
   {
     cost: 225e6,
     mults: { str: 1.3, dex: 1.25, agi: 1.3 },
-    name: "AWM Sniper Rifle",
+    name: "Techtronika-SPT32",
     upgType: UpgradeType.Weapon,
   },
   {
@@ -107,25 +107,25 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 3e6,
     mults: { agi: 1.04, cha: 1.04 },
-    name: "Ford Flex V20",
+    name: "Herrera Outlaw GTS",
     upgType: UpgradeType.Vehicle,
   },
   {
     cost: 9e6,
     mults: { agi: 1.08, cha: 1.08 },
-    name: "ATX1070 Superbike",
+    name: "Yaiba ASM-R250 Muramasa",
     upgType: UpgradeType.Vehicle,
   },
   {
     cost: 18e6,
     mults: { agi: 1.12, cha: 1.12 },
-    name: "Mercedes-Benz S9001",
+    name: "Rayfield Caliburn",
     upgType: UpgradeType.Vehicle,
   },
   {
     cost: 30e6,
     mults: { agi: 1.16, cha: 1.16 },
-    name: "White Ferrari",
+    name: "Quadra Sport R-7",
     upgType: UpgradeType.Vehicle,
   },
   {

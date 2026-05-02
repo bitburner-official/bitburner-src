@@ -77,7 +77,9 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={2}>
-                  <Typography>└ Args: {arrayToString(recentScript.runningScript.args)}</Typography>
+                  <Typography sx={{ overflowWrap: "anywhere" }}>
+                    └ Args: {arrayToString(recentScript.runningScript.args)}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>

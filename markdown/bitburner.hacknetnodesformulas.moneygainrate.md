@@ -14,12 +14,87 @@ moneyGainRate(level: number, ram: number, cores: number, mult?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  level | number | level of the node. |
-|  ram | number | ram of the node. |
-|  cores | number | cores of the node. |
-|  mult | number | _(Optional)_ player production mult (default to 1) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+level
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+level of the node.
+
+
+</td></tr>
+<tr><td>
+
+ram
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+ram of the node.
+
+
+</td></tr>
+<tr><td>
+
+cores
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+cores of the node.
+
+
+</td></tr>
+<tr><td>
+
+mult
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ player production mult (default to 1)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

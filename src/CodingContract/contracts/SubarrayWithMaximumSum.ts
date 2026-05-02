@@ -23,13 +23,16 @@ export const subarrayWithMaximumSum: Pick<CodingContractTypes, CodingContractNam
 
       return arr;
     },
-    solver: (data, answer) => {
+    getAnswer: (data) => {
       const nums: number[] = data.slice();
       for (let i = 1; i < nums.length; i++) {
         nums[i] = Math.max(nums[i], nums[i] + nums[i - 1]);
       }
 
-      return Math.max(...nums) === answer;
+      return Math.max(...nums);
+    },
+    solver: (data, answer) => {
+      return subarrayWithMaximumSum[CodingContractName.SubarrayWithMaximumSum].getAnswer(data) === answer;
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",

@@ -12,6 +12,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatPercent } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
+import { getDarknetVolatilityMult } from "../../DarkNet/effects/effects";
 
 interface IProps {
   stock: Stock;
@@ -34,7 +35,8 @@ export function StockTickerHeaderText(props: IProps): React.ReactElement {
 
   let hdrText = `${stock.name}${spacesAfterStockName}${stock.symbol} -${spacesBeforePrice}${stockPriceFormat}`;
   if (Player.has4SData) {
-    hdrText += ` - Volatility: ${formatPercent(stock.mv / 100)} - Price Forecast: `;
+    const volatility = stock.mv * getDarknetVolatilityMult(stock.symbol);
+    hdrText += ` - Volatility: ${formatPercent(volatility / 100)} - Price Forecast: `;
     let plusOrMinus = stock.b; // True for "+", false for "-"
     if (stock.otlkMag < 0) {
       plusOrMinus = !plusOrMinus;

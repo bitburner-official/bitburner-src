@@ -4,15 +4,10 @@
 
 ## NS.hacknet property
 
-Namespace for hacknet functions. Some of this API contains spoilers.
+Namespace for [hacknet](./bitburner.hacknet.md) functions. Some of this API contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly hacknet: Hacknet;
 ```
-
-## Remarks
-
-RAM cost: 4 GB.
-

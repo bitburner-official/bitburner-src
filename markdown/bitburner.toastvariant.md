@@ -2,21 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [ToastVariant](./bitburner.toastvariant.md)
 
-## ToastVariant enum
+## ToastVariant type
 
 
 **Signature:**
 
 ```typescript
-declare enum ToastVariant 
+type ToastVariant = _ValueOf<ToastVariantEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  ERROR | <code>&quot;error&quot;</code> |  |
-|  INFO | <code>&quot;info&quot;</code> |  |
-|  SUCCESS | <code>&quot;success&quot;</code> |  |
-|  WARNING | <code>&quot;warning&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)
 

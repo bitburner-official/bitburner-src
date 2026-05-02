@@ -40,10 +40,9 @@ export function LoadingScreen(): React.ReactElement {
         pushGameReady();
         setLoaded(true);
       })
-      .catch(async (error) => {
+      .catch((error) => {
         console.error(error);
         ActivateRecoveryMode(error);
-        await Engine.load("");
         setLoaded(true);
       });
   }, []);

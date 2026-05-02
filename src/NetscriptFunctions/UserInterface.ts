@@ -15,8 +15,8 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
     openTail:
       (ctx) =>
-      (scriptID, hostname, ...scriptArgs) => {
-        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+      (scriptID, host, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
         const runningScriptObj = helpers.getRunningScript(ctx, ident);
         if (runningScriptObj == null) {
           helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
@@ -70,7 +70,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       (ctx) =>
       (_pid = ctx.workerScript.scriptRef.pid) => {
         const pid = helpers.number(ctx, "pid", _pid);
-        //Emit an event to tell the game to close the tail window if it exists
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        // Emit an event to tell the game to close the tail window if it exists.
         LogBoxCloserEvents.emit(pid);
       },
 
@@ -89,8 +94,8 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     setTailFontSize:
       (ctx) =>
-      (_pixel, scriptID, hostname, ...scriptArgs) => {
-        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+      (_pixel, scriptID, host, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
         const runningScriptObj = helpers.getRunningScript(ctx, ident);
         if (runningScriptObj == null) {
           helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
@@ -98,6 +103,19 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         }
         if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
         else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
+      },
+
+    setTailMinimized:
+      (ctx) =>
+      (_minimized, _pid = ctx.workerScript.scriptRef.pid) => {
+        const minimized = helpers.boolean(ctx, "minimized", _minimized);
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.setMinimized(minimized);
       },
 
     windowSize: () => () => {
@@ -159,17 +177,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     },
 
     getGameInfo: () => () => {
-      const version = CONSTANTS.VersionString;
-      const commit = commitHash();
-      const platform = navigator.userAgent.toLowerCase().includes(" electron/") ? "Steam" : "Browser";
-
-      const gameInfo = {
-        version,
-        commit,
-        platform,
+      return {
+        version: CONSTANTS.VersionString,
+        versionNumber: CONSTANTS.VersionNumber,
+        commit: commitHash(),
+        platform: navigator.userAgent.toLowerCase().includes(" electron/") ? "Steam" : "Browser",
       };
-
-      return gameInfo;
     },
 
     clearTerminal: (ctx) => () => {

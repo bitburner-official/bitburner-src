@@ -1,4 +1,7 @@
-import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
+import type { BlackOperation } from "./Actions/BlackOperation";
+import type { Contract } from "./Actions/Contract";
+import type { GeneralAction } from "./Actions/GeneralAction";
+import type { Operation } from "./Actions/Operation";
 
 export interface SuccessChanceParams {
   /** Whether the success chance should be based on estimated statistics */

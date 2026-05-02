@@ -11,18 +11,78 @@ Set a sleeve to take a class at a university.
 ```typescript
 setToUniversityCourse(
     sleeveNumber: number,
-    universityName: UniversityLocationName | `${UniversityLocationName}`,
-    courseName: UniversityClassType | `${UniversityClassType}`,
+    universityName: UniversityLocationName,
+    courseName: UniversityClassType,
   ): boolean;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sleeveNumber | number | Index of the sleeve to start taking class. |
-|  universityName | [UniversityLocationName](./bitburner.universitylocationname.md) \| \`${[UniversityLocationName](./bitburner.universitylocationname.md)<!-- -->}\` | Name of the university to attend. |
-|  courseName | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` | Name of the course to follow. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sleeveNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index of the sleeve to start taking class.
+
+
+</td></tr>
+<tr><td>
+
+universityName
+
+
+</td><td>
+
+[UniversityLocationName](./bitburner.universitylocationname.md)
+
+
+</td><td>
+
+Name of the university to attend.
+
+
+</td></tr>
+<tr><td>
+
+courseName
+
+
+</td><td>
+
+[UniversityClassType](./bitburner.universityclasstype.md)
+
+
+</td><td>
+
+Name of the course to follow.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

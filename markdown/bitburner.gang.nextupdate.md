@@ -19,7 +19,7 @@ Promise that resolves to the number of milliseconds of Gang time that were proce
 
 ## Remarks
 
-RAM cost: 1 GB
+RAM cost: 0 GB
 
 The amount of real time spent asleep between updates can vary due to "bonus time".
 
@@ -29,8 +29,8 @@ The amount of real time spent asleep between updates can vary due to "bonus time
 ```js
 while (true) {
   const duration = await ns.gang.nextUpdate();
-  ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
-  ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
+  ns.print(`Gang completed ${ns.format.time(duration)} of activity.`);
+  ns.print(`Bonus time remaining: ${ns.format.time(ns.gang.getBonusTime())}`);
   // Manage the Gang
 }
 ```

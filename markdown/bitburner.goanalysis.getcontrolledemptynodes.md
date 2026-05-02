@@ -10,7 +10,17 @@ Takes an optional boardState argument; by default uses the current board state.
 
 Filled points of any color are indicated with '.'
 
-In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center: <pre lang="javascript"> \[ "OO..?", "OO.?.", "O.?.X", ".?.XX", "?..X\#", \] </pre>
+In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
+
+```
+[
+  "OO..?",
+  "OO.?.",
+  "O.?.X",
+  ".?.XX",
+  "?..X#",
+]
+```
 
 **Signature:**
 
@@ -20,9 +30,39 @@ getControlledEmptyNodes(boardState?: string[]): string[];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  boardState | string\[\] | _(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+boardState
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+_(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -32,5 +72,7 @@ A 2D array of characters indicating the player who controls each empty point.
 
 ## Remarks
 
-RAM cost: 16 GB (This is intentionally expensive; you can derive this info from just getBoardState() )
+RAM cost: 16 GB
+
+(This is intentionally expensive; you can derive this info from just getBoardState() )
 

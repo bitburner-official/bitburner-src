@@ -182,10 +182,6 @@ function parseOnlyRamCalculate(
       return { cost: override, entries: [{ type: "misc", name: "override", cost: override }] };
     }
     // Check if this is one of the special keys, and add the appropriate ram cost if so.
-    if (ref === "hacknet" && !resolvedRefs.has("hacknet")) {
-      ram += RamCostConstants.HacknetNodes;
-      detailedCosts.push({ type: "ns", name: "hacknet", cost: RamCostConstants.HacknetNodes });
-    }
     if (ref === "document" && !resolvedRefs.has("document")) {
       ram += RamCostConstants.Dom;
       detailedCosts.push({ type: "dom", name: "document", cost: RamCostConstants.Dom });

@@ -2,7 +2,7 @@ import type { Bladeburner } from "../../../src/Bladeburner/Bladeburner";
 import { Player, setPlayer } from "@player";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { BladeburnerContractName } from "@enums";
-import { Contract } from "../../../src/Bladeburner/Actions";
+import { Contract } from "../../../src/Bladeburner/Actions/Contract";
 
 describe("Bladeburner Console", () => {
   let inst: Bladeburner;

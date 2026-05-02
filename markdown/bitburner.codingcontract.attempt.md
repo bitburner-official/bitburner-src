@@ -14,11 +14,71 @@ attempt(answer: any, filename: string, host?: string): string;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  answer | any | Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type. |
-|  filename | string | Filename of the contract. |
-|  host | string | _(Optional)_ Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+answer
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
+
+
+</td></tr>
+<tr><td>
+
+filename
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of the contract.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

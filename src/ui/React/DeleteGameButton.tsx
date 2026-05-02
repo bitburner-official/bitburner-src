@@ -27,7 +27,7 @@ export function DeleteGameButton({ color = "primary" }: IProps): React.ReactElem
           deleteGame()
             .then(() => {
               pushDisableRestore();
-              setTimeout(() => location.reload(), 1000);
+              setTimeout(() => location.reload(), 0);
             })
             .catch((r) => console.error("Could not delete game: %o", r));
         }}

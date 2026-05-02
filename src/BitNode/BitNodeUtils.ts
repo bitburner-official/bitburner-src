@@ -4,8 +4,7 @@ import { GetServer } from "../Server/AllServers";
 import { Server } from "../Server/Server";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { JSONMap } from "../Types/Jsonable";
-
-export const validBitNodes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+import { validBitNodes } from "./Constants";
 
 export function isBitNodeFinished(): boolean {
   const wd = GetServer(SpecialServers.WorldDaemon);
@@ -80,4 +79,26 @@ export function setBitNodeOptions(bitNodeOptions: BitNodeOptions): void {
   }
 
   Object.assign(Player.bitNodeOptions, bitNodeOptions);
+}
+
+/**
+ * This function only sets the backdoorInstalled flag of the WD server. The caller must call Router.toPage() to route
+ * the UI to the BitVerse page. Importing Router from src\ui\GameRoot.tsx brings too many unnecessary dependencies to
+ * this utility file.
+ */
+export function finishBitNode() {
+  const wd = GetServer(SpecialServers.WorldDaemon);
+  if (!(wd instanceof Server)) {
+    throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
+  }
+  wd.backdoorInstalled = true;
+}
+
+/**
+ * BitNode level is not something that is stored, but rather calculated from the current BN and SF level. The concept
+ * appeared because saying "Enter BN1.2" is shorter than saying "Enter BN1 with SF1.1". This is how we display it in the
+ * BitVerse UI and other places. This function is used to consistently calculate this "level".
+ */
+export function getBitNodeLevel(bn = Player.bitNodeN, sfLevel = Player.activeSourceFileLvl(bn)): number {
+  return Math.min(sfLevel + 1, bn === 12 ? Number.MAX_VALUE : 3);
 }

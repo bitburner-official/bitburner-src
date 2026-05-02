@@ -4,12 +4,111 @@
 
 ## StockOrder interface
 
-Return value of [getOrders](./bitburner.tix.getorders.md)
-
-Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)
 
 **Signature:**
 
 ```typescript
 interface StockOrder 
 ```
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[position](./bitburner.stockorder.position.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PositionType](./bitburner.positiontype.md)
+
+
+</td><td>
+
+Order position
+
+
+</td></tr>
+<tr><td>
+
+[price](./bitburner.stockorder.price.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Price per share
+
+
+</td></tr>
+<tr><td>
+
+[shares](./bitburner.stockorder.shares.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of shares
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.stockorder.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[OrderType](./bitburner.ordertype.md)
+
+
+</td><td>
+
+Order type
+
+
+</td></tr>
+</tbody></table>
+

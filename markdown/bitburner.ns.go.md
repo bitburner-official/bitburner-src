@@ -4,15 +4,10 @@
 
 ## NS.go property
 
-Namespace for Go functions.
+Namespace for [Go](./bitburner.go.md) functions.
 
 **Signature:**
 
 ```typescript
 readonly go: Go;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

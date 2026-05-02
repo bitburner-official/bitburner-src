@@ -14,11 +14,71 @@ ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): nu
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  startingRam | number | starting ram |
-|  extraLevels | number | _(Optional)_ amount of level of ram to purchase (defaults to 1) |
-|  costMult | number | _(Optional)_ player cost reduction (default to 1) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+startingRam
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+starting ram
+
+
+</td></tr>
+<tr><td>
+
+extraLevels
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ amount of level of ram to purchase (defaults to 1)
+
+
+</td></tr>
+<tr><td>
+
+costMult
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ player cost reduction (default to 1)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

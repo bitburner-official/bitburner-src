@@ -15,11 +15,29 @@ cd ..
 cp -r .app/* .package
 cp -r electron/* .package
 
-# steam_appid.txt would end up in the resource dir
-rm .package/steam_appid.txt
+packageWin() {
+  electron-packager .package bitburner --platform win32 --arch x64,arm64 --out .build --overwrite --icon .package/icon.ico --app-copyright "Copyright (C) 2025 Bitburner"
+}
+
+packageLinux() {
+  electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --overwrite --app-copyright "Copyright (C) 2025 Bitburner"
+}
+
+packageMac() {
+  electron-packager .package bitburner --platform darwin --arch universal --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*" --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner"
+}
 
 BUILD_PLATFORM="${1:-"all"}"
 # And finally build the app.
-npm run electron:packager-$BUILD_PLATFORM
-
-echo .build/* | xargs -n 1 cp electron/steam_appid.txt
+case $BUILD_PLATFORM in
+  "win")
+    packageWin;;
+  "linux")
+    packageLinux;;
+  "mac")
+    packageMac;;
+  *)
+    packageWin;
+    packageLinux;
+    packageMac;;
+esac

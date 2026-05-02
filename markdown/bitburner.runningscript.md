@@ -13,24 +13,372 @@ interface RunningScript
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [args](./bitburner.runningscript.args.md) |  | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments the script was called with |
-|  [dynamicRamUsage](./bitburner.runningscript.dynamicramusage.md) |  | number \| undefined | <p>The dynamic RAM usage of (one thread of) this script instance. Does not affect overall RAM consumption (ramUsage is for that), but rather shows how much of the reserved RAM is currently in use via all the ns functions the script has called. Initially 1.6GB, this increases as new functions are called.</p><p>Only set for scripts that are still running.</p> |
-|  [filename](./bitburner.runningscript.filename.md) |  | string | Filename of the script |
-|  [logs](./bitburner.runningscript.logs.md) |  | string\[\] | Script logs as an array. The newest log entries are at the bottom. Timestamps, if enabled, are placed inside <code>[brackets]</code> at the start of each line. |
-|  [offlineExpGained](./bitburner.runningscript.offlineexpgained.md) |  | number | Total amount of hacking experience earned from this script when offline |
-|  [offlineMoneyMade](./bitburner.runningscript.offlinemoneymade.md) |  | number | Total amount of money made by this script when offline |
-|  [offlineRunningTime](./bitburner.runningscript.offlinerunningtime.md) |  | number | Number of seconds that the script has been running offline |
-|  [onlineExpGained](./bitburner.runningscript.onlineexpgained.md) |  | number | Total amount of hacking experience earned from this script when online |
-|  [onlineMoneyMade](./bitburner.runningscript.onlinemoneymade.md) |  | number | Total amount of money made by this script when online |
-|  [onlineRunningTime](./bitburner.runningscript.onlinerunningtime.md) |  | number | Number of seconds that this script has been running online |
-|  [parent](./bitburner.runningscript.parent.md) |  | number | <p>Process ID of the parent process.</p><p>If this script was started by another script, this will be the PID of that script. If this script was started directly through the terminal, the value will be 0.</p> |
-|  [pid](./bitburner.runningscript.pid.md) |  | number | Process ID. Must be an integer |
-|  [ramUsage](./bitburner.runningscript.ramusage.md) |  | number | How much RAM this script uses for ONE thread. Also known as "static RAM usage," this value does not change once the script is started, unless you call ns.ramOverride(). |
-|  [server](./bitburner.runningscript.server.md) |  | string | Hostname of the server on which this script runs |
-|  [tailProperties](./bitburner.runningscript.tailproperties.md) |  | [TailProperties](./bitburner.tailproperties.md) \| null | Properties of the tail window, or null if it is not shown |
-|  [temporary](./bitburner.runningscript.temporary.md) |  | boolean | Whether this RunningScript is excluded from saves |
-|  [threads](./bitburner.runningscript.threads.md) |  | number | Number of threads that this script runs with |
-|  [title](./bitburner.runningscript.title.md) |  | string \| [ReactElement](./bitburner.reactelement.md) | The title, as shown in the script's log box. Defaults to the name + args, but can be changed by the user. If it is set to a React element (only by the user), that will not be persisted, and will be restored to default on load. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[args](./bitburner.runningscript.args.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments the script was called with
+
+
+</td></tr>
+<tr><td>
+
+[dynamicRamUsage](./bitburner.runningscript.dynamicramusage.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| undefined
+
+
+</td><td>
+
+The dynamic RAM usage of (one thread of) this script instance. Does not affect overall RAM consumption (ramUsage is for that), but rather shows how much of the reserved RAM is currently in use via all the ns functions the script has called. Initially 1.6GB, this increases as new functions are called.
+
+Only set for scripts that are still running.
+
+
+</td></tr>
+<tr><td>
+
+[filename](./bitburner.runningscript.filename.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of the script
+
+
+</td></tr>
+<tr><td>
+
+[logs](./bitburner.runningscript.logs.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+Script logs as an array. The newest log entries are at the bottom. Timestamps, if enabled, are placed inside `[brackets]` at the start of each line.
+
+
+</td></tr>
+<tr><td>
+
+[offlineExpGained](./bitburner.runningscript.offlineexpgained.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total amount of hacking experience earned from this script when offline
+
+
+</td></tr>
+<tr><td>
+
+[offlineMoneyMade](./bitburner.runningscript.offlinemoneymade.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total amount of money made by this script when offline
+
+
+</td></tr>
+<tr><td>
+
+[offlineRunningTime](./bitburner.runningscript.offlinerunningtime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of seconds that the script has been running offline
+
+
+</td></tr>
+<tr><td>
+
+[onlineExpGained](./bitburner.runningscript.onlineexpgained.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total amount of hacking experience earned from this script when online
+
+
+</td></tr>
+<tr><td>
+
+[onlineMoneyMade](./bitburner.runningscript.onlinemoneymade.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total amount of money made by this script when online
+
+
+</td></tr>
+<tr><td>
+
+[onlineRunningTime](./bitburner.runningscript.onlinerunningtime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of seconds that this script has been running online
+
+
+</td></tr>
+<tr><td>
+
+[parent](./bitburner.runningscript.parent.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Process ID of the parent process.
+
+If this script was started by another script, this will be the PID of that script. If this script was started directly through the terminal, the value will be 0.
+
+
+</td></tr>
+<tr><td>
+
+[pid](./bitburner.runningscript.pid.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+A Process ID unique to this script across all hosts. Must be an integer starting from 1 for the first process spawned at game launch and incrementing from there. Note that PIDs are not saved in the savegame and are regenerated at launch.
+
+
+</td></tr>
+<tr><td>
+
+[ramUsage](./bitburner.runningscript.ramusage.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+How much RAM this script uses for ONE thread. Also known as "static RAM usage," this value does not change once the script is started, unless you call ns.ramOverride().
+
+
+</td></tr>
+<tr><td>
+
+[server](./bitburner.runningscript.server.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname of the server on which this script runs
+
+
+</td></tr>
+<tr><td>
+
+[tailProperties](./bitburner.runningscript.tailproperties.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[TailProperties](./bitburner.tailproperties.md) \| null
+
+
+</td><td>
+
+Properties of the tail window, or null if it is not shown
+
+
+</td></tr>
+<tr><td>
+
+[temporary](./bitburner.runningscript.temporary.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether this RunningScript is excluded from saves
+
+
+</td></tr>
+<tr><td>
+
+[threads](./bitburner.runningscript.threads.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of threads that this script runs with
+
+
+</td></tr>
+<tr><td>
+
+[title](./bitburner.runningscript.title.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string \| [ReactElement](./bitburner.reactelement.md)
+
+
+</td><td>
+
+The title, as shown in the script's log box. Defaults to the name + args, but can be changed by the user. If it is set to a React element (only by the user), that will not be persisted, and will be restored to default on load.
+
+
+</td></tr>
+</tbody></table>
 

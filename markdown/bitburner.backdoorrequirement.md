@@ -14,8 +14,60 @@ interface BackdoorRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [server](./bitburner.backdoorrequirement.server.md) |  | string |  |
-|  [type](./bitburner.backdoorrequirement.type.md) |  | "backdoorInstalled" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[server](./bitburner.backdoorrequirement.server.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.backdoorrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"backdoorInstalled"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

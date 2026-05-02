@@ -9,15 +9,60 @@ Get the security increase for a number of threads.
 **Signature:**
 
 ```typescript
-hackAnalyzeSecurity(threads: number, hostname?: string): number;
+hackAnalyzeSecurity(threads: number, host?: string): number;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  threads | number | Amount of threads that will be used. |
-|  hostname | string | _(Optional)_ Hostname of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+threads
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of threads that will be used.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the target server. Optional. If unspecified, the threads are not capped.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
@@ -29,5 +74,5 @@ The security increase.
 
 RAM cost: 1 GB
 
-Returns the security increase that would occur if a hack with this many threads happened.
+Returns the security increase that would occur if a hack with this many threads happened. The number of threads is limited to the number needed to hack the server's maximum amount of money.
 

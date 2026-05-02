@@ -6,7 +6,7 @@ import { NetscriptContext } from "../Netscript/APIWrapper";
 export type Schema = [string, string | number | boolean | string[]][];
 type FlagType = StringConstructor | NumberConstructor | BooleanConstructor | StringConstructor[];
 type FlagsRet = Record<string, ScriptArg | string[]>;
-export function Flags(ctx: NetscriptContext | string[]): (data: unknown) => FlagsRet {
+export function Flags(ctx: NetscriptContext | string[], permissive: boolean): (data: unknown) => FlagsRet {
   const vargs = Array.isArray(ctx) ? ctx : ctx.workerScript.args;
   return (schema: unknown): FlagsRet => {
     schema = toNative(schema);
@@ -26,7 +26,7 @@ export function Flags(ctx: NetscriptContext | string[]): (data: unknown) => Flag
       args["-".repeat(numDashes) + d[0]] = t;
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-    const ret: FlagsRet = libarg(args, { argv: vargs });
+    const ret: FlagsRet = libarg(args, { argv: vargs, permissive });
     for (const d of schema as Schema) {
       if (!Object.hasOwn(ret, "--" + d[0]) || !Object.hasOwn(ret, "-" + d[0])) ret[d[0]] = d[1];
     }

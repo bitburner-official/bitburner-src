@@ -1,7 +1,21 @@
 import React from "react";
 import { formatMoney } from "../formatNumber";
-import { Money } from "./Money";
+import type { Theme } from "@mui/material/styles";
+import { makeStyles } from "tss-react/mui";
 
-export function MoneyRate({ money }: { money: number }): JSX.Element {
-  return <Money money={`${formatMoney(money)} / sec`} />;
+const useStyles = makeStyles()((theme: Theme) => ({
+  money: {
+    color: theme.colors.money,
+  },
+}));
+
+export function MoneyRate({
+  money,
+  useExponentialFormForSmallValue,
+}: {
+  money: number;
+  useExponentialFormForSmallValue?: boolean;
+}): JSX.Element {
+  const { classes } = useStyles();
+  return <span className={classes.money}>{formatMoney(money, useExponentialFormForSmallValue)} / sec</span>;
 }

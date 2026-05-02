@@ -1,23 +1,24 @@
 import * as React from "react";
 
-import { Player } from "@player";
-import { Money } from "../ui/React/Money";
-import { win, reachedLimit } from "./Game";
-import { Deck } from "./CardDeck/Deck";
-import { Hand } from "./CardDeck/Hand";
-import { InputAdornment } from "@mui/material";
-import { ReactCard } from "./CardDeck/ReactCard";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
+import { Money } from "../ui/React/Money";
+import { BetInput } from "./BetInput";
+import { Deck } from "./CardDeck/Deck";
+import { Hand } from "./CardDeck/Hand";
+import { ReactCard } from "./CardDeck/ReactCard";
+import { hasEnoughMoney, reachedLimit, win } from "./Game";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
-const MAX_BET = 100e6;
+const initialBet = 1e6;
+const maxBet = 100e6;
+
 export const DECK_COUNT = 5; // 5-deck multideck
 
 enum Result {
-  Pending = "",
+  Pending = "Pending",
   PlayerWon = "You won!",
   PlayerWonByBlackjack = "You Won! Blackjack!",
   DealerWon = "You lost!",
@@ -44,8 +45,6 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
 
     this.deck = new Deck(DECK_COUNT);
 
-    const initialBet = 1e6;
-
     this.state = {
       playerHand: new Hand([]),
       dealerHand: new Hand([]),
@@ -59,14 +58,8 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
     };
   }
 
-  canStartGame = (): boolean => {
-    const { bet } = this.state;
-
-    return Player.canAfford(bet);
-  };
-
   startGame = (): void => {
-    if (!this.canStartGame() || reachedLimit()) {
+    if (reachedLimit() || !hasEnoughMoney(this.state.bet)) {
       return;
     }
 
@@ -203,67 +196,43 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
   };
 
   finishGame = (result: Result): void => {
-    const gains =
-      result === Result.DealerWon
-        ? 0 // We took away the bet at the start, don't need to take more
-        : result === Result.Tie
-        ? this.state.bet // We took away the bet at the start, give it back
-        : result === Result.PlayerWon
-        ? 2 * this.state.bet // Give back their bet plus their winnings
-        : result === Result.PlayerWonByBlackjack
-        ? 2.5 * this.state.bet // Blackjack pays out 1.5x bet!
-        : (() => {
-            throw new Error(`Unexpected result: ${result}`);
-          })(); // This can't happen, right?
+    /**
+     * Explicitly declare the type of "gains". If we forget a case here, TypeScript will notify us: "Variable 'gains' is
+     * used before being assigned.".
+     */
+    let gains: number;
+    switch (result) {
+      case Result.DealerWon:
+        // We took away the bet at the start, don't need to take more
+        gains = 0;
+        break;
+      case Result.Tie:
+        // We took away the bet at the start, give it back
+        gains = this.state.bet;
+        break;
+      case Result.PlayerWon:
+        // Give back their bet plus their winnings
+        gains = 2 * this.state.bet;
+        break;
+      case Result.PlayerWonByBlackjack:
+        // Blackjack pays out 1.5x bet!
+        gains = 2.5 * this.state.bet;
+        break;
+      case Result.Pending:
+        /**
+         * Don't throw an error. Callers of this function are event handlers (onClick) of buttons. If we throw an error,
+         * it won't be shown to the player.
+         */
+        exceptionAlert(new Error(`Unexpected Blackjack result: ${result}.`));
+        gains = 0;
+        break;
+    }
     win(gains);
     this.setState({
       gameInProgress: false,
       result,
       gains: this.state.gains + gains - this.state.bet, // Not updated upfront - only tracks the final outcome
     });
-  };
-
-  wagerOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const betInput = event.target.value;
-    const wager = Math.round(parseFloat(betInput));
-    if (isNaN(wager)) {
-      this.setState({
-        bet: 0,
-        betInput,
-        wagerInvalid: true,
-        wagerInvalidHelperText: "Not a valid number",
-      });
-    } else if (wager <= 0) {
-      this.setState({
-        bet: 0,
-        betInput,
-        wagerInvalid: true,
-        wagerInvalidHelperText: "Must bet a positive amount",
-      });
-    } else if (wager > MAX_BET) {
-      this.setState({
-        bet: 0,
-        betInput,
-        wagerInvalid: true,
-        wagerInvalidHelperText: "Exceeds max bet",
-      });
-    } else if (!Player.canAfford(wager)) {
-      this.setState({
-        bet: 0,
-        betInput,
-        wagerInvalid: true,
-        wagerInvalidHelperText: "Not enough money",
-      });
-    } else {
-      // Valid wager
-      this.setState({
-        bet: wager,
-        betInput,
-        wagerInvalid: false,
-        wagerInvalidHelperText: "",
-        result: Result.Pending, // Reset previous game status to clear the win/lose text UI
-      });
-    }
   };
 
   // Start game button
@@ -279,8 +248,7 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
   };
 
   render(): React.ReactNode {
-    const { betInput, playerHand, dealerHand, gameInProgress, result, wagerInvalid, wagerInvalidHelperText, gains } =
-      this.state;
+    const { playerHand, dealerHand, gameInProgress, result, wagerInvalid, gains } = this.state;
 
     // Get the player totals to display.
     const playerHandValues = this.getHandDisplayValues(playerHand);
@@ -288,31 +256,26 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
 
     return (
       <>
-        {/* Wager input */}
         <Box>
-          <TextField
-            value={betInput}
-            label={
-              <>
-                {"Wager (Max: "}
-                <Money money={MAX_BET} />
-                {")"}
-              </>
-            }
-            disabled={gameInProgress}
-            onChange={this.wagerOnChange}
-            error={wagerInvalid}
-            helperText={wagerInvalid ? wagerInvalidHelperText : ""}
-            type="number"
-            style={{
-              width: "200px",
+          <BetInput
+            initialBet={initialBet}
+            maxBet={maxBet}
+            gameInProgress={gameInProgress}
+            setBet={(bet) => {
+              this.setState({
+                bet,
+              });
             }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Typography>$</Typography>
-                </InputAdornment>
-              ),
+            validBetCallback={() => {
+              this.setState({
+                wagerInvalid: false,
+                result: Result.Pending,
+              });
+            }}
+            invalidBetCallback={() => {
+              this.setState({
+                wagerInvalid: true,
+              });
             }}
           />
 
@@ -324,7 +287,7 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
 
         {/* Buttons */}
         {!gameInProgress ? (
-          <Button onClick={this.startOnClick} disabled={wagerInvalid || !this.canStartGame()}>
+          <Button onClick={this.startOnClick} disabled={wagerInvalid}>
             Start
           </Button>
         ) : (

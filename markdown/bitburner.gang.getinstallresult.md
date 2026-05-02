@@ -14,9 +14,39 @@ getInstallResult(memberName: string): GangMemberInstall | undefined;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  memberName | string | Name of member. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+memberName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of member.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

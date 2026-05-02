@@ -14,8 +14,60 @@ interface KarmaRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [karma](./bitburner.karmarequirement.karma.md) |  | number |  |
-|  [type](./bitburner.karmarequirement.type.md) |  | "karma" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[karma](./bitburner.karmarequirement.karma.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.karmarequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"karma"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

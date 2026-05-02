@@ -4,15 +4,10 @@
 
 ## NS.singularity property
 
-Namespace for singularity functions. Contains spoilers.
+Namespace for [singularity](./bitburner.singularity.md) functions. Contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly singularity: Singularity;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

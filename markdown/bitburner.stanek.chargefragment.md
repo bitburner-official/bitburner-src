@@ -14,10 +14,55 @@ chargeFragment(rootX: number, rootY: number): Promise<void>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  rootX | number | Root X against which to align the top left of the fragment. |
-|  rootY | number | Root Y against which to align the top left of the fragment. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+rootX
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Root X against which to align the top left of the fragment.
+
+
+</td></tr>
+<tr><td>
+
+rootY
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Root Y against which to align the top left of the fragment.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,20 +14,284 @@ interface CorpIndustryData
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [advertisingFactor?](./bitburner.corpindustrydata.advertisingfactor.md) |  | number | _(Optional)_ Advertising factor (affects sales) |
-|  [aiCoreFactor?](./bitburner.corpindustrydata.aicorefactor.md) |  | number | _(Optional)_ AI Cores factor |
-|  [description](./bitburner.corpindustrydata.description.md) |  | string |  |
-|  [hardwareFactor?](./bitburner.corpindustrydata.hardwarefactor.md) |  | number | _(Optional)_ Hardware factor |
-|  [makesMaterials](./bitburner.corpindustrydata.makesmaterials.md) |  | boolean | Whether the industry of this division is capable of producing materials |
-|  [makesProducts](./bitburner.corpindustrydata.makesproducts.md) |  | boolean | Whether the industry of this division is capable of developing and producing products |
-|  [producedMaterials?](./bitburner.corpindustrydata.producedmaterials.md) |  | [CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\] | _(Optional)_ Array of Materials produced |
-|  [product?](./bitburner.corpindustrydata.product.md) |  | [CorpProductData](./bitburner.corpproductdata.md) | _(Optional)_ |
-|  [realEstateFactor?](./bitburner.corpindustrydata.realestatefactor.md) |  | number | _(Optional)_ Real estate factor |
-|  [recommendStarting](./bitburner.corpindustrydata.recommendstarting.md) |  | boolean |  |
-|  [requiredMaterials](./bitburner.corpindustrydata.requiredmaterials.md) |  | Partial&lt;Record&lt;[CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->, number&gt;&gt; |  |
-|  [robotFactor?](./bitburner.corpindustrydata.robotfactor.md) |  | number | _(Optional)_ Robots factor |
-|  [scienceFactor?](./bitburner.corpindustrydata.sciencefactor.md) |  | number | _(Optional)_ Scientific research factor (affects quality) |
-|  [startingCost](./bitburner.corpindustrydata.startingcost.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[advertisingFactor?](./bitburner.corpindustrydata.advertisingfactor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Advertising factor (affects sales)
+
+
+</td></tr>
+<tr><td>
+
+[aiCoreFactor?](./bitburner.corpindustrydata.aicorefactor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ AI Cores factor
+
+
+</td></tr>
+<tr><td>
+
+[description](./bitburner.corpindustrydata.description.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[hardwareFactor?](./bitburner.corpindustrydata.hardwarefactor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Hardware factor
+
+
+</td></tr>
+<tr><td>
+
+[makesMaterials](./bitburner.corpindustrydata.makesmaterials.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether the industry of this division is capable of producing materials
+
+
+</td></tr>
+<tr><td>
+
+[makesProducts](./bitburner.corpindustrydata.makesproducts.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Whether the industry of this division is capable of developing and producing products
+
+
+</td></tr>
+<tr><td>
+
+[producedMaterials?](./bitburner.corpindustrydata.producedmaterials.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\]
+
+
+</td><td>
+
+_(Optional)_ Array of Materials produced
+
+
+</td></tr>
+<tr><td>
+
+[product?](./bitburner.corpindustrydata.product.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpProductData](./bitburner.corpproductdata.md)
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[realEstateFactor?](./bitburner.corpindustrydata.realestatefactor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Real estate factor
+
+
+</td></tr>
+<tr><td>
+
+[recommendStarting](./bitburner.corpindustrydata.recommendstarting.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[requiredMaterials](./bitburner.corpindustrydata.requiredmaterials.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Partial&lt;Record&lt;[CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->, number&gt;&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[robotFactor?](./bitburner.corpindustrydata.robotfactor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Robots factor
+
+
+</td></tr>
+<tr><td>
+
+[scienceFactor?](./bitburner.corpindustrydata.sciencefactor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Scientific research factor (affects quality)
+
+
+</td></tr>
+<tr><td>
+
+[startingCost](./bitburner.corpindustrydata.startingcost.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

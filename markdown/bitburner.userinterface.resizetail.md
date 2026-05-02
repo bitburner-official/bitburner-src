@@ -14,11 +14,71 @@ resizeTail(width: number, height: number, pid?: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  width | number | Width of the window. |
-|  height | number | Height of the window. |
-|  pid | number | _(Optional)_ Optional. PID of the script having its tail resized. If omitted, the current script is used. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+width
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Width of the window. The minimum value is 150.
+
+
+</td></tr>
+<tr><td>
+
+height
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Height of the window. The minimum value is 30.
+
+
+</td></tr>
+<tr><td>
+
+pid
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional. PID of the script having its tail resized. If omitted, the current script is used.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

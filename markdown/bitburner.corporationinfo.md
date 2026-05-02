@@ -14,25 +14,395 @@ interface CorporationInfo
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [dividendEarnings](./bitburner.corporationinfo.dividendearnings.md) |  | number | Your earnings as a shareholder per second this cycle |
-|  [dividendRate](./bitburner.corporationinfo.dividendrate.md) |  | number | Fraction of profits issued as dividends |
-|  [dividendTax](./bitburner.corporationinfo.dividendtax.md) |  | number | Tax applied on your earnings as a shareholder |
-|  [divisions](./bitburner.corporationinfo.divisions.md) |  | string\[\] | Array of all division names |
-|  [expenses](./bitburner.corporationinfo.expenses.md) |  | number | Expenses per second this cycle |
-|  [funds](./bitburner.corporationinfo.funds.md) |  | number | Funds available |
-|  [investorShares](./bitburner.corporationinfo.investorshares.md) |  | number | Amount of shares owned by private investors. Not available for public sale or CEO buyback. |
-|  [issuedShares](./bitburner.corporationinfo.issuedshares.md) |  | number | Amount of shares owned by public traders. Available for CEO buyback. |
-|  [issueNewSharesCooldown](./bitburner.corporationinfo.issuenewsharescooldown.md) |  | number | Cooldown until new shares can be issued |
-|  [name](./bitburner.corporationinfo.name.md) |  | string | Name of the corporation |
-|  [nextState](./bitburner.corporationinfo.nextstate.md) |  | [CorpStateName](./bitburner.corpstatename.md) | <p>The next state to be processed.</p><p>I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.</p><p>Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.</p> |
-|  [numShares](./bitburner.corporationinfo.numshares.md) |  | number | Amount of shares owned by the CEO. |
-|  [prevState](./bitburner.corporationinfo.prevstate.md) |  | [CorpStateName](./bitburner.corpstatename.md) | <p>The last state that got processed.</p><p>I.e. when that state is PURCHASE, it means purchasing just happened.</p><p>Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.</p> |
-|  [public](./bitburner.corporationinfo.public.md) |  | boolean | Indicating if the company is public |
-|  [revenue](./bitburner.corporationinfo.revenue.md) |  | number | Revenue per second this cycle |
-|  [sharePrice](./bitburner.corporationinfo.shareprice.md) |  | number | Price of the shares |
-|  [shareSaleCooldown](./bitburner.corporationinfo.sharesalecooldown.md) |  | number | Cooldown until shares can be sold again |
-|  [totalShares](./bitburner.corporationinfo.totalshares.md) |  | number | Total number of shares issued by this corporation. |
-|  [valuation](./bitburner.corporationinfo.valuation.md) |  | number | Corporation valuation |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[dividendEarnings](./bitburner.corporationinfo.dividendearnings.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Your earnings as a shareholder per second this cycle
+
+
+</td></tr>
+<tr><td>
+
+[dividendRate](./bitburner.corporationinfo.dividendrate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Fraction of profits issued as dividends
+
+
+</td></tr>
+<tr><td>
+
+[divisions](./bitburner.corporationinfo.divisions.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string\[\]
+
+
+</td><td>
+
+Array of all division names
+
+
+</td></tr>
+<tr><td>
+
+[expenses](./bitburner.corporationinfo.expenses.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Expenses per second this cycle
+
+
+</td></tr>
+<tr><td>
+
+[funds](./bitburner.corporationinfo.funds.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Funds available
+
+
+</td></tr>
+<tr><td>
+
+[investorShares](./bitburner.corporationinfo.investorshares.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of shares owned by private investors. Not available for public sale or CEO buyback.
+
+
+</td></tr>
+<tr><td>
+
+[issuedShares](./bitburner.corporationinfo.issuedshares.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of shares owned by public traders. Available for CEO buyback.
+
+
+</td></tr>
+<tr><td>
+
+[issueNewSharesCooldown](./bitburner.corporationinfo.issuenewsharescooldown.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cooldown until new shares can be issued
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.corporationinfo.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the corporation
+
+
+</td></tr>
+<tr><td>
+
+[nextState](./bitburner.corporationinfo.nextstate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpStateName](./bitburner.corpstatename.md)
+
+
+</td><td>
+
+The next state to be processed.
+
+I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.
+
+Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
+
+
+</td></tr>
+<tr><td>
+
+[numShares](./bitburner.corporationinfo.numshares.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of shares owned by the CEO.
+
+
+</td></tr>
+<tr><td>
+
+[prevState](./bitburner.corporationinfo.prevstate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CorpStateName](./bitburner.corpstatename.md)
+
+
+</td><td>
+
+The last state that got processed.
+
+I.e. when that state is PURCHASE, it means purchasing just happened.
+
+Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
+
+
+</td></tr>
+<tr><td>
+
+[public](./bitburner.corporationinfo.public.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Indicating if the company is public
+
+
+</td></tr>
+<tr><td>
+
+[revenue](./bitburner.corporationinfo.revenue.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Revenue per second this cycle
+
+
+</td></tr>
+<tr><td>
+
+[sharePrice](./bitburner.corporationinfo.shareprice.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Price of the shares
+
+
+</td></tr>
+<tr><td>
+
+[shareSaleCooldown](./bitburner.corporationinfo.sharesalecooldown.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Cooldown until shares can be sold again
+
+
+</td></tr>
+<tr><td>
+
+[totalShares](./bitburner.corporationinfo.totalshares.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Total number of shares issued by this corporation.
+
+
+</td></tr>
+<tr><td>
+
+[tributeModifier](./bitburner.corporationinfo.tributemodifier.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Your income from dividend is negatively affected by this penalty modifier
+
+
+</td></tr>
+<tr><td>
+
+[valuation](./bitburner.corporationinfo.valuation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Corporation valuation
+
+
+</td></tr>
+</tbody></table>
 

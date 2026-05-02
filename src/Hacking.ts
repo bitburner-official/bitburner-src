@@ -3,6 +3,7 @@ import { Person as IPerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { Server as IServer } from "@nsdefs";
 import { clampNumber } from "./utils/helpers/clampNumber";
+import { DarknetServer } from "./Server/DarknetServer";
 
 /** Returns the chance the person has to successfully hack a server */
 export function calculateHackingChance(server: IServer, person: IPerson): number {
@@ -57,6 +58,7 @@ export function calculatePercentMoneyHacked(server: IServer, person: IPerson): n
 
 /** Returns time it takes to complete a hack on a server, in seconds */
 export function calculateHackingTime(server: IServer, person: IPerson): number {
+  if (server instanceof DarknetServer) return 16;
   const { hackDifficulty, requiredHackingSkill } = server;
   if (typeof hackDifficulty !== "number" || typeof requiredHackingSkill !== "number") return Infinity;
   const difficultyMult = requiredHackingSkill * hackDifficulty;
