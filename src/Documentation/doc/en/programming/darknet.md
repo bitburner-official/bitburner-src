@@ -250,7 +250,7 @@ const authenticateWithNoPassword = async (ns, hostname) => {
 
 // This lets you tab-complete putting "--tail" on the run command so you can see the script logs as it runs, if you want
 // If you add support to the script to take other arguments, you can add them here as well for convenience
-export function autocomplete(data: AutocompleteData) {
+export function autocomplete(data) {
   return ["--tail"];
 }
 ```
