@@ -19,5 +19,5 @@ A promise that resolves when the current grafting finishes or is canceled. If th
 
 ## Remarks
 
-RAM cost: 1 GB
+RAM cost: 0 GB
 

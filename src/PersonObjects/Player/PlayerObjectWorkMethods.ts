@@ -1,8 +1,8 @@
-import { Work } from "../../Work/Work";
+import type { PlayerBaseWork } from "../../Work/Work";
 
 import type { PlayerObject } from "./PlayerObject";
 
-export function startWork(this: PlayerObject, w: Work): void {
+export function startWork(this: PlayerObject, w: PlayerBaseWork): void {
   if (this.currentWork !== null) {
     this.currentWork.finish(true);
   }

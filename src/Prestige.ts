@@ -190,6 +190,8 @@ export function prestigeAugmentation(): void {
     }
   }
 
+  // clear recent scripts
+  recentScripts.splice(0);
   resetPidCounter();
   ProgramsSeen.clear();
   InvitationsSeen.clear();
@@ -236,6 +238,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
+
+  if (canAccessBitNodeFeature(15)) {
+    getDarkscapeNavigator();
+  }
 
   if (Player.activeSourceFileLvl(9) >= 2) {
     homeComp.setMaxRam(128);

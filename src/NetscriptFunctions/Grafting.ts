@@ -107,7 +107,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
           `The current work is not a grafting work. Type of current work: ${Player.currentWork.type}.`,
         );
       }
-      return Player.currentWork.completion;
+      return Player.currentWork.nextCompletion;
     },
   };
 }

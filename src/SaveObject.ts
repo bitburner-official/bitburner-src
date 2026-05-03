@@ -332,7 +332,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       dialogBoxCreate(`Cannot import save data: ${error}`);
       return;
     }
-    setTimeout(() => location.reload(), 1000);
+    setTimeout(() => location.reload(), 0);
   }
 
   async getSaveDataFromFile(files: FileList | null): Promise<SaveData> {

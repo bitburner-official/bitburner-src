@@ -271,13 +271,13 @@ function IntelligenceOverride({
               disabled={!enabled}
               value={intelligenceOverride !== undefined ? intelligenceOverride : ""}
               onChange={(event) => {
-                // Empty string will be automatically changed to "0".
+                // Empty string will be automatically changed to "1".
                 if (event.target.value === "") {
-                  callbacks.setIntelligenceOverride(0);
+                  callbacks.setIntelligenceOverride(1);
                   return;
                 }
                 const value = Number.parseInt(event.target.value);
-                if (!Number.isInteger(value) || value < 0) {
+                if (!Number.isInteger(value) || value < 1) {
                   return;
                 }
                 callbacks.setIntelligenceOverride(value);

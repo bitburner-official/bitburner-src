@@ -9,6 +9,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
 import { useCycleRerender } from "../../ui/React/hooks";
+import Button from "@mui/material/Button";
+import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
+import { Factions } from "../../Faction/Factions";
 
 /** React Component for all the gang stuff. */
 export function GangRoot(): React.ReactElement {
@@ -18,7 +22,7 @@ export function GangRoot(): React.ReactElement {
   })();
   const [value, setValue] = React.useState(0);
 
-  function handleChange(event: React.SyntheticEvent, tab: number): void {
+  function handleChange(__event: React.SyntheticEvent, tab: number): void {
     setValue(tab);
   }
 
@@ -26,11 +30,26 @@ export function GangRoot(): React.ReactElement {
 
   return (
     <Context.Gang.Provider value={gang}>
-      <Tabs variant="fullWidth" value={value} onChange={handleChange} sx={{ minWidth: "fit-content", maxWidth: "45%" }}>
-        <Tab label="Management" />
-        <Tab label="Equipment" />
-        <Tab label="Territory" />
-      </Tabs>
+      <div style={{ display: "flex" }}>
+        <Tabs
+          variant="fullWidth"
+          value={value}
+          onChange={handleChange}
+          sx={{ minWidth: "fit-content", maxWidth: "45%" }}
+        >
+          <Tab label="Management" />
+          <Tab label="Equipment" />
+          <Tab label="Territory" />
+        </Tabs>
+        <Button
+          style={{ marginLeft: "20px" }}
+          onClick={() => {
+            Router.toPage(Page.Faction, { faction: Factions[gang.facName] });
+          }}
+        >
+          Faction
+        </Button>
+      </div>
       {value === 0 && <ManagementSubpage />}
       {value === 1 && <EquipmentsSubpage />}
       {value === 2 && <TerritorySubpage />}

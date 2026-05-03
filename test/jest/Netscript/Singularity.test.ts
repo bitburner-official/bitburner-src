@@ -1,6 +1,21 @@
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
-import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
-import { AugmentationName, CompanyName, CompletedProgramName, FactionName, JobField, JobName } from "@enums";
+import {
+  AugmentationName,
+  BladeburnerContractName,
+  BladeburnerGeneralActionName,
+  CityName,
+  CompanyName,
+  CompletedProgramName,
+  CrimeType,
+  FactionName,
+  FactionWorkType,
+  GymType,
+  JobField,
+  JobName,
+  LocationName,
+  SpecialBladeburnerActionTypeForSleeve,
+  UniversityClassType,
+} from "@enums";
 import { Player } from "@player";
 import { prestigeSourceFile } from "../../../src/Prestige";
 import { disconnectServers, GetServerOrThrow } from "../../../src/Server/AllServers";
@@ -14,6 +29,8 @@ import { Companies } from "../../../src/Company/Companies";
 import { CompanyPositions } from "../../../src/Company/CompanyPositions";
 import { getTorRouter } from "../../../src/Server/ServerHelpers";
 import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
+import { numberOfBlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
+import type { SleeveTask, Task } from "@nsdefs";
 
 const nextBN = 4;
 
@@ -55,8 +72,12 @@ function testIntelligenceOverride(
   setUpBeforePrestige = () => {},
 ): void {
   Player.sourceFiles.set(5, 1);
+  // The intelligence skill level starts at 0.
+  expect(Player.skills.intelligence).toStrictEqual(0);
+  prestigeSourceFile(true);
   // Start without exp.
   expect(Player.exp.intelligence).toStrictEqual(0);
+  // When having SF5 and the skill level is 0, it's set to 1.
   expect(Player.skills.intelligence).toStrictEqual(1);
   expect(Player.persistentIntelligenceData.exp).toStrictEqual(0);
   // Gain 1e6 exp (skill = 242).
@@ -159,6 +180,30 @@ function testIntelligenceOverride(
   expect(Player.persistentIntelligenceData.exp).toStrictEqual(1e6 + intelligenceExpGainOnPrestige * 2);
 }
 
+/** Sets intelligence exp while bypassing the requirements (SF5 or being in BN5). */
+function manuallySetIntelligenceExp(exp: number): void {
+  Player.exp.intelligence = exp;
+  Player.skills.intelligence = Math.floor(Player.calculateSkill(Player.exp.intelligence, 1));
+  Player.persistentIntelligenceData.exp = exp;
+}
+
+function expectIntelligenceExp(exp: number): void {
+  expect(Player.exp.intelligence).toStrictEqual(exp);
+  expect(Player.skills.intelligence).toStrictEqual(Math.floor(Player.calculateSkill(exp, 1)));
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(exp);
+}
+
+/**
+ * This function is not equivalent to expectIntelligenceExp(0). The intelligence skill level starts at 0, not 1 like
+ * other stats. This function specifically verifies the initial state of intelligence data (before entering BN5).
+ */
+function expectInitialIntelligenceData(): void {
+  expect(Player.exp.intelligence).toStrictEqual(0);
+  // The intelligence skill level starts at 0.
+  expect(Player.skills.intelligence).toStrictEqual(0);
+  expect(Player.persistentIntelligenceData.exp).toStrictEqual(0);
+}
+
 function setUpBeforeDestroyingWD(): void {
   Player.queueAugmentation(AugmentationName.TheRedPill);
   installAugmentations();
@@ -166,7 +211,7 @@ function setUpBeforeDestroyingWD(): void {
   const wdServer = GetServerOrThrow(SpecialServers.WorldDaemon);
   wdServer.hasAdminRights = true;
   Player.startBladeburner();
-  setNumBlackOpsComplete(blackOpsArray.length);
+  setNumBlackOpsComplete(numberOfBlackOperations);
 }
 
 describe("b1tflum3", () => {
@@ -641,4 +686,479 @@ describe("purchaseProgram", () => {
       expect(Player.hasProgram(CompletedProgramName.bruteSsh)).toStrictEqual(false);
     });
   });
+});
+
+describe("Intelligence", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    expect(Player.bitNodeN).toStrictEqual(1);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(0);
+    expectInitialIntelligenceData();
+  });
+  test("Get SF5", () => {
+    // This is the most common scenario. Some checks in this test will be repeated in other tests.
+    const ns = getNS();
+    ns.singularity.b1tflum3(5);
+    expectIntelligenceExp(0);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(1000);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(5);
+    expectIntelligenceExp(1300);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(1);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(5);
+    expectIntelligenceExp(1600);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(2);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(1);
+    expectIntelligenceExp(1900);
+    expect(Player.sourceFileLvl(5)).toStrictEqual(3);
+  });
+  test("Can gain intelligence exp with SF5", () => {
+    Player.sourceFiles.set(5, 1);
+    const ns = getNS();
+    ns.singularity.b1tflum3(1);
+    expectIntelligenceExp(0);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(1000);
+
+    ns.singularity.b1tflum3(1);
+    expectIntelligenceExp(1000);
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(1);
+    expectIntelligenceExp(1300);
+  });
+  test("Can gain intelligence exp in BN5", () => {
+    const ns = getNS();
+    ns.singularity.b1tflum3(5);
+    expectIntelligenceExp(0);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(1000);
+  });
+  describe("Reset intelligence data", () => {
+    test("Install augmentations", () => {
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      Player.queueAugmentation(AugmentationName.Targeting1);
+      expect(installAugmentations()).toStrictEqual(true);
+      expectInitialIntelligenceData();
+    });
+    test("Bitflume", () => {
+      const ns = getNS();
+
+      // Bitflume from non-BN5 to non-BN5.
+      expect(Player.bitNodeN).toStrictEqual(1);
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      ns.singularity.b1tflum3(1);
+      // Reset intelligence data
+      expectInitialIntelligenceData();
+
+      // We intentionally skip this scenario.
+      // For more information, please check https://github.com/bitburner-official/bitburner-src/pull/2666
+      // // Bitflume from non-BN5 to BN5.
+      // expect(Player.bitNodeN).toStrictEqual(1);
+      // manuallySetIntelligenceExp(50);
+      // expectIntelligenceExp(50);
+      // ns.singularity.b1tflum3(5);
+      // // Reset intelligence data and skill = 1
+      // expectIntelligenceExp(0);
+
+      // Bitflume from non-BN5 to BN5.
+      ns.singularity.b1tflum3(5);
+      // Check if skill is set to 1.
+      expectIntelligenceExp(0);
+
+      // Bitflume from BN5 to BN5.
+      expect(Player.bitNodeN).toStrictEqual(5);
+      Player.gainIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      // Bitflume to BN5 again.
+      ns.singularity.b1tflum3(5);
+      // Not lose exp when bitfluming from BN5 to BN5.
+      expectIntelligenceExp(50);
+
+      // Bitflume from BN5 to non-BN5.
+      expect(Player.bitNodeN).toStrictEqual(5);
+      Player.gainIntelligenceExp(50);
+      // 50 exp from the previous scenario + 50 exp from this scenario.
+      expectIntelligenceExp(100);
+      ns.singularity.b1tflum3(1);
+      // Reset intelligence data
+      expectInitialIntelligenceData();
+    });
+    test("Destroy WD", () => {
+      const ns = getNS();
+
+      // Destroy WD of non-BN5 and jump to non-BN5.
+      expect(Player.bitNodeN).toStrictEqual(1);
+      manuallySetIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      setUpBeforeDestroyingWD();
+      ns.singularity.destroyW0r1dD43m0n(1);
+      // Reset intelligence data
+      expectInitialIntelligenceData();
+
+      // We intentionally skip this scenario.
+      // For more information, please check https://github.com/bitburner-official/bitburner-src/pull/2666
+      // // Destroy WD of non-BN5 and jump to BN5.
+      // expect(Player.bitNodeN).toStrictEqual(1);
+      // manuallySetIntelligenceExp(50);
+      // expectIntelligenceExp(50);
+      // setUpBeforeDestroyingWD();
+      // ns.singularity.destroyW0r1dD43m0n(5);
+      // // Reset intelligence data and skill = 1
+      // expectIntelligenceExp(0);
+
+      // Destroy WD of BN5 and jump to BN5.
+      ns.singularity.b1tflum3(5);
+      // Check the initial state that we want to test: in BN5 and do not have SF5.
+      expect(Player.bitNodeN).toStrictEqual(5);
+      expect(Player.sourceFileLvl(5)).toStrictEqual(0);
+      // Check if skill is set to 1.
+      expectIntelligenceExp(0);
+      Player.gainIntelligenceExp(50);
+      expectIntelligenceExp(50);
+      setUpBeforeDestroyingWD();
+      ns.singularity.destroyW0r1dD43m0n(5);
+      // 50 exp from Player.gainIntelligenceExp() + 300 exp reward of destroying WD.
+      expectIntelligenceExp(350);
+
+      // Destroy WD of BN5 and jump to non-BN5.
+      Player.gainIntelligenceExp(50);
+      // 350 exp from the previous scenario + 50 exp from Player.gainIntelligenceExp().
+      expectIntelligenceExp(400);
+      setUpBeforeDestroyingWD();
+      ns.singularity.destroyW0r1dD43m0n(1);
+      expectIntelligenceExp(700);
+    });
+  });
+  test("Cannot gain intelligence exp without SF5 or being in BN5", () => {
+    const ns = getNS();
+    Player.gainIntelligenceExp(1000);
+    expectInitialIntelligenceData();
+
+    ns.singularity.b1tflum3(1);
+    expectInitialIntelligenceData();
+
+    setUpBeforeDestroyingWD();
+    ns.singularity.destroyW0r1dD43m0n(1);
+    expectInitialIntelligenceData();
+  });
+  test("Cannot gain intelligence exp even with intelligence skill > 0", () => {
+    manuallySetIntelligenceExp(50);
+    expectIntelligenceExp(50);
+
+    Player.gainIntelligenceExp(1000);
+    expectIntelligenceExp(50);
+  });
+});
+
+const nextCompletionTestCases = [
+  {
+    action: () =>
+      expect(
+        getNS().singularity.universityCourse(LocationName.Sector12RothmanUniversity, UniversityClassType.algorithms),
+      ).toStrictEqual(true),
+    taskType: "CLASS",
+    isPlayerTask: true,
+  },
+  {
+    action: () =>
+      expect(getNS().singularity.gymWorkout(LocationName.Sector12PowerhouseGym, GymType.strength)).toStrictEqual(true),
+    taskType: "CLASS",
+    isPlayerTask: true,
+  },
+  {
+    action: () => {
+      const ns = getNS();
+      ns.singularity.applyToCompany(LocationName.Sector12JoesGuns, JobField.employee);
+      expect(ns.singularity.workForCompany(LocationName.Sector12JoesGuns)).toStrictEqual(true);
+    },
+    taskType: "COMPANY",
+    isPlayerTask: true,
+  },
+  {
+    action: () => expect(getNS().singularity.createProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true),
+    taskType: "CREATE_PROGRAM",
+    isPlayerTask: true,
+  },
+  {
+    action: () => {
+      const ns = getNS();
+      ns.singularity.commitCrime(CrimeType.mug);
+      expect(ns.singularity.getCurrentWork()?.type === "CRIME").toStrictEqual(true);
+    },
+    taskType: "CRIME",
+    isPlayerTask: true,
+  },
+  {
+    action: () =>
+      expect(getNS().singularity.workForFaction(FactionName.Sector12, FactionWorkType.hacking)).toStrictEqual(true),
+    taskType: "FACTION",
+    isPlayerTask: true,
+  },
+  {
+    action: () => {
+      const ns = getNS();
+      ns.singularity.travelToCity(CityName.NewTokyo);
+      expect(ns.grafting.graftAugmentation(AugmentationName.Targeting1)).toStrictEqual(true);
+    },
+    taskType: "GRAFTING",
+    isPlayerTask: true,
+  },
+  {
+    action: () =>
+      expect(
+        getNS().sleeve.setToUniversityCourse(0, LocationName.Sector12RothmanUniversity, UniversityClassType.algorithms),
+      ).toStrictEqual(true),
+    taskType: "CLASS",
+    isPlayerTask: false,
+  },
+  {
+    action: () =>
+      expect(getNS().sleeve.setToGymWorkout(0, LocationName.Sector12PowerhouseGym, GymType.strength)).toStrictEqual(
+        true,
+      ),
+    taskType: "CLASS",
+    isPlayerTask: false,
+  },
+  {
+    action: () => {
+      const ns = getNS();
+      ns.singularity.applyToCompany(LocationName.Sector12JoesGuns, JobField.employee);
+      expect(ns.sleeve.setToCompanyWork(0, LocationName.Sector12JoesGuns)).toStrictEqual(true);
+    },
+    taskType: "COMPANY",
+    isPlayerTask: false,
+  },
+  {
+    action: () => expect(getNS().sleeve.setToCommitCrime(0, CrimeType.mug)).toStrictEqual(true),
+    taskType: "CRIME",
+    isPlayerTask: false,
+  },
+  {
+    action: () =>
+      expect(getNS().sleeve.setToFactionWork(0, FactionName.Sector12, FactionWorkType.hacking)).toStrictEqual(true),
+    taskType: "FACTION",
+    isPlayerTask: false,
+  },
+  {
+    action: () => expect(getNS().sleeve.setToShockRecovery(0)).toStrictEqual(true),
+    taskType: "RECOVERY",
+    isPlayerTask: false,
+  },
+  {
+    action: () => expect(getNS().sleeve.setToSynchronize(0)).toStrictEqual(true),
+    taskType: "SYNCHRO",
+    isPlayerTask: false,
+  },
+  {
+    action: () =>
+      expect(getNS().sleeve.setToBladeburnerAction(0, BladeburnerGeneralActionName.Training)).toStrictEqual(true),
+    taskType: "BLADEBURNER",
+    isPlayerTask: false,
+  },
+  {
+    action: () =>
+      expect(
+        getNS().sleeve.setToBladeburnerAction(0, SpecialBladeburnerActionTypeForSleeve.InfiltrateSynthoids),
+      ).toStrictEqual(true),
+    taskType: "INFILTRATE",
+    isPlayerTask: false,
+  },
+  {
+    action: () =>
+      expect(
+        getNS().sleeve.setToBladeburnerAction(0, SpecialBladeburnerActionTypeForSleeve.SupportMainSleeve),
+      ).toStrictEqual(true),
+    taskType: "SUPPORT",
+    isPlayerTask: false,
+  },
+  {
+    action: () =>
+      expect(
+        getNS().sleeve.setToBladeburnerAction(
+          0,
+          SpecialBladeburnerActionTypeForSleeve.TakeOnContracts,
+          BladeburnerContractName.Tracking,
+        ),
+      ).toStrictEqual(true),
+    taskType: "BLADEBURNER",
+    isPlayerTask: false,
+  },
+] as const;
+
+function assertNoCurrentTask(): void {
+  expect(Player.currentWork).toBeNull();
+  expect(Player.sleeves[0].currentWork).toBeNull();
+}
+
+async function testNextCompletion(
+  action: () => void,
+  taskType: Task["type"] | SleeveTask["type"],
+  isPlayerTask: boolean,
+): Promise<void> {
+  const ns = getNS();
+  let isCompletable;
+  let isRepeatable = false;
+  switch (taskType) {
+    case "CLASS":
+      isCompletable = false;
+      break;
+    case "COMPANY":
+      isCompletable = false;
+      break;
+    case "CREATE_PROGRAM":
+      isCompletable = true;
+      break;
+    case "CRIME":
+      isCompletable = true;
+      isRepeatable = true;
+      break;
+    case "FACTION":
+      isCompletable = false;
+      break;
+    case "GRAFTING":
+      isCompletable = true;
+      break;
+    case "BLADEBURNER":
+      isCompletable = true;
+      isRepeatable = true;
+      break;
+    case "INFILTRATE":
+      isCompletable = true;
+      isRepeatable = true;
+      break;
+    case "RECOVERY":
+      isCompletable = false;
+      break;
+    case "SUPPORT":
+      isCompletable = false;
+      break;
+    case "SYNCHRO":
+      isCompletable = false;
+      break;
+    default: {
+      // Verify type switch statement is exhaustive
+      const __a: never = taskType;
+      throw new Error(`Invalid taskType: ${taskType}`);
+    }
+  }
+
+  const processTask = async (cycles: number) => {
+    if (isPlayerTask) {
+      Player.processWork(cycles);
+    } else {
+      Player.sleeves[0].currentWork?.process(Player.sleeves[0], cycles);
+    }
+    // Yield to the microtask queue.
+    await Promise.resolve();
+  };
+
+  const cancelTask = async () => {
+    if (isPlayerTask) {
+      ns.singularity.stopAction();
+    } else {
+      ns.sleeve.setToIdle(0);
+    }
+    // Yield to the microtask queue.
+    await Promise.resolve();
+  };
+
+  const assertCurrentTask = () => {
+    if (isPlayerTask) {
+      expect(Player.currentWork).not.toBeNull();
+    } else {
+      expect(Player.sleeves[0].currentWork).not.toBeNull();
+    }
+  };
+
+  let isResolved = false;
+  const setUpNextCompletionPromise = () => {
+    if (isPlayerTask) {
+      void ns.singularity.getCurrentWork()?.nextCompletion.then(() => (isResolved = true));
+    } else {
+      void ns.sleeve.getTask(0)?.nextCompletion.then(() => (isResolved = true));
+    }
+  };
+
+  assertNoCurrentTask();
+  action();
+  setUpNextCompletionPromise();
+  expect(isResolved).toStrictEqual(false);
+
+  // The current task should remain incomplete after 1 cycle.
+  await processTask(1);
+  assertCurrentTask();
+  expect(isResolved).toStrictEqual(false);
+
+  // Run many cycles to ensure all completable tasks are completed.
+  await processTask(1e4);
+
+  if (isCompletable) {
+    // The nextCompletion promise should be resolved now.
+    expect(isResolved).toStrictEqual(true);
+    if (isRepeatable) {
+      assertCurrentTask();
+      // Create the promise again to verify cancellation.
+      isResolved = false;
+      setUpNextCompletionPromise();
+    } else {
+      assertNoCurrentTask();
+      // Run the action again. We will cancel it later to verify cancellation.
+      if (taskType !== "GRAFTING") {
+        // Delete the completed program before creating it again.
+        if (taskType === "CREATE_PROGRAM") {
+          ns.rm(CompletedProgramName.bruteSsh);
+        }
+        action();
+      } else {
+        // Graft a different augmentation.
+        ns.grafting.graftAugmentation(AugmentationName.BitWire);
+      }
+      // Create the promise again to verify cancellation.
+      isResolved = false;
+      setUpNextCompletionPromise();
+    }
+  }
+  expect(isResolved).toStrictEqual(false);
+  // Verify cancellation.
+  await cancelTask();
+  assertNoCurrentTask();
+  expect(isResolved).toStrictEqual(true);
+}
+
+describe("nextCompletion", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    Player.sourceFiles.set(7, 3);
+    Player.sourceFiles.set(10, 3);
+    prestigeSourceFile(true);
+    Player.money = 1e15;
+    gainTonsOfExp();
+    const ns = getNS();
+    expect(ns.bladeburner.joinBladeburnerDivision()).toStrictEqual(true);
+    if (!Player.bladeburner) {
+      throw new Error("Bladeburner was not initialized");
+    }
+    Player.bladeburner.contracts[BladeburnerContractName.Tracking].count = 1e6;
+    ns.singularity.checkFactionInvitations();
+    expect(ns.singularity.joinFaction(FactionName.Sector12)).toStrictEqual(true);
+    ns.sleeve.setToIdle(0);
+  });
+  test.each(nextCompletionTestCases)(
+    "Task type: $taskType - Is player task: $isPlayerTask",
+    async ({ action, taskType, isPlayerTask }) => {
+      await testNextCompletion(action, taskType, isPlayerTask);
+    },
+  );
 });

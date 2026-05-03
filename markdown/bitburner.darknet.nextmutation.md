@@ -29,5 +29,5 @@ Promise&lt;void&gt;
 
 ## Remarks
 
-RAM cost: 1 GB
+RAM cost: 0 GB
 

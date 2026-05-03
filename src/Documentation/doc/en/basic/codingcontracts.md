@@ -142,8 +142,23 @@ same as the string `['foo', 'bar']`.
 Internally, we use `JSON.parse` to convert the string answer, and `['foo', 'bar']` is not a valid string representation
 of an array. In JSON, a string needs to be enclosed by double quotes. Using single quotes or backticks is not allowed.
 
-This is another example of why you should not convert your answer to a string when not requested. If you submit your
-array as it is, you do not need to care about the quote types.
+This is one reason why you should not convert your answer to a string unless requested. If you submit your array as is,
+you do not need to worry about quote types.
+
+Let's check another example:
+
+```js
+const firstString = "foo";
+const secondString = "bar";
+const answer = [firstString, secondString];
+ns.codingcontract.attempt(answer.toString(), "filename.cct");
+ns.codingcontract.attempt(String(answer), "filename.cct");
+```
+
+Do NOT call toString() or use similar methods to convert your string array to a string. `["foo", "bar"]` will be
+converted to `foo,bar`. For contracts that expect a string array, submitting this string causes it to be interpreted as
+`[foo,bar]`, which is then passed to `JSON.parse`. However, `[foo,bar]` is not valid JSON (it lacks double quotes), so
+your answer will be invalid.
 
 ## Rewards
 

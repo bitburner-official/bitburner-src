@@ -6,7 +6,7 @@ import { CONSTANTS } from "../Constants";
 import { determineCrimeSuccess } from "../Crime/CrimeHelpers";
 import { Crimes } from "../Crime/Crimes";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Work, WorkType } from "./Work";
+import { PlayerBaseWork, WorkType } from "./Work";
 import { scaleWorkStats, WorkStats } from "./WorkStats";
 import { calculateCrimeWorkStats } from "./Formulas";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -16,9 +16,9 @@ interface CrimeWorkParams {
   singularity: boolean;
 }
 
-export const isCrimeWork = (w: Work | null): w is CrimeWork => w !== null && w.type === WorkType.CRIME;
+export const isCrimeWork = (w: PlayerBaseWork | null): w is CrimeWork => w !== null && w.type === WorkType.CRIME;
 
-export class CrimeWork extends Work {
+export class CrimeWork extends PlayerBaseWork {
   crimeType: CrimeType;
   unitCompleted: number;
 
@@ -82,10 +82,7 @@ export class CrimeWork extends Work {
     Player.gainAgilityExp(gains.agiExp);
     Player.gainCharismaExp(gains.chaExp);
     Player.karma -= karma * focusBonus;
-  }
-
-  finish(): void {
-    /** nothing to do */
+    this.resolveNextCompletion();
   }
 
   APICopy() {
@@ -93,6 +90,7 @@ export class CrimeWork extends Work {
       type: WorkType.CRIME as const,
       cyclesWorked: this.cyclesWorked,
       crimeType: this.crimeType,
+      nextCompletion: this.nextCompletion,
     };
   }
 
