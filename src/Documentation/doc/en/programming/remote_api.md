@@ -16,6 +16,7 @@ Links:
 - https://github.com/bitburner-official/typescript-template
 - https://github.com/Tanimodori/viteburner
 - https://github.com/shyguy1412/bb-external-editor
+- https://github.com/CTNOriginals/BitburnerGoFilesync
 
 `typescript-template` has a small set of options and features. Its simplicity is by design. `viteburner` and `bb-external-editor` have more fancy features.
 
