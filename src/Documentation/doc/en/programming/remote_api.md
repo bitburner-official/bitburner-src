@@ -13,13 +13,10 @@ All these tools support synchronizing scripts to Bitburner and transpiling TypeS
 
 Links:
 
-- https://github.com/bitburner-official/typescript-template
-- https://github.com/Tanimodori/viteburner
-- https://github.com/shyguy1412/bb-external-editor
-- https://github.com/CTNOriginals/BitburnerGoFilesync
-
-`typescript-template` and `BitburnerGoFilesync` both have a small set of options and features, their simplicity is by design.
-`viteburner` and `bb-external-editor` have more fancy features and may offer more control for specific use cases.
+- [typescript-template](https://github.com/bitburner-official/typescript-template): The official template for synchronizing Typescript/Javascript from your computer to the game.
+- [viteburner](https://github.com/Tanimodori/viteburner): Daemon tools of bitburner using vite for script transform, file syncing, RAM monitoring and more!
+- [bb-external-editor](https://github.com/shyguy1412/bb-external-editor): This is a template for using any external editor for Bitburner. This Template supports JS, JSX, TS and TSX out of the box.
+- [BitburnerGoFilesync](https://github.com/CTNOriginals/BitburnerGoFilesync): This tool allows you to sync up your local files to Bitburner automatically without needing NodeJS or NPM installed.
 
 ## Troubleshooting tips
 
