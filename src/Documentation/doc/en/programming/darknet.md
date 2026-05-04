@@ -240,7 +240,7 @@ export const serverSolver = async (ns, hostname) => {
 
 /** Authenticates on 'ZeroLogon' type servers, which always have an empty password.
  *  @param {NS} ns
- * @param {string} hostname - the name of the server to attempt to authorize on
+ *  @param {string} hostname - the name of the server to attempt to authorize on
  */
 const authenticateWithNoPassword = async (ns, hostname) => {
   const result = await ns.dnet.authenticate(hostname, "");
@@ -248,9 +248,10 @@ const authenticateWithNoPassword = async (ns, hostname) => {
   return result.success;
 };
 
-// This lets you tab-complete putting "--tail" on the run command so you can see the script logs as it runs, if you want
-// If you add support to the script to take other arguments, you can add them here as well for convenience
-export function autocomplete(data: AutocompleteData) {
+/** This lets you tab-complete putting "--tail" on the run command so you can see the script logs as it runs, if you want
+ *  If you add support to the script to take other arguments, you can add them here as well for convenience
+ *  @param {AutocompleteData} data */
+export function autocomplete(data) {
   return ["--tail"];
 }
 ```
