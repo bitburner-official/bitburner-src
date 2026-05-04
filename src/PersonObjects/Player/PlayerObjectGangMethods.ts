@@ -54,8 +54,9 @@ export function hasGangWith(this: PlayerObject, facName: FactionName): boolean {
 }
 
 export function startGang(this: PlayerObject, factionName: FactionName, hacking: boolean): void {
-  // isFactionWork handles null internally, finishWork might need to be run with true
-  if (isFactionWork(this.currentWork) && this.currentWork.factionName === factionName) this.finishWork(false);
+  if (isFactionWork(this.currentWork) && this.currentWork.factionName === factionName) {
+    this.finishWork(true);
+  }
 
   this.gang = new Gang(factionName, hacking);
 
