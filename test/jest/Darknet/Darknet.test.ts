@@ -65,7 +65,6 @@ import { generateCacheFilename, getStockReward } from "../../../src/DarkNet/effe
 import { getAllDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { prestigeAugmentation } from "../../../src/Prestige";
 import { initStockMarket, StockMarket } from "../../../src/StockMarket/StockMarket";
-import { Stock } from "../../../src/StockMarket/Stock";
 import { StockSymbol } from "@enums";
 
 beforeAll(() => {
