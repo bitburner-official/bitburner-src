@@ -61,7 +61,7 @@ import { DarknetServer } from "../../../src/Server/DarknetServer";
 import { isDirectoryPath } from "../../../src/Paths/Directory";
 import { isFilePath } from "../../../src/Paths/FilePath";
 import { LAB_CACHE_NAME } from "../../../src/DarkNet/effects/labyrinth";
-import { generateCacheFilename, getStockReward, getMoneyReward } from "../../../src/DarkNet/effects/cacheFiles";
+import { generateCacheFilename, getStockReward } from "../../../src/DarkNet/effects/cacheFiles";
 import { getAllDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { prestigeAugmentation } from "../../../src/Prestige";
 import { initStockMarket, StockMarket } from "../../../src/StockMarket/StockMarket";
@@ -850,7 +850,7 @@ describe("Stock cache reward", () => {
     const remaining = 3;
     // Fill every stock to near capacity so no matter which one is randomly picked, it triggers clamping
     for (const stockName of Object.keys(StockSymbol)) {
-      const stock = StockMarket[stockName] as Stock;
+      const stock = StockMarket[stockName];
       stock.playerShares = stock.maxShares - remaining;
       stock.playerShortShares = 0;
     }
@@ -864,7 +864,7 @@ describe("Stock cache reward", () => {
 
     // Verify the chosen stock was clamped to exactly maxShares
     for (const stockName of Object.keys(StockSymbol)) {
-      const stock = StockMarket[stockName] as Stock;
+      const stock = StockMarket[stockName];
       expect(stock.playerShares).toBeLessThanOrEqual(stock.maxShares);
     }
   });
@@ -874,7 +874,7 @@ describe("Stock cache reward", () => {
 
     // Fill every stock to max capacity
     for (const stockName of Object.keys(StockSymbol)) {
-      const stock = StockMarket[stockName] as Stock;
+      const stock = StockMarket[stockName];
       stock.playerShares = stock.maxShares;
       stock.playerShortShares = 0;
     }
