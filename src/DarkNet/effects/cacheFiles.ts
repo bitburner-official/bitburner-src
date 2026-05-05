@@ -12,6 +12,7 @@ import type { DarknetServer } from "../../Server/DarknetServer";
 import { resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import type { CacheResult } from "@nsdefs";
 import { addClue, cctCooldownReached } from "./effects";
+import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 
 export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -41,10 +42,14 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
     };
   }
 
-  const rewards = [getMoneyReward, getProgramAndStockMarketRelatedRewards, getStockReward, getDataFileReward];
+  const rewards = [getProgramAndStockMarketRelatedRewards, getStockReward, getDataFileReward];
   if (cacheName.endsWith(".d.cache")) {
     // only include ccts from caches generated from phishing attacks
     rewards.push(getCCTReward);
+  }
+  if (getBitNodeMultipliers(Player.bitNodeN, 1).DarknetMoneyMultiplier) {
+    // only include money reward if it is not disabled by the bn mults
+    rewards.push(getMoneyReward);
   }
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   const result = reward(difficulty, server);
