@@ -98,10 +98,14 @@ export const getStockReward = (difficulty: number): string => {
     initStockMarket();
   }
   const stockSymbols = Object.keys(StockSymbol);
-  const randomStock = stockSymbols[Math.floor(Math.random() * stockSymbols.length)];
-  const shares = Math.floor(1 + difficulty * 5 + Math.random() * 10);
-  StockMarket[randomStock].playerShares += shares;
-  return `You have discovered a stock option cache containing ${shares} shares of ${randomStock}!`;
+  const stock = StockMarket[stockSymbols[Math.floor(Math.random() * stockSymbols.length)]];
+  const maxNewShares = stock.maxShares - stock.playerShares - stock.playerShortShares;
+  if (maxNewShares <= 0) {
+    return getMoneyReward(difficulty);
+  }
+  const shares = Math.min(Math.floor(1 + difficulty * 5 + Math.random() * 10), maxNewShares);
+  stock.playerShares += shares;
+  return `You have discovered a stock option cache containing ${shares} shares of ${stock.symbol}!`;
 };
 
 export const getDataFileReward = (difficulty: number, server: DarknetServer): string => {
