@@ -5,8 +5,10 @@ import { hasTextExtension, validTextExtensions } from "../../Paths/TextFilePath"
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
 import { PromptEvent } from "../../ui/React/PromptManager";
 import type { ContentFilePath } from "../../Paths/ContentFile";
+import { invalidCharacters } from "../../Paths/Directory";
+import { pluralize } from "../../utils/I18nUtils";
 
-function pickDirectory(): Promise<null | FileList> {
+function pickDirectory(): Promise<FileList | null> {
   return new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
@@ -97,30 +99,30 @@ async function uploadAsync(args: (string | number | boolean)[], server: BaseServ
   const skipped = withPath.filter((item) => "badPath" in item);
   const create = withPath.filter((item) => "create" in item);
   const destForPrint = destination === "" ? "/" : destination;
-  let lines = [`Upload files to ${destForPrint}?`];
+  const lines = [`Upload files to ${destForPrint}?`];
   if (overwrite.length !== 0) {
-    lines = [
-      ...lines,
+    lines.push(
       "",
-      `${overwrite.length} files will be overwritten:`,
+      `${pluralize(overwrite.length, "file")} will be overwritten:`,
       ...overwrite.map(({ overwrite }) => overwrite),
-    ];
+    );
   }
   if (skipped.length !== 0) {
     const extensions = [...validScriptExtensions, ...validTextExtensions];
-    lines = [
-      ...lines,
+    lines.push(
       "",
-      "Characters * ? [ ] ! \\ ~ | # \" ' and whitespace are not allowed in file paths.",
+      `Characters ${invalidCharacters
+        .filter((v) => v !== "/")
+        .join(" ")} and whitespace are not allowed in file paths.`,
       `Only file extensions ${extensions.join(", ")} are allowed.`,
       "A file name must have at least one character before the extension.",
       "",
-      `${skipped.length} files will be skipped due to prohibited file paths:`,
+      `${pluralize(skipped.length, "file")} will be skipped due to prohibited file paths:`,
       ...skipped.map(({ badPath }) => badPath),
-    ];
+    );
   }
   if (create.length !== 0) {
-    lines = [...lines, "", `${create.length} new files will be created:`, ...create.map(({ create }) => create)];
+    lines.push("", `${pluralize(create.length, "new file")} will be created:`, ...create.map(({ create }) => create));
   }
   if (!(await askConfirm(lines.join("\n")))) {
     return;
