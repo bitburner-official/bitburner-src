@@ -61,9 +61,11 @@ import { DarknetServer } from "../../../src/Server/DarknetServer";
 import { isDirectoryPath } from "../../../src/Paths/Directory";
 import { isFilePath } from "../../../src/Paths/FilePath";
 import { LAB_CACHE_NAME } from "../../../src/DarkNet/effects/labyrinth";
-import { generateCacheFilename } from "../../../src/DarkNet/effects/cacheFiles";
+import { generateCacheFilename, getStockReward } from "../../../src/DarkNet/effects/cacheFiles";
 import { getAllDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { prestigeAugmentation } from "../../../src/Prestige";
+import { initStockMarket, StockMarket } from "../../../src/StockMarket/StockMarket";
+import { StockSymbol } from "@enums";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -837,5 +839,50 @@ describe("Clue filename generator", () => {
         getClueFileName(notebookFileNames);
       }).not.toThrow();
     }
+  });
+});
+
+describe("Stock cache reward", () => {
+  test("stock reward does not exceed maxShares and falls back to money reward", () => {
+    initStockMarket();
+
+    const remaining = 3;
+    // Fill every stock to near capacity so no matter which one is randomly picked, it triggers clamping
+    for (const stockName of Object.keys(StockSymbol)) {
+      const stock = StockMarket[stockName];
+      stock.playerShares = stock.maxShares - remaining;
+      stock.playerShortShares = 0;
+    }
+
+    // Use high difficulty to ensure the unclamped share count would exceed remaining
+    const difficulty = 100;
+    const result = getStockReward(difficulty);
+
+    // Should have awarded at most `remaining` shares
+    expect(result).toContain(`${remaining} shares`);
+
+    // Verify the chosen stock was clamped to exactly maxShares
+    for (const stockName of Object.keys(StockSymbol)) {
+      const stock = StockMarket[stockName];
+      expect(stock.playerShares).toBeLessThanOrEqual(stock.maxShares);
+    }
+  });
+
+  test("stock reward falls back to money when stock is fully owned", () => {
+    initStockMarket();
+
+    // Fill every stock to max capacity
+    for (const stockName of Object.keys(StockSymbol)) {
+      const stock = StockMarket[stockName];
+      stock.playerShares = stock.maxShares;
+      stock.playerShortShares = 0;
+    }
+
+    const moneyBefore = Player.money;
+    const result = getStockReward(5);
+
+    // Should have fallen back to a money reward
+    expect(result).toContain("discovered a cache with");
+    expect(Player.money).toBeGreaterThan(moneyBefore);
   });
 });
