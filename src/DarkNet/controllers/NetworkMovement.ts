@@ -1,10 +1,4 @@
-import {
-  changeIp,
-  connectServers,
-  DeleteServer,
-  disconnectServers,
-  GetServer,
-} from "../../Server/AllServers";
+import { changeIp, connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
 import {
   DarknetEvents,
   DarknetState,
@@ -66,7 +60,6 @@ export const mutateDarknet = (): void => {
   if (Math.random() > depthSpeedFactor) {
     return;
   }
-
 
   restartRandomServer();
   restartRandomServer();
