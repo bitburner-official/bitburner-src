@@ -61,10 +61,6 @@ export const mutateDarknet = (): void => {
     return;
   }
 
-  restartRandomServer();
-  restartRandomServer();
-  restartRandomServer();
-
   if (Math.random() < 0.3) {
     const islands = getIslands();
     const island = islands[Math.floor(Math.random() * islands.length)];
