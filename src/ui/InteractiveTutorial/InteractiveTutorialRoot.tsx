@@ -563,8 +563,8 @@ export async function main(ns) {
               materials for all NS APIs.
             </li>
             <li>
-              The <DocumentationLink page="help/beginner_faq.md">FAQ</DocumentationLink> contains questions often asked
-              by beginners of the game.
+              The <DocumentationLink page="help/faq.md">FAQ</DocumentationLink> contains questions often asked by
+              beginners of the game.
             </li>
           </ul>
           <Typography fontWeight="fontWeightBold">
