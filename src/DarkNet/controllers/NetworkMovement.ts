@@ -1,4 +1,10 @@
-import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
+import {
+  changeIp,
+  connectServers,
+  DeleteServer,
+  disconnectServers,
+  GetServer,
+} from "../../Server/AllServers";
 import {
   DarknetEvents,
   DarknetState,
@@ -60,6 +66,11 @@ export const mutateDarknet = (): void => {
   if (Math.random() > depthSpeedFactor) {
     return;
   }
+
+
+  restartRandomServer();
+  restartRandomServer();
+  restartRandomServer();
 
   if (Math.random() < 0.3) {
     const islands = getIslands();
@@ -307,6 +318,7 @@ export const restartServer = (server: DarknetServer): void => {
   serverState.authenticatedPIDs = [];
   serverState.serverLogs = [{ pid: -1, message: "Server restarting, terminating scripts..." }];
   server.backdoorInstalled = false;
+  changeIp(server);
   disconnectServer(server);
   addGuaranteedConnection(server);
 };

@@ -133,6 +133,13 @@ export const renameServer = (hostname: string, newName: string): void => {
   // No need to touch the entry keyed by IP
 };
 
+// Set a server's IP to a new, random, value
+export const changeIp = (server: BaseServer): void => {
+  AllServers.delete(server.ip);
+  server.ip = createUniqueRandomIp();
+  AllServers.set(server.ip, server);
+};
+
 export function prestigeAllServers(): void {
   AllServers.clear();
 }
