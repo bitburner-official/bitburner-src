@@ -89,7 +89,6 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
           Player.startFocusing();
           Router.toPage(Page.Work);
         } else if (wasFocusing) {
-          Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
 
