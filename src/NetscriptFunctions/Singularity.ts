@@ -283,7 +283,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.startFocusing();
           Router.toPage(Page.Work);
         } else if (wasFocusing) {
-          Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
         helpers.log(ctx, () => `Started ${classType} at ${universityName}`);
@@ -365,7 +364,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.startFocusing();
           Router.toPage(Page.Work);
         } else if (wasFocusing) {
-          Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
         helpers.log(ctx, () => `Started training ${classType} at ${gymName}`);
@@ -570,7 +568,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         Router.toPage(Page.Work);
         return true;
       } else if (Player.focus && !focus) {
-        Player.stopFocusing();
         Router.toPage(Page.Terminal);
         return true;
       }
@@ -709,7 +706,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.startFocusing();
           Router.toPage(Page.Work);
         } else if (wasFocused) {
-          Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
         helpers.log(ctx, () => `Began working at '${companyName}' with position '${jobName}'`);
@@ -834,7 +830,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               Player.startFocusing();
               Router.toPage(Page.Work);
             } else if (wasFocusing) {
-              Player.stopFocusing();
               Router.toPage(Page.Terminal);
             }
             helpers.log(ctx, () => `Started carrying out hacking contracts for '${faction.name}'`);
@@ -855,7 +850,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               Player.startFocusing();
               Router.toPage(Page.Work);
             } else if (wasFocusing) {
-              Player.stopFocusing();
               Router.toPage(Page.Terminal);
             }
             helpers.log(ctx, () => `Started carrying out field missions for '${faction.name}'`);
@@ -876,7 +870,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               Player.startFocusing();
               Router.toPage(Page.Work);
             } else if (wasFocusing) {
-              Player.stopFocusing();
               Router.toPage(Page.Terminal);
             }
             helpers.log(ctx, () => `Started carrying out security work for '${faction.name}'`);
@@ -1009,7 +1002,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.startFocusing();
           Router.toPage(Page.Work);
         } else if (wasFocusing) {
-          Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
         helpers.log(ctx, () => `Began creating program: '${programName}'`);
@@ -1059,7 +1051,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         Player.startFocusing();
         Router.toPage(Page.Work);
       } else if (wasFocusing) {
-        Player.stopFocusing();
         Router.toPage(Page.Terminal);
       }
       return crimeTime;
