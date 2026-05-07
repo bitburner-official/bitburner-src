@@ -836,7 +836,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftPowerMultiplier: 0.5,
         StaneksGiftExtraSize: 2,
 
-        DarknetMoneyMultiplier: 0.5,
+        DarknetMoneyMultiplier: 0.05,
 
         WorldDaemonDifficulty: 2,
       });
@@ -1036,7 +1036,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         StaneksGiftPowerMultiplier: 2,
         StaneksGiftExtraSize: 1,
-        DarknetMoneyMultiplier: 0.5,
+        DarknetMoneyMultiplier: 0.1,
 
         WorldDaemonDifficulty: 3,
       });
