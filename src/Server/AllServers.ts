@@ -148,8 +148,29 @@ export function loadAllServers(saveString: string): void {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
     }
+    // Sanitize hostname
+    if (!server.hostname.isWellFormed()) {
+      server.hostname = server.hostname.toWellFormed();
+      for (const script of server.scripts.values()) {
+        script.server = server.hostname;
+      }
+      if (server.savedScripts) {
+        for (const script of server.savedScripts) {
+          script.server = server.hostname;
+        }
+      }
+    }
+    // Sanitize hostnames in server.serversOnNetwork
+    for (const [index, value] of server.serversOnNetwork.entries()) {
+      server.serversOnNetwork[index] = value.toWellFormed();
+    }
+
     AllServers.set(server.hostname, server);
     AllServers.set(server.ip, server);
+  }
+  // Sanity check
+  for (const server of GetAllServers(true)) {
+    server.serversOnNetwork = server.serversOnNetwork.filter((hostname) => GetServer(hostname) !== null);
   }
 
   // Apply blocked ram for darknet servers

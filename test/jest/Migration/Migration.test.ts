@@ -6,6 +6,7 @@ import * as db from "../../../src/db";
 import * as FileUtils from "../../../src/utils/FileUtils";
 import type { SaveData } from "../../../src/types";
 import { calculateExp } from "../../../src/PersonObjects/formulas/skill";
+import { GetAllServers, GetServer } from "../../../src/Server/AllServers";
 
 async function loadGameFromSaveData(saveData: SaveData) {
   // Simulate loading the data in IndexedDB
@@ -131,5 +132,26 @@ describe("v3", () => {
 
       expect(mockedDownload).not.toHaveBeenCalled();
     });
+  });
+
+  test("Malformed hostname", async () => {
+    const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/malformed-hostname.gz"));
+    await loadGameFromSaveData(saveData);
+    for (const server of GetAllServers(true)) {
+      expect(server.hostname.isWellFormed()).toBe(true);
+      for (const script of server.scripts.values()) {
+        expect(script.server).toStrictEqual(server.hostname);
+      }
+      if (server.savedScripts) {
+        for (const script of server.savedScripts) {
+          expect(script.server).toStrictEqual(server.hostname);
+        }
+      }
+      for (const hostname of server.serversOnNetwork) {
+        expect(hostname.isWellFormed()).toBe(true);
+        expect(GetServer(hostname)).not.toBeNull();
+      }
+    }
+    expect(() => Player.getCurrentServer()).not.toThrow();
   });
 });
