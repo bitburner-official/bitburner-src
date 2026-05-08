@@ -120,7 +120,7 @@ import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { checkDarknetServer } from "./DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
-import { ResponseCodeEnum } from "./DarkNet/Enums";
+import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
@@ -935,7 +935,14 @@ export const ns: InternalAPI<NSFull> = {
   getServer: (ctx) => (_host?) => {
     const [server, host] = helpers.getServer(ctx, _host);
     if (!server) {
-      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
+      // If the server is offline, return a dummy object with isOnline = false.
+      const isIp = isIPAddress(host);
+      return {
+        isOnline: false,
+        ...exampleDarknetServerData,
+        hostname: isIp ? "" : host,
+        ip: isIp ? host : "",
+      } satisfies DarknetServerData & { isOnline: boolean } as unknown as Server;
     }
     if (server instanceof DarknetServer) {
       return {
@@ -963,6 +970,10 @@ export const ns: InternalAPI<NSFull> = {
         // This uses the type casting to have a clean return type,
         // but also to avoid breaking scripts that expect it to work for darknet servers.
       } satisfies DarknetServerData & { isOnline: boolean } as unknown as Server;
+    }
+    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
+    if (server.serversOnNetwork.length === 0) {
+      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
     }
     return {
       hostname: server.hostname,
