@@ -6,12 +6,10 @@
 
 Returns data of a server.
 
-If the server is a darknet server and has recently gone offline, it will return a dummy server object with `isOnline: false`<!-- -->.
-
 **Signature:**
 
 ```typescript
-getServer(host?: string): Server | (DarknetServerData & { isOnline: boolean });
+getServer(host?: string): Server;
 ```
 
 ## Parameters
@@ -52,7 +50,7 @@ _(Optional)_ Optional. Hostname/IP of the server. Defaults to the hostname of th
 
 **Returns:**
 
-[Server](./bitburner.server.md) \| ([DarknetServerData](./bitburner.darknetserverdata.md) &amp; { isOnline: boolean })
+[Server](./bitburner.server.md)
 
 Data of the server.
 

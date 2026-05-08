@@ -37,6 +37,25 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[blockedRam](./bitburner.serverauthdetails.blockedram.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The amount of ram blocked by the server owner
+
+
+</td></tr>
+<tr><td>
+
 [data](./bitburner.serverauthdetails.data.md)
 
 
@@ -51,6 +70,25 @@ string
 </td><td>
 
 Data from the passwordHint, if any.
+
+
+</td></tr>
+<tr><td>
+
+[difficulty](./bitburner.serverauthdetails.difficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The difficulty rating of the server, associated with its original depth in the net
 
 
 </td></tr>
@@ -89,6 +127,25 @@ boolean
 </td><td>
 
 True if the server is directly connected to the current server
+
+
+</td></tr>
+<tr><td>
+
+[isStationary](./bitburner.serverauthdetails.isstationary.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+If this darknet server cannot be moved. True for fixed/story servers.
 
 
 </td></tr>
@@ -184,6 +241,25 @@ number
 </td><td>
 
 The number of characters in the password
+
+
+</td></tr>
+<tr><td>
+
+[requiredCharismaSkill](./bitburner.serverauthdetails.requiredcharismaskill.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The charisma skill required to authenticate on the server
 
 
 </td></tr>

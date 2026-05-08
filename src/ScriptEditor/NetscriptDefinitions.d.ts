@@ -8217,9 +8217,6 @@ export interface NS {
   /**
    * Returns data of a server.
    *
-   * If the server is a darknet server and has recently gone offline, it will return a dummy server object with
-   * `isOnline: false`.
-   *
    * @remarks
    * RAM cost: 2 GB
    *
