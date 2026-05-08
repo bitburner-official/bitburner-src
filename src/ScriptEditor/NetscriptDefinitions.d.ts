@@ -4488,6 +4488,14 @@ interface ServerAuthDetails {
   passwordLength: number;
   /** The character set used in the password */
   passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
+  /** The amount of ram blocked by the server owner */
+  blockedRam: number;
+  /** The difficulty rating of the server, associated with its original depth in the net */
+  difficulty: number;
+  /** The charisma skill required to authenticate on the server */
+  requiredCharismaSkill: number;
+  /** If this darknet server cannot be moved. True for fixed/story servers. */
+  isStationary: boolean;
 }
 
 /**
@@ -8218,7 +8226,7 @@ export interface NS {
    * @param host - Optional. Hostname/IP of the server. Defaults to the hostname of the running script's server.
    * @returns Data of the server.
    */
-  getServer(host?: string): Server | (DarknetServerData & { isOnline: boolean });
+  getServer(host?: string): Server;
 
   /**
    * Get money available on a server.

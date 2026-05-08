@@ -74,7 +74,15 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer, DarknetServerData } from "@nsdefs";
+import type {
+  NS,
+  RecentScript,
+  ProcessInfo,
+  NSEnums,
+  Server as NSInterfaceServer,
+  DarknetServerData,
+  Server,
+} from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -112,7 +120,7 @@ import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { checkDarknetServer } from "./DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
-import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
+import { ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
@@ -927,14 +935,7 @@ export const ns: InternalAPI<NSFull> = {
   getServer: (ctx) => (_host?) => {
     const [server, host] = helpers.getServer(ctx, _host);
     if (!server) {
-      // If the server is offline, return a dummy object with isOnline = false.
-      const isIp = isIPAddress(host);
-      return {
-        isOnline: false,
-        ...exampleDarknetServerData,
-        hostname: isIp ? "" : host,
-        ip: isIp ? host : "",
-      } satisfies DarknetServerData & { isOnline: boolean };
+      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
     }
     if (server instanceof DarknetServer) {
       return {
@@ -958,11 +959,10 @@ export const ns: InternalAPI<NSFull> = {
         logTrafficInterval: server.logTrafficInterval,
         isStationary: server.isStationary,
         purchasedByPlayer: false,
-      } satisfies DarknetServerData & { isOnline: boolean };
-    }
-    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
-    if (server.serversOnNetwork.length === 0) {
-      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
+        // FUTURE: remove this deprecated support for darknet servers.
+        // This uses the type casting to have a clean return type,
+        // but also to avoid breaking scripts that expect it to work for darknet servers.
+      } satisfies DarknetServerData & { isOnline: boolean } as unknown as Server;
     }
     return {
       hostname: server.hostname,

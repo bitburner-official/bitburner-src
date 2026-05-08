@@ -392,6 +392,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           logTrafficInterval: -1,
           passwordLength: -1,
           passwordFormat: "numeric",
+          blockedRam: -1,
+          difficulty: -1,
+          requiredCharismaSkill: -1,
+          isStationary: false,
         } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
       }
       const targetServer = serverCheck.server;
@@ -408,6 +412,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         logTrafficInterval: targetServer.logTrafficInterval,
         passwordLength: targetServer.password.length,
         passwordFormat: getPasswordType(targetServer.password),
+        blockedRam: targetServer.blockedRam,
+        difficulty: targetServer.difficulty,
+        requiredCharismaSkill: targetServer.requiredCharismaSkill,
+        isStationary: targetServer.isStationary,
       } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
     },
     induceServerMigration:
