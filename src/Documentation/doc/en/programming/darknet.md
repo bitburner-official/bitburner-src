@@ -25,7 +25,7 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 - `await ns.dnet.authenticate(hostname, password)` lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `exec` and `scp` to move scripts onto that server.
 - Some servers require interactive feedback to guess their password. Use `await ns.dnet.heartbleed(hostname)` to check that server's logs and get clues after you attempt a password.
 - `ns.dnet.connectToSession(hostName, password)` lets you use a password you already know to log in to a darknet server at a distance. This is required to scp files there.
-- Some servers will have part of their max ram blocked off. Use `ns.dnet.influence.memoryReallocation()` to free it.
+- Some servers will have part of their max ram blocked off. Use `ns.dnet.memoryReallocation()` to free it.
 - Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
 - Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
 - Using `ns.dnet.setStasisLink()` will stasis lock the current server. This prevents it from moving or going offline, and also allows getting a session on the server at a distance like backdooring does.
