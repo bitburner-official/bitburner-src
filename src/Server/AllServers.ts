@@ -149,6 +149,8 @@ export function loadAllServers(saveString: string): void {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
     }
     // Sanitize hostname
+    // A bug created ill-formed UTF-16 darknet hostnames that caused the in-game editor to crash. This code migrates
+    // those invalid hostnames and protects against similar issues in the future.
     if (!server.hostname.isWellFormed()) {
       server.hostname = server.hostname.toWellFormed();
       for (const script of server.scripts.values()) {
@@ -167,10 +169,6 @@ export function loadAllServers(saveString: string): void {
 
     AllServers.set(server.hostname, server);
     AllServers.set(server.ip, server);
-  }
-  // Sanity check
-  for (const server of GetAllServers(true)) {
-    server.serversOnNetwork = server.serversOnNetwork.filter((hostname) => GetServer(hostname) !== null);
   }
 
   // Apply blocked ram for darknet servers

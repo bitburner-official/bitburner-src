@@ -13,7 +13,7 @@
 
 import { Player } from "@player";
 import { AugmentationName, CityName, CodingContractName, LocationName } from "@enums";
-import { GetAllServers, GetServer } from "../Server/AllServers";
+import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
 import { Settings } from "../Settings/Settings";
@@ -35,7 +35,6 @@ import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../C
 import { load } from "../db";
 import { downloadContentAsFile } from "./FileUtils";
 import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
-import { SpecialServers } from "../Server/data/SpecialServers";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -644,14 +643,5 @@ Error: ${e}`,
       }
     }
     showAPIBreaks("3.0.0", breakingChanges300);
-  }
-  // Don't move these checks to a specific version check. This is a safety measure in case buggy code incorrectly
-  // handles Player.currentServer.
-  if (!Player.currentServer.isWellFormed()) {
-    Player.currentServer = Player.currentServer.toWellFormed();
-  }
-  if (GetServer(Player.currentServer) === null) {
-    console.error(`Invalid Player.currentServer: ${Player.currentServer}`);
-    Player.currentServer = SpecialServers.Home;
   }
 }
