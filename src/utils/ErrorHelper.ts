@@ -186,7 +186,9 @@ Copy your save here if possible
 \`\`\`
 `.trim();
 
-  const issueUrl = `${newIssueUrl}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+  const issueUrl = `${newIssueUrl}?title=${encodeURIComponent(title.toWellFormed())}&body=${encodeURIComponent(
+    body.toWellFormed(),
+  )}`;
 
   return {
     metadata,
