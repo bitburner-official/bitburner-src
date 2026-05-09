@@ -74,15 +74,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import type {
-  NS,
-  RecentScript,
-  ProcessInfo,
-  NSEnums,
-  Server as NSInterfaceServer,
-  DarknetServerData,
-  Server,
-} from "@nsdefs";
+import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer, Server } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -110,7 +102,7 @@ import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
-import { NetscriptDarknet } from "./NetscriptFunctions/Darknet";
+import { getDarknetPropertiesForDeprecationSupport, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { validBitNodes } from "./BitNode/Constants";
 import { isIPAddress } from "./Types/strings";
@@ -124,6 +116,7 @@ import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
+import { setDeprecatedProperties } from "./utils/DeprecationHelper";
 
 export const enums: NSEnums = {
   CityName,
@@ -934,6 +927,14 @@ export const ns: InternalAPI<NSFull> = {
     },
   getServer: (ctx) => (_host?) => {
     const [server, host] = helpers.getServer(ctx, _host);
+    const serverProps = {
+      sshPortOpen: false,
+      ftpPortOpen: false,
+      smtpPortOpen: false,
+      httpPortOpen: false,
+      sqlPortOpen: false,
+      organizationName: "",
+    };
     if (!server) {
       // If the server is offline, return a dummy object with isOnline = false.
       const isIp = isIPAddress(host);
@@ -942,13 +943,9 @@ export const ns: InternalAPI<NSFull> = {
         ...exampleDarknetServerData,
         hostname: isIp ? "" : host,
         ip: isIp ? host : "",
-        sshPortOpen: false,
-        ftpPortOpen: false,
-        smtpPortOpen: false,
-        httpPortOpen: false,
-        sqlPortOpen: false,
-        organizationName: "",
+        ...serverProps,
       };
+      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport());
       return result satisfies Server & { isOnline: boolean };
     }
     if (server instanceof DarknetServer) {
@@ -962,24 +959,10 @@ export const ns: InternalAPI<NSFull> = {
         ramUsed: server.ramUsed,
         maxRam: server.maxRam,
         backdoorInstalled: server.backdoorInstalled,
-        depth: server.depth,
-        modelId: server.modelId,
-        hasStasisLink: server.hasStasisLink,
-        blockedRam: server.blockedRam,
-        staticPasswordHint: server.staticPasswordHint,
-        passwordHintData: server.passwordHintData,
-        difficulty: server.difficulty,
-        requiredCharismaSkill: server.requiredCharismaSkill,
-        logTrafficInterval: server.logTrafficInterval,
-        isStationary: server.isStationary,
         purchasedByPlayer: false,
-        sshPortOpen: false,
-        ftpPortOpen: false,
-        smtpPortOpen: false,
-        httpPortOpen: false,
-        sqlPortOpen: false,
-        organizationName: "",
+        ...serverProps,
       };
+      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport());
       return result satisfies Server & { isOnline: boolean };
     }
     // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
