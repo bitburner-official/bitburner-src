@@ -8217,13 +8217,15 @@ export interface NS {
   /**
    * Returns data of a server.
    *
+   * If the server is a darknet server, it will also contain the "isOnline" field.
+   *
    * @remarks
    * RAM cost: 2 GB
    *
    * @param host - Optional. Hostname/IP of the server. Defaults to the hostname of the running script's server.
    * @returns Data of the server.
    */
-  getServer(host?: string): Server;
+  getServer(host?: string): Server & { isOnline?: boolean };
 
   /**
    * Get money available on a server.

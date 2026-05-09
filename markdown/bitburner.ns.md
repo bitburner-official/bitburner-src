@@ -929,6 +929,8 @@ Get the ram cost of a script.
 
 Returns data of a server.
 
+If the server is a darknet server, it will also contain the "isOnline" field.
+
 
 </td></tr>
 <tr><td>

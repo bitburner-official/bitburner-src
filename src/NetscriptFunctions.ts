@@ -937,15 +937,22 @@ export const ns: InternalAPI<NSFull> = {
     if (!server) {
       // If the server is offline, return a dummy object with isOnline = false.
       const isIp = isIPAddress(host);
-      return {
+      const result = {
         isOnline: false,
         ...exampleDarknetServerData,
         hostname: isIp ? "" : host,
         ip: isIp ? host : "",
-      } satisfies DarknetServerData & { isOnline: boolean } as unknown as Server;
+        sshPortOpen: false,
+        ftpPortOpen: false,
+        smtpPortOpen: false,
+        httpPortOpen: false,
+        sqlPortOpen: false,
+        organizationName: "",
+      };
+      return result satisfies Server & { isOnline: boolean };
     }
     if (server instanceof DarknetServer) {
-      return {
+      const result = {
         isOnline: true,
         hostname: server.hostname,
         ip: server.ip,
@@ -966,10 +973,14 @@ export const ns: InternalAPI<NSFull> = {
         logTrafficInterval: server.logTrafficInterval,
         isStationary: server.isStationary,
         purchasedByPlayer: false,
-        // FUTURE: remove this deprecated support for darknet servers.
-        // This uses the type casting to have a clean return type,
-        // but also to avoid breaking scripts that expect it to work for darknet servers.
-      } satisfies Server & { isOnline: boolean };
+        sshPortOpen: false,
+        ftpPortOpen: false,
+        smtpPortOpen: false,
+        httpPortOpen: false,
+        sqlPortOpen: false,
+        organizationName: "",
+      };
+      return result satisfies Server & { isOnline: boolean };
     }
     // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
     if (server.serversOnNetwork.length === 0) {

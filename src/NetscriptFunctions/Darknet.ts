@@ -712,3 +712,13 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     },
   };
 }
+
+
+export const getDarknetPropertiesForDeprecationSupport = (dnetServer: DarknetServer | undefined) => ({
+  isOnline: {
+    identifier: "ns.getServer().isOnline",
+    message: "Use ns.dnet.getServerAuthDetails().isOnline instead.",
+    value: !!dnetServer,
+  },
+
+});
