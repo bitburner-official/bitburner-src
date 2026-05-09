@@ -969,7 +969,7 @@ export const ns: InternalAPI<NSFull> = {
         // FUTURE: remove this deprecated support for darknet servers.
         // This uses the type casting to have a clean return type,
         // but also to avoid breaking scripts that expect it to work for darknet servers.
-      } satisfies DarknetServerData & { isOnline: boolean } as unknown as Server;
+      } satisfies Server & { isOnline: boolean };
     }
     // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
     if (server.serversOnNetwork.length === 0) {
