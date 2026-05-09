@@ -962,7 +962,7 @@ export const ns: InternalAPI<NSFull> = {
         purchasedByPlayer: false,
         ...serverProps,
       };
-      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport());
+      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport(server));
       return result satisfies Server & { isOnline: boolean };
     }
     // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
