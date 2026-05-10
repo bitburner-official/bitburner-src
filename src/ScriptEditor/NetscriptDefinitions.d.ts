@@ -4412,54 +4412,6 @@ type DarknetResponseCode = _ValueOf<DarknetResponseCodeType>;
 /** @public */
 export type DarknetResult = { success: boolean; code: DarknetResponseCode; message: string };
 
-/**
- * Darknet server data.
- * @public
- */
-export interface DarknetServerData {
-  /** Hostname. Must be unique */
-  hostname: string;
-  /** IP Address. Must be unique */
-  ip: string;
-  /** Flag indicating whether the player has admin/root access to this server */
-  hasAdminRights: boolean;
-  /** Flag indicating whether the player's terminal is currently connected to this server */
-  isConnectedTo: boolean;
-  /** Number of CPU cores */
-  cpuCores: number;
-  /** Used RAM (GB). i.e. unavailable RAM */
-  ramUsed: number;
-  /** Max RAM (GB) of this server */
-  maxRam: number;
-  /** Flag indicating whether this server has a backdoor installed by the player */
-  backdoorInstalled: boolean;
-  /** If the server has a stasis link applied */
-  hasStasisLink: boolean;
-  /** The amount of ram blocked by the server owner */
-  blockedRam: number;
-  /**
-   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
-   * You are supposed to experiment and discover the models.
-   */
-  modelId: string;
-  /** The generic password prompt for the server */
-  staticPasswordHint: string;
-  /** Data associated with the password hint */
-  passwordHintData: string;
-  /** The difficulty rating of the server, associated with its original depth in the net */
-  difficulty: number;
-  /** The depth of the server in the net */
-  depth: number;
-  /** The charisma skill required to heartbleed the server */
-  requiredCharismaSkill: number;
-  /** The interval at which the server periodically adds to its logs, in seconds. */
-  logTrafficInterval: number;
-  /** If this darknet server cannot be moved. True for fixed/story servers. */
-  isStationary: boolean;
-  /** Whether this server was purchased by the player. Always false for darknet servers */
-  purchasedByPlayer: boolean;
-}
-
 /** @public */
 export type CacheResult = {
   success: boolean;
@@ -4472,11 +4424,16 @@ export type CacheResult = {
  * @public
  */
 interface ServerAuthDetails {
+  /** The hostname of the server */
+  hostname: string;
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
   hasSession: boolean;
-  /** The model ID of the server. Similar models share vulnerabilities. */
+  /**
+   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
+   * You are supposed to experiment and discover the models.
+   */
   modelId: string;
   /** Static password reminder text set for this server. */
   passwordHint: string;
@@ -4492,6 +4449,8 @@ interface ServerAuthDetails {
   blockedRam: number;
   /** The difficulty rating of the server, associated with its original depth in the net */
   difficulty: number;
+  /** The current depth in the darknet of the server */
+  depth: number;
   /** The charisma skill required to authenticate on the server */
   requiredCharismaSkill: number;
   /** If this darknet server cannot be moved. True for fixed/story servers. */
@@ -6536,26 +6495,26 @@ interface BladeburnerFormulas {
 interface DarknetFormulas {
   /**
    * Gets the time it will take to authenticate a server.
-   * @param darknetServerData - The server to check authentication time on.
+   * @param serverDetails - The server to check authentication time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getAuthenticateTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getAuthenticateTime(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
   /**
    * Gets the time it will take to scrape logs from a server.
-   * @param darknetServerData - The server to check heartbleed log scraping time on.
+   * @param serverDetails - The server to check heartbleed log scraping time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getHeartbleedTime(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
-   * @param darknetServerData - The server to check ram freed on.
+   * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
 }
 
 /**

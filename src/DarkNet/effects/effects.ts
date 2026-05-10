@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import type { DarknetServerData, Person as IPerson } from "@nsdefs";
+import { Person as IPerson, ServerAuthDetails } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import {
   commonPasswordDictionary,
@@ -16,7 +16,7 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { GenericResponseMessage, ModelIds, NET_WIDTH, ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
-import { getDarknetServer } from "../utils/darknetServerUtils";
+import { DarknetServerData, getDarknetServer } from "../utils/darknetServerUtils";
 import {
   getAllMovableDarknetServers,
   getBackdooredDarknetServers,
@@ -59,7 +59,7 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
  * @param linear - if true, the time scaling is linear with the number of threads instead of having diminishing returns
  */
 export const calculateAuthenticationTime = (
-  darknetServerData: DarknetServerData,
+  darknetServerData: DarknetServerData | ServerAuthDetails,
   person: IPerson = Player,
   threads = 1,
   attemptedPassword = "",

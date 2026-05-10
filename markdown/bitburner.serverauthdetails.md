@@ -75,6 +75,25 @@ Data from the passwordHint, if any.
 </td></tr>
 <tr><td>
 
+[depth](./bitburner.serverauthdetails.depth.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The current depth in the darknet of the server
+
+
+</td></tr>
+<tr><td>
+
 [difficulty](./bitburner.serverauthdetails.difficulty.md)
 
 
@@ -108,6 +127,25 @@ boolean
 </td><td>
 
 True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion()
+
+
+</td></tr>
+<tr><td>
+
+[hostname](./bitburner.serverauthdetails.hostname.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The hostname of the server
 
 
 </td></tr>
@@ -183,7 +221,7 @@ string
 
 </td><td>
 
-The model ID of the server. Similar models share vulnerabilities.
+The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented. You are supposed to experiment and discover the models.
 
 
 </td></tr>

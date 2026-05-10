@@ -4,7 +4,7 @@
 
 ## ServerAuthDetails.modelId property
 
-The model ID of the server. Similar models share vulnerabilities.
+The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented. You are supposed to experiment and discover the models.
 
 **Signature:**
 

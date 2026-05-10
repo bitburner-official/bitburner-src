@@ -383,6 +383,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       if (!serverCheck.success) {
         logger(ctx)(serverCheck.message);
         return {
+          hostname: "",
           isOnline: false,
           isConnectedToCurrentServer: false,
           hasSession: false,
@@ -395,6 +396,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           blockedRam: -1,
           difficulty: -1,
           requiredCharismaSkill: -1,
+          depth: -1,
           isStationary: false,
         } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
       }
@@ -404,6 +406,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const hasSession = isAuthenticated(targetServer, ctx.workerScript.pid);
       return {
         isOnline: true,
+        hostname: targetServer.hostname,
         isConnectedToCurrentServer: isConnected,
         hasSession,
         modelId: targetServer.modelId,
@@ -415,6 +418,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         blockedRam: targetServer.blockedRam,
         difficulty: targetServer.difficulty,
         requiredCharismaSkill: targetServer.requiredCharismaSkill,
+        depth: targetServer.depth,
         isStationary: targetServer.isStationary,
       } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
     },

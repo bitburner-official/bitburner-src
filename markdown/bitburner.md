@@ -382,17 +382,6 @@ Instability of the darknet caused by excessive backdoor-ing of servers.
 </td></tr>
 <tr><td>
 
-[DarknetServerData](./bitburner.darknetserverdata.md)
-
-
-</td><td>
-
-Darknet server data.
-
-
-</td></tr>
-<tr><td>
-
 [Division](./bitburner.division.md)
 
 
