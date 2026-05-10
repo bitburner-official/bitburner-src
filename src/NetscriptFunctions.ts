@@ -74,7 +74,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer, Server } from "@nsdefs";
+import type { NS, RecentScript, ProcessInfo, NSEnums, Server } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -994,7 +994,7 @@ export const ns: InternalAPI<NSFull> = {
       openPortCount: server.openPortCount,
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
-    } satisfies NSInterfaceServer;
+    } satisfies Server;
   },
   getServerMoneyAvailable: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
