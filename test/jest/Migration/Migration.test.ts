@@ -154,4 +154,12 @@ describe("v3", () => {
     }
     expect(() => Player.getCurrentServer()).not.toThrow();
   });
+
+  test("Unusual hostnames", async () => {
+    const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/unusual-hostnames.gz"));
+    await loadGameFromSaveData(saveData);
+    for (const hostname of ["__proto__", "constructor"]) {
+      expect(GetServer(hostname)).toBeNull();
+    }
+  });
 });

@@ -148,6 +148,10 @@ export function loadAllServers(saveString: string): void {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
     }
+    // Temporarily skip loading servers with these unusual hostnames.
+    if (serverName === "__proto__" || serverName === "constructor") {
+      continue;
+    }
     // Sanitize hostname
     // A bug created ill-formed UTF-16 darknet hostnames that caused the in-game editor to crash. This code migrates
     // those invalid hostnames and protects against similar issues in the future.
@@ -163,8 +167,13 @@ export function loadAllServers(saveString: string): void {
       }
     }
     // Sanitize hostnames in server.serversOnNetwork
-    for (const [index, value] of server.serversOnNetwork.entries()) {
-      server.serversOnNetwork[index] = value.toWellFormed();
+    for (let i = server.serversOnNetwork.length - 1; i >= 0; --i) {
+      const hostname = server.serversOnNetwork[i];
+      if (hostname === "__proto__" || hostname === "constructor") {
+        server.serversOnNetwork.splice(i, 1);
+      } else {
+        server.serversOnNetwork[i] = hostname.toWellFormed();
+      }
     }
 
     AllServers.set(server.hostname, server);

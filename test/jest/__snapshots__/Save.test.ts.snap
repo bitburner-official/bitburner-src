@@ -89,49 +89,6 @@ exports[`load/saveAllServers 1`] = `
         }
       ]
     }
-  },
-  "__proto__": {
-    "ctor": "Server",
-    "data": {
-      "contracts": [],
-      "cpuCores": 1,
-      "ftpPortOpen": false,
-      "hasAdminRights": false,
-      "hostname": "__proto__",
-      "httpPortOpen": false,
-      "ip": "61.6.6.2",
-      "isConnectedTo": false,
-      "maxRam": 4,
-      "messages": [],
-      "organizationName": "Noodle Bar",
-      "programs": [],
-      "scripts": {
-        "ctor": "JSONMap",
-        "data": []
-      },
-      "serversOnNetwork": [
-        "home"
-      ],
-      "smtpPortOpen": false,
-      "sqlPortOpen": false,
-      "sshPortOpen": false,
-      "textFiles": {
-        "ctor": "JSONMap",
-        "data": []
-      },
-      "purchasedByPlayer": false,
-      "backdoorInstalled": false,
-      "baseDifficulty": 1,
-      "hackDifficulty": 1,
-      "minDifficulty": 1,
-      "moneyAvailable": 70000,
-      "moneyMax": 1750000,
-      "numOpenPortsRequired": 0,
-      "openPortCount": 0,
-      "requiredHackingSkill": 1,
-      "serverGrowth": 3000,
-      "runningScripts": []
-    }
   }
 }"
 `;
@@ -202,49 +159,6 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "openPortCount": 0,
       "requiredHackingSkill": 1,
       "serverGrowth": 1,
-      "runningScripts": []
-    }
-  },
-  "__proto__": {
-    "ctor": "Server",
-    "data": {
-      "contracts": [],
-      "cpuCores": 1,
-      "ftpPortOpen": false,
-      "hasAdminRights": false,
-      "hostname": "__proto__",
-      "httpPortOpen": false,
-      "ip": "61.6.6.2",
-      "isConnectedTo": false,
-      "maxRam": 4,
-      "messages": [],
-      "organizationName": "Noodle Bar",
-      "programs": [],
-      "scripts": {
-        "ctor": "JSONMap",
-        "data": []
-      },
-      "serversOnNetwork": [
-        "home"
-      ],
-      "smtpPortOpen": false,
-      "sqlPortOpen": false,
-      "sshPortOpen": false,
-      "textFiles": {
-        "ctor": "JSONMap",
-        "data": []
-      },
-      "purchasedByPlayer": false,
-      "backdoorInstalled": false,
-      "baseDifficulty": 1,
-      "hackDifficulty": 1,
-      "minDifficulty": 1,
-      "moneyAvailable": 70000,
-      "moneyMax": 1750000,
-      "numOpenPortsRequired": 0,
-      "openPortCount": 0,
-      "requiredHackingSkill": 1,
-      "serverGrowth": 3000,
       "runningScripts": []
     }
   }
