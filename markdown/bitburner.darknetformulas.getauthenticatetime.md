@@ -9,7 +9,12 @@ Gets the time it will take to authenticate a server.
 **Signature:**
 
 ```typescript
-getAuthenticateTime(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
+getAuthenticateTime(
+    serverDetails: ServerAuthDetails,
+    threads?: number,
+    player?: Person,
+    correctCharactersInPassword: number,
+  ): number;
 ```
 
 ## Parameters
@@ -75,6 +80,22 @@ player
 </td><td>
 
 _(Optional)_ The player object. Optional, defaults to the current player status
+
+
+</td></tr>
+<tr><td>
+
+correctCharactersInPassword
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+only used for 2G\_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
 
 
 </td></tr>

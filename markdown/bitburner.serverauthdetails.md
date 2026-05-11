@@ -132,25 +132,6 @@ True if the current script has authenticated to this server with the right passw
 </td></tr>
 <tr><td>
 
-[hostname](./bitburner.serverauthdetails.hostname.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-The hostname of the server
-
-
-</td></tr>
-<tr><td>
-
 [isConnectedToCurrentServer](./bitburner.serverauthdetails.isconnectedtocurrentserver.md)
 
 

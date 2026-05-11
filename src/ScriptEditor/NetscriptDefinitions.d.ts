@@ -4424,8 +4424,6 @@ export type CacheResult = {
  * @public
  */
 interface ServerAuthDetails {
-  /** The hostname of the server */
-  hostname: string;
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
@@ -6498,8 +6496,14 @@ interface DarknetFormulas {
    * @param serverDetails - The server to check authentication time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
+   * @param correctCharactersInPassword - only used for 2G_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
    */
-  getAuthenticateTime(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
+  getAuthenticateTime(
+    serverDetails: ServerAuthDetails,
+    threads?: number,
+    player?: Person,
+    correctCharactersInPassword: number,
+  ): number;
   /**
    * Gets the time it will take to scrape logs from a server.
    * @param serverDetails - The server to check heartbleed log scraping time on.

@@ -27,7 +27,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[getAuthenticateTime(serverDetails, threads, player)](./bitburner.darknetformulas.getauthenticatetime.md)
+[getAuthenticateTime(serverDetails, threads, player, correctCharactersInPassword)](./bitburner.darknetformulas.getauthenticatetime.md)
 
 
 </td><td>

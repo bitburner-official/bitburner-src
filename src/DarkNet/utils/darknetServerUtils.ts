@@ -22,7 +22,6 @@ export function getDarknetServerOrThrow(host: string): DarknetServer {
 
 /**
  * Darknet server data.
- * @public
  */
 export interface DarknetServerData {
   /** Hostname. Must be unique */

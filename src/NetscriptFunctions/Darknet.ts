@@ -48,6 +48,7 @@ import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
 import { isIPAddress } from "../Types/strings";
 import { getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
 import { shuffle } from "lodash";
+import { getSharedChars } from "../DarkNet/utils/darknetAuthUtils";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -121,7 +122,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const server = serverCheck.server;
 
         const threads = ctx.workerScript.scriptRef.threads;
-        const networkDelay = calculateAuthenticationTime(server, Player, threads, password) + additionalMsec;
+        const sharedChars = getSharedChars(server.password, password);
+        const networkDelay = calculateAuthenticationTime(server, Player, threads, sharedChars) + additionalMsec;
 
         logger(ctx)(
           `Connecting to ${server.hostname} with password '${password}'... (Est: ${formatNumber(
@@ -383,7 +385,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       if (!serverCheck.success) {
         logger(ctx)(serverCheck.message);
         return {
-          hostname: "",
           isOnline: false,
           isConnectedToCurrentServer: false,
           hasSession: false,
@@ -406,7 +407,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const hasSession = isAuthenticated(targetServer, ctx.workerScript.pid);
       return {
         isOnline: true,
-        hostname: targetServer.hostname,
         isConnectedToCurrentServer: isConnected,
         hasSession,
         modelId: targetServer.modelId,

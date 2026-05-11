@@ -1,4 +1,4 @@
-import { _ValueOf, ServerAuthDetails } from "@nsdefs";
+import type { _ValueOf } from "@nsdefs";
 import { DarknetServerData } from "./utils/darknetServerUtils";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
@@ -89,20 +89,3 @@ export const exampleDarknetServerData: DarknetServerData = {
   isStationary: false,
   purchasedByPlayer: false,
 } as const;
-
-export const exampleServerAuthDetails: ServerAuthDetails = {
-  hostname: "",
-  isConnectedToCurrentServer: false,
-  hasSession: false,
-  modelId: ModelIds.NoPassword,
-  passwordHint: "",
-  data: "",
-  logTrafficInterval: -1,
-  passwordLength: -1,
-  passwordFormat: "numeric",
-  blockedRam: -1,
-  difficulty: -1,
-  depth: -1,
-  requiredCharismaSkill: -1,
-  isStationary: false,
-};

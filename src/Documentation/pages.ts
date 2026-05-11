@@ -1258,7 +1258,6 @@ import nsDoc_bitburner_serverauthdetails_data_md from "../../markdown/bitburner.
 import nsDoc_bitburner_serverauthdetails_depth_md from "../../markdown/bitburner.serverauthdetails.depth.md?raw";
 import nsDoc_bitburner_serverauthdetails_difficulty_md from "../../markdown/bitburner.serverauthdetails.difficulty.md?raw";
 import nsDoc_bitburner_serverauthdetails_hassession_md from "../../markdown/bitburner.serverauthdetails.hassession.md?raw";
-import nsDoc_bitburner_serverauthdetails_hostname_md from "../../markdown/bitburner.serverauthdetails.hostname.md?raw";
 import nsDoc_bitburner_serverauthdetails_isconnectedtocurrentserver_md from "../../markdown/bitburner.serverauthdetails.isconnectedtocurrentserver.md?raw";
 import nsDoc_bitburner_serverauthdetails_isstationary_md from "../../markdown/bitburner.serverauthdetails.isstationary.md?raw";
 import nsDoc_bitburner_serverauthdetails_logtrafficinterval_md from "../../markdown/bitburner.serverauthdetails.logtrafficinterval.md?raw";
@@ -2867,7 +2866,6 @@ AllPages["nsDoc/bitburner.serverauthdetails.data.md"] = nsDoc_bitburner_serverau
 AllPages["nsDoc/bitburner.serverauthdetails.depth.md"] = nsDoc_bitburner_serverauthdetails_depth_md;
 AllPages["nsDoc/bitburner.serverauthdetails.difficulty.md"] = nsDoc_bitburner_serverauthdetails_difficulty_md;
 AllPages["nsDoc/bitburner.serverauthdetails.hassession.md"] = nsDoc_bitburner_serverauthdetails_hassession_md;
-AllPages["nsDoc/bitburner.serverauthdetails.hostname.md"] = nsDoc_bitburner_serverauthdetails_hostname_md;
 AllPages["nsDoc/bitburner.serverauthdetails.isconnectedtocurrentserver.md"] = nsDoc_bitburner_serverauthdetails_isconnectedtocurrentserver_md;
 AllPages["nsDoc/bitburner.serverauthdetails.isstationary.md"] = nsDoc_bitburner_serverauthdetails_isstationary_md;
 AllPages["nsDoc/bitburner.serverauthdetails.logtrafficinterval.md"] = nsDoc_bitburner_serverauthdetails_logtrafficinterval_md;

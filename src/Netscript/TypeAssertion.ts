@@ -1,6 +1,6 @@
 import type { NetscriptContext } from "./APIWrapper";
 import { errorMessage } from "./ErrorMessages";
-import { ServerAuthDetails } from "@nsdefs";
+import type { ServerAuthDetails } from "@nsdefs";
 
 const clip = (s: string): string => {
   if (s.length > 15) {
@@ -73,7 +73,6 @@ export function assertDarknetServerData(ctx: NetscriptContext, data: unknown): a
       difficulty: -1,
       depth: -1,
       blockedRam: -1,
-      hostname: "",
       requiredCharismaSkill: -1,
     },
     data,
