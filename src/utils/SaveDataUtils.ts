@@ -35,6 +35,17 @@ async function decompress(binaryData: Uint8Array<ArrayBuffer>): Promise<string> 
 }
 
 export async function encodeJsonSaveString(jsonSaveString: string): Promise<SaveData> {
+  if (jsonSaveString == null) {
+    throw new InvalidSaveData(`jsonSaveString is ${jsonSaveString}`);
+  }
+  if (typeof jsonSaveString !== "string") {
+    console.error(jsonSaveString);
+    throw new InvalidSaveData(`jsonSaveString is ${typeof jsonSaveString}`);
+  }
+  if (!jsonSaveString.startsWith(`{"ctor":"BitburnerSaveObject"`)) {
+    console.error(jsonSaveString);
+    throw new InvalidSaveData(`Invalid jsonSaveString: ${jsonSaveString.slice(0, 100)}`);
+  }
   // Fallback to the base64 format if player's browser does not support Compression Streams API.
   if (canUseBinaryFormat()) {
     return await compress(jsonSaveString);
