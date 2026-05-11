@@ -4420,10 +4420,10 @@ export type CacheResult = {
 };
 
 /**
- * Details about a server's authentication schema
+ * Details about a darknet server
  * @public
  */
-interface ServerAuthDetails {
+interface DarknetServerDetails {
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
@@ -4626,7 +4626,7 @@ export interface Darknet {
    * @param host - Hostname/IP of the server to analyze. Defaults to the running script's server if not specified.
    * @returns An object containing the server's authentication protocol details.
    */
-  getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
+  getServerDetails(host?: string): DarknetServerDetails & { isOnline: boolean };
 
   /**
    * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
@@ -6499,7 +6499,7 @@ interface DarknetFormulas {
    * @param correctCharactersInPassword - only used for 2G_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
    */
   getAuthenticateTime(
-    serverDetails: ServerAuthDetails,
+    serverDetails: DarknetServerDetails,
     threads?: number,
     player?: Person,
     correctCharactersInPassword: number,
@@ -6510,7 +6510,7 @@ interface DarknetFormulas {
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedTime(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
+  getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
@@ -6518,7 +6518,7 @@ interface DarknetFormulas {
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 }
 
 /**

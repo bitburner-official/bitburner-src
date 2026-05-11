@@ -96,7 +96,7 @@ Returns -1 if the server is offline, not found, or not a darkweb server.
 </td></tr>
 <tr><td>
 
-[getServerAuthDetails(host)](./bitburner.darknet.getserverauthdetails.md)
+[getServerDetails(host)](./bitburner.darknet.getserverdetails.md)
 
 
 </td><td>

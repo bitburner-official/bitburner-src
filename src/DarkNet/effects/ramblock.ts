@@ -8,7 +8,7 @@ import { addCacheToServer } from "./cacheFiles";
 import { DarknetState } from "../models/DarknetState";
 import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 import { CompletedProgramName } from "@enums";
-import type { Person as IPerson, ServerAuthDetails } from "@nsdefs";
+import type { Person as IPerson, DarknetServerDetails } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { ResponseCodeEnum } from "../Enums";
 import { isLabyrinthServer } from "./labyrinth";
@@ -69,7 +69,7 @@ export const handleRamBlockClearedRewards = (server: DarknetServer) => {
  * Calculates the amount of RAM block that is removed from a Darknet server, based on the number of threads and the player's charisma.
  */
 export const getRamBlockRemoved = (
-  darknetServerData: DarknetServerData | ServerAuthDetails,
+  darknetServerData: DarknetServerData | DarknetServerDetails,
   threads = 1,
   player: IPerson = Player,
 ) => {

@@ -382,6 +382,17 @@ Instability of the darknet caused by excessive backdoor-ing of servers.
 </td></tr>
 <tr><td>
 
+[DarknetServerDetails](./bitburner.darknetserverdetails.md)
+
+
+</td><td>
+
+Details about a darknet server
+
+
+</td></tr>
+<tr><td>
+
 [Division](./bitburner.division.md)
 
 
@@ -1205,17 +1216,6 @@ Various info about resets
 </td><td>
 
 A server. Not all servers have all of these properties - optional properties are missing on certain servers.
-
-
-</td></tr>
-<tr><td>
-
-[ServerAuthDetails](./bitburner.serverauthdetails.md)
-
-
-</td><td>
-
-Details about a server's authentication schema
 
 
 </td></tr>

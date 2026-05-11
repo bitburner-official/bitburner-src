@@ -379,7 +379,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         logger(ctx)(`Stasis linked servers: ${serverNames}`);
         return serverNames;
       },
-    getServerAuthDetails: (ctx) => (_host) => {
+    getServerDetails: (ctx) => (_host) => {
       const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
       const serverCheck = checkDarknetServer(ctx, targetHost);
       if (!serverCheck.success) {
@@ -399,7 +399,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           requiredCharismaSkill: -1,
           depth: -1,
           isStationary: false,
-        } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
+        } satisfies ReturnType<DarknetAPI["getServerDetails"]>;
       }
       const targetServer = serverCheck.server;
       const localServer = ctx.workerScript.getServer();
@@ -420,7 +420,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         requiredCharismaSkill: targetServer.requiredCharismaSkill,
         depth: targetServer.depth,
         isStationary: targetServer.isStationary,
-      } satisfies ReturnType<DarknetAPI["getServerAuthDetails"]>;
+      } satisfies ReturnType<DarknetAPI["getServerDetails"]>;
     },
     induceServerMigration:
       (ctx) =>
@@ -720,57 +720,57 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 export const getDarknetPropertiesForDeprecationSupport = (dnetServer?: DarknetServer | undefined) => ({
   isOnline: {
     identifier: "ns.getServer().isOnline",
-    message: "Use ns.dnet.getServerAuthDetails().isOnline instead.",
+    message: "Use ns.dnet.getServerDetails().isOnline instead.",
     value: !!dnetServer,
   },
   depth: {
     identifier: "ns.getServer().depth",
-    message: "Use ns.dnet.getServerAuthDetails().depth instead.",
+    message: "Use ns.dnet.getServerDetails().depth instead.",
     value: dnetServer?.depth ?? -1,
   },
   modelId: {
     identifier: "ns.getServer().modelId",
-    message: "Use ns.dnet.getServerAuthDetails().modelId instead.",
+    message: "Use ns.dnet.getServerDetails().modelId instead.",
     value: dnetServer?.modelId ?? "",
   },
   hasStasisLink: {
     identifier: "ns.getServer().hasStasisLink",
-    message: "Use ns.dnet.getServerAuthDetails().hasStasisLink instead.",
+    message: "Use ns.dnet.getServerDetails().hasStasisLink instead.",
     value: dnetServer?.hasStasisLink ?? false,
   },
   blockedRam: {
     identifier: "ns.getServer().blockedRam",
-    message: "Use ns.dnet.getServerAuthDetails().blockedRam instead.",
+    message: "Use ns.dnet.getServerDetails().blockedRam instead.",
     value: dnetServer?.blockedRam ?? -1,
   },
   staticPasswordHint: {
     identifier: "ns.getServer().staticPasswordHint",
-    message: "Use ns.dnet.getServerAuthDetails().staticPasswordHint instead.",
+    message: "Use ns.dnet.getServerDetails().staticPasswordHint instead.",
     value: dnetServer?.staticPasswordHint ?? "",
   },
   passwordHintData: {
     identifier: "ns.getServer().passwordHintData",
-    message: "Use ns.dnet.getServerAuthDetails().passwordHintData instead.",
+    message: "Use ns.dnet.getServerDetails().passwordHintData instead.",
     value: dnetServer?.passwordHintData ?? "",
   },
   difficulty: {
     identifier: "ns.getServer().difficulty",
-    message: "Use ns.dnet.getServerAuthDetails().difficulty instead.",
+    message: "Use ns.dnet.getServerDetails().difficulty instead.",
     value: dnetServer?.difficulty ?? -1,
   },
   requiredCharismaSkill: {
     identifier: "ns.getServer().requiredCharismaSkill",
-    message: "Use ns.dnet.getServerAuthDetails().requiredCharismaSkill instead.",
+    message: "Use ns.dnet.getServerDetails().requiredCharismaSkill instead.",
     value: dnetServer?.requiredCharismaSkill ?? -1,
   },
   logTrafficInterval: {
     identifier: "ns.getServer().logTrafficInterval",
-    message: "Use ns.dnet.getServerAuthDetails().logTrafficInterval instead.",
+    message: "Use ns.dnet.getServerDetails().logTrafficInterval instead.",
     value: dnetServer?.logTrafficInterval ?? -1,
   },
   isStationary: {
     identifier: "ns.getServer().isStationary",
-    message: "Use ns.dnet.getServerAuthDetails().isStationary instead.",
+    message: "Use ns.dnet.getServerDetails().isStationary instead.",
     value: dnetServer?.isStationary ?? false,
   },
 });

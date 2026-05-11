@@ -9,7 +9,7 @@ Gets the time it will take to scrape logs from a server.
 **Signature:**
 
 ```typescript
-getHeartbleedTime(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
+getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ serverDetails
 
 </td><td>
 
-[ServerAuthDetails](./bitburner.serverauthdetails.md)
+[DarknetServerDetails](./bitburner.darknetserverdetails.md)
 
 
 </td><td>

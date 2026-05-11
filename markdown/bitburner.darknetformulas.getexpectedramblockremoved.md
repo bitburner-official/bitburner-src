@@ -9,7 +9,7 @@ Gets the expected amount off ram that will be freed by a call to dnet.memoryReal
 **Signature:**
 
 ```typescript
-getExpectedRamBlockRemoved(serverDetails: ServerAuthDetails, threads?: number, player?: Person): number;
+getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ serverDetails
 
 </td><td>
 
-[ServerAuthDetails](./bitburner.serverauthdetails.md)
+[DarknetServerDetails](./bitburner.darknetserverdetails.md)
 
 
 </td><td>

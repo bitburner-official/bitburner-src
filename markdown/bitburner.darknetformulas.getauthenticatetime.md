@@ -10,7 +10,7 @@ Gets the time it will take to authenticate a server.
 
 ```typescript
 getAuthenticateTime(
-    serverDetails: ServerAuthDetails,
+    serverDetails: DarknetServerDetails,
     threads?: number,
     player?: Person,
     correctCharactersInPassword: number,
@@ -42,7 +42,7 @@ serverDetails
 
 </td><td>
 
-[ServerAuthDetails](./bitburner.serverauthdetails.md)
+[DarknetServerDetails](./bitburner.darknetserverdetails.md)
 
 
 </td><td>

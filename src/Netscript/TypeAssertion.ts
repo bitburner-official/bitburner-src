@@ -1,6 +1,6 @@
 import type { NetscriptContext } from "./APIWrapper";
 import { errorMessage } from "./ErrorMessages";
-import type { ServerAuthDetails } from "@nsdefs";
+import type { DarknetServerDetails } from "@nsdefs";
 
 const clip = (s: string): string => {
   if (s.length > 15) {
@@ -67,7 +67,7 @@ export function missingKey(expect: object, actual: unknown): string | false {
   return false;
 }
 
-export function assertDarknetServerData(ctx: NetscriptContext, data: unknown): asserts data is ServerAuthDetails {
+export function assertDarknetServerData(ctx: NetscriptContext, data: unknown): asserts data is DarknetServerDetails {
   const error = missingKey(
     {
       difficulty: -1,

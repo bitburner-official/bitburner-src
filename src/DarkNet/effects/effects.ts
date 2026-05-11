@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Person as IPerson, ServerAuthDetails } from "@nsdefs";
+import { Person as IPerson, DarknetServerDetails } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import {
   commonPasswordDictionary,
@@ -58,7 +58,7 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
  * @param linear - if true, the time scaling is linear with the number of threads instead of having diminishing returns
  */
 export const calculateAuthenticationTime = (
-  darknetServerData: DarknetServerData | ServerAuthDetails,
+  darknetServerData: DarknetServerData | DarknetServerDetails,
   person: IPerson = Player,
   threads = 1,
   correctCharsInPassword = 0,
