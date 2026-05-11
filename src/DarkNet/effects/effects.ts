@@ -53,7 +53,7 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
  * Returns the time it takes to authenticate on a server in milliseconds
  * @param darknetServerData - the target server to attempt a password on
  * @param person - the player's character
- * @param correctCharsInPassword - the number of correct characters in the password. Only used for TimingAttack servers, where it adds some small delay per char
+ * @param correctCharsInPassword - the number of correct characters in the password. Only used for TimingAttack servers, where it adds some small auth time delay per char
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
  * @param linear - if true, the time scaling is linear with the number of threads instead of having diminishing returns
  */
