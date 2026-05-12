@@ -52,9 +52,11 @@ Name of Augmentation.
 
 number
 
-Base price of the augmentation, before price multiplier.
+Base price of the augmentation, before the player's price multiplier.
 
 ## Remarks
 
 RAM cost: 2.5 GB \* 16/4/1
+
+This excludes the player's price multiplier, but does include the relevant BitNode multipliers (e.g. the Shadows of Anarchy augmentation cost mult).
 

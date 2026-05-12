@@ -2655,9 +2655,10 @@ export interface Singularity {
    * @remarks
    * RAM cost: 2.5 GB * 16/4/1
    *
+   * This excludes the player's price multiplier, but does include the relevant BitNode multipliers (e.g. the Shadows of Anarchy augmentation cost mult).
    *
    * @param augName - Name of Augmentation.
-   * @returns Base price of the augmentation, before price multiplier.
+   * @returns Base price of the augmentation, before the player's price multiplier.
    */
   getAugmentationBasePrice(augName: string): number;
 
