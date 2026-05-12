@@ -6502,7 +6502,7 @@ interface DarknetFormulas {
     serverDetails: DarknetServerDetails,
     threads?: number,
     player?: Person,
-    correctCharactersInPassword: number,
+    correctCharactersInPassword?: number,
   ): number;
   /**
    * Gets the time it will take to scrape logs from a server.

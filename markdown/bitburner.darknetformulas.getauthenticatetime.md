@@ -13,7 +13,7 @@ getAuthenticateTime(
     serverDetails: DarknetServerDetails,
     threads?: number,
     player?: Person,
-    correctCharactersInPassword: number,
+    correctCharactersInPassword?: number,
   ): number;
 ```
 
@@ -95,7 +95,7 @@ number
 
 </td><td>
 
-only used for 2G\_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
+_(Optional)_ only used for 2G\_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
 
 
 </td></tr>

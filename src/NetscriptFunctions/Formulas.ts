@@ -482,11 +482,11 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
     dnet: {
       getAuthenticateTime:
         (ctx) =>
-        (_darknetServerData, _threads, _player, correctCharactersInPassword): number => {
+        (_darknetServerData, _threads, _player, _correctCharactersInPassword): number => {
           assertDarknetServerData(ctx, _darknetServerData);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
-          const correctChars = helpers.number(ctx, "correctCharactersInPassword", correctCharactersInPassword ?? 0);
+          const correctChars = helpers.number(ctx, "correctCharactersInPassword", _correctCharactersInPassword ?? 0);
           return calculateAuthenticationTime(_darknetServerData, person, threads, correctChars);
         },
       getHeartbleedTime:

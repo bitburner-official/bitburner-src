@@ -7,8 +7,8 @@ export const breakingChanges301: VersionBreakingChange = {
         {
           name: "ns.dnet.getServerAuthDetails",
           migration: {
-            searchValue: "ns.dnet.getServerAuthDetails",
-            replaceValue: "ns.dnet.getServerDetails",
+            searchValue: "getServerAuthDetails",
+            replaceValue: "getServerDetails",
           },
         },
       ],
