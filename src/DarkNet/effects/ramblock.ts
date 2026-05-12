@@ -13,7 +13,7 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 import { ResponseCodeEnum } from "../Enums";
 import { isLabyrinthServer } from "./labyrinth";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
-import { DarknetServerData } from "../utils/darknetServerUtils";
+import type { DarknetServerData } from "../utils/darknetServerUtils";
 
 /*
  * Handles the effects of removing some blocked RAM from a Darknet server.

@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Person as IPerson, DarknetServerDetails } from "@nsdefs";
+import type { Person as IPerson, DarknetServerDetails } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import {
   commonPasswordDictionary,
@@ -16,7 +16,7 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { GenericResponseMessage, ModelIds, NET_WIDTH, ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
-import { DarknetServerData, getDarknetServer } from "../utils/darknetServerUtils";
+import { type DarknetServerData, getDarknetServer } from "../utils/darknetServerUtils";
 import {
   getAllMovableDarknetServers,
   getBackdooredDarknetServers,

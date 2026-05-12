@@ -74,7 +74,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import type { NS, RecentScript, ProcessInfo, NSEnums, Server } from "@nsdefs";
+import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -946,7 +946,7 @@ export const ns: InternalAPI<NSFull> = {
         ...serverProps,
       };
       setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport());
-      return result satisfies Server & { isOnline: boolean };
+      return result satisfies NSInterfaceServer & { isOnline: boolean };
     }
     if (server instanceof DarknetServer) {
       const result = {
@@ -963,7 +963,7 @@ export const ns: InternalAPI<NSFull> = {
         ...serverProps,
       };
       setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport(server));
-      return result satisfies Server & { isOnline: boolean };
+      return result satisfies NSInterfaceServer & { isOnline: boolean };
     }
     // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
     if (server.serversOnNetwork.length === 0) {
@@ -994,7 +994,7 @@ export const ns: InternalAPI<NSFull> = {
       openPortCount: server.openPortCount,
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
-    } satisfies Server;
+    } satisfies NSInterfaceServer;
   },
   getServerMoneyAvailable: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);

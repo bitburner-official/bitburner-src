@@ -1,5 +1,5 @@
 import type { _ValueOf } from "@nsdefs";
-import { DarknetServerData } from "./utils/darknetServerUtils";
+import type { DarknetServerData } from "./utils/darknetServerUtils";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;

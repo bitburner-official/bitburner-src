@@ -4,7 +4,7 @@ import { exampleDarknetServerData } from "../DarkNet/Enums";
 import { createRandomIp } from "../utils/IPAddress";
 import type { CacheFilePath } from "../Paths/CacheFilePath";
 import type { IPAddress } from "../Types/strings";
-import { DarknetServerData } from "../DarkNet/utils/darknetServerUtils";
+import type { DarknetServerData } from "../DarkNet/utils/darknetServerUtils";
 
 export interface DarknetServerConstructorParams {
   // Properties of BaseServer
