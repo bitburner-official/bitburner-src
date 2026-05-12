@@ -20,6 +20,5 @@ if (window.indexedDB) {
   Object.defineProperty(window, "indexedDB", {
     value: window.indexedDB,
     writable: false,
-    configurable: false,
   });
 }
