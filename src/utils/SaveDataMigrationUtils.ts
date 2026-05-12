@@ -645,7 +645,7 @@ Error: ${e}`,
     }
     showAPIBreaks("3.0.0", breakingChanges300);
   }
-  if (ver < 50) {
+  if (ver < 51) {
     showAPIBreaks("3.0.1", breakingChanges301);
   }
 }
