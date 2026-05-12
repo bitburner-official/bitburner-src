@@ -72,6 +72,296 @@ function getNumericCost(cost: number | (() => number)): number {
   return typeof cost === "function" ? cost() : cost;
 }
 
+function unwrapExpressionForMemberPath(node: acorn.Expression | acorn.Super): acorn.Expression | acorn.Super {
+  let n: acorn.Node = node as acorn.Node;
+  for (;;) {
+    if (n.type === "ParenthesizedExpression") {
+      n = (n as acorn.ParenthesizedExpression).expression as acorn.Node;
+      continue;
+    }
+    if (n.type === "ChainExpression") {
+      n = (n as acorn.ChainExpression).expression as acorn.Node;
+      continue;
+    }
+    return n as acorn.Expression | acorn.Super;
+  }
+}
+
+/**
+ * Collects a.b.c from a non-computed member chain whose root is a simple Identifier,
+ * ThisExpression, or Super. Returns null for dynamic roots (e.g. call results) or
+ * computed access we can't statically resolve.
+ */
+function collectStaticMemberExpressionPath(node: acorn.MemberExpression): string[] | null {
+  const parts: string[] = [];
+  let current: acorn.MemberExpression = node;
+  for (;;) {
+    if (current.computed) {
+      return null;
+    }
+    const prop = current.property;
+    // PrivateIdentifier (e.g. `obj.#name`) is treated as a static name. Identifier is the common case.
+    if (prop.type === "Identifier") {
+      parts.unshift(prop.name);
+    } else if (prop.type === "PrivateIdentifier") {
+      parts.unshift("#" + prop.name);
+    } else {
+      return null;
+    }
+    const obj = unwrapExpressionForMemberPath(current.object as acorn.Expression);
+    if (obj.type === "Identifier") {
+      parts.unshift(obj.name);
+      return parts;
+    }
+    if (obj.type === "ThisExpression") {
+      parts.unshift("this");
+      return parts;
+    }
+    if (obj.type === "Super") {
+      parts.unshift("super");
+      return parts;
+    }
+    if (obj.type === "MemberExpression") {
+      current = obj;
+      continue;
+    }
+    return null;
+  }
+}
+
+/**
+ * Maps a static access path to candidate RamCosts ref strings. RamCosts has no top-level
+ * `ns` wrapper, so we strip a leading `ns` (and any receiver marker) before joining.
+ *
+ * The leaf is returned as a separate candidate only when `allowLeafFallback` is true. The
+ * caller decides eligibility based on scope: typically true when the chain root is
+ * `this`/`super` or a parameter visible in the current lexical scope (and not shadowed by
+ * a local declaration). See `rootIsVisibleParam` and the MemberExpression visitor.
+ *
+ * Without the leaf fallback, identifiers like `readback.weaken` (issue #298) or
+ * `test.run()` (issue #1894) are NOT attributed NS RAM. Dynamic roots like
+ * `someCall().hack` never produce a path here at all, which fixes issue #875.
+ *
+ * The strict bare-lookup in `lookupRamCost` (top-level only) further ensures the leaf
+ * candidate cannot pick up nested API names (e.g. `obj.codingcontract.attempt` won't
+ * resolve to `codingcontract.attempt` via the bare leaf "attempt").
+ */
+function ramCostRefsFromStaticPath(path: string[], allowLeafFallback: boolean): string[] {
+  let segments = path;
+  if (segments[0] === "this" || segments[0] === "super") {
+    segments = segments.slice(1);
+  }
+  if (segments[0] === "ns") {
+    segments = segments.slice(1);
+  }
+  if (segments.length === 0) {
+    return [];
+  }
+  const refs: string[] = [segments.join(".")];
+  if (allowLeafFallback && segments.length > 1) {
+    refs.push(segments[segments.length - 1]);
+  }
+  return refs;
+}
+
+/**
+ * A lexical scope frame used to decide whether an identifier root in a static member
+ * chain (e.g. the `X` in `X.hack`) is actually a function parameter visible at that
+ * point — and thus a plausible alias for `ns`, eligible for a bare-leaf RamCosts
+ * fallback — or is shadowed by a local declaration in the same scope.
+ */
+interface ScopeFrame {
+  /** Identifier names bound as parameters when entering this function. */
+  params: Set<string>;
+  /** Identifier names declared in this scope (var/let/const, function decls, class decls, imports). */
+  locals: Set<string>;
+}
+
+/** Collects every binding name introduced by a destructuring / param / catch pattern. */
+function collectPatternNames(p: acorn.Pattern | null | undefined, out: Set<string>): void {
+  if (!p) return;
+  switch (p.type) {
+    case "Identifier":
+      out.add(p.name);
+      return;
+    case "AssignmentPattern":
+      collectPatternNames(p.left, out);
+      return;
+    case "RestElement":
+      collectPatternNames(p.argument, out);
+      return;
+    case "ObjectPattern":
+      for (const prop of p.properties) {
+        if (prop.type === "RestElement") {
+          collectPatternNames(prop.argument, out);
+        } else {
+          collectPatternNames(prop.value, out);
+        }
+      }
+      return;
+    case "ArrayPattern":
+      for (const elem of p.elements) {
+        if (elem != null) collectPatternNames(elem, out);
+      }
+      return;
+  }
+}
+
+/**
+ * Scans `node` (a function body or program) for declarations that introduce names into the
+ * same scope as the enclosing function's params. Does NOT descend into nested function
+ * bodies — those open new scopes — but does descend through blocks, conditionals, loops,
+ * try/catch, switch, labels, and export declarations.
+ *
+ * `var`/`let`/`const` are treated uniformly as function-scoped. This is a mild
+ * over-approximation for block-scoped `let`/`const`, but the only consequence is that a
+ * block-scoped local can still shadow an outer parameter — which matches the pessimistic
+ * intent of the static RAM pass.
+ */
+function visitForLocals(node: acorn.Node | null | undefined, out: Set<string>): void {
+  if (!node) return;
+  switch (node.type) {
+    case "Program":
+      for (const stmt of (node as acorn.Program).body) visitForLocals(stmt, out);
+      return;
+    case "BlockStatement":
+      for (const stmt of (node as acorn.BlockStatement).body) visitForLocals(stmt, out);
+      return;
+    case "VariableDeclaration":
+      for (const decl of (node as acorn.VariableDeclaration).declarations) {
+        collectPatternNames(decl.id, out);
+      }
+      return;
+    case "FunctionDeclaration": {
+      const id = (node as acorn.FunctionDeclaration).id;
+      if (id) out.add(id.name);
+      return;
+    }
+    case "ClassDeclaration": {
+      const id = (node as acorn.ClassDeclaration).id;
+      if (id) out.add(id.name);
+      return;
+    }
+    case "ImportDeclaration":
+      for (const spec of (node as acorn.ImportDeclaration).specifiers) {
+        if (spec.local?.type === "Identifier") out.add(spec.local.name);
+      }
+      return;
+    case "ExportNamedDeclaration": {
+      const decl = (node as acorn.ExportNamedDeclaration).declaration;
+      if (decl) visitForLocals(decl, out);
+      return;
+    }
+    case "ExportDefaultDeclaration": {
+      const decl = (node as acorn.ExportDefaultDeclaration).declaration;
+      if (decl) visitForLocals(decl as acorn.Node, out);
+      return;
+    }
+    case "IfStatement": {
+      const n = node as acorn.IfStatement;
+      visitForLocals(n.consequent, out);
+      if (n.alternate) visitForLocals(n.alternate, out);
+      return;
+    }
+    case "ForStatement": {
+      const n = node as acorn.ForStatement;
+      if (n.init && n.init.type === "VariableDeclaration") {
+        for (const decl of n.init.declarations) collectPatternNames(decl.id, out);
+      }
+      visitForLocals(n.body, out);
+      return;
+    }
+    case "ForInStatement":
+    case "ForOfStatement": {
+      const n = node as acorn.ForInStatement | acorn.ForOfStatement;
+      if (n.left && n.left.type === "VariableDeclaration") {
+        for (const decl of n.left.declarations) collectPatternNames(decl.id, out);
+      }
+      visitForLocals(n.body, out);
+      return;
+    }
+    case "WhileStatement":
+    case "DoWhileStatement":
+      visitForLocals((node as acorn.WhileStatement).body, out);
+      return;
+    case "SwitchStatement":
+      for (const c of (node as acorn.SwitchStatement).cases) {
+        for (const stmt of c.consequent) visitForLocals(stmt, out);
+      }
+      return;
+    case "TryStatement": {
+      const n = node as acorn.TryStatement;
+      visitForLocals(n.block, out);
+      if (n.handler) {
+        if (n.handler.param) collectPatternNames(n.handler.param, out);
+        visitForLocals(n.handler.body, out);
+      }
+      if (n.finalizer) visitForLocals(n.finalizer, out);
+      return;
+    }
+    case "LabeledStatement":
+      visitForLocals((node as acorn.LabeledStatement).body, out);
+      return;
+  }
+}
+
+/** Builds a ScopeFrame for a function (or the module top-level). */
+function buildScopeFrame(params: acorn.Pattern[], body: acorn.Node | null | undefined): ScopeFrame {
+  const ps = new Set<string>();
+  for (const p of params) collectPatternNames(p, ps);
+  const locals = new Set<string>();
+  visitForLocals(body, locals);
+  return { params: ps, locals };
+}
+
+/**
+ * Looks up `name` against the active scope chain. Walks innermost to outermost. The first
+ * frame that declares `name` as a local shadows any outer params. Otherwise, the first
+ * frame that lists `name` as a parameter signals an `ns`-alias-eligible identifier.
+ */
+function rootIsVisibleParam(name: string, scopes: ScopeFrame[]): boolean {
+  for (let i = scopes.length - 1; i >= 0; i--) {
+    if (scopes[i].locals.has(name)) return false;
+    if (scopes[i].params.has(name)) return true;
+  }
+  return false;
+}
+
+/**
+ * Resolves a dependency string against RamCosts. Dotted refs use strict path traversal; bare refs
+ * only match top-level leaves so locals (e.g. `attempt`) do not pick up nested API keys (`codingcontract.attempt`).
+ */
+function lookupRamCost(ref: string): { func: (() => number) | number; refDetail: string } | undefined {
+  if (!ref) {
+    return undefined;
+  }
+  const costs = RamCosts as Record<string, unknown>;
+  if (ref.includes(".")) {
+    const segments = ref.split(".");
+    let cur: unknown = costs;
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i];
+      if (seg === undefined || cur === null || typeof cur !== "object") {
+        return undefined;
+      }
+      const next = (cur as Record<string, unknown>)[seg];
+      if (i === segments.length - 1) {
+        if (typeof next === "number" || typeof next === "function") {
+          return { func: next as (() => number) | number, refDetail: ref };
+        }
+        return undefined;
+      }
+      cur = next;
+    }
+    return undefined;
+  }
+  const leaf = costs[ref];
+  if (typeof leaf === "number" || typeof leaf === "function") {
+    return { func: leaf as (() => number) | number, refDetail: ref };
+  }
+  return undefined;
+}
+
 /**
  * Parses code into an AST and walks through it recursively to calculate
  * RAM usage. Also accounts for imported modules.
@@ -221,29 +511,7 @@ function parseOnlyRamCalculate(
       }
       loadedFns[ref] = true;
 
-      // This accounts for namespaces (Bladeburner, CodingContract, etc.)
-      const findFunc = (
-        prefix: string,
-        obj: object,
-        ref: string,
-      ): { func: (() => number) | number; refDetail: string } | undefined => {
-        if (!obj) {
-          return;
-        }
-        const elem = Object.entries(obj).find(([key]) => key === ref);
-        if (elem !== undefined && (typeof elem[1] === "function" || typeof elem[1] === "number")) {
-          return { func: elem[1] as (() => number) | number, refDetail: `${prefix}${ref}` };
-        }
-        for (const [key, value] of Object.entries(obj)) {
-          const found = findFunc(`${key}.`, value as object, ref);
-          if (found) {
-            return found;
-          }
-        }
-        return undefined;
-      };
-
-      const details = findFunc("", RamCosts, ref);
+      const details = lookupRamCost(ref);
       const fnRam = getNumericCost(details?.func ?? 0);
       ram += fnRam;
       detailedCosts.push({ type: "fn", name: details?.refDetail ?? "", cost: fnRam });
@@ -324,6 +592,15 @@ function parseOnlyCalculateDeps(
   const dependencyMap: Record<string, Set<string> | undefined> = {};
   dependencyMap[globalKey] = new Set<string>();
 
+  // The module's top-level scope frame. Its `params` is empty (the module is not a function);
+  // its `locals` holds every top-level binding (var/let/const, function/class decl, imports).
+  // The MemberExpression visitor walks the scope stack innermost-to-outermost to decide
+  // whether a static chain like `X.hack` should get a bare-leaf RamCosts fallback. Locals
+  // shadow outer params; this lets `var readback` in `main` shadow an unrelated `decode(readback)`
+  // parameter elsewhere in the module (issue #298), without losing the renamed-`ns` behavior.
+  const moduleFrame: ScopeFrame = { params: new Set(), locals: new Set() };
+  visitForLocals(ast as acorn.Node, moduleFrame.locals);
+
   // If we reference this internal name, we're really referencing that external name.
   // Filled when we import names from other modules.
   const internalToExternal: Record<string, string | undefined> = {};
@@ -347,6 +624,28 @@ function parseOnlyCalculateDeps(
 
   interface State {
     key: string;
+    /** Active lexical scope chain, innermost frame last. */
+    scopes: ScopeFrame[];
+  }
+
+  /**
+   * Enters a function scope for the duration of `run`. Pushes a new frame computed from
+   * `params` and `body`, then pops it. The scope chain is shared by reference through
+   * State, so callers don't need to thread a fresh state object through.
+   */
+  function withFunctionScope(
+    params: acorn.Pattern[],
+    body: acorn.Node | null | undefined,
+    st: State,
+    run: () => void,
+  ): void {
+    const frame = buildScopeFrame(params, body);
+    st.scopes.push(frame);
+    try {
+      run();
+    } finally {
+      st.scopes.pop();
+    }
   }
 
   function checkRamOverride(node: acorn.BlockStatement) {
@@ -434,98 +733,147 @@ function parseOnlyCalculateDeps(
         node.alternate && walkDeeper(node.alternate, st);
       },
       MemberExpression: (node: acorn.MemberExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        const path = collectStaticMemberExpressionPath(node);
+        if (path !== null && path.length >= 2) {
+          const root = path[0];
+          const allowLeafFallback = root === "this" || root === "super" || rootIsVisibleParam(root, st.scopes);
+          for (const ref of ramCostRefsFromStaticPath(path, allowLeafFallback)) {
+            addRef(st.key, ref);
+          }
+        }
         node.object && walkDeeper(node.object, st);
-        node.property && walkDeeper(node.property, st);
+        // Only descend into the property for computed access (e.g. obj[expr]),
+        // where the property expression can contain real identifier references.
+        // A non-computed property name is just a static key (e.g. the `hack` in
+        // `someCall().hack`) and must not be treated as an identifier reference
+        // into RamCosts. Static API references are captured via the path collection above.
+        if (node.computed && node.property) {
+          walkDeeper(node.property, st);
+        }
+      },
+      // Function-scope entry visitors. We push a ScopeFrame so nested member expressions
+      // resolve identifier roots against the correct lexical scope. The walker still
+      // descends into nested-function bodies and attributes their refs to the same
+      // outer state.key (matching the existing pessimistic "outermost function" model).
+      FunctionDeclaration: (
+        node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration,
+        st: State,
+        walkDeeper: walk.WalkerCallback<State>,
+      ) => {
+        withFunctionScope(node.params, node.body, st, () => {
+          if (node.body) walkDeeper(node.body, st);
+        });
+      },
+      FunctionExpression: (node: acorn.FunctionExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        withFunctionScope(node.params, node.body, st, () => {
+          if (node.body) walkDeeper(node.body, st);
+        });
+      },
+      ArrowFunctionExpression: (
+        node: acorn.ArrowFunctionExpression,
+        st: State,
+        walkDeeper: walk.WalkerCallback<State>,
+      ) => {
+        withFunctionScope(node.params, node.body, st, () => {
+          if (node.body) walkDeeper(node.body, st);
+        });
       },
     };
   }
 
   walk.recursive<State>(
     ast as acorn.Node, // Pretend that ast is an acorn node
-    { key: globalKey },
-    Object.assign(
-      {
-        ImportDeclaration: (node: acorn.ImportDeclaration, st: State) => {
-          const rawImportModuleName = node.source.value;
-          if (typeof rawImportModuleName !== "string") {
-            console.error("Invalid node when walking ImportDeclaration in parseOnlyCalculateDeps. node:", node);
-            return;
-          }
-          // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
-          if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
-            return;
-          }
-          const importModuleName = getModuleScript(rawImportModuleName, currentModule, otherScripts).filename;
-          additionalModules.push(importModuleName);
+    { key: globalKey, scopes: [moduleFrame] },
+    // commonVisitors first so the top-level handlers (FunctionDeclaration, etc.) below
+    // override them at the outermost walk. The top-level FunctionDeclaration handler is
+    // responsible for `checkRamOverride` and for opening a new dep-map key per function;
+    // it then dispatches into commonVisitors for the body, where the scope-pushing
+    // function visitors (FunctionExpression / ArrowFunctionExpression / nested
+    // FunctionDeclaration) take over.
+    Object.assign(commonVisitors(), {
+      ImportDeclaration: (node: acorn.ImportDeclaration, st: State) => {
+        const rawImportModuleName = node.source.value;
+        if (typeof rawImportModuleName !== "string") {
+          console.error("Invalid node when walking ImportDeclaration in parseOnlyCalculateDeps. node:", node);
+          return;
+        }
+        // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
+        if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
+          return;
+        }
+        const importModuleName = getModuleScript(rawImportModuleName, currentModule, otherScripts).filename;
+        additionalModules.push(importModuleName);
 
-          // This module's global scope refers to that module's global scope, no matter how we
-          // import it.
-          const set = dependencyMap[st.key];
-          if (set === undefined) throw new Error("set should not be undefined");
-          set.add(importModuleName + memCheckGlobalKey);
+        // This module's global scope refers to that module's global scope, no matter how we
+        // import it.
+        const set = dependencyMap[st.key];
+        if (set === undefined) throw new Error("set should not be undefined");
+        set.add(importModuleName + memCheckGlobalKey);
 
-          for (let i = 0; i < node.specifiers.length; ++i) {
-            const spec = node.specifiers[i];
-            /**
-             * spec can be ImportSpecifier, ImportDefaultSpecifier, or ImportNamespaceSpecifier. "imported" only exists
-             * in ImportSpecifier. "imported" can be Identifier or Literal. imported.name only exists in Identifier.
-             */
-            if (spec.type === "ImportSpecifier" && spec.imported.type === "Identifier" && spec.local !== undefined) {
-              // We depend on specific things.
-              internalToExternal[spec.local.name] = importModuleName + "." + spec.imported.name;
-            } else {
-              // We depend on everything.
-              const set = dependencyMap[st.key];
-              if (set === undefined) throw new Error("set should not be undefined");
-              set.add(importModuleName + ".*");
-            }
+        for (let i = 0; i < node.specifiers.length; ++i) {
+          const spec = node.specifiers[i];
+          /**
+           * spec can be ImportSpecifier, ImportDefaultSpecifier, or ImportNamespaceSpecifier. "imported" only exists
+           * in ImportSpecifier. "imported" can be Identifier or Literal. imported.name only exists in Identifier.
+           */
+          if (spec.type === "ImportSpecifier" && spec.imported.type === "Identifier" && spec.local !== undefined) {
+            // We depend on specific things.
+            internalToExternal[spec.local.name] = importModuleName + "." + spec.imported.name;
+          } else {
+            // We depend on everything.
+            const set = dependencyMap[st.key];
+            if (set === undefined) throw new Error("set should not be undefined");
+            set.add(importModuleName + ".*");
           }
-        },
-        FunctionDeclaration: (node: acorn.FunctionDeclaration) => {
-          if (node.id?.name === "main") {
-            checkRamOverride(node.body);
-          }
-          // node.id will be null when using 'export default'. Add a module name indicating the default export.
-          const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
-          walk.recursive(node, { key: key }, commonVisitors());
-        },
-        ExportNamedDeclaration: (
-          node: acorn.ExportNamedDeclaration,
-          st: State,
-          walkDeeper: walk.WalkerCallback<State>,
-        ) => {
-          if (node.declaration != null) {
-            // if this is true, the statement is not a named export, but rather a exported function/variable
-            walkDeeper(node.declaration, st);
-            return;
-          }
-
-          for (const specifier of node.specifiers) {
-            /**
-             * specifier.exported can be Identifier or Literal. specifier.exported.name only exists in Identifier.
-             */
-            if (specifier.exported.type === "Literal") {
-              continue;
-            }
-            const exportedDepName = currentModule + "." + specifier.exported.name;
-            /**
-             * We need to use specifier.local.name and node.source.value. Before doing that, we need to check if they
-             * exist. local.name only exists in Identifier.
-             */
-            if (node.source != null && typeof node.source.value === "string" && specifier.local.type === "Identifier") {
-              // if this is true, we are re-exporting something
-              addRef(exportedDepName, specifier.local.name, node.source.value as ScriptFilePath);
-              additionalModules.push(node.source.value as ScriptFilePath);
-            } else if (specifier.local.type === "Identifier" && specifier.exported.name !== specifier.local.name) {
-              // this makes sure we are not referring to ourselves
-              // if this is not true, we don't need to add anything
-              addRef(exportedDepName, specifier.local.name);
-            }
-          }
-        },
+        }
       },
-      commonVisitors(),
-    ),
+      FunctionDeclaration: (node: acorn.FunctionDeclaration) => {
+        if (node.id?.name === "main") {
+          checkRamOverride(node.body);
+        }
+        // node.id will be null when using 'export default'. Add a module name indicating the default export.
+        const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
+        // Seed the scope chain with the module frame and this function's own frame. We walk
+        // the body directly so the commonVisitors FunctionDeclaration handler doesn't fire
+        // on this same node and double-push the frame.
+        const ownFrame = buildScopeFrame(node.params, node.body);
+        walk.recursive(node.body, { key, scopes: [moduleFrame, ownFrame] }, commonVisitors());
+      },
+      ExportNamedDeclaration: (
+        node: acorn.ExportNamedDeclaration,
+        st: State,
+        walkDeeper: walk.WalkerCallback<State>,
+      ) => {
+        if (node.declaration != null) {
+          // if this is true, the statement is not a named export, but rather a exported function/variable
+          walkDeeper(node.declaration, st);
+          return;
+        }
+
+        for (const specifier of node.specifiers) {
+          /**
+           * specifier.exported can be Identifier or Literal. specifier.exported.name only exists in Identifier.
+           */
+          if (specifier.exported.type === "Literal") {
+            continue;
+          }
+          const exportedDepName = currentModule + "." + specifier.exported.name;
+          /**
+           * We need to use specifier.local.name and node.source.value. Before doing that, we need to check if they
+           * exist. local.name only exists in Identifier.
+           */
+          if (node.source != null && typeof node.source.value === "string" && specifier.local.type === "Identifier") {
+            // if this is true, we are re-exporting something
+            addRef(exportedDepName, specifier.local.name, node.source.value as ScriptFilePath);
+            additionalModules.push(node.source.value as ScriptFilePath);
+          } else if (specifier.local.type === "Identifier" && specifier.exported.name !== specifier.local.name) {
+            // this makes sure we are not referring to ourselves
+            // if this is not true, we don't need to add anything
+            addRef(exportedDepName, specifier.local.name);
+          }
+        }
+      },
+    }),
   );
 
   return { dependencyMap: dependencyMap, additionalModules: additionalModules };

@@ -148,8 +148,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, 0);
     });
 
-    // TODO: once we fix static parsing this should pass
-    it.skip("Function 'getTask' that can be confused with Sleeve.getTask", function () {
+    it("Function 'getTask' that can be confused with Sleeve.getTask", function () {
       const code = `
         export async function main(ns) {
           getTask();
@@ -158,6 +157,117 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       `;
       const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, 0);
+    });
+
+    it("Parameter named 'attempt' does not pick up codingcontract.attempt RAM", function () {
+      const code = `
+        /** @param {NS} ns */
+        export async function main(ns) {
+          function f(attempt) {
+            return attempt + 1;
+          }
+          f(0);
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, 0);
+    });
+
+    // Issue #875: property access on the result of a call must not be treated as an
+    // NS function reference, even when the property name matches a top-level API.
+    it("Property access on call result (issue #875) does not pick up matching top-level API RAM", function () {
+      const code = `
+        export async function main(ns) {
+          ns.gang.getMemberInformation('').hack;
+          ns.gang.getAscensionResult('').hack;
+        }
+      `;
+      const calc = calculateRamUsage(code, filename, server, new Map());
+      const names = (calc.entries ?? []).map((e) => e.name);
+      expect(names).toContain("gang.getMemberInformation");
+      expect(names).toContain("gang.getAscensionResult");
+      expect(names).not.toContain("hack");
+    });
+
+    // Issue #298: a plain local variable property whose name matches a top-level NS API
+    // (e.g. `readback.weaken` where `readback` is a JSON parse result) must not be
+    // attributed NS RAM.
+    it("Local variable property readback.weaken (issue #298) does not pick up weaken() RAM", function () {
+      const code = `
+        export async function main(ns) {
+          var readback;
+          readback = JSON.parse("{}");
+          ns.tprint(readback.weaken);
+        }
+      `;
+      const calc = calculateRamUsage(code, filename, server, new Map());
+      const names = (calc.entries ?? []).map((e) => e.name);
+      expect(names).not.toContain("weaken");
+    });
+
+    // Issue #1894: a user-defined class method whose name matches a top-level NS API
+    // (e.g. `test.run()`) must not be attributed NS RAM.
+    it("User class method test.run() (issue #1894) does not pick up run() RAM", function () {
+      const code = `
+        class TestClass {
+          constructor() {}
+          run() {}
+        }
+        export async function main(ns) {
+          let test = new TestClass();
+          test.run();
+        }
+      `;
+      const calc = calculateRamUsage(code, filename, server, new Map());
+      const names = (calc.entries ?? []).map((e) => e.name);
+      expect(names).not.toContain("run");
+    });
+
+    // Scope-shadowing variant of #298: a local var named `readback` in main shadows an
+    // unrelated `decode(readback)` helper's parameter of the same name. Per-function
+    // scope analysis must keep the local from being treated as a renamed-ns alias.
+    it("Local var shadows unrelated function param of same name (issue #298 contrived)", function () {
+      const code = `
+        function decode(readback) { return readback; }
+        export async function main(ns) {
+          var readback;
+          readback = JSON.parse("{}");
+          ns.tprint(readback.weaken);
+        }
+      `;
+      const calc = calculateRamUsage(code, filename, server, new Map());
+      const names = (calc.entries ?? []).map((e) => e.name);
+      expect(names).not.toContain("weaken");
+    });
+
+    // Scope-shadowing variant of #1894: a let-bound class instance shadows an unrelated
+    // helper's `test` parameter. Same scope-analysis requirement as the previous test.
+    it("Let-bound local shadows unrelated function param of same name (issue #1894 contrived)", function () {
+      const code = `
+        class TestClass { run() {} }
+        function helper(test) { return test; }
+        export async function main(ns) {
+          let test = new TestClass();
+          test.run();
+        }
+      `;
+      const calc = calculateRamUsage(code, filename, server, new Map());
+      const names = (calc.entries ?? []).map((e) => e.name);
+      expect(names).not.toContain("run");
+    });
+
+    // Sharpened renamed-ns test: a module-level `var X` must NOT shadow the function's
+    // own `X` parameter. The function frame's params should win against the outer module
+    // frame's locals during innermost-first scope lookup.
+    it("Renamed ns param wins over a module-level local of the same name", function () {
+      const code = `
+        export async function main(X) {
+          await X.hack("joesguns");
+        }
+        var X;
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, HackCost);
     });
   });
 
