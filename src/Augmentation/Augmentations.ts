@@ -75,7 +75,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "Pheromone extruder injected in the thoracodorsal nerve. Emits pleasing scent guaranteed to " +
+        "Pheromone extruder injected in the thoracodorsal nerve. Emits a pleasing scent guaranteed to " +
         "make conversational partners more agreeable.",
       stats: "This augmentation makes the Bribe minigame easier by indicating the incorrect paths.",
       charisma: 1.1,
@@ -90,7 +90,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A chip containing the psyche of the greatest BitRunner to ever exist. " +
         "Installing this relic significantly increases ALL of your stats. " +
-        "However, it may have unintended consequence on the users mental well-being.",
+        "However, it may have unintended consequences on the user's mental well-being.",
       stats: "Grants access to unimaginable power.",
       hacking: 2,
       strength: 2,
@@ -274,7 +274,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         `A cybernetic foot augmentation that was specifically created for ${FactionName.Bladeburners} ` +
         "during the Synthoid Uprising. The organic musculature of the human foot " +
         "is enhanced with flexible carbon nanotube matrices that are controlled by " +
-        "intelligent servo-motors.",
+        "intelligent servomotors.",
       agility: 1.05,
       bladeburner_max_stamina: 1.05,
       bladeburner_stamina_gain: 1.05,
@@ -285,10 +285,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e3,
       moneyCost: 1.5e11,
       info:
-        "A highly-advanced matter phase-shifter module that is embedded " +
+        "A highly advanced matter phase-shifter module that is embedded " +
         "in the brainstem and cerebellum. This augmentation allows " +
         "the user to project and control a holographic simulacrum within an " +
-        "extremely large radius. These specially-modified holograms were specifically " +
+        "extremely large radius. These specially modified holograms were specifically " +
         "weaponized by Bladeburner units to be used against Synthoids.",
       stats:
         "This augmentation allows you to perform Bladeburner actions and other actions (such as working, committing crimes, etc.) at the same time.",
@@ -1028,7 +1028,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e3,
       moneyCost: 5e6,
       info:
-        "A skin implant that reinforces the skin with highly-advanced synthetic cells. These " +
+        "A skin implant that reinforces the skin with highly advanced synthetic cells. These " +
         "cells, when powered, have a negative refractive index. As a result, they bend light " +
         "around the skin, making the user much harder to see with the naked eye.",
       agility: 1.05,
@@ -1041,7 +1041,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 3e7,
       info:
         "This is a more advanced version of the LuminCloaking-V1 augmentation. This skin implant " +
-        "reinforces the skin with highly-advanced synthetic cells. These " +
+        "reinforces the skin with highly advanced synthetic cells. These " +
         "cells, when powered, are capable of not only bending light but also of bending heat, " +
         "making the user more resilient as well as stealthy.",
       prereqs: [AugmentationName.LuminCloaking1],
@@ -1095,7 +1095,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5.625e5,
       moneyCost: 2.875e9,
       info:
-        "A highly-advanced techno-organic drug that is injected into the skeletal " +
+        "A highly advanced techno-organic drug that is injected into the skeletal " +
         "and integumentary system. The drug permanently modifies the DNA of the " +
         "body's skin and bone cells, granting them the ability to repair " +
         "and restructure themselves.",
@@ -1459,7 +1459,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 3.375e9,
       info:
         "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
-        "Thought to be stolen technology, its existance has been a secret until recently.",
+        "Thought to be stolen technology, its existence has been a secret until recently.",
       charisma: 1.1,
       charisma_exp: 1.4,
       factions: [FactionName.TheDarkArmy, FactionName.TheSyndicate],
@@ -1507,7 +1507,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 4.875e9,
       info:
         "The SPTN-97 gene is injected into the genome. The SPTN-97 gene is an " +
-        "artificially-synthesized gene that was developed by DARPA to create " +
+        "artificially synthesized gene that was developed by DARPA to create " +
         "super-soldiers through genetic modification. The gene was outlawed in " +
         "2056.",
       strength: 1.75,
@@ -1708,7 +1708,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 8.75e5,
       moneyCost: 3.25e9,
       info:
-        "The NEMEAN Subdermal Weave is a thin, light-weight, graphene plating that houses a dilatant fluid. " +
+        "The NEMEAN Subdermal Weave is a thin, lightweight, graphene plating that houses a dilatant fluid. " +
         "The material is implanted underneath the skin, and is the most advanced form of defensive enhancement " +
         "that has ever been created. The dilatant fluid, despite being thin and light, is extremely effective " +
         "at stopping piercing blows and reducing blunt trauma. The properties of graphene allow the plating to " +
@@ -1882,8 +1882,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
-        "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
+        "This unique augmentation allows the user to strike straight to the heart of the matter and sweep aside obstacles in the way of their goals. " +
+        "Appearing as a simple insignia on the user's forearm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
         "Awarded to those who discover the secrets of the labyrinth.",
       stats:
         "This augmentation increases the stasis link limit by one, and raises charisma by 7%, strength by 10%, and darknet money by 10%.",
@@ -1898,7 +1898,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "This skeletal augmentation greatly enhances the users durability and health. Inspired by the original Staff of Medicine that is said to " +
+        "This skeletal augmentation greatly enhances the user's durability and health. Inspired by the original Staff of Medicine that is said to " +
         "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. ",
       stats:
         "This augmentation increases the stasis link limit by one, and raises charisma xp, defense, and darknet money by 10%.",
