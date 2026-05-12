@@ -45,9 +45,7 @@ exports[`load/saveAllServers 1`] = `
           ]
         ]
       },
-      "serversOnNetwork": [
-        "__proto__"
-      ],
+      "serversOnNetwork": [],
       "smtpPortOpen": false,
       "sqlPortOpen": false,
       "sshPortOpen": false,
@@ -138,9 +136,7 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
           ]
         ]
       },
-      "serversOnNetwork": [
-        "__proto__"
-      ],
+      "serversOnNetwork": [],
       "smtpPortOpen": false,
       "sqlPortOpen": false,
       "sshPortOpen": false,
