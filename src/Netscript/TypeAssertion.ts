@@ -1,3 +1,4 @@
+import { exampleDarknetServerDetails } from "../DarkNet/Enums";
 import type { NetscriptContext } from "./APIWrapper";
 import { errorMessage } from "./ErrorMessages";
 import type { DarknetServerDetails } from "@nsdefs";
@@ -67,16 +68,8 @@ export function missingKey(expect: object, actual: unknown): string | false {
   return false;
 }
 
-export function assertDarknetServerData(ctx: NetscriptContext, data: unknown): asserts data is DarknetServerDetails {
-  const error = missingKey(
-    {
-      difficulty: -1,
-      depth: -1,
-      blockedRam: -1,
-      requiredCharismaSkill: -1,
-    },
-    data,
-  );
+export function assertDarknetServerDetails(ctx: NetscriptContext, data: unknown): asserts data is DarknetServerDetails {
+  const error = missingKey(exampleDarknetServerDetails, data);
   if (error) {
     throw errorMessage(ctx, `Invalid darknet server data.\n${error}`, "TYPE");
   }
