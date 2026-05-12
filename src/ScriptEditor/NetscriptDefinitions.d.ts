@@ -4618,13 +4618,16 @@ export interface Darknet {
   getStasisLinkedServers(returnByIP?: boolean): string[];
 
   /**
-   * Returns the server's authentication protocol details.
+   * Returns the darknet-specific details of the server.
+   *
+   * If the darknet server has recently gone offline, the returned object will be a dummy server object with
+   * `isOnline: false`.
    *
    * @remarks
    * RAM cost: 0.1 GB
    *
    * @param host - Hostname/IP of the server to analyze. Defaults to the running script's server if not specified.
-   * @returns An object containing the server's authentication protocol details.
+   * @returns An object containing the server's darknet-specific details.
    */
   getServerDetails(host?: string): DarknetServerDetails & { isOnline: boolean };
 

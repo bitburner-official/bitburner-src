@@ -4,7 +4,9 @@
 
 ## Darknet.getServerDetails() method
 
-Returns the server's authentication protocol details.
+Returns the darknet-specific details of the server.
+
+If the darknet server has recently gone offline, the returned object will be a dummy server object with `isOnline: false`<!-- -->.
 
 **Signature:**
 
@@ -52,7 +54,7 @@ _(Optional)_ Hostname/IP of the server to analyze. Defaults to the running scrip
 
 [DarknetServerDetails](./bitburner.darknetserverdetails.md) &amp; { isOnline: boolean }
 
-An object containing the server's authentication protocol details.
+An object containing the server's darknet-specific details.
 
 ## Remarks
 

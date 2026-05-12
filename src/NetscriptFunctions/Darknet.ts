@@ -38,7 +38,7 @@ import {
   logger,
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
-import { GenericResponseMessage, ResponseCodeEnum } from "../DarkNet/Enums";
+import { exampleDarknetServerDetails, GenericResponseMessage, ResponseCodeEnum } from "../DarkNet/Enums";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
 import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
@@ -385,20 +385,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       if (!serverCheck.success) {
         logger(ctx)(serverCheck.message);
         return {
+          ...exampleDarknetServerDetails,
           isOnline: false,
-          isConnectedToCurrentServer: false,
-          hasSession: false,
-          modelId: "",
-          passwordHint: "",
-          data: "",
-          logTrafficInterval: -1,
-          passwordLength: -1,
-          passwordFormat: "numeric",
-          blockedRam: -1,
-          difficulty: -1,
-          requiredCharismaSkill: -1,
-          depth: -1,
-          isStationary: false,
         } satisfies ReturnType<DarknetAPI["getServerDetails"]>;
       }
       const targetServer = serverCheck.server;
