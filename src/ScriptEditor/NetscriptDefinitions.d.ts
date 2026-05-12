@@ -2835,7 +2835,7 @@ export interface Singularity {
    * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
    * been purchased
    */
-  getDarkwebPrograms(): string[];
+  getDarkwebPrograms(): ProgramName[];
 
   /**
    * Check the price of an exploit on the dark web
