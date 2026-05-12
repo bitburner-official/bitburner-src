@@ -46,7 +46,7 @@ import { resolveCacheFilePath } from "../Paths/CacheFilePath";
 import type { CacheResult } from "@nsdefs";
 import { MAX_PASSWORD_LENGTH } from "../DarkNet/Constants";
 import { isIPAddress } from "../Types/strings";
-import { getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
+import { type DarknetServerData, getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
 import { shuffle } from "lodash";
 import { getSharedChars } from "../DarkNet/utils/darknetAuthUtils";
 
@@ -717,60 +717,55 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
   };
 }
 
-export const getDarknetPropertiesForDeprecationSupport = (dnetServer?: DarknetServer | undefined) => ({
-  isOnline: {
-    identifier: "ns.getServer().isOnline",
-    message: "Use ns.dnet.getServerDetails().isOnline instead.",
-    value: !!dnetServer,
-  },
+export const getDarknetPropertiesForDeprecationSupport = (dnetServer: DarknetServerData) => ({
   depth: {
     identifier: "ns.getServer().depth",
     message: "Use ns.dnet.getServerDetails().depth instead.",
-    value: dnetServer?.depth ?? -1,
+    value: dnetServer.depth,
   },
   modelId: {
     identifier: "ns.getServer().modelId",
     message: "Use ns.dnet.getServerDetails().modelId instead.",
-    value: dnetServer?.modelId ?? "",
+    value: dnetServer.modelId,
   },
   hasStasisLink: {
     identifier: "ns.getServer().hasStasisLink",
     message: "Use ns.dnet.getServerDetails().hasStasisLink instead.",
-    value: dnetServer?.hasStasisLink ?? false,
+    value: dnetServer.hasStasisLink,
   },
   blockedRam: {
     identifier: "ns.getServer().blockedRam",
     message: "Use ns.dnet.getServerDetails().blockedRam instead.",
-    value: dnetServer?.blockedRam ?? -1,
+    value: dnetServer.blockedRam,
   },
   staticPasswordHint: {
     identifier: "ns.getServer().staticPasswordHint",
     message: "Use ns.dnet.getServerDetails().staticPasswordHint instead.",
-    value: dnetServer?.staticPasswordHint ?? "",
+    value: dnetServer.staticPasswordHint,
   },
   passwordHintData: {
     identifier: "ns.getServer().passwordHintData",
     message: "Use ns.dnet.getServerDetails().passwordHintData instead.",
-    value: dnetServer?.passwordHintData ?? "",
+    value: dnetServer.passwordHintData,
   },
   difficulty: {
     identifier: "ns.getServer().difficulty",
     message: "Use ns.dnet.getServerDetails().difficulty instead.",
-    value: dnetServer?.difficulty ?? -1,
+    value: dnetServer.difficulty,
   },
   requiredCharismaSkill: {
     identifier: "ns.getServer().requiredCharismaSkill",
     message: "Use ns.dnet.getServerDetails().requiredCharismaSkill instead.",
-    value: dnetServer?.requiredCharismaSkill ?? -1,
+    value: dnetServer.requiredCharismaSkill,
   },
   logTrafficInterval: {
     identifier: "ns.getServer().logTrafficInterval",
     message: "Use ns.dnet.getServerDetails().logTrafficInterval instead.",
-    value: dnetServer?.logTrafficInterval ?? -1,
+    value: dnetServer.logTrafficInterval,
   },
   isStationary: {
     identifier: "ns.getServer().isStationary",
     message: "Use ns.dnet.getServerDetails().isStationary instead.",
-    value: dnetServer?.isStationary ?? false,
+    value: dnetServer.isStationary,
   },
 });

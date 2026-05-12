@@ -927,49 +927,25 @@ export const ns: InternalAPI<NSFull> = {
     },
   getServer: (ctx) => (_host?) => {
     const [server, host] = helpers.getServer(ctx, _host);
-    const serverProps = {
-      sshPortOpen: false,
-      ftpPortOpen: false,
-      smtpPortOpen: false,
-      httpPortOpen: false,
-      sqlPortOpen: false,
-      organizationName: "",
-    };
     if (!server) {
       // If the server is offline, return a dummy object with isOnline = false.
       const isIp = isIPAddress(host);
       const result = {
-        isOnline: false,
+        sshPortOpen: false,
+        ftpPortOpen: false,
+        smtpPortOpen: false,
+        httpPortOpen: false,
+        sqlPortOpen: false,
+        organizationName: "",
         ...exampleDarknetServerData,
         hostname: isIp ? "" : host,
         ip: isIp ? host : "",
-        ...serverProps,
+        isOnline: false,
       };
-      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport());
+      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport(result));
       return result satisfies NSInterfaceServer & { isOnline: boolean };
     }
-    if (server instanceof DarknetServer) {
-      const result = {
-        isOnline: true,
-        hostname: server.hostname,
-        ip: server.ip,
-        hasAdminRights: server.hasAdminRights,
-        isConnectedTo: server.isConnectedTo,
-        cpuCores: server.cpuCores,
-        ramUsed: server.ramUsed,
-        maxRam: server.maxRam,
-        backdoorInstalled: server.backdoorInstalled,
-        purchasedByPlayer: false,
-        ...serverProps,
-      };
-      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport(server));
-      return result satisfies NSInterfaceServer & { isOnline: boolean };
-    }
-    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
-    if (server.serversOnNetwork.length === 0) {
-      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
-    }
-    return {
+    const result: NSInterfaceServer = {
       hostname: server.hostname,
       ip: server.ip,
       sshPortOpen: server.sshPortOpen,
@@ -995,6 +971,20 @@ export const ns: InternalAPI<NSFull> = {
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
     } satisfies NSInterfaceServer;
+
+    if (server instanceof DarknetServer) {
+      const resultWithAdditionalProps = {
+        ...result,
+        isOnline: true,
+      };
+      setDeprecatedProperties(resultWithAdditionalProps, getDarknetPropertiesForDeprecationSupport(server));
+      return resultWithAdditionalProps satisfies NSInterfaceServer & { isOnline: boolean };
+    }
+    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
+    if (server.serversOnNetwork.length === 0) {
+      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
+    }
+    return result;
   },
   getServerMoneyAvailable: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
