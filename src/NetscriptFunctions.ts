@@ -945,7 +945,7 @@ export const ns: InternalAPI<NSFull> = {
       setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport(result));
       return result satisfies NSInterfaceServer & { isOnline: boolean };
     }
-    const result: NSInterfaceServer = {
+    const result = {
       hostname: server.hostname,
       ip: server.ip,
       sshPortOpen: server.sshPortOpen,
