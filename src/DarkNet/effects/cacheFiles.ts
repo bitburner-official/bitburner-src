@@ -85,7 +85,7 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): string 
 };
 
 export const getMoneyReward = (difficulty: number): string => {
-  const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
+  const sf15_3Factor = Player.activeSourceFileLvl(15) >= 3 ? 1.5 : 1;
   const reward =
     1.2 ** difficulty *
     1e7 *
