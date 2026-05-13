@@ -8588,7 +8588,7 @@ export interface NS {
   /**
    * Delete a file.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0.6 GB
    *
    * Removes the specified file from the current server. This function works for every file
    * type except message (.msg) files.
