@@ -72,15 +72,16 @@ function getNumericCost(cost: number | (() => number)): number {
   return typeof cost === "function" ? cost() : cost;
 }
 
-function unwrapExpressionForMemberPath(node: acorn.Expression | acorn.Super): acorn.Expression | acorn.Super {
+/** Skip over `(...)` and `?.` wrappers to reach the actual expression. */
+function unwrapExpression(node: acorn.Expression | acorn.Super): acorn.Expression | acorn.Super {
   let n: acorn.Node = node as acorn.Node;
   for (;;) {
     if (n.type === "ParenthesizedExpression") {
-      n = (n as acorn.ParenthesizedExpression).expression as acorn.Node;
+      n = (n as acorn.ParenthesizedExpression).expression;
       continue;
     }
     if (n.type === "ChainExpression") {
-      n = (n as acorn.ChainExpression).expression as acorn.Node;
+      n = (n as acorn.ChainExpression).expression;
       continue;
     }
     return n as acorn.Expression | acorn.Super;
@@ -88,27 +89,20 @@ function unwrapExpressionForMemberPath(node: acorn.Expression | acorn.Super): ac
 }
 
 /**
- * Collects a.b.c from a non-computed member chain whose root is a simple Identifier,
- * ThisExpression, or Super. Returns null for dynamic roots (e.g. call results) or
- * computed access we can't statically resolve.
+ * Collects `a.b.c` from a non-computed member chain whose root is an Identifier, ThisExpression,
+ * or Super. Returns null for dynamic roots (e.g. call results) or computed access we can't
+ * statically resolve.
  */
-function collectStaticMemberExpressionPath(node: acorn.MemberExpression): string[] | null {
+function collectStaticMemberPath(node: acorn.MemberExpression): string[] | null {
   const parts: string[] = [];
   let current: acorn.MemberExpression = node;
   for (;;) {
-    if (current.computed) {
-      return null;
-    }
+    if (current.computed) return null;
     const prop = current.property;
-    // PrivateIdentifier (e.g. `obj.#name`) is treated as a static name. Identifier is the common case.
-    if (prop.type === "Identifier") {
-      parts.unshift(prop.name);
-    } else if (prop.type === "PrivateIdentifier") {
-      parts.unshift("#" + prop.name);
-    } else {
-      return null;
-    }
-    const obj = unwrapExpressionForMemberPath(current.object as acorn.Expression);
+    if (prop.type === "Identifier") parts.unshift(prop.name);
+    else if (prop.type === "PrivateIdentifier") parts.unshift("#" + prop.name);
+    else return null;
+    const obj = unwrapExpression(current.object as acorn.Expression);
     if (obj.type === "Identifier") {
       parts.unshift(obj.name);
       return parts;
@@ -130,45 +124,9 @@ function collectStaticMemberExpressionPath(node: acorn.MemberExpression): string
 }
 
 /**
- * Maps a static access path to candidate RamCosts ref strings. RamCosts has no top-level
- * `ns` wrapper, so we strip a leading `ns` (and any receiver marker) before joining.
- *
- * The leaf is returned as a separate candidate only when `allowLeafFallback` is true. The
- * caller decides eligibility based on scope: typically true when the chain root is
- * `this`/`super` or a parameter visible in the current lexical scope (and not shadowed by
- * a local declaration). See `rootIsVisibleParam` and the MemberExpression visitor.
- *
- * Without the leaf fallback, identifiers like `readback.weaken` (issue #298) or
- * `test.run()` (issue #1894) are NOT attributed NS RAM. Dynamic roots like
- * `someCall().hack` never produce a path here at all, which fixes issue #875.
- *
- * The strict bare-lookup in `lookupRamCost` (top-level only) further ensures the leaf
- * candidate cannot pick up nested API names (e.g. `obj.codingcontract.attempt` won't
- * resolve to `codingcontract.attempt` via the bare leaf "attempt").
- */
-function ramCostRefsFromStaticPath(path: string[], allowLeafFallback: boolean): string[] {
-  let segments = path;
-  if (segments[0] === "this" || segments[0] === "super") {
-    segments = segments.slice(1);
-  }
-  if (segments[0] === "ns") {
-    segments = segments.slice(1);
-  }
-  if (segments.length === 0) {
-    return [];
-  }
-  const refs: string[] = [segments.join(".")];
-  if (allowLeafFallback && segments.length > 1) {
-    refs.push(segments[segments.length - 1]);
-  }
-  return refs;
-}
-
-/**
- * A lexical scope frame used to decide whether an identifier root in a static member
- * chain (e.g. the `X` in `X.hack`) is actually a function parameter visible at that
- * point — and thus a plausible alias for `ns`, eligible for a bare-leaf RamCosts
- * fallback — or is shadowed by a local declaration in the same scope.
+ * A lexical scope frame used to decide whether an identifier root in a static member chain
+ * (e.g. the `X` in `X.hack`) is a function parameter visible at that point — and thus a plausible
+ * alias for `ns` — or is shadowed by a local declaration in the same scope.
  */
 interface ScopeFrame {
   /** Identifier names bound as parameters when entering this function. */
@@ -192,11 +150,8 @@ function collectPatternNames(p: acorn.Pattern | null | undefined, out: Set<strin
       return;
     case "ObjectPattern":
       for (const prop of p.properties) {
-        if (prop.type === "RestElement") {
-          collectPatternNames(prop.argument, out);
-        } else {
-          collectPatternNames(prop.value, out);
-        }
+        if (prop.type === "RestElement") collectPatternNames(prop.argument, out);
+        else collectPatternNames(prop.value, out);
       }
       return;
     case "ArrayPattern":
@@ -208,15 +163,11 @@ function collectPatternNames(p: acorn.Pattern | null | undefined, out: Set<strin
 }
 
 /**
- * Scans `node` (a function body or program) for declarations that introduce names into the
- * same scope as the enclosing function's params. Does NOT descend into nested function
- * bodies — those open new scopes — but does descend through blocks, conditionals, loops,
- * try/catch, switch, labels, and export declarations.
- *
- * `var`/`let`/`const` are treated uniformly as function-scoped. This is a mild
- * over-approximation for block-scoped `let`/`const`, but the only consequence is that a
- * block-scoped local can still shadow an outer parameter — which matches the pessimistic
- * intent of the static RAM pass.
+ * Scans `node` (a function body or program) for declarations introduced into the same scope as
+ * the enclosing function's params. Does NOT descend into nested function bodies — those open new
+ * scopes — but does descend through blocks, conditionals, loops, try/catch, switch, and labels.
+ * `var`/`let`/`const` are treated uniformly; the only consequence is that block-scoped names can
+ * still shadow outer params, which matches the pessimistic intent of the pass.
  */
 function visitForLocals(node: acorn.Node | null | undefined, out: Set<string>): void {
   if (!node) return;
@@ -315,9 +266,9 @@ function buildScopeFrame(params: acorn.Pattern[], body: acorn.Node | null | unde
 }
 
 /**
- * Looks up `name` against the active scope chain. Walks innermost to outermost. The first
- * frame that declares `name` as a local shadows any outer params. Otherwise, the first
- * frame that lists `name` as a parameter signals an `ns`-alias-eligible identifier.
+ * Walks the scope chain innermost-to-outermost. The first frame that declares `name` as a local
+ * shadows any outer params; otherwise the first frame that lists `name` as a parameter signals an
+ * `ns`-alias-eligible identifier.
  */
 function rootIsVisibleParam(name: string, scopes: ScopeFrame[]): boolean {
   for (let i = scopes.length - 1; i >= 0; i--) {
@@ -327,24 +278,186 @@ function rootIsVisibleParam(name: string, scopes: ScopeFrame[]): boolean {
   return false;
 }
 
+/** Strip parens / optional-chain wrappers from a variable initializer or assignment RHS. */
+function unwrapInit(init: acorn.Expression | null | undefined): acorn.Expression | null {
+  if (!init) return null;
+  let n: acorn.Node = init;
+  for (;;) {
+    if (n.type === "ParenthesizedExpression") {
+      n = (n as acorn.ParenthesizedExpression).expression;
+      continue;
+    }
+    if (n.type === "ChainExpression") {
+      n = (n as acorn.ChainExpression).expression;
+      continue;
+    }
+    return n as acorn.Expression;
+  }
+}
+
 /**
- * Resolves a dependency string against RamCosts. Dotted refs use strict path traversal; bare refs
- * only match top-level leaves so locals (e.g. `attempt`) do not pick up nested API keys (`codingcontract.attempt`).
+ * True for any binding whose RHS is `ns` or `this.ns` / `super.ns`. The local should be treated
+ * exactly like the `ns` param for path-normalization purposes.
+ */
+function rhsIsNsLike(init: acorn.Expression | null | undefined, scopes: ScopeFrame[]): boolean {
+  const n = unwrapInit(init);
+  if (n === null) return false;
+  if (n.type === "Identifier") return n.name === "ns" && rootIsVisibleParam("ns", scopes);
+  if (n.type !== "MemberExpression" || n.computed) return false;
+  const obj = unwrapExpression(n.object as acorn.Expression);
+  if (obj.type !== "ThisExpression" && obj.type !== "Super") return false;
+  return n.property.type === "Identifier" && n.property.name === "ns";
+}
+
+/**
+ * For `const x = ns.gang` (or `_ns.gang` when `_ns` is already an ns alias), returns the namespace
+ * segment (`"gang"`) so a later access on `x` resolves into `RamCosts.gang.*`.
+ */
+function extractNsNamespaceAlias(
+  init: acorn.Expression | null | undefined,
+  scopes: ScopeFrame[],
+  nsParamAliases: Set<string>,
+): string | null {
+  const n = unwrapInit(init);
+  if (n === null || n.type !== "MemberExpression" || n.computed) return null;
+  const obj = unwrapExpression(n.object as acorn.Expression);
+  if (obj.type !== "Identifier") return null;
+  const isNs = (obj.name === "ns" && rootIsVisibleParam("ns", scopes)) || nsParamAliases.has(obj.name);
+  if (!isNs) return null;
+  return n.property.type === "Identifier" ? n.property.name : null;
+}
+
+/** Non-computed `globalThis.<slot>`. */
+function isGlobalThisSlotMember(expr: acorn.Expression): { slot: string } | null {
+  const n = unwrapExpression(expr);
+  if (n.type !== "MemberExpression" || n.computed) return null;
+  const obj = unwrapExpression(n.object as acorn.Expression);
+  if (obj.type !== "Identifier" || obj.name !== "globalThis") return null;
+  if (n.property.type !== "Identifier") return null;
+  return { slot: n.property.name };
+}
+
+/**
+ * For each `globalThis.<slot> = …` that assigns from `ns` or `ns.<api>`, maps `<slot>` to the
+ * RamCosts path prefix (segments) after stripping `globalThis.<slot>`. An empty prefix means the
+ * whole `ns` object was stored (e.g. `globalThis.ns = ns` or `globalThis.foo = ns`). A one-segment
+ * prefix means `ns.<segment>` was stored (e.g. `globalThis.gang = ns.gang` → `["gang"]`).
+ *
+ * Module-wide and order-insensitive like the old `globalThis.ns = ns` hint: any read of
+ * `globalThis.<slot>.*` in a sibling function may hit Netscript APIs because `globalThis` is shared.
+ */
+function moduleGlobalThisNsSlotPrefixMap(ast: acorn.Node): Map<string, string[]> {
+  const map = new Map<string, string[]>();
+  walk.simple(ast, {
+    AssignmentExpression(node: acorn.AssignmentExpression) {
+      if (node.operator !== "=") return;
+      const slotInfo = isGlobalThisSlotMember(node.left as acorn.Expression);
+      if (slotInfo === null) return;
+      const r = unwrapInit(node.right);
+      if (r === null) return;
+      if (r.type === "Identifier" && r.name === "ns") {
+        map.set(slotInfo.slot, []);
+        return;
+      }
+      if (r.type === "MemberExpression" && !r.computed) {
+        const robj = unwrapExpression(r.object as acorn.Expression);
+        if (robj.type !== "Identifier" || robj.name !== "ns") return;
+        if (r.property.type !== "Identifier") return;
+        map.set(slotInfo.slot, [r.property.name]);
+      }
+    },
+  });
+  return map;
+}
+
+/**
+ * Records aliases produced by `const { a, b: c } = ns.<namespace>` so a bare reference to `a` or
+ * `c` charges the namespace-qualified API.
+ */
+function recordDestructuredNamespaceAliases(
+  pattern: acorn.ObjectPattern,
+  init: acorn.Expression | null | undefined,
+  scopes: ScopeFrame[],
+  nsParamAliases: Set<string>,
+  apiLeafAliases: Map<string, string>,
+): void {
+  const nsSeg = extractNsNamespaceAlias(init, scopes, nsParamAliases);
+  if (nsSeg === null) return;
+  for (const prop of pattern.properties) {
+    if (prop.type !== "Property" || prop.computed) continue;
+    const sourceName =
+      prop.key.type === "Identifier"
+        ? prop.key.name
+        : prop.key.type === "Literal" && typeof prop.key.value === "string"
+        ? prop.key.value
+        : null;
+    if (sourceName === null) continue;
+    if (prop.value.type !== "Identifier") continue;
+    apiLeafAliases.set(prop.value.name, `${nsSeg}.${sourceName}`);
+  }
+}
+
+/**
+ * Strips `this`/`super`, rewrites `globalThis.<slot>` when the module assigns that slot from `ns`
+ * or `ns.<api>` (see `moduleGlobalThisNsSlotPrefixMap`), then rewrites `ns` and full-ns aliases away
+ * and substitutes namespace aliases. The returned segments are the dotted ref into `RamCosts`.
+ */
+function normalizeMemberPathForRam(
+  path: string[],
+  scopes: ScopeFrame[],
+  nsParamAliases: Set<string>,
+  namespaceAliases: Map<string, string>,
+  globalThisNsSlotPrefixes: Map<string, string[]>,
+): string[] {
+  let segments = path;
+  if (segments[0] === "this" || segments[0] === "super") segments = segments.slice(1);
+  if (segments[0] === "globalThis" && segments.length >= 2) {
+    const prefix = globalThisNsSlotPrefixes.get(segments[1]);
+    if (prefix !== undefined) {
+      segments = [...prefix, ...segments.slice(2)];
+    }
+  }
+  if (segments.length === 0) return segments;
+  const head = segments[0];
+  if (nsParamAliases.has(head)) {
+    segments = segments.slice(1);
+  } else if (head === "ns" && rootIsVisibleParam("ns", scopes)) {
+    segments = segments.slice(1);
+  } else {
+    const mapped = namespaceAliases.get(head);
+    if (mapped !== undefined) segments = [mapped, ...segments.slice(1)];
+  }
+  return segments;
+}
+
+/**
+ * Maps a normalized static access path to candidate `RamCosts` ref strings. The bare leaf is
+ * returned as an extra candidate only when `allowLeafFallback` is true — caller-controlled so
+ * that e.g. `readback.weaken` (issue #298) or `test.run()` (issue #1894) do NOT pick up
+ * `weaken` / `run`. The strict bare-lookup in `lookupRamCost` further ensures the leaf candidate
+ * cannot pick up nested API names (e.g. `attempt` does not resolve to `codingcontract.attempt`).
+ */
+function ramCostRefsFromStaticPath(path: string[], allowLeafFallback: boolean): string[] {
+  if (path.length === 0) return [];
+  const refs: string[] = [path.join(".")];
+  if (allowLeafFallback && path.length > 1) refs.push(path[path.length - 1]);
+  return refs;
+}
+
+/**
+ * Resolves a dependency string against `RamCosts`. Dotted refs use strict path traversal; bare
+ * refs only match top-level leaves so locals (e.g. `attempt`) do not pick up nested API keys
+ * (`codingcontract.attempt`).
  */
 function lookupRamCost(ref: string): { func: (() => number) | number; refDetail: string } | undefined {
-  if (!ref) {
-    return undefined;
-  }
+  if (!ref) return undefined;
   const costs = RamCosts as Record<string, unknown>;
   if (ref.includes(".")) {
     const segments = ref.split(".");
     let cur: unknown = costs;
     for (let i = 0; i < segments.length; i++) {
-      const seg = segments[i];
-      if (seg === undefined || cur === null || typeof cur !== "object") {
-        return undefined;
-      }
-      const next = (cur as Record<string, unknown>)[seg];
+      if (cur === null || typeof cur !== "object") return undefined;
+      const next = (cur as Record<string, unknown>)[segments[i]];
       if (i === segments.length - 1) {
         if (typeof next === "number" || typeof next === "function") {
           return { func: next as (() => number) | number, refDetail: ref };
@@ -592,12 +705,10 @@ function parseOnlyCalculateDeps(
   const dependencyMap: Record<string, Set<string> | undefined> = {};
   dependencyMap[globalKey] = new Set<string>();
 
-  // The module's top-level scope frame. Its `params` is empty (the module is not a function);
-  // its `locals` holds every top-level binding (var/let/const, function/class decl, imports).
-  // The MemberExpression visitor walks the scope stack innermost-to-outermost to decide
-  // whether a static chain like `X.hack` should get a bare-leaf RamCosts fallback. Locals
-  // shadow outer params; this lets `var readback` in `main` shadow an unrelated `decode(readback)`
-  // parameter elsewhere in the module (issue #298), without losing the renamed-`ns` behavior.
+  // The module's top-level scope frame. Its `params` is empty (the module is not a function); its
+  // `locals` hold every top-level binding. The MemberExpression visitor walks this stack
+  // innermost-first to decide whether a static chain like `X.hack` is rooted in a visible
+  // parameter (and thus eligible for an `ns`-alias leaf fallback).
   const moduleFrame: ScopeFrame = { params: new Set(), locals: new Set() };
   visitForLocals(ast as acorn.Node, moduleFrame.locals);
 
@@ -606,6 +717,10 @@ function parseOnlyCalculateDeps(
   const internalToExternal: Record<string, string | undefined> = {};
 
   const additionalModules: ScriptFilePath[] = [];
+
+  // Assignments like `globalThis.ns = ns` / `globalThis.gang = ns.gang`: sibling functions may
+  // read those slots; `globalThis` is shared at runtime. Cheap one-pass prescan.
+  const globalThisNsSlotPrefixes = moduleGlobalThisNsSlotPrefixMap(ast as acorn.Node);
 
   // References get added pessimistically. They are added for thisModule.name, name, and for
   // any aliases.
@@ -626,12 +741,17 @@ function parseOnlyCalculateDeps(
     key: string;
     /** Active lexical scope chain, innermost frame last. */
     scopes: ScopeFrame[];
+    /** Locals assigned from `ns` / `this.ns` — treated like `ns` for path normalization. */
+    nsParamAliases: Set<string>;
+    /** Locals assigned from `ns.<namespace>` — maps local name to the first RamCosts segment. */
+    namespaceAliases: Map<string, string>;
+    /** Names pulled out of `ns.<namespace>` via destructuring — maps local name to a dotted ref. */
+    apiLeafAliases: Map<string, string>;
   }
 
   /**
-   * Enters a function scope for the duration of `run`. Pushes a new frame computed from
-   * `params` and `body`, then pops it. The scope chain is shared by reference through
-   * State, so callers don't need to thread a fresh state object through.
+   * Enters a function scope for the duration of `run`. Saves and snapshot-copies the alias state,
+   * then restores on exit so child scopes can't leak bindings outward.
    */
   function withFunctionScope(
     params: acorn.Pattern[],
@@ -640,11 +760,20 @@ function parseOnlyCalculateDeps(
     run: () => void,
   ): void {
     const frame = buildScopeFrame(params, body);
+    const prevNsAliases = st.nsParamAliases;
+    const prevNamespaceAliases = st.namespaceAliases;
+    const prevApiLeafAliases = st.apiLeafAliases;
+    st.nsParamAliases = new Set(prevNsAliases);
+    st.namespaceAliases = new Map(prevNamespaceAliases);
+    st.apiLeafAliases = new Map(prevApiLeafAliases);
     st.scopes.push(frame);
     try {
       run();
     } finally {
       st.scopes.pop();
+      st.nsParamAliases = prevNsAliases;
+      st.namespaceAliases = prevNamespaceAliases;
+      st.apiLeafAliases = prevApiLeafAliases;
     }
   }
 
@@ -707,6 +836,11 @@ function parseOnlyCalculateDeps(
         if (objectPrototypeProperties.includes(node.name)) {
           return;
         }
+        const apiLeaf = st.apiLeafAliases.get(node.name);
+        if (apiLeaf !== undefined) {
+          addRef(st.key, apiLeaf);
+          return;
+        }
         addRef(st.key, node.name);
       },
       WhileStatement: (node: acorn.WhileStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
@@ -733,28 +867,92 @@ function parseOnlyCalculateDeps(
         node.alternate && walkDeeper(node.alternate, st);
       },
       MemberExpression: (node: acorn.MemberExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
-        const path = collectStaticMemberExpressionPath(node);
+        const path = collectStaticMemberPath(node);
         if (path !== null && path.length >= 2) {
           const root = path[0];
-          const allowLeafFallback = root === "this" || root === "super" || rootIsVisibleParam(root, st.scopes);
-          for (const ref of ramCostRefsFromStaticPath(path, allowLeafFallback)) {
-            addRef(st.key, ref);
+          const normalized = normalizeMemberPathForRam(
+            path,
+            st.scopes,
+            st.nsParamAliases,
+            st.namespaceAliases,
+            globalThisNsSlotPrefixes,
+          );
+          if (normalized.length >= 1) {
+            const allowLeafFallback =
+              root === "this" || root === "super" || rootIsVisibleParam(root, st.scopes) || st.nsParamAliases.has(root);
+            for (const ref of ramCostRefsFromStaticPath(normalized, allowLeafFallback)) {
+              addRef(st.key, ref);
+            }
+          }
+        }
+        // For `knownApiCall().leaf`: charge the called API only. The leaf is data on the return
+        // value, not a reference to a top-level NS API (issue #875), including under namespace
+        // aliases and when nested inside another call's arguments.
+        if (!node.computed && node.property.type === "Identifier") {
+          const obj = unwrapExpression(node.object as acorn.Expression);
+          if (obj.type === "CallExpression") {
+            const callee = unwrapExpression(obj.callee as acorn.Expression);
+            const calleePath = callee.type === "MemberExpression" ? collectStaticMemberPath(callee) : null;
+            if (calleePath !== null && calleePath.length >= 2) {
+              const normalizedCallee = normalizeMemberPathForRam(
+                calleePath,
+                st.scopes,
+                st.nsParamAliases,
+                st.namespaceAliases,
+                globalThisNsSlotPrefixes,
+              );
+              if (normalizedCallee.length >= 2 && lookupRamCost(normalizedCallee.join("."))) {
+                for (const ref of ramCostRefsFromStaticPath(normalizedCallee, false)) {
+                  addRef(st.key, ref);
+                }
+              }
+            }
           }
         }
         node.object && walkDeeper(node.object, st);
-        // Only descend into the property for computed access (e.g. obj[expr]),
-        // where the property expression can contain real identifier references.
-        // A non-computed property name is just a static key (e.g. the `hack` in
-        // `someCall().hack`) and must not be treated as an identifier reference
-        // into RamCosts. Static API references are captured via the path collection above.
+        // Only descend into the property for computed access (e.g. obj[expr]), where the property
+        // expression can contain real identifier references. A non-computed property name is just
+        // a static key and must not be treated as an identifier reference into RamCosts; static
+        // API references are captured via the path collection above.
         if (node.computed && node.property) {
           walkDeeper(node.property, st);
         }
       },
-      // Function-scope entry visitors. We push a ScopeFrame so nested member expressions
-      // resolve identifier roots against the correct lexical scope. The walker still
-      // descends into nested-function bodies and attributes their refs to the same
-      // outer state.key (matching the existing pessimistic "outermost function" model).
+      VariableDeclaration: (node: acorn.VariableDeclaration, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        for (const decl of node.declarations) {
+          if (decl.init) walkDeeper(decl.init, st);
+          if (decl.id.type === "Identifier" && decl.init) {
+            if (rhsIsNsLike(decl.init, st.scopes)) {
+              st.nsParamAliases.add(decl.id.name);
+            }
+            const nsSeg = extractNsNamespaceAlias(decl.init, st.scopes, st.nsParamAliases);
+            if (nsSeg !== null) st.namespaceAliases.set(decl.id.name, nsSeg);
+          } else if (decl.id.type === "ObjectPattern" && decl.init) {
+            recordDestructuredNamespaceAliases(decl.id, decl.init, st.scopes, st.nsParamAliases, st.apiLeafAliases);
+            if (extractNsNamespaceAlias(decl.init, st.scopes, st.nsParamAliases) === null) {
+              walkDeeper(decl.id, st);
+            }
+          } else if (decl.id.type !== "Identifier") {
+            walkDeeper(decl.id, st);
+          }
+        }
+      },
+      AssignmentExpression: (node: acorn.AssignmentExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        if (node.operator === "=" && node.left.type === "Identifier") {
+          walkDeeper(node.right, st);
+          if (rhsIsNsLike(node.right, st.scopes)) {
+            st.nsParamAliases.add(node.left.name);
+          }
+          walkDeeper(node.left, st);
+          return;
+        }
+        walkDeeper(node.left, st);
+        walkDeeper(node.right, st);
+      },
+      CallExpression: (node: acorn.CallExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        walkDeeper(node.callee, st);
+        for (const arg of node.arguments) walkDeeper(arg, st);
+      },
       FunctionDeclaration: (
         node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration,
         st: State,
@@ -783,13 +981,17 @@ function parseOnlyCalculateDeps(
 
   walk.recursive<State>(
     ast as acorn.Node, // Pretend that ast is an acorn node
-    { key: globalKey, scopes: [moduleFrame] },
-    // commonVisitors first so the top-level handlers (FunctionDeclaration, etc.) below
-    // override them at the outermost walk. The top-level FunctionDeclaration handler is
-    // responsible for `checkRamOverride` and for opening a new dep-map key per function;
-    // it then dispatches into commonVisitors for the body, where the scope-pushing
-    // function visitors (FunctionExpression / ArrowFunctionExpression / nested
-    // FunctionDeclaration) take over.
+    {
+      key: globalKey,
+      scopes: [moduleFrame],
+      nsParamAliases: new Set<string>(),
+      namespaceAliases: new Map<string, string>(),
+      apiLeafAliases: new Map<string, string>(),
+    },
+    // commonVisitors first so the top-level handlers below override them at the outermost walk.
+    // The top-level FunctionDeclaration handler is responsible for `checkRamOverride` and for
+    // opening a new dep-map key per function; it then dispatches into commonVisitors for the body,
+    // where the scope-pushing function visitors take over.
     Object.assign(commonVisitors(), {
       ImportDeclaration: (node: acorn.ImportDeclaration, st: State) => {
         const rawImportModuleName = node.source.value;
@@ -833,11 +1035,21 @@ function parseOnlyCalculateDeps(
         }
         // node.id will be null when using 'export default'. Add a module name indicating the default export.
         const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
-        // Seed the scope chain with the module frame and this function's own frame. We walk
-        // the body directly so the commonVisitors FunctionDeclaration handler doesn't fire
-        // on this same node and double-push the frame.
+        // Seed the scope chain with the module frame and this function's own frame. We walk the
+        // body directly so the commonVisitors FunctionDeclaration handler doesn't fire on this
+        // same node and double-push the frame.
         const ownFrame = buildScopeFrame(node.params, node.body);
-        walk.recursive(node.body, { key, scopes: [moduleFrame, ownFrame] }, commonVisitors());
+        walk.recursive(
+          node.body,
+          {
+            key,
+            scopes: [moduleFrame, ownFrame],
+            nsParamAliases: new Set<string>(),
+            namespaceAliases: new Map<string, string>(),
+            apiLeafAliases: new Map<string, string>(),
+          },
+          commonVisitors(),
+        );
       },
       ExportNamedDeclaration: (
         node: acorn.ExportNamedDeclaration,
