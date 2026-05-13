@@ -5,7 +5,7 @@ import { CityName, CompletedProgramName, FactionWorkType, LocationName } from "@
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { getAugCost, installAugmentations } from "../Augmentation/AugmentationHelpers";
+import { getAugCost, installAugmentations, soaAugmentationNames } from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
@@ -141,6 +141,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
+      // SoA augmentations don't use the bitnode AugmentationMoneyCost multiplier;
+      // their cost only scales with the number of SoA augs already owned.
+      if (soaAugmentationNames.includes(augName)) {
+        return aug.baseCost;
+      }
       return aug.baseCost * currentNodeMults.AugmentationMoneyCost;
     },
     getAugmentationPrice: (ctx) => (_augName) => {
