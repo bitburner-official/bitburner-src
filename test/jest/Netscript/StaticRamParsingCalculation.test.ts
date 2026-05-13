@@ -271,6 +271,28 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
     });
   });
 
+  // Some scripts may hide functions from static analysis (e.g. `ns["hack"]()`)
+  // but still need that function in static allocation. A bare `ns.hack` reference without
+  // calling (e.g. `void ns.hack`) registers that cost
+  describe("Bare ns.hack reference with computed-member call (ram-dodge padding)", function () {
+    it('still attributes hack when the invoke path uses ns["hack"]()', function () {
+      const code = `
+export async function main(ns) {
+  void ns.hack;
+  const host = "n00dles";
+  await ns["hack"](host);
+}
+`;
+      const calc = calculateRamUsage(code, filename, server, new Map());
+      if ("errorCode" in calc) {
+        throw new Error(calc.errorMessage ?? String(calc.errorCode));
+      }
+      expectCost(calc.cost, HackCost);
+      const names = (calc.entries ?? []).map((e) => e.name);
+      expect(names).toContain("hack");
+    });
+  });
+
   describe("Single files with non-core NS functions", function () {
     it("Hacknet NS functions with an individual cost", function () {
       const code = `
