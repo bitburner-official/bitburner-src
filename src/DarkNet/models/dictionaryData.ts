@@ -209,8 +209,6 @@ export const presetNames = [
   "Anor_Londo",
   "The_Painted_World",
   "The_Depths",
-  "__proto__",
-  "constructor",
 ] as const;
 
 export const ServerNamePrefixes = [
