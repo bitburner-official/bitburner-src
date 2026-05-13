@@ -15,9 +15,7 @@ describe("AllServers can be saved and loaded", () => {
   it("saves and loads servers correctly", () => {
     prestigeAllServers();
     expect(GetAllServers(true)).toEqual([]);
-    // TODO: Rename to __proto__ when adding "__proto__" and "constructor" back to the list of potential darknet
-    // hostnames.
-    const hostname = "__proto__temp";
+    const hostname = "__proto__";
     const server1 = new Server({
       hostname,
       ip: "173.78.146.183" as IPAddress,
@@ -27,7 +25,7 @@ describe("AllServers can be saved and loaded", () => {
 
     const serializedServers = saveAllServers();
     expect(serializedServers).toEqual(
-      `{"__proto__temp":{"ctor":"Server","data":{"contracts":[],"cpuCores":1,"ftpPortOpen":false,"hasAdminRights":false,"hostname":"__proto__temp","httpPortOpen":false,"ip":"173.78.146.183","isConnectedTo":false,"maxRam":0,"messages":[],"organizationName":"","programs":[],"scripts":{"ctor":"JSONMap","data":[]},"serversOnNetwork":[],"smtpPortOpen":false,"sqlPortOpen":false,"sshPortOpen":false,"textFiles":{"ctor":"JSONMap","data":[]},"purchasedByPlayer":false,"backdoorInstalled":false,"baseDifficulty":1,"hackDifficulty":1,"minDifficulty":1,"moneyAvailable":0,"moneyMax":0,"numOpenPortsRequired":5,"openPortCount":0,"requiredHackingSkill":1,"serverGrowth":1,"runningScripts":[]}}}`,
+      `{"__proto__":{"ctor":"Server","data":{"contracts":[],"cpuCores":1,"ftpPortOpen":false,"hasAdminRights":false,"hostname":"__proto__","httpPortOpen":false,"ip":"173.78.146.183","isConnectedTo":false,"maxRam":0,"messages":[],"organizationName":"","programs":[],"scripts":{"ctor":"JSONMap","data":[]},"serversOnNetwork":[],"smtpPortOpen":false,"sqlPortOpen":false,"sshPortOpen":false,"textFiles":{"ctor":"JSONMap","data":[]},"purchasedByPlayer":false,"backdoorInstalled":false,"baseDifficulty":1,"hackDifficulty":1,"minDifficulty":1,"moneyAvailable":0,"moneyMax":0,"numOpenPortsRequired":5,"openPortCount":0,"requiredHackingSkill":1,"serverGrowth":1,"runningScripts":[]}}}`,
     );
 
     loadAllServers(serializedServers);
