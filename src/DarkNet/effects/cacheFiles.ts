@@ -25,6 +25,9 @@ export const addCacheToServer = (server: DarknetServer, isPhishingCache: boolean
   if (!cacheFilename) {
     return { success: false, message: `Cannot generate path. prefix: ${prefix}` };
   }
+  if (server.caches.includes(cacheFilename)) {
+    return { success: false, message: `Duplicate cache file: ${cacheFilename}` };
+  }
   server.caches.push(cacheFilename);
   return { success: true, cacheFilename };
 };
