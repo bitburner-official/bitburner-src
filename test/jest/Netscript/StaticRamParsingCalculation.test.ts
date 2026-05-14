@@ -561,6 +561,37 @@ export async function main(ns) {
       expectCost(calculated, 0);
     });
 
+    // Opaque import: static analysis cannot prove `foo().hack` is not `ns.hack`; we intend to
+    // charge `hack` pessimistically until cross-module / receiver proof exists.
+    it("Imported factory foo().hack() charges ns.hack RAM (pessimistic)", function () {
+      const libCode = `
+        export function foo() {
+          return { "hack": function () {} };
+        }
+      `;
+      const lib = new Script("libTest.js" as ScriptFilePath, libCode);
+
+      const code = `
+        import { foo } from "libTest";
+        /** @param {NS} ns */
+        export async function main(ns) {
+          foo().hack();
+        }
+      `;
+      const calc = calculateRamUsage(
+        code,
+        filename,
+        server,
+        new Map([["libTest.js" as ScriptFilePath, lib]]),
+      );
+      if ("errorCode" in calc) {
+        throw new Error(calc.errorMessage ?? String(calc.errorCode));
+      }
+      const names = (calc.entries ?? []).map((e) => e.name);
+      expect(names).toContain("hack");
+      expectCost(calc.cost, HackCost);
+    });
+
     it("Imported ns function", function () {
       const libCode = `
         export async function doHack(ns) { return await ns.hack("joesguns"); }
