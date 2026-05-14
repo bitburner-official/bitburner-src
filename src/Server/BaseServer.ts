@@ -322,6 +322,12 @@ export abstract class BaseServer implements IServer {
     if (value.data.runningScripts != null && Array.isArray(value.data.runningScripts)) {
       server.savedScripts = value.data.runningScripts;
     }
+    // Remove duplicate .lit and .msg files.
+    const messageSet = new Set(server.messages);
+    if (messageSet.size !== server.messages.length) {
+      console.warn("Found duplicate messages in ", server.messages);
+      server.messages = [...messageSet];
+    }
     // If textFiles is not an array, we've already done the 2.3 migration to textFiles and scripts as maps + path changes.
     if (!Array.isArray(server.textFiles)) return server;
 

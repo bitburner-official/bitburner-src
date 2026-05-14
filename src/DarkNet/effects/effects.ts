@@ -125,7 +125,7 @@ export const addClue = (server: DarknetServer) => {
   // Basic mechanics hints
   if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
-    if (hint) {
+    if (hint && !server.messages.includes(hint)) {
       server.messages.push(hint);
     }
   }
