@@ -42,7 +42,7 @@ string \| string\[\]
 
 </td><td>
 
-Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`<!-- -->.
+Filename or an array of filenames of text/script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`<!-- -->.
 
 
 </td></tr>
@@ -90,7 +90,7 @@ True if the file is successfully copied over and false otherwise. If the files a
 
 RAM cost: 0.6 GB
 
-Copies a script or literature (.lit) file(s) to another server. The files argument can be either a string specifying a single file to copy, or an array of strings specifying multiple files to copy.
+Copies text, script or literature (.lit) file(s) to another server. The files argument can be either a string specifying a single file to copy, or an array of strings specifying multiple files to copy.
 
 ## Example 1
 
