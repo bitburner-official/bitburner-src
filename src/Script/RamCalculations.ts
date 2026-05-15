@@ -278,6 +278,33 @@ function rootIsVisibleParam(name: string, scopes: ScopeFrame[]): boolean {
   return false;
 }
 
+/** Top-level `import` binding names in this module (default, namespace, and named specifiers). */
+function collectModuleImportLocals(ast: acorn.Node): Set<string> {
+  const names = new Set<string>();
+  if (ast.type !== "Program") return names;
+  for (const stmt of (ast as acorn.Program).body) {
+    if (stmt.type !== "ImportDeclaration") continue;
+    for (const spec of stmt.specifiers) {
+      if (spec.local?.type === "Identifier") names.add(spec.local.name);
+    }
+  }
+  return names;
+}
+
+/**
+ * True if `name` refers to a module import (not a parameter or inner local that shadows the same
+ * identifier).
+ */
+function calleeBindingIsModuleImport(name: string, scopes: ScopeFrame[], importedBindings: Set<string>): boolean {
+  if (!importedBindings.has(name)) return false;
+  for (let i = scopes.length - 1; i >= 0; i--) {
+    if (scopes[i].params.has(name) || scopes[i].locals.has(name)) {
+      return i === 0;
+    }
+  }
+  return false;
+}
+
 /** Strip parens / optional-chain wrappers from a variable initializer or assignment RHS. */
 function unwrapInit(init: acorn.Expression | null | undefined): acorn.Expression | null {
   if (!init) return null;
@@ -712,6 +739,8 @@ function parseOnlyCalculateDeps(
   const moduleFrame: ScopeFrame = { params: new Set(), locals: new Set() };
   visitForLocals(ast as acorn.Node, moduleFrame.locals);
 
+  const importedBindings = collectModuleImportLocals(ast as acorn.Node);
+
   // If we reference this internal name, we're really referencing that external name.
   // Filled when we import names from other modules.
   const internalToExternal: Record<string, string | undefined> = {};
@@ -741,6 +770,8 @@ function parseOnlyCalculateDeps(
     key: string;
     /** Active lexical scope chain, innermost frame last. */
     scopes: ScopeFrame[];
+    /** Module-top-level `import` locals; used for pessimistic `imported().api` charging. */
+    importedBindings: Set<string>;
     /** Locals assigned from `ns` / `this.ns` — treated like `ns` for path normalization. */
     nsParamAliases: Set<string>;
     /** Locals assigned from `ns.<namespace>` — maps local name to the first RamCosts segment. */
@@ -907,6 +938,17 @@ function parseOnlyCalculateDeps(
                 }
               }
             }
+            // Pessimistic: `import { foo } …; foo().hack()` may forward `ns.hack` from another module.
+            if (
+              callee.type === "Identifier" &&
+              node.property.type === "Identifier" &&
+              calleeBindingIsModuleImport(callee.name, st.scopes, st.importedBindings)
+            ) {
+              const apiLeaf = node.property.name;
+              if (lookupRamCost(apiLeaf)) {
+                addRef(st.key, apiLeaf);
+              }
+            }
           }
         }
         node.object && walkDeeper(node.object, st);
@@ -984,6 +1026,7 @@ function parseOnlyCalculateDeps(
     {
       key: globalKey,
       scopes: [moduleFrame],
+      importedBindings,
       nsParamAliases: new Set<string>(),
       namespaceAliases: new Map<string, string>(),
       apiLeafAliases: new Map<string, string>(),
@@ -1029,6 +1072,29 @@ function parseOnlyCalculateDeps(
           }
         }
       },
+      ClassDeclaration: (node: acorn.ClassDeclaration, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        // Top-level class bodies are walked under their own dependency key so NS API usage in
+        // methods is not attributed to the module global scope (which every import links to).
+        // Class RAM is charged only when the class is referenced from reachable code.
+        if (st.key !== globalKey || node.id === null) {
+          if (node.body) walkDeeper(node.body, st);
+          return;
+        }
+        const classKey = currentModule + "." + node.id.name;
+        const ownFrame = buildScopeFrame([], node.body);
+        walk.recursive(
+          node.body,
+          {
+            key: classKey,
+            scopes: [moduleFrame, ownFrame],
+            importedBindings,
+            nsParamAliases: new Set<string>(),
+            namespaceAliases: new Map<string, string>(),
+            apiLeafAliases: new Map<string, string>(),
+          },
+          commonVisitors(),
+        );
+      },
       FunctionDeclaration: (node: acorn.FunctionDeclaration) => {
         if (node.id?.name === "main") {
           checkRamOverride(node.body);
@@ -1044,6 +1110,7 @@ function parseOnlyCalculateDeps(
           {
             key,
             scopes: [moduleFrame, ownFrame],
+            importedBindings,
             nsParamAliases: new Set<string>(),
             namespaceAliases: new Map<string, string>(),
             apiLeafAliases: new Map<string, string>(),
