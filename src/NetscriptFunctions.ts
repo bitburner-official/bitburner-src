@@ -96,7 +96,7 @@ import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
 import { hasContractExtension } from "./Paths/ContractFilePath";
-import { getRamCost } from "./Netscript/RamCostGenerator";
+import { getRamCost, RamCostConstants } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
@@ -1505,6 +1505,9 @@ export const ns: InternalAPI<NSFull> = {
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);
+	if(name === 'baseCost') {
+		return RamCostConstants.Base;
+	}
     return getRamCost(name.split("."), true);
   },
   tprintRaw: () => (value) => {
