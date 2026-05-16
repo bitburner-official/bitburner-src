@@ -255,7 +255,7 @@ export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
     xpGained: xpGained,
   };
   if (newCharge >= 1) {
-    moveDarknetServer(server, -2, 4);
+    moveDarknetServer(server, 2, 4);
     DarknetState.migrationInductionServers.set(server.hostname, 0);
   }
   return result;
