@@ -33,9 +33,9 @@ export function Info(props: IProps): React.ReactElement {
         </Typography>
       )}
       <Typography>-------------------------</Typography>
-      <ReputationInfo favor={props.faction.favor} playerReputation={props.faction.playerReputation} />
+      <ReputationInfo playerReputation={props.faction.playerReputation} />
       <Typography>-------------------------</Typography>
-      <FavorInfo favor={props.faction.favor} />
+      <FavorInfo favor={props.faction.favor} playerReputation={props.faction.playerReputation} />
       <Typography>-------------------------</Typography>
       <Typography variant="h5" style={{ display: "flex", alignItems: "center" }}>
         <Grade style={{ fontSize: "1.1em", marginRight: "10px" }} />

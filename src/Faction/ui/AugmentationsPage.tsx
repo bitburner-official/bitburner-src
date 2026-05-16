@@ -204,8 +204,8 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
           >
             {multiplierComponent}
             <Box>
-              <ReputationInfo favor={faction.favor} playerReputation={faction.playerReputation} boldLabel={true} />
-              <FavorInfo favor={faction.favor} boldLabel={true} />
+              <ReputationInfo playerReputation={faction.playerReputation} boldLabel={true} />
+              <FavorInfo favor={faction.favor} playerReputation={faction.playerReputation} boldLabel={true} />
             </Box>
           </Box>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
