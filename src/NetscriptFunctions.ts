@@ -1505,9 +1505,9 @@ export const ns: InternalAPI<NSFull> = {
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);
-	if(name === 'baseCost') {
-		return RamCostConstants.Base;
-	}
+    if (name === "baseCost") {
+      return RamCostConstants.Base;
+    }
     return getRamCost(name.split("."), true);
   },
   tprintRaw: () => (value) => {
