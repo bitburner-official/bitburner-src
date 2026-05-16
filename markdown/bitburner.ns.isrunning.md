@@ -9,7 +9,7 @@ Check if a script is running.
 **Signature:**
 
 ```typescript
-isRunning(script: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
+isRunning(script?: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ script
 
 </td><td>
 
-Filename or PID of script to check. This is case-sensitive.
+_(Optional)_ Filename (case-sensitive) or PID of script to check. Optional, default to the current script's pid.
 
 
 </td></tr>
