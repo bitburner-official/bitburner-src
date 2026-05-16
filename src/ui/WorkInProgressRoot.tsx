@@ -219,7 +219,6 @@ export function WorkInProgressRoot(): React.ReactElement {
         },
         unfocus: () => {
           Router.toPage(Page.City);
-          Player.stopFocusing();
         },
       },
       title: `You are attempting ${crime.workName}`,
@@ -266,7 +265,6 @@ export function WorkInProgressRoot(): React.ReactElement {
         },
         unfocus: () => {
           Router.toPage(Page.Location, { location: Locations[classWork.location] });
-          Player.stopFocusing();
         },
       },
       title: (
@@ -303,7 +301,6 @@ export function WorkInProgressRoot(): React.ReactElement {
         },
         unfocus: () => {
           Router.toPage(Page.Terminal);
-          Player.stopFocusing();
         },
       },
       title: (
@@ -334,7 +331,6 @@ export function WorkInProgressRoot(): React.ReactElement {
         },
         unfocus: () => {
           Router.toPage(Page.Terminal);
-          Player.stopFocusing();
         },
       },
       title: (
@@ -388,7 +384,6 @@ export function WorkInProgressRoot(): React.ReactElement {
         },
         unfocus: () => {
           Router.toPage(Page.Faction, { faction });
-          Player.stopFocusing();
         },
       },
       title: (
@@ -439,7 +434,6 @@ export function WorkInProgressRoot(): React.ReactElement {
           Router.toPage(Page.Job);
         },
         unfocus: () => {
-          Player.stopFocusing();
           Router.toPage(Page.Job);
         },
       },

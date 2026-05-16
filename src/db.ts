@@ -1,5 +1,6 @@
 import type { SaveData } from "./types";
-import { isSaveData } from "./utils/TypeAssertion";
+import { InvalidSaveData } from "./utils/SaveDataUtils";
+import { isSaveData, validateSaveData } from "./utils/TypeAssertion";
 
 export class IndexedDBVersionError extends Error {
   constructor(message: string, options: ErrorOptions) {
@@ -100,6 +101,12 @@ export async function load(skipCheckingLoadedData = false): Promise<SaveData | u
 }
 
 export async function save(saveData: SaveData): Promise<void> {
+  // Validate save data at runtime. Players may accidentally manipulate the prototypes of built-in JS objects and cause
+  // functions in SaveObject.ts to generate invalid save data.
+  const validationResult = validateSaveData(saveData);
+  if (!validationResult.success) {
+    throw new InvalidSaveData(validationResult.message);
+  }
   const db = await getDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(["savestring"], "readwrite");

@@ -39,7 +39,7 @@ Once you have enough ports opened on a [server](servers.md) and have ran the NUK
 
 ### For specific details of how Hacking work "offline"
 
-See [Offline And Bonus Time](../advanced/offlineandbonustime.md).
+See [Offline And Bonus Time](../programming/offlineandbonustime.md).
 
 ## General Hacking Mechanics
 

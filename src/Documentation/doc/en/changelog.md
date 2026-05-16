@@ -462,3 +462,5 @@
 - Consistently check when to show intelligence skill (#2692) (@catloversg)
 - Fix api-extractor warnings (#2701) (@catloversg)
 - Add comments explaining redundant check in product calculation (#2705) (@catloversg)
+- Update tests related to calculateExp and clampNumber (#2713) (@catloversg)
+- Update Electron (#2712) (@catloversg)

@@ -25,6 +25,9 @@ export const addCacheToServer = (server: DarknetServer, isPhishingCache: boolean
   if (!cacheFilename) {
     return { success: false, message: `Cannot generate path. prefix: ${prefix}` };
   }
+  if (server.caches.includes(cacheFilename)) {
+    return { success: false, message: `Duplicate cache file: ${cacheFilename}` };
+  }
   server.caches.push(cacheFilename);
   return { success: true, cacheFilename };
 };
@@ -85,7 +88,7 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): string 
 };
 
 export const getMoneyReward = (difficulty: number): string => {
-  const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
+  const sf15_3Factor = Player.activeSourceFileLvl(15) >= 3 ? 1.5 : 1;
   const reward =
     1.2 ** difficulty *
     1e7 *

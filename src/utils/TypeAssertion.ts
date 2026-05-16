@@ -1,4 +1,5 @@
 import type { SaveData, Unknownify } from "../types";
+import type { Result } from "@nsdefs";
 
 // This function is empty because Unknownify<T> is a typesafe assertion on any object with no runtime checks needed.
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -90,12 +91,35 @@ export function assertNumberArray(unknownData: unknown, assertFinite = false): a
   }
 }
 
-export function isSaveData(unknownData: unknown): unknownData is SaveData {
-  if (typeof unknownData === "string") {
-    return true;
+export function validateSaveData(unknownData: unknown): Result {
+  if (unknownData == null) {
+    return { success: false, message: `Save data is ${unknownData}` };
   }
 
-  return unknownData instanceof Uint8Array && unknownData.buffer instanceof ArrayBuffer;
+  if (unknownData === "") {
+    return { success: false, message: "Save data is an empty string" };
+  }
+  if (typeof unknownData === "string") {
+    return { success: true };
+  }
+
+  if (!(unknownData instanceof Uint8Array)) {
+    console.error(unknownData);
+    return { success: false, message: "Save data is not an instance of Uint8Array" };
+  }
+  if (unknownData.length === 0) {
+    return { success: false, message: "Save data is an empty Uint8Array" };
+  }
+  if (!(unknownData.buffer instanceof ArrayBuffer)) {
+    console.error(unknownData.buffer);
+    return { success: false, message: "Save data is a Uint8Array, but its buffer is not an ArrayBuffer" };
+  }
+
+  return { success: true };
+}
+
+export function isSaveData(unknownData: unknown): unknownData is SaveData {
+  return validateSaveData(unknownData).success;
 }
 
 export function assertSaveData(unknownData: unknown): asserts unknownData is SaveData {

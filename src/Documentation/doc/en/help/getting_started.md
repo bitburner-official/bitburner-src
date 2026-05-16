@@ -377,7 +377,7 @@ Paste the following code into the [Script](../basic/scripts.md) editor:
         // amount of servers
         while (i < ns.cloud.getServerLimit()) {
             // Check if we have enough money to purchase access to a server
-            if (ns.getServerMoneyAvailable("home") > ns.cloud.getRamLimit(ram)) {
+            if (ns.getServerMoneyAvailable("home") > ns.cloud.getServerCost(ram)) {
                 // If we have enough money, then:
                 //  1. Purchase the server
                 //  2. Copy our hacking script onto the newly purchased cloud server

@@ -1274,9 +1274,11 @@ export class Bladeburner implements OperationTeam {
     }
     this.maxRank = Math.max(this.rank, this.maxRank);
 
-    const bladeburnerFaction = Factions[FactionName.Bladeburners];
-    if (bladeburnerFaction.isMember) {
-      bladeburnerFaction.playerReputation += calculateActionReputationGain(person, change);
+    if (change > 0) {
+      const bladeburnerFaction = Factions[FactionName.Bladeburners];
+      if (bladeburnerFaction.isMember) {
+        bladeburnerFaction.playerReputation += calculateActionReputationGain(person, change);
+      }
     }
 
     // Gain skill points

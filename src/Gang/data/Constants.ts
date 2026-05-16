@@ -23,7 +23,7 @@ export const GangConstants = {
     FactionName.SpeakersForTheDead,
     FactionName.NiteSec,
     FactionName.TheBlackHand,
-  ] as string[],
+  ] as FactionName[],
   GangKarmaRequirement: -54000,
   /** Normal number of game cycles processed at once (2 seconds) */
   minCyclesToProcess: 2000 / CONSTANTS.MilliPerCycle,

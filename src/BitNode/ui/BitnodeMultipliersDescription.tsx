@@ -68,6 +68,7 @@ export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFea
       <CloudServersMults n={n} mults={mults} />
       <StockMults n={n} mults={mults} />
       <CrimeMults n={n} mults={mults} />
+      <DarknetMults n={n} mults={mults} />
       <InfiltrationMults n={n} mults={mults} />
       <CompanyMults n={n} mults={mults} />
       <GangMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
@@ -224,6 +225,17 @@ function CrimeMults({ mults }: IMultsProps): React.ReactElement {
   };
 
   return <BNMultTable sectionName="Crime" rowData={rows} mults={mults} />;
+}
+
+function DarknetMults({ mults }: IMultsProps): React.ReactElement {
+  const rows: IBNMultRows = {
+    DarknetMoneyMultiplier: {
+      name: "Darknet Money",
+      color: Settings.theme.money,
+    },
+  };
+
+  return <BNMultTable sectionName="Darknet" rowData={rows} mults={mults} />;
 }
 
 function SkillMults({ mults }: IMultsProps): React.ReactElement {
