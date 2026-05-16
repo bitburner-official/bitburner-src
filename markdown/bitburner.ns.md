@@ -718,7 +718,9 @@ Get the metadata of a file.
 
 </td><td>
 
-Get the ram cost of a netscript function.
+Get the RAM cost of a netscript function.
+
+The base RAM cost per script thread can also be retrieved by using `"baseCost"` as argument to this function.
 
 
 </td></tr>
