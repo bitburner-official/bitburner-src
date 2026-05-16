@@ -13,6 +13,7 @@ import {
   BladeburnerOperationName,
   CityName,
   CrimeType,
+  FactionName,
 } from "@enums";
 import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import { CrimeWork } from "../../../src/Work/CrimeWork";
@@ -21,6 +22,8 @@ import type { Skills } from "@nsdefs";
 import { applyAugmentation } from "../../../src/Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { BlackOperation } from "../../../src/Bladeburner/Actions/BlackOperation";
+import { joinFaction } from "../../../src/Faction/FactionHelpers";
+import { Factions } from "../../../src/Faction/Factions";
 
 describe("Bladeburner Actions", () => {
   const SampleContract = Contract.createId(BladeburnerContractName.Tracking);
@@ -244,8 +247,12 @@ describe("Bladeburner Actions", () => {
     describe.each([SampleOperation, SampleBlackOp])("operations and black operations decrease rank", (id) => {
       it(`${id.type}`, () => {
         before = bb.rank;
+        joinFaction(Factions[FactionName.Bladeburners]);
+        expect(Player.factions.includes(FactionName.Bladeburners)).toBe(true);
+        expect(Factions[FactionName.Bladeburners].playerReputation).toBe(0);
         complete(id, forceFailure);
         expect(bb.rank).toBeLessThan(before);
+        expect(Factions[FactionName.Bladeburners].playerReputation).toBe(0);
       });
     });
   });
@@ -262,6 +269,7 @@ describe("Bladeburner Actions", () => {
 
   beforeEach(() => {
     setPlayer(new PlayerObject());
+    Factions[FactionName.Bladeburners].prestigeSourceFile();
 
     /** Need BN5 to receive Int EXP */
     Player.sourceFiles.set(5, 3);

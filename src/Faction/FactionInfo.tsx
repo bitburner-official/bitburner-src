@@ -40,6 +40,8 @@ import { CONSTANTS } from "../Constants";
 import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { CovenantCampaign } from "./ui/CovenantCampaign";
+import { GangCampaign } from "./ui/GangCampaign";
+import { GangConstants } from "../Gang/data/Constants";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;
@@ -812,3 +814,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     },
   }),
 };
+
+for (const factionName of GangConstants.Names) {
+  FactionInfos[factionName].campaign = () => <GangCampaign factionName={factionName} />;
+}

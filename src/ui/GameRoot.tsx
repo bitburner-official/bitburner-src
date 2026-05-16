@@ -266,6 +266,13 @@ export function GameRoot(): React.ReactElement {
           }
           break;
       }
+      // If the current page is Page.Work, the player is focusing on their current work. Switching to another page ends
+      // that focus, so we must call Player.stopFocusing() immediately after Router.toPage() to keep Player.focus in
+      // sync. Instead of repeating this logic wherever Router.toPage() is called, we should centralize the check and
+      // the Player.stopFocusing() call here.
+      if (pageWithContext.page === Page.Work && page !== Page.Work && Player.currentWork && Player.focus) {
+        Player.stopFocusing();
+      }
       setNextPage({ page, ...context } as PageWithContext);
     },
     back: () => {

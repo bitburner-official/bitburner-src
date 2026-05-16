@@ -17,7 +17,6 @@ import { Player } from "@player";
 import { Typography, Button } from "@mui/material";
 
 import { FactionWorkType } from "@enums";
-import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { favorNeededToDonate } from "../formulas/donation";
@@ -111,7 +110,6 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
         {faction.name}
       </Typography>
       <Info faction={faction} factionInfo={factionInfo} />
-      <GangButton faction={faction} />
       {!isPlayersGang && (
         <>
           {factionInfo.offersWork() && (

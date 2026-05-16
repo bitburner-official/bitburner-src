@@ -20,12 +20,12 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 
 **There is an example starter script at the bottom of this document, to see some of these API methods in action.**
 
-- `dnet.getServerAuthDetails(hostname)` tells you a server's password hint and format, and if the server is offline or connected to the current server.
+- `dnet.getServerDetails(hostname)` tells you a server's password hint and format, and if the server is offline or connected to the current server.
 - `ns.dnet.probe()` lets you find darknet servers directly connected to your current server. Use this to find targets to crack and copy your script onto.
 - `await ns.dnet.authenticate(hostname, password)` lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `exec` and `scp` to move scripts onto that server.
 - Some servers require interactive feedback to guess their password. Use `await ns.dnet.heartbleed(hostname)` to check that server's logs and get clues after you attempt a password.
 - `ns.dnet.connectToSession(hostName, password)` lets you use a password you already know to log in to a darknet server at a distance. This is required to scp files there.
-- Some servers will have part of their max ram blocked off. Use `ns.dnet.influence.memoryReallocation()` to free it.
+- Some servers will have part of their max ram blocked off. Use `ns.dnet.memoryReallocation()` to free it.
 - Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
 - Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
 - Using `ns.dnet.setStasisLink()` will stasis lock the current server. This prevents it from moving or going offline, and also allows getting a session on the server at a distance like backdooring does.
@@ -86,12 +86,12 @@ Darknet servers cannot simply be broken into with a few port openers you can buy
 
 ### Cracking servers with dnet.authenticate and dnet.heartbleed
 
-Darknet servers require a password to interact with. To get started, use `dnet.getServerAuthDetails` to find out critical information about a server. It will give a hint to the password, and tell you if the server is still online.
+Darknet servers require a password to interact with. To get started, use `dnet.getServerDetails` to find out critical information about a server. It will give a hint to the password, and tell you if the server is still online.
 
-You can use `await ns.dnet.authenticate` to check if a guessed password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' security. Using more threads also speeds up this process. It may be faster to divide up the work across multiple scripts, if you can coordinate them. (Note that **`dnet.authenticate` can only target nearby connected servers**. You can verify if a server is connected to the current one using `dnet.probe` or `dnet.getServerAuthDetails`.)
+You can use `await ns.dnet.authenticate` to check if a guessed password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' security. Using more threads also speeds up this process. It may be faster to divide up the work across multiple scripts, if you can coordinate them. (Note that **`dnet.authenticate` can only target nearby connected servers**. You can verify if a server is connected to the current one using `dnet.probe` or `dnet.getServerDetails`.)
 
 ```js
-const details = ns.dnet.getServerAuthDetails(hostname);
+const details = ns.dnet.getServerDetails(hostname);
 if (!details.isConnectedToCurrentServer || !details.isOnline) {
   /* If the server isn't connected or is offline, we can't authenticate */
   return false;
@@ -123,12 +123,12 @@ Darknet servers are password-protected. This means that you will need to get a s
 
 Once you have authenticated, other scripts can then connect to that same server using `dnet.connectToSession` and the password for the server. This is synchronous and can be done at any distance, meaning you don't have to wait for an authenticate call.
 
-`scp` file transfers can be performed at any distance once you have established a session. However, `exec` also requires the script to either be run from a server adjacent to and connected to the target server, or a backdoor or stasis link on the target server. You can identify direct connections using `probe` or `getServerAuthDetails`.
+`scp` file transfers can be performed at any distance once you have established a session. However, `exec` also requires the script to either be run from a server adjacent to and connected to the target server, or a backdoor or stasis link on the target server. You can identify direct connections using `probe` or `getServerDetails`.
 
 ```js
 // the darknet server in "hostname" must be either backdoored, stasis linked, or directly connected to the server this script is running on
 // to allow exec calls from the current server
-if (ns.dnet.getServerAuthDetails(hostname).isConnectedToCurrentServer) {
+if (ns.dnet.getServerDetails(hostname).isConnectedToCurrentServer) {
   ns.dnet.connectToSession(hostname, previouslyDiscoveredPassword);
   ns.scp("my_script.js", hostname);
   ns.exec("my_script.js", hostname, {
@@ -214,7 +214,7 @@ export async function main(ns) {
  */
 export const serverSolver = async (ns, hostname) => {
   // Get key info about the server, so we know what kind it is and how to authenticate with it
-  const details = ns.dnet.getServerAuthDetails(hostname);
+  const details = ns.dnet.getServerDetails(hostname);
   if (!details.isConnectedToCurrentServer || !details.isOnline) {
     // If the server isn't connected or is offline, we can't authenticate
     return false;

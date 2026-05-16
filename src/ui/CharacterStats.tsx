@@ -533,14 +533,18 @@ export function CharacterStats(): React.ReactElement {
                   effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
                   color: Settings.theme.money,
                 },
+              ]}
+              color={Settings.theme.combat}
+            />
+            <MultiplierTable
+              rows={[
                 {
                   mult: "Darknet Money",
                   value: Player.mults.dnet_money,
                   effValue: Player.mults.dnet_money * currentNodeMults.DarknetMoneyMultiplier,
-                  color: Settings.theme.money,
                 },
               ]}
-              color={Settings.theme.combat}
+              color={Settings.theme.money}
             />
             {Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0 && (
               <MultiplierTable

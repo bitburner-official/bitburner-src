@@ -929,7 +929,7 @@ Get the ram cost of a script.
 
 Returns data of a server.
 
-If the server is a darknet server and has recently gone offline, it will return a dummy server object with `isOnline: false`<!-- -->.
+If the server is a darknet server, it will also contain the "isOnline" field. If the darknet server has recently gone offline, the returned object will be a dummy server object with `isOnline: false`<!-- -->.
 
 
 </td></tr>

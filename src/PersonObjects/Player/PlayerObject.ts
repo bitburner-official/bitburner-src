@@ -212,6 +212,12 @@ export class PlayerObject extends Person implements IPlayer {
         delete player.jobs[loadedCompanyName as CompanyName];
       }
     }
+    // A bug created ill-formed UTF-16 darknet hostnames that caused the in-game editor to crash. Player.currentServer
+    // may point to one of these invalid hostnames. This code migrates the invalid hostnames and protects against
+    // similar issues in the future.
+    if (!player.currentServer.isWellFormed()) {
+      player.currentServer = player.currentServer.toWellFormed();
+    }
     return player;
   }
 }

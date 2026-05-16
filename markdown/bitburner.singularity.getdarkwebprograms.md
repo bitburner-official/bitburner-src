@@ -9,11 +9,11 @@ Get a list of programs offered on the dark web.
 **Signature:**
 
 ```typescript
-getDarkwebPrograms(): string[];
+getDarkwebPrograms(): ProgramName[];
 ```
 **Returns:**
 
-string\[\]
+[ProgramName](./bitburner.programname.md)<!-- -->\[\]
 
 - a list of programs available for purchase on the dark web, or \[\] if Tor has not been purchased
 

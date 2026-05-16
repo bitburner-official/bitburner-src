@@ -1,3 +1,5 @@
+import "./utils/Protections"; // Side-effect: Protect against certain unrecoverable errors
+
 import React from "react";
 import ReactDOM from "react-dom";
 

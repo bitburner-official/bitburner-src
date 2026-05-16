@@ -780,6 +780,7 @@ describe("mutateDarknet and webstorm", () => {
 function validatePath(hostname: string): void {
   expectWithMessage(isDirectoryPath(`${hostname}/`), true, `Invalid hostname: ${hostname}`);
   expectWithMessage(isFilePath(`${hostname}/data.txt`), true, `Invalid hostname: ${hostname}`);
+  expectWithMessage(hostname.isWellFormed(), true, `Malformed hostname: ${hostname}`);
 }
 
 describe("Darknet server name generator", () => {
