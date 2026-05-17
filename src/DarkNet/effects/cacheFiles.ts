@@ -118,9 +118,7 @@ export const getStockReward = (difficulty: number): string => {
 };
 
 export const getDataFileReward = (difficulty: number, server: DarknetServer): string => {
-  const dataFiles = [];
-  dataFiles.push(...addClue(server));
-  dataFiles.push(...addClue(server));
+  const dataFiles = [...addClue(server), ...addClue(server)];
   if (dataFiles.length === 0) {
     return getMoneyReward(difficulty);
   }
