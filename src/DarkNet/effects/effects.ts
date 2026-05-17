@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import type { DarknetServerData, Person as IPerson } from "@nsdefs";
+import type { Person as IPerson, DarknetServerDetails } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import {
   commonPasswordDictionary,
@@ -16,17 +16,16 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { GenericResponseMessage, ModelIds, NET_WIDTH, ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
-import { getDarknetServer } from "../utils/darknetServerUtils";
+import { type DarknetServerData, getDarknetServer } from "../utils/darknetServerUtils";
 import {
   getAllMovableDarknetServers,
   getBackdooredDarknetServers,
   getNearbyNonEmptyPasswordServer,
   getStasisLinkServers,
 } from "../utils/darknetNetworkUtils";
-import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
+import { getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import { getTorRouter } from "../../Server/ServerHelpers";
 import { DarknetConstants } from "../Constants";
-import { GetServer } from "../../Server/AllServers";
 import { isLabyrinthServer } from "./labyrinth";
 import { NetscriptContext } from "../../Netscript/APIWrapper";
 import { helpers } from "../../Netscript/NetscriptHelpers";
@@ -54,15 +53,15 @@ export const handleFailedAuth = (server: DarknetServer, threads: number) => {
  * Returns the time it takes to authenticate on a server in milliseconds
  * @param darknetServerData - the target server to attempt a password on
  * @param person - the player's character
- * @param attemptedPassword - the password being attempted
+ * @param correctCharsInPassword - the number of correct characters in the password. Only used for TimingAttack servers, where it adds some small auth time delay per char
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
  * @param linear - if true, the time scaling is linear with the number of threads instead of having diminishing returns
  */
 export const calculateAuthenticationTime = (
-  darknetServerData: DarknetServerData,
+  darknetServerData: DarknetServerData | DarknetServerDetails,
   person: IPerson = Player,
   threads = 1,
-  attemptedPassword = "",
+  correctCharsInPassword = 0,
   linear = false,
 ) => {
   const chaRequired = darknetServerData.requiredCharismaSkill;
@@ -83,13 +82,8 @@ export const calculateAuthenticationTime = (
   const time =
     baseTime * skillFactor * backdoorFactor * underleveledFactor * hasBootsFactor * hasSf15_2Factor * threadsFactor;
 
-  // We need to call GetServer and check if it's a dnet server later because this function can be called by formulas
-  // APIs (darknetServerData.hostname may be an invalid hostname).
-  const server = GetServer(darknetServerData.hostname);
-  const password = server instanceof DarknetServer ? server.password : "";
   // Add extra time for timing attack server, per correct character
-  const sharedChars =
-    darknetServerData.modelId === ModelIds.TimingAttack ? getSharedChars(password, attemptedPassword) : 0;
+  const sharedChars = darknetServerData.modelId === ModelIds.TimingAttack ? correctCharsInPassword : 0;
   const sharedCharsExtraTime = sharedChars * 50 * threadsFactor;
 
   return time * calculateIntelligenceBonus(person.skills.intelligence, 0.25) + sharedCharsExtraTime;
@@ -131,7 +125,7 @@ export const addClue = (server: DarknetServer) => {
   // Basic mechanics hints
   if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
-    if (hint) {
+    if (hint && !server.messages.includes(hint)) {
       server.messages.push(hint);
     }
   }
@@ -261,7 +255,7 @@ export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
     xpGained: xpGained,
   };
   if (newCharge >= 1) {
-    moveDarknetServer(server, -2, 4);
+    moveDarknetServer(server, 2, 4);
     DarknetState.migrationInductionServers.set(server.hostname, 0);
   }
   return result;

@@ -4,7 +4,9 @@
 
 ## NS.getFunctionRamCost() method
 
-Get the ram cost of a netscript function.
+Get the RAM cost of a netscript function.
+
+The base RAM cost per script thread can also be retrieved by using `"baseCost"` as argument to this function.
 
 **Signature:**
 
@@ -42,7 +44,7 @@ string
 
 </td><td>
 
-The fully-qualified function name, without the leading `ns`<!-- -->. Example inputs: `hack`<!-- -->, `tprint`<!-- -->, `stock.getPosition`<!-- -->.
+The fully-qualified function name, without the leading `ns`<!-- -->.
 
 
 </td></tr>
@@ -55,4 +57,14 @@ number
 ## Remarks
 
 RAM cost: 0 GB
+
+## Example
+
+
+```js
+const RAM_baseCost = ns.getFunctionRamCost('baseCost');
+const RAM_for_hack = ns.getFunctionRamCost('hack');
+const RAM_for_tprint = ns.getFunctionRamCost('tprint');
+const RAM_for_stock_getPosition = ns.getFunctionRamCost('stock.getPosition');
+```
 

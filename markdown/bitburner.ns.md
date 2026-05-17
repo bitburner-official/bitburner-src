@@ -718,7 +718,9 @@ Get the metadata of a file.
 
 </td><td>
 
-Get the ram cost of a netscript function.
+Get the RAM cost of a netscript function.
+
+The base RAM cost per script thread can also be retrieved by using `"baseCost"` as argument to this function.
 
 
 </td></tr>
@@ -929,7 +931,7 @@ Get the ram cost of a script.
 
 Returns data of a server.
 
-If the server is a darknet server and has recently gone offline, it will return a dummy server object with `isOnline: false`<!-- -->.
+If the server is a darknet server, it will also contain the "isOnline" field. If the darknet server has recently gone offline, the returned object will be a dummy server object with `isOnline: false`<!-- -->.
 
 
 </td></tr>

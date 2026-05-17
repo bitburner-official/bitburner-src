@@ -54,7 +54,7 @@ import type { PositiveNumber } from "../types";
 import { Crimes } from "../Crime/Crimes";
 import { calculateEffectiveSharedThreads, calculateShareBonus } from "../NetworkShare/Share";
 import { calculateAuthenticationTime } from "../DarkNet/effects/effects";
-import { assertDarknetServerData } from "../Netscript/TypeAssertion";
+import { assertDarknetServerDetails } from "../Netscript/TypeAssertion";
 import { getRamBlockRemoved } from "../DarkNet/effects/ramblock";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
@@ -482,27 +482,28 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
     dnet: {
       getAuthenticateTime:
         (ctx) =>
-        (_darknetServerData, _threads, _player): number => {
-          assertDarknetServerData(ctx, _darknetServerData);
+        (_darknetServerDetails, _threads, _player, _correctCharactersInPassword): number => {
+          assertDarknetServerDetails(ctx, _darknetServerDetails);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
-          return calculateAuthenticationTime(_darknetServerData, person, threads);
+          const correctChars = helpers.number(ctx, "correctCharactersInPassword", _correctCharactersInPassword ?? 0);
+          return calculateAuthenticationTime(_darknetServerDetails, person, threads, correctChars);
         },
       getHeartbleedTime:
         (ctx) =>
-        (_darknetServerData, _threads, _player): number => {
-          assertDarknetServerData(ctx, _darknetServerData);
+        (_darknetServerDetails, _threads, _player): number => {
+          assertDarknetServerDetails(ctx, _darknetServerDetails);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
-          return calculateAuthenticationTime(_darknetServerData, person, threads) * 1.5;
+          return calculateAuthenticationTime(_darknetServerDetails, person, threads) * 1.5;
         },
       getExpectedRamBlockRemoved:
         (ctx) =>
-        (_darknetServerData, _threads, _person): number => {
-          assertDarknetServerData(ctx, _darknetServerData);
+        (_darknetServerDetails, _threads, _person): number => {
+          assertDarknetServerDetails(ctx, _darknetServerDetails);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _person ?? Player);
-          return getRamBlockRemoved(_darknetServerData, threads, person);
+          return getRamBlockRemoved(_darknetServerDetails, threads, person);
         },
     },
   };

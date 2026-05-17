@@ -106,7 +106,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     value: 10,
   },
   {
-    costPerLevel: 200,
+    costPerLevel: 25,
     desc: "Generate a random Coding Contract somewhere on the network",
     name: HashUpgradeEnum.GenerateCodingContract,
     effectText: (level: number): JSX.Element | null => <>Generated {level} contracts.</>,

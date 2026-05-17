@@ -81,7 +81,7 @@ export function extendAcornWalkForTypeScriptNodes(base: any) {
   }
   // Only walk relevant TypeScript nodes.
   base.TSModuleBlock = base.BlockStatement;
-  base.TSAsExpression = base.TSNonNullExpression = base.ExpressionStatement;
+  base.TSTypeAssertion = base.TSAsExpression = base.TSNonNullExpression = base.ExpressionStatement;
   base.TSModuleDeclaration = (node: any, state: any, callback: any) => {
     callback(node.body, state);
   };

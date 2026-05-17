@@ -1,5 +1,58 @@
 # Changelog
 
+## v3.0.1 Dev: 17 May 2026
+
+### BREAKING CHANGES
+
+- Change getServer return type; rename getServerAuthDetails and add missing dnet properties (#2746) (@ficocelliguy)
+
+### MISC
+
+- Cache reward fixes (#2731) (@ficocelliguy)
+- Fix typo in darknet authentication response message (#2734) (@catloversg)
+- Fix: Tutorial links to outdated faq url (#2733) (@catloversg)
+- Fix: Player can switch tabs without losing focus on current work (#2724) (@catloversg)
+- Add new command to upload a directory (#2659) (@hexagonrecursion)
+- Add HJKL key mappings for infiltration arrows (#2742) (@mahlquistj)
+- Prevent generating malformed darknet server hostname (#2744) (@catloversg)
+- Support angle bracket type assertions in RAM calculation (#2751) (@catloversg)
+- Fix typo in augmentation description (#2760) (@gmcew)
+- Reduce the RAM cost of ns.rm() to match ns.scp() (#2761) (@NagaOuroboros)
+- Temporarily remove darknet servers with unusual hostnames (#2757) (@catloversg)
+- Fix: Duplicate .lit and .cache files can be generated in dnet (#2763) (@catloversg)
+- Allow getFunctionRamCost to get base RAM cost for scripts (#2771) (@Mathekatze)
+
+### DOCUMENTATION
+
+- Remove TS type annotation from doc example script (#2721) (@ficocelliguy)
+- Update list of RFA community tools (#2722) (@CTNOriginals)
+- Fix incorrect cloud API example (#2738) (@catloversg)
+- Remove non-existent influence namespace in Darknet documentation (#2748) (@Berdes)
+- Remove spoiler for Offline scripts and bonus time page and make it accessible early-game (#2749) (@Berdes)
+- Clarify ns.scp and ns.isRunning (#2769) (@catloversg)
+
+### SPOILER CHANGES - UI
+
+- Show hints of Gang mechanic in pre-endgame (#2723) (@catloversg)
+- Break out Darknet BN and player mults as separate entries (#2745) (@gmcew)
+
+### SPOILER CHANGES - MISC
+
+- Cancel faction work instead of finishing it when creating gang (#2726) (@catloversg)
+- Lower darknet BN money mults on hard nodes (#2743) (@ficocelliguy)
+- Change getDarkwebPrograms return type to ProgramName[] (#2754) (@catloversg)
+- Fix: getAugmentationBasePrice ignores bitnode mult for SoA augs (#2756) (@SAY-5)
+- Rebalance hash base cost of generating coding contract (#2759) (@gmcew)
+- Ensure induceServerMigration moves servers randomly (#2767) (@catloversg)
+- Do not decrease player reputation when failing bladeburner actions (#2768) (@catloversg)
+
+### CODEBASE/REFACTOR/WORKFLOW/JEST/TOOL/DEPS
+
+- Update action versions (#2718) (@Snarling)
+- Remove duplicate getStockFromSymbol function (#2725) (@catloversg)
+- Update game version (#2732) (@catloversg)
+- Harden saving to avoid save data corruption (#2755) (@catloversg)
+
 ## v3.0.0: 1 May 2026
 
 ### BREAKING CHANGES
@@ -462,3 +515,5 @@
 - Consistently check when to show intelligence skill (#2692) (@catloversg)
 - Fix api-extractor warnings (#2701) (@catloversg)
 - Add comments explaining redundant check in product calculation (#2705) (@catloversg)
+- Update tests related to calculateExp and clampNumber (#2713) (@catloversg)
+- Update Electron (#2712) (@catloversg)

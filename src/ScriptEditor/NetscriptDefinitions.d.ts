@@ -2655,9 +2655,10 @@ export interface Singularity {
    * @remarks
    * RAM cost: 2.5 GB * 16/4/1
    *
+   * This excludes the player's price multiplier, but does include the relevant BitNode multiplier (for all augs that aren't part of Shadows of Anarchy, which doesn't use BitNode multipliers).
    *
    * @param augName - Name of Augmentation.
-   * @returns Base price of the augmentation, before price multiplier.
+   * @returns Base price of the augmentation, before the player's price multiplier.
    */
   getAugmentationBasePrice(augName: string): number;
 
@@ -2835,7 +2836,7 @@ export interface Singularity {
    * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
    * been purchased
    */
-  getDarkwebPrograms(): string[];
+  getDarkwebPrograms(): ProgramName[];
 
   /**
    * Check the price of an exploit on the dark web
@@ -4412,54 +4413,6 @@ type DarknetResponseCode = _ValueOf<DarknetResponseCodeType>;
 /** @public */
 export type DarknetResult = { success: boolean; code: DarknetResponseCode; message: string };
 
-/**
- * Darknet server data.
- * @public
- */
-export interface DarknetServerData {
-  /** Hostname. Must be unique */
-  hostname: string;
-  /** IP Address. Must be unique */
-  ip: string;
-  /** Flag indicating whether the player has admin/root access to this server */
-  hasAdminRights: boolean;
-  /** Flag indicating whether the player's terminal is currently connected to this server */
-  isConnectedTo: boolean;
-  /** Number of CPU cores */
-  cpuCores: number;
-  /** Used RAM (GB). i.e. unavailable RAM */
-  ramUsed: number;
-  /** Max RAM (GB) of this server */
-  maxRam: number;
-  /** Flag indicating whether this server has a backdoor installed by the player */
-  backdoorInstalled: boolean;
-  /** If the server has a stasis link applied */
-  hasStasisLink: boolean;
-  /** The amount of ram blocked by the server owner */
-  blockedRam: number;
-  /**
-   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
-   * You are supposed to experiment and discover the models.
-   */
-  modelId: string;
-  /** The generic password prompt for the server */
-  staticPasswordHint: string;
-  /** Data associated with the password hint */
-  passwordHintData: string;
-  /** The difficulty rating of the server, associated with its original depth in the net */
-  difficulty: number;
-  /** The depth of the server in the net */
-  depth: number;
-  /** The charisma skill required to heartbleed the server */
-  requiredCharismaSkill: number;
-  /** The interval at which the server periodically adds to its logs, in seconds. */
-  logTrafficInterval: number;
-  /** If this darknet server cannot be moved. True for fixed/story servers. */
-  isStationary: boolean;
-  /** Whether this server was purchased by the player. Always false for darknet servers */
-  purchasedByPlayer: boolean;
-}
-
 /** @public */
 export type CacheResult = {
   success: boolean;
@@ -4468,15 +4421,18 @@ export type CacheResult = {
 };
 
 /**
- * Details about a server's authentication schema
+ * Details about a darknet server
  * @public
  */
-interface ServerAuthDetails {
+interface DarknetServerDetails {
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
   hasSession: boolean;
-  /** The model ID of the server. Similar models share vulnerabilities. */
+  /**
+   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
+   * You are supposed to experiment and discover the models.
+   */
   modelId: string;
   /** Static password reminder text set for this server. */
   passwordHint: string;
@@ -4488,6 +4444,16 @@ interface ServerAuthDetails {
   passwordLength: number;
   /** The character set used in the password */
   passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
+  /** The amount of ram blocked by the server owner */
+  blockedRam: number;
+  /** The difficulty rating of the server, associated with its original depth in the net */
+  difficulty: number;
+  /** The current depth in the darknet of the server */
+  depth: number;
+  /** The charisma skill required to authenticate on the server */
+  requiredCharismaSkill: number;
+  /** If this darknet server cannot be moved. True for fixed/story servers. */
+  isStationary: boolean;
 }
 
 /**
@@ -4653,15 +4619,18 @@ export interface Darknet {
   getStasisLinkedServers(returnByIP?: boolean): string[];
 
   /**
-   * Returns the server's authentication protocol details.
+   * Returns the darknet-specific details of the server.
+   *
+   * If the darknet server has recently gone offline, the returned object will be a dummy server object with
+   * `isOnline: false`.
    *
    * @remarks
    * RAM cost: 0.1 GB
    *
    * @param host - Hostname/IP of the server to analyze. Defaults to the running script's server if not specified.
-   * @returns An object containing the server's authentication protocol details.
+   * @returns An object containing the server's darknet-specific details.
    */
-  getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
+  getServerDetails(host?: string): DarknetServerDetails & { isOnline: boolean };
 
   /**
    * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
@@ -6528,26 +6497,32 @@ interface BladeburnerFormulas {
 interface DarknetFormulas {
   /**
    * Gets the time it will take to authenticate a server.
-   * @param darknetServerData - The server to check authentication time on.
+   * @param serverDetails - The server to check authentication time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
+   * @param correctCharactersInPassword - only used for 2G_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
    */
-  getAuthenticateTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getAuthenticateTime(
+    serverDetails: DarknetServerDetails,
+    threads?: number,
+    player?: Person,
+    correctCharactersInPassword?: number,
+  ): number;
   /**
    * Gets the time it will take to scrape logs from a server.
-   * @param darknetServerData - The server to check heartbleed log scraping time on.
+   * @param serverDetails - The server to check heartbleed log scraping time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
-   * @param darknetServerData - The server to check ram freed on.
+   * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 }
 
 /**
@@ -8057,7 +8032,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0.6 GB
    *
-   * Copies a script or literature (.lit) file(s) to another server. The files argument can be either a string
+   * Copies text, script or literature (.lit) file(s) to another server. The files argument can be either a string
    * specifying a single file to copy, or an array of strings specifying multiple files to copy.
    *
    * @example
@@ -8082,7 +8057,7 @@ export interface NS {
    * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (at any distance) to
    * establish a session.
    *
-   * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
+   * @param files - Filename or an array of filenames of text/script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.
    * @param source - Hostname/IP of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server.
    * @returns True if the file is successfully copied over and false otherwise. If the files argument is an array then this function will return false if any of the operations failed.
@@ -8209,8 +8184,8 @@ export interface NS {
   /**
    * Returns data of a server.
    *
-   * If the server is a darknet server and has recently gone offline, it will return a dummy server object with
-   * `isOnline: false`.
+   * If the server is a darknet server, it will also contain the "isOnline" field. If the darknet server has recently
+   * gone offline, the returned object will be a dummy server object with `isOnline: false`.
    *
    * @remarks
    * RAM cost: 2 GB
@@ -8218,7 +8193,7 @@ export interface NS {
    * @param host - Optional. Hostname/IP of the server. Defaults to the hostname of the running script's server.
    * @returns Data of the server.
    */
-  getServer(host?: string): Server | (DarknetServerData & { isOnline: boolean });
+  getServer(host?: string): Server & { isOnline?: boolean };
 
   /**
    * Get money available on a server.
@@ -8404,12 +8379,12 @@ export interface NS {
    * //The function call will return true if there is a script named foo.js running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
    * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
-   * @param script - Filename or PID of script to check. This is case-sensitive.
+   * @param script - Filename (case-sensitive) or PID of script to check. Optional, default to the current script's pid.
    * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
    * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
-  isRunning(script: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
+  isRunning(script?: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
 
   /**
    * Get general info about a running script.
@@ -8614,7 +8589,7 @@ export interface NS {
   /**
    * Delete a file.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0.6 GB
    *
    * Removes the specified file from the current server. This function works for every file
    * type except message (.msg) files.
@@ -9027,12 +9002,22 @@ export interface NS {
   getResetInfo(): ResetInfo;
 
   /**
-   * Get the ram cost of a netscript function.
+   * Get the RAM cost of a netscript function.
+   *
+   * The base RAM cost per script thread can also be retrieved by using `"baseCost"` as argument to this function.
    *
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param name - The fully-qualified function name, without the leading `ns`. Example inputs: `hack`, `tprint`, `stock.getPosition`.
+   * @param name - The fully-qualified function name, without the leading `ns`.
+   *
+   * @example
+   * ```js
+   * const RAM_baseCost = ns.getFunctionRamCost('baseCost');
+   * const RAM_for_hack = ns.getFunctionRamCost('hack');
+   * const RAM_for_tprint = ns.getFunctionRamCost('tprint');
+   * const RAM_for_stock_getPosition = ns.getFunctionRamCost('stock.getPosition');
+   * ```
    */
   getFunctionRamCost(name: string): number;
 

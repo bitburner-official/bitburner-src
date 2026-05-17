@@ -9,7 +9,12 @@ Gets the time it will take to authenticate a server.
 **Signature:**
 
 ```typescript
-getAuthenticateTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+getAuthenticateTime(
+    serverDetails: DarknetServerDetails,
+    threads?: number,
+    player?: Person,
+    correctCharactersInPassword?: number,
+  ): number;
 ```
 
 ## Parameters
@@ -32,12 +37,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-darknetServerData
+serverDetails
 
 
 </td><td>
 
-[DarknetServerData](./bitburner.darknetserverdata.md)
+[DarknetServerDetails](./bitburner.darknetserverdetails.md)
 
 
 </td><td>
@@ -75,6 +80,22 @@ player
 </td><td>
 
 _(Optional)_ The player object. Optional, defaults to the current player status
+
+
+</td></tr>
+<tr><td>
+
+correctCharactersInPassword
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ only used for 2G\_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
 
 
 </td></tr>
