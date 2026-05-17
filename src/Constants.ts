@@ -111,7 +111,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.1 Dev: 17 May 2026
+## v3.0.1: 17 May 2026
 
 ### BREAKING CHANGES
 
