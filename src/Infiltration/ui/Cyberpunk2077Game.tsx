@@ -43,7 +43,7 @@ export function Cyberpunk2077Game({ stage }: IProps): React.ReactElement {
         <Typography variant="h5" color={Settings.theme.primary}>
           Targets:{" "}
           {stage.answers.map((a, i) => {
-            if (i == stage.currentAnswerIndex)
+            if (i === stage.currentAnswerIndex)
               return (
                 <span key={`${i}`} style={{ fontSize: "1em", color: Settings.theme.infolight }}>
                   {a}&nbsp;
@@ -70,7 +70,13 @@ export function Cyberpunk2077Game({ stage }: IProps): React.ReactElement {
               sx={{
                 fontSize: fontSize,
                 color: item.color,
-                border: item.selected ? `2px solid ${Settings.theme.infolight}` : "unset",
+                // Always use a 2px border to avoid small symbol position shifts caused by size changes (element vs
+                // element + 2px border).
+                border: item.selected
+                  ? `2px solid ${Settings.theme.infolight}`
+                  : hasAugment && item.content === stage.answers[stage.currentAnswerIndex]
+                  ? `2px solid ${Settings.theme.warning}`
+                  : "2px solid transparent",
                 lineHeight: "unset",
                 p: item.selected ? "2px" : "4px",
               }}
