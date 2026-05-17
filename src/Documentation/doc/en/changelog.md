@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.0.1 Dev: 17 May 2026
+## v3.0.1: 17 May 2026
 
 ### BREAKING CHANGES
 
