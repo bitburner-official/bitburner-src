@@ -111,7 +111,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.1 Dev: 14 May 2026
+## v3.0.1 Dev: 16 May 2026
 
 ### BREAKING CHANGES
 
@@ -131,6 +131,7 @@ export const CONSTANTS = {
 - Reduce the RAM cost of ns.rm() to match ns.scp() (#2761) (@NagaOuroboros)
 - Temporarily remove darknet servers with unusual hostnames (#2757) (@catloversg)
 - Fix: Duplicate .lit and .cache files can be generated in dnet (#2763) (@catloversg)
+- Allow getFunctionRamCost to get base RAM cost for scripts (#2771) (@Mathekatze)
 
 ### DOCUMENTATION
 
@@ -139,6 +140,7 @@ export const CONSTANTS = {
 - Fix incorrect cloud API example (#2738) (@catloversg)
 - Remove non-existent influence namespace in Darknet documentation (#2748) (@Berdes)
 - Remove spoiler for Offline scripts and bonus time page and make it accessible early-game (#2749) (@Berdes)
+- Clarify ns.scp and ns.isRunning (#2769) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
@@ -152,6 +154,8 @@ export const CONSTANTS = {
 - Change getDarkwebPrograms return type to ProgramName[] (#2754) (@catloversg)
 - Fix: getAugmentationBasePrice ignores bitnode mult for SoA augs (#2756) (@SAY-5)
 - Rebalance hash base cost of generating coding contract (#2759) (@gmcew)
+- Ensure induceServerMigration moves servers randomly (#2767) (@catloversg)
+- Do not decrease player reputation when failing bladeburner actions (#2768) (@catloversg)
 
 ### CODEBASE/REFACTOR/WORKFLOW/JEST/TOOL/DEPS
 
