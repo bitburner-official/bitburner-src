@@ -121,12 +121,14 @@ export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threa
 };
 
 // TODO: balance password clue spawn rate
-export const addClue = (server: DarknetServer) => {
+export const addClue = (server: DarknetServer): string[] => {
+  const files = [];
   // Basic mechanics hints
   if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
     if (hint && !server.messages.includes(hint)) {
       server.messages.push(hint);
+      files.push(hint);
     }
   }
 
@@ -137,7 +139,8 @@ export const addClue = (server: DarknetServer) => {
     const start = Math.floor(Math.random() * (commonPasswordDictionary.length - length));
     const commonPasswords = commonPasswordDictionary.slice(start, start + length).join(", ");
     server.writeToTextFile(hintFileName, `Some common passwords include ${commonPasswords}`);
-    return;
+    files.push(hintFileName);
+    return files;
   }
 
   // connected neighboring server's password (does not include server name)
@@ -150,7 +153,8 @@ export const addClue = (server: DarknetServer) => {
     const neighboringServer = neighboringServerName ? getDarknetServer(neighboringServerName) : null;
     if (neighboringServer) {
       server.writeToTextFile(passwordHintName, `Remember this password: ${neighboringServer.password}`);
-      return;
+      files.push(passwordHintName);
+      return files;
     }
   }
 
@@ -161,7 +165,8 @@ export const addClue = (server: DarknetServer) => {
     if (targetServer) {
       const contents = `Server: ${targetServer.hostname} Password: "${targetServer.password}"`;
       server.writeToTextFile(hintFileName, contents);
-      return;
+      files.push(hintFileName);
+      return files;
     }
   }
 
@@ -169,7 +174,8 @@ export const addClue = (server: DarknetServer) => {
     const hintFileName = getClueFileName(notebookFileNames);
     const loreNote = packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
     server.writeToTextFile(hintFileName, loreNote);
-    return;
+    files.push(hintFileName);
+    return files;
   }
 
   if (Math.random() < 0.7) {
@@ -179,9 +185,11 @@ export const addClue = (server: DarknetServer) => {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);
       const hint = `The password for ${targetServer.hostname} contains ${containedChar1} and ${containedChar2}`;
       server.writeToTextFile(hintFileName, hint);
-      return;
+      files.push(hintFileName);
+      return files;
     }
   }
+  return files;
 };
 
 export const getClueFileName = (fileNameList: readonly string[]): TextFilePath => {
