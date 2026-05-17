@@ -48,7 +48,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   const requiredMatch = currentText.toLowerCase();
 
   // If a relative directory is included in the path, this will store what the absolute path needs to start with to be valid
-  let pathingRequiredMatch = currentText.toLowerCase();
+  let pathingRequiredMatch = currentText;
 
   /** The directory portion of the current input */
   let relativeDir = "";
@@ -60,9 +60,11 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     // No valid terminal inputs contain a / that does not indicate a path
     if (path === null) return [];
     baseDir = path;
-    pathingRequiredMatch = currentText.replace(/^.*\//, path).toLowerCase();
+    pathingRequiredMatch = currentText.replace(/^.*\//, path);
   } else if (baseDir !== root) {
-    pathingRequiredMatch = (baseDir + currentText).toLowerCase();
+    pathingRequiredMatch = baseDir + currentText;
+  } else {
+    pathingRequiredMatch = currentText;
   }
 
   const possibilities: string[] = [];
@@ -82,10 +84,23 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   function addGeneric({ iterable, usePathing, ignoreCurrent }: AddAllGenericOptions) {
     const requiredStart = usePathing ? pathingRequiredMatch : requiredMatch;
     for (const member of iterable) {
+      // const name = usePathing ? member.substring(0, member.lastIndexOf("/")) + member.substring(member.lastIndexOf("/")).toLowerCase() : member.toLowerCase();
+      // if (ignoreCurrent && member.length <= requiredStart.length) continue;
+      // if (name.startsWith(requiredStart)) { // removed member.lower()
+      //   possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+      // }
       if (ignoreCurrent && member.length <= requiredStart.length) continue;
-      if (member.toLowerCase().startsWith(requiredStart)) {
-        possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
-      }
+      if(usePathing){
+        if(member.startsWith(requiredStart)){
+          possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+        }
+        else{
+          const name = member.substring(0, member.lastIndexOf("/")) + member.substring(member.lastIndexOf("/")).toLowerCase()
+          const start_lowered = pathingRequiredMatch.substring(0, slashIndex) + pathingRequiredMatch.substring(slashIndex).toLocaleLowerCase();
+          if (name.startsWith(start_lowered)) { // removed member.lower()
+            possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+          }
+        }
     }
   }
 
