@@ -22,3 +22,10 @@ if (window.indexedDB) {
     writable: false,
   });
 }
+
+// Some players use really old browser versions on unsupported OSes such as Windows 7. Intl.Segmenter and other APIs are
+// not supported in these browsers, so they will only see a black screen when loading the game. We should show an alert
+// to notify them that they should update their browser, if possible.
+if (typeof Intl.Segmenter !== "function") {
+  alert(`Your browser is too outdated. Please update your browser.\n\nUserAgent: ${navigator.userAgent}`);
+}
