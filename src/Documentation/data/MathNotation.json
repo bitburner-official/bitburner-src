@@ -1,10 +1,10 @@
 {
-  "RepDonation": "reputation = \\frac{\\text{donation amount} \\cdot \\text{reputation multiplier}}{10^{6}}",
-  "CoreCost": "\\large{cost = 10^9 \\cdot 7.5 ^{\\text{cores}}}",
-  "HomeRAMCost": "\\large{cost = ram \\cdot 3.2 \\cdot 10^4 \\cdot 1.58^{log_2{(ram)}}} \\cdot HomeRamCostMult",
-  "FavorBonus": "\\huge{\\Delta r = \\Delta r \\times \\frac{100+favor}{100}}",
-  "RepToFavor": "\\huge{favor=\\log_{1.02}\\left(1+\\frac{r}{25000}\\right)}",
-  "CorpTotalDividends": "TotalDividends = DividendRate\\ast(Revenue - Expenses)\\ast 10",
-  "CorpDividend": "Dividend = \\left(OwnedShares\\ast\\frac{TotalDividends}{TotalShares}\\right)^{1 - TributeModifier}",
+  "RepDonation": "\\text{reputation} = \\frac{\\text{donation amount} \\cdot \\text{reputation multiplier}}{10^{6}}",
+  "CoreCost": "\\large{\\text{cost} = 10^9 \\cdot 7.5 ^{\\text{cores}}}",
+  "HomeRAMCost": "\\large{\\text{cost} = \\text{RAM} \\cdot 3.2 \\cdot 10^4 \\cdot 1.58^{log_2{(\\text{RAM})}}} \\cdot \\text{HomeRamCostMult}",
+  "FavorBonusFactor": "\\large{\\frac{100+\\text{favor}}{100}}",
+  "RepToFavor": "\\Large\\text{favor}=\\log_{1.02}\\left(1+\\frac{\\text{total faction reputation}}{25000}\\right)",
+  "CorpTotalDividends": "\\text{TotalDividends} = \\text{DividendRate}\\ast(\\text{Revenue} - \\text{Expenses})\\ast 10",
+  "CorpDividend": "\\text{Dividend} = \\left(\\text{OwnedShares}\\ast\\frac{\\text{TotalDividends}}{\\text{TotalShares}}\\right)^{1 - \\text{TributeModifier}}",
   "CorpAdvertFactor": "\\text{multiplier} = \\left((\\text{awareness}+1)^{\\alpha} \\times (\\text{popularity}+1)^{\\alpha} \\times \\frac{\\text{popularity}+0.001}{\\text{awareness}}\\right)^{0.85}"
 }
