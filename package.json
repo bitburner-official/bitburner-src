@@ -56,7 +56,7 @@
   "description": "A cyberpunk-themed incremental game",
   "devDependencies": {
     "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
+    "@babel/preset-env": "^7.29.5",
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@electron/packager": "^18.4.4",
