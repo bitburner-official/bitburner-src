@@ -60,7 +60,7 @@
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@electron/packager": "^18.4.4",
-    "@mathjax/src": "^4.1.0",
+    "@mathjax/src": "^4.1.2",
     "@microsoft/api-documenter": "^7.26.34",
     "@microsoft/api-extractor": "^7.58.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
