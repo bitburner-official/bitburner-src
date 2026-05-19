@@ -57,10 +57,11 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   if (slashIndex !== -1) {
     relativeDir = currentText.substring(0, slashIndex + 1);
-    absoluteDir = resolveDirectory(relativeDir, baseDir);
+    const path = resolveDirectory(relativeDir, baseDir);
     // No valid terminal inputs contain a / that does not indicate a path
-    if (absoluteDir === null) return [];
-    pathingRequiredMatch = currentText.replace(/^.*\//, absoluteDir).toLowerCase();
+    if (path === null) return [];
+    absoluteDir = path;
+    pathingRequiredMatch = currentText.replace(/^.*\//, path).toLowerCase();
   } else if (baseDir !== root) {
     pathingRequiredMatch = (baseDir + currentText).toLowerCase();
   }
