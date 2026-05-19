@@ -12,7 +12,6 @@ npm install
 cd ..
 
 # .app should have the fully built game already after npm run build
-cp export.html .package
 cp -r .app/* .package
 cp -r electron/* .package
 
