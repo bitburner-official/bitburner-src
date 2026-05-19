@@ -718,6 +718,7 @@ export class Terminal {
       }
       const errorMessageForBadCommand =
         "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
+      const tutorialArg = (arg: string | number | boolean) => String(arg).toLowerCase();
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
           if (commandArray.length === 1 && commandArray[0] === "help") {
@@ -817,10 +818,16 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalCreateScript:
-          if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
+          if (
+            commandArray.length === 2 &&
+            tutorialArg(commandArray[0]) === "nano" &&
+            tutorialArg(commandArray[1]) === "n00dles.js"
+          ) {
             iTutorialNextStep();
+            commandArray[0] = "nano";
+            commandArray[1] = "n00dles.js";
           } else {
-            this.error(errorMessageForBadCommand);
+            this.error("Bad command. Enter: nano n00dles.js (check case).");
             return;
           }
           break;
@@ -833,18 +840,30 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalRunScript:
-          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
+          if (
+            commandArray.length === 2 &&
+            tutorialArg(commandArray[0]) === "run" &&
+            tutorialArg(commandArray[1]) === "n00dles.js"
+          ) {
             iTutorialNextStep();
+            commandArray[0] = "run";
+            commandArray[1] = "n00dles.js";
           } else {
-            this.error(errorMessageForBadCommand);
+            this.error("Bad command. Enter: run n00dles.js (check case).");
             return;
           }
           break;
         case iTutorialSteps.ActiveScriptsToTerminal:
-          if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
+          if (
+            commandArray.length === 2 &&
+            tutorialArg(commandArray[0]) === "tail" &&
+            tutorialArg(commandArray[1]) === "n00dles.js"
+          ) {
             iTutorialNextStep();
+            commandArray[0] = "tail";
+            commandArray[1] = "n00dles.js";
           } else {
-            this.error(errorMessageForBadCommand);
+            this.error("Bad command. Enter: tail n00dles.js (check case).");
             return;
           }
           break;

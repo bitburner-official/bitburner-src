@@ -323,14 +323,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             hacking manually the entire time. You can automate your hacking by writing scripts!
             <br />
             <br />
-            To create a new script or edit an existing one, you can use{" "}
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Create your first script by entering
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
-
-          <Typography>
-            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
+          <Typography classes={{ root: classes.textfield }}>
+            {`[home /]> nano ${tutorialScriptName} (check case)`}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
       ),
       canNext: false,
