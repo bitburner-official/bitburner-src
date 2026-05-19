@@ -52,14 +52,14 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   /** The directory portion of the current input */
   let relativeDir = "";
+  let path = baseDir;
   const slashIndex = currentText.lastIndexOf("/");
 
   if (slashIndex !== -1) {
     relativeDir = currentText.substring(0, slashIndex + 1);
-    const path = resolveDirectory(relativeDir, baseDir);
+    path = resolveDirectory(relativeDir, baseDir);
     // No valid terminal inputs contain a / that does not indicate a path
     if (path === null) return [];
-    baseDir = path;
     pathingRequiredMatch = currentText.replace(/^.*\//, path).toLowerCase();
   } else if (baseDir !== root) {
     pathingRequiredMatch = (baseDir + currentText).toLowerCase();
@@ -84,7 +84,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     for (const member of iterable) {
       if (ignoreCurrent && member.length <= requiredStart.length) continue;
       if (member.toLowerCase().startsWith(requiredStart)) {
-        possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+        possibilities.push(usePathing ? relativeDir + member.substring(path.length) : member);
       }
     }
   }
