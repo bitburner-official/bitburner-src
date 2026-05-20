@@ -1,6 +1,6 @@
 {
   "name": "bitburner",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A cyberpunk-themed programming incremental game",
   "main": "main.js",
   "author": "Daniel Xie, hydroflame, et al.",
@@ -28,6 +28,6 @@
     "arg": "^5.0.2",
     "electron-log": "^4.4.8",
     "electron-store": "^8.1.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.18.1"
   }
 }

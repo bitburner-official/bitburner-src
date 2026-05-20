@@ -4,10 +4,10 @@
  * Constants for specific mechanics or features will NOT be here.
  */
 export const CONSTANTS = {
-  VersionString: "3.0.1Dev",
+  VersionString: "3.0.2",
   isDevBranch: true,
   isInTestEnvironment: globalThis.process?.env?.JEST_WORKER_ID !== undefined,
-  VersionNumber: 50,
+  VersionNumber: 51,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -111,53 +111,10 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v3.0.1 Dev: 14 May 2026
-
-### BREAKING CHANGES
-
-- Change getServer return type; rename getServerAuthDetails and add missing dnet properties (#2746) (@ficocelliguy)
+## v3.0.2: Dev version last updated 17 May 2026
 
 ### MISC
 
-- Cache reward fixes (#2731) (@ficocelliguy)
-- Fix typo in darknet authentication response message (#2734) (@catloversg)
-- Fix: Tutorial links to outdated faq url (#2733) (@catloversg)
-- Fix: Player can switch tabs without losing focus on current work (#2724) (@catloversg)
-- Add new command to upload a directory (#2659) (@hexagonrecursion)
-- Add HJKL key mappings for infiltration arrows (#2742) (@mahlquistj)
-- Prevent generating malformed darknet server hostname (#2744) (@catloversg)
-- Support angle bracket type assertions in RAM calculation (#2751) (@catloversg)
-- Fix typo in augmentation description (#2760) (@gmcew)
-- Reduce the RAM cost of ns.rm() to match ns.scp() (#2761) (@NagaOuroboros)
-- Temporarily remove darknet servers with unusual hostnames (#2757) (@catloversg)
-- Fix: Duplicate .lit and .cache files can be generated in dnet (#2763) (@catloversg)
-
-### DOCUMENTATION
-
-- Remove TS type annotation from doc example script (#2721) (@ficocelliguy)
-- Update list of RFA community tools (#2722) (@CTNOriginals)
-- Fix incorrect cloud API example (#2738) (@catloversg)
-- Remove non-existent influence namespace in Darknet documentation (#2748) (@Berdes)
-- Remove spoiler for Offline scripts and bonus time page and make it accessible early-game (#2749) (@Berdes)
-
-### SPOILER CHANGES - UI
-
-- Show hints of Gang mechanic in pre-endgame (#2723) (@catloversg)
-- Break out Darknet BN and player mults as separate entries (#2745) (@gmcew)
-
-### SPOILER CHANGES - MISC
-
-- Cancel faction work instead of finishing it when creating gang (#2726) (@catloversg)
-- Lower darknet BN money mults on hard nodes (#2743) (@ficocelliguy)
-- Change getDarkwebPrograms return type to ProgramName[] (#2754) (@catloversg)
-- Fix: getAugmentationBasePrice ignores bitnode mult for SoA augs (#2756) (@SAY-5)
-- Rebalance hash base cost of generating coding contract (#2759) (@gmcew)
-
-### CODEBASE/REFACTOR/WORKFLOW/JEST/TOOL/DEPS
-
-- Update action versions (#2718) (@Snarling)
-- Remove duplicate getStockFromSymbol function (#2725) (@catloversg)
-- Update game version (#2732) (@catloversg)
-- Harden saving to avoid save data corruption (#2755) (@catloversg)
+- No changes yet
 `,
 } as const;

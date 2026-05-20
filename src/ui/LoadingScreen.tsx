@@ -61,6 +61,8 @@ export function LoadingScreen(): React.ReactElement {
         <Grid item>
           <Typography>
             If the game fails to load, consider <a href="?noScripts">killing all scripts</a>
+            <br />
+            You can export your save data at <a href="./export.html">export.html</a>
           </Typography>
         </Grid>
       )}

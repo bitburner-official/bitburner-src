@@ -27,6 +27,12 @@
     </div>
     <!-- Use esm for top-level await -->
     <script type="module">
+      if (!window.indexedDB || typeof window.indexedDB.databases !== "function") {
+        const errorMessage = `Your browser is too outdated. Please update your browser.\n\nUserAgent: ${navigator.userAgent}`;
+        alert(errorMessage);
+        // This is the simplest way to stop execution in top-level code without using a labeled block or IIFE.
+        throw new Error(errorMessage);
+      }
       const databaseName = "bitburnerSave";
       // Check src/db.ts to see why the current max version is 2. If the database version is greater than this value, it
       // means that the code in this file is outdated.
@@ -35,7 +41,6 @@
       const database = databases.find((info) => info.name === databaseName);
       if (!database) {
         alert("There is no save data");
-        // This is the simplest way to stop execution in top-level code without using a labeled block or IIFE.
         throw new Error("There is no save data");
       }
       if (database.version === undefined || database.version > maxDatabaseVersion) {
