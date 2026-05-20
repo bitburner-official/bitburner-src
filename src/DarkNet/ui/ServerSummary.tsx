@@ -7,6 +7,8 @@ import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetConstants } from "../Constants";
+import type { ScriptKey } from "../../utils/helpers/scriptKey";
+import { RunningScript } from "../../Script/RunningScript";
 
 export type ServerSummaryProps = {
   server: DarknetServer;
@@ -41,7 +43,8 @@ export function ServerSummary({
         }`
       : "No data files on server";
   const contractCount = server.contracts.length;
-  const runningScriptNames = Array.from(server.runningScriptMap.keys()).map((script) => script.replace("*[]", ""));
+  const runningScriptsCount = getScriptCount(server.runningScriptMap);
+  const runningScriptNames = getScriptNameStrings(server.runningScriptMap);
   const runningScriptsTooltip =
     runningScriptNames.length > 0
       ? `Running scripts on server: ${runningScriptNames.slice(0, 3).join(", ")}${
@@ -58,9 +61,9 @@ export function ServerSummary({
 
   const runningScriptsComponent = (
     <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
-      <Typography color={runningScriptNames.length > 0 ? "primary" : "secondary"}>
+      <Typography color={runningScriptsCount > 0 ? "primary" : "secondary"}>
         <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
-        {runningScriptNames.length}
+        {runningScriptsCount}
       </Typography>
     </Tooltip>
   );
@@ -152,3 +155,17 @@ export function ServerSummary({
     </div>
   );
 }
+
+const getScriptNameStrings = (runningScriptMap: Map<ScriptKey, Map<number, RunningScript>>) => {
+  return Array.from(runningScriptMap.entries()).map(([script, dataMap]) => cleanScriptName(script, dataMap.size));
+};
+
+const cleanScriptName = (scriptName: string, count: number) => {
+  const cleanedName = scriptName.slice(0, scriptName.indexOf("*"));
+  const countString = count > 1 ? ` x${count}` : "";
+  return cleanedName + countString;
+};
+
+const getScriptCount = (runningScriptMap: Map<ScriptKey, Map<number, RunningScript>>) => {
+  return runningScriptMap.values().reduce((acc, dataMap) => acc + dataMap.size, 0);
+};
