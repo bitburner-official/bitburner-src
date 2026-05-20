@@ -134,7 +134,7 @@ Calculate hack time.
 
 </td><td>
 
-Calculate the security decrease from a weaken operation. Unlike other hacking formulas, weaken effect depends only on thread count and core count, not on server or player properties. The core bonus formula is `1 + (cores - 1) / 16}`<!-- -->.
+Calculate the security decrease from a weaken operation. Unlike other hacking formulas, weaken effect depends only on thread count and core count, not on server or player properties. The core bonus formula is `1 + (cores - 1) / 16`<!-- -->.
 
 
 </td></tr>
