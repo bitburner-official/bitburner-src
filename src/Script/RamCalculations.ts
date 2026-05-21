@@ -442,6 +442,20 @@ function parseOnlyCalculateDeps(
           addRef(st.key, node.property.name, true);
         }
       },
+      ObjectPattern: (node: acorn.ObjectPattern, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        for (const property of node.properties) {
+          if (property.type === "RestElement") continue;
+          const assignmentProperty = property;
+          assignmentProperty.key && walkDeeper(assignmentProperty.key, st);
+          assignmentProperty.value && walkDeeper(assignmentProperty.value, st);
+          if (
+            assignmentProperty.key?.type === "Identifier" &&
+            !objectPrototypeProperties.includes(assignmentProperty.key.name)
+          ) {
+            addRef(st.key, assignmentProperty.key.name, true);
+          }
+        }
+      },
     };
   }
 
