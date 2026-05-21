@@ -19,7 +19,7 @@ export function JobRoot(): React.ReactElement {
     }
     return (
       <Box key={companyName} sx={{ marginBottom: "20px" }}>
-        <GenericLocation location={location} showBackButton={false} />;
+        <GenericLocation location={location} showBackButton={false} />
       </Box>
     );
   });
