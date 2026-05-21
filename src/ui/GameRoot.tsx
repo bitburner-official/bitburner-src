@@ -351,9 +351,9 @@ export function GameRoot(): React.ReactElement {
     case Page.ScriptEditor: {
       mainPage = (
         <ScriptEditorRoot
-          files={pageWithContext.files ?? new Map()}
-          hostname={pageWithContext.options?.hostname ?? Player.getCurrentServer().hostname}
-          vim={pageWithContext.options === undefined ? Settings.MonacoDefaultToVim : pageWithContext.options.vim}
+          files={pageWithContext.files}
+          hostname={pageWithContext.options.hostname}
+          vim={pageWithContext.options.vim}
         />
       );
       break;

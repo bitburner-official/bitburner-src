@@ -1,9 +1,9 @@
 import { Terminal } from "../../../Terminal";
-import { ScriptEditorRouteOptions, Page } from "../../../ui/Router";
+import { Page } from "../../../ui/Router";
 import { Router } from "../../../ui/GameRoot";
-import { BaseServer } from "../../../Server/BaseServer";
+import type { BaseServer } from "../../../Server/BaseServer";
 import { type ScriptFilePath, hasScriptExtension, isLegacyScript } from "../../../Paths/ScriptFilePath";
-import { TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";
+import { type TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
 import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
@@ -14,6 +14,7 @@ import { hasCacheExtension } from "../../../Paths/CacheFilePath";
 interface EditorParameters {
   args: (string | number | boolean)[];
   server: BaseServer;
+  vim: boolean;
 }
 
 function getScriptTemplate(path: string): string {
@@ -33,11 +34,7 @@ export async function main(ns) {
   }
 }
 
-export function commonEditor(
-  command: string,
-  { args, server }: EditorParameters,
-  options?: ScriptEditorRouteOptions,
-): void {
+export function commonEditor(command: string, { args, server, vim }: EditorParameters): void {
   if (args.length < 1) return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
   const files = new Map<ScriptFilePath | TextFilePath, string>();
   let hasLegacyScript = false;
@@ -76,5 +73,5 @@ export function commonEditor(
   if (hasLegacyScript) {
     sendDeprecationNotice();
   }
-  Router.toPage(Page.ScriptEditor, { files, options });
+  Router.toPage(Page.ScriptEditor, { files, options: { vim, hostname: server.hostname } });
 }

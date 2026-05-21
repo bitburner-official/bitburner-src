@@ -18,7 +18,7 @@ export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   : T extends ComplexPage.FactionAugmentations
   ? { faction: Faction }
   : T extends ComplexPage.ScriptEditor
-  ? { files?: Map<ScriptFilePath | TextFilePath, string>; options?: ScriptEditorRouteOptions }
+  ? { files: Map<ScriptFilePath | TextFilePath, string>; options: ScriptEditorRouteOptions }
   : T extends ComplexPage.Location
   ? { location: Location }
   : T extends ComplexPage.ImportSave
@@ -43,7 +43,7 @@ export type PageWithContext =
 
 export interface ScriptEditorRouteOptions {
   vim: boolean;
-  hostname?: string;
+  hostname: string;
 }
 
 /** The router keeps track of player navigation/routing within the game. */
