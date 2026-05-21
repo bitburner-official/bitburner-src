@@ -332,14 +332,16 @@ function parseOnlyCalculateDeps(
 
   // References get added pessimistically. They are added for thisModule.name, name, and for
   // any aliases.
-  function addRef(key: string, name: string, module = currentModule): void {
+  function addRef(key: string, name: string, memberRhs = false, module = currentModule): void {
     const s = dependencyMap[key] || (dependencyMap[key] = new Set());
     const external = internalToExternal[name];
     if (external !== undefined) {
       s.add(external);
     }
     s.add(module + "." + name);
-    s.add(name); // For builtins like hack.
+    if (memberRhs) {
+      s.add(name); // For builtins like hack.
+    }
   }
 
   //A list of identifiers that resolve to "native Javascript code"
@@ -436,6 +438,9 @@ function parseOnlyCalculateDeps(
       MemberExpression: (node: acorn.MemberExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         node.object && walkDeeper(node.object, st);
         node.property && walkDeeper(node.property, st);
+        if (node.property?.type === "Identifier" && !objectPrototypeProperties.includes(node.property.name)) {
+          addRef(st.key, node.property.name, true);
+        }
       },
     };
   }
@@ -514,7 +519,7 @@ function parseOnlyCalculateDeps(
              */
             if (node.source != null && typeof node.source.value === "string" && specifier.local.type === "Identifier") {
               // if this is true, we are re-exporting something
-              addRef(exportedDepName, specifier.local.name, node.source.value as ScriptFilePath);
+              addRef(exportedDepName, specifier.local.name, false, node.source.value as ScriptFilePath);
               additionalModules.push(node.source.value as ScriptFilePath);
             } else if (specifier.local.type === "Identifier" && specifier.exported.name !== specifier.local.name) {
               // this makes sure we are not referring to ourselves

@@ -149,7 +149,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
     });
 
     // TODO: once we fix static parsing this should pass
-    it.skip("Function 'getTask' that can be confused with Sleeve.getTask", function () {
+    it("Function 'getTask' that can be confused with Sleeve.getTask", function () {
       const code = `
         export async function main(ns) {
           getTask();
