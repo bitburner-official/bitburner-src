@@ -134,6 +134,53 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost);
     });
+
+    it("Simple base NS function in a renamed variable", function () {
+      const code = `
+        export async function main(ns) {
+          const _ns = ns;
+          ns.hack("joesguns");
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, HackCost);
+    });
+
+    it("Simple base NS function in a renamed variable", function () {
+      const code = `
+        export async function main(ns) {
+          const _ns = ns;
+          ns.hack("joesguns");
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, HackCost);
+    });
+
+    it("Simple base NS function in destructuring renamed to another base NS function", function () {
+      const code = `
+        export async function main(ns) {
+          const { grow: hack } = ns;  // same as const hack = ns.grow;
+          hack();
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, GrowCost);
+    });
+
+    it("Simple base NS function in destructuring as function parameter", function () {
+      const code = `
+        export async function main(ns) {
+          doHack(ns);
+        }
+
+        function doHack({ hack }) {
+          hack();
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, HackCost);
+    });
   });
 
   describe("Functions that can be confused with NS functions", function () {
@@ -148,13 +195,23 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, 0);
     });
 
-    // TODO: once we fix static parsing this should pass
     it("Function 'getTask' that can be confused with Sleeve.getTask", function () {
       const code = `
         export async function main(ns) {
           getTask();
         }
         function getTask() { return 0; }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, 0);
+    });
+
+    it("Variable 'attempt' that can be confused with CodingContract.attempt", function () {
+      const code = `
+        export async function main(ns) {
+          const attempt = 0;
+          attempt = attempt + 1;
+        }
       `;
       const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, 0);
@@ -176,6 +233,50 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const code = `
         export async function main(ns) {
           ns.sleeve.getTask(3);
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, SleeveGetTaskCost);
+    });
+
+    it("Sleeve functions using a namespace alias", function () {
+      const code = `
+        export async function main(ns) {
+          const s = ns.sleeve;
+          s.getTask(3);
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, SleeveGetTaskCost);
+    });
+
+    it("Sleeve functions from destructuring", function () {
+      const code = `
+        export async function main(ns) {
+          const { getTask } = ns.sleeve;
+          getTask(3);
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, SleeveGetTaskCost);
+    });
+
+    it("Sleeve functions from destructuring with renaming", function () {
+      const code = `
+        export async function main(ns) {
+          const { getTask: gt } = ns.sleeve;
+          gt(3);
+        }
+      `;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
+      expectCost(calculated, SleeveGetTaskCost);
+    });
+
+    it("Sleeve function from nested destructuring with renaming", function () {
+      const code = `
+        export async function main(ns) {
+          const { sleeve: { getTask: gt } } = ns;
+          gt(3);
         }
       `;
       const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
@@ -452,6 +553,25 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           [incorrect_libNameTwo, incorrect_libScriptTwo],
         ]),
       ).cost;
+      expectCost(calculated, HackCost);
+    });
+    it("Importing a function that returns a reference to NS", function () {
+      const libName = "lib.js" as ScriptFilePath;
+      const libCode = `
+        export function getNS() {
+          return globalThis.ns;
+        }
+      `;
+      const lib = new Script(libName, libCode);
+      const code = `
+        import { getNS } from "lib";
+
+        export async function main(ns) {
+          globalThis.ns = ns;
+          getNS().hack();
+        }
+      `;
+      const calculated = calculateRamUsage(code, folderFilename, server, new Map([[libName, lib]])).cost;
       expectCost(calculated, HackCost);
     });
   });
