@@ -72,7 +72,6 @@ import { V2Modal } from "../utils/V2Modal";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
-import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { UIEventEmitter, UIEventType } from "./UIEventEmitter";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
