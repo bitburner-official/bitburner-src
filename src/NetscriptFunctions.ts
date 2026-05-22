@@ -675,18 +675,15 @@ export const ns: InternalAPI<NSFull> = {
       }
 
       helpers.log(ctx, () => "About to exit...");
-      const killed = killWorkerScript(ctx.workerScript);
+      killWorkerScript(ctx.workerScript);
 
       if (runOpts.spawnDelay === 0) {
         helpers.log(ctx, () => `Executing '${path}' immediately`);
         spawnCb();
       }
-
-      if (killed) {
-        // This prevents error messages about statements after the spawn()
-        // trying to be executed when the script is dead.
-        throw new ScriptDeath(ctx.workerScript);
-      }
+      // This prevents error messages about statements after the spawn()
+      // trying to be executed when the script is dead.
+      throw new ScriptDeath(ctx.workerScript);
     },
   self: (ctx) => () => {
     const runningScript = helpers.getRunningScript(ctx, ctx.workerScript.pid);

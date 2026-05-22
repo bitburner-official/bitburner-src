@@ -8,20 +8,12 @@ import { workerScripts } from "./WorkerScripts";
 
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { AddRecentScript } from "./RecentScripts";
-import { ITutorial } from "../InteractiveTutorial";
-import { AlertEvents } from "../ui/React/AlertManager";
 import { handleUnknownError } from "../utils/ErrorHandler";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { BaseServer } from "../Server/BaseServer";
 
-export function killWorkerScript(ws: WorkerScript): boolean {
-  if (ITutorial.isRunning) {
-    AlertEvents.emit("Processes cannot be killed during the tutorial.");
-    return false;
-  }
+export function killWorkerScript(ws: WorkerScript): void {
   stopAndCleanUpWorkerScript(ws);
-
-  return true;
 }
 
 export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boolean {
