@@ -182,7 +182,12 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
   const clickPage = useCallback(
     (page: Page) => {
-      if (page == Page.ScriptEditor || page == Page.Documentation || page == Page.Options) {
+      if (page == Page.ScriptEditor) {
+        Router.toPage(page, {
+          files: new Map(),
+          options: { vim: Settings.MonacoDefaultToVim, hostname: Player.currentServer },
+        });
+      } else if (page == Page.Documentation || page == Page.Options) {
         Router.toPage(page, {});
       } else if (isSimplePage(page)) {
         Router.toPage(page);

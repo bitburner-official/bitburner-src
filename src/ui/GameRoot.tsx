@@ -72,7 +72,6 @@ import { V2Modal } from "../utils/V2Modal";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
-import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { UIEventEmitter, UIEventType } from "./UIEventEmitter";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
@@ -351,9 +350,9 @@ export function GameRoot(): React.ReactElement {
     case Page.ScriptEditor: {
       mainPage = (
         <ScriptEditorRoot
-          files={pageWithContext.files ?? new Map()}
-          hostname={pageWithContext.options?.hostname ?? Player.getCurrentServer().hostname}
-          vim={pageWithContext.options === undefined ? Settings.MonacoDefaultToVim : pageWithContext.options.vim}
+          files={pageWithContext.files}
+          hostname={pageWithContext.options.hostname}
+          vim={pageWithContext.options.vim}
         />
       );
       break;
