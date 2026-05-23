@@ -38,6 +38,8 @@ export function FragmentInspector(props: IProps): React.ReactElement {
           <br />
           Charge: N/A
           <br />
+          Highest charge: N/A
+          <br />
           root [X, Y] N/A
           <br />
         </Typography>
@@ -47,10 +49,12 @@ export function FragmentInspector(props: IProps): React.ReactElement {
   const f = props.fragment.fragment();
 
   let charge = formatStaneksGiftCharge(props.fragment.highestCharge * props.fragment.numCharge);
+  let highestCharge = formatStaneksGiftCharge(props.fragment.highestCharge);
   let effect = "N/A";
   // Boosters cannot be charged.
   if (f.type === FragmentTypeEnum.Booster) {
     charge = "N/A";
+    highestCharge = "N/A";
     effect = `${f.power}x adjacent fragment power`;
   } else if (Effect(f.type).includes("+x%")) {
     effect = Effect(f.type).replace(/-*x%/, formatPercent(props.gift.effect(props.fragment) - 1));
@@ -73,6 +77,8 @@ export function FragmentInspector(props: IProps): React.ReactElement {
         Base Power: {formatStaneksGiftPower(f.power)}
         <br />
         Charge: {charge}
+        <br />
+        Highest Charge: {highestCharge}
         <br />
         root [X, Y] {props.fragment.x}, {props.fragment.y}
         <br />
