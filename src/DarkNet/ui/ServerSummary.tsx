@@ -7,8 +7,7 @@ import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetConstants } from "../Constants";
-import type { ScriptKey } from "../../utils/helpers/scriptKey";
-import { RunningScript } from "../../Script/RunningScript";
+import { BaseServer } from "../../Server/BaseServer";
 
 export type ServerSummaryProps = {
   server: DarknetServer;
@@ -43,8 +42,8 @@ export function ServerSummary({
         }`
       : "No data files on server";
   const contractCount = server.contracts.length;
-  const runningScriptsCount = getScriptCount(server.runningScriptMap);
-  const runningScriptNames = getScriptNameStrings(server.runningScriptMap);
+  const runningScriptsCount = getScriptCount(server);
+  const runningScriptNames = getScriptNameStrings(server);
   const runningScriptsTooltip =
     runningScriptNames.length > 0
       ? `Running scripts on server: ${runningScriptNames.slice(0, 3).join(", ")}${
@@ -156,12 +155,11 @@ export function ServerSummary({
   );
 }
 
-const getScriptNameStrings = (runningScriptMap: Map<ScriptKey, Map<number, RunningScript>>) => {
+const getScriptNameStrings = (server: BaseServer) => {
   const filenames = [];
   for (const map of server.runningScriptMap.values()) {
-    for (const rs of map.values()) {
-      filenames.push(rs.filename);
-    }
+    const scriptName = map.values().next()?.value?.filename ?? "";
+    filenames.push(cleanScriptName(scriptName, map.size));
   }
   return filenames;
 };
@@ -172,6 +170,6 @@ const cleanScriptName = (scriptName: string, count: number) => {
   return cleanedName + countString;
 };
 
-const getScriptCount = (runningScriptMap: Map<ScriptKey, Map<number, RunningScript>>) => {
-  return runningScriptMap.values().reduce((acc, dataMap) => acc + dataMap.size, 0);
+const getScriptCount = (server: BaseServer) => {
+  return server.runningScriptMap.values().reduce((acc, dataMap) => acc + dataMap.size, 0);
 };
