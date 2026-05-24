@@ -1,10 +1,10 @@
 import { CodingContractName } from "@enums";
-import { CodingContractTypes } from "../ContractTypes";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
+import type { CodingContractTypes } from "../ContractTypes";
 
 export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.TotalPrimesInRange> = {
   [CodingContractName.TotalPrimesInRange]: {
-    desc: (data: number[]): string => {
+    desc: (data: [number, number]): string => {
       return [
         `You are given two random non-negative integers: ${data}.\n`,
         `The first will be up to 5000000, and the second will be at most 1000000 greater.\n`,
@@ -14,7 +14,7 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
       ].join(" ");
     },
     difficulty: 2,
-    generate: (): number[] => {
+    generate: (): [number, number] => {
       //The total range of values across all contracts, and minimum range for each contract is intended to make a pre-generated array of primes impractical,
       //and naive approaches for checking every value for primality slower but possible if well written.
       const low = getRandomIntInclusive(0, 5e6);
