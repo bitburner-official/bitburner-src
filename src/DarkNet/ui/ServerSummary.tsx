@@ -6,8 +6,8 @@ import { CompletedProgramName } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
+import type { BaseServer } from "../../Server/BaseServer";
 import { DarknetConstants } from "../Constants";
-import { BaseServer } from "../../Server/BaseServer";
 
 export type ServerSummaryProps = {
   server: DarknetServer;
