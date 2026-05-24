@@ -157,7 +157,13 @@ export function ServerSummary({
 }
 
 const getScriptNameStrings = (runningScriptMap: Map<ScriptKey, Map<number, RunningScript>>) => {
-  return Array.from(runningScriptMap.entries()).map(([script, dataMap]) => cleanScriptName(script, dataMap.size));
+  const filenames = [];
+  for (const map of server.runningScriptMap.values()) {
+    for (const rs of map.values()) {
+      filenames.push(rs.filename);
+    }
+  }
+  return filenames;
 };
 
 const cleanScriptName = (scriptName: string, count: number) => {
