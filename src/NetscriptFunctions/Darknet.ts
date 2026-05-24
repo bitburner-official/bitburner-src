@@ -247,7 +247,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
         if (Player.skills.charisma < server.requiredCharismaSkill) {
           logger(ctx)(
-            `You need a higher charisma level to extract data from ${server.hostname}. (${server.requiredHackingSkill} required)`,
+            `You need a higher charisma level to extract data from ${server.hostname}. (${server.requiredCharismaSkill} required)`,
           );
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
