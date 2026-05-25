@@ -9,10 +9,11 @@ import { CodingContract } from "../../../src/CodingContract/Contract";
 import { asFilePath } from "../../../src/Paths/FilePath";
 import { Directory, isAbsolutePath, isDirectoryPath, root } from "../../../src/Paths/Directory";
 import { hasTextExtension } from "../../../src/Paths/TextFilePath";
-import { hasScriptExtension } from "../../../src/Paths/ScriptFilePath";
+import { hasScriptExtension, type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { LiteratureName, MessageFilename } from "../../../src/Enums";
 import { Terminal } from "../../../src/Terminal";
 import { IPAddress } from "../../../src/Types/strings";
+import { LoadedModule, type ScriptURL } from "../../../src/Script/LoadedModule";
 
 describe("getTabCompletionPossibilities", function () {
   let closeServer: Server;
@@ -88,18 +89,7 @@ describe("getTabCompletionPossibilities", function () {
   it("completes the scp command", async () => {
     writeFiles();
     let options = await getTabCompletionPossibilities("scp ", root);
-    const filesToMatch = [
-      "note.txt",
-      "folder1/text.txt",
-      "folder1/text2.txt",
-      "hack.js",
-      "weaken.js",
-      "grow.js",
-      "old.script",
-      "folder1/test.js",
-      "anotherFolder/win.js",
-      LiteratureName.AGreenTomorrow,
-    ];
+    const filesToMatch = [...textFilePaths, ...scriptFilePaths, LiteratureName.AGreenTomorrow];
     expect(options.sort()).toEqual(filesToMatch.sort());
     // Test the second command argument (server name)
     options = await getTabCompletionPossibilities("scp note.txt ", root);
@@ -117,7 +107,13 @@ describe("getTabCompletionPossibilities", function () {
       // From a directory but with relative path .., show stuff in the resolved directory with the relative pathing included
       options = await getTabCompletionPossibilities(`${command} ../`, asDirectory("folder1/"));
       expect(options.sort()).toEqual(
-        [...scriptFilePaths.map((path) => "../" + path), "../folder1/", "../anotherFolder/"].sort(),
+        [
+          ...scriptFilePaths.map((path) => "../" + path),
+          "../folder1/",
+          "../anotherFolder/",
+          "../hack/",
+          "../hack/utils/",
+        ].sort(),
       );
       options = await getTabCompletionPossibilities(`${command} ../folder1/../anotherFolder/`, asDirectory("folder1/"));
       expect(options.sort()).toEqual(["../folder1/../anotherFolder/win.js"]);
@@ -152,8 +148,73 @@ describe("getTabCompletionPossibilities", function () {
     // Also check the same files
     options = await getTabCompletionPossibilities("./", root);
     expect(options.sort()).toEqual(
-      [...runnableFilePaths.map((path) => "./" + path), "./folder1/", "./anotherFolder/"].sort(),
+      [
+        ...runnableFilePaths.map((path) => "./" + path),
+        "./folder1/",
+        "./anotherFolder/",
+        "./hack/",
+        "./hack/utils/",
+      ].sort(),
     );
+  });
+
+  it("autocomplete function", async () => {
+    writeFiles();
+    const tempAutocomplete = setUpAutocompleteFunction("temp.js");
+    const scriptAutocomplete = setUpAutocompleteFunction("hack/script.js");
+    const listServersAutocomplete = setUpAutocompleteFunction("hack/utils/listServers.js");
+
+    expect(await getTabCompletionPossibilities("run temp.js ", root)).toStrictEqual(["temp.js_foo"]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+
+    // Only suggest directories
+    expect(await getTabCompletionPossibilities("run temp.js ./hac", root)).toStrictEqual(["./hack/", "./hack/utils/"]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+
+    // Only suggest directories
+    expect(await getTabCompletionPossibilities("run temp.js hack/", root)).toStrictEqual(["hack/utils/"]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+    // Suggest nothing
+    expect(await getTabCompletionPossibilities("run temp.js hack/scr", root)).toStrictEqual([]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+    // Only suggest directories
+    expect(await getTabCompletionPossibilities("run temp.js hack/util", root)).toStrictEqual(["hack/utils/"]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+
+    // Only suggest directories
+    expect(await getTabCompletionPossibilities("run /temp.js hack/", root)).toStrictEqual(["hack/utils/"]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+    // Suggest nothing
+    expect(await getTabCompletionPossibilities("run /temp.js hack/scr", root)).toStrictEqual([]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+    // Only suggest directories
+    expect(await getTabCompletionPossibilities("run /temp.js hack/util", root)).toStrictEqual(["hack/utils/"]);
+    expect(tempAutocomplete).toHaveBeenCalledTimes(1);
+    tempAutocomplete.mockClear();
+
+    const hackDirectory = asDirectory("hack/");
+    // Not suggest any directories because none match "hack/hack/sc".
+    // Suggest the result of the autocomplete function because "hack/script.js_foo" matches "hack/sc".
+    expect(await getTabCompletionPossibilities("run script.js hack/sc", hackDirectory)).toStrictEqual([
+      "hack/script.js_foo",
+    ]);
+    expect(scriptAutocomplete).toHaveBeenCalledTimes(1);
+    scriptAutocomplete.mockClear();
+
+    // Not suggest any directories because none match "hack/hack/uti".
+    // Suggest the result of the autocomplete function because "hack/utils/listServers.js_foo" matches "hack/uti".
+    expect(await getTabCompletionPossibilities("run utils/listServers.js hack/uti", hackDirectory)).toStrictEqual([
+      "hack/utils/listServers.js_foo",
+    ]);
+    expect(listServersAutocomplete).toHaveBeenCalledTimes(1);
+    listServersAutocomplete.mockClear();
   });
 
   it("completes the cat command", async () => {
@@ -182,7 +243,7 @@ describe("getTabCompletionPossibilities", function () {
     writeFiles();
     for (const command of ["ls", "cd", "upload"]) {
       const options = await getTabCompletionPossibilities(`${command} `, root);
-      expect(options.sort()).toEqual(["folder1/", "anotherFolder/"].sort());
+      expect(options.sort()).toEqual(["folder1/", "anotherFolder/", "hack/", "hack/utils/"].sort());
     }
   });
 });
@@ -220,6 +281,9 @@ const scriptFilePaths = [
   "old.script",
   "folder1/test.js",
   "anotherFolder/win.js",
+  "temp.js",
+  "hack/script.js",
+  "hack/utils/listServers.js",
 ].sort();
 const contractFilePaths = ["testContract.cct", "anothercontract.cct"];
 function writeFiles() {
@@ -240,4 +304,17 @@ function writeFiles() {
     home.contracts.push(new CodingContract(filename));
   }
   home.messages.push(LiteratureName.AGreenTomorrow, MessageFilename.TruthGazer);
+}
+
+function setUpAutocompleteFunction(filePath: string) {
+  const home = Player.getHomeComputer();
+  const script = home.scripts.get(filePath as ScriptFilePath);
+  if (!script) {
+    throw `${filePath} does not exist`;
+  }
+  const autocomplete = jest.fn(() => {
+    return [`${filePath}_foo`];
+  });
+  script.mod = new LoadedModule("" as ScriptURL, new Promise((r) => r({ autocomplete })));
+  return autocomplete;
 }
