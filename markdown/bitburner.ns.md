@@ -514,17 +514,6 @@ Open up a message box.
 </td></tr>
 <tr><td>
 
-[alias(alias, substitution, global)](./bitburner.ns.alias.md)
-
-
-</td><td>
-
-Programmatically sets an alias.
-
-
-</td></tr>
-<tr><td>
-
 [asleep(millis)](./bitburner.ns.asleep.md)
 
 
@@ -564,17 +553,6 @@ Runs BruteSSH.exe on a server.
 </td><td>
 
 Clear data from a file.
-
-
-</td></tr>
-<tr><td>
-
-[clearAliases()](./bitburner.ns.clearaliases.md)
-
-
-</td><td>
-
-Clears every alias.
 
 
 </td></tr>
@@ -1637,17 +1615,6 @@ Prints a ReactNode to the terminal.
 </td><td>
 
 Attempt to write to a port.
-
-
-</td></tr>
-<tr><td>
-
-[unalias(alias)](./bitburner.ns.unalias.md)
-
-
-</td><td>
-
-Clears an existing alias.
 
 
 </td></tr>
