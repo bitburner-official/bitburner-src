@@ -1422,13 +1422,11 @@ export const ns: InternalAPI<NSFull> = {
     const alias = helpers.string(ctx, "alias", _alias);
     if (alias) {
       helpers.log(ctx, () => `Successfully removed the "${alias}" alias.`);
-    }
-    else {
+    } else {
       helpers.log(ctx, () => `Failed to remove the "${alias}" alias: no alias with that name found.`);
     }
 
     return removeAlias(alias);
-
   },
   clearAliases: (ctx) => () => {
     let count = 0;
