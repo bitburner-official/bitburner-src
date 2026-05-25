@@ -6,7 +6,6 @@ import { CompletedProgramName } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
-import type { BaseServer } from "../../Server/BaseServer";
 import { DarknetConstants } from "../Constants";
 
 export type ServerSummaryProps = {
@@ -42,8 +41,19 @@ export function ServerSummary({
         }`
       : "No data files on server";
   const contractCount = server.contracts.length;
-  const runningScriptsCount = getScriptCount(server);
-  const runningScriptNames = getScriptNameStrings(server);
+  let runningScriptCount = 0;
+  const scripts = new Map<string, number>();
+  for (const map of server.runningScriptMap.values()) {
+    const rs = map.values().next().value;
+    if (!rs) continue;
+    runningScriptCount += map.size;
+    const count = (scripts.get(rs.filename) ?? 0) + map.size;
+    scripts.set(rs.filename, count);
+  }
+  const runningScriptNames = scripts
+    .entries()
+    .map(([name, count]) => name + (count === 1 ? "" : "x" + count))
+    .toArray();
   const runningScriptsTooltip =
     runningScriptNames.length > 0
       ? `Running scripts on server: ${runningScriptNames.slice(0, 3).join(", ")}${
@@ -60,9 +70,9 @@ export function ServerSummary({
 
   const runningScriptsComponent = (
     <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
-      <Typography color={runningScriptsCount > 0 ? "primary" : "secondary"}>
+      <Typography color={runningScriptCount > 0 ? "primary" : "secondary"}>
         <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
-        {runningScriptsCount}
+        {runningScriptCount}
       </Typography>
     </Tooltip>
   );
@@ -154,26 +164,3 @@ export function ServerSummary({
     </div>
   );
 }
-
-const getScriptNameStrings = (server: BaseServer) => {
-  let runningScriptCount = 0;
-  const scripts = new Map<string, number>();
-  for (const map of server.runningScriptMap.values()) {
-    const rs = map.values().next().value;
-    if (!rs) continue;
-    runningScriptCount += map.size;
-    let count = (scripts.get(rs.filename) ?? 0) + map.size;
-    scripts.set(rs.filename, count);
-  }
-  const runningScriptNames = scripts.entries().map((name, count) =>name + (count === 1 ? "" : "x" + count));
-};
-
-const cleanScriptName = (scriptName: string, count: number) => {
-  const cleanedName = scriptName.slice(0, scriptName.indexOf("*"));
-  const countString = count > 1 ? ` x${count}` : "";
-  return cleanedName + countString;
-};
-
-const getScriptCount = (server: BaseServer) => {
-  return server.runningScriptMap.values().reduce((acc, dataMap) => acc + dataMap.size, 0);
-};
