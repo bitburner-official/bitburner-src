@@ -454,6 +454,11 @@ const ui = {
   clearTerminal: 0,
   openCodeEditor: 0,
   windowSize: 0,
+  alias: 0.05,
+  unalias: 0.05,
+  clearAliases: 0.05,
+  getAlias: 0,
+  getAllAliases: 0,
 } as const;
 
 // Grafting API
@@ -667,9 +672,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   tprintRaw: 0,
   printRaw: 0,
   dynamicImport: 0,
-  alias: 0.05,
-  unalias: 0.05,
-  clearAliases: 0.05,
 
   formulas: {
     mockServer: 0,
