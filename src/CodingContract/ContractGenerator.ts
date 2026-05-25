@@ -134,7 +134,7 @@ interface IGenerateContractParams {
   rewardScaling?: number;
 }
 
-export function generateContract(params: IGenerateContractParams): void {
+export function generateContract(params: IGenerateContractParams): ContractFilePath | null {
   // Problem Type
   let problemType;
   const problemTypes = Object.keys(CodingContractTypes);
@@ -158,15 +158,16 @@ export function generateContract(params: IGenerateContractParams): void {
     server = getRandomServer();
   }
   if (server === null) {
-    return;
+    return null;
   }
 
   const filename = params.filename ? params.filename : getRandomFilename(server);
   if (filename == null) {
-    return;
+    return null;
   }
   const contract = new CodingContract(filename, problemType, reward, params.rewardScaling);
   server.addContract(contract);
+  return contract.fn;
 }
 
 function getRandomProblemType(maxDif = 10): CodingContractName {
