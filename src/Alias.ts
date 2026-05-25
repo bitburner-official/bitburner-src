@@ -45,12 +45,12 @@ export function parseAliasDeclaration(dec: string, global = false): boolean {
   return true;
 }
 
-function addAlias(name: string, value: string): void {
+export function addAlias(name: string, value: string): void {
   GlobalAliases.delete(name);
   Aliases.set(name, value.trim());
 }
 
-function addGlobalAlias(name: string, value: string): void {
+export function addGlobalAlias(name: string, value: string): void {
   Aliases.delete(name);
   GlobalAliases.set(name, value.trim());
 }

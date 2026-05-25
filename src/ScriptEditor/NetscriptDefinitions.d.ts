@@ -9138,6 +9138,43 @@ export interface NS {
   getSharePower(): number;
 
   /**
+   * Programmatically sets an alias
+   * @param alias - The keyword to set.
+   * @param substitution - The substitution to run.
+   * @param global - Whether the alias should be set as a global alias. Global aliases replace all examples of the alias with the substitution string.
+   *
+   * @example
+   * File: script.js
+   * ```js
+   * export async function main(ns){
+   *    ns.alias("nuke", "run NUKE.exe"); // Equivalent to typing "alias nuke="run NUKE.exe"
+   *    ns.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing "alias -g worm="HTTPWorm.exe"
+   * }
+   *
+   * ```
+   *
+   * @remarks
+   * RAM cost: 0.05 GB
+   */
+  alias(alias: string, substitution: string, global?: boolean): void;
+
+  /**
+   * Clears an existing alias.
+   * @param alias - The alias to clear.
+   * @returns - True if there was a previous alias set.
+   * @remarks
+   * RAM cost: 0.05 GB
+   */
+  unalias(alias: string): boolean;
+
+  /**
+   * Clears every alias.
+   * @remarks
+   * RAM cost: 0.05 GB
+   */
+  clearAliases(): void;
+
+  /**
    * Dynamically import a script.
    * Only scripts located on the same server can be imported.
    * A dynamic import will not adjust RAM usage. This must be done manually with {@link NS.ramOverride|ramOverride}.

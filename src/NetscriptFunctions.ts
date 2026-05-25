@@ -117,6 +117,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
 import { setDeprecatedProperties } from "./utils/DeprecationHelper";
+import { addAlias, addGlobalAlias, Aliases, GlobalAliases, removeAlias } from "./Alias";
 
 export const enums: NSEnums = {
   CityName,
@@ -1403,6 +1404,43 @@ export const ns: InternalAPI<NSFull> = {
   },
   getFavorToDonate: () => () => {
     return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.FavorToDonateToFaction);
+  },
+  alias: (ctx) => (_alias, _substitution, _global) => {
+    const alias = helpers.string(ctx, "alias", _alias);
+    const substitution = helpers.string(ctx, "substitution", _substitution);
+    const global = helpers.boolean(ctx, "global", _global ?? false);
+
+    if (global) {
+      addGlobalAlias(alias, substitution);
+      helpers.log(ctx, () => `Added global alias ${alias}: ${substitution}`);
+    } else {
+      addAlias(alias, substitution);
+      helpers.log(ctx, () => `Added alias ${alias}: ${substitution}`);
+    }
+  },
+  unalias: (ctx) => (_alias) => {
+    const alias = helpers.string(ctx, "alias", _alias);
+    if (alias) {
+      helpers.log(ctx, () => `Successfully removed the "${alias}" alias.`);
+    }
+    else {
+      helpers.log(ctx, () => `Failed to remove the "${alias}" alias: no alias with that name found.`);
+    }
+
+    return removeAlias(alias);
+
+  },
+  clearAliases: (ctx) => () => {
+    let count = 0;
+    for (const alias of Aliases.keys()) {
+      removeAlias(alias);
+      count++;
+    }
+    for (const alias of GlobalAliases.keys()) {
+      removeAlias(alias);
+      count++;
+    }
+    helpers.log(ctx, () => `Cleared all ${count} aliases.`);
   },
   getPlayer: () => () => {
     const data = {
