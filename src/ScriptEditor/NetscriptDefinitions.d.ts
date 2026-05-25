@@ -9138,7 +9138,7 @@ export interface NS {
   getSharePower(): number;
 
   /**
-   * Programmatically sets an alias
+   * Programmatically sets an alias.
    * @param alias - The keyword to set.
    * @param substitution - The substitution to run.
    * @param global - Whether the alias should be set as a global alias. Global aliases replace all examples of the alias with the substitution string.
