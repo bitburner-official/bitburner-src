@@ -517,7 +517,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "millions of nanobots capable of projecting high-density muon beams, " +
         "creating an energy barrier around the user.",
       defense: 1.4,
-      charisma: 1.05,
+      charisma: 1.03,
       factions: [FactionName.Volhaven],
     },
     // === E === //
@@ -1187,6 +1187,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1.01 + donationBonus,
       crime_money: 1.01 + donationBonus,
       crime_success: 1.01 + donationBonus,
+      dnet_money: 1.01 + donationBonus,
       hacknet_node_money: 1.01 + donationBonus,
       hacknet_node_purchase_cost: 1 / (1.01 + donationBonus),
       hacknet_node_ram_cost: 1 / (1.01 + donationBonus),
@@ -1460,8 +1461,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
         "Thought to be stolen technology, its existence has been a secret until recently.",
-      charisma: 1.1,
-      charisma_exp: 1.4,
+      charisma: 1.05,
+      charisma_exp: 1.2,
       factions: [FactionName.TheDarkArmy, FactionName.TheSyndicate],
     },
     // === Q === //
@@ -1560,7 +1561,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "you more convincing and likable in conversations and overall improving your " +
         "social interactions.",
       company_rep: 1.1,
-      charisma: 1.1,
+      charisma: 1.05,
       factions: [
         FactionName.TianDiHui,
         FactionName.SpeakersForTheDead,
@@ -1577,7 +1578,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "A cochlear implant with an embedded computer that analyzes incoming speech. " +
         "The embedded computer processes characteristics of incoming speech, such as tone " +
         "and inflection, to pick up on subtle cues and aid in social interactions.",
-      charisma: 1.2,
+      charisma: 1.1,
       factions: [
         FactionName.TianDiHui,
         FactionName.Chongqing,
@@ -1759,7 +1760,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "more efficiently than an organic heart.",
       agility: 1.5,
       strength: 1.5,
-      charisma: 1.3,
+      charisma: 1.15,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,

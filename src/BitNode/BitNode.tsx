@@ -1000,6 +1000,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         DefenseLevelMultiplier: 0.7,
         DexterityLevelMultiplier: 0.7,
         AgilityLevelMultiplier: 0.7,
+        CharismaLevelMultiplier: 0.7,
 
         CloudServerSoftcap: 1.6,
 
