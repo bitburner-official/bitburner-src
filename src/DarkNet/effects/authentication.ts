@@ -155,7 +155,8 @@ export const isCloseToCorrectPassword = (
   logIfNotClose = false,
 ): boolean => {
   const difference = Math.abs(attemptedPassword - Number(correctPassword));
-  const result = difference < 0.01 || difference / Number(correctPassword) < 0.005;
+  const fractionalDiff = Math.abs(difference / Number(correctPassword));
+  const result = difference < 0.01 || fractionalDiff < 0.005;
 
   if (logIfNotClose && !result) {
     console.warn(`Attempted password ${attemptedPassword} is not close enough to correct password ${correctPassword}`);
