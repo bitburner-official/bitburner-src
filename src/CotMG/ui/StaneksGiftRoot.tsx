@@ -170,12 +170,12 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   Stat Fragments are charged using the stanek.chargeFragment(rootX, rootY) NetScript API function. The
                   charging process ordinarily takes 1000ms to complete, but only takes 200ms during bonus time. When the
                   function finishes executing, the fragment's charge levels will be raised by an amount corresponding to
-                  the number of threads that were used. Note that it is generally more effective to charge a fragment a
-                  few times with many threads than to charge it many times with few threads, so there is a benefit to
-                  combining charging jobs into fewer scripts. As a Stat Fragment's charge level is increased, its
-                  bonuses will increase, but there will be diminishing returns. As such, it is generally most efficient
-                  to charge all of the placed fragments equally. The charge level of a fragment will not decrease over
-                  time, but it will be reset to 0 upon removing it from the board or installing augmentations.
+                  the number of threads that were used. The maximum number of threads used in a single call to
+                  chargeFragment is also recorded as its highest charge. As a Stat Fragment's charge level and highest
+                  charge are increased, its bonuses will increase, but there will be diminishing returns. As such, it is
+                  generally most efficient to charge all of the placed fragments equally. The charge level of a fragment
+                  will not decrease over time, but it will be reset to 0 upon removing it from the board or installing
+                  augmentations.
                 </Typography>
               </>,
             )
