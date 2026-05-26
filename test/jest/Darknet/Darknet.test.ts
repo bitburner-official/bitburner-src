@@ -61,11 +61,12 @@ import { DarknetServer } from "../../../src/Server/DarknetServer";
 import { isDirectoryPath } from "../../../src/Paths/Directory";
 import { isFilePath } from "../../../src/Paths/FilePath";
 import { LAB_CACHE_NAME } from "../../../src/DarkNet/effects/labyrinth";
-import { generateCacheFilename, getStockReward } from "../../../src/DarkNet/effects/cacheFiles";
+import { generateCacheFilename, getRewardFromCache, getStockReward } from "../../../src/DarkNet/effects/cacheFiles";
 import { getAllDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { prestigeAugmentation } from "../../../src/Prestige";
-import { initStockMarket, StockMarket } from "../../../src/StockMarket/StockMarket";
+import { initStockMarket, StockMarket, SymbolToStockMap } from "../../../src/StockMarket/StockMarket";
 import { StockSymbol } from "@enums";
+import { GetAllServers } from "../../../src/Server/AllServers";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -843,7 +844,7 @@ describe("Clue filename generator", () => {
   });
 });
 
-describe("Stock cache reward", () => {
+describe("CacheReward", () => {
   test("stock reward does not exceed maxShares and falls back to money reward", () => {
     initStockMarket();
 
@@ -860,7 +861,7 @@ describe("Stock cache reward", () => {
     const result = getStockReward(difficulty);
 
     // Should have awarded at most `remaining` shares
-    expect(result).toContain(`${remaining} shares`);
+    expect(result.message).toContain(`${remaining} shares`);
 
     // Verify the chosen stock was clamped to exactly maxShares
     for (const stockName of Object.keys(StockSymbol)) {
@@ -883,7 +884,84 @@ describe("Stock cache reward", () => {
     const result = getStockReward(5);
 
     // Should have fallen back to a money reward
-    expect(result).toContain("discovered a cache with");
+    expect(result.message).toContain("discovered a cache with");
     expect(Player.money).toBeGreaterThan(moneyBefore);
+  });
+
+  test("CacheReward", () => {
+    for (let i = 0; i < 500; ++i) {
+      Player.queuedAugmentations.length = 0;
+      prestigeAugmentation();
+      initStockMarket();
+      Player.money = 0;
+      Player.getHomeComputer().programs.length = 0;
+      const dnetServers = [];
+      for (const server of GetAllServers(true)) {
+        server.messages.length = 0;
+        if (server instanceof DarknetServer) {
+          dnetServers.push(server);
+        }
+      }
+      const randomServer = dnetServers[Math.floor(Math.random() * dnetServers.length)];
+
+      const result = getRewardFromCache(randomServer, "test.d.cache");
+
+      const home = Player.getHomeComputer();
+      expect(typeof result.success).toBe("boolean");
+      expect(typeof result.message).toBe("string");
+      expect(Number.isFinite(result.karmaLoss)).toBe(true);
+
+      expect(result.wseAccount).toBe(Player.hasWseAccount);
+      expect(result.tixApiAccess).toBe(Player.hasTixApiAccess);
+      expect(result.fourSigmaData).toBe(Player.has4SData);
+
+      if (Player.money > 0) {
+        expect(result.money).toBe(Player.money);
+      } else {
+        expect(result.money).toBeUndefined();
+      }
+
+      if (home.programs.length > 0) {
+        expect(home.programs.length).toBe(1);
+        expect(result.programName).toBe(home.programs[0]);
+      } else {
+        expect(result.programName).toBeUndefined();
+      }
+
+      if (Object.values(SymbolToStockMap).some((stock) => stock.playerShares > 0)) {
+        expect(result.stockSymbol).toBeDefined();
+        expect(SymbolToStockMap[result.stockSymbol as string].playerShares).toBe(result.stockShares);
+      } else {
+        expect(result.stockSymbol).toBeUndefined();
+        expect(result.stockShares).toBeUndefined();
+      }
+
+      const dataFilePaths = [];
+      const contractFilePaths = [];
+      for (const server of GetAllServers(true)) {
+        dataFilePaths.push(...server.messages);
+        dataFilePaths.push(...server.textFiles.keys());
+        contractFilePaths.push(...server.contracts.map((c) => c.fn));
+      }
+      dataFilePaths.sort();
+      contractFilePaths.sort();
+      if (dataFilePaths.length > 0) {
+        expect(result.dataFilePaths?.sort()).toStrictEqual(dataFilePaths);
+      } else {
+        expect(result.dataFilePaths).toBeUndefined();
+      }
+      if (contractFilePaths.length > 0) {
+        expect(result.contractFilePaths?.sort()).toStrictEqual(contractFilePaths);
+      } else {
+        expect(result.contractFilePaths).toBeUndefined();
+      }
+
+      if (Player.queuedAugmentations.length > 0) {
+        expect(Player.queuedAugmentations).toBe(1);
+        expect(result.augmentationName).toStrictEqual(Player.queuedAugmentations[0]);
+      } else {
+        expect(result.augmentationName).toBeUndefined();
+      }
+    }
   });
 });

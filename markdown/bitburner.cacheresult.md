@@ -11,6 +11,7 @@
 export type CacheResult = {
   success: boolean;
   message: string;
-  karmaLoss: number;
-};
+} & CacheReward;
 ```
+**References:** [CacheReward](./bitburner.cachereward.md)
+

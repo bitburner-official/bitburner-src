@@ -4417,7 +4417,22 @@ export type DarknetResult = { success: boolean; code: DarknetResponseCode; messa
 export type CacheResult = {
   success: boolean;
   message: string;
+} & CacheReward;
+
+/** @public */
+export type CacheReward = {
   karmaLoss: number;
+  wseAccount: boolean;
+  tixApiAccess: boolean;
+  fourSigmaData: boolean;
+
+  money?: number;
+  programName?: ProgramName;
+  stockSymbol?: string;
+  stockShares?: number;
+  dataFilePaths?: string[];
+  contractFilePaths?: string[];
+  augmentationName?: string;
 };
 
 /**
