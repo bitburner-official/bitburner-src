@@ -8,9 +8,9 @@ import {
 } from "./dnetStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
-import { NET_WIDTH } from "../Enums";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
+import { NET_WIDTH } from "../Constants";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");

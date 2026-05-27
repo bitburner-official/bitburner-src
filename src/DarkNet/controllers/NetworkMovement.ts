@@ -12,13 +12,6 @@ import { killServerScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer, labData } from "../effects/labyrinth";
 import {
-  LOW_LEVEL_SERVER_DENSITY,
-  MAX_NET_DEPTH,
-  MAXIMUM_DNET_SERVER_COUNT,
-  NET_WIDTH,
-  SERVER_DENSITY,
-} from "../Enums";
-import {
   getAllAdjacentNeighbors,
   getAllDarknetServers,
   getAllMovableDarknetServers,
@@ -27,7 +20,14 @@ import {
   getDarknetCyclesPerMutation,
   getIslands,
 } from "../utils/darknetNetworkUtils";
-import { DarknetConstants } from "../Constants";
+import {
+  DarknetConstants,
+  LOW_LEVEL_SERVER_DENSITY,
+  MAX_NET_DEPTH,
+  MAXIMUM_DNET_SERVER_COUNT,
+  NET_WIDTH,
+  SERVER_DENSITY,
+} from "../Constants";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
@@ -71,7 +71,7 @@ export const mutateDarknet = (): void => {
     const islands = getIslands();
     const island = islands[Math.floor(Math.random() * islands.length)];
     if (island) {
-      moveDarknetServer(island);
+      moveDarknetServer(island, 3, 3, island.difficulty);
     }
   }
 
@@ -196,10 +196,11 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
 };
 
 export const addRandomDarknetServers = (count = 1, difficulty?: number, fixedDepth?: boolean): void => {
-  if (getAllMovableDarknetServers().length >= MAXIMUM_DNET_SERVER_COUNT) {
-    return;
-  }
   for (let i = 0; i < count; i++) {
+    if (getAllMovableDarknetServers().length >= MAXIMUM_DNET_SERVER_COUNT) {
+      return;
+    }
+
     const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
     const newServer = createDarknetServer(diff, diff, -1);
     const range = fixedDepth ? 0 : 3;
@@ -211,7 +212,6 @@ export const addLowLevelServersIfNeeded = (): void => {
   if (getAllMovableDarknetServers().length >= MAXIMUM_DNET_SERVER_COUNT) {
     return;
   }
-  console.log("adding low level servers");
   const lowLevelServers = getAllDarknetServers().filter((s) => s.depth <= 3);
   const serversConnectedToDarkweb = getAllDarknetServers().filter((s) => s.depth === 0);
   if (serversConnectedToDarkweb.length <= 3) {

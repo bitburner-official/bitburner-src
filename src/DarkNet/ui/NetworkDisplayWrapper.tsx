@@ -110,6 +110,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     if (target.id === "draggableBackgroundTarget") {
       background?.releasePointerCapture(pointerEvent.pointerId);
     }
+    DarknetEvents.emit();
   };
 
   const handleDrag: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {

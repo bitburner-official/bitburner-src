@@ -10,8 +10,8 @@ import {
   numbers,
 } from "../models/dictionaryData";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { ModelIds, MinigamesType, MAXIMUM_DIFFICULTY } from "../Enums";
-import { MAX_PASSWORD_LENGTH } from "../Constants";
+import { ModelIds, MinigamesType } from "../Enums";
+import { MAX_PASSWORD_LENGTH, MAXIMUM_DIFFICULTY } from "../Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { hasFullDarknetAccess } from "../effects/effects";
 

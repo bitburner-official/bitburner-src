@@ -1,10 +1,10 @@
 import { DarknetState } from "../models/DarknetState";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH } from "../Enums";
 import { GetAllServers } from "../../Server/AllServers";
 import { getNetDepth } from "../effects/labyrinth";
 import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
+import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH } from "../Constants";
 
 export const getDarknetCyclesPerMutation = () => {
   const depth = getNetDepth();

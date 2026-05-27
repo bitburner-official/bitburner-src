@@ -26,7 +26,7 @@ import {
   isLabyrinthServer,
 } from "../effects/labyrinth";
 import { DarknetServer, type DarknetServerConstructorParams } from "../../Server/DarknetServer";
-import { HORIZONTAL_CONNECTION_CHANCE, MAX_NET_DEPTH, ModelIds, NET_WIDTH, VERTICAL_CONNECTION_CHANCE } from "../Enums";
+import { HORIZONTAL_CONNECTION_CHANCE, ModelIds } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
 import {
   getAllDarknetServers,
@@ -42,6 +42,7 @@ import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import type { Script } from "../../Script/Script";
 import type { CodingContract } from "../../CodingContract/Contract";
 import { getTorRouter } from "../../Server/ServerHelpers";
+import { MAX_NET_DEPTH, NET_WIDTH, VERTICAL_CONNECTION_CHANCE } from "../Constants";
 
 export function initDarkwebServer(): void {
   const existingServer = GetServer(SpecialServers.DarkWeb);

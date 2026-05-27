@@ -11,9 +11,9 @@ import {
 } from "../controllers/NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
-import { NET_WIDTH } from "../Enums";
 import { sleep } from "../../utils/Utility";
 import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
+import { NET_WIDTH } from "../Constants";
 
 const validateDarknetNetworkAndEmitDarknetEvent = (): void => {
   validateDarknetNetwork();

@@ -13,7 +13,7 @@ import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { GenericResponseMessage, ModelIds, NET_WIDTH, ResponseCodeEnum } from "../Enums";
+import { GenericResponseMessage, ModelIds, ResponseCodeEnum } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
 import { type DarknetServerData, getDarknetServer } from "../utils/darknetServerUtils";
@@ -25,7 +25,7 @@ import {
 } from "../utils/darknetNetworkUtils";
 import { getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 import { getTorRouter } from "../../Server/ServerHelpers";
-import { DarknetConstants } from "../Constants";
+import { DarknetConstants, NET_WIDTH } from "../Constants";
 import { isLabyrinthServer } from "./labyrinth";
 import { NetscriptContext } from "../../Netscript/APIWrapper";
 import { helpers } from "../../Netscript/NetscriptHelpers";

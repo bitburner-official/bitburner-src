@@ -11,7 +11,7 @@ import {
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import type { DarknetResponseCode } from "@nsdefs";
-import { MinigamesType } from "../Enums";
+import type { MinigamesType } from "../Enums";
 import { DarknetState } from "./DarknetState";
 import { getRamBlock } from "../effects/ramblock";
 import { hasFullDarknetAccess } from "../effects/effects";

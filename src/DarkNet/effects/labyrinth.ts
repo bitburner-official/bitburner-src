@@ -11,6 +11,7 @@ import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 import type { SuccessResult } from "@nsdefs";
+import { MAX_MAZE_BONUS_SIZE, MAX_NET_DEPTH } from "../Constants";
 
 export const LAB_CACHE_NAME = "the_great_work";
 
@@ -368,10 +369,8 @@ const getOrdinalInput = (input: string): number[] | null => {
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
     const { mazeWidth, mazeHeight } = getLabyrinthDetails();
-    DarknetState.labyrinth = generateMaze(
-      mazeWidth + DarknetState.bonusLabCompletions * 2,
-      mazeHeight + DarknetState.bonusLabCompletions * 2,
-    );
+    const bonusSize = Math.min(DarknetState.bonusLabCompletions * 2, MAX_MAZE_BONUS_SIZE);
+    DarknetState.labyrinth = generateMaze(mazeWidth + bonusSize, mazeHeight + bonusSize);
     const [offsetX, offsetY] = getRandomOffset();
     DarknetState.labEndpoint = [
       DarknetState.labyrinth[0].length - 2 - offsetX,
@@ -400,7 +399,7 @@ export const getLabyrinthChaRequirement = (name: string) => {
 export const getNetDepth = () => {
   const labDetails = getLabyrinthDetails();
   if (labDetails.name === SpecialServers.BonusLab) {
-    return labDetails.depth + DarknetState.bonusLabCompletions * 2;
+    return Math.min(labDetails.depth + DarknetState.bonusLabCompletions * 2, MAX_NET_DEPTH);
   }
   return labDetails.depth ?? 10;
 };

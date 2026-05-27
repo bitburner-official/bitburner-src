@@ -13,12 +13,12 @@ import { Player } from "@player";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 import { populateDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
-import { MAX_NET_DEPTH, NET_WIDTH } from "../../../src/DarkNet/Enums";
 import type { DarknetServer } from "../../../src/Server/DarknetServer";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName } from "@enums";
 import { getAuthResult } from "../../../src/DarkNet/effects/authentication";
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
+import { MAX_NET_DEPTH, NET_WIDTH } from "../../../src/DarkNet/Constants";
 
 beforeAll(() => {
   initGameEnvironment();
