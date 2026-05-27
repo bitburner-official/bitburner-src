@@ -10,7 +10,7 @@ import React, {
 import { Container, Typography, Button, Box, Tooltip } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { throttle } from "lodash";
-import { ServerStatusBox } from "./ServerStatusBox";
+import { getServerStateSnapshot, ServerStatusBox } from "./ServerStatusBox";
 import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -110,7 +110,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     if (target.id === "draggableBackgroundTarget") {
       background?.releasePointerCapture(pointerEvent.pointerId);
     }
-    DarknetEvents.emit();
   };
 
   const handleDrag: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
@@ -279,18 +278,36 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             height={DW_NET_HEIGHT}
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
-          {darkWebRoot && <ServerStatusBox server={darkWebRoot} enableAuth={true} classes={classes} />}
+          {darkWebRoot && (
+            <ServerStatusBox
+              server={darkWebRoot}
+              enableAuth={true}
+              classes={classes}
+              stateSnapshot={getServerStateSnapshot(darkWebRoot)}
+            />
+          )}
           {DarknetState.Network.slice(0, netDisplayDepth).map((row) =>
             row.map(
               (server) =>
                 !!server && (
-                  <ServerStatusBox server={server} key={server.ip} enableAuth={allowAuth(server)} classes={classes} />
+                  <ServerStatusBox
+                    server={server}
+                    key={server.ip}
+                    enableAuth={allowAuth(server)}
+                    classes={classes}
+                    stateSnapshot={getServerStateSnapshot(server)}
+                  />
                 ),
             ),
           )}
 
           {!!labyrinth && netDisplayDepth > depth && (
-            <ServerStatusBox server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
+            <ServerStatusBox
+              server={labyrinth}
+              enableAuth={allowAuth(labyrinth)}
+              classes={classes}
+              stateSnapshot={getServerStateSnapshot(labyrinth)}
+            />
           )}
         </div>
       </div>

@@ -62,7 +62,7 @@ export const mutateDarknet = (): void => {
 
   // Limit mutation speed based on size of net
   const depth = getNetDepth();
-  const depthSpeedFactor = 16 / depth;
+  const depthSpeedFactor = Math.max(16 / depth, 0.3);
   if (Math.random() > depthSpeedFactor) {
     return;
   }
@@ -211,7 +211,7 @@ export const addLowLevelServersIfNeeded = (): void => {
   if (getAllMovableDarknetServers().length >= MAXIMUM_DNET_SERVER_COUNT) {
     return;
   }
-  console.log("adding low level servers")
+  console.log("adding low level servers");
   const lowLevelServers = getAllDarknetServers().filter((s) => s.depth <= 3);
   const serversConnectedToDarkweb = getAllDarknetServers().filter((s) => s.depth === 0);
   if (serversConnectedToDarkweb.length <= 3) {
@@ -242,8 +242,8 @@ export const getServerDensity = () => {
   if (getNetDepth() <= labData[SpecialServers.BonusLab].depth) {
     return SERVER_DENSITY;
   }
-  return Math.max(SERVER_DENSITY - DarknetState.bonusLabCompletions * 0.01, SERVER_DENSITY * 0.4);
-}
+  return Math.max(SERVER_DENSITY - DarknetState.bonusLabCompletions * 0.01, SERVER_DENSITY * 0.45);
+};
 
 const isImmutable = (server: DarknetServer): boolean =>
   server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;

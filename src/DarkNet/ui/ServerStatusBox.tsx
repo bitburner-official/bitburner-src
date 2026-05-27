@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Typography, SvgIcon, Tooltip } from "@mui/material";
+import React, { useState, memo } from "react";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { getIcon } from "./ServerIcon";
 import { DarknetState } from "../models/DarknetState";
@@ -15,11 +14,12 @@ export type DWServerProps = {
   classes: {
     [key: string]: string;
   };
+  stateSnapshot: string;
 };
 
-export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps): React.ReactElement {
+function ServerStatusBoxImpl({ server, enableAuth, classes }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const icon = getIcon(server.modelId);
+  const Icon = getIcon(server.modelId);
 
   const authButtonHandler = () => {
     DarknetState.openServer = server;
@@ -31,41 +31,61 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
     setOpen(false);
   };
 
-  const getServerStyles = (server: DarknetServer) => {
-    const position = getPixelPosition(server);
-    return {
-      ...DWServerStyles,
-      top: `${position.top}px`,
-      left: `${position.left}px`,
-      borderColor: server.hasStasisLink ? "gold" : server.hasAdminRights ? "green" : "grey",
-    };
+  const position = getPixelPosition(server);
+  const buttonStyle = {
+    ...DWServerStyles,
+    top: `${position.top}px`,
+    left: `${position.left}px`,
+    borderColor: server.hasStasisLink ? "gold" : server.hasAdminRights ? "green" : "grey",
+    position: "absolute" as const,
+    userSelect: "none" as const,
   };
+  const hostnameClass = server.hasAdminRights ? classes.txtPrimary : classes.txtSecondary;
 
   return (
     <>
-      {open ? <ServerDetailsModal open={open} onClose={handleClose} server={server} classes={classes} /> : ""}
-      <button
-        style={{ ...getServerStyles(server), position: "absolute", userSelect: "none" }}
-        className={classes.DWServer}
-        onClick={authButtonHandler}
-        disabled={!enableAuth}
-      >
+      {open ? <ServerDetailsModal open={open} onClose={handleClose} server={server} classes={classes} /> : null}
+      <button style={buttonStyle} className={classes.DWServer} onClick={authButtonHandler} disabled={!enableAuth}>
         <div style={{ padding: 0, margin: 0, width: "100%" }}>
           <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
-            <Tooltip title={`Server Model: ${server.modelId}`}>
-              <SvgIcon component={icon} color="secondary" />
-            </Tooltip>
-            <Typography color={server.hasAdminRights ? "primary" : "secondary"} sx={ServerName}>
+            <span title={`Server Model: ${server.modelId}`} style={{ display: "inline-flex" }}>
+              <Icon className={classes.txtSecondary} />
+            </span>
+            <span className={hostnameClass} style={ServerName}>
               {server.hostname}
-            </Typography>
+            </span>
           </div>
-          <Typography color="secondary" style={{ fontSize: "0.9em" }}>
+          <span className={classes.txtSecondary} style={{ display: "block", fontSize: "0.9em" }}>
             {server.ip} cha:{server.requiredCharismaSkill}
-          </Typography>
+          </span>
           <br />
           <ServerSummary server={server} enableAuth={enableAuth} classes={classes} />
         </div>
       </button>
     </>
   );
+}
+
+export const ServerStatusBox = memo(ServerStatusBoxImpl);
+
+/**
+ * Snapshot the mutable server fields that ServerStatusBox/ServerSummary render.
+ * This is used to avoid re-rendering the status box unless visible values change.
+ */
+export function getServerStateSnapshot(server: DarknetServer): string {
+  return [
+    server.hasAdminRights,
+    server.hasStasisLink,
+    server.backdoorInstalled,
+    server.depth,
+    server.leftOffset,
+    server.blockedRam,
+    server.requiredCharismaSkill,
+    server.caches.length,
+    server.contracts.length,
+    server.messages.length,
+    server.programs.length,
+    server.textFiles.size,
+    server.runningScriptMap.size,
+  ].join("|");
 }

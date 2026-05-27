@@ -1,5 +1,4 @@
 import React from "react";
-import { SvgIcon, Tooltip, Typography } from "@mui/material";
 import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
 import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
@@ -17,6 +16,11 @@ export type ServerSummaryProps = {
   };
 };
 
+const summaryItemStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+};
+
 export function ServerSummary({
   server,
   enableAuth,
@@ -24,10 +28,14 @@ export function ServerSummary({
   showDetails = false,
 }: ServerSummaryProps): React.ReactElement {
   if (!server.hasAdminRights && enableAuth) {
-    return <Typography>[ auth required ]</Typography>;
+    return <span style={{ display: "block" }}>[ auth required ]</span>;
   }
   if (!server.hasAdminRights && !enableAuth) {
-    return <Typography color="secondary">(no connection)</Typography>;
+    return (
+      <span className={classes.txtSecondary} style={{ display: "block" }}>
+        (no connection)
+      </span>
+    );
   }
 
   const cacheCount = server.caches.length;
@@ -69,90 +77,87 @@ export function ServerSummary({
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.blockedRam, 0);
 
   const runningScriptsComponent = (
-    <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
-      <Typography color={runningScriptCount > 0 ? "primary" : "secondary"}>
-        <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
-        {runningScriptCount}
-      </Typography>
-    </Tooltip>
+    <span
+      key="runningScript"
+      title={runningScriptsTooltip}
+      className={runningScriptCount > 0 ? classes.txtPrimary : classes.txtSecondary}
+      style={summaryItemStyle}
+    >
+      <Terminal className={classes.serverStatusIcon} />
+      {runningScriptCount}
+    </span>
   );
 
   const components = [];
   if (cacheCount) {
     components.push(
-      <Tooltip key="cache" title={<>{dataCacheTooltip}</>}>
-        <Typography>
-          <SvgIcon component={Inventory2} className={`${classes.gold} ${classes.serverStatusIcon}`} />
-          {cacheCount}
-        </Typography>
-      </Tooltip>,
+      <span key="cache" title={dataCacheTooltip} style={summaryItemStyle}>
+        <Inventory2 className={`${classes.gold} ${classes.serverStatusIcon}`} />
+        {cacheCount}
+      </span>,
     );
   }
   if (hasStormSeed) {
     components.push(
-      <Tooltip key="stormSeed" title={<>A mysterious executable has been found here...</>}>
-        <Typography>
-          <SvgIcon component={Bolt} className={`${classes.gold} ${classes.serverStatusIcon}`} />?
-        </Typography>
-      </Tooltip>,
+      <span key="stormSeed" title="A mysterious executable has been found here..." style={summaryItemStyle}>
+        <Bolt className={`${classes.gold} ${classes.serverStatusIcon}`} />?
+      </span>,
     );
   }
   if (hasBackdoor) {
     components.push(
-      <Tooltip key="backdoor" title={<>Backdoor installed. Warning: this increases darknet instability.</>}>
-        <Typography>
-          <SvgIcon component={DoorBackSharp} className={`${classes.red} ${classes.serverStatusIcon}`} />
-        </Typography>
-      </Tooltip>,
+      <span
+        key="backdoor"
+        title="Backdoor installed. Warning: this increases darknet instability."
+        style={summaryItemStyle}
+      >
+        <DoorBackSharp className={`${classes.red} ${classes.serverStatusIcon}`} />
+      </span>,
     );
   }
   if (server.hasStasisLink) {
     components.push(
-      <Tooltip
-        key="backdoor"
-        title={
-          <>
-            Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance.
-          </>
-        }
+      <span
+        key="stasis"
+        title="Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance."
+        style={summaryItemStyle}
       >
-        <Typography>
-          <SvgIcon component={DoorBackSharp} className={`${classes.gold} ${classes.serverStatusIcon}`} />
-        </Typography>
-      </Tooltip>,
+        <DoorBackSharp className={`${classes.gold} ${classes.serverStatusIcon}`} />
+      </span>,
     );
   }
   if (contractCount) {
     components.push(
-      <Tooltip key="contract" title={<>Coding contract count: {contractCount}</>}>
-        <Typography>
-          <SvgIcon component={Code} className={classes.serverStatusIcon} />
-          {contractCount}
-        </Typography>
-      </Tooltip>,
+      <span key="contract" title={`Coding contract count: ${contractCount}`} style={summaryItemStyle}>
+        <Code className={classes.serverStatusIcon} />
+        {contractCount}
+      </span>,
     );
   }
   if (fileCount) {
     components.push(
-      <Tooltip key="file" title={<>{textFilesTooltip}</>}>
-        <Typography color={fileCount ? "primary" : "secondary"}>
-          <SvgIcon component={Description} className={classes.serverStatusIcon} />
-          {fileCount}
-        </Typography>
-      </Tooltip>,
+      <span
+        key="file"
+        title={textFilesTooltip}
+        className={fileCount ? classes.txtPrimary : classes.txtSecondary}
+        style={summaryItemStyle}
+      >
+        <Description className={classes.serverStatusIcon} />
+        {fileCount}
+      </span>,
     );
   }
   if (server.blockedRam) {
     components.push(
-      <Tooltip
+      <span
         key="ramBlocked"
-        title={<>Ram blocked by owner: {ramBlockedDetails}. This can be freed up using ns.dnet.memoryReallocation()</>}
+        title={`Ram blocked by owner: ${ramBlockedDetails}. This can be freed up using ns.dnet.memoryReallocation()`}
+        className={classes.txtSecondary}
+        style={summaryItemStyle}
       >
-        <Typography color={"secondary"}>
-          <SvgIcon component={LockPerson} className={classes.serverStatusIcon} />
-          {ramBlocked}
-        </Typography>
-      </Tooltip>,
+        <LockPerson className={classes.serverStatusIcon} />
+        {ramBlocked}
+      </span>,
     );
   }
   const maxIcons = showDetails ? components.length : 2;

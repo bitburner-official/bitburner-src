@@ -12,7 +12,8 @@ import {
   addRandomDarknetServers,
   balanceDarknetServers,
   deleteDarknetServer,
-  disconnectServer, getServerDensity,
+  disconnectServer,
+  getServerDensity,
 } from "./NetworkMovement";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Player } from "@player";
@@ -25,13 +26,7 @@ import {
   isLabyrinthServer,
 } from "../effects/labyrinth";
 import { DarknetServer, type DarknetServerConstructorParams } from "../../Server/DarknetServer";
-import {
-  HORIZONTAL_CONNECTION_CHANCE,
-  MAX_NET_DEPTH,
-  ModelIds,
-  NET_WIDTH,
-  VERTICAL_CONNECTION_CHANCE,
-} from "../Enums";
+import { HORIZONTAL_CONNECTION_CHANCE, MAX_NET_DEPTH, ModelIds, NET_WIDTH, VERTICAL_CONNECTION_CHANCE } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
 import {
   getAllDarknetServers,

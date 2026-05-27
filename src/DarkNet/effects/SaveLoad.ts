@@ -26,10 +26,11 @@ export function loadDarkNet(saveString: unknown): void {
     if (typeof storedCycles !== "number" || !Number.isFinite(storedCycles)) {
       throw new Error(`Invalid storedCycles: ${storedCycles}`);
     }
-    const cleanedBonusLabCompletions = typeof bonusLabCompletions !== "number" || !Number.isFinite(bonusLabCompletions) ? 0 : bonusLabCompletions;
+    const cleanedBonusLabCompletions =
+      typeof bonusLabCompletions !== "number" || !Number.isFinite(bonusLabCompletions) ? 0 : bonusLabCompletions;
     DarknetState.storedCycles = storedCycles < 0 ? 0 : storedCycles;
     DarknetState.hasUsedHeartbleed = Boolean(hasUsedHeartbleed);
-    DarknetState.bonusLabCompletions = 50; // cleanedBonusLabCompletions < 0 ? 0 : cleanedBonusLabCompletions;
+    DarknetState.bonusLabCompletions = cleanedBonusLabCompletions < 0 ? 0 : cleanedBonusLabCompletions;
   } catch (error) {
     console.error(error);
     console.error("Invalid DarkNet data:", saveString);

@@ -308,14 +308,14 @@ export const handleLabyrinthPassword = (
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
     Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, 32, true));
     server.hasAdminRights = true;
-    const isBonusLab = getLabyrinthDetails().name === SpecialServers.BonusLab
+    const isBonusLab = getLabyrinthDetails().name === SpecialServers.BonusLab;
     const cacheCount = isBonusLab ? 3 : 1;
     for (let i = 0; i < cacheCount; i++) {
       addCacheToServer(server, false, LAB_CACHE_NAME);
     }
     addSessionToServer(labServer, pid);
     if (isBonusLab) {
-      DarknetState.bonusLabCompletions ++;
+      DarknetState.bonusLabCompletions++;
     }
 
     return {

@@ -114,6 +114,12 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     textIndent: "2em",
     color: "grey",
   },
+  txtPrimary: {
+    color: theme.palette.primary.main,
+  },
+  txtSecondary: {
+    color: theme.palette.secondary.main,
+  },
 }));
 
 /*
@@ -147,7 +153,7 @@ export const DWServerStyles = {
   fontSize: "0.875rem",
   lineHeight: 1.75,
   transition:
-    "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    "background-color 100ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 100ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 100ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 100ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
   color: "#0c0",
 };
 export const DWServerLogStyles = { fontFamily: 'JetBrainsMono, "Courier New", monospace', fontSize: "12px" };
