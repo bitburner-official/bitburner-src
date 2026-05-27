@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
-import { AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
+import { AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography, TextField } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { makeStyles } from "tss-react/mui";
 
@@ -15,6 +15,7 @@ import { DeleteServer, GetAllServers } from "../../Server/AllServers";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 const useStyles = makeStyles()({
   group: {
@@ -32,6 +33,10 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
 
   const setSF = useCallback(
     (sfN: number, sfLvl: number) => () => {
+      if (!Number.isInteger(sfLvl) || sfLvl < 0) {
+        dialogBoxCreate(`Invalid SF level: ${sfLvl}`);
+        return;
+      }
       if (sfN === 9) {
         if (sfLvl === 0) {
           // Make sure that Player.hacknetNodes contains only HackNode and there is no hacknet server in "AllServers".
@@ -88,9 +93,10 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
 
   const devLvls = [0, 1, 2, 3];
 
-  const buttonRow = (sfN?: number) => {
+  const ButtonRow = (sfN?: number) => {
     const title = sfN ? `SF-${sfN}` : "Set All";
     const level = sfN ? Player.sourceFileLvl(sfN) : 0;
+    const [newSf12Level, setNewSf12Level] = useState(Player.sourceFileLvl(12));
     return (
       <tr key={title}>
         <td>
@@ -103,12 +109,16 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                 {lvl}
               </Button>
             ))}
-            {sfN === 12 &&
-              [1, 10, 100].map((numLevels) => (
-                <Button key={numLevels} onClick={setSF(12, level + numLevels)}>
-                  +{numLevels}
-                </Button>
-              ))}
+            {sfN === 12 && (
+              <>
+                <TextField
+                  style={{ maxWidth: "90px" }}
+                  value={newSf12Level}
+                  onChange={(x) => setNewSf12Level(Number(x.target.value))}
+                />
+                <Button onClick={setSF(12, newSf12Level)}>Set</Button>
+              </>
+            )}
             {sfN && <Typography className={classes.extraInfo}>{`Level: ${level}`}</Typography>}
             {sfN === 10 && (
               <>
@@ -151,7 +161,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                 <Button onClick={clearExploits}>Clear</Button>
               </td>
             </tr>
-            {[undefined, ...validBitNodes].map((sfN) => buttonRow(sfN))}
+            {[undefined, ...validBitNodes].map((sfN) => ButtonRow(sfN))}
           </tbody>
         </table>
       </AccordionDetails>
