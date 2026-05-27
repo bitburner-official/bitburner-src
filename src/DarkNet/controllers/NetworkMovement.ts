@@ -10,8 +10,14 @@ import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killServerScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
-import { LOW_LEVEL_SERVER_DENSITY, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
+import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer, labData } from "../effects/labyrinth";
+import {
+  LOW_LEVEL_SERVER_DENSITY,
+  MAX_NET_DEPTH,
+  MAXIMUM_DNET_SERVER_COUNT,
+  NET_WIDTH,
+  SERVER_DENSITY,
+} from "../Enums";
 import {
   getAllAdjacentNeighbors,
   getAllDarknetServers,
@@ -190,15 +196,22 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
 };
 
 export const addRandomDarknetServers = (count = 1, difficulty?: number, fixedDepth?: boolean): void => {
+  if (getAllMovableDarknetServers().length >= MAXIMUM_DNET_SERVER_COUNT) {
+    return;
+  }
   for (let i = 0; i < count; i++) {
     const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
-    const newServer = createDarknetServer(diff, -1, -1);
+    const newServer = createDarknetServer(diff, diff, -1);
     const range = fixedDepth ? 0 : 3;
     moveDarknetServer(newServer, range, range);
   }
 };
 
 export const addLowLevelServersIfNeeded = (): void => {
+  if (getAllMovableDarknetServers().length >= MAXIMUM_DNET_SERVER_COUNT) {
+    return;
+  }
+  console.log("adding low level servers")
   const lowLevelServers = getAllDarknetServers().filter((s) => s.depth <= 3);
   const serversConnectedToDarkweb = getAllDarknetServers().filter((s) => s.depth === 0);
   if (serversConnectedToDarkweb.length <= 3) {
@@ -214,15 +227,23 @@ export const addLowLevelServersIfNeeded = (): void => {
 export const balanceDarknetServers = (): void => {
   const movableServers = getAllMovableDarknetServers();
   const netDepth = getNetDepth();
-  if (movableServers.length > netDepth * NET_WIDTH * SERVER_DENSITY) {
-    const serversToRemove = movableServers.length - netDepth * NET_WIDTH * SERVER_DENSITY;
+  const density = getServerDensity();
+  if (movableServers.length > netDepth * NET_WIDTH * density) {
+    const serversToRemove = movableServers.length - netDepth * NET_WIDTH * density;
     deleteRandomDarknetServers(serversToRemove);
   } else {
-    const serversToAdd = netDepth * NET_WIDTH * SERVER_DENSITY - movableServers.length;
+    const serversToAdd = netDepth * NET_WIDTH * density - movableServers.length;
     addRandomDarknetServers(serversToAdd);
   }
   addLowLevelServersIfNeeded();
 };
+
+export const getServerDensity = () => {
+  if (getNetDepth() <= labData[SpecialServers.BonusLab].depth) {
+    return SERVER_DENSITY;
+  }
+  return Math.max(SERVER_DENSITY - DarknetState.bonusLabCompletions * 0.01, SERVER_DENSITY * 0.4);
+}
 
 const isImmutable = (server: DarknetServer): boolean =>
   server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;
@@ -231,7 +252,7 @@ export const moveDarknetServer = (
   server: DarknetServer,
   maxDepthDecrease = 3,
   maxDepthIncrease = 3,
-  startingDepth = server.difficulty,
+  startingDepth = server.depth,
 ): boolean => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to move darkweb"), true);

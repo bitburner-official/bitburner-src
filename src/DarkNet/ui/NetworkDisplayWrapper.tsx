@@ -16,7 +16,7 @@ import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles, DWServerLogStyles } from "./dnetStyles";
-import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
+import { getLabyrinthDetails, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
@@ -28,7 +28,6 @@ import { DocumentationLink } from "../../ui/React/DocumentationLink";
 import { Settings } from "../../Settings/Settings";
 
 const DW_NET_WIDTH = 6000;
-const DW_NET_HEIGHT = 12000;
 const initialSearchLabel = `Search:`;
 
 export function NetworkDisplayWrapper(): React.ReactElement {
@@ -43,6 +42,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const { classes } = dnetStyles({});
   const instability = getTimeoutChance();
   const instabilityText = instability > 0.01 ? `${(instability * 100).toFixed(1)}%` : "< 1%";
+  const DW_NET_HEIGHT = Math.max(getNetDepth() * 300, 5000);
 
   const scrollTo = useCallback(
     (top: number, left: number) => {
@@ -64,7 +64,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     }
     const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
     const lab = getLabyrinthDetails().lab;
-    const startingDepth = lab && getServerLogs(lab, 1, true).length ? lab.depth : 0;
+    const startingDepth = lab && getServerLogs(lab, 1, true).length ? getNetDepth() : 0;
     const deepestServerDepth = DarknetState.Network.flat().reduce(
       (deepest, server) => (server?.hasAdminRights && server.depth > deepest ? server.depth : deepest),
       startingDepth,
@@ -94,7 +94,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const darkWebRoot = getDarknetServerOrThrow(SpecialServers.DarkWeb);
   const labDetails = getLabyrinthDetails();
   const labyrinth = labDetails.lab;
-  const depth = labDetails.depth;
+  const depth = getNetDepth();
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;

@@ -308,11 +308,15 @@ export const handleLabyrinthPassword = (
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
     Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, 32, true));
     server.hasAdminRights = true;
-    const cacheCount = getLabyrinthDetails().name === SpecialServers.BonusLab ? 3 : 1;
+    const isBonusLab = getLabyrinthDetails().name === SpecialServers.BonusLab
+    const cacheCount = isBonusLab ? 3 : 1;
     for (let i = 0; i < cacheCount; i++) {
       addCacheToServer(server, false, LAB_CACHE_NAME);
     }
     addSessionToServer(labServer, pid);
+    if (isBonusLab) {
+      DarknetState.bonusLabCompletions ++;
+    }
 
     return {
       passwordAttempted: attemptedPassword,
@@ -364,7 +368,10 @@ const getOrdinalInput = (input: string): number[] | null => {
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
     const { mazeWidth, mazeHeight } = getLabyrinthDetails();
-    DarknetState.labyrinth = generateMaze(mazeWidth, mazeHeight);
+    DarknetState.labyrinth = generateMaze(
+      mazeWidth + DarknetState.bonusLabCompletions * 2,
+      mazeHeight + DarknetState.bonusLabCompletions * 2,
+    );
     const [offsetX, offsetY] = getRandomOffset();
     DarknetState.labEndpoint = [
       DarknetState.labyrinth[0].length - 2 - offsetX,
@@ -392,6 +399,9 @@ export const getLabyrinthChaRequirement = (name: string) => {
 
 export const getNetDepth = () => {
   const labDetails = getLabyrinthDetails();
+  if (labDetails.name === SpecialServers.BonusLab) {
+    return labDetails.depth + DarknetState.bonusLabCompletions * 2;
+  }
   return labDetails.depth ?? 10;
 };
 

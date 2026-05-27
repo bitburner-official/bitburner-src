@@ -10,7 +10,7 @@ import {
   numbers,
 } from "../models/dictionaryData";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { ModelIds, MinigamesType } from "../Enums";
+import { ModelIds, MinigamesType, MAXIMUM_DIFFICULTY } from "../Enums";
 import { MAX_PASSWORD_LENGTH } from "../Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { hasFullDarknetAccess } from "../effects/effects";
@@ -62,7 +62,7 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
 };
 
 export const createDarknetServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
-  const cappedDifficulty = clampNumber(difficulty, 0, MAX_PASSWORD_LENGTH);
+  const cappedDifficulty = clampNumber(difficulty, 0, MAXIMUM_DIFFICULTY);
   return serverFactory(getRandomServerConfigBuilder(cappedDifficulty), difficulty, depth, leftOffset);
 };
 

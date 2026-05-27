@@ -12,7 +12,7 @@ import {
   addRandomDarknetServers,
   balanceDarknetServers,
   deleteDarknetServer,
-  disconnectServer,
+  disconnectServer, getServerDensity,
 } from "./NetworkMovement";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Player } from "@player";
@@ -30,7 +30,6 @@ import {
   MAX_NET_DEPTH,
   ModelIds,
   NET_WIDTH,
-  SERVER_DENSITY,
   VERTICAL_CONNECTION_CHANCE,
 } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
@@ -98,7 +97,7 @@ export const populateDarknet = () => {
 
   clearDarknet();
   addLabyrinth();
-  addRandomDarknetServers(getNetDepth() * NET_WIDTH * SERVER_DENSITY - 10);
+  addRandomDarknetServers(getNetDepth() * NET_WIDTH * getServerDensity() - 10);
   addRandomDarknetServers(5 - DarknetState.Network[0].length);
   addRandomDarknetServers(5 - DarknetState.Network[1].length);
   balanceDarknetServers();
