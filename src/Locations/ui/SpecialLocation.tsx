@@ -158,13 +158,28 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     );
   }
 
+  function specialLocationNextBNHint(bn_number: number): React.ReactElement {
+    if (knowAboutBitverse()) {
+      return (
+        <>
+          <br />
+          <br />
+          <Typography>You should check out BN-{bn_number} to uncover more details about this place.</Typography>
+        </>
+      )
+    }
+    return <></>;
+  }
+
   function CreateCorporation(): React.ReactElement {
     const [open, setOpen] = useState(false);
     if (!Player.canAccessCorporation()) {
+
       return (
         <>
           <Typography>
             <i>A businessman is yelling at a clerk. You should come back later.</i>
+            {specialLocationNextBNHint(3)}
           </Typography>
         </>
       );
@@ -181,7 +196,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderGrafting(): React.ReactElement {
     if (!Player.canAccessGrafting()) {
-      return <></>;
+      { specialLocationNextBNHint(10) };
     }
     return (
       <Button onClick={handleGrafting} sx={{ my: 5 }}>
@@ -293,6 +308,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
             <br />
             <br />A symbol is carved in the altar.
           </Typography>
+
           <br />
           {symbol}
         </>
