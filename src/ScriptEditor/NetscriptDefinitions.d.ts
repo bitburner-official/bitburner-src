@@ -4547,6 +4547,21 @@ export interface Darknet {
   connectToSession(host: string, password: string): DarknetResult;
 
   /**
+   * Overloads a darknet server with feedback to lock it down. It will no longer move or go offline.
+   * However, it also loses all of its connections (excluding the one to the script's current server),
+   * and all of its max ram, and no longer gives experience.
+   *
+   * This technique is sometimes used to sacrifice a new device that appears on the network to make
+   * it easier to probe it for weaknesses and develop scripts against it.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @param host the server to freeze
+   */
+  freezeServer(host: string): Promise<DarknetResult>;
+
+  /**
    * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
    * Retrieves the most recent logs on the server. This can be used to get more feedback on authentication attempts.
    * The retrieved logs are removed from the server, unless the "peek" flag is set to true in the provided HeartbleedOptions.

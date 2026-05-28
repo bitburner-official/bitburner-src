@@ -5,6 +5,7 @@ import { GetAllServers } from "../../Server/AllServers";
 import { getNetDepth } from "../effects/labyrinth";
 import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
+import { isFrozen } from "../controllers/NetworkMovement";
 
 export const getDarknetCyclesPerMutation = () => {
   const depth = getNetDepth();
@@ -43,7 +44,7 @@ export const getNeighborsOnRow = (x: number, y: number): DarknetServer[] => {
   if (rightNeighbor) {
     neighbors.push(rightNeighbor);
   }
-  return neighbors;
+  return neighbors.filter((n) => !isFrozen(n));
 };
 
 export const getServersOnRowBelow = (x: number, close = false): DarknetServer[] => {
@@ -51,7 +52,7 @@ export const getServersOnRowBelow = (x: number, close = false): DarknetServer[] 
   if (close) {
     return rowBelow.filter((server) => Math.abs(server.leftOffset ?? 0 - x) <= 1);
   }
-  return rowBelow;
+  return rowBelow.filter((n) => !isFrozen(n));
 };
 
 export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] => {
@@ -59,7 +60,7 @@ export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] 
   if (close) {
     return rowAbove.filter((server) => Math.abs(server.leftOffset ?? 0 - x) <= 1);
   }
-  return rowAbove;
+  return rowAbove.filter((n) => !isFrozen(n));
 };
 
 export const getAllDarknetServers = (): DarknetServer[] => {
@@ -81,7 +82,7 @@ export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] =
   const rowAbove = getServersOnRowAbove(x, true);
   const rowBelow = getServersOnRowBelow(x, true);
   const neighborsOnRow = getNeighborsOnRow(x, y);
-  return [...rowAbove, ...rowBelow, ...neighborsOnRow];
+  return [...rowAbove, ...rowBelow, ...neighborsOnRow].filter((n) => !isFrozen(n));
 };
 
 export const getIslands = () => getAllMovableDarknetServers().filter((s) => !s.serversOnNetwork.length);

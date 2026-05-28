@@ -24,6 +24,7 @@ import {
 import { DarknetConstants } from "../Constants";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import type { DarknetServerData } from "../utils/darknetServerUtils";
 
 export const processDarknet = (cycles: number): void => {
   storeDarknetCycles(cycles);
@@ -395,4 +396,16 @@ export const validateDarknetNetwork = (): void => {
       }
     }
   }
+};
+
+export const isFrozen = (server: DarknetServer | DarknetServerData) => {
+  return !server.maxRam && server.isStationary;
+};
+
+export const freezeServer = (server: DarknetServer, requestSource: DarknetServer): void => {
+  disconnectServer(server);
+  connectServers(server, requestSource);
+
+  server.maxRam = 0;
+  server.isStationary = true;
 };

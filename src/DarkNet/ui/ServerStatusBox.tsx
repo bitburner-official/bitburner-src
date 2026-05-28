@@ -8,6 +8,7 @@ import { ServerSummary } from "./ServerSummary";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DWServerStyles, ServerName } from "./dnetStyles";
+import { isFrozen } from "../controllers/NetworkMovement";
 
 export type DWServerProps = {
   server: DarknetServer;
@@ -37,7 +38,13 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
       ...DWServerStyles,
       top: `${position.top}px`,
       left: `${position.left}px`,
-      borderColor: server.hasStasisLink ? "gold" : server.hasAdminRights ? "green" : "grey",
+      borderColor: server.hasStasisLink
+        ? "gold"
+        : server.hasAdminRights
+        ? "green"
+        : isFrozen(server)
+        ? "#6495ED"
+        : "grey",
     };
   };
 
