@@ -109,19 +109,15 @@ export function FileDiagnosticModal(props: IProps): React.ReactElement {
           text/scripts. This tool can help you narrow down where they are.
         </Typography>
         {console.log(keys)}
-        {
-          visibleKeys.length > 0 ? (
-            keys.map((hostname: string) => (
-              <ServerAccordion key={hostname} hostname={hostname} />
-            )))
-            : (
-              <>
-                <br />
-                <br />
-                <Typography>You do not have scripts on any server</Typography>
-              </>
-            )
-        }
+        {visibleKeys.length > 0 ? (
+          keys.map((hostname: string) => <ServerAccordion key={hostname} hostname={hostname} />)
+        ) : (
+          <>
+            <br />
+            <br />
+            <Typography>You do not have scripts on any server</Typography>
+          </>
+        )}
       </>
     </Modal>
   );
