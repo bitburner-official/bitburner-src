@@ -186,7 +186,7 @@ export const Crimes: Record<CrimeType, Crime> = {
 
   [CrimeType.kidnap]: new Crime(
     "to kidnap",
-    "Attempt to kidnap and ransom a high-profile-target",
+    "Attempt to kidnap and ransom a high-profile target",
     CrimeType.kidnap,
     120e3,
     3.6e6,

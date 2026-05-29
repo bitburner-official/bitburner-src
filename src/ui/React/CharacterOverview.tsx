@@ -300,7 +300,7 @@ function Work(): React.ReactElement {
     const perc = (Player.currentWork.unitCompleted / crime.time) * 100;
 
     details = <>{Player.currentWork.crimeType}</>;
-    header = <>You are attempting to {Player.currentWork.crimeType}</>;
+    header = <>You are attempting {Player.currentWork.getCrime().workName}</>;
     innerText = <>{perc.toFixed(2)}%</>;
   }
   if (isClassWork(Player.currentWork)) {
