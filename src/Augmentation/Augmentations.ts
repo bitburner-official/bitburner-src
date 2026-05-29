@@ -1944,6 +1944,15 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       prereqs: [AugmentationName.TheLaw],
       factions: [],
     },
+    [AugmentationName.TheThread]: {
+      repCost: 1e4,
+      moneyCost: 1e6,
+      info: "",
+      stats: "",
+      isSpecial: true,
+      prereqs: [AugmentationName.TheSword],
+      factions: [],
+    },
     [AugmentationName.TheRedPill]: {
       repCost: 2.5e6,
       moneyCost: 0,

@@ -128,7 +128,7 @@ export const generateMaze = (width: number = 41, height: number = 29): string[] 
   const halfWidth = Math.ceil(width / 2);
   const halfHeight = Math.ceil(height / 2);
 
-  // BAbove the threshold, join together 4 mazes and make some breaks in the walls
+  // Above the threshold, join together 4 mazes and make some breaks in the walls
   const maze1 = mazeMaker(halfWidth, halfHeight);
   const maze2 = mazeMaker(halfWidth, halfHeight);
   const maze3 = mazeMaker(halfWidth, halfHeight);
@@ -149,10 +149,10 @@ export const generateMaze = (width: number = 41, height: number = 29): string[] 
   resultingMaze[subHeight][randomLeftGap] = PATH;
 
   const randomBottomGap = (Math.floor((Math.random() * halfWidth) / 4) + 1) * 2;
-  resultingMaze[height - randomBottomGap - 1][subWidth] = PATH;
+  resultingMaze[resultingMaze.length - randomBottomGap - 1][subWidth] = PATH;
 
   const randomRightGap = (Math.floor((Math.random() * halfHeight) / 4) + 1) * 2;
-  resultingMaze[subHeight][width - randomRightGap - 1] = PATH;
+  resultingMaze[subHeight][resultingMaze[0].length - randomRightGap - 1] = PATH;
 
   return resultingMaze.map((row) => row.join(""));
 };
@@ -308,9 +308,11 @@ export const handleLabyrinthPassword = (
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
     Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, 32, true));
     server.hasAdminRights = true;
-    const cacheCount = getLabyrinthDetails().name === SpecialServers.BonusLab ? 3 : 1;
-    for (let i = 0; i < cacheCount; i++) {
+    for (let i = 0; i < getCacheCount(); i++) {
       addCacheToServer(server, false, LAB_CACHE_NAME);
+    }
+    if (getLabyrinthDetails().name === SpecialServers.BonusLab) {
+      DarknetState.bonusLabCompletions ++;
     }
     addSessionToServer(labServer, pid);
 
@@ -330,6 +332,19 @@ export const handleLabyrinthPassword = (
     data: newSurroundings,
   };
 };
+
+const getCacheCount = (): number => {
+  if (getLabyrinthDetails().name !== SpecialServers.BonusLab) {
+    return 1;
+  }
+  if (DarknetState.bonusLabCompletions < 4) {
+    return 3;
+  }
+  if (DarknetState.bonusLabCompletions < 8) {
+    return 2;
+  }
+  return 1;
+}
 
 export const getPositionInLab = (pid: number): [number, number] => {
   const [offsetX, offsetY] = getRandomOffset();
@@ -364,7 +379,8 @@ const getOrdinalInput = (input: string): number[] | null => {
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
     const { mazeWidth, mazeHeight } = getLabyrinthDetails();
-    DarknetState.labyrinth = generateMaze(mazeWidth, mazeHeight);
+    const bonusSize = Math.min(DarknetState.bonusLabCompletions * 4, 900);
+    DarknetState.labyrinth = generateMaze(mazeWidth + bonusSize, mazeHeight + bonusSize);
     const [offsetX, offsetY] = getRandomOffset();
     DarknetState.labEndpoint = [
       DarknetState.labyrinth[0].length - 2 - offsetX,
@@ -376,8 +392,9 @@ export const getLabMaze = (): string[] => {
 
 const getRandomOffset = () => {
   const { offsetStartAndEnd } = getLabyrinthDetails();
-  const offsetX = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
-  const offsetY = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
+  const maxOffset = 3 + DarknetState.bonusLabCompletions / 3;
+  const offsetX = offsetStartAndEnd ? Math.floor(Math.random() * maxOffset) * 2 : 0;
+  const offsetY = offsetStartAndEnd ? Math.floor(Math.random() * maxOffset) * 2 : 0;
   return [offsetX, offsetY];
 };
 

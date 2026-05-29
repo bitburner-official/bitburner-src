@@ -197,7 +197,7 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): Inte
 const getLabReward = (): InternalCacheReward => {
   let reward = getLabAugReward();
   if (!reward || Player.hasAugmentation(reward)) {
-    reward = AugmentationName.NeuroFluxGovernor;
+    reward = AugmentationName.TheThread;
   }
   Player.queueAugmentation(reward);
   return {

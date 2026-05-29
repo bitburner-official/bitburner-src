@@ -10,9 +10,11 @@ import { prestigeAugmentation } from "../Prestige";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
-import { mergeMultipliers } from "../PersonObjects/Multipliers";
+import { defaultMultipliers, mergeMultipliers } from "../PersonObjects/Multipliers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { prestigeWorkerScripts } from "../NetscriptWorker";
+import { romanNumeralEncoder } from "../DarkNet/controllers/ServerGenerator";
+import type { Multipliers } from "@nsdefs";
 
 export const soaAugmentationNames = [
   AugmentationName.BeautyOfAphrodite,
@@ -37,10 +39,8 @@ export function getGenericAugmentationPriceMultiplier(): number {
 }
 
 export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
-  const staticAugmentation = Augmentations[aug.name];
-
   // Apply multipliers
-  Player.mults = mergeMultipliers(Player.mults, staticAugmentation.mults);
+  Player.mults = mergeMultipliers(Player.mults, getAugmentMults(aug));
 
   // Special logic for Congruity Implant
   if (aug.name === AugmentationName.CongruityImplant && !reapply) {
@@ -66,6 +66,48 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false)
   }
 }
 
+/**
+ * Retrieves the mults for the given augmentation.
+ * Has special handling for "The Thr3ad of Ariadne" since its mults are additive, not multiplicative, per level
+ * @param aug
+ */
+
+export function getAugmentMults(aug: PlayerOwnedAugmentation): Multipliers {
+  if (aug.name !== AugmentationName.TheThread) {
+    return Augmentations[aug.name].mults;
+  }
+  return {
+    ...defaultMultipliers(),
+    hacking_chance: 1.01 * aug.level,
+    hacking_speed: 1.01 * aug.level,
+    hacking_money: 1.01 * aug.level,
+    hacking_grow: 1.01 * aug.level,
+    hacking: 1.01 * aug.level,
+    strength: 1.01 * aug.level,
+    defense: 1.01 * aug.level,
+    dexterity: 1.01 * aug.level,
+    agility: 1.01 * aug.level,
+    charisma: 1.01 * aug.level,
+    hacking_exp: 1.01 * aug.level,
+    strength_exp: 1.01 * aug.level,
+    defense_exp: 1.01 * aug.level,
+    dexterity_exp: 1.01 * aug.level,
+    agility_exp: 1.01 * aug.level,
+    charisma_exp: 1.01 * aug.level,
+    company_rep: 1.01 * aug.level,
+    faction_rep: 1.01 * aug.level,
+    crime_money: 1.01 * aug.level,
+    crime_success: 1.01 * aug.level,
+    dnet_money: 1.01 * aug.level,
+    hacknet_node_money: 1.01 * aug.level,
+    hacknet_node_purchase_cost: 1 / (1.01 * aug.level),
+    hacknet_node_ram_cost: 1 / (1.01 * aug.level),
+    hacknet_node_core_cost: 1 / (1.01 * aug.level),
+    hacknet_node_level_cost: 1 / (1.01 * aug.level),
+    work_money: 1.01 * aug.level,
+  };
+}
+
 export function installAugmentations(force?: boolean): boolean {
   if (Player.queuedAugmentations.length == 0 && !force) {
     dialogBoxCreate("You have not purchased any Augmentations to install!");
@@ -83,6 +125,7 @@ export function installAugmentations(force?: boolean): boolean {
       break;
     }
   }
+  const threadIndex = Player.queuedAugmentations.findLastIndex((aug) => aug.name === AugmentationName.TheThread);
   for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
     const ownedAug = Player.queuedAugmentations[i];
     const aug = Augmentations[ownedAug.name];
@@ -91,12 +134,15 @@ export function installAugmentations(force?: boolean): boolean {
       continue;
     }
 
+    if (ownedAug.name === AugmentationName.TheThread && i !== threadIndex) continue;
     applyAugmentation(Player.queuedAugmentations[i]);
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor && i !== nfgIndex) continue;
 
     let level = "";
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ` - ${ownedAug.level}`;
+    } else if (ownedAug.name === AugmentationName.TheThread) {
+      level = ` ${romanNumeralEncoder(ownedAug.level)}`;
     }
     augmentationList += aug.name + level + "\n";
   }
