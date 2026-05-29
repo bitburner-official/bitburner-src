@@ -51,6 +51,20 @@ interface SpecialLocationProps {
 export function SpecialLocation(props: SpecialLocationProps): React.ReactElement {
   const rerender = useRerender();
 
+  // Special Location Hints
+  function specialLocationNextBNHint(bn_number: number): React.ReactElement {
+    if (knowAboutBitverse()) {
+      return (
+        <>
+          <br />
+          <br />
+          <Typography>You should check out BN-{bn_number} to uncover more details about this place.</Typography>
+        </>
+      )
+    }
+    return <></>;
+  }
+
   // Apply for Bladeburner division
   const joinBladeburnerDivision = useCallback(() => {
     Player.startBladeburner();
@@ -104,7 +118,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderBladeburner(): React.ReactElement {
     if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
-      return <></>;
+      { specialLocationNextBNHint(6) };
     }
     const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
     return (
@@ -156,19 +170,6 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         <Button onClick={EatNoodles}>Eat noodles</Button>
       </>
     );
-  }
-
-  function specialLocationNextBNHint(bn_number: number): React.ReactElement {
-    if (knowAboutBitverse()) {
-      return (
-        <>
-          <br />
-          <br />
-          <Typography>You should check out BN-{bn_number} to uncover more details about this place.</Typography>
-        </>
-      )
-    }
-    return <></>;
   }
 
   function CreateCorporation(): React.ReactElement {
@@ -307,6 +308,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
             A decrepit altar stands in the middle of a dilapidated church.
             <br />
             <br />A symbol is carved in the altar.
+            {specialLocationNextBNHint(13)}
           </Typography>
 
           <br />
