@@ -60,7 +60,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <br />
           <Typography>You should check out BN-{bn_number} to uncover more details about this place.</Typography>
         </>
-      )
+      );
     }
     return <></>;
   }
@@ -118,7 +118,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderBladeburner(): React.ReactElement {
     if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
-      { specialLocationNextBNHint(6) };
+      {
+        return specialLocationNextBNHint(6);
+      }
     }
     const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
     return (
@@ -175,7 +177,6 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
   function CreateCorporation(): React.ReactElement {
     const [open, setOpen] = useState(false);
     if (!Player.canAccessCorporation()) {
-
       return (
         <>
           <Typography>
@@ -197,7 +198,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderGrafting(): React.ReactElement {
     if (!Player.canAccessGrafting()) {
-      { specialLocationNextBNHint(10) };
+      {
+        return specialLocationNextBNHint(10);
+      }
     }
     return (
       <Button onClick={handleGrafting} sx={{ my: 5 }}>
@@ -308,11 +311,11 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
             A decrepit altar stands in the middle of a dilapidated church.
             <br />
             <br />A symbol is carved in the altar.
-            {specialLocationNextBNHint(13)}
           </Typography>
 
           <br />
           {symbol}
+          <Typography>{specialLocationNextBNHint(13)}</Typography>
         </>
       );
     }
