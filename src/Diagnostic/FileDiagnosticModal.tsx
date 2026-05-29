@@ -88,6 +88,19 @@ export function FileDiagnosticModal(props: IProps): React.ReactElement {
     keys.push(key.hostname);
   }
 
+  const visibleKeys = keys.filter((hostname: string) => {
+    const server = GetServer(hostname);
+    if (!server) return false;
+
+    for (const [, file] of allContentFiles(server)) {
+      if (file.content.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
+  });
+
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <>
@@ -95,9 +108,20 @@ export function FileDiagnosticModal(props: IProps): React.ReactElement {
           Welcome to the file diagnostic! If your save file is really big it's likely because you have too many
           text/scripts. This tool can help you narrow down where they are.
         </Typography>
-        {keys.map((hostname: string) => (
-          <ServerAccordion key={hostname} hostname={hostname} />
-        ))}
+        {console.log(keys)}
+        {
+          visibleKeys.length > 0 ? (
+            keys.map((hostname: string) => (
+              <ServerAccordion key={hostname} hostname={hostname} />
+            )))
+            : (
+              <>
+                <br />
+                <br />
+                <Typography>You do not have scripts on any server</Typography>
+              </>
+            )
+        }
       </>
     </Modal>
   );
