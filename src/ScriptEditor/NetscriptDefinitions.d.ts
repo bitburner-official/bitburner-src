@@ -7017,6 +7017,17 @@ interface UserInterface {
    * RAM cost: 0.2 GB
    */
   clearTerminal(): void;
+
+  /**
+   * Opens the specified file(s) in the nano or vim code editor
+   *
+   * @param files - Optional. The file(s) to open in the editor. If not provided, opens the editor to the last edited file, if any.
+   * @param vim - Optional. If true, opens the editor in `vim` mode rather than `nano`
+   *
+   * @remarks
+   * RAM cost: 0.2 GB
+   */
+  nano(files?: string | string[], vim?: boolean): void;
 }
 
 /**

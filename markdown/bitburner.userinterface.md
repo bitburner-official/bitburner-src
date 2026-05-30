@@ -93,6 +93,17 @@ Move a tail window.
 </td></tr>
 <tr><td>
 
+[nano(files, vim)](./bitburner.userinterface.nano.md)
+
+
+</td><td>
+
+Opens the specified file(s) in the nano or vim code editor
+
+
+</td></tr>
+<tr><td>
+
 [openTail(fn, host, args)](./bitburner.userinterface.opentail.md)
 
 

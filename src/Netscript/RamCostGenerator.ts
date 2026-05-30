@@ -451,6 +451,7 @@ const ui = {
   resetStyles: 0,
   getGameInfo: 0,
   clearTerminal: 0,
+  nano: 0.2,
   windowSize: 0,
 } as const;
 
