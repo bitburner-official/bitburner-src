@@ -13,7 +13,7 @@ import { getTotalThreadCount } from "../AugmentationHelpers";
 export function PurchasedAugmentations(): React.ReactElement {
   const augs: React.ReactElement[] = [];
   // Only render the last NeuroFlux (there are no findLastIndex btw)
-  const nfgIndex = Player.queuedAugmentations.findLastIndex(a => a.name == AugmentationName.NeuroFluxGovernor);
+  const nfgIndex = Player.queuedAugmentations.findLastIndex((a) => a.name == AugmentationName.NeuroFluxGovernor);
   for (let i = 0; i < Player.queuedAugmentations.length; i++) {
     const ownedAug = Player.queuedAugmentations[i];
     let displayName: string = ownedAug.name;

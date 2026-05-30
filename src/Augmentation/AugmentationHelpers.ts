@@ -187,18 +187,18 @@ export function getAugmentMults(augment: Augmentation | PlayerOwnedAugmentation,
   return Augmentations[augment.name].mults;
 }
 
-
+export function getInstalledThreadCount(): number {
+  return Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
+}
 
 export function getTotalThreadCount(): number {
-  const threadCount = Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
   const pendingThreadCount =
     Player.queuedAugmentations.find((aug) => aug.name == AugmentationName.TheThread)?.level ?? 0;
-  return threadCount + pendingThreadCount;
+  return getInstalledThreadCount() + pendingThreadCount;
 }
 
 export function getThreadAugmentMults(delta = false): Multipliers {
-  const threadCount = Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
-  const existingMult = 1 + 0.01 * threadCount;
+  const existingMult = 1 + 0.01 * getInstalledThreadCount();
   const mult = delta ? (1 + 0.01 * getTotalThreadCount()) / existingMult : existingMult;
   return {
     ...defaultMultipliers(),
@@ -224,10 +224,10 @@ export function getThreadAugmentMults(delta = false): Multipliers {
     crime_success: mult,
     dnet_money: mult,
     hacknet_node_money: mult,
-    hacknet_node_purchase_cost: 1 / (mult),
-    hacknet_node_ram_cost: 1 / (mult),
-    hacknet_node_core_cost: 1 / (mult),
-    hacknet_node_level_cost: 1 / (mult),
+    hacknet_node_purchase_cost: 1 / mult,
+    hacknet_node_ram_cost: 1 / mult,
+    hacknet_node_core_cost: 1 / mult,
+    hacknet_node_level_cost: 1 / mult,
     work_money: mult,
   };
 }

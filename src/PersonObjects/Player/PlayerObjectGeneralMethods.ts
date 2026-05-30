@@ -496,7 +496,7 @@ export function queueAugmentation(this: PlayerObject, name: AugmentationName): v
   }
   const queuedThreadAug = this.queuedAugmentations.find((a) => a.name === AugmentationName.TheThread);
   if (name === AugmentationName.TheThread && queuedThreadAug) {
-    queuedThreadAug.level ++;
+    queuedThreadAug.level++;
     return;
   }
   this.queuedAugmentations.push(queuedAugmentation);

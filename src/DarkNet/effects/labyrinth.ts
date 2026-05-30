@@ -11,6 +11,7 @@ import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 import type { SuccessResult } from "@nsdefs";
+import { getInstalledThreadCount } from "../../Augmentation/AugmentationHelpers";
 
 export const LAB_CACHE_NAME = "the_great_work";
 
@@ -311,9 +312,6 @@ export const handleLabyrinthPassword = (
     for (let i = 0; i < getCacheCount(); i++) {
       addCacheToServer(server, false, LAB_CACHE_NAME);
     }
-    if (getLabyrinthDetails().name === SpecialServers.BonusLab) {
-      DarknetState.bonusLabCompletions ++;
-    }
     addSessionToServer(labServer, pid);
 
     return {
@@ -337,14 +335,14 @@ const getCacheCount = (): number => {
   if (getLabyrinthDetails().name !== SpecialServers.BonusLab) {
     return 1;
   }
-  if (DarknetState.bonusLabCompletions < 4) {
+  if (getInstalledThreadCount() < 9) {
     return 3;
   }
-  if (DarknetState.bonusLabCompletions < 8) {
+  if (getInstalledThreadCount() < 15) {
     return 2;
   }
   return 1;
-}
+};
 
 export const getPositionInLab = (pid: number): [number, number] => {
   const [offsetX, offsetY] = getRandomOffset();
@@ -379,7 +377,7 @@ const getOrdinalInput = (input: string): number[] | null => {
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
     const { mazeWidth, mazeHeight } = getLabyrinthDetails();
-    const bonusSize = Math.min(DarknetState.bonusLabCompletions * 4, 900);
+    const bonusSize = Math.min(getInstalledThreadCount() * 4, 900);
     DarknetState.labyrinth = generateMaze(mazeWidth + bonusSize, mazeHeight + bonusSize);
     const [offsetX, offsetY] = getRandomOffset();
     DarknetState.labEndpoint = [
@@ -391,10 +389,12 @@ export const getLabMaze = (): string[] => {
 };
 
 const getRandomOffset = () => {
-  const { offsetStartAndEnd } = getLabyrinthDetails();
-  const maxOffset = 3 + DarknetState.bonusLabCompletions / 3;
-  const offsetX = offsetStartAndEnd ? Math.floor(Math.random() * maxOffset) * 2 : 0;
-  const offsetY = offsetStartAndEnd ? Math.floor(Math.random() * maxOffset) * 2 : 0;
+  if (!getLabyrinthDetails().offsetStartAndEnd) {
+    return [0, 0];
+  }
+  const maxOffset = 3 + getInstalledThreadCount() / 3;
+  const offsetX = Math.floor(Math.random() * maxOffset) * 2;
+  const offsetY = Math.floor(Math.random() * maxOffset) * 2;
   return [offsetX, offsetY];
 };
 

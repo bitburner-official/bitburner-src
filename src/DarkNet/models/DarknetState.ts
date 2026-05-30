@@ -46,7 +46,6 @@ export const DarknetState = {
    * want to get data of alive PIDs.
    */
   labLocations: {} as Record<number, [number, number] | undefined>,
-  bonusLabCompletions: 0,
 
   lastPhishingCacheTime: new Date(),
   lastCctRewardTime: new Date(),
@@ -88,7 +87,6 @@ export function prestigeDarknetState(prestigeSourceFile: boolean): void {
   DarknetState.storedCycles = 0;
   if (prestigeSourceFile) {
     DarknetState.hasUsedHeartbleed = false;
-    DarknetState.bonusLabCompletions = 0;
   }
   DarknetState.cyclesSinceLastMutation = 0;
   DarknetState.Network = new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<null>(NET_WIDTH).fill(null));
