@@ -11,7 +11,7 @@ import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 import type { SuccessResult } from "@nsdefs";
-import { getInstalledThreadCount } from "../../Augmentation/AugmentationHelpers";
+import { getInstalledThreadAugCount } from "../../Augmentation/AugmentationHelpers";
 
 export const LAB_CACHE_NAME = "the_great_work";
 
@@ -335,12 +335,15 @@ const getCacheCount = (): number => {
   if (getLabyrinthDetails().name !== SpecialServers.BonusLab) {
     return 1;
   }
-  if (getInstalledThreadCount() < 9) {
+  // For first three completions, award 3 levels of The Thread
+  if (getInstalledThreadAugCount() < 9) {
     return 3;
   }
-  if (getInstalledThreadCount() < 15) {
+  // For the next three completions, award 2 levels of The Thread
+  if (getInstalledThreadAugCount() < 15) {
     return 2;
   }
+  // After that, reward only 1
   return 1;
 };
 
@@ -377,7 +380,7 @@ const getOrdinalInput = (input: string): number[] | null => {
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
     const { mazeWidth, mazeHeight } = getLabyrinthDetails();
-    const bonusSize = Math.min(getInstalledThreadCount() * 4, 900);
+    const bonusSize = Math.min(getInstalledThreadAugCount() * 4, 900);
     DarknetState.labyrinth = generateMaze(mazeWidth + bonusSize, mazeHeight + bonusSize);
     const [offsetX, offsetY] = getRandomOffset();
     DarknetState.labEndpoint = [
@@ -392,7 +395,7 @@ const getRandomOffset = () => {
   if (!getLabyrinthDetails().offsetStartAndEnd) {
     return [0, 0];
   }
-  const maxOffset = 3 + getInstalledThreadCount() / 3;
+  const maxOffset = 3 + getInstalledThreadAugCount() / 3;
   const offsetX = Math.floor(Math.random() * maxOffset) * 2;
   const offsetY = Math.floor(Math.random() * maxOffset) * 2;
   return [offsetX, offsetY];

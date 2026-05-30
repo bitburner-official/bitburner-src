@@ -8,11 +8,11 @@ import { Player } from "@player";
 import { Augmentations } from "../Augmentations";
 import { AugmentationName } from "@enums";
 import { romanNumeralEncoder } from "../../DarkNet/controllers/ServerGenerator";
-import { getTotalThreadCount } from "../AugmentationHelpers";
+import { getTotalThreadAugCount } from "../AugmentationHelpers";
 
 export function PurchasedAugmentations(): React.ReactElement {
   const augs: React.ReactElement[] = [];
-  // Only render the last NeuroFlux (there are no findLastIndex btw)
+  // Only render the last NeuroFlux
   const nfgIndex = Player.queuedAugmentations.findLastIndex((a) => a.name == AugmentationName.NeuroFluxGovernor);
   for (let i = 0; i < Player.queuedAugmentations.length; i++) {
     const ownedAug = Player.queuedAugmentations[i];
@@ -26,7 +26,7 @@ export function PurchasedAugmentations(): React.ReactElement {
       level = ownedAug.level;
       displayName += ` - Level ${level}`;
     } else if (ownedAug.name === AugmentationName.TheThread) {
-      displayName += ` ${romanNumeralEncoder(getTotalThreadCount())}`;
+      displayName += ` ${romanNumeralEncoder(getTotalThreadAugCount())}`;
     }
 
     augs.push(

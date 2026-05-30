@@ -1950,7 +1950,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A simple, crystalline, fiber-optic neural threading system. It is styled after the mythical threads that the Princess Ariadne " +
         "famously used to conquer the original Labyrinth. Where many heroes had failed, this woman took the most humble of material - yarn for " +
-        "stockings - and made a way to trace an unerring path through the Labyrinth. This fiber-optic threading brand is now synonomous " +
+        "stockings - and made a way to trace an unerring path through the Labyrinth. This fiber-optic threading brand is now synonymous " +
         "with step-by-step logic and guiding paths.",
       stats:
         "Improves all stats by 1%. This bonus is increased by an additional 1% for each spool of thread installed.",

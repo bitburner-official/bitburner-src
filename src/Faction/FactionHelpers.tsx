@@ -72,7 +72,7 @@ function checkIfPlayerCanPurchaseAugmentation(faction: Faction, augmentation: Au
     };
   }
 
-  if (augmentation.name !== AugmentationName.NeuroFluxGovernor) {
+  if (augmentation.name !== AugmentationName.NeuroFluxGovernor && augmentation.name !== AugmentationName.TheThread) {
     for (const queuedAugmentation of Player.queuedAugmentations) {
       if (queuedAugmentation.name === augmentation.name) {
         return { success: false, message: `You already purchased the '${augmentation.name}' augmentation.` };

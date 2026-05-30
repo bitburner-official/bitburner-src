@@ -57,8 +57,8 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false)
     ownedNfg.level = aug.level;
     return;
   }
-  const ownedThread = Player.augmentations.find((pAug) => pAug.name === AugmentationName.TheThread);
   if (aug.name === AugmentationName.TheThread && !reapply) {
+    const ownedThread = Player.augmentations.find((pAug) => pAug.name === AugmentationName.TheThread);
     if (ownedThread) {
       ownedThread.level += aug.level;
     } else {
@@ -103,7 +103,7 @@ export function installAugmentations(force?: boolean): boolean {
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ` - ${ownedAug.level}`;
     } else if (ownedAug.name === AugmentationName.TheThread) {
-      level = ` ${romanNumeralEncoder(ownedAug.level)}`;
+      level = ` ${romanNumeralEncoder(getTotalThreadAugCount())}`;
     }
     augmentationList += aug.name + level + "\n";
   }
@@ -167,10 +167,10 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
   return { moneyCost, repCost };
 }
 
-export function getAugName(augment: PlayerOwnedAugmentation) {
+export function getAugName(augment: PlayerOwnedAugmentation, includeQueued = false): string {
   if (augment.name === AugmentationName.TheThread) {
-    const threadCount = Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
-    return `${augment.name} ${romanNumeralEncoder(threadCount)}`;
+    const count = includeQueued ? getTotalThreadAugCount() : getInstalledThreadAugCount();
+    return `${augment.name} ${romanNumeralEncoder(count)}`;
   }
   return augment.name;
 }
@@ -187,19 +187,19 @@ export function getAugmentMults(augment: Augmentation | PlayerOwnedAugmentation,
   return Augmentations[augment.name].mults;
 }
 
-export function getInstalledThreadCount(): number {
+export function getInstalledThreadAugCount(): number {
   return Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
 }
 
-export function getTotalThreadCount(): number {
+export function getTotalThreadAugCount(): number {
   const pendingThreadCount =
     Player.queuedAugmentations.find((aug) => aug.name == AugmentationName.TheThread)?.level ?? 0;
-  return getInstalledThreadCount() + pendingThreadCount;
+  return getInstalledThreadAugCount() + pendingThreadCount;
 }
 
 export function getThreadAugmentMults(delta = false): Multipliers {
-  const existingMult = 1 + 0.01 * getInstalledThreadCount();
-  const mult = delta ? (1 + 0.01 * getTotalThreadCount()) / existingMult : existingMult;
+  const existingMult = 1 + 0.01 * getInstalledThreadAugCount();
+  const mult = delta ? (1 + 0.01 * getTotalThreadAugCount()) / existingMult : existingMult;
   return {
     ...defaultMultipliers(),
     hacking_chance: mult,
