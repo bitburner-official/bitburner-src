@@ -17,19 +17,30 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ServerName } from "../Types/strings";
 import { allContentFiles } from "../Paths/ContentFile";
+import { BaseServer } from "../Server/BaseServer";
 
 interface File {
   name: string;
   size: number;
 }
 
+function getServerContentSize(server: BaseServer): number {
+  let totalSize = 0;
+
+  for (const [, file] of allContentFiles(server)) {
+    totalSize += file.content.length;
+  }
+
+  return totalSize;
+}
+
 function ServerAccordion(props: { hostname: ServerName }): React.ReactElement {
   const server = GetServer(props.hostname);
   if (server === null) throw new Error(`server '${props.hostname}' should not be null`);
-  let totalSize = 0;
+  const totalSize = getServerContentSize(server);
+
   const files: File[] = [];
   for (const [path, file] of allContentFiles(server)) {
-    totalSize += file.content.length;
     files.push({ name: path, size: file.content.length });
   }
 
@@ -84,21 +95,13 @@ interface IProps {
 
 export function FileDiagnosticModal(props: IProps): React.ReactElement {
   const keys: string[] = [];
-  for (const key of GetAllServers()) {
+  for (const key of GetAllServers(true)) {
     keys.push(key.hostname);
   }
 
   const visibleKeys = keys.filter((hostname: string) => {
     const server = GetServer(hostname);
-    if (!server) return false;
-
-    for (const [, file] of allContentFiles(server)) {
-      if (file.content.length > 0) {
-        return true;
-      }
-    }
-
-    return false;
+    return server !== null && getServerContentSize(server) > 0;
   });
 
   return (
@@ -108,14 +111,13 @@ export function FileDiagnosticModal(props: IProps): React.ReactElement {
           Welcome to the file diagnostic! If your save file is really big it's likely because you have too many
           text/scripts. This tool can help you narrow down where they are.
         </Typography>
-        {console.log(keys)}
         {visibleKeys.length > 0 ? (
           keys.map((hostname: string) => <ServerAccordion key={hostname} hostname={hostname} />)
         ) : (
           <>
             <br />
             <br />
-            <Typography>You do not have files on any server.</Typography>
+            <Typography>You do not have any files on any server.</Typography>
           </>
         )}
       </>

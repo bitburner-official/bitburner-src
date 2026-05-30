@@ -181,7 +181,6 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         <>
           <Typography>
             <i>A businessman is yelling at a clerk. You should come back later.</i>
-            {specialLocationNextBNHint(3)}
           </Typography>
           {specialLocationNextBNHint(3)}
         </>
