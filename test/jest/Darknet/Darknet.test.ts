@@ -67,6 +67,8 @@ import { prestigeAugmentation } from "../../../src/Prestige";
 import { initStockMarket, StockMarket, SymbolToStockMap } from "../../../src/StockMarket/StockMarket";
 import { StockSymbol } from "@enums";
 import { GetAllServers } from "../../../src/Server/AllServers";
+import { roundToTwo } from "../../../src/utils/helpers/roundToTwo";
+import { getRamBlock } from "../../../src/DarkNet/effects/ramblock";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -962,6 +964,26 @@ describe("CacheReward", () => {
       } else {
         expect(result.augmentationName).toBeUndefined();
       }
+    }
+  });
+});
+
+describe("ramblock", () => {
+  test.each([16, 16.01, 32.01, 64.01])("getRamBlock rounds %d correctly", (maxRam: number) => {
+    // This *must* be done within the function, Jest internally relies on
+    // Math.random so the mock must be restored immediately after.
+    const saved = Math.random;
+    let rng: number;
+    try {
+      Math.random = () => rng;
+      for (let i = 0; i < 1; i += 1.0 / 8.0) {
+        rng = i;
+        const result = getRamBlock(maxRam);
+        // We want *exact* equality
+        expect(result).toBe(roundToTwo(result));
+      }
+    } finally {
+      Math.random = saved;
     }
   });
 });
