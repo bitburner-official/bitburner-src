@@ -12,7 +12,7 @@ import { getAugmentMults } from "../AugmentationHelpers";
 function calculateAugmentedStats(): Multipliers {
   let augP: Multipliers = defaultMultipliers();
   for (const aug of Player.queuedAugmentations) {
-    augP = mergeMultipliers(augP, getAugmentMults(aug));
+    augP = mergeMultipliers(augP, getAugmentMults(aug, true));
   }
   return augP;
 }

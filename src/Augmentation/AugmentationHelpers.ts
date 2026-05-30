@@ -40,7 +40,7 @@ export function getGenericAugmentationPriceMultiplier(): number {
 
 export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
   // Apply multipliers
-  Player.mults = mergeMultipliers(Player.mults, getAugmentMults(aug));
+  Player.mults = mergeMultipliers(Player.mults, getAugmentMults(aug, !reapply));
 
   // Special logic for Congruity Implant
   if (aug.name === AugmentationName.CongruityImplant && !reapply) {
@@ -57,6 +57,17 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false)
     ownedNfg.level = aug.level;
     return;
   }
+  const ownedThread = Player.augmentations.find((pAug) => pAug.name === AugmentationName.TheThread);
+  if (aug.name === AugmentationName.TheThread && !reapply) {
+    if (ownedThread) {
+      ownedThread.level += aug.level;
+    } else {
+      const ownedAug = new PlayerOwnedAugmentation(aug.name);
+      ownedAug.level = aug.level;
+      Player.augmentations.push(ownedAug);
+    }
+    return;
+  }
 
   // Push onto Player's Augmentation list
   if (!reapply) {
@@ -64,48 +75,6 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false)
 
     Player.augmentations.push(ownedAug);
   }
-}
-
-/**
- * Retrieves the mults for the given augmentation.
- * Has special handling for "The Thr3ad of Ariadne" since its mults are additive, not multiplicative, per level
- * @param aug
- */
-
-export function getAugmentMults(aug: PlayerOwnedAugmentation): Multipliers {
-  if (aug.name !== AugmentationName.TheThread) {
-    return Augmentations[aug.name].mults;
-  }
-  return {
-    ...defaultMultipliers(),
-    hacking_chance: 1.01 * aug.level,
-    hacking_speed: 1.01 * aug.level,
-    hacking_money: 1.01 * aug.level,
-    hacking_grow: 1.01 * aug.level,
-    hacking: 1.01 * aug.level,
-    strength: 1.01 * aug.level,
-    defense: 1.01 * aug.level,
-    dexterity: 1.01 * aug.level,
-    agility: 1.01 * aug.level,
-    charisma: 1.01 * aug.level,
-    hacking_exp: 1.01 * aug.level,
-    strength_exp: 1.01 * aug.level,
-    defense_exp: 1.01 * aug.level,
-    dexterity_exp: 1.01 * aug.level,
-    agility_exp: 1.01 * aug.level,
-    charisma_exp: 1.01 * aug.level,
-    company_rep: 1.01 * aug.level,
-    faction_rep: 1.01 * aug.level,
-    crime_money: 1.01 * aug.level,
-    crime_success: 1.01 * aug.level,
-    dnet_money: 1.01 * aug.level,
-    hacknet_node_money: 1.01 * aug.level,
-    hacknet_node_purchase_cost: 1 / (1.01 * aug.level),
-    hacknet_node_ram_cost: 1 / (1.01 * aug.level),
-    hacknet_node_core_cost: 1 / (1.01 * aug.level),
-    hacknet_node_level_cost: 1 / (1.01 * aug.level),
-    work_money: 1.01 * aug.level,
-  };
 }
 
 export function installAugmentations(force?: boolean): boolean {
@@ -118,14 +87,7 @@ export function installAugmentations(force?: boolean): boolean {
   prestigeWorkerScripts();
 
   let augmentationList = "";
-  let nfgIndex = -1;
-  for (let i = Player.queuedAugmentations.length - 1; i >= 0; i--) {
-    if (Player.queuedAugmentations[i].name === AugmentationName.NeuroFluxGovernor) {
-      nfgIndex = i;
-      break;
-    }
-  }
-  const threadIndex = Player.queuedAugmentations.findLastIndex((aug) => aug.name === AugmentationName.TheThread);
+  const nfgIndex = Player.queuedAugmentations.findLastIndex((aug) => aug.name === AugmentationName.NeuroFluxGovernor);
   for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
     const ownedAug = Player.queuedAugmentations[i];
     const aug = Augmentations[ownedAug.name];
@@ -134,7 +96,6 @@ export function installAugmentations(force?: boolean): boolean {
       continue;
     }
 
-    if (ownedAug.name === AugmentationName.TheThread && i !== threadIndex) continue;
     applyAugmentation(Player.queuedAugmentations[i]);
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor && i !== nfgIndex) continue;
 
@@ -204,4 +165,69 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
       repCost = aug.baseRepRequirement * currentNodeMults.AugmentationRepCost;
   }
   return { moneyCost, repCost };
+}
+
+export function getAugName(augment: PlayerOwnedAugmentation) {
+  if (augment.name === AugmentationName.TheThread) {
+    const threadCount = Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
+    return `${augment.name} ${romanNumeralEncoder(threadCount)}`;
+  }
+  return augment.name;
+}
+
+/**
+ * Retrieves the mults for the given augmentation.
+ * Has special handling for "The Thr3ad of Ariadne" since its mults are additive, not multiplicative, per level
+ */
+export function getAugmentMults(augment: Augmentation | PlayerOwnedAugmentation, delta = false): Multipliers {
+  if (augment.name === AugmentationName.TheThread) {
+    return getThreadAugmentMults(delta);
+  }
+
+  return Augmentations[augment.name].mults;
+}
+
+
+
+export function getTotalThreadCount(): number {
+  const threadCount = Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
+  const pendingThreadCount =
+    Player.queuedAugmentations.find((aug) => aug.name == AugmentationName.TheThread)?.level ?? 0;
+  return threadCount + pendingThreadCount;
+}
+
+export function getThreadAugmentMults(delta = false): Multipliers {
+  const threadCount = Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
+  const existingMult = 1 + 0.01 * threadCount;
+  const mult = delta ? (1 + 0.01 * getTotalThreadCount()) / existingMult : existingMult;
+  return {
+    ...defaultMultipliers(),
+    hacking_chance: mult,
+    hacking_speed: mult,
+    hacking_money: mult,
+    hacking_grow: mult,
+    hacking: mult,
+    strength: mult,
+    defense: mult,
+    dexterity: mult,
+    agility: mult,
+    charisma: mult,
+    hacking_exp: mult,
+    strength_exp: mult,
+    defense_exp: mult,
+    dexterity_exp: mult,
+    agility_exp: mult,
+    charisma_exp: mult,
+    company_rep: mult,
+    faction_rep: mult,
+    crime_money: mult,
+    crime_success: mult,
+    dnet_money: mult,
+    hacknet_node_money: mult,
+    hacknet_node_purchase_cost: 1 / (mult),
+    hacknet_node_ram_cost: 1 / (mult),
+    hacknet_node_core_cost: 1 / (mult),
+    hacknet_node_level_cost: 1 / (mult),
+    work_money: mult,
+  };
 }

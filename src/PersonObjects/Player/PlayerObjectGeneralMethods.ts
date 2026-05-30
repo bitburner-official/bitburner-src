@@ -471,7 +471,7 @@ export function setBitNodeNumber(this: PlayerObject, n: number): void {
 }
 
 export function queueAugmentation(this: PlayerObject, name: AugmentationName): void {
-  if (name !== AugmentationName.NeuroFluxGovernor) {
+  if (name !== AugmentationName.NeuroFluxGovernor && name !== AugmentationName.TheThread) {
     for (const aug of this.queuedAugmentations) {
       if (name === aug.name) {
         AlertEvents.emit(`Tried to queue ${name} twice. This is a bug. Please contact developers.`);
@@ -493,6 +493,11 @@ export function queueAugmentation(this: PlayerObject, name: AugmentationName): v
   if (name === AugmentationName.NeuroFluxGovernor) {
     const augmentation = Augmentations[name];
     queuedAugmentation.level = augmentation.getNextLevel();
+  }
+  const queuedThreadAug = this.queuedAugmentations.find((a) => a.name === AugmentationName.TheThread);
+  if (name === AugmentationName.TheThread && queuedThreadAug) {
+    queuedThreadAug.level ++;
+    return;
   }
   this.queuedAugmentations.push(queuedAugmentation);
 }
