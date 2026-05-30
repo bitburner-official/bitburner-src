@@ -227,37 +227,20 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         requireDirectConnection: true,
       });
       if (!serverCheck.success) {
-        return helpers.netscriptDelay(ctx, 100).then(() => ({
+        return {
           success: false,
           code: serverCheck.code,
           message: serverCheck.message,
           logs: [],
-        }));
-      }
-      const networkDelay = getSetStasisLinkDuration();
-      logger(ctx)(
-        `Attempting to freeze server: ${serverCheck.server.hostname} . (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
-      );
-
-      return helpers.netscriptDelay(ctx, networkDelay).then(() => {
-        const serverCheck = checkDarknetServer(ctx, targetHost, { requireDirectConnection: true });
-        if (!serverCheck.success) {
-          return {
-            success: false,
-            code: serverCheck.code,
-            message: serverCheck.message,
-            logs: [],
-          };
-        }
-
-        freezeServer(serverCheck.server, getDarknetServerOrThrow(ctx.workerScript.hostname));
-        logger(ctx)(`Froze ${serverCheck.server.hostname}`);
-        return {
-          success: true,
-          code: ResponseCodeEnum.Success,
-          message: GenericResponseMessage.Success,
         };
-      });
+      }
+      freezeServer(serverCheck.server);
+      logger(ctx)(`Froze ${serverCheck.server.hostname}`);
+      return {
+        success: true,
+        code: ResponseCodeEnum.Success,
+        message: GenericResponseMessage.Success,
+      };
     },
     heartbleed:
       (ctx: NetscriptContext) =>

@@ -4547,9 +4547,9 @@ export interface Darknet {
   connectToSession(host: string, password: string): DarknetResult;
 
   /**
-   * Overloads a darknet server with feedback to lock it down. It will no longer move or go offline.
-   * However, it also loses all of its connections (excluding the one to the script's current server),
-   * and all of its max ram, and no longer gives experience.
+   * Overloads a darknet server with feedback to lock it down. Similar to status link, it will no longer move
+   * or go offline, although servers connected to it may still move. However, it also loses all of its max ram,
+   * and no longer gives experience.
    *
    * This technique is sometimes used to sacrifice a new device that appears on the network to make
    * it easier to probe it for weaknesses and develop scripts against it.
@@ -4559,7 +4559,7 @@ export interface Darknet {
    *
    * @param host the server to freeze
    */
-  freezeServer(host: string): Promise<DarknetResult>;
+  freezeServer(host: string): DarknetResult;
 
   /**
    * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.

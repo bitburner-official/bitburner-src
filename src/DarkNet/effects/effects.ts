@@ -9,7 +9,7 @@ import {
 } from "../models/dictionaryData";
 import { hintLiterature } from "../models/hintNotes";
 import { resolveTextFilePath, type TextFilePath } from "../../Paths/TextFilePath";
-import { isFrozen, moveDarknetServer } from "../controllers/NetworkMovement";
+import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
 import { DarknetServer } from "../../Server/DarknetServer";
@@ -40,7 +40,7 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
   addClue(server);
 
   const chance = 0.1 * 1.05 ** server?.difficulty;
-  if (Math.random() < chance && !isLabyrinthServer(server.hostname) && !isFrozen(server)) {
+  if (Math.random() < chance && !isLabyrinthServer(server.hostname) && server.maxRam) {
     addCacheToServer(server, false);
   }
 };
@@ -111,7 +111,7 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
 };
 
 export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threads: number = 1, success = false) => {
-  if (isFrozen(server)) {
+  if (!server.maxRam) {
     return 0;
   }
   const baseXpGain = 2.5;
@@ -124,7 +124,7 @@ export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threa
 };
 
 export const addClue = (server: DarknetServer): string[] => {
-  if (isFrozen(server)) {
+  if (!server.maxRam) {
     return [];
   }
   const files = [];

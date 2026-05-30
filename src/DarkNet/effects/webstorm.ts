@@ -6,7 +6,6 @@ import {
   balanceDarknetServers,
   deleteDarknetServer,
   deleteRandomDarknetServers,
-  isFrozen,
   moveRandomDarknetServers,
   restartAllDarknetServers,
   validateDarknetNetwork,
@@ -42,7 +41,7 @@ export const launchWebstorm = async (suppressToast = false) => {
     }
     await cancellableSleep(5000);
 
-    for (const frozenServer of getAllDarknetServers().filter(isFrozen)) {
+    for (const frozenServer of getAllDarknetServers().filter((s) => !s.maxRam)) {
       deleteDarknetServer(frozenServer, true);
     }
     const serversToDelete = getAllMovableDarknetServers().length * 0.6 + (Math.random() * getNetDepth() - 6);

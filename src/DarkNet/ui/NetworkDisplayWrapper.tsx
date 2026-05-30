@@ -26,7 +26,6 @@ import { getServerLogs } from "../models/packetSniffing";
 import { getTimeoutChance } from "../effects/offlineServerHandling";
 import { DocumentationLink } from "../../ui/React/DocumentationLink";
 import { Settings } from "../../Settings/Settings";
-import { isFrozen } from "../controllers/NetworkMovement";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
@@ -248,7 +247,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
                   <br />
                   Current backdoored servers: {getAllMovableDarknetServers().filter((s) => s.backdoorInstalled).length}
                   <br />
-                  Current frozen servers: {getAllDarknetServers().filter(isFrozen).length}
+                  Current frozen servers: {getAllDarknetServers().filter((s) => !s.maxRam).length}
                 </>
               }
             >

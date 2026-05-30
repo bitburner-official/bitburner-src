@@ -13,7 +13,6 @@ import {
   balanceDarknetServers,
   deleteDarknetServer,
   disconnectServer,
-  isFrozen,
 } from "./NetworkMovement";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Player } from "@player";
@@ -177,7 +176,7 @@ export const loadDarknet = () => {
 };
 
 export const addRandomConnections = (server: DarknetServer) => {
-  if (isLabyrinthServer(server.hostname) || isFrozen(server)) {
+  if (isLabyrinthServer(server.hostname)) {
     return;
   }
   const x = server.depth;
