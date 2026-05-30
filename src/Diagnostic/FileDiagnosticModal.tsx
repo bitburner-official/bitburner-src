@@ -1,5 +1,5 @@
 import React from "react";
-import { GetServer, GetAllServers } from "../Server/AllServers";
+import { GetAllServers } from "../Server/AllServers";
 import { Modal } from "../ui/React/Modal";
 import { formatBigNumber } from "../ui/formatNumber";
 
@@ -17,42 +17,18 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ServerName } from "../Types/strings";
 import { allContentFiles } from "../Paths/ContentFile";
-import { BaseServer } from "../Server/BaseServer";
 
 interface File {
   name: string;
   size: number;
 }
 
-function getServerContentSize(server: BaseServer): number {
-  let totalSize = 0;
-
-  for (const [, file] of allContentFiles(server)) {
-    totalSize += file.content.length;
-  }
-
-  return totalSize;
-}
-
-function ServerAccordion(props: { hostname: ServerName }): React.ReactElement {
-  const server = GetServer(props.hostname);
-  if (server === null) throw new Error(`server '${props.hostname}' should not be null`);
-  const totalSize = getServerContentSize(server);
-
-  const files: File[] = [];
-  for (const [path, file] of allContentFiles(server)) {
-    files.push({ name: path, size: file.content.length });
-  }
-
-  if (totalSize === 0) return <></>;
-
-  files.sort((a: File, b: File): number => b.size - a.size);
-
+function ServerAccordion({ hostname, files }: { hostname: ServerName; files: File[] }): React.ReactElement {
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>
-          {server.hostname} ({formatBigNumber(totalSize)}b)
+          {hostname} ({formatBigNumber(files.length)}b)
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
@@ -94,15 +70,18 @@ interface IProps {
 }
 
 export function FileDiagnosticModal(props: IProps): React.ReactElement {
-  const keys: string[] = [];
-  for (const key of GetAllServers(true)) {
-    keys.push(key.hostname);
+  const data = new Map<string, File[]>();
+  for (const server of GetAllServers(true)) {
+    const files = data.get(server.hostname) ?? [];
+    for (const [path, file] of allContentFiles(server)) {
+      files.push({ name: path, size: file.content.length });
+    }
+    if (files.length === 0) {
+      continue;
+    }
+    files.sort((a: File, b: File): number => b.size - a.size);
+    data.set(server.hostname, files);
   }
-
-  const visibleKeys = keys.filter((hostname: string) => {
-    const server = GetServer(hostname);
-    return server !== null && getServerContentSize(server) > 0;
-  });
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
@@ -111,8 +90,8 @@ export function FileDiagnosticModal(props: IProps): React.ReactElement {
           Welcome to the file diagnostic! If your save file is really big it's likely because you have too many
           text/scripts. This tool can help you narrow down where they are.
         </Typography>
-        {visibleKeys.length > 0 ? (
-          keys.map((hostname: string) => <ServerAccordion key={hostname} hostname={hostname} />)
+        {data.size > 0 ? (
+          Array.from(data, ([hostname, files]) => <ServerAccordion key={hostname} hostname={hostname} files={files} />)
         ) : (
           <>
             <br />
