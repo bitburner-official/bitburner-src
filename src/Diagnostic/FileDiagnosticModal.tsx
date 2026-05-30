@@ -115,7 +115,7 @@ export function FileDiagnosticModal(props: IProps): React.ReactElement {
           <>
             <br />
             <br />
-            <Typography>You do not have scripts on any server</Typography>
+            <Typography>You do not have files on any server.</Typography>
           </>
         )}
       </>
