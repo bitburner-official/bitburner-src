@@ -29,6 +29,7 @@ import type { PositiveInteger } from "../types";
 import { Factions } from "../Faction/Factions";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { formatMoney, formatNumber } from "../ui/formatNumber";
+import { evaluateCorpFormula } from "./FormulaEvaluator";
 
 export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
   const checkResult = canCreateCorporation(selfFund, restart);
@@ -228,15 +229,8 @@ export function convertPriceString(price: string): string {
 
   // Replace MP with test numbers.
   for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
-    const temp = sanitizedPrice.replace(/MP/g, testNumber.toString());
-    let evaluatedTemp: unknown;
     try {
-      evaluatedTemp = eval?.(temp);
-      if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
-        throw new Error(
-          `Evaluated value is not a valid number: ${evaluatedTemp}. Price: ${price}. sanitizedPrice: ${sanitizedPrice}. testNumber: ${testNumber}.`,
-        );
-      }
+      evaluateCorpFormula(sanitizedPrice, { MP: testNumber });
     } catch (error) {
       throw new Error(`Invalid value or expression for sell price field: ${error}`, { cause: error });
     }
@@ -266,17 +260,8 @@ export function convertAmountString(amount: string): string {
   const sanitizedAmount = amount.replace(/[^\d+\-*/().eEMAXPRODINV]/g, "");
 
   for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
-    let temp = sanitizedAmount.replace(/MAX/g, testNumber.toString());
-    temp = temp.replace(/PROD/g, testNumber.toString());
-    temp = temp.replace(/INV/g, testNumber.toString());
-    let evaluatedTemp: unknown;
     try {
-      evaluatedTemp = eval?.(temp);
-      if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
-        throw new Error(
-          `Evaluated value is not a valid number: ${evaluatedTemp}. Amount: ${amount}. sanitizedAmount: ${sanitizedAmount}. testNumber: ${testNumber}.`,
-        );
-      }
+      evaluateCorpFormula(sanitizedAmount, { MAX: testNumber, PROD: testNumber, INV: testNumber });
     } catch (error) {
       throw new Error(`Invalid value or expression for sell quantity field: ${error}`, { cause: error });
     }
@@ -567,22 +552,20 @@ Attempted export amount: ${amount}`);
   // Perform sanitization and tests
   let sanitizedAmt = amount.replace(/\s+/g, "").toUpperCase();
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
-  for (const testReplacement of ["(1.23)", "(-1.23)"]) {
-    const replaced = sanitizedAmt.replace(/(MAX|IPROD|EPROD|IINV|EINV)/g, testReplacement);
-    let evaluated: unknown;
+  for (const testReplacement of [1.23, -1.23]) {
     try {
-      evaluated = eval?.(replaced);
-      if (typeof evaluated !== "number" || !Number.isFinite(evaluated)) {
-        throw new Error(`Evaluated value is not a valid number: ${evaluated}`);
-      }
+      evaluateCorpFormula(sanitizedAmt, {
+        MAX: testReplacement,
+        IPROD: testReplacement,
+        EPROD: testReplacement,
+        IINV: testReplacement,
+        EINV: testReplacement,
+      });
     } catch (error) {
       throw new Error(
         `Error while trying to set the exported amount of ${material.name}.
-Error occurred while testing keyword replacement with ${testReplacement}.
 Your input: ${amount}
 Sanitized input: ${sanitizedAmt}
-Input after replacement: ${replaced}
-Evaluated value: ${evaluated}
 Error encountered: ${error}`,
       );
     }

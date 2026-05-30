@@ -19,6 +19,7 @@ import { calculateMarkupMultiplier } from "./helpers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { assertObject } from "../utils/TypeAssertion";
+import { evaluateCorpFormula } from "./FormulaEvaluator";
 
 interface DivisionParams {
   name: string;
@@ -337,16 +338,12 @@ export class Division {
      * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
      * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
      */
-    let temp = String(desiredSellAmount);
-    temp = temp.replace(/MAX/g, adjustedQty.toString());
-    temp = temp.replace(/PROD/g, productionAmount.toString());
-    temp = temp.replace(/INV/g, stored.toString());
     try {
-      // Typecasting here is fine. We will validate the result immediately after this line.
-      sellAmt = eval?.(temp) as number;
-      if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
-        throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
-      }
+      sellAmt = evaluateCorpFormula(String(desiredSellAmount), {
+        MAX: adjustedQty,
+        PROD: productionAmount,
+        INV: stored,
+      });
     } catch (error) {
       dialogBoxCreate(
         `Error evaluating your sell amount for ${name} in ${this.name}'s ${city} office. Error: ${error}.`,
@@ -398,13 +395,8 @@ export class Division {
        * desiredSellPrice is usually a string, but it also can be a number in old versions. eval requires a
        * string, so we convert it to a string here, replace the placeholder MP, and then pass it to eval later.
        */
-      const temp = String(desiredSellPrice).replace(/MP/g, marketPrice.toString());
       try {
-        // Typecasting here is fine. We will validate the result immediately after this line.
-        sCost = eval?.(temp) as number;
-        if (typeof sCost !== "number" || !Number.isFinite(sCost)) {
-          throw new Error(`Evaluated value is not a valid number: ${sCost}`);
-        }
+        sCost = evaluateCorpFormula(String(desiredSellPrice), { MP: marketPrice });
       } catch (error) {
         dialogBoxCreate(
           `Error evaluating your sell price for ${name} in ${this.name}'s ${city} office. ` +
@@ -749,11 +741,13 @@ export class Division {
                 amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
-                  // Typecasting here is fine. We will validate the result immediately after this line.
-                  amt = eval?.(amtStr) as number;
-                  if (typeof amt !== "number" || !Number.isFinite(amt)) {
-                    throw new Error(`Evaluated value is not a valid number: ${amt}`);
-                  }
+                  amt = evaluateCorpFormula(exp.amount, {
+                    MAX: mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles),
+                    EPROD: mat.productionAmount,
+                    IPROD: tempMaterial.productionAmount,
+                    EINV: mat.stored,
+                    IINV: tempMaterial.stored,
+                  });
                 } catch (e) {
                   dialogBoxCreate(
                     `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${e}`,
