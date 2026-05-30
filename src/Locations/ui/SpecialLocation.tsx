@@ -51,6 +51,20 @@ interface SpecialLocationProps {
 export function SpecialLocation(props: SpecialLocationProps): React.ReactElement {
   const rerender = useRerender();
 
+  // Special Location Hints
+  function specialLocationNextBNHint(bn_number: number): React.ReactElement {
+    if (knowAboutBitverse()) {
+      return (
+        <>
+          <br />
+          <br />
+          <Typography>You should check out BN-{bn_number} to uncover more details about this place.</Typography>
+        </>
+      );
+    }
+    return <></>;
+  }
+
   // Apply for Bladeburner division
   const joinBladeburnerDivision = useCallback(() => {
     Player.startBladeburner();
@@ -104,7 +118,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderBladeburner(): React.ReactElement {
     if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
-      return <></>;
+      {
+        return specialLocationNextBNHint(6);
+      }
     }
     const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
     return (
@@ -166,6 +182,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <Typography>
             <i>A businessman is yelling at a clerk. You should come back later.</i>
           </Typography>
+          {specialLocationNextBNHint(3)}
         </>
       );
     }
@@ -181,7 +198,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderGrafting(): React.ReactElement {
     if (!Player.canAccessGrafting()) {
-      return <></>;
+      {
+        return specialLocationNextBNHint(10);
+      }
     }
     return (
       <Button onClick={handleGrafting} sx={{ my: 5 }}>
@@ -293,8 +312,10 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
             <br />
             <br />A symbol is carved in the altar.
           </Typography>
+
           <br />
           {symbol}
+          <Typography>{specialLocationNextBNHint(13)}</Typography>
         </>
       );
     }
