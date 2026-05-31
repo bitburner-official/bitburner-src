@@ -15,11 +15,10 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { calculateMarkupMultiplier } from "./helpers";
+import { calculateMarkupMultiplier, evaluateCorpFormula } from "./helpers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { assertObject } from "../utils/TypeAssertion";
-import { evaluateCorpFormula } from "./FormulaEvaluator";
 
 interface DivisionParams {
   name: string;
@@ -335,8 +334,7 @@ export class Division {
     // amount to calculate with for "MAX".
     const adjustedQty = stored / (corpConstants.secondsPerMarketCycle * marketCycles);
     /**
-     * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
-     * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
+     * desiredSellAmount is usually a string, but it also can be a number in old versions.
      */
     try {
       sellAmt = evaluateCorpFormula(String(desiredSellAmount), {
@@ -392,8 +390,7 @@ export class Division {
         return 0;
       }
       /**
-       * desiredSellPrice is usually a string, but it also can be a number in old versions. eval requires a
-       * string, so we convert it to a string here, replace the placeholder MP, and then pass it to eval later.
+       * desiredSellPrice is usually a string, but it also can be a number in old versions.
        */
       try {
         sCost = evaluateCorpFormula(String(desiredSellPrice), { MP: marketPrice });
@@ -731,14 +728,6 @@ export class Division {
                 }
                 const tempMaterial = expWarehouse.materials[matName];
 
-                let amtStr = exp.amount.replace(
-                  /MAX/g,
-                  (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles)).toString(),
-                );
-                amtStr = amtStr.replace(/EPROD/g, `(${mat.productionAmount})`);
-                amtStr = amtStr.replace(/IPROD/g, `(${tempMaterial.productionAmount})`);
-                amtStr = amtStr.replace(/EINV/g, `(${mat.stored})`);
-                amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
                   amt = evaluateCorpFormula(exp.amount, {

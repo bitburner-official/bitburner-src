@@ -24,12 +24,12 @@ import {
   costOfCreatingCorporation,
   canCreateCorporation,
   convertCreatingCorporationCheckResultToMessage,
+  evaluateCorpFormula,
 } from "./helpers";
 import type { PositiveInteger } from "../types";
 import { Factions } from "../Faction/Factions";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { formatMoney, formatNumber } from "../ui/formatNumber";
-import { evaluateCorpFormula } from "./FormulaEvaluator";
 
 export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
   const checkResult = canCreateCorporation(selfFund, restart);
@@ -210,9 +210,7 @@ export function acceptInvestmentOffer(corporation: Corporation): void {
 
 export function convertPriceString(price: string): string {
   /**
-   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
-   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
-   * message.
+   * This is a common error. We check it here to provide a user-friendly error message before parsing.
    */
   if (price === "") {
     throw new Error("Price cannot be an empty string.");
@@ -242,9 +240,7 @@ export function convertPriceString(price: string): string {
 
 export function convertAmountString(amount: string): string {
   /**
-   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
-   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
-   * message.
+   * This is a common error. We check it here to provide a user-friendly error message before parsing.
    */
   if (amount === "") {
     throw new Error("Amount cannot be an empty string.");

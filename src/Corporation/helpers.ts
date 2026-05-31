@@ -8,6 +8,43 @@ import * as corpConstants from "./data/Constants";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CreatingCorporationCheckResultEnum } from "@enums";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { Parser } from "expr-eval";
+
+const corpFormulaParser = new Parser({
+  allowMemberAccess: false,
+  operators: {
+    power: false,
+    remainder: false,
+    factorial: false,
+    comparison: false,
+    logical: false,
+    conditional: false,
+    concatenate: false,
+    assignment: false,
+    fndef: false,
+    in: false,
+  },
+});
+
+corpFormulaParser.unaryOps = {
+  "-": (value: number) => -value,
+  "+": Number,
+};
+corpFormulaParser.functions = {};
+corpFormulaParser.consts = {};
+
+function getCorpFormulaExpression(formula: string): ReturnType<typeof corpFormulaParser.parse> {
+  const parsed = corpFormulaParser.parse(formula);
+  return parsed;
+}
+
+export function evaluateCorpFormula(formula: string, variables: Readonly<Record<string, number>>): number {
+  const result = getCorpFormulaExpression(formula).evaluate(variables) as unknown;
+  if (typeof result !== "number" || !Number.isFinite(result)) {
+    throw new Error("Formula did not evaluate to a finite number.");
+  }
+  return result;
+}
 
 export function convertCreatingCorporationCheckResultToMessage(checkResult: CreatingCorporationCheckResult): string {
   switch (checkResult) {
