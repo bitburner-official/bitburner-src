@@ -1529,7 +1529,7 @@ setRemovedFunctions(ns, {
   getServerRam: { version: "2.2.0", replacement: "getServerMaxRam and getServerUsedRam" },
   nFormat: {
     version: "3.0.0",
-    replacement: "ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions",
+    replacement: "ns.format.number(), ns.format.ram(), ns.format.percent(), or JS built-in objects/functions",
   },
   getTimeSinceLastAug: {
     version: "3.0.0",
