@@ -7027,7 +7027,7 @@ interface UserInterface {
    * @param vim - Optional. If true, opens the editor in `vim` mode
    *
    * @remarks
-   * RAM cost: 0.0 GB
+   * RAM cost: 0 GB
    */
   nano(files?: string | string[], vim?: boolean): void;
 }
