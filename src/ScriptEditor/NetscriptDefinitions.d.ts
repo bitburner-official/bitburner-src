@@ -7014,18 +7014,20 @@ interface UserInterface {
   /**
    * Clear the Terminal window, as if the player ran `clear` in the terminal
    * @remarks
-   * RAM cost: 0.2 GB
+   * RAM cost: 0.0 GB
    */
   clearTerminal(): void;
 
   /**
-   * Opens the specified file(s) in the nano or vim code editor
+   * Opens the specified file(s) in the code editor.
+   *
+   * This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
    *
    * @param files - Optional. The file(s) to open in the editor. If not provided, opens the editor to the last edited file, if any.
-   * @param vim - Optional. If true, opens the editor in `vim` mode rather than `nano`
+   * @param vim - Optional. If true, opens the editor in `vim` mode
    *
    * @remarks
-   * RAM cost: 0.2 GB
+   * RAM cost: 0.0 GB
    */
   nano(files?: string | string[], vim?: boolean): void;
 }

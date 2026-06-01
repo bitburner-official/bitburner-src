@@ -14,6 +14,8 @@ import { commonEditor } from "../Terminal/commands/common/editor";
 import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { errorMessage } from "../Netscript/ErrorMessages";
+import { Router } from "../ui/GameRoot";
+import { ComplexPage, SimplePage } from "@enums";
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
@@ -203,7 +205,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         }
         return path;
       });
+      helpers.log(ctx, () => `Opening files: ${files.join(", ")}`);
       const vim = helpers.boolean(ctx, "vim", _vim ?? false);
+      if (Router.page() === ComplexPage.ScriptEditor) {
+        // Ensure we are navigating to the editor from another page, so that file open handling/parsing is properly handled
+        Router.toPage(SimplePage.Terminal);
+      }
       commonEditor(vim ? "vim" : "nano", { args: fileNames, server: ctx.workerScript.getServer(), vim }, true);
     },
   };

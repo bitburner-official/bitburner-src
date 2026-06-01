@@ -4,7 +4,9 @@
 
 ## UserInterface.nano() method
 
-Opens the specified file(s) in the nano or vim code editor
+Opens the specified file(s) in the code editor.
+
+This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
 
 **Signature:**
 
@@ -58,7 +60,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ Optional. If true, opens the editor in `vim` mode rather than `nano`
+_(Optional)_ Optional. If true, opens the editor in `vim` mode
 
 
 </td></tr>
@@ -70,5 +72,5 @@ void
 
 ## Remarks
 
-RAM cost: 0.2 GB
+RAM cost: 0.0 GB
 

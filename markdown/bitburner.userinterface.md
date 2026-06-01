@@ -98,7 +98,9 @@ Move a tail window.
 
 </td><td>
 
-Opens the specified file(s) in the nano or vim code editor
+Opens the specified file(s) in the code editor.
+
+This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
 
 
 </td></tr>
