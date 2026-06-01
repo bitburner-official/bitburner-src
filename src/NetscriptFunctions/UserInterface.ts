@@ -201,7 +201,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       const fileNames = files.map((f) => {
         const path = helpers.filePath(ctx, "fileName", f);
         if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-          throw errorMessage(ctx, `Only scripts or text files can be edited. Invalid file path: ${path}`);
+          throw errorMessage(ctx, `Only scripts and text files can be edited. Invalid file path: ${path}`);
         }
         return path;
       });
