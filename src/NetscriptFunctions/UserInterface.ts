@@ -196,7 +196,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       Terminal.clear();
     },
 
-    nano: (ctx: NetscriptContext) => (_files: any, _vim: any) => {
+    nano: (ctx: NetscriptContext) => (_files, _vim) => {
       const files = !_files ? [] : Array.isArray(_files) ? _files : [_files];
       const fileNames = files.map((f) => {
         const path = helpers.filePath(ctx, "fileName", f);
