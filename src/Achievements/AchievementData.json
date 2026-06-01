@@ -218,7 +218,7 @@
     },
     "KARMA_1000000": {
       "ID": "KARMA_1000000",
-      "Name": "Wretched hive of scum and villainy",
+      "Name": "Wretched hive of scum and villainy.",
       "Description": "Reach -1m karma."
     },
     "STOCK_1q": {
@@ -334,7 +334,7 @@
     "INTELLIGENCE_255": {
       "ID": "INTELLIGENCE_255",
       "Name": "Smart!",
-      "Description": "Reach intelligence level 255"
+      "Description": "Reach intelligence level 255."
     },
     "BLADEBURNER_DIVISION": {
       "ID": "BLADEBURNER_DIVISION",
@@ -344,7 +344,7 @@
     "BLADEBURNER_OVERCLOCK": {
       "ID": "BLADEBURNER_OVERCLOCK",
       "Name": "Overclock!",
-      "Description": "Reach maximum level of Overclock"
+      "Description": "Reach maximum level of Overclock."
     },
     "BLADEBURNER_UNSPENT_100000": {
       "ID": "BLADEBURNER_UNSPENT_100000",
@@ -519,7 +519,7 @@
     "EDITSAVEFILE": {
       "ID": "EDITSAVEFILE",
       "Name": "Exploit: edit",
-      "Description": "Edit your savefile"
+      "Description": "Edit your savefile."
     },
     "UNACHIEVABLE": {
       "ID": "UNACHIEVABLE",
