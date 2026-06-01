@@ -233,7 +233,7 @@
     },
     "SCRIPT_32GB": {
       "ID": "SCRIPT_32GB",
-      "Name": "You'll need upgrade for this one.",
+      "Name": "You'll need upgrade for this one",
       "Description": "Write a script that costs 32GB per thread."
     },
     "FIRST_HACKNET_NODE": {
