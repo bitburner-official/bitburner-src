@@ -10,8 +10,9 @@ import { CreatingCorporationCheckResultEnum } from "@enums";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { Parser } from "expr-eval";
 
+//We are intentionally dissabling features we do not want enabled here
 const corpFormulaParser = new Parser({
-  allowMemberAccess: false,
+  allowMemberAccess: false, //Specifically disallows processing of objects and their properties
   operators: {
     power: false,
     remainder: false,
@@ -25,7 +26,7 @@ const corpFormulaParser = new Parser({
     in: false,
   },
 });
-
+//We replace the 3 areas below to avoid enabling unneeded features
 corpFormulaParser.unaryOps = {
   "-": (value: number) => -value,
   "+": Number,
@@ -33,13 +34,8 @@ corpFormulaParser.unaryOps = {
 corpFormulaParser.functions = {};
 corpFormulaParser.consts = {};
 
-function getCorpFormulaExpression(formula: string): ReturnType<typeof corpFormulaParser.parse> {
-  const parsed = corpFormulaParser.parse(formula);
-  return parsed;
-}
-
 export function evaluateCorpFormula(formula: string, variables: Readonly<Record<string, number>>): number {
-  const result = getCorpFormulaExpression(formula).evaluate(variables) as unknown;
+  const result = corpFormulaParser.evaluate(formula, variables);
   if (typeof result !== "number" || !Number.isFinite(result)) {
     throw new Error("Formula did not evaluate to a finite number.");
   }
