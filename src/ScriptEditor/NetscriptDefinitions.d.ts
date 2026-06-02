@@ -2717,7 +2717,7 @@ export interface Singularity {
   /**
    * Hospitalize the player.
    * @remarks
-   * RAM cost: 0.25 GB * 16/4/1
+   * RAM cost: 0.5 GB * 16/4/1
    */
   hospitalize(): void;
 
@@ -2820,7 +2820,7 @@ export interface Singularity {
   /**
    * Get a list of programs offered on the dark web.
    * @remarks
-   * RAM cost: 1 GB * 16/4/1
+   * RAM cost: 0.5 GB * 16/4/1
    *
    *
    * This function allows the player to get a list of programs available for purchase
@@ -6709,7 +6709,7 @@ interface Stanek {
   /**
    * Get placed fragment at location.
    * @remarks
-   * RAM cost: 5 GB
+   * RAM cost: 2 GB
    *
    * @param rootX - X against which to align the top left of the fragment.
    * @param rootY - Y against which to align the top left of the fragment.
@@ -7014,7 +7014,7 @@ interface UserInterface {
   /**
    * Clear the Terminal window, as if the player ran `clear` in the terminal
    * @remarks
-   * RAM cost: 0.2 GB
+   * RAM cost: 0 GB
    */
   clearTerminal(): void;
 }
