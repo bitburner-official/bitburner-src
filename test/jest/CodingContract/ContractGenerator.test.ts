@@ -6,6 +6,7 @@ import {
   generateRandomContractOnHome,
   getRandomFilename,
   getRandomReward,
+  getRandomServer,
 } from "../../../src/CodingContract/ContractGenerator";
 import { CodingContractName, CompanyName, JobField, JobName } from "../../../src/Enums";
 import { GetAllServers } from "../../../src/Server/AllServers";
@@ -19,6 +20,7 @@ import { Factions } from "../../../src/Faction/Factions";
 import { Companies } from "../../../src/Company/Companies";
 import { CodingContractTypes } from "../../../src/CodingContract/ContractTypes";
 import { getRecordEntries } from "../../../src/Types/Record";
+import { Server } from "../../../src/Server/Server";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -56,6 +58,30 @@ describe("Generator", () => {
   test("generateContract - random server", () => {
     generateContract({});
     assertNumberOfContracts(1, GetAllServers());
+  });
+  test("getRandomServer", () => {
+    Player.sourceFiles.set(9, 3);
+    const ns = getNS();
+    for (let i = 0; i < ns.cloud.getServerLimit(); ++i) {
+      ns.cloud.purchaseServer(`pserver-${i}`, 2);
+    }
+    for (let i = 0; i < ns.hacknet.maxNumNodes(); ++i) {
+      ns.hacknet.purchaseNode();
+    }
+    for (let i = 0; i < 10000; ++i) {
+      const server = getRandomServer();
+      if (server === null) {
+        throw new Error(`getRandomServer does not return a server`);
+      }
+      if (
+        !(server instanceof Server) ||
+        server.purchasedByPlayer ||
+        server.hostname === SpecialServers.WorldDaemon ||
+        server.serversOnNetwork.length === 0
+      ) {
+        throw new Error(`getRandomServer returns an invalid server: ${server.hostname}`);
+      }
+    }
   });
 });
 

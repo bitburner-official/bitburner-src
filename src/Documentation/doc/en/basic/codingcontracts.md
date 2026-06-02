@@ -9,7 +9,8 @@ Each contract has a limited number of attempts.
 If you provide the wrong answer too many times and exceed the number of attempts, the contract will self-destruct (delete itself).
 
 Coding Contracts are randomly generated and spawn over time. Initially, you'll only see a small range of the easier contracts, but as you progress further through the game more challenging ones will unlock.
-They can appear on any [server](servers.md) (including your home computer), except for your purchased [servers](servers.md).
+
+They can appear on non-darknet [servers](servers.md) that are not owned by the player (`Server.purchasedByPlayer` is false).
 
 ## Contract generation
 
