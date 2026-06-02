@@ -84,7 +84,7 @@ interface IProps {
 
 export function FileDiagnosticModal(props: IProps): React.ReactElement {
   const keys: string[] = [];
-  for (const server of GetAllServers()) {
+  for (const server of GetAllServers(true)) {
     if (server.scripts.size + server.textFiles.size === 0) {
       continue;
     }
