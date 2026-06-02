@@ -593,32 +593,32 @@ export async function main(ns) {
 
   const step = ITutorial.currStep;
   const content = contents[step];
-  if (content === undefined) throw new Error("error in the tutorial");
+  if (content === undefined) {
+    throw new Error(`Invalid step in the tutorial: ${step}`);
+  }
   return (
-    <>
-      <Paper square sx={{ maxWidth: "70vw", p: 2 }}>
-        {content.content}
-        <br />
-        {step !== iTutorialSteps.DocumentationPageInfo && (
-          <>
-            {step !== iTutorialSteps.Start && (
-              <Button onClick={iTutorialPrevStep} aria-label="previous" style={{ marginRight: "1em" }}>
-                Previous
-              </Button>
-            )}
-            {(content.canNext || ITutorial.stepIsDone[step]) && (
-              <Button onClick={iTutorialNextStep} aria-label="next">
-                Next
-              </Button>
-            )}
-          </>
-        )}
-        <br />
-        <br />
-        <Button onClick={iTutorialEnd}>
-          {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
-        </Button>
-      </Paper>
-    </>
+    <Paper square sx={{ maxWidth: "70vw", p: 2 }}>
+      {content.content}
+      <br />
+      {step !== iTutorialSteps.DocumentationPageInfo && (
+        <>
+          {step !== iTutorialSteps.Start && (
+            <Button onClick={iTutorialPrevStep} aria-label="previous" style={{ marginRight: "1em" }}>
+              Previous
+            </Button>
+          )}
+          {(content.canNext || ITutorial.stepIsDone[step]) && (
+            <Button onClick={iTutorialNextStep} aria-label="next">
+              Next
+            </Button>
+          )}
+        </>
+      )}
+      <br />
+      <br />
+      <Button onClick={iTutorialEnd}>
+        {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
+      </Button>
+    </Paper>
   );
 }
