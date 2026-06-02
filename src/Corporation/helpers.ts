@@ -10,9 +10,10 @@ import { CreatingCorporationCheckResultEnum } from "@enums";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { Parser } from "expr-eval";
 
-//We are intentionally dissabling features we do not want enabled here
+// Configure a restricted parser by disabling unnecessary features.
 const corpFormulaParser = new Parser({
-  allowMemberAccess: false, //Specifically disallows processing of objects and their properties
+  // Disallow access to object properties (e.g. obj.prop).
+  allowMemberAccess: false,
   operators: {
     power: false,
     remainder: false,
@@ -26,7 +27,7 @@ const corpFormulaParser = new Parser({
     in: false,
   },
 });
-//We replace the 3 areas below to avoid enabling unneeded features
+// Restrict the parser to a minimal feature set by overriding the built-in unary operators, functions, and constants.
 corpFormulaParser.unaryOps = {
   "-": (value: number) => -value,
   "+": Number,
