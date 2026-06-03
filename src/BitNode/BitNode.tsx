@@ -55,7 +55,7 @@ export function initBitNodes() {
         This is the first BitNode that you play through. It has no special modifications or mechanics.
         <br />
         <br />
-        {replaceSourceFileTextForBN(1)}
+        {upgradeTextForBN(1)}
       </>
     ),
     (
@@ -88,7 +88,7 @@ export function initBitNodes() {
         other factions, and in BitNode-2, it offers The Red Pill.
         <br />
         <br />
-        {replaceSourceFileTextForBN(2)}
+        {upgradeTextForBN(2)}
       </>
     ),
     (
@@ -121,7 +121,7 @@ export function initBitNodes() {
         potential to generate massive profits.
         <br />
         <br />
-        {replaceSourceFileTextForBN(3)}
+        {upgradeTextForBN(3)}
       </>
     ),
     (
@@ -152,7 +152,7 @@ export function initBitNodes() {
         factions/companies, purchasing/installing augmentations, and creating programs.
         <br />
         <br />
-        {replaceSourceFileTextForBN(4)}
+        {upgradeTextForBN(4)}
       </>
     ),
     (
@@ -178,7 +178,7 @@ export function initBitNodes() {
         that couldn't be modeled by 1's and 0's. They were wrong.
         <br />
         <br />
-        {replaceSourceFileTextForBN(5)}
+        {upgradeTextForBN(5)}
       </>
     ),
     (
@@ -224,7 +224,7 @@ export function initBitNodes() {
         for progression.
         <br />
         <br />
-        {replaceSourceFileTextForBN(6)}
+        {upgradeTextForBN(6)}
       </>
     ),
     (
@@ -256,7 +256,7 @@ export function initBitNodes() {
         for progression.
         <br />
         <br />
-        {replaceSourceFileTextForBN(7)}
+        {upgradeTextForBN(7)}
       </>
     ),
     (
@@ -289,7 +289,7 @@ export function initBitNodes() {
           <li>You start with a WSE membership and access to the TIX API.</li>
           <li>You can short stocks and place different types of orders (limit/stop).</li>
         </ul>
-        {replaceSourceFileTextForBN(8)}
+        {upgradeTextForBN(8)}
       </>
     ),
     (
@@ -325,7 +325,7 @@ export function initBitNodes() {
         generate hashes, which can be spent on a variety of different upgrades.
         <br />
         <br />
-        {replaceSourceFileTextForBN(9)}
+        {upgradeTextForBN(9)}
       </>
     ),
     (
@@ -372,7 +372,7 @@ export function initBitNodes() {
             augmentations, which is an alternative way of installing augmentations.
           </li>
         </ul>
-        {replaceSourceFileTextForBN(10)}
+        {upgradeTextForBN(10)}
       </>
     ),
     (
@@ -400,7 +400,7 @@ export function initBitNodes() {
         the world is slowly crumbling in the middle of the biggest economic crisis of all time.
         <br />
         <br />
-        {replaceSourceFileTextForBN(11)}
+        {upgradeTextForBN(11)}
       </>
     ),
     (
@@ -452,7 +452,7 @@ export function initBitNodes() {
         other. Find her in {CityName.Chongqing} and gain her trust.
         <br />
         <br />
-        {replaceSourceFileTextForBN(13)}
+        {upgradeTextForBN(13)}
       </>
     ),
     (
@@ -481,7 +481,7 @@ export function initBitNodes() {
         networks by controlling the open space in the 'net!
         <br />
         <br />
-        {replaceSourceFileTextForBN(14)}
+        {upgradeTextForBN(14)}
       </>
     ),
     (
@@ -530,7 +530,7 @@ export function initBitNodes() {
         Legends say it can be found somewhere, out there in the dark...
         <br />
         <br />
-        {replaceSourceFileTextForBN(15)}
+        {upgradeTextForBN(15)}
       </>
     ),
     (
