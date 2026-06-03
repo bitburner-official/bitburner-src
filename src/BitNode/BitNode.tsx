@@ -37,7 +37,7 @@ class BitNode {
 }
 
 export const BitNodes: Record<string, BitNode> = {};
-function replaceSourceFileTextForBN(sourceFileNum: number) {
+function upgradeTextForBN(sourceFileNum: number) {
   const sourceFileText = `Destroying this BitNode will give you Source-File ${sourceFileNum}, or if you already have this Source-File, it will upgrade its level up to a maximum of 3.`;
   return sourceFileText;
 }
