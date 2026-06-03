@@ -21,6 +21,7 @@ import { Companies } from "../../../src/Company/Companies";
 import { CodingContractTypes } from "../../../src/CodingContract/ContractTypes";
 import { getRecordEntries } from "../../../src/Types/Record";
 import { Server } from "../../../src/Server/Server";
+import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -61,6 +62,7 @@ describe("Generator", () => {
   });
   test("getRandomServer", () => {
     Player.sourceFiles.set(9, 3);
+    getDarkscapeNavigator();
     const ns = getNS();
     for (let i = 0; i < ns.cloud.getServerLimit(); ++i) {
       ns.cloud.purchaseServer(`pserver-${i}`, 2);
@@ -68,20 +70,34 @@ describe("Generator", () => {
     for (let i = 0; i < ns.hacknet.maxNumNodes(); ++i) {
       ns.hacknet.purchaseNode();
     }
+    const isValidTargetServerForGeneratingContract = (server: BaseServer) => {
+      return (
+        server instanceof Server &&
+        !server.purchasedByPlayer &&
+        server.hostname !== SpecialServers.WorldDaemon &&
+        server.serversOnNetwork.length !== 0
+      );
+    };
+
     for (let i = 0; i < 10000; ++i) {
       const server = getRandomServer();
       if (server === null) {
         throw new Error(`getRandomServer does not return a server`);
       }
-      if (
-        !(server instanceof Server) ||
-        server.purchasedByPlayer ||
-        server.hostname === SpecialServers.WorldDaemon ||
-        server.serversOnNetwork.length === 0
-      ) {
+      if (!isValidTargetServerForGeneratingContract(server)) {
         throw new Error(`getRandomServer returns an invalid server: ${server.hostname}`);
       }
     }
+
+    const spiedMathRandom = jest.spyOn(Math, "random").mockReturnValue(0);
+    const server = getRandomServer();
+    if (server === null) {
+      throw new Error(`getRandomServer does not return a server`);
+    }
+    if (!isValidTargetServerForGeneratingContract(server)) {
+      throw new Error(`getRandomServer returns an invalid server: ${server.hostname}`);
+    }
+    spiedMathRandom.mockRestore();
   });
 });
 
