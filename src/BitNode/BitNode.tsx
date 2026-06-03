@@ -2,7 +2,7 @@ import React from "react";
 import { Player } from "@player";
 import { AugmentationName, CityName, CompletedProgramName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
-
+import { formatMoney } from "../ui/formatNumber";
 class BitNode {
   // A short description, or tagline, about the BitNode
   tagline: string;
@@ -285,7 +285,7 @@ export function initBitNodes() {
         <br />
         In this BitNode:
         <ul>
-          <li>Your starting money is $250 million.</li>
+          <li>Your starting money is ${formatMoney(250e6)}.</li>
           <li>You start with a WSE membership and access to the TIX API.</li>
           <li>You can short stocks and place different types of orders (limit/stop).</li>
         </ul>
