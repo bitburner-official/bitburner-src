@@ -70,34 +70,27 @@ describe("Generator", () => {
     for (let i = 0; i < ns.hacknet.maxNumNodes(); ++i) {
       ns.hacknet.purchaseNode();
     }
-    const isValidTargetServerForGeneratingContract = (server: BaseServer) => {
-      return (
-        server instanceof Server &&
-        !server.purchasedByPlayer &&
-        server.hostname !== SpecialServers.WorldDaemon &&
-        server.serversOnNetwork.length !== 0
-      );
-    };
-
-    for (let i = 0; i < 10000; ++i) {
+    const testRandomServer = () => {
       const server = getRandomServer();
       if (server === null) {
         throw new Error(`getRandomServer does not return a server`);
       }
-      if (!isValidTargetServerForGeneratingContract(server)) {
+      if (
+        !(server instanceof Server) ||
+        server.purchasedByPlayer ||
+        server.hostname === SpecialServers.WorldDaemon ||
+        server.serversOnNetwork.length === 0
+      ) {
         throw new Error(`getRandomServer returns an invalid server: ${server.hostname}`);
       }
-    }
+    };
 
     const spiedMathRandom = jest.spyOn(Math, "random").mockReturnValue(0);
-    const server = getRandomServer();
-    if (server === null) {
-      throw new Error(`getRandomServer does not return a server`);
-    }
-    if (!isValidTargetServerForGeneratingContract(server)) {
-      throw new Error(`getRandomServer returns an invalid server: ${server.hostname}`);
-    }
+    testRandomServer();
     spiedMathRandom.mockRestore();
+    for (let i = 0; i < 10000; ++i) {
+      testRandomServer();
+    }
   });
 });
 
