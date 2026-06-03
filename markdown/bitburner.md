@@ -1221,6 +1221,16 @@ A server. Not all servers have all of these properties - optional properties are
 </td></tr>
 <tr><td>
 
+[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [Singularity](./bitburner.singularity.md)
 
 
@@ -2290,16 +2300,6 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 <tr><td>
 
 [ScriptArg](./bitburner.scriptarg.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
 
 
 </td><td>

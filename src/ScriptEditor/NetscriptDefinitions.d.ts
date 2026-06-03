@@ -5166,7 +5166,7 @@ type GoOpponent =
   | "????????????";
 
 /** @public */
-type SimpleOpponentStats = {
+interface SimpleOpponentStats {
   /** Number of wins since last reset */
   wins: number;
   /** Number of losses since last reset*/
@@ -5181,7 +5181,7 @@ type SimpleOpponentStats = {
   bonusPercent: number;
   /** Description of stat boost */
   bonusDescription: string;
-};
+}
 
 /**
  * Tools to analyze the IPvGO subnet.
@@ -5316,22 +5316,6 @@ export interface GoAnalysis {
 
   /**
    * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
-   *
-   * The details are keyed by opponent name, in this structure:
-   *
-   * ```
-   * {
-   *   <OpponentName>: {
-   *     wins: number,
-   *     losses: number,
-   *     winStreak: number,
-   *     highestWinStreak: number,
-   *     favor: number,
-   *     bonusPercent: number,
-   *     bonusDescription: string,
-   *   }
-   * }
-   * ```
    *
    * @remarks
    * RAM cost: 0 GB

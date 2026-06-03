@@ -6,22 +6,6 @@
 
 Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
 
-The details are keyed by opponent name, in this structure:
-
-```
-{
-  <OpponentName>: {
-    wins: number,
-    losses: number,
-    winStreak: number,
-    highestWinStreak: number,
-    favor: number,
-    bonusPercent: number,
-    bonusDescription: string,
-  }
-}
-```
-
 **Signature:**
 
 ```typescript
