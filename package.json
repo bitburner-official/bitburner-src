@@ -30,6 +30,7 @@
     "clsx": "^1.2.1",
     "convert-source-map": "^2.0.0",
     "date-fns": "^2.30.0",
+    "expr-eval": "^2.0.2",
     "fast-dice-coefficient": "1.0.3",
     "hast-util-from-dom": "^5.0.1",
     "hast-util-to-text": "^4.0.2",

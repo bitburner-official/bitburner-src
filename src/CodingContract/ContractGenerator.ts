@@ -190,29 +190,18 @@ export function getRandomReward(): ICodingContractReward {
   return { type: getRandomIntInclusive(0, validRewardTypes.length - 1) };
 }
 
-function getRandomServer(): BaseServer | null {
-  const servers = GetAllServers().filter((server: BaseServer) => server.serversOnNetwork.length !== 0);
+export function getRandomServer(): BaseServer | null {
+  const servers = GetAllServers().filter(
+    (server: BaseServer) =>
+      server instanceof Server &&
+      !server.purchasedByPlayer &&
+      server.hostname !== SpecialServers.WorldDaemon &&
+      server.serversOnNetwork.length !== 0,
+  );
   if (servers.length === 0) {
     return null;
   }
-  let randIndex = getRandomIntInclusive(0, servers.length - 1);
-  let randServer = servers[randIndex];
-
-  // An infinite loop shouldn't ever happen, but to be safe we'll use
-  // a for loop with a limited number of tries
-  for (let i = 0; i < 200; ++i) {
-    if (
-      randServer instanceof Server &&
-      !randServer.purchasedByPlayer &&
-      randServer.hostname !== SpecialServers.WorldDaemon
-    ) {
-      break;
-    }
-    randIndex = getRandomIntInclusive(0, servers.length - 1);
-    randServer = servers[randIndex];
-  }
-
-  return randServer;
+  return servers[getRandomIntInclusive(0, servers.length - 1)];
 }
 
 /**
