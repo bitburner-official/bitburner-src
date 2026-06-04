@@ -429,7 +429,28 @@ export const ns: InternalAPI<NSFull> = {
       }
       const str = helpers.argsToString(args);
       const color = helpers.getTextColor(str);
-      Terminal.print(`${ctx.workerScript.name}: ${str}`, color);
+      switch (color) {
+        case "error": {
+          Terminal.error(`${ctx.workerScript.name}: ${str}`);
+          break;
+        }
+        case "success": {
+          Terminal.success(`${ctx.workerScript.name}: ${str}`);
+          break;
+        }
+        case "warn": {
+          Terminal.warn(`${ctx.workerScript.name}: ${str}`);
+          break;
+        }
+        case "info": {
+          Terminal.info(`${ctx.workerScript.name}: ${str}`);
+          break;
+        }
+        case "primary": {
+          Terminal.print(`${ctx.workerScript.name}: ${str}`);
+          break;
+        }
+      }
     },
   tprintf:
     (ctx) =>
@@ -437,7 +458,28 @@ export const ns: InternalAPI<NSFull> = {
       const format = helpers.string(ctx, "format", _format);
       const str = vsprintf(format, args);
       const color = helpers.getTextColor(str);
-      Terminal.print(`${str}`, color);
+      switch (color) {
+        case "error": {
+          Terminal.error(`${str}`);
+          break;
+        }
+        case "success": {
+          Terminal.success(`${str}`);
+          break;
+        }
+        case "warn": {
+          Terminal.warn(`${str}`);
+          break;
+        }
+        case "info": {
+          Terminal.info(`${str}`);
+          break;
+        }
+        case "primary": {
+          Terminal.print(`${str}`);
+          break;
+        }
+      }
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();

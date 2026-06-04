@@ -176,8 +176,8 @@ export class Terminal {
     TerminalEvents.emit();
   }
 
-  print(s: string, color: "primary" | "error" | "success" | "info" | "warn" = "primary"): void {
-    this.append(new Output(s, color));
+  print(s: string): void {
+    this.append(new Output(s, "primary"));
   }
 
   printRaw(node: React.ReactNode): void {
