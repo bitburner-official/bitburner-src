@@ -125,6 +125,14 @@ export function Tab({ provided, tabId, isActive, isExternal, isUnsaved, onClick,
               onClose();
             }
           }}
+          onMouseUp={(e) => {
+            // Some Linux DEs do a "paste" action on MMB (mouse up).
+            // Closing a tab with the editor in focus would cause a paste in the editor.
+            // This event handler prevents the paste in cases where another tab slides under the cursor
+            if (e.button === 1) {
+              e.preventDefault();
+            }
+          }}
           style={{
             minHeight: tabIconHeight,
             overflow: "hidden",

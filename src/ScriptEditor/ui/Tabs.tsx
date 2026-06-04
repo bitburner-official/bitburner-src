@@ -114,6 +114,18 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
                 overflowX: "scroll",
               }}
               onWheel={handleScroll}
+              onMouseUp={(e) => {
+                // Some Linux DEs do a "paste" action on MMB (mouse up).
+                // Closing a tab with the editor in focus would cause a paste in the editor
+                // This event handler prevents the paste in cases where the last tab is closed
+                //
+                // It's important to mention that a regular MMB click on the tab container would
+                // also do nothing here, since the "mouse down" event changes the focus away from
+                // the editor before the "mouse up" attempts a paste, preventing it altogether.
+                if (e.button === 1) {
+                  e.preventDefault();
+                }
+              }}
             >
               {filteredScripts.map(({ script, originalIndex }, index) => {
                 const { path, hostname } = script;
