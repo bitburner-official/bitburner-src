@@ -289,7 +289,7 @@ export function initBitNodes() {
           {/* Do NOT call formatMoney. formatMoney applies the player-defined currency symbol settings, but BitNode data
           is initialized before the save data is loaded, so it always uses the default settings. If we cannot apply the
           player's settings, just don't call formatMoney. */}
-          <li>Your starting money is 250e6.</li>
+          <li>Your starting money is 250 million.</li>
           <li>You start with a WSE membership and access to the TIX API.</li>
           <li>You can short stocks and place different types of orders (limit/stop).</li>
         </ul>
