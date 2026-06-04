@@ -9,5 +9,5 @@ Optional. If true, opens the editor in vim mode. If false, opens the editor in n
 **Signature:**
 
 ```typescript
-vim?: boolean
+vim?: boolean;
 ```
