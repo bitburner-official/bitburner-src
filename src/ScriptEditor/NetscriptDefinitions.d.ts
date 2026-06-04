@@ -7025,8 +7025,7 @@ interface UserInterface {
 /**
  * Collection of all functions passed to scripts
  * @public
- * @remarks
- * <b>Basic usage example:</b>
+ * @example
  * ```js
  * export async function main(ns) {
  *  // Basic ns functions can be accessed on the ns object

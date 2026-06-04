@@ -12,9 +12,8 @@ Collection of all functions passed to scripts
 export interface NS 
 ```
 
-## Remarks
+## Example
 
-<b>Basic usage example:</b>
 
 ```js
 export async function main(ns) {
