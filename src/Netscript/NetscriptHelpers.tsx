@@ -370,7 +370,7 @@ function argsToString(args: unknown[]): string {
 
 /** Determine what default color a string should have for tprint/print. */
 function getTextColor(str: string): "error" | "success" | "warn" | "info" | "primary" {
-  if (str.match(/^(\[[^\]]+\] )?ERROR/) || str.match(/(^\[[^\]]+\] )?FAIL/)) {
+  if (str.match(/^(\[[^\]]+\] )?ERROR/) || str.match(/^(\[[^\]]+\] )?FAIL/)) {
     return "error";
   }
   if (str.match(/^(\[[^\]]+\] )?SUCCESS/)) {
