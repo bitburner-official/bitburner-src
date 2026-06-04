@@ -428,47 +428,16 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
       }
       const str = helpers.argsToString(args);
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      Terminal.print(`${ctx.workerScript.name}: ${str}`);
+      const color = helpers.getTextColor(str);
+      Terminal.print(`${ctx.workerScript.name}: ${str}`, color);
     },
   tprintf:
     (ctx) =>
     (_format, ...args) => {
       const format = helpers.string(ctx, "format", _format);
       const str = vsprintf(format, args);
-
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${str}`);
-        return;
-      }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${str}`);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${str}`);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${str}`);
-        return;
-      }
-      Terminal.print(`${str}`);
+      const color = helpers.getTextColor(str);
+      Terminal.print(`${str}`, color);
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
