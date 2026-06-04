@@ -36,7 +36,7 @@ export function NetscriptFormat(): InternalAPI<Format> {
     },
     money: (ctx) => (_n, _exp) => {
       const n = helpers.number(ctx, "n", _n);
-      const exp = !!_exp;
+      const exp = helpers.boolean(ctx, "exp", _exp ?? false);
       return formatMoney(n, exp);
     },
   };
