@@ -487,6 +487,8 @@ import nsDoc_bitburner_division_products_md from "../../markdown/bitburner.divis
 import nsDoc_bitburner_division_researchpoints_md from "../../markdown/bitburner.division.researchpoints.md?raw";
 import nsDoc_bitburner_division_thiscycleexpenses_md from "../../markdown/bitburner.division.thiscycleexpenses.md?raw";
 import nsDoc_bitburner_division_thiscyclerevenue_md from "../../markdown/bitburner.division.thiscyclerevenue.md?raw";
+import nsDoc_bitburner_editoroptions_md from "../../markdown/bitburner.editoroptions.md?raw";
+import nsDoc_bitburner_editoroptions_vim_md from "../../markdown/bitburner.editoroptions.vim.md?raw";
 import nsDoc_bitburner_employedbyrequirement_company_md from "../../markdown/bitburner.employedbyrequirement.company.md?raw";
 import nsDoc_bitburner_employedbyrequirement_md from "../../markdown/bitburner.employedbyrequirement.md?raw";
 import nsDoc_bitburner_employedbyrequirement_type_md from "../../markdown/bitburner.employedbyrequirement.type.md?raw";
@@ -1513,6 +1515,7 @@ import nsDoc_bitburner_userinterface_getstyles_md from "../../markdown/bitburner
 import nsDoc_bitburner_userinterface_gettheme_md from "../../markdown/bitburner.userinterface.gettheme.md?raw";
 import nsDoc_bitburner_userinterface_md from "../../markdown/bitburner.userinterface.md?raw";
 import nsDoc_bitburner_userinterface_movetail_md from "../../markdown/bitburner.userinterface.movetail.md?raw";
+import nsDoc_bitburner_userinterface_opencodeeditor_md from "../../markdown/bitburner.userinterface.opencodeeditor.md?raw";
 import nsDoc_bitburner_userinterface_opentail_md from "../../markdown/bitburner.userinterface.opentail.md?raw";
 import nsDoc_bitburner_userinterface_rendertail_md from "../../markdown/bitburner.userinterface.rendertail.md?raw";
 import nsDoc_bitburner_userinterface_resetstyles_md from "../../markdown/bitburner.userinterface.resetstyles.md?raw";
@@ -2103,6 +2106,8 @@ AllPages["nsDoc/bitburner.division.products.md"] = nsDoc_bitburner_division_prod
 AllPages["nsDoc/bitburner.division.researchpoints.md"] = nsDoc_bitburner_division_researchpoints_md;
 AllPages["nsDoc/bitburner.division.thiscycleexpenses.md"] = nsDoc_bitburner_division_thiscycleexpenses_md;
 AllPages["nsDoc/bitburner.division.thiscyclerevenue.md"] = nsDoc_bitburner_division_thiscyclerevenue_md;
+AllPages["nsDoc/bitburner.editoroptions.md"] = nsDoc_bitburner_editoroptions_md;
+AllPages["nsDoc/bitburner.editoroptions.vim.md"] = nsDoc_bitburner_editoroptions_vim_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.company.md"] = nsDoc_bitburner_employedbyrequirement_company_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.md"] = nsDoc_bitburner_employedbyrequirement_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.type.md"] = nsDoc_bitburner_employedbyrequirement_type_md;
@@ -3129,6 +3134,7 @@ AllPages["nsDoc/bitburner.userinterface.getstyles.md"] = nsDoc_bitburner_userint
 AllPages["nsDoc/bitburner.userinterface.gettheme.md"] = nsDoc_bitburner_userinterface_gettheme_md;
 AllPages["nsDoc/bitburner.userinterface.md"] = nsDoc_bitburner_userinterface_md;
 AllPages["nsDoc/bitburner.userinterface.movetail.md"] = nsDoc_bitburner_userinterface_movetail_md;
+AllPages["nsDoc/bitburner.userinterface.opencodeeditor.md"] = nsDoc_bitburner_userinterface_opencodeeditor_md;
 AllPages["nsDoc/bitburner.userinterface.opentail.md"] = nsDoc_bitburner_userinterface_opentail_md;
 AllPages["nsDoc/bitburner.userinterface.rendertail.md"] = nsDoc_bitburner_userinterface_rendertail_md;
 AllPages["nsDoc/bitburner.userinterface.resetstyles.md"] = nsDoc_bitburner_userinterface_resetstyles_md;

@@ -5,6 +5,7 @@ import type {
   Server as IServer,
   ScriptArg,
   BitNodeOptions,
+  EditorOptions,
 } from "@nsdefs";
 import type { WorkerScript } from "./WorkerScript";
 
@@ -80,6 +81,7 @@ export const helpers = {
   scriptArgs,
   boolean,
   runOptions,
+  editorOptions,
   spawnOptions,
   hostReturnOptions,
   returnServerID,
@@ -220,6 +222,28 @@ function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
     throw errorMessage(ctx, `${argName} must be a boolean, was ${v}`, "TYPE");
   }
   return v;
+}
+
+/**
+ * Converts the provided to a valid EditorOptions object, throwing if it is not an object
+ * @param ctx
+ * @param _options
+ */
+function editorOptions(ctx: NetscriptContext, _options: unknown): EditorOptions {
+  if (!_options) {
+    return {};
+  }
+  if (typeof _options !== "object") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    throw errorMessage(ctx, `editorOptions must be an object, was ${_options}`);
+  }
+  // Safe assertion since _options type has been narrowed to a non-null object
+  const options = _options as Unknownify<EditorOptions>;
+  if (Object.hasOwn(options, "vim") && typeof options.vim !== "boolean") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    throw errorMessage(ctx, `editorOptions.vim must be a boolean, was ${_options}`);
+  }
+  return _options;
 }
 
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
