@@ -74,7 +74,8 @@ RAM cost: 0 GB
 
 This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
 
-<b>Usage examples:</b>
+## Example
+
 
 ```js
   ns.ui.openCodeEditor("foo.js");

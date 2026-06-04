@@ -7005,19 +7005,19 @@ interface UserInterface {
   /**
    * Opens the specified file(s) in the code editor.
    *
-   * @param files - Optional. The file(s) to open in the editor. If not provided, opens the editor to the last edited file, if any.
-   * @param editorOptions - Optional. Settings for opening the editor, such as `vim` mode
-   *
    * @remarks
    * RAM cost: 0 GB
    *
    * This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
    *
-   * <b>Usage examples:</b>
+   * @example
    * ```js
    *   ns.ui.openCodeEditor("foo.js");
    *   ns.ui.openCodeEditor(["bar.js", "data.json"], { vim: true });
    * ```
+   *
+   * @param files - Optional. The file(s) to open in the editor. If not provided, opens the editor to the last edited file, if any.
+   * @param editorOptions - Optional. Settings for opening the editor, such as `vim` mode
    */
   openCodeEditor(files?: string | string[], editorOptions?: EditorOptions): void;
 }
