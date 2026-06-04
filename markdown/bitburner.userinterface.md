@@ -93,14 +93,12 @@ Move a tail window.
 </td></tr>
 <tr><td>
 
-[nano(files, vim)](./bitburner.userinterface.nano.md)
+[openCodeEditor(files, editorOptions)](./bitburner.userinterface.opencodeeditor.md)
 
 
 </td><td>
 
 Opens the specified file(s) in the code editor.
-
-This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
 
 
 </td></tr>

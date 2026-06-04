@@ -404,6 +404,17 @@ Corporation division
 </td></tr>
 <tr><td>
 
+[EditorOptions](./bitburner.editoroptions.md)
+
+
+</td><td>
+
+Options for opening the code editor
+
+
+</td></tr>
+<tr><td>
+
 [EmployedByRequirement](./bitburner.employedbyrequirement.md)
 
 

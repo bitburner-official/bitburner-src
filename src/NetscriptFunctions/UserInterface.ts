@@ -194,7 +194,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       Terminal.clear();
     },
 
-    nano: (ctx: NetscriptContext) => (_files, _vim) => {
+    openCodeEditor: (ctx: NetscriptContext) => (_files, _options) => {
       const files = !_files ? [] : Array.isArray(_files) ? _files : [_files];
       const fileNames = files.map((f) => {
         const path = helpers.filePath(ctx, "fileName", f);
@@ -203,9 +203,14 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         }
         return path;
       });
+      const options = helpers.editorOptions(ctx, _options);
+      const useVim = options.vim ?? Settings.MonacoDefaultToVim;
       helpers.log(ctx, () => `Opening files: ${files.join(", ")}`);
-      const vim = helpers.boolean(ctx, "vim", _vim ?? false);
-      commonEditor(vim ? "vim" : "nano", { args: fileNames, server: ctx.workerScript.getServer(), vim }, true);
+      commonEditor(
+        useVim ? "vim" : "nano",
+        { args: fileNames, server: ctx.workerScript.getServer(), vim: useVim },
+        true,
+      );
     },
   };
 }
