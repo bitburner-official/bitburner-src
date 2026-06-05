@@ -1,7 +1,7 @@
 import { Format } from "@nsdefs";
 import { InternalAPI } from "src/Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { formatNumber, formatPercent, formatRam } from "../ui/formatNumber";
+import { formatNumber, formatPercent, formatRam, formatMoney } from "../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 
 export function NetscriptFormat(): InternalAPI<Format> {
@@ -33,6 +33,11 @@ export function NetscriptFormat(): InternalAPI<Format> {
       const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);
       const milliPrecision = !!_milliPrecision;
       return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
+    },
+    money: (ctx) => (_n, _exp) => {
+      const n = helpers.number(ctx, "n", _n);
+      const exp = helpers.boolean(ctx, "exp", _exp ?? false);
+      return formatMoney(n, exp);
     },
   };
 }

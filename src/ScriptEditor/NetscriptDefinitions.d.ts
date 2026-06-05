@@ -4375,6 +4375,19 @@ export interface Format {
    * @returns The formatted time.
    */
   time(milliseconds: number, milliPrecision?: boolean): string;
+
+  /**
+   * Format a number as an amount of money.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a numeric string, using the user-defined currency prefix/suffix.
+   *
+   * @param n - Amount of money to format.
+   * @param exponential - Whether or not to use exponential form for small numbers (between 0 and 0.001). Defaults to false.
+   * @returns Formatted amount of money.
+   */
+  money(n: number, exponential?: boolean): string;
 }
 
 /**
@@ -5166,7 +5179,7 @@ type GoOpponent =
   | "????????????";
 
 /** @public */
-type SimpleOpponentStats = {
+interface SimpleOpponentStats {
   /** Number of wins since last reset */
   wins: number;
   /** Number of losses since last reset*/
@@ -5181,7 +5194,7 @@ type SimpleOpponentStats = {
   bonusPercent: number;
   /** Description of stat boost */
   bonusDescription: string;
-};
+}
 
 /**
  * Tools to analyze the IPvGO subnet.
@@ -5316,22 +5329,6 @@ export interface GoAnalysis {
 
   /**
    * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
-   *
-   * The details are keyed by opponent name, in this structure:
-   *
-   * ```
-   * {
-   *   <OpponentName>: {
-   *     wins: number,
-   *     losses: number,
-   *     winStreak: number,
-   *     highestWinStreak: number,
-   *     favor: number,
-   *     bonusPercent: number,
-   *     bonusDescription: string,
-   *   }
-   * }
-   * ```
    *
    * @remarks
    * RAM cost: 0 GB
@@ -7017,13 +7014,31 @@ interface UserInterface {
    * RAM cost: 0 GB
    */
   clearTerminal(): void;
+
+  /**
+   * Opens the specified file(s) in the code editor.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
+   *
+   * @example
+   * ```js
+   *   ns.ui.openCodeEditor("foo.js");
+   *   ns.ui.openCodeEditor(["bar.js", "data.json"], { vim: true });
+   * ```
+   *
+   * @param files - Optional. The file(s) to open in the editor. If not provided, opens the editor to the last edited file, if any.
+   * @param editorOptions - Optional. Settings for opening the editor, such as `vim` mode
+   */
+  openCodeEditor(files?: string | string[], editorOptions?: EditorOptions): void;
 }
 
 /**
  * Collection of all functions passed to scripts
  * @public
- * @remarks
- * <b>Basic usage example:</b>
+ * @example
  * ```js
  * export async function main(ns) {
  *  // Basic ns functions can be accessed on the ns object
@@ -11034,6 +11049,18 @@ interface GameInfo {
   commit: string;
   /** Platform that the game is running on */
   platform: "Browser" | "Steam";
+}
+
+/**
+ * Options for opening the code editor
+ * @public
+ */
+interface EditorOptions {
+  /**
+   * Optional. If true, opens the editor in vim mode. If false, opens the editor in nano mode.
+   * If not provided, uses the user's default editor settings
+   */
+  vim?: boolean;
 }
 
 /**

@@ -265,6 +265,7 @@ const format = {
   ram: 0,
   percent: 0,
   time: 0,
+  money: 0,
 } as const;
 
 // Gang API
@@ -451,6 +452,7 @@ const ui = {
   resetStyles: 0,
   getGameInfo: 0,
   clearTerminal: 0,
+  openCodeEditor: 0,
   windowSize: 0,
 } as const;
 

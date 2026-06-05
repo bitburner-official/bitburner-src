@@ -278,6 +278,10 @@ describe("b1tflum3", () => {
       }).toThrow();
       expectFailToB1tflum3();
     });
+    test("Invalid nextBN", () => {
+      const ns = getNS();
+      expect(() => ns.singularity.b1tflum3(-1)).toThrow("Invalid BitNode");
+    });
   });
 });
 
@@ -372,6 +376,10 @@ describe("destroyW0r1dD43m0n", () => {
         });
       }).toThrow();
       expectFailToDestroyWD();
+    });
+    test("Invalid nextBN", () => {
+      const ns = getNS();
+      expect(() => ns.singularity.destroyW0r1dD43m0n(-1)).toThrow("Invalid BitNode");
     });
   });
 });

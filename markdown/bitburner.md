@@ -404,6 +404,17 @@ Corporation division
 </td></tr>
 <tr><td>
 
+[EditorOptions](./bitburner.editoroptions.md)
+
+
+</td><td>
+
+Options for opening the code editor
+
+
+</td></tr>
+<tr><td>
+
 [EmployedByRequirement](./bitburner.employedbyrequirement.md)
 
 
@@ -1216,6 +1227,16 @@ Various info about resets
 </td><td>
 
 A server. Not all servers have all of these properties - optional properties are missing on certain servers.
+
+
+</td></tr>
+<tr><td>
+
+[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
+
+
+</td><td>
+
 
 
 </td></tr>
@@ -2290,16 +2311,6 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 <tr><td>
 
 [ScriptArg](./bitburner.scriptarg.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
 
 
 </td><td>

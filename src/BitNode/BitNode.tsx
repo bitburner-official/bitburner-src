@@ -37,6 +37,11 @@ class BitNode {
 }
 
 export const BitNodes: Record<string, BitNode> = {};
+
+function upgradeTextForBN(sourceFileNum: number) {
+  return `Destroying this BitNode will give you Source-File ${sourceFileNum}, or if you already have this Source-File, it will upgrade its level up to a maximum of 3.`;
+}
+
 export function initBitNodes() {
   BitNodes.BitNode1 = new BitNode(
     1,
@@ -51,8 +56,7 @@ export function initBitNodes() {
         This is the first BitNode that you play through. It has no special modifications or mechanics.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 1, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(1)}
       </>
     ),
     (
@@ -85,8 +89,7 @@ export function initBitNodes() {
         other factions, and in BitNode-2, it offers The Red Pill.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 2, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(2)}
       </>
     ),
     (
@@ -119,8 +122,7 @@ export function initBitNodes() {
         potential to generate massive profits.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 3, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(3)}
       </>
     ),
     (
@@ -151,8 +153,7 @@ export function initBitNodes() {
         factions/companies, purchasing/installing augmentations, and creating programs.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 4, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(4)}
       </>
     ),
     (
@@ -178,8 +179,7 @@ export function initBitNodes() {
         that couldn't be modeled by 1's and 0's. They were wrong.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 5, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(5)}
       </>
     ),
     (
@@ -225,8 +225,7 @@ export function initBitNodes() {
         for progression.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(6)}
       </>
     ),
     (
@@ -258,8 +257,7 @@ export function initBitNodes() {
         for progression.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(7)}
       </>
     ),
     (
@@ -288,12 +286,14 @@ export function initBitNodes() {
         <br />
         In this BitNode:
         <ul>
-          <li>Your starting money is 250e6.</li>
+          {/* Do NOT call formatMoney. formatMoney applies the player-defined currency symbol settings, but BitNode data
+          is initialized before the save data is loaded, so it always uses the default settings. If we cannot apply the
+          player's settings, just don't call formatMoney. */}
+          <li>Your starting money is 250 million.</li>
           <li>You start with a WSE membership and access to the TIX API.</li>
           <li>You can short stocks and place different types of orders (limit/stop).</li>
         </ul>
-        Destroying this BitNode will give you Source-File 8, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(8)}
       </>
     ),
     (
@@ -329,8 +329,7 @@ export function initBitNodes() {
         generate hashes, which can be spent on a variety of different upgrades.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 9, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(9)}
       </>
     ),
     (
@@ -377,8 +376,7 @@ export function initBitNodes() {
             augmentations, which is an alternative way of installing augmentations.
           </li>
         </ul>
-        Destroying this BitNode will give you Source-File 10, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(10)}
       </>
     ),
     (
@@ -406,8 +404,7 @@ export function initBitNodes() {
         the world is slowly crumbling in the middle of the biggest economic crisis of all time.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 11, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(11)}
       </>
     ),
     (
@@ -459,8 +456,7 @@ export function initBitNodes() {
         other. Find her in {CityName.Chongqing} and gain her trust.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 13, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(13)}
       </>
     ),
     (
@@ -489,8 +485,7 @@ export function initBitNodes() {
         networks by controlling the open space in the 'net!
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 14, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(14)}
       </>
     ),
     (
@@ -539,8 +534,7 @@ export function initBitNodes() {
         Legends say it can be found somewhere, out there in the dark...
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 15, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3.
+        {upgradeTextForBN(15)}
       </>
     ),
     (

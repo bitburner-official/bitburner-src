@@ -12,6 +12,7 @@ import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUt
 import { prestigeWorkerScripts } from "./NetscriptWorker";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { ActivateRecoveryMode } from "./ui/React/RecoveryRoot";
+import { validBitNodes } from "./BitNode/Constants";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -56,6 +57,9 @@ export function enterBitNode(
   newBitNode: number,
   bitNodeOptions: BitNodeOptions,
 ): void {
+  if (!validBitNodes.includes(newBitNode)) {
+    throw new Error(`Invalid BitNode: ${newBitNode}.`);
+  }
   // We must kill all scripts before setting up BitNode data and performing the prestige.
   prestigeWorkerScripts();
 

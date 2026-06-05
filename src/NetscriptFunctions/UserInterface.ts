@@ -5,11 +5,15 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CONSTANTS } from "../Constants";
 import { commitHash } from "../utils/helpers/commitHash";
-import { InternalAPI } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { Terminal } from "../../src/Terminal";
 import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
 import { assertAndSanitizeMainTheme, assertAndSanitizeStyles } from "../JsonSchema/JSONSchemaAssertion";
 import { LogBoxCloserEvents, LogBoxEvents } from "../ui/React/LogBoxManager";
+import { commonEditor } from "../Terminal/commands/common/editor";
+import { hasScriptExtension } from "../Paths/ScriptFilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
+import { errorMessage } from "../Netscript/ErrorMessages";
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
@@ -188,6 +192,25 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     clearTerminal: (ctx) => () => {
       helpers.log(ctx, () => `Clearing terminal`);
       Terminal.clear();
+    },
+
+    openCodeEditor: (ctx: NetscriptContext) => (_files, _options) => {
+      const files = !_files ? [] : Array.isArray(_files) ? _files : [_files];
+      const fileNames = files.map((f) => {
+        const path = helpers.filePath(ctx, "fileName", f);
+        if (!hasScriptExtension(path) && !hasTextExtension(path)) {
+          throw errorMessage(ctx, `Only scripts and text files can be edited. Invalid file path: ${path}`);
+        }
+        return path;
+      });
+      const options = helpers.editorOptions(ctx, _options);
+      const useVim = options.vim ?? Settings.MonacoDefaultToVim;
+      helpers.log(ctx, () => `Opening files: ${files.join(", ")}`);
+      commonEditor(
+        useVim ? "vim" : "nano",
+        { args: fileNames, server: ctx.workerScript.getServer(), vim: useVim },
+        true,
+      );
     },
   };
 }

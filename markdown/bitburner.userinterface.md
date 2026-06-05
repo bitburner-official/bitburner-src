@@ -93,6 +93,17 @@ Move a tail window.
 </td></tr>
 <tr><td>
 
+[openCodeEditor(files, editorOptions)](./bitburner.userinterface.opencodeeditor.md)
+
+
+</td><td>
+
+Opens the specified file(s) in the code editor.
+
+
+</td></tr>
+<tr><td>
+
 [openTail(fn, host, args)](./bitburner.userinterface.opentail.md)
 
 
