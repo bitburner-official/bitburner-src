@@ -86,6 +86,7 @@ export const helpers = {
   hostReturnOptions,
   returnServerID,
   argsToString,
+  getTextColor,
   errorMessage,
   validateHGWOptions,
   checkEnvFlags,
@@ -368,6 +369,25 @@ function argsToString(args: unknown[]): string {
 
     return (out += String(nativeArg));
   }, "");
+}
+
+/** Determine what default color a string should have for tprint/print. */
+function getTextColor(str: string): "error" | "success" | "warn" | "info" | "primary" {
+  // Match a tag at the start-of-line with an optional bracket part (primarily for timestamps)
+  // Example: "[13:10] ERROR: Too much regex"
+  if (str.match(/^(\[[^\]]+\] )?ERROR/) || str.match(/^(\[[^\]]+\] )?FAIL/)) {
+    return "error";
+  }
+  if (str.match(/^(\[[^\]]+\] )?SUCCESS/)) {
+    return "success";
+  }
+  if (str.match(/^(\[[^\]]+\] )?WARN/)) {
+    return "warn";
+  }
+  if (str.match(/^(\[[^\]]+\] )?INFO/)) {
+    return "info";
+  }
+  return "primary";
 }
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
