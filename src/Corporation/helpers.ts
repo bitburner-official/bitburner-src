@@ -8,7 +8,7 @@ import * as corpConstants from "./data/Constants";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CreatingCorporationCheckResultEnum } from "@enums";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
-import { Parser } from "expr-eval";
+import { Parser } from "expr-eval-fork";
 
 // Configure a restricted parser by disabling unnecessary features.
 const corpFormulaParser = new Parser({
