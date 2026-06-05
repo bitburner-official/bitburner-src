@@ -524,6 +524,7 @@ import nsDoc_bitburner_filerequirement_file_md from "../../markdown/bitburner.fi
 import nsDoc_bitburner_filerequirement_md from "../../markdown/bitburner.filerequirement.md?raw";
 import nsDoc_bitburner_filerequirement_type_md from "../../markdown/bitburner.filerequirement.type.md?raw";
 import nsDoc_bitburner_format_md from "../../markdown/bitburner.format.md?raw";
+import nsDoc_bitburner_format_money_md from "../../markdown/bitburner.format.money.md?raw";
 import nsDoc_bitburner_format_number_md from "../../markdown/bitburner.format.number.md?raw";
 import nsDoc_bitburner_format_percent_md from "../../markdown/bitburner.format.percent.md?raw";
 import nsDoc_bitburner_format_ram_md from "../../markdown/bitburner.format.ram.md?raw";
@@ -2143,6 +2144,7 @@ AllPages["nsDoc/bitburner.filerequirement.file.md"] = nsDoc_bitburner_filerequir
 AllPages["nsDoc/bitburner.filerequirement.md"] = nsDoc_bitburner_filerequirement_md;
 AllPages["nsDoc/bitburner.filerequirement.type.md"] = nsDoc_bitburner_filerequirement_type_md;
 AllPages["nsDoc/bitburner.format.md"] = nsDoc_bitburner_format_md;
+AllPages["nsDoc/bitburner.format.money.md"] = nsDoc_bitburner_format_money_md;
 AllPages["nsDoc/bitburner.format.number.md"] = nsDoc_bitburner_format_number_md;
 AllPages["nsDoc/bitburner.format.percent.md"] = nsDoc_bitburner_format_percent_md;
 AllPages["nsDoc/bitburner.format.ram.md"] = nsDoc_bitburner_format_ram_md;

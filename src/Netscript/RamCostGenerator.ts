@@ -265,6 +265,7 @@ const format = {
   ram: 0,
   percent: 0,
   time: 0,
+  money: 0,
 } as const;
 
 // Gang API
