@@ -430,20 +430,11 @@ export const ns: InternalAPI<NSFull> = {
       const str = helpers.argsToString(args);
       const color = helpers.getTextColor(str);
       switch (color) {
-        case "error": {
-          Terminal.error(`${ctx.workerScript.name}: ${str}`);
-          break;
-        }
-        case "success": {
-          Terminal.success(`${ctx.workerScript.name}: ${str}`);
-          break;
-        }
-        case "warn": {
-          Terminal.warn(`${ctx.workerScript.name}: ${str}`);
-          break;
-        }
+        case "error":
+        case "success":
+        case "warn":
         case "info": {
-          Terminal.info(`${ctx.workerScript.name}: ${str}`);
+          Terminal[color](`${ctx.workerScript.name}: ${str}`);
           break;
         }
         case "primary": {
@@ -459,20 +450,11 @@ export const ns: InternalAPI<NSFull> = {
       const str = vsprintf(format, args);
       const color = helpers.getTextColor(str);
       switch (color) {
-        case "error": {
-          Terminal.error(`${str}`);
-          break;
-        }
-        case "success": {
-          Terminal.success(`${str}`);
-          break;
-        }
-        case "warn": {
-          Terminal.warn(`${str}`);
-          break;
-        }
+        case "error":
+        case "success":
+        case "warn":
         case "info": {
-          Terminal.info(`${str}`);
+          Terminal[color](`${str}`);
           break;
         }
         case "primary": {
