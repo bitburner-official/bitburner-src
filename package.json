@@ -109,6 +109,9 @@
   "overrides": {
     "react-syntax-highlighter": {
       "prismjs": "1.30.0"
+    },
+    "webpack-dev-server": {
+      "launch-editor": "^2.14.1"
     }
   },
   "engines": {
