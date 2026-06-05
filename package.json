@@ -107,6 +107,9 @@
     "xml-formatter": "^3.6.7"
   },
   "overrides": {
+    "monaco-editor": {
+      "dompurify": "^3.4.8"
+    },
     "react-syntax-highlighter": {
       "prismjs": "1.30.0"
     },
