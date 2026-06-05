@@ -2,7 +2,7 @@ import React from "react";
 import { Player } from "@player";
 import { AugmentationName, CityName, CompletedProgramName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
-import { formatMoney } from "../ui/formatNumber";
+
 class BitNode {
   // A short description, or tagline, about the BitNode
   tagline: string;
@@ -37,10 +37,11 @@ class BitNode {
 }
 
 export const BitNodes: Record<string, BitNode> = {};
+
 function upgradeTextForBN(sourceFileNum: number) {
-  const sourceFileText = `Destroying this BitNode will give you Source-File ${sourceFileNum}, or if you already have this Source-File, it will upgrade its level up to a maximum of 3.`;
-  return sourceFileText;
+  return `Destroying this BitNode will give you Source-File ${sourceFileNum}, or if you already have this Source-File, it will upgrade its level up to a maximum of 3.`;
 }
+
 export function initBitNodes() {
   BitNodes.BitNode1 = new BitNode(
     1,
@@ -285,7 +286,10 @@ export function initBitNodes() {
         <br />
         In this BitNode:
         <ul>
-          <li>Your starting money is ${formatMoney(250e6)}.</li>
+          {/* Do NOT call formatMoney. formatMoney applies the player-defined currency symbol settings, but BitNode data
+          is initialized before the save data is loaded, so it always uses the default settings. If we cannot apply the
+          player's settings, just don't call formatMoney. */}
+          <li>Your starting money is 250 million.</li>
           <li>You start with a WSE membership and access to the TIX API.</li>
           <li>You can short stocks and place different types of orders (limit/stop).</li>
         </ul>

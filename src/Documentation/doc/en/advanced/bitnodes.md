@@ -157,7 +157,7 @@ You are trying to make a name for yourself as an up-and-coming hedge fund manage
 
 In this BitNode:
 
-- You start with $250 million
+- Your starting money is 250 million.
 - You start with a WSE membership and access to the TIX API
 - You are able to short stocks and place different types of orders (limit/stop)
 
