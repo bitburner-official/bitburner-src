@@ -7,7 +7,7 @@
  * Sleeves are unlocked in BitNode-10.
  */
 
-import type { Result, SleevePerson } from "@nsdefs";
+import type { Result, SleevePerson, Multipliers } from "@nsdefs";
 import type { Augmentation } from "../../Augmentation/Augmentation";
 import type { SleeveWork } from "./Work/Work";
 
@@ -45,7 +45,7 @@ import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { Multipliers, mergeMultipliers } from "../Multipliers";
+import { mergeMultipliers } from "../Multipliers";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost } from "../../Augmentation/AugmentationHelpers";
@@ -84,7 +84,7 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Updates this object's multipliers for the given augmentation */
   applyAugmentation(aug: Augmentation): void {
-    this.mults = mergeMultipliers(this.mults, aug.mults);
+    mergeMultipliers(this.mults, aug.mults);
   }
 
   findPurchasableAugs(): Augmentation[] {
