@@ -69,7 +69,7 @@ import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
 import { DarknetState } from "../DarkNet/models/DarknetState";
-import { getFriendlyType } from "../utils/TypeAssertion";
+import { getFriendlyType, isObject } from "../utils/TypeAssertion";
 
 export const helpers = {
   string,
@@ -233,15 +233,18 @@ function editorOptions(ctx: NetscriptContext, _options: unknown): EditorOptions 
   if (!_options) {
     return {};
   }
-  if (typeof _options !== "object") {
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-    throw errorMessage(ctx, `editorOptions must be an object, was ${_options}`);
+  if (!isObject(_options)) {
+    throw errorMessage(
+      ctx,
+      `editorOptions must be an object. Its type is ${getFriendlyType(_options)}. Its string value is ${String(
+        _options,
+      )}`,
+    );
   }
   // Safe assertion since _options type has been narrowed to a non-null object
   const options = _options as Unknownify<EditorOptions>;
   if (Object.hasOwn(options, "vim") && typeof options.vim !== "boolean") {
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-    throw errorMessage(ctx, `editorOptions.vim must be a boolean, was ${_options}`);
+    throw errorMessage(ctx, `editorOptions.vim must be a boolean, was ${options.vim}`);
   }
   return _options;
 }
