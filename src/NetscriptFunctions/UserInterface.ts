@@ -19,7 +19,7 @@ import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
-  if (typeof v === "number") v = v + ""; // cast to string;
+  if (typeof v === "number") v = helpers.string(ctx, argName, v); // cast to string;
   assertStringWithNSContext(ctx, argName, v);
   const matches = v.match(aliasRegex);
   if (matches == null || matches.length !== 1 || matches[0] !== v) {
@@ -224,10 +224,11 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         { args: fileNames, server: ctx.workerScript.getServer(), vim: useVim },
         true,
       );
-	},
+    },
+
     alias: (ctx) => (_alias, _substitution, _global) => {
       const alias = parseAsAlias(ctx, "alias", _alias);
-      const substitution = helpers.string(ctx, "substitution", _substitution).trim();
+      const substitution = helpers.string(ctx, "substitution", _substitution);
       const global = helpers.boolean(ctx, "global", _global ?? false);
       if (!alias) {
         throw helpers.errorMessage(ctx, `'alias' cannot be an empty string.`);
@@ -262,38 +263,6 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       }
 
       return removedAlias;
-    },
-
-    clearAliases: (ctx) => () => {
-      let count = 0;
-      for (const alias of Aliases.keys()) {
-        removeAlias(alias);
-        count++;
-      }
-      for (const alias of GlobalAliases.keys()) {
-        removeAlias(alias);
-        count++;
-      }
-      helpers.log(ctx, () => `Cleared all ${count} aliases.`);
-    },
-
-    getAlias: (ctx) => (_alias) => {
-      const alias = parseAsAlias(ctx, "alias", _alias);
-      if (!alias) {
-        throw helpers.errorMessage(ctx, `'alias' cannot be an empty string.`);
-      }
-
-      let substitution = Aliases.get(alias);
-      if (substitution) {
-        const returnResult = { substitution: substitution, isGlobal: false };
-        return returnResult;
-      }
-      substitution = GlobalAliases.get(alias);
-      if (substitution) {
-        const returnResult = { substitution: substitution, isGlobal: true };
-        return returnResult;
-      }
-      return undefined;
     },
 
     getAllAliases: () => () => {

@@ -454,10 +454,8 @@ const ui = {
   clearTerminal: 0,
   openCodeEditor: 0,
   windowSize: 0,
-  alias: 0.05,
-  unalias: 0.05,
-  clearAliases: 0.05,
-  getAlias: 0,
+  alias: 0,
+  unalias: 0,
   getAllAliases: 0,
 } as const;
 

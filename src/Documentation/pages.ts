@@ -1510,10 +1510,8 @@ import nsDoc_bitburner_universityclasstype_md from "../../markdown/bitburner.uni
 import nsDoc_bitburner_universitylocationname_md from "../../markdown/bitburner.universitylocationname.md?raw";
 import nsDoc_bitburner_universitylocationnameenumtype_md from "../../markdown/bitburner.universitylocationnameenumtype.md?raw";
 import nsDoc_bitburner_userinterface_alias_md from "../../markdown/bitburner.userinterface.alias.md?raw";
-import nsDoc_bitburner_userinterface_clearaliases_md from "../../markdown/bitburner.userinterface.clearaliases.md?raw";
 import nsDoc_bitburner_userinterface_clearterminal_md from "../../markdown/bitburner.userinterface.clearterminal.md?raw";
 import nsDoc_bitburner_userinterface_closetail_md from "../../markdown/bitburner.userinterface.closetail.md?raw";
-import nsDoc_bitburner_userinterface_getalias_md from "../../markdown/bitburner.userinterface.getalias.md?raw";
 import nsDoc_bitburner_userinterface_getallaliases_md from "../../markdown/bitburner.userinterface.getallaliases.md?raw";
 import nsDoc_bitburner_userinterface_getgameinfo_md from "../../markdown/bitburner.userinterface.getgameinfo.md?raw";
 import nsDoc_bitburner_userinterface_getstyles_md from "../../markdown/bitburner.userinterface.getstyles.md?raw";
@@ -3135,10 +3133,8 @@ AllPages["nsDoc/bitburner.universityclasstype.md"] = nsDoc_bitburner_universityc
 AllPages["nsDoc/bitburner.universitylocationname.md"] = nsDoc_bitburner_universitylocationname_md;
 AllPages["nsDoc/bitburner.universitylocationnameenumtype.md"] = nsDoc_bitburner_universitylocationnameenumtype_md;
 AllPages["nsDoc/bitburner.userinterface.alias.md"] = nsDoc_bitburner_userinterface_alias_md;
-AllPages["nsDoc/bitburner.userinterface.clearaliases.md"] = nsDoc_bitburner_userinterface_clearaliases_md;
 AllPages["nsDoc/bitburner.userinterface.clearterminal.md"] = nsDoc_bitburner_userinterface_clearterminal_md;
 AllPages["nsDoc/bitburner.userinterface.closetail.md"] = nsDoc_bitburner_userinterface_closetail_md;
-AllPages["nsDoc/bitburner.userinterface.getalias.md"] = nsDoc_bitburner_userinterface_getalias_md;
 AllPages["nsDoc/bitburner.userinterface.getallaliases.md"] = nsDoc_bitburner_userinterface_getallaliases_md;
 AllPages["nsDoc/bitburner.userinterface.getgameinfo.md"] = nsDoc_bitburner_userinterface_getgameinfo_md;
 AllPages["nsDoc/bitburner.userinterface.getstyles.md"] = nsDoc_bitburner_userinterface_getstyles_md;

@@ -38,17 +38,6 @@ Programmatically sets an alias.
 </td></tr>
 <tr><td>
 
-[clearAliases()](./bitburner.userinterface.clearaliases.md)
-
-
-</td><td>
-
-Clears all aliases.
-
-
-</td></tr>
-<tr><td>
-
 [clearTerminal()](./bitburner.userinterface.clearterminal.md)
 
 
@@ -66,17 +55,6 @@ Clear the Terminal window, as if the player ran `clear` in the terminal
 </td><td>
 
 Close the tail window of a script.
-
-
-</td></tr>
-<tr><td>
-
-[getAlias(alias)](./bitburner.userinterface.getalias.md)
-
-
-</td><td>
-
-Gets the substitution for a specific alias name, or "undefined" if it hasn't been set.
 
 
 </td></tr>

@@ -86,9 +86,11 @@ void
 
 ## Remarks
 
-RAM cost: 0.05 GB
+RAM cost: 0 GB
 
-Programmatically sets an alias. This is functionally equivalent to if you typed \`\`<!-- -->alias $<!-- -->{<!-- -->alias<!-- -->}<!-- -->=$<!-- -->{<!-- -->substitution<!-- -->}<!-- -->\`\` in the terminal. This function throws an error if alias/substitution are empty strings after leading and trailing whitespace are removed. It also throws if alias has any white space in the string in the middle of the string.
+Programmatically sets an alias. This is functionally equivalent to if you typed \`\`<!-- -->alias $<!-- -->{<!-- -->alias<!-- -->}<!-- -->=$<!-- -->{<!-- -->substitution<!-- -->}<!-- -->\`\` in the terminal. This function throws an error if alias/substitution are empty strings after leading and trailing whitespace are removed. It also throws if alias has any invalid characters (not alphanum or `|!%,@-`<!-- -->).
+
+Only one alias can be set for a particular context; global aliases will overwrite nonglobal aliases silently and vice versa.
 
 ## Example
 
