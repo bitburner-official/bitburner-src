@@ -447,6 +447,10 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     case LocationName.ChongqingShadowedWalkway: {
       return renderShadowedWalkway();
     }
+    case LocationName.Void: {
+      // Reserved for special content such as easter eggs.
+      return <></>;
+    }
     default:
       console.error(`Location ${props.loc.name} doesn't have any special properties`);
       return <></>;
