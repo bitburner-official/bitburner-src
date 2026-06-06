@@ -38,13 +38,7 @@ export const config = {
 // or changes a script and then changes it back).
 // Modules can never be garbage collected by Javascript, so it's good to try
 // to keep from making more than we need.
-const moduleCache = new Map<string, WeakRef<LoadedModule>>();
-const cleanup = new FinalizationRegistry((mapKey: string) => {
-  // A new entry can be created with the same key, before this callback is called.
-  if (moduleCache.get(mapKey)?.deref() === undefined) {
-    moduleCache.delete(mapKey);
-  }
-});
+const moduleCache = new Map<string, LoadedModule>();
 
 export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): Promise<ScriptModule> {
   // Return the module if it already exists
@@ -183,7 +177,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     newCode = newCode.substring(0, node.start) + importedScript.mod.url + newCode.substring(node.end);
   }
 
-  const cachedMod = moduleCache.get(newCode)?.deref();
+  const cachedMod = moduleCache.get(newCode);
   if (cachedMod) {
     script.mod = cachedMod;
   } else {
@@ -220,8 +214,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // modules work.
     URL.revokeObjectURL(url);
     script.mod = new LoadedModule(url, module);
-    moduleCache.set(newCode, new WeakRef(script.mod));
-    cleanup.register(script.mod, newCode);
+    moduleCache.set(newCode, script.mod);
   }
 
   addDependencyInfo(script, seenStack);
