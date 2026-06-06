@@ -428,47 +428,40 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
       }
       const str = helpers.argsToString(args);
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${ctx.workerScript.name}: ${str}`);
-        return;
+      const color = helpers.getTextColor(str);
+      switch (color) {
+        case "error":
+        case "success":
+        case "warn":
+        case "info": {
+          Terminal[color](`${ctx.workerScript.name}: ${str}`);
+          break;
+        }
+        case "primary": {
+          Terminal.print(`${ctx.workerScript.name}: ${str}`);
+          break;
+        }
       }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      Terminal.print(`${ctx.workerScript.name}: ${str}`);
     },
   tprintf:
     (ctx) =>
     (_format, ...args) => {
       const format = helpers.string(ctx, "format", _format);
       const str = vsprintf(format, args);
-
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${str}`);
-        return;
+      const color = helpers.getTextColor(str);
+      switch (color) {
+        case "error":
+        case "success":
+        case "warn":
+        case "info": {
+          Terminal[color](`${str}`);
+          break;
+        }
+        case "primary": {
+          Terminal.print(`${str}`);
+          break;
+        }
       }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${str}`);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${str}`);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${str}`);
-        return;
-      }
-      Terminal.print(`${str}`);
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
