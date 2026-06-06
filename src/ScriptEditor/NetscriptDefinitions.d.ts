@@ -7033,6 +7033,53 @@ interface UserInterface {
    * @param editorOptions - Optional. Settings for opening the editor, such as `vim` mode
    */
   openCodeEditor(files?: string | string[], editorOptions?: EditorOptions): void;
+
+  /**
+   * Programmatically sets an alias.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Programmatically sets an alias. This is functionally equivalent to if you typed ``alias ${alias}=${substitution}`` in the terminal.
+   * This function throws an error if alias/substitution are empty strings after leading and trailing whitespace are removed. It also throws if
+   * alias has any invalid characters (not alphanum or `|!%,@-`).
+   *
+   * Only one alias can be set for a particular context; global aliases will overwrite nonglobal aliases silently and vice versa.
+   *
+   * @example
+   * File: script.js
+   * ```js
+   * export async function main(ns){
+   *    ns.alias("nuke", "run NUKE.exe"); // Equivalent to typing "alias nuke="run NUKE.exe"
+   *    ns.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing "alias -g worm="HTTPWorm.exe"
+   * }
+   *
+   * ```
+   * @param alias - The keyword to set.
+   * @param substitution - The substitution to run.
+   * @param global - Whether the alias should be set as a global alias. Global aliases replace all examples of the alias with the substitution string.
+   *
+   */
+  alias(alias: string, substitution: string, global?: boolean): void;
+
+  /**
+   * Clears an existing alias.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param alias - The alias to clear.
+   * @returns - True if there was a previous alias set.
+   */
+  unalias(alias: string): boolean;
+
+  /**
+   * Returns a list of every alias that's been set.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns A map of alias names to an object containing the substitution string and if the alias was set to global.
+   */
+  getAllAliases(): Map<string, { substitution: string; isGlobal: boolean }>;
 }
 
 /**

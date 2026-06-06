@@ -1509,8 +1509,10 @@ import nsDoc_bitburner_universityclassenumtype_md from "../../markdown/bitburner
 import nsDoc_bitburner_universityclasstype_md from "../../markdown/bitburner.universityclasstype.md?raw";
 import nsDoc_bitburner_universitylocationname_md from "../../markdown/bitburner.universitylocationname.md?raw";
 import nsDoc_bitburner_universitylocationnameenumtype_md from "../../markdown/bitburner.universitylocationnameenumtype.md?raw";
+import nsDoc_bitburner_userinterface_alias_md from "../../markdown/bitburner.userinterface.alias.md?raw";
 import nsDoc_bitburner_userinterface_clearterminal_md from "../../markdown/bitburner.userinterface.clearterminal.md?raw";
 import nsDoc_bitburner_userinterface_closetail_md from "../../markdown/bitburner.userinterface.closetail.md?raw";
+import nsDoc_bitburner_userinterface_getallaliases_md from "../../markdown/bitburner.userinterface.getallaliases.md?raw";
 import nsDoc_bitburner_userinterface_getgameinfo_md from "../../markdown/bitburner.userinterface.getgameinfo.md?raw";
 import nsDoc_bitburner_userinterface_getstyles_md from "../../markdown/bitburner.userinterface.getstyles.md?raw";
 import nsDoc_bitburner_userinterface_gettheme_md from "../../markdown/bitburner.userinterface.gettheme.md?raw";
@@ -1527,6 +1529,7 @@ import nsDoc_bitburner_userinterface_settailfontsize_md from "../../markdown/bit
 import nsDoc_bitburner_userinterface_settailminimized_md from "../../markdown/bitburner.userinterface.settailminimized.md?raw";
 import nsDoc_bitburner_userinterface_settailtitle_md from "../../markdown/bitburner.userinterface.settailtitle.md?raw";
 import nsDoc_bitburner_userinterface_settheme_md from "../../markdown/bitburner.userinterface.settheme.md?raw";
+import nsDoc_bitburner_userinterface_unalias_md from "../../markdown/bitburner.userinterface.unalias.md?raw";
 import nsDoc_bitburner_userinterface_windowsize_md from "../../markdown/bitburner.userinterface.windowsize.md?raw";
 import nsDoc_bitburner_userinterfacetheme_backgroundprimary_md from "../../markdown/bitburner.userinterfacetheme.backgroundprimary.md?raw";
 import nsDoc_bitburner_userinterfacetheme_backgroundsecondary_md from "../../markdown/bitburner.userinterfacetheme.backgroundsecondary.md?raw";
@@ -3129,8 +3132,10 @@ AllPages["nsDoc/bitburner.universityclassenumtype.md"] = nsDoc_bitburner_univers
 AllPages["nsDoc/bitburner.universityclasstype.md"] = nsDoc_bitburner_universityclasstype_md;
 AllPages["nsDoc/bitburner.universitylocationname.md"] = nsDoc_bitburner_universitylocationname_md;
 AllPages["nsDoc/bitburner.universitylocationnameenumtype.md"] = nsDoc_bitburner_universitylocationnameenumtype_md;
+AllPages["nsDoc/bitburner.userinterface.alias.md"] = nsDoc_bitburner_userinterface_alias_md;
 AllPages["nsDoc/bitburner.userinterface.clearterminal.md"] = nsDoc_bitburner_userinterface_clearterminal_md;
 AllPages["nsDoc/bitburner.userinterface.closetail.md"] = nsDoc_bitburner_userinterface_closetail_md;
+AllPages["nsDoc/bitburner.userinterface.getallaliases.md"] = nsDoc_bitburner_userinterface_getallaliases_md;
 AllPages["nsDoc/bitburner.userinterface.getgameinfo.md"] = nsDoc_bitburner_userinterface_getgameinfo_md;
 AllPages["nsDoc/bitburner.userinterface.getstyles.md"] = nsDoc_bitburner_userinterface_getstyles_md;
 AllPages["nsDoc/bitburner.userinterface.gettheme.md"] = nsDoc_bitburner_userinterface_gettheme_md;
@@ -3147,6 +3152,7 @@ AllPages["nsDoc/bitburner.userinterface.settailfontsize.md"] = nsDoc_bitburner_u
 AllPages["nsDoc/bitburner.userinterface.settailminimized.md"] = nsDoc_bitburner_userinterface_settailminimized_md;
 AllPages["nsDoc/bitburner.userinterface.settailtitle.md"] = nsDoc_bitburner_userinterface_settailtitle_md;
 AllPages["nsDoc/bitburner.userinterface.settheme.md"] = nsDoc_bitburner_userinterface_settheme_md;
+AllPages["nsDoc/bitburner.userinterface.unalias.md"] = nsDoc_bitburner_userinterface_unalias_md;
 AllPages["nsDoc/bitburner.userinterface.windowsize.md"] = nsDoc_bitburner_userinterface_windowsize_md;
 AllPages["nsDoc/bitburner.userinterfacetheme.backgroundprimary.md"] = nsDoc_bitburner_userinterfacetheme_backgroundprimary_md;
 AllPages["nsDoc/bitburner.userinterfacetheme.backgroundsecondary.md"] = nsDoc_bitburner_userinterfacetheme_backgroundsecondary_md;
