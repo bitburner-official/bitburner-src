@@ -613,11 +613,11 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!server.sqlPortOpen) {
-      helpers.log(ctx, () => `Executed SQLInject.exe on '${server.hostname}' to open SQL port (1433).`);
+      helpers.log(ctx, () => `Executed SQLInject.exe on '${server.hostname}' to open SQL port (3306).`);
       server.sqlPortOpen = true;
       ++server.openPortCount;
     } else {
-      helpers.log(ctx, () => `SQL Port (1433) already opened on '${server.hostname}'.`);
+      helpers.log(ctx, () => `SQL Port (3306) already opened on '${server.hostname}'.`);
     }
     return true;
   },
