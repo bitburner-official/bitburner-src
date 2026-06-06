@@ -114,6 +114,7 @@
       "prismjs": "1.30.0"
     },
     "webpack-dev-server": {
+      "express": "^5.2.1",
       "launch-editor": "^2.14.1"
     }
   },
