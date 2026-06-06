@@ -109,9 +109,6 @@
     "jest-environment-jsdom": {
       "jsdom": "^26.1.0"
     },
-    "monaco-editor": {
-      "dompurify": "^3.4.8"
-    },
     "react-syntax-highlighter": {
       "prismjs": "1.30.0"
     },
