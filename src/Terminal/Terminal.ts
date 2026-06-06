@@ -651,7 +651,12 @@ export class Terminal {
       } else {
         this.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n");
       }
-      this.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
+      this.print(
+        `${infoPrefix}RAM: ${formatRam(server.maxRam)}` +
+          ", Backdoor: " +
+          (server.backdoorInstalled ? "YES" : "NO") +
+          "\n",
+      );
       node.children.forEach((n, i) =>
         printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1),
       );
