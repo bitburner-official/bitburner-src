@@ -17,6 +17,7 @@ export class TextFile extends ContentFile {
     return this.text;
   }
   set content(text: string) {
+    if (this.text === text) return;
     this.metadata.edit();
     this.text = text;
   }

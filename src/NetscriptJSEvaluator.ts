@@ -160,7 +160,11 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
   let newCode = scriptCode;
-  // Loop through each node and replace the script name with a blob url.
+  let cacheKey = scriptCode;
+
+  // Runtime code needs blob URLs, but the module cache key does not.
+  // Blob URLs are unique per creation, so using them as the cache key makes
+  // identical imports miss the cache and create permanent duplicate modules.
   for (const node of importNodes) {
     const importedScript = getModuleScript(node.filename, script.filename, scripts);
     for (const scriptInSeenStack of seenStack) {
@@ -175,9 +179,10 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     importedScript.mod = generateLoadedModule(importedScript, scripts, seenStack);
     seenStack.pop();
     newCode = newCode.substring(0, node.start) + importedScript.mod.url + newCode.substring(node.end);
+    cacheKey = cacheKey.substring(0, node.start) + importedScript.mod.cacheKey + cacheKey.substring(node.end);
   }
 
-  const cachedMod = moduleCache.get(newCode);
+  const cachedMod = moduleCache.get(cacheKey);
   if (cachedMod) {
     script.mod = cachedMod;
   } else {
@@ -213,8 +218,8 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // directly return the module, without even attempting to fetch, due to the way
     // modules work.
     URL.revokeObjectURL(url);
-    script.mod = new LoadedModule(url, module);
-    moduleCache.set(newCode, script.mod);
+    script.mod = new LoadedModule(url, module, cacheKey);
+    moduleCache.set(cacheKey, script.mod);
   }
 
   addDependencyInfo(script, seenStack);

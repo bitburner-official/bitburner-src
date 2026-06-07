@@ -7,10 +7,36 @@ import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
 
+//This caches script code for scripts with the same code but a different filename
+interface ScriptCodeCacheEntry {
+  code: string;
+  refs: number;
+}
+
+const scriptCodeCache = new Map<string, ScriptCodeCacheEntry>();
+
+function retainScriptCode(code: string): string {
+  const entry = scriptCodeCache.get(code);
+  if (entry) {
+    entry.refs++;
+    return entry.code;
+  }
+  scriptCodeCache.set(code, { code, refs: 1 });
+  return code;
+}
+
+function releaseScriptCode(code: string): void {
+  const entry = scriptCodeCache.get(code);
+  if (!entry) return;
+  entry.refs--;
+  if (entry.refs <= 0) scriptCodeCache.delete(code);
+}
+
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
 export class Script extends ContentFile {
-  code: string;
+  private _code = "";
+  private codeRefRetained = false;
   filename: ScriptFilePath;
   server: string;
 
@@ -34,18 +60,31 @@ export class Script extends ContentFile {
     this.metadata.read();
     return this.code;
   }
+  get code(): string {
+    return this._code;
+  }
   set content(newCode: string) {
-    this.metadata.edit();
     if (this.code === newCode) return;
+    this.metadata.edit();
     this.code = newCode;
     this.invalidateModule();
   }
-
+  set code(newCode: string) {
+    if (this.codeRefRetained && this._code === newCode) return;
+    if (this.codeRefRetained) releaseScriptCode(this._code);
+    this._code = retainScriptCode(newCode);
+    this.codeRefRetained = true;
+  }
   constructor(filename = "default.js" as ScriptFilePath, code = "", server = "") {
     super();
     this.filename = filename;
     this.code = code;
     this.server = server; // hostname of server this script is on
+  }
+  dispose(): void {
+    if (this.codeRefRetained) releaseScriptCode(this._code);
+    this._code = "";
+    this.codeRefRetained = false;
   }
 
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
@@ -93,6 +132,7 @@ export class Script extends ContentFile {
     if (this.server !== server.hostname || server.isRunning(this.filename)) return false;
     this.invalidateModule();
     server.scripts.delete(this.filename);
+    this.dispose();
     return true;
   }
 

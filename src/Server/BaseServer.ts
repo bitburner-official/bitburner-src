@@ -190,6 +190,7 @@ export abstract class BaseServer implements IServer {
       if (this.isRunning(path)) return { res: false, msg: "Cannot delete a script that is currently running!" };
       script.invalidateModule();
       this.scripts.delete(path);
+      script.dispose();
       return { res: true };
     }
     if (hasProgramExtension(path)) {
@@ -256,6 +257,7 @@ export abstract class BaseServer implements IServer {
     // Check if the script already exists, and overwrite it if it does
     const script = this.scripts.get(filename);
     if (script) {
+      if (script.code === code) return { overwritten: false };
       // content setter handles module invalidation
       script.content = code;
       return { overwritten: true };
@@ -274,6 +276,7 @@ export abstract class BaseServer implements IServer {
     const existingFile = this.textFiles.get(textPath);
     // overWrite if already exists
     if (existingFile) {
+      if (existingFile.text === txt) return { overwritten: false };
       existingFile.content = txt;
       return { overwritten: true };
     }
