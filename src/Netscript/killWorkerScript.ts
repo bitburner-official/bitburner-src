@@ -119,4 +119,5 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   if (rs.temporary === false) {
     AddRecentScript(workerScript);
   }
+  workerScript.code = "";
 }
