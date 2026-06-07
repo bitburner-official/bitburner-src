@@ -191,12 +191,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.sqlPortOpen) {
-        Terminal.print("SQL Port (3306) is already open!");
+        Terminal.print("SQL Port (1433) is already open!");
         return;
       }
 
       server.sqlPortOpen = true;
-      Terminal.print("Opened SQL Port (3306)!");
+      Terminal.print("Opened SQL Port (1433)!");
       server.openPortCount++;
     },
   }),
