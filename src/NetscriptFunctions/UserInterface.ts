@@ -14,6 +14,19 @@ import { commonEditor } from "../Terminal/commands/common/editor";
 import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { errorMessage } from "../Netscript/ErrorMessages";
+import { addGlobalAlias, addAlias, removeAlias, Aliases, GlobalAliases, aliasRegex } from "../Alias";
+import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
+
+/** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
+export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
+  if (typeof v === "number") v = helpers.string(ctx, argName, v); // cast to string;
+  assertStringWithNSContext(ctx, argName, v);
+  const matches = v.match(aliasRegex);
+  if (matches == null || matches.length !== 1 || matches[0] !== v) {
+    throw helpers.errorMessage(ctx, `'${argName}' must only contain letters, numbers, or any of these symbols: |!%,@-`);
+  }
+  return v;
+}
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
@@ -211,6 +224,58 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         { args: fileNames, server: ctx.workerScript.getServer(), vim: useVim },
         true,
       );
+    },
+
+    alias: (ctx) => (_alias, _substitution, _global) => {
+      const alias = parseAsAlias(ctx, "alias", _alias);
+      const substitution = helpers.string(ctx, "substitution", _substitution);
+      const global = helpers.boolean(ctx, "global", _global ?? false);
+      if (!alias) {
+        throw helpers.errorMessage(ctx, `'alias' cannot be an empty string.`);
+      }
+      if (!substitution) {
+        throw helpers.errorMessage(ctx, `'substitution' cannot be an empty string or only contain whitespace.`);
+      }
+
+      if (global) {
+        addGlobalAlias(alias, substitution);
+        helpers.log(ctx, () => `Added global alias ${alias}: ${substitution}`);
+      } else {
+        addAlias(alias, substitution);
+        helpers.log(ctx, () => `Added alias ${alias}: ${substitution}`);
+      }
+    },
+
+    unalias: (ctx) => (_alias) => {
+      const alias = parseAsAlias(ctx, "alias", _alias);
+
+      if (!alias) {
+        throw helpers.errorMessage(ctx, `'alias' cannot be an empty string.`);
+      }
+
+      // This removes from both global and non-global aliases.
+      const removedAlias = removeAlias(alias);
+
+      if (removedAlias) {
+        helpers.log(ctx, () => `Successfully removed the "${alias}" alias.`);
+      } else {
+        helpers.log(ctx, () => `Failed to remove the "${alias}" alias: no alias with that name found.`);
+      }
+
+      return removedAlias;
+    },
+
+    getAllAliases: () => () => {
+      const returnMap = new Map<string, { substitution: string; isGlobal: boolean }>();
+
+      for (const alias of Aliases.entries()) {
+        returnMap.set(alias[0], { substitution: alias[1], isGlobal: false });
+      }
+      for (const alias of GlobalAliases.entries()) {
+        returnMap.set(alias[0], { substitution: alias[1], isGlobal: true });
+      }
+
+      return returnMap;
     },
   };
 }
