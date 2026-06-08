@@ -10,11 +10,12 @@
  * This subcomponent creates all of the buttons for interacting with those special
  * properties
  */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-import { Location } from "../Location";
+import type { Location } from "../Location";
+import { Locations } from "../Locations";
 import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
 import { AugmentationName, CompletedProgramName, FactionName, LocationName, ToastVariant } from "@enums";
 import { Factions } from "../../Faction/Factions";
@@ -350,7 +351,19 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     );
   }
 
-  function renderGlitch(): React.ReactElement {
+  function RenderGlitch(): React.ReactElement {
+    // If the user stays here for ~25 seconds, silently warp them to The Void.
+    useEffect(() => {
+      let delay = 0;
+      // This is a sum of 25 exponential random variables, which is equivalent
+      // to one Erlang-distributed random variable with mean 25sec and stddev 5sec.
+      for (let i = 0; i < 25; ++i) {
+        delay += -1000 * Math.log(1 - Math.random());
+      }
+      const id = setTimeout(() => Router.toPage(Page.Location, { location: Locations[LocationName.Void] }), delay);
+      return () => clearTimeout(id);
+    });
+
     return (
       <>
         <Typography>
@@ -428,7 +441,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return renderCotMG();
     }
     case LocationName.IshimaGlitch: {
-      return renderGlitch();
+      return <RenderGlitch />;
     }
     case LocationName.NewTokyoArcade: {
       return <ArcadeRoot />;
