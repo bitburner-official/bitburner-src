@@ -91,7 +91,6 @@
     "html-webpack-plugin": "^5.6.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "jsdom": "^26.1.0",
     "lodash": "^4.18.1",
     "monaco-editor": "^0.55.1",
     "monaco-editor-webpack-plugin": "^7.1.1",
@@ -107,6 +106,9 @@
     "xml-formatter": "^3.6.7"
   },
   "overrides": {
+    "jest-environment-jsdom": {
+      "jsdom": "^26.1.0"
+    },
     "react-syntax-highlighter": {
       "prismjs": "1.30.0"
     }
