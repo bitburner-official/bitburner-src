@@ -11,6 +11,7 @@ import { Player } from "@player";
 import MenuItem from "@mui/material/MenuItem";
 import { CompletedProgramName } from "@enums";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { populateDarknet } from "../../DarkNet/controllers/NetworkGenerator";
 
 export function ProgramsDev(): React.ReactElement {
   const [program, setProgram] = useState(CompletedProgramName.bruteSsh);
@@ -19,12 +20,18 @@ export function ProgramsDev(): React.ReactElement {
   }
   function addProgram(): void {
     Player.getHomeComputer().pushProgram(program);
+    if (program === CompletedProgramName.darkscape) {
+      populateDarknet();
+    }
   }
 
   function addAllPrograms(): void {
     const home = Player.getHomeComputer();
     for (const name of Object.values(CompletedProgramName)) {
       home.pushProgram(name);
+      if (name === CompletedProgramName.darkscape) {
+        populateDarknet();
+      }
     }
   }
 
