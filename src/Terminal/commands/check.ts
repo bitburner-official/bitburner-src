@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScripts } from "../../Script/ScriptHelpers";
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
 
-export function check(args: (string | number | boolean)[], server: BaseServer): void {
+export function check(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length < 1) {
     Terminal.error(`Incorrect number of arguments. Usage: check [script] [arg1] [arg2]...`);
   } else {

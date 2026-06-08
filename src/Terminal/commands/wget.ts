@@ -1,9 +1,10 @@
 import { Terminal } from "../../Terminal";
+import { type TerminalAction, Cancellation } from "../TerminalAction";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 
-export function wget(args: (string | number | boolean)[], server: BaseServer): void {
+export function wget(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   if (args.length !== 2 || typeof args[0] !== "string" || typeof args[1] !== "string") {
     Terminal.error("Incorrect usage of wget command. Usage: wget [url] [target file]");
     return;
@@ -15,7 +16,14 @@ export function wget(args: (string | number | boolean)[], server: BaseServer): v
     return;
   }
 
-  fetch(args[0])
+  const abort = new AbortController();
+  let cancelled = false;
+  const cancel = () => {
+    cancelled = true;
+    abort.abort("Request cancelled");
+  };
+
+  const p = fetch(args[0], { signal: abort.signal })
     .then(async (response) => {
       if (response.status !== 200) {
         Terminal.error(`wget failed. HTTP code: ${response.status}.`);
@@ -31,5 +39,21 @@ export function wget(args: (string | number | boolean)[], server: BaseServer): v
     .catch((reason) => {
       // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
       Terminal.error(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`);
+      if (cancelled) {
+        // We need to propogate a Cancellation error to abort any chained
+        // commands higher up.
+        throw new Cancellation("wget");
+      }
     });
+
+  let state = 0;
+  return {
+    cancel: cancel,
+    finished: p,
+    getProgressText: () => {
+      const spinChar = "\\|/-"[state];
+      state = (state + 1) % 4;
+      return `[${spinChar.repeat(50)}]`;
+    },
+  };
 }

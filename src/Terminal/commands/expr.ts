@@ -1,6 +1,6 @@
 import { Terminal } from "../../Terminal";
 
-export function expr(args: (string | number | boolean)[]): void {
+export function expr(args: (string | number | boolean)[]): undefined {
   if (args.length === 0) {
     Terminal.error("Incorrect usage of expr command. Usage: expr [math expression]");
     return;
