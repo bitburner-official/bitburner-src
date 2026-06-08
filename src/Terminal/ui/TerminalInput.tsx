@@ -213,7 +213,7 @@ export function TerminalInput(): React.ReactElement {
         return;
       }
       if (Terminal.action !== null && event.key === KEY.C && event.ctrlKey) {
-        Terminal.finishAction(true);
+        Terminal.action.cancel();
         return;
       }
       const ref = terminalInput.current;
@@ -244,7 +244,7 @@ export function TerminalInput(): React.ReactElement {
       const command = searchResults.length ? searchResults[searchResultsIndex] : value;
       Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
       if (command) {
-        Terminal.executeCommands(command);
+        void Terminal.executeCommands(command); // Async function, errors will hit the uncaught handler
         saveValue("");
         resetSearch();
       }

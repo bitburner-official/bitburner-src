@@ -2,7 +2,7 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { formatPercent, formatRam } from "../../ui/formatNumber";
 
-export function free(args: (string | number | boolean)[], server: BaseServer): void {
+export function free(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 0) {
     Terminal.error("Incorrect usage of free command. Usage: free");
     return;

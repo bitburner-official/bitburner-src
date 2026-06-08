@@ -5,7 +5,7 @@ import { Programs } from "../../Programs/Programs";
 import { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import { getRecordKeys } from "../../Types/Record";
 
-export function runProgram(path: ProgramFilePath, args: (string | number | boolean)[], server: BaseServer): void {
+export function runProgram(path: ProgramFilePath, args: (string | number | boolean)[], server: BaseServer): undefined {
   // Check if you have the program on your computer. If you do, execute it, otherwise
   // display an error message
   const programLowered = path.toLowerCase();

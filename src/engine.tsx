@@ -25,7 +25,6 @@ import { GetAllServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
 import { canAccessStockMarket, initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
-import { Terminal } from "./Terminal";
 
 import { Money } from "./ui/React/Money";
 import { Hashes } from "./ui/React/Hashes";
@@ -92,8 +91,6 @@ const Engine = {
     Player.totalPlaytime += time;
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
-
-    Terminal.process(numCycles);
 
     Player.processWork(numCycles);
 
