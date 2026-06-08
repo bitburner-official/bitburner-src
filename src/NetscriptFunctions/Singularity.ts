@@ -1156,6 +1156,20 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
+      if (!nextBN && (_cbScript || _bitNodeOptions)) {
+        throw helpers.errorMessage(
+          ctx,
+          `Invalid call: When nextBN is undefined, all other params should not be declared`,
+        );
+      } else {
+        const wd = GetServer(SpecialServers.WorldDaemon);
+        if (!(wd instanceof Server)) {
+          throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
+        } else {
+          wd.backdoorInstalled = true;
+        }
+        Router.toPage(Page.BitVerse, { flume: false, quick: false });
+      }
       if (!validBitNodes.includes(nextBN)) {
         throw new Error(`Invalid BitNode: ${_nextBN}.`);
       }

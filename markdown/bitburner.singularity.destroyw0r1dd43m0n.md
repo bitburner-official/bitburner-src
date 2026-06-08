@@ -9,7 +9,7 @@ Destroy the w0r1d\_d43m0n and move on to the next BN.
 **Signature:**
 
 ```typescript
-destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
+destroyW0r1dD43m0n(nextBN?: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ number
 
 </td><td>
 
-BN number to jump to
+_(Optional)_ BN number to jump to. undefined leads you to the BitVerse
 
 
 </td></tr>
