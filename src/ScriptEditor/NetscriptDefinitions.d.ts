@@ -1100,58 +1100,65 @@ interface GangMemberAscension {
 }
 
 /** @public */
-type SleeveBladeburnerTask = {
+interface SleeveBladeburnerTask extends BaseTask {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
   cyclesWorked: number;
   cyclesNeeded: number;
-  nextCompletion: Promise<void>;
   tasksCompleted: number;
-};
+}
 
 /** @public */
-type SleeveClassTask = {
+interface SleeveClassTask extends BaseTask {
   type: "CLASS";
   classType: UniversityClassType | GymType;
   location: LocationName;
-};
+}
 
 /** @public */
-type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
+interface SleeveCompanyTask extends BaseTask {
+  type: "COMPANY";
+  companyName: CompanyName;
+}
 
 /** @public */
-type SleeveCrimeTask = {
+interface SleeveCrimeTask extends BaseTask {
   type: "CRIME";
   crimeType: CrimeType;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;
-};
+}
 
 /** @public */
-type SleeveFactionTask = {
+interface SleeveFactionTask extends BaseTask {
   type: "FACTION";
   factionWorkType: FactionWorkType;
   factionName: FactionName;
-};
+}
 
 /** @public */
-type SleeveInfiltrateTask = {
+interface SleeveInfiltrateTask extends BaseTask {
   type: "INFILTRATE";
   cyclesWorked: number;
   cyclesNeeded: number;
-  nextCompletion: Promise<void>;
-};
+}
 
 /** @public */
-type SleeveRecoveryTask = { type: "RECOVERY" };
+interface SleeveRecoveryTask extends BaseTask {
+  type: "RECOVERY";
+}
 
 /** @public */
-type SleeveSupportTask = { type: "SUPPORT" };
+interface SleeveSupportTask extends BaseTask {
+  type: "SUPPORT";
+}
 
 /** @public */
-type SleeveSynchroTask = { type: "SYNCHRO" };
+interface SleeveSynchroTask extends BaseTask {
+  type: "SYNCHRO";
+}
 
 /** Object representing a sleeve current task.
  * @public */
@@ -1718,7 +1725,7 @@ export interface Stock {
   /**
    * Sleep until the next Stock Market price update has happened.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time"
    * (usually 4 seconds - 6 seconds).
@@ -1742,7 +1749,26 @@ export interface Stock {
  *
  * @public
  */
-export interface BaseTask {
+interface BaseTask {
+  /**
+   * This promise resolves when the task completes or is canceled.
+   *
+   * Tasks that do not track progress, such as studying or working for a company, are non-completable, i.e., they
+   * continue indefinitely until canceled. The `nextCompletion` promise of these tasks resolves only when they are
+   * canceled.
+   *
+   * Among completable tasks, some are repeatable, i.e., they automatically restart after completion. The
+   * `nextCompletion` promise of these tasks resolves on the next completion or when they are canceled.
+   */
+  nextCompletion: Promise<void>;
+}
+
+/**
+ * Base interface of all player tasks.
+ *
+ * @public
+ */
+interface PlayerBaseTask extends BaseTask {
   /**
    * The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
    */
@@ -1757,7 +1783,7 @@ export interface BaseTask {
  *
  * @public
  */
-export interface StudyTask extends BaseTask {
+interface StudyTask extends PlayerBaseTask {
   type: "CLASS";
   classType: string;
   location: LocationName;
@@ -1771,7 +1797,7 @@ export interface StudyTask extends BaseTask {
  *
  * @public
  */
-export interface CompanyWorkTask extends BaseTask {
+interface CompanyWorkTask extends PlayerBaseTask {
   type: "COMPANY";
   companyName: CompanyName;
 }
@@ -1784,7 +1810,7 @@ export interface CompanyWorkTask extends BaseTask {
  *
  * @public
  */
-export interface CreateProgramWorkTask extends BaseTask {
+interface CreateProgramWorkTask extends PlayerBaseTask {
   type: "CREATE_PROGRAM";
   programName: ProgramName;
 }
@@ -1797,7 +1823,7 @@ export interface CreateProgramWorkTask extends BaseTask {
  *
  * @public
  */
-export interface CrimeTask extends BaseTask {
+interface CrimeTask extends PlayerBaseTask {
   type: "CRIME";
   crimeType: CrimeType;
 }
@@ -1810,7 +1836,7 @@ export interface CrimeTask extends BaseTask {
  *
  * @public
  */
-export interface FactionWorkTask extends BaseTask {
+interface FactionWorkTask extends PlayerBaseTask {
   type: "FACTION";
   factionWorkType: FactionWorkType;
   factionName: FactionName;
@@ -1824,13 +1850,9 @@ export interface FactionWorkTask extends BaseTask {
  *
  * @public
  */
-export interface GraftingTask extends BaseTask {
+interface GraftingTask extends PlayerBaseTask {
   type: "GRAFTING";
   augmentation: string;
-  /**
-   * This promise resolves when the task is complete.
-   */
-  completion: Promise<void>;
 }
 
 /**
@@ -1852,7 +1874,7 @@ export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTa
  *
  * - All boolean options: false
  *
- * If you specify intelligenceOverride, it must be a non-negative integer.
+ * If you specify intelligenceOverride, it must be a positive integer.
  *
  * @public
  */
@@ -2345,8 +2367,10 @@ export interface Singularity {
    *
    * This function will automatically accept an invitation from a faction and join it.
    *
+   * Note that this function returns false if you are already a member of the specified faction.
+   *
    * @param faction - Name of faction to join.
-   * @returns True if player joined the faction, and false otherwise.
+   * @returns True if the player successfully accepts an invitation, and false otherwise.
    */
   joinFaction(faction: FactionName): boolean;
 
@@ -2631,9 +2655,10 @@ export interface Singularity {
    * @remarks
    * RAM cost: 2.5 GB * 16/4/1
    *
+   * This excludes the player's price multiplier, but does include the relevant BitNode multiplier (for all augs that aren't part of Shadows of Anarchy, which doesn't use BitNode multipliers).
    *
    * @param augName - Name of Augmentation.
-   * @returns Base price of the augmentation, before price multiplier.
+   * @returns Base price of the augmentation, before the player's price multiplier.
    */
   getAugmentationBasePrice(augName: string): number;
 
@@ -2692,7 +2717,7 @@ export interface Singularity {
   /**
    * Hospitalize the player.
    * @remarks
-   * RAM cost: 0.25 GB * 16/4/1
+   * RAM cost: 0.5 GB * 16/4/1
    */
   hospitalize(): void;
 
@@ -2795,7 +2820,7 @@ export interface Singularity {
   /**
    * Get a list of programs offered on the dark web.
    * @remarks
-   * RAM cost: 1 GB * 16/4/1
+   * RAM cost: 0.5 GB * 16/4/1
    *
    *
    * This function allows the player to get a list of programs available for purchase
@@ -2811,7 +2836,7 @@ export interface Singularity {
    * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
    * been purchased
    */
-  getDarkwebPrograms(): string[];
+  getDarkwebPrograms(): ProgramName[];
 
   /**
    * Check the price of an exploit on the dark web
@@ -2925,7 +2950,7 @@ export interface Hacknet {
   /**
    * Get the number of hacknet nodes you own.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the number of Hacknet Nodes you own.
    *
@@ -2936,7 +2961,7 @@ export interface Hacknet {
   /**
    * Get the maximum number of hacknet nodes.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * @returns Maximum number of hacknet nodes.
    */
@@ -2945,7 +2970,7 @@ export interface Hacknet {
   /**
    * Purchase a new hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Purchases a new Hacknet Node. Returns a number with the index of the
    * Hacknet Node. This index is equivalent to the number at the end of
@@ -2961,7 +2986,7 @@ export interface Hacknet {
   /**
    * Get the price of the next hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of purchasing a new Hacknet Node.
    *
@@ -2972,7 +2997,7 @@ export interface Hacknet {
   /**
    * Get the stats of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns an object containing a variety of stats about the specified Hacknet Node.
    *
@@ -2988,7 +3013,7 @@ export interface Hacknet {
   /**
    * Upgrade the level of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to upgrade the level of the specified Hacknet Node by n.
    *
@@ -3006,7 +3031,7 @@ export interface Hacknet {
   /**
    * Upgrade the RAM of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to upgrade the specified Hacknet Node’s RAM n times.
    * Note that each upgrade doubles the Node’s RAM.
@@ -3026,7 +3051,7 @@ export interface Hacknet {
   /**
    * Upgrade the core of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Tries to purchase n cores for the specified Hacknet Node.
    *
@@ -3044,7 +3069,7 @@ export interface Hacknet {
   /**
    * Upgrade the cache of a hacknet node.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3064,7 +3089,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node levels.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the specified Hacknet Node by n levels.
    *
@@ -3080,7 +3105,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node RAM.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the RAM of the specified Hacknet Node n times.
    *
@@ -3096,7 +3121,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node cores.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * Returns the cost of upgrading the number of cores of the specified Hacknet Node by n.
    *
@@ -3112,7 +3137,7 @@ export interface Hacknet {
   /**
    * Calculate the cost of upgrading hacknet node cache.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3130,7 +3155,7 @@ export interface Hacknet {
   /**
    * Get the total number of hashes stored.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3143,7 +3168,7 @@ export interface Hacknet {
   /**
    * Get the maximum number of hashes you can store.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3156,7 +3181,7 @@ export interface Hacknet {
   /**
    * Get the cost of a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3178,7 +3203,7 @@ export interface Hacknet {
   /**
    * Purchase a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3207,7 +3232,7 @@ export interface Hacknet {
   /**
    * Get the list of hash upgrades
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3223,7 +3248,7 @@ export interface Hacknet {
   /**
    * Get the level of a hash upgrade.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3234,7 +3259,7 @@ export interface Hacknet {
   /**
    * Get the multiplier to study.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3245,7 +3270,7 @@ export interface Hacknet {
   /**
    * Get the multiplier to training.
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.5 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -3969,7 +3994,7 @@ export interface Bladeburner {
   /**
    * Sleep until the next Bladeburner update has happened.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time"
    * (usually 1 second).
@@ -4350,6 +4375,19 @@ export interface Format {
    * @returns The formatted time.
    */
   time(milliseconds: number, milliPrecision?: boolean): string;
+
+  /**
+   * Format a number as an amount of money.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a numeric string, using the user-defined currency prefix/suffix.
+   *
+   * @param n - Amount of money to format.
+   * @param exponential - Whether or not to use exponential form for small numbers (between 0 and 0.001). Defaults to false.
+   * @returns Formatted amount of money.
+   */
+  money(n: number, exponential?: boolean): string;
 }
 
 /**
@@ -4388,71 +4426,41 @@ type DarknetResponseCode = _ValueOf<DarknetResponseCodeType>;
 /** @public */
 export type DarknetResult = { success: boolean; code: DarknetResponseCode; message: string };
 
-/**
- * Darknet server data.
- * @public
- */
-export interface DarknetServerData {
-  /** Hostname. Must be unique */
-  hostname: string;
-  /** IP Address. Must be unique */
-  ip: string;
-  /** Flag indicating whether the player has admin/root access to this server */
-  hasAdminRights: boolean;
-  /** Flag indicating whether the player's terminal is currently connected to this server */
-  isConnectedTo: boolean;
-  /** Number of CPU cores */
-  cpuCores: number;
-  /** Used RAM (GB). i.e. unavailable RAM */
-  ramUsed: number;
-  /** Max RAM (GB) of this server */
-  maxRam: number;
-  /** Flag indicating whether this server has a backdoor installed by the player */
-  backdoorInstalled: boolean;
-  /** If the server has a stasis link applied */
-  hasStasisLink: boolean;
-  /** The amount of ram blocked by the server owner */
-  blockedRam: number;
-  /**
-   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
-   * You are supposed to experiment and discover the models.
-   */
-  modelId: string;
-  /** The generic password prompt for the server */
-  staticPasswordHint: string;
-  /** Data associated with the password hint */
-  passwordHintData: string;
-  /** The difficulty rating of the server, associated with its original depth in the net */
-  difficulty: number;
-  /** The depth of the server in the net */
-  depth: number;
-  /** The charisma skill required to heartbleed the server */
-  requiredCharismaSkill: number;
-  /** The interval at which the server periodically adds to its logs, in seconds. */
-  logTrafficInterval: number;
-  /** If this darknet server cannot be moved. True for fixed/story servers. */
-  isStationary: boolean;
-  /** Whether this server was purchased by the player. Always false for darknet servers */
-  purchasedByPlayer: boolean;
-}
-
 /** @public */
 export type CacheResult = {
   success: boolean;
   message: string;
+} & CacheReward;
+
+/** @public */
+export type CacheReward = {
   karmaLoss: number;
+  wseAccount: boolean;
+  tixApiAccess: boolean;
+  fourSigmaData: boolean;
+
+  money?: number;
+  programName?: ProgramName;
+  stockSymbol?: string;
+  stockShares?: number;
+  dataFilePaths?: string[];
+  contractFilePaths?: string[];
+  augmentationName?: string;
 };
 
 /**
- * Details about a server's authentication schema
+ * Details about a darknet server
  * @public
  */
-interface ServerAuthDetails {
+interface DarknetServerDetails {
   /** True if the server is directly connected to the current server */
   isConnectedToCurrentServer: boolean;
   /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
   hasSession: boolean;
-  /** The model ID of the server. Similar models share vulnerabilities. */
+  /**
+   * The model of the server. Similar models have similar vulnerabilities. The model list is intentionally undocumented.
+   * You are supposed to experiment and discover the models.
+   */
   modelId: string;
   /** Static password reminder text set for this server. */
   passwordHint: string;
@@ -4464,6 +4472,16 @@ interface ServerAuthDetails {
   passwordLength: number;
   /** The character set used in the password */
   passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
+  /** The amount of ram blocked by the server owner */
+  blockedRam: number;
+  /** The difficulty rating of the server, associated with its original depth in the net */
+  difficulty: number;
+  /** The current depth in the darknet of the server */
+  depth: number;
+  /** The charisma skill required to authenticate on the server */
+  requiredCharismaSkill: number;
+  /** If this darknet server cannot be moved. True for fixed/story servers. */
+  isStationary: boolean;
 }
 
 /**
@@ -4629,15 +4647,18 @@ export interface Darknet {
   getStasisLinkedServers(returnByIP?: boolean): string[];
 
   /**
-   * Returns the server's authentication protocol details.
+   * Returns the darknet-specific details of the server.
+   *
+   * If the darknet server has recently gone offline, the returned object will be a dummy server object with
+   * `isOnline: false`.
    *
    * @remarks
    * RAM cost: 0.1 GB
    *
    * @param host - Hostname/IP of the server to analyze. Defaults to the running script's server if not specified.
-   * @returns An object containing the server's authentication protocol details.
+   * @returns An object containing the server's darknet-specific details.
    */
-  getServerAuthDetails(host?: string): ServerAuthDetails & { isOnline: boolean };
+  getServerDetails(host?: string): DarknetServerDetails & { isOnline: boolean };
 
   /**
    * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
@@ -4771,7 +4792,7 @@ export interface Darknet {
    * - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
    *
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    */
   nextMutation(): Promise<void>;
 
@@ -4879,7 +4900,7 @@ export interface Gang {
    *
    * @returns Object containing territory and power information about all gangs, including the player's gang, if any.
    */
-  getOtherGangInformation(): Record<string, GangOtherInfoObject>;
+  getAllGangInformation(): Record<string, GangOtherInfoObject>;
 
   /**
    * Get information about a specific gang member.
@@ -5126,7 +5147,7 @@ export interface Gang {
   /**
    * Sleeps until the next Gang update has happened.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time".
    *
@@ -5158,7 +5179,7 @@ type GoOpponent =
   | "????????????";
 
 /** @public */
-type SimpleOpponentStats = {
+interface SimpleOpponentStats {
   /** Number of wins since last reset */
   wins: number;
   /** Number of losses since last reset*/
@@ -5173,7 +5194,7 @@ type SimpleOpponentStats = {
   bonusPercent: number;
   /** Description of stat boost */
   bonusDescription: string;
-};
+}
 
 /**
  * Tools to analyze the IPvGO subnet.
@@ -5309,22 +5330,6 @@ export interface GoAnalysis {
   /**
    * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
    *
-   * The details are keyed by opponent name, in this structure:
-   *
-   * ```
-   * {
-   *   <OpponentName>: {
-   *     wins: number,
-   *     losses: number,
-   *     winStreak: number,
-   *     highestWinStreak: number,
-   *     favor: number,
-   *     bonusPercent: number,
-   *     bonusDescription: string,
-   *   }
-   * }
-   * ```
-   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -5430,7 +5435,7 @@ export interface GoCheat {
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *
-   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   * Success chance can be seen via ns.go.cheat.getCheatSuccessChance()
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
@@ -5458,7 +5463,7 @@ export interface GoCheat {
    * Attempts to place two routers at once on empty nodes. Note that this ignores other move restrictions, so you can
    * suicide your own routers if they have no access to empty ports and do not capture any enemy routers.
    *
-   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   * Success chance can be seen via ns.go.cheat.getCheatSuccessChance()
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
@@ -5490,7 +5495,7 @@ export interface GoCheat {
   /**
    * Attempts to repair an offline node, leaving an empty playable node behind.
    *
-   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   * Success chance can be seen via ns.go.cheat.getCheatSuccessChance()
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
@@ -5519,7 +5524,7 @@ export interface GoCheat {
    * Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or
    * provide open node access to adjacent routers.
    *
-   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   * Success chance can be seen via ns.go.cheat.getCheatSuccessChance()
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
@@ -6091,7 +6096,7 @@ export interface Grafting {
    * Wait until the ongoing grafting finishes or is canceled.
    *
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * @returns A promise that resolves when the current grafting finishes or is canceled. If there is no current work,
    * the promise resolves immediately. If the current work is not a grafting work, the promise rejects immediately.
@@ -6299,6 +6304,16 @@ interface HackingFormulas {
    * @returns The calculated weaken time, in milliseconds.
    */
   weakenTime(server: Server, player: Person): number;
+  /**
+   * Calculate the security decrease from a weaken operation.
+   * Unlike other hacking formulas, weaken effect depends only on thread count and
+   * core count, not on server or player properties. The core bonus formula is
+   * `1 + (cores - 1) / 16`.
+   * @param threads - Number of threads running weaken.
+   * @param cores - Number of cores on the host server. Default 1.
+   * @returns The security decrease amount.
+   */
+  weakenEffect(threads: number, cores?: number): number;
 }
 
 /**
@@ -6494,26 +6509,32 @@ interface BladeburnerFormulas {
 interface DarknetFormulas {
   /**
    * Gets the time it will take to authenticate a server.
-   * @param darknetServerData - The server to check authentication time on.
+   * @param serverDetails - The server to check authentication time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
+   * @param correctCharactersInPassword - only used for 2G_cellular model servers. The number of correct characters in the attempted password. Optional, defaults to 0
    */
-  getAuthenticateTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getAuthenticateTime(
+    serverDetails: DarknetServerDetails,
+    threads?: number,
+    player?: Person,
+    correctCharactersInPassword?: number,
+  ): number;
   /**
    * Gets the time it will take to scrape logs from a server.
-   * @param darknetServerData - The server to check heartbleed log scraping time on.
+   * @param serverDetails - The server to check heartbleed log scraping time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedTime(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
-   * @param darknetServerData - The server to check ram freed on.
+   * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(darknetServerData: DarknetServerData, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 }
 
 /**
@@ -6586,6 +6607,21 @@ interface ActiveFragment extends Fragment {
   rotation: number;
   x: number;
   y: number;
+  /**
+   * This is the raw value of the modifier used to calculate the effect on your multipliers. It may not be a multiplier.
+   *
+   * With fragments that increase a multiplier, this value is a multiplier. For example, with "+x% hacknet production"
+   * fragment, a value of 1.25 will multiply the "hacknet_node_money" multiplier by 1.25. The UI will show "+25% hacknet
+   * production".
+   *
+   * With fragments that decrease a multiplier, you need to invert this value. For example, with "-x% cheaper hacknet
+   * costs" fragment, a value of 1.25 means the "hacknet_node_purchase_cost" (and other relevant cost multipliers) will
+   * be multiplied by 0.8 (1 / 1.25). The UI will show "20% cheaper hacknet costs".
+   *
+   * With booster fragments, this value is always 1. Booster fragments only boost non-booster fragments. They don't
+   * directly boost your multipliers.
+   */
+  chargedEffect: number;
 }
 
 /**
@@ -6670,7 +6706,7 @@ interface Stanek {
   /**
    * Get placed fragment at location.
    * @remarks
-   * RAM cost: 5 GB
+   * RAM cost: 2 GB
    *
    * @param rootX - X against which to align the top left of the fragment.
    * @param rootY - Y against which to align the top left of the fragment.
@@ -6975,16 +7011,81 @@ interface UserInterface {
   /**
    * Clear the Terminal window, as if the player ran `clear` in the terminal
    * @remarks
-   * RAM cost: 0.2 GB
+   * RAM cost: 0 GB
    */
   clearTerminal(): void;
+
+  /**
+   * Opens the specified file(s) in the code editor.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
+   *
+   * @example
+   * ```js
+   *   ns.ui.openCodeEditor("foo.js");
+   *   ns.ui.openCodeEditor(["bar.js", "data.json"], { vim: true });
+   * ```
+   *
+   * @param files - Optional. The file(s) to open in the editor. If not provided, opens the editor to the last edited file, if any.
+   * @param editorOptions - Optional. Settings for opening the editor, such as `vim` mode
+   */
+  openCodeEditor(files?: string | string[], editorOptions?: EditorOptions): void;
+
+  /**
+   * Programmatically sets an alias.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Programmatically sets an alias. This is functionally equivalent to if you typed ``alias ${alias}=${substitution}`` in the terminal.
+   * This function throws an error if alias/substitution are empty strings after leading and trailing whitespace are removed. It also throws if
+   * alias has any invalid characters (not alphanum or `|!%,@-`).
+   *
+   * Only one alias can be set for a particular context; global aliases will overwrite nonglobal aliases silently and vice versa.
+   *
+   * @example
+   * File: script.js
+   * ```js
+   * export async function main(ns){
+   *    ns.alias("nuke", "run NUKE.exe"); // Equivalent to typing "alias nuke="run NUKE.exe"
+   *    ns.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing "alias -g worm="HTTPWorm.exe"
+   * }
+   *
+   * ```
+   * @param alias - The keyword to set.
+   * @param substitution - The substitution to run.
+   * @param global - Whether the alias should be set as a global alias. Global aliases replace all examples of the alias with the substitution string.
+   *
+   */
+  alias(alias: string, substitution: string, global?: boolean): void;
+
+  /**
+   * Clears an existing alias.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param alias - The alias to clear.
+   * @returns - True if there was a previous alias set.
+   */
+  unalias(alias: string): boolean;
+
+  /**
+   * Returns a list of every alias that's been set.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns A map of alias names to an object containing the substitution string and if the alias was set to global.
+   */
+  getAllAliases(): Map<string, { substitution: string; isGlobal: boolean }>;
 }
 
 /**
  * Collection of all functions passed to scripts
  * @public
- * @remarks
- * <b>Basic usage example:</b>
+ * @example
  * ```js
  * export async function main(ns) {
  *  // Basic ns functions can be accessed on the ns object
@@ -6999,113 +7100,93 @@ interface UserInterface {
 export interface NS {
   /**
    * Namespace for {@link Hacknet | hacknet} functions. Some of this API contains spoilers.
-   * @remarks RAM cost: 4 GB.
    */
   readonly hacknet: Hacknet;
 
   /**
    * Namespace for {@link Bladeburner | Bladeburner} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly bladeburner: Bladeburner;
 
   /**
    * Namespace for {@link CodingContract | coding contract} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly codingcontract: CodingContract;
 
   /**
    * Namespace for {@link Cloud | cloud} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly cloud: Cloud;
 
   /**
    * Namespace for darknet functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly dnet: Darknet;
 
   /**
    * Namespace for {@link Format | formatting} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly format: Format;
 
   /**
    * Namespace for {@link Gang | gang} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly gang: Gang;
 
   /**
    * Namespace for {@link Go | Go} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly go: Go;
 
   /**
    * Namespace for {@link Sleeve | sleeve} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly sleeve: Sleeve;
 
   /**
    * Namespace for {@link Stock | stock} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly stock: Stock;
 
   /**
    * Namespace for {@link Formulas | formulas} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly formulas: Formulas;
 
   /**
    * Namespace for {@link Stanek | Stanek} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly stanek: Stanek;
 
   /**
    * Namespace for {@link Infiltration | infiltration} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly infiltration: Infiltration;
 
   /**
    * Namespace for {@link Corporation | corporation} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly corporation: Corporation;
 
   /**
    * Namespace for {@link UserInterface | user interface} functions.
-   * @remarks RAM cost: 0 GB
    */
   readonly ui: UserInterface;
 
   /**
    * Namespace for {@link Singularity | singularity} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly singularity: Singularity;
 
   /**
    * Namespace for {@link Grafting | grafting} functions. Contains spoilers.
-   * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;
 
   /**
    * Arguments passed into the script.
    *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Arguments passed into a script can be accessed as a normal array by using the `[]` operator
+   * These arguments can be accessed as a normal array by using the `[]` operator
    * (`args[0]`, `args[1]`, etc...).
    * Arguments can be string, number, or boolean.
    * Use `args.length` to get the number of arguments that were passed into a script.
@@ -7905,6 +7986,11 @@ export interface NS {
    * // arguments to the script.
    * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
+   *
+   * For darknet servers: A session must be established with the target server, and the script must be
+   * running on a server that is directly connected to the target, or the target must have a backdoor or
+   * stasis link installed.
+   *
    * @param script - Filename of script to execute. This file must already exist on the target server.
    * @param host - Hostname/IP of the target server on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
@@ -7941,7 +8027,7 @@ export interface NS {
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link SpawnOptions} object. Threads defaults to 1 and spawnDelay defaults to 10,000 ms.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
-  spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: ScriptArg[]): void;
+  spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: ScriptArg[]): never;
 
   /**
    * Returns the currently running script.
@@ -8023,7 +8109,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0.6 GB
    *
-   * Copies a script or literature (.lit) file(s) to another server. The files argument can be either a string
+   * Copies text, script or literature (.lit) file(s) to another server. The files argument can be either a string
    * specifying a single file to copy, or an array of strings specifying multiple files to copy.
    *
    * @example
@@ -8042,9 +8128,13 @@ export interface NS {
    * ns.scp(files, server, "home");
    * ```
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
+   * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec}, does not
+   * require a direct connection — scp works at any distance. The source server has no darknet requirements
+   * (no session or connection needed). Use {@link Darknet.authenticate | dnet.authenticate} (requires direct
+   * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (at any distance) to
+   * establish a session.
    *
-   * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
+   * @param files - Filename or an array of filenames of text/script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.
    * @param source - Hostname/IP of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server.
    * @returns True if the file is successfully copied over and false otherwise. If the files argument is an array then this function will return false if any of the operations failed.
@@ -8171,8 +8261,8 @@ export interface NS {
   /**
    * Returns data of a server.
    *
-   * If the server is a darknet server and has recently gone offline, it will return a dummy server object with
-   * `isOnline: false`.
+   * If the server is a darknet server, it will also contain the "isOnline" field. If the darknet server has recently
+   * gone offline, the returned object will be a dummy server object with `isOnline: false`.
    *
    * @remarks
    * RAM cost: 2 GB
@@ -8180,7 +8270,7 @@ export interface NS {
    * @param host - Optional. Hostname/IP of the server. Defaults to the hostname of the running script's server.
    * @returns Data of the server.
    */
-  getServer(host?: string): Server | (DarknetServerData & { isOnline: boolean });
+  getServer(host?: string): Server & { isOnline?: boolean };
 
   /**
    * Get money available on a server.
@@ -8366,12 +8456,12 @@ export interface NS {
    * //The function call will return true if there is a script named foo.js running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
    * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
-   * @param script - Filename or PID of script to check. This is case-sensitive.
+   * @param script - Filename (case-sensitive) or PID of script to check. Optional, default to the current script's pid.
    * @param host - Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
    * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
-  isRunning(script: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
+  isRunning(script?: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
 
   /**
    * Get general info about a running script.
@@ -8576,7 +8666,7 @@ export interface NS {
   /**
    * Delete a file.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0.6 GB
    *
    * Removes the specified file from the current server. This function works for every file
    * type except message (.msg) files.
@@ -8989,12 +9079,22 @@ export interface NS {
   getResetInfo(): ResetInfo;
 
   /**
-   * Get the ram cost of a netscript function.
+   * Get the RAM cost of a netscript function.
+   *
+   * The base RAM cost per script thread can also be retrieved by using `"baseCost"` as argument to this function.
    *
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param name - The fully-qualified function name, without the leading `ns`. Example inputs: `hack`, `tprint`, `stock.getPosition`.
+   * @param name - The fully-qualified function name, without the leading `ns`.
+   *
+   * @example
+   * ```js
+   * const RAM_baseCost = ns.getFunctionRamCost('baseCost');
+   * const RAM_for_hack = ns.getFunctionRamCost('hack');
+   * const RAM_for_tprint = ns.getFunctionRamCost('tprint');
+   * const RAM_for_stock_getPosition = ns.getFunctionRamCost('stock.getPosition');
+   * ```
    */
   getFunctionRamCost(name: string): number;
 
@@ -9575,7 +9675,7 @@ export type CodingContractSignatures = {
   "Encryption I: Caesar Cipher": [[string, number], string];
   "Encryption II: Vigenère Cipher": [[string, string], string];
   "Square Root": [bigint, bigint, [string, string]];
-  "Total Number of Primes": [number[], number];
+  "Total Number of Primes": [[number, number], number];
   "Largest Rectangle in a Matrix": [(1 | 0)[][], [[number, number], [number, number]]];
 };
 
@@ -10079,6 +10179,19 @@ export interface WarehouseAPI {
    * @remarks
    * RAM cost: 20 GB
    *
+   * This limit applies only to output; it does not affect input consumption.
+   *
+   * For example, in Agriculture, assume the division's raw production is 1000. You need to consume 500 Water and 200
+   * Chemicals to produce 1000 Plants and 1000 Food. If you set the limits for Plants and Food to 200 and 100
+   * respectively, you will still consume 500 Water and 200 Chemicals, but only produce 200 Plants and 100 Food.
+   *
+   * With industries that produce both materials and products, the material production limits do not affect product
+   * production.
+   *
+   * You can set a limit on any material, but only limits on output materials are enforced. Limits on other materials
+   * are stored but ignored during production calculations. For example, in Agriculture, only limits on Plants and Food
+   * are enforced.
+   *
    * @param divisionName - Name of the division.
    * @param city - Name of the city.
    * @param materialName - Name of the material.
@@ -10427,7 +10540,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * Sleep until the next Corporation update happens.
    *
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time"
    * (usually 200 milliseconds - 2 seconds).
@@ -10983,6 +11096,18 @@ interface GameInfo {
   commit: string;
   /** Platform that the game is running on */
   platform: "Browser" | "Steam";
+}
+
+/**
+ * Options for opening the code editor
+ * @public
+ */
+interface EditorOptions {
+  /**
+   * Optional. If true, opens the editor in vim mode. If false, opens the editor in nano mode.
+   * If not provided, uses the user's default editor settings
+   */
+  vim?: boolean;
 }
 
 /**

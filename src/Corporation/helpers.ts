@@ -8,6 +8,40 @@ import * as corpConstants from "./data/Constants";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CreatingCorporationCheckResultEnum } from "@enums";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { Parser } from "expr-eval-fork";
+
+// Configure a restricted parser by disabling unnecessary features.
+const corpFormulaParser = new Parser({
+  // Disallow access to object properties (e.g. obj.prop).
+  allowMemberAccess: false,
+  operators: {
+    power: false,
+    remainder: false,
+    factorial: false,
+    comparison: false,
+    logical: false,
+    conditional: false,
+    concatenate: false,
+    assignment: false,
+    fndef: false,
+    in: false,
+  },
+});
+// Restrict the parser to a minimal feature set by overriding the built-in unary operators, functions, and constants.
+corpFormulaParser.unaryOps = {
+  "-": (value: number) => -value,
+  "+": Number,
+};
+corpFormulaParser.functions = {};
+corpFormulaParser.consts = {};
+
+export function evaluateCorpFormula(formula: string, variables: Readonly<Record<string, number>>): number {
+  const result = corpFormulaParser.evaluate(formula, variables);
+  if (typeof result !== "number" || !Number.isFinite(result)) {
+    throw new Error("Formula did not evaluate to a finite number.");
+  }
+  return result;
+}
 
 export function convertCreatingCorporationCheckResultToMessage(checkResult: CreatingCorporationCheckResult): string {
   switch (checkResult) {

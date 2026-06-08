@@ -72,7 +72,6 @@ import { V2Modal } from "../utils/V2Modal";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
-import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { UIEventEmitter, UIEventType } from "./UIEventEmitter";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
@@ -224,7 +223,7 @@ export function GameRoot(): React.ReactElement {
     saveObject
       .saveGame()
       .then(() => {
-        setTimeout(() => htmlLocation.reload(), 2000);
+        setTimeout(() => htmlLocation.reload(), 0);
       })
       .catch((error) => {
         exceptionAlert(error);
@@ -266,6 +265,13 @@ export function GameRoot(): React.ReactElement {
           }
           break;
       }
+      // If the current page is Page.Work, the player is focusing on their current work. Switching to another page ends
+      // that focus, so we must call Player.stopFocusing() immediately after Router.toPage() to keep Player.focus in
+      // sync. Instead of repeating this logic wherever Router.toPage() is called, we should centralize the check and
+      // the Player.stopFocusing() call here.
+      if (pageWithContext.page === Page.Work && page !== Page.Work && Player.currentWork && Player.focus) {
+        Player.stopFocusing();
+      }
       setNextPage({ page, ...context } as PageWithContext);
     },
     back: () => {
@@ -285,7 +291,7 @@ export function GameRoot(): React.ReactElement {
 
   useEffect(() => {
     if (pageWithContext.page !== Page.Terminal) window.scrollTo(0, 0);
-  });
+  }, [pageWithContext.page]);
 
   function softReset(): void {
     dialogBoxCreate("Soft Reset!");
@@ -344,9 +350,9 @@ export function GameRoot(): React.ReactElement {
     case Page.ScriptEditor: {
       mainPage = (
         <ScriptEditorRoot
-          files={pageWithContext.files ?? new Map()}
-          hostname={pageWithContext.options?.hostname ?? Player.getCurrentServer().hostname}
-          vim={pageWithContext.options === undefined ? Settings.MonacoDefaultToVim : pageWithContext.options.vim}
+          files={pageWithContext.files}
+          hostname={pageWithContext.options.hostname}
+          vim={pageWithContext.options.vim}
         />
       );
       break;

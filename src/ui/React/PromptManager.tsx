@@ -7,6 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { KEY } from "../../utils/KeyboardEventKey";
+import { Terminal } from "../../Terminal";
 
 export const PromptEvent = new EventEmitter<[Prompt]>();
 
@@ -59,6 +60,8 @@ export function PromptManager({ hidden }: { hidden: boolean }): React.ReactEleme
     prompt?.resolve(value);
     setPrompt(null);
   };
+
+  Terminal.nsPromptApiOpen = !hidden && prompt !== null;
 
   return (
     <Modal open={!hidden && prompt !== null} onClose={close}>

@@ -1,3 +1,4 @@
+import { CONSTANTS } from "../../../src/Constants";
 import { calculateSkill, calculateExp } from "../../../src/PersonObjects/formulas/skill";
 
 describe("calculateSkill", () => {
@@ -18,7 +19,11 @@ describe("calculateSkill", () => {
     expect(calculateSkill(calculateExp(skill, 3.3), 3.3)).toBe(skill);
   });
   test("Special cases", () => {
-    expect(() => calculateExp(NaN)).toThrow();
+    if (CONSTANTS.isDevBranch) {
+      expect(() => calculateExp(NaN)).toThrow();
+    } else {
+      expect(calculateExp(NaN)).toBe(0);
+    }
     expect(calculateExp(Infinity)).toBe(Number.MAX_VALUE);
     expect(calculateExp(-Infinity)).toBe(0);
 

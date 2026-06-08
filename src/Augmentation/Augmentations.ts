@@ -37,7 +37,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration, approval, and respect in others.",
       company_rep: 1.2,
       faction_rep: 1.2,
-      charisma: 1.2,
+      charisma: 1.1,
       factions: [
         FactionName.Silhouette,
         FactionName.FourSigma,
@@ -75,7 +75,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "Pheromone extruder injected in the thoracodorsal nerve. Emits pleasing scent guaranteed to " +
+        "Pheromone extruder injected in the thoracodorsal nerve. Emits a pleasing scent guaranteed to " +
         "make conversational partners more agreeable.",
       stats: "This augmentation makes the Bribe minigame easier by indicating the incorrect paths.",
       charisma: 1.1,
@@ -90,7 +90,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A chip containing the psyche of the greatest BitRunner to ever exist. " +
         "Installing this relic significantly increases ALL of your stats. " +
-        "However, it may have unintended consequence on the users mental well-being.",
+        "However, it may have unintended consequences on the user's mental well-being.",
       stats: "Grants access to unimaginable power.",
       hacking: 2,
       strength: 2,
@@ -274,7 +274,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         `A cybernetic foot augmentation that was specifically created for ${FactionName.Bladeburners} ` +
         "during the Synthoid Uprising. The organic musculature of the human foot " +
         "is enhanced with flexible carbon nanotube matrices that are controlled by " +
-        "intelligent servo-motors.",
+        "intelligent servomotors.",
       agility: 1.05,
       bladeburner_max_stamina: 1.05,
       bladeburner_stamina_gain: 1.05,
@@ -285,10 +285,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e3,
       moneyCost: 1.5e11,
       info:
-        "A highly-advanced matter phase-shifter module that is embedded " +
+        "A highly advanced matter phase-shifter module that is embedded " +
         "in the brainstem and cerebellum. This augmentation allows " +
         "the user to project and control a holographic simulacrum within an " +
-        "extremely large radius. These specially-modified holograms were specifically " +
+        "extremely large radius. These specially modified holograms were specifically " +
         "weaponized by Bladeburner units to be used against Synthoids.",
       stats:
         "This augmentation allows you to perform Bladeburner actions and other actions (such as working, committing crimes, etc.) at the same time.",
@@ -517,7 +517,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "millions of nanobots capable of projecting high-density muon beams, " +
         "creating an energy barrier around the user.",
       defense: 1.4,
-      charisma: 1.1,
+      charisma: 1.03,
       factions: [FactionName.Volhaven],
     },
     // === E === //
@@ -528,7 +528,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "A neural implant that enhances the user's ability to resonate with others. " +
         "It is capable of analyzing and interpreting the emotions of those nearby, allowing " +
         "the user to better understand and influence them.",
-      charisma: 1.1,
+      charisma: 1.05,
       crime_success: 1.1,
       work_money: 1.2,
       factions: [FactionName.SpeakersForTheDead],
@@ -772,7 +772,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "An aural implant that enhances the user's ability to communicate and persuade others. " +
         "The implant uses a predictive model that lets the user say precisely what their audience " +
         "wants to hear. This implant is commonly used by many high-level executives and government officials.",
-      charisma: 1.2,
+      charisma: 1.1,
       charisma_exp: 1.3,
       factions: [FactionName.SpeakersForTheDead],
     },
@@ -945,7 +945,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Even though it contains no weapons, the advanced tungsten titanium " +
         "alloy increases the user's strength to unbelievable levels.",
       strength: 2.8,
-      charisma: 1.4,
       factions: [FactionName.NWO],
     },
     [AugmentationName.HyperionV1]: {
@@ -985,7 +984,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       dexterity: 1.4,
       hacking_speed: 1.03,
       hacking_money: 1.1,
-      charisma: 1.05,
+      charisma: 1.03,
       factions: [FactionName.BladeIndustries, FactionName.KuaiGongInternational],
     },
     // === I === //
@@ -1029,11 +1028,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e3,
       moneyCost: 5e6,
       info:
-        "A skin implant that reinforces the skin with highly-advanced synthetic cells. These " +
+        "A skin implant that reinforces the skin with highly advanced synthetic cells. These " +
         "cells, when powered, have a negative refractive index. As a result, they bend light " +
         "around the skin, making the user much harder to see with the naked eye.",
       agility: 1.05,
-      charisma: 1.05,
+      charisma: 1.03,
       crime_money: 1.1,
       factions: [FactionName.SlumSnakes, FactionName.Tetrads],
     },
@@ -1042,7 +1041,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 3e7,
       info:
         "This is a more advanced version of the LuminCloaking-V1 augmentation. This skin implant " +
-        "reinforces the skin with highly-advanced synthetic cells. These " +
+        "reinforces the skin with highly advanced synthetic cells. These " +
         "cells, when powered, are capable of not only bending light but also of bending heat, " +
         "making the user more resilient as well as stealthy.",
       prereqs: [AugmentationName.LuminCloaking1],
@@ -1057,7 +1056,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e4,
       moneyCost: 2.5e8,
       info: "A cranial implant that increases the attractive force of the wearer. (Even its inventor isn't quite sure how it works).",
-      charisma: 1.1,
+      charisma: 1.05,
       company_rep: 1.1,
       factions: [FactionName.TheBlackHand, FactionName.TheDarkArmy],
     },
@@ -1081,7 +1080,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "which improves its regenerative and extracellular homeostasis abilities.",
       strength: 1.2,
       defense: 1.2,
-      charisma: 1.1,
+      charisma: 1.05,
       factions: [
         FactionName.TheDarkArmy,
         FactionName.TheSyndicate,
@@ -1096,7 +1095,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5.625e5,
       moneyCost: 2.875e9,
       info:
-        "A highly-advanced techno-organic drug that is injected into the skeletal " +
+        "A highly advanced techno-organic drug that is injected into the skeletal " +
         "and integumentary system. The drug permanently modifies the DNA of the " +
         "body's skin and bone cells, granting them the ability to repair " +
         "and restructure themselves.",
@@ -1134,7 +1133,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacking_speed: 1.02,
       hacking_chance: 1.1,
       hacking_exp: 1.12,
-      charisma: 1.05,
       factions: [
         FactionName.TheBlackHand,
         FactionName.Chongqing,
@@ -1189,6 +1187,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1.01 + donationBonus,
       crime_money: 1.01 + donationBonus,
       crime_success: 1.01 + donationBonus,
+      dnet_money: 1.01 + donationBonus,
       hacknet_node_money: 1.01 + donationBonus,
       hacknet_node_purchase_cost: 1 / (1.01 + donationBonus),
       hacknet_node_ram_cost: 1 / (1.01 + donationBonus),
@@ -1294,7 +1293,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "the bloodstream to improve memory, increase focus, and provide other " +
         "cognitive enhancements.",
       company_rep: 1.2,
-      charisma: 1.05,
+      charisma: 1.03,
       factions: [
         FactionName.TianDiHui,
         FactionName.Volhaven,
@@ -1432,7 +1431,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       strength: 1.4,
       defense: 1.4,
       agility: 1.4,
-      charisma: 1.4,
+      charisma: 1.2,
       factions: [FactionName.KuaiGongInternational],
     },
     [AugmentationName.PowerRecirculator]: {
@@ -1461,9 +1460,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 3.375e9,
       info:
         "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
-        "Thought to be stolen technology, its existance has been a secret until recently.",
-      charisma: 1.2,
-      charisma_exp: 1.4,
+        "Thought to be stolen technology, its existence has been a secret until recently.",
+      charisma: 1.05,
+      charisma_exp: 1.2,
       factions: [FactionName.TheDarkArmy, FactionName.TheSyndicate],
     },
     // === Q === //
@@ -1500,7 +1499,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "Makes the wearer a better leader and mentor by greatly increasing their awareness of social dynamics. " +
         "Not actually a standard implant, but rather a series of training courses and seminars, led by a famous speaker named Denis.",
-      charisma: 1.3,
+      charisma: 1.1,
       company_rep: 1.3,
       factions: [FactionName.MegaCorp, FactionName.ECorp, FactionName.OmniTekIncorporated],
     },
@@ -1509,7 +1508,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 4.875e9,
       info:
         "The SPTN-97 gene is injected into the genome. The SPTN-97 gene is an " +
-        "artificially-synthesized gene that was developed by DARPA to create " +
+        "artificially synthesized gene that was developed by DARPA to create " +
         "super-soldiers through genetic modification. The gene was outlawed in " +
         "2056.",
       strength: 1.75,
@@ -1528,7 +1527,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "criminal organizations and allows the user to project and control holographic " +
         "simulacrums within a large radius. These simulacrums are commonly used for " +
         "espionage and surveillance work.",
-      charisma: 1.15,
       company_rep: 1.15,
       faction_rep: 1.15,
       factions: [FactionName.TheSyndicate, FactionName.TheDarkArmy, FactionName.SpeakersForTheDead],
@@ -1563,7 +1561,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "you more convincing and likable in conversations and overall improving your " +
         "social interactions.",
       company_rep: 1.1,
-      charisma: 1.1,
+      charisma: 1.05,
       factions: [
         FactionName.TianDiHui,
         FactionName.SpeakersForTheDead,
@@ -1580,7 +1578,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "A cochlear implant with an embedded computer that analyzes incoming speech. " +
         "The embedded computer processes characteristics of incoming speech, such as tone " +
         "and inflection, to pick up on subtle cues and aid in social interactions.",
-      charisma: 1.2,
+      charisma: 1.1,
       factions: [
         FactionName.TianDiHui,
         FactionName.Chongqing,
@@ -1711,7 +1709,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 8.75e5,
       moneyCost: 3.25e9,
       info:
-        "The NEMEAN Subdermal Weave is a thin, light-weight, graphene plating that houses a dilatant fluid. " +
+        "The NEMEAN Subdermal Weave is a thin, lightweight, graphene plating that houses a dilatant fluid. " +
         "The material is implanted underneath the skin, and is the most advanced form of defensive enhancement " +
         "that has ever been created. The dilatant fluid, despite being thin and light, is extremely effective " +
         "at stopping piercing blows and reducing blunt trauma. The properties of graphene allow the plating to " +
@@ -1743,7 +1741,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Scientists have named these artificially enhanced units 'synfibrils'.",
       strength: 1.3,
       defense: 1.3,
-      charisma: 1.15,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,
@@ -1763,7 +1760,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "more efficiently than an organic heart.",
       agility: 1.5,
       strength: 1.5,
-      charisma: 1.5,
+      charisma: 1.15,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,
@@ -1886,8 +1883,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
-        "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
+        "This unique augmentation allows the user to strike straight to the heart of the matter and sweep aside obstacles in the way of their goals. " +
+        "Appearing as a simple insignia on the user's forearm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
         "Awarded to those who discover the secrets of the labyrinth.",
       stats:
         "This augmentation increases the stasis link limit by one, and raises charisma by 7%, strength by 10%, and darknet money by 10%.",
@@ -1902,7 +1899,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "This skeletal augmentation greatly enhances the users durability and health. Inspired by the original Staff of Medicine that is said to " +
+        "This skeletal augmentation greatly enhances the user's durability and health. Inspired by the original Staff of Medicine that is said to " +
         "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. ",
       stats:
         "This augmentation increases the stasis link limit by one, and raises charisma xp, defense, and darknet money by 10%.",
@@ -2042,8 +2039,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A connective brain implant that greatly increases the user's speech reaction time. " +
         "This allows the user to think faster and respond quicker in negotiations, and always have the last word.",
-      charisma: 1.08,
-      charisma_exp: 1.1,
+      charisma: 1.03,
+      charisma_exp: 1.05,
       company_rep: 1.05,
       factions: [FactionName.SlumSnakes, FactionName.BitRunners],
     },

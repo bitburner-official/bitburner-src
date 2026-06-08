@@ -100,3 +100,9 @@ with a semicolon (;). For example:
     $ run foo.js; tail foo.js
 
 Chained commands do **not** wait for functions like `hack` or `wget` to finish executing, and so may not always work as expected.
+
+## Quirks
+
+When your scripts render a text box (e.g., `<input>`, `<textarea>`) with the `autoFocus` attribute in the terminal or
+the tail log window, it may not focus automatically as expected. To be precise, the text box receives focus, but the
+terminal may immediately reclaim it. This depends on the specific timing of the render.

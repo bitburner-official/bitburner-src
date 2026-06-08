@@ -41,7 +41,19 @@ export function ServerSummary({
         }`
       : "No data files on server";
   const contractCount = server.contracts.length;
-  const runningScriptNames = Array.from(server.runningScriptMap.keys()).map((script) => script.replace("*[]", ""));
+  let runningScriptCount = 0;
+  const scripts = new Map<string, number>();
+  for (const map of server.runningScriptMap.values()) {
+    const rs = map.values().next().value;
+    if (!rs) continue;
+    runningScriptCount += map.size;
+    const count = (scripts.get(rs.filename) ?? 0) + map.size;
+    scripts.set(rs.filename, count);
+  }
+  const runningScriptNames = scripts
+    .entries()
+    .map(([name, count]) => name + (count === 1 ? "" : "x" + count))
+    .toArray();
   const runningScriptsTooltip =
     runningScriptNames.length > 0
       ? `Running scripts on server: ${runningScriptNames.slice(0, 3).join(", ")}${
@@ -58,9 +70,9 @@ export function ServerSummary({
 
   const runningScriptsComponent = (
     <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
-      <Typography color={runningScriptNames.length > 0 ? "primary" : "secondary"}>
+      <Typography color={runningScriptCount > 0 ? "primary" : "secondary"}>
         <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
-        {runningScriptNames.length}
+        {runningScriptCount}
       </Typography>
     </Tooltip>
   );

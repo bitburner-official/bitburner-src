@@ -141,7 +141,7 @@ export function getModuleScript(
   for (const extension of validScriptExtensions) {
     const filename = resolveScriptFilePath(moduleName, baseModule, extension);
     if (!filename) {
-      throw new ModuleResolutionError(`Invalid module: "${moduleName}". Base module: "${baseModule}".`);
+      throw new ModuleResolutionError(`Invalid module path: "${moduleName}". Base module: "${baseModule}".`);
     }
     script = scripts.get(filename);
     if (script) {
@@ -149,7 +149,7 @@ export function getModuleScript(
     }
   }
   if (!script) {
-    throw new ModuleResolutionError(`Invalid module: "${moduleName}". Base module: "${baseModule}".`);
+    throw new ModuleResolutionError(`Module not found: "${moduleName}". Base module: "${baseModule}".`);
   }
   return script;
 }

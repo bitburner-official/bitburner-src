@@ -129,6 +129,17 @@ Calculate hack time.
 </td></tr>
 <tr><td>
 
+[weakenEffect(threads, cores)](./bitburner.hackingformulas.weakeneffect.md)
+
+
+</td><td>
+
+Calculate the security decrease from a weaken operation. Unlike other hacking formulas, weaken effect depends only on thread count and core count, not on server or player properties. The core bonus formula is `1 + (cores - 1) / 16`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
 [weakenTime(server, player)](./bitburner.hackingformulas.weakentime.md)
 
 

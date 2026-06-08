@@ -11,8 +11,3 @@ Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. Contains spoi
 ```typescript
 readonly bladeburner: Bladeburner;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

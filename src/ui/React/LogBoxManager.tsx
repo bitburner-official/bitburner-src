@@ -28,6 +28,7 @@ import { dialogBoxCreate } from "./DialogBox";
 import { makeStyles } from "tss-react/mui";
 import { logBoxBaseZIndex } from "./Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { helpers } from "../../Netscript/NetscriptHelpers";
 
 let layerCounter = 0;
 
@@ -271,22 +272,6 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     propsRef.current.setMinimized(!propsRef.current.minimized);
   }
 
-  function lineColor(s: string): "error" | "success" | "warn" | "info" | "primary" {
-    if (s.match(/(^\[[^\]]+\] )?ERROR/) || s.match(/(^\[[^\]]+\] )?FAIL/)) {
-      return "error";
-    }
-    if (s.match(/(^\[[^\]]+\] )?SUCCESS/)) {
-      return "success";
-    }
-    if (s.match(/(^\[[^\]]+\] )?WARN/)) {
-      return "warn";
-    }
-    if (s.match(/(^\[[^\]]+\] )?INFO/)) {
-      return "info";
-    }
-    return "primary";
-  }
-
   const onWindowResize = useMemo(
     () =>
       debounce((): void => {
@@ -429,7 +414,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                       <ANSIITypography
                         key={i}
                         text={line}
-                        color={lineColor(line)}
+                        color={helpers.getTextColor(line)}
                         styles={{
                           fontSize: propsRef.current.fontSize ?? Settings.styles.tailFontSize,
                         }}

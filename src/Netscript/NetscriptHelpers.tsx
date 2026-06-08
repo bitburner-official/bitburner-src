@@ -5,6 +5,7 @@ import type {
   Server as IServer,
   ScriptArg,
   BitNodeOptions,
+  EditorOptions,
 } from "@nsdefs";
 import type { WorkerScript } from "./WorkerScript";
 
@@ -68,7 +69,7 @@ import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
 import { DarknetState } from "../DarkNet/models/DarknetState";
-import { getFriendlyType } from "../utils/TypeAssertion";
+import { getFriendlyType, isObject } from "../utils/TypeAssertion";
 
 export const helpers = {
   string,
@@ -80,10 +81,12 @@ export const helpers = {
   scriptArgs,
   boolean,
   runOptions,
+  editorOptions,
   spawnOptions,
   hostReturnOptions,
   returnServerID,
   argsToString,
+  getTextColor,
   errorMessage,
   validateHGWOptions,
   checkEnvFlags,
@@ -222,6 +225,31 @@ function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
   return v;
 }
 
+/**
+ * Converts the provided to a valid EditorOptions object, throwing if it is not an object
+ * @param ctx
+ * @param _options
+ */
+function editorOptions(ctx: NetscriptContext, _options: unknown): EditorOptions {
+  if (!_options) {
+    return {};
+  }
+  if (!isObject(_options)) {
+    throw errorMessage(
+      ctx,
+      `editorOptions must be an object. Its type is ${getFriendlyType(_options)}. Its string value is ${String(
+        _options,
+      )}`,
+    );
+  }
+  // Safe assertion since _options type has been narrowed to a non-null object
+  const options = _options as Unknownify<EditorOptions>;
+  if (Object.hasOwn(options, "vim") && typeof options.vim !== "boolean") {
+    throw errorMessage(ctx, `editorOptions.vim must be a boolean, was ${options.vim}`);
+  }
+  return _options;
+}
+
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
   const result: CompleteRunOptions = {
     threads: 1 as PositiveInteger,
@@ -341,6 +369,25 @@ function argsToString(args: unknown[]): string {
 
     return (out += String(nativeArg));
   }, "");
+}
+
+/** Determine what default color a string should have for tprint/print. */
+function getTextColor(str: string): "error" | "success" | "warn" | "info" | "primary" {
+  // Match a tag at the start-of-line with an optional bracket part (primarily for timestamps)
+  // Example: "[13:10] ERROR: Too much regex"
+  if (str.match(/^(\[[^\]]+\] )?ERROR/) || str.match(/^(\[[^\]]+\] )?FAIL/)) {
+    return "error";
+  }
+  if (str.match(/^(\[[^\]]+\] )?SUCCESS/)) {
+    return "success";
+  }
+  if (str.match(/^(\[[^\]]+\] )?WARN/)) {
+    return "warn";
+  }
+  if (str.match(/^(\[[^\]]+\] )?INFO/)) {
+    return "info";
+  }
+  return "primary";
 }
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {

@@ -17,7 +17,7 @@ import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
 import { useCycleRerender } from "./React/hooks";
 import { getMaxRep } from "../Go/effects/effect";
-import { canAccessBitNodeFeature, knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { canAccessBitNodeFeature, getBitNodeLevel, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 interface EmployersModalProps {
   open: boolean;
@@ -103,11 +103,10 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
 function CurrentBitNode(): React.ReactElement {
   if (knowAboutBitverse()) {
     const index = "BitNode" + Player.bitNodeN;
-    const lvl = Math.min(Player.sourceFileLvl(Player.bitNodeN) + 1, Player.bitNodeN === 12 ? Number.MAX_VALUE : 3);
     return (
       <Paper sx={{ mb: 1, p: 1 }}>
         <Typography variant="h5">
-          BitNode {Player.bitNodeN}: {BitNodes[index].name} (Level {lvl})
+          BitNode {Player.bitNodeN}: {BitNodes[index].name} (Level {getBitNodeLevel()})
         </Typography>
         <Typography component="div" sx={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>
           {BitNodes[index].info}
@@ -534,14 +533,18 @@ export function CharacterStats(): React.ReactElement {
                   effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
                   color: Settings.theme.money,
                 },
+              ]}
+              color={Settings.theme.combat}
+            />
+            <MultiplierTable
+              rows={[
                 {
                   mult: "Darknet Money",
                   value: Player.mults.dnet_money,
                   effValue: Player.mults.dnet_money * currentNodeMults.DarknetMoneyMultiplier,
-                  color: Settings.theme.money,
                 },
               ]}
-              color={Settings.theme.combat}
+              color={Settings.theme.money}
             />
             {Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0 && (
               <MultiplierTable

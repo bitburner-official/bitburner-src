@@ -11,8 +11,3 @@ Namespace for [stock](./bitburner.stock.md) functions.
 ```typescript
 readonly stock: Stock;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

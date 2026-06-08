@@ -67,7 +67,9 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
       textPropsAsString = JSON.stringify(text.props);
     } catch (e) {
       console.error(e);
-      // Use the current timestamp as the fallback value.
+    }
+    // Use the current timestamp as the fallback value.
+    if (textPropsAsString == null) {
       textPropsAsString = Date.now().toString();
     }
     return cyrb53(textPropsAsString);

@@ -72,7 +72,7 @@ True if the Hacknet Node’s RAM is successfully upgraded, false otherwise.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Tries to upgrade the specified Hacknet Node’s RAM n times. Note that each upgrade doubles the Node’s RAM. So this is equivalent to multiplying the Node’s RAM by 2 n.
 

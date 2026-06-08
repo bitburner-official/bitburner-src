@@ -27,7 +27,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[getAuthenticateTime(darknetServerData, threads, player)](./bitburner.darknetformulas.getauthenticatetime.md)
+[getAuthenticateTime(serverDetails, threads, player, correctCharactersInPassword)](./bitburner.darknetformulas.getauthenticatetime.md)
 
 
 </td><td>
@@ -38,7 +38,7 @@ Gets the time it will take to authenticate a server.
 </td></tr>
 <tr><td>
 
-[getExpectedRamBlockRemoved(darknetServerData, threads, player)](./bitburner.darknetformulas.getexpectedramblockremoved.md)
+[getExpectedRamBlockRemoved(serverDetails, threads, player)](./bitburner.darknetformulas.getexpectedramblockremoved.md)
 
 
 </td><td>
@@ -49,7 +49,7 @@ Gets the expected amount off ram that will be freed by a call to dnet.memoryReal
 </td></tr>
 <tr><td>
 
-[getHeartbleedTime(darknetServerData, threads, player)](./bitburner.darknetformulas.getheartbleedtime.md)
+[getHeartbleedTime(serverDetails, threads, player)](./bitburner.darknetformulas.getheartbleedtime.md)
 
 
 </td><td>

@@ -624,5 +624,55 @@ export const breakingChanges300: VersionBreakingChange = {
         `- Read the "General rules", "String conversion", and "Tips" sections on the "Coding Contracts" page carefully.`,
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.gang.getOtherGangInformation",
+          migration: {
+            searchValue: "getOtherGangInformation",
+            replaceValue: "getAllGangInformation",
+          },
+        },
+      ],
+      info:
+        "ns.gang.getOtherGangInformation() was renamed to ns.gang.getAllGangInformation().\n" +
+        "The function was renamed because it returns information about all gangs, including the player's own gang.",
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.singularity.getCurrentWork",
+          migration: {
+            searchValue: "completion",
+            /**
+             * "completion" is a common word, so we cannot replace all its instances.
+             * This migrator focuses on the most popular use cases of the "completion" promise. It intentionally does
+             * not support complex cases and `completion.then()`.
+             */
+            migrator: (line: string) => {
+              // Direct chaining from API
+              // Use \b:
+              // - The leading \b applies to getCurrentWork, preventing prefixes like foo_getCurrentWork
+              // - The trailing \b applies to completion, preventing suffixes like completionFoo.
+              // Use \s* to match `getCurrentWork ( ) .completion`
+              line = line.replace(/\b(getCurrentWork\s*\(\s*\))\s*\.completion\b/g, "$1.nextCompletion");
+
+              // Awaited property access (`await task.completion`). This is a bit risky, but it's still a common usage.
+              // [a-zA-Z0-9_$.[\]()?]+ is enough to catch common usages.
+              line = line.replace(/(\bawait\s+[a-zA-Z0-9_$.[\]()?]+)\s*\.completion\b/g, "$1.nextCompletion");
+
+              return line;
+            },
+          },
+        },
+        { name: "ns.sleeve.getTask" },
+      ],
+      info:
+        "Task objects returned from ns.singularity.getCurrentWork() and ns.sleeve.getTask() previously had an optional\n" +
+        `promise property named either "completion" or "nextCompletion", depending on the task.\n` +
+        `Now, these task objects always include this property, and it is consistently named "nextCompletion".`,
+      showWarning: false,
+    },
   ],
 };

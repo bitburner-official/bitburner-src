@@ -11,8 +11,3 @@ Namespace for [grafting](./bitburner.grafting.md) functions. Contains spoilers.
 ```typescript
 readonly grafting: Grafting;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

@@ -6,7 +6,7 @@
 
 Attempts to remove an existing router, leaving an empty node behind.
 
-Success chance can be seen via ns.go.getCheatSuccessChance()
+Success chance can be seen via ns.go.cheat.getCheatSuccessChance()
 
 Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
 

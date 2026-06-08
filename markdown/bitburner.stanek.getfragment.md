@@ -72,5 +72,5 @@ The fragment at \[rootX, rootY\], if any.
 
 ## Remarks
 
-RAM cost: 5 GB
+RAM cost: 2 GB
 

@@ -15,7 +15,7 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { calculateMarkupMultiplier } from "./helpers";
+import { calculateMarkupMultiplier, evaluateCorpFormula } from "./helpers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { assertObject } from "../utils/TypeAssertion";
@@ -215,32 +215,25 @@ export class Division {
     }
   }
 
-  // Process change in demand and competition for this industry's materials
+  // Process demand, competition, and market price changes for this division's materials
   processMaterialMarket(): void {
-    //References to prodMats and reqMats
-    const reqMats = this.requiredMaterials,
-      prodMats = this.producedMaterials;
+    // Relevant materials:
+    // - All materials this division requires or produces
+    // - Boost materials
+    const materials = new Set([
+      ...getRecordKeys(this.requiredMaterials),
+      ...this.producedMaterials,
+      ...corpConstants.boostMaterials,
+    ]);
 
-    //Only 'process the market' for materials that this industry deals with
     for (const city of Object.values(CityName)) {
-      //If this industry has a warehouse in this city, process the market
-      //for every material this industry requires or produces
-      if (this.warehouses[city]) {
-        const wh = this.warehouses[city];
-        for (const name of Object.keys(reqMats) as CorpMaterialName[]) {
-          if (Object.hasOwn(reqMats, name)) {
-            wh.materials[name].processMarket();
-          }
-        }
-
-        //Produced materials are stored in an array
-        for (const matName of prodMats) wh.materials[matName].processMarket();
-
-        //Process these twice because these boost production ??????
-        wh.materials.Hardware.processMarket();
-        wh.materials.Robots.processMarket();
-        wh.materials["AI Cores"].processMarket();
-        wh.materials["Real Estate"].processMarket();
+      const warehouse = this.warehouses[city];
+      // If this division has a warehouse in this city, process the relevant materials
+      if (warehouse == null) {
+        continue;
+      }
+      for (const materialName of materials) {
+        warehouse.materials[materialName].processMarket();
       }
     }
   }
@@ -341,19 +334,14 @@ export class Division {
     // amount to calculate with for "MAX".
     const adjustedQty = stored / (corpConstants.secondsPerMarketCycle * marketCycles);
     /**
-     * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
-     * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
+     * desiredSellAmount is usually a string, but it also can be a number in old versions.
      */
-    let temp = String(desiredSellAmount);
-    temp = temp.replace(/MAX/g, adjustedQty.toString());
-    temp = temp.replace(/PROD/g, productionAmount.toString());
-    temp = temp.replace(/INV/g, stored.toString());
     try {
-      // Typecasting here is fine. We will validate the result immediately after this line.
-      sellAmt = eval?.(temp) as number;
-      if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
-        throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
-      }
+      sellAmt = evaluateCorpFormula(String(desiredSellAmount), {
+        MAX: adjustedQty,
+        PROD: productionAmount,
+        INV: stored,
+      });
     } catch (error) {
       dialogBoxCreate(
         `Error evaluating your sell amount for ${name} in ${this.name}'s ${city} office. Error: ${error}.`,
@@ -402,16 +390,10 @@ export class Division {
         return 0;
       }
       /**
-       * desiredSellPrice is usually a string, but it also can be a number in old versions. eval requires a
-       * string, so we convert it to a string here, replace the placeholder MP, and then pass it to eval later.
+       * desiredSellPrice is usually a string, but it also can be a number in old versions.
        */
-      const temp = String(desiredSellPrice).replace(/MP/g, marketPrice.toString());
       try {
-        // Typecasting here is fine. We will validate the result immediately after this line.
-        sCost = eval?.(temp) as number;
-        if (typeof sCost !== "number" || !Number.isFinite(sCost)) {
-          throw new Error(`Evaluated value is not a valid number: ${sCost}`);
-        }
+        sCost = evaluateCorpFormula(String(desiredSellPrice), { MP: marketPrice });
       } catch (error) {
         dialogBoxCreate(
           `Error evaluating your sell price for ${name} in ${this.name}'s ${city} office. ` +
@@ -592,20 +574,16 @@ export class Division {
 
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
-            const mat = warehouse.materials[this.producedMaterials[0]];
             //Calculate the maximum production of this material based
             //on the office's productivity
             const maxProd =
               this.getOfficeProductivity(office) *
-              this.productionMult * // Multiplier from materials
+              this.productionMult * // Multiplier from boost materials
               corporation.getProductionMultiplier() *
               this.getProductionMultiplier(); // Multiplier from Research
-            let prod;
 
-            // If there is a limit set on production, apply the limit
-            prod = mat.productionLimit === null ? maxProd : Math.min(maxProd, mat.productionLimit);
-
-            prod *= corpConstants.secondsPerMarketCycle * marketCycles; //Convert production from per second to per market cycle
+            // Convert production from per second to per market cycle
+            let prod = maxProd * corpConstants.secondsPerMarketCycle * marketCycles;
 
             // Calculate net change in warehouse storage making the produced materials will cost
             let totalMatSize = 0;
@@ -677,6 +655,14 @@ export class Division {
               }
               avgQlt = Math.max(avgQlt, 1);
               for (let j = 0; j < this.producedMaterials.length; ++j) {
+                let outputAmount = prod * producableFrac;
+                const productionLimit = warehouse.materials[this.producedMaterials[j]].productionLimit;
+                if (productionLimit !== null) {
+                  // productionLimit is per second, so we need to convert it to per market cycle.
+                  const effectiveLimitValue = productionLimit * corpConstants.secondsPerMarketCycle * marketCycles;
+                  outputAmount = Math.min(outputAmount, effectiveLimitValue);
+                }
+
                 let tempQlt =
                   office.employeeProductionByJob[CorpEmployeeJob.Engineer] / 90 +
                   Math.pow(this.researchPoints, this.researchFactor) +
@@ -687,26 +673,23 @@ export class Division {
                   1,
                   (warehouse.materials[this.producedMaterials[j]].quality *
                     warehouse.materials[this.producedMaterials[j]].stored +
-                    tempQlt * prod * producableFrac) /
-                    (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac),
+                    tempQlt * outputAmount) /
+                    (warehouse.materials[this.producedMaterials[j]].stored + outputAmount),
                 );
                 warehouse.materials[this.producedMaterials[j]].averagePrice =
                   (warehouse.materials[this.producedMaterials[j]].averagePrice *
                     warehouse.materials[this.producedMaterials[j]].stored +
-                    warehouse.materials[this.producedMaterials[j]].marketPrice * prod * producableFrac) /
-                  (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac);
-                warehouse.materials[this.producedMaterials[j]].stored += prod * producableFrac;
+                    warehouse.materials[this.producedMaterials[j]].marketPrice * outputAmount) /
+                  (warehouse.materials[this.producedMaterials[j]].stored + outputAmount);
+
+                warehouse.materials[this.producedMaterials[j]].stored += outputAmount;
+                warehouse.materials[this.producedMaterials[j]].productionAmount =
+                  outputAmount / (corpConstants.secondsPerMarketCycle * marketCycles);
               }
             } else {
               for (const reqMatName of getRecordKeys(this.requiredMaterials)) {
                 warehouse.materials[reqMatName].productionAmount = 0;
               }
-            }
-
-            //Per second
-            const materialProduction = (prod * producableFrac) / (corpConstants.secondsPerMarketCycle * marketCycles);
-            for (const prodMatName of this.producedMaterials) {
-              warehouse.materials[prodMatName].productionAmount = materialProduction;
             }
           } else {
             //If this doesn't produce any materials, then it only creates
@@ -745,21 +728,15 @@ export class Division {
                 }
                 const tempMaterial = expWarehouse.materials[matName];
 
-                let amtStr = exp.amount.replace(
-                  /MAX/g,
-                  (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles)).toString(),
-                );
-                amtStr = amtStr.replace(/EPROD/g, `(${mat.productionAmount})`);
-                amtStr = amtStr.replace(/IPROD/g, `(${tempMaterial.productionAmount})`);
-                amtStr = amtStr.replace(/EINV/g, `(${mat.stored})`);
-                amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
-                  // Typecasting here is fine. We will validate the result immediately after this line.
-                  amt = eval?.(amtStr) as number;
-                  if (typeof amt !== "number" || !Number.isFinite(amt)) {
-                    throw new Error(`Evaluated value is not a valid number: ${amt}`);
-                  }
+                  amt = evaluateCorpFormula(exp.amount, {
+                    MAX: mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles),
+                    EPROD: mat.productionAmount,
+                    IPROD: tempMaterial.productionAmount,
+                    EINV: mat.stored,
+                    IINV: tempMaterial.stored,
+                  });
                 } catch (e) {
                   dialogBoxCreate(
                     `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${e}`,
@@ -860,12 +837,12 @@ export class Division {
       if (!warehouse) continue;
       switch (state) {
         case "PRODUCTION": {
-          //Calculate the maximum production of this material based
+          //Calculate the maximum production of this product based
           //on the office's productivity
           const maxProd =
             this.getOfficeProductivity(office, { forProduct: true }) *
             corporation.getProductionMultiplier() *
-            this.productionMult * // Multiplier from materials
+            this.productionMult * // Multiplier from boost materials
             this.getProductionMultiplier() * // Multiplier from research
             this.getProductProductionMultiplier(); // Multiplier from research
           let prod;
@@ -879,12 +856,12 @@ export class Division {
           }
           prod *= corpConstants.secondsPerMarketCycle * marketCycles;
 
+          // The "netStorageSize" check is redundant, but retained in case the product size calculation changes.
           //Calculate net change in warehouse storage making the Products will cost
           let netStorageSize = product.size;
           for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
             netStorageSize -= MaterialInfo[reqMatName].size * reqQty;
           }
-
           //If there's not enough space in warehouse, limit the amount of Product
           if (netStorageSize > 0) {
             const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / netStorageSize);

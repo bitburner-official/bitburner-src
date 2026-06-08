@@ -35,6 +35,7 @@ import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../C
 import { load } from "../db";
 import { downloadContentAsFile } from "./FileUtils";
 import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
+import { breakingChanges301 } from "./APIBreaks/3.0.1";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -634,7 +635,17 @@ Error: ${e}`,
       person.overrideIntelligence();
     }
   }
-  if (ver < 48) {
+  if (ver < 49) {
+    if (Player.sourceFileLvl(5) === 0 && Player.bitNodeN !== 5) {
+      for (const person of [Player, ...Player.sleeves]) {
+        person.persistentIntelligenceData.exp = 0;
+        person.exp.intelligence = 0;
+        person.skills.intelligence = 0;
+      }
+    }
     showAPIBreaks("3.0.0", breakingChanges300);
+  }
+  if (ver < 51) {
+    showAPIBreaks("3.0.1", breakingChanges301);
   }
 }

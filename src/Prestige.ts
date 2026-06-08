@@ -187,6 +187,8 @@ export function prestigeAugmentation(): void {
     }
   }
 
+  // clear recent scripts
+  recentScripts.splice(0);
   resetPidCounter();
   ProgramsSeen.clear();
   InvitationsSeen.clear();
@@ -230,6 +232,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
+
+  if (canAccessBitNodeFeature(15)) {
+    getDarkscapeNavigator();
+  }
 
   if (Player.activeSourceFileLvl(9) >= 2) {
     homeComp.setMaxRam(128);
@@ -299,7 +305,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // BitNode 12: The Recursion
-  if (Player.bitNodeN === 12 && Player.activeSourceFileLvl(12) > 100) {
+  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
     delayedDialog("Saynt_Garmo is watching you");
   }
 

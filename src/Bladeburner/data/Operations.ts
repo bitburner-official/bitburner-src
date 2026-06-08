@@ -230,7 +230,9 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
 export function loadOperationsData(data: unknown, operations: Record<BladeburnerOperationName, Operation>) {
   // loading data as "unknown" and typechecking it down is probably not necessary
   // but this will prevent crashes even with malformed savedata
-  if (!data || typeof data !== "object") return;
+  if (data == null || typeof data !== "object" || Array.isArray(data)) {
+    return;
+  }
   assertLoadingType<Record<BladeburnerOperationName, unknown>>(data);
   for (const operationName of Object.values(BladeburnerOperationName)) {
     const loadedOperation = data[operationName];

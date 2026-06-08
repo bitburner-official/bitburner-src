@@ -10,8 +10,10 @@ import { initStockMarket, isStockMarketInitialized, StockMarket } from "../../St
 import { cachePrefixes } from "../models/dictionaryData";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { resolveCacheFilePath } from "../../Paths/CacheFilePath";
-import type { CacheResult } from "@nsdefs";
+import type { CacheResult, CacheReward } from "@nsdefs";
 import { addClue, cctCooldownReached } from "./effects";
+import { getBitNodeMultipliers } from "../../BitNode/BitNode";
+import { pluralize } from "../../utils/I18nUtils";
 
 export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -24,9 +26,21 @@ export const addCacheToServer = (server: DarknetServer, isPhishingCache: boolean
   if (!cacheFilename) {
     return { success: false, message: `Cannot generate path. prefix: ${prefix}` };
   }
+  if (server.caches.includes(cacheFilename)) {
+    return { success: false, message: `Duplicate cache file: ${cacheFilename}` };
+  }
   server.caches.push(cacheFilename);
   return { success: true, cacheFilename };
 };
+
+type InternalCacheReward = Partial<Omit<CacheResult, "success">> & Pick<CacheResult, "message">;
+
+const defaultReward: CacheReward = {
+  karmaLoss: 0,
+  wseAccount: false,
+  tixApiAccess: false,
+  fourSigmaData: false,
+} as const;
 
 export const getRewardFromCache = (server: DarknetServer, cacheName: string, suppressToast = false): CacheResult => {
   const difficulty = server.difficulty;
@@ -36,15 +50,20 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
     const labReward = getLabReward();
     return {
       success: true,
-      message: labReward,
+      ...defaultReward,
       karmaLoss: -karmaLoss,
+      ...labReward,
     };
   }
 
-  const rewards = [getMoneyReward, getProgramAndStockMarketRelatedRewards, getStockReward, getDataFileReward];
+  const rewards = [getProgramAndStockMarketRelatedRewards, getStockReward, getDataFileReward];
   if (cacheName.endsWith(".d.cache")) {
     // only include ccts from caches generated from phishing attacks
     rewards.push(getCCTReward);
+  }
+  if (getBitNodeMultipliers(Player.bitNodeN, 1).DarknetMoneyMultiplier) {
+    // only include money reward if it is not disabled by the bn mults
+    rewards.push(getMoneyReward);
   }
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   const result = reward(difficulty, server);
@@ -53,19 +72,20 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
     SnackbarEvents.emit(
       // Karma is only useful in relation to gangs, so we only show the karma loss if the player has started unlocking gang
       // content. This is to avoid cluttering the UI with unnecessary info, and confusion before players discover karma.
-      result + (Player.isAwareOfGang() ? ` Gained -${karmaLoss} karma.` : ""),
+      result.message + (Player.isAwareOfGang() ? ` Gained -${karmaLoss} karma.` : ""),
       ToastVariant.SUCCESS,
       4000,
     );
   }
   return {
     success: true,
-    message: result,
+    ...defaultReward,
     karmaLoss: -karmaLoss,
+    ...result,
   };
 };
 
-export const getCCTReward = (difficulty: number, server: DarknetServer): string => {
+export const getCCTReward = (difficulty: number, server: DarknetServer): InternalCacheReward => {
   if (!cctCooldownReached()) {
     return getMoneyReward(difficulty);
   }
@@ -73,14 +93,22 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): string 
   if (contractCount < 1) {
     return getMoneyReward(difficulty);
   }
+  const contractFilePaths = [];
   for (let i = 0; i < contractCount; i++) {
-    generateContract({ server: server.hostname, rewardScaling: 1 / 2 });
+    const contractFilePath = generateContract({ server: server.hostname, rewardScaling: 1 / 2 });
+    if (contractFilePath === null) {
+      continue;
+    }
+    contractFilePaths.push(contractFilePath);
   }
-  return `New coding contracts are now available on the network!`;
+  if (contractFilePaths.length === 0) {
+    return getMoneyReward(difficulty);
+  }
+  return { message: `New coding contracts are now available on the network!`, contractFilePaths };
 };
 
-export const getMoneyReward = (difficulty: number): string => {
-  const sf15_3Factor = Player.activeSourceFileLvl(15) > 3 ? 1.5 : 1;
+export const getMoneyReward = (difficulty: number): InternalCacheReward => {
+  const sf15_3Factor = Player.activeSourceFileLvl(15) >= 3 ? 1.5 : 1;
   const reward =
     1.2 ** difficulty *
     1e7 *
@@ -90,32 +118,40 @@ export const getMoneyReward = (difficulty: number): string => {
     Player.mults.dnet_money *
     currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");
-  return `You have discovered a cache with ${formatMoney(reward)}.`;
+  return { message: `You have discovered a cache with ${formatMoney(reward)}.`, money: reward };
 };
 
-export const getStockReward = (difficulty: number): string => {
+export const getStockReward = (difficulty: number): InternalCacheReward => {
   if (!isStockMarketInitialized()) {
     initStockMarket();
   }
   const stockSymbols = Object.keys(StockSymbol);
-  const randomStock = stockSymbols[Math.floor(Math.random() * stockSymbols.length)];
-  const shares = Math.floor(1 + difficulty * 5 + Math.random() * 10);
-  StockMarket[randomStock].playerShares += shares;
-  return `You have discovered a stock option cache containing ${shares} shares of ${randomStock}!`;
-};
-
-export const getDataFileReward = (difficulty: number, server: DarknetServer): string => {
-  const currentDataFiles = server.textFiles.size;
-  addClue(server);
-  addClue(server);
-  const dataFilesGained = server.textFiles.size - currentDataFiles;
-  if (dataFilesGained === 0) {
+  const stock = StockMarket[stockSymbols[Math.floor(Math.random() * stockSymbols.length)]];
+  const maxNewShares = stock.maxShares - stock.playerShares - stock.playerShortShares;
+  if (maxNewShares <= 0) {
     return getMoneyReward(difficulty);
   }
-  return `You have discovered a data file cache!`;
+  const shares = Math.min(Math.floor(1 + difficulty * 5 + Math.random() * 10), maxNewShares);
+  stock.playerShares += shares;
+  return {
+    message: `You have discovered a stock option cache containing ${shares} shares of ${stock.symbol}!`,
+    stockSymbol: stock.symbol,
+    stockShares: shares,
+  };
 };
 
-export const getProgramAndStockMarketRelatedRewards = (difficulty: number): string => {
+export const getDataFileReward = (difficulty: number, server: DarknetServer): InternalCacheReward => {
+  const dataFiles = [...new Set([...addClue(server), ...addClue(server)])];
+  if (dataFiles.length === 0) {
+    return getMoneyReward(difficulty);
+  }
+  return {
+    message: `You have discovered ${pluralize(dataFiles.length, "data file cache")}: ${dataFiles.join(", ")}.`,
+    dataFilePaths: dataFiles,
+  };
+};
+
+export const getProgramAndStockMarketRelatedRewards = (difficulty: number): InternalCacheReward => {
   const creatingProgram = Player.currentWork instanceof CreateProgramWork ? Player.currentWork.programName : null;
   const programs = [
     CompletedProgramName.serverProfiler,
@@ -133,7 +169,7 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): stri
   for (const program of programs) {
     if (!Player.hasProgram(program) && creatingProgram !== program) {
       Player.getHomeComputer().pushProgram(program);
-      return `You have discovered the program ${program}.`;
+      return { message: `You have discovered the program ${program}.`, programName: program };
     }
   }
   if (!Player.hasWseAccount) {
@@ -141,28 +177,31 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): stri
     if (!isStockMarketInitialized()) {
       initStockMarket();
     }
-    return `You have discovered a stolen WSE Account!`;
+    return { message: `You have discovered a stolen WSE Account!`, wseAccount: true };
   }
   if (!Player.hasTixApiAccess) {
     Player.hasTixApiAccess = true;
     if (!isStockMarketInitialized()) {
       initStockMarket();
     }
-    return `You have discovered a stolen TIX API access point!`;
+    return { message: `You have discovered a stolen TIX API access point!`, tixApiAccess: true };
   }
   if (!Player.has4SData && Player.bitNodeN !== 8 && !Player.bitNodeOptions.disable4SData) {
     Player.has4SData = true;
-    return `You have discovered a cache of stolen 4S Data!`;
+    return { message: `You have discovered a cache of stolen 4S Data!`, fourSigmaData: true };
   }
 
   return getMoneyReward(difficulty);
 };
 
-const getLabReward = (): string => {
+const getLabReward = (): InternalCacheReward => {
   let reward = getLabAugReward();
   if (!reward || Player.hasAugmentation(reward)) {
     reward = AugmentationName.NeuroFluxGovernor;
   }
   Player.queueAugmentation(reward);
-  return `You have discovered a cache with the augmentation ${reward}!`;
+  return {
+    message: `You have discovered a cache with the augmentation ${reward}!`,
+    augmentationName: reward,
+  };
 };

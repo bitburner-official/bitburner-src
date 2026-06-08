@@ -7,6 +7,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { KEY } from "../../utils/KeyboardEventKey";
 import { FactionName } from "@enums";
+import { canCreateGang } from "../../Gang/helpers";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 interface IProps {
   open: boolean;
@@ -33,6 +35,11 @@ export function CreateGangModal(props: IProps): React.ReactElement {
   }
 
   function createGang(): void {
+    const checkResult = canCreateGang(props.facName);
+    if (!checkResult.success) {
+      dialogBoxCreate(checkResult.message);
+      return;
+    }
     Player.startGang(props.facName, isHacking());
     props.onClose();
     Router.toPage(Page.Gang);

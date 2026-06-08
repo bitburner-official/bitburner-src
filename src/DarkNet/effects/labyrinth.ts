@@ -270,7 +270,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.Success,
-      message: "You have discovered the end the labyrinth.",
+      message: "You have discovered the end of the labyrinth.",
       data: labServer.password,
     };
   }

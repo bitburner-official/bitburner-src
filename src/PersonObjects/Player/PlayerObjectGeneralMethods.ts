@@ -135,12 +135,14 @@ export function prestigeAugmentation(this: PlayerObject): void {
   this.hp.current = this.hp.max;
 
   this.finishWork(true, true);
+  // We need to call overrideIntelligence here instead of prestigeSourceFile to reset intelligence data when installing
+  // augmentations.
+  this.overrideIntelligence();
 }
 
 export function prestigeSourceFile(this: PlayerObject): void {
   this.entropy = 0;
   this.prestigeAugmentation();
-  this.overrideIntelligence();
   this.karma = 0;
   // Duplicate sleeves are reset to level 1 every Bit Node (but the number of sleeves you have persists)
   this.sleeves.forEach((sleeve) => sleeve.prestige());
@@ -602,6 +604,10 @@ export function canAccessCotMG(this: PlayerObject): boolean {
   return canAccessBitNodeFeature(13);
 }
 
+/**
+ * To ensure the "SF override" option work properly, this function should only be used in special cases. In most cases,
+ * activeSourceFileLvl should be used instead.
+ */
 export function sourceFileLvl(this: PlayerObject, n: number): number {
   return this.sourceFiles.get(n) ?? 0;
 }

@@ -9,17 +9,17 @@ Get a list of programs offered on the dark web.
 **Signature:**
 
 ```typescript
-getDarkwebPrograms(): string[];
+getDarkwebPrograms(): ProgramName[];
 ```
 **Returns:**
 
-string\[\]
+[ProgramName](./bitburner.programname.md)<!-- -->\[\]
 
 - a list of programs available for purchase on the dark web, or \[\] if Tor has not been purchased
 
 ## Remarks
 
-RAM cost: 1 GB \* 16/4/1
+RAM cost: 0.5 GB \* 16/4/1
 
 This function allows the player to get a list of programs available for purchase on the dark web. Players MUST have purchased Tor to get the list of programs available. If Tor has not been purchased yet, this function will return an empty list.
 

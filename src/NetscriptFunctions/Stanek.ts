@@ -64,7 +64,11 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       checkStanekAPIAccess(ctx);
       helpers.log(ctx, () => `Returned ${staneksGift.fragments.length} fragments`);
       return staneksGift.fragments.map((activeFragment) => {
-        return { ...activeFragment.copy(), ...activeFragment.fragment().copy() };
+        return {
+          ...activeFragment.copy(),
+          ...activeFragment.fragment().copy(),
+          chargedEffect: staneksGift.effect(activeFragment),
+        };
       }) satisfies ReturnType<IStanek["activeFragments"]>;
     },
     clearGift: (ctx) => () => {
@@ -99,9 +103,11 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       checkStanekAPIAccess(ctx);
       const activeFragment = staneksGift.findFragment(rootX, rootY);
       if (activeFragment !== undefined) {
-        return { ...activeFragment.copy(), ...activeFragment.fragment().copy() } satisfies ReturnType<
-          IStanek["getFragment"]
-        >;
+        return {
+          ...activeFragment.copy(),
+          ...activeFragment.fragment().copy(),
+          chargedEffect: staneksGift.effect(activeFragment),
+        } satisfies ReturnType<IStanek["getFragment"]>;
       }
       return undefined;
     },
@@ -113,10 +119,15 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     },
     acceptGift: (ctx) => () => {
       const cotmgFaction = Factions[FactionName.ChurchOfTheMachineGod];
+      // Return early if the player is already a member
+      if (cotmgFaction.isMember && Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
+        helpers.log(ctx, () => `You are already a member of ${FactionName.ChurchOfTheMachineGod}.`);
+        return true;
+      }
       // Check if the player is eligible to join the church
       const checkResult = canAcceptStaneksGift();
       if (checkResult.success) {
-        // Join the CotMG factionn
+        // Join the CotMG faction
         joinFaction(cotmgFaction);
         // Install the first Stanek aug
         applyAugmentation({ name: AugmentationName.StaneksGift1, level: 1 });

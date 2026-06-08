@@ -48,7 +48,7 @@ function coloredArrow(difficulty: number): JSX.Element {
   } else {
     return (
       <>
-        {arrowPart(Settings.theme.primary, cappedDifficulty * 13)}
+        {arrowPart(Settings.theme.success, cappedDifficulty * 13)}
         {arrowPart(Settings.theme.warning, (cappedDifficulty - 1) * 13)}
         {arrowPart(Settings.theme.warning, (cappedDifficulty - 2) * 13)}
         {arrowPart(Settings.theme.error, (cappedDifficulty - 3) * 26)}

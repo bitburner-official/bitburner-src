@@ -20,7 +20,7 @@ import { StatsRow } from "../../ui/React/StatsRow";
 import { defaultMultipliers, getBitNodeMultipliers } from "../BitNode";
 import { BitNodeMultipliers } from "../BitNodeMultipliers";
 import { PartialRecord, getRecordEntries } from "../../Types/Record";
-import { canAccessBitNodeFeature } from "../BitNodeUtils";
+import { canAccessBitNodeFeature, getBitNodeLevel } from "../BitNodeUtils";
 
 interface IProps {
   n: number;
@@ -56,8 +56,7 @@ export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFea
   // If not, then we have to assume that we want the next level up from the
   // current node's source file, so we get the min of that, the SF's max level,
   // or if it's BN12, ∞
-  const maxSfLevel = n === 12 ? Number.MAX_VALUE : 3;
-  const mults = getBitNodeMultipliers(n, level ?? Math.min(Player.activeSourceFileLvl(n) + 1, maxSfLevel));
+  const mults = getBitNodeMultipliers(n, level ?? getBitNodeLevel(n));
 
   return (
     <Box sx={{ columnCount: 2, columnGap: 1, mb: n === 1 ? 0 : -2 }}>
@@ -69,6 +68,7 @@ export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFea
       <CloudServersMults n={n} mults={mults} />
       <StockMults n={n} mults={mults} />
       <CrimeMults n={n} mults={mults} />
+      <DarknetMults n={n} mults={mults} />
       <InfiltrationMults n={n} mults={mults} />
       <CompanyMults n={n} mults={mults} />
       <GangMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
@@ -225,6 +225,17 @@ function CrimeMults({ mults }: IMultsProps): React.ReactElement {
   };
 
   return <BNMultTable sectionName="Crime" rowData={rows} mults={mults} />;
+}
+
+function DarknetMults({ mults }: IMultsProps): React.ReactElement {
+  const rows: IBNMultRows = {
+    DarknetMoneyMultiplier: {
+      name: "Darknet Money",
+      color: Settings.theme.money,
+    },
+  };
+
+  return <BNMultTable sectionName="Darknet" rowData={rows} mults={mults} />;
 }
 
 function SkillMults({ mults }: IMultsProps): React.ReactElement {

@@ -19,7 +19,7 @@ Promise that resolves to the name of the state that was just processed.
 
 ## Remarks
 
-RAM cost: 1 GB
+RAM cost: 0 GB
 
 The amount of real time spent asleep between updates can vary due to "bonus time" (usually 200 milliseconds - 2 seconds).
 

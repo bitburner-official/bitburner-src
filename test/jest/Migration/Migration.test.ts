@@ -6,6 +6,7 @@ import * as db from "../../../src/db";
 import * as FileUtils from "../../../src/utils/FileUtils";
 import type { SaveData } from "../../../src/types";
 import { calculateExp } from "../../../src/PersonObjects/formulas/skill";
+import { GetAllServers, GetServer } from "../../../src/Server/AllServers";
 
 async function loadGameFromSaveData(saveData: SaveData) {
   // Simulate loading the data in IndexedDB
@@ -104,5 +105,53 @@ describe("v3", () => {
       saveData,
       `bitburnerSave_backup_2.8.1_${Math.round(lastUpdate / 1000)}.json.gz`,
     );
+  });
+
+  describe("Intelligence migration bug", () => {
+    test("No change in exp and skill level", async () => {
+      const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v2.8.1_SF1.1_SF10.3.gz"));
+      const mockedDownload = await loadGameFromSaveData(saveData);
+
+      for (const person of [Player, ...Player.sleeves]) {
+        expect(person.persistentIntelligenceData.exp).toStrictEqual(0);
+        expect(person.exp.intelligence).toStrictEqual(0);
+        expect(person.skills.intelligence).toStrictEqual(0);
+      }
+
+      expect(mockedDownload).toHaveBeenCalledWith(saveData, "bitburnerSave_backup_2.8.1_1776173824.json.gz");
+    });
+    test("Reset wrong exp and skill level", async () => {
+      const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v3.0.0_int_migration_bug.gz"));
+      const mockedDownload = await loadGameFromSaveData(saveData);
+
+      for (const person of [Player, ...Player.sleeves]) {
+        expect(person.persistentIntelligenceData.exp).toStrictEqual(0);
+        expect(person.exp.intelligence).toStrictEqual(0);
+        expect(person.skills.intelligence).toStrictEqual(0);
+      }
+
+      expect(mockedDownload).not.toHaveBeenCalled();
+    });
+  });
+
+  test("Malformed hostname", async () => {
+    const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/malformed-hostname.gz"));
+    await loadGameFromSaveData(saveData);
+    for (const server of GetAllServers(true)) {
+      expect(server.hostname.isWellFormed()).toBe(true);
+      for (const script of server.scripts.values()) {
+        expect(script.server).toStrictEqual(server.hostname);
+      }
+      if (server.savedScripts) {
+        for (const script of server.savedScripts) {
+          expect(script.server).toStrictEqual(server.hostname);
+        }
+      }
+      for (const hostname of server.serversOnNetwork) {
+        expect(hostname.isWellFormed()).toBe(true);
+        expect(GetServer(hostname)).not.toBeNull();
+      }
+    }
+    expect(() => Player.getCurrentServer()).not.toThrow();
   });
 });

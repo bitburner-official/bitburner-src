@@ -18,7 +18,6 @@ import { OpenScript } from "./OpenScript";
 import { Tab } from "./Tab";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
-const tabsMaxWidth = 1640;
 const searchWidth = 180;
 
 interface IProps {
@@ -101,7 +100,6 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
         <Droppable droppableId="tabs" direction="horizontal">
           {(provided, snapshot) => (
             <Box
-              maxWidth={`${tabsMaxWidth}px`}
               display="flex"
               flexGrow="1"
               flexDirection="row"
@@ -116,6 +114,22 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
                 overflowX: "scroll",
               }}
               onWheel={handleScroll}
+              onMouseUp={(e) => {
+                // Some Linux DEs do a "paste" action on MMB (mouse up).
+                // Closing a tab with the editor in focus would cause a paste in the editor.
+                // This event handler prevents the paste in cases where a tab is closed.
+                //
+                // It's important to mention that a regular MMB click on the tab container itself
+                // (not one of the tabs) without this workaround would do nothing here,
+                // since the "mouse down" event changes the focus away from
+                // the editor before the "mouse up" attempts a paste, preventing it altogether.
+                //
+                // This handler also catches onMouseUp events originating from <Tab> (Tab.tsx), in cases
+                // where a tab is closed, and another one slides under the cursor before MMB is released.
+                if (e.button === 1) {
+                  e.preventDefault();
+                }
+              }}
             >
               {filteredScripts.map(({ script, originalIndex }, index) => {
                 const { path, hostname } = script;

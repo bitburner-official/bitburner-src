@@ -11,8 +11,3 @@ Namespace for [cloud](./bitburner.cloud.md) functions.
 ```typescript
 readonly cloud: Cloud;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

@@ -8,7 +8,6 @@ import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
-import "./utils/Protections"; // Side-effect: Protect against certain unrecoverable errors
 import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
 import {
@@ -154,7 +153,7 @@ const Engine = {
     messages: 150,
     mechanicProcess: 5, // Process Bladeburner
     contractGeneration: 3000, // Generate Coding Contracts
-    achievementsCounter: 60, // Check if we have new achievements
+    achievementsCounter: 5, // Check if we have new achievements
   },
 
   decrementAllCounters: function (numCycles = 1) {
@@ -212,7 +211,7 @@ const Engine = {
 
     if (Engine.Counters.achievementsCounter <= 0) {
       calculateAchievements();
-      Engine.Counters.achievementsCounter = 300;
+      Engine.Counters.achievementsCounter = 5;
     }
 
     // This **MUST** remain the last block in the function!

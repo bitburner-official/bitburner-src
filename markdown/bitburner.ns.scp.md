@@ -42,7 +42,7 @@ string \| string\[\]
 
 </td><td>
 
-Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`<!-- -->.
+Filename or an array of filenames of text/script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`<!-- -->.
 
 
 </td></tr>
@@ -90,7 +90,7 @@ True if the file is successfully copied over and false otherwise. If the files a
 
 RAM cost: 0.6 GB
 
-Copies a script or literature (.lit) file(s) to another server. The files argument can be either a string specifying a single file to copy, or an array of strings specifying multiple files to copy.
+Copies text, script or literature (.lit) file(s) to another server. The files argument can be either a string specifying a single file to copy, or an array of strings specifying multiple files to copy.
 
 ## Example 1
 
@@ -112,5 +112,5 @@ const server = ns.args[0];
 const files = ["hack.js", "weaken.js", "grow.js"];
 ns.scp(files, server, "home");
 ```
-For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function. (The source server does not require a session.)
+For darknet servers: The destination requires a session, but unlike [exec](./bitburner.ns.exec.md)<!-- -->, does not require a direct connection — scp works at any distance. The source server has no darknet requirements (no session or connection needed). Use [dnet.authenticate](./bitburner.darknet.authenticate.md) (requires direct connection) or [dnet.connectToSession](./bitburner.darknet.connecttosession.md) (at any distance) to establish a session.
 

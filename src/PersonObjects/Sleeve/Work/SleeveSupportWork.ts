@@ -1,11 +1,11 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
-import { SleeveWorkClass, SleeveWorkType } from "./Work";
+import { SleeveBaseWork, SleeveWorkType } from "./Work";
 
-export const isSleeveSupportWork = (w: SleeveWorkClass | null): w is SleeveSupportWork =>
+export const isSleeveSupportWork = (w: SleeveBaseWork | null): w is SleeveSupportWork =>
   w !== null && w.type === SleeveWorkType.SUPPORT;
 
-export class SleeveSupportWork extends SleeveWorkClass {
+export class SleeveSupportWork extends SleeveBaseWork {
   type: SleeveWorkType.SUPPORT = SleeveWorkType.SUPPORT;
   constructor() {
     super();
@@ -16,10 +16,14 @@ export class SleeveSupportWork extends SleeveWorkClass {
 
   finish(): void {
     Player.bladeburner?.sleeveSupport(false);
+    super.resolveNextCompletion();
   }
 
   APICopy() {
-    return { type: SleeveWorkType.SUPPORT as const };
+    return {
+      type: SleeveWorkType.SUPPORT as const,
+      nextCompletion: this.nextCompletion,
+    };
   }
 
   /** Serialize the current object to a JSON save state. */

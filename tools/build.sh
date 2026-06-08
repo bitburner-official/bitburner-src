@@ -9,5 +9,6 @@ mkdir .app
 
 # Should be all the files needed.
 cp index.html .app
+cp export.html .app
 cp favicon.ico .app
 cp -r dist .app
