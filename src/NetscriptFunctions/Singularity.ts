@@ -1155,31 +1155,31 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
-      const nextBN = helpers.number(ctx, "nextBN", _nextBN);
+      const { shouldStopOnBitVerse, nextBN } = _nextBN
+        ? { shouldStopOnBitVerse: false, nextBN: helpers.number(ctx, "nextBN", _nextBN) }
+        : { shouldStopOnBitVerse: true, nextBN: 0 };
+      // Checks if nextBN is undefined and either 2nd or 3rd param have been declared
       if (!nextBN && (_cbScript || _bitNodeOptions)) {
         throw helpers.errorMessage(
           ctx,
           `Invalid call: When nextBN is undefined, all other params should not be declared`,
         );
-      } else {
-        const wd = GetServer(SpecialServers.WorldDaemon);
-        if (!(wd instanceof Server)) {
-          throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
-        } else {
-          wd.backdoorInstalled = true;
+      }
+      // Only runs if nextBN !== 0 (jumping to a valid BN)
+      let cbScript;
+      if (shouldStopOnBitVerse) {
+        if (!validBitNodes.includes(nextBN)) {
+          throw new Error(`Invalid BitNode: ${_nextBN}.`);
         }
-        Router.toPage(Page.BitVerse, { flume: false, quick: false });
-      }
-      if (!validBitNodes.includes(nextBN)) {
-        throw new Error(`Invalid BitNode: ${_nextBN}.`);
-      }
-      const cbScript = _cbScript
-        ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
-        : false;
-      if (cbScript === null) {
-        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
+        cbScript = _cbScript
+          ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
+          : false;
+        if (cbScript === null) {
+          throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
+        }
       }
 
+      // General checks
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) {
         throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
@@ -1204,9 +1204,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       wd.backdoorInstalled = true;
       calculateAchievements();
-      enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
-      if (cbScript) {
-        setTimeout(() => runAfterReset(cbScript), 500);
+      if (shouldStopOnBitVerse) {
+        enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+        if (cbScript) {
+          setTimeout(() => runAfterReset(cbScript), 500);
+        }
+      } else {
+        Router.toPage(Page.BitVerse, { flume: false, quick: false });
       }
     },
     getCurrentWork: (ctx) => () => {

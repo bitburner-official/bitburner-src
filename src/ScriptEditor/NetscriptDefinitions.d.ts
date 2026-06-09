@@ -2887,7 +2887,7 @@ export interface Singularity {
    *   OR
    * Completed the final black op.
    *
-   * @param nextBN - BN number to jump to. undefined leads you to the BitVerse
+   * @param nextBN - BN number to jump to. Undefined leaves you on the BitVerse selection screen.
    * @param callbackScript - Name of the script to launch in the next BN.
    * @param bitNodeOptions - BitNode options for the next BN.
    */
