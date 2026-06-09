@@ -64,8 +64,8 @@ export class Script extends ContentFile {
     return this._code;
   }
   set content(newCode: string) {
-    if (this.code === newCode) return;
     this.metadata.edit();
+    if (this.code === newCode) return;
     this.code = newCode;
     this.invalidateModule();
   }

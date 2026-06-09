@@ -276,7 +276,7 @@ export abstract class BaseServer implements IServer {
     const existingFile = this.textFiles.get(textPath);
     // overWrite if already exists
     if (existingFile) {
-      if (existingFile.text === txt) return { overwritten: false };
+      if (existingFile.text === txt) return { overwritten: true };
       existingFile.content = txt;
       return { overwritten: true };
     }
