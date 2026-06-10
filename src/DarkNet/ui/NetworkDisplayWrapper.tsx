@@ -72,8 +72,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     setNetDisplayDepth(deepestServerDepth + visibilityMargin);
 
     rerender();
-    drawOnCanvas(canvas.current);
-  }, [rerender]);
+    drawOnCanvas(canvas.current, netDisplayDepth);
+  }, [rerender, netDisplayDepth]);
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
