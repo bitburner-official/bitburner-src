@@ -23,9 +23,6 @@ export class WorkerScript {
   /** Script's arguments */
   args: ScriptArg[];
 
-  /** Copy of the script's code */
-  code = "";
-
   /**
    * Holds the timeoutID (numeric value) for whenever this script is blocked by a
    * timed Netscript function. i.e. Holds the return value of setTimeout()
@@ -98,7 +95,6 @@ export class WorkerScript {
     if (!script) {
       throw new Error(`WorkerScript constructed with invalid script filename: ${this.name}`);
     }
-    this.code = script.code;
     this.scriptRef = runningScriptObj;
     this.args = runningScriptObj.args.slice();
     this.env = new Environment();
