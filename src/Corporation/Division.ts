@@ -662,6 +662,9 @@ export class Division {
                   const effectiveLimitValue = productionLimit * corpConstants.secondsPerMarketCycle * marketCycles;
                   outputAmount = Math.min(outputAmount, effectiveLimitValue);
                 }
+                if (outputAmount === 0) {
+                  continue;
+                }
 
                 let tempQlt =
                   office.employeeProductionByJob[CorpEmployeeJob.Engineer] / 90 +
