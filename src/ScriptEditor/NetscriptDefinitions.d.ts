@@ -2887,6 +2887,9 @@ export interface Singularity {
    *   OR
    * Completed the final black op.
    *
+   * Although this function can be used to take you to the BitVerse screen, that can usually be accomplished
+   * more cheaply with @link{#installBackdoor}.
+   *
    * @param nextBN - BN number to jump to. Undefined leaves you on the BitVerse selection screen.
    * @param callbackScript - Name of the script to launch in the next BN.
    * @param bitNodeOptions - BitNode options for the next BN.

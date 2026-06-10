@@ -1155,21 +1155,25 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
-      const { shouldStopOnBitVerse, nextBN } = _nextBN
-        ? { shouldStopOnBitVerse: false, nextBN: helpers.number(ctx, "nextBN", _nextBN) }
-        : { shouldStopOnBitVerse: true, nextBN: 0 };
+      let nextBN;
+      if (_nextBN == null) {
+        nextBN = 0;
+      } else {
+        nextBN = helpers.number(ctx, "nextBN", _nextBN);
+      }
+
       // Checks if nextBN is undefined and either 2nd or 3rd param have been declared
-      if (!nextBN && (_cbScript || _bitNodeOptions)) {
+      if (!_nextBN && (_cbScript || _bitNodeOptions)) {
         throw helpers.errorMessage(
           ctx,
           `Invalid call: When nextBN is undefined, all other params should not be declared`,
         );
       }
-      // Only runs if nextBN !== 0 (jumping to a valid BN)
-      let cbScript;
-      if (shouldStopOnBitVerse) {
+
+      let cbScript: ScriptFilePath | false | null | undefined;
+      if (!(_nextBN == null)) {
         if (!validBitNodes.includes(nextBN)) {
-          throw new Error(`Invalid BitNode: ${_nextBN}.`);
+          throw new Error(`Invalid BitNode: ${nextBN}.`);
         }
         cbScript = _cbScript
           ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
@@ -1204,7 +1208,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       wd.backdoorInstalled = true;
       calculateAchievements();
-      if (shouldStopOnBitVerse) {
+      if (_nextBN) {
         enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
         if (cbScript) {
           setTimeout(() => runAfterReset(cbScript), 500);
