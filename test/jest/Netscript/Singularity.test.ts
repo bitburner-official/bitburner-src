@@ -341,6 +341,7 @@ describe("destroyW0r1dD43m0n", () => {
       expect(Player.bitNodeN).toStrictEqual(1);
       expect(Player.augmentations.length).toStrictEqual(1);
       expect(Player.sourceFileLvl(1)).toStrictEqual(0);
+      expect(GetServerOrThrow(SpecialServers.WorldDaemon).backdoorInstalled).toBe(false);
     };
     test("Do not have enough hacking level and numBlackOpsComplete", () => {
       Player.skills.hacking = 0;

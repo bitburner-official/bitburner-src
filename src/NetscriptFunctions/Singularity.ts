@@ -1148,7 +1148,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       if (cbScript === null) {
         throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
-      enterBitNode(true, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      const bitNodeOptions = helpers.validateBitNodeOptions(ctx, _bitNodeOptions);
+      enterBitNode(true, Player.bitNodeN, nextBN, bitNodeOptions);
       if (cbScript) {
         setTimeout(() => runAfterReset(cbScript), 500);
       }
@@ -1165,6 +1166,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       if (cbScript === null) {
         throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
+      const bitNodeOptions = helpers.validateBitNodeOptions(ctx, _bitNodeOptions);
 
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) {
@@ -1190,7 +1192,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       wd.backdoorInstalled = true;
       calculateAchievements();
-      enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      enterBitNode(false, Player.bitNodeN, nextBN, bitNodeOptions);
       if (cbScript) {
         setTimeout(() => runAfterReset(cbScript), 500);
       }
