@@ -16,6 +16,8 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { addGlobalAlias, addAlias, removeAlias, Aliases, GlobalAliases, aliasRegex } from "../Alias";
 import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
+import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
@@ -276,6 +278,10 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       }
 
       return returnMap;
+    },
+
+    renderPage: () => (_node) => {
+      Router.toPage(Page.CustomPage, { content: wrapUserNode(_node) });
     },
   };
 }

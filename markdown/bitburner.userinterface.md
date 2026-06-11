@@ -137,6 +137,17 @@ Open the tail window of a script.
 </td></tr>
 <tr><td>
 
+[renderPage(node)](./bitburner.userinterface.renderpage.md)
+
+
+</td><td>
+
+Render a ReactNode in the main content area.
+
+
+</td></tr>
+<tr><td>
+
 [renderTail(pid)](./bitburner.userinterface.rendertail.md)
 
 

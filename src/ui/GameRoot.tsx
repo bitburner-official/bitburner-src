@@ -79,6 +79,7 @@ import { SpecialServers } from "../Server/data/SpecialServers";
 import { ErrorModal } from "../ErrorHandling/ErrorModal";
 import { DWRoot } from "../DarkNet/DWRoot";
 import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
+import { CustomPage } from "./CustomPage";
 
 const htmlLocation = location;
 
@@ -492,6 +493,10 @@ export function GameRoot(): React.ReactElement {
       mainPage = <ImportSaveComparison saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
       bypassGame = true;
+      break;
+    }
+    case Page.CustomPage: {
+      mainPage = <CustomPage content={pageWithContext.content} />;
       break;
     }
   }

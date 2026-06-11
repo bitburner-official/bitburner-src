@@ -56,4 +56,5 @@ export enum ComplexPage {
   // is constructed as a ComplexPage with no PageContext, and thus toPage() cannot be used (since no overload will fit
   // it).
   LoadingScreen = "Loading Screen",
+  CustomPage = "Custom Page",
 }
