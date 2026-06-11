@@ -16,6 +16,7 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { addGlobalAlias, addAlias, removeAlias, Aliases, GlobalAliases, aliasRegex } from "../Alias";
 import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
+import { CustomPageManager } from "../ui/CustomPageManager";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
@@ -277,5 +278,22 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
       return returnMap;
     },
+
+    openPage:
+      (ctx) =>
+      (_title, _content = "") => {
+        const title = helpers.string(ctx, "title", _title);
+        const content = helpers.string(ctx, "content", _content);
+        if (!title) throw helpers.errorMessage(ctx, "'title' cannot be empty.");
+        CustomPageManager.openPage(ctx.workerScript.pid, title, content);
+      },
+
+    closePage:
+      (ctx) =>
+      (_title) => {
+        const title = helpers.string(ctx, "title", _title);
+        if (!title) throw helpers.errorMessage(ctx, "'title' cannot be empty.");
+        CustomPageManager.closePage(title);
+      },
   };
 }

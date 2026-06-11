@@ -7080,6 +7080,48 @@ interface UserInterface {
    * @returns A map of alias names to an object containing the substitution string and if the alias was set to global.
    */
   getAllAliases(): Map<string, { substitution: string; isGlobal: boolean }>;
+
+  /**
+   * Open or update a custom sidebar page.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Creates a new page that appears in the game's sidebar under a "Scripts" section.
+   * If a page with the given title already exists, its content is updated in place.
+   * The page is automatically removed when the script that created it exits.
+   *
+   * Call this function repeatedly (e.g. in a loop with `await ns.sleep()`) to update
+   * the displayed content.
+   *
+   * @example
+   * ```js
+   * export async function main(ns) {
+   *   while (true) {
+   *     const info = `Money: ${ns.formatNumber(ns.getServerMoneyAvailable("n00dles"))}`;
+   *     ns.ui.openPage("My Dashboard", info);
+   *     await ns.sleep(1000);
+   *   }
+   * }
+   * ```
+   *
+   * @param title - The page title shown in the sidebar (must be unique across all scripts).
+   * @param content - Optional text to display on the page.
+   */
+  openPage(title: string, content?: string): void;
+
+  /**
+   * Close a custom sidebar page.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Removes the page with the given title from the sidebar. Has no effect if no such
+   * page exists. Pages are also automatically removed when the owning script exits.
+   *
+   * @param title - The title of the page to close.
+   */
+  closePage(title: string): void;
 }
 
 /**

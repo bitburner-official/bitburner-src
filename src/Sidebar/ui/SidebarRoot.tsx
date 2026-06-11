@@ -43,7 +43,9 @@ import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
 import { Router } from "../../ui/GameRoot";
 import { ComplexPage, SimplePage } from "../../ui/Enums";
-import { Page, isSimplePage } from "../../ui/Router";
+import { Page, PageWithContext, isSimplePage } from "../../ui/Router";
+import { CustomPageManager, type CustomPage } from "../../ui/CustomPageManager";
+import ArticleIcon from "@mui/icons-material/Article";
 import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
 import { CONSTANTS } from "../../Constants";
@@ -122,7 +124,11 @@ const useStyles = makeStyles()((theme: Theme) => ({
   listitem: {},
 }));
 
-export function SidebarRoot(props: { page: Page }): React.ReactElement {
+export function SidebarRoot(props: { pageWithContext: PageWithContext }): React.ReactElement {
+  const page = props.pageWithContext.page;
+  const scriptPageId = props.pageWithContext.page === ComplexPage.ScriptPage
+    ? (props.pageWithContext as { page: ComplexPage.ScriptPage; id: string }).id
+    : null;
   const isSettingUpKeyBindings = useRef(false);
   useCycleRerender();
 
@@ -307,7 +313,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
     document.addEventListener("keydown", handleShortcuts);
     return () => document.removeEventListener("keydown", handleShortcuts);
-  }, [canGoToPage, clickPage, props.page]);
+  }, [canGoToPage, clickPage, page]);
 
   const { classes } = useStyles();
   const [open, setOpen] = useState(Settings.IsSidebarOpened);
@@ -345,7 +351,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       <List>
         <SidebarAccordion
           key_="Hacking"
-          page={props.page}
+          page={page}
           clickPage={clickPage}
           flash={flash}
           icon={ComputerIcon}
@@ -368,7 +374,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         <Divider />
         <SidebarAccordion
           key_="Character"
-          page={props.page}
+          page={page}
           clickPage={clickPage}
           flash={flash}
           icon={AccountBoxIcon}
@@ -379,7 +385,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canOpenFactions && {
               key_: Page.Factions,
               icon: ContactsIcon,
-              active: [Page.Factions, Page.Faction].includes(props.page),
+              active: [Page.Factions, Page.Faction].includes(page),
               count: invitationsCount,
             },
             canOpenAugmentations && {
@@ -396,7 +402,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         <Divider />
         <SidebarAccordion
           key_="World"
-          page={props.page}
+          page={page}
           clickPage={clickPage}
           flash={flash}
           icon={PublicIcon}
@@ -406,7 +412,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             {
               key_: Page.City,
               icon: LocationCityIcon,
-              active: [Page.City, Page.Location].includes(props.page),
+              active: [Page.City, Page.Location].includes(page),
             },
             { key_: Page.Travel, icon: AirplanemodeActiveIcon },
             canJob && { key_: Page.Job, icon: WorkIcon },
@@ -422,7 +428,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         <Divider />
         <SidebarAccordion
           key_="Help"
-          page={props.page}
+          page={page}
           clickPage={clickPage}
           flash={flash}
           icon={LiveHelpIcon}
@@ -436,8 +442,51 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             process.env.NODE_ENV === "development" && { key_: Page.DevMenu, icon: DeveloperBoardIcon },
           ]}
         />
+        <ScriptPageItems activeId={scriptPageId} classes={classes} sidebarOpen={open} />
         <Typography id="sidebar-extra-hook-3"></Typography>
       </List>
     </Drawer>
+  );
+}
+
+// ── Script-created custom pages ───────────────────────────────────────────────
+
+interface ScriptPageItemsProps {
+  activeId: string | null;
+  classes: Record<"listitem" | "active", string>;
+  sidebarOpen: boolean;
+}
+
+function ScriptPageItems({ activeId, classes, sidebarOpen }: ScriptPageItemsProps): React.ReactElement | null {
+  const [customPages, setCustomPages] = useState<readonly CustomPage[]>(() => CustomPageManager.getSnapshot());
+  useEffect(() => CustomPageManager.subscribe(() => setCustomPages(CustomPageManager.getSnapshot())), []);
+  if (customPages.length === 0) return null;
+
+  return (
+    <>
+      <Divider />
+      {customPages.map((cp) => {
+        const isActive = activeId === cp.id;
+        const color = isActive ? "primary" : "secondary";
+        return (
+          <ListItem
+            key={cp.id}
+            classes={{ root: classes.listitem }}
+            button
+            className={isActive ? classes.active : ""}
+            onClick={() => Router.toPage(ComplexPage.ScriptPage, { id: cp.id })}
+          >
+            <ListItemIcon>
+              <Tooltip title={!sidebarOpen ? cp.title : ""}>
+                <ArticleIcon color={color} />
+              </Tooltip>
+            </ListItemIcon>
+            <ListItemText>
+              <Typography color={color}>{cp.title}</Typography>
+            </ListItemText>
+          </ListItem>
+        );
+      })}
+    </>
   );
 }

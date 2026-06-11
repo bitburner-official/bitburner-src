@@ -11,6 +11,7 @@ import { AddRecentScript } from "./RecentScripts";
 import { handleUnknownError } from "../utils/ErrorHandler";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { BaseServer } from "../Server/BaseServer";
+import { CustomPageManager } from "../ui/CustomPageManager";
 
 export function killWorkerScript(ws: WorkerScript): void {
   stopAndCleanUpWorkerScript(ws);
@@ -119,4 +120,5 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   if (rs.temporary === false) {
     AddRecentScript(workerScript);
   }
+  CustomPageManager.closePagesByPid(workerScript.pid);
 }

@@ -44,6 +44,7 @@ export enum SimplePage {
 }
 
 export enum ComplexPage {
+  ScriptPage = "Script Page",
   BitVerse = "BitVerse",
   Faction = "Faction",
   FactionAugmentations = "Faction Augmentations",

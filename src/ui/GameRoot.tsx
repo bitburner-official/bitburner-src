@@ -79,6 +79,7 @@ import { SpecialServers } from "../Server/data/SpecialServers";
 import { ErrorModal } from "../ErrorHandling/ErrorModal";
 import { DWRoot } from "../DarkNet/DWRoot";
 import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
+import { CustomPageRoot } from "./CustomPages/CustomPageRoot";
 
 const htmlLocation = location;
 
@@ -488,6 +489,10 @@ export function GameRoot(): React.ReactElement {
       mainPage = <ThemeBrowser />;
       break;
     }
+    case Page.ScriptPage: {
+      mainPage = <CustomPageRoot id={pageWithContext.id} />;
+      break;
+    }
     case Page.ImportSave: {
       mainPage = <ImportSaveComparison saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
@@ -546,7 +551,7 @@ export function GameRoot(): React.ReactElement {
               </Overview>
               {withSidebar ? (
                 <Box display="flex" flexDirection="row" width="100%">
-                  <SidebarRoot page={pageWithContext.page} />
+                  <SidebarRoot pageWithContext={pageWithContext} />
                   <Box className={classes.root}>{mainPage}</Box>
                 </Box>
               ) : (

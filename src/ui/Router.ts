@@ -11,7 +11,9 @@ import { ComplexPage, SimplePage } from "./Enums";
 export type Page = SimplePage | ComplexPage;
 export const Page = { ...SimplePage, ...ComplexPage };
 
-export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
+export type PageContext<T extends Page> = T extends ComplexPage.ScriptPage
+  ? { id: string }
+  : T extends ComplexPage.BitVerse
   ? { flume: boolean; quick: boolean }
   : T extends ComplexPage.Faction
   ? { faction: Faction }
@@ -30,6 +32,7 @@ export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   : never;
 
 export type PageWithContext =
+  | ({ page: ComplexPage.ScriptPage } & PageContext<ComplexPage.ScriptPage>)
   | ({ page: ComplexPage.BitVerse } & PageContext<ComplexPage.BitVerse>)
   | ({ page: ComplexPage.Faction } & PageContext<ComplexPage.Faction>)
   | ({ page: ComplexPage.FactionAugmentations } & PageContext<ComplexPage.FactionAugmentations>)
