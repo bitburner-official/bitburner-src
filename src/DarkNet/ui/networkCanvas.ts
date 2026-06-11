@@ -12,7 +12,7 @@ import { NET_WIDTH } from "../Enums";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
 
-export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
+export const drawOnCanvas = (canvas: HTMLCanvasElement, netDisplayDepth: number) => {
   const ctx = canvas?.getContext("2d");
   if (!ctx || !canvas) {
     console.error("Could not get canvas context");
@@ -23,6 +23,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   for (const server of DarknetState.Network.flat()) {
     if (
       !server ||
+      server.depth >= netDisplayDepth ||
       (!server.hasAdminRights && !server.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights))
     ) {
       continue;
@@ -32,7 +33,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
     for (const connectedServerName of server.serversOnNetwork) {
       const connectedServer = getDarknetServerOrThrow(connectedServerName);
       if (
-        !connectedServer ||
+        connectedServer.depth >= netDisplayDepth ||
         (!connectedServer.hasAdminRights &&
           !connectedServer.serversOnNetwork.find((s) => getDarknetServerOrThrow(s).hasAdminRights))
       ) {
