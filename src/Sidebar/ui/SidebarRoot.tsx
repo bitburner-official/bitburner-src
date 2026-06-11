@@ -364,7 +364,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canStaneksGift && { key_: Page.StaneksGift, icon: DeveloperBoardIcon },
           ]}
         />
-        <Typography id="sidebar-extra-hook-0"></Typography>
+        <Typography component="div" id="sidebar-extra-hook-0"></Typography>
         <Divider />
         <SidebarAccordion
           key_="Character"
@@ -392,7 +392,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canOpenGrafting && { key_: Page.Grafting, icon: BiotechIcon },
           ]}
         />
-        <Typography id="sidebar-extra-hook-1"></Typography>
+        <Typography component="div" id="sidebar-extra-hook-1"></Typography>
         <Divider />
         <SidebarAccordion
           key_="World"
@@ -418,7 +418,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canDarkNet && { key_: Page.DarkNet, icon: ShareIcon },
           ]}
         />
-        <Typography id="sidebar-extra-hook-2"></Typography>
+        <Typography component="div" id="sidebar-extra-hook-2"></Typography>
         <Divider />
         <SidebarAccordion
           key_="Help"
@@ -436,7 +436,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             process.env.NODE_ENV === "development" && { key_: Page.DevMenu, icon: DeveloperBoardIcon },
           ]}
         />
-        <Typography id="sidebar-extra-hook-3"></Typography>
+        <Typography component="div" id="sidebar-extra-hook-3"></Typography>
       </List>
     </Drawer>
   );
