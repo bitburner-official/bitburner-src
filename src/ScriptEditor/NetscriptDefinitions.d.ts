@@ -7096,6 +7096,7 @@ interface UserInterface {
    *
    * @example
    * ```js
+   * // Plain string (renders in monospace pre-formatted style)
    * export async function main(ns) {
    *   while (true) {
    *     const info = `Money: ${ns.formatNumber(ns.getServerMoneyAvailable("n00dles"))}`;
@@ -7105,10 +7106,28 @@ interface UserInterface {
    * }
    * ```
    *
+   * ```js
+   * // React JSX (full control over layout and styling)
+   * export async function main(ns) {
+   *   while (true) {
+   *     const money = ns.getServerMoneyAvailable("n00dles");
+   *     ns.ui.openPage("My Dashboard",
+   *       <div>
+   *         <h2>n00dles</h2>
+   *         <p>Money: {ns.formatNumber(money)}</p>
+   *       </div>
+   *     );
+   *     await ns.sleep(1000);
+   *   }
+   * }
+   * ```
+   *
    * @param title - The page title shown in the sidebar (must be unique across all scripts).
-   * @param content - Optional text to display on the page.
+   * @param content - Optional content to display. Accepts a plain string (rendered
+   *   in monospace pre-formatted style) or a React node (rendered as-is, giving
+   *   full control over layout and styling). See {@link ReactNode}.
    */
-  openPage(title: string, content?: string): void;
+  openPage(title: string, content?: ReactNode): void;
 
   /**
    * Close a custom sidebar page.

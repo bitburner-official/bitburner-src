@@ -283,8 +283,8 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       (ctx) =>
       (_title, _content = "") => {
         const title = helpers.string(ctx, "title", _title);
-        const content = helpers.string(ctx, "content", _content);
         if (!title) throw helpers.errorMessage(ctx, "'title' cannot be empty.");
+        const content = typeof _content === "string" ? _content : wrapUserNode(_content);
         CustomPageManager.openPage(ctx.workerScript.pid, title, content);
       },
 

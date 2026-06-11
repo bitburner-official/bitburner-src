@@ -1,10 +1,12 @@
 /** Registry for script-created sidebar pages. */
 
+import type { ReactNode } from "react";
+
 export interface CustomPage {
   /** Unique identifier — same as title. */
   id: string;
   title: string;
-  content: string;
+  content: ReactNode;
   /** PID of the script that created this page. */
   pid: number;
 }
@@ -19,7 +21,7 @@ class CustomPageRegistry {
   private snapshot: readonly CustomPage[] = [];
 
   /** Open a page or update its content.  Called by ns.ui.openPage(). */
-  openPage(pid: number, title: string, content = ""): void {
+  openPage(pid: number, title: string, content: ReactNode = ""): void {
     const existing = this.pages.get(title);
     if (existing) {
       existing.content = content;

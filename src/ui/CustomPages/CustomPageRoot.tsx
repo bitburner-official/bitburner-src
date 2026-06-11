@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { CustomPageManager, type CustomPage } from "../CustomPageManager";
+import { Settings } from "../../Settings/Settings";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 interface Props {
   id: string;
@@ -22,22 +24,27 @@ export function CustomPageRoot({ id }: Props): React.ReactElement {
     return <Typography>This page no longer exists.</Typography>;
   }
 
-  // Typography as="pre" so MUI's theme text color is applied — bare <pre>
-  // does not inherit the theme color and renders invisible on dark backgrounds.
-  return (
-    <Typography
-      component="pre"
-      sx={{
-        fontFamily: "monospace",
-        fontSize: "1rem",
-        whiteSpace: "pre-wrap",
-        wordBreak: "break-word",
-        m: 0,
-        p: 0,
-        lineHeight: 1.4,
-      }}
-    >
-      {page.content}
-    </Typography>
-  );
+  // String content: render in a Typography pre so the player's configured
+  // monospace font/size is applied and column-padded text aligns correctly.
+  // ReactNode content: render directly inside a plain container so the
+  // caller's JSX controls its own layout and styling.
+  if (typeof page.content === "string") {
+    return (
+      <Typography
+        component="pre"
+        sx={{
+          fontFamily: Settings.styles.fontFamily,
+          fontSize: `${Settings.styles.fontSize}px`,
+          lineHeight: Settings.styles.lineHeight,
+          whiteSpace: "pre",
+          m: 0,
+          p: 1,
+        }}
+      >
+        {page.content}
+      </Typography>
+    );
+  }
+
+  return <Box sx={{ p: 1 }}>{page.content}</Box>;
 }
