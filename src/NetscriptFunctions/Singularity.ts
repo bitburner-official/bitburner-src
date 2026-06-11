@@ -1156,7 +1156,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = _nextBN != null ? helpers.number(ctx, "nextBN", _nextBN) : null;
-      if (nextBN != null) {
+      if (nextBN !== null) {
         // If _nextBN was provided, check that it is a valid BitNode.
         if (!validBitNodes.includes(nextBN)) {
           throw new Error(`Invalid BitNode: ${_nextBN}.`);
