@@ -42,7 +42,7 @@ number
 
 </td><td>
 
-_(Optional)_ BN number to jump to. Undefined leaves you on the BitVerse selection screen.
+_(Optional)_ BN number to jump to. Passing undefined leaves you on the BitVerse screen.
 
 
 </td></tr>
@@ -90,5 +90,5 @@ RAM cost: 32 GB \* 16/4/1
 
 You must have the special augment installed and the required hacking level OR Completed the final black op.
 
-Although this function can be used to take you to the BitVerse screen, that can usually be accomplished more cheaply with @<!-- -->link<!-- -->{<!-- -->\#installBackdoor<!-- -->}<!-- -->.
+If you do not want to move on to the next BN and instead stay on the BitVerse screen, you can set nextBN to undefined. Note that with the hacking route, using [installBackdoor](./bitburner.singularity.installbackdoor.md) is a cheaper way to do this.
 
