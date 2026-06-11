@@ -1155,35 +1155,23 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
-      let nextBN;
-      if (_nextBN == null) {
-        nextBN = 0;
-      } else {
-        nextBN = helpers.number(ctx, "nextBN", _nextBN);
-      }
-
-      // Checks if nextBN is undefined and either 2nd or 3rd param have been declared
-      if (!_nextBN && (_cbScript || _bitNodeOptions)) {
-        throw helpers.errorMessage(
-          ctx,
-          `Invalid call: When nextBN is undefined, all other params should not be declared`,
-        );
-      }
-
-      let cbScript: ScriptFilePath | false | null | undefined;
-      if (!(_nextBN == null)) {
+      const nextBN = _nextBN != null ? helpers.number(ctx, "nextBN", _nextBN) : null;
+      if (nextBN != null) {
+        // If _nextBN was provided, check that it is a valid BitNode.
         if (!validBitNodes.includes(nextBN)) {
-          throw new Error(`Invalid BitNode: ${nextBN}.`);
+          throw new Error(`Invalid BitNode: ${_nextBN}.`);
         }
-        cbScript = _cbScript
-          ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
-          : false;
-        if (cbScript === null) {
-          throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
-        }
+      } else if (_cbScript != null || _bitNodeOptions != null) {
+        // If _nextBN was not provided, the other parameters must also be nullish.
+        throw helpers.errorMessage(ctx, `When nextBN is nullish, other parameters must be nullish.`);
+      }
+      const cbScript = _cbScript
+        ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
+        : false;
+      if (cbScript === null) {
+        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
 
-      // General checks
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) {
         throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
@@ -1208,13 +1196,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       wd.backdoorInstalled = true;
       calculateAchievements();
-      if (_nextBN) {
-        enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
-        if (cbScript) {
-          setTimeout(() => runAfterReset(cbScript), 500);
-        }
-      } else {
+      if (nextBN === null) {
         Router.toPage(Page.BitVerse, { flume: false, quick: false });
+        return;
+      }
+      enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      if (cbScript) {
+        setTimeout(() => runAfterReset(cbScript), 500);
       }
     },
     getCurrentWork: (ctx) => () => {
