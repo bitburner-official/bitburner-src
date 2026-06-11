@@ -22,19 +22,22 @@ export function CustomPageRoot({ id }: Props): React.ReactElement {
     return <Typography>This page no longer exists.</Typography>;
   }
 
+  // Typography as="pre" so MUI's theme text color is applied — bare <pre>
+  // does not inherit the theme color and renders invisible on dark backgrounds.
   return (
-    <pre
-      style={{
+    <Typography
+      component="pre"
+      sx={{
         fontFamily: "monospace",
-        fontSize: "inherit",
+        fontSize: "1rem",
         whiteSpace: "pre-wrap",
         wordBreak: "break-word",
-        margin: 0,
-        padding: 0,
+        m: 0,
+        p: 0,
         lineHeight: 1.4,
       }}
     >
       {page.content}
-    </pre>
+    </Typography>
   );
 }
