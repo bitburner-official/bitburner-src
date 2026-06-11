@@ -7039,27 +7039,28 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Programmatically sets an alias. This is functionally equivalent to if you typed ``alias ${alias}=${substitution}`` in the terminal.
-   * This function throws an error if alias/substitution are empty strings after leading and trailing whitespace are removed. It also throws if
-   * alias has any invalid characters (not alphanum or `|!%,@-`).
+   * This is functionally equivalent to typing `alias ${alias}=${substitution}` in the terminal.
    *
-   * Only one alias can be set for a particular context; global aliases will overwrite nonglobal aliases silently and vice versa.
+   * This function throws an error if `alias` is an empty string or contains any invalid characters (only alphanumeric
+   * characters and `_|!%,@-` are allowed).
+   *
+   * Only one alias may be defined for a given context. Setting a global alias will silently overwrite an existing
+   * non-global alias with the same name, and vice versa.
    *
    * @example
-   * File: script.js
    * ```js
-   * export async function main(ns){
-   *    ns.alias("nuke", "run NUKE.exe"); // Equivalent to typing "alias nuke="run NUKE.exe"
-   *    ns.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing "alias -g worm="HTTPWorm.exe"
+   * export async function main(ns) {
+   *   ns.ui.alias("nuke", "run NUKE.exe"); // Equivalent to typing `alias nuke="run NUKE.exe"`
+   *   ns.ui.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing `alias -g worm="HTTPWorm.exe"`
    * }
    *
    * ```
-   * @param alias - The keyword to set.
+   * @param alias - The alias name to set.
    * @param substitution - The substitution to run.
-   * @param global - Whether the alias should be set as a global alias. Global aliases replace all examples of the alias with the substitution string.
-   *
+   * @param isGlobal - Whether the alias should be set as a global alias. Global aliases replace all occurrences of the
+   * alias with the substitution string.
    */
-  alias(alias: string, substitution: string, global?: boolean): void;
+  alias(alias: string, substitution: string, isGlobal?: boolean): void;
 
   /**
    * Clears an existing alias.

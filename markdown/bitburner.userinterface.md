@@ -27,7 +27,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[alias(alias, substitution, global)](./bitburner.userinterface.alias.md)
+[alias(alias, substitution, isGlobal)](./bitburner.userinterface.alias.md)
 
 
 </td><td>
