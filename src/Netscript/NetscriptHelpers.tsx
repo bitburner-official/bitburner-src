@@ -856,10 +856,15 @@ function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string
  */
 function createPublicRunningScript(runningScript: RunningScript, workerScript?: WorkerScript): IRunningScript {
   const logProps = runningScript.tailProps;
+  //Create a reference to the strings, not the runningScript
+  const args = runningScript.args.slice();
+  const filename = runningScript.filename;
+  const title = runningScript.title;
+
   return {
-    args: runningScript.args.slice(),
+    args,
     dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),
-    filename: runningScript.filename,
+    filename,
     logs: runningScript.logs.map((x) => String(x)),
     offlineExpGained: runningScript.offlineExpGained,
     offlineMoneyMade: runningScript.offlineMoneyMade,
@@ -882,7 +887,9 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
             fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
             minimized: logProps.minimized,
           },
-    title: runningScript.title,
+    get title(): string | React.ReactElement {
+      return title || `${filename} ${args.join(" ")}`;
+    },
     threads: runningScript.threads,
     temporary: runningScript.temporary,
   };

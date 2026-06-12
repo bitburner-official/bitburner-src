@@ -73,9 +73,7 @@ export class RunningScript {
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
 
-  // The title, as shown in the script's log box. Defaults to the name + args,
-  // but can be changed by the user. If it is set to a React element (only by the user),
-  // that will not be persisted, and will be restored to default on load.
+  // Custom title for the script's log box. Undefined means use the default filename + args title only when looked at.
   title = "" as string | React.ReactElement;
 
   // Number of threads that this script is running with
@@ -96,7 +94,10 @@ export class RunningScript {
     this.server = script.server;
     this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;
-    this.title = `${this.filename} ${args.join(" ")}`;
+  }
+
+  getDefaultTitle(): string {
+    return `${this.filename} ${this.args.join(" ")}`;
   }
 
   log(txt: React.ReactNode): void {
@@ -157,7 +158,7 @@ export class RunningScript {
         ...this,
         dataMap: Object.fromEntries(this.dataMap.entries()),
       },
-      typeof this.title === "string" ? includedProperties : includedPropsNoTitle,
+      typeof this.title === "string" && this.title !== "" ? includedProperties : includedPropsNoTitle,
     );
   }
 
@@ -167,7 +168,6 @@ export class RunningScript {
     const validEntries = Object.entries(runningScript.dataMap).filter(isValidDataMapEntry);
     runningScript.dataMap = new Map(validEntries);
     if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
-    if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
     return runningScript;
   }
 

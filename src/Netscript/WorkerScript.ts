@@ -12,7 +12,6 @@ import type { NSFull } from "../NetscriptFunctions";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { RunningScript } from "../Script/RunningScript";
 import type { Script } from "../Script/Script";
-import type { ScriptArg } from "@nsdefs";
 import type { ScriptDeath } from "./ScriptDeath";
 
 import { Environment } from "./Environment";
@@ -20,9 +19,6 @@ import { RamCostConstants } from "./RamCostGenerator";
 import { GetServer } from "../Server/AllServers";
 
 export class WorkerScript {
-  /** Script's arguments */
-  args: ScriptArg[];
-
   /**
    * Holds the timeoutID (numeric value) for whenever this script is blocked by a
    * timed Netscript function. i.e. Holds the return value of setTimeout()
@@ -96,7 +92,6 @@ export class WorkerScript {
       throw new Error(`WorkerScript constructed with invalid script filename: ${this.name}`);
     }
     this.scriptRef = runningScriptObj;
-    this.args = runningScriptObj.args.slice();
     this.env = new Environment();
     if (typeof nsFuncsGenerator === "function") {
       this.env.vars = nsFuncsGenerator(this);

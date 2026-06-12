@@ -847,10 +847,10 @@ export const ns: InternalAPI<NSFull> = {
     return allFilenames.filter((filename) => ("/" + filename).includes(substring)).sort();
   },
   getRecentScripts: () => (): RecentScript[] => {
-    return recentScripts.map((rs) => ({
-      timeOfDeath: rs.timeOfDeath,
-      ...helpers.createPublicRunningScript(rs.runningScript),
-    }));
+    return recentScripts.map((rs) =>
+      //Don't spread - it will touch .title and generate one
+      Object.assign(helpers.createPublicRunningScript(rs.runningScript), { timeOfDeath: rs.timeOfDeath }),
+    );
   },
   ps: (ctx) => (_host?) => {
     const [server] = helpers.getServer(ctx, _host);
@@ -1603,7 +1603,7 @@ setRemovedFunctions(ns, {
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {
-  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
+  return NSProxy(ws, ns, [], { args: ws.scriptRef.args.slice(), pid: ws.pid, enums });
 }
 
 const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));
