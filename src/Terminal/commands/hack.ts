@@ -24,9 +24,9 @@ export function hack(
   server: BaseServer,
   stdIO: StdIO,
 ): undefined | TerminalAction {
-  if (args.length !== 0) return Terminal.fatal("Incorrect usage of hack command. Usage: hack");
-  if (server.purchasedByPlayer) return Terminal.fatal("Cannot hack your own machines!");
-  if (!server.hasAdminRights) return Terminal.fatal("You do not have admin rights for this machine!");
+  if (args.length !== 0) return Terminal.fatal("Incorrect usage of hack command. Usage: hack", stdIO);
+  if (server.purchasedByPlayer) return Terminal.fatal("Cannot hack your own machines!", stdIO);
+  if (!server.hasAdminRights) return Terminal.fatal("You do not have admin rights for this machine!", stdIO);
   // Acts as a functional check that the server is hackable. Hacknet servers should already be filtered out anyway by purchasedByPlayer
   if (server.requiredHackingSkill === undefined) return Terminal.fatal("Cannot hack this server.", stdIO);
   if (server.requiredHackingSkill > Player.skills.hacking) {
@@ -38,7 +38,7 @@ export function hack(
 
   // Hacking through Terminal should be faster than hacking through a script
   if (server instanceof HacknetServer) {
-    Terminal.fatal("Cannot hack this kind of server");
+    Terminal.fatal("Cannot hack this kind of server", stdIO);
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");

@@ -14,6 +14,7 @@ export function wget(
   if (args.length === 2 && stdIO.stdout) {
     Terminal.fatal(
       "Incorrect use of wget command. Either specify a destination file or redirect the output with a pipe, not both.",
+      stdIO,
     );
     return;
   }
@@ -42,7 +43,7 @@ export function wget(
   const p = fetch(source, { signal: abort.signal })
     .then(async (response) => {
       if (response.status !== 200) {
-        Terminal.fatal(`wget failed. HTTP code: ${response.status}.`);
+        Terminal.fatal(`wget failed. HTTP code: ${response.status}.`, stdIO);
         return;
       }
       const content = await response.text();
@@ -64,7 +65,7 @@ export function wget(
     })
     .catch((reason) => {
       // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
-      Terminal.fatal(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`);
+      Terminal.fatal(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`, stdIO);
       if (cancelled) {
         // We need to propogate a Cancellation error to abort any chained
         // commands higher up.

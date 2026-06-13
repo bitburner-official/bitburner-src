@@ -317,10 +317,11 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
       loadedModule = await compile(script, currServ.scripts);
     } catch (e) {
       const errorData = parseUnknownError(e);
-      Terminal.fatal(
+      Terminal.error(
         `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
           errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
         }`,
+        getTerminalStdIO(),
       );
       return;
     }

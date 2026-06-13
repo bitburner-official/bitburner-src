@@ -14,15 +14,15 @@ export function grow(
   server: BaseServer,
   stdIO: StdIO,
 ): undefined | TerminalAction {
-  if (args.length !== 0) return Terminal.fatal("Incorrect usage of grow command. Usage: grow");
+  if (args.length !== 0) return Terminal.fatal("Incorrect usage of grow command. Usage: grow", stdIO);
 
   if (server.purchasedByPlayer) return Terminal.fatal("Cannot grow your own machines!", stdIO);
   if (!server.hasAdminRights) return Terminal.fatal("You do not have admin rights for this machine!", stdIO);
   // Grow does not require meeting the hacking level, but undefined requiredHackingSkill indicates the wrong type of server.
-  if (server.requiredHackingSkill === undefined) return Terminal.fatal("Cannot grow this server.");
+  if (server.requiredHackingSkill === undefined) return Terminal.fatal("Cannot grow this server.", stdIO);
 
   if (server instanceof HacknetServer) {
-    Terminal.fatal("Cannot grow this kind of server");
+    Terminal.fatal("Cannot grow this kind of server", stdIO);
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");

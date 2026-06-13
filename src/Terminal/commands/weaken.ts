@@ -19,10 +19,10 @@ export function weaken(
   if (server.purchasedByPlayer) return Terminal.fatal("Cannot weaken your own machines!", stdIO);
   if (!server.hasAdminRights) return Terminal.fatal("You do not have admin rights for this machine!", stdIO);
   // Weaken does not require meeting the hacking level, but undefined requiredHackingSkill indicates the wrong type of server.
-  if (server.requiredHackingSkill === undefined) return Terminal.fatal("Cannot weaken this server.");
+  if (server.requiredHackingSkill === undefined) return Terminal.fatal("Cannot weaken this server.", stdIO);
 
   if (server instanceof HacknetServer) {
-    Terminal.fatal("Cannot weaken this kind of server");
+    Terminal.fatal("Cannot weaken this kind of server", stdIO);
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");

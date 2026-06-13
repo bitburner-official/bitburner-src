@@ -91,12 +91,6 @@ function loadStandardServers() {
             "ramUsage": 1.6,
             "server": "home",
             "scriptKey": "script.js*[]",
-            "stdin": null,
-            "tailStdOut": null,
-            "terminalStdOut": {
-              "stdin": null,
-              "stdout": null
-            },
             "title": "Awesome Script",
             "dependencies": [
               {

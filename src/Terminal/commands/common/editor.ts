@@ -10,6 +10,7 @@ import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransforme
 import { hasContractExtension } from "../../../Paths/ContractFilePath";
 
 import { hasCacheExtension } from "../../../Paths/CacheFilePath";
+import { getTerminalStdIO } from "../../StdIO/RedirectIO";
 
 interface EditorParameters {
   args: (string | number | boolean)[];
@@ -36,7 +37,7 @@ export async function main(ns) {
 
 export function commonEditor(command: string, { args, server, vim }: EditorParameters, allowZeroFiles = false): void {
   if (args.length < 1 && !allowZeroFiles) {
-    return Terminal.fatal(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
+    return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`, getTerminalStdIO());
   }
   const files = new Map<ScriptFilePath | TextFilePath, string>();
   let hasLegacyScript = false;
@@ -47,7 +48,7 @@ export function commonEditor(command: string, { args, server, vim }: EditorParam
     if (pattern.includes("*") || pattern.includes("?")) {
       const globbedFileMap = getGlobbedFileMap(pattern, server, Terminal.currDir);
       if (globbedFileMap.size === 0) {
-        Terminal.fatal(`No files matching ${pattern}`);
+        Terminal.error(`No files matching ${pattern}`, getTerminalStdIO());
         return;
       }
       for (const [path, file] of globbedFileMap) {
@@ -61,10 +62,13 @@ export function commonEditor(command: string, { args, server, vim }: EditorParam
 
     // Non-glob, files do not need to already exist
     const path = Terminal.getFilepath(pattern);
-    if (!path) return Terminal.fatal(`Invalid file path ${arg}`);
+    if (!path) return Terminal.error(`Invalid file path ${arg}`, getTerminalStdIO());
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       const hint = hasContractExtension(path) || hasCacheExtension(path) ? " (Try using 'run')" : "";
-      return Terminal.fatal(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`);
+      return Terminal.error(
+        `${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`,
+        getTerminalStdIO(),
+      );
     }
     if (isLegacyScript(path)) {
       hasLegacyScript = true;

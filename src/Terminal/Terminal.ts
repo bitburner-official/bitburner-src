@@ -67,7 +67,7 @@ import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
 import { StdIO } from "./StdIO/StdIO";
-import { parseRedirectedCommands } from "./StdIO/RedirectIO";
+import { getTerminalStdIO, parseRedirectedCommands } from "./StdIO/RedirectIO";
 import { mkdir } from "./commands/mkdir";
 
 export const TerminalCommands: Record<
@@ -170,9 +170,7 @@ export class Terminal {
 
   // Used for logging when a process is ending with an error. Prints directly to terminal so
   // the error isn't lost due to redirects. Closes the stdIO, if provided
-
-  // TODO-fico: validate all stdios are captured
-  fatal(s: string, stdIO: StdIO | null = null): undefined {
+  fatal(s: string, stdIO: StdIO | null): undefined {
     stdIO?.close();
     this.terminalOutput(new Output(s, "error"));
   }
@@ -290,7 +288,7 @@ export class Terminal {
   connectToServer(hostname: string, singularity = false): void {
     const server = GetServer(hostname);
     if (server === null) {
-      this.fatal("Invalid server. Connection failed.");
+      this.error("Invalid server. Connection failed.", getTerminalStdIO());
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
@@ -372,7 +370,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "help") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -380,10 +378,10 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
           } else if (commandArray[0] === "1s") {
-            this.fatal("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?", getTerminalStdIO());
             return;
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -391,7 +389,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "scan") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -399,7 +397,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -407,7 +405,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -419,11 +417,11 @@ export class Terminal {
             ) {
               iTutorialNextStep();
             } else {
-              this.fatal("Wrong command! Try again!");
+              this.error("Wrong command! Try again!", getTerminalStdIO());
               return;
             }
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -431,7 +429,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "analyze") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -439,7 +437,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -447,13 +445,13 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "hack") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
         case iTutorialSteps.TerminalHackingMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -461,7 +459,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -469,7 +467,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -477,7 +475,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "free") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -485,7 +483,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
@@ -493,12 +491,15 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.fatal(errorMessageForBadCommand);
+            this.error(errorMessageForBadCommand, getTerminalStdIO());
             return;
           }
           break;
         default:
-          this.fatal("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
+          this.error(
+            "Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it",
+            getTerminalStdIO(),
+          );
           return;
       }
     }

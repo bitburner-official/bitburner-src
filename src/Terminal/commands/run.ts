@@ -32,7 +32,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
     (async () => {
       // There's already an opened contract
       if (Terminal.contractOpen) {
-        return Terminal.fatal("There's already a Coding Contract in Progress");
+        return Terminal.fatal("There's already a Coding Contract in Progress", stdIO);
       }
 
       const server = Player.getCurrentServer();

@@ -483,8 +483,9 @@ Error: ${e}`,
       }
     }
     if (anyExportsFailed)
-      Terminal.fatal(
+      Terminal.error(
         "Some material exports failed to validate while loading and have been removed. See console for more info.",
+        getTerminalStdIO(),
       );
   }
   if (ver < 33) {
@@ -530,7 +531,8 @@ Error: ${e}`,
         found = true;
       }
     }
-    if (found) Terminal.fatal("Filenames with whitespace found and corrected, see console for details.");
+    if (found)
+      Terminal.error("Filenames with whitespace found and corrected, see console for details.", getTerminalStdIO());
   }
   // Migrate save data related to the breaking changes in the first beta of v3.0.0.
   if (ver < 44) {

@@ -169,22 +169,27 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
   }
   const overwrite = pipeType === PipeSymbols.OutputRedirection;
 
+  if (!Terminal.getScript(scriptPath)) {
+    Player.getCurrentServer().writeToScriptFile(scriptPath, "");
+  }
+  const file = Terminal.getScript(scriptPath);
+  if (!file) {
+    return handleIoError(stdIO, `Failed to create script file for piping output: ${scriptPath}`);
+  }
+  if (file?.content && overwrite) {
+    return handleIoError(
+      stdIO,
+      `Overwriting non-empty script files is forbidden. Attempted to overwrite ${scriptPath}`,
+    );
+  }
+
   void callOnRead(stdIO, (data: unknown) => {
-    if (!Terminal.getScript(scriptPath)) {
-      Player.getCurrentServer().writeToScriptFile(scriptPath, "");
-    }
-    const file = Terminal.getScript(scriptPath);
-    if (!file) {
-      return handleIoError(stdIO, `Failed to create script file for piping output: ${scriptPath}`);
-    }
-    if (file?.content && overwrite) {
-      return handleIoError(
-        stdIO,
-        `Overwriting non-empty script files is forbidden. Attempted to overwrite ${scriptPath}`,
-      );
+    const currentFile = Terminal.getScript(scriptPath);
+    if (!currentFile) {
+      return;
     }
     const output = stringify(data);
-    file.content = concatenateFileContents(file.content, output);
+    currentFile.content = concatenateFileContents(currentFile.content, output);
   });
 }
 
