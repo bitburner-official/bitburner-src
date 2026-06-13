@@ -188,6 +188,12 @@ function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): vo
     if (!currentFile) {
       return;
     }
+    if (file?.content && overwrite) {
+      return handleIoError(
+        stdIO,
+        `Overwriting non-empty script files is forbidden. Attempted to overwrite ${scriptPath}`,
+      );
+    }
     const output = stringify(data);
     currentFile.content = concatenateFileContents(currentFile.content, output);
   });
