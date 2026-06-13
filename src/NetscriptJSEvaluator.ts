@@ -93,7 +93,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     case FileType.JSX:
     case FileType.TS:
     case FileType.TSX:
-      ({ scriptCode, sourceMap } = transformScript(script.code, fileType));
+      ({ scriptCode, sourceMap } = transformScript(script.internedCode, fileType));
       break;
     default:
       throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);

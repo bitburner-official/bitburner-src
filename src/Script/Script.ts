@@ -6,11 +6,21 @@ import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
+import { internString, type InternedString } from "../utils/helpers/internString";
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
 export class Script extends ContentFile {
-  code: string;
+  private _code = internString("");
+  get code(): string {
+    return this._code.value;
+  }
+  set code(value: string) {
+    this._code = internString(value);
+  }
+  get internedCode(): InternedString {
+    return this._code;
+  }
   filename: ScriptFilePath;
   server: string;
 

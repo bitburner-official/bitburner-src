@@ -3,6 +3,7 @@ import { transformSync, type ParserConfig } from "@swc/wasm-web";
 import * as acorn from "acorn";
 import { resolveScriptFilePath, validScriptExtensions, type ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { Script } from "../Script/Script";
+import { internString, type InternedString } from "./helpers/internString";
 
 export type AcornASTProgram = acorn.Program;
 export type BabelASTProgram = object;
@@ -27,6 +28,12 @@ export interface FileTypeFeature {
 export class ModuleResolutionError extends Error {}
 
 const supportedFileTypes = [FileType.JSX, FileType.TS, FileType.TSX] as const;
+
+type TransformCacheEntry = {
+  scriptCode: InternedString;
+  sourceMap?: InternedString;
+};
+const transformCache = new WeakMap<InternedString, Partial<Record<FileType, TransformCacheEntry>>>();
 
 export function getFileType(filename: string): FileType {
   const extension = filename.substring(filename.lastIndexOf(".") + 1);
@@ -159,11 +166,18 @@ export function getModuleScript(
  * for more information.
  */
 export function transformScript(
-  code: string,
+  internedCode: InternedString,
   fileType: FileType,
 ): { scriptCode: string; sourceMap: string | undefined } {
   if (supportedFileTypes.every((v) => v !== fileType)) {
     throw new Error(`Invalid file type: ${fileType}`);
+  }
+  const cached = transformCache.get(internedCode)?.[fileType];
+  if (cached) {
+    return {
+      scriptCode: cached.scriptCode.value,
+      sourceMap: cached.sourceMap?.value,
+    };
   }
   const fileTypeFeature = getFileTypeFeature(fileType);
   let parserConfig: ParserConfig;
@@ -182,7 +196,7 @@ export function transformScript(
       parserConfig.jsx = true;
     }
   }
-  const result = transformSync(code, {
+  const result = transformSync(internedCode.value, {
     jsc: {
       parser: parserConfig,
       // @ts-expect-error -- jsc supports "esnext" target, but the definition in wasm-web.d.ts is outdated. Ref: https://github.com/swc-project/swc/issues/9495
@@ -190,8 +204,19 @@ export function transformScript(
     },
     sourceMaps: true,
   });
+  const entry: TransformCacheEntry = {
+    scriptCode: internString(result.code),
+    sourceMap: result.map === undefined ? undefined : internString(result.map),
+  };
+  let byFileType = transformCache.get(internedCode);
+  if (!byFileType) {
+    byFileType = {};
+    transformCache.set(internedCode, byFileType);
+  }
+  byFileType[fileType] = entry;
+
   return {
-    scriptCode: result.code,
-    sourceMap: result.map,
+    scriptCode: entry.scriptCode.value,
+    sourceMap: entry.sourceMap?.value,
   };
 }
