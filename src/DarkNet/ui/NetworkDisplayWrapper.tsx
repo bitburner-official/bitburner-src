@@ -77,7 +77,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
-    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault());
+    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault(), { passive: false });
     scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
     updateDisplay();
 
@@ -120,51 +120,35 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     }
   };
 
-  const zoomIn = useCallback(() => {
-    if (zoomIndex >= zoomOptions.length - 1) {
-      return;
-    }
-    DarknetState.zoomIndex = Math.max(zoomIndex + 1, 0);
-    setZoomIndex(DarknetState.zoomIndex);
-    const zoom = zoomOptions[zoomIndex];
-    const background = draggableBackground.current;
-    scrollTo(
-      (background?.scrollTop ?? 0) + ((background?.clientHeight ?? 0) / 4) * zoom,
-      (background?.scrollLeft ?? 0) + ((background?.clientWidth ?? 0) / 4) * zoom,
-    );
-  }, [zoomIndex, setZoomIndex, zoomOptions, scrollTo]);
-
-  const zoomOut = useCallback(() => {
-    if (zoomIndex <= 0) {
-      return;
-    }
-    DarknetState.zoomIndex = Math.min(zoomIndex - 1, zoomOptions.length - 1);
-    setZoomIndex(DarknetState.zoomIndex);
-    const zoom = zoomOptions[zoomIndex];
-    const background = draggableBackground.current;
-    scrollTo(
-      (background?.scrollTop ?? 0) - ((background?.clientHeight ?? 0) / 4) * zoom,
-      (background?.scrollLeft ?? 0) - ((background?.clientWidth ?? 0) / 4) * zoom,
-    );
-  }, [zoomIndex, setZoomIndex, zoomOptions, scrollTo]);
+  const changeZoom = useCallback(
+    (out = true, mouseX?: number, mouseY?: number) => {
+      if (out && zoomIndex <= 0) return;
+      if (!out && zoomIndex >= zoomOptions.length - 1) return;
+      const newZoomIndex = out ? zoomIndex - 1 : zoomIndex + 1;
+      const oldZoom = zoomOptions[zoomIndex];
+      const newZoom = zoomOptions[newZoomIndex];
+      DarknetState.zoomIndex = newZoomIndex;
+      setZoomIndex(newZoomIndex);
+      const background = draggableBackground.current;
+      const mx = mouseX ?? (background?.clientWidth ?? 0) / 2;
+      const my = mouseY ?? (background?.clientHeight ?? 0) / 2;
+      scrollTo(
+        (((background?.scrollTop ?? 0) + my) / oldZoom) * newZoom - my,
+        (((background?.scrollLeft ?? 0) + mx) / oldZoom) * newZoom - mx,
+      );
+    },
+    [zoomIndex, setZoomIndex, zoomOptions, scrollTo],
+  );
 
   const zoom = useCallback(
     (wheelEvent: WheelEvent) => {
-      const target = wheelEvent.target as HTMLDivElement;
-      if (!draggableBackground.current || DarknetState.openServer) {
-        return;
-      }
-      if (wheelEvent.deltaY < 0) {
-        zoomIn();
-      } else {
-        zoomOut();
-      }
-
-      if (!target?.parentElement?.getBoundingClientRect()) {
-        return;
-      }
+      if (!draggableBackground.current || DarknetState.openServer) return;
+      const rect = draggableBackground.current.getBoundingClientRect();
+      const mouseX = wheelEvent.clientX - rect.left;
+      const mouseY = wheelEvent.clientY - rect.top;
+      changeZoom(wheelEvent.deltaY > 0, mouseX, mouseY);
     },
-    [draggableBackground, zoomOut, zoomIn],
+    [draggableBackground, changeZoom],
   );
 
   const zoomRef = useRef(zoom);
@@ -311,10 +295,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </div>
       </div>
       <div className={classes.zoomContainer}>
-        <Button className={classes.button} onClick={() => zoomIn()}>
+        <Button className={classes.button} onClick={() => changeZoom(false)}>
           <ZoomIn />
         </Button>
-        <Button className={classes.button} onClick={() => zoomOut()}>
+        <Button className={classes.button} onClick={() => changeZoom()}>
           <ZoomOut />
         </Button>
       </div>

@@ -370,7 +370,7 @@ function grabTerminal(): string[] {
   return Terminal.outputHistory.map((line) => (line as Output).text ?? "");
 }
 
-export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   const stdin = stdIO.stdin?.deref();
   const noStdinProvided = !stdin || (stdin.isClosed && stdin.empty());
   if (!args.length && noStdinProvided) return Terminal.fatal(ERR.noArgs, stdIO);

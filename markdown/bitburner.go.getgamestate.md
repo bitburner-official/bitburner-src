@@ -22,3 +22,7 @@ getGameState(): {
 
 { currentPlayer: "White" \| "Black" \| "None"; whiteScore: number; blackScore: number; previousMove: \[number, number\] \| null; komi: number; bonusCycles: number; }
 
+## Remarks
+
+RAM cost: 0 GB
+

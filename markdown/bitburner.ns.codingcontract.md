@@ -11,8 +11,3 @@ Namespace for [coding contract](./bitburner.codingcontract.md) functions.
 ```typescript
 readonly codingcontract: CodingContract;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

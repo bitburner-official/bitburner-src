@@ -1,10 +1,10 @@
 import { BaseServer } from "./BaseServer";
 import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
-import type { DarknetServerData } from "@nsdefs";
 import { exampleDarknetServerData } from "../DarkNet/Enums";
 import { createRandomIp } from "../utils/IPAddress";
 import type { CacheFilePath } from "../Paths/CacheFilePath";
 import type { IPAddress } from "../Types/strings";
+import type { DarknetServerData } from "../DarkNet/utils/darknetServerUtils";
 
 export interface DarknetServerConstructorParams {
   // Properties of BaseServer
@@ -89,7 +89,14 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
   }
 
   static fromJSON(value: IReviverValue): DarknetServer {
-    return BaseServer.fromJSONBase(value, DarknetServer, includedKeys);
+    const server = BaseServer.fromJSONBase(value, DarknetServer, includedKeys);
+    // Remove duplicate .cache files.
+    const cacheSet = new Set(server.caches);
+    if (cacheSet.size !== server.caches.length) {
+      console.warn("Found duplicate cache files in ", server.caches);
+      server.caches = [...cacheSet];
+    }
+    return server;
   }
 }
 

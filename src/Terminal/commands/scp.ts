@@ -8,7 +8,7 @@ import { LiteratureName } from "@enums";
 import { ContentFile } from "../../Paths/ContentFile";
 import { StdIO } from "../StdIO/StdIO";
 
-export function scp(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function scp(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length < 2) {
     return Terminal.fatal("Incorrect usage of scp command. Usage: scp [source filename] [destination hostname]", stdIO);
   }

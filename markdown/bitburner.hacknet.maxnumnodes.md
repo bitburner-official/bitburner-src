@@ -19,5 +19,5 @@ Maximum number of hacknet nodes.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 

@@ -3,7 +3,7 @@ import { Player } from "@player";
 import { BaseServer } from "../../Server/BaseServer";
 import { StdIO } from "../StdIO/StdIO";
 
-export function history(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function history(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length === 0) {
     Terminal.commandHistory.forEach((command, index) => {
       Terminal.print(`${index.toString().padStart(2)} ${command}`, stdIO);

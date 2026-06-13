@@ -1,5 +1,4 @@
 import { Player, setPlayer } from "@player";
-import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import type { ActionIdFor } from "../../../src/Bladeburner/Types";
 import type { Bladeburner } from "../../../src/Bladeburner/Bladeburner";
 import { BlackOperation } from "../../../src/Bladeburner/Actions/BlackOperation";
@@ -9,6 +8,9 @@ import { SleeveSupportWork } from "../../../src/PersonObjects/Sleeve/Work/Sleeve
 import { BladeburnerBlackOpName, BladeburnerContractName, BladeburnerOperationName } from "@enums";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { recalculateNumberOfOwnedSleeves } from "../../../src/PersonObjects/Sleeve/SleeveCovenantPurchases";
+import { initGameEnvironment } from "../Utilities";
+
+initGameEnvironment();
 
 /**
  * You may want to use hook to help with debugging
@@ -26,11 +28,6 @@ describe("Bladeburner Team", () => {
 
   let inst: Bladeburner;
   let action: BlackOperation | Operation;
-
-  beforeAll(() => {
-    /* Initialise Formatters. Dependency of Bladeburner */
-    FormatsNeedToChange.emit();
-  });
 
   beforeEach(() => {
     setPlayer(new PlayerObject());
@@ -130,6 +127,51 @@ describe("Bladeburner Team", () => {
     it("at worst half the team when succeeding (rounding up)", () => {
       teamSize(5), startAction(OP), forceMaxCasualties(), teamUsed(5), actionSucceeds();
       expect(inst).toMatchObject({ teamSize: 2, teamLost: 3 });
+    });
+  });
+
+  describe("Check teamSize and teamCount", () => {
+    test("Failed action", () => {
+      teamSize(10);
+      startAction(OP);
+      forceMaxCasualties();
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
+        action.teamCount = 10;
+        expect(action.teamCount).toStrictEqual(10);
+      }
+      actionFails();
+      expect(inst.teamSize).toStrictEqual(0);
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
+        expect(action.teamCount).toStrictEqual(0);
+      }
+    });
+    test("Sleeves", () => {
+      teamSize(1);
+      supportingSleeves(8);
+      expect(inst.teamSize).toStrictEqual(9);
+      startAction(OP);
+      forceMaxCasualties();
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
+        action.teamCount = 9;
+        expect(action.teamCount).toStrictEqual(9);
+      }
+      actionFails();
+      // The teamCount of all operations/black operations should be 8, not 0.
+      assertSleevesHaveBeenShocked();
+      expect(inst.teamSize).toStrictEqual(8);
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
+        expect(action.teamCount).toStrictEqual(8);
+      }
+      Player.sleeves[0].stopWork();
+      expect(inst.teamSize).toStrictEqual(7);
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
+        expect(action.teamCount).toStrictEqual(7);
+      }
+      Player.sleeves[0].startWork(new SleeveSupportWork());
+      expect(inst.teamSize).toStrictEqual(8);
+      for (const action of [...Object.values(inst.operations), ...Object.values(inst.blackOperations)]) {
+        expect(action.teamCount).toStrictEqual(7);
+      }
     });
   });
 

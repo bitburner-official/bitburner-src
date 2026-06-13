@@ -12,7 +12,7 @@ import { stringify } from "../StdIO/utils";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   const initialStdIn = stdIO.getAllCurrentStdin(false);
   const stdin = stdIO.stdin?.deref();
   const stdinIsClosed = !stdin || (stdin.isClosed && stdin.empty());
@@ -86,20 +86,23 @@ export function getFileContents(filename: string, server: BaseServer): string {
   return "";
 }
 
-function showFileContentDialog(filename: string, server: BaseServer, stdIO: StdIO) {
+function showFileContentDialog(filename: string, server: BaseServer, stdIO: StdIO): undefined {
   const path = Terminal.getFilepath(filename);
   if (!path) return Terminal.fatal(`Invalid filename: ${filename}`, stdIO);
 
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
     if (!file) return Terminal.fatal(`No file at path ${path}`, stdIO);
-    return dialogBoxCreate(`${file.filename}\n\n${file.content}`);
+    dialogBoxCreate(`${file.filename}\n\n${file.content}`);
+    return;
   }
   if (isMember("MessageFilename", path) && server.messages.includes(path)) {
-    return showMessage(path);
+    showMessage(path);
+    return;
   }
   if (isMember("LiteratureName", path) && server.messages.includes(path)) {
-    return showLiterature(path);
+    showLiterature(path);
+    return;
   }
 }
 

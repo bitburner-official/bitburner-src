@@ -11,13 +11,20 @@ import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
-import { TerminalCommands } from "./Terminal";
+import { supportedCommands } from "./Terminal";
 import { Terminal } from "../Terminal";
 import { parseUnknownError } from "../utils/ErrorHelper";
 import { DarknetServer } from "../Server/DarknetServer";
 import { CompletedProgramName } from "@enums";
 import { getCommandAfterLastPipe } from "./StdIO/utils";
 import { getTerminalStdIO } from "./StdIO/RedirectIO";
+
+/** Extract the text being autocompleted, handling unclosed double quotes as a single token */
+export function extractCurrentText(terminalText: string): string {
+  const quoteCount = (terminalText.match(/"/g) || []).length;
+  if (quoteCount % 2 === 1) return terminalText.substring(terminalText.lastIndexOf('"'));
+  return /[^ ]*$/.exec(terminalText)?.[0] ?? "";
+}
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -30,8 +37,8 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
   // True if there is a pipe in the terminal text
   const isInPipe = fullTerminalText !== terminalText;
 
-  // Get the current command text
-  const currentText = /[^ ]*$/.exec(terminalText)?.[0] ?? "";
+  // Get the current command text, treating unclosed quotes as a single token
+  const currentText = extractCurrentText(terminalText);
   // Remove the current text from the commands string
   const valueWithoutCurrent = terminalText.substring(0, terminalText.length - currentText.length);
   // Parse the commands string, this handles alias replacement as well.
@@ -52,6 +59,7 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
 
   /** The directory portion of the current input */
   let relativeDir = "";
+  let absoluteDir = baseDir;
   const slashIndex = currentText.lastIndexOf("/");
 
   if (slashIndex !== -1) {
@@ -59,7 +67,7 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
     const path = resolveDirectory(relativeDir, baseDir);
     // No valid terminal inputs contain a / that does not indicate a path
     if (path === null) return [];
-    baseDir = path;
+    absoluteDir = path;
     pathingRequiredMatch = currentText.replace(/^.*\//, path).toLowerCase();
   } else if (baseDir !== root) {
     pathingRequiredMatch = (baseDir + currentText).toLowerCase();
@@ -82,7 +90,7 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
   function addGeneric({ iterable, usePathing, ignoreCurrent }: AddAllGenericOptions) {
     const requiredStart = usePathing ? pathingRequiredMatch : requiredMatch;
     for (const member of iterable) {
-      const itemToAdd = usePathing ? relativeDir + member.substring(baseDir.length) : member;
+      const itemToAdd = usePathing ? relativeDir + member.substring(absoluteDir.length) : member;
       if ((ignoreCurrent && member.length <= requiredStart.length) || possibilities.includes(itemToAdd)) continue;
       if (member.toLowerCase().startsWith(requiredStart)) {
         possibilities.push(itemToAdd);
@@ -92,7 +100,7 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
 
   const addAliases = () => addGeneric({ iterable: Aliases.keys() });
   const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
-  const addCommands = () => addGeneric({ iterable: Object.keys(TerminalCommands) });
+  const addCommands = () => addGeneric({ iterable: supportedCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
   const addServerNames = () =>
     addGeneric({
@@ -185,6 +193,7 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
 
     case "cd":
     case "ls":
+    case "upload":
       if (onFirstCommandArg && !relativeDir) addDirectories();
       return possibilities;
 

@@ -6,7 +6,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import type { BaseServer } from "../../Server/BaseServer";
 import { StdIO } from "../StdIO/StdIO";
 
-export function kill(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function kill(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   try {
     if (args.length < 1 || typeof args[0] === "boolean") {
       Terminal.fatal("Incorrect usage of kill command. Usage: kill [pid] or kill [scriptname] [arg1] [arg2]...", stdIO);

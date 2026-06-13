@@ -10,11 +10,12 @@
  * This subcomponent creates all of the buttons for interacting with those special
  * properties
  */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-import { Location } from "../Location";
+import type { Location } from "../Location";
+import { Locations } from "../Locations";
 import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
 import { AugmentationName, CompletedProgramName, FactionName, LocationName, ToastVariant } from "@enums";
 import { Factions } from "../../Faction/Factions";
@@ -50,6 +51,20 @@ interface SpecialLocationProps {
 
 export function SpecialLocation(props: SpecialLocationProps): React.ReactElement {
   const rerender = useRerender();
+
+  // Special Location Hints
+  function specialLocationNextBNHint(bn_number: number): React.ReactElement {
+    if (knowAboutBitverse()) {
+      return (
+        <>
+          <br />
+          <br />
+          <Typography>You should check out BN-{bn_number} to uncover more details about this place.</Typography>
+        </>
+      );
+    }
+    return <></>;
+  }
 
   // Apply for Bladeburner division
   const joinBladeburnerDivision = useCallback(() => {
@@ -104,7 +119,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderBladeburner(): React.ReactElement {
     if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
-      return <></>;
+      {
+        return specialLocationNextBNHint(6);
+      }
     }
     const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
     return (
@@ -166,6 +183,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <Typography>
             <i>A businessman is yelling at a clerk. You should come back later.</i>
           </Typography>
+          {specialLocationNextBNHint(3)}
         </>
       );
     }
@@ -181,7 +199,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderGrafting(): React.ReactElement {
     if (!Player.canAccessGrafting()) {
-      return <></>;
+      {
+        return specialLocationNextBNHint(10);
+      }
     }
     return (
       <Button onClick={handleGrafting} sx={{ my: 5 }}>
@@ -293,8 +313,10 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
             <br />
             <br />A symbol is carved in the altar.
           </Typography>
+
           <br />
           {symbol}
+          <Typography>{specialLocationNextBNHint(13)}</Typography>
         </>
       );
     }
@@ -329,7 +351,19 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     );
   }
 
-  function renderGlitch(): React.ReactElement {
+  function RenderGlitch(): React.ReactElement {
+    // If the user stays here for ~25 seconds, silently warp them to The Void.
+    useEffect(() => {
+      let delay = 0;
+      // This is a sum of 25 exponential random variables, which is equivalent
+      // to one Erlang-distributed random variable with mean 25sec and stddev 5sec.
+      for (let i = 0; i < 25; ++i) {
+        delay += -1000 * Math.log(1 - Math.random());
+      }
+      const id = setTimeout(() => Router.toPage(Page.Location, { location: Locations[LocationName.Void] }), delay);
+      return () => clearTimeout(id);
+    });
+
     return (
       <>
         <Typography>
@@ -407,7 +441,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return renderCotMG();
     }
     case LocationName.IshimaGlitch: {
-      return renderGlitch();
+      return <RenderGlitch />;
     }
     case LocationName.NewTokyoArcade: {
       return <ArcadeRoot />;
@@ -425,6 +459,10 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     case LocationName.ChongqingShadowedWalkway: {
       return renderShadowedWalkway();
+    }
+    case LocationName.Void: {
+      // Reserved for special content such as easter eggs.
+      return <></>;
     }
     default:
       console.error(`Location ${props.loc.name} doesn't have any special properties`);

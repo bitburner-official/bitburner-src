@@ -18,6 +18,7 @@ import { hasFullDarknetAccess } from "../effects/effects";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 import { isIPAddress } from "../../Types/strings";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
+import { safelyReverseString } from "../../utils/StringHelperFunctions";
 
 export type PasswordResponse = {
   code: DarknetResponseCode;
@@ -158,11 +159,11 @@ const decorateName = (name: string): string => {
     const connector = connectors[Math.floor(Math.random() * connectors.length)];
 
     if (Math.random() < 0.3) {
-      updatedName = l33tifyName(name);
+      updatedName = l33tifyName(updatedName);
     }
 
     if (Math.random() < 0.05) {
-      updatedName = updatedName.split("").reverse().join("");
+      updatedName = safelyReverseString(updatedName);
     }
 
     if (Math.random() < 0.1) {
@@ -180,7 +181,11 @@ const decorateName = (name: string): string => {
     }
   } while (GetServer(updatedName) !== null);
 
-  return updatedName;
+  // Defensive coding. All operations above preserve well-formed UTF-16, so this is currently redundant. It's a
+  // safeguard to ensure the function never returns ill-formed UTF-16 if future changes introduce code unit–level
+  // manipulation.
+  // This normalization is lossy (lone surrogates -> U+FFFD).
+  return updatedName.toWellFormed();
 };
 
 const l33tifyName = (name: string): string => {
@@ -191,7 +196,11 @@ const l33tifyName = (name: string): string => {
     const replacement: string = l33t[char] ?? "";
     updatedName = updatedName.replaceAll(char, replacement);
   }
-  return updatedName;
+  // Defensive coding. All operations above preserve well-formed UTF-16, so this is currently redundant. It's a
+  // safeguard to ensure the function never returns ill-formed UTF-16 if future changes introduce code unit–level
+  // manipulation.
+  // This normalization is lossy (lone surrogates -> U+FFFD).
+  return updatedName.toWellFormed();
 };
 
 const getMaxRam = (difficulty: number): number => {

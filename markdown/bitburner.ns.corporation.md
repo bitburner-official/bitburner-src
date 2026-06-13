@@ -11,8 +11,3 @@ Namespace for [corporation](./bitburner.corporation.md) functions. Contains spoi
 ```typescript
 readonly corporation: Corporation;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

@@ -6,7 +6,7 @@
 
 Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or provide open node access to adjacent routers.
 
-Success chance can be seen via ns.go.getCheatSuccessChance()
+Success chance can be seen via ns.go.cheat.getCheatSuccessChance()
 
 Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
 

@@ -84,3 +84,7 @@ _(Optional)_ Duration of toast in ms. Can also be `null` to create a persistent 
 
 void
 
+## Remarks
+
+RAM cost: 0 GB
+

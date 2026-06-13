@@ -1,6 +1,6 @@
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { CodingContractTypes, removeBracketsFromArrayString, removeQuotesFromString } from "../ContractTypes";
+import { CodingContractTypes, parseArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
 export const sanitizeParenthesesInExpression: Pick<
@@ -113,10 +113,16 @@ export const sanitizeParenthesesInExpression: Pick<
       return res.every((sol) => answer.includes(sol));
     },
     convertAnswer: (ans) => {
-      const sanitized = removeBracketsFromArrayString(ans).split(",");
-      return sanitized.map((s) => removeQuotesFromString(s.replace(/\s/g, "")));
+      const parsedAnswer = parseArrayString(ans);
+      if (
+        !sanitizeParenthesesInExpression[CodingContractName.SanitizeParenthesesInExpression].validateAnswer(
+          parsedAnswer,
+        )
+      ) {
+        return null;
+      }
+      return parsedAnswer;
     },
-    validateAnswer: (ans): ans is string[] =>
-      typeof ans === "object" && Array.isArray(ans) && ans.every((s) => typeof s === "string"),
+    validateAnswer: (ans): ans is string[] => Array.isArray(ans) && ans.every((s) => typeof s === "string"),
   },
 };

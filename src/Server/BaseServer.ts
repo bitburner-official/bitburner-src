@@ -26,6 +26,7 @@ import { Settings } from "../Settings/Settings";
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 
 export interface BaseServerConstructorParams {
   adminRights?: boolean;
@@ -233,7 +234,7 @@ export abstract class BaseServer implements IServer {
   }
 
   updateRamUsed(ram: number): void {
-    this.ramUsed = clampNumber(ram, 0, this.maxRam);
+    this.ramUsed = roundToTwo(clampNumber(ram, 0, this.maxRam));
   }
 
   pushProgram(program: ProgramFilePath | CompletedProgramName): void {
@@ -320,6 +321,12 @@ export abstract class BaseServer implements IServer {
     const server = Generic_fromJSON(ctor, value.data, keys);
     if (value.data.runningScripts != null && Array.isArray(value.data.runningScripts)) {
       server.savedScripts = value.data.runningScripts;
+    }
+    // Remove duplicate .lit and .msg files.
+    const messageSet = new Set(server.messages);
+    if (messageSet.size !== server.messages.length) {
+      console.warn("Found duplicate messages in ", server.messages);
+      server.messages = [...messageSet];
     }
     // If textFiles is not an array, we've already done the 2.3 migration to textFiles and scripts as maps + path changes.
     if (!Array.isArray(server.textFiles)) return server;

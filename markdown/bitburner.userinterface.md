@@ -27,6 +27,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[alias(alias, substitution, global)](./bitburner.userinterface.alias.md)
+
+
+</td><td>
+
+Programmatically sets an alias.
+
+
+</td></tr>
+<tr><td>
+
 [clearTerminal()](./bitburner.userinterface.clearterminal.md)
 
 
@@ -44,6 +55,17 @@ Clear the Terminal window, as if the player ran `clear` in the terminal
 </td><td>
 
 Close the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[getAllAliases()](./bitburner.userinterface.getallaliases.md)
+
+
+</td><td>
+
+Returns a list of every alias that's been set.
 
 
 </td></tr>
@@ -88,6 +110,17 @@ Get the current theme
 </td><td>
 
 Move a tail window.
+
+
+</td></tr>
+<tr><td>
+
+[openCodeEditor(files, editorOptions)](./bitburner.userinterface.opencodeeditor.md)
+
+
+</td><td>
+
+Opens the specified file(s) in the code editor.
 
 
 </td></tr>
@@ -198,6 +231,17 @@ Set the title of the tail window of a script.
 </td><td>
 
 Sets the current theme
+
+
+</td></tr>
+<tr><td>
+
+[unalias(alias)](./bitburner.userinterface.unalias.md)
+
+
+</td><td>
+
+Clears an existing alias.
 
 
 </td></tr>

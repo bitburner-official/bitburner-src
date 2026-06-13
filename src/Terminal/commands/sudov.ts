@@ -2,7 +2,7 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { StdIO } from "../StdIO/StdIO";
 
-export function sudov(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function sudov(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 0) {
     Terminal.fatal("Incorrect number of arguments. Usage: sudov", stdIO);
     return;

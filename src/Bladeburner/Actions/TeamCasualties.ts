@@ -44,12 +44,18 @@ export function resolveTeamCasualties(action: TeamActionWithCasualties, team: Op
    */
   const losses =
     minCasualties <= maxCasualties ? team.getTeamCasualtiesRoll(minCasualties, maxCasualties) : minCasualties;
-  team.teamSize -= losses;
-  if (team.teamSize < team.sleeveSize) {
-    team.killRandomSupportingSleeves(team.sleeveSize - team.teamSize);
+  // Calculate the new teamSize in a temporary variable and call the setter team.teamSize ONCE.
+  // Note that it's important to call the setter only once; otherwise, the team count of each operation won't be reset
+  // correctly.
+  // For example, if _teamSize is 9 (1 team member + 8 support sleeves) and "losses" is 9, calling the setter with
+  // (team.teamSize - losses) will set teamCount of ops/blackOps to 0 while it should be 8.
+  let newTeamSize = team.teamSize - losses;
+  if (newTeamSize < team.sleeveSize) {
+    team.killRandomSupportingSleeves(team.sleeveSize - newTeamSize);
     // If this happens, all team members died and some sleeves took damage. In this case, teamSize = sleeveSize.
-    team.teamSize = team.sleeveSize;
+    newTeamSize = team.sleeveSize;
   }
+  team.teamSize = newTeamSize;
   team.teamLost += losses;
 
   return losses;

@@ -31,6 +31,7 @@ type LabDetails = {
   mazeWidth: number;
   mazeHeight: number;
   manual: boolean;
+  offsetStartAndEnd: boolean;
 };
 
 export const labData: Record<string, LabDetails> = {
@@ -41,6 +42,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 20,
     mazeHeight: 14,
     manual: true,
+    offsetStartAndEnd: false,
   },
   [SpecialServers.CruelLab]: {
     name: SpecialServers.CruelLab,
@@ -49,6 +51,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 30,
     mazeHeight: 20,
     manual: true,
+    offsetStartAndEnd: false,
   },
   [SpecialServers.MercilessLab]: {
     name: SpecialServers.MercilessLab,
@@ -57,6 +60,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 40,
     mazeHeight: 26,
     manual: false,
+    offsetStartAndEnd: false,
   },
   [SpecialServers.UberLab]: {
     name: SpecialServers.UberLab,
@@ -65,6 +69,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
+    offsetStartAndEnd: true,
   },
   [SpecialServers.EternalLab]: {
     name: SpecialServers.EternalLab,
@@ -73,6 +78,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
+    offsetStartAndEnd: true,
   },
   [SpecialServers.EndlessLab]: {
     name: SpecialServers.EndlessLab,
@@ -81,6 +87,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
+    offsetStartAndEnd: true,
   },
   [SpecialServers.FinalLab]: {
     name: SpecialServers.FinalLab,
@@ -89,6 +96,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
+    offsetStartAndEnd: true,
   },
   [SpecialServers.BonusLab]: {
     name: SpecialServers.BonusLab,
@@ -97,6 +105,7 @@ export const labData: Record<string, LabDetails> = {
     mazeWidth: 60,
     mazeHeight: 40,
     manual: false,
+    offsetStartAndEnd: true,
   },
 } as const;
 
@@ -185,6 +194,7 @@ export const getSurroundingsVisualized = (
   showEnd = false,
 ): string => {
   const result: string[] = [];
+  const [endpointY, endpointX] = DarknetState.labEndpoint ?? [maze[0].length - 2, maze.length - 2];
   for (let i = y - range; i <= y + range; i++) {
     let row = "";
     for (let j = x - range; j <= x + range; j++) {
@@ -192,7 +202,7 @@ export const getSurroundingsVisualized = (
         row += "@";
         continue;
       }
-      if (i === maze.length - 2 && j === maze[0].length - 2 && showEnd) {
+      if (i === endpointX && j === endpointY && showEnd) {
         row += "X";
         continue;
       }
@@ -205,7 +215,7 @@ export const getSurroundingsVisualized = (
 };
 
 const getLocationStatus = (pid: number): LocationStatus => {
-  const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
+  const [initialX, initialY] = getPositionInLab(pid);
   const surroundings = getSurroundingsVisualized(getLabMaze(), initialX, initialY).split("\n");
   return {
     coords: [initialX, initialY],
@@ -245,11 +255,8 @@ export const handleLabyrinthPassword = (
   }
 
   const maze = getLabMaze();
-  if (!DarknetState.labLocations[pid]) {
-    DarknetState.labLocations[pid] = [1, 1];
-  }
-  const [initialX, initialY] = DarknetState.labLocations[pid];
-  const end = [maze[0].length - 2, maze.length - 2];
+  const [initialX, initialY] = getPositionInLab(pid);
+  const end = DarknetState.labEndpoint ?? [maze[0].length - 2, maze.length - 2];
   const [dx, dy] = getDirectionFromInput(attemptedPassword);
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];
 
@@ -263,7 +270,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.Success,
-      message: "You have discovered the end the labyrinth.",
+      message: "You have discovered the end of the labyrinth.",
       data: labServer.password,
     };
   }
@@ -324,6 +331,12 @@ export const handleLabyrinthPassword = (
   };
 };
 
+export const getPositionInLab = (pid: number): [number, number] => {
+  const [offsetX, offsetY] = getRandomOffset();
+  DarknetState.labLocations[pid] ??= [1 + offsetX, 1 + offsetY];
+  return DarknetState.labLocations[pid];
+};
+
 const getDirectionFromInput = (input: string): number[] => {
   const direction = input
     .split(" ")
@@ -352,8 +365,20 @@ export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
     const { mazeWidth, mazeHeight } = getLabyrinthDetails();
     DarknetState.labyrinth = generateMaze(mazeWidth, mazeHeight);
+    const [offsetX, offsetY] = getRandomOffset();
+    DarknetState.labEndpoint = [
+      DarknetState.labyrinth[0].length - 2 - offsetX,
+      DarknetState.labyrinth.length - 2 - offsetY,
+    ];
   }
   return DarknetState.labyrinth;
+};
+
+const getRandomOffset = () => {
+  const { offsetStartAndEnd } = getLabyrinthDetails();
+  const offsetX = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
+  const offsetY = offsetStartAndEnd ? Math.floor(Math.random() * 3) * 2 : 0;
+  return [offsetX, offsetY];
 };
 
 export const getLabyrinthServerNames = () => {
@@ -455,6 +480,7 @@ export const getLabyrinthDetails = (): {
   mazeHeight: number;
   cha: number;
   name: string;
+  offsetStartAndEnd: boolean;
 } => {
   // Lab not unlocked yet
   if (!hasFullDarknetAccess()) {
@@ -466,6 +492,7 @@ export const getLabyrinthDetails = (): {
       lab: null,
       depth: 5,
       manual: false,
+      offsetStartAndEnd: false,
     };
   }
 
@@ -480,6 +507,7 @@ export const getLabyrinthDetails = (): {
     mazeHeight: labDetails.mazeHeight,
     cha: labDetails.cha,
     name: labDetails.name,
+    offsetStartAndEnd: labDetails.offsetStartAndEnd,
   };
 };
 

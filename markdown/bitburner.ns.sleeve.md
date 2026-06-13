@@ -11,8 +11,3 @@ Namespace for [sleeve](./bitburner.sleeve.md) functions. Contains spoilers.
 ```typescript
 readonly sleeve: Sleeve;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

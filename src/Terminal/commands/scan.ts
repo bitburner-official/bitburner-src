@@ -4,7 +4,7 @@ import { getServerOnNetwork } from "../../Server/ServerHelpers";
 import { IPAddress } from "../../Types/strings";
 import { StdIO } from "../StdIO/StdIO";
 
-export function scan(args: (string | number | boolean)[], currServ: BaseServer, stdIO: StdIO): void {
+export function scan(args: (string | number | boolean)[], currServ: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 0) {
     Terminal.fatal("Incorrect usage of scan command. Usage: scan", stdIO);
     return;

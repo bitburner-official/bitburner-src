@@ -74,7 +74,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer, DarknetServerData } from "@nsdefs";
+import type { NS, RecentScript, ProcessInfo, NSEnums, Server as NSInterfaceServer } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { NetscriptCloud } from "./NetscriptFunctions/Cloud";
 
@@ -96,13 +96,13 @@ import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
 import { hasContractExtension } from "./Paths/ContractFilePath";
-import { getRamCost } from "./Netscript/RamCostGenerator";
+import { getRamCost, RamCostConstants } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
-import { NetscriptDarknet } from "./NetscriptFunctions/Darknet";
+import { getDarknetPropertiesForDeprecationSupport, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { validBitNodes } from "./BitNode/Constants";
 import { isIPAddress } from "./Types/strings";
@@ -117,6 +117,7 @@ import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
+import { setDeprecatedProperties } from "./utils/DeprecationHelper";
 
 export const enums: NSEnums = {
   CityName,
@@ -429,23 +430,20 @@ export const ns: InternalAPI<NSFull> = {
       }
       const str = helpers.argsToString(args);
       const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.fatal(`${ctx.workerScript.name}: ${str}`);
-        return;
+      const color = helpers.getTextColor(str);
+      switch (color) {
+        case "error":
+        case "success":
+        case "warn":
+        case "info": {
+          Terminal[color](`${ctx.workerScript.name}: ${str}`, stdOut);
+          break;
+        }
+        case "primary": {
+          Terminal.print(`${ctx.workerScript.name}: ${str}`, stdOut);
+          break;
+        }
       }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${ctx.workerScript.name}: ${str}`, stdOut);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${ctx.workerScript.name}: ${str}`, stdOut);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${ctx.workerScript.name}: ${str}`, stdOut);
-        return;
-      }
-      Terminal.print(`${ctx.workerScript.name}: ${str}`, stdOut);
     },
   tprintf:
     (ctx) =>
@@ -453,24 +451,20 @@ export const ns: InternalAPI<NSFull> = {
       const format = helpers.string(ctx, "format", _format);
       const str = vsprintf(format, args);
       const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
-
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.fatal(`${str}`);
-        return;
+      const color = helpers.getTextColor(str);
+      switch (color) {
+        case "error":
+        case "success":
+        case "warn":
+        case "info": {
+          Terminal[color](`${str}`, stdOut);
+          break;
+        }
+        case "primary": {
+          Terminal.print(`${str}`, stdOut);
+          break;
+        }
       }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${str}`, stdOut);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${str}`, stdOut);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${str}`, stdOut);
-        return;
-      }
-      Terminal.print(`${str}`, stdOut);
     },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
@@ -677,18 +671,15 @@ export const ns: InternalAPI<NSFull> = {
       }
 
       helpers.log(ctx, () => "About to exit...");
-      const killed = killWorkerScript(ctx.workerScript);
+      killWorkerScript(ctx.workerScript);
 
       if (runOpts.spawnDelay === 0) {
         helpers.log(ctx, () => `Executing '${path}' immediately`);
         spawnCb();
       }
-
-      if (killed) {
-        // This prevents error messages about statements after the spawn()
-        // trying to be executed when the script is dead.
-        throw new ScriptDeath(ctx.workerScript);
-      }
+      // This prevents error messages about statements after the spawn()
+      // trying to be executed when the script is dead.
+      throw new ScriptDeath(ctx.workerScript);
     },
   self: (ctx) => () => {
     const runningScript = helpers.getRunningScript(ctx, ctx.workerScript.pid);
@@ -932,42 +923,22 @@ export const ns: InternalAPI<NSFull> = {
     if (!server) {
       // If the server is offline, return a dummy object with isOnline = false.
       const isIp = isIPAddress(host);
-      return {
-        isOnline: false,
+      const result = {
+        sshPortOpen: false,
+        ftpPortOpen: false,
+        smtpPortOpen: false,
+        httpPortOpen: false,
+        sqlPortOpen: false,
+        organizationName: "",
         ...exampleDarknetServerData,
         hostname: isIp ? "" : host,
         ip: isIp ? host : "",
-      } satisfies DarknetServerData & { isOnline: boolean };
+        isOnline: false,
+      };
+      setDeprecatedProperties(result, getDarknetPropertiesForDeprecationSupport(result));
+      return result satisfies NSInterfaceServer & { isOnline: boolean };
     }
-    if (server instanceof DarknetServer) {
-      return {
-        isOnline: true,
-        hostname: server.hostname,
-        ip: server.ip,
-        hasAdminRights: server.hasAdminRights,
-        isConnectedTo: server.isConnectedTo,
-        cpuCores: server.cpuCores,
-        ramUsed: server.ramUsed,
-        maxRam: server.maxRam,
-        backdoorInstalled: server.backdoorInstalled,
-        depth: server.depth,
-        modelId: server.modelId,
-        hasStasisLink: server.hasStasisLink,
-        blockedRam: server.blockedRam,
-        staticPasswordHint: server.staticPasswordHint,
-        passwordHintData: server.passwordHintData,
-        difficulty: server.difficulty,
-        requiredCharismaSkill: server.requiredCharismaSkill,
-        logTrafficInterval: server.logTrafficInterval,
-        isStationary: server.isStationary,
-        purchasedByPlayer: false,
-      } satisfies DarknetServerData & { isOnline: boolean };
-    }
-    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
-    if (server.serversOnNetwork.length === 0) {
-      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
-    }
-    return {
+    const result = {
       hostname: server.hostname,
       ip: server.ip,
       sshPortOpen: server.sshPortOpen,
@@ -993,6 +964,20 @@ export const ns: InternalAPI<NSFull> = {
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
     } satisfies NSInterfaceServer;
+
+    if (server instanceof DarknetServer) {
+      const resultWithAdditionalProps = {
+        ...result,
+        isOnline: true,
+      };
+      setDeprecatedProperties(resultWithAdditionalProps, getDarknetPropertiesForDeprecationSupport(server));
+      return resultWithAdditionalProps satisfies NSInterfaceServer & { isOnline: boolean };
+    }
+    // Throw if it's an isolated non-dnet server (e.g., pre-TOR darkweb, pre-TRP WD).
+    if (server.serversOnNetwork.length === 0) {
+      throw helpers.errorMessage(ctx, `Server ${host} does not exist.`);
+    }
+    return result;
   },
   getServerMoneyAvailable: (ctx) => (_host?) => {
     const server = helpers.getNormalServer(ctx, _host);
@@ -1508,6 +1493,9 @@ export const ns: InternalAPI<NSFull> = {
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);
+    if (name === "baseCost") {
+      return RamCostConstants.Base;
+    }
     return getRamCost(name.split("."), true);
   },
   tprintRaw: (ctx) => (value) => {
@@ -1541,7 +1529,7 @@ setRemovedFunctions(ns, {
   getServerRam: { version: "2.2.0", replacement: "getServerMaxRam and getServerUsedRam" },
   nFormat: {
     version: "3.0.0",
-    replacement: "ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions",
+    replacement: "ns.format.number(), ns.format.ram(), ns.format.percent(), or JS built-in objects/functions",
   },
   getTimeSinceLastAug: {
     version: "3.0.0",

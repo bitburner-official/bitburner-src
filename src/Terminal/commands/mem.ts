@@ -4,7 +4,7 @@ import { Settings } from "../../Settings/Settings";
 import { BaseServer } from "../../Server/BaseServer";
 import { StdIO } from "../StdIO/StdIO";
 
-export function mem(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function mem(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   try {
     if (args.length !== 1 && args.length !== 3) {
       Terminal.fatal("Incorrect usage of mem command. usage: mem [scriptname] [-t] [number threads]", stdIO);

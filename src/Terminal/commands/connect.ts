@@ -5,7 +5,7 @@ import { GetServer } from "../../Server/AllServers";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { StdIO } from "../StdIO/StdIO";
 
-export function connect(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function connect(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   // Disconnect from current server in Terminal and connect to new one
   if (args.length !== 1) {
     Terminal.fatal("Incorrect usage of connect command. Usage: connect [hostname]", stdIO);

@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { formatRam } from "../../ui/formatNumber";
 import { StdIO } from "../StdIO/StdIO";
 
-export function top(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function top(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 0) {
     Terminal.fatal("Incorrect usage of top command. Usage: top", stdIO);
     return;

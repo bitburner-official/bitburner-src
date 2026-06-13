@@ -4,7 +4,7 @@ import { findRunningScripts } from "../../Script/ScriptHelpers";
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
 import { StdIO } from "../StdIO/StdIO";
 
-export function check(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function check(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length < 1) {
     Terminal.fatal(`Incorrect number of arguments. Usage: check [script] [arg1] [arg2]...`, stdIO);
   } else {

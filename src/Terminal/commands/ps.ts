@@ -4,7 +4,7 @@ import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
 import libarg from "arg";
 import { StdIO } from "../StdIO/StdIO";
 
-export function ps(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function ps(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   let flags: {
     "--grep": string;
   };

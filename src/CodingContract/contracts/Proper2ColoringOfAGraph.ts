@@ -1,4 +1,4 @@
-import { CodingContractTypes, removeBracketsFromArrayString } from "../ContractTypes";
+import { CodingContractTypes, parseArrayString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
 export const proper2ColoringOfAGraph: Pick<CodingContractTypes, CodingContractName.Proper2ColoringOfAGraph> = {
@@ -121,14 +121,12 @@ export const proper2ColoringOfAGraph: Pick<CodingContractTypes, CodingContractNa
       return data[1].every(([a, b]) => answer[a] !== answer[b]);
     },
     convertAnswer: (ans) => {
-      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
-      if (sanitized === "") return [];
-      const arr = sanitized.split(",").map((s) => parseInt(s, 10));
-      // An inline function is needed here, so that TS knows this returns true if it matches the type
-      if (((a): a is (1 | 0)[] => !a.some((n) => n !== 1 && n !== 0))(arr)) return arr;
-      return null;
+      const parsedAnswer = parseArrayString(ans.replace(/\s/g, ""));
+      if (!proper2ColoringOfAGraph[CodingContractName.Proper2ColoringOfAGraph].validateAnswer(parsedAnswer)) {
+        return null;
+      }
+      return parsedAnswer;
     },
-    validateAnswer: (ans): ans is (1 | 0)[] =>
-      typeof ans === "object" && Array.isArray(ans) && !ans.some((a) => a !== 1 && a !== 0),
+    validateAnswer: (ans): ans is (1 | 0)[] => Array.isArray(ans) && !ans.some((a) => a !== 1 && a !== 0),
   },
 };

@@ -78,7 +78,7 @@ export function containsAllStrings(arr: string[]): boolean {
 }
 
 // Generates a random alphanumeric string with N characters
-export function generateRandomString(n: number): string {
+export function getRandomAlphanumericString(n: number): string {
   let str = "";
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -104,4 +104,19 @@ export function getKeyFromReactElements(a: string | React.JSX.Element, b: string
   const keyOfA = typeof a === "string" ? a : a.key ?? "";
   const keyOfb = typeof b === "string" ? b : b.key ?? "";
   return keyOfA + keyOfb;
+}
+
+const graphemeSegmenter = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+
+/**
+ * input.split("") operates on UTF-16 code units and can break surrogate pairs.
+ * For example, 'a🅱️b' is 'a\uD83C\uDD71\uFE0Fb'. A naive reverse yields 'b\uFE0F\uDD71\uD83Ca', which is ill-formed
+ * UTF-16 and not 'b🅱️a' as expected.
+ * Passing such a string to encodeURIComponent may throw a URIError (e.g. in Monaco editor code when processing model
+ * ids).
+ */
+export function safelyReverseString(input: string): string {
+  return Array.from(graphemeSegmenter.segment(input), (s) => s.segment)
+    .reverse()
+    .join("");
 }

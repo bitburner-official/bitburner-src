@@ -234,7 +234,7 @@ BitNode 14 enhances IPvGO. IPvGO is _not_ locked behind this BitNode. It's avail
 
 BitNode 9 and BitNode 13 unlock HackNet server and Stanek's Gift, respectively. They are powerful mechanics that buff other mechanics, but these BitNodes are extremely hard. You should prepare carefully before entering them.
 
-BitNode 15 enhances the dark net. Darknet is _not_ locked behind this BitNode. It's available at the start of the game. You can unlock it by buying the `DarkscapeNavigator.exe` from the terminal once you have a TOR router. If you haven't experimented with the mechanic, you should do so before entering BN15. You _can_ complete BN15 with a simple script that uses `ns.dnet.packetCapture` to get passwords and copies itself around, but it will be much slower than going through and solving a good fraction of the authentication puzzles.
+BitNode 15 enhances the dark net. Darknet is _not_ locked behind this BitNode. It's available at the start of the game. You can unlock it by buying the `DarkscapeNavigator.exe` from the terminal once you have a TOR router. If you haven't experimented with the mechanic, you should do so before entering BN15. You _can_ complete BN15 with a simple script that only solves a few of the basic server puzzle types to get passwords and copies itself around, but it will be much slower than going through and solving a good fraction of the authentication puzzles.
 
 ## Challenging BitNodes
 

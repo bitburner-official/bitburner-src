@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
+import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { FactionName, FactionWorkType } from "@enums";
 import { Factions } from "../../../Faction/Factions";
 import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
@@ -14,10 +14,10 @@ interface SleeveFactionWorkParams {
   factionName: FactionName;
 }
 
-export const isSleeveFactionWork = (w: SleeveWorkClass | null): w is SleeveFactionWork =>
+export const isSleeveFactionWork = (w: SleeveBaseWork | null): w is SleeveFactionWork =>
   w !== null && w.type === SleeveWorkType.FACTION;
 
-export class SleeveFactionWork extends SleeveWorkClass {
+export class SleeveFactionWork extends SleeveBaseWork {
   type: SleeveWorkType.FACTION = SleeveWorkType.FACTION;
   factionWorkType: FactionWorkType;
   factionName: FactionName;
@@ -56,6 +56,7 @@ export class SleeveFactionWork extends SleeveWorkClass {
       type: SleeveWorkType.FACTION as const,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,
+      nextCompletion: this.nextCompletion,
     };
   }
 

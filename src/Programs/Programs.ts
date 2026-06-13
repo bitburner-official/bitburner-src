@@ -107,7 +107,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     nsMethod: "ftpcrack",
     create: {
       level: 100,
-      tooltip: "This program cracks open FTP ports",
+      tooltip: "This program cracks open FTP ports by exploiting weak credentials",
       req: requireHackingLevel(100),
       time: CONSTANTS.MillisecondsPerHalfHour,
     },
@@ -157,7 +157,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     nsMethod: "httpworm",
     create: {
       level: 500,
-      tooltip: "This virus opens up HTTP ports",
+      tooltip: "This virus opens up HTTP ports by exploiting web servers' vulnerabilities",
       req: requireHackingLevel(500),
       time: CONSTANTS.MillisecondsPer4Hours,
     },
@@ -182,7 +182,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     nsMethod: "sqlinject",
     create: {
       level: 750,
-      tooltip: "This virus opens SQL ports",
+      tooltip: "This virus opens SQL ports by injecting malicious code into databases",
       req: requireHackingLevel(750),
       time: CONSTANTS.MillisecondsPer8Hours,
     },

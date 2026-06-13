@@ -11,14 +11,15 @@ import { BaseServer } from "../Server/BaseServer";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { getRandomAlphanumericString } from "../utils/StringHelperFunctions";
 
 export function tryGeneratingRandomContract(numberOfTries: number): void {
   /**
-   * We try to generate a contract every 10 minutes. 525600 is the number of tries in 10 years. There is no reason to
-   * support anything above that. We tested this number (525600) on a very old machine. It took only 300-350ms to
-   * loop 525600 times and generate ~9137 contracts on that machine.
+   * We try to generate contracts three times every 10 minutes. 1576800 is the number of tries in 10 years. There is no
+   * reason to support anything above that. We tested this number (1576800) on a very old machine. It took only ~300ms
+   * to loop 1576800 times and generate ~10103 contracts on that machine.
    */
-  numberOfTries = clampNumber(Math.floor(numberOfTries), 0, 525600);
+  numberOfTries = clampNumber(Math.floor(numberOfTries), 0, 1576800);
   if (numberOfTries < 1) {
     return;
   }
@@ -46,19 +47,19 @@ export function tryGeneratingRandomContract(numberOfTries: number): void {
      * - If the offline time is unusually large (being offline for years, editing save file, tampering function prototype,
      * etc.), the game will not hang when it tries to generate contracts.
      *
-     * These are some data for reference:
-     * - 1 month: ~1077 contracts.
-     * - 3 months: ~3157 contracts.
-     * - 6 months: ~5296 contracts.
-     * - 12 months: ~6678 contracts.
-     * - 2 years: ~7570 contracts.
-     * - 5 years: ~8504 contracts.
-     * - 10 years: ~9137 contracts.
-     * - 25 years: ~9936 contracts.
-     * - 50 years: ~10526 contracts.
+     * These are some data points for reference:
+     * - 1 month: ~3157 contracts.
+     * - 3 months: ~6198 contracts.
+     * - 6 months: ~7231 contracts.
+     * - 12 months: ~8003 contracts.
+     * - 2 years: ~8687 contracts.
+     * - 5 years: ~9506 contracts.
+     * - 10 years: ~10103 contracts.
+     * - 25 years: ~10879 contracts.
+     * - 50 years: ~11461 contracts.
      *
-     * Those numbers mean: If the player does not have any contracts and is online (or loads a save file with equivalent
-     * offline time) for X months/years, they will have ~Y contracts.
+     * Those numbers mean that if the player does not have any contracts and is online (or loads a save file with
+     * equivalent offline time) for X months/years, they will have ~Y contracts.
      */
     if (random > 100 / (399 + Math.exp(0.0012 * currentNumberOfContracts))) {
       continue;
@@ -133,7 +134,7 @@ interface IGenerateContractParams {
   rewardScaling?: number;
 }
 
-export function generateContract(params: IGenerateContractParams): void {
+export function generateContract(params: IGenerateContractParams): ContractFilePath | null {
   // Problem Type
   let problemType;
   const problemTypes = Object.keys(CodingContractTypes);
@@ -157,15 +158,16 @@ export function generateContract(params: IGenerateContractParams): void {
     server = getRandomServer();
   }
   if (server === null) {
-    return;
+    return null;
   }
 
   const filename = params.filename ? params.filename : getRandomFilename(server);
   if (filename == null) {
-    return;
+    return null;
   }
   const contract = new CodingContract(filename, problemType, reward, params.rewardScaling);
   server.addContract(contract);
+  return contract.fn;
 }
 
 function getRandomProblemType(maxDif = 10): CodingContractName {
@@ -188,38 +190,18 @@ export function getRandomReward(): ICodingContractReward {
   return { type: getRandomIntInclusive(0, validRewardTypes.length - 1) };
 }
 
-function getRandomServer(): BaseServer | null {
-  const servers = GetAllServers().filter((server: BaseServer) => server.serversOnNetwork.length !== 0);
+export function getRandomServer(): BaseServer | null {
+  const servers = GetAllServers().filter(
+    (server: BaseServer) =>
+      server instanceof Server &&
+      !server.purchasedByPlayer &&
+      server.hostname !== SpecialServers.WorldDaemon &&
+      server.serversOnNetwork.length !== 0,
+  );
   if (servers.length === 0) {
     return null;
   }
-  let randIndex = getRandomIntInclusive(0, servers.length - 1);
-  let randServer = servers[randIndex];
-
-  // An infinite loop shouldn't ever happen, but to be safe we'll use
-  // a for loop with a limited number of tries
-  for (let i = 0; i < 200; ++i) {
-    if (
-      randServer instanceof Server &&
-      !randServer.purchasedByPlayer &&
-      randServer.hostname !== SpecialServers.WorldDaemon
-    ) {
-      break;
-    }
-    randIndex = getRandomIntInclusive(0, servers.length - 1);
-    randServer = servers[randIndex];
-  }
-
-  return randServer;
-}
-
-function getRandomAlphanumericString(length: number) {
-  const alphanumericChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < length; ++i) {
-    result += alphanumericChars.charAt(Math.random() * alphanumericChars.length);
-  }
-  return result;
+  return servers[getRandomIntInclusive(0, servers.length - 1)];
 }
 
 /**

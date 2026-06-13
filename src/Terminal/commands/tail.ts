@@ -8,7 +8,7 @@ import { RunningScript } from "../../Script/RunningScript";
 import { matchScriptPathExact } from "../../utils/helpers/scriptKey";
 import { StdIO } from "../StdIO/StdIO";
 
-export function tail(commandArray: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function tail(commandArray: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   try {
     if (commandArray.length < 1) {
       Terminal.fatal("Incorrect number of arguments. Usage: tail [pid] or tail [scriptname] [arg1] [arg2]...");

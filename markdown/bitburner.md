@@ -123,7 +123,7 @@ Default value:
 
 - All boolean options: false
 
-If you specify intelligenceOverride, it must be a non-negative integer.
+If you specify intelligenceOverride, it must be a positive integer.
 
 
 </td></tr>
@@ -382,12 +382,12 @@ Instability of the darknet caused by excessive backdoor-ing of servers.
 </td></tr>
 <tr><td>
 
-[DarknetServerData](./bitburner.darknetserverdata.md)
+[DarknetServerDetails](./bitburner.darknetserverdetails.md)
 
 
 </td><td>
 
-Darknet server data.
+Details about a darknet server
 
 
 </td></tr>
@@ -399,6 +399,17 @@ Darknet server data.
 </td><td>
 
 Corporation division
+
+
+</td></tr>
+<tr><td>
+
+[EditorOptions](./bitburner.editoroptions.md)
+
+
+</td><td>
+
+Options for opening the code editor
 
 
 </td></tr>
@@ -1114,6 +1125,17 @@ Player must have killed at least this many people.
 </td></tr>
 <tr><td>
 
+[PlayerBaseTask](./bitburner.playerbasetask.md)
+
+
+</td><td>
+
+Base interface of all player tasks.
+
+
+</td></tr>
+<tr><td>
+
 [ProcessInfo](./bitburner.processinfo.md)
 
 
@@ -1210,12 +1232,11 @@ A server. Not all servers have all of these properties - optional properties are
 </td></tr>
 <tr><td>
 
-[ServerAuthDetails](./bitburner.serverauthdetails.md)
+[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
 
 
 </td><td>
 
-Details about a server's authentication schema
 
 
 </td></tr>
@@ -1275,7 +1296,97 @@ Sleeve API
 </td></tr>
 <tr><td>
 
+[SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveClassTask](./bitburner.sleeveclasstask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveCompanyTask](./bitburner.sleevecompanytask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveCrimeTask](./bitburner.sleevecrimetask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveFactionTask](./bitburner.sleevefactiontask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveInfiltrateTask](./bitburner.sleeveinfiltratetask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [SleevePerson](./bitburner.sleeveperson.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveRecoveryTask](./bitburner.sleeverecoverytask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveSupportTask](./bitburner.sleevesupporttask.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SleeveSynchroTask](./bitburner.sleevesynchrotask.md)
 
 
 </td><td>
@@ -1628,6 +1739,16 @@ Skill names type of Bladeburner
 <tr><td>
 
 [CacheResult](./bitburner.cacheresult.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CacheReward](./bitburner.cachereward.md)
 
 
 </td><td>
@@ -2190,106 +2311,6 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 <tr><td>
 
 [ScriptArg](./bitburner.scriptarg.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveClassTask](./bitburner.sleeveclasstask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveCompanyTask](./bitburner.sleevecompanytask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveCrimeTask](./bitburner.sleevecrimetask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveFactionTask](./bitburner.sleevefactiontask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveInfiltrateTask](./bitburner.sleeveinfiltratetask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveRecoveryTask](./bitburner.sleeverecoverytask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveSupportTask](./bitburner.sleevesupporttask.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SleeveSynchroTask](./bitburner.sleevesynchrotask.md)
 
 
 </td><td>

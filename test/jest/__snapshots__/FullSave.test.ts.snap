@@ -75,6 +75,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "bladeburner": {
       "ctor": "Bladeburner",
       "data": {
+        "_teamSize": 0,
         "action": null,
         "actionTimeCurrent": 0,
         "actionTimeOverflow": 0,
@@ -84,6 +85,134 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "automateEnabled": false,
         "automateThreshHigh": 0,
         "automateThreshLow": 0,
+        "blackOperations": {
+          "Operation Annihilus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Archangel": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Ares": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Centurion": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Daedalus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Deckard": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Hyron": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Ion Storm": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Juggernaut": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation K": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Morpheus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Red Dragon": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Shoulder of Orion": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Titan": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Typhoon": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Tyrell": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Ultron": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Vindictus": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Wallace": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation X": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+          "Operation Zero": {
+            "ctor": "BlackOperation",
+            "data": {
+              "teamCount": 0,
+            },
+          },
+        },
         "cities": {
           "Aevum": {
             "ctor": "City",
@@ -281,7 +410,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "staminaBonus": 0,
         "storedCycles": 0,
         "teamLost": 0,
-        "teamSize": 0,
         "totalSkillPoints": 666,
       },
     },

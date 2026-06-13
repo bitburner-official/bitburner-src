@@ -1,7 +1,7 @@
 {
   "name": "bitburner",
   "license": "SEE LICENSE IN license.txt",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "main": "electron-main.js",
   "author": {
     "name": "Daniel Xie, hydroflame, et al."
@@ -18,7 +18,7 @@
     "@mui/material": "^5.18.0",
     "@mui/styles": "^5.18.0",
     "@mui/system": "^5.18.0",
-    "@swc/wasm-web": "^1.9.3",
+    "@swc/wasm-web": "^1.15.33",
     "@types/estree": "^1.0.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "acorn": "^8.11.3",
@@ -30,6 +30,7 @@
     "clsx": "^1.2.1",
     "convert-source-map": "^2.0.0",
     "date-fns": "^2.30.0",
+    "expr-eval-fork": "^3.0.3",
     "fast-dice-coefficient": "1.0.3",
     "hast-util-from-dom": "^5.0.1",
     "hast-util-to-text": "^4.0.2",
@@ -56,20 +57,20 @@
   "description": "A cyberpunk-themed incremental game",
   "devDependencies": {
     "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
+    "@babel/preset-env": "^7.29.5",
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@electron/packager": "^18.4.4",
-    "@mathjax/src": "^4.1.0",
+    "@mathjax/src": "^4.1.2",
     "@microsoft/api-documenter": "^7.26.34",
-    "@microsoft/api-extractor": "^7.52.13",
+    "@microsoft/api-extractor": "^7.58.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
-    "@swc/core": "^1.12.14",
+    "@swc/core": "^1.15.33",
     "@types/babel__standalone": "^7.1.9",
     "@types/bcryptjs": "^2.4.4",
     "@types/convert-source-map": "^2.0.3",
     "@types/jest": "^30.0.0",
-    "@types/lodash": "^4.17.20",
+    "@types/lodash": "^4.17.24",
     "@types/react": "^17.0.89",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^17.0.26",
@@ -82,7 +83,7 @@
     "babel-plugin-transform-barrels": "^1.0.17",
     "css-loader": "^7.1.2",
     "csstype": "3.1.3",
-    "electron": "^38.4.0",
+    "electron": "^41.4.0",
     "eslint": "^8.52.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -90,8 +91,7 @@
     "html-webpack-plugin": "^5.6.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "jsdom": "^26.1.0",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "monaco-editor": "^0.55.1",
     "monaco-editor-webpack-plugin": "^7.1.1",
     "prettier": "^2.8.8",
@@ -99,13 +99,16 @@
     "style-loader": "^4.0.0",
     "tinybench": "^6.0.0",
     "typescript": "^5.9.3",
-    "webpack": "^5.105.4",
-    "webpack-bundle-analyzer": "^5.2.0",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2",
+    "webpack": "^5.106.2",
+    "webpack-bundle-analyzer": "^5.3.0",
+    "webpack-cli": "^7.0.2",
+    "webpack-dev-server": "^5.2.4",
     "xml-formatter": "^3.6.7"
   },
   "overrides": {
+    "jest-environment-jsdom": {
+      "jsdom": "^26.1.0"
+    },
     "react-syntax-highlighter": {
       "prismjs": "1.30.0"
     }

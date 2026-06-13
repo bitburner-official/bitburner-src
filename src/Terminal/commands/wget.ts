@@ -1,11 +1,16 @@
 import { Terminal } from "../../Terminal";
+import { type TerminalAction, Cancellation } from "../TerminalAction";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { StdIO } from "../StdIO/StdIO";
 
 // TODO-FICO: unit tests
-export function wget(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function wget(
+  args: (string | number | boolean)[],
+  server: BaseServer,
+  stdIO: StdIO,
+): undefined | TerminalAction {
   if (args.length === 2 && stdIO.stdout) {
     Terminal.fatal(
       "Incorrect use of wget command. Either specify a destination file or redirect the output with a pipe, not both.",
@@ -27,10 +32,17 @@ export function wget(args: (string | number | boolean)[], server: BaseServer, st
     return;
   }
 
-  fetch(source)
+  const abort = new AbortController();
+  let cancelled = false;
+  const cancel = () => {
+    cancelled = true;
+    abort.abort("Request cancelled");
+  };
+
+  const p = fetch(source, { signal: abort.signal })
     .then(async (response) => {
       if (response.status !== 200) {
-        Terminal.fatal(`wget failed. HTTP code: ${response.status}.`, stdIO);
+        Terminal.fatal(`wget failed. HTTP code: ${response.status}.`);
         return;
       }
       const content = await response.text();
@@ -52,6 +64,22 @@ export function wget(args: (string | number | boolean)[], server: BaseServer, st
     })
     .catch((reason) => {
       // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
-      Terminal.fatal(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`, stdIO);
+      Terminal.fatal(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`);
+      if (cancelled) {
+        // We need to propogate a Cancellation error to abort any chained
+        // commands higher up.
+        throw new Cancellation("wget");
+      }
     });
+
+  let state = 0;
+  return {
+    cancel: cancel,
+    finished: p,
+    getProgressText: () => {
+      const spinChar = "\\|/-"[state];
+      state = (state + 1) % 4;
+      return `[${spinChar.repeat(50)}]`;
+    },
+  };
 }

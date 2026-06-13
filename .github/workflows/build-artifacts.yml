@@ -2,7 +2,17 @@ name: Build artifacts
 
 on:
   workflow_dispatch:
+    inputs:
+      git-sha:
+        description: "Commit SHA-1 to checkout"
+        required: false
+        default: ""
   workflow_call:
+    inputs:
+      git-sha:
+        type: string
+        required: false
+        default: ""
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -12,9 +22,11 @@ jobs:
     name: Build Windows
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.git-sha || inputs.git-sha || github.sha }}
       - name: Use Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: "npm"
@@ -27,14 +39,14 @@ jobs:
         shell: bash
         run: npm run electron-win
       - name: Upload x64 artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bitburner-win32-x64
           include-hidden-files: true
           path: .build/bitburner-win32-x64/*
           if-no-files-found: error
       - name: Upload arm64 artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bitburner-win32-arm64
           include-hidden-files: true
@@ -45,9 +57,11 @@ jobs:
     name: Build Linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.git-sha || inputs.git-sha || github.sha }}
       - name: Use Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: "npm"
@@ -58,14 +72,14 @@ jobs:
       - name: Build the Electron app
         run: npm run electron-linux
       - name: Upload x64 artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bitburner-linux-x64
           include-hidden-files: true
           path: .build/bitburner-linux-x64/*
           if-no-files-found: error
       - name: Upload arm64 artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bitburner-linux-arm64
           include-hidden-files: true
@@ -76,9 +90,11 @@ jobs:
     name: Build macOS
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.git-sha || inputs.git-sha || github.sha }}
       - name: Use Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: "npm"
@@ -89,7 +105,7 @@ jobs:
       - name: Build the Electron app
         run: npm run electron-mac
       - name: Upload darwin-universal artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bitburner-darwin-universal
           include-hidden-files: true

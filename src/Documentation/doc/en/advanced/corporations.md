@@ -77,5 +77,4 @@ The documentation is a bit long and intimidating at first glance, but you don't 
   - Use mathematical library
     - Ceres Solver
   - Noodles trick
-  - "sudo.Assist" research
   - Dummy division

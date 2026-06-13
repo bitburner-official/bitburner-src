@@ -11,8 +11,3 @@ Namespace for [Stanek](./bitburner.stanek.md) functions. Contains spoilers.
 ```typescript
 readonly stanek: Stanek;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

@@ -56,5 +56,5 @@ Returns an array with the hostnames or IP addresses of all of the cloud servers 
 
 ## Remarks
 
-1.05 GB
+RAM cost: 1.05 GB
 

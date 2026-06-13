@@ -40,11 +40,12 @@ export const DarknetState = {
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null)),
 
   labyrinth: null as string[] | null,
+  labEndpoint: null as [number, number] | null,
   /**
    * This property may contain data of dead PIDs. Call cleanUpLabyrinthLocations before using this property if you
    * want to get data of alive PIDs.
    */
-  labLocations: { "-1": [1, 1] } as Record<number, [number, number] | undefined>,
+  labLocations: {} as Record<number, [number, number] | undefined>,
 
   lastPhishingCacheTime: new Date(),
   lastCctRewardTime: new Date(),
@@ -90,7 +91,7 @@ export function prestigeDarknetState(prestigeSourceFile: boolean): void {
   DarknetState.cyclesSinceLastMutation = 0;
   DarknetState.Network = new Array(MAX_NET_DEPTH).fill(null).map(() => new Array<null>(NET_WIDTH).fill(null));
   DarknetState.labyrinth = null;
-  DarknetState.labLocations = { "-1": [1, 1] };
+  DarknetState.labLocations = {};
   DarknetState.lastPhishingCacheTime = new Date();
   DarknetState.lastStormTime = new Date();
   DarknetState.stockPromotions = {};

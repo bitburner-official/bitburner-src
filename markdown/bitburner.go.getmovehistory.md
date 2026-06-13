@@ -8,19 +8,15 @@ Returns all the prior moves in the current game, as an array of simple board sta
 
 For example, a single 5x5 prior move board might look like this:
 
-\[
-
-"XX.O.",
-
-"X..OO",
-
-".XO..",
-
-"XXO.\#",
-
-".XO.\#",
-
-\]
+```
+[
+  "XX.O.",
+  "X..OO",
+  ".XO..",
+  "XXO.#",
+  ".XO.#",
+]
+```
 
 **Signature:**
 
@@ -30,4 +26,8 @@ getMoveHistory(): string[][];
 **Returns:**
 
 string\[\]\[\]
+
+## Remarks
+
+RAM cost: 0 GB
 

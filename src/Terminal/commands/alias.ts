@@ -3,7 +3,7 @@ import { parseAliasDeclaration, printAliases } from "../../Alias";
 import { BaseServer } from "../../Server/BaseServer";
 import { StdIO } from "../StdIO/StdIO";
 
-export function alias(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function alias(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length === 0) {
     printAliases(stdIO);
     return;

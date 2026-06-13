@@ -9,9 +9,9 @@ Company Work
 **Signature:**
 
 ```typescript
-export interface CompanyWorkTask extends BaseTask 
+interface CompanyWorkTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 

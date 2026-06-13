@@ -14,7 +14,7 @@ import { mergeMultipliers } from "../PersonObjects/Multipliers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { prestigeWorkerScripts } from "../NetscriptWorker";
 
-const soaAugmentationNames = [
+export const soaAugmentationNames = [
   AugmentationName.BeautyOfAphrodite,
   AugmentationName.ChaosOfDionysus,
   AugmentationName.FloodOfPoseidon,

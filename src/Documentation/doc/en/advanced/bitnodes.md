@@ -27,6 +27,10 @@ Furthermore, some BitNodes introduce new content and mechanics.
 For example, there is one BitNode that grants access to the [Singularity API](../../../../../markdown/bitburner.singularity.md).
 There is another BitNode in which you can manage a [Gang](gang.md) to earn money and [Reputation](../basic/reputation.md).
 
+After entering a BitNode, if you want to jump to another BitNode immediately, you can run `b1t_flum3.exe` to return to
+the BitVerse screen.
+Note that if you leave the current BitNode in this way, you will lose all progress made in that BitNode.
+
 ## How to destroy a BitNode
 
 Initially, the only way to destroy a BitNode is to join Daedalus.
@@ -153,7 +157,7 @@ You are trying to make a name for yourself as an up-and-coming hedge fund manage
 
 In this BitNode:
 
-- You start with $250 million
+- Your starting money is 250 million.
 - You start with a WSE membership and access to the TIX API
 - You are able to short stocks and place different types of orders (limit/stop)
 
@@ -196,7 +200,7 @@ achieved immortality - at least for those that could afford it.
 
 This BitNode unlocks Sleeve and Grafting technology:
 
-- Sleeve: Duplicate your consciousness into Synthoids, allowing you to perform different tasks asynchronously. You cannot buy Sleeves outside this BitNode.
+- Sleeve: Duplicate your consciousness into Synthoids, allowing you to perform different tasks asynchronously. You cannot buy Sleeves or upgrade them outside this BitNode.
 - Grafting: Visit VitaLife in New Tokyo to get access to this technology. It allows you to graft augmentations, which is an alternative way of installing augmentations.
 
 Destroying this BitNode will give you Source-File 10, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File unlocks Sleeve and Grafting API in other BitNodes. Each level of this Source-File also grants you a Sleeve.

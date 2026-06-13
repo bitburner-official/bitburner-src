@@ -3,7 +3,7 @@ import { TerminalHelpText, HelpTexts } from "../HelpText";
 import { BaseServer } from "../../Server/BaseServer";
 import { StdIO } from "../StdIO/StdIO";
 
-export function help(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function help(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 0 && args.length !== 1) {
     Terminal.fatal("Incorrect usage of help command. Usage: help", stdIO);
     return;

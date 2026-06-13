@@ -55,5 +55,15 @@ module.exports = {
         "@typescript-eslint/prefer-literal-enum-member": ["off"],
       },
     },
+    /**
+     * TypeScript requires the "var" keyword within "declare global" to correctly merge variables into the global
+     * namespace.
+     */
+    {
+      files: ["**/*.d.ts"],
+      rules: {
+        "no-var": "off",
+      },
+    },
   ],
 };

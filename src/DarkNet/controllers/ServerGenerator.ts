@@ -210,7 +210,7 @@ export const getTimingAttackConfig = (difficulty: number): ServerConfig => {
     "I spent some time on it, but that's not the password",
   ];
   const alphanumeric = difficulty > 16 && Math.random() < 0.3;
-  const length = (alphanumeric ? 0 : 3) + difficulty / 4;
+  const length = Math.min((alphanumeric ? 0 : 3) + difficulty / 4, 8);
   return {
     modelId: ModelIds.TimingAttack,
     password: getPassword(length, alphanumeric),
@@ -411,7 +411,7 @@ export const getKingOfTheHillConfig = (difficulty: number): ServerConfig => {
 export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.packetSniffer,
-    password: getPassword(3 + difficulty / 3, difficulty > 8),
+    password: getPassword(3 + Math.random() * 6, difficulty > 8),
     staticPasswordHint: "(I'm busy browsing social media at the cafe)",
   };
 };
@@ -514,7 +514,7 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
 
 export const generateSimpleArithmeticExpression = (difficulty: number): string => {
   const operators = ["+", "-", "*", "/"];
-  const operatorCount = Math.floor(difficulty / 4);
+  const operatorCount = Math.max(Math.floor(difficulty / 4), 1);
   const expression = [];
   for (let i = 0; i < operatorCount; i++) {
     expression.push(Math.ceil(Math.random() * 98));

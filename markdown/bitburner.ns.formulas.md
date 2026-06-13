@@ -11,8 +11,3 @@ Namespace for [formulas](./bitburner.formulas.md) functions.
 ```typescript
 readonly formulas: Formulas;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

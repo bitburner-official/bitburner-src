@@ -30,7 +30,7 @@ import { StdIO } from "../StdIO/StdIO";
 import { DarknetServer } from "../../Server/DarknetServer";
 import type { CacheFilePath } from "../../Paths/CacheFilePath";
 
-export function ls(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function ls(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   enum FileType {
     Folder,
     Message,
@@ -76,7 +76,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer, stdI
   const filter = flags["--grep"] ?? "";
 
   const numArgs = args.length;
-  function incorrectUsage(): void {
+  function incorrectUsage(): undefined {
     Terminal.fatal("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]", stdIO);
   }
 

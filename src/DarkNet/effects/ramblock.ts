@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { addClue } from "./effects";
-import { formatNumber } from "../../ui/formatNumber";
+import { formatNumber, formatRam } from "../../ui/formatNumber";
 import { logger } from "./offlineServerHandling";
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
 import type { DarknetServer } from "../../Server/DarknetServer";
@@ -8,10 +8,12 @@ import { addCacheToServer } from "./cacheFiles";
 import { DarknetState } from "../models/DarknetState";
 import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 import { CompletedProgramName } from "@enums";
-import type { DarknetServerData, Person as IPerson } from "@nsdefs";
+import type { Person as IPerson, DarknetServerDetails } from "@nsdefs";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { ResponseCodeEnum } from "../Enums";
 import { isLabyrinthServer } from "./labyrinth";
+import { roundToTwo } from "../../utils/helpers/roundToTwo";
+import type { DarknetServerData } from "../utils/darknetServerUtils";
 
 /*
  * Handles the effects of removing some blocked RAM from a Darknet server.
@@ -21,7 +23,7 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   const difficulty = server.difficulty + 1;
 
   const ramBlockRemoved = getRamBlockRemoved(server, threads);
-  server.blockedRam -= ramBlockRemoved;
+  server.blockedRam = roundToTwo(server.blockedRam - ramBlockRemoved);
   server.updateRamUsed(server.ramUsed - ramBlockRemoved);
 
   if (server.blockedRam <= 0) {
@@ -30,10 +32,10 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   const xpGained = Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty;
   Player.gainCharismaExp(xpGained);
 
-  const result = `Liberated ${formatNumber(
+  const result = `Liberated ${formatRam(
     ramBlockRemoved,
     4,
-  )}gb of RAM from the server owner's processes. (Gained ${formatNumber(xpGained, 1)} cha xp.)`;
+  )} of RAM from the server owner's processes. (Gained ${formatNumber(xpGained, 1)} cha xp.)`;
   logger(ctx)(result);
   return {
     success: true,
@@ -66,13 +68,17 @@ export const handleRamBlockClearedRewards = (server: DarknetServer) => {
 /*
  * Calculates the amount of RAM block that is removed from a Darknet server, based on the number of threads and the player's charisma.
  */
-export const getRamBlockRemoved = (darknetServerData: DarknetServerData, threads = 1, player: IPerson = Player) => {
+export const getRamBlockRemoved = (
+  darknetServerData: DarknetServerData | DarknetServerDetails,
+  threads = 1,
+  player: IPerson = Player,
+) => {
   const difficulty = darknetServerData.difficulty;
   const remainingRamBlock = darknetServerData.blockedRam;
   const charismaFactor = 1 + player.skills.charisma / 100;
   const difficultyFactor = 2 * 0.92 ** (difficulty + 1);
   const baseAmount = 0.02;
-  return clampNumber(baseAmount * difficultyFactor * threads * charismaFactor, 0, remainingRamBlock);
+  return roundToTwo(clampNumber(baseAmount * difficultyFactor * threads * charismaFactor, 0, remainingRamBlock));
 };
 
 /*
@@ -97,8 +103,8 @@ export const getRamBlock = (maxRam: number): number => {
   }
 
   if (maxRam <= 64) {
-    return [16, 32, maxRam - 8][Math.floor(Math.random() * 3)];
+    return roundToTwo([16, 32, maxRam - 8][Math.floor(Math.random() * 3)]);
   }
 
-  return [maxRam, maxRam - 8, maxRam - 64, maxRam / 2][Math.floor(Math.random() * 4)];
+  return roundToTwo([maxRam, maxRam - 8, maxRam - 64, maxRam / 2][Math.floor(Math.random() * 4)]);
 };

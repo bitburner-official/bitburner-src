@@ -2,19 +2,170 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SimpleOpponentStats](./bitburner.simpleopponentstats.md)
 
-## SimpleOpponentStats type
+## SimpleOpponentStats interface
 
 
 **Signature:**
 
 ```typescript
-type SimpleOpponentStats = {
-  wins: number;
-  losses: number;
-  winStreak: number;
-  highestWinStreak: number;
-  rep: number;
-  bonusPercent: number;
-  bonusDescription: string;
-};
+interface SimpleOpponentStats 
 ```
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[bonusDescription](./bitburner.simpleopponentstats.bonusdescription.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Description of stat boost
+
+
+</td></tr>
+<tr><td>
+
+[bonusPercent](./bitburner.simpleopponentstats.bonuspercent.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Stat boost
+
+
+</td></tr>
+<tr><td>
+
+[highestWinStreak](./bitburner.simpleopponentstats.highestwinstreak.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Highest winstreak since last reset
+
+
+</td></tr>
+<tr><td>
+
+[losses](./bitburner.simpleopponentstats.losses.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of losses since last reset
+
+
+</td></tr>
+<tr><td>
+
+[rep](./bitburner.simpleopponentstats.rep.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Favor gain from winstreaks, calculated as converted rep
+
+
+</td></tr>
+<tr><td>
+
+[wins](./bitburner.simpleopponentstats.wins.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of wins since last reset
+
+
+</td></tr>
+<tr><td>
+
+[winStreak](./bitburner.simpleopponentstats.winstreak.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Current winstreak
+
+
+</td></tr>
+</tbody></table>
+

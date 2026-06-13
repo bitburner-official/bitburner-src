@@ -27,7 +27,17 @@ export class Port {
   resolver: Resolver | null = null;
   promise: Promise<void> | null = null;
   add(data: unknown) {
-    this.data.push(data);
+    let value = data;
+    if (isObjectLike(data)) {
+      try {
+        value = structuredClone(data);
+      } catch (ex) {
+        throw new Error("You can't send Functions, Promises, NS, or other unserializable data through ports!", {
+          cause: ex,
+        });
+      }
+    }
+    this.data.push(value);
     if (!this.resolver) return;
     this.resolver();
     this.resolver = null;
@@ -45,7 +55,7 @@ export class PortHandle implements NetscriptPort {
   write(value: unknown): unknown {
     const port = getPort(this.n);
     // Primitives don't need to be cloned.
-    port.add(isObjectLike(value) ? structuredClone(value) : value);
+    port.add(value);
     if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
     return null;
   }
@@ -54,7 +64,7 @@ export class PortHandle implements NetscriptPort {
     const port = getPort(this.n);
     if (port.data.length >= Settings.MaxPortCapacity) return false;
     // Primitives don't need to be cloned.
-    port.add(isObjectLike(value) ? structuredClone(value) : value);
+    port.add(value);
     return true;
   }
 

@@ -17,7 +17,7 @@ Scripts can be run on any [server](servers.md) you have root access to, but not 
 Being actual JavaScript, Bitburner also contains some quirks and limitations.
 For this reason, it is not possible for Bitburner scripts to run the same way at all times.
 However, you will continue to earn money and exp when Bitburner is not running, though at a slower rate.
-See [How Scripts Work Offline](../advanced/offlineandbonustime.md) for more details.
+See [How Scripts Work Offline](../programming/offlineandbonustime.md) for more details.
 
 ## Identifying a Script
 

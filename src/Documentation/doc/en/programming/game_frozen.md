@@ -33,12 +33,12 @@ Adding a sleep like in the first example, or changing the code so that the `awai
 
 Common infinite loop when translating the server purchasing script in starting guide to scripts is to have a while loop, where the condition's change is conditional:
 
-    var ram = 8;
-    var i = 0;
+    const ram = 8;
+    let i = ns.cloud.getServerNames().length;
 
     while (i < ns.cloud.getServerLimit()) {
-        if (ns.getServerMoneyAvailable("home") > ns.cloud.getRamLimit(ram)) {
-            var hostname = ns.cloud.purchaseServer("cloud-server-" + i, ram);
+        if (ns.getServerMoneyAvailable("home") > ns.cloud.getServerCost(ram)) {
+            const hostname = ns.cloud.purchaseServer("cloud-server-" + i, ram);
             ns.scp("early-hack-template.js", hostname);
             ns.exec("early-hack-template.js", hostname, 3);
             ++i;

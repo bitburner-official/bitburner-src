@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { formatPercent, formatRam } from "../../ui/formatNumber";
 import { StdIO } from "../StdIO/StdIO";
 
-export function free(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function free(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 0) {
     Terminal.fatal("Incorrect usage of free command. Usage: free", stdIO);
     return;

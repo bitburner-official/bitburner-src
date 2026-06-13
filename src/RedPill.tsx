@@ -11,6 +11,8 @@ import { prestigeSourceFile } from "./Prestige";
 import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUtils";
 import { prestigeWorkerScripts } from "./NetscriptWorker";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
+import { ActivateRecoveryMode } from "./ui/React/RecoveryRoot";
+import { validBitNodes } from "./BitNode/Constants";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -35,9 +37,6 @@ function giveSourceFile(bitNodeNumber: number): void {
     }
   } else {
     Player.sourceFiles.set(bitNodeNumber, 1);
-    if (bitNodeNumber === 5 && Player.skills.intelligence === 0) {
-      Player.skills.intelligence = 1;
-    }
     dialogBoxCreate(
       <>
         You received a Source-File for destroying a BitNode!
@@ -58,18 +57,14 @@ export function enterBitNode(
   newBitNode: number,
   bitNodeOptions: BitNodeOptions,
 ): void {
+  if (!validBitNodes.includes(newBitNode)) {
+    throw new Error(`Invalid BitNode: ${newBitNode}.`);
+  }
   // We must kill all scripts before setting up BitNode data and performing the prestige.
   prestigeWorkerScripts();
 
   if (!isFlume) {
     giveSourceFile(destroyedBitNode);
-  } else if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
-    Player.skills.intelligence = 0;
-    Player.exp.intelligence = 0;
-    Player.persistentIntelligenceData.exp = 0;
-  }
-  if (newBitNode === 5 && Player.skills.intelligence === 0) {
-    Player.skills.intelligence = 1;
   }
   // Set new Bit Node
   Player.bitNodeN = newBitNode;
@@ -83,7 +78,16 @@ export function enterBitNode(
     setBitNodeOptions(getDefaultBitNodeOptions());
   }
 
-  prestigeSourceFile(isFlume);
+  try {
+    prestigeSourceFile(isFlume);
+  } catch (error) {
+    // prestigeSourceFile only throws on critical bugs. In these cases, we must activate recovery mode to ensure the
+    // player knows something went wrong and can notify us. Recovery mode also disables autosave, which may prevent the
+    // error from corrupting the save data.
+    ActivateRecoveryMode(error);
+    Router.toPage(Page.Recovery);
+    return;
+  }
 
   if (newBitNode === 6) {
     Router.toPage(Page.BladeburnerCinematic);

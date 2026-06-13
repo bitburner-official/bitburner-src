@@ -56,7 +56,7 @@ Object containing a variety of stats about the specified Hacknet Node.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.5 GB
 
 Returns an object containing a variety of stats about the specified Hacknet Node.
 

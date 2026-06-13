@@ -510,6 +510,12 @@ export class Corporation {
     if (typeof value.data.dividendTax === "number") {
       corporation.tributeModifier = value.data.dividendTax;
     }
+    if (!Number.isFinite(corporation.totalAssets)) {
+      corporation.totalAssets = 0;
+    }
+    if (!Number.isFinite(corporation.previousTotalAssets)) {
+      corporation.previousTotalAssets = 0;
+    }
     return corporation;
   }
 }

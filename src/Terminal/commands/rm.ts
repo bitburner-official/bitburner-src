@@ -7,7 +7,7 @@ import type { IReturnStatus } from "../../types";
 import type { FilePath } from "../../Paths/FilePath";
 import { StdIO } from "../StdIO/StdIO";
 
-export function rm(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function rm(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   const errors = {
     arg: (reason: string) => `Incorrect usage of rm command. ${reason}. Usage: rm [OPTION]... [FILE]...`,
     dirsProvided: (name: string) =>

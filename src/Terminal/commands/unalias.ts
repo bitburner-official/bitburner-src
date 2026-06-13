@@ -3,7 +3,7 @@ import { removeAlias, Aliases, GlobalAliases } from "../../Alias";
 import { BaseServer } from "../../Server/BaseServer";
 import { StdIO } from "../StdIO/StdIO";
 
-export function unalias(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function unalias(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 1) {
     Terminal.fatal("Incorrect usage of unalias name. Usage: unalias [alias] or unalias --all", stdIO);
     return;

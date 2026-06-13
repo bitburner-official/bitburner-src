@@ -83,6 +83,41 @@ export function removeBracketsFromArrayString(str: string): string {
   return strCpy;
 }
 
+/**
+ * This function only performs very simple checks to add the outermost optional brackets. Callers must perform other
+ * preprocessing steps and postprocessing validations. For example:
+ * - "[ [0, 1]]" will be incorrectly wrapped and converted to "[[[0,1]]]". Callers need to remove redundant whitespace.
+ * - "[[1,2],3]" is not an array of arrays, but this function will return it as is. Callers need to call validateAnswer.
+ *
+ * Note:
+ * - "" will always be converted to an empty array ([]).
+ * - When parsing an array of arrays (isArrayOfArray = true), "[]" will be converted to an empty array ([]), not an
+ * array containing an empty array ([[]]).
+ */
+export function parseArrayString(answer: string, isArrayOfArray = false): unknown {
+  let modifiedAnswer = answer.trim();
+
+  if (isArrayOfArray && modifiedAnswer === "[]") {
+    return [];
+  }
+
+  // If it doesn't start with any bracket, it's definitely "naked".
+  if (!modifiedAnswer.startsWith("[")) {
+    modifiedAnswer = `[${modifiedAnswer}]`;
+  } else if (isArrayOfArray && !modifiedAnswer.startsWith("[[")) {
+    // If it's supposed to be an array of arrays but only has one "[".
+    modifiedAnswer = `[${modifiedAnswer}]`;
+  }
+
+  try {
+    return JSON.parse(modifiedAnswer);
+  } catch (error) {
+    console.error(`Invalid answer: ${answer}`);
+    console.error(error);
+    return null;
+  }
+}
+
 export function removeQuotesFromString(str: string): string {
   let strCpy: string = str;
   if (strCpy.startsWith('"') || strCpy.startsWith("'")) {

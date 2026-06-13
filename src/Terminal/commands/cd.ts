@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { directoryExistsOnServer, resolveDirectory } from "../../Paths/Directory";
 import { StdIO } from "../StdIO/StdIO";
 
-export function cd(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function cd(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length > 1) return Terminal.fatal("Incorrect number of arguments. Usage: cd [dir]", stdIO);
   // If no arg was provided, just use "/".
   const userInput = String(args[0] ?? "/");

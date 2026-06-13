@@ -11,7 +11,7 @@ export function runProgram(
   args: (string | number | boolean)[],
   server: BaseServer,
   stdIO: StdIO,
-): void {
+): undefined {
   // Check if you have the program on your computer. If you do, execute it, otherwise
   // display an error message
   const programLowered = path.toLowerCase();

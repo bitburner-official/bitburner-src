@@ -11,8 +11,3 @@ Namespace for [Go](./bitburner.go.md) functions.
 ```typescript
 readonly go: Go;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

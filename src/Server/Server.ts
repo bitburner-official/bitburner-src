@@ -3,7 +3,7 @@ import { BaseServer } from "./BaseServer";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
-import { createRandomString } from "../utils/helpers/createRandomString";
+import { getRandomAlphanumericString } from "../utils/StringHelperFunctions";
 import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { IPAddress } from "../Types/strings";
@@ -61,7 +61,7 @@ export class Server extends BaseServer {
 
     // "hacknet-node-X" hostnames are reserved for Hacknet Servers
     if (this.hostname.startsWith("hacknet-node-") || this.hostname.startsWith("hacknet-server-")) {
-      this.hostname = createRandomString(10);
+      this.hostname = getRandomAlphanumericString(10);
     }
 
     this.purchasedByPlayer = params.purchasedByPlayer != null ? params.purchasedByPlayer : false;

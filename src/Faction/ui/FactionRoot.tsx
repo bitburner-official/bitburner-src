@@ -3,7 +3,7 @@
  * This is the component for displaying a single faction's UI, not the list of all
  * accessible factions
  */
-import React, { useState } from "react";
+import React from "react";
 
 import { DonateOption } from "./DonateOption";
 import { Info } from "./Info";
@@ -16,12 +16,11 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { Typography, Button } from "@mui/material";
 
-import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPurchasesRoot";
-import { FactionName, FactionWorkType } from "@enums";
-import { GangButton } from "./GangButton";
+import { FactionWorkType } from "@enums";
 import { FactionWork } from "../../Work/FactionWork";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { favorNeededToDonate } from "../formulas/donation";
+import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 type FactionRootProps = {
   faction: Faction;
@@ -47,7 +46,6 @@ const augmentationsInfo =
   "As your reputation with this faction rises, you will " +
   "unlock augmentations, which you can purchase to enhance " +
   "your abilities.";
-const sleevePurchasesInfo = "Purchase Duplicate Sleeves and upgrades. These are permanent!";
 
 interface IMainProps {
   faction: Faction;
@@ -56,7 +54,6 @@ interface IMainProps {
 }
 
 function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.ReactElement {
-  const [sleevesOpen, setSleevesOpen] = useState(false);
   const factionInfo = faction.getInfo();
 
   function startWork(): void {
@@ -105,7 +102,6 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
   // should be shown
   const favorToDonate = favorNeededToDonate();
   const canDonate = faction.favor >= favorToDonate;
-  const canPurchaseSleeves = faction.name === FactionName.TheCovenant && Player.bitNodeN === 10;
 
   return (
     <>
@@ -114,34 +110,41 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
         {faction.name}
       </Typography>
       <Info faction={faction} factionInfo={factionInfo} />
-      <GangButton faction={faction} />
-      {!isPlayersGang && factionInfo.offerHackingWork && (
-        <Option
-          buttonText={"Hacking Contracts"}
-          infoText={hackingContractsInfo}
-          onClick={() => startHackingContracts(faction)}
-        />
-      )}
-      {!isPlayersGang && factionInfo.offerFieldWork && (
-        <Option buttonText={"Field Work"} infoText={fieldWorkInfo} onClick={() => startFieldWork(faction)} />
-      )}
-      {!isPlayersGang && factionInfo.offerSecurityWork && (
-        <Option buttonText={"Security Work"} infoText={securityWorkInfo} onClick={() => startSecurityWork(faction)} />
-      )}
-      {!isPlayersGang && factionInfo.offersWork() && (
-        <DonateOption faction={faction} rerender={rerender} favorToDonate={favorToDonate} disabled={!canDonate} />
-      )}
-      <Option buttonText={"Purchase Augmentations"} infoText={augmentationsInfo} onClick={onAugmentations} />
-      {canPurchaseSleeves && (
+      {!isPlayersGang && (
         <>
-          <Option
-            buttonText={"Purchase & Upgrade Duplicate Sleeves"}
-            infoText={sleevePurchasesInfo}
-            onClick={() => setSleevesOpen(true)}
-          />
-          <CovenantPurchasesRoot open={sleevesOpen} onClose={() => setSleevesOpen(false)} />
+          {factionInfo.offersWork() && (
+            <Typography>
+              Perform work/carry out assignments for your faction to help further its cause! By doing so, you will earn
+              reputation for your faction. You will also gain reputation passively over time, although at a very slow
+              rate.&nbsp;
+              {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in some BitNodes. </>}
+              Earning reputation will allow you to purchase augmentations through this faction, which are powerful
+              upgrades that enhance your abilities.
+            </Typography>
+          )}
+          {factionInfo.offerHackingWork && (
+            <Option
+              buttonText={"Hacking Contracts"}
+              infoText={hackingContractsInfo}
+              onClick={() => startHackingContracts(faction)}
+            />
+          )}
+          {factionInfo.offerFieldWork && (
+            <Option buttonText={"Field Work"} infoText={fieldWorkInfo} onClick={() => startFieldWork(faction)} />
+          )}
+          {factionInfo.offerSecurityWork && (
+            <Option
+              buttonText={"Security Work"}
+              infoText={securityWorkInfo}
+              onClick={() => startSecurityWork(faction)}
+            />
+          )}
+          {factionInfo.offersWork() && (
+            <DonateOption faction={faction} rerender={rerender} favorToDonate={favorToDonate} disabled={!canDonate} />
+          )}
         </>
       )}
+      <Option buttonText={"Purchase Augmentations"} infoText={augmentationsInfo} onClick={onAugmentations} />
     </>
   );
 }

@@ -43,7 +43,7 @@ async function createWindow(killall) {
   if (tracker.state.isMaximized) window.maximize();
 
   window.removeMenu();
-  noScripts = killall ? { query: { noScripts: killall } } : {};
+  const noScripts = killall ? { query: { noScripts: killall } } : {};
   window.loadFile("index.html", noScripts);
   window.once("ready-to-show", () => {
     utils.setZoomFactor(window, utils.getZoomFactor());

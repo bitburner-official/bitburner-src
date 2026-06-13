@@ -1,13 +1,8 @@
-import { Output, Link, RawOutput, TTimer } from "./OutputTypes";
-import { Router } from "../ui/GameRoot";
-import { Page } from "../ui/Router";
+import { Output, Link, RawOutput } from "./OutputTypes";
 import { Player } from "@player";
-import { HacknetServer } from "../Hacknet/HacknetServer";
-import { BaseServer } from "../Server/BaseServer";
-import { Server } from "../Server/Server";
-import { CompletedProgramName } from "@enums";
-import { CodingContractResult } from "../CodingContract/Contract";
+import type { BaseServer } from "../Server/BaseServer";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
+import { type TerminalAction, Cancellation } from "./TerminalAction";
 
 import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
@@ -17,23 +12,14 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { processSingleServerGrowth, getWeakenEffect } from "../Server/ServerHelpers";
 import { parseCommand, parseCommands } from "./Parser";
-import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
 import { createProgressBarText } from "../utils/helpers/createProgressBarText";
-import {
-  calculateHackingChance,
-  calculateHackingExpGain,
-  calculatePercentMoneyHacked,
-  calculateHackingTime,
-  calculateGrowTime,
-  calculateWeakenTime,
-} from "../Hacking";
-import { formatExp, formatMoney, formatPercent, formatRam, formatSecurity } from "../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+import { Directory, resolveDirectory, root } from "../Paths/Directory";
+import { FilePath, isBasicFilePath, resolveFilePath } from "../Paths/FilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
+import { isIPAddress } from "../Types/strings";
 
-// TODO: Does every terminal function really need its own file...?
 import { alias } from "./commands/alias";
 import { analyze } from "./commands/analyze";
 import { backdoor } from "./commands/backdoor";
@@ -45,6 +31,7 @@ import { connect } from "./commands/connect";
 import { cp } from "./commands/cp";
 import { download } from "./commands/download";
 import { echo } from "./commands/echo";
+import { upload } from "./commands/upload";
 import { expr } from "./commands/expr";
 import { free } from "./commands/free";
 import { grep } from "./commands/grep";
@@ -79,22 +66,13 @@ import { commitHash } from "../utils/helpers/commitHash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { Engine } from "../engine";
-import { Directory, resolveDirectory, root } from "../Paths/Directory";
-import { FilePath, isBasicFilePath, resolveFilePath } from "../Paths/FilePath";
-import { hasTextExtension } from "../Paths/TextFilePath";
-import { ContractFilePath } from "../Paths/ContractFilePath";
-import { ServerConstants } from "../Server/data/Constants";
-import { isIPAddress } from "../Types/strings";
 import { StdIO } from "./StdIO/StdIO";
 import { parseRedirectedCommands } from "./StdIO/RedirectIO";
-import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
-import { DarknetServer } from "../Server/DarknetServer";
+import { mkdir } from "./commands/mkdir";
 
 export const TerminalCommands: Record<
   string,
-  (args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO) => void
+  (args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO) => undefined | TerminalAction
 > = {
   "scan-analyze": scananalyze,
   alias: alias,
@@ -126,6 +104,7 @@ export const TerminalCommands: Record<
   ls: ls,
   lscpu: lscpu,
   mem: mem,
+  mkdir: mkdir,
   mv: mv,
   nano: nano,
   ps: ps,
@@ -138,15 +117,18 @@ export const TerminalCommands: Record<
   apr1: apr1,
   top: top,
   unalias: unalias,
+  upload: upload,
   vim: vim,
   weaken: weaken,
   wget: wget,
 };
 
+// "mkdir" is a "hidden" command; i.e., it is not shown in help text or autocomplete.
+export const supportedCommands = Object.keys(TerminalCommands).filter((command) => command !== "mkdir");
+
 export class Terminal {
-  // Flags to determine whether the player is currently running a hack or an analyze
-  action: TTimer | null = null;
-  actionStdIO: StdIO | null = null;
+  // What the terminal is currently running (blocked by)
+  action: TerminalAction | null = null;
 
   commandHistory: string[] = [];
   commandHistoryIndex = 0;
@@ -157,18 +139,14 @@ export class Terminal {
 
   // True if a Coding Contract prompt is opened
   contractOpen = false;
+  // True if a prompt is opened via the ns.prompt() API
+  nsPromptApiOpen = false;
 
   // Path of current directory
   currDir = "" as Directory;
 
   // PID of the script run as part of the last executed command, if any
   pidOfLastScriptRun: number | null = null;
-
-  process(cycles: number): void {
-    if (this.action === null) return;
-    this.action.timeLeft -= (CONSTANTS.MilliPerCycle * cycles) / 1000;
-    if (this.action.timeLeft < 0.01) this.finishAction(false);
-  }
 
   terminalOutput(item: Output | Link | RawOutput): void {
     this.outputHistory.push(item);
@@ -178,361 +156,76 @@ export class Terminal {
     TerminalEvents.emit();
   }
 
-  print(s: string, stdIO: StdIO): void {
+  print(s: string, stdIO: StdIO): undefined {
     stdIO.write(s);
   }
 
-  printRaw(node: React.ReactNode, stdIO: StdIO): void {
+  printRaw(node: React.ReactNode, stdIO: StdIO): undefined {
     stdIO.write(new RawOutput(node));
   }
 
-  printAndBypassPipes(s: string): void {
+  printAndBypassPipes(s: string): undefined {
     this.terminalOutput(new Output(s, "primary"));
   }
 
   // Used for logging when a process is ending with an error. Prints directly to terminal so
   // the error isn't lost due to redirects. Closes the stdIO, if provided
-  fatal(s: string, stdIO: StdIO | null = null): void {
+
+  // TODO-fico: validate all stdios are captured
+  fatal(s: string, stdIO: StdIO | null = null): undefined {
     stdIO?.close();
     this.terminalOutput(new Output(s, "error"));
   }
 
-  error(s: string, stdIO: StdIO): void {
+  error(s: string, stdIO: StdIO): undefined {
     stdIO.write(new Output(s, "error"));
   }
 
-  success(s: string, stdIO: StdIO): void {
+  success(s: string, stdIO: StdIO): undefined {
     stdIO.write(new Output(s, "success"));
   }
 
-  info(s: string, stdIO: StdIO): void {
+  info(s: string, stdIO: StdIO): undefined {
     stdIO.write(new Output(s, "info"));
   }
 
-  warn(s: string, stdIO: StdIO): void {
+  warn(s: string, stdIO: StdIO): undefined {
     stdIO.write(new Output(s, "warn"));
   }
 
-  startHack(stdIO: StdIO): void {
-    // Hacking through Terminal should be faster than hacking through a script
-    const server = Player.getCurrentServer();
-    if (server instanceof HacknetServer) {
-      this.fatal("Cannot hack this kind of server");
-      return;
-    }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
-    this.startAction(calculateHackingTime(server, Player) / 4, "h", stdIO, server);
-  }
+  timedAction(durationSec: number, name: string, onDone: () => void, stdIO: StdIO): TerminalAction {
+    const start = performance.now();
+    const progress = () =>
+      createProgressBarText({
+        progress: (performance.now() - start) / (durationSec * 1000),
+        totalTicks: 50,
+      });
 
-  startGrow(stdIO: StdIO): void {
-    const server = Player.getCurrentServer();
-    if (server instanceof HacknetServer) {
-      this.fatal("Cannot grow this kind of server");
-      return;
-    }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
-    this.startAction(calculateGrowTime(server, Player) / 16, "g", stdIO, server);
-  }
-  startWeaken(stdIO: StdIO): void {
-    const server = Player.getCurrentServer();
-    if (server instanceof HacknetServer) {
-      this.fatal("Cannot weaken this kind of server");
-      return;
-    }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
-    this.startAction(calculateWeakenTime(server, Player) / 16, "w", stdIO, server);
-  }
-
-  startBackdoor(stdIO: StdIO): void {
-    // Backdoor should take the same amount of time as hack
-    const server = Player.getCurrentServer();
-    if (server instanceof HacknetServer) {
-      this.fatal("Cannot backdoor this kind of server", stdIO);
-      return;
-    }
-    if (!(server instanceof Server || server instanceof DarknetServer))
-      throw new Error("server should be normal server");
-    this.startAction(calculateHackingTime(server, Player) / 4, "b", stdIO, server);
-  }
-
-  startAnalyze(stdIO: StdIO): void {
-    this.print("Analyzing system...", stdIO);
-    const server = Player.getCurrentServer();
-    this.startAction(1, "a", stdIO, server);
-  }
-
-  startAction(n: number, action: "h" | "b" | "a" | "g" | "w" | "c", stdIO: StdIO, server?: BaseServer): void {
-    this.action = new TTimer(n, action, server);
-    this.actionStdIO = stdIO;
-  }
-
-  // Complete the hack/analyze command
-  finishHack(server: BaseServer, cancelled = false): void {
-    if (cancelled) return;
-
-    if (server instanceof HacknetServer) {
-      this.fatal("Cannot hack this kind of server");
-      return;
-    }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
-    if (!this.actionStdIO) {
-      throw new Error("Missing stdIO for hack action");
-    }
-
-    // Calculate whether hack was successful
-    const hackChance = calculateHackingChance(server, Player);
-    const rand = Math.random();
-    let expGainedOnSuccess = calculateHackingExpGain(server, Player);
-    const expGainedOnFailure = expGainedOnSuccess / 4;
-    if (rand < hackChance) {
-      // Success!
-      server.backdoorInstalled = true;
-      if (SpecialServers.WorldDaemon === server.hostname) {
-        Router.toPage(Page.BitVerse, { flume: false, quick: false });
-        return;
-      }
-      // Manually check for faction invitations
-      Engine.Counters.checkFactionInvitations = 0;
-      Engine.checkCounters();
-
-      let moneyDrained = server.moneyAvailable * calculatePercentMoneyHacked(server, Player);
-
-      // Over-the-top safety checks
-      if (moneyDrained < 0) {
-        moneyDrained = 0;
-      }
-      if (moneyDrained > server.moneyAvailable) {
-        moneyDrained = server.moneyAvailable;
-      }
-
-      if (moneyDrained === 0) {
-        expGainedOnSuccess = expGainedOnFailure;
-      }
-
-      server.moneyAvailable -= moneyDrained;
-      if (server.moneyAvailable < 0) {
-        server.moneyAvailable = 0;
-      }
-
-      const moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
-      Player.gainMoney(moneyGained, "hacking");
-      Player.gainHackingExp(expGainedOnSuccess);
-      if (expGainedOnSuccess > 1) {
-        Player.gainIntelligenceExp(4 * Math.log10(expGainedOnSuccess));
-      }
-
-      const oldSec = server.hackDifficulty;
-      server.fortify(ServerConstants.ServerFortifyAmount);
-      const newSec = server.hackDifficulty;
-
-      this.print(
-        `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained, true)} and ${formatExp(
-          expGainedOnSuccess,
-        )} hacking exp`,
-        this.actionStdIO,
-      );
-      this.print(
-        `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,
-        this.actionStdIO,
-      );
-    } else {
-      // Failure
-      Player.gainHackingExp(expGainedOnFailure);
-      this.print(
-        `Failed to hack '${server.hostname}'. Gained ${formatExp(expGainedOnFailure)} hacking exp`,
-        this.actionStdIO,
-      );
-    }
-    this.actionStdIO?.close();
-    this.actionStdIO = null;
-  }
-
-  finishGrow(server: BaseServer, cancelled = false): void {
-    if (cancelled) return;
-
-    if (server instanceof HacknetServer) {
-      this.fatal("Cannot grow this kind of server", this.actionStdIO);
-      return;
-    }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
-    if (!this.actionStdIO) {
-      throw new Error("Missing stdIO for grow action");
-    }
-
-    const expGain = calculateHackingExpGain(server, Player);
-    const oldSec = server.hackDifficulty;
-    const growth = processSingleServerGrowth(server, 25, server.cpuCores);
-    const newSec = server.hackDifficulty;
-
-    Player.gainHackingExp(expGain);
-    this.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
-        expGain,
-      )} hacking exp.`,
-      this.actionStdIO,
-    );
-    this.print(
-      `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,
-      this.actionStdIO,
-    );
-    this.actionStdIO?.close();
-    this.actionStdIO = null;
-  }
-
-  finishWeaken(server: BaseServer, cancelled = false): void {
-    if (cancelled) return;
-
-    if (server instanceof HacknetServer) {
-      this.fatal("Cannot weaken this kind of server", this.actionStdIO);
-      return;
-    }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
-    if (!this.actionStdIO) {
-      throw new Error("Missing stdIO for weaken action");
-    }
-    const expGain = calculateHackingExpGain(server, Player);
-    const oldSec = server.hackDifficulty;
-    const weakenAmt = getWeakenEffect(1, server.cpuCores);
-    server.weaken(weakenAmt);
-    const newSec = server.hackDifficulty;
-
-    Player.gainHackingExp(expGain);
-    this.print(
-      `Security decreased on '${server.hostname}' by ${formatSecurity(weakenAmt)} from ${formatSecurity(
-        oldSec,
-      )} to ${formatSecurity(newSec)} (min: ${formatSecurity(server.minDifficulty)})` +
-        ` and Gained ${formatExp(expGain)} hacking exp.`,
-      this.actionStdIO,
-    );
-    this.actionStdIO?.close();
-    this.actionStdIO = null;
-  }
-
-  finishBackdoor(server: BaseServer, cancelled = false): void {
-    if (!cancelled) {
-      if (server instanceof HacknetServer) {
-        this.fatal("Cannot hack this kind of server", this.actionStdIO);
-        return;
-      }
-      if (!(server instanceof Server || server instanceof DarknetServer))
-        throw new Error("server should be normal server");
-      if (!this.actionStdIO) {
-        throw new Error("Missing stdIO for backdoor action");
-      }
-
-      server.backdoorInstalled = true;
-      if (SpecialServers.WorldDaemon === server.hostname) {
-        if (Player.bitNodeN == null) {
-          Player.bitNodeN = 1;
+    let cancel = () => {};
+    const p = (async () => {
+      let cancelled = false;
+      try {
+        await new Promise<void>((resolve, reject) => {
+          setTimeout(resolve, durationSec * 1000);
+          cancel = () => {
+            cancelled = true;
+            reject(new Cancellation(name));
+          };
+        });
+      } finally {
+        this.print(progress(), stdIO);
+        if (cancelled) {
+          this.print(`Cancelled ${name}`, stdIO);
         }
-        Router.toPage(Page.BitVerse, { flume: false, quick: false });
-        return;
       }
-      // Manunally check for faction invites
-      Engine.Counters.checkFactionInvitations = 0;
-      Engine.checkCounters();
+      onDone();
+    })();
 
-      this.print(`Backdoor on '${server.hostname}' successful!`, this.actionStdIO);
-      this.actionStdIO?.close();
-      this.actionStdIO = null;
-    }
-  }
-
-  finishAnalyze(currServ: BaseServer, cancelled = false): void {
-    if (!cancelled) {
-      if (!this.actionStdIO) {
-        throw new Error("Missing stdIO for analyze action");
-      }
-      const isHacknet = currServ instanceof HacknetServer;
-      this.print(currServ.hostname + ": ", this.actionStdIO);
-      const org = currServ.organizationName;
-      this.print("Organization name: " + (!isHacknet ? org : "player"), this.actionStdIO);
-      const hasAdminRights = (!isHacknet && currServ.hasAdminRights) || isHacknet;
-      this.print("Root Access: " + (hasAdminRights ? "YES" : "NO"), this.actionStdIO);
-      const canRunScripts = hasAdminRights && currServ.maxRam > 0;
-      this.print("Can run scripts on this host: " + (canRunScripts ? "YES" : "NO"), this.actionStdIO);
-      this.print("RAM: " + formatRam(currServ.maxRam), this.actionStdIO);
-      if (currServ instanceof DarknetServer && currServ.blockedRam) {
-        this.print("RAM blocked by owner: " + formatRam(currServ.blockedRam), this.actionStdIO);
-        this.print("Stasis link: " + (currServ.hasStasisLink ? "YES" : "NO"), this.actionStdIO);
-        this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"), this.actionStdIO);
-      }
-      if (currServ instanceof Server) {
-        this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"), this.actionStdIO);
-        const hackingSkill = currServ.requiredHackingSkill;
-        this.print(
-          "Required hacking skill for hack() and backdoor: " + (!isHacknet ? hackingSkill : "N/A"),
-          this.actionStdIO,
-        );
-        const security = currServ.hackDifficulty;
-        this.print("Server security level: " + (!isHacknet ? formatSecurity(security) : "N/A"), this.actionStdIO);
-        const hackingChance = calculateHackingChance(currServ, Player);
-        this.print("Chance to hack: " + (!isHacknet ? formatPercent(hackingChance) : "N/A"), this.actionStdIO);
-        const hackingTime = calculateHackingTime(currServ, Player) * 1000;
-        this.print(
-          "Time to hack: " + (!isHacknet ? convertTimeMsToTimeElapsedString(hackingTime, true) : "N/A"),
-          this.actionStdIO,
-        );
-      }
-      this.print(
-        `Total money available on server: ${
-          currServ instanceof Server ? formatMoney(currServ.moneyAvailable, true) : "N/A"
-        }`,
-        this.actionStdIO,
-      );
-      if (currServ instanceof Server) {
-        const numPort = currServ.numOpenPortsRequired;
-        this.print("Required number of open ports for NUKE: " + (!isHacknet ? numPort : "N/A"), this.actionStdIO);
-        this.print("SSH port: " + (currServ.sshPortOpen ? "Open" : "Closed"), this.actionStdIO);
-        this.print("FTP port: " + (currServ.ftpPortOpen ? "Open" : "Closed"), this.actionStdIO);
-        this.print("SMTP port: " + (currServ.smtpPortOpen ? "Open" : "Closed"), this.actionStdIO);
-        this.print("HTTP port: " + (currServ.httpPortOpen ? "Open" : "Closed"), this.actionStdIO);
-        this.print("SQL port: " + (currServ.sqlPortOpen ? "Open" : "Closed"), this.actionStdIO);
-      }
-      this.actionStdIO?.close();
-      this.actionStdIO = null;
-    }
-  }
-
-  finishAction(cancelled = false): void {
-    if (this.action === null) {
-      if (!cancelled) throw new Error("Finish action called when there was no action");
-      return;
-    }
-
-    if (!this.action.server) throw new Error("Missing action target server");
-    if (!this.actionStdIO) {
-      throw new Error("Missing stdIO for action");
-    }
-
-    this.print(this.getProgressText(), this.actionStdIO);
-    if (this.action.action === "h") {
-      this.finishHack(this.action.server, cancelled);
-    } else if (this.action.action === "g") {
-      this.finishGrow(this.action.server, cancelled);
-    } else if (this.action.action === "w") {
-      this.finishWeaken(this.action.server, cancelled);
-    } else if (this.action.action === "b") {
-      this.finishBackdoor(this.action.server, cancelled);
-    } else if (this.action.action === "a") {
-      this.finishAnalyze(this.action.server, cancelled);
-    } else if (this.action.action === "c" && this.action.server instanceof DarknetServer) {
-      const cache = this.action.server.caches.pop();
-      if (!cache) {
-        this.print("No cache files found.", this.actionStdIO);
-      } else {
-        const result = getRewardFromCache(this.action.server, cache, true);
-        this.print(result.message, this.actionStdIO);
-      }
-    }
-
-    if (cancelled) {
-      this.print("Cancelled", this.actionStdIO);
-    }
-    this.action = null;
-    this.actionStdIO?.close();
-    this.actionStdIO = null;
-    TerminalEvents.emit();
+    return {
+      cancel: cancel,
+      finished: p,
+      getProgressText: progress,
+    };
   }
 
   getFile(filename: string): Script | TextFile | string | null {
@@ -594,140 +287,6 @@ export class Terminal {
     TerminalEvents.emit();
   }
 
-  async runContract(contractPath: ContractFilePath, stdIO: StdIO): Promise<void> {
-    // There's already an opened contract
-    if (this.contractOpen) {
-      return this.fatal("There's already a Coding Contract in Progress", stdIO);
-    }
-
-    const server = Player.getCurrentServer();
-    const contract = server.getContract(contractPath);
-    if (!contract) {
-      return this.fatal("No such contract", stdIO);
-    }
-
-    this.contractOpen = true;
-    const promptResult = await contract.prompt();
-
-    // Get a new copy of the server, in case it changed while the prompt was open
-    const postPromptServer = GetServer(server.hostname);
-
-    // Check if the contract still exists by the time the promise is fulfilled
-    if (postPromptServer?.getContract(contractPath) == null) {
-      this.contractOpen = false;
-      return this.fatal("Contract no longer exists (Was it solved by a script?)", stdIO);
-    }
-
-    switch (promptResult.result) {
-      case CodingContractResult.Success:
-        if (contract.reward !== null) {
-          const reward = Player.gainCodingContractReward(
-            contract.reward,
-            contract.getDifficulty(),
-            contract.rewardScaling,
-          );
-          this.print(`Contract SUCCESS - ${reward}`, stdIO);
-        }
-        server.removeContract(contract);
-        break;
-      case CodingContractResult.InvalidFormat:
-        this.error(
-          `Contract FAILED - ${
-            promptResult.message ?? `The answer is not in the right format for contract '${contract.type}'`
-          }`,
-          stdIO,
-        );
-        break;
-      case CodingContractResult.Failure:
-        ++contract.tries;
-        if (contract.tries >= contract.getMaxNumTries()) {
-          this.error("Contract FAILED - Contract is now self-destructing", stdIO);
-          const solution = contract.getAnswer();
-          if (solution !== null) {
-            this.error(`Coding Contract solution was: ${solution}`, stdIO);
-          }
-          server.removeContract(contract);
-        } else {
-          this.error(`Contract FAILED - ${contract.getMaxNumTries() - contract.tries} tries remaining`, stdIO);
-        }
-        break;
-      case CodingContractResult.Cancelled:
-        this.print("Contract cancelled", stdIO);
-        break;
-      default: {
-        const __: never = promptResult.result;
-      }
-    }
-    this.contractOpen = false;
-  }
-
-  executeScanAnalyzeCommand(depth = 1, all = false, stdIO: StdIO): void {
-    interface Node {
-      hostname: string;
-      children: Node[];
-    }
-
-    const ignoreServer = (s: BaseServer, d: number): boolean =>
-      (!all && s.purchasedByPlayer && s.hostname != "home") ||
-      d > depth ||
-      (!all && s instanceof HacknetServer) ||
-      (!all && s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
-
-    const makeNode = (root: BaseServer = Player.getCurrentServer()) => {
-      // Keep track of previously seen servers to prevent backtracking (since darknet can be cyclical)
-      const seenServers = [root.hostname];
-      const populateNode = (s: BaseServer, d = 1): Node => {
-        seenServers.push(s.hostname);
-        return {
-          hostname: s.hostname,
-          children: s.serversOnNetwork
-            .filter((h) => !seenServers.includes(h))
-            .map((s) => GetServer(s))
-            .filter((v): v is BaseServer => !!v)
-            .filter((v) => !ignoreServer(v, d))
-            .map((h) => populateNode(h, d + 1)),
-        };
-      };
-      return populateNode(root);
-    };
-
-    const root = makeNode();
-
-    const printOutput = (node: Node, stdIO: StdIO, prefix = ["  "], last = true) => {
-      const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
-      const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
-      if (Player.hasProgram(CompletedProgramName.autoLink)) {
-        this.printRaw(new Link(titlePrefix, node.hostname), stdIO);
-      } else {
-        this.print(titlePrefix + node.hostname + "\n", stdIO);
-      }
-
-      const server = GetServer(node.hostname);
-      if (!server) return;
-      const hasRoot = server.hasAdminRights ? "YES" : "NO";
-      if (server instanceof Server) {
-        this.print(
-          `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
-          stdIO,
-        );
-        this.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n", stdIO);
-      } else {
-        this.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n", stdIO);
-      }
-      this.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n", stdIO);
-      node.children.forEach((n, i) =>
-        printOutput(
-          n,
-          stdIO,
-          [...prefix, i === node.children.length - 1 ? "  " : "┃ "],
-          i === node.children.length - 1,
-        ),
-      );
-    };
-
-    printOutput(root, stdIO);
-  }
-
   connectToServer(hostname: string, singularity = false): void {
     const server = GetServer(hostname);
     if (server === null) {
@@ -757,8 +316,26 @@ export class Terminal {
     }
     this.commandHistoryIndex = this.commandHistory.length;
     const allCommands = parseCommands(commands);
-    for (const command of allCommands) {
-      await parseRedirectedCommands(command);
+    try {
+      for (const command of allCommands) {
+        const result = await parseRedirectedCommands(command);
+        if (result) {
+          this.action = result;
+          TerminalEvents.emit();
+          await result.finished;
+          this.action = null;
+          TerminalEvents.emit();
+        }
+      }
+    } catch (ex) {
+      if (!(ex instanceof Cancellation)) {
+        throw ex;
+      }
+    } finally {
+      // If we throw for any reason, abort the current action.
+      this.action?.cancel();
+      this.action = null;
+      TerminalEvents.emit();
     }
   }
 
@@ -769,11 +346,12 @@ export class Terminal {
   }
 
   prestige(): void {
+    this.action?.cancel();
     this.action = null;
     this.clear();
   }
 
-  executeCommand(command: string, stdIO: StdIO): void {
+  executeCommand(command: string, stdIO: StdIO): undefined | TerminalAction {
     if (this.action !== null)
       return this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
 
@@ -942,7 +520,7 @@ export class Terminal {
       return this.fatal(`Command ${commandName} not found.${didYouMeanString}`, stdIO);
     }
 
-    f(commandArray, currentServer, stdIO);
+    const result = f(commandArray, currentServer, stdIO);
 
     if (commandName.toLowerCase() !== "run") {
       this.pidOfLastScriptRun = null;
@@ -951,20 +529,18 @@ export class Terminal {
     if (!this.action && !["wget", "run", "cat", "grep", "tail"].includes(commandName.toLowerCase())) {
       stdIO.close();
     }
+
+    return result;
   }
 
   getProgressText(): string {
     if (this.action === null) throw new Error("trying to get the progress text when there's no action");
-    return createProgressBarText({
-      progress: (this.action.time - this.action.timeLeft) / this.action.time,
-      totalTicks: 50,
-    });
+    return this.action.getProgressText();
   }
 }
 
 function findSimilarCommands(command: string): string[] {
-  const commands = Object.keys(TerminalCommands);
-  const offByOneLetter = commands.filter((c) => {
+  const offByOneLetter = supportedCommands.filter((c) => {
     if (c.length !== command.length) return false;
     let diff = 0;
     for (let i = 0; i < c.length; i++) {
@@ -972,6 +548,6 @@ function findSimilarCommands(command: string): string[] {
     }
     return diff === 1;
   });
-  const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
+  const subset = supportedCommands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
   return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }

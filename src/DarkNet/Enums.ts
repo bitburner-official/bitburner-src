@@ -1,4 +1,5 @@
-import type { _ValueOf, DarknetServerData } from "@nsdefs";
+import type { _ValueOf, DarknetServerDetails } from "@nsdefs";
+import type { DarknetServerData } from "./utils/darknetServerUtils";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
@@ -67,7 +68,7 @@ export const ResponseCodeEnum = {
   ServiceUnavailable: 503,
 } as const;
 
-export const exampleDarknetServerData: DarknetServerData = {
+export const exampleDarknetServerData = {
   hostname: "",
   ip: "",
   hasAdminRights: false,
@@ -87,4 +88,20 @@ export const exampleDarknetServerData: DarknetServerData = {
   logTrafficInterval: -1,
   isStationary: false,
   purchasedByPlayer: false,
-} as const;
+} as const satisfies DarknetServerData;
+
+export const exampleDarknetServerDetails = {
+  isConnectedToCurrentServer: false,
+  hasSession: false,
+  modelId: exampleDarknetServerData.modelId,
+  passwordHint: exampleDarknetServerData.staticPasswordHint,
+  data: exampleDarknetServerData.passwordHintData,
+  logTrafficInterval: exampleDarknetServerData.logTrafficInterval,
+  passwordLength: -1,
+  passwordFormat: "numeric",
+  blockedRam: exampleDarknetServerData.blockedRam,
+  difficulty: exampleDarknetServerData.difficulty,
+  requiredCharismaSkill: exampleDarknetServerData.requiredCharismaSkill,
+  depth: exampleDarknetServerData.depth,
+  isStationary: exampleDarknetServerData.isStationary,
+} as const satisfies DarknetServerDetails;

@@ -582,5 +582,97 @@ export const breakingChanges300: VersionBreakingChange = {
         "They now use the hostname as provided.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        { name: "ns.codingcontract.attempt" },
+
+        { name: "FindAllValidMathExpressions" },
+        { name: "GenerateIPAddresses" },
+        { name: "LargestRectangleInAMatrix" },
+        { name: "MergeOverlappingIntervals" },
+        { name: "Proper2ColoringOfAGraph" },
+        { name: "SanitizeParenthesesInExpression" },
+        { name: "SpiralizeMatrix" },
+
+        { name: "Find All Valid Math Expressions" },
+        { name: "Generate IP Addresses" },
+        { name: "Largest Rectangle in a Matrix" },
+        { name: "Merge Overlapping Intervals" },
+        { name: "Proper 2-Coloring of a Graph" },
+        { name: "Sanitize Parentheses in Expression" },
+        { name: "Spiralize Matrix" },
+      ],
+      info:
+        "If you pass a string to ns.codingcontract.attempt() for contracts that require a non-string answer, the\n" +
+        "game will convert that string to the expected format. This string conversion was inconsistent and had many\n" +
+        `undocumented behaviors. Now the rules are consistent and well-documented. Please check the "Coding Contracts"\n` +
+        "page for more information.\n" +
+        "There are 7 contracts that are affected by this change:\n" +
+        "- Find All Valid Math Expressions\n" +
+        "- Generate IP Addresses\n" +
+        "- Largest Rectangle in a Matrix\n" +
+        "- Merge Overlapping Intervals\n" +
+        "- Proper 2-Coloring of a Graph\n" +
+        "- Sanitize Parentheses in Expression\n" +
+        "- Spiralize Matrix\n" +
+        "Note that this change only affects the string conversion. The solution format of these contracts is an array,\n" +
+        "so if you pass the solution, which is an array, as is, you will not have any problems.\n" +
+        `If your code converts the array to a string, you should check these contracts, especially the "Sanitize\n` +
+        `Parentheses in Expression" contract and others that require a string array.\n` +
+        `- Sanitize Parentheses in Expression: Previously, if you passed an empty string to this contract, it was\n` +
+        "converted to an array containing an empty string. Now, it's converted to an empty array.\n" +
+        `- Read the "General rules", "String conversion", and "Tips" sections on the "Coding Contracts" page carefully.`,
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.gang.getOtherGangInformation",
+          migration: {
+            searchValue: "getOtherGangInformation",
+            replaceValue: "getAllGangInformation",
+          },
+        },
+      ],
+      info:
+        "ns.gang.getOtherGangInformation() was renamed to ns.gang.getAllGangInformation().\n" +
+        "The function was renamed because it returns information about all gangs, including the player's own gang.",
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.singularity.getCurrentWork",
+          migration: {
+            searchValue: "completion",
+            /**
+             * "completion" is a common word, so we cannot replace all its instances.
+             * This migrator focuses on the most popular use cases of the "completion" promise. It intentionally does
+             * not support complex cases and `completion.then()`.
+             */
+            migrator: (line: string) => {
+              // Direct chaining from API
+              // Use \b:
+              // - The leading \b applies to getCurrentWork, preventing prefixes like foo_getCurrentWork
+              // - The trailing \b applies to completion, preventing suffixes like completionFoo.
+              // Use \s* to match `getCurrentWork ( ) .completion`
+              line = line.replace(/\b(getCurrentWork\s*\(\s*\))\s*\.completion\b/g, "$1.nextCompletion");
+
+              // Awaited property access (`await task.completion`). This is a bit risky, but it's still a common usage.
+              // [a-zA-Z0-9_$.[\]()?]+ is enough to catch common usages.
+              line = line.replace(/(\bawait\s+[a-zA-Z0-9_$.[\]()?]+)\s*\.completion\b/g, "$1.nextCompletion");
+
+              return line;
+            },
+          },
+        },
+        { name: "ns.sleeve.getTask" },
+      ],
+      info:
+        "Task objects returned from ns.singularity.getCurrentWork() and ns.sleeve.getTask() previously had an optional\n" +
+        `promise property named either "completion" or "nextCompletion", depending on the task.\n` +
+        `Now, these task objects always include this property, and it is consistently named "nextCompletion".`,
+      showWarning: false,
+    },
   ],
 };

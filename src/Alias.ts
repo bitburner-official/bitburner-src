@@ -29,9 +29,11 @@ export function printAliases(stdIO: StdIO): void {
   for (const [name, alias] of GlobalAliases) Terminal.print("global alias " + name + "=" + alias, stdIO);
 }
 
+export const aliasRegex = /[\w|!%,@-]+/;
+const re = new RegExp("^(" + aliasRegex.source + ")=(.+)$");
+
 // Returns true if successful, false otherwise
 export function parseAliasDeclaration(dec: string, global = false): boolean {
-  const re = /^([\w|!%,@-]+)=(.+)$/;
   const matches = dec.match(re);
   if (matches == null || matches.length != 3) {
     return false;
@@ -46,12 +48,12 @@ export function parseAliasDeclaration(dec: string, global = false): boolean {
   return true;
 }
 
-function addAlias(name: string, value: string): void {
+export function addAlias(name: string, value: string): void {
   GlobalAliases.delete(name);
   Aliases.set(name, value.trim());
 }
 
-function addGlobalAlias(name: string, value: string): void {
+export function addGlobalAlias(name: string, value: string): void {
   Aliases.delete(name);
   GlobalAliases.set(name, value.trim());
 }
@@ -94,7 +96,7 @@ function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases
   // First get non-global aliases, and recursively apply them
   // (unless there are any reference loops or the reference chain is too deep)
   const localAlias = Aliases.get(commandArray[0]);
-  if (localAlias && !currentlyProcessingAliases.includes(localAlias)) {
+  if (localAlias && !currentlyProcessingAliases.includes(commandArray[0])) {
     const appliedAlias = applyAliases(localAlias, depth + 1, [commandArray[0], ...currentlyProcessingAliases]);
     commandArray.splice(0, 1, ...appliedAlias.split(" "));
   }
@@ -102,7 +104,7 @@ function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases
   // Once local aliasing is complete (or if none are present) handle any global aliases
   const processedCommands = commandArray.reduce((resolvedCommandArray: string[], command) => {
     const globalAlias = GlobalAliases.get(command);
-    if (globalAlias && !currentlyProcessingAliases.includes(globalAlias)) {
+    if (globalAlias && !currentlyProcessingAliases.includes(command)) {
       const appliedAlias = applyAliases(globalAlias, depth + 1, [command, ...currentlyProcessingAliases]);
       resolvedCommandArray.push(appliedAlias);
     } else {

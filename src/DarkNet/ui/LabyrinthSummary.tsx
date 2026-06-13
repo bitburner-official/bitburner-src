@@ -144,7 +144,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
     <>
       <div className={classes.inlineFlexBox}>
         <div style={{ width: "50%" }}>
-          {!lab.manual ? (
+          {!lab.manual && currentPerspective === -1 ? (
             <Typography style={{ fontStyle: "italic", paddingRight: "10px" }}>
               This lab cannot be completed manually. Select a script PID that is attempting the labyrinth from the
               options below to view its progress.

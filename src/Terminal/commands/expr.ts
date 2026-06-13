@@ -2,7 +2,7 @@ import { Terminal } from "../../Terminal";
 import { StdIO } from "../StdIO/StdIO";
 import { BaseServer } from "../../Server/BaseServer";
 
-export function expr(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function expr(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length === 0) {
     Terminal.fatal("Incorrect usage of expr command. Usage: expr [math expression]", stdIO);
     return;

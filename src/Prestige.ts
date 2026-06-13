@@ -106,10 +106,7 @@ export function prestigeAugmentation(): void {
   for (const faction of Object.values(Factions)) faction.prestigeAugmentation();
 
   // Stop a Terminal action if there is one.
-  if (Terminal.action !== null) {
-    Terminal.finishAction(true);
-  }
-  Terminal.clear();
+  Terminal.prestige();
   LogBoxClearEvents.emit();
 
   // Close coding contract modal
@@ -190,6 +187,8 @@ export function prestigeAugmentation(): void {
     }
   }
 
+  // clear recent scripts
+  recentScripts.splice(0);
   resetPidCounter();
   ProgramsSeen.clear();
   InvitationsSeen.clear();
@@ -210,10 +209,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   const homeComp = Player.getHomeComputer();
 
   // Stop a Terminal action if there is one.
-  if (Terminal.action !== null) {
-    Terminal.finishAction(true);
-  }
-  Terminal.clear();
+  Terminal.prestige();
   LogBoxClearEvents.emit();
 
   // Close coding contract modal
@@ -237,6 +233,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
 
+  if (canAccessBitNodeFeature(15)) {
+    getDarkscapeNavigator();
+  }
+
   if (Player.activeSourceFileLvl(9) >= 2) {
     homeComp.setMaxRam(128);
   } else if (Player.activeSourceFileLvl(1) > 0) {
@@ -249,11 +249,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Reset favor for Companies and Factions
   for (const company of Object.values(Companies)) company.prestigeSourceFile();
   for (const faction of Object.values(Factions)) faction.prestigeSourceFile();
-
-  // Stop a Terminal action if there is one
-  if (Terminal.action !== null) {
-    Terminal.finishAction(true);
-  }
 
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated
   if (Player.activeSourceFileLvl(12) > 0) {
@@ -310,7 +305,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // BitNode 12: The Recursion
-  if (Player.bitNodeN === 12 && Player.activeSourceFileLvl(12) > 100) {
+  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
     delayedDialog("Saynt_Garmo is watching you");
   }
 

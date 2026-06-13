@@ -4,7 +4,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { StdIO } from "../StdIO/StdIO";
 
-export function mv(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): void {
+export function mv(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 2) {
     Terminal.fatal(`Incorrect number of arguments. Usage: mv [src] [dest]`, stdIO);
     return;

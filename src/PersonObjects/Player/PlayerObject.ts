@@ -7,7 +7,7 @@ import type { Exploit } from "../../Exploits/Exploit";
 import type { Gang } from "../../Gang/Gang";
 import type { HacknetNode } from "../../Hacknet/HacknetNode";
 import type { Sleeve } from "../Sleeve/Sleeve";
-import type { Work } from "../../Work/Work";
+import type { PlayerBaseWork } from "../../Work/Work";
 
 import * as augmentationMethods from "./PlayerObjectAugmentationMethods";
 import * as bladeburnerMethods from "./PlayerObjectBladeburnerMethods";
@@ -73,7 +73,7 @@ export class PlayerObject extends Person implements IPlayer {
   lastSave = 0;
   totalPlaytime = 0;
 
-  currentWork: Work | null = null;
+  currentWork: PlayerBaseWork | null = null;
   focus = false;
 
   entropy = 0;
@@ -211,6 +211,12 @@ export class PlayerObject extends Person implements IPlayer {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete player.jobs[loadedCompanyName as CompanyName];
       }
+    }
+    // A bug created ill-formed UTF-16 darknet hostnames that caused the in-game editor to crash. Player.currentServer
+    // may point to one of these invalid hostnames. This code migrates the invalid hostnames and protects against
+    // similar issues in the future.
+    if (!player.currentServer.isWellFormed()) {
+      player.currentServer = player.currentServer.toWellFormed();
     }
     return player;
   }

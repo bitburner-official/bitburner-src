@@ -11,8 +11,3 @@ Namespace for [user interface](./bitburner.userinterface.md) functions.
 ```typescript
 readonly ui: UserInterface;
 ```
-
-## Remarks
-
-RAM cost: 0 GB
-

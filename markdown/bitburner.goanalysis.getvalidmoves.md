@@ -6,15 +6,17 @@
 
 Shows if each point on the board is a valid move for the player. By default, analyzes the current board state. Takes an optional boardState (and an optional prior-move boardState, if desired) to analyze a custom board.
 
-The true/false validity of each move can be retrieved via the X and Y coordinates of the move. `const validMoves = ns.go.analysis.getValidMoves();`
+The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
 
-`const moveIsValid = validMoves[x][y];`
-
+```js
+const validMoves = ns.go.analysis.getValidMoves();
+const moveIsValid = validMoves[x][y];
+```
 Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
 
 Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
 
-The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)` .
+The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)`<!-- -->.
 
 **Signature:**
 

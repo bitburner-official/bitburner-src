@@ -2,11 +2,55 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [SleeveRecoveryTask](./bitburner.sleeverecoverytask.md)
 
-## SleeveRecoveryTask type
+## SleeveRecoveryTask interface
 
 
 **Signature:**
 
 ```typescript
-type SleeveRecoveryTask = { type: "RECOVERY" };
+interface SleeveRecoveryTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[type](./bitburner.sleeverecoverytask.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"RECOVERY"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
+

@@ -6,10 +6,6 @@
 
 Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
 
-The details are keyed by opponent name, in this structure:
-
-<pre lang="javascript"> { <OpponentName>: { wins: number, losses: number, winStreak: number, highestWinStreak: number, favor: number, bonusPercent: number, bonusDescription: string, } } </pre>
-
 **Signature:**
 
 ```typescript
@@ -20,4 +16,8 @@ getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
 Partial&lt;Record&lt;[GoOpponent](./bitburner.goopponent.md)<!-- -->, [SimpleOpponentStats](./bitburner.simpleopponentstats.md)<!-- -->&gt;&gt;
 
 A dictionary of opponent stats keyed by opponent name.
+
+## Remarks
+
+RAM cost: 0 GB
 

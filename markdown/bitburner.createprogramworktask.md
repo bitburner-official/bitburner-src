@@ -9,9 +9,9 @@ Create Program
 **Signature:**
 
 ```typescript
-export interface CreateProgramWorkTask extends BaseTask 
+interface CreateProgramWorkTask extends PlayerBaseTask 
 ```
-**Extends:** [BaseTask](./bitburner.basetask.md)
+**Extends:** [PlayerBaseTask](./bitburner.playerbasetask.md)
 
 ## Remarks
 

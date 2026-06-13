@@ -96,12 +96,14 @@ Returns -1 if the server is offline, not found, or not a darkweb server.
 </td></tr>
 <tr><td>
 
-[getServerAuthDetails(host)](./bitburner.darknet.getserverauthdetails.md)
+[getServerDetails(host)](./bitburner.darknet.getserverdetails.md)
 
 
 </td><td>
 
-Returns the server's authentication protocol details.
+Returns the darknet-specific details of the server.
+
+If the darknet server has recently gone offline, the returned object will be a dummy server object with `isOnline: false`<!-- -->.
 
 
 </td></tr>
@@ -247,19 +249,6 @@ Some possible mutations that can occur somewhere on the darknet each cycle:
 </td><td>
 
 Opens a .cache file on the current server to acquire its valuable contents.
-
-
-</td></tr>
-<tr><td>
-
-[packetCapture(host)](./bitburner.darknet.packetcapture.md)
-
-
-</td><td>
-
-Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise. The target server must be directly connected to the server that the script is running on.
-
-Using multiple threads speeds up the capture process.
 
 
 </td></tr>

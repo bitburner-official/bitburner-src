@@ -1,6 +1,6 @@
 /* eslint-disable no-process-exit */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, dialog, BrowserWindow, ipcMain, protocol, net } = require("electron");
+const { app, dialog, BrowserWindow, ipcMain, protocol, net, shell } = require("electron");
 
 const log = require("electron-log");
 log.catchErrors();
@@ -19,7 +19,7 @@ app.on("window-all-closed", () => {
   process.exit(0);
 });
 
-require("./steamworksUtils");
+const { MissingVcRuntimeError } = require("./steamworksUtils");
 const gameWindow = require("./gameWindow");
 const utils = require("./utils");
 const storage = require("./storage");
@@ -30,8 +30,11 @@ const path = require("path");
 const { realpathSync } = require("fs");
 const { fileURLToPath, format } = require("url");
 
-log.transports.file.level = store.get("file-log-level", "info");
-log.transports.console.level = store.get("console-log-level", "debug");
+utils.initializeLogLevelConfig();
+
+// Apply config of log levels.
+log.transports.file.level = store.get("file-log-level");
+log.transports.console.level = store.get("console-log-level");
 
 log.info(`Started app: ${JSON.stringify(process.argv)}`);
 
@@ -255,17 +258,23 @@ app.on("ready", async () => {
     await window.loadFile("export.html");
     window.show();
     setStopProcessHandler(window);
-    await utils.exportSave(window);
   } else {
     window = await startWindow(process.argv.includes("--no-scripts"));
     if (global.steamworksError) {
-      await dialog.showMessageBox(window, {
+      const buttons = ["OK"];
+      if (global.steamworksError instanceof MissingVcRuntimeError) {
+        buttons.push("Download Visual C++ v14 Redistributable");
+      }
+      const { response } = await dialog.showMessageBox(window, {
         title: "Bitburner",
         message: "Could not connect to Steam",
-        detail: `${global.steamworksError.message}\n\nYou won't be able to receive achievements until this is resolved and you restart the game.`,
+        detail: `${global.steamworksError.message}\n\nSteam Cloud and Steam achievements won't work until this is resolved and you restart the game.`,
         type: "warning",
-        buttons: ["OK"],
+        buttons,
       });
+      if (response === 1) {
+        await shell.openExternal("https://aka.ms/vc14/vc_redist.x64.exe");
+      }
     }
   }
 });

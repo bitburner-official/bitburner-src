@@ -39,6 +39,9 @@ import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
 import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+import { CovenantCampaign } from "./ui/CovenantCampaign";
+import { GangCampaign } from "./ui/GangCampaign";
+import { GangConstants } from "../Gang/data/Constants";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;
@@ -51,7 +54,7 @@ interface FactionInfoParams {
   offerSecurityWork?: boolean;
   special?: boolean;
   keepOnInstall?: boolean;
-  assignment?: () => React.ReactElement;
+  campaign?: () => React.ReactElement;
 }
 
 /** Contains the "information" property for all the Factions, which is just a description of each faction */
@@ -65,10 +68,10 @@ export class FactionInfo {
   /** The hint to show about how to get invited to this faction. */
   rumorText: JSX.Element;
 
-  /** Conditions for being automatically inivited to this facton. */
+  /** Conditions for being automatically invited to this faction. */
   inviteReqs: CompoundPlayerCondition;
 
-  /** Conditions for automatically hearing a rumor about this facton. */
+  /** Conditions for automatically hearing a rumor about this faction. */
   rumorReqs: CompoundPlayerCondition;
 
   /** A flag indicating if the faction supports field work to earn reputation. */
@@ -87,7 +90,7 @@ export class FactionInfo {
   special: boolean;
 
   /** The data to display on the faction screen. */
-  assignment?: () => React.ReactElement;
+  campaign?: () => React.ReactElement;
 
   constructor(params: FactionInfoParams) {
     this.infoText = params.infoText ?? <></>;
@@ -101,7 +104,7 @@ export class FactionInfo {
 
     this.keep = params.keepOnInstall ?? false;
     this.special = params.special ?? false;
-    this.assignment = params.assignment;
+    this.campaign = params.campaign;
   }
 
   offersWork(): boolean {
@@ -170,6 +173,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ],
     offerHackingWork: true,
     offerFieldWork: true,
+    campaign: () => {
+      return <CovenantCampaign />;
+    },
   }),
 
   // Megacorporations, each forms its own faction
@@ -706,7 +712,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerFieldWork: false,
     offerSecurityWork: false,
     special: true,
-    assignment: (): React.ReactElement => {
+    campaign: (): React.ReactElement => {
       return (
         <Option
           buttonText={"Open Bladeburner headquarters"}
@@ -768,7 +774,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerSecurityWork: false,
     special: true,
     keepOnInstall: true,
-    assignment: (): React.ReactElement => {
+    campaign: (): React.ReactElement => {
       return (
         <Option
           buttonText={"Open Stanek's Gift"}
@@ -803,8 +809,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerSecurityWork: false,
     special: true,
     keepOnInstall: true,
-    assignment: (): React.ReactElement => {
+    campaign: (): React.ReactElement => {
       return <Typography>{FactionName.ShadowsOfAnarchy} can only gain reputation by infiltrating.</Typography>;
     },
   }),
 };
+
+for (const factionName of GangConstants.Names) {
+  FactionInfos[factionName].campaign = () => <GangCampaign factionName={factionName} />;
+}
