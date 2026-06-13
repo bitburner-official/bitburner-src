@@ -207,6 +207,7 @@ export class Terminal {
           setTimeout(resolve, durationSec * 1000);
           cancel = () => {
             cancelled = true;
+            stdIO.close();
             reject(new Cancellation(name));
           };
         });
@@ -215,6 +216,7 @@ export class Terminal {
         if (cancelled) {
           this.print(`Cancelled ${name}`, stdIO);
         }
+        stdIO.close();
       }
       onDone();
     })();

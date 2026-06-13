@@ -35,6 +35,7 @@ import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { DarknetServer } from "./Server/DarknetServer";
 import { getTerminalStdIO } from "./Terminal/StdIO/RedirectIO";
+import { resetStdinHandleCounter } from "./Terminal/StdIO/utils";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -44,6 +45,7 @@ export function prestigeWorkerScripts(): void {
   }
 
   NetscriptPorts.clear();
+  resetStdinHandleCounter();
 }
 
 async function startNetscript2Script(workerScript: WorkerScript): Promise<void> {

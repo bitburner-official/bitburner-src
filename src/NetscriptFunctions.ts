@@ -1517,7 +1517,21 @@ export const ns: InternalAPI<NSFull> = {
   },
   getStdin: (ctx) => () => {
     const stdinHandle = ctx.workerScript.scriptRef.stdin?.handle;
-    return stdinHandle ? new PortHandle(stdinHandle.n) : null;
+    if (!stdinHandle) {
+      return null;
+    }
+    const handle = new PortHandle(stdinHandle.n);
+    // Provide only the methods the player needs to access (or write to) stdio
+    return {
+      write: (n) => handle.write(n),
+      tryWrite: (n) => handle.tryWrite(n),
+      nextWrite: () => handle.nextWrite(),
+      read: () => handle.read(),
+      peek: () => handle.peek(),
+      full: () => handle.full(),
+      empty: () => handle.empty(),
+      clear: () => handle.clear(),
+    };
   },
   flags: (ctx) => Flags(ctx, false),
   heart: { break: () => () => Player.karma },

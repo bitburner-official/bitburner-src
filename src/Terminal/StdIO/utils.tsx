@@ -59,8 +59,11 @@ function clean(str: string, stripAnsiEscape: boolean) {
   return stripAnsiEscape ? str.replaceAll(ANSI_ESCAPE, "") : str;
 }
 
-let nextStdinPort = -1e7;
+let nextStdinPort = -1;
 export function getNextStdinHandle(): PortHandle {
   // port numbers for pipes are negative numbers to avoid collisions with standard player ns ports
   return new PortHandle(nextStdinPort-- as PortNumber);
+}
+export function resetStdinHandleCounter() {
+  nextStdinPort = -1;
 }
