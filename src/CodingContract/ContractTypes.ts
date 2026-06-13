@@ -68,7 +68,16 @@ type CodingContractDefinitions<Signatures extends Record<string, [unknown, unkno
     ? CodingContractComplexType<Signatures[T][0], Signatures[T][1], Signatures[T][2]>
     : CodingContractSimpleType<Signatures[T][0], Signatures[T][1]>;
 };
-export type CodingContractTypes = CodingContractDefinitions<CodingContractSignatures>;
+
+type CodingContractStates = {
+  "Square Root": [string, string];
+};
+type InternalCodingContractSignatures = {
+  [K in keyof CodingContractSignatures]: K extends keyof CodingContractStates
+    ? [...CodingContractSignatures[K], CodingContractStates[K]]
+    : CodingContractSignatures[K];
+};
+export type CodingContractTypes = CodingContractDefinitions<InternalCodingContractSignatures>;
 
 /* Helper functions for Coding Contract implementations */
 export function removeBracketsFromArrayString(str: string): string {
