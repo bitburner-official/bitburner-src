@@ -52,9 +52,9 @@ export enum ComplexPage {
   ImportSave = "Import Save",
   Documentation = "Documentation",
   Options = "Options",
+  CustomPage = "Custom Page",
   // LoadingScreen is a special state that should never be returned to after the initial game load. To enforce this, it
   // is constructed as a ComplexPage with no PageContext, and thus toPage() cannot be used (since no overload will fit
   // it).
   LoadingScreen = "Loading Screen",
-  CustomPage = "Custom Page",
 }

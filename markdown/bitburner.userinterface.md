@@ -142,7 +142,7 @@ Open the tail window of a script.
 
 </td><td>
 
-Render a ReactNode in the main content area.
+Renders a ReactNode in the main content area.
 
 
 </td></tr>
