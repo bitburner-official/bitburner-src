@@ -12,7 +12,8 @@ import { sleep } from "../../utils/Utility";
 export async function parseRedirectedCommands(commandString: string) {
   const parsed = parseCommand(commandString);
   const commandSets = findCommandsSplitByRedirects(parsed);
-  if (commandSets.length <= 1) {
+  if (!commandSets.length) return;
+  if (commandSets.length === 1) {
     return Terminal.executeCommand(commandString, getTerminalStdIO());
   }
 
@@ -76,10 +77,10 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
   const result: Args[][] = [];
   let currentCommand: Args[] = [];
   for (const token of commands) {
-    if (isPipeSymbol(token)) {
+    if (isPipeSymbol(token) && currentCommand.length) {
       result.push(currentCommand);
       currentCommand = [token];
-    } else {
+    } else if (token) {
       currentCommand.push(token);
     }
   }
@@ -207,8 +208,8 @@ function handleIoError(stdIO: StdIO, error: string) {
 
 export function isLongRunningCommand(commandSet: Args[]) {
   const pipeSymbol = isPipeSymbol(commandSet[0]) ? `${commandSet[0]}` : null;
-  const command = `${pipeSymbol ? commandSet[1] : commandSet[0]}`;
-  return ["tail", "run"].includes(command) || !!resolveScriptFilePath(command);
+  const command = `${pipeSymbol ? commandSet[1] : commandSet[0]}`.toLowerCase();
+  return ["tail", "run", "cat", "grep"].includes(command) || !!resolveScriptFilePath(command);
 }
 
 function concatenateFileContents(content: string, newContent: string): string {
