@@ -76,7 +76,7 @@ export class RunningScript {
   // The title, as shown in the script's log box. Null means use the default filename + args,
   // but the text is only created on first access. If it is set to a React element (only by the user),
   // that will not be persisted, and will be restored to default on load.
-  title = "" as string | React.ReactElement;
+  title = null as string | React.ReactElement | null;
 
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
