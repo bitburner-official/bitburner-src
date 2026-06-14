@@ -24,7 +24,7 @@ packageLinux() {
 }
 
 packageMac() {
-  electron-packager .package bitburner --platform darwin --arch universal --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*" --out .build --asar.unpack='**/node_modules/@catloversg/steamworks.js/**/*.{dylib,node}' --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner"
+  electron-packager .package bitburner --platform darwin --arch universal --osx-universal.x64ArchFiles="Contents/Resources/app.asar.unpacked/node_modules/@catloversg/steamworks.js/dist/osx/*.node" --out .build --asar.unpack='**/node_modules/@catloversg/steamworks.js/**/*.{dylib,node}' --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner"
 }
 
 BUILD_PLATFORM="${1:-"all"}"
