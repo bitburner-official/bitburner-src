@@ -11,6 +11,7 @@ import { AddRecentScript } from "./RecentScripts";
 import { handleUnknownError } from "../utils/ErrorHandler";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { BaseServer } from "../Server/BaseServer";
+import { scriptKey } from "../utils/helpers/scriptKey";
 
 export function killWorkerScript(ws: WorkerScript): void {
   stopAndCleanUpWorkerScript(ws);
@@ -102,13 +103,14 @@ function removeWorkerScript(workerScript: WorkerScript): void {
 
   // Delete the RunningScript object from that server
   const rs = workerScript.scriptRef;
-  const byPid = server.runningScriptMap.get(rs.scriptKey);
+  const key = scriptKey(rs.filename, rs.args);
+  const byPid = server.runningScriptMap.get(key);
   if (!byPid) {
-    console.error(`Couldn't find runningScriptMap for key ${rs.scriptKey}`);
+    console.error(`Couldn't find runningScriptMap for key ${key}`);
   } else {
     byPid.delete(workerScript.pid);
     if (byPid.size === 0) {
-      server.runningScriptMap.delete(rs.scriptKey);
+      server.runningScriptMap.delete(key);
     }
   }
 

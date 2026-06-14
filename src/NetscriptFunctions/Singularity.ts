@@ -1155,16 +1155,23 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       if (cbScript === null) {
         throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
-      enterBitNode(true, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      const bitNodeOptions = helpers.validateBitNodeOptions(ctx, _bitNodeOptions);
+      enterBitNode(true, Player.bitNodeN, nextBN, bitNodeOptions);
       if (cbScript) {
         setTimeout(() => runAfterReset(cbScript), 500);
       }
     },
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
-      const nextBN = helpers.number(ctx, "nextBN", _nextBN);
-      if (!validBitNodes.includes(nextBN)) {
-        throw new Error(`Invalid BitNode: ${_nextBN}.`);
+      const nextBN = _nextBN != null ? helpers.number(ctx, "nextBN", _nextBN) : null;
+      if (nextBN !== null) {
+        // If _nextBN was provided, check that it is a valid BitNode.
+        if (!validBitNodes.includes(nextBN)) {
+          throw new Error(`Invalid BitNode: ${_nextBN}.`);
+        }
+      } else if (_cbScript != null || _bitNodeOptions != null) {
+        // If _nextBN was not provided, the other parameters must also be nullish.
+        throw helpers.errorMessage(ctx, `When nextBN is nullish, other parameters must be nullish.`);
       }
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
@@ -1172,6 +1179,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       if (cbScript === null) {
         throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
+      const bitNodeOptions = helpers.validateBitNodeOptions(ctx, _bitNodeOptions);
 
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) {
@@ -1197,7 +1205,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       wd.backdoorInstalled = true;
       calculateAchievements();
-      enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      if (nextBN === null) {
+        Router.toPage(Page.BitVerse, { flume: false, quick: false });
+        return;
+      }
+      enterBitNode(false, Player.bitNodeN, nextBN, bitNodeOptions);
       if (cbScript) {
         setTimeout(() => runAfterReset(cbScript), 500);
       }

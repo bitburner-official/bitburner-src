@@ -19,15 +19,16 @@ A **redirect** changes where a command's output goes, or where a command reads i
 - `<` reads a file and sends its contents as input to a command
 
 This can be used for writing to a file from the terminal:
+
 ```
 [home /]> echo "hello world" > myFile.txt
 ```
 
 or appending script logs to a file:
+
 ```
 [home /]> tail hack.js >> logs.txt
 ```
-
 
 ### Why are pipes and redirects useful?
 

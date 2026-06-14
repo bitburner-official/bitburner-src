@@ -27,7 +27,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[alias(alias, substitution, global)](./bitburner.userinterface.alias.md)
+[alias(alias, substitution, isGlobal)](./bitburner.userinterface.alias.md)
 
 
 </td><td>
@@ -132,6 +132,17 @@ Opens the specified file(s) in the code editor.
 </td><td>
 
 Open the tail window of a script.
+
+
+</td></tr>
+<tr><td>
+
+[renderPage(node)](./bitburner.userinterface.renderpage.md)
+
+
+</td><td>
+
+Renders a ReactNode in the main content area.
 
 
 </td></tr>

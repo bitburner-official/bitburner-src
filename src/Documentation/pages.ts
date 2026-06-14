@@ -1522,6 +1522,7 @@ import nsDoc_bitburner_userinterface_md from "../../markdown/bitburner.userinter
 import nsDoc_bitburner_userinterface_movetail_md from "../../markdown/bitburner.userinterface.movetail.md?raw";
 import nsDoc_bitburner_userinterface_opencodeeditor_md from "../../markdown/bitburner.userinterface.opencodeeditor.md?raw";
 import nsDoc_bitburner_userinterface_opentail_md from "../../markdown/bitburner.userinterface.opentail.md?raw";
+import nsDoc_bitburner_userinterface_renderpage_md from "../../markdown/bitburner.userinterface.renderpage.md?raw";
 import nsDoc_bitburner_userinterface_rendertail_md from "../../markdown/bitburner.userinterface.rendertail.md?raw";
 import nsDoc_bitburner_userinterface_resetstyles_md from "../../markdown/bitburner.userinterface.resetstyles.md?raw";
 import nsDoc_bitburner_userinterface_resettheme_md from "../../markdown/bitburner.userinterface.resettheme.md?raw";
@@ -3147,6 +3148,7 @@ AllPages["nsDoc/bitburner.userinterface.md"] = nsDoc_bitburner_userinterface_md;
 AllPages["nsDoc/bitburner.userinterface.movetail.md"] = nsDoc_bitburner_userinterface_movetail_md;
 AllPages["nsDoc/bitburner.userinterface.opencodeeditor.md"] = nsDoc_bitburner_userinterface_opencodeeditor_md;
 AllPages["nsDoc/bitburner.userinterface.opentail.md"] = nsDoc_bitburner_userinterface_opentail_md;
+AllPages["nsDoc/bitburner.userinterface.renderpage.md"] = nsDoc_bitburner_userinterface_renderpage_md;
 AllPages["nsDoc/bitburner.userinterface.rendertail.md"] = nsDoc_bitburner_userinterface_rendertail_md;
 AllPages["nsDoc/bitburner.userinterface.resetstyles.md"] = nsDoc_bitburner_userinterface_resetstyles_md;
 AllPages["nsDoc/bitburner.userinterface.resettheme.md"] = nsDoc_bitburner_userinterface_resettheme_md;

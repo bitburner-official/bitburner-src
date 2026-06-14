@@ -457,6 +457,7 @@ const ui = {
   alias: 0,
   unalias: 0,
   getAllAliases: 0,
+  renderPage: 0,
 } as const;
 
 // Grafting API

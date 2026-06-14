@@ -15,7 +15,6 @@ import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
@@ -71,9 +70,7 @@ export class RunningScript {
   // hostname of the server on which this script is running
   server = "";
 
-  // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
-  scriptKey = "" as ScriptKey;
-
+  // input from pipes or redirects in the terminal
   stdin: IOStream | null = null;
 
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
@@ -104,7 +101,6 @@ export class RunningScript {
     if (!ramUsage) throw new Error("Must provide a ramUsage for RunningScript initialization.");
     this.filename = script.filename;
     this.args = args;
-    this.scriptKey = scriptKey(this.filename, args);
     this.server = script.server;
     this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;
@@ -180,7 +176,6 @@ export class RunningScript {
     const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
     const validEntries = Object.entries(runningScript.dataMap).filter(isValidDataMapEntry);
     runningScript.dataMap = new Map(validEntries);
-    if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
     if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
     return runningScript;
   }

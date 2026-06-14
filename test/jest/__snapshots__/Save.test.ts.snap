@@ -81,7 +81,6 @@ exports[`load/saveAllServers 1`] = `
             "onlineRunningTime": 7.210000000000004,
             "ramUsage": 1.6,
             "server": "home",
-            "scriptKey": "script.js*[]",
             "title": "Awesome Script",
             "threads": 1,
             "temporary": false
