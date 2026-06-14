@@ -73,7 +73,9 @@ export class RunningScript {
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
 
-  // Custom title for the script's log box. Undefined means use the default filename + args title only when looked at.
+  // The title, as shown in the script's log box. Null means use the default filename + args,
+  // but the text is only created on first access. If it is set to a React element (only by the user),
+  // that will not be persisted, and will be restored to default on load.
   title = "" as string | React.ReactElement;
 
   // Number of threads that this script is running with
