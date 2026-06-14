@@ -7084,6 +7084,26 @@ interface UserInterface {
    * @returns A map of alias names to an object containing the substitution string and if the alias was set to global.
    */
   getAllAliases(): Map<string, { substitution: string; isGlobal: boolean }>;
+
+  /**
+   * Renders a ReactNode in the main content area.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * On the left side of the UI, the sidebar contains shortcuts to game features (Terminal, Script Editor, City, etc.).
+   * When clicking a sidebar item, the feature is rendered on the right side of the UI. This space is the main content
+   * area.
+   *
+   * For example, when you click the "City" button in the sidebar, the locations in that city are rendered in the main
+   * content area.
+   *
+   * This function effectively switches to a new custom "page", as if you had navigated via the sidebar. Calling it
+   * again replaces the contents of the page.
+   *
+   * @param node - The node to be rendered.
+   */
+  renderPage(node: ReactNode): void;
 }
 
 /**
