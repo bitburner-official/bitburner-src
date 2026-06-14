@@ -296,10 +296,11 @@ const expectSucceedInJumpingToNextBN = () => {
 };
 
 // Make sure that the player is still in the same BN without SF rewards.
-const expectFailToJumpToNextBN = () => {
+const expectFailToJumpToNextBN = (expectedWDBackdoorStatus = false) => {
   expect(Player.bitNodeN).toStrictEqual(1);
   expect(Player.augmentations.length).toStrictEqual(1);
   expect(Player.sourceFileLvl(1)).toStrictEqual(0);
+  expect(GetServerOrThrow(SpecialServers.WorldDaemon).backdoorInstalled).toBe(expectedWDBackdoorStatus);
 };
 
 describe("destroyW0r1dD43m0n", () => {
@@ -350,8 +351,7 @@ describe("destroyW0r1dD43m0n", () => {
       const spiedRouterToPage = jest.spyOn(Router, "toPage");
       ns.singularity.destroyW0r1dD43m0n(undefined);
 
-      expect(GetServerOrThrow(SpecialServers.WorldDaemon).backdoorInstalled).toBe(true);
-      expectFailToJumpToNextBN();
+      expectFailToJumpToNextBN(true);
       expect(spiedRouterToPage).toHaveBeenCalledWith(Page.BitVerse, { flume: false, quick: false });
       spiedRouterToPage.mockRestore();
     });
@@ -410,7 +410,6 @@ describe("destroyW0r1dD43m0n", () => {
         "When nextBN is nullish, other parameters must be nullish.",
       );
 
-      expect(GetServerOrThrow(SpecialServers.WorldDaemon).backdoorInstalled).toBe(false);
       expectFailToJumpToNextBN();
       expect(spiedRouterToPage).not.toHaveBeenCalled();
       spiedRouterToPage.mockRestore();
