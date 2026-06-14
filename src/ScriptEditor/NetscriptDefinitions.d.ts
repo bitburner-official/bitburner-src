@@ -2890,11 +2890,15 @@ export interface Singularity {
    *   OR
    * Completed the final black op.
    *
-   * @param nextBN - BN number to jump to
+   * If you do not want to move on to the next BN and instead stay on the BitVerse screen, you can set nextBN
+   * to undefined. Note that with the hacking route, using {@link Singularity.installBackdoor | installBackdoor} is a
+   * cheaper way to do this.
+   *
+   * @param nextBN - BN number to jump to. Passing undefined leaves you on the BitVerse screen.
    * @param callbackScript - Name of the script to launch in the next BN.
    * @param bitNodeOptions - BitNode options for the next BN.
    */
-  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
+  destroyW0r1dD43m0n(nextBN?: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Get the current work the player is doing.
