@@ -7,6 +7,8 @@ import { LiteratureName, MessageFilename } from "@enums";
 import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
 import { runScript } from "../../../src/Terminal/commands/runScript";
 import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
+import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
+import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -482,5 +484,97 @@ describe("Terminal Pipes", () => {
 
     const outputFileContent = GetServer(Player.currentServer)?.textFiles?.get(tailOutputFileName)?.text;
     expect(outputFileContent).toContain("foo\nsleep: Sleeping for 0.050 seconds.\ntest2");
+  });
+
+  describe("error paths and pipeline drainage", () => {
+    it("should create an empty file when grep finds no matches in piped input", async () => {
+      const fileName = "noMatch.txt" as TextFilePath;
+      await Terminal.executeCommands(`echo 'hello world' | grep 'missing' > ${fileName}`);
+      await sleep(100);
+
+      const file = GetServer(Player.currentServer)?.textFiles?.get(fileName);
+      expect(file).toBeDefined();
+      expect(file?.text).toBe("");
+    });
+
+    it("should drain the pipeline and continue past a grep with no matches", async () => {
+      const fileName = "afterGrep.txt" as TextFilePath;
+      await Terminal.executeCommands(`echo 'hello world' | grep 'missing'; echo 'after' > ${fileName}`);
+      await sleep(100);
+
+      const file = GetServer(Player.currentServer)?.textFiles?.get(fileName);
+      expect(file?.text).toBe("after");
+    });
+
+    it("should write both tprint chunks to a script file across a single > redirect when the file does not yet exist", async () => {
+      const scriptName = "testScript.js" as ScriptFilePath;
+      const outputScriptName = "freshOutput.js" as ScriptFilePath;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.getStdin().read()); await ns.sleep(100); ns.tprint(ns.getStdin().read()); }`;
+      await Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
+
+      // Confirm the output file does not exist before the run.
+      expect(GetServer(Player.currentServer)?.scripts?.get(outputScriptName)).toBeUndefined();
+
+      await Terminal.executeCommands(`echo first second | ${scriptName} > ${outputScriptName}`);
+      await sleep(200);
+
+      const fileContent = GetServer(Player.currentServer)?.scripts?.get(outputScriptName)?.content;
+      expect(fileContent).toContain(`${scriptName}: first second\n${scriptName}: null`);
+    });
+  });
+
+  describe("cancellation", () => {
+    it("cancelAction closes the running action's stdIO", () => {
+      const stdin = new IOStream();
+      const stdIO = new StdIO(stdin);
+      let cancelCalled = false;
+      Terminal.action = {
+        cancel: () => {
+          cancelCalled = true;
+        },
+        finished: Promise.resolve(),
+        getProgressText: () => "",
+        stdIO,
+      };
+
+      Terminal.cancelAction();
+
+      expect(cancelCalled).toBe(true);
+      expect(Terminal.action).toBeNull();
+      expect(stdIO.stdout?.isClosed).toBe(true);
+      expect(stdin.isClosed).toBe(true);
+    });
+
+    it("cancelAction allows a downstream pipe consumer to drain instead of hanging", async () => {
+      const upstream = new StdIO(null);
+      const downstreamStdin = upstream.stdout;
+      const downstream = new StdIO(downstreamStdin, null);
+
+      const received: unknown[] = [];
+      const drained = (async () => {
+        for await (const chunk of downstream) {
+          if (chunk === null) break;
+          received.push(chunk);
+        }
+      })();
+
+      upstream.write("first");
+
+      Terminal.action = {
+        cancel: () => {},
+        finished: Promise.resolve(),
+        getProgressText: () => "",
+        stdIO: upstream,
+      };
+      Terminal.cancelAction();
+
+      // Race the drain against a short timeout to fail fast if cancellation leaks the pipe.
+      const timeout = new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 100));
+      const result = await Promise.race([drained.then(() => "drained" as const), timeout]);
+
+      expect(result).toBe("drained");
+      expect(received).toEqual(["first"]);
+      expect(downstreamStdin?.isClosed).toBe(true);
+    });
   });
 });
