@@ -96,8 +96,8 @@ export function runScript(
   runningScript.stdin = stdIO.stdin?.deref() ?? null;
   runningScript.terminalStdOut = stdIO;
 
-  // scripts interacting with terminal pipes are temporary, to avoid orphaned or partial pipelines on start
-  if (runningScript.stdin || stdIO.stdout) {
+  // scripts using input from terminal pipes are temporary, to avoid orphaned or partial pipelines on start
+  if (runningScript.stdin) {
     runningScript.temporary = true;
   }
 

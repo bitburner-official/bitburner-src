@@ -5,10 +5,10 @@
 When you run a command in the terminal, it normally prints its output directly to the screen. A **pipe** (`|`) lets you take that output and send it as input to another command instead. One command produces output, and the next command consumes it.
 
 ```
-[home /]> echo "hello world" | myFile.txt
+[home /]> echo "hello world" | grep "hello"
 ```
 
-Here, `echo` produces the text `"hello world"`, and instead of printing it to the terminal, that text is passed as input (stdin) to a file and saved.
+Here, `echo` produces the text `"hello world"`, and instead of printing it to the terminal, that text is passed as input (stdin) to grep for it to search.
 
 ### What is a redirect?
 
@@ -17,6 +17,17 @@ A **redirect** changes where a command's output goes, or where a command reads i
 - `>` sends output to a file, **overwriting** any existing content
 - `>>` sends output to a file, **appending** to any existing content
 - `<` reads a file and sends its contents as input to a command
+
+This can be used for writing to a file from the terminal:
+```
+[home /]> echo "hello world" > myFile.txt
+```
+
+or appending script logs to a file:
+```
+[home /]> tail hack.js >> logs.txt
+```
+
 
 ### Why are pipes and redirects useful?
 
@@ -62,8 +73,6 @@ Writes command output to a file. If the file already exists, its contents are re
 
 After this, `notes.txt` contains only `second`.
 
-**Note:** Script files (`.js`, `.ts`, `.jsx`, `.tsx`) can only be written to with `>` if they are empty files. Attempts to overwrite a non-empty script file are blocked. This is to prevent accidentally deleting player scripts.
-
 ### Pipe: `|`
 
 Sends the output (stdout) of one command as the input (stdin) of the next.
@@ -85,7 +94,7 @@ Pipes can be chained across multiple commands:
 Reads a file and provides its contents as stdin to a command. This can only be used as the **first** command in a pipe chain.
 
 ```
-[home /]> cat < myfile.txt | cat
+[home /]> grep "error" < myfile.txt
 ```
 
 If you try to use `<` anywhere other than the first position, you will get an error.
@@ -100,7 +109,7 @@ Semicolons let you run multiple independent commands on one line. Each command i
 
 ### The `$!` variable
 
-`$!` expands to the PID (process ID) of the last script that was started with `run`. If the last command was not a `run`, it expands to `-1`.
+`$!` expands to the PID (process ID) of the last script that was started with `run`.
 
 This is useful for piping the output of `tail` to a file:
 
@@ -116,7 +125,7 @@ You can also use it with `echo` to capture the PID:
 
 ### Piping into scripts
 
-When a script is part of a pipe chain, it can read from stdin using `ns.getStdin()`. The script receives whatever the previous command wrote to stdout.
+When a script is part of a pipe chain, it can read any input piped into its `run` command using `ns.getStdin()`. The script receives anything the previous command wrote to its stdout.
 
 ```
 [home /]> echo "input data" | run myScript.js
@@ -197,11 +206,12 @@ Bitburner's terminal supports a useful subset of Unix pipes and redirects, but i
 
 The following common Unix features are **not supported**:
 
+- **Multi-line command processing** — Unlike Unix, commands in Bitburner do not support commands wrapping multiple lines.
 - **Here-documents (`<< EOF`)** — There is no way to provide multi-line string literals as stdin inline in the terminal.
 - **Here-strings (`<<<`)** — The `<<<` operator for passing a single string directly to stdin is not supported.
 - **Stderr redirect (`2>`, `2>>`, `&>`)** — There is no way to separately redirect or suppress error output.
 - **Process substitution (`<(cmd)`, `>(cmd)`)** — Commands cannot be used in place of file arguments.
-- **Background jobs (`&`)** — You cannot run commands in the background from the terminal using `&`.
+- **Background jobs (`&`)** — Long-running commands like `hack` and `backdoor` are always blocking/foreground, and cannot be run as background tasks. (Other commands like `run` are effectively "background" already.)
 - **Subshells (`$(cmd)` or backtick substitution)** — Command output cannot be substituted inline as an argument to another command.
 - **Named pipes (FIFOs)** — There is no `mkfifo` or equivalent.
 - **Multiple output targets (`tee`)** — You cannot split output to both the terminal and a file simultaneously (no built-in `tee` command). This can be implemented by the player, though.

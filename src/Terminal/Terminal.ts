@@ -12,7 +12,7 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { parseCommand, parseCommands } from "./Parser";
+import { applyLastPidVariables, parseCommand, parseCommands } from "./Parser";
 import { Settings } from "../Settings/Settings";
 import { createProgressBarText } from "../utils/helpers/createProgressBarText";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
@@ -146,7 +146,7 @@ export class Terminal {
   currDir = "" as Directory;
 
   // PID of the script run as part of the last executed command, if any
-  pidOfLastScriptRun: number | null = null;
+  pidOfLastScriptRun: number = -1;
 
   terminalOutput(item: Output | Link | RawOutput): void {
     this.outputHistory.push(item);
@@ -355,7 +355,8 @@ export class Terminal {
     if (this.action !== null)
       return this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
 
-    const commandArray = parseCommand(command);
+    const rawCommandArray = parseCommand(command);
+    const commandArray = applyLastPidVariables(rawCommandArray, this.pidOfLastScriptRun);
     if (!commandArray.length) return;
 
     const currentServer = Player.getCurrentServer();
@@ -525,10 +526,7 @@ export class Terminal {
 
     const result = f(commandArray, currentServer, stdIO);
 
-    if (commandName.toLowerCase() !== "run") {
-      this.pidOfLastScriptRun = null;
-    }
-
+    // TODO-fico: validate this works with aliases
     if (!this.action && !["wget", "run", "cat", "grep", "tail"].includes(commandName.toLowerCase())) {
       stdIO.close();
     }

@@ -129,16 +129,30 @@ describe("Terminal Pipes", () => {
       expect(fileContent).not.toContain(startingData);
     });
 
-    it("should not permit overwriting a script file with content", async () => {
-      const fileName = "output.js";
-      const commandString = `echo 'Hello World' > ${fileName}; echo 'Malicious Content' > ${fileName}`;
-
+    it("should only overwrite script contents once per > pipe when arguments are piped in", async () => {
+      // Add file to server with content
+      const outputFileName = "outputScript.js" as ScriptFilePath;
+      const startingData = "startingData";
+      const commandString = `echo ${startingData} > ${outputFileName}`;
       await Terminal.executeCommands(commandString);
 
-      const server = GetServer(Player.currentServer);
-      const fileContent = server?.scripts?.get(fileName as ScriptFilePath)?.content;
+      const scriptName = "testScript.js" as ScriptFilePath;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.getStdin().read()); await ns.sleep(100); ns.tprint(ns.getStdin().read()); }`;
 
-      expect(fileContent).toContain("Hello World");
+      // Add script to server
+      await Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
+
+      // Pass arguments to script via pipe
+      const command = `echo test1 test2 | ${scriptName} > ${outputFileName}`;
+      await Terminal.executeCommands(command);
+      await sleep(200);
+
+      const server = GetServer(Player.currentServer);
+      const fileContent = server?.scripts?.get(outputFileName)?.content;
+
+      expect(Terminal.outputHistory.length).toBe(1);
+      expect(fileContent).toContain(`${scriptName}: test1 test2\n${scriptName}: null`);
+      expect(fileContent).not.toContain(startingData);
     });
   });
 

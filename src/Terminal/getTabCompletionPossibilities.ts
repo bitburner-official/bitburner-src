@@ -17,7 +17,7 @@ import { parseUnknownError } from "../utils/ErrorHelper";
 import { DarknetServer } from "../Server/DarknetServer";
 import { CompletedProgramName } from "@enums";
 import { getCommandAfterLastPipe } from "./StdIO/utils";
-import { getTerminalStdIO } from "./StdIO/RedirectIO";
+import { Output } from "./OutputTypes";
 
 /** Extract the text being autocompleted, handling unclosed double quotes as a single token */
 export function extractCurrentText(terminalText: string): string {
@@ -317,11 +317,13 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
       loadedModule = await compile(script, currServ.scripts);
     } catch (e) {
       const errorData = parseUnknownError(e);
-      Terminal.error(
-        `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
-          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
-        }`,
-        getTerminalStdIO(),
+      Terminal.terminalOutput(
+        new Output(
+          `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
+            errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+          }`,
+          "error",
+        ),
       );
       return;
     }
@@ -408,11 +410,13 @@ export async function getTabCompletionPossibilities(fullTerminalText: string, ba
       pos = pos.concat(options.map((x) => String(x)));
     } catch (error) {
       const errorData = parseUnknownError(error);
-      Terminal.fatal(
-        `The autocomplete function in ${filepath} throws an error. Reason: ${errorData.errorAsString}.${
-          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
-        }`,
-        getTerminalStdIO(),
+      Terminal.terminalOutput(
+        new Output(
+          `The autocomplete function in ${filepath} throws an error. Reason: ${errorData.errorAsString}.${
+            errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+          }`,
+          "error",
+        ),
       );
     }
     return pos.concat(pos2);
