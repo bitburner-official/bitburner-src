@@ -345,7 +345,7 @@ describe("Terminal Pipes", () => {
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
 
       expect(Terminal.outputHistory.length).toBe(2);
-      expect(fileContent).toContain(`${scriptName2}: ${scriptName}: 1\n${scriptName2}: NULL PORT DATA`);
+      expect(fileContent).toContain(`${scriptName2}: ${scriptName}: 1\n${scriptName2}: null`);
     });
 
     it("should correctly pipe each script's async output to its specified destination script", async () => {
@@ -376,8 +376,8 @@ describe("Terminal Pipes", () => {
       const fileContent2 = server?.textFiles?.get(outputFileName2)?.text;
 
       expect(Terminal.outputHistory.length).toBe(4);
-      expect(fileContent).toContain(`${scriptName2}: ${scriptName}: 1\n${scriptName2}: NULL PORT DATA`);
-      expect(fileContent2).toContain(`${scriptName4}: ${scriptName3}: 2\n${scriptName4}: NULL PORT DATA`);
+      expect(fileContent).toContain(`${scriptName2}: ${scriptName}: 1\n${scriptName2}: null`);
+      expect(fileContent2).toContain(`${scriptName4}: ${scriptName3}: 2\n${scriptName4}: null`);
     });
   });
 

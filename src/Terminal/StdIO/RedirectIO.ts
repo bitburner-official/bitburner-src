@@ -22,7 +22,7 @@ export async function parseRedirectedCommands(commandString: string) {
   for (let i = 0; i < commandSets.length; i++) {
     const commandSet = commandSets[i];
     const stdIO = stdIOChain[i];
-    handleCommand(stdIO, commandSet);
+    await handleCommand(stdIO, commandSet);
     longRunningCommandUsed ||= isLongRunningCommand(commandSet);
     openPipes.push(longRunningCommandUsed ? sleep(0) : waitUntilClosed(stdIO));
   }
@@ -31,7 +31,7 @@ export async function parseRedirectedCommands(commandString: string) {
   await Promise.all(openPipes);
 }
 
-export function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
+export async function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
   const pipeSymbol = isPipeSymbol(commandStrings[0]) ? `${commandStrings[0]}` : null;
   const command = `${pipeSymbol ? commandStrings[1] : commandStrings[0]}`;
   const args = pipeSymbol ? commandStrings.slice(2) : commandStrings.slice(1);
@@ -55,7 +55,7 @@ export function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
   const commandArgs = args.map((arg) => (`${arg}`.includes(" ") ? `"${arg}"` : `${arg}`));
   const commandString = [command, ...commandArgs].join(" ");
 
-  Terminal.executeCommand(commandString, stdIO);
+  await Terminal.executeCommand(commandString, stdIO);
 }
 
 export function buildStdIOChain(length: number, initialStdIO: StdIO | null = null): StdIO[] {
@@ -205,10 +205,10 @@ function handleIoError(stdIO: StdIO, error: string) {
   Terminal.error(error, stdIO);
 }
 
-function isLongRunningCommand(commandSet: Args[]) {
+export function isLongRunningCommand(commandSet: Args[]) {
   const pipeSymbol = isPipeSymbol(commandSet[0]) ? `${commandSet[0]}` : null;
   const command = `${pipeSymbol ? commandSet[1] : commandSet[0]}`;
-  return ["wget", "tail", "run"].includes(command) || !!resolveScriptFilePath(command);
+  return ["tail", "run"].includes(command) || !!resolveScriptFilePath(command);
 }
 
 function concatenateFileContents(content: string, newContent: string): string {

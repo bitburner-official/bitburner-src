@@ -6,7 +6,6 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../Paths/GlobbedFiles";
 import { downloadContentAsFile } from "../../utils/FileUtils";
-import { getTerminalStdIO } from "../StdIO/RedirectIO";
 import { StdIO } from "../StdIO/StdIO";
 
 // Basic globbing implementation only supporting * and ?. Can be broken out somewhere else later.
@@ -27,9 +26,9 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
     .then((content: Blob) => downloadContentAsFile(content, filename))
     .catch((error) => {
       console.error(error);
-      Terminal.error(
+      Terminal.printAndBypassPipes(
         `Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`,
-        getTerminalStdIO(),
+        "error",
       );
     });
 }

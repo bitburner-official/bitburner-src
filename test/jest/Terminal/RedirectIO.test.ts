@@ -55,7 +55,7 @@ describe("RedirectIOTests", () => {
     it("should handle echo command passing its args to stdout", async () => {
       const commandString = "echo Hello, World";
       const stdIO = new StdIO(null);
-      handleCommand(stdIO, commandString.split(" "));
+      await handleCommand(stdIO, commandString.split(" "));
       await sleep(50);
 
       expect(stdIO.stdout.empty()).toBe(false);
