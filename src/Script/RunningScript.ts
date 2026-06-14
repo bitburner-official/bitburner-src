@@ -160,7 +160,7 @@ export class RunningScript {
         ...this,
         dataMap: Object.fromEntries(this.dataMap.entries()),
       },
-      typeof this.title === "string" && this.title !== "" ? includedProperties : includedPropsNoTitle,
+      typeof this.title === "string" ? includedProperties : includedPropsNoTitle,
     );
   }
 
