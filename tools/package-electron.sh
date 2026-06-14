@@ -16,15 +16,15 @@ cp -r .app/* .package
 cp -r electron/* .package
 
 packageWin() {
-  electron-packager .package bitburner --platform win32 --arch x64,arm64 --out .build --overwrite --icon .package/icon.ico --app-copyright "Copyright (C) 2025 Bitburner"
+  electron-packager .package bitburner --platform win32 --arch x64,arm64 --out .build --asar.unpack='**/node_modules/@catloversg/steamworks.js/**/*.{dll,node}' --overwrite --icon .package/icon.ico --app-copyright "Copyright (C) 2025 Bitburner"
 }
 
 packageLinux() {
-  electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --overwrite --app-copyright "Copyright (C) 2025 Bitburner"
+  electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --asar.unpack='**/node_modules/@catloversg/steamworks.js/**/*.{so,node}' --overwrite --app-copyright "Copyright (C) 2025 Bitburner"
 }
 
 packageMac() {
-  electron-packager .package bitburner --platform darwin --arch universal --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*" --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner"
+  electron-packager .package bitburner --platform darwin --arch universal --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*" --out .build --asar.unpack='**/node_modules/@catloversg/steamworks.js/**/*.{dylib,node}' --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner"
 }
 
 BUILD_PLATFORM="${1:-"all"}"

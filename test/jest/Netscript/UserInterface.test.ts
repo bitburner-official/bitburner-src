@@ -11,9 +11,12 @@ beforeAll(() => {
   initGameEnvironment();
 });
 
+beforeEach(() => {
+  setupBasicTestingEnvironment();
+});
+
 describe("setTheme", () => {
   beforeEach(() => {
-    setupBasicTestingEnvironment();
     Settings.theme = { ...defaultTheme };
   });
 
@@ -88,7 +91,6 @@ describe("setTheme", () => {
 
 describe("setStyles", () => {
   beforeEach(() => {
-    setupBasicTestingEnvironment();
     Settings.styles = { ...defaultStyles };
   });
 
@@ -159,4 +161,20 @@ describe("setStyles", () => {
       spyConErr.mockRestore();
     });
   });
+});
+
+test("alias", () => {
+  const ns = getNS();
+  ns.ui.alias("foo", "run foo.js");
+  expect(ns.ui.getAllAliases().get("foo")?.substitution).toBe("run foo.js");
+
+  ns.ui.alias("foo", "   run foo.js   ");
+  expect(ns.ui.getAllAliases().get("foo")?.substitution).toBe("run foo.js");
+
+  ns.ui.alias("foo", "   ");
+  expect(ns.ui.getAllAliases().get("foo")?.substitution).toBe("");
+
+  expect(() => ns.ui.alias("", "bar")).toThrow();
+  expect(() => ns.ui.alias("   ", "bar")).toThrow();
+  expect(() => ns.ui.alias("^", "bar")).toThrow();
 });
