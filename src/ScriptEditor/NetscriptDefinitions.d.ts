@@ -2592,6 +2592,9 @@ export interface Singularity {
    *
    * If the active level of a source file is 0, that source file won't be included in the result.
    *
+   * This function does not require owning Source-File 4 or being in BitNode 4. You can also use
+   * {@link ResetInfo.ownedSF | ResetInfo.ownedSF} as a lower-RAM alternative.
+   *
    * @returns Array containing an object with number and level of the source file.
    */
   getOwnedSourceFiles(): SourceFileLvl[];
