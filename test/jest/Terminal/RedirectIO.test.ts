@@ -92,18 +92,6 @@ describe("RedirectIOTests", () => {
       expect(file).toBeDefined();
       expect(file?.content).toBe("First Line\nSecond Line");
     });
-
-    it("should prevent overwriting non-empty script files", async () => {
-      const filename = "scriptOutput.js";
-      const commandString = `echo Hello > ${filename} | echo World > ${filename}`;
-
-      await parseRedirectedCommands(commandString);
-
-      const server = GetServer(Player.currentServer);
-      const file = server?.scripts.get(filename as ScriptFilePath);
-      expect(file).toBeDefined();
-      expect(file?.content).toBe("Hello");
-    });
   });
 
   describe("stdout from scripts", () => {

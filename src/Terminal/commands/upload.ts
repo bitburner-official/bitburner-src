@@ -158,5 +158,6 @@ export function upload(
     cancel: () => {}, // Upload ignores cancellation
     finished: uploadAsync(destination, destForPrint, server, stdIO),
     getProgressText: () => `Uploading files to ${destForPrint}`,
+    stdIO,
   };
 }

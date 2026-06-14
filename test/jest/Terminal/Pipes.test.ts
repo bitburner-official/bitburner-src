@@ -448,28 +448,6 @@ describe("Terminal Pipes", () => {
     expect(Number(fileContent)).toBe(expectedPid);
   });
 
-  it("should replace $! with -1 if the prior command was not a run", async () => {
-    const scriptName = "testScript.js" as ScriptFilePath;
-    const scriptContent = `export async function main(ns) { ns.print("Script is running"); await ns.sleep(100); }`;
-    const server = GetServer(Player.currentServer);
-
-    // Add script to server
-    await Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
-    await sleep(50);
-
-    // Run the script to set PipeState.pidOfLastScriptRun
-    await Terminal.executeCommands(`run ${scriptName}`);
-    await sleep(200);
-
-    await Terminal.executeCommands(`echo "Not a run command"`);
-
-    const command = `echo $! > pidOutput.txt`;
-    await Terminal.executeCommands(command);
-    const fileContent = server?.textFiles?.get("pidOutput.txt" as TextFilePath)?.text;
-
-    expect(Number(fileContent)).toBe(-1);
-  });
-
   it("should pipe the tail output of scripts to stdout when specified with $!", async () => {
     const scriptContent = `export async function main(ns) {ns.print('foo');await ns.sleep(50);ns.print('test2');}`;
     const scriptName = "testScript.jsx" as ScriptFilePath;

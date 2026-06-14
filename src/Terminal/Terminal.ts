@@ -207,7 +207,6 @@ export class Terminal {
           setTimeout(resolve, durationSec * 1000);
           cancel = () => {
             cancelled = true;
-            stdIO.close();
             reject(new Cancellation(name));
           };
         });
@@ -216,7 +215,6 @@ export class Terminal {
         if (cancelled) {
           this.print(`Cancelled ${name}`, stdIO);
         }
-        stdIO.close();
       }
       onDone();
     })();
@@ -225,6 +223,7 @@ export class Terminal {
       cancel: cancel,
       finished: p,
       getProgressText: progress,
+      stdIO,
     };
   }
 
@@ -333,10 +332,15 @@ export class Terminal {
       }
     } finally {
       // If we throw for any reason, abort the current action.
-      this.action?.cancel();
-      this.action = null;
+      this.cancelAction();
       TerminalEvents.emit();
     }
+  }
+
+  cancelAction(): void {
+    this.action?.cancel();
+    this.action?.stdIO?.close();
+    this.action = null;
   }
 
   clear(): void {
@@ -346,8 +350,7 @@ export class Terminal {
   }
 
   prestige(): void {
-    this.action?.cancel();
-    this.action = null;
+    this.cancelAction();
     this.clear();
   }
 

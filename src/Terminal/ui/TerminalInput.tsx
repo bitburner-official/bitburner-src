@@ -213,7 +213,7 @@ export function TerminalInput(): React.ReactElement {
         return;
       }
       if (Terminal.action !== null && event.key === KEY.C && event.ctrlKey) {
-        Terminal.action.cancel();
+        Terminal.cancelAction();
         return;
       }
       const ref = terminalInput.current;

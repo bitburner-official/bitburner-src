@@ -82,5 +82,6 @@ export function wget(
       state = (state + 1) % 4;
       return `[${spinChar.repeat(50)}]`;
     },
+    stdIO,
   };
 }
