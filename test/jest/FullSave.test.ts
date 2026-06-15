@@ -1,9 +1,4 @@
-import {
-  type BitburnerSaveObjectType,
-  getSaveData,
-  getParsedSaveData,
-  assertBitburnerSaveObjectType,
-} from "../../src/SaveObject";
+import { getSaveData, getParsedSaveData, assertBitburnerSaveObjectType } from "../../src/SaveObject";
 import { Factions } from "../../src/Faction/Factions";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
