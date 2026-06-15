@@ -1,4 +1,4 @@
-import { saveObject } from "../../src/SaveObject";
+import { getSaveData, getParsedSaveData, assertBitburnerSaveObjectType } from "../../src/SaveObject";
 import { Factions } from "../../src/Faction/Factions";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
@@ -10,15 +10,13 @@ import { Companies } from "../../src/Company/Companies";
 
 describe("Check Save File Continuity", () => {
   establishInitialConditions();
-  beforeAll(async () => {
-    // Calling getSaveString forces save info to update
-    await saveObject.getSaveData();
-  });
 
   const savesToTest = ["FactionsSave", "PlayerSave", "CompaniesSave", "GoSave"] as const;
   for (const saveToTest of savesToTest) {
-    test(`${saveToTest} continuity`, () => {
-      const parsed: unknown = JSON.parse(saveObject[saveToTest]);
+    test(`${saveToTest} continuity`, async () => {
+      const saveObject = (await getParsedSaveData(await getSaveData())).data;
+      assertBitburnerSaveObjectType(saveObject);
+      const parsed: unknown = JSON.parse(saveObject[saveToTest] as string);
       expect(parsed).toMatchSnapshot();
     });
   }
