@@ -116,7 +116,7 @@ type ParsedSaveData = {
  * - "Optional 2": "loadGame" only loads these properties if they exist. The respective loaders require string values.
  * If saveObject has these properties, we check if their values are strings.
  */
-function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject is BitburnerSaveObjectType {
+export function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject is BitburnerSaveObjectType {
   assertObject(saveObject);
 
   const mandatoryKeysOfSaveObj = [
@@ -166,6 +166,244 @@ function assertParsedSaveData(parsedSaveData: unknown): asserts parsedSaveData i
   }
 }
 
+export async function getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
+  const save = new BitburnerSaveObject();
+  save.PlayerSave = JSON.stringify(Player);
+
+  // For the servers save, overwrite the ExcludeRunningScripts setting if forced
+  const originalExcludeSetting = Settings.ExcludeRunningScriptsFromSave;
+  if (forceExcludeRunningScripts) Settings.ExcludeRunningScriptsFromSave = true;
+  save.AllServersSave = saveAllServers();
+  Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
+
+  save.CompaniesSave = JSON.stringify(getCompaniesSave());
+  save.FactionsSave = JSON.stringify(getFactionsSave());
+  save.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
+  save.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
+  save.StockMarketSave = JSON.stringify(StockMarket);
+  save.SettingsSave = JSON.stringify(Settings);
+  save.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
+  save.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
+  save.StaneksGiftSave = JSON.stringify(staneksGift);
+  save.GoSave = JSON.stringify(getGoSave());
+  save.DarknetSave = JSON.stringify(getDarkNetSave());
+  save.InfiltrationsSave = JSON.stringify(InfiltrationState);
+
+  if (Player.gang) save.AllGangsSave = JSON.stringify(AllGangs);
+
+  return await encodeJsonSaveString(JSON.stringify(save));
+}
+
+export async function saveGame(emitToastEvent = true): Promise<void> {
+  const savedOn = new Date().getTime();
+  Player.lastSave = savedOn;
+  let saveData;
+  try {
+    saveData = await getSaveData();
+  } catch (error) {
+    handleGetSaveDataInfoError(error);
+    return;
+  }
+  try {
+    await save(saveData);
+  } catch (error) {
+    console.error(error);
+    dialogBoxCreate(`Cannot save game: ${error}`);
+    return;
+  }
+  const electronGameData: ElectronGameData = {
+    playerIdentifier: Player.identifier,
+    fileName: getSaveFileName(),
+    save: saveData,
+    savedOn,
+  };
+  pushGameSaved(electronGameData);
+
+  if (emitToastEvent) {
+    SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
+  }
+}
+
+export function getSaveFileName(): string {
+  // Save file name is based on current timestamp and BitNode
+  const epochTime = Math.round(Date.now() / 1000);
+  const bn = Player.bitNodeN;
+  /**
+   * - Binary format: save file uses .json.gz extension. Save data is the compressed json save string.
+   * - Base64 format: save file uses .json extension. Save data is the base64-encoded json save string.
+   */
+  const extension = canUseBinaryFormat() ? "json.gz" : "json";
+  return `bitburnerSave_${epochTime}_BN${bn}x${getBitNodeLevel()}.${extension}`;
+}
+
+export async function exportGame(): Promise<void> {
+  // Give the export bonus before exporting the save data
+  giveExportBonus();
+  let saveData;
+  try {
+    saveData = await getSaveData();
+  } catch (error) {
+    handleGetSaveDataInfoError(error);
+    return;
+  }
+  const filename = getSaveFileName();
+  downloadContentAsFile(saveData, filename);
+}
+
+export async function importGame(
+  saveData: SaveData,
+  overrideSettings?: {
+    SyncSteamAchievements: boolean;
+  },
+): Promise<void> {
+  if (!saveData || saveData.length === 0) {
+    dialogBoxCreate("Invalid save data");
+    return;
+  }
+  // Modify settings in save data if needed (i.e., toggle SyncSteamAchievements before importing).
+  if (overrideSettings) {
+    let parsedSaveData;
+    try {
+      parsedSaveData = await getParsedSaveData(saveData);
+      // Validate SettingsSave
+      if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
+        // Parse settings from data.SettingsSave
+        const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
+        assertObject(settings);
+        // Modify setting
+        settings.SyncSteamAchievements = overrideSettings.SyncSteamAchievements;
+        // Save modified data back to saveData
+        parsedSaveData.data.SettingsSave = JSON.stringify(settings);
+        saveData = await encodeJsonSaveString(JSON.stringify(parsedSaveData));
+      }
+    } catch (error) {
+      console.error(error);
+      dialogBoxCreate(`Cannot override settings: ${error}`);
+      return;
+    }
+  }
+  try {
+    await save(saveData);
+    /**
+     * Notify Electron code that the player imported a save file. "restoreIfNewerExists" will be disabled for a brief
+     * period of time.
+     */
+    pushImportResult(true);
+  } catch (error) {
+    console.error(error);
+    dialogBoxCreate(`Cannot import save data: ${error}`);
+    return;
+  }
+  setTimeout(() => location.reload(), 0);
+}
+
+export async function getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
+  if (files === null) {
+    throw new Error("No file selected");
+  }
+  const file = files[0];
+  if (!file) {
+    throw new Error("Invalid file selected");
+  }
+
+  const rawData = new Uint8Array(await file.arrayBuffer());
+  if (isBinaryFormat(rawData)) {
+    return rawData;
+  }
+  if (isSteamCloudFormat(rawData)) {
+    return decodeBase64BytesToBytes(rawData);
+  }
+  return new TextDecoder().decode(rawData);
+}
+
+export async function getParsedSaveData(saveData: SaveData): Promise<ParsedSaveData> {
+  if (!saveData || saveData.length === 0) {
+    throw new Error("Invalid save data");
+  }
+
+  if (typeof saveData === "string" && saveData.startsWith(`{"ctor"`)) {
+    throw new Error(
+      "The save data is invalid. You must import the original save file. If it's a .gz file, don't decompress it.",
+    );
+  }
+
+  let decodedSaveData;
+  try {
+    decodedSaveData = await decodeSaveData(saveData);
+  } catch (error) {
+    console.error(error);
+    // Rethrow immediately if the error is SaveDataError; otherwise, handle it below.
+    if (error instanceof SaveDataError) {
+      throw error;
+    }
+  }
+
+  if (!decodedSaveData || decodedSaveData === "") {
+    console.error("decodedSaveData:", decodedSaveData);
+    console.error("saveData:", saveData);
+    throw new Error("The save data cannot be decoded.");
+  }
+
+  let parsedSaveData: unknown;
+  try {
+    parsedSaveData = JSON.parse(decodedSaveData);
+  } catch (error) {
+    console.error("decodedSaveData:", decodedSaveData);
+    throw new Error("The decoded save data is not valid.");
+  }
+
+  assertParsedSaveData(parsedSaveData);
+
+  return parsedSaveData;
+}
+
+export async function getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
+  const parsedSaveData = await getParsedSaveData(saveData);
+
+  const data: ImportData = {
+    saveData: saveData,
+  };
+
+  const importedPlayer = loadPlayer(parsedSaveData.data.PlayerSave);
+
+  let syncSteamAchievements = true;
+  // Parse data.SettingsSave to get syncSteamAchievements.
+  if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
+    try {
+      const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
+      assertObject(settings);
+      if (typeof settings.SyncSteamAchievements === "boolean") {
+        syncSteamAchievements = settings.SyncSteamAchievements;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const playerData: ImportPlayerData = {
+    identifier: importedPlayer.identifier,
+    lastSave: importedPlayer.lastSave,
+    totalPlaytime: importedPlayer.totalPlaytime,
+
+    money: importedPlayer.money,
+    skills: importedPlayer.skills,
+
+    augmentations: importedPlayer.augmentations?.reduce<number>((total, current) => (total += current.level), 0) ?? 0,
+    factions: importedPlayer.factions?.length ?? 0,
+    achievements: importedPlayer.achievements?.length ?? 0,
+
+    bitNode: importedPlayer.bitNodeN,
+    bitNodeLevel: getBitNodeLevel(importedPlayer.bitNodeN, importedPlayer.activeSourceFileLvl(importedPlayer.bitNodeN)),
+    sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
+    exploits: importedPlayer.exploits.length,
+
+    syncSteamAchievements,
+  };
+
+  data.playerData = playerData;
+  return data;
+}
+
 /**
  * We sometimes need the raw data in the loaded save object for debugging and showing useful error messages. This object
  * contains only what we need.
@@ -205,246 +443,6 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   DarknetSave = "";
   InfiltrationsSave = "";
 
-  async getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
-    this.PlayerSave = JSON.stringify(Player);
-
-    // For the servers save, overwrite the ExcludeRunningScripts setting if forced
-    const originalExcludeSetting = Settings.ExcludeRunningScriptsFromSave;
-    if (forceExcludeRunningScripts) Settings.ExcludeRunningScriptsFromSave = true;
-    this.AllServersSave = saveAllServers();
-    Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
-
-    this.CompaniesSave = JSON.stringify(getCompaniesSave());
-    this.FactionsSave = JSON.stringify(getFactionsSave());
-    this.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
-    this.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
-    this.StockMarketSave = JSON.stringify(StockMarket);
-    this.SettingsSave = JSON.stringify(Settings);
-    this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
-    this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
-    this.StaneksGiftSave = JSON.stringify(staneksGift);
-    this.GoSave = JSON.stringify(getGoSave());
-    this.DarknetSave = JSON.stringify(getDarkNetSave());
-    this.InfiltrationsSave = JSON.stringify(InfiltrationState);
-
-    if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
-
-    return await encodeJsonSaveString(JSON.stringify(this));
-  }
-
-  async saveGame(emitToastEvent = true): Promise<void> {
-    const savedOn = new Date().getTime();
-    Player.lastSave = savedOn;
-    let saveData;
-    try {
-      saveData = await this.getSaveData();
-    } catch (error) {
-      handleGetSaveDataInfoError(error);
-      return;
-    }
-    try {
-      await save(saveData);
-    } catch (error) {
-      console.error(error);
-      dialogBoxCreate(`Cannot save game: ${error}`);
-      return;
-    }
-    const electronGameData: ElectronGameData = {
-      playerIdentifier: Player.identifier,
-      fileName: this.getSaveFileName(),
-      save: saveData,
-      savedOn,
-    };
-    pushGameSaved(electronGameData);
-
-    if (emitToastEvent) {
-      SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
-    }
-  }
-
-  getSaveFileName(): string {
-    // Save file name is based on current timestamp and BitNode
-    const epochTime = Math.round(Date.now() / 1000);
-    const bn = Player.bitNodeN;
-    /**
-     * - Binary format: save file uses .json.gz extension. Save data is the compressed json save string.
-     * - Base64 format: save file uses .json extension. Save data is the base64-encoded json save string.
-     */
-    const extension = canUseBinaryFormat() ? "json.gz" : "json";
-    return `bitburnerSave_${epochTime}_BN${bn}x${getBitNodeLevel()}.${extension}`;
-  }
-
-  async exportGame(): Promise<void> {
-    // Give the export bonus before exporting the save data
-    giveExportBonus();
-    let saveData;
-    try {
-      saveData = await this.getSaveData();
-    } catch (error) {
-      handleGetSaveDataInfoError(error);
-      return;
-    }
-    const filename = this.getSaveFileName();
-    downloadContentAsFile(saveData, filename);
-  }
-
-  async importGame(
-    saveData: SaveData,
-    overrideSettings?: {
-      SyncSteamAchievements: boolean;
-    },
-  ): Promise<void> {
-    if (!saveData || saveData.length === 0) {
-      dialogBoxCreate("Invalid save data");
-      return;
-    }
-    // Modify settings in save data if needed (i.e., toggle SyncSteamAchievements before importing).
-    if (overrideSettings) {
-      let parsedSaveData;
-      try {
-        parsedSaveData = await this.getParsedSaveData(saveData);
-        // Validate SettingsSave
-        if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
-          // Parse settings from data.SettingsSave
-          const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
-          assertObject(settings);
-          // Modify setting
-          settings.SyncSteamAchievements = overrideSettings.SyncSteamAchievements;
-          // Save modified data back to saveData
-          parsedSaveData.data.SettingsSave = JSON.stringify(settings);
-          saveData = await encodeJsonSaveString(JSON.stringify(parsedSaveData));
-        }
-      } catch (error) {
-        console.error(error);
-        dialogBoxCreate(`Cannot override settings: ${error}`);
-        return;
-      }
-    }
-    try {
-      await save(saveData);
-      /**
-       * Notify Electron code that the player imported a save file. "restoreIfNewerExists" will be disabled for a brief
-       * period of time.
-       */
-      pushImportResult(true);
-    } catch (error) {
-      console.error(error);
-      dialogBoxCreate(`Cannot import save data: ${error}`);
-      return;
-    }
-    setTimeout(() => location.reload(), 0);
-  }
-
-  async getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
-    if (files === null) {
-      throw new Error("No file selected");
-    }
-    const file = files[0];
-    if (!file) {
-      throw new Error("Invalid file selected");
-    }
-
-    const rawData = new Uint8Array(await file.arrayBuffer());
-    if (isBinaryFormat(rawData)) {
-      return rawData;
-    }
-    if (isSteamCloudFormat(rawData)) {
-      return decodeBase64BytesToBytes(rawData);
-    }
-    return new TextDecoder().decode(rawData);
-  }
-
-  async getParsedSaveData(saveData: SaveData): Promise<ParsedSaveData> {
-    if (!saveData || saveData.length === 0) {
-      throw new Error("Invalid save data");
-    }
-
-    if (typeof saveData === "string" && saveData.startsWith(`{"ctor"`)) {
-      throw new Error(
-        "The save data is invalid. You must import the original save file. If it's a .gz file, don't decompress it.",
-      );
-    }
-
-    let decodedSaveData;
-    try {
-      decodedSaveData = await decodeSaveData(saveData);
-    } catch (error) {
-      console.error(error);
-      // Rethrow immediately if the error is SaveDataError; otherwise, handle it below.
-      if (error instanceof SaveDataError) {
-        throw error;
-      }
-    }
-
-    if (!decodedSaveData || decodedSaveData === "") {
-      console.error("decodedSaveData:", decodedSaveData);
-      console.error("saveData:", saveData);
-      throw new Error("The save data cannot be decoded.");
-    }
-
-    let parsedSaveData: unknown;
-    try {
-      parsedSaveData = JSON.parse(decodedSaveData);
-    } catch (error) {
-      console.error("decodedSaveData:", decodedSaveData);
-      throw new Error("The decoded save data is not valid.");
-    }
-
-    assertParsedSaveData(parsedSaveData);
-
-    return parsedSaveData;
-  }
-
-  async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
-    const parsedSaveData = await this.getParsedSaveData(saveData);
-
-    const data: ImportData = {
-      saveData: saveData,
-    };
-
-    const importedPlayer = loadPlayer(parsedSaveData.data.PlayerSave);
-
-    let syncSteamAchievements = true;
-    // Parse data.SettingsSave to get syncSteamAchievements.
-    if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
-      try {
-        const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
-        assertObject(settings);
-        if (typeof settings.SyncSteamAchievements === "boolean") {
-          syncSteamAchievements = settings.SyncSteamAchievements;
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    const playerData: ImportPlayerData = {
-      identifier: importedPlayer.identifier,
-      lastSave: importedPlayer.lastSave,
-      totalPlaytime: importedPlayer.totalPlaytime,
-
-      money: importedPlayer.money,
-      skills: importedPlayer.skills,
-
-      augmentations: importedPlayer.augmentations?.reduce<number>((total, current) => (total += current.level), 0) ?? 0,
-      factions: importedPlayer.factions?.length ?? 0,
-      achievements: importedPlayer.achievements?.length ?? 0,
-
-      bitNode: importedPlayer.bitNodeN,
-      bitNodeLevel: getBitNodeLevel(
-        importedPlayer.bitNodeN,
-        importedPlayer.activeSourceFileLvl(importedPlayer.bitNodeN),
-      ),
-      sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
-      exploits: importedPlayer.exploits.length,
-
-      syncSteamAchievements,
-    };
-
-    data.playerData = playerData;
-    return data;
-  }
-
   toJSON(): IReviverValue {
     return Generic_toJSON("BitburnerSaveObject", this);
   }
@@ -454,7 +452,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   }
 }
 
-async function loadGame(saveData: SaveData): Promise<boolean> {
+export async function loadGame(saveData: SaveData): Promise<boolean> {
   createScamUpdateText();
   if (!saveData) {
     console.error(
@@ -601,7 +599,3 @@ function createBetaUpdateText() {
 }
 
 constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;
-
-export { saveObject, loadGame };
-
-const saveObject = new BitburnerSaveObject();

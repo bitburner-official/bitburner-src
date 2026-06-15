@@ -9,7 +9,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "../../Enums";
 import { EditorEvents } from "../EditorData";
 import { Settings } from "../../Settings/Settings";
-import { saveObject } from "../../SaveObject";
+import { saveGame } from "../../SaveObject";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 export function getServerCode(scripts: OpenScript[], index: number): string | null {
@@ -95,6 +95,6 @@ export function saveScript(scriptToSave: OpenScript): void {
   EditorEvents.emit(scriptToSave.hostname, scriptToSave.path);
 
   if (Settings.SaveGameOnFileSave) {
-    saveObject.saveGame().catch((error) => exceptionAlert(error));
+    saveGame().catch((error) => exceptionAlert(error));
   }
 }
