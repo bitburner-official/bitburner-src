@@ -88,8 +88,8 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
     return this.toJSONBase("DarknetServer", includedKeys);
   }
 
-  static fromJSON(value: IReviverValue): DarknetServer {
-    const server = BaseServer.fromJSONBase(value, DarknetServer, includedKeys);
+  static fromJSON(value: IReviverValue, context?: string[]): DarknetServer {
+    const server = BaseServer.fromJSONBase(value, DarknetServer, includedKeys, context);
     // Remove duplicate .cache files.
     const cacheSet = new Set(server.caches);
     if (cacheSet.size !== server.caches.length) {

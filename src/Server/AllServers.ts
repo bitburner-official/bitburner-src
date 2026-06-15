@@ -4,7 +4,7 @@ import { BaseServer } from "./BaseServer";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 
 import { createRandomIp } from "../utils/IPAddress";
-import { Reviver } from "../utils/GenericReviver";
+import type { Reviver } from "../utils/GenericReviver";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
@@ -137,16 +137,27 @@ export function prestigeAllServers(): void {
   AllServers.clear();
 }
 
-export function loadAllServers(saveString: string): void {
-  const allServersData: unknown = JSON.parse(saveString, Reviver);
-  assertObject(allServersData);
-  if (Object.keys(allServersData).length === 0) {
-    throw new Error("Server list is empty.");
+export function loadAllServers(saveString: string, reviver: typeof Reviver): void {
+  const allServersData: unknown = JSON.parse(saveString, reviver);
+  let iterator;
+  if (Array.isArray(allServersData)) {
+    // Modern format - flat array of servers
+    if (allServersData.length === 0) {
+      throw new Error("Server list is empty.");
+    }
+    iterator = allServersData.entries();
+  } else {
+    // Pre v51 format - Object keyed by hostname, except the keys were ignored
+    assertObject(allServersData);
+    if (Object.keys(allServersData).length === 0) {
+      throw new Error("Server list is empty.");
+    }
+    iterator = Object.entries(allServersData);
   }
   AllServers.clear();
-  for (const [serverName, server] of Object.entries(allServersData)) {
+  for (const [serverTag, server] of iterator) {
     if (!(server instanceof Server) && !(server instanceof HacknetServer) && !(server instanceof DarknetServer)) {
-      throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer or DarknetServer.`);
+      throw new Error(`Server ${serverTag} is not an instance of Server or HacknetServer or DarknetServer.`);
     }
     // Sanitize hostname
     // A bug created ill-formed UTF-16 darknet hostnames that caused the in-game editor to crash. This code migrates
@@ -173,8 +184,4 @@ export function loadAllServers(saveString: string): void {
 
   // Apply blocked ram for darknet servers
   applyRamBlocks();
-}
-
-export function saveAllServers(): string {
-  return JSON.stringify(Object.fromEntries(GetAllServers(true).map((s) => [s.hostname, s])));
 }

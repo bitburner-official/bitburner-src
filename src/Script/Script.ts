@@ -1,7 +1,13 @@
 import type { BaseServer } from "../Server/BaseServer";
 import { calculateRamUsage, type RamUsageEntry } from "./RamCalculations";
 import type { LoadedModule, ScriptURL } from "./LoadedModule";
-import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import {
+  Generic_fromJSON,
+  Generic_toJSON,
+  type IReviverValue,
+  constructorsForReviver,
+  stringDataIdx,
+} from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
@@ -101,11 +107,29 @@ export class Script extends ContentFile {
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    return Generic_toJSON("Script", this, Script.savedKeys);
+    const value = Generic_toJSON("Script", this, Script.savedKeys) as IReviverValue<Script>;
+    // Dedup common strings
+    value.data.server = stringDataIdx(value.data.server);
+    value.data.filename = stringDataIdx(value.data.filename) as ScriptFilePath;
+    value.data.code = stringDataIdx(value.data.code);
+    return value;
   }
 
   // Initializes a Script Object from a JSON save state
-  static fromJSON(value: IReviverValue): Script {
+  static fromJSON(value: IReviverValue, context?: string[]): Script {
+    context ??= [];
+    // This cast is to ensure our writes are type-safe. Our reads are checked
+    // via typeof already (and don't conform to the type given).
+    const data = (value as IReviverValue<Script>).data;
+    if (typeof data.server === "number") {
+      data.server = context[data.server];
+    }
+    if (typeof data.filename === "number") {
+      data.filename = context[data.filename] as ScriptFilePath;
+    }
+    if (typeof data.code === "number") {
+      data.code = context[data.code];
+    }
     return Generic_fromJSON(Script, value.data, Script.savedKeys);
   }
 }
