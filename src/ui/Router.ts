@@ -30,6 +30,8 @@ export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   ? { tab?: OptionsTabName }
   : T extends ComplexPage.CustomPage
   ? { content: ReactElement }
+  : T extends ComplexPage.ActiveScripts
+  ? { serverName?: string }
   : never;
 
 export type PageWithContext =
@@ -42,6 +44,7 @@ export type PageWithContext =
   | ({ page: ComplexPage.Documentation } & PageContext<ComplexPage.Documentation>)
   | ({ page: ComplexPage.Options } & PageContext<ComplexPage.Options>)
   | ({ page: ComplexPage.CustomPage } & PageContext<ComplexPage.CustomPage>)
+  | ({ page: ComplexPage.ActiveScripts } & PageContext<ComplexPage.ActiveScripts>)
   | { page: ComplexPage.LoadingScreen }
   | { page: SimplePage };
 

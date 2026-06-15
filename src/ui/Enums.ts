@@ -11,7 +11,6 @@ export enum ToastVariant {
  * transition to. You can use setPage() with these.
  */
 export enum SimplePage {
-  ActiveScripts = "Active Scripts",
   RecentlyKilledScripts = "Recently Killed Scripts",
   RecentErrors = "Recent Errors",
   Augmentations = "Augmentations",
@@ -44,6 +43,7 @@ export enum SimplePage {
 }
 
 export enum ComplexPage {
+  ActiveScripts = "Active Scripts",
   BitVerse = "BitVerse",
   Faction = "Faction",
   FactionAugmentations = "Faction Augmentations",
