@@ -847,10 +847,10 @@ export const ns: InternalAPI<NSFull> = {
     return allFilenames.filter((filename) => ("/" + filename).includes(substring)).sort();
   },
   getRecentScripts: () => (): RecentScript[] => {
-    return recentScripts.map((rs) =>
-      //Don't spread - it will touch .title and generate one
-      Object.assign(helpers.createPublicRunningScript(rs.runningScript), { timeOfDeath: rs.timeOfDeath }),
-    );
+    return recentScripts.map((rs) => ({
+      timeOfDeath: rs.timeOfDeath,
+      ...helpers.createPublicRunningScript(rs.runningScript),
+    }));
   },
   ps: (ctx) => (_host?) => {
     const [server] = helpers.getServer(ctx, _host);

@@ -94,7 +94,6 @@ export class LogBoxProperties {
 interface Log {
   id: number; // The PID of the script *when the window was first opened*
   script: RunningScript;
-  defaultTitle: string;
 }
 
 let logs: Log[] = [];
@@ -118,7 +117,6 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
         logs.push({
           id: script.pid,
           script,
-          defaultTitle: script.getDefaultTitle(),
         });
         rerender();
       }),
@@ -152,13 +150,7 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
   return (
     <>
       {logs.map((log) => (
-        <LogWindow
-          hidden={hidden}
-          key={log.id}
-          script={log.script}
-          defaultTitle={log.defaultTitle}
-          onClose={() => close(log.id)}
-        />
+        <LogWindow hidden={hidden} key={log.id} script={log.script} onClose={() => close(log.id)} />
       ))}
     </>
   );
@@ -166,7 +158,6 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
 
 interface LogWindowProps {
   script: RunningScript;
-  defaultTitle: string;
   onClose: () => void;
   hidden: boolean;
 }
@@ -190,7 +181,7 @@ const useStyles = makeStyles()({
   },
 });
 
-function LogWindow({ hidden, script, defaultTitle, onClose }: LogWindowProps): React.ReactElement {
+function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
   const { classes } = useStyles();
@@ -265,6 +256,7 @@ function LogWindow({ hidden, script, defaultTitle, onClose }: LogWindowProps): R
   }
 
   function title(): React.ReactElement {
+    const defaultTitle = script.getDefaultTitle();
     const displayTitle = script.title || defaultTitle;
     const titleText = typeof displayTitle === "string" ? displayTitle : defaultTitle;
     return (
