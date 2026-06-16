@@ -145,7 +145,7 @@ export function v1APIBreak(): void {
         continue;
       }
       backupFiles.set(filename, script.code);
-      script.code = convert(script.code);
+      server.writeToScriptFile(script.filename, convert(script.code));
     }
     for (const [filename, code] of backupFiles.entries()) {
       server.writeToScriptFile(filename, code);

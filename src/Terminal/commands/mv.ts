@@ -21,17 +21,24 @@ export function mv(args: (string | number | boolean)[], server: BaseServer): und
   ) {
     return Terminal.error(`'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css)`);
   }
+  if (sourcePath === destinationPath) {
+    Terminal.warn("Did nothing, source and destination paths were the same.");
+    return;
+  }
 
   // Allow content to be moved between scripts and textfiles, no need to limit this.
   const sourceContentFile = server.getContentFile(sourcePath);
   if (!sourceContentFile) return Terminal.error(`Source file ${sourcePath} does not exist`);
 
-  if (!sourceContentFile.deleteFromServer(server)) {
+  if (hasScriptExtension(sourcePath) && server.isRunning(sourcePath)) {
     return Terminal.error(
       `Could not remove source file ${sourcePath} from existing location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
     );
   }
+  const sourceContent = sourceContentFile.content;
+  const { overwritten } = server.writeToContentFile(destinationPath, sourceContent);
+  // The running-script case is rejected above, so deleting the just-read source from this server cannot fail.
+  sourceContentFile.deleteFromServer(server);
   Terminal.print(`Moved ${sourcePath} to ${destinationPath}`);
-  const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
   if (overwritten) Terminal.warn(`${destinationPath} was overwritten.`);
 }

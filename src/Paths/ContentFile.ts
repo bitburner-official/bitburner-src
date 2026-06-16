@@ -7,6 +7,7 @@ import { FileMetadata } from "./FileMetadata";
 export type ContentFilePath = ScriptFilePath | TextFilePath;
 export abstract class ContentFile {
   abstract filename: ContentFilePath;
+  abstract server: string;
   // Inherited classes must call this.metadata.read() when implementing this getter.
   abstract get content(): string;
   // Inherited classes must call this.metadata.edit() when implementing this setter.
@@ -15,6 +16,9 @@ export abstract class ContentFile {
   constructor() {
     this.metadata = new FileMetadata();
   }
+  // Move the storage-cache owner when the filename/server changes, without altering content.
+  abstract setFilename(filename: ContentFilePath): void;
+  abstract setServer(server: string): void;
   abstract deleteFromServer(server: BaseServer): boolean;
 }
 export type ContentFileMap = Map<ContentFilePath, ContentFile>;

@@ -7,6 +7,7 @@ import { getFactionsSave, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
 import { Player, setPlayer, loadPlayer } from "./Player";
 import { saveAllServers, loadAllServers } from "./Server/AllServers";
+import { getStorageCacheSaveData } from "./utils/helpers/storageCache";
 import { Settings } from "./Settings/Settings";
 import { loadStockMarket, StockMarket } from "./StockMarket/StockMarket";
 import { staneksGift, loadStaneksGift } from "./CotMG/Helper";
@@ -79,6 +80,7 @@ export interface ImportPlayerData {
 export type BitburnerSaveObjectType = {
   PlayerSave: string;
   AllServersSave: string;
+  StorageCacheSave: string;
   CompaniesSave: string;
   FactionsSave: string;
   AliasesSave: string;
@@ -134,7 +136,7 @@ export function assertBitburnerSaveObjectType(saveObject: unknown): asserts save
     }
   }
 
-  const optional1KeysOfSaveObj = ["StaneksGiftSave", "StockMarketSave"];
+  const optional1KeysOfSaveObj = ["StaneksGiftSave", "StockMarketSave", "StorageCacheSave"];
   for (const key of optional1KeysOfSaveObj) {
     if (Object.hasOwn(saveObject, key)) {
       if (typeof saveObject[key] !== "string") {
@@ -175,6 +177,7 @@ export async function getSaveData(forceExcludeRunningScripts = false): Promise<S
   if (forceExcludeRunningScripts) Settings.ExcludeRunningScriptsFromSave = true;
   save.AllServersSave = saveAllServers();
   Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
+  save.StorageCacheSave = JSON.stringify(getStorageCacheSaveData());
 
   save.CompaniesSave = JSON.stringify(getCompaniesSave());
   save.FactionsSave = JSON.stringify(getFactionsSave());
@@ -429,6 +432,7 @@ export const loadedSaveObjectMiniDump = {
 class BitburnerSaveObject implements BitburnerSaveObjectType {
   PlayerSave = "";
   AllServersSave = "";
+  StorageCacheSave = "";
   CompaniesSave = "";
   FactionsSave = "";
   AliasesSave = "";
@@ -479,7 +483,7 @@ export async function loadGame(saveData: SaveData): Promise<boolean> {
 
   // "Mandatory"
   setPlayer(loadPlayer(saveObj.PlayerSave));
-  loadAllServers(saveObj.AllServersSave);
+  loadAllServers(saveObj.AllServersSave, saveObj.StorageCacheSave);
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
   loadGo(saveObj.GoSave);

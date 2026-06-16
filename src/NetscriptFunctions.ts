@@ -1458,8 +1458,7 @@ export const ns: InternalAPI<NSFull> = {
     if (!sourceContentFile) {
       throw helpers.errorMessage(ctx, `Source text file ${sourcePath} does not exist on ${host}`);
     }
-    const success = sourceContentFile.deleteFromServer(server);
-    if (!success) {
+    if (hasScriptExtension(sourcePath) && server.isRunning(sourcePath)) {
       helpers.log(
         ctx,
         () =>
@@ -1467,7 +1466,10 @@ export const ns: InternalAPI<NSFull> = {
       );
       return;
     }
-    const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
+    const sourceContent = sourceContentFile.content;
+    const { overwritten } = server.writeToContentFile(destinationPath, sourceContent);
+    // The running-script case is rejected above, so deleting the just-read source from this server cannot fail.
+    sourceContentFile.deleteFromServer(server);
     if (overwritten) {
       helpers.log(ctx, () => `WARNING: Overwriting file ${destinationPath} on ${host}`);
     }

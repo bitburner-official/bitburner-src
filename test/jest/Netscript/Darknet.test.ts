@@ -5,6 +5,7 @@ import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAu
 import { addCacheToServer } from "../../../src/DarkNet/effects/cacheFiles";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { connectServers, GetServerOrThrow } from "../../../src/Server/AllServers";
+import { deleteContentFile } from "../../../src/utils/helpers/storageCache";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import {
@@ -297,7 +298,11 @@ describe("home", () => {
     // exec from darkweb
     expect(nsDarkWeb.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
 
-    // Clear scripts on dnet server
+    // Clear scripts on dnet server. Evict their storage-cache owners first (mirrors DeleteServer); a bare
+    // scripts.clear() would orphan the cache entries and break the next scp of the same file.
+    for (const script of dnetServer.scripts.values()) {
+      deleteContentFile(script.server, script.filename, script.code);
+    }
     dnetServer.scripts.clear();
 
     // Cannot scp from home without a session

@@ -60,7 +60,7 @@ function removeWhitespace(hostname: ServerName, file: ContentFile, files: Conten
   }
   console.warn(`Renamed "${file.filename}" to "${filename}" on ${hostname}.`);
   files.delete(file.filename);
-  file.filename = filename;
+  file.setFilename(filename);
   files.set(file.filename, file);
 }
 
@@ -140,7 +140,7 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
       ];
       for (const server of GetAllServers()) {
         for (const script of server.scripts.values()) {
-          script.content = convert(script.code, changes);
+          server.writeToScriptFile(script.filename, convert(script.code, changes));
         }
       }
     }
@@ -494,7 +494,7 @@ Error: ${e}`,
           console.warn(
             `Detected script ${script.filename} on ${server.hostname} with incorrect server property: ${script.server}. Repairing.`,
           );
-          script.server = server.hostname;
+          script.setServer(server.hostname);
         }
       }
     }

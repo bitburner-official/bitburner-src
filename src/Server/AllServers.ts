@@ -8,9 +8,17 @@ import { Reviver } from "../utils/GenericReviver";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
-import { assertObject } from "../utils/TypeAssertion";
+import { assertArray, assertObject } from "../utils/TypeAssertion";
 import { DarknetServer } from "./DarknetServer";
 import { applyRamBlocks } from "../DarkNet/effects/ramblock";
+import { hasScriptExtension } from "../Paths/ScriptFilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
+import {
+  assertSavedStorageCacheEntry,
+  assertStorageCacheOwner,
+  clearStorageCache,
+  deleteContentFile,
+} from "../utils/helpers/storageCache";
 
 /**
  * Map of all Servers that exist in the game
@@ -69,6 +77,15 @@ export function GetAllServers(showDarkweb = false): BaseServer[] {
 export function DeleteServer(serverkey: string): void {
   const server = GetServer(serverkey);
   if (server) {
+    // Evict storage-cache owners directly rather than via each file's deleteFromServer, which would block on
+    // running scripts during teardown. This is safe because every server-resident file is attached to the cache
+    // (a file is only unattached while its server is ""), so its content is guaranteed to be present to remove.
+    for (const script of server.scripts.values()) {
+      deleteContentFile(script.server, script.filename, script.code);
+    }
+    for (const textFile of server.textFiles.values()) {
+      deleteContentFile(textFile.server, textFile.filename, textFile.text);
+    }
     AllServers.delete(server.hostname);
     AllServers.delete(server.ip);
   }
@@ -135,9 +152,40 @@ export const renameServer = (hostname: string, newName: string): void => {
 
 export function prestigeAllServers(): void {
   AllServers.clear();
+  clearStorageCache();
 }
 
-export function loadAllServers(saveString: string): void {
+function populateStorageCacheFiles(entries: readonly unknown[]): void {
+  for (const entry of entries) {
+    assertSavedStorageCacheEntry(entry);
+
+    for (const owner of entry.owners) {
+      assertStorageCacheOwner(owner);
+      // owner.server was saved from an already-sanitized hostname, so look it up directly (no toWellFormed scan).
+      const server = GetServer(owner.server);
+      if (!server) throw new Error(`Storage cache owner server does not exist: ${owner.server}`);
+
+      if (hasScriptExtension(owner.filename)) {
+        const script = server.scripts.get(owner.filename);
+        if (!script) throw new Error(`Storage cache owner script does not exist: ${owner.server}/${owner.filename}`);
+
+        script.code = entry.content;
+      } else if (hasTextExtension(owner.filename)) {
+        const textFile = server.textFiles.get(owner.filename);
+        if (!textFile)
+          throw new Error(`Storage cache owner text file does not exist: ${owner.server}/${owner.filename}`);
+
+        textFile.text = entry.content;
+      } else {
+        throw new Error(`Storage cache owner has an unroutable filename: ${owner.server}/${owner.filename}`);
+      }
+    }
+  }
+}
+
+export function loadAllServers(saveString: string, storageCacheSave = ""): void {
+  clearStorageCache();
+
   const allServersData: unknown = JSON.parse(saveString, Reviver);
   assertObject(allServersData);
   if (Object.keys(allServersData).length === 0) {
@@ -154,13 +202,16 @@ export function loadAllServers(saveString: string): void {
     if (!server.hostname.isWellFormed()) {
       server.hostname = server.hostname.toWellFormed();
       for (const script of server.scripts.values()) {
-        script.server = server.hostname;
+        script.setServer(server.hostname);
       }
       if (server.savedScripts) {
         for (const script of server.savedScripts) {
           script.server = server.hostname;
         }
       }
+    }
+    for (const textFile of server.textFiles.values()) {
+      textFile.setServer(server.hostname);
     }
     // Sanitize hostnames in server.serversOnNetwork
     for (const [index, value] of server.serversOnNetwork.entries()) {
@@ -169,6 +220,12 @@ export function loadAllServers(saveString: string): void {
 
     AllServers.set(server.hostname, server);
     AllServers.set(server.ip, server);
+  }
+
+  if (storageCacheSave) {
+    const entries: unknown = JSON.parse(storageCacheSave);
+    assertArray(entries);
+    populateStorageCacheFiles(entries);
   }
 
   // Apply blocked ram for darknet servers

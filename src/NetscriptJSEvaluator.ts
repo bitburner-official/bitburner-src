@@ -11,6 +11,7 @@ import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/Loaded
 import type { Script } from "./Script/Script";
 import type { ScriptFilePath } from "./Paths/ScriptFilePath";
 import { FileType, getFileType, getModuleScript, transformScript } from "./utils/ScriptTransformer";
+import { cacheTransform, getCachedTransform } from "./utils/helpers/storageCache";
 
 // Makes a blob that contains the code of a given script.
 function makeScriptBlob(code: string): Blob {
@@ -80,7 +81,8 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     return script.mod;
   }
 
-  if (script.code === "") {
+  const code = script.code;
+  if (code === "") {
     throw new Error(`Script content is an empty string. Filename: ${script.filename}, server: ${script.server}.`);
   }
   let scriptCode;
@@ -88,13 +90,22 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   const fileType = getFileType(script.filename);
   switch (fileType) {
     case FileType.JS:
-      scriptCode = script.code;
+      scriptCode = code;
       break;
     case FileType.JSX:
     case FileType.TS:
-    case FileType.TSX:
-      ({ scriptCode, sourceMap } = transformScript(script.code, fileType));
+    case FileType.TSX: {
+      // Identical content (e.g. a worm copied across servers) shares one storage-cache entry, so transform it once
+      // and reuse the result for every other owner instead of re-running swc per instance.
+      const cached = getCachedTransform(code);
+      if (cached) {
+        ({ scriptCode, sourceMap } = cached);
+      } else {
+        ({ scriptCode, sourceMap } = transformScript(code, fileType));
+        cacheTransform(code, { scriptCode, sourceMap });
+      }
       break;
+    }
     default:
       throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);
   }

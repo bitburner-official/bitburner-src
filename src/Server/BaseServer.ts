@@ -181,15 +181,14 @@ export abstract class BaseServer implements IServer {
     if (hasTextExtension(path)) {
       const textFile = this.textFiles.get(path);
       if (!textFile) return { res: false, msg: `Text file ${path} not found.` };
-      this.textFiles.delete(path);
+      if (!textFile.deleteFromServer(this)) return { res: false, msg: `Text file ${path} not found.` };
       return { res: true };
     }
     if (hasScriptExtension(path)) {
       const script = this.scripts.get(path);
       if (!script) return { res: false, msg: `Script ${path} not found.` };
-      if (this.isRunning(path)) return { res: false, msg: "Cannot delete a script that is currently running!" };
-      script.invalidateModule();
-      this.scripts.delete(path);
+      if (!script.deleteFromServer(this))
+        return { res: false, msg: "Cannot delete a script that is currently running!" };
       return { res: true };
     }
     if (hasProgramExtension(path)) {
@@ -280,7 +279,7 @@ export abstract class BaseServer implements IServer {
     }
 
     // Otherwise create a new text file
-    const newFile = new TextFile(textPath, txt);
+    const newFile = new TextFile(textPath, txt, this.hostname);
     this.textFiles.set(textPath, newFile);
     return { overwritten: false };
   }
@@ -347,13 +346,13 @@ export abstract class BaseServer implements IServer {
     // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
     for (const script of oldScripts) {
       // We're about to do type validation on the filename anyway.
-      if (script.filename.endsWith(".ns")) script.filename = (script.filename + ".js") as ScriptFilePath;
+      if (script.filename.endsWith(".ns")) script.setFilename((script.filename + ".js") as ScriptFilePath);
       let newFilePath = resolveScriptFilePath(script.filename);
       if (!newFilePath) {
         newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;
         script.content = `// Original path: ${script.filename}. Path was no longer valid\n` + script.content;
       }
-      script.filename = newFilePath;
+      script.setFilename(newFilePath);
       server.scripts.set(newFilePath, script);
     }
     let invalidTextCount = 0;
@@ -369,7 +368,7 @@ export abstract class BaseServer implements IServer {
         newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
         textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
       }
-      textFile.filename = newFilePath;
+      textFile.setFilename(newFilePath);
       server.textFiles.set(newFilePath, textFile);
     }
     if (invalidScriptCount || invalidTextCount) {

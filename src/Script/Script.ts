@@ -6,11 +6,19 @@ import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
+import {
+  cacheContentFile,
+  deleteContentFile,
+  moveCacheOwner,
+  recacheContentFile,
+  type StorageCacheEntry,
+} from "../utils/helpers/storageCache";
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
 export class Script extends ContentFile {
-  code: string;
+  private storageCacheEntry: StorageCacheEntry | null = null;
+  private uncachedCode = "";
   filename: ScriptFilePath;
   server: string;
 
@@ -41,11 +49,46 @@ export class Script extends ContentFile {
     this.invalidateModule();
   }
 
+  get code(): string {
+    return this.storageCacheEntry?.content ?? this.uncachedCode;
+  }
+
+  set code(code: string) {
+    if (this.server === "") {
+      this.uncachedCode = code;
+      return;
+    }
+
+    this.storageCacheEntry = this.storageCacheEntry
+      ? recacheContentFile(this.server, this.filename, this.storageCacheEntry.content, code)
+      : cacheContentFile(this.server, this.filename, code);
+    this.uncachedCode = "";
+  }
+
   constructor(filename = "default.js" as ScriptFilePath, code = "", server = "") {
     super();
     this.filename = filename;
-    this.code = code;
     this.server = server; // hostname of server this script is on
+    this.code = code;
+  }
+
+  setFilename(filename: ScriptFilePath): void {
+    if (this.filename === filename) return;
+    if (this.storageCacheEntry) {
+      this.storageCacheEntry = moveCacheOwner(this.server, this.filename, this.server, filename, this.code);
+    }
+    this.filename = filename;
+  }
+
+  setServer(server: string): void {
+    if (this.server === server) return;
+    if (this.storageCacheEntry) {
+      this.storageCacheEntry = moveCacheOwner(this.server, this.filename, server, this.filename, this.code);
+    }
+    this.server = server;
+    if (!this.storageCacheEntry && this.uncachedCode !== "" && server !== "") {
+      this.code = this.uncachedCode;
+    }
   }
 
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
@@ -91,17 +134,26 @@ export class Script extends ContentFile {
   /** Remove script from server. Fails if the provided server isn't the server for this script. */
   deleteFromServer(server: BaseServer): boolean {
     if (this.server !== server.hostname || server.isRunning(this.filename)) return false;
+    deleteContentFile(this.server, this.filename, this.code);
+    this.storageCacheEntry = null;
     this.invalidateModule();
     server.scripts.delete(this.filename);
     return true;
   }
 
-  /** The keys that are relevant in a save file */
-  static savedKeys = ["code", "filename", "server", "metadata"] as const;
+  /** The keys that are relevant in a save file.
+   * Order matters for fromJSON: `code` is a setter that caches content keyed by `server`+`filename`, so both must be
+   * applied before `code` when loading an old save with inline code. Moving `code` earlier would route it to
+   * uncachedCode (never attaching, losing content on the next save) or cache it under the default filename. */
+  static savedKeys = ["filename", "server", "code", "metadata"] as const;
+  // New saves omit inline code (it lives once in the top-level storageCache) but must keep `server`: scripts are only
+  // re-assigned a server on load when their hostname was ill-formed, so the saved value is the source of truth.
+  // (TextFile omits `server` instead, because every text file is unconditionally re-attached via setServer on load.)
+  static savedKeysNoCode = ["filename", "server", "metadata"] as const;
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    return Generic_toJSON("Script", this, Script.savedKeys);
+    return Generic_toJSON("Script", this, Script.savedKeysNoCode);
   }
 
   // Initializes a Script Object from a JSON save state

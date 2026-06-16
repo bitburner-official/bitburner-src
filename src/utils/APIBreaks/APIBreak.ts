@@ -2,6 +2,7 @@
 
 import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import type { Script } from "../../Script/Script";
+import type { BaseServer } from "../../Server/BaseServer";
 import { Player } from "@player";
 import { GetAllServers } from "../../Server/AllServers";
 import { resolveTextFilePath } from "../../Paths/TextFilePath";
@@ -64,7 +65,11 @@ export interface APIBreakInfo {
   doNotSkip?: boolean;
 }
 
-function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakInfo["brokenAPIs"]): number[] | null {
+function detectImpactAndMigrateLines(
+  server: BaseServer,
+  script: Script,
+  brokenFunctions: APIBreakInfo["brokenAPIs"],
+): number[] | null {
   const impactedLines: number[] = [];
   const lines = script.content.split("\n");
   for (let i = 0; i < lines.length; ++i) {
@@ -86,7 +91,7 @@ function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakIn
       }
     }
   }
-  script.content = lines.join("\n");
+  server.writeToScriptFile(script.filename, lines.join("\n"));
   return impactedLines.length ? impactedLines : null;
 }
 
@@ -100,7 +105,7 @@ function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): {
   for (const server of GetAllServers()) {
     const impactedScripts = new Map<ScriptFilePath, number[]>();
     for (const [filename, script] of server.scripts) {
-      const impactedLines = detectImpactAndMigrateLines(script, brokenFunctions);
+      const impactedLines = detectImpactAndMigrateLines(server, script, brokenFunctions);
       if (impactedLines) {
         totalDetectedLines += impactedLines.length;
         impactedScripts.set(filename, impactedLines);

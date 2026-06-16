@@ -88,7 +88,8 @@ export const renameCloudServer = (hostname: string, newName: string): void => {
       ws.hostname = newName;
     }
   }
-  server.scripts.forEach((r) => (r.server = newName));
+  server.scripts.forEach((r) => r.setServer(newName));
+  server.textFiles.forEach((r) => r.setServer(newName));
   server.hostname = newName;
   renameServer(hostname, newName);
 };
