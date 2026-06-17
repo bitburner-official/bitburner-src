@@ -145,5 +145,10 @@
     "version": "sh ./tools/build-release.sh && git add --all",
     "postversion": "git push -u origin dev && git push --tags",
     "changelog": "node tools/fetch-changelog/index.js --from=$(cat last_changelog_hash) > changelog.md"
+  },
+  "allowScripts": {
+    "@swc/core@1.15.33": true,
+    "core-js-pure@3.33.0": true,
+    "electron@41.4.0": true
   }
 }
