@@ -1431,7 +1431,7 @@ export const ns: InternalAPI<NSFull> = {
   atExit: (ctx) => (callback, _id) => {
     const id = _id ? helpers.string(ctx, "id", _id) : "default";
     assertFunctionWithNSContext(ctx, "callback", callback);
-    ctx.workerScript.atExit.set(id, callback);
+    (ctx.workerScript.atExit ??= new Map()).set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {
     const [server, host] = helpers.getServer(ctx, _host);

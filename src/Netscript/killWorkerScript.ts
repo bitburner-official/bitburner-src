@@ -65,13 +65,15 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   const atExit = ws.atExit;
   //Calling ns.exit inside ns.atExit can lead to recursion
   //so the map must be cleared before looping
-  ws.atExit = new Map();
+  ws.atExit = null;
 
-  for (const [id, callback] of atExit) {
-    try {
-      callback();
-    } catch (e: unknown) {
-      handleUnknownError(e, ws, `Error running atExit function with id ${id}.\n\n`);
+  if (atExit) {
+    for (const [id, callback] of atExit) {
+      try {
+        callback();
+      } catch (e: unknown) {
+        handleUnknownError(e, ws, `Error running atExit function with id ${id}.\n\n`);
+      }
     }
   }
 

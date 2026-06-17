@@ -48,12 +48,6 @@ export class WorkerScript {
   /** Netscript Environment for this script */
   env: Environment;
 
-  /**
-   * Used for static RAM calculation. Stores names of all functions that have
-   * already been checked by this script
-   */
-  loadedFns: Record<string, boolean> = {};
-
   /** Filename of script. Mirrors the RunningScript, so we don't store a second copy. */
   get name(): ScriptFilePath {
     return this.scriptRef.filename;
@@ -73,8 +67,8 @@ export class WorkerScript {
     return this.scriptRef.server;
   }
 
-  /**Map of functions called when the script ends. */
-  atExit: Map<string, () => void> = new Map();
+  /** Map of functions called when the script ends. Allocated lazily on the first ns.atExit call. */
+  atExit: Map<string, () => void> | null = null;
 
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     // Assign first: the name/hostname getters read through scriptRef.
