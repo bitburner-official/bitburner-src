@@ -16,14 +16,18 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { addGlobalAlias, addAlias, removeAlias, Aliases, GlobalAliases, aliasRegex } from "../Alias";
 import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
+import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
-  if (typeof v === "number") v = helpers.string(ctx, argName, v); // cast to string;
   assertStringWithNSContext(ctx, argName, v);
   const matches = v.match(aliasRegex);
-  if (matches == null || matches.length !== 1 || matches[0] !== v) {
-    throw helpers.errorMessage(ctx, `'${argName}' must only contain letters, numbers, or any of these symbols: |!%,@-`);
+  if (matches === null || matches.length !== 1 || matches[0] !== v) {
+    throw helpers.errorMessage(
+      ctx,
+      `'${argName}' must not be an empty string and must contain only alphanumeric characters or any of these symbols: _|!%,@-`,
+    );
   }
   return v;
 }
@@ -226,18 +230,11 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       );
     },
 
-    alias: (ctx) => (_alias, _substitution, _global) => {
+    alias: (ctx) => (_alias, _substitution, _isGlobal) => {
       const alias = parseAsAlias(ctx, "alias", _alias);
       const substitution = helpers.string(ctx, "substitution", _substitution);
-      const global = helpers.boolean(ctx, "global", _global ?? false);
-      if (!alias) {
-        throw helpers.errorMessage(ctx, `'alias' cannot be an empty string.`);
-      }
-      if (!substitution) {
-        throw helpers.errorMessage(ctx, `'substitution' cannot be an empty string or only contain whitespace.`);
-      }
-
-      if (global) {
+      const isGlobal = helpers.boolean(ctx, "global", _isGlobal ?? false);
+      if (isGlobal) {
         addGlobalAlias(alias, substitution);
         helpers.log(ctx, () => `Added global alias ${alias}: ${substitution}`);
       } else {
@@ -276,6 +273,10 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       }
 
       return returnMap;
+    },
+
+    renderPage: () => (_node) => {
+      Router.toPage(Page.CustomPage, { content: wrapUserNode(_node) });
     },
   };
 }

@@ -1814,6 +1814,7 @@ Names of all cities
 
 </td><td>
 
+This is a map of contract types to their input and answer data types. The key is the contract type. The value is a tuple containing the input and answer data types.
 
 
 </td></tr>
