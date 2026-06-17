@@ -86,7 +86,6 @@ export class WorkerScript {
     if (!script) {
       throw new Error(`WorkerScript constructed with invalid script filename: ${this.name}`);
     }
-    this.args = runningScriptObj.args.slice();
     this.env = new Environment();
     if (typeof nsFuncsGenerator === "function") {
       this.env.vars = nsFuncsGenerator(this);
