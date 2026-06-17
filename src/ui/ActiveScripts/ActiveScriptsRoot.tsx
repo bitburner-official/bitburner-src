@@ -20,7 +20,7 @@ type ActiveScriptsTab = ComplexPage.ActiveScripts | SimplePage.RecentlyKilledScr
 
 export type ComponentProps = {
   page: ActiveScriptsTab;
-  serverName?: string | null;
+  serverName?: string;
 };
 
 export function ActiveScriptsRoot({ page, serverName }: ComponentProps): React.ReactElement {
