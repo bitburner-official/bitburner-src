@@ -15,7 +15,7 @@ import { isPositiveInteger } from "../../types";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
 interface IProps {
-  serverName?: string | null;
+  serverName?: string;
 }
 
 export function ActiveScriptsPage(props: IProps): React.ReactElement {

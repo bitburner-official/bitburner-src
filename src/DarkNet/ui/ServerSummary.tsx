@@ -70,7 +70,7 @@ export function ServerSummary({
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.blockedRam, 0);
 
   const components = [
-    <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
+    <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>} style={{ cursor: "pointer" }}>
       <Typography
         color={runningScriptCount > 0 ? "primary" : "secondary"}
         onClick={() => Router.toPage(ComplexPage.ActiveScripts, { serverName: server.hostname })}
@@ -158,13 +158,11 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  const maxIcons = showDetails ? components.length : 2;
+  const maxIcons = showDetails ? components.length : 3;
   const componentsToShow = components.slice(0, maxIcons);
 
   return (
-    <div
-      style={{ display: "inline-flex", flexDirection: "row-reverse", width: "100%", justifyContent: "space-between" }}
-    >
+    <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
       {componentsToShow}
     </div>
   );
