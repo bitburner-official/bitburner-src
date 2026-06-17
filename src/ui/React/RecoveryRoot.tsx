@@ -109,14 +109,8 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
         Please update your browser.
       </Typography>
     );
-  } else if (sourceError instanceof InvalidSaveData) {
-    instructions = (
-      <Typography variant="h4" color={Settings.theme.warning}>
-        Your save data is invalid. Please import a valid backup save file.
-      </Typography>
-    );
   } else if (
-    (sourceError instanceof JSONReviverError && isSaveDataFromNewerVersions(loadedSaveObjectMiniDump.VersionSave)) ||
+    isSaveDataFromNewerVersions(loadedSaveObjectMiniDump.VersionSave) ||
     sourceError instanceof IndexedDBVersionError
   ) {
     instructions = (
@@ -130,6 +124,12 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
         )}
         Please check if you are using the correct build. This may happen when you load the save data of the dev build
         (Steam Beta or https://bitburner-official.github.io/bitburner-src) on the stable build.
+      </Typography>
+    );
+  } else if (sourceError instanceof InvalidSaveData || sourceError instanceof JSONReviverError) {
+    instructions = (
+      <Typography variant="h4" color={Settings.theme.warning}>
+        Your save data is invalid. Please import a valid backup save file.
       </Typography>
     );
   } else {
