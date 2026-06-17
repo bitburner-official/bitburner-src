@@ -856,8 +856,6 @@ function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string
  */
 function createPublicRunningScript(runningScript: RunningScript, workerScript?: WorkerScript): IRunningScript {
   const logProps = runningScript.tailProps;
-  // Generate the default title on first request if the script doesn't have one yet.
-  const title = (runningScript.title ??= runningScript.getDefaultTitle());
 
   return {
     args: runningScript.args.slice(),
@@ -885,7 +883,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
             fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
             minimized: logProps.minimized,
           },
-    title,
+    title: runningScript.title,
     threads: runningScript.threads,
     temporary: runningScript.temporary,
   };

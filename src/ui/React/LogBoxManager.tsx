@@ -256,9 +256,8 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   }
 
   function title(): React.ReactElement {
-    const defaultTitle = script.getDefaultTitle();
-    const displayTitle = script.title || defaultTitle;
-    const titleText = typeof displayTitle === "string" ? displayTitle : defaultTitle;
+    const displayTitle = script.title;
+    const titleText = typeof displayTitle === "string" ? displayTitle : script.getDefaultTitle();
     return (
       <Typography
         variant="h6"
