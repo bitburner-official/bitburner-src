@@ -187,7 +187,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           files: new Map(),
           options: { vim: Settings.MonacoDefaultToVim, hostname: Player.currentServer },
         });
-      } else if (page == Page.Documentation || page == Page.Options) {
+      } else if (page === Page.Documentation || page === Page.Options || page === Page.ActiveScripts) {
         Router.toPage(page, {});
       } else if (isSimplePage(page)) {
         Router.toPage(page);
