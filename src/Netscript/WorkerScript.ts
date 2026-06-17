@@ -72,8 +72,8 @@ export class WorkerScript {
   /** hostname on which this script is running */
   hostname: string;
 
-  /**Map of functions called when the script ends. */
-  atExit: Map<string, () => void> = new Map();
+  /** Map of functions called when the script ends. Allocated lazily on the first ns.atExit call. */
+  atExit: Map<string, () => void> | null = null;
 
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;
