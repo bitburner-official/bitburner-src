@@ -1,12 +1,13 @@
 import React from "react";
 import { SvgIcon, Tooltip, Typography } from "@mui/material";
-import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
+import { Bolt, Code, Description, DoorBackSharp, Inventory2, LockPerson, Terminal } from "@mui/icons-material";
 import { formatNumber } from "../../ui/formatNumber";
-import { CompletedProgramName } from "@enums";
+import { CompletedProgramName, ComplexPage } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetConstants } from "../Constants";
+import { Router } from "../../ui/GameRoot";
 
 export type ServerSummaryProps = {
   server: DarknetServer;
@@ -24,7 +25,7 @@ export function ServerSummary({
   showDetails = false,
 }: ServerSummaryProps): React.ReactElement {
   if (!server.hasAdminRights && enableAuth) {
-    return <Typography>[ auth required ]</Typography>;
+    return <Typography color="secondary">[ auth required ]</Typography>;
   }
   if (!server.hasAdminRights && !enableAuth) {
     return <Typography color="secondary">(no connection)</Typography>;
@@ -68,16 +69,18 @@ export function ServerSummary({
   const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.blockedRam, 0);
 
-  const runningScriptsComponent = (
+  const components = [
     <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
-      <Typography color={runningScriptCount > 0 ? "primary" : "secondary"}>
+      <Typography
+        color={runningScriptCount > 0 ? "primary" : "secondary"}
+        onClick={() => Router.toPage(ComplexPage.ActiveScripts, { serverName: server.hostname })}
+      >
         <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
         {runningScriptCount}
       </Typography>
-    </Tooltip>
-  );
+    </Tooltip>,
+  ];
 
-  const components = [];
   if (cacheCount) {
     components.push(
       <Tooltip key="cache" title={<>{dataCacheTooltip}</>}>
@@ -156,10 +159,12 @@ export function ServerSummary({
     );
   }
   const maxIcons = showDetails ? components.length : 2;
-  const componentsToShow = [...components.slice(0, maxIcons), runningScriptsComponent];
+  const componentsToShow = components.slice(0, maxIcons);
 
   return (
-    <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
+    <div
+      style={{ display: "inline-flex", flexDirection: "row-reverse", width: "100%", justifyContent: "space-between" }}
+    >
       {componentsToShow}
     </div>
   );

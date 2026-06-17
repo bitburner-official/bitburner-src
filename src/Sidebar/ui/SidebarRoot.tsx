@@ -209,7 +209,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       switch (keyBindingType) {
         case SimplePage.Terminal:
         case ComplexPage.ScriptEditor:
-        case SimplePage.ActiveScripts:
+        case ComplexPage.ActiveScripts:
         case SimplePage.CreateProgram:
         case SimplePage.Stats:
         case SimplePage.Hacknet:
