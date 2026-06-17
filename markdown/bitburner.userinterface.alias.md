@@ -9,7 +9,7 @@ Programmatically sets an alias.
 **Signature:**
 
 ```typescript
-alias(alias: string, substitution: string, global?: boolean): void;
+alias(alias: string, substitution: string, isGlobal?: boolean): void;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-The keyword to set.
+The alias name to set.
 
 
 </td></tr>
@@ -64,7 +64,7 @@ The substitution to run.
 </td></tr>
 <tr><td>
 
-global
+isGlobal
 
 
 </td><td>
@@ -74,7 +74,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ Whether the alias should be set as a global alias. Global aliases replace all examples of the alias with the substitution string.
+_(Optional)_ Whether the alias should be set as a global alias. Global aliases replace all occurrences of the alias with the substitution string.
 
 
 </td></tr>
@@ -88,18 +88,19 @@ void
 
 RAM cost: 0 GB
 
-Programmatically sets an alias. This is functionally equivalent to if you typed \`\`<!-- -->alias $<!-- -->{<!-- -->alias<!-- -->}<!-- -->=$<!-- -->{<!-- -->substitution<!-- -->}<!-- -->\`\` in the terminal. This function throws an error if alias/substitution are empty strings after leading and trailing whitespace are removed. It also throws if alias has any invalid characters (not alphanum or `|!%,@-`<!-- -->).
+This is functionally equivalent to typing `alias ${alias}=${substitution}` in the terminal.
 
-Only one alias can be set for a particular context; global aliases will overwrite nonglobal aliases silently and vice versa.
+This function throws an error if `alias` is an empty string or contains any invalid characters (only alphanumeric characters and `_|!%,@-` are allowed).
+
+Only one alias may be defined for a given context. Setting a global alias will silently overwrite an existing non-global alias with the same name, and vice versa.
 
 ## Example
 
-File: script.js
 
 ```js
-export async function main(ns){
-   ns.alias("nuke", "run NUKE.exe"); // Equivalent to typing "alias nuke="run NUKE.exe"
-   ns.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing "alias -g worm="HTTPWorm.exe"
+export async function main(ns) {
+  ns.ui.alias("nuke", "run NUKE.exe"); // Equivalent to typing `alias nuke="run NUKE.exe"`
+  ns.ui.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing `alias -g worm="HTTPWorm.exe"`
 }
 
 ```

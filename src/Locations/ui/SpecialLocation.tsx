@@ -49,22 +49,44 @@ interface SpecialLocationProps {
   loc: Location;
 }
 
-export function SpecialLocation(props: SpecialLocationProps): React.ReactElement {
-  const rerender = useRerender();
-
-  // Special Location Hints
-  function specialLocationNextBNHint(bn_number: number): React.ReactElement {
-    if (knowAboutBitverse()) {
-      return (
-        <>
-          <br />
-          <br />
-          <Typography>You should check out BN-{bn_number} to uncover more details about this place.</Typography>
-        </>
-      );
-    }
+function SpecialLocationHint(bitNode: number): React.ReactElement {
+  let message;
+  switch (bitNode) {
+    case 3:
+      if (Player.bitNodeOptions.disableCorporation) {
+        message = "You disabled Corporation via BitNode advanced options.";
+      } else if (currentNodeMults.CorporationSoftcap < 0.15) {
+        message = `Corporation is disabled in BN-${Player.bitNodeN}.`;
+      }
+      break;
+    case 6:
+    case 7:
+      if (Player.bitNodeOptions.disableBladeburner) {
+        message = "You disabled Bladeburner via BitNode advanced options.";
+      } else if (currentNodeMults.BladeburnerRank === 0) {
+        message = `Bladeburner is disabled in BN-${Player.bitNodeN}.`;
+      }
+      break;
+  }
+  if (!message && knowAboutBitverse()) {
+    message = `You should check out ${
+      bitNode !== 6 ? `BN-${bitNode}` : `BN-6 or BN-7`
+    } to uncover more details about this place.`;
+  }
+  if (!message) {
     return <></>;
   }
+  return (
+    <>
+      <br />
+      <br />
+      <Typography>{message}</Typography>
+    </>
+  );
+}
+
+export function SpecialLocation(props: SpecialLocationProps): React.ReactElement {
+  const rerender = useRerender();
 
   // Apply for Bladeburner division
   const joinBladeburnerDivision = useCallback(() => {
@@ -119,9 +141,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderBladeburner(): React.ReactElement {
     if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
-      {
-        return specialLocationNextBNHint(6);
-      }
+      return SpecialLocationHint(6);
     }
     const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
     return (
@@ -177,13 +197,13 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function CreateCorporation(): React.ReactElement {
     const [open, setOpen] = useState(false);
-    if (!Player.canAccessCorporation()) {
+    if (!Player.canAccessCorporation() || currentNodeMults.CorporationSoftcap < 0.15) {
       return (
         <>
           <Typography>
             <i>A businessman is yelling at a clerk. You should come back later.</i>
           </Typography>
-          {specialLocationNextBNHint(3)}
+          {SpecialLocationHint(3)}
         </>
       );
     }
@@ -199,9 +219,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderGrafting(): React.ReactElement {
     if (!Player.canAccessGrafting()) {
-      {
-        return specialLocationNextBNHint(10);
-      }
+      return SpecialLocationHint(10);
     }
     return (
       <Button onClick={handleGrafting} sx={{ my: 5 }}>
@@ -316,7 +334,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
           <br />
           {symbol}
-          <Typography>{specialLocationNextBNHint(13)}</Typography>
+          {SpecialLocationHint(13)}
         </>
       );
     }
@@ -429,7 +447,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return renderGrafting();
     }
     case LocationName.Sector12CityHall: {
-      return (currentNodeMults.CorporationSoftcap < 0.15 && <></>) || <CreateCorporation />;
+      return <CreateCorporation />;
     }
     case LocationName.Sector12NSA: {
       return renderBladeburner();

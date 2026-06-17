@@ -13,7 +13,7 @@ import { ScriptFilePath, resolveScriptFilePath, hasScriptExtension } from "../Pa
 import { Directory, resolveDirectory } from "../Paths/Directory";
 import { TextFilePath, resolveTextFilePath, hasTextExtension } from "../Paths/TextFilePath";
 import { Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { matchScriptPathExact } from "../utils/helpers/scriptKey";
+import { matchScriptPathExact, scriptKey } from "../utils/helpers/scriptKey";
 
 import { createRandomIp } from "../utils/IPAddress";
 import { JSONMap } from "../Types/Jsonable";
@@ -221,10 +221,11 @@ export abstract class BaseServer implements IServer {
    * be run.
    */
   runScript(script: RunningScript): void {
-    let byPid = this.runningScriptMap.get(script.scriptKey);
+    const key = scriptKey(script.filename, script.args);
+    let byPid = this.runningScriptMap.get(key);
     if (!byPid) {
       byPid = new Map();
-      this.runningScriptMap.set(script.scriptKey, byPid);
+      this.runningScriptMap.set(key, byPid);
     }
     byPid.set(script.pid, script);
   }

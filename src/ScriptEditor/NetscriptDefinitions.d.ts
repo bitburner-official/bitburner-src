@@ -2592,6 +2592,9 @@ export interface Singularity {
    *
    * If the active level of a source file is 0, that source file won't be included in the result.
    *
+   * This function does not require owning Source-File 4 or being in BitNode 4. You can also use
+   * {@link ResetInfo.ownedSF | ResetInfo.ownedSF} as a lower-RAM alternative.
+   *
    * @returns Array containing an object with number and level of the source file.
    */
   getOwnedSourceFiles(): SourceFileLvl[];
@@ -2887,11 +2890,15 @@ export interface Singularity {
    *   OR
    * Completed the final black op.
    *
-   * @param nextBN - BN number to jump to
+   * If you do not want to move on to the next BN and instead stay on the BitVerse screen, you can set nextBN
+   * to undefined. Note that with the hacking route, using {@link Singularity.installBackdoor | installBackdoor} is a
+   * cheaper way to do this.
+   *
+   * @param nextBN - BN number to jump to. Passing undefined leaves you on the BitVerse screen.
    * @param callbackScript - Name of the script to launch in the next BN.
    * @param bitNodeOptions - BitNode options for the next BN.
    */
-  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
+  destroyW0r1dD43m0n(nextBN?: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Get the current work the player is doing.
@@ -7039,27 +7046,28 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Programmatically sets an alias. This is functionally equivalent to if you typed ``alias ${alias}=${substitution}`` in the terminal.
-   * This function throws an error if alias/substitution are empty strings after leading and trailing whitespace are removed. It also throws if
-   * alias has any invalid characters (not alphanum or `|!%,@-`).
+   * This is functionally equivalent to typing `alias ${alias}=${substitution}` in the terminal.
    *
-   * Only one alias can be set for a particular context; global aliases will overwrite nonglobal aliases silently and vice versa.
+   * This function throws an error if `alias` is an empty string or contains any invalid characters (only alphanumeric
+   * characters and `_|!%,@-` are allowed).
+   *
+   * Only one alias may be defined for a given context. Setting a global alias will silently overwrite an existing
+   * non-global alias with the same name, and vice versa.
    *
    * @example
-   * File: script.js
    * ```js
-   * export async function main(ns){
-   *    ns.alias("nuke", "run NUKE.exe"); // Equivalent to typing "alias nuke="run NUKE.exe"
-   *    ns.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing "alias -g worm="HTTPWorm.exe"
+   * export async function main(ns) {
+   *   ns.ui.alias("nuke", "run NUKE.exe"); // Equivalent to typing `alias nuke="run NUKE.exe"`
+   *   ns.ui.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing `alias -g worm="HTTPWorm.exe"`
    * }
    *
    * ```
-   * @param alias - The keyword to set.
+   * @param alias - The alias name to set.
    * @param substitution - The substitution to run.
-   * @param global - Whether the alias should be set as a global alias. Global aliases replace all examples of the alias with the substitution string.
-   *
+   * @param isGlobal - Whether the alias should be set as a global alias. Global aliases replace all occurrences of the
+   * alias with the substitution string.
    */
-  alias(alias: string, substitution: string, global?: boolean): void;
+  alias(alias: string, substitution: string, isGlobal?: boolean): void;
 
   /**
    * Clears an existing alias.
@@ -7080,6 +7088,26 @@ interface UserInterface {
    * @returns A map of alias names to an object containing the substitution string and if the alias was set to global.
    */
   getAllAliases(): Map<string, { substitution: string; isGlobal: boolean }>;
+
+  /**
+   * Renders a ReactNode in the main content area.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * On the left side of the UI, the sidebar contains shortcuts to game features (Terminal, Script Editor, City, etc.).
+   * When clicking a sidebar item, the feature is rendered on the right side of the UI. This space is the main content
+   * area.
+   *
+   * For example, when you click the "City" button in the sidebar, the locations in that city are rendered in the main
+   * content area.
+   *
+   * This function effectively switches to a new custom "page", as if you had navigated via the sidebar. Calling it
+   * again replaces the contents of the page.
+   *
+   * @param node - The node to be rendered.
+   */
+  renderPage(node: ReactNode): void;
 }
 
 /**
@@ -9645,7 +9673,18 @@ type CodingContractNameEnumType = {
 /** @public */
 type CodingContractName = _ValueOf<CodingContractNameEnumType>;
 
-/** @public */
+/**
+ * This is a map of contract types to their input and answer data types. The key is the contract type. The value is a
+ * tuple containing the input and answer data types.
+ *
+ * @example
+ * ```
+ * "Subarray with Maximum Sum": [number[], number]
+ * ```
+ * For the "Subarray with Maximum Sum" contract, the input type is `number[]` and the answer type is `number`.
+ *
+ * @public
+ */
 export type CodingContractSignatures = {
   "Find Largest Prime Factor": [number, number];
   "Subarray with Maximum Sum": [number[], number];
@@ -9674,7 +9713,7 @@ export type CodingContractSignatures = {
   "Compression III: LZ Compression": [string, string];
   "Encryption I: Caesar Cipher": [[string, number], string];
   "Encryption II: Vigenère Cipher": [[string, string], string];
-  "Square Root": [bigint, bigint, [string, string]];
+  "Square Root": [bigint, bigint];
   "Total Number of Primes": [[number, number], number];
   "Largest Rectangle in a Matrix": [(1 | 0)[][], [[number, number], [number, number]]];
 };
