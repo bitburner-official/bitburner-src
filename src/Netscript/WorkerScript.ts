@@ -32,8 +32,8 @@ export class WorkerScript {
   /** Holds the Promise reject() function while the script is "blocked" by an async op */
   delayReject: ((reason?: ScriptDeath) => void) | undefined = undefined;
 
-  /** Stores names of all functions that have logging disabled */
-  disableLogs: Record<string, boolean> = {};
+  /** Stores names of all functions that have logging disabled. Allocated lazily; null means none disabled. */
+  disableLogs: Record<string, boolean> | null = null;
 
   /**
    * Used for dynamic RAM calculation. Stores names of all functions that have
@@ -127,7 +127,7 @@ export class WorkerScript {
   }
 
   shouldLog(fn: string): boolean {
-    return !(this.disableLogs.ALL || this.disableLogs[fn]);
+    return !(this.disableLogs?.ALL || this.disableLogs?.[fn]);
   }
 
   log(func: string, txt: () => string): void {

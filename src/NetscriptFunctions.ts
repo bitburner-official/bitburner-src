@@ -476,8 +476,8 @@ export const ns: InternalAPI<NSFull> = {
       // No need to log here, it's been disabled.
     } else {
       // We don't track individual log entries when all are disabled.
-      if (!ctx.workerScript.disableLogs["ALL"]) {
-        ctx.workerScript.disableLogs[fn] = true;
+      if (!ctx.workerScript.disableLogs?.["ALL"]) {
+        (ctx.workerScript.disableLogs ??= {})[fn] = true;
         helpers.log(ctx, () => `Disabled logging for ${fn}`);
       }
     }
@@ -488,15 +488,15 @@ export const ns: InternalAPI<NSFull> = {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
     if (fn === "ALL") {
-      ctx.workerScript.disableLogs = {};
+      ctx.workerScript.disableLogs = null;
       helpers.log(ctx, () => `Enabled logging for all functions`);
     } else {
-      if (ctx.workerScript.disableLogs["ALL"]) {
+      if (ctx.workerScript.disableLogs?.["ALL"]) {
         // As an optimization, we normally store only that key, but we have to
         // expand it out to all keys at this point.
         // Conveniently, possibleLogs serves as a model for "all keys disabled."
         ctx.workerScript.disableLogs = Object.assign({}, possibleLogs, { ALL: false, [fn]: false });
-      } else {
+      } else if (ctx.workerScript.disableLogs) {
         ctx.workerScript.disableLogs[fn] = false;
       }
       helpers.log(ctx, () => `Enabled logging for ${fn}`);
