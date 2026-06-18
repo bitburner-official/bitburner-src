@@ -8044,8 +8044,6 @@ export interface NS {
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
-   *
    * @example
    * ```js
    * //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
