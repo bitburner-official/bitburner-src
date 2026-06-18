@@ -33,12 +33,32 @@ export const config = {
   },
 };
 
-// Maps code to LoadedModules, so we can reuse compiled code across servers,
-// or possibly across files (if someone makes two copies of the same script,
-// or changes a script and then changes it back).
+// Cache transforms by exact source and file type, and LoadedModules by the
+// dependency-resolved code, so both can be reused across servers and files.
 // Modules can never be garbage collected by Javascript, so it's good to try
 // to keep from making more than we need.
-const moduleCache = new Map<string, LoadedModule>();
+type CachedTransform = ReturnType<typeof transformScript>;
+
+const moduleCache = {
+  modules: new Map<string, LoadedModule>(),
+  transforms: new Map<string, Map<FileType, CachedTransform>>(),
+};
+
+function getTransformedScript(code: string, fileType: FileType): CachedTransform {
+  let byFileType = moduleCache.transforms.get(code);
+  const cached = byFileType?.get(fileType);
+  if (cached) return cached;
+
+  const transformed = transformScript(code, fileType);
+
+  if (!byFileType) {
+    byFileType = new Map();
+    moduleCache.transforms.set(code, byFileType);
+  }
+  byFileType.set(fileType, transformed);
+
+  return transformed;
+}
 
 export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): Promise<ScriptModule> {
   // Return the module if it already exists
@@ -83,8 +103,8 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   if (script.code === "") {
     throw new Error(`Script content is an empty string. Filename: ${script.filename}, server: ${script.server}.`);
   }
-  let scriptCode;
-  let sourceMap;
+  let scriptCode: string;
+  let sourceMap: string | undefined;
   const fileType = getFileType(script.filename);
   switch (fileType) {
     case FileType.JS:
@@ -93,7 +113,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     case FileType.JSX:
     case FileType.TS:
     case FileType.TSX:
-      ({ scriptCode, sourceMap } = transformScript(script.code, fileType));
+      ({ scriptCode, sourceMap } = getTransformedScript(script.code, fileType));
       break;
     default:
       throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);
@@ -177,7 +197,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     newCode = newCode.substring(0, node.start) + importedScript.mod.url + newCode.substring(node.end);
   }
 
-  const cachedMod = moduleCache.get(newCode);
+  const cachedMod = moduleCache.modules.get(newCode);
   if (cachedMod) {
     script.mod = cachedMod;
   } else {
@@ -214,7 +234,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // modules work.
     URL.revokeObjectURL(url);
     script.mod = new LoadedModule(url, module);
-    moduleCache.set(newCode, script.mod);
+    moduleCache.modules.set(newCode, script.mod);
   }
 
   addDependencyInfo(script, seenStack);
