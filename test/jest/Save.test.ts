@@ -28,6 +28,10 @@ fixDoImportIssue();
 // been removed both for space, and to test that they are added correctly.
 // The one remaining server has been renamed to "__proto__" to test the
 // handling of darknet servers with unusual hostnames.
+//
+// Note that this is a different (older) JSON format than what the game
+// currently produces. This is intentional; the game should continue to be
+// able to read this format to support old savefiles.
 function loadStandardServers() {
   loadAllServers(
     String.raw`{
