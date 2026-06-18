@@ -44,11 +44,10 @@ export class WorkerScript {
   /** Netscript Environment for this script */
   env: Environment;
 
-  /** Filename of script */
-  name: ScriptFilePath;
-
-  /** Script's output/return value. Currently not used or implemented */
-  output = "";
+  /** Filename of script. Mirrors the RunningScript, so we don't store a second copy. */
+  get name(): ScriptFilePath {
+    return this.scriptRef.filename;
+  }
 
   /**
    * Process ID. Must be an integer. Used for efficient script
@@ -59,15 +58,17 @@ export class WorkerScript {
   /** Reference to underlying RunningScript object */
   scriptRef: RunningScript;
 
-  /** hostname on which this script is running */
-  hostname: string;
+  /** hostname on which this script is running. Mirrors the RunningScript. */
+  get hostname(): string {
+    return this.scriptRef.server;
+  }
 
   /** Map of functions called when the script ends. Allocated lazily on the first ns.atExit call. */
   atExit: Map<string, () => void> | null = null;
 
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
-    this.name = runningScriptObj.filename;
-    this.hostname = runningScriptObj.server;
+    // Assign first: the name/hostname getters read through scriptRef.
+    this.scriptRef = runningScriptObj;
 
     const sanitizedPid = Math.round(pid);
     if (typeof sanitizedPid !== "number" || isNaN(sanitizedPid)) {
@@ -76,7 +77,7 @@ export class WorkerScript {
     this.pid = sanitizedPid;
     runningScriptObj.pid = sanitizedPid;
 
-    // Get the underlying script's code
+    // Verify the server and underlying script exist
     const server = GetServer(this.hostname);
     if (server == null) {
       throw new Error(`WorkerScript constructed with invalid server ip: ${this.hostname}`);
@@ -85,7 +86,6 @@ export class WorkerScript {
     if (!script) {
       throw new Error(`WorkerScript constructed with invalid script filename: ${this.name}`);
     }
-    this.scriptRef = runningScriptObj;
     this.env = new Environment();
     if (typeof nsFuncsGenerator === "function") {
       this.env.vars = nsFuncsGenerator(this);

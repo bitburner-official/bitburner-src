@@ -11,7 +11,6 @@ import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { isPowerOfTwo } from "../utils/helpers/isPowerOfTwo";
-import { workerScripts } from "../Netscript/WorkerScripts";
 import { isIPAddress } from "../Types/strings";
 
 // Returns the cost of purchasing a server with the given RAM
@@ -83,9 +82,6 @@ export const renameCloudServer = (hostname: string, newName: string): void => {
   for (const byPid of server.runningScriptMap.values()) {
     for (const r of byPid.values()) {
       r.server = newName;
-      const ws = workerScripts.get(r.pid);
-      if (!ws) continue;
-      ws.hostname = newName;
     }
   }
   server.scripts.forEach((r) => (r.server = newName));
