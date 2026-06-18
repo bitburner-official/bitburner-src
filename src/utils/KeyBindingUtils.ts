@@ -21,7 +21,7 @@ export const SpoilerKeyBindingTypes = [
 export const GoToPageKeyBindingTypes = [
   SimplePage.Terminal,
   ComplexPage.ScriptEditor,
-  SimplePage.ActiveScripts,
+  ComplexPage.ActiveScripts,
   SimplePage.CreateProgram,
   SimplePage.Stats,
   SimplePage.Factions,
@@ -84,7 +84,7 @@ export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, 
     },
     null,
   ],
-  [SimplePage.ActiveScripts]: [
+  [ComplexPage.ActiveScripts]: [
     {
       control: false,
       alt: true,

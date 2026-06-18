@@ -7,7 +7,7 @@ export type Schema = [string, string | number | boolean | string[]][];
 type FlagType = StringConstructor | NumberConstructor | BooleanConstructor | StringConstructor[];
 type FlagsRet = Record<string, ScriptArg | string[]>;
 export function Flags(ctx: NetscriptContext | string[], permissive: boolean): (data: unknown) => FlagsRet {
-  const vargs = Array.isArray(ctx) ? ctx : ctx.workerScript.args;
+  const vargs = Array.isArray(ctx) ? ctx : ctx.workerScript.scriptRef.args;
   return (schema: unknown): FlagsRet => {
     schema = toNative(schema);
     if (!Array.isArray(schema)) throw new Error("flags schema passed in is invalid.");

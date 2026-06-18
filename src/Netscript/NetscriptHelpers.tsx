@@ -856,6 +856,7 @@ function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string
  */
 function createPublicRunningScript(runningScript: RunningScript, workerScript?: WorkerScript): IRunningScript {
   const logProps = runningScript.tailProps;
+
   return {
     args: runningScript.args.slice(),
     dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),

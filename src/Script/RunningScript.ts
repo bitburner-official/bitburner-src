@@ -75,10 +75,18 @@ export class RunningScript {
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
 
-  // The title, as shown in the script's log box. Defaults to the name + args,
-  // but can be changed by the user. If it is set to a React element (only by the user),
-  // that will not be persisted, and will be restored to default on load.
-  title = "" as string | React.ReactElement;
+  // Backing store for the title. Null means "use the default", generated lazily by the
+  // title getter so we don't store a title for every script up-front. A React element
+  // title (only set by the user) is not persisted, and is restored to default on load.
+  title_ = null as string | React.ReactElement | null;
+
+  // The title shown in the script's log box, defaulting to "filename args".
+  get title(): string | React.ReactElement {
+    return (this.title_ ??= this.getDefaultTitle());
+  }
+  set title(value: string | React.ReactElement) {
+    this.title_ = value;
+  }
 
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
@@ -97,7 +105,10 @@ export class RunningScript {
     this.server = script.server;
     this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;
-    this.title = `${this.filename} ${args.join(" ")}`;
+  }
+
+  getDefaultTitle(): string {
+    return `${this.filename} ${this.args.join(" ")}`;
   }
 
   log(txt: React.ReactNode): void {
@@ -156,9 +167,12 @@ export class RunningScript {
       {
         ...this,
         dataMap: Object.fromEntries(this.dataMap.entries()),
+        // Save the title under its canonical name, reading the raw backing field so we don't
+        // generate a default. Omit it when it's the default (null) or a ReactElement; both are
+        // restored on load.
+        title: this.title_,
       },
-      // Omit the title if it's a ReactNode, it will be filled in with the default on load.
-      typeof this.title === "string" ? includedProperties : includedPropsNoTitle,
+      typeof this.title_ === "string" ? includedProperties : includedPropsNoTitle,
     ) as IReviverValue<RunningScript>;
     // Dedup common strings
     value.data.server = stringDataIdx(value.data.server);
@@ -188,7 +202,7 @@ export class RunningScript {
     const runningScript = Generic_fromJSON(RunningScript, data, includedProperties);
     const validEntries = Object.entries(runningScript.dataMap).filter(isValidDataMapEntry);
     runningScript.dataMap = new Map(validEntries);
-    if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
+
     return runningScript;
   }
 
@@ -200,7 +214,8 @@ export class RunningScript {
 }
 const includedProperties = getKeyList(RunningScript, {
   removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
-});
+  // Persist the title under its canonical name, keeping its original key position.
+}).map((key) => (key === "title_" ? "title" : key));
 const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");
 
 function isValidDataMapEntry(entry: [string, unknown]): entry is [string, number[]] {
