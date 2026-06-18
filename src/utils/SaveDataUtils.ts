@@ -1,8 +1,8 @@
 import { SaveData } from "../types";
 
 export abstract class SaveDataError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor(message: string, cause?: unknown) {
+    super(message, { cause });
     this.name = this.constructor.name;
   }
 }
@@ -29,7 +29,7 @@ async function decompress(binaryData: Uint8Array<ArrayBuffer>): Promise<string> 
       result += value;
     }
   } catch (error) {
-    throw new InvalidSaveData(String(error));
+    throw new InvalidSaveData("Can't decompress", error);
   }
   return result;
 }

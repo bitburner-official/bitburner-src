@@ -26,8 +26,8 @@ export function fixDoImportIssue() {
   // Replace Blob/ObjectURL functions, because they don't work natively in Jest
   global.Blob = class extends Blob {
     code: string;
-    constructor(blobParts?: BlobPart[], __options?: BlobPropertyBag) {
-      super();
+    constructor(blobParts?: BlobPart[], options?: BlobPropertyBag) {
+      super(blobParts, options);
       this.code = String((blobParts ?? [])[0]);
     }
   };
@@ -123,6 +123,9 @@ export function getMockedNetscriptContext(
     functionPath: "",
     workerScript: {
       log: workerScriptLogFunction,
+      get hostname() {
+        return (this as WorkerScript).scriptRef.server;
+      },
       scriptRef: {
         dependencies: [],
       },

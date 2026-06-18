@@ -77,7 +77,7 @@ export interface ImportPlayerData {
   syncSteamAchievements: boolean;
 }
 
-type BitburnerSaveObjectType = {
+export type BitburnerSaveObjectType = {
   PlayerSave: string;
   VersionSave?: string;
   SettingsSave?: string;
