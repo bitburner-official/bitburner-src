@@ -14,7 +14,6 @@ import type { RunningScript } from "../Script/RunningScript";
 import type { Script } from "../Script/Script";
 import type { ScriptDeath } from "./ScriptDeath";
 
-import { Environment } from "./Environment";
 import { RamCostConstants } from "./RamCostGenerator";
 import { GetServer } from "../Server/AllServers";
 
@@ -41,8 +40,14 @@ export class WorkerScript {
   /** Tracks dynamic RAM usage */
   dynamicRamUsage: number = RamCostConstants.Base;
 
-  /** Netscript Environment for this script */
-  env: Environment;
+  /** Whether or not this script is stopped */
+  stopFlag = false;
+
+  /** The currently running function */
+  runningFn = "";
+
+  /** Netscript API bound to this script (the script's environment variables) */
+  vars: NSFull | null = null;
 
   /** Filename of script */
   name: ScriptFilePath;
@@ -86,9 +91,8 @@ export class WorkerScript {
       throw new Error(`WorkerScript constructed with invalid script filename: ${this.name}`);
     }
     this.scriptRef = runningScriptObj;
-    this.env = new Environment();
     if (typeof nsFuncsGenerator === "function") {
-      this.env.vars = nsFuncsGenerator(this);
+      this.vars = nsFuncsGenerator(this);
     }
   }
 
