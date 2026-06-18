@@ -46,7 +46,7 @@ export class WorkerScript {
   /** The currently running function */
   runningFn = "";
 
-  /** Netscript API bound to this script (the script's environment variables) */
+  /** Netscript API bound to this script */
   vars: NSFull | null = null;
 
   /** Filename of script. Mirrors the RunningScript, so we don't store a second copy. */
