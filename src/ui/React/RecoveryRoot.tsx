@@ -104,6 +104,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
 
   let instructions;
   if (sourceError instanceof UnsupportedSaveData) {
+    // This specifically is thrown only from needing CompressionStream and not having it.
     instructions = (
       <Typography variant="h4" color={Settings.theme.warning}>
         Please update your browser.
@@ -113,6 +114,9 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
     isSaveDataFromNewerVersions(loadedSaveObjectMiniDump.VersionSave) ||
     sourceError instanceof IndexedDBVersionError
   ) {
+    // We check broadly for the version being mismatched. If the version is
+    // newer than we expect, an unknown/unanticipated change to the save
+    // format may have occured, which could result in almost any error type.
     instructions = (
       <Typography variant="h5" color={Settings.theme.warning}>
         {loadedSaveObjectMiniDump.VersionSave !== undefined && (
@@ -127,12 +131,15 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
       </Typography>
     );
   } else if (sourceError instanceof InvalidSaveData || sourceError instanceof JSONReviverError) {
+    // These error types are mostly already covered by the version check above.
+    // If they occur while on the same version, it indicates bad save editing.
     instructions = (
       <Typography variant="h4" color={Settings.theme.warning}>
         Your save data is invalid. Please import a valid backup save file.
       </Typography>
     );
   } else {
+    // If we get this far, we don't know what's going on.
     instructions = (
       <Box>
         <Typography>It is recommended to alert a developer.</Typography>
