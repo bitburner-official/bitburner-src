@@ -113,6 +113,11 @@
       "prismjs": "1.30.0"
     }
   },
+  "allowScripts": {
+    "electron@41.4.0": true,
+    "@swc/core": false,
+    "core-js-pure": false
+  },
   "engines": {
     "node": ">=24"
   },
