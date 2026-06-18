@@ -1,13 +1,8 @@
 import type { BaseServer } from "../Server/BaseServer";
 import { calculateRamUsage, type RamUsageEntry } from "./RamCalculations";
 import type { LoadedModule, ScriptURL } from "./LoadedModule";
-import {
-  Generic_fromJSON,
-  Generic_toJSON,
-  type IReviverValue,
-  constructorsForReviver,
-  stringDataIdx,
-} from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { stringDataIdx } from "../utils/JSONContext";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";

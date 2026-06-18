@@ -12,7 +12,8 @@ import { IReturnStatus } from "../types";
 import { ScriptFilePath, resolveScriptFilePath, hasScriptExtension } from "../Paths/ScriptFilePath";
 import { Directory, resolveDirectory } from "../Paths/Directory";
 import { TextFilePath, resolveTextFilePath, hasTextExtension } from "../Paths/TextFilePath";
-import { Generic_toJSON, Generic_fromJSON, IReviverValue, stringDataIdx } from "../utils/JSONReviver";
+import { Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { stringDataIdx } from "../utils/JSONContext";
 import { matchScriptPathExact, scriptKey } from "../utils/helpers/scriptKey";
 
 import { createRandomIp } from "../utils/IPAddress";

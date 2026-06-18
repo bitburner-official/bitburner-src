@@ -16,13 +16,8 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import {
-  constructorsForReviver,
-  Generic_toJSON,
-  Generic_fromJSON,
-  type IReviverValue,
-  setJSONContext,
-} from "./utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
+import { setJSONContext } from "./utils/JSONContext";
 import { save } from "./db";
 import { ToastVariant } from "@enums";
 import { pushGameSaved, pushImportResult } from "./Electron";
