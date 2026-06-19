@@ -3,7 +3,8 @@ import type { BladeburnerMultName, BladeburnerSkillName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Bladeburner } from "./Bladeburner";
 import { Availability } from "./Types";
-import { PositiveInteger, PositiveNumber, isPositiveInteger } from "../types";
+import { nextafter } from "../utils/NextAfter";
+import { type PositiveInteger, type PositiveNumber, isPositiveInteger } from "../types";
 import { PartialRecord, getRecordEntries } from "../Types/Record";
 
 interface SkillParams {
@@ -35,6 +36,10 @@ export class Skill {
   }
 
   calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
+    // This avoids an exploit where at high currentLevels, skills can be bought more cheaply by manipulating
+    // rounding. Adding "count" to "currentLevel" will round in these circumstances because not all integer values
+    // are representable; this leads to potentially getting more levels than we asked for. By performing the same
+    // rounding here, we calculate the cost for the number of levels we will actually get.
     const actualCount = currentLevel + count - currentLevel;
     /**
      * The cost of the next level: (baseCost + currentLevel * costInc) * mult. The cost needs to be an integer, so we
@@ -63,7 +68,7 @@ export class Skill {
      *
      * This means that we do the flooring/rounding at the end instead of each iterative step.
      *
-     * [3] and [4] are not equivalent to [1] and [2] respectively, but it's much easier to find the close forms of [3]
+     * [3] and [4] are not equivalent to [1] and [2] respectively, but it's much easier to find the closed forms of [3]
      * and [4] than [1] and [2]. After testing, we conclude that the cost calculated by [4] is a good approximation of
      * [2], so we choose [4] to calculate the cost. In order to calculate the cost with a big "count", we accept the
      * slight inaccuracy.
@@ -72,11 +77,16 @@ export class Skill {
      *
      * $$Cost = \mathrm{Round}(Count \ast Mult \ast (BaseCost + (CostInc \ast (CurrentLevel + \frac{Count - 1}{2}))))$$
      *
+     * We rearrange slightly for greater accuracy, because CurrentLevel is often much higher than Count but Count and
+     * BaseCost are usually closer in magnitude:
+     *
+     * $$Cost = \mathrm{Round}(Count \ast Mult \ast (BaseCost + CostInc \ast \frac{Count - 1}{2} + CostInc \ast CurrentLevel))$$
+     *
      */
     return Math.round(
       actualCount *
         currentNodeMults.BladeburnerSkillCost *
-        (this.baseCost + this.costInc * (currentLevel + (actualCount - 1) / 2)),
+        (this.baseCost + this.costInc * (actualCount - 1) * 0.5 + this.costInc * currentLevel),
     );
   }
 
@@ -92,47 +102,84 @@ export class Skill {
      *
      * We have:
      *
-     * $$ y = \mathrm{Round}(x \ast a \ast (b + c \ast (d + \frac{x - 1}{2})))$$
+     * y = round(x*a*(b + c*(d + (x - 1)/2)))
      *
      * To simplify the calculation, let's ignore the Math.round part:
      *
-     * $$ y = x \ast a \ast (b + c \ast (d + \frac{x - 1}{2}))$$
+     * y = x*a*(b + c*(d + (x - 1)/2))
      *
-     * Solve for x in terms of y:
+     * Divide by a and c to simplify things, multiply by 2 to help complete the square:
+     *
+     * 2y/(a*c) = 2x*(b/c + d + (x - 1)/2)
+     *          = x^2 + 2x*(b/c + d - 1/2)
+     *
+     * Solve for x in terms of everything else:
      *
      * Define:
      *
-     * $$ m = -b - c \ast d + \frac{c}{2} $$
+     * m = b/c + d - 1/2
      *
-     * $$ Delta = \sqrt{{m ^ 2} + \frac{2 \ast c \ast y}{a}} $$
+     * 2y/(a*c) = x^2 + 2x*m
+     * m^2 + 2y/(a*c) = x^2 + 2xm + m^2 = (x + m)^2
+     *
+     * Define:
+     *
+     * Delta = sqrt(m^2 + 2y/(a*c))
      *
      * Solutions:
      *
-     * $$ x_1 = \frac{m + Delta}{c} $$
+     * x_1 = Delta - m
      *
-     * $$ x_2 = \frac{m - Delta}{c} $$
+     * x_2 = -Delta - m
      *
-     * $a$, $c$ and $y$ are always greater than 0, so $x_2$ is always less than 0. Therefore, $x_1$ is the only
-     * solution.
+     * a, c and y are always greater than 0, so x_2 is always less than 0. Therefore, x_1 is the only solution.
+     *
+     * However, calculating it directly in this form will lead to catastrophic cancellation when m gets large.
+     * So, multiply top and bottom by (Delta + m):
+     *
+     * x_1 = (Delta - m)(Delta + m)/(Delta + m)
+     *     = (Delta^2 - m^2)/(Delta + m)
+     *     = (m^2 + 2y/(a*c) - m^2)/(Delta + m)
+     *     = (2y/(a*c))/(Delta + m)
      */
-    const m = -this.baseCost - this.costInc * currentLevel + this.costInc / 2;
-    const delta = Math.sqrt(m * m + (2 * this.costInc * cost) / currentNodeMults.BladeburnerSkillCost);
-    const result = Math.round((m + delta) / this.costInc);
+    const m = this.baseCost / this.costInc + currentLevel - 0.5;
+    const yac = (2 * cost) / (currentNodeMults.BladeburnerSkillCost * this.costInc);
+    const delta = Math.sqrt(m * m + yac);
+    const result = yac / (delta + m);
     /**
-     * Due to floating-point rounding and edge-cases, we cannot ensure that rounding x_1 will give us the correct
-     * integer. In other words, we cannot be sure that x_1 is within 0.5 of the integer value we want. However, we can
-     * be sure that it is within 1 of the value we want, which means that checking the numbers above and below the
-     * rounded value are sufficient to find our correct integer.
+     * Now we have to find the actual answer. We search a window that includes the (rounded) result as well as the next
+     * higher and lower numbers. For reasons that I believe can be proven but am only handwaving here, the true result
+     * will lie in this window, so checking these three values will be sufficient.
      */
-    const costOfResultPlus1 = this.calculateCost(currentLevel, (result + 1) as PositiveInteger);
-    if (costOfResultPlus1 <= cost) {
-      return result + 1;
+    let r0, r1, r2;
+    const nextLevel = currentLevel + result;
+    // MAX_SAFE_INTEGER (+1) is the first point where intervals between numbers become 2, so not all integers are
+    // representable. Half this value is the first point where intervals between numbers become *1*, which is very
+    // important for rounding.
+    const HALF_SAFE = (Number.MAX_SAFE_INTEGER + 1) / 2;
+    if (nextLevel > HALF_SAFE) {
+      // Because the result is *strictly greater* than HALF_SAFE, we know that both the successor and predecessor
+      // will also be integers. So we use nextafter() to find these values to
+      // form our window. The simple addition will correctly round nextLevel, the middle of our range.
+      r1 = nextLevel - currentLevel;
+      r2 = nextafter(nextLevel, Number.POSITIVE_INFINITY) - currentLevel;
+      r0 = nextafter(nextLevel, 0) - currentLevel;
+    } else {
+      // Since the (rounded) sum is <= HALF_SAFE, we know the rounded result alone is also <= HALF_SAFE.
+      // So we can operate directly on the rounded result, +-1.
+      r1 = Math.round(result);
+      r2 = r1 + 1;
+      r0 = r1 - 1;
     }
-    const costOfResult = this.calculateCost(currentLevel, result as PositiveInteger);
+    const costOfResultPlus = this.calculateCost(currentLevel, r2 as PositiveInteger);
+    if (costOfResultPlus <= cost) {
+      return r2;
+    }
+    const costOfResult = this.calculateCost(currentLevel, r1 as PositiveInteger);
     if (costOfResult <= cost) {
-      return result;
+      return r1;
     }
-    return result - 1;
+    return r0;
   }
 
   canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ actualCount: number; cost: number }> {
