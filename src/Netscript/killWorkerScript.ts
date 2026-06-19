@@ -56,12 +56,12 @@ function killWorkerScriptWithMessage(pid: number, message: string): boolean {
 function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   // Only clean up once.
   // Important: Only this function can set stopFlag!
-  if (ws.env.stopFlag) return;
+  if (ws.stopFlag) return;
 
   //Clean up any ongoing netscriptDelay
   if (ws.delay) clearTimeout(ws.delay);
   ws.delayReject?.(new ScriptDeath(ws));
-  ws.env.runningFn = "";
+  ws.runningFn = "";
   const atExit = ws.atExit;
   //Calling ns.exit inside ns.atExit can lead to recursion
   //so the map must be cleared before looping
@@ -77,12 +77,12 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
     }
   }
 
-  if (ws.env.stopFlag) {
+  if (ws.stopFlag) {
     // If atExit() kills the script, we'll already be stopped, don't stop again.
     return;
   }
 
-  ws.env.stopFlag = true;
+  ws.stopFlag = true;
   removeWorkerScript(ws);
 }
 

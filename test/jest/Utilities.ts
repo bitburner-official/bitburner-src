@@ -101,7 +101,7 @@ export function getWorkerScriptAndNS(hostname: string = SpecialServers.Home): {
   }
   const runningScript = new RunningScript(script, 1024);
   const workerScript = new WorkerScript(runningScript, generateNextPid(), NetscriptFunctions);
-  const ns = workerScript.env.vars;
+  const ns = workerScript.vars;
   if (!ns) {
     throw new Error("Invalid NS instance");
   }
