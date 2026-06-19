@@ -62,10 +62,7 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
           rows={[
             [
               "Profit:",
-              <MoneyRate
-                key="profit"
-                money={(divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10}
-              />,
+              <MoneyRate key="profit" money={divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses} />,
             ],
             ["Cities:", getRecordKeys(divisionToSell.offices).length],
             ["Warehouses:", getRecordKeys(divisionToSell.warehouses).length],

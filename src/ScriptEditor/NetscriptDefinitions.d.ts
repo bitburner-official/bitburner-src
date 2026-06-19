@@ -8044,8 +8044,6 @@ export interface NS {
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
-   *
    * @example
    * ```js
    * //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
@@ -9189,7 +9187,10 @@ export interface NS {
    * ```
    * `bar` in the last example is `"false"` (a string), not `false` (a boolean). `data.bar` is truthy, not falsy.
    */
-  flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  flags(schema: [string, any][]): {
+    [key: string]: any;
+    _: ScriptArg[];
+  };
 
   /**
    * Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is
@@ -11168,7 +11169,10 @@ interface AutocompleteData {
   /** Netscript Enums */
   enums: NSEnums;
   /** Parses the flags schema on the already inputted flags */
-  flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  flags(schema: [string, any][]): {
+    [key: string]: any;
+    _: ScriptArg[];
+  };
   /** The hostname of the server the script would be running on */
   hostname: string;
   /** The filename of the script about to be run */
