@@ -17,24 +17,24 @@ export function nextafter(x: number, y: number): number {
     // y can't be 0, from above
     return y > 0 ? Number.MIN_VALUE : -Number.MIN_VALUE;
   }
-  const f64 = Float64Array.of(x, y);
-  const u32 = new Uint32Array(f64.buffer);
+  const view = new DataView(new ArrayBuffer(8));
+  view.setFloat64(0, x, true);
+  // We use Int32 for convenience of the test below. Because storage in
+  // TypedArrays is wrapping and we are only doing addition, signed/unsigned
+  // does not matter.
+  const u0 = view.getInt32(0, true);
   // We can't underflow 0 or overflow here, because 0 is 0.0 (already checked
   // for), and the max value is NaN (already checked for).
   if (x < y === x > 0) {
-    if (u32[0] === -1 >>> 0) {
-      u32[0] = 0;
-      u32[1]++;
-    } else {
-      u32[0]++;
+    view.setInt32(0, u0 + 1, true);
+    if (u0 === -1) {
+      view.setInt32(4, view.getInt32(4, true) + 1, true);
     }
   } else {
-    if (u32[0] === 0) {
-      u32[0] = -1 >>> 0;
-      u32[1]--;
-    } else {
-      u32[0]--;
+    view.setInt32(0, u0 - 1, true);
+    if (u0 === 0) {
+      view.setInt32(4, view.getInt32(4, true) - 1, true);
     }
   }
-  return f64[0];
+  return view.getFloat64(0, true);
 }
