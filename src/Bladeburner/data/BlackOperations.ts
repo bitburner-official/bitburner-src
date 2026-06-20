@@ -172,8 +172,8 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "One of our undercover agents, Agent Carter, has informed us of a massive weapons deal going down in Dubai " +
-        "between rogue Russian militants and a radical Synthoid community. These weapons are next-gen plasma and energy " +
+        `One of our undercover agents, Agent Carter, has informed us of a massive weapons deal going down in ${CityName.Volhaven} ` +
+        "between rogue local militants and a radical Synthoid community. These weapons are next-gen plasma and energy " +
         "weapons. It is critical for the safety of humanity that this deal does not happen.\n\n" +
         "Your task is to intercept the deal. Leave no survivors.",
     }),
@@ -205,7 +205,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "Our analysts have discovered that the popular Red Rabbit brothel in Amsterdam is run and 'staffed' by MK-VI " +
+        `Our analysts have discovered that the popular Red Rabbit brothel in ${CityName.Chongqing} is run and 'staffed' by MK-VI ` +
         "Synthoids. Intelligence suggests that the profit from this brothel is used to fund a large black market arms " +
         "trafficking operation.\n\n" +
         "The goal of this operation is to take out the leaders that are running the Red Rabbit brothel. Try to limit the " +
@@ -277,7 +277,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
         `The ${FactionName.Tetrads} criminal organization is suspected of reverse-engineering the MK-VI Synthoid design. ` +
         "We believe they altered and possibly improved the design and began manufacturing their own Synthoid models in " +
         "order to bolster their criminal activities.\n\n" +
-        `Your task is to infiltrate and destroy the ${FactionName.Tetrads}' base of operations in Los Angeles. ` +
+        `Your task is to infiltrate and destroy the ${FactionName.Tetrads}' base of operations in ${CityName.NewTokyo}. ` +
         "Intelligence tells us that their base houses one of their Synthoid manufacturing units.",
     }),
     [BladeburnerBlackOpName.OperationK]: new BlackOperation({
@@ -490,7 +490,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
         "using human brains as core processors. This supercomputer is rumored to be able to store vast amounts of data " +
         "and perform computations unmatched by any other supercomputer on the planet. But more importantly, the use of " +
         "organic human brains means that the supercomputer may be able to reason abstractly and become self-aware.\n\n" +
-        "I do not need to remind you why sentient-level AIs pose a serious threat to all of mankind.\n\n" +
+        "We do not need to remind you why sentient-level AIs pose a serious threat to all of mankind.\n\n" +
         `The research for this project is being conducted at one of ${FactionName.FulcrumSecretTechnologies} secret ` +
         `facilities in ${CityName.Aevum}, codenamed 'Alpha Ranch'. Infiltrate the compound, delete and destroy the work, ` +
         "and then find and kill the project lead.",

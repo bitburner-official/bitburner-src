@@ -9,3 +9,7 @@ Designed to improve a human agent's capabilities beyond their natural limits, Bl
 ## Faction and Rank:
 
 Bladeburners also offer unique [Augmentations](../basic/augmentations.md) and a [Faction](factions.md) invite to agents who "put in the work" to gain a small amount of rank. While Bladeburner rank and skill points persist after any augmentation installs, faction reputation will be reset. Bladeburner faction reputation can only be gained through Bladeburner actions.
+
+## Distribution
+### General
+Here you will find all you need to start earning money, reputation and rank. 
