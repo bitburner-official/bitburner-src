@@ -349,7 +349,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
         `${BladeburnerBlackOpName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off with ` +
         "the schematics and design of the technology before the operation. It is almost a certainty that these Synthoids " +
         "are some of the rogue MK-VI ones from the Synthoid Uprising.\n\n" +
-        `The goal of ${BladeburnerBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. I don't need to ` +
+        `The goal of ${BladeburnerBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. We don't need to ` +
         "tell you how critical this mission is.",
     }),
     [BladeburnerBlackOpName.OperationTyrell]: new BlackOperation({
@@ -452,8 +452,8 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isStealth: true,
       desc:
-        "China's Solaris Space Systems is secretly launching the first manned spacecraft in over a decade using " +
-        "Synthoids. We believe China is trying to establish the first off-world colonies.\n\n" +
+        `${CityName.Chongqing}'s Solaris Space Systems is secretly launching the first manned spacecraft in over a decade using ` +
+        `Synthoids. We believe ${CityName.Chongqing} is trying to establish the first off-world colonies.\n\n` +
         "The mission is to prevent this launch without instigating an international conflict. When you accept this " +
         "mission, you will be officially disavowed by the NSA and the national government until after you successfully " +
         "return. In the event of failure, all of the operation's team members must not let themselves be captured alive.",
