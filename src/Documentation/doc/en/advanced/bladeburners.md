@@ -11,6 +11,7 @@ Designed to improve a human agent's capabilities beyond their natural limits, Bl
 Bladeburners also offer unique [Augmentations](../basic/augmentations.md) and a [Faction](factions.md) invite to agents who "put in the work" to gain a small amount of rank. While Bladeburner rank and skill points persist after any augmentation installs, faction reputation will be reset. Bladeburner faction reputation can only be gained through Bladeburner actions.
 
 ## Team members
+
 You can recruit team members via the "Recruitment" action in the General tab. [Sleeves](../advanced/sleeves.md) can also perform this action.
 The more team members you have, the more easy it will be to complete the task successfully. Team members increase your success chance in Operations and
 BlackOps, but they will also die no matter if you fail or succeed in the task. Note that, the more team members you have, the more difficult it is to recruit them.
@@ -18,23 +19,28 @@ BlackOps, but they will also die no matter if you fail or succeed in the task. N
 ## Distribution
 
 ### General
+
 Here you will find basic activities that can improve your stats and gain you rank. From here, you can recruit members, train, recover HP and take
 some minor contracts to gain rank. You should train your stats first before attempting any of the other activities.
 
 ### Contracts
+
 Contracts are a basic way to increase your rank and gain money. Contracts will level up as you succeed and make you loose HP if you fail them.
 The higher the level, the more rank, experience and money you will gain, but the difficulty will also increase. [Sleeves](../advanced/sleeves.md) can also take
 contracts.
 
 ### Operations
+
 Operations are harder and more punishing than contracts, but are also more rewarding. Failing an Operation will have the same effects but on a higher scale as failing a contract, but it will also reduce your rank. Similarly, succeeding an Operation will earn you more rank and more experience than Contracts. Operations do not earn money.
 For Operations you may use a team. See the team section above for more detailed information.
 
 ### Black Operations
+
 Black Operations (BlackOps) are special, one-time covert operations. Each BlackOp must be unlocked successively by completing the one before it.
 Failing a BlackOp will incur heavy HP and rank losses.
 
 **You must complete all the BlackOps in order to destroy the World Daemon.**
 
 ## Sleeves and Bladeburner
+
 [Sleeves](../advanced/sleeves.md) can perform various bladeburner actions. They are able to do all the "General" tab actions, Infiltrate Synthoids (generate more contracts and operations), support the main sleeve (bonus to your bladeburner work) and take on contracts (as if it were you).
