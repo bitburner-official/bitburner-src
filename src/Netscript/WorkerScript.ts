@@ -12,7 +12,6 @@ import type { NSFull } from "../NetscriptFunctions";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { RunningScript } from "../Script/RunningScript";
 import type { Script } from "../Script/Script";
-import type { LoadedModule } from "../Script/LoadedModule";
 import type { ScriptDeath } from "./ScriptDeath";
 
 import { RamCostConstants } from "./RamCostGenerator";
@@ -27,9 +26,6 @@ export class WorkerScript {
 
   /** Holds the Promise reject() function while the script is "blocked" by an async op */
   delayReject: ((reason?: ScriptDeath) => void) | undefined = undefined;
-
-  /** The module that this worker is running */
-  mod: LoadedModule | null = null;
 
   /** Stores names of all functions that have logging disabled */
   disableLogs: Record<string, boolean> = {};

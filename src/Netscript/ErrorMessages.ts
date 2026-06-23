@@ -42,20 +42,9 @@ export function log(ctx: NetscriptContext, message: () => string) {
   ctx.workerScript.log(ctx.functionPath, message);
 }
 
-/** Error messages may contain blob URLs (). This function replaces those URLs with the script names. */
-export function parseBlobUrlInMessage(ws: WorkerScript, msg: string): string {
-  if (ws.mod == null) {
-    return msg;
-  }
-  for (const [scriptUrl, filename] of ws.mod.dependencies) {
-    msg = msg.replaceAll(scriptUrl, filename);
-  }
-  return msg;
-}
-
 /** Creates an error message string containing hostname, scriptname, and the error message msg */
 export function basicErrorMessage(ws: WorkerScript, msg: string, type = "RUNTIME"): string {
-  return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${parseBlobUrlInMessage(ws, msg)}`;
+  return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${msg}`;
 }
 
 /**

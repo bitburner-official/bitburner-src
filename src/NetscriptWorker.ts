@@ -54,7 +54,6 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   if (!ns) throw `${script.filename} cannot be run because the NS object hasn't been constructed properly.`;
 
   const loadedModule = await compile(script, scripts);
-  workerScript.mod = script.mod;
 
   // if for whatever reason the stopFlag is already set we abort
   if (workerScript.stopFlag) return;
