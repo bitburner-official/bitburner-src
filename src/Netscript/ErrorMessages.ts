@@ -1,5 +1,41 @@
 import type { WorkerScript } from "./WorkerScript";
 import type { NetscriptContext } from "./APIWrapper";
+import { assertString } from "../utils/TypeAssertion";
+
+// This is a *static* property of the Error class, so it applies *globally* to all
+// Errors. It also is non-standard, so it doesn't work on Firefox/SpiderMonkery
+// (which always includes all frames in the stack trace, at the time of this comment.)
+// On Chromium/V8 and Safari/JavaScriptCore, this sets a limit on the number of frames
+// returned in a stack trace. V8 defaults to 10, which is normally a reasonable default,
+// but scripts which end up calling errorMessage() the start of the user's code may be 7
+// or more frames down, so we expand the limit to ensure that all the user's stack
+// frames are (reasonably sure to be) in the trace.
+Error.stackTraceLimit = 20;
+
+// The last/first line in a stacktrace that is non-user code. These bracket the "user code"
+// part of a stack trace, allowing us to trim out the platform-code noise.
+//
+// Currently, this means the wrappedFunction within APIWrapper, and startNetscript2Script().
+// We take advantage of the fact that, although different browsers will render these
+// differently (and different builds will have wildly different line numbers), within a
+// *single* run these will always be *exactly* the same strings.
+let topStackLine = undefined as string | undefined;
+let bottomStackLine = undefined as string | undefined;
+
+export function setupStackBoundaries(funcName: unknown) {
+  if (topStackLine && bottomStackLine) return;
+  const err = new Error("Couldn't get stack trace");
+  if (err.stack === undefined) throw err;
+  assertString(funcName);
+  const stack = err.stack.split("\n");
+  const lineIdx = stack.findIndex((x) => x.includes(funcName));
+  if (lineIdx < 0) {
+    throw new Error(`Couldn't find stack frame for ${funcName}`);
+  }
+  // Our custom user script has exactly two frames. See runErrorStackScript().
+  topStackLine = stack[lineIdx - 1];
+  bottomStackLine = stack[lineIdx + 2];
+}
 
 /** Log a message to a script's logs */
 export function log(ctx: NetscriptContext, message: () => string) {
@@ -8,8 +44,11 @@ export function log(ctx: NetscriptContext, message: () => string) {
 
 /** Error messages may contain blob URLs (). This function replaces those URLs with the script names. */
 export function parseBlobUrlInMessage(ws: WorkerScript, msg: string): string {
-  for (const [scriptUrl, script] of ws.scriptRef.dependencies) {
-    msg = msg.replaceAll(scriptUrl, script.filename);
+  if (ws.mod == null) {
+    return msg;
+  }
+  for (const [scriptUrl, filename] of ws.mod.dependencies) {
+    msg = msg.replaceAll(scriptUrl, filename);
   }
   return msg;
 }
@@ -32,52 +71,14 @@ export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME
   const stack = errstack.split("\n").slice(1);
   const ws = ctx.workerScript;
   const caller = ctx.functionPath;
-  const userstack = [];
-  for (const stackline of stack) {
-    const filename = (() => {
-      // Check urls for dependencies
-      for (const [url, script] of ws.scriptRef.dependencies) if (stackline.includes(url)) return script.filename;
-      // Check for filenames directly if no URL found
-      if (stackline.includes(ws.scriptRef.filename)) return ws.scriptRef.filename;
-      for (const script of ws.scriptRef.dependencies.values()) {
-        if (stackline.includes(script.filename)) return script.filename;
-      }
-    })();
-    if (!filename) continue;
-
-    let call = { line: "-1", func: "unknown" };
-    const chromeCall = parseChromeStackline(stackline);
-    if (chromeCall) {
-      call = chromeCall;
-    }
-
-    const firefoxCall = parseFirefoxStackline(stackline);
-    if (firefoxCall) {
-      call = firefoxCall;
-    }
-
-    userstack.push(`${filename}:L${call.line}@${call.func}`);
-  }
+  // indexOf will return -1 if we search for undefined
+  const topIdx = stack.indexOf(topStackLine as string);
+  const bottomIdx = stack.indexOf(bottomStackLine as string);
+  // -1 of "not found" becomes 0 of "use whole trace" for topIdx
+  const userstack = stack.slice(topIdx + 1, bottomIdx >= 0 ? bottomIdx : undefined);
 
   log(ctx, () => msg);
   let rejectMsg = `${caller}: ${msg}`;
   if (userstack.length !== 0) rejectMsg += `\n\nStack:\n${userstack.join("\n")}`;
   return basicErrorMessage(ws, rejectMsg, type);
-
-  interface ILine {
-    line: string;
-    func: string;
-  }
-  function parseChromeStackline(line: string): ILine | null {
-    const lineMatch = line.match(/.*:(\d+):\d+.*/);
-    const funcMatch = line.match(/.*at (.+) \(.*/);
-    if (lineMatch && funcMatch) return { line: lineMatch[1], func: funcMatch[1] };
-    return null;
-  }
-  function parseFirefoxStackline(line: string): ILine | null {
-    const lineMatch = line.match(/.*:(\d+):\d+$/);
-    const lio = line.lastIndexOf("@");
-    if (lineMatch && lio !== -1) return { line: lineMatch[1], func: line.slice(0, lio) };
-    return null;
-  }
 }

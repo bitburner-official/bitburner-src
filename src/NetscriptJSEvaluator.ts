@@ -60,12 +60,8 @@ export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): P
 function addDependencyInfo(script: Script, seenStack: Script[]) {
   if (!script.mod) throw new Error(`addDependencyInfo called without a LoadedModule (${script.filename})`);
   if (seenStack.length) {
-    script.dependents.add(seenStack[seenStack.length - 1]);
-    for (const dependent of seenStack) dependent.dependencies.set(script.mod.url, script);
+    script.dependents.push(seenStack[seenStack.length - 1]);
   }
-  // Add self to dependencies (it's not part of the stack, since we don't want
-  // it in dependents.)
-  script.dependencies.set(script.mod.url, script);
 }
 
 /**
@@ -160,11 +156,13 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
   let newCode = scriptCode;
+  const dependencies = new Map<ScriptURL, ScriptFilePath>();
+
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
     const importedScript = getModuleScript(node.filename, script.filename, scripts);
     for (const scriptInSeenStack of seenStack) {
-      if (scriptInSeenStack.filename === script.filename) {
+      if (scriptInSeenStack.filename === importedScript.filename) {
         throw new Error(
           `Circular dependencies detected. ${script.filename} imports ${importedScript.filename}, but ` +
             `${importedScript.filename} or its dependencies import ${script.filename}.`,
@@ -173,6 +171,13 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     }
     seenStack.push(script);
     importedScript.mod = generateLoadedModule(importedScript, scripts, seenStack);
+    // Build our dependencies from the recursive expansion of imported dependencies.
+    // Because LoadedModules can be reused across servers and even files, the paths
+    // won't be guaranteed correct. But they'll be consistent with the paths in the
+    // sourceURLs, which is more important.
+    for (const [url, path] of importedScript.mod.dependencies) {
+      dependencies.set(url, path);
+    }
     seenStack.pop();
     newCode = newCode.substring(0, node.start) + importedScript.mod.url + newCode.substring(node.end);
   }
@@ -213,7 +218,11 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // directly return the module, without even attempting to fetch, due to the way
     // modules work.
     URL.revokeObjectURL(url);
-    script.mod = new LoadedModule(url, module);
+    // Set our self-dependency to be the sourceURL. This makes cases where the browser-native machinery
+    // fails and shows the blob (thus getting caught by our code) consistent with the browser code that
+    // uses sourceURL comments above.
+    dependencies.set(url, sourceURL as ScriptFilePath);
+    script.mod = new LoadedModule(url, module, [...dependencies]);
     moduleCache.set(newCode, script.mod);
   }
 
