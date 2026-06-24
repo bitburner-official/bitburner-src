@@ -16,7 +16,8 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
 ${gridString}
 ]
 
-Your task is to find the two corners of the largest rectangle ([[r1,c1],[r2,c2]]) that does not contain any 1s.
+Your task is to find the two corners of the largest rectangle ([[r1,c1],[r2,c2]]) that does not contain any 1s, these 
+corners being the top-left and bottom right corners respectively, in [row,column] order.
 
 Example 1:
 Data:
