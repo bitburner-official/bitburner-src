@@ -25,7 +25,7 @@ some minor contracts to gain rank. You should train your stats first before atte
 
 ### Contracts
 
-Contracts are a basic way to increase your rank and gain money. Contracts will level up as you succeed and make you loose HP if you fail them.
+Contracts are a basic way to increase your rank and gain money. Contracts will level up as you succeed and make you lose HP if you fail them.
 The higher the level, the more rank, experience and money you will gain, but the difficulty will also increase. [Sleeves](../advanced/sleeves.md) can also take
 contracts.
 
