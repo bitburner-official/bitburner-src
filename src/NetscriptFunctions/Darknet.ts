@@ -500,7 +500,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     },
     isDarknetServer: (ctx) => (_host) => {
       const targetHost = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
-      expectDarknetAccess(ctx);
       const server = GetServer(targetHost);
       if (!server) {
         return false;
