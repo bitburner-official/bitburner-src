@@ -8,16 +8,20 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): undefined {
-  if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
+  if (args.length !== 1 && args.length !== 2) return Terminal.error("Incorrect usage of cat command. Usage: cat [-t] [file]");
 
-  const relative_filename = args[0] + "";
+  const relative_filename = args[0] !== "-t" ? `${args[0]}` : `${args[1]}`;
   const path = Terminal.getFilepath(relative_filename);
   if (!path) return Terminal.error(`Invalid filename: ${relative_filename}`);
 
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
     if (!file) return Terminal.error(`No file at path ${path}`);
-    dialogBoxCreate(`${file.filename}\n\n${file.content}`);
+    if (args[0] === "-t") {
+      Terminal.print(`${file.filename}\n\n${file.content}`);
+    } else {
+      dialogBoxCreate(`${file.filename}\n\n${file.content}`);
+    }
     return;
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
