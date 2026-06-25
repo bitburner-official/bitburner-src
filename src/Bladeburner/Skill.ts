@@ -35,12 +35,16 @@ export class Skill {
     for (const [multName, mult] of getRecordEntries(params.mults)) this.mults[multName] = mult;
   }
 
-  calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
+  getActualUpgradeCount(currentLevel: number, count: number): number {
     // This avoids an exploit where at high currentLevels, skills can be bought more cheaply by manipulating
     // rounding. Adding "count" to "currentLevel" will round in these circumstances because not all integer values
     // are representable; this leads to potentially getting more levels than we asked for. By performing the same
     // rounding here, we calculate the cost for the number of levels we will actually get.
-    const actualCount = currentLevel + count - currentLevel;
+    return currentLevel + count - currentLevel;
+  }
+
+  calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
+    const actualCount = this.getActualUpgradeCount(currentLevel, count);
     /**
      * The cost of the next level: (baseCost + currentLevel * costInc) * mult. The cost needs to be an integer, so we
      * need to use Math.floor or Math.round.
@@ -132,7 +136,15 @@ export class Skill {
      *
      * x_2 = -Delta - m
      *
-     * a, c and y are always greater than 0, so x_2 is always less than 0. Therefore, x_1 is the only solution.
+     * Since a, c, and y are all greater than 0:
+     *
+     * Delta = sqrt(m^2 + 2y/(a*c)) > |m|
+     *
+     * Therefore:
+     *
+     * x_2 = -Delta - m < -|m| - m <= 0
+     *
+     * Since the first inequality is strict, x_2 < 0. Thus, x_1 is the only non-negative solution.
      *
      * However, calculating it directly in this form will lead to catastrophic cancellation when m gets large.
      * So, multiply top and bottom by (Delta + m):
@@ -182,9 +194,149 @@ export class Skill {
     return r0;
   }
 
+  calculateMaxUpgradeCountNew(currentLevel: number, cost: PositiveNumber): number {
+    // Sanity checks for bnMult and skill settings. Callers should already check currentLevel and cost.
+    if (currentNodeMults.BladeburnerSkillCost <= 0 || this.baseCost <= 0 || this.costInc <= 0) {
+      throw new Error(
+        `Invalid bnMult or skill settings. BladeburnerSkillCost: ${currentNodeMults.BladeburnerSkillCost}, baseCost: ${this.baseCost}, costInc: ${this.costInc}`,
+      );
+    }
+
+    // Find the smallest count that registers a real, nonzero level change. The dead zone below this can span more than
+    // one count, so this needs its own search, not a single fixed check at count = 1.
+    let lo = 0;
+    let hi = 1;
+    while (this.getActualUpgradeCount(currentLevel, hi) === 0) {
+      lo = hi;
+      hi *= 2;
+    }
+    // At extreme magnitudes, the gap between adjacent representable doubles can exceed 1, so "hi - lo > 1" would never
+    // become false and the loop would spin indefinitely. The "mid === lo || mid === hi" check would break the loop in
+    // that case.
+    while (hi - lo > 1) {
+      const mid = lo + Math.floor((hi - lo) / 2);
+      // Granularity floor, can't narrow further
+      if (mid === lo || mid === hi) {
+        break;
+      }
+      if (this.getActualUpgradeCount(currentLevel, mid) === 0) {
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+    const countMin = hi;
+
+    const isAffordable = (count: number) =>
+      count >= countMin && this.calculateCost(currentLevel, count as PositiveInteger) <= cost;
+
+    // Return early if even the cheapest viable request is not affordable.
+    if (!isAffordable(countMin)) {
+      return 0;
+    }
+
+    /**
+     * Define:
+     * - x = count
+     * - a = currentNodeMults.BladeburnerSkillCost
+     * - b = this.baseCost
+     * - c = this.costInc
+     * - d = currentLevel
+     * - y = cost
+     *
+     * We have:
+     *
+     * y = round(x*a*(b + c*(d + (x - 1)/2)))
+     *
+     * To simplify the calculation, let's ignore the Math.round part:
+     *
+     * y = x*a*(b + c*(d + (x - 1)/2))
+     *
+     * Divide by a and c to simplify things, multiply by 2 to help complete the square:
+     *
+     * 2y/(a*c) = 2x*(b/c + d + (x - 1)/2)
+     *          = x^2 + 2x*(b/c + d - 1/2)
+     *
+     * Solve for x in terms of everything else:
+     *
+     * Define:
+     *
+     * m = b/c + d - 1/2
+     *
+     * 2y/(a*c) = x^2 + 2x*m
+     * m^2 + 2y/(a*c) = x^2 + 2xm + m^2 = (x + m)^2
+     *
+     * Define:
+     *
+     * Delta = sqrt(m^2 + 2y/(a*c))
+     *
+     * Solutions:
+     *
+     * x_1 = Delta - m
+     *
+     * x_2 = -Delta - m
+     *
+     * Since a, c, and y are all greater than 0:
+     *
+     * Delta = sqrt(m^2 + 2y/(a*c)) > |m|
+     *
+     * Therefore:
+     *
+     * x_2 = -Delta - m < -|m| - m <= 0
+     *
+     * Since the first inequality is strict, x_2 < 0. Thus, x_1 is the only non-negative solution.
+     *
+     * However, calculating it directly in this form will lead to catastrophic cancellation when m gets large.
+     * So, multiply top and bottom by (Delta + m):
+     *
+     * x_1 = (Delta - m)(Delta + m)/(Delta + m)
+     *     = (Delta^2 - m^2)/(Delta + m)
+     *     = (m^2 + 2y/(a*c) - m^2)/(Delta + m)
+     *     = (2y/(a*c))/(Delta + m)
+     */
+    const m = this.baseCost / this.costInc + currentLevel - 0.5;
+    const yac = (2 * cost) / (currentNodeMults.BladeburnerSkillCost * this.costInc);
+    const delta = Math.sqrt(m * m + yac);
+    const numericallyStableEstimate = yac / (delta + m);
+
+    let seed = Math.round(numericallyStableEstimate);
+    if (!Number.isFinite(seed) || seed < countMin) {
+      seed = countMin;
+    }
+
+    // Expand outward from the seed to bracket the true boundary.
+    // After this step, it's guaranteed that lower is affordable and upper is not.
+    let lower = countMin;
+    let upper = seed;
+    let step = Math.max(1, seed - countMin);
+    // This loop cannot be infinite. If upper is a too high finite value (not affordable) or Infinity, isAffordable will
+    // return false.
+    while (isAffordable(upper)) {
+      lower = upper;
+      upper += step;
+      step *= 2;
+    }
+
+    // Binary search the exact boundary.
+    // Same comment about the "upper - lower > 1" case and the "mid === lower || mid === upper" check as above.
+    while (upper - lower > 1) {
+      const mid = lower + Math.floor((upper - lower) / 2);
+      if (mid === lower || mid === upper) {
+        break;
+      }
+      if (isAffordable(mid)) {
+        lower = mid;
+      } else {
+        upper = mid;
+      }
+    }
+
+    return lower;
+  }
+
   canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ actualCount: number; cost: number }> {
     const currentLevel = bladeburner.skills[this.name] ?? 0;
-    const actualCount = currentLevel + count - currentLevel;
+    const actualCount = this.getActualUpgradeCount(currentLevel, count);
     if (actualCount === 0) {
       return {
         error: `Cannot upgrade ${this.name}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
