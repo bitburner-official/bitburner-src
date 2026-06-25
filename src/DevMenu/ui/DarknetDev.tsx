@@ -173,6 +173,7 @@ export function DarknetDev(): React.ReactElement {
         </AccordionSummary>
         <AccordionDetails>
           <OptionSwitch
+            disabled={!hasDarknetAccess()}
             checked={DarknetState.showFullNetwork}
             onChange={(newValue) => toggleShowFullNetwork(newValue)}
             text="Show Full Network"
