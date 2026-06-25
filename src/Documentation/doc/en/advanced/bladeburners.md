@@ -4,7 +4,7 @@ Bladeburner divisions were created internationally in the mid-21st century. Task
 
 ## Bladeburner Skills:
 
-Designed to improve a human agent's capabilities beyond their natural limits, Bladeburner skills add a persistent bonus while in the [BitNode](bitnodes.md) where they were purchased. Bladeburner skills are purchased with Bladeburner skill points, not money. There is no limit on the skills level, except for the "Overclock" which can only reach level 90. Each individual skill will become more expensive as you level it up. Each skill level is additive, however different skills' effects are multiplicative.
+Designed to improve a human agent's capabilities beyond their natural limits, Bladeburner skills add a persistent bonus while in the [BitNode](bitnodes.md) where they were purchased. Bladeburner skills are purchased with Bladeburner skill points, not money. There is no limit on the skills level, except for "Overclock" which can only reach level 90. Each individual skill will become more expensive as you level it up. Each skill level is additive, however different skills' effects are multiplicative.
 
 ## Faction and Rank:
 
