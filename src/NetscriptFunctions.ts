@@ -164,7 +164,7 @@ export const ns: InternalAPI<NSFull> = {
   cloud: NetscriptCloud(),
   sprintf: (ctx, _format, ...args) => {
     const format = helpers.string(ctx, "format", _format);
-    return sprintf(format, ...(args ));
+    return sprintf(format, ...args);
   },
   vsprintf: (ctx, _format, _args) => {
     const format = helpers.string(ctx, "format", _format);
