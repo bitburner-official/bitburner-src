@@ -13,7 +13,7 @@ Bladeburners also offer unique [Augmentations](../basic/augmentations.md) and a 
 ## Team members
 
 You can recruit team members via the "Recruitment" action in the General tab. [Sleeves](../advanced/sleeves.md) can also perform this action.
-The more team members you have, the more easy it will be to complete the task successfully. Team members increase your success chance in Operations and
+The more team members you have, the easier it will be to complete the task successfully. Team members increase your success chance in Operations and
 BlackOps, but they will also die no matter if you fail or succeed in the task. Note that, the more team members you have, the more difficult it is to recruit them.
 
 ## Distribution
