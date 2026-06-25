@@ -4,8 +4,11 @@ import { helpers } from "./NetscriptHelpers";
 
 /** Permissive type for the documented API functions */
 type APIFn = (...args: any[]) => unknown;
-/** Type for internal, unwrapped ctx function that produces an APIFunction */
-type InternalFn<F extends APIFn> = (ctx: NetscriptContext) => ((...args: unknown[]) => ReturnType<F>) & F;
+// This helper can't be inlined, it needs to be its own generic to function
+type Unknownify<T> = { [K in keyof T]: unknown };
+// Type for internal function that includes a ctx as the first param.
+// We enforce that the params have the same length, but tranform the type to unknown.
+type InternalFn<F extends APIFn> = (ctx: NetscriptContext, ...args: Unknownify<Parameters<F>>) => ReturnType<F>;
 /** Type constraint for an API layer. They must all fit this "shape". */
 type GenericAPI<T> = { [key in keyof T]: APIFn | GenericAPI<T[key]> };
 
@@ -73,13 +76,12 @@ class NSProxyHandler<API extends GenericAPI<API>> {
       const functionPath = arrayPath.join(".");
       const ctx = { workerScript: this.ws, function: key, functionPath };
       // Only do the context-binding once, instead of each time the function
-      // is called.
-      const func = field(ctx) as (...args: unknown[]) => unknown;
+      // is called. It is stored in the closure.
       const wrappedFunction = function (...args: unknown[]): unknown {
         // What remains *must* be called every time.
         helpers.checkEnvFlags(ctx);
         helpers.updateDynamicRam(ctx, getRamCost(arrayPath));
-        return func(...args);
+        return field(ctx, ...args);
       };
       Object.defineProperty(this.memoed, key, { ...descriptor, value: wrappedFunction });
       return wrappedFunction;

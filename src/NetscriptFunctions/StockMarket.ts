@@ -44,44 +44,44 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
   };
 
   const stockFunctions: InternalAPI<StockAPI> = {
-    getConstants: () => () => structuredClone(StockMarketConstants),
-    hasWseAccount: () => () => Player.hasWseAccount,
-    hasTixApiAccess: () => () => Player.hasTixApiAccess,
-    has4SData: () => () => Player.has4SData,
-    has4SDataTixApi: () => () => Player.has4SDataTixApi,
-    getSymbols: (ctx) => () => {
+    getConstants: () => structuredClone(StockMarketConstants),
+    hasWseAccount: () => Player.hasWseAccount,
+    hasTixApiAccess: () => Player.hasTixApiAccess,
+    has4SData: () => Player.has4SData,
+    has4SDataTixApi: () => Player.has4SDataTixApi,
+    getSymbols: (ctx) => {
       checkTixApiAccess(ctx);
       return Object.values(StockSymbol);
     },
-    getPrice: (ctx) => (_symbol) => {
+    getPrice: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
 
       return stock.price;
     },
-    getOrganization: (ctx) => (_symbol) => {
+    getOrganization: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
 
       return stock.name;
     },
-    getAskPrice: (ctx) => (_symbol) => {
+    getAskPrice: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
 
       return stock.getAskPrice();
     },
-    getBidPrice: (ctx) => (_symbol) => {
+    getBidPrice: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
 
       return stock.getBidPrice();
     },
-    getPosition: (ctx) => (_symbol) => {
+    getPosition: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       checkTixApiAccess(ctx);
       const stock = SymbolToStockMap[symbol];
@@ -90,14 +90,14 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       }
       return [stock.playerShares, stock.playerAvgPx, stock.playerShortShares, stock.playerAvgShortPx];
     },
-    getMaxShares: (ctx) => (_symbol) => {
+    getMaxShares: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
 
       return stock.maxShares;
     },
-    getPurchaseCost: (ctx) => (_symbol, _shares, _posType) => {
+    getPurchaseCost: (ctx, _symbol, _shares, _posType) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       let shares = helpers.number(ctx, "shares", _shares);
       const posType = getEnumHelper("PositionType").nsGetMember(ctx, _posType);
@@ -112,7 +112,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return res;
     },
-    getSaleGain: (ctx) => (_symbol, _shares, _posType) => {
+    getSaleGain: (ctx, _symbol, _shares, _posType) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       let shares = helpers.number(ctx, "shares", _shares);
       const posType = getEnumHelper("PositionType").nsGetMember(ctx, _posType);
@@ -127,7 +127,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return res;
     },
-    buyStock: (ctx) => (_symbol, _shares) => {
+    buyStock: (ctx, _symbol, _shares) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
@@ -135,7 +135,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       const res = buyStock(stock, shares, ctx, {});
       return res ? stock.getAskPrice() : 0;
     },
-    sellStock: (ctx) => (_symbol, _shares) => {
+    sellStock: (ctx, _symbol, _shares) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
@@ -144,7 +144,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return res ? stock.getBidPrice() : 0;
     },
-    buyShort: (ctx) => (_symbol, _shares) => {
+    buyShort: (ctx, _symbol, _shares) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
@@ -156,7 +156,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return res ? stock.getBidPrice() : 0;
     },
-    sellShort: (ctx) => (_symbol, _shares) => {
+    sellShort: (ctx, _symbol, _shares) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
@@ -168,7 +168,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return res ? stock.getAskPrice() : 0;
     },
-    placeOrder: (ctx) => (_symbol, _shares, _price, _type, _pos) => {
+    placeOrder: (ctx, _symbol, _shares, _price, _type, _pos) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       const price = helpers.number(ctx, "price", _price);
@@ -182,7 +182,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return placeOrder(stock, shares, price, type, pos, ctx);
     },
-    cancelOrder: (ctx) => (_symbol, _shares, _price, _type, _pos) => {
+    cancelOrder: (ctx, _symbol, _shares, _price, _type, _pos) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       const price = helpers.number(ctx, "price", _price);
@@ -199,7 +199,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return cancelOrder({ stock, shares, price, type, pos }, ctx);
     },
-    getOrders: (ctx) => () => {
+    getOrders: (ctx) => {
       checkTixApiAccess(ctx);
       if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
         throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or have Source-File 8 Level 3.");
@@ -225,7 +225,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return orders;
     },
-    getVolatility: (ctx) => (_symbol) => {
+    getVolatility: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       if (!Player.has4SDataTixApi) {
         throw helpers.errorMessage(ctx, "You don't have 4S Market Data TIX API Access!");
@@ -235,7 +235,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
 
       return volatility / 100; // Convert from percentage to decimal
     },
-    getForecast: (ctx) => (_symbol) => {
+    getForecast: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       if (!Player.has4SDataTixApi) {
         throw helpers.errorMessage(ctx, "You don't have 4S Market Data TIX API Access!");
@@ -246,7 +246,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       stock.b ? (forecast += stock.otlkMag) : (forecast -= stock.otlkMag);
       return forecast / 100; // Convert from percentage to decimal
     },
-    purchase4SMarketData: (ctx) => () => {
+    purchase4SMarketData: (ctx) => {
       if (Player.bitNodeOptions.disable4SData) {
         helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
@@ -272,7 +272,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       helpers.log(ctx, () => "Purchased 4S Market Data");
       return true;
     },
-    purchase4SMarketDataTixApi: (ctx) => () => {
+    purchase4SMarketDataTixApi: (ctx) => {
       if (Player.bitNodeOptions.disable4SData) {
         helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
         return false;
@@ -295,7 +295,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       helpers.log(ctx, () => "Purchased 4S Market Data TIX API");
       return true;
     },
-    purchaseWseAccount: (ctx) => () => {
+    purchaseWseAccount: (ctx) => {
       if (Player.hasWseAccount) {
         helpers.log(ctx, () => "Already purchased WSE Account");
         return true;
@@ -314,7 +314,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       helpers.log(ctx, () => "Purchased WSE Account Access");
       return true;
     },
-    purchaseTixApi: (ctx) => () => {
+    purchaseTixApi: (ctx) => {
       if (Player.hasTixApiAccess) {
         helpers.log(ctx, () => "Already purchased TIX API");
         return true;
@@ -333,11 +333,11 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       helpers.log(ctx, () => "Purchased TIX API");
       return true;
     },
-    getBonusTime: (ctx) => () => {
+    getBonusTime: (ctx) => {
       checkTixApiAccess(ctx);
       return StockMarket.storedCycles * CONSTANTS.MilliPerCycle;
     },
-    nextUpdate: (ctx) => () => {
+    nextUpdate: (ctx) => {
       checkTixApiAccess(ctx);
       if (!StockMarketPromise.promise)
         StockMarketPromise.promise = new Promise<number>((res) => (StockMarketPromise.resolve = res));
