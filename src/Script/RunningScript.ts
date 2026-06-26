@@ -15,7 +15,6 @@ import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
@@ -67,16 +66,21 @@ export class RunningScript {
   // hostname of the server on which this script is running
   server = "";
 
-  // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
-  scriptKey = "" as ScriptKey;
-
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
 
-  // The title, as shown in the script's log box. Defaults to the name + args,
-  // but can be changed by the user. If it is set to a React element (only by the user),
-  // that will not be persisted, and will be restored to default on load.
-  title = "" as string | React.ReactElement;
+  // Backing store for the title. Null means "use the default", generated lazily by the
+  // title getter so we don't store a title for every script up-front. A React element
+  // title (only set by the user) is not persisted, and is restored to default on load.
+  title_ = null as string | React.ReactElement | null;
+
+  // The title shown in the script's log box, defaulting to "filename args".
+  get title(): string | React.ReactElement {
+    return (this.title_ ??= this.getDefaultTitle());
+  }
+  set title(value: string | React.ReactElement) {
+    this.title_ = value;
+  }
 
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
@@ -92,11 +96,13 @@ export class RunningScript {
     if (!ramUsage) throw new Error("Must provide a ramUsage for RunningScript initialization.");
     this.filename = script.filename;
     this.args = args;
-    this.scriptKey = scriptKey(this.filename, args);
     this.server = script.server;
     this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;
-    this.title = `${this.filename} ${args.join(" ")}`;
+  }
+
+  getDefaultTitle(): string {
+    return `${this.filename} ${this.args.join(" ")}`;
   }
 
   log(txt: React.ReactNode): void {
@@ -150,14 +156,17 @@ export class RunningScript {
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    // Omit the title if it's a ReactNode, it will be filled in with the default on load.
+    // Save the title under its canonical name, reading the raw backing field so we don't
+    // generate a default. Omit it when it's the default (null) or a ReactElement; both are
+    // restored on load.
     return Generic_toJSON(
       "RunningScript",
       {
         ...this,
         dataMap: Object.fromEntries(this.dataMap.entries()),
+        title: this.title_,
       },
-      typeof this.title === "string" ? includedProperties : includedPropsNoTitle,
+      typeof this.title_ === "string" ? includedProperties : includedPropsNoTitle,
     );
   }
 
@@ -166,8 +175,7 @@ export class RunningScript {
     const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
     const validEntries = Object.entries(runningScript.dataMap).filter(isValidDataMapEntry);
     runningScript.dataMap = new Map(validEntries);
-    if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
-    if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
+
     return runningScript;
   }
 
@@ -179,7 +187,8 @@ export class RunningScript {
 }
 const includedProperties = getKeyList(RunningScript, {
   removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
-});
+  // Persist the title under its canonical name, keeping its original key position.
+}).map((key) => (key === "title_" ? "title" : key));
 const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");
 
 function isValidDataMapEntry(entry: [string, unknown]): entry is [string, number[]] {

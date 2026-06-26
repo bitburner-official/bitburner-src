@@ -72,8 +72,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     setNetDisplayDepth(deepestServerDepth + visibilityMargin);
 
     rerender();
-    drawOnCanvas(canvas.current);
-  }, [rerender]);
+    drawOnCanvas(canvas.current, netDisplayDepth);
+  }, [rerender, netDisplayDepth]);
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
@@ -171,9 +171,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   };
 
   const search = (selection: string, options: string[], searchTerm: string) => {
+    // Ignore single character searches
     if (searchTerm.length === 1) {
       return;
-    } // Ignore single character searches
+    }
     if (!searchTerm) {
       setSearchLabel(initialSearchLabel);
       return;
@@ -183,12 +184,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       servers.find((s) => s.hostname.toLowerCase() === selection.toLowerCase()) ||
       servers.find((s) => s.hostname.toLowerCase() === options[0]?.toLowerCase());
 
-    if (!foundServer) {
+    if (!foundServer || foundServer.depth >= netDisplayDepth) {
       setSearchLabel(`(No results)`);
       return;
-    } else {
-      setSearchLabel(initialSearchLabel);
     }
+    setSearchLabel(initialSearchLabel);
 
     const position = getPixelPosition(foundServer, true);
 

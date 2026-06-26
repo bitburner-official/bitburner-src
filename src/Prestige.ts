@@ -106,10 +106,7 @@ export function prestigeAugmentation(): void {
   for (const faction of Object.values(Factions)) faction.prestigeAugmentation();
 
   // Stop a Terminal action if there is one.
-  if (Terminal.action !== null) {
-    Terminal.finishAction(true);
-  }
-  Terminal.clear();
+  Terminal.prestige();
   LogBoxClearEvents.emit();
 
   // Close coding contract modal
@@ -212,10 +209,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   const homeComp = Player.getHomeComputer();
 
   // Stop a Terminal action if there is one.
-  if (Terminal.action !== null) {
-    Terminal.finishAction(true);
-  }
-  Terminal.clear();
+  Terminal.prestige();
   LogBoxClearEvents.emit();
 
   // Close coding contract modal
@@ -255,11 +249,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Reset favor for Companies and Factions
   for (const company of Object.values(Companies)) company.prestigeSourceFile();
   for (const faction of Object.values(Factions)) faction.prestigeSourceFile();
-
-  // Stop a Terminal action if there is one
-  if (Terminal.action !== null) {
-    Terminal.finishAction(true);
-  }
 
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated
   if (Player.activeSourceFileLvl(12) > 0) {

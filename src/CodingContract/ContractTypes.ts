@@ -68,7 +68,27 @@ type CodingContractDefinitions<Signatures extends Record<string, [unknown, unkno
     ? CodingContractComplexType<Signatures[T][0], Signatures[T][1], Signatures[T][2]>
     : CodingContractSimpleType<Signatures[T][0], Signatures[T][1]>;
 };
-export type CodingContractTypes = CodingContractDefinitions<CodingContractSignatures>;
+
+/**
+ * Internally, a contract requires three types: input, answer, and internal state. The internal state type is usually
+ * the same as the input type, but for some contracts it differs (e.g., the "Square Root" contract).
+ *
+ * The public CodingContractSignatures type defines the input and answer types, but not the internal state type.
+ * CodingContractCustomStates maps contracts whose internal state type differs from their input type. We then use this
+ * type to construct InternalCodingContractSignatures and CodingContractTypes.
+ *
+ * With this design, CodingContractTypes can define all three required types by reusing the public
+ * CodingContractSignatures type, while only defining the internal state type when necessary.
+ */
+type CodingContractCustomStates = {
+  "Square Root": [string, string];
+};
+type InternalCodingContractSignatures = {
+  [K in keyof CodingContractSignatures]: K extends keyof CodingContractCustomStates
+    ? [...CodingContractSignatures[K], CodingContractCustomStates[K]]
+    : CodingContractSignatures[K];
+};
+export type CodingContractTypes = CodingContractDefinitions<InternalCodingContractSignatures>;
 
 /* Helper functions for Coding Contract implementations */
 export function removeBracketsFromArrayString(str: string): string {

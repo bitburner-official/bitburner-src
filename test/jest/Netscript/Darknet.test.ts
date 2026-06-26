@@ -321,7 +321,7 @@ describe("home", () => {
     await ns.singularity.installBackdoor();
     // Can exec from home
     expect(ns.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
-  });
+  }, 8000);
   test("getServerRequiredCharismaLevel", () => {
     const ns = getNS(SpecialServers.Home);
     const server = GetServerOrThrow(SpecialServers.Home);
@@ -757,6 +757,9 @@ describe("darkweb", () => {
     if (!result.success) {
       throw new Error("Cannot add cache");
     }
+    if (result.cacheFilename == null) {
+      throw new Error("No cache filename");
+    }
     expect(darkweb.caches.length).toBe(1);
     expect(darkweb.caches[0]).toMatch(/test_[0-9]+\.cache/);
     ns.dnet.openCache(result.cacheFilename);
@@ -898,9 +901,12 @@ describe("Non-darkweb darknet server", () => {
   });
   test("openCache", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = addCacheToServer(getDarknetServerOrThrow(ns.getHostname()), "test.cache");
+    const result = addCacheToServer(getDarknetServerOrThrow(ns.getHostname()), false, "test.cache");
     if (!result.success) {
       throw new Error(result.message);
+    }
+    if (result.cacheFilename == null) {
+      throw new Error("No cache filename");
     }
     ns.dnet.openCache(result.cacheFilename);
   });

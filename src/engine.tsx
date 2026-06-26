@@ -20,12 +20,11 @@ import { iTutorialStart } from "./InteractiveTutorial";
 import { checkForMessagesToSend } from "./Message/MessageHelpers";
 import { loadAllRunningScripts, updateOnlineScriptTimes } from "./NetscriptWorker";
 import { Player } from "@player";
-import { saveObject, loadGame } from "./SaveObject";
+import { saveGame, loadGame } from "./SaveObject";
 import { GetAllServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
 import { canAccessStockMarket, initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
-import { Terminal } from "./Terminal";
 
 import { Money } from "./ui/React/Money";
 import { Hashes } from "./ui/React/Hashes";
@@ -62,10 +61,6 @@ declare global {
     GetAllServers: typeof GetAllServers;
     Factions: typeof Factions;
     Companies: typeof Companies;
-    SaveObject: {
-      saveObject: typeof saveObject;
-      loadGame: typeof loadGame;
-    };
   };
   // eslint-disable-next-line no-var
   var openDevMenu: () => void;
@@ -92,8 +87,6 @@ const Engine = {
     Player.totalPlaytime += time;
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
-
-    Terminal.process(numCycles);
 
     Player.processWork(numCycles);
 
@@ -231,7 +224,7 @@ const Engine = {
         Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
       } else {
         Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
+        saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
       }
     }
   },
@@ -402,11 +395,6 @@ const Engine = {
         // Manipulate data of Factions and Companies
         Factions: Factions,
         Companies: Companies,
-        // saveObject and loadGame can be used to create a custom save/load tool
-        SaveObject: {
-          saveObject: saveObject,
-          loadGame: loadGame,
-        },
       };
     }
     globalThis.openDevMenu = () => apr1();

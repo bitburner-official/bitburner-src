@@ -153,18 +153,18 @@
     },
     "INSTALL_1": {
       "ID": "INSTALL_1",
-      "Name": "I never asked for this.",
+      "Name": "I never asked for this",
       "Description": "Install your first augmentation."
     },
     "INSTALL_100": {
       "ID": "INSTALL_100",
-      "Name": "I asked for this.",
-      "Description": "Have 100 augmentation installed at once."
+      "Name": "I asked for this",
+      "Description": "Have 100 augmentations installed at once."
     },
     "QUEUE_40": {
       "ID": "QUEUE_40",
       "Name": "It's time to install",
-      "Description": "Have 40 augmentation queued at once."
+      "Description": "Have 40 augmentations queued at once."
     },
     "HACKING_100000": {
       "ID": "HACKING_100000",
@@ -178,7 +178,7 @@
     },
     "NEUROFLUX_255": {
       "ID": "NEUROFLUX_255",
-      "Name": "Neuroflux is love, Neuroflux is live",
+      "Name": "Neuroflux is love, Neuroflux is life",
       "Description": "Install Neuroflux Governor level 255"
     },
     "NS2": {
@@ -223,7 +223,7 @@
     },
     "STOCK_1q": {
       "ID": "STOCK_1q",
-      "Name": "Wolf of wall street.",
+      "Name": "Wolf of Wall Street",
       "Description": "Make 1q on the stock market."
     },
     "DISCOUNT": {
@@ -233,7 +233,7 @@
     },
     "SCRIPT_32GB": {
       "ID": "SCRIPT_32GB",
-      "Name": "You'll need upgrade for this one.",
+      "Name": "You'll need upgrade for this one",
       "Description": "Write a script that costs 32GB per thread."
     },
     "FIRST_HACKNET_NODE": {
@@ -308,7 +308,7 @@
     },
     "CORPORATION": {
       "ID": "CORPORATION",
-      "Name": "A small 150b loan.",
+      "Name": "A small 150b loan",
       "Description": "Create a corporation."
     },
     "CORPORATION_BRIBE": {
@@ -324,7 +324,7 @@
     "CORPORATION_EMPLOYEE_3000": {
       "ID": "CORPORATION_EMPLOYEE_3000",
       "Name": "Small town",
-      "Description": "Have a division with 3000 employee."
+      "Description": "Have a division with 3000 employees."
     },
     "CORPORATION_REAL_ESTATE": {
       "ID": "CORPORATION_REAL_ESTATE",
@@ -334,7 +334,7 @@
     "INTELLIGENCE_255": {
       "ID": "INTELLIGENCE_255",
       "Name": "Smart!",
-      "Description": "Reach intelligence 255"
+      "Description": "Reach intelligence level 255."
     },
     "BLADEBURNER_DIVISION": {
       "ID": "BLADEBURNER_DIVISION",
@@ -344,12 +344,12 @@
     "BLADEBURNER_OVERCLOCK": {
       "ID": "BLADEBURNER_OVERCLOCK",
       "Name": "Overclock!",
-      "Description": "Reach maximum level of Overclock"
+      "Description": "Reach maximum level of Overclock."
     },
     "BLADEBURNER_UNSPENT_100000": {
       "ID": "BLADEBURNER_UNSPENT_100000",
-      "Name": "You should really spend those.",
-      "Description": "Have 100 000 unspent bladeburner skill points."
+      "Name": "You should really spend those...",
+      "Description": "Have 100 000 unspent Bladeburner skill points."
     },
     "4S": {
       "ID": "4S",
@@ -358,7 +358,7 @@
     },
     "FIRST_HACKNET_SERVER": {
       "ID": "FIRST_HACKNET_SERVER",
-      "Name": "The improved hacker.",
+      "Name": "The improved hacker",
       "Description": "Purchase your first hacknet server."
     },
     "ALL_HACKNET_SERVER": {
@@ -368,7 +368,7 @@
     },
     "MAX_HACKNET_SERVER": {
       "ID": "MAX_HACKNET_SERVER",
-      "Name": "That's the new limit.",
+      "Name": "That's the new limit",
       "Description": "Maximize a hacknet server."
     },
     "HACKNET_SERVER_1B": {
@@ -378,7 +378,7 @@
     },
     "MAX_CACHE": {
       "ID": "MAX_CACHE",
-      "Name": "What a waste.",
+      "Name": "What a waste",
       "Description": "Cap your hashes."
     },
     "SLEEVE_8": {
@@ -388,13 +388,13 @@
     },
     "INDECISIVE": {
       "ID": "INDECISIVE",
-      "Name": "Too many options.",
-      "Description": "Spend 1h straight on the bitverse."
+      "Name": "Too many options",
+      "Description": "Spend 1h straight on the BitVerse."
     },
     "FAST_BN": {
       "ID": "FAST_BN",
-      "Name": "Speed demon.",
-      "Description": "Destroy a bitnode in under 2 days."
+      "Name": "Speed demon",
+      "Description": "Destroy a BitNode in under 2 days."
     },
     "BN_DESTROYER": {
       "ID": "BN_DESTROYER",
@@ -434,22 +434,22 @@
     "CHALLENGE_BN3": {
       "ID": "CHALLENGE_BN3",
       "Name": "BN3: Challenge",
-      "Description": "Destroy BN3 without creating corporation."
+      "Description": "Destroy BN3 without creating a corporation."
     },
     "CHALLENGE_BN6": {
       "ID": "CHALLENGE_BN6",
       "Name": "BN6: Challenge",
-      "Description": "Destroy BN6 without joining the bladeburner division."
+      "Description": "Destroy BN6 without joining the Bladeburner division."
     },
     "CHALLENGE_BN7": {
       "ID": "CHALLENGE_BN7",
       "Name": "BN7: Challenge",
-      "Description": "Destroy BN7 without joining the bladeburner division."
+      "Description": "Destroy BN7 without joining the Bladeburner division."
     },
     "CHALLENGE_BN8": {
       "ID": "CHALLENGE_BN8",
       "Name": "BN8: Challenge",
-      "Description": "Destroy BN8 without purchasing the 4s market data."
+      "Description": "Destroy BN8 without purchasing the 4S market data."
     },
     "CHALLENGE_BN9": {
       "ID": "CHALLENGE_BN9",
@@ -519,7 +519,7 @@
     "EDITSAVEFILE": {
       "ID": "EDITSAVEFILE",
       "Name": "Exploit: edit",
-      "Description": "Acquire the EditSaveFile Source-File -1"
+      "Description": "Edit your savefile."
     },
     "UNACHIEVABLE": {
       "ID": "UNACHIEVABLE",

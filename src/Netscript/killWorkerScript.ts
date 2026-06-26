@@ -11,6 +11,7 @@ import { AddRecentScript } from "./RecentScripts";
 import { handleUnknownError } from "../utils/ErrorHandler";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { BaseServer } from "../Server/BaseServer";
+import { scriptKey } from "../utils/helpers/scriptKey";
 
 export function killWorkerScript(ws: WorkerScript): void {
   stopAndCleanUpWorkerScript(ws);
@@ -55,31 +56,33 @@ function killWorkerScriptWithMessage(pid: number, message: string): boolean {
 function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   // Only clean up once.
   // Important: Only this function can set stopFlag!
-  if (ws.env.stopFlag) return;
+  if (ws.stopFlag) return;
 
   //Clean up any ongoing netscriptDelay
   if (ws.delay) clearTimeout(ws.delay);
   ws.delayReject?.(new ScriptDeath(ws));
-  ws.env.runningFn = "";
+  ws.runningFn = "";
   const atExit = ws.atExit;
   //Calling ns.exit inside ns.atExit can lead to recursion
   //so the map must be cleared before looping
-  ws.atExit = new Map();
+  ws.atExit = null;
 
-  for (const [id, callback] of atExit) {
-    try {
-      callback();
-    } catch (e: unknown) {
-      handleUnknownError(e, ws, `Error running atExit function with id ${id}.\n\n`);
+  if (atExit) {
+    for (const [id, callback] of atExit) {
+      try {
+        callback();
+      } catch (e: unknown) {
+        handleUnknownError(e, ws, `Error running atExit function with id ${id}.\n\n`);
+      }
     }
   }
 
-  if (ws.env.stopFlag) {
+  if (ws.stopFlag) {
     // If atExit() kills the script, we'll already be stopped, don't stop again.
     return;
   }
 
-  ws.env.stopFlag = true;
+  ws.stopFlag = true;
   removeWorkerScript(ws);
 }
 
@@ -102,13 +105,14 @@ function removeWorkerScript(workerScript: WorkerScript): void {
 
   // Delete the RunningScript object from that server
   const rs = workerScript.scriptRef;
-  const byPid = server.runningScriptMap.get(rs.scriptKey);
+  const key = scriptKey(rs.filename, rs.args);
+  const byPid = server.runningScriptMap.get(key);
   if (!byPid) {
-    console.error(`Couldn't find runningScriptMap for key ${rs.scriptKey}`);
+    console.error(`Couldn't find runningScriptMap for key ${key}`);
   } else {
     byPid.delete(workerScript.pid);
     if (byPid.size === 0) {
-      server.runningScriptMap.delete(rs.scriptKey);
+      server.runningScriptMap.delete(key);
     }
   }
 

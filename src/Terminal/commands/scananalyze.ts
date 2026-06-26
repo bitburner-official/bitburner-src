@@ -1,10 +1,18 @@
 import { Player } from "@player";
 import { CompletedProgramName } from "@enums";
 import { Terminal } from "../../Terminal";
+import type { BaseServer } from "../../Server/BaseServer";
+import { HacknetServer } from "../../Hacknet/HacknetServer";
+import { Server } from "../../Server/Server";
+import { DarknetServer } from "../../Server/DarknetServer";
+import { GetServer } from "../../Server/AllServers";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { formatRam } from "../../ui/formatNumber";
+import { Link } from "../OutputTypes";
 
-export function scananalyze(args: (string | number | boolean)[]): void {
+export function scananalyze(args: (string | number | boolean)[]): undefined {
   if (args.length === 0) {
-    Terminal.executeScanAnalyzeCommand();
+    executeScanAnalyzeCommand(1, false);
   } else {
     // # of args must be 2 or 3
     if (args.length > 2) {
@@ -32,6 +40,67 @@ export function scananalyze(args: (string | number | boolean)[]): void {
     } else if (depth > 10) {
       return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 10");
     }
-    Terminal.executeScanAnalyzeCommand(depth, all);
+    executeScanAnalyzeCommand(depth, all);
   }
+}
+
+function executeScanAnalyzeCommand(depth: number, all: boolean): void {
+  interface Node {
+    hostname: string;
+    children: Node[];
+  }
+
+  const ignoreServer = (s: BaseServer, d: number): boolean =>
+    (!all && s.purchasedByPlayer && s.hostname != "home") ||
+    d > depth ||
+    (!all && s instanceof HacknetServer) ||
+    (!all && s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
+
+  const makeNode = (root: BaseServer = Player.getCurrentServer()) => {
+    // Keep track of previously seen servers to prevent backtracking (since darknet can be cyclical)
+    const seenServers = [root.hostname];
+    const populateNode = (s: BaseServer, d = 1): Node => {
+      seenServers.push(s.hostname);
+      return {
+        hostname: s.hostname,
+        children: s.serversOnNetwork
+          .filter((h) => !seenServers.includes(h))
+          .map((s) => GetServer(s))
+          .filter((v): v is BaseServer => !!v)
+          .filter((v) => !ignoreServer(v, d))
+          .map((h) => populateNode(h, d + 1)),
+      };
+    };
+    return populateNode(root);
+  };
+
+  const root = makeNode();
+
+  const printOutput = (node: Node, prefix = ["  "], last = true) => {
+    const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
+    const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
+    if (Player.hasProgram(CompletedProgramName.autoLink)) {
+      Terminal.append(new Link(titlePrefix, node.hostname));
+    } else {
+      Terminal.print(titlePrefix + node.hostname + "\n");
+    }
+
+    const server = GetServer(node.hostname);
+    if (!server) return;
+    const hasRoot = server.hasAdminRights ? "YES" : "NO";
+    if (server instanceof Server) {
+      Terminal.print(
+        `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
+      );
+      Terminal.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n");
+    } else {
+      Terminal.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n");
+    }
+    Terminal.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
+    node.children.forEach((n, i) =>
+      printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1),
+    );
+  };
+
+  printOutput(root);
 }

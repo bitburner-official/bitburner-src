@@ -1,6 +1,6 @@
 import { isLegacyScript } from "../Paths/ScriptFilePath";
 import { TextFilePath } from "../Paths/TextFilePath";
-import { saveObject } from "../SaveObject";
+import { exportGame } from "../SaveObject";
 import { Script } from "../Script/Script";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { IFileLine } from "./v1APIBreak";
@@ -239,7 +239,7 @@ export const v2APIBreak = () => {
   for (const server of GetAllServers()) {
     server.runningScriptMap = new Map();
   }
-  saveObject.exportGame().catch((e) => console.error(e));
+  exportGame().catch((e) => console.error(e));
 };
 
 const formatOffenders = (offenders: IFileLine[]): string => {

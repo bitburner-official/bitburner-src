@@ -13,10 +13,11 @@ import { createProgressBarText } from "../../utils/helpers/createProgressBarText
 interface ServerAccordionProps {
   server: BaseServer;
   scripts: WorkerScript[];
+  startOpen: boolean;
 }
 
-export function ServerAccordion({ server, scripts }: ServerAccordionProps): React.ReactElement {
-  const [open, setOpen] = React.useState(false);
+export function ServerAccordion({ server, scripts, startOpen }: ServerAccordionProps): React.ReactElement {
+  const [open, setOpen] = React.useState(startOpen);
 
   // Accordion's header text
   const longestHostnameLength = 26;

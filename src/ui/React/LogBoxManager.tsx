@@ -28,6 +28,7 @@ import { dialogBoxCreate } from "./DialogBox";
 import { makeStyles } from "tss-react/mui";
 import { logBoxBaseZIndex } from "./Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { helpers } from "../../Netscript/NetscriptHelpers";
 
 let layerCounter = 0;
 
@@ -115,7 +116,7 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
         if (logs.some((l) => l.script.pid === script.pid)) return;
         logs.push({
           id: script.pid,
-          script: script,
+          script,
         });
         rerender();
       }),
@@ -255,36 +256,21 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   }
 
   function title(): React.ReactElement {
-    const title_str = script.title === "string" ? script.title : `${script.filename} ${script.args.join(" ")}`;
+    const displayTitle = script.title;
+    const titleText = typeof displayTitle === "string" ? displayTitle : script.getDefaultTitle();
     return (
       <Typography
         variant="h6"
         sx={{ marginRight: "auto", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}
-        title={title_str}
+        title={titleText}
       >
-        {script.title}
+        {displayTitle}
       </Typography>
     );
   }
 
   function minimize(): void {
     propsRef.current.setMinimized(!propsRef.current.minimized);
-  }
-
-  function lineColor(s: string): "error" | "success" | "warn" | "info" | "primary" {
-    if (s.match(/(^\[[^\]]+\] )?ERROR/) || s.match(/(^\[[^\]]+\] )?FAIL/)) {
-      return "error";
-    }
-    if (s.match(/(^\[[^\]]+\] )?SUCCESS/)) {
-      return "success";
-    }
-    if (s.match(/(^\[[^\]]+\] )?WARN/)) {
-      return "warn";
-    }
-    if (s.match(/(^\[[^\]]+\] )?INFO/)) {
-      return "info";
-    }
-    return "primary";
   }
 
   const onWindowResize = useMemo(
@@ -429,7 +415,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                       <ANSIITypography
                         key={i}
                         text={line}
-                        color={lineColor(line)}
+                        color={helpers.getTextColor(line)}
                         styles={{
                           fontSize: propsRef.current.fontSize ?? Settings.styles.tailFontSize,
                         }}

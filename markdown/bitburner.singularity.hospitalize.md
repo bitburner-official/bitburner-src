@@ -17,5 +17,5 @@ void
 
 ## Remarks
 
-RAM cost: 0.25 GB \* 16/4/1
+RAM cost: 0.5 GB \* 16/4/1
 

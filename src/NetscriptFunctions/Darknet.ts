@@ -337,6 +337,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx: NetscriptContext) =>
       (_returnByIp): string[] => {
         const returnByIP = helpers.boolean(ctx, "returnByIP", _returnByIp ?? false);
+        expectDarknetAccess(ctx);
         const server = ctx.workerScript.getServer();
         const out = [];
         for (const neighbor of server.serversOnNetwork) {
@@ -388,6 +389,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           .then(() => setStasisLink(ctx, server, shouldLink));
       },
     getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
+      expectDarknetAccess(ctx);
       const limit = getStasisLinkLimit();
       logger(ctx)(`Stasis link limit: ${limit}`);
       return limit;
@@ -396,6 +398,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx: NetscriptContext) =>
       (_returnByIP): string[] => {
         const returnByIp = helpers.boolean(ctx, "returnByIP", _returnByIP ?? false);
+        expectDarknetAccess(ctx);
         const servers = getStasisLinkServers();
         const serverNames = servers.map((s) => (returnByIp ? s.ip : s.hostname));
         logger(ctx)(`Stasis linked servers: ${serverNames}`);

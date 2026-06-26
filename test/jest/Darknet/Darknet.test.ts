@@ -66,7 +66,12 @@ import { getAllDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkU
 import { prestigeAugmentation } from "../../../src/Prestige";
 import { initStockMarket, StockMarket, SymbolToStockMap } from "../../../src/StockMarket/StockMarket";
 import { StockSymbol } from "@enums";
-import { GetAllServers } from "../../../src/Server/AllServers";
+import { disconnectServers, GetAllServers, GetServerOrThrow } from "../../../src/Server/AllServers";
+import { roundToTwo } from "../../../src/utils/helpers/roundToTwo";
+import { getRamBlock } from "../../../src/DarkNet/effects/ramblock";
+import { SpecialServers } from "../../../src/Server/data/SpecialServers";
+import { clearDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
+import { getTorRouter } from "../../../src/Server/ServerHelpers";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -963,5 +968,55 @@ describe("CacheReward", () => {
         expect(result.augmentationName).toBeUndefined();
       }
     }
+  });
+});
+
+describe("ramblock", () => {
+  test.each([16, 16.01, 32.01, 64.01])("getRamBlock rounds %d correctly", (maxRam: number) => {
+    // This *must* be done within the function, Jest internally relies on
+    // Math.random so the mock must be restored immediately after.
+    const saved = Math.random;
+    let rng: number;
+    try {
+      Math.random = () => rng;
+      for (let i = 0; i < 1; i += 1.0 / 8.0) {
+        rng = i;
+        const result = getRamBlock(maxRam);
+        // We want *exact* equality
+        expect(result).toBe(roundToTwo(result));
+      }
+    } finally {
+      Math.random = saved;
+    }
+  });
+});
+
+describe("clearDarknet", () => {
+  it("leaves home<->darkweb disconnected on both sides when the player has no TOR router", () => {
+    const home = Player.getHomeComputer();
+    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+
+    disconnectServers(home, darkweb);
+    expect(Player.hasTorRouter()).toBe(false);
+
+    clearDarknet();
+
+    expect(darkweb.serversOnNetwork.includes(home.hostname)).toBe(home.serversOnNetwork.includes(darkweb.hostname));
+    expect(home.serversOnNetwork).not.toContain(darkweb.hostname);
+    expect(darkweb.serversOnNetwork).not.toContain(home.hostname);
+  });
+
+  it("leaves home<->darkweb connected on both sides when the player has a TOR router", () => {
+    const home = Player.getHomeComputer();
+    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+
+    getTorRouter();
+    expect(Player.hasTorRouter()).toBe(true);
+
+    clearDarknet();
+
+    expect(darkweb.serversOnNetwork.includes(home.hostname)).toBe(home.serversOnNetwork.includes(darkweb.hostname));
+    expect(home.serversOnNetwork).toContain(darkweb.hostname);
+    expect(darkweb.serversOnNetwork).toContain(home.hostname);
   });
 });

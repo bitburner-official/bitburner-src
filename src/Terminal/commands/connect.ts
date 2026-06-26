@@ -4,7 +4,7 @@ import { getServerOnNetwork } from "../../Server/ServerHelpers";
 import { GetServer } from "../../Server/AllServers";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
-export function connect(args: (string | number | boolean)[], server: BaseServer): void {
+export function connect(args: (string | number | boolean)[], server: BaseServer): undefined {
   // Disconnect from current server in Terminal and connect to new one
   if (args.length !== 1) {
     Terminal.error("Incorrect usage of connect command. Usage: connect [hostname]");

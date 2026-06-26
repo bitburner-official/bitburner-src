@@ -2592,6 +2592,9 @@ export interface Singularity {
    *
    * If the active level of a source file is 0, that source file won't be included in the result.
    *
+   * This function does not require owning Source-File 4 or being in BitNode 4. You can also use
+   * {@link ResetInfo.ownedSF | ResetInfo.ownedSF} as a lower-RAM alternative.
+   *
    * @returns Array containing an object with number and level of the source file.
    */
   getOwnedSourceFiles(): SourceFileLvl[];
@@ -2717,7 +2720,7 @@ export interface Singularity {
   /**
    * Hospitalize the player.
    * @remarks
-   * RAM cost: 0.25 GB * 16/4/1
+   * RAM cost: 0.5 GB * 16/4/1
    */
   hospitalize(): void;
 
@@ -2820,7 +2823,7 @@ export interface Singularity {
   /**
    * Get a list of programs offered on the dark web.
    * @remarks
-   * RAM cost: 1 GB * 16/4/1
+   * RAM cost: 0.5 GB * 16/4/1
    *
    *
    * This function allows the player to get a list of programs available for purchase
@@ -2887,11 +2890,15 @@ export interface Singularity {
    *   OR
    * Completed the final black op.
    *
-   * @param nextBN - BN number to jump to
+   * If you do not want to move on to the next BN and instead stay on the BitVerse screen, you can set nextBN
+   * to undefined. Note that with the hacking route, using {@link Singularity.installBackdoor | installBackdoor} is a
+   * cheaper way to do this.
+   *
+   * @param nextBN - BN number to jump to. Passing undefined leaves you on the BitVerse screen.
    * @param callbackScript - Name of the script to launch in the next BN.
    * @param bitNodeOptions - BitNode options for the next BN.
    */
-  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
+  destroyW0r1dD43m0n(nextBN?: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Get the current work the player is doing.
@@ -4375,6 +4382,19 @@ export interface Format {
    * @returns The formatted time.
    */
   time(milliseconds: number, milliPrecision?: boolean): string;
+
+  /**
+   * Format a number as an amount of money.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a numeric string, using the user-defined currency prefix/suffix.
+   *
+   * @param n - Amount of money to format.
+   * @param exponential - Whether or not to use exponential form for small numbers (between 0 and 0.001). Defaults to false.
+   * @returns Formatted amount of money.
+   */
+  money(n: number, exponential?: boolean): string;
 }
 
 /**
@@ -5181,7 +5201,7 @@ type GoOpponent =
   | "????????????";
 
 /** @public */
-type SimpleOpponentStats = {
+interface SimpleOpponentStats {
   /** Number of wins since last reset */
   wins: number;
   /** Number of losses since last reset*/
@@ -5196,7 +5216,7 @@ type SimpleOpponentStats = {
   bonusPercent: number;
   /** Description of stat boost */
   bonusDescription: string;
-};
+}
 
 /**
  * Tools to analyze the IPvGO subnet.
@@ -5331,22 +5351,6 @@ export interface GoAnalysis {
 
   /**
    * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
-   *
-   * The details are keyed by opponent name, in this structure:
-   *
-   * ```
-   * {
-   *   <OpponentName>: {
-   *     wins: number,
-   *     losses: number,
-   *     winStreak: number,
-   *     highestWinStreak: number,
-   *     favor: number,
-   *     bonusPercent: number,
-   *     bonusDescription: string,
-   *   }
-   * }
-   * ```
    *
    * @remarks
    * RAM cost: 0 GB
@@ -6724,7 +6728,7 @@ interface Stanek {
   /**
    * Get placed fragment at location.
    * @remarks
-   * RAM cost: 5 GB
+   * RAM cost: 2 GB
    *
    * @param rootX - X against which to align the top left of the fragment.
    * @param rootY - Y against which to align the top left of the fragment.
@@ -7029,16 +7033,102 @@ interface UserInterface {
   /**
    * Clear the Terminal window, as if the player ran `clear` in the terminal
    * @remarks
-   * RAM cost: 0.2 GB
+   * RAM cost: 0 GB
    */
   clearTerminal(): void;
+
+  /**
+   * Opens the specified file(s) in the code editor.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This opens files from the server the script is running on, which may be different than the server the terminal is connected to.
+   *
+   * @example
+   * ```js
+   *   ns.ui.openCodeEditor("foo.js");
+   *   ns.ui.openCodeEditor(["bar.js", "data.json"], { vim: true });
+   * ```
+   *
+   * @param files - Optional. The file(s) to open in the editor. If not provided, opens the editor to the last edited file, if any.
+   * @param editorOptions - Optional. Settings for opening the editor, such as `vim` mode
+   */
+  openCodeEditor(files?: string | string[], editorOptions?: EditorOptions): void;
+
+  /**
+   * Programmatically sets an alias.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This is functionally equivalent to typing `alias ${alias}=${substitution}` in the terminal.
+   *
+   * This function throws an error if `alias` is an empty string or contains any invalid characters (only alphanumeric
+   * characters and `_|!%,@-` are allowed).
+   *
+   * Only one alias may be defined for a given context. Setting a global alias will silently overwrite an existing
+   * non-global alias with the same name, and vice versa.
+   *
+   * @example
+   * ```js
+   * export async function main(ns) {
+   *   ns.ui.alias("nuke", "run NUKE.exe"); // Equivalent to typing `alias nuke="run NUKE.exe"`
+   *   ns.ui.alias("worm", "HTTPWorm.exe", true); // Equivalent to typing `alias -g worm="HTTPWorm.exe"`
+   * }
+   *
+   * ```
+   * @param alias - The alias name to set.
+   * @param substitution - The substitution to run.
+   * @param isGlobal - Whether the alias should be set as a global alias. Global aliases replace all occurrences of the
+   * alias with the substitution string.
+   */
+  alias(alias: string, substitution: string, isGlobal?: boolean): void;
+
+  /**
+   * Clears an existing alias.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param alias - The alias to clear.
+   * @returns - True if there was a previous alias set.
+   */
+  unalias(alias: string): boolean;
+
+  /**
+   * Returns a list of every alias that's been set.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns A map of alias names to an object containing the substitution string and if the alias was set to global.
+   */
+  getAllAliases(): Map<string, { substitution: string; isGlobal: boolean }>;
+
+  /**
+   * Renders a ReactNode in the main content area.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * On the left side of the UI, the sidebar contains shortcuts to game features (Terminal, Script Editor, City, etc.).
+   * When clicking a sidebar item, the feature is rendered on the right side of the UI. This space is the main content
+   * area.
+   *
+   * For example, when you click the "City" button in the sidebar, the locations in that city are rendered in the main
+   * content area.
+   *
+   * This function effectively switches to a new custom "page", as if you had navigated via the sidebar. Calling it
+   * again replaces the contents of the page.
+   *
+   * @param node - The node to be rendered.
+   */
+  renderPage(node: ReactNode): void;
 }
 
 /**
  * Collection of all functions passed to scripts
  * @public
- * @remarks
- * <b>Basic usage example:</b>
+ * @example
  * ```js
  * export async function main(ns) {
  *  // Basic ns functions can be accessed on the ns object
@@ -7968,8 +8058,6 @@ export interface NS {
    * Because this function immediately terminates the script, it does not have a return value.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
-   *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
    *
    * @example
    * ```js
@@ -9114,7 +9202,10 @@ export interface NS {
    * ```
    * `bar` in the last example is `"false"` (a string), not `false` (a boolean). `data.bar` is truthy, not falsy.
    */
-  flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  flags(schema: [string, any][]): {
+    [key: string]: any;
+    _: ScriptArg[];
+  };
 
   /**
    * Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is
@@ -9598,7 +9689,18 @@ type CodingContractNameEnumType = {
 /** @public */
 type CodingContractName = _ValueOf<CodingContractNameEnumType>;
 
-/** @public */
+/**
+ * This is a map of contract types to their input and answer data types. The key is the contract type. The value is a
+ * tuple containing the input and answer data types.
+ *
+ * @example
+ * ```
+ * "Subarray with Maximum Sum": [number[], number]
+ * ```
+ * For the "Subarray with Maximum Sum" contract, the input type is `number[]` and the answer type is `number`.
+ *
+ * @public
+ */
 export type CodingContractSignatures = {
   "Find Largest Prime Factor": [number, number];
   "Subarray with Maximum Sum": [number[], number];
@@ -9627,7 +9729,7 @@ export type CodingContractSignatures = {
   "Compression III: LZ Compression": [string, string];
   "Encryption I: Caesar Cipher": [[string, number], string];
   "Encryption II: Vigenère Cipher": [[string, string], string];
-  "Square Root": [bigint, bigint, [string, string]];
+  "Square Root": [bigint, bigint];
   "Total Number of Primes": [[number, number], number];
   "Largest Rectangle in a Matrix": [(1 | 0)[][], [[number, number], [number, number]]];
 };
@@ -11052,6 +11154,18 @@ interface GameInfo {
 }
 
 /**
+ * Options for opening the code editor
+ * @public
+ */
+interface EditorOptions {
+  /**
+   * Optional. If true, opens the editor in vim mode. If false, opens the editor in nano mode.
+   * If not provided, uses the user's default editor settings
+   */
+  vim?: boolean;
+}
+
+/**
  * Used for autocompletion
  * @public
  */
@@ -11070,7 +11184,10 @@ interface AutocompleteData {
   /** Netscript Enums */
   enums: NSEnums;
   /** Parses the flags schema on the already inputted flags */
-  flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  flags(schema: [string, any][]): {
+    [key: string]: any;
+    _: ScriptArg[];
+  };
   /** The hostname of the server the script would be running on */
   hostname: string;
   /** The filename of the script about to be run */

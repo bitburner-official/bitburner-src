@@ -136,8 +136,11 @@ export class Material {
   // Initializes a Material object from a JSON save state.
   static fromJSON(value: IReviverValue): Material {
     const material = Generic_fromJSON(Material, value.data);
-    if (isNaN(material.quality)) {
+    if (!Number.isFinite(material.quality)) {
       material.quality = 1;
+    }
+    if (!Number.isFinite(material.maxSellPerCycle)) {
+      material.maxSellPerCycle = 0;
     }
     /**
      * averagePrice has not been calculated properly, so if it is an invalid value (Number.isFinite returns false) or 0

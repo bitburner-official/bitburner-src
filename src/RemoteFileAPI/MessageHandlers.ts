@@ -13,7 +13,7 @@ import {
 } from "./MessageDefinitions";
 
 import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";
-import { saveObject } from "../SaveObject";
+import { getSaveData } from "../SaveObject";
 import { Player } from "@player";
 import type { BaseServer } from "../Server/BaseServer";
 import type { ContentFilePath } from "../Paths/ContentFile";
@@ -221,7 +221,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
   },
 
   getSaveFile: async function (msg: RFAMessage): Promise<RFAMessage> {
-    const saveData = await saveObject.getSaveData();
+    const saveData = await getSaveData();
 
     if (typeof saveData === "string") {
       return new RFAMessage({

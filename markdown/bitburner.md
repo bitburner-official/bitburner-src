@@ -404,6 +404,17 @@ Corporation division
 </td></tr>
 <tr><td>
 
+[EditorOptions](./bitburner.editoroptions.md)
+
+
+</td><td>
+
+Options for opening the code editor
+
+
+</td></tr>
+<tr><td>
+
 [EmployedByRequirement](./bitburner.employedbyrequirement.md)
 
 
@@ -1221,6 +1232,16 @@ A server. Not all servers have all of these properties - optional properties are
 </td></tr>
 <tr><td>
 
+[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [Singularity](./bitburner.singularity.md)
 
 
@@ -1793,6 +1814,7 @@ Names of all cities
 
 </td><td>
 
+This is a map of contract types to their input and answer data types. The key is the contract type. The value is a tuple containing the input and answer data types.
 
 
 </td></tr>
@@ -2290,16 +2312,6 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 <tr><td>
 
 [ScriptArg](./bitburner.scriptarg.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SimpleOpponentStats](./bitburner.simpleopponentstats.md)
 
 
 </td><td>
