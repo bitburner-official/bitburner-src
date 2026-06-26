@@ -38,13 +38,7 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
       ...DWServerStyles,
       top: `${position.top}px`,
       left: `${position.left}px`,
-      borderColor: server.hasStasisLink
-        ? "gold"
-        : hasRunningScripts
-        ? "green"
-        : !server.maxRam
-        ? "#6495ED"
-        : "grey",
+      borderColor: server.hasStasisLink ? "gold" : hasRunningScripts ? "green" : !server.maxRam ? "#6495ED" : "grey",
     };
   };
 
