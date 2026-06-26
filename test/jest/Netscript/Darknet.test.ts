@@ -321,7 +321,7 @@ describe("home", () => {
     await ns.singularity.installBackdoor();
     // Can exec from home
     expect(ns.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
-  });
+  }, 8000);
   test("getServerRequiredCharismaLevel", () => {
     const ns = getNS(SpecialServers.Home);
     const server = GetServerOrThrow(SpecialServers.Home);

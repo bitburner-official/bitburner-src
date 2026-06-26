@@ -66,9 +66,12 @@ import { getAllDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkU
 import { prestigeAugmentation } from "../../../src/Prestige";
 import { initStockMarket, StockMarket, SymbolToStockMap } from "../../../src/StockMarket/StockMarket";
 import { StockSymbol } from "@enums";
-import { GetAllServers } from "../../../src/Server/AllServers";
+import { disconnectServers, GetAllServers, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { roundToTwo } from "../../../src/utils/helpers/roundToTwo";
 import { getRamBlock } from "../../../src/DarkNet/effects/ramblock";
+import { SpecialServers } from "../../../src/Server/data/SpecialServers";
+import { clearDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
+import { getTorRouter } from "../../../src/Server/ServerHelpers";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -985,5 +988,35 @@ describe("ramblock", () => {
     } finally {
       Math.random = saved;
     }
+  });
+});
+
+describe("clearDarknet", () => {
+  it("leaves home<->darkweb disconnected on both sides when the player has no TOR router", () => {
+    const home = Player.getHomeComputer();
+    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+
+    disconnectServers(home, darkweb);
+    expect(Player.hasTorRouter()).toBe(false);
+
+    clearDarknet();
+
+    expect(darkweb.serversOnNetwork.includes(home.hostname)).toBe(home.serversOnNetwork.includes(darkweb.hostname));
+    expect(home.serversOnNetwork).not.toContain(darkweb.hostname);
+    expect(darkweb.serversOnNetwork).not.toContain(home.hostname);
+  });
+
+  it("leaves home<->darkweb connected on both sides when the player has a TOR router", () => {
+    const home = Player.getHomeComputer();
+    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+
+    getTorRouter();
+    expect(Player.hasTorRouter()).toBe(true);
+
+    clearDarknet();
+
+    expect(darkweb.serversOnNetwork.includes(home.hostname)).toBe(home.serversOnNetwork.includes(darkweb.hostname));
+    expect(home.serversOnNetwork).toContain(darkweb.hostname);
+    expect(darkweb.serversOnNetwork).toContain(home.hostname);
   });
 });
