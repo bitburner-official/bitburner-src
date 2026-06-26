@@ -157,7 +157,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           const success = authResult.result.success;
           const xp = formatNumber(calculatePasswordAttemptChaGain(server, threads, success), 1);
           logger(ctx)(
-            `Authentication on ${server.hostname} ${success ? "succeeded" : `failed. (Gained ${xp} cha xp)`}`,
+            `Authentication on ${server.hostname} ${success ? "succeeded" : "failed"}. (Gained ${xp} cha xp)`,
           );
 
           if (isLabyrinthServer(server.hostname)) {
