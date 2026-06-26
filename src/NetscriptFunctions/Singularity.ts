@@ -38,7 +38,7 @@ import { FactionWork } from "../Work/FactionWork";
 import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus } from "../ExportBonus";
 import { getSaveData, exportGame } from "../SaveObject";
-import { calculateCrimeWorkStats } from "../Work/Formulas";
+import { calculateCompanyWorkStats, calculateCrimeWorkStats } from "../Work/Formulas";
 import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
@@ -680,7 +680,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         name: job.name,
         field: job.field,
         nextPosition: job.nextPosition,
-        salary: job.baseSalary * company.salaryMultiplier,
+        salary: calculateCompanyWorkStats(Player, company, job, company.favor).money,
         requiredReputation: calculateEffectiveRequiredReputation(companyName, job.requiredReputation),
         requiredSkills: job.requiredSkills(company.jobStatReqOffset),
       };
