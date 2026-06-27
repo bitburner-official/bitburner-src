@@ -1323,6 +1323,28 @@ Get a copy of the data from a port without popping it.
 </td></tr>
 <tr><td>
 
+[portIsEmpty(portNumber)](./bitburner.ns.portisempty.md)
+
+
+</td><td>
+
+Check if a port is empty.
+
+
+</td></tr>
+<tr><td>
+
+[portIsFull(portNumber)](./bitburner.ns.portisfull.md)
+
+
+</td><td>
+
+Check if a port is full.
+
+
+</td></tr>
+<tr><td>
+
 [print(args)](./bitburner.ns.print.md)
 
 

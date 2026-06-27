@@ -1079,6 +1079,8 @@ import nsDoc_bitburner_ns_nextportwrite_md from "../../markdown/bitburner.ns.nex
 import nsDoc_bitburner_ns_nuke_md from "../../markdown/bitburner.ns.nuke.md?raw";
 import nsDoc_bitburner_ns_peek_md from "../../markdown/bitburner.ns.peek.md?raw";
 import nsDoc_bitburner_ns_pid_md from "../../markdown/bitburner.ns.pid.md?raw";
+import nsDoc_bitburner_ns_portisempty_md from "../../markdown/bitburner.ns.portisempty.md?raw";
+import nsDoc_bitburner_ns_portisfull_md from "../../markdown/bitburner.ns.portisfull.md?raw";
 import nsDoc_bitburner_ns_print_md from "../../markdown/bitburner.ns.print.md?raw";
 import nsDoc_bitburner_ns_printf_md from "../../markdown/bitburner.ns.printf.md?raw";
 import nsDoc_bitburner_ns_printraw_md from "../../markdown/bitburner.ns.printraw.md?raw";
@@ -2703,6 +2705,8 @@ AllPages["nsDoc/bitburner.ns.nextportwrite.md"] = nsDoc_bitburner_ns_nextportwri
 AllPages["nsDoc/bitburner.ns.nuke.md"] = nsDoc_bitburner_ns_nuke_md;
 AllPages["nsDoc/bitburner.ns.peek.md"] = nsDoc_bitburner_ns_peek_md;
 AllPages["nsDoc/bitburner.ns.pid.md"] = nsDoc_bitburner_ns_pid_md;
+AllPages["nsDoc/bitburner.ns.portisempty.md"] = nsDoc_bitburner_ns_portisempty_md;
+AllPages["nsDoc/bitburner.ns.portisfull.md"] = nsDoc_bitburner_ns_portisfull_md;
 AllPages["nsDoc/bitburner.ns.print.md"] = nsDoc_bitburner_ns_print_md;
 AllPages["nsDoc/bitburner.ns.printf.md"] = nsDoc_bitburner_ns_printf_md;
 AllPages["nsDoc/bitburner.ns.printraw.md"] = nsDoc_bitburner_ns_printraw_md;

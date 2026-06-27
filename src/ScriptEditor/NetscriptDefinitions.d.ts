@@ -8693,10 +8693,10 @@ export interface NS {
    * Check if a port is full.
    * @remarks
    * RAM cost: 0 GB
-   * 
+   *
    * Returns true if the port's data queue is full, and false otherwise.
    * Ports are shared across all hosts and contents are reset on game restart.
-   * 
+   *
    * @param portNumber - Port number. Must be a positive integer.
    */
   portIsFull(portNumber: number): boolean;
@@ -8705,10 +8705,10 @@ export interface NS {
    * Check if a port is empty.
    * @remarks
    * RAM cost: 0 GB
-   * 
+   *
    * Returns true if the port's data queue is empty, and false otherwise.
    * Ports are shared across all hosts and contents are reset on game restart.
-   * 
+   *
    * @param portNumber - Port number. Must be a positive integer.
    */
   portIsEmpty(portNumber: number): boolean;
