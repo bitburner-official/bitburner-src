@@ -8,8 +8,12 @@ const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
 export type PortNumber = PositiveInteger & { __PortNumber: true };
 
-function needsChecking(value: unknown): boolean {
-  return (typeof value === "object" && value !== null) || typeof value === "function" || typeof value === "symbol";
+function isObjectLike(value: unknown): value is object {
+  return (typeof value === "object" && value !== null) || typeof value === "function";
+}
+
+function isSymbol(value: unknown): value is symbol {
+  return typeof value === 'symbol';
 }
 
 /** Gets the numbered port, initializing it if it doesn't already exist.
@@ -28,7 +32,7 @@ export class Port {
   promise: Promise<void> | null = null;
   add(data: unknown) {
     let value = data;
-    if (needsChecking(data)) {
+    if (isObjectLike(data) || isSymbol(data)) {
       try {
         value = structuredClone(data);
       } catch (ex) {
@@ -78,7 +82,7 @@ export class PortHandle implements NetscriptPort {
     const port = NetscriptPorts.get(this.n);
     if (!port || !port.data.length) return emptyPortData;
     // Needed to avoid exposing internal objects.
-    return needsChecking(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
+    return isObjectLike(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
   }
 
   nextWrite(): Promise<void> {
