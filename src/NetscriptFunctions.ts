@@ -827,25 +827,27 @@ export const ns: InternalAPI<NSFull> = {
     }
     return noFailures;
   },
-  ls: (ctx) => (_host = ctx.workerScript.hostname, _substring) => {
-    const [server] = helpers.getServer(ctx, _host);
-    const substring = helpers.string(ctx, "substring", _substring ?? "");
-    if (!server) {
-      return [];
-    }
+  ls:
+    (ctx) =>
+    (_host = ctx.workerScript.hostname, _substring) => {
+      const [server] = helpers.getServer(ctx, _host);
+      const substring = helpers.string(ctx, "substring", _substring ?? "");
+      if (!server) {
+        return [];
+      }
 
-    const allFilenames = [
-      ...server.contracts.map((contract) => contract.fn),
-      ...(server instanceof DarknetServer ? server.caches : []),
-      ...server.messages,
-      ...server.programs,
-      ...server.scripts.keys(),
-      ...server.textFiles.keys(),
-    ];
+      const allFilenames = [
+        ...server.contracts.map((contract) => contract.fn),
+        ...(server instanceof DarknetServer ? server.caches : []),
+        ...server.messages,
+        ...server.programs,
+        ...server.scripts.keys(),
+        ...server.textFiles.keys(),
+      ];
 
-    if (!substring) return allFilenames.sort();
-    return allFilenames.filter((filename) => ("/" + filename).includes(substring)).sort();
-  },
+      if (!substring) return allFilenames.sort();
+      return allFilenames.filter((filename) => ("/" + filename).includes(substring)).sort();
+    },
   getRecentScripts: () => (): RecentScript[] => {
     return recentScripts.map((rs) => ({
       timeOfDeath: rs.timeOfDeath,
