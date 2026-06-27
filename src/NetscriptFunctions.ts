@@ -827,7 +827,7 @@ export const ns: InternalAPI<NSFull> = {
     }
     return noFailures;
   },
-  ls: (ctx) => (_host, _substring) => {
+  ls: (ctx) => (_host = ctx.workerScript.hostname, _substring) => {
     const [server] = helpers.getServer(ctx, _host);
     const substring = helpers.string(ctx, "substring", _substring ?? "");
     if (!server) {

@@ -8175,11 +8175,11 @@ export interface NS {
    * Returns an array with the filenames of all files on the specified server
    * (as strings). The returned array is sorted in alphabetic order.
    *
-   * @param host - Hostname/IP of the target server.
+   * @param host - Hostname/IP of the target server. Defaults to current server if not provided.
    * @param substring - A substring to search for in the filename.
    * @returns Array with the filenames of all files on the specified server.
    */
-  ls(host: string, substring?: string): string[];
+  ls(host?: string, substring?: string): string[];
 
   /**
    * List running scripts on a server.
