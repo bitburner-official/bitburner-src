@@ -1213,6 +1213,28 @@ Runs HTTPWorm.exe on a server.
 </td></tr>
 <tr><td>
 
+[isEmptyPort(portNumber)](./bitburner.ns.isemptyport.md)
+
+
+</td><td>
+
+Check if a port is empty.
+
+
+</td></tr>
+<tr><td>
+
+[isFullPort(portNumber)](./bitburner.ns.isfullport.md)
+
+
+</td><td>
+
+Check if a port is full.
+
+
+</td></tr>
+<tr><td>
+
 [isLogEnabled(fn)](./bitburner.ns.islogenabled.md)
 
 
@@ -1318,28 +1340,6 @@ Runs NUKE.exe on a server.
 </td><td>
 
 Get a copy of the data from a port without popping it.
-
-
-</td></tr>
-<tr><td>
-
-[portIsEmpty(portNumber)](./bitburner.ns.portisempty.md)
-
-
-</td><td>
-
-Check if a port is empty.
-
-
-</td></tr>
-<tr><td>
-
-[portIsFull(portNumber)](./bitburner.ns.portisfull.md)
-
-
-</td><td>
-
-Check if a port is full.
 
 
 </td></tr>
