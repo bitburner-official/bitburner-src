@@ -411,7 +411,7 @@ export class Division {
     const markupMultiplier = calculateMarkupMultiplier(sCost, marketPrice, markupLimit);
 
     // Calculate how much of the material sells (per second)
-    const maxSellPerCycle =
+    const maxSellPerSecond =
       qualityAndEffectiveRatingFactor *
       marketFactor *
       markupMultiplier *
@@ -419,13 +419,8 @@ export class Division {
       corporation.getSalesMult() *
       advertisingFactor *
       this.getSalesMultiplier();
-    if (isMaterial) {
-      item.maxSellPerCycle = maxSellPerCycle;
-    } else {
-      item.maxSellAmount = maxSellPerCycle;
-    }
 
-    sellAmt = Math.min(maxSellPerCycle, sellAmt);
+    sellAmt = Math.min(maxSellPerSecond, sellAmt);
     sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
     sellAmt = Math.min(stored, sellAmt);
     const setActualSellAmount = (value: number) => {
