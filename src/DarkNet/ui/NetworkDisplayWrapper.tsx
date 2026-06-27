@@ -43,6 +43,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const { classes } = dnetStyles({});
   const instability = getTimeoutChance();
   const instabilityText = instability > 0.01 ? `${(instability * 100).toFixed(1)}%` : "< 1%";
+  const darkWebRoot = getDarknetServerOrThrow(SpecialServers.DarkWeb);
+  const labDetails = getLabyrinthDetails();
+  const labyrinth = labDetails.lab;
+  const labDepth = labDetails.depth;
 
   const scrollTo = useCallback(
     (top: number, left: number) => {
@@ -70,10 +74,9 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       startingDepth,
     );
     setNetDisplayDepth(deepestServerDepth + visibilityMargin);
-
     rerender();
-    drawOnCanvas(canvas.current, netDisplayDepth);
-  }, [rerender, netDisplayDepth]);
+    drawOnCanvas(canvas.current, deepestServerDepth + visibilityMargin, labDepth);
+  }, [rerender, labDepth]);
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
@@ -90,11 +93,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     !!server &&
     (server.hasAdminRights ||
       server.serversOnNetwork.some((neighbor) => getDarknetServerOrThrow(neighbor).hasAdminRights));
-
-  const darkWebRoot = getDarknetServerOrThrow(SpecialServers.DarkWeb);
-  const labDetails = getLabyrinthDetails();
-  const labyrinth = labDetails.lab;
-  const depth = labDetails.depth;
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
@@ -208,7 +206,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       .filter((s) => s.depth < netDisplayDepth && !isLabyrinthServer(s.hostname))
       .map((s) => s.hostname);
 
-    if (labyrinth && netDisplayDepth > depth) {
+    if (labyrinth && netDisplayDepth > labDepth) {
       return [...servers, labyrinth.hostname];
     }
 
@@ -289,7 +287,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             ),
           )}
 
-          {!!labyrinth && netDisplayDepth > depth && (
+          {labyrinth && netDisplayDepth > labDepth && (
             <ServerStatusBox server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
           )}
         </div>
