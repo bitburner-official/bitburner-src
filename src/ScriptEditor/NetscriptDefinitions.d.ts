@@ -1173,8 +1173,12 @@ export type SleeveTask =
   | SleeveSupportTask
   | SleeveSynchroTask;
 
-/** Object representing a port. A port is a serialized queue.
- * @public */
+/**
+ * Object representing a port. A port is a serialized queue.
+ *
+ * All methods in this interface can be used even after the ns instance is dead.
+ * @public
+ */
 export interface NetscriptPort {
   /** Write data to a port.
    * @remarks
@@ -8683,6 +8687,9 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Get a handle to a Netscript Port.
+   *
+   * All methods of the port handle can be used even after the ns instance is dead.
+   *
    * Ports are shared across all hosts and contents are reset on game restart.
    *
    * @param portNumber - Port number. Must be a positive integer.

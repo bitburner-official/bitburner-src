@@ -6,6 +6,8 @@
 
 Object representing a port. A port is a serialized queue.
 
+All methods in this interface can be used even after the ns instance is dead.
+
 **Signature:**
 
 ```typescript
