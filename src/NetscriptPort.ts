@@ -13,7 +13,7 @@ function isObjectLike(value: unknown): value is object {
 }
 
 function isSymbol(value: unknown): value is symbol {
-  return typeof value === 'symbol';
+  return typeof value === "symbol";
 }
 
 /** Gets the numbered port, initializing it if it doesn't already exist.
