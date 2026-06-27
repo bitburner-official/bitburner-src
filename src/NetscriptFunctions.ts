@@ -1144,11 +1144,11 @@ export const ns: InternalAPI<NSFull> = {
     const portHandle = helpers.portHandle(ctx, _portNumber);
     return portHandle.peek();
   },
-  portIsFull: (ctx) => (_portNumber) => {
+  isFullPort: (ctx) => (_portNumber) => {
     const portHandle = helpers.portHandle(ctx, _portNumber);
     return portHandle.full();
   },
-  portIsEmpty: (ctx) => (_portNumber) => {
+  isEmptyPort: (ctx) => (_portNumber) => {
     const portHandle = helpers.portHandle(ctx, _portNumber);
     return portHandle.empty();
   },

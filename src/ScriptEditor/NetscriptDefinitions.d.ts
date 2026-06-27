@@ -8699,7 +8699,7 @@ export interface NS {
    *
    * @param portNumber - Port number. Must be a positive integer.
    */
-  portIsFull(portNumber: number): boolean;
+  isFullPort(portNumber: number): boolean;
 
   /**
    * Check if a port is empty.
@@ -8711,7 +8711,7 @@ export interface NS {
    *
    * @param portNumber - Port number. Must be a positive integer.
    */
-  portIsEmpty(portNumber: number): boolean;
+  isEmptyPort(portNumber: number): boolean;
 
   /**
    * Delete a file.
