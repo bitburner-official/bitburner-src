@@ -12,6 +12,7 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { CompletedProgramName } from "../../Enums";
 import type { DarknetResponseCode } from "@nsdefs";
 import { isIPAddress } from "../../Types/strings";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 type CheckDarknetServerOptions = {
   requireAdminRights?: boolean;
@@ -153,5 +154,5 @@ export function getTimeoutChance() {
   const backdooredDarknetServerCount = getBackdooredDarknetServers().length;
   const frozenServers = getAllDarknetServers().filter((s) => !s.maxRam).length;
   const serversAddingToInstability = frozenServers + Math.max(backdooredDarknetServerCount - 2, 0);
-  return Math.max(Math.min(serversAddingToInstability * 0.03, 0.5), 0);
+  return clampNumber(serversAddingToInstability * 0.03, 0, 0.5);
 }

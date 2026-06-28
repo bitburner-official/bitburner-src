@@ -81,7 +81,7 @@ export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] =
   const rowAbove = getServersOnRowAbove(x, true);
   const rowBelow = getServersOnRowBelow(x, true);
   const neighborsOnRow = getNeighborsOnRow(x, y);
-  return [...rowAbove, ...rowBelow, ...neighborsOnRow].filter((n) => n.maxRam);
+  return [...rowAbove, ...rowBelow, ...neighborsOnRow];
 };
 
 export const getIslands = () => getAllMovableDarknetServers().filter((s) => !s.serversOnNetwork.length);
