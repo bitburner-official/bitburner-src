@@ -225,7 +225,7 @@ export const balanceDarknetServers = (): void => {
 };
 
 const isImmutable = (server: DarknetServer): boolean =>
-  server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;
+  server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink || !server.maxRam;
 
 export const moveDarknetServer = (
   server: DarknetServer,
@@ -238,7 +238,7 @@ export const moveDarknetServer = (
     return false;
   }
   if (isImmutable(server)) {
-    // Do not try to move the server that is open in the UI or the terminal
+    // Do not try to move the server that is frozen, stasis locked, or open in the UI or the terminal
     return false;
   }
 
