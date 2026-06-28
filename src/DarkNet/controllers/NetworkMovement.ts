@@ -283,7 +283,8 @@ export const disconnectServer = (server: DarknetServer, disconnectFromDarkweb = 
   }
   for (const neighbor of server.serversOnNetwork) {
     const connectedServer = GetServer(neighbor);
-    const isOkToDisconnect = disconnectFromDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
+    const isOkToDisconnect =
+      (disconnectFromDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb) && !isLabyrinthServer(neighbor);
     if (connectedServer && isOkToDisconnect) {
       disconnectServers(server, connectedServer);
     }
