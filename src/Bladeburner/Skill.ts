@@ -44,7 +44,11 @@ export class Skill {
   }
 
   calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
+    if (!isFinite(count) || !isFinite(currentLevel)) return Number.POSITIVE_INFINITY;
+
     const actualCount = this.getActualUpgradeCount(currentLevel, count);
+    // Edge case: If currentLevel is too high, the calculation below can result in NaN.
+    if (actualCount === 0) return 0;
     /**
      * The cost of the next level: (baseCost + currentLevel * costInc) * mult. The cost needs to be an integer, so we
      * need to use Math.floor or Math.round.
@@ -95,6 +99,19 @@ export class Skill {
   }
 
   calculateMaxUpgradeCount(currentLevel: number, cost: PositiveNumber): number {
+    // Check edge cases.
+    if (Number.isNaN(currentLevel) || Number.isNaN(cost)) {
+      return Number.NaN;
+    }
+    if (cost < 1) {
+      return 0;
+    }
+    if (!Number.isFinite(cost)) {
+      return Number.POSITIVE_INFINITY;
+    }
+    if (!Number.isFinite(currentLevel)) {
+      return 0;
+    }
     /**
      * Define:
      * - x = count
@@ -153,10 +170,17 @@ export class Skill {
      *     = (Delta^2 - m^2)/(Delta + m)
      *     = (m^2 + 2y/(a*c) - m^2)/(Delta + m)
      *     = (2y/(a*c))/(Delta + m)
+     *
+     * Both y and d can be very large numbers, ranging up to MAX_VALUE.
+     * However, they are never *small* numbers - we don't have to worry about underflow.
+     * So, we multiply top and bottom of the final equation by 2^-500 to shift the ranges of the exponent from
+     * [0, 1024] to [-500, 524], such that we don't have to worry about overflows.
+     * Note that it is still possible for the expression "m * m" to overflow to Infinity if d > 2**1012, since
+     * at this range m > 2**512. However, for all d > ~2**537 the result will be zero anyway, so this is not an issue.
      */
-    const m = this.baseCost / this.costInc + currentLevel - 0.5;
-    const yac = (2 * cost) / (currentNodeMults.BladeburnerSkillCost * this.costInc);
-    const delta = Math.sqrt(m * m + yac);
+    const m = 2 ** -500 * (this.baseCost / this.costInc) + 2 ** -500 * currentLevel - 2 ** -501;
+    const yac = (2 ** -499 * cost) / (currentNodeMults.BladeburnerSkillCost * this.costInc);
+    const delta = Math.sqrt(m * m + 2 ** -500 * yac);
     const result = yac / (delta + m);
     /**
      * Now we have to find the actual answer. We search a window that includes the (rounded) result as well as the next
