@@ -193,10 +193,6 @@ export class Division {
       this.processMaterialMarket();
       this.processProductMarket(marketCycles);
 
-      // Process loss of popularity
-      this.popularity -= marketCycles * 0.0001;
-      this.popularity = Math.max(0, this.popularity);
-
       return;
     }
 
