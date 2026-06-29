@@ -8,8 +8,6 @@ Awareness and popularity are capped at `Number.MAX_VALUE` (~1.7976931348623157E+
 
 Raw values of those stats are crucial, but their ratio is also important. We want to have high ratio of popularity/awareness, check this [section](./optimal-selling-price-market-ta2.md) for formulas.
 
-Popularity decreases by 0.0001 per cycle.
-
 ## Wilson Analytics
 
 Wilson is a multiplier that is applied on Advert's benefits when we buy Advert, so it's not retroactive. Therefore, we need to buy it as soon as possible. However, there are cases that Wilson is too expensive and it does not bring much benefits. Round 1 and 2 are those cases.
