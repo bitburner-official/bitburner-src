@@ -18,7 +18,7 @@ import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles, DWServerLogStyles } from "./dnetStyles";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
+import { getAllDarknetServers, getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
@@ -240,9 +240,14 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             <Tooltip
               title={
                 <>
-                  If too many darknet servers are backdoored, it will increase the chance that authentication <br />
+                  If too many darknet servers are backdoored or frozen, it will increase the chance that authentication{" "}
+                  <br />
                   attempts will return a 408 Request Timeout error (even if the password is correct). <br />
                   Most servers will eventually restart or go offline, which removes backdoors over time.
+                  <br />
+                  Current backdoored servers: {getAllMovableDarknetServers().filter((s) => s.backdoorInstalled).length}
+                  <br />
+                  Current frozen servers: {getAllDarknetServers().filter((s) => !s.maxRam).length}
                 </>
               }
             >

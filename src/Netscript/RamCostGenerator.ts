@@ -237,6 +237,7 @@ const cloud = {
 const dnet = {
   authenticate: 0.4,
   connectToSession: 0.05,
+  freezeServer: 2,
   heartbleed: 0.6,
   openCache: 2,
   probe: RamCostConstants.Scan,

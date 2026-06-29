@@ -49,6 +49,7 @@ import { isIPAddress } from "../Types/strings";
 import { type DarknetServerData, getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
 import { shuffle } from "lodash";
 import { getSharedChars } from "../DarkNet/utils/darknetAuthUtils";
+import { freezeServer } from "../DarkNet/controllers/NetworkMovement";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -220,6 +221,27 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           message: GenericResponseMessage.Success,
         };
       },
+    freezeServer: (ctx: NetscriptContext) => (_host) => {
+      const targetHost = helpers.string(ctx, "host", _host);
+      const serverCheck = checkDarknetServer(ctx, targetHost, {
+        requireDirectConnection: true,
+      });
+      if (!serverCheck.success) {
+        return {
+          success: false,
+          code: serverCheck.code,
+          message: serverCheck.message,
+          logs: [],
+        };
+      }
+      freezeServer(serverCheck.server);
+      logger(ctx)(`Froze ${serverCheck.server.hostname}`);
+      return {
+        success: true,
+        code: ResponseCodeEnum.Success,
+        message: GenericResponseMessage.Success,
+      };
+    },
     heartbleed:
       (ctx: NetscriptContext) =>
       (_host, _opts): Promise<DarknetResult & { logs: string[] }> => {

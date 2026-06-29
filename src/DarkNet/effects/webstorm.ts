@@ -4,6 +4,7 @@ import { CompletedProgramName, ToastVariant } from "@enums";
 import {
   addRandomDarknetServers,
   balanceDarknetServers,
+  deleteDarknetServer,
   deleteRandomDarknetServers,
   moveRandomDarknetServers,
   restartAllDarknetServers,
@@ -13,7 +14,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
 import { NET_WIDTH } from "../Enums";
 import { sleep } from "../../utils/Utility";
-import { getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
+import { getAllDarknetServers, getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
 
 const validateDarknetNetworkAndEmitDarknetEvent = (): void => {
   validateDarknetNetwork();
@@ -40,6 +41,9 @@ export const launchWebstorm = async (suppressToast = false) => {
     }
     await cancellableSleep(5000);
 
+    for (const frozenServer of getAllDarknetServers().filter((s) => !s.maxRam)) {
+      deleteDarknetServer(frozenServer, true);
+    }
     const serversToDelete = getAllMovableDarknetServers().length * 0.6 + (Math.random() * getNetDepth() - 6);
     deleteRandomDarknetServers(serversToDelete);
     moveRandomDarknetServers((getAllMovableDarknetServers().length - serversToDelete) * 0.6);
