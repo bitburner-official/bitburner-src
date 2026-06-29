@@ -100,10 +100,16 @@ export class Skill {
 
   calculateMaxUpgradeCount(currentLevel: number, cost: PositiveNumber): number {
     // Check edge cases.
+    // Sanity checks for bnMult and skill settings.
+    if (currentNodeMults.BladeburnerSkillCost <= 0 || this.baseCost <= 0 || this.costInc <= 0) {
+      throw new Error(
+        `Invalid bnMult or skill settings. BladeburnerSkillCost: ${currentNodeMults.BladeburnerSkillCost}, baseCost: ${this.baseCost}, costInc: ${this.costInc}`,
+      );
+    }
     if (Number.isNaN(currentLevel) || Number.isNaN(cost)) {
       return Number.NaN;
     }
-    if (cost < this.baseCost) {
+    if (cost < currentNodeMults.BladeburnerSkillCost * this.baseCost) {
       return 0;
     }
     if (!Number.isFinite(cost)) {
@@ -181,7 +187,19 @@ export class Skill {
     const m = 2 ** -500 * (this.baseCost / this.costInc) + 2 ** -500 * currentLevel - 2 ** -501;
     const yac = (2 ** -499 * cost) / (currentNodeMults.BladeburnerSkillCost * this.costInc);
     const delta = Math.sqrt(m * m + 2 ** -500 * yac);
-    const result = yac / (delta + m);
+    const estimate = yac / (delta + m);
+    // Defensive coding.
+    // This never happens as long as the math above is correct and we do not remove the sanity checks for bnMult and
+    // skill settings.
+    // If estimate is not finite, the downward search will enter an infinite loop:
+    // - Infinity: "x" (a variable in that loop) will "step down" from Infinity to 1.7976931348623157e+308
+    // (Number.MAX_VALUE) and then gradually decrease from there, which practically never ends.
+    // - NaN: x is NaN and nextafter(NaN, 0) is also NaN, so the loop is obviously infinite.
+    if (!Number.isFinite(estimate)) {
+      throw new Error(
+        `Invalid estimate: ${estimate}. BladeburnerSkillCost: ${currentNodeMults.BladeburnerSkillCost}, baseCost: ${this.baseCost}, costInc: ${this.costInc}, currentLevel: ${currentLevel}, cost: ${cost}`,
+      );
+    }
     /**
      * Now we have to find the actual answer. We use the perspective of "final level" rather than amount, because that
      * has the property that at large values it rounds correctly - the available amounts that can be used aren't the
@@ -191,7 +209,7 @@ export class Skill {
      * changes result. The speed (but not correctness) relies on the fact that our initial guess will be very close -
      * almost always within 1 (or 1 ulp for large values) of the correct answer.
      */
-    const finalLevel = Math.round(currentLevel + result);
+    const finalLevel = Math.round(currentLevel + estimate);
     let x = finalLevel;
     if (this.calculateCost(currentLevel, (finalLevel - currentLevel) as PositiveInteger) <= cost) {
       // Search upwards. This loop *will* terminate because eventually calculateCost will return Infinity,

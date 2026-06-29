@@ -2,7 +2,8 @@ import { BladeburnerSkillName } from "@enums";
 import { Skills } from "../../../src/Bladeburner/data/Skills";
 import { Skill } from "../../../src/Bladeburner/Skill";
 import { nextafter } from "../../../src/utils/NextAfter";
-import type { PositiveNumber } from "../../../src/types";
+import type { PositiveInteger, PositiveNumber } from "../../../src/types";
+import { currentNodeMults } from "../../../src/BitNode/BitNodeMultipliers";
 
 const hyperdrive = Skills[BladeburnerSkillName.Hyperdrive];
 
@@ -36,42 +37,42 @@ describe("Bladeburner Skill", () => {
   // test for NaN. Add those tests if that changes.
   describe("calculateCost", () => {
     it("MAX_VALUE arg 1", () => {
-      const result = hyperdrive.calculateCost(Number.MAX_VALUE, 1 as PositiveNumber);
+      const result = hyperdrive.calculateCost(Number.MAX_VALUE, 1 as PositiveInteger);
       expect(result).toBe(0);
     });
 
     it("MAX_VALUE arg 2", () => {
-      const result = hyperdrive.calculateCost(0, Number.MAX_VALUE as PositiveNumber);
+      const result = hyperdrive.calculateCost(0, Number.MAX_VALUE as PositiveInteger);
       expect(result).toBe(Infinity);
     });
 
     it("MAX_VALUE arg both", () => {
-      const result = hyperdrive.calculateCost(Number.MAX_VALUE, Number.MAX_VALUE as PositiveNumber);
+      const result = hyperdrive.calculateCost(Number.MAX_VALUE, Number.MAX_VALUE as PositiveInteger);
       expect(result).toBe(Infinity);
     });
 
     it("Inf arg 1", () => {
-      const result = hyperdrive.calculateCost(Infinity, 1 as PositiveNumber);
+      const result = hyperdrive.calculateCost(Infinity, 1 as PositiveInteger);
       expect(result).toBe(Infinity);
     });
 
     it("Inf arg 2", () => {
-      const result = hyperdrive.calculateCost(0, Infinity as PositiveNumber);
+      const result = hyperdrive.calculateCost(0, Infinity as PositiveInteger);
       expect(result).toBe(Infinity);
     });
 
     it("Inf arg both", () => {
-      const result = hyperdrive.calculateCost(Infinity, Infinity as PositiveNumber);
+      const result = hyperdrive.calculateCost(Infinity, Infinity as PositiveInteger);
       expect(result).toBe(Infinity);
     });
 
     it("Last possible upgrade", () => {
       const level = 2 ** 537 * 1.6 - 2 ** 486;
-      let result = hyperdrive.calculateCost(level, (2 ** 485) as PositiveNumber);
+      let result = hyperdrive.calculateCost(level, (2 ** 485) as PositiveInteger);
       expect(result).toBe(Number.MAX_VALUE);
 
       // Can't upgrade again
-      result = hyperdrive.calculateCost(level + 2 ** 485, (2 ** 485) as PositiveNumber);
+      result = hyperdrive.calculateCost(level + 2 ** 485, (2 ** 485) as PositiveInteger);
       expect(result).toBe(Infinity);
 
       // Can't add a smaller increment
@@ -118,6 +119,33 @@ describe("Bladeburner Skill", () => {
     it("MAX_VALUE arg both", () => {
       const result = hyperdrive.calculateMaxUpgradeCount(Number.MAX_VALUE, Number.MAX_VALUE as PositiveNumber);
       expect(result).toBe(0);
+    });
+
+    it("infinite loop in downward search", () => {
+      const testSkill = new Skill({
+        name: BladeburnerSkillName.Cloak,
+        desc: "test",
+        baseCost: 0,
+        costInc: 0,
+        mults: {},
+      });
+      expect(() => testSkill.calculateMaxUpgradeCount(1, 1 as PositiveNumber)).toThrow();
+    });
+
+    it("mult < 1", () => {
+      const testSkill = new Skill({
+        name: BladeburnerSkillName.Cloak,
+        desc: "test",
+        baseCost: 10,
+        costInc: 1,
+        mults: {},
+      });
+      currentNodeMults.BladeburnerSkillCost = 0.5;
+      try {
+        expect(testSkill.calculateMaxUpgradeCount(0, 6 as PositiveNumber)).toBe(1);
+      } finally {
+        currentNodeMults.BladeburnerSkillCost = 1;
+      }
     });
 
     it("Example that tests a rounding edge case", () => {
@@ -185,7 +213,7 @@ describe("Bladeburner Skill", () => {
         let amount = v2 * v2mul * v1mul;
         // amount might not be properly rounded due to collectively crossing a 2**x precision boundary.
         amount = level + amount - level;
-        const cost = hyperdrive.calculateCost(level, amount as PositiveNumber);
+        const cost = hyperdrive.calculateCost(level, amount as PositiveInteger);
         // Rejection-sample: Simply try again if these parameters are out-of-bounds. Most of them are in-bounds.
         if (!Number.isFinite(cost)) continue;
         // If this test ever hits an infinite loop, console.log'ing won't help because jest does stuff to it.
@@ -202,7 +230,7 @@ describe("Bladeburner Skill", () => {
             nextafter(amount, Number.POSITIVE_INFINITY),
             nextafter(level + amount, Number.POSITIVE_INFINITY) - level,
           );
-          if (hyperdrive.calculateCost(level, nextAmount as PositiveNumber) > cost) {
+          if (hyperdrive.calculateCost(level, nextAmount as PositiveInteger) > cost) {
             break;
           }
           amount = nextAmount;
