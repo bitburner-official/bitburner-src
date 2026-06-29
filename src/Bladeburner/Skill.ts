@@ -101,7 +101,7 @@ export class Skill {
   calculateMaxUpgradeCount(currentLevel: number, cost: PositiveNumber): number {
     // Check edge cases.
     // Sanity checks for bnMult and skill settings.
-    if (currentNodeMults.BladeburnerSkillCost <= 0 || this.baseCost <= 0 || this.costInc <= 0) {
+    if (currentNodeMults.BladeburnerSkillCost <= 0 || this.costInc <= 0) {
       throw new Error(
         `Invalid bnMult or skill settings. BladeburnerSkillCost: ${currentNodeMults.BladeburnerSkillCost}, baseCost: ${this.baseCost}, costInc: ${this.costInc}`,
       );
@@ -186,8 +186,15 @@ export class Skill {
      */
     const m = 2 ** -500 * (this.baseCost / this.costInc) + 2 ** -500 * currentLevel - 2 ** -501;
     const yac = (2 ** -499 * cost) / (currentNodeMults.BladeburnerSkillCost * this.costInc);
-    const delta = Math.sqrt(m * m + 2 ** -500 * yac);
-    const estimate = yac / (delta + m);
+    let estimate;
+    if (m === 0) {
+      // Divide-by-zero avoidance: If m is zero, it is possible for the normal calculation of estimate to divide-by-zero,
+      // so we use a simplified version without that problem.
+      estimate = Math.sqrt(yac) * 2 ** 250;
+    } else {
+      const delta = Math.sqrt(m * m + 2 ** -500 * yac);
+      estimate = yac / (delta + m);
+    }
     // Defensive coding.
     // This never happens as long as the math above is correct and we do not remove the sanity checks for bnMult and
     // skill settings.

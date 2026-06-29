@@ -140,6 +140,42 @@ describe("Bladeburner Skill", () => {
       expect(() => testSkill.calculateMaxUpgradeCount(1, 1 as PositiveNumber)).toThrow();
     });
 
+    // This is not something we'd ever do, but it's also not *completely* invalid
+    it("negative baseCost", () => {
+      const testSkill = new Skill({
+        name: BladeburnerSkillName.Cloak,
+        desc: "test",
+        baseCost: -20,
+        costInc: 1,
+        mults: {},
+      });
+      expect(testSkill.calculateMaxUpgradeCount(0, 1 as PositiveNumber)).toBe(41);
+      expect(testSkill.calculateMaxUpgradeCount(10, 1 as PositiveNumber)).toBe(21);
+      expect(testSkill.calculateMaxUpgradeCount(18, 1 as PositiveNumber)).toBe(5);
+      expect(testSkill.calculateMaxUpgradeCount(19, 1 as PositiveNumber)).toBe(3);
+      expect(testSkill.calculateMaxUpgradeCount(20, 1 as PositiveNumber)).toBe(2);
+      expect(testSkill.calculateMaxUpgradeCount(21, 1 as PositiveNumber)).toBe(1);
+    });
+
+    // This uses numbers that are technically valid, but would never be encountered in the game.
+    // These precise numbers tickle an edge case that leads to divide-by-zero in a previous revision of the algorithm.
+    it("divide-by-zero edge-case", () => {
+      const testSkill = new Skill({
+        name: BladeburnerSkillName.Cloak,
+        desc: "test",
+        baseCost: 1,
+        costInc: 2,
+        mults: {},
+      });
+      try {
+        // This just needs to be big enough.
+        currentNodeMults.BladeburnerSkillCost = 1e100;
+        expect(testSkill.calculateMaxUpgradeCount(0, 1 as PositiveNumber)).toBe(0);
+      } finally {
+        currentNodeMults.BladeburnerSkillCost = 1;
+      }
+    });
+
     it("mult < 1", () => {
       const testSkill = new Skill({
         name: BladeburnerSkillName.Cloak,
