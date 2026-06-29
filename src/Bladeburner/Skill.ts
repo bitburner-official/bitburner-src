@@ -103,7 +103,7 @@ export class Skill {
     if (Number.isNaN(currentLevel) || Number.isNaN(cost)) {
       return Number.NaN;
     }
-    if (cost < 1) {
+    if (cost < this.baseCost) {
       return 0;
     }
     if (!Number.isFinite(cost)) {
@@ -183,39 +183,38 @@ export class Skill {
     const delta = Math.sqrt(m * m + 2 ** -500 * yac);
     const result = yac / (delta + m);
     /**
-     * Now we have to find the actual answer. We search a window that includes the (rounded) result as well as the next
-     * higher and lower numbers. For reasons that I believe can be proven but am only handwaving here, the true result
-     * will lie in this window, so checking these three values will be sufficient.
+     * Now we have to find the actual answer. We use the perspective of "final level" rather than amount, because that
+     * has the property that at large values it rounds correctly - the available amounts that can be used aren't the
+     * whole range of integers anymore, but are only restricted to a smaller set of powers of 2. For small values, the
+     * final level will be an integer.
+     * We start with an initial guess, and then depending on if it was high or low, we search linearly until the guess
+     * changes result. The speed (but not correctness) relies on the fact that our initial guess will be very close -
+     * almost always within 1 (or 1 ulp for large values) of the correct answer.
      */
-    let r0, r1, r2;
-    const nextLevel = currentLevel + result;
-    // MAX_SAFE_INTEGER (+1) is the first point where intervals between numbers become 2, so not all integers are
-    // representable. Half this value is the first point where intervals between numbers become *1*, which is very
-    // important for rounding.
-    const HALF_SAFE = (Number.MAX_SAFE_INTEGER + 1) / 2;
-    if (nextLevel > HALF_SAFE) {
-      // Because the result is *strictly greater* than HALF_SAFE, we know that both the successor and predecessor
-      // will also be integers. So we use nextafter() to find these values to
-      // form our window. The simple addition will correctly round nextLevel, the middle of our range.
-      r1 = nextLevel - currentLevel;
-      r2 = nextafter(nextLevel, Number.POSITIVE_INFINITY) - currentLevel;
-      r0 = nextafter(nextLevel, 0) - currentLevel;
+    const finalLevel = Math.round(currentLevel + result);
+    let x = finalLevel;
+    if (this.calculateCost(currentLevel, finalLevel - currentLevel as PositiveInteger) <= cost) {
+      // Search upwards. This loop *will* terminate because eventually calculateCost will return Infinity,
+      // and from the edge-checks above we know cost < Infinity.
+      while (true) {
+        const prev = x;
+        x = Math.max(x + 1, nextafter(x, Number.POSITIVE_INFINITY));
+        if (this.calculateCost(currentLevel, x - currentLevel as PositiveInteger) > cost) {
+          return prev - currentLevel;
+        }
+      }
     } else {
-      // Since the (rounded) sum is <= HALF_SAFE, we know the rounded result alone is also <= HALF_SAFE.
-      // So we can operate directly on the rounded result, +-1.
-      r1 = Math.round(result);
-      r2 = r1 + 1;
-      r0 = r1 - 1;
+      let i = 0;
+      // Search downwards. This loop *will* terminate because eventually x will be currentLevel.
+      while (true) {
+        // We need an explicit check because x can start at currentLevel.
+        if (x <= currentLevel) return 0;
+        x = Math.min(x - 1, nextafter(x, 0));
+        if (this.calculateCost(currentLevel, x - currentLevel as PositiveInteger) <= cost) {
+          return x - currentLevel;
+        }
+      }
     }
-    const costOfResultPlus = this.calculateCost(currentLevel, r2 as PositiveInteger);
-    if (costOfResultPlus <= cost) {
-      return r2;
-    }
-    const costOfResult = this.calculateCost(currentLevel, r1 as PositiveInteger);
-    if (costOfResult <= cost) {
-      return r1;
-    }
-    return r0;
   }
 
   calculateMaxUpgradeCountNew(currentLevel: number, cost: PositiveNumber): number {

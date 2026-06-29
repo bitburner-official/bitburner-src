@@ -159,6 +159,10 @@ describe("Bladeburner Skill", () => {
       expect(result).toBe(0);
     });
 
+    // This test chooses random values to generate a cost via calculateCost, and then tests that
+    // calculateMaxUpgradeCount matches it for the chosen parameters and finds a smaller value when given slightly less
+    // cost. Even for such a straightforward-sounding test, there are a lot of complexities involved in choosing correct
+    // values, due to floating-point issues.
     it("test random values", () => {
       // Basic tests of our helper
       expect(getValue(0, 0)).toStrictEqual([0, 1]);
@@ -167,24 +171,48 @@ describe("Bladeburner Skill", () => {
       expect(getValue(0, 0x8000_0000)).toStrictEqual([2 ** 52, 2]);
 
       const typed = new Uint32Array(4);
-      // When the implementation was insufficient, 1000 iterations was enough to guarantee a failure.
-      for (let i = 0; i < 10000; ) {
+      // When the implementation was insufficient or the test itself had problems,
+      // 1000 iterations was enough to practically guarantee a failure or infinite loop.
+      // 5000 runs very quickly, so we select that for safety.
+      for (let i = 0; i < 5000; ) {
         // We don't need secure values, we just want a guaranteed number of random bits.
         // (Math.random has no guarantees for how much randomness it provides.)
         crypto.getRandomValues(typed);
         const [v1, v1mul] = getValue(typed[0], typed[1]);
-        const [v2, v2mul] = getValue(typed[0], typed[1]);
+        const [v2, v2mul] = getValue(typed[2], typed[3]);
         const level = v1 * v1mul;
         // This is also scaled by v1mul because otherwise amount would round to 0.
-        const amount = v2 * v2mul * v1mul;
+        let amount = v2 * v2mul * v1mul;
+        // amount might not be properly rounded due to collectively crossing a 2**x precision boundary.
+        amount = level + amount - level;
         const cost = hyperdrive.calculateCost(level, amount as PositiveNumber);
+        // Rejection-sample: Simply try again if these parameters are out-of-bounds. Most of them are in-bounds.
         if (!Number.isFinite(cost)) continue;
+        // If this test ever hits an infinite loop, console.log'ing won't help because jest does stuff to it.
+        // In that case, uncomment this line to find the problematic parameters.
+        // process.stderr.write(`With parameters {level:${level}, cost:${cost}, amount:${amount}}\n`);
+
+        // We have to advance to the *biggest* amount.
+        while (true) {
+          // The middle term seems spurious here. However, when amount and level are both large enough that the gap is
+          // larger than 1, and amount >> level, and level is exactly halfway between two representable amounts, we can
+          // get a situation where the last term returns amount again due to ties-to-even rounding.
+          const nextAmount = Math.max(amount + 1, nextafter(amount, Number.POSITIVE_INFINITY), nextafter(level + amount, Number.POSITIVE_INFINITY) - level);
+          if (hyperdrive.calculateCost(level, nextAmount as PositiveNumber) > cost) {
+            break;
+          }
+          amount = nextAmount;
+        }
         const prevCost = Math.min(cost - 1, nextafter(cost, 0));
-        // Because the parameters to this test are random, it is possible for this test to be flaky on one of
+        // Because the parameters to this test are random, it is conceivable for this test to be flaky on one of
         // these next two lines. However, any failures here are *real*, and the test log should have enough
         // info to reliably reproduce the issue (call it with the same params) and thus fix it.
-        expect(hyperdrive.calculateMaxUpgradeCount(level, cost as PositiveNumber)).toBe(amount);
-        expect(hyperdrive.calculateMaxUpgradeCount(level, prevCost as PositiveNumber)).toBeLessThan(amount);
+        try {
+          expect(hyperdrive.calculateMaxUpgradeCount(level, cost as PositiveNumber)).toBe(amount);
+          expect(hyperdrive.calculateMaxUpgradeCount(level, prevCost as PositiveNumber)).toBeLessThan(amount);
+        } catch (e) {
+          throw new Error(`With parameters {level:${level}, cost:${cost}, prevCost:${prevCost}, amount:${amount}}`, {cause: e});
+        }
         i++; // Not in the loop body so we can rejection-sample
       }
     });
