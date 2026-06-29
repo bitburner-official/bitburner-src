@@ -193,24 +193,23 @@ export class Skill {
      */
     const finalLevel = Math.round(currentLevel + result);
     let x = finalLevel;
-    if (this.calculateCost(currentLevel, finalLevel - currentLevel as PositiveInteger) <= cost) {
+    if (this.calculateCost(currentLevel, (finalLevel - currentLevel) as PositiveInteger) <= cost) {
       // Search upwards. This loop *will* terminate because eventually calculateCost will return Infinity,
       // and from the edge-checks above we know cost < Infinity.
-      while (true) {
+      for (;;) {
         const prev = x;
         x = Math.max(x + 1, nextafter(x, Number.POSITIVE_INFINITY));
-        if (this.calculateCost(currentLevel, x - currentLevel as PositiveInteger) > cost) {
+        if (this.calculateCost(currentLevel, (x - currentLevel) as PositiveInteger) > cost) {
           return prev - currentLevel;
         }
       }
     } else {
-      let i = 0;
       // Search downwards. This loop *will* terminate because eventually x will be currentLevel.
-      while (true) {
+      for (;;) {
         // We need an explicit check because x can start at currentLevel.
         if (x <= currentLevel) return 0;
         x = Math.min(x - 1, nextafter(x, 0));
-        if (this.calculateCost(currentLevel, x - currentLevel as PositiveInteger) <= cost) {
+        if (this.calculateCost(currentLevel, (x - currentLevel) as PositiveInteger) <= cost) {
           return x - currentLevel;
         }
       }

@@ -66,7 +66,7 @@ describe("Bladeburner Skill", () => {
     });
 
     it("Last possible upgrade", () => {
-      let level = 2 ** 537 * 1.6 - 2 ** 486;
+      const level = 2 ** 537 * 1.6 - 2 ** 486;
       let result = hyperdrive.calculateCost(level, (2 ** 485) as PositiveNumber);
       expect(result).toBe(Number.MAX_VALUE);
 
@@ -193,11 +193,15 @@ describe("Bladeburner Skill", () => {
         // process.stderr.write(`With parameters {level:${level}, cost:${cost}, amount:${amount}}\n`);
 
         // We have to advance to the *biggest* amount.
-        while (true) {
+        for (;;) {
           // The middle term seems spurious here. However, when amount and level are both large enough that the gap is
           // larger than 1, and amount >> level, and level is exactly halfway between two representable amounts, we can
           // get a situation where the last term returns amount again due to ties-to-even rounding.
-          const nextAmount = Math.max(amount + 1, nextafter(amount, Number.POSITIVE_INFINITY), nextafter(level + amount, Number.POSITIVE_INFINITY) - level);
+          const nextAmount = Math.max(
+            amount + 1,
+            nextafter(amount, Number.POSITIVE_INFINITY),
+            nextafter(level + amount, Number.POSITIVE_INFINITY) - level,
+          );
           if (hyperdrive.calculateCost(level, nextAmount as PositiveNumber) > cost) {
             break;
           }
@@ -211,7 +215,9 @@ describe("Bladeburner Skill", () => {
           expect(hyperdrive.calculateMaxUpgradeCount(level, cost as PositiveNumber)).toBe(amount);
           expect(hyperdrive.calculateMaxUpgradeCount(level, prevCost as PositiveNumber)).toBeLessThan(amount);
         } catch (e) {
-          throw new Error(`With parameters {level:${level}, cost:${cost}, prevCost:${prevCost}, amount:${amount}}`, {cause: e});
+          throw new Error(`With parameters {level:${level}, cost:${cost}, prevCost:${prevCost}, amount:${amount}}`, {
+            cause: e,
+          });
         }
         i++; // Not in the loop body so we can rejection-sample
       }
