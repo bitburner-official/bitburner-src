@@ -94,9 +94,6 @@ export class Product {
   marketTa2 = false;
   uiMarketPrice = createEnumKeyedRecord(CityName, () => 0);
 
-  /** Effective number that "MAX" represents in a sell amount */
-  maxSellAmount = 0;
-
   constructor(params: IConstructorParams | null = null) {
     if (!params) return;
     this.name = params.name;
