@@ -7,11 +7,13 @@ import { currentNodeMults } from "../../../src/BitNode/BitNodeMultipliers";
 
 const hyperdrive = Skills[BladeburnerSkillName.Hyperdrive];
 
-// Given two Uint32s (presumably randomly generated), return a floating point
-// value for testing. The first part of the tuple is an integer, and the 2nd
-// is a multiplier of the form 2**x. The values are designed for use with
-// calculateCost: half the time the multiplier will be 1, and the multiplier
-// won't exceed 2**512 (since after this point all results will be Infinity).
+// Given two random Uint32 values, construct a test value represented as
+// (integer, multiplier), where the numeric value is integer * multiplier.
+// The multiplier is of the form 2**x, and the representation will be unique,
+// i.e. the same numeric value won't be formed with different multipliers.
+// The values are designed for use with calculateCost: half the time the
+// multiplier will be 1, and the multiplier won't exceed 2**512
+// (since after this point all results will be Infinity).
 function getValue(uint1: number, uint2: number): [number, number] {
   if (uint2 < 2 ** 31) {
     // One-half chance of a simple integer. It will span [0, 2**53).
@@ -67,6 +69,12 @@ describe("Bladeburner Skill", () => {
     });
 
     it("Last possible upgrade", () => {
+      // This tests the functioning of calculateCost at the point of the last possible skill upgrade that can be
+      // purchased. The specific value depends on skill.costInc, BN mults, etc., but in general it will be at
+      // approximately 2**(512 + 26), since this is where a minimal representable amount of ~ 2**(512 - 27) will result
+      // in a cost just shy of Infinity.
+      // The form of the specific value comes from 1.6 * 2.5 (costInc) = 4, and needing a slightly smaller value to
+      // avoid overflow to infinity.
       const level = 2 ** 537 * 1.6 - 2 ** 486;
       let result = hyperdrive.calculateCost(level, (2 ** 485) as PositiveInteger);
       expect(result).toBe(Number.MAX_VALUE);
@@ -75,7 +83,7 @@ describe("Bladeburner Skill", () => {
       result = hyperdrive.calculateCost(level + 2 ** 485, (2 ** 485) as PositiveInteger);
       expect(result).toBe(Infinity);
 
-      // Can't add a smaller increment
+      // Can't add a smaller increment - the gap is too large
       expect(level + 2 ** 484).toBe(level);
     });
   });
@@ -161,9 +169,15 @@ describe("Bladeburner Skill", () => {
       expect(result).toBe(20243517480910200);
     });
 
+    // At level 1e18, the smallest gap between numbers is 128. The cost of
+    // 128 levels will be 128 * (1 + 2.5 * 127/2 + 2.5 * 1e18) = 128 * (2.5e18) = 3.2e20.
+    // These next two tests check that we return the proper result around this particular edge-case.
+    // Note that the correct value on the high side is 128 and not 191: This is because we do not return the
+    // largest integer that can be successfully passed to calculateCost, but rather the largest "valid" upgrade count.
+    // Since upgrades are always rounded in calculateCost and similar functions to the nearest representable level,
+    // it is misleading to return a larger value that is not actually giving more levels. For more discussion, see
+    // https://github.com/bitburner-official/bitburner-src/pull/2905
     it("should return 0 when currentLevel is too high for floating-point precision", () => {
-      // At level 1e18, the smallest gap between numbers is 128. The cost of
-      // 128 levels will be 128 * (1 + 2.5 * 127/2 + 2.5 * 1e18) = 128 * (2.5e18) = 3.2e20.
       const result = hyperdrive.calculateMaxUpgradeCount(1e18, nextafter(3.2e20, 0) as PositiveNumber);
       expect(result).toBe(0);
     });

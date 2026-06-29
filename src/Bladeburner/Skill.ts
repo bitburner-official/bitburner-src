@@ -109,7 +109,7 @@ export class Skill {
     if (Number.isNaN(currentLevel) || Number.isNaN(cost)) {
       return Number.NaN;
     }
-    if (cost < currentNodeMults.BladeburnerSkillCost * this.baseCost) {
+    if (cost <= 0) {
       return 0;
     }
     if (!Number.isFinite(cost)) {
