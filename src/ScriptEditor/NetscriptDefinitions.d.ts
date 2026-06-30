@@ -4577,7 +4577,7 @@ export interface Darknet {
    * @remarks
    * RAM cost: 2 GB
    *
-   * @param host the server to freeze
+   * @param host - Hostname/IP of the target server.
    */
   freezeServer(host: string): DarknetResult;
 

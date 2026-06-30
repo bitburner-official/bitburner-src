@@ -1,4 +1,4 @@
-import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
+import { connectServers, DeleteServer, disconnectServers, GetServer, GetServerOrThrow } from "../../Server/AllServers";
 import {
   DarknetEvents,
   DarknetState,
@@ -269,22 +269,22 @@ const disconnectRandomServer = (): void => {
 };
 
 /**
- * By default, this function disconnects the specified server from its neighbors, unless the neighbor is darkweb. Use
- * the second parameter to ignore the exception. We added this exception to improve the stability of the servers
- * directly connected to darkweb.
+ * By default, this function disconnects the specified server from its neighbors, unless the neighbor is darkweb or a
+ * labyrinth server. Use the second parameter to ignore the exception.
+ * We added this exception to improve the stability of the servers directly connected to darkweb or labyrinth servers.
  */
-export const disconnectServer = (server: DarknetServer, disconnectFromDarkweb = false): void => {
+export const disconnectServer = (server: DarknetServer, force = false): void => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to disconnect darkweb"), true);
     return;
   }
-  if (isImmutable(server)) {
+  if (isImmutable(server) && !force) {
     return;
   }
   for (const neighbor of server.serversOnNetwork) {
-    const connectedServer = GetServer(neighbor);
+    const connectedServer = GetServerOrThrow(neighbor);
     const isOkToDisconnect =
-      (disconnectFromDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb) && !isLabyrinthServer(neighbor);
+      force || (connectedServer.hostname !== SpecialServers.DarkWeb && !isLabyrinthServer(neighbor));
     if (connectedServer && isOkToDisconnect) {
       disconnectServers(server, connectedServer);
     }
@@ -399,6 +399,13 @@ export const validateDarknetNetwork = (): void => {
 };
 
 export const freezeServer = (server: DarknetServer): void => {
+  killServerScripts(server, "Server was frozen.");
   server.maxRam = 0;
+  server.blockedRam = 0;
+  // When blockedRam is non-zero, server.ramUsed is equal to blockedRam. When scripts are running, server.ramUsed is
+  // equal to totalRAMCost + blockedRam. After all scripts are killed, server.ramUsed resets to blockedRam.
+  // When a server is frozen, its maxRam is 0, so blockedRam should naturally also be 0. Therefore, we need to manually
+  // set ramUsed to 0.
+  server.updateRamUsed(0);
   server.isStationary = true;
 };
