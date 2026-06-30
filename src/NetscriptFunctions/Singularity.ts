@@ -10,6 +10,7 @@ import {
   getAugmentMults,
   getAugName,
   installAugmentations,
+  labAugmentationNames,
   soaAugmentationNames,
 } from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
@@ -149,7 +150,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const aug = Augmentations[augName];
       // SoA augmentations don't use the bitnode AugmentationMoneyCost multiplier;
       // their cost only scales with the number of SoA augs already owned.
-      if (soaAugmentationNames.includes(augName)) {
+      if (soaAugmentationNames.includes(augName) || labAugmentationNames.includes(augName)) {
         return aug.baseCost;
       }
       return aug.baseCost * currentNodeMults.AugmentationMoneyCost;
