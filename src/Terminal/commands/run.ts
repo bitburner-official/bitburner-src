@@ -53,14 +53,11 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
 
       switch (promptResult.result) {
         case CodingContractResult.Success:
-          if (contract.reward !== null) {
-            const reward = Player.gainCodingContractReward(
-              contract.reward,
-              contract.getDifficulty(),
-              contract.rewardScaling,
-            );
-            Terminal.print(`Contract SUCCESS - ${reward}`);
-          }
+          const reward =
+            contract.reward !== null
+              ? Player.gainCodingContractReward(contract.reward, contract.getDifficulty(), contract.rewardScaling)
+              : null;
+          Terminal.print(`Contract SUCCESS - ${reward ?? "No reward"}`);
           server.removeContract(contract);
           break;
         case CodingContractResult.InvalidFormat:
