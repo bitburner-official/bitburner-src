@@ -178,7 +178,7 @@ export class Skill {
      *     = (2y/(a*c))/(Delta + m)
      *
      * Both y and d can be very large numbers, ranging up to MAX_VALUE.
-     * However, they are never *small* numbers - we don't have to worry about underflow.
+     * However, they are never *small* numbers - we don't have to worry about underflow for *them*.
      * So, we multiply top and bottom of the final equation by 2^-500 to shift the ranges of the exponent from
      * [0, 1024] to [-500, 524], such that we don't have to worry about overflows.
      * Note that it is still possible for the expression "m * m" to overflow to Infinity if d > 2**1012, since
@@ -186,15 +186,15 @@ export class Skill {
      */
     const m = 2 ** -500 * (this.baseCost / this.costInc) + 2 ** -500 * currentLevel - 2 ** -501;
     const yac = (2 ** -499 * cost) / (currentNodeMults.BladeburnerSkillCost * this.costInc);
-    let estimate;
-    if (m === 0) {
-      // Divide-by-zero avoidance: If m is zero, it is possible for the normal calculation of estimate to divide-by-zero,
-      // so we use a simplified version without that problem.
-      estimate = Math.sqrt(yac) * 2 ** 250;
-    } else {
-      const delta = Math.sqrt(m * m + 2 ** -500 * yac);
-      estimate = yac / (delta + m);
-    }
+    const delta = Math.sqrt(m * m + 2 ** -500 * yac);
+    // Divide-by-zero/underflow avoidance: If m is sufficiently small, we can run into underflow issues in the
+    // calculations. If m is *negative*, then we can run into catastrophic cancellation. The solution to both issues is
+    // to revert to the original formula of "delta - m". Note that underflows to 0 are a non-issue here for the same
+    // reason that overflows to Infinity are a non-issue for the other form: Having an initial estimate of 0 is fine.
+    //
+    // Also note that it is technically possible for the simple form to give an Infinite result, but only if m < -(2**512),
+    // which requires an extremely negative baseCost.
+    const estimate = m < 2 ** -512 ? (delta - m) * 2 ** 500 : yac / (delta + m);
     // Defensive coding.
     // This never happens as long as the math above is correct and we do not remove the sanity checks for bnMult and
     // skill settings.

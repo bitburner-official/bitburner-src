@@ -176,6 +176,32 @@ describe("Bladeburner Skill", () => {
       }
     });
 
+    // This uses numbers that are technically valid, but would never be encountered in the game.
+    // These leads to divide-by-zero in a previous revision of the algorithm that fixed the previous test.
+    it("divide-by-zero edge-case 2", () => {
+      const testSkill = new Skill({
+        name: BladeburnerSkillName.Cloak,
+        desc: "test",
+        baseCost: 1,
+        costInc: 1e50,
+        mults: {},
+      });
+      expect(testSkill.calculateMaxUpgradeCount(0, 1 as PositiveNumber)).toBe(1);
+    });
+
+    // Rounding out the m ~= 0 edge-cases.
+    // This tests that the final estimate is close enough to quickly get to the correct answer.
+    it("divide-by-zero edge-case 3", () => {
+      const testSkill = new Skill({
+        name: BladeburnerSkillName.Cloak,
+        desc: "test",
+        baseCost: 1,
+        costInc: 2,
+        mults: {},
+      });
+      expect(testSkill.calculateMaxUpgradeCount(0, 1e20 as PositiveNumber)).toBe(1e10);
+    });
+
     it("mult < 1", () => {
       const testSkill = new Skill({
         name: BladeburnerSkillName.Cloak,
@@ -203,6 +229,12 @@ describe("Bladeburner Skill", () => {
       });
       const result = testSkill.calculateMaxUpgradeCount(2048, 2.049e32 as PositiveNumber);
       expect(result).toBe(20243517480910200);
+    });
+
+    it("Example that tests a rounding edge case 2", () => {
+      // This example was gleaned from the random tests. The estimate starts two steps below the correct value.
+      const result = hyperdrive.calculateMaxUpgradeCount(1501603967766474, 9.587200318209743e31 as PositiveNumber);
+      expect(result).toBe(8885517262472117 - 1501603967766474);
     });
 
     // At level 1e18, the smallest gap between numbers is 128. The cost of
