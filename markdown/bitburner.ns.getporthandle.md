@@ -58,7 +58,7 @@ RAM cost: 0 GB
 
 Get a handle to a Netscript Port.
 
-All methods of the port handle can be used even after the ns instance is dead.
+All methods of the port handle can be used while the ns instance is "busy" (they avoid the concurrency check), or even when it is dead.
 
 Ports are shared across all hosts and contents are reset on game restart.
 
