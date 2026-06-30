@@ -52,7 +52,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
       }
 
       switch (promptResult.result) {
-        case CodingContractResult.Success:
+        case CodingContractResult.Success: {
           const reward =
             contract.reward !== null
               ? Player.gainCodingContractReward(contract.reward, contract.getDifficulty(), contract.rewardScaling)
@@ -60,6 +60,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
           Terminal.print(`Contract SUCCESS - ${reward ?? "No reward"}`);
           server.removeContract(contract);
           break;
+        }
         case CodingContractResult.InvalidFormat:
           Terminal.error(
             `Contract FAILED - ${
