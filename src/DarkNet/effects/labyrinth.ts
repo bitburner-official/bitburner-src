@@ -143,16 +143,16 @@ export const generateMaze = (width: number = 41, height: number = 29): string[] 
   const subHeight = maze1.length - 1;
 
   // Add gaps in the walls between the mazes
-  const randomTopGap = Math.floor((Math.random() * halfWidth) / 4) * 2 + 1;
+  const randomTopGap = Math.floor((Math.random() * halfHeight) / 4) * 2 + 1;
   resultingMaze[randomTopGap][subWidth] = PATH;
 
-  const randomLeftGap = Math.floor((Math.random() * halfHeight) / 4) * 2 + 1;
+  const randomLeftGap = Math.floor((Math.random() * halfWidth) / 4) * 2 + 1;
   resultingMaze[subHeight][randomLeftGap] = PATH;
 
-  const randomBottomGap = (Math.floor((Math.random() * halfWidth) / 4) + 1) * 2;
+  const randomBottomGap = Math.floor((Math.random() * halfHeight) / 4) * 2 + 1;
   resultingMaze[resultingMaze.length - randomBottomGap - 1][subWidth] = PATH;
 
-  const randomRightGap = (Math.floor((Math.random() * halfHeight) / 4) + 1) * 2;
+  const randomRightGap = Math.floor((Math.random() * halfWidth) / 4) * 2 + 1;
   resultingMaze[subHeight][resultingMaze[0].length - randomRightGap - 1] = PATH;
 
   return resultingMaze.map((row) => row.join(""));

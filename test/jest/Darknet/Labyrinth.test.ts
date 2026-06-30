@@ -37,7 +37,7 @@ const setupBN15Environment = (labAugCount: number) => {
     AugmentationName.TheRedPill,
     AugmentationName.TheLaw,
     AugmentationName.TheSword,
-    AugmentationName.NeuroFluxGovernor,
+    AugmentationName.TheThread,
   ];
 
   Player.augmentations = augs.slice(0, labAugCount).map((aug) => new PlayerOwnedAugmentation(aug));
@@ -72,6 +72,35 @@ const setupNonBN15Environment = (labAugCount: number, hasSf15 = false, allowTRPI
   populateDarknet();
 };
 
+const isMazeSolvable = (maze: string[]): boolean => {
+  const height = maze.length;
+  const width = maze[0].length;
+  const endX = width - 2;
+  const endY = height - 2;
+  const visited = Array.from({ length: height }, () => new Array<boolean>(width).fill(false));
+  visited[1][1] = true;
+  const roomQueue: Array<[number, number]> = [[1, 1]];
+  const directions: Array<[number, number]> = [
+    [0, -1],
+    [1, 0],
+    [0, 1],
+    [-1, 0],
+  ];
+  for (const [x, y] of roomQueue) {
+    if (x === endX && y === endY) return true;
+    for (const [dx, dy] of directions) {
+      const newX = x + dx;
+      const newY = y + dy;
+      if (newX < 0 || newX >= width || newY < 0 || newY >= height) continue;
+      if (visited[newY][newX]) continue;
+      if (maze[newY][newX] !== " ") continue;
+      visited[newY][newX] = true;
+      roomQueue.push([newX, newY]);
+    }
+  }
+  return false;
+};
+
 describe("Labyrinth Tests", () => {
   it("should create a maze with the correct size", () => {
     const width = 30;
@@ -93,6 +122,47 @@ describe("Labyrinth Tests", () => {
 
     expect(maze).toHaveLength(height + 1);
     expect(maze[0]).toHaveLength(width - 1);
+  });
+
+  it.each([
+    [10, 10],
+    [20, 14],
+    [30, 20],
+    [40, 26],
+    [60, 40],
+    [100, 80],
+    [900, 800],
+  ])("generates solvable %ix%i mazes with paths only on valid cells", (width, height) => {
+    for (let trial = 0; trial < 10; trial++) {
+      const maze = generateMaze(width, height);
+      const hasInvalidPaths = maze.some((row, y) =>
+        row.split("").some((cell, x) => cell === " " && x % 2 === 0 && y % 2 === 0),
+      );
+      expect(hasInvalidPaths).toBe(false);
+      expect(isMazeSolvable(maze)).toBe(true);
+    }
+  });
+
+  it("should grow the maze size with each additional Thread aug stack", () => {
+    const sizesByLevel: Array<{ level: number; width: number; height: number }> = [];
+    for (const level of [0, 1, 3, 7, 15, 21, 34]) {
+      setupBN15Environment(7);
+      if (level > 0) {
+        const threadAug = new PlayerOwnedAugmentation(AugmentationName.TheThread);
+        threadAug.level = level;
+        Player.augmentations.push(threadAug);
+      }
+      DarknetState.labyrinth = null;
+      DarknetState.labEndpoint = null;
+
+      const maze = getLabMaze();
+      sizesByLevel.push({ level, width: maze[0].length, height: maze.length });
+    }
+
+    for (let i = 1; i < sizesByLevel.length; i++) {
+      expect(sizesByLevel[i].width).toBeGreaterThan(sizesByLevel[i - 1].width);
+      expect(sizesByLevel[i].height).toBeGreaterThan(sizesByLevel[i - 1].height);
+    }
   });
 
   it("should accept basic commands", () => {
