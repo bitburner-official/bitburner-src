@@ -113,7 +113,7 @@ export function installAugmentations(force?: boolean): boolean {
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ` - ${ownedAug.level}`;
     } else if (ownedAug.name === AugmentationName.TheThread) {
-      level = ` ${romanNumeralEncoder(getTotalThreadAugCount())}`;
+      level = ` ${romanNumeralEncoder(getInstalledThreadAugCount())}`;
     }
     augmentationList += aug.name + level + "\n";
   }
