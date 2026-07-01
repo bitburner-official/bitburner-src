@@ -5,8 +5,8 @@ import { makeStyles } from "tss-react/mui";
 
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
-import { saveObject } from "../SaveObject";
-import { CompletedProgramName, LocationName, SimplePage } from "@enums";
+import { saveGame, exportGame } from "../SaveObject";
+import { CompletedProgramName, ComplexPage, LocationName, SimplePage } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
@@ -16,7 +16,6 @@ import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
-import type { ComplexPage } from "./Enums";
 import type { IRouter, PageContext, PageWithContext } from "./Router";
 import { isSimplePage, Page } from "./Router";
 import { Overview } from "./React/Overview";
@@ -221,8 +220,7 @@ export function GameRoot(): React.ReactElement {
     for (const server of GetAllServers(true)) {
       server.runningScriptMap.clear();
     }
-    saveObject
-      .saveGame()
+    saveGame()
       .then(() => {
         setTimeout(() => htmlLocation.reload(), 0);
       })
@@ -359,7 +357,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ActiveScripts: {
-      mainPage = <ActiveScriptsRoot page={SimplePage.ActiveScripts} />;
+      mainPage = <ActiveScriptsRoot page={ComplexPage.ActiveScripts} serverName={pageWithContext.serverName} />;
       break;
     }
     case Page.RecentlyKilledScripts: {
@@ -442,10 +440,10 @@ export function GameRoot(): React.ReactElement {
         <GameOptionsRoot
           tab={pageWithContext.tab}
           save={() => {
-            saveObject.saveGame().catch((error) => exceptionAlert(error));
+            saveGame().catch((error) => exceptionAlert(error));
           }}
           export={() => {
-            saveObject.exportGame().catch((error) => exceptionAlert(error));
+            exportGame().catch((error) => exceptionAlert(error));
           }}
           forceKill={killAllScripts}
           softReset={softReset}
@@ -464,7 +462,7 @@ export function GameRoot(): React.ReactElement {
       mainPage = (
         <AugmentationsRoot
           exportGameFn={() => {
-            saveObject.exportGame().catch((error) => exceptionAlert(error));
+            exportGame().catch((error) => exceptionAlert(error));
           }}
           installAugmentationsFn={() => {
             installAugmentations();
@@ -540,7 +538,7 @@ export function GameRoot(): React.ReactElement {
                     <CharacterOverview
                       parentOpen={parentOpen}
                       save={() => {
-                        saveObject.saveGame().catch((error) => exceptionAlert(error));
+                        saveGame().catch((error) => exceptionAlert(error));
                       }}
                       killScripts={killAllScripts}
                     />

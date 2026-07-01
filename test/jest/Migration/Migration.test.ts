@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import fs from "node:fs";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
-import { loadGame, saveObject } from "../../../src/SaveObject";
+import { loadGame, saveGame, getSaveData } from "../../../src/SaveObject";
 import * as db from "../../../src/db";
 import * as FileUtils from "../../../src/utils/FileUtils";
 import type { SaveData } from "../../../src/types";
@@ -88,8 +88,8 @@ describe("v3", () => {
     }
 
     // Save and reload.
-    await saveObject.saveGame();
-    await loadGameFromSaveData(await saveObject.getSaveData());
+    await saveGame();
+    await loadGameFromSaveData(await getSaveData());
     expect(Player.lastSave).not.toStrictEqual(lastSave);
 
     // Check if gained exp is saved correctly.

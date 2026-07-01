@@ -37,8 +37,8 @@ import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWor
 import { FactionWork } from "../Work/FactionWork";
 import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus } from "../ExportBonus";
-import { saveObject } from "../SaveObject";
-import { calculateCrimeWorkStats } from "../Work/Formulas";
+import { getSaveData, exportGame } from "../SaveObject";
+import { calculateCompanyWorkStats, calculateCrimeWorkStats } from "../Work/Formulas";
 import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
@@ -686,7 +686,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         name: job.name,
         field: job.field,
         nextPosition: job.nextPosition,
-        salary: job.baseSalary * company.salaryMultiplier,
+        salary: calculateCompanyWorkStats(Player, company, job, company.favor).money,
         requiredReputation: calculateEffectiveRequiredReputation(companyName, job.requiredReputation),
         requiredSkills: job.requiredSkills(company.jobStatReqOffset),
       };
@@ -1220,7 +1220,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getSaveData: (ctx) => async () => {
       helpers.checkSingularityAccess(ctx);
-      const saveData = await saveObject.getSaveData();
+      const saveData = await getSaveData();
       if (typeof saveData === "string") {
         // saveData is the base64-encoded json save string. A base64-encoded string only uses ASCII characters, so it's
         // fine to use new TextEncoder().encode() to encode it to a Uint8Array.
@@ -1231,7 +1231,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     exportGame: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
-      return saveObject.exportGame();
+      return exportGame();
     },
     exportGameBonus: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

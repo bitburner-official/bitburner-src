@@ -1,13 +1,13 @@
 import type { ScriptArg } from "@nsdefs";
 import { toNative } from "./toNative";
 import libarg from "arg";
-import { NetscriptContext } from "../Netscript/APIWrapper";
+import type { NetscriptContext } from "../Netscript/APIWrapper";
 
 export type Schema = [string, string | number | boolean | string[]][];
 type FlagType = StringConstructor | NumberConstructor | BooleanConstructor | StringConstructor[];
-type FlagsRet = Record<string, ScriptArg | string[]>;
+type FlagsRet = Record<string, unknown> & { _: ScriptArg[] };
 export function Flags(ctx: NetscriptContext | string[], permissive: boolean): (data: unknown) => FlagsRet {
-  const vargs = Array.isArray(ctx) ? ctx : ctx.workerScript.args;
+  const vargs = Array.isArray(ctx) ? ctx : ctx.workerScript.scriptRef.args;
   return (schema: unknown): FlagsRet => {
     schema = toNative(schema);
     if (!Array.isArray(schema)) throw new Error("flags schema passed in is invalid.");

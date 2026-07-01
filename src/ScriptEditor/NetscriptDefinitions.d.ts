@@ -4567,6 +4567,21 @@ export interface Darknet {
   connectToSession(host: string, password: string): DarknetResult;
 
   /**
+   * Overloads a darknet server with feedback to lock it down. Similar to status link, it will no longer move
+   * or go offline, although servers connected to it may still move. However, it also loses all of its max ram,
+   * and no longer gives experience.
+   *
+   * This technique is sometimes used to sacrifice a new device that appears on the network to make
+   * it easier to probe it for weaknesses and develop scripts against it.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @param host the server to freeze
+   */
+  freezeServer(host: string): DarknetResult;
+
+  /**
    * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
    * Retrieves the most recent logs on the server. This can be used to get more feedback on authentication attempts.
    * The retrieved logs are removed from the server, unless the "peek" flag is set to true in the provided HeartbleedOptions.
@@ -8044,8 +8059,6 @@ export interface NS {
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
    *
-   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
-   *
    * @example
    * ```js
    * //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
@@ -8692,6 +8705,30 @@ export interface NS {
   getPortHandle(portNumber: number): NetscriptPort;
 
   /**
+   * Check if a port is full.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns true if the port's data queue is full, and false otherwise.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  isFullPort(portNumber: number): boolean;
+
+  /**
+   * Check if a port is empty.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns true if the port's data queue is empty, and false otherwise.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  isEmptyPort(portNumber: number): boolean;
+
+  /**
    * Delete a file.
    * @remarks
    * RAM cost: 0.6 GB
@@ -9189,7 +9226,10 @@ export interface NS {
    * ```
    * `bar` in the last example is `"false"` (a string), not `false` (a boolean). `data.bar` is truthy, not falsy.
    */
-  flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  flags(schema: [string, any][]): {
+    [key: string]: any;
+    _: ScriptArg[];
+  };
 
   /**
    * Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is
@@ -11183,7 +11223,10 @@ interface AutocompleteData {
   /** Netscript Enums */
   enums: NSEnums;
   /** Parses the flags schema on the already inputted flags */
-  flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  flags(schema: [string, any][]): {
+    [key: string]: any;
+    _: ScriptArg[];
+  };
   /** The hostname of the server the script would be running on */
   hostname: string;
   /** The filename of the script about to be run */

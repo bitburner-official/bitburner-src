@@ -12,6 +12,10 @@ function isObjectLike(value: unknown): value is object {
   return (typeof value === "object" && value !== null) || typeof value === "function";
 }
 
+function isSymbol(value: unknown): value is symbol {
+  return typeof value === "symbol";
+}
+
 /** Gets the numbered port, initializing it if it doesn't already exist.
  * Only using for functions that write data/resolvers. Use NetscriptPorts.get(n) for */
 export function getPort(n: PortNumber) {
@@ -28,7 +32,7 @@ export class Port {
   promise: Promise<void> | null = null;
   add(data: unknown) {
     let value = data;
-    if (isObjectLike(data)) {
+    if (isObjectLike(data) || isSymbol(data)) {
       try {
         value = structuredClone(data);
       } catch (ex) {
@@ -54,7 +58,6 @@ export class PortHandle implements NetscriptPort {
 
   write(value: unknown): unknown {
     const port = getPort(this.n);
-    // Primitives don't need to be cloned.
     port.add(value);
     if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
     return null;
@@ -63,7 +66,6 @@ export class PortHandle implements NetscriptPort {
   tryWrite(value: unknown): boolean {
     const port = getPort(this.n);
     if (port.data.length >= Settings.MaxPortCapacity) return false;
-    // Primitives don't need to be cloned.
     port.add(value);
     return true;
   }

@@ -1147,6 +1147,14 @@ export const ns: InternalAPI<NSFull> = {
     const portHandle = helpers.portHandle(ctx, _portNumber);
     return portHandle.peek();
   },
+  isFullPort: (ctx) => (_portNumber) => {
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.full();
+  },
+  isEmptyPort: (ctx) => (_portNumber) => {
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.empty();
+  },
   clear: (ctx) => (_file) => {
     const path = helpers.filePath(ctx, "file", _file);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
@@ -1434,7 +1442,7 @@ export const ns: InternalAPI<NSFull> = {
   atExit: (ctx) => (callback, _id) => {
     const id = _id ? helpers.string(ctx, "id", _id) : "default";
     assertFunctionWithNSContext(ctx, "callback", callback);
-    ctx.workerScript.atExit.set(id, callback);
+    (ctx.workerScript.atExit ??= new Map()).set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {
     const [server, host] = helpers.getServer(ctx, _host);
@@ -1624,7 +1632,7 @@ setRemovedFunctions(ns, {
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {
-  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
+  return NSProxy(ws, ns, [], { args: ws.scriptRef.args.slice(), pid: ws.pid, enums });
 }
 
 const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));

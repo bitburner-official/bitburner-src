@@ -116,7 +116,7 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
         if (logs.some((l) => l.script.pid === script.pid)) return;
         logs.push({
           id: script.pid,
-          script: script,
+          script,
         });
         rerender();
       }),
@@ -256,14 +256,15 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   }
 
   function title(): React.ReactElement {
-    const title_str = script.title === "string" ? script.title : `${script.filename} ${script.args.join(" ")}`;
+    const displayTitle = script.title;
+    const titleText = typeof displayTitle === "string" ? displayTitle : script.getDefaultTitle();
     return (
       <Typography
         variant="h6"
         sx={{ marginRight: "auto", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}
-        title={title_str}
+        title={titleText}
       >
-        {script.title}
+        {displayTitle}
       </Typography>
     );
   }

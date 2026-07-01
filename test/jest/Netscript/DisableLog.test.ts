@@ -24,9 +24,9 @@ test("Edge cases of disableLog", function () {
   const runningScript = new RunningScript(script, 2);
   const ws = new WorkerScript(runningScript, 1, NetscriptFunctions);
 
-  const ns = ws.env.vars;
+  const ns = ws.vars;
   if (!ns) {
-    throw new Error("Invalid ws.env.vars");
+    throw new Error("Invalid ws.vars");
   }
 
   // Generate logs in a specific pattern that checks edge cases in

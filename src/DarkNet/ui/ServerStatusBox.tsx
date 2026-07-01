@@ -33,11 +33,12 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
 
   const getServerStyles = (server: DarknetServer) => {
     const position = getPixelPosition(server);
+    const hasRunningScripts = !!server.runningScriptMap.size;
     return {
       ...DWServerStyles,
       top: `${position.top}px`,
       left: `${position.left}px`,
-      borderColor: server.hasStasisLink ? "gold" : server.hasAdminRights ? "green" : "grey",
+      borderColor: server.hasStasisLink ? "gold" : hasRunningScripts ? "green" : !server.maxRam ? "#6495ED" : "grey",
     };
   };
 

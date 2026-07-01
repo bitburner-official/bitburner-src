@@ -70,7 +70,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
           primary={
             <Typography sx={{ overflowWrap: "break-word" }}>
               └ {props.workerScript.name} ({formatRam(scriptRef.ramUsage * scriptRef.threads)}){" "}
-              {JSON.stringify(props.workerScript.args)}
+              {JSON.stringify(scriptRef.args)}
             </Typography>
           }
         />
@@ -92,9 +92,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={2}>
-                  <Typography sx={{ overflowWrap: "anywhere" }}>
-                    └ Args: {arrayToString(props.workerScript.args)}
-                  </Typography>
+                  <Typography sx={{ overflowWrap: "anywhere" }}>└ Args: {arrayToString(scriptRef.args)}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
