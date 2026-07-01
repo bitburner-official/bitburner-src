@@ -70,7 +70,7 @@ export function CodingContractModal(): React.ReactElement {
   const description = [];
   for (const [i, value] of contractType.desc(eventData.codingContract.getData()).split("\n").entries()) {
     description.push(
-      <span key={i} style={{ whiteSpace: "pre-wrap" }}>
+      <span key={i} style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
         {value} <br />
       </span>,
     );
