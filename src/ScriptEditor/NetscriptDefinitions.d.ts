@@ -898,7 +898,7 @@ interface GangOtherInfoObject {
  */
 interface GangTaskStats {
   /** Task name */
-  name: GangTaskNameEnumType;
+  name: string;
   /** Task Description */
   desc: string;
   /** Is a task of a hacking gang */
@@ -978,7 +978,7 @@ interface GangMemberInfo {
   /** Name of the gang member */
   name: string;
   /** Currently assigned task */
-  task: GangTaskNameEnumType;
+  task: string;
   /** Amount of Respect earned by member since they last Ascended */
   earnedRespect: number;
 
