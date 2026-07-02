@@ -730,7 +730,7 @@ Strength skill level
 
 </td><td>
 
-string
+[GangTaskNameEnumType](./bitburner.gangtasknameenumtype.md)
 
 
 </td><td>

@@ -273,7 +273,7 @@ Is a task of a hacking gang
 
 </td><td>
 
-string
+[GangTaskNameEnumType](./bitburner.gangtasknameenumtype.md)
 
 
 </td><td>

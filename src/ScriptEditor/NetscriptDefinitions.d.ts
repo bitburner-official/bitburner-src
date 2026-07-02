@@ -898,7 +898,7 @@ interface GangOtherInfoObject {
  */
 interface GangTaskStats {
   /** Task name */
-  name: string;
+  name: GangTaskNameEnumType;
   /** Task Description */
   desc: string;
   /** Is a task of a hacking gang */
@@ -978,7 +978,7 @@ interface GangMemberInfo {
   /** Name of the gang member */
   name: string;
   /** Currently assigned task */
-  task: string;
+  task: GangTaskNameEnumType;
   /** Amount of Respect earned by member since they last Ascended */
   earnedRespect: number;
 
@@ -9771,6 +9771,40 @@ export type CodingContractObject = {
 }[keyof CodingContractSignatures];
 
 /** @public */
+export type GangTaskNameEnumType = {
+  idle: "Unassigned";
+
+  ransomware: "Ransomware";
+  phishing: "Phishing";
+  identityTheft: "Identity Theft";
+  ddosAttacks: "DDoS Attacks";
+  plantVirus: "Plant Virus";
+  fraudAndCounterfeiting: "Fraud & Counterfeiting";
+  moneyLaundering: "Money Laundering";
+  cyberterrorism: "Cyberterrorism";
+  ethicalHacking: "Ethical Hacking";
+
+  mug: "Mug People";
+  dealDrugs: "Deal Drugs";
+  strongarm: "Strongarm Civilians";
+  con: "Run a Con";
+  armedRobbery: "Armed Robbery";
+  traffickArms: "Traffick Illegal Arms";
+  threatenAndBlackmail: "Threaten & Blackmail";
+  humanTrafficking: "Human Trafficking";
+  terrorism: "Terrorism";
+  vigilanteJustice: "Vigilante Justice";
+
+  trainCombat: "Train Combat";
+  trainHacking: "Train Hacking";
+  trainCharisma: "Train Charisma";
+  territoryWarfare: "Territory Warfare";
+};
+
+/** @public */
+type GangMemberTask = _ValueOf<GangTaskNameEnumType>;
+
+/** @public */
 type NSEnums = {
   CityName: CityNameEnumType;
   CrimeType: CrimeEnumType;
@@ -9791,6 +9825,7 @@ type NSEnums = {
   FragmentType: FragmentEnumType;
   DarknetResponseCode: DarknetResponseCodeType;
   ProgramName: ProgramNameEnumType;
+  GangTaskName: GangTaskNameEnumType;
 };
 
 /**
