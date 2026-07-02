@@ -9772,33 +9772,33 @@ export type CodingContractObject = {
 
 /** @public */
 export type GangTaskNameEnumType = {
-  idle: "Unassigned";
+  Unassigned: "Unassigned";
 
-  ransomware: "Ransomware";
-  phishing: "Phishing";
-  identityTheft: "Identity Theft";
-  ddosAttacks: "DDoS Attacks";
-  plantVirus: "Plant Virus";
-  fraudAndCounterfeiting: "Fraud & Counterfeiting";
-  moneyLaundering: "Money Laundering";
-  cyberterrorism: "Cyberterrorism";
-  ethicalHacking: "Ethical Hacking";
+  Ransomware: "Ransomware";
+  Phishing: "Phishing";
+  IdentityTheft: "Identity Theft";
+  DDoSAttacks: "DDoS Attacks";
+  PlantVirus: "Plant Virus";
+  FraudAndCounterfeiting: "Fraud & Counterfeiting";
+  MoneyLaundering: "Money Laundering";
+  Cyberterrorism: "Cyberterrorism";
+  EthicalHacking: "Ethical Hacking";
 
-  mug: "Mug People";
-  dealDrugs: "Deal Drugs";
-  strongarm: "Strongarm Civilians";
-  con: "Run a Con";
-  armedRobbery: "Armed Robbery";
-  traffickArms: "Traffick Illegal Arms";
-  threatenAndBlackmail: "Threaten & Blackmail";
-  humanTrafficking: "Human Trafficking";
-  terrorism: "Terrorism";
-  vigilanteJustice: "Vigilante Justice";
+  MugPeople: "Mug People";
+  DealDrugs: "Deal Drugs";
+  StrongarmCivilians: "Strongarm Civilians";
+  RunACon: "Run a Con";
+  ArmedRobbery: "Armed Robbery";
+  TraffickIllegalArms: "Traffick Illegal Arms";
+  ThreatenAndBlackmail: "Threaten & Blackmail";
+  HumanTrafficking: "Human Trafficking";
+  Terrorism: "Terrorism";
+  VigilanteJustice: "Vigilante Justice";
 
-  trainCombat: "Train Combat";
-  trainHacking: "Train Hacking";
-  trainCharisma: "Train Charisma";
-  territoryWarfare: "Territory Warfare";
+  TrainCombat: "Train Combat";
+  TrainHacking: "Train Hacking";
+  TrainCharisma: "Train Charisma";
+  TerritoryWarfare: "Territory Warfare";
 };
 
 /** @public */
