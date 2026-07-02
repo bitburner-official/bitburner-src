@@ -9,5 +9,5 @@ Currently assigned task
 **Signature:**
 
 ```typescript
-task: GangTaskNameEnumType;
+task: string;
 ```

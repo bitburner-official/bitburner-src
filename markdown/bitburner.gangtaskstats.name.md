@@ -9,5 +9,5 @@ Task name
 **Signature:**
 
 ```typescript
-name: GangTaskNameEnumType;
+name: string;
 ```
