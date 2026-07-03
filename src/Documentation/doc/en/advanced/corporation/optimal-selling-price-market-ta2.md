@@ -173,5 +173,5 @@ In order to use the formula of Market-TA2, we need `MarkupLimit`. With products,
 - Calculate `MarkupLimit` directly:
   - Set `SellingPrice` to a very high value. It must be so high that we cannot sell all produced units (`MaxSalesVolume < ExpectedSalesVolume`). This forces the game to apply the penalty modifier that contains `MarkupLimit`.
   - Wait for 1 cycle to get `ActualSalesVolume`. It's `product.actualSellAmount` and `material.actualSellAmount`.
-  - Use `ActualSalesVolume` in place of `ExpectedSalesVolume` in the previous formula: $MarkupLimit = (SellingPrice - MarketPrice)\ast\sqrt{\frac{ActualSalesVolume}{M}}$
+  - Use `ActualSalesVolume` in place of `ExpectedSalesVolume` in the previous formula: $MarkupLimit = (SellingPrice - MarketPrice)\ast\sqrt{\frac{ActualSalesVolume}{PotentialSalesVolume}}$
   - Calculate `ProductMarkup` from `MarkupLimit`, save `ProductMarkup` to reuse later. `ProductMarkup` never changes.
