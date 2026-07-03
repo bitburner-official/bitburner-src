@@ -20,6 +20,10 @@ import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import React from "react";
 import { Link as MuiLink } from "@mui/material";
+import { GetServer } from "../Server/AllServers";
+import { DarknetServer } from "../Server/DarknetServer";
+import { SpecialServers } from "../Server/data/SpecialServers";
+import { isImmediatelyReachable } from "../Server/ServerHelpers";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
@@ -34,10 +38,30 @@ export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown)
   return v;
 }
 
+function isServerLinkAllowed(hostname: string): boolean {
+  const server = GetServer(hostname);
+  if (server == null) {
+    return false;
+  }
+  if (!(server instanceof DarknetServer)) {
+    return server.serversOnNetwork.length > 0;
+  }
+  if (server.hostname === SpecialServers.DarkWeb) {
+    // Can't handle DarkWeb as a regular dark net server
+    // because it always has hasAdminRights === true
+    return isImmediatelyReachable(server.hostname, SpecialServers.Home);
+  }
+  return server.hasAdminRights;
+}
+
 function handleServerLinkClick(hostname: string, event: React.MouseEvent<HTMLAnchorElement>): void {
   const { nativeEvent } = event;
   if (!(nativeEvent instanceof Event) || !nativeEvent.isTrusted) {
     Terminal.error("Links created by ns.ui.createServerLink() can only be used manually.");
+    return;
+  }
+  if (!isServerLinkAllowed(hostname)) {
+    Terminal.error("Invalid server. Connection failed.");
     return;
   }
   Terminal.connectToServer(hostname);

@@ -1,8 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { getServerOnNetwork } from "../../Server/ServerHelpers";
 import { GetServer } from "../../Server/AllServers";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { isImmediatelyReachable } from "../../Server/ServerHelpers";
 
 export function connect(args: (string | number | boolean)[], server: BaseServer): undefined {
   // Disconnect from current server in Terminal and connect to new one
@@ -20,20 +19,9 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
   }
 
   // Adjacent servers
-  for (let i = 0; i < server.serversOnNetwork.length; i++) {
-    const other = getServerOnNetwork(server, i);
-    if (other === null) {
-      exceptionAlert(
-        new Error(
-          `${server.serversOnNetwork[i]} is on the network of ${server.hostname}, but we cannot find its data.`,
-        ),
-      );
-      return;
-    }
-    if (other.hostname === target.hostname) {
-      Terminal.connectToServer(hostname);
-      return;
-    }
+  if (isImmediatelyReachable(server.hostname, target.hostname)) {
+    Terminal.connectToServer(hostname);
+    return;
   }
 
   /**
