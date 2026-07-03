@@ -1,6 +1,6 @@
 import React from "react";
 import { SvgIcon, Tooltip, Typography } from "@mui/material";
-import { Bolt, Code, Description, DoorBackSharp, Inventory2, LockPerson, Terminal } from "@mui/icons-material";
+import { AcUnit, Bolt, Code, Description, DoorBackSharp, Inventory2, LockPerson, Terminal } from "@mui/icons-material";
 import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName, ComplexPage } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
@@ -8,6 +8,7 @@ import { formatToMaxDigits } from "./uiUtilities";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetConstants } from "../Constants";
 import { Router } from "../../ui/GameRoot";
+import { Settings } from "../../Settings/Settings";
 
 export type ServerSummaryProps = {
   server: DarknetServer;
@@ -25,7 +26,7 @@ export function ServerSummary({
   showDetails = false,
 }: ServerSummaryProps): React.ReactElement {
   if (!server.hasAdminRights && enableAuth) {
-    return <Typography color="secondary">[ auth required ]</Typography>;
+    return <Typography color={Settings.theme.int}>[ auth required ]</Typography>;
   }
   if (!server.hasAdminRights && !enableAuth) {
     return <Typography color="secondary">(no connection)</Typography>;
@@ -109,10 +110,21 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  if (server.hasStasisLink) {
+  if (!server.maxRam) {
     components.push(
       <Tooltip
-        key="backdoor"
+        key="frozen"
+        title={<>Server has been frozen. It will not move, but has no max ram and does not give charisma xp.</>}
+      >
+        <Typography>
+          <SvgIcon component={AcUnit} className={`${classes.blue} ${classes.serverStatusIcon}`} />
+        </Typography>
+      </Tooltip>,
+    );
+  } else if (server.hasStasisLink) {
+    components.push(
+      <Tooltip
+        key="stasisLinked"
         title={
           <>
             Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance.

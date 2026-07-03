@@ -12,6 +12,7 @@ import { sleep } from "../../utils/Utility";
 import { getSharedChars } from "../utils/darknetAuthUtils";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { formatObjectWithColoredKeys } from "./uiUtilities";
+import { Settings } from "../../Settings/Settings";
 
 export type PasswordPromptProps = {
   server: DarknetServer;
@@ -134,7 +135,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
         <div style={{ width: "50%" }}>
           <Container disableGutters>
             {isLabServer ? (
-              <div style={{ color: "white" }}>
+              <div style={{ color: Settings.theme.maplocation }}>
                 <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
                   <span className={classes.serverDetailsText}>Hint:</span> {server.staticPasswordHint}
                   <br />
@@ -145,7 +146,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
                 </pre>
               </div>
             ) : (
-              <div style={{ color: "white" }}>
+              <div style={{ color: Settings.theme.maplocation }}>
                 <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
                   <span className={classes.serverDetailsText}>Hint:</span> {server.staticPasswordHint}
                   <br />
@@ -168,7 +169,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
           <br />
           {!isLabServer && (
             <Card style={{ padding: "8px", minHeight: "60px", marginBottom: "8px" }}>
-              <div style={{ color: "white" }}>
+              <div style={{ color: Settings.theme.maplocation }}>
                 {typeof authFeedback !== "string" ? (
                   authFeedback
                 ) : (
