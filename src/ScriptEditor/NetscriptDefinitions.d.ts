@@ -7123,6 +7123,8 @@ interface UserInterface {
    * @param node - The node to be rendered.
    */
   renderPage(node: ReactNode): void;
+
+  createServerLink(hostname: string, linkText?: string): ReactNode;
 }
 
 /**

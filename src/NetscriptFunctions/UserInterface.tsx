@@ -6,7 +6,7 @@ import { defaultStyles } from "../Themes/Styles";
 import { CONSTANTS } from "../Constants";
 import { commitHash } from "../utils/helpers/commitHash";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { Terminal } from "../../src/Terminal";
+import { Terminal } from "../Terminal";
 import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
 import { assertAndSanitizeMainTheme, assertAndSanitizeStyles } from "../JsonSchema/JSONSchemaAssertion";
 import { LogBoxCloserEvents, LogBoxEvents } from "../ui/React/LogBoxManager";
@@ -18,6 +18,8 @@ import { addGlobalAlias, addAlias, removeAlias, Aliases, GlobalAliases, aliasReg
 import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
+import React from "react";
+import { Link as MuiLink } from "@mui/material";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
@@ -30,6 +32,14 @@ export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown)
     );
   }
   return v;
+}
+
+function handleServerLinkClick(hostname: string, event: React.MouseEvent<HTMLAnchorElement>): void {
+  if (!event.isTrusted) {
+    Terminal.error("Links created by ns.ui.createServerLink() can only be used manually.");
+    return;
+  }
+  Terminal.connectToServer(hostname);
 }
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
@@ -277,6 +287,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     renderPage: () => (_node) => {
       Router.toPage(Page.CustomPage, { content: wrapUserNode(_node) });
+    },
+
+    createServerLink: (ctx) => (_hostname, _linkText?) => {
+      const hostname = helpers.string(ctx, "hostname", _hostname);
+      const linkText = _linkText == null ? hostname : helpers.string(ctx, "linkText", _linkText);
+      return <MuiLink onClick={(event) => handleServerLinkClick(hostname, event)}>{linkText}</MuiLink>;
     },
   };
 }
