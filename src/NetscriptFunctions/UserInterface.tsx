@@ -47,11 +47,9 @@ function isServerLinkAllowed(hostname: string): boolean {
     return server.serversOnNetwork.length > 0;
   }
   if (server.hostname === SpecialServers.DarkWeb) {
-    // Can't handle DarkWeb as a regular dark net server
-    // because it always has hasAdminRights === true
     return isImmediatelyReachable(server.hostname, SpecialServers.Home);
   }
-  return server.hasAdminRights;
+  return server.backdoorInstalled;
 }
 
 function handleServerLinkClick(hostname: string, event: React.MouseEvent<HTMLAnchorElement>): void {
