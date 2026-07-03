@@ -23,7 +23,6 @@ import { Link as MuiLink } from "@mui/material";
 import { GetServer } from "../Server/AllServers";
 import { DarknetServer } from "../Server/DarknetServer";
 import { SpecialServers } from "../Server/data/SpecialServers";
-import { isImmediatelyReachable } from "../Server/ServerHelpers";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
@@ -43,13 +42,10 @@ function isServerLinkAllowed(hostname: string): boolean {
   if (server == null) {
     return false;
   }
-  if (!(server instanceof DarknetServer)) {
-    return server.serversOnNetwork.length > 0;
+  if (server instanceof DarknetServer && server.hostname !== SpecialServers.DarkWeb) {
+    return server.backdoorInstalled;
   }
-  if (server.hostname === SpecialServers.DarkWeb) {
-    return isImmediatelyReachable(server.hostname, SpecialServers.Home);
-  }
-  return server.backdoorInstalled;
+  return server.serversOnNetwork.length > 0;
 }
 
 function handleServerLinkClick(hostname: string, event: React.MouseEvent<HTMLAnchorElement>): void {

@@ -268,25 +268,6 @@ export function getServerOnNetwork(server: BaseServer, i: number): BaseServer | 
   return GetServer(server.serversOnNetwork[i]);
 }
 
-export function isImmediatelyReachable(from: string, to: string): boolean {
-  const src = GetServer(from);
-  const dst = GetServer(to);
-  if (src == null || dst == null) {
-    return false;
-  }
-  for (const name of src.serversOnNetwork) {
-    const other = GetServer(name);
-    if (other == null) {
-      exceptionAlert(new Error(`${name} is on the network of ${src.hostname}, but we cannot find its data.`));
-      return false;
-    }
-    if (other.hostname === dst.hostname) {
-      return true;
-    }
-  }
-  return false;
-}
-
 export function isBackdoorInstalled(server: BaseServer): boolean {
   if (server instanceof Server) {
     return server.backdoorInstalled;

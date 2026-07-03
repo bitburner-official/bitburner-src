@@ -23,7 +23,7 @@ import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { getTorRouter, isImmediatelyReachable } from "../Server/ServerHelpers";
+import { getServerOnNetwork, getTorRouter } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
 import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
@@ -49,6 +49,7 @@ import { numberOfBlackOperations } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { addRepToFavor } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/Constants";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
@@ -480,9 +481,21 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
 
       // Adjacent servers
-      if (isImmediatelyReachable(Player.getCurrentServer().hostname, target.hostname)) {
-        Terminal.connectToServer(host, true);
-        return true;
+      const server = Player.getCurrentServer();
+      for (let i = 0; i < server.serversOnNetwork.length; i++) {
+        const other = getServerOnNetwork(server, i);
+        if (other === null) {
+          exceptionAlert(
+            new Error(
+              `${server.serversOnNetwork[i]} is on the network of ${server.hostname}, but we cannot find its data.`,
+            ),
+          );
+          return false;
+        }
+        if (other.hostname === target.hostname) {
+          Terminal.connectToServer(host, true);
+          return true;
+        }
       }
 
       /**
