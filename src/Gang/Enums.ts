@@ -1,4 +1,4 @@
-export const GangTaskName = {
+export const GangTaskNameEnum = {
   Unassigned: "Unassigned",
 
   Ransomware: "Ransomware",

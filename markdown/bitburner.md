@@ -2085,7 +2085,7 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 </td></tr>
 <tr><td>
 
-[GangMemberTask](./bitburner.gangmembertask.md)
+[GangTaskName](./bitburner.gangtaskname.md)
 
 
 </td><td>
