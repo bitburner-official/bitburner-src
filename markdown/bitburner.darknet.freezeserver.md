@@ -44,7 +44,7 @@ string
 
 </td><td>
 
-the server to freeze
+Hostname/IP of the target server.
 
 
 </td></tr>

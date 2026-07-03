@@ -231,7 +231,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           success: false,
           code: serverCheck.code,
           message: serverCheck.message,
-          logs: [],
         };
       }
       freezeServer(serverCheck.server);
