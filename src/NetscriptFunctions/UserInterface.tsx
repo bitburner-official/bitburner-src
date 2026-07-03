@@ -35,7 +35,8 @@ export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown)
 }
 
 function handleServerLinkClick(hostname: string, event: React.MouseEvent<HTMLAnchorElement>): void {
-  if (!event.isTrusted) {
+  const { nativeEvent } = event;
+  if (!(nativeEvent instanceof Event) || !nativeEvent.isTrusted) {
     Terminal.error("Links created by ns.ui.createServerLink() can only be used manually.");
     return;
   }
