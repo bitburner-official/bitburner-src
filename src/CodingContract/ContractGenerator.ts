@@ -129,7 +129,6 @@ export const generateDummyContract = (problemType: CodingContractName, server: B
 interface IGenerateContractParams {
   problemType?: CodingContractName;
   server?: string;
-  filename?: ContractFilePath;
   reward?: ICodingContractReward;
   rewardScaling?: number;
 }
@@ -161,7 +160,7 @@ export function generateContract(params: IGenerateContractParams): ContractFileP
     return null;
   }
 
-  const filename = params.filename ? params.filename : getRandomFilename(server);
+  const filename = getRandomFilename(server);
   if (filename == null) {
     return null;
   }
