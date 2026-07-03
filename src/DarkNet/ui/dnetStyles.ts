@@ -14,7 +14,7 @@ export const MAP_BORDER_WIDTH = 300;
 export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" })((theme: Theme, __, __classes) => ({
   DWServer: {
     "&:hover": {
-      backgroundColor: Settings.theme.well + " !important",
+      backgroundColor: theme.colors.well + " !important",
     },
   },
   NetWrapper: {
@@ -22,7 +22,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     height: "calc(100vh - 80px)",
     overflow: "scroll",
     position: "relative",
-    border: "solid 1px " + Settings.theme.secondary,
+    border: "solid 1px " + theme.colors.secondary,
   },
   button: {
     color: theme.colors.white,
@@ -105,10 +105,10 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     borderColor: theme.colors.success,
   },
   green: {
-    borderColor: Settings.theme.primary,
+    borderColor: theme.colors.primary,
   },
   grey: {
-    borderColor: Settings.theme.secondary,
+    borderColor: theme.colors.secondary,
   },
   goldBorder: {
     borderColor: theme.colors.money,
@@ -116,7 +116,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   serverDetailsText: {
     marginLeft: "-2em",
     textIndent: "2em",
-    color: Settings.theme.secondary,
+    color: theme.colors.secondary,
   },
 }));
 
