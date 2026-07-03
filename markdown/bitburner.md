@@ -1013,6 +1013,8 @@ Player must have at least this much money.
 
 Object representing a port. A port is a serialized queue.
 
+All methods in this interface can be used while the ns instance is "busy" (they avoid the concurrency check), or even when it is dead.
+
 
 </td></tr>
 <tr><td>
