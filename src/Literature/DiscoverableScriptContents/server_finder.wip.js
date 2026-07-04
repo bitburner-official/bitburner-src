@@ -23,12 +23,9 @@ export function getServerList(ns) {
   let index = 0;
   let serversToScan = ns.SCAN();
 
-  // Keep looping until you run out of new servers to scan, unless it goes for too long
-  while (index++ < serversToScan.length && index < 2e7) {
-    const nextServerToScan = serversToScan[index];
-    const results = ns.scan(nextServerToScan);
-    serversToScan.push(results);
-  }
+  const nextServerToScan = serversToScan[index];
+  const results = ns.scan(nextServerToScan);
+  serversToScan.push(results);
 
   return serversToScan;
 }
