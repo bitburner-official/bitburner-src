@@ -2087,6 +2087,26 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 </td></tr>
 <tr><td>
 
+[GangTaskName](./bitburner.gangtaskname.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GangTaskNameEnumType](./bitburner.gangtasknameenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [GoOpponent](./bitburner.goopponent.md)
 
 
