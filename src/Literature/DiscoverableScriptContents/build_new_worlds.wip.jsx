@@ -19,7 +19,7 @@
 /** @param {NS} ns */
 export async function main(ns) {
   ns.ui.openTail();
-  addToSidebar(ns, "֍   jump3r's secrets", 'this world is not what it seems');
+  addToSidebar;(ns, "֍   jump3r's secrets", 'this world is not what it seems');
   ns.tprint('Custom content added to sidebar');
 
   // Prevent the script from exiting, so react components can still use ns methods
