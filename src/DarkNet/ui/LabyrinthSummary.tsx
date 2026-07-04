@@ -13,6 +13,7 @@ import { useCycleRerender } from "../../ui/React/hooks";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { GetServerOrThrow } from "../../Server/AllServers";
 import { assertPasswordResponse, isPasswordResponse } from "../models/DarknetServerOptions";
+import { Settings } from "../../Settings/Settings";
 
 export type LabyrinthSummaryProps = {
   isAuthenticating: boolean;
@@ -168,7 +169,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
             Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
           </Typography>
           <Card style={{ padding: "8px", minHeight: "270px", marginBottom: "8px" }}>
-            <div style={{ color: "white" }}>
+            <div style={{ color: Settings.theme.maplocation }}>
               <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{getLogs()}</pre>
             </div>
           </Card>
@@ -177,7 +178,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
             ns.dnet.labreport:
           </Typography>
           <Card style={{ padding: "8px" }}>
-            <div style={{ color: "white" }}>
+            <div style={{ color: Settings.theme.maplocation }}>
               <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontSize: "10.5px" }}>{getLocationStatusString()}</pre>
             </div>
           </Card>

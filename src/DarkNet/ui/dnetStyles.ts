@@ -1,5 +1,6 @@
 import { Theme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
+import { Settings } from "../../Settings/Settings";
 
 export const dwColors = ["hack", "hp", "money", "int", "cha", "rep", "success"] as const;
 export type dwColors = (typeof dwColors)[number];
@@ -13,7 +14,7 @@ export const MAP_BORDER_WIDTH = 300;
 export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" })((theme: Theme, __, __classes) => ({
   DWServer: {
     "&:hover": {
-      backgroundColor: "#333 !important",
+      backgroundColor: theme.colors.well + " !important",
     },
   },
   NetWrapper: {
@@ -21,7 +22,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     height: "calc(100vh - 80px)",
     overflow: "scroll",
     position: "relative",
-    border: "solid 1px slategray",
+    border: "solid 1px " + theme.colors.secondary,
   },
   button: {
     color: theme.colors.white,
@@ -68,6 +69,9 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   gold: {
     color: theme.colors.money,
   },
+  blue: {
+    color: theme.colors.int,
+  },
   red: {
     color: theme.colors.hp,
   },
@@ -101,18 +105,18 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     borderColor: theme.colors.success,
   },
   green: {
-    borderColor: "green",
+    borderColor: theme.colors.primary,
   },
   grey: {
-    borderColor: "grey",
+    borderColor: theme.colors.secondary,
   },
   goldBorder: {
-    borderColor: "gold",
+    borderColor: theme.colors.money,
   },
   serverDetailsText: {
     marginLeft: "-2em",
     textIndent: "2em",
-    color: "grey",
+    color: theme.colors.secondary,
   },
 }));
 
@@ -124,7 +128,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
    This is done instead of adding hundreds of <style> tags into the DOM, which in some cases took multiple seconds
    waiting for insertBefore calls and reflowing the page when loading the darknet UI view.
  */
-export const DWServerStyles = {
+export const DWServerStyles = () => ({
   width: `${DW_SERVER_WIDTH}px`,
   height: `${DW_SERVER_HEIGHT}px`,
   borderWidth: "1px",
@@ -133,7 +137,7 @@ export const DWServerStyles = {
   borderRadius: "4px",
   zIndex: 10,
   cursor: "auto",
-  backgroundColor: "#000",
+  backgroundColor: Settings.theme.backgroundprimary,
 
   display: "inline-flex",
   alignItems: "center",
@@ -148,8 +152,8 @@ export const DWServerStyles = {
   lineHeight: 1.75,
   transition:
     "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-  color: "#0c0",
-};
+  color: Settings.theme.primary,
+});
 export const DWServerLogStyles = { fontFamily: 'JetBrainsMono, "Courier New", monospace', fontSize: "12px" };
 
 export const ServerName = {

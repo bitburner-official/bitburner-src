@@ -1,11 +1,12 @@
 import type { Augmentation } from "../../../Augmentation/Augmentation";
 
 import { Player } from "@player";
-import { AugmentationName } from "@enums";
+import { AugmentationName, CityName } from "@enums";
 
 import React, { useState } from "react";
 import { CheckBox, CheckBoxOutlineBlank, Construction, Search } from "@mui/icons-material";
 import { Box, Button, Container, List, ListItemButton, Paper, TextField, Typography } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 import { GraftingWork } from "../../../Work/GraftingWork";
 import { Augmentations } from "../../../Augmentation/Augmentations";
@@ -22,6 +23,8 @@ import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFun
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
 import { useCycleRerender } from "../../../ui/React/hooks";
+import type { Result } from "@nsdefs";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 
 export const GraftableAugmentations = (): Record<string, GraftableAugmentation> => {
   const gAugs: Record<string, GraftableAugmentation> = {};
@@ -33,11 +36,17 @@ export const GraftableAugmentations = (): Record<string, GraftableAugmentation> 
   return gAugs;
 };
 
-const canGraft = (aug: GraftableAugmentation): boolean => {
-  if (Player.money < aug.cost) {
-    return false;
+const canGraft = (aug: GraftableAugmentation): Result => {
+  if (Player.city !== CityName.NewTokyo) {
+    return { success: false, message: "You must be in New Tokyo to begin grafting an augmentation." };
   }
-  return hasAugmentationPrereqs(aug.augmentation);
+  if (Player.money < aug.cost) {
+    return { success: false, message: "You do not have enough money." };
+  }
+  if (!hasAugmentationPrereqs(aug.augmentation)) {
+    return { success: false, message: "You do not have the pre-requisites augmentations." };
+  }
+  return { success: true };
 };
 
 interface IProps {
@@ -92,6 +101,8 @@ export const GraftingRoot = (): React.ReactElement => {
     rerender();
   };
 
+  const checkResult = canGraft(graftableAugmentations[selectedAug]);
+
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
       <Button onClick={() => Router.back()}>Back</Button>
@@ -141,7 +152,9 @@ export const GraftingRoot = (): React.ReactElement => {
                   <ListItemButton key={i + 1} onClick={() => setSelectedAug(k)} selected={selectedAug === k}>
                     <Typography
                       sx={{
-                        color: canGraft(graftableAugmentations[k]) ? Settings.theme.primary : Settings.theme.disabled,
+                        color: canGraft(graftableAugmentations[k]).success
+                          ? Settings.theme.primary
+                          : Settings.theme.disabled,
                       }}
                     >
                       {k}
@@ -154,21 +167,27 @@ export const GraftingRoot = (): React.ReactElement => {
               <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
                 <Construction sx={{ mr: 1 }} /> {selectedAug}
               </Typography>
-              <Button
-                onClick={() => setGraftOpen(true)}
-                sx={{ width: "100%" }}
-                disabled={!canGraft(graftableAugmentations[selectedAug])}
-              >
-                Graft Augmentation (
-                <Typography>
-                  <Money money={graftableAugmentations[selectedAug].cost} forPurchase={true} />
-                </Typography>
-                )
-              </Button>
+              <Tooltip title={checkResult.message}>
+                <span>
+                  <Button onClick={() => setGraftOpen(true)} sx={{ width: "100%" }} disabled={!checkResult.success}>
+                    Graft Augmentation (
+                    <Typography>
+                      <Money money={graftableAugmentations[selectedAug].cost} forPurchase={true} />
+                    </Typography>
+                    )
+                  </Button>
+                </span>
+              </Tooltip>
               <ConfirmationModal
                 open={graftOpen}
                 onClose={() => setGraftOpen(false)}
                 onConfirm={() => {
+                  const checkResult = canGraft(graftableAugmentations[selectedAug]);
+                  if (!checkResult.success) {
+                    setGraftOpen(false);
+                    dialogBoxCreate(checkResult.message);
+                    return;
+                  }
                   Player.startWork(
                     new GraftingWork({
                       augmentation: selectedAug,

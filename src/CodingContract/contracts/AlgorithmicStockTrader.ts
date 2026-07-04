@@ -14,7 +14,7 @@ export const algorithmicStockTrader: Pick<
       return [
         "You are given the following array of stock prices (which are numbers)",
         "where the i-th element represents the stock price on day i:\n\n",
-        `${data}\n\n`,
+        `[${data}]\n\n`,
         "Determine the maximum possible profit you can earn using at most",
         "one transaction (i.e. you can only buy and sell the stock once). If no profit can be made",
         "then the answer should be 0. Note",
@@ -53,7 +53,7 @@ export const algorithmicStockTrader: Pick<
       return [
         "You are given the following array of stock prices (which are numbers)",
         "where the i-th element represents the stock price on day i:\n\n",
-        `${data}\n\n`,
+        `[${data}]\n\n`,
         "Determine the maximum possible profit you can earn using as many",
         "transactions as you'd like. A transaction is defined as buying",
         "and then selling one share of the stock. Note that you cannot",
@@ -92,7 +92,7 @@ export const algorithmicStockTrader: Pick<
       return [
         "You are given the following array of stock prices (which are numbers)",
         "where the i-th element represents the stock price on day i:\n\n",
-        `${data}\n\n`,
+        `[${data}]\n\n`,
         "Determine the maximum possible profit you can earn using at most",
         "two transactions. A transaction is defined as buying",
         "and then selling one share of the stock. Note that you cannot",

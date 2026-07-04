@@ -8,6 +8,7 @@ import { ServerSummary } from "./ServerSummary";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DWServerStyles, ServerName } from "./dnetStyles";
+import { Settings } from "../../Settings/Settings";
 
 export type DWServerProps = {
   server: DarknetServer;
@@ -35,10 +36,16 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
     const position = getPixelPosition(server);
     const hasRunningScripts = !!server.runningScriptMap.size;
     return {
-      ...DWServerStyles,
+      ...DWServerStyles(),
       top: `${position.top}px`,
       left: `${position.left}px`,
-      borderColor: server.hasStasisLink ? "gold" : hasRunningScripts ? "green" : !server.maxRam ? "#6495ED" : "grey",
+      borderColor: !server.maxRam
+        ? Settings.theme.info
+        : server.hasStasisLink
+        ? Settings.theme.money
+        : hasRunningScripts
+        ? Settings.theme.primary
+        : Settings.theme.secondary,
     };
   };
 
