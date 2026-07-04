@@ -101,7 +101,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
   errorText: {
     margin: "4px",
-    color: "white",
+    color: theme.colors.primary,
     textOverflow: "ellipsis",
     whiteSpace: "pre-wrap",
     lineClamp: "6",
