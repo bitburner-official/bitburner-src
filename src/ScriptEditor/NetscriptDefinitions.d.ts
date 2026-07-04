@@ -10302,11 +10302,19 @@ export interface WarehouseAPI {
    * @remarks
    * RAM cost: 20 GB
    *
-   * This limit applies only to output; it does not affect input consumption.
+   * This limit does not reduce input consumption.
    *
-   * For example, in Agriculture, assume the division's raw production is 1000. You need to consume 500 Water and 200
-   * Chemicals to produce 1000 Plants and 1000 Food. If you set the limits for Plants and Food to 200 and 100
-   * respectively, you will still consume 500 Water and 200 Chemicals, but only produce 200 Plants and 100 Food.
+   * For example, in Agriculture, assume the division's raw production is 1000 and assume the division
+   * is bottlenecked by raw production (as opposed to lack of input materials or warehouse space).
+   * You need to consume 500 Water and 200 Chemicals to produce 1000 Plants and 1000 Food. If you set
+   * the limits for Plants and Food to 200 and 100 respectively, you will still consume 500 Water
+   * and 200 Chemicals, but only produce 200 Plants and 100 Food.
+   *
+   * The limit does not make production more space-efficient.
+   *
+   * For example, If you set the limit for Plants to 0, the formula effectively becomes
+   * 0.5 Water + 0.2 Chemicals ⟹ 1 Food, but it still requires empty warehouse space as
+   * if it were 0.5 Water + 0.2 Chemicals ⟹ 1 Plants + 1 Food.
    *
    * With industries that produce both materials and products, the material production limits do not affect product
    * production.
