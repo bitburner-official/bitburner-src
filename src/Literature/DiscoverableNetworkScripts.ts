@@ -5,7 +5,7 @@ import portReceiverContent from "./DiscoverableScriptContents/port_receiver.wip.
 import serverFinderContent from "./DiscoverableScriptContents/server_finder.wip.js?raw";
 import customLogScriptContent from "./DiscoverableScriptContents/escaping_your_chains.wip.jsx?raw";
 import customContentScriptContent from "./DiscoverableScriptContents/build_new_worlds.wip.jsx?raw";
-import batcherContent from "./DiscoverableScriptContents/batch_hack.wip.js?raw";
+import hackControllerContent from "./DiscoverableScriptContents/hack_controller.wip.js?raw";
 import hackChildScriptContent from "./DiscoverableScriptContents/hack.wip.js?raw";
 import { DiscoverableScriptName } from "@enums";
 
@@ -40,9 +40,9 @@ export const discoverableNetworkScripts: Record<DiscoverableScriptName, Discover
     filename: DiscoverableScriptName.customContentScript,
     content: customContentScriptContent,
   },
-  [DiscoverableScriptName.batcher]: {
-    filename: DiscoverableScriptName.batcher,
-    content: batcherContent,
+  [DiscoverableScriptName.hackController]: {
+    filename: DiscoverableScriptName.hackController,
+    content: hackControllerContent,
   },
   [DiscoverableScriptName.hackChildScript]: {
     filename: DiscoverableScriptName.hackChildScript,

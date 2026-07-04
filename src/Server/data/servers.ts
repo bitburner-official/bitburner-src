@@ -291,7 +291,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 99,
     hostname: SpecialServers.FulcrumSecretTechnologies,
-    discoverableScripts: [DiscoverableScriptName.batcher, DiscoverableScriptName.hackChildScript],
+    discoverableScripts: [DiscoverableScriptName.hackController, DiscoverableScriptName.hackChildScript],
     moneyAvailable: 1e6,
     networkLayer: 15,
     numOpenPortsRequired: 5,

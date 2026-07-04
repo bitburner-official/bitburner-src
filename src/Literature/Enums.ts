@@ -43,6 +43,6 @@ export enum DiscoverableScriptName {
   serverFinder = "server_finder.wip.js",
   customLogScript = "escaping_your_chains.wip.jsx",
   customContentScript = "build_new_worlds.wip.jsx",
-  batcher = "batch_hack.wip.js",
+  hackController = "hack_controller.wip.js",
   hackChildScript = "hack.wip.js",
 }
