@@ -34,3 +34,15 @@ export enum LiteratureName {
   StasisLinkHint = "stasis-link.lit",
   LabHint = "secrets-in-the-depths.lit",
 }
+
+export enum DiscoverableScriptName {
+  guessingGame = "guessing_game.wip.js",
+  cloudServerUpgrades = "upgrade_cloud_server.wip.ts",
+  portSender = "port_sender.wip.js",
+  portReceiver = "port_receiver.wip.js",
+  serverFinder = "server_finder.wip.js",
+  customLogScript = "escaping_your_chains.wip.jsx",
+  customContentScript = "build_new_worlds.wip.jsx",
+  batcher = "batch_hack.wip.js",
+  hackChildScript = "hack.wip.js",
+}

@@ -25,13 +25,22 @@ export async function main(ns) {
   const containerNode = document.querySelector('#overview-extra-hook-0');
   ReactDOM.render(<div>They are always watching over you... waiting...</div>, containerNode);
 
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 10; i++) {
     ns.print('Logging real stuff...', String.fromCharCode(i + 32));
     await ns.sleep(10);
   }
 
+  const borderColor = ns.ui.getTheme().primary;
+
   function handleClick() {
     ns.toast('Was that really a good idea?');
 
-  ns.printRaw(<button onClick={handleClick}>"Click Me."</button>);
+
+  ns.printRaw(
+    <button style={{ borderColor: borderColor, backgroundColor: '#111', color: '#FFF' }} onClick={handleClick}>
+      Click Me!
+    </button>,
+  );
+
+  ns.asleep(1e20);
 }

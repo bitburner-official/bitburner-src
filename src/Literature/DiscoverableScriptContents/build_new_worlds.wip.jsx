@@ -1,6 +1,6 @@
 /*
             ** GUI Spec v0.12 — Render Hook Injection **
-            (c) 2076 Fulcrum Tech (Secret Lab Division)
+            (c) 2076 Fulcrum Tech (R&D Division)
                           Author: jump3r
 
    status: DRAFT. do not circulate. do not check this in. or out.
@@ -23,7 +23,7 @@ export async function main(ns) {
   ns.tprint('Custom content added to sidebar');
 
   // Prevent the script from exiting, so react components can still use ns methods
-  ns.sleep(1e20);
+  ns.asleep(1e20);
 }
 
 /**
