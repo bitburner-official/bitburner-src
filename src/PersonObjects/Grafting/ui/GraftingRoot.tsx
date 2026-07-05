@@ -205,7 +205,10 @@ export const GraftingRoot = (): React.ReactElement => {
                       <>
                         <br />
                         <br />
-                        Additionally, grafting an augmentation will increase the potency of the Entropy virus.
+                        {selectedAug !== AugmentationName.CongruityImplant &&
+                          "Additionally, grafting an augmentation will increase the potency of the Entropy virus."}
+                        {selectedAug === AugmentationName.CongruityImplant &&
+                          "This augmentation will remove the Entropy virus effect."}
                       </>
                     )}
                   </Typography>
