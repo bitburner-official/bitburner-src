@@ -7,7 +7,7 @@
 
      > is this finally good enough? it's perfect code - no flaws!
      > I know that a high hacking skill is the key to finally
-     > getting an in with daedalus
+     > getting an in with d██████s
      >
      > these augments make my brain itch. I hope it's all worth it
      >
