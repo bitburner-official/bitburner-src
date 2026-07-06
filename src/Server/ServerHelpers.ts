@@ -379,13 +379,13 @@ export function initForeignServers(homeComputer: Server): void {
       server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
     }
 
-    for (const filename of metadata.literature || []) {
+    for (const filename of metadata.literature ?? []) {
       server.messages.push(filename);
     }
 
-    for (const scriptName of metadata.discoverableScripts || []) {
+    for (const scriptName of metadata.discoverableScripts ?? []) {
       const path = resolveScriptFilePath(scriptName);
-      const content = discoverableNetworkScripts[scriptName]?.content;
+      const content = discoverableNetworkScripts[scriptName].content;
       if (!path || !content) {
         console.error(
           `Unable to populate script ${scriptName} on server ${server.hostname}: invalid script name or content`,
