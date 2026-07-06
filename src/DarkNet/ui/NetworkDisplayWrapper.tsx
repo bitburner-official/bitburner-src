@@ -18,7 +18,7 @@ import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles, DWServerLogStyles } from "./dnetStyles";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getAllDarknetServers, getAllMovableDarknetServers } from "../utils/darknetNetworkUtils";
+import { getAllDarknetServers, getBackdooredDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
@@ -226,36 +226,34 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         ""
       )}
       {DarknetState.mutationLock ? (
-        <Typography variant={"h6"} className={classes.gold}>
+        <Typography variant={"h5"} className={classes.gold}>
           [WEBSTORM WARNING]
         </Typography>
       ) : (
-        <Box className={`${classes.inlineFlexBox}`}>
-          <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
-            Dark Net
-          </Typography>
+        <Typography variant={"h5"} sx={{ fontWeight: "bold", display: "flex", alignItems: "center" }}>
+          Dark Net
           {instability > 0 && (
             <Tooltip
               title={
                 <>
-                  If too many darknet servers are backdoored or frozen, it will increase the chance that authentication{" "}
+                  If too many darknet servers are backdoored (without stasis links) or frozen, it will increase the
+                  chance that authentication attempts return a 408 Request Timeout error even if the password is
+                  correct.
                   <br />
-                  attempts will return a 408 Request Timeout error (even if the password is correct). <br />
                   Most servers will eventually restart or go offline, which removes backdoors over time.
                   <br />
-                  Current backdoored servers: {getAllMovableDarknetServers().filter((s) => s.backdoorInstalled).length}
+                  Current backdoored servers: {getBackdooredDarknetServers().length}
                   <br />
                   Current frozen servers: {getAllDarknetServers().filter((s) => !s.maxRam).length}
                 </>
               }
             >
-              <Typography variant={"subtitle1"} sx={{ fontStyle: "italic" }}>
-                {" "}
-                Instability: {instabilityText}
+              <Typography component="span" sx={{ fontStyle: "italic", marginLeft: "10px" }}>
+                (Instability: {instabilityText})
               </Typography>
             </Tooltip>
           )}
-        </Box>
+        </Typography>
       )}
 
       <div
