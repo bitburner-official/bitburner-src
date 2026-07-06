@@ -1,12 +1,12 @@
-import guessingGameContent from "./DiscoverableScriptContents/guessing_game.wip.js?raw";
-import upgradeCloudServerContent from "./DiscoverableScriptContents/upgrade_cloud_server.wip.ts?raw";
-import portSenderContent from "./DiscoverableScriptContents/port_sender.wip.js?raw";
-import portReceiverContent from "./DiscoverableScriptContents/port_receiver.wip.js?raw";
-import serverFinderContent from "./DiscoverableScriptContents/server_finder.wip.js?raw";
-import customLogScriptContent from "./DiscoverableScriptContents/escaping_your_chains.wip.jsx?raw";
-import customContentScriptContent from "./DiscoverableScriptContents/build_new_worlds.wip.jsx?raw";
-import hackControllerContent from "./DiscoverableScriptContents/hack_controller.wip.js?raw";
-import hackChildScriptContent from "./DiscoverableScriptContents/hack.wip.js?raw";
+import guessingGameContent from "./DiscoverableScriptContent/guessing_game.wip.js?raw";
+import upgradeCloudServerContent from "./DiscoverableScriptContent/upgrade_cloud_server.wip.ts?raw";
+import portSenderContent from "./DiscoverableScriptContent/port_sender.wip.js?raw";
+import portReceiverContent from "./DiscoverableScriptContent/port_receiver.wip.js?raw";
+import serverFinderContent from "./DiscoverableScriptContent/server_finder.wip.js?raw";
+import customLogScriptContent from "./DiscoverableScriptContent/escaping_your_chains.wip.jsx?raw";
+import customContentScriptContent from "./DiscoverableScriptContent/build_new_worlds.wip.jsx?raw";
+import hackControllerContent from "./DiscoverableScriptContent/hack_controller.wip.js?raw";
+import hackChildScriptContent from "./DiscoverableScriptContent/hack.wip.js?raw";
 import { DiscoverableScriptName } from "@enums";
 
 export type DiscoverableScript = { filename: DiscoverableScriptName; content: string };
