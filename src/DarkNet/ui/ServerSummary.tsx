@@ -184,7 +184,7 @@ export function ServerSummary({
       ? components
       : [
           ...components.slice(0, 3),
-          <Tooltip key="others" title={components.slice(3)}>
+          <Tooltip key="others" placement="right" title={<div style={{ display: "flex" }}>{components.slice(3)}</div>}>
             <Typography>
               <SvgIcon component={Add} className={classes.serverStatusIcon} />
             </Typography>
