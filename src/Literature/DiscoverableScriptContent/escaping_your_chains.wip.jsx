@@ -27,7 +27,7 @@ export async function main(ns) {
 
   for (let i = 0; i < 10; i++) {
     ns.print('Logging real stuff...', String.fromCharCode(i + 32));
-    await ns.sleep(10);
+    ns.sleep(10);
   }
 
   const borderColor = ns.ui.getTheme().primary;
@@ -42,5 +42,5 @@ export async function main(ns) {
     </button>,
   );
 
-  ns.asleep(1e20);
+  await new Promise(resolve => {});
 }

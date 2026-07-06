@@ -23,9 +23,10 @@
  Grow is like interest - the more money the server has, the more that grow adds!
  Make sure the server stays near max money. Don't steal big chunks of money at once.
 
- RULE 3: The Botnet Must Grow
- RAM is everything. Get your hands on any servers' ram that you can buy or steal or upgrade.
- The more hack script threads you can bring to bear, the more you can upgrade your servers, which lets you launch more threads, and repeat!
+ RULE 3: Be Ready For Anything
+ Expect things to go wrong. Watch out for security and money drift over time!
+ Add a little extra to however much it seems like you would need.
+
 */
 
 /** @param {NS} ns */

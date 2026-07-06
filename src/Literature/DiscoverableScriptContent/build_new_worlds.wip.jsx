@@ -23,7 +23,7 @@ export async function main(ns) {
   ns.tprint('Custom content added to sidebar');
 
   // Prevent the script from exiting, so react components can still use ns methods
-  ns.asleep(1e20);
+  await new Promise(resolve => {});
 }
 
 /**
