@@ -190,7 +190,8 @@ Saving a file will reload the game automatically.
 Tested on:
 
 - Node 24.13.0 (LTS) on Windows.
-- These steps only work in a Bash-like environment, like MinGW for Windows.
+
+These steps only work in a Bash-like environment, like MinGW for Windows.
 
 ```sh
 # Install the main game dependencies & build the app in debug mode.
