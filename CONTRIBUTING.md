@@ -61,12 +61,12 @@ called `npm` is installed as well.
 Not all code contributions will be accepted. The safest way to ensure
 that you don't waste time working on something that gets rejected is to
 run your idea(s)/plan(s) past the developers first.
-You can contact him through Discord.
+You can contact them through Discord.
 
 Otherwise, here are some general guidelines for determining what types of
 changes are okay to contribute:
 
-##### Contributions that Will Most Likely Be Accepted
+##### Contributions that will most likely be accepted
 
 - Bug fixes
 - Quality-of-life changes
@@ -76,14 +76,14 @@ changes are okay to contribute:
   - Adding a new Terminal command
 - Code refactors that conform to good/standard practices
 
-##### Contributions that will not be Accepted without prior approval
+##### Contributions that will not be accepted without prior approval
 
 - Changes that directly affect the game's balance
 - New gameplay mechanics
 
 ---
 
-## How to setup fork properly
+## How to setup your fork properly
 
 Clone and fork the game's repository by using one of these methods: web browser, GitHub
 Desktop, or command line.
@@ -213,23 +213,7 @@ the following rules:
 - The title of your Pull Request will need to be formatted like
   `MISC: Reticulated the splines`, where the first word must be capitalised
   and relate to the kind of change being implemented. Possible examples
-  are UI, BUGFIX, SERVERS, NETSCRIPT... You get the idea.
-
-## Troubleshooting common issues
-
-### Unrelated changes in `package-lock.json`
-
-After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
-
-### Lots of `peer: true` lines added in `package-lock.json`
-
-npm version 11.6.2 has a bug that causes this. Unfortunately, this is the current LTS (stable) release as of this writing. Use a newer or older npm version, and re-run `npm install`.
-
-See https://github.com/npm/cli/pull/8671 and https://github.com/npm/cli/issues/8690 for details.
-
-### Unrelated failed Jest tests
-
-Some Jest tests fail to run in Node versions older than v24. On those versions, these tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). You need to use Node v24+ to run these tests.
+  are UI, BUGFIX, SERVERS, API... You get the idea.
 
 ## As a Documenter
 
@@ -274,3 +258,19 @@ Avoid:
 
 - Failure conditions. It's very frustrating to lose several days' worth of progress.
 - Making existing mechanics harder. This makes it hard to port the content to other BNs.
+
+## Troubleshooting common issues
+
+### Unrelated changes in `package-lock.json`
+
+After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
+
+### Lots of `peer: true` lines added in `package-lock.json`
+
+npm version 11.6.2 has a bug that causes this. If you can, switch to the `24.18.0` version which is the LTS as of this writing and re-run `npm install`.
+
+See [PR #8671](https://github.com/npm/cli/pull/8671) and [Issue #8690](https://github.com/npm/cli/issues/8690) for details.
+
+### Unrelated failed Jest tests
+
+Some Jest tests fail to run in Node versions older than v24. On those versions, these tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). You need to use Node v24+ to run these tests.
