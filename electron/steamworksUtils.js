@@ -54,9 +54,18 @@ function verifyLibraryFiles() {
   return { success: true };
 }
 
+/** Steam integration can be disabled entirely with the --no-steam command-line flag. When disabled, we never load
+ * steamworks.js or connect to the Steam client, and we don't set global.steamworksError, so the "Could not connect
+ * to Steam" dialog is skipped. Steam Cloud and achievements are already no-ops when steamworksClient is undefined. */
+const steamworksDisabled = process.argv.includes("--no-steam");
+
 let steamworks;
 try {
-  steamworks = require("@catloversg/steamworks.js");
+  if (!steamworksDisabled) {
+    steamworks = require("@catloversg/steamworks.js");
+  } else {
+    log.info("Steam integration disabled by --no-steam flag");
+  }
 } catch (error) {
   log.error(error);
   log.info(
