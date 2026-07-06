@@ -156,7 +156,7 @@ Your branch is up to date with 'upstream/dev'
 $ git checkout -b new-stuff-to-add
 # ... (do some changes in the code)
 $ git add . # store my changes and prep them to go
-$ git commit -m "Commit Messsage" # this will store your changes into a "commit", which is
+$ git commit -m "Commit Messsage" # this will store your changes into a commit
 $ git push origin new-stuff-to-add # upload changes to GitHub
 ```
 
