@@ -36,21 +36,19 @@ already been reported as an [Issue](https://github.com/bitburner-official/bitbur
 - **Use a clear and descriptive title** for the Issue.
 - **State your browser, your browser's version, and your computer's OS.**
 - **Attach your save file**, if you think it would help solve the Issue.
-  Zip your save file first, then attach the zipped save file.
+  The game auto-zips the save, upload it as-is.
 - **Provide instructions on how to reproduce the bug** in as much detail
   as possible. If you cannot reliably reproduce the bug, then just try
   your best to explain what was happening when the bug occurred.
 - **Provide any scripts** that triggered the bug if the Issue is Netscript-related.
-- **Open your browser's Dev Console and report any error-related output**
+- **Open your browser's Dev Tools and report any error-related output**
   that may be printed there. The Dev Console can be opened on most modern
-  browsers by pressing F12.
+  browsers by pressing F12 or Ctrl+Shift+I.
 
 ## As a Developer
 
 Anyone is welcome to contribute to Bitburner code. However, please read
-the [license](./license.txt)
-and the [readme](./README.md)
-before doing so.
+the [LICENSE](./license.txt) and the [README](./README.md) before doing so.
 
 To contribute to Bitburner code, you will need to have
 [NodeJS](https://nodejs.org) installed. When installing NodeJS, a utility
@@ -103,7 +101,7 @@ Desktop, or command line.
 ```sh
 # This clones the game's code repository. The output you get might vary.
 $ git clone https://github.com/bitburner-official/bitburner-src.git
-Cloning into 'bitburner'...
+Cloning into 'bitburner-src'...
 remote: Enumerating objects: 57072, done.
 remote: Counting objects: 100% (404/404), done.
 remote: Compressing objects: 100% (205/205), done.
@@ -138,18 +136,38 @@ $ git fetch upstream
 $ git branch
 * dev
 $ git branch -r
-upstream/BN14
+origin/HEAD -> origin/dev
+origin/dev
 upstream/HEAD -> upstream/dev
 upstream/dev
-upstream/folders
-upstream/master
+...
 ```
 
 ## Development Workflow Best Practices
 
 - Work in a new branch forked from the `dev` branch to isolate your new code.
-  - Keep code-changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
-  - Regularly rebase your branch against `dev` to make sure you have the latest updates pulled.
+
+```sh
+$ git checkout dev # or with modern syntax, git switch dev
+Switched to branch 'dev'
+Your branch is up to date with 'upstream/dev'
+# create another branch based on dev called 'new-stuff-to-add'
+# your changes will be stored in this branch, which later you will PR to upstream/dev
+$ git checkout -b new-stuff-to-add
+# ... (do some changes in the code)
+$ git add . # store my changes and prep them to go
+$ git commit -m "Commit Messsage" # this will store your changes into a "commit", which is
+$ git push origin new-stuff-to-add # upload changes to GitHub
+```
+
+- Keep code-changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
+- Regularly rebase your branch against `dev` to make sure you have the latest updates pulled.
+
+```sh
+$ git checkout new-stuff-to-add
+Switched 'to branch new-stuff-to-add'
+$ git rebase upstream dev # git merge upstream dev works as well
+```
 
 ## Running locally
 
@@ -157,7 +175,7 @@ Install
 
 - NodeJS (maybe via `nvm`). When installing NodeJS, you also get a tool called `npm`. You can update `npm` to the latest version by running `npm install -g npm@latest`.
 - Github Desktop (Windows only)
-- Visual Studio Code (optional)
+- Visual Studio Code (optional but recommended)
 
 Inside the root of the repository run:
 
@@ -169,8 +187,10 @@ Saving a file will reload the game automatically.
 
 ### How to build the electron app
 
-Tested on Node 24.13.0 (LTS) on Windows.
-These steps only work in a Bash-like environment, like MinGW for Windows.
+Tested on:
+
+- Node 24.13.0 (LTS) on Windows.
+- These steps only work in a Bash-like environment, like MinGW for Windows.
 
 ```sh
 # Install the main game dependencies & build the app in debug mode.
@@ -192,13 +212,13 @@ the following rules:
 - Work in a branch forked from `dev` to isolate the new code.
 - Ensure you have the latest from the [game's main
   repository](../../tree/dev).
-- Rebase your branch if necessary.
-- Run the game locally to test out your changes.
+- Rebase or merge your branch if necessary.
+- Run the game locally to test out your changes (`npm run start:dev`).
 - When submitting the pull request, make sure that the base fork is
   _bitburner-official/bitburner-src_ and the base is _dev_.
 - If your changes affect the game's UI, attach some screenshots or GIFs showing
   the changes to the UI.
-- If your changes affect Netscript, provide some
+- If your changes affect the Netscript API, provide some
   scripts that can be used to test the Netscript changes.
 - Ensure you have run `npm run lint` to make sure your changes conform to the
   rules enforced across the code base. The command will fail if any of the
@@ -274,3 +294,15 @@ See [PR #8671](https://github.com/npm/cli/pull/8671) and [Issue #8690](https://g
 ### Unrelated failed Jest tests
 
 Some Jest tests fail to run in Node versions older than v24. On those versions, these tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). You need to use Node v24+ to run these tests.
+
+## TL;DR
+
+- Fork the repo ([How to setup your fork properly](#how-to-setup-your-fork-properly)).
+- Make your changes.
+- Run `npm run format` (prettier), `npm run lint` (linter) and `npm run test` (jest). If you made any changes to
+  `NetscriptDefinitions.d.ts`, run `npm run doc` (API documenter) as well.
+- Test your changes manually before submitting anything!! ([running locally](#running-locally)).
+- Commit your changes ([Development Workflow](#development-workflow-best-practices)).
+- Go to GitHub and create a PR following [these guidelines](#submitting-a-pull-request).
+- Follow maintainers' feedback and adjust any changes you made to their suggestions. If you have
+  any questions or doubts, check [this links](#in-general).
