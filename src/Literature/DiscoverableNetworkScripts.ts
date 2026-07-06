@@ -12,40 +12,40 @@ import { DiscoverableScriptName } from "@enums";
 export type DiscoverableScript = { filename: DiscoverableScriptName; content: string };
 
 export const discoverableNetworkScripts: Record<DiscoverableScriptName, DiscoverableScript> = {
-  [DiscoverableScriptName.guessingGame]: {
-    filename: DiscoverableScriptName.guessingGame,
+  [DiscoverableScriptName.GuessingGame]: {
+    filename: DiscoverableScriptName.GuessingGame,
     content: guessingGameContent,
   },
-  [DiscoverableScriptName.cloudServerUpgrades]: {
-    filename: DiscoverableScriptName.cloudServerUpgrades,
+  [DiscoverableScriptName.CloudServerUpgrades]: {
+    filename: DiscoverableScriptName.CloudServerUpgrades,
     content: upgradeCloudServerContent,
   },
-  [DiscoverableScriptName.portSender]: {
-    filename: DiscoverableScriptName.portSender,
+  [DiscoverableScriptName.PortSender]: {
+    filename: DiscoverableScriptName.PortSender,
     content: portSenderContent,
   },
-  [DiscoverableScriptName.portReceiver]: {
-    filename: DiscoverableScriptName.portReceiver,
+  [DiscoverableScriptName.PortReceiver]: {
+    filename: DiscoverableScriptName.PortReceiver,
     content: portReceiverContent,
   },
-  [DiscoverableScriptName.serverFinder]: {
-    filename: DiscoverableScriptName.serverFinder,
+  [DiscoverableScriptName.ServerFinder]: {
+    filename: DiscoverableScriptName.ServerFinder,
     content: serverFinderContent,
   },
-  [DiscoverableScriptName.customLogScript]: {
-    filename: DiscoverableScriptName.customLogScript,
+  [DiscoverableScriptName.CustomLogScript]: {
+    filename: DiscoverableScriptName.CustomLogScript,
     content: customLogScriptContent,
   },
-  [DiscoverableScriptName.customContentScript]: {
-    filename: DiscoverableScriptName.customContentScript,
+  [DiscoverableScriptName.CustomContentScript]: {
+    filename: DiscoverableScriptName.CustomContentScript,
     content: customContentScriptContent,
   },
-  [DiscoverableScriptName.hackController]: {
-    filename: DiscoverableScriptName.hackController,
+  [DiscoverableScriptName.HackController]: {
+    filename: DiscoverableScriptName.HackController,
     content: hackControllerContent,
   },
-  [DiscoverableScriptName.hackChildScript]: {
-    filename: DiscoverableScriptName.hackChildScript,
+  [DiscoverableScriptName.HackChildScript]: {
+    filename: DiscoverableScriptName.HackChildScript,
     content: hackChildScriptContent,
   },
 };
