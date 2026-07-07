@@ -170,6 +170,7 @@ const useStyles = makeStyles()({
     flexDirection: "column-reverse",
     whiteSpace: "pre-wrap",
     wordWrap: "break-word",
+    borderWidth: "0 1px 1px 1px",
   },
   titleButton: {
     borderWidth: "0 0 0 1px",
@@ -336,16 +337,12 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
           zIndex: 1400,
           minWidth: `${minWindowSize[0]}px`,
           minHeight: `${minWindowSize[1]}px`,
-          ...(propsRef.current.minimized
-            ? {
-                border: "none",
-                margin: 0,
-                maxHeight: 0,
-                padding: 0,
-              }
-            : {
-                border: `1px solid ${Settings.theme.welllight}`,
-              }),
+          ...(propsRef.current.minimized && {
+            border: "none",
+            margin: 0,
+            maxHeight: 0,
+            padding: 0,
+          }),
         }}
         ref={container}
       >
