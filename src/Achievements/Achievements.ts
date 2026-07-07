@@ -6,7 +6,6 @@ import {
   CorpUnlockName,
   FactionName,
   IndustryType,
-  LocationName,
 } from "@enums";
 import { Skills } from "../Bladeburner/data/Skills";
 import { CONSTANTS } from "../Constants";
@@ -772,9 +771,9 @@ export const achievements: Record<AchievementId, Achievement> = {
   },
   THE_VOID: {
     ...achievementData.THE_VOID,
-    Icon: "VOID",
+    Icon: "the-void",
     Secret: true,
-    Condition: () => Player.location === LocationName.Void,
+    Condition: () => false,
     NotInSteam: true,
   },
 };

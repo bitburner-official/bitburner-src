@@ -44,7 +44,6 @@ import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
 import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
 import { DarknetConstants } from "../../DarkNet/Constants";
 import { formatMoney } from "../../ui/formatNumber";
-import { TheVoid } from "./TheVoid";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -481,7 +480,14 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     case LocationName.Void: {
       // Reserved for special content such as easter eggs.
-      return <TheVoid />;
+      // Player.giveAchievement() may render a toast while React is rendering this component. This causes a state update
+      // during rendering, which triggers the following React warning: "Cannot update during an existing state
+      // transition (such as within `render`). Render methods should be a pure function of props and state."
+      // Therefore, we defer the call until after the current render completes.
+      setTimeout(() => {
+        Player.giveAchievement("THE_VOID");
+      }, 0);
+      return <></>;
     }
     default:
       console.error(`Location ${props.loc.name} doesn't have any special properties`);
