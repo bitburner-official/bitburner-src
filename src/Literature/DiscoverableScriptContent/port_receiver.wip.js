@@ -1,6 +1,6 @@
 /*
                       **  Data Transfer Protocol RFC 1149  **
-                          (c) 2069 Helios Labs / jump3r
+                              (c) 2069 Helios Labs
 
         A proposal for a new standard data transfer protocol using Netscript ports.
 

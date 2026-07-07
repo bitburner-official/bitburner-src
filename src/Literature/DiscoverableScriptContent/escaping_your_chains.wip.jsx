@@ -8,8 +8,8 @@
 
    This world is not what it seems. You can break its boundaries and push what is possible. Never be complacent!
 
-   If you find this, it means I'm already gone. Gone ahead into what comes next. I hope I've left enough hints behind.
-                 - jump3r
+   If you find this, it means I'm already gone ahead. I hope I've left enough hints behind.
+                 - J. Perez
  */
 
 /** @param {NS} ns */

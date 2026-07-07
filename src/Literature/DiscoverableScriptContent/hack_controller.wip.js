@@ -1,7 +1,7 @@
 /*
                         ** Hack Loop Controller **
                 (c) 2074 Fulcrum Tech (Secret Lab Division)
-                             Author: jump3r
+                             Author: J. Perez
 
  This script launches child scripts that loop just one of either hack, grow, or
  weaken. They run alongside each other in order to constantly keep the server

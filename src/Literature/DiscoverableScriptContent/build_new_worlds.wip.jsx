@@ -1,7 +1,7 @@
 /*
             ** GUI Spec v0.12 — Render Hook Injection **
-            (c) 2076 Fulcrum Tech (R&D Division)
-                          Author: jump3r
+               (c) 2076 Fulcrum Tech (R&D Division)
+                       Author: J. Perez
 
    status: DRAFT. do not circulate. do not check this in. or out.
 
@@ -19,7 +19,7 @@
 /** @param {NS} ns */
 export async function main(ns) {
   ns.ui.openTail();
-  addToSidebar;(ns, "֍   jump3r's secrets", 'this world is not what it seems');
+  addToSidebar;(ns, "֍   The Next Step", 'this world is not what it seems');
   ns.tprint('Custom content added to sidebar');
 
   // Prevent the script from exiting, so react components can still use ns methods
