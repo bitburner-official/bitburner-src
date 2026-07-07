@@ -6,6 +6,7 @@ import {
   CorpUnlockName,
   FactionName,
   IndustryType,
+  LocationName,
 } from "@enums";
 import { Skills } from "../Bladeburner/data/Skills";
 import { CONSTANTS } from "../Constants";
@@ -768,6 +769,13 @@ export const achievements: Record<AchievementId, Achievement> = {
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.TrueRecursion),
+  },
+  THE_VOID: {
+    ...achievementData.THE_VOID,
+    Icon: "VOID",
+    Secret: true,
+    Condition: () => Player.location === LocationName.Void,
+    NotInSteam: true,
   },
 };
 

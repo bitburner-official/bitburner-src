@@ -44,6 +44,7 @@ import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
 import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
 import { DarknetConstants } from "../../DarkNet/Constants";
 import { formatMoney } from "../../ui/formatNumber";
+import { TheVoid } from "./TheVoid";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -480,7 +481,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     case LocationName.Void: {
       // Reserved for special content such as easter eggs.
-      return <></>;
+      return <TheVoid />;
     }
     default:
       console.error(`Location ${props.loc.name} doesn't have any special properties`);
