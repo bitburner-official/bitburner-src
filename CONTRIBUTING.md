@@ -36,14 +36,14 @@ already been reported as an [Issue](https://github.com/bitburner-official/bitbur
 - **Use a clear and descriptive title** for the Issue.
 - **State your browser, your browser's version, and your computer's OS.**
 - **Attach your save file**, if you think it would help solve the Issue.
-  The game auto-zips the save, upload it as-is.
+  Upload your save file as is. Do NOT compress or decompress it.
 - **Provide instructions on how to reproduce the bug** in as much detail
   as possible. If you cannot reliably reproduce the bug, then just try
   your best to explain what was happening when the bug occurred.
 - **Provide any scripts** that triggered the bug if the Issue is Netscript-related.
-- **Open your browser's Dev Tools and report any error-related output**
-  that may be printed there. The Dev Console can be opened on most modern
-  browsers by pressing F12 or Ctrl+Shift+I.
+- **Open the Console tab in your browser's Dev Tools and report any error-related output**
+  that may be printed there. The Dev Tools can be opened on most modern
+  browsers by pressing F12 or Ctrl+Shift+I (Cmd + Option + I on macOS machines).
 
 ## As a Developer
 
@@ -136,37 +136,30 @@ $ git fetch upstream
 $ git branch
 * dev
 $ git branch -r
-origin/HEAD -> origin/dev
-origin/dev
 upstream/HEAD -> upstream/dev
 upstream/dev
-...
 ```
 
 ## Development Workflow Best Practices
 
-- Work in a new branch forked from the `dev` branch to isolate your new code.
+- Work in a new branch based on the `dev` branch to isolate your changes.
 
 ```sh
-$ git checkout dev # or with modern syntax, git switch dev
-Switched to branch 'dev'
-Your branch is up to date with 'upstream/dev'
-# create another branch based on dev called 'new-stuff-to-add'
-# your changes will be stored in this branch, which later you will PR to upstream/dev
-$ git checkout -b new-stuff-to-add
-# ... (do some changes in the code)
-$ git add . # store my changes and prep them to go
-$ git commit -m "Commit Messsage" # this will store your changes into a commit
-$ git push origin new-stuff-to-add # upload changes to GitHub
+$ git checkout dev
+$ git checkout -b new-stuff-to-add # Create a new branch for your changes.
+# ... (Make your changes)
+$ git add . # Stage your changes.
+$ git commit -m "Commit Message" # Commit your staged changes.
+$ git push origin new-stuff-to-add # Push your branch to GitHub.
 ```
 
-- Keep code-changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
-- Regularly rebase your branch against `dev` to make sure you have the latest updates pulled.
+- Keep code changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
+- Regularly rebase your branch onto `upstream/dev` to keep it up to date.
 
 ```sh
+$ git fetch upstream
 $ git checkout new-stuff-to-add
-Switched 'to branch new-stuff-to-add'
-$ git rebase upstream dev # git merge upstream dev works as well
+$ git rebase upstream/dev
 ```
 
 ## Running locally
@@ -175,7 +168,7 @@ Install
 
 - NodeJS (maybe via `nvm`). When installing NodeJS, you also get a tool called `npm`. You can update `npm` to the latest version by running `npm install -g npm@latest`.
 - Github Desktop (Windows only)
-- Visual Studio Code (optional but recommended)
+- Visual Studio Code (optional)
 
 Inside the root of the repository run:
 
@@ -187,9 +180,7 @@ Saving a file will reload the game automatically.
 
 ### How to build the electron app
 
-Tested on:
-
-- Node 24.13.0 (LTS) on Windows.
+Tested on Node 24.13.0 (LTS) on Windows.
 
 These steps only work in a Bash-like environment, like MinGW for Windows.
 
@@ -219,7 +210,7 @@ the following rules:
   _bitburner-official/bitburner-src_ and the base is _dev_.
 - If your changes affect the game's UI, attach some screenshots or GIFs showing
   the changes to the UI.
-- If your changes affect the Netscript API, provide some
+- If your changes affect the Netscript APIs, provide some
   scripts that can be used to test the Netscript changes.
 - Ensure you have run `npm run lint` to make sure your changes conform to the
   rules enforced across the code base. The command will fail if any of the
@@ -288,9 +279,9 @@ After running `npm install`, if you do not change anything in `package.json` and
 
 ### Lots of `peer: true` lines added in `package-lock.json`
 
-npm version 11.6.2 has a bug that causes this. If you can, switch to the `24.18.0` version which is the LTS as of this writing and re-run `npm install`.
+npm version 11.6.2 has a bug that causes this. You need to update npm and rerun `npm install`.
 
-See [PR #8671](https://github.com/npm/cli/pull/8671) and [Issue #8690](https://github.com/npm/cli/issues/8690) for details.
+See https://github.com/npm/cli/pull/8671 and https://github.com/npm/cli/issues/8690 for details.
 
 ### Unrelated failed Jest tests
 
@@ -300,10 +291,8 @@ Some Jest tests fail to run in Node versions older than v24. On those versions, 
 
 - Fork the repo ([How to setup your fork properly](#how-to-setup-your-fork-properly)).
 - Make your changes.
-- Run `npm run format` (prettier), `npm run lint` (linter) and `npm run test` (jest). If you made any changes to
-  `NetscriptDefinitions.d.ts`, run `npm run doc` (API documenter) as well.
-- Test your changes manually before submitting anything!! ([running locally](#running-locally)).
+- Test your changes manually before submitting anything ([Running locally](#running-locally)).
+- Run `npm run format`, `npm run lint`, and `npm run test`. If you make any changes to
+  `NetscriptDefinitions.d.ts` or in-game documentation pages, run `npm run doc`.
 - Commit your changes ([Development Workflow](#development-workflow-best-practices)).
-- Go to GitHub and create a PR following [these guidelines](#submitting-a-pull-request).
-- Follow maintainers' feedback and adjust any changes you made to their suggestions. If you have
-  any questions or doubts, check [this links](#in-general).
+- Go to GitHub and create a PR [Submitting a Pull Request](#submitting-a-pull-request).
