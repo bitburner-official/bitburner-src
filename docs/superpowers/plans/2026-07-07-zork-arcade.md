@@ -36,7 +36,7 @@ Facts verified by reading the packages (do not re-derive):
   `file_ref_exists(ref)`, `file_remove_ref(ref)`, `file_write(ref, content, israw)`,
   `file_read(ref, israw)`, `file_clean_fixed_name(filename, usage)`. Save/restore
   prompts arrive at the display as `update.specialinput =
-  {type:"fileref_prompt", filemode, filetype, gameid}`; the display answers
+{type:"fileref_prompt", filemode, filetype, gameid}`; the display answers
   `accept({type:"specialresponse", gen, response:"fileref_prompt", value})` where
   `value` is `{filename, usage}` or `null` for cancel.
 - **GlkOte update payload:** `{type:"update", gen, windows?, content?, input?, specialinput?, disable?}`.
@@ -52,6 +52,7 @@ Facts verified by reading the packages (do not re-derive):
 ### Task 1: Vendor drop, game files, licensing, toolchain config
 
 **Files:**
+
 - Create: `src/Arcade/Zork/vendor/zvm.js` (verbatim from ifvms 1.1.6)
 - Create: `src/Arcade/Zork/vendor/glkapi.js` (verbatim from GlkOte 2.3.7)
 - Create: `src/Arcade/Zork/vendor/vendor.d.ts`
@@ -63,6 +64,7 @@ Facts verified by reading the packages (do not re-derive):
 - Modify: `.prettierignore` and ESLint ignore config (create/extend)
 
 **Interfaces:**
+
 - Produces: `require("src/Arcade/Zork/vendor/zvm.js")` → ZVM constructor;
   `require("src/Arcade/Zork/vendor/glkapi.js")` → `{ Glk, GlkClass }`;
   importable `*.z3` asset URLs.
@@ -102,17 +104,20 @@ material plus Bitburner glue code. The rest of Bitburner is licensed separately 
 see `license.txt` in the repository root.
 
 ## ZVM interpreter — `vendor/zvm.js`
+
 From ifvms.js 1.1.6 (https://github.com/curiousdannii/ifvms.js), part of the
 Parchment project.
 
 [exact MIT text, Copyright (c) 2011-2017 Dannii Willis and other contributors]
 
 ## Glk API layer — `vendor/glkapi.js`
+
 From GlkOte 2.3.7 (https://github.com/erkyrath/glkote).
 
 [exact MIT text, Copyright (c) 2008-2025, Andrew Plotkin]
 
 ## Zork I, II, III — `games/*.z3`
+
 Compiled Z-machine story files, open-sourced under MIT
 (https://github.com/historicalsource/zork1 et al.).
 
@@ -204,10 +209,12 @@ git commit -m "Arcade: vendor ZVM + glkapi and Zork 1-3 story files (MIT, scoped
 ### Task 2: ZorkDialog — localStorage-backed Glk file layer (TDD)
 
 **Files:**
+
 - Create: `src/Arcade/Zork/ZorkDialog.ts`
 - Test: `test/Arcade/Zork/ZorkDialog.test.ts`
 
 **Interfaces:**
+
 - Produces: `class ZorkDialog { constructor(gameKey: string) }` implementing the
   non-streaming Dialog contract listed in the Reference section. `FileRef` type:
   `{ filename: string; usage: string; gameid?: string }`. Storage key format:
@@ -307,7 +314,8 @@ export class ZorkDialog {
   /** content is an array of byte values (israw) or a string. Returns success. */
   file_write(ref: ZorkFileRef, content: number[] | string, _israw?: boolean): boolean {
     try {
-      const payload = typeof content === "string" ? { text: content } : { bytes: btoa(String.fromCharCode(...content)) };
+      const payload =
+        typeof content === "string" ? { text: content } : { bytes: btoa(String.fromCharCode(...content)) };
       localStorage.setItem(this.key(ref), JSON.stringify(payload));
       return true;
     } catch (e) {
@@ -360,21 +368,26 @@ git commit -m "Arcade: Zork save-file Dialog layer backed by localStorage"
 ### Task 3: GlkOteReact — display adapter / state parser (TDD)
 
 **Files:**
+
 - Create: `src/Arcade/Zork/GlkOteReact.ts`
 - Test: `test/Arcade/Zork/GlkOteReact.test.ts`
 
 **Interfaces:**
+
 - Consumes: `ZorkDialog` from Task 2.
 - Produces:
 
 ```ts
-export interface StyledRun { style: string; text: string }
+export interface StyledRun {
+  style: string;
+  text: string;
+}
 export interface TerminalState {
-  gridLines: StyledRun[][];            // status-line rows
-  bufferLines: StyledRun[][];          // scrollback; one entry per display line
+  gridLines: StyledRun[][]; // status-line rows
+  bufferLines: StyledRun[][]; // scrollback; one entry per display line
   inputRequest: { id: number; gen: number; type: "line" | "char"; maxlen: number; initial: string } | null;
   filePrompt: { filemode: string; filetype: string } | null;
-  disabled: boolean;                   // true after glk_exit / while no input
+  disabled: boolean; // true after glk_exit / while no input
   error: string | null;
 }
 export type TerminalListener = (state: TerminalState) => void;
@@ -456,14 +469,22 @@ describe("GlkOteReact", () => {
     const lineEv = accepted[accepted.length - 1] as { type: string; window: number; value: string };
     expect(lineEv).toMatchObject({ type: "line", window: 2, value: "save" });
 
-    glkote.update({ type: "update", gen: 2, specialinput: { type: "fileref_prompt", filemode: "write", filetype: "save" } });
+    glkote.update({
+      type: "update",
+      gen: 2,
+      specialinput: { type: "fileref_prompt", filemode: "write", filetype: "save" },
+    });
     expect(states[states.length - 1].filePrompt).toMatchObject({ filemode: "write" });
 
     glkote.sendFileref({ filename: "slot1", usage: "save" });
     const frEv = accepted[accepted.length - 1] as { type: string; response: string };
     expect(frEv).toMatchObject({ type: "specialresponse", response: "fileref_prompt" });
 
-    glkote.update({ type: "update", gen: 3, content: [{ id: 2, clear: true, text: [{ content: ["normal", "fresh"] }] }] });
+    glkote.update({
+      type: "update",
+      gen: 3,
+      content: [{ id: 2, clear: true, text: [{ content: ["normal", "fresh"] }] }],
+    });
     const s = states[states.length - 1];
     expect(s.bufferLines.map((l) => l.map((r) => r.text).join("")).join("\n")).toBe("fresh");
   });
@@ -749,20 +770,29 @@ git commit -m "Arcade: GlkOte display adapter feeding React state"
 ### Task 4: Engine session + headless Zork smoke test
 
 **Files:**
+
 - Create: `src/Arcade/Zork/session.ts`
 - Create: `src/Arcade/Zork/metadata.ts`
 - Test: `test/Arcade/Zork/engine.test.ts`
 
 **Interfaces:**
+
 - Consumes: `GlkOteReact`, `TerminalListener` (Task 3), `ZorkDialog` (Task 2), vendor modules (Task 1).
 - Produces:
 
 ```ts
 // session.ts
-export interface ZorkSession { glkote: GlkOteReact; dispose(): void }
+export interface ZorkSession {
+  glkote: GlkOteReact;
+  dispose(): void;
+}
 export function createZorkSession(story: Uint8Array, gameKey: string, listener: TerminalListener): ZorkSession;
 // metadata.ts
-export interface ZorkGame { key: "zork1" | "zork2" | "zork3"; title: string; url: string }
+export interface ZorkGame {
+  key: "zork1" | "zork2" | "zork3";
+  title: string;
+  url: string;
+}
 export const ZorkGames: ZorkGame[];
 ```
 
@@ -881,6 +911,7 @@ export const ZorkGames: ZorkGame[] = [
 
 Run: `npx jest test/Arcade/Zork/engine.test.ts`
 Expected: PASS. Debugging notes if not:
+
 - "This is not a Z-Code file" → story bytes mangled; check fs read.
 - No update received → check `Glk.init` was passed the same options object given to `vm.prepare`.
 - Fileref/save shape mismatch → read the `fileref_prompt` handling in `vendor/glkapi.js` (search `fileref_prompt`) and adjust `sendFileref`'s `value` shape to what `gli_fileref_create_by_prompt_callback` expects; update the Task 3 test to match reality. The state of the art is the vendor file, not this plan.
@@ -902,10 +933,12 @@ git commit -m "Arcade: ZVM session wiring + headless Zork I smoke test"
 ### Task 5: ZorkTerminal — the React terminal UI
 
 **Files:**
+
 - Create: `src/Arcade/Zork/ZorkTerminal.tsx`
 - Test: `test/Arcade/Zork/ZorkTerminal.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `TerminalState`, `StyledRun` (Task 3).
 - Produces:
 
@@ -955,7 +988,10 @@ describe("ZorkTerminal", () => {
 
   it("renders status line, story text, and a focused input", () => {
     act(() => {
-      ReactDOM.render(<ZorkTerminal state={baseState} onLine={jest.fn()} onChar={jest.fn()} onFileref={jest.fn()} />, container);
+      ReactDOM.render(
+        <ZorkTerminal state={baseState} onLine={jest.fn()} onChar={jest.fn()} onFileref={jest.fn()} />,
+        container,
+      );
     });
     expect(container.textContent).toContain("West of House");
     expect(container.textContent).toContain("small mailbox");
@@ -965,7 +1001,10 @@ describe("ZorkTerminal", () => {
   it("submits a line on Enter and clears the field", () => {
     const onLine = jest.fn();
     act(() => {
-      ReactDOM.render(<ZorkTerminal state={baseState} onLine={onLine} onChar={jest.fn()} onFileref={jest.fn()} />, container);
+      ReactDOM.render(
+        <ZorkTerminal state={baseState} onLine={onLine} onChar={jest.fn()} onFileref={jest.fn()} />,
+        container,
+      );
     });
     const input = container.querySelector("input") as HTMLInputElement;
     act(() => {
@@ -979,7 +1018,10 @@ describe("ZorkTerminal", () => {
   it("shows the save-slot prompt when filePrompt is set", () => {
     const state = { ...baseState, inputRequest: null, filePrompt: { filemode: "write", filetype: "save" } };
     act(() => {
-      ReactDOM.render(<ZorkTerminal state={state} onLine={jest.fn()} onChar={jest.fn()} onFileref={jest.fn()} />, container);
+      ReactDOM.render(
+        <ZorkTerminal state={state} onLine={jest.fn()} onChar={jest.fn()} onFileref={jest.fn()} />,
+        container,
+      );
     });
     expect(container.textContent).toMatch(/slot|file|name/i);
   });
@@ -1084,7 +1126,9 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
 
   const width = "740px";
   return (
-    <Box sx={{ width, border: `1px solid ${Settings.theme.primary}`, backgroundColor: Settings.theme.backgroundprimary }}>
+    <Box
+      sx={{ width, border: `1px solid ${Settings.theme.primary}`, backgroundColor: Settings.theme.backgroundprimary }}
+    >
       {/* Status line: classic inverse-video Infocom bar */}
       <Box sx={{ backgroundColor: Settings.theme.primary, color: Settings.theme.backgroundprimary, px: 1, ...MONO }}>
         {state.gridLines.length > 0 ? (
@@ -1100,7 +1144,9 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
         ))}
         {state.error && <Typography color={Settings.theme.error}>[ {state.error} ]</Typography>}
         {state.disabled && !state.error && !state.filePrompt && (
-          <Typography sx={{ color: Settings.theme.secondary, ...MONO }}>[ The cabinet hums quietly. Press Back to leave. ]</Typography>
+          <Typography sx={{ color: Settings.theme.secondary, ...MONO }}>
+            [ The cabinet hums quietly. Press Back to leave. ]
+          </Typography>
         )}
         {/* Input line */}
         {state.inputRequest && !state.filePrompt && (
@@ -1168,10 +1214,12 @@ git commit -m "Arcade: Zork terminal UI component"
 ### Task 6: ZorkRoot + arcade menu integration
 
 **Files:**
+
 - Create: `src/Arcade/Zork/ZorkRoot.tsx`
 - Modify: `src/Arcade/ui/ArcadeRoot.tsx` (all 43 lines shown in current form below)
 
 **Interfaces:**
+
 - Consumes: `createZorkSession` (Task 4), `ZorkTerminal` (Task 5), `ZorkGames`/`ZorkGame` (Task 4).
 - Produces: `<ZorkRoot game={ZorkGame} />` rendered by ArcadeRoot.
 
@@ -1327,6 +1375,7 @@ git commit -m "Arcade: Zork 1-3 cabinets in the New Tokyo arcade menu"
 ### Task 7: Full verification pass (build + manual play)
 
 **Files:**
+
 - None created; fixes only if verification finds problems.
 
 - [ ] **Step 1: Production-grade checks**
@@ -1342,6 +1391,7 @@ Expected: game loads with no console errors from the Zork additions.
 - [ ] **Step 3: Manual play verification (use the `verify` skill if available)**
 
 In the running game: create/load a save, travel to New Tokyo, open the Arcade location.
+
 - All four buttons visible (Megabyte + 3 Zorks).
 - Launch Zork I: opening text renders, status bar shows "West of House".
 - `open mailbox`, `read leaflet` — sensible responses; command history via ↑.

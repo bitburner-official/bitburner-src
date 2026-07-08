@@ -15,6 +15,10 @@ declare module "*.svg" {
   const value: string;
   export default value;
 }
+declare module "*.z3" {
+  const value: string;
+  export default value;
+}
 
 // Achievements communicated back to Electron shell for Steam.
 declare interface Document {

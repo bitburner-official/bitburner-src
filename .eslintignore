@@ -13,5 +13,6 @@ markdown
 electron
 tools
 src/ThirdParty
+src/Arcade/Zork/vendor
 
 webpack.config.js
