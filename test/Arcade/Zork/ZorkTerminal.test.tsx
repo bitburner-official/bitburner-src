@@ -58,7 +58,11 @@ describe("ZorkTerminal", () => {
   });
 
   it("shows the save-slot prompt when filePrompt is set", () => {
-    const state: TerminalState = { ...baseState, inputRequest: null, filePrompt: { filemode: "write", filetype: "save" } };
+    const state: TerminalState = {
+      ...baseState,
+      inputRequest: null,
+      filePrompt: { filemode: "write", filetype: "save" },
+    };
     act(() => {
       ReactDOM.render(
         <ZorkTerminal state={state} onLine={jest.fn()} onChar={jest.fn()} onFileref={jest.fn()} />,

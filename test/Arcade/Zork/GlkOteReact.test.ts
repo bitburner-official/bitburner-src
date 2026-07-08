@@ -72,7 +72,11 @@ describe("GlkOteReact", () => {
     const frEv = accepted[accepted.length - 1] as { type: string; response: string };
     expect(frEv).toMatchObject({ type: "specialresponse", response: "fileref_prompt" });
 
-    glkote.update({ type: "update", gen: 3, content: [{ id: 2, clear: true, text: [{ content: ["normal", "fresh"] }] }] });
+    glkote.update({
+      type: "update",
+      gen: 3,
+      content: [{ id: 2, clear: true, text: [{ content: ["normal", "fresh"] }] }],
+    });
     const s = states[states.length - 1];
     expect(s.bufferLines.map((l) => l.map((r) => r.text).join("")).join("\n")).toBe("fresh");
   });

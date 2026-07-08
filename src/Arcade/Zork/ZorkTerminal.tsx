@@ -92,7 +92,11 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
 
   return (
     <Box
-      sx={{ width: "740px", border: `1px solid ${Settings.theme.primary}`, backgroundColor: Settings.theme.backgroundprimary }}
+      sx={{
+        width: "740px",
+        border: `1px solid ${Settings.theme.primary}`,
+        backgroundColor: Settings.theme.backgroundprimary,
+      }}
     >
       {/* Status line: classic inverse-video Infocom bar */}
       <Box sx={{ backgroundColor: Settings.theme.primary, color: Settings.theme.backgroundprimary, px: 1, ...MONO }}>
