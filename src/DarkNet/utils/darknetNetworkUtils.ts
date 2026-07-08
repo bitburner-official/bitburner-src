@@ -87,7 +87,7 @@ export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] =
 export const getIslands = () => getAllMovableDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
 export const getBackdooredDarknetServers = (): DarknetServer[] =>
-  getAllMovableDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
+  getAllMovableDarknetServers().filter((s) => s.backdoorInstalled);
 
 export const getNearbyNonEmptyPasswordServer = (server: DarknetServer, disconnected = false) => {
   return getAllAdjacentNeighbors(server.depth, server.leftOffset).find(

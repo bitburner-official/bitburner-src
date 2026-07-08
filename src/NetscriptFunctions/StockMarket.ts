@@ -25,6 +25,7 @@ import { StockMarketConstants } from "../StockMarket/data/Constants";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CONSTANTS } from "../Constants";
 import { getDarknetVolatilityMult } from "../DarkNet/effects/effects";
+import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 export const getStockFromSymbol = function (ctx: NetscriptContext, symbol: string): Stock {
   const stock = SymbolToStockMap[symbol];
@@ -40,6 +41,14 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
   const checkTixApiAccess = function (ctx: NetscriptContext): void {
     if (!Player.hasTixApiAccess) {
       throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
+    }
+  };
+  const checkSFAccess = function (ctx: NetscriptContext, sfLevel: number): void {
+    if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) < sfLevel) {
+      const errorMessage = knowAboutBitverse()
+        ? `You must either be in BitNode-8 or have Source-File 8.${sfLevel}.`
+        : "You cannot access this API yet. It will be unlocked later, and it will be obvious when and how to obtain it.";
+      throw helpers.errorMessage(ctx, errorMessage);
     }
   };
 
@@ -148,9 +157,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 1) {
-        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 2.");
-      }
+      checkSFAccess(ctx, 2);
       const stock = getStockFromSymbol(ctx, symbol);
       const res = shortStock(stock, shares, ctx, {});
 
@@ -160,9 +167,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 1) {
-        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 2.");
-      }
+      checkSFAccess(ctx, 2);
       const stock = getStockFromSymbol(ctx, symbol);
       const res = sellShort(stock, shares, ctx, {});
 
@@ -175,9 +180,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       const type = getEnumHelper("OrderType").nsGetMember(ctx, _type);
       const pos = getEnumHelper("PositionType").nsGetMember(ctx, _pos);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
-        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
-      }
+      checkSFAccess(ctx, 3);
       const stock = getStockFromSymbol(ctx, symbol);
 
       return placeOrder(stock, shares, price, type, pos, ctx);
@@ -189,9 +192,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       const type = getEnumHelper("OrderType").nsGetMember(ctx, _type);
       const pos = getEnumHelper("PositionType").nsGetMember(ctx, _pos);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
-        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
-      }
+      checkSFAccess(ctx, 3);
       const stock = getStockFromSymbol(ctx, symbol);
       if (isNaN(shares) || isNaN(price)) {
         throw helpers.errorMessage(ctx, `Invalid shares or price. Must be numeric. shares=${shares}, price=${price}`);
@@ -201,9 +202,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
     },
     getOrders: (ctx) => () => {
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
-        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or have Source-File 8 Level 3.");
-      }
+      checkSFAccess(ctx, 3);
 
       const orders: Record<string, StockOrder[]> = {};
 
