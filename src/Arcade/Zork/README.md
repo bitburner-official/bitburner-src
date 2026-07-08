@@ -37,5 +37,3 @@ Re-fetch from upstream and update the versions here and in `LICENSE.md`:
 
 - `https://registry.npmjs.org/ifvms/-/ifvms-<version>.tgz` → `package/dist/zvm.js`
 - `https://github.com/erkyrath/glkote` → `glkapi.js`
-
-Design spec: `docs/superpowers/specs/2026-07-07-zork-arcade-design.md`
