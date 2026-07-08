@@ -364,7 +364,7 @@ describe("production", () => {
     ns.corporation.bulkPurchase(div1, city, "Drugs", 1e6);
     ns.corporation.makeProduct(div2, city, "0", 1e10, 1e10);
     ns.corporation.sellProduct(div2, city, "0", "MAX", "MP", true);
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     corp.divisions.get(div2)!.products.get("0")!.developmentProgress = 99.99;
     processCycles(10);
 
@@ -372,5 +372,70 @@ describe("production", () => {
     expect(Number.isFinite(ns.corporation.getMaterial(div2, city, "Drugs").quality)).toBe(true);
     expect(Number.isFinite(ns.corporation.getProduct(div2, city, "0").effectiveRating)).toBe(true);
     expect(Number.isFinite(corp.totalAssets)).toBe(true);
+  });
+
+  test("limitMaterialProduction 3", () => {
+    const ns = getNS();
+    setUpCorp(ns, []);
+    for (let i = 0; i < 1000; ++i) {
+      ns.corporation.levelUpgrade("Smart Storage");
+    }
+    const corp = getCorp();
+    const div = "Agriculture";
+    const city = CityName.Sector12;
+    ns.corporation.expandIndustry("Agriculture", div);
+    setUpDivision(ns, div);
+    ns.corporation.bulkPurchase(div, city, "Chemicals", 1e6);
+    ns.corporation.bulkPurchase(div, city, "Water", 1e6);
+    ns.corporation.bulkPurchase(div, city, "Real Estate", 1e6);
+    processCycles(2);
+
+    ns.corporation.limitMaterialProduction(div, city, "Plants", 20);
+    ns.corporation.limitMaterialProduction(div, city, "Food", 10);
+    // Manually set the free space.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    corp.divisions.get(div)!.warehouses[city]!.size =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      corp.divisions.get(div)!.warehouses[city]!.sizeUsed + 45;
+
+    processCycles(1);
+    expect(ns.corporation.getMaterial(div, city, "Water").stored).toBe(999500);
+    expect(ns.corporation.getMaterial(div, city, "Chemicals").stored).toBe(999800);
+    expect(ns.corporation.getMaterial(div, city, "Plants").stored).toBe(200);
+    expect(ns.corporation.getMaterial(div, city, "Food").stored).toBe(100);
+
+    expect(ns.corporation.getWarehouse(div, city).size - ns.corporation.getWarehouse(div, city).sizeUsed).toBe(67);
+  });
+
+  test("limitMaterialProduction 4", () => {
+    const ns = getNS();
+    setUpCorp(ns, []);
+    for (let i = 0; i < 1000; ++i) {
+      ns.corporation.levelUpgrade("Smart Storage");
+    }
+    const corp = getCorp();
+    const div = "Agriculture";
+    const city = CityName.Sector12;
+    ns.corporation.expandIndustry("Agriculture", div);
+    setUpDivision(ns, div);
+    ns.corporation.bulkPurchase(div, city, "Chemicals", 1e6);
+    ns.corporation.bulkPurchase(div, city, "Water", 1e6);
+    ns.corporation.bulkPurchase(div, city, "Real Estate", 1e6);
+    processCycles(2);
+
+    ns.corporation.limitMaterialProduction(div, city, "Food", 0);
+    // Manually set the free space.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    corp.divisions.get(div)!.warehouses[city]!.size =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      corp.divisions.get(div)!.warehouses[city]!.sizeUsed + 22.5;
+
+    processCycles(1);
+    expect(ns.corporation.getMaterial(div, city, "Water").stored).toBe(999750);
+    expect(ns.corporation.getMaterial(div, city, "Chemicals").stored).toBe(999900);
+    expect(ns.corporation.getMaterial(div, city, "Plants").stored).toBe(500);
+    expect(ns.corporation.getMaterial(div, city, "Food").stored).toBe(0);
+
+    expect(ns.corporation.getWarehouse(div, city).size - ns.corporation.getWarehouse(div, city).sizeUsed).toBe(15);
   });
 });
