@@ -24,7 +24,12 @@ import { saveGame, loadGame } from "./SaveObject";
 import { GetAllServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
-import { canAccessStockMarket, initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
+import {
+  canAccessStockMarket,
+  initSymbolToStockMap,
+  isStockMarketInitialized,
+  processStockPrices,
+} from "./StockMarket/StockMarket";
 
 import { Money } from "./ui/React/Money";
 import { Hashes } from "./ui/React/Hashes";
@@ -240,7 +245,7 @@ const Engine = {
     if (saveData !== undefined && (await loadGame(saveData))) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      if (canAccessStockMarket()) {
+      if (isStockMarketInitialized()) {
         initSymbolToStockMap();
       }
 
