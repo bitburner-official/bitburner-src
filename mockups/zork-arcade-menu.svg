@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640">
+  <!-- Mockup: New Tokyo Arcade menu with Zork cabinets added -->
+  <rect width="1000" height="640" fill="#000000"/>
+
+  <!-- Sidebar (Bitburner nav hint) -->
+  <rect x="0" y="0" width="200" height="640" fill="#111111"/>
+  <line x1="200" y1="0" x2="200" y2="640" stroke="#0c0" stroke-opacity="0.25"/>
+  <g font-family="Consolas, 'Lucida Console', monospace" font-size="14" fill="#090">
+    <text x="20" y="40">Hacking</text>
+    <text x="30" y="70" fill="#060">Terminal</text>
+    <text x="30" y="95" fill="#060">Script Editor</text>
+    <text x="30" y="120" fill="#060">Active Scripts</text>
+    <text x="20" y="160">Character</text>
+    <text x="30" y="190" fill="#060">Stats</text>
+    <text x="30" y="215" fill="#060">Factions</text>
+    <text x="30" y="240" fill="#060">Augmentations</text>
+    <text x="20" y="280">World</text>
+    <text x="30" y="310" fill="#0f0" font-weight="bold">City</text>
+    <text x="30" y="335" fill="#060">Travel</text>
+    <text x="30" y="360" fill="#060">Job</text>
+    <text x="20" y="400">Help</text>
+    <text x="30" y="430" fill="#060">Documentation</text>
+    <text x="30" y="455" fill="#060">Achievements</text>
+    <text x="30" y="480" fill="#060">Options</text>
+  </g>
+
+  <!-- Content area -->
+  <g font-family="Consolas, 'Lucida Console', monospace">
+    <text x="240" y="52" font-size="15" fill="#0c0">&#60; Return to World</text>
+    <text x="240" y="100" font-size="30" fill="#0c0" font-weight="bold">Arcade</text>
+    <text x="240" y="128" font-size="14" fill="#090">New Tokyo</text>
+
+    <!-- Existing cabinet -->
+    <rect x="240" y="160" width="440" height="40" fill="#333333"/>
+    <text x="460" y="186" font-size="15" fill="#0c0" text-anchor="middle">Megabyte burner 2000</text>
+
+    <!-- New Zork cabinets -->
+    <rect x="240" y="214" width="440" height="40" fill="#333333"/>
+    <text x="460" y="240" font-size="15" fill="#0c0" text-anchor="middle">Zork I: The Great Underground Empire</text>
+
+    <rect x="240" y="268" width="440" height="40" fill="#333333"/>
+    <text x="460" y="294" font-size="15" fill="#0c0" text-anchor="middle">Zork II: The Wizard of Frobozz</text>
+
+    <rect x="240" y="322" width="440" height="40" fill="#333333"/>
+    <text x="460" y="348" font-size="15" fill="#0c0" text-anchor="middle">Zork III: The Dungeon Master</text>
+
+    <!-- Flavor text -->
+    <text x="240" y="410" font-size="13" fill="#666666">A dusty row of cabinets hums in the corner. Three of them glow with</text>
+    <text x="240" y="430" font-size="13" fill="#666666">an ancient phosphor light, as if they have been running since 1980.</text>
+  </g>
+
+  <!-- Annotation -->
+  <g font-family="Consolas, 'Lucida Console', monospace" font-size="12" fill="#c60">
+    <rect x="700" y="214" width="14" height="148" fill="none" stroke="#c60" stroke-dasharray="4,3"/>
+    <text x="726" y="284">&#8592; new buttons added to</text>
+    <text x="726" y="302">   ArcadeRoot.tsx menu</text>
+  </g>
+</svg>
