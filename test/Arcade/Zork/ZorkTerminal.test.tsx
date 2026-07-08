@@ -71,4 +71,28 @@ describe("ZorkTerminal", () => {
     });
     expect(container.textContent).toMatch(/slot|file|name/i);
   });
+
+  it("indicates focus state and refocuses the input when the terminal is clicked", () => {
+    act(() => {
+      ReactDOM.render(
+        <ZorkTerminal state={baseState} onLine={jest.fn()} onChar={jest.fn()} onFileref={jest.fn()} />,
+        container,
+      );
+    });
+    const root = container.querySelector("[data-focused]") as HTMLElement;
+    const input = container.querySelector("input") as HTMLInputElement;
+    act(() => {
+      input.focus();
+    });
+    expect(root.getAttribute("data-focused")).toBe("true");
+    act(() => {
+      input.blur();
+    });
+    expect(root.getAttribute("data-focused")).toBe("false");
+    act(() => {
+      root.click();
+    });
+    expect(document.activeElement).toBe(input);
+    expect(root.getAttribute("data-focused")).toBe("true");
+  });
 });

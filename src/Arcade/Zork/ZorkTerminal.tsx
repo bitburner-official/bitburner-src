@@ -48,8 +48,16 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
   const [slotName, setSlotName] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [focused, setFocused] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const slotInputRef = useRef<HTMLInputElement>(null);
+
+  function focusGame(): void {
+    // Don't steal focus while the player is selecting text to copy.
+    if (window.getSelection()?.toString()) return;
+    (state.filePrompt ? slotInputRef : inputRef).current?.focus();
+  }
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -104,9 +112,19 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
 
   return (
     <Box
+      onClick={focusGame}
+      onFocus={() => setFocused(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
+      }}
+      data-focused={focused}
       sx={{
         width: "740px",
-        border: `1px solid ${Settings.theme.primary}`,
+        cursor: "text",
+        border: `1px solid ${focused ? Settings.theme.primary : Settings.theme.primarydark}`,
+        boxShadow: focused ? `0 0 8px ${Settings.theme.primary}` : "none",
+        opacity: focused ? 1 : 0.7,
+        transition: "opacity 150ms, box-shadow 150ms, border-color 150ms",
         backgroundColor: Settings.theme.backgroundprimary,
       }}
     >
@@ -167,6 +185,7 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
               {state.filePrompt.filemode === "read" ? "Restore from slot:" : "Save to slot:"}
             </Typography>
             <TextField
+              inputRef={slotInputRef}
               value={slotName}
               onChange={(e) => setSlotName(e.target.value)}
               onKeyDown={(e) => {
