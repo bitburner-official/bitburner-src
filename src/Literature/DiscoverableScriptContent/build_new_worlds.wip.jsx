@@ -40,11 +40,8 @@ function addToSidebar(ns, sidebarLabel, pageText) {
 
 /**
  * Example component: a sidebar item that opens a new ContentPage when clicked.
- * @param {NS} ns - netscript api
- * @param {string} sidebarLabel - the label for the sidebar button
- * @param {string} pageText - the text to display in the new page
+ * @param {{ ns: NS, sidebarLabel: string, pageText: string}} props - The props for the component
  * @returns {React.ReactElement}
- * @constructor
  */
 function SidebarItem({ ns, sidebarLabel, pageText }) {
   function openPage() {
@@ -59,9 +56,8 @@ function SidebarItem({ ns, sidebarLabel, pageText }) {
 
 /**
  * Example component: a simple page that displays some text and a button that changes the background color
- * @param {string} text - text to show on the page
+ * @param {{ text: string }} props - The props for the component
  * @returns {React.ReactElement}
- * @constructor
  */
 function ContentPage({ text }) {
   const colorList = ['#762f5c', '#845ee8', '#d47fc7', '#9e4b3f', '#5bdf7d'];
