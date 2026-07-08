@@ -56,6 +56,18 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
     inputRef.current?.focus();
   }, [state]);
 
+  // The game's own prompt (e.g. "> ") is the last buffer line while line input
+  // is pending; render the input as a continuation of it instead of doubling it.
+  const lastLine = state.bufferLines[state.bufferLines.length - 1];
+  const inlineInput =
+    !!state.inputRequest &&
+    !state.filePrompt &&
+    !!lastLine &&
+    lastLine
+      .map((run) => run.text)
+      .join("")
+      .trim().length <= 2;
+
   function keyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     // Keep keystrokes inside the cabinet: no Bitburner hotkeys mid-game.
     event.stopPropagation();
@@ -106,9 +118,10 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
           <div style={{ minHeight: "18px" }} />
         )}
       </Box>
-      {/* Story buffer */}
+      {/* Story buffer. The game prints its own "> " prompt as the final buffer
+          line, so when line input is wanted the input field continues that line. */}
       <Box ref={scrollRef} sx={{ height: "430px", overflowY: "auto", p: 1, color: Settings.theme.primary, ...MONO }}>
-        {state.bufferLines.map((runs, i) => (
+        {(inlineInput ? state.bufferLines.slice(0, -1) : state.bufferLines).map((runs, i) => (
           <Line key={i} runs={runs} />
         ))}
         {state.error && <Typography sx={{ color: Settings.theme.error, ...MONO }}>[ {state.error} ]</Typography>}
@@ -120,7 +133,13 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
         {/* Input line */}
         {state.inputRequest && !state.filePrompt && (
           <Box sx={{ display: "flex", alignItems: "baseline" }}>
-            <span style={MONO}>&gt;</span>
+            {inlineInput ? (
+              <span style={{ ...MONO, whiteSpace: "pre" }}>
+                {state.bufferLines[state.bufferLines.length - 1].map((run) => run.text).join("")}
+              </span>
+            ) : (
+              <span style={MONO}>&gt;</span>
+            )}
             <TextField
               inputRef={inputRef}
               value={entry}
@@ -129,8 +148,15 @@ export function ZorkTerminal({ state, onLine, onChar, onFileref }: ZorkTerminalP
               variant="standard"
               autoFocus
               fullWidth
-              InputProps={{ disableUnderline: true, sx: { color: Settings.theme.primary, ...MONO } }}
-              inputProps={{ maxLength: state.inputRequest.maxlen, "aria-label": "Zork command input" }}
+              InputProps={{
+                disableUnderline: true,
+                sx: { color: Settings.theme.primary, backgroundColor: "transparent", ...MONO },
+              }}
+              inputProps={{
+                maxLength: state.inputRequest.maxlen,
+                "aria-label": "Zork command input",
+                style: { padding: 0 },
+              }}
             />
           </Box>
         )}
