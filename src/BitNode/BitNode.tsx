@@ -556,6 +556,43 @@ export function initBitNodes() {
       </>
     ),
   );
+  BitNodes.BitNode16 = new BitNode(
+    16,
+    "Sell-out",
+    "The Need for a Boss",
+    (
+      <>
+        <br />
+        With the domination of Megacorporations, the only way to survive is to serve them. Gangs are neutered, while
+        their cybersecurity teams leave free hackers to fight for scraps. Only those at the top are able to afford to
+        install all but the most basic augmentations.
+        <br />
+        <br />
+        As Megacorporations rised, all of humanity had to leave their jobs, their life, their homes, their dreams... to
+        provide food and shelter to their families, by the only way possible: serving those who ruined their lives. The
+        only goal Megacorporations have is to improve their security systems and economy in order to impose themselves
+        to their competitors...
+        <br />
+        <br />
+        In this BitNode, Megacorporations have taken over the planet, and thus economy, jobs, and of course, the
+        well-desired augmentations reside on their strongholds. Will you be able to climb through the ranks of the
+        corporations and become the boss of the world?
+        <br />
+        <br />
+        {upgradeTextForBN(16)}
+      </>
+    ),
+    (
+      <>
+        This Source-File grants the following benefits:
+        <ul>
+          <li>Level 1: ****</li>
+          <li>Level 2: ****</li>
+          <li>Level 3: ****</li>
+        </ul>
+      </>
+    ),
+  );
 }
 
 export const defaultMultipliers = new BitNodeMultipliers();
@@ -1108,6 +1145,51 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         BladeburnerSkillCost: 3,
 
         GangUniqueAugs: 0.3,
+
+        StaneksGiftPowerMultiplier: 0.7,
+        StaneksGiftExtraSize: -2,
+
+        WorldDaemonDifficulty: 2,
+      });
+    }
+    case 16: {
+      return new BitNodeMultipliers({
+        HackingLevelMultiplier: 0.6,
+        HackingSpeedMultiplier: 0.6,
+
+        StrengthLevelMultiplier: 0.7,
+        DefenseLevelMultiplier: 0.7,
+        DexterityLevelMultiplier: 0.7,
+        AgilityLevelMultiplier: 0.7,
+        CharismaLevelMultiplier: 1,
+
+        ServerMaxMoney: 0.8,
+        ServerStartingMoney: 0.5,
+        ServerStartingSecurity: 1.5,
+
+        AugmentationMoneyCost: 3,
+
+        CorporationValuation: 0.2,
+        CorporationSoftcap: 0.4,
+        CorporationDivisions: 0.4,
+
+        DaedalusAugsRequirement: 30,
+
+        BladeburnerRank: 0.15,
+        BladeburnerSkillCost: 3.5,
+
+        GangUniqueAugs: 0.1,
+        GangSoftcap: 0.2,
+
+        CompanyWorkExpGain: 2,
+        CompanyWorkMoney: 3,
+        CompanyWorkRepGain: 1.7,
+
+        FactionPassiveRepGain: 0.1,
+        FactionWorkExpGain: 0.2,
+        FactionWorkRepGain: 0.2,
+
+        HacknetNodeMoney: 0.2,
 
         StaneksGiftPowerMultiplier: 0.7,
         StaneksGiftExtraSize: -2,
