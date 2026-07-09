@@ -19,7 +19,6 @@
    Now written in TypeScript: for even fewer bugs! Probably!
 */
 
-/** @param {NS} ns */
 export async function main(ns: NS) {
   ns.ui.openTail();
 
