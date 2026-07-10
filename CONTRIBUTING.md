@@ -36,21 +36,19 @@ already been reported as an [Issue](https://github.com/bitburner-official/bitbur
 - **Use a clear and descriptive title** for the Issue.
 - **State your browser, your browser's version, and your computer's OS.**
 - **Attach your save file**, if you think it would help solve the Issue.
-  Zip your save file first, then attach the zipped save file.
+  Upload your save file as is. Do NOT compress or decompress it.
 - **Provide instructions on how to reproduce the bug** in as much detail
   as possible. If you cannot reliably reproduce the bug, then just try
   your best to explain what was happening when the bug occurred.
 - **Provide any scripts** that triggered the bug if the Issue is Netscript-related.
-- **Open your browser's Dev Console and report any error-related output**
-  that may be printed there. The Dev Console can be opened on most modern
-  browsers by pressing F12.
+- **Open the Console tab in your browser's Dev Tools and report any error-related output**
+  that may be printed there. The Dev Tools can be opened on most modern
+  browsers by pressing F12 or Ctrl+Shift+I (Cmd + Option + I on macOS machines).
 
 ## As a Developer
 
 Anyone is welcome to contribute to Bitburner code. However, please read
-the [license](./license.txt)
-and the [readme](./README.md)
-before doing so.
+the [LICENSE](./license.txt) and the [README](./README.md) before doing so.
 
 To contribute to Bitburner code, you will need to have
 [NodeJS](https://nodejs.org) installed. When installing NodeJS, a utility
@@ -61,12 +59,12 @@ called `npm` is installed as well.
 Not all code contributions will be accepted. The safest way to ensure
 that you don't waste time working on something that gets rejected is to
 run your idea(s)/plan(s) past the developers first.
-You can contact him through Discord.
+You can contact them through Discord.
 
 Otherwise, here are some general guidelines for determining what types of
 changes are okay to contribute:
 
-##### Contributions that Will Most Likely Be Accepted
+##### Contributions that will most likely be accepted
 
 - Bug fixes
 - Quality-of-life changes
@@ -76,14 +74,14 @@ changes are okay to contribute:
   - Adding a new Terminal command
 - Code refactors that conform to good/standard practices
 
-##### Contributions that will not be Accepted without prior approval
+##### Contributions that will not be accepted without prior approval
 
 - Changes that directly affect the game's balance
 - New gameplay mechanics
 
 ---
 
-## How to setup fork properly
+## How to setup your fork properly
 
 Clone and fork the game's repository by using one of these methods: web browser, GitHub
 Desktop, or command line.
@@ -103,7 +101,7 @@ Desktop, or command line.
 ```sh
 # This clones the game's code repository. The output you get might vary.
 $ git clone https://github.com/bitburner-official/bitburner-src.git
-Cloning into 'bitburner'...
+Cloning into 'bitburner-src'...
 remote: Enumerating objects: 57072, done.
 remote: Counting objects: 100% (404/404), done.
 remote: Compressing objects: 100% (205/205), done.
@@ -138,18 +136,31 @@ $ git fetch upstream
 $ git branch
 * dev
 $ git branch -r
-upstream/BN14
 upstream/HEAD -> upstream/dev
 upstream/dev
-upstream/folders
-upstream/master
 ```
 
 ## Development Workflow Best Practices
 
-- Work in a new branch forked from the `dev` branch to isolate your new code.
-  - Keep code-changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
-  - Regularly rebase your branch against `dev` to make sure you have the latest updates pulled.
+- Work in a new branch based on the `dev` branch to isolate your changes.
+
+```sh
+$ git checkout dev
+$ git checkout -b new-stuff-to-add # Create a new branch for your changes.
+# ... (Make your changes)
+$ git add . # Stage your changes.
+$ git commit -m "Commit Message" # Commit your staged changes.
+$ git push origin new-stuff-to-add # Push your branch to GitHub.
+```
+
+- Keep code changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
+- Regularly rebase your branch onto `upstream/dev` to keep it up to date.
+
+```sh
+$ git fetch upstream
+$ git checkout new-stuff-to-add
+$ git rebase upstream/dev
+```
 
 ## Running locally
 
@@ -170,6 +181,7 @@ Saving a file will reload the game automatically.
 ### How to build the electron app
 
 Tested on Node 24.13.0 (LTS) on Windows.
+
 These steps only work in a Bash-like environment, like MinGW for Windows.
 
 ```sh
@@ -192,13 +204,13 @@ the following rules:
 - Work in a branch forked from `dev` to isolate the new code.
 - Ensure you have the latest from the [game's main
   repository](../../tree/dev).
-- Rebase your branch if necessary.
-- Run the game locally to test out your changes.
+- Rebase or merge your branch if necessary.
+- Run the game locally to test out your changes (`npm run start:dev`).
 - When submitting the pull request, make sure that the base fork is
   _bitburner-official/bitburner-src_ and the base is _dev_.
 - If your changes affect the game's UI, attach some screenshots or GIFs showing
   the changes to the UI.
-- If your changes affect Netscript, provide some
+- If your changes affect the Netscript APIs, provide some
   scripts that can be used to test the Netscript changes.
 - Ensure you have run `npm run lint` to make sure your changes conform to the
   rules enforced across the code base. The command will fail if any of the
@@ -213,23 +225,7 @@ the following rules:
 - The title of your Pull Request will need to be formatted like
   `MISC: Reticulated the splines`, where the first word must be capitalised
   and relate to the kind of change being implemented. Possible examples
-  are UI, BUGFIX, SERVERS, NETSCRIPT... You get the idea.
-
-## Troubleshooting common issues
-
-### Unrelated changes in `package-lock.json`
-
-After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
-
-### Lots of `peer: true` lines added in `package-lock.json`
-
-npm version 11.6.2 has a bug that causes this. Unfortunately, this is the current LTS (stable) release as of this writing. Use a newer or older npm version, and re-run `npm install`.
-
-See https://github.com/npm/cli/pull/8671 and https://github.com/npm/cli/issues/8690 for details.
-
-### Unrelated failed Jest tests
-
-Some Jest tests fail to run in Node versions older than v24. On those versions, these tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). You need to use Node v24+ to run these tests.
+  are UI, BUGFIX, SERVERS, API... You get the idea.
 
 ## As a Documenter
 
@@ -274,3 +270,29 @@ Avoid:
 
 - Failure conditions. It's very frustrating to lose several days' worth of progress.
 - Making existing mechanics harder. This makes it hard to port the content to other BNs.
+
+## Troubleshooting common issues
+
+### Unrelated changes in `package-lock.json`
+
+After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
+
+### Lots of `peer: true` lines added in `package-lock.json`
+
+npm version 11.6.2 has a bug that causes this. You need to update npm and rerun `npm install`.
+
+See https://github.com/npm/cli/pull/8671 and https://github.com/npm/cli/issues/8690 for details.
+
+### Unrelated failed Jest tests
+
+Some Jest tests fail to run in Node versions older than v24. On those versions, these tests show a small difference between the expected value ("Snapshot") and the actual value ("Received"). You need to use Node v24+ to run these tests.
+
+## TL;DR
+
+- Fork the repo ([How to setup your fork properly](#how-to-setup-your-fork-properly)).
+- Make your changes.
+- Test your changes manually before submitting anything ([Running locally](#running-locally)).
+- Run `npm run format`, `npm run lint`, and `npm run test`. If you make any changes to
+  `NetscriptDefinitions.d.ts` or in-game documentation pages, run `npm run doc`.
+- Commit your changes ([Development Workflow](#development-workflow-best-practices)).
+- Go to GitHub and create a PR [Submitting a Pull Request](#submitting-a-pull-request).
