@@ -3,13 +3,16 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { GetServer, GetAllServers } from "../Server/AllServers";
 import {
-  RFAMessage,
   isFileServer,
   isFileLocation,
   isFileData,
   type FileData,
   type FileLocation,
   type FileServer,
+  RFAErrorResponse,
+  type RFARequest,
+  type RFAResponse,
+  RFASuccessResponse,
 } from "./MessageDefinitions";
 
 import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";
@@ -19,14 +22,14 @@ import type { BaseServer } from "../Server/BaseServer";
 import type { ContentFilePath } from "../Paths/ContentFile";
 
 type SuccessResult<T> = { success: true; params: T };
-type FailureResult = { success: false; errorResponse: RFAMessage };
+type FailureResult = { success: false; errorResponse: RFAErrorResponse };
 export type ValidationResult<T> = SuccessResult<T> | FailureResult;
 
-function getErrorResponse(errorMsg: string, { id }: RFAMessage): RFAMessage {
-  return new RFAMessage({ error: errorMsg, id });
+function getErrorResponse(errorMsg: string, { id }: RFARequest): RFAErrorResponse {
+  return new RFAErrorResponse({ error: errorMsg, id });
 }
 
-function validateParams<T>(validationFunction: (p: unknown) => p is T, request: RFAMessage): ValidationResult<T> {
+function validateParams<T>(validationFunction: (p: unknown) => p is T, request: RFARequest): ValidationResult<T> {
   if (!request.params) {
     return { success: false, errorResponse: getErrorResponse("Missing params", request) };
   }
@@ -41,7 +44,7 @@ function validateParams<T>(validationFunction: (p: unknown) => p is T, request: 
 
 function validateFilePathAndServerParams<T extends FileData | FileLocation>(
   validationFunction: (p: unknown) => p is T,
-  request: RFAMessage,
+  request: RFARequest,
 ): { success: true; data: { filePath: ContentFilePath; server: BaseServer; params: T } } | FailureResult {
   const validationResult = validateParams(validationFunction, request);
   if (!validationResult.success) {
@@ -69,7 +72,7 @@ function validateFilePathAndServerParams<T extends FileData | FileLocation>(
 }
 
 function validateServerParams(
-  request: RFAMessage,
+  request: RFARequest,
 ): { success: true; data: { server: BaseServer; params: FileServer } } | FailureResult {
   const validationResult = validateParams(isFileServer, request);
   if (!validationResult.success) {
@@ -85,8 +88,8 @@ function validateServerParams(
   return { success: true, data: { server, params: fileServer } };
 }
 
-export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessage | Promise<RFAMessage>> = {
-  pushFile: function (msg: RFAMessage): RFAMessage {
+export const RFARequestHandler: Record<string, (message: RFARequest) => RFAResponse | Promise<RFAResponse>> = {
+  pushFile: function (msg: RFARequest): RFAResponse {
     const validationResult = validateFilePathAndServerParams(isFileData, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -94,10 +97,10 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
     const validationData = validationResult.data;
 
     validationData.server.writeToContentFile(validationData.filePath, validationData.params.content);
-    return new RFAMessage({ result: "OK", id: msg.id });
+    return new RFASuccessResponse({ result: "OK", id: msg.id });
   },
 
-  getFile: function (msg: RFAMessage): RFAMessage {
+  getFile: function (msg: RFARequest): RFAResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -109,10 +112,10 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
       return getErrorResponse(`File does not exist. Filename: ${validationData.params.filename}`, msg);
     }
 
-    return new RFAMessage({ result: file.content, id: msg.id });
+    return new RFASuccessResponse({ result: file.content, id: msg.id });
   },
 
-  getFileMetadata: function (msg: RFAMessage): RFAMessage {
+  getFileMetadata: function (msg: RFARequest): RFAResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -124,7 +127,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
       return getErrorResponse(`File does not exist. Filename: ${validationData.params.filename}`, msg);
     }
 
-    return new RFAMessage({
+    return new RFASuccessResponse({
       result: {
         filename: file.filename,
         ...file.metadata.plain(),
@@ -133,7 +136,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
     });
   },
 
-  deleteFile: function (msg: RFAMessage): RFAMessage {
+  deleteFile: function (msg: RFARequest): RFAResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -145,10 +148,10 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
       return getErrorResponse(resultOfRemovingFile.msg ?? "Failed", msg);
     }
 
-    return new RFAMessage({ result: "OK", id: msg.id });
+    return new RFASuccessResponse({ result: "OK", id: msg.id });
   },
 
-  getFileNames: function (msg: RFAMessage): RFAMessage {
+  getFileNames: function (msg: RFARequest): RFAResponse {
     const validationResult = validateServerParams(msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -157,10 +160,10 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
 
     const fileNameList = [...validationData.server.textFiles.keys(), ...validationData.server.scripts.keys()];
 
-    return new RFAMessage({ result: fileNameList, id: msg.id });
+    return new RFASuccessResponse({ result: fileNameList, id: msg.id });
   },
 
-  getAllFiles: function (msg: RFAMessage): RFAMessage {
+  getAllFiles: function (msg: RFARequest): RFAResponse {
     const validationResult = validateServerParams(msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -171,10 +174,10 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
       filename,
       content: file.content,
     }));
-    return new RFAMessage({ result: fileList, id: msg.id });
+    return new RFASuccessResponse({ result: fileList, id: msg.id });
   },
 
-  getAllFileMetadata: function (msg: RFAMessage): RFAMessage {
+  getAllFileMetadata: function (msg: RFARequest): RFAResponse {
     const validationResult = validateServerParams(msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -185,10 +188,10 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
       filename: filename,
       ...file.metadata.plain(),
     }));
-    return new RFAMessage({ result: fileList, id: msg.id });
+    return new RFASuccessResponse({ result: fileList, id: msg.id });
   },
 
-  calculateRam: function (msg: RFAMessage): RFAMessage {
+  calculateRam: function (msg: RFARequest): RFAResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -213,18 +216,18 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
       );
     }
 
-    return new RFAMessage({ result: ramUsage, id: msg.id });
+    return new RFASuccessResponse({ result: ramUsage, id: msg.id });
   },
 
-  getDefinitionFile: function (msg: RFAMessage): RFAMessage {
-    return new RFAMessage({ result: libSource, id: msg.id });
+  getDefinitionFile: function (msg: RFARequest): RFAResponse {
+    return new RFASuccessResponse({ result: libSource, id: msg.id });
   },
 
-  getSaveFile: async function (msg: RFAMessage): Promise<RFAMessage> {
+  getSaveFile: async function (msg: RFARequest): Promise<RFAResponse> {
     const saveData = await getSaveData();
 
     if (typeof saveData === "string") {
-      return new RFAMessage({
+      return new RFASuccessResponse({
         result: {
           identifier: Player.identifier,
           binary: false,
@@ -241,7 +244,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
       converted += String.fromCharCode(saveData[i]);
     }
 
-    return new RFAMessage({
+    return new RFASuccessResponse({
       result: {
         identifier: Player.identifier,
         binary: true,
@@ -251,13 +254,13 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
     });
   },
 
-  getAllServers: function (msg: RFAMessage): RFAMessage {
+  getAllServers: function (msg: RFARequest): RFAResponse {
     const servers = GetAllServers().map(({ hostname, hasAdminRights, purchasedByPlayer }) => ({
       hostname,
       hasAdminRights,
       purchasedByPlayer,
     }));
 
-    return new RFAMessage({ result: servers, id: msg.id });
+    return new RFASuccessResponse({ result: servers, id: msg.id });
   },
 };

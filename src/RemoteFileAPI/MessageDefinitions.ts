@@ -1,22 +1,43 @@
 import type { SaveData } from "../types";
 import type { BaseServer } from "../Server/BaseServer";
 
-export class RFAMessage {
-  jsonrpc = "2.0"; // Transmits version of JSON-RPC. Compliance maybe allows some funky interaction with external tools?
-  public method?: string; // Is defined when it's a request/notification, otherwise undefined
-  public result?: ResultType; // Is defined when it's a response, otherwise undefined
-  public params?: FileDescription; // Optional parameters to method
-  public error?: string; // Only defined on error
-  public id?: number; // ID to keep track of request -> response interaction, undefined with notifications, defined with request/response
+abstract class RFAMessage {
+  jsonrpc = "2.0";
+  public id: number; // ID to keep track of request -> response interaction
 
-  constructor(
-    obj: { method?: string; result?: ResultType; params?: FileDescription; error?: string; id?: number } = {},
-  ) {
+  constructor(id: number) {
+    this.id = id;
+  }
+}
+
+export class RFARequest extends RFAMessage {
+  public method: string;
+  public params: FileDescription;
+
+  constructor(obj: { id: number; method: string; params: FileDescription }) {
+    super(obj.id);
     this.method = obj.method;
-    this.result = obj.result;
     this.params = obj.params;
+  }
+}
+
+export abstract class RFAResponse extends RFAMessage {}
+
+export class RFASuccessResponse extends RFAResponse {
+  public result: ResultType;
+
+  constructor(obj: { id: number; result: ResultType }) {
+    super(obj.id);
+    this.result = obj.result;
+  }
+}
+
+export class RFAErrorResponse extends RFAResponse {
+  public error: string;
+
+  constructor(obj: { id: number; error: string }) {
+    super(obj.id);
     this.error = obj.error;
-    this.id = obj.id;
   }
 }
 
