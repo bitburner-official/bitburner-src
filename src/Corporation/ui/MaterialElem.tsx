@@ -123,7 +123,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           </Tooltip>
         </Box>
 
-        <Box sx={{ "& button": { width: "100%" } }}>
+        <Box key={`${division.name}-${city}`} sx={{ "& button": { width: "100%" } }}>
           <Tooltip
             title={tutorial ? <Typography>Purchase your required materials to get production started!</Typography> : ""}
           >
