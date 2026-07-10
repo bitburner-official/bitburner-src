@@ -117,13 +117,16 @@ export function getNS(hostname: string = SpecialServers.Home): NSFull {
 
 export function getMockedNetscriptContext(
   workerScriptLogFunction: (func: string, txt: () => string) => void = () => {},
+  hostname?: string,
 ): NetscriptContext {
   return {
     function: "",
     functionPath: "",
     workerScript: {
+      hostname,
       log: workerScriptLogFunction,
       scriptRef: {
+        server: hostname,
         dependencies: [],
       },
     } as unknown as WorkerScript,

@@ -320,7 +320,7 @@ describe("home", () => {
     await ns.singularity.installBackdoor();
     // Can exec from home
     expect(ns.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
-  }, 8000);
+  }, 8000); // TODO: Check why this test is flaky.
   test("getServerRequiredCharismaLevel", () => {
     const ns = getNS(SpecialServers.Home);
     const server = GetServerOrThrow(SpecialServers.Home);
@@ -713,14 +713,12 @@ describe("darkweb targets home", () => {
 describe("expectRunningOnDarknetServer", () => {
   test("throws when called on non-darknet server", () => {
     const logger = jest.fn();
-    const ctx = getMockedNetscriptContext(logger);
-    ctx.workerScript.hostname = SpecialServers.Home;
+    const ctx = getMockedNetscriptContext(logger, SpecialServers.Home);
     expect(() => expectRunningOnDarknetServer(ctx)).toThrow("This API can only be used on a darknet server");
   });
   test("does not throw when called on darknet server", () => {
     const logger = jest.fn();
-    const ctx = getMockedNetscriptContext(logger);
-    ctx.workerScript.hostname = SpecialServers.DarkWeb;
+    const ctx = getMockedNetscriptContext(logger, SpecialServers.DarkWeb);
     expect(() => expectRunningOnDarknetServer(ctx)).not.toThrow();
   });
 });
