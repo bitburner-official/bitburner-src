@@ -364,8 +364,11 @@ describe("production", () => {
     ns.corporation.bulkPurchase(div1, city, "Drugs", 1e6);
     ns.corporation.makeProduct(div2, city, "0", 1e10, 1e10);
     ns.corporation.sellProduct(div2, city, "0", "MAX", "MP", true);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    corp.divisions.get(div2)!.products.get("0")!.developmentProgress = 99.99;
+    const product = corp.divisions.get(div2)?.products.get("0");
+    if (!product) {
+      throw new Error("Invalid product");
+    }
+    product.developmentProgress = 99.99;
     processCycles(10);
 
     expect(Number.isFinite(ns.corporation.getMaterial(div1, city, "Drugs").quality)).toBe(true);
@@ -374,7 +377,16 @@ describe("production", () => {
     expect(Number.isFinite(corp.totalAssets)).toBe(true);
   });
 
-  test("limitMaterialProduction 3", () => {
+  // Test two example cases documented in the limitMaterialProduction API.
+  test.each([
+    // Test case 1: There is enough free space for the expected RawProduction value.
+    // Expected RawProduction = 1000. Free space = 45.
+    ["limitMaterialProduction 3", [20, 10], 45, [500, 200], [200, 100], 67],
+    // Test case 2: There is insufficient free space for the expected RawProduction value. The effective RawProduction
+    // is scaled down.
+    // Expected RawProduction = 1000. Free space = 22.5.
+    ["limitMaterialProduction 4", [-1, 0], 22.5, [250, 100], [500, 0], 15],
+  ])("%s", (_, limits, freeSpace, expectedConsumedInput, expectedOutput, expectedRemainingFreeSpace) => {
     const ns = getNS();
     setUpCorp(ns, []);
     for (let i = 0; i < 1000; ++i) {
@@ -390,52 +402,23 @@ describe("production", () => {
     ns.corporation.bulkPurchase(div, city, "Real Estate", 1e6);
     processCycles(2);
 
-    ns.corporation.limitMaterialProduction(div, city, "Plants", 20);
-    ns.corporation.limitMaterialProduction(div, city, "Food", 10);
+    ns.corporation.limitMaterialProduction(div, city, "Plants", limits[0]);
+    ns.corporation.limitMaterialProduction(div, city, "Food", limits[1]);
     // Manually set the free space.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    corp.divisions.get(div)!.warehouses[city]!.size =
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      corp.divisions.get(div)!.warehouses[city]!.sizeUsed + 45;
-
-    processCycles(1);
-    expect(ns.corporation.getMaterial(div, city, "Water").stored).toBe(999500);
-    expect(ns.corporation.getMaterial(div, city, "Chemicals").stored).toBe(999800);
-    expect(ns.corporation.getMaterial(div, city, "Plants").stored).toBe(200);
-    expect(ns.corporation.getMaterial(div, city, "Food").stored).toBe(100);
-
-    expect(ns.corporation.getWarehouse(div, city).size - ns.corporation.getWarehouse(div, city).sizeUsed).toBe(67);
-  });
-
-  test("limitMaterialProduction 4", () => {
-    const ns = getNS();
-    setUpCorp(ns, []);
-    for (let i = 0; i < 1000; ++i) {
-      ns.corporation.levelUpgrade("Smart Storage");
+    const warehouse = corp.divisions.get(div)?.warehouses[city];
+    if (!warehouse) {
+      throw new Error("Invalid warehouse");
     }
-    const corp = getCorp();
-    const div = "Agriculture";
-    const city = CityName.Sector12;
-    ns.corporation.expandIndustry("Agriculture", div);
-    setUpDivision(ns, div);
-    ns.corporation.bulkPurchase(div, city, "Chemicals", 1e6);
-    ns.corporation.bulkPurchase(div, city, "Water", 1e6);
-    ns.corporation.bulkPurchase(div, city, "Real Estate", 1e6);
-    processCycles(2);
-
-    ns.corporation.limitMaterialProduction(div, city, "Food", 0);
-    // Manually set the free space.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    corp.divisions.get(div)!.warehouses[city]!.size =
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      corp.divisions.get(div)!.warehouses[city]!.sizeUsed + 22.5;
+    warehouse.size = warehouse.sizeUsed + freeSpace;
 
     processCycles(1);
-    expect(ns.corporation.getMaterial(div, city, "Water").stored).toBe(999750);
-    expect(ns.corporation.getMaterial(div, city, "Chemicals").stored).toBe(999900);
-    expect(ns.corporation.getMaterial(div, city, "Plants").stored).toBe(500);
-    expect(ns.corporation.getMaterial(div, city, "Food").stored).toBe(0);
+    expect(ns.corporation.getMaterial(div, city, "Water").stored).toBe(1e6 - expectedConsumedInput[0]);
+    expect(ns.corporation.getMaterial(div, city, "Chemicals").stored).toBe(1e6 - expectedConsumedInput[1]);
+    expect(ns.corporation.getMaterial(div, city, "Plants").stored).toBe(expectedOutput[0]);
+    expect(ns.corporation.getMaterial(div, city, "Food").stored).toBe(expectedOutput[1]);
 
-    expect(ns.corporation.getWarehouse(div, city).size - ns.corporation.getWarehouse(div, city).sizeUsed).toBe(15);
+    expect(ns.corporation.getWarehouse(div, city).size - ns.corporation.getWarehouse(div, city).sizeUsed).toBe(
+      expectedRemainingFreeSpace,
+    );
   });
 });
