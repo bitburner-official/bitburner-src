@@ -46,7 +46,7 @@ export function scananalyze(args: (string | number | boolean)[]): undefined {
 
 function executeScanAnalyzeCommand(depth: number, all: boolean): void {
   interface Node {
-    hostname: string;
+    server: BaseServer;
     children: Node[];
   }
 
@@ -54,7 +54,7 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
     (!all && s.purchasedByPlayer && s.hostname != "home") ||
     d > depth ||
     (!all && s instanceof HacknetServer) ||
-    (!all && s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
+    ((!all || !s.hasAdminRights) && s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
 
   const makeNode = (root: BaseServer = Player.getCurrentServer()) => {
     // Keep track of previously seen servers to prevent backtracking (since darknet can be cyclical)
@@ -62,7 +62,7 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
     const populateNode = (s: BaseServer, d = 1): Node => {
       seenServers.push(s.hostname);
       return {
-        hostname: s.hostname,
+        server: s,
         children: s.serversOnNetwork
           .filter((h) => !seenServers.includes(h))
           .map((s) => GetServer(s))
@@ -79,14 +79,13 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
   const printOutput = (node: Node, prefix = ["  "], last = true) => {
     const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
     const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
-    if (Player.hasProgram(CompletedProgramName.autoLink)) {
-      Terminal.append(new Link(titlePrefix, node.hostname));
+    const { server } = node;
+    if (server.isHyperLinkAllowed() && Player.hasProgram(CompletedProgramName.autoLink)) {
+      Terminal.append(new Link(titlePrefix, server.hostname));
     } else {
-      Terminal.print(titlePrefix + node.hostname + "\n");
+      Terminal.print(titlePrefix + server.hostname + "\n");
     }
 
-    const server = GetServer(node.hostname);
-    if (!server) return;
     const hasRoot = server.hasAdminRights ? "YES" : "NO";
     if (server instanceof Server) {
       Terminal.print(

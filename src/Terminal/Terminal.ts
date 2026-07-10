@@ -285,6 +285,19 @@ export class Terminal {
     }
   }
 
+  onServerHyperLinkClick(hostname: string): void {
+    const server = GetServer(hostname);
+    if (server == null) {
+      this.error("Invalid server. Connection failed.");
+      return;
+    }
+    if (!server.isHyperLinkAllowed()) {
+      this.error("Tried to connect to a dnet server without backdoor or stasis link. Connection failed.");
+      return;
+    }
+    this.connectToServer(hostname);
+  }
+
   async executeCommands(commands: string): Promise<void> {
     // Handle Terminal History - multiple commands should be saved as one
     if (this.commandHistory[this.commandHistory.length - 1] != commands) {
