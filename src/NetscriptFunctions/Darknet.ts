@@ -606,6 +606,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     promoteStock:
       (ctx: NetscriptContext) =>
       (_symbol): Promise<DarknetResult> => {
+        if (!Player.hasTixApiAccess) {
+          throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
+        }
         const symbol = helpers.string(ctx, "symbol", _symbol);
         const stock = getStockFromSymbol(ctx, symbol);
         expectRunningOnDarknetServer(ctx);
