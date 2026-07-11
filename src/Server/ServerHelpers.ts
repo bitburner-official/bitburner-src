@@ -254,6 +254,11 @@ export function prestigeHomeComputer(homeComp: Server): void {
     }
     homeComp.runningScriptMap.clear();
   }
+  homeComp.sshPortOpen = false;
+  homeComp.ftpPortOpen = false;
+  homeComp.smtpPortOpen = false;
+  homeComp.httpPortOpen = false;
+  homeComp.sqlPortOpen = false;
 }
 
 // Returns the i-th server on the specified server's network
