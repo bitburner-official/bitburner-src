@@ -404,15 +404,19 @@ interface CrimeStats {
  * @public
  */
 interface BasicHGWOptions {
-  /** Number of threads to use for this function.
+  /**
+   * Number of threads to use for this function.
    * Must be less than or equal to the number of threads the script is running with.
    * Accepts positive non integer values.
+   * Defaults to the number of threads the script is running with.
    */
   threads?: number;
-  /** Set to true this action will affect the stock market. */
+  /** Whether to make this action affect the stock market. Defaults to false. */
   stock?: boolean;
-  /** Number of additional milliseconds that will be spent waiting between the start of the function and when it
-   * completes. */
+  /**
+   * Number of additional milliseconds that will be spent waiting between the start of the function and when it
+   * completes. Defaults to 0.
+   */
   additionalMsec?: number;
 }
 
