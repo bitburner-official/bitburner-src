@@ -1130,12 +1130,15 @@ export const ns: InternalAPI<NSFull> = {
     }
     return server.getContentFile(path)?.content ?? "";
   },
-  getFileMetadata: (ctx) => (_filename) => {
+  getFileMetadata: (ctx) => (_filename, _host?) => {
+    const [server] = helpers.getServer(ctx, _host);
+    if (!server || server.serversOnNetwork.length === 0) {
+      throw helpers.errorMessage(ctx, `Server ${_host} does not exist.`);
+    }
     const path = helpers.filePath(ctx, "filename", _filename);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       throw new Error(`Invalid path: ${_filename}. It must be a text file or a script.`);
     }
-    const server = ctx.workerScript.getServer();
     const contentFile = server.getContentFile(path);
     if (!contentFile) {
       throw new Error(`Invalid path: ${_filename}. The file does not exist on ${server.hostname}.`);

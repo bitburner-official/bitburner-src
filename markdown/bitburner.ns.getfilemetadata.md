@@ -9,7 +9,7 @@ Get the metadata of a file.
 **Signature:**
 
 ```typescript
-getFileMetadata(filename: string): FileMetadata;
+getFileMetadata(filename: string, host?: string): FileMetadata;
 ```
 
 ## Parameters
@@ -43,6 +43,22 @@ string
 </td><td>
 
 Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script (.js, .jsx, .ts, .tsx).
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of the target server. Optional. Defaults to current server if not provided.
 
 
 </td></tr>

@@ -8580,7 +8580,8 @@ export interface NS {
    *
    * @param ram - The new RAM limit to set.
    * @returns The new static RAM limit, which will be the old one if it wasn't changed.
-   * This means you can use no parameters to check the current ram limit.
+   * This means you can use no
+   * parameters to check the current ram limit.
    */
   ramOverride(ram?: number): number;
 
@@ -8659,9 +8660,10 @@ export interface NS {
    *
    * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script
    * (.js, .jsx, .ts, .tsx).
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @Returns The metadata of the file.
    */
-  getFileMetadata(filename: string): FileMetadata;
+  getFileMetadata(filename: string, host?: string): FileMetadata;
 
   /**
    * Get a copy of the data from a port without popping it.
