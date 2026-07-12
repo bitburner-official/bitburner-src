@@ -8580,8 +8580,7 @@ export interface NS {
    *
    * @param ram - The new RAM limit to set.
    * @returns The new static RAM limit, which will be the old one if it wasn't changed.
-   * This means you can use no
-   * parameters to check the current ram limit.
+   * This means you can use no parameters to check the current ram limit.
    */
   ramOverride(ram?: number): number;
 
