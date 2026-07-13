@@ -256,6 +256,30 @@ export function prestigeHomeComputer(homeComp: Server): void {
   }
 }
 
+type ConnectionResult =
+  | { status: "ok"; destination: BaseServer }
+  | { status: "server not found"; hostname: string }
+  | { status: "no connection"; from: string; to: string };
+
+export function validateConnections(start: BaseServer, path: string[]): ConnectionResult {
+  let current = start;
+  for (const hostname of path) {
+    const next = GetServer(hostname);
+    if (next === null) {
+      return { status: "server not found", hostname };
+    }
+    if (
+      !next.backdoorInstalled &&
+      !next.purchasedByPlayer &&
+      !current.serversOnNetwork.some((n) => GetServer(n)?.hostname === next.hostname)
+    ) {
+      return { status: "no connection", from: current.hostname, to: next.hostname };
+    }
+    current = next;
+  }
+  return { status: "ok", destination: current };
+}
+
 // Returns the i-th server on the specified server's network
 // A Server's serverOnNetwork property holds only the IPs. This function returns
 // the actual Server object

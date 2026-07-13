@@ -1,6 +1,8 @@
 import React from "react";
 import { Link as MuiLink } from "@mui/material";
 import { Terminal } from "../../Terminal";
+import { Player } from "@player";
+import { validateConnections } from "../../Server/ServerHelpers";
 
 interface IConnectLinkProps {
   path: string[];
@@ -14,11 +16,21 @@ export function ConnectLink(props: IConnectLinkProps): React.ReactElement {
       Terminal.error("Links created by ns.ui.createServerLink() can only be used manually.");
       return;
     }
-    // if (!isServerLinkAllowed(hostname)) {
-    //     Terminal.error("Invalid server. Connection failed.");
-    //     return;
-    // }
-    // Terminal.connectToServer(hostname);
+    const result = validateConnections(Player.getCurrentServer(), props.path);
+    switch (result.status) {
+      case "server not found":
+        Terminal.error(`${result.hostname} not found. Connection failed.`);
+        return;
+      case "no connection":
+        Terminal.error(`Unable to connect from ${result.from} to ${result.to}. Connection failed.`);
+        return;
+      case "ok":
+        Terminal.connectToServer(result.destination.hostname);
+        return;
+      default: {
+        const __s: never = result;
+      }
+    }
   };
   return <MuiLink onClick={onClick}>{props.text}</MuiLink>;
 }
