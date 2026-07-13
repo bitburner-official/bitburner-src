@@ -27,8 +27,10 @@ export async function main(ns) {
 }
 
 /**
- * Creates a clickable SidebarItem and adds it to the game's left-hand menu.
- * When clicked, it opens a new full-screen ContentPage with the provided text.
+ * Creates a new clickable link item and injects it into the HUD on the left side.
+ * It opens a new full-screen page with custom content.
+ * (Where did you think new pages came from? A stork?)
+ *
  * @param {NS} ns - netscript api
  * @param {string} sidebarLabel - the label for the sidebar button
  * @param {string} pageText - the text to display in the new page
@@ -39,7 +41,9 @@ function addToSidebar(ns, sidebarLabel, pageText) {
 }
 
 /**
- * Example component: a sidebar item that opens a new ContentPage when clicked.
+ * A button. But cooler. Style it yourself if you don't like how it looks.
+ * It opens a new page with custom content when clicked.
+ *
  * @param {{ ns: NS, sidebarLabel: string, pageText: string}} props - The props for the component
  * @returns {React.ReactElement}
  */
@@ -55,7 +59,9 @@ function SidebarItem({ ns, sidebarLabel, pageText }) {
 }
 
 /**
- * Example component: a simple page that displays some text and a button that changes the background color
+ * A full-screen custom component with dynamic content.
+ * Try not to stare at the screen too hard while spamming the button, it's not good for your eyes.
+ *
  * @param {{ text: string }} props - The props for the component
  * @returns {React.ReactElement}
  */

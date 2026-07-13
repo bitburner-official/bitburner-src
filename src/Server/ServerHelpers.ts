@@ -387,10 +387,9 @@ export function initForeignServers(homeComputer: Server): void {
       const path = resolveScriptFilePath(scriptName);
       const content = discoverableNetworkScripts[scriptName].content;
       if (!path || !content) {
-        console.error(
+        throw new Error(
           `Unable to populate script ${scriptName} on server ${server.hostname}: invalid script name or content`,
         );
-        continue;
       }
       server.scripts.set(path, new Script(path, content, server.hostname));
     }

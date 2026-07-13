@@ -38,6 +38,7 @@ function senderScriptIsRunning(ns) {
   return runningScripts.find((script) => script.filename === 'port_sender.wip.js');
 }
 
+// ansi color codes ftw
 export function colorText(text, colorHexCode) {
   const r = parseInt(colorHexCode.slice(1, 3), 16);
   const g = parseInt(colorHexCode.slice(3, 5), 16);

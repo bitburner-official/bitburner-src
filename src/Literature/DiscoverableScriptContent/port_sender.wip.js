@@ -26,7 +26,7 @@ export async function main(ns) {
   if (!receiverScriptIsRunning(ns)) {
     ns.print(colorText('Starting data receiver script...', '#8855FF'));
     ns.run('port_receiver.wip.js');
-    await ns.sleep(10); // let go of the thread so the other script can actually start
+    await ns.sleep(0); // let go of the thread so the other script can actually start
   }
 
   const serverToAnalyze = 'n00dles';
