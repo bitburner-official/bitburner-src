@@ -19,10 +19,11 @@ import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import React from "react";
-import { Link as MuiLink } from "@mui/material";
-import { GetServer } from "../Server/AllServers";
-import { DarknetServer } from "../Server/DarknetServer";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { getFriendlyType } from "../utils/TypeAssertion";
+import { ConnectLink } from "../Terminal/ui/ConnextLink";
+import { Player } from "@player";
+import { CompletedProgramName } from "@enums";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
@@ -35,30 +36,6 @@ export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown)
     );
   }
   return v;
-}
-
-function isServerLinkAllowed(hostname: string): boolean {
-  const server = GetServer(hostname);
-  if (server == null) {
-    return false;
-  }
-  if (server instanceof DarknetServer && server.hostname !== SpecialServers.DarkWeb) {
-    return server.backdoorInstalled;
-  }
-  return server.serversOnNetwork.length > 0;
-}
-
-function handleServerLinkClick(hostname: string, event: React.MouseEvent<HTMLAnchorElement>): void {
-  const { nativeEvent } = event;
-  if (!(nativeEvent instanceof Event) || !nativeEvent.isTrusted) {
-    Terminal.error("Links created by ns.ui.createServerLink() can only be used manually.");
-    return;
-  }
-  if (!isServerLinkAllowed(hostname)) {
-    Terminal.error("Invalid server. Connection failed.");
-    return;
-  }
-  Terminal.connectToServer(hostname);
 }
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
@@ -308,10 +285,29 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       Router.toPage(Page.CustomPage, { content: wrapUserNode(_node) });
     },
 
-    createServerLink: (ctx) => (_hostname, _linkText?) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const linkText = _linkText == null ? hostname : helpers.string(ctx, "linkText", _linkText);
-      return <MuiLink onClick={(event) => handleServerLinkClick(hostname, event)}>{linkText}</MuiLink>;
+    createConnectLink: (ctx) => (_connectPath, _linkText?) => {
+      if (!Player.hasProgram(CompletedProgramName.autoLink)) {
+        throw errorMessage(ctx, `Requires AutoLink.exe to run.`);
+      }
+      if (!Array.isArray(_connectPath)) {
+        throw errorMessage(
+          ctx,
+          `connectPath must be an array. Current type is ${getFriendlyType(_connectPath)}.`,
+          "TYPE",
+        );
+      }
+      if (_connectPath.length === 0) {
+        throw errorMessage(ctx, `connectPath must not be empty.`, "TYPE");
+      }
+      const connectPath = _connectPath.map((s) => helpers.string(ctx, "connectPath", s));
+      for (const host of connectPath) {
+        const [s] = helpers.getServer(ctx, host);
+        if (s == null || (s.hostname === SpecialServers.DarkWeb && s.serversOnNetwork.length === 0)) {
+          throw errorMessage(ctx, `Invalid host: '${host}'`);
+        }
+      }
+      const linkText = _linkText == null ? connectPath[0] : helpers.string(ctx, "linkText", _linkText);
+      return <ConnectLink path={connectPath} text={linkText} />;
     },
   };
 }

@@ -7124,7 +7124,7 @@ interface UserInterface {
    */
   renderPage(node: ReactNode): void;
 
-  createServerLink(hostname: string, linkText?: string): ReactNode;
+  createConnectLink(connectPath: string[], linkText?: string): ReactNode;
 }
 
 /**

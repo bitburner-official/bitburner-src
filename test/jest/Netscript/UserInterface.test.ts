@@ -3,6 +3,10 @@ import { Settings } from "../../../src/Settings/Settings";
 import { defaultStyles } from "../../../src/Themes/Styles";
 import { defaultTheme } from "../../../src/Themes/Themes";
 import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { SpecialServers } from "../../../src/Server/data/SpecialServers";
+import { GetServerOrThrow } from "../../../src/Server/AllServers";
+import { Player } from "@player";
+import { CompletedProgramName } from "@enums";
 
 const themeHexColor = "#abc";
 const fontFamily = "monospace";
@@ -177,4 +181,29 @@ test("alias", () => {
   expect(() => ns.ui.alias("", "bar")).toThrow();
   expect(() => ns.ui.alias("   ", "bar")).toThrow();
   expect(() => ns.ui.alias("^", "bar")).toThrow();
+});
+
+describe("createConnectLink", () => {
+  test("Create link", () => {
+    const ns = getNS();
+
+    expect(() => ns.ui.createConnectLink([SpecialServers.Home])).toThrow();
+    Player.getHomeComputer().pushProgram(CompletedProgramName.autoLink);
+    ns.ui.createConnectLink([SpecialServers.Home]);
+
+    expect(() => ns.ui.createConnectLink([])).toThrow();
+
+    expect(() => ns.ui.createConnectLink([SpecialServers.WorldDaemon])).toThrow();
+    const WorldDaemon = GetServerOrThrow(SpecialServers.WorldDaemon);
+    const DaedalusServer = GetServerOrThrow(SpecialServers.DaedalusServer);
+    WorldDaemon.serversOnNetwork.push(DaedalusServer.hostname);
+    DaedalusServer.serversOnNetwork.push(WorldDaemon.hostname);
+    ns.ui.createConnectLink([SpecialServers.WorldDaemon]);
+
+    expect(() => ns.ui.createConnectLink([SpecialServers.DarkWeb])).toThrow();
+    ns.singularity.purchaseTor();
+    ns.ui.createConnectLink([SpecialServers.DarkWeb]);
+
+    expect(() => ns.ui.createConnectLink(["name of server that does not exist"])).toThrow();
+  });
 });
