@@ -6,30 +6,24 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Adjuster } from "./Adjuster";
-import { Player } from "@player";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import type { Gang } from "../../Gang/Gang";
 
 const bigNumber = 1e27;
 
-export function GangDev(): React.ReactElement {
+export function GangDev({ gang }: { gang: Gang }): React.ReactElement {
   function addTonsGangCycles(): void {
-    if (Player.gang) {
-      Player.gang.storedCycles = bigNumber;
-    }
+    gang.storedCycles = bigNumber;
   }
 
   function modifyGangCycles(modify: number): (x: number) => void {
     return function (cycles: number): void {
-      if (Player.gang) {
-        Player.gang.storedCycles += cycles * modify;
-      }
+      gang.storedCycles += cycles * modify;
     };
   }
 
   function resetGangCycles(): void {
-    if (Player.gang) {
-      Player.gang.storedCycles = 0;
-    }
+    gang.storedCycles = 0;
   }
 
   return (
