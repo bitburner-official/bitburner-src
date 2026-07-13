@@ -18,13 +18,13 @@ const difficultySettings = {
   Brutal: { timer: 4000, wiresmin: 9, wiresmax: 9, rules: 4 },
 };
 
-const colors = ["red", "#FFC107", "blue", "white"] as const;
+const colors = ["#D55E00", "#F0E442", "#0072B2", "#FFFFFF"] as const;
 
 const colorNames = {
-  red: "RED",
-  "#FFC107": "YELLOW",
-  blue: "BLUE",
-  white: "WHITE",
+  "#D55E00": "RED",
+  "#F0E442": "YELLOW",
+  "#0072B2": "BLUE",
+  "#FFFFFF": "WHITE",
 } as const;
 
 interface Wire {
