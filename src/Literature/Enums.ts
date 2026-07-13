@@ -35,16 +35,14 @@ export enum LiteratureName {
   LabHint = "secrets-in-the-depths.lit",
 }
 
-export const DiscoverableScriptName = {
-  GuessingGame: "guessing_game.wip.js",
-  CloudServerUpgrades: "upgrade_cloud_server.wip.ts",
-  PortSender: "port_sender.wip.js",
-  PortReceiver: "port_receiver.wip.js",
-  ServerFinder: "server_finder.wip.js",
-  CustomLogScript: "escaping_your_chains.wip.jsx",
-  CustomContentScript: "build_new_worlds.wip.jsx",
-  HackController: "hack_controller.wip.js",
-  HackChildScript: "hack.wip.js",
-} as const;
-
-export type DiscoverableScriptName = (typeof DiscoverableScriptName)[keyof typeof DiscoverableScriptName];
+export enum DiscoverableScriptName {
+  GuessingGame = "guessing_game.wip.js",
+  CloudServerUpgrades = "upgrade_cloud_server.wip.ts",
+  PortSender = "port_sender.wip.js",
+  PortReceiver = "port_receiver.wip.js",
+  ServerFinder = "server_finder.wip.js",
+  CustomLogScript = "escaping_your_chains.wip.jsx",
+  CustomContentScript = "build_new_worlds.wip.jsx",
+  HackController = "hack_controller.wip.js",
+  HackChildScript = "hack.wip.js",
+}
