@@ -1975,15 +1975,25 @@ export interface Singularity {
   exportGame(): Promise<void>;
 
   /**
-   * Returns Backup save bonus availability.
+   * Returns whether the Export Game bonus is available.
+   *
+   * This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link Singularity.hasExportGameBonus | hasExportGameBonus} instead.
+   *
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
-   *
-   *
-   * This function will check if there is a bonus for backing up your save.
-   *
    */
   exportGameBonus(): boolean;
+
+  /**
+   * Returns whether the Export Game bonus is available.
+   *
+   * @remarks
+   * RAM cost: 0.5 GB * 16/4/1
+   */
+  hasExportGameBonus(): boolean;
 
   /**
    * Take university class.

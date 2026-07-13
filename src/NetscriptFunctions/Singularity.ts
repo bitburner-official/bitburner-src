@@ -54,6 +54,7 @@ import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
 import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
+import { deprecationWarning } from "../utils/DeprecationHelper";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -1228,6 +1229,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return exportGame();
     },
     exportGameBonus: (ctx) => () => {
+      deprecationWarning("ns.singularity.exportGameBonus", "Use ns.singularity.hasExportGameBonus instead.");
+      return singularityAPI.hasExportGameBonus(ctx)();
+    },
+    hasExportGameBonus: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       return canGetBonus();
     },
