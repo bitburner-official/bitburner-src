@@ -13,7 +13,7 @@ import { StockMarket as SM } from "../../StockMarket/StockMarket";
 import { Stock } from "../../StockMarket/Stock";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
-export function StockMarketDev(): React.ReactElement {
+export function StockMarketDev({ disabled }: { disabled: boolean }): React.ReactElement {
   const [stockPrice, setStockPrice] = useState(0);
   const [stockSymbol, setStockSymbol] = useState("");
 
@@ -81,7 +81,7 @@ export function StockMarketDev(): React.ReactElement {
     );
   }
   return (
-    <AutoExpandAccordion cacheKey="DEVMENU_StockMarketDev" unmountOnExit={true}>
+    <AutoExpandAccordion cacheKey="DEVMENU_StockMarketDev" unmountOnExit={true} disabled={disabled}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Stock Market</Typography>
       </AccordionSummary>

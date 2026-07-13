@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from "react";
 import Typography from "@mui/material/Typography";
 
 import { Player } from "@player";
-import { AugmentationName } from "@enums";
 
 import { GeneralDev } from "./DevMenu/ui/GeneralDev";
 import { TimeSkipDev } from "./DevMenu/ui/TimeSkipDev";
@@ -59,18 +58,18 @@ export function DevMenuRoot(): React.ReactElement {
       <ServersDev />
       <CompaniesDev />
 
-      {Player.bladeburner && <BladeburnerDev bladeburner={Player.bladeburner} />}
+      <BladeburnerDev bladeburner={Player.bladeburner ?? null} />
 
-      {Player.gang && <GangDev />}
+      <GangDev />
 
-      {Player.corporation && <CorporationDev />}
+      <CorporationDev />
 
       <CodingContractsDev />
 
-      {canAccessStockMarket() && <StockMarketDev />}
+      <StockMarketDev disabled={canAccessStockMarket()} />
 
-      {Player.sleeves.length > 0 && <SleevesDev />}
-      {Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1) && <StanekDev />}
+      <SleevesDev />
+      <StanekDev />
 
       <TimeSkipDev />
       <AchievementsDev />
