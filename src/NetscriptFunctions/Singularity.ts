@@ -23,7 +23,7 @@ import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { getServerOnNetwork, getTorRouter } from "../Server/ServerHelpers";
+import { getTorRouter, validateConnections } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
 import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
@@ -49,7 +49,6 @@ import { numberOfBlackOperations } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { addRepToFavor } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/Constants";
-import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
@@ -475,39 +474,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     connect: (ctx) => (_host?) => {
       helpers.checkSingularityAccess(ctx);
-      const [target, host] = helpers.getServer(ctx, _host);
-      if (target == null) {
-        return false;
-      }
-
-      // Adjacent servers
-      const server = Player.getCurrentServer();
-      for (let i = 0; i < server.serversOnNetwork.length; i++) {
-        const other = getServerOnNetwork(server, i);
-        if (other === null) {
-          exceptionAlert(
-            new Error(
-              `${server.serversOnNetwork[i]} is on the network of ${server.hostname}, but we cannot find its data.`,
-            ),
-          );
-          return false;
-        }
-        if (other.hostname === target.hostname) {
-          Terminal.connectToServer(host, true);
-          return true;
-        }
-      }
-
-      /**
-       * Backdoored + owned servers (home, private servers, or hacknet servers). With home computer, purchasedByPlayer
-       * is true.
-       */
-      if (target.backdoorInstalled || target.purchasedByPlayer) {
-        Terminal.connectToServer(host, true);
+      const host = helpers.string(ctx, "host", _host);
+      const result = validateConnections(Player.getCurrentServer(), [host]);
+      if (result.status === "ok") {
+        Terminal.connectToServer(result.destination.hostname, true);
         return true;
       }
-
-      // Failure case
       return false;
     },
     manualHack: (ctx) => () => {
