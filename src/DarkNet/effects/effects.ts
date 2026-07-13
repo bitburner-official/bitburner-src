@@ -81,7 +81,14 @@ export const calculateAuthenticationTime = (
   const intelligenceFactor = 1 / calculateIntelligenceBonus(person.skills.intelligence, 0.25);
 
   const time =
-    baseTime * skillFactor * backdoorFactor * underleveledFactor * hasBootsFactor * hasSf15_2Factor * threadsFactor * intelligenceFactor;
+    baseTime *
+    skillFactor *
+    backdoorFactor *
+    underleveledFactor *
+    hasBootsFactor *
+    hasSf15_2Factor *
+    threadsFactor *
+    intelligenceFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars = darknetServerData.modelId === ModelIds.TimingAttack ? correctCharsInPassword : 0;
