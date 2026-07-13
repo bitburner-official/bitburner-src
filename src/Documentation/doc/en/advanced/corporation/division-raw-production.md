@@ -18,8 +18,8 @@ and produce 1000 units of Plants and 1000 units of Food.
 
 ## Production scaling due to insufficient storage space
 
-`RawProduction` will be scaled down if there is insufficient free space in the warehouse. The games calculates the net
-change in storage space, then scale down `RawProduction` based on the net change and the free space.
+`RawProduction` will be scaled down if there is insufficient free space in the warehouse. The game calculates the net
+change in storage space, then scales down `RawProduction` based on the net change and the free space.
 
 For example, with Agriculture, for each unit of `RawProduction`, we consume 0.5 units of Water and 0.2 units of Chemicals
 to produce 1 unit of Plants and 1 unit of Food. The sizes of these materials:
