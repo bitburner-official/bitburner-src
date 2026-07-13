@@ -3,9 +3,9 @@
                 (c) 2074 Fulcrum Tech (Secret Lab Division)
                              Author: J. Perez
 
- This script launches child scripts that loop just one of either hack, grow, or
+ This script launches children that loop just one of either hack, grow, or
  weaken. They run alongside each other in order to constantly keep the server
- near maximum money (to increase the power of hack and grow) and minimum security
+ near max cash (to increase the power of hack and grow) and minsec
  (to reduce the penalties for high security on runtime and money hacked)
 
 
