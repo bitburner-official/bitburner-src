@@ -7124,6 +7124,29 @@ interface UserInterface {
    */
   renderPage(node: ReactNode): void;
 
+  /**
+   * Allows programmatic use of AutoLink.exe.
+   *
+   * @remarks
+   * RAM cost: 5 GB
+   *
+   * This function uses AutoLink.exe to create a clickable link. Clicking on the link is approximately
+   * equivalent to typing a sequence of "connect" commands into the terminal.
+   *
+   * * @example
+   * ```js
+   * export async function main(ns) {
+   *   // Prints a link to the terminal. Clicking on it is approximately equivalent
+   *   // to typing `connect joesguns; connect zer0; connect  silver-helix`.
+   *   ns.tprintRaw(ns.ui.createConnectLink(['joesguns', 'zer0', 'silver-helix']));
+   * }
+   * ```
+   *
+   * @param connectPath - host names or ip addresses of servers to connect to.
+   * @param linkText - the text to display on the link. Defaunts to the last host name or ip in connectPath.
+   *
+   * @returns A link that can, for example, be used with ns.tprintRaw().
+   */
   createConnectLink(connectPath: string[], linkText?: string): ReactNode;
 }
 

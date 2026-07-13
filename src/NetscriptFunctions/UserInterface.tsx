@@ -296,9 +296,6 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
           "TYPE",
         );
       }
-      if (_connectPath.length === 0) {
-        throw errorMessage(ctx, `connectPath must not be empty.`, "TYPE");
-      }
       const connectPath = _connectPath.map((s) => helpers.string(ctx, "connectPath", s));
       for (const host of connectPath) {
         const [s] = helpers.getServer(ctx, host);
@@ -306,7 +303,11 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
           throw errorMessage(ctx, `Invalid host: '${host}'`);
         }
       }
-      const linkText = _linkText == null ? connectPath[0] : helpers.string(ctx, "linkText", _linkText);
+      const last = connectPath.at(-1);
+      if (last == null) {
+        throw errorMessage(ctx, `connectPath must not be empty.`, "TYPE");
+      }
+      const linkText = _linkText == null ? last : helpers.string(ctx, "linkText", _linkText);
       return <ConnectLink path={connectPath} text={linkText} />;
     },
   };
