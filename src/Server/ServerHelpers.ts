@@ -265,14 +265,10 @@ export function validateConnections(start: BaseServer, path: string[]): Connecti
   let current = start;
   for (const hostname of path) {
     const next = GetServer(hostname);
-    if (next === null) {
+    if (next == null) {
       return { status: "server not found", hostname };
     }
-    if (
-      !next.backdoorInstalled &&
-      !next.purchasedByPlayer &&
-      !current.serversOnNetwork.some((n) => GetServer(n)?.hostname === next.hostname)
-    ) {
+    if (!next.backdoorInstalled && !next.purchasedByPlayer && !current.serversOnNetwork.includes(next.hostname)) {
       return { status: "no connection", from: current.hostname, to: next.hostname };
     }
     current = next;
