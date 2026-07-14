@@ -1136,12 +1136,9 @@ export const ns: InternalAPI<NSFull> = {
       throw new Error(`Invalid path: ${_filename}. It must be a text file or a script.`);
     }
     const [server] = helpers.getServer(ctx, _host);
-    if (!server) {
-      throw helpers.errorMessage(ctx, `Server ${_host} does not exist.`);
-    }
-    const contentFile = server.getContentFile(path);
+    const contentFile = server?.getContentFile(path);
     if (!contentFile) {
-      throw new Error(`Invalid path: ${_filename}. The file does not exist on ${server.hostname}.`);
+      return null;
     }
     return contentFile.metadata.plain();
   },

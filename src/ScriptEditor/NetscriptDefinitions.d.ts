@@ -8662,7 +8662,7 @@ export interface NS {
    * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @Returns The metadata of the file.
    */
-  getFileMetadata(filename: string, host?: string): FileMetadata;
+  getFileMetadata(filename: string, host?: string): FileMetadata | null;
 
   /**
    * Get a copy of the data from a port without popping it.

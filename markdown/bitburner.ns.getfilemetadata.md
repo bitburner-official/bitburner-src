@@ -9,7 +9,7 @@ Get the metadata of a file.
 **Signature:**
 
 ```typescript
-getFileMetadata(filename: string, host?: string): FileMetadata;
+getFileMetadata(filename: string, host?: string): FileMetadata | null;
 ```
 
 ## Parameters
@@ -66,7 +66,7 @@ _(Optional)_ Hostname/IP of the target server. Optional. Defaults to current ser
 
 **Returns:**
 
-[FileMetadata](./bitburner.filemetadata.md)
+[FileMetadata](./bitburner.filemetadata.md) \| null
 
 The metadata of the file.
 
