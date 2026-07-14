@@ -320,7 +320,11 @@ export function getGameState() {
 }
 
 export function getMoveHistory(): SimpleBoard[] {
-  return Go.currentGame.previousBoards.map((boardString) => simpleBoardFromBoardString(boardString));
+  if (Go.currentGame.previousBoards.length > 0) {
+    return Go.currentGame.previousBoards.map((boardString) => simpleBoardFromBoardString(boardString));
+  } else {
+    return [simpleBoardFromBoard(Go.currentGame.board)];
+  }
 }
 
 /**
