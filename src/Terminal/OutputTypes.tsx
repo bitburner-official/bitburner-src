@@ -26,11 +26,13 @@ export class RawOutput {
 }
 
 export class Link {
-  hostname: string;
   dashes: string;
-  constructor(dashes: string, hostname: string) {
+  path: string[];
+  text: string;
+  constructor(dashes: string, path: string[], text: string) {
     if (Settings.TimestampsFormat) dashes = "[" + formatTime(Settings.TimestampsFormat) + "] " + dashes;
-    this.hostname = hostname;
     this.dashes = dashes;
+    this.path = path;
+    this.text = text;
   }
 }
