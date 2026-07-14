@@ -474,8 +474,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     connect: (ctx) => (_host?) => {
       helpers.checkSingularityAccess(ctx);
-      const host = helpers.string(ctx, "host", _host);
-      const result = validateConnections(Player.getCurrentServer(), [host]);
+      const [target] = helpers.getServer(ctx, _host);
+      if (target == null) {
+        return false;
+      }
+      const result = validateConnections(Player.getCurrentServer(), [target.hostname]);
       if (result.status === "ok") {
         Terminal.connectToServer(result.destination.hostname, true);
         return true;

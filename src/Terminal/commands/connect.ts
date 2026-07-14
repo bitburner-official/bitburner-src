@@ -23,7 +23,7 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
       );
       return;
     case "ok":
-      Terminal.connectToServer(result.destination.hostname);
+      Terminal.connectToServer(hostname);
       return;
     default: {
       const __s: never = result;
