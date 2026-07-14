@@ -7,11 +7,11 @@ import customLogScriptContent from "./DiscoverableScriptContent/escaping_your_ch
 import customContentScriptContent from "./DiscoverableScriptContent/build_new_worlds.wip.jsx?raw";
 import hackControllerContent from "./DiscoverableScriptContent/hack_controller.wip.js?raw";
 import hackChildScriptContent from "./DiscoverableScriptContent/hack.wip.js?raw";
-import { DiscoverableScriptName } from "@enums";
+import { DiscoverableScriptName, type DiscoverableScriptNameType } from "@enums";
 
-export type DiscoverableScript = { filename: DiscoverableScriptName; content: string };
+export type DiscoverableScript = { filename: DiscoverableScriptNameType; content: string };
 
-export const discoverableNetworkScripts: Record<DiscoverableScriptName, DiscoverableScript> = {
+export const discoverableNetworkScripts: Record<DiscoverableScriptNameType, DiscoverableScript> = {
   [DiscoverableScriptName.GuessingGame]: {
     filename: DiscoverableScriptName.GuessingGame,
     content: guessingGameContent,

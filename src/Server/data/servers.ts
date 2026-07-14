@@ -1,6 +1,12 @@
 import type { ServerName } from "../../Types/strings";
 
-import { DiscoverableScriptName, FactionName, LiteratureName, LocationName } from "@enums";
+import {
+  DiscoverableScriptName,
+  type DiscoverableScriptNameType,
+  FactionName,
+  LiteratureName,
+  LocationName,
+} from "@enums";
 import { SpecialServers } from "./SpecialServers";
 import { IMinMaxRange } from "../../types";
 
@@ -19,7 +25,7 @@ interface IServerMetadata {
   literature?: LiteratureName[];
 
   /** When populated, these scripts will be added to the server when created. */
-  discoverableScripts?: DiscoverableScriptName[];
+  discoverableScripts?: DiscoverableScriptNameType[];
 
   /**
    * When populated, the exponent of 2^x amount of RAM the server has.
