@@ -23,7 +23,7 @@ export function ServerAccordion({ server, scripts, startOpen }: ServerAccordionP
   const longestHostnameLength = 26;
   const truncatedHostname =
     server.hostname.length > longestHostnameLength - 2
-      ? server.hostname.slice(0, longestHostnameLength) + "..."
+      ? server.hostname.slice(0, longestHostnameLength - 3) + "..."
       : server.hostname;
   const paddedName = `${truncatedHostname}${" ".repeat(longestHostnameLength)}`.slice(
     0,
