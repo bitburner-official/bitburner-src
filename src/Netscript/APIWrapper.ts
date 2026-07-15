@@ -4,7 +4,7 @@ import { helpers } from "./NetscriptHelpers";
 
 /** Permissive type for the documented API functions */
 type APIFn = (...args: any[]) => unknown;
-// This helper can't be inlined, it needs to be its own generic to function
+// This helper can't be inlined, it needs to be its own generic type to function
 type Unknownify<T> = { [K in keyof T]: unknown };
 // Type for internal function that includes a ctx as the first param.
 // We enforce that the params have the same length, but tranform the type to unknown.
@@ -75,8 +75,6 @@ class NSProxyHandler<API extends GenericAPI<API>> {
       const arrayPath = [...this.tree, key];
       const functionPath = arrayPath.join(".");
       const ctx = { workerScript: this.ws, function: key, functionPath };
-      // Only do the context-binding once, instead of each time the function
-      // is called. It is stored in the closure.
       const wrappedFunction = function (...args: unknown[]): unknown {
         // What remains *must* be called every time.
         helpers.checkEnvFlags(ctx);
