@@ -28,7 +28,9 @@ export function ServerAccordion({ server, scripts, startOpen }: ServerAccordionP
   const paddedName = `${truncatedHostname}${" ".repeat(longestHostnameLength)}`.slice(
     0,
     Math.max(truncatedHostname.length, longestHostnameLength),
-  );
+const paddedName = server.hostname.length > longestHostnameLength
+      ? server.hostname.slice(0, longestHostnameLength - 3) + "..."
+      : `${server.hostname}${" ".repeat(longestHostnameLength)}`.slice(0, longestHostnameLength);
   const barOptions = {
     progress: server.ramUsed / server.maxRam,
     totalTicks: 30,
