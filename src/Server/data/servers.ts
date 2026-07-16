@@ -1,6 +1,12 @@
 import type { ServerName } from "../../Types/strings";
 
-import { FactionName, LiteratureName, LocationName } from "@enums";
+import {
+  DiscoverableScriptName,
+  type DiscoverableScriptNameType,
+  FactionName,
+  LiteratureName,
+  LocationName,
+} from "@enums";
 import { SpecialServers } from "./SpecialServers";
 import { IMinMaxRange } from "../../types";
 
@@ -17,6 +23,9 @@ interface IServerMetadata {
 
   /** When populated, the files will be added to the server when created. */
   literature?: LiteratureName[];
+
+  /** When populated, these scripts will be added to the server when created. */
+  discoverableScripts?: DiscoverableScriptNameType[];
 
   /**
    * When populated, the exponent of 2^x amount of RAM the server has.
@@ -263,6 +272,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     hostname: "fulcrumtech",
     literature: [LiteratureName.SimulatedReality],
+    discoverableScripts: [DiscoverableScriptName.CustomContentScript],
     maxRamExponent: {
       max: 11,
       min: 7,
@@ -287,6 +297,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 99,
     hostname: SpecialServers.FulcrumSecretTechnologies,
+    discoverableScripts: [DiscoverableScriptName.HackController, DiscoverableScriptName.HackChildScript],
     moneyAvailable: 1e6,
     networkLayer: 15,
     numOpenPortsRequired: 5,
@@ -304,6 +315,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 78,
     },
     hostname: "stormtech",
+    discoverableScripts: [DiscoverableScriptName.GuessingGame],
     moneyAvailable: {
       max: 1200e6,
       min: 1000e6,
@@ -373,6 +385,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     hostname: "helios",
     literature: [LiteratureName.BeyondMan],
+    discoverableScripts: [DiscoverableScriptName.PortSender, DiscoverableScriptName.PortReceiver],
     maxRamExponent: {
       max: 8,
       min: 5,
@@ -653,6 +666,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 60,
     },
     hostname: "applied-energetics",
+    discoverableScripts: [DiscoverableScriptName.ServerFinder],
     moneyAvailable: {
       max: 1000000000,
       min: 700000000,
@@ -825,6 +839,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 60,
     },
     hostname: "lexo-corp",
+    discoverableScripts: [DiscoverableScriptName.CustomLogScript],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -1469,6 +1484,7 @@ export const serverMetadata: IServerMetadata[] = [
     hackDifficulty: 0,
     hostname: SpecialServers.NiteSecServer,
     literature: [LiteratureName.DemocracyIsDead],
+    discoverableScripts: [DiscoverableScriptName.CloudServerUpgrades],
     maxRamExponent: {
       max: 7,
       min: 4,
