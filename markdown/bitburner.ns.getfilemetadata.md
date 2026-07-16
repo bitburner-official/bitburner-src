@@ -74,5 +74,5 @@ The metadata of the file.
 
 RAM cost: 0 GB
 
-This function returns the metadata associated with the specified file.
+This function returns the metadata associated with the specified file. If the file does not exist or the server is offline, returns null. It will throw if the path or host is malformed.
 
