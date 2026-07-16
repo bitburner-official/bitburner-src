@@ -8656,6 +8656,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * This function returns the metadata associated with the specified file.
+   * If the file does not exist or the server is offline, returns null. It will throw if the path or host is malformed.
    *
    * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script
    * (.js, .jsx, .ts, .tsx).
