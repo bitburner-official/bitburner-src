@@ -123,7 +123,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           </Tooltip>
         </Box>
 
-        <Box key={`${division.name}-${city}`} sx={{ "& button": { width: "100%" } }}>
+        <Box sx={{ "& button": { width: "100%" } }}>
           <Tooltip
             title={tutorial ? <Typography>Purchase your required materials to get production started!</Typography> : ""}
           >
@@ -132,6 +132,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             </Button>
           </Tooltip>
           <PurchaseMaterialModal
+            key={`${division.name}-${city}`}
             mat={mat}
             warehouse={warehouse}
             open={purchaseMaterialOpen}
@@ -143,7 +144,12 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             <>
               <Button onClick={() => setExportOpen(true)}>Export</Button>
 
-              <ExportModal mat={mat} open={exportOpen} onClose={() => setExportOpen(false)} />
+              <ExportModal
+                key={`${division.name}-${city}`}
+                mat={mat}
+                open={exportOpen}
+                onClose={() => setExportOpen(false)}
+              />
             </>
           )}
 
@@ -154,6 +160,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             {sellButtonText}
           </Button>
           <SellMaterialModal
+            key={`${division.name}-${city}`}
             mat={mat}
             div={division}
             open={sellMaterialOpen}
