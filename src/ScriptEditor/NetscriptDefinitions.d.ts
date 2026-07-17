@@ -7130,20 +7130,20 @@ interface UserInterface {
    * @remarks
    * RAM cost: 5 GB
    *
-   * This function uses AutoLink.exe to create a clickable link. Clicking on the link is approximately
+   * This function uses AutoLink.exe to create a clickable link. Clicking on the link is
    * equivalent to typing a sequence of "connect" commands into the terminal.
    *
    * * @example
    * ```js
    * export async function main(ns) {
-   *   // Prints a link to the terminal. Clicking on it is approximately equivalent
+   *   // Prints a link to the terminal. Clicking on it is equivalent
    *   // to typing `connect joesguns; connect zer0; connect  silver-helix`.
    *   ns.tprintRaw(ns.ui.createConnectLink(['joesguns', 'zer0', 'silver-helix']));
    * }
    * ```
    *
    * @param connectPath - host names or ip addresses of servers to connect to.
-   * @param linkText - the text to display on the link. Defaunts to the last host name or ip in connectPath.
+   * @param linkText - the text to display on the link. Defaults to the last host name or ip in connectPath.
    *
    * @returns A link that can, for example, be used with ns.tprintRaw().
    */

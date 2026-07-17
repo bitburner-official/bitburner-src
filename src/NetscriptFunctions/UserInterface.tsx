@@ -1,3 +1,4 @@
+import React from "react";
 import { UserInterface as IUserInterface } from "@nsdefs";
 import { Settings } from "../Settings/Settings";
 import { ThemeEvents } from "../Themes/ui/Theme";
@@ -18,8 +19,6 @@ import { addGlobalAlias, addAlias, removeAlias, Aliases, GlobalAliases, aliasReg
 import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
-import React from "react";
-import { SpecialServers } from "../Server/data/SpecialServers";
 import { getFriendlyType } from "../utils/TypeAssertion";
 import { ConnectLink } from "../Terminal/ui/ConnextLink";
 import { Player } from "@player";
@@ -287,7 +286,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     createConnectLink: (ctx) => (_connectPath, _linkText?) => {
       if (!Player.hasProgram(CompletedProgramName.autoLink)) {
-        throw errorMessage(ctx, `Requires AutoLink.exe to run.`);
+        throw errorMessage(ctx, "Requires AutoLink.exe to run.");
       }
       if (!Array.isArray(_connectPath)) {
         throw errorMessage(
@@ -296,18 +295,10 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
           "TYPE",
         );
       }
-      const connectPath = _connectPath.map((s) => helpers.string(ctx, "connectPath", s));
-      for (const host of connectPath) {
-        const [s] = helpers.getServer(ctx, host);
-        if (s == null || (s.hostname === SpecialServers.DarkWeb && s.serversOnNetwork.length === 0)) {
-          throw errorMessage(ctx, `Invalid host: '${host}'`);
-        }
-      }
+      // Enforce validation of server and return resolved hostname
+      const connectPath = _connectPath.map((s) => helpers.getServer(ctx, helpers.string(ctx, "connectPath", s))[1]);
       const last = connectPath.at(-1);
-      if (last == null) {
-        throw errorMessage(ctx, `connectPath must not be empty.`, "TYPE");
-      }
-      const linkText = _linkText == null ? last : helpers.string(ctx, "linkText", _linkText);
+      const linkText = helpers.string(ctx, "linkText", _linkText ?? last ?? "do nothing");
       return <ConnectLink path={connectPath} text={linkText} />;
     },
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Link as MuiLink } from "@mui/material";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
@@ -9,28 +9,14 @@ interface IConnectLinkProps {
   text: string;
 }
 
-export function ConnectLink(props: IConnectLinkProps): React.ReactElement {
-  const onClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const { nativeEvent } = event;
-    if (!(nativeEvent instanceof Event) || !nativeEvent.isTrusted) {
-      Terminal.error("Links created by ns.ui.createServerLink() can only be used manually.");
+export function ConnectLink({ path, text }: IConnectLinkProps): React.ReactElement {
+  const onClick = useCallback(() => {
+    const result = validateConnections(Player.getCurrentServer(), path);
+    if (result.success) {
+      Terminal.connectToServer(result.destination);
       return;
     }
-    const result = validateConnections(Player.getCurrentServer(), props.path);
-    switch (result.status) {
-      case "server not found":
-        Terminal.error(`${result.hostname} not found. Connection failed.`);
-        return;
-      case "no connection":
-        Terminal.error(`Unable to connect from ${result.from} to ${result.to}. Connection failed.`);
-        return;
-      case "ok":
-        Terminal.connectToServer(result.destination.hostname);
-        return;
-      default: {
-        const __s: never = result;
-      }
-    }
-  };
-  return <MuiLink onClick={onClick}>{props.text}</MuiLink>;
+    Terminal.error(result.message);
+  }, [path]);
+  return <MuiLink onClick={onClick}>{text}</MuiLink>;
 }

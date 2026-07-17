@@ -479,10 +479,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
       const result = validateConnections(Player.getCurrentServer(), [target.hostname]);
-      if (result.status === "ok") {
-        Terminal.connectToServer(result.destination.hostname, true);
+      if (result.success) {
+        Terminal.connectToServer(result.destination, true);
         return true;
       }
+      helpers.log(ctx, () => result.message);
       return false;
     },
     manualHack: (ctx) => () => {

@@ -188,90 +188,68 @@ test("alias", () => {
 test("createConnectLink", () => {
   const ns = getNS();
 
-  expect(() => ns.ui.createConnectLink([SpecialServers.Home])).toThrow();
+  expect(() => ns.ui.createConnectLink([SpecialServers.Home])).toThrow("Requires AutoLink");
   Player.getHomeComputer().pushProgram(CompletedProgramName.autoLink);
   ns.ui.createConnectLink([SpecialServers.Home]);
 
-  expect(() => ns.ui.createConnectLink([])).toThrow();
-
-  expect(() => ns.ui.createConnectLink([SpecialServers.WorldDaemon])).toThrow();
+  expect(() => ns.ui.createConnectLink([SpecialServers.WorldDaemon])).toThrow("Invalid host");
   connectServers(GetServerOrThrow(SpecialServers.WorldDaemon), GetServerOrThrow(SpecialServers.DaedalusServer));
   ns.ui.createConnectLink([SpecialServers.WorldDaemon]);
 
-  expect(() => ns.ui.createConnectLink([SpecialServers.DarkWeb])).toThrow();
+  expect(() => ns.ui.createConnectLink([SpecialServers.DarkWeb])).toThrow("Invalid host");
   ns.singularity.purchaseTor();
   ns.ui.createConnectLink([SpecialServers.DarkWeb]);
 
-  expect(() => ns.ui.createConnectLink(["name of server that does not exist"])).toThrow();
+  expect(() => ns.ui.createConnectLink(["name of server that does not exist"])).toThrow("Invalid host");
 });
 
-describe("validateConnections", () => {
-  const initialize = () => {
-    const home = GetServerOrThrow(SpecialServers.Home);
-    if (!(home instanceof Server)) {
-      throw new Error("home is not a Server");
-    }
-    prestigeAllServers();
-    AddToAllServers(home);
-    const a = new Server({ hostname: "a" });
-    AddToAllServers(a);
-    const b = new Server({ hostname: "b" });
-    AddToAllServers(b);
-    const c = new Server({ hostname: "c" });
-    AddToAllServers(c);
-    const d = new Server({ hostname: "d" });
-    AddToAllServers(d);
-    // ┗ home
-    //   ┣ a
-    //   ┃ ┗ b
-    //   ┗ c
-    //     ┗ d
-    connectServers(home, a);
-    connectServers(home, c);
-    connectServers(a, b);
-    connectServers(c, d);
-    return { home, a, b, c, d };
-  };
-  it("connects by host name", () => {
-    const { b } = initialize();
-    expect(validateConnections(b, ["a", "home", "c"])).toMatchObject({
-      status: "ok",
-      destination: { hostname: "c" },
-    });
-  });
-  it("connects by ip", () => {
-    const { home, a, b, c } = initialize();
-    expect(validateConnections(b, [a.ip, home.ip, c.ip])).toMatchObject({
-      status: "ok",
-      destination: { hostname: "c" },
-    });
-  });
-  it("fails to connect if we skip a server", () => {
-    const { b } = initialize();
-    expect(validateConnections(b, ["a", "home", "d"]).status).toBe("no connection");
-  });
-  it("fails to connect if server does not exist", () => {
-    const { b } = initialize();
-    expect(validateConnections(b, ["a", "foo", "c"]).status).toBe("server not found");
-  });
-  it("fails to connect if the starting point is wrong", () => {
-    const { d } = initialize();
-    // the path is written as if we are starting from b, but we are actually starting from d
-    expect(validateConnections(d, ["a", "home", "c"]).status).toBe("no connection");
-  });
-  it("a path from home works regardless of where we are", () => {
-    const { d } = initialize();
-    expect(validateConnections(d, ["home", "c"])).toMatchObject({
-      status: "ok",
-      destination: { hostname: "c" },
-    });
-  });
-  it("uses a backdoor", () => {
-    const { b, c } = initialize();
-    c.backdoorInstalled = true;
-    expect(validateConnections(b, ["c"])).toMatchObject({
-      status: "ok",
-      destination: { hostname: "c" },
-    });
-  });
+// ┗ home 1.1.1.1
+//   ┣ a 2.2.2.2
+//   ┃ ┗ b
+//   ┣ c 4.4.4.4
+//   ┃ ┗ d
+//   ┗ backdoored
+test.each([
+  ["b", ["a", "home", "c"], { success: true, destination: "c" }],
+  ["b", ["2.2.2.2", "1.1.1.1", "4.4.4.4"], { success: true, destination: "c" }],
+  ["b", ["c"], { success: false, message: "Cannot directly connect" }],
+  ["b", ["backdoored"], { success: true, destination: "backdoored" }],
+  ["b", ["a", "foo", "c"], { success: false, message: "Invalid hostname" }],
+  // the path is written as if we are starting from b, but we are actually starting from d
+  ["d", ["a", "home", "c"], { success: false, message: "Cannot directly connect" }],
+  // a path from home works regardless of where we are
+  ["d", ["home", "c"], { success: true, destination: "c" }],
+  ["b", [], { success: true, destination: "b" }],
+])("validateConnections($s, $p)", (start, path, expected) => {
+  const home = GetServerOrThrow(SpecialServers.Home);
+  if (!(home instanceof Server)) {
+    throw new Error("home is not a Server");
+  }
+  prestigeAllServers();
+  home.ip = "1.1.1.1";
+  AddToAllServers(home);
+  const a = new Server({ hostname: "a", ip: "2.2.2.2" });
+  AddToAllServers(a);
+  const b = new Server({ hostname: "b" });
+  AddToAllServers(b);
+  const c = new Server({ hostname: "c", ip: "4.4.4.4" });
+  AddToAllServers(c);
+  const d = new Server({ hostname: "d" });
+  AddToAllServers(d);
+  const backdoored = new Server({ hostname: "backdoored" });
+  backdoored.backdoorInstalled = true;
+  AddToAllServers(backdoored);
+  connectServers(home, a);
+  connectServers(home, c);
+  connectServers(home, backdoored);
+  connectServers(a, b);
+  connectServers(c, d);
+
+  const result = validateConnections({ a, b, c, d }[start], path);
+  if (expected.success) {
+    expect(result).toMatchObject(expected);
+  } else {
+    expect(result.success).toBe(expected.success);
+    expect(result.message).toContain(result.message);
+  }
 });

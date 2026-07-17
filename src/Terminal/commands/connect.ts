@@ -12,21 +12,9 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
   const hostname = String(args[0]);
 
   const result = validateConnections(server, [hostname]);
-
-  switch (result.status) {
-    case "server not found":
-      Terminal.error(`Invalid hostname: '${hostname}'`);
-      return;
-    case "no connection":
-      Terminal.error(
-        `Cannot directly connect to ${hostname}. Make sure the server is backdoored or adjacent to your current server`,
-      );
-      return;
-    case "ok":
-      Terminal.connectToServer(hostname);
-      return;
-    default: {
-      const __s: never = result;
-    }
+  if (result.success) {
+    Terminal.connectToServer(result.destination);
+    return;
   }
+  Terminal.error(result.message);
 }

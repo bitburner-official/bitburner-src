@@ -13,8 +13,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
-import { Person as IPerson } from "@nsdefs";
-import { Server as IServer } from "@nsdefs";
+import type { Person as IPerson, Server as IServer, Result } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
@@ -256,24 +255,22 @@ export function prestigeHomeComputer(homeComp: Server): void {
   }
 }
 
-type ConnectionResult =
-  | { status: "ok"; destination: BaseServer }
-  | { status: "server not found"; hostname: string }
-  | { status: "no connection"; from: string; to: string };
-
-export function validateConnections(start: BaseServer, path: string[]): ConnectionResult {
+export function validateConnections(start: BaseServer, path: string[]): Result<{ destination: string }> {
   let current = start;
   for (const hostname of path) {
     const next = GetServer(hostname);
     if (next == null) {
-      return { status: "server not found", hostname };
+      return { success: false, message: `Invalid hostname: '${hostname}'` };
     }
     if (!next.backdoorInstalled && !next.purchasedByPlayer && !current.serversOnNetwork.includes(next.hostname)) {
-      return { status: "no connection", from: current.hostname, to: next.hostname };
+      return {
+        success: false,
+        message: `Cannot directly connect from ${current.hostname} to ${hostname}. Make sure the server is backdoored or adjacent to ${current.hostname}`,
+      };
     }
     current = next;
   }
-  return { status: "ok", destination: current };
+  return { success: true, destination: current.hostname };
 }
 
 // Returns the i-th server on the specified server's network

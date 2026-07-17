@@ -70,6 +70,7 @@ import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
 import { DarknetState } from "../DarkNet/models/DarknetState";
 import { getFriendlyType, isObject } from "../utils/TypeAssertion";
+import { SpecialServers } from "../Server/data/SpecialServers";
 
 export const helpers = {
   string,
@@ -551,12 +552,18 @@ function scriptIdentifier(ctx: NetscriptContext, scriptID: unknown, _host: unkno
 export function getServer(ctx: NetscriptContext, _host: unknown): [BaseServer | null, string] {
   const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
   const server = GetServer(host);
-  if (server != null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer)) {
-    return [server, host];
-  }
-  if (DarknetState.offlineServers.has(host)) {
-    log(ctx, () => `Server ${host} is offline.`);
-    return [null, host];
+  if (server == null) {
+    if (DarknetState.offlineServers.has(host)) {
+      log(ctx, () => `Server ${host} is offline.`);
+      return [null, host];
+    }
+  } else {
+    if (
+      server.serversOnNetwork.length > 0 ||
+      (server instanceof DarknetServer && server.hostname !== SpecialServers.DarkWeb)
+    ) {
+      return [server, host];
+    }
   }
   const str = host === "" ? "'' (empty string)" : "'" + host + "'";
   throw errorMessage(ctx, `Invalid host: ${str}`);
