@@ -21,16 +21,10 @@ export function ServerAccordion({ server, scripts, startOpen }: ServerAccordionP
 
   // Accordion's header text
   const longestHostnameLength = 26;
-  const truncatedHostname =
-    server.hostname.length > longestHostnameLength - 2
-      ? server.hostname.slice(0, longestHostnameLength - 3) + "..."
-      : server.hostname;
-  const paddedName = `${truncatedHostname}${" ".repeat(longestHostnameLength)}`.slice(
-    0,
-    Math.max(truncatedHostname.length, longestHostnameLength),
-const paddedName = server.hostname.length > longestHostnameLength
-      ? server.hostname.slice(0, longestHostnameLength - 3) + "..."
-      : `${server.hostname}${" ".repeat(longestHostnameLength)}`.slice(0, longestHostnameLength);
+  // Use spread operator to get accurate length on servers with UTF-16 names
+  const paddedName = [...server.hostname].length > longestHostnameLength
+      ? [...server.hostname].slice(0, longestHostnameLength - 3).join('') + "..."
+      : [...`${server.hostname}${" ".repeat(longestHostnameLength)}`].slice(0, longestHostnameLength).join('');
   const barOptions = {
     progress: server.ramUsed / server.maxRam,
     totalTicks: 30,
