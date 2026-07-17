@@ -262,6 +262,9 @@ export function validateConnections(start: BaseServer, path: string[]): Result<{
     if (next == null) {
       return { success: false, message: `Invalid hostname: '${hostname}'` };
     }
+    if (next === current) {
+      continue;
+    }
     if (!next.backdoorInstalled && !next.purchasedByPlayer && !current.serversOnNetwork.includes(next.hostname)) {
       return {
         success: false,

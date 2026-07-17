@@ -220,6 +220,7 @@ test.each([
   // a path from home works regardless of where we are
   ["d", ["home", "c"], { success: true, destination: "c" }],
   ["b", [], { success: true, destination: "b" }],
+  ["b", ["b"], { success: true, destination: "b" }],
 ])("validateConnections($s, $p)", (start, path, expected) => {
   const home = GetServerOrThrow(SpecialServers.Home);
   if (!(home instanceof Server)) {
