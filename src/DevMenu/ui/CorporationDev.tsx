@@ -7,55 +7,42 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Adjuster } from "./Adjuster";
-import { Player } from "@player";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import type { Corporation } from "../../Corporation/Corporation";
 
 const bigNumber = 1e27;
 
-export function CorporationDev(): React.ReactElement {
+export function CorporationDev({ corporation }: { corporation: Corporation }): React.ReactElement {
   function addTonsCorporationFunds(): void {
-    if (Player.corporation) {
-      Player.corporation.gainFunds(bigNumber, "force majeure");
-    }
+    corporation.gainFunds(bigNumber, "force majeure");
   }
 
   function modifyCorporationFunds(modify: number): (x: number) => void {
     return function (funds: number): void {
-      if (Player.corporation) {
-        Player.corporation.gainFunds(funds * modify, "force majeure");
-      }
+      corporation.gainFunds(funds * modify, "force majeure");
     };
   }
 
   function resetCorporationFunds(): void {
-    if (Player.corporation) {
-      Player.corporation.loseFunds(Player.corporation.funds, "force majeure");
-    }
+    corporation.loseFunds(corporation.funds, "force majeure");
   }
 
   function addTonsCorporationCycles(): void {
-    if (Player.corporation) {
-      Player.corporation.storedCycles = bigNumber;
-    }
+    corporation.storedCycles = bigNumber;
   }
 
   function modifyCorporationCycles(modify: number): (x: number) => void {
     return function (cycles: number): void {
-      if (Player.corporation) {
-        Player.corporation.storedCycles += cycles * modify;
-      }
+      corporation.storedCycles += cycles * modify;
     };
   }
 
   function resetCorporationCycles(): void {
-    if (Player.corporation) {
-      Player.corporation.storedCycles = 0;
-    }
+    corporation.storedCycles = 0;
   }
 
   function finishCorporationProducts(): void {
-    if (!Player.corporation) return;
-    for (const division of Player.corporation.divisions.values()) {
+    for (const division of corporation.divisions.values()) {
       for (const product of division.products.values()) {
         product.developmentProgress = 99.9;
       }
@@ -63,16 +50,14 @@ export function CorporationDev(): React.ReactElement {
   }
 
   function addCorporationResearch(): void {
-    if (!Player.corporation) return;
-    Player.corporation.divisions.forEach((div) => {
+    corporation.divisions.forEach((div) => {
       div.researchPoints += 1e10;
     });
   }
 
   function resetCorporationCooldowns(): void {
-    if (!Player.corporation) return;
-    Player.corporation.shareSaleCooldown = 0;
-    Player.corporation.issueNewSharesCooldown = 0;
+    corporation.shareSaleCooldown = 0;
+    corporation.issueNewSharesCooldown = 0;
   }
 
   return (
