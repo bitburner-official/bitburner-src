@@ -20,7 +20,7 @@ import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { getFriendlyType } from "../utils/TypeAssertion";
-import { ConnectLink } from "../Terminal/ui/ConnextLink";
+import { ConnectLink } from "../Terminal/ui/ConnectLink";
 import { Player } from "@player";
 import { CompletedProgramName } from "@enums";
 
