@@ -18,10 +18,13 @@ const difficultySettings = {
   Brutal: { timer: 4000, wiresmin: 9, wiresmax: 9, rules: 4 },
 };
 
+// These colors, except white, come from the Okabe-Ito palette. White is used because it provides high contrast on a
+// black background.
+// Reference: https://jfly.uni-koeln.de/color/
 const colors = ["#D55E00", "#F0E442", "#0072B2", "#FFFFFF"] as const;
 
 const colorNames = {
-  "#D55E00": "RED",
+  "#D55E00": "RED", // Okabe-Ito Vermilion
   "#F0E442": "YELLOW",
   "#0072B2": "BLUE",
   "#FFFFFF": "WHITE",

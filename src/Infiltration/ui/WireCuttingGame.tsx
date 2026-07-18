@@ -12,6 +12,7 @@ interface IProps {
 
 export function WireCuttingGame({ stage }: IProps): React.ReactElement {
   const hasAugment = Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true);
+  // Okabe-Ito "Reddish Purple"
   const wrongWireColor = "#CC79A7";
   return (
     <>
@@ -34,7 +35,7 @@ export function WireCuttingGame({ stage }: IProps): React.ReactElement {
         >
           {Array.from({ length: stage.wires.length }, (_, i) => {
             const isCorrectWire = stage.cutWires[i] || stage.wiresToCut.has(i);
-            const color = hasAugment && !isCorrectWire ? wrongWireColor : "#009E73";
+            const color = hasAugment && !isCorrectWire ? wrongWireColor : "#009E73"; // Okabe-Ito "Bluish Green"
             return (
               <Typography key={i} style={{ color: color }}>
                 {i + 1}
