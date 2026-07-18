@@ -5,6 +5,7 @@ import { createRandomIp } from "../utils/IPAddress";
 import type { CacheFilePath } from "../Paths/CacheFilePath";
 import type { IPAddress } from "../Types/strings";
 import type { DarknetServerData } from "../DarkNet/utils/darknetServerUtils";
+import { SpecialServers } from "./data/SpecialServers";
 
 export interface DarknetServerConstructorParams {
   // Properties of BaseServer
@@ -82,6 +83,13 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
     this.logTrafficInterval = params.logTrafficInterval;
     this.requiredCharismaSkill = params.requiredCharismaSkill;
     this.isStationary = params.isStationary;
+  }
+
+  isVisible(): boolean {
+    if (this.hostname === SpecialServers.DarkWeb) {
+      return this.serversOnNetwork.length > 0;
+    }
+    return true;
   }
 
   toJSON(): IReviverValue {
