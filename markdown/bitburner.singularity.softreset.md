@@ -56,5 +56,5 @@ void
 
 RAM cost: 5 GB \* 16/4/1
 
-This function will perform a reset even if you don’t have any augmentation installed.
+This function performs the same reset as when you install augmentations, but it can be performed even when you don’t have augmentations queued. If you do have augmentaions queued, it will install them.
 

@@ -41,7 +41,7 @@ Are you sure?
 
   return (
     <>
-      <Tooltip title="Perform a Soft Reset - similar to installing Augmentations, even if you have none.">
+      <Tooltip title="Perform a soft reset - the same reset as when you install Augmentations, but it can be performed even when you don't have Augmentations queued. If you do have Augmentations queued, it will install them.">
         <Button startIcon={<RestartAltIcon />} color={color} onClick={handleButtonClick}>
           Soft Reset
         </Button>

@@ -2773,7 +2773,7 @@ export interface Singularity {
    * RAM cost: 5 GB * 16/4/1
    *
    *
-   * This function will perform a reset even if you don’t have any augmentation installed.
+   * This function performs the same reset as when you install Augmentations, but it can be performed even when you don't have Augmentations queued. If you do have Augmentations queued, it will install them.
    *
    * @param cbScript - This is a script that will automatically be run after Augmentations are installed (after the reset). This script will be run with no arguments and 1 thread. It must be located on your home computer.
    */
