@@ -77,7 +77,7 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
           .map((s) => GetServer(s))
           .filter((v) => v != null)
           .filter((v) => showServer(v, d))
-          .map((h) => populateNode(h, [...path, s.hostname], d + 1)),
+          .map((h) => populateNode(h, [...path, h.hostname], d + 1)),
       };
     };
     return populateNode();
