@@ -58,7 +58,7 @@ string
 
 </td><td>
 
-_(Optional)_ the text to display on the link. Defaunts to the last host name or ip in connectPath.
+_(Optional)_ the text to display on the link. Defaults to the last host name or ip in connectPath.
 
 
 </td></tr>
@@ -74,7 +74,7 @@ A link that can, for example, be used with ns.tprintRaw().
 
 RAM cost: 5 GB
 
-This function uses AutoLink.exe to create a clickable link. Clicking on the link is approximately equivalent to typing a sequence of "connect" commands into the terminal.
+This function uses AutoLink.exe to create a clickable link. Clicking on the link is equivalent to typing a sequence of "connect" commands into the terminal.
 
 \*
 
@@ -83,7 +83,7 @@ This function uses AutoLink.exe to create a clickable link. Clicking on the link
 
 ```js
 export async function main(ns) {
-  // Prints a link to the terminal. Clicking on it is approximately equivalent
+  // Prints a link to the terminal. Clicking on it is equivalent
   // to typing `connect joesguns; connect zer0; connect  silver-helix`.
   ns.tprintRaw(ns.ui.createConnectLink(['joesguns', 'zer0', 'silver-helix']));
 }
