@@ -8660,12 +8660,14 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * This function returns the metadata associated with the specified file.
+   * If the file does not exist or the server is offline, returns null. It will throw if the path or host is malformed.
    *
    * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json, .css) or a script
    * (.js, .jsx, .ts, .tsx).
+   * @param host - Hostname/IP of the target server. Optional. Defaults to current server if not provided.
    * @Returns The metadata of the file.
    */
-  getFileMetadata(filename: string): FileMetadata;
+  getFileMetadata(filename: string, host?: string): FileMetadata | null;
 
   /**
    * Get a copy of the data from a port without popping it.
