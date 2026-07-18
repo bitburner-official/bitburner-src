@@ -34,6 +34,7 @@ The documentation is a bit long and intimidating at first glance, but you don't 
   - Handle low storage space
 - [Division raw production](./corporation/division-raw-production.md)
   - Definition
+  - Production scaling due to insufficient storage space
   - Formula
 - [Office](./corporation/office.md)
   - Basic information
