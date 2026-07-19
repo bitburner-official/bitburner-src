@@ -2773,9 +2773,9 @@ export interface Singularity {
    * RAM cost: 5 GB * 16/4/1
    *
    *
-   * This function performs the same reset as when you install Augmentations, but it can be performed even when you don't have Augmentations queued. If you do have Augmentations queued, it will install them.
+   * Performs the same reset as when you install Augmentations. This can be used even when no Augmentations are queued. Installs any queued Augmentations.
    *
-   * @param cbScript - This is a script that will automatically be run after the reset. This script will be run with no arguments and 1 thread. It must be located on your home computer.
+   * @param cbScript - This is a script that will automatically be run after the reset. This script will be run with no arguments and 1 thread. It must be located on your home computer.
    */
   softReset(cbScript?: string): void;
 

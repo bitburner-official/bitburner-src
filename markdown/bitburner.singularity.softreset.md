@@ -56,5 +56,5 @@ void
 
 RAM cost: 5 GB \* 16/4/1
 
-This function performs the same reset as when you install Augmentations, but it can be performed even when you don't have Augmentations queued. If you do have Augmentations queued, it will install them.
+Performs the same reset as when you install Augmentations. This can be used even when no Augmentations are queued. Installs any queued Augmentations.
 
