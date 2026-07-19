@@ -138,6 +138,7 @@ const initialBet = 1000;
 const maxBet = 1e6;
 
 export function SlotMachine(): React.ReactElement {
+  // This one is seeded by the player's total play time.
   const [rng] = useState(new WHRNG(Player.totalPlaytime));
   const [index, setIndex] = useState<number[]>([0, 0, 0, 0, 0]);
   const [locks, setLocks] = useState<number[]>([0, 0, 0, 0, 0]);
