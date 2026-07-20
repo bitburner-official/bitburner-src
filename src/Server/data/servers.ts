@@ -1177,6 +1177,7 @@ export const serverMetadata: IServerMetadata[] = [
     hackDifficulty: 1,
     hostname: "n00dles",
     literature: [],
+    discoverableScripts: [DiscoverableScriptName.InfiniteLoop],
     maxRamExponent: 2,
     moneyAvailable: 70000,
     networkLayer: 1,
