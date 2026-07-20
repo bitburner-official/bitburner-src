@@ -7,6 +7,7 @@ import customLogScriptContent from "./DiscoverableScriptContent/escaping_your_ch
 import customContentScriptContent from "./DiscoverableScriptContent/build_new_worlds.wip.jsx?raw";
 import hackControllerContent from "./DiscoverableScriptContent/hack_controller.wip.js?raw";
 import hackChildScriptContent from "./DiscoverableScriptContent/hack.wip.js?raw";
+import infiniteLoopContent from "./DiscoverableScriptContent/infinite_loop.wip.js?raw";
 import { DiscoverableScriptName, type DiscoverableScriptNameType } from "@enums";
 
 export type DiscoverableScript = { filename: DiscoverableScriptNameType; content: string };
@@ -47,5 +48,9 @@ export const discoverableNetworkScripts: Record<DiscoverableScriptNameType, Disc
   [DiscoverableScriptName.HackChildScript]: {
     filename: DiscoverableScriptName.HackChildScript,
     content: hackChildScriptContent,
+  },
+  [DiscoverableScriptName.InfiniteLoop]: {
+    filename: DiscoverableScriptName.InfiniteLoop,
+    content: infiniteLoopContent,
   },
 };

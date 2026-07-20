@@ -45,6 +45,7 @@ export const DiscoverableScriptName = {
   CustomContentScript: "build_new_worlds.wip.jsx",
   HackController: "hack_controller.wip.js",
   HackChildScript: "hack.wip.js",
+  InfiniteLoop: "infinite_loop.wip.js",
 } as const;
 
 export type DiscoverableScriptNameType = (typeof DiscoverableScriptName)[keyof typeof DiscoverableScriptName];
