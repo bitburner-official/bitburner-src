@@ -314,7 +314,7 @@ interface RunningScript {
 interface RunOptions {
   /** Number of threads that the script will run with, defaults to 1 */
   threads?: number;
-  /** Whether this script is excluded from saves, defaults to false */
+  /** Whether this script is excluded from saves and the "Recently Killed" tab in Active Scripts, defaults to false */
   temporary?: boolean;
   /**
    * The RAM allocation to launch each thread of the script with.
