@@ -1517,6 +1517,7 @@ import nsDoc_bitburner_universitylocationnameenumtype_md from "../../markdown/bi
 import nsDoc_bitburner_userinterface_alias_md from "../../markdown/bitburner.userinterface.alias.md?raw";
 import nsDoc_bitburner_userinterface_clearterminal_md from "../../markdown/bitburner.userinterface.clearterminal.md?raw";
 import nsDoc_bitburner_userinterface_closetail_md from "../../markdown/bitburner.userinterface.closetail.md?raw";
+import nsDoc_bitburner_userinterface_createconnectlink_md from "../../markdown/bitburner.userinterface.createconnectlink.md?raw";
 import nsDoc_bitburner_userinterface_getallaliases_md from "../../markdown/bitburner.userinterface.getallaliases.md?raw";
 import nsDoc_bitburner_userinterface_getgameinfo_md from "../../markdown/bitburner.userinterface.getgameinfo.md?raw";
 import nsDoc_bitburner_userinterface_getstyles_md from "../../markdown/bitburner.userinterface.getstyles.md?raw";
@@ -3146,6 +3147,7 @@ AllPages["nsDoc/bitburner.universitylocationnameenumtype.md"] = nsDoc_bitburner_
 AllPages["nsDoc/bitburner.userinterface.alias.md"] = nsDoc_bitburner_userinterface_alias_md;
 AllPages["nsDoc/bitburner.userinterface.clearterminal.md"] = nsDoc_bitburner_userinterface_clearterminal_md;
 AllPages["nsDoc/bitburner.userinterface.closetail.md"] = nsDoc_bitburner_userinterface_closetail_md;
+AllPages["nsDoc/bitburner.userinterface.createconnectlink.md"] = nsDoc_bitburner_userinterface_createconnectlink_md;
 AllPages["nsDoc/bitburner.userinterface.getallaliases.md"] = nsDoc_bitburner_userinterface_getallaliases_md;
 AllPages["nsDoc/bitburner.userinterface.getgameinfo.md"] = nsDoc_bitburner_userinterface_getgameinfo_md;
 AllPages["nsDoc/bitburner.userinterface.getstyles.md"] = nsDoc_bitburner_userinterface_getstyles_md;

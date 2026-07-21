@@ -459,6 +459,7 @@ const ui = {
   unalias: 0,
   getAllAliases: 0,
   renderPage: 0,
+  createConnectLink: 5,
 } as const;
 
 // Grafting API

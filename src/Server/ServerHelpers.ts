@@ -13,8 +13,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
-import { Person as IPerson } from "@nsdefs";
-import { Server as IServer } from "@nsdefs";
+import type { Person as IPerson, Server as IServer, Result } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
@@ -262,6 +261,27 @@ export function prestigeHomeComputer(homeComp: Server): void {
   homeComp.smtpPortOpen = false;
   homeComp.httpPortOpen = false;
   homeComp.sqlPortOpen = false;
+}
+
+export function validateConnections(start: BaseServer, path: string[]): Result<{ destination: string }> {
+  let current = start;
+  for (const host of path) {
+    const next = GetServer(host);
+    if (next === null) {
+      return { success: false, message: `Invalid host: '${host}'` };
+    }
+    if (next === current) {
+      continue;
+    }
+    if (!next.backdoorInstalled && !next.purchasedByPlayer && !current.serversOnNetwork.includes(next.hostname)) {
+      return {
+        success: false,
+        message: `Cannot directly connect from ${current.hostname} to ${host}. Make sure the server is backdoored or adjacent to ${current.hostname}`,
+      };
+    }
+    current = next;
+  }
+  return { success: true, destination: current.hostname };
 }
 
 // Returns the i-th server on the specified server's network
