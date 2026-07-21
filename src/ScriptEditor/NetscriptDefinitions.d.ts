@@ -7133,21 +7133,22 @@ interface UserInterface {
    * This function uses AutoLink.exe to create a clickable link. Clicking on the link is
    * equivalent to typing a sequence of "connect" commands into the terminal.
    *
-   * * @example
+   * @example
    * ```js
    * export async function main(ns) {
    *   // Prints a link to the terminal. Clicking on it is equivalent
-   *   // to typing `connect joesguns; connect zer0; connect  silver-helix`.
+   *   // to typing `connect joesguns; connect zer0; connect silver-helix`.
    *   ns.tprintRaw(ns.ui.createConnectLink(['joesguns', 'zer0', 'silver-helix']));
    * }
    * ```
    *
-   * @param connectPath - host names or ip addresses of servers to connect to.
-   * @param linkText - the text to display on the link. Defaults to the last host name or ip in connectPath.
+   * @param connectPath - Hostnames or IP addresses of servers to connect to.
+   * @param linkText - The text to display on the link. Defaults to the last hostname or IP in connectPath. If
+   * connectPath is an empty array and linkText is nullish, linkText is set to `"do nothing"`.
    *
-   * @returns A link that can, for example, be used with ns.tprintRaw().
+   * @returns A ReactElement that can be used with APIs such as ns.tprintRaw() and ns.printRaw().
    */
-  createConnectLink(connectPath: string[], linkText?: string): ReactNode;
+  createConnectLink(connectPath: string[], linkText?: string): ReactElement;
 }
 
 /**
