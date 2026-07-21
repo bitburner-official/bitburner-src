@@ -204,13 +204,22 @@ test("createConnectLink", () => {
   expect(() => ns.ui.createConnectLink(["name of server that does not exist"])).toThrow("Invalid host");
 });
 
+type Expected =
+  | {
+      success: true;
+      destination: string;
+    }
+  | {
+      success: false;
+      message: string;
+    };
 // ┗ home 1.1.1.1
 //   ┣ a 2.2.2.2
 //   ┃ ┗ b
 //   ┣ c 4.4.4.4
 //   ┃ ┗ d
 //   ┗ backdoored
-test.each([
+const cases: [string, string[], Expected][] = [
   ["b", ["a", "home", "c"], { success: true, destination: "c" }],
   ["b", ["2.2.2.2", "1.1.1.1", "4.4.4.4"], { success: true, destination: "c" }],
   ["b", ["c"], { success: false, message: "Cannot directly connect" }],
@@ -222,7 +231,8 @@ test.each([
   ["d", ["home", "c"], { success: true, destination: "c" }],
   ["b", [], { success: true, destination: "b" }],
   ["b", ["b"], { success: true, destination: "b" }],
-])("validateConnections($s, $p)", (start, path, expected) => {
+];
+test.each(cases)("validateConnections($s, $p)", (start, path, expected) => {
   const home = GetServerOrThrow(SpecialServers.Home);
   if (!(home instanceof Server)) {
     throw new Error("home is not a Server");
@@ -256,6 +266,6 @@ test.each([
     expect(result).toMatchObject(expected);
   } else {
     expect(result.success).toBe(expected.success);
-    expect(result.message).toContain(result.message);
+    expect(result.message).toContain(expected.message);
   }
 });
