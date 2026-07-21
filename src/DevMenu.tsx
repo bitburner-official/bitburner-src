@@ -58,7 +58,7 @@ export function DevMenuRoot(): React.ReactElement {
       <ServersDev />
       <CompaniesDev />
 
-      <BladeburnerDev bladeburner={Player.bladeburner ?? null} />
+      <BladeburnerDev />
 
       <GangDev />
 
@@ -66,7 +66,7 @@ export function DevMenuRoot(): React.ReactElement {
 
       <CodingContractsDev />
 
-      <StockMarketDev disabled={canAccessStockMarket()} />
+      <StockMarketDev />
 
       <SleevesDev />
       <StanekDev />

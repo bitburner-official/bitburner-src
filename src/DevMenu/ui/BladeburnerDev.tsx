@@ -16,13 +16,13 @@ import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
 import { BladeburnerContractName, BladeburnerOperationName, BladeburnerSkillName, CityName } from "@enums";
 import { Skills as AllSkills } from "../../Bladeburner/data/Skills";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const bigNumber = 1e27;
 
-export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner | null }): React.ReactElement {
+export function BladeburnerDev(): React.ReactElement {
+  const bladeburner = Player.bladeburner;
   const [skillName, setSkillName] = useState(BladeburnerSkillName.BladesIntuition);
   const [contractTarget, setContract] = useState<BladeburnerContractName>(
     bladeburner?.contracts.Tracking.name ?? BladeburnerContractName.Tracking,
