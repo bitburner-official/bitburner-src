@@ -68,7 +68,7 @@ _(Optional)_ The text to display on the link. Defaults to the last hostname or I
 
 [ReactElement](./bitburner.reactelement.md)
 
-A ReactElement that can be used with APIs such as ns.tprintRaw() and ns.printRaw().
+A ReactElement that can be used with APIs such as [tprintRaw](./bitburner.ns.tprintraw.md) and [printRaw](./bitburner.ns.printraw.md)<!-- -->.
 
 ## Remarks
 

@@ -7145,7 +7145,8 @@ interface UserInterface {
    * @param connectPath - Hostnames or IP addresses of servers to connect to.
    * @param linkText - The text to display on the link. Defaults to the last hostname or IP in connectPath. If
    * connectPath is an empty array and linkText is nullish, linkText is set to `"do nothing"`.
-   * @returns A ReactElement that can be used with APIs such as ns.tprintRaw() and ns.printRaw().
+   * @returns A ReactElement that can be used with APIs such as {@link NS.tprintRaw | tprintRaw} and
+   * {@link NS.printRaw | printRaw}.
    */
   createConnectLink(connectPath: string[], linkText?: string): ReactElement;
 }
