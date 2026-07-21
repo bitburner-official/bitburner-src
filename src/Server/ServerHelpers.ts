@@ -257,10 +257,10 @@ export function prestigeHomeComputer(homeComp: Server): void {
 
 export function validateConnections(start: BaseServer, path: string[]): Result<{ destination: string }> {
   let current = start;
-  for (const hostname of path) {
-    const next = GetServer(hostname);
-    if (next == null) {
-      return { success: false, message: `Invalid hostname: '${hostname}'` };
+  for (const host of path) {
+    const next = GetServer(host);
+    if (next === null) {
+      return { success: false, message: `Invalid host: '${host}'` };
     }
     if (next === current) {
       continue;
@@ -268,7 +268,7 @@ export function validateConnections(start: BaseServer, path: string[]): Result<{
     if (!next.backdoorInstalled && !next.purchasedByPlayer && !current.serversOnNetwork.includes(next.hostname)) {
       return {
         success: false,
-        message: `Cannot directly connect from ${current.hostname} to ${hostname}. Make sure the server is backdoored or adjacent to ${current.hostname}`,
+        message: `Cannot directly connect from ${current.hostname} to ${host}. Make sure the server is backdoored or adjacent to ${current.hostname}`,
       };
     }
     current = next;

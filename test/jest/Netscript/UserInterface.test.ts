@@ -224,7 +224,7 @@ const cases: [string, string[], Expected][] = [
   ["b", ["2.2.2.2", "1.1.1.1", "4.4.4.4"], { success: true, destination: "c" }],
   ["b", ["c"], { success: false, message: "Cannot directly connect" }],
   ["b", ["backdoored"], { success: true, destination: "backdoored" }],
-  ["b", ["a", "foo", "c"], { success: false, message: "Invalid hostname" }],
+  ["b", ["a", "foo", "c"], { success: false, message: "Invalid host" }],
   // the path is written as if we are starting from b, but we are actually starting from d
   ["d", ["a", "home", "c"], { success: false, message: "Cannot directly connect" }],
   // a path from home works regardless of where we are

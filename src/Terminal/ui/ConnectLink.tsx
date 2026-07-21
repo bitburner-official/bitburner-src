@@ -12,11 +12,11 @@ interface IConnectLinkProps {
 export function ConnectLink({ path, text }: IConnectLinkProps): React.ReactElement {
   const onClick = useCallback(() => {
     const result = validateConnections(Player.getCurrentServer(), path);
-    if (result.success) {
-      Terminal.connectToServer(result.destination);
+    if (!result.success) {
+      Terminal.error(result.message);
       return;
     }
-    Terminal.error(result.message);
+    Terminal.connectToServer(result.destination);
   }, [path]);
   return <MuiLink onClick={onClick}>{text}</MuiLink>;
 }

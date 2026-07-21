@@ -12,9 +12,9 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
   const hostname = String(args[0]);
 
   const result = validateConnections(server, [hostname]);
-  if (result.success) {
-    Terminal.connectToServer(result.destination);
+  if (!result.success) {
+    Terminal.error(result.message);
     return;
   }
-  Terminal.error(result.message);
+  Terminal.connectToServer(result.destination);
 }
