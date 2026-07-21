@@ -291,10 +291,6 @@ export abstract class BaseServer implements IServer {
     return this.writeToScriptFile(path, content);
   }
 
-  isVisible(): boolean {
-    return this.serversOnNetwork.length > 0;
-  }
-
   // Serialize the current object to a JSON save state
   // Called by subclasses, not stringify.
   toJSONBase(ctorName: string, keys: readonly (keyof this)[]): IReviverValue {
