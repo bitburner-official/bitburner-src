@@ -9,6 +9,7 @@ import { Player } from "@player";
 import { CompletedProgramName } from "@enums";
 import { validateConnections } from "../../../src/Server/ServerHelpers";
 import { Server } from "../../../src/Server/Server";
+import type { IPAddress } from "../../../src/Types/strings";
 
 const themeHexColor = "#abc";
 const fontFamily = "monospace";
@@ -227,13 +228,13 @@ test.each([
     throw new Error("home is not a Server");
   }
   prestigeAllServers();
-  home.ip = "1.1.1.1";
+  home.ip = "1.1.1.1" as IPAddress;
   AddToAllServers(home);
-  const a = new Server({ hostname: "a", ip: "2.2.2.2" });
+  const a = new Server({ hostname: "a", ip: "2.2.2.2" as IPAddress });
   AddToAllServers(a);
   const b = new Server({ hostname: "b" });
   AddToAllServers(b);
-  const c = new Server({ hostname: "c", ip: "4.4.4.4" });
+  const c = new Server({ hostname: "c", ip: "4.4.4.4" as IPAddress });
   AddToAllServers(c);
   const d = new Server({ hostname: "d" });
   AddToAllServers(d);
@@ -246,7 +247,11 @@ test.each([
   connectServers(a, b);
   connectServers(c, d);
 
-  const result = validateConnections({ a, b, c, d }[start], path);
+  const startingServer = { a, b, c, d }[start];
+  if (!startingServer) {
+    throw new Error("Invalid starting server");
+  }
+  const result = validateConnections(startingServer, path);
   if (expected.success) {
     expect(result).toMatchObject(expected);
   } else {
