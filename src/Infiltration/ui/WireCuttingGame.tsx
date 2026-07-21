@@ -16,12 +16,19 @@ export function WireCuttingGame({ stage }: IProps): React.ReactElement {
   const wrongWireColor = "#CC79A7";
   return (
     <>
-      <Paper sx={{ display: "grid", justifyItems: "center", pb: 1 }}>
-        <Typography variant="h4" sx={{ width: "75%", textAlign: "center" }}>
+      <Paper sx={{ display: "grid", justifyItems: "center", pb: 1, background: "black" }}>
+        <Typography variant="h4" sx={{ width: "75%", textAlign: "center", color: "white" }}>
           Cut the wires with the following properties! (keyboard 1 to 9)
         </Typography>
         {stage.questions.map((question, i) => (
-          <Typography key={i}>{question.toString()}</Typography>
+          <Typography
+            key={i}
+            sx={{
+              color: "white",
+            }}
+          >
+            {question.render()}
+          </Typography>
         ))}
         <Box
           sx={{
@@ -29,7 +36,6 @@ export function WireCuttingGame({ stage }: IProps): React.ReactElement {
             gridTemplateColumns: `repeat(${stage.wires.length}, 1fr)`,
             columnGap: 3,
             justifyItems: "center",
-            background: "black",
             padding: "10px 20px",
           }}
         >

@@ -1,3 +1,4 @@
+import React from "react";
 import type { InfiltrationStage, KeyboardLikeEvent } from "../InfiltrationStage";
 import type { Infiltration } from "../Infiltration";
 import { interpolate } from "./Difficulty";
@@ -36,14 +37,14 @@ interface Wire {
 }
 
 interface Question {
-  toString: () => string;
+  render: () => React.ReactNode;
   shouldCut: (wire: Wire, index: number) => boolean;
 }
 
 function randomPositionQuestion(wires: Wire[]): Question {
   const index = Math.floor(Math.random() * wires.length);
   return {
-    toString: (): string => {
+    render: () => {
       return `Cut wire number ${index + 1}.`;
     },
     shouldCut: (_wire: Wire, i: number): boolean => {
@@ -56,8 +57,12 @@ function randomColorQuestion(wires: Wire[]): Question {
   const index = Math.floor(Math.random() * wires.length);
   const cutColor = wires[index].colors[0];
   return {
-    toString: (): string => {
-      return `Cut all wires colored ${colorNames[cutColor]}.`;
+    render: () => {
+      return (
+        <>
+          Cut all wires colored <span style={{ color: cutColor }}>{colorNames[cutColor]}</span>.
+        </>
+      );
     },
     shouldCut: (wire: Wire): boolean => {
       return wire.colors.includes(cutColor);
