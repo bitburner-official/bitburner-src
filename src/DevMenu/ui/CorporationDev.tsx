@@ -6,9 +6,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
-import type { Corporation } from "../../Corporation/Corporation";
 
 const bigNumber = 1e27;
 

@@ -28,7 +28,6 @@ import { Exploit } from "./Exploits/Exploit";
 import { useRerender } from "./ui/React/hooks";
 import { DarknetDev } from "./DevMenu/ui/DarknetDev";
 import { AutoExpandContext, getAutoExpandData, setAutoExpandData } from "./ui/AutoExpand/AutoExpandContext";
-import { canAccessStockMarket } from "./StockMarket/StockMarket";
 
 export function DevMenuRoot(): React.ReactElement {
   const autoExpandContextValue = useRef({

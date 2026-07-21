@@ -5,6 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import type { Gang } from "../../Gang/Gang";
