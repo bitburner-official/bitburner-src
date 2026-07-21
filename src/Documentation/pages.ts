@@ -1328,6 +1328,7 @@ import nsDoc_bitburner_singularity_getupgradehomecorescost_md from "../../markdo
 import nsDoc_bitburner_singularity_getupgradehomeramcost_md from "../../markdown/bitburner.singularity.getupgradehomeramcost.md?raw";
 import nsDoc_bitburner_singularity_gotolocation_md from "../../markdown/bitburner.singularity.gotolocation.md?raw";
 import nsDoc_bitburner_singularity_gymworkout_md from "../../markdown/bitburner.singularity.gymworkout.md?raw";
+import nsDoc_bitburner_singularity_hasexportgamebonus_md from "../../markdown/bitburner.singularity.hasexportgamebonus.md?raw";
 import nsDoc_bitburner_singularity_hospitalize_md from "../../markdown/bitburner.singularity.hospitalize.md?raw";
 import nsDoc_bitburner_singularity_installaugmentations_md from "../../markdown/bitburner.singularity.installaugmentations.md?raw";
 import nsDoc_bitburner_singularity_installbackdoor_md from "../../markdown/bitburner.singularity.installbackdoor.md?raw";
@@ -2958,6 +2959,7 @@ AllPages["nsDoc/bitburner.singularity.getupgradehomecorescost.md"] = nsDoc_bitbu
 AllPages["nsDoc/bitburner.singularity.getupgradehomeramcost.md"] = nsDoc_bitburner_singularity_getupgradehomeramcost_md;
 AllPages["nsDoc/bitburner.singularity.gotolocation.md"] = nsDoc_bitburner_singularity_gotolocation_md;
 AllPages["nsDoc/bitburner.singularity.gymworkout.md"] = nsDoc_bitburner_singularity_gymworkout_md;
+AllPages["nsDoc/bitburner.singularity.hasexportgamebonus.md"] = nsDoc_bitburner_singularity_hasexportgamebonus_md;
 AllPages["nsDoc/bitburner.singularity.hospitalize.md"] = nsDoc_bitburner_singularity_hospitalize_md;
 AllPages["nsDoc/bitburner.singularity.installaugmentations.md"] = nsDoc_bitburner_singularity_installaugmentations_md;
 AllPages["nsDoc/bitburner.singularity.installbackdoor.md"] = nsDoc_bitburner_singularity_installbackdoor_md;
