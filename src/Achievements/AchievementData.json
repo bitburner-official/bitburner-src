@@ -144,7 +144,7 @@
     "MONEY_1Q": {
       "ID": "MONEY_1Q",
       "Name": "Here comes the money!",
-      "Description": "Have $1Q on your home computer."
+      "Description": "Have $1Q (not $1q) on your home computer."
     },
     "MONEY_M1B": {
       "ID": "MONEY_M1B",
@@ -454,7 +454,7 @@
     "CHALLENGE_BN9": {
       "ID": "CHALLENGE_BN9",
       "Name": "BN9: Challenge",
-      "Description": "Destroy BN9 without using hacknet servers or hacknet nodes."
+      "Description": "Destroy BN9 without converting hashes from hacknet servers into money or using hacknet nodes."
     },
     "CHALLENGE_BN10": {
       "ID": "CHALLENGE_BN10",
