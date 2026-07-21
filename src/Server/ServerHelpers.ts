@@ -13,8 +13,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
-import { Person as IPerson } from "@nsdefs";
-import { Server as IServer } from "@nsdefs";
+import type { Person as IPerson, Server as IServer, Result } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
@@ -27,6 +26,9 @@ import { hasDarknetAccess } from "../DarkNet/utils/darknetAuthUtils";
 import type { IMinMaxRange } from "../types";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import type { IPAddress } from "../Types/strings";
+import { discoverableNetworkScripts } from "../Literature/DiscoverableNetworkScripts";
+import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { Script } from "../Script/Script";
 
 export enum ServerOwnershipType {
   All = 0,
@@ -261,6 +263,27 @@ export function prestigeHomeComputer(homeComp: Server): void {
   homeComp.sqlPortOpen = false;
 }
 
+export function validateConnections(start: BaseServer, path: string[]): Result<{ destination: string }> {
+  let current = start;
+  for (const host of path) {
+    const next = GetServer(host);
+    if (next === null) {
+      return { success: false, message: `Invalid host: '${host}'` };
+    }
+    if (next === current) {
+      continue;
+    }
+    if (!next.backdoorInstalled && !next.purchasedByPlayer && !current.serversOnNetwork.includes(next.hostname)) {
+      return {
+        success: false,
+        message: `Cannot directly connect from ${current.hostname} to ${host}. Make sure the server is backdoored or adjacent to ${current.hostname}`,
+      };
+    }
+    current = next;
+  }
+  return { success: true, destination: current.hostname };
+}
+
 // Returns the i-th server on the specified server's network
 // A Server's serverOnNetwork property holds only the IPs. This function returns
 // the actual Server object
@@ -381,8 +404,19 @@ export function initForeignServers(homeComputer: Server): void {
       server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
     }
 
-    for (const filename of metadata.literature || []) {
+    for (const filename of metadata.literature ?? []) {
       server.messages.push(filename);
+    }
+
+    for (const scriptName of metadata.discoverableScripts ?? []) {
+      const path = resolveScriptFilePath(scriptName);
+      const content = discoverableNetworkScripts[scriptName].content;
+      if (!path || !content) {
+        throw new Error(
+          `Unable to populate script ${scriptName} on server ${server.hostname}: invalid script name or content`,
+        );
+      }
+      server.scripts.set(path, new Script(path, content, server.hostname));
     }
 
     if (server.hostname === SpecialServers.WorldDaemon) {

@@ -2,10 +2,18 @@
 
 ## Infinite Loop in Scripts
 
-If your game is frozen or stuck in any way, then the most likely culprit is an infinitely running loop in your script.
-To get past the freezing, run the game with `?noScripts` in the URL:
+### Overview
+
+If your game is frozen or stuck in any way, then the most likely culprit is an infinite loop in your script.
+To recover from the freeze, run the game with `?noScripts` in the URL:
 
 [Link to no freeze](https://bitburner-official.github.io?noScripts)
+
+If you are playing the Steam version, you can reload the game without running scripts by using the menu option: Reloads => Reload & Kill All Scripts.
+
+If you run the executable file from the command line, you can use the `--no-scripts` parameter.
+
+### Fix the infinite loop
 
 Then, to fix your script, make sure you have a `sleep()` or any other timed function like `hack()` or `grow()` in any infinite loops:
 
@@ -48,6 +56,28 @@ Common infinite loop when translating the server purchasing script in starting g
 If the player does not currently have enough money to purchase a server, the `if`'s condition will be false and `++i` will not be reached.
 Since the script doesn't have `sleep()` and value `i` will not change without the `if` being true, this will crash the game.
 Adding a `sleep()` that is always reached would prevent the crash.
+
+### Use a debugger
+
+If you cannot find where the infinite loop is, you can use the Pause button in the debugger.
+
+The first step is to open the built-in developer tools of your browser:
+
+- Web version:
+  - Windows/Linux: Ctrl + Shift + I or F12
+  - macOS: Cmd + Option + I
+- Steam version:
+  - Menu: Debug => Activate
+  - Shortcut:
+    - Windows/Linux: F12
+    - macOS: Cmd + Option + I
+
+In the developer tools:
+
+- Open the Sources tab (Chrome/Safari) or the Debugger tab (Firefox).
+- Click the Pause button. It usually looks like this: ⏸ and is located on the right side of the Sources/Debugger tab.
+
+This pauses execution so you can debug the infinite loop. The call stack is also very useful.
 
 ## Black screen
 
