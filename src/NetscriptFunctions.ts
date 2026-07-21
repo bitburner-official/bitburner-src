@@ -33,6 +33,7 @@ import {
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
   GangTaskNameEnum,
+  MeetingTitleEnum,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer } from "./Server/AllServers";
@@ -118,6 +119,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
 import { setDeprecatedProperties } from "./utils/DeprecationHelper";
+import { NetscriptBoss } from "./NetscriptFunctions/Boss";
 
 export const enums: NSEnums = {
   CityName,
@@ -140,6 +142,7 @@ export const enums: NSEnums = {
   DarknetResponseCode: ResponseCodeEnum,
   ProgramName: CompletedProgramName,
   GangTaskName: GangTaskNameEnum,
+  MeetingTitle: MeetingTitleEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -164,6 +167,7 @@ export const ns: InternalAPI<NSFull> = {
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
   cloud: NetscriptCloud(),
+  boss: NetscriptBoss(),
   sprintf:
     (ctx) =>
     (_format, ...args) => {

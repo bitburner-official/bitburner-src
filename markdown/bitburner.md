@@ -184,6 +184,39 @@ Player must have at least this rank in the Bladeburner Division.
 </td></tr>
 <tr><td>
 
+[Boss](./bitburner.boss.md)
+
+
+</td><td>
+
+Boss API
+
+
+</td></tr>
+<tr><td>
+
+[BossAgents](./bitburner.bossagents.md)
+
+
+</td><td>
+
+Agent API. Allows you to interact with your agents
+
+
+</td></tr>
+<tr><td>
+
+[BossCalendar](./bitburner.bosscalendar.md)
+
+
+</td><td>
+
+Company Calendar
+
+
+</td></tr>
+<tr><td>
+
 [CityRequirement](./bitburner.cityrequirement.md)
 
 
@@ -960,6 +993,17 @@ Player must be at this location within a city.
 </td><td>
 
 Material in a warehouse
+
+
+</td></tr>
+<tr><td>
+
+[Meeting](./bitburner.meeting.md)
+
+
+</td><td>
+
+Defines a Meeting
 
 
 </td></tr>
@@ -2224,6 +2268,46 @@ Locations of gym
 </td><td>
 
 Names of all locations
+
+
+</td></tr>
+<tr><td>
+
+[MeetingFixedBreaks](./bitburner.meetingfixedbreaks.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[MeetingFixedBreaksEnumType](./bitburner.meetingfixedbreaksenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[MeetingTitle](./bitburner.meetingtitle.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[MeetingTitleEnumType](./bitburner.meetingtitleenumtype.md)
+
+
+</td><td>
+
 
 
 </td></tr>

@@ -71,6 +71,9 @@ BN15 expands on the darknet mechanic unlocked via the DarkscapeNavigator.exe pro
 It encourages solving a number of practical problems (e.g. passing data around between scripts, handling servers disappearing) as well as solving many small programming puzzles to get servers' passwords. The deeper levels of the darknet have significantly more complex puzzles.
 It provides a variety of useful bonuses.
 
+BN16 refactors company work, adds more augmentations and factions and challenging puzzles you can solve to gain
+reputation with those new factions.
+
 ## Save these for later
 
 BN8 focuses on the stock market to the point that there's no other way to make money.

@@ -95,6 +95,27 @@ Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. Contains spoi
 </td></tr>
 <tr><td>
 
+[boss](./bitburner.ns.boss.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[Boss](./bitburner.boss.md)
+
+
+</td><td>
+
+Namespace for [boss](./bitburner.boss.md) functions. Contains spoilers.
+
+
+</td></tr>
+<tr><td>
+
 [cloud](./bitburner.ns.cloud.md)
 
 

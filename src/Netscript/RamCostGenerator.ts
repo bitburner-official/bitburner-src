@@ -76,6 +76,13 @@ export const RamCostConstants = {
   InfiltrationCalculateRewards: 2.5,
   InfiltrationGetInfiltrations: 15,
 
+  BossNormal: 2,
+  BossExtense: 3,
+  BossChanger: 4,
+  BossSolver: 10,
+  BossVeryLow: 0.1,
+  BossLow: 0.2,
+
   CycleTiming: 0,
 } as const;
 
@@ -538,6 +545,24 @@ const corporation = {
   getOfficeSizeUpgradeCost: RamCostConstants.CorporationInfo,
 } as const;
 
+const boss = {
+  solvePuzzle: RamCostConstants.BossSolver,
+  changeFixedSchedule: RamCostConstants.BossChanger,
+  addBreakTime: RamCostConstants.BossChanger,
+  getRsvps: RamCostConstants.BossNormal,
+  hasAccess: RamCostConstants.BossVeryLow,
+  nextUpdate: RamCostConstants.BossLow,
+  calendar: {
+    getAppointments: RamCostConstants.BossNormal,
+    rsvp: RamCostConstants.BossNormal,
+    cancelMeeting: RamCostConstants.BossNormal,
+  } as const,
+  agent: {
+    getNumAgents: RamCostConstants.BossLow,
+    hireAgent: RamCostConstants.BossExtense,
+  } as const,
+} as const;
+
 /** RamCosts guaranteed to match ns structure 1:1 (aside from args and enums).
  *  An error will be generated if there are missing OR additional ram costs defined.
  *  To avoid errors, define every function in NetscriptDefinition.d.ts and NetscriptFunctions,
@@ -559,6 +584,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stanek,
   ui,
   grafting,
+  boss,
 
   sprintf: 0,
   vsprintf: 0,

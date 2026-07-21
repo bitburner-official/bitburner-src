@@ -17,3 +17,4 @@ export * from "./Work/Enums";
 export * from "./CodingContract/Enums";
 export * from "./Hacknet/Enums";
 export * from "./Gang/Enums";
+export * from "./Boss/Enums";

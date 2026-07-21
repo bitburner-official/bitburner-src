@@ -34,6 +34,7 @@ Some BitNodes unlock new mechanics, while others improve or change original mech
   - BitNode 12: Grant free NeuroFlux Governor (NFG) based on the Source-File level.
   - BitNode 14: Enhance IPvGO.
   - BitNode 15: Enhanced darknet.
+  - BitNode 16: Enhanced company work.
 
 Some mechanics synergize well with other mechanics. For example, in order to create a gang outside of BitNode 2, you need to "farm karma" (more about this later), and Sleeves can help you do it faster.
 
@@ -204,6 +205,10 @@ This BitNode increases the size and depth of the dark net. This increases the re
 The first Source-File level also allows the use of the dark net to get The Red Pill from the final lab in all BitNodes (except for BN8), which in some cases may be quicker than unlocking it via Daedalus.
 
 However, the complexity of dealing with the deep dark net and the number of different puzzles to solve make BN15 not a simple BitNode to approach. Before tackling BN15, you will want to experiment with the basic version in other nodes to get a feel for it.
+
+## BitNode 16
+
+Refactored company work
 
 # Order advice
 

@@ -279,3 +279,25 @@ This Source-File grants the following benefits:
 - Level 1: Permanently start with the TOR router and DarkscapeNavigator.exe, and unlock the full dark web on all BitNodes.
 - Level 2: Your charisma level increases job salary and rep gain. Also increases authentication speed by 20%
 - Level 3: Your charisma level increases faction work rep gain. Also increases the xp and money gained from .cache files by 50%.
+
+### BitNode 16: The Need for a Boss
+
+In a world where Megacorporations took over the planet's economy, industry, supply chains and the
+well-desired augmentations, it seems that there is no turning back...
+This created the need for Megacorporations: in order to obtain primary resources such as food and water you had to
+be employed on a company. Criminal bands, hacking factions, rebel leaders... all of them were neutralized in a short period of time, and with them, all the hope for humanity of having back the old ways...
+
+However, they say there is one thing that you can provide that can prove invaluable to Megacorporations: cybersecurity expertise.
+
+Man and women from all around the globe put their skills in secret to hack into Megacorporations' mainframes and destroy their
+empire. Various attacks were launched, and all of them failed. Only you can provide them with the security expertise that is
+needed for taking them down once and for all...
+
+Destroying this BitNode will give you Source-File 16, or if you already have this Source-File, it will upgrade
+its level up to a maximum of 3.
+
+This Source-File grants the following benefits:
+
+- Level 1: Unlock access to the Boss API. This replaces the old boring work with the new puzzles and challenges.
+- Level 2: Start with 2 agents and a 20% bonus to all API-related multipliers
+- Level 3: Start with 3 agents and a 35% bonus to all API-related multipliers
