@@ -8,7 +8,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
-import type { Gang } from "../../Gang/Gang";
 
 const bigNumber = 1e27;
 
