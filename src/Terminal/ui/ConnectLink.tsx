@@ -19,17 +19,20 @@ export function ConnectLink({ path, text }: IConnectLinkProps): React.ReactEleme
     }
     Terminal.connectToServer(result.destination);
   }, [path]);
-  const first = path[0];
-  const last = path.at(-1);
   let tooltip: string;
-  if (last == null) {
-    tooltip = "";
-  } else if (path.length === 1) {
-    tooltip = `connect ${first}`;
-  } else if (path.length === 2) {
-    tooltip = `connect ${first}; connect ${last}`;
-  } else {
-    tooltip = `connect ${first}; ...; connect ${last}`;
+  switch (path.length) {
+    case 0:
+      tooltip = "";
+      break;
+    case 1:
+      tooltip = `connect ${path[0]}`;
+      break;
+    case 2:
+      tooltip = `connect ${path[0]}; connect ${path[1]}`;
+      break;
+    default:
+      tooltip = `connect ${path[0]}; ...; connect ${path.at(-1)}`;
+      break;
   }
   return (
     <Tooltip title={tooltip}>
