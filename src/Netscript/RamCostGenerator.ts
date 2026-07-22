@@ -387,6 +387,7 @@ const codingcontract = {
   attempt: RamCostConstants.CodingContractBase,
   getContractType: RamCostConstants.CodingContractBase / 2,
   getData: RamCostConstants.CodingContractBase / 2,
+  getAnswer: 0,
   getContract: RamCostConstants.CodingContractBase * (3 / 2),
   getDescription: RamCostConstants.CodingContractBase / 2,
   getNumTriesRemaining: RamCostConstants.CodingContractBase / 5,

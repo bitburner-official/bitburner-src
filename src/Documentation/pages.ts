@@ -247,6 +247,7 @@ import nsDoc_bitburner_cloud_renameserver_md from "../../markdown/bitburner.clou
 import nsDoc_bitburner_cloud_upgradeserver_md from "../../markdown/bitburner.cloud.upgradeserver.md?raw";
 import nsDoc_bitburner_codingcontract_attempt_md from "../../markdown/bitburner.codingcontract.attempt.md?raw";
 import nsDoc_bitburner_codingcontract_createdummycontract_md from "../../markdown/bitburner.codingcontract.createdummycontract.md?raw";
+import nsDoc_bitburner_codingcontract_getanswer_md from "../../markdown/bitburner.codingcontract.getanswer.md?raw";
 import nsDoc_bitburner_codingcontract_getcontract_md from "../../markdown/bitburner.codingcontract.getcontract.md?raw";
 import nsDoc_bitburner_codingcontract_getcontracttype_md from "../../markdown/bitburner.codingcontract.getcontracttype.md?raw";
 import nsDoc_bitburner_codingcontract_getcontracttypes_md from "../../markdown/bitburner.codingcontract.getcontracttypes.md?raw";
@@ -1876,6 +1877,7 @@ AllPages["nsDoc/bitburner.cloud.renameserver.md"] = nsDoc_bitburner_cloud_rename
 AllPages["nsDoc/bitburner.cloud.upgradeserver.md"] = nsDoc_bitburner_cloud_upgradeserver_md;
 AllPages["nsDoc/bitburner.codingcontract.attempt.md"] = nsDoc_bitburner_codingcontract_attempt_md;
 AllPages["nsDoc/bitburner.codingcontract.createdummycontract.md"] = nsDoc_bitburner_codingcontract_createdummycontract_md;
+AllPages["nsDoc/bitburner.codingcontract.getanswer.md"] = nsDoc_bitburner_codingcontract_getanswer_md;
 AllPages["nsDoc/bitburner.codingcontract.getcontract.md"] = nsDoc_bitburner_codingcontract_getcontract_md;
 AllPages["nsDoc/bitburner.codingcontract.getcontracttype.md"] = nsDoc_bitburner_codingcontract_getcontracttype_md;
 AllPages["nsDoc/bitburner.codingcontract.getcontracttypes.md"] = nsDoc_bitburner_codingcontract_getcontracttypes_md;

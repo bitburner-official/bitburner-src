@@ -246,16 +246,51 @@ describe("Check getAnswer and solver", () => {
     CodingContractName.ShortestPathInAGrid,
     CodingContractName.SquareRoot,
   ];
-  for (const [name, cct] of getRecordEntries(CodingContractTypes)) {
+  for (const [name] of getRecordEntries(CodingContractTypes)) {
     if (skippedContractTypes.includes(name)) {
       continue;
     }
-    test(name, () => {
-      const state = cct.generate();
-      const data = cct.getData ? cct.getData(state) : state;
-      const answer = cct.getAnswer(data);
+    test(`ns.codingcontract.getAnswer() ${name}`, () => {
+      const ns = getNS();
+      generateContract({
+        problemType: name,
+        server: SpecialServers.Home,
+        reward: { type: CodingContractRewardType.Money },
+      });
+      const file = Player.getHomeComputer().contracts[0].fn;
+      const answer: unknown = ns.codingcontract.getAnswer(file);
       expect(answer).not.toBeNull();
-      expect(cct.solver(state, answer)).toStrictEqual(true);
+      Player.money = 0;
+      expect(ns.codingcontract.attempt(answer, file)).toBe("No reward for this contract");
+      expect(Player.money).toBe(0);
+    });
+  }
+  test("getContract().getAnswer()", () => {
+    const ns = getNS();
+    generateContract({
+      problemType: CodingContractName.FindLargestPrimeFactor,
+      server: SpecialServers.Home,
+      reward: { type: CodingContractRewardType.Money },
+    });
+    const file = Player.getHomeComputer().contracts[0].fn;
+    const cct = ns.codingcontract.getContract(file);
+    const answer = cct.getAnswer();
+    expect(answer).not.toBeNull();
+    Player.money = 0;
+    expect(cct.submit(answer as string)).toBe("No reward for this contract");
+    expect(Player.money).toBe(0);
+  });
+  for (const name of skippedContractTypes) {
+    test(`unsupported ${name}`, () => {
+      const ns = getNS();
+      generateContract({
+        problemType: name,
+        server: SpecialServers.Home,
+      });
+      const file = Player.getHomeComputer().contracts[0].fn;
+      const cct = ns.codingcontract.getContract(file);
+      expect(() => ns.codingcontract.getAnswer(file) as unknown).toThrow("Getting the answer is unsupported");
+      expect(() => cct.getAnswer()).toThrow("Getting the answer is unsupported");
     });
   }
 });

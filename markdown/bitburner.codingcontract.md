@@ -49,6 +49,17 @@ Generate a dummy contract.
 </td></tr>
 <tr><td>
 
+[getAnswer(filename, host)](./bitburner.codingcontract.getanswer.md)
+
+
+</td><td>
+
+Get the expected answer.
+
+
+</td></tr>
+<tr><td>
+
 [getContract(filename, host)](./bitburner.codingcontract.getcontract.md)
 
 

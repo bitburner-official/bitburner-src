@@ -24,6 +24,18 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     return [contract, server];
   };
 
+  function convertToDummyAndGetAnswer(ctx: NetscriptContext, contract: CodingContract): unknown {
+    const answer = contract.getAnswer();
+    if (answer == null) {
+      throw helpers.errorMessage(ctx, `Getting the answer is unsupported for contract type ${contract.getType()}.`);
+    }
+    if (contract.reward != null) {
+      helpers.log(ctx, () => `Converted contract '${contract.fn}' into a dummy contract. There will be no reward.`);
+    }
+    contract.reward = null;
+    return structuredClone(answer);
+  }
+
   function attemptContract(
     ctx: NetscriptContext,
     server: BaseServer,
@@ -102,6 +114,11 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const [contract] = getCodingContract(ctx, _host, filename);
       return structuredClone(contract.getData());
     },
+    getAnswer: (ctx) => (_filename, _host?) => {
+      const filename = helpers.string(ctx, "filename", _filename);
+      const [contract] = getCodingContract(ctx, _host, filename);
+      return convertToDummyAndGetAnswer(ctx, contract);
+    },
     getContract: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const [contract, server] = getCodingContract(ctx, _host, filename);
@@ -109,6 +126,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       return {
         type: contract.type,
         data: structuredClone(contract.getData()),
+        getAnswer: () => convertToDummyAndGetAnswer(ctx, contract),
         submit: (answer: unknown) => {
           helpers.checkEnvFlags(ctx);
           return attemptContract(ctx, server, contract, answer);
