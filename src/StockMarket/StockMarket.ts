@@ -178,6 +178,10 @@ export function isStockMarketInitialized(): boolean {
  */
 export function deleteStockMarket(): void {
   StockMarket = getDefaultEmptyStockMarket();
+  for (const key of Object.keys(SymbolToStockMap)) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete SymbolToStockMap[key];
+  }
 }
 
 export function initStockMarket(): void {

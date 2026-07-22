@@ -6,12 +6,17 @@ import {
   renameServer,
   GetServer,
   ipExists,
+  GetServerOrThrow,
 } from "../../../src/Server/AllServers";
 import { Server } from "../../../src/Server/Server";
 import { IPAddress } from "../../../src/Types/strings";
 import { type BitburnerSaveObjectType, getSaveData } from "../../../src/SaveObject";
 import { decodeSaveData } from "../../../src/utils/SaveDataUtils";
 import { Reviver, makeReviverWithContext } from "../../../src/utils/GenericReviver";
+import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { serverMetadata } from "../../../src/Server/data/servers";
+import { resolveScriptFilePath } from "../../../src/Paths/ScriptFilePath";
+import { discoverableNetworkScripts } from "../../../src/Literature/DiscoverableNetworkScripts";
 
 async function saveAllServers() {
   const data = JSON.parse(await decodeSaveData(await getSaveData()), Reviver) as BitburnerSaveObjectType;
@@ -100,4 +105,29 @@ describe("renameServer tests", () => {
     expect(GetServer("home")).toBe(home);
     expect(GetServer("1.2.3.4")).toBe(home);
   });
+});
+
+describe("initForeignServers seeds discoverable scripts onto the right servers", () => {
+  initGameEnvironment();
+
+  beforeAll(() => {
+    setupBasicTestingEnvironment();
+  });
+
+  const seededMetadata = serverMetadata.filter((m) => m.discoverableScripts && m.discoverableScripts.length > 0);
+
+  it.each(seededMetadata.map((m) => [m.hostname, m.discoverableScripts]))(
+    "places discoverable scripts on %s",
+    (hostname, scriptNames) => {
+      const server = GetServerOrThrow(hostname);
+      for (const scriptName of scriptNames) {
+        const path = resolveScriptFilePath(scriptName);
+        if (!path) throw new Error(`Missing script ${scriptName} on ${hostname}`);
+        const script = server.scripts.get(path);
+        expect(script).toBeDefined();
+        expect(script?.code).toBe(discoverableNetworkScripts[scriptName].content);
+        expect(script?.server).toBe(hostname);
+      }
+    },
+  );
 });

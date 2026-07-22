@@ -70,6 +70,7 @@ import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
 import { DarknetState } from "../DarkNet/models/DarknetState";
 import { getFriendlyType, isObject } from "../utils/TypeAssertion";
+import { SpecialServers } from "../Server/data/SpecialServers";
 
 export const helpers = {
   string,
@@ -445,16 +446,16 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
 /** Create an error if a script is dead or if concurrent ns function calls are made */
 function checkEnvFlags(ctx: NetscriptContext): void {
   const ws = ctx.workerScript;
-  if (ws.env.stopFlag) {
+  if (ws.stopFlag) {
     log(ctx, () => "Failed to run due to script being killed.");
     throw new ScriptDeath(ws);
   }
-  if (ws.env.runningFn && ctx.function !== "asleep") {
+  if (ws.runningFn && ctx.function !== "asleep") {
     log(ctx, () => "Failed to run due to failed concurrency check.");
     const err = errorMessage(
       ctx,
       "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
-        `promise-returning function?\nCurrently running: ${ws.env.runningFn}\nTried to run: ${ctx.function}`,
+        `promise-returning function?\nCurrently running: ${ws.runningFn}\nTried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
@@ -469,12 +470,12 @@ function netscriptDelay(ctx: NetscriptContext, time: number): Promise<void> {
     ws.delay = window.setTimeout(() => {
       ws.delay = null;
       ws.delayReject = undefined;
-      ws.env.runningFn = "";
-      if (ws.env.stopFlag) reject(new ScriptDeath(ws));
+      ws.runningFn = "";
+      if (ws.stopFlag) reject(new ScriptDeath(ws));
       else resolve();
     }, time);
     ws.delayReject = reject;
-    ws.env.runningFn = ctx.function;
+    ws.runningFn = ctx.function;
   });
 }
 
@@ -551,7 +552,11 @@ function scriptIdentifier(ctx: NetscriptContext, scriptID: unknown, _host: unkno
 export function getServer(ctx: NetscriptContext, _host: unknown): [BaseServer | null, string] {
   const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
   const server = GetServer(host);
-  if (server != null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer)) {
+  if (
+    server != null &&
+    (server.serversOnNetwork.length > 0 ||
+      (server instanceof DarknetServer && server.hostname !== SpecialServers.DarkWeb))
+  ) {
     return [server, host];
   }
   if (DarknetState.offlineServers.has(host)) {

@@ -50,7 +50,7 @@ import { CONSTANTS } from "../../Constants";
 import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
 import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
 import { Settings } from "../../Settings/Settings";
-import { AugmentationName, CityName } from "@enums";
+import { AugmentationName } from "@enums";
 
 import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
@@ -169,7 +169,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     Player.exploits.length > 0;
 
   const canOpenSleeves = Player.sleeves.length > 0;
-  const canOpenGrafting = Player.canAccessGrafting() && Player.city === CityName.NewTokyo;
+  const canOpenGrafting = Player.canAccessGrafting();
 
   const canCorporation = !!Player.corporation;
   const canGang = !!Player.gang;

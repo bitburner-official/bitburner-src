@@ -147,6 +147,19 @@ export const SystemPage = (): React.ReactElement => {
         tooltip={<>If this is set, there will be no warning triggered when auto-save is disabled (at 0).</>}
       />
       <OptionSwitch
+        checked={Settings.EnableSaveDataBackupReminder}
+        onChange={(newValue) => {
+          Settings.EnableSaveDataBackupReminder = newValue;
+        }}
+        promptOptions={{
+          // Only require confirmation if the player is disabling the reminder.
+          shouldShowPrompt: (switchNewValue) => !switchNewValue,
+          text: "Are you sure you want to disable the reminder?",
+        }}
+        text="Enable save data backup reminder"
+        tooltip={<>If disabled, we will not remind you to back up your save data.</>}
+      />
+      <OptionSwitch
         checked={Settings.SaveGameOnFileSave}
         onChange={(newValue) => (Settings.SaveGameOnFileSave = newValue)}
         text="Save game on file save"

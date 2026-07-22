@@ -40,7 +40,7 @@ export const handleSuccessfulAuth = (server: DarknetServer, threads: number, pid
   addClue(server);
 
   const chance = 0.1 * 1.05 ** server?.difficulty;
-  if (Math.random() < chance && !isLabyrinthServer(server.hostname)) {
+  if (Math.random() < chance && !isLabyrinthServer(server.hostname) && server.maxRam) {
     addCacheToServer(server, false);
   }
 };
@@ -78,15 +78,23 @@ export const calculateAuthenticationTime = (
   const underleveledFactor = applyUnderleveledFactor ? 1.5 + (chaRequired + 50) / (person.skills.charisma + 50) : 1;
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
   const hasSf15_2Factor = Player.activeSourceFileLvl(15) > 2 ? 0.8 : 1;
+  const intelligenceFactor = 1 / calculateIntelligenceBonus(person.skills.intelligence, 0.25);
 
   const time =
-    baseTime * skillFactor * backdoorFactor * underleveledFactor * hasBootsFactor * hasSf15_2Factor * threadsFactor;
+    baseTime *
+    skillFactor *
+    backdoorFactor *
+    underleveledFactor *
+    hasBootsFactor *
+    hasSf15_2Factor *
+    threadsFactor *
+    intelligenceFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars = darknetServerData.modelId === ModelIds.TimingAttack ? correctCharsInPassword : 0;
   const sharedCharsExtraTime = sharedChars * 50 * threadsFactor;
 
-  return time * calculateIntelligenceBonus(person.skills.intelligence, 0.25) + sharedCharsExtraTime;
+  return time + sharedCharsExtraTime;
 };
 
 export const getBackdoorAuthTimeDebuff = () => {
@@ -111,6 +119,9 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
 };
 
 export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threads: number = 1, success = false) => {
+  if (!server.maxRam) {
+    return 0;
+  }
   const baseXpGain = 2.5;
   const difficultyBase = 1.07;
   const xpGain = baseXpGain + difficultyBase ** server.difficulty;
@@ -121,6 +132,9 @@ export const calculatePasswordAttemptChaGain = (server: DarknetServerData, threa
 };
 
 export const addClue = (server: DarknetServer): string[] => {
+  if (!server.maxRam) {
+    return [];
+  }
   const files = [];
   // Basic mechanics hints
   if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {

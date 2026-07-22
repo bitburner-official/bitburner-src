@@ -4,7 +4,7 @@
 
 ## BasicHGWOptions.stock property
 
-Set to true this action will affect the stock market.
+Whether to make this action affect the stock market. Defaults to false.
 
 **Signature:**
 

@@ -1,6 +1,6 @@
 import { assertLoadingType } from "../../utils/TypeAssertion";
 import { BlackOperation } from "../Actions/BlackOperation";
-import { BladeburnerBlackOpName, CityName, FactionName } from "@enums";
+import { BladeburnerBlackOpName, CityName, FactionName, LocationName } from "@enums";
 
 export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOperation> {
   return {
@@ -67,9 +67,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       desc:
         "AeroCorp is one of the world's largest defense contractors. Its leader, Steve Watataki, is thought to be " +
         "a supporter of Synthoid rights. He must be removed.\n\n" +
-        `The goal of ${BladeburnerBlackOpName.OperationZero} is to covertly infiltrate AeroCorp and uncover any incriminating ` +
-        "evidence or information against Watataki that will cause him to be removed from his position at AeroCorp. " +
-        "Incriminating evidence can be fabricated as a last resort. Be warned that AeroCorp has some of the most advanced " +
+        `The goal of ${BladeburnerBlackOpName.OperationZero} is to covertly infiltrate ${LocationName.AevumAeroCorp} and uncover any incriminating ` +
+        `evidence or information against Watataki that will cause him to be removed from his position at ${LocationName.AevumAeroCorp}. ` +
+        `Incriminating evidence can be fabricated as a last resort. Be warned that ${LocationName.AevumAeroCorp} has some of the most advanced ` +
         "security measures in the world.",
     }),
     [BladeburnerBlackOpName.OperationX]: new BlackOperation({
@@ -136,9 +136,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "Several months ago, Titan Laboratories' Bioengineering department was infiltrated by Synthoids. As far as we " +
-        "know, Titan Laboratories' management has no knowledge about this. We don't know what the Synthoids are up to, " +
-        "but the research that they could be conducting using Titan Laboratories' vast resources is potentially very " +
+        `Several months ago,${LocationName.AevumNetLinkTechnologies}' Bioengineering department was infiltrated by Synthoids. As far as we ` +
+        `know, ${LocationName.AevumNetLinkTechnologies}' management has no knowledge about this. We don't know what the Synthoids are up to, ` +
+        `but the research that they could be conducting using ${LocationName.AevumNetLinkTechnologies}' vast resources is potentially very ` +
         "dangerous.\n\n" +
         `Your goal is to enter and destroy the Bioengineering department's facility in ${CityName.Aevum}. The task is not ` +
         "just to retire the Synthoids there, but also to destroy any information or research at the facility that is " +
@@ -172,8 +172,8 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "One of our undercover agents, Agent Carter, has informed us of a massive weapons deal going down in Dubai " +
-        "between rogue Russian militants and a radical Synthoid community. These weapons are next-gen plasma and energy " +
+        `One of our undercover agents, Agent Carter, has informed us of a massive weapons deal going down in ${CityName.Volhaven} ` +
+        "between rogue local militants and a radical Synthoid community. These weapons are next-gen plasma and energy " +
         "weapons. It is critical for the safety of humanity that this deal does not happen.\n\n" +
         "Your task is to intercept the deal. Leave no survivors.",
     }),
@@ -205,7 +205,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "Our analysts have discovered that the popular Red Rabbit brothel in Amsterdam is run and 'staffed' by MK-VI " +
+        `Our analysts have discovered that the popular Red Rabbit brothel in ${CityName.Chongqing} is run and 'staffed' by MK-VI ` +
         "Synthoids. Intelligence suggests that the profit from this brothel is used to fund a large black market arms " +
         "trafficking operation.\n\n" +
         "The goal of this operation is to take out the leaders that are running the Red Rabbit brothel. Try to limit the " +
@@ -241,7 +241,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       desc:
         "The CIA has just encountered a new security threat. A new criminal group, led by a shadowy operative who calls " +
         "himself Juggernaut, has been smuggling drugs and weapons (including suspected bioweapons) into " +
-        `${CityName.Sector12}. We also have reason to believe they tried to break into one of Universal Energy's ` +
+        `${CityName.Sector12}. We also have reason to believe they tried to break into one of ${LocationName.Sector12UniversalEnergy}'s ` +
         "facilities in order to cause a city-wide blackout. The CIA suspects that Juggernaut is a heavily augmented " +
         "Synthoid and has thus enlisted our help.\n\n" +
         "Your mission is to eradicate Juggernaut and his followers.",
@@ -277,7 +277,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
         `The ${FactionName.Tetrads} criminal organization is suspected of reverse-engineering the MK-VI Synthoid design. ` +
         "We believe they altered and possibly improved the design and began manufacturing their own Synthoid models in " +
         "order to bolster their criminal activities.\n\n" +
-        `Your task is to infiltrate and destroy the ${FactionName.Tetrads}' base of operations in Los Angeles. ` +
+        `Your task is to infiltrate and destroy the ${FactionName.Tetrads}' base of operations in ${CityName.NewTokyo}. ` +
         "Intelligence tells us that their base houses one of their Synthoid manufacturing units.",
     }),
     [BladeburnerBlackOpName.OperationK]: new BlackOperation({
@@ -308,9 +308,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "CODE RED SITUATION. Our intelligence tells us that VitaLife has discovered a new android cloning technology. " +
+        `CODE RED SITUATION. Our intelligence tells us that ${LocationName.NewTokyoVitaLife} has discovered a new android cloning technology. ` +
         "This technology is supposedly capable of cloning Synthoids, not only physically but also their advanced AI " +
-        "modules. We do not believe that VitaLife is trying to use this technology illegally or maliciously, but if any " +
+        `modules. We do not believe that ${LocationName.NewTokyoVitaLife} is trying to use this technology illegally or maliciously, but if any ` +
         "Synthoids were able to infiltrate the corporation and take advantage of this technology, then the results would " +
         "be catastrophic.\n\n" +
         "We do not have the power or jurisdiction to shut this down through legal or political means, so we must resort " +
@@ -349,7 +349,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
         `${BladeburnerBlackOpName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off with ` +
         "the schematics and design of the technology before the operation. It is almost a certainty that these Synthoids " +
         "are some of the rogue MK-VI ones from the Synthoid Uprising.\n\n" +
-        `The goal of ${BladeburnerBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. I don't need to ` +
+        `The goal of ${BladeburnerBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. We don't need to ` +
         "tell you how critical this mission is.",
     }),
     [BladeburnerBlackOpName.OperationTyrell]: new BlackOperation({
@@ -452,8 +452,8 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isStealth: true,
       desc:
-        "China's Solaris Space Systems is secretly launching the first manned spacecraft in over a decade using " +
-        "Synthoids. We believe China is trying to establish the first off-world colonies.\n\n" +
+        `${CityName.Chongqing}'s ${LocationName.ChongqingSolarisSpaceSystems} is secretly launching the first manned spacecraft in over a decade using ` +
+        `Synthoids. We believe ${CityName.Chongqing} is trying to establish the first off-world colonies.\n\n` +
         "The mission is to prevent this launch without instigating an international conflict. When you accept this " +
         "mission, you will be officially disavowed by the NSA and the national government until after you successfully " +
         "return. In the event of failure, all of the operation's team members must not let themselves be captured alive.",
@@ -490,7 +490,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
         "using human brains as core processors. This supercomputer is rumored to be able to store vast amounts of data " +
         "and perform computations unmatched by any other supercomputer on the planet. But more importantly, the use of " +
         "organic human brains means that the supercomputer may be able to reason abstractly and become self-aware.\n\n" +
-        "I do not need to remind you why sentient-level AIs pose a serious threat to all of mankind.\n\n" +
+        "We do not need to remind you why sentient-level AIs pose a serious threat to all of mankind.\n\n" +
         `The research for this project is being conducted at one of ${FactionName.FulcrumSecretTechnologies} secret ` +
         `facilities in ${CityName.Aevum}, codenamed 'Alpha Ranch'. Infiltrate the compound, delete and destroy the work, ` +
         "and then find and kill the project lead.",

@@ -1,7 +1,6 @@
 import { Player } from "../../../src/Player";
-import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
+import { NetscriptFunctions, type NSFull } from "../../../src/NetscriptFunctions";
 import { RamCosts, getRamCost, RamCostConstants, type RamCostTree } from "../../../src/Netscript/RamCostGenerator";
-import { Environment } from "../../../src/Netscript/Environment";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { Script } from "../../../src/Script/Script";
 import type { WorkerScript } from "../../../src/Netscript/WorkerScript";
@@ -58,7 +57,9 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     delay: null,
     dynamicLoadedFns: {},
     dynamicRamUsage: RamCostConstants.Base,
-    env: new Environment(),
+    stopFlag: false,
+    runningFn: "",
+    vars: null as NSFull | null,
     ramUsage: scriptRef.ramUsage,
     scriptRef,
   };
@@ -88,10 +89,11 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
       scriptRef,
       ramUsage: scriptRef.ramUsage,
       dynamicRamUsage: baseCost,
-      env: new Environment(),
+      stopFlag: false,
+      runningFn: "",
       dynamicLoadedFns: {},
     });
-    workerScript.env.vars = nsExternal;
+    workerScript.vars = nsExternal;
 
     // Run the function through the workerscript's args
     const fnPathAsString = fnPath.join(".");

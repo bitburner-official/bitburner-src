@@ -49,6 +49,7 @@ import { isIPAddress } from "../Types/strings";
 import { type DarknetServerData, getDarknetServerOrThrow } from "../DarkNet/utils/darknetServerUtils";
 import { shuffle } from "lodash";
 import { getSharedChars } from "../DarkNet/utils/darknetAuthUtils";
+import { freezeServer } from "../DarkNet/controllers/NetworkMovement";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -157,7 +158,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           const success = authResult.result.success;
           const xp = formatNumber(calculatePasswordAttemptChaGain(server, threads, success), 1);
           logger(ctx)(
-            `Authentication on ${server.hostname} ${success ? "succeeded" : `failed. (Gained ${xp} cha xp)`}`,
+            `Authentication on ${server.hostname} ${success ? "succeeded" : "failed"}. (Gained ${xp} cha xp)`,
           );
 
           if (isLabyrinthServer(server.hostname)) {
@@ -220,6 +221,26 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           message: GenericResponseMessage.Success,
         };
       },
+    freezeServer: (ctx: NetscriptContext) => (_host) => {
+      const targetHost = helpers.string(ctx, "host", _host);
+      const serverCheck = checkDarknetServer(ctx, targetHost, {
+        requireDirectConnection: true,
+      });
+      if (!serverCheck.success) {
+        return {
+          success: false,
+          code: serverCheck.code,
+          message: serverCheck.message,
+        };
+      }
+      freezeServer(serverCheck.server);
+      logger(ctx)(`Froze ${serverCheck.server.hostname}`);
+      return {
+        success: true,
+        code: ResponseCodeEnum.Success,
+        message: GenericResponseMessage.Success,
+      };
+    },
     heartbleed:
       (ctx: NetscriptContext) =>
       (_host, _opts): Promise<DarknetResult & { logs: string[] }> => {
@@ -315,6 +336,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx: NetscriptContext) =>
       (_returnByIp): string[] => {
         const returnByIP = helpers.boolean(ctx, "returnByIP", _returnByIp ?? false);
+        expectDarknetAccess(ctx);
         const server = ctx.workerScript.getServer();
         const out = [];
         for (const neighbor of server.serversOnNetwork) {
@@ -366,6 +388,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           .then(() => setStasisLink(ctx, server, shouldLink));
       },
     getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
+      expectDarknetAccess(ctx);
       const limit = getStasisLinkLimit();
       logger(ctx)(`Stasis link limit: ${limit}`);
       return limit;
@@ -374,6 +397,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       (ctx: NetscriptContext) =>
       (_returnByIP): string[] => {
         const returnByIp = helpers.boolean(ctx, "returnByIP", _returnByIP ?? false);
+        expectDarknetAccess(ctx);
         const servers = getStasisLinkServers();
         const serverNames = servers.map((s) => (returnByIp ? s.ip : s.hostname));
         logger(ctx)(`Stasis linked servers: ${serverNames}`);
@@ -582,6 +606,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     promoteStock:
       (ctx: NetscriptContext) =>
       (_symbol): Promise<DarknetResult> => {
+        if (!Player.hasTixApiAccess) {
+          throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
+        }
         const symbol = helpers.string(ctx, "symbol", _symbol);
         const stock = getStockFromSymbol(ctx, symbol);
         expectRunningOnDarknetServer(ctx);

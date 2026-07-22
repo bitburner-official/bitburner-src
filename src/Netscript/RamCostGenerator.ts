@@ -215,6 +215,7 @@ const singularity = {
   getSaveData: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGame: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGameBonus: SF4Cost(RamCostConstants.SingularityFn1 / 4),
+  hasExportGameBonus: SF4Cost(RamCostConstants.SingularityFn1 / 4),
   b1tflum3: SF4Cost(16),
   destroyW0r1dD43m0n: SF4Cost(32),
   getCurrentWork: SF4Cost(0.5),
@@ -237,6 +238,7 @@ const cloud = {
 const dnet = {
   authenticate: 0.4,
   connectToSession: 0.05,
+  freezeServer: 2,
   heartbleed: 0.6,
   openCache: 2,
   probe: RamCostConstants.Scan,
@@ -458,6 +460,7 @@ const ui = {
   unalias: 0,
   getAllAliases: 0,
   renderPage: 0,
+  createConnectLink: 5,
 } as const;
 
 // Grafting API
@@ -635,6 +638,8 @@ export const RamCosts: RamCostTree<NSFull> = {
   writePort: 0,
   nextPortWrite: 0,
   readPort: 0,
+  isFullPort: 0,
+  isEmptyPort: 0,
   getPortHandle: 0,
   rm: RamCostConstants.Scp,
   scriptRunning: RamCostConstants.ArbScript,

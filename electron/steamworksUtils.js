@@ -54,9 +54,14 @@ function verifyLibraryFiles() {
   return { success: true };
 }
 
+/** Steam integration is optional. Players can disable it by passing the --no-steam flag. */
 let steamworks;
 try {
-  steamworks = require("@catloversg/steamworks.js");
+  if (!process.argv.includes("--no-steam")) {
+    steamworks = require("@catloversg/steamworks.js");
+  } else {
+    log.info("Steam integration was disabled by --no-steam flag");
+  }
 } catch (error) {
   log.error(error);
   log.info(
