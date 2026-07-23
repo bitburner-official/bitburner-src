@@ -69,6 +69,8 @@ export const Settings = {
   SuppressSavedGameToast: false,
   /** Whether to hide the toast warning when the autosave is disabled. */
   SuppressAutosaveDisabledWarnings: false,
+  /** Whether to enable the save data backup reminder. */
+  EnableSaveDataBackupReminder: true,
   /** Whether to GiB instead of GB. */
   UseIEC60027_2: false,
   /** Whether to display intermediary time unit when their value is null */
@@ -77,7 +79,7 @@ export const Settings = {
   ExcludeRunningScriptsFromSave: false,
   /**  Whether the game's sidebar is opened. */
   IsSidebarOpened: true,
-  /** Tail rendering intervall in ms */
+  /** Tail rendering interval in ms */
   TailRenderInterval: 1000,
   /** Theme colors. */
   theme: { ...defaultTheme },

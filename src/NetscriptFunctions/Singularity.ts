@@ -23,7 +23,7 @@ import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { getServerOnNetwork, getTorRouter } from "../Server/ServerHelpers";
+import { getTorRouter, validateConnections } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
 import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
@@ -49,11 +49,11 @@ import { numberOfBlackOperations } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { addRepToFavor } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/Constants";
-import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
 import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
+import { deprecationWarning } from "../utils/DeprecationHelper";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -475,40 +475,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     connect: (ctx) => (_host?) => {
       helpers.checkSingularityAccess(ctx);
-      const [target, host] = helpers.getServer(ctx, _host);
+      const [target] = helpers.getServer(ctx, _host);
       if (target == null) {
         return false;
       }
-
-      // Adjacent servers
-      const server = Player.getCurrentServer();
-      for (let i = 0; i < server.serversOnNetwork.length; i++) {
-        const other = getServerOnNetwork(server, i);
-        if (other === null) {
-          exceptionAlert(
-            new Error(
-              `${server.serversOnNetwork[i]} is on the network of ${server.hostname}, but we cannot find its data.`,
-            ),
-          );
-          return false;
-        }
-        if (other.hostname === target.hostname) {
-          Terminal.connectToServer(host, true);
-          return true;
-        }
+      const result = validateConnections(Player.getCurrentServer(), [target.hostname]);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
+        return false;
       }
-
-      /**
-       * Backdoored + owned servers (home, private servers, or hacknet servers). With home computer, purchasedByPlayer
-       * is true.
-       */
-      if (target.backdoorInstalled || target.purchasedByPlayer) {
-        Terminal.connectToServer(host, true);
-        return true;
-      }
-
-      // Failure case
-      return false;
+      Terminal.connectToServer(result.destination, true);
+      return true;
     },
     manualHack: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
@@ -1228,6 +1205,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return exportGame();
     },
     exportGameBonus: (ctx) => () => {
+      deprecationWarning("ns.singularity.exportGameBonus", "Use ns.singularity.hasExportGameBonus instead.");
+      return singularityAPI.hasExportGameBonus(ctx)();
+    },
+    hasExportGameBonus: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       return canGetBonus();
     },

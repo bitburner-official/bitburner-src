@@ -1,11 +1,18 @@
 import { Player } from "@player";
 import { getMockedNetscriptContext, getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
-import { deleteStockMarket, getDefaultEmptyStockMarket, StockMarket } from "../../../src/StockMarket/StockMarket";
+import {
+  deleteStockMarket,
+  getDefaultEmptyStockMarket,
+  StockMarket,
+  SymbolToStockMap,
+} from "../../../src/StockMarket/StockMarket";
 import { Stock } from "../../../src/StockMarket/Stock";
 import { buyStock } from "../../../src/StockMarket/BuyingAndSelling";
+import { getStockReward } from "../../../src/DarkNet/effects/cacheFiles";
 
 function expectUninitializedStockMarket(): void {
   expect(StockMarket).toStrictEqual(getDefaultEmptyStockMarket());
+  expect(Object.keys(SymbolToStockMap).length).toBe(0);
 }
 
 function expectInitializedStockMarket(): void {
@@ -14,6 +21,7 @@ function expectInitializedStockMarket(): void {
   expect(symbols.includes("ECP")).toStrictEqual(true);
   expect(StockMarket["ECorp"] instanceof Stock).toStrictEqual(true);
   expect(StockMarket.lastUpdate).toBeGreaterThan(0);
+  expect(Object.keys(SymbolToStockMap).length).toBeGreaterThan(0);
 }
 
 function buyShareOfECP(): void {
@@ -110,6 +118,18 @@ describe("Prestige", () => {
     ns.singularity.softReset();
     expect(StockMarket["ECorp"].playerShares).toStrictEqual(0);
   });
+  test("soft reset after getting shares from dnet caches", () => {
+    const ns = getNS();
+    expectUninitializedStockMarket();
+    const reward = getStockReward(0);
+    if (!reward.stockSymbol) {
+      throw new Error(`Invalid cache reward: ${JSON.stringify(reward)}`);
+    }
+    expectInitializedStockMarket();
+    expect(SymbolToStockMap[reward.stockSymbol].playerShares).toBeGreaterThan(0);
+    ns.singularity.softReset();
+    expectUninitializedStockMarket();
+  });
   test("b1tflum3", () => {
     const ns = getNS();
     ns.stock.purchaseTixApi();
@@ -129,5 +149,17 @@ describe("Prestige", () => {
     ns.singularity.b1tflum3(1);
     expectInitializedStockMarket();
     expect(StockMarket["ECorp"].playerShares).toStrictEqual(0);
+  });
+  test("b1tflum3 after getting shares from dnet caches", () => {
+    const ns = getNS();
+    expectUninitializedStockMarket();
+    const reward = getStockReward(0);
+    if (!reward.stockSymbol) {
+      throw new Error(`Invalid cache reward: ${JSON.stringify(reward)}`);
+    }
+    expectInitializedStockMarket();
+    expect(SymbolToStockMap[reward.stockSymbol].playerShares).toBeGreaterThan(0);
+    ns.singularity.b1tflum3(1);
+    expectUninitializedStockMarket();
   });
 });
