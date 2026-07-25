@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
-import { getRemoteFileApiConnectionStatus } from "../../RemoteFileAPI/RemoteFileAPI";
+import {
+  getRemoteFileApiConnectionStatus,
+  isRemoteFileApiConnectionLive,
+  newRemoteFileApiConnection,
+} from "../../RemoteFileAPI/RemoteFileAPI";
 import OnlinePredictionIcon from "@mui/icons-material/OnlinePrediction";
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
@@ -34,7 +38,19 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
   return (
     <Box style={{ display: "flex", flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
       {showIcon ? (
-        <IconButton aria-label="Remote API status" onClick={() => Router.toPage(Page.Options, { tab: "Remote API" })}>
+        <IconButton
+          aria-label="Remote API status"
+          onClick={() => {
+            if (
+              !isRemoteFileApiConnectionLive() &&
+              Settings.RemoteFileApiAddress !== "" &&
+              Settings.RemoteFileApiPort > 0
+            ) {
+              newRemoteFileApiConnection();
+            }
+            Router.toPage(Page.Options, { tab: "Remote API" });
+          }}
+        >
           <Tooltip title={`Remote API: ${rfaConnectionStatus}`}>
             <OnlinePredictionIcon style={{ fontSize: "30px", color }} />
           </Tooltip>
