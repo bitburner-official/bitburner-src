@@ -94,9 +94,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("SSH Port (22) is already open!");
         return;
       }
+      if (server.hostname === "home") {
+        Terminal.print("WARN: Opening ports has no effect on home");
+      }
 
       server.sshPortOpen = true;
-      Terminal.print("Opened SSH Port(22)!");
+      Terminal.print("Opened SSH Port (22)!");
       server.openPortCount++;
     },
   }),
@@ -118,6 +121,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       if (server.ftpPortOpen) {
         Terminal.print("FTP Port (21) is already open!");
         return;
+      }
+      if (server.hostname === "home") {
+        Terminal.print("WARN: Opening ports has no effect on home");
       }
 
       server.ftpPortOpen = true;
@@ -144,6 +150,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("SMTP Port (25) is already open!");
         return;
       }
+      if (server.hostname === "home") {
+        Terminal.print("WARN: Opening ports has no effect on home");
+      }
 
       server.smtpPortOpen = true;
       Terminal.print("Opened SMTP Port (25)!");
@@ -169,6 +178,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("HTTP Port (80) is already open!");
         return;
       }
+      if (server.hostname === "home") {
+        Terminal.print("WARN: Opening ports has no effect on home");
+      }
 
       server.httpPortOpen = true;
       Terminal.print("Opened HTTP Port (80)!");
@@ -193,6 +205,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       if (server.sqlPortOpen) {
         Terminal.print("SQL Port (1433) is already open!");
         return;
+      }
+      if (server.hostname === "home") {
+        Terminal.print("WARN: Opening ports has no effect on home");
       }
 
       server.sqlPortOpen = true;
