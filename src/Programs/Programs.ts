@@ -94,7 +94,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("SSH Port (22) is already open!");
         return;
       }
-      if (server.hostname === "home" || server.purchasedByPlayer) {
+      if (server.purchasedByPlayer) {
         Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
@@ -122,7 +122,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("FTP Port (21) is already open!");
         return;
       }
-      if (server.hostname === "home" || server.purchasedByPlayer) {
+      if (server.purchasedByPlayer) {
         Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
@@ -150,7 +150,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("SMTP Port (25) is already open!");
         return;
       }
-      if (server.hostname === "home" || server.purchasedByPlayer) {
+      if (server.purchasedByPlayer) {
         Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
@@ -178,7 +178,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("HTTP Port (80) is already open!");
         return;
       }
-      if (server.hostname === "home" || server.purchasedByPlayer) {
+      if (server.purchasedByPlayer) {
         Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
@@ -206,7 +206,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("SQL Port (1433) is already open!");
         return;
       }
-      if (server.hostname === "home" || server.purchasedByPlayer) {
+      if (server.purchasedByPlayer) {
         Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
