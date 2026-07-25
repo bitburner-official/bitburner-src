@@ -10,6 +10,7 @@ import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { RemoteFileApiConnectionEvents } from "../../RemoteFileAPI/Remote";
+import { isValidConnectionHostname, isValidConnectionPort } from "src/Settings/SettingsUtils";
 
 export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
   const [rfaConnectionStatus, setRfaConnectionStatus] = useState(getRemoteFileApiConnectionStatus());
@@ -43,8 +44,8 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
           onClick={() => {
             if (
               !isRemoteFileApiConnectionLive() &&
-              Settings.RemoteFileApiAddress !== "" &&
-              Settings.RemoteFileApiPort > 0
+              isValidConnectionHostname(Settings.RemoteFileApiAddress) &&
+              isValidConnectionPort(Settings.RemoteFileApiPort)
             ) {
               newRemoteFileApiConnection();
             }
