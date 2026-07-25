@@ -10,7 +10,7 @@ import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { RemoteFileApiConnectionEvents } from "../../RemoteFileAPI/Remote";
-import { isValidConnectionHostname, isValidConnectionPort } from "src/Settings/SettingsUtils";
+import { isValidConnectionHostname, isValidConnectionPort } from "../../Settings/SettingsUtils";
 
 export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
   const [rfaConnectionStatus, setRfaConnectionStatus] = useState(getRemoteFileApiConnectionStatus());
