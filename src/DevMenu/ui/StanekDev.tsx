@@ -13,7 +13,7 @@ import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import { AugmentationName } from "../../Enums";
 
 export function StanekDev(): React.ReactElement {
-  if (!Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1))
+  if (!Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1)) {
     return (
       <AutoExpandAccordion cacheKey="DEVMENU_StanekDev" unmountOnExit={true} disabled={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -21,6 +21,7 @@ export function StanekDev(): React.ReactElement {
         </AccordionSummary>
       </AutoExpandAccordion>
     );
+  }
   function addCycles(): void {
     staneksGift.storedCycles = 1e6;
   }

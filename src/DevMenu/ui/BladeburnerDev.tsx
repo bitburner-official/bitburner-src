@@ -22,16 +22,11 @@ import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 const bigNumber = 1e27;
 
 export function BladeburnerDev(): React.ReactElement {
-  const bladeburner = Player.bladeburner;
   const [skillName, setSkillName] = useState(BladeburnerSkillName.BladesIntuition);
-  const [contractTarget, setContract] = useState<BladeburnerContractName>(
-    bladeburner?.contracts.Tracking.name ?? BladeburnerContractName.Tracking,
-  );
-  const [operationTarget, setOperation] = useState<BladeburnerOperationName>(
-    bladeburner?.operations.Investigation.name ?? BladeburnerOperationName.Investigation,
-  );
+  const [contractTarget, setContractTarget] = useState(BladeburnerContractName.Tracking);
+  const [operationTarget, setOperationTarget] = useState(BladeburnerOperationName.Investigation);
 
-  if (!bladeburner) {
+  if (!Player.bladeburner) {
     return (
       <AutoExpandAccordion cacheKey="DEVMENU_BladeburnerDev" unmountOnExit={true} disabled={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -41,6 +36,7 @@ export function BladeburnerDev(): React.ReactElement {
       </AutoExpandAccordion>
     );
   }
+  const bladeburner = Player.bladeburner;
 
   // Rank functions
   const modifyBladeburnerRank = (modify: number) => (rank: number) => bladeburner.changeRank(Player, rank * modify);
@@ -99,7 +95,7 @@ export function BladeburnerDev(): React.ReactElement {
   const AllContracts = bladeburner.contracts;
   function setContractDropdown(event: SelectChangeEvent): void {
     if (!getEnumHelper("BladeburnerContractName").isMember(event.target.value)) return;
-    setContract(event.target.value);
+    setContractTarget(event.target.value);
   }
   const modifyContractLevel = (modifier: number) => (levelchange: number) => {
     if (!isNaN(levelchange)) {
@@ -134,7 +130,7 @@ export function BladeburnerDev(): React.ReactElement {
   const AllOperations = bladeburner.operations;
   function setOperationDropdown(event: SelectChangeEvent): void {
     if (!getEnumHelper("BladeburnerOperationName").isMember(event.target.value)) return;
-    setOperation(event.target.value);
+    setOperationTarget(event.target.value);
   }
   const modifyOperationLevel = (modifier: number) => (levelchange: number) => {
     if (!isNaN(levelchange)) {
