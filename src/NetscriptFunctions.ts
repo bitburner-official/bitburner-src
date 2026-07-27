@@ -113,12 +113,12 @@ import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { checkDarknetServer } from "./DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "./Server/DarknetServer";
 import { FragmentTypeEnum } from "./CotMG/FragmentType";
-import { PortHandle } from "./NetscriptPort";
 import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
 import { setDeprecatedProperties } from "./utils/DeprecationHelper";
+import { IOStream } from "./Terminal/StdIO/IOStream";
 
 export const enums: NSEnums = {
   CityName,
@@ -1526,22 +1526,11 @@ export const ns: InternalAPI<NSFull> = {
     return compile(script as Script, server.scripts);
   },
   getStdin: (ctx) => () => {
-    const stdinHandle = ctx.workerScript.scriptRef.stdin?.handle;
-    if (!stdinHandle) {
+    const stdin = ctx.workerScript.scriptRef.stdin;
+    if (!stdin) {
       return null;
     }
-    const handle = new PortHandle(stdinHandle.n);
-    // Provide only the methods the player needs to access (or write to) stdio
-    return {
-      write: (n) => handle.write(n),
-      tryWrite: (n) => handle.tryWrite(n),
-      nextWrite: () => handle.nextWrite(),
-      read: () => handle.read(),
-      peek: () => handle.peek(),
-      full: () => handle.full(),
-      empty: () => handle.empty(),
-      clear: () => handle.clear(),
-    };
+    return new IOStream(stdin.handle.n);
   },
   flags: (ctx) => Flags(ctx, false),
   heart: { break: () => () => Player.karma },
