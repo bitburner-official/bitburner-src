@@ -9,13 +9,22 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Money } from "../../ui/React/Money";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { StockMarket as SM } from "../../StockMarket/StockMarket";
+import { canAccessStockMarket, StockMarket as SM } from "../../StockMarket/StockMarket";
 import { Stock } from "../../StockMarket/Stock";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function StockMarketDev(): React.ReactElement {
   const [stockPrice, setStockPrice] = useState(0);
   const [stockSymbol, setStockSymbol] = useState("");
+  if (!canAccessStockMarket()) {
+    return (
+      <AutoExpandAccordion cacheKey="DEVMENU_StockMarketDev" unmountOnExit={true} disabled={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Stock Market</Typography>
+        </AccordionSummary>
+      </AutoExpandAccordion>
+    );
+  }
 
   function setStockPriceField(event: React.ChangeEvent<HTMLInputElement>): void {
     setStockPrice(parseFloat(event.target.value));
