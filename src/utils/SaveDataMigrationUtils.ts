@@ -36,6 +36,7 @@ import { load } from "../db";
 import { downloadContentAsFile } from "./FileUtils";
 import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
 import { breakingChanges301 } from "./APIBreaks/3.0.1";
+import { breakingChanges302 } from "./APIBreaks/3.0.2";
 import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
@@ -650,5 +651,8 @@ Error: ${e}`,
   }
   if (ver < 51) {
     showAPIBreaks("3.0.1", breakingChanges301);
+  }
+  if (ver < 52) {
+    showAPIBreaks("3.0.2", breakingChanges302);
   }
 }

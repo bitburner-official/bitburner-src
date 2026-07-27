@@ -6,7 +6,6 @@ import { addCacheToServer } from "../../../src/DarkNet/effects/cacheFiles";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { connectServers, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
-import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import {
   fixDoImportIssue,
   getMockedNetscriptContext,
@@ -45,7 +44,6 @@ fixDoImportIssue();
 
 beforeAll(() => {
   initGameEnvironment();
-  initStockMarket();
 });
 beforeEach(() => {
   DarknetState.offlineServers = new Set();
@@ -238,6 +236,7 @@ describe("home", () => {
   });
   test("promoteStock", async () => {
     const ns = getNsOnHome();
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -402,6 +401,7 @@ describe("Normal NPC server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -492,6 +492,7 @@ describe("Private server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNS("test-server-1");
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -582,6 +583,7 @@ describe("Hashnet server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNS("hacknet-server-0");
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -820,6 +822,7 @@ describe("darkweb", () => {
   });
   test("promoteStock", async () => {
     const ns = getNsOnDarkWeb();
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     const result = await ns.dnet.promoteStock("ECP");
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
@@ -1017,6 +1020,7 @@ describe("Non-darkweb darknet server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     const result = await ns.dnet.promoteStock("ECP");
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);

@@ -61,9 +61,9 @@ export function DevMenuRoot(): React.ReactElement {
 
       {Player.bladeburner && <BladeburnerDev bladeburner={Player.bladeburner} />}
 
-      {Player.gang && <GangDev />}
+      {Player.gang && <GangDev gang={Player.gang} />}
 
-      {Player.corporation && <CorporationDev />}
+      {Player.corporation && <CorporationDev corporation={Player.corporation} />}
 
       <CodingContractsDev />
 

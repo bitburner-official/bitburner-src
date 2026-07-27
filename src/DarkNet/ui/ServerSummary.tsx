@@ -1,6 +1,16 @@
 import React from "react";
 import { SvgIcon, Tooltip, Typography } from "@mui/material";
-import { AcUnit, Bolt, Code, Description, DoorBackSharp, Inventory2, LockPerson, Terminal } from "@mui/icons-material";
+import {
+  AcUnit,
+  Add,
+  Bolt,
+  Code,
+  Description,
+  DoorBackSharp,
+  Inventory2,
+  LockPerson,
+  Terminal,
+} from "@mui/icons-material";
 import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName, ComplexPage } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
@@ -66,7 +76,6 @@ export function ServerSummary({
     server.caches.length > 3 ? ` +${server.caches.length - 3}` : ""
   }`;
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
-  const hasBackdoor = server.backdoorInstalled && !server.hasStasisLink;
   const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.blockedRam, 0);
 
@@ -101,7 +110,22 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  if (hasBackdoor) {
+  if (server.hasStasisLink) {
+    components.push(
+      <Tooltip
+        key="stasisLinked"
+        title={
+          <>
+            Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance.
+          </>
+        }
+      >
+        <Typography>
+          <SvgIcon component={DoorBackSharp} className={`${classes.gold} ${classes.serverStatusIcon}`} />
+        </Typography>
+      </Tooltip>,
+    );
+  } else if (server.backdoorInstalled) {
     components.push(
       <Tooltip key="backdoor" title={<>Backdoor installed. Warning: this increases darknet instability.</>}>
         <Typography>
@@ -118,21 +142,6 @@ export function ServerSummary({
       >
         <Typography>
           <SvgIcon component={AcUnit} className={`${classes.blue} ${classes.serverStatusIcon}`} />
-        </Typography>
-      </Tooltip>,
-    );
-  } else if (server.hasStasisLink) {
-    components.push(
-      <Tooltip
-        key="stasisLinked"
-        title={
-          <>
-            Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance.
-          </>
-        }
-      >
-        <Typography>
-          <SvgIcon component={DoorBackSharp} className={`${classes.gold} ${classes.serverStatusIcon}`} />
         </Typography>
       </Tooltip>,
     );
@@ -170,8 +179,17 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  const maxIcons = showDetails ? components.length : 3;
-  const componentsToShow = components.slice(0, maxIcons);
+  const componentsToShow =
+    showDetails || components.length <= 4
+      ? components
+      : [
+          ...components.slice(0, 3),
+          <Tooltip key="others" placement="right" title={<div style={{ display: "flex" }}>{components.slice(3)}</div>}>
+            <Typography>
+              <SvgIcon component={Add} className={classes.serverStatusIcon} />
+            </Typography>
+          </Tooltip>,
+        ];
 
   return (
     <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>

@@ -701,7 +701,7 @@ Returns the amount of Faction favor required to be able to donate to a faction.
 </td></tr>
 <tr><td>
 
-[getFileMetadata(filename)](./bitburner.ns.getfilemetadata.md)
+[getFileMetadata(filename, host)](./bitburner.ns.getfilemetadata.md)
 
 
 </td><td>

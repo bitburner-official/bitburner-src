@@ -1,3 +1,4 @@
+import React from "react";
 import { UserInterface as IUserInterface } from "@nsdefs";
 import { Settings } from "../Settings/Settings";
 import { ThemeEvents } from "../Themes/ui/Theme";
@@ -6,7 +7,7 @@ import { defaultStyles } from "../Themes/Styles";
 import { CONSTANTS } from "../Constants";
 import { commitHash } from "../utils/helpers/commitHash";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { Terminal } from "../../src/Terminal";
+import { Terminal } from "../Terminal";
 import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
 import { assertAndSanitizeMainTheme, assertAndSanitizeStyles } from "../JsonSchema/JSONSchemaAssertion";
 import { LogBoxCloserEvents, LogBoxEvents } from "../ui/React/LogBoxManager";
@@ -18,6 +19,10 @@ import { addGlobalAlias, addAlias, removeAlias, Aliases, GlobalAliases, aliasReg
 import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
+import { getFriendlyType } from "../utils/TypeAssertion";
+import { ConnectLink } from "../Terminal/ui/ConnectLink";
+import { Player } from "@player";
+import { CompletedProgramName } from "@enums";
 
 /** Converts the provided value to a string and ensures it satisfies the alias condition, throwing if it is not  */
 export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown): string {
@@ -277,6 +282,24 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     renderPage: () => (_node) => {
       Router.toPage(Page.CustomPage, { content: wrapUserNode(_node) });
+    },
+
+    createConnectLink: (ctx) => (_connectPath, _linkText?) => {
+      if (!Player.hasProgram(CompletedProgramName.autoLink)) {
+        throw errorMessage(ctx, "Requires AutoLink.exe to run.");
+      }
+      if (!Array.isArray(_connectPath)) {
+        throw errorMessage(
+          ctx,
+          `connectPath must be an array. Current type is ${getFriendlyType(_connectPath)}.`,
+          "TYPE",
+        );
+      }
+      // Enforce validation of server and return resolved hostname
+      const connectPath = _connectPath.map((s) => helpers.getServer(ctx, helpers.string(ctx, "connectPath", s))[1]);
+      const last = connectPath.at(-1);
+      const linkText = helpers.string(ctx, "linkText", _linkText ?? last ?? "do nothing");
+      return <ConnectLink path={connectPath} text={linkText} />;
     },
   };
 }

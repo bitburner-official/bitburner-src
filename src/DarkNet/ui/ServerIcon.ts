@@ -13,7 +13,7 @@ import {
   LiveTv,
   Subtitles,
   Web,
-  ExitToApp,
+  CallSplit,
   SignalWifiStatusbarConnectedNoInternet4,
   Calculate,
   Watch,
@@ -79,7 +79,7 @@ export const getIcon = (model: string): SvgIconComponent => {
     case ModelIds.encryptedPassword:
       return AssuredWorkload;
     case ModelIds.labyrinth:
-      return ExitToApp;
+      return CallSplit;
     default:
       return ConnectedTv;
   }

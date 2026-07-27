@@ -50,7 +50,7 @@ number
 
 </td><td>
 
-_(Optional)_ Number of additional milliseconds that will be spent waiting between the start of the function and when it completes.
+_(Optional)_ Number of additional milliseconds that will be spent waiting between the start of the function and when it completes. Defaults to 0.
 
 
 </td></tr>
@@ -69,7 +69,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ Set to true this action will affect the stock market.
+_(Optional)_ Whether to make this action affect the stock market. Defaults to false.
 
 
 </td></tr>
@@ -88,7 +88,7 @@ number
 
 </td><td>
 
-_(Optional)_ Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with. Accepts positive non integer values.
+_(Optional)_ Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with. Accepts positive non integer values. Defaults to the number of threads the script is running with.
 
 
 </td></tr>

@@ -146,7 +146,9 @@ Backup game save.
 
 </td><td>
 
-Returns Backup save bonus availability.
+Returns whether the Export Game bonus is available.
+
+This function is deprecated and will be removed in a later version.
 
 
 </td></tr>
@@ -510,6 +512,17 @@ Go to a location.
 </td><td>
 
 Workout at the gym.
+
+
+</td></tr>
+<tr><td>
+
+[hasExportGameBonus()](./bitburner.singularity.hasexportgamebonus.md)
+
+
+</td><td>
+
+Returns whether the Export Game bonus is available.
 
 
 </td></tr>

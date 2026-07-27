@@ -1,3 +1,4 @@
+import React from "react";
 import type { InfiltrationStage, KeyboardLikeEvent } from "../InfiltrationStage";
 import type { Infiltration } from "../Infiltration";
 import { interpolate } from "./Difficulty";
@@ -18,13 +19,16 @@ const difficultySettings = {
   Brutal: { timer: 4000, wiresmin: 9, wiresmax: 9, rules: 4 },
 };
 
-const colors = ["red", "#FFC107", "blue", "white"] as const;
+// These colors, except white, come from the Okabe-Ito palette. White is used because it provides high contrast on a
+// black background.
+// Reference: https://jfly.uni-koeln.de/color/
+const colors = ["#D55E00", "#F0E442", "#0072B2", "#FFFFFF"] as const;
 
 const colorNames = {
-  red: "RED",
-  "#FFC107": "YELLOW",
-  blue: "BLUE",
-  white: "WHITE",
+  "#D55E00": "RED", // Okabe-Ito Vermilion
+  "#F0E442": "YELLOW",
+  "#0072B2": "BLUE",
+  "#FFFFFF": "WHITE",
 } as const;
 
 interface Wire {
@@ -33,14 +37,14 @@ interface Wire {
 }
 
 interface Question {
-  toString: () => string;
+  render: () => React.ReactNode;
   shouldCut: (wire: Wire, index: number) => boolean;
 }
 
 function randomPositionQuestion(wires: Wire[]): Question {
   const index = Math.floor(Math.random() * wires.length);
   return {
-    toString: (): string => {
+    render: () => {
       return `Cut wire number ${index + 1}.`;
     },
     shouldCut: (_wire: Wire, i: number): boolean => {
@@ -53,8 +57,12 @@ function randomColorQuestion(wires: Wire[]): Question {
   const index = Math.floor(Math.random() * wires.length);
   const cutColor = wires[index].colors[0];
   return {
-    toString: (): string => {
-      return `Cut all wires colored ${colorNames[cutColor]}.`;
+    render: () => {
+      return (
+        <>
+          Cut all wires colored <span style={{ color: cutColor }}>{colorNames[cutColor]}</span>.
+        </>
+      );
     },
     shouldCut: (wire: Wire): boolean => {
       return wire.colors.includes(cutColor);

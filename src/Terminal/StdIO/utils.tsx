@@ -24,7 +24,7 @@ export function stringify(s: unknown, stripAnsiEscape = false): string {
   } else if (s instanceof Output) {
     return clean(s.text, stripAnsiEscape);
   } else if (s instanceof Link) {
-    return `${s.dashes} ${s.hostname}`;
+    return `${s.dashes} ${s.text}`;
   } else if (s instanceof RawOutput) {
     return stringifyReactElement(s.raw);
   } else if (isValidElement(s)) {
