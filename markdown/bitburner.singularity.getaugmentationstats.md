@@ -9,7 +9,7 @@ Get the stats of an augmentation.
 **Signature:**
 
 ```typescript
-getAugmentationStats(name: string): Multipliers;
+getAugmentationStats(augName: AugmentationName): Multipliers;
 ```
 
 ## Parameters
@@ -32,17 +32,15 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-name
+augName
 
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>
-
-Name of Augmentation. CASE-SENSITIVE.
 
 
 </td></tr>

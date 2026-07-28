@@ -220,7 +220,7 @@ Get a list of augmentation available from a faction.
 </td></tr>
 <tr><td>
 
-[getAugmentationStats(name)](./bitburner.singularity.getaugmentationstats.md)
+[getAugmentationStats(augName)](./bitburner.singularity.getaugmentationstats.md)
 
 
 </td><td>
