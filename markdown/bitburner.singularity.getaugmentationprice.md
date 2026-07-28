@@ -9,7 +9,7 @@ Get price of an augmentation.
 **Signature:**
 
 ```typescript
-getAugmentationPrice(augName: string): number;
+getAugmentationPrice(augName: AugmentationName): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ augName
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>

@@ -9,11 +9,11 @@ Retrieves a list of augmentations that can be grafted.
 **Signature:**
 
 ```typescript
-getGraftableAugmentations(): string[];
+getGraftableAugmentations(): AugmentationName[];
 ```
 **Returns:**
 
-string\[\]
+[AugmentationName](./bitburner.augmentationname.md)<!-- -->\[\]
 
 An array of graftable augmentations.
 

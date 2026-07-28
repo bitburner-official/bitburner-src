@@ -121,7 +121,7 @@ Numeric timestamp (from Date.now()) of last BitNode reset
 
 </td><td>
 
-Map&lt;string, number&gt;
+Map&lt;[AugmentationName](./bitburner.augmentationname.md)<!-- -->, number&gt;
 
 
 </td><td>

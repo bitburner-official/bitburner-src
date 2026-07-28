@@ -9,7 +9,7 @@ Purchase an aug for a sleeve.
 **Signature:**
 
 ```typescript
-purchaseSleeveAug(sleeveNumber: number, augName: string): boolean;
+purchaseSleeveAug(sleeveNumber: number, augName: AugmentationName): boolean;
 ```
 
 ## Parameters
@@ -53,7 +53,7 @@ augName
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>

@@ -9,11 +9,11 @@ List equipment names.
 **Signature:**
 
 ```typescript
-getEquipmentNames(): string[];
+getEquipmentNames(): string[] | AugmentationName;
 ```
 **Returns:**
 
-string\[\]
+string\[\] \| [AugmentationName](./bitburner.augmentationname.md)
 
 Names of all Equipments/Augmentations.
 

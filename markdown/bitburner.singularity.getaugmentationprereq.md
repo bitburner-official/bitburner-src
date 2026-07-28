@@ -9,7 +9,7 @@ Get the pre-requisite of an augmentation.
 **Signature:**
 
 ```typescript
-getAugmentationPrereq(augName: string): string[];
+getAugmentationPrereq(augName: AugmentationName): AugmentationName[];
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ augName
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>
@@ -50,7 +50,7 @@ Name of Augmentation.
 
 **Returns:**
 
-string\[\]
+[AugmentationName](./bitburner.augmentationname.md)<!-- -->\[\]
 
 Array with the names of the prerequisite Augmentation(s) for the specified Augmentation.
 

@@ -9,7 +9,7 @@ Retrieve the grafting cost of an aug.
 **Signature:**
 
 ```typescript
-getAugmentationGraftPrice(augName: string): number;
+getAugmentationGraftPrice(augName: AugmentationName): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ augName
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>

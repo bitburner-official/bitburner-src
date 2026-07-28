@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-augmentation: string;
+augmentation: AugmentationName;
 ```

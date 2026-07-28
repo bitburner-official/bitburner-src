@@ -9,7 +9,7 @@ Retrieves the time required to graft an aug. Do not use this value to determine 
 **Signature:**
 
 ```typescript
-getAugmentationGraftTime(augName: string): number;
+getAugmentationGraftTime(augName: AugmentationName): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ augName
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>

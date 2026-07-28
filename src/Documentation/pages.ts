@@ -75,6 +75,8 @@ import nsDoc_bitburner_activefragment_numcharge_md from "../../markdown/bitburne
 import nsDoc_bitburner_activefragment_rotation_md from "../../markdown/bitburner.activefragment.rotation.md?raw";
 import nsDoc_bitburner_activefragment_x_md from "../../markdown/bitburner.activefragment.x.md?raw";
 import nsDoc_bitburner_activefragment_y_md from "../../markdown/bitburner.activefragment.y.md?raw";
+import nsDoc_bitburner_augmentationname_md from "../../markdown/bitburner.augmentationname.md?raw";
+import nsDoc_bitburner_augmentationnameenumtype_md from "../../markdown/bitburner.augmentationnameenumtype.md?raw";
 import nsDoc_bitburner_augmentpair_cost_md from "../../markdown/bitburner.augmentpair.cost.md?raw";
 import nsDoc_bitburner_augmentpair_md from "../../markdown/bitburner.augmentpair.md?raw";
 import nsDoc_bitburner_augmentpair_name_md from "../../markdown/bitburner.augmentpair.name.md?raw";
@@ -1706,6 +1708,8 @@ AllPages["nsDoc/bitburner.activefragment.numcharge.md"] = nsDoc_bitburner_active
 AllPages["nsDoc/bitburner.activefragment.rotation.md"] = nsDoc_bitburner_activefragment_rotation_md;
 AllPages["nsDoc/bitburner.activefragment.x.md"] = nsDoc_bitburner_activefragment_x_md;
 AllPages["nsDoc/bitburner.activefragment.y.md"] = nsDoc_bitburner_activefragment_y_md;
+AllPages["nsDoc/bitburner.augmentationname.md"] = nsDoc_bitburner_augmentationname_md;
+AllPages["nsDoc/bitburner.augmentationnameenumtype.md"] = nsDoc_bitburner_augmentationnameenumtype_md;
 AllPages["nsDoc/bitburner.augmentpair.cost.md"] = nsDoc_bitburner_augmentpair_cost_md;
 AllPages["nsDoc/bitburner.augmentpair.md"] = nsDoc_bitburner_augmentpair_md;
 AllPages["nsDoc/bitburner.augmentpair.name.md"] = nsDoc_bitburner_augmentpair_name_md;

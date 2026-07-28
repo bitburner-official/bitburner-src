@@ -139,7 +139,7 @@ Agility skill level
 
 </td><td>
 
-string\[\]
+[AugmentationName](./bitburner.augmentationname.md)<!-- -->\[\]
 
 
 </td><td>

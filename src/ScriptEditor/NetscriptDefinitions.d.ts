@@ -91,7 +91,7 @@ interface ResetInfo {
   /** The current BitNode */
   currentNode: number;
   /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
-  ownedAugs: Map<string, number>;
+  ownedAugs: Map<AugmentationName, number>;
   /**
    * A map of owned source files. Its keys are the SF numbers. Its values are the active SF levels. This map takes
    * BitNode options into account.
@@ -1088,7 +1088,7 @@ interface GangMemberInfo {
   /** List of all non-Augmentation Equipment owned by gang member */
   upgrades: string[];
   /** List of all Augmentations currently installed on gang member */
-  augmentations: string[];
+  augmentations: AugmentationName[];
 
   /** Per Cycle Rate this member is currently gaining Respect */
   respectGain: number;
@@ -1895,7 +1895,7 @@ interface FactionWorkTask extends PlayerBaseTask {
  */
 interface GraftingTask extends PlayerBaseTask {
   type: "GRAFTING";
-  augmentation: string;
+  augmentation: AugmentationName;
 }
 
 /**
@@ -2630,7 +2630,7 @@ export interface Singularity {
    *   Augmentations.
    * @returns Array containing the names (as strings) of all Augmentations you have.
    */
-  getOwnedAugmentations(purchased?: boolean): string[];
+  getOwnedAugmentations(purchased?: boolean): AugmentationName[];
 
   /**
    * Get a list of acquired Source-Files.
@@ -2665,7 +2665,7 @@ export interface Singularity {
    * @param augName - Name of Augmentation.
    * @returns Array containing the names of all factions.
    */
-  getAugmentationFactions(augName: string): FactionName[];
+  getAugmentationFactions(augName: AugmentationName): FactionName[];
 
   /**
    * Get a list of augmentation available from a faction.
@@ -2679,7 +2679,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Array containing the names of all Augmentations.
    */
-  getAugmentationsFromFaction(faction: FactionName): string[];
+  getAugmentationsFromFaction(faction: FactionName): AugmentationName[];
 
   /**
    * Get the pre-requisite of an augmentation.
@@ -2693,7 +2693,7 @@ export interface Singularity {
    * @param augName - Name of Augmentation.
    * @returns Array with the names of the prerequisite Augmentation(s) for the specified Augmentation.
    */
-  getAugmentationPrereq(augName: string): string[];
+  getAugmentationPrereq(augName: AugmentationName): AugmentationName[];
 
   /**
    * Get price of an augmentation.
@@ -2704,7 +2704,7 @@ export interface Singularity {
    * @param augName - Name of Augmentation.
    * @returns Price of the augmentation.
    */
-  getAugmentationPrice(augName: string): number;
+  getAugmentationPrice(augName: AugmentationName): number;
 
   /**
    * Get base price of an augmentation.
@@ -2716,7 +2716,7 @@ export interface Singularity {
    * @param augName - Name of Augmentation.
    * @returns Base price of the augmentation, before the player's price multiplier.
    */
-  getAugmentationBasePrice(augName: string): number;
+  getAugmentationBasePrice(augName: AugmentationName): number;
 
   /**
    * Get reputation requirement of an augmentation.
@@ -2727,7 +2727,7 @@ export interface Singularity {
    * @param augName - Name of Augmentation.
    * @returns Reputation requirement of the augmentation.
    */
-  getAugmentationRepReq(augName: string): number;
+  getAugmentationRepReq(augName: AugmentationName): number;
 
   /**
    * Purchase an augmentation
@@ -2740,10 +2740,10 @@ export interface Singularity {
    * This function will return true if the Augmentation is successfully purchased, and false otherwise.
    *
    * @param faction - Name of faction to purchase Augmentation from.
-   * @param augmentation - Name of Augmentation to purchase.
+   * @param augName - Name of Augmentation to purchase.
    * @returns True if the Augmentation is successfully purchased, and false otherwise.
    */
-  purchaseAugmentation(faction: FactionName, augmentation: string): boolean;
+  purchaseAugmentation(faction: FactionName, augName: AugmentationName): boolean;
 
   /**
    * Get the stats of an augmentation.
@@ -4505,7 +4505,7 @@ export type CacheReward = {
   stockShares?: number;
   dataFilePaths?: string[];
   contractFilePaths?: string[];
-  augmentationName?: string;
+  augmentationName?: AugmentationName;
 };
 
 /**
@@ -5094,7 +5094,7 @@ export interface Gang {
    *
    * @returns Names of all Equipments/Augmentations.
    */
-  getEquipmentNames(): string[];
+  getEquipmentNames(): string[] | AugmentationName;
 
   /**
    * Get cost of equipment.
@@ -5991,7 +5991,7 @@ export interface Sleeve {
    * @param sleeveNumber - Index of the sleeve to retrieve augmentations from.
    * @returns List of augmentation names that this sleeve has installed.
    */
-  getSleeveAugmentations(sleeveNumber: number): string[];
+  getSleeveAugmentations(sleeveNumber: number): AugmentationName[];
 
   /**
    * Get price of an augmentation.
@@ -6002,7 +6002,7 @@ export interface Sleeve {
    * @param augName - Name of Augmentation.
    * @returns Price of the augmentation.
    */
-  getSleeveAugmentationPrice(augName: string): number;
+  getSleeveAugmentationPrice(augName: AugmentationName): number;
 
   /**
    * Get reputation requirement of an augmentation.
@@ -6013,7 +6013,7 @@ export interface Sleeve {
    * @param augName - Name of Augmentation.
    * @returns Reputation requirement of the augmentation.
    */
-  getSleeveAugmentationRepReq(augName: string): number;
+  getSleeveAugmentationRepReq(augName: AugmentationName): number;
 
   /**
    * List purchasable augs for a sleeve.
@@ -6038,7 +6038,7 @@ export interface Sleeve {
    * @param augName - Name of the aug to buy. Must be an exact match.
    * @returns True if the aug was purchased and installed on the sleeve, false otherwise.
    */
-  purchaseSleeveAug(sleeveNumber: number, augName: string): boolean;
+  purchaseSleeveAug(sleeveNumber: number, augName: AugmentationName): boolean;
 
   /**
    * Set a sleeve to perform Bladeburner actions.
@@ -6120,7 +6120,7 @@ export interface Grafting {
    * @returns The cost required to graft the named augmentation.
    * @throws Will error if an invalid Augmentation name is provided.
    */
-  getAugmentationGraftPrice(augName: string): number;
+  getAugmentationGraftPrice(augName: AugmentationName): number;
 
   /**
    * Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes.
@@ -6134,7 +6134,7 @@ export interface Grafting {
    * @returns The time required, in milliseconds, to graft the named augmentation.
    * @throws Will error if an invalid Augmentation name is provided.
    */
-  getAugmentationGraftTime(augName: string): number;
+  getAugmentationGraftTime(augName: AugmentationName): number;
 
   /**
    * Retrieves a list of augmentations that can be grafted.
@@ -6153,7 +6153,7 @@ export interface Grafting {
    *
    * @returns An array of graftable augmentations.
    */
-  getGraftableAugmentations(): string[];
+  getGraftableAugmentations(): AugmentationName[];
 
   /**
    * Begins grafting the named aug. You must be in New Tokyo to use this. When you call this API, the current work
@@ -6168,7 +6168,7 @@ export interface Grafting {
    * invalid Augmentation name provided).
    * @throws Will error if called while you are not in New Tokyo.
    */
-  graftAugmentation(augName: string, focus?: boolean): boolean;
+  graftAugmentation(augName: AugmentationName, focus?: boolean): boolean;
 
   /**
    * Wait until the ongoing grafting finishes or is canceled.
@@ -9857,6 +9857,159 @@ export type CodingContractObject = {
     numTriesRemaining: () => number;
   };
 }[keyof CodingContractSignatures];
+
+/** @public */
+export type AugmentationNameEnumType = {
+  NeuroFluxGovernor: "NeuroFlux Governor";
+  Targeting1: "Augmented Targeting I";
+  Targeting2: "Augmented Targeting II";
+  Targeting3: "Augmented Targeting III";
+  SyntheticHeart: "Synthetic Heart";
+  SynfibrilMuscle: "Synfibril Muscle";
+  CombatRib1: "Combat Rib I";
+  CombatRib2: "Combat Rib II";
+  CombatRib3: "Combat Rib III";
+  NanofiberWeave: "Nanofiber Weave";
+  SubdermalArmor: "NEMEAN Subdermal Weave";
+  WiredReflexes: "Wired Reflexes";
+  GrapheneBoneLacings: "Graphene Bone Lacings";
+  BionicSpine: "Bionic Spine";
+  GrapheneBionicSpine: "Graphene Bionic Spine Upgrade";
+  BionicLegs: "Bionic Legs";
+  GrapheneBionicLegs: "Graphene Bionic Legs Upgrade";
+  SpeechProcessor: "Speech Processor Implant";
+  TITN41Injection: "TITN-41 Gene-Modification Injection";
+  EnhancedSocialInteractionImplant: "Enhanced Social Interaction Implant";
+  BitWire: "BitWire";
+  ArtificialBioNeuralNetwork: "Artificial Bio-neural Network Implant";
+  ArtificialSynapticPotentiation: "Artificial Synaptic Potentiation";
+  EnhancedMyelinSheathing: "Enhanced Myelin Sheathing";
+  SynapticEnhancement: "Synaptic Enhancement Implant";
+  NeuralRetentionEnhancement: "Neural-Retention Enhancement";
+  DataJack: "DataJack";
+  ENM: "Embedded Netburner Module";
+  ENMCore: "Embedded Netburner Module Core Implant";
+  ENMCoreV2: "Embedded Netburner Module Core V2 Upgrade";
+  ENMCoreV3: "Embedded Netburner Module Core V3 Upgrade";
+  ENMAnalyzeEngine: "Embedded Netburner Module Analyze Engine";
+  ENMDMA: "Embedded Netburner Module Direct Memory Access Upgrade";
+  Neuralstimulator: "Neuralstimulator";
+  NeuralAccelerator: "Neural Accelerator";
+  CranialSignalProcessorsG1: "Cranial Signal Processors - Gen I";
+  CranialSignalProcessorsG2: "Cranial Signal Processors - Gen II";
+  CranialSignalProcessorsG3: "Cranial Signal Processors - Gen III";
+  CranialSignalProcessorsG4: "Cranial Signal Processors - Gen IV";
+  CranialSignalProcessorsG5: "Cranial Signal Processors - Gen V";
+  NeuronalDensification: "Neuronal Densification";
+  NeuroreceptorManager: "Neuroreceptor Management Implant";
+  NuoptimalInjectorImplant: "Nuoptimal Nootropic Injector Implant";
+  SpeechEnhancement: "Speech Enhancement";
+  FocusWire: "FocusWire";
+  PCDNI: "PC Direct-Neural Interface";
+  PCDNIOptimizer: "PC Direct-Neural Interface Optimization Submodule";
+  PCDNINeuralNetwork: "PC Direct-Neural Interface NeuroNet Injector";
+  PCMatrix: "PCMatrix";
+  ADRPheromone1: "ADR-V1 Pheromone Gene";
+  ADRPheromone2: "ADR-V2 Pheromone Gene";
+  ShadowsSimulacrum: "The Shadow's Simulacrum";
+  HacknetNodeCPUUpload: "Hacknet Node CPU Architecture Neural-Upload";
+  HacknetNodeCacheUpload: "Hacknet Node Cache Architecture Neural-Upload";
+  HacknetNodeNICUpload: "Hacknet Node NIC Architecture Neural-Upload";
+  HacknetNodeKernelDNI: "Hacknet Node Kernel Direct-Neural Interface";
+  HacknetNodeCoreDNI: "Hacknet Node Core Direct-Neural Interface";
+  Neurotrainer1: "Neurotrainer I";
+  Neurotrainer2: "Neurotrainer II";
+  Neurotrainer3: "Neurotrainer III";
+  Hypersight: "HyperSight Corneal Implant";
+  LuminCloaking1: "LuminCloaking-V1 Skin Implant";
+  LuminCloaking2: "LuminCloaking-V2 Skin Implant";
+  HemoRecirculator: "HemoRecirculator";
+  SmartSonar: "SmartSonar Implant";
+  PowerRecirculator: "Power Recirculation Core";
+  QLink: "QLink";
+  TheRedPill: "The Red Pill";
+  SPTN97: "SPTN-97 Gene Modification";
+  HiveMind: "ECorp HVMind Implant";
+  CordiARCReactor: "CordiARC Fusion Reactor";
+  SmartJaw: "SmartJaw";
+  Neotra: "Neotra";
+  Xanipher: "Xanipher";
+  nextSENS: "nextSENS Gene Modification";
+  OmniTekInfoLoad: "OmniTek InfoLoad";
+  PhotosyntheticCells: "Photosynthetic Cells";
+  Neurolink: "BitRunners Neurolink";
+  TheBlackHand: "The Black Hand";
+  UnstableCircadianModulator: "Unstable Circadian Modulator";
+  CRTX42AA: "CRTX42-AA Gene Modification";
+  Neuregen: "Neuregen Gene Modification";
+  CashRoot: "CashRoot Starter Kit";
+  NutriGen: "NutriGen Implant";
+  INFRARet: "INFRARET Enhancement";
+  DermaForce: "DermaForce Particle Barrier";
+  GrapheneBrachiBlades: "Graphene BrachiBlades Upgrade";
+  GrapheneBionicArms: "Graphene Bionic Arms Upgrade";
+  BrachiBlades: "BrachiBlades";
+  BionicArms: "Bionic Arms";
+  SNA: "Social Negotiation Assistant (S.N.A)";
+  CongruityImplant: "violet Congruity Implant";
+  HydroflameLeftArm: "Hydroflame Left Arm";
+  BigDsBigBrain: "BigD's Big ... Brain";
+  ZOE: "Z.O.Ë.";
+  Eloquence: "Eloquence Module";
+  GoldenTongue: "Golden Tongue Module";
+  Glib: "Glibness Enhancement";
+  Magnetism: "Magnetism Amplifier";
+  Primer: "The Illustrated Primer";
+  SocialDynamo: "Social Dynamics Processor";
+  Wit: "Neural Wit Amplifier";
+  // UnnamedAug2: "UnnamedAug2",
+
+  // Bladeburner augs
+  EsperEyewear: "EsperTech Bladeburner Eyewear";
+  EMS4Recombination: "EMS-4 Recombination";
+  OrionShoulder: "ORION-MKIV Shoulder";
+  HyperionV1: "Hyperion Plasma Cannon V1";
+  HyperionV2: "Hyperion Plasma Cannon V2";
+  GolemSerum: "GOLEM Serum";
+  VangelisVirus: "Vangelis Virus";
+  VangelisVirus3: "Vangelis Virus 3.0";
+  INTERLINKED: "I.N.T.E.R.L.I.N.K.E.D";
+  BladeRunner: "Blade's Runners";
+  BladeArmor: "BLADE-51b Tesla Armor";
+  BladeArmorPowerCells: "BLADE-51b Tesla Armor: Power Cells Upgrade";
+  BladeArmorEnergyShielding: "BLADE-51b Tesla Armor: Energy Shielding Upgrade";
+  BladeArmorUnibeam: "BLADE-51b Tesla Armor: Unibeam Upgrade";
+  BladeArmorOmnibeam: "BLADE-51b Tesla Armor: Omnibeam Upgrade";
+  BladeArmorIPU: "BLADE-51b Tesla Armor: IPU Upgrade";
+  BladesSimulacrum: "The Blade's Simulacrum";
+
+  // Stanek Augs
+  StaneksGift1: "Stanek's Gift - Genesis";
+  StaneksGift2: "Stanek's Gift - Awakening";
+  StaneksGift3: "Stanek's Gift - Serenity";
+
+  // Darknet lab augs (in order of acquisition)
+  TheBrokenWings: "The W1ngs of Icarus";
+  TheBoots: "The B00ts of Perseus";
+  TheStaff: "The St4ff of Asclepius";
+  TheHammer: "The H4mmer of Daedalus";
+  TheLaw: "The L4w of Bayes";
+  TheSword: "The B1ade of Solomonoff";
+
+  // Infiltrators MiniGames
+  MightOfAres: "SoA - Might of Ares"; // slash
+  WisdomOfAthena: "SoA - Wisdom of Athena"; // bracket
+  TrickeryOfHermes: "SoA - Trickery of Hermes"; // cheatcode
+  BeautyOfAphrodite: "SoA - Beauty of Aphrodite"; // bribe
+  ChaosOfDionysus: "SoA - Chaos of Dionysus"; // reverse
+  FloodOfPoseidon: "SoA - Flood of Poseidon"; // hex
+  HuntOfArtemis: "SoA - Hunt of Artemis"; // mine
+  KnowledgeOfApollo: "SoA - Knowledge of Apollo"; // wire
+  WKSharmonizer: "SoA - phyzical WKS harmonizer";
+};
+
+/** @public */
+type AugmentationName = _ValueOf<AugmentationNameEnumType>;
 
 /** @public */
 type NSEnums = {

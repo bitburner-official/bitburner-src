@@ -9,7 +9,7 @@ Get reputation requirement of an augmentation.
 **Signature:**
 
 ```typescript
-getSleeveAugmentationRepReq(augName: string): number;
+getSleeveAugmentationRepReq(augName: AugmentationName): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ augName
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>

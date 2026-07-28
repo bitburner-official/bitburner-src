@@ -9,5 +9,5 @@ A map of owned augmentations to their levels. Keyed by the augmentation name. Ma
 **Signature:**
 
 ```typescript
-ownedAugs: Map<string, number>;
+ownedAugs: Map<AugmentationName, number>;
 ```

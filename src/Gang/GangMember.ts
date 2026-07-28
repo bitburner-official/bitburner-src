@@ -2,6 +2,7 @@ import { GangMemberTask } from "./GangMemberTask";
 import { GangMemberTasks } from "./GangMemberTasks";
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
 import { GangMemberUpgrades } from "./GangMemberUpgrades";
+import { UpgradeType } from "./data/upgrades";
 import { IAscensionResult } from "./IAscensionResult";
 import { Player } from "@player";
 import { Gang } from "./Gang";
@@ -14,6 +15,7 @@ import {
   calculateAscensionMult,
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
+import { AugmentationName } from "@enums";
 import { GangMemberExpGain } from "@nsdefs";
 import { convertV2GangEquipmentNames } from "../utils/APIBreaks/3.0.0";
 
@@ -24,6 +26,10 @@ interface IMults {
   dex: number;
   agi: number;
   cha: number;
+}
+
+function isAugmentationName(name: string): name is AugmentationName {
+  return Object.values(AugmentationName).some((value) => value === name);
 }
 
 export class GangMember {
@@ -61,7 +67,7 @@ export class GangMember {
   cha_asc_points = 0;
 
   upgrades: string[] = []; // Names of upgrades
-  augmentations: string[] = []; // Names of augmentations only
+  augmentations: AugmentationName[] = []; // Names of augmentations only
 
   constructor(name = "") {
     this.name = name;
@@ -352,15 +358,17 @@ export class GangMember {
   buyUpgrade(upg: GangMemberUpgrade): boolean {
     if (!Player.gang) throw new Error("Tried to buy a gang member upgrade when no gang was present");
 
-    // Prevent purchasing of already-owned upgrades
-    if (this.augmentations.includes(upg.name) || this.upgrades.includes(upg.name)) return false;
+    const upgradeName = upg.name;
+    if (this.upgrades.includes(upgradeName)) return false;
+    if (isAugmentationName(upgradeName) && this.augmentations.includes(upgradeName)) return false;
 
     if (Player.money < Player.gang.getUpgradeCost(upg)) return false;
     Player.loseMoney(Player.gang.getUpgradeCost(upg), "gang_expenses");
-    if (upg.type === "g") {
-      this.augmentations.push(upg.name);
+    if (upg.type === UpgradeType.Augmentation) {
+      if (!isAugmentationName(upgradeName)) return false;
+      this.augmentations.push(upgradeName);
     } else {
-      this.upgrades.push(upg.name);
+      this.upgrades.push(upgradeName);
     }
     this.applyUpgrade(upg);
     return true;

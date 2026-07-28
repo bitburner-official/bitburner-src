@@ -9,7 +9,7 @@ Get augmentations installed on a sleeve.
 **Signature:**
 
 ```typescript
-getSleeveAugmentations(sleeveNumber: number): string[];
+getSleeveAugmentations(sleeveNumber: number): AugmentationName[];
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ Index of the sleeve to retrieve augmentations from.
 
 **Returns:**
 
-string\[\]
+[AugmentationName](./bitburner.augmentationname.md)<!-- -->\[\]
 
 List of augmentation names that this sleeve has installed.
 

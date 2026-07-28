@@ -1594,6 +1594,26 @@ Description
 </td></tr>
 <tr><td>
 
+[AugmentationName](./bitburner.augmentationname.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AugmentationNameEnumType](./bitburner.augmentationnameenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [BladeburnerActionEnumType](./bitburner.bladeburneractionenumtype.md)
 
 

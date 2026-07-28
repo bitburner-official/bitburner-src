@@ -9,5 +9,5 @@ List of all Augmentations currently installed on gang member
 **Signature:**
 
 ```typescript
-augmentations: string[];
+augmentations: AugmentationName[];
 ```

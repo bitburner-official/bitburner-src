@@ -9,7 +9,7 @@ Begins grafting the named aug. You must be in New Tokyo to use this. When you ca
 **Signature:**
 
 ```typescript
-graftAugmentation(augName: string, focus?: boolean): boolean;
+graftAugmentation(augName: AugmentationName, focus?: boolean): boolean;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ augName
 
 </td><td>
 
-string
+[AugmentationName](./bitburner.augmentationname.md)
 
 
 </td><td>

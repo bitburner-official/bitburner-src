@@ -605,7 +605,7 @@ Run the hack command in the terminal.
 </td></tr>
 <tr><td>
 
-[purchaseAugmentation(faction, augmentation)](./bitburner.singularity.purchaseaugmentation.md)
+[purchaseAugmentation(faction, augName)](./bitburner.singularity.purchaseaugmentation.md)
 
 
 </td><td>

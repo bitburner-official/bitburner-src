@@ -1,4 +1,4 @@
-import type { Singularity as ISingularity } from "@nsdefs";
+import type { AugmentationName, Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
 import { CityName, CompletedProgramName, FactionWorkType, LocationName } from "@enums";
@@ -79,7 +79,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getOwnedAugmentations: (ctx) => (_purchased) => {
       helpers.checkSingularityAccess(ctx);
       const purchased = !!_purchased;
-      const res: string[] = [];
+      const res: AugmentationName[] = [];
       for (let i = 0; i < Player.augmentations.length; ++i) {
         res.push(Player.augmentations[i].name);
       }

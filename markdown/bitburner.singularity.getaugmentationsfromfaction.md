@@ -9,7 +9,7 @@ Get a list of augmentation available from a faction.
 **Signature:**
 
 ```typescript
-getAugmentationsFromFaction(faction: FactionName): string[];
+getAugmentationsFromFaction(faction: FactionName): AugmentationName[];
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ Name of faction.
 
 **Returns:**
 
-string\[\]
+[AugmentationName](./bitburner.augmentationname.md)<!-- -->\[\]
 
 Array containing the names of all Augmentations.
 

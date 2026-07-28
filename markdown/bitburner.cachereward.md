@@ -20,8 +20,8 @@ export type CacheReward = {
   stockShares?: number;
   dataFilePaths?: string[];
   contractFilePaths?: string[];
-  augmentationName?: string;
+  augmentationName?: AugmentationName;
 };
 ```
-**References:** [ProgramName](./bitburner.programname.md)
+**References:** [ProgramName](./bitburner.programname.md)<!-- -->, [AugmentationName](./bitburner.augmentationname.md)
 

@@ -9,7 +9,7 @@ Get a list of owned augmentation.
 **Signature:**
 
 ```typescript
-getOwnedAugmentations(purchased?: boolean): string[];
+getOwnedAugmentations(purchased?: boolean): AugmentationName[];
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ _(Optional)_ Specifies whether the returned array should include Augmentations y
 
 **Returns:**
 
-string\[\]
+[AugmentationName](./bitburner.augmentationname.md)<!-- -->\[\]
 
 Array containing the names (as strings) of all Augmentations you have.
 
