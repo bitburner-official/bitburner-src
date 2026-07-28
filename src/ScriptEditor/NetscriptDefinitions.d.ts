@@ -2756,7 +2756,7 @@ export interface Singularity {
    * @param name - Name of Augmentation. CASE-SENSITIVE.
    * @returns Augmentation stats.
    */
-  getAugmentationStats(name: string): Multipliers;
+  getAugmentationStats(augName: AugmentationName): Multipliers;
 
   /**
    * Install your purchased augmentations.
