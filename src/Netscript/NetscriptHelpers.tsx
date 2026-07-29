@@ -348,7 +348,7 @@ function argsToString(args: unknown[]): string {
     if (nativeArg instanceof Set) {
       return (out += setToString(nativeArg));
     }
-    if (typeof nativeArg === "object" && !(nativeArg instanceof Error)) {
+    if (typeof nativeArg === "object") {
       return (out += JSON.stringify(nativeArg, (_, value: unknown) => {
         /**
          * If the property is a promise, we will return a string that clearly states that it's a promise object, not a
@@ -356,6 +356,10 @@ function argsToString(args: unknown[]): string {
          */
         if (value instanceof Promise) {
           // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
+          return value.toString();
+        }
+        // Print the name and message of the error instead of "{}".
+        if (value instanceof Error) {
           return value.toString();
         }
         if (value instanceof Map) {
