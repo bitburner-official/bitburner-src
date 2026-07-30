@@ -1,11 +1,10 @@
 import { getRamCost } from "./RamCostGenerator";
 import type { WorkerScript } from "./WorkerScript";
 import { helpers } from "./NetscriptHelpers";
+import type { Unknownify } from "../types";
 
 /** Permissive type for the documented API functions */
 type APIFn = (...args: any[]) => unknown;
-// This helper can't be inlined, it needs to be its own generic type to function
-type Unknownify<T> = { [K in keyof T]: unknown };
 // Type for internal function that includes a ctx as the first param.
 // We enforce that the params have the same length, but tranform the type to unknown.
 type InternalFn<F extends APIFn> = (ctx: NetscriptContext, ...args: Unknownify<Parameters<F>>) => ReturnType<F>;
