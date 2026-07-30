@@ -358,6 +358,10 @@ function argsToString(args: unknown[]): string {
           // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
           return value.toString();
         }
+        // Print the name and message of the error instead of "{}".
+        if (value instanceof Error) {
+          return value.toString();
+        }
         if (value instanceof Map) {
           return mapToString(value);
         }
