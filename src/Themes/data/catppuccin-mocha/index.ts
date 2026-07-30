@@ -4,7 +4,7 @@ import img1 from "./screenshot.png";
 export const Theme: IPredefinedTheme = {
   name: "Catppuccin Mocha",
   description: "Dark pastel theme based on the Catppuccin Mocha palette.",
-  credit: "Catppuccin",
+  credit: "Suniltwo",
   reference: "https://catppuccin.com/palette",
   screenshot: img1,
   colors: {
