@@ -343,7 +343,7 @@ export const packetSniffPhrases = [
   "Apparently the secret to intelligence is just... to do a lot of ass?",
   "n00dles is by far the best hacking target. At least, if you like ramen.",
   "I just got a new set of hacknet nodes. They should pay for themselves by early next year!",
-  "I was told that hacknet was a get-rich quick strategy. Why have they still not payed for themselves?",
+  "I was told that hacknet was a get-rich quick strategy. Why have they still not paid for themselves?",
   "I have definitely, never in my entire life, programmed an infinite loop that froze the game.",
   "Slum snakes rule!",
   "The final opponent only appears once you have taken the Pill",

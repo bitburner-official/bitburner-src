@@ -116,7 +116,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
   ) {
     // We check broadly for the version being mismatched. If the version is
     // newer than we expect, an unknown/unanticipated change to the save
-    // format may have occured, which could result in almost any error type.
+    // format may have occurred, which could result in almost any error type.
     instructions = (
       <Typography variant="h5" color={Settings.theme.warning}>
         {loadedSaveObjectMiniDump.VersionSave !== undefined && (

@@ -84,7 +84,7 @@ export class OfficeSpace {
         );
       }
       // Flat reduction per cycle.
-      // This does not cause a noticable decrease (it's only -.001% per cycle).
+      // This does not cause a noticeable decrease (it's only -.001% per cycle).
       const reduction = 0.002 * marketCycles;
 
       if (this.autoTea) {
