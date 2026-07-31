@@ -4,7 +4,7 @@
  */
 import { PositionType, OrderType } from "@enums";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 
 export class Order {
   readonly pos: PositionType;
@@ -42,15 +42,5 @@ export class Order {
     this.pos = pos;
   }
 
-  /** Serialize the Order to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Order", this);
-  }
-
-  /** Initializes a Order from a JSON save state */
-  static fromJSON(value: IReviverValue): Order {
-    return Generic_fromJSON(Order, value.data);
-  }
+  static includedKeys = makeSerializable("Order", Order);
 }
-
-constructorsForReviver.Order = Order;

@@ -16,7 +16,7 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
+import { makeSerializable } from "./utils/GenericReviver";
 import { save } from "./db";
 import { ToastVariant } from "@enums";
 import { pushGameSaved, pushImportResult } from "./Electron";
@@ -443,13 +443,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   DarknetSave = "";
   InfiltrationsSave = "";
 
-  toJSON(): IReviverValue {
-    return Generic_toJSON("BitburnerSaveObject", this);
-  }
-
-  static fromJSON(value: IReviverValue): BitburnerSaveObject {
-    return Generic_fromJSON(BitburnerSaveObject, value.data);
-  }
+  static includedKeys = makeSerializable("BitburnerSaveObject", BitburnerSaveObject);
 }
 
 export async function loadGame(saveData: SaveData): Promise<boolean> {
@@ -597,5 +591,3 @@ function createBetaUpdateText() {
     1000,
   );
 }
-
-constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;

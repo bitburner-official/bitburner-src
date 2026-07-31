@@ -1,5 +1,5 @@
 import type { BaseServer } from "./Server/BaseServer";
-import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
+import { makeSerializable } from "./utils/GenericReviver";
 import type { TextFilePath } from "./Paths/TextFilePath";
 import { ContentFile } from "./Paths/ContentFile";
 
@@ -27,21 +27,11 @@ export class TextFile extends ContentFile {
     this.text = txt;
   }
 
-  /** Serialize the current file to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("TextFile", this);
-  }
-
   deleteFromServer(server: BaseServer): boolean {
     if (!server.textFiles.has(this.filename)) return false;
     server.textFiles.delete(this.filename);
     return true;
   }
 
-  /** Initializes a TextFile from a JSON save state. */
-  static fromJSON(value: IReviverValue): TextFile {
-    return Generic_fromJSON(TextFile, value.data);
-  }
+  static includedKeys = makeSerializable("TextFile", TextFile);
 }
-
-constructorsForReviver.TextFile = TextFile;

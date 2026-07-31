@@ -6,7 +6,7 @@ import { CorpMaterialName, CorpSmartSupplyOption } from "@nsdefs";
 import { CityName, CorpUnlockName } from "@enums";
 import { Material } from "./Material";
 import { MaterialInfo } from "./MaterialInfo";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { materialNames } from "./data/Constants";
 import { createFullRecordFromEntries, getRecordEntries } from "../Types/Record";
 
@@ -76,15 +76,5 @@ export class Warehouse {
     this.size = this.level * 100 * corporation.getStorageMultiplier() * division.getStorageMultiplier();
   }
 
-  // Serialize the current object to a JSON save state.
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Warehouse", this);
-  }
-
-  // Initializes a Warehouse object from a JSON save state.
-  static fromJSON(value: IReviverValue): Warehouse {
-    return Generic_fromJSON(Warehouse, value.data);
-  }
+  static includedKeys = makeSerializable("Warehouse", Warehouse);
 }
-
-constructorsForReviver.Warehouse = Warehouse;
