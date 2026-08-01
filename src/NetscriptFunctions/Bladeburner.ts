@@ -71,71 +71,71 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   }
 
   return {
-    inBladeburner: () => () => !!Player.bladeburner,
-    getContractNames: (ctx) => () => {
+    inBladeburner: () => !!Player.bladeburner,
+    getContractNames: (ctx) => {
       getBladeburner(ctx);
       return Object.values(BladeburnerContractName);
     },
-    getOperationNames: (ctx) => () => {
+    getOperationNames: (ctx) => {
       getBladeburner(ctx);
       return Object.values(BladeburnerOperationName);
     },
-    getBlackOpNames: (ctx) => () => {
+    getBlackOpNames: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       // Ensures they are sent in the correct order
       return bladeburner.blackOperationArray.map((blackOp) => blackOp.name);
     },
-    getNextBlackOp: (ctx) => () => {
+    getNextBlackOp: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       if (bladeburner.numBlackOpsComplete >= numberOfBlackOperations) return null;
       const blackOp = bladeburner.blackOperationArray[bladeburner.numBlackOpsComplete];
       return { name: blackOp.name, rank: blackOp.reqdRank };
     },
-    getBlackOpRank: (ctx) => (_blackOpName) => {
+    getBlackOpRank: (ctx, _blackOpName) => {
       checkBladeburnerAccess(ctx);
       const blackOpName = getEnumHelper("BladeburnerBlackOpName").nsGetMember(ctx, _blackOpName);
       const bladeburner = getBladeburner(ctx);
       return bladeburner.blackOperations[blackOpName].reqdRank;
     },
-    getGeneralActionNames: (ctx) => () => {
+    getGeneralActionNames: (ctx) => {
       getBladeburner(ctx);
       return Object.values(BladeburnerGeneralActionName);
     },
-    getSkillNames: (ctx) => () => {
+    getSkillNames: (ctx) => {
       getBladeburner(ctx);
       return Object.values(BladeburnerSkillName);
     },
-    startAction: (ctx) => (type, name) => {
+    startAction: (ctx, type, name) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
       const attempt = bladeburner.startAction(action.id);
       helpers.log(ctx, () => attempt.message);
       return !!attempt.success;
     },
-    stopBladeburnerAction: (ctx) => () => {
+    stopBladeburnerAction: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       helpers.log(ctx, () => `Stopping current Bladeburner action.`);
       return bladeburner.resetAction();
     },
-    getCurrentAction: (ctx) => () => {
+    getCurrentAction: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       if (!bladeburner.action) return null;
       return { ...bladeburner.action };
     },
-    getActionTime: (ctx) => (type, name) => {
+    getActionTime: (ctx, type, name) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
       // return ms instead of seconds
       return action.getActionTime(bladeburner, Player) * 1000;
     },
-    getActionCurrentTime: (ctx) => () => {
+    getActionCurrentTime: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       return (
         Math.min(bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow, bladeburner.actionTimeToComplete) *
         1000
       );
     },
-    getActionEstimatedSuccessChance: (ctx) => (type, name, _sleeve) => {
+    getActionEstimatedSuccessChance: (ctx, type, name, _sleeve) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
       if (_sleeve == null) {
@@ -154,26 +154,26 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           return [0, 0];
       }
     },
-    getActionRepGain: (ctx) => (type, name, _level) => {
+    getActionRepGain: (ctx, type, name, _level) => {
       checkBladeburnerAccess(ctx);
       const action = getAction(ctx, type, name);
       const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
       const rankGain = calculateActionRankGain(action, level);
       return calculateActionReputationGain(Player, rankGain);
     },
-    getActionRankGain: (ctx) => (type, name, _level) => {
+    getActionRankGain: (ctx, type, name, _level) => {
       checkBladeburnerAccess(ctx);
       const action = getAction(ctx, type, name);
       const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
       return calculateActionRankGain(action, level);
     },
-    getActionRankLoss: (ctx) => (type, name, _level) => {
+    getActionRankLoss: (ctx, type, name, _level) => {
       checkBladeburnerAccess(ctx);
       const action = getAction(ctx, type, name);
       const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
       return calculateActionRankLoss(action, level);
     },
-    getActionCountRemaining: (ctx) => (type, name) => {
+    getActionCountRemaining: (ctx, type, name) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
       switch (action.type) {
@@ -186,36 +186,34 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           return action.count;
       }
     },
-    getActionMaxLevel: (ctx) => (type, name) => {
+    getActionMaxLevel: (ctx, type, name) => {
       checkBladeburnerAccess(ctx);
       const action = getLevelableAction(ctx, type, name);
       return action.maxLevel;
     },
-    getActionCurrentLevel: (ctx) => (type, name) => {
+    getActionCurrentLevel: (ctx, type, name) => {
       checkBladeburnerAccess(ctx);
       const action = getLevelableAction(ctx, type, name);
       return action.level;
     },
-    getActionAutolevel: (ctx) => (type, name) => {
+    getActionAutolevel: (ctx, type, name) => {
       checkBladeburnerAccess(ctx);
       const action = getLevelableAction(ctx, type, name);
       return action.autoLevel;
     },
-    getActionSuccesses: (ctx) => (type, name) => {
+    getActionSuccesses: (ctx, type, name) => {
       checkBladeburnerAccess(ctx);
       const action = getLevelableAction(ctx, type, name);
       return action.successes;
     },
-    setActionAutolevel:
-      (ctx) =>
-      (type, name, _autoLevel = true) => {
-        const autoLevel = !!_autoLevel;
-        checkBladeburnerAccess(ctx);
-        const action = getLevelableAction(ctx, type, name);
-        action.autoLevel = autoLevel;
-        helpers.log(ctx, () => `Autolevel for ${action.name} has been ${autoLevel ? "enabled" : "disabled"}`);
-      },
-    setActionLevel: (ctx) => (type, name, _level) => {
+    setActionAutolevel: (ctx, type, name, _autoLevel = true) => {
+      const autoLevel = !!_autoLevel;
+      checkBladeburnerAccess(ctx);
+      const action = getLevelableAction(ctx, type, name);
+      action.autoLevel = autoLevel;
+      helpers.log(ctx, () => `Autolevel for ${action.name} has been ${autoLevel ? "enabled" : "disabled"}`);
+    },
+    setActionLevel: (ctx, type, name, _level) => {
       const level = helpers.positiveInteger(ctx, "level", _level ?? 1);
       checkBladeburnerAccess(ctx);
       const action = getLevelableAction(ctx, type, name);
@@ -225,20 +223,20 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       action.level = level;
       helpers.log(ctx, () => `Set level for ${action.name} to ${level}`);
     },
-    getRank: (ctx) => () => {
+    getRank: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       return bladeburner.rank;
     },
-    getSkillPoints: (ctx) => () => {
+    getSkillPoints: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       return bladeburner.skillPoints;
     },
-    getSkillLevel: (ctx) => (_skillName) => {
+    getSkillLevel: (ctx, _skillName) => {
       const bladeburner = getBladeburner(ctx);
       const skillName = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _skillName, "skillName");
       return bladeburner.getSkillLevel(skillName);
     },
-    getSkillUpgradeCost: (ctx) => (_skillName, _count) => {
+    getSkillUpgradeCost: (ctx, _skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
       const skillName = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _skillName, "skillName");
       const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
@@ -249,7 +247,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       }
       return skill.calculateCost(currentLevel, count);
     },
-    upgradeSkill: (ctx) => (_skillName, _count) => {
+    upgradeSkill: (ctx, _skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
       const skillName = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _skillName, "skillName");
       const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
@@ -257,7 +255,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       helpers.log(ctx, () => attempt.message);
       return !!attempt.success;
     },
-    getTeamSize: (ctx) => (type, name) => {
+    getTeamSize: (ctx, type, name) => {
       const bladeburner = getBladeburner(ctx);
       if (!type && !name) return bladeburner.teamSize;
       const action = getAction(ctx, type, name);
@@ -270,7 +268,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           return action.teamCount;
       }
     },
-    setTeamSize: (ctx) => (type, name, _size) => {
+    setTeamSize: (ctx, type, name, _size) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
       const size = helpers.integer(ctx, "size", _size);
@@ -294,42 +292,42 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         }
       }
     },
-    getCityEstimatedPopulation: (ctx) => (_cityName) => {
+    getCityEstimatedPopulation: (ctx, _cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].popEst;
     },
-    getCityCommunities: (ctx) => (_cityName) => {
+    getCityCommunities: (ctx, _cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].comms;
     },
-    getCityChaos: (ctx) => (_cityName) => {
+    getCityChaos: (ctx, _cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].chaos;
     },
-    getCity: (ctx) => () => {
+    getCity: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       return bladeburner.city;
     },
-    switchCity: (ctx) => (_cityName) => {
+    switchCity: (ctx, _cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       bladeburner.city = cityName;
       return true;
     },
-    getStamina: (ctx) => () => {
+    getStamina: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       return [bladeburner.stamina, bladeburner.maxStamina];
     },
-    joinBladeburnerFaction: (ctx) => () => {
+    joinBladeburnerFaction: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       const attempt = bladeburner.joinFaction();
       helpers.log(ctx, () => attempt.message);
       return !!attempt.success;
     },
-    joinBladeburnerDivision: (ctx) => () => {
+    joinBladeburnerDivision: (ctx) => {
       if (!canAccessBitNodeFeature(7) && !canAccessBitNodeFeature(6)) {
         helpers.log(ctx, () => "You do not have Source-File 6 or Source-File 7.");
         return false;
@@ -364,11 +362,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
 
       return true;
     },
-    getBonusTime: (ctx) => () => {
+    getBonusTime: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       return bladeburner.storedCycles * CONSTANTS.MilliPerCycle;
     },
-    nextUpdate: (ctx) => () => {
+    nextUpdate: (ctx) => {
       checkBladeburnerAccess(ctx);
       if (!BladeburnerPromise.promise)
         BladeburnerPromise.promise = new Promise<number>((res) => (BladeburnerPromise.resolve = res));

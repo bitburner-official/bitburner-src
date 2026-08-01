@@ -26,7 +26,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
   const isValidGraftingAugName = (augName: AugmentationName) => getGraftingAvailableAugs().includes(augName);
 
   return {
-    getAugmentationGraftPrice: (ctx) => (_augName) => {
+    getAugmentationGraftPrice: (ctx, _augName) => {
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
@@ -36,7 +36,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       return graftableAug.cost;
     },
 
-    getAugmentationGraftTime: (ctx) => (_augName) => {
+    getAugmentationGraftTime: (ctx, _augName) => {
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
@@ -46,57 +46,55 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       return calculateGraftingTimeWithBonus(graftableAug);
     },
 
-    getGraftableAugmentations: (ctx) => () => {
+    getGraftableAugmentations: (ctx) => {
       checkGraftingAPIAccess(ctx);
       return getGraftingAvailableAugs();
     },
 
-    graftAugmentation:
-      (ctx) =>
-      (_augName, _focus = true) => {
-        const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
-        const focus = !!_focus;
-        checkGraftingAPIAccess(ctx);
-        if (Player.city !== CityName.NewTokyo) {
-          throw helpers.errorMessage(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
-        }
-        if (!isValidGraftingAugName(augName)) {
-          helpers.log(ctx, () => `Invalid aug: ${augName}`);
-          return false;
-        }
+    graftAugmentation: (ctx, _augName, _focus = true) => {
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const focus = !!_focus;
+      checkGraftingAPIAccess(ctx);
+      if (Player.city !== CityName.NewTokyo) {
+        throw helpers.errorMessage(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
+      }
+      if (!isValidGraftingAugName(augName)) {
+        helpers.log(ctx, () => `Invalid aug: ${augName}`);
+        return false;
+      }
 
-        const wasFocusing = Player.focus;
+      const wasFocusing = Player.focus;
 
-        const craftableAug = new GraftableAugmentation(Augmentations[augName]);
-        if (Player.money < craftableAug.cost) {
-          helpers.log(ctx, () => `You don't have enough money to craft ${augName}`);
-          return false;
-        }
+      const craftableAug = new GraftableAugmentation(Augmentations[augName]);
+      if (Player.money < craftableAug.cost) {
+        helpers.log(ctx, () => `You don't have enough money to craft ${augName}`);
+        return false;
+      }
 
-        if (!hasAugmentationPrereqs(craftableAug.augmentation)) {
-          helpers.log(ctx, () => `You don't have the pre-requisites for ${augName}`);
-          return false;
-        }
+      if (!hasAugmentationPrereqs(craftableAug.augmentation)) {
+        helpers.log(ctx, () => `You don't have the pre-requisites for ${augName}`);
+        return false;
+      }
 
-        Player.startWork(
-          new GraftingWork({
-            singularity: true,
-            augmentation: augName,
-          }),
-        );
+      Player.startWork(
+        new GraftingWork({
+          singularity: true,
+          augmentation: augName,
+        }),
+      );
 
-        if (focus) {
-          Player.startFocusing();
-          Router.toPage(Page.Work);
-        } else if (wasFocusing) {
-          Router.toPage(Page.Terminal);
-        }
+      if (focus) {
+        Player.startFocusing();
+        Router.toPage(Page.Work);
+      } else if (wasFocusing) {
+        Router.toPage(Page.Terminal);
+      }
 
-        helpers.log(ctx, () => `Began grafting Augmentation ${augName}.`);
-        return true;
-      },
+      helpers.log(ctx, () => `Began grafting Augmentation ${augName}.`);
+      return true;
+    },
 
-    waitForOngoingGrafting: (ctx) => () => {
+    waitForOngoingGrafting: (ctx) => {
       checkGraftingAPIAccess(ctx);
       if (!Player.currentWork) {
         return Promise.resolve();

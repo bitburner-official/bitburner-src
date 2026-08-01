@@ -16,9 +16,9 @@ export interface INetscriptExtra {
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
-    openDevMenu: () => () => devMenu.emit(),
-    exploit: () => () => Player.giveExploit(Exploit.UndocumentedFunctionCall),
-    bypass: (ctx) => (doc) => {
+    openDevMenu: () => devMenu.emit(),
+    exploit: () => Player.giveExploit(Exploit.UndocumentedFunctionCall),
+    bypass: (ctx, doc) => {
       // reset both fields first
       interface temporary {
         completely_unused_field: unknown;
@@ -35,7 +35,7 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       d.completely_unused_field = undefined;
       real_document.completely_unused_field = undefined;
     },
-    alterReality: () => () => {
+    alterReality: () => {
       // We need to trick webpack into not optimizing a variable that is guaranteed to be false (and doesn't use prototypes)
       let x = false;
       const recur = function (depth: number): void {
@@ -50,7 +50,7 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
         Player.giveExploit(Exploit.RealityAlteration);
       }
     },
-    rainbow: (ctx) => (_guess) => {
+    rainbow: (ctx, _guess) => {
       const guess = helpers.string(ctx, "guess", _guess);
       const verified = bcrypt.compareSync(guess, "$2a$10$aertxDEkgor8baVtQDZsLuMwwGYmkRM/ohcA6FjmmzIHQeTCsrCcO");
       if (!verified) return false;
