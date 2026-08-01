@@ -18,7 +18,7 @@ import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { dnetStyles, DWServerLogStyles } from "./dnetStyles";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getAllDarknetServers } from "../utils/darknetNetworkUtils";
+import { getAllDarknetServers, getBackdooredDarknetServers } from "../utils/darknetNetworkUtils";
 import { ServerDetailsModal } from "./ServerDetailsModal";
 import { AutoCompleteSearchBox } from "../../ui/AutoCompleteSearchBox";
 import { getDarknetServerOrThrow } from "../utils/darknetServerUtils";
@@ -43,6 +43,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const { classes } = dnetStyles({});
   const instability = getTimeoutChance();
   const instabilityText = instability > 0.01 ? `${(instability * 100).toFixed(1)}%` : "< 1%";
+  const darkWebRoot = getDarknetServerOrThrow(SpecialServers.DarkWeb);
+  const labDetails = getLabyrinthDetails();
+  const labyrinth = labDetails.lab;
+  const labDepth = labDetails.depth;
 
   const scrollTo = useCallback(
     (top: number, left: number) => {
@@ -70,10 +74,9 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       startingDepth,
     );
     setNetDisplayDepth(deepestServerDepth + visibilityMargin);
-
     rerender();
-    drawOnCanvas(canvas.current, netDisplayDepth);
-  }, [rerender, netDisplayDepth]);
+    drawOnCanvas(canvas.current, deepestServerDepth + visibilityMargin, labDepth);
+  }, [rerender, labDepth]);
 
   useEffect(() => {
     const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
@@ -90,11 +93,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     !!server &&
     (server.hasAdminRights ||
       server.serversOnNetwork.some((neighbor) => getDarknetServerOrThrow(neighbor).hasAdminRights));
-
-  const darkWebRoot = getDarknetServerOrThrow(SpecialServers.DarkWeb);
-  const labDetails = getLabyrinthDetails();
-  const labyrinth = labDetails.lab;
-  const depth = labDetails.depth;
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
@@ -208,7 +206,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       .filter((s) => s.depth < netDisplayDepth && !isLabyrinthServer(s.hostname))
       .map((s) => s.hostname);
 
-    if (labyrinth && netDisplayDepth > depth) {
+    if (labyrinth && netDisplayDepth > labDepth) {
       return [...servers, labyrinth.hostname];
     }
 
@@ -228,31 +226,34 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         ""
       )}
       {DarknetState.mutationLock ? (
-        <Typography variant={"h6"} className={classes.gold}>
+        <Typography variant={"h5"} className={classes.gold}>
           [WEBSTORM WARNING]
         </Typography>
       ) : (
-        <Box className={`${classes.inlineFlexBox}`}>
-          <Typography variant={"h5"} sx={{ fontWeight: "bold" }}>
-            Dark Net
-          </Typography>
+        <Typography variant={"h5"} sx={{ fontWeight: "bold", display: "flex", alignItems: "center" }}>
+          Dark Net
           {instability > 0 && (
             <Tooltip
               title={
                 <>
-                  If too many darknet servers are backdoored, it will increase the chance that authentication <br />
-                  attempts will return a 408 Request Timeout error (even if the password is correct). <br />
+                  If too many darknet servers are backdoored (without stasis links) or frozen, it will increase the
+                  chance that authentication attempts return a 408 Request Timeout error even if the password is
+                  correct.
+                  <br />
                   Most servers will eventually restart or go offline, which removes backdoors over time.
+                  <br />
+                  Current backdoored servers: {getBackdooredDarknetServers().length}
+                  <br />
+                  Current frozen servers: {getAllDarknetServers().filter((s) => !s.maxRam).length}
                 </>
               }
             >
-              <Typography variant={"subtitle1"} sx={{ fontStyle: "italic" }}>
-                {" "}
-                Instability: {instabilityText}
+              <Typography component="span" sx={{ fontStyle: "italic", marginLeft: "10px" }}>
+                (Instability: {instabilityText})
               </Typography>
             </Tooltip>
           )}
-        </Box>
+        </Typography>
       )}
 
       <div
@@ -289,7 +290,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             ),
           )}
 
-          {!!labyrinth && netDisplayDepth > depth && (
+          {labyrinth && netDisplayDepth > labDepth && (
             <ServerStatusBox server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
           )}
         </div>

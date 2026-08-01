@@ -32,6 +32,7 @@ import {
   OrderType,
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
+  GangTaskNameEnum,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer } from "./Server/AllServers";
@@ -138,6 +139,7 @@ export const enums: NSEnums = {
   FragmentType: FragmentTypeEnum,
   DarknetResponseCode: ResponseCodeEnum,
   ProgramName: CompletedProgramName,
+  GangTaskName: GangTaskNameEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -1092,21 +1094,29 @@ export const ns: InternalAPI<NSFull> = {
     }
     return server.getContentFile(path)?.content ?? "";
   },
-  getFileMetadata: (ctx, _filename) => {
+  getFileMetadata: (ctx, _filename, _host?) => {
     const path = helpers.filePath(ctx, "filename", _filename);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       throw new Error(`Invalid path: ${_filename}. It must be a text file or a script.`);
     }
-    const server = ctx.workerScript.getServer();
-    const contentFile = server.getContentFile(path);
+    const [server] = helpers.getServer(ctx, _host);
+    const contentFile = server?.getContentFile(path);
     if (!contentFile) {
-      throw new Error(`Invalid path: ${_filename}. The file does not exist on ${server.hostname}.`);
+      return null;
     }
     return contentFile.metadata.plain();
   },
   peek: (ctx, _portNumber) => {
     const portHandle = helpers.portHandle(ctx, _portNumber);
     return portHandle.peek();
+  },
+  isFullPort: (ctx, _portNumber) => {
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.full();
+  },
+  isEmptyPort: (ctx, _portNumber) => {
+    const portHandle = helpers.portHandle(ctx, _portNumber);
+    return portHandle.empty();
   },
   clear: (ctx, _file) => {
     const path = helpers.filePath(ctx, "file", _file);

@@ -119,7 +119,7 @@ interface RemovedFunctionInfo {
 export function setRemovedFunctions(api: object, infos: Record<string, RemovedFunctionInfo>) {
   for (const [key, { version, replacement, replaceMsg }] of Object.entries(infos)) {
     Object.defineProperty(api, key, {
-      value: (ctx: NetscriptContext) => () => {
+      value: (ctx: NetscriptContext) => {
         throw helpers.errorMessage(
           ctx,
           `Function removed in ${version}. ${replaceMsg ? replacement : `Please use ${replacement} instead.`}`,

@@ -9,7 +9,7 @@ List files on a server.
 **Signature:**
 
 ```typescript
-ls(host: string, substring?: string): string[];
+ls(host?: string, substring?: string): string[];
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ string
 
 </td><td>
 
-Hostname/IP of the target server.
+_(Optional)_ Hostname/IP of the target server. Defaults to current server if not provided.
 
 
 </td></tr>

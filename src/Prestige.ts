@@ -166,6 +166,8 @@ export function prestigeAugmentation(): void {
   // Reset Stock market
   if (canAccessStockMarket()) {
     initStockMarket();
+  } else {
+    deleteStockMarket();
   }
 
   // Red Pill

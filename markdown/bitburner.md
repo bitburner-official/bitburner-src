@@ -1013,6 +1013,8 @@ Player must have at least this much money.
 
 Object representing a port. A port is a serialized queue.
 
+All methods in this interface can be used while the ns instance is "busy" (they avoid the concurrency check), or even when it is dead.
+
 
 </td></tr>
 <tr><td>
@@ -2076,6 +2078,26 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 <tr><td>
 
 [FragmentType](./bitburner.fragmenttype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GangTaskName](./bitburner.gangtaskname.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GangTaskNameEnumType](./bitburner.gangtasknameenumtype.md)
 
 
 </td><td>

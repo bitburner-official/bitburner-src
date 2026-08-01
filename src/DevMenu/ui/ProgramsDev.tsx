@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { CompletedProgramName } from "@enums";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import { populateDarknet } from "../../DarkNet/controllers/NetworkGenerator";
+import { getTorRouter } from "../../Server/ServerHelpers";
 
 export function ProgramsDev(): React.ReactElement {
   const [program, setProgram] = useState(CompletedProgramName.bruteSsh);
@@ -21,6 +22,9 @@ export function ProgramsDev(): React.ReactElement {
   function addProgram(): void {
     Player.getHomeComputer().pushProgram(program);
     if (program === CompletedProgramName.darkscape) {
+      if (!Player.hasTorRouter()) {
+        getTorRouter();
+      }
       populateDarknet();
     }
   }
@@ -30,6 +34,9 @@ export function ProgramsDev(): React.ReactElement {
     for (const name of Object.values(CompletedProgramName)) {
       home.pushProgram(name);
       if (name === CompletedProgramName.darkscape) {
+        if (!Player.hasTorRouter()) {
+          getTorRouter();
+        }
         populateDarknet();
       }
     }

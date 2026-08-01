@@ -4,7 +4,7 @@
 
 ## RunOptions.temporary property
 
-Whether this script is excluded from saves, defaults to false
+Whether this script is excluded from saves and the "Recently Killed" tab in Active Scripts, defaults to false
 
 **Signature:**
 

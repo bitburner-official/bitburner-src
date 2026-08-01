@@ -6,12 +6,13 @@ import { errorMessage } from "../../Netscript/ErrorMessages";
 import type { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { GenericResponseMessage, ResponseCodeEnum } from "../Enums";
-import { getBackdooredDarknetServers } from "../utils/darknetNetworkUtils";
+import { getAllDarknetServers, getBackdooredDarknetServers } from "../utils/darknetNetworkUtils";
 import { hasDarknetAccess } from "../utils/darknetAuthUtils";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { CompletedProgramName } from "../../Enums";
 import type { DarknetResponseCode } from "@nsdefs";
 import { isIPAddress } from "../../Types/strings";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 type CheckDarknetServerOptions = {
   requireAdminRights?: boolean;
@@ -148,7 +149,10 @@ export function expectRunningOnDarknetServer(ctx: NetscriptContext): DarknetServ
   return server;
 }
 
+// Having frozen servers, or more than two backdoored servers, increases darknet instability.
 export function getTimeoutChance() {
-  const backdooredDarknetServerCount = getBackdooredDarknetServers().length - 2;
-  return Math.max(Math.min(backdooredDarknetServerCount * 0.03, 0.5), 0);
+  const backdooredDarknetServerCount = getBackdooredDarknetServers().length;
+  const frozenServers = getAllDarknetServers().filter((s) => !s.maxRam).length;
+  const serversAddingToInstability = frozenServers + Math.max(backdooredDarknetServerCount - 2, 0);
+  return clampNumber(serversAddingToInstability * 0.03, 0, 0.5);
 }

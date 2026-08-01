@@ -14,15 +14,30 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
-import { BladeburnerSkillName, CityName } from "@enums";
+import { BladeburnerContractName, BladeburnerOperationName, BladeburnerSkillName, CityName } from "@enums";
 import { Skills as AllSkills } from "../../Bladeburner/data/Skills";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const bigNumber = 1e27;
 
-export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): React.ReactElement {
+export function BladeburnerDev(): React.ReactElement {
+  const [skillName, setSkillName] = useState(BladeburnerSkillName.BladesIntuition);
+  const [contractTarget, setContractTarget] = useState(BladeburnerContractName.Tracking);
+  const [operationTarget, setOperationTarget] = useState(BladeburnerOperationName.Investigation);
+
+  if (!Player.bladeburner) {
+    return (
+      <AutoExpandAccordion cacheKey="DEVMENU_BladeburnerDev" unmountOnExit={true} disabled={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Bladeburner</Typography>
+        </AccordionSummary>
+        <AccordionDetails />
+      </AutoExpandAccordion>
+    );
+  }
+  const bladeburner = Player.bladeburner;
+
   // Rank functions
   const modifyBladeburnerRank = (modify: number) => (rank: number) => bladeburner.changeRank(Player, rank * modify);
   const resetBladeburnerRank = () => {
@@ -57,7 +72,6 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   };
 
   // Skill functions
-  const [skillName, setSkillName] = useState(BladeburnerSkillName.BladesIntuition);
   function setSkillDropdown(event: SelectChangeEvent): void {
     if (!getEnumHelper("BladeburnerSkillName").isMember(event.target.value)) return;
     setSkillName(event.target.value);
@@ -79,10 +93,9 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
 
   // Contract functions
   const AllContracts = bladeburner.contracts;
-  const [contractTarget, setContract] = useState(AllContracts.Tracking.name);
   function setContractDropdown(event: SelectChangeEvent): void {
     if (!getEnumHelper("BladeburnerContractName").isMember(event.target.value)) return;
-    setContract(event.target.value);
+    setContractTarget(event.target.value);
   }
   const modifyContractLevel = (modifier: number) => (levelchange: number) => {
     if (!isNaN(levelchange)) {
@@ -115,10 +128,9 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
 
   // Operation functions
   const AllOperations = bladeburner.operations;
-  const [operationTarget, setOperation] = useState(AllOperations.Investigation.name);
   function setOperationDropdown(event: SelectChangeEvent): void {
     if (!getEnumHelper("BladeburnerOperationName").isMember(event.target.value)) return;
-    setOperation(event.target.value);
+    setOperationTarget(event.target.value);
   }
   const modifyOperationLevel = (modifier: number) => (levelchange: number) => {
     if (!isNaN(levelchange)) {
