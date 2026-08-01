@@ -44,7 +44,7 @@ export class Division {
   get maxProducts() {
     if (!this.makesProducts) return 0;
 
-    // Calculate additional number of allowed Products from Research/Upgrades
+    // Calculate additional number of allowed products from Research/Upgrades
     let additional = 0;
     if (this.hasResearch("uPgrade: Capacity.I")) ++additional;
     if (this.hasResearch("uPgrade: Capacity.II")) ++additional;
