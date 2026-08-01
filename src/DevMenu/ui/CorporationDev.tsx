@@ -6,13 +6,23 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
-import type { Corporation } from "../../Corporation/Corporation";
 
 const bigNumber = 1e27;
 
-export function CorporationDev({ corporation }: { corporation: Corporation }): React.ReactElement {
+export function CorporationDev(): React.ReactElement {
+  if (!Player.corporation) {
+    return (
+      <AutoExpandAccordion cacheKey="DEVMENU_CorporationDev" unmountOnExit={true} disabled={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Corporation</Typography>
+        </AccordionSummary>
+      </AutoExpandAccordion>
+    );
+  }
+  const corporation = Player.corporation;
   function addTonsCorporationFunds(): void {
     corporation.gainFunds(bigNumber, "force majeure");
   }

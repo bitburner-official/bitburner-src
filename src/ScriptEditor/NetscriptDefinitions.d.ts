@@ -9204,8 +9204,7 @@ export interface NS {
    *
    * Move the source file to the specified destination on the target server.
    *
-   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). It cannot, however, be
-   * used to convert from script to text file, or vice versa.
+   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css).
    *
    * This function can also be used to rename files.
    *

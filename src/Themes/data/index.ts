@@ -14,3 +14,4 @@ export { Theme as MutedGoldBlue } from "./muted-gold-blue";
 export { Theme as Light } from "./light";
 export { Theme as IronMan } from "./iron-man";
 export { Theme as Zerenity } from "./zerenity";
+export { Theme as Catppuccin } from "./catppuccin-mocha";

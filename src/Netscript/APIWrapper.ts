@@ -1,11 +1,13 @@
 import { getRamCost } from "./RamCostGenerator";
 import type { WorkerScript } from "./WorkerScript";
 import { helpers } from "./NetscriptHelpers";
+import type { Unknownify } from "../types";
 
 /** Permissive type for the documented API functions */
 type APIFn = (...args: any[]) => unknown;
-/** Type for internal, unwrapped ctx function that produces an APIFunction */
-type InternalFn<F extends APIFn> = (ctx: NetscriptContext) => ((...args: unknown[]) => ReturnType<F>) & F;
+// Type for internal function that includes a ctx as the first param.
+// We enforce that the params have the same length, but tranform the type to unknown.
+type InternalFn<F extends APIFn> = (ctx: NetscriptContext, ...args: Unknownify<Parameters<F>>) => ReturnType<F>;
 /** Type constraint for an API layer. They must all fit this "shape". */
 type GenericAPI<T> = { [key in keyof T]: APIFn | GenericAPI<T[key]> };
 
@@ -72,14 +74,11 @@ class NSProxyHandler<API extends GenericAPI<API>> {
       const arrayPath = [...this.tree, key];
       const functionPath = arrayPath.join(".");
       const ctx = { workerScript: this.ws, function: key, functionPath };
-      // Only do the context-binding once, instead of each time the function
-      // is called.
-      const func = field(ctx) as (...args: unknown[]) => unknown;
       const wrappedFunction = function (...args: unknown[]): unknown {
         // What remains *must* be called every time.
         helpers.checkEnvFlags(ctx);
         helpers.updateDynamicRam(ctx, getRamCost(arrayPath));
-        return func(...args);
+        return field(ctx, ...args);
       };
       Object.defineProperty(this.memoed, key, { ...descriptor, value: wrappedFunction });
       return wrappedFunction;
@@ -120,7 +119,7 @@ interface RemovedFunctionInfo {
 export function setRemovedFunctions(api: object, infos: Record<string, RemovedFunctionInfo>) {
   for (const [key, { version, replacement, replaceMsg }] of Object.entries(infos)) {
     Object.defineProperty(api, key, {
-      value: (ctx: NetscriptContext) => () => {
+      value: (ctx: NetscriptContext) => {
         throw helpers.errorMessage(
           ctx,
           `Function removed in ${version}. ${replaceMsg ? replacement : `Please use ${replacement} instead.`}`,

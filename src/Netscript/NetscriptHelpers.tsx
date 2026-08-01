@@ -32,7 +32,6 @@ import { FormulaGang } from "../Gang/formulas/formulas";
 import { GangMember } from "../Gang/GangMember";
 import { GangMemberTask } from "../Gang/GangMemberTask";
 import { RunningScript } from "../Script/RunningScript";
-import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScripts, findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { arrayToString } from "../utils/helpers/ArrayHelpers";
@@ -337,25 +336,28 @@ function argsToString(args: unknown[]): string {
     if (arg === undefined) {
       return (out += "undefined");
     }
-    const nativeArg = toNative(arg);
 
     // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
     // output is  "< Map: key1 => value1; key2 => value2 >"
-    if (nativeArg instanceof Map) {
-      return (out += mapToString(nativeArg));
+    if (arg instanceof Map) {
+      return (out += mapToString(arg));
     }
     // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
-    if (nativeArg instanceof Set) {
-      return (out += setToString(nativeArg));
+    if (arg instanceof Set) {
+      return (out += setToString(arg));
     }
-    if (typeof nativeArg === "object") {
-      return (out += JSON.stringify(nativeArg, (_, value: unknown) => {
+    if (typeof arg === "object") {
+      return (out += JSON.stringify(arg, (_, value: unknown) => {
         /**
          * If the property is a promise, we will return a string that clearly states that it's a promise object, not a
          * normal object. If we don't do that, all promises will be serialized into "{}".
          */
         if (value instanceof Promise) {
           // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
+          return value.toString();
+        }
+        // Print the name and message of the error instead of "{}".
+        if (value instanceof Error) {
           return value.toString();
         }
         if (value instanceof Map) {
@@ -368,7 +370,7 @@ function argsToString(args: unknown[]): string {
       }));
     }
 
-    return (out += String(nativeArg));
+    return (out += String(arg));
   }, "");
 }
 
