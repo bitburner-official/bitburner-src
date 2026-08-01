@@ -1,5 +1,5 @@
 import { RunningScript } from "../../../src/Script/RunningScript";
-import { Reviver } from "../../../src/utils/GenericReviver";
+import { Replacer, Reviver } from "../../../src/utils/GenericReviver";
 import { Script } from "../../../src/Script/Script";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 
@@ -15,7 +15,7 @@ describe("Validate that a RunningScript can be saved and loaded", () => {
     const runningScript = new RunningScript(script, ramUsage, args);
     runningScript.dataMap.set(hostname, [1000, 2, 3, 4]);
 
-    const json = JSON.stringify(runningScript);
+    const json = JSON.stringify(runningScript, Replacer);
     const revivedRunningScript = JSON.parse(json, Reviver) as RunningScript;
 
     expect(revivedRunningScript).toBeInstanceOf(RunningScript);
