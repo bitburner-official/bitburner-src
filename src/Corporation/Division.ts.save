@@ -77,7 +77,6 @@ export class Division {
   thisCycleExpenses = 0;
 
   newInd = true;
-
   // Sector 12 office and warehouse are added by default, these entries are added in the constructor.
   warehouses: PartialRecord<CityName, Warehouse> = {};
   offices: PartialRecord<CityName, OfficeSpace> = {};
@@ -864,7 +863,7 @@ export class Division {
 
           warehouse.smartSupplyStore += prod / (corpConstants.secondsPerMarketCycle * marketCycles);
 
-          //Make sure we have enough resources to make our products
+          //Make sure we have enough resources to make our Products
           let producibleFrac = 1;
           for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
             const req = reqQty * prod;
