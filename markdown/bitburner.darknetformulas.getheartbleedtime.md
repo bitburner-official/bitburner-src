@@ -58,7 +58,7 @@ number
 
 </td><td>
 
-_(Optional)_ The number of threads to use for the authentication. Optional, defaults to 1
+_(Optional)_ The number of threads to use for log scraping. Optional, defaults to 1
 
 
 </td></tr>

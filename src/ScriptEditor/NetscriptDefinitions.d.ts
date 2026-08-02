@@ -6601,7 +6601,7 @@ interface DarknetFormulas {
   /**
    * Gets the time it will take to scrape logs from a server.
    * @param serverDetails - The server to check heartbleed log scraping time on.
-   * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
+   * @param threads - The number of threads to use for log scraping. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
