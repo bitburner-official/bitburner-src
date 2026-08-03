@@ -50,6 +50,7 @@ import { type DarknetServerData, getDarknetServerOrThrow } from "../DarkNet/util
 import { shuffle } from "lodash";
 import { getSharedChars } from "../DarkNet/utils/darknetAuthUtils";
 import { freezeServer } from "../DarkNet/controllers/NetworkMovement";
+import { populateServerLogsWithNoise } from "../DarkNet/models/packetSniffing";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -284,6 +285,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           };
         }
         const serverState = getServerState(server.hostname);
+        populateServerLogsWithNoise(server);
 
         logger(ctx)(`Extracted log data from ${server.hostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
 
