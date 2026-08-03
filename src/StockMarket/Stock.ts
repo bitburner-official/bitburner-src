@@ -188,11 +188,13 @@ export class Stock {
       this.otlkMag += changeAmt;
     }
 
-    this.otlkMag = Math.min(this.otlkMag, 50);
     if (this.otlkMag < 0) {
       this.otlkMag *= -1;
       this.b = !this.b;
     }
+    // Clamp after the sign flip: a swing below -50 would otherwise flip into a magnitude the clamp
+    // never saw, and everything sized against the forecast column assumes otlkMag <= 50.
+    this.otlkMag = Math.min(this.otlkMag, 50);
   }
 
   /**

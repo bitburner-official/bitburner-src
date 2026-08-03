@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { StockTickerHeaderText } from "./StockTickerHeaderText";
+import { StockPriceDetail, StockPriceRowChart } from "./StockPriceChart";
 import { StockTickerOrderList } from "./StockTickerOrderList";
 import { StockTickerPositionText } from "./StockTickerPositionText";
 import { StockTickerTxButton } from "./StockTickerTxButton";
@@ -278,45 +279,69 @@ export function StockTicker(props: IProps): React.ReactElement {
     return Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) >= 2;
   }
 
+  const tickerControls = (
+    <Box display="flex" alignItems="center">
+      <TextField onChange={handleQuantityChange} placeholder="Quantity (Shares)" value={qty} />
+      <Select onChange={handlePositionTypeChange} value={position}>
+        <MenuItem value={PositionType.Long}>Long</MenuItem>
+        {hasShortAccess() && <MenuItem value={PositionType.Short}>Short</MenuItem>}
+      </Select>
+      <Select onChange={handleOrderTypeChange} value={orderType}>
+        <MenuItem value={SelectorOrderType.Market}>{SelectorOrderType.Market}</MenuItem>
+        {hasOrderAccess() && <MenuItem value={SelectorOrderType.Limit}>{SelectorOrderType.Limit}</MenuItem>}
+        {hasOrderAccess() && <MenuItem value={SelectorOrderType.Stop}>{SelectorOrderType.Stop}</MenuItem>}
+      </Select>
+
+      <StockTickerTxButton onClick={handleBuyButtonClick} text={"Buy"} tooltip={getBuyTransactionCostContent()} />
+      <StockTickerTxButton onClick={handleSellButtonClick} text={"Sell"} tooltip={getSellTransactionCostContent()} />
+      <StockTickerTxButton onClick={handleBuyMaxButtonClick} text={"Buy MAX"} />
+      <StockTickerTxButton onClick={handleSellAllButtonClick} text={"Sell ALL"} />
+    </Box>
+  );
+
+  const tickerBody = (
+    <>
+      <StockTickerPositionText stock={props.stock} />
+      <StockTickerOrderList orders={props.orders} stock={props.stock} />
+
+      <PlaceOrderModal
+        text={modalProps.text}
+        placeText={modalProps.placeText}
+        place={modalProps.place}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
+    </>
+  );
+
   return (
     <Box component={Paper}>
       <ListItemButton onClick={() => setTicketOpen((old) => !old)}>
-        <ListItemText primary={<StockTickerHeaderText stock={props.stock} />} />
-        {tickerOpen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
+        {/* The header text keeps its natural width so the chart beside it can claim exactly what is
+            left over, and gives that up first when the window is too narrow for both. */}
+        <ListItemText sx={{ flex: "0 0 auto" }} primary={<StockTickerHeaderText stock={props.stock} />} />
+        {/* Redundant with the expanded panel's chart, so it yields to it - but keeps its space, so
+            expanding a ticker does not shift the row it was expanded from. */}
+        {Player.has4SData && <StockPriceRowChart stock={props.stock} hidden={tickerOpen} />}
+        {/* The chart is the only item allowed to shrink, so it absorbs every narrowing on its own. */}
+        {tickerOpen ? (
+          <ExpandLess color="primary" sx={{ flexShrink: 0 }} />
+        ) : (
+          <ExpandMore color="primary" sx={{ flexShrink: 0 }} />
+        )}
       </ListItemButton>
       <Collapse in={tickerOpen} unmountOnExit>
         <Box sx={{ mx: 4 }}>
-          <Box display="flex" alignItems="center">
-            <TextField onChange={handleQuantityChange} placeholder="Quantity (Shares)" value={qty} />
-            <Select onChange={handlePositionTypeChange} value={position}>
-              <MenuItem value={PositionType.Long}>Long</MenuItem>
-              {hasShortAccess() && <MenuItem value={PositionType.Short}>Short</MenuItem>}
-            </Select>
-            <Select onChange={handleOrderTypeChange} value={orderType}>
-              <MenuItem value={SelectorOrderType.Market}>{SelectorOrderType.Market}</MenuItem>
-              {hasOrderAccess() && <MenuItem value={SelectorOrderType.Limit}>{SelectorOrderType.Limit}</MenuItem>}
-              {hasOrderAccess() && <MenuItem value={SelectorOrderType.Stop}>{SelectorOrderType.Stop}</MenuItem>}
-            </Select>
-
-            <StockTickerTxButton onClick={handleBuyButtonClick} text={"Buy"} tooltip={getBuyTransactionCostContent()} />
-            <StockTickerTxButton
-              onClick={handleSellButtonClick}
-              text={"Sell"}
-              tooltip={getSellTransactionCostContent()}
-            />
-            <StockTickerTxButton onClick={handleBuyMaxButtonClick} text={"Buy MAX"} />
-            <StockTickerTxButton onClick={handleSellAllButtonClick} text={"Sell ALL"} />
-          </Box>
-          <StockTickerPositionText stock={props.stock} />
-          <StockTickerOrderList orders={props.orders} stock={props.stock} />
-
-          <PlaceOrderModal
-            text={modalProps.text}
-            placeText={modalProps.placeText}
-            place={modalProps.place}
-            open={open}
-            onClose={() => setOpen(false)}
-          />
+          {Player.has4SData ? (
+            <StockPriceDetail stock={props.stock} controls={tickerControls}>
+              {tickerBody}
+            </StockPriceDetail>
+          ) : (
+            <>
+              {tickerControls}
+              {tickerBody}
+            </>
+          )}
         </Box>
       </Collapse>
     </Box>

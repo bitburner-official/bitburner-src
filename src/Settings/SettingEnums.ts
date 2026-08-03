@@ -13,3 +13,10 @@ export enum OwnedAugmentationsOrderSetting {
   Alphabetically,
   AcquirementTime,
 }
+
+// String enum
+/** Allowed values for the 'StockChartType' setting */
+export enum StockChartTypeSetting {
+  Line = "Line",
+  Candlestick = "Candlestick",
+}

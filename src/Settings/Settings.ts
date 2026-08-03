@@ -3,7 +3,11 @@ import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { defaultStyles } from "../Themes/Styles";
 import { defaultTheme } from "../Themes/Themes";
 import type { PlayerDefinedKeyBindingsType } from "../utils/KeyBindingUtils";
-import { OwnedAugmentationsOrderSetting, PurchaseAugmentationsOrderSetting } from "./SettingEnums";
+import {
+  OwnedAugmentationsOrderSetting,
+  PurchaseAugmentationsOrderSetting,
+  StockChartTypeSetting,
+} from "./SettingEnums";
 
 /** The current options the player has customized to their play style. */
 export const Settings = {
@@ -144,4 +148,17 @@ export const Settings = {
   KeyBindings: {} as PlayerDefinedKeyBindingsType,
   /** Whether to sync Steam achievements */
   SyncSteamAchievements: true,
+  /**
+   * Whether to record stock price history at all. When set, recording stops, whatever was recorded
+   * is discarded (the options UI wipes on toggle), and the Stock Market page shows no charts.
+   */
+  DisableStockPriceHistory: false,
+  /** Which marks the expanded stock ticker's price chart is drawn with. */
+  StockChartType: StockChartTypeSetting.Line,
+  /** How far back the stock price charts reach, in minutes. The history itself is in-memory only. */
+  StockChartHistoryMinutes: 15,
+  /** Market ticks aggregated into each candle of the candlestick chart. */
+  StockChartTicksPerCandle: 5,
+  /** Whether collapsed stock ticker rows show a small price trend chart beside the header. */
+  ShowStockChartInCollapsedRows: true,
 };
