@@ -110,7 +110,7 @@ export function handleNextTurn(boardState: BoardState = Go.currentGame, useOffli
           console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
         }
         // Recursively update promises for the next turn. This can't create an
-        // infinite loop because the recursion is happenning asynchronously from a
+        // infinite loop because the recursion is happening asynchronously from a
         // delayed promise.
         return handleNextTurn(boardState, useOfflineCycles);
       })
@@ -159,10 +159,10 @@ function createPromise(promiseObj: PlayerPromise): void {
   Basic GO AIs, each with some personality and weaknesses
 
   The AIs are aware of chains of connected pieces, their liberties, and their eyes.
-  They know how to lok for moves that capture or threaten capture, moves that create eyes, and moves that take
+  They know how to look for moves that capture or threaten capture, moves that create eyes, and moves that take
      away liberties from their opponent, as well as some pattern matching on strong move ideas.
 
-  They do not know about larger jump moves, nor about frameworks on the board. Also, they each have a tendancy to
+  They do not know about larger jump moves, nor about frameworks on the board. Also, they each have a tendency to
      over-focus on a different type of move, giving each AI a different playstyle and weakness to exploit.
  */
 
@@ -276,7 +276,7 @@ async function getNetburnersPriorityMove(moves: MoveOptions, rng: number): Promi
 }
 
 /**
- * Slum snakes prioritize defending their pieces and building chains that snake around as much of the bord as possible.
+ * Slum snakes prioritize defending their pieces and building chains that snake around as much of the board as possible.
  */
 async function getSlumSnakesPriorityMove(moves: MoveOptions, rng: number): Promise<PointState | null> {
   if (await moves.defendCapture()) {

@@ -121,7 +121,7 @@ export const mutateDarknet = (): void => {
   }
 
   if (Math.random() < 0.5) {
-    // delink all connections from a server
+    // unlink all connections from a server
     disconnectRandomServer();
   }
 
