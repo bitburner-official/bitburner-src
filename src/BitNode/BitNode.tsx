@@ -951,6 +951,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ScriptHackMoney: dec,
         CodingContractMoney: dec,
         DarknetMoneyMultiplier: dec,
+        DarknetLabyrinthRewardsTheRedPill: 0,
 
         ClassGymExpGain: dec,
         CompanyWorkExpGain: dec,
