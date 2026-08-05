@@ -578,9 +578,15 @@ export class Bladeburner implements OperationTeam {
       --sourceCity.comms;
       ++destCity.comms;
     }
-    const count = Math.round(sourceCity.pop * percentage);
-    sourceCity.pop -= count;
-    destCity.pop += count;
+    // community based population changes logically require a non-zero population change
+    sourceCity.changePopulationByPercentage(-percentage, {
+      nonZero: true,
+      changeEstEqually: false,
+    });
+    destCity.changePopulationByPercentage(percentage, {
+      nonZero: true,
+      changeEstEqually: false,
+    });
     if (destCity.pop < BladeburnerConstants.PopGrowthCeiling) {
       destCity.pop += BladeburnerConstants.BasePopGrowth;
     }
@@ -614,8 +620,10 @@ export class Bladeburner implements OperationTeam {
       // New Synthoid Community, 5%
       ++sourceCity.comms;
       const percentage = getRandomIntInclusive(10, 20) / 100;
-      const count = Math.round(sourceCity.pop * percentage);
-      sourceCity.pop += count;
+      sourceCity.changePopulationByPercentage(percentage, {
+        nonZero: true,
+        changeEstEqually: false,
+      });
       if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
         sourceCity.pop += BladeburnerConstants.BasePopGrowth;
       }
@@ -628,8 +636,10 @@ export class Bladeburner implements OperationTeam {
         // If no comms in source city, then instead trigger a new Synthoid community event
         ++sourceCity.comms;
         const percentage = getRandomIntInclusive(10, 20) / 100;
-        const count = Math.round(sourceCity.pop * percentage);
-        sourceCity.pop += count;
+        sourceCity.changePopulationByPercentage(percentage, {
+          nonZero: true,
+          changeEstEqually: false,
+        });
         if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
           sourceCity.pop += BladeburnerConstants.BasePopGrowth;
         }
@@ -642,9 +652,14 @@ export class Bladeburner implements OperationTeam {
 
         // Change pop
         const percentage = getRandomIntInclusive(10, 20) / 100;
-        const count = Math.round(sourceCity.pop * percentage);
-        sourceCity.pop -= count;
-        destCity.pop += count;
+        sourceCity.changePopulationByPercentage(-percentage, {
+          nonZero: true,
+          changeEstEqually: false,
+        });
+        destCity.changePopulationByPercentage(percentage, {
+          nonZero: true,
+          changeEstEqually: false,
+        });
         if (destCity.pop < BladeburnerConstants.PopGrowthCeiling) {
           destCity.pop += BladeburnerConstants.BasePopGrowth;
         }
@@ -657,8 +672,8 @@ export class Bladeburner implements OperationTeam {
     } else if (chance <= 0.3) {
       // New Synthoids (non community), 20%
       const percentage = getRandomIntInclusive(8, 24) / 100;
-      const count = Math.round(sourceCity.pop * percentage);
-      sourceCity.pop += count;
+      // Non-community based population changes may be zero
+      sourceCity.changePopulationByPercentage(percentage);
       if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
         sourceCity.pop += BladeburnerConstants.BasePopGrowth;
       }
@@ -687,8 +702,7 @@ export class Bladeburner implements OperationTeam {
     } else if (chance <= 0.9) {
       // Less Synthoids, 20%
       const percentage = getRandomIntInclusive(8, 20) / 100;
-      const count = Math.round(sourceCity.pop * percentage);
-      sourceCity.pop -= count;
+      sourceCity.changePopulationByPercentage(-percentage);
       if (this.logging.events) {
         this.log(
           "Intelligence indicates that the Synthoid population of " + sourceCityName + " just changed significantly",
