@@ -132,7 +132,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             </Button>
           </Tooltip>
           <PurchaseMaterialModal
-            key={`${division.name}-${city}`}
+            key={`PurchaseMaterialModal-${division.name}-${city}-${mat.name}`}
             mat={mat}
             warehouse={warehouse}
             open={purchaseMaterialOpen}
@@ -145,7 +145,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
               <Button onClick={() => setExportOpen(true)}>Export</Button>
 
               <ExportModal
-                key={`${division.name}-${city}`}
+                key={`ExportModal-${division.name}-${city}-${mat.name}`}
                 mat={mat}
                 open={exportOpen}
                 onClose={() => setExportOpen(false)}
@@ -160,7 +160,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             {sellButtonText}
           </Button>
           <SellMaterialModal
-            key={`${division.name}-${city}`}
+            key={`SellMaterialModal-${division.name}-${city}-${mat.name}`}
             mat={mat}
             div={division}
             open={sellMaterialOpen}
