@@ -11,7 +11,7 @@ Effect scales with threads and charisma level.
 **Signature:**
 
 ```typescript
-induceServerMigration(host: string): Promise<DarknetResult & { progress?: number }>;
+induceServerMigration(host: string): Promise<DarknetResult & { progress: number }>;
 ```
 
 ## Parameters
@@ -52,9 +52,9 @@ Hostname/IP of the connected server to migrate.
 
 **Returns:**
 
-Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { progress?: number }&gt;
+Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { progress: number }&gt;
 
-A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object with an additional `progress` field indicating the migration progress between 0 and 1.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object with a `progress` field indicating the total migration progress in the range \[0, 1\].
 
 ## Remarks
 

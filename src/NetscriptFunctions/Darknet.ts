@@ -26,6 +26,7 @@ import {
   getLabyrinthLocationReport,
   getSurroundingsVisualized,
   isLabyrinthServer,
+  labData,
 } from "../DarkNet/effects/labyrinth";
 import { getPhishingAttackSpeed, handlePhishingAttack } from "../DarkNet/effects/phishing";
 import { handleRamBlockRemoved } from "../DarkNet/effects/ramblock";
@@ -401,7 +402,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const localServer = ctx.workerScript.getServer();
       const isConnected = isDirectConnected(localServer, targetServer);
       const hasSession = isAuthenticated(targetServer, ctx.workerScript.pid);
-      const depth = isLabyrinthServer(targetServer.hostname) ? getLabyrinthDetails().depth : targetServer.depth;
+      const depth = isLabyrinthServer(targetServer.hostname)
+        ? labData[targetServer.hostname].depth
+        : targetServer.depth;
       return {
         isOnline: true,
         isConnectedToCurrentServer: isConnected,
@@ -419,8 +422,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         isStationary: targetServer.isStationary,
       } satisfies ReturnType<DarknetAPI["getServerDetails"]>;
     },
-    induceServerMigration: (ctx, _host): Promise<DarknetResult & { progress?: number }> => {
+    induceServerMigration: (ctx, _host): Promise<DarknetResult & { progress: number }> => {
       const targetHost = helpers.string(ctx, "host", _host);
+      const currentProgress = DarknetState.migrationInductionServers.get(targetHost) ?? 0;
       const serverCheck = checkDarknetServer(ctx, targetHost, {
         requireDirectConnection: true,
         preventUseOnStationaryServers: true,
@@ -430,6 +434,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           success: false,
           code: serverCheck.code,
           message: serverCheck.message,
+          progress: currentProgress,
         }));
       }
       const hostOfCurrentServer = !isIPAddress(targetHost)
@@ -442,6 +447,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           success: false,
           code: ResponseCodeEnum.DirectConnectionRequired,
           message: message,
+          progress: currentProgress,
         }));
       }
       const server = serverCheck.server;
@@ -458,6 +464,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             success: false,
             code: serverCheck.code,
             message: serverCheck.message,
+            progress: DarknetState.migrationInductionServers.get(targetHost) ?? 0,
           }));
         }
         const server = serverCheck.server;
@@ -710,7 +717,7 @@ export const getDarknetPropertiesForDeprecationSupport = (dnetServer: DarknetSer
   depth: {
     identifier: "ns.getServer().depth",
     message: "Use ns.dnet.getServerDetails().depth instead.",
-    value: dnetServer.depth,
+    value: isLabyrinthServer(dnetServer.hostname) ? labData[dnetServer.hostname].depth : dnetServer.depth,
   },
   modelId: {
     identifier: "ns.getServer().modelId",
