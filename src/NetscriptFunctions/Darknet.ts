@@ -401,6 +401,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const localServer = ctx.workerScript.getServer();
       const isConnected = isDirectConnected(localServer, targetServer);
       const hasSession = isAuthenticated(targetServer, ctx.workerScript.pid);
+      const depth = isLabyrinthServer(targetServer.hostname) ? getLabyrinthDetails().depth : targetServer.depth;
       return {
         isOnline: true,
         isConnectedToCurrentServer: isConnected,
@@ -414,11 +415,11 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         blockedRam: targetServer.blockedRam,
         difficulty: targetServer.difficulty,
         requiredCharismaSkill: targetServer.requiredCharismaSkill,
-        depth: targetServer.depth,
+        depth: depth,
         isStationary: targetServer.isStationary,
       } satisfies ReturnType<DarknetAPI["getServerDetails"]>;
     },
-    induceServerMigration: (ctx, _host): Promise<DarknetResult> => {
+    induceServerMigration: (ctx, _host): Promise<DarknetResult & { progress?: number }> => {
       const targetHost = helpers.string(ctx, "host", _host);
       const serverCheck = checkDarknetServer(ctx, targetHost, {
         requireDirectConnection: true,
@@ -475,6 +476,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           success: true,
           code: ResponseCodeEnum.Success,
           message: GenericResponseMessage.Success,
+          progress: result.newCharge,
         };
       });
     },
