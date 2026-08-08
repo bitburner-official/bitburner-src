@@ -89,8 +89,8 @@ const getExactCharactersHint = (lastPassword: string, realPassword: string) => {
 
 export const logPasswordAttempt = (server: DarknetServer, passwordResponse: PasswordResponse, pid: number) => {
   const serverState = getServerState(server.hostname);
-  const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
+  const serverLogs = serverState.serverLogs;
 
   let message = passwordResponse;
 
