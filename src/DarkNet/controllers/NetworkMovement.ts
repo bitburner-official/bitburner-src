@@ -10,7 +10,7 @@ import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killServerScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
+import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { LOW_LEVEL_SERVER_DENSITY, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,

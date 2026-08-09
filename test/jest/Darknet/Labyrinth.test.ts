@@ -7,7 +7,7 @@ import {
   handleLabyrinthPassword,
   labData,
 } from "../../../src/DarkNet/effects/labyrinth";
-import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { fixDoImportIssue, getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { Player } from "@player";
 import { clearDarknet, populateDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
@@ -16,6 +16,9 @@ import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAu
 import { AugmentationName } from "@enums";
 import { getAuthResult } from "../../../src/DarkNet/effects/authentication";
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
+import { applyAugmentation } from "../../../src/Augmentation/AugmentationHelpers";
+
+fixDoImportIssue();
 
 beforeAll(() => {
   initGameEnvironment();
@@ -316,6 +319,43 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.BonusLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.BonusLab].cha);
       expect(getLabAugReward()).toEqual(AugmentationName.NeuroFluxGovernor);
+    });
+  });
+
+  describe("current lab progression", () => {
+    it("should return the current lab's info via ns.dnet.getServerDetails", () => {
+      setupBN15Environment(0);
+      const currentLabName = getLabyrinthDetails().name;
+      expect(currentLabName).toEqual(SpecialServers.NormalLab);
+
+      const ns = getNS(SpecialServers.Home);
+      const serverDetails = ns.dnet.getServerDetails(currentLabName);
+
+      expect(serverDetails.isOnline).toBe(true);
+      expect(serverDetails.requiredCharismaSkill).toEqual(labData[SpecialServers.NormalLab].cha);
+      expect(serverDetails.depth).toEqual(labData[SpecialServers.NormalLab].depth);
+    });
+
+    it("should not return other lab's info via ns.dnet.getServerDetails", () => {
+      setupBN15Environment(0);
+      const currentLabName = getLabyrinthDetails().name;
+      expect(currentLabName).toEqual(SpecialServers.NormalLab);
+
+      const ns = getNS(SpecialServers.Home);
+      expect(() => ns.dnet.getServerDetails(SpecialServers.CruelLab)).toThrow("Invalid host: 'cru3l_l4byr1nth'");
+    });
+
+    it("should not change the current lab when queueing a lab aug, only when installing it", () => {
+      setupBN15Environment(0);
+      expect(getLabyrinthDetails().name).toEqual(SpecialServers.NormalLab);
+
+      const queuedAug = new PlayerOwnedAugmentation(AugmentationName.TheBrokenWings);
+      Player.queuedAugmentations.push(queuedAug);
+      expect(getLabyrinthDetails().name).toEqual(SpecialServers.NormalLab);
+
+      applyAugmentation(queuedAug);
+      Player.queuedAugmentations = [];
+      expect(getLabyrinthDetails().name).toEqual(SpecialServers.CruelLab);
     });
   });
 });
