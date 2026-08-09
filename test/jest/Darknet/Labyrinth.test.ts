@@ -10,11 +10,8 @@ import {
 import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { Player } from "@player";
-import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
-import { populateDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
+import { clearDarknet, populateDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
-import { MAX_NET_DEPTH, NET_WIDTH } from "../../../src/DarkNet/Enums";
-import type { DarknetServer } from "../../../src/Server/DarknetServer";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName } from "@enums";
 import { getAuthResult } from "../../../src/DarkNet/effects/authentication";
@@ -42,9 +39,7 @@ const setupBN15Environment = (labAugCount: number) => {
 
   Player.augmentations = augs.slice(0, labAugCount).map((aug) => new PlayerOwnedAugmentation(aug));
 
-  DarknetState.Network = new Array(MAX_NET_DEPTH)
-    .fill(null)
-    .map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null));
+  clearDarknet();
   populateDarknet();
 };
 
@@ -66,9 +61,7 @@ const setupNonBN15Environment = (labAugCount: number, hasSf15 = false, allowTRPI
     Player.augmentations.push(new PlayerOwnedAugmentation(augs[i]));
   }
 
-  DarknetState.Network = new Array(MAX_NET_DEPTH)
-    .fill(null)
-    .map(() => new Array<DarknetServer | null>(NET_WIDTH).fill(null));
+  clearDarknet();
   populateDarknet();
 };
 

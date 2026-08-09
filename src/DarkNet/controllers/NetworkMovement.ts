@@ -337,7 +337,7 @@ export const addGuaranteedConnection = (server: DarknetServer): void => {
 export const validateDarknetNetwork = (): void => {
   const servers = getAllDarknetServers();
   // The darknet should have at least darkweb and labyrinth servers.
-  if (servers.length < getLabyrinthServerNames().length + 1) {
+  if (servers.length < 2) {
     exceptionAlert(new Error(`There are too few darknet servers. servers.length: ${servers.length}`), true);
   }
   for (const server of servers) {

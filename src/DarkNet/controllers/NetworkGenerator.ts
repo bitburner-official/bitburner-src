@@ -247,7 +247,8 @@ export const addLabyrinth = () => {
     isStationary: true,
   };
 
-  for (const hostname of getLabyrinthServerNames()) {
+  const hostname = getLabyrinthDetails().name;
+  if (hostname) {
     const passwordSalt = Math.floor(Math.random() * 10000);
     const server = new DarknetServer({
       ...commonData,
