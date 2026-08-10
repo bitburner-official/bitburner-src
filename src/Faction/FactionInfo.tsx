@@ -577,7 +577,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.TheDarkArmy]: new FactionInfo({
     infoText: <>The World doesn't care about right or wrong. It only cares about power.</>,
-    rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}</>,
+    rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}.</>,
     inviteReqs: [
       locatedInCity(CityName.Chongqing),
       notEmployedBy(CompanyName.CIA),
@@ -600,7 +600,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.TheSyndicate]: new FactionInfo({
     infoText: <>Honor holds you back.</>,
-    rumorText: <>An elite criminal organization that operates in the western hemisphere</>,
+    rumorText: <>An elite criminal organization that operates in the western hemisphere.</>,
     inviteReqs: [
       locatedInSomeCity(CityName.Aevum, CityName.Sector12),
       notEmployedBy(CompanyName.CIA),
@@ -701,8 +701,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         It's too bad they won't live. But then again, who does?
         <br />
         <br />
-        Note that for this faction, reputation can only be gained through {FactionName.Bladeburners} actions. Completing{" "}
-        {FactionName.Bladeburners} contracts/operations will increase your reputation.
+        Reputation can only be gained among the {FactionName.Bladeburners} by completing contracts and operations.
       </>
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
@@ -716,7 +715,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       return (
         <Option
           buttonText={"Open Bladeburner headquarters"}
-          infoText={"You can gain reputation with bladeburner by completing contracts and operations."}
+          infoText={"Gain reputation by completing contracts and operations."}
           onClick={() => Router.toPage(Page.Bladeburner)}
         />
       );

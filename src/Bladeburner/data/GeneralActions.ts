@@ -8,14 +8,14 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
     getActionTime: () => 30,
     desc:
       "Improve your abilities at the Bladeburner unit's specialized training center. Doing this gives experience for " +
-      "all combat stats and also increases your max stamina.",
+      "all combat stats, and increases your max stamina.",
   }),
   [BladeburnerGeneralActionName.FieldAnalysis]: new GeneralAction({
     name: BladeburnerGeneralActionName.FieldAnalysis,
     getActionTime: () => 30,
     desc:
       "Mine and analyze Synthoid-related data. This improves the Bladeburner unit's intelligence on Synthoid locations " +
-      "and activities. Completing this action will improve the accuracy of your Synthoid population estimated in the " +
+      "and activities. Completing this action will improve the accuracy of your Synthoid population estimate for the " +
       "current city.\n" +
       "Does NOT require stamina.",
   }),
@@ -47,13 +47,13 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
     getActionTime: () => 60,
     desc:
       "Enter cryogenic stasis using the Bladeburner division's hi-tech Regeneration Chamber. This will slowly heal your " +
-      "wounds and slightly increase your stamina.",
+      "wounds and slightly restore your stamina.",
   }),
   [BladeburnerGeneralActionName.InciteViolence]: new GeneralAction({
     name: BladeburnerGeneralActionName.InciteViolence,
     getActionTime: () => 60,
     desc:
-      "Purposefully stir trouble in the synthoid community in order to gain a political edge. This will generate " +
+      "Purposefully stir trouble in the Synthoid community in order to gain a political edge. This will generate " +
       "additional contracts and operations at the cost of increasing the chaos level of all cities.\n" +
       "Does NOT require stamina.",
     warning: "This action increases chaos of all cities by percentage.",
