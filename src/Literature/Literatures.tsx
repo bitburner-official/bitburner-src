@@ -1,4 +1,4 @@
-import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
+import { CityName, FactionName, CompanyName, LiteratureName, CompletedProgramName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
@@ -55,7 +55,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         own money, but this money will get put into your corporation's funds. If you're in BitNode 3, you also have the
         option to get seed money from the government in exchange for 500m shares. Your corporation can have many
         different divisions, each in a different industry. There are many different types of industries, each with
-        different properties. To create your first division, select the "Expand" button at the top of the management UI.
+        different properties. To create your first division, click the "Expand" button at the top of the management UI.
         The agriculture industry is recommended for your first division.
         <br />
         <br />
@@ -76,16 +76,16 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         <br />
         To get your supply chain system started, purchase the materials that your industry needs to produce other
-        materials/products. This can be done by selecting the "Buy" button next to the corresponding material(s). After
+        materials/products. This can be done by clicking the "Buy" button next to the corresponding material(s). After
         you have the required materials, you will immediately start production. The amount and quality/effective rating
         of materials/products you produce is based on a variety of factors, such as your employees and their
         productivity and the quality of materials used for production.
         <br />
         <br />
         Once you start producing materials/products, you can sell them in order to start earning revenue. This can be
-        done by selecting the "Sell" button next to the corresponding material or product. The amount of
-        material/product you sell is dependent on a wide variety of different factors. In order to produce and sell a
-        product, you'll have to fully develop it first.
+        done by clicking the "Sell" button next to the corresponding material or product. The amount of material/product
+        you sell is dependent on a wide variety of different factors. In order to produce and sell a product, you'll
+        have to fully develop it first.
         <br />
         <br />
         These are the basics of getting your corporation up and running! Now, you can start purchasing upgrades to
@@ -741,9 +741,9 @@ export const Literatures: Record<LiteratureName, Literature> = {
         - or bring code along from home - in order to progress into the deeper layers of the 'net.
         <br />
         <br />
-        You now have permanent access to the Darknet Navigator, allowing exploration of the 'net manually via the UI.
-        But beware: the labyrinths further into the deep are said to only be accessible via script! Do you have the
-        charisma and the scripting skills needed to conquer the dark?
+        You now have permanent access to ${CompletedProgramName.darkscape}, allowing exploration of the 'net manually
+        via the UI. But beware: the labyrinths further into the deep are said to only be accessible via script! Do you
+        have the charisma and the scripting skills needed to conquer the dark?
         <br />
         <br />
         For more details on the darknet and its API, see the Darknet page under Documentation {">"} Advanced.
