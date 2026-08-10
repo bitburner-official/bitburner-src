@@ -20,7 +20,7 @@ export const breakingChanges302: VersionBreakingChange = {
     {
       brokenAPIs: [
         {
-          name: "ns.dnet.getServerDetails",
+          name: "getServerDetails",
         },
       ],
       info: "ns.dnet.getServerDetails() now returns the visible depth of the darknet lab server, instead of -1.",
