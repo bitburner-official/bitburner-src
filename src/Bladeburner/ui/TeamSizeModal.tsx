@@ -41,8 +41,8 @@ export function TeamSizeModal({ bladeburner, action, open, onClose }: TeamSizeMo
     <Modal open={open} onClose={onClose}>
       <form onSubmit={confirmTeamSize}>
         <Typography>
-          Enter the number of team members you want to take on this Op. If you don't have that many team members,
-          then all your team members will be used.
+          Enter the number of team members you want to take on this Op. If you don't have that many team members, then
+          all your team members will be used.
           <br />
           <br />
           Team members boost your success chance, but at a diminishing rate the more you bring along.
