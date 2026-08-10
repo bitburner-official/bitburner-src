@@ -43,9 +43,11 @@ export function TeamSizeModal({ bladeburner, action, open, onClose }: TeamSizeMo
         <Typography>
           Enter the amount of team members you would like to take on this Op. If the amount you enter is more team
           members than you have, then as many as possible will be used.
-          <br /><br />
-          Team members boost your success chance, but at a diminishing rate the more you bring along. 
-          <br /><br />
+          <br />
+          <br />
+          Team members boost your success chance, but at a diminishing rate the more you bring along.
+          <br />
+          <br />
           Note that team members are likely to be lost on each operation, even if you're successful.
         </Typography>
         <TextField autoFocus type="number" placeholder="Team size" value={teamSize} onChange={onTeamSize} />
