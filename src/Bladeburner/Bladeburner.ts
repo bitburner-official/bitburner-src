@@ -620,7 +620,7 @@ export class Bladeburner implements OperationTeam {
         sourceCity.pop += BladeburnerConstants.BasePopGrowth;
       }
       if (this.logging.events) {
-        this.log(`Intelligence indicates that a new Synthoid community was formed in a city.`);
+        this.log("Intelligence indicates that a new Synthoid community was formed in a city.");
       }
     } else if (chance <= 0.1) {
       // Synthoid Community Migration, 5%
