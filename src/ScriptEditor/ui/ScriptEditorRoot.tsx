@@ -355,7 +355,10 @@ function Root(props: IProps): React.ReactElement {
     if (!currentScript || !editorRef.current) return;
     const currentPosition = editorRef.current.getPosition();
     if (currentPosition) currentScript.lastPosition = currentPosition;
-    currentScript.lastViewState = editorRef.current.saveViewState();
+    const viewState = editorRef.current.saveViewState();
+    // Restoring the word highlighter rejects a promise monaco never handles, and its highlights are recomputed anyway.
+    if (viewState) delete viewState.contributionsState["editor.contrib.wordHighlighter"];
+    currentScript.lastViewState = viewState;
   }
 
   /** Restore what saveViewState stored. Must be called after the editor's model was set to openScript's model. */
