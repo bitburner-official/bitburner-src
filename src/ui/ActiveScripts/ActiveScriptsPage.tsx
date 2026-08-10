@@ -104,7 +104,7 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
     <>
       <Typography>
         This page displays a list of all of your scripts that are currently running across every machine. It also
-        provides information about each script's production. The scripts are categorized by the hostname of the servers
+        provides information about each script's production. The scripts are categorized by the hostnames of the servers
         on which they are running.
       </Typography>
 

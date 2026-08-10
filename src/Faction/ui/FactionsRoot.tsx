@@ -175,7 +175,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                           <li key={enemy}>{enemy}</li>
                         ))}
                       </ul>
-                      {!props.faction.isMember && <>Joining this Faction will prevent you from joining its enemies</>}
+                      {!props.faction.isMember && <>Joining this Faction will prevent you from joining its enemies.</>}
                     </Typography>
                   }
                 >
