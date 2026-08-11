@@ -48,8 +48,8 @@ AutocompleteData is an object with the following properties;
     txts:       // List of all text files on the current server.
     scripts:    // List of all scripts on the current server.
 
-    // A function similar to ns.flags(). Calling this function adds all the flags as autocomplete
-    // arguments.
+    // A function similar to ns.flags(). Calling this function adds all the flags as
+    // autocomplete arguments.
     flags:
   }
 ```
@@ -72,8 +72,8 @@ export function autocomplete(data, args) {
   // We are only interested in the string values from the enums object.
   const gymTypes = Object.values(gymTypesObject);
 
-  // Offer a list of all servers, all scripts on the current server, and gym jobs ("str", "agi" etc)
-  // as autocomplete options.
+  // Offer a list of all servers, all scripts on the current server, and gym jobs
+  // ("str", "agi" etc) as autocomplete options.
   return [...scripts, ...servers, ...gymTypes];
 }
 ```
