@@ -126,13 +126,16 @@ Once you have authenticated, other scripts can then connect to that same server 
 `scp` file transfers can be performed at any distance once you have established a session. However, `exec` also requires the script to either be run from a server adjacent to and connected to the target server, or a backdoor or stasis link on the target server. You can identify direct connections using `probe` or `getServerDetails`.
 
 ```js
-// the darknet server in "hostname" must be either backdoored, stasis linked, or directly connected to the server this script is running on
+// the darknet server in "hostname" must be either backdoored, stasis linked, or directly connected
+// to the server this script is running on
+
 // to allow exec calls from the current server
 if (ns.dnet.getServerDetails(hostname).isConnectedToCurrentServer) {
   ns.dnet.connectToSession(hostname, previouslyDiscoveredPassword);
   ns.scp("my_script.js", hostname);
   ns.exec("my_script.js", hostname, {
-    preventDuplicates: true, // This prevents running multiple copies of this script, if there is already one on that server
+    // This prevents running multiple copies of this script, if there is already one on that server
+    preventDuplicates: true,
   });
 }
 ```
@@ -191,7 +194,8 @@ export async function main(ns) {
         continue; // If we failed to auth, just move on to the next server
       }
 
-      // If we have successfully authenticated, we can now copy and run this script on the target server
+      // If we have successfully authenticated, we can now copy and run this script on the target
+      // server
       ns.scp(ns.getScriptName(), hostname);
       ns.exec(ns.getScriptName(), hostname, {
         preventDuplicates: true, // This prevents running multiple copies of this script
@@ -202,7 +206,8 @@ export async function main(ns) {
 
     // TODO: look for .cache files on this server and open them with ns.dnet.openCache
 
-    // TODO: take advantage of the extra ram on darknet servers to run ns.dnet.phishingAttack calls for money
+    // TODO: take advantage of the extra ram on darknet servers to run ns.dnet.phishingAttack calls
+    // for money
 
     await ns.sleep(5000);
   }
@@ -230,7 +235,8 @@ export const serverSolver = async (ns, hostname) => {
 
     // TODO: handle other models of darknet servers here
 
-    // TODO: get recent server logs with `await ns.dnet.heartbleed(hostname)` for more detailed logging on failed auth attempts
+    // TODO: get recent server logs with `await ns.dnet.heartbleed(hostname)` for more detailed
+    // logging on failed auth attempts
 
     default:
       ns.tprint(`Unrecognized modelId: ${details.modelId}`);
@@ -248,8 +254,9 @@ const authenticateWithNoPassword = async (ns, hostname) => {
   return result.success;
 };
 
-/** This lets you tab-complete putting "--tail" on the run command so you can see the script logs as it runs, if you want
- *  If you add support to the script to take other arguments, you can add them here as well for convenience
+/** This lets you tab-complete putting "--tail" on the run command so you can see the script logs as
+ *  it runs, if you want. If you add support to the script to take other arguments, you can add them
+ *  here as well for convenience.
  *  @param {AutocompleteData} data */
 export function autocomplete(data) {
   return ["--tail"];

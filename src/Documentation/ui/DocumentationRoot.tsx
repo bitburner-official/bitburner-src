@@ -95,7 +95,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
           }}
         />
       </Box>
-      <Box paddingTop="50px">
+      <Box paddingTop="50px" sx={{ maxWidth: "920px" }}>
         <Navigator.Provider value={navigator}>
           <MD pageFilePath={deepLink ? asFilePath(deepLink) : history.page} />
         </Navigator.Provider>
