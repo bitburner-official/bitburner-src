@@ -126,16 +126,16 @@ Once you have authenticated, other scripts can then connect to that same server 
 `scp` file transfers can be performed at any distance once you have established a session. However, `exec` also requires the script to either be run from a server adjacent to and connected to the target server, or a backdoor or stasis link on the target server. You can identify direct connections using `probe` or `getServerDetails`.
 
 ```js
-// the darknet server in "hostname" must be either backdoored, stasis linked, or directly
-// connected to the server this script is running on
+// the darknet server in "hostname" must be either backdoored, stasis linked, or
+// directly connected to the server this script is running on
 
 // to allow exec calls from the current server
 if (ns.dnet.getServerDetails(hostname).isConnectedToCurrentServer) {
   ns.dnet.connectToSession(hostname, previouslyDiscoveredPassword);
   ns.scp("my_script.js", hostname);
   ns.exec("my_script.js", hostname, {
-    // This prevents running multiple copies of this script, if there is already one on
-    // that server
+    // This prevents running multiple copies of this script, if there is already
+    // one on that server
     preventDuplicates: true,
   });
 }
@@ -185,28 +185,31 @@ It needs a lot of improvements, and only works on one model type right now. See 
 /** @param {NS} ns */
 export async function main(ns) {
   while (true) {
-    // Get a list of all darknet hostnames directly connected to the current server
+    // Get a list of all darknet hostnames directly connected to the current
+    // server
     const nearbyServers = ns.dnet.probe();
 
-    // Attempt to authenticate with each of the nearby servers, and spread this script to
-    // them
+    // Attempt to authenticate with each of the nearby servers, and spread this
+    // script to them
     for (const hostname of nearbyServers) {
       const authenticationSuccessful = await serverSolver(ns, hostname);
       if (!authenticationSuccessful) {
         continue; // If we failed to auth, just move on to the next server
       }
 
-      // If we have successfully authenticated, we can now copy and run this script on
-      // the target server
+      // If we have successfully authenticated, we can now copy and run this
+      // script on the target server
       ns.scp(ns.getScriptName(), hostname);
       ns.exec(ns.getScriptName(), hostname, {
-        preventDuplicates: true, // This prevents running multiple copies of this script
+        // This prevents running multiple copies of this script
+        preventDuplicates: true,
       });
     }
 
     // TODO: free up blocked ram on this server using ns.dnet.memoryReallocation
 
-    // TODO: look for .cache files on this server and open them with ns.dnet.openCache
+    // TODO: look for .cache files on this server and open them with
+    // ns.dnet.openCache
 
     // TODO: take advantage of the extra ram on darknet servers to run
     // ns.dnet.phishingAttack calls for money
@@ -220,15 +223,15 @@ export async function main(ns) {
  * @param {string} hostname - the name of the server to attempt to authorize on
  */
 export const serverSolver = async (ns, hostname) => {
-  // Get key info about the server, so we know what kind it is and how to authenticate
-  // with it
+  // Get key info about the server, so we know what kind it is and how to
+  // authenticate with it
   const details = ns.dnet.getServerDetails(hostname);
   if (!details.isConnectedToCurrentServer || !details.isOnline) {
     // If the server isn't connected or is offline, we can't authenticate
     return false;
   }
-  // If you are already authenticated to that server with this script, you don't need to
-  // do it again
+  // If you are already authenticated to that server with this script, you don't
+  // need to do it again
   if (details.hasSession) {
     return true;
   }
@@ -239,8 +242,8 @@ export const serverSolver = async (ns, hostname) => {
 
     // TODO: handle other models of darknet servers here
 
-    // TODO: get recent server logs with `await ns.dnet.heartbleed(hostname)` for more
-    // detailed logging on failed auth attempts
+    // TODO: get recent server logs with `await ns.dnet.heartbleed(hostname)`
+    // for more detailed logging on failed auth attempts
 
     default:
       ns.tprint(`Unrecognized modelId: ${details.modelId}`);
@@ -248,7 +251,8 @@ export const serverSolver = async (ns, hostname) => {
   }
 };
 
-/** Authenticates on 'ZeroLogon' type servers, which always have an empty password.
+/** Authenticates on 'ZeroLogon' type servers, which always have an empty
+ *  password.
  *  @param {NS} ns
  *  @param {string} hostname - the name of the server to attempt to authorize on
  */
@@ -258,9 +262,10 @@ const authenticateWithNoPassword = async (ns, hostname) => {
   return result.success;
 };
 
-/** This lets you tab-complete putting "--tail" on the run command so you can see the
- *  script logs as it runs, if you want. If you add support to the script to take other
- *  arguments, you can add them here as well for convenience.
+/** This lets you tab-complete putting "--tail" on the run command so you can
+ *  see the script logs as it runs, if you want. If you add support to the
+ *  script to take other arguments, you can add them here as well for
+ *  convenience.
  *  @param {AutocompleteData} data */
 export function autocomplete(data) {
   return ["--tail"];

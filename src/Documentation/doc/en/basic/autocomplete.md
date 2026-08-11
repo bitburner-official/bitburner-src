@@ -10,7 +10,8 @@ A basic example as a complete script;
 
 ```javascript
 /**
- * @param {AutocompleteData} data - context about the game, useful when autocompleting
+ * @param {AutocompleteData} data - context about the game, useful
+ *   when autocompleting
  * @param {string[]} args - current arguments, not including "run script.js"
  * @returns {string[]} - the array of possible autocomplete options
  */
@@ -37,19 +38,22 @@ AutocompleteData is an object with the following properties;
   {
     command:    // The command being run, as seen on the terminal.
     enums:      // The ns.enums object with various in-game strings.
-    filename:   // The name of the script file containing the autocomplete function.
+
+    // The name of the script file containing the autocomplete function.
+    filename:
+
     hostname:   // The name of the host server the script would be running on.
     processes:  // List of all processes running on the current server.
 
-    // List of all servers in the game. Some servers are hidden until you satisfy their
-    // requirements. This array does not contain hidden servers.
+    // List of all servers in the game. Some servers are hidden until you
+    // satisfy their requirements. This array does not contain hidden servers.
     servers:
 
     txts:       // List of all text files on the current server.
     scripts:    // List of all scripts on the current server.
 
-    // A function similar to ns.flags(). Calling this function adds all the flags as
-    // autocomplete arguments.
+    // A function similar to ns.flags(). Calling this function adds all the flags
+    // as autocomplete arguments.
     flags:
   }
 ```
@@ -58,7 +62,8 @@ Here is a more complete example, utilising and returning information from the Au
 
 ```javascript
 /**
- * @param {AutocompleteData} data - context about the game, useful when autocompleting
+ * @param {AutocompleteData} data - context about the game, useful
+ *   when autocompleting
  * @param {string[]} args - current arguments, not including "run script.js"
  * @returns {string[]} - the array of possible autocomplete options
  */
@@ -72,8 +77,8 @@ export function autocomplete(data, args) {
   // We are only interested in the string values from the enums object.
   const gymTypes = Object.values(gymTypesObject);
 
-  // Offer a list of all servers, all scripts on the current server, and gym jobs
-  // ("str", "agi" etc) as autocomplete options.
+  // Offer a list of all servers, all scripts on the current server, and gym
+  // jobs ("str", "agi" etc) as autocomplete options.
   return [...scripts, ...servers, ...gymTypes];
 }
 ```
@@ -88,7 +93,8 @@ For example;
 
 ```javascript
 /**
- * @param {AutocompleteData} data - context about the game, useful when autocompleting
+ * @param {AutocompleteData} data - context about the game, useful
+ *   when autocompleting
  * @param {string[]} args - current arguments, not including "run script.js"
  * @returns {string[]} - the array of possible autocomplete options
  */
