@@ -256,7 +256,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           }
         >
           <Button onClick={() => setDiagnosticOpen(true)} sx={{ gridArea: "diagnose" }}>
-            Diagnose files
+            Diagnose Files
           </Button>
         </Tooltip>
         <Tooltip title="Head to the theme browser to see a collection of prebuilt themes.">
@@ -298,7 +298,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
           <CreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
           <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
-            Reset tutorial
+            Repeat Tutorial
           </Button>
           <Button startIcon={<Chat />} href="https://discord.gg/TFc3hKD" target="_blank" sx={{ gridArea: "discord" }}>
             Discord
