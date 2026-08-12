@@ -116,17 +116,6 @@ Changes your fixed schedule
 </td></tr>
 <tr><td>
 
-[getRsvps()](./bitburner.boss.getrsvps.md)
-
-
-</td><td>
-
-To add definition
-
-
-</td></tr>
-<tr><td>
-
 [hasAccess()](./bitburner.boss.hasaccess.md)
 
 

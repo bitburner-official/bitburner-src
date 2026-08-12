@@ -233,7 +233,6 @@ import nsDoc_bitburner_boss_addbreaktime_md from "../../markdown/bitburner.boss.
 import nsDoc_bitburner_boss_agent_md from "../../markdown/bitburner.boss.agent.md?raw";
 import nsDoc_bitburner_boss_calendar_md from "../../markdown/bitburner.boss.calendar.md?raw";
 import nsDoc_bitburner_boss_changefixedschedule_md from "../../markdown/bitburner.boss.changefixedschedule.md?raw";
-import nsDoc_bitburner_boss_getrsvps_md from "../../markdown/bitburner.boss.getrsvps.md?raw";
 import nsDoc_bitburner_boss_hasaccess_md from "../../markdown/bitburner.boss.hasaccess.md?raw";
 import nsDoc_bitburner_boss_md from "../../markdown/bitburner.boss.md?raw";
 import nsDoc_bitburner_boss_nextupdate_md from "../../markdown/bitburner.boss.nextupdate.md?raw";
@@ -241,8 +240,10 @@ import nsDoc_bitburner_boss_solvepuzzle_md from "../../markdown/bitburner.boss.s
 import nsDoc_bitburner_bossagents_getnumagents_md from "../../markdown/bitburner.bossagents.getnumagents.md?raw";
 import nsDoc_bitburner_bossagents_hireagent_md from "../../markdown/bitburner.bossagents.hireagent.md?raw";
 import nsDoc_bitburner_bossagents_md from "../../markdown/bitburner.bossagents.md?raw";
-import nsDoc_bitburner_bosscalendar_cancelmeeting_md from "../../markdown/bitburner.bosscalendar.cancelmeeting.md?raw";
+import nsDoc_bitburner_bosscalendar_cancelmeetingattendance_md from "../../markdown/bitburner.bosscalendar.cancelmeetingattendance.md?raw";
 import nsDoc_bitburner_bosscalendar_getappointments_md from "../../markdown/bitburner.bosscalendar.getappointments.md?raw";
+import nsDoc_bitburner_bosscalendar_getrsvps_md from "../../markdown/bitburner.bosscalendar.getrsvps.md?raw";
+import nsDoc_bitburner_bosscalendar_ismeetingattended_md from "../../markdown/bitburner.bosscalendar.ismeetingattended.md?raw";
 import nsDoc_bitburner_bosscalendar_md from "../../markdown/bitburner.bosscalendar.md?raw";
 import nsDoc_bitburner_bosscalendar_rsvp_md from "../../markdown/bitburner.bosscalendar.rsvp.md?raw";
 import nsDoc_bitburner_cacheresult_md from "../../markdown/bitburner.cacheresult.md?raw";
@@ -1893,7 +1894,6 @@ AllPages["nsDoc/bitburner.boss.addbreaktime.md"] = nsDoc_bitburner_boss_addbreak
 AllPages["nsDoc/bitburner.boss.agent.md"] = nsDoc_bitburner_boss_agent_md;
 AllPages["nsDoc/bitburner.boss.calendar.md"] = nsDoc_bitburner_boss_calendar_md;
 AllPages["nsDoc/bitburner.boss.changefixedschedule.md"] = nsDoc_bitburner_boss_changefixedschedule_md;
-AllPages["nsDoc/bitburner.boss.getrsvps.md"] = nsDoc_bitburner_boss_getrsvps_md;
 AllPages["nsDoc/bitburner.boss.hasaccess.md"] = nsDoc_bitburner_boss_hasaccess_md;
 AllPages["nsDoc/bitburner.boss.md"] = nsDoc_bitburner_boss_md;
 AllPages["nsDoc/bitburner.boss.nextupdate.md"] = nsDoc_bitburner_boss_nextupdate_md;
@@ -1901,8 +1901,10 @@ AllPages["nsDoc/bitburner.boss.solvepuzzle.md"] = nsDoc_bitburner_boss_solvepuzz
 AllPages["nsDoc/bitburner.bossagents.getnumagents.md"] = nsDoc_bitburner_bossagents_getnumagents_md;
 AllPages["nsDoc/bitburner.bossagents.hireagent.md"] = nsDoc_bitburner_bossagents_hireagent_md;
 AllPages["nsDoc/bitburner.bossagents.md"] = nsDoc_bitburner_bossagents_md;
-AllPages["nsDoc/bitburner.bosscalendar.cancelmeeting.md"] = nsDoc_bitburner_bosscalendar_cancelmeeting_md;
+AllPages["nsDoc/bitburner.bosscalendar.cancelmeetingattendance.md"] = nsDoc_bitburner_bosscalendar_cancelmeetingattendance_md;
 AllPages["nsDoc/bitburner.bosscalendar.getappointments.md"] = nsDoc_bitburner_bosscalendar_getappointments_md;
+AllPages["nsDoc/bitburner.bosscalendar.getrsvps.md"] = nsDoc_bitburner_bosscalendar_getrsvps_md;
+AllPages["nsDoc/bitburner.bosscalendar.ismeetingattended.md"] = nsDoc_bitburner_bosscalendar_ismeetingattended_md;
 AllPages["nsDoc/bitburner.bosscalendar.md"] = nsDoc_bitburner_bosscalendar_md;
 AllPages["nsDoc/bitburner.bosscalendar.rsvp.md"] = nsDoc_bitburner_bosscalendar_rsvp_md;
 AllPages["nsDoc/bitburner.cacheresult.md"] = nsDoc_bitburner_cacheresult_md;

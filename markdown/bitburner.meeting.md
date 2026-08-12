@@ -62,7 +62,7 @@ number
 
 </td><td>
 
-string
+number
 
 
 </td><td>
@@ -115,7 +115,7 @@ _(Optional)_
 
 </td><td>
 
-string
+number
 
 
 </td><td>
@@ -132,7 +132,7 @@ string
 
 </td><td>
 
-string
+[MeetingTitle](./bitburner.meetingtitle.md)
 
 
 </td><td>

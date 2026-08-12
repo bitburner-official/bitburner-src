@@ -447,7 +447,7 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
 }
 
 /** Returns true if the player has access, false otherwise. */
-function checkBossAPIAccess(ctx: NetscriptContext): boolean {
+function checkBossAPIAccess(): boolean {
   return canAccessBitNodeFeature(16);
 }
 

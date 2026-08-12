@@ -17,7 +17,9 @@ type MeetingTitleEnumType = {
   Interview: "Candidate Interview";
   Presentation: "Slide Presentation";
   SoftwareDemo: "Software Demo";
-  Lunch: "Lunch";
-  Recess: "Recess";
+  Lunch: MeetingFixedBreaksEnumType["Lunch"];
+  Recess: MeetingFixedBreaksEnumType["Recess"];
 };
 ```
+**References:** [MeetingFixedBreaksEnumType](./bitburner.meetingfixedbreaksenumtype.md)
+

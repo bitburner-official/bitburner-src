@@ -27,12 +27,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[cancelMeeting(meetingID)](./bitburner.bosscalendar.cancelmeeting.md)
+[cancelMeetingAttendance(meetingID)](./bitburner.bosscalendar.cancelmeetingattendance.md)
 
 
 </td><td>
 
-Cancel a specified meeting
+Cancel the attendance to the specified meeting
 
 
 </td></tr>
@@ -43,7 +43,29 @@ Cancel a specified meeting
 
 </td><td>
 
-Get all the information of the next appointments
+Get all the meetings this round.
+
+
+</td></tr>
+<tr><td>
+
+[getRsvps()](./bitburner.bosscalendar.getrsvps.md)
+
+
+</td><td>
+
+Returns all the meetings' IDs you're attending to this round.
+
+
+</td></tr>
+<tr><td>
+
+[isMeetingAttended(meetingID)](./bitburner.bosscalendar.ismeetingattended.md)
+
+
+</td><td>
+
+Returns true if the meeting is attended, false otherwise
 
 
 </td></tr>
@@ -54,7 +76,7 @@ Get all the information of the next appointments
 
 </td><td>
 
-French for répondez s'il vous plaît
+Attend a meeting by its ID.
 
 
 </td></tr>

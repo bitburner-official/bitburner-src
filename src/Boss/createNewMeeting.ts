@@ -1,4 +1,4 @@
-import { Meeting, MeetingTitle } from "@nsdefs";
+import { MeetingTitle } from "@nsdefs";
 import { MeetingTitleEnum } from "./Enums";
 
 /**
@@ -17,15 +17,4 @@ export function generateMeetingID(): number {
  */
 export function generateRandomTitle(): MeetingTitle {
   return Object.values(MeetingTitleEnum)[Math.floor(Math.random() * Object.values(MeetingTitleEnum).length)];
-}
-
-export function generateNewMeeting(): Meeting {
-  return {
-    id: generateMeetingID(),
-    title: generateRandomTitle(),
-    startTime: "",
-    finishTime: "",
-    attendanceMults: 1,
-    nonAttendanceMults: 0,
-  };
 }

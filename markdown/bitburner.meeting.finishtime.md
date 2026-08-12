@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-finishTime: string;
+finishTime: number;
 ```

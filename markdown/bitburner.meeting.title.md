@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-title: string;
+title: MeetingTitle;
 ```

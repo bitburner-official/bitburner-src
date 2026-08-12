@@ -9778,8 +9778,8 @@ type MeetingTitleEnumType = {
   Interview: "Candidate Interview";
   Presentation: "Slide Presentation";
   SoftwareDemo: "Software Demo";
-  Lunch: "Lunch";
-  Recess: "Recess";
+  Lunch: MeetingFixedBreaksEnumType["Lunch"];
+  Recess: MeetingFixedBreaksEnumType["Recess"];
 };
 
 /** @public */
@@ -9787,8 +9787,8 @@ type MeetingTitle = _ValueOf<MeetingTitleEnumType>;
 
 /** @public */
 type MeetingFixedBreaksEnumType = {
-  Lunch: MeetingTitleEnumType["Lunch"];
-  Recess: MeetingTitleEnumType["Recess"];
+  Lunch: "Lunch";
+  Recess: "Recess";
 };
 
 /** @public */
@@ -9916,39 +9916,55 @@ type NSEnums = {
 /** Defines a Meeting */
 export interface Meeting {
   id: number;
-  title: string;
-  startTime: string;
-  finishTime: string;
+  title: MeetingTitle;
+  startTime: number;
+  finishTime: number;
   attendanceMults: number;
   nonAttendanceMults?: number;
 }
 
 /** Company Calendar */
 export interface BossCalendar {
-  /** Get all the information of the next appointments
+  /**
+   * Get all the meetings this round.
    *
    * @remarks
    * RAM cost: 2 GB
    */
   getAppointments(): Meeting[];
 
-  /** French for répondez s'il vous plaît
+  /**
+   * Attend a meeting by its ID.
    *
-   * @param meetingID - The ID of the puzzle
+   * @param meetingID - The ID of the meeting to attend
    *
    * @remarks
    * RAM cost: 2 GB
    */
   rsvp(meetingID: number): void;
 
-  /** Cancel a specified meeting
+  /**
+   * Returns all the meetings' IDs you're attending to this round.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   */
+  getRsvps(): number[];
+
+  /**
+   * Cancel the attendance to the specified meeting
    *
    * @param meetingID - the ID of the meeting to cancel
    *
    * @remarks
    * RAM cost: 2 GB
    */
-  cancelMeeting(meetingID: number): void;
+  cancelMeetingAttendance(meetingID: number): void;
+
+  /**
+   * Returns true if the meeting is attended, false otherwise
+   */
+  isMeetingAttended(meetingID: number): boolean;
 }
 
 /** Agent API. Allows you to interact with your agents */
@@ -10009,14 +10025,6 @@ export interface Boss {
    * RAM cost: 4 GB
    */
   addBreakTime(timezone: Date): void;
-
-  /**
-   * To add definition
-   *
-   * @remarks
-   * RAM cost: 2 GB
-   */
-  getRsvps(): string[];
 
   /**
    * Checks if you have access to the API

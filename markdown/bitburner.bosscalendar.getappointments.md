@@ -4,7 +4,7 @@
 
 ## BossCalendar.getAppointments() method
 
-Get all the information of the next appointments
+Get all the meetings this round.
 
 **Signature:**
 
