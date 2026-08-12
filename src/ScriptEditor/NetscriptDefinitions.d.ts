@@ -4745,9 +4745,9 @@ export interface Darknet {
    * RAM cost: 4 GB
    *
    * @param host - Hostname/IP of the connected server to migrate.
-   * @returns A promise that resolves to a {@link DarknetResult} object.
+   * @returns A promise that resolves to a {@link DarknetResult} object with a `progress` field indicating the total migration progress in the range [0, 1].
    */
-  induceServerMigration(host: string): Promise<DarknetResult>;
+  induceServerMigration(host: string): Promise<DarknetResult & { progress: number }>;
 
   /**
    * Executes STORM_SEED.exe, if it is present on the server the script is running on.
