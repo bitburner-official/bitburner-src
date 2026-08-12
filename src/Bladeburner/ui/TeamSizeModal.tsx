@@ -41,8 +41,14 @@ export function TeamSizeModal({ bladeburner, action, open, onClose }: TeamSizeMo
     <Modal open={open} onClose={onClose}>
       <form onSubmit={confirmTeamSize}>
         <Typography>
-          Enter the amount of team members you would like to take on this Op. If you do not have the specified number of
-          team members, then as many as possible will be used. Note that team members may be lost during operations.
+          Enter the number of team members you want to take on this Op. If you don't have that many team members, then
+          all your team members will be used.
+          <br />
+          <br />
+          Team members boost your success chance, but at a diminishing rate the more you bring along.
+          <br />
+          <br />
+          Note that some team members are likely to be lost on each operation, even if you're successful.
         </Typography>
         <TextField autoFocus type="number" placeholder="Team size" value={teamSize} onChange={onTeamSize} />
         <Button sx={{ mx: 2 }} type={"submit"}>
