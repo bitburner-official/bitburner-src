@@ -19,6 +19,8 @@ import { initBitNodeMultipliers } from "../../src/BitNode/BitNode";
 import { resetGoPromises } from "../../src/Go/boardAnalysis/goAI";
 import { enterBitNode } from "../../src/RedPill";
 import { getDefaultBitNodeOptions } from "../../src/BitNode/BitNodeUtils";
+import { addLowLevelServersIfNeeded } from "../../src/DarkNet/controllers/NetworkMovement";
+import { getDarknetServerOrThrow } from "../../src/DarkNet/utils/darknetServerUtils";
 
 declare const importActual: (typeof config)["doImport"];
 
@@ -137,4 +139,14 @@ export function expectWithMessage(actual: unknown, expected: unknown, customMess
   } catch (error) {
     throw new Error(customMessage, { cause: error });
   }
+}
+
+export function getFirstDarknetServerAdjacentToDarkWeb() {
+  addLowLevelServersIfNeeded();
+  const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
+  const result = darkweb.serversOnNetwork.filter((hostname) => hostname !== SpecialServers.Home)[0];
+  if (!result) {
+    throw new Error("No darknet server adjacent to darkweb found");
+  }
+  return result;
 }

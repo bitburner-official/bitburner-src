@@ -8,6 +8,7 @@ import { connectServers, GetServerOrThrow } from "../../../src/Server/AllServers
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import {
   fixDoImportIssue,
+  getFirstDarknetServerAdjacentToDarkWeb,
   getMockedNetscriptContext,
   getNS,
   getWorkerScriptAndNS,
@@ -21,7 +22,6 @@ import { ModelIds, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { expectRunningOnDarknetServer } from "../../../src/DarkNet/effects/offlineServerHandling";
 import { sleep } from "../../../src/utils/Utility";
-import { addLowLevelServersIfNeeded } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { isIPAddress } from "../../../src/Types/strings";
 import { clearDarknet, populateDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
 import {
@@ -79,16 +79,6 @@ function getNsOnServerNearLabyrinth() {
     }
   }
   return getNS(server);
-}
-
-function getFirstDarknetServerAdjacentToDarkWeb() {
-  addLowLevelServersIfNeeded();
-  const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
-  const result = darkweb.serversOnNetwork.filter((hostname) => hostname !== SpecialServers.Home)[0];
-  if (!result) {
-    throw new Error("No darknet server adjacent to darkweb found");
-  }
-  return result;
 }
 
 function getNsOnNonDarkwebDarknetServer() {
@@ -1311,4 +1301,29 @@ describe("lab location methods", () => {
       }
     }
   });
+});
+
+test.each([
+  ["heartbleed", true],
+  ["heartbleed", false],
+])("%s with peek = %s", async (__, peek) => {
+  const ns = getNsOnHome();
+  const serverState = getServerState(SpecialServers.DarkWeb);
+  await ns.dnet.authenticate(SpecialServers.DarkWeb, "");
+
+  const serverLogs = serverState.serverLogs;
+  const result = await ns.dnet.heartbleed(SpecialServers.DarkWeb, { logsToCapture: 1, peek });
+  // serverLogs contain 3 entries: the success response and two noise logs. The heartbleed call returns the success
+  // response.
+  expect(result.logs.length).toBe(1);
+  expect(result.logs[0]).toBe(`{"code":200,"message":"Success","passwordAttempted":""}`);
+  // This is similar to the "do not assign a new array to serverState.serverLogs" test in
+  // test/jest/Darknet/Darknet.test.ts, but for the heartbleed API.
+  expect(serverState.serverLogs).toBe(serverLogs);
+  // Check whether we handle the peek parameter correctly.
+  if (peek) {
+    expect(serverLogs.length).toBe(3);
+  } else {
+    expect(serverLogs.length).toBe(2);
+  }
 });

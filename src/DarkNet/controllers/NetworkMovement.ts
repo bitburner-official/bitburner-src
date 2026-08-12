@@ -186,7 +186,7 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
   DeleteServer(server.hostname);
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [];
+  serverState.serverLogs.length = 0;
 };
 
 export const addRandomDarknetServers = (count = 1, difficulty?: number, fixedDepth?: boolean): void => {
@@ -306,7 +306,8 @@ export const restartServer = (server: DarknetServer): void => {
   killServerScripts(server, "Server restarted.");
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [{ pid: -1, message: "Server restarting, terminating scripts..." }];
+  serverState.serverLogs.length = 0;
+  serverState.serverLogs.push({ pid: -1, message: "Server restarting, terminating scripts..." });
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);
