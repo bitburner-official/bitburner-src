@@ -39,124 +39,108 @@ export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown)
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
-    openTail:
-      (ctx) =>
-      (scriptID, host, ...scriptArgs) => {
-        const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
-        const runningScriptObj = helpers.getRunningScript(ctx, ident);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-          return;
-        }
+    openTail: (ctx, scriptID, host, ...scriptArgs) => {
+      const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
+      const runningScriptObj = helpers.getRunningScript(ctx, ident);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+        return;
+      }
 
-        LogBoxEvents.emit(runningScriptObj);
-      },
+      LogBoxEvents.emit(runningScriptObj);
+    },
 
-    renderTail:
-      (ctx) =>
-      (_pid = ctx.workerScript.scriptRef.pid) => {
-        const pid = helpers.number(ctx, "pid", _pid);
-        const runningScriptObj = helpers.getRunningScript(ctx, pid);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-          return;
-        }
-        runningScriptObj.tailProps?.rerender();
-      },
+    renderTail: (ctx, _pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.rerender();
+    },
 
-    moveTail:
-      (ctx) =>
-      (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
-        const x = helpers.number(ctx, "x", _x);
-        const y = helpers.number(ctx, "y", _y);
-        const pid = helpers.number(ctx, "pid", _pid);
-        const runningScriptObj = helpers.getRunningScript(ctx, pid);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-          return;
-        }
-        runningScriptObj.tailProps?.setPosition(x, y);
-      },
+    moveTail: (ctx, _x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
+      const x = helpers.number(ctx, "x", _x);
+      const y = helpers.number(ctx, "y", _y);
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setPosition(x, y);
+    },
 
-    resizeTail:
-      (ctx) =>
-      (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
-        const w = helpers.number(ctx, "w", _w);
-        const h = helpers.number(ctx, "h", _h);
-        const pid = helpers.number(ctx, "pid", _pid);
-        const runningScriptObj = helpers.getRunningScript(ctx, pid);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-          return;
-        }
-        runningScriptObj.tailProps?.setSize(w, h);
-      },
+    resizeTail: (ctx, _w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
+      const w = helpers.number(ctx, "w", _w);
+      const h = helpers.number(ctx, "h", _h);
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setSize(w, h);
+    },
 
-    closeTail:
-      (ctx) =>
-      (_pid = ctx.workerScript.scriptRef.pid) => {
-        const pid = helpers.number(ctx, "pid", _pid);
-        const runningScriptObj = helpers.getRunningScript(ctx, pid);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-          return;
-        }
-        // Emit an event to tell the game to close the tail window if it exists.
-        LogBoxCloserEvents.emit(pid);
-      },
+    closeTail: (ctx, _pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      // Emit an event to tell the game to close the tail window if it exists.
+      LogBoxCloserEvents.emit(pid);
+    },
 
-    setTailTitle:
-      (ctx) =>
-      (title, _pid = ctx.workerScript.scriptRef.pid) => {
-        const pid = helpers.number(ctx, "pid", _pid);
-        const runningScriptObj = helpers.getRunningScript(ctx, pid);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-          return;
-        }
-        runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
-        runningScriptObj.tailProps?.rerender();
-      },
+    setTailTitle: (ctx, title, _pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
+      runningScriptObj.tailProps?.rerender();
+    },
 
-    setTailFontSize:
-      (ctx) =>
-      (_pixel, scriptID, host, ...scriptArgs) => {
-        const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
-        const runningScriptObj = helpers.getRunningScript(ctx, ident);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-          return;
-        }
-        if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
-        else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
-      },
+    setTailFontSize: (ctx, _pixel, scriptID, host, ...scriptArgs) => {
+      const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
+      const runningScriptObj = helpers.getRunningScript(ctx, ident);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+        return;
+      }
+      if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
+      else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
+    },
 
-    setTailMinimized:
-      (ctx) =>
-      (_minimized, _pid = ctx.workerScript.scriptRef.pid) => {
-        const minimized = helpers.boolean(ctx, "minimized", _minimized);
-        const pid = helpers.number(ctx, "pid", _pid);
-        const runningScriptObj = helpers.getRunningScript(ctx, pid);
-        if (runningScriptObj == null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-          return;
-        }
-        runningScriptObj.tailProps?.setMinimized(minimized);
-      },
+    setTailMinimized: (ctx, _minimized, _pid = ctx.workerScript.scriptRef.pid) => {
+      const minimized = helpers.boolean(ctx, "minimized", _minimized);
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setMinimized(minimized);
+    },
 
-    windowSize: () => () => {
+    windowSize: () => {
       return [window.innerWidth, window.innerHeight];
     },
 
-    getTheme: () => () => {
+    getTheme: () => {
       return { ...Settings.theme };
     },
 
-    getStyles: () => () => {
+    getStyles: () => {
       return { ...Settings.styles };
     },
 
-    setTheme: (ctx) => (newTheme) => {
+    setTheme: (ctx, newTheme) => {
       let newData: unknown;
       try {
         /**
@@ -173,7 +157,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       helpers.log(ctx, () => `Successfully set theme`);
     },
 
-    setStyles: (ctx) => (newStyles) => {
+    setStyles: (ctx, newStyles) => {
       let newData: unknown;
       try {
         /**
@@ -190,19 +174,19 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       helpers.log(ctx, () => `Successfully set styles`);
     },
 
-    resetTheme: (ctx) => () => {
+    resetTheme: (ctx) => {
       Settings.theme = { ...defaultTheme };
       ThemeEvents.emit();
       helpers.log(ctx, () => `Reinitialized theme to default`);
     },
 
-    resetStyles: (ctx) => () => {
+    resetStyles: (ctx) => {
       Settings.styles = { ...defaultStyles };
       ThemeEvents.emit();
       helpers.log(ctx, () => `Reinitialized styles to default`);
     },
 
-    getGameInfo: () => () => {
+    getGameInfo: () => {
       return {
         version: CONSTANTS.VersionString,
         versionNumber: CONSTANTS.VersionNumber,
@@ -211,12 +195,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       };
     },
 
-    clearTerminal: (ctx) => () => {
+    clearTerminal: (ctx) => {
       helpers.log(ctx, () => `Clearing terminal`);
       Terminal.clear();
     },
 
-    openCodeEditor: (ctx: NetscriptContext) => (_files, _options) => {
+    openCodeEditor: (ctx: NetscriptContext, _files, _options) => {
       const files = !_files ? [] : Array.isArray(_files) ? _files : [_files];
       const fileNames = files.map((f) => {
         const path = helpers.filePath(ctx, "fileName", f);
@@ -235,7 +219,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       );
     },
 
-    alias: (ctx) => (_alias, _substitution, _isGlobal) => {
+    alias: (ctx, _alias, _substitution, _isGlobal) => {
       const alias = parseAsAlias(ctx, "alias", _alias);
       const substitution = helpers.string(ctx, "substitution", _substitution);
       const isGlobal = helpers.boolean(ctx, "global", _isGlobal ?? false);
@@ -248,7 +232,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       }
     },
 
-    unalias: (ctx) => (_alias) => {
+    unalias: (ctx, _alias) => {
       const alias = parseAsAlias(ctx, "alias", _alias);
 
       if (!alias) {
@@ -267,7 +251,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       return removedAlias;
     },
 
-    getAllAliases: () => () => {
+    getAllAliases: () => {
       const returnMap = new Map<string, { substitution: string; isGlobal: boolean }>();
 
       for (const alias of Aliases.entries()) {
@@ -280,11 +264,11 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       return returnMap;
     },
 
-    renderPage: () => (_node) => {
+    renderPage: (_, _node) => {
       Router.toPage(Page.CustomPage, { content: wrapUserNode(_node) });
     },
 
-    createConnectLink: (ctx) => (_connectPath, _linkText?) => {
+    createConnectLink: (ctx, _connectPath, _linkText?) => {
       if (!Player.hasProgram(CompletedProgramName.autoLink)) {
         throw errorMessage(ctx, "Requires AutoLink.exe to run.");
       }

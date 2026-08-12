@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
-import { Link as MuiLink } from "@mui/material";
+import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { validateConnections } from "../../Server/ServerHelpers";
@@ -18,5 +19,24 @@ export function ConnectLink({ path, text }: IConnectLinkProps): React.ReactEleme
     }
     Terminal.connectToServer(result.destination);
   }, [path]);
-  return <MuiLink onClick={onClick}>{text}</MuiLink>;
+  let tooltip: string;
+  switch (path.length) {
+    case 0:
+      tooltip = "";
+      break;
+    case 1:
+      tooltip = `connect ${path[0]}`;
+      break;
+    case 2:
+      tooltip = `connect ${path[0]}; connect ${path[1]}`;
+      break;
+    default:
+      tooltip = `connect ${path[0]}; ...; connect ${path.at(-1)}`;
+      break;
+  }
+  return (
+    <Tooltip title={tooltip}>
+      <Link onClick={onClick}>{text}</Link>
+    </Tooltip>
+  );
 }

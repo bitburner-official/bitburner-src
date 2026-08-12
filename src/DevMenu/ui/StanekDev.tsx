@@ -10,8 +10,18 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import { Adjuster } from "./Adjuster";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { AugmentationName } from "../../Enums";
 
 export function StanekDev(): React.ReactElement {
+  if (!Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1)) {
+    return (
+      <AutoExpandAccordion cacheKey="DEVMENU_StanekDev" unmountOnExit={true} disabled={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Stanek's Gift</Typography>
+        </AccordionSummary>
+      </AutoExpandAccordion>
+    );
+  }
   function addCycles(): void {
     staneksGift.storedCycles = 1e6;
   }
