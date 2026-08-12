@@ -13,7 +13,7 @@ import {
 import { Player } from "@player";
 import { formatNumber } from "../ui/formatNumber";
 import { GetServer } from "../Server/AllServers";
-import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
+import { addSessionToServer, DarknetState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkNet/effects/webstorm";
@@ -51,7 +51,7 @@ import { type DarknetServerData, getDarknetServerOrThrow } from "../DarkNet/util
 import { shuffle } from "lodash";
 import { getSharedChars } from "../DarkNet/utils/darknetAuthUtils";
 import { freezeServer } from "../DarkNet/controllers/NetworkMovement";
-import { populateServerLogsWithNoise } from "../DarkNet/models/packetSniffing";
+import { getServerLogs } from "../DarkNet/models/packetSniffing";
 
 type CompleteHeartbleedOptions = {
   peek: boolean;
@@ -285,15 +285,8 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             logs: [],
           };
         }
-        const serverState = getServerState(server.hostname);
-        populateServerLogsWithNoise(server);
-
+        const capturedLogs = getServerLogs(server, options.logsToCapture, options.peek);
         logger(ctx)(`Extracted log data from ${server.hostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
-
-        const capturedLogs = serverState.serverLogs.slice(0, options.logsToCapture);
-        if (!options.peek) {
-          serverState.serverLogs = serverState.serverLogs.slice(options.logsToCapture);
-        }
 
         return {
           success: true,

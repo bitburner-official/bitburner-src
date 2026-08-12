@@ -44,16 +44,27 @@ import {
   ServerNameSuffixes,
 } from "../../../src/DarkNet/models/dictionaryData";
 import { getAuthResult, isCloseToCorrectPassword } from "../../../src/DarkNet/effects/authentication";
-import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
+import { DarknetState, getServerState } from "../../../src/DarkNet/models/DarknetState";
 import { GenericResponseMessage, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
-import { expectWithMessage, getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import {
+  expectWithMessage,
+  getFirstDarknetServerAdjacentToDarkWeb,
+  getNS,
+  initGameEnvironment,
+  setupBasicTestingEnvironment,
+} from "../Utilities";
 import { getClueFileName, getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
 import * as UtilityModule from "../../../src/utils/Utility";
-import { mutateDarknet } from "../../../src/DarkNet/controllers/NetworkMovement";
+import { mutateDarknet, restartServer } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { launchWebstorm } from "../../../src/DarkNet/effects/webstorm";
 import { isNumber } from "../../../src/types";
-import { getMostRecentAuthLog, getServerLogs } from "../../../src/DarkNet/models/packetSniffing";
+import {
+  getMostRecentAuthLog,
+  getServerLogs,
+  logPasswordAttempt,
+  populateServerLogsWithNoise,
+} from "../../../src/DarkNet/models/packetSniffing";
 import { Player } from "@player";
 import { assertString } from "../../../src/utils/TypeAssertion";
 import { assertPasswordResponse, generateDarknetServerName } from "../../../src/DarkNet/models/DarknetServerOptions";
@@ -72,6 +83,7 @@ import { getRamBlock } from "../../../src/DarkNet/effects/ramblock";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { clearDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
 import { getTorRouter } from "../../../src/Server/ServerHelpers";
+import { getDarknetServerOrThrow } from "../../../src/DarkNet/utils/darknetServerUtils";
 
 beforeAll(() => {
   initGameEnvironment();
@@ -1019,4 +1031,111 @@ describe("clearDarknet", () => {
     expect(home.serversOnNetwork).toContain(darkweb.hostname);
     expect(darkweb.serversOnNetwork).toContain(home.hostname);
   });
+});
+
+test("authentication preserves generated server logs", () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.99);
+
+  const server = getDarknetServerOrThrow(SpecialServers.DarkWeb);
+  server.logTrafficInterval = 1;
+
+  const serverState = getServerState(server.hostname);
+  serverState.serverLogs = [{ message: "existing", pid: -1 }];
+  serverState.lastLogTime = new Date(Date.now() - 2500);
+
+  getAuthResult(server, "wrongPassword", 1);
+
+  expect(serverState.serverLogs.length).toBeGreaterThanOrEqual(4);
+});
+
+describe("do not assign a new array to serverState.serverLogs", () => {
+  test.each([
+    ["restartServer", (server: DarknetServer) => restartServer(server)],
+    [
+      "logPasswordAttempt with undefined lastLogTime",
+      (server: DarknetServer) => {
+        server.logTrafficInterval = 1;
+        getServerState(server.hostname).lastLogTime = undefined;
+        logPasswordAttempt(server, { code: 200, message: "", passwordAttempted: "" }, 1);
+      },
+    ],
+    [
+      "logPasswordAttempt with lastLogTime",
+      (server: DarknetServer) => {
+        server.logTrafficInterval = 1;
+        getServerState(server.hostname).lastLogTime = new Date(Date.now() - 5000);
+        logPasswordAttempt(server, { code: 200, message: "", passwordAttempted: "" }, 1);
+      },
+    ],
+    ["populateServerLogsWithNoise", (server: DarknetServer) => populateServerLogsWithNoise(server)],
+    ["getServerLogs with peek = false", (server: DarknetServer) => getServerLogs(server, 1, false)],
+    ["getServerLogs with peek = true", (server: DarknetServer) => getServerLogs(server, 1, true)],
+  ])("%s", (__, callback) => {
+    const server = getDarknetServerOrThrow(getFirstDarknetServerAdjacentToDarkWeb());
+    const serverState = getServerState(server.hostname);
+    const serverLogs = serverState.serverLogs;
+    callback(server);
+    expect(serverState.serverLogs).toBe(serverLogs);
+  });
+});
+
+test("generated log noise is ordered from newest to oldest", () => {
+  // Use a fixed time to prevent the generated logs from crossing midnight.
+  // The logs only contain the time of day, so the test cannot distinguish 11:59:59 PM from 12:00:00 AM when checking
+  // their chronological order.
+  jest.useFakeTimers();
+  jest.setSystemTime(new Date("2026-08-12T12:00:00"));
+
+  const server = getDarknetServerOrThrow(SpecialServers.DarkWeb);
+  server.logTrafficInterval = 1;
+
+  const serverState = getServerState(server.hostname);
+  serverState.lastLogTime = new Date(Date.now() - 10000);
+
+  // Force en-US formatting so the generated time strings have a consistent format.
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const originalToLocaleTimeString = Date.prototype.toLocaleTimeString;
+  const toLocaleTimeStringSpy = jest
+    .spyOn(Date.prototype, "toLocaleTimeString")
+    .mockImplementation(function (this: Date) {
+      return originalToLocaleTimeString.bind(this)("en-US");
+    });
+
+  try {
+    populateServerLogsWithNoise(server);
+  } finally {
+    toLocaleTimeStringSpy.mockRestore();
+    jest.useRealTimers();
+  }
+
+  // Parse the time prefix from the generated log message. This is sufficient for this test.
+  const getTime = (message: string): number | undefined => {
+    const match = message.match(/^(\d{1,2}):(\d{2}):(\d{2})\s([AP]M)/);
+    if (!match) {
+      return undefined;
+    }
+
+    const hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    const seconds = Number(match[3]);
+    const period = match[4];
+
+    const hour = period === "PM" && hours !== 12 ? hours + 12 : period === "AM" && hours === 12 ? 0 : hours;
+
+    return hour * 3600 + minutes * 60 + seconds;
+  };
+
+  const times = [];
+  for (const log of serverState.serverLogs) {
+    if (typeof log.message !== "string") {
+      continue;
+    }
+    const time = getTime(log.message);
+    if (time === undefined) {
+      continue;
+    }
+    times.push(time);
+  }
+
+  expect(times).toEqual([...times].sort((a, b) => b - a));
 });
