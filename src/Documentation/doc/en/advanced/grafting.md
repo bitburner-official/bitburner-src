@@ -7,7 +7,8 @@ From there, you can spend a sum of money to begin grafting [Augmentations](../ba
 This will take some time.
 When done, the [Augmentation](../basic/augmentations.md) will be applied to your character without needing to install.
 
-Be warned, some who have tested grafting have reported an unidentified malware.
-Dubbed `Entropy`, this virus seems to grow in potency as more [Augmentations](../basic/augmentations.md) are grafted, causing unpredictable affects to the victim.
+Be warned: some who have tested grafting have reported an unidentified malware.
+Dubbed `Entropy`, this virus seems to grow in potency as more [Augmentations](../basic/augmentations.md) are grafted, causing unpredictable effects to the victim.
+Perhaps there is a way to reverse its effects ...
 
 Note that when grafting an [Augmentation](../basic/augmentations.md), cancelling will **not** save your progress, and the money spent will **not** be returned.
