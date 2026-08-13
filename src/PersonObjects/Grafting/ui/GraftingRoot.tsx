@@ -110,6 +110,7 @@ export const GraftingRoot = (): React.ReactElement => {
       <Typography>
         You find yourself in a secret laboratory, owned by a mysterious researcher.
         <br />
+        <br />
         The scientist explains that they've been studying augmentation grafting, the process of applying augmentations
         without requiring a body reset.
         <br />
