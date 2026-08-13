@@ -269,7 +269,7 @@ export const GraftingRoot = (): React.ReactElement => {
           hidden malware. However, grafted augmentations do not provide this security measure.
           <br />
           <br />
-          Individuals who tested augmentation grafting have reported symptoms of an unknown virus which persists even
+          Individuals who tested augmentation grafting have reported symptoms of an unknown virus, which persists even
           after a later body reset. They've dubbed it "Entropy". This virus seems to grow more potent with each grafted
           augmentation ...
         </Typography>
