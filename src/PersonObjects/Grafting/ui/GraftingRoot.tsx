@@ -116,7 +116,7 @@ export const GraftingRoot = (): React.ReactElement => {
         <br />
         Through legally questionable connections, the scientist has access to a vast array of augmentation blueprints,
         even private designs. They offer to build and graft the augmentations onto you, in exchange for both a hefty sum
-        of money, and your agreement to act as a lab rat.
+        of money, and for being a lab rat.
         <br />
         <br />
         When grafting augmentations, prerequisites work the same way as usual. If an augmentation has prerequsities, you
@@ -268,7 +268,7 @@ export const GraftingRoot = (): React.ReactElement => {
           hidden malware. However, grafted augmentations do not provide this security measure.
           <br />
           <br />
-          Individuals who tested augmentation grafting have reported symptoms of an unknown virus, which persists even
+          Individuals who tested augmentation grafting have reported symptoms of an unknown virus which persists even
           after a later body reset. They've dubbed it "Entropy". This virus seems to grow more potent with each grafted
           augmentation ...
         </Typography>
