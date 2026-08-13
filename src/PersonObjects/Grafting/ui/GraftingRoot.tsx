@@ -116,11 +116,11 @@ export const GraftingRoot = (): React.ReactElement => {
         <br />
         <br />
         Through legally questionable connections, the scientist has access to a vast array of augmentation blueprints,
-        even private designs. They offer to build and graft the augmentations onto you, in exchange both for a hefty sum
-        of money, and for being a lab rat.
+        even private designs. They offer to build and graft the augmentations onto you, in exchange for both a hefty sum
+        of money, and being a lab rat.
         <br />
         <br />
-        When grafting augmentations, prerequisites work the same way as usual. If an augmentation has prerequsities, you
+        When grafting augmentations, prerequisites work the same way as usual. If an augmentation has prerequisites, you
         must buy, install or graft those prerequisites before you can graft the augmentation.
       </Typography>
 
