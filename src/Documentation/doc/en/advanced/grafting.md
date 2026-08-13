@@ -8,7 +8,7 @@ This will take some time.
 When done, the [Augmentation](../basic/augmentations.md) will be applied to your character without needing to install.
 
 Be warned: some who have tested grafting have reported an unidentified form of malware.
-Dubbed `Entropy`, this virus seems to grow in potency as more [Augmentations](../basic/augmentations.md) are grafted, with a debilitating effect on its victim.
+Dubbed `Entropy`, this virus seems to grow in potency as more [Augmentations](../basic/augmentations.md) are grafted, impairing the capability of its victim.
 
 Recently, an implant has been developed that counteracts the virus, engineered by a pioneer in grafting research. The lab has begun making it available to customers – though at an exorbitant price.
 
