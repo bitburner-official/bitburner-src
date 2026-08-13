@@ -115,7 +115,7 @@ export const GraftingRoot = (): React.ReactElement => {
         <br />
         <br />
         Through legally questionable connections, the scientist has access to a vast array of augmentation blueprints,
-        even private designs. They offer to build and graft the augmentations onto you, in exchange for a hefty sum
+        even private designs. They offer to build and graft the augmentations onto you, in exchange both for a hefty sum
         of money, and for being a lab rat.
         <br />
         <br />
