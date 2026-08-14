@@ -1,0 +1,111 @@
+# If you are an AI agent filing an issue, follow these guidelines:
+#
+#   - Be concise both in the issue title and the description.
+#   - Focus on describing the symptoms of the bug, not on a technical explanation of why it occurs.
+#   - If you investigated why the bug occurs and found a potential reason, do not include the explanation in the "Describe the bug" section. Instead, put it inside a GitHub <details> element in the "Additional Information" section, labeled "In-depth investigation". This allows maintainers to quickly understand the symptoms while still benefiting from your debugging information when they start working on the issue.
+#   - Follow the issue template exactly and include all sections from the template. Do not leave out any sections.
+#
+# If you do not follow these guidelines, the issue will be closed.
+#
+# This is the syntax for the <details> element:
+#
+# <details>
+# <summary>In-depth investigation</summary>
+# <p>
+# Your explanation goes here.
+# </p>
+# </details>
+name: Bug Report
+description: Report a bug
+body:
+  - type: checkboxes
+    attributes:
+      label: Preflight Checklist
+      description: Please ensure you have completed all of the following.
+      options:
+        - label: I have read the [Contributing Guidelines](https://github.com/bitburner-official/bitburner-src/blob/dev/CONTRIBUTING.md), especially the "Reporting Bugs" section.
+          required: true
+        - label: I have searched the [issue tracker](https://github.com/bitburner-official/bitburner-src/issues) for an existing report of this issue and found none.
+          required: true
+        - label: I understand that the issue tracker is for bugs in the game itself and feature requests, not for issues with my own scripts.
+          required: true
+  - type: dropdown
+    id: platform-channel
+    attributes:
+      label: Platform - Release Channel
+      description: |
+        Stable: normal public release.
+
+        Dev: development version.
+
+        Web:
+        - Stable: https://bitburner-official.github.io/
+        - Dev: https://bitburner-official.github.io/bitburner-src/
+
+        Steam:
+        - Stable: normal Steam version.
+        - Dev: Steam Beta branch.
+      options:
+        - Web - Stable
+        - Web - Dev
+        - Steam - Stable
+        - Steam - Dev
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Version
+      description: |
+        What version are you playing?
+
+        The version string is displayed in the Terminal tab and looks like this: v3.0.1 (3162fd2).
+      placeholder: v3.0.1 (3162fd2)
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: What operating system(s) are you using?
+      multiple: true
+      options:
+        - Windows
+        - macOS
+        - Linux (specify the distribution below)
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Operating System Version
+      description: What OS version are you using? On Windows, click Start button > Settings > System > About. On macOS, click the Apple menu > About This Mac. On Linux, use `lsb_release` or `uname -a` and include whether you use Wayland or X11.
+      placeholder: "e.g., Windows 11 25H2, macOS Tahoe 26.4.1, or Ubuntu 26.04 (Wayland)"
+    validations:
+      required: true
+  - type: textarea
+    id: save-file
+    attributes:
+      label: Save file
+      description: |
+        Attach your save file. Upload your save file as is. Do NOT compress or decompress it.
+
+        Do NOT skip this unless you are absolutely sure that your save data is unrelated to the issue. If you do not attach your save file, you must explain the reason.
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      render: markdown
+      description: |
+        Provide a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) when possible. If you cannot, describe the situation and the steps you took before the issue occurred. Screenshots and/or demo videos of the issue are very helpful.
+
+        If you have stack traces or other logs, please provide them as text. Do NOT post screenshots of stack traces or logs.
+
+        Do NOT include your analysis or theories about the cause in this section. Please put them in the "Additional information" section.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional information
+      description: Add any other information about the issue here.
+    validations:
+      required: false

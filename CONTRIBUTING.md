@@ -33,17 +33,21 @@ already been reported as an [Issue](https://github.com/bitburner-official/bitbur
 
 #### How to Submit a Good Bug Report
 
-- **Use a clear and descriptive title** for the Issue.
-- **State your browser, your browser's version, and your computer's OS.**
-- **Attach your save file**, if you think it would help solve the Issue.
-  Upload your save file as is. Do NOT compress or decompress it.
-- **Provide instructions on how to reproduce the bug** in as much detail
-  as possible. If you cannot reliably reproduce the bug, then just try
-  your best to explain what was happening when the bug occurred.
-- **Provide any scripts** that triggered the bug if the Issue is Netscript-related.
+- **Use a clear and descriptive title** for the issue.
+- Complete the bug report template and provide all requested information. Incomplete reports may be closed if the missing information prevents investigation.
+  - **State your browser, your browser's version, and your computer's OS.**
+  - **Attach your save file**. Upload your save file as is. Do NOT compress or decompress it.
+  - **Provide a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example)**.
+    If you cannot reliably reproduce the bug, then just try your best to explain what was happening when the bug occurred.
+  - **Provide any scripts** that triggered the bug if the issue is Netscript-related.
+- Screenshots and/or demo videos of the issue are very helpful.
+- If you have stack traces or other logs, please provide them as text. Do NOT post screenshots of stack traces or logs.
 - **Open the Console tab in your browser's Dev Tools and report any error-related output**
   that may be printed there. The Dev Tools can be opened on most modern
   browsers by pressing F12 or Ctrl+Shift+I (Cmd + Option + I on macOS machines).
+
+Note that the issue tracker is for bugs in the game itself and feature requests, not for issues with your own scripts.
+If you want to get help with your scripts, please ask on Discord.
 
 ## As a Developer
 
