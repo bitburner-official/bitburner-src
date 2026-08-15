@@ -35,7 +35,7 @@ already been reported as an [Issue](https://github.com/bitburner-official/bitbur
 
 - **Use a clear and descriptive title** for the issue.
 - Complete the bug report template and provide all requested information. Incomplete reports may be closed if the missing information prevents investigation.
-  - **State your browser, your browser's version, and your computer's OS.**
+  - **State your browser, its version, and your computer's OS.**
   - **Attach your save file**. Upload your save file as is. Do NOT compress or decompress it.
   - **Provide a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example)**.
     If you cannot reliably reproduce the bug, then just try your best to explain what was happening when the bug occurred.
@@ -47,7 +47,7 @@ already been reported as an [Issue](https://github.com/bitburner-official/bitbur
   browsers by pressing F12 or Ctrl+Shift+I (Cmd + Option + I on macOS machines).
 
 Note that the issue tracker is for bugs in the game itself and feature requests, not for issues with your own scripts.
-If you want to get help with your scripts, please ask on Discord.
+If you want to get help with your scripts, please ask in the [#help-scripts](https://discord.com/channels/415207508303544321/415247422638522395) channel or other relevant channels on Discord.
 
 ## As a Developer
 
