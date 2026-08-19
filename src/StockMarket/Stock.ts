@@ -123,6 +123,8 @@ export class Stock {
    */
   readonly totalShares: number;
 
+  readonly priceHistory: { time: number; price: number }[];
+
   constructor(p: IConstructorParams = defaultConstructorParams) {
     this.name = p.name;
     this.symbol = p.symbol;
@@ -148,6 +150,8 @@ export class Stock {
     // Max Shares (Outstanding shares) is a percentage of total shares
     const outstandingSharePercentage = 0.2;
     this.maxShares = Math.round((this.totalShares * outstandingSharePercentage) / 1e5) * 1e5;
+
+    this.priceHistory = [];
   }
 
   /** Safely set the stock's second-order forecast to a new value */
@@ -188,11 +192,11 @@ export class Stock {
       this.otlkMag += changeAmt;
     }
 
-    this.otlkMag = Math.min(this.otlkMag, 50);
     if (this.otlkMag < 0) {
       this.otlkMag *= -1;
       this.b = !this.b;
     }
+    this.otlkMag = Math.min(this.otlkMag, 50);
   }
 
   /**
