@@ -86,11 +86,6 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     closeTail: (ctx, _pid = ctx.workerScript.scriptRef.pid) => {
       const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
       // Emit an event to tell the game to close the tail window if it exists.
       LogBoxCloserEvents.emit(pid);
     },
