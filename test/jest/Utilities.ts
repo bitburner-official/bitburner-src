@@ -125,6 +125,9 @@ export function getMockedNetscriptContext(
     functionPath: "",
     workerScript: {
       log: workerScriptLogFunction,
+      get hostname() {
+        return (this as WorkerScript).scriptRef.server;
+      },
       scriptRef: {
         dependencies: [],
       },

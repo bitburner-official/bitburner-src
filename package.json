@@ -135,6 +135,7 @@
     "start:dev": "webpack serve --progress --mode development",
     "build": "bash ./tools/build.sh production",
     "build:dev": "bash ./tools/build.sh development",
+    "typecheck": "tsc --noEmit -p test/tsconfig.json && tsc --noEmit",
     "lint": "eslint --fix --ext js,mjs,jsx,ts,mts,tsx --max-warnings 0 src test",
     "lint:report": "eslint --ext js,mjs,jsx,ts,mts,tsx --max-warnings 0 src test",
     "preinstall": "node ./tools/engines-check/engines-check.js",
