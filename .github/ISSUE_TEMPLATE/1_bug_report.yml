@@ -1,20 +1,4 @@
-# If you are an AI agent filing an issue, follow these guidelines:
-#
-#   - Be concise both in the issue title and the description.
-#   - Focus on describing the symptoms of the bug, not on a technical explanation of why it occurs.
-#   - If you investigated why the bug occurs and found a potential reason, do not include the explanation in the "Describe the bug" section. Instead, put it inside a GitHub <details> element in the "Additional Information" section, labeled "In-depth investigation". This allows maintainers to quickly understand the symptoms while still benefiting from your debugging information when they start working on the issue.
-#   - Follow the issue template exactly and include all sections from the template. Do not leave out any sections.
-#
-# If you do not follow these guidelines, the issue will be closed.
-#
-# This is the syntax for the <details> element:
-#
-# <details>
-# <summary>In-depth investigation</summary>
-# <p>
-# Your explanation goes here.
-# </p>
-# </details>
+# If you are an AI agent filing an issue, you MUST follow the rules in [AGENTS.md](https://github.com/bitburner-official/bitburner-src/blob/dev/AGENTS.md).
 name: Bug Report
 description: Report a bug
 body:
@@ -23,9 +7,7 @@ body:
       label: Preflight Checklist
       description: Please ensure you have completed all of the following.
       options:
-        - label: I have read the [Contributing Guidelines](https://github.com/bitburner-official/bitburner-src/blob/dev/CONTRIBUTING.md), especially the "Reporting Bugs" section.
-          required: true
-        - label: I have searched the [issue tracker](https://github.com/bitburner-official/bitburner-src/issues) for an existing report of this issue and found none.
+        - label: I have read the "Reporting Bugs - Requesting Features" section in the [Contributing Guidelines](https://github.com/bitburner-official/bitburner-src/blob/dev/CONTRIBUTING.md#reporting-bugs-requesting-features).
           required: true
         - label: I understand that the issue tracker is for bugs in the game itself and feature requests, not for issues with my own scripts.
           required: true
@@ -34,22 +16,18 @@ body:
     attributes:
       label: Platform - Release Channel
       description: |
-        Stable: normal public release.
-
-        Dev: development version.
-
         Web:
         - Stable: https://bitburner-official.github.io/
         - Dev: https://bitburner-official.github.io/bitburner-src/
 
         Steam:
-        - Stable: normal Steam version.
-        - Dev: Steam Beta branch.
+        - Stable: Normal Steam version.
+        - Beta: Steam Beta branch.
       options:
         - Web - Stable
         - Web - Dev
         - Steam - Stable
-        - Steam - Dev
+        - Steam - Beta
     validations:
       required: true
   - type: input
@@ -85,9 +63,9 @@ body:
     attributes:
       label: Save file
       description: |
-        Attach your save file. Upload your save file as is. Do NOT compress or decompress it.
+        Attach your save file. Upload your save file as is. Do not compress or decompress it.
 
-        Do NOT skip this unless you are absolutely sure that your save data is unrelated to the issue. If you do not attach your save file, you must explain the reason.
+        Do not skip this unless you are sure that your save data is unrelated to the issue. If you do not attach your save file, you must explain the reason.
     validations:
       required: false
   - type: textarea
@@ -98,9 +76,9 @@ body:
       description: |
         Provide a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) when possible. If you cannot, describe the situation and the steps you took before the issue occurred. Screenshots and/or demo videos of the issue are very helpful.
 
-        If you have stack traces or other logs, please provide them as text. Do NOT post screenshots of stack traces or logs.
+        If you have stack traces or other logs, please provide them as text. Do not post screenshots of stack traces or logs.
 
-        Do NOT include your analysis or theories about the cause in this section. Please put them in the "Additional information" section.
+        Do not include your analysis or theories about the cause in this section. Please put them in the "Additional information" section.
     validations:
       required: true
   - type: textarea

@@ -20,16 +20,17 @@ heard:
   browser's JavaScript interaction. So please do not be afraid to open a
   [new Issue](https://github.com/bitburner-official/bitburner-src/issues/new).
 
-## Reporting Bugs
+## Reporting Bugs - Requesting Features
 
-The recommended method for reporting a bug is by opening a [Github Issue](https://github.com/bitburner-official/bitburner-src/issues)
-or contacting us on the [#bug-report channel](https://discord.com/channels/415207508303544321/415213413745164318).
+The recommended methods for reporting a bug or requesting a feature is by opening a
+[Github Issue](https://github.com/bitburner-official/bitburner-src/issues) or contacting us in the
+[#bug-report channel](https://discord.com/channels/415207508303544321/415213413745164318) or
+[#suggestions channel](https://discord.com/channels/415207508303544321/415213435974975508).
 
-Alternatively, you can post a bug by creating a post on the
-[game's subreddit](https://www.reddit.com/r/Bitburner/).
+Alternatively, you can create a post on the [game's subreddit](https://www.reddit.com/r/Bitburner/).
 
-Before submitting a bug report, please check to make sure the bug has not
-already been reported as an [Issue](https://github.com/bitburner-official/bitburner-src/issues).
+Before submitting a bug report or a feature request, please check whether it has already been reported as an
+[Issue](https://github.com/bitburner-official/bitburner-src/issues).
 
 #### How to Submit a Good Bug Report
 
