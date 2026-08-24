@@ -20,7 +20,7 @@ heard:
   browser's JavaScript interaction. So please do not be afraid to open a
   [new Issue](https://github.com/bitburner-official/bitburner-src/issues/new).
 
-## Reporting Bugs - Requesting Features
+## Reporting Bugs / Requesting Features
 
 The recommended methods for reporting a bug or requesting a feature is by opening a
 [Github Issue](https://github.com/bitburner-official/bitburner-src/issues) or contacting us in the
