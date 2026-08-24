@@ -10,6 +10,6 @@ export enum PurchaseAugmentationsOrderSetting {
 // Numeric enum
 /** Allowed values for the 'OwnedAugmentationsOrder' setting */
 export enum OwnedAugmentationsOrderSetting {
-  Alphabetically,
-  AcquirementTime,
+  Alphabetically, 
+  AcquisitionTime,
 }

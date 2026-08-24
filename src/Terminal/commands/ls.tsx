@@ -132,7 +132,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
 
   // Sort the files/folders alphabetically then print each
 
-  const trueAlphabetical = (a: string, b: string) => a.localeCompare(b, "en", { caseFirst: "upper" });
+  const trueAlphabetical = (a: string, b: string) => a.localeCompare(b);
 
   allPrograms.sort(trueAlphabetical);
   allScripts.sort(trueAlphabetical);
