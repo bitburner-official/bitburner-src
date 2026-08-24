@@ -13,6 +13,7 @@ import {
   formatSleeveShock,
   formatSleeveSynchro,
 } from "../../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
 import { useStyles } from "../../../ui/React/CharacterOverview";
@@ -104,6 +105,17 @@ export function StatsElement(props: IProps): React.ReactElement {
           color={Settings.theme.primary}
           data={{ content: formatSleeveMemory(props.sleeve.memory) }}
         />
+        <StatsRow
+          name="Bonus time"
+          color={Settings.theme.primary}
+          data={{
+            content: convertTimeMsToTimeElapsedString(
+              props.sleeve.storedCycles < 10 ? 0 : props.sleeve.storedCycles * CONSTANTS.MilliPerCycle,
+              false,
+              true,
+            ),
+          }}
+        />
       </TableBody>
     </Table>
   );
@@ -116,38 +128,38 @@ export function EarningsElement(props: IProps): React.ReactElement {
   if (isSleeveCrimeWork(props.sleeve.currentWork)) {
     const gains = props.sleeve.currentWork.getExp(props.sleeve);
     data = [
-      [`Money:`, <Money key="money" money={gains.money} />],
-      [`Hacking Exp:`, `${formatExp(gains.hackExp)}`],
-      [`Strength Exp:`, `${formatExp(gains.strExp)}`],
-      [`Defense Exp:`, `${formatExp(gains.defExp)}`],
-      [`Dexterity Exp:`, `${formatExp(gains.dexExp)}`],
-      [`Agility Exp:`, `${formatExp(gains.agiExp)}`],
-      [`Charisma Exp:`, `${formatExp(gains.chaExp)}`],
+      [`Money`, <Money key="money" money={gains.money} />],
+      [`Hacking Exp`, `${formatExp(gains.hackExp)}`],
+      [`Strength Exp`, `${formatExp(gains.strExp)}`],
+      [`Defense Exp`, `${formatExp(gains.defExp)}`],
+      [`Dexterity Exp`, `${formatExp(gains.dexExp)}`],
+      [`Agility Exp`, `${formatExp(gains.agiExp)}`],
+      [`Charisma Exp`, `${formatExp(gains.chaExp)}`],
     ];
   }
   if (isSleeveClassWork(props.sleeve.currentWork)) {
     const rates = props.sleeve.currentWork.calculateRates(props.sleeve);
     data = [
-      [`Money:`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
-      [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
-      [`Strength Exp:`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
-      [`Defense Exp:`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
-      [`Dexterity Exp:`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
-      [`Agility Exp:`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
-      [`Charisma Exp:`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
+      [`Money`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
+      [`Hacking Exp`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
+      [`Strength Exp`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
+      [`Defense Exp`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
+      [`Dexterity Exp`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
+      [`Agility Exp`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
+      [`Charisma Exp`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
     ];
   }
   if (isSleeveFactionWork(props.sleeve.currentWork)) {
     const rates = props.sleeve.currentWork.getExpRates(props.sleeve);
     const repGain = props.sleeve.currentWork.getReputationRate(props.sleeve);
     data = [
-      [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
-      [`Strength Exp:`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
-      [`Defense Exp:`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
-      [`Dexterity Exp:`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
-      [`Agility Exp:`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
-      [`Charisma Exp:`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
-      [`Reputation:`, <ReputationRate key="reputation-rate" reputation={CYCLES_PER_SEC * repGain} />],
+      [`Hacking Exp`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
+      [`Strength Exp`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
+      [`Defense Exp`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
+      [`Dexterity Exp`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
+      [`Agility Exp`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
+      [`Charisma Exp`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
+      [`Reputation`, <ReputationRate key="reputation-rate" reputation={CYCLES_PER_SEC * repGain} />],
     ];
   }
 
@@ -156,39 +168,35 @@ export function EarningsElement(props: IProps): React.ReactElement {
     if (job) {
       const rates = props.sleeve.currentWork.getGainRates(props.sleeve, job);
       data = [
-        [`Money:`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
-        [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
-        [`Strength Exp:`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
-        [`Defense Exp:`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
-        [`Dexterity Exp:`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
-        [`Agility Exp:`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
-        [`Charisma Exp:`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
-        [`Reputation:`, <ReputationRate key="reputation-rate" reputation={CYCLES_PER_SEC * rates.reputation} />],
+        [`Money`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
+        [`Hacking Exp`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
+        [`Strength Exp`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
+        [`Defense Exp`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
+        [`Dexterity Exp`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
+        [`Agility Exp`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
+        [`Charisma Exp`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
+        [`Reputation`, <ReputationRate key="reputation-rate" reputation={CYCLES_PER_SEC * rates.reputation} />],
       ];
     }
   }
 
   return (
-    <Table sx={{ display: "table", mb: 1, width: "100%", lineHeight: 0 }}>
-      <TableBody>
-        <TableRow>
-          <TableCell classes={{ root: classes.cellNone }}>
-            <Typography variant="h6">
-              Earnings {props.sleeve.storedCycles > 50 ? "(Boosted by bonus time)" : ""}
-            </Typography>
-          </TableCell>
-        </TableRow>
-        {data.map(([a, b]) => (
-          <TableRow key={getKeyFromReactElements(a, b)}>
-            <TableCell classes={{ root: classes.cellNone }}>
-              <Typography>{a}</Typography>
-            </TableCell>
-            <TableCell align="right" classes={{ root: classes.cellNone }}>
-              <Typography>{b}</Typography>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Typography variant="h6">Earnings {props.sleeve.storedCycles > 50 ? "(boosted by bonus time)" : ""}</Typography>
+      <Table sx={{ display: "table", mb: 1, width: "100%", lineHeight: 0 }}>
+        <TableBody>
+          {data.map(([a, b]) => (
+            <TableRow key={getKeyFromReactElements(a, b)}>
+              <TableCell sx={{ width: "50%" }} classes={{ root: classes.cellNone }}>
+                <Typography>{a}</Typography>
+              </TableCell>
+              <TableCell sx={{ width: "50%" }} align="right" classes={{ root: classes.cellNone }}>
+                <Typography>{b}</Typography>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   );
 }
