@@ -37,7 +37,11 @@ Links:
 
 ## API specification
 
+### Overview
+
 All APIs use a request/response format similar to the JSON RPC 2.0 protocol.
+
+Unknown parameters in requests are ignored.
 
 Request:
 
@@ -64,7 +68,39 @@ Error Response:
             "error": string
         }
 
-### pushFile
+### Pagination
+
+Some APIs support pagination. These APIs accept the following optional parameters in `params`:
+
+- `limit`: The maximum number of items to return. If omitted, there is no limit.
+- `offset`: The number of items to skip before returning items. If omitted, defaults to 0.
+
+If specified, `limit` and `offset` must be a non-negative integer. `null` is not a valid value.
+
+        {
+            "jsonrpc": "2.0",
+            "id": number,
+            "method": string,
+            "params": {
+                "limit": number;
+                "offset": number;
+            }
+        }
+
+Paginated responses include a `total` field containing the total number of items before applying `limit` and `offset`:
+
+        {
+            "jsonrpc": "2.0",
+            "id": number,
+            "result": any,
+            "total": number
+        }
+
+In the next section, APIs that support pagination will say "This API supports pagination". For brevity, their request and response schemas do not include the optional `limit` and `offset` parameters or the `total` field. The pagination rules described above still apply.
+
+### API list
+
+#### pushFile
 
 Create or update a file.
 
@@ -89,7 +125,7 @@ Response:
             "result": "OK"
         }
 
-### getFile
+#### getFile
 
 Read a file and its content.
 
@@ -113,7 +149,7 @@ Response:
             "result": string
         }
 
-### getFileMetadata
+#### getFileMetadata
 
 Read metadata of a file.
 
@@ -142,7 +178,7 @@ Response:
             }
         }
 
-### deleteFile
+#### deleteFile
 
 Delete a file.
 
@@ -166,9 +202,11 @@ Response:
             "result": "OK"
         }
 
-### getFileNames
+#### getFileNames
 
 List all file names on a server.
+
+This API supports pagination.
 
 Request:
 
@@ -189,9 +227,11 @@ Response:
             "result": string[]
         }
 
-### getAllFiles
+#### getAllFiles
 
 Get the content of all files on a server.
+
+This API supports pagination.
 
 Request:
 
@@ -215,11 +255,13 @@ Response:
             }[]
         }
 
-### getAllFileMetadata
-
-Request:
+#### getAllFileMetadata
 
 Get the content of all files on a server.
+
+This API supports pagination.
+
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -243,7 +285,7 @@ Response:
             }[]
         }
 
-### calculateRam
+#### calculateRam
 
 Calculate the in-game ram cost of a script.
 
@@ -267,7 +309,7 @@ Response:
             "result": number
         }
 
-### getDefinitionFile
+#### getDefinitionFile
 
 Get the definition file of NS APIs.
 
@@ -287,7 +329,7 @@ Response:
             "result": string
         }
 
-### getSaveFile
+#### getSaveFile
 
 Get save data.
 
@@ -311,7 +353,7 @@ Response:
             }
         }
 
-### getAllServers
+#### getAllServers
 
 Get all servers.
 

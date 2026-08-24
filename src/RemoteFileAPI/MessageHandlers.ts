@@ -8,11 +8,11 @@ import {
   isFileData,
   type FileData,
   type FileLocation,
-  type FileServer,
   RFAErrorResponse,
   type RFARequest,
   type RFAResponse,
   RFASuccessResponse,
+  type PaginationParams,
 } from "./MessageDefinitions";
 
 import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";
@@ -71,9 +71,7 @@ function validateFilePathAndServerParams<T extends FileData | FileLocation>(
   return { success: true, data: { filePath, server, params } };
 }
 
-function validateServerParams(
-  request: RFARequest,
-): { success: true; data: { server: BaseServer; params: FileServer } } | FailureResult {
+function validateServerParams(request: RFARequest): { success: true; data: { server: BaseServer } } | FailureResult {
   const validationResult = validateParams(isFileServer, request);
   if (!validationResult.success) {
     return validationResult;
@@ -85,7 +83,33 @@ function validateServerParams(
     return { success: false, errorResponse: getErrorResponse(`Invalid hostname: ${fileServer.server}`, request) };
   }
 
-  return { success: true, data: { server, params: fileServer } };
+  return { success: true, data: { server } };
+}
+
+function validatePaginationParams(request: RFARequest): { success: true; data: PaginationParams } | FailureResult {
+  if (request.params.limit !== undefined && (!Number.isInteger(request.params.limit) || request.params.limit < 0)) {
+    return {
+      success: false,
+      errorResponse: getErrorResponse(`Invalid limit: ${request.params.limit}`, request),
+    };
+  }
+
+  if (request.params.offset !== undefined && (!Number.isInteger(request.params.offset) || request.params.offset < 0)) {
+    return {
+      success: false,
+      errorResponse: getErrorResponse(`Invalid offset: ${request.params.offset}`, request),
+    };
+  }
+  return { success: true, data: { limit: request.params.limit, offset: request.params.offset } };
+}
+
+function paginate<T>(items: T[], paginationParams: PaginationParams): { items: T[]; total: number } {
+  const { limit = items.length, offset = 0 } = paginationParams;
+
+  return {
+    items: items.slice(offset, offset + limit),
+    total: items.length,
+  };
 }
 
 export const RFARequestHandler: Record<string, (message: RFARequest) => RFAResponse | Promise<RFAResponse>> = {
@@ -152,43 +176,75 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
   },
 
   getFileNames: function (msg: RFARequest): RFAResponse {
-    const validationResult = validateServerParams(msg);
-    if (!validationResult.success) {
-      return validationResult.errorResponse;
+    const serverValidationResult = validateServerParams(msg);
+    if (!serverValidationResult.success) {
+      return serverValidationResult.errorResponse;
     }
-    const validationData = validationResult.data;
 
-    const fileNameList = [...validationData.server.textFiles.keys(), ...validationData.server.scripts.keys()];
+    const paginationValidationResult = validatePaginationParams(msg);
+    if (!paginationValidationResult.success) {
+      return paginationValidationResult.errorResponse;
+    }
 
-    return new RFASuccessResponse({ result: fileNameList, id: msg.id });
+    const { server } = serverValidationResult.data;
+    const fileNameList = [...server.scripts.keys(), ...server.textFiles.keys()];
+    const { items, total } = paginate(fileNameList, paginationValidationResult.data);
+
+    return new RFASuccessResponse({
+      result: items,
+      total,
+      id: msg.id,
+    });
   },
 
   getAllFiles: function (msg: RFARequest): RFAResponse {
-    const validationResult = validateServerParams(msg);
-    if (!validationResult.success) {
-      return validationResult.errorResponse;
+    const serverValidationResult = validateServerParams(msg);
+    if (!serverValidationResult.success) {
+      return serverValidationResult.errorResponse;
     }
-    const validationData = validationResult.data;
 
-    const fileList = [...validationData.server.scripts, ...validationData.server.textFiles].map(([filename, file]) => ({
+    const paginationValidationResult = validatePaginationParams(msg);
+    if (!paginationValidationResult.success) {
+      return paginationValidationResult.errorResponse;
+    }
+
+    const { server } = serverValidationResult.data;
+    const fileList = [...server.scripts, ...server.textFiles].map(([filename, file]) => ({
       filename,
       content: file.content,
     }));
-    return new RFASuccessResponse({ result: fileList, id: msg.id });
+    const { items, total } = paginate(fileList, paginationValidationResult.data);
+
+    return new RFASuccessResponse({
+      result: items,
+      total,
+      id: msg.id,
+    });
   },
 
   getAllFileMetadata: function (msg: RFARequest): RFAResponse {
-    const validationResult = validateServerParams(msg);
-    if (!validationResult.success) {
-      return validationResult.errorResponse;
+    const serverValidationResult = validateServerParams(msg);
+    if (!serverValidationResult.success) {
+      return serverValidationResult.errorResponse;
     }
-    const validationData = validationResult.data;
 
-    const fileList = [...validationData.server.scripts, ...validationData.server.textFiles].map(([filename, file]) => ({
-      filename: filename,
+    const paginationValidationResult = validatePaginationParams(msg);
+    if (!paginationValidationResult.success) {
+      return paginationValidationResult.errorResponse;
+    }
+
+    const { server } = serverValidationResult.data;
+    const fileList = [...server.scripts, ...server.textFiles].map(([filename, file]) => ({
+      filename,
       ...file.metadata.plain(),
     }));
-    return new RFASuccessResponse({ result: fileList, id: msg.id });
+    const { items, total } = paginate(fileList, paginationValidationResult.data);
+
+    return new RFASuccessResponse({
+      result: items,
+      total,
+      id: msg.id,
+    });
   },
 
   calculateRam: function (msg: RFARequest): RFAResponse {
