@@ -87,7 +87,7 @@ export function SourceFilesElement(): React.ReactElement {
   }
 
   if (Settings.OwnedAugmentationsOrder === OwnedAugmentationsOrderSetting.Alphabetically) {
-    sourceFileList.sort((a, b) => a.name.localeCompare(b.name));
+    sourceFileList.sort((a, b) => a.name.localeCompare(b.name, undefined, { caseFirst: "upper" }));
   }
 
   const [selectedSfData, setSelectedSfData] = useState<SourceFileData | null>(() => {

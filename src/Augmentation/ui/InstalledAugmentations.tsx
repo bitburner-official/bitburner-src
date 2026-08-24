@@ -40,7 +40,7 @@ export function InstalledAugmentations(): React.ReactElement {
 
   if (Settings.OwnedAugmentationsOrder === OwnedAugmentationsOrderSetting.Alphabetically) {
     filteredSourceAugs.sort((aug1, aug2) => {
-      return aug1.name.localeCompare(aug2.name);
+      return aug1.name.localeCompare(aug2.name, undefined, { caseFirst: "upper" });
     });
   }
 

@@ -37,7 +37,7 @@ export function CreditsModal(props: CreditsModalProps): React.ReactElement {
 
   const currentMaintainers = ["Snarling", "d0sboots"];
 
-  const handles = handle.sort((a, b) => a.localeCompare(b)).join(", ");
+  const handles = handle.sort((a, b) => a.localeCompare(b, undefined, { caseFirst: "upper" })).join(", ");
   const contributorsURL = `https://github.com/bitburner-official/bitburner-src/graphs/contributors`;
   const contributorsMessage = `Visit GitHub to see all contributors
 or to participate yourself`;

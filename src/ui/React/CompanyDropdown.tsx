@@ -15,7 +15,7 @@ interface IProps {
   value: CompanyName;
 }
 
-const sortedCompanies = getRecordKeys(Companies).sort((a, b) => a.localeCompare(b));
+const sortedCompanies = getRecordKeys(Companies).sort((a, b) => a.localeCompare(b, undefined, { caseFirst: "upper" }));
 
 export function CompanyDropdown(props: IProps): React.ReactElement {
   const companies = [];
