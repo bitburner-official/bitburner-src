@@ -637,8 +637,7 @@ export async function main(ns) {
           <ul>
             <li>
               the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which gives
-              you an <strong>invaluable</strong> basic hacking script, and which helps you navigate through most of the
-              early game
+              you an <strong>invaluable</strong> basic hacking script, and helps you with most of the early game
             </li>
             <li>
               the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, which contains
@@ -656,12 +655,14 @@ export async function main(ns) {
           Mac keyboard). If you're playing the Steam version, doing that will open the link in your default browser.
           <br />
           <br />
-          While the documentation page is the best place to get information, especially when you're stuck, if you can't
-          find the answer here then please{" "}
-          <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="hover">
-            ask us on Discord
-          </Link>
-          .
+          <Typography fontWeight="fontWeightBold">
+            While the documentation is the best place to get help, if you can't
+            find the answer then please{" "}
+            <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="hover">
+              ask us on Discord
+            </Link>
+            .
+          </Typography>
           <br />
           <br />
           <Typography color={Settings.theme.warning}>
