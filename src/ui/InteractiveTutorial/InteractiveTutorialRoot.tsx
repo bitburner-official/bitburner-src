@@ -83,7 +83,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             You can use the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <LastPageIcon color="primary" />
-              <Typography color="primary">Terminal</Typography>
+              <Typography color="primary"> Terminal</Typography>
             </Box>{" "}
             to interface with your home computer, as well as with other machines around the world.
           </Typography>
@@ -422,7 +422,7 @@ export async function main(ns) {
             Let's check out some statistics for our running scripts by clicking{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <StorageIcon color={"error"} />
-              <Typography color={"error"}>Active Scripts</Typography>
+              <Typography color={"error"}> Active Scripts</Typography>
             </Box>
           </Typography>
         </>
@@ -446,7 +446,7 @@ export async function main(ns) {
             Let's go back to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <LastPageIcon color={"error"} />
-              <Typography color={"error"}>Terminal</Typography>
+              <Typography color={"error"}> Terminal</Typography>
             </Box>
           </Typography>
         </>
@@ -547,7 +547,7 @@ export async function main(ns) {
             Now we've made some money and exp, let's head to the Stats tab and see our gains. Click{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <EqualizerIcon color={"error"} />
-              <Typography color={"error"}>Stats</Typography>
+              <Typography color={"error"}> Stats</Typography>
             </Box>{" "}
             at the left-hand side of the screen.
           </Typography>
@@ -561,7 +561,7 @@ export async function main(ns) {
           <Typography>
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <EqualizerIcon color={"error"} />
-              <Typography color={"error"}>Stats</Typography>
+              <Typography color={"error"}> Stats</Typography>
             </Box>{" "}
             shows information about your skills, money, and bonuses.
           </Typography>
@@ -577,7 +577,7 @@ export async function main(ns) {
             Hacknet Nodes. Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <AccountTreeIcon color={"error"} />
-              <Typography color={"error"}>Hacknet</Typography>
+              <Typography color={"error"}> Hacknet</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -604,7 +604,7 @@ export async function main(ns) {
             Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <LocationCityIcon color={"error"} />
-              <Typography color={"error"}>City</Typography>
+              <Typography color={"error"}> City</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -623,7 +623,7 @@ export async function main(ns) {
             Lastly, click on{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <HelpIcon color={"error"} />
-              <Typography color={"error"}>Documentation</Typography>
+              <Typography color={"error"}> Documentation</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -660,8 +660,8 @@ export async function main(ns) {
           Mac keyboard). If you're playing the Steam version, doing that will open the link in your default browser.
           <br />
           <br />
-          While the documentation page is the best place to get information, especially when you get stuck, if you
-          can't find the answer here then please{" "}
+          While the documentation page is the best place to get information, especially when you get stuck, if you can't
+          find the answer here then please{" "}
           <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="hover">
             ask us on Discord
           </Link>
