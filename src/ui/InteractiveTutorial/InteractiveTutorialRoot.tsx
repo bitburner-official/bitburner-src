@@ -10,7 +10,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { useTheme, styled } from '@mui/material/styles';
+import { useTheme, styled } from "@mui/material/styles";
 import { useStyles as codeBlockStyles } from "../MD/code";
 
 import {
@@ -30,7 +30,7 @@ interface IContent {
   canNext: boolean;
 }
 
-export const tutorialScriptName = `script.js`;
+export const tutorialScriptName = `hacking.js`;
 
 export function InteractiveTutorialRoot(): React.ReactElement {
   const theme = useTheme();
@@ -68,16 +68,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             We're currently on the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon sx={{ color: theme.palette.primary.main }} />{" "}
-              <Typography sx={{ color: theme.palette.primary.main }} >Terminal</Typography>
+              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.primary.main }}>Terminal</Typography>
             </Box>{" "}
             tab.
             <br />
             <br />
             You can use the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon sx={{ color: theme.palette.primary.main }} />{" "}
-              <Typography sx={{ color: theme.palette.primary.main }} >Terminal</Typography>
+              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.primary.main }}>Terminal</Typography>
             </Box>{" "}
             to interface with your home computer, as well as with other machines around the world.
           </Typography>
@@ -162,12 +162,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>
             In the year 2077, currency is digital and decentralized. People and corporations store their money on
-            servers and computers. Using hacking skills and malware, you can hack servers to steal money and gain
+            servers and computers. Using specialised your skills, you can hack servers to steal money and gain
             experience.
             <br />
             <br />
-            If you check the read-out of scan-analyze you can see that n00dles has a required hacking skill of only 1.
-            That means you can hack it right now.
+            If you check the read-out of scan-analyze in the Terminal you can see that n00dles has a required hacking
+            skill of only 1. That means you can hack it right now.
             <br />
             <br />
             To do that, we need to connect to it. You can connect to a machine that is one node away using
@@ -210,16 +210,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <TerminalText>{"[n00dles /]> analyze"}</TerminalText>
           <Typography>
             <br />
-            finishes running, it'll display some useful diagnostic data.
+            finishes running, it displays some useful diagnostic data.
             <br />
             <br />
-            In the data, you can see the server's root access status. To hack a server you must gain root access first.
-            Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to a machine
-            as long as there are enough open ports.
+            If you have a look, you can see the server's root access status. To hack a server, you must gain root access
+            first. Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to a
+            machine as long as there are enough open ports.
             <br />
             <br />
-            If you look at the diagnostics again, you'll also see that n00dles' required number of open ports for NUKE
-            is 0. So you're good to go ahead and run the virus! Just enter
+            If you look at the diagnostics again, you'll see that n00dles' "Required number of open ports for NUKE" is
+            0. So you're good to go ahead and run the virus! Just enter
             <br />
             <br />
           </Typography>
@@ -249,17 +249,26 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack the server. Performing a hack takes time, and has a certain success chance.
-            Both the hack time and success chance are affected by your hacking skill, and by the server's security
-            level.
+            You're now attempting to hack the server. Hacking takes time, and has a success chance. If your hack is
+            successful, you'll steal a percentage of the server's available money.
             <br />
             <br />
-            If your attempt to hack the server is successful, you'll steal a percentage of the server's available money.
-            (Again, this percentage is affected by your hacking skill and the server's security level).
-            <br />
-            <br />
-            When you hack a server, you deplete the money it has available, so your following hacks take less money. You 
-            also cause its security level to rise, so your hacks take longer. 
+            All of those variables (hacking time, success chance, and the percentage stolen) are affected by:
+            <ul>
+              <li>your hacking skill</li>
+              <li>the server's security level</li>
+            </ul>
+          </Typography>
+        </>
+      ),
+      canNext: true,
+    },
+    [iTutorialSteps.TerminalWeakenGrowMechanics as number]: {
+      content: (
+        <>
+          <Typography>
+            When you hack a server, you deplete the money it has available, so any following hacks take less money. You
+            also cause its security level to rise, so your hacks take longer.
             <br />
             <br />
             To restore things, you can use
@@ -286,8 +295,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Hacking is the core mechanic of the game and is necessary for progression. So you don't want to
-            be hacking manually the entire time. What we need is a way to automate it.
+            Hacking is the core mechanic of the game and is necessary for progression. So you don't want to be hacking
+            manually the entire time. What we need is a way to automate it.
             <br />
             <br />
             So let's head home and create our first script.
@@ -314,7 +323,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <TerminalText>{"[home /]> nano file"}</TerminalText>
           <Typography>
             <br />
-            Script names must end with a script extension (.js, .ts, .jsx, .tsx). Let's create a script now by entering
+            Script names must end with a script extension (.js, .jsx, .ts, .tsx).
+            <br />
+            <br />
+            Let's create a script now by entering
             <br />
             <br />
           </Typography>
@@ -347,13 +359,12 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            If you have a look at the code of the script, you might be able to see that it hacks n00dles while true is
-            true – which it always is! So this script hacks n00dles on a loop forever.
+            Have a look at the code of the script. It says to hack n00dles while true is true – which it always is! So
+            this script hacks n00dles on a loop forever.
             <br />
             <br />
-            When we were hacking manually, we needed to be connected to our target. With scripts, however, we can target 
-            any server on the network{" "}
-            <em>from</em>{" "}any target on the network.
+            One benefit of using scripts to hack is that you don't need to be connected to the server you're hacking.
+            You can target any server on the network from any server on the network.
             <br />
             <br />
             While we're in the editor, it's worth saying that everything we do in this tutorial can be scripted. You can
@@ -361,8 +372,8 @@ export async function main(ns) {
             ns.getServer().
             <br />
             <br />
-            If you ever want to check which functions are available to you, you can do that in the editor. Either search
-            using the search bar tool at the bottom of the editor, or click the{" "}
+            If you ever want to check which functions are available to you in the edior, you can search using the search
+            bar at the bottom, or click the{" "}
             <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside it.
             <br />
             <br />
@@ -395,11 +406,11 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We have 8GB of free RAM. If that doesn't sound like much, don't worry: you can purchase more RAM 
-            for your home server.
+            We have 8GB of free RAM. If that doesn't sound like much, don't worry: you can purchase more RAM for your
+            home server later.
             <br />
             <br />
-            For now though, let's run our script using
+            For now, let's run our script using
             <br />
             <br />
           </Typography>
@@ -422,8 +433,8 @@ export async function main(ns) {
             <br />
             Let's check out some statistics for our running scripts by clicking{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <StorageIcon sx={{ color: theme.palette.info.main }} />{" "}
-              <Typography sx={{ color: theme.palette.info.main }} >Active Scripts</Typography>
+              <StorageIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.info.main }}>Active Scripts</Typography>
             </Box>
           </Typography>
         </>
@@ -447,7 +458,7 @@ export async function main(ns) {
             Let's go back to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <LastPageIcon sx={{ color: theme.palette.info.main }} />
-              <Typography sx={{ color: theme.palette.info.main }} >Terminal</Typography>
+              <Typography sx={{ color: theme.palette.info.main }}>Terminal</Typography>
             </Box>
           </Typography>
         </>
@@ -508,8 +519,8 @@ export async function main(ns) {
             used earlier, and {tutorialScriptName}.
             <br />
             <br />
-            If you want other servers to run {tutorialScriptName}, you need to copy it to them. (NUKE.exe can't be copied
-            elsewhere. It's only stored on home.)
+            If you want other servers to run {tutorialScriptName}, you need to copy it to them. (NUKE.exe can't be
+            copied elsewhere. It's only stored on home.)
             <br />
             <br />
             To do that, we use
@@ -553,8 +564,8 @@ export async function main(ns) {
           <Typography>
             Now we've made some money and exp, let's head to the Stats tab and see what we've gained. Click{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon sx={{ color: theme.palette.info.main }} />{" "}
-              <Typography sx={{ color: theme.palette.info.main }} >Stats</Typography>
+              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
             </Box>{" "}
             at the left-hand side of the screen.
           </Typography>
@@ -567,8 +578,8 @@ export async function main(ns) {
         <>
           <Typography>
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon sx={{ color: theme.palette.info.main }} />{" "}
-              <Typography sx={{ color: theme.palette.info.main }} >Stats</Typography>
+              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
             </Box>{" "}
             shows information about your skills, money, and bonuses.
           </Typography>
@@ -583,8 +594,8 @@ export async function main(ns) {
             Hacking isn't the only way to earn money. One other way to passively earn money is to purchase and upgrade
             Hacknet Nodes. Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <AccountTreeIcon sx={{ color: theme.palette.info.main }} />{" "}
-              <Typography sx={{ color: theme.palette.info.main }} >Hacknet</Typography>
+              <AccountTreeIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.info.main }}>Hacknet</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -610,10 +621,9 @@ export async function main(ns) {
             <br />
             Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LocationCityIcon sx={{ color: theme.palette.info.main }} />{" "}
-              <Typography sx={{ color: theme.palette.info.main }} >City</Typography>
+              <LocationCityIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.info.main }}>City</Typography>
             </Box>{" "}
-            .
           </Typography>
         </>
       ),
@@ -629,8 +639,8 @@ export async function main(ns) {
             <br />
             Lastly, click on{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <HelpIcon sx={{ color: theme.palette.info.main }} />{" "}
-              <Typography sx={{ color: theme.palette.info.main }} >Documentation</Typography>
+              <HelpIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <Typography sx={{ color: theme.palette.info.main }}>Documentation</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -648,7 +658,7 @@ export async function main(ns) {
           If you look at nothing else, the three pages I'd recommend are:
           <ul>
             <li>
-              the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which gives 
+              the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which gives
               you an <strong>invaluable</strong> basic hacking script, and which helps you navigate through most of the
               early game
             </li>
@@ -661,14 +671,14 @@ export async function main(ns) {
               beginners
             </li>
           </ul>
-          You'll notice that some of the pages are inaccessible right now. Don't worry – you'll unlock them later on.
+          You'll notice that some of the pages are inaccessible right now. You'll unlock those later on.
           <br />
           <br />
           If you want to open one of the Documentaion page links in a new tab, click it while holding Ctrl (Control on a
           Mac keyboard). If you're playing the Steam version, doing that will open the link in your default browser.
           <br />
           <br />
-          While the documentation page is the best place to get information, especially when you get stuck, if you can't
+          While the documentation page is the best place to get information, especially when you're stuck, if you can't
           find the answer here then please{" "}
           <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="hover">
             ask us on Discord

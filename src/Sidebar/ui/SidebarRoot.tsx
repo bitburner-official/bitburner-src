@@ -119,11 +119,15 @@ const useStyles = makeStyles()((theme: Theme) => ({
   active: {
     borderLeft: "3px solid " + theme.palette.primary.main,
   },
-  listitem: {},  
+  listitem: {},
+  // To explain why I did this daft shit: Lots of elements here are setting their colour using color="error" or similar.
+  // The problem is that Typography doesn't have the same list of possible colours as other items. In particular, it's missing
+  // "info". Do <Typography color="info> and it turns the text black. So unlike everything else, it needs the theme colours
+  // passed to it. Ideally everything should consume useTheme() and be on the same scheme, but that's a refactor that I don't
+  // have the skill to execute.
   themeColorPrimary: { color: theme.palette.primary.main },
   themeColorSecondary: { color: theme.palette.secondary.main },
   themeColorInfo: { color: theme.palette.info.main },
-  themeColorError: { color: theme.palette.error.main },
 }));
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
@@ -331,7 +335,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         () => (
           <ListItem classes={li_classes} button onClick={toggleDrawer}>
             <ListItemIcon>
-              <ChevronOpenClose sx={{ color: classes.themeColorPrimary }} />
+              <ChevronOpenClose color="primary" />
             </ListItemIcon>
             <ListItemText
               primary={

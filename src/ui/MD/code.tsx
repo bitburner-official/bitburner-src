@@ -40,7 +40,7 @@ type CodeBlockProps = {
   children: string;
 };
 
-export const CodeBlock = ( {children}: CodeBlockProps): React.ReactElement => (
+const BigCode = ({ children }: CodeBlockProps): React.ReactElement => (
   <SyntaxHighlighter
     language="javascript"
     style={theme}
@@ -54,4 +54,4 @@ export const CodeBlock = ( {children}: CodeBlockProps): React.ReactElement => (
 );
 
 export const code = (props: React.PropsWithChildren<CodeProps>): React.ReactElement =>
-  props.inline ? <InlineCode {...props} /> : <CodeBlock>{String(props.children)}</CodeBlock>;
+  props.inline ? <InlineCode {...props} /> : <BigCode>{String(props.children)}</BigCode>;

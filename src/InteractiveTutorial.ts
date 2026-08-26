@@ -1,6 +1,4 @@
 //// Still to do:
-// n00dles.js references in docs
-// Red to blue for stuff
 // Somewhere ??? the text that says 'Processes cannot be killed during the tutorial' ... when you clearly can!
 // Rebase to get rid of the irrelevant commits!
 
@@ -23,6 +21,7 @@ enum iTutorialSteps {
   TerminalNuke, // NUKE n00dles
   TerminalManualHack, // Hack n00dles
   TerminalHackingMechanics, // Explanation of hacking mechanics
+  TerminalWeakenGrowMechanics, // Explanation of grow/weaken mechanics
   TerminalGoHome, // Go home before creating a script.
   TerminalCreateScript, // Create a script using 'nano'
   TerminalEditScript, // Script Editor page - Edit script and then save & close
@@ -33,7 +32,7 @@ enum iTutorialSteps {
   ActiveScriptsToTerminal,
   TerminalTailScript,
   TerminalLs, // Using 'ls' Terminal command
-  TerminalScp,
+  TerminalScp, // using the 'scp' Terminal command
   TerminalHelp, // Using 'help' Terminal command
 
   // See the results of our hacking
@@ -70,6 +69,7 @@ const ITutorial = {
     [iTutorialSteps.TerminalNuke]: false,
     [iTutorialSteps.TerminalManualHack]: false,
     [iTutorialSteps.TerminalHackingMechanics]: false,
+    [iTutorialSteps.TerminalWeakenGrowMechanics]: false,
     [iTutorialSteps.TerminalGoHome]: false,
     [iTutorialSteps.TerminalCreateScript]: false,
     [iTutorialSteps.TerminalEditScript]: false,
