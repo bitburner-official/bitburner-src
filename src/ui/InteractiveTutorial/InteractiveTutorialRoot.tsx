@@ -121,7 +121,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             shows all servers that you can connect to from your current machine.
             <br />
             <br />
-            The network's much bigger than these nearby servers though. To start exploring it, let's enter
+            The network's much bigger than that though. To start exploring it, let's enter
             <br />
             <br />
           </Typography>
@@ -137,7 +137,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             That's given us more detailed information about the servers we can connect to.
             <br />
             <br />
-            To look depeer into the network, we can change our scanning depth to 2.
+            To look depeer into the network, change your scanning depth to 2.
             <br />
             <br />
           </Typography>
@@ -150,11 +150,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Now you can see information about all servers that are up to 2 nodes away. You can also see how to navigate
-            to those servers through the network.
+            Now you can see all servers that are up to 2 nodes away, and how to navigate to them.
             <br />
             <br />
-            That's great and all, but there are so many servers. Which one should we go to? Well, let's pick a target we
+            That's great and all, but there are so many servers. Which ones do we focus on? Well, let's pick a target we
             can hack!
           </Typography>
         </>
@@ -207,18 +206,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            When
-            <br />
-            <br />
-          </Typography>
-          <TerminalText>{"[n00dles /]> analyze"}</TerminalText>
-          <Typography>
-            <br />
-            finishes running, it displays some useful diagnostic data.
-            <br />
-            <br />
-            If you have a look, you can see the server's root access status. To hack a server, you must gain root access
-            first.
+            If you have a look at the diagnostic data, you can see the server's root access status. To hack a server, 
+            you must gain root access first.
             <br />
             <br />
             Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to a machine
@@ -274,7 +263,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            When you hack a server, you deplete the money it has available, so any following hacks take less money. You
+            When you hack a server, you deplete the money it has available, so the following hacks take less money. You
             also cause its security level to rise, so your hacks take longer.
             <br />
             <br />
@@ -464,7 +453,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Each active script has logs that detail what it's doing. You can check these logs using the tail command. To
+            Each active script has logs that detail what it's doing. You can check these using the tail command. To
             do that for the script you just ran, enter
             <br />
             <br />
@@ -478,7 +467,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This log might not show much because the script just started... but check back again in a few minutes!
+            This log might not show much because the script has just started... but check back again in a few minutes!
           </Typography>
         </>
       ),
@@ -488,11 +477,11 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We won't get far running scripts on just our home computer. We want to run them on other servers too, and
-            that means we need to copy them over.
+            We won't get far running scripts on just our home computer. We can run them on other servers too, and
+            to do that, we need to copy them over.
             <br />
             <br />
-            Before we do that, let's see what files are stored on our home computer using
+            First though, let's see what files are stored on our home computer using
             <br />
             <br />
           </Typography>
