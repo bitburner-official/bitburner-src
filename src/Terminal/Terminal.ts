@@ -510,7 +510,7 @@ export class Terminal {
           }
           break;
         default:
-          this.error("Please follow the tutorial, or if you'd like to skip it click Exit Tutorial");
+          this.error("Make sure you're following the tutorial. If you'd like to skip it click Exit Tutorial");
           return;
       }
     }
