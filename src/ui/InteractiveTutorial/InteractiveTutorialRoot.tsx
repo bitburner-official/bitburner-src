@@ -641,8 +641,8 @@ export async function main(ns) {
           If you look at nothing else, the three pages I'd recommend are:
           <ul>
             <li>
-              the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which will
-              help you navigate through most of the early game
+              the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which contains
+              an invaluable basic hacking script, and which helps you navigate through most of the early game
             </li>
             <li>
               the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, which contains

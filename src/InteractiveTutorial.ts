@@ -1,14 +1,8 @@
-//// Tidy up:
-// n00dles.js
-//
-
-////////
+//// Still to do:
+// n00dles.js references in docs
 // Red to blue for stuff
-/// Somewhere ??? the text that says 'can't kill during tutorial' ... when you clearly can
-// Add the stuff about docs and the editor back in later on
-// Don't auto-move from the Script editor to the Termainal. Make the player do that.
-// add scp step
-// add "all this stuff can be automated" scp > ns.scp; run > ns.run/ns.exec; weaken > ns.weaken
+// Somewhere ??? the text that says 'Processes cannot be killed during the tutorial' ... when you clearly can!
+// Rebase to get rid of the irrelevant commits!
 
 import { Player } from "@player";
 import { LiteratureName } from "@enums";
