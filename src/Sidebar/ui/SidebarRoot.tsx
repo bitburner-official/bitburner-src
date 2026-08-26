@@ -119,7 +119,11 @@ const useStyles = makeStyles()((theme: Theme) => ({
   active: {
     borderLeft: "3px solid " + theme.palette.primary.main,
   },
-  listitem: {},
+  listitem: {},  
+  themeColorPrimary: { color: theme.palette.primary.main },
+  themeColorSecondary: { color: theme.palette.secondary.main },
+  themeColorInfo: { color: theme.palette.info.main },
+  themeColorError: { color: theme.palette.error.main },
 }));
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
@@ -327,7 +331,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         () => (
           <ListItem classes={li_classes} button onClick={toggleDrawer}>
             <ListItemIcon>
-              <ChevronOpenClose color={"primary"} />
+              <ChevronOpenClose sx={{ color: classes.themeColorPrimary }} />
             </ListItemIcon>
             <ListItemText
               primary={

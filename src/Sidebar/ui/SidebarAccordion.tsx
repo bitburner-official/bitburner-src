@@ -20,7 +20,7 @@ type SidebarAccordionProps = {
   items: (IItemProps | boolean)[];
   icon: React.ReactElement["type"];
   sidebarOpen: boolean;
-  classes: Record<"listitem" | "active", string>;
+  classes: Record<"listitem" | "active" | "themeColorPrimary" | "themeColorSecondary" | "themeColorInfo" | "themeColorError", string>;
 };
 
 type ClickFnCacheKeyType = (page: Page) => void;
@@ -69,11 +69,11 @@ export function SidebarAccordion({
           <ListItem classes={li_classes} button onClick={() => setOpen((open) => !open)}>
             <ListItemIcon>
               <Tooltip title={!sidebarOpen ? key_ : ""}>
-                <Icon color={"primary"} />
+                <Icon color={classes.themeColorPrimary} />
               </Tooltip>
             </ListItemIcon>
             <ListItemText primary={<Typography>{key_}</Typography>} />
-            {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+            {open ? <ExpandLessIcon sx={{ color: classes.themeColorPrimary}} /> : <ExpandMoreIcon sx={{ color: classes.themeColorPrimary}} />}
           </ListItem>
         ),
         [li_classes, sidebarOpen, key_, open, Icon],

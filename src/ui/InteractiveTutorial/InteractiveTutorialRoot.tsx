@@ -10,8 +10,8 @@ import HelpIcon from "@mui/icons-material/Help";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+import { useTheme, styled } from '@mui/material/styles';
+import { useStyles as codeBlockStyles } from "../MD/code";
 
 import {
   iTutorialPrevStep,
@@ -30,20 +30,14 @@ interface IContent {
   canNext: boolean;
 }
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  textfield: {
-    borderBottom: "1px solid " + theme.palette.primary.main,
-  },
-  code: {
-    whiteSpace: "pre",
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
-
 export const tutorialScriptName = `script.js`;
 
 export function InteractiveTutorialRoot(): React.ReactElement {
-  const { classes } = useStyles();
+  const theme = useTheme();
+  const { classes } = codeBlockStyles();
+  const TerminalText = styled(Typography)(({ theme }) => ({
+    borderBottom: `1px solid ${theme.palette.primary.main}`,
+  }));
   const rerender = useRerender();
 
   const contents: Record<string, IContent | undefined> = {
@@ -58,7 +52,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             This tutorial will show you the basics of the game.
             <br />
             <br />
-            If you need to hide this tutorial panel temporarily, there's a button to collapse it in the top-right.
+            If you need to hide this tutorial panel temporarily, you can collapse it.
             <br />
             <br />
             You can also exit the tutorial at any time. If you ever want to review it, go to the Options tab and select
@@ -74,16 +68,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             We're currently on the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon color="primary" />
-              <Typography color="primary">Terminal</Typography>
+              <LastPageIcon sx={{ color: theme.palette.primary.main }} />{" "}
+              <Typography sx={{ color: theme.palette.primary.main }} >Terminal</Typography>
             </Box>{" "}
             tab.
             <br />
             <br />
             You can use the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon color="primary" />
-              <Typography color="primary"> Terminal</Typography>
+              <LastPageIcon sx={{ color: theme.palette.primary.main }} />{" "}
+              <Typography sx={{ color: theme.palette.primary.main }} >Terminal</Typography>
             </Box>{" "}
             to interface with your home computer, as well as with other machines around the world.
           </Typography>
@@ -99,7 +93,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
+          <TerminalText>{"[home /]> scan"}</TerminalText>
           <Typography>
             <br />
             (Don't forget to press Enter after typing the command.)
@@ -116,7 +110,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
+          <TerminalText>{"[home /]> scan"}</TerminalText>
           <Typography>
             <br />
             shows all servers that you can connect to from your current machine. Servers are identified by their
@@ -127,7 +121,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
+          <TerminalText>{"[home /]> scan-analyze"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -136,14 +130,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            That's given more detailed information about the servers you can connect to.
+            That's given us more detailed information about the servers we can connect to.
             <br />
             <br />
             To look depeer into the network, we can change our scanning depth to 2.
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
+          <TerminalText>{"[home /]> scan-analyze 2"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -180,14 +174,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect hostname"}</Typography>
+          <TerminalText>{"[home /]> connect hostname"}</TerminalText>
           <Typography>
             <br />
             So let's connect to n00dles.
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect n00dles"}</Typography>
+          <TerminalText>{"[home /]> connect n00dles"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -196,11 +190,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Before we try hacking, let's start by running some diagnostics using
+            Before we try hacking, let's run some diagnostics using
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
+          <TerminalText>{"[n00dles /]> analyze"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -213,23 +207,23 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
+          <TerminalText>{"[n00dles /]> analyze"}</TerminalText>
           <Typography>
             <br />
             finishes running, it'll display some useful diagnostic data.
             <br />
             <br />
-            In the data, you can see the server's Root Access status. To hack a server you must gain root access first.
+            In the data, you can see the server's root access status. To hack a server you must gain root access first.
             Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to a machine
             as long as there are enough open ports.
             <br />
             <br />
-            If you look at the diagnostics again, you'll also see that the required number of open ports for NUKE is 0.
-            So you're good to go ahead and run the virus! Just enter
+            If you look at the diagnostics again, you'll also see that n00dles' required number of open ports for NUKE
+            is 0. So you're good to go ahead and run the virus! Just enter
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> NUKE.exe"}</Typography>
+          <TerminalText>{"[n00dles /]> NUKE.exe"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -242,7 +236,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> hack"}</Typography>
+          <TerminalText>{"[n00dles /]> hack"}</TerminalText>
           <Typography>
             <br />
             Try doing that now.
@@ -264,22 +258,25 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             (Again, this percentage is affected by your hacking skill and the server's security level).
             <br />
             <br />
-            As you hack a server, you'll deplete the money it has available and cause its security level to rise. To
-            restore things, you need to use
+            When you hack a server, you deplete the money it has available, so your following hacks take less money. You 
+            also cause its security level to rise, so your hacks take longer. 
+            <br />
+            <br />
+            To restore things, you can use
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> grow"}</Typography>
+          <TerminalText>{"[n00dles /]> grow"}</TerminalText>
           <Typography>
             <br />
             which tricks the company into adding money to their server, and
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> weaken"}</Typography>
+          <TerminalText>{"[n00dles /]> weaken"}</TerminalText>
           <Typography>
             <br />
-            which lowers the server's security level.
+            which lowers the server's security level, speeding up hack, grow and weaken.
           </Typography>
         </>
       ),
@@ -289,7 +286,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Hacking from the terminal is OK, but it's manual. It sure would be handy if there was a way to automate it!
+            Hacking is the core mechanic of the game and is necessary for progression. So you don't want to
+            be hacking manually the entire time. What we need is a way to automate it.
             <br />
             <br />
             So let's head home and create our first script.
@@ -299,7 +297,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> home"}</Typography>
+          <TerminalText>{"[n00dles /]> home"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -313,14 +311,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> nano file"}</Typography>
+          <TerminalText>{"[home /]> nano file"}</TerminalText>
           <Typography>
             <br />
-            Script names must end with a script extension (.js, .ts, .jsx, .tsx). Let's make a script now by entering
+            Script names must end with a script extension (.js, .ts, .jsx, .tsx). Let's create a script now by entering
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
+          <TerminalText>{`[home /]> nano ${tutorialScriptName}`}</TerminalText>
         </>
       ),
       canNext: false,
@@ -332,7 +330,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             This is the script editor.
             <br />
             <br />
-            Below is a basic script that hacks n00dles. Click it to copy it, then paste it into the editor.
+            Below is a basic script that hacks n00dles. Copy and paste it into the editor.
           </Typography>
           <br />
           <Typography component="div" classes={{ root: classes.code }}>
@@ -349,29 +347,26 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            If you have a look at the code of the script, you might be able to see that it hacks n00dles while 'true' is
+            If you have a look at the code of the script, you might be able to see that it hacks n00dles while true is
             true – which it always is! So this script hacks n00dles on a loop forever.
             <br />
             <br />
-            Unlike manual hacking where you need to be connected to your target, scripts can target any server on the
-            network
-            <em>from</em> any server on the network.
+            When we were hacking manually, we needed to be connected to our target. With scripts, however, we can target 
+            any server on the network{" "}
+            <em>from</em>{" "}any target on the network.
             <br />
             <br />
             While we're in the editor, it's worth saying that everything we do in this tutorial can be scripted. You can
-            map the network with ns.scan(), run scripts with ns.run() or ns.exec(), and get server diagnostics with
+            map the network with ns.scan(), run scripts with ns.run() or ns.exec(), and get server information with
             ns.getServer().
             <br />
             <br />
             If you ever want to check which functions are available to you, you can do that in the editor. Either search
             using the search bar tool at the bottom of the editor, or click the{" "}
-            <DocumentationLink page={defaultNsApiPage}>
-              <strong>NS API documentation</strong>
-            </DocumentationLink>{" "}
-            link beside it.
+            <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside it.
             <br />
             <br />
-            OK, back to hacking. Click <strong>Save</strong> at the bottom to save your script and close the editor.
+            OK, back to hacking. Click Save at the bottom to save your script and close the editor.
           </Typography>
         </>
       ),
@@ -381,15 +376,17 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we'll run the script. Scripts need RAM to run, and can be run on any machine which you have root access
-            to. Different servers have different amounts of RAM. You can also purchase more RAM for your home server.
+            Now we'll run the script. You can run scripts on any server that you have root access to.
+            <br />
+            <br />
+            Scripts need RAM to run, and different servers have different amounts.
             <br />
             <br />
             To check how much RAM is available on this machine, enter
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> free"}</Typography>
+          <TerminalText>{"[home /]> free"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -398,11 +395,15 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We have 8GB of free RAM, which is enough to run our script. Let's run our script using
+            We have 8GB of free RAM. If that doesn't sound like much, don't worry: you can purchase more RAM 
+            for your home server.
+            <br />
+            <br />
+            For now though, let's run our script using
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> ${tutorialScriptName}`}</Typography>
+          <TerminalText>{`[home /]> ${tutorialScriptName}`}</TerminalText>
         </>
       ),
       canNext: false,
@@ -421,8 +422,8 @@ export async function main(ns) {
             <br />
             Let's check out some statistics for our running scripts by clicking{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <StorageIcon color={"error"} />
-              <Typography color={"error"}> Active Scripts</Typography>
+              <StorageIcon sx={{ color: theme.palette.info.main }} />{" "}
+              <Typography sx={{ color: theme.palette.info.main }} >Active Scripts</Typography>
             </Box>
           </Typography>
         </>
@@ -437,16 +438,16 @@ export async function main(ns) {
             this to gauge how well your scripts are doing.
             <br />
             <br />
-            Click <strong>home</strong> to see the scripts running on it.
+            Click home to see the scripts running on it.
             <br />
             <br />
-            Then click <strong>${tutorialScriptName}</strong> to see the script's information.
+            Then click {tutorialScriptName} to see the script's information.
             <br />
             <br />
             Let's go back to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon color={"error"} />
-              <Typography color={"error"}> Terminal</Typography>
+              <LastPageIcon sx={{ color: theme.palette.info.main }} />
+              <Typography sx={{ color: theme.palette.info.main }} >Terminal</Typography>
             </Box>
           </Typography>
         </>
@@ -462,7 +463,7 @@ export async function main(ns) {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> tail ${tutorialScriptName}`}</Typography>
+          <TerminalText>{`[home /]> tail ${tutorialScriptName}`}</TerminalText>
         </>
       ),
       canNext: false,
@@ -486,11 +487,11 @@ export async function main(ns) {
             servers too.
             <br />
             <br />
-            Before we do that, let's see what's currently on our home computer using
+            Before we do that, let's see what files are stored on our home computer using
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
+          <TerminalText>{"[home /]> ls"}</TerminalText>
           <Typography>
             <br />
             ("ls" is short for "list".)
@@ -503,26 +504,32 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            That's shown all the files on your home computer. Right now, you can see the NUKE.exe program that you used
-            earlier, and {tutorialScriptName}.
+            That's shown you all the files on your home computer. Right now, you can see NUKE.exe, the program that you
+            used earlier, and {tutorialScriptName}.
             <br />
             <br />
-            NUKE.exe can only ever be on your home computer. But if you want other servers to run {tutorialScriptName},
-            you need to copy it to them.
+            If you want other servers to run {tutorialScriptName}, you need to copy it to them. (NUKE.exe can't be copied
+            elsewhere. It's only stored on home.)
             <br />
             <br />
             To do that, we use
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scp file destination"}</Typography>
+          <TerminalText>{"[home /]> scp file destination"}</TerminalText>
           <Typography>
             <br />
             To copy {tutorialScriptName} to n00dles, enter
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> scp ${tutorialScriptName} n00dles`}</Typography>
+          <TerminalText>{`[home /]> scp ${tutorialScriptName} n00dles`}</TerminalText>
+          <Typography>
+            <br />
+            You can then connect to n00dles and run your script on it later.
+            <br />
+            <br />
+          </Typography>
         </>
       ),
       canNext: false,
@@ -535,7 +542,7 @@ export async function main(ns) {
             <br />
             <br />
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
+          <TerminalText>{"[home /]> help"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -544,10 +551,10 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we've made some money and exp, let's head to the Stats tab and see our gains. Click{" "}
+            Now we've made some money and exp, let's head to the Stats tab and see what we've gained. Click{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon color={"error"} />
-              <Typography color={"error"}> Stats</Typography>
+              <EqualizerIcon sx={{ color: theme.palette.info.main }} />{" "}
+              <Typography sx={{ color: theme.palette.info.main }} >Stats</Typography>
             </Box>{" "}
             at the left-hand side of the screen.
           </Typography>
@@ -560,8 +567,8 @@ export async function main(ns) {
         <>
           <Typography>
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon color={"error"} />
-              <Typography color={"error"}> Stats</Typography>
+              <EqualizerIcon sx={{ color: theme.palette.info.main }} />{" "}
+              <Typography sx={{ color: theme.palette.info.main }} >Stats</Typography>
             </Box>{" "}
             shows information about your skills, money, and bonuses.
           </Typography>
@@ -576,8 +583,8 @@ export async function main(ns) {
             Hacking isn't the only way to earn money. One other way to passively earn money is to purchase and upgrade
             Hacknet Nodes. Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <AccountTreeIcon color={"error"} />
-              <Typography color={"error"}> Hacknet</Typography>
+              <AccountTreeIcon sx={{ color: theme.palette.info.main }} />{" "}
+              <Typography sx={{ color: theme.palette.info.main }} >Hacknet</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -603,8 +610,8 @@ export async function main(ns) {
             <br />
             Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LocationCityIcon color={"error"} />
-              <Typography color={"error"}> City</Typography>
+              <LocationCityIcon sx={{ color: theme.palette.info.main }} />{" "}
+              <Typography sx={{ color: theme.palette.info.main }} >City</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -622,8 +629,8 @@ export async function main(ns) {
             <br />
             Lastly, click on{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <HelpIcon color={"error"} />
-              <Typography color={"error"}> Documentation</Typography>
+              <HelpIcon sx={{ color: theme.palette.info.main }} />{" "}
+              <Typography sx={{ color: theme.palette.info.main }} >Documentation</Typography>
             </Box>{" "}
             .
           </Typography>
@@ -641,8 +648,9 @@ export async function main(ns) {
           If you look at nothing else, the three pages I'd recommend are:
           <ul>
             <li>
-              the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which contains
-              an invaluable basic hacking script, and which helps you navigate through most of the early game
+              the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which gives 
+              you an <strong>invaluable</strong> basic hacking script, and which helps you navigate through most of the
+              early game
             </li>
             <li>
               the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, which contains
@@ -666,6 +674,7 @@ export async function main(ns) {
             ask us on Discord
           </Link>
           .
+          <br />
           <br />
           <Typography color={Settings.theme.warning}>
             The documentation at readthedocs is outdated and unmaintained. Do not use it!
