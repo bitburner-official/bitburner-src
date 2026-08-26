@@ -344,7 +344,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       <Divider />
       <List>
         <SidebarAccordion
-          key_="Hacking"
+          key_="黑客"
           page={props.page}
           clickPage={clickPage}
           flash={flash}
@@ -367,7 +367,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         <Typography component="div" id="sidebar-extra-hook-0"></Typography>
         <Divider />
         <SidebarAccordion
-          key_="Character"
+          key_="角色"
           page={props.page}
           clickPage={clickPage}
           flash={flash}
@@ -395,7 +395,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         <Typography component="div" id="sidebar-extra-hook-1"></Typography>
         <Divider />
         <SidebarAccordion
-          key_="World"
+          key_="世界"
           page={props.page}
           clickPage={clickPage}
           flash={flash}
@@ -421,7 +421,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         <Typography component="div" id="sidebar-extra-hook-2"></Typography>
         <Divider />
         <SidebarAccordion
-          key_="Help"
+          key_="帮助"
           page={props.page}
           clickPage={clickPage}
           flash={flash}

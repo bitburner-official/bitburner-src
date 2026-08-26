@@ -26,13 +26,13 @@ function showMessage(name: MessageFilename): void {
   const msg = Messages[name];
   dialogBoxCreate(
     <>
-      Message received from unknown sender:
+      收到来自未知发件人的消息：
       <br />
       <br />
       <i>{msg.msg}</i>
       <br />
       <br />
-      This message was saved as {msg.filename} onto your home computer.
+      这条消息已以 {msg.filename} 的名义保存到你的家用电脑上。
     </>,
   );
 }
@@ -97,47 +97,47 @@ const Messages: Record<MessageFilename, Message> = {
   //jump3R Messages
   [MessageFilename.Jumper0]: new Message(
     MessageFilename.Jumper0,
-    "I know you can sense it. I know you're searching for it. " +
-      "It's why you spend night after " +
-      "night at your computer. \n\nIt's real, I've seen it. And I can " +
-      "help you find it. But not right now. You're not ready yet.\n\n" +
-      "Use this program to track your progress\n\n" +
-      "The fl1ght.exe program was added to your home computer\n\n" +
+    "我知道你能感觉到它。我知道你在寻找它。" +
+      "这就是你为什么夜复一夜地" +
+      "守在电脑前。\n\n它是真实存在的，我见过它。我可以" +
+      "帮你找到它。但现在还不行。你还没准备好。\n\n" +
+      "用这个程序来追踪你的进度\n\n" +
+      "fl1ght.exe 程序已被添加到你的家用电脑上\n\n" +
       "-jump3R",
   ),
 
   [MessageFilename.Jumper1]: new Message(
     MessageFilename.Jumper1,
-    `Soon you will be contacted by a hacking group known as ${FactionName.CyberSec}. ` +
-      "They can help you with your search. \n\n" +
-      "You should join them, garner their favor, and " +
-      "exploit them for their Augmentations. But do not trust them. " +
-      "They are not what they seem. No one is.\n\n" +
+    `很快，一个名为 ${FactionName.CyberSec} 的黑客组织会联系你。` +
+      "他们可以帮助你进行你的探寻。\n\n" +
+      "你应该加入他们，赢得他们的好感，并" +
+      "利用他们获取强化。但不要相信他们。" +
+      "他们并不像表面那样。没有人是。\n\n" +
       "-jump3R",
     FactionName.CyberSec,
   ),
 
   [MessageFilename.Jumper2]: new Message(
     MessageFilename.Jumper2,
-    "Do not try to save the world. There is no world to save. If " +
-      "you want to find the truth, worry only about yourself. Ethics and " +
-      `morals will get you killed. \n\nKeep an eye out for a hacking group known as ${FactionName.NiteSec}.` +
+    "不要试图拯救世界。已经没有世界可以拯救了。如果" +
+      "你想找到真相，只管好你自己。伦理和" +
+      `道德会让你送命。\n\n留意一个名为 ${FactionName.NiteSec} 的黑客组织。` +
       "\n\n-jump3R",
     FactionName.NiteSec,
   ),
 
   [MessageFilename.Jumper3]: new Message(
     MessageFilename.Jumper3,
-    "You must learn to walk before you can run. And you must " +
-      `run before you can fly. Look for ${FactionName.TheBlackHand}. \n\n` +
+    "你必须先学会走路，才能奔跑。而你必须" +
+      `先学会奔跑，才能飞翔。去找 ${FactionName.TheBlackHand} 吧。\n\n` +
       "I.I.I.I \n\n-jump3R",
     FactionName.TheBlackHand,
   ),
 
   [MessageFilename.Jumper4]: new Message(
     MessageFilename.Jumper4,
-    "To find what you are searching for, you must understand the bits. " +
-      "The bits are all around us. The runners will help you.\n\n" +
+    "要找到你所寻找的东西，你必须理解 bits。" +
+      "bits 无处不在。跑者们会帮助你。\n\n" +
       "-jump3R",
     FactionName.BitRunners,
   ),
@@ -145,31 +145,31 @@ const Messages: Record<MessageFilename, Message> = {
   //Messages from hacking factions
   [MessageFilename.CyberSecTest]: new Message(
     MessageFilename.CyberSecTest,
-    "We've been watching you. Your skills are very impressive. But you're wasting " +
-      "your talents. If you join us, you can put your skills to good use and change " +
-      "the world for the better. If you join us, we can unlock your full potential. \n\n" +
-      "But first, you must pass our test. Find and install the backdoor on our server. \n\n" +
+    "我们一直在观察你。你的技能令人印象深刻。但你正在浪费" +
+      "你的天赋。如果你加入我们，你可以把技能用在刀刃上，让" +
+      "世界变得更美好。加入我们，我们可以释放你的全部潜能。\n\n" +
+      "但首先，你必须通过我们的测试。在我们的服务器上找到并安装后门。\n\n" +
       `-${FactionName.CyberSec}`,
     FactionName.CyberSec,
   ),
 
   [MessageFilename.NiteSecTest]: new Message(
     MessageFilename.NiteSecTest,
-    "People say that the corrupted governments and corporations rule the world. " +
-      "Yes, maybe they do. But do you know who everyone really fears? People " +
-      "like us. Because they can't hide from us. Because they can't fight shadows " +
-      "and ideas with bullets. \n\n" +
-      "Join us, and people will fear you, too. \n\n" +
-      "Find and install the backdoor on our server, avmnite-02h. Then, we will contact you again." +
+    "人们说，腐败的政府和公司统治着世界。" +
+      "是的，也许是这样。但你知道人们真正害怕的是谁吗？是像" +
+      "我们这样的人。因为他们无法躲开我们。因为他们无法用子弹" +
+      "对抗阴影和思想。\n\n" +
+      "加入我们，人们也会惧怕你。\n\n" +
+      "在我们的服务器 avmnite-02h 上找到并安装后门。然后，我们会再次联系你。" +
       `\n\n-${FactionName.NiteSec}`,
     FactionName.NiteSec,
   ),
 
   [MessageFilename.BitRunnersTest]: new Message(
     MessageFilename.BitRunnersTest,
-    "We know what you are doing. We know what drives you. We know " +
-      "what you are looking for. \n\n " +
-      "We can help you find the answers.\n\n" +
+    "我们知道你在做什么。我们知道是什么驱使着你。我们知道" +
+      "你在寻找什么。\n\n " +
+      "我们可以帮你找到答案。\n\n" +
       "run4theh111z",
     FactionName.BitRunners,
   ),

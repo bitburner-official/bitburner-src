@@ -28,7 +28,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
     const args = parseCommand(autoexec);
     if (args.length === 0) {
       return (
-        <Tooltip title={<Typography>No script will be auto-launched</Typography>}>
+        <Tooltip title={<Typography>不会自动启动任何脚本</Typography>}>
           <CheckCircleIcon color="primary" />
         </Tooltip>
       );
@@ -37,7 +37,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
     const scriptPath = resolveScriptFilePath(cmd);
     if (!scriptPath) {
       return (
-        <Tooltip title={<Typography>"{cmd}" is invalid for a script name (maybe missing suffix?)</Typography>}>
+        <Tooltip title={<Typography>“{cmd}”不是有效的脚本名（可能缺少后缀？）</Typography>}>
           <ErrorIcon color="error" />
         </Tooltip>
       );
@@ -46,7 +46,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
     const script = home.scripts.get(scriptPath);
     if (!script) {
       return (
-        <Tooltip title={<Typography>{cmd} does not exist!</Typography>}>
+        <Tooltip title={<Typography>{cmd} 不存在！</Typography>}>
           <ErrorIcon color="error" />
         </Tooltip>
       );
@@ -54,7 +54,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
     const ramUsage = script.getRamUsage(home.scripts);
     if (ramUsage === null) {
       return (
-        <Tooltip title={<Typography>{cmd} has errors!</Typography>}>
+        <Tooltip title={<Typography>{cmd} 存在错误！</Typography>}>
           <ErrorIcon color="error" />
         </Tooltip>
       );
@@ -66,7 +66,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
         <Tooltip
           title={
             <Typography>
-              {cmd} costs {formatRam(ramUsage)}
+              {cmd} 需要 {formatRam(ramUsage)}
             </Typography>
           }
         >
@@ -78,7 +78,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
         <Tooltip
           title={
             <Typography>
-              {cmd} costs {formatRam(ramUsage)}, you might only have {formatRam(minRam)} on home!
+              {cmd} 需要 {formatRam(ramUsage)}，你的家用电脑可能只有 {formatRam(minRam)}！
             </Typography>
           }
         >

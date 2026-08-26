@@ -31,7 +31,7 @@ interface ICorporationParams {
 }
 
 export class Corporation {
-  name = "The Corporation";
+  name = "企业";
 
   /** Map keyed by division name */
   divisions = new JSONMap<string, Division>();
@@ -74,7 +74,7 @@ export class Corporation {
   numberOfOfficesAndWarehouses = 0;
 
   constructor(params: ICorporationParams = {}) {
-    this.name = params.name || "The Corporation";
+    this.name = params.name || "企业";
     this.seedFunded = params.seedFunded ?? false;
     this.shareSaleCooldown = params.shareSaleCooldown ?? 0;
   }
@@ -148,9 +148,9 @@ export class Corporation {
         });
         if (isNaN(this.funds) || this.funds === Infinity || this.funds === -Infinity) {
           dialogBoxCreate(
-            "There was an error calculating your Corporations funds and they got reset to 0. " +
-              "This is a bug. Please report to game developer.\n\n" +
-              `(Your funds have been set to ${formatMoney(150e9)} for the inconvenience)`,
+            "计算企业资金时出错，资金已被重置为0。" +
+              "这是一个 bug。请向游戏开发者报告。\n\n" +
+              `（作为补偿，你的资金已被重置为 ${formatMoney(150e9)}）`,
           );
           this.funds = 150e9;
         }
@@ -361,11 +361,11 @@ export class Corporation {
     const SecondsPerHour = 3600;
 
     if (seconds > SecondsPerHour) {
-      return `${Math.floor(seconds / SecondsPerHour)} hour(s)`;
+      return `${Math.floor(seconds / SecondsPerHour)} 小时`;
     } else if (seconds > SecondsPerMinute) {
-      return `${Math.floor(seconds / SecondsPerMinute)} minute(s)`;
+      return `${Math.floor(seconds / SecondsPerMinute)} 分钟`;
     } else {
-      return `${Math.floor(seconds)} second(s)`;
+      return `${Math.floor(seconds)} 秒`;
     }
   }
 
@@ -376,14 +376,14 @@ export class Corporation {
     if (this.unlocks.has(unlockName)) {
       return {
         success: false,
-        message: `${unlockName} has already been unlocked.`,
+        message: `${unlockName} 已被解锁。`,
       };
     }
     const price = CorpUnlocks[unlockName].price;
     if (this.funds < price) {
       return {
         success: false,
-        message: `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}.`,
+        message: `资金不足，无法购买 ${unlockName}，需要 ${formatMoney(price)}。`,
       };
     }
     this.loseFunds(price, "upgrades");
@@ -408,7 +408,7 @@ export class Corporation {
     if (!isPositiveInteger(amount)) {
       return {
         success: false,
-        message: `Number of upgrade levels purchased must be a positive integer (attempted: ${amount}).`,
+        message: `购买的升级级数必须是正整数（尝试购买：${amount}）。`,
       };
     }
     const upgrade = CorpUpgrades[upgradeName];
@@ -421,7 +421,7 @@ export class Corporation {
     if (this.funds < totalCost) {
       return {
         success: false,
-        message: `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`,
+        message: `资金不足，无法为升级 ${upgradeName} 购买 ${amount} 级。`,
       };
     }
     this.loseFunds(totalCost, "upgrades");

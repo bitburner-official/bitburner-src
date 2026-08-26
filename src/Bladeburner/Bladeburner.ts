@@ -141,7 +141,7 @@ export class Bladeburner implements OperationTeam {
   automateActionLow: ActionIdentifier | null = null;
   automateThreshLow = 0;
   consoleHistory: string[] = [];
-  consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
+  consoleLogs: string[] = ["Bladeburner 控制台", "输入 'help' 查看控制台命令"];
   getTeamCasualtiesRoll = getRandomIntInclusive;
 
   constructor() {
@@ -173,7 +173,7 @@ export class Bladeburner implements OperationTeam {
   startAction(actionId: ActionIdentifier | null): Attempt<{ message: string }> {
     if (!actionId) {
       this.resetAction();
-      return { success: true, message: "Stopped current Bladeburner action" };
+      return { success: true, message: "已停止当前Bladeburner行动" };
     }
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) {
       Player.finishWork(true);
@@ -181,12 +181,12 @@ export class Bladeburner implements OperationTeam {
     const action = this.getActionObject(actionId);
     const availability = action.getAvailability(this);
     if (!availability.available) {
-      return { message: `Could not start action ${action.name}: ${availability.error}` };
+      return { message: `无法开始行动 ${action.name}：${availability.error}` };
     }
     this.action = actionId;
     this.actionTimeCurrent = 0;
     this.actionTimeToComplete = action.getActionTime(this, Player);
-    return { success: true, message: `Started action ${action.name}` };
+    return { success: true, message: `已开始行动 ${action.name}` };
   }
 
   /** Directly sets a skill level, with no validation */
@@ -200,13 +200,13 @@ export class Bladeburner implements OperationTeam {
     const currentSkillLevel = this.skills[skillName] ?? 0;
     const availability = Skills[skillName].canUpgrade(this, count);
     if (!availability.available) {
-      return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+      return { message: `无法升级 ${skillName}：${availability.error}` };
     }
     this.skillPoints -= availability.cost;
     this.setSkillLevel(skillName, currentSkillLevel + availability.actualCount);
     return {
       success: true,
-      message: `Upgraded skill ${skillName} by ${pluralize(availability.actualCount, "level")}`,
+      message: `技能 ${skillName} 提升了 ${pluralize(availability.actualCount, "级", "级")}`,
     };
   }
 
@@ -264,12 +264,12 @@ export class Bladeburner implements OperationTeam {
 
   joinFaction(): Attempt<{ message: string }> {
     const faction = Factions[FactionName.Bladeburners];
-    if (faction.isMember) return { success: true, message: `Already a member of ${FactionName.Bladeburners} faction` };
+    if (faction.isMember) return { success: true, message: `已经是 ${FactionName.Bladeburners} 派系的成员` };
     if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
       joinFaction(faction);
-      return { success: true, message: `Joined ${FactionName.Bladeburners} faction` };
+      return { success: true, message: `已加入 ${FactionName.Bladeburners} 派系` };
     }
-    return { message: `Insufficient rank (${this.rank} / ${BladeburnerConstants.RankNeededForFaction})` };
+    return { message: `声望不足（${this.rank} / ${BladeburnerConstants.RankNeededForFaction}）` };
   }
 
   storeCycles(numCycles = 0): void {
@@ -278,15 +278,15 @@ export class Bladeburner implements OperationTeam {
 
   executeStartConsoleCommand(args: string[]): void {
     if (args.length !== 3) {
-      this.postToConsole("Invalid usage of 'start' console command: start [type] [name]");
-      this.postToConsole("Use 'help start' for more info");
+      this.postToConsole("'start' 控制台命令用法无效：start [type] [name]");
+      this.postToConsole("使用 'help start' 了解更多信息");
       return;
     }
     const type = args[1];
     const name = args[2];
     const action = this.guessActionFromTypeAndName(type, name);
     if (!action) {
-      this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
+      this.postToConsole(`指定的行动类型/名称无效：类型：${type}，名称：${name}`);
       return;
     }
     const attempt = this.startAction(action.id);
@@ -305,46 +305,46 @@ export class Bladeburner implements OperationTeam {
     switch (args.length) {
       case 1: {
         // Display Skill Help Command
-        this.postToConsole("Invalid usage of 'skill' console command: skill [action] [name]");
-        this.postToConsole("Use 'help skill' for more info");
+        this.postToConsole("'skill' 控制台命令用法无效：skill [action] [name]");
+        this.postToConsole("使用 'help skill' 了解更多信息");
         break;
       }
       case 2: {
         if (args[1].toLowerCase() === "list") {
           // List all skills and their level
-          this.postToConsole("Skills: ");
+          this.postToConsole("技能：");
           for (const skill of Object.values(Skills)) {
             const skillLevel = this.getSkillLevel(skill.name);
-            this.postToConsole(`${skill.name}: Level ${formatNumberNoSuffix(skillLevel, 0)}\n\nEffects: `);
+            this.postToConsole(`${skill.name}：等级 ${formatNumberNoSuffix(skillLevel, 0)}\n\n效果：`);
           }
           for (const logEntry of this.getSkillMultsDisplay()) this.postToConsole(logEntry);
         } else {
-          this.postToConsole("Invalid usage of 'skill' console command: skill [action] [name]");
-          this.postToConsole("Use 'help skill' for more info");
+          this.postToConsole("'skill' 控制台命令用法无效：skill [action] [name]");
+          this.postToConsole("使用 'help skill' 了解更多信息");
         }
         break;
       }
       case 3: {
         const skillName = args[2];
         if (!getEnumHelper("BladeburnerSkillName").isMember(skillName)) {
-          this.postToConsole("Invalid skill name (Note that it is case-sensitive): " + skillName);
+          this.postToConsole("无效的技能名称（注意区分大小写）：" + skillName);
           return;
         }
         const level = this.getSkillLevel(skillName);
         if (args[1].toLowerCase() === "list") {
-          this.postToConsole(skillName + ": Level " + formatNumberNoSuffix(level));
+          this.postToConsole(skillName + "：等级 " + formatNumberNoSuffix(level));
         } else if (args[1].toLowerCase() === "level") {
           const attempt = this.upgradeSkill(skillName);
           this.postToConsole(attempt.message);
         } else {
-          this.postToConsole("Invalid usage of 'skill' console command: skill [action] [name]");
-          this.postToConsole("Use 'help skill' for more info");
+          this.postToConsole("'skill' 控制台命令用法无效：skill [action] [name]");
+          this.postToConsole("使用 'help skill' 了解更多信息");
         }
         break;
       }
       default: {
-        this.postToConsole("Invalid usage of 'skill' console command: skill [action] [name]");
-        this.postToConsole("Use 'help skill' for more info");
+        this.postToConsole("'skill' 控制台命令用法无效：skill [action] [name]");
+        this.postToConsole("使用 'help skill' 了解更多信息");
         break;
       }
     }
@@ -352,8 +352,8 @@ export class Bladeburner implements OperationTeam {
 
   executeLogConsoleCommand(args: string[]): void {
     if (args.length < 3) {
-      this.postToConsole("Invalid usage of log command: log [enable/disable] [action/event]");
-      this.postToConsole("Use 'help log' for more details and examples");
+      this.postToConsole("log 命令用法无效：log [enable/disable] [action/event]");
+      this.postToConsole("使用 'help log' 查看更多细节与示例");
       return;
     }
 
@@ -366,31 +366,31 @@ export class Bladeburner implements OperationTeam {
       case "general":
       case "gen":
         this.logging.general = flag;
-        this.log("Logging " + (flag ? "enabled" : "disabled") + " for general actions");
+        this.log("通用行动（general actions）的日志记录已" + (flag ? "开启" : "关闭"));
         break;
       case "contract":
       case "contracts":
         this.logging.contracts = flag;
-        this.log("Logging " + (flag ? "enabled" : "disabled") + " for Contracts");
+        this.log("合约（Contracts）的日志记录已" + (flag ? "开启" : "关闭"));
         break;
       case "ops":
       case "op":
       case "operations":
       case "operation":
         this.logging.ops = flag;
-        this.log("Logging " + (flag ? "enabled" : "disabled") + " for Operations");
+        this.log("行动（Operations）的日志记录已" + (flag ? "开启" : "关闭"));
         break;
       case "blackops":
       case "blackop":
       case "black operations":
       case "black operation":
         this.logging.blackops = flag;
-        this.log("Logging " + (flag ? "enabled" : "disabled") + " for BlackOps");
+        this.log("黑色行动（BlackOps）的日志记录已" + (flag ? "开启" : "关闭"));
         break;
       case "event":
       case "events":
         this.logging.events = flag;
-        this.log("Logging " + (flag ? "enabled" : "disabled") + " for events");
+        this.log("事件（events）的日志记录已" + (flag ? "开启" : "关闭"));
         break;
       case "all":
         this.logging.general = flag;
@@ -398,12 +398,12 @@ export class Bladeburner implements OperationTeam {
         this.logging.ops = flag;
         this.logging.blackops = flag;
         this.logging.events = flag;
-        this.log("Logging " + (flag ? "enabled" : "disabled") + " for everything");
+        this.log("所有类别的日志记录已" + (flag ? "开启" : "关闭"));
         break;
       default:
-        this.postToConsole("Invalid action/event type specified: " + args[2]);
+        this.postToConsole("指定的行动/事件类型无效：" + args[2]);
         this.postToConsole(
-          "Examples of valid action/event identifiers are: [general, contracts, ops, blackops, events]",
+          "有效的行动/事件标识符示例：[general, contracts, ops, blackops, events]",
         );
         break;
     }
@@ -428,7 +428,7 @@ export class Bladeburner implements OperationTeam {
   executeAutomateConsoleCommand(args: string[]): void {
     if (args.length !== 2 && args.length !== 4) {
       this.postToConsole(
-        "Invalid use of 'automate' command: automate [var] [val] [hi/low]. Use 'help automate' for more info",
+        "'automate' 命令用法无效：automate [var] [val] [hi/low]。使用 'help automate' 了解更多信息",
       );
       return;
     }
@@ -437,30 +437,30 @@ export class Bladeburner implements OperationTeam {
     if (args.length === 2) {
       const flag = args[1];
       if (flag.toLowerCase() === "status") {
-        this.postToConsole("Automation: " + (this.automateEnabled ? "enabled" : "disabled"));
+        this.postToConsole("自动化状态：" + (this.automateEnabled ? "已启用" : "已禁用"));
         this.postToConsole(
-          "When your stamina drops to " +
+          "当你的体力降到 " +
             formatNumberNoSuffix(this.automateThreshLow, 0) +
-            ", you will automatically switch to " +
-            (this.automateActionLow?.name ?? "Idle") +
-            ". When your stamina recovers to " +
+            " 时，会自动切换至 " +
+            (this.automateActionLow?.name ?? "空闲") +
+            "。当你的体力恢复到 " +
             formatNumberNoSuffix(this.automateThreshHigh, 0) +
-            ", you will automatically " +
-            "switch to " +
-            (this.automateActionHigh?.name ?? "Idle") +
-            ".",
+            " 时，会自动" +
+            "切换至 " +
+            (this.automateActionHigh?.name ?? "空闲") +
+            "。",
         );
       } else if (flag.toLowerCase().includes("en")) {
         if (!this.automateActionLow || !this.automateActionHigh) {
-          return this.log("Failed to enable automation. Actions were not set");
+          return this.log("启用自动化失败。尚未设置行动");
         }
         this.automateEnabled = true;
-        this.log("Bladeburner automation enabled");
+        this.log("Bladeburner 自动化已启用");
       } else if (flag.toLowerCase().includes("d")) {
         this.automateEnabled = false;
-        this.log("Bladeburner automation disabled");
+        this.log("Bladeburner 自动化已禁用");
       } else {
-        this.log("Invalid argument for 'automate' console command: " + args[1]);
+        this.log("'automate' 控制台命令的参数无效：" + args[1]);
       }
       return;
     }
@@ -478,14 +478,14 @@ export class Bladeburner implements OperationTeam {
       if (type === "stamina") {
         // For stamina, the "name" variable is actually the stamina threshold
         if (isNaN(parseFloat(name))) {
-          this.postToConsole("Invalid value specified for stamina threshold (must be numeric): " + name);
+          this.postToConsole("体力阈值指定的值无效（必须为数字）：" + name);
         } else {
           if (highLow) {
             this.automateThreshHigh = Number(name);
           } else {
             this.automateThreshLow = Number(name);
           }
-          this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") stamina threshold set to " + name);
+          this.log("自动化（" + (highLow ? "高" : "低") + "）体力阈值已设为 " + name);
         }
         return;
       }
@@ -496,22 +496,22 @@ export class Bladeburner implements OperationTeam {
         switch (type) {
           case "general":
           case "gen": {
-            this.postToConsole("Invalid General Action name specified: " + name);
+            this.postToConsole("指定的通用行动名称无效：" + name);
             return;
           }
           case "contract":
           case "contracts": {
-            this.postToConsole("Invalid Contract name specified: " + name);
+            this.postToConsole("指定的合约名称无效：" + name);
             return;
           }
           case "ops":
           case "op":
           case "operations":
           case "operation":
-            this.postToConsole("Invalid Operation name specified: " + name);
+            this.postToConsole("指定的行动名称无效：" + name);
             return;
           default:
-            this.postToConsole("Invalid use of automate command.");
+            this.postToConsole("automate 命令用法无效。");
             return;
         }
       }
@@ -521,7 +521,7 @@ export class Bladeburner implements OperationTeam {
       } else {
         this.automateActionLow = actionId;
       }
-      this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") action set to " + name);
+      this.log("自动化（" + (highLow ? "高" : "低") + "）行动已设为 " + name);
     }
   }
 
@@ -556,7 +556,7 @@ export class Bladeburner implements OperationTeam {
         this.resetAction();
         break;
       default:
-        this.postToConsole("Invalid console command");
+        this.postToConsole("无效的控制台命令");
         break;
     }
   }
@@ -620,7 +620,7 @@ export class Bladeburner implements OperationTeam {
         sourceCity.pop += BladeburnerConstants.BasePopGrowth;
       }
       if (this.logging.events) {
-        this.log("Intelligence indicates that a new Synthoid community was formed in a city.");
+        this.log("情报显示某座城市新成立了一个合成人社区。");
       }
     } else if (chance <= 0.1) {
       // Synthoid Community Migration, 5%
@@ -634,7 +634,7 @@ export class Bladeburner implements OperationTeam {
           sourceCity.pop += BladeburnerConstants.BasePopGrowth;
         }
         if (this.logging.events) {
-          this.log("Intelligence indicates that a new Synthoid community was formed in a city.");
+          this.log("情报显示某座城市新成立了一个合成人社区。");
         }
       } else {
         --sourceCity.comms;
@@ -650,7 +650,7 @@ export class Bladeburner implements OperationTeam {
         }
         if (this.logging.events) {
           this.log(
-            `Intelligence indicates that a Synthoid community migrated from ${sourceCityName} to some other city.`,
+            `情报显示一个合成人社区从 ${sourceCityName} 迁移到了其他城市。`,
           );
         }
       }
@@ -664,7 +664,7 @@ export class Bladeburner implements OperationTeam {
       }
       if (this.logging.events) {
         this.log(
-          `Intelligence indicates that the Synthoid population of ${sourceCityName} just changed significantly.`,
+          `情报显示 ${sourceCityName} 的合成人数量刚刚发生了显著变化。`,
         );
       }
     } else if (chance <= 0.5) {
@@ -672,7 +672,7 @@ export class Bladeburner implements OperationTeam {
       this.triggerMigration(sourceCityName);
       if (this.logging.events) {
         this.log(
-          `Intelligence indicates that a large number of Synthoids migrated from ${sourceCityName} to some other city.`,
+          `情报显示大批合成人从 ${sourceCityName} 迁移到了其他城市。`,
         );
       }
     } else if (chance <= 0.7) {
@@ -680,7 +680,7 @@ export class Bladeburner implements OperationTeam {
       sourceCity.changeChaosByCount(1);
       sourceCity.changeChaosByPercentage(getRandomIntInclusive(5, 20));
       if (this.logging.events) {
-        this.log(`Tensions between Synthoids and humans lead to riots in ${sourceCityName}! Chaos increased.`);
+        this.log(`合成人与人类之间的紧张局势在 ${sourceCityName} 引发骚乱！混乱度上升。`);
       }
     } else if (chance <= 0.9) {
       // Less Synthoids, 20%
@@ -689,7 +689,7 @@ export class Bladeburner implements OperationTeam {
       sourceCity.changePopulationByCount(-count);
       if (this.logging.events) {
         this.log(
-          `Intelligence indicates that the Synthoid population of ${sourceCityName} just changed significantly.`,
+          `情报显示 ${sourceCityName} 的合成人数量刚刚发生了显著变化。`,
         );
       }
     }
@@ -795,7 +795,7 @@ export class Bladeburner implements OperationTeam {
     const action = this.getActionObject(this.action);
     const deaths = resolveTeamCasualties(action, this, success);
     if (this.logging.ops && deaths > 0) {
-      this.log(`Lost ${formatNumberNoSuffix(deaths, 0)} team members during this ${action.name}.`);
+      this.log(`在本次 ${action.name} 中损失了 ${formatNumberNoSuffix(deaths, 0)} 名团队成员。`);
     }
 
     const city = this.getCurrentCity();
@@ -892,14 +892,14 @@ export class Bladeburner implements OperationTeam {
       let extraLog = "";
       if (currentHp <= damage) {
         if (person instanceof PlayerObject) {
-          extraLog += ` ${person.whoAmI()} was hospitalized. Current HP is ${formatHp(person.hp.current)}.`;
+          extraLog += ` ${person.whoAmI()} 被送往医院。当前生命值为 ${formatHp(person.hp.current)}。`;
         } else if (person instanceof Sleeve) {
-          extraLog += ` ${person.whoAmI()} was shocked. Current shock is ${formatSleeveShock(
+          extraLog += ` ${person.whoAmI()} 受到冲击。当前冲击度为 ${formatSleeveShock(
             person.shock,
-          )}. Current HP is ${formatHp(person.hp.current)}.`;
+          )}。当前生命值为 ${formatHp(person.hp.current)}。`;
         }
       } else {
-        extraLog += ` HP reduced from ${formatHp(currentHp)} to ${formatHp(person.hp.current)}.`;
+        extraLog += ` 生命值从 ${formatHp(currentHp)} 降至 ${formatHp(person.hp.current)}。`;
       }
       return extraLog;
     };
@@ -950,12 +950,12 @@ export class Bladeburner implements OperationTeam {
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
-                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank.`,
+                  `${person.whoAmI()}：${action.name} 成功完成！获得 ${formatBigNumber(gain)} 声望。`,
                 );
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
-                  `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}.`,
+                  `${person.whoAmI()}：${action.name} 合约成功完成！获得 ` +
+                    `${formatBigNumber(gain)} 声望和 ${formatMoney(moneyGain)}。`,
                 );
               }
             }
@@ -989,15 +989,15 @@ export class Bladeburner implements OperationTeam {
             }
             let logLossText = "";
             if (loss > 0) {
-              logLossText += ` Lost ${formatNumberNoSuffix(loss, 3)} rank.`;
+              logLossText += ` 损失 ${formatNumberNoSuffix(loss, 3)} 声望。`;
             }
             if (damage > 0) {
-              logLossText += ` Took ${formatNumberNoSuffix(damage, 0)} damage.${getExtraLogAfterTakingDamage(damage)}`;
+              logLossText += ` 受到 ${formatNumberNoSuffix(damage, 0)} 点伤害。${getExtraLogAfterTakingDamage(damage)}`;
             }
             if (isOperation && this.logging.ops) {
-              this.log(`${person.whoAmI()}: ${action.name} failed!${logLossText}`);
+              this.log(`${person.whoAmI()}：${action.name} 失败！${logLossText}`);
             } else if (!isOperation && this.logging.contracts) {
-              this.log(`${person.whoAmI()}: ${action.name} contract failed!${logLossText}`);
+              this.log(`${person.whoAmI()}：${action.name} 合约失败！${logLossText}`);
             }
             isOperation ? this.completeOperation(false) : this.completeContract(false, action);
           }
@@ -1036,7 +1036,7 @@ export class Bladeburner implements OperationTeam {
 
           if (this.logging.blackops) {
             this.log(
-              `${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank.`,
+              `${person.whoAmI()}：${action.name} 成功！获得 ${formatNumberNoSuffix(rankGain, 1)} 声望。`,
             );
           }
           /**
@@ -1070,10 +1070,10 @@ export class Bladeburner implements OperationTeam {
 
           if (this.logging.blackops) {
             this.log(
-              `${person.whoAmI()}: ${action.name} failed! Lost ${formatNumberNoSuffix(
+              `${person.whoAmI()}：${action.name} 失败！损失 ${formatNumberNoSuffix(
                 rankLoss,
                 1,
-              )} rank. Took ${formatNumberNoSuffix(damage, 0)} damage.${getExtraLogAfterTakingDamage(damage)}`,
+              )} 声望，受到 ${formatNumberNoSuffix(damage, 0)} 点伤害。${getExtraLogAfterTakingDamage(damage)}`,
             );
           }
         }
@@ -1082,7 +1082,7 @@ export class Bladeburner implements OperationTeam {
 
         if (this.logging.blackops && deaths > 0) {
           this.log(
-            `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(deaths, 0)} team members during ${action.name}.`,
+            `${person.whoAmI()}：你在 ${action.name} 中损失了 ${formatNumberNoSuffix(deaths, 0)} 名团队成员。`,
           );
         }
         break;
@@ -1103,18 +1103,18 @@ export class Bladeburner implements OperationTeam {
             this.staminaBonus += staminaGain;
             if (this.logging.general) {
               this.log(
-                `${person.whoAmI()}: ` +
-                  "Training completed. Gained: " +
+                `${person.whoAmI()}：` +
+                  "训练完成。获得：" +
                   formatExp(strExpGain) +
-                  " str exp, " +
+                  " 力量经验，" +
                   formatExp(defExpGain) +
-                  " def exp, " +
+                  " 防御经验，" +
                   formatExp(dexExpGain) +
-                  " dex exp, " +
+                  " 灵巧经验，" +
                   formatExp(agiExpGain) +
-                  " agi exp, " +
+                  " 敏捷经验，" +
                   formatBigNumber(staminaGain) +
-                  " max stamina.",
+                  " 最大体力。",
               );
             }
             break;
@@ -1141,10 +1141,10 @@ export class Bladeburner implements OperationTeam {
             );
             if (this.logging.general) {
               this.log(
-                `${person.whoAmI()}: ` +
-                  `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
-                  `${formatExp(hackingExpGain)} hacking exp, and ` +
-                  `${formatExp(charismaExpGain)} charisma exp.`,
+                `${person.whoAmI()}：` +
+                  `现场分析完成。获得 ${formatBigNumber(rankGain)} 声望、` +
+                  `${formatExp(hackingExpGain)} 黑客经验和 ` +
+                  `${formatExp(charismaExpGain)} 魅力经验。`,
               );
             }
             break;
@@ -1162,10 +1162,10 @@ export class Bladeburner implements OperationTeam {
               ++this.teamSize;
               if (this.logging.general) {
                 this.log(
-                  `${person.whoAmI()}: ` +
-                    "Successfully recruited a team member! Gained " +
+                  `${person.whoAmI()}：` +
+                    "成功招募了一名团队成员！获得 " +
                     formatExp(expGain) +
-                    " charisma exp.",
+                    " 魅力经验。",
                 );
               }
             } else {
@@ -1173,10 +1173,10 @@ export class Bladeburner implements OperationTeam {
               retValue.chaExp = expGain;
               if (this.logging.general) {
                 this.log(
-                  `${person.whoAmI()}: ` +
-                    "Failed to recruit a team member. Gained " +
+                  `${person.whoAmI()}：` +
+                    "未能招募团队成员。获得 " +
                     formatExp(expGain) +
-                    " charisma exp.",
+                    " 魅力经验。",
                 );
               }
             }
@@ -1187,9 +1187,9 @@ export class Bladeburner implements OperationTeam {
             this.getCurrentCity().changeChaosByPercentage(-diplomacyPct);
             if (this.logging.general) {
               this.log(
-                `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
+                `${person.whoAmI()}：外交完成。当前城市的混乱度下降了 ${formatPercent(
                   diplomacyPct / 100,
-                )}.`,
+                )}。`,
               );
             }
             break;
@@ -1203,16 +1203,16 @@ export class Bladeburner implements OperationTeam {
             if (this.logging.general) {
               let extraLog = "";
               if (person.hp.current > currentHp) {
-                extraLog += ` Restored ${formatHp(BladeburnerConstants.HrcHpGain)} HP. Current HP is ${formatHp(
+                extraLog += ` 恢复了 ${formatHp(BladeburnerConstants.HrcHpGain)} 点生命值。当前生命值为 ${formatHp(
                   person.hp.current,
-                )}.`;
+                )}。`;
               }
               if (this.stamina > currentStamina) {
-                extraLog += ` Restored ${formatStamina(staminaGain)} stamina. Current stamina is ${formatStamina(
+                extraLog += ` 恢复了 ${formatStamina(staminaGain)} 体力。当前体力为 ${formatStamina(
                   this.stamina,
-                )}.`;
+                )}。`;
               }
-              this.log(`${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber.${extraLog}`);
+              this.log(`${person.whoAmI()}：在双曲再生舱中休息。${extraLog}`);
             }
             break;
           }
@@ -1224,7 +1224,7 @@ export class Bladeburner implements OperationTeam {
               operation.count += (60 * 3 * operation.growthFunction()) / BladeburnerConstants.ActionCountGrowthPeriod;
             }
             if (this.logging.general) {
-              this.log(`${person.whoAmI()}: Incited violence in the Synthoid communities.`);
+              this.log(`${person.whoAmI()}：已在合成人社区中煽动暴力。`);
             }
             for (const cityName of Object.values(CityName)) {
               const city = this.cities[cityName];
@@ -1258,7 +1258,7 @@ export class Bladeburner implements OperationTeam {
       this.operations[operation].count += amt;
     }
     if (this.logging.general) {
-      this.log(`Sleeve: Infiltrate the Synthoid communities.`);
+      this.log(`分身：潜入合成人社区。`);
     }
   }
 
@@ -1353,9 +1353,9 @@ export class Bladeburner implements OperationTeam {
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {
       if (this.action) {
-        let msg = "Your Bladeburner action was cancelled because you started doing something else.";
+        let msg = "你的Bladeburner行动已被取消，因为你开始做其他事情。";
         if (this.automateEnabled) {
-          msg += `\n\nYour automation was disabled as well. You will have to re-enable it through the Bladeburner console`;
+          msg += `\n\n你的自动化也已被禁用。你需要通过Bladeburner控制台重新启用它`;
           this.automateEnabled = false;
         }
         if (!Settings.SuppressBladeburnerPopup) {
@@ -1367,7 +1367,7 @@ export class Bladeburner implements OperationTeam {
 
     // If the Player has no Stamina, set action to idle
     if (this.stamina <= 0) {
-      this.log("Your Bladeburner action was cancelled because your stamina hit 0");
+      this.log("你的Bladeburner行动已被取消，因为你的体力降到了 0");
       this.resetAction();
     }
 

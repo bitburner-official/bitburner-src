@@ -141,7 +141,7 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
   }
 
   // Position type, for logging/message purposes
-  const pos = order.pos === PositionType.Long ? "Long" : "Short";
+  const pos = order.pos === PositionType.Long ? "做多" : "做空";
 
   if (res) {
     for (let i = 0; i < stockOrders.length; ++i) {
@@ -150,8 +150,8 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
         if (!Settings.SuppressTIXPopup) {
           dialogBoxCreate(
             <>
-              {order.type} for {stock.symbol} @ <Money money={order.price} /> ({pos}) was filled (
-              {formatShares(Math.round(order.shares))} shares)
+              {order.type}：{stock.symbol} @ <Money money={order.price} />（{pos}）已成交（
+              {formatShares(Math.round(order.shares))} 股）
             </>,
           );
         }
@@ -164,8 +164,8 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
   } else if (isBuy) {
     dialogBoxCreate(
       <>
-        Failed to execute {order.type} for {stock.symbol} @ <Money money={order.price} /> ({pos}). This is most likely
-        because you do not have enough money or the order would exceed the stock's maximum number of shares
+        执行 {order.type}：{stock.symbol} @ <Money money={order.price} />（{pos}
+        ）失败。最可能的原因是你的资金不足，或该订单会超过此股票的最大股数
       </>,
     );
   }

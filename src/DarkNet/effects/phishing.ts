@@ -23,7 +23,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
     addCacheToServer(server, true);
     Player.gainCharismaExp(xpReward);
     DarknetState.lastPhishingCacheTime = new Date();
-    const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(xpReward, 1)} cha xp)`;
+    const result = `网络钓鱼攻击成功！找到了一个缓存文件。（获得 ${formatNumber(xpReward, 1)} 魅力经验）`;
     helpers.log(ctx, () => result);
     return {
       success: true,
@@ -46,10 +46,10 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
       currentNodeMults.DarknetMoneyMultiplier;
     Player.gainMoney(moneyReward, "darknet");
     Player.gainCharismaExp(xpReward);
-    const result = `Phishing attack succeeded! $${formatNumber(moneyReward, 2)} retrieved. (Gained ${formatNumber(
+    const result = `网络钓鱼攻击成功！取回了 $${formatNumber(moneyReward, 2)}。（获得 ${formatNumber(
       xpReward,
       1,
-    )} cha xp)`;
+    )} 魅力经验）`;
     helpers.log(ctx, () => result);
     return {
       success: true,
@@ -58,7 +58,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
     };
   }
   Player.gainCharismaExp(xpReward / 4);
-  const result = `There were no takers on that phishing attempt. (Gained ${formatNumber(xpReward / 4, 1)} cha xp)`;
+  const result = `这次网络钓鱼无人上钩。（获得 ${formatNumber(xpReward / 4, 1)} 魅力经验）`;
   helpers.log(ctx, () => result);
   return {
     success: false,

@@ -31,20 +31,20 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
   }, [rerender]);
 
   const connectionConfig = {
-    Online: { color: Settings.theme.success, instruction: "Click to disconnect" },
+    Online: { color: Settings.theme.success, instruction: "点击断开连接" },
     Offline: {
       color: Settings.theme.error,
-      instruction: canCreateNewRemoteFileApiConnection() ? "Click to connect" : "Click to go to the option page",
+      instruction: canCreateNewRemoteFileApiConnection() ? "点击连接" : "点击前往选项页面",
     },
     Reconnecting: {
       color: Settings.theme.warning,
       instruction: canCreateNewRemoteFileApiConnection()
-        ? "Click to try to connect immediately without waiting"
-        : "Click to go to the option page",
+        ? "点击立即尝试连接，无需等待"
+        : "点击前往选项页面",
     },
     Connecting: {
       color: Settings.theme.warning,
-      instruction: "Connecting",
+      instruction: "连接中",
     },
   };
 
@@ -54,7 +54,7 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
     <Box style={{ display: "flex", flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
       {showIcon ? (
         <IconButton
-          aria-label="Remote API status"
+          aria-label="Remote API 状态"
           onClick={() => {
             switch (rfaConnectionStatus) {
               case "Online":
@@ -77,7 +77,7 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
           <Tooltip
             title={
               <>
-                Remote API: {rfaConnectionStatus}
+                Remote API：{rfaConnectionStatus}
                 <br />
                 {connectionConfig[rfaConnectionStatus].instruction}
               </>
@@ -88,7 +88,7 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
         </IconButton>
       ) : (
         <Typography>
-          Status: <span style={{ color }}>{rfaConnectionStatus}</span>
+          状态：<span style={{ color }}>{rfaConnectionStatus}</span>
         </Typography>
       )}
     </Box>

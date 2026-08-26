@@ -59,18 +59,18 @@ const getRandomData = (server: DarknetServer, length: number) => {
 
 const getRandomCharsInPassword = (password: string) => {
   if (!password) {
-    return "There's definitely nothing in that password...";
+    return "那个密码里肯定什么都没有……";
   }
   const [containedChar1, containedChar2] = getTwoCharsInPassword(password);
   const hints = [
-    `There's definitely a ${containedChar1} and a ${containedChar2}...`,
-    `I can see a ${containedChar1} and a ${containedChar2}.`,
-    `I must use ${containedChar1} & ${containedChar2}!`,
-    `Did it have a ${containedChar1} and a ${containedChar2}?`,
-    `Note to self: ${containedChar1} and ${containedChar2} are important.`,
-    `I think ${containedChar1} with ${containedChar2} is key.`,
-    `I need to remember ${containedChar1} 'n ${containedChar2}.`,
-    `Theres a ${containedChar1}, and maybe a ${containedChar2}...`,
+    `里面肯定有一个 ${containedChar1} 和一个 ${containedChar2}……`,
+    `我能看到一个 ${containedChar1} 和一个 ${containedChar2}。`,
+    `我必须用上 ${containedChar1} 和 ${containedChar2}！`,
+    `它是不是有一个 ${containedChar1} 和一个 ${containedChar2}？`,
+    `自我提醒：${containedChar1} 和 ${containedChar2} 很重要。`,
+    `我觉得 ${containedChar1} 配 ${containedChar2} 是关键。`,
+    `我得记住 ${containedChar1} 还有 ${containedChar2}。`,
+    `有一个 ${containedChar1}，也许还有一个 ${containedChar2}……`,
   ];
   return hints[Math.floor(Math.random() * hints.length)];
 };
@@ -82,9 +82,9 @@ const getExactCharactersHint = (lastPassword: string, realPassword: string) => {
     .filter((c, i) => correctCharPlacement[i])
     .slice(0, 2);
   if (rightChars.length === 0) {
-    return "No characters are in the right place.";
+    return "没有字符位于正确的位置。";
   }
-  return `The characters ${rightChars.join(", ")} are in the right place. `;
+  return `字符 ${rightChars.join("、")} 位于正确的位置。 `;
 };
 
 export const logPasswordAttempt = (server: DarknetServer, passwordResponse: PasswordResponse, pid: number) => {
@@ -164,12 +164,12 @@ const getLogNoise = (server: DarknetServer, logDate: Date): LogEntry => {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
     const connectedServer = getDarknetServer(connectedServerName);
     if (connectedServer) {
-      return log(`Connecting to ${connectedServerName}:${connectedServer.password} ...`);
+      return log(`正在连接到 ${connectedServerName}:${connectedServer.password} ...`);
     }
   }
   if (Math.random() < 0.05) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    return log(`[sending transaction details to ${connectedServerName}.]`);
+    return log(`[正在向 ${connectedServerName} 发送交易详情。]`);
   }
   if (Math.random() < 0.1) {
     const mostRecentAuthLog = getMostRecentAuthLog(server.hostname);
@@ -192,7 +192,7 @@ const getLogNoise = (server: DarknetServer, logDate: Date): LogEntry => {
     return addPacketSnifferNoise(server);
   }
 
-  return log(`${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`);
+  return log(`${logDate.toLocaleTimeString()}: ${server.hostname} - 心跳检测（存活）`);
 };
 
 const log = (message: string, pid = -1) => ({
@@ -205,11 +205,11 @@ const addPacketSnifferNoise = (server: DarknetServer) => {
   // If the server becomes disconnected while the UI is open and has no neighbors but still
   // has logs being populated, fall back to showing the current password
   if (Math.random() < 0.3 || connectedServers.length === 0) {
-    return log(`Logging in with passcode: ${server.password} ...`);
+    return log(`正在使用密码登录：${server.password} ...`);
   }
   const randomServerName = connectedServers[Math.floor(Math.random() * connectedServers.length)];
   const randomServer = getDarknetServerOrThrow(randomServerName);
-  return log(`Connecting to ${randomServer.hostname}:${randomServer.password} ...`);
+  return log(`正在连接到 ${randomServer.hostname}:${randomServer.password} ...`);
 };
 
 export const getMostRecentAuthLog = (hostname: string) => {

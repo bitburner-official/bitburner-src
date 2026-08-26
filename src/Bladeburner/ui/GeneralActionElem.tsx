@@ -26,7 +26,7 @@ export function GeneralActionElem({ bladeburner, action }: GeneralActionElemProp
       <Typography whiteSpace={"pre-wrap"}>{action.desc}</Typography>
       <br />
       <Typography>
-        Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
+        所需时间：{convertTimeMsToTimeElapsedString(actionTime * 1000)}
         {action.name === BladeburnerGeneralActionName.Recruitment && (
           <>
             <br />

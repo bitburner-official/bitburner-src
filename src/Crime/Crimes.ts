@@ -4,8 +4,8 @@ import { CrimeType } from "@enums";
 
 export const Crimes: Record<CrimeType, Crime> = {
   [CrimeType.shoplift]: new Crime(
-    "to shoplift",
-    "Attempt to shoplift from a low-end retailer",
+    "入店行窃",
+    "试图从低端零售商处行窃",
     CrimeType.shoplift,
     2e3,
     15e3,
@@ -21,8 +21,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.robStore]: new Crime(
-    "to rob a store",
-    "Attempt to commit armed robbery on a high-end store",
+    "抢劫商店",
+    "试图持械抢劫一家高端商店",
     CrimeType.robStore,
     60e3,
     400e3,
@@ -42,8 +42,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.mug]: new Crime(
-    "to mug",
-    "Attempt to mug a random person on the street",
+    "街头抢劫",
+    "试图在街上随机抢劫一名路人",
     CrimeType.mug,
     4e3,
     36e3,
@@ -63,8 +63,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.larceny]: new Crime(
-    "larceny",
-    "Attempt to rob property from someone's house",
+    "入室盗窃",
+    "试图从他人住宅中窃取财物",
     CrimeType.larceny,
     90e3,
     800e3,
@@ -83,7 +83,7 @@ export const Crimes: Record<CrimeType, Crime> = {
     },
   ),
 
-  [CrimeType.dealDrugs]: new Crime("to deal drugs", "Attempt to deal drugs", CrimeType.dealDrugs, 10e3, 120e3, 1, 0.5, {
+  [CrimeType.dealDrugs]: new Crime("贩卖毒品", "试图贩卖毒品", CrimeType.dealDrugs, 10e3, 120e3, 1, 0.5, {
     dexterity_exp: 5,
     agility_exp: 5,
     charisma_exp: 10,
@@ -94,8 +94,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   }),
 
   [CrimeType.bondForgery]: new Crime(
-    "to forge bonds",
-    "Attempt to forge corporate bonds",
+    "伪造债券",
+    "试图伪造公司债券",
     CrimeType.bondForgery,
     300e3,
     4.5e6,
@@ -114,8 +114,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.traffickArms]: new Crime(
-    "to traffic arms",
-    "Attempt to smuggle illegal arms into the city",
+    "走私军火",
+    "试图将非法武器走私进城",
     CrimeType.traffickArms,
     40e3,
     600e3,
@@ -137,8 +137,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.homicide]: new Crime(
-    "homicide",
-    "Attempt to murder a random person on the street",
+    "杀人",
+    "试图在街上随机谋杀一名路人",
     CrimeType.homicide,
     3e3,
     45e3,
@@ -160,8 +160,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.grandTheftAuto]: new Crime(
-    "grand theft auto",
-    "Attempt to commit grand theft auto",
+    "盗车",
+    "试图实施重大盗车犯罪",
     CrimeType.grandTheftAuto,
     80e3,
     1.6e6,
@@ -185,8 +185,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.kidnap]: new Crime(
-    "to kidnap",
-    "Attempt to kidnap and ransom a high-profile target",
+    "绑架",
+    "试图绑架知名目标并索取赎金",
     CrimeType.kidnap,
     120e3,
     3.6e6,
@@ -209,8 +209,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.assassination]: new Crime(
-    "to assassinate",
-    "Attempt to assassinate a high-profile target",
+    "暗杀",
+    "试图暗杀一名知名目标",
     CrimeType.assassination,
     300e3,
     12e6,
@@ -233,8 +233,8 @@ export const Crimes: Record<CrimeType, Crime> = {
   ),
 
   [CrimeType.heist]: new Crime(
-    "a heist",
-    "Attempt to pull off the ultimate heist",
+    "惊天劫案",
+    "试图完成一场惊天动地的终极劫案",
     CrimeType.heist,
     600e3,
     120e6,

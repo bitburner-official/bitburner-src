@@ -19,10 +19,10 @@ export const DECK_COUNT = 5; // 5-deck multideck
 
 enum Result {
   Pending = "Pending",
-  PlayerWon = "You won!",
-  PlayerWonByBlackjack = "You Won! Blackjack!",
-  DealerWon = "You lost!",
-  Tie = "Push! (Tie)",
+  PlayerWon = "你赢了！",
+  PlayerWonByBlackjack = "你赢了！二十一点！",
+  DealerWon = "你输了！",
+  Tie = "平局！(Push)",
 }
 
 interface State {
@@ -223,7 +223,7 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
          * Don't throw an error. Callers of this function are event handlers (onClick) of buttons. If we throw an error,
          * it won't be shown to the player.
          */
-        exceptionAlert(new Error(`Unexpected Blackjack result: ${result}.`));
+        exceptionAlert(new Error(`意外的二十一点结果：${result}。`));
         gains = 0;
         break;
     }
@@ -280,7 +280,7 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
           />
 
           <Typography>
-            {"Total earnings this session: "}
+            {"本次会话总收益： "}
             <Money money={gains} />
           </Typography>
         </Box>
@@ -288,13 +288,13 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
         {/* Buttons */}
         {!gameInProgress ? (
           <Button onClick={this.startOnClick} disabled={wagerInvalid}>
-            Start
+            开始
           </Button>
         ) : (
           <>
-            <Button onClick={this.playerHit}>Hit</Button>
+            <Button onClick={this.playerHit}>要牌</Button>
             <Button color="secondary" onClick={this.playerStay}>
-              Stay
+              停牌
             </Button>
           </>
         )}
@@ -305,16 +305,16 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
           <>
             <Box display="flex">
               <Paper elevation={2}>
-                <Typography>Player</Typography>
+                <Typography>玩家</Typography>
                 {playerHand.cards.map((card, i) => (
                   <ReactCard card={card} key={i} />
                 ))}
 
                 <Typography>
-                  Count:{" "}
+                  点数：{" "}
                   {playerHandValues
                     .map<React.ReactNode>((value, i) => <span key={i}>{value}</span>)
-                    .reduce((prev, curr) => [prev, " or ", curr])}
+                    .reduce((prev, curr) => [prev, " 或 ", curr])}
                 </Typography>
               </Paper>
             </Box>
@@ -323,7 +323,7 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
 
             <Box display="flex">
               <Paper elevation={2}>
-                <Typography>Dealer</Typography>
+                <Typography>庄家</Typography>
                 {dealerHand.cards.map((card, i) => (
                   // Hide every card except the first while game is in progress
                   <ReactCard card={card} hidden={gameInProgress && i !== 0} key={i} />
@@ -332,10 +332,10 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
                 {!gameInProgress && (
                   <>
                     <Typography>
-                      Count:{" "}
+                      点数：{" "}
                       {dealerHandValues
                         .map<React.ReactNode>((value, i) => <span key={i}>{value}</span>)
-                        .reduce((prev, curr) => [prev, " or ", curr])}
+                        .reduce((prev, curr) => [prev, " 或 ", curr])}
                     </Typography>
                   </>
                 )}

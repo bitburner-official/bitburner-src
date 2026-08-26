@@ -20,7 +20,7 @@ export function killWorkerScript(ws: WorkerScript): void {
 export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boolean {
   const ws = workerScripts.get(pid);
   if (ws instanceof WorkerScript) {
-    ws.log("", () => (killer ? `Script killed by script ${killer.name} with PID ${killer.pid}` : "Script killed."));
+    ws.log("", () => (killer ? `脚本被脚本 ${killer.name} 杀死（PID ${killer.pid}）` : "脚本已被杀死。"));
     stopAndCleanUpWorkerScript(ws);
     return true;
   }
@@ -30,7 +30,7 @@ export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boole
 
 export const killAllScripts = () => {
   for (const server of GetAllServers(true)) {
-    killServerScripts(server, "Script killed.");
+    killServerScripts(server, "脚本已被杀死。");
   }
 };
 
@@ -72,7 +72,7 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
       try {
         callback();
       } catch (e: unknown) {
-        handleUnknownError(e, ws, `Error running atExit function with id ${id}.\n\n`);
+        handleUnknownError(e, ws, `执行 atExit 函数（id ${id}）时出错。\n\n`);
       }
     }
   }

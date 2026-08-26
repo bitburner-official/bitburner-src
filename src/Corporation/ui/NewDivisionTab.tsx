@@ -30,9 +30,9 @@ export function NewDivisionTab(props: IProps): React.ReactElement {
 
   const disabledText =
     corp.divisions.size >= corp.maxDivisions
-      ? "Corporation already has the maximum number of divisions"
+      ? "企业已达到部门数量上限"
       : corp.funds < data.startingCost
-      ? "Insufficient corporation funds"
+      ? "企业资金不足"
       : "";
 
   function newDivision(): void {
@@ -64,9 +64,9 @@ export function NewDivisionTab(props: IProps): React.ReactElement {
   return (
     <>
       <Typography>
-        {corp.name} has {corp.divisions.size} of {corp.maxDivisions} divisions.
+        {corp.name} 目前拥有 {corp.divisions.size} / {corp.maxDivisions} 个部门。
       </Typography>
-      <Typography>Create a new division to expand into a new industry:</Typography>
+      <Typography>创建一个新部门，扩张到新的行业：</Typography>
       <Select value={industry} onChange={onIndustryChange}>
         {allIndustries.map((industry) => (
           <MenuItem key={industry} value={industry}>
@@ -78,12 +78,12 @@ export function NewDivisionTab(props: IProps): React.ReactElement {
       <br />
       <br />
 
-      <Typography>Division name:</Typography>
+      <Typography>部门名称：</Typography>
 
       <Box display="flex" alignItems="center">
         <TextField autoFocus={true} value={name} onChange={onNameChange} onKeyDown={onKeyDown} type="text"></TextField>{" "}
         <ButtonWithTooltip disabledTooltip={disabledText} onClick={newDivision}>
-          Expand
+          扩张
         </ButtonWithTooltip>
       </Box>
     </>

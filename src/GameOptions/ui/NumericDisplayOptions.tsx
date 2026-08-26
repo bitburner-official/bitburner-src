@@ -32,18 +32,17 @@ export const NumericDisplayPage = (): React.ReactElement => {
   }
 
   return (
-    <GameOptionsPage title="Numeric Display">
+    <GameOptionsPage title="数字显示">
       <OptionSwitch
         checked={Settings.useEngineeringNotation}
         onChange={(newValue) => {
           Settings.useEngineeringNotation = newValue;
           FormatsNeedToChange.emit();
         }}
-        text="Use engineering notation instead of scientific notation for exponential form"
+        text="指数形式使用工程记数法而非科学记数法"
         tooltip={
           <>
-            If this is set, numbers displayed in exponential form will use engineering notation instead of scientific
-            notation.
+            设置后，以指数形式显示的数字将使用工程记数法而非科学记数法。
           </>
         }
       />
@@ -53,11 +52,10 @@ export const NumericDisplayPage = (): React.ReactElement => {
           Settings.disableSuffixes = newValue;
           FormatsNeedToChange.emit();
         }}
-        text="Use exponential form instead of suffixed form"
+        text="使用指数形式而非后缀形式"
         tooltip={
           <>
-            If this is set, suffixed form will not be used, and numbers that would have been suffixed will be displayed
-            with exponential form instead.
+            设置后，将不再使用后缀形式，原本应显示为后缀形式的数字将改用指数形式显示。
           </>
         }
       />
@@ -67,17 +65,17 @@ export const NumericDisplayPage = (): React.ReactElement => {
           Settings.hideThousandsSeparator = newValue;
           FormatsNeedToChange.emit();
         }}
-        text="Hide thousands separator"
-        tooltip={<>If this is set, thousands separators will not be displayed.</>}
+        text="隐藏千位分隔符"
+        tooltip={<>设置后，将不显示千位分隔符。</>}
       />
       <OptionsSlider
-        label="Fractional Digits"
+        label="小数位数"
         initialValue={Settings.fractionalDigits}
         callback={handleFractionalDigitChange}
         step={1}
         min={0}
         max={5}
-        tooltip={<>The default number of decimal places to display on small numbers. Default value: 3</>}
+        tooltip={<>较小数字默认显示的小数位数。默认值：3</>}
       />
       <OptionSwitch
         checked={Settings.hideTrailingDecimalZeros}
@@ -85,8 +83,8 @@ export const NumericDisplayPage = (): React.ReactElement => {
           Settings.hideTrailingDecimalZeros = newValue;
           FormatsNeedToChange.emit();
         }}
-        text="Hide trailing fractional zeroes for decimals"
-        tooltip={<>If this is set, zeroes at the end of a fractional part of a decimal will not be displayed.</>}
+        text="隐藏小数末尾的零"
+        tooltip={<>设置后，小数部分末尾的零将不会显示。</>}
       />
       <OptionSwitch
         checked={Settings.UseIEC60027_2}
@@ -94,12 +92,12 @@ export const NumericDisplayPage = (): React.ReactElement => {
           Settings.UseIEC60027_2 = newValue;
           FormatsNeedToChange.emit();
         }}
-        text="Use GiB instead of GB"
+        text="使用 GiB 而非 GB"
         tooltip={
-          <>If this is set all references to memory will use GiB instead of GB, in accordance with IEC 60027-2.</>
+          <>设置后，所有内存相关数值将按照 IEC 60027-2 标准使用 GiB 而非 GB。</>
         }
       />
-      <Select startAdornment={<Typography>Locale:&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
+      <Select startAdornment={<Typography>区域设置：&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
         <MenuItem value="en">en</MenuItem>
         <MenuItem value="bg">bg</MenuItem>
         <MenuItem value="cs">cs</MenuItem>
@@ -119,7 +117,7 @@ export const NumericDisplayPage = (): React.ReactElement => {
       <div style={{ marginTop: "16px" }}>
         <TextField
           InputProps={{
-            startAdornment: <Typography sx={{ whiteSpace: "nowrap" }}>Currency Symbol:&nbsp;</Typography>,
+            startAdornment: <Typography sx={{ whiteSpace: "nowrap" }}>货币符号：&nbsp;</Typography>,
           }}
           value={currencySymbol}
           onChange={handleCurrencySymbolChange}
@@ -132,8 +130,8 @@ export const NumericDisplayPage = (): React.ReactElement => {
             Settings.CurrencySymbolAfterValue = newValue;
             FormatsNeedToChange.emit();
           }}
-          text="Move the currency symbol to be after the value"
-          tooltip={<>If enabled, the currency symbol appears after the number (e.g., 100€ instead of €100)</>}
+          text="将货币符号移到数值之后"
+          tooltip={<>启用后，货币符号将显示在数字之后（例如：100€ 而非 €100）</>}
         />
       </div>
     </GameOptionsPage>

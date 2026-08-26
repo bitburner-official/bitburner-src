@@ -26,7 +26,7 @@ export const StatsRow = ({ name, color, children, data }: IProps): React.ReactEl
     if (data.content !== undefined) {
       content = data.content;
     } else if (data.level !== undefined && data.exp !== undefined) {
-      content = `${formatSkill(data.level)} (${formatExp(data.exp)} exp)`;
+      content = `${formatSkill(data.level)} (${formatExp(data.exp)} 经验)`;
     } else if (data.level !== undefined && data.exp === undefined) {
       content = `${formatSkill(data.level)}`;
     }

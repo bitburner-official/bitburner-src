@@ -16,7 +16,7 @@ export function GangDev(): React.ReactElement {
     return (
       <AutoExpandAccordion cacheKey="DEVMENU_GangDev" unmountOnExit={true} disabled={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Gang</Typography>
+          <Typography>帮派</Typography>
         </AccordionSummary>
       </AutoExpandAccordion>
     );
@@ -39,19 +39,19 @@ export function GangDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_GangDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Gang</Typography>
+        <Typography>帮派</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Cycles:</Typography>
+                <Typography>周期：</Typography>
               </td>
               <td>
                 <Adjuster
-                  label="cycles"
-                  placeholder="amt"
+                  label="周期"
+                  placeholder="数量"
                   tons={addTonsGangCycles}
                   add={modifyGangCycles(1)}
                   subtract={modifyGangCycles(-1)}

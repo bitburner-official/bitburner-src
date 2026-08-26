@@ -30,14 +30,14 @@ export function GangStats(): React.ReactElement {
   const hasEnoughBonusTime = gang.storedCycles > GangConstants.maxCyclesToProcess;
   const bonusCyclesInOneSecond = 5 * GangConstants.maxCyclesToProcess;
   const respectGainRateInBonusTime = hasEnoughBonusTime
-    ? `[Effective Gain: ${formatRespect(gang.respectGainRate * bonusCyclesInOneSecond)} / sec]`
+    ? `[实际收益：${formatRespect(gang.respectGainRate * bonusCyclesInOneSecond)} / 秒]`
     : "";
   const wantedGainRateInBonusTime = hasEnoughBonusTime
-    ? `[Effective Gain: ${formatWanted(gang.wantedGainRate * bonusCyclesInOneSecond)} / sec]`
+    ? `[实际收益：${formatWanted(gang.wantedGainRate * bonusCyclesInOneSecond)} / 秒]`
     : "";
   const moneyGainRateInBonusTime = hasEnoughBonusTime ? (
     <>
-      [Effective Gain: <MoneyRate money={gang.moneyGainRate * bonusCyclesInOneSecond} />]
+      [实际收益：<MoneyRate money={gang.moneyGainRate * bonusCyclesInOneSecond} />]
     </>
   ) : (
     ""
@@ -49,14 +49,12 @@ export function GangStats(): React.ReactElement {
         <Tooltip
           title={
             <Typography>
-              Represents the amount of respect your gang has from other gangs and criminal organizations. Your respect
-              affects the amount of money your gang members will earn, and also determines how much reputation you are
-              earning with your gang's corresponding Faction.
+              表示你的帮派从其他帮派和犯罪组织那里获得的尊重数量。你的尊重会影响帮派成员能赚取的资金数额，也决定了你在帮派对应派系中能获得多少声望。
             </Typography>
           }
         >
           <Typography>
-            Respect: {formatRespect(gang.respect)} ({formatRespect(5 * gang.respectGainRate)} / sec){" "}
+            尊重： {formatRespect(gang.respect)} ({formatRespect(5 * gang.respectGainRate)} / 秒){" "}
             {respectGainRateInBonusTime}
           </Typography>
         </Tooltip>
@@ -66,37 +64,36 @@ export function GangStats(): React.ReactElement {
         <Tooltip
           title={
             <Typography>
-              Represents how much the gang is wanted by law enforcement. The higher your gang's wanted level, the harder
-              it will be for your gang members to make money and earn respect. Note that the minimum wanted level is 1.
+              表示执法部门对你的帮派的通缉程度。你的帮派通缉等级越高，帮派成员赚钱和赚取尊重就越困难。注意，最低通缉等级为 1。
             </Typography>
           }
         >
           <Typography>
-            Wanted Level: {formatWanted(gang.wanted)} ({formatWanted(5 * gang.wantedGainRate)} / sec){" "}
+            通缉等级： {formatWanted(gang.wanted)} ({formatWanted(5 * gang.wantedGainRate)} / 秒){" "}
             {wantedGainRateInBonusTime}
           </Typography>
         </Tooltip>
       </Box>
 
       <Box display="flex">
-        <Tooltip title={<Typography>Penalty for respect and money gain rates due to Wanted Level</Typography>}>
+        <Tooltip title={<Typography>因通缉等级而对尊重与资金获取速率造成的惩罚</Typography>}>
           <Typography>
-            Wanted Level Penalty: -{formatNumberNoSuffix((1 - gang.getWantedPenalty()) * 100, 2)}%
+            通缉等级惩罚： -{formatNumberNoSuffix((1 - gang.getWantedPenalty()) * 100, 2)}%
           </Typography>
         </Tooltip>
       </Box>
 
       <Typography>
-        Money gain rate: <MoneyRate money={5 * gang.moneyGainRate} /> {moneyGainRateInBonusTime}
+        资金获取速率： <MoneyRate money={5 * gang.moneyGainRate} /> {moneyGainRateInBonusTime}
       </Typography>
 
       <Box display="flex">
-        <Tooltip title={<Typography>The percentage of total territory your Gang controls</Typography>}>
-          <Typography>Territory: {territoryStr}%</Typography>
+        <Tooltip title={<Typography>你的帮派所控制地盘占总地盘的百分比</Typography>}>
+          <Typography>地盘： {territoryStr}%</Typography>
         </Tooltip>
       </Box>
       <Typography>
-        Faction reputation: <Reputation reputation={Factions[gang.facName].playerReputation} />
+        派系声望： <Reputation reputation={Factions[gang.facName].playerReputation} />
       </Typography>
 
       <BonusTime gang={gang} />

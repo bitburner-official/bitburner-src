@@ -44,38 +44,38 @@ function MakeProductButton(): React.ReactElement {
   let createProductButtonText = "";
   switch (division.industry) {
     case IndustryType.Restaurant:
-      createProductButtonText = "Build Restaurant";
+      createProductButtonText = "开设餐厅";
       break;
     case IndustryType.Tobacco:
-      createProductButtonText = "Create Product";
+      createProductButtonText = "开发产品";
       break;
     case IndustryType.Pharmaceutical:
-      createProductButtonText = "Create Drug";
+      createProductButtonText = "研发药品";
       break;
     case IndustryType.Computers:
-      createProductButtonText = "Create Product";
+      createProductButtonText = "开发产品";
       break;
     case IndustryType.Robotics:
-      createProductButtonText = "Design Robot";
+      createProductButtonText = "设计机器人";
       break;
     case IndustryType.Software:
-      createProductButtonText = "Develop Software";
+      createProductButtonText = "开发软件";
       break;
     case IndustryType.Healthcare:
-      createProductButtonText = "Build Hospital";
+      createProductButtonText = "建造医院";
       break;
     case IndustryType.RealEstate:
-      createProductButtonText = "Develop Property";
+      createProductButtonText = "开发地产";
       break;
     default:
-      createProductButtonText = "Create Product";
+      createProductButtonText = "开发产品";
       return <></>;
   }
 
   const disabledText = hasMaxProducts
-    ? `${division.name} already has the maximum number of products (${division.maxProducts})`
+    ? `${division.name} 已达到最大产品数量（${division.maxProducts}）`
     : corp.funds < 0
-    ? "Insufficient corporation funds"
+    ? "企业资金不足"
     : "";
 
   return (
@@ -119,45 +119,45 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
   return (
     <Paper>
       <Typography>
-        Industry: {division.industry} (Corp Funds: <Money money={corp.funds} />)
+        行业：{division.industry}（企业资金：<Money money={corp.funds} />）
       </Typography>
       <br />
       <StatsTable
         rows={[
-          ["Awareness:", formatBigNumber(division.awareness)],
-          ["Popularity:", formatBigNumber(division.popularity)],
+          ["知名度：", formatBigNumber(division.awareness)],
+          ["受欢迎度：", formatBigNumber(division.popularity)],
         ]}
       />
       <Tooltip
         title={
           <>
-            <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
+            <Typography>该行业的知名度和受欢迎度对其销售的倍率加成。</Typography>
             <br />
             <Typography>
-              {division.industry} Industry: 𝞪 = {division.advertisingFactor}
+              {division.industry}行业：𝞪 = {division.advertisingFactor}
             </Typography>
             <br />
             <MathNotationOutput notation={MathNotation.CorpAdvertFactor} />
             <br />
             <StatsTable
               rows={[
-                ["Awareness Bonus:", formatCorpMultiplier(Math.pow(awarenessFac, 0.85))],
-                ["Popularity Bonus:", formatCorpMultiplier(Math.pow(popularityFac, 0.85))],
-                ["Ratio Multiplier:", formatCorpMultiplier(Math.pow(ratioFac, 0.85))],
-                [<b key={1}>Total:</b>, <b key={2}>{formatCorpMultiplier(totalAdvertisingFac)}</b>],
+                ["知名度加成：", formatCorpMultiplier(Math.pow(awarenessFac, 0.85))],
+                ["受欢迎度加成：", formatCorpMultiplier(Math.pow(popularityFac, 0.85))],
+                ["比率倍率：", formatCorpMultiplier(Math.pow(ratioFac, 0.85))],
+                [<b key={1}>总计：</b>, <b key={2}>{formatCorpMultiplier(totalAdvertisingFac)}</b>],
               ]}
             />
           </>
         }
       >
-        <Typography>Advertising Multiplier: {formatCorpMultiplier(totalAdvertisingFac)}</Typography>
+        <Typography>广告倍率：{formatCorpMultiplier(totalAdvertisingFac)}</Typography>
       </Tooltip>
       <br />
       <StatsTable
         rows={[
-          ["Revenue:", <MoneyRate key="revenue" money={division.lastCycleRevenue} />],
-          ["Expenses:", <MoneyRate key="expenses" money={division.lastCycleExpenses} />],
-          ["Profit:", <MoneyRate key="profit" money={profit} />],
+          ["收入：", <MoneyRate key="revenue" money={division.lastCycleRevenue} />],
+          ["支出：", <MoneyRate key="expenses" money={division.lastCycleExpenses} />],
+          ["利润：", <MoneyRate key="profit" money={profit} />],
         ]}
       />
       <br />
@@ -165,49 +165,42 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         <Tooltip
           title={
             <>
-              Production gain from owning production-boosting materials such as
-              <br />
-              hardware, Robots, AI Cores, and Real Estate.
+              拥有硬件、机器人、AI核心和房地产等增产材料带来的产量提升。
             </>
           }
         >
-          <Typography>Production Multiplier: {formatCorpMultiplier(division.productionMult)}</Typography>
+          <Typography>生产倍率：{formatCorpMultiplier(division.productionMult)}</Typography>
         </Tooltip>
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
         </IconButton>
         <StaticModal open={helpOpen} onClose={() => setHelpOpen(false)}>
           <Typography>
-            Owning Hardware, Robots, AI Cores, and Real Estate can boost your Industry's production. The effect these
-            materials have on your production varies between Industries. For example, Real Estate may be very effective
-            for some Industries, but ineffective for others.
+            拥有硬件、机器人、AI核心和房地产可以提升你行业的产量。这些材料对产量的影响因行业而异。例如，房地产可能对某些行业非常有效，而对另一些行业则毫无效果。
             <br />
             <br />
-            This division's production multiplier is calculated by summing the individual production multiplier of each
-            of its office locations. This production multiplier is applied to each office. Therefore, it is beneficial
-            to expand into new cities as this can greatly increase the production multiplier of your entire Division.
+            本部门的生产倍率是将各个办公地点的单独生产倍率相加得出的。该生产倍率会应用于每个办事处。因此，扩张到新城市是有益的，这可以大幅提升整个部门的生产倍率。
             <br />
             <br />
-            Below are approximations for how effective each material is at boosting this industry's production
-            multiplier (Bigger bars = more effective):
+            以下是每种材料对提升该行业生产倍率的有效程度近似值（条越长越有效）：
             <br />
             <br />
-            Hardware:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.hardwareFactor)}
+            硬件（Hardware）：&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.hardwareFactor)}
             <br />
-            Robots:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.robotFactor)}
+            机器人（Robots）：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.robotFactor)}
             <br />
-            AI Cores:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.aiCoreFactor)}
+            AI核心（AI Cores）：&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.aiCoreFactor)}
             <br />
-            Real Estate: {convertEffectFacToGraphic(division.realEstateFactor)}
+            房地产（Real Estate）：{convertEffectFacToGraphic(division.realEstateFactor)}
           </Typography>
         </StaticModal>
       </Box>
       <Box display="flex" alignItems="center">
-        <Tooltip title={"Scientific Research increases the quality of the materials and products that you produce."}>
-          <Typography>Scientific Research: {formatBigNumber(division.researchPoints)}</Typography>
+        <Tooltip title={"科研可以提高你所生产的材料和产品的质量。"}>
+          <Typography>科研：{formatBigNumber(division.researchPoints)}</Typography>
         </Tooltip>
         <Button sx={{ mx: 1 }} onClick={() => setResearchOpen(true)}>
-          Research
+          研究
         </Button>
         <ResearchModal open={researchOpen} onClose={() => setResearchOpen(false)} industry={division} />
       </Box>
@@ -216,19 +209,16 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         <ButtonWithTooltip
           normalTooltip={
             <>
-              Hire <b>AdVert.Inc</b> to advertise your company. Each level of this upgrade grants your company a static
-              increase of 3 and 1 to its awareness and popularity, respectively. It will then increase your company's
-              awareness by 0.5%, and its popularity by a random percentage between 0.5% and 1.5%. These effects are
-              increased by other upgrades that increase the power of your advertising.
+              雇用 <b>AdVert.Inc</b> 为你的公司做广告。该升级的每一级都会使公司的知名度和受欢迎度分别静态提升3点和1点。之后它还会让公司的知名度提升0.5%，受欢迎度随机提升0.5%至1.5%。这些效果会被其他增强广告效果的升级进一步提高。
             </>
           }
-          disabledTooltip={division.getAdVertCost() > corp.funds ? "Insufficient corporation funds" : ""}
+          disabledTooltip={division.getAdVertCost() > corp.funds ? "企业资金不足" : ""}
           onClick={() => {
             hireAdVert(corp, division);
             props.rerender();
           }}
         >
-          Hire AdVert -&nbsp; <MoneyCost money={division.getAdVertCost()} corp={corp} />
+          投放广告 -&nbsp; <MoneyCost money={division.getAdVertCost()} corp={corp} />
         </ButtonWithTooltip>
         {division.makesProducts && <MakeProductButton />}
       </Box>

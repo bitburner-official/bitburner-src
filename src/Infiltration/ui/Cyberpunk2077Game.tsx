@@ -39,9 +39,9 @@ export function Cyberpunk2077Game({ stage }: IProps): React.ReactElement {
   return (
     <>
       <Paper sx={{ display: "grid", justifyItems: "center", pb: 1 }}>
-        <Typography variant="h4">Match the symbols!</Typography>
+        <Typography variant="h4">匹配符号！</Typography>
         <Typography variant="h5" color={Settings.theme.primary}>
-          Targets:{" "}
+          目标：{" "}
           {stage.answers.map((a, i) => {
             if (i === stage.currentAnswerIndex)
               return (

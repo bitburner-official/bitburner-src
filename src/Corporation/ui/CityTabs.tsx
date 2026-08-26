@@ -44,7 +44,7 @@ export function CityTabs(props: IProps): React.ReactElement {
           (office: OfficeSpace | 0) =>
             office !== 0 && <Tab key={office.city} label={office.city} value={office.city} />,
         )}
-        {canExpand && <Tab label={"Expand"} value={"Expand"} />}
+        {canExpand && <Tab label={"扩张"} value={"Expand"} />}
       </Tabs>
       {mainContent}
     </>

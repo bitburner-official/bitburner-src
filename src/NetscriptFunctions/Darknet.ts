@@ -69,7 +69,7 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
     return defaults;
   }
   if (typeof opts !== "object") {
-    throw helpers.errorMessage(ctx, `Invalid arguments: "options" is not an object`);
+    throw helpers.errorMessage(ctx, `无效参数："options" 不是对象`);
   }
   const options = {
     ...defaults,
@@ -81,7 +81,7 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
   if (additionalMsec < 0) {
     throw helpers.errorMessage(
       ctx,
-      `Invalid arguments: "options.additionalMsec" (${options.additionalMsec}) must be a non-negative integer`,
+      `无效参数："options.additionalMsec" (${options.additionalMsec}) 必须是非负整数`,
     );
   }
   return {
@@ -98,16 +98,16 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const password = helpers.string(ctx, "password", _password);
       const additionalMsec = helpers.number(ctx, "additionalMsec", _additionalMsec ?? 0);
       if (additionalMsec < 0) {
-        throw helpers.errorMessage(ctx, `Invalid arguments: "additionalMsec" is not a positive integer`);
+        throw helpers.errorMessage(ctx, `无效参数："additionalMsec" 不是正整数`);
       }
       if (password.length > MAX_PASSWORD_LENGTH * 2) {
         // No password will ever be this long, and this prevents extremely long password attempts from causing performance issues,
         // or feedback loops where longer and longer passwords are attempted due to player script bugs.
         throw helpers.errorMessage(
           ctx,
-          `Invalid arguments: "password" is too long. Attempted length: ${
+          `无效参数："password" 过长。尝试的长度：${
             password.length
-          }. Attempted password starts with ${password.slice(0, 100)} `,
+          }。尝试的密码开头为 ${password.slice(0, 100)} `,
         );
       }
       const serverCheck = checkDarknetServer(ctx, targetHost, {
@@ -127,10 +127,10 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const networkDelay = calculateAuthenticationTime(server, Player, threads, sharedChars) + additionalMsec;
 
       logger(ctx)(
-        `Connecting to ${server.hostname} with password '${password}'... (Est: ${formatNumber(
+        `正在使用密码 '${password}' 连接到 ${server.hostname}...（预计：${formatNumber(
           networkDelay / 1000,
           1,
-        )}s)`,
+        )}s）`,
       );
 
       return helpers.netscriptDelay(ctx, networkDelay).then(() => {
@@ -146,7 +146,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const server = serverCheck.server;
         // Authentication has a chance to timeout based on darknet instability
         if (Math.random() < getTimeoutChance()) {
-          logger(ctx)(`Authentication to ${server.hostname} timed out due to network instability. Please try again.`);
+          logger(ctx)(`由于网络不稳定，到 ${server.hostname} 的身份验证超时。请重试。`);
           return {
             success: false,
             code: ResponseCodeEnum.RequestTimeOut,
@@ -157,7 +157,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const authResult = getAuthResult(server, password, threads, networkDelay, ctx.workerScript.pid);
         const success = authResult.result.success;
         const xp = formatNumber(calculatePasswordAttemptChaGain(server, threads, success), 1);
-        logger(ctx)(`Authentication on ${server.hostname} ${success ? "succeeded" : "failed"}. (Gained ${xp} cha xp)`);
+        logger(ctx)(`${server.hostname} 上的身份验证${success ? "成功" : "失败"}。（获得 ${xp} 魅力经验）`);
 
         if (isLabyrinthServer(server.hostname)) {
           return {
@@ -181,9 +181,9 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       if (token.length > 100) {
         throw helpers.errorMessage(
           ctx,
-          `Invalid arguments: "password" is too long. Attempted length: ${
+          `无效参数："password" 过长。尝试的长度：${
             token.length
-          }. Attempted password starts with ${token.slice(0, 100)} `,
+          }。尝试的密码开头为 ${token.slice(0, 100)} `,
         );
       }
       const serverCheck = checkDarknetServer(ctx, targetHost, {
@@ -201,7 +201,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const result = checkPassword(server, token, ctx.workerScript.scriptRef.threads, ctx.workerScript.pid);
       if (result.code !== ResponseCodeEnum.Success) {
         logger(ctx)(
-          `${server.hostname} does not recognise that password. Use ns.dnet.authenticate() to create a session.`,
+          `${server.hostname} 无法识别该密码。请使用 ns.dnet.authenticate() 创建会话。`,
         );
         return {
           success: false,
@@ -210,7 +210,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         };
       }
       addSessionToServer(server, ctx.workerScript.pid);
-      logger(ctx)(`Authentication on ${server.hostname} succeeded.`);
+      logger(ctx)(`${server.hostname} 上的身份验证成功。`);
       return {
         success: true,
         code: ResponseCodeEnum.Success,
@@ -230,7 +230,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         };
       }
       freezeServer(serverCheck.server);
-      logger(ctx)(`Froze ${serverCheck.server.hostname}`);
+      logger(ctx)(`已冻结 ${serverCheck.server.hostname}`);
       return {
         success: true,
         code: ResponseCodeEnum.Success,
@@ -256,13 +256,13 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 1.5 +
         (options.additionalMsec ?? 0);
       logger(ctx)(
-        `Attempting to extract data from ${server.hostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
+        `正在尝试从 ${server.hostname} 提取数据...（预计：${formatNumber(networkDelay / 1000, 1)}s）`,
       );
       DarknetState.hasUsedHeartbleed = true;
 
       if (Player.skills.charisma < server.requiredCharismaSkill) {
         logger(ctx)(
-          `You need a higher charisma level to extract data from ${server.hostname}. (${server.requiredCharismaSkill} required)`,
+          `你需要更高的魅力等级才能从 ${server.hostname} 提取数据。（需要 ${server.requiredCharismaSkill}）`,
         );
         return helpers.netscriptDelay(ctx, 100).then(() => ({
           success: false,
@@ -286,7 +286,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           };
         }
         const capturedLogs = getServerLogs(server, options.logsToCapture, options.peek);
-        logger(ctx)(`Extracted log data from ${server.hostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
+        logger(ctx)(`已从 ${server.hostname} 提取日志数据...（获得 ${formatNumber(xpGained, 1)} 魅力经验）`);
 
         return {
           success: true,
@@ -306,16 +306,16 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
       const path = resolveCacheFilePath(fileName);
       if (!path) {
-        throw helpers.errorMessage(ctx, `Invalid cache file. (File must end in .cache) : ${fileName}`);
+        throw helpers.errorMessage(ctx, `无效的缓存文件。（文件必须以 .cache 结尾）：${fileName}`);
       }
       const hasCacheFile = server.caches.includes(path);
       if (!hasCacheFile) {
-        throw helpers.errorMessage(ctx, `Cache file not found: ${fileName} on server ${server.hostname}`);
+        throw helpers.errorMessage(ctx, `找不到缓存文件：${fileName}（服务器 ${server.hostname}）`);
       }
 
       server.caches = server.caches.filter((cache) => cache !== fileName);
       const result = getRewardFromCache(server, fileName, suppressToast);
-      logger(ctx)(`Data file ${fileName} opened. ${result.message}.`);
+      logger(ctx)(`数据文件 ${fileName} 已打开。${result.message}。`);
       return result;
     },
     probe: (ctx: NetscriptContext, _returnByIp): string[] => {
@@ -333,7 +333,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           out.push(entry);
         }
       }
-      helpers.log(ctx, () => `Returned ${out.length} connections for ${server.hostname}`);
+      helpers.log(ctx, () => `为 ${server.hostname} 返回了 ${out.length} 个连接`);
       // The order of results is shuffled. This is to avoid clues to the network structure
       // like there are in the standard network's scan results order.
       return shuffle(out);
@@ -353,7 +353,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const stasisLinkCount = getStasisLinkServers().length;
       const stasisLinkLimit = getStasisLinkLimit();
       if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
-        helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
+        helpers.log(ctx, () => `已达到滞留链路上限。（${stasisLinkCount}/${stasisLinkLimit}）`);
         return helpers.netscriptDelay(ctx, 100).then(() => ({
           success: false,
           code: ResponseCodeEnum.StasisLinkLimitReached,
@@ -362,7 +362,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       }
       helpers.log(
         ctx,
-        () => `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
+        () => `正在 ${server.hostname} 上开始滞留${shouldLink ? "" : "解除"}程序...（预计：30s）`,
       );
       // setStasisLink's delay is hardcoded at 30s. We should skip this delay in Jest tests.
       return helpers.netscriptDelay(ctx, getSetStasisLinkDuration()).then(() => setStasisLink(ctx, server, shouldLink));
@@ -370,7 +370,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     getStasisLinkLimit: (ctx: NetscriptContext): number => {
       expectDarknetAccess(ctx);
       const limit = getStasisLinkLimit();
-      logger(ctx)(`Stasis link limit: ${limit}`);
+      logger(ctx)(`滞留链路上限：${limit}`);
       return limit;
     },
     getStasisLinkedServers: (ctx: NetscriptContext, _returnByIP): string[] => {
@@ -378,7 +378,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       expectDarknetAccess(ctx);
       const servers = getStasisLinkServers();
       const serverNames = servers.map((s) => (returnByIp ? s.ip : s.hostname));
-      logger(ctx)(`Stasis linked servers: ${serverNames}`);
+      logger(ctx)(`已建立滞留链路的服务器：${serverNames}`);
       return serverNames;
     },
     getServerDetails: (ctx, _host) => {
@@ -434,7 +434,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         ? ctx.workerScript.hostname
         : getDarknetServerOrThrow(ctx.workerScript.hostname).ip;
       if (targetHost === hostOfCurrentServer) {
-        const message = `Cannot induce migration on a script's own server. induceServerMigration must target a neighboring connected server.`;
+        const message = `无法在脚本所在的服务器上引发迁移。induceServerMigration 必须以相邻的已连接服务器为目标。`;
         logger(ctx)(message);
         return helpers.netscriptDelay(ctx, 100).then(() => ({
           success: false,
@@ -444,7 +444,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }));
       }
       const server = serverCheck.server;
-      logger(ctx)(`Inducing server migration of ${server.hostname}... (Est: 6s)`);
+      logger(ctx)(`正在引发 ${server.hostname} 的服务器迁移...（预计：6s）`);
 
       // induceServerMigration's delay is hardcoded at 6s. We should skip this delay in Jest tests.
       return helpers.netscriptDelay(ctx, !CONSTANTS.isInTestEnvironment ? 6000 : 0).then(() => {
@@ -465,12 +465,12 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const result = chargeServerMigration(server, ctx.workerScript.scriptRef.threads);
 
         logger(ctx)(
-          `Induced ${formatNumber(result.chargeIncrease * 100)}%. Migration prep is now at ${formatNumber(
+          `已引发 ${formatNumber(result.chargeIncrease * 100)}%。迁移准备现在为 ${formatNumber(
             result.newCharge * 100,
-          )}%. (Gained ${formatNumber(result.xpGained)} cha xp)`,
+          )}%。（获得 ${formatNumber(result.xpGained)} 魅力经验）`,
         );
         if (result.newCharge >= 1 && currentDepth < server.depth) {
-          logger(ctx)(`${server.hostname} has been migrated!`);
+          logger(ctx)(`${server.hostname} 已完成迁移！`);
         }
         return {
           success: true,
@@ -485,7 +485,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const server = ctx.workerScript.getServer();
       const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
       if (!hasStormSeed) {
-        const result = `${CompletedProgramName.stormSeed} not found on ${server.hostname}`;
+        const result = `在 ${server.hostname} 上未找到 ${CompletedProgramName.stormSeed}`;
         logger(ctx)(result);
         return {
           success: false,
@@ -494,7 +494,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         };
       }
 
-      const result = `The webstorm has been unleashed...`;
+      const result = `网络风暴已被释放...`;
       logger(ctx)(result);
       handleStormSeed(server);
       return {
@@ -530,7 +530,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
       const server = serverCheck.server;
 
       if (server.blockedRam <= 0) {
-        logger(ctx)(`Server ${server.hostname} has no host-owned ram left to reallocate.`);
+        logger(ctx)(`服务器 ${server.hostname} 没有可重新分配的主机占用 RAM。`);
         return helpers.netscriptDelay(ctx, 100).then(() => ({
           success: false,
           code: ResponseCodeEnum.NoBlockRAM,
@@ -538,7 +538,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }));
       }
 
-      logger(ctx)(`Attempting to liberate RAM from '${server.hostname}'s owner ...`);
+      logger(ctx)(`正在尝试从 '${server.hostname}' 的所有者那里夺取 RAM...`);
       const delayTime = Math.max(8000 * (500 / (500 + Player.skills.charisma)), 200);
 
       return helpers.netscriptDelay(ctx, delayTime).then(() => {
@@ -555,7 +555,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         }
         const server = serverCheck.server;
         if (server.blockedRam <= 0) {
-          logger(ctx)(`Server ${server.hostname} has no host-owned ram left to reallocate.`);
+          logger(ctx)(`服务器 ${server.hostname} 没有可重新分配的主机占用 RAM。`);
           return {
             success: false,
             code: ResponseCodeEnum.NoBlockRAM,
@@ -583,7 +583,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
     },
     promoteStock: (ctx: NetscriptContext, _symbol): Promise<DarknetResult> => {
       if (!Player.hasTixApiAccess) {
-        throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
+        throw helpers.errorMessage(ctx, `你没有 TIX API 权限！无法使用 ${ctx.function}()`);
       }
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const stock = getStockFromSymbol(ctx, symbol);
@@ -592,7 +592,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
       const waitTime = Math.max(8000 * (600 / (600 + Player.skills.charisma)), 200);
       logger(ctx)(
-        `Spreading ${stock.name} stock propaganda to raise volatility... (Est: ${formatNumber(waitTime / 1000, 1)}s)`,
+        `散布 ${stock.name} 股票宣传以提升波动性...（预计：${formatNumber(waitTime / 1000, 1)}s）`,
       );
 
       return helpers.netscriptDelay(ctx, waitTime).then(() => {
@@ -603,7 +603,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         const chaXp = Player.mults.charisma_exp * threads * 10 * ((200 + Player.skills.charisma) / 200);
         Player.gainCharismaExp(chaXp);
 
-        logger(ctx)(`Spread promotion for ${stock.name}. (Gained ${formatNumber(chaXp, 1)} cha xp)`);
+        logger(ctx)(`已为 ${stock.name} 散布宣传。（获得 ${formatNumber(chaXp, 1)} 魅力经验）`);
         return {
           success: true,
           code: ResponseCodeEnum.Success,
@@ -645,7 +645,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
       const lab = getLabyrinthDetails().lab;
       if (!lab) {
-        const status = "You feel lost...";
+        const status = "你感到迷茫...";
         logger(ctx)(status);
         return {
           success: false,
@@ -655,7 +655,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
       const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
       if (!isDirectConnected(currentServer, lab)) {
-        const status = "You feel disconnected...";
+        const status = "你感到断连...";
         logger(ctx)(status);
         return {
           success: false,
@@ -675,7 +675,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
       const lab = getLabyrinthDetails().lab;
       if (!lab) {
-        const status = "You feel blind...";
+        const status = "你感到一片漆黑...";
         logger(ctx)(status);
         return {
           success: false,
@@ -685,7 +685,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
 
       const currentServer = getDarknetServerOrThrow(ctx.workerScript.hostname);
       if (!isDirectConnected(currentServer, lab)) {
-        const status = "You feel disconnected...";
+        const status = "你感到断连...";
         logger(ctx)(status);
         return {
           success: false,

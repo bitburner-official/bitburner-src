@@ -27,12 +27,12 @@ export function AchievementCategory({
       <AccordionSummary>
         {allAchievements ? (
           <Typography variant="h5" sx={{ my: 1 }}>
-            {title} ({achievements.length}/{allAchievements.length}, {steamCount(achievements)}/
-            {steamCount(allAchievements)} for Steam)
+            {title}（{achievements.length}/{allAchievements.length}，其中 {steamCount(achievements)}/
+            {steamCount(allAchievements)} 计入 Steam）
           </Typography>
         ) : (
           <Typography variant="h5" color="secondary">
-            {title} ({achievements.length} remaining, {steamCount(achievements)} for Steam)
+            {title}（剩余 {achievements.length} 个，其中 {steamCount(achievements)} 个计入 Steam）
           </Typography>
         )}
       </AccordionSummary>

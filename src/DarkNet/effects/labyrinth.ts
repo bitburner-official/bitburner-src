@@ -242,10 +242,10 @@ export const handleLabyrinthPassword = (
 
   if (Player.skills.charisma < labDetails.cha) {
     const failureMessages = [
-      `You find yourself lost and confused. You need to be more charismatic to navigate the labyrinth.`,
-      `You stumble in the dark. You need more moxie to find your way.`,
-      `You feel the walls closing in. You need to be more charming to escape.`,
-      `You are unable to make any progress. You need more charisma to find the secret.`,
+      `你发现自己迷路了，一头雾水。你需要更高的魅力才能在迷宫中穿行。`,
+      `你在黑暗中跌跌撞撞。你需要更多的胆识才能找到出路。`,
+      `你感觉墙壁正在向你逼近。你需要更有魅力才能逃脱。`,
+      `你无法取得任何进展。你需要更多魅力才能找到秘密。`,
     ];
     return {
       passwordAttempted: attemptedPassword,
@@ -270,7 +270,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.Success,
-      message: "You have discovered the end of the labyrinth.",
+      message: "你发现了迷宫的尽头。",
       data: labServer.password,
     };
   }
@@ -279,7 +279,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
-      message: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
+      message: `经过一番思索，你认定战胜迷宫最好的办法是找到终点，而不是试图抄近路跳过它。`,
     };
   }
   const initialSurroundings = getSurroundingsVisualized(maze, initialX, initialY, 1, true, false);
@@ -289,7 +289,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
-      message: `You cannot go that way. You are still at ${initialX},${initialY}.`,
+      message: `你不能走那个方向。你还停留在 ${initialX},${initialY}。`,
       data: initialSurroundings,
     };
   }
@@ -298,7 +298,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.AuthFailure,
-      message: `You don't know how to do that. Try a command such as "go north"`,
+      message: `你不知道该怎么做。试试诸如 "go north" 这样的命令`,
       data: initialSurroundings,
     };
   }
@@ -317,7 +317,7 @@ export const handleLabyrinthPassword = (
     return {
       passwordAttempted: attemptedPassword,
       code: ResponseCodeEnum.Success,
-      message: "You have successfully navigated the labyrinth! Congratulations",
+      message: "你已成功走出迷宫！恭喜",
       data: labServer.password,
     };
   }
@@ -326,7 +326,7 @@ export const handleLabyrinthPassword = (
   return {
     passwordAttempted: attemptedPassword,
     code: ResponseCodeEnum.AuthFailure,
-    message: `You have moved to ${newLocation[0]},${newLocation[1]}.`,
+    message: `你已移动到 ${newLocation[0]},${newLocation[1]}。`,
     data: newSurroundings,
   };
 };

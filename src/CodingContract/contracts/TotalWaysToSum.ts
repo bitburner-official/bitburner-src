@@ -9,13 +9,13 @@ export const totalWaysToSum: Pick<
   [CodingContractName.TotalWaysToSum]: {
     desc: (n: number): string => {
       return [
-        "It is possible write four as a sum in exactly four different ways:\n\n",
+        "把 4 写成和的形式恰好有四种不同的方式：\n\n",
         "    3 + 1\n",
         "    2 + 2\n",
         "    2 + 1 + 1\n",
         "    1 + 1 + 1 + 1\n\n",
-        `How many different distinct ways can the number ${n} be written as a sum of at least`,
-        "two positive integers?",
+        `数字 ${n} 可以用多少种不同的方式写成至少`,
+        "两个正整数的和？",
       ].join(" ");
     },
     difficulty: 1,
@@ -46,10 +46,9 @@ export const totalWaysToSum: Pick<
       const n: number = data[0];
       const s: number[] = data[1];
       return [
-        `How many different distinct ways can the number ${n} be written`,
-        "as a sum of integers contained in the set:\n\n",
-        `[${s}]?\n\n`,
-        "You may use each integer in the set zero or more times.",
+        `数字 ${n} 可以用多少种不同的方式写成由集合中的整数相加得到的和：\n\n`,
+        `[${s}]？\n\n`,
+        "集合中的每个整数都可以使用零次或多次。",
       ].join(" ");
     },
     difficulty: 2,

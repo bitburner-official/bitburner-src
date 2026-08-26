@@ -73,7 +73,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
     setRemoteFileApiReconnectionDelay(newValue);
     const reconnectionDelay = Number(newValue);
     if (!Number.isFinite(reconnectionDelay) || reconnectionDelay < 0) {
-      setReconnectionDelayError("Invalid reconnection delay");
+      setReconnectionDelayError("无效的重连延迟");
       return;
     }
     Settings.RemoteFileApiReconnectionDelay = reconnectionDelay;
@@ -84,22 +84,20 @@ export const RemoteAPIPage = (): React.ReactElement => {
   return (
     <GameOptionsPage title="Remote API">
       <Typography>
-        These settings control the Remote API for Bitburner. This is typically used to write scripts using an external
-        text editor and then upload files to the home server.
+        这些设置用于控制 Bitburner 的 Remote API。它通常用于在外部文本编辑器中编写脚本，然后将文件上传到家用电脑。
       </Typography>
       <Typography>
-        <DocumentationLink page="programming/remote_api.md">Documentation</DocumentationLink>
+        <DocumentationLink page="programming/remote_api.md">文档</DocumentationLink>
       </Typography>
       <RemoteFileApiConnectionStatus showIcon={false} />
       <Tooltip
         title={
           <Typography>
-            This hostname is used to connect to a Remote API, please ensure that it matches with your Remote API
-            hostname.
+            此主机名用于连接 Remote API，请确保它与你的 Remote API 主机名一致。
             <br />
-            If you use IPv6, you need to wrap it in square brackets. For example: [::1]
+            若使用 IPv6，需要用方括号包裹，例如：[::1]
             <br />
-            Default: localhost.
+            默认值：localhost。
           </Typography>
         }
       >
@@ -107,7 +105,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
           <TextField
             error={!isValidHostname}
             InputProps={{
-              startAdornment: <Typography style={{ minWidth: "200px" }}>Hostname:&nbsp;</Typography>,
+              startAdornment: <Typography style={{ minWidth: "200px" }}>主机名：&nbsp;</Typography>,
             }}
             value={remoteFileApiHostname}
             onChange={handleRemoteFileApiHostnameChange}
@@ -120,10 +118,9 @@ export const RemoteAPIPage = (): React.ReactElement => {
       <Tooltip
         title={
           <Typography>
-            This port number is used to connect to the Remote API. Please ensure that it matches with your Remote API
-            server port.
+            此端口号用于连接 Remote API。请确保它与你的 Remote API 服务器端口一致。
             <br />
-            The value must be in the range of [0, 65535]. Set it to 0 to disable the feature.
+            取值范围必须为 [0, 65535]。设为 0 可禁用此功能。
           </Typography>
         }
       >
@@ -133,7 +130,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
             InputProps={{
               startAdornment: (
                 <Typography color={isValidPort ? "success" : "error"} style={{ minWidth: "200px" }}>
-                  Port:&nbsp;
+                  端口：&nbsp;
                 </Typography>
               ),
             }}
@@ -148,12 +145,11 @@ export const RemoteAPIPage = (): React.ReactElement => {
       <Tooltip
         title={
           <Typography>
-            If a connection attempt fails or the current connection is closed unexpectedly, Bitburner will automatically
-            reconnect after this delay.
+            如果连接尝试失败或当前连接意外断开，Bitburner 将在此延迟后自动重新连接。
             <br />
-            Note that Bitburner will NOT automatically reconnect if you intentionally disconnect.
+            注意：如果你主动断开连接，Bitburner 将不会自动重连。
             <br />
-            The value must be in seconds. Set it to 0 to disable the feature.
+            取值单位为秒。设为 0 可禁用此功能。
           </Typography>
         }
       >
@@ -163,7 +159,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
             InputProps={{
               startAdornment: (
                 <Typography color={isValidReconnectionDelay ? "success" : "error"} style={{ minWidth: "200px" }}>
-                  Reconnection delay:&nbsp;
+                  重连延迟：&nbsp;
                 </Typography>
               ),
             }}
@@ -181,8 +177,8 @@ export const RemoteAPIPage = (): React.ReactElement => {
           Settings.UseWssForRemoteFileApi = newValue;
           RemoteFileApiConnectionSettingEvents.emit();
         }}
-        text="Use wss"
-        tooltip={<>Use wss instead of ws when connecting to RFA clients.</>}
+        text="使用 wss"
+        tooltip={<>连接 RFA 客户端时使用 wss 而非 ws。</>}
       />
       <Button
         disabled={!isRemoteFileApiConnectionLive() && !canCreateNewRemoteFileApiConnection()}
@@ -194,7 +190,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
           }
         }}
       >
-        {!isRemoteFileApiConnectionLive() ? "Connect" : "Disconnect"}
+        {!isRemoteFileApiConnectionLive() ? "连接" : "断开连接"}
       </Button>
     </GameOptionsPage>
   );

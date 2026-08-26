@@ -89,7 +89,7 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
     } catch (error) {
       console.error(error);
       console.error("Theme data is invalid. Data:", event.target.value);
-      dialogBoxCreate(`Invalid theme. Errors: ${error}.`);
+      dialogBoxCreate(`主题无效。错误信息：${error}。`);
       return;
     }
     Object.assign(Settings.theme, themeData);
@@ -114,40 +114,40 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Paper sx={{ px: 1, py: 1, my: 1 }}>
-        <Tooltip open={true} placement={"top"} title={<Typography>Example tooltip</Typography>}>
+        <Tooltip open={true} placement={"top"} title={<Typography>示例提示框</Typography>}>
           <Button color="primary" size="small">
-            primary button
+            主色按钮
           </Button>
         </Tooltip>
         <Button color="secondary" size="small">
-          secondary button
+          次色按钮
         </Button>
         <Button color="warning" size="small">
-          warning button
+          警告按钮
         </Button>
         <Button color="info" size="small">
-          info button
+          信息按钮
         </Button>
         <Button color="error" size="small">
-          error button
+          错误按钮
         </Button>
         <Button disabled size="small">
-          disabled button
+          禁用按钮
         </Button>
         <br />
         <Typography color="primary" variant="caption">
-          text with primary color
+          主色文字
         </Typography>
         &nbsp;
         <Typography color="secondary" variant="caption">
-          text with secondary color
+          次色文字
         </Typography>
         &nbsp;
         <Typography color="error" variant="caption">
-          text with error color
+          错误色文字
         </Typography>
         <br />
-        <TextField value={"Text field"} size="small" />
+        <TextField value={"文本输入框"} size="small" />
       </Paper>
 
       <Paper sx={{ py: 1, my: 1 }}>
@@ -385,22 +385,22 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
           multiline
           fullWidth
           maxRows={10}
-          label={"import / export theme"}
+          label={"导入 / 导出主题"}
           value={JSON.stringify(customTheme, undefined, 2)}
           onChange={onThemeChange}
         />
         <>
-          <Typography sx={{ my: 1 }}>Backup your theme or share it with others by copying the string above.</Typography>
+          <Typography sx={{ my: 1 }}>复制上方字符串即可备份你的主题或与他人分享。</Typography>
           <ThemeCollaborate />
           <ButtonGroup>
-            <Tooltip title="Reverts all modification back to the default theme. This is permanent.">
+            <Tooltip title="将所有修改还原为默认主题。此操作不可撤销。">
               <Button onClick={() => setTemplateTheme(defaultTheme)} startIcon={<HistoryIcon />}>
-                Revert to Default
+                还原默认主题
               </Button>
             </Tooltip>
-            <Tooltip title="Move over to the theme browser's page to use one of our predefined themes.">
+            <Tooltip title="前往主题浏览器页面，使用我们提供的预置主题。">
               <Button startIcon={<PaletteSharpIcon />} onClick={() => Router.toPage(Page.ThemeBrowser)}>
-                See more themes
+                查看更多主题
               </Button>
             </Tooltip>
           </ButtonGroup>

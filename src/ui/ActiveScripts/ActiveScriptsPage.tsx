@@ -103,9 +103,7 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
   return (
     <>
       <Typography>
-        This page displays a list of all of your scripts that are currently running across every machine. It also
-        provides information about each script's production. The scripts are categorized by the hostnames of the servers
-        on which they are running.
+        此页面显示你在所有机器上正在运行的全部脚本列表，并提供每个脚本的产出信息。脚本按其运行所在服务器的主机名分类。
       </Typography>
 
       <ScriptProduction />
@@ -117,14 +115,14 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
           InputProps={{ startAdornment: <Search />, spellCheck: false }}
           size="small"
         />
-        <Typography marginLeft="1em">Servers/page:</Typography>
+        <Typography marginLeft="1em">每页服务器数：</Typography>
         <Select value={serversPerPage} onChange={changeServersPerPage}>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={15}>15</MenuItem>
           <MenuItem value={20}>20</MenuItem>
           <MenuItem value={100}>100</MenuItem>
         </Select>
-        <Typography marginLeft="1em">Scripts/page:</Typography>
+        <Typography marginLeft="1em">每页脚本数：</Typography>
         <Select value={scriptsPerPage} onChange={changeScriptsPerPage}>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={15}>15</MenuItem>
@@ -134,7 +132,7 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
         <Typography
           marginLeft="auto"
           marginRight="1em"
-        >{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
+        >{`${firstServerNumber}-${lastServerNumber} / ${serverData.length}`}</Typography>
         <IconButton onClick={() => changePage(0)} disabled={page === 0}>
           <FirstPage />
         </IconButton>

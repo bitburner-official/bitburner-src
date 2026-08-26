@@ -7,11 +7,11 @@ import { DocumentationLink } from "../../../ui/React/DocumentationLink";
 export function sendDeprecationNotice() {
   return Terminal.printRaw(
     <Typography sx={{ color: Settings.theme.error }}>
-      Running .script files is unsupported.{" "}
+      不支持运行 .script 文件。{" "}
       <DocumentationLink page="migrations/ns2.md" color="inherit">
-        Here are instructions
+        点此查看说明
       </DocumentationLink>{" "}
-      to migrate your scripts to .js files instead.
+      以将你的脚本迁移为 .js 文件。
     </Typography>,
   );
 }

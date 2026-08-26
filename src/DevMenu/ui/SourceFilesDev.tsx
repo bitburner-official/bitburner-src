@@ -34,7 +34,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   const setSF = useCallback(
     (sfN: number, sfLvl: number) => () => {
       if (!Number.isInteger(sfLvl) || sfLvl < 0) {
-        dialogBoxCreate(`Invalid SF level: ${sfLvl}`);
+        dialogBoxCreate(`无效的源文件等级：${sfLvl}`);
         return;
       }
       if (sfN === 9) {
@@ -94,7 +94,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   const devLvls = [0, 1, 2, 3];
 
   const ButtonRow = (sfN?: number) => {
-    const title = sfN ? `SF-${sfN}` : "Set All";
+    const title = sfN ? `SF-${sfN}` : "全部设置";
     const level = sfN ? Player.sourceFileLvl(sfN) : 0;
     const [newSf12Level, setNewSf12Level] = useState(Player.sourceFileLvl(12));
     return (
@@ -116,25 +116,25 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                   value={newSf12Level}
                   onChange={(x) => setNewSf12Level(Number(x.target.value))}
                 />
-                <Button onClick={setSF(12, newSf12Level)}>Set</Button>
+                <Button onClick={setSF(12, newSf12Level)}>设置</Button>
               </>
             )}
-            {sfN && <Typography className={classes.extraInfo}>{`Level: ${level}`}</Typography>}
+            {sfN && <Typography className={classes.extraInfo}>{`等级：${level}`}</Typography>}
             {sfN === 10 && (
               <>
                 <ButtonWithTooltip
-                  disabledTooltip={Player.sleevesFromCovenant <= 0 ? "Already at minimum" : ""}
+                  disabledTooltip={Player.sleevesFromCovenant <= 0 ? "已达最小值" : ""}
                   onClick={removeSleeve}
                 >
-                  -1 sleeve
+                  -1 分身
                 </ButtonWithTooltip>
                 <ButtonWithTooltip
-                  disabledTooltip={Player.sleevesFromCovenant >= MaxSleevesFromCovenant ? "Already at maximum" : ""}
+                  disabledTooltip={Player.sleevesFromCovenant >= MaxSleevesFromCovenant ? "已达最大值" : ""}
                   onClick={addSleeve}
                 >
-                  +1 sleeve
+                  +1 分身
                 </ButtonWithTooltip>
-                <Typography className={classes.extraInfo}>Extra sleeves: {Player.sleevesFromCovenant}</Typography>
+                <Typography className={classes.extraInfo}>额外分身：{Player.sleevesFromCovenant}</Typography>
               </>
             )}
           </ButtonGroup>
@@ -146,19 +146,19 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_SourceFilesDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Source-Files</Typography>
+        <Typography>源文件</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>Note: This tool sets both the owned level and the overridden level.</Typography>
+        <Typography>注意：此工具会同时设置已拥有的等级与覆盖后的等级。</Typography>
         <br />
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Exploits:</Typography>
+                <Typography>漏洞：</Typography>
               </td>
               <td>
-                <Button onClick={clearExploits}>Clear</Button>
+                <Button onClick={clearExploits}>清除</Button>
               </td>
             </tr>
             {[undefined, ...validBitNodes].map((sfN) => ButtonRow(sfN))}

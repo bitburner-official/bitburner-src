@@ -25,10 +25,9 @@ export function DiscontinueProductModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Are you sure you want to do this? Discontinuing a product removes it completely and permanently. You will no
-        longer produce this product and all of its existing stock will be removed and left unsold
+        你确定要这样做吗？停产一款产品会将其完全且永久地移除。你将不再生产该产品，其所有现有库存都会被移除且无法售出
       </Typography>
-      <Button onClick={discontinue}>Discontinue</Button>
+      <Button onClick={discontinue}>停产</Button>
     </Modal>
   );
 }

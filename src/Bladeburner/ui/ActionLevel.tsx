@@ -42,20 +42,20 @@ export function ActionLevel({ action, isActive, bladeburner, rerender }: ActionL
   return (
     <Box display="flex" flexDirection="row" alignItems="center">
       <Box display="flex">
-        <Tooltip title={<Typography>{successesNeededForNextLevel} successes needed for next level</Typography>}>
+        <Tooltip title={<Typography>升到下一级还需要 {successesNeededForNextLevel} 次成功</Typography>}>
           <Typography>
-            Level: {action.level} / {action.maxLevel}
+            等级：{action.level} / {action.maxLevel}
           </Typography>
         </Tooltip>
       </Box>
-      <Tooltip title={isActive ? <Typography>WARNING: changing the level will restart the Operation</Typography> : ""}>
+      <Tooltip title={isActive ? <Typography>警告：更改等级将重新开始该行动</Typography> : ""}>
         <span>
           <IconButton disabled={!canIncrease} onClick={increaseLevel}>
             <ArrowDropUpIcon />
           </IconButton>
         </span>
       </Tooltip>
-      <Tooltip title={isActive ? <Typography>WARNING: changing the level will restart the Operation</Typography> : ""}>
+      <Tooltip title={isActive ? <Typography>警告：更改等级将重新开始该行动</Typography> : ""}>
         <span>
           <IconButton disabled={!canDecrease} onClick={decreaseLevel}>
             <ArrowDropDownIcon />

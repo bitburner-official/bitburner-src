@@ -442,8 +442,8 @@ export const achievements: Record<AchievementId, Achievement> = {
   CORPORATION_REAL_ESTATE: {
     ...achievementData.CORPORATION_REAL_ESTATE,
     Icon: "CORPRE",
-    Name: "Own the land",
-    Description: "Expand to the Real Estate division.",
+    Name: "拥有土地",
+    Description: "扩展到房地产部门。",
     Visible: () => canAccessBitNodeFeature(3),
     Condition: () => {
       if (!Player.corporation) return false;

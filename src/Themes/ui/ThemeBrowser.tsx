@@ -37,7 +37,7 @@ export function ThemeBrowser(): React.ReactElement {
     ThemeEvents.emit();
     SnackbarEvents.emit(
       <>
-        Updated theme to "<strong>{theme.name}</strong>"
+        主题已切换为“<strong>{theme.name}</strong>”
         <Button
           sx={{ ml: 1 }}
           color="secondary"
@@ -47,7 +47,7 @@ export function ThemeBrowser(): React.ReactElement {
             ThemeEvents.emit();
           }}
         >
-          UNDO
+          撤销
         </Button>
       </>,
       ToastVariant.INFO,
@@ -72,7 +72,7 @@ export function ThemeBrowser(): React.ReactElement {
 
   return (
     <Box sx={{ mx: 2 }}>
-      <Typography variant="h4">Theme Browser</Typography>
+      <Typography variant="h4">主题浏览器</Typography>
       <Paper sx={{ px: 2, py: 1, my: 1 }}>
         <ThemeCollaborate />
         <ButtonGroup sx={{ mb: 2, display: "block" }}>

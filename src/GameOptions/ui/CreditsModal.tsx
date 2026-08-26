@@ -39,8 +39,8 @@ export function CreditsModal(props: CreditsModalProps): React.ReactElement {
 
   const handles = handle.sort((a, b) => a.localeCompare(b)).join(", ");
   const contributorsURL = `https://github.com/bitburner-official/bitburner-src/graphs/contributors`;
-  const contributorsMessage = `Visit GitHub to see all contributors
-or to participate yourself`;
+  const contributorsMessage = `前往 GitHub 查看所有贡献者
+或亲自参与其中`;
   const maxEM = Math.floor(contributorsMessage.length / 2);
 
   return (
@@ -54,16 +54,16 @@ or to participate yourself`;
       <Typography alignContent={"start"} variant="h3">
         Bitburner
       </Typography>
-      <Typography sx={{ textDecoration: "underline" }}>Original Code and Concept</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>原始代码与创意</Typography>
       <Typography>danielyxie</Typography>
       <br />
-      <Typography sx={{ textDecoration: "underline" }}>Lead Developers</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>首席开发者</Typography>
       <Typography style={{ whiteSpace: "pre-wrap" }}>{leadDevs.join("\n")}</Typography>
       <br />
-      <Typography sx={{ textDecoration: "underline" }}>Current Maintainers</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>当前维护者</Typography>
       <Typography whiteSpace={"pre-wrap"}>{currentMaintainers.join("\n")}</Typography>
       <br />
-      <Typography sx={{ textDecoration: "underline" }}>Recent patch contributors:</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>近期补丁贡献者：</Typography>
       <Typography style={{ whiteSpace: "pre-wrap", maxWidth: maxEM + "rem", textOverflow: "clip" }}>
         {/*rem unit = character px based, dynamic with font. balance contributor overflow vs longest other message*/}
         {/*textoverflow "clip" forces very long @names to stretch a single line, it's silly*/}
@@ -78,7 +78,7 @@ or to participate yourself`;
       <br />
       <Typography fontSize={"large"}>
         <Button onClick={props.onClose} size="large">
-          Thanks for Playing!
+          感谢游玩！
         </Button>
       </Typography>
     </Modal>

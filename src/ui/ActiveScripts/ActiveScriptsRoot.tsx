@@ -47,9 +47,9 @@ export function ActiveScriptsRoot({ page, serverName }: ComponentProps): React.R
 
   function errorTabText(): string {
     if (!ErrorState.UnreadErrors || tab === SimplePage.RecentErrors) {
-      return "Recent Errors";
+      return "近期错误";
     }
-    return `Recent Errors (${ErrorState.UnreadErrors})`;
+    return `近期错误 (${ErrorState.UnreadErrors})`;
   }
 
   return (
@@ -68,8 +68,8 @@ export function ActiveScriptsRoot({ page, serverName }: ComponentProps): React.R
             },
           }}
         >
-          <Tab label={"Active"} value={ComplexPage.ActiveScripts} />
-          <Tab label={"Recently Killed"} value={SimplePage.RecentlyKilledScripts} />
+          <Tab label={"运行中"} value={ComplexPage.ActiveScripts} />
+          <Tab label={"最近终止"} value={SimplePage.RecentlyKilledScripts} />
           <Tab label={errorTabText()} value={SimplePage.RecentErrors} />
         </Tabs>
         {Settings.SuppressErrorModals ? (
@@ -78,18 +78,17 @@ export function ActiveScriptsRoot({ page, serverName }: ComponentProps): React.R
           <OptionSwitch
             checked={errorModalsAreSuppressed()}
             onChange={(newValue) => toggleSuppressErrorModals(newValue)}
-            text="Suppress error modals (5 min)"
+            text="抑制错误弹窗（5 分钟）"
             tooltip={
               <>
-                If this is set, no error modals will be shown for the next five minutes, and only log errors to the
-                Recent Errors page.
+                启用后，接下来五分钟内不会显示任何错误弹窗，错误只会记录到“近期错误”页面。
               </>
             }
             wrapperStyles={{ marginLeft: "20px" }}
           />
         )}
         <Button color="error" onClick={killAllScripts} sx={{ margin: 0 }}>
-          Kill All Scripts
+          终止所有脚本
         </Button>
       </div>
 

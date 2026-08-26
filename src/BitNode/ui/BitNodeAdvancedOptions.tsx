@@ -73,7 +73,7 @@ function SourceFileButtonRow({
   const extraInfo =
     sfNumber === 12 ? (
       <td>
-        <Typography marginLeft="1rem">Max level: {sfLevel}</Typography>
+        <Typography marginLeft="1rem">最大等级：{sfLevel}</Typography>
       </td>
     ) : null;
 
@@ -115,29 +115,29 @@ function SourceFileOverrides({
     }
   }, [sourceFileOverrides, firstSourceFile]);
 
-  const basicNote = `Changing the active level of a SF is temporary; you still permanently own that SF level. For example, if
-  you enter BN 1.3 while having SF 1.2 but with the active level set to 0, you will not get the bonuses from SF
-  1.1 or SF 1.2, but you will still earn SF 1.3 when destroying the BN.`;
+  const basicNote = `更改源文件的生效等级只是暂时的；你仍然永久拥有该源文件等级。例如，如果你拥有源文件
+  1.2 并以生效等级 0 进入 BN 1.3，你将不会获得源文件 1.1 或源文件 1.2 的加成，但在摧毁该 BN 时仍然会获得源文件
+  1.3。`;
   const note = currentSourceFiles.has(10) ? (
     <>
-      <Typography>Note:</Typography>
+      <Typography>注意：</Typography>
       <ul style={{ marginTop: 0 }}>
         <li>{basicNote}</li>
         <li>
-          Changing the active level of SF 10 does not affect your current sleeves or the maximum number of sleeves.
+          更改源文件 10 的生效等级不会影响你当前的分身或分身的数量上限。
         </li>
       </ul>
     </>
   ) : (
     <>
-      <Typography>Note: {basicNote}</Typography>
+      <Typography>注意：{basicNote}</Typography>
       <br />
     </>
   );
 
   return (
     <>
-      <Typography>Override active level of Source-File:</Typography>
+      <Typography>覆盖源文件的生效等级：</Typography>
       <br />
       <Typography component="div">{note}</Typography>
       <div>
@@ -173,17 +173,17 @@ function SourceFileOverrides({
           }}
           sx={{ marginLeft: "1rem" }}
         >
-          Add
+          添加
         </Button>
         <ButtonWithTooltip
-          normalTooltip="Remove all overridden SF"
-          disabledTooltip={sourceFileOverrides.size === 0 ? "No overridden SF" : ""}
+          normalTooltip="移除所有被覆盖的源文件"
+          disabledTooltip={sourceFileOverrides.size === 0 ? "没有被覆盖的源文件" : ""}
           onClick={() => {
             callbacks.setSfOverrides(new JSONMap());
           }}
           buttonProps={{ sx: { marginLeft: "1rem" } }}
         >
-          Remove all
+          全部移除
         </ButtonWithTooltip>
       </div>
       <br />
@@ -193,8 +193,8 @@ function SourceFileOverrides({
             <tbody>
               <tr>
                 <td>
-                  <Tooltip title="Set active level for all chosen SF">
-                    <Typography minWidth="7rem">Set all SF</Typography>
+                  <Tooltip title="为所有选中的源文件设置生效等级">
+                    <Typography minWidth="7rem">设置全部源文件</Typography>
                   </Tooltip>
                 </td>
                 <td>
@@ -264,7 +264,7 @@ function IntelligenceOverride({
         <>
           <Typography component="div" display="flex" gap="1rem">
             <Typography display="flex" alignItems="center">
-              Override Intelligence:
+              覆盖智力：
             </Typography>
             <TextField
               sx={{ maxWidth: "4rem" }}
@@ -289,35 +289,25 @@ function IntelligenceOverride({
       tooltip={
         <>
           <Typography component="div">
-            Your intelligence and your Sleeves' intelligence will be temporarily set to this value if it is lower than
-            their current values. For example:
+            如果该值低于你的智力和分身智力的当前值，它们将被临时设置为该值。例如：
             <ul>
-              <li>
-                If your intelligence is 1000 and you set this value to 500, your intelligence will be temporarily set to
-                500.
-              </li>
-              <li>
-                If a Sleeve's intelligence is 200 and you set this value to 500, that Sleeve's intelligence is still
-                200.
-              </li>
+              <li>如果你的智力是 1000，而你把这个值设为 500，那么你的智力将被临时设置为 500。</li>
+              <li>如果某个分身的智力是 200，而你把这个值设为 500，那么该分身的智力仍为 200。</li>
             </ul>
           </Typography>
           <Typography>
-            Note that you still gain intelligence experience as normal.
+            注意你仍然会照常获得智力经验。
             <br />
-            For example, suppose you have 1e6 intelligence exp (intelligence skill = 242) and set the intelligence
-            override to 100. At the start of the BitNode, your intelligence skill will be set to 100 (equivalent to
-            ~11255.318 intelligence exp).
+            例如，假设你拥有 1e6 智力经验（智力技能 = 242），并将智力覆盖值设为
+            100。在 BitNode 开始时，你的智力技能将被设为 100（约等于 11255.318 智力经验）。
             <br />
-            If you gain 500e3 intelligence exp during the BitNode, your intelligence skill will increase to 220 (total
-            intelligence exp = 11255 + 500e3 = 511255). After performing bitflume, the exp gained during the BitNode is
-            added to your original exp. Your intelligence skill will then become 255 (total intelligence exp = 1e6 +
-            500e3 = 1.5e6).
+            如果你在这个 BitNode 中获得了 500e3 智力经验，你的智力技能将提升到 220（总智力经验 =
+            11255 + 500e3 = 511255）。在执行 bitflume 之后，该 BitNode 中获得的经验会被加到你原本的经验上，你的智力技能将变为
+            255（总智力经验 = 1e6 + 500e3 = 1.5e6）。
           </Typography>
           <br />
           <Typography>
-            The overridden intelligence will be shown in the character overview. You can hover your mouse over it to see
-            the original value.
+            被覆盖的智力会显示在角色概览中。你可以将鼠标悬停在上面查看原始数值。
           </Typography>
         </>
       }
@@ -358,14 +348,13 @@ export function BitNodeAdvancedOptions({
   return (
     <Box component={Paper} sx={{ mt: 1, p: 1 }}>
       <ListItemButton disableGutters onClick={() => setOpen((old) => !old)} sx={{ padding: "4px 8px" }}>
-        <ListItemText primary={<Typography variant="h6">Advanced options</Typography>} />
+        <ListItemText primary={<Typography variant="h6">高级选项</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Collapse in={open}>
         <Box sx={{ padding: "0 1rem" }}>
           <Typography>
-            These options enable unique gameplay that is intended for experienced players. If you are a new player, you
-            can safely ignore these options and come back to try them later.
+            这些选项为经验丰富的玩家提供了独特的玩法。如果你是新手，可以放心忽略这些选项，以后再来尝试。
           </Typography>
           <br />
           <OptionSwitch
@@ -373,8 +362,8 @@ export function BitNodeAdvancedOptions({
             onChange={(value) => {
               callbacks.setBooleanOption("restrictHomePCUpgrade", value);
             }}
-            text="Restrict max RAM and core of Home PC"
-            tooltip="The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1."
+            text="限制家用电脑的最大 RAM 与核心数"
+            tooltip="家用电脑的最大 RAM 和核心数将低于正常值。最大 RAM：128GB。最大核心数：1。"
           />
           <OptionSwitch
             disabled={getSfLevel(2) === 0 && targetBitNode !== 2}
@@ -382,8 +371,8 @@ export function BitNodeAdvancedOptions({
             onChange={(value) => {
               callbacks.setBooleanOption("disableGang", value);
             }}
-            text="Disable Gang"
-            tooltip="Disable Gang, regardless of BitNode and SF level"
+            text="禁用帮派"
+            tooltip="无论 BitNode 与源文件等级如何，均禁用帮派"
           />
           <OptionSwitch
             disabled={getSfLevel(3) === 0 && targetBitNode !== 3}
@@ -391,8 +380,8 @@ export function BitNodeAdvancedOptions({
             onChange={(value) => {
               callbacks.setBooleanOption("disableCorporation", value);
             }}
-            text="Disable Corporation"
-            tooltip="Disable Corporation, regardless of BitNode and SF level"
+            text="禁用企业"
+            tooltip="无论 BitNode 与源文件等级如何，均禁用企业"
           />
           <OptionSwitch
             disabled={getSfLevel(6) === 0 && getSfLevel(7) === 0 && targetBitNode !== 6 && targetBitNode !== 7}
@@ -400,16 +389,16 @@ export function BitNodeAdvancedOptions({
             onChange={(value) => {
               callbacks.setBooleanOption("disableBladeburner", value);
             }}
-            text="Disable Bladeburner"
-            tooltip="Disable Bladeburner, regardless of BitNode and SF level"
+            text="禁用 Bladeburner"
+            tooltip="无论 BitNode 与源文件等级如何，均禁用 Bladeburner"
           />
           <OptionSwitch
             checked={bitNodeBooleanOptions.disable4SData}
             onChange={(value) => {
               callbacks.setBooleanOption("disable4SData", value);
             }}
-            text="Disable 4S Market Data"
-            tooltip="Disable 4S Market Data, regardless of BitNode and SF level"
+            text="禁用 4S 市场数据"
+            tooltip="无论 BitNode 与源文件等级如何，均禁用 4S 市场数据"
           />
           <OptionSwitch
             disabled={getSfLevel(9) === 0 && targetBitNode !== 9}
@@ -417,8 +406,8 @@ export function BitNodeAdvancedOptions({
             onChange={(value) => {
               callbacks.setBooleanOption("disableHacknetServer", value);
             }}
-            text="Disable Hacknet Server"
-            tooltip="Disable Hacknet Server, regardless of BitNode and SF level. Hacknet Node is re-enabled in place of Hacknet Server."
+            text="禁用 Hacknet Server"
+            tooltip="无论 BitNode 与源文件等级如何，均禁用 Hacknet Server。将以 Hacknet Node 取代 Hacknet Server。"
           />
           <OptionSwitch
             disabled={getSfLevel(10) === 0 && targetBitNode !== 10}
@@ -426,8 +415,8 @@ export function BitNodeAdvancedOptions({
             onChange={(value) => {
               callbacks.setBooleanOption("disableSleeveExpAndAugmentation", value);
             }}
-            text="Disable Sleeves' experience and augmentation"
-            tooltip="Sleeves cannot gain experience or install augmentations"
+            text="禁用分身的经验与强化"
+            tooltip="分身无法获得经验或安装强化"
           />
           <IntelligenceOverride
             intelligenceOverride={intelligenceOverride}

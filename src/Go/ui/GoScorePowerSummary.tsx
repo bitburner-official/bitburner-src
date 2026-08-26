@@ -35,38 +35,31 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
   return (
     <>
       <Typography>
-        <strong>Subnet power gained:</strong>
+        <strong>获得的子网能量：</strong>
       </Typography>
       <br />
       <Table sx={{ display: "table", mb: 1, width: "100%" }}>
         <TableBody>
-          <Tooltip title={<>The total number of empty points and routers you took control of on this subnet</>}>
+          <Tooltip title={<>你在此子网上夺取控制的空节点与路由器总数</>}>
             <TableRow>
-              <TableCell className={classes.cellNone}>Nodes Captured:</TableCell>
+              <TableCell className={classes.cellNone}>夺取的节点：</TableCell>
               <TableCell className={classes.cellNone}>{blackScore.sum}</TableCell>
             </TableRow>
           </Tooltip>
-          <Tooltip title={<>The difficulty multiplier for this opponent faction</>}>
+          <Tooltip title={<>针对该对手派系的难度乘数</>}>
             <TableRow>
-              <TableCell className={classes.cellNone}>Difficulty Multiplier:</TableCell>
+              <TableCell className={classes.cellNone}>难度乘数：</TableCell>
               <TableCell className={classes.cellNone}>{formatNumber(difficultyMultiplier, 2)}x</TableCell>
             </TableRow>
           </Tooltip>
           <TableRow>
-            <TableCell className={classes.cellNone}>{winStreak >= 0 ? "Win" : "Loss"} Streak:</TableCell>
+            <TableCell className={classes.cellNone}>{winStreak >= 0 ? "连胜" : "连败"}：</TableCell>
             <TableCell className={classes.cellNone}>{winStreak}</TableCell>
           </TableRow>
-          <Tooltip
-            title={
-              <>
-                Consecutive wins award progressively higher multipliers for node power. Coming back from a loss streak
-                also gives an extra bonus.
-              </>
-            }
-          >
+          <Tooltip title={<>连续胜利会为节点能量带来越来越高的乘数。从连败中重回胜轨也会获得额外加成。</>}>
             <TableRow>
               <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
-                {winStreak >= 0 ? "Win Streak" : "Loss"} Multiplier:
+                {winStreak >= 0 ? "连胜" : "连败"}乘数：
               </TableCell>
               <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
                 {formatNumber(winstreakMultiplier, 2)}x
@@ -76,20 +69,22 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
           <Tooltip
             title={
               <>
-                Node power is what stat bonuses scale from, and is gained on each completed subnet. <br />
-                It is calculated from the number of nodes you control, multiplied by modifiers for the <br />
-                opponent difficulty, if you won or lost, and your current winstreak.
+                属性加成基于节点能量计算，每完成一局子网都会获得。
+                <br />
+                它由你控制的节点数量乘以以下修正得出：
+                <br />
+                对手难度、胜负情况以及当前连胜数。
               </>
             }
           >
             <TableRow>
-              <TableCell className={classes.cellNone}>Node power gained:</TableCell>
+              <TableCell className={classes.cellNone}>获得的节点能量：</TableCell>
               <TableCell className={classes.cellNone}>{nodePowerIncrease}</TableCell>
             </TableRow>
           </Tooltip>
-          <Tooltip title={<>Your total node power from all subnets</>}>
+          <Tooltip title={<>你在所有子网累计的节点能量总量</>}>
             <TableRow>
-              <TableCell className={classes.cellNone}>Total node power:</TableCell>
+              <TableCell className={classes.cellNone}>节点能量总量：</TableCell>
               <TableCell className={classes.cellNone}>{nodePower}</TableCell>
             </TableRow>
           </Tooltip>
@@ -99,25 +94,24 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
         <Tooltip
           title={
             <>
-              Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor with that
-              faction (up to a max of {getMaxRep()} reputation), if you are a member of that faction.
+              只要你是该派系成员，连续战胜同一对手两次即可获得 {getMaxRep() / 200}{" "}
+              点声望，转化为该派系的好感度（声望上限为 {getMaxRep()}）。
               <br />
-              The rep is immediately applied as favor, meaning it will increase reputation gain right away without
-              needing an install.
+              这些声望会立即转化为好感度，也就是说无需转生安装即可立刻提升声望获取速度。
             </>
           }
         >
           <Typography className={`${classes.inlineFlexBox} ${classes.keyText}`}>
-            <span>Winstreak Bonus: </span>
-            <span>{getMaxRep() / 200} reputation converted to favor</span>
+            <span>连胜奖励： </span>
+            <span>{getMaxRep() / 200} 声望转化为好感度</span>
           </Typography>
         </Tooltip>
       ) : (
         ""
       )}
-      <Tooltip title={<>The total stat multiplier gained via your current node power.</>}>
+      <Tooltip title={<>当前节点能量带来的属性乘数总和。</>}>
         <Typography className={`${classes.inlineFlexBox} ${classes.keyText}`}>
-          <span>New Total Bonus: </span>
+          <span>新总计加成： </span>
           <span>{getBonusText(opponent)}</span>
         </Typography>
       </Tooltip>

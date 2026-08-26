@@ -147,26 +147,21 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   let multiplierDescription;
   let multiplierComponent;
   if (faction.name !== FactionName.ShadowsOfAnarchy) {
-    multiplierDescription = (
-      <Typography>
-        The price of every Augmentation increases for every queued Augmentation and it is reset when you install them.
-      </Typography>
-    );
+    multiplierDescription = <Typography>每排队一个强化，所有强化的价格都会上涨；安装它们时价格会重置。</Typography>;
     multiplierComponent = (
       <Typography>
-        <b>Price multiplier:</b> x {formatBigNumber(getGenericAugmentationPriceMultiplier())}
+        <b>价格倍率：</b>x {formatBigNumber(getGenericAugmentationPriceMultiplier())}
       </Typography>
     );
   } else {
     multiplierDescription = (
       <Typography>
-        This price multiplier increases for each {FactionName.ShadowsOfAnarchy} augmentation already purchased. The
-        multiplier is NOT reset when installing augmentations.
+        每已购买一个 {FactionName.ShadowsOfAnarchy} 强化，该价格倍率就会提高。安装强化时该倍率不会重置。
       </Typography>
     );
     multiplierComponent = (
       <Typography>
-        <b>Price multiplier:</b> x{" "}
+        <b>价格倍率：</b>x{" "}
         {formatBigNumber(
           Math.pow(
             CONSTANTS.SoACostMult,
@@ -174,7 +169,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
           ),
         )}
         <br />
-        <b>Reputation multiplier:</b> x{" "}
+        <b>声望倍率：</b>x{" "}
         {formatBigNumber(
           Math.pow(
             CONSTANTS.SoARepMult,
@@ -188,12 +183,11 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   return (
     <>
       <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-        <Button onClick={() => Router.back()}>Back</Button>
-        <Typography variant="h4">Faction Augmentations - {faction.name}</Typography>
+        <Button onClick={() => Router.back()}>返回</Button>
+        <Typography variant="h4">派系强化 - {faction.name}</Typography>
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography>
-            These are all of the Augmentations that are available to purchase from <b>{faction.name}</b>. Augmentations
-            are powerful upgrades that will enhance your abilities.
+            以下是可从 <b>{faction.name}</b> 购买的所有强化。强化是能够增强你能力的强力升级。
           </Typography>
           <br />
           {multiplierDescription}
@@ -212,22 +206,16 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
             </Box>
           </Box>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
-            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Cost)}>Sort by Cost</Button>
-            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Reputation)}>
-              Sort by Reputation
-            </Button>
-            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Default)}>
-              Sort by Default Order
-            </Button>
-            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Purchasable)}>
-              Sort by Purchasable
-            </Button>
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Cost)}>按费用排序</Button>
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Reputation)}>按声望排序</Button>
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Default)}>按默认顺序排序</Button>
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Purchasable)}>按可购买排序</Button>
           </Box>
           <TextField
             value={filterText}
             onChange={handleFilterChange}
             autoFocus
-            placeholder="Filter augmentations"
+            placeholder="筛选强化"
             InputProps={{
               startAdornment: <SearchIcon />,
               spellCheck: false,

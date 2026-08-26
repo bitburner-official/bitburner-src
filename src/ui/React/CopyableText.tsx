@@ -39,7 +39,7 @@ export function CopyableText(props: IProps): React.ReactElement {
   }
 
   return (
-    <Tooltip open={open} title={<Typography>Copied!</Typography>}>
+    <Tooltip open={open} title={<Typography>已复制！</Typography>}>
       <Typography variant={props.variant} color={props.color} onClick={copy}>
         {props.value}
       </Typography>

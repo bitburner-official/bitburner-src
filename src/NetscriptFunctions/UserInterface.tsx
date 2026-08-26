@@ -31,7 +31,7 @@ export function parseAsAlias(ctx: NetscriptContext, argName: string, v: unknown)
   if (matches === null || matches.length !== 1 || matches[0] !== v) {
     throw helpers.errorMessage(
       ctx,
-      `'${argName}' must not be an empty string and must contain only alphanumeric characters or any of these symbols: _|!%,@-`,
+      `'${argName}' 不能是空字符串，且只能包含字母数字字符或这些符号：_|!%,@-`,
     );
   }
   return v;
@@ -144,12 +144,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         newData = structuredClone(newTheme);
         assertAndSanitizeMainTheme(newData);
       } catch (error) {
-        helpers.log(ctx, () => `Failed to set theme. Errors: ${error}`);
+        helpers.log(ctx, () => `设置主题失败。错误：${error}`);
         return;
       }
       Object.assign(Settings.theme, newData);
       ThemeEvents.emit();
-      helpers.log(ctx, () => `Successfully set theme`);
+      helpers.log(ctx, () => `成功设置主题`);
     },
 
     setStyles: (ctx, newStyles) => {
@@ -161,24 +161,24 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         newData = structuredClone(newStyles);
         assertAndSanitizeStyles(newData);
       } catch (error) {
-        helpers.log(ctx, () => `Failed to set styles. Errors: ${error}`);
+        helpers.log(ctx, () => `设置样式失败。错误：${error}`);
         return;
       }
       Object.assign(Settings.styles, newData);
       ThemeEvents.emit();
-      helpers.log(ctx, () => `Successfully set styles`);
+      helpers.log(ctx, () => `成功设置样式`);
     },
 
     resetTheme: (ctx) => {
       Settings.theme = { ...defaultTheme };
       ThemeEvents.emit();
-      helpers.log(ctx, () => `Reinitialized theme to default`);
+      helpers.log(ctx, () => `已将主题重置为默认`);
     },
 
     resetStyles: (ctx) => {
       Settings.styles = { ...defaultStyles };
       ThemeEvents.emit();
-      helpers.log(ctx, () => `Reinitialized styles to default`);
+      helpers.log(ctx, () => `已将样式重置为默认`);
     },
 
     getGameInfo: () => {
@@ -191,7 +191,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     },
 
     clearTerminal: (ctx) => {
-      helpers.log(ctx, () => `Clearing terminal`);
+      helpers.log(ctx, () => `正在清空终端`);
       Terminal.clear();
     },
 
@@ -200,13 +200,13 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       const fileNames = files.map((f) => {
         const path = helpers.filePath(ctx, "fileName", f);
         if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-          throw errorMessage(ctx, `Only scripts and text files can be edited. Invalid file path: ${path}`);
+          throw errorMessage(ctx, `只能编辑脚本和文本文件。无效的文件路径：${path}`);
         }
         return path;
       });
       const options = helpers.editorOptions(ctx, _options);
       const useVim = options.vim ?? Settings.MonacoDefaultToVim;
-      helpers.log(ctx, () => `Opening files: ${files.join(", ")}`);
+      helpers.log(ctx, () => `正在打开文件：${files.join(", ")}`);
       commonEditor(
         useVim ? "vim" : "nano",
         { args: fileNames, server: ctx.workerScript.getServer(), vim: useVim },
@@ -220,10 +220,10 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       const isGlobal = helpers.boolean(ctx, "global", _isGlobal ?? false);
       if (isGlobal) {
         addGlobalAlias(alias, substitution);
-        helpers.log(ctx, () => `Added global alias ${alias}: ${substitution}`);
+        helpers.log(ctx, () => `已添加全局别名 ${alias}：${substitution}`);
       } else {
         addAlias(alias, substitution);
-        helpers.log(ctx, () => `Added alias ${alias}: ${substitution}`);
+        helpers.log(ctx, () => `已添加别名 ${alias}：${substitution}`);
       }
     },
 
@@ -231,16 +231,16 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       const alias = parseAsAlias(ctx, "alias", _alias);
 
       if (!alias) {
-        throw helpers.errorMessage(ctx, `'alias' cannot be an empty string.`);
+        throw helpers.errorMessage(ctx, `'alias' 不能是空字符串。`);
       }
 
       // This removes from both global and non-global aliases.
       const removedAlias = removeAlias(alias);
 
       if (removedAlias) {
-        helpers.log(ctx, () => `Successfully removed the "${alias}" alias.`);
+        helpers.log(ctx, () => `成功移除别名 "${alias}"。`);
       } else {
-        helpers.log(ctx, () => `Failed to remove the "${alias}" alias: no alias with that name found.`);
+        helpers.log(ctx, () => `移除别名 "${alias}" 失败：找不到该名称的别名。`);
       }
 
       return removedAlias;
@@ -265,19 +265,19 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     createConnectLink: (ctx, _connectPath, _linkText?) => {
       if (!Player.hasProgram(CompletedProgramName.autoLink)) {
-        throw errorMessage(ctx, "Requires AutoLink.exe to run.");
+        throw errorMessage(ctx, "需要 AutoLink.exe 才能运行。");
       }
       if (!Array.isArray(_connectPath)) {
         throw errorMessage(
           ctx,
-          `connectPath must be an array. Current type is ${getFriendlyType(_connectPath)}.`,
+          `connectPath 必须是数组。当前类型为 ${getFriendlyType(_connectPath)}。`,
           "TYPE",
         );
       }
       // Enforce validation of server and return resolved hostname
       const connectPath = _connectPath.map((s) => helpers.getServer(ctx, helpers.string(ctx, "connectPath", s))[1]);
       const last = connectPath.at(-1);
-      const linkText = helpers.string(ctx, "linkText", _linkText ?? last ?? "do nothing");
+      const linkText = helpers.string(ctx, "linkText", _linkText ?? last ?? "无操作");
       return <ConnectLink path={connectPath} text={linkText} />;
     },
   };

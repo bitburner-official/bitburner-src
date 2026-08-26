@@ -82,12 +82,12 @@ export function getTabId(hostname: string, filePath: string): string {
 export function saveScript(scriptToSave: OpenScript): void {
   const server = GetServer(scriptToSave.hostname);
   if (!server) {
-    dialogBoxCreate(`Server ${scriptToSave.hostname} does not exist.`);
+    dialogBoxCreate(`服务器 ${scriptToSave.hostname} 不存在。`);
     return;
   }
   // Show a warning message if the file is on a non-home server.
   if (scriptToSave.hostname !== SpecialServers.Home) {
-    SnackbarEvents.emit("You saved a file on a non-home server!", ToastVariant.WARNING, 3000);
+    SnackbarEvents.emit("你将文件保存到了非家用电脑的服务器上！", ToastVariant.WARNING, 3000);
   }
   // This server helper already handles overwriting, etc.
   server.writeToContentFile(scriptToSave.path, scriptToSave.code);

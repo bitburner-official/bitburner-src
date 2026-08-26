@@ -12,13 +12,13 @@ export const algorithmicStockTrader: Pick<
   [CodingContractName.AlgorithmicStockTraderI]: {
     desc: (data: number[]): string => {
       return [
-        "You are given the following array of stock prices (which are numbers)",
-        "where the i-th element represents the stock price on day i:\n\n",
+        "给你以下股票价格数组（均为数字），",
+        "其中第 i 个元素表示第 i 天的股票价格：\n\n",
         `[${data}]\n\n`,
-        "Determine the maximum possible profit you can earn using at most",
-        "one transaction (i.e. you can only buy and sell the stock once). If no profit can be made",
-        "then the answer should be 0. Note",
-        "that you have to buy the stock before you can sell it.",
+        "请计算你在最多进行一次交易（即只能买入并卖出股票一次）的情况下",
+        "能获得的最大利润。如果无法获利，",
+        "则答案应为 0。注意，",
+        "你必须先买入股票才能卖出它。",
       ].join(" ");
     },
     difficulty: 1,
@@ -51,15 +51,15 @@ export const algorithmicStockTrader: Pick<
   [CodingContractName.AlgorithmicStockTraderII]: {
     desc: (data: number[]): string => {
       return [
-        "You are given the following array of stock prices (which are numbers)",
-        "where the i-th element represents the stock price on day i:\n\n",
+        "给你以下股票价格数组（均为数字），",
+        "其中第 i 个元素表示第 i 天的股票价格：\n\n",
         `[${data}]\n\n`,
-        "Determine the maximum possible profit you can earn using as many",
-        "transactions as you'd like. A transaction is defined as buying",
-        "and then selling one share of the stock. Note that you cannot",
-        "engage in multiple transactions at once. In other words, you",
-        "must sell the stock before you buy it again.\n\n",
-        "If no profit can be made, then the answer should be 0.",
+        "请计算你在进行任意多次交易的情况下",
+        "能获得的最大利润。一次交易定义为买入",
+        "然后卖出一股股票。注意你不能",
+        "同时进行多笔交易。换句话说，你",
+        "必须在再次买入之前卖出股票。\n\n",
+        "如果无法获利，则答案应为 0。",
       ].join(" ");
     },
     difficulty: 2,
@@ -90,15 +90,15 @@ export const algorithmicStockTrader: Pick<
   [CodingContractName.AlgorithmicStockTraderIII]: {
     desc: (data: number[]): string => {
       return [
-        "You are given the following array of stock prices (which are numbers)",
-        "where the i-th element represents the stock price on day i:\n\n",
+        "给你以下股票价格数组（均为数字），",
+        "其中第 i 个元素表示第 i 天的股票价格：\n\n",
         `[${data}]\n\n`,
-        "Determine the maximum possible profit you can earn using at most",
-        "two transactions. A transaction is defined as buying",
-        "and then selling one share of the stock. Note that you cannot",
-        "engage in multiple transactions at once. In other words, you",
-        "must sell the stock before you buy it again.\n\n",
-        "If no profit can be made, then the answer should be 0.",
+        "请计算你在最多进行两次交易的情况下",
+        "能获得的最大利润。一次交易定义为买入",
+        "然后卖出一股股票。注意你不能",
+        "同时进行多笔交易。换句话说，你",
+        "必须在再次买入之前卖出股票。\n\n",
+        "如果无法获利，则答案应为 0。",
       ].join(" ");
     },
     difficulty: 4,
@@ -137,17 +137,17 @@ export const algorithmicStockTrader: Pick<
       const k = data[0];
       const prices = data[1];
       return [
-        "You are given the following array with two elements:\n\n",
+        "给你以下包含两个元素的数组：\n\n",
         `[${k}, [${prices}]]\n\n`,
-        "The first element is an integer k. The second element is an",
-        "array of stock prices (which are numbers) where the i-th element",
-        "represents the stock price on day i.\n\n",
-        "Determine the maximum possible profit you can earn using at most",
-        "k transactions. A transaction is defined as buying and then selling",
-        "one share of the stock. Note that you cannot engage in multiple",
-        "transactions at once. In other words, you must sell the stock before",
-        "you can buy it again.\n\n",
-        "If no profit can be made, then the answer should be 0.",
+        "第一个元素是整数 k。第二个元素是",
+        "股票价格数组（均为数字），其中第 i 个元素",
+        "表示第 i 天的股票价格。\n\n",
+        "请计算你在最多进行 k 次交易的情况下",
+        "能获得的最大利润。一次交易定义为买入然后卖出",
+        "一股股票。注意你不能同时进行多笔",
+        "交易。换句话说，你必须先卖出股票，",
+        "才能再次买入。\n\n",
+        "如果无法获利，则答案应为 0。",
       ].join(" ");
     },
     difficulty: 8,

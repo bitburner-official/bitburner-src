@@ -14,8 +14,8 @@ export function getUnstableCircadianModulatorParams(): Omit<AugmentationCtorPara
     moneyCost: 5e9,
     repCost: 3.625e5,
     info:
-      "An experimental nanobot injection. Its unstable nature leads to " +
-      "unpredictable results based on your circadian rhythm.",
+      "一种实验性的纳米机器人注射剂。其不稳定的特性会" +
+      "根据你的昼夜节律产生不可预测的结果。",
     factions: [FactionName.SpeakersForTheDead],
   };
   getRecordKeys(randomBonuses.bonuses).forEach(
@@ -40,10 +40,10 @@ function getRandomBonus(): CircadianBonus {
         hacking_grow: 1.1,
       },
       description:
-        "Increases the player's hacking chance by 25%.\n" +
-        "Increases the player's hacking speed by 10%.\n" +
-        "Increases the amount of money the player gains from hacking by 25%.\n" +
-        "Improves the effectiveness of grow() by 10%.",
+        "将玩家的入侵成功率提高 25%。\n" +
+        "将玩家的入侵速度提高 10%。\n" +
+        "将玩家通过入侵获得的资金提高 25%。\n" +
+        "使 grow() 的效果提高 10%。",
     },
     {
       bonuses: {
@@ -51,8 +51,8 @@ function getRandomBonus(): CircadianBonus {
         hacking_exp: 2,
       },
       description:
-        "Increases the player's hacking skill by 15%.\n" +
-        "Increases the player's hacking experience gain rate by 100%.",
+        "将玩家的黑客技能提高 15%。\n" +
+        "将玩家的黑客经验获取速度提高 100%。",
     },
     {
       bonuses: {
@@ -66,8 +66,8 @@ function getRandomBonus(): CircadianBonus {
         agility_exp: 2,
       },
       description:
-        "Increases all of the player's combat stats by 25%.\n" +
-        "Increases all of the player's combat stat experience gain rate by 100%.",
+        "将玩家的所有战斗属性提高 25%。\n" +
+        "将玩家的所有战斗属性经验获取速度提高 100%。",
     },
     {
       bonuses: {
@@ -75,8 +75,8 @@ function getRandomBonus(): CircadianBonus {
         charisma_exp: 2,
       },
       description:
-        "This augmentation increases the player's charisma by 50%.\n" +
-        "Increases the player's charisma experience gain rate by 100%.",
+        "该强化将玩家的魅力提高 50%。\n" +
+        "将玩家的魅力经验获取速度提高 100%。",
     },
     {
       bonuses: {
@@ -86,7 +86,7 @@ function getRandomBonus(): CircadianBonus {
         hacknet_node_core_cost: 0.85,
         hacknet_node_level_cost: 0.85,
       },
-      description: "Increases Hacknet production by 20%.\n" + "Decreases all costs related to Hacknet by 15%.",
+      description: "将 Hacknet 产出提高 20%。\n" + "将与 Hacknet 相关的所有成本降低 15%。",
     },
     {
       bonuses: {
@@ -95,9 +95,9 @@ function getRandomBonus(): CircadianBonus {
         work_money: 1.7,
       },
       description:
-        "Increases the amount of money the player gains from working by 70%.\n" +
-        "Increases the amount of reputation the player gains when working for a company by 25%.\n" +
-        "Increases the amount of reputation the player gains for a faction by 15%.",
+        "将玩家通过工作获得的资金提高 70%。\n" +
+        "将玩家为公司工作时获得的声望提高 25%。\n" +
+        "将玩家为派系工作时获得的声望提高 15%。",
     },
     {
       bonuses: {
@@ -105,8 +105,8 @@ function getRandomBonus(): CircadianBonus {
         crime_money: 2,
       },
       description:
-        "Increases the player's crime success rate by 100%.\n" +
-        "Increases the amount of money the player gains from crimes by 100%.",
+        "将玩家的犯罪成功率提高 100%。\n" +
+        "将玩家通过犯罪获得的资金提高 100%。",
     },
   ];
 

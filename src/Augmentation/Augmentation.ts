@@ -59,7 +59,7 @@ export interface AugmentationCtorParams {
 function generateStatsDescription(mults: Multipliers, programs?: string[], startingMoney?: number): string {
   // For a percentage that is <10, show x.xx%, otherwise show xx.x%
   const f = (x: number) => formatPercent(x, x - 1 < 0.1 ? 2 : 1);
-  let desc = "Effects:";
+  let desc = "效果：";
 
   // Skills
   if (
@@ -70,25 +70,25 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
     mults.hacking === mults.agility &&
     mults.hacking === mults.charisma
   ) {
-    desc += `\n+${f(mults.hacking - 1)} all skills`;
+    desc += `\n+${f(mults.hacking - 1)} 全部技能`;
   } else {
     // Not allskills
-    if (mults.hacking !== 1) desc += `\n+${f(mults.hacking - 1)} hacking skill`;
+    if (mults.hacking !== 1) desc += `\n+${f(mults.hacking - 1)} 黑客技能`;
     if (
       mults.strength !== 1 &&
       mults.strength === mults.defense &&
       mults.strength === mults.dexterity &&
       mults.strength === mults.agility
     ) {
-      desc += `\n+${f(mults.strength - 1)} combat skills`;
+      desc += `\n+${f(mults.strength - 1)} 战斗技能`;
     } else {
       // Not all combat
-      if (mults.strength !== 1) desc += `\n+${f(mults.strength - 1)} strength skill`;
-      if (mults.defense !== 1) desc += `\n+${f(mults.defense - 1)} defense skill`;
-      if (mults.dexterity !== 1) desc += `\n+${f(mults.dexterity - 1)} dexterity skill`;
-      if (mults.agility !== 1) desc += `\n+${f(mults.agility - 1)} agility skill`;
+      if (mults.strength !== 1) desc += `\n+${f(mults.strength - 1)} 力量技能`;
+      if (mults.defense !== 1) desc += `\n+${f(mults.defense - 1)} 防御技能`;
+      if (mults.dexterity !== 1) desc += `\n+${f(mults.dexterity - 1)} 灵巧技能`;
+      if (mults.agility !== 1) desc += `\n+${f(mults.agility - 1)} 敏捷技能`;
     }
-    if (mults.charisma !== 1) desc += `\n+${f(mults.charisma - 1)} charisma skill`;
+    if (mults.charisma !== 1) desc += `\n+${f(mults.charisma - 1)} 魅力技能`;
   }
 
   // Skill XP
@@ -100,73 +100,73 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
     mults.hacking_exp === mults.agility_exp &&
     mults.hacking_exp === mults.charisma_exp
   ) {
-    desc += `\n+${f(mults.hacking_exp - 1)} exp for all skills`;
+    desc += `\n+${f(mults.hacking_exp - 1)} 全部技能经验`;
   } else {
     // Not allskillxp
-    if (mults.hacking_exp !== 1) desc += `\n+${f(mults.hacking_exp - 1)} hacking exp`;
+    if (mults.hacking_exp !== 1) desc += `\n+${f(mults.hacking_exp - 1)} 黑客经验`;
     if (
       mults.strength_exp !== 1 &&
       mults.strength_exp === mults.defense_exp &&
       mults.strength_exp === mults.dexterity_exp &&
       mults.strength_exp === mults.agility_exp
     ) {
-      desc += `\n+${f(mults.strength_exp - 1)} combat exp`;
+      desc += `\n+${f(mults.strength_exp - 1)} 战斗经验`;
     } else {
       // Not all combat
-      if (mults.strength_exp !== 1) desc += `\n+${f(mults.strength_exp - 1)} strength exp`;
-      if (mults.defense_exp !== 1) desc += `\n+${f(mults.defense_exp - 1)} defense exp`;
-      if (mults.dexterity_exp !== 1) desc += `\n+${f(mults.dexterity_exp - 1)} dexterity exp`;
-      if (mults.agility_exp !== 1) desc += `\n+${f(mults.agility_exp - 1)} agility exp`;
+      if (mults.strength_exp !== 1) desc += `\n+${f(mults.strength_exp - 1)} 力量经验`;
+      if (mults.defense_exp !== 1) desc += `\n+${f(mults.defense_exp - 1)} 防御经验`;
+      if (mults.dexterity_exp !== 1) desc += `\n+${f(mults.dexterity_exp - 1)} 灵巧经验`;
+      if (mults.agility_exp !== 1) desc += `\n+${f(mults.agility_exp - 1)} 敏捷经验`;
     }
-    if (mults.charisma_exp !== 1) desc += `\n+${f(mults.charisma_exp - 1)} charisma exp`;
+    if (mults.charisma_exp !== 1) desc += `\n+${f(mults.charisma_exp - 1)} 魅力经验`;
   }
 
-  if (mults.hacking_speed !== 1) desc += `\n+${f(mults.hacking_speed - 1)} faster hack(), grow(), and weaken()`;
-  if (mults.hacking_chance !== 1) desc += `\n+${f(mults.hacking_chance - 1)} hack() success chance`;
-  if (mults.hacking_money !== 1) desc += `\n+${f(mults.hacking_money - 1)} hack() power`;
-  if (mults.hacking_grow !== 1) desc += `\n+${f(mults.hacking_grow - 1)} grow() power`;
+  if (mults.hacking_speed !== 1) desc += `\n+${f(mults.hacking_speed - 1)} hack()、grow() 和 weaken() 速度提升`;
+  if (mults.hacking_chance !== 1) desc += `\n+${f(mults.hacking_chance - 1)} hack() 成功率`;
+  if (mults.hacking_money !== 1) desc += `\n+${f(mults.hacking_money - 1)} hack() 威力`;
+  if (mults.hacking_grow !== 1) desc += `\n+${f(mults.hacking_grow - 1)} grow() 威力`;
 
   // Reputation
   if (mults.faction_rep !== 1 && mults.faction_rep === mults.company_rep)
-    desc += `\n+${f(mults.faction_rep - 1)} reputation from factions and companies`;
+    desc += `\n+${f(mults.faction_rep - 1)} 来自派系和公司的声望`;
   else {
     // Not all reputation
-    if (mults.faction_rep !== 1) desc += `\n+${f(mults.faction_rep - 1)} reputation from factions`;
-    if (mults.company_rep !== 1) desc += `\n+${f(mults.company_rep - 1)} reputation from companies`;
+    if (mults.faction_rep !== 1) desc += `\n+${f(mults.faction_rep - 1)} 来自派系的声望`;
+    if (mults.company_rep !== 1) desc += `\n+${f(mults.company_rep - 1)} 来自公司的声望`;
   }
 
-  if (mults.crime_money !== 1) desc += `\n+${f(mults.crime_money - 1)} crime money`;
-  if (mults.crime_success !== 1) desc += `\n+${f(mults.crime_success - 1)} crime success rate`;
-  if (mults.work_money !== 1) desc += `\n+${f(mults.work_money - 1)} work money`;
+  if (mults.crime_money !== 1) desc += `\n+${f(mults.crime_money - 1)} 犯罪收入`;
+  if (mults.crime_success !== 1) desc += `\n+${f(mults.crime_success - 1)} 犯罪成功率`;
+  if (mults.work_money !== 1) desc += `\n+${f(mults.work_money - 1)} 工作收入`;
 
   // Hacknet: costs are negative
-  if (mults.hacknet_node_money !== 1) desc += `\n+${f(mults.hacknet_node_money - 1)} hacknet production`;
+  if (mults.hacknet_node_money !== 1) desc += `\n+${f(mults.hacknet_node_money - 1)} Hacknet 产出`;
   if (mults.hacknet_node_purchase_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_purchase_cost - 1))} hacknet purchase cost`;
+    desc += `\n-${f(-(mults.hacknet_node_purchase_cost - 1))} Hacknet 购买成本`;
   }
   if (mults.hacknet_node_level_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_level_cost - 1))} hacknet level upgrade cost`;
+    desc += `\n-${f(-(mults.hacknet_node_level_cost - 1))} Hacknet 升级等级成本`;
   }
   if (mults.hacknet_node_ram_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_ram_cost - 1))} hacknet RAM upgrade cost`;
+    desc += `\n-${f(-(mults.hacknet_node_ram_cost - 1))} Hacknet RAM 升级成本`;
   }
   if (mults.hacknet_node_core_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_core_cost - 1))} hacknet core upgrade cost`;
+    desc += `\n-${f(-(mults.hacknet_node_core_cost - 1))} Hacknet 核心升级成本`;
   }
 
   // Bladeburner
-  if (mults.bladeburner_max_stamina !== 1) desc += `\n+${f(mults.bladeburner_max_stamina - 1)} Bladeburner Max Stamina`;
+  if (mults.bladeburner_max_stamina !== 1) desc += `\n+${f(mults.bladeburner_max_stamina - 1)} Bladeburner 最大体力`;
   if (mults.bladeburner_stamina_gain !== 1) {
-    desc += `\n+${f(mults.bladeburner_stamina_gain - 1)} Bladeburner Stamina gain`;
+    desc += `\n+${f(mults.bladeburner_stamina_gain - 1)} Bladeburner 体力获取`;
   }
   if (mults.bladeburner_analysis !== 1) {
-    desc += `\n+${f(mults.bladeburner_analysis - 1)} Bladeburner Field Analysis effectiveness`;
+    desc += `\n+${f(mults.bladeburner_analysis - 1)} Bladeburner 现场分析效果`;
   }
   if (mults.bladeburner_success_chance !== 1) {
-    desc += `\n+${f(mults.bladeburner_success_chance - 1)} Bladeburner action success chance`;
+    desc += `\n+${f(mults.bladeburner_success_chance - 1)} Bladeburner 行动成功率`;
   }
-  if (startingMoney) desc += `\nStart with ${startingMoney} after installing Augmentations.`;
-  if (programs) desc += `\nStart with ${programs.join(" and ")} after installing Augmentations.`;
+  if (startingMoney) desc += `\n安装强化后以 ${startingMoney} 起步。`;
+  if (programs) desc += `\n安装强化后获得 ${programs.join(" 和 ")}。`;
   return desc;
 }
 

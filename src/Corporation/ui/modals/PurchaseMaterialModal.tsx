@@ -42,14 +42,14 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
       setDisabled(true);
       return (
         <>
-          <Typography color={"error"}>Not enough warehouse space to purchase this amount</Typography>
+          <Typography color={"error"}>仓库空间不足，无法购买这一数量</Typography>
         </>
       );
     } else if (isNaN(cost) || parsedAmt < 0) {
       setDisabled(true);
       return (
         <>
-          <Typography color={"error"}>Invalid input for Bulk Purchase amount</Typography>
+          <Typography color={"error"}>批量购买数量输入无效</Typography>
         </>
       );
     } else {
@@ -57,7 +57,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
       return (
         <>
           <Typography>
-            Purchasing {formatMatPurchaseAmount(parsedAmt)} of {props.mat.name} will cost <Money money={cost} />
+            购买 {formatMatPurchaseAmount(parsedAmt)} 的 {props.mat.name} 将花费 <Money money={cost} />
           </Typography>
         </>
       );
@@ -84,19 +84,18 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
   return (
     <>
       <Typography>
-        Enter the amount of {props.mat.name} you would like to bulk purchase. This purchases the specified amount
-        instantly (all at once).
+        输入你想要批量购买的 {props.mat.name} 数量。这会立即（一次性）购买指定数量。
       </Typography>
       <BulkPurchaseText warehouse={props.warehouse} mat={props.mat} amount={buyAmt} />
       <TextField
         value={buyAmt}
         onChange={onChange}
         type="number"
-        placeholder="Bulk Purchase amount"
+        placeholder="批量购买数量"
         onKeyDown={onKeyDown}
       />
       <Button disabled={disabled} onClick={bulkPurchase}>
-        Confirm Bulk Purchase
+        确认批量购买
       </Button>
     </>
   );
@@ -142,24 +141,23 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter the amount of {props.mat.name} you would like to purchase per second. This material's cost changes
-        constantly.
-        {props.disablePurchaseLimit ? " Note: Purchase amount is disabled as smart supply is enabled" : ""}
+        输入你每秒想要购买的 {props.mat.name} 数量。这种材料的成本在不断变化。
+        {props.disablePurchaseLimit ? " 注意：由于已启用智能供应，购买数量不可修改" : ""}
       </Typography>
       <TextField
         value={buyAmt}
         onChange={onChange}
         autoFocus={true}
-        placeholder="Purchase amount"
+        placeholder="购买数量"
         type="number"
         disabled={props.disablePurchaseLimit}
         onKeyDown={onKeyDown}
       />
       <Button disabled={props.disablePurchaseLimit} onClick={purchaseMaterial}>
-        Confirm
+        确认
       </Button>
       <Button disabled={props.disablePurchaseLimit} onClick={clearPurchase}>
-        Clear Purchase
+        清除购买
       </Button>
       {<BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />}
     </Modal>

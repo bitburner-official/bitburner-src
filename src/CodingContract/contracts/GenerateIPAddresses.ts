@@ -7,13 +7,13 @@ export const generateIPAddresses: Pick<CodingContractTypes, CodingContractName.G
   [CodingContractName.GenerateIPAddresses]: {
     desc: (data: string): string => {
       return [
-        "Given the following string containing only digits, return",
-        "an array with all possible valid IP address combinations",
-        "that can be created from the string:\n\n",
+        "给定以下只包含数字的字符串，返回",
+        "由该字符串可以构造出的所有",
+        "有效 IP 地址组合的数组：\n\n",
         `${data}\n\n`,
-        "Note that an octet cannot begin with a '0' unless the number",
-        "itself is exactly '0'. For example, '192.168.010.1' is not a valid IP.\n\n",
-        "Examples:\n\n",
+        "注意：除非八位组表示的数字本身就是 '0'，否则它不能以 '0' 开头。",
+        "例如，'192.168.010.1' 不是有效 IP。\n\n",
+        "示例：\n\n",
         '25525511135 -> ["255.255.11.135", "255.255.111.35"]\n',
         '1938718066 -> ["193.87.180.66"]',
       ].join(" ");

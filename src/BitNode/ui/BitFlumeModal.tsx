@@ -21,17 +21,17 @@ export function BitFlumeModal(): React.ReactElement {
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Typography>
-        WARNING: USING THIS PROGRAM WILL CAUSE YOU TO LOSE ALL OF YOUR PROGRESS ON THE CURRENT BITNODE.
+        警告：使用该程序将使你失去当前 BitNode 中的所有进度。
         <br />
         <br />
-        Do you want to travel to the BitNode Nexus? This allows you to reset the current BitNode and select a new one.
+        是否要前往 BitNode 枢纽？这将允许你重置当前的 BitNode 并选择一个新的。
         <br />
         <br />
-        You can use the "-q" option when running {CompletedProgramName.bitFlume} to skip this confirmation dialog.
+        你可以在运行 {CompletedProgramName.bitFlume} 时使用 "-q" 选项来跳过此确认对话框。
       </Typography>
       <br />
       <br />
-      <Button onClick={flume}>Travel to the BitVerse</Button>
+      <Button onClick={flume}>前往 BitVerse</Button>
     </Modal>
   );
 }

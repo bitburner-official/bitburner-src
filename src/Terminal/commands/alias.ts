@@ -7,22 +7,22 @@ export function alias(args: (string | number | boolean)[]): undefined {
     return;
   }
   if (args[0] === "--all") {
-    Terminal.error(`--all is reserved for removal`);
+    Terminal.error(`--all 保留用于移除操作`);
     return;
   }
   if (args.length === 1) {
     if (parseAliasDeclaration(args[0] + "")) {
-      Terminal.print(`Set alias ${args[0]}`);
+      Terminal.print(`已设置别名 ${args[0]}`);
       return;
     }
   }
   if (args.length === 2) {
     if (args[0] === "-g") {
       if (parseAliasDeclaration(args[1] + "", true)) {
-        Terminal.print(`Set global alias ${args[1]}`);
+        Terminal.print(`已设置全局别名 ${args[1]}`);
         return;
       }
     }
   }
-  Terminal.error('Incorrect usage of alias command. Usage: alias [-g] [aliasname="value"]');
+  Terminal.error('alias 命令用法不正确。用法：alias [-g] [aliasname="value"]');
 }

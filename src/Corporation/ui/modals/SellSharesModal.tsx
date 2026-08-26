@@ -34,10 +34,10 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       dialogBoxCreate(
         <>
           <Typography>
-            You sold {formatShares(shares)} shares for <Money money={profit} />.
+            你以 <Money money={profit} /> 的价格出售了 {formatShares(shares)} 股股份。
           </Typography>
           <Typography>
-            <b>{corp.name}</b>'s stock price fell to <Money money={sharePrice} /> per share.
+            <b>{corp.name}</b> 的股价跌至每股 <Money money={sharePrice} />。
           </Typography>
         </>,
       );
@@ -56,29 +56,29 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography component="div">
-        Enter the number of shares you would like to sell.
+        输入你想要出售的股份数量。
         <ul>
-          <li>Selling shares will cause stock price to fall due to market forces.</li>
-          <li>The money from selling your shares will go directly to you (NOT your Corporation).</li>
+          <li>出售股份会因市场力量导致股价下跌。</li>
+          <li>出售股份所得的资金会直接归你所有（而不是你的企业）。</li>
           <li>
-            You will not be able to sell shares again for{" "}
-            <b>{corp.convertCooldownToString(corpConstants.sellSharesCooldown)}</b>.
+            之后 <b>{corp.convertCooldownToString(corpConstants.sellSharesCooldown)}</b>
+            内你将无法再次出售股份。
           </li>
         </ul>
-        You currently have {formatShares(corp.numShares)} shares of <b>{corp.name}</b> stock, valued at{" "}
-        <Money money={corp.sharePrice} /> per share.
+        你目前持有 <b>{corp.name}</b> 的 {formatShares(corp.numShares)} 股股票，每股价值{" "}
+        <Money money={corp.sharePrice} />。
       </Typography>
       <br />
       <NumberInput
         defaultValue={shares || ""}
         variant="standard"
         autoFocus
-        placeholder="Shares to sell"
+        placeholder="要出售的股份数"
         onChange={setShares}
         onKeyDown={onKeyDown}
       />
       <ButtonWithTooltip disabledTooltip={disabledText} onClick={sell}>
-        Sell shares
+        出售股份
       </ButtonWithTooltip>
       <br />
       <Typography sx={{ minHeight: "3em" }}>
@@ -86,9 +86,9 @@ export function SellSharesModal(props: IProps): React.ReactElement {
           disabledText
         ) : (
           <>
-            You will receive <Money money={profit} />.
+            你将获得 <Money money={profit} />。
             <br />
-            <b>{corp.name}</b>'s stock price will settle at <Money money={sharePrice} /> per share.
+            <b>{corp.name}</b> 的股价将稳定在每股 <Money money={sharePrice} />。
           </>
         )}
       </Typography>

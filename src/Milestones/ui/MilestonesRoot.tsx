@@ -27,15 +27,14 @@ export function MilestonesRoot(): JSX.Element {
   });
   return (
     <>
-      <Typography variant="h4">Milestones</Typography>
+      <Typography variant="h4">里程碑</Typography>
       <Box mx={2}>
         <Typography>
-          Milestones don't reward you for completing them. They are here to guide you if you're lost. They will reset
-          when you install Augmentations.
+          完成里程碑不会给你任何奖励。它们的作用是在你迷茫时为你指引方向。安装强化后，里程碑将会重置。
         </Typography>
         <br />
 
-        <Typography>Completing fl1ght.exe</Typography>
+        <Typography>完成 fl1ght.exe</Typography>
         {milestones}
       </Box>
     </>

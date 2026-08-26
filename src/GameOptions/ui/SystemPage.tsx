@@ -43,30 +43,30 @@ export const SystemPage = (): React.ReactElement => {
     Settings.AutosaveInterval = newValue as number;
   }
   return (
-    <GameOptionsPage title="System">
+    <GameOptionsPage title="系统">
       {/* Wrap in a React fragment to prevent the sliders from breaking as list items */}
       <>
         <AutoexecInput
-          label="Autoexec Script + Args"
+          label="自动执行脚本 + 参数"
           tooltip={
             <>
-              Path to a script (with optional args) to run on game load. The script will be run on home, launched before
-              any saved running scripts. It will have the "temporary" setting, so if it stays running it won't be saved.
+              游戏加载时运行的脚本路径（可附带参数）。该脚本将在家用电脑上运行，并先于所有已存档的运行中脚本启动。
+              它会带有“临时”属性，因此如果它持续运行，将不会被保存进存档。
             </>
           }
         />
         <br />
         <OptionsSlider
-          label="Recently killed scripts size"
+          label="最近被杀死的脚本数量"
           initialValue={recentScriptsSize}
           callback={handleRecentScriptsSizeChange}
           step={25}
           min={0}
           max={500}
-          tooltip={<>The maximum number of recently killed scripts the game will keep.</>}
+          tooltip={<>游戏保留的最近被杀死脚本的 最大数量。</>}
         />
         <OptionsSlider
-          label="Netscript log size"
+          label="Netscript 日志大小"
           initialValue={logSize}
           callback={handleLogSizeChange}
           step={20}
@@ -74,13 +74,12 @@ export const SystemPage = (): React.ReactElement => {
           max={500}
           tooltip={
             <>
-              The maximum number of lines a script's logs can hold. Setting this too high can cause the game to use a
-              lot of memory if you have many scripts running.
+              单个脚本日志可容纳的最大行数。设置过高时，若同时运行大量脚本，游戏可能占用大量内存。
             </>
           }
         />
         <OptionsSlider
-          label="Netscript port size"
+          label="Netscript 端口大小"
           initialValue={portSize}
           callback={handlePortSizeChange}
           step={1}
@@ -88,13 +87,12 @@ export const SystemPage = (): React.ReactElement => {
           max={100}
           tooltip={
             <>
-              The maximum number of entries that can be written to a port using Netscript's write() function. Setting
-              this too high can cause the game to use a lot of memory.
+              使用 Netscript 的 write() 函数可写入端口的最大条目数。设置过高可能导致游戏占用大量内存。
             </>
           }
         />
         <OptionsSlider
-          label="Terminal capacity"
+          label="终端容量"
           initialValue={terminalSize}
           callback={handleTerminalSizeChange}
           step={50}
@@ -102,24 +100,23 @@ export const SystemPage = (): React.ReactElement => {
           max={500}
           tooltip={
             <>
-              The maximum number of entries that can be written to the terminal. Setting this too high can cause the
-              game to use a lot of memory.
+              可写入终端的最大条目数。设置过高可能导致游戏占用大量内存。
             </>
           }
           marks
         />
         <OptionsSlider
-          label="Autosave interval (s)"
+          label="自动存档间隔（秒）"
           initialValue={autosaveInterval}
           callback={handleAutosaveIntervalChange}
           step={30}
           min={0}
           max={600}
-          tooltip={<>The time (in seconds) between each autosave. Set to 0 to disable autosave.</>}
+          tooltip={<>两次自动存档之间的时间间隔（秒）。设为 0 可禁用自动存档。</>}
           marks
         />
         <OptionsSlider
-          label="Tail render interval (ms)"
+          label="Tail 窗口渲染间隔（毫秒）"
           initialValue={tailRenderInterval}
           callback={handleTailIntervalChange}
           step={100}
@@ -127,8 +124,7 @@ export const SystemPage = (): React.ReactElement => {
           max={5000}
           tooltip={
             <>
-              The minimum number of milliseconds between tail rerenders. Setting this too low can result in poor
-              performance if you have many tail windows open.
+              两次 Tail 窗口重新渲染之间的最小毫秒数。若打开了许多 Tail 窗口，设置过低可能导致性能下降。
             </>
           }
         />
@@ -137,14 +133,14 @@ export const SystemPage = (): React.ReactElement => {
       <OptionSwitch
         checked={Settings.SuppressSavedGameToast}
         onChange={(newValue) => (Settings.SuppressSavedGameToast = newValue)}
-        text="Suppress Auto-Save Game Toast"
-        tooltip={<>If this is set, there will be no "Game Saved!" toast appearing after an auto-save.</>}
+        text="隐藏自动存档提示"
+        tooltip={<>设置后，自动存档完成后将不会显示“游戏已存档！”提示。</>}
       />
       <OptionSwitch
         checked={Settings.SuppressAutosaveDisabledWarnings}
         onChange={(newValue) => (Settings.SuppressAutosaveDisabledWarnings = newValue)}
-        text="Suppress Auto-Save Disabled Warning"
-        tooltip={<>If this is set, there will be no warning triggered when auto-save is disabled (at 0).</>}
+        text="隐藏自动存档已禁用警告"
+        tooltip={<>设置后，自动存档被禁用（设为 0）时将不会触发警告。</>}
       />
       <OptionSwitch
         checked={Settings.EnableSaveDataBackupReminder}
@@ -154,26 +150,25 @@ export const SystemPage = (): React.ReactElement => {
         promptOptions={{
           // Only require confirmation if the player is disabling the reminder.
           shouldShowPrompt: (switchNewValue) => !switchNewValue,
-          text: "Are you sure you want to disable the reminder?",
+          text: "确定要禁用该提醒吗？",
         }}
-        text="Enable save data backup reminder"
-        tooltip={<>If disabled, we will not remind you to back up your save data.</>}
+        text="启用存档数据备份提醒"
+        tooltip={<>若禁用，我们将不再提醒你备份存档数据。</>}
       />
       <OptionSwitch
         checked={Settings.SaveGameOnFileSave}
         onChange={(newValue) => (Settings.SaveGameOnFileSave = newValue)}
-        text="Save game on file save"
-        tooltip={<>Save your game any time a file is saved in the script editor.</>}
+        text="保存文件时自动存档"
+        tooltip={<>在脚本编辑器中每次保存文件时都会保存游戏进度。</>}
       />
       <OptionSwitch
         checked={Settings.ExcludeRunningScriptsFromSave}
         onChange={(newValue) => (Settings.ExcludeRunningScriptsFromSave = newValue)}
-        text="Exclude Running Scripts from Save"
+        text="存档时排除运行中的脚本"
         tooltip={
           <>
-            If this is set, the save file will exclude all running scripts. This is only useful if your save is lagging
-            a lot. You'll have to restart your script every time you launch the game, possibly by using the "autoexec"
-            option.
+            设置后，存档文件将不包含所有运行中的脚本。这仅在存档严重卡顿时有用。每次启动游戏后你都需要重新启动脚本，
+            可以借助“autoexec”选项来实现。
           </>
         }
       />

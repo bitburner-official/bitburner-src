@@ -45,19 +45,19 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>Enter a name for your new Gang Member:</Typography>
+      <Typography>为你的新帮派成员起一个名字：</Typography>
       <br />
       <TextField
         autoFocus
         onKeyUp={onKeyUp}
         onChange={onChange}
         type="text"
-        placeholder="unique name"
+        placeholder="独一无二的名字"
         spellCheck="false"
         InputProps={{
           endAdornment: (
             <Button disabled={disabled} onClick={recruit}>
-              Recruit
+              招募
             </Button>
           ),
         }}

@@ -6,9 +6,9 @@ export const subarrayWithMaximumSum: Pick<CodingContractTypes, CodingContractNam
   [CodingContractName.SubarrayWithMaximumSum]: {
     desc: (n: number[]): string => {
       return [
-        "Given the following integer array, find the contiguous subarray",
-        "(containing at least one number) which has the largest sum and return that sum.",
-        "'Sum' refers to the sum of all the numbers in the subarray.\n",
+        "给定以下整数数组，找出具有最大和的连续子数组",
+        "（至少包含一个数字），并返回该和。",
+        "“和”指的是子数组中所有数字的总和。\n",
         `${n.toString()}`,
       ].join(" ");
     },

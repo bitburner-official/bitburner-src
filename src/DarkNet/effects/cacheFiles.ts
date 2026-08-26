@@ -13,7 +13,6 @@ import { resolveCacheFilePath } from "../../Paths/CacheFilePath";
 import type { CacheResult, CacheReward } from "@nsdefs";
 import { addClue, cctCooldownReached } from "./effects";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
-import { pluralize } from "../../utils/I18nUtils";
 
 export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -24,10 +23,10 @@ export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string)
 export const addCacheToServer = (server: DarknetServer, isPhishingCache: boolean, prefix?: string) => {
   const cacheFilename = generateCacheFilename(isPhishingCache, prefix);
   if (!cacheFilename) {
-    return { success: false, message: `Cannot generate path. prefix: ${prefix}` };
+    return { success: false, message: `无法生成路径。前缀：${prefix}` };
   }
   if (server.caches.includes(cacheFilename)) {
-    return { success: false, message: `Duplicate cache file: ${cacheFilename}` };
+    return { success: false, message: `重复的缓存文件：${cacheFilename}` };
   }
   server.caches.push(cacheFilename);
   return { success: true, cacheFilename };
@@ -72,7 +71,7 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
     SnackbarEvents.emit(
       // Karma is only useful in relation to gangs, so we only show the karma loss if the player has started unlocking gang
       // content. This is to avoid cluttering the UI with unnecessary info, and confusion before players discover karma.
-      result.message + (Player.isAwareOfGang() ? ` Gained -${karmaLoss} karma.` : ""),
+      result.message + (Player.isAwareOfGang() ? ` 获得 -${karmaLoss} 业力。` : ""),
       ToastVariant.SUCCESS,
       4000,
     );
@@ -104,7 +103,7 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): Interna
   if (contractFilePaths.length === 0) {
     return getMoneyReward(difficulty);
   }
-  return { message: `New coding contracts are now available on the network!`, contractFilePaths };
+  return { message: `新的编程合约已在网络上出现！`, contractFilePaths };
 };
 
 export const getMoneyReward = (difficulty: number): InternalCacheReward => {
@@ -118,7 +117,7 @@ export const getMoneyReward = (difficulty: number): InternalCacheReward => {
     Player.mults.dnet_money *
     currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");
-  return { message: `You have discovered a cache with ${formatMoney(reward)}.`, money: reward };
+  return { message: `你发现了一个装有 ${formatMoney(reward)} 的缓存。`, money: reward };
 };
 
 export const getStockReward = (difficulty: number): InternalCacheReward => {
@@ -134,7 +133,7 @@ export const getStockReward = (difficulty: number): InternalCacheReward => {
   const shares = Math.min(Math.floor(1 + difficulty * 5 + Math.random() * 10), maxNewShares);
   stock.playerShares += shares;
   return {
-    message: `You have discovered a stock option cache containing ${shares} shares of ${stock.symbol}!`,
+    message: `你发现了一个股票期权缓存，其中包含 ${stock.symbol} 的 ${shares} 股！`,
     stockSymbol: stock.symbol,
     stockShares: shares,
   };
@@ -146,7 +145,7 @@ export const getDataFileReward = (difficulty: number, server: DarknetServer): In
     return getMoneyReward(difficulty);
   }
   return {
-    message: `You have discovered ${pluralize(dataFiles.length, "data file cache")}: ${dataFiles.join(", ")}.`,
+    message: `你发现了 ${dataFiles.length} 个数据文件缓存：${dataFiles.join("、")}。`,
     dataFilePaths: dataFiles,
   };
 };
@@ -169,7 +168,7 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): Inte
   for (const program of programs) {
     if (!Player.hasProgram(program) && creatingProgram !== program) {
       Player.getHomeComputer().pushProgram(program);
-      return { message: `You have discovered the program ${program}.`, programName: program };
+      return { message: `你发现了程序 ${program}。`, programName: program };
     }
   }
   if (!Player.hasWseAccount) {
@@ -177,18 +176,18 @@ export const getProgramAndStockMarketRelatedRewards = (difficulty: number): Inte
     if (!isStockMarketInitialized()) {
       initStockMarket();
     }
-    return { message: `You have discovered a stolen WSE Account!`, wseAccount: true };
+    return { message: `你发现了一个被盗的 WSE 账户！`, wseAccount: true };
   }
   if (!Player.hasTixApiAccess) {
     Player.hasTixApiAccess = true;
     if (!isStockMarketInitialized()) {
       initStockMarket();
     }
-    return { message: `You have discovered a stolen TIX API access point!`, tixApiAccess: true };
+    return { message: `你发现了一个被盗的 TIX API 访问点！`, tixApiAccess: true };
   }
   if (!Player.has4SData && Player.bitNodeN !== 8 && !Player.bitNodeOptions.disable4SData) {
     Player.has4SData = true;
-    return { message: `You have discovered a cache of stolen 4S Data!`, fourSigmaData: true };
+    return { message: `你发现了一个存放被盗 4S 数据的缓存！`, fourSigmaData: true };
   }
 
   return getMoneyReward(difficulty);
@@ -201,7 +200,7 @@ const getLabReward = (): InternalCacheReward => {
   }
   Player.queueAugmentation(reward);
   return {
-    message: `You have discovered a cache with the augmentation ${reward}!`,
+    message: `你发现了一个装有强化 ${reward} 的缓存！`,
     augmentationName: reward,
   };
 };

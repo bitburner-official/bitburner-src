@@ -2,8 +2,8 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Default-lite",
-  description: "Less eye-straining default theme",
+  name: "默认（轻量）",
+  description: "更护眼的默认主题",
   credit: "NmuGmu",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/925263801564151888",
   screenshot: img1,

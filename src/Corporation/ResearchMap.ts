@@ -8,34 +8,31 @@ export const ResearchMap: Record<CorpResearchName, Research> = {
     name: "AutoBrew",
     cost: 12e3,
     desc:
-      "Automatically keep your employees fully caffeinated with " +
-      "tea injections. This research will keep the energy of all " +
-      "employees at its maximum possible value, for no cost. " +
-      "This will also disable the Tea upgrade.",
+      "通过注射茶水，自动让你的员工保持充足的咖啡因。" +
+      "该研究会让所有员工的精力始终保持在可能的最大值，且不产生任何费用。" +
+      "这同时会禁用“购买茶水”升级。",
   }),
   AutoPartyManager: new Research({
     name: "AutoPartyManager",
     cost: 15e3,
     desc:
-      "Automatically analyzes your employees' morale " +
-      "and boosts them whenever it detects a decrease. This research will " +
-      "keep the morale of all employees at their maximum possible " +
-      "values, for no cost. " +
-      "This will also disable the 'Throw Party' feature.",
+      "自动分析员工的士气，并在检测到士气下降时进行提升。该研究会让所有员工" +
+      "的士气始终保持在可能的最大值，且不产生任何费用。" +
+      "这同时会禁用“举办派对”功能。",
   }),
   "Automatic Drug Administration": new Research({
     name: "Automatic Drug Administration",
     cost: 10e3,
     desc:
-      "Research how to automatically administer performance-enhancing drugs to all of " +
-      "your employees. This unlocks Drug-related Research.",
+      "研究如何自动为所有员工服用提升表现的药物。" +
+      "这会解锁与药物相关的研究。",
   }),
   "CPH4 Injections": new Research({
     name: "CPH4 Injections",
     cost: 25e3,
     desc:
-      "Develop an advanced and harmless synthetic drug that is administered to " +
-      "employees to increase all of their stats, except experience, by 10%.",
+      "研发一种先进无害的合成药物，给员工服用后，" +
+      "除经验以外的所有属性都会提升10%。",
     employeeCreMult: 1.1,
     employeeChaMult: 1.1,
     employeeEffMult: 1.1,
@@ -45,58 +42,53 @@ export const ResearchMap: Record<CorpResearchName, Research> = {
     name: "Drones",
     cost: 5e3,
     desc:
-      "Acquire the knowledge needed to create advanced drones. This research does nothing " +
-      "by itself, but unlocks other Drone-related research.",
+      "获得制造先进无人机所需的知识。该研究本身没有效果，" +
+      "但会解锁其他与无人机相关的研究。",
   }),
   "Drones - Assembly": new Research({
     name: "Drones - Assembly",
     cost: 25e3,
     desc:
-      "Manufacture and use Assembly Drones to improve the efficiency of " +
-      "your production lines. This increases all production by 20%.",
+      "制造并使用装配无人机来提高生产线的效率。" +
+      "这会使所有产量提高20%。",
     productionMult: 1.2,
   }),
   "Drones - Transport": new Research({
     name: "Drones - Transport",
     cost: 30e3,
     desc:
-      "Manufacture and use intelligent Transport Drones to optimize " +
-      "your warehouses. This increases the storage space of all warehouses " +
-      "by 50%.",
+      "制造并使用智能运输无人机来优化你的仓库。" +
+      "这会使所有仓库的存储空间增加50%。",
     storageMult: 1.5,
   }),
   "Go-Juice": new Research({
     name: "Go-Juice",
     cost: 25e3,
     desc:
-      "Provide employees with Go-Juice, a tea-derivative that further enhances " +
-      "the brain's dopamine production. This increases the maximum energy of all " +
-      "employees by 10.",
+      "为员工提供Go-Juice——一种能进一步促进大脑多巴胺分泌的茶衍生饮品。" +
+      "这会使所有员工的最大精力提高10。",
   }),
   "HRBuddy-Recruitment": new Research({
     name: "HRBuddy-Recruitment",
     cost: 15e3,
     desc:
-      "Use automated software to handle the hiring of employees. With this " +
-      "research, each office will automatically hire one employee per " +
-      "market cycle if there is available space.",
+      "使用自动化软件处理员工招聘。有了该研究，" +
+      "只要有空余空间，每个办事处都会在每个市场周期自动雇用一名员工。",
   }),
   "HRBuddy-Training": new Research({
     name: "HRBuddy-Training",
     cost: 20e3,
     desc:
-      "Use automated software to handle the training of employees. With this " +
-      "research, each employee hired with HRBuddy-Recruitment will automatically " +
-      "be assigned to 'Intern', rather than being unassigned.",
+      "使用自动化软件处理员工培训。有了该研究，" +
+      "通过HRBuddy-Recruitment雇用的每名员工都会被自动分配到“实习生”岗位，而不是处于未分配状态。",
   }),
   "Hi-Tech R&D Laboratory": new Research({
     name: "Hi-Tech R&D Laboratory",
     cost: 5e3,
     desc:
-      "Construct a cutting-edge facility dedicated to advanced research and " +
-      "development. This allows you to spend Scientific Research " +
-      "on powerful upgrades. It also globally increases Scientific Research " +
-      "production by 10%.",
+      "建造一座致力于高级研究与开发的前沿设施。" +
+      "这让你可以把科研点数花在强大的升级上。" +
+      "它还会使全局科研点数产出提高10%。",
     sciResearchMult: 1.1,
   }),
 
@@ -104,31 +96,25 @@ export const ResearchMap: Record<CorpResearchName, Research> = {
     name: "Market-TA.I",
     cost: 20e3,
     desc:
-      "Develop advanced AI software that uses technical analysis to " +
-      "help you understand and exploit the market. This research " +
-      "allows you to know what price to sell your Materials/Products " +
-      "at in order to avoid losing sales due to having too high of a mark-up. " +
-      "It also lets you automatically use that sale price.",
+      "开发使用技术分析帮助你理解和利用市场的高级人工智能软件。" +
+      "该研究让你知道应以什么价格出售材料/产品，" +
+      "从而避免因加价过高而损失销量。" +
+      "它还让你可以自动使用该售价。",
   }),
   "Market-TA.II": new Research({
     name: "Market-TA.II",
     cost: 50e3,
     desc:
-      "Develop double-advanced AI software that uses technical analysis to " +
-      "help you understand and exploit the market. This research " +
-      "allows you to know how many sales of a Material/Product you lose or gain " +
-      "from having too high or too low of a sale price. It also lets you automatically " +
-      "set the sale price of your Materials/Products at the optimal price such that " +
-      "the amount sold matches the amount produced.",
+      "开发使用技术分析帮助你理解和市场的双重强化人工智能软件。" +
+      "该研究让你知道售价过高或过低时，某种材料/产品的销量会损失或增加多少。" +
+      "它还让你可以自动把材料/产品的售价设为最优价格，使售出数量与生产数量相匹配。",
   }),
   Overclock: new Research({
     name: "Overclock",
     cost: 15e3,
     desc:
-      "Equip employees with a headset that uses transcranial direct current " +
-      "stimulation (tDCS) to increase the speed of their neurotransmitters. " +
-      "This research increases the intelligence and efficiency of all " +
-      "employees by 25%.",
+      "为员工配备使用经颅直流电刺激（tDCS）来加快神经递质传导速度的头戴设备。" +
+      "该研究会使所有员工的智力和效率提高25%。",
     employeeEffMult: 1.25,
     employeeIntMult: 1.25,
   }),
@@ -136,49 +122,45 @@ export const ResearchMap: Record<CorpResearchName, Research> = {
     name: "Self-Correcting Assemblers",
     cost: 25e3,
     desc:
-      "Create assemblers that can be used for universal production. " +
-      "These assemblers use deep learning to improve their efficiency " +
-      "at their tasks. This research increases all production by 10%.",
+      "制造可用于通用生产的装配器。" +
+      "这些装配器利用深度学习来提高自身的工作效率。" +
+      "该研究会使所有产量提高10%。",
     productionMult: 1.1,
   }),
   "Sti.mu": new Research({
     name: "Sti.mu",
     cost: 30e3,
     desc:
-      "Upgrade the tDCS headset to stimulate regions of the brain that " +
-      "control confidence and enthusiasm. This research increases the maximum " +
-      "morale of all employees by 10.",
+      "升级tDCS头戴设备，以刺激大脑中控制自信和热情的区域。" +
+      "该研究会使所有员工的最大士气提高10。",
   }),
   "uPgrade: Capacity.I": new Research({
     name: "uPgrade: Capacity.I",
     cost: 20e3,
     desc:
-      "Expand the industry's capacity for designing and manufacturing its " +
-      "various products. This increases the industry's maximum number of products " +
-      "by 1 (from 3 to 4).",
+      "扩展该行业设计和制造各类产品的产能。" +
+      "这会使该行业的最大产品数量增加1（从3增加到4）。",
   }),
   "uPgrade: Capacity.II": new Research({
     name: "uPgrade: Capacity.II",
     cost: 30e3,
     desc:
-      "Expand the industry's capacity for designing and manufacturing its " +
-      "various products. This increases the industry's maximum number of products " +
-      "by 1 (from 4 to 5).",
+      "扩展该行业设计和制造各类产品的产能。" +
+      "这会使该行业的最大产品数量增加1（从4增加到5）。",
   }),
   "uPgrade: Dashboard": new Research({
     name: "uPgrade: Dashboard",
     cost: 5e3,
     desc:
-      "Improve the software used to manage the industry's production line " +
-      "for its various products. This allows you to manage the production and " +
-      "sale of a product before it's finished being designed.",
+      "改进用于管理该行业各类产品生产线的软件。" +
+      "这让你可以在产品设计完成之前就管理其生产和销售。",
   }),
   "uPgrade: Fulcrum": new Research({
     name: "uPgrade: Fulcrum",
     cost: 10e3,
     desc:
-      "Streamline the manufacturing of this industry's various products. " +
-      "This research increases the production of your products by 5%.",
+      "简化该行业各类产品的制造流程。" +
+      "该研究会使你的产品产量提高5%。",
     productProductionMult: 1.05,
   }),
 };

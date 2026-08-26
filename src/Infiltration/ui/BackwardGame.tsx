@@ -17,7 +17,7 @@ export function BackwardGame({ stage }: IProps): React.ReactElement {
   return (
     <>
       <Paper sx={{ display: "grid", justifyItems: "center", pb: 1 }}>
-        <Typography variant="h4">Type it{!hasAugment ? " backward" : ""}</Typography>
+        <Typography variant="h4">输入所见内容{!hasAugment ? "（反向）" : ""}</Typography>
         <Typography style={{ transform: hasAugment ? "none" : "scaleX(-1)" }}>{stage.answer}</Typography>
         <Typography>
           {stage.guess}

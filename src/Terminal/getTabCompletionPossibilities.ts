@@ -303,8 +303,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     } catch (e) {
       const errorData = parseUnknownError(e);
       Terminal.error(
-        `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
-          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+        `无法编译 ${filepath}。原因：${errorData.errorAsString}。${
+          errorData.causeAsString ? ` 引起原因：${errorData.causeAsString}` : ""
         }`,
       );
       return;
@@ -393,8 +393,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     } catch (error) {
       const errorData = parseUnknownError(error);
       Terminal.error(
-        `The autocomplete function in ${filepath} throws an error. Reason: ${errorData.errorAsString}.${
-          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+        `${filepath} 中的 autocomplete 函数抛出了错误。原因：${errorData.errorAsString}。${
+          errorData.causeAsString ? ` 引起原因：${errorData.causeAsString}` : ""
         }`,
       );
     }

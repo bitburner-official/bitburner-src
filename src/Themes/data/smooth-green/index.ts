@@ -2,8 +2,8 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Smooth Green",
-  description: "A nice green theme that doesn't hurt your eyes.",
+  name: "柔滑绿",
+  description: "一款不伤眼的舒适绿色主题。",
   credit: "Swidt",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/922243957986033725",
   screenshot: img1,

@@ -13,7 +13,7 @@ export function win(n: number): void {
 export function reachedLimit(): boolean {
   const reached = Player.getCasinoWinnings() > gainLimit;
   if (reached) {
-    dialogBoxCreate("Alright cheater get out of here. You're not allowed here anymore.");
+    dialogBoxCreate("好吧，作弊者，请离开。你已经不被允许进入这里了。");
   }
   return reached;
 }
@@ -21,7 +21,7 @@ export function reachedLimit(): boolean {
 export function hasEnoughMoney(bet: number): boolean {
   const result = Player.canAfford(bet);
   if (!result) {
-    dialogBoxCreate("You do not have enough money.");
+    dialogBoxCreate("你的资金不足。");
   }
   return result;
 }

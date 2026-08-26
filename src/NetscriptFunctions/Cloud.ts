@@ -23,9 +23,9 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       const cost = getCloudServerCost(ram);
       if (cost === Infinity) {
         if (ram > getCloudServerMaxRam()) {
-          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than CloudServerMaxRam`);
+          helpers.log(ctx, () => `无效参数：ram='${ram}'，不能大于 CloudServerMaxRam`);
         } else {
-          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
+          helpers.log(ctx, () => `无效参数：ram='${ram}'，必须是 2 的正数次幂`);
         }
         return Infinity;
       }
@@ -36,15 +36,15 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const ram = helpers.number(ctx, "ram", _ram);
       if (hostname === "") {
-        helpers.log(ctx, () => `Invalid argument: hostname='${hostname}' is an empty string.`);
+        helpers.log(ctx, () => `无效参数：hostname='${hostname}' 是空字符串。`);
         return "";
       }
       if (isIPAddress(hostname)) {
-        helpers.log(ctx, () => `Invalid argument: hostname='${hostname}' is an IP address.`);
+        helpers.log(ctx, () => `无效参数：hostname='${hostname}' 是一个 IP 地址。`);
         return "";
       }
       if (hostname.startsWith("hacknet-node-") || hostname.startsWith("hacknet-server-")) {
-        helpers.log(ctx, () => `Invalid argument: hostname='${hostname}' is a reserved hostname.`);
+        helpers.log(ctx, () => `无效参数：hostname='${hostname}' 是保留主机名。`);
         return "";
       }
 
@@ -52,7 +52,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
         helpers.log(
           ctx,
           () =>
-            `You have reached the maximum limit of ${getCloudServerLimit()} cloud servers. You cannot purchase any more.`,
+            `你已达到 ${getCloudServerLimit()} 台云服务器的上限，无法再购买。`,
         );
         return "";
       }
@@ -60,16 +60,16 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       const cost = getCloudServerCost(ram);
       if (cost === Infinity) {
         if (ram > getCloudServerMaxRam()) {
-          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than CloudServerMaxRam`);
+          helpers.log(ctx, () => `无效参数：ram='${ram}'，不能大于 CloudServerMaxRam`);
         } else {
-          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
+          helpers.log(ctx, () => `无效参数：ram='${ram}'，必须是 2 的正数次幂`);
         }
 
         return "";
       }
 
       if (Player.money < cost) {
-        helpers.log(ctx, () => `Not enough money to purchase cloud server. Need ${formatMoney(cost)}`);
+        helpers.log(ctx, () => `资金不足，无法购买云服务器。需要 ${formatMoney(cost)}`);
         return "";
       }
       const newServ = safelyCreateUniqueServer({
@@ -88,7 +88,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       homeComputer.serversOnNetwork.push(newServ.hostname);
       newServ.serversOnNetwork.push(homeComputer.hostname);
       Player.loseMoney(cost, "servers");
-      helpers.log(ctx, () => `Purchased new cloud server with hostname '${newServ.hostname}' for ${formatMoney(cost)}`);
+      helpers.log(ctx, () => `已购买新的云服务器，主机名 '${newServ.hostname}'，花费 ${formatMoney(cost)}`);
       return newServ.hostname;
     },
     getServerUpgradeCost: (ctx, _host, _ram) => {
@@ -130,30 +130,30 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       const hostname = server.hostname;
 
       if (server.hostname === "home") {
-        helpers.log(ctx, () => "Cannot delete your home computer.");
+        helpers.log(ctx, () => "无法删除你的家用电脑。");
         return false;
       }
 
       if (!server.purchasedByPlayer) {
-        helpers.log(ctx, () => `Cannot delete ${hostname}. You do not own this server.`);
+        helpers.log(ctx, () => `无法删除 ${hostname}。你不拥有该服务器。`);
         return false;
       }
 
       // Can't delete server you're currently connected to
       if (server.isConnectedTo) {
-        helpers.log(ctx, () => "You are currently connected to the cloud server you are trying to delete.");
+        helpers.log(ctx, () => "你当前正连接到要删除的云服务器。");
         return false;
       }
 
       // A server cannot delete itself
       if (hostname === ctx.workerScript.hostname) {
-        helpers.log(ctx, () => "Cannot delete the cloud server this script is running on.");
+        helpers.log(ctx, () => "无法删除本脚本正在运行的云服务器。");
         return false;
       }
 
       // Delete all scripts running on server
       if (server.runningScriptMap.size > 0) {
-        helpers.log(ctx, () => `Cannot delete cloud server '${hostname}' because it still has scripts running.`);
+        helpers.log(ctx, () => `无法删除云服务器 '${hostname}'，因为它仍有脚本在运行。`);
         return false;
       }
 
@@ -170,7 +170,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       if (!found) {
         helpers.log(
           ctx,
-          () => `Could not identify server ${hostname} as a cloud server. This is a bug. Report to dev.`,
+          () => `无法将服务器 ${hostname} 识别为云服务器。这是一个 bug。请报告给开发者。`,
         );
         return false;
       }
@@ -184,12 +184,12 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       for (let i = 0; i < homeComputer.serversOnNetwork.length; ++i) {
         if (hostname == homeComputer.serversOnNetwork[i]) {
           homeComputer.serversOnNetwork.splice(i, 1);
-          helpers.log(ctx, () => `Deleted server '${hostname}'.`);
+          helpers.log(ctx, () => `已删除服务器 '${hostname}'。`);
           return true;
         }
       }
       // Wasn't found on home computer
-      helpers.log(ctx, () => `Could not find server ${hostname} as a cloud server. This is a bug. Report to dev.`);
+      helpers.log(ctx, () => `找不到作为云服务器的服务器 ${hostname}。这是一个 bug。请报告给开发者。`);
       return false;
     },
     getServerNames: (_, _returnOpts): string[] => {

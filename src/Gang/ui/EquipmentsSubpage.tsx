@@ -118,55 +118,55 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
           <Tooltip
             title={
               <Typography>
-                Hk: x{formatMultiplier(props.member.hack_mult * asc.hack)}(x
-                {formatMultiplier(props.member.hack_mult)} Eq, x{formatMultiplier(asc.hack)} Asc)
+                Hk: x{formatMultiplier(props.member.hack_mult * asc.hack)}（x
+                {formatMultiplier(props.member.hack_mult)} 装备，x{formatMultiplier(asc.hack)} 飞升）
                 <br />
                 St: x{formatMultiplier(props.member.str_mult * asc.str)}
-                (x{formatMultiplier(props.member.str_mult)} Eq, x{formatMultiplier(asc.str)} Asc)
+                （x{formatMultiplier(props.member.str_mult)} 装备，x{formatMultiplier(asc.str)} 飞升）
                 <br />
                 Df: x{formatMultiplier(props.member.def_mult * asc.def)}
-                (x{formatMultiplier(props.member.def_mult)} Eq, x{formatMultiplier(asc.def)} Asc)
+                （x{formatMultiplier(props.member.def_mult)} 装备，x{formatMultiplier(asc.def)} 飞升）
                 <br />
                 Dx: x{formatMultiplier(props.member.dex_mult * asc.dex)}
-                (x{formatMultiplier(props.member.dex_mult)} Eq, x{formatMultiplier(asc.dex)} Asc)
+                （x{formatMultiplier(props.member.dex_mult)} 装备，x{formatMultiplier(asc.dex)} 飞升）
                 <br />
                 Ag: x{formatMultiplier(props.member.agi_mult * asc.agi)}
-                (x{formatMultiplier(props.member.agi_mult)} Eq, x{formatMultiplier(asc.agi)} Asc)
+                （x{formatMultiplier(props.member.agi_mult)} 装备，x{formatMultiplier(asc.agi)} 飞升）
                 <br />
                 Ch: x{formatMultiplier(props.member.cha_mult * asc.cha)}
-                (x{formatMultiplier(props.member.cha_mult)} Eq, x{formatMultiplier(asc.cha)} Asc)
+                （x{formatMultiplier(props.member.cha_mult)} 装备，x{formatMultiplier(asc.cha)} 飞升）
               </Typography>
             }
           >
             <Table>
               <TableBody>
                 <StatsRow
-                  name="Hacking"
+                  name="黑客"
                   color={Settings.theme.hack}
                   data={{ level: props.member.hack, exp: props.member.hack_exp }}
                 />
                 <StatsRow
-                  name="Strength"
+                  name="力量"
                   color={Settings.theme.combat}
                   data={{ level: props.member.str, exp: props.member.str_exp }}
                 />
                 <StatsRow
-                  name="Defense"
+                  name="防御"
                   color={Settings.theme.combat}
                   data={{ level: props.member.def, exp: props.member.def_exp }}
                 />
                 <StatsRow
-                  name="Dexterity"
+                  name="灵巧"
                   color={Settings.theme.combat}
                   data={{ level: props.member.dex, exp: props.member.dex_exp }}
                 />
                 <StatsRow
-                  name="Agility"
+                  name="敏捷"
                   color={Settings.theme.combat}
                   data={{ level: props.member.agi, exp: props.member.agi_exp }}
                 />
                 <StatsRow
-                  name="Charisma"
+                  name="魅力"
                   color={Settings.theme.cha}
                   data={{ level: props.member.cha, exp: props.member.cha_exp }}
                 />
@@ -186,7 +186,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
 
           <Box sx={{ width: "100%" }}>
             {(categories[currentCategory][0] as GangMemberUpgrade[]).length === 0 && (
-              <Typography>All upgrades owned!</Typography>
+              <Typography>已拥有所有升级！</Typography>
             )}
             <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr" }}>
               {(categories[currentCategory][0] as GangMemberUpgrade[]).map((upg) => (
@@ -197,7 +197,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
         </span>
       </Box>
 
-      <Typography sx={{ mx: 1 }}>Purchased Upgrades: </Typography>
+      <Typography sx={{ mx: 1 }}>已购买的升级：</Typography>
       <Box display="grid" sx={{ gridTemplateColumns: "repeat(4, 1fr)", m: 1 }}>
         {props.member.upgrades.map((upg: string) => (
           <PurchasedUpgrade key={upg} upgName={upg} />
@@ -226,12 +226,11 @@ export function EquipmentsSubpage(): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            A discount on equipment and upgrades based on your gang's respect and power. More respect and power leads to
-            more discounts.
+            基于你帮派的尊重和势力，装备与升级可获得折扣。尊重和势力越高，折扣越大。
           </Typography>
         }
       >
-        <Typography sx={{ m: 1 }}>Discount: {formatPercent(1 - 1 / gang.getDiscount())}</Typography>
+        <Typography sx={{ m: 1 }}>折扣： {formatPercent(1 - 1 / gang.getDiscount())}</Typography>
       </Tooltip>
 
       <TextField
@@ -242,7 +241,7 @@ export function EquipmentsSubpage(): React.ReactElement {
           startAdornment: <SearchIcon />,
           spellCheck: false,
         }}
-        placeholder="Filter by member name"
+        placeholder="按成员名称筛选"
         sx={{ m: 1, width: "15%" }}
       />
 

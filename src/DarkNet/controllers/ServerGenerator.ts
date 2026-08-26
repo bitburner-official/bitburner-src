@@ -89,12 +89,12 @@ export const serverFactory = (
 
 export const getEchoVulnConfig = (__difficulty: number): ServerConfig => {
   const hintTemplates = [
-    "The password is",
-    "The PIN is",
-    "Remember to use",
-    "It's set to",
-    "The key is",
-    "The secret is",
+    "密码是",
+    "PIN 码是",
+    "记得使用",
+    "它被设置为",
+    "密钥是",
+    "秘密是",
   ];
   const password = getPassword(3);
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password}`;
@@ -107,10 +107,10 @@ export const getEchoVulnConfig = (__difficulty: number): ServerConfig => {
 
 export const getSortedEchoVulnConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
-    "The password is shuffled",
-    "The key is made from",
-    "I accidentally sorted the password:",
-    "The PIN uses",
+    "密码被打乱了顺序",
+    "密钥由以下字符组成",
+    "我不小心把密码排序了：",
+    "PIN 码使用了",
   ];
   const password = getPassword(Math.min(2 + difficulty / 7, 9));
   const sortedPassword = password.split("").sort().join("");
@@ -138,22 +138,22 @@ export const getDictionaryAttackConfig = (
 
 export const getNoPasswordConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
-    "The password is not set",
-    "There is no password",
-    "The PIN is empty",
-    "Did I set a code?",
-    "I didn't set a password",
+    "密码没有设置",
+    "没有密码",
+    "PIN 码是空的",
+    "我设置过密码吗？",
+    "我没有设置密码",
   ];
   return getDictionaryAttackConfig(difficulty, [""], hintTemplates, ModelIds.NoPassword);
 };
 
 export const getDefaultPasswordConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
-    "The password is the default password",
-    "It's still the default",
-    "The default password is set",
-    "I never changed the password",
-    "It's still the factory settings",
+    "密码就是默认密码",
+    "还是默认的没改",
+    "默认密码还在用着",
+    "我从来没改过密码",
+    "还是出厂设置",
   ];
   return getDictionaryAttackConfig(difficulty, defaultSettingsDictionary, hintTemplates, ModelIds.DefaultPassword);
 };
@@ -173,7 +173,7 @@ export const getCaptchaConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.Captcha,
     password,
-    staticPasswordHint: "Type the numbers to prove you are human",
+    staticPasswordHint: "输入数字以证明你是人类",
     passwordHintData: filledPassword,
   };
 };
@@ -188,7 +188,7 @@ const getFillerChars = () => {
 };
 
 export const getDogNameConfig = (difficulty: number): ServerConfig => {
-  const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
+  const hintTemplates = ["这是我狗的名字", "是我家狗的名字", "我第一条狗的名字"];
   return getDictionaryAttackConfig(difficulty, dogNameDictionary, hintTemplates, ModelIds.DogNames);
 };
 
@@ -198,16 +198,16 @@ export const getMastermindHintConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.MastermindHint,
     password: getPassword(passwordLength, alphanumeric),
-    staticPasswordHint: "Only a true master may pass",
+    staticPasswordHint: "唯真正的宗师方可通过",
   };
 };
 
 export const getTimingAttackConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
-    "I thought about it for some time, but that is not the password.",
-    "I spent a while on it, but that's not right",
-    "I considered it for a bit, but that's not it",
-    "I spent some time on it, but that's not the password",
+    "我想了一段时间，但那不是密码。",
+    "我花了好一会儿，但那不对",
+    "我琢磨了一下，但那不是",
+    "我花了一些时间，但那不是密码",
   ];
   const alphanumeric = difficulty > 16 && Math.random() < 0.3;
   const length = Math.min((alphanumeric ? 0 : 3) + difficulty / 4, 8);
@@ -225,7 +225,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
     return {
       modelId: ModelIds.RomanNumeral,
       password: `${password}`,
-      staticPasswordHint: `The password is the value of the number '${encodedPassword}'`,
+      staticPasswordHint: `密码是数字 '${encodedPassword}' 所表示的值`,
       passwordHintData: encodedPassword,
     };
   } else {
@@ -233,7 +233,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
     const passwordRangeMax = password + Math.floor(Math.random() * difficulty * 10 + 10);
     const encodedMin = romanNumeralEncoder(passwordRangeMin);
     const encodedMax = romanNumeralEncoder(passwordRangeMax);
-    const hint = `The password is between '${encodedMin}' and '${encodedMax}'`;
+    const hint = `密码介于 '${encodedMin}' 和 '${encodedMax}' 之间`;
     const hintData = `${encodedMin},${encodedMax}`;
     return {
       modelId: ModelIds.RomanNumeral,
@@ -249,7 +249,7 @@ export const getLargestPrimeFactorConfig = (difficulty: number): ServerConfig =>
   return {
     modelId: ModelIds.LargestPrimeFactor,
     password: `${largestPrimePasswordDetails.largestPrime}`,
-    staticPasswordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.targetNumber}`,
+    staticPasswordHint: `密码是 ${largestPrimePasswordDetails.targetNumber} 的最大质因数`,
     passwordHintData: `${largestPrimePasswordDetails.targetNumber}`,
   };
 };
@@ -260,7 +260,7 @@ export const getGuessNumberConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.GuessNumber,
     password,
-    staticPasswordHint: `The password is a number between 0 and ${maxNumber}`,
+    staticPasswordHint: `密码是 0 到 ${maxNumber} 之间的一个数字`,
   };
 };
 
@@ -268,13 +268,13 @@ export const getLargeDictionaryConfig = (difficulty: number): ServerConfig => {
   return getDictionaryAttackConfig(
     difficulty,
     commonPasswordDictionary,
-    ["It's a common password"],
+    ["这是一个常见密码"],
     ModelIds.CommonPasswordDictionary,
   );
 };
 
 export const getEuCountryDictionaryConfig = (difficulty: number): ServerConfig => {
-  return getDictionaryAttackConfig(difficulty, EUCountries, ["My favorite EU country"], ModelIds.EUCountryDictionary);
+  return getDictionaryAttackConfig(difficulty, EUCountries, ["我最喜欢的欧盟国家"], ModelIds.EUCountryDictionary);
 };
 
 export const getYesn_tConfig = (difficulty: number): ServerConfig => {
@@ -282,7 +282,7 @@ export const getYesn_tConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.Yesn_t,
     password,
-    staticPasswordHint: "you are one who's'nt authorized",
+    staticPasswordHint: "你似乎并不是一个获得授权的人",
   };
 };
 
@@ -292,7 +292,7 @@ export const getBufferOverflowConfig = (): ServerConfig => {
   return {
     modelId: ModelIds.BufferOverflow,
     password,
-    staticPasswordHint: `Warning: password buffer is ${length} bytes`,
+    staticPasswordHint: `警告：密码缓冲区为 ${length} 字节`,
   };
 };
 
@@ -330,7 +330,7 @@ export const getXorMaskEncryptedPasswordConfig = (): ServerConfig => {
   return {
     modelId: ModelIds.encryptedPassword,
     password,
-    staticPasswordHint: `XOR mask encrypted password: "${passwordWithXorMaskApplied}".`,
+    staticPasswordHint: `经 XOR 掩码加密的密码："${passwordWithXorMaskApplied}"。`,
     passwordHintData: `${passwordWithXorMaskApplied};${xorMaskStrings.join(" ")}`,
   };
 };
@@ -355,7 +355,7 @@ export const getConvertToBase10Config = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.ConvertToBase10,
     password: `${password}`,
-    staticPasswordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
+    staticPasswordHint: `密码是进制为 ${base} 的数字 ${encodedPassword} 转换为十进制后的值`,
     passwordHintData: `${base},${encodedPassword}`,
   };
 };
@@ -376,7 +376,7 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
   return {
     modelId: ModelIds.parsedExpression,
     password: `${result}`,
-    staticPasswordHint: `The password is the evaluation of this expression`,
+    staticPasswordHint: `密码是这个表达式的求值结果`,
     passwordHintData: expression,
   };
 };
@@ -386,7 +386,7 @@ export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.divisibilityTest,
     password: `${password}`,
-    staticPasswordHint: `The password is divisible by 1 ;)`,
+    staticPasswordHint: `密码可以被 1 整除 ;)`,
   };
 };
 
@@ -404,7 +404,7 @@ export const getKingOfTheHillConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.globalMaxima,
     password,
-    staticPasswordHint: "Ascend the highest mountain!",
+    staticPasswordHint: "攀登最高的山峰！",
   };
 };
 
@@ -412,7 +412,7 @@ export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
   return {
     modelId: ModelIds.packetSniffer,
     password: getPassword(3 + Math.random() * 6, difficulty > 8),
-    staticPasswordHint: "(I'm busy browsing social media at the cafe)",
+    staticPasswordHint: "（我正忙着在咖啡馆刷社交媒体）",
   };
 };
 
@@ -558,7 +558,7 @@ export const cleanArithmeticExpression = (expression: string): string => {
 };
 
 const getCodeInjection = () => {
-  return ` , !globalThis.pwn3d && (globalThis.pwn3d=true, alert("You've been hacked! You evaluated a string and let me inject code, didn't you? HAHAHAHA!") , globalThis.openDevMenu() ) , ns.exit()`;
+  return ` , !globalThis.pwn3d && (globalThis.pwn3d=true, alert("你被黑了！你执行了一个字符串，让我注入了代码，对吧？哈哈哈哈！") , globalThis.openDevMenu() ) , ns.exit()`;
 };
 
 export const getPassword = (length: number, allowLetters = false): string => {

@@ -32,7 +32,7 @@ export function CorporationRoot(): React.ReactElement {
         {[...corporation.divisions.values()].map((div) => (
           <Tab key={div.name} label={div.name} value={div.name} />
         ))}
-        {canExpand && <Tab label={"Expand"} value={-1} />}
+        {canExpand && <Tab label={"扩张"} value={-1} />}
       </Tabs>
       {divisionName === "Overview" && <Overview rerender={rerender} />}
       {divisionName === -1 && <NewDivisionTab setDivisionName={setDivisionName} />}

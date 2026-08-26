@@ -37,7 +37,7 @@ export function StockTickerHeaderText(props: IProps): React.ReactElement {
   let hdrText = `${stock.name}${spacesAfterStockName}${stock.symbol} -${spacesBeforePrice}${stockPriceFormat}`;
   if (Player.has4SData) {
     const volatility = stock.mv * getDarknetVolatilityMult(stock.symbol);
-    hdrText += ` - Volatility: ${formatPercent(volatility / 100)} - Price Forecast: `;
+    hdrText += ` - 波动率：${formatPercent(volatility / 100)} - 价格预测：`;
     let plusOrMinus = stock.b; // True for "+", false for "-"
     if (stock.otlkMag < 0) {
       plusOrMinus = !plusOrMinus;

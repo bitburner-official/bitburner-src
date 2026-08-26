@@ -26,12 +26,12 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
       acceptInvestmentOffer(corp);
       dialogBoxCreate(
         <>
-          <Typography>You accepted the investment offer.</Typography>
+          <Typography>你接受了该投资报价。</Typography>
           <Typography>
-            <b>{corp.name}</b> received <Money money={funds} />.
+            <b>{corp.name}</b> 获得了 <Money money={funds} />。
           </Typography>
           <Typography>
-            Your remaining equity is <b>{formatPercent(corp.numShares / corp.totalShares, 1)}</b>.
+            你剩余的股权为 <b>{formatPercent(corp.numShares / corp.totalShares, 1)}</b>。
           </Typography>
         </>,
       );
@@ -45,22 +45,22 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered to buy {formatShares(shares)} shares of stock (a{" "}
-        <b>{formatPercent(shares / corp.totalShares, 1)}</b> stake in the company).
+        一家投资公司提出以{" "}
+        <b>{formatPercent(shares / corp.totalShares, 1)}</b> 的公司股权，购买 {formatShares(shares)} 股股票。
         <br />
         <br />
-        <b>{corp.name}</b> will receive <Money money={funds} />.
+        <b>{corp.name}</b> 将获得 <Money money={funds} />。
         <br />
-        Your equity will fall to <b>{formatPercent((corp.numShares - shares) / corp.totalShares, 1)}</b>.
-        <br />
-        <br />
-        <b>Hint</b>: Investment firms will offer more money if your Corporation is turning a profit.
+        你的股权将降至 <b>{formatPercent((corp.numShares - shares) / corp.totalShares, 1)}</b>。
         <br />
         <br />
-        Do you accept this offer?
+        <b>提示</b>：如果你的企业正在盈利，投资公司会出更高的价钱。
+        <br />
+        <br />
+        你接受这份报价吗？
       </Typography>
       <br />
-      <Button onClick={findInvestors}>Accept</Button> <Button onClick={props.onClose}>Ignore</Button>
+      <Button onClick={findInvestors}>接受</Button> <Button onClick={props.onClose}>拒绝</Button>
     </Modal>
   );
 }

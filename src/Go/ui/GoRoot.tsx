@@ -23,10 +23,10 @@ export function GoRoot(): React.ReactElement {
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
       <Tabs variant="fullWidth" value={value} onChange={handleChange} sx={{ minWidth: "fit-content", maxWidth: "45%" }}>
-        <Tab label="IPvGO Subnet" icon={<BorderInnerSharp />} iconPosition={"start"} className={classes.tab} />
-        <Tab label="Status" icon={<ManageSearch />} iconPosition={"start"} className={classes.tab} />
-        <Tab label="History" icon={<History />} iconPosition={"start"} className={classes.tab} />
-        <Tab label="How to Play" icon={<Help />} iconPosition={"start"} className={classes.tab} />
+        <Tab label="IPvGO 子网" icon={<BorderInnerSharp />} iconPosition={"start"} className={classes.tab} />
+        <Tab label="状态" icon={<ManageSearch />} iconPosition={"start"} className={classes.tab} />
+        <Tab label="历史" icon={<History />} iconPosition={"start"} className={classes.tab} />
+        <Tab label="玩法说明" icon={<Help />} iconPosition={"start"} className={classes.tab} />
       </Tabs>
       {value === 0 && <GoGameboardWrapper showInstructions={showInstructions} />}
       {value === 1 && <GoStatusPage />}

@@ -20,7 +20,7 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
   const possibleCities = Object.values(CityName).filter((cityName) => !(cityName in division.offices));
   const [city, setCity] = useState(possibleCities[0]);
 
-  const disabledText = corp.funds < corpConstants.officeInitialCost ? "Insufficient corporation funds" : "";
+  const disabledText = corp.funds < corpConstants.officeInitialCost ? "企业资金不足" : "";
 
   function onCityChange(event: SelectChangeEvent): void {
     setCity(event.target.value as CityName);
@@ -34,14 +34,14 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
       return;
     }
 
-    dialogBoxCreate(`Opened a new office in ${city}!`);
+    dialogBoxCreate(`已在 ${city} 开设新办事处！`);
 
     props.cityStateSetter(city);
   }
   return (
     <>
       <Typography>
-        Would you like to expand into a new city by opening an office? This would cost{" "}
+        要开设办事处、扩张到新城市吗？这将花费{" "}
         <MoneyCost money={corpConstants.officeInitialCost} corp={corp} />
       </Typography>
       <Select value={city} onChange={onCityChange}>
@@ -52,7 +52,7 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
         ))}
       </Select>
       <ButtonWithTooltip onClick={expand} disabledTooltip={disabledText}>
-        Confirm
+        确认
       </ButtonWithTooltip>
     </>
   );

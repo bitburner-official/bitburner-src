@@ -26,8 +26,8 @@ export function JobSummary({ company, position }: JobSummaryProps): React.ReactE
       <StatsTable
         wide
         rows={[
-          ["Wages:", <MoneyRate key="money" money={workStats.money * CYCLES_PER_SEC} />],
-          ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation * CYCLES_PER_SEC} />],
+          ["薪水：", <MoneyRate key="money" money={workStats.money * CYCLES_PER_SEC} />],
+          ["声望：", <ReputationRate key="rep" reputation={workStats.reputation * CYCLES_PER_SEC} />],
         ]}
       />
     </>

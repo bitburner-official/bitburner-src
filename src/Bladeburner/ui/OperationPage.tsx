@@ -13,21 +13,16 @@ export function OperationPage({ bladeburner }: OperationPageProps): React.ReactE
   return (
     <>
       <Typography>
-        Carry out operations for the Bladeburner division. Failing an operation will reduce your Bladeburner rank. It
-        will also cause you to lose HP, which can lead to hospitalization. In general, operations are harder and more
-        punishing than contracts, but are also more rewarding.
+        为Bladeburner部门执行行动。行动失败会降低你的Bladeburner声望，还会让你损失生命值，甚至可能导致住院。总体而言，行动比合约更困难、惩罚更重，但回报也更丰厚。
         <br />
         <br />
-        Operations can affect the chaos level and Synthoid population of your current city. The exact effects vary
-        between different Operations.
+        行动会影响当前城市的混乱度和合成人数量。具体效果因行动而异。
         <br />
         <br />
-        For operations, you can use a team. You must first recruit team members. Having a larger team will improve your
-        chances of success.
+        执行行动时可以带上团队，但你必须先招募团队成员。团队规模越大，成功几率越高。
         <br />
         <br />
-        You can unlock higher-level operations by successfully completing them. Higher-level operations are more
-        difficult, but grant more rank and experience.
+        成功完成行动可以解锁更高等级的行动。更高等级的行动难度更大，但给予更多声望和经验。
       </Typography>
       {operations.map((operation) => (
         <OperationElem key={operation.name} bladeburner={bladeburner} action={operation} />

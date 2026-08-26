@@ -40,16 +40,16 @@ export function GymLocation(props: IProps): React.ReactElement {
   return (
     <Box sx={{ display: "grid", width: "fit-content" }}>
       <Button onClick={() => train(GymType.strength)}>
-        Train Strength (<Money money={cost} forPurchase={true} /> / sec)
+        训练力量（<Money money={cost} forPurchase={true} /> / 秒）
       </Button>
       <Button onClick={() => train(GymType.defense)}>
-        Train Defense (<Money money={cost} forPurchase={true} /> / sec)
+        训练防御（<Money money={cost} forPurchase={true} /> / 秒）
       </Button>
       <Button onClick={() => train(GymType.dexterity)}>
-        Train Dexterity (<Money money={cost} forPurchase={true} /> / sec)
+        训练灵巧（<Money money={cost} forPurchase={true} /> / 秒）
       </Button>
       <Button onClick={() => train(GymType.agility)}>
-        Train Agility (<Money money={cost} forPurchase={true} /> / sec)
+        训练敏捷（<Money money={cost} forPurchase={true} /> / 秒）
       </Button>
     </Box>
   );

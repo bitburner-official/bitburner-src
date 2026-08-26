@@ -8,11 +8,10 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
     [BladeburnerContractName.Tracking]: new Contract({
       name: BladeburnerContractName.Tracking,
       desc:
-        "Identify and locate Synthoids. This contract involves reconnaissance and information-gathering ONLY. Do NOT " +
-        "engage. Stealth is of the utmost importance.\n" +
-        "Successfully completing this contract will slightly improve the Synthoid population estimate of your current city.",
+        "识别并定位合成人。该合约只涉及侦察与情报收集，切勿交战，隐蔽至关重要。\n" +
+        "成功完成该合约将略微提高对当前城市合成人数量的估计精度。",
       successScaling:
-        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
+        "显著受灵巧和敏捷影响，战斗属性和魅力提供少量加成，不受黑客技能影响。",
       baseDifficulty: 125,
       difficultyFac: 1.02,
       rewardFac: 1.041,
@@ -43,10 +42,10 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
     [BladeburnerContractName.BountyHunter]: new Contract({
       name: BladeburnerContractName.BountyHunter,
       desc:
-        "Hunt down and capture fugitive Synthoids. These Synthoids are wanted alive.\n" +
-        "Successfully completing this contract will decrease the Synthoid population of your current city and increase its chaos level.",
+        "追捕并捉拿在逃的合成人。这些合成人必须活捉。\n" +
+        "成功完成该合约将降低当前城市的合成人数量，并提升其混乱度。",
       successScaling:
-        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
+        "显著受灵巧和敏捷影响，战斗属性和魅力提供少量加成，不受黑客技能影响。",
       baseDifficulty: 250,
       difficultyFac: 1.04,
       rewardFac: 1.085,
@@ -77,9 +76,9 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
     [BladeburnerContractName.Retirement]: new Contract({
       name: BladeburnerContractName.Retirement,
       desc:
-        "Hunt down and retire (kill) rogue Synthoids.\n" +
-        "Successfully completing this contract will decrease the Synthoid population of your current city and increase its chaos level.",
-      successScaling: "Affected by combat stats. Minor bonus from Charisma. Unaffected by Hacking skill.",
+        "追捕并清除（击杀）失控的合成人。\n" +
+        "成功完成该合约将降低当前城市的合成人数量，并提升其混乱度。",
+      successScaling: "受战斗属性影响，魅力提供少量加成，不受黑客技能影响。",
       baseDifficulty: 200,
       difficultyFac: 1.03,
       rewardFac: 1.065,

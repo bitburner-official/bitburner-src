@@ -4,7 +4,7 @@ import { formatPercent, formatRam } from "../../ui/formatNumber";
 
 export function free(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of free command. Usage: free");
+    Terminal.error("free 命令用法不正确。用法：free");
     return;
   }
   const ram = formatRam(server.maxRam);
@@ -13,9 +13,9 @@ export function free(args: (string | number | boolean)[], server: BaseServer): u
   const maxLength = Math.max(ram.length, Math.max(used.length, avail.length));
   const usedPercent = formatPercent(server.ramUsed / server.maxRam);
 
-  Terminal.print(`Total:     ${" ".repeat(maxLength - ram.length)}${ram}`);
+  Terminal.print(`总计：     ${" ".repeat(maxLength - ram.length)}${ram}`);
   Terminal.print(
-    `Used:      ${" ".repeat(maxLength - used.length)}${used}` + (server.maxRam > 0 ? ` (${usedPercent})` : ""),
+    `已用：      ${" ".repeat(maxLength - used.length)}${used}` + (server.maxRam > 0 ? ` (${usedPercent})` : ""),
   );
-  Terminal.print(`Available: ${" ".repeat(maxLength - avail.length)}${avail}`);
+  Terminal.print(`可用： ${" ".repeat(maxLength - avail.length)}${avail}`);
 }

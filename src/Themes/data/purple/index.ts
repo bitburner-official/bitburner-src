@@ -2,9 +2,9 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Purple",
+  name: "紫色",
   credit: "zer0ney",
-  description: "Essentially all defaults except for purple replacing the main colors",
+  description: "除主色替换为紫色外，其余与默认主题基本相同",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/922091815849570395",
   screenshot: img1,
   colors: {

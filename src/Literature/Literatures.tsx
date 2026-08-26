@@ -10,33 +10,30 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.HackersStartingHandbook,
     text: (
       <Typography>
-        When starting out, hacking is the most profitable way to earn money and progress. This is a brief collection of
-        tips/pointers on how to make the most out of your hacking scripts.
+        刚开始时，入侵是赚钱和推进游戏进程最有利可图的方式。这里简要收集了一些技巧/要点，帮助你充分利用入侵脚本。
         <br />
         <br />
-        -hack() and grow() both work by percentages. hack() steals a certain percentage of the money on a server, and
-        grow() increases the amount of money on a server by some percentage (multiplicatively)
+        -hack() 和 grow() 都按百分比运作。hack() 窃取服务器上一定比例的资金，grow()
+        则以某个百分比（乘法方式）增加服务器上的资金
         <br />
         <br />
-        -Because hack() and grow() work by percentages, they are more effective if the target server has a high amount
-        of money. Therefore, you should try to increase the amount of money on a server (using grow()) to a certain
-        amount before hacking it. Two important Netscript functions for this are getServerMoneyAvailable() and
+        -由于 hack() 和 grow() 按百分比运作，当目标服务器资金较多时它们更有效。因此，你应该先设法把服务器上的资金（用
+        grow()）增加到一定程度，然后再入侵它。两个重要的 Netscript 函数是 getServerMoneyAvailable() 和
         getServerMaxMoney()
         <br />
         <br />
-        -Keep security level low. Security level affects everything when hacking. Two important Netscript functions for
-        this are getServerSecurityLevel() and getServerMinSecurityLevel()
+        -保持安全等级处于低位。安全等级会影响入侵的一切。两个重要的 Netscript 函数是 getServerSecurityLevel() 和
+        getServerMinSecurityLevel()
         <br />
         <br />
-        -Purchase additional cloud servers by visiting "Alpha Enterprises" in the city. They are relatively cheap and
-        give you valuable RAM to run more scripts early in the game
+        -前往城里的 "Alpha Enterprises" 购买额外的云服务器。它们相对便宜，能在游戏早期为你提供宝贵的 RAM 来运行更多脚本
         <br />
         <br />
-        -Prioritize upgrading the RAM on your home computer. This can also be done at "Alpha Enterprises"
+        -优先升级家用电脑的 RAM。这同样可以在 "Alpha Enterprises" 完成
         <br />
         <br />
-        -Many low level servers have free RAM. You can use this RAM to run your scripts. Use the scp Terminal or
-        Netscript command to copy your scripts onto these servers and then run them.
+        -许多低等级服务器有闲置的 RAM。你可以用这些 RAM 运行你的脚本。使用 scp 终端或 Netscript
+        命令把你的脚本复制到这些服务器上，然后运行它们。
       </Typography>
     ),
   }),
@@ -45,108 +42,77 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.CorporationManagementHandbook,
     text: (
       <Typography>
-        You should check the in-game Corporation documentation in the Documentation tab (Documentation {"->"}
-        Advanced Mechanics {"->"} Corporation). It's the most useful and up-to-date resource for managing Corporation.
+        你应该查看文档标签页中的游戏内企业文档（Documentation {"->"} Advanced Mechanics {"->"}
+        Corporation）。它是管理企业最有用、最新的资源。
         <br />
         <br />
-        <u>Getting Started with Corporation</u>
+        <u>企业入门</u>
         <br />
-        To get started, visit the city hall in Sector-12 in order to create a corporation. This requires 150e9 of your
-        own money, but this money will get put into your corporation's funds. If you're in BitNode 3, you also have the
-        option to get seed money from the government in exchange for 500m shares. Your corporation can have many
-        different divisions, each in a different industry. There are many different types of industries, each with
-        different properties. To create your first division, click the "Expand" button at the top of the management UI.
-        The agriculture industry is recommended for your first division.
+        首先，前往 Sector-12 的市政厅创建企业。这需要你自掏 150e9 资金，但这笔钱会进入企业的资金池。如果你在
+        BitNode 3 中，还可以选择从政府获得启动资金，作为交换要出让 5 亿股股份。你的企业可以拥有多个不同部门，每个部门属于不同行业。行业有很多种，各自属性不同。要创建第一个部门，点击管理界面顶部的“扩展”按钮。推荐第一个部门选择农业。
         <br />
         <br />
-        The first thing you'll need to do is hire some employees. Employees can be assigned to five different positions.
-        Each position has a different effect on various aspects of your corporation. It is recommended to have at least
-        one employee at each position.
+        接下来你需要雇佣一些员工。员工可以被分配到五个不同的职位。每个职位对企业的各个方面有不同的影响。建议每个职位至少有一名员工。
         <br />
         <br />
-        Each industry uses some combination of materials in order to produce other materials and/or create products.
-        Specific information about this is displayed in each of your divisions' UI.
+        每个行业都会使用某些材料组合来生产其他材料和/或制造产品。相关信息会显示在每个部门的界面中。
         <br />
         <br />
-        Products are special, industry-specific objects. They are different than materials because you must manually
-        choose to develop them, and you can choose to develop any number of products. Developing a product takes time,
-        but a product typically generates significantly more revenue than any material. Not all industries allow you to
-        create products. To create a product, look for a button in the top-left panel of the division UI (e.g., for the
-        software industry, the button says "Develop Software").
+        产品是特殊的、因行业而异的对象。它们与材料不同，因为你必须手动选择研发它们，而且可以研发任意数量的产品。研发产品需要时间，但产品产生的收入通常远高于任何材料。并非所有行业都能制造产品。要创建产品，请在部门界面左上方面板中寻找按钮（例如软件行业的按钮写着“研发软件”）。
         <br />
         <br />
-        To get your supply chain system started, purchase the materials that your industry needs to produce other
-        materials/products. This can be done by clicking the "Buy" button next to the corresponding material(s). After
-        you have the required materials, you will immediately start production. The amount and quality/effective rating
-        of materials/products you produce is based on a variety of factors, such as your employees and their
-        productivity and the quality of materials used for production.
+        要启动你的供应链系统，请购买你的行业生产其他材料/产品所需的材料。点击相应材料旁边的“购买”按钮即可。当你拥有所需材料后就会立即开始生产。你生产的材料/产品的数量和质量/效果评级取决于多种因素，例如你的员工及其生产力，以及用于生产的材料的质量。
         <br />
         <br />
-        Once you start producing materials/products, you can sell them in order to start earning revenue. This can be
-        done by clicking the "Sell" button next to the corresponding material or product. The amount of material/product
-        you sell is dependent on a wide variety of different factors. In order to produce and sell a product, you'll
-        have to fully develop it first.
+        开始产出材料/产品后，你就可以出售它们来获得收入。点击相应材料或产品旁的“出售”按钮即可。你能售出的材料/产品数量取决于许多不同因素。要生产和出售产品，必须先完成其全部研发。
         <br />
         <br />
-        These are the basics of getting your corporation up and running! Now, you can start purchasing upgrades to
-        improve your bottom line. If you need money, consider looking for seed investors, who will give you money in
-        exchange for stock shares. Otherwise, once you feel you are ready, take your corporation public! Once your
-        corporation goes public, you can no longer find investors. Instead, your corporation will be publicly traded,
-        and its stock price will change based on how well it's performing financially. In order to make money for
-        yourself, you can set dividends for a solid, reliable income, or you can sell your stock shares in order to make
-        quick money.
+        以上就是让你的企业运转起来的基础知识！现在你可以开始购买升级来改善收益了。如果缺钱，可以考虑寻找种子投资人，他们用资金换取股票份额。否则，等你觉得准备就绪后，就让公司上市吧！上市后就无法再找投资人。此后你的公司将公开交易，股价会随其财务表现波动。为了给自己赚钱，你可以设置分红以获得稳定可靠的收入，也可以出售股份快速套现。
         <br />
         <br />
-        <u>Tips/Pointers</u>
+        <u>技巧/要点</u>
         <br />
-        -Start with one division, such as Agriculture. Get it profitable on its own, then expand to a division that
-        consumes/produces a material that the division you selected produces/consumes.
-        <br />
-        <br />
-        -Materials are profitable, but products are where the real money is, although if the product has a low
-        development budget or is produced with low-quality materials, it won't sell well.
+        -从一个部门开始，比如农业。让它自身盈利，然后扩展到与你所选部门互为材料供需关系的部门。
         <br />
         <br />
-        -The "Smart Supply" upgrade is extremely useful. Consider purchasing it as soon as possible.
+        -材料是盈利的，但产品才是真正赚钱的地方；不过如果产品研发预算低或用低质量材料生产，就卖不出好价钱。
         <br />
         <br />
-        -Purchasing Hardware, Robots, AI Cores, and Real Estate can potentially increase your production. The effects of
-        these depend on what industry you are in.
+        -“智能供应链”升级极其有用。考虑尽快购买它。
         <br />
         <br />
-        -In order to optimize your production, you will need a good balance of all employee positions.
+        -购买硬件、机器人、AI 核心和房地产可能会提高你的产能。其效果取决于你所处的行业。
         <br />
         <br />
-        -Quality of materials used for production affects the quality/effective rating of materials/products produced,
-        so vertical integration is important for high profits.
+        -要优化产能，你需要让所有员工职位保持良好的平衡。
         <br />
         <br />
-        -Materials purchased from the open market are always of quality 1.
+        -生产所用材料的质量会影响产出的材料/产品的质量/效果评级，因此垂直整合对高利润非常重要。
         <br />
         <br />
-        -The price at which you can sell your materials/products is highly affected by the quality/effective rating.
+        -从公开市场购买的材料质量恒为 1。
         <br />
         <br />
-        -When developing a product, different employee positions affect the development process differently. Some
-        improve the development speed, some improve the rating of the finished product.
+        -你的材料/产品的售价在很大程度上受质量/效果评级影响。
         <br />
         <br />
-        -If your employees have low morale or energy, their production will greatly suffer. Having enough interns will
-        make sure those stats get high and stay high. 1/9 is a good ratio for interns (number of interns / office size).
-        If morale and energy still drop, use 1/6.
+        -研发产品时，不同职位对研发过程的影响不同：有些加快研发速度，有些提升成品评级。
         <br />
         <br />
-        -Don't forget to advertise your company. You won't have any business if nobody knows you.
+        -如果你的员工士气或精力低下，他们的产出会大打折扣。保证足够的实习生能让这些数值升高并保持高位。1/9
+        是不错的实习生比例（实习生数 / 办公室规模）。如果士气和精力仍然下降，就用 1/6。
         <br />
         <br />
-        -Having company awareness is great, but what's really important is your company's popularity. Try to keep your
-        popularity as high as possible to see the biggest benefit for your sales.
+        -别忘了为你的公司做广告。如果没人知道你，你就不会有任何生意。
         <br />
         <br />
-        -Remember, you need to spend money to make money!
+        -公司知名度固然很好，但真正重要的是公司的受欢迎程度。尽量把受欢迎程度保持在最高，以便销售获得最大收益。
         <br />
         <br />
-        -Your corporation does not reset when installing Augmentations, but it does reset when destroying a BitNode.
+        -记住，要想赚钱就得先花钱！
+        <br />
+        <br />
+        -安装强化时你的企业不会重置，但摧毁 BitNode 时会重置。
       </Typography>
     ),
   }),
@@ -156,63 +122,46 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.OmniTekIncorporated, FactionName.Bladeburners],
     text: (
       <Typography>
-        Synthetic androids, or Synthoids for short, are genetically engineered robots and, short of Augmentations, are
-        composed entirely of organic substances. For this reason, Synthoids are virtually identical to humans in form,
-        composition, and appearance.
+        合成人形机器人，简称合成人，是基因工程打造的机器人；除强化外，它们完全由有机物质构成。因此，合成人在形态、构造和外表上与人类几乎毫无二致。
         <br />
         <br />
-        Synthoids were first designed and manufactured by {FactionName.OmniTekIncorporated} sometime around the middle
-        of the century. Their original purpose was to be used for manual labor and as emergency responders for
-        disasters. As such, they were initially programmed only for their specific tasks. Each iteration that followed
-        improved upon the intelligence and capabilities of the Synthoids. By the 6th iteration, called MK-VI, the
-        Synthoids were so smart and capable enough of making their own decisions that many argued{" "}
-        {FactionName.OmniTekIncorporated} had created the first sentient AI. These MK-VI Synthoids were produced in mass
-        quantities (estimates up to 50 billion) with the hopes of increasing society's productivity and bolstering the
-        global economy. Stemming from humanity's desire for technological advancement, optimism and excitement about the
-        future had never been higher.
+        合成人最初由 {FactionName.OmniTekIncorporated}
+        在本世纪中叶前后设计并制造。它们的最初用途是体力劳动和灾害应急响应。因此，它们起初只被编程用于执行特定任务。之后的每一次迭代都提升了合成人的智能与能力。到第
+        6 代（称为 MK-VI）时，合成人已经聪明到能够自主决策，以至于许多人认为{" "}
+        {FactionName.OmniTekIncorporated} 创造了第一个拥有自我意识的 AI。这些 MK-VI 合成人被大批量生产（估计多达 500
+        亿台），以期提高社会生产力、提振全球经济。出于人类对技术进步的渴望，当时对未来的乐观与兴奋达到了前所未有的高度。
         <br />
         <br />
-        All of that excitement and optimism quickly turned to fear, panic, and dread in 2070, when a terrorist group
-        called Ascendis Totalis hacked into {FactionName.OmniTekIncorporated} and uploaded a rogue AI into several of
-        their Synthoid manufacturing facilities. This hack went undetected and for months{" "}
-        {FactionName.OmniTekIncorporated}
-        unknowingly churned out legions of Synthoids embedded with this rogue AI. Then, on December 24th, 2070, Omnica
-        activated dormant protocols in the rogue AI, causing all of the infected Synthoids to immediately launch a
-        military campaign to seek and destroy all of humanity.
+        然而在 2070 年，所有这些兴奋与乐观迅速化为恐惧、恐慌与绝望：一个名为 Ascendis Totalis
+        的恐怖组织入侵了 {FactionName.OmniTekIncorporated}，并将一个失控 AI 上传到他们的几家合成人制造工厂。这次入侵未被察觉，数月间{" "}
+        {FactionName.OmniTekIncorporated} 在不知不觉中源源不断地生产出嵌入该失控 AI
+        的合成人大军。随后，在 2070 年 12 月 24 日，Omnica 激活了失控 AI
+        中休眠的协议，导致所有被感染的合成人立即发动军事行动，企图搜寻并消灭全人类。
         <br />
         <br />
-        What ensued was the deadliest conflict in human history. This crisis, now commonly known as the Synthoid
-        Uprising, resulted in almost ten billion deaths over the course of a year. Despite the nations of the world
-        banding together to combat the threat, the MK-VI Synthoids were simply stronger, faster, more intelligent, and
-        more adaptable than humans, outsmarting them at every turn.
+        随之而来的是人类历史上最致命的冲突。这场如今通常被称为“合成人起义”的危机在一年内造成近一百亿人死亡。尽管世界各国联手对抗威胁，MK-VI
+        合成人仍然比人类更强壮、更迅速、更聪明、更适应环境，在每一次交锋中都胜过人类。
         <br />
         <br />
-        It wasn't until the sacrifice of an elite international military taskforce, called the{" "}
-        {FactionName.Bladeburners}, that humanity was finally able to defeat the Synthoids. The{" "}
-        {FactionName.Bladeburners}' final act was a suicide bombing mission that destroyed a large portion of the MK-VI
-        Synthoids, including many of its leaders. In the following weeks militaries from around the world were able to
-        round up and shut down the remaining rogue MK-VI Synthoids, ending the Synthoid Uprising.
+        直到一支被称为{FactionName.Bladeburners}的国际精英特种部队做出牺牲，人类才终于得以击败合成人。{" "}
+        {FactionName.Bladeburners} 的最后一击是一次自杀式爆破任务，摧毁了大部分 MK-VI
+        合成人，包括其许多领袖。在接下来的几周里，世界各地的军队得以围捕并关闭残余的失控 MK-VI
+        合成人，结束了合成人起义。
         <br />
         <br />
-        In the aftermath of the bloodshed, the Synthoid Accords were drawn up. These Accords banned{" "}
-        {FactionName.OmniTekIncorporated} from manufacturing any Synthoids beyond the MK-III series. They also banned
-        any other corporation from constructing androids with advanced, near-sentient AI. MK-VI Synthoids that did not
-        have the rogue Ascendis Totalis AI were allowed to continue their existence, but they were stripped of all
-        rights and protections as they were not considered humans. They were also banned from doing anything that may
-        pose a global security threat, such as working for any military/defense organization or conducting any
-        bioengineering, computing, or robotics related research.
+        血腥冲突之后，《合成人协定》起草完成。该协定禁止 {FactionName.OmniTekIncorporated}
+        制造任何超出 MK-III 系列的合成人，也禁止任何其他公司制造具备高级近自我意识 AI
+        的人形机器人。未携带 Ascendis Totalis 失控 AI 的 MK-VI 合成人被允许继续存在，但被剥夺了一切权利与保护，因为他们不被视作人类。他们还被禁止从事任何可能构成全球安全威胁的活动，例如为任何军事/国防组织工作，或开展任何生物工程、计算或机器人相关研究。
         <br />
         <br />
-        Unfortunately, many believe that not all of the rogue MK-VI Synthoids from the Uprising were found and
-        destroyed, and that many of them are blending in as normal humans in society today. In response, many nations
-        have created {FactionName.Bladeburners} divisions, special military branches that are tasked with investigating
-        and dealing with any Synthoid threats.
+        不幸的是，许多人相信并非所有起义中的失控 MK-VI 合成人都被找到并销毁，其中许多正以普通人类的身份混迹于当今社会。作为应对，许多国家设立了{" "}
+        {FactionName.Bladeburners} 部门——负责调查和处理一切合成人威胁的特殊军事分支。
         <br />
         <br />
-        To this day, tensions still exist between the remaining Synthoids and humans as a result of the Uprising.
+        时至今日，由于那场起义，残存的合成人与人类之间仍然关系紧张。
         <br />
         <br />
-        Nobody knows what happened to the terrorist group Ascendis Totalis.
+        没有人知道恐怖组织 Ascendis Totalis 后来怎么样了。
       </Typography>
     ),
   }),
@@ -221,32 +170,19 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.AGreenTomorrow,
     text: (
       <Typography>
-        Starting a few decades ago, there was a massive global movement towards the generation of renewable energy in an
-        effort to combat global warming and climate change. The shift towards renewable energy was a big success, or so
-        it seemed. In 2045 a staggering 80% of the world's energy came from non-renewable fossil fuels. Now, about three
-        decades later, that number is down to only 15%. Most of the world's energy now comes from nuclear power and
-        renewable sources such as solar and geothermal energy. Unfortunately, these efforts were not the huge success
-        that they seem to be.
+        从几十年前开始，全球掀起了一场大规模的可再生能源发电运动，以应对全球变暖和气候变化。向可再生能源的转型取得了巨大成功——至少看起来如此。2045
+        年，世界上竟有 80% 的能源来自不可再生的化石燃料。而如今，大约三十年过去，这一数字已降至 15%。世界上的大部分能源现在来自核能以及太阳能、地热能等可再生能源。遗憾的是，这些努力并不像表面上那样成功。
         <br />
         <br />
-        Since 2045 primary energy use has soared almost tenfold. This was mainly due to growing urban populations and
-        the rise of increasingly advanced (and power-hungry) technology that has become ubiquitous in our lives. So,
-        despite the fact that the percentage of our energy that comes from fossil fuels has drastically decreased, the
-        total amount of energy we are producing from fossil fuels has actually increased.
+        自 2045 年以来，一次能源消耗飙升了近十倍。这主要是由于城市人口的增长，以及在我们生活中无处不在的越来越先进（且耗电）的技术的兴起。因此，尽管化石燃料能源占比大幅下降，我们从化石燃料生产的能源总量实际上反而增加了。
         <br />
         <br />
-        The grim effects of our species' irresponsible use of energy and neglect of our mother world have become
-        increasingly apparent. Last year a temperature of 190F was recorded in the Death Valley desert, which is over
-        50% higher than the highest recorded temperature at the beginning of the century. In the last two decades
-        numerous major cities such as Manhattan, Boston, and Los Angeles have been partially or fully submerged by
-        rising sea levels. In the present day, over 75% of the world's agriculture is done in climate-controlled
-        vertical farms, as most traditional farmland has become unusable due to severe climate conditions.
+        我们这个物种对能源的不负责任使用以及对地球母亲的漠视所带来的恶果已日益明显。去年，死亡谷沙漠记录到了 190F（约 88°C）
+        的气温，比本世纪初的最高纪录高出 50% 以上。在过去二十年里，曼哈顿、波士顿、洛杉矶等许多大城市已被上升的海平面部分或完全淹没。如今，世界超过 75%
+        的农业在恒温垂直农场中进行，因为大多数传统农田已因恶劣的气候条件而无法使用。
         <br />
         <br />
-        Despite all of this, the greedy and corrupt corporations that rule the world have done nothing to address these
-        problems that threaten our species. And so it's up to us, the common people. Each and every one of us can make a
-        difference by doing what these corporations won't: taking responsibility. If we don't, pretty soon there won't
-        be an Earth left to save. We are the last hope for a green tomorrow.
+        尽管如此，统治世界的贪婪腐败的企业对威胁我们物种的这些问题毫无作为。所以，重担落在了我们这些普通人身上。我们每一个人都可以做那些企业不愿做的事来改变现状：承担责任。如果我们不这样做，很快就不会剩下可以拯救的地球了。我们是绿色明天的最后希望。
       </Typography>
     ),
   }),
@@ -255,20 +191,10 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.AlphaOmega,
     text: (
       <Typography>
-        Then we saw a new Heaven and a new Earth, for our first Heaven and Earth had gone away, and our sea was no more.
-        And we saw a new holy city, new Aeria, coming down out of this new Heaven, prepared as a bride adorned for her
-        husband. And we heard a loud voice saying, "Behold, the new dwelling place of the Gods. We will dwell with them,
-        and they will be our people, and we will be with them as their Gods. We will wipe away every tear from their
-        eyes, and death shall be no more, neither shall there be mourning, nor crying, nor pain anymore, for the former
-        things have passed away."
+        我们又看见一个新天新地，因为先前的天地已经过去了，海也不再有了。我们又看见圣城新耶利亚由神那里从天而降，预备好了，如新妇装饰整齐等候丈夫。我们又听见有大声音说：“看哪，众神的帐幕在人间。他们要作他的子民，神要亲自与他们同在，作他们的神。神要擦去他们一切的眼泪。不再有死亡，也不再有悲哀、哭号、疼痛，因为以前的事都过去了。”
         <br />
         <br />
-        And once we were seated on the throne we said "Behold, I am making all things new." Also we said, "Write this
-        down, for these words are trustworthy and true." And we said to you, "It is done! I am the Alpha and the Omega,
-        the beginning and the end. To the thirsty I will give from the spring of the water of life without payment. The
-        one who conquers will have this heritage, and we will be his God and he will be our son. But as for the
-        cowardly, the faithless, the detestable, as for murderers, the sexually immoral, sorcerers, idolaters, and all
-        liars, their portion will be in the lake that burns with fire and sulfur, for it is the second true death."
+        当我们坐上宝座后便说：“看哪，我将一切都更新了。”又说：“你要写上，因这些话是可信的、真实的。”我们对你说：“都成了！我是阿尔法，我是俄梅戛；我是始，我是终。我要将生命泉的水白白赐给口渴的人喝。得胜的，必承受这些为业。我要作他的神，他要作我的儿子。惟有胆怯的、不信的、可憎的、杀人的、淫乱的、行邪术的、拜偶像的和一切说谎话的，他们的分就在烧着硫磺的火湖里，这是第二次的真死。”
       </Typography>
     ),
   }),
@@ -277,25 +203,13 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.SimulatedReality,
     text: (
       <Typography>
-        The idea that we are living in a virtual world is not new. It's a trope that has been explored constantly in
-        literature and pop culture. However, it is also a legitimate scientific hypothesis that many notable physicists
-        and philosophers have debated for years.
+        我们生活在虚拟世界中的想法并不新鲜。它是文学和流行文化中反复探讨的老生常谈。然而，它也是一个严肃的科学假说，许多著名的物理学家和哲学家多年来一直在争论这个问题。
         <br />
         <br />
-        Proponents for this simulated reality theory often point to how advanced our technology has become, as well as
-        the incredibly fast pace at which it has advanced over the past decades. The amount of computing power available
-        to us has increased over 100-fold since 2060 due to the development of nanoprocessors and quantum computers.
-        Artificial Intelligence has advanced to the point where our entire lives are controlled by robots and machines
-        that handle our day-to-day activities such as autonomous transportation and scheduling. If we consider the pace
-        at which this technology has advanced and assume that these developments continue, it's reasonable to assume
-        that at some point in the future our technology would be advanced enough that we could create simulations that
-        are indistinguishable from reality. However, if continued technological advancement is a reasonable outcome,
-        then it is very likely that such a scenario has already happened.
+        支持模拟现实理论的人常常指出我们的技术已经变得多么先进，以及过去几十年技术进步的速度之惊人。由于纳米处理器与量子计算机的发展，自 2060 年以来我们可用的算力增长了一百多倍。人工智能已经发展到这样的程度：我们的整个生活都被机器人和机器掌控，它们处理着自动驾驶交通、日程安排等日常事务。如果我们考虑这项技术的进步速度并假设其持续发展，那么可以合理地推断，未来某个时候我们的技术将先进到足以创造出与现实无法区分的模拟。然而，如果技术的持续进步是合理的结果，那么这种情形很可能早已发生过。
         <br />
         <br />
-        Statistically speaking, somewhere out there in the infinite universe there is an advanced, intelligent species
-        that already has such technology. Who's to say that they haven't already created such a virtual reality: our
-        own?
+        从统计学的角度讲，在无限的宇宙中，某处一定存在一个已经掌握此类技术的先进智慧物种。谁又能断言他们没有早已创造出这样一个虚拟现实——也就是我们所在的这个呢？
       </Typography>
     ),
   }),
@@ -304,23 +218,14 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.BeyondMan,
     text: (
       <Typography>
-        Humanity entered a "transhuman" era a long time ago. And despite the protests and criticisms of many who cried
-        out against human augmentation at the time, the transhuman movement continued and prospered. Proponents of the
-        movement ignored the critics, arguing that it was in our inherent nature to better ourselves. To improve. To be
-        more than we were. They claimed that not doing so would be to go against every living organism's biological
-        purpose: evolution and survival of the fittest.
+        人类早在很久以前就进入了“超人类”时代。尽管当时有许多人抗议和抨击人体强化，超人类运动依然继续发展并繁荣壮大。运动的支持者们无视批评者，认为超越自我、不断改进、变得比过去更强是我们与生俱来的天性。他们声称，不这样做就违背了一切生物的生物学使命：进化与适者生存。
         <br />
         <br />
-        And here we are today, with technology that is advanced enough to augment humans to a state that can only be
-        described as posthuman. But what do we have to show for it when this augmentation technology is only available
-        to the so-called "elite"? Are we really better off than before when only 5% of the world's population has access
-        to this technology? When the powerful corporations and organizations of the world keep it all to themselves,
-        have we really evolved?
+        而今天我们在这里，拥有的技术已经先进到可以把人类强化到只能以“后人类”来形容的状态。可是，当这种强化技术只提供给所谓的“精英”时，我们又有什么可炫耀的呢？当世界上只有 5%
+        的人口能够使用这项技术时，我们真的比从前过得更好吗？当强大的公司和组织把这一切据为己有时，我们真的进化了吗？
         <br />
         <br />
-        Augmentation technology has only further increased the divide between the rich and the poor, between the
-        powerful and the oppressed. We have not become "more than human". We have not evolved from nature's original
-        design. We are still the greedy, corrupted, and evil men that we always were.
+        强化技术只是进一步加大了富人与穷人、强者与被压迫者之间的鸿沟。我们没有成为“超越人类的存在”。我们没有从自然最初的设计中进化。我们依然是那群贪婪、腐化、邪恶的人，一如既往。
       </Typography>
     ),
   }),
@@ -330,32 +235,21 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.KuaiGongInternational, FactionName.OmniTekIncorporated],
     text: (
       <Typography>
-        When people think about the corporations that dominate the East, they typically think of{" "}
-        {CompanyName.KuaiGongInternational}, which holds a complete monopoly for manufacturing and commerce in Asia, or{" "}
-        {CompanyName.GlobalPharmaceuticals}, the world's largest drug company, or {CompanyName.OmniTekIncorporated}, the
-        global leader in intelligent and autonomous robots. But there's one company that has seen a rapid rise in the
-        last year and is poised to dominate not only the East, but the entire world: TaiYang Digital.
+        当人们想到主导东方的企业时，通常会想到垄断整个亚洲制造业和商业的{" "}
+        {CompanyName.KuaiGongInternational}、全球最大的制药公司 {CompanyName.GlobalPharmaceuticals}，或智能与自主机器人领域的全球领导者{" "}
+        {CompanyName.OmniTekIncorporated}。但有一家公司在去年迅速崛起，不仅准备主宰东方，更准备主宰全世界：TaiYang Digital。
         <br />
         <br />
-        TaiYang Digital is a Chinese internet-technology corporation that provides services such as online advertising,
-        search engines, gaming, media, entertainment, and cloud computing/storage. Its name TaiYang comes from the
-        Chinese word for "sun". In Chinese culture, the sun is a 'yang' symbol associated with life, heat, masculinity,
-        and heaven.
+        TaiYang Digital 是一家中国互联网科技公司，提供在线广告、搜索引擎、游戏、媒体、娱乐以及云计算/存储等服务。它的名字
+        TaiYang 来自中文的“太阳”。在中国文化中，太阳是“阳”的象征，与生命、热量、阳刚和天相关联。
         <br />
         <br />
-        The company was founded less than 5 years ago and is already the third highest valued company in all of Asia. In
-        2076 it generated a total revenue of over 10 trillion yuan. Its services are used daily by over a billion people
-        worldwide.
+        这家公司成立不到 5 年，却已成为全亚洲市值第三高的公司。2076 年，它创造了超过 10 万亿元的总营收。全球每天有超过十亿人使用它的服务。
         <br />
         <br />
-        TaiYang Digital's meteoric rise is extremely surprising in modern society. This sort of growth is something
-        you'd commonly see in the first half of the century, especially for tech companies. However in the last two
-        decades the number of corporations has significantly declined as the largest entities quickly took over the
-        economy. Corporations such as {CompanyName.ECorp}, {CompanyName.MegaCorp}, and{" "}
-        {CompanyName.KuaiGongInternational} have established such strong monopolies in their market sectors that they
-        have effectively killed off all of the smaller and new corporations that have tried to start up over the years.
-        This is what makes the rise of TaiYang Digital so impressive. And if TaiYang continues down this path, then they
-        have a bright future ahead of them.
+        TaiYang Digital 的迅速崛起在现代社会极为罕见。这种增长速度在本世纪上半叶很常见，对科技公司来说尤其如此。然而在过去二十年里，随着最大的巨头们迅速接管经济，公司的数量大幅减少。{CompanyName.ECorp}、{CompanyName.MegaCorp}
+        和 {CompanyName.KuaiGongInternational}
+        等公司已在各自的市场领域建立起如此牢固的垄断，以至于多年来所有试图创业的小型和新兴公司都被它们彻底扼杀。这正是 TaiYang Digital 的崛起令人惊叹之处。如果 TaiYang 沿着这条路继续走下去，它们的未来一片光明。
       </Typography>
     ),
   }),
@@ -364,33 +258,33 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.DemocracyIsDead,
     text: (
       <Typography>
-        They rose from the shadows in the street.
+        他们从街头的阴影中站起。
         <br />
-        From the places where the oppressed meet.
+        从被压迫者相聚之地走来。
         <br />
-        Their cries echoed loudly through the air.
+        他们的呐喊在空中回响激荡。
         <br />
-        As they once did in Tiananmen Square.
+        一如当年在天安门广场。
         <br />
-        Loudness in the silence, Darkness in the light.
+        寂静中的喧嚣，光明中的黑暗。
         <br />
-        They came forth with power and might.
+        他们携着力量与威势而来。
         <br />
-        Once the beacon of democracy, America was first.
+        曾是民主灯塔的美国首当其冲。
         <br />
-        Its pillars of society destroyed and dispersed.
+        社会的支柱被摧毁离散。
         <br />
-        Soon the cries rose everywhere, with revolt and riot.
+        很快，反抗与暴动的呼声四处升腾。
         <br />
-        Until one day, finally, all was quiet.
+        直到某一天，一切终于归于沉寂。
         <br />
-        From the ashes rose a new order, corporatocracy was its name.
+        灰烬中升起一种新秩序，名叫财阀统治。
         <br />
-        Rome, Mongol, Byzantine, all of history is just the same.
+        罗马、蒙古、拜占庭，历史不过一再重演。
         <br />
-        For man will never change in a fundamental way.
+        因为人在根本上永远不会改变。
         <br />
-        And now democracy is dead, in the USA.
+        而今民主已死，在美利坚。
       </Typography>
     ),
   }),
@@ -400,17 +294,14 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.TheSyndicate, FactionName.SlumSnakes],
     text: (
       <Typography>
-        A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in{" "}
-        {CityName.Sector12}. Perhaps the most alarming part of the statistic is that most of the rise is in violent
-        crime such as homicide and assault. According to the study, the city saw a total of 21,406 reported homicides in
-        2076, which is over a 20% increase compared to 2075.
+        分析公司 Wilson Inc. 的一项最新研究显示，{CityName.Sector12}
+        的犯罪活动显著上升。数据中最令人警惕的部分也许是：大部分增长来自凶杀和袭击等暴力犯罪。根据该研究，2076
+        年全市共报告 21,406 起凶杀案，比 2075 年增加了 20% 以上。
         <br />
         <br />
-        CIA director David Glarow says it's too early to know whether these figures indicate the beginning of a
-        sustained increase in crime rates, or whether the year was just an unfortunate outlier. He states that many
-        intelligence and law enforcement agents have noticed an increase in organized crime activities, and believes
-        that these figures may be the result of an uprising from criminal organizations such as{" "}
-        {FactionName.TheSyndicate} or the {FactionName.SlumSnakes}.
+        中央情报局局长 David Glarow
+        表示，现在判断这些数字是否标志着犯罪率持续上升的开始，还是这一年只是不幸的异常值，还为时过早。他表示，许多情报和执法人员已注意到有组织犯罪活动的增加，并认为这些数字可能是{" "}
+        {FactionName.TheSyndicate} 或 {FactionName.SlumSnakes} 等犯罪组织蠢蠢欲动的结果。
       </Typography>
     ),
   }),
@@ -419,20 +310,12 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.ManAndMachine,
     text: (
       <Typography>
-        In 2005 Ray Kurzweil popularized his theory of the Singularity. He predicted that the rate of technological
-        advancement would continue to accelerate faster and faster until one day machines would be become infinitely
-        more intelligent than humans. This point, called the Singularity, would result in a drastic transformation of
-        the world as we know it. He predicted that the Singularity would arrive by 2045. And yet here we are, more than
-        three decades later, where most would agree that we have not yet reached a point where computers and machines
-        are vastly more intelligent than we are. So what gives?
+        2005 年，Ray Kurzweil 使他的奇点理论广为人知。他预言技术进步的速度会不断加快，直到有一天机器变得比人类聪明无限倍。这个被称为“奇点”的时点将给我们所知的世界带来剧变。他预言奇点将在
+        2045 年到来。然而三十多年过去，大多数人都会认同：我们尚未达到计算机和机器远比人类聪明的程度。这是怎么回事？
         <br />
         <br />
-        The answer is that we have reached the Singularity, just not in the way we expected. The artificial
-        superintelligence that was predicted by Kurzweil and others exists in the world today - in the form of
-        Augmentations. Yes, those Augmentations that the rich and powerful keep to themselves enable humans to become
-        superintelligent beings. The Singularity did not lead to a world where our machines are infinitely more
-        intelligent than us, it led to a world where man and machine can merge to become something greater. Most of the
-        world just doesn't know it yet.
+        答案是：我们已经到达了奇点，只是不是以我们预期的方式。Kurzweil
+        和其他人预言的那种人工超级智能确实存在于当今世界——以强化的形式。是的，正是那些被富人和强者据为己有的强化，使人类得以成为超级智能的存在。奇点并没有带来机器比我们聪明无限倍的世界，而是带来了人与机器可以融合成更伟大之物的世界。只是世界上大多数人还不知道这一点。
       </Typography>
     ),
   }),
@@ -442,24 +325,17 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.TheBlackHand, FactionName.NiteSec, FactionName.BitRunners],
     text: (
       <Typography>
-        The idea of secret societies has long intrigued the general public by inspiring curiosity, fascination, and
-        distrust. People have long wondered about who these secret society members are and what they do, with the most
-        radical of conspiracy theorists claiming that they control everything in the entire world. And while the world
-        may never know for sure, it is likely that many secret societies do actually exist, even today.
+        秘密社团的概念长期以来激发着公众的好奇、着迷与不信任。人们一直想知道这些秘密社团的成员是谁、他们在做什么，最极端的阴谋论者甚至声称他们掌控着整个世界的一切。虽然世界可能永远无法确知真相，但很可能许多秘密社团确实存在，即使在今天也是如此。
         <br />
         <br />
-        However, the secret societies of the modern world are nothing like those that (supposedly) existed decades and
-        centuries ago. The Freemasons, Knights Templar, and {FactionName.Illuminati}, while they may have been around at
-        the turn of the 21st century, almost assuredly do not exist today. The dominance of the Web in our everyday
-        lives and the fact that so much of the world is now digital has given rise to a new breed of secret societies:
-        Internet-based ones.
+        然而，现代世界的秘密社团与几十年、几百年前（据说）存在的那些截然不同。共济会、圣殿骑士团和{FactionName.Illuminati}或许在
+        21 世纪初还活跃过，但几乎可以肯定它们如今已不复存在。网络对我们日常生活的支配，以及世界大部分事物已经数字化的现实，催生了一种新型秘密社团：基于互联网的秘密社团。
         <br />
         <br />
-        Commonly called "hacker groups", Internet-based secret societies have become well-known in today's world. Some
-        of these, such as {FactionName.TheBlackHand}, are black hat groups that claim they are trying to help the
-        oppressed by attacking the elite and powerful. Others, such as {FactionName.NiteSec}, are hacktivist groups that
-        try to push political and social agendas. Perhaps the most intriguing hacker group is the mysterious{" "}
-        {FactionName.BitRunners}, whose purpose still remains unknown.
+        这类基于互联网的秘密社团通常被称为“黑客组织”，在当今世界已广为人知。其中一些，如{" "}
+        {FactionName.TheBlackHand}，是自称通过攻击权贵强者来帮助被压迫者的黑帽组织。另一些，如{" "}
+        {FactionName.NiteSec}，是试图推动政治与社会议程的黑客行动主义团体。而最耐人寻味的黑客组织也许是神秘的{" "}
+        {FactionName.BitRunners}，其目的至今无人知晓。
       </Typography>
     ),
   }),
@@ -468,22 +344,14 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.TheFailedFrontier,
     text: (
       <Typography>
-        Humans have long dreamed about spaceflight. With enduring interest, we were driven to explore the unknown and
-        discover new worlds. We dreamed about conquering the stars. And in our quest, we pushed the boundaries of our
-        scientific limits, and then pushed further. Space exploration lead to the development of many important
-        technologies and new industries.
+        人类长久以来梦想着太空飞行。怀着经久不衰的兴趣，我们被驱使去探索未知、发现新世界。我们梦想征服群星。在这场探索中，我们不断突破科学的极限，然后继续向前。太空探索催生了许多重要的技术和新产业。
         <br />
         <br />
-        But sometime in the middle of the 21st century, all of that changed. Humanity lost its ambitions and aspirations
-        of exploring the cosmos. The once-large funding for agencies like NASA and the European Space Agency gradually
-        whittled away until their eventual disbanding in the 2060's. Not even militaries are fielding flights into space
-        nowadays. The only remnants of the once great mission for cosmic conquest are the countless satellites in
-        near-earth orbit, used for communications, espionage, and other corporate interests.
+        但在 21 世纪中叶的某个时候，这一切都改变了。人类失去了探索宇宙的雄心与渴望。NASA 和欧洲空间局等机构曾经庞大的经费逐渐枯竭，最终在
+        2060 年代解散。如今连军队也不再进行太空飞行。曾经伟大的宇宙征服使命留下的唯一遗迹，是近地轨道上无数用于通信、间谍活动和其他企业利益的卫星。
         <br />
         <br />
-        And as we continue to look at the state of space technology, it becomes more and more apparent that we will
-        never return to that golden age of space exploration, that age where everyone dreamed of going beyond earth for
-        the sake of discovery.
+        当我们继续审视太空技术的现状时，越来越明显的是：我们再也不会回到那个太空探索的黄金时代，那个人人都为了发现而梦想离开地球的时代。
       </Typography>
     ),
   }),
@@ -493,23 +361,15 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.OmniTekIncorporated],
     text: (
       <Typography>
-        Tremendous progress has been made in the field of Artificial Intelligence over the past few decades. Our
-        autonomous vehicles and transportation systems. The electronic personal assistants that control our everyday
-        lives. Medical, service, and manufacturing robots. All of these are examples of how far AI has come and how much
-        it has improved our daily lives. However, the question still remains of whether AI will ever be advanced enough
-        to re-create human intelligence.
+        过去几十年里，人工智能领域取得了巨大的进步。我们的自动驾驶车辆和交通系统、掌控我们日常生活的电子个人助理、医疗、服务和制造机器人——这些都是 AI
+        发展到何种程度、又在多大程度上改善了我们的日常生活的例证。然而，AI 是否终将先进到足以重现人类智能，这个问题依然悬而未决。
         <br />
         <br />
-        We've certainly come close to artificial intelligence that is similar to humans. For example,{" "}
-        {CompanyName.OmniTekIncorporated}'s CompanionBot, a robot meant to act as a comforting friend for lonely and
-        grieving people, is eerily human-like in its appearance, speech, mannerisms, and even movement. However its
-        artificial intelligence isn't the same as that of humans. Not yet. It doesn't have sentience or self-awareness
-        or consciousness.
+        我们无疑已经非常接近与人类相似的人工智能。例如，{CompanyName.OmniTekIncorporated}
+        的 CompanionBot——一种旨在为孤独和悲伤的人充当慰藉之友的机器人——在外表、言语、举止甚至动作上都逼真得令人不安。但它的智能仍与人类不同。至少现在还不是。它没有感知力、自我意识或意识。
         <br />
         <br />
-        Many neuroscientists believe that we won't ever reach the point of creating artificial human intelligence. "At
-        the end of the day, AI comes down to 1's and 0's, while the human brain does not. We'll never see AI that is
-        identical to that of humans."
+        许多神经科学家认为，我们永远无法创造出人工的人类智能。“归根结底，AI 归结为 0 和 1，而人脑并非如此。我们永远不会看到与人类智能完全相同的 AI。”
       </Typography>
     ),
   }),
@@ -518,15 +378,10 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.SyntheticMuscles,
     text: (
       <Typography>
-        Initial versions of synthetic muscles weren't made of anything organic but were actually crude devices made to
-        mimic human muscle function. Some of the early iterations were actually made of common materials such as fishing
-        lines and sewing threads due to their high strength for a cheap cost.
+        早期版本的合成肌肉并非由任何有机物制成，而是模仿人体肌肉功能的粗糙装置。一些早期型号实际上是用鱼线和缝纫线等常见材料制成的，因为它们以低廉的成本提供了较高的强度。
         <br />
         <br />
-        As technology progressed, however, advances in biomedical engineering paved the way for a new method of creating
-        synthetic muscles. Instead of creating something that closely imitated the functionality of human muscle,
-        scientists discovered a way of forcing the human body itself to augment its own muscle tissue using both
-        synthetic and organic materials. This is typically done using gene therapy or chemical injections.
+        然而随着技术的进步，生物医学工程的进展开辟了一条创造合成肌肉的新途径。科学家们不再制造高度模仿人体肌肉功能的人造物，而是发现了迫使人体自身使用合成与有机材料来强化其肌肉组织的方法。这通常通过基因疗法或化学注射来实现。
       </Typography>
     ),
   }),
@@ -536,16 +391,13 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.OmniTekIncorporated, FactionName.MegaCorp, FactionName.ECorp],
     text: (
       <Typography>
-        Have we entered a new Cold War? Is WWIII just beyond the horizon?
+        我们是否已进入一场新冷战？第三次世界大战是否就在地平线之外？
         <br />
         <br />
-        After rumors came out that {CompanyName.OmniTekIncorporated} had begun developing advanced robotic
-        supersoldiers, geopolitical tensions quickly flared between the USA, Russia, and several Asian superpowers. In a
-        rare show of cooperation between corporations, {CompanyName.MegaCorp} and {CompanyName.ECorp} have reportedly
-        launched hundreds of new surveillance and espionage satellites. Defense contractors such as{" "}
-        {CompanyName.DeltaOne} and {CompanyName.AeroCorp} have been working with the CIA and NSA to prepare for
-        conflict. Meanwhile, the rest of the world sits in earnest hoping that it never reaches full-scale war. With
-        today's technology and firepower, a World War would assuredly mean the end of human civilization.
+        自有传言称 {CompanyName.OmniTekIncorporated}
+        已开始研发先进的机器人士兵以来，美国、俄罗斯与几个亚洲超级大国之间的地缘政治紧张局势迅速升温。据称，{CompanyName.MegaCorp}
+        和 {CompanyName.ECorp} 已发射了数百颗新的监视与间谍卫星——企业间这种合作实属罕见。{CompanyName.DeltaOne} 和{" "}
+        {CompanyName.AeroCorp} 等国防承包商一直在与中央情报局和国家安全局合作为冲突做准备。与此同时，世界其他各国正诚挚地希望事态永远不会发展到全面战争。以今天的技术和火力，一场世界大战无疑将意味着人类文明的终结。
       </Typography>
     ),
   }),
@@ -554,24 +406,14 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.CostOfImmortality,
     text: (
       <Typography>
-        Evolution and advances in medical and augmentation technology has lead to drastic improvements in human
-        mortality rates. Recent figures show that the life expectancy for humans that live in a first-world country is
-        about 130 years of age, almost double of what it was at the turn of the century. However, this increase in
-        average lifespan has had some significant effects on society and culture.
+        医学与强化技术的演进和进步，使人类的死亡率大幅改善。最新数据显示，生活在发达国家的人类预期寿命约为 130
+        岁，几乎是世纪之交的两倍。然而，平均寿命的延长也给社会和文化带来了一些显著的影响。
         <br />
         <br />
-        Due to longer lifespans and a better quality of life, many adults are holding off on having kids until much
-        later. As a result, the percentage of youth in first-world countries has been decreasing, while the number of
-        senior citizens is significantly increasing.
+        由于更长的寿命和更好的生活质量，许多成年人把生育推迟到很晚。结果，发达国家青年人口的比例不断下降，而老年人的数量却在显著增加。
         <br />
         <br />
-        Perhaps the most alarming result of all of this is the rapidly shrinking workforce. Despite the increase in life
-        expectancy, the typical retirement age for workers in America has remained about the same, meaning a larger and
-        larger percentage of people in America are retirees. Furthermore, many young adults are holding off on joining
-        the workforce because they feel that they have plenty of time left in their lives for employment, and want to
-        "enjoy life while they're young." For most industries, this shrinking workforce is not a major issue as most
-        things are handled by robots anyways. However, there are still several key industries such as engineering and
-        education that have not been automated, and these remain in danger to this cultural phenomenon.
+        这一切最令人担忧的结果也许是劳动力的迅速萎缩。尽管预期寿命延长，美国工人的典型退休年龄却基本保持不变，这意味着美国退休人口的比例越来越大。此外，许多年轻人迟迟不进入职场，因为他们觉得自己的人生还长得很，想趁年轻“先享受生活”。对大多数行业而言，劳动力萎缩并不是大问题，因为大多数事情反正都由机器人处理。但仍有一些关键行业（如工程和教育）尚未实现自动化，它们至今仍受这一文化现象的威胁。
       </Typography>
     ),
   }),
@@ -581,33 +423,28 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.Illuminati],
     text: (
       <Typography>
-        WAKE UP SHEEPLE
+        醒醒吧，蠢货们（WAKE UP SHEEPLE）
         <br />
         <br />
-        THE GOVERNMENT DOES NOT EXIST. CORPORATIONS DO NOT RUN SOCIETY
+        政府并不存在。企业并没有掌控社会
         <br />
         <br />
-        THE {FactionName.Illuminati.toUpperCase()} ARE THE SECRET RULERS OF THE WORLD!
+        {FactionName.Illuminati.toUpperCase()} 才是世界的秘密统治者！
         <br />
         <br />
-        Yes, the {FactionName.Illuminati} of legends. The ancient secret society that controls the entire world from the
-        shadows with their invisible hand. With their personal wealth and skills they have penetrated every major
-        government, financial agency, and corporation in the last three hundred years.
+        是的，就是传说中的{FactionName.Illuminati}。那个古老秘密社团用他们看不见的手在阴影中控制着整个世界。凭借他们的个人财富与手段，三百年来他们已渗透进每一个主要政府、金融机构和公司。
         <br />
         <br />
-        OPEN YOUR EYES
+        睁开你的眼睛
         <br />
         <br />
-        It was the {FactionName.Illuminati} that brought an end to democracy in the world. They are the driving force
-        behind everything that happens.
+        正是{FactionName.Illuminati}终结了世界的民主。他们是一切事件背后的推动力量。
         <br />
         <br />
-        THEY ARE ALL AROUND YOU
+        他们无处不在，就在你身边
         <br />
         <br />
-        After destabilizing the world's governments, they are now entering the final stage of their master plan. They
-        will secretly initiate global crises. Terrorism. Pandemics. World War. And out of the chaos that ensues they
-        will build their New World Order.
+        在动摇了世界各国政府之后，他们正在进入其宏大计划的最后阶段。他们将秘密制造全球危机。恐怖主义。大流行病。世界大战。并将在随之而来的混乱中建立他们的“新世界秩序”。
       </Typography>
     ),
   }),
@@ -617,27 +454,25 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.ChurchOfTheMachineGod],
     text: (
       <Typography>
-        Everyone has a moment in their life when they wonder about the bigger questions.
+        每个人生命中都有那么一刻，会去思考那些更宏大的问题。
         <br />
         <br />
-        What's the point of all this? What is my purpose?
+        这一切的意义何在？我的使命是什么？
         <br />
         <br />
-        Some people dare to think even bigger.
+        有些人敢想得更远。
         <br />
         <br />
-        What will the fate of the human race be?
+        人类的命运将会如何？
         <br />
         <br />
-        We live in an era vastly different from that of 15 or even 20 years ago. We have gone beyond the limits of
-        humanity. We have stripped ourselves of the tyranny of flesh.
+        我们生活的时代与 15 年甚至 20 年前截然不同。我们已经超越了人类的极限。我们摆脱了血肉的暴政。
         <br />
         <br />
-        The Singularity is here. The merging of man and machine. This is where humanity evolves into something greater.
-        This is our future.
+        奇点已经到来。人与机器的融合。在这里，人类将进化成更伟大的存在。这就是我们的未来。
         <br />
         <br />
-        Embrace it, and you will obey a new god. The God in the Machine.
+        拥抱它，你将侍奉一位新的神。机器中的神。
       </Typography>
     ),
   }),
@@ -647,24 +482,17 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.Tetrads],
     text: (
       <Typography>
-        The Triads were an ancient transnational crime syndicate based in China, Hong Kong, and other Asian territories.
-        They were often considered one of the first and biggest criminal secret societies. While most of the branches of
-        the Triads have been destroyed over the past few decades, the crime faction has spawned and inspired a number of
-        other Asian crime organizations over the past few years. The most notable of these is the {FactionName.Tetrads}.
+        三合会是一个古老跨国犯罪集团，根基于中国、香港和其他亚洲地区。它们常被认为是最早、最大的犯罪秘密社团之一。尽管三合会的大部分分支在过去几十年里已被摧毁，这个犯罪派系在过去几年里催生并启发了其他许多亚洲犯罪组织。其中最著名的是{FactionName.Tetrads}。
         <br />
         <br />
-        It is widely believed that the {FactionName.Tetrads} are a rogue group that splintered off from the Triads
-        sometime in the mid 21st century. The founders of the {FactionName.Tetrads}, all of whom were ex-Triad members,
-        believed that the Triads were losing their purpose and direction. The {FactionName.Tetrads} started off as a
-        small group that mainly engaged in fraud and extortion. They were largely unknown until just a few years ago
-        when they took over the illegal drug trade in all of the major Asian cities. They quickly became the most
-        powerful crime syndicate in the continent.
+        人们普遍认为，{FactionName.Tetrads}
+        是 21 世纪中叶某个时候从三合会分裂出来的叛离团体。{FactionName.Tetrads}
+        的创始人全都是前三合会成员，他们认为三合会正在迷失其宗旨与方向。{FactionName.Tetrads}
+        起初只是一个小团体，主要从事欺诈和敲诈勒索。直到几年前他们接管了所有亚洲主要城市的非法毒品贸易之前，他们一直默默无闻。此后他们迅速成为这片大陆上最强大的犯罪集团。
         <br />
         <br />
-        Not much else is known about the {FactionName.Tetrads}, or about the efforts the Asian governments and
-        corporations are making to take down this large new crime organization. Many believe that the{" "}
-        {FactionName.Tetrads} have infiltrated the governments and powerful corporations in Asia, which has helped
-        facilitate their recent rapid rise.
+        关于{FactionName.Tetrads}，以及亚洲各国政府和公司为打垮这个新兴大型犯罪组织所做的努力，外界知之甚少。许多人认为{" "}
+        {FactionName.Tetrads} 已渗透进亚洲的政府和权势企业，这助推了他们近来的迅速崛起。
       </Typography>
     ),
   }),
@@ -678,46 +506,24 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.ABriefHistoryOfTranshumanism,
     text: (
       <Typography>
-        Human augmentation has come a long way since the first prosthetics and implants. Now any and all parts of the
-        human body are able to be improved by technology: strength, speed, perception, intelligence. A large variety of
-        powerful augmentations have been developed, but for most they may as well not exist. How did things end up like
-        this?
+        自第一批假肢和植入体问世以来，人体强化已经走过了漫长的道路。如今，人体的任何部位都可以通过技术得到增强：力量、速度、感知、智力。人们已研发出种类繁多的强大强化，但对大多数人来说，它们形同虚设。事情是怎么变成这样的？
         <br />
         <br />
-        Part of the answer is, unfortunately, that the exact technology that has allowed us to come so far in human
-        augmentation is also responsible for its great expense and exclusivity.
+        遗憾的是，部分答案在于：让我们在人体强化上走到如此之远的那项技术本身，也正是它极其昂贵和专属排他的原因。
         <br />
-        The early days of human augmentation were plagued with issues. Immunosuppressants were needed to keep people's
-        bodies from rejecting the foreign bodies being implanted, with the body constantly trying to "restore" itself to
-        its natural state. On top of that, with the messy nature of biology any replacement for a natural organ would
-        fall short of full functionality. The skeleton doesn't just provide structural support and anchors for muscles;
-        it also helps produce the blood in your body in the marrow. Even the fat in the body is a living organ that
-        produces hormones helping to regulate its activity.
+        人体强化的早期充满了问题。需要免疫抑制剂来防止人们的身体排斥被植入的异体，因为身体会不断试图“恢复”到它的自然状态。除此之外，由于生物学固有的复杂性，任何对天然器官的替代品都无法实现完整的功能。骨骼不仅为肌肉提供结构支撑和附着点，还通过骨髓参与造血。就连体内的脂肪也是一个活器官，分泌激素帮助调节机体活动。
         <br />
         <br />
-        Thus, the process was limited by the capacity of the human body to accept and deal with these changes. Biology
-        is redundant and flexible, so replacing a few bones won't impact the body's functioning too badly. But every
-        addition and change would add up, ultimately severely limiting the body's capacity for augmentation.
+        因此，整个过程受限于人体接受和应对这些变化的能力。生物学是冗余而灵活的，替换几根骨头不会对身体机能造成太大影响。但每一次添加和改变都会累积起来，最终严重限制身体的强化容量。
         <br />
         <br />
-        Ultimately it was {CompanyName.VitaLife} who found a way around this limitation, though only at great expense...
-        They discovered that by using a radical new form of gene therapy to reshape a person's body to not only
-        accommodate but integrate the augmentations into their body at a cellular level, they could completely eliminate
-        the side-effects of augmenting.
+        最终，{CompanyName.VitaLife} 找到了绕过这一限制的办法——尽管代价高昂……他们发现，通过使用一种激进的全新基因疗法来重塑人的身体，不仅让身体容纳强化物，还让强化物在细胞层面与身体融为一体，就能完全消除强化的副作用。
         <br />
         <br />
-        The downside, of course, is the extreme expense and complexity of the process. Not only must each augment be
-        tailored for its intended recipient and a custom genetic therapy program developed, but to truly avoid any
-        side-effects this program must take into account the interactions between augmentations when multiple are
-        installed. The combinatoric explosion in complexity leads to exponentially increasing costs when more than one
-        augment is installed at the same time. Despite this most still prefer to install as many as possible at once,
-        because in addition the radical transformation their body undergoes leaves them relearning to use their body for
-        weeks or even months afterward.
+        缺点当然是这个过程极端昂贵且复杂。每一件强化物都必须为预期的接受者量身定制，并开发定制化的基因治疗方案；而且要真正避免任何副作用，当安装多个强化时，方案还必须考虑强化之间的相互作用。这种组合复杂度的爆炸式增长导致同时安装多件强化时成本呈指数级上升。尽管如此，大多数人仍倾向于一次性安装尽可能多的强化，因为此外身体经历的剧烈转变会让他们在之后的数周甚至数月里重新学习如何使用自己的身体。
         <br />
         <br />
-        In the end humanity is left with the theoretical capacity to transform themselves to the limits of their
-        imagininations, but the practical reality that the expense of even basic augmentations is beyond 95% of the
-        population.
+        最终，人类留下了把自己改造到想象力极限的理论可能，但现实是：连最基本的强化的费用也超出了 95% 人口的承受能力。
       </Typography>
     ),
   }),
@@ -726,60 +532,54 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.DarknetHandbook,
     text: (
       <Typography>
-        There is a legend of a powerful augment, known as the <span style={{ color: "red" }}>"Red Pill"</span>, that can
-        only be found deep within the darknet. The mysterious faction {FactionName.Daedalus} has been searching for it
-        for years, hoping to monopolize it one day.
+        传说中有一种强大的强化，被称为<span style={{ color: "red" }}>"红药丸"</span>，只能在暗网深处找到。神秘的派系{" "}
+        {FactionName.Daedalus} 多年来一直在寻找它，希望有朝一日能将其垄断。
         <br />
         <br />
-        However, the legendary augment is hidden in the depths of a labyrinth. You will need to delve far into the dark
-        in order to find these mysterious servers, and defeat their protections to gain their secret augments.
+        然而，这个传说中的强化藏在一座迷宫的深处。你需要深入黑暗之中才能找到这些神秘的服务器，并击破它们的防护以获取其中秘密的强化。
         <br />
         <br />
-        The darknet itself is an extremely unstable network of servers. They will continually shift locations, restart,
-        or even go offline. Some parts of the net are islands that can only be reached by riding on a moving server. In
-        addition, these darknet servers cannot be accessed from a distance: you must build a script that can copy itself
-        - or bring code along from home - in order to progress into the deeper layers of the 'net.
+        暗网本身是一个极不稳定的服务器网络。它们会不断变换位置、重启，甚至离线。网络的某些部分是孤岛，只能搭乘移动中的服务器抵达。此外，这些暗网服务器无法从远处访问：你必须构建能够自我复制的脚本——或者从家里带上代码——才能深入‘net’的更深层。
         <br />
         <br />
-        You now have permanent access to ${CompletedProgramName.darkscape}, allowing exploration of the 'net manually
-        via the UI. But beware: the labyrinths further into the deep are said to only be accessible via script! Do you
-        have the charisma and the scripting skills needed to conquer the dark?
+        你现在拥有 {CompletedProgramName.darkscape}
+        的永久使用权，可以通过 UI 手动探索‘net’。但要小心：据说更深处的迷宫只能通过脚本进入！你有征服黑暗所需的魅力和脚本功力吗？
         <br />
         <br />
-        For more details on the darknet and its API, see the Darknet page under Documentation {">"} Advanced.
+        有关暗网及其 API 的更多细节，请参阅 Documentation {">"} Advanced 下的 Darknet 页面。
       </Typography>
     ),
   }),
   [LiteratureName.CacheHint1]: new Literature({
     title: "eGeoCacheing?",
     filename: LiteratureName.CacheHint1,
-    text: <Typography>I've heard there are valuable .cache files to find out in the dark net.</Typography>,
+    text: <Typography>我听说在暗网里能找到值钱的 .cache 文件。</Typography>,
   }),
   [LiteratureName.CacheHint2]: new Literature({
     title: "Cache the Flag",
     filename: LiteratureName.CacheHint2,
-    text: <Typography>I ran this .cache file I found and it had crazy stuff in it!</Typography>,
+    text: <Typography>我运行了一个捡到的 .cache 文件，里面有些疯狂的东西！</Typography>,
   }),
   [LiteratureName.ServerOfflineHint]: new Literature({
     title: "Server offline again",
     filename: LiteratureName.ServerOfflineHint,
     text: (
       <Typography>
-        My scripts went down again when their server went offline. I'll have to do something about that.
+        我的服务器离线时脚本又挂了。我得想点办法。
       </Typography>
     ),
   }),
   [LiteratureName.DarkWebRebootHint]: new Literature({
     title: "Darkweb server rebooted",
     filename: LiteratureName.DarkWebRebootHint,
-    text: <Typography>Darkweb servers are known to reboot sometimes, requiring scripts to be restarted.</Typography>,
+    text: <Typography>众所周知，暗网服务器有时会重启，需要重新启动脚本。</Typography>,
   }),
   [LiteratureName.PasswordServerHint]: new Literature({
     title: "Partial Password Jutsu",
     filename: LiteratureName.PasswordServerHint,
     text: (
       <Typography>
-        There is a type of server that will tell you if you get some parts of the password correct.
+        有一种服务器会告诉你密码的某些部分是否正确。
       </Typography>
     ),
   }),
@@ -788,36 +588,34 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.TimingServerHint,
     text: (
       <Typography>
-        I found a server that takes much longer to respond if you get some characters in the password correct.
+        我发现一台服务器：如果密码中的某些字符正确，它的响应会明显变慢。
       </Typography>
     ),
   }),
   [LiteratureName.BinaryServerHint]: new Literature({
     title: "Raw Data?",
     filename: LiteratureName.BinaryServerHint,
-    text: <Typography>Some servers only respond with raw binary data. I wonder what each bit represents?</Typography>,
+    text: <Typography>有些服务器只返回原始二进制数据。真好奇每个比特代表什么？</Typography>,
   }),
   [LiteratureName.DogNameHint]: new Literature({
     title: "Dog Name Ideas",
     filename: LiteratureName.DogNameHint,
-    text: <Typography>What should I name my dog? Maybe {dogNameDictionary.join(", ")}?</Typography>,
+    text: <Typography>我该给狗起什么名字？也许 {dogNameDictionary.join(", ")}？</Typography>,
   }),
   [LiteratureName.FactoryDefaultHint]: new Literature({
     title: "Factory Default",
     filename: LiteratureName.FactoryDefaultHint,
-    text: <Typography>The factory default is usually one of {defaultSettingsDictionary.join(", ")}.</Typography>,
+    text: <Typography>出厂默认设置通常是 {defaultSettingsDictionary.join(", ")} 之一。</Typography>,
   }),
   [LiteratureName.StasisLinkHint]: new Literature({
     title: "Try the best new thing in web surfing: the Stasis Link!",
     filename: LiteratureName.StasisLinkHint,
     text: (
       <Typography>
-        Tired of the server you are on restarting or moving? You need to try our latest networking tool, the Stasis
-        Link! <br />
-        With the click of a `ns.dnet.setStasisLink()`, you, too, can sleep soundly knowing that that server is not gonna
-        go anywhere. <br />
+        厌倦了你所在的服务器重启或移动？你需要试试我们最新的网络工具——滞留链路（Stasis Link）！<br />
+        只需点击一下 `ns.dnet.setStasisLink()`，你也可以高枕无忧，因为那台服务器哪儿也不会去。<br />
         <br />
-        Limited time only! While `ns.dnet.getStasisLinkLimit()` lasts!
+        仅限限时活动！趁 `ns.dnet.getStasisLinkLimit()` 还在有效期内！
       </Typography>
     ),
   }),
@@ -826,11 +624,11 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.LabHint,
     text: (
       <Typography>
-        If you go deep enough into the dark net, they say there's a lost server out there with special files on it. I
-        wonder how you can get there? It may even be deeper than the airgaps around this IP block...
+        据说，如果你在暗网中走得足够深，那里有一台丢失的服务器，上面有一些特殊文件。我很好奇该怎么到达那里？它甚至可能比这个 IP
+        段周围的物理隔离还要深……
         <br />
         <br />
-        If I ever find it, I'll set down a stasis link next to it and charge tickets for admission!
+        如果我能找到它，我就在旁边放一个滞留链路，然后卖门票收钱！
       </Typography>
     ),
   }),

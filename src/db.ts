@@ -44,7 +44,7 @@ function getDB(): Promise<IDBDatabase> {
     };
     indexedDbRequest.onblocked = function (this: IDBRequest<IDBDatabase>) {
       reject(
-        new Error("Database in use by another tab. Please close all other Bitburner tabs.", { cause: this.error }),
+        new Error("数据库正被另一个标签页使用。请关闭所有其他 Bitburner 标签页。", { cause: this.error }),
       );
     };
 
@@ -133,7 +133,7 @@ export function deleteGame(): Promise<void> {
       reject(request.error ?? new Error("Cannot delete save data"));
     };
     request.onblocked = function () {
-      reject(new Error("Database in use by another tab. Please close all other Bitburner tabs."));
+      reject(new Error("数据库正被另一个标签页使用。请关闭所有其他 Bitburner 标签页。"));
     };
 
     request.onsuccess = () => resolve();

@@ -40,13 +40,13 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   function getRepText(money: number): string {
     if (money === 0) return "";
     if (isNaN(money) || money < 0) {
-      return "Invalid value.";
+      return "无效的数值。";
     } else if (corp.funds < money) {
-      return "Your corporation does not have enough funds.";
+      return "你的企业资金不足。";
     } else {
-      return `You will gain ${formatReputation(
+      return `这笔贿赂将使你在 ${selectedFaction} 的声望提升 ${formatReputation(
         money / bribeAmountPerReputation,
-      )} reputation with ${selectedFaction} with this bribe.`;
+      )}。`;
     }
   }
 
@@ -58,7 +58,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
     const result = actions.bribe(corp, money, faction.name);
     if (result.success) {
       dialogBoxCreate(
-        `You gained ${formatReputation(result.reputationGain)} reputation with ${faction.name} by bribing them.`,
+        `你通过贿赂 ${faction.name}，获得了 ${formatReputation(result.reputationGain)} 声望。`,
       );
     }
     props.onClose();
@@ -67,10 +67,10 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        You can use corporation funds to bribe faction leaders in exchange for faction reputation.
+        你可以使用企业资金贿赂派系领袖，以换取派系声望。
       </Typography>
       <Box display="flex" alignItems="center">
-        <Typography style={{ whiteSpace: "pre" }}>Faction: </Typography>
+        <Typography style={{ whiteSpace: "pre" }}>派系： </Typography>
         <Select value={selectedFaction} onChange={changeFaction}>
           {factions.map((name) => {
             if (!Factions[name].getInfo().offersWork()) {
@@ -89,11 +89,11 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
       </Typography>
       <NumberInput
         onChange={setMoney}
-        placeholder="Corporation funds"
+        placeholder="企业资金"
         defaultValue={!disabled ? money.toExponential() : ""}
       />
       <Button disabled={disabled} sx={{ mx: 1 }} onClick={() => bribe(money ? money : 0)}>
-        Bribe
+        贿赂
       </Button>
     </Modal>
   );

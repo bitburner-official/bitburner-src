@@ -29,7 +29,7 @@ import { Settings } from "../../Settings/Settings";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;
-const initialSearchLabel = `Search:`;
+const initialSearchLabel = `搜索：`;
 
 export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
@@ -183,7 +183,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       servers.find((s) => s.hostname.toLowerCase() === options[0]?.toLowerCase());
 
     if (!foundServer || foundServer.depth >= netDisplayDepth) {
-      setSearchLabel(`(No results)`);
+      setSearchLabel(`（无结果）`);
       return;
     }
     setSearchLabel(initialSearchLabel);
@@ -231,25 +231,24 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Typography>
       ) : (
         <Typography variant={"h5"} sx={{ fontWeight: "bold", display: "flex", alignItems: "center" }}>
-          Dark Net
+          暗网
           {instability > 0 && (
             <Tooltip
               title={
                 <>
-                  If too many darknet servers are backdoored (without stasis links) or frozen, it will increase the
-                  chance that authentication attempts return a 408 Request Timeout error even if the password is
-                  correct.
+                  如果太多暗网服务器被安装后门（且没有滞留链路）或被冻结，即使密码正确，认证尝试返回 408
+                  请求超时错误的几率也会增加。
                   <br />
-                  Most servers will eventually restart or go offline, which removes backdoors over time.
+                  大多数服务器最终会重启或离线，这会随时间移除后门。
                   <br />
-                  Current backdoored servers: {getBackdooredDarknetServers().length}
+                  当前被安插后门的服务器：{getBackdooredDarknetServers().length}
                   <br />
-                  Current frozen servers: {getAllDarknetServers().filter((s) => !s.maxRam).length}
+                  当前被冻结的服务器：{getAllDarknetServers().filter((s) => !s.maxRam).length}
                 </>
               }
             >
               <Typography component="span" sx={{ fontStyle: "italic", marginLeft: "10px" }}>
-                (Instability: {instabilityText})
+                （不稳定性：{instabilityText}）
               </Typography>
             </Tooltip>
           )}
@@ -309,7 +308,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             {searchLabel}
           </Typography>
           <AutoCompleteSearchBox
-            placeholder="Search for server"
+            placeholder="搜索服务器"
             maxSuggestions={6}
             suggestionList={getAutocompleteSuggestionList}
             ignoredTextRegex={/ /g}
@@ -328,7 +327,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             backgroundColor: Settings.theme.well,
           }}
         >
-          Darknet Docs
+          Darknet 文档
         </DocumentationLink>
       </Box>
     </Container>

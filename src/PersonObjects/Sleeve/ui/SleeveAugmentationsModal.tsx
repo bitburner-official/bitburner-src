@@ -27,16 +27,13 @@ export function SleeveAugmentationsModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Container component={Paper} disableGutters maxWidth="lg" sx={{ mx: 0, mb: 1, p: 1 }}>
         <Typography>
-          You can purchase augmentations for your Sleeves. These augmentations have the same effect as they would for
-          you. You can only purchase augmentations that you unlocked through factions. If an augmentation is useless for
-          Sleeves, it will not be available. Sleeves can install an augmentation without its prerequisites.
+          你可以为你的分身购买强化。这些强化的效果与你自身使用的强化相同。你只能购买通过派系解锁的强化。如果某个强化对分身无用，它将不会出现在这里。分身安装强化时无需满足其前置条件。
           <br />
           <br />
-          When purchasing an augmentation for a Sleeve, it is immediately installed. This means that the Sleeve will
-          immediately lose all of its stat experience.
+          为分身购买强化时会立即安装，这意味着该分身会立即失去所有属性经验。
           <br />
           <br />
-          Augmentations will appear below as they become available.
+          可用的强化会显示在下方。
         </Typography>
       </Container>
       <PurchasableAugmentations

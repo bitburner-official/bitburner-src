@@ -43,20 +43,17 @@ export function LimitMaterialProductionModal(props: IProps): React.ReactElement 
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter a limit to the amount of this material you would like to produce per second. Leave the box empty to set no
-        limit.
+        输入你每秒想要生产这种材料的数量上限。将输入框留空则不设上限。
         <br />
         <br />
-        This limit applies only to output; it does not affect input consumption.
+        该上限仅作用于产出，不会影响原料消耗。
         <br />
         <br />
-        For example, in Agriculture, assume the division's raw production is 1000. You need to consume 500 Water and 200
-        Chemicals to produce 1000 Plants and 1000 Food. If you set the limits for Plants and Food to 200 and 100
-        respectively, you will still consume 500 Water and 200 Chemicals, but only produce 200 Plants and 100 Food.
+        例如，在农业行业中，假设部门的原始产量为1000。你需要消耗500水和200化学品来生产1000植物和1000食物。如果你把植物和食物的产量上限分别设为200和100，你仍会消耗500水和200化学品，但只会生产200植物和100食物。
       </Typography>
       <br />
-      <TextField autoFocus={true} placeholder="Limit" type="number" onChange={onChange} onKeyDown={onKeyDown} />
-      <Button onClick={limitMaterialProduction}>Limit production</Button>
+      <TextField autoFocus={true} placeholder="上限" type="number" onChange={onChange} onKeyDown={onKeyDown} />
+      <Button onClick={limitMaterialProduction}>限制产量</Button>
     </Modal>
   );
 }

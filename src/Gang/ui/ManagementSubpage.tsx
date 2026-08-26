@@ -10,23 +10,20 @@ export function ManagementSubpage(): React.ReactElement {
   return (
     <>
       <Typography variant="h4" color="primary">
-        {gang.facName} (your Gang)
+        {gang.facName}（你的帮派）
       </Typography>
       <Typography>
         <br />
-        If a gang member is not earning much money or respect, the task you assigned might be too difficult. Consider
-        assigning an easier task, or training them. Tasks closer to the top of the dropdown list are generally easier.
-        Alternatively, low production might be a sign that your wanted level is too high. Consider doing{" "}
+        如果某位帮派成员获得的资金或尊重不多，可能是你分配的任务太难了。可以考虑分配更简单的任务，或者对其进行训练。下拉列表中越靠前的任务通常越简单。
+        另外，产出偏低也可能说明你的通缉等级过高。可以考虑让成员执行{" "}
         {gang.isHackingGang ? "Ethical Hacking or " : ""}
-        Vigilante Justice to lower your wanted level.
+        Vigilante Justice 来降低通缉等级。
         <br />
         <br />
-        Installing Augmentations does NOT reset progress with your Gang, however ascension multipliers will decrease
-        slightly. Furthermore, after installing Augmentations, you will automatically join whatever Faction you created
-        your gang with.
+        安装强化不会重置你在帮派中的进度，但飞升倍率会略微下降。此外，安装强化后，你会自动加入创建帮派时所用的那个派系。
         <br />
         <br />
-        You can also manage your gang programmatically through Netscript using the Gang API.
+        你也可以在 Netscript 中通过 Gang API 以编程方式管理你的帮派。
       </Typography>
       <br />
       <GangStats />

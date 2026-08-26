@@ -151,7 +151,7 @@ export const addClue = (server: DarknetServer): string[] => {
     const hintFileName = getClueFileName(passwordFileNames);
     const start = Math.floor(Math.random() * (commonPasswordDictionary.length - length));
     const commonPasswords = commonPasswordDictionary.slice(start, start + length).join(", ");
-    server.writeToTextFile(hintFileName, `Some common passwords include ${commonPasswords}`);
+    server.writeToTextFile(hintFileName, `一些常见密码包括 ${commonPasswords}`);
     files.push(hintFileName);
     return files;
   }
@@ -165,7 +165,7 @@ export const addClue = (server: DarknetServer): string[] => {
     });
     const neighboringServer = neighboringServerName ? getDarknetServer(neighboringServerName) : null;
     if (neighboringServer) {
-      server.writeToTextFile(passwordHintName, `Remember this password: ${neighboringServer.password}`);
+      server.writeToTextFile(passwordHintName, `记住这个密码：${neighboringServer.password}`);
       files.push(passwordHintName);
       return files;
     }
@@ -176,7 +176,7 @@ export const addClue = (server: DarknetServer): string[] => {
     const hintFileName = getClueFileName(passwordFileNames);
     const targetServer = getNearbyNonEmptyPasswordServer(server, true);
     if (targetServer) {
-      const contents = `Server: ${targetServer.hostname} Password: "${targetServer.password}"`;
+      const contents = `服务器：${targetServer.hostname} 密码："${targetServer.password}"`;
       server.writeToTextFile(hintFileName, contents);
       files.push(hintFileName);
       return files;
@@ -196,7 +196,7 @@ export const addClue = (server: DarknetServer): string[] => {
     const targetServer = getNearbyNonEmptyPasswordServer(server);
     if (targetServer) {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);
-      const hint = `The password for ${targetServer.hostname} contains ${containedChar1} and ${containedChar2}`;
+      const hint = `${targetServer.hostname} 的密码包含 ${containedChar1} 和 ${containedChar2}`;
       server.writeToTextFile(hintFileName, hint);
       files.push(hintFileName);
       return files;
@@ -244,7 +244,7 @@ export const setStasisLink = (ctx: NetscriptContext, server: DarknetServer, shou
   const stasisLinkCount = getStasisLinkServers().length;
   const stasisLinkLimit = getStasisLinkLimit();
   if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
-    helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
+    helpers.log(ctx, () => `已达到滞留链路上限。（${stasisLinkCount}/${stasisLinkLimit}）`);
     return {
       success: false,
       code: ResponseCodeEnum.StasisLinkLimitReached,
@@ -254,8 +254,8 @@ export const setStasisLink = (ctx: NetscriptContext, server: DarknetServer, shou
 
   server.hasStasisLink = shouldLink;
   server.backdoorInstalled = shouldLink;
-  const message = `Stasis link ${shouldLink ? "applied to" : "removed from"} server ${server.hostname}.`;
-  helpers.log(ctx, () => `${message}. (${stasisLinkCount}/${stasisLinkLimit} links in use)`);
+  const message = `已${shouldLink ? "为" : "从"}服务器 ${server.hostname}${shouldLink ? "设置" : "移除"}滞留链路。`;
+  helpers.log(ctx, () => `${message}（${stasisLinkCount}/${stasisLinkLimit} 条链路正在使用中）`);
   return {
     success: true,
     code: ResponseCodeEnum.Success,

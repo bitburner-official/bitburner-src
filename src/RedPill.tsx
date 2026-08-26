@@ -28,18 +28,18 @@ function giveSourceFile(bitNodeNumber: number): void {
   if (lvl > 0) {
     if (lvl >= 3 && bitNodeNumber !== 12) {
       dialogBoxCreate(
-        `The Source-File for the BitNode you just destroyed, ${sourceFile.name}, is already at max level!`,
+        `你刚摧毁的 BitNode 对应的源文件 ${sourceFile.name} 已达到最高等级！`,
       );
     } else {
       lvl++;
       Player.sourceFiles.set(bitNodeNumber, lvl);
-      dialogBoxCreate(`${sourceFile.name} was upgraded to level ${lvl} for destroying its corresponding BitNode!`);
+      dialogBoxCreate(`由于摧毁了对应的 BitNode，${sourceFile.name} 已升级到 ${lvl} 级！`);
     }
   } else {
     Player.sourceFiles.set(bitNodeNumber, 1);
     dialogBoxCreate(
       <>
-        You received a Source-File for destroying a BitNode!
+        你因摧毁 BitNode 获得了一个源文件！
         <br />
         <br />
         {sourceFile.name}

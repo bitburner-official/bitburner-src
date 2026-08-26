@@ -87,7 +87,7 @@ export function Intro({ state }: IProps): React.ReactElement {
   if (state.startingDifficulty >= MaxDifficultyForInfiltration) {
     warningMessage = (
       <Typography color={Settings.theme.error} textAlign="center">
-        This location is too secure for your current abilities. You cannot infiltrate it.
+        该地点对你的当前能力而言过于森严，你无法潜入。
       </Typography>
     );
   } else if (state.startingDifficulty >= 1.5) {
@@ -96,7 +96,7 @@ export function Intro({ state }: IProps): React.ReactElement {
         color={state.startingDifficulty > 2 ? Settings.theme.error : Settings.theme.warning}
         textAlign="center"
       >
-        This location is too heavily guarded for your current stats. You should train more or find an easier location.
+        该地点的守卫对你的当前属性而言过于严密。你应该多加训练，或寻找一个更容易的目标。
       </Typography>
     );
   }
@@ -105,36 +105,36 @@ export function Intro({ state }: IProps): React.ReactElement {
     <Container sx={{ alignItems: "center" }}>
       <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">
-          Infiltrating <b>{state.location.name}</b>
+          正在潜入 <b>{state.location.name}</b>
         </Typography>
 
         <Typography variant="h6">
-          <b>HP: {`${formatHp(Player.hp.current)} / ${formatHp(Player.hp.max)}`}</b>
+          <b>HP：{`${formatHp(Player.hp.current)} / ${formatHp(Player.hp.max)}`}</b>
         </Typography>
         <Typography variant="h6">
           <b>
-            Lose {formatHp(calculateDamageAfterFailingInfiltration(state.startingSecurityLevel))} HP for each failure
+            每次失败将损失 {formatHp(calculateDamageAfterFailingInfiltration(state.startingSecurityLevel))} 点 HP
           </b>
         </Typography>
 
         <Typography variant="h6">
-          <b>Maximum clearance level: </b>
+          <b>最大潜入层数：</b>
           {state.maxLevel}
         </Typography>
 
         <br />
         <Typography variant="h6">
-          <b>Reward: </b>
+          <b>奖励：</b>
         </Typography>
         <Typography component="div">
           <ul style={{ marginTop: 0 }}>
-            <li>Reputation: {formatReputation(repGain)}</li>
-            <li>Money: {formatMoney(moneyGain)}</li>
+            <li>声望：{formatReputation(repGain)}</li>
+            <li>资金：{formatMoney(moneyGain)}</li>
             {Player.factions.includes(FactionName.ShadowsOfAnarchy) && (
-              <li>SoA reputation: {formatReputation(soaRepGain)}</li>
+              <li>SoA 声望：{formatReputation(soaRepGain)}</li>
             )}
             <li>
-              Market demand:{" "}
+              市场需求：{" "}
               {marketRateMultiplier >= 0
                 ? formatPercent(marketRateMultiplier, marketRateMultiplier !== 100 ? 3 : 0)
                 : `0% (${formatPercent(marketRateMultiplier)})`}
@@ -155,7 +155,7 @@ export function Intro({ state }: IProps): React.ReactElement {
             alignItems: "center",
           }}
         >
-          <b>Difficulty:&nbsp;</b>
+          <b>难度：&nbsp;</b>
           {formatNumberNoSuffix(state.startingDifficulty * (100 / MaxDifficultyForInfiltration))} / 100
         </Typography>
         <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
@@ -166,7 +166,7 @@ export function Intro({ state }: IProps): React.ReactElement {
         >{`▲            ▲            ▲            ▲           ▲`}</Typography>
         <Typography
           sx={{ lineHeight: "1em", whiteSpace: "pre" }}
-        >{`  Trivial       Normal        Hard        Brutal    Impossible`}</Typography>
+        >{`  轻松          普通          困难          残酷       不可能`}</Typography>
 
         {warningMessage && (
           <>
@@ -178,35 +178,34 @@ export function Intro({ state }: IProps): React.ReactElement {
 
       <Paper sx={{ p: 1, display: "grid", justifyItems: "center" }}>
         <Typography sx={{ width: "75%", textAlign: "center" }}>
-          <b>Infiltration</b> is a series of short minigames that get progressively harder. You take damage for failing
-          them. Reaching the maximum level rewards you with intel that you can trade for money or reputation.
+          <b>潜入</b>是由一系列越来越难的小游戏组成的。失败会让你受到伤害。到达最大层数后，你将获得情报奖励，可以用来换取资金或声望。
           <br />
           <br />
-          <b>Gameplay:</b>
+          <b>玩法：</b>
         </Typography>
         <ul>
           <Typography>
             <li>
-              The minigames you play are randomly selected.
+              你玩到的小游戏是随机选择的。
               <br />
-              It might take you a few tries to get used to them.
+              可能需要尝试几次才能上手。
             </li>
-            <li>No game requires use of the mouse.</li>
+            <li>所有游戏都无需使用鼠标。</li>
             <li>
-              <b>Spacebar</b> is the default action/confirm button.
+              <b>空格键</b>是默认的行动/确认按键。
             </li>
             <li>
-              The <b>arrow keys</b> and <b>WASD</b> can be used interchangeably.
+              <b>方向键</b>与 <b>WASD</b> 可以互换使用。
             </li>
-            <li>Sometimes the rest of the keyboard is used.</li>
+            <li>有时也会用到键盘上的其他按键。</li>
           </Typography>
         </ul>
 
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", width: "100%" }}>
           <Button onClick={start} disabled={state.startingDifficulty >= MaxDifficultyForInfiltration}>
-            Start
+            开始
           </Button>
-          <Button onClick={cancel}>Cancel</Button>
+          <Button onClick={cancel}>取消</Button>
         </Box>
       </Paper>
     </Container>

@@ -195,7 +195,7 @@ export class Terminal {
       } finally {
         this.print(progress());
         if (cancelled) {
-          this.print(`Cancelled ${name}`);
+          this.print(`已取消 ${name}`);
         }
       }
       onDone();
@@ -270,7 +270,7 @@ export class Terminal {
   connectToServer(hostname: string, singularity = false): void {
     const server = GetServer(hostname);
     if (server === null) {
-      this.error("Invalid server. Connection failed.");
+      this.error("无效的服务器。连接失败。");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
@@ -278,7 +278,7 @@ export class Terminal {
     server.isConnectedTo = true;
     this.setcwd(root);
     if (!singularity) {
-      this.print("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
+      this.print("已连接到 " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
       if (Player.getCurrentServer().hostname === "darkweb") {
         checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
       }
@@ -333,7 +333,7 @@ export class Terminal {
 
   executeCommand(command: string): undefined | TerminalAction {
     if (this.action !== null) {
-      throw new Error(`Cannot execute command (${command}) while an action is in progress`);
+      throw new Error(`有操作正在进行时无法执行命令（${command}）`);
     }
 
     const commandArray = parseCommand(command);
@@ -347,7 +347,7 @@ export class Terminal {
         throw new Error("Could not get n00dles server");
       }
       const errorMessageForBadCommand =
-        "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
+        "错误的命令。请按照教程操作；如果你想跳过教程，请点击“退出教程”。";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
           if (commandArray.length === 1 && commandArray[0] === "help") {
@@ -361,7 +361,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
           } else if (commandArray[0] === "1s") {
-            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            this.error("未找到命令 '1s'。你是想输入小写字母 L 的 'ls' 吗？");
             return;
           } else {
             this.error(errorMessageForBadCommand);
@@ -400,7 +400,7 @@ export class Terminal {
             ) {
               iTutorialNextStep();
             } else {
-              this.error("Wrong command! Try again!");
+              this.error("命令错误！请重试！");
               return;
             }
           } else {
@@ -479,7 +479,7 @@ export class Terminal {
           }
           break;
         default:
-          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
+          this.error("请按照教程操作；如果你想跳过教程，请点击“退出教程”");
           return;
       }
     }
@@ -487,7 +487,7 @@ export class Terminal {
     /* Command parser */
 
     const commandName = commandArray[0];
-    if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`);
+    if (typeof commandName !== "string") return this.error(`${commandName} 不是有效的命令。`);
     // run by path command
     if (isBasicFilePath(commandName)) return run(commandArray, currentServer);
 
@@ -497,8 +497,8 @@ export class Terminal {
     const f = TerminalCommands[commandName.toLowerCase()];
     if (!f) {
       const similarCommands = findSimilarCommands(commandName);
-      const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
-      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
+      const didYouMeanString = similarCommands.length ? ` 你是想输入：${similarCommands.join(" 或 ")}吗？` : "";
+      return this.error(`未找到命令 ${commandName}。${didYouMeanString}`);
     }
 
     return f(commandArray, currentServer);

@@ -3,7 +3,7 @@ import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
   name: "Dracula",
-  description: "Dracula Look-alike",
+  description: "仿 Dracula 风格",
   credit: "H3draut3r",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/922296307836678144",
   screenshot: img1,

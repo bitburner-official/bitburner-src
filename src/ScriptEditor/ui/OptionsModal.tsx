@@ -43,24 +43,24 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <ThemeEditorModal open={themeEditorOpen} onChange={props.onThemeChange} onClose={closeThemeEditor} />
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography>Theme: </Typography>
+        <Typography>主题： </Typography>
         <Select onChange={(event) => props.onOptionChange("theme", event.target.value)} value={props.options.theme}>
           <MenuItem value="monokai">monokai</MenuItem>
           <MenuItem value="solarized-dark">solarized-dark</MenuItem>
           <MenuItem value="solarized-light">solarized-light</MenuItem>
-          <MenuItem value="vs-dark">dark</MenuItem>
-          <MenuItem value="light">light</MenuItem>
+          <MenuItem value="vs-dark">深色</MenuItem>
+          <MenuItem value="light">浅色</MenuItem>
           <MenuItem value="dracula">dracula</MenuItem>
           <MenuItem value="one-dark">one-dark</MenuItem>
-          <MenuItem value="customTheme">Custom theme</MenuItem>
+          <MenuItem value="customTheme">自定义主题</MenuItem>
         </Select>
         <Button onClick={openThemeEditor} sx={{ ml: 1 }} startIcon={<EditIcon />}>
-          Edit custom theme
+          编辑自定义主题
         </Button>
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Indent using spaces: </Typography>
+        <Typography marginRight={"auto"}>使用空格缩进： </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("insertSpaces", e.target.checked)}
           checked={props.options.insertSpaces}
@@ -68,12 +68,12 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Tab size: </Typography>
+        <Typography marginRight={"auto"}>制表符宽度： </Typography>
         <TextField type="number" value={props.options.tabSize} onChange={onTabSizeChange} />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Auto-detect indentation: </Typography>
+        <Typography marginRight={"auto"}>自动检测缩进： </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("detectIndentation", e.target.checked)}
           checked={props.options.detectIndentation}
@@ -81,20 +81,20 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Word wrap: </Typography>
+        <Typography marginRight={"auto"}>自动换行： </Typography>
         <Select
           onChange={(event) => props.onOptionChange("wordWrap", event.target.value)}
           value={props.options.wordWrap}
         >
-          <MenuItem value={"off"}>Off</MenuItem>
-          <MenuItem value={"on"}>On</MenuItem>
-          <MenuItem value={"bounded"}>Bounded</MenuItem>
-          <MenuItem value={"wordWrapColumn"}>Word Wrap Column</MenuItem>
+          <MenuItem value={"off"}>关闭</MenuItem>
+          <MenuItem value={"on"}>开启</MenuItem>
+          <MenuItem value={"bounded"}>受限</MenuItem>
+          <MenuItem value={"wordWrapColumn"}>换行列</MenuItem>
         </Select>
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Font family: </Typography>
+        <Typography marginRight={"auto"}>字体： </Typography>
         <TextField
           type="text"
           value={props.options.fontFamily}
@@ -103,12 +103,12 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Font size: </Typography>
+        <Typography marginRight={"auto"}>字号： </Typography>
         <TextField type="number" value={props.options.fontSize} onChange={onFontSizeChange} />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Enable font ligatures: </Typography>
+        <Typography marginRight={"auto"}>启用字体连字： </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("fontLigatures", e.target.checked)}
           checked={props.options.fontLigatures}
@@ -116,7 +116,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Cursor style: </Typography>
+        <Typography marginRight={"auto"}>光标样式： </Typography>
         <Select
           onChange={(event) => props.onOptionChange("cursorStyle", event.target.value)}
           value={props.options.cursorStyle}
@@ -130,7 +130,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Cursor blinking: </Typography>
+        <Typography marginRight={"auto"}>光标闪烁： </Typography>
         <Select
           onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value)}
           value={props.options.cursorBlinking}
@@ -144,7 +144,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Run Beautify on Save: </Typography>
+        <Typography marginRight={"auto"}>保存时运行美化： </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("beautifyOnSave", e.target.checked)}
           checked={props.options.beautifyOnSave}
@@ -152,7 +152,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Enable Sticky Scroll: </Typography>
+        <Typography marginRight={"auto"}>启用粘性滚动： </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("stickyScroll", { enabled: e.target.checked })}
           checked={props.options.stickyScroll?.enabled}
@@ -160,7 +160,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Enable Minimap: </Typography>
+        <Typography marginRight={"auto"}>启用缩略图： </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("minimap", { enabled: e.target.checked })}
           checked={props.options.minimap?.enabled}
@@ -168,7 +168,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Autosave on focus change: </Typography>
+        <Typography marginRight={"auto"}>失去焦点时自动保存： </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("autoSaveOnFocusChange", e.target.checked)}
           checked={props.options.autoSaveOnFocusChange}

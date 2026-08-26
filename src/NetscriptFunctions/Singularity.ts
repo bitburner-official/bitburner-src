@@ -64,11 +64,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     if (!script) return;
     const ramUsage = script.getRamUsage(home.scripts);
     if (!ramUsage) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
+      return Terminal.error(`尝试在重置后启动 ${cbScript}，但无法计算 RAM 用量。`);
     }
     const ramAvailable = home.maxRam - home.ramUsed;
     if (ramUsage > ramAvailable + 0.001) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
+      return Terminal.error(`尝试在重置后启动 ${cbScript}，但 RAM 不足。`);
     }
     // Start script with no args and 1 thread (default).
     const runningScriptObj = new RunningScript(script, ramUsage, []);
@@ -178,7 +178,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => result.message);
         return false;
       }
-      helpers.log(ctx, () => `You purchased ${augName}.`);
+      helpers.log(ctx, () => `你已购买 ${augName}。`);
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
       return true;
     },
@@ -187,9 +187,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `无法解析文件路径：${_cbScript}`);
 
-      helpers.log(ctx, () => "Soft resetting. This will cause this script to be killed");
+      helpers.log(ctx, () => "正在软重置。这将导致本脚本被杀死");
       installAugmentations(true);
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
@@ -198,14 +198,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `无法解析文件路径：${_cbScript}`);
 
       if (Player.queuedAugmentations.length === 0) {
-        helpers.log(ctx, () => "You do not have any Augmentations to be installed.");
+        helpers.log(ctx, () => "你没有任何可安装的强化。");
         return false;
       }
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
-      helpers.log(ctx, () => "Installing Augmentations. This will cause this script to be killed");
+      helpers.log(ctx, () => "正在安装强化。这将导致本脚本被杀死");
       installAugmentations();
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
@@ -215,11 +215,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const locationName = helpers.string(ctx, "locationName", _locationName);
       const location = Object.values(Locations).find((l) => l.name === locationName);
       if (!location) {
-        helpers.log(ctx, () => `No location named ${locationName}`);
+        helpers.log(ctx, () => `没有名为 ${locationName} 的地点`);
         return false;
       }
       if (location.city && Player.city !== location.city) {
-        helpers.log(ctx, () => `No location named ${locationName} in ${Player.city}`);
+        helpers.log(ctx, () => `${Player.city} 中没有名为 ${locationName} 的地点`);
         return false;
       }
       if (location.name === LocationName.TravelAgency) {
@@ -244,7 +244,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           if (Player.city !== CityName.Aevum) {
             helpers.log(
               ctx,
-              () => `You cannot study at 'Summit University' because you are not in '${CityName.Aevum}'.`,
+              () => `你无法在'Summit University'学习，因为你不在'${CityName.Aevum}'。`,
             );
             return false;
           }
@@ -254,7 +254,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           if (Player.city !== CityName.Sector12) {
             helpers.log(
               ctx,
-              () => `You cannot study at 'Rothman University' because you are not in '${CityName.Sector12}'.`,
+              () => `你无法在'Rothman University'学习，因为你不在'${CityName.Sector12}'。`,
             );
             return false;
           }
@@ -264,14 +264,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           if (Player.city !== CityName.Volhaven) {
             helpers.log(
               ctx,
-              () => `You cannot study at 'ZB Institute of Technology' because you are not in '${CityName.Volhaven}'.`,
+              () => `你无法在'ZB Institute of Technology'学习，因为你不在'${CityName.Volhaven}'。`,
             );
             return false;
           }
           Player.gotoLocation(LocationName.VolhavenZBInstituteOfTechnology);
           break;
         default:
-          helpers.log(ctx, () => `Invalid university name: '${universityName}'.`);
+          helpers.log(ctx, () => `无效的大学名称：'${universityName}'。`);
           return false;
       }
 
@@ -288,7 +288,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       } else if (wasFocusing) {
         Router.toPage(Page.Terminal);
       }
-      helpers.log(ctx, () => `Started ${classType} at ${universityName}`);
+      helpers.log(ctx, () => `开始在 ${universityName} 上 ${classType}`);
       return true;
     },
 
@@ -305,7 +305,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
             helpers.log(
               ctx,
               () =>
-                `You cannot workout at '${LocationName.AevumCrushFitnessGym}' because you are not in '${CityName.Aevum}'.`,
+                `你无法在'${LocationName.AevumCrushFitnessGym}'锻炼，因为你不在'${CityName.Aevum}'。`,
             );
             return false;
           }
@@ -316,7 +316,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
             helpers.log(
               ctx,
               () =>
-                `You cannot workout at '${LocationName.AevumSnapFitnessGym}' because you are not in '${CityName.Aevum}'.`,
+                `你无法在'${LocationName.AevumSnapFitnessGym}'锻炼，因为你不在'${CityName.Aevum}'。`,
             );
             return false;
           }
@@ -327,7 +327,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
             helpers.log(
               ctx,
               () =>
-                `You cannot workout at '${LocationName.Sector12IronGym}' because you are not in '${CityName.Sector12}'.`,
+                `你无法在'${LocationName.Sector12IronGym}'锻炼，因为你不在'${CityName.Sector12}'。`,
             );
             return false;
           }
@@ -338,7 +338,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
             helpers.log(
               ctx,
               () =>
-                `You cannot workout at '${LocationName.Sector12PowerhouseGym}' because you are not in '${CityName.Sector12}'.`,
+                `你无法在'${LocationName.Sector12PowerhouseGym}'锻炼，因为你不在'${CityName.Sector12}'。`,
             );
             return false;
           }
@@ -349,14 +349,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
             helpers.log(
               ctx,
               () =>
-                `You cannot workout at '${LocationName.VolhavenMilleniumFitnessGym}' because you are not in '${CityName.Volhaven}'.`,
+                `你无法在'${LocationName.VolhavenMilleniumFitnessGym}'锻炼，因为你不在'${CityName.Volhaven}'。`,
             );
             return false;
           }
           Player.gotoLocation(LocationName.VolhavenMilleniumFitnessGym);
           break;
         default:
-          helpers.log(ctx, () => `Invalid gym name: ${gymName}. gymWorkout() failed`);
+          helpers.log(ctx, () => `无效的健身房名称：${gymName}。gymWorkout() 失败`);
           return false;
       }
 
@@ -367,7 +367,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       } else if (wasFocusing) {
         Router.toPage(Page.Terminal);
       }
-      helpers.log(ctx, () => `Started training ${classType} at ${gymName}`);
+      helpers.log(ctx, () => `开始在 ${gymName} 训练 ${classType}`);
       return true;
     },
 
@@ -383,14 +383,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         case CityName.Ishima:
         case CityName.Volhaven:
           if (!Player.travel(cityName)) {
-            helpers.log(ctx, () => "Not enough money to travel.");
+            helpers.log(ctx, () => "资金不足，无法旅行。");
             return false;
           }
-          helpers.log(ctx, () => `Traveled to ${cityName}`);
+          helpers.log(ctx, () => `已前往 ${cityName}`);
           Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 50000);
           return true;
         default:
-          throw helpers.errorMessage(ctx, `Invalid city name: '${cityName}'.`);
+          throw helpers.errorMessage(ctx, `无效的城市名称：'${cityName}'。`);
       }
     },
 
@@ -398,19 +398,19 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
 
       if (Player.hasTorRouter()) {
-        helpers.log(ctx, () => "You already have a TOR router!");
+        helpers.log(ctx, () => "你已经拥有 TOR 路由器！");
         return true;
       }
 
       if (Player.money < CONSTANTS.TorRouterCost) {
-        helpers.log(ctx, () => "You cannot afford to purchase a Tor router.");
+        helpers.log(ctx, () => "你买不起 Tor 路由器。");
         return false;
       }
       Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
       getTorRouter();
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 500);
-      helpers.log(ctx, () => "You have purchased a Tor router!");
+      helpers.log(ctx, () => "你已购买了 Tor 路由器！");
       return true;
     },
     purchaseProgram: (ctx, _programName) => {
@@ -418,23 +418,23 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const programName = helpers.string(ctx, "programName", _programName).toLowerCase();
 
       if (!Player.hasTorRouter()) {
-        helpers.log(ctx, () => "You do not have the TOR router.");
+        helpers.log(ctx, () => "你没有 TOR 路由器。");
         return false;
       }
 
       const item = Object.values(DarkWebItems).find((i) => i.program.toLowerCase() === programName);
       if (item == null) {
-        helpers.log(ctx, () => `Invalid program name: '${programName}.`);
+        helpers.log(ctx, () => `无效的程序名称：'${programName}.`);
         return false;
       }
 
       if (Player.hasProgram(item.program)) {
-        helpers.log(ctx, () => `You already have the '${item.program}' program`);
+        helpers.log(ctx, () => `你已经拥有 '${item.program}' 程序`);
         return true;
       }
 
       if (Player.money < item.price) {
-        helpers.log(ctx, () => `Not enough money to purchase '${item.program}'. Need ${formatMoney(item.price)}`);
+        helpers.log(ctx, () => `资金不足，无法购买 '${item.program}'。需要 ${formatMoney(item.price)}`);
         return false;
       }
 
@@ -447,7 +447,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.loseMoney(item.price, "other");
       helpers.log(
         ctx,
-        () => `You have purchased the '${item.program}' program. The new program can be found on your home computer.`,
+        () => `你已购买了 '${item.program}' 程序。新程序可以在你的家用电脑上找到。`,
       );
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 5000);
 
@@ -492,7 +492,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const baseserver = Player.getCurrentServer();
       if (!(baseserver instanceof Server || baseserver instanceof DarknetServer)) {
-        throw helpers.errorMessage(ctx, "Cannot backdoor this kind of server.");
+        throw helpers.errorMessage(ctx, "无法在此类服务器上安装后门。");
       }
       const server = baseserver;
       const installTime = (calculateHackingTime(server, Player) / 4) * 1000;
@@ -509,17 +509,16 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(
           ctx,
           () =>
-            "You have already installed a backdoor on this server. You can check if the server has a backdoor installed " +
-            "with ns.getServer().backdoorInstalled.",
+            "你已经在此服务器上安装过后门。你可以用 ns.getServer().backdoorInstalled 检查服务器是否已安装后门。",
         );
       }
       helpers.log(
         ctx,
-        () => `Installing backdoor on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(installTime, true)}`,
+        () => `正在 '${server.hostname}' 上安装后门，耗时 ${convertTimeMsToTimeElapsedString(installTime, true)}`,
       );
 
       return helpers.netscriptDelay(ctx, installTime).then(function () {
-        helpers.log(ctx, () => `Successfully installed backdoor on '${server.hostname}'`);
+        helpers.log(ctx, () => `已成功在 '${server.hostname}' 上安装后门`);
         server.backdoorInstalled = true;
 
         if (SpecialServers.WorldDaemon === server.hostname) {
@@ -538,7 +537,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const focus = !!_focus;
       if (Player.currentWork === null) {
-        throw helpers.errorMessage(ctx, "Not currently working");
+        throw helpers.errorMessage(ctx, "当前没有在工作");
       }
 
       if (!Player.focus && focus) {
@@ -571,13 +570,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       // Check if we're at max cores
       const homeComputer = Player.getHomeComputer();
       if (Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8) {
-        helpers.log(ctx, () => `Your home computer is at max cores.`);
+        helpers.log(ctx, () => `你的家用电脑已达到最大核心数。`);
         return false;
       }
 
       const cost = Player.getUpgradeHomeCoresCost();
       if (Player.money < cost) {
-        helpers.log(ctx, () => `You don't have enough money. Need ${formatMoney(cost)}`);
+        helpers.log(ctx, () => `你的资金不足。需要 ${formatMoney(cost)}`);
         return false;
       }
 
@@ -587,7 +586,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 2);
       helpers.log(
         ctx,
-        () => `Purchased an additional core for home computer! It now has ${homeComputer.cpuCores} cores.`,
+        () => `为家用电脑购买了额外的核心！现在有 ${homeComputer.cpuCores} 个核心。`,
       );
       return true;
     },
@@ -605,13 +604,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
         homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
       ) {
-        helpers.log(ctx, () => `Your home computer is at max RAM.`);
+        helpers.log(ctx, () => `你的家用电脑已达到最大 RAM。`);
         return false;
       }
 
       const cost = Player.getUpgradeHomeRamCost();
       if (Player.money < cost) {
-        helpers.log(ctx, () => `You don't have enough money. Need ${formatMoney(cost)}`);
+        helpers.log(ctx, () => `你的资金不足。需要 ${formatMoney(cost)}`);
         return false;
       }
 
@@ -621,7 +620,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 2);
       helpers.log(
         ctx,
-        () => `Purchased additional RAM for home computer! It now has ${formatRam(homeComputer.maxRam)} of RAM.`,
+        () => `为家用电脑购买了额外的 RAM！现在有 ${formatRam(homeComputer.maxRam)} 的 RAM。`,
       );
       return true;
     },
@@ -645,7 +644,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const company = Companies[companyName];
 
       if (!company.hasPosition(positionName)) {
-        throw helpers.errorMessage(ctx, `Company '${companyName}' does not have position '${positionName}'`);
+        throw helpers.errorMessage(ctx, `公司 '${companyName}' 没有职位 '${positionName}'`);
       }
 
       const job = CompanyPositions[positionName];
@@ -667,7 +666,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const jobName = Player.jobs[companyName];
       // Make sure player is actually employed at the company
       if (!jobName) {
-        throw helpers.errorMessage(ctx, `You do not have a job at: '${companyName}'`);
+        throw helpers.errorMessage(ctx, `你没有在这家公司工作：'${companyName}'`);
       }
 
       const wasFocused = Player.focus;
@@ -684,7 +683,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       } else if (wasFocused) {
         Router.toPage(Page.Terminal);
       }
-      helpers.log(ctx, () => `Began working at '${companyName}' with position '${jobName}'`);
+      helpers.log(ctx, () => `开始在 '${companyName}' 工作，职位为 '${jobName}'`);
       return true;
     },
     applyToCompany: (ctx, _companyName, _field) => {
@@ -699,11 +698,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(
           ctx,
           () =>
-            `You failed to get a new job/promotion at '${companyName}' in the '${field}' field. Reason: ${result.message}`,
+            `你未能在 '${companyName}' 的 '${field}' 领域获得新工作/晋升。原因：${result.message}`,
         );
         return null;
       }
-      helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${result.jobName}'.`);
+      helpers.log(ctx, () => `你在 '${companyName}' 获得了一份新工作，职位为 '${result.jobName}'。`);
       return result.jobName;
     },
     quitJob: (ctx, _companyName) => {
@@ -752,19 +751,19 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
 
       if (Player.factions.includes(facName)) {
-        helpers.log(ctx, () => `You are already a member of faction '${facName}'`);
+        helpers.log(ctx, () => `你已经是派系 '${facName}' 的成员了`);
         return false;
       }
 
       if (!Player.factionInvitations.includes(facName)) {
-        helpers.log(ctx, () => `You have not been invited by faction '${facName}'`);
+        helpers.log(ctx, () => `你没有收到派系 '${facName}' 的邀请`);
         return false;
       }
       const fac = Factions[facName];
       joinFaction(fac);
 
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 5);
-      helpers.log(ctx, () => `Joined the '${facName}' faction.`);
+      helpers.log(ctx, () => `已加入 '${facName}' 派系。`);
       return true;
     },
     workForFaction: (ctx, _facName, _type, _focus = true) => {
@@ -776,12 +775,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // if the player is in a gang and the target faction is any of the gang faction, fail
       if (Player.gang && faction.name === Player.getGangFaction().name) {
-        helpers.log(ctx, () => `You can't work for '${facName}' because you are managing a gang for it`);
+        helpers.log(ctx, () => `你无法为 '${facName}' 工作，因为你正在为它管理帮派`);
         return false;
       }
 
       if (!Player.factions.includes(facName)) {
-        helpers.log(ctx, () => `You are not a member of '${facName}'`);
+        helpers.log(ctx, () => `你不是 '${facName}' 的成员`);
         return false;
       }
 
@@ -790,7 +789,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       switch (type) {
         case FactionWorkType.hacking:
           if (!FactionInfos[faction.name].offerHackingWork) {
-            helpers.log(ctx, () => `Faction '${faction.name}' do not need help with hacking contracts.`);
+            helpers.log(ctx, () => `派系 '${faction.name}' 不需要黑客合约方面的帮助。`);
             return false;
           }
           Player.startWork(
@@ -806,11 +805,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           } else if (wasFocusing) {
             Router.toPage(Page.Terminal);
           }
-          helpers.log(ctx, () => `Started carrying out hacking contracts for '${faction.name}'`);
+          helpers.log(ctx, () => `开始为 '${faction.name}' 执行黑客合约`);
           return true;
         case FactionWorkType.field:
           if (!FactionInfos[faction.name].offerFieldWork) {
-            helpers.log(ctx, () => `Faction '${faction.name}' do not need help with field missions.`);
+            helpers.log(ctx, () => `派系 '${faction.name}' 不需要野外任务方面的帮助。`);
             return false;
           }
           Player.startWork(
@@ -826,11 +825,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           } else if (wasFocusing) {
             Router.toPage(Page.Terminal);
           }
-          helpers.log(ctx, () => `Started carrying out field missions for '${faction.name}'`);
+          helpers.log(ctx, () => `开始为 '${faction.name}' 执行野外任务`);
           return true;
         case FactionWorkType.security:
           if (!FactionInfos[faction.name].offerSecurityWork) {
-            helpers.log(ctx, () => `Faction '${faction.name}' do not need help with security work.`);
+            helpers.log(ctx, () => `派系 '${faction.name}' 不需要安保工作方面的帮助。`);
             return false;
           }
           Player.startWork(
@@ -846,10 +845,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           } else if (wasFocusing) {
             Router.toPage(Page.Terminal);
           }
-          helpers.log(ctx, () => `Started carrying out security work for '${faction.name}'`);
+          helpers.log(ctx, () => `开始为 '${faction.name}' 执行安保工作`);
           return true;
         default:
-          helpers.log(ctx, () => `Invalid work type: '${type}`);
+          helpers.log(ctx, () => `无效的工作类型：'${type}`);
           return false;
       }
     },
@@ -897,23 +896,23 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const amt = helpers.number(ctx, "amt", _amt);
       const faction = Factions[facName];
       if (!Player.factions.includes(faction.name)) {
-        helpers.log(ctx, () => `You can't donate to '${facName}' because you aren't a member`);
+        helpers.log(ctx, () => `你无法向 '${facName}' 捐款，因为你不是它的成员`);
         return false;
       }
       if (Player.gang && faction.name === Player.getGangFaction().name) {
-        helpers.log(ctx, () => `You can't donate to '${facName}' because you are managing a gang for it`);
+        helpers.log(ctx, () => `你无法向 '${facName}' 捐款，因为你正在为它管理帮派`);
         return false;
       }
       if (!faction.getInfo().offersWork()) {
-        helpers.log(ctx, () => `You can't donate to '${facName}' because this faction does not offer any type of work`);
+        helpers.log(ctx, () => `你无法向 '${facName}' 捐款，因为该派系不提供任何类型的工作`);
         return false;
       }
       if (typeof amt !== "number" || amt <= 0 || isNaN(amt)) {
-        helpers.log(ctx, () => `Invalid donation amount: '${amt}'.`);
+        helpers.log(ctx, () => `无效的捐款金额：'${amt}'。`);
         return false;
       }
       if (Player.money < amt) {
-        helpers.log(ctx, () => `You do not have enough money to donate ${formatMoney(amt)} to '${facName}'`);
+        helpers.log(ctx, () => `你没有足够的资金向 '${facName}' 捐款 ${formatMoney(amt)}`);
         return false;
       }
 
@@ -921,14 +920,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(
           ctx,
           () =>
-            `You do not have enough favor to donate to this faction. Have ${
+            `你的恩惠不足以向该派系捐款。当前 ${
               faction.favor
-            }, need ${favorNeededToDonate()}`,
+            }，需要 ${favorNeededToDonate()}`,
         );
         return false;
       }
       const repGain = donate(amt, faction);
-      helpers.log(ctx, () => `${formatMoney(amt)} donated to '${facName}' for ${formatReputation(repGain)} reputation`);
+      helpers.log(ctx, () => `已向 '${facName}' 捐款 ${formatMoney(amt)}，获得 ${formatReputation(repGain)} 声望`);
       return true;
     },
     createProgram: (ctx, _programName, _focus = true) => {
@@ -941,23 +940,23 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const p = Object.values(Programs).find((p) => p.name.toLowerCase() === programName);
 
       if (p == null) {
-        helpers.log(ctx, () => `The specified program does not exist: '${programName}'`);
+        helpers.log(ctx, () => `指定的程序不存在：'${programName}'`);
         return false;
       }
 
       if (Player.hasProgram(p.name)) {
-        helpers.log(ctx, () => `You already have the '${p.name}' program`);
+        helpers.log(ctx, () => `你已经拥有 '${p.name}' 程序`);
         return false;
       }
 
       const create = p.create;
       if (create === null) {
-        helpers.log(ctx, () => `You cannot create the '${p.name}' program`);
+        helpers.log(ctx, () => `你无法创建 '${p.name}' 程序`);
         return false;
       }
 
       if (!create.req()) {
-        helpers.log(ctx, () => `Hacking level is too low to create '${p.name}' (level ${create.level} req)`);
+        helpers.log(ctx, () => `黑客等级过低，无法创建 '${p.name}'（需要等级 ${create.level}）`);
         return false;
       }
       if (Player.currentWork) {
@@ -976,7 +975,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       } else if (wasFocusing) {
         Router.toPage(Page.Terminal);
       }
-      helpers.log(ctx, () => `Began creating program: '${programName}'`);
+      helpers.log(ctx, () => `开始编写程序：'${programName}'`);
       return true;
     },
     getHackingLevelRequirementOfProgram: (ctx, _programName) => {
@@ -985,7 +984,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const program = Object.values(Programs).find((p) => p.name.toLowerCase() === programName);
       if (program == null) {
-        throw helpers.errorMessage(ctx, `The specified program does not exist: '${programName}'`);
+        throw helpers.errorMessage(ctx, `指定的程序不存在：'${programName}'`);
       }
 
       const create = program.create;
@@ -1014,10 +1013,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const crime = Crimes[crimeType];
       if (crime == null) {
-        throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
+        throw helpers.errorMessage(ctx, `无效的犯罪：'${crimeType}'`);
       }
 
-      helpers.log(ctx, () => `Attempting to commit ${crime.type}...`);
+      helpers.log(ctx, () => `正在尝试实施 ${crime.type}...`);
       const crimeTime = crime.commit(1, ctx.workerScript);
       if (focus) {
         Player.startFocusing();
@@ -1033,7 +1032,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const crime = Crimes[crimeType];
       if (crime == null) {
-        throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
+        throw helpers.errorMessage(ctx, `无效的犯罪：'${crimeType}'`);
       }
 
       return crime.successRate(Player);
@@ -1044,7 +1043,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const crime = Crimes[crimeType];
       if (crime == null) {
-        throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
+        throw helpers.errorMessage(ctx, `无效的犯罪：'${crimeType}'`);
       }
 
       const crimeStatsWithMultipliers = calculateCrimeWorkStats(Player, crime);
@@ -1066,7 +1065,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If we don't have Tor, log it and return [] (empty list)
       if (!Player.hasTorRouter()) {
-        helpers.log(ctx, () => "You do not have the TOR router.");
+        helpers.log(ctx, () => "你没有 TOR 路由器。");
         return [];
       }
       return Object.values(DarkWebItems).map((p) => p.program);
@@ -1077,7 +1076,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If we don't have Tor, log it and return -1
       if (!Player.hasTorRouter()) {
-        helpers.log(ctx, () => "You do not have the TOR router.");
+        helpers.log(ctx, () => "你没有 TOR 路由器。");
         // returning -1 rather than throwing an error to be consistent with purchaseProgram
         // which returns false if tor has
         return -1;
@@ -1092,13 +1091,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       if (item == null) {
         throw helpers.errorMessage(
           ctx,
-          `No such exploit ('${programName}') found on the darkweb! ` +
-            `\nThis function is not case-sensitive. Did you perhaps forget .exe at the end?`,
+          `在暗网上找不到此利用程序（'${programName}'）！` +
+            `\n此函数不区分大小写。你是否忘了在结尾加上 .exe？`,
         );
       }
 
       if (Player.hasProgram(item.program)) {
-        helpers.log(ctx, () => `You already have the '${item.program}' program`);
+        helpers.log(ctx, () => `你已经拥有 '${item.program}' 程序`);
         return 0;
       }
       return item.price;
@@ -1113,7 +1112,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
       if (cbScript === null) {
-        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
+        throw helpers.errorMessage(ctx, `无法解析文件路径。callbackScript 为 null。`);
       }
       const bitNodeOptions = helpers.validateBitNodeOptions(ctx, _bitNodeOptions);
       enterBitNode(true, Player.bitNodeN, nextBN, bitNodeOptions);
@@ -1131,19 +1130,19 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         }
       } else if (_cbScript != null || _bitNodeOptions != null) {
         // If _nextBN was not provided, the other parameters must also be nullish.
-        throw helpers.errorMessage(ctx, `When nextBN is nullish, other parameters must be nullish.`);
+        throw helpers.errorMessage(ctx, `当 nextBN 为空值时，其他参数也必须为空值。`);
       }
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
       if (cbScript === null) {
-        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
+        throw helpers.errorMessage(ctx, `无法解析文件路径。callbackScript 为 null。`);
       }
       const bitNodeOptions = helpers.validateBitNodeOptions(ctx, _bitNodeOptions);
 
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) {
-        throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
+        throw new Error("WorldDaemon 不是普通服务器。这是一个 bug。请联系开发者。");
       }
       const hackingRequirements = () => {
         if (Player.skills.hacking < wd.requiredHackingSkill || !wd.hasAdminRights) {
@@ -1159,7 +1158,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       };
 
       if (!hackingRequirements() && !bladeburnerRequirements()) {
-        helpers.log(ctx, () => "Requirements not met to destroy the world daemon");
+        helpers.log(ctx, () => "未满足摧毁世界守护进程的条件");
         return;
       }
 

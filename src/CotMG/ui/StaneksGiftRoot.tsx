@@ -23,7 +23,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
   return (
     <Container maxWidth="lg" disableGutters sx={{ mx: 0 }}>
       <Typography variant="h4">
-        Stanek's Gift
+        Stanek 的礼物
         <Info
           sx={{ ml: 1, mb: 0 }}
           color="info"
@@ -31,39 +31,29 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
             dialogBoxCreate(
               <>
                 <Typography>
-                  Stanek's Gift is a powerful, unique augmentation obtained by joining the Church of the Machine God,
-                  which can be found in Chongqing. It is only possible to join the church if you are in BitNode 13 or
-                  possess at least one level of Source File 13, and you will be turned away if you have purchased or
-                  installed any augmentations beside NeuroFlux Governors. You are, however, permitted to install
-                  augmentations as normal once you have joined the church.
+                  Stanek 的礼物是一种强大且独一无二的强化，通过加入机械神教获得，该教会位于重庆。只有当你处于
+                  BitNode 13 或拥有至少 1 级源文件 13 时才能加入教会；如果你购买或安装了除 NeuroFlux
+                  Governors 以外的任何强化，你会被拒之门外。不过，一旦加入教会，你就可以正常安装其他强化。
                 </Typography>
                 <br />
                 <Typography>
-                  Initially, those bearing the gift will find that its overwhelming power worsens all of their stats by
-                  10%. This penalty can be overcome in time by receiving free upgrades from the Church of the Machine
-                  God faction, but the reputation requirements for these upgrades are steep, and you can only obtain
-                  reputation with the church by charging the gift.
+                  最初，携带礼物的人会发现它压倒性的力量会使你的所有属性降低
+                  10%。这一惩罚可以通过接受机械神教派系的免费升级来逐渐克服，但这些升级所需的声望非常高，而且你只能通过为礼物充能来获得教会的声望。
                 </Typography>
                 <br />
                 <Typography>
-                  In order to charge Stanek's Gift, the user must first arrange stat-modifying fragments within the grid
-                  located on the device. This may be done manually or by scripts that utilize the Stanek's Gift
-                  Netscript API. Not every tile of the grid must house a fragment, but fragments cannot overlap or
-                  otherwise share tiles. Fragments can be rotated, but their design does not allow them to be flipped
-                  around to mirror their original shape. Note that the size of the grid is determined by the BitNode you
-                  are currently in and the level of your Source File 13, if applicable.
+                  要为 Stanek 的礼物充能，用户必须先在设备上的网格中排列能够修改属性的碎片。这可以手动完成，也可以由使用
+                  Stanek's Gift Netscript API
+                  的脚本来完成。网格上并非每个格子都必须放置碎片，但碎片之间不能重叠或共享格子。碎片可以旋转，但其设计不允许翻转以镜像其原始形状。注意，网格的大小取决于你当前所在的
+                  BitNode 以及你的源文件 13 的等级（如果适用）。
                 </Typography>
                 <br />
                 <Typography>
-                  There exist two kinds of fragments. The first are Stat Fragments, which take up 4 tiles of the grid.
-                  Each Stat Fragment is unique, and there is only one of each. There is no way to obtain more of these
-                  fragments. Each Stat Fragment has an associated stat that it will improve, as well as a multiplier on
-                  its effectiveness known as power. When initially placed, a Stat Fragment will have no effect. In order
-                  for the fragment to gain stat boosts, it must be charged. The other kind of fragments are known as
-                  Booster Fragments, which take up 5 tiles of the grid. There is no shortage of Booster Fragments, and
-                  it is virtually impossible to run out of them. While not providing any direct stat increases to their
-                  user, Booster Fragments increase the efficacy of adjacent Stat Fragments by 10%, and do not need to be
-                  charged. Multiple Booster Fragments can affect the same Stat Fragment.
+                  碎片有两种。第一种是属性碎片（Stat
+                  Fragment），占据网格的 4 个格子。每种属性碎片都是独一无二、仅有
+                  1 个的，无法获得更多。每个属性碎片都有一个对应的属性会被提升，同时还有一个衡量其效果的乘数，称为威力（power）。刚放置时，属性碎片不会产生任何效果。要使碎片获得属性加成，必须为其充能。另一种碎片被称为增幅碎片（Booster
+                  Fragment），占据网格的 5 个格子。增幅碎片数量充足，几乎不可能用完。虽然不会给用户带来直接的属性提升，但增幅碎片会将相邻属性碎片的效果提高
+                  10%，并且无需充能。多个增幅碎片可以影响同一个属性碎片。
                 </Typography>
                 <br />
 
@@ -86,7 +76,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   ]}
                 />
                 <Typography sx={{ fontStyle: "italic" }}>
-                  This Booster Fragment provides a bonus to the adjacent Stat Fragment.
+                  这个增幅碎片为其相邻的属性碎片提供加成。
                 </Typography>
                 <br />
 
@@ -109,8 +99,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   ]}
                 />
                 <Typography sx={{ fontStyle: "italic" }}>
-                  Even though the Booster Fragment touches the Stat Fragment in multiple places, the bonus is only
-                  applied once.
+                  即使这个增幅碎片在多处接触到属性碎片，加成也只会生效一次。
                 </Typography>
                 <br />
 
@@ -133,7 +122,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   ]}
                 />
                 <Typography sx={{ fontStyle: "italic" }}>
-                  This Booster Fragment does nothing, as it is not touching a Stat Fragment.
+                  这个增幅碎片没有作用，因为它没有接触任何属性碎片。
                 </Typography>
                 <br />
 
@@ -162,20 +151,16 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   ]}
                 />
                 <Typography sx={{ fontStyle: "italic" }}>
-                  This Booster Fragment provides a bonus to both Stat Fragments it's touching.
+                  这个增幅碎片为它接触到的两个属性碎片都提供加成。
                 </Typography>
                 <br />
 
                 <Typography>
-                  Stat Fragments are charged using the stanek.chargeFragment(rootX, rootY) NetScript API function. The
-                  charging process ordinarily takes 1000ms to complete, but only takes 200ms during bonus time. When the
-                  function finishes executing, the fragment's charge levels will be raised by an amount corresponding to
-                  the number of threads that were used. The maximum number of threads used in a single call to
-                  chargeFragment is also recorded as its highest charge. As a Stat Fragment's charge level and highest
-                  charge are increased, its bonuses will increase, but there will be diminishing returns. As such, it is
-                  generally most efficient to charge all of the placed fragments equally. The charge level of a fragment
-                  will not decrease over time, but it will be reset to 0 upon removing it from the board or installing
-                  augmentations.
+                  属性碎片通过 stanek.chargeFragment(rootX, rootY) 这一 NetScript API 函数进行充能。充能过程通常需要
+                  1000ms 完成，但在奖励时间内只需
+                  200ms。函数执行完毕后，碎片的充能等级会根据所使用的线程数相应提升。单次调用 chargeFragment
+                  所使用的最大线程数也会被记录为其最高充能。随着属性碎片的充能等级和最高充能的提高，其加成也会增加，但收益会递减。因此，通常最有效率的做法是均匀地为所有已放置的碎片充能。碎片的充能等级不会随时间下降，但在将其从棋盘上移除或安装强化时会被重置为
+                  0。
                 </Typography>
               </>,
             )
@@ -184,14 +169,11 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
       </Typography>
 
       <Typography sx={{ mb: 1 }}>
-        The gift is a grid on which you can place upgrades called fragments. The main type of fragment increases a stat,
-        like your hacking skill or agility exp. Once a stat fragment is placed it then needs to be charged via scripts
-        in order to become useful. The other kind of fragments are called booster fragments. They increase the
-        efficiency of the neighboring fragments (not diagonally). Use Q/E to rotate fragments.
+        礼物是一个网格，你可以在上面放置被称为碎片的升级。主要类型的碎片可以提升一项属性，例如你的黑客技能或敏捷经验。属性碎片放置后需要通过脚本充能才能发挥作用。另一种碎片被称为增幅碎片，它们会提升相邻碎片（不含对角线）的效率。使用 Q/E 旋转碎片。
       </Typography>
       {staneksGift.storedCycles > 5 && (
         <Typography sx={{ mb: 1 }}>
-          Bonus time: {convertTimeMsToTimeElapsedString(CONSTANTS.MilliPerCycle * staneksGift.storedCycles)}
+          奖励时间：{convertTimeMsToTimeElapsedString(CONSTANTS.MilliPerCycle * staneksGift.storedCycles)}
         </Typography>
       )}
       <MainBoard gift={staneksGift} />

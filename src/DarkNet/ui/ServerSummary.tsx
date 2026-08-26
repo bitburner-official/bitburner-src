@@ -36,10 +36,10 @@ export function ServerSummary({
   showDetails = false,
 }: ServerSummaryProps): React.ReactElement {
   if (!server.hasAdminRights && enableAuth) {
-    return <Typography color={Settings.theme.int}>[ auth required ]</Typography>;
+    return <Typography color={Settings.theme.int}>[ 需要认证 ]</Typography>;
   }
   if (!server.hasAdminRights && !enableAuth) {
-    return <Typography color="secondary">(no connection)</Typography>;
+    return <Typography color="secondary">（无连接）</Typography>;
   }
 
   const cacheCount = server.caches.length;
@@ -48,10 +48,10 @@ export function ServerSummary({
   const fileCount = textFiles.length;
   const textFilesTooltip =
     textFiles.length > 0
-      ? `Data files on server: ${textFiles.slice(0, 3).join(", ")}${
-          textFiles.length > 3 ? ` +${textFiles.length - 3}` : ""
+      ? `服务器上的数据文件：${textFiles.slice(0, 3).join("、")}${
+          textFiles.length > 3 ? ` 等 ${textFiles.length} 个` : ""
         }`
-      : "No data files on server";
+      : "服务器上没有数据文件";
   const contractCount = server.contracts.length;
   let runningScriptCount = 0;
   const scripts = new Map<string, number>();
@@ -68,12 +68,12 @@ export function ServerSummary({
     .toArray();
   const runningScriptsTooltip =
     runningScriptNames.length > 0
-      ? `Running scripts on server: ${runningScriptNames.slice(0, 3).join(", ")}${
-          runningScriptNames.length > 3 ? ` +${runningScriptNames.length - 3}` : ""
+      ? `服务器上运行中的脚本：${runningScriptNames.slice(0, 3).join("、")}${
+          runningScriptNames.length > 3 ? ` 等 ${runningScriptNames.length} 个` : ""
         }`
-      : "No running scripts on server";
-  const dataCacheTooltip = `Reward caches on server: ${server.caches.slice(0, 3).join(", ")}${
-    server.caches.length > 3 ? ` +${server.caches.length - 3}` : ""
+      : "服务器上没有运行中的脚本";
+  const dataCacheTooltip = `服务器上的奖励缓存：${server.caches.slice(0, 3).join("、")}${
+    server.caches.length > 3 ? ` 等 ${server.caches.length} 个` : ""
   }`;
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
   const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";
@@ -103,7 +103,7 @@ export function ServerSummary({
   }
   if (hasStormSeed) {
     components.push(
-      <Tooltip key="stormSeed" title={<>A mysterious executable has been found here...</>}>
+      <Tooltip key="stormSeed" title={<>这里发现了一个神秘的可执行文件……</>}>
         <Typography>
           <SvgIcon component={Bolt} className={`${classes.gold} ${classes.serverStatusIcon}`} />?
         </Typography>
@@ -116,7 +116,7 @@ export function ServerSummary({
         key="stasisLinked"
         title={
           <>
-            Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance.
+            已安装滞留链路。这允许远程连接到该服务器，并可以从任意距离执行 ns.exec。
           </>
         }
       >
@@ -127,7 +127,7 @@ export function ServerSummary({
     );
   } else if (server.backdoorInstalled) {
     components.push(
-      <Tooltip key="backdoor" title={<>Backdoor installed. Warning: this increases darknet instability.</>}>
+      <Tooltip key="backdoor" title={<>已安装后门。警告：这会增加暗网的不稳定性。</>}>
         <Typography>
           <SvgIcon component={DoorBackSharp} className={`${classes.red} ${classes.serverStatusIcon}`} />
         </Typography>
@@ -138,7 +138,7 @@ export function ServerSummary({
     components.push(
       <Tooltip
         key="frozen"
-        title={<>Server has been frozen. It will not move, but has no max ram and does not give charisma xp.</>}
+        title={<>服务器已被冻结。它不会移动，但没有最大 RAM，也不会提供魅力经验。</>}
       >
         <Typography>
           <SvgIcon component={AcUnit} className={`${classes.blue} ${classes.serverStatusIcon}`} />
@@ -148,7 +148,7 @@ export function ServerSummary({
   }
   if (contractCount) {
     components.push(
-      <Tooltip key="contract" title={<>Coding contract count: {contractCount}</>}>
+      <Tooltip key="contract" title={<>编程合约数量：{contractCount}</>}>
         <Typography>
           <SvgIcon component={Code} className={classes.serverStatusIcon} />
           {contractCount}
@@ -170,7 +170,7 @@ export function ServerSummary({
     components.push(
       <Tooltip
         key="ramBlocked"
-        title={<>Ram blocked by owner: {ramBlockedDetails}. This can be freed up using ns.dnet.memoryReallocation()</>}
+        title={<>所有者封锁的 RAM：{ramBlockedDetails}。可以使用 ns.dnet.memoryReallocation() 释放这些内存</>}
       >
         <Typography color={"secondary"}>
           <SvgIcon component={LockPerson} className={classes.serverStatusIcon} />

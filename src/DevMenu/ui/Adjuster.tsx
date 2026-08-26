@@ -40,12 +40,12 @@ export function Adjuster(props: IProps): React.ReactElement {
         InputProps={{
           startAdornment: (
             <>
-              <Tooltip title={props.useDownArrowIcon ? "Subtract a lot" : "Add a lot"}>
+              <Tooltip title={props.useDownArrowIcon ? "大幅减少" : "大幅增加"}>
                 <IconButton onClick={tons} size="large">
                   <DoubleArrowIcon style={{ transform: `rotate(${props.useDownArrowIcon ? 90 : -90}deg)` }} />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Add">
+              <Tooltip title="增加">
                 <IconButton onClick={() => add(typeof value !== "string" ? value : 0)} size="large">
                   <AddIcon />
                 </IconButton>
@@ -54,12 +54,12 @@ export function Adjuster(props: IProps): React.ReactElement {
           ),
           endAdornment: (
             <>
-              <Tooltip title="Subtract">
+              <Tooltip title="减少">
                 <IconButton onClick={() => subtract(typeof value !== "string" ? value : 0)} size="large">
                   <RemoveIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Reset">
+              <Tooltip title="重置">
                 <IconButton onClick={reset} size="large">
                   <ClearIcon />
                 </IconButton>

@@ -7,8 +7,8 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
   [CodingContractName.SpiralizeMatrix]: {
     desc: (n: number[][]): string => {
       let d: string = [
-        "Given the following array of arrays of numbers representing a 2D matrix,",
-        "return the elements of the matrix as an array in spiral order:\n\n",
+        "给定以下表示二维矩阵的二维数字数组，",
+        "以螺旋顺序返回矩阵元素组成的数组：\n\n",
       ].join(" ");
       // for (const line of n) {
       //   d += `${line.toString()},\n`;
@@ -19,20 +19,20 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
         .join("\n");
       d += "\n    ]\n";
       d += [
-        "\nHere is an example of what spiral order should be:\n\n",
+        "\n以下是螺旋顺序的示例：\n\n",
         "    [\n",
         "        [1, 2, 3]\n",
         "        [4, 5, 6]\n",
         "        [7, 8, 9]\n",
         "    ]\n\n",
-        "Answer: [1, 2, 3, 6, 9, 8 ,7, 4, 5]\n\n",
-        "Note that the matrix will not always be square:\n\n",
+        "答案：[1, 2, 3, 6, 9, 8 ,7, 4, 5]\n\n",
+        "注意矩阵不一定是方阵：\n\n",
         "    [\n",
         "        [1,  2,  3,  4]\n",
         "        [5,  6,  7,  8]\n",
         "        [9, 10, 11, 12]\n",
         "    ]\n\n",
-        "Answer: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]",
+        "答案：[1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]",
       ].join(" ");
 
       return d;

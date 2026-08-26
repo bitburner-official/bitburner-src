@@ -49,7 +49,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
   // Upgrade Level Button
   let upgradeLevelButton;
   if (node.level >= HacknetServerConstants.MaxLevel) {
-    upgradeLevelButton = <Button disabled>MAX LEVEL</Button>;
+    upgradeLevelButton = <Button disabled>已满级</Button>;
   } else {
     let multiplier = 0;
     if (purchaseMult === "MAX") {
@@ -69,12 +69,13 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            +<HashRate hashes={modded_increase} /> (effective increase, taking current RAM usage into account)
+            +<HashRate hashes={modded_increase} />
+            （实际增幅，已考虑当前 RAM 使用情况）
             <br />
             <span style={{ opacity: 0.5 }}>
               +<HashRate hashes={base_increase} />
             </span>{" "}
-            (base increase, attained when no script is running)
+            （基础增幅，在无脚本运行时达到）
           </Typography>
         }
       >
@@ -105,7 +106,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
   // Upgrade RAM Button
   let upgradeRamButton;
   if (node.maxRam >= HacknetServerConstants.MaxRam) {
-    upgradeRamButton = <Button disabled>MAX RAM</Button>;
+    upgradeRamButton = <Button disabled>RAM 已满</Button>;
   } else {
     let multiplier = 0;
     if (purchaseMult === "MAX") {
@@ -138,12 +139,13 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            +<HashRate hashes={modded_increase} /> (effective increase, taking current RAM usage into account)
+            +<HashRate hashes={modded_increase} />
+            （实际增幅，已考虑当前 RAM 使用情况）
             <br />
             <span style={{ opacity: 0.5 }}>
               +<HashRate hashes={base_increase} />
             </span>{" "}
-            (base increase, attained when no script is running)
+            （基础增幅，在无脚本运行时达到）
           </Typography>
         }
       >
@@ -166,7 +168,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
   // Upgrade Cores Button
   let upgradeCoresButton;
   if (node.cores >= HacknetServerConstants.MaxCores) {
-    upgradeCoresButton = <Button disabled>MAX CORES</Button>;
+    upgradeCoresButton = <Button disabled>核心已满</Button>;
   } else {
     let multiplier = 0;
     if (purchaseMult === "MAX") {
@@ -186,12 +188,13 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            +<HashRate hashes={modded_increase} /> (effective increase, taking current RAM usage into account)
+            +<HashRate hashes={modded_increase} />
+            （实际增幅，已考虑当前 RAM 使用情况）
             <br />
             <span style={{ opacity: 0.5 }}>
               +<HashRate hashes={base_increase} />
             </span>{" "}
-            (base increase, attained when no script is running)
+            （基础增幅，在无脚本运行时达到）
           </Typography>
         }
       >
@@ -206,7 +209,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
   // Upgrade Cache button
   let upgradeCacheButton;
   if (node.cache >= HacknetServerConstants.MaxCache) {
-    upgradeCacheButton = <Button disabled>MAX CACHE</Button>;
+    upgradeCacheButton = <Button disabled>缓存已满</Button>;
   } else {
     let multiplier = 0;
     if (purchaseMult === "MAX") {
@@ -222,7 +225,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            +<Hashes hashes={increase} /> hashes
+            +<Hashes hashes={increase} /> 哈希
           </Typography>
         }
       >
@@ -254,16 +257,15 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography>Production:</Typography>
+              <Typography>产量：</Typography>
             </TableCell>
             <TableCell colSpan={2}>
               <Tooltip
                 title={
                   <Typography>
-                    <Hashes hashes={node.totalHashesGenerated} /> hashes produced by this server since last augment
-                    installation.
+                    自上次安装强化以来，此服务器共产生了 <Hashes hashes={node.totalHashesGenerated} /> 哈希。
                     <br />
-                    <HashRate hashes={node.hashRate} /> current production rate.
+                    当前生产速率为 <HashRate hashes={node.hashRate} />。
                     <br />
                     <span style={{ opacity: 0.5 }}>
                       <HashRate
@@ -276,13 +278,13 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
                         )}
                       />
                     </span>{" "}
-                    max production rate. (achieved when 100% RAM is allocated to it)
+                    最大生产速率。（在 100% RAM 都分配给它时达到）
                     <br />
-                    {formatRam(node.ramUsed)} / {formatRam(node.maxRam)} (
-                    {Math.round((100 * node.ramUsed) / node.maxRam)}%) RAM allocated to script.
+                    {formatRam(node.ramUsed)} / {formatRam(node.maxRam)}（
+                    {Math.round((100 * node.ramUsed) / node.maxRam)}%）的 RAM 用于运行脚本。
                     <br />
-                    {formatRam(node.maxRam - node.ramUsed)} / {formatRam(node.maxRam)} (
-                    {Math.round((100 * (node.maxRam - node.ramUsed)) / node.maxRam)}%) RAM allocated to hash production.
+                    {formatRam(node.maxRam - node.ramUsed)} / {formatRam(node.maxRam)}（
+                    {Math.round((100 * (node.maxRam - node.ramUsed)) / node.maxRam)}%）的 RAM 用于哈希生产。
                   </Typography>
                 }
               >
@@ -294,7 +296,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography>Hash Capacity:</Typography>
+              <Typography>哈希容量：</Typography>
             </TableCell>
             <TableCell colSpan={2}>
               <Typography>
@@ -304,7 +306,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography>Level:</Typography>
+              <Typography>等级：</Typography>
             </TableCell>
             <TableCell>
               <Typography>{node.level}</Typography>
@@ -313,7 +315,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography>RAM:</Typography>
+              <Typography>RAM：</Typography>
             </TableCell>
             <TableCell>
               <Typography>{formatRam(node.maxRam)}</Typography>
@@ -322,7 +324,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography>Cores:</Typography>
+              <Typography>核心：</Typography>
             </TableCell>
             <TableCell>
               <Typography>{node.cores}</Typography>
@@ -331,7 +333,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
           </TableRow>
           <TableRow>
             <TableCell>
-              <Typography>Cache Level:</Typography>
+              <Typography>缓存等级：</Typography>
             </TableCell>
             <TableCell>
               <Typography>{node.cache}</Typography>

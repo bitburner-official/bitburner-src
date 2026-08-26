@@ -60,7 +60,7 @@ import { getRamBlockRemoved } from "../DarkNet/effects/ramblock";
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
     if (!Player.hasProgram(CompletedProgramName.formulas)) {
-      throw helpers.errorMessage(ctx, `Requires Formulas.exe to run.`);
+      throw helpers.errorMessage(ctx, `需要 Formulas.exe 才能运行。`);
     }
   };
   const formulasFunctions: InternalAPI<IFormulas> = {
@@ -314,7 +314,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         const upg = Player.hashManager.getUpgrade(upgName);
         if (!upg) {
-          throw helpers.errorMessage(ctx, `Invalid Hash Upgrade: ${upgName}`);
+          throw helpers.errorMessage(ctx, `无效的哈希升级：${upgName}`);
         }
         return upg.getCost(level);
       },
@@ -373,7 +373,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const person = helpers.person(ctx, _person);
         const crime = Crimes[getEnumHelper("CrimeType").nsGetMember(ctx, _crimeType)];
         if (!crime) {
-          throw new Error(`Invalid crime type: ${_crimeType}`);
+          throw new Error(`无效的犯罪类型：${_crimeType}`);
         }
         return crime.successRate(person);
       },
@@ -382,7 +382,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const person = helpers.person(ctx, _person);
         const crime = Crimes[getEnumHelper("CrimeType").nsGetMember(ctx, _crimeType)];
         if (!crime) {
-          throw new Error(`Invalid crime type: ${_crimeType}`);
+          throw new Error(`无效的犯罪类型：${_crimeType}`);
         }
         return calculateCrimeWorkStats(person, crime);
       },
@@ -427,11 +427,11 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const name = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _name, "name");
         const level = helpers.number(ctx, "level", _level);
         if (!Number.isFinite(level) || level < 0) {
-          throw new Error(`Level must be a finite, non-negative number. Its value is ${level}.`);
+          throw new Error(`Level 必须是有限的非负数。当前值为 ${level}。`);
         }
         const skillPoints = helpers.number(ctx, "skillPoints", _skillPoints);
         if (!Number.isFinite(skillPoints) || skillPoints < 0) {
-          throw new Error(`SkillPoints must be a finite, non-negative number. Its value is ${skillPoints}.`);
+          throw new Error(`SkillPoints 必须是有限的非负数。当前值为 ${skillPoints}。`);
         }
         const skill = Skills[name];
         if (level >= skill.maxLvl) {

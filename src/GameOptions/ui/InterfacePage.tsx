@@ -13,45 +13,43 @@ export const InterfacePage = (): React.ReactElement => {
     Settings.TimestampsFormat = event.target.value;
   }
   return (
-    <GameOptionsPage title="Interface">
+    <GameOptionsPage title="界面">
       <OptionSwitch
         checked={Settings.DisableASCIIArt}
         onChange={(newValue) => (Settings.DisableASCIIArt = newValue)}
-        text="Disable ASCII art"
+        text="禁用 ASCII 艺术"
         tooltip={
           <>
-            If this is set, ASCII art for UI elements will be disabled. This setting does not affect ASCII art in the
-            description of factions.
+            设置后，UI 元素的 ASCII 艺术将被禁用。此设置不影响派系描述中的 ASCII 艺术。
           </>
         }
       />
       <OptionSwitch
         checked={Settings.DisableTextEffects}
         onChange={(newValue) => (Settings.DisableTextEffects = newValue)}
-        text="Disable text effects"
+        text="禁用文字特效"
         tooltip={
           <>
-            If this is set, text effects will not be displayed. This can help if text is difficult to read in certain
-            areas.
+            设置后，将不再显示文字特效。如果某些区域的文字难以阅读，这会有所帮助。
           </>
         }
       />
       <OptionSwitch
         checked={Settings.DisableOverviewProgressBars}
         onChange={(newValue) => (Settings.DisableOverviewProgressBars = newValue)}
-        text="Disable Overview Progress Bars"
-        tooltip={<>If this is set, progress bars in the character overview will be hidden.</>}
+        text="禁用概览进度条"
+        tooltip={<>设置后，角色概览中的进度条将被隐藏。</>}
       />
       <OptionSwitch
         checked={Settings.ShowMiddleNullTimeUnit}
         onChange={(newValue) => (Settings.ShowMiddleNullTimeUnit = newValue)}
-        text="Show all intermediary time units, even when null."
-        tooltip={<>Example: 1 hour 13 seconds becomes 1 hour 0 minutes 13 seconds.</>}
+        text="显示所有中间时间单位（即使为 0）"
+        tooltip={<>示例：1 小时 13 秒 将显示为 1 小时 0 分 13 秒。</>}
       />
       <Tooltip
         title={
           <Typography>
-            Terminal commands and log entries will be timestamped. See https://date-fns.org/docs/Getting-Started/
+            终端命令和日志条目将附带时间戳。参见 https://date-fns.org/docs/Getting-Started/
           </Typography>
         }
       >
@@ -62,7 +60,7 @@ export const InterfacePage = (): React.ReactElement => {
               <Typography
                 color={formatTime(timestampFormat) === "format error" && timestampFormat !== "" ? "error" : "success"}
               >
-                Timestamp&nbsp;format:&nbsp;
+                时间戳&nbsp;格式：&nbsp;
               </Typography>
             ),
           }}
@@ -72,7 +70,7 @@ export const InterfacePage = (): React.ReactElement => {
         />
       </Tooltip>
       <Typography>
-        Example timestamp: {timestampFormat !== "" ? formatTime(timestampFormat) : "no timestamp"}
+        时间戳示例：{timestampFormat !== "" ? formatTime(timestampFormat) : "无时间戳"}
       </Typography>
       <br />
     </GameOptionsPage>

@@ -9,16 +9,15 @@ export const arrayJumpingGame: Pick<
   [CodingContractName.ArrayJumpingGame]: {
     desc: (arr: number[]): string => {
       return [
-        "You are given the following array of integers:\n\n",
+        "给你以下整数数组：\n\n",
         `${arr}\n\n`,
-        "Each element in the array represents your MAXIMUM jump length",
-        "at that position. This means that if you are at position i and your",
-        "maximum jump length is n, you can jump to any position from",
-        "i to i+n.",
-        "\n\nAssuming you are initially positioned",
-        "at the start of the array, determine whether you are",
-        "able to reach the last index.\n\n",
-        "Your answer should be submitted as 1 or 0, representing true and false respectively.",
+        "数组中的每个元素表示你在该位置的最大跳跃长度。",
+        "也就是说，如果你位于位置 i，且你的",
+        "最大跳跃长度为 n，那么你可以跳到从",
+        "i 到 i+n 的任意位置。",
+        "\n\n假设你最初位于数组的起始位置，请判断你是否",
+        "能够到达最后一个下标。\n\n",
+        "你的答案应以 1 或 0 提交，分别代表真和假。",
       ].join(" ");
     },
     difficulty: 2,
@@ -59,16 +58,15 @@ export const arrayJumpingGame: Pick<
   [CodingContractName.ArrayJumpingGameII]: {
     desc: (arr: number[]): string => {
       return [
-        "You are given the following array of integers:\n\n",
+        "给你以下整数数组：\n\n",
         `${arr}\n\n`,
-        "Each element in the array represents your MAXIMUM jump length",
-        "at that position. This means that if you are at position i and your",
-        "maximum jump length is n, you can jump to any position from",
-        "i to i+n.",
-        "\n\nAssuming you are initially positioned",
-        "at the start of the array, determine the minimum number of",
-        "jumps to reach the last index.\n\n",
-        "If it's impossible to reach the last index, then the answer should be 0.",
+        "数组中的每个元素表示你在该位置的最大跳跃长度。",
+        "也就是说，如果你位于位置 i，且你的",
+        "最大跳跃长度为 n，那么你可以跳到从",
+        "i 到 i+n 的任意位置。",
+        "\n\n假设你最初位于数组的起始位置，请计算到达最后一个下标所需的",
+        "最少跳跃次数。\n\n",
+        "如果无法到达最后一个下标，则答案应为 0。",
       ].join(" ");
     },
     difficulty: 3,

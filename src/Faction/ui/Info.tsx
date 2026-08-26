@@ -29,7 +29,7 @@ export function Info(props: IProps): React.ReactElement {
       {props.factionInfo.enemies.length > 0 && (
         <Typography component="div">
           <br />
-          This faction is enemies with: {props.factionInfo.enemies.join(", ")}.
+          该派系的敌对派系：{props.factionInfo.enemies.join(", ")}。
         </Typography>
       )}
       <Typography>-------------------------</Typography>
@@ -39,20 +39,18 @@ export function Info(props: IProps): React.ReactElement {
       <Typography>-------------------------</Typography>
       <Typography variant="h5" style={{ display: "flex", alignItems: "center" }}>
         <Grade style={{ fontSize: "1.1em", marginRight: "10px" }} />
-        Special Campaign
+        特殊战役
         <Tooltip
           title={
             <>
-              Some factions are developing special campaigns for researching breakthrough technology or executing
-              initiatives. Some campaigns may be complete, while others remain unfinished. Explore them now, and return
-              later if a campaign is not yet complete to see what unfolds.
+              一些派系正在开发特殊战役，用于研究突破性技术或执行特别计划。有些战役可能已经完成，而另一些则尚未完成。现在就去探索吧；如果某场战役尚未完成，稍后再来看看会有什么进展。
             </>
           }
         >
           <InfoIcon sx={{ fontSize: "0.8em", marginLeft: "10px" }} />
         </Tooltip>
       </Typography>
-      {props.factionInfo.campaign ? props.factionInfo.campaign() : <Typography>None</Typography>}
+      {props.factionInfo.campaign ? props.factionInfo.campaign() : <Typography>无</Typography>}
       <Typography>-------------------------</Typography>
     </>
   );

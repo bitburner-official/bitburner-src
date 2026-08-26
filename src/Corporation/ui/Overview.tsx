@@ -51,28 +51,28 @@ export function Overview({ rerender }: IProps): React.ReactElement {
     if (value === 1) return;
     multRows.push([name, formatCorpMultiplier(value)]);
   }
-  appendMult("Production Multiplier: ", corp.getProductionMultiplier());
-  appendMult("Storage Multiplier: ", corp.getStorageMultiplier());
-  appendMult("Advertising Multiplier: ", corp.getAdvertisingMultiplier());
-  appendMult("Empl. Creativity Multiplier: ", corp.getEmployeeCreMultiplier());
-  appendMult("Empl. Charisma Multiplier: ", corp.getEmployeeChaMult());
-  appendMult("Empl. Intelligence Multiplier: ", corp.getEmployeeIntMult());
-  appendMult("Empl. Efficiency Multiplier: ", corp.getEmployeeEffMult());
-  appendMult("Sales Multiplier: ", corp.getSalesMult());
-  appendMult("Scientific Research Multiplier: ", corp.getScientificResearchMult());
+  appendMult("生产倍率： ", corp.getProductionMultiplier());
+  appendMult("仓储倍率： ", corp.getStorageMultiplier());
+  appendMult("广告倍率： ", corp.getAdvertisingMultiplier());
+  appendMult("员工创造力倍率： ", corp.getEmployeeCreMultiplier());
+  appendMult("员工魅力倍率： ", corp.getEmployeeChaMult());
+  appendMult("员工智力倍率： ", corp.getEmployeeIntMult());
+  appendMult("员工效率倍率： ", corp.getEmployeeEffMult());
+  appendMult("销售倍率： ", corp.getSalesMult());
+  appendMult("科研倍率： ", corp.getScientificResearchMult());
 
   return (
     <>
       <StatsTable
         rows={[
-          ["Total Funds:", <Money key="funds" money={corp.funds} />],
-          ["Total Assets:", <Money key="assets" money={corp.totalAssets} />],
-          ["Total Revenue:", <MoneyRate key="revenue" money={corp.revenue} />],
-          ["Total Expenses:", <MoneyRate key="expenses" money={corp.expenses} />],
-          ["Total Profit:", <MoneyRate key="profit" money={corp.revenue - corp.expenses} />],
-          ["Publicly Traded:", corp.public ? "Yes" : "No"],
-          ["Owned Stock Shares:", formatShares(corp.numShares)],
-          ["Stock Price:", corp.public ? <Money key="price" money={corp.sharePrice} /> : "N/A"],
+          ["总资金：", <Money key="funds" money={corp.funds} />],
+          ["总资产：", <Money key="assets" money={corp.totalAssets} />],
+          ["总收入：", <MoneyRate key="revenue" money={corp.revenue} />],
+          ["总支出：", <MoneyRate key="expenses" money={corp.expenses} />],
+          ["总利润：", <MoneyRate key="profit" money={corp.revenue - corp.expenses} />],
+          ["是否上市：", corp.public ? "是" : "否"],
+          ["持有股份数：", formatShares(corp.numShares)],
+          ["股价：", corp.public ? <Money key="price" money={corp.sharePrice} /> : "N/A"],
         ]}
       />
       <br />
@@ -82,17 +82,17 @@ export function Overview({ rerender }: IProps): React.ReactElement {
             <StatsTable
               rows={[
                 [
-                  "Owned Stock Shares:",
+                  "持有股份数：",
                   formatShares(corp.numShares),
                   `(${formatPercent(corp.numShares / corp.totalShares)})`,
                 ],
                 [
-                  "Outstanding Shares:",
+                  "已发行股份：",
                   formatShares(corp.issuedShares),
                   `(${formatPercent(corp.issuedShares / corp.totalShares)})`,
                 ],
                 [
-                  "Private Shares:",
+                  "私人股份：",
                   formatShares(corp.investorShares),
                   `(${formatPercent(corp.investorShares / corp.totalShares)})`,
                 ],
@@ -100,7 +100,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
             />
           }
         >
-          <Typography>Total Stock Shares: {formatShares(corp.totalShares)}</Typography>
+          <Typography>股份总数：{formatShares(corp.totalShares)}</Typography>
         </Tooltip>
       </Box>
       <br />
@@ -113,14 +113,12 @@ export function Overview({ rerender }: IProps): React.ReactElement {
         <ButtonWithTooltip
           normalTooltip={
             <>
-              Get a copy of and read <i>The Complete Handbook for Creating a Successful Corporation</i>. This is a .lit
-              file that guides you through the beginning of setting up a Corporation and provides some tips/pointers for
-              helping you get started with managing it.
+              获取并阅读<i>《创建成功企业完全手册》</i>。这是一份 .lit 文件，会引导你完成企业创立的起步阶段，并提供一些帮助你上手经营管理的提示与建议。
             </>
           }
           onClick={() => corp.getStarterGuide()}
         >
-          Getting Started Guide
+          新手指南
         </ButtonWithTooltip>
         <BribeButton />
         {corp.divisions.size > 0 && <SellDivisionButton />}
@@ -144,28 +142,27 @@ function PrivateButtons({ rerender }: IPrivateButtonsProps): React.ReactElement 
 
   const fundingAvailable = corp.fundingRound < corpConstants.fundingRoundShares.length;
   const findInvestorsTooltip = fundingAvailable
-    ? "Search for private investors who will give you startup funding in exchange for equity (stock shares) in your company"
+    ? "寻找愿意为你提供启动资金以换取公司股权（股票份额）的私人投资者"
     : "";
 
   return (
     <>
       <ButtonWithTooltip
         normalTooltip={findInvestorsTooltip}
-        disabledTooltip={fundingAvailable ? "" : "Max funding rounds already reached"}
+        disabledTooltip={fundingAvailable ? "" : "已达到最大融资轮数"}
         onClick={() => setFindInvestorsopen(true)}
       >
-        Find Investors
+        寻找投资者
       </ButtonWithTooltip>
       <ButtonWithTooltip
         normalTooltip={
           <>
-            Become a publicly traded and owned entity. Going public involves issuing shares for an IPO. Once you are a
-            public company, your shares will be traded on the stock market.
+            成为公开交易的实体。上市需要通过首次公开发行（IPO）发行股份。一旦成为上市公司，你的股份将在股票市场上交易。
           </>
         }
         onClick={() => setGoPublicopen(true)}
       >
-        Go Public
+        上市
       </ButtonWithTooltip>
       <FindInvestorsModal open={findInvestorsopen} onClose={() => setFindInvestorsopen(false)} rerender={rerender} />
       <GoPublicModal open={goPublicopen} onClose={() => setGoPublicopen(false)} rerender={rerender} />
@@ -185,7 +182,7 @@ function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
   const corp = useCorporation();
   // Don't show upgrades
   if (corp.divisions.size === 0) {
-    return <Typography variant="h4">Upgrades are unlocked once you create an industry.</Typography>;
+    return <Typography variant="h4">创建一个行业后即可解锁升级。</Typography>;
   }
 
   const unlocksNotOwned = Object.values(CorpUnlocks)
@@ -195,13 +192,13 @@ function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
   return (
     <>
       <Paper sx={{ p: 1, my: 1 }}>
-        <Typography variant="h4">Unlocks</Typography>
+        <Typography variant="h4">解锁</Typography>
         <Grid container>
-          {unlocksNotOwned.length ? unlocksNotOwned : <Typography>All unlocks are owned.</Typography>}
+          {unlocksNotOwned.length ? unlocksNotOwned : <Typography>已拥有全部解锁项。</Typography>}
         </Grid>
       </Paper>
       <Paper sx={{ p: 1, my: 1 }}>
-        <Typography variant="h4">Upgrades</Typography>
+        <Typography variant="h4">升级</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <MultiplierButtons setMultiplier={setPurchaseMultiplier} selectedMultiplier={purchaseMultiplier} />
@@ -231,9 +228,9 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
 
   const sellSharesOnCd = corp.shareSaleCooldown > 0;
   const sellSharesTooltip =
-    "Sell your shares in the company. The money earned from selling your " +
-    "shares goes into your personal account, not the Corporation's. " +
-    "This is one of the only ways to profit from your business venture.";
+    "出售你持有的公司股份。出售股份所得的资金会进入你的个人账户，" +
+    "而不是企业的账户。" +
+    "这是从你的商业冒险中获利的少数途径之一。";
 
   const issueNewSharesOnCd = corp.issueNewSharesCooldown > 0;
 
@@ -242,36 +239,36 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
       <ButtonWithTooltip
         normalTooltip={sellSharesTooltip}
         disabledTooltip={
-          sellSharesOnCd ? "Cannot sell shares for " + corp.convertCooldownToString(corp.shareSaleCooldown) : ""
+          sellSharesOnCd ? "无法出售股份，还需等待 " + corp.convertCooldownToString(corp.shareSaleCooldown) : ""
         }
         onClick={() => setSellSharesOpen(true)}
       >
-        Sell Shares
+        出售股份
       </ButtonWithTooltip>
       <SellSharesModal open={sellSharesOpen} onClose={() => setSellSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
-        normalTooltip={"Buy back outstanding shares that you previously issued or sold on the market"}
-        disabledTooltip={corp.issuedShares < 1 ? "No shares available to buy back" : ""}
+        normalTooltip={"回购你先前发行或在市场上售出的股份"}
+        disabledTooltip={corp.issuedShares < 1 ? "没有可供回购的股份" : ""}
         onClick={() => setBuybackSharesOpen(true)}
       >
-        Buyback shares
+        回购股份
       </ButtonWithTooltip>
       <BuybackSharesModal open={buybackSharesOpen} onClose={() => setBuybackSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
-        normalTooltip={"Issue new equity shares to raise capital"}
+        normalTooltip={"发行新股以筹集资金"}
         disabledTooltip={
-          issueNewSharesOnCd ? `On cooldown for ${corp.convertCooldownToString(corp.issueNewSharesCooldown)}` : ""
+          issueNewSharesOnCd ? `冷却中，还需等待 ${corp.convertCooldownToString(corp.issueNewSharesCooldown)}` : ""
         }
         onClick={() => setIssueNewSharesOpen(true)}
       >
-        Issue New Shares
+        发行新股
       </ButtonWithTooltip>
       <IssueNewSharesModal open={issueNewSharesOpen} onClose={() => setIssueNewSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
-        normalTooltip={"Manage the dividends that are paid out to shareholders (including yourself)"}
+        normalTooltip={"管理向股东（包括你自己）派发的股息"}
         onClick={() => setIssueDividendsOpen(true)}
       >
-        Issue Dividends
+        派发股息
       </ButtonWithTooltip>
       <IssueDividendsModal open={issueDividendsOpen} onClose={() => setIssueDividendsOpen(false)} />
     </>
@@ -287,15 +284,13 @@ function BribeButton(): React.ReactElement {
   const errorMessages = [];
   if (!isValuationHighEnough) {
     errorMessages.push(
-      `Your corporation is not powerful enough to bribe faction leaders. The corporation valuation is below the threshold. Threshold: ${formatNumber(
+      `你的企业还不够强大，无法贿赂派系领袖。企业估值低于门槛值。门槛：${formatNumber(
         corpConstants.bribeThreshold,
-      )}.`,
+      )}。`,
     );
   }
   if (!isMemberOfBribableFaction) {
-    errorMessages.push(
-      `You are not a member of any bribable factions. You can only bribe factions that offer at least 1 type of work.`,
-    );
+    errorMessages.push(`你不属于任何可贿赂的派系。只能贿赂至少提供一种工作类型的派系。`);
   }
 
   function openBribe(): void {
@@ -308,13 +303,13 @@ function BribeButton(): React.ReactElement {
   return (
     <>
       <ButtonWithTooltip
-        normalTooltip={"Use your corporation's power and influence to bribe faction leaders in exchange for reputation"}
+        normalTooltip={"利用你企业的权势与影响力贿赂派系领袖，以换取声望"}
         disabledTooltip={
           canBribe ? "" : errorMessages.map((error, index) => <Typography key={index}>{error}</Typography>)
         }
         onClick={openBribe}
       >
-        Bribe Factions
+        贿赂派系
       </ButtonWithTooltip>
       <BribeFactionModal open={open} onClose={() => setOpen(false)} />
     </>
@@ -329,8 +324,8 @@ function SellDivisionButton(): React.ReactElement {
   }
   return (
     <>
-      <ButtonWithTooltip normalTooltip={"Sell a division to make room for other divisions"} onClick={sellDiv}>
-        Sell division
+      <ButtonWithTooltip normalTooltip={"出售一个部门，为其他部门腾出空间"} onClick={sellDiv}>
+        出售部门
       </ButtonWithTooltip>
       <SellDivisionModal open={open} onClose={() => setOpen(false)} />
     </>
@@ -342,8 +337,8 @@ function RestartButton(): React.ReactElement {
 
   return (
     <>
-      <ButtonWithTooltip normalTooltip={"Sell corporation and start over"} onClick={() => setOpen(true)}>
-        Sell CEO position
+      <ButtonWithTooltip normalTooltip={"出售企业并重新开始"} onClick={() => setOpen(true)}>
+        出售CEO职位
       </ButtonWithTooltip>
       <CreateCorporationModal open={open} onClose={() => setOpen(false)} restart={true} />
     </>
@@ -363,10 +358,10 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
   return (
     <StatsTable
       rows={[
-        ["Retained Profits (after dividends):", <MoneyRate key="profits" money={retainedEarnings} />],
-        ["Dividend Percentage:", formatPercent(corp.dividendRate, 0)],
+        ["留存利润（扣除股息后）：", <MoneyRate key="profits" money={retainedEarnings} />],
+        ["股息百分比：", formatPercent(corp.dividendRate, 0)],
         [
-          "Dividends per share:",
+          "每股股息：",
           <MoneyRate key="dividends" money={dividendsPerShare} useExponentialFormForSmallValue={true} />,
         ],
         [
@@ -374,21 +369,18 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
             <Tooltip
               title={
                 <>
-                  Everything comes with a price.
+                  一切都有代价。
                   <br />
                   <br />
-                  Although your corporation grants you unlimited wealth, nobody dares try to sabotage your corporation
-                  and take that wealth away from you. Why? All (alive) CEOs know this unspoken rule: If you pay a
-                  "small" tribute to "them", "they" will protect you. Just pay a small fee, and you are safe.
-                  Guaranteed.
+                  尽管你的企业给了你无尽的财富，却没人敢暗中破坏你的企业、夺走这些财富。为什么？所有（还活着的）CEO都心知肚明这条不成文的规矩：只要你向"他们"缴纳一点"贡金"，"他们"就会保护你。只要交一小笔费用，你就安全了。
+                  保证如此。
                   <br />
                   <br />
-                  Who are "they"? Nobody knows for certain. There is a rumour that they are{" "}
-                  <CorruptibleText content={"||| BUFFER OVERFLOW DETECTED |||"} spoiler={true} />.
+                  "他们"是谁？没人确切知道。有传言说他们是{" "}
+                  <CorruptibleText content={"||| BUFFER OVERFLOW DETECTED |||"} spoiler={true} />。
                   <br />
                   <br />
-                  Due to this tribute, your dividend is negatively affected by a penalty modifier called
-                  "TributeModifier". Formulas:
+                  由于这笔贡金，你的股息会受到一个名为"TributeModifier"的惩罚系数的负面影响。公式：
                   <br />
                   <br />
                   <MathNotationOutput notation={MathNotation.CorpTotalDividends} />
@@ -403,7 +395,7 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
                   alignItems: "center",
                 }}
               >
-                Your earnings as a shareholder:
+                你作为股东的收益：
                 <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />
               </div>
             </Tooltip>
@@ -425,13 +417,12 @@ function BonusTime(): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            You gain bonus time while offline or when the game is inactive (e.g. when the tab is throttled by the
-            browser). Bonus time makes the Corporation mechanic progress faster, up to 10x the normal speed.
+            离线或游戏未处于活动状态时（例如标签页被浏览器节流），你可以获得奖励时间。奖励时间会让企业机制加速运转，最高可达正常速度的10倍。
           </Typography>
         }
       >
         <Typography>
-          Bonus time: {convertTimeMsToTimeElapsedString(storedTime)}
+          奖励时间：{convertTimeMsToTimeElapsedString(storedTime)}
           <br />
           <br />
         </Typography>

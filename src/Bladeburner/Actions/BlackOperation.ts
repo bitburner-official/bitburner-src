@@ -42,9 +42,9 @@ export class BlackOperation extends ActionClass implements TeamActionWithCasualt
   }
 
   getAvailability(bladeburner: Bladeburner): Availability {
-    if (bladeburner.numBlackOpsComplete < this.n) return { error: "Have not completed the previous Black Operation" };
-    if (bladeburner.numBlackOpsComplete > this.n) return { error: "Already completed" };
-    if (bladeburner.rank < this.reqdRank) return { error: "Insufficient rank" };
+    if (bladeburner.numBlackOpsComplete < this.n) return { error: "尚未完成前一项黑色行动" };
+    if (bladeburner.numBlackOpsComplete > this.n) return { error: "已完成" };
+    if (bladeburner.rank < this.reqdRank) return { error: "声望不足" };
     return { available: true };
   }
 

@@ -68,7 +68,7 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false)
 
 export function installAugmentations(force?: boolean): boolean {
   if (Player.queuedAugmentations.length == 0 && !force) {
-    dialogBoxCreate("You have not purchased any Augmentations to install!");
+    dialogBoxCreate("你尚未购买任何可安装的强化！");
     return false;
   }
 
@@ -103,10 +103,10 @@ export function installAugmentations(force?: boolean): boolean {
   Player.queuedAugmentations = [];
   if (!force && augmentationList !== "") {
     dialogBoxCreate(
-      "You slowly drift to sleep as scientists put you under in order " +
-        "to install the following Augmentations:\n" +
+      "科学家们让你渐渐入睡，以便" +
+        "安装以下强化：\n" +
         augmentationList +
-        "\nYou wake up in your home...you feel different...",
+        "\n你在自己的家中醒来……你感觉有些不同……",
     );
   }
   prestigeAugmentation();

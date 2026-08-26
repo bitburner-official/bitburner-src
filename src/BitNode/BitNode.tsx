@@ -39,21 +39,21 @@ class BitNode {
 export const BitNodes: Record<string, BitNode> = {};
 
 function upgradeTextForBN(sourceFileNum: number) {
-  return `Destroying this BitNode will give you Source-File ${sourceFileNum}, or if you already have this Source-File, it will upgrade its level up to a maximum of 3.`;
+  return `摧毁该 BitNode 会给予你源文件 ${sourceFileNum}；如果你已经拥有该源文件，则会将其等级提升，最高到 3 级。`;
 }
 
 export function initBitNodes() {
   BitNodes.BitNode1 = new BitNode(
     1,
-    "Source Genesis",
-    "The original BitNode",
+    "源之起源",
+    "最初的 BitNode",
     (
       <>
-        This is the first BitNode created by the Enders to imprison the minds of humans. It became the prototype and
-        testing ground for all of the BitNodes that followed.
+        这是由终结者（Enders）创造的第一个 BitNode，用来囚禁人类的心智。它是之后所有 BitNode
+        的原型与试验场。
         <br />
         <br />
-        This is the first BitNode that you play through. It has no special modifications or mechanics.
+        这是玩家游玩的第一个 BitNode，没有任何特殊的修改或机制。
         <br />
         <br />
         {upgradeTextForBN(1)}
@@ -61,32 +61,28 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File lets the player start with 32GB of RAM on their home computer when entering a new BitNode and
-        increases all of the player's multipliers by:
+        该源文件让玩家在进入新 BitNode 时，家用电脑以 32GB RAM 起步，并将玩家的所有乘数提高：
         <ul>
-          <li>Level 1: 16%</li>
-          <li>Level 2: 24%</li>
-          <li>Level 3: 28%</li>
+          <li>1 级：16%</li>
+          <li>2 级：24%</li>
+          <li>3 级：28%</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode2 = new BitNode(
     2,
-    "Rise of the Underworld",
-    "From the shadows, they rose",
+    "黑帮崛起",
+    "他们自阴影中升起",
     (
       <>
-        Organized crime groups quickly filled the void of power left behind from the collapse of Western government in
-        the 2050s. As society and civilization broke down, people quickly succumbed to the innate human impulse of evil
-        and savagery. The organized crime factions quickly rose to the top of the modern world.
+        2050 年代西方政府崩溃后，有组织犯罪集团迅速填补了权力的真空。随着社会与文明分崩离析，人们很快屈服于人性中固有的邪恶与野蛮冲动。有组织犯罪派系迅速登上了现代世界的顶端。
         <br />
         <br />
-        Certain factions ({FactionName.SlumSnakes}, {FactionName.Tetrads}, {FactionName.TheSyndicate},{" "}
-        {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, and{" "}
-        {FactionName.TheBlackHand}) give the player the ability to form and manage their own gang, which can earn the
-        player money and reputation with the corresponding faction. The gang faction offers more augmentations than
-        other factions, and in BitNode-2, it offers The Red Pill.
+        某些派系（{FactionName.SlumSnakes}、{FactionName.Tetrads}、{FactionName.TheSyndicate},{" "}
+        {FactionName.TheDarkArmy}、{FactionName.SpeakersForTheDead}、{FactionName.NiteSec} 和{" "}
+        {FactionName.TheBlackHand}）允许玩家创建并管理自己的帮派，帮派可以为玩家赚取资金以及对应派系的声望。帮派派系比其他派系提供更多强化；在
+        BitNode-2 中，它还提供红药丸。
         <br />
         <br />
         {upgradeTextForBN(2)}
@@ -94,32 +90,28 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File allows you to form gangs in other BitNodes once your karma decreases to a certain value. It
-        also increases your crime success rate, crime money, and charisma multipliers by:
+        该源文件允许你在其他 BitNode 中，当业力降至某个值以下时组建帮派。它还会将你的犯罪成功率、犯罪收入和魅力乘数提高：
         <ul>
-          <li>Level 1: 24%</li>
-          <li>Level 2: 36%</li>
-          <li>Level 3: 42%</li>
+          <li>1 级：24%</li>
+          <li>2 级：36%</li>
+          <li>3 级：42%</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode3 = new BitNode(
     3,
-    "Corporatocracy",
-    "The Price of Civilization",
+    "财阀统治",
+    "文明的代价",
     (
       <>
-        Our greatest illusion is that a healthy society can revolve around a single-minded pursuit of wealth.
+        我们最大的幻觉，就是一个健康的社会能够围绕对财富的偏执追求而运转。
         <br />
         <br />
-        Sometime in the early 21st century, economic and political globalization turned the world into a corporatocracy,
-        and it never looked back. Now, the privileged elite will happily bankrupt their own countrymen, decimate their
-        own community, and evict their neighbors from houses in their desperate bid to increase their wealth.
+        在 21 世纪早期的某个时候，经济与政治全球化把世界变成了一个财阀统治的国家，而且一发不可收拾。如今，特权精英们为了增加自己的财富，会毫不犹豫地让自己的同胞破产、摧毁自己的社区、把邻居赶出家园。
         <br />
         <br />
-        In this BitNode, you can create and manage your own corporation. Running a successful corporation has the
-        potential to generate massive profits.
+        在这个 BitNode 中，你可以创建并管理自己的企业。成功经营企业有可能带来巨额利润。
         <br />
         <br />
         {upgradeTextForBN(3)}
@@ -127,30 +119,26 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File lets you create corporations on other BitNodes (although some BitNodes will disable this
-        mechanic) and level 3 permanently unlocks the full API. This Source-File also increases your charisma and
-        company salary multipliers by:
+        该源文件让你可以在其他 BitNode 中创建企业（尽管某些 BitNode 会禁用这一机制），且 3 级会永久解锁完整
+        API。该源文件还会将你的魅力和公司薪资乘数提高：
         <ul>
-          <li>Level 1: 8%</li>
-          <li>Level 2: 12%</li>
-          <li>Level 3: 14%</li>
+          <li>1 级：8%</li>
+          <li>2 级：12%</li>
+          <li>3 级：14%</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode4 = new BitNode(
     4,
-    "The Singularity",
-    "The Man and the Machine",
+    "奇点",
+    "人与机器",
     (
       <>
-        The Singularity has arrived. The human race is gone, replaced by artificially super intelligent beings that are
-        more machine than man.
+        奇点已经到来。人类已经消失，取而代之的是一些机器属性远超人类属性的超级人工智能存在。
         <br />
         <br />
-        In this BitNode, you will gain access to a new set of Netscript functions known as Singularity functions. These
-        functions allow you to control most aspects of the game through scripts, including working for
-        factions/companies, purchasing/installing augmentations, and creating programs.
+        在这个 BitNode 中，你将可以使用一套被称为奇点（Singularity）函数的新 Netscript 函数。这些函数让你可以通过脚本控制游戏中大多数方面，包括为派系/公司工作、购买/安装强化以及编写程序。
         <br />
         <br />
         {upgradeTextForBN(4)}
@@ -158,25 +146,24 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File lets you access and use the Singularity functions outside of this BitNode. Each level of this
-        Source-File reduces the RAM cost of singularity functions in other BitNodes:
+        该源文件让你可以在这个 BitNode 之外访问并使用奇点函数。该源文件的每一级都会降低其他 BitNode
+        中奇点函数的 RAM 成本：
         <ul>
-          <li>Level 1: 16x</li>
-          <li>Level 2: 4x</li>
-          <li>Level 3: 1x</li>
+          <li>1 级：16x</li>
+          <li>2 级：4x</li>
+          <li>3 级：1x</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode5 = new BitNode(
     5,
-    "Artificial Intelligence",
-    "Posthuman",
+    "人工智能",
+    "后人类",
     (
       <>
-        They said it couldn't be done. They said the human brain, along with its consciousness and intelligence,
-        couldn't be replicated. They said the complexity of the brain results from unpredictable, nonlinear interactions
-        that couldn't be modeled by 1's and 0's. They were wrong.
+        他们说这不可能做到。他们说人类大脑及其意识与智能无法被复制。他们说大脑的复杂性源于不可预测的非线性相互作用，无法用
+        0 和 1 来建模。但他们错了。
         <br />
         <br />
         {upgradeTextForBN(5)}
@@ -184,26 +171,25 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File grants you a new stat called Intelligence. Intelligence is unique because it is permanent and
-        persistent (it never gets reset back to 1). However, gaining Intelligence experience is much slower than other
-        stats. Higher Intelligence levels will boost your production for many actions in the game.
+        该源文件赋予你一项名为智力（Intelligence）的新属性。智力的独特之处在于它是永久且持续的（永远不会被重置回
+        1）。不过，获得智力经验的速度比其他属性慢得多。更高的智力等级会提升你游戏中许多行动的产出。
         <br />
         <br />
-        In addition, this Source-File will unlock:
+        此外，该源文件将解锁：
         <ul>
           <li>
-            <code>getBitNodeMultipliers()</code> Netscript function
+            <code>getBitNodeMultipliers()</code> Netscript 函数
           </li>
-          <li>Permanent access to {CompletedProgramName.formulas}</li>
+          <li>永久使用 {CompletedProgramName.formulas}</li>
           <li>
-            Access to BitNode multiplier information on the <b>Stats</b> page
+            在<b>属性</b>页面查看 BitNode 倍率信息
           </li>
         </ul>
-        It will also raise all of your hacking-related multipliers by:
+        它还会将你所有与黑客相关的乘数提高：
         <ul>
-          <li>Level 1: 8%</li>
-          <li>Level 2: 12%</li>
-          <li>Level 3: 14%</li>
+          <li>1 级：8%</li>
+          <li>2 级：12%</li>
+          <li>3 级：14%</li>
         </ul>
       </>
     ),
@@ -211,18 +197,15 @@ export function initBitNodes() {
   BitNodes.BitNode6 = new BitNode(
     6,
     FactionName.Bladeburners,
-    "Like Tears in Rain",
+    "如雨中之泪",
     (
       <>
-        In the middle of the 21st century, {FactionName.OmniTekIncorporated} began designing and manufacturing advanced
-        synthetic androids, or Synthoids for short. They achieved a major technological breakthrough in the sixth
-        generation of their Synthoid design, called MK-VI, by developing a hyper-intelligent AI. Many argue that this
-        was the first sentient AI ever created. This resulted in Synthoid models that were stronger, faster, and more
-        intelligent than the humans that had created them.
+        21 世纪中叶，{FactionName.OmniTekIncorporated}
+        开始设计并制造先进的合成人形机器人，简称合成人。在第六代合成人设计 MK-VI
+        中，他们通过开发一个超高智能的 AI 实现了重大技术突破。许多人认为这是有史以来第一个拥有自我意识的 AI。这使得合成人型号变得比创造它们的人类更强壮、更迅速、更聪明。
         <br />
         <br />
-        In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic
-        for progression.
+        在这个 BitNode 中，你将可以访问 NSA 的 Bladeburner 部门，它会为游戏进程提供一个新机制。
         <br />
         <br />
         {upgradeTextForBN(6)}
@@ -230,12 +213,11 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this
-        Source-File will raise both the level and experience gain rate of all your combat stats by:
+        该源文件允许你在其他 BitNode 中访问 NSA 的 Bladeburner 部门。此外，该源文件会将你所有战斗属性的等级与经验获取速度提高：
         <ul>
-          <li>Level 1: 8%</li>
-          <li>Level 2: 12%</li>
-          <li>Level 3: 14%</li>
+          <li>1 级：8%</li>
+          <li>2 级：12%</li>
+          <li>3 级：14%</li>
         </ul>
       </>
     ),
@@ -243,18 +225,16 @@ export function initBitNodes() {
   BitNodes.BitNode7 = new BitNode(
     7,
     `${FactionName.Bladeburners} 2079`,
-    "More human than humans",
+    "比人类更像人类",
     (
       <>
-        In the middle of the 21st century, you were doing cutting-edge work at {FactionName.OmniTekIncorporated} as part
-        of the AI design team for advanced synthetic androids, or Synthoids for short. You helped achieve a major
-        technological breakthrough in the sixth generation of the company's Synthoid design, called MK-VI, by developing
-        a hyper-intelligent AI. Many argue that this was the first sentient AI ever created. This resulted in Synthoid
-        models that were stronger, faster, and more intelligent than the humans that had created them.
+        21 世纪中叶，你在 {FactionName.OmniTekIncorporated}
+        的先进合成人形机器人（简称合成人）AI 设计团队从事前沿工作。你帮助公司在第六代合成人设计
+        MK-VI 上实现了重大技术突破——开发出一个超高智能的 AI。许多人认为这是有史以来第一个拥有自我意识的
+        AI。这使得合成人型号变得比创造它们的人类更强壮、更迅速、更聪明。
         <br />
         <br />
-        In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic
-        for progression.
+        在这个 BitNode 中，你将可以访问 NSA 的 Bladeburner 部门，它会为游戏进程提供一个新机制。
         <br />
         <br />
         {upgradeTextForBN(7)}
@@ -262,14 +242,14 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this
-        Source-File will increase all of your Bladeburner multipliers by:
+        该源文件允许你在其他 BitNode 中访问 NSA 的 Bladeburner 部门。此外，该源文件会将你的所有 Bladeburner
+        乘数提高：
         <ul>
-          <li>Level 1: 8%</li>
-          <li>Level 2: 12%</li>
+          <li>1 级：8%</li>
+          <li>2 级：12%</li>
           <li>
-            Level 3: 14% and immediately receive "{AugmentationName.BladesSimulacrum}" augmentation after joining the
-            Bladeburner division
+            3 级：14%，并在加入 Bladeburner 部门后立即获得 "{AugmentationName.BladesSimulacrum}"
+            强化
           </li>
         </ul>
       </>
@@ -277,56 +257,56 @@ export function initBitNodes() {
   );
   BitNodes.BitNode8 = new BitNode(
     8,
-    "Ghost of Wall Street",
-    "Money never sleeps",
+    "华尔街之鬼",
+    "金钱永不眠",
     (
       <>
-        You are trying to make a name for yourself as an up-and-coming hedge fund manager on Wall Street.
+        你正努力在华尔街闯出名堂，成为一名崭露头角的对冲基金经理。
         <br />
         <br />
-        In this BitNode:
+        在这个 BitNode 中：
         <ul>
           {/* Do NOT call formatMoney. formatMoney applies the player-defined currency symbol settings, but BitNode data
           is initialized before the save data is loaded, so it always uses the default settings. If we cannot apply the
           player's settings, just don't call formatMoney. */}
-          <li>Your starting money is 250 million.</li>
-          <li>You start with a WSE membership and access to the TIX API.</li>
-          <li>You can short stocks and place different types of orders (limit/stop).</li>
+          <li>你的初始资金为 2.5 亿。</li>
+          <li>你开局即拥有 WSE 会员资格和 TIX API 的访问权限。</li>
+          <li>你可以做空股票，并使用不同类型的订单（限价/止损）。</li>
         </ul>
         {upgradeTextForBN(8)}
       </>
     ),
     (
       <>
-        This Source-File grants the following benefits:
+        该源文件提供以下好处：
         <ul>
-          <li>Level 1: Permanent access to WSE and TIX API</li>
-          <li>Level 2: Ability to short stocks in other BitNodes</li>
-          <li>Level 3: Ability to use limit/stop orders in other BitNodes</li>
+          <li>1 级：永久拥有 WSE 和 TIX API 访问权限</li>
+          <li>2 级：可以在其他 BitNode 中做空股票</li>
+          <li>3 级：可以在其他 BitNode 中使用限价/止损订单</li>
         </ul>
-        This Source-File also increases your hacking growth multipliers by:
+        该源文件还会将你的黑客增长（growth）乘数提高：
         <ul>
-          <li>Level 1: 12%</li>
-          <li>Level 2: 18%</li>
-          <li>Level 3: 21%</li>
+          <li>1 级：12%</li>
+          <li>2 级：18%</li>
+          <li>3 级：21%</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode9 = new BitNode(
     9,
-    "Hacktocracy",
-    "Hacknet Unleashed",
+    "黑客至上",
+    "Hacknet 全开",
     (
       <>
-        When {FactionName.FulcrumSecretTechnologies} released their open-source Linux distro Chapeau, it quickly became
-        the OS of choice for the underground hacking community. Chapeau became especially notorious for powering the
-        Hacknet, which is a global, decentralized network used for nefarious purposes.{" "}
-        {FactionName.FulcrumSecretTechnologies} quickly abandoned the project and dissociated themselves from it.
+        当 {FactionName.FulcrumSecretTechnologies}
+        发布他们的开源 Linux 发行版 Chapeau 后，它迅速成为地下黑客群体的首选操作系统。Chapeau
+        尤其因为支撑着 Hacknet——一个被用于不法目的的全球去中心化网络——而声名狼藉。{" "}
+        {FactionName.FulcrumSecretTechnologies} 很快放弃了该项目，并与它撇清了关系。
         <br />
         <br />
-        This BitNode unlocks the Hacknet Server, which is an upgraded version of the Hacknet Node. Hacknet Servers
-        generate hashes, which can be spent on a variety of different upgrades.
+        这个 BitNode 解锁了 Hacknet Server，它是 Hacknet Node 的升级版本。Hacknet Server
+        会产生哈希，哈希可以花费在各种不同的升级上。
         <br />
         <br />
         {upgradeTextForBN(9)}
@@ -334,46 +314,42 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File grants the following benefits:
+        该源文件提供以下好处：
         <ul>
-          <li>Level 1: Permanently unlocks the Hacknet Server in other BitNodes</li>
-          <li>Level 2: You start with 128GB of RAM on your home computer when entering a new BitNode</li>
-          <li>Level 3: Grants a highly-upgraded Hacknet Server when entering a new BitNode</li>
+          <li>1 级：在其他 BitNode 中永久解锁 Hacknet Server</li>
+          <li>2 级：进入新 BitNode 时，家用电脑以 128GB RAM 起步</li>
+          <li>3 级：进入新 BitNode 时获得一台高度升级的 Hacknet Server</li>
         </ul>
-        (Note that the Level 3 effect of this Source-File only applies when entering a new BitNode, NOT when installing
-        augmentations.)
+        （注意，该源文件的 3 级效果只在进入新 BitNode 时生效，安装强化时不会生效。）
         <br />
         <br />
-        This Source-File also increases Hacknet production and reduces Hacknet costs by:
+        该源文件还会提高 Hacknet 产出并降低 Hacknet 成本：
         <ul>
-          <li>Level 1: 12%</li>
-          <li>Level 2: 18%</li>
-          <li>Level 3: 21%</li>
+          <li>1 级：12%</li>
+          <li>2 级：18%</li>
+          <li>3 级：21%</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode10 = new BitNode(
     10,
-    "Digital Carbon",
-    "Your body is not who you are",
+    "数字碳基",
+    "你的身体并不代表你",
     (
       <>
-        In 2084, VitaLife unveiled to the world the Persona Core, a technology that allowed people to digitize their
-        consciousness. Their consciousness could then be transferred into Synthoids or other bodies by transmitting the
-        digitized data. Human bodies became nothing more than 'sleeves' for the human consciousness. Mankind had finally
-        achieved immortality - at least for those that could afford it.
+        2084 年，VitaLife 向世界公布了“人格核心”（Persona
+        Core），一项让人们将意识数字化的技术。通过传输数字化后的数据，人们的意识可以被转移进合成人或其他躯体中。人类的身体沦为了人类意识的“容器”。人类终于实现了永生——至少对买得起的人而言是如此。
         <br />
         <br />
-        This BitNode unlocks Sleeve and Grafting technology:
+        这个 BitNode 解锁分身与移植（Grafting）技术：
         <ul>
           <li>
-            Sleeve: Duplicate your consciousness into Synthoids, allowing you to perform different tasks asynchronously.
-            You cannot buy Sleeves or upgrade them outside this BitNode.
+            分身：将你的意识复制到合成人中，让你可以异步执行不同的任务。在这个 BitNode
+            之外无法购买或升级分身。
           </li>
           <li>
-            Grafting: Visit VitaLife in New Tokyo to get access to this technology. It allows you to graft
-            augmentations, which is an alternative way of installing augmentations.
+            移植：前往新东京的 VitaLife 获得该技术。它允许你移植强化，这是安装强化的另一种方式。
           </li>
         </ul>
         {upgradeTextForBN(10)}
@@ -381,27 +357,20 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File unlocks Sleeve and Grafting API in other BitNodes. Each level of this Source-File also grants
-        you a Sleeve.
+        该源文件在其他 BitNode 中解锁分身与移植 API。该源文件的每一级还会给予你一个分身。
       </>
     ),
   );
   BitNodes.BitNode11 = new BitNode(
     11,
-    "The Big Crash",
-    "Okay. Sell it all.",
+    "大崩盘",
+    "好，全部卖出。",
     (
       <>
-        The 2050s was defined by the massive amounts of violent civil unrest and anarchic rebellion that rose all around
-        the world. It was this period of disorder that eventually led to the governmental reformation of many global
-        superpowers, most notably the USA and China. But just as the world was slowly beginning to recover from these
-        dark times, financial catastrophes hit.
+        2050 年代的标志是世界各地爆发的大规模暴力内乱与无政府反叛。正是这段动荡时期最终导致了许多全球超级大国的政府改革，其中以美国和中国最为显著。但就在世界从这些黑暗时期缓慢恢复之际，金融灾难接踵而至。
         <br />
         <br />
-        In many countries, the high cost of trying to deal with the civil disorder bankrupted the governments. In all of
-        this chaos and confusion, hackers were able to steal billions of dollars from the world's largest electronic
-        banks, prompting an international banking crisis as governments were unable to bail out insolvent banks. Now,
-        the world is slowly crumbling in the middle of the biggest economic crisis of all time.
+        在许多国家，应对内乱的高昂开销使政府破产。在这片混乱之中，黑客得以从全球最大的电子银行中窃取数十亿美元；由于政府无力救助资不抵债的银行，一场国际银行业危机就此爆发。如今，世界正在史上最严重的经济危机中慢慢崩塌。
         <br />
         <br />
         {upgradeTextForBN(11)}
@@ -409,51 +378,48 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File makes it so that company favor increases BOTH the player's salary and reputation gain rate at
-        that company by 1% per favor (rather than just the reputation gain). This Source-File also increases the
-        player's company salary and reputation gain multipliers by:
+        该源文件使公司好感度同时提升玩家在该公司的薪资与声望获取速度（每点好感 +1%，而不只是声望获取）。该源文件还会提高玩家的公司薪资和声望获取乘数：
         <ul>
-          <li>Level 1: 32%</li>
-          <li>Level 2: 48%</li>
-          <li>Level 3: 56%</li>
+          <li>1 级：32%</li>
+          <li>2 级：48%</li>
+          <li>3 级：56%</li>
         </ul>
-        It also reduces the price increase for every augmentation bought by:
+        它还会降低每购买一个强化的价格增幅：
         <ul>
-          <li>Level 1: 4%</li>
-          <li>Level 2: 6%</li>
-          <li>Level 3: 7%</li>
+          <li>1 级：4%</li>
+          <li>2 级：6%</li>
+          <li>3 级：7%</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode12 = new BitNode(
     12,
-    "The Recursion",
-    "Repeat.",
+    "递归",
+    "循环往复。",
     (
       <>
-        To iterate is human; to recurse, divine.
+        迭代者，人也；递归者，神也。
         <br />
         <br />
-        Every time this BitNode is destroyed, it becomes slightly harder. Destroying this BitNode will give you
-        Source-File 12, or if you already have this Source-File, it will upgrade its level. There is no maximum level
-        for Source-File 12.
+        每次摧毁这个 BitNode，它都会变得更难一点。摧毁该 BitNode 会给予你源文件
+        12；如果你已经拥有该源文件，则会提升其等级。源文件 12 没有最高等级上限。
       </>
     ),
-    <>This Source-File lets you start any BitNodes with Neuroflux Governor equal to the level of this Source-File.</>,
+    <>该源文件让你在任何 BitNode 中，以等于该源文件等级的神经通量统治者（Neuroflux Governor）等级起步。</>,
   );
   BitNodes.BitNode13 = new BitNode(
     13,
-    "They're lunatics",
-    "1 step back, 2 steps forward",
+    "他们是疯子",
+    "退一步，进两步",
     (
       <>
-        With the invention of augmentations in the 2040s, a religious group known as the{" "}
-        {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
+        随着 2040 年代强化的发明，一个被称为{FactionName.ChurchOfTheMachineGod}
+        的宗教团体获得了远超所有人预期的支持。
         <br />
         <br />
-        Their leader, Allison "Mother" Stanek is said to have created her own augmentation whose power goes beyond any
-        other. Find her in {CityName.Chongqing} and gain her trust.
+        据说他们的领袖 Allison "Mother"
+        Stanek 创造了她自己的强化，其力量超越任何其他强化。去{CityName.Chongqing}找到她并获得她的信任吧。
         <br />
         <br />
         {upgradeTextForBN(13)}
@@ -461,28 +427,24 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other BitNodes.
+        该源文件让{FactionName.ChurchOfTheMachineGod}出现在其他 BitNode 中。
         <br />
         <br />
-        Each level of this Source-File increases the size of Stanek's Gift.
+        该源文件的每一级都会增大 Stanek 的礼物的尺寸。
         <br />
         <br />
-        Due to the effect of Source-File 7.3, you must accept Stanek's Gift before joining the Bladeburner division if
-        you have that Source-File.
+        由于源文件 7.3 的效果，如果你拥有该源文件，则必须在加入 Bladeburner 部门之前接受 Stanek 的礼物。
       </>
     ),
   );
   BitNodes.BitNode14 = new BitNode(
     14,
-    "IPvGO Subnet Takeover",
-    "Territory exists only in the 'net",
+    "IPvGO 子网接管",
+    "领地只存在于‘网’中",
     (
       <>
-        In late 2070, the .org bubble burst, and most of the newly-implemented IPvGO 'net collapsed overnight. Since
-        then, various factions have been fighting over small subnets to control their computational power. These subnets
-        are very valuable in the right hands, if you can wrest them from their current owners. You will be opposed by
-        the other factions, but you can overcome them with careful choices. Prevent their attempts to destroy your
-        networks by controlling the open space in the 'net!
+        2070 年末，.org 泡沫破裂，大多数新建立的 IPvGO ‘net’在一夜之间崩塌。从那时起，各个派系一直在争夺小型子网，以控制它们的算力。这些子网在合适的人手中非常宝贵——如果你能从它们当前的主人手中夺过来的话。你会受到其他派系的对抗，但你可以通过谨慎的选择战胜它们。通过控制
+        ‘net’中的开放空间，阻止它们摧毁你的网络！
         <br />
         <br />
         {upgradeTextForBN(14)}
@@ -490,48 +452,41 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File grants the following benefits:
+        该源文件提供以下好处：
         <ul>
-          <li>Level 1: 100% increased stat multipliers from Node Power</li>
-          <li>Level 2: Permanently unlocks the go.cheat API</li>
-          <li>Level 3: 25% additive increased success rate for the go.cheat API</li>
+          <li>1 级：节点威力提供的属性乘数提高 100%</li>
+          <li>2 级：永久解锁 go.cheat API</li>
+          <li>3 级：go.cheat API 的成功率额外提高 25%</li>
         </ul>
-        This Source-File also increases the maximum favor from winstreaks you can gain for each faction to:
+        该源文件还会将每个派系通过连胜可获得的最大好感度提升至：
         <ul>
-          <li>Level 1: 200k rep equivalent</li>
-          <li>Level 2: 300k rep equivalent</li>
-          <li>Level 3: 400k rep equivalent</li>
+          <li>1 级：相当于 20 万声望</li>
+          <li>2 级：相当于 30 万声望</li>
+          <li>3 级：相当于 40 万声望</li>
         </ul>
-        and increases the reputation converted to favor for winning two games in a row to:
+        并将连胜两局时转换为好感的声望提升至：
         <ul>
-          <li>Level 1: 1000 rep to favor</li>
-          <li>Level 2: 1500 rep to favor</li>
-          <li>Level 3: 2000 rep to favor</li>
+          <li>1 级：1000 声望转换为好感</li>
+          <li>2 级：1500 声望转换为好感</li>
+          <li>3 级：2000 声望转换为好感</li>
         </ul>
       </>
     ),
   );
   BitNodes.BitNode15 = new BitNode(
     15,
-    "The Secrets of the Dark Net",
-    "The rules have changed",
+    "暗网的秘密",
+    "规则已经改变",
     (
       <>
         <br />
-        Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive
-        authority and surveillance. Leaving stability behind and turning to the dark web comes with risks... but also
-        rewards.
+        深入互联网未知的隐秘角落，许诺着摆脱压迫性权威与监控的自由。抛开稳定、转向暗网伴随着风险……但也有回报。
         <br />
         <br />
-        Unlike the traditional network of servers, the "dark" net is a constantly shifting, complex, unreliable place
-        where servers can move or disappear at any moment. Long-distance communication is often impossible, requiring
-        scripts to be self-sufficient and durable, and spread themselves to stay alive. If you can take advantage of the
-        darknet servers' weak passwords and leaky logs, you will be able to gain access to the deepest parts of the
-        darknet and its secrets.
+        与传统的服务器网络不同，“暗”网是一个不断变化、复杂而不可靠的地方，服务器随时可能移动或消失。远距离通信通常是不可能的，这要求脚本自给自足、足够健壮，并通过自我传播来存活。如果你能利用暗网服务器脆弱的密码和泄露的日志，你就能够进入暗网最深处及其秘密。
         <br />
         <br />
-        In this BitNode, the Daedalus faction has not yet found and monopolized the fabled Red Pill augmentation.
-        Legends say it can be found somewhere, out there in the dark...
+        在这个 BitNode 中，Daedalus 派系尚未找到并垄断传说中的红药丸强化。传说它就藏在某处，在黑暗之中……
         <br />
         <br />
         {upgradeTextForBN(15)}
@@ -539,18 +494,17 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File grants the following benefits:
+        该源文件提供以下好处：
         <ul>
           <li>
-            Level 1: Permanently start with the TOR router and {CompletedProgramName.darkscape}, and unlock the full
-            dark web on all BitNodes.
+            1 级：永久以 TOR 路由器和 {CompletedProgramName.darkscape}
+            起步，并在所有 BitNode 中解锁完整的暗网。
           </li>
           <li>
-            Level 2: Your charisma level increases job salary and rep gain. Also increases authentication speed by 20%
+            2 级：你的魅力等级会提高工作薪资与声望获取。认证速度还会提高 20%
           </li>
           <li>
-            Level 3: Your charisma level increases faction work rep gain. Also increases the xp and money gained from
-            .cache files by 50%.
+            3 级：你的魅力等级会提高派系工作声望获取。从 .cache 文件获得的经验和资金也会提高 50%。
           </li>
         </ul>
       </>

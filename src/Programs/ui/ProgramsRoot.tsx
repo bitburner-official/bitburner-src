@@ -60,11 +60,9 @@ export function ProgramsRoot(): React.ReactElement {
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0, mb: 10 }}>
-      <Typography variant="h4">Create program</Typography>
+      <Typography variant="h4">编写程序</Typography>
       <Typography>
-        This page displays any programs that you are able to create. Writing the code for a program takes time, which
-        can vary based on how complex the program is. If you are working on creating a program you can cancel at any
-        time. Your progress will be saved and you can continue later.
+        此页面显示你能够编写的所有程序。编写程序代码需要时间，时长取决于程序的复杂程度。如果你正在编写某个程序，可以随时取消。进度会被保存，你可以稍后继续。
       </Typography>
 
       <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", my: 1 }}>
@@ -98,7 +96,7 @@ export function ProgramsRoot(): React.ReactElement {
                         Router.toPage(Page.Work);
                       }}
                     >
-                      Resume focus
+                      继续专注
                     </Button>
                   ) : (
                     //Button if the program is not currently worked on
@@ -114,25 +112,25 @@ export function ProgramsRoot(): React.ReactElement {
                         Router.toPage(Page.Work);
                       }}
                     >
-                      Create program
+                      编写程序
                     </Button>
                   ))}
                 {Player.hasProgram(program.name) || hackingLevelRemaining === 0 || (
-                  <Tooltip title={<>Unlocks after you gain {hackingLevelRemaining} more hacking levels</>}>
+                  <Tooltip title={<>再获得 {hackingLevelRemaining} 级黑客技能后解锁</>}>
                     <Typography color={Settings.theme.hack}>
-                      <b>Unlocks at hacking level:</b> {Player.skills.hacking + hackingLevelRemaining}
+                      <b>解锁所需黑客等级：</b> {Player.skills.hacking + hackingLevelRemaining}
                     </Typography>
                   </Tooltip>
                 )}
                 {curCompletion !== -1 && (
                   <Typography color={Settings.theme.infolight}>
-                    <b>Current completion:</b> {curCompletion}%
+                    <b>当前完成度：</b> {curCompletion}%
                   </Typography>
                 )}
                 {/*Displays the current completion of the program currently being created*/}
                 {isCreateProgramWork(Player.currentWork) && Player.currentWork.programName === program.name && (
                   <Typography color={Settings.theme.infolight}>
-                    <b>Current completion:</b>{" "}
+                    <b>当前完成度：</b>{" "}
                     {((100 * Player.currentWork.unitCompleted) / Player.currentWork.unitNeeded()).toFixed(2)}%
                   </Typography>
                 )}

@@ -18,7 +18,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     const [server, host] = helpers.getServer(ctx, _host);
     const contract = server?.getContract(filename);
     if (server == null || contract == null) {
-      throw helpers.errorMessage(ctx, `Cannot find contract '${filename}' on server '${host}'`);
+      throw helpers.errorMessage(ctx, `在服务器 '${host}' 上找不到合约 '${filename}'`);
     }
 
     return [contract, server];
@@ -43,7 +43,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
           contract.getDifficulty(),
           contract.rewardScaling,
         );
-        helpers.log(ctx, () => `Successfully completed Coding Contract '${contract.fn}'. Reward: ${reward}`);
+        helpers.log(ctx, () => `成功完成编程合约 '${contract.fn}'。奖励：${reward}`);
         server.removeContract(contract.fn);
         return reward;
       }
@@ -62,19 +62,19 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       }
       case CodingContractResult.Failure: {
         if (++contract.tries >= contract.getMaxNumTries()) {
-          helpers.log(ctx, () => `Coding Contract attempt '${contract.fn}' failed. Contract is now self-destructing`);
+          helpers.log(ctx, () => `编程合约 '${contract.fn}' 尝试失败。合约即将自毁`);
           const solution = contract.getAnswer();
           if (solution !== null) {
-            helpers.log(ctx, () => `Coding Contract solution was: ${solution}`);
+            helpers.log(ctx, () => `编程合约的答案是：${solution}`);
           }
           server.removeContract(contract.fn);
         } else {
           helpers.log(
             ctx,
             () =>
-              `Coding Contract attempt '${contract.fn}' failed. ${
+              `编程合约 '${contract.fn}' 尝试失败。剩余 ${
                 contract.getMaxNumTries() - contract.tries
-              } attempt(s) remaining.`,
+              } 次尝试机会。`,
           );
         }
         return "";

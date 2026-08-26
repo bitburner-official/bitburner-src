@@ -30,7 +30,7 @@ import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 export const getStockFromSymbol = function (ctx: NetscriptContext, symbol: string): Stock {
   const stock = SymbolToStockMap[symbol];
   if (stock == null) {
-    throw helpers.errorMessage(ctx, `Invalid stock symbol: '${symbol}'`);
+    throw helpers.errorMessage(ctx, `无效的股票代码：'${symbol}'`);
   }
 
   return stock;
@@ -40,14 +40,14 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
   const checkTixApiAccess = function (ctx: NetscriptContext): void {
     if (!Player.hasTixApiAccess) {
-      throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
+      throw helpers.errorMessage(ctx, `你没有 TIX API 权限！无法使用 ${ctx.function}()`);
     }
   };
   const checkSFAccess = function (ctx: NetscriptContext, sfLevel: number): void {
     if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) < sfLevel) {
       const errorMessage = knowAboutBitverse()
-        ? `You must either be in BitNode-8 or have Source-File 8.${sfLevel}.`
-        : "You cannot access this API yet. It will be unlocked later, and it will be obvious when and how to obtain it.";
+        ? `你必须处于 BitNode-8 或拥有源文件 8.${sfLevel}。`
+        : "你目前还无法访问此 API。它会在之后解锁，届时如何获取它会非常明显。";
       throw helpers.errorMessage(ctx, errorMessage);
     }
   };
@@ -95,7 +95,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       checkTixApiAccess(ctx);
       const stock = SymbolToStockMap[symbol];
       if (stock == null) {
-        throw helpers.errorMessage(ctx, `Invalid stock symbol: ${symbol}`);
+        throw helpers.errorMessage(ctx, `无效的股票代码：${symbol}`);
       }
       return [stock.playerShares, stock.playerAvgPx, stock.playerShortShares, stock.playerAvgShortPx];
     },
@@ -195,7 +195,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
       checkSFAccess(ctx, 3);
       const stock = getStockFromSymbol(ctx, symbol);
       if (isNaN(shares) || isNaN(price)) {
-        throw helpers.errorMessage(ctx, `Invalid shares or price. Must be numeric. shares=${shares}, price=${price}`);
+        throw helpers.errorMessage(ctx, `无效的股数或价格。必须是数字。shares=${shares}，price=${price}`);
       }
 
       return cancelOrder({ stock, shares, price, type, pos }, ctx);
@@ -227,7 +227,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
     getVolatility: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       if (!Player.has4SDataTixApi) {
-        throw helpers.errorMessage(ctx, "You don't have 4S Market Data TIX API Access!");
+        throw helpers.errorMessage(ctx, "你没有 4S 市场数据 TIX API 权限！");
       }
       const stock = getStockFromSymbol(ctx, symbol);
       const volatility = stock.mv * getDarknetVolatilityMult(symbol);
@@ -237,7 +237,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
     getForecast: (ctx, _symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       if (!Player.has4SDataTixApi) {
-        throw helpers.errorMessage(ctx, "You don't have 4S Market Data TIX API Access!");
+        throw helpers.errorMessage(ctx, "你没有 4S 市场数据 TIX API 权限！");
       }
       const stock = getStockFromSymbol(ctx, symbol);
 
@@ -247,61 +247,61 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
     },
     purchase4SMarketData: (ctx) => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
+        helpers.log(ctx, () => "4S 市场数据已在 BitNode 高级选项中被禁用。");
         return false;
       }
 
       if (Player.has4SData) {
-        helpers.log(ctx, () => "Already purchased 4S Market Data.");
+        helpers.log(ctx, () => "已购买过 4S 市场数据。");
         return true;
       }
 
       if (!Player.hasWseAccount) {
-        helpers.log(ctx, () => "You need to have a WSE account.");
+        helpers.log(ctx, () => "你需要拥有 WSE 账户。");
         return false;
       }
 
       if (Player.money < getStockMarket4SDataCost()) {
-        helpers.log(ctx, () => "Not enough money to purchase 4S Market Data.");
+        helpers.log(ctx, () => "资金不足，无法购买 4S 市场数据。");
         return false;
       }
 
       Player.has4SData = true;
       Player.loseMoney(getStockMarket4SDataCost(), "stock");
-      helpers.log(ctx, () => "Purchased 4S Market Data");
+      helpers.log(ctx, () => "已购买 4S 市场数据");
       return true;
     },
     purchase4SMarketDataTixApi: (ctx) => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled in advanced BitNode options.");
+        helpers.log(ctx, () => "4S 市场数据已在 BitNode 高级选项中被禁用。");
         return false;
       }
 
       checkTixApiAccess(ctx);
 
       if (Player.has4SDataTixApi) {
-        helpers.log(ctx, () => "Already purchased 4S Market Data TIX API");
+        helpers.log(ctx, () => "已购买过 4S 市场数据 TIX API");
         return true;
       }
 
       if (Player.money < getStockMarket4STixApiCost()) {
-        helpers.log(ctx, () => "Not enough money to purchase 4S Market Data TIX API");
+        helpers.log(ctx, () => "资金不足，无法购买 4S 市场数据 TIX API");
         return false;
       }
 
       Player.has4SDataTixApi = true;
       Player.loseMoney(getStockMarket4STixApiCost(), "stock");
-      helpers.log(ctx, () => "Purchased 4S Market Data TIX API");
+      helpers.log(ctx, () => "已购买 4S 市场数据 TIX API");
       return true;
     },
     purchaseWseAccount: (ctx) => {
       if (Player.hasWseAccount) {
-        helpers.log(ctx, () => "Already purchased WSE Account");
+        helpers.log(ctx, () => "已购买过 WSE 账户");
         return true;
       }
 
       if (Player.money < getStockMarketWseCost()) {
-        helpers.log(ctx, () => "Not enough money to purchase WSE Account Access");
+        helpers.log(ctx, () => "资金不足，无法购买 WSE 账户");
         return false;
       }
 
@@ -310,17 +310,17 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
         initStockMarket();
       }
       Player.loseMoney(getStockMarketWseCost(), "stock");
-      helpers.log(ctx, () => "Purchased WSE Account Access");
+      helpers.log(ctx, () => "已购买 WSE 账户");
       return true;
     },
     purchaseTixApi: (ctx) => {
       if (Player.hasTixApiAccess) {
-        helpers.log(ctx, () => "Already purchased TIX API");
+        helpers.log(ctx, () => "已购买过 TIX API");
         return true;
       }
 
       if (Player.money < getStockMarketTixApiCost()) {
-        helpers.log(ctx, () => "Not enough money to purchase TIX API Access");
+        helpers.log(ctx, () => "资金不足，无法购买 TIX API 权限");
         return false;
       }
 
@@ -329,7 +329,7 @@ export function NetscriptStockMarket(): InternalAPI<StockAPI> {
         initStockMarket();
       }
       Player.loseMoney(getStockMarketTixApiCost(), "stock");
-      helpers.log(ctx, () => "Purchased TIX API");
+      helpers.log(ctx, () => "已购买 TIX API");
       return true;
     },
     getBonusTime: (ctx) => {

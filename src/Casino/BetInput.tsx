@@ -33,10 +33,10 @@ export function BetInput({
      */
     if (isNaN(bet)) {
       setBet(0);
-      setHelperText("Not a valid number");
+      setHelperText("不是有效的数字");
     } else if (bet <= 0) {
       setBet(0);
-      setHelperText("Must bet a positive amount");
+      setHelperText("下注金额必须为正数");
     } else if (bet > maxBet) {
       // This is for the player's convenience. They can type a bunch of 9s, and we will set the max bet for them.
       setBetValue(String(maxBet));
@@ -71,7 +71,7 @@ export function BetInput({
         },
       }}
       value={betValue}
-      label={<>Wager (Max: {formatMoney(maxBet)})</>}
+      label={<>下注 (上限：{formatMoney(maxBet)})</>}
       disabled={gameInProgress}
       onChange={onChange}
       error={helperText !== ""}

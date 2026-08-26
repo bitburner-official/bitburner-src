@@ -43,15 +43,15 @@ export const ModelIds = {
 export type MinigamesType = _ValueOf<typeof ModelIds>;
 
 export const GenericResponseMessage = {
-  Success: "Success",
-  DirectConnectionRequired: "Direct Connection Required",
-  AuthFailure: "Unauthorized",
-  NotFound: "Not Found",
-  RequestTimeOut: "Request Timeout",
-  NotEnoughCharisma: "Not Enough Charisma",
-  StasisLinkLimitReached: "Stasis Link Limit Reached",
-  NoBlockRAM: "No Host-owned RAM Left To Reallocate",
-  ServiceUnavailable: "Service Unavailable",
+  Success: "成功",
+  DirectConnectionRequired: "需要直接连接",
+  AuthFailure: "未授权",
+  NotFound: "未找到",
+  RequestTimeOut: "请求超时",
+  NotEnoughCharisma: "魅力不足",
+  StasisLinkLimitReached: "已达到滞留链路上限",
+  NoBlockRAM: "没有所有者占用的 RAM 可供重新分配",
+  ServiceUnavailable: "服务不可用",
 } as const;
 
 export const ResponseCodeEnum = {

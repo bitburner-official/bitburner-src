@@ -18,7 +18,7 @@ export function WireCuttingGame({ stage }: IProps): React.ReactElement {
     <>
       <Paper sx={{ display: "grid", justifyItems: "center", pb: 1, background: "black" }}>
         <Typography variant="h4" sx={{ width: "75%", textAlign: "center", color: "white" }}>
-          Cut the wires with the following properties! (keyboard 1 to 9)
+          剪断具有以下属性的电线！（键盘 1 到 9）
         </Typography>
         {stage.questions.map((question, i) => (
           <Typography

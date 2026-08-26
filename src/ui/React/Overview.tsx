@@ -72,7 +72,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
 
   const CurrentIcon = open ? KeyboardArrowUpIcon : KeyboardArrowDownIcon;
   const LeftIcon = mode === "tutorial" ? SchoolIcon : EqualizerIcon;
-  const header = mode === "tutorial" ? "Tutorial" : "Overview";
+  const header = mode === "tutorial" ? "教程" : "概览";
   const handleStop: DraggableEventHandler = (e, data) => {
     setX(data.x);
     setY(data.y);
@@ -131,7 +131,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
               {header}
             </Typography>
             <Button
-              aria-label="expand or collapse character overview"
+              aria-label="展开或收起角色概览"
               variant="text"
               size="small"
               className={classes.visibilityToggle}

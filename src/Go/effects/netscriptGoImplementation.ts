@@ -45,7 +45,7 @@ export function validateMove(ctx: NetscriptContext, x: number, y: number, method
     ...settings,
   };
 
-  const moveString = methodName + (check.pass ? "" : ` ${x},${y}`) + (check.playAsWhite ? " (White)" : "") + ": ";
+  const moveString = methodName + (check.pass ? "" : ` ${x},${y}`) + (check.playAsWhite ? " （白方）" : "") + ": ";
   const moveColor = check.playAsWhite ? GoColor.white : GoColor.black;
 
   if (check.playAsWhite) {
@@ -59,10 +59,10 @@ export function validateMove(ctx: NetscriptContext, x: number, y: number, method
 
   const boardSize = Go.currentGame.board.length;
   if (x < 0 || x >= boardSize) {
-    throw errorMessage(ctx, `Invalid column number (x = ${x}), column must be a number 0 through ${boardSize - 1}`);
+    throw errorMessage(ctx, `无效的列号（x = ${x}），列号必须是 0 到 ${boardSize - 1} 之间的数字`);
   }
   if (y < 0 || y >= boardSize) {
-    throw errorMessage(ctx, `Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
+    throw errorMessage(ctx, `无效的行号（y = ${y}），行号必须是 0 到 ${boardSize - 1} 之间的数字`);
   }
 
   const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, moveColor);
@@ -70,57 +70,48 @@ export function validateMove(ctx: NetscriptContext, x: number, y: number, method
   if (!point && check.onlineNode) {
     throw errorMessage(
       ctx,
-      `The node ${x},${y} is offline, so you cannot ${
+      `节点 ${x},${y} 已离线，因此无法${
         methodName === "removeRouter"
-          ? "clear this point with removeRouter()"
+          ? "使用 removeRouter() 清除此位置"
           : methodName === "destroyNode"
-          ? "destroy the node. (Attempted to destroyNode)"
-          : "place a router there"
-      }.`,
+          ? "摧毁该节点。（尝试调用 destroyNode）"
+          : "在此放置路由器"
+      }。`,
     );
   }
   if (validity === GoValidity.noSuicide && check.suicide) {
     throw errorMessage(
       ctx,
-      `${moveString} ${validity}. That point has no neighboring empty nodes, and is not connected to a network with access to empty nodes, meaning it would be instantly captured if played there.`,
+      `${moveString} ${validity}。该位置周围没有任何空节点，也不与任何连通空节点的网络相连，在此落子会立刻被提掉。`,
     );
   }
   if (validity === GoValidity.boardRepeated && check.repeat) {
-    throw errorMessage(
-      ctx,
-      `${moveString} ${validity}. That move would repeat the previous board state, which is illegal as it leads to infinite loops.`,
-    );
+    throw errorMessage(ctx, `${moveString} ${validity}。这步棋会重复之前的棋盘状态，属于违规，因为会导致无限循环。`);
   }
   if (point?.color !== GoColor.empty && check.emptyNode) {
     throw errorMessage(
       ctx,
-      `The point ${x},${y} is occupied by a router, so you cannot ${
-        methodName === "destroyNode" ? "destroy this node. (Attempted to destroyNode)" : "place a router there"
+      `位置 ${x},${y} 已有路由器占据，因此无法${
+        methodName === "destroyNode" ? "摧毁该节点。（尝试调用 destroyNode）" : "在此放置路由器"
       }`,
     );
   }
 
   if (point?.color === GoColor.empty && check.requireNonEmptyNode) {
-    throw errorMessage(
-      ctx,
-      `The point ${x},${y} does not have a router on it, so you cannot clear this point with removeRouter().`,
-    );
+    throw errorMessage(ctx, `位置 ${x},${y} 上没有路由器，因此无法使用 removeRouter() 清除该位置。`);
   }
   if (point && check.requireOfflineNode) {
-    throw errorMessage(ctx, `The node ${x},${y} is not offline, so you cannot repair the node.`);
+    throw errorMessage(ctx, `节点 ${x},${y} 并未离线，因此无法修复该节点。`);
   }
 }
 
 function validatePlayAsWhite(ctx: NetscriptContext) {
   if (Go.currentGame.ai !== GoOpponent.none) {
-    throw errorMessage(ctx, `${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
+    throw errorMessage(ctx, `${GoValidity.invalid}。只有在与 'No AI' 对战时才能执白`);
   }
 
   if (Go.currentGame.previousPlayer === GoColor.white) {
-    throw errorMessage(
-      ctx,
-      `${GoValidity.notYourTurn}. You cannot play or pass as white until the opponent has played.`,
-    );
+    throw errorMessage(ctx, `${GoValidity.notYourTurn}。在对手落子之前，你不能执白落子或停一手。`);
   }
 }
 
@@ -128,13 +119,13 @@ function validateTurn(ctx: NetscriptContext, moveString = "", color = GoColor.bl
   if (Go.currentGame.previousPlayer === color) {
     throw errorMessage(
       ctx,
-      `${moveString} ${GoValidity.notYourTurn}. Do you have multiple scripts running, or did you forget to await makeMove() or opponentNextTurn()`,
+      `${moveString} ${GoValidity.notYourTurn}。你是否同时运行了多个脚本，或者忘记 await makeMove() 或 opponentNextTurn()`,
     );
   }
   if (Go.currentGame.previousPlayer === null) {
     throw errorMessage(
       ctx,
-      `${moveString} ${GoValidity.gameOver}. You cannot make more moves. Start a new game using resetBoardState().`,
+      `${moveString} ${GoValidity.gameOver}。不能再继续落子了。请使用 resetBoardState() 开始新对局。`,
     );
   }
 }
@@ -145,7 +136,7 @@ function validateTurn(ctx: NetscriptContext, moveString = "", color = GoColor.bl
 export function handlePassTurn(ctx: NetscriptContext, passAsWhite = false) {
   const color = passAsWhite ? GoColor.white : GoColor.black;
   passTurn(Go.currentGame, color);
-  helpers.log(ctx, () => "Go turn passed.");
+  helpers.log(ctx, () => "已停一手。");
   if (Go.currentGame.previousPlayer === null) {
     logEndGame(ctx);
   }
@@ -162,10 +153,10 @@ export function makePlayerMove(ctx: NetscriptContext, x: number, y: number, play
   const moveWasMade = makeMove(boardState, x, y, color);
 
   if (validity !== GoValidity.valid || !moveWasMade) {
-    throw errorMessage(ctx, `Invalid move: ${x} ${y}. ${validity}.`);
+    throw errorMessage(ctx, `无效落子：${x} ${y}。${validity}。`);
   }
 
-  helpers.log(ctx, () => `Go move played: ${x}, ${y}${playAsWhite ? " (White)" : ""}`);
+  helpers.log(ctx, () => `已落子：${x}, ${y}${playAsWhite ? " （白方）" : ""}`);
   return handleNextTurn(boardState, true);
 }
 
@@ -181,9 +172,9 @@ export function getOpponentNextMove(ctx: NetscriptContext, logOpponentMove = tru
       if (move.type === GoPlayType.gameOver) {
         logEndGame(ctx);
       } else if (move.type === GoPlayType.pass) {
-        helpers.log(ctx, () => `Opponent passed their turn. You can end the game by passing as well.`);
+        helpers.log(ctx, () => `对手停一手。你也可以停一手来结束对局。`);
       } else if (move.type === GoPlayType.move) {
-        helpers.log(ctx, () => `Opponent played move: ${move.x}, ${move.y}`);
+        helpers.log(ctx, () => `对手落子：${move.x}, ${move.y}`);
       }
       return move;
     });
@@ -341,10 +332,7 @@ function logEndGame(ctx: NetscriptContext) {
   const score = getScore(boardState);
   helpers.log(
     ctx,
-    () =>
-      `Subnet complete! Final score: ${boardState.ai}: ${score[GoColor.white].sum},  Player: ${
-        score[GoColor.black].sum
-      }`,
+    () => `子网攻略完成！最终得分：${boardState.ai}：${score[GoColor.white].sum}，玩家：${score[GoColor.black].sum}`,
   );
 }
 
@@ -353,11 +341,11 @@ function logEndGame(ctx: NetscriptContext) {
  */
 export function resetBoardState(ctx: NetscriptContext, opponent: GoOpponent, boardSize: number) {
   if (![5, 7, 9, 13].includes(boardSize) && opponent !== GoOpponent.w0r1d_d43m0n) {
-    throw errorMessage(ctx, `Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
+    throw errorMessage(ctx, `请求的子网大小无效（${boardSize}），大小必须为 5、7、9 或 13`);
   }
 
   if (opponent === GoOpponent.w0r1d_d43m0n && !Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
-    throw errorMessage(ctx, `Invalid opponent requested (${opponent}), this opponent has not yet been discovered`);
+    throw errorMessage(ctx, `请求的对手无效（${opponent}），该对手尚未被发现`);
   }
 
   const oldBoardState = Go.currentGame;
@@ -368,7 +356,7 @@ export function resetBoardState(ctx: NetscriptContext, opponent: GoOpponent, boa
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
   resetGoPromises();
   clearAllPointHighlights(Go.currentGame);
-  helpers.log(ctx, () => `New game started: ${opponent}, ${boardSize}x${boardSize}`);
+  helpers.log(ctx, () => `新对局开始：${opponent}，${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }
 
@@ -419,12 +407,11 @@ export function resetStats(resetAll = false) {
 
 const boardValidity = {
   valid: "",
-  badShape: "Invalid boardState: Board must be a square",
-  badType: "Invalid boardState: Board must be an array of strings",
-  badSize: "Invalid boardState: Board must be 5, 7, 9, 13, or 19 in size",
-  badCharacters:
-    'Invalid board state: unknown characters found. "X" represents black pieces, "O" white, "." empty points, and "#" offline nodes.',
-  failedToCreateBoard: "Invalid board state: Failed to create board",
+  badShape: "无效的 boardState：棋盘必须是正方形",
+  badType: "无效的 boardState：棋盘必须是字符串数组",
+  badSize: "无效的 boardState：棋盘大小必须为 5、7、9、13 或 19",
+  badCharacters: '无效的棋盘状态：发现了未知字符。"X" 代表黑子，"O" 代表白子，"." 代表空位，"#" 代表离线节点。',
+  failedToCreateBoard: "无效的棋盘状态：创建棋盘失败",
 } as const;
 
 /**
@@ -490,8 +477,8 @@ export function checkCheatApiAccess(ctx: NetscriptContext): void {
   if (!hasSourceFile && !isBitnodeFourteenTwo) {
     throw errorMessage(
       ctx,
-      `The go.cheat API requires Source-File 14.2 to run, a power up you obtain later in the game.
-      It will be very obvious when and how you can obtain it.`,
+      `go.cheat API 需要 源文件 14.2 才能运行，这是你在游戏后期才能获得的强化能力。
+      到时候你该如何获得它会非常显而易见。`,
     );
   }
 }
@@ -520,13 +507,13 @@ export function determineCheatSuccess(
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly ending the game
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
-    helpers.log(ctx, () => `Cheat failed! You have been ejected from the subnet.`);
+    helpers.log(ctx, () => `作弊失败！你已被逐出子网。`);
     forceEndGoGame(state);
     Player.giveAchievement("IPVGO_ANTICHEAT");
     return handleNextTurn(state, true);
   } else {
     // If the cheat fails, your turn is skipped
-    helpers.log(ctx, () => `Cheat failed. Your turn has been skipped.`);
+    helpers.log(ctx, () => `作弊失败。你的回合已被跳过。`);
     passTurn(state, playerColor, false);
   }
 
@@ -579,13 +566,13 @@ export function cheatRemoveRouter(
 ): Promise<Play> {
   const point = Go.currentGame.board[x][y];
   if (!point) {
-    throw errorMessage(ctx, `Cheat failed. The point ${x},${y} is already offline.`);
+    throw errorMessage(ctx, `作弊失败。位置 ${x},${y} 已经离线。`);
   }
   return determineCheatSuccess(
     ctx,
     () => {
       point.color = GoColor.empty;
-      helpers.log(ctx, () => `Cheat successful. The point ${x},${y} was cleared.`);
+      helpers.log(ctx, () => `作弊成功。位置 ${x},${y} 已被清除。`);
     },
     successRngOverride,
     ejectRngOverride,
@@ -610,7 +597,7 @@ export function cheatPlayTwoMoves(
   const point2 = Go.currentGame.board[x2][y2];
 
   if (!point1 || !point2) {
-    throw errorMessage(ctx, `Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
+    throw errorMessage(ctx, `作弊失败。位置 ${x1},${y1} 或 ${x2},${y2} 中有一个已经离线。`);
   }
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
 
@@ -620,7 +607,7 @@ export function cheatPlayTwoMoves(
       point1.color = playerColor;
       point2.color = playerColor;
 
-      helpers.log(ctx, () => `Cheat successful. Two go moves played: ${x1},${y1} and ${x2},${y2}`);
+      helpers.log(ctx, () => `作弊成功。已连下两手：${x1},${y1} 和 ${x2},${y2}`);
     },
     successRngOverride,
     ejectRngOverride,
@@ -646,7 +633,7 @@ export function cheatRepairOfflineNode(
         color: GoColor.empty,
         x,
       };
-      helpers.log(ctx, () => `Cheat successful. The point ${x},${y} was repaired.`);
+      helpers.log(ctx, () => `作弊成功。位置 ${x},${y} 已被修复。`);
     },
     successRngOverride,
     ejectRngOverride,
@@ -666,7 +653,7 @@ export function cheatDestroyNode(
     ctx,
     () => {
       Go.currentGame.board[x][y] = null;
-      helpers.log(ctx, () => `Cheat successful. The point ${x},${y} was destroyed.`);
+      helpers.log(ctx, () => `作弊成功。位置 ${x},${y} 已被摧毁。`);
     },
     successRngOverride,
     ejectRngOverride,

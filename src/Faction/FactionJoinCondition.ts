@@ -42,7 +42,7 @@ export interface PlayerCondition {
 
 export const haveBackdooredServer = (hostname: ServerName): PlayerCondition => ({
   toString(): string {
-    return `Backdoor access to ${hostname} server`;
+    return `${hostname} 服务器的后门访问权限`;
   },
   toJSON(): BackdoorRequirement {
     return { type: "backdoorInstalled", server: hostname };
@@ -58,7 +58,7 @@ export const haveBackdooredServer = (hostname: ServerName): PlayerCondition => (
 
 export const employedBy = (companyName: CompanyName): PlayerCondition => ({
   toString(): string {
-    return `Employed at ${companyName}`;
+    return `就职于 ${companyName}`;
   },
   toJSON(): EmployedByRequirement {
     return { type: "employedBy", company: companyName };
@@ -70,7 +70,7 @@ export const employedBy = (companyName: CompanyName): PlayerCondition => ({
 
 export const haveCompanyRep = (companyName: CompanyName, rep: number): PlayerCondition => ({
   toString(): string {
-    return `${formatReputation(calculateEffectiveRequiredReputation(companyName, rep))} reputation with ${companyName}`;
+    return `在 ${companyName} 的声望达到 ${formatReputation(calculateEffectiveRequiredReputation(companyName, rep))}`;
   },
   toJSON(): CompanyReputationRequirement {
     return {
@@ -88,7 +88,7 @@ export const haveCompanyRep = (companyName: CompanyName, rep: number): PlayerCon
 
 export const haveJobTitle = (jobTitle: JobName): PlayerCondition => ({
   toString(): string {
-    return `Employed as a ${jobTitle}`;
+    return `担任 ${jobTitle}`;
   },
   toJSON(): JobTitleRequirement {
     return { type: "jobTitle", jobTitle: jobTitle };
@@ -102,20 +102,20 @@ export const haveJobTitle = (jobTitle: JobName): PlayerCondition => ({
 export const executiveEmployee = (): PlayerCondition => ({
   ...someCondition([JobName.software7, JobName.business4, JobName.business5].map((jobTitle) => haveJobTitle(jobTitle))),
   toString(): string {
-    return `CTO, CFO, or CEO of a company`;
+    return `担任某公司的 CTO、CFO 或 CEO`;
   },
 });
 
 export const notEmployedBy = (companyName: CompanyName): PlayerCondition => ({
   ...notCondition(employedBy(companyName)),
   toString(): string {
-    return `Not working for the ${companyName}`;
+    return `不在 ${companyName} 工作`;
   },
 });
 
 export const haveAugmentations = (n: number): PlayerCondition => ({
   toString(): string {
-    return `${n || "No"} augmentations installed`;
+    return `已安装 ${n || "无"} 个强化`;
   },
   toJSON(): NumAugmentationsRequirement {
     return { type: "numAugmentations", numAugmentations: n };
@@ -133,7 +133,7 @@ export const haveAugmentations = (n: number): PlayerCondition => ({
 
 export const haveMoney = (n: number): PlayerCondition => ({
   toString(): string {
-    return `Have ${formatMoney(n)}`;
+    return `拥有 ${formatMoney(n)}`;
   },
   toJSON(): MoneyRequirement {
     return { type: "money", money: n };
@@ -145,7 +145,7 @@ export const haveMoney = (n: number): PlayerCondition => ({
 
 export const haveSkill = (skill: keyof Skills, n: number): PlayerCondition => ({
   toString(): string {
-    return `${capitalize(skill)} level ${n}`;
+    return `${SKILL_NAMES_ZH[skill] ?? capitalize(skill)}等级 ${n}`;
   },
   toJSON(): SkillRequirement {
     return { type: "skills", skills: { [skill]: n } };
@@ -158,7 +158,7 @@ export const haveSkill = (skill: keyof Skills, n: number): PlayerCondition => ({
 export const haveCombatSkills = (n: number): CompoundPlayerCondition => ({
   ...everyCondition(["strength", "defense", "dexterity", "agility"].map((s) => haveSkill(s as keyof Skills, n))),
   toString(): string {
-    return `All combat skills level ${n}`;
+    return `所有战斗属性达到 ${n} 级`;
   },
   toJSON(): SkillRequirement {
     return { type: "skills", skills: { strength: n, defense: n, dexterity: n, agility: n } };
@@ -167,11 +167,11 @@ export const haveCombatSkills = (n: number): CompoundPlayerCondition => ({
 
 export const haveKarma = (n: number): PlayerCondition => ({
   toString(): string {
-    if (n < -1000) return "An extensive criminal record";
-    else if (n < -40) return "A criminal reputation";
-    else if (n < -20) return "A disregard for the law";
-    else if (n < -10) return "A history of violence";
-    else return "Street cred";
+    if (n < -1000) return "大量的犯罪记录";
+    else if (n < -40) return "有犯罪恶名";
+    else if (n < -20) return "无视法律";
+    else if (n < -10) return "有暴力历史";
+    else return "街头名望";
   },
   toJSON(): KarmaRequirement {
     return { type: "karma", karma: n };
@@ -183,7 +183,7 @@ export const haveKarma = (n: number): PlayerCondition => ({
 
 export const haveKilledPeople = (n: number): PlayerCondition => ({
   toString(): string {
-    return `${n} people killed`;
+    return `击杀 ${n} 人`;
   },
   toJSON(): PeopleKilledRequirement {
     return { type: "numPeopleKilled", numPeopleKilled: n };
@@ -195,7 +195,7 @@ export const haveKilledPeople = (n: number): PlayerCondition => ({
 
 export const locatedInCity = (city: CityName): PlayerCondition => ({
   toString(): string {
-    return `Located in ${city}`;
+    return `位于 ${city}`;
   },
   toJSON(): CityRequirement {
     return { type: "city", city: city };
@@ -208,13 +208,13 @@ export const locatedInCity = (city: CityName): PlayerCondition => ({
 export const locatedInSomeCity = (...cities: CityName[]): PlayerCondition => ({
   ...someCondition(cities.map((city) => locatedInCity(city))),
   toString(): string {
-    return `Located in ${joinList(cities)}`;
+    return `位于 ${joinList(cities)}`;
   },
 });
 
 export const totalHacknetRam = (n: number): PlayerCondition => ({
   toString(): string {
-    return `Total Hacknet RAM of ${formatRam(n)}`;
+    return `Hacknet 总 RAM 达到 ${formatRam(n)}`;
   },
   toJSON(): HacknetRAMRequirement {
     return { type: "hacknetRAM", hacknetRAM: n };
@@ -231,7 +231,7 @@ export const totalHacknetRam = (n: number): PlayerCondition => ({
 
 export const totalHacknetCores = (n: number): PlayerCondition => ({
   toString(): string {
-    return `Total Hacknet cores of ${n}`;
+    return `Hacknet 总核心数达到 ${n}`;
   },
   toJSON(): HacknetCoresRequirement {
     return { type: "hacknetCores", hacknetCores: n };
@@ -248,7 +248,7 @@ export const totalHacknetCores = (n: number): PlayerCondition => ({
 
 export const totalHacknetLevels = (n: number): PlayerCondition => ({
   toString(): string {
-    return `Total Hacknet levels of ${n}`;
+    return `Hacknet 总等级达到 ${n}`;
   },
   toJSON(): HacknetLevelsRequirement {
     return { type: "hacknetLevels", hacknetLevels: n };
@@ -265,7 +265,7 @@ export const totalHacknetLevels = (n: number): PlayerCondition => ({
 
 export const haveBladeburnerRank = (n: number): PlayerCondition => ({
   toString(): string {
-    return `Rank ${n} in the Bladeburner Division`;
+    return `在 Bladeburner 部门中军衔达到 ${n}`;
   },
   toJSON(): BladeburnerRankRequirement {
     return { type: "bladeburnerRank", bladeburnerRank: n };
@@ -278,7 +278,7 @@ export const haveBladeburnerRank = (n: number): PlayerCondition => ({
 
 export const inBitNode = (n: number): PlayerCondition => ({
   toString(): string {
-    return `In BitNode ${n}`;
+    return `处于 BitNode ${n}`;
   },
   toJSON(): BitNodeRequirement {
     return { type: "bitNodeN", bitNodeN: n };
@@ -290,7 +290,7 @@ export const inBitNode = (n: number): PlayerCondition => ({
 
 export const haveSourceFile = (n: number): PlayerCondition => ({
   toString(): string {
-    return `In BitNode ${n} or have SourceFile ${n}`;
+    return `处于 BitNode ${n} 或拥有源文件 ${n}`;
   },
   toJSON(): SomeRequirement {
     return {
@@ -309,13 +309,13 @@ export const haveSourceFile = (n: number): PlayerCondition => ({
 export const haveSomeSourceFile = (...nodeNums: number[]): PlayerCondition => ({
   ...someCondition(nodeNums.map((n) => haveSourceFile(n))),
   toString(): string {
-    return `In BitNode ${joinList(nodeNums)} or have SourceFile ${joinList(nodeNums)}`;
+    return `处于 BitNode ${joinList(nodeNums)} 或拥有源文件 ${joinList(nodeNums)}`;
   },
 });
 
 export const haveFile = (fileName: LiteratureName | MessageFilename): PlayerCondition => ({
   toString(): string {
-    return `Have the file '${fileName}'`;
+    return `拥有文件 '${fileName}'`;
   },
   toJSON(): FileRequirement {
     return { type: "file", file: fileName };
@@ -335,7 +335,7 @@ export interface CompoundPlayerCondition extends PlayerCondition, Iterable<Playe
 
 export const unsatisfiable: PlayerCondition = {
   toString(): string {
-    return "(unsatisfiable)";
+    return "（无法满足）";
   },
   toJSON(): SomeRequirement {
     return { type: "someCondition", conditions: [] };
@@ -347,7 +347,7 @@ export const unsatisfiable: PlayerCondition = {
 
 export const notCondition = (condition: PlayerCondition): PlayerCondition => ({
   toString(): string {
-    return `Not ${condition.toString()}`;
+    return `非：${condition.toString()}`;
   },
   toJSON(): NotRequirement {
     return { type: "not", condition: condition.toJSON() };
@@ -385,7 +385,7 @@ export const everyCondition = (conditions: PlayerCondition[]): CompoundPlayerCon
   toString(): string {
     return joinList(
       conditions.map((c) => c.toString()),
-      "and",
+      "和",
     );
   },
   toJSON(): EveryRequirement {
@@ -414,11 +414,20 @@ export const delayedCondition = (arg: () => PlayerCondition): PlayerCondition =>
 
 /* helpers */
 
+const SKILL_NAMES_ZH: Record<string, string> = {
+  hacking: "黑客",
+  strength: "力量",
+  defense: "防御",
+  dexterity: "灵巧",
+  agility: "敏捷",
+  charisma: "魅力",
+};
+
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function joinList(list: (string | number)[], conjunction = "or", separator = ", ") {
+function joinList(list: (string | number)[], conjunction = "或", separator = ", ") {
   if (list.length < 3) {
     return list.join(` ${conjunction} `);
   }

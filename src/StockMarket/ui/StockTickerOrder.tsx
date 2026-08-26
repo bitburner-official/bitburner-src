@@ -22,7 +22,7 @@ export function StockTickerOrder(props: IProps): React.ReactElement {
 
   const order = props.order;
 
-  const posTxt = order.pos === PositionType.Long ? "Long Position" : "Short Position";
+  const posTxt = order.pos === PositionType.Long ? "做多持仓" : "做空持仓";
   const txt = (
     <>
       {order.type} - {posTxt} - {formatShares(order.shares)} @ <Money money={order.price} />
@@ -32,7 +32,7 @@ export function StockTickerOrder(props: IProps): React.ReactElement {
   return (
     <Box display="flex" alignItems="center">
       <Typography>{txt}</Typography>
-      <Button onClick={handleCancelOrderClick}>Cancel Order</Button>
+      <Button onClick={handleCancelOrderClick}>取消订单</Button>
     </Box>
   );
 }

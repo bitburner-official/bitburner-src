@@ -85,10 +85,10 @@ function StatsProgressBarInner({ name, color }: InnerProps): React.ReactElement 
 
   const tooltip = (
     <Typography sx={{ textAlign: "right" }}>
-      <strong>Progress:</strong>&nbsp;
+      <strong>进度：</strong>&nbsp;
       {formatExp(progress.currentExperience)} ({progress.progress.toFixed(2)}%)
       <br />
-      <strong>Remaining:</strong>&nbsp;
+      <strong>剩余：</strong>&nbsp;
       {formatExp(progress.remainingExperience)} / {formatExp(progress.nextExperience - progress.baseExperience)}
     </Typography>
   );

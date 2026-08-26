@@ -180,38 +180,38 @@ export abstract class BaseServer implements IServer {
   removeFile(path: FilePath): IReturnStatus {
     if (hasTextExtension(path)) {
       const textFile = this.textFiles.get(path);
-      if (!textFile) return { res: false, msg: `Text file ${path} not found.` };
+      if (!textFile) return { res: false, msg: `找不到文本文件 ${path}。` };
       this.textFiles.delete(path);
       return { res: true };
     }
     if (hasScriptExtension(path)) {
       const script = this.scripts.get(path);
-      if (!script) return { res: false, msg: `Script ${path} not found.` };
-      if (this.isRunning(path)) return { res: false, msg: "Cannot delete a script that is currently running!" };
+      if (!script) return { res: false, msg: `找不到脚本 ${path}。` };
+      if (this.isRunning(path)) return { res: false, msg: "无法删除正在运行的脚本！" };
       script.invalidateModule();
       this.scripts.delete(path);
       return { res: true };
     }
     if (hasProgramExtension(path)) {
       const programIndex = this.programs.findIndex((program) => program === path);
-      if (programIndex === -1) return { res: false, msg: `Program ${path} does not exist` };
+      if (programIndex === -1) return { res: false, msg: `程序 ${path} 不存在` };
       this.programs.splice(programIndex, 1);
       return { res: true };
     }
     if (path.endsWith(".lit")) {
       const litIndex = this.messages.findIndex((lit) => lit === path);
-      if (litIndex === -1) return { res: false, msg: `Literature file ${path} does not exist` };
+      if (litIndex === -1) return { res: false, msg: `文学文件 ${path} 不存在` };
       this.messages.splice(litIndex, 1);
       return { res: true };
     }
     if (path.endsWith(".cct")) {
       const contractIndex = this.contracts.findIndex((contracts) => contracts.fn === path);
-      if (contractIndex === -1) return { res: false, msg: `Contract file ${path} does not exist` };
+      if (contractIndex === -1) return { res: false, msg: `合约文件 ${path} 不存在` };
       this.contracts.splice(contractIndex, 1);
       return { res: true };
     }
 
-    return { res: false, msg: `Unhandled file extension on file path ${path}` };
+    return { res: false, msg: `文件路径 ${path} 使用了未处理的扩展名` };
   }
 
   /**

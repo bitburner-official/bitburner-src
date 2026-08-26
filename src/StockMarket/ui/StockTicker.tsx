@@ -74,8 +74,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     return (
       <>
-        Purchasing {formatShares(qty)} shares ({position === PositionType.Long ? "Long" : "Short"}
-        ) will cost <Money money={cost} />.
+        购买 {formatShares(qty)} 股（{position === PositionType.Long ? "做多" : "做空"}）将花费 <Money money={cost} />。
       </>
     );
   }
@@ -93,10 +92,10 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     if (position === PositionType.Long) {
       if (qty > stock.playerShares) {
-        return <>You do not have this many shares in the Long position</>;
+        return <>你没有这么多做多持仓的股份</>;
       }
     } else if (qty > stock.playerShortShares) {
-      return <>You do not have this many shares in the Short position</>;
+      return <>你没有这么多做空持仓的股份</>;
     }
 
     const cost = getSellTransactionGain(stock, qty, position);
@@ -106,8 +105,8 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     return (
       <>
-        Selling {formatShares(qty)} shares ({position === PositionType.Long ? "Long" : "Short"}) will result in a gain
-        of <Money money={cost} />.
+        卖出 {formatShares(qty)} 股（{position === PositionType.Long ? "做多" : "做空"}）将获得收益{" "}
+        <Money money={cost} />。
       </>
     );
   }
@@ -115,7 +114,7 @@ export function StockTicker(props: IProps): React.ReactElement {
   function handleBuyButtonClick(): void {
     const shares = getQuantity();
     if (isNaN(shares)) {
-      dialogBoxCreate(`Invalid input for quantity (number of shares): ${qty}`);
+      dialogBoxCreate(`数量（股数）输入无效：${qty}`);
       return;
     }
 
@@ -132,8 +131,8 @@ export function StockTicker(props: IProps): React.ReactElement {
       case SelectorOrderType.Limit: {
         setOpen(true);
         setModalProps({
-          text: "Enter the price for your Limit Order",
-          placeText: "Place Buy Limit Order",
+          text: "请输入限价单价格",
+          placeText: "下达买入限价单",
           place: (price: number) => placeOrder(props.stock, shares, price, OrderType.LimitBuy, position),
         });
         break;
@@ -141,8 +140,8 @@ export function StockTicker(props: IProps): React.ReactElement {
       case SelectorOrderType.Stop: {
         setOpen(true);
         setModalProps({
-          text: "Enter the price for your Stop Order",
-          placeText: "Place Buy Stop Order",
+          text: "请输入止损单价格",
+          placeText: "下达买入止损单",
           place: (price: number) => placeOrder(props.stock, shares, price, OrderType.StopBuy, position),
         });
         break;
@@ -170,7 +169,7 @@ export function StockTicker(props: IProps): React.ReactElement {
         break;
       }
       default: {
-        dialogBoxCreate(`ERROR: 'Buy Max' only works for Market Orders`);
+        dialogBoxCreate(`错误："最大买入"仅适用于市价单`);
         break;
       }
     }
@@ -211,7 +210,7 @@ export function StockTicker(props: IProps): React.ReactElement {
   function handleSellButtonClick(): void {
     const shares = getQuantity();
     if (isNaN(shares)) {
-      dialogBoxCreate(`Invalid input for quantity (number of shares): ${qty}`);
+      dialogBoxCreate(`数量（股数）输入无效：${qty}`);
       return;
     }
 
@@ -228,8 +227,8 @@ export function StockTicker(props: IProps): React.ReactElement {
       case SelectorOrderType.Limit: {
         setOpen(true);
         setModalProps({
-          text: "Enter the price for your Limit Order",
-          placeText: "Place Sell Limit Order",
+          text: "请输入限价单价格",
+          placeText: "下达卖出限价单",
           place: (price: number) => placeOrder(props.stock, shares, price, OrderType.LimitSell, position),
         });
         break;
@@ -237,8 +236,8 @@ export function StockTicker(props: IProps): React.ReactElement {
       case SelectorOrderType.Stop: {
         setOpen(true);
         setModalProps({
-          text: "Enter the price for your Stop Order",
-          placeText: "Place Sell Stop Order",
+          text: "请输入止损单价格",
+          placeText: "下达卖出止损单",
           place: (price: number) => placeOrder(props.stock, shares, price, OrderType.StopSell, position),
         });
         break;
@@ -262,7 +261,7 @@ export function StockTicker(props: IProps): React.ReactElement {
         break;
       }
       default: {
-        dialogBoxCreate(`ERROR: 'Sell All' only works for Market Orders`);
+        dialogBoxCreate(`错误："全部卖出"仅适用于市价单`);
         break;
       }
     }
@@ -287,10 +286,10 @@ export function StockTicker(props: IProps): React.ReactElement {
       <Collapse in={tickerOpen} unmountOnExit>
         <Box sx={{ mx: 4 }}>
           <Box display="flex" alignItems="center">
-            <TextField onChange={handleQuantityChange} placeholder="Quantity (Shares)" value={qty} />
+            <TextField onChange={handleQuantityChange} placeholder="数量（股）" value={qty} />
             <Select onChange={handlePositionTypeChange} value={position}>
-              <MenuItem value={PositionType.Long}>Long</MenuItem>
-              {hasShortAccess() && <MenuItem value={PositionType.Short}>Short</MenuItem>}
+              <MenuItem value={PositionType.Long}>做多</MenuItem>
+              {hasShortAccess() && <MenuItem value={PositionType.Short}>做空</MenuItem>}
             </Select>
             <Select onChange={handleOrderTypeChange} value={orderType}>
               <MenuItem value={SelectorOrderType.Market}>{SelectorOrderType.Market}</MenuItem>

@@ -37,9 +37,9 @@ export function GangRoot(): React.ReactElement {
           onChange={handleChange}
           sx={{ minWidth: "fit-content", maxWidth: "45%" }}
         >
-          <Tab label="Management" />
-          <Tab label="Equipment" />
-          <Tab label="Territory" />
+          <Tab label="管理" />
+          <Tab label="装备" />
+          <Tab label="地盘" />
         </Tabs>
         <Button
           style={{ marginLeft: "20px" }}
@@ -47,7 +47,7 @@ export function GangRoot(): React.ReactElement {
             Router.toPage(Page.Faction, { faction: Factions[gang.facName] });
           }}
         >
-          Faction
+          派系
         </Button>
       </div>
       {value === 0 && <ManagementSubpage />}

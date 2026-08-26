@@ -24,7 +24,7 @@ export class CustomBoundary extends React.Component<CustomBoundaryProps, CustomB
     if (this.state.error) {
       // Typography is used because there are no default page styles.
       // Span is used because it does not conflict with the DOM validation nesting (default Typography element of p is invalid at this location in dom tree)
-      return <Typography component={"span"}>Error in custom react content. See console for details.</Typography>;
+      return <Typography component={"span"}>自定义 React 内容出错，详情请查看控制台。</Typography>;
     }
     return <Typography component={"span"}>{this.props.children}</Typography>;
   }

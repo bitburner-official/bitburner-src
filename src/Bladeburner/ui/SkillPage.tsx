@@ -19,13 +19,12 @@ export function SkillPage({ bladeburner }: SkillPageProps): React.ReactElement {
   return (
     <>
       <Typography>
-        <strong>Skill Points: {formatBigNumber(bladeburner.skillPoints)}</strong>
+        <strong>技能点：{formatBigNumber(bladeburner.skillPoints)}</strong>
       </Typography>
       <Typography>
-        You will gain one skill point every {BladeburnerConstants.RanksPerSkillPoint} ranks.
+        每积累 {BladeburnerConstants.RanksPerSkillPoint} 点声望可获得 1 点技能点。
         <br />
-        Note that when upgrading a skill, the benefit for that skill is additive. However, the effects of different
-        skills with each other is multiplicative.
+        注意：升级同一技能时，其收益按加法叠加；而不同技能之间的效果则按乘法叠加。
       </Typography>
       {multDisplays.map((multDisplay, i) => (
         <Typography key={i}>{multDisplay}</Typography>

@@ -1,10 +1,10 @@
 import { Paper, Typography } from "@mui/material";
 import React from "react";
-import { OptionsTabName } from "./GameOptionsRoot";
 
 interface IProps {
   children: React.ReactNode;
-  title: OptionsTabName;
+  // Localized display title of the tab. Tab identifiers (OptionsTabName) are kept untranslated.
+  title: string;
 }
 
 export const GameOptionsPage = (props: IProps): React.ReactElement => {

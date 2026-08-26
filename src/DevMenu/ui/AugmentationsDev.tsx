@@ -88,16 +88,16 @@ export function AugmentationsDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_AugmentationsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMore />}>
-        <Typography>Augmentations</Typography>
+        <Typography>强化</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Box display="flex" marginBottom="8px">
-          <Tooltip title="Queue all augmentations" style={{ marginRight: "8px" }}>
+          <Tooltip title="将所有强化加入队列" style={{ marginRight: "8px" }}>
             <Button onClick={queueAllAugs}>
               <ReplyAllIcon />
             </Button>
           </Tooltip>
-          <Tooltip title="Queue augmentation">
+          <Tooltip title="将强化加入队列">
             <IconButton onClick={queueAug}>
               <ReplyIcon />
             </IconButton>
@@ -113,14 +113,14 @@ export function AugmentationsDev(): React.ReactElement {
           ></Autocomplete>
         </Box>
         <Button onClick={installAugs} style={{ marginRight: "8px" }}>
-          {`Quick-install ${Player.queuedAugmentations.length} queued augmentations`}
+          {`快速安装 ${Player.queuedAugmentations.length} 个排队中的强化`}
         </Button>
         <Button onClick={clearQueuedAugs} style={{ marginRight: "8px" }}>
-          {`Clear ${Player.queuedAugmentations.length} queued augmentations`}
+          {`清空 ${Player.queuedAugmentations.length} 个排队中的强化`}
         </Button>
-        <Button onClick={clearAugs}>{`Uninstall ${Player.augmentations.length} installed augmentations`}</Button>
+        <Button onClick={clearAugs}>{`卸载 ${Player.augmentations.length} 个已安装的强化`}</Button>
         <Box display="flex" marginTop="8px">
-          <Tooltip title="Queue all augmentations offered by faction, except NFG">
+          <Tooltip title="将所选派系提供的全部强化加入队列（NFG 除外）">
             <Button onClick={queueAllAugsOfFaction}>
               <ReplyAllIcon />
             </Button>

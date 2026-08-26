@@ -33,22 +33,20 @@ function LongPosition(props: IProps): React.ReactElement {
       <Box display="flex">
         <Tooltip
           title={
-            <Typography>
-              Shares in the long position will increase in value if the price of the corresponding stock increases
-            </Typography>
+            <Typography>做多持仓的股份会在对应股票价格上涨时增值</Typography>
           }
         >
           <Typography variant="h5" color="primary">
-            Long Position:
+            做多持仓：
           </Typography>
         </Tooltip>
       </Box>
-      <Typography>Shares: {formatShares(stock.playerShares)}</Typography>
+      <Typography>股份：{formatShares(stock.playerShares)}</Typography>
       <Typography>
-        Average Price: <Money money={stock.playerAvgPx} /> (Total Cost: <Money money={totalCost} />)
+        平均价格：<Money money={stock.playerAvgPx} />（总成本：<Money money={totalCost} />）
       </Typography>
       <Typography>
-        Profit: <Money money={gains} /> ({formatPercent(percentageGains)})
+        利润：<Money money={gains} />（{formatPercent(percentageGains)}）
       </Typography>
     </>
   );
@@ -71,23 +69,21 @@ function ShortPosition(props: IProps): React.ReactElement {
         <Box display="flex">
           <Tooltip
             title={
-              <Typography>
-                Shares in the short position will increase in value if the price of the corresponding stock decreases
-              </Typography>
+              <Typography>做空持仓的股份会在对应股票价格下跌时增值</Typography>
             }
           >
             <Typography variant="h5" color="primary">
-              Short Position:
+              做空持仓：
             </Typography>
           </Tooltip>
         </Box>
 
-        <Typography>Shares: {formatShares(stock.playerShortShares)}</Typography>
+        <Typography>股份：{formatShares(stock.playerShortShares)}</Typography>
         <Typography>
-          Average Price: <Money money={stock.playerAvgShortPx} /> (Total Cost: <Money money={totalCost} />)
+          平均价格：<Money money={stock.playerAvgShortPx} />（总成本：<Money money={totalCost} />）
         </Typography>
         <Typography>
-          Profit: <Money money={gains} /> ({formatPercent(percentageGains)})
+          利润：<Money money={gains} />（{formatPercent(percentageGains)}）
         </Typography>
       </>
     );
@@ -101,13 +97,13 @@ export function StockTickerPositionText(props: IProps): React.ReactElement {
 
   return (
     <>
-      <Typography>Max Shares: {formatShares(stock.maxShares)}</Typography>
+      <Typography>最大股份：{formatShares(stock.maxShares)}</Typography>
       <Typography>
-        Ask Price: <Money money={stock.getAskPrice()} />
+        买入价：<Money money={stock.getAskPrice()} />
       </Typography>
       <br />
       <Typography>
-        Bid Price: <Money money={stock.getBidPrice()} />
+        卖出价：<Money money={stock.getBidPrice()} />
       </Typography>
       <LongPosition {...props} />
       <ShortPosition {...props} />

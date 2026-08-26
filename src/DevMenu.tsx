@@ -47,7 +47,7 @@ export function DevMenuRoot(): React.ReactElement {
   const rerender = useRerender(400);
   return (
     <AutoExpandContext.Provider value={autoExpandContextValue.current}>
-      <Typography>Development Menu - Only meant to be used for testing/debugging</Typography>
+      <Typography>开发菜单 - 仅用于测试/调试</Typography>
       <GeneralDev parentRerender={rerender} />
       <StatsDev />
       <FactionsDev />

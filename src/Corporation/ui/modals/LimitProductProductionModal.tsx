@@ -45,11 +45,10 @@ export function LimitProductProductionModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter a limit to the amount of this product you would like to produce per second. Leave the box empty to set no
-        limit.
+        输入你每秒想要生产这种产品的数量上限。将输入框留空则不设上限。
       </Typography>
-      <TextField autoFocus={true} placeholder="Limit" type="number" onChange={onChange} onKeyDown={onKeyDown} />
-      <Button onClick={limitProductProduction}>Limit production</Button>
+      <TextField autoFocus={true} placeholder="上限" type="number" onChange={onChange} onKeyDown={onKeyDown} />
+      <Button onClick={limitProductProduction}>限制产量</Button>
     </Modal>
   );
 }

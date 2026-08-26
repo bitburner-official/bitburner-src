@@ -30,7 +30,7 @@ export class ScriptDeath extends Error {
 
   constructor(ws: WorkerScript) {
     // Invoke the Error constructor with a meaningful message
-    const message = `NS instance has already been killed (${ws.name} running on ${ws.hostname} with pid ${ws.pid})`;
+    const message = `NS 实例已被杀死（${ws.name} 运行于 ${ws.hostname}，pid ${ws.pid}）`;
     super(message);
     // Setting the base Error.name property is important to facilitate easy
     // detection, since prototype.constructor.name might be minified for them.

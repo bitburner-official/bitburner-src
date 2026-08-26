@@ -2,8 +2,8 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Default",
-  description: "Default game theme, most supported",
+  name: "默认",
+  description: "游戏默认主题，兼容性最好",
   credit: "hydroflame",
   screenshot: img1,
   colors: {

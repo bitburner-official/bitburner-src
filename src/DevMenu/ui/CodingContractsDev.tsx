@@ -37,15 +37,15 @@ export function CodingContractsDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_CodingContractsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Coding Contracts</Typography>
+        <Typography>编程合约</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Button onClick={generateRandomContract}>Generate Random Contract</Button>
-                <Button onClick={generateRandomContractOnHome}>Generate Random Contract on Home Comp</Button>
+                <Button onClick={generateRandomContract}>生成随机合约</Button>
+                <Button onClick={generateRandomContractOnHome}>在家用电脑上生成随机合约</Button>
               </td>
             </tr>
             <tr>
@@ -57,7 +57,7 @@ export function CodingContractsDev(): React.ReactElement {
                     </MenuItem>
                   ))}
                 </Select>
-                <Button onClick={specificContract}>Generate Specified Contract Type on Home Comp</Button>
+                <Button onClick={specificContract}>在家用电脑上生成指定类型的合约</Button>
               </td>
             </tr>
           </tbody>

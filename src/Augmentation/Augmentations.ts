@@ -14,9 +14,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e3,
       moneyCost: 1.75e7,
       info:
-        "The body is genetically re-engineered so that it produces the ADR-V1 pheromone, " +
-        "an artificial pheromone discovered by scientists. The ADR-V1 pheromone, when excreted, " +
-        "triggers feelings of admiration and approval in other people.",
+        "通过基因重组改造身体，使其分泌 ADR-V1 信息素——一种由科学家发现的人工信息素。" +
+        "ADR-V1 信息素在分泌时会引发他人的钦佩与好感。",
       company_rep: 1.1,
       faction_rep: 1.1,
       charisma_exp: 1.05,
@@ -32,9 +31,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e4,
       moneyCost: 5.5e8,
       info:
-        "The body is genetically re-engineered so that it produces the ADR-V2 pheromone, " +
-        "which is similar to but more potent than ADR-V1. This pheromone, when excreted, " +
-        "triggers feelings of admiration, approval, and respect in others.",
+        "通过基因重组改造身体，使其分泌 ADR-V2 信息素，它与 ADR-V1 类似但效力更强。" +
+        "这种信息素在分泌时会引发他人的钦佩、好感与尊重。",
       company_rep: 1.2,
       faction_rep: 1.2,
       charisma: 1.1,
@@ -49,11 +47,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.75e5,
       moneyCost: 3e9,
       info:
-        "A network consisting of millions of nanoprocessors is embedded into the brain. " +
-        "The network is meant to mimic the way a biological brain solves a problem, with each " +
-        "nanoprocessor acting similar to the way a neuron would in a neural network. However, these " +
-        "nanoprocessors are programmed to perform computations much faster than organic neurons, " +
-        "allowing the user to solve much more complex problems at a much faster rate.",
+        "一个由数百万纳米处理器构成的网络被植入大脑。" +
+        "该网络旨在模仿生物大脑解决问题的方式，每个纳米处理器的作用类似于神经网络中的一个神经元。不过，这些" +
+        "纳米处理器经过编程，其运算速度远超有机神经元，" +
+        "使用户能够以更快的速度解决复杂得多的问题。",
       hacking_speed: 1.03,
       hacking_money: 1.15,
       hacking: 1.12,
@@ -63,8 +60,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e3,
       moneyCost: 8e7,
       info:
-        "The body is injected with a chemical that artificially induces synaptic potentiation, " +
-        "otherwise known as the strengthening of synapses. This results in enhanced cognitive abilities.",
+        "向体内注射一种能够人为诱导突触增强（即强化突触连接）的化学物质。" +
+        "这将带来认知能力的提升。",
       hacking_speed: 1.02,
       hacking_chance: 1.05,
       hacking_exp: 1.05,
@@ -75,9 +72,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "Pheromone extruder injected in the thoracodorsal nerve. Emits a pleasing scent guaranteed to " +
-        "make conversational partners more agreeable.",
-      stats: "This augmentation makes the Bribe minigame easier by indicating the incorrect paths.",
+        "注入胸背神经的信息素挤出器。它会散发出一种宜人的气味，保证让" +
+        "交谈对象变得更加随和。",
+      stats: "该强化会标示出错误路径，使贿赂小游戏更容易。",
       charisma: 1.1,
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
@@ -88,10 +85,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: Infinity,
       moneyCost: Infinity,
       info:
-        "A chip containing the psyche of the greatest BitRunner to ever exist. " +
-        "Installing this relic significantly increases ALL of your stats. " +
-        "However, it may have unintended consequences on the user's mental well-being.",
-      stats: "Grants access to unimaginable power.",
+        "一枚承载着史上最伟大 BitRunner 灵魂的芯片。" +
+        "安装这件遗物将大幅提升你的所有属性。" +
+        "不过，它可能对使用者的精神健康造成意想不到的影响。",
+      stats: "赋予你难以想象的力量。",
       hacking: 2,
       strength: 2,
       defense: 2,
@@ -140,7 +137,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.BionicArms]: {
       repCost: 6.25e4,
       moneyCost: 2.75e8,
-      info: "Cybernetic arms created from plasteel and carbon fibers that completely replace the user's organic arms.",
+      info: "由塑钢和碳纤维打造的义肢手臂，完全取代使用者的天然手臂。",
       strength: 1.3,
       dexterity: 1.3,
       factions: [FactionName.Tetrads],
@@ -148,7 +145,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.BionicLegs]: {
       repCost: 1.5e5,
       moneyCost: 3.75e8,
-      info: "Cybernetic legs, created from plasteel and carbon fibers, enhance running speed.",
+      info: "由塑钢和碳纤维打造的义肢双腿，提升奔跑速度。",
       agility: 1.6,
       factions: [
         FactionName.SpeakersForTheDead,
@@ -162,10 +159,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 4.5e4,
       moneyCost: 1.25e8,
       info:
-        "The spine is reconstructed using plasteel and carbon fibers. " +
-        "It is now capable of stimulating and regulating neural signals " +
-        "passing through the spinal cord, improving senses and reaction speed. " +
-        "The 'Bionic Spine' also interfaces with all other 'Bionic' implants.",
+        "脊柱由塑钢和碳纤维重建。" +
+        "它如今能够刺激并调节穿过脊髓的神经信号，" +
+        "改善感官与反应速度。" +
+        "“仿生脊柱”还会与所有其他“仿生”植入体交互。",
       strength: 1.15,
       defense: 1.15,
       agility: 1.15,
@@ -182,8 +179,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e3,
       moneyCost: 1e7,
       info:
-        "A small brain implant embedded in the cerebrum. This regulates and improves the brain's computing " +
-        "capabilities.",
+        "嵌入大脑的小型脑部植入体。它能调节并改善大脑的运算" +
+        "能力。",
       hacking: 1.05,
       factions: [FactionName.CyberSec, FactionName.NiteSec],
     },
@@ -191,10 +188,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e4,
       moneyCost: 1.375e9,
       info:
-        `A powered exoskeleton suit designed as armor for ${FactionName.Bladeburners} units. This ` +
-        "exoskeleton is incredibly adaptable and can protect the wearer from blunt, piercing, " +
-        "concussive, thermal, chemical, and electric trauma. It also enhances the user's " +
-        "physical abilities.",
+        `为${FactionName.Bladeburners}部队设计的动力外骨骼装甲。这套` +
+        "外骨骼适应力极强，能够保护穿戴者免受钝击、穿刺、" +
+        "震荡、高温、化学和电击创伤。它还能增强使用者的" +
+        "身体能力。",
       strength: 1.04,
       defense: 1.04,
       dexterity: 1.04,
@@ -208,8 +205,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.125e4,
       moneyCost: 5.5e9,
       info:
-        "Upgrades the BLADE-51b Tesla Armor with a plasma energy propulsion system " +
-        "that is capable of projecting an energy shielding force field.",
+        "为 BLADE-51b 特斯拉装甲升级一套等离子能量推进系统，" +
+        "可投射出能量护盾力场。",
       prereqs: [AugmentationName.BladeArmor],
       defense: 1.05,
       bladeburner_success_chance: 1.06,
@@ -220,9 +217,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e4,
       moneyCost: 1.1e9,
       info:
-        "Upgrades the BLADE-51b Tesla Armor with an AI Information Processing " +
-        "Unit that was specially designed to analyze Synthoid related data and " +
-        "information.",
+        "为 BLADE-51b 特斯拉装甲升级一台 AI 信息处理单元，" +
+        "专门用于分析合成人相关的数据与情报。",
       prereqs: [AugmentationName.BladeArmor],
       bladeburner_analysis: 1.15,
       bladeburner_success_chance: 1.02,
@@ -233,10 +229,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e4,
       moneyCost: 2.75e10,
       info:
-        "Upgrades the BLADE-51b Tesla Armor Unibeam augmentation to use a " +
-        "multiple-fiber system. This upgraded weapon uses multiple fiber laser " +
-        "modules that combine together to form a single, more powerful beam of up to " +
-        "2000MW.",
+        "将 BLADE-51b 特斯拉装甲的 Unibeam 强化升级为" +
+        "多光纤系统。这件升级后的武器使用多个光纤激光" +
+        "模块，它们汇聚成一束最高可达 2000MW 的更强光束。",
       prereqs: [AugmentationName.BladeArmorUnibeam],
       bladeburner_success_chance: 1.1,
       isSpecial: true,
@@ -246,8 +241,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e4,
       moneyCost: 2.75e9,
       info:
-        "Upgrades the BLADE-51b Tesla Armor with Ion Power Cells, which are capable of " +
-        "more efficiently storing and using power.",
+        "为 BLADE-51b 特斯拉装甲升级离子动力电池，" +
+        "能更高效地储存和使用能量。",
       prereqs: [AugmentationName.BladeArmor],
       bladeburner_success_chance: 1.05,
       bladeburner_stamina_gain: 1.02,
@@ -259,9 +254,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.125e4,
       moneyCost: 1.65e10,
       info:
-        "Upgrades the BLADE-51b Tesla Armor with a concentrated deuterium-fluoride laser " +
-        "weapon. Its precision and accuracy makes it useful for quickly neutralizing " +
-        "threats while keeping casualties to a minimum.",
+        "为 BLADE-51b 特斯拉装甲升级浓缩氟化氘激光武器。" +
+        "它的精确度与准度使其适合在快速瓦解威胁的同时" +
+        "将伤亡降到最低。",
       prereqs: [AugmentationName.BladeArmor],
       bladeburner_success_chance: 1.08,
       isSpecial: true,
@@ -271,10 +266,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2e4,
       moneyCost: 8.25e9,
       info:
-        `A cybernetic foot augmentation that was specifically created for ${FactionName.Bladeburners} ` +
-        "during the Synthoid Uprising. The organic musculature of the human foot " +
-        "is enhanced with flexible carbon nanotube matrices that are controlled by " +
-        "intelligent servomotors.",
+        `在合成人起义期间专为${FactionName.Bladeburners}打造的` +
+        "仿生足部强化。人足的有机肌肉组织" +
+        "由智能伺服电机控制的柔性碳纳米管基质加以强化。",
       agility: 1.05,
       bladeburner_max_stamina: 1.05,
       bladeburner_stamina_gain: 1.05,
@@ -285,20 +279,20 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e3,
       moneyCost: 1.5e11,
       info:
-        "A highly advanced matter phase-shifter module that is embedded " +
-        "in the brainstem and cerebellum. This augmentation allows " +
-        "the user to project and control a holographic simulacrum within an " +
-        "extremely large radius. These specially modified holograms were specifically " +
-        "weaponized by Bladeburner units to be used against Synthoids.",
+        "高度先进的物质相位移模块，嵌入" +
+        "脑干和小脑。该强化允许" +
+        "使用者在极大的半径内投射并控制全息拟像。" +
+        "这些经过特殊改装的全息影像曾被 Bladeburner 部队" +
+        "专门武器化，用来对付合成人。",
       stats:
-        "This augmentation allows you to perform Bladeburner actions and other actions (such as working, committing crimes, etc.) at the same time.",
+        "该强化让你可以同时执行 Bladeburner 行动和其他行动（例如工作、犯罪等）。",
       isSpecial: true,
       factions: [FactionName.Bladeburners],
     },
     [AugmentationName.BrachiBlades]: {
       repCost: 1.25e4,
       moneyCost: 9e7,
-      info: "A set of retractable plasteel blades that are implanted in the arm, underneath the skin.",
+      info: "一组植入皮下、可伸缩的塑钢刀刃。",
       strength: 1.15,
       defense: 1.15,
       crime_success: 1.1,
@@ -310,9 +304,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 4.5e4,
       moneyCost: 2.25e8,
       info:
-        "The CRTX42-AA gene is injected into the genome. " +
-        "The CRTX42-AA is an artificially-synthesized gene that targets the visual and prefrontal " +
-        "cortex and improves cognitive abilities.",
+        "将 CRTX42-AA 基因注入基因组。" +
+        "CRTX42-AA 是一种人工合成基因，靶向视觉皮层和前额叶皮层，提升认知能力。",
       hacking: 1.08,
       hacking_exp: 1.15,
       factions: [FactionName.NiteSec],
@@ -320,7 +313,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.CashRoot]: {
       repCost: 1.25e4,
       moneyCost: 1.25e8,
-      info: "A collection of digital assets saved on a small chip. The chip is implanted into your wrist. A small jack in the chip allows you to connect it to a computer and upload the assets.",
+      info: "保存在小芯片上的一组数字资产。芯片被植入你的手腕。芯片上的一个小插口可以让你把它连接到电脑并上传资产。",
       startingMoney: 1e6,
       programs: [CompletedProgramName.bruteSsh],
       factions: [FactionName.Sector12],
@@ -328,8 +321,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.ChaosOfDionysus]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "Opto-occipito implant to process visual signals before brain interpretation.",
-      stats: "This augmentation makes the Backwards minigame easier by flipping the words.",
+      info: "视-枕植入体，在大脑解析之前处理视觉信号。",
+      stats: "该强化通过翻转词语，使倒序小游戏更容易。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -337,8 +330,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 7.5e3,
       moneyCost: 2.375e7,
       info:
-        "The rib cage is augmented to continuously release boosters into the bloodstream " +
-        "which increase the oxygen-carrying capacity of blood.",
+        "肋骨经过强化改造，会持续向血液中释放增强剂，" +
+        "提高血液的携氧能力。",
       strength: 1.1,
       defense: 1.1,
       factions: [
@@ -356,8 +349,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e4,
       moneyCost: 6.5e7,
       info:
-        "An upgraded version of the 'Combat Rib' augmentation that adds potent stimulants which " +
-        "improve focus and endurance while decreasing reaction time and fatigue.",
+        "“战斗肋骨”强化的升级版本，加入了强效兴奋剂，" +
+        "可改善专注力与耐力，同时缩短反应时间并减轻疲劳。",
       prereqs: [AugmentationName.CombatRib1],
       strength: 1.14,
       defense: 1.14,
@@ -374,8 +367,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.5e4,
       moneyCost: 1.2e8,
       info:
-        "The latest version of the 'Combat Rib' augmentation releases advanced anabolic steroids that " +
-        "improve muscle mass and physical performance while being safe and free of side effects.",
+        "“战斗肋骨”强化的最新版本，会释放先进的合成代谢类固醇，" +
+        "在安全无副作用的前提下提升肌肉量与身体表现。",
       prereqs: [AugmentationName.CombatRib2, AugmentationName.CombatRib1],
       strength: 1.18,
       defense: 1.18,
@@ -392,19 +385,18 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: Infinity,
       moneyCost: 50e12,
       info:
-        "Developed by a pioneer in Grafting research, this implant generates pulses of stability which seem to have a nullifying effect against the Entropy virus.\n\n" +
-        "Note: For unknown reasons, the lowercase 'v' appears to be an integral component to its functionality.",
-      stats: "This Augmentation removes the Entropy virus, and prevents it from affecting you again.",
+        "由移植研究先驱开发，该植入体会产生稳定脉冲，似乎对熵病毒有抵消效果。\n\n" +
+        "注意：由于未知的原因，小写的 'v' 似乎是它正常运作不可或缺的一部分。",
+      stats: "该强化会清除熵病毒，并防止它再次影响你。",
       factions: [],
     },
     [AugmentationName.CordiARCReactor]: {
       repCost: 1.125e6,
       moneyCost: 5e9,
       info:
-        "The thoracic cavity is equipped with a small chamber designed " +
-        "to hold and sustain hydrogen plasma. The plasma is used to generate " +
-        "power through nuclear fusion, providing limitless amounts of clean " +
-        "energy for the body.",
+        "胸腔内装有一个小型腔室，专门用于容纳并维持氢等离子体。" +
+        "等离子体通过核聚变产生能量，" +
+        "为身体提供无限的清洁能源。",
       strength: 1.35,
       defense: 1.35,
       dexterity: 1.35,
@@ -419,10 +411,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 7e7,
       info:
-        "The first generation of Cranial Signal Processors. Cranial Signal Processors " +
-        "are a set of specialized microprocessors that are attached to " +
-        "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
-        "so that the brain doesn't have to.",
+        "第一代颅信号处理器。颅信号处理器" +
+        "是一组连接到大脑神经元的专用微处理器。这些芯片处理神经信号，快速自动地完成特定运算，" +
+        "从而让大脑不必亲自操劳。",
       hacking_speed: 1.01,
       hacking: 1.05,
       factions: [FactionName.CyberSec, FactionName.NiteSec],
@@ -431,10 +422,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e4,
       moneyCost: 1.25e8,
       info:
-        "The second generation of Cranial Signal Processors. Cranial Signal Processors " +
-        "are a set of specialized microprocessors that are attached to " +
-        "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
-        "so that the brain doesn't have to.",
+        "第二代颅信号处理器。颅信号处理器" +
+        "是一组连接到大脑神经元的专用微处理器。这些芯片处理神经信号，快速自动地完成特定运算，" +
+        "从而让大脑不必亲自操劳。",
       prereqs: [AugmentationName.CranialSignalProcessorsG1],
       hacking_speed: 1.02,
       hacking_chance: 1.05,
@@ -445,10 +435,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e4,
       moneyCost: 5.5e8,
       info:
-        "The third generation of Cranial Signal Processors. Cranial Signal Processors " +
-        "are a set of specialized microprocessors that are attached to " +
-        "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
-        "so that the brain doesn't have to.",
+        "第三代颅信号处理器。颅信号处理器" +
+        "是一组连接到大脑神经元的专用微处理器。这些芯片处理神经信号，快速自动地完成特定运算，" +
+        "从而让大脑不必亲自操劳。",
       prereqs: [AugmentationName.CranialSignalProcessorsG2, AugmentationName.CranialSignalProcessorsG1],
       hacking_speed: 1.02,
       hacking_money: 1.15,
@@ -459,10 +448,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e5,
       moneyCost: 1.1e9,
       info:
-        "The fourth generation of Cranial Signal Processors. Cranial Signal Processors " +
-        "are a set of specialized microprocessors that are attached to " +
-        "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
-        "so that the brain doesn't have to.",
+        "第四代颅信号处理器。颅信号处理器" +
+        "是一组连接到大脑神经元的专用微处理器。这些芯片处理神经信号，快速自动地完成特定运算，" +
+        "从而让大脑不必亲自操劳。",
       prereqs: [
         AugmentationName.CranialSignalProcessorsG3,
         AugmentationName.CranialSignalProcessorsG2,
@@ -477,10 +465,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e5,
       moneyCost: 2.25e9,
       info:
-        "The fifth generation of Cranial Signal Processors. Cranial Signal Processors " +
-        "are a set of specialized microprocessors that are attached to " +
-        "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
-        "so that the brain doesn't have to.",
+        "第五代颅信号处理器。颅信号处理器" +
+        "是一组连接到大脑神经元的专用微处理器。这些芯片处理神经信号，快速自动地完成特定运算，" +
+        "从而让大脑不必亲自操劳。",
       prereqs: [
         AugmentationName.CranialSignalProcessorsG4,
         AugmentationName.CranialSignalProcessorsG3,
@@ -497,9 +484,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.125e5,
       moneyCost: 4.5e8,
       info:
-        "A brain implant that provides an interface for direct, wireless communication between a computer's main " +
-        "memory and the mind. This implant allows the user to not only access a computer's memory, but also alter " +
-        "and delete it.",
+        "一种脑部植入体，为计算机主存与思维之间提供直接无线通信的接口。" +
+        "该植入体不仅让使用者能够访问计算机内存，还能修改" +
+        "和删除它。",
       hacking_money: 1.25,
       factions: [
         FactionName.BitRunners,
@@ -513,9 +500,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e4,
       moneyCost: 5e7,
       info:
-        "Synthetic skin that is grafted onto the body. This skin consists of " +
-        "millions of nanobots capable of projecting high-density muon beams, " +
-        "creating an energy barrier around the user.",
+        "移植到身体上的人造皮肤。这种皮肤由" +
+        "数百万个纳米机器人构成，能够投射高密度μ子束，" +
+        "在使用者周围形成能量屏障。",
       defense: 1.4,
       charisma: 1.03,
       factions: [FactionName.Volhaven],
@@ -525,9 +512,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e4,
       moneyCost: 2.5e8,
       info:
-        "A neural implant that enhances the user's ability to resonate with others. " +
-        "It is capable of analyzing and interpreting the emotions of those nearby, allowing " +
-        "the user to better understand and influence them.",
+        "一种神经植入体，增强使用者与他人共鸣的能力。" +
+        "它能够分析并解读周围人的情绪，让使用者" +
+        "更好地理解并影响他们。",
       charisma: 1.05,
       crime_success: 1.1,
       work_money: 1.2,
@@ -537,10 +524,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e3,
       moneyCost: 2.75e8,
       info:
-        "A DNA recombination of the EMS-4 Gene. This genetic engineering " +
-        "technique was originally used on Bladeburners during the Synthoid uprising " +
-        "to induce wakefulness and concentration, suppress fear, reduce empathy, " +
-        "improve reflexes, and improve memory, among other things.",
+        "对 EMS-4 基因进行的 DNA 重组。这种基因工程" +
+        "技术最初在合成人起义期间用于 Bladeburners，" +
+        "以诱导清醒与专注、抑制恐惧、减少共情、" +
+        "改善反应和记忆等。",
       bladeburner_success_chance: 1.03,
       bladeburner_analysis: 1.05,
       bladeburner_stamina_gain: 1.02,
@@ -551,11 +538,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e4,
       moneyCost: 2.5e8,
       info:
-        "A thin device embedded inside the arm containing a wireless module capable of connecting " +
-        "to nearby networks. Once connected, the Netburner Module is capable of capturing and " +
-        "processing all of the traffic on that network. By itself, the Embedded Netburner Module does " +
-        "not do much, but a variety of very powerful upgrades can be installed that allow you to fully " +
-        "control the traffic on a network.",
+        "一种嵌入手臂内的轻薄设备，包含可连接附近网络的无线模块。" +
+        "一旦连接，Netburner 模块便能捕获并处理该网络上的所有流量。" +
+        "就其本身而言，嵌入式 Netburner 模块作用有限，但可以安装各种极其强大的升级，让你完全" +
+        "掌控网络上的流量。",
       hacking: 1.08,
       factions: [
         FactionName.BitRunners,
@@ -572,8 +558,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e5,
       moneyCost: 6e9,
       info:
-        "Installs the Analyze Engine for the Embedded Netburner Module, which is a CPU cluster " +
-        "that vastly outperforms the Netburner Module's native single-core processor.",
+        "为嵌入式 Netburner 模块安装分析引擎，这是一个 CPU 集群，" +
+        "性能远超 Netburner 模块自带的单核处理器。",
       prereqs: [AugmentationName.ENM],
       hacking_speed: 1.1,
       factions: [
@@ -590,8 +576,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 175e3,
       moneyCost: 2.5e9,
       info:
-        "The Core library is an implant that upgrades the firmware of the Embedded Netburner Module. " +
-        "This upgrade allows the Embedded Netburner Module to generate its own data on a network.",
+        "Core 库是一种为嵌入式 Netburner 模块升级固件的植入体。" +
+        "这次升级使嵌入式 Netburner 模块能够在网络上生成自己的数据。",
       prereqs: [AugmentationName.ENM],
       hacking_speed: 1.03,
       hacking_money: 1.1,
@@ -612,10 +598,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e6,
       moneyCost: 4.5e9,
       info:
-        "The Core V2 library is an implant that upgrades the firmware of the Embedded Netburner Module. " +
-        "This upgraded firmware allows the Embedded Netburner Module to control information on " +
-        "a network by re-routing traffic, spoofing IP addresses, and altering the data inside network " +
-        "packets.",
+        "Core V2 库是一种为嵌入式 Netburner 模块升级固件的植入体。" +
+        "升级后的固件使嵌入式 Netburner 模块能够通过重新路由流量、伪造 IP 地址以及篡改网络" +
+        "数据包中的数据来控制网络上的信息。",
       prereqs: [AugmentationName.ENMCore, AugmentationName.ENM],
       hacking_speed: 1.05,
       hacking_money: 1.3,
@@ -637,9 +622,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.75e6,
       moneyCost: 7.5e9,
       info:
-        "The Core V3 library is an implant that upgrades the firmware of the Embedded Netburner Module. " +
-        "This upgraded firmware allows the Embedded Netburner Module to seamlessly inject code into " +
-        "any device on a network.",
+        "Core V3 库是一种为嵌入式 Netburner 模块升级固件的植入体。" +
+        "升级后的固件使嵌入式 Netburner 模块能够无缝地向网络上的任何设备注入代码。",
       prereqs: [AugmentationName.ENMCoreV2, AugmentationName.ENMCore, AugmentationName.ENM],
       hacking_speed: 1.05,
       hacking_money: 1.4,
@@ -660,9 +644,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e6,
       moneyCost: 7e9,
       info:
-        "This implant installs a Direct Memory Access (DMA) controller into the " +
-        "Embedded Netburner Module. This allows the Module to send and receive data " +
-        "directly to and from the main memory of devices on a network.",
+        "该植入体在嵌入式 Netburner 模块中安装了直接内存访问（DMA）控制器。" +
+        "这使模块可以直接向网络上设备的主存发送数据并从中接收数据。",
       prereqs: [AugmentationName.ENM],
       hacking_money: 1.4,
       hacking_chance: 1.2,
@@ -680,10 +663,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e5,
       moneyCost: 1.375e9,
       info:
-        "Electrical signals are used to induce a new, artificial form of myelinogenesis in the human body. " +
-        "This process results in the proliferation of new, synthetic myelin sheaths in the nervous " +
-        "system. These myelin sheaths can propagate neuro-signals much faster than their organic " +
-        "counterparts, leading to greater processing speeds and better brain function.",
+        "利用电信号在人体内诱导出一种全新的人工髓鞘形成过程。" +
+        "这一过程使神经系统中增殖出新的合成髓鞘。" +
+        "这些髓鞘传导神经信号的速度远超有机髓鞘，" +
+        "带来更快的处理速度和更好的大脑功能。",
       hacking_speed: 1.03,
       hacking_exp: 1.1,
       hacking: 1.08,
@@ -693,11 +676,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e5,
       moneyCost: 1.375e9,
       info:
-        "A cranial implant that greatly assists in the user's ability to analyze social situations " +
-        "and interactions. The system uses a wide variety of factors such as facial expression, body " +
-        "language, voice tone, and inflection to determine the best course of action during social " +
-        "situations. The implant also uses deep learning software to continuously learn new behavior " +
-        "patterns and how to best respond.",
+        "一种颅部植入体，极大帮助使用者分析社交情境与互动。" +
+        "该系统利用面部表情、肢体语言、语调和抑扬顿挫等各种各样的因素来确定社交" +
+        "情境中的最佳行动方案。植入体还使用深度学习软件持续学习新的行为" +
+        "模式以及如何做出最佳回应。",
       charisma: 1.6,
       charisma_exp: 1.6,
       factions: [
@@ -712,14 +694,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e3,
       moneyCost: 1.65e8,
       info:
-        "Ballistic-grade protective and retractable eyewear that was designed specifically " +
-        "for Bladeburner units. This " +
-        "is implanted by installing a mechanical frame in the skull's orbit. " +
-        "This frame interfaces with the brain and allows the user to " +
-        "automatically extrude and extract the eyewear. The eyewear protects " +
-        "against debris, shrapnel, lasers, blinding flashes, and gas. It is also " +
-        "embedded with a data processing chip that can be programmed to display an " +
-        "AR HUD to assist the user in field missions.",
+        "专为 Bladeburner 部队设计的防弹级可伸缩护目镜。" +
+        "通过在颅骨眼眶中安装机械框架来植入。" +
+        "该框架与大脑交互，允许使用者自动伸出和收回护目镜。护目镜可防护" +
+        "碎片、弹片、激光、致盲闪光和毒气。它还" +
+        "嵌入了一颗数据处理芯片，可以编程显示 AR HUD，" +
+        "在外勤任务中辅助使用者。",
       bladeburner_success_chance: 1.03,
       dexterity: 1.05,
       isSpecial: true,
@@ -729,15 +709,15 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.FloodOfPoseidon]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "Transtinatium VVD reticulator used in optico-sterbing recognition.",
-      stats: "This augmentation makes the Symbol matching minigame easier by indicating the correct choice.",
+      info: "用于视觉-转向识别的 Transtinatium VVD 网格校正器。",
+      stats: "该强化会标示出正确选项，使符号配对小游戏更容易。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
     [AugmentationName.FocusWire]: {
       repCost: 7.5e4,
       moneyCost: 9e8,
-      info: "A cranial implant that stops procrastination by blocking specific neural pathways in the brain.",
+      info: "一种颅部植入体，通过阻断大脑中的特定神经通路来杜绝拖延。",
       hacking_exp: 1.05,
       strength_exp: 1.05,
       defense_exp: 1.05,
@@ -758,9 +738,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 4.05e4,
       moneyCost: 2.5e9,
       info:
-        "An implant that, when activated, makes the speaker sound unbelievably reasonable and plausible to listeners " +
-        "for the next hour. It requires no concentration from the user, and only a verbal activation component. It even affects " +
-        "most electronic detection methods.",
+        "一种植入体，激活后能让说话者在接下来的一小时内听起来令人难以置信地合情合理、无懈可击。" +
+        "它不需要使用者集中注意力，只需要一个语音激活组件。它甚至能影响" +
+        "大多数电子检测手段。",
       charisma_exp: 1.2,
       company_rep: 1.1,
       factions: [FactionName.Tetrads, FactionName.Bladeburners],
@@ -769,9 +749,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e5,
       moneyCost: 1.25e8,
       info:
-        "An aural implant that enhances the user's ability to communicate and persuade others. " +
-        "The implant uses a predictive model that lets the user say precisely what their audience " +
-        "wants to hear. This implant is commonly used by many high-level executives and government officials.",
+        "一种听觉植入体，增强使用者沟通与说服他人的能力。" +
+        "植入体使用一个预测模型，让使用者精确说出听众" +
+        "想听的话。这种植入体被许多高层管理人员和政府官员广泛使用。",
       charisma: 1.1,
       charisma_exp: 1.3,
       factions: [FactionName.SpeakersForTheDead],
@@ -780,10 +760,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.125e4,
       moneyCost: 1.1e10,
       info:
-        "A serum that permanently enhances many aspects of human capabilities, " +
-        "including strength, speed, immune system enhancements, and mitochondrial efficiency. The " +
-        "serum was originally developed by the Chinese military in an attempt to " +
-        "create super soldiers.",
+        "一种能够永久增强人体多方面能力的血清，" +
+        "包括力量、速度、免疫系统增强以及线粒体效率。这种" +
+        "血清最初由中国军方为打造超级士兵而研发。",
       strength: 1.07,
       defense: 1.07,
       dexterity: 1.07,
@@ -796,9 +775,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e5,
       moneyCost: 3.75e9,
       info:
-        "An upgrade to the 'Bionic Arms' augmentation. It infuses the " +
-        "prosthetic arms with an advanced graphene material " +
-        "to make them stronger and lighter.",
+        "“仿生手臂”强化的升级版。它将先进的石墨烯材料" +
+        "注入义肢手臂，使其更强、更轻。",
       prereqs: [AugmentationName.BionicArms],
       strength: 1.85,
       dexterity: 1.85,
@@ -808,8 +786,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 7.5e5,
       moneyCost: 4.5e9,
       info:
-        "An upgrade to the 'Bionic Legs' augmentation. The legs are fused " +
-        "with graphene, greatly enhancing jumping ability.",
+        "“仿生双腿”强化的升级版。双腿与石墨烯融合，" +
+        "大幅提升跳跃能力。",
       prereqs: [AugmentationName.BionicLegs],
       agility: 2.5,
       factions: [FactionName.MegaCorp, FactionName.ECorp, FactionName.FulcrumSecretTechnologies],
@@ -818,8 +796,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.625e6,
       moneyCost: 6e9,
       info:
-        "An upgrade to the 'Bionic Spine' augmentation. The spine is fused with graphene " +
-        "which enhances durability and supercharges all body functions.",
+        "“仿生脊柱”强化的升级版。脊柱与石墨烯融合，" +
+        "增强耐久性并全面激发身体机能。",
       prereqs: [AugmentationName.BionicSpine],
       strength: 1.6,
       defense: 1.6,
@@ -830,7 +808,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.GrapheneBoneLacings]: {
       repCost: 1.125e6,
       moneyCost: 4.25e9,
-      info: "Graphene is grafted and fused into the skeletal structure, enhancing bone density and tensile strength.",
+      info: "石墨烯被移植并融合进骨骼结构，提升骨密度和抗拉强度。",
       strength: 1.7,
       defense: 1.7,
       factions: [FactionName.FulcrumSecretTechnologies, FactionName.TheCovenant],
@@ -839,9 +817,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.25e5,
       moneyCost: 2.5e9,
       info:
-        "An upgrade to the BrachiBlades augmentation. It infuses " +
-        "the retractable blades with an advanced graphene material, " +
-        "making them stronger and lighter.",
+        "臂刃（BrachiBlades）强化的升级版。它为可伸缩刀刃" +
+        "注入先进的石墨烯材料，" +
+        "使其更坚固、更轻便。",
       prereqs: [AugmentationName.BrachiBlades],
       strength: 1.4,
       defense: 1.4,
@@ -854,9 +832,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e3,
       moneyCost: 1.1e7,
       info:
-        "Uploads the architecture and design details of a Hacknet Node's CPU into " +
-        "the brain. This allows the user to engineer custom hardware and software " +
-        "for the Hacknet Node that provides better performance.",
+        "将 Hacknet 节点 CPU 的架构与设计细节上传" +
+        "到大脑中。这使使用者能够为 Hacknet 节点设计性能更佳的定制硬件和软件。",
       hacknet_node_money: 1.15,
       hacknet_node_purchase_cost: 0.85,
       factions: [FactionName.Netburners],
@@ -865,9 +842,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e3,
       moneyCost: 5.5e6,
       info:
-        "Uploads the architecture and design details of a Hacknet Node's main-memory cache " +
-        "into the brain. This allows the user to engineer custom cache hardware for the " +
-        "Hacknet Node that offers better performance.",
+        "将 Hacknet 节点主存缓存的架构与设计细节上传" +
+        "到大脑中。这使使用者能够为 Hacknet 节点设计性能更佳的定制缓存硬件。",
       hacknet_node_money: 1.1,
       hacknet_node_level_cost: 0.85,
       factions: [FactionName.Netburners],
@@ -876,9 +852,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e4,
       moneyCost: 6e7,
       info:
-        "Installs a Direct-Neural Interface jack into the arm that is capable of connecting " +
-        "to a Hacknet Node. This lets the user access and manipulate the Node's processing logic using " +
-        "electrochemical signals.",
+        "在手臂中安装可连接 Hacknet 节点的直接神经接口插口。" +
+        "这让使用者能够用电化学信号访问和操纵节点的处理逻辑。",
       hacknet_node_money: 1.45,
       factions: [FactionName.Netburners],
     },
@@ -886,9 +861,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 7.5e3,
       moneyCost: 4e7,
       info:
-        "Installs a Direct-Neural Interface jack into the arm that is capable of connecting to a " +
-        "Hacknet Node. This lets the user access and manipulate the Node's kernel using " +
-        "electrochemical signals.",
+        "在手臂中安装可连接 Hacknet 节点的直接神经接口插口。" +
+        "这让使用者能够用电化学信号访问和操纵节点的内核。",
       hacknet_node_money: 1.25,
       factions: [FactionName.Netburners],
     },
@@ -896,9 +870,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e3,
       moneyCost: 4.5e6,
       info:
-        "Uploads the architecture and design details of a Hacknet Node's Network Interface Card (NIC) " +
-        "into the brain. This allows the user to engineer a custom NIC for the Hacknet Node that " +
-        "offers better performance.",
+        "将 Hacknet 节点的网卡（NIC）架构与设计细节上传" +
+        "到大脑中。这使使用者能够为 Hacknet 节点设计性能更佳的定制网卡。",
       hacknet_node_money: 1.1,
       hacknet_node_purchase_cost: 0.9,
       factions: [FactionName.Netburners],
@@ -906,7 +879,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.HemoRecirculator]: {
       moneyCost: 4.5e7,
       repCost: 1e4,
-      info: "A heart implant that greatly increases the body's ability to effectively use and pump blood.",
+      info: "一种心脏植入体，大幅提升身体高效利用血液和泵送血液的能力。",
       strength: 1.08,
       defense: 1.08,
       agility: 1.08,
@@ -918,21 +891,21 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e6,
       moneyCost: 5.5e9,
       info:
-        `A brain implant developed by ${FactionName.ECorp}. They do not reveal what ` +
-        "exactly the implant does, but they promise that it will greatly " +
-        "enhance your abilities.",
+        `由${FactionName.ECorp}开发的脑部植入体。他们没有透露` +
+        "这个植入体究竟做什么，但承诺它会大幅" +
+        "增强你的能力。",
       hacking_grow: 3,
       stats:
-        `Many hackers say that they can spoof money much better than normal after installing this augmentation. ` +
-        `A leaked document from ${FactionName.ECorp} contains this weird message: "vnmehidi's gorw oprwe si ebesaccisl aiv sliguntayir".`,
+        `许多黑客说安装这个强化后，他们伪造资金的效果比平常好得多。` +
+        `一份从${FactionName.ECorp}泄露的文件里包含这样一条奇怪的消息："vnmehidi's gorw oprwe si ebesaccisl aiv sliguntayir"。`,
       factions: [FactionName.ECorp],
     },
     [AugmentationName.HuntOfArtemis]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "Magneto-turboencabulator based on technology by Micha Eike Siemon, increases the user's electro-magnetic sensitivity.",
+      info: "基于 Micha Eike Siemon 技术的磁力涡轮增压机，提高使用者的电磁敏感度。",
       stats:
-        "This augmentation makes the Minesweeper minigame easier by showing the location of all mines and keeping their position.",
+        "该强化会显示所有地雷的位置并保持其方位，使扫雷小游戏更容易。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -940,10 +913,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e6,
       moneyCost: 2.5e12,
       info:
-        "The left arm of a legendary BitRunner who ascended beyond this world. " +
-        "It projects a light blue energy shield that protects the exposed inner parts. " +
-        "Even though it contains no weapons, the advanced tungsten titanium " +
-        "alloy increases the user's strength to unbelievable levels.",
+        "一位超脱此界的传奇 BitRunner 的左臂。" +
+        "它会投射出淡蓝色的能量护盾，保护裸露的内部结构。" +
+        "尽管它不含任何武器，但先进的钨钛" +
+        "合金能将使用者的力量提升到难以置信的水平。",
       strength: 2.8,
       factions: [FactionName.NWO],
     },
@@ -951,12 +924,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e4,
       moneyCost: 2.75e9,
       info:
-        "A pair of mini plasma cannons embedded into the hands. The Hyperion is capable " +
-        "of rapidly firing bolts of high-density plasma. The weapon is meant to " +
-        "be used against augmented enemies as the ionized " +
-        "nature of the plasma disrupts the electrical systems of Augmentations. However, " +
-        "it can also be effective against non-augmented enemies due to its high temperature " +
-        "and concussive force.",
+        "一对嵌入双手的小型等离子炮。Hyperion 能够" +
+        "快速发射高密度等离子体弹。这种武器旨在用于对付经过强化的敌人，因为等离子体的电离特性会干扰强化的电气系统。不过，" +
+        "凭借其高温与冲击力，它对付未经强化的敌人同样有效。",
       bladeburner_success_chance: 1.06,
       isSpecial: true,
       factions: [FactionName.Bladeburners],
@@ -965,10 +935,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e4,
       moneyCost: 5.5e9,
       info:
-        "A pair of mini plasma cannons embedded into the hands. This augmentation " +
-        "is more advanced and powerful than the original V1 model. This V2 model is " +
-        "more power-efficient, more accurate, and can fire plasma bolts at a much " +
-        "higher velocity than the V1 model.",
+        "一对嵌入双手的小型等离子炮。该强化比最初的 V1 型号更先进、更强大。" +
+        "V2 型号更加节能、更加精准，且发射等离子弹的速度远高于 V1 型号。",
       prereqs: [AugmentationName.HyperionV1],
       bladeburner_success_chance: 1.08,
       isSpecial: true,
@@ -978,9 +946,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e5,
       moneyCost: 2.75e9,
       info:
-        "A bionic eye implant that enhances the user's sight far beyond that of a natural human. " +
-        "Embedded circuitry within the implant provides the ability to detect heat and movement " +
-        "through solid objects such as walls, thus providing 'x-ray vision'-like capabilities.",
+        "一种仿生眼植入体，让使用者的视力远超自然人类。" +
+        "植入体内嵌的电路使其能够透过墙壁等实体障碍物探测热量和移动，从而提供类似“透视眼”的能力。",
       dexterity: 1.4,
       hacking_speed: 1.03,
       hacking_money: 1.1,
@@ -991,7 +958,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.INFRARet]: {
       repCost: 7.5e3,
       moneyCost: 3e7,
-      info: "A tiny chip that sits behind the retina. This implant lets the user visually detect infrared radiation.",
+      info: "一枚位于视网膜后方的微型芯片。该植入体让使用者能够以视觉探测红外辐射。",
       crime_success: 1.25,
       crime_money: 1.1,
       dexterity: 1.1,
@@ -1001,10 +968,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e4,
       moneyCost: 5.5e9,
       info:
-        "A drug which incites a DNA modification to the body's extracellular " +
-        "matrix (ECM). This improves the ECM's ability to structurally " +
-        "support the body, granting heightened strength and " +
-        "durability.",
+        "一种药物，会诱使身体的细胞外基质（ECM）发生 DNA 改性。" +
+        "这改善了 ECM 在结构上支撑身体的能力，带来更高的力量" +
+        "与耐久性。",
       strength_exp: 1.05,
       defense_exp: 1.05,
       dexterity_exp: 1.05,
@@ -1018,8 +984,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.KnowledgeOfApollo]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "Neodynic retention fjengeln spoofer using -φ karmions, net positive effect on implantee's delta wave.",
-      stats: "This augmentation makes the Wire Cutting minigame easier by indicating the incorrect wires.",
+      info: "采用 -φ 卡米恩（karmion）的钕系保持式欺骗器（fjengeln spoofer），对被植入者的δ波有净正向影响。",
+      stats: "该强化会标示出错误的导线，使剪线小游戏更容易。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -1028,9 +994,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e3,
       moneyCost: 5e6,
       info:
-        "A skin implant that reinforces the skin with highly advanced synthetic cells. These " +
-        "cells, when powered, have a negative refractive index. As a result, they bend light " +
-        "around the skin, making the user much harder to see with the naked eye.",
+        "一种皮肤植入体，用高度先进的合成细胞强化皮肤。" +
+        "这些细胞在通电时具有负折射率。因此，它们能让光线" +
+        "绕过皮肤，使肉眼很难看到使用者。",
       agility: 1.05,
       charisma: 1.03,
       crime_money: 1.1,
@@ -1040,10 +1006,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e3,
       moneyCost: 3e7,
       info:
-        "This is a more advanced version of the LuminCloaking-V1 augmentation. This skin implant " +
-        "reinforces the skin with highly advanced synthetic cells. These " +
-        "cells, when powered, are capable of not only bending light but also of bending heat, " +
-        "making the user more resilient as well as stealthy.",
+        "LuminCloaking-V1 强化的更高级版本。这种皮肤植入体" +
+        "用高度先进的合成细胞强化皮肤。这些细胞在通电时不仅能折射光线，还能折射热量，" +
+        "让使用者更具隐蔽性的同时也更有韧性。",
       prereqs: [AugmentationName.LuminCloaking1],
       agility: 1.1,
       defense: 1.1,
@@ -1055,7 +1020,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.Magnetism]: {
       repCost: 1.5e4,
       moneyCost: 2.5e8,
-      info: "A cranial implant that increases the attractive force of the wearer. (Even its inventor isn't quite sure how it works).",
+      info: "一种颅部植入体，能增强佩戴者的吸引力。（连它的发明者也不太清楚它的原理）。",
       charisma: 1.05,
       company_rep: 1.1,
       factions: [FactionName.TheBlackHand, FactionName.TheDarkArmy],
@@ -1064,10 +1029,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "Extra-ocular neurons taken from old martial arts master. Injecting them gives the user the ability to " +
-        "predict the enemy's movement.",
+        "取自年迈武术宗师的额外眼神经元。将它们注入体内后，使用者将获得" +
+        "预判敌人动作的能力。",
       stats:
-        "This augmentation makes the Slash minigame easier by showing you via an indicator when the sentinel is distracted.",
+        "该强化会通过指示器提示哨兵何时分心，使劈砍小游戏更容易。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -1076,8 +1041,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e4,
       moneyCost: 1.25e8,
       info:
-        "Synthetic nanofibers are woven into the skin's extracellular matrix using electrospinning, " +
-        "which improves its regenerative and extracellular homeostasis abilities.",
+        "利用静电纺丝技术将合成纳米纤维织入皮肤的细胞外基质，" +
+        "从而改善其再生与细胞外稳态能力。",
       strength: 1.2,
       defense: 1.2,
       charisma: 1.05,
@@ -1095,10 +1060,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5.625e5,
       moneyCost: 2.875e9,
       info:
-        "A highly advanced techno-organic drug that is injected into the skeletal " +
-        "and integumentary system. The drug permanently modifies the DNA of the " +
-        "body's skin and bone cells, granting them the ability to repair " +
-        "and restructure themselves.",
+        "一种注射到骨骼系统与皮肤系统中的高度先进的有机技术药物。" +
+        "这种药物会永久改变身体皮肤和骨骼细胞的 DNA，赋予它们自我修复" +
+        "与重构的能力。",
       strength: 1.55,
       defense: 1.55,
       charisma: 1.55,
@@ -1108,8 +1072,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2e5,
       moneyCost: 1.75e9,
       info:
-        "A microprocessor that accelerates the processing " +
-        "speed of biological neural networks. This is a cranial implant that is embedded inside the brain.",
+        "一种加速生物神经网络处理速度的微处理器。" +
+        "这是一种嵌入大脑内部的颅部植入体。",
       hacking: 1.1,
       hacking_exp: 1.15,
       hacking_money: 1.2,
@@ -1119,8 +1083,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2e4,
       moneyCost: 2.5e8,
       info:
-        "Chemical injections are used to permanently alter and strengthen the brain's neuronal " +
-        "circuits, strengthening the ability to retain information.",
+        "使用化学注射永久性地改造并强化大脑的神经元回路，" +
+        "增强记忆信息的能力。",
       hacking_exp: 1.25,
       factions: [FactionName.NiteSec],
     },
@@ -1128,8 +1092,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e4,
       moneyCost: 3e9,
       info:
-        "A cranial implant that intelligently stimulates certain areas of the brain " +
-        "in order to improve cognitive functions.",
+        "一种颅部植入体，智能刺激大脑的特定区域，" +
+        "以提升认知功能。",
       hacking_speed: 1.02,
       hacking_chance: 1.1,
       hacking_exp: 1.12,
@@ -1150,9 +1114,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e4,
       moneyCost: 3.75e8,
       info:
-        "A drug that genetically modifies the neurons in the brain, " +
-        "resulting in neurons that continuously " +
-        "regenerate and strengthen themselves.",
+        "一种对大脑神经元进行基因改造的药物，" +
+        "使神经元能够持续" +
+        "再生并自我强化。",
       hacking_exp: 1.4,
       factions: [FactionName.Chongqing],
     },
@@ -1160,12 +1124,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 500,
       moneyCost: 750e3,
       info:
-        "Undetectable adamantium nanobots injected in the user's bloodstream. The NeuroFlux Governor " +
-        "monitors and regulates all aspects of the human body, essentially 'governing' the body. " +
-        "By doing so, it improves the user's performance for most actions.",
-      stats: `This special augmentation can be leveled up infinitely. Each level of this augmentation increases MOST multipliers by 1% (+${(
+        "注入使用者血液的隐形纳米机器人。神经通量统治者（NeuroFlux Governor）" +
+        "监测并调节人体的方方面面，实际上是在“统治”身体。" +
+        "借此，它提升使用者大多数行动的表现。",
+      stats: `这个特殊强化可以无限升级。每一级都会以乘法叠加的方式，将大多数乘数提高 1%（+${(
         donationBonus * 100
-      ).toFixed(6)}%), stacking multiplicatively.`,
+      ).toFixed(6)}%）。`,
       isSpecial: true,
       hacking_chance: 1.01 + donationBonus,
       hacking_speed: 1.01 + donationBonus,
@@ -1205,9 +1169,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 8.75e5,
       moneyCost: 4.375e9,
       info:
-        "A brain implant that provides a high-bandwidth, direct neural link between your " +
-        `mind and the ${FactionName.BitRunners}' data servers, which reportedly contain ` +
-        "the largest database of hacking tools and information in the world.",
+        "一种脑部植入体，在你的思维与" +
+        `${FactionName.BitRunners} 的数据服务器之间提供高带宽的直接神经链接。据说那里保存着` +
+        "世界上最大的黑客工具与情报数据库。",
       hacking: 1.15,
       hacking_exp: 1.2,
       hacking_chance: 1.1,
@@ -1219,9 +1183,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e5,
       moneyCost: 1.375e9,
       info:
-        "The brain is surgically re-engineered to have increased neuronal density " +
-        "by decreasing the neuron gap junction. Then, the body is genetically modified " +
-        "to enhance the production and capabilities of its neural stem cells.",
+        "通过缩小神经元间隙连接，以手术方式改造大脑，提高神经元密度。" +
+        "随后，再对身体进行基因改造，增强其神经干细胞的生产与能力。",
       hacking: 1.15,
       hacking_exp: 1.1,
       hacking_speed: 1.03,
@@ -1231,22 +1194,19 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 0.75e5,
       moneyCost: 5.5e8,
       info:
-        "A brain implant carefully assembled around the synapses, which " +
-        "micromanages the activity and levels of various neuroreceptor " +
-        "chemicals and modulates electrical activity to optimize concentration, " +
-        "allowing the user to multitask much more effectively.",
+        "围绕突触精心组装的脑部植入体，它" +
+        "精细管理各种神经受体化学物质的活动与水平，并调节电活动以优化专注力，" +
+        "让使用者能够更有效地多任务处理。",
       stats:
-        "This augmentation removes the penalty for not focusing on actions such as working in a job or working for a faction.",
+        "该强化移除了在工作、为派系效力等行动中未专注时的惩罚。",
       factions: [FactionName.TianDiHui],
     },
     [AugmentationName.Neurotrainer1]: {
       repCost: 1e3,
       moneyCost: 4e6,
       info:
-        "A decentralized cranial implant that improves the brain's ability to learn. It is " +
-        "installed by releasing millions of nanobots into the human brain, each of which " +
-        "attaches to a different neural pathway to enhance the brain's ability to retain " +
-        "and retrieve information.",
+        "一种分散式颅部植入体，提升大脑的学习能力。它的安装方式是向人脑释放数百万个纳米机器人，每个纳米机器人都会附着到不同的神经通路上，增强大脑记忆" +
+        "和提取信息的能力。",
       hacking_exp: 1.1,
       strength_exp: 1.1,
       defense_exp: 1.1,
@@ -1259,9 +1219,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 4.5e7,
       info:
-        "A decentralized cranial implant that improves the brain's ability to learn. This " +
-        "is a more powerful version of the Neurotrainer I augmentation, but it does not " +
-        "require Neurotrainer I to be installed as a prerequisite.",
+        "一种分散式颅部植入体，提升大脑的学习能力。这是" +
+        "神经训练器 I（Neurotrainer I）强化的更强版本，但它不" +
+        "要求先安装神经训练器 I 作为前置条件。",
       hacking_exp: 1.15,
       strength_exp: 1.15,
       defense_exp: 1.15,
@@ -1274,9 +1234,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e4,
       moneyCost: 1.3e8,
       info:
-        "A decentralized cranial implant that improves the brain's ability to learn. This " +
-        "is a more powerful version of the Neurotrainer I and Neurotrainer II augmentation, " +
-        "but it does not require either of them to be installed as a prerequisite.",
+        "一种分散式颅部植入体，提升大脑的学习能力。这是" +
+        "神经训练器 I 和神经训练器 II 强化的更强版本，" +
+        "但不要求先安装其中任何一个作为前置条件。",
       hacking_exp: 1.2,
       strength_exp: 1.2,
       defense_exp: 1.2,
@@ -1289,9 +1249,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e3,
       moneyCost: 2e7,
       info:
-        "This torso implant automatically injects nootropic supplements into " +
-        "the bloodstream to improve memory, increase focus, and provide other " +
-        "cognitive enhancements.",
+        "这种躯干植入体会自动向血液中注射益智补剂，" +
+        "以改善记忆、提高专注力并提供其他" +
+        "认知增强。",
       company_rep: 1.2,
       charisma: 1.03,
       factions: [
@@ -1308,10 +1268,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e3,
       moneyCost: 2.5e6,
       info:
-        "A thermal-powered artificial nutrition generator. Endogenously " +
-        "synthesizes glucose, amino acids, and vitamins, and redistributes them " +
-        "across the body. The device is powered by the body's naturally wasted " +
-        "energy in the form of heat.",
+        "一种热动力人工营养发生器。它在体内" +
+        "合成葡萄糖、氨基酸和维生素，并将它们重新分配到" +
+        "全身。该设备由身体以热量形式自然浪费的能量驱动。",
       strength_exp: 1.2,
       defense_exp: 1.2,
       dexterity_exp: 1.2,
@@ -1322,9 +1281,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 4.375e5,
       moneyCost: 1.925e9,
       info:
-        "The body is genetically re-engineered to maintain a state " +
-        "of negligible senescence, preventing the body from " +
-        "deteriorating with age.",
+        "身体经过基因改造，维持在可忽略衰老的状态，" +
+        "防止身体随年龄增长而退化。",
       hacking: 1.2,
       strength: 1.2,
       defense: 1.2,
@@ -1338,9 +1296,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e5,
       moneyCost: 2.875e9,
       info:
-        "OmniTek's data and information repository is uploaded " +
-        "into your brain, enhancing your programming and " +
-        "hacking abilities.",
+        "OmniTek 的数据与情报库被上传" +
+        "到你的大脑中，增强你的编程与" +
+        "入侵能力。",
       hacking: 1.2,
       hacking_exp: 1.25,
       factions: [FactionName.OmniTekIncorporated],
@@ -1349,10 +1307,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e3,
       moneyCost: 5.5e8,
       info:
-        "A bionic shoulder augmentation for the right shoulder. Using cybernetics, " +
-        "the ORION-MKIV shoulder enhances the strength and dexterity " +
-        "of the user's right arm. It also provides protection due to its " +
-        "crystallized graphene plating.",
+        "右肩的仿生肩部强化。ORION-MKIV 肩部植入体利用控制论技术，" +
+        "增强使用者右臂的力量与灵巧度。" +
+        "其结晶石墨烯镀层还能提供防护。",
       defense: 1.05,
       strength: 1.05,
       dexterity: 1.05,
@@ -1365,9 +1322,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e5,
       moneyCost: 3.75e9,
       info:
-        "Installs a Direct-Neural Interface jack into your arm that is compatible with most " +
-        "computers. Connecting to a computer through this jack allows you to interface with " +
-        "it using the brain's electrochemical signals.",
+        "在手臂中安装一个与大多数计算机兼容的直接神经接口插口。" +
+        "通过这个插口连接计算机后，你可以利用大脑的电化学信号与它交互。",
       company_rep: 1.3,
       hacking: 1.08,
       factions: [
@@ -1381,10 +1337,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e6,
       moneyCost: 7.5e9,
       info:
-        "This is an additional installation that upgrades the functionality of the " +
-        "PC Direct-Neural Interface augmentation. When connected to a computer, " +
-        "the Neural Network upgrade allows the user to use their own brain's " +
-        "processing power to aid the computer in computational tasks.",
+        "这是一项额外安装，用于升级 PC 直接神经接口强化的功能。" +
+        "连接到计算机时，神经网络升级允许使用者借助自己大脑的" +
+        "算力来辅助计算机完成计算任务。",
       prereqs: [AugmentationName.PCDNI],
       company_rep: 2,
       hacking: 1.1,
@@ -1395,9 +1350,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e5,
       moneyCost: 4.5e9,
       info:
-        "This is a submodule upgrade to the PC Direct-Neural Interface augmentation. It " +
-        "improves the performance of the interface and gives the user more control options " +
-        "to a connected computer.",
+        "这是 PC 直接神经接口强化的子模块升级。它" +
+        "提升了接口的性能，并为使用者提供更多对所连计算机的控制选项。",
       prereqs: [AugmentationName.PCDNI],
       company_rep: 1.75,
       hacking: 1.1,
@@ -1407,9 +1361,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 100e3,
       moneyCost: 2e9,
       info:
-        "A 'Probability Computation Matrix' is installed in the frontal cortex. This implant " +
-        "uses advanced mathematical algorithms to rapidly identify and compute statistical " +
-        "outcomes of nearly every situation.",
+        "额叶皮层中安装了一个“概率计算矩阵”。该植入体" +
+        "使用先进的数学算法来快速识别并计算几乎所有情境的统计结果。",
       charisma: 1.0777,
       charisma_exp: 1.0777,
       work_money: 1.777,
@@ -1424,10 +1377,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5.625e5,
       moneyCost: 2.75e9,
       info:
-        "Chloroplasts are added to epidermal stem cells and are applied " +
-        "to the body using a skin graft. The result is photosynthetic " +
-        "skin cells, allowing users to generate their own energy " +
-        "and nutrition using solar power.",
+        "将叶绿体添加到表皮干细胞中，并通过皮肤移植应用到身体上。" +
+        "结果便是具备光合作用的皮肤细胞，使用者能够利用太阳能自己生成能量" +
+        "和营养。",
       strength: 1.4,
       defense: 1.4,
       agility: 1.4,
@@ -1438,9 +1390,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e4,
       moneyCost: 1.8e8,
       info:
-        "The body's nerves are attached with polypyrrole nanocircuits that " +
-        "are capable of capturing wasted energy, in the form of heat, " +
-        "and converting it back into usable power.",
+        "身体的神经上附着了聚吡咯纳米电路，" +
+        "能够捕获以热量形式浪费的能量，" +
+        "并将其转化回可用电力。",
       hacking: 1.05,
       strength: 1.05,
       defense: 1.05,
@@ -1459,8 +1411,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e5,
       moneyCost: 3.375e9,
       info:
-        "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
-        "Thought to be stolen technology, its existence has been a secret until recently.",
+        "一套完全基于纳米技术杆式逻辑构建的前沿知识库，用于训练使用者进行社会工程。" +
+        "据信是被盗的技术，直到最近其存在才为人所知。",
       charisma: 1.05,
       charisma_exp: 1.2,
       factions: [FactionName.TheDarkArmy, FactionName.TheSyndicate],
@@ -1470,9 +1422,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e6,
       moneyCost: 2.5e13,
       info:
-        `A brain implant that wirelessly connects you to the ${FactionName.Illuminati}'s ` +
-        "quantum supercomputer, allowing you to access and use its incredible " +
-        "computing power.",
+        `一种脑部植入体，将你无线连接到${FactionName.Illuminati}的` +
+        "量子超级计算机，让你能够访问并使用它惊人的" +
+        "算力。",
       hacking: 1.75,
       hacking_speed: 2,
       hacking_chance: 2.5,
@@ -1485,8 +1437,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e3,
       moneyCost: 3e7,
       info:
-        "A cranial implant that affects the user's personality, making them better " +
-        "at negotiation in social situations.",
+        "一种颅部植入体，会影响使用者的性格，使其在社交场合中更擅长谈判。",
       charisma_exp: 1.15,
       work_money: 1.1,
       company_rep: 1.15,
@@ -1497,8 +1448,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.25e5,
       moneyCost: 1.2e9,
       info:
-        "Makes the wearer a better leader and mentor by greatly increasing their awareness of social dynamics. " +
-        "Not actually a standard implant, but rather a series of training courses and seminars, led by a famous speaker named Denis.",
+        "通过大幅提升佩戴者对社会动态的感知力，使其成为更好的领导者和导师。" +
+        "这其实并不是标准的植入体，而是一系列由著名演说家 Denis 主持的培训课程和研讨会。",
       charisma: 1.1,
       company_rep: 1.3,
       factions: [FactionName.MegaCorp, FactionName.ECorp, FactionName.OmniTekIncorporated],
@@ -1507,10 +1458,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e6,
       moneyCost: 4.875e9,
       info:
-        "The SPTN-97 gene is injected into the genome. The SPTN-97 gene is an " +
-        "artificially synthesized gene that was developed by DARPA to create " +
-        "super-soldiers through genetic modification. The gene was outlawed in " +
-        "2056.",
+        "SPTN-97 基因被注入基因组。SPTN-97 基因是一种" +
+        "人工合成基因，由 DARPA 开发，旨在通过基因改造打造" +
+        "超级士兵。该基因于 2056 年被列为非法。",
       strength: 1.75,
       defense: 1.75,
       dexterity: 1.75,
@@ -1522,11 +1472,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e4,
       moneyCost: 4e8,
       info:
-        "A crude but functional matter phase-shifter module that is embedded " +
-        "in the brainstem and cerebellum. This augmentation was developed by " +
-        "criminal organizations and allows the user to project and control holographic " +
-        "simulacrums within a large radius. These simulacrums are commonly used for " +
-        "espionage and surveillance work.",
+        "一个粗糙但可用的物质相位移模块，嵌入" +
+        "脑干和小脑。该强化由犯罪组织开发，允许使用者在较大半径内投射并控制全息" +
+        "拟像。这些拟像常被用于" +
+        "间谍与监视工作。",
       company_rep: 1.15,
       faction_rep: 1.15,
       factions: [FactionName.TheSyndicate, FactionName.TheDarkArmy, FactionName.SpeakersForTheDead],
@@ -1535,9 +1484,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e5,
       moneyCost: 2.75e9,
       info:
-        "A bionic jaw that contains advanced hardware and software " +
-        "capable of psychoanalyzing and profiling the personality of " +
-        "others using optical imaging software.",
+        "一种仿生下颚，包含先进的硬件和软件，" +
+        "能够利用光学成像软件对他人进行心理分析和人格侧写。",
       charisma: 1.5,
       charisma_exp: 1.5,
       company_rep: 1.25,
@@ -1547,7 +1495,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.SmartSonar]: {
       repCost: 2.25e4,
       moneyCost: 7.5e7,
-      info: "A cochlear implant that helps the player detect and locate enemies using sound propagation.",
+      info: "一种耳蜗植入体，帮助玩家利用声波传播探测并定位敌人。",
       dexterity: 1.1,
       dexterity_exp: 1.15,
       crime_money: 1.25,
@@ -1557,9 +1505,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e3,
       moneyCost: 1.25e7,
       info:
-        "An advanced neural implant that improves your speaking abilities, making " +
-        "you more convincing and likable in conversations and overall improving your " +
-        "social interactions.",
+        "一种先进的神经植入体，改善你的说话能力，使你" +
+        "在对话中更有说服力和亲和力，并整体提升你的" +
+        "社交互动水平。",
       company_rep: 1.1,
       charisma: 1.05,
       factions: [
@@ -1575,9 +1523,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 7.5e3,
       moneyCost: 5e7,
       info:
-        "A cochlear implant with an embedded computer that analyzes incoming speech. " +
-        "The embedded computer processes characteristics of incoming speech, such as tone " +
-        "and inflection, to pick up on subtle cues and aid in social interactions.",
+        "一种带有嵌入式计算机的耳蜗植入体，可以分析传入的语音。" +
+        "嵌入式计算机会处理语音的特征（如语调和抑扬顿挫），以捕捉细微线索并辅助社交互动。",
       charisma: 1.1,
       factions: [
         FactionName.TianDiHui,
@@ -1594,10 +1541,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 0,
       moneyCost: 0,
       info:
-        'Allison "Mother" Stanek imparts you with her gift. An ' +
-        "experimental Augmentation implanted at the base of the neck. " +
-        "It allows you to overclock your entire system by carefully " +
-        "changing the configuration.",
+        'Allison "Mother" Stanek 将她的礼物传授给你。一个' +
+        "植入颈根部的实验性强化。" +
+        "它允许你通过谨慎修改配置来超频你的整个系统。",
       isSpecial: true,
       hacking_chance: 0.9,
       hacking_speed: 0.9,
@@ -1625,16 +1571,16 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacknet_node_core_cost: 1.1,
       hacknet_node_level_cost: 1.1,
       work_money: 0.9,
-      stats: "Its unstable nature decreases all your stats by 10%.",
+      stats: "它的不稳定性会使你的所有属性降低 10%。",
       factions: [FactionName.ChurchOfTheMachineGod],
     },
     [AugmentationName.StaneksGift2]: {
       repCost: 1e6,
       moneyCost: 0,
       info:
-        "The next evolution is near, a union of man and machine. A synthesis greater than the birth of the human " +
-        "organism. Time spent with the gift has allowed for acclimatization of the invasive augment and the toll it takes upon " +
-        "your frame, granting a 5% reduced penalty to all stats.",
+        "下一次进化近在眼前——人与机器的结合。一场比人类有机体的诞生更伟大的融合。" +
+        "与礼物共度的时光让你逐渐适应了这种侵入式强化及其对" +
+        "身体的损耗，使所有属性的惩罚降低 5%。",
       prereqs: [AugmentationName.StaneksGift1],
       isSpecial: true,
       hacking_chance: 0.95 / 0.9,
@@ -1663,17 +1609,16 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacknet_node_core_cost: 1.05 / 1.1,
       hacknet_node_level_cost: 1.05 / 1.1,
       work_money: 0.95 / 0.9,
-      stats: "The penalty for the gift is reduced to 5%.",
+      stats: "礼物的惩罚降低至 5%。",
       factions: [FactionName.ChurchOfTheMachineGod],
     },
     [AugmentationName.StaneksGift3]: {
       repCost: 1e8,
       moneyCost: 0,
       info:
-        "The synthesis of human and machine is nothing to fear. It is our destiny. " +
-        "You will become greater than the sum of our parts. As One. Embrace your gift " +
-        "fully and wholly free of its accursed toll. Serenity brings tranquility in the form " +
-        "of no longer suffering a stat penalty. ",
+        "人与机器的融合并不可怕。这是我们的宿命。" +
+        "你将变得超越我们各部分之和。合而为一。完全地、彻底地拥抱你的礼物，" +
+        "摆脱它那可诅咒的代价。宁静将以不再承受属性惩罚的形式带来安详。 ",
       prereqs: [AugmentationName.StaneksGift2, AugmentationName.StaneksGift1],
       isSpecial: true,
       hacking_chance: 1 / 0.95,
@@ -1702,18 +1647,17 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacknet_node_core_cost: 1 / 1.05,
       hacknet_node_level_cost: 1 / 1.05,
       work_money: 1 / 0.95,
-      stats: "Stanek's Gift has no penalty.",
+      stats: "Stanek 的礼物已无任何惩罚。",
       factions: [FactionName.ChurchOfTheMachineGod],
     },
     [AugmentationName.SubdermalArmor]: {
       repCost: 8.75e5,
       moneyCost: 3.25e9,
       info:
-        "The NEMEAN Subdermal Weave is a thin, lightweight, graphene plating that houses a dilatant fluid. " +
-        "The material is implanted underneath the skin, and is the most advanced form of defensive enhancement " +
-        "that has ever been created. The dilatant fluid, despite being thin and light, is extremely effective " +
-        "at stopping piercing blows and reducing blunt trauma. The properties of graphene allow the plating to " +
-        "mitigate damage from any fire or electrical traumas.",
+        "NEMEAN 皮下织物是一种轻薄、轻量的石墨烯镀层，其中容纳着一种剪切增稠流体。" +
+        "这种材料被植入皮肤下方，是有史以来最先进的防御增强形式。尽管又薄又轻，这种剪切增稠流体在" +
+        "阻挡穿刺打击和减轻钝击创伤方面极其有效。石墨烯的特性使镀层能够" +
+        "减轻任何火焰或电击创伤造成的伤害。",
       defense: 2.2,
       factions: [
         FactionName.TheSyndicate,
@@ -1727,8 +1671,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2e3,
       moneyCost: 7.5e6,
       info:
-        "A small cranial implant that continuously uses weak electrical signals to stimulate the brain and " +
-        "induce stronger synaptic activity. This improves the user's cognitive abilities.",
+        "一种小型颅部植入体，持续使用微弱电信号刺激大脑并" +
+        "诱发更强的突触活动。这能提升使用者的认知能力。",
       hacking_speed: 1.03,
       factions: [FactionName.CyberSec, FactionName.Aevum],
     },
@@ -1736,9 +1680,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 4.375e5,
       moneyCost: 1.125e9,
       info:
-        "The myofibrils in human muscles are injected with special chemicals that react with the proteins inside " +
-        "the myofibrils, altering their underlying structure. The end result is muscles that are stronger and more elastic. " +
-        "Scientists have named these artificially enhanced units 'synfibrils'.",
+        "向人体肌肉的肌原纤维中注射特殊化学物质，它们会与肌原纤维内的蛋白质发生反应，改变其底层结构。最终得到的肌肉更强大、更有弹性。" +
+        "科学家将这些人工强化的单元命名为“合成肌原纤维”（synfibrils）。",
       strength: 1.3,
       defense: 1.3,
       factions: [
@@ -1756,8 +1699,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 2.875e9,
       repCost: 7.5e5,
       info:
-        "This advanced artificial heart, created from plasteel and graphene, is capable of pumping blood " +
-        "more efficiently than an organic heart.",
+        "这颗由塑钢和石墨烯打造的先进人造心脏，泵送血液" +
+        "的效率比有机心脏更高。",
       agility: 1.5,
       strength: 1.5,
       charisma: 1.15,
@@ -1776,9 +1719,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e4,
       moneyCost: 1.9e8,
       info:
-        "TITN is a series of viruses that targets and alters the sequences of human DNA in genes that " +
-        "control personality. The TITN-41 strain alters these genes so that the subject becomes more " +
-        "outgoing and sociable.",
+        "TITN 是一系列病毒，靶向并改写控制人格的基因中的人类 DNA 序列。" +
+        "TITN-41 毒株会改造这些基因，使受试者变得更加外向、善于交际。",
       charisma: 1.15,
       charisma_exp: 1.15,
       factions: [FactionName.Silhouette],
@@ -1787,8 +1729,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 1.5e7,
       repCost: 5e3,
       info:
-        "A cranial implant that is embedded within the inner ear structures and optic nerves. It regulates " +
-        "and enhances balance and hand-eye coordination.",
+        "一种嵌入内耳结构和视神经中的颅部植入体。" +
+        "它调节并增强平衡感和手眼协调能力。",
       dexterity: 1.1,
       factions: [
         FactionName.SlumSnakes,
@@ -1805,8 +1747,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 4.25e7,
       repCost: 8.75e3,
       info:
-        "This upgraded version of the 'Augmented Targeting' implant is capable of augmenting " +
-        "reality by digitally displaying weaknesses and vital signs of threats.",
+        "“强化瞄准”植入体的升级版，能够通过数字化显示威胁的弱点与生命体征来增强现实。",
       prereqs: [AugmentationName.Targeting1],
       dexterity: 1.2,
       factions: [
@@ -1821,7 +1762,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.Targeting3]: {
       moneyCost: 1.15e8,
       repCost: 2.75e4,
-      info: "The latest version of the 'Augmented Targeting' implant adds the ability to lock-on and track threats.",
+      info: "“强化瞄准”植入体的最新版本增加了锁定和追踪威胁的能力。",
       prereqs: [AugmentationName.Targeting2, AugmentationName.Targeting1],
       dexterity: 1.3,
       factions: [
@@ -1837,10 +1778,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e5,
       moneyCost: 5.5e8,
       info:
-        "A highly advanced bionic hand. This prosthetic not only " +
-        "enhances the user's strength and dexterity, but is also embedded " +
-        "with hardware and firmware that lets them connect to, access, and hack " +
-        "devices and machines by just touching them.",
+        "一只高度先进的仿生手。这只义肢不仅" +
+        "增强使用者的力量与灵巧度，还嵌入了硬件和固件，让他们只需触碰设备与机器就能连接、访问并入侵" +
+        "它们。",
       strength: 1.15,
       dexterity: 1.15,
       hacking: 1.1,
@@ -1852,13 +1792,13 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "An experimental augmentation that lets the user make incredible leaps of insight and flights of fancy. " +
-        "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
-        "metallic patterns on the user's upper back and shoulders. " +
-        "Awarded to those who discover the secrets of the labyrinth." +
-        "\n\nInstalling this augment will deepen the darkness...",
+        "一种实验性强化，让使用者获得惊人的洞察飞跃与想象翱翔。" +
+        "它由一位只被称为“雕塑家”的神秘人物创造，在使用者的上背部和肩膀上呈现为一组银色" +
+        "金属图案。" +
+        "授予那些发现迷宫秘密的人。" +
+        "\n\n安装这个强化将加深黑暗……",
       stats:
-        "This augmentation increases the stasis link limit by one, charisma by 5%, agility by 10%, and darknet money by 30%.",
+        "该强化使滞留链路上限增加一，魅力提高 5%，敏捷提高 10%，暗网收入提高 30%。",
       charisma: 1.05,
       agility: 1.1,
       dnet_money: 1.3,
@@ -1869,12 +1809,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
-        "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
-        "Awarded to those who discover the secrets of the labyrinth." +
-        "\n\nInstalling this augment will deepen the darkness...",
+        "以神话中带翼的神行靴为原型，这个植入体不知为何能为使用者提供无穷无尽的社交精力。" +
+        "它的创造者、神秘的雕塑家拒绝透露其工作原理，只是喃喃念叨着‘liveware API’。" +
+        "授予那些发现迷宫秘密的人。" +
+        "\n\n安装这个强化将加深黑暗……",
       stats:
-        "This augmentation increases charisma and dexterity by 6%, and the speed of authentication and heartbleed by 20%.",
+        "该强化使魅力和灵巧各提高 6%，认证与 heartbleed 的速度提高 20%。",
       charisma: 1.06,
       dexterity: 1.06,
       isSpecial: true,
@@ -1885,12 +1825,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "This unique augmentation allows the user to strike straight to the heart of the matter and sweep aside obstacles in the way of their goals. " +
-        "Appearing as a simple insignia on the user's forearm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
-        "Awarded to those who discover the secrets of the labyrinth." +
-        "\n\nInstalling this augment will deepen the darkness...",
+        "这个独特的强化让使用者能够直击问题核心，扫清通往目标道路上的障碍。" +
+        "它在使用者前臂上呈现为一个简单的徽记，其真正功能无人知晓。据说它是雕塑家的工具之一。" +
+        "授予那些发现迷宫秘密的人。" +
+        "\n\n安装这个强化将加深黑暗……",
       stats:
-        "This augmentation increases the stasis link limit by one, charisma by 7%, strength by 10%, and darknet money by 10%.",
+        "该强化使滞留链路上限增加一，魅力提高 7%，力量提高 10%，暗网收入提高 10%。",
       charisma: 1.07,
       strength: 1.1,
       dnet_money: 1.1,
@@ -1902,12 +1842,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "This skeletal augmentation greatly enhances the user's durability and health. Inspired by the original Staff of Medicine that is said to " +
-        "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. " +
-        "Awarded to those who discover the secrets of the labyrinth." +
-        "\n\nInstalling this augment will deepen the darkness...",
+        "这种骨骼强化极大增强了使用者的耐久性与健康。其灵感源自传说中的医药之杖——据说是 Daedalus 完成迷宫后获得的奖励，如今所有现代强化都是它的后裔。" +
+        "授予那些发现迷宫秘密的人。" +
+        "\n\n安装这个强化将加深黑暗……",
       stats:
-        "This augmentation increases the stasis link limit by one, and charisma xp, defense, and darknet money by 10%.",
+        "该强化使滞留链路上限增加一，魅力经验、防御和暗网收入各提高 10%。",
       charisma_exp: 1.1,
       defense: 1.1,
       dnet_money: 1.1,
@@ -1919,12 +1858,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "An advanced neural implant that integrates Bayesian inference algorithms into the brain's decision-making processes. " +
-        "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
-        "making them exceptionally persuasive and confident in negotiations and social interactions. " +
-        "Awarded to those who discover the secrets of the labyrinth." +
-        "\n\nInstalling this augment will deepen the darkness...",
-      stats: "This augmentation raises charisma by 9%, company rep by 5%, and darknet money by 15%.",
+        "一种先进的神经植入体，将贝叶斯推断算法整合进大脑的决策过程。" +
+        "该强化提升了使用者评估概率、预测结果和实时调整策略的能力，" +
+        "使他们在谈判和社交互动中极具说服力和自信。" +
+        "授予那些发现迷宫秘密的人。" +
+        "\n\n安装这个强化将加深黑暗……",
+      stats: "该强化使魅力提高 9%，公司声望提高 5%，暗网收入提高 15%。",
       charisma: 1.09,
       company_rep: 1.05,
       dnet_money: 1.15,
@@ -1936,12 +1875,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "A cutting-edge neural implant that leverages Solomonoff induction to analyze and predict patterns with unparalleled precision. " +
-        "This augmentation enhances the user's ability to deduce optimal strategies and make compelling arguments, " +
-        "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
-        "more powerful version of Occam's razor. " +
-        "The final augment awarded to those who discover the secrets of the labyrinth.",
-      stats: "This augmentation raises charisma, hacking, darknet money, and company rep by 10%.",
+        "一种前沿神经植入体，利用所罗门诺夫归纳法以无与伦比的精度分析和预测模式。" +
+        "该强化提升了使用者推导最优策略和提出有力论证的能力，" +
+        "让每一次互动都成为精心计算的成功。这项技术有时被称为“所罗门诺夫的光剑”，因为它是" +
+        "奥卡姆剃刀的更强大版本。" +
+        "这是授予那些发现迷宫秘密之人的最后一件强化。",
+      stats: "该强化使魅力、黑客、暗网收入和公司声望各提高 10%。",
       charisma: 1.1,
       hacking: 1.1,
       company_rep: 1.1,
@@ -1953,7 +1892,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.TheRedPill]: {
       repCost: 2.5e6,
       moneyCost: 0,
-      info: "It's time to leave the cave.",
+      info: "是时候离开洞穴了。",
       stats: "",
       isSpecial: true,
       factions: [FactionName.Daedalus],
@@ -1961,8 +1900,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.TrickeryOfHermes]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "Penta-dynamo-neurovascular-valve inserted in the carpal ligament, enhances dexterity.",
-      stats: "This augmentation makes the Cheat Code minigame easier by showing what character will come next.",
+      info: "植入手腕韧带的五重动力-神经-血管阀，提升灵巧度。",
+      stats: "该强化会显示下一个出现的字符，使作弊码小游戏更容易。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -1973,8 +1912,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.875e4,
       moneyCost: 2.75e9,
       info:
-        "A synthetic symbiotic virus that is injected into human brain tissue. The Vangelis virus " +
-        "heightens the senses and focus of its host while also enhancing their intuition.",
+        "一种注射到人脑组织中的合成共生病毒。Vangelis 病毒" +
+        "能增强宿主的感官与专注力，同时提升其直觉。",
       dexterity_exp: 1.1,
       charisma_exp: 1.1,
       bladeburner_analysis: 1.1,
@@ -1986,10 +1925,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e4,
       moneyCost: 1.1e10,
       info:
-        "An improved version of Vangelis, a synthetic symbiotic virus that is " +
-        "injected into human brain tissue. On top of the benefits of the original " +
-        "virus, this also grants accelerated healing and enhanced " +
-        "reflexes.",
+        "Vangelis 的改进版，一种注射到人脑组织中的" +
+        "合成共生病毒。在原有病毒的好处之上，它还赋予加速愈合和增强的" +
+        "反应能力。",
       prereqs: [AugmentationName.VangelisVirus],
       defense_exp: 1.1,
       dexterity_exp: 1.1,
@@ -2004,10 +1942,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        `A copy of the WKS harmonizer from the MIA leader of the ${FactionName.ShadowsOfAnarchy} ` +
-        "injects *Γ-based cells that provide general enhancement to the body.",
+        `一份来自${FactionName.ShadowsOfAnarchy}下落不明的领袖的 WKS 谐波器拷贝，` +
+        "注入 *Γ 基细胞，为身体提供全面增强。",
       stats:
-        "This augmentation makes many aspects of infiltration easier and more productive via increased timer and rewards, reduced damage taken, etc.",
+        "该强化通过延长计时器与提高奖励、减少受到的伤害等，使潜入的许多方面更容易且收益更高。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -2015,8 +1953,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.25e3,
       moneyCost: 2.5e6,
       info:
-        "Synthetic nerve-enhancements are injected into all major parts of the somatic nervous system, " +
-        "supercharging the spread of neural signals and increasing reflex speed.",
+        "向躯体神经系统的所有主要部位注射合成神经增强剂，" +
+        "大幅加快神经信号的传导并提升反射速度。",
       agility: 1.05,
       dexterity: 1.05,
       factions: [
@@ -2034,8 +1972,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.WisdomOfAthena]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "A connective brain implant to SASHA that focuses on pattern recognition and predictive templating.",
-      stats: "This augmentation makes the Bracket minigame easier by removing all '[' ']'.",
+      info: "一个连接 SASHA 的脑部植入体，专注于模式识别和预测模板。",
+      stats: "该强化会移除所有 '[' ']'，使括号小游戏更容易。",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -2043,8 +1981,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e3,
       moneyCost: 1e7,
       info:
-        "A connective brain implant that greatly increases the user's speech reaction time. " +
-        "This allows the user to think faster and respond quicker in negotiations, and always have the last word.",
+        "一种连接式脑部植入体，大幅缩短使用者的言语反应时间。" +
+        "这使使用者在谈判中思考更快、回应更迅速，并且总能说到最后一句。",
       charisma: 1.03,
       charisma_exp: 1.05,
       company_rep: 1.05,
@@ -2055,9 +1993,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 8.75e5,
       moneyCost: 4.25e9,
       info:
-        "A concoction of advanced nanobots that is orally ingested into the " +
-        "body. These nanobots induce physiological changes and significantly " +
-        "improve the body's functioning in all aspects.",
+        "口服摄入体内的高级纳米机器人混合制剂。" +
+        "这些纳米机器人会诱发生理变化，显著" +
+        "改善身体各方面的机能。",
       hacking: 1.2,
       strength: 1.2,
       defense: 1.2,
@@ -2079,10 +2017,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: Infinity,
       moneyCost: 1e12,
       info:
-        "Zoë's Omnicerebrum Ënhancer for sleeves inserts an omnicerebrum into your sleeve. " +
-        "An omnicerebrum is a near perfect simulation of the human brain, allowing it to take advantage of a larger variety of augments. " +
-        "But you should know about this, BitRunner, since you have one of these yourself!",
-      stats: "Allows sleeves to benefit from Stanek's Gift, but is less powerful if several are installed.",
+        "Zoë 的分身全能大脑增强器（Omnicerebrum Enhancer）会为你的分身插入一个全能大脑（omnicerebrum）。" +
+        "全能大脑是对人脑近乎完美的模拟，使分身能够利用更多种类的强化物。" +
+        "不过你应该很清楚这一点，BitRunner，因为你自己就有一个！",
+      stats: "允许分身从 Stanek 的礼物中获益，但如果安装了多个则效果较弱。",
       factions: [
         /*Technically in FactionNames.ChurchOfTheMachineGod but not really for display reasons */
       ],

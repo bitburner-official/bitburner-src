@@ -32,10 +32,10 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, server: DarknetServ
   const xpGained = Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty;
   Player.gainCharismaExp(xpGained);
 
-  const result = `Liberated ${formatRam(
+  const result = `从服务器所有者的进程中解放了 ${formatRam(
     ramBlockRemoved,
     4,
-  )} of RAM from the server owner's processes. (Gained ${formatNumber(xpGained, 1)} cha xp.)`;
+  )} 的 RAM。（获得 ${formatNumber(xpGained, 1)} 魅力经验。）`;
   logger(ctx)(result);
   return {
     success: true,

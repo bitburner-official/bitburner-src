@@ -23,10 +23,10 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
   const calculateInfiltrationData = (ctx: NetscriptContext, locationName: LocationName): InfiltrationLocation => {
     const location = Locations[locationName];
     if (location === undefined) {
-      throw helpers.errorMessage(ctx, `Location "${locationName}" does not exist.`);
+      throw helpers.errorMessage(ctx, `地点 "${locationName}" 不存在。`);
     }
     if (location.infiltrationData === undefined) {
-      throw helpers.errorMessage(ctx, `Location "${locationName}" does not provide infiltrations.`);
+      throw helpers.errorMessage(ctx, `地点 "${locationName}" 不提供潜入。`);
     }
     const locationCity = location.city;
     /**
@@ -34,7 +34,7 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
      * infiltration data.
      */
     if (locationCity === null) {
-      const errorMessage = `Location "${locationName}" is available in all cities, but it still has infiltration data.`;
+      const errorMessage = `地点 "${locationName}" 在所有城市都可用，但它仍有潜入数据。`;
       exceptionAlert(new Error(errorMessage));
       throw helpers.errorMessage(ctx, errorMessage);
     }

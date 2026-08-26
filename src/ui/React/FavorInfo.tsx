@@ -13,17 +13,15 @@ export function FavorInfo({ favor, boldLabel }: { favor: number; boldLabel?: boo
       title={
         <>
           <Typography>
-            Faction favor increases the rate at which you earn reputation for this faction by 1% per favor. Faction
-            favor is gained whenever you install an Augmentation. The amount of favor you gain depends on the total
-            amount of reputation you earned with this faction across all resets.
+            好感每提高 1 点，你在该派系获得的声望速度就提升 1%。每当你安装一个强化时都会获得好感。获得的好感数量取决于你在所有转生中为该派系赚取的声望总量。
           </Typography>
-          <Typography style={{ fontSize: "2rem" }}>r = Reputation gain</Typography>
+          <Typography style={{ fontSize: "2rem" }}>r = 声望收益</Typography>
           <MathNotationOutput notation={MathNotation.FavorBonus} />
         </>
       }
     >
       <Typography component="div" sx={{ display: "flex", alignItems: "center", whiteSpace: "pre-wrap" }}>
-        <Typography sx={{ fontWeight: `${boldLabel ? "bold" : "normal"}` }}>Favor: </Typography>
+        <Typography sx={{ fontWeight: `${boldLabel ? "bold" : "normal"}` }}>好感： </Typography>
         <Favor favor={favor} />
         <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />
       </Typography>

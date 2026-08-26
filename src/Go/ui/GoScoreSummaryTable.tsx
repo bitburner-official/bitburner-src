@@ -15,7 +15,7 @@ export const GoScoreSummaryTable = ({ score, opponent }: GoScoreSummaryTableProp
   const { classes } = boardStyles({});
   const blackScore = score[GoColor.black];
   const whiteScore = score[GoColor.white];
-  const blackPlayerName = opponent === GoOpponent.none ? GoColor.black : "You";
+  const blackPlayerName = opponent === GoOpponent.none ? GoColor.black : "你";
   const whitePlayerName = opponent === GoOpponent.none ? GoColor.white : opponent;
 
   return (
@@ -33,25 +33,26 @@ export const GoScoreSummaryTable = ({ score, opponent }: GoScoreSummaryTableProp
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className={classes.cellNone}>Owned Empty Nodes:</TableCell>
+            <TableCell className={classes.cellNone}>占据的空节点：</TableCell>
             <TableCell className={classes.cellNone}>{whiteScore.territory}</TableCell>
             <TableCell className={classes.cellNone}>{blackScore.territory}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className={classes.cellNone}>Routers placed:</TableCell>
+            <TableCell className={classes.cellNone}>已放置路由器：</TableCell>
             <TableCell className={classes.cellNone}>{whiteScore.pieces}</TableCell>
             <TableCell className={classes.cellNone}>{blackScore.pieces}</TableCell>
           </TableRow>
           <Tooltip
             title={
               <>
-                Komi represents the current faction's home-field advantage on this subnet, <br />
-                to balance the first-move advantage that the player with the black routers has.
+                贴目代表当前派系在此子网的主场优势，
+                <br />
+                用以平衡执黑路由器一方玩家的先行之利。
               </>
             }
           >
             <TableRow>
-              <TableCell className={classes.cellNone}>Komi:</TableCell>
+              <TableCell className={classes.cellNone}>贴目：</TableCell>
               <TableCell className={classes.cellNone}>{whiteScore.komi}</TableCell>
               <TableCell className={classes.cellNone} />
             </TableRow>
@@ -59,7 +60,7 @@ export const GoScoreSummaryTable = ({ score, opponent }: GoScoreSummaryTableProp
           <TableRow>
             <TableCell className={classes.cellNone}>
               <br />
-              <strong className={classes.keyText}>Total score:</strong>
+              <strong className={classes.keyText}>总分：</strong>
             </TableCell>
             <TableCell className={classes.cellNone}>
               <strong className={classes.keyText}>{whiteScore.sum}</strong>

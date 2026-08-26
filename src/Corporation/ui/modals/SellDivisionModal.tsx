@@ -36,8 +36,8 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
     props.onClose();
     dialogBoxCreate(
       <Typography>
-        Sold <b>{divisionToSell.name}</b> for <Money money={soldPrice} />, you now have space for{" "}
-        {corp.maxDivisions - corp.divisions.size} more divisions.
+        以 <Money money={soldPrice} /> 的价格出售了 <b>{divisionToSell.name}</b>，你现在还可以拥有{" "}
+        {corp.maxDivisions - corp.divisions.size} 个部门。
       </Typography>,
     );
   }
@@ -46,9 +46,9 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <>
         <Typography>
-          Would you like to sell a division?
+          要出售一个部门吗？
           <br></br>
-          You'll get back half the money you've spent on starting the division and expanding to offices and warehouses.
+          你将收回创办该部门以及扩张办事处和仓库所花费资金的一半。
         </Typography>
         <Select value={divisionToSell.name} onChange={onDivisionChange}>
           {allDivisions.map((div) => (
@@ -57,23 +57,23 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
             </MenuItem>
           ))}
         </Select>
-        <Typography>Division {divisionToSell.name} has:</Typography>
+        <Typography>部门 {divisionToSell.name} 拥有：</Typography>
         <StatsTable
           rows={[
             [
-              "Profit:",
+              "利润：",
               <MoneyRate key="profit" money={divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses} />,
             ],
-            ["Cities:", getRecordKeys(divisionToSell.offices).length],
-            ["Warehouses:", getRecordKeys(divisionToSell.warehouses).length],
-            divisionToSell.makesProducts ? ["Products:", divisionToSell.products.size] : [],
+            ["城市数：", getRecordKeys(divisionToSell.offices).length],
+            ["仓库数：", getRecordKeys(divisionToSell.warehouses).length],
+            divisionToSell.makesProducts ? ["产品数：", divisionToSell.products.size] : [],
           ]}
         />
         <br />
         <Typography>
-          Sell price: <Money money={price} />
+          出售价格：<Money money={price} />
         </Typography>
-        <Button onClick={sellDivision}>Sell division</Button>
+        <Button onClick={sellDivision}>出售部门</Button>
       </>
     </Modal>
   );

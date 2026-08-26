@@ -60,14 +60,14 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
     <>
       <Box display="flex" flexDirection="row" sx={{ m: 1 }} alignItems="center">
         <Button startIcon={<SettingsIcon />} onClick={openOptions} sx={{ mr: 1 }}>
-          Options
+          设置
         </Button>
         <Button
           onClick={() => {
             onBeautify().catch((error) => console.error(error));
           }}
         >
-          Beautify
+          美化代码
         </Button>
         <Button
           color={isUpdatingRAM ? "secondary" : "primary"}
@@ -82,12 +82,12 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
               onSave().catch((error) => console.error(error));
             }}
           >
-            Save
+            保存
           </Button>
         </Tooltip>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.GoToTerminal])}>
           <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
-            Terminal
+            终端
           </Button>
         </Tooltip>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Run])}>
@@ -97,7 +97,7 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
               onRun().catch((error) => console.error(error));
             }}
           >
-            Run
+            运行
           </Button>
         </Tooltip>
         <DocumentationAutocomplete
@@ -120,7 +120,7 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
               textUnderlineOffset: "5px",
             }}
           >
-            NS API documentation
+            NS API 文档
           </DocumentationLink>
         </Typography>
       </Box>
@@ -134,9 +134,9 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
       <Modal open={ramInfoOpen} onClose={closeRAMInfo}>
         <Tooltip
           title={
-            "Static RAM costs of individual functions used by this script. " +
-            "Calling `ns.ramOverride()` with a constant number as the first statement in " +
-            "your script will override the value here, as well."
+            "此脚本使用的各个函数的静态 RAM 开销。" +
+            "在脚本的第一条语句处调用 `ns.ramOverride()` 并传入一个常数，" +
+            "也会覆盖此处显示的值。"
           }
         >
           <Table>

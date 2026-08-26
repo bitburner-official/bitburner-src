@@ -10,25 +10,25 @@ export const largestRectangle: Pick<CodingContractTypes, CodingContractName.Larg
       for (let i = 0; i < data.length; i++) {
         gridString += `  [${data[i]}]${i !== data.length - 1 ? ",\n" : ""}`;
       }
-      return `You are given a binary matrix consisting only of 0s and 1s:
+      return `给你一个仅由 0 和 1 组成的二进制矩阵：
 
 [
 ${gridString}
 ]
 
-Your task is to find the two corners of the largest rectangle ([[r1,c1],[r2,c2]]) that does not contain any 1s.
+你的任务是找出不包含任何 1 的最大矩形（[[r1,c1],[r2,c2]]）的两个角。
 
-Example 1:
-Data:
+示例 1：
+数据：
 [
   [1,0,0],
   [0,0,0]
 ]
 
-Answer:[[0,1],[1,2]]
+答案：[[0,1],[1,2]]
 
-Example 2:
-Data:
+示例 2：
+数据：
 [
   [0,0,0,1],
   [0,0,0,0],
@@ -36,7 +36,7 @@ Data:
   [0,0,0,1]
 ]
 
-Answer: [[0,0],[3,1]]
+答案：[[0,0],[3,1]]
 `;
     },
     difficulty: 6,

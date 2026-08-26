@@ -21,7 +21,7 @@ function allFactionAugs(faction: Faction): boolean {
 
 export const Milestones: Milestone[] = [
   {
-    title: () => "Gain root access on CSEC",
+    title: () => "获得 CSEC 的 root 权限",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
       if (!server || !Object.hasOwn(server, "hasAdminRights")) return false;
@@ -29,7 +29,7 @@ export const Milestones: Milestone[] = [
     },
   },
   {
-    title: () => "Install the backdoor on CSEC",
+    title: () => "在 CSEC 上安插后门",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
       if (!server || !Object.hasOwn(server, "backdoorInstalled")) return false;
@@ -37,55 +37,55 @@ export const Milestones: Milestone[] = [
     },
   },
   {
-    title: () => "Join the faction hinted at in csec-test.msg",
+    title: () => "加入 csec-test.msg 中暗示的派系",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.CyberSec);
     },
   },
   {
-    title: () => `Install all the Augmentations from ${FactionName.CyberSec}`,
+    title: () => `安装 ${FactionName.CyberSec} 的所有强化`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.CyberSec]);
     },
   },
   {
-    title: () => "Join the faction hinted at in nitesec-test.msg",
+    title: () => "加入 nitesec-test.msg 中暗示的派系",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.NiteSec);
     },
   },
   {
-    title: () => `Install all the Augmentations from ${FactionName.NiteSec}`,
+    title: () => `安装 ${FactionName.NiteSec} 的所有强化`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.NiteSec]);
     },
   },
   {
-    title: () => "Join the faction hinted at in j3.msg",
+    title: () => "加入 j3.msg 中暗示的派系",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.TheBlackHand);
     },
   },
   {
-    title: () => `Install all the Augmentations from ${FactionName.TheBlackHand}`,
+    title: () => `安装 ${FactionName.TheBlackHand} 的所有强化`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.TheBlackHand]);
     },
   },
   {
-    title: () => "Join the faction hinted at in 19dfj3l1nd.msg",
+    title: () => "加入 19dfj3l1nd.msg 中暗示的派系",
     fulfilled: (): boolean => {
       return Player.factions.includes(FactionName.BitRunners);
     },
   },
   {
-    title: () => `Install all the Augmentations from ${FactionName.BitRunners}`,
+    title: () => `安装 ${FactionName.BitRunners} 的所有强化`,
     fulfilled: (): boolean => {
       return allFactionAugs(Factions[FactionName.BitRunners]);
     },
   },
   {
-    title: () => "Complete fl1ght.exe",
+    title: () => "完成 fl1ght.exe",
     fulfilled: (): boolean => {
       // technically wrong but whatever
       return Player.factions.includes(FactionName.Daedalus);
@@ -94,14 +94,14 @@ export const Milestones: Milestone[] = [
   {
     title: () =>
       Player.bitNodeN === 15
-        ? `Find The Red Pill somewhere in the dark net`
-        : `Install the special Augmentation from ${FactionName.Daedalus}`,
+        ? `在暗网中的某处找到 The Red Pill`
+        : `安装 ${FactionName.Daedalus} 的特殊强化`,
     fulfilled: (): boolean => {
       return Player.augmentations.some((aug) => aug.name == "The Red Pill");
     },
   },
   {
-    title: () => "Install the final backdoor and free yourself.",
+    title: () => "安装最终的后门，解放你自己。",
     fulfilled: (): boolean => {
       return false;
     },

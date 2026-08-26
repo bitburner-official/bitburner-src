@@ -268,7 +268,7 @@ export function validateConnections(start: BaseServer, path: string[]): Result<{
   for (const host of path) {
     const next = GetServer(host);
     if (next === null) {
-      return { success: false, message: `Invalid host: '${host}'` };
+      return { success: false, message: `无效主机：'${host}'` };
     }
     if (next === current) {
       continue;
@@ -276,7 +276,7 @@ export function validateConnections(start: BaseServer, path: string[]): Result<{
     if (!next.backdoorInstalled && !next.purchasedByPlayer && !current.serversOnNetwork.includes(next.hostname)) {
       return {
         success: false,
-        message: `Cannot directly connect from ${current.hostname} to ${host}. Make sure the server is backdoored or adjacent to ${current.hostname}`,
+        message: `无法从 ${current.hostname} 直接连接到 ${host}。请确保该服务器已安装后门或与 ${current.hostname} 相邻`,
       };
     }
     current = next;
@@ -413,7 +413,7 @@ export function initForeignServers(homeComputer: Server): void {
       const content = discoverableNetworkScripts[scriptName].content;
       if (!path || !content) {
         throw new Error(
-          `Unable to populate script ${scriptName} on server ${server.hostname}: invalid script name or content`,
+          `无法在服务器 ${server.hostname} 上载入脚本 ${scriptName}：脚本名称或内容无效`,
         );
       }
       server.scripts.set(path, new Script(path, content, server.hostname));

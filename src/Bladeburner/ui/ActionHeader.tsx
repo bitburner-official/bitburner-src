@@ -70,8 +70,8 @@ export function ActionHeader({ bladeburner, action, rerender }: ActionHeaderProp
           <StopButton bladeburner={bladeburner} rerender={rerender} />
         </Box>
         <Typography>
-          (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
-          {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
+          （进行中 - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+          {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)}）
         </Typography>
         <Box display="flex" flexDirection="row" alignItems="center">
           <Typography>
@@ -80,7 +80,7 @@ export function ActionHeader({ bladeburner, action, rerender }: ActionHeaderProp
             })}
           </Typography>
           <Typography marginLeft="1rem">
-            Remaining time: {convertTimeMsToTimeElapsedString(eta * 1000, showMilliseconds)}
+            剩余时间：{convertTimeMsToTimeElapsedString(eta * 1000, showMilliseconds)}
           </Typography>
         </Box>
       </>

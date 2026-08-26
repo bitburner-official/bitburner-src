@@ -20,7 +20,7 @@ export function StockMarketDev(): React.ReactElement {
     return (
       <AutoExpandAccordion cacheKey="DEVMENU_StockMarketDev" unmountOnExit={true} disabled={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Stock Market</Typography>
+          <Typography>股票市场</Typography>
         </AccordionSummary>
       </AutoExpandAccordion>
     );
@@ -81,8 +81,8 @@ export function StockMarketDev(): React.ReactElement {
       <table>
         <tbody>
           <tr>
-            <th>Stock</th>
-            <th>Price cap</th>
+            <th>股票</th>
+            <th>价格上限</th>
           </tr>
           {stocks}
         </tbody>
@@ -92,34 +92,34 @@ export function StockMarketDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_StockMarketDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Stock Market</Typography>
+        <Typography>股票市场</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Symbol:</Typography>
+                <Typography>代码：</Typography>
               </td>
               <td>
-                <TextField placeholder="symbol/'all'" onChange={setStockSymbolField} />
+                <TextField placeholder="代码/'all'" onChange={setStockSymbolField} />
               </td>
             </tr>
             <tr>
               <td>
-                <Typography>Price:</Typography>
+                <Typography>价格：</Typography>
               </td>
               <td>
                 <TextField placeholder="$$$" onChange={setStockPriceField} />
-                <Button onClick={doSetStockPrice}>Set</Button>
+                <Button onClick={doSetStockPrice}>设置</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Typography>Caps:</Typography>
+                <Typography>上限：</Typography>
               </td>
               <td>
-                <Button onClick={viewStockCaps}>View stock caps</Button>
+                <Button onClick={viewStockCaps}>查看股价上限</Button>
               </td>
             </tr>
           </tbody>

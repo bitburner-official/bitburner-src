@@ -45,17 +45,17 @@ export function placeOrder(
 ): boolean {
   if (!(stock instanceof Stock)) {
     if (ctx) {
-      helpers.log(ctx, () => `Invalid stock: '${stock}'`);
+      helpers.log(ctx, () => `股票无效：'${stock}'`);
     } else {
-      dialogBoxCreate(`ERROR: Invalid stock passed to placeOrder() function`);
+      dialogBoxCreate(`错误：传给 placeOrder() 函数的股票无效`);
     }
     return false;
   }
   if (typeof shares !== "number" || typeof price !== "number") {
     if (ctx) {
-      helpers.log(ctx, () => `Invalid arguments: shares='${shares}' price='${price}'`);
+      helpers.log(ctx, () => `参数无效：数量='${shares}' 价格='${price}'`);
     } else {
-      dialogBoxCreate("ERROR: Invalid numeric value provided for either 'shares' or 'price' argument");
+      dialogBoxCreate("错误：'shares' 或 'price' 参数提供了无效的数值");
     }
     return false;
   }
@@ -126,11 +126,11 @@ export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext):
         params.pos === order.pos
       ) {
         stockOrders.splice(i, 1);
-        if (ctx) helpers.log(ctx, () => "Successfully cancelled order: " + orderTxt);
+        if (ctx) helpers.log(ctx, () => "成功取消订单：" + orderTxt);
         return true;
       }
     }
-    if (ctx) helpers.log(ctx, () => "Failed to cancel order: " + orderTxt);
+    if (ctx) helpers.log(ctx, () => "取消订单失败：" + orderTxt);
     return false;
   }
   return false;
@@ -154,7 +154,7 @@ export function loadStockMarket(saveString: string): void {
     if (canAccessStockMarket()) {
       initStockMarket();
     }
-    const errorMessage = `Cannot load data of StockMarket. StockMarket is reset.`;
+    const errorMessage = `无法读取股票市场（StockMarket）的数据，股票市场已被重置。`;
     setTimeout(() => {
       dialogBoxCreate(errorMessage);
     }, 1000);

@@ -42,11 +42,11 @@ export function RecentErrorsPage(): React.ReactElement {
         <table className={classes.errorTable}>
           <thead>
             <tr>
-              <th className={classes.cellText}>Count</th>
-              <th className={classes.cellText}>Type</th>
-              <th className={classes.cellText}>Message</th>
-              <th className={classes.cellText}>Script</th>
-              <th className={classes.cellText}>Time</th>
+              <th className={classes.cellText}>次数</th>
+              <th className={classes.cellText}>类型</th>
+              <th className={classes.cellText}>信息</th>
+              <th className={classes.cellText}>脚本</th>
+              <th className={classes.cellText}>时间</th>
             </tr>
           </thead>
           <tbody>

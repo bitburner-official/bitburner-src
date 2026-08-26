@@ -43,7 +43,7 @@ import { handleGetSaveDataInfoError } from "../../utils/ErrorHandler";
 import { OptionSwitch } from "./OptionSwitch";
 
 const ComparisonIcon = ({ isBetter }: { isBetter: boolean }): JSX.Element => {
-  const title = isBetter ? "Imported value is larger!" : "Imported value is smaller!";
+  const title = isBetter ? "导入的数值更大！" : "导入的数值更小！";
   const icon = isBetter ? <ThumbUpAlt color="success" /> : <ThumbDownAlt color="error" />;
 
   return <Tooltip title={title}>{icon}</Tooltip>;
@@ -167,44 +167,44 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
   return (
     <Box className={classes.root}>
       <Typography variant="h4" sx={{ mb: 2 }}>
-        Import Save Comparison
+        导入存档对比
       </Typography>
       {props.automatic && (
         <Typography sx={{ mb: 2 }}>
-          We've found a <b>NEWER save</b> that you may want to use instead.
+          我们发现了一个<b>更新的存档</b>，你或许想改用它。
         </Typography>
       )}
       <Typography variant="body1" sx={{ mb: 2 }}>
-        Your current game's data is on the left and the data that will be imported is on the right.
+        左侧是你当前游戏的数据，右侧是将要导入的数据。
         <br />
-        Please double check everything is fine before proceeding!
+        请在继续之前仔细确认一切无误！
       </Typography>
       <TableContainer color="secondary" component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              <TableCell>Current Game</TableCell>
-              <TableCell>Being Imported</TableCell>
+              <TableCell>当前游戏</TableCell>
+              <TableCell>正在导入</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             <TableRow>
-              <TableCell>Game Identifier</TableCell>
-              <TableCell>{currentData.playerData?.identifier ?? "n/a"}</TableCell>
-              <TableCell>{importData.playerData?.identifier ?? "n/a"}</TableCell>
+              <TableCell>游戏标识符</TableCell>
+              <TableCell>{currentData.playerData?.identifier ?? "无"}</TableCell>
+              <TableCell>{importData.playerData?.identifier ?? "无"}</TableCell>
               <TableCell>
                 {importData.playerData?.identifier !== currentData.playerData?.identifier && (
-                  <Tooltip title="These are two different games!">
+                  <Tooltip title="这是两个不同的游戏！">
                     <WarningIcon color="warning" />
                   </Tooltip>
                 )}
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Playtime</TableCell>
+              <TableCell>游戏时长</TableCell>
               <TableCell>{convertTimeMsToTimeElapsedString(currentData.playerData?.totalPlaytime ?? 0)}</TableCell>
               <TableCell>{convertTimeMsToTimeElapsedString(importData.playerData?.totalPlaytime ?? 0)}</TableCell>
               <TableCell>
@@ -219,16 +219,16 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
             </TableRow>
 
             <TableRow>
-              <TableCell>Saved On</TableCell>
+              <TableCell>保存时间</TableCell>
               <TableCell>
                 {(currentData.playerData?.lastSave ?? 0) > 0
                   ? new Date(currentData.playerData?.lastSave ?? 0).toLocaleString()
-                  : "n/a"}
+                  : "无"}
               </TableCell>
               <TableCell>
                 {(importData.playerData?.lastSave ?? 0) > 0
                   ? new Date(importData.playerData?.lastSave ?? 0).toLocaleString()
-                  : "n/a"}
+                  : "无"}
               </TableCell>
               <TableCell>
                 {importData.playerData?.lastSave !== currentData.playerData?.lastSave && (
@@ -240,7 +240,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
             </TableRow>
 
             <TableRow>
-              <TableCell>Money</TableCell>
+              <TableCell>资金</TableCell>
               <TableCell>{formatMoney(currentData.playerData?.money ?? 0)}</TableCell>
               <TableCell>{formatMoney(importData.playerData?.money ?? 0)}</TableCell>
               <TableCell>
@@ -254,10 +254,10 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
 
             <TableRow>
               <TableCell colSpan={4}>
-                <IconButton aria-label="expand row" size="small" onClick={toggleSkillsExpand}>
+                <IconButton aria-label="展开行" size="small" onClick={toggleSkillsExpand}>
                   {isSkillsExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
-                Skills
+                技能
               </TableCell>
             </TableRow>
             <TableRow>
@@ -292,10 +292,10 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
 
             <TableRow>
               <TableCell colSpan={4}>
-                <IconButton aria-label="expand row" size="small" onClick={toggleOthersExpand}>
+                <IconButton aria-label="展开行" size="small" onClick={toggleOthersExpand}>
                   {isOthersExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
-                Others
+                其他
               </TableCell>
             </TableRow>
             <TableRow>
@@ -304,7 +304,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
                   <Table>
                     <TableBody>
                       <TableRow>
-                        <TableCell>Augmentations</TableCell>
+                        <TableCell>强化</TableCell>
                         <TableCell>{currentData.playerData?.augmentations}</TableCell>
                         <TableCell>{importData.playerData?.augmentations}</TableCell>
                         <TableCell>
@@ -320,7 +320,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
                       </TableRow>
 
                       <TableRow>
-                        <TableCell>Factions</TableCell>
+                        <TableCell>派系</TableCell>
                         <TableCell>{currentData.playerData?.factions}</TableCell>
                         <TableCell>{importData.playerData?.factions}</TableCell>
                         <TableCell>
@@ -334,7 +334,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Achievements</TableCell>
+                        <TableCell>成就</TableCell>
                         <TableCell>{currentData.playerData?.achievements}</TableCell>
                         <TableCell>{importData.playerData?.achievements}</TableCell>
                         <TableCell>
@@ -349,8 +349,8 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
                       </TableRow>
 
                       <TableRow>
-                        <Tooltip title="The total SF levels owned, except for SF-1 Exploit levels.">
-                          <TableCell>Source File Levels</TableCell>
+                        <Tooltip title="拥有的源文件总等级，不包括 SF-1 漏洞等级。">
+                          <TableCell>源文件等级</TableCell>
                         </Tooltip>
                         <TableCell>{currentData.playerData?.sourceFiles}</TableCell>
                         <TableCell>{importData.playerData?.sourceFiles}</TableCell>
@@ -366,8 +366,8 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
                       </TableRow>
 
                       <TableRow>
-                        <Tooltip title="Number of exploits owned.">
-                          <TableCell>Exploits</TableCell>
+                        <Tooltip title="拥有的漏洞数量。">
+                          <TableCell>漏洞</TableCell>
                         </Tooltip>
                         <TableCell>{currentData.playerData?.exploits}</TableCell>
                         <TableCell>{importData.playerData?.exploits}</TableCell>
@@ -383,7 +383,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
                       </TableRow>
 
                       <TableRow>
-                        <Tooltip title="The player's current BitNode.">
+                        <Tooltip title="玩家当前的 BitNode。">
                           <TableCell>BitNode</TableCell>
                         </Tooltip>
                         <TableCell>
@@ -407,25 +407,24 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
       <OptionSwitch
         checked={syncSteamAchievements}
         onChange={(newValue) => setSyncSteamAchievements(newValue)}
-        text="Sync Steam achievements"
+        text="同步 Steam 成就"
         tooltip={
           <>
-            This setting is only used in the Steam app. If this setting is enabled, the game will automatically sync
-            your unlocked Steam achievements to Steam Cloud.
+            此设置仅在 Steam 版中使用。启用后，游戏会自动将你解锁的 Steam 成就同步到 Steam 云。
           </>
         }
       />
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <ButtonGroup>
-          <Tooltip title="Continue with current save">
+          <Tooltip title="继续使用当前存档">
             <Button onClick={handleGoBack} sx={{ my: 2 }} startIcon={<ArrowBackIcon />} color="secondary">
-              Take me back!
+              返回当前存档！
             </Button>
           </Tooltip>
-          <Tooltip title="Import newer save and reload">
+          <Tooltip title="导入新存档并重新加载">
             <Button onClick={openImportModal} sx={{ my: 2 }} startIcon={<DirectionsRunIcon />} color="warning">
-              Proceed with import
+              继续导入
             </Button>
           </Tooltip>
         </ButtonGroup>
@@ -439,11 +438,11 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
           }}
           confirmationText={
             <>
-              Importing new save game data will <strong>completely wipe</strong> the current game data!
+              导入新的存档数据将会<strong>完全清空</strong>当前的游戏数据！
               <br />
             </>
           }
-          additionalButton={<Button onClick={closeImportModal}>Cancel</Button>}
+          additionalButton={<Button onClick={closeImportModal}>取消</Button>}
         />
       </Box>
     </Box>

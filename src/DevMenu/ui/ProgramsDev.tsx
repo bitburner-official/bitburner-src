@@ -45,14 +45,14 @@ export function ProgramsDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_ProgramsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Programs</Typography>
+        <Typography>程序</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Program:</Typography>
+                <Typography>程序：</Typography>
               </td>
               <td>
                 <Select onChange={setProgramDropdown} value={program}>
@@ -66,11 +66,11 @@ export function ProgramsDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Add:</Typography>
+                <Typography>添加：</Typography>
               </td>
               <td>
-                <Button onClick={addProgram}>One</Button>
-                <Button onClick={addAllPrograms}>All</Button>
+                <Button onClick={addProgram}>单个</Button>
+                <Button onClick={addAllPrograms}>全部</Button>
               </td>
             </tr>
           </tbody>

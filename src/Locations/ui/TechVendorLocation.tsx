@@ -28,8 +28,8 @@ function ServerButton(props: { ram: number }): React.ReactElement {
   return (
     <>
       <Button onClick={() => setOpen(true)} disabled={!Player.canAfford(cost) || reachLimitOfPrivateServer}>
-        Purchase {formatRam(props.ram)} Cloud Server -&nbsp;
-        {reachLimitOfPrivateServer ? "Max" : <Money money={cost} forPurchase={true} />}
+        购买 {formatRam(props.ram)} 云服务器 -&nbsp;
+        {reachLimitOfPrivateServer ? "已达上限" : <Money money={cost} forPurchase={true} />}
       </Button>
       <PurchaseServerModal open={open} onClose={() => setOpen(false)} ram={props.ram} cost={cost} />
     </>
@@ -53,7 +53,7 @@ export function TechVendorLocation(props: { loc: Location }): React.ReactElement
       <Box sx={{ display: "grid", width: "fit-content" }}>{purchaseServerButtons}</Box>
       <br />
       <Typography>
-        <i>"You can order bigger cloud servers via scripts. We don't take custom orders in person."</i>
+        <i>“你可以通过脚本订购更大的云服务器。我们不接待现场定制。”</i>
       </Typography>
       <br />
       <TorButton rerender={rerender} />

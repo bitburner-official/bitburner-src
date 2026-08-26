@@ -19,20 +19,20 @@ import { ServerConstants } from "../../Server/data/Constants";
 import { formatExp, formatMoney, formatSecurity } from "../../ui/formatNumber";
 
 export function hack(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
-  if (args.length !== 0) return Terminal.error("Incorrect usage of hack command. Usage: hack");
-  if (server.purchasedByPlayer) return Terminal.error("Cannot hack your own machines!");
-  if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
+  if (args.length !== 0) return Terminal.error("hack 命令用法不正确。用法：hack");
+  if (server.purchasedByPlayer) return Terminal.error("无法入侵你自己的机器！");
+  if (!server.hasAdminRights) return Terminal.error("你没有这台机器的管理员权限！");
   // Acts as a functional check that the server is hackable. Hacknet servers should already be filtered out anyway by purchasedByPlayer
-  if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot hack this server.");
+  if (server.requiredHackingSkill === undefined) return Terminal.error("无法入侵这台服务器。");
   if (server.requiredHackingSkill > Player.skills.hacking) {
     return Terminal.error(
-      "Your hacking skill is not high enough to hack this machine. Try analyzing the machine to determine the required hacking skill",
+      "你的黑客等级不足以入侵这台机器。请尝试分析该机器以确定所需的黑客等级",
     );
   }
 
   // Hacking through Terminal should be faster than hacking through a script
   if (server instanceof HacknetServer) {
-    Terminal.error("Cannot hack this kind of server");
+    Terminal.error("无法入侵此类服务器");
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -84,17 +84,17 @@ export function hack(args: (string | number | boolean)[], server: BaseServer): u
       const newSec = server.hackDifficulty;
 
       Terminal.print(
-        `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained, true)} and ${formatExp(
+        `成功入侵 '${server.hostname}'！获得 ${formatMoney(moneyGained, true)} 资金和 ${formatExp(
           expGainedOnSuccess,
-        )} hacking exp`,
+        )} 点黑客经验`,
       );
       Terminal.print(
-        `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,
+        `'${server.hostname}' 的安全等级从 ${formatSecurity(oldSec)} 升至 ${formatSecurity(newSec)}`,
       );
     } else {
       // Failure
       Player.gainHackingExp(expGainedOnFailure);
-      Terminal.print(`Failed to hack '${server.hostname}'. Gained ${formatExp(expGainedOnFailure)} hacking exp`);
+      Terminal.print(`入侵 '${server.hostname}' 失败。获得 ${formatExp(expGainedOnFailure)} 点黑客经验`);
     }
   });
 }

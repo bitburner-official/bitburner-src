@@ -99,7 +99,7 @@ export function PortalModal(props: IProps): React.ReactElement {
       <Typography variant="h5">{bitNode.tagline}</Typography>
       <br />
       <Typography>
-        Source-File Level: {props.level} / {maxSourceFileLevel}
+        源文件等级：{props.level} / {maxSourceFileLevel}
       </Typography>
       <br />
       <br />
@@ -127,7 +127,7 @@ export function PortalModal(props: IProps): React.ReactElement {
           props.onClose();
         }}
       >
-        Enter BN{props.n}.{newLevel}
+        进入 BN{props.n}.{newLevel}
       </Button>
     </Modal>
   );

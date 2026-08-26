@@ -38,7 +38,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
             <Container disableGutters>
               <div style={{ color: Settings.theme.maplocation }}>
                 <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                  <span className={classes.serverDetailsText}>Required charisma:</span> {server.requiredCharismaSkill}
+                  <span className={classes.serverDetailsText}>所需魅力：</span> {server.requiredCharismaSkill}
                 </pre>
               </div>
             </Container>
@@ -47,8 +47,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
         <br />
         <br />
         <Typography>
-          The weight of the deep net presses down on you. It seems this place will challenge you to make your own
-          tools...
+          深网的重量压在你的身上。这个地方似乎要挑战你，让你自己打造工具……
         </Typography>
         <br />
         <br />
@@ -104,10 +103,10 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
 
   let authFeedback;
   if (isAuthenticating) {
-    authFeedback = "Checking password...";
+    authFeedback = "正在检查密码……";
   } else {
     if (lastDarknetResultFromAuth === null) {
-      authFeedback = "(no response yet)";
+      authFeedback = "（尚无响应）";
     } else {
       authFeedback = formatObjectWithColoredKeys(lastDarknetResultFromAuth, ["success", "message", "code"]);
     }
@@ -120,7 +119,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
           <form onSubmit={(e) => handleSubmit(e)}>
             <TextField
               ref={passwordInput}
-              label="Password"
+              label="密码"
               type="text"
               value={inputPassword}
               onChange={(e) => setInputPassword(e.target.value)}
@@ -132,14 +131,14 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
           </form>
           <br />
           <Button onClick={(e) => handleSubmit(e)} disabled={isAuthenticating}>
-            Submit Password
+            提交密码
           </Button>
           <br />
           <br />
           <br />
           {!isLabServer && (
             <Typography variant="caption" color="secondary">
-              Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+              通过 <pre style={{ display: "inline" }}>heartbleed</pre> 抓取的日志：
             </Typography>
           )}
         </div>
@@ -148,30 +147,30 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
             {isLabServer ? (
               <div style={{ color: Settings.theme.maplocation }}>
                 <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                  <span className={classes.serverDetailsText}>Hint:</span> {server.staticPasswordHint}
+                  <span className={classes.serverDetailsText}>提示：</span> {server.staticPasswordHint}
                   <br />
-                  <span className={classes.serverDetailsText}>Model:</span> {server.modelId}
+                  <span className={classes.serverDetailsText}>型号：</span> {server.modelId}
                   <br />
-                  <span className={classes.serverDetailsText}>Required charisma:</span> {server.requiredCharismaSkill}
+                  <span className={classes.serverDetailsText}>所需魅力：</span> {server.requiredCharismaSkill}
                   <br />
                 </pre>
               </div>
             ) : (
               <div style={{ color: Settings.theme.maplocation }}>
                 <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                  <span className={classes.serverDetailsText}>Hint:</span> {server.staticPasswordHint}
+                  <span className={classes.serverDetailsText}>提示：</span> {server.staticPasswordHint}
                   <br />
                   {!!server.passwordHintData && (
                     <>
-                      <span className={classes.serverDetailsText}>Data: </span> {server.passwordHintData}
+                      <span className={classes.serverDetailsText}>数据：</span> {server.passwordHintData}
                       <br />
                     </>
                   )}
-                  <span className={classes.serverDetailsText}>Length:</span> {server.password.length}
+                  <span className={classes.serverDetailsText}>长度：</span> {server.password.length}
                   <br />
-                  <span className={classes.serverDetailsText}>Format:</span> {getPasswordType(server.password)}
+                  <span className={classes.serverDetailsText}>格式：</span> {getPasswordType(server.password)}
                   <br />
-                  <span className={classes.serverDetailsText}>Model:</span> {server.modelId}
+                  <span className={classes.serverDetailsText}>型号：</span> {server.modelId}
                   <br />
                 </pre>
               </div>

@@ -79,20 +79,20 @@ export function CodingContractModal(): React.ReactElement {
     <Modal open={eventData !== null} onClose={close}>
       <CopyableText variant="h4" value={eventData.codingContract.type} />
       <Typography>
-        You are attempting to solve a Coding Contract. You have{" "}
-        {pluralize(eventData.codingContract.getMaxNumTries() - eventData.codingContract.tries, "try", "tries")}{" "}
-        remaining, after which the contract will self-destruct.
+        你正在尝试解决一个编程合约。（剩余尝试次数：
+        {pluralize(eventData.codingContract.getMaxNumTries() - eventData.codingContract.tries, "次", "次")}）
+        之后该合约将会自毁。
       </Typography>
       <br />
       <Typography>{description}</Typography>
       <br />
       <Typography>
-        If your solution is an empty string, you must leave the text box empty. Do not use "", '', or ``.
+        如果你的答案是一个空字符串，你必须让输入框保持空白。不要使用 ""、'' 或 ``。
       </Typography>
       <br />
       <TextField
         autoFocus
-        placeholder="Enter Solution here"
+        placeholder="在此输入答案"
         value={answer}
         onChange={onChange}
         onKeyDown={onKeyDown}
@@ -105,7 +105,7 @@ export function CodingContractModal(): React.ReactElement {
                 close();
               }}
             >
-              Solve
+              解决
             </Button>
           ),
         }}

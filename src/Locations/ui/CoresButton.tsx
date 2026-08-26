@@ -37,13 +37,13 @@ export function CoresButton(props: IProps): React.ReactElement {
       <span>
         <br />
         <Typography>
-          <i>"Cores increase the effectiveness of grow() and weaken() on 'home'"</i>
+          <i>“核心可提高 'home' 上 grow() 和 weaken() 的效果”</i>
         </Typography>
         <br />
         <Button disabled={!Player.canAfford(cost) || reachMaxCore} onClick={buy}>
-          Upgrade 'home' cores&nbsp;
+          升级 'home' 核心数&nbsp;
           {reachMaxCore ? (
-            "- Max"
+            "- 已达上限"
           ) : (
             <>
               ({homeComputer.cpuCores} -&gt; {homeComputer.cpuCores + 1}) -&nbsp;

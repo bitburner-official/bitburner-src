@@ -102,8 +102,8 @@ export class CompanyPosition {
     this.baseSalary = p.baseSalary;
     this.repMultiplier = p.repMultiplier;
     this.isPartTime = p.isPartTime ?? false;
-    this.applyText = p.applyText ?? `Apply for ${this.name} Job`;
-    this.hiredText = p.hiredText ?? `Congratulations, you are now employed as a ${this.name}`;
+    this.applyText = p.applyText ?? `申请 ${this.name} 职位`;
+    this.hiredText = p.hiredText ?? `恭喜，你现在受雇为 ${this.name}`;
 
     this.requiredHacking = p.reqdHacking != null ? p.reqdHacking : 0;
     this.requiredStrength = p.reqdStrength != null ? p.reqdStrength : 0;

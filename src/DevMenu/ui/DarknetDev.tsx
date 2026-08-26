@@ -101,13 +101,13 @@ export function DarknetDev(): React.ReactElement {
     }
     if (successCount !== count) {
       SnackbarEvents.emit(
-        `Only created ${successCount} ${selectedServerType.label} darknet servers at depth ${depth}. Not enough open positions available`,
+        `在深度 ${depth} 处仅创建了 ${successCount} 个 ${selectedServerType.label} 暗网服务器。可用位置不足`,
         ToastVariant.ERROR,
         4000,
       );
     } else {
       SnackbarEvents.emit(
-        `Created ${count} new ${selectedServerType.label} darknet servers at depth ${depth}`,
+        `已在深度 ${depth} 处创建 ${count} 个新的 ${selectedServerType.label} 暗网服务器`,
         ToastVariant.SUCCESS,
         2000,
       );
@@ -119,7 +119,7 @@ export function DarknetDev(): React.ReactElement {
     <>
       <Modal open={open} onClose={cancel}>
         <div>
-          <Typography variant="h4">Add Darknet Server</Typography>
+          <Typography variant="h4">添加暗网服务器</Typography>
           <br />
           <Select
             value={selectedServerType.label}
@@ -137,7 +137,7 @@ export function DarknetDev(): React.ReactElement {
             value={difficulty}
             onChange={updateDifficulty}
             type="number"
-            label="Server difficulty"
+            label="服务器难度"
             inputProps={{ min: 1, step: 1, max: maxDepth }}
             sx={{ minWidth: `200px` }}
             id="darknet-dev-server-depth-input"
@@ -147,7 +147,7 @@ export function DarknetDev(): React.ReactElement {
             value={depth}
             onChange={updateDepth}
             type="number"
-            label="Server starting depth"
+            label="服务器起始深度"
             inputProps={{ min: 1, step: 1, max: maxDepth }}
             sx={{ minWidth: `200px` }}
             id="darknet-dev-server-depth-input"
@@ -157,7 +157,7 @@ export function DarknetDev(): React.ReactElement {
             value={count}
             onChange={updateCount}
             type="number"
-            label="Number of copies"
+            label="副本数量"
             inputProps={{ min: 1, step: 1, max: maxDepth * 2 }}
             sx={{ minWidth: `200px` }}
             id="darknet-dev-server-depth-input"
@@ -169,68 +169,68 @@ export function DarknetDev(): React.ReactElement {
       </Modal>
       <AutoExpandAccordion cacheKey="DEVMENU_DarknetDev" unmountOnExit={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Darknet</Typography>
+          <Typography>暗网</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <OptionSwitch
             disabled={!hasDarknetAccess()}
             checked={DarknetState.showFullNetwork}
             onChange={(newValue) => toggleShowFullNetwork(newValue)}
-            text="Show Full Network"
-            tooltip={<>If this is set, the full depth of the dark network will be displayed.</>}
+            text="显示完整网络"
+            tooltip={<>设置后，将显示暗网的完整深度。</>}
           />
-          <Tooltip title={<Typography>Gain access to the darkweb network.</Typography>}>
+          <Tooltip title={<Typography>获得进入暗网网络的权限。</Typography>}>
             <Button
               onClick={() => {
                 getDarkscapeNavigator();
               }}
             >
-              Get {CompletedProgramName.darkscape}
+              获取 {CompletedProgramName.darkscape}
             </Button>
           </Tooltip>
           <br />
           <br />
-          <Tooltip title={<Typography>Create a new darkweb network.</Typography>}>
+          <Tooltip title={<Typography>生成一个新的暗网网络。</Typography>}>
             <span>
               <Button
                 disabled={!hasDarknetAccess()}
                 onClick={() => {
                   clearDarknet();
                   populateDarknet();
-                  SnackbarEvents.emit("New dark network generated", ToastVariant.SUCCESS, 2000);
+                  SnackbarEvents.emit("已生成新的暗网网络", ToastVariant.SUCCESS, 2000);
                 }}
               >
-                Generate New Dark Network
+                生成新暗网网络
               </Button>
             </span>
           </Tooltip>
           <br />
           <br />
-          <Tooltip title={<Typography>Reposition the majority of servers in the darknet.</Typography>}>
+          <Tooltip title={<Typography>重新布置暗网中大部分服务器的位置。</Typography>}>
             <span>
               <Button
                 disabled={!hasDarknetAccess()}
                 onClick={() => {
                   moveRandomDarknetServers(Math.floor(getAllDarknetServers().length / 2));
-                  SnackbarEvents.emit("Darknet servers shuffled", ToastVariant.SUCCESS, 2000);
+                  SnackbarEvents.emit("暗网服务器位置已打乱", ToastVariant.SUCCESS, 2000);
                 }}
               >
-                Shuffle Server Locations
+                打乱服务器位置
               </Button>
             </span>
           </Tooltip>
           <br />
           <br />
-          <Tooltip title={<Typography>Adds a new server of a specific variety.</Typography>}>
+          <Tooltip title={<Typography>添加一个特定类型的新服务器。</Typography>}>
             <span>
               <Button disabled={!hasDarknetAccess()} onClick={() => setOpen(true)}>
-                Add Darknet Servers...
+                添加暗网服务器…
               </Button>
             </span>
           </Tooltip>
           <br />
           <br />
-          <Tooltip title={<Typography>Root all standard darknet servers.</Typography>}>
+          <Tooltip title={<Typography>对所有标准暗网服务器提权。</Typography>}>
             <span>
               <Button
                 disabled={!hasDarknetAccess()}
@@ -240,16 +240,16 @@ export function DarknetDev(): React.ReactElement {
                       handleSuccessfulAuth(server, 1, -1);
                     }
                   });
-                  SnackbarEvents.emit("Gained darknet server admin rights", ToastVariant.SUCCESS, 2000);
+                  SnackbarEvents.emit("已获得暗网服务器管理员权限", ToastVariant.SUCCESS, 2000);
                 }}
               >
-                Gain admin access to all darknet servers
+                获得所有暗网服务器的管理员权限
               </Button>
             </span>
           </Tooltip>
           <br />
           <br />
-          <Tooltip title={<Typography>Root all darknet labyrinth servers.</Typography>}>
+          <Tooltip title={<Typography>对所有暗网迷宫（Labyrinth）服务器提权。</Typography>}>
             <span>
               <Button
                 disabled={!hasDarknetAccess()}
@@ -259,10 +259,10 @@ export function DarknetDev(): React.ReactElement {
                       server.hasAdminRights = true;
                     }
                   });
-                  SnackbarEvents.emit("Gained lab admin rights", ToastVariant.SUCCESS, 2000);
+                  SnackbarEvents.emit("已获得迷宫管理员权限", ToastVariant.SUCCESS, 2000);
                 }}
               >
-                Gain admin access to labyrinth server
+                获得迷宫服务器的管理员权限
               </Button>
             </span>
           </Tooltip>
@@ -271,7 +271,7 @@ export function DarknetDev(): React.ReactElement {
           <Tooltip
             title={
               <Typography>
-                Start a violent "webstorm," which will wipe out much of the dark net and replace it.
+                启动一场猛烈的“webstorm”，它将摧毁大部分暗网并将其重建。
               </Typography>
             }
           >
@@ -283,7 +283,7 @@ export function DarknetDev(): React.ReactElement {
                   Router.toPage(SimplePage.DarkNet);
                 }}
               >
-                START WEBSTORM
+                启动 WEBSTORM
               </Button>
             </span>
           </Tooltip>

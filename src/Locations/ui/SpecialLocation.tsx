@@ -54,24 +54,24 @@ function SpecialLocationHint(bitNode: number): React.ReactElement {
   switch (bitNode) {
     case 3:
       if (Player.bitNodeOptions.disableCorporation) {
-        message = "You disabled Corporation via BitNode advanced options.";
+        message = "你已通过 BitNode 高级选项禁用了企业。";
       } else if (currentNodeMults.CorporationSoftcap < 0.15) {
-        message = `Corporation is disabled in BN-${Player.bitNodeN}.`;
+        message = `企业已在 BN-${Player.bitNodeN} 中禁用。`;
       }
       break;
     case 6:
     case 7:
       if (Player.bitNodeOptions.disableBladeburner) {
-        message = "You disabled Bladeburner via BitNode advanced options.";
+        message = "你已通过 BitNode 高级选项禁用了 Bladeburner。";
       } else if (currentNodeMults.BladeburnerRank === 0) {
-        message = `Bladeburner is disabled in BN-${Player.bitNodeN}.`;
+        message = `Bladeburner 已在 BN-${Player.bitNodeN} 中禁用。`;
       }
       break;
   }
   if (!message && knowAboutBitverse()) {
-    message = `You should check out ${
-      bitNode !== 6 ? `BN-${bitNode}` : `BN-6 or BN-7`
-    } to uncover more details about this place.`;
+    message = `你应该去看看 ${
+      bitNode !== 6 ? `BN-${bitNode}` : `BN-6 或 BN-7`
+    }，以了解更多关于此地的详情。`;
   }
   if (!message) {
     return <></>;
@@ -91,7 +91,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
   // Apply for Bladeburner division
   const joinBladeburnerDivision = useCallback(() => {
     Player.startBladeburner();
-    dialogBoxCreate("You have been accepted into the Bladeburner division!");
+    dialogBoxCreate("你已被 Bladeburner 部门录取！");
     rerender();
   }, [rerender]);
 
@@ -108,7 +108,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       Player.skills.dexterity < 100 ||
       Player.skills.agility < 100
     ) {
-      dialogBoxCreate("Rejected! Please apply again when you have 100 of each combat stat (str, def, dex, agi)");
+      dialogBoxCreate("拒绝！请在你每项战斗属性都达到 100 后再来申请（力量、防御、灵巧、敏捷）");
       return;
     }
     if (
@@ -118,10 +118,10 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     ) {
       PromptEvent.emit({
         txt:
-          `After joining the Bladeburner division, you will immediately receive "${AugmentationName.BladesSimulacrum}"\n` +
-          `augmentation and won't be able to accept Stanek's Gift. If you want to accept Stanek's Gift,\n` +
-          `you must do that before joining the Bladeburner division.\n\n` +
-          "Do you really want to join the Bladeburner division now?",
+          `加入 Bladeburner 部门后，你会立即获得 "${AugmentationName.BladesSimulacrum}"\n` +
+          `强化，且将无法接受 Stanek 的礼物。如果你想接受 Stanek 的礼物，\n` +
+          `必须在加入 Bladeburner 部门之前进行。\n\n` +
+          "你现在真的想加入 Bladeburner 部门吗？",
         resolve: (value: string | boolean) => {
           if (value !== true) {
             return;
@@ -143,7 +143,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
       return SpecialLocationHint(6);
     }
-    const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
+    const text = Player.bladeburner ? "进入 Bladeburner 总部" : "申请加入 Bladeburner 部门";
     return (
       <>
         <br />
@@ -154,7 +154,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
 
   function renderNoodleBar(): React.ReactElement {
     function EatNoodles(): void {
-      SnackbarEvents.emit("You ate some delicious noodles and feel refreshed", ToastVariant.SUCCESS, 2000);
+      SnackbarEvents.emit("你吃了一些美味的面条，感觉神清气爽", ToastVariant.SUCCESS, 2000);
       N00dles(); // This is the true power of the noodles.
       if (knowAboutBitverse()) {
         Player.giveExploit(Exploit.N00dles);
@@ -190,7 +190,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     return (
       <>
         <br />
-        <Button onClick={EatNoodles}>Eat noodles</Button>
+        <Button onClick={EatNoodles}>吃面条</Button>
       </>
     );
   }
@@ -201,7 +201,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return (
         <>
           <Typography>
-            <i>A businessman is yelling at a clerk. You should come back later.</i>
+            <i>一名商人正在对职员大吼大叫。你应该稍后再来。</i>
           </Typography>
           {SpecialLocationHint(3)}
         </>
@@ -210,7 +210,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     return (
       <>
         <Button disabled={!Player.canAccessCorporation() || !!Player.corporation} onClick={() => setOpen(true)}>
-          Create a Corporation
+          创建企业
         </Button>
         <CreateCorporationModal open={open} onClose={() => setOpen(false)} restart={false} />
       </>
@@ -223,7 +223,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     return (
       <Button onClick={handleGrafting} sx={{ my: 5 }}>
-        Enter the secret lab
+        进入秘密实验室
       </Button>
     );
   }
@@ -244,7 +244,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
   }
 
   function renderCotMG(): React.ReactElement {
-    const toStanek = <Button onClick={() => Router.toPage(Page.StaneksGift)}>Open Stanek's Gift</Button>;
+    const toStanek = <Button onClick={() => Router.toPage(Page.StaneksGift)}>打开 Stanek 的礼物</Button>;
     // prettier-ignore
     const symbol = <Typography sx={{ lineHeight: '1em', whiteSpace: 'pre' }}>
       {"                 ``          "}<br />
@@ -280,9 +280,8 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         <>
           <Typography>
             <i>
-              Allison "Mother" Stanek: ..can ...you hear them too ...? Come now, don't be shy and let me get a closer
-              look at you. Yes wonderful, I see my creation has taken root without consequence or much ill effect it
-              seems. Curious, Just how much of a machine's soul do you house in that body?
+              Allison "Mother" Stanek：……你……你也能听到它们吗……？来吧，别害羞，让我好好看看你。
+              很好，太棒了，看来我的造物已经生根发芽，没有产生什么恶果。真好奇，你那具身体里到底容纳了多少机器的灵魂？
             </i>
           </Typography>
           <br />
@@ -297,9 +296,8 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         <>
           <Typography>
             <i>
-              Allison "Mother" Stanek: I see you've taken to my creation. So much that it could hardly be recognized as
-              one of my own after your tinkering with it. I see you follow the ways of the Machine God as I do, and your
-              mastery of the gift clearly demonstrates that. My hopes are climbing by the day for you.
+              Allison "Mother" Stanek：看来你很中意我的造物。经过你的摆弄，它几乎让人认不出是我亲手之作。
+              我看得出你和我一样遵循机械神的道路，你对这份礼物的精通清楚地证明了这一点。我对你的期望与日俱增。
             </i>
           </Typography>
           <br />
@@ -313,7 +311,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return (
         <>
           <Typography>
-            <i>Allison "Mother" Stanek: Welcome back my child!</i>
+            <i>Allison "Mother" Stanek：欢迎回来，我的孩子！</i>
           </Typography>
           <br />
           {toStanek}
@@ -327,9 +325,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return (
         <>
           <Typography>
-            A decrepit altar stands in the middle of a dilapidated church.
+            一座破败的祭坛矗立在残破的教堂中央。
             <br />
-            <br />A symbol is carved in the altar.
+            <br />祭坛上刻着一个符号。
           </Typography>
 
           <br />
@@ -346,10 +344,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return (
         <>
           <Typography>
-            <i>
-              Allison "Mother" Stanek: Begone you filth! My gift must be the first modification that your body should
-              have!
-            </i>
+            <i>Allison "Mother" Stanek：滚开，你这污秽之物！我的礼物必须是你身体接受的第一处改造！</i>
           </Typography>
         </>
       );
@@ -359,11 +354,11 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       <>
         <Typography>
           <i>
-            Allison "Mother" Stanek: Welcome child, I see your body is pure. Are you ready to ascend beyond our human
-            form? If you are, accept my gift.
+            Allison "Mother" Stanek：欢迎，孩子，我看到你的身体是纯洁的。准备好超越我们的人类形态了吗？
+            如果准备好了，就接受我的礼物。
           </i>
         </Typography>
-        <Button onClick={handleCotMG}>Accept Stanek's Gift</Button>
+        <Button onClick={handleCotMG}>接受 Stanek 的礼物</Button>
         {symbol}
       </>
     );
@@ -385,7 +380,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     return (
       <>
         <Typography>
-          <CorruptibleText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
+          <CorruptibleText content={"这片区域笼罩着诡异的气息。你觉得自己应该离开。"} spoiler={false} />
         </Typography>
       </>
     );
@@ -394,15 +389,15 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
   function renderShadowedWalkway(): React.ReactElement {
     function handleDarknetNavigator(): void {
       if (Player.money < DarknetConstants.DarkscapeNavigatorDiscountedPrice) {
-        dialogBoxCreate(`You don't have enough money to buy ${CompletedProgramName.darkscape}`);
+        dialogBoxCreate(`你的资金不足以购买 ${CompletedProgramName.darkscape}`);
         return;
       }
       Player.loseMoney(DarknetConstants.DarkscapeNavigatorDiscountedPrice, "other");
       getDarkscapeNavigator();
       dialogBoxCreate(
-        `You bought ${CompletedProgramName.darkscape} for ${formatMoney(
+        `你以 ${formatMoney(
           DarknetConstants.DarkscapeNavigatorDiscountedPrice,
-        )}.`,
+        )} 的价格购买了 ${CompletedProgramName.darkscape}。`,
       );
       rerender();
     }
@@ -413,28 +408,25 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         <Typography>
           <br />
           <br />
-          The city is dark and quiet. It stretches out below this decrepit walkway, a seemingly endless expanse of
-          decaying concrete and rusted metal.
+          城市黑暗而寂静。它在这条破败走道的下方延展，是一片看似无尽的腐朽混凝土与锈蚀金属。
           <br />
           <br />
-          Nearby, an ancient automat sits askew, its screen flickering with static, still covered with ads for the
-          compact disks it sells for credits.
+          附近，一台古老的自动售货机歪斜地立着，屏幕闪烁着雪花，上面仍然贴满广告，宣传着它以信用点出售的激光唱片。
           <br />
           <br />
-          On it, a faded sign reads:
+          机器上一块褪色的标牌写着：
           <br />
           <br />
           <i>
-            Resistance, change, & freedom: powered by privacy. Darkscape Navigator is the only way to escape the
-            oppression of the Great Firewall.
+            反抗、变革与自由：由隐私驱动。Darkscape Navigator 是逃离防火墙压迫的唯一途径。
           </i>
           <br />
           <br />
           <br />
           <Button onClick={handleDarknetNavigator} disabled={!canBuyDarknetNavigator}>
-            Buy {CompletedProgramName.darkscape}{" "}
+            购买 {CompletedProgramName.darkscape}{" "}
             {hasDarknetAccess()
-              ? " - Purchased"
+              ? " - 已购买"
               : `(${formatMoney(DarknetConstants.DarkscapeNavigatorDiscountedPrice)})`}
           </Button>
         </Typography>
@@ -471,7 +463,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <br />
           <br />
           <br />
-          <Button onClick={() => Router.toPage(Page.Go)}>IPvGO Subnet Takeover</Button>
+          <Button onClick={() => Router.toPage(Page.Go)}>IPvGO 子网接管</Button>
         </>
       );
     }

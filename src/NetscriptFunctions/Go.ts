@@ -112,7 +112,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         const nextPlayerIsWhite = helpers.boolean(ctx, "nextPlayerIsWhite", _nextPlayerIsWhite ?? false);
         const State = validateBoardState(ctx, _boardState, null, nextPlayerIsWhite);
         if (!State) {
-          throw errorMessage(ctx, "Invalid board state passed to setTestingBoardState()");
+          throw errorMessage(ctx, "传给 setTestingBoardState() 的棋盘状态无效");
         }
         const komi = helpers.number(ctx, "komi", _komi ?? 5.5);
         return setTestingBoardState(ctx, State, komi);

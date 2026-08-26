@@ -21,19 +21,15 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
   return (
     <>
       <Typography>
-        Black Operations (Black Ops) are special, one-time covert operations. Each Black Op is unlocked by completing
-        the one before it.
+        黑色行动（Black Ops）是一次性的特殊秘密行动。每项黑色行动都需要完成前一项后才会解锁。
         <br />
         <br />
         <b>
-          Your ultimate goal to climb through the ranks of {FactionName.Bladeburners} is to complete all of the Black
-          Ops.
+          要在 {FactionName.Bladeburners} 中步步高升，你的最终目标就是完成所有黑色行动。
         </b>
         <br />
         <br />
-        Like normal operations, you may use a team for Black Ops. Failing a Black Op will incur heavy HP and rank
-        losses. Black Ops success is significantly affected by combat stats. Many Ops benefit from Hacking skill.
-        Unaffected by Charisma.
+        与普通行动一样，黑色行动也可以使用团队。黑色行动失败将损失大量生命值和声望。黑色行动的成功率显著受战斗属性影响，许多行动还能从黑客技能中获益，不受魅力影响。
       </Typography>
 
       {bladeburner.numBlackOpsComplete >= numberOfBlackOperations && (

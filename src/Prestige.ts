@@ -274,9 +274,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
     homeComp.messages.push(LiteratureName.CorporationManagementHandbook);
     delayedDialog(
-      "You received a copy of the Corporation Management Handbook on your home computer. It's a short introduction for " +
-        "managing Corporation.\n\nYou should check the in-game Corporation documentation in the Documentation tab " +
-        "(Documentation -> Advanced Mechanics -> Corporation). It's the most useful and up-to-date resource for managing Corporation.",
+      "你在家用电脑上收到了一本《企业管理工作手册》。这是一份简短的企业管理入门介绍。\n\n你可以在游戏内的文档页查看企业相关文档（文档 -> 高级机制 -> 企业）。这是管理企业最有用且最新的资源。",
       false,
     );
   }
@@ -284,7 +282,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
     delayedDialog(
-      `The ${CompanyName.NSA} would like to have a word with you once you're ready. You should train your combat stats to level 100 before going there.`,
+      `${CompanyName.NSA} 想在你就绪后与你谈一谈。在前往之前，请先把你的战斗属性训练到 100 级。`,
       false,
     );
   }
@@ -301,18 +299,18 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // BitNode 10: Digital Carbon
   if (Player.bitNodeN === 10) {
     delayedDialog(
-      `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityName.NewTokyo} has to offer for you`,
+      `如果你想购买一两个新的分身，去找 ${FactionName.TheCovenant}！另外看看 ${CityName.NewTokyo} 的 ${CompanyName.VitaLife} 有什么适合你的`,
       false,
     );
   }
 
   // BitNode 12: The Recursion
   if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
-    delayedDialog("Saynt_Garmo is watching you");
+    delayedDialog("Saynt_Garmo 正在注视着你");
   }
 
   if (Player.bitNodeN === 13) {
-    delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`, false);
+    delayedDialog(`${CityName.Chongqing} 正酝酿着麻烦`, false);
   }
 
   // Reset Stock market, gang, and corporation
@@ -363,7 +361,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   if (!isFlume && Player.sourceFiles.size === 1 && Player.sourceFileLvl(1) === 1) {
     delayedDialog(
-      "Congratulations on destroying your first BitNode! Make sure to check the Documentation tab. Many pages are unlocked now.",
+      "恭喜你摧毁了第一个 BitNode！记得查看文档页，现在有许多新页面已解锁。",
       false,
     );
   }

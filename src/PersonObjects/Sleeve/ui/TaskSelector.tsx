@@ -22,7 +22,7 @@ import { getRecordKeys } from "../../../Types/Record";
 
 const universitySelectorOptions = Object.values(UniversityClassType);
 
-const gymSelectorOptions: string[] = ["Train Strength", "Train Defense", "Train Dexterity", "Train Agility"];
+const gymSelectorOptions: string[] = ["训练力量", "训练防御", "训练灵巧", "训练敏捷"];
 
 const bladeburnerSelectorOptions: string[] = [
   BladeburnerGeneralActionName.Training,
@@ -146,13 +146,13 @@ const tasks: {
         const facInfo = faction.getInfo();
         const options: string[] = [];
         if (facInfo.offerHackingWork) {
-          options.push("Hacking Contracts");
+          options.push("黑客合同");
         }
         if (facInfo.offerFieldWork) {
-          options.push("Field Work");
+          options.push("外勤工作");
         }
         if (facInfo.offerSecurityWork) {
-          options.push("Security Work");
+          options.push("安保工作");
         }
         return options;
       },
@@ -174,7 +174,7 @@ const tasks: {
         universities = [LocationName.VolhavenZBInstituteOfTechnology];
         break;
       default:
-        universities = ["No university available in city!"];
+        universities = ["该城市没有可用的大学！"];
         break;
     }
 
@@ -193,7 +193,7 @@ const tasks: {
         gyms = [LocationName.VolhavenMilleniumFitnessGym];
         break;
       default:
-        gyms = ["No gym available in city!"];
+        gyms = ["该城市没有可用的健身房！"];
         break;
     }
 

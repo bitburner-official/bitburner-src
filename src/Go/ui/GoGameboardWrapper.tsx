@@ -71,11 +71,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   // Currently this function changing is what triggers a GoGameboard rerender, which is needed
   function clickHandler(x: number, y: number) {
     if (showPriorMove) {
-      SnackbarEvents.emit(
-        `Currently showing a past board state. Please disable "Show previous move" to continue.`,
-        ToastVariant.WARNING,
-        2000,
-      );
+      SnackbarEvents.emit(`当前正在查看历史棋盘状态。请取消勾选"显示上一手"后再继续。`, ToastVariant.WARNING, 2000);
       return;
     }
 
@@ -83,17 +79,17 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     const gameOver = boardState.previousPlayer === null;
     const notYourTurn = boardState.previousPlayer === GoColor.black && Go.currentGame.ai !== GoOpponent.none;
     if (notYourTurn) {
-      SnackbarEvents.emit(`It is not your turn to play.`, ToastVariant.WARNING, 2000);
+      SnackbarEvents.emit(`还没轮到你落子。`, ToastVariant.WARNING, 2000);
       return;
     }
     if (gameOver) {
-      SnackbarEvents.emit(`The game is complete, please reset to continue.`, ToastVariant.WARNING, 2000);
+      SnackbarEvents.emit(`对局已经结束，请开始新对局后再继续。`, ToastVariant.WARNING, 2000);
       return;
     }
 
     const validity = evaluateIfMoveIsValid(boardState, x, y, currentPlayer);
     if (validity != GoValidity.valid) {
-      SnackbarEvents.emit(`Invalid move: ${validity}`, ToastVariant.ERROR, 2000);
+      SnackbarEvents.emit(`无效落子：${validity}`, ToastVariant.ERROR, 2000);
       return;
     }
 
@@ -116,7 +112,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     const move = await handleNextTurn(boardState, false);
 
     if (move.type === GoPlayType.pass) {
-      SnackbarEvents.emit(`The opponent passes their turn; It is now your turn to move.`, ToastVariant.WARNING, 4000);
+      SnackbarEvents.emit(`对手选择停一手；现在轮到你落子。`, ToastVariant.WARNING, 4000);
       return;
     }
 
@@ -168,21 +164,21 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const noLegalMoves = manualTurnAvailable && !getAllValidMoves(boardState, currentPlayer).length;
 
   const scoreBoxText = boardState.previousBoards.length
-    ? `Score: Black: ${score[GoColor.black].sum} White: ${score[GoColor.white].sum}`
-    : "Place a router to begin!";
+    ? `得分：黑方：${score[GoColor.black].sum} 白方：${score[GoColor.white].sum}`
+    : "放置一个路由器以开始！";
 
   const getPassButtonLabel = () => {
     const playerString = boardState.ai === GoOpponent.none ? ` (${currentPlayer})` : "";
     if (endGameAvailable) {
-      return `End Game${playerString}`;
+      return `结束对局${playerString}`;
     }
     if (boardState.previousPlayer === null) {
-      return "View Final Score";
+      return "查看最终得分";
     }
     if (waitingOnAI) {
-      return "Waiting for opponent";
+      return "等待对手行动";
     }
-    return `Pass Turn${playerString}`;
+    return `停一手${playerString}`;
   };
 
   return (
@@ -213,7 +209,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <br />
           <Typography variant={"h6"} className={classes.opponentLabel}>
-            {Go.currentGame.ai !== GoOpponent.none ? "Subnet owner: " : ""}{" "}
+            {Go.currentGame.ai !== GoOpponent.none ? "子网占据者：" : ""}{" "}
             {Go.currentGame.ai === GoOpponent.w0r1d_d43m0n ? (
               <CorruptibleText content={Go.currentGame.ai} spoiler={false} />
             ) : (
@@ -232,7 +228,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
         </div>
         <Box className={classes.inlineFlexBox}>
           <Button onClick={() => setSearchOpen(true)} className={classes.resetBoard}>
-            Find New Subnet
+            寻找新子网
           </Button>
           <Typography className={classes.scoreBox}>{scoreBoxText}</Typography>
           <Button
@@ -249,15 +245,15 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
             <OptionSwitch
               checked={traditional}
               onChange={(newValue) => setTraditional(newValue)}
-              text="Traditional Go look"
-              tooltip={<>Show stones and grid as if it was a standard Go board</>}
+              text="传统围棋外观"
+              tooltip={<>以标准围棋棋盘的样式显示棋子与网格</>}
             />
             <OptionSwitch
               checked={showPriorMove}
               disabled={!boardState.previousBoards.length}
               onChange={(newValue) => showPreviousMove(newValue)}
-              text="Show previous move"
-              tooltip={<>Show the board as it was before the last move</>}
+              text="显示上一手"
+              tooltip={<>显示上一手落下之前的棋盘状态</>}
             />
           </Box>
         </div>

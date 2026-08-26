@@ -14,22 +14,22 @@ export function SlashGame({ stage }: IProps): React.ReactElement {
     <>
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h5" textAlign="center">
-          Attack after the sentinel drops his guard and is distracted.
+          在哨卫放松警惕并分心之后再发起攻击。
           <br />
-          Do not alert him!
+          不要惊动他！
         </Typography>
         <br />
         {stage.phase === 0 && stage.hasMightOfAres && (
           <Box sx={{ my: 1 }}>
-            <Typography variant="h5">The sentinel will drop his guard and be distracted in ...</Typography>
+            <Typography variant="h5">哨卫将在倒计时结束后放松警惕并分心 …</Typography>
             <GameTimer endTimestamp={stage.guardingEndTime} />
             <br />
           </Box>
         )}
 
-        {stage.phase === 0 && <Typography variant="h4">Guarding ...</Typography>}
-        {stage.phase === 1 && <Typography variant="h4">Distracted!</Typography>}
-        {stage.phase === 2 && <Typography variant="h4">Alerted!</Typography>}
+        {stage.phase === 0 && <Typography variant="h4">警戒中 …</Typography>}
+        {stage.phase === 1 && <Typography variant="h4">分心了！</Typography>}
+        {stage.phase === 2 && <Typography variant="h4">被发现了！</Typography>}
       </Paper>
     </>
   );

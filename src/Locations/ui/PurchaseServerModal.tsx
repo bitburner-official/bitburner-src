@@ -38,12 +38,12 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to purchase a new cloud server with {formatRam(props.ram)} of RAM for{" "}
-        <Money money={props.cost} forPurchase={true} />?
+        你想购买一台具有 {formatRam(props.ram)} RAM 的新云服务器吗？价格为{" "}
+        <Money money={props.cost} forPurchase={true} />。
       </Typography>
       <br />
       <br />
-      <Typography> Please enter the server hostname below:</Typography>
+      <Typography> 请在下方输入服务器主机名：</Typography>
       <br />
 
       <TextField
@@ -51,11 +51,11 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
         onKeyUp={onKeyUp}
         onChange={onChange}
         type="text"
-        placeholder="Unique Hostname"
+        placeholder="唯一主机名"
         InputProps={{
           endAdornment: (
             <Button onClick={tryToPurchaseServer} disabled={!Player.canAfford(props.cost) || hostname === ""}>
-              Buy
+              购买
             </Button>
           ),
         }}

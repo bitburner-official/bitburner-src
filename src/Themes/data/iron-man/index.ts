@@ -2,9 +2,9 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Iron Man",
+  name: "钢铁侠",
   credit: "Matti#2942",
-  description: "Mark 42. Threw a little hot rod red in there.",
+  description: "马克 42。在里面加了一点热棒红。",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/1069233364927787089",
   screenshot: img1,
   colors: {

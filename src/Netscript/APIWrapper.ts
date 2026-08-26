@@ -54,12 +54,12 @@ class NSProxyHandler<API extends GenericAPI<API>> {
   }
 
   defineProperty(__target: unknown, __key: unknown, __attrs: unknown): boolean {
-    throw new TypeError("ns instances are not modifiable!");
+    throw new TypeError("ns 实例不可修改！");
   }
 
   set(__target: unknown, __key: unknown, __attrs: unknown): boolean {
     // Redundant with defineProperty, but we'll be explicit
-    throw new TypeError("ns instances are not modifiable!");
+    throw new TypeError("ns 实例不可修改！");
   }
 
   get(__target: unknown, key: keyof API & string, __receiver: any) {
@@ -91,7 +91,7 @@ class NSProxyHandler<API extends GenericAPI<API>> {
       ));
     }
     console.warn(`Unexpected data while wrapping API.`, "tree:", this.tree, "key:", key, "field:", field);
-    throw new Error("Error while wrapping netscript API. See console.");
+    throw new Error("封装 Netscript API 时出错。详见控制台。");
   }
 }
 
@@ -122,7 +122,7 @@ export function setRemovedFunctions(api: object, infos: Record<string, RemovedFu
       value: (ctx: NetscriptContext) => {
         throw helpers.errorMessage(
           ctx,
-          `Function removed in ${version}. ${replaceMsg ? replacement : `Please use ${replacement} instead.`}`,
+          `函数已在 ${version} 中移除。${replaceMsg ? replacement : `请改用 ${replacement}。`}`,
           "REMOVED FUNCTION",
         );
       },

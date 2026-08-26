@@ -38,7 +38,7 @@ export const ServerDetailsModal = ({
   const ramBlock = server.blockedRam;
   const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
   const usedRamString = formatToMaxDigits(server.ramUsed - ramBlock, 1);
-  const serverRamString = `RAM in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`;
+  const serverRamString = `RAM 占用：${blockedRamString}${usedRamString}/${server.maxRam} GB`;
 
   const logContent = recentLogs.map((log, index) => (
     <pre
@@ -68,25 +68,25 @@ export const ServerDetailsModal = ({
             <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
               {server.hostname}
             </Typography>
-            <Tooltip title={`Server Model: ${server.modelId}`}>
+            <Tooltip title={`服务器型号：${server.modelId}`}>
               <SvgIcon component={icon} color="secondary" />
             </Tooltip>
           </div>
           <br />
           {server.hasAdminRights ? (
             <>
-              <Typography>Password: "{server.password}"</Typography>
+              <Typography>密码："{server.password}"</Typography>
               <br />
-              <Typography color="secondary">IP: {server.ip}</Typography>
-              <Typography color="secondary">Required charisma: {server.requiredCharismaSkill}</Typography>
+              <Typography color="secondary">IP：{server.ip}</Typography>
+              <Typography color="secondary">所需魅力：{server.requiredCharismaSkill}</Typography>
               <Tooltip
-                title={`Ram blocked by server owner: ${ramBlock} GB. Ram in use by scripts: ${
+                title={`被服务器所有者封锁的 RAM：${ramBlock} GB。脚本占用的 RAM：${
                   server.ramUsed - ramBlock
-                } GB.`}
+                } GB。`}
               >
                 <Typography color="secondary">{serverRamString}</Typography>
               </Tooltip>
-              <Typography color="secondary">Model: {server.modelId}</Typography>
+              <Typography color="secondary">型号：{server.modelId}</Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>
                 <ServerSummary server={server} enableAuth={true} showDetails={true} classes={classes} />
@@ -95,7 +95,7 @@ export const ServerDetailsModal = ({
               {isLabServer && (
                 <>
                   <br />
-                  <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
+                  <Typography>你已成功走出迷宫！恭喜！</Typography>
                 </>
               )}
             </>

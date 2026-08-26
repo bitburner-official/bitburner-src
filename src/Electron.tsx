@@ -89,7 +89,7 @@ function initSaveFunctions(): void {
     triggerGameExport: (): void => {
       exportGame().catch((error) => {
         console.error(error);
-        SnackbarEvents.emit("Could not export game.", ToastVariant.ERROR, 2000);
+        SnackbarEvents.emit("无法导出游戏。", ToastVariant.ERROR, 2000);
       });
     },
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
@@ -154,7 +154,7 @@ function initElectronBridge(): void {
       })
       .catch((error: unknown) => {
         console.error(error);
-        SnackbarEvents.emit("Could not save game.", ToastVariant.ERROR, 2000);
+        SnackbarEvents.emit("无法保存游戏。", ToastVariant.ERROR, 2000);
       });
   });
   bridge.receive("trigger-game-export", () => {
@@ -162,7 +162,7 @@ function initElectronBridge(): void {
       window.appSaveFns.triggerGameExport();
     } catch (error) {
       console.error(error);
-      SnackbarEvents.emit("Could not export game.", ToastVariant.ERROR, 2000);
+      SnackbarEvents.emit("无法导出游戏。", ToastVariant.ERROR, 2000);
     }
   });
   bridge.receive("trigger-scripts-export", () => {
@@ -170,7 +170,7 @@ function initElectronBridge(): void {
       window.appSaveFns.triggerScriptsExport();
     } catch (error) {
       console.error(error);
-      SnackbarEvents.emit("Could not export scripts.", ToastVariant.ERROR, 2000);
+      SnackbarEvents.emit("无法导出脚本。", ToastVariant.ERROR, 2000);
     }
   });
 }

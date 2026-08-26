@@ -38,9 +38,9 @@ function StyleField<T extends keyof React.CSSProperties>({
 
   const update = (newValue: React.CSSProperties[T]) => {
     const errorText = !newValue
-      ? "Must have a value"
+      ? "必须填写内容"
       : type === "number" && Number.isNaN(Number(newValue))
-      ? "Must be a number"
+      ? "必须为数字"
       : "";
     setFieldValue(newValue);
     setErrorText(errorText);
@@ -90,21 +90,21 @@ export function StyleEditorModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography variant="h6">Styles Editor</Typography>
+      <Typography variant="h6">样式编辑器</Typography>
       <Typography>
-        WARNING: Changing styles <strong>may mess up</strong> the interface. Drastic changes are{" "}
-        <strong>NOT recommended</strong>.
+        警告：更改样式<strong>可能会弄乱</strong>界面。{" "}
+        大幅修改是<strong>强烈不建议</strong>的。
       </Typography>
       <Paper sx={{ p: 2, my: 2 }}>
         <StyleField<"fontFamily">
-          name="Font Family"
+          name="字体"
           type="string"
           value={customStyle.fontFamily}
           onChange={(value, error) => update({ ...customStyle, fontFamily: value ?? "" }, error)}
         />
         <br />
         <StyleField<"fontSize">
-          name="Font Size"
+          name="字体大小"
           type="number"
           value={customStyle.fontSize * (16 / 14)}
           onChange={(value, error) =>
@@ -118,14 +118,14 @@ export function StyleEditorModal(props: IProps): React.ReactElement {
         />
         <br />
         <StyleField<"fontSize">
-          name="Tail Font Size"
+          name="日志窗口字体大小"
           type="number"
           value={customStyle.tailFontSize}
           onChange={(value, error) => update({ ...customStyle, tailFontSize: Number(value) ?? 0 }, error)}
         />
         <br />
         <StyleField<"lineHeight">
-          name="Line Height"
+          name="行高"
           type="number"
           value={customStyle.lineHeight}
           onChange={(value, error) => update({ ...customStyle, lineHeight: Number(value) ?? 0 }, error)}
@@ -133,11 +133,11 @@ export function StyleEditorModal(props: IProps): React.ReactElement {
         <br />
         <ButtonGroup sx={{ my: 1 }}>
           <Button onClick={setDefaults} startIcon={<ReplyIcon />} color="secondary" variant="outlined">
-            Revert to Defaults
+            还原默认样式
           </Button>
-          <Tooltip title={"Save styles to settings"}>
+          <Tooltip title={"将样式保存到设置中"}>
             <Button onClick={saveStyles} endIcon={<SaveIcon />} color={error ? "error" : "primary"} disabled={!!error}>
-              Save Modifications
+              保存修改
             </Button>
           </Tooltip>
         </ButtonGroup>

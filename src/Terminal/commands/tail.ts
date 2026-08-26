@@ -7,18 +7,18 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 export function tail(commandArray: (string | number | boolean)[], server: BaseServer): undefined {
   try {
     if (commandArray.length < 1) {
-      Terminal.error("Incorrect number of arguments. Usage: tail [pid] or tail [scriptname] [arg1] [arg2]...");
+      Terminal.error("参数数量不正确。用法：tail [pid] 或 tail [scriptname] [arg1] [arg2]...");
     } else if (typeof commandArray[0] === "string") {
       const [rawName, ...args] = commandArray;
       const path = Terminal.getFilepath(rawName);
-      if (!path) return Terminal.error(`Invalid filename: ${rawName}`);
-      if (!hasScriptExtension(path)) return Terminal.error(`Invalid file extension. Tail can only be used on scripts.`);
+      if (!path) return Terminal.error(`无效的文件名：${rawName}`);
+      if (!hasScriptExtension(path)) return Terminal.error(`无效的文件扩展名。tail 只能用于脚本。`);
 
       const candidates = findRunningScripts(path, args, server);
 
       // if there's no candidate then we just don't know.
       if (candidates === null) {
-        Terminal.error(`No script named ${path} with args ${JSON.stringify(args)} is running on the server`);
+        Terminal.error(`服务器上没有名为 ${path}、参数为 ${JSON.stringify(args)} 的脚本在运行`);
         return;
       }
       // Just use the first one (if there are multiple with the same
@@ -30,7 +30,7 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
     } else if (typeof commandArray[0] === "number") {
       const runningScript = findRunningScriptByPid(commandArray[0]);
       if (runningScript == null) {
-        Terminal.error(`No script with PID ${commandArray[0]} is running`);
+        Terminal.error(`没有 PID 为 ${commandArray[0]} 的脚本在运行`);
         return;
       }
       LogBoxEvents.emit(runningScript);

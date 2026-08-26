@@ -23,7 +23,7 @@ export function loadStaneksGift(saveString: string, versionSave?: string): void 
     staneksGift = new StaneksGift();
     if (isStanekGiftImplemented(versionSave)) {
       setTimeout(() => {
-        dialogBoxCreate(`Cannot load data of Stanek's Gift. Stanek's Gift is reset. Error: ${error}.`);
+        dialogBoxCreate(`无法加载 Stanek 的礼物的数据。Stanek 的礼物已被重置。错误：${error}。`);
       }, 1000);
     }
     return;
@@ -58,7 +58,7 @@ export function calculateGrid(gift: BaseGift): number[][] {
 
 export function canAcceptStaneksGift(): Result {
   if (!Player.canAccessCotMG()) {
-    return { success: false, message: "You do not have Source-File 13." };
+    return { success: false, message: "你没有源文件 13。" };
   }
   if (
     [...Player.augmentations, ...Player.queuedAugmentations].filter(
@@ -67,7 +67,7 @@ export function canAcceptStaneksGift(): Result {
   ) {
     return {
       success: false,
-      message: `You already purchased or installed augmentations that are not ${AugmentationName.NeuroFluxGovernor}.`,
+      message: `你已经购买或安装了 ${AugmentationName.NeuroFluxGovernor} 以外的强化。`,
     };
   }
   return { success: true };

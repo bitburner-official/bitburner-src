@@ -38,14 +38,14 @@ export function GangMemberList(): React.ReactElement {
           startAdornment: <SearchIcon />,
           spellCheck: false,
         }}
-        placeholder="Filter by member name"
+        placeholder="按成员名称筛选"
         sx={{ m: 1, width: "15%" }}
       />
       <OptionSwitch
         checked={ascendOnly}
         onChange={(newValue) => setAscendOnly(newValue)}
-        text="Show only ascendable"
-        tooltip={<>Filter the members list by whether or not the member can be ascended.</>}
+        text="仅显示可飞升的成员"
+        tooltip={<>根据成员是否可以飞升来筛选成员列表。</>}
       />
       <Box display="grid" sx={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
         {members.map((member: GangMember) => (

@@ -173,7 +173,7 @@ export class PlayerObject extends Person implements IPlayer {
   }
 
   whoAmI(): string {
-    return "Player";
+    return "玩家";
   }
 
   sleevesSupportingBladeburner(): Sleeve[] {

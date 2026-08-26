@@ -16,11 +16,11 @@ export function NoOpenScripts() {
       }}
     >
       <span style={{ color: Settings.theme.primary, fontSize: "20px", textAlign: "center" }}>
-        <Typography variant="h4">No open files</Typography>
+        <Typography variant="h4">没有打开的文件</Typography>
         <Typography variant="h5">
-          Use <code>nano FILENAME</code> in
+          在终端中使用 <code>nano FILENAME</code>
           <br />
-          the terminal to open files
+          即可打开文件
         </Typography>
       </span>
     </div>

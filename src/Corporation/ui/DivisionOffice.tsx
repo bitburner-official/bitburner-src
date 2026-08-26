@@ -111,11 +111,11 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const materialBreakdown = (
     <StatsTable
       rows={[
-        ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false }))],
-        ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
-        ["Research:", formatCorpMultiplier(division.getProductionMultiplier())],
-        [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
-        [<b key={1}>Total Material Production:</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
+        ["员工产出：", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false }))],
+        ["增产材料：", formatCorpMultiplier(division.productionMult)],
+        ["研究：", formatCorpMultiplier(division.getProductionMultiplier())],
+        [`${CorpUpgradeName.SmartFactories}：`, formatCorpMultiplier(corp.getProductionMultiplier())],
+        [<b key={1}>材料总产量：</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
       ]}
     />
   );
@@ -129,12 +129,12 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const productBreakdown = (
     <StatsTable
       rows={[
-        ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true }))],
-        ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
-        ["Research:", formatCorpMultiplier(division.getProductionMultiplier())],
-        [`${CorpProductResearchName.Fulcrum}:`, formatCorpMultiplier(division.getProductProductionMultiplier())],
-        [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
-        [<b key={1}>Total Product Production:</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
+        ["员工产出：", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true }))],
+        ["增产材料：", formatCorpMultiplier(division.productionMult)],
+        ["研究：", formatCorpMultiplier(division.getProductionMultiplier())],
+        [`${CorpProductResearchName.Fulcrum}：`, formatCorpMultiplier(division.getProductProductionMultiplier())],
+        [`${CorpUpgradeName.SmartFactories}：`, formatCorpMultiplier(corp.getProductionMultiplier())],
+        [<b key={1}>产品总产量：</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
       ]}
     />
   );
@@ -148,11 +148,11 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const salesBreakdown = (
     <StatsTable
       rows={[
-        ["Business Employees:", formatCorpMultiplier(businessFactor)],
-        ["Advertising:", formatCorpMultiplier(adsTotal)],
-        researchMult !== 1 ? ["Research:", formatCorpMultiplier(researchMult)] : [],
-        [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(upgradeMult)],
-        [<b key={1}>Total Sales Multiplier:</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
+        ["商务员工：", formatCorpMultiplier(businessFactor)],
+        ["广告：", formatCorpMultiplier(adsTotal)],
+        researchMult !== 1 ? ["研究：", formatCorpMultiplier(researchMult)] : [],
+        [`${CorpUpgradeName.ABCSalesBots}：`, formatCorpMultiplier(upgradeMult)],
+        [<b key={1}>总销售倍率：</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
       ]}
     />
   );
@@ -162,7 +162,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
       <TableBody>
         <TableRow>
           <TableCell>
-            <Typography>Unassigned Employees:</Typography>
+            <Typography>未分配员工：</Typography>
           </TableCell>
           <TableCell>
             <EmployeeCount num={currUna} next={nextUna} />
@@ -170,7 +170,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         </TableRow>
         <TableRow>
           <TableCell>
-            <Typography>Avg Employee Morale:</Typography>
+            <Typography>员工平均士气：</Typography>
           </TableCell>
           <TableCell align="right">
             <Typography>{formatCorpStat(props.office.avgMorale)}</Typography>
@@ -178,7 +178,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         </TableRow>
         <TableRow>
           <TableCell>
-            <Typography>Avg Employee Energy:</Typography>
+            <Typography>员工平均精力：</Typography>
           </TableCell>
           <TableCell align="right">
             <Typography>{formatCorpStat(props.office.avgEnergy)}</Typography>
@@ -186,7 +186,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         </TableRow>
         <TableRow>
           <TableCell>
-            <Typography>Avg Employee Experience:</Typography>
+            <Typography>员工平均经验：</Typography>
           </TableCell>
           <TableCell align="right">
             <Typography>{formatCorpStat(props.office.totalExperience / props.office.numEmployees || 0)}</Typography>
@@ -194,7 +194,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         </TableRow>
         <TableRow>
           <TableCell>
-            <Typography>Total Employee Salary:</Typography>
+            <Typography>员工总薪资：</Typography>
           </TableCell>
           <TableCell>
             <Typography align="right">
@@ -207,15 +207,15 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography component="div">
-                  The amount of material this office can produce.
+                  该办事处能生产的材料数量。
                   <br />
-                  This value is based off the productivity of your
+                  该值取决于你的运营、工程
                   <br />
-                  Operations, Engineering, and Management employees.
+                  和管理员工的生产力。
                 </Typography>
               }
             >
-              <Typography>Material Production:</Typography>
+              <Typography>材料产量：</Typography>
             </Tooltip>
           </TableCell>
           <TableCell>
@@ -230,15 +230,15 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
               <Tooltip
                 title={
                   <Typography component="div">
-                    The amount of any given Product this office can produce.
+                    该办事处能生产的任一产品的数量。
                     <br />
-                    This value is based off the productivity of your
+                    该值取决于你的运营、工程
                     <br />
-                    Operations, Engineering, and Management employees.
+                    和管理员工的生产力。
                   </Typography>
                 }
               >
-                <Typography>Product Production:</Typography>
+                <Typography>产品产量：</Typography>
               </Tooltip>
             </TableCell>
             <TableCell>
@@ -253,15 +253,15 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  This office's sales effectivity for all materials and products.
+                  该办事处对所有材料和产品的销售效率。
                   <br />
-                  It is based on your Business employees and your advertising.
+                  它取决于你的商务员工和广告。
                   <br />
-                  This will be further modified by demand and competition for each item.
+                  还会进一步受到每种物品的需求与竞争的影响。
                 </Typography>
               }
             >
-              <Typography>Sales Multiplier:</Typography>
+              <Typography>销售倍率：</Typography>
             </Tooltip>
           </TableCell>
           <TableCell align="right">
@@ -274,7 +274,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           rerender={props.rerender}
           office={props.office}
           job={CorpEmployeeJob.Operations}
-          desc={<>Manages supply chain operations. Improves the amount of Materials and Products you produce.</>}
+          desc={<>管理供应链运营。提高你生产的材料和产品数量。</>}
         />
 
         <AutoAssignJob
@@ -283,8 +283,8 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           job={CorpEmployeeJob.Engineer}
           desc={
             <>
-              Develops and maintains products and production systems. Increases the quality of everything you produce.
-              Also increases the amount you produce (not as much as Operations, however).
+              开发和维护产品与生产系统。提升你所生产一切的质量。
+              也会增加产量（不过不如运营岗位多）。
             </>
           }
         />
@@ -293,7 +293,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           rerender={props.rerender}
           office={props.office}
           job={CorpEmployeeJob.Business}
-          desc={<>Handles sales and finances. Improves the amount of Materials and Products you can sell.</>}
+          desc={<>负责销售和财务。提高你可售出的材料和产品数量。</>}
         />
 
         <AutoAssignJob
@@ -302,8 +302,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           job={CorpEmployeeJob.Management}
           desc={
             <>
-              Leads and oversees employees and office operations. Improves the effectiveness of Engineer and Operations
-              employees.
+              领导并监督员工和办事处的运作。提升工程师和业务员工的工作效率。
             </>
           }
         />
@@ -314,8 +313,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           job={CorpEmployeeJob.RandD}
           desc={
             <>
-              Research new innovative ways to improve the company. Generates Scientific Research. Also increases the
-              quality of everything you produce (not as much as Engineer, however).
+              研究改进公司的新颖方法。产生科研点数。也会提升你所生产一切的质量（不过不如工程岗位多）。
             </>
           }
         />
@@ -326,13 +324,10 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           job={CorpEmployeeJob.Intern}
           desc={
             <>
-              Set employee to intern, which will increase some of their stats. Employees in intern do not affect any
-              company operations, but gain increased exp and improve morale and energy.
+              将员工设为实习生，这会提升他们的部分属性。实习中的员工不影响任何公司运营，但会获得更多经验，并改善士气和精力。
               <br />
               <br />
-              Using interns is useful for maintaining morale and energy without scripting and expensive research, but
-              writing a script to buy tea and throw parties is easy. You should do that and stop wasting your employees
-              on this job.
+              使用实习生可以在不写脚本、不花钱搞研究的情况下维持士气和精力，不过写个脚本买茶和开派对也很简单。你应该那么做，别再让员工浪费在这个岗位上。
             </>
           }
         />
@@ -353,33 +348,33 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
     props.rerender();
   }
 
-  const hireEmployeeDisabledText = props.office.atCapacity() ? "Insufficient office space" : "";
+  const hireEmployeeDisabledText = props.office.atCapacity() ? "办公室空间不足" : "";
   const teaDisabledText =
     corp.funds < props.office.getTeaCost()
-      ? "Insufficient corporation funds"
+      ? "企业资金不足"
       : props.office.teaPending
-      ? "Tea is already pending for this cycle"
+      ? "本周期已在购买茶水中"
       : "";
   const partyPending = props.office.partyMult > 1;
   const partyDisabledText =
-    corp.funds < 0 ? "Insufficient corporation funds" : partyPending ? "A party is already pending for this cycle" : "";
+    corp.funds < 0 ? "企业资金不足" : partyPending ? "本周期已在举办派对" : "";
 
   return (
     <Paper>
-      <Typography>Office Space</Typography>
+      <Typography>办公空间</Typography>
       <Typography>
-        Size: {props.office.numEmployees} / {props.office.size} employees
+        规模：{props.office.numEmployees} / {props.office.size} 名员工
       </Typography>
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr", width: "fit-content" }}>
         <Box sx={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
           <ButtonWithTooltip disabledTooltip={hireEmployeeDisabledText} onClick={autohireEmployeeButtonOnClick}>
-            Hire Employee
+            雇用员工
           </ButtonWithTooltip>
           <ButtonWithTooltip
-            normalTooltip={"Upgrade the office's size so that it can hold more employees!"}
+            normalTooltip={"扩大办公室规模，以便容纳更多员工！"}
             onClick={() => setUpgradeOfficeSizeOpen(true)}
           >
-            Upgrade size
+            升级规模
           </ButtonWithTooltip>
           <UpgradeOfficeSizeModal
             rerender={props.rerender}
@@ -390,15 +385,15 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
 
           {!division.hasResearch("AutoBrew") && (
             <ButtonWithTooltip
-              normalTooltip={"Provide your employees with tea to increase their energy"}
+              normalTooltip={"为员工提供茶水以提升他们的精力"}
               disabledTooltip={teaDisabledText}
               onClick={() => buyTea(corp, props.office)}
             >
               {props.office.teaPending ? (
-                "Buying Tea"
+                "正在购买茶水"
               ) : (
                 <>
-                  Buy Tea - <MoneyCost money={props.office.getTeaCost()} corp={corp} />
+                  购买茶水 - <MoneyCost money={props.office.getTeaCost()} corp={corp} />
                 </>
               )}
             </ButtonWithTooltip>
@@ -407,11 +402,11 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
           {!division.hasResearch("AutoPartyManager") && (
             <>
               <ButtonWithTooltip
-                normalTooltip={"Throw an office party to increase your employees' morale"}
+                normalTooltip={"举办办公室派对以提升员工的士气"}
                 disabledTooltip={partyDisabledText}
                 onClick={() => setThrowPartyOpen(true)}
               >
-                {props.office.partyMult > 1 ? "Throwing Party..." : "Throw Party"}
+                {props.office.partyMult > 1 ? "派对进行中……" : "举办派对"}
               </ButtonWithTooltip>
               <ThrowPartyModal
                 rerender={props.rerender}

@@ -30,26 +30,26 @@ export function canPurchaseSleeve(): Result {
   if (Player.bitNodeN !== 10) {
     return {
       success: false,
-      message: "You must be in BitNode 10 to purchase sleeves.",
+      message: "你必须在 BitNode 10 中才能购买分身。",
     };
   }
   if (!Factions[FactionName.TheCovenant].isMember) {
     return {
       success: false,
-      message: `You must be a member of ${FactionName.TheCovenant} to purchase sleeves.`,
+      message: `你必须成为 ${FactionName.TheCovenant} 的成员才能购买分身。`,
     };
   }
   if (Player.sleevesFromCovenant >= MaxSleevesFromCovenant) {
     return {
       success: false,
-      message: `You already have the maximum amount of sleeves purchasable from ${FactionName.TheCovenant}.`,
+      message: `你已经拥有从${FactionName.TheCovenant}处可购买的最大分身数量。`,
     };
   }
   const cost = getSleeveCost(Player.sleevesFromCovenant);
   if (!Player.canAfford(cost)) {
     return {
       success: false,
-      message: `You must have at least ${formatMoney(cost)} to buy this sleeve.`,
+      message: `你至少需要拥有 ${formatMoney(cost)} 才能购买该分身。`,
     };
   }
   return { success: true };
@@ -87,26 +87,26 @@ export function canPurchaseMemoryUpgrade(sleeve: Sleeve, amount: number): Result
   if (Player.bitNodeN !== 10) {
     return {
       success: false,
-      message: "You must be in BitNode 10 to purchase sleeves' memory upgrade.",
+      message: "你必须在 BitNode 10 中才能购买分身记忆升级。",
     };
   }
   if (!Factions[FactionName.TheCovenant].isMember) {
     return {
       success: false,
-      message: `You must be a member of ${FactionName.TheCovenant} to purchase sleeves' memory upgrade.`,
+      message: `你必须成为 ${FactionName.TheCovenant} 的成员才能购买分身记忆升级。`,
     };
   }
   if (sleeve.memory + amount > 100) {
     return {
       success: false,
-      message: `Invalid amount of upgrade: ${amount}. The max memory of a sleeve is 100.`,
+      message: `无效的升级数量：${amount}。分身的最大记忆为 100。`,
     };
   }
   const cost = sleeve.getMemoryUpgradeCost(amount);
   if (!Player.canAfford(cost)) {
     return {
       success: false,
-      message: `You must have at least ${formatMoney(cost)} to buy this sleeve's memory upgrade.`,
+      message: `你至少需要拥有 ${formatMoney(cost)} 才能购买该分身的记忆升级。`,
     };
   }
   return { success: true };

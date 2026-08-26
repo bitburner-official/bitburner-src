@@ -2,8 +2,8 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Monokai'ish",
-  description: "Monokai'ish",
+  name: "Monokai 风格",
+  description: "Monokai 风格",
   credit: "eltea",
   screenshot: img1,
   colors: {

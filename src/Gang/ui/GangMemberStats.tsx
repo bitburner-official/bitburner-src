@@ -35,10 +35,10 @@ export function GangMemberStats(props: IProps): React.ReactElement {
 
   const gang = useGang();
   const data = [
-    [`Money:`, <MoneyRate key="money" money={5 * props.member.calculateMoneyGain(gang)} />],
-    [`Respect:`, `${formatRespect(5 * props.member.calculateRespectGain(gang))} / sec`],
-    [`Wanted Level:`, `${formatWanted(5 * props.member.calculateWantedLevelGain(gang))} / sec`],
-    [`Total Respect:`, `${formatRespect(props.member.earnedRespect)}`],
+    [`资金：`, <MoneyRate key="money" money={5 * props.member.calculateMoneyGain(gang)} />],
+    [`尊重：`, `${formatRespect(5 * props.member.calculateRespectGain(gang))} / 秒`],
+    [`通缉等级：`, `${formatWanted(5 * props.member.calculateWantedLevelGain(gang))} / 秒`],
+    [`累计尊重：`, `${formatRespect(props.member.earnedRespect)}`],
   ];
 
   return (
@@ -46,55 +46,55 @@ export function GangMemberStats(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            Hk: x{formatMultiplier(props.member.hack_mult * asc.hack)}(x
-            {formatMultiplier(props.member.hack_mult)} Eq, x{formatMultiplier(asc.hack)} Asc)
+            Hk: x{formatMultiplier(props.member.hack_mult * asc.hack)}（x
+            {formatMultiplier(props.member.hack_mult)} 装备，x{formatMultiplier(asc.hack)} 飞升）
             <br />
             St: x{formatMultiplier(props.member.str_mult * asc.str)}
-            (x{formatMultiplier(props.member.str_mult)} Eq, x{formatMultiplier(asc.str)} Asc)
+            （x{formatMultiplier(props.member.str_mult)} 装备，x{formatMultiplier(asc.str)} 飞升）
             <br />
             Df: x{formatMultiplier(props.member.def_mult * asc.def)}
-            (x{formatMultiplier(props.member.def_mult)} Eq, x{formatMultiplier(asc.def)} Asc)
+            （x{formatMultiplier(props.member.def_mult)} 装备，x{formatMultiplier(asc.def)} 飞升）
             <br />
             Dx: x{formatMultiplier(props.member.dex_mult * asc.dex)}
-            (x{formatMultiplier(props.member.dex_mult)} Eq, x{formatMultiplier(asc.dex)} Asc)
+            （x{formatMultiplier(props.member.dex_mult)} 装备，x{formatMultiplier(asc.dex)} 飞升）
             <br />
             Ag: x{formatMultiplier(props.member.agi_mult * asc.agi)}
-            (x{formatMultiplier(props.member.agi_mult)} Eq, x{formatMultiplier(asc.agi)} Asc)
+            （x{formatMultiplier(props.member.agi_mult)} 装备，x{formatMultiplier(asc.agi)} 飞升）
             <br />
             Ch: x{formatMultiplier(props.member.cha_mult * asc.cha)}
-            (x{formatMultiplier(props.member.cha_mult)} Eq, x{formatMultiplier(asc.cha)} Asc)
+            （x{formatMultiplier(props.member.cha_mult)} 装备，x{formatMultiplier(asc.cha)} 飞升）
           </Typography>
         }
       >
         <Table sx={{ display: "table", mb: 1, width: "100%" }}>
           <TableBody>
             <StatsRow
-              name="Hacking"
+              name="黑客"
               color={Settings.theme.hack}
               data={{ level: props.member.hack, exp: props.member.hack_exp }}
             />
             <StatsRow
-              name="Strength"
+              name="力量"
               color={Settings.theme.combat}
               data={{ level: props.member.str, exp: props.member.str_exp }}
             />
             <StatsRow
-              name="Defense"
+              name="防御"
               color={Settings.theme.combat}
               data={{ level: props.member.def, exp: props.member.def_exp }}
             />
             <StatsRow
-              name="Dexterity"
+              name="灵巧"
               color={Settings.theme.combat}
               data={{ level: props.member.dex, exp: props.member.dex_exp }}
             />
             <StatsRow
-              name="Agility"
+              name="敏捷"
               color={Settings.theme.combat}
               data={{ level: props.member.agi, exp: props.member.agi_exp }}
             />
             <StatsRow
-              name="Charisma"
+              name="魅力"
               color={Settings.theme.cha}
               data={{ level: props.member.cha, exp: props.member.cha_exp }}
             />

@@ -35,18 +35,18 @@ export function runScript(
       argv: commandArgs,
     });
   } catch (error) {
-    Terminal.error(`Invalid arguments. ${error}.`);
+    Terminal.error(`无效的参数。${error}。`);
     return;
   }
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : undefined;
   if (!isPositiveInteger(numThreads)) {
-    return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
+    return Terminal.error("指定的线程数无效。线程数必须是大于 0 的整数");
   }
   if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
     Terminal.error(
-      `Invalid ram override specified. Ram override must be a number greater than ${RamCostConstants.Base}`,
+      `指定的 RAM 覆盖值无效。RAM 覆盖值必须是大于 ${RamCostConstants.Base} 的数字`,
     );
     return;
   }
@@ -72,14 +72,14 @@ export function runScript(
 
   const success = startWorkerScript(runningScript, server);
   if (!success) {
-    Terminal.error(`Failed to start script`);
+    Terminal.error(`启动脚本失败`);
     return;
   }
 
   Terminal.print(
-    `Running script with ${pluralize(numThreads, "thread")}, pid ${runningScript.pid} and args: ${JSON.stringify(
+    `正在以 ${pluralize(numThreads, "个线程", "个线程")}运行脚本，pid ${runningScript.pid}，参数：${JSON.stringify(
       args,
-    )}.`,
+    )}。`,
   );
   if (tailFlag) {
     LogBoxEvents.emit(runningScript);

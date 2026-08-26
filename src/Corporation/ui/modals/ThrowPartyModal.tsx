@@ -33,9 +33,9 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
 
   function throwParty(): void {
     if (cost === null || isNaN(cost) || cost < 0) {
-      dialogBoxCreate("Invalid value entered");
+      dialogBoxCreate("输入的数值无效");
     } else if (!canParty) {
-      dialogBoxCreate("You don't have enough company funds to throw a party!");
+      dialogBoxCreate("你的公司资金不足，无法举办派对！");
     } else {
       const mult = actions.throwParty(corp, props.office, cost);
       // Each 10% multiplier gives an extra flat +1 to morale to make recovering from low morale easier.
@@ -43,9 +43,9 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
 
       if (mult > 0) {
         dialogBoxCreate(
-          "You threw a party for the office! The morale of each employee increased by " +
+          "你为办公室举办了一场派对！每位员工的士气提升了 " +
             formatPercent(increase) +
-            " and was multiplied by " +
+            "，并被乘以了 " +
             formatMultiplier(mult),
         );
       }
@@ -56,10 +56,10 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
   }
 
   function EffectText(): React.ReactElement {
-    if (isNaN(cost) || cost < 0) return <Typography>Invalid value entered!</Typography>;
+    if (isNaN(cost) || cost < 0) return <Typography>输入的数值无效！</Typography>;
     return (
       <Typography>
-        Throwing this party will cost a total of <MoneyCost money={totalCost} corp={corp} />
+        举办这场派对将总共花费 <MoneyCost money={totalCost} corp={corp} />
       </Typography>
     );
   }
@@ -70,12 +70,12 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>Enter the amount of money you would like to spend PER EMPLOYEE on this office party</Typography>
+      <Typography>输入你想为这次办公室派对给每名员工花费的金额</Typography>
       <EffectText />
       <Box display="flex" alignItems="center">
         <TextField autoFocus={true} type="number" value={cost} onChange={changeCost} onKeyDown={onKeyDown} />
         <Button disabled={!canParty} onClick={throwParty}>
-          Throw Party
+          举办派对
         </Button>
       </Box>
     </Modal>

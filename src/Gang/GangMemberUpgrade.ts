@@ -19,30 +19,30 @@ export class GangMemberUpgrade {
   }
 
   createDescription(): string {
-    const lines = ["Effects:"];
+    const lines = ["效果："];
     if (this.mults.str != null) {
-      lines.push(`+${formatPercent(this.mults.str - 1, 0)} strength skill`);
-      lines.push(`+${formatPercent((this.mults.str - 1) / 4, 2)} strength exp`);
+      lines.push(`+${formatPercent(this.mults.str - 1, 0)} 力量技能`);
+      lines.push(`+${formatPercent((this.mults.str - 1) / 4, 2)} 力量经验`);
     }
     if (this.mults.def != null) {
-      lines.push(`+${formatPercent(this.mults.def - 1, 0)} defense skill`);
-      lines.push(`+${formatPercent((this.mults.def - 1) / 4, 2)} defense exp`);
+      lines.push(`+${formatPercent(this.mults.def - 1, 0)} 防御技能`);
+      lines.push(`+${formatPercent((this.mults.def - 1) / 4, 2)} 防御经验`);
     }
     if (this.mults.dex != null) {
-      lines.push(`+${formatPercent(this.mults.dex - 1, 0)} dexterity skill`);
-      lines.push(`+${formatPercent((this.mults.dex - 1) / 4, 2)} dexterity exp`);
+      lines.push(`+${formatPercent(this.mults.dex - 1, 0)} 灵巧技能`);
+      lines.push(`+${formatPercent((this.mults.dex - 1) / 4, 2)} 灵巧经验`);
     }
     if (this.mults.agi != null) {
-      lines.push(`+${formatPercent(this.mults.agi - 1, 0)} agility skill`);
-      lines.push(`+${formatPercent((this.mults.agi - 1) / 4, 2)} agility exp`);
+      lines.push(`+${formatPercent(this.mults.agi - 1, 0)} 敏捷技能`);
+      lines.push(`+${formatPercent((this.mults.agi - 1) / 4, 2)} 敏捷经验`);
     }
     if (this.mults.cha != null) {
-      lines.push(`+${formatPercent(this.mults.cha - 1, 0)} charisma skill`);
-      lines.push(`+${formatPercent((this.mults.cha - 1) / 4, 2)} charisma exp`);
+      lines.push(`+${formatPercent(this.mults.cha - 1, 0)} 魅力技能`);
+      lines.push(`+${formatPercent((this.mults.cha - 1) / 4, 2)} 魅力经验`);
     }
     if (this.mults.hack != null) {
-      lines.push(`+${formatPercent(this.mults.hack - 1, 0)} hacking skill`);
-      lines.push(`+${formatPercent((this.mults.hack - 1) / 4, 2)} hacking exp`);
+      lines.push(`+${formatPercent(this.mults.hack - 1, 0)} 黑客技能`);
+      lines.push(`+${formatPercent((this.mults.hack - 1) / 4, 2)} 黑客经验`);
     }
     return lines.join("<br>");
   }

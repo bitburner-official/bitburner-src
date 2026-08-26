@@ -48,7 +48,7 @@ export function createCorporation(corporationName: string, selfFund: boolean, re
   }
 
   if (!corporationName) {
-    return { success: false, message: "Corporation name cannot be an empty string." };
+    return { success: false, message: "企业名称不能为空字符串。" };
   }
 
   if (selfFund) {
@@ -56,7 +56,7 @@ export function createCorporation(corporationName: string, selfFund: boolean, re
     if (!Player.canAfford(cost)) {
       return {
         success: false,
-        message: `You don't have enough money to create a corporation. It costs ${formatMoney(cost)}.`,
+        message: `你的资金不足，无法创办企业。这需要花费 ${formatMoney(cost)}。`,
       };
     }
     Player.startCorporation(corporationName, false);
@@ -69,19 +69,19 @@ export function createCorporation(corporationName: string, selfFund: boolean, re
 
 export function createDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
-    throw new Error(`Cannot expand into ${industry} industry, too many divisions!`);
+    throw new Error(`无法扩张到 ${industry} 行业，部门数量已达上限！`);
 
-  if (corporation.divisions.has(name)) throw new Error(`Division name ${name} is already in use!`);
+  if (corporation.divisions.has(name)) throw new Error(`部门名称 ${name} 已被使用！`);
   // "Overview" is forbidden as a division name, see CorporationRoot.tsx for why this would cause issues.
-  if (name === "Overview") throw new Error(`"Overview" is a forbidden division name.`);
+  if (name === "Overview") throw new Error(`“Overview”是禁止使用的部门名称。`);
 
   const data = IndustriesData[industry];
-  if (!data) throw new Error(`Invalid industry: '${industry}'`);
+  if (!data) throw new Error(`无效的行业：'${industry}'`);
   const cost = data.startingCost;
   if (corporation.funds < cost) {
-    throw new Error("Not enough money to create a new division in this industry");
+    throw new Error("资金不足，无法在该行业创建新部门");
   } else if (name === "") {
-    throw new Error("New division must have a name!");
+    throw new Error("新部门必须有名称！");
   } else {
     corporation.loseFunds(cost, "division");
     corporation.divisions.set(
@@ -98,7 +98,7 @@ export function createDivision(corporation: Corporation, industry: IndustryType,
 
 export function removeDivision(corporation: Corporation, name: string): number {
   const division = corporation.divisions.get(name);
-  if (!division) throw new Error("There is no division called " + name);
+  if (!division) throw new Error("没有名为 " + name + " 的部门");
   corporation.divisions.delete(name);
   corporation.numberOfOfficesAndWarehouses -= getRecordValues(division.offices).length;
   corporation.numberOfOfficesAndWarehouses -= getRecordValues(division.warehouses).length;
@@ -121,10 +121,10 @@ export function removeDivision(corporation: Corporation, name: string): number {
 
 export function purchaseOffice(corporation: Corporation, division: Division, city: CityName): void {
   if (corporation.funds < corpConstants.officeInitialCost) {
-    throw new Error("You don't have enough company funds to open a new office!");
+    throw new Error("公司资金不足，无法开设新办事处！");
   }
   if (division.offices[city]) {
-    throw new Error(`You have already expanded into ${city} for ${division.name}`);
+    throw new Error(`你已经为 ${division.name} 扩张到 ${city} 了`);
   }
   corporation.loseFunds(corpConstants.officeInitialCost, "division");
   division.offices[city] = new OfficeSpace({
@@ -136,7 +136,7 @@ export function purchaseOffice(corporation: Corporation, division: Division, cit
 
 export function issueDividends(corporation: Corporation, rate: number): void {
   if (isNaN(rate) || rate < 0 || rate > corpConstants.dividendMaxRate) {
-    throw new Error(`Invalid value. Must be an number between 0 and ${corpConstants.dividendMaxRate}`);
+    throw new Error(`数值无效。必须是 0 到 ${corpConstants.dividendMaxRate} 之间的数字`);
   }
 
   corporation.dividendRate = rate;
@@ -147,10 +147,10 @@ export function goPublic(corporation: Corporation, numShares: number): void {
   const initialSharePrice = corporation.getTargetSharePrice(ceoOwnership);
 
   if (isNaN(numShares) || numShares < 0) {
-    throw new Error("Invalid value for number of issued shares");
+    throw new Error("发行的股份数值无效");
   }
   if (numShares > corporation.numShares) {
-    throw new Error("You don't have that many shares to issue!");
+    throw new Error("你没有那么多股份可供发行！");
   }
   corporation.public = true;
   corporation.sharePrice = initialSharePrice;
@@ -194,7 +194,7 @@ export function acceptInvestmentOffer(corporation: Corporation): void {
     corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
     corporation.public
   ) {
-    throw new Error("No more investment offers are available.");
+    throw new Error("没有更多可用的投资报价了。");
   }
   const val = corporation.valuation;
   const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
@@ -213,7 +213,7 @@ export function convertPriceString(price: string): string {
    * This is a common error. We check it here to provide a user-friendly error message before parsing.
    */
   if (price === "") {
-    throw new Error("Price cannot be an empty string.");
+    throw new Error("价格不能为空字符串。");
   }
   /**
    * Replace invalid characters. Only accepts:
@@ -230,7 +230,7 @@ export function convertPriceString(price: string): string {
     try {
       evaluateCorpFormula(sanitizedPrice, { MP: testNumber });
     } catch (error) {
-      throw new Error(`Invalid value or expression for sell price field: ${error}`, { cause: error });
+      throw new Error(`出售价格字段的值或表达式无效：${error}`, { cause: error });
     }
   }
 
@@ -243,7 +243,7 @@ export function convertAmountString(amount: string): string {
    * This is a common error. We check it here to provide a user-friendly error message before parsing.
    */
   if (amount === "") {
-    throw new Error("Amount cannot be an empty string.");
+    throw new Error("数量不能为空字符串。");
   }
   /**
    * Replace invalid characters. Only accepts:
@@ -259,7 +259,7 @@ export function convertAmountString(amount: string): string {
     try {
       evaluateCorpFormula(sanitizedAmount, { MAX: testNumber, PROD: testNumber, INV: testNumber });
     } catch (error) {
-      throw new Error(`Invalid value or expression for sell quantity field: ${error}`, { cause: error });
+      throw new Error(`出售数量字段的值或表达式无效：${error}`, { cause: error });
     }
   }
 
@@ -300,11 +300,11 @@ export function setSmartSupplyOption(warehouse: Warehouse, material: Material, u
 
 export function buyMaterial(division: Division, material: Material, amt: number): void {
   if (!isRelevantMaterial(material.name, division)) {
-    throw new Error(`${material.name} is not a relevant material for industry ${division.industry}`);
+    throw new Error(`${material.name} 不是行业 ${division.industry} 的相关材料`);
   }
   if (!Number.isFinite(amt) || amt < 0) {
     throw new Error(
-      `Invalid amount '${amt}' to buy material '${material.name}'. Must be numeric and greater than or equal to 0`,
+      `购买材料 '${material.name}' 的数量 '${amt}' 无效。必须是大于或等于0的数字`,
     );
   }
   material.buyAmount = amt;
@@ -318,17 +318,17 @@ export function bulkPurchase(
   amt: number,
 ): void {
   if (!isRelevantMaterial(material.name, division)) {
-    throw new Error(`${material.name} is not a relevant material for industry ${division.industry}`);
+    throw new Error(`${material.name} 不是行业 ${division.industry} 的相关材料`);
   }
   const matSize = MaterialInfo[material.name].size;
   const maxAmount = (warehouse.size - warehouse.sizeUsed) / matSize;
   if (!Number.isFinite(amt) || amt < 0) {
     throw new Error(
-      `Invalid amount '${amt}' to buy material '${material.name}'. Must be numeric and greater than or equal to 0`,
+      `购买材料 '${material.name}' 的数量 '${amt}' 无效。必须是大于或等于0的数字`,
     );
   }
   if (amt > maxAmount) {
-    throw new Error(`You do not have enough warehouse size to fit this purchase`);
+    throw new Error(`你的仓库空间不足，无法容纳这次购买`);
   }
   // Special case: if "amount" is 0, this is a no-op.
   if (amt === 0) {
@@ -336,7 +336,7 @@ export function bulkPurchase(
   }
   const cost = amt * material.marketPrice;
   if (corp.funds < cost) {
-    throw new Error(`You cannot afford this purchase.`);
+    throw new Error(`你负担不起这次购买。`);
   }
   corp.loseFunds(cost, "materials");
   material.averagePrice =
@@ -450,19 +450,19 @@ export function makeProduct(
   if (isNaN(marketingInvest) || marketingInvest < 0) marketingInvest = 0;
 
   if (!division.offices[city]) {
-    throw new Error(`Cannot develop a product in a city without an office!`);
+    throw new Error(`无法在没有办事处的城市开发产品！`);
   }
   if (productName == null || productName === "") {
-    throw new Error("You must specify a name for your product!");
+    throw new Error("你必须为产品指定一个名称！");
   }
   if (!division.makesProducts) {
-    throw new Error("You cannot create products for this industry!");
+    throw new Error("你不能为该行业开发产品！");
   }
   if (corp.funds < designInvest + marketingInvest) {
-    throw new Error("You don't have enough company funds to make this large of an investment");
+    throw new Error("公司资金不足，无法进行这么大的投资");
   }
   if (division.products.size >= division.maxProducts) {
-    throw new Error(`You are already at the max products (${division.maxProducts}) for division: ${division.name}!`);
+    throw new Error(`部门 ${division.name} 的产品数量已达上限（${division.maxProducts}）！`);
   }
 
   const product = new Product({
@@ -472,7 +472,7 @@ export function makeProduct(
     advertisingInvestment: marketingInvest,
   });
   if (division.products.has(product.name)) {
-    throw new Error(`You already have a product with this name!`);
+    throw new Error(`你已经拥有同名产品了！`);
   }
 
   corp.loseFunds(designInvest + marketingInvest, "product development");
@@ -483,7 +483,7 @@ export function research(researchingDivision: Division, researchName: CorpResear
   const corp = Player.corporation;
   if (!corp) return;
   const researchTree = IndustryResearchTrees[researchingDivision.industry];
-  if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.industry}'`);
+  if (researchTree === undefined) throw new Error(`行业 '${researchingDivision.industry}' 没有研究树`);
   const research = ResearchMap[researchName];
   const researchNode = researchTree.findNode(researchName);
   if (!researchNode) {
@@ -494,13 +494,13 @@ export function research(researchingDivision: Division, researchName: CorpResear
   if (researchPreReq) {
     if (!researchingDivision.researched?.has(researchPreReq)) {
       throw new Error(
-        `Division ${researchingDivision.name} requires ${researchPreReq} before researching ${research.name}`,
+        `部门 ${researchingDivision.name} 需要先研究 ${researchPreReq}，才能研究 ${research.name}`,
       );
     }
   }
   if (researchingDivision.researched.has(researchName)) return;
   if (researchingDivision.researchPoints < research.cost) {
-    throw new Error(`You do not have enough Scientific Research for ${research.name}`);
+    throw new Error(`你的科研点数不足以研究 ${research.name}`);
   }
   researchingDivision.researchPoints -= research.cost;
 
@@ -528,20 +528,20 @@ export function exportMaterial(
   amount: string,
 ): void {
   if (!isRelevantMaterial(material.name, targetDivision)) {
-    throw new Error(`You cannot export material: ${material.name} to division: ${targetDivision.name}!`);
+    throw new Error(`无法将材料 ${material.name} 出口到部门 ${targetDivision.name}！`);
   }
   if (!targetDivision.warehouses[targetCity]) {
-    throw new Error(`Cannot export to ${targetCity} in division ${targetDivision.name} because there is no warehouse.`);
+    throw new Error(`无法出口到部门 ${targetDivision.name} 的 ${targetCity}，因为那里没有仓库。`);
   }
   if (material === targetDivision.warehouses[targetCity]?.materials[material.name]) {
-    throw new Error(`Source and target division/city cannot be the same.`);
+    throw new Error(`源部门和目标部门/城市不能相同。`);
   }
   for (const existingExport of material.exports) {
     if (existingExport.division === targetDivision.name && existingExport.city === targetCity) {
-      throw new Error(`Tried to initialize an export to a duplicate warehouse.
-Target warehouse (division / city): ${existingExport.division} / ${existingExport.city}
-Existing export amount: ${existingExport.amount}
-Attempted export amount: ${amount}`);
+      throw new Error(`试图初始化一个指向重复仓库的出口。
+目标仓库（部门 / 城市）：${existingExport.division} / ${existingExport.city}
+现有出口数量：${existingExport.amount}
+尝试导出的数量：${amount}`);
     }
   }
 
@@ -559,10 +559,10 @@ Attempted export amount: ${amount}`);
       });
     } catch (error) {
       throw new Error(
-        `Error while trying to set the exported amount of ${material.name}.
-Your input: ${amount}
-Sanitized input: ${sanitizedAmt}
-Error encountered: ${error}`,
+        `设置 ${material.name} 的出口数量时出错。
+你的输入：${amount}
+清理后的输入：${sanitizedAmt}
+遇到的错误：${error}`,
       );
     }
   }
@@ -617,21 +617,21 @@ export function bribe(
   if (!Number.isFinite(fundsForBribing) || fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
     return {
       success: false,
-      message: "Invalid amount of cash for bribing.",
+      message: "用于贿赂的金额无效。",
     };
   }
   if (corporation.valuation < corpConstants.bribeThreshold) {
     return {
       success: false,
-      message: `The corporation valuation is below the threshold. Threshold: ${formatNumber(
+      message: `企业估值低于门槛值。门槛：${formatNumber(
         corpConstants.bribeThreshold,
-      )}.`,
+      )}。`,
     };
   }
   if (!Player.factions.includes(factionName)) {
     return {
       success: false,
-      message: `You are not a member of ${factionName}.`,
+      message: `你不是 ${factionName} 的成员。`,
     };
   }
   const faction = Factions[factionName];
@@ -639,7 +639,7 @@ export function bribe(
   if (!factionInfo.offersWork()) {
     return {
       success: false,
-      message: `${factionName} cannot be bribed. It does not offer any types of work.`,
+      message: `${factionName} 无法被贿赂。它不提供任何类型的工作。`,
     };
   }
 

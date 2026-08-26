@@ -137,7 +137,7 @@ export class HashManager {
     const cost = this.getUpgradeCost(upgName, count);
 
     if (this.hashes < cost) {
-      return { success: false, message: "Not enough hashes" };
+      return { success: false, message: "哈希不足" };
     }
 
     this.hashes -= cost;

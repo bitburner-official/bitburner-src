@@ -18,18 +18,18 @@ const YELLOW: string = "\x1b[33m";
 const WHITE: string = "\x1b[37m";
 
 const ERR = {
-  noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
+  noArgs: "grep 参数错误。用法：grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
   noSearchArg:
-    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
-  badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
+    "grep 参数错误：必须传入至少一个 FILE 参数，或使用 -*/--search-all 来搜索服务器上的所有文件",
+  badArgs: (args: string[]) => "grep 参数错误：无效的参数：" + args.join(", "),
   badParameter: (option: string, arg: string) =>
-    `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
+    `grep 参数错误：${option} 参数 "${arg}" 不正确，必须是数字。带额外参数的选项（-O、-m、-B/A/C）必须与其他选项分开`,
   outFileExists: (path: string) =>
-    `grep file output failed: Invalid output file "${path}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
+    `grep 输出文件失败：输出文件 "${path}" 无效。该文件不能已经存在。如需覆盖，请使用 -f/--allow-overwrite。`,
   badOutFile: (path: string) =>
-    `grep file output failed: Invalid output file "${path}". Output file path must be a valid text file. (.txt, .json, .css)`,
+    `grep 输出文件失败：输出文件 "${path}" 无效。输出文件路径必须是有效的文本文件（.txt、.json、.css）。`,
   truncated: () =>
-    `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
+    `\n${YELLOW}终端输出已截断至 ${Settings.MaxTerminalCapacity} 行（达到终端最大容量）`,
 } as const;
 
 type ArgStrings = {
@@ -293,18 +293,18 @@ class Results {
     if (!options.isVerbose) return "";
     const totalLines = this.results.length;
     const matchCount = Math.abs((options.isInvertMatch ? totalLines : 0) - this.numMatches);
-    const inputStr = options.isPipeIn ? "piped from terminal " : `in ${pluralize(files.length, "file")}:\n`;
+    const inputStr = options.isPipeIn ? "（输入自终端） " : `来自 ${pluralize(files.length, "个文件", "个文件")}：\n`;
     const filesStr = files
       .map((file, i) => `${i % 2 ? WHITE : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
       .join(", ");
 
     return [
       `\n${
-        (this.params.maxMatches ? this.params.maxMatches : matchCount) + (options.isInvertMatch ? " INVERTED" : "")
+        (this.params.maxMatches ? this.params.maxMatches : matchCount) + (options.isInvertMatch ? "（反转匹配）" : "")
       } `,
-      pluralize(matchCount, "line", undefined, true) + " matched ",
-      `against PATTERN "${pattern.toString()}" `,
-      `in ${pluralize(totalLines, "line")}, `,
+      pluralize(matchCount, "处匹配", "处匹配", true) + " ",
+      `模式 "${pattern.toString()}" `,
+      `共 ${pluralize(totalLines, "行", "行")}， `,
       inputStr,
       `${filesStr}`,
     ].join("");
@@ -412,9 +412,9 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): u
   const nLimit = Number(params.maxMatches);
 
   if (options.hasContextFlag && (!nContext || isNaN(Number(params.context))))
-    return Terminal.error(ERR.badParameter("context", params.context));
+    return Terminal.error(ERR.badParameter("上下文", params.context));
   if (params.maxMatches && (!nLimit || isNaN(Number(params.maxMatches))))
-    return Terminal.error(ERR.badParameter("limit", params.maxMatches));
+    return Terminal.error(ERR.badParameter("上限", params.maxMatches));
 
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
@@ -439,6 +439,6 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): u
     if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
   } catch (error) {
     console.error(error);
-    Terminal.error(`grep processing error: ${error}`);
+    Terminal.error(`grep 处理错误：${error}`);
   }
 }

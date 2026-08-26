@@ -67,7 +67,7 @@ export function AchievementEntry({
           </Typography>
           {isUnlocked && (
             <Typography variant="caption" sx={{ fontSize: "12px", color: captionColor }}>
-              Acquired on {achievedOn}
+              获得于 {achievedOn}
             </Typography>
           )}
           {achievement.NotInSteam && (
@@ -81,7 +81,7 @@ export function AchievementEntry({
             >
               <LinkOffIcon sx={{ fontSize: "20px", color: captionColor, marginRight: 1 }} />
               <Typography variant="caption" sx={{ fontSize: "12px", color: captionColor }}>
-                No equivalent Steam achievement
+                没有对应的 Steam 成就
               </Typography>
             </Box>
           )}

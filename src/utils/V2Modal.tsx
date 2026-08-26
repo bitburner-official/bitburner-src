@@ -13,17 +13,17 @@ export const V2Modal = (): React.ReactElement => {
   const [open, setOpen] = useState(v2ModalOpen);
   return (
     <Modal open={open} onClose={() => undefined}>
-      <Typography>NOTICE FOR BREAKING CHANGES IN V2</Typography>
+      <Typography>V2 破坏性变更通知</Typography>
       <Typography>
-        A file was added to your home computer called V2_0_0_API_BREAK.txt and it is highly recommended you take a look
-        at this file. It explains where most of the API break have occurred.
+        你的家用电脑上添加了一个名为 V2_0_0_API_BREAK.txt 的文件，强烈建议你查看
+        该文件。它解释了大部分 API 破坏性变更发生的位置。
       </Typography>{" "}
       <Typography>
-        You should also take a look at{" "}
-        <DocumentationLink page="migrations/v2.md">the migration guide</DocumentationLink> as well as{" "}
-        <DocumentationLink page="changelog.md">the changelog</DocumentationLink>.
+        你还应该查看{" "}
+        <DocumentationLink page="migrations/v2.md">迁移指南</DocumentationLink> 以及{" "}
+        <DocumentationLink page="changelog.md">更新日志</DocumentationLink>。
       </Typography>
-      <Button onClick={() => setOpen(false)}>I understand</Button>
+      <Button onClick={() => setOpen(false)}>我已了解</Button>
     </Modal>
   );
 };

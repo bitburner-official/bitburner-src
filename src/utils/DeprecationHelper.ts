@@ -19,10 +19,10 @@ export function setDeprecatedProperties(
 export function deprecationWarning(identifier: string, message: string) {
   if (!deprecatedWarningsGiven.has(identifier)) {
     deprecatedWarningsGiven.add(identifier);
-    Terminal.warn(`Accessed deprecated function or property: ${identifier}`);
-    Terminal.warn(`This is no longer supported usage and will be removed in a later version.`);
+    Terminal.warn(`访问了已弃用的函数或属性：${identifier}`);
+    Terminal.warn(`此用法已不再受支持，并将在之后的版本中被移除。`);
     Terminal.warn(message);
-    Terminal.info(`This message can also appear for object properties when the object's values are iterated.`);
-    Terminal.info(`This message will only be shown once per game session for each deprecated item accessed.`);
+    Terminal.info(`当遍历对象的值时，对象属性也可能出现此消息。`);
+    Terminal.info(`每个被访问的弃用项在本次游戏会话中只会显示一次此消息。`);
   }
 }

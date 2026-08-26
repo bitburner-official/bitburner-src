@@ -16,7 +16,7 @@ import { getCoreBonus } from "../Server/ServerHelpers";
 export function NetscriptStanek(): InternalAPI<IStanek> {
   function checkStanekAPIAccess(ctx: NetscriptContext): void {
     if (!Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
-      throw helpers.errorMessage(ctx, "Stanek's Gift is not installed");
+      throw helpers.errorMessage(ctx, "Stanek 的礼物尚未安装");
     }
   }
 
@@ -36,11 +36,11 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       checkStanekAPIAccess(ctx);
       const fragment = staneksGift.findFragment(rootX, rootY);
       //Check whether the selected fragment can ge charged
-      if (!fragment) throw helpers.errorMessage(ctx, `No fragment with root (${rootX}, ${rootY}).`);
+      if (!fragment) throw helpers.errorMessage(ctx, `根坐标 (${rootX}, ${rootY}) 处没有片段。`);
       if (fragment.fragment().type == FragmentTypeEnum.Booster) {
         throw helpers.errorMessage(
           ctx,
-          `The fragment with root (${rootX}, ${rootY}) is a Booster Fragment and thus cannot be charged.`,
+          `根坐标 (${rootX}, ${rootY}) 处的片段是增幅片段，无法充能。`,
         );
       }
       //Charge the fragment
@@ -51,18 +51,18 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       if (inBonus) staneksGift.isBonusCharging = true;
       return helpers.netscriptDelay(ctx, time).then(function () {
         staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads * coreBonus);
-        helpers.log(ctx, () => `Charged fragment with ${ctx.workerScript.scriptRef.threads} threads.`);
+        helpers.log(ctx, () => `已用 ${ctx.workerScript.scriptRef.threads} 个线程为片段充能。`);
         return Promise.resolve();
       });
     },
     fragmentDefinitions: (ctx) => {
       checkStanekAPIAccess(ctx);
-      helpers.log(ctx, () => `Returned ${Fragments.length} fragments`);
+      helpers.log(ctx, () => `返回了 ${Fragments.length} 个片段`);
       return Fragments.map((f) => f.copy());
     },
     activeFragments: (ctx) => {
       checkStanekAPIAccess(ctx);
-      helpers.log(ctx, () => `Returned ${staneksGift.fragments.length} fragments`);
+      helpers.log(ctx, () => `返回了 ${staneksGift.fragments.length} 个片段`);
       return staneksGift.fragments.map((activeFragment) => {
         return {
           ...activeFragment.copy(),
@@ -73,7 +73,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     },
     clearGift: (ctx) => {
       checkStanekAPIAccess(ctx);
-      helpers.log(ctx, () => `Cleared Stanek's Gift.`);
+      helpers.log(ctx, () => `已清空 Stanek 的礼物。`);
       staneksGift.clear();
     },
     canPlaceFragment: (ctx, _rootX, _rootY, _rotation, _fragmentId) => {
@@ -83,7 +83,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       const fragmentId = helpers.number(ctx, "fragmentId", _fragmentId);
       checkStanekAPIAccess(ctx);
       const fragment = FragmentById(fragmentId);
-      if (!fragment) throw helpers.errorMessage(ctx, `Invalid fragment id: ${fragmentId}`);
+      if (!fragment) throw helpers.errorMessage(ctx, `无效的片段 id：${fragmentId}`);
       const can = staneksGift.canPlace(rootX, rootY, rotation, fragment);
       return can;
     },
@@ -94,7 +94,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       const fragmentId = helpers.number(ctx, "fragmentId", _fragmentId);
       checkStanekAPIAccess(ctx);
       const fragment = FragmentById(fragmentId);
-      if (!fragment) throw helpers.errorMessage(ctx, `Invalid fragment id: ${fragmentId}`);
+      if (!fragment) throw helpers.errorMessage(ctx, `无效的片段 id：${fragmentId}`);
       return staneksGift.place(rootX, rootY, rotation, fragment);
     },
     getFragment: (ctx, _rootX, _rootY) => {
@@ -121,7 +121,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       const cotmgFaction = Factions[FactionName.ChurchOfTheMachineGod];
       // Return early if the player is already a member
       if (cotmgFaction.isMember && Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
-        helpers.log(ctx, () => `You are already a member of ${FactionName.ChurchOfTheMachineGod}.`);
+        helpers.log(ctx, () => `你已经是 ${FactionName.ChurchOfTheMachineGod} 的成员了。`);
         return true;
       }
       // Check if the player is eligible to join the church
@@ -134,7 +134,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
         helpers.log(
           ctx,
           () =>
-            `You joined '${FactionName.ChurchOfTheMachineGod}' and have '${AugmentationName.StaneksGift1}' installed.`,
+            `你加入了 '${FactionName.ChurchOfTheMachineGod}'，并安装了 '${AugmentationName.StaneksGift1}'。`,
         );
       } else {
         helpers.log(ctx, () => checkResult.message);

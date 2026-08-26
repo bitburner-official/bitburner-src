@@ -13,7 +13,7 @@ export function GeneralActionPage({ bladeburner }: GeneralActionPageProps): Reac
   const actions = Object.values(GeneralActions);
   return (
     <>
-      <Typography>These are generic actions that will assist you in your Bladeburner duties.</Typography>
+      <Typography>这些是协助你履行Bladeburner职责的通用行动。</Typography>
       {actions.map((action) => (
         <GeneralActionElem key={action.name} bladeburner={bladeburner} action={action} />
       ))}

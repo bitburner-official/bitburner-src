@@ -15,7 +15,7 @@ export function ArcadeRoot(): React.ReactElement {
 
   function mbBurner2000(): void {
     if (Player.activeSourceFileLvl(1) === 0) {
-      AlertEvents.emit("This machine is broken.");
+      AlertEvents.emit("这台机器坏了。");
     } else {
       setPage(Page.Megabyteburner2000);
     }
@@ -24,7 +24,7 @@ export function ArcadeRoot(): React.ReactElement {
   if (page === Page.None) {
     return (
       <>
-        <Button onClick={mbBurner2000}>Megabyte burner 2000</Button>
+        <Button onClick={mbBurner2000}>Megabyte 燃烧机 2000</Button>
       </>
     );
   }
@@ -35,7 +35,7 @@ export function ArcadeRoot(): React.ReactElement {
   }
   return (
     <>
-      <Button onClick={() => setPage(Page.None)}>Back</Button>
+      <Button onClick={() => setPage(Page.None)}>返回</Button>
       {currentGame}
     </>
   );

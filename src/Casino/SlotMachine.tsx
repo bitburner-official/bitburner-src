@@ -143,7 +143,7 @@ export function SlotMachine(): React.ReactElement {
   const [locks, setLocks] = useState<number[]>([0, 0, 0, 0, 0]);
   const [investment, setInvestment] = useState(initialBet);
   const [canPlay, setCanPlay] = useState(true);
-  const [status, setStatus] = useState<string | JSX.Element>("waiting");
+  const [status, setStatus] = useState<string | JSX.Element>("等待中");
 
   useEffect(() => {
     const i = window.setInterval(step, 50);
@@ -190,7 +190,7 @@ export function SlotMachine(): React.ReactElement {
     if (reachedLimit() || !hasEnoughMoney(investment)) {
       return;
     }
-    setStatus("playing");
+    setStatus("旋转中");
     win(-investment);
     if (!canPlay) return;
     unlock();
@@ -238,7 +238,7 @@ export function SlotMachine(): React.ReactElement {
 
     setStatus(
       <>
-        {gains > 0 ? "gained" : "lost"} <Money money={Math.abs(gains)} />
+        {gains > 0 ? "赢得" : "输掉"} <Money money={Math.abs(gains)} />
       </>,
     );
     setCanPlay(true);
@@ -270,12 +270,12 @@ export function SlotMachine(): React.ReactElement {
         />
         <div>
           <Button onClick={trusted(play)} disabled={!canPlay}>
-            Spin!
+            旋转！
           </Button>
         </div>
 
         <Typography variant="h4">{status}</Typography>
-        <Typography>Pay lines</Typography>
+        <Typography>赔付线</Typography>
 
 <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>-----   ·····   ·····</Typography>
 <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·····   -----   ·····</Typography>

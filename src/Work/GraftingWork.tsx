@@ -66,18 +66,18 @@ export class GraftingWork extends PlayerBaseWork {
       if (!this.singularity) {
         dialogBoxCreate(
           <>
-            You've finished grafting {augName}.<br />
-            The augmentation has been applied to your body
-            {Player.hasAugmentation(AugmentationName.CongruityImplant, true) ? "." : ", but you feel a bit off."}
+            你已完成 {augName} 的移植。<br />
+            该强化已被应用到你的身体
+            {Player.hasAugmentation(AugmentationName.CongruityImplant, true) ? "。" : "，但你感觉有些不对劲。"}
           </>,
         );
       }
     } else if (cancelled && !this.singularity) {
       dialogBoxCreate(
         <>
-          You cancelled the grafting of {augName}.
+          你取消了 {augName} 的移植。
           <br />
-          Your money was not returned to you.
+          你的资金不会被退还。
         </>,
       );
     }

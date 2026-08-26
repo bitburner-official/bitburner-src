@@ -91,11 +91,11 @@ async function uploadAsync(destination: Directory, destForPrint: string, server:
   const overwrite = withPath.filter((item) => "overwrite" in item);
   const skipped = withPath.filter((item) => "badPath" in item);
   const create = withPath.filter((item) => "create" in item);
-  const lines = [`Upload files to ${destForPrint}?`];
+  const lines = [`将文件上传到 ${destForPrint}？`];
   if (overwrite.length !== 0) {
     lines.push(
       "",
-      `${pluralize(overwrite.length, "file")} will be overwritten:`,
+      `${pluralize(overwrite.length, "个文件", "个文件")}将被覆盖：`,
       ...overwrite.map(({ overwrite }) => overwrite),
     );
   }
@@ -103,18 +103,18 @@ async function uploadAsync(destination: Directory, destForPrint: string, server:
     const extensions = [...validScriptExtensions, ...validTextExtensions];
     lines.push(
       "",
-      `Characters ${invalidCharacters
+      `文件路径中不允许使用字符 ${invalidCharacters
         .filter((v) => v !== "/")
-        .join(" ")} and whitespace are not allowed in file paths.`,
-      `Only file extensions ${extensions.join(", ")} are allowed.`,
-      "A file name must have at least one character before the extension.",
+        .join(" ")} 和空白字符。`,
+      `只允许以下文件扩展名：${extensions.join(", ")}。`,
+      "文件名在扩展名之前必须至少有一个字符。",
       "",
-      `${pluralize(skipped.length, "file")} will be skipped due to prohibited file paths:`,
+      `${pluralize(skipped.length, "个文件", "个文件")}因文件路径不合规而被跳过：`,
       ...skipped.map(({ badPath }) => badPath),
     );
   }
   if (create.length !== 0) {
-    lines.push("", `${pluralize(create.length, "new file")} will be created:`, ...create.map(({ create }) => create));
+    lines.push("", `将创建 ${pluralize(create.length, "个新文件", "个新文件")}：`, ...create.map(({ create }) => create));
   }
   if (!(await askConfirm(lines.join("\n")))) {
     return;
@@ -126,27 +126,27 @@ async function uploadAsync(destination: Directory, destForPrint: string, server:
       text = await item.file.text();
     } catch (error) {
       console.error(error);
-      Terminal.error(`Failed to upload ${destFilePath}. Error: ${error}`);
+      Terminal.error(`上传 ${destFilePath} 失败。错误：${error}`);
       continue;
     }
     server.writeToContentFile(destFilePath, text);
   }
-  Terminal.print(`Successfully uploaded files to ${destForPrint}`);
+  Terminal.print(`已成功将文件上传到 ${destForPrint}`);
 }
 
 export function upload(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
+    return Terminal.error("upload 命令用法不正确。用法：upload [dir]");
   }
   const destinationInput = String(args[0]);
   const destination = Terminal.getDirectory(destinationInput);
   if (destination === null) {
-    return Terminal.error(`Could not resolve ${destinationInput} as a Directory`);
+    return Terminal.error(`无法将 ${destinationInput} 解析为目录`);
   }
   const destForPrint = destination === "" ? "/" : destination;
   return {
     cancel: () => {}, // Upload ignores cancellation
     finished: uploadAsync(destination, destForPrint, server),
-    getProgressText: () => `Uploading files to ${destForPrint}`,
+    getProgressText: () => `正在将文件上传到 ${destForPrint}`,
   };
 }

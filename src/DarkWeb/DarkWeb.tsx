@@ -15,10 +15,10 @@ export function checkIfConnectedToDarkweb(): void {
   const server = Player.getCurrentServer();
   if (server !== null && SpecialServers.DarkWeb == server.hostname) {
     Terminal.print(
-      "You are now connected to the dark web. From the dark web you can purchase illegal items. " +
-        "Use the 'buy -l' command to display a list of all the items you can buy. Use 'buy [item-name]' " +
-        "to purchase an item. Use 'buy -a' to purchase all unowned items. You can use the 'buy' command anywhere, " +
-        "not only when connecting to the 'darkweb' server.",
+      "你已连接到暗网。在暗网上你可以购买非法物品。" +
+        "使用 'buy -l' 命令显示所有可购买物品的列表。使用 'buy [物品名]' " +
+        "购买物品。使用 'buy -a' 购买所有尚未拥有的物品。你可以在任何地方使用 'buy' 命令，" +
+        "而不仅是在连接到 'darkweb' 服务器时。",
     );
   }
 }
@@ -56,19 +56,19 @@ export function buyDarkwebItem(itemName: string): void {
 
   // return if invalid
   if (item === null) {
-    Terminal.error("Unrecognized item: " + itemName);
+    Terminal.error("无法识别的物品：" + itemName);
     return;
   }
 
   // return if the player already has it.
   if (Player.hasProgram(item.program)) {
-    Terminal.print("You already have the " + item.program + " program");
+    Terminal.print("你已经拥有 " + item.program + " 程序");
     return;
   }
 
   // return if the player doesn't have enough money
   if (Player.money < item.price) {
-    Terminal.error("Not enough money to purchase " + item.program);
+    Terminal.error("资金不足，无法购买 " + item.program);
     return;
   }
 
@@ -82,7 +82,7 @@ export function buyDarkwebItem(itemName: string): void {
   }
 
   Terminal.print(
-    "You have purchased the " + item.program + " program. The new program can be found on your home computer.",
+    "你已购买 " + item.program + " 程序。新程序可以在你的家用电脑上找到。",
   );
 
   if (item.program === CompletedProgramName.darkscape) {
@@ -98,7 +98,7 @@ export function buyAllDarkwebItems(): void {
     if (!Player.hasProgram(item.program)) {
       itemsToBuy.push(item);
       if (item.price > Player.money) {
-        Terminal.error("Need " + formatMoney(item.price - Player.money) + " more to purchase " + item.program);
+        Terminal.error("购买 " + item.program + " 还需要 " + formatMoney(item.price - Player.money));
         return;
       } else {
         buyDarkwebItem(item.program);
@@ -107,12 +107,12 @@ export function buyAllDarkwebItems(): void {
   }
 
   if (itemsToBuy.length === 0) {
-    Terminal.print("All available programs have been purchased already.");
+    Terminal.print("所有可购买的程序都已经购买过了。");
     return;
   }
 
   if (itemsToBuy.length > 0) {
-    Terminal.print("All programs have been purchased.");
+    Terminal.print("所有程序均已购买。");
     return;
   }
 }

@@ -9,10 +9,10 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Investigation]: new Operation({
       name: BladeburnerOperationName.Investigation,
       desc:
-        "As a field agent, investigate and identify Synthoid populations, movements, and operations.\n" +
-        "Successful Investigation ops will increase the accuracy of your Synthoid data.\n" +
-        "You will NOT lose HP from failed Investigation ops.",
-      successScaling: "Significantly affected by Hacking skill and Charisma. Minor bonus from combat stats.",
+        "作为外勤特工，调查并确认合成人的数量、动向与行动。\n" +
+        "成功完成调查行动将提高合成人数据的准确度。\n" +
+        "调查行动失败不会损失生命值。",
+      successScaling: "显著受黑客技能和魅力影响，战斗属性提供少量加成。",
       baseDifficulty: 400,
       difficultyFac: 1.03,
       rewardFac: 1.07,
@@ -43,10 +43,9 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Undercover]: new Operation({
       name: BladeburnerOperationName.Undercover,
       desc:
-        "Conduct undercover operations to identify hidden and underground Synthoid communities and organizations.\n" +
-        "Successful Undercover ops will increase the accuracy of your Synthoid data.",
-      successScaling:
-        "Affected by Hacking skill, Dexterity, Agility and Charisma. Minor bonus from Defense and Strength.",
+        "执行卧底行动，查明隐匿的地下合成人社区与组织。\n" +
+        "成功完成卧底行动将提高合成人数据的准确度。",
+      successScaling: "受黑客技能、灵巧、敏捷和魅力影响，防御和力量提供少量加成。",
       baseDifficulty: 500,
       difficultyFac: 1.04,
       rewardFac: 1.09,
@@ -78,11 +77,10 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Sting]: new Operation({
       name: BladeburnerOperationName.Sting,
       desc:
-        "Conduct a sting operation to bait and capture particularly notorious Synthoid criminals.\n" +
-        "Completing this operation will increase the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
-      warning: "This action decreases population by percentage.",
-      successScaling:
-        "Significantly affected by Hacking skill and Dexterity. Major bonus from Charisma. Minor bonus from combat stats.",
+        "执行诱捕行动，引诱并抓捕恶名昭彰的合成人罪犯。\n" +
+        "完成该行动将提升当前城市的混乱度。若成功完成，还会降低当前城市的合成人数量。",
+      warning: "该行动会按百分比减少人口。",
+      successScaling: "显著受黑客技能和灵巧影响，魅力提供大量加成，战斗属性提供少量加成。",
       baseDifficulty: 650,
       difficultyFac: 1.04,
       rewardFac: 1.095,
@@ -113,11 +111,10 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Raid]: new Operation({
       name: BladeburnerOperationName.Raid,
       desc:
-        "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
-        "current city in order for this Operation to be successful.\n" +
-        "Completing this operation will decrease the Synthoid population of your current city and increase its chaos level.",
-      warning: "This action decreases population and increases chaos by percentage.",
-      successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
+        "率领突袭，攻击已知的合成人社区。注意：当前城市中必须存在合成人社区，该行动才可能成功。\n" +
+        "完成该行动将降低当前城市的合成人数量，并提升其混乱度。",
+      warning: "该行动会按百分比减少人口并增加混乱度。",
+      successScaling: "受战斗属性影响，黑客技能提供少量加成，不受魅力影响。",
       baseDifficulty: 800,
       difficultyFac: 1.045,
       rewardFac: 1.1,
@@ -145,19 +142,18 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       isKill: true,
       growthFunction: () => getRandomIntInclusive(2, 40) / 10,
       getAvailability: function (bladeburner) {
-        if (bladeburner.getCurrentCity().comms < 1) return { error: "No Synthoid communities in current city" };
+        if (bladeburner.getCurrentCity().comms < 1) return { error: "当前城市没有合成人社区" };
         return LevelableActionClass.prototype.getAvailability.call(this, bladeburner);
       },
     }),
     [BladeburnerOperationName.StealthRetirement]: new Operation({
       name: BladeburnerOperationName.StealthRetirement,
       desc:
-        "Lead a covert operation to retire Synthoids. The objective is to complete the task without drawing any " +
-        "attention. Stealth and discretion are key.\n" +
-        "Completing this operation will DECREASE the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
-      warning: "This action decreases population by percentage.",
+        "领导一次秘密行动来清除合成人。目标是在不引起任何注意的情况下完成任务，隐蔽与谨慎是关键。\n" +
+        "完成该行动将降低当前城市的混乱度。若成功完成，还会降低当前城市的合成人数量。",
+      warning: "该行动会按百分比减少人口。",
       successScaling:
-        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. Unaffected by Charisma.",
+        "显著受灵巧和敏捷影响，战斗属性和黑客技能提供少量加成，不受魅力影响。",
       baseDifficulty: 1000,
       difficultyFac: 1.05,
       rewardFac: 1.11,
@@ -189,13 +185,12 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Assassination]: new Operation({
       name: BladeburnerOperationName.Assassination,
       desc:
-        "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
-        "Synthoid communities.\n" +
-        "Completing this operation may increase the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
-      warning: "This action may increase chaos by percentage.",
+        "暗杀已被确认为合成人社区中重要且知名的社会与政治领袖的合成人。\n" +
+        "完成该行动可能会提升当前城市的混乱度。若成功完成，还会降低当前城市的合成人数量。",
+      warning: "该行动可能按百分比增加混乱度。",
       successScaling:
-        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill.\n" +
-        "Unaffected by Charisma.",
+        "显著受灵巧和敏捷影响，战斗属性和黑客技能提供少量加成。\n" +
+        "不受魅力影响。",
       baseDifficulty: 1500,
       difficultyFac: 1.06,
       rewardFac: 1.14,

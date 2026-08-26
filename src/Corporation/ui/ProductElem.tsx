@@ -43,18 +43,18 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     if (typeof desiredSellAmount === "string") {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(cityData.actualSellAmount)}/{desiredSellAmount})
+          出售（{formatBigNumber(cityData.actualSellAmount)}/{desiredSellAmount}）
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(cityData.actualSellAmount)}/{formatBigNumber(desiredSellAmount)})
+          出售（{formatBigNumber(cityData.actualSellAmount)}/{formatBigNumber(desiredSellAmount)}）
         </>
       );
     }
   } else {
-    sellButtonText = <>Sell (0.000/0.000)</>;
+    sellButtonText = <>出售（0.000/0.000）</>;
   }
 
   sellButtonText = (
@@ -65,18 +65,18 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   // Limit Production button
   const productionLimit = cityData.productionLimit;
   const limitProductionButtonText =
-    "Limit Production" + (productionLimit !== null ? " (" + formatBigNumber(productionLimit) + ")" : "");
+    "限制产量" + (productionLimit !== null ? " (" + formatBigNumber(productionLimit) + ")" : "");
 
   return (
     <Paper>
       {!product.finished ? (
         <>
           <Typography>
-            Designing {product.name} (req. Operations/Engineers in {product.creationCity})...
+            正在设计 {product.name}（需要 {product.creationCity} 的运营/工程员工）……
           </Typography>
           <br />
-          <Typography>{formatPercent(product.developmentProgress / 100, 2)} complete</Typography>
-          <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
+          <Typography>已完成 {formatPercent(product.developmentProgress / 100, 2)}</Typography>
+          <Button onClick={() => setCancelOpen(true)}>取消</Button>
           <CancelProductModal
             product={product}
             rerender={props.rerender}
@@ -91,8 +91,8 @@ export function ProductElem(props: IProductProps): React.ReactElement {
               title={
                 <StatsTable
                   rows={[
-                    ["Prod:", formatBigNumber(cityData.productionAmount)],
-                    ["Sell:", formatBigNumber(-cityData.actualSellAmount || 0)],
+                    ["生产：", formatBigNumber(cityData.productionAmount)],
+                    ["出售：", formatBigNumber(-cityData.actualSellAmount || 0)],
                   ]}
                 />
               }
@@ -107,36 +107,36 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Effective rating is calculated from product rating and the quality of materials used <br />
-                  Rating: {formatBigNumber(product.rating)} <br /> <br />
-                  Quality: {formatBigNumber(product.stats.quality)} <br />
-                  Performance: {formatBigNumber(product.stats.performance)} <br />
-                  Durability: {formatBigNumber(product.stats.durability)} <br />
-                  Reliability: {formatBigNumber(product.stats.reliability)} <br />
-                  Aesthetics: {formatBigNumber(product.stats.aesthetics)} <br />
-                  Features: {formatBigNumber(product.stats.features)}
+                  有效评级由产品评级与所用材料的质量计算得出 <br />
+                  评级：{formatBigNumber(product.rating)} <br /> <br />
+                  质量：{formatBigNumber(product.stats.quality)} <br />
+                  性能：{formatBigNumber(product.stats.performance)} <br />
+                  耐久度：{formatBigNumber(product.stats.durability)} <br />
+                  可靠性：{formatBigNumber(product.stats.reliability)} <br />
+                  美观度：{formatBigNumber(product.stats.aesthetics)} <br />
+                  功能性：{formatBigNumber(product.stats.features)}
                   {corp.unlocks.has(CorpUnlockName.MarketResearchDemand) && (
                     <>
                       <br />
-                      {"Demand: " + formatBigNumber(product.demand)}
+                      {"需求：" + formatBigNumber(product.demand)}
                     </>
                   )}
                   {corp.unlocks.has(CorpUnlockName.MarketDataCompetition) && (
                     <>
                       <br />
-                      {"Competition: " + formatBigNumber(product.competition)}
+                      {"竞争：" + formatBigNumber(product.competition)}
                     </>
                   )}
                 </Typography>
               }
             >
-              <Typography>Effective rating: {formatBigNumber(cityData.effectiveRating)}</Typography>
+              <Typography>有效评级：{formatBigNumber(cityData.effectiveRating)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">
-            <Tooltip title={<Typography>An estimate of the material cost it takes to create this Product.</Typography>}>
+            <Tooltip title={<Typography>制造该产品所需材料成本的估计值。</Typography>}>
               <Typography>
-                Est. Production Cost: <Money money={cityData.productionCost / corpConstants.baseProductProfitMult} />
+                预计生产成本：<Money money={cityData.productionCost / corpConstants.baseProductProfitMult} />
               </Typography>
             </Tooltip>
           </Box>
@@ -144,17 +144,16 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  An estimate of how much consumers are willing to pay for this product. Setting the sale price above
-                  this may result in less sales. Setting the sale price below this may result in more sales.
+                  消费者愿意为该产品支付价格的估计值。售价高于此值可能导致销量下降；售价低于此值可能带来更多销量。
                 </Typography>
               }
             >
               <Typography>
-                Est. Market Price: <Money money={cityData.productionCost} />
+                预计市场价格：<Money money={cityData.productionCost} />
               </Typography>
             </Tooltip>
           </Box>
-          <Button onClick={() => setDiscontinueOpen(true)}>Discontinue</Button>
+          <Button onClick={() => setDiscontinueOpen(true)}>停产</Button>
           <DiscontinueProductModal
             product={product}
             rerender={props.rerender}

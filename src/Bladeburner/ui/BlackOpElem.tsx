@@ -25,7 +25,7 @@ export function BlackOpElem({ bladeburner, action }: BlackOpElemProps): React.Re
       <Paper sx={{ my: 1, p: 1 }}>
         <Tooltip title={action.desc}>
           <Typography>
-            {action.name} (COMPLETED) <Info sx={{ fontSize: "1.1em" }} />
+            {action.name}（已完成）<Info sx={{ fontSize: "1.1em" }} />
           </Typography>
         </Tooltip>
       </Paper>
@@ -42,13 +42,13 @@ export function BlackOpElem({ bladeburner, action }: BlackOpElemProps): React.Re
       <Typography whiteSpace={"pre-wrap"}>{action.desc}</Typography>
       <br />
       <Typography color={hasRequiredRank ? "primary" : "error"}>
-        Required Rank: {formatNumberNoSuffix(action.reqdRank, 0)}
+        所需声望：{formatNumberNoSuffix(action.reqdRank, 0)}
       </Typography>
       <br />
       <Typography>
         <SuccessChance action={action} bladeburner={bladeburner} />
         <br />
-        Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
+        所需时间：{convertTimeMsToTimeElapsedString(actionTime * 1000)}
       </Typography>
     </Paper>
   );

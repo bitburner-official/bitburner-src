@@ -20,7 +20,7 @@ export const resolvePage = (title: string): { pageName: string | null; pageConte
     pageContent = AllPages[title];
   }
   if (pageContent == null) {
-    const errorMessage = `Cannot find ${title} page.`;
+    const errorMessage = `无法找到页面 ${title}。`;
     console.error(errorMessage);
     return { pageName: null, pageContent: errorMessage };
   }
@@ -42,7 +42,7 @@ export function convertMathNotation(value: string): string {
   // easier without fighting with the TS compiler.
   const output = (MathNotationOutput as Record<string, string>)[value];
   if (output == null) {
-    throw new Error(`Unknown math notation: ${value}`);
+    throw new Error(`未知的数学记号：${value}`);
   }
   return output;
 }

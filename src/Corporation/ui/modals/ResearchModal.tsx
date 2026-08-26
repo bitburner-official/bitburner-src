@@ -45,7 +45,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
     }
 
     dialogBoxCreate(
-      `Researched ${n.researchName}. It may take a market cycle (~${corpConstants.secondsPerMarketCycle} seconds) before the effects of the Research apply.`,
+      `已完成研究 ${n.researchName}。研究结果可能需要一个市场周期（约${corpConstants.secondsPerMarketCycle}秒）才会生效。`,
     );
   }
 
@@ -59,7 +59,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            Research points: {r.cost}
+            研究点数：{r.cost}
             <br />
             {r.description}
           </Typography>
@@ -144,21 +144,21 @@ export function ResearchModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Upgrade division={props.industry} n={researchTree.root} />
       <Typography component="div" sx={{ mt: 1 }}>
-        Research points: {props.industry.researchPoints.toFixed(3)}
+        研究点数：{props.industry.researchPoints.toFixed(3)}
         <br />
-        Multipliers from research:
+        来自研究的倍率：
         <StatsTable
           rows={[
-            ["Advertising Multiplier:", formatCorpMultiplier(researchTree.getAdvertisingMultiplier())],
-            ["Employee Charisma Multiplier:", formatCorpMultiplier(researchTree.getEmployeeChaMultiplier())],
-            ["Employee Creativity Multiplier:", formatCorpMultiplier(researchTree.getEmployeeCreMultiplier())],
-            ["Employee Efficiency Multiplier:", formatCorpMultiplier(researchTree.getEmployeeEffMultiplier())],
-            ["Employee Intelligence Multiplier:", formatCorpMultiplier(researchTree.getEmployeeIntMultiplier())],
-            ["Production Multiplier:", formatCorpMultiplier(researchTree.getProductionMultiplier())],
-            ["Product Production Multiplier:", formatCorpMultiplier(researchTree.getProductProductionMultiplier())],
-            ["Sales Multiplier:", formatCorpMultiplier(researchTree.getSalesMultiplier())],
-            ["Scientific Research Multiplier:", formatCorpMultiplier(researchTree.getScientificResearchMultiplier())],
-            ["Storage Multiplier:", formatCorpMultiplier(researchTree.getStorageMultiplier())],
+            ["广告倍率：", formatCorpMultiplier(researchTree.getAdvertisingMultiplier())],
+            ["员工魅力倍率：", formatCorpMultiplier(researchTree.getEmployeeChaMultiplier())],
+            ["员工创造力倍率：", formatCorpMultiplier(researchTree.getEmployeeCreMultiplier())],
+            ["员工效率倍率：", formatCorpMultiplier(researchTree.getEmployeeEffMultiplier())],
+            ["员工智力倍率：", formatCorpMultiplier(researchTree.getEmployeeIntMultiplier())],
+            ["生产倍率：", formatCorpMultiplier(researchTree.getProductionMultiplier())],
+            ["产品生产倍率：", formatCorpMultiplier(researchTree.getProductProductionMultiplier())],
+            ["销售倍率：", formatCorpMultiplier(researchTree.getSalesMultiplier())],
+            ["科研倍率：", formatCorpMultiplier(researchTree.getScientificResearchMultiplier())],
+            ["仓储倍率：", formatCorpMultiplier(researchTree.getStorageMultiplier())],
           ]}
         />
       </Typography>

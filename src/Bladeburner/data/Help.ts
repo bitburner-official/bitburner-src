@@ -11,112 +11,107 @@ export const ConsoleHelpText: {
   stop: string[];
 } = {
   helpList: [
-    "Use 'help [command]' to get more information about a particular Bladeburner console command.",
+    "使用 'help [command]' 可查看某个Bladeburner控制台命令的更多信息。",
     " ",
-    "    automate [var] [val] [hi/low] Configure simple automation for Bladeburner tasks",
-    "    clear/cls                     Clear the console",
-    "    help [cmd]                    Display this help text, or help text for a specific command",
-    "    log [en/dis] [type]           Enable or disable logging for events and actions",
-    "    skill [action] [name]         Level or display info about your Bladeburner skills",
-    "    start [type] [name]           Start a Bladeburner action/task",
-    "    stop                          Stops your current Bladeburner action/task",
+    "    automate [var] [val] [hi/low] 为Bladeburner任务配置简单的自动化",
+    "    clear/cls                     清空控制台",
+    "    help [cmd]                    显示本帮助文本，或某个特定命令的帮助文本",
+    "    log [en/dis] [type]           启用或禁用事件与行动的日志记录",
+    "    skill [action] [name]         升级你的Bladeburner技能，或显示技能信息",
+    "    start [type] [name]           开始一个Bladeburner行动/任务",
+    "    stop                          停止当前Bladeburner行动/任务",
     " ",
   ],
   automate: [
-    "Usage: automate [var] [val] [hi/low]",
+    "用法：automate [var] [val] [hi/low]",
     " ",
-    "A simple way to automate your Bladeburner actions. This console command can be used " +
-      "to automatically start an action when your stamina rises above a certain threshold, and " +
-      "automatically switch to another action when your stamina drops below another threshold.",
+    "一种自动化Bladeburner行动的简单方式。该控制台命令可在你的体力高于某一阈值时自动开始某个行动，并在体力低于另一阈值时" +
+      "自动切换到另一个行动。",
     " ",
-    "    automate status - Check the current status of your automation and get a brief description of what it'll do",
-    "    automate en - Enable the automation feature",
-    "    automate dis - Disable the automation feature",
+    "    automate status - 查看自动化的当前状态及其行为简述",
+    "    automate en - 启用自动化功能",
+    "    automate dis - 禁用自动化功能",
     " ",
-    "There are four properties that must be set for this automation to work properly. Here is how to set them:",
+    "要让自动化正常工作，必须设置四个属性。设置方法如下：",
     " ",
     "    automate stamina 100 high",
     "    automate contract Tracking high",
     "    automate stamina 50 low",
     "    automate general 'Field Analysis' low",
     " ",
-    "Using the four console commands above will set the automation to perform Tracking contracts " +
-      "if your stamina is 100 or higher, and then switch to Field Analysis if your stamina drops below " +
-      "50. Note that when setting the action, the name of the action is CASE-SENSITIVE. It must " +
-      "exactly match whatever the name is in the UI.",
+    "使用上面四条控制台命令后，自动化将在体力达到100或更高时执行追踪（Tracking）合约，并在体力低于" +
+      "50时切换到现场分析（Field Analysis）。注意：设置行动时，行动名称区分大小写（CASE-SENSITIVE）。它必须" +
+      "与UI中的名称完全一致。",
     " ",
   ],
-  clear: ["Usage: clear", " ", "Clears the console", " "],
-  cls: ["Usage: cls", " ", "Clears the console", " "],
+  clear: ["用法：clear", " ", "清空控制台", " "],
+  cls: ["用法：cls", " ", "清空控制台", " "],
   help: [
-    "Usage: help [command]",
+    "用法：help [command]",
     " ",
-    "Running 'help' with no arguments displays the general help text, which lists all console commands " +
-      "and a brief description of what they do. A command can be specified to get more specific help text " +
-      "about that particular command. For example:",
+    "不带参数运行 'help' 会显示通用帮助文本，其中列出所有控制台命令" +
+      "及其简要说明。也可以指定某个命令来获取该命令的具体帮助文本。" +
+      "例如：",
     " ",
     "    help automate",
     " ",
-    "will display specific information about using the automate console command",
+    "将显示 automate 控制台命令的详细用法说明",
     " ",
   ],
   log: [
-    "Usage: log [en/dis] [type]",
+    "用法：log [en/dis] [type]",
     " ",
-    "Enable or disable logging. By default, the results of completing actions such as contracts/operations are logged " +
-      "in the console. There are also random events that are logged in the console as well. The five categories of " +
-      "things that get logged are:",
+    "启用或禁用日志记录。默认情况下，合约/行动等任务的完成结果会记录在控制台中。" +
+      "此外还有一些随机事件也会被记录。共有五类可记录的内容：",
     " ",
     "[general, contracts, ops, blackops, events]",
     " ",
-    "The logging for these categories can be enabled or disabled like so:",
+    "这些类别的日志可按如下方式启用或禁用：",
     " ",
-    "    log dis contracts - Disables logging that occurs when contracts are completed",
-    "    log en contracts - Enables logging that occurs when contracts are completed",
-    "    log dis events - Disables logging for Bladeburner random events",
+    "    log dis contracts - 禁用合约完成时的日志记录",
+    "    log en contracts - 启用合约完成时的日志记录",
+    "    log dis events - 禁用Bladeburner随机事件的日志记录",
     " ",
-    "Logging can be universally enabled/disabled using the 'all' keyword:",
+    "可以使用 'all' 关键字统一启用/禁用所有日志：",
     " ",
     "    log dis all",
     "    log en all",
     " ",
   ],
   skill: [
-    "Usage: skill [action] [name]",
+    "用法：skill [action] [name]",
     " ",
-    "Level or display information about your skills.",
+    "升级你的技能，或显示技能信息。",
     " ",
-    "To display information about all of your skills and your multipliers, use:",
+    "要显示所有技能及加成信息，请使用：",
     " ",
     "    skill list",
     " ",
-    "To display information about a specific skill, specify the name of the skill afterwards. " +
-      "Note that the name of the skill is case-sensitive. Enter it exactly as seen in the UI. If " +
-      "the name of the skill has whitespace, enclose the name of the skill in double quotation marks:",
+    "要显示某个具体技能的信息，请在后面附上技能名称。" +
+      "注意技能名称区分大小写，必须与UI中显示的完全一致。如果" +
+      "技能名称中含有空格，请用双引号将其括起来：",
     " ",
     "    skill list Reaper",
     "    skill list 'Digital Observer'",
     " ",
-    "This console command can also be used to level up skills:",
+    "该控制台命令也可用于升级技能：",
     " ",
     "    skill level [skill name]",
     " ",
   ],
   start: [
-    "Usage: start [type] [name]",
+    "用法：start [type] [name]",
     " ",
-    "Start an action. An action is specified by its type and its name. The " +
-      "name is case-sensitive. It must appear exactly as it does in the UI. If " +
-      "the name of the action has whitespace, enclose it in double quotation marks. " +
-      "Valid action types include:",
+    "开始一个行动。行动由其类型和名称指定。名称区分大小写，必须与UI中显示的完全一致。如果行动名称中含有空格，请用双引号将其括起来。" +
+      "有效的行动类型包括：",
     " ",
     "[general, contract, op, blackop]",
     " ",
-    "Examples:",
+    "示例：",
     " ",
     "    start contract Tracking",
     "    start op 'Undercover Operation'",
     " ",
   ],
-  stop: ["Usage: stop", " ", "Stop your current action and go idle.", " "],
+  stop: ["用法：stop", " ", "停止当前行动并进入空闲状态。", " "],
 };

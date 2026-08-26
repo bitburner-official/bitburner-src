@@ -57,7 +57,7 @@ export class CrimeWork extends PlayerBaseWork {
     const crime = this.getCrime();
     if (crime == null) {
       dialogBoxCreate(
-        `ERR: Unrecognized crime type (${this.crimeType}). This is probably a bug please contact the developer`,
+        `错误：未知的犯罪类型（${this.crimeType}）。这很可能是一个 bug，请联系开发者`,
       );
       return;
     }

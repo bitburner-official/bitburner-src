@@ -36,7 +36,7 @@ export class Port {
       try {
         value = structuredClone(data);
       } catch (ex) {
-        throw new Error("You can't send Functions, Promises, NS, or other unserializable data through ports!", {
+        throw new Error("无法通过端口发送函数、Promise、NS 或其他不可序列化的数据！", {
           cause: ex,
         });
       }

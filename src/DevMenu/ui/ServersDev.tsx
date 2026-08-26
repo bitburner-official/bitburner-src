@@ -103,14 +103,14 @@ export function ServersDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_ServersDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Servers</Typography>
+        <Typography>服务器</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Server:</Typography>
+                <Typography>服务器：</Typography>
               </td>
               <td colSpan={2}>
                 <Autocomplete
@@ -129,52 +129,52 @@ export function ServersDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Root:</Typography>
+                <Typography>提权：</Typography>
               </td>
               <td>
-                <Button onClick={rootServer}>Root one</Button>
+                <Button onClick={rootServer}>单个提权</Button>
               </td>
               <td>
-                <Button onClick={rootAllServers}>Root all</Button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Typography>Backdoor:</Typography>
-              </td>
-              <td>
-                <Button onClick={backdoorServer}>Backdoor one</Button>
-              </td>
-              <td>
-                <Button onClick={backdoorAllServers}>Backdoor all</Button>
+                <Button onClick={rootAllServers}>全部提权</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Typography>Security:</Typography>
+                <Typography>后门：</Typography>
               </td>
               <td>
-                <Button onClick={minSecurity}>Min one</Button>
+                <Button onClick={backdoorServer}>单个留后门</Button>
               </td>
               <td>
-                <Button onClick={minAllSecurity}>Min all</Button>
+                <Button onClick={backdoorAllServers}>全部留后门</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Typography>Money:</Typography>
+                <Typography>安全等级：</Typography>
               </td>
               <td>
-                <Button onClick={minMoney}>Min one</Button>
+                <Button onClick={minSecurity}>单个降至最低</Button>
               </td>
               <td>
-                <Button onClick={minAllMoney}>Min all</Button>
+                <Button onClick={minAllSecurity}>全部降至最低</Button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>资金：</Typography>
               </td>
               <td>
-                <Button onClick={maxMoney}>Max one</Button>
+                <Button onClick={minMoney}>单个设为 0</Button>
               </td>
               <td>
-                <Button onClick={maxAllMoney}>Max all</Button>
+                <Button onClick={minAllMoney}>全部设为 0</Button>
+              </td>
+              <td>
+                <Button onClick={maxMoney}>单个设为最高</Button>
+              </td>
+              <td>
+                <Button onClick={maxAllMoney}>全部设为最高</Button>
               </td>
             </tr>
           </tbody>

@@ -20,12 +20,11 @@ export function BonusTime(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            You gain bonus time while offline or when the game is inactive (e.g. when the tab is throttled by the
-            browser). Bonus time makes the Gang mechanic progress faster, up to 25x the normal speed.
+            当你离线或游戏处于非活动状态时（例如标签页被浏览器节流），你会获得奖励时间。奖励时间会让帮派机制的进程加快，最高可达正常速度的 25 倍。
           </Typography>
         }
       >
-        <Typography>Bonus time: {convertTimeMsToTimeElapsedString(bonusMillis)}</Typography>
+        <Typography>奖励时间： {convertTimeMsToTimeElapsedString(bonusMillis)}</Typography>
       </Tooltip>
     </Box>
   );

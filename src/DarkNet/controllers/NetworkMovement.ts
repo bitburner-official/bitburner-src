@@ -172,7 +172,7 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
   }
   const isLabyrinth = isLabyrinthServer(server.hostname);
   movePlayerIfNeeded(server);
-  killServerScripts(server, "Server shut down.");
+  killServerScripts(server, "服务器已关闭。");
   disconnectServer(server, true);
   if (DarknetState.Network[server.depth]?.[server.leftOffset]) {
     DarknetState.Network[server.depth][server.leftOffset] = null;
@@ -303,11 +303,11 @@ export const restartServer = (server: DarknetServer): void => {
   if (isImmutable(server)) {
     return;
   }
-  killServerScripts(server, "Server restarted.");
+  killServerScripts(server, "服务器已重启。");
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
   serverState.serverLogs.length = 0;
-  serverState.serverLogs.push({ pid: -1, message: "Server restarting, terminating scripts..." });
+  serverState.serverLogs.push({ pid: -1, message: "服务器正在重启，正在终止脚本……" });
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);
@@ -400,7 +400,7 @@ export const validateDarknetNetwork = (): void => {
 };
 
 export const freezeServer = (server: DarknetServer): void => {
-  killServerScripts(server, "Server was frozen.");
+  killServerScripts(server, "服务器已被冻结。");
   server.maxRam = 0;
   server.blockedRam = 0;
   // When blockedRam is non-zero, server.ramUsed is equal to blockedRam. When scripts are running, server.ramUsed is

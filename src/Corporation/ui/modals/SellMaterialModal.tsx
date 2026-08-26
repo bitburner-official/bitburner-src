@@ -47,38 +47,33 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter the maximum amount of {props.mat.name} you would like to sell per second, as well as the price at which
-        you would like to sell.
+        输入你每秒想要出售的 {props.mat.name} 最大数量，以及你想要的出售价格。
         <br />
         <br />
-        If the sell amount is set to 0, then the material will not be sold. If the sell price is set to 0, then the
-        material will be discarded.
+        如果出售数量设为0，则该材料不会被出售。如果出售价格设为0，则该材料会被丢弃。
         <br />
         <br />
-        Setting the sell amount to 'MAX' will result in you always selling the maximum possible amount of the material.
+        将出售数量设为'MAX'会让你始终以最大可能数量出售该材料。
         <br />
         <br />
-        When setting the sell amount, you can use the 'PROD' variable to designate a dynamically changing amount that
-        depends on your production. For example, if you set the sell amount to 'PROD-5' then you will always sell 5 less
-        of the material than you produce.
+        设置出售数量时，你可以使用'PROD'变量来指定一个随产量动态变化的数量。例如，如果你把出售数量设为'PROD-5'，那么你出售的数量将始终比你生产的少5。
         <br />
         <br />
-        When setting the sell price, you can use the 'MP' variable to designate a dynamically changing price that
-        depends on the market price. For example, if you set the sell price to 'MP+10' then it will always be sold at{" "}
-        {formatMoney(10)} above the market price.
+        设置出售价格时，你可以使用'MP'变量来指定一个随市场价格动态变化的价格。例如，如果你把出售价格设为'MP+10'，那么它将始终以{" "}
+        {formatMoney(10)} 的溢价（高于市场价）出售。
       </Typography>
       <br />
       <TextField
         value={amt}
         autoFocus={true}
         type="text"
-        placeholder="Sell amount"
+        placeholder="出售数量"
         onChange={onAmtChange}
         onKeyDown={onKeyDown}
       />
-      <TextField value={price} type="text" placeholder="Sell price" onChange={onPriceChange} onKeyDown={onKeyDown} />
+      <TextField value={price} type="text" placeholder="出售价格" onChange={onPriceChange} onKeyDown={onKeyDown} />
       <Button onClick={sellMaterial} style={{ marginLeft: ".5rem", marginRight: ".5rem" }}>
-        Confirm
+        确认
       </Button>
       {props.div.hasResearch("Market-TA.I") && (
         <FormControlLabel
@@ -90,9 +85,9 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  If this is enabled, then this Material will automatically be sold at market price + markup.
+                  启用后，这种材料将自动以市场价+加价幅度出售。
                   <br />
-                  This overrides player set pricing and gets overridden by an active TA2.
+                  这会覆盖玩家设置的价格，并且会被已启用的TA2覆盖。
                 </Typography>
               }
             >
@@ -110,10 +105,9 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  If this is enabled, then this Material will automatically be sold at the optimal price such that the
-                  amount sold matches the amount specified.
+                  启用后，这种材料将自动以最优价格出售，使售出的数量与指定的数量一致。
                   <br />
-                  This overrides player set pricing and TA1.
+                  这会覆盖玩家设置的价格和TA1。
                 </Typography>
               }
             >

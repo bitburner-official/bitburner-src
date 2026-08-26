@@ -118,7 +118,7 @@ export class CodingContract {
       } catch (error) {
         return {
           success: false,
-          message: `The answer is not in the right format for contract '${this.type}'. Reason: ${
+          message: `答案的格式不符合合约 '${this.type}' 的要求。原因：${
             error instanceof Error ? error.message : String(error)
           }`,
         };
@@ -128,7 +128,7 @@ export class CodingContract {
     if (!result) {
       return {
         success: false,
-        message: `The answer is not in the right format for contract '${this.type}'. Got: ${answer}`,
+        message: `答案的格式不符合合约 '${this.type}' 的要求。得到：${answer}`,
       };
     }
     return { success: true, answer };

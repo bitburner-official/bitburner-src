@@ -21,7 +21,7 @@ export function TeamSizeModal({ bladeburner, action, open, onClose }: TeamSizeMo
     // Prevent reloading page when submitting form
     event.preventDefault();
     if (!Number.isInteger(teamSize) || teamSize < 0) {
-      dialogBoxCreate("Invalid value entered for number of Team Members (must be a non-negative integer)");
+      dialogBoxCreate("输入的团队成员数量无效（必须为非负整数）");
       return;
     }
     action.teamCount = teamSize;
@@ -41,18 +41,17 @@ export function TeamSizeModal({ bladeburner, action, open, onClose }: TeamSizeMo
     <Modal open={open} onClose={onClose}>
       <form onSubmit={confirmTeamSize}>
         <Typography>
-          Enter the number of team members you want to take on this Op. If you don't have that many team members, then
-          all your team members will be used.
+          输入你想带上参加这次行动的团队成员数量。如果你的团队成员不足该数量，则所有团队成员都会参加。
           <br />
           <br />
-          Team members boost your success chance, but at a diminishing rate the more you bring along.
+          团队成员会提升你的成功几率，但带的人越多，提升幅度越小。
           <br />
           <br />
-          Note that some team members are likely to be lost on each operation, even if you're successful.
+          注意：每次行动都可能损失部分团队成员，即使行动成功也是如此。
         </Typography>
-        <TextField autoFocus type="number" placeholder="Team size" value={teamSize} onChange={onTeamSize} />
+        <TextField autoFocus type="number" placeholder="团队规模" value={teamSize} onChange={onTeamSize} />
         <Button sx={{ mx: 2 }} type={"submit"}>
-          Confirm
+          确认
         </Button>
       </form>
     </Modal>

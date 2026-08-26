@@ -37,7 +37,7 @@ export function MinesweeperGame({ stage }: IProps): React.ReactElement {
   return (
     <>
       <Paper sx={{ display: "grid", justifyItems: "center", pb: 1 }}>
-        <Typography variant="h4">{stage.memoryPhase ? "Remember all the mines!" : "Mark all the mines!"}</Typography>
+        <Typography variant="h4">{stage.memoryPhase ? "记住所有的地雷！" : "标记所有的地雷！"}</Typography>
         <Box
           sx={{
             display: "grid",

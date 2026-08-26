@@ -293,13 +293,13 @@ export function GameRoot(): React.ReactElement {
   }, [pageWithContext.page]);
 
   function softReset(): void {
-    dialogBoxCreate("Soft Reset!");
+    dialogBoxCreate("软重置！");
     installAugmentations(true);
     resetErrorBoundary();
     Router.toPage(Page.Terminal);
   }
 
-  let mainPage = <Typography>Cannot load</Typography>;
+  let mainPage = <Typography>无法加载</Typography>;
   let withSidebar = true;
   const hidePopups = Router.hidingMessages();
   let bypassGame = false;

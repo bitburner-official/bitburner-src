@@ -9,15 +9,15 @@ import { calculateHackingExpGain, calculateGrowTime } from "../../Hacking";
 import { processSingleServerGrowth } from "../../Server/ServerHelpers";
 
 export function grow(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
-  if (args.length !== 0) return Terminal.error("Incorrect usage of grow command. Usage: grow");
+  if (args.length !== 0) return Terminal.error("grow 命令用法不正确。用法：grow");
 
-  if (server.purchasedByPlayer) return Terminal.error("Cannot grow your own machines!");
-  if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
+  if (server.purchasedByPlayer) return Terminal.error("无法增长你自己的机器！");
+  if (!server.hasAdminRights) return Terminal.error("你没有这台机器的管理员权限！");
   // Grow does not require meeting the hacking level, but undefined requiredHackingSkill indicates the wrong type of server.
-  if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot grow this server.");
+  if (server.requiredHackingSkill === undefined) return Terminal.error("无法增长这台服务器。");
 
   if (server instanceof HacknetServer) {
-    Terminal.error("Cannot grow this kind of server");
+    Terminal.error("无法对此类服务器执行增长");
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -29,12 +29,12 @@ export function grow(args: (string | number | boolean)[], server: BaseServer): u
 
     Player.gainHackingExp(expGain);
     Terminal.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
+      `'${server.hostname}' 上的可用资金增长了 ${formatPercent(growth - 1, 6)}。获得 ${formatExp(
         expGain,
-      )} hacking exp.`,
+      )} 点黑客经验。`,
     );
     Terminal.print(
-      `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,
+      `'${server.hostname}' 的安全等级从 ${formatSecurity(oldSec)} 升至 ${formatSecurity(newSec)}`,
     );
   });
 }

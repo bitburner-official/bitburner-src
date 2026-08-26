@@ -15,7 +15,7 @@ export function runProgram(path: ProgramFilePath, args: (string | number | boole
   const programPresentOnServer = server.programs.find((name) => name.toLowerCase() === programLowered);
   if (!realProgramName || (!Player.hasProgram(realProgramName) && !programPresentOnServer)) {
     Terminal.error(
-      `No such (js, jsx, ts, tsx, script, cct, or exe) file! (Only finished programs that exist on your home computer or scripts on ${server.hostname} can be run)`,
+      `没有这样的（js、jsx、ts、tsx、脚本、cct 或 exe）文件！（只能运行家用电脑上已完成的程序，或 ${server.hostname} 上的脚本）`,
     );
     return;
   }

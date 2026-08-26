@@ -34,27 +34,26 @@ const NeuroFluxDisplay = (): React.ReactElement => {
   const openBloodDonation = () => {
     AlertEvents.emit(
       <>
-        <Typography variant="h5">Bitburner blood donation community program</Typography>
+        <Typography variant="h5">Bitburner 献血社区计划</Typography>
         <Typography>
-          The blood donation program is a continuous real life event started on 2022-04-01. To participate, simply go
-          donate blood, plasma, or platelets to a local organization and take a picture as proof (hide your personal
-          information). Then, send the proof to hydroflame on reddit or discord.
+          献血计划是一项始于 2022-04-01 的持续进行的现实活动。参与方式很简单：前往本地机构献血、血浆或血小板，并拍照作为证明（隐藏你的个人信息）。然后，把证明发送到
+          reddit 或 discord 上的 hydroflame。
         </Typography>
-        <Typography>Currently accumulated {CONSTANTS.Donations} donations.</Typography>
+        <Typography>目前已累计 {CONSTANTS.Donations} 次捐赠。</Typography>
       </>,
     );
   };
   return level > 0 ? (
     <Paper sx={{ p: 1 }}>
       <Typography variant="h5" color={Settings.theme.info}>
-        NeuroFlux Governor - Level {level}
+        NeuroFlux Governor - {level} 级
       </Typography>
       <Typography color={Settings.theme.info} whiteSpace={"pre-wrap"}>
         {Augmentations[AugmentationName.NeuroFluxGovernor].stats}
       </Typography>
       <Typography color={Settings.theme.info}>
-        The power of {AugmentationName.NeuroFluxGovernor} increases with blood donations from players in real life.
-        Learn more <Link onClick={openBloodDonation}>here</Link>
+        {AugmentationName.NeuroFluxGovernor} 的威力会随着玩家在现实中的献血而增强。在
+        <Link onClick={openBloodDonation}>这里</Link>了解更多
       </Typography>
     </Paper>
   ) : (
@@ -66,11 +65,11 @@ const EntropyDisplay = (): React.ReactElement => {
   return Player.entropy > 0 ? (
     <Paper sx={{ p: 1 }}>
       <Typography variant="h5" color={Settings.theme.error}>
-        Entropy Virus - Level {Player.entropy}
+        熵病毒 - {Player.entropy} 级
       </Typography>
       <Typography color={Settings.theme.error}>
-        <b>All multipliers decreased by:</b>{" "}
-        {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
+        <b>所有乘数降低：</b>{" "}
+        {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}%（乘法叠加）
       </Typography>
     </Paper>
   ) : (
@@ -93,7 +92,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
   }
 
   function exportBonusStr(): string {
-    if (canGetBonus()) return "(+1 favor to all factions)";
+    if (canGetBonus()) return "（所有派系好感 +1）";
     return "";
   }
 
@@ -107,34 +106,32 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-      <Typography variant="h4">Augmentations</Typography>
+      <Typography variant="h4">强化</Typography>
       <Box sx={{ mb: 1 }}>
         <Paper sx={{ p: 1 }}>
           <Typography variant="h5" color="primary" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
-            Purchased Augmentations
+            已购买的强化
             <Tooltip
               title={
                 <>
                   <Typography>
-                    Below is a list of all Augmentations you have purchased but not yet installed. Click the button
-                    below to install them.
+                    下面是你已购买但尚未安装的所有强化的列表。点击下方的按钮安装它们。
                   </Typography>
                   <Typography>
-                    WARNING: Installing your Augmentations resets most of your progress, including:
+                    警告：安装强化会重置你的大部分进度，包括：
                   </Typography>
                   <br />
-                  <Typography>- Stats/Skill levels and Experience</Typography>
-                  <Typography>- Money</Typography>
-                  <Typography>- Scripts on every computer but your home computer</Typography>
-                  <Typography>- Cloud servers</Typography>
+                  <Typography>- 属性/技能等级与经验</Typography>
+                  <Typography>- 资金</Typography>
+                  <Typography>- 除家用电脑外所有电脑上的脚本</Typography>
+                  <Typography>- 云服务器</Typography>
                   <Typography>- Hacknet</Typography>
-                  <Typography>- Faction/Company reputation</Typography>
-                  <Typography>- Stocks</Typography>
+                  <Typography>- 派系/公司声望</Typography>
+                  <Typography>- 股票</Typography>
                   <br />
                   <Typography>
-                    Installing Augmentations lets you start over with the perks and benefits granted by all of the
-                    Augmentations you have ever installed. Also, you will keep any scripts and RAM/Core upgrades on your
-                    home computer (but you will lose all programs besides NUKE.exe)
+                    安装强化让你可以重新开始，并保留你曾经安装过的所有强化所赋予的特权与好处。此外，你在家用电脑上的脚本和 RAM/核心升级都会保留（但除
+                    NUKE.exe 外的所有程序都会丢失）
                   </Typography>
                 </>
               }
@@ -148,36 +145,36 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
             onConfirm={props.installAugmentationsFn}
             confirmationText={
               <>
-                Installing will reset
+                安装将重置：
                 <br />
-                <br />- money
-                <br />- skill / experience
-                <br />- every server except home
-                <br />- factions and reputation
-                <br />- current work activity
-                <br />
-                <br />
-                You will keep:
-                <br />
-                <br />- All scripts on home
-                <br />- home ram and cores
+                <br />- 资金
+                <br />- 技能 / 经验
+                <br />- 除家用电脑外的所有服务器
+                <br />- 派系和声望
+                <br />- 当前工作活动
                 <br />
                 <br />
-                It is recommended to install several Augmentations at once.
+                你将保留：
+                <br />
+                <br />- 家用电脑上的所有脚本
+                <br />- 家用电脑的 RAM 和核心数
+                <br />
+                <br />
+                建议一次性安装多个强化。
               </>
             }
           />
           <Box sx={{ display: "grid", width: "100%", gridTemplateColumns: "1fr 1fr" }}>
-            <Tooltip title={<Typography>'I never asked for this'</Typography>}>
+            <Tooltip title={<Typography>'我从未要求过这些'</Typography>}>
               <span>
                 <Button sx={{ width: "100%" }} disabled={Player.queuedAugmentations.length === 0} onClick={doInstall}>
-                  Install Augmentations
+                  安装强化
                 </Button>
               </span>
             </Tooltip>
-            <Tooltip title={<Typography>It's always a good idea to backup/export your save!</Typography>}>
+            <Tooltip title={<Typography>备份/导出存档永远是个好主意！</Typography>}>
               <Button sx={{ width: "100%", color: Settings.theme.successlight }} onClick={doExport}>
-                Backup Save {exportBonusStr()}
+                备份存档 {exportBonusStr()}
               </Button>
             </Tooltip>
           </Box>
@@ -189,7 +186,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
           </Box>
         ) : (
           <Paper sx={{ p: 1 }}>
-            <Typography>No Augmentations have been purchased yet</Typography>
+            <Typography>尚未购买任何强化</Typography>
           </Paper>
         )}
       </Box>

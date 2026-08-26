@@ -28,9 +28,9 @@ export function GoPublicModal(props: IProps): React.ReactElement {
 
   const disabledText =
     shares >= corp.numShares
-      ? "Cannot issue this many shares"
+      ? "无法发行这么多股份"
       : shares !== 0 && !isPositiveInteger(shares)
-      ? "Must issue an non-negative integer number of shares"
+      ? "发行股份数必须是非负整数"
       : "";
 
   function goPublic(): void {
@@ -39,7 +39,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
       actions.goPublic(corp, shares);
       dialogBoxCreate(
         <Typography>
-          <b>{corp.name}</b> went public and earned <Money money={shares * initialSharePrice} /> in its IPO.
+          <b>{corp.name}</b> 已上市，并在首次公开发行（IPO）中获得了 <Money money={shares * initialSharePrice} />。
         </Typography>,
       );
       props.onClose();
@@ -57,12 +57,12 @@ export function GoPublicModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography component="div">
-        Enter the number of shares you would like to issue for your IPO.
+        输入你想要为首次公开发行（IPO）发行的股份数量。
         <ul>
-          <li>These shares will be publicly sold and you will no longer own them.</li>
-          <li>The IPO money will be deposited directly into your Corporation's funds.</li>
+          <li>这些股份将被公开出售，你将不再拥有它们。</li>
+          <li>IPO所得资金会直接存入企业的资金账户。</li>
         </ul>
-        You can issue some, but not all, of your {formatShares(corp.numShares)} shares.
+        你可以发行 {formatShares(corp.numShares)} 股中的一部分，但不能全部发行。
       </Typography>
       <br />
       <Box display="flex" alignItems="center">
@@ -70,11 +70,11 @@ export function GoPublicModal(props: IProps): React.ReactElement {
           defaultValue={shares || ""}
           onChange={setShares}
           autoFocus
-          placeholder="Shares to issue"
+          placeholder="要发行的股份数"
           onKeyDown={onKeyDown}
         />
         <ButtonWithTooltip disabledTooltip={disabledText} onClick={goPublic}>
-          Go Public
+          上市
         </ButtonWithTooltip>
       </Box>
       <br />
@@ -83,9 +83,9 @@ export function GoPublicModal(props: IProps): React.ReactElement {
           disabledText
         ) : (
           <>
-            Go public at <Money money={initialSharePrice} /> per share?
+            要以每股 <Money money={initialSharePrice} /> 的价格上市吗？
             <br />
-            <b>{corp.name}</b> will receive <Money money={initialSharePrice * (shares || 0)} />.
+            <b>{corp.name}</b> 将获得 <Money money={initialSharePrice * (shares || 0)} />。
           </>
         )}
       </Typography>

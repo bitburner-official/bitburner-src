@@ -27,9 +27,10 @@ export function HashUpgradeModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose} removeFocus={false}>
       <>
-        <Typography>Spend your hashes on a variety of different upgrades</Typography>
+        <Typography>将你的哈希用于各种不同的升级</Typography>
         <Typography>
-          Hashes: <Hashes hashes={Player.hashManager.hashes} />
+          哈希：
+          <Hashes hashes={Player.hashManager.hashes} />
         </Typography>
         {getRecordKeys(HashUpgrades).map((upgName) => {
           const upg = HashUpgrades[upgName];

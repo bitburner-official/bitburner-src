@@ -68,7 +68,7 @@ export function initDarkwebServer(): void {
   const data: DarknetServerOptions = {
     password: "",
     modelId: ModelIds.NoPassword,
-    staticPasswordHint: "There is no password",
+    staticPasswordHint: "没有密码",
     leftOffset: -1,
     depth: -1,
     difficulty: 0,
@@ -144,7 +144,7 @@ export const clearDarknet = () => {
 export const movePlayerIfNeeded = (server?: DarknetServer) => {
   const connectedServer = Player.getCurrentServer();
   if ((!server && connectedServer instanceof DarknetServer) || server?.hostname === connectedServer.hostname) {
-    Terminal.print(`Something seems to have happened to '${connectedServer.hostname}'...`);
+    Terminal.print(`'${connectedServer.hostname}' 似乎发生了什么……`);
     Terminal.connectToServer(SpecialServers.Home);
   }
 };
@@ -236,7 +236,7 @@ export const addLabyrinth = () => {
   const commonData: Omit<DarknetServerConstructorParams, "hostname" | "ip" | "password" | "requiredCharismaSkill"> = {
     maxRam: 128,
     modelId: ModelIds.labyrinth,
-    staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
+    staticPasswordHint: "你发现了一座黑暗而神秘的迷宫。你的脚步声在寂静中诡异回响。",
     passwordHintData: "",
     difficulty: 10,
     depth: -1,

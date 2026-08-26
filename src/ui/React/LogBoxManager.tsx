@@ -235,12 +235,12 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
       const baseScript = server.scripts.get(script.filename);
       if (!baseScript) {
         return dialogBoxCreate(
-          `Could not launch script. The script ${script.filename} no longer exists on the server ${server.hostname}.`,
+          `无法启动脚本。脚本 ${script.filename} 已不存在于服务器 ${server.hostname} 上。`,
         );
       }
       const ramUsage = baseScript.getRamUsage(server.scripts);
       if (!ramUsage) {
-        return dialogBoxCreate(`Could not calculate ram usage for ${script.filename} on ${server.hostname}.`);
+        return dialogBoxCreate(`无法计算 ${script.filename} 在 ${server.hostname} 上的 RAM 用量。`);
       }
       // Reset some things, because we're reusing the RunningScript instance
       script.ramUsage = ramUsage;
@@ -371,23 +371,23 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
 
               <span style={{ minWidth: "fit-content", height: `${minWindowSize[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
-                  <IconButton title="Re-run script" className={classes.titleButton} onClick={run} onTouchEnd={run}>
+                  <IconButton title="重新运行脚本" className={classes.titleButton} onClick={run} onTouchEnd={run}>
                     <PlayCircleIcon />
                   </IconButton>
                 ) : (
-                  <IconButton title="Stop script" className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
+                  <IconButton title="停止脚本" className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
                     <StopCircleIcon color="error" />
                   </IconButton>
                 )}
                 <IconButton
-                  title={propsRef.current.minimized ? "Expand" : "Minimize"}
+                  title={propsRef.current.minimized ? "展开" : "最小化"}
                   className={classes.titleButton}
                   onClick={minimize}
                   onTouchEnd={minimize}
                 >
                   {propsRef.current.minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                 </IconButton>
-                <IconButton title="Close window" className={classes.titleButton} onClick={onClose} onTouchEnd={onClose}>
+                <IconButton title="关闭窗口" className={classes.titleButton} onClick={onClose} onTouchEnd={onClose}>
                   <CloseIcon />
                 </IconButton>
               </span>

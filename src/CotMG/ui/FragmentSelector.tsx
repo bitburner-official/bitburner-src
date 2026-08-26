@@ -18,7 +18,7 @@ interface IOptionProps {
 
 function FragmentOption(props: IOptionProps): React.ReactElement {
   const left = props.fragment.limit - props.gift.count(props.fragment);
-  const remaining = props.fragment.limit !== Infinity ? <>{left} remaining</> : <></>;
+  const remaining = props.fragment.limit !== Infinity ? <>剩余 {left} 个</> : <></>;
   return (
     <Box display="flex">
       <Box sx={{ mx: 2 }}>
@@ -34,10 +34,10 @@ function FragmentOption(props: IOptionProps): React.ReactElement {
       </Box>
       <Typography>
         {props.fragment.type === FragmentTypeEnum.Booster
-          ? `${props.fragment.power}x adjacent fragment power`
+          ? `为相邻碎片提供 ${props.fragment.power}x 威力加成`
           : Effect(props.fragment.type)}
         <br />
-        power: {formatStaneksGiftPower(props.fragment.power)}
+        威力：{formatStaneksGiftPower(props.fragment.power)}
         <br />
         {remaining}
       </Typography>
@@ -80,10 +80,10 @@ export function FragmentSelector(props: IProps): React.ReactElement {
   return (
     <Select sx={{ width: "100%" }} onChange={onChange} value={value}>
       <MenuItem value="None">
-        <Typography>None</Typography>
+        <Typography>无</Typography>
       </MenuItem>
       <MenuItem value="Delete">
-        <Typography>Delete</Typography>
+        <Typography>删除</Typography>
       </MenuItem>
       {Fragments.map((fragment) => (
         <MenuItem key={fragment.id} value={fragment.id}>

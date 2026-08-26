@@ -57,16 +57,16 @@ export function SourceFilesElement(): React.ReactElement {
       level: Player.exploits.length,
       maxLevel: Object.keys(Exploit).length,
       activeLevel: Player.exploits.length,
-      name: "Source-File -1: Exploits in the BitNodes",
+      name: "源文件 -1：BitNode 中的漏洞利用",
       info: (
         <>
-          This Source-File can only be acquired with obscure knowledge of the game, Javascript, and the web ecosystem.
+          该源文件只能通过对游戏、Javascript 和 Web 生态的冷门知识来获取。
           <br />
           <br />
-          It increases all of the player's multipliers by 0.1%
+          它会将玩家的所有乘数提高 0.1%
           <br />
           <br />
-          You have found the following exploits:
+          你已发现以下漏洞利用：
           <ul>
             {Player.exploits.map((c) => (
               <li key={c}>
@@ -104,7 +104,7 @@ export function SourceFilesElement(): React.ReactElement {
   return (
     <Box sx={{ width: "100%", mt: 1 }}>
       <Paper sx={{ p: 1 }}>
-        <Typography variant="h5">Source Files</Typography>
+        <Typography variant="h5">源文件</Typography>
       </Paper>
       <Paper sx={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
         <Box>
@@ -123,16 +123,16 @@ export function SourceFilesElement(): React.ReactElement {
                   <ListItemText
                     disableTypography
                     primary={<Typography>{sourceFileData.name}</Typography>}
-                    secondary={
-                      <>
-                        <Typography>
-                          Level: {sourceFileData.level} / {sourceFileData.maxLevel}
-                        </Typography>
-                        {sourceFileData.activeLevel < sourceFileData.level && (
-                          <Typography>Active level: {sourceFileData.activeLevel}</Typography>
-                        )}
-                      </>
-                    }
+                     secondary={
+                       <>
+                         <Typography>
+                           等级：{sourceFileData.level} / {sourceFileData.maxLevel}
+                         </Typography>
+                         {sourceFileData.activeLevel < sourceFileData.level && (
+                           <Typography>生效等级：{sourceFileData.activeLevel}</Typography>
+                         )}
+                       </>
+                     }
                   />
                 </ListItemButton>
               );
@@ -145,11 +145,11 @@ export function SourceFilesElement(): React.ReactElement {
               {selectedSfData.name}
             </Typography>
             <Typography component="div" sx={{ maxHeight: 350, overflowY: "scroll" }}>
-              Level: {selectedSfData.level} / {selectedSfData.maxLevel}
+              等级：{selectedSfData.level} / {selectedSfData.maxLevel}
               <br />
               {selectedSfData.activeLevel < selectedSfData.level && (
                 <>
-                  Active level: {selectedSfData.activeLevel}
+                  生效等级：{selectedSfData.activeLevel}
                   <br />
                 </>
               )}

@@ -140,18 +140,18 @@ export class Skill {
     const actualCount = currentLevel + count - currentLevel;
     if (actualCount === 0) {
       return {
-        error: `Cannot upgrade ${this.name}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
+        error: `无法升级 ${this.name}：由于浮点数精度问题及指定的升级次数过小，该技能无法升级。`,
       };
     }
     if (!isPositiveInteger(actualCount)) {
-      return { error: `Invalid upgrade count ${actualCount}` };
+      return { error: `无效的升级次数 ${actualCount}` };
     }
     if (currentLevel + actualCount > this.maxLvl) {
-      return { error: `Upgraded level ${currentLevel + actualCount} exceeds max` };
+      return { error: `升级后的等级 ${currentLevel + actualCount} 超过上限` };
     }
     const cost = this.calculateCost(currentLevel, actualCount);
     if (cost > bladeburner.skillPoints) {
-      return { error: `Insufficient skill points for upgrade` };
+      return { error: `技能点不足，无法升级` };
     }
     return { available: true, actualCount, cost };
   }

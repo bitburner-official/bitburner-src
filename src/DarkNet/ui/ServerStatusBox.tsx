@@ -60,7 +60,7 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
       >
         <div style={{ padding: 0, margin: 0, width: "100%" }}>
           <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
-            <Tooltip title={`Server Model: ${server.modelId}`}>
+            <Tooltip title={`服务器型号：${server.modelId}`}>
               <SvgIcon component={icon} color="secondary" />
             </Tooltip>
             <Typography color={server.hasAdminRights ? "primary" : "secondary"} sx={ServerName}>
@@ -68,7 +68,7 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
             </Typography>
           </div>
           <Typography color="secondary" style={{ fontSize: "0.9em" }}>
-            {server.ip} cha:{server.requiredCharismaSkill}
+            {server.ip} 魅力:{server.requiredCharismaSkill}
           </Typography>
           <br />
           <ServerSummary server={server} enableAuth={enableAuth} classes={classes} />

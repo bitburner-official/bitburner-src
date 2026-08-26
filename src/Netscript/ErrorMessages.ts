@@ -16,7 +16,7 @@ export function parseBlobUrlInMessage(ws: WorkerScript, msg: string): string {
 
 /** Creates an error message string containing hostname, scriptname, and the error message msg */
 export function basicErrorMessage(ws: WorkerScript, msg: string, type = "RUNTIME"): string {
-  return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${parseBlobUrlInMessage(ws, msg)}`;
+  return `${type} 错误\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${parseBlobUrlInMessage(ws, msg)}`;
 }
 
 /**
@@ -61,7 +61,7 @@ export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME
 
   log(ctx, () => msg);
   let rejectMsg = `${caller}: ${msg}`;
-  if (userstack.length !== 0) rejectMsg += `\n\nStack:\n${userstack.join("\n")}`;
+  if (userstack.length !== 0) rejectMsg += `\n\n堆栈：\n${userstack.join("\n")}`;
   return basicErrorMessage(ws, rejectMsg, type);
 
   interface ILine {

@@ -121,23 +121,23 @@ export function FactionsDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_FactionsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Factions</Typography>
+        <Typography>派系</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Faction:</Typography>
+                <Typography>派系：</Typography>
               </td>
               <td>
                 <Box display="flex">
-                  <Tooltip title={`Hear rumor about ${selectedFaction.name}`}>
+                  <Tooltip title={`听说关于 ${selectedFaction.name} 的传闻`}>
                     <Button onClick={receiveRumor} size="large">
                       <ChatIcon />
                     </Button>
                   </Tooltip>
-                  <Tooltip title={`Receive invitation to ${selectedFaction.name}`}>
+                  <Tooltip title={`收到加入 ${selectedFaction.name} 的邀请`}>
                     <Button onClick={receiveInvite} size="large">
                       <ReplyIcon />
                     </Button>
@@ -152,7 +152,7 @@ export function FactionsDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Discovery:</Typography>
+                <Typography>发现状态：</Typography>
               </td>
               <td>
                 <FormControl>
@@ -166,12 +166,12 @@ export function FactionsDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Reputation:</Typography>
+                <Typography>声望：</Typography>
               </td>
               <td>
                 <Adjuster
-                  label="reputation"
-                  placeholder="amt"
+                  label="声望"
+                  placeholder="数量"
                   tons={() => modifyFactionRep(1)(largeAmountOfReputation)}
                   add={modifyFactionRep(1)}
                   subtract={modifyFactionRep(-1)}
@@ -181,12 +181,12 @@ export function FactionsDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Favor:</Typography>
+                <Typography>好感：</Typography>
               </td>
               <td>
                 <Adjuster
-                  label="favor"
-                  placeholder="amt"
+                  label="好感"
+                  placeholder="数量"
                   tons={() => modifyFactionFavor(1)(MaxFavor)}
                   add={modifyFactionFavor(1)}
                   subtract={modifyFactionFavor(-1)}
@@ -196,20 +196,20 @@ export function FactionsDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>All Factions:</Typography>
+                <Typography>所有派系：</Typography>
               </td>
               <td>
-                <Tooltip title="Forget all discovery">
+                <Tooltip title="忘记全部发现状态">
                   <Button onClick={resetAllDiscovery} size="large">
                     <ChatBubbleIcon />
                   </Button>
                 </Tooltip>
-                <Tooltip title="Hear all rumors">
+                <Tooltip title="听取全部传闻">
                   <Button onClick={receiveAllRumors} size="large">
                     <ChatIcon />
                   </Button>
                 </Tooltip>
-                <Tooltip title="Receive all invitations">
+                <Tooltip title="接收全部邀请">
                   <Button onClick={receiveAllInvites} size="large">
                     <ReplyAllIcon />
                   </Button>
@@ -218,20 +218,20 @@ export function FactionsDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>All Reputation:</Typography>
+                <Typography>全部声望：</Typography>
               </td>
               <td>
-                <Button onClick={tonsOfRep}>Tons</Button>
-                <Button onClick={resetAllRep}>Reset</Button>
+                <Button onClick={tonsOfRep}>海量</Button>
+                <Button onClick={resetAllRep}>重置</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Typography>All Favor:</Typography>
+                <Typography>全部好感：</Typography>
               </td>
               <td>
-                <Button onClick={tonsOfFactionFavor}>Tons</Button>
-                <Button onClick={resetAllFactionFavor}>Reset</Button>
+                <Button onClick={tonsOfFactionFavor}>海量</Button>
+                <Button onClick={resetAllFactionFavor}>重置</Button>
               </td>
             </tr>
           </tbody>

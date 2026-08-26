@@ -56,8 +56,9 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
         <ListItemText
           primary={
             <Typography>
-              └ {recentScript.runningScript.filename} (died{" "}
-              {convertTimeMsToTimeElapsedString(new Date().getTime() - recentScript.timeOfDeath.getTime())} ago)
+              └ {recentScript.runningScript.filename}
+              （已于{" "}
+              {convertTimeMsToTimeElapsedString(new Date().getTime() - recentScript.timeOfDeath.getTime())} 前终止）
             </Typography>
           }
         />
@@ -69,7 +70,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
             <TableBody>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Threads:</Typography>
+                  <Typography>└ 线程：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
                   <Typography>{formatThreads(recentScript.runningScript.threads)}</Typography>
@@ -78,13 +79,13 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={2}>
                   <Typography sx={{ overflowWrap: "anywhere" }}>
-                    └ Args: {arrayToString(recentScript.runningScript.args)}
+                    └ 参数：{arrayToString(recentScript.runningScript.args)}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Online Time:</Typography>
+                  <Typography>└ 在线时间：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
                   <Typography>
@@ -94,7 +95,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Offline Time:</Typography>
+                  <Typography>└ 离线时间：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
                   <Typography>
@@ -104,7 +105,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Total online production:</Typography>
+                  <Typography>└ 在线总收益：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
@@ -116,14 +117,14 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
-                    &nbsp;{formatExp(recentScript.runningScript.onlineExpGained) + " hacking exp"}
+                    &nbsp;{formatExp(recentScript.runningScript.onlineExpGained) + " 黑客经验"}
                   </Typography>
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Online production rate:</Typography>
+                  <Typography>└ 在线产出速率：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
@@ -134,13 +135,13 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
-                  <Typography>&nbsp;{formatExp(onlineEps) + " hacking exp / sec"}</Typography>
+                  <Typography>&nbsp;{formatExp(onlineEps) + " 黑客经验/秒"}</Typography>
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Total offline production:</Typography>
+                  <Typography>└ 离线总收益：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
@@ -152,13 +153,13 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
-                    &nbsp;{formatExp(recentScript.runningScript.offlineExpGained) + " hacking exp"}
+                    &nbsp;{formatExp(recentScript.runningScript.offlineExpGained) + " 黑客经验"}
                   </Typography>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
-          <Button onClick={logClickHandler}>LOG</Button>
+          <Button onClick={logClickHandler}>日志</Button>
         </Box>
       </Collapse>
     </>

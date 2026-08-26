@@ -16,7 +16,7 @@ export function CheatCodeGame({ stage }: IProps): React.ReactElement {
   return (
     <>
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
-        <Typography variant="h4">Enter the Code!</Typography>
+        <Typography variant="h4">输入代码！</Typography>
         <Typography variant="h4">
           <div
             style={{

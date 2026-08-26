@@ -20,7 +20,7 @@ const bigNumber = 1e27;
 function modifyExp(stat: string, modifier: number) {
   return function (exp: number) {
     if (!Number.isFinite(exp) || exp < 0) {
-      dialogBoxCreate(`Exp cannot be ${exp}.`);
+      dialogBoxCreate(`经验不能为 ${exp}。`);
       return;
     }
     switch (stat) {
@@ -52,7 +52,7 @@ function modifyExp(stat: string, modifier: number) {
 
 function setStatLevel(stat: string, level: number): void {
   if (!Number.isFinite(level) || level < 1) {
-    dialogBoxCreate(`Invalid level.`);
+    dialogBoxCreate(`等级无效。`);
     return;
   }
   switch (stat) {
@@ -172,8 +172,8 @@ function StatRow({ stat }: { stat: string }): React.ReactElement {
       </td>
       <td>
         <Adjuster
-          label={"exp"}
-          placeholder={"exp"}
+          label={"经验"}
+          placeholder={"经验"}
           tons={() => modifyExp(stat, 1)(bigNumber)}
           add={modifyExp(stat, 1)}
           subtract={modifyExp(stat, -1)}
@@ -182,7 +182,7 @@ function StatRow({ stat }: { stat: string }): React.ReactElement {
       </td>
       <td>
         <TextField
-          label={"Level"}
+          label={"等级"}
           value={level}
           onChange={(event) => {
             if (event.target.value === "") {
@@ -191,13 +191,13 @@ function StatRow({ stat }: { stat: string }): React.ReactElement {
             }
             setLevel(Number.parseFloat(event.target.value));
           }}
-          placeholder={"Level"}
+          placeholder={"等级"}
           type="number"
           InputProps={{
             // Without startAdornment, label and placeholder are only shown when TextField is focused
             startAdornment: <></>,
             endAdornment: (
-              <Button onClick={() => setStatLevel(stat, typeof level !== "string" ? level : 0)}>Set</Button>
+              <Button onClick={() => setStatLevel(stat, typeof level !== "string" ? level : 0)}>设置</Button>
             ),
           }}
           style={{ marginLeft: "20px" }}
@@ -207,12 +207,12 @@ function StatRow({ stat }: { stat: string }): React.ReactElement {
         <>
           <td>
             <Button onClick={enableIntelligence} style={{ marginTop: "15px" }}>
-              Enable
+              启用
             </Button>
           </td>
           <td>
             <Button onClick={disableIntelligence} style={{ marginTop: "15px" }}>
-              Disable
+              禁用
             </Button>
           </td>
         </>
@@ -227,22 +227,22 @@ export function StatsDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_StatsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Experience / Stats</Typography>
+        <Typography>经验 / 属性</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>All:</Typography>
+                <Typography>全部：</Typography>
               </td>
               <td>
-                <Button onClick={tonsOfExp}>Tons of exp</Button>
-                <Button onClick={resetAllExp}>Reset</Button>
+                <Button onClick={tonsOfExp}>海量经验</Button>
+                <Button onClick={resetAllExp}>重置</Button>
               </td>
               <td>
                 <TextField
-                  label={"Level"}
+                  label={"等级"}
                   value={levelOfNormalStats}
                   onChange={(event) => {
                     if (event.target.value === "") {
@@ -251,13 +251,13 @@ export function StatsDev(): React.ReactElement {
                     }
                     setLevelOfNormalStats(Number.parseFloat(event.target.value));
                   }}
-                  placeholder={"Level"}
+                  placeholder={"等级"}
                   type="number"
                   InputProps={{
                     // Without startAdornment, label and placeholder are only shown when TextField is focused
                     startAdornment: <></>,
                     endAdornment: (
-                      <Tooltip title="Set all, except Intelligence and Karma">
+                      <Tooltip title="设置全部（智力与 Karma 除外）">
                         <Button
                           onClick={() => {
                             const level = typeof levelOfNormalStats !== "string" ? levelOfNormalStats : 0;
@@ -270,7 +270,7 @@ export function StatsDev(): React.ReactElement {
                           }}
                           style={{ width: "100px" }}
                         >
-                          Set all
+                          全部设置
                         </Button>
                       </Tooltip>
                     ),
@@ -288,8 +288,8 @@ export function StatsDev(): React.ReactElement {
               </td>
               <td>
                 <Adjuster
-                  label="karma"
-                  placeholder="amt"
+                  label="Karma"
+                  placeholder="数量"
                   tons={() => modifyKarma(1)(-54000)}
                   add={modifyKarma(1)}
                   subtract={modifyKarma(-1)}

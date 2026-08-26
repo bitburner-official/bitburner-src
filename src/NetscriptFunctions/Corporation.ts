@@ -123,21 +123,21 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   function getDivision(divisionName: string): Division {
     const corporation = getCorporation();
     const division = corporation.divisions.get(divisionName);
-    if (division === undefined) throw new Error(`No division named '${divisionName}'`);
+    if (division === undefined) throw new Error(`没有名为 '${divisionName}' 的部门`);
     return division;
   }
 
   function getOffice(divisionName: string, cityName: CityName): OfficeSpace {
     const division = getDivision(divisionName);
     const office = division.offices[cityName];
-    if (!office) throw new Error(`${division.name} has not expanded to '${cityName}'`);
+    if (!office) throw new Error(`${division.name} 尚未扩展到 '${cityName}'`);
     return office;
   }
 
   function getWarehouse(divisionName: string, cityName: CityName): Warehouse {
     const division = getDivision(divisionName);
     const warehouse = division.warehouses[cityName];
-    if (!warehouse) throw new Error(`${division.name} does not have a warehouse in '${cityName}'`);
+    if (!warehouse) throw new Error(`${division.name} 在 '${cityName}' 没有仓库`);
     return warehouse;
   }
 
@@ -150,15 +150,15 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   function getProduct(divisionName: string, productName: string): Product {
     const division = getDivision(divisionName);
     const product = division.products.get(productName);
-    if (product === undefined) throw new Error(`Invalid product name: '${productName}'`);
+    if (product === undefined) throw new Error(`无效的产品名称：'${productName}'`);
     return product;
   }
 
   function checkAccess(ctx: NetscriptContext, api?: CorpUnlockName): void {
-    if (!Player.corporation) throw helpers.errorMessage(ctx, "Must own a corporation.");
+    if (!Player.corporation) throw helpers.errorMessage(ctx, "必须拥有一家企业。");
     if (!api) return;
     if (!Player.corporation.unlocks.has(api)) {
-      throw helpers.errorMessage(ctx, "You do not have access to this API.");
+      throw helpers.errorMessage(ctx, "你无权访问此 API。");
     }
   }
 
@@ -199,7 +199,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const amt = helpers.number(ctx, "amount", _amt);
       if (amt < 1) {
-        throw helpers.errorMessage(ctx, "You must provide a positive number");
+        throw helpers.errorMessage(ctx, "你必须提供一个正数");
       }
       const warehouse = getWarehouse(divisionName, cityName);
       return upgradeWarehouseCost(warehouse.level, amt);
@@ -291,7 +291,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const amt = helpers.number(ctx, "amount", _amt);
       const corporation = getCorporation();
       if (amt < 1) {
-        throw helpers.errorMessage(ctx, "You must provide a positive number");
+        throw helpers.errorMessage(ctx, "你必须提供一个正数");
       }
       upgradeWarehouse(corporation, getDivision(divisionName), getWarehouse(divisionName, cityName), amt);
     },
@@ -329,7 +329,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const enabled = !!_enabled;
       const warehouse = getWarehouse(divisionName, cityName);
       if (!hasUnlock(CorpUnlockName.SmartSupply))
-        throw helpers.errorMessage(ctx, `You have not purchased the Smart Supply upgrade!`);
+        throw helpers.errorMessage(ctx, `你尚未购买智能供应升级！`);
       setSmartSupply(warehouse, enabled);
     },
     setSmartSupplyOption: (ctx, _divisionName, _cityName, _materialName, _option) => {
@@ -341,14 +341,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const material = getMaterial(divisionName, cityName, materialName);
       const option = getEnumHelper("SmartSupplyOption").nsGetMember(ctx, _option);
       if (!hasUnlock(CorpUnlockName.SmartSupply))
-        throw helpers.errorMessage(ctx, `You have not purchased the Smart Supply upgrade!`);
+        throw helpers.errorMessage(ctx, `你尚未购买智能供应升级！`);
       setSmartSupplyOption(warehouse, material, option);
     },
     buyMaterial: (ctx, _divisionName, _cityName, _materialName, _amt) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const division = getCorporation().divisions.get(divisionName);
-      if (!division) throw helpers.errorMessage(ctx, `No division with provided name ${divisionName}`);
+      if (!division) throw helpers.errorMessage(ctx, `没有找到该名称的部门：${divisionName}`);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const amt = helpers.number(ctx, "amt", _amt);
@@ -359,7 +359,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const division = getCorporation().divisions.get(divisionName);
-      if (!division) throw helpers.errorMessage(ctx, `No division with provided name ${divisionName}`);
+      if (!division) throw helpers.errorMessage(ctx, `没有找到该名称的部门：${divisionName}`);
       const corporation = getCorporation();
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
@@ -389,7 +389,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     exportMaterial: (ctx, _sourceDivision, _sourceCity, _targetDivision, _targetCity, _materialName, _amt): void => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       if (!hasUnlock(CorpUnlockName.Export)) {
-        throw helpers.errorMessage(ctx, `You have not unlocked the Export feature!`);
+        throw helpers.errorMessage(ctx, `你尚未解锁导出功能！`);
       }
       const sourceDivision = helpers.string(ctx, "sourceDivision", _sourceDivision);
       const sourceCity = getEnumHelper("CityName").nsGetMember(ctx, _sourceCity, "sourceCity");
@@ -403,7 +403,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     cancelExportMaterial: (ctx, _sourceDivision, _sourceCity, _targetDivision, _targetCity, _materialName): void => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       if (!hasUnlock(CorpUnlockName.Export)) {
-        throw helpers.errorMessage(ctx, `You have not unlocked the Export feature!`);
+        throw helpers.errorMessage(ctx, `你尚未解锁导出功能！`);
       }
       const sourceDivision = helpers.string(ctx, "sourceDivision", _sourceDivision);
       const sourceCity = getEnumHelper("CityName").nsGetMember(ctx, _sourceCity, "sourceCity");
@@ -427,7 +427,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.I"))
-        throw helpers.errorMessage(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `你没有为部门研究 MarketTA.I：${divisionName}`);
       setMaterialMarketTA1(getMaterial(divisionName, cityName, materialName), on);
     },
     setMaterialMarketTA2: (ctx, _divisionName, _cityName, _materialName, _on) => {
@@ -437,7 +437,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.II"))
-        throw helpers.errorMessage(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `你没有为部门研究 MarketTA.II：${divisionName}`);
       setMaterialMarketTA2(getMaterial(divisionName, cityName, materialName), on);
     },
     setProductMarketTA1: (ctx, _divisionName, _productName, _on) => {
@@ -446,7 +446,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const productName = helpers.string(ctx, "productName", _productName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.I"))
-        throw helpers.errorMessage(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `你没有为部门研究 MarketTA.I：${divisionName}`);
       setProductMarketTA1(getProduct(divisionName, productName), on);
     },
     setProductMarketTA2: (ctx, _divisionName, _productName, _on) => {
@@ -455,7 +455,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const productName = helpers.string(ctx, "productName", _productName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.II"))
-        throw helpers.errorMessage(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `你没有为部门研究 MarketTA.II：${divisionName}`);
       setProductMarketTA2(getProduct(divisionName, productName), on);
     },
   };
@@ -503,14 +503,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       if (job === CorpEmployeeJob.Unassigned) {
         helpers.log(
           ctx,
-          () => `This API will not do anything and just return false if you pass "Unassigned" to the "job" parameter.`,
+          () => `如果你向 "job" 参数传入 "Unassigned"，此 API 不会执行任何操作并直接返回 false。`,
         );
         return false;
       }
       if (amount < 0 || !Number.isInteger(amount)) {
         throw helpers.errorMessage(
           ctx,
-          `Invalid value for amount! Must be an integer and greater than or be 0". Amount:'${amount}'`,
+          `amount 的值无效！必须是大于或等于 0 的整数。amount：'${amount}'`,
         );
       }
 
@@ -521,7 +521,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       if (office.employeeNextJobs[CorpEmployeeJob.Unassigned] < totalNewEmployees) {
         throw helpers.errorMessage(
           ctx,
-          `Unable to bring '${job} employees to ${amount}. Requires ${totalNewEmployees} unassigned employees`,
+          `无法将 '${job} 员工数量设为 ${amount}。需要 ${totalNewEmployees} 名未分配的员工`,
         );
       }
       return office.autoAssignJob(job, amount);
@@ -553,7 +553,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const costPerEmployee = helpers.number(ctx, "costPerEmployee", _costPerEmployee);
 
       if (costPerEmployee < 0) {
-        throw new Error("Invalid value for Cost Per Employee field! Must be numeric and greater than 0");
+        throw new Error("每位员工成本字段的值无效！必须是数字且大于 0");
       }
       const corporation = getCorporation();
       const office = getOffice(divisionName, cityName);
@@ -661,7 +661,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const corporation = getCorporation();
       const result = corporation.purchaseUnlock(unlockName);
       if (!result.success) {
-        throw new Error(`Could not unlock ${unlockName}: ${result.message}`);
+        throw new Error(`无法解锁 ${unlockName}：${result.message}`);
       }
     },
     levelUpgrade: (ctx, _upgradeName) => {
@@ -670,7 +670,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const corporation = getCorporation();
       const result = corporation.purchaseUpgrade(upgradeName, 1);
       if (!result.success) {
-        throw new Error(`Could not upgrade ${upgradeName}: ${result.message}`);
+        throw new Error(`无法升级 ${upgradeName}：${result.message}`);
       }
     },
     issueDividends: (ctx, _rate) => {
@@ -678,9 +678,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const rate = helpers.number(ctx, "rate", _rate);
       const max = corpConstants.dividendMaxRate;
       if (rate < 0 || rate > max)
-        throw new Error(`Invalid value for rate field! Must be numeric, greater than 0, and less than ${max}`);
+        throw new Error(`rate 字段的值无效！必须是数字、大于 0 且小于 ${max}`);
       const corporation = getCorporation();
-      if (!corporation.public) throw helpers.errorMessage(ctx, `Your company has not gone public!`);
+      if (!corporation.public) throw helpers.errorMessage(ctx, `你的公司尚未上市！`);
       issueDividends(corporation, rate);
     },
     issueNewShares: (ctx, _amount) => {
@@ -762,7 +762,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     goPublic: (ctx, _numShares) => {
       checkAccess(ctx);
       const corporation = getCorporation();
-      if (corporation.public) throw helpers.errorMessage(ctx, "Corporation is already public");
+      if (corporation.public) throw helpers.errorMessage(ctx, "公司已经上市");
       const numShares = helpers.number(ctx, "numShares", _numShares);
       goPublic(corporation, numShares);
       return true;

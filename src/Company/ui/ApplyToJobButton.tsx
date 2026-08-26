@@ -22,10 +22,10 @@ export function ApplyToJobButton({ company, position, qualified }: ApplyToJobPro
   const reqs = getJobRequirements(company, position);
   const positionRequirements =
     reqs.length == 0 ? (
-      <Typography>Accepting all applicants</Typography>
+      <Typography>接受所有申请者</Typography>
     ) : (
       <>
-        <Typography>Requirements:</Typography>
+        <Typography>要求：</Typography>
         {reqs.map((req, i) => (
           <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />
         ))}
@@ -38,8 +38,8 @@ export function ApplyToJobButton({ company, position, qualified }: ApplyToJobPro
       {position.isPartTime && (
         <Typography>
           <br />
-          Part-time jobs have no penalty for
-          <br /> doing something else simultaneously.
+          兼职工作可以
+          <br /> 同时进行其他活动而不会受到惩罚。
         </Typography>
       )}
       <br />

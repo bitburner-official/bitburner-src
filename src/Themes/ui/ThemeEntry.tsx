@@ -18,23 +18,23 @@ export function ThemeEntry({ theme, onActivated, onImageClick }: IProps): React.
     <Card key={theme.screenshot} sx={{ width: 400, mr: 1, mb: 1 }}>
       <CardHeader
         action={
-          <Tooltip title="Use this theme">
+          <Tooltip title="使用此主题">
             <Button startIcon={<PaletteSharpIcon />} onClick={onActivated} variant="outlined">
-              Use
+              使用
             </Button>
           </Tooltip>
         }
         title={theme.name}
         subheader={
           <>
-            by {theme.credit}{" "}
+            作者：{theme.credit}{" "}
             {theme.reference && (
               <>
-                (
+                （
                 <Link href={theme.reference} target="_blank">
-                  ref
+                  参考
                 </Link>
-                )
+                ）
               </>
             )}
           </>
@@ -53,7 +53,7 @@ export function ThemeEntry({ theme, onActivated, onImageClick }: IProps): React.
         component="img"
         width="400"
         image={theme.screenshot}
-        alt={`Theme Screenshot of "${theme.name}"`}
+        alt={`“${theme.name}”的主题截图`}
         sx={{
           borderTop: `1px solid ${Settings.theme.welllight}`,
           borderBottom: `1px solid ${Settings.theme.welllight}`,

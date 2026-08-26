@@ -22,52 +22,52 @@ export interface Class {
 export const Classes: Record<ClassType, Class> = {
   [UniversityClassType.computerScience]: {
     type: UniversityClassType.computerScience,
-    youAreCurrently: `studying Computer Science`,
+    youAreCurrently: `学习计算机科学`,
     earnings: newWorkStats({ hackExp: 0.5, intExp: 0.01 }),
   },
   [UniversityClassType.dataStructures]: {
     type: UniversityClassType.dataStructures,
-    youAreCurrently: "taking a Data Structures course",
+    youAreCurrently: "上数据结构课程",
     earnings: newWorkStats({ money: -40, hackExp: 1, intExp: 0.01 }),
   },
   [UniversityClassType.networks]: {
     type: UniversityClassType.networks,
-    youAreCurrently: "taking a Networks course",
+    youAreCurrently: "上网络课程",
     earnings: newWorkStats({ money: -80, hackExp: 2, intExp: 0.01 }),
   },
   [UniversityClassType.algorithms]: {
     type: UniversityClassType.algorithms,
-    youAreCurrently: "taking an Algorithms course",
+    youAreCurrently: "上算法课程",
     earnings: newWorkStats({ money: -320, hackExp: 4, intExp: 0.01 }),
   },
   [UniversityClassType.management]: {
     type: UniversityClassType.management,
-    youAreCurrently: "taking a Management course",
+    youAreCurrently: "上管理课程",
     earnings: newWorkStats({ money: -160, chaExp: 2, intExp: 0.01 }),
   },
   [UniversityClassType.leadership]: {
     type: UniversityClassType.leadership,
-    youAreCurrently: "taking a Leadership course",
+    youAreCurrently: "上领导力课程",
     earnings: newWorkStats({ money: -320, chaExp: 4, intExp: 0.01 }),
   },
   [GymType.strength]: {
     type: GymType.strength,
-    youAreCurrently: "training your strength at a gym",
+    youAreCurrently: "在健身房训练力量",
     earnings: newWorkStats({ money: -120, strExp: 1 }),
   },
   [GymType.defense]: {
     type: GymType.defense,
-    youAreCurrently: "training your defense at a gym",
+    youAreCurrently: "在健身房训练防御",
     earnings: newWorkStats({ money: -120, defExp: 1 }),
   },
   [GymType.dexterity]: {
     type: GymType.dexterity,
-    youAreCurrently: "training your dexterity at a gym",
+    youAreCurrently: "在健身房训练灵巧",
     earnings: newWorkStats({ money: -120, dexExp: 1 }),
   },
   [GymType.agility]: {
     type: GymType.agility,
-    youAreCurrently: "training your agility at a gym",
+    youAreCurrently: "在健身房训练敏捷",
     earnings: newWorkStats({ money: -120, agiExp: 1 }),
   },
 };
@@ -114,17 +114,17 @@ export class ClassWork extends PlayerBaseWork {
     if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
-          After {this.getClass().youAreCurrently} for{" "}
-          {convertTimeMsToTimeElapsedString(this.cyclesWorked * CONSTANTS.MilliPerCycle)}, <br />
-          you spent a total of <Money money={-this.earnings.money} />. <br />
+          {this.getClass().youAreCurrently}{" "}
+          {convertTimeMsToTimeElapsedString(this.cyclesWorked * CONSTANTS.MilliPerCycle)}后，<br />
+          你总共花费了 <Money money={-this.earnings.money} />。<br />
           <br />
-          You earned a total of: <br />
-          {formatExp(this.earnings.hackExp)} hacking exp <br />
-          {formatExp(this.earnings.strExp)} strength exp <br />
-          {formatExp(this.earnings.defExp)} defense exp <br />
-          {formatExp(this.earnings.dexExp)} dexterity exp <br />
-          {formatExp(this.earnings.agiExp)} agility exp <br />
-          {formatExp(this.earnings.chaExp)} charisma exp
+          你总共获得了：<br />
+          {formatExp(this.earnings.hackExp)} 黑客经验 <br />
+          {formatExp(this.earnings.strExp)} 力量经验 <br />
+          {formatExp(this.earnings.defExp)} 防御经验 <br />
+          {formatExp(this.earnings.dexExp)} 灵巧经验 <br />
+          {formatExp(this.earnings.agiExp)} 敏捷经验 <br />
+          {formatExp(this.earnings.chaExp)} 魅力经验
           <br />
         </>,
       );

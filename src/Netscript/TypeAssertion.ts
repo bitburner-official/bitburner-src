@@ -16,7 +16,7 @@ export const userFriendlyString = (v: unknown): string => {
   }
   if (typeof v === "string") {
     if (v === "") {
-      return `'' (empty string)`;
+      return `''（空字符串）`;
     }
     return `'${clip(v)}'`;
   }
@@ -36,10 +36,10 @@ export const userFriendlyString = (v: unknown): string => {
 };
 
 export const debugType = (v: unknown): string => {
-  if (v === null) return `Is null.`;
-  if (v === undefined) return "Is undefined.";
-  if (typeof v === "function") return "Is a function.";
-  return `Is of type '${typeof v}', value: ${userFriendlyString(v)}`;
+  if (v === null) return `为 null。`;
+  if (v === undefined) return "为 undefined。";
+  if (typeof v === "function") return "是一个函数。";
+  return `类型为 '${typeof v}'，值：${userFriendlyString(v)}`;
 };
 
 /**
@@ -47,7 +47,7 @@ export const debugType = (v: unknown): string => {
  * provides a stack trace pointing to the player's invalid caller.
  */
 export function assertStringWithNSContext(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
-  if (typeof v !== "string") throw errorMessage(ctx, `${argName} expected to be a string. ${debugType(v)}`, "TYPE");
+  if (typeof v !== "string") throw errorMessage(ctx, `${argName} 应为字符串。${debugType(v)}`, "TYPE");
 }
 
 export function assertFunctionWithNSContext(
@@ -55,15 +55,15 @@ export function assertFunctionWithNSContext(
   argName: string,
   v: unknown,
 ): asserts v is () => void {
-  if (typeof v !== "function") throw errorMessage(ctx, `${argName} expected to be a function ${debugType(v)}`, "TYPE");
+  if (typeof v !== "function") throw errorMessage(ctx, `${argName} 应为函数 ${debugType(v)}`, "TYPE");
 }
 
 export function missingKey(expect: object, actual: unknown): string | false {
   if (typeof actual !== "object" || actual === null) {
-    return `Expected to be an object, was ${actual === null ? "null" : typeof actual}.`;
+    return `应为对象，实际为 ${actual === null ? "null" : typeof actual}。`;
   }
   for (const key in expect) {
-    if (!(key in actual)) return `Property ${key} was expected but not present.`;
+    if (!(key in actual)) return `缺少预期的属性 ${key}。`;
   }
   return false;
 }
@@ -71,6 +71,6 @@ export function missingKey(expect: object, actual: unknown): string | false {
 export function assertDarknetServerDetails(ctx: NetscriptContext, data: unknown): asserts data is DarknetServerDetails {
   const error = missingKey(exampleDarknetServerDetails, data);
   if (error) {
-    throw errorMessage(ctx, `Invalid darknet server data.\n${error}`, "TYPE");
+    throw errorMessage(ctx, `无效的暗网服务器数据。\n${error}`, "TYPE");
   }
 }

@@ -54,16 +54,16 @@ export function ActiveFragmentSummary(props: IProps): React.ReactElement {
 
   return (
     <Paper sx={{ mb: 1 }}>
-      <Typography variant="h5">Summary of active fragments:</Typography>
+      <Typography variant="h5">已激活碎片摘要：</Typography>
       <Table sx={{ display: "table", width: "100%" }}>
         <TableBody>
           <TableRow>
             <TableCell sx={{ borderBottom: "none", p: 0, m: 0 }}>
-              <Typography>Coordinate</Typography>
+              <Typography>坐标</Typography>
             </TableCell>
 
             <TableCell sx={{ borderBottom: "none", p: 0, m: 0 }}>
-              <Typography>Effect</Typography>
+              <Typography>效果</Typography>
             </TableCell>
           </TableRow>
           {summary.map((entry) => {

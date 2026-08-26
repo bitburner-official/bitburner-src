@@ -28,7 +28,7 @@ export function PurchasedAugmentations(): React.ReactElement {
     let level = null;
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ownedAug.level;
-      displayName += ` - Level ${level}`;
+      displayName += ` - ${level} 级`;
     }
 
     augs.push(

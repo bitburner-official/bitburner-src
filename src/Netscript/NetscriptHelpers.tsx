@@ -149,17 +149,17 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
     const x = parseFloat(v);
     if (!isNaN(x)) return x; // otherwise it wasn't even a string representing a number.
   } else if (typeof v === "number") {
-    if (isNaN(v)) throw errorMessage(ctx, `'${argName}' is NaN.`);
+    if (isNaN(v)) throw errorMessage(ctx, `'${argName}' 是 NaN。`);
     return v;
   }
-  throw errorMessage(ctx, `'${argName}' must be a number. ${debugType(v)}`, "TYPE");
+  throw errorMessage(ctx, `'${argName}' 必须是数字。${debugType(v)}`, "TYPE");
 }
 
 /** Convert provided value v for argument argName to an integer, throwing if it looks like something else. */
 function integer(ctx: NetscriptContext, argName: string, v: unknown): Integer {
   const n = number(ctx, argName, v);
   if (!isInteger(n)) {
-    throw errorMessage(ctx, `${argName} must be an integer, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} 必须是整数，当前为 ${n}`, "TYPE");
   }
   return n;
 }
@@ -168,7 +168,7 @@ function integer(ctx: NetscriptContext, argName: string, v: unknown): Integer {
 function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveInteger {
   const n = number(ctx, argName, v);
   if (!isPositiveInteger(n)) {
-    throw errorMessage(ctx, `${argName} must be a positive integer, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} 必须是正整数，当前为 ${n}`, "TYPE");
   }
   return n;
 }
@@ -177,7 +177,7 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
 function positiveSafeInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveSafeInteger {
   const n = number(ctx, argName, v);
   if (!isPositiveSafeInteger(n)) {
-    throw errorMessage(ctx, `${argName} must be a positive safe integer, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} 必须是安全正整数，当前为 ${n}`, "TYPE");
   }
   return n;
 }
@@ -186,7 +186,7 @@ function positiveSafeInteger(ctx: NetscriptContext, argName: string, v: unknown)
 function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): PositiveNumber {
   const n = number(ctx, argName, v);
   if (!isPositiveNumber(n)) {
-    throw errorMessage(ctx, `${argName} must be a positive number, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} 必须是正数，当前为 ${n}`, "TYPE");
   }
   return n;
 }
@@ -205,14 +205,14 @@ function scriptArgs(ctx: NetscriptContext, args: unknown): ScriptArg[] {
     return args;
   }
   if (!Array.isArray(args)) {
-    throw errorMessage(ctx, `scriptArgs must be an array. Current type is ${getFriendlyType(args)}.`, "TYPE");
+    throw errorMessage(ctx, `scriptArgs 必须是数组。当前类型为 ${getFriendlyType(args)}。`, "TYPE");
   }
   const nonValidArgument: unknown = args.find((arg) => !isScriptArg(arg));
   throw errorMessage(
     ctx,
-    `scriptArgs can only contain strings, numbers, or booleans.
-Found ${getFriendlyType(nonValidArgument)}: ${userFriendlyString(nonValidArgument)}
-Args passed: ${args.map((arg) => userFriendlyString(arg)).join(", ")}`,
+    `scriptArgs 只能包含字符串、数字或布尔值。
+发现 ${getFriendlyType(nonValidArgument)}：${userFriendlyString(nonValidArgument)}
+传入的参数：${args.map((arg) => userFriendlyString(arg)).join(", ")}`,
     "TYPE",
   );
 }
@@ -220,7 +220,7 @@ Args passed: ${args.map((arg) => userFriendlyString(arg)).join(", ")}`,
 /** Converts the provided value for v to a boolean, throwing if it is not  */
 function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
   if (typeof v !== "boolean") {
-    throw errorMessage(ctx, `${argName} must be a boolean, was ${v}`, "TYPE");
+    throw errorMessage(ctx, `${argName} 必须是布尔值，当前为 ${v}`, "TYPE");
   }
   return v;
 }
@@ -237,7 +237,7 @@ function editorOptions(ctx: NetscriptContext, _options: unknown): EditorOptions 
   if (!isObject(_options)) {
     throw errorMessage(
       ctx,
-      `editorOptions must be an object. Its type is ${getFriendlyType(_options)}. Its string value is ${String(
+      `editorOptions 必须是对象。其类型为 ${getFriendlyType(_options)}。其字符串值为 ${String(
         _options,
       )}`,
     );
@@ -245,7 +245,7 @@ function editorOptions(ctx: NetscriptContext, _options: unknown): EditorOptions 
   // Safe assertion since _options type has been narrowed to a non-null object
   const options = _options as Unknownify<EditorOptions>;
   if (Object.hasOwn(options, "vim") && typeof options.vim !== "boolean") {
-    throw errorMessage(ctx, `editorOptions.vim must be a boolean, was ${options.vim}`);
+    throw errorMessage(ctx, `editorOptions.vim 必须是布尔值，当前为 ${options.vim}`);
   }
   return _options;
 }
@@ -275,7 +275,7 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
     if (result.ramOverride < RamCostConstants.Base) {
       throw errorMessage(
         ctx,
-        `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
+        `RunOptions.ramOverride 必须 >= baseCost（${RamCostConstants.Base}），当前为 ${result.ramOverride}`,
       );
     }
     // It is important that all RAM calculations operate in hundredths-of-a-GB,
@@ -293,7 +293,7 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
   if (spawnDelay !== undefined) {
     result.spawnDelay = number(ctx, "spawnDelay", spawnDelay);
     if (result.spawnDelay < 0) {
-      throw errorMessage(ctx, `spawnDelay must be non-negative, got ${spawnDelay}`);
+      throw errorMessage(ctx, `spawnDelay 不能为负，当前为 ${spawnDelay}`);
     }
   }
   return result;
@@ -404,17 +404,17 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
   }
   if (typeof opts !== "object") {
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
-    throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${opts}`);
+    throw errorMessage(ctx, `如果指定 BasicHGWOptions，则它必须是对象，当前为 ${opts}`);
   }
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
   const options = opts as Unknownify<CompleteHGWOptions>;
   result.stock = !!options.stock;
   result.additionalMsec = number(ctx, "opts.additionalMsec", options.additionalMsec ?? 0);
   if (result.additionalMsec < 0) {
-    throw errorMessage(ctx, `additionalMsec must be non-negative, got ${options.additionalMsec}`);
+    throw errorMessage(ctx, `additionalMsec 不能为负，当前为 ${options.additionalMsec}`);
   }
   if (result.additionalMsec > 1e9) {
-    throw errorMessage(ctx, `additionalMsec too large (>1e9), got ${options.additionalMsec}`);
+    throw errorMessage(ctx, `additionalMsec 过大（>1e9），当前为 ${options.additionalMsec}`);
   }
   const requestedThreads = options.threads;
   const threads = ctx.workerScript.scriptRef.threads;
@@ -425,7 +425,7 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
     if (positiveThreads > threads) {
       throw errorMessage(
         ctx,
-        `Too many threads requested by ${ctx.function}. Requested: ${positiveThreads}. Has: ${threads}.`,
+        `${ctx.function} 请求的线程数过多。请求：${positiveThreads}。拥有：${threads}。`,
       );
     }
     result.threads = positiveThreads;
@@ -439,7 +439,7 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
-      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game. It will be very obvious when and how you can obtain it.`,
+      `此奇点函数需要源文件 4 才能运行。它是你在游戏后期获得的一种强化。何时以及如何获得它会非常明显。`,
       "API ACCESS",
     );
   }
@@ -449,15 +449,15 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
 function checkEnvFlags(ctx: NetscriptContext): void {
   const ws = ctx.workerScript;
   if (ws.stopFlag) {
-    log(ctx, () => "Failed to run due to script being killed.");
+    log(ctx, () => "因脚本已被杀死而无法运行。");
     throw new ScriptDeath(ws);
   }
   if (ws.runningFn && ctx.function !== "asleep") {
-    log(ctx, () => "Failed to run due to failed concurrency check.");
+    log(ctx, () => "并发检查失败，无法运行。");
     const err = errorMessage(
       ctx,
-      "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
-        `promise-returning function?\nCurrently running: ${ws.runningFn}\nTried to run: ${ctx.function}`,
+      "不允许并发调用 Netscript 函数！你是否忘记 await hack()、grow() 或其他返回 Promise 的" +
+        `函数？\n正在运行：${ws.runningFn}\n尝试运行：${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
@@ -496,28 +496,28 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   // addition and this multiplication here for speed, since dynamic RAM
   // checking is a speed-critical component.
   if (ws.dynamicRamUsage > 1.00000000000001 * ws.scriptRef.ramUsage) {
-    log(ctx, () => "Insufficient static ram available.");
+    log(ctx, () => "静态 RAM 不足。");
     const functionsUsed = Object.keys(ws.dynamicLoadedFns).join(", ");
     const err = errorMessage(
       ctx,
-      `Dynamic RAM usage calculated to be greater than RAM allocation.
-      This is probably because you somehow circumvented the static RAM calculation.
+      `动态 RAM 使用量计算结果大于 RAM 分配。
+      这可能是因为你以某种方式绕过了静态 RAM 计算。
 
-      Threads: ${ws.scriptRef.threads}
-      Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
-      RAM Allocation: ${formatRam(ws.scriptRef.ramUsage)} per thread
-      Functions in-use: [${functionsUsed}]
+      线程数：${ws.scriptRef.threads}
+      动态 RAM 使用量：每线程 ${formatRam(ws.dynamicRamUsage)}
+      RAM 分配：每线程 ${formatRam(ws.scriptRef.ramUsage)}
+      使用中的函数：[${functionsUsed}]
 
-      One of these could be the reason:
-      * Using eval() to get a reference to a ns function
+      可能的原因之一：
+      * 使用 eval() 获取 ns 函数的引用
       \u00a0\u00a0const myScan = eval('ns.scan');
 
-      * Using map access to do the same
+      * 使用映射访问做同样的事
       \u00a0\u00a0const myScan = ns['scan'];
 
-      * Using RunOptions.ramOverride to set a smaller allocation than needed
+      * 使用 RunOptions.ramOverride 设置了小于所需的分配
 
-      Sorry :(`,
+      抱歉 :(`,
       "RAM USAGE",
     );
     killWorkerScript(ws);
@@ -539,7 +539,7 @@ function scriptIdentifier(ctx: NetscriptContext, scriptID: unknown, _host: unkno
       args,
     };
   }
-  throw errorMessage(ctx, "An unknown type of input was provided as a script identifier.", "TYPE");
+  throw errorMessage(ctx, "提供了未知类型的脚本标识符。", "TYPE");
 }
 
 /**
@@ -562,11 +562,11 @@ export function getServer(ctx: NetscriptContext, _host: unknown): [BaseServer | 
     return [server, host];
   }
   if (DarknetState.offlineServers.has(host)) {
-    log(ctx, () => `Server ${host} is offline.`);
+    log(ctx, () => `服务器 ${host} 已离线。`);
     return [null, host];
   }
-  const str = host === "" ? "'' (empty string)" : "'" + host + "'";
-  throw errorMessage(ctx, `Invalid host: ${str}`);
+  const str = host === "" ? "''（空字符串）" : "'" + host + "'";
+  throw errorMessage(ctx, `无效主机：${str}`);
 }
 
 /**
@@ -575,13 +575,13 @@ export function getServer(ctx: NetscriptContext, _host: unknown): [BaseServer | 
 function getNormalServer(ctx: NetscriptContext, _host: unknown): Server {
   const [server, host] = getServer(ctx, _host);
   if (!(server instanceof Server)) {
-    let errorMessage = `Cannot be executed on ${host}.`;
+    let errorMessage = `无法在 ${host} 上执行。`;
     if (server == null) {
-      errorMessage += " The server was offline (and thus a darknet server).";
+      errorMessage += " 该服务器处于离线状态（因此是暗网服务器）。";
     } else if (server instanceof HacknetServer) {
-      errorMessage += " The server must not be a hacknet server.";
+      errorMessage += " 该服务器不能是 Hacknet 服务器。";
     } else if (server instanceof DarknetServer) {
-      errorMessage += " The server must not be a darknet server.";
+      errorMessage += " 该服务器不能是暗网服务器。";
     }
     throw helpers.errorMessage(ctx, errorMessage);
   }
@@ -606,10 +606,10 @@ function hack(ctx: NetscriptContext, _host: unknown, manual: boolean, opts: unkn
   log(
     ctx,
     () =>
-      `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
+      `正在入侵 '${server.hostname}'，耗时 ${convertTimeMsToTimeElapsedString(
         hackingTime * 1000,
         true,
-      )} (t=${formatThreads(threads)})`,
+      )}（t=${formatThreads(threads)}）`,
   );
 
   return helpers.netscriptDelay(ctx, hackingTime * 1000).then(function () {
@@ -660,9 +660,9 @@ function hack(ctx: NetscriptContext, _host: unknown, manual: boolean, opts: unkn
       log(
         ctx,
         () =>
-          `Successfully hacked '${server.hostname}' for ${formatMoney(moneyGained)} and ${formatExp(
+          `成功入侵 '${server.hostname}'，获得 ${formatMoney(moneyGained)} 和 ${formatExp(
             expGainedOnSuccess,
-          )} exp (t=${formatThreads(threads)})`,
+          )} 经验（t=${formatThreads(threads)}）`,
       );
       server.fortify(ServerConstants.ServerFortifyAmount * Math.min(threads, maxThreadNeeded));
       if (stock) {
@@ -682,9 +682,9 @@ function hack(ctx: NetscriptContext, _host: unknown, manual: boolean, opts: unkn
       log(
         ctx,
         () =>
-          `Failed to hack '${server.hostname}'. Gained ${formatExp(expGainedOnFailure)} exp (t=${formatThreads(
+          `入侵 '${server.hostname}' 失败。获得 ${formatExp(expGainedOnFailure)} 经验（t=${formatThreads(
             threads,
-          )})`,
+          )}）`,
       );
       return 0;
     }
@@ -696,7 +696,7 @@ function portHandle(ctx: NetscriptContext, _n: unknown): PortHandle {
   if (n > CONSTANTS.NumNetscriptPorts) {
     throw errorMessage(
       ctx,
-      `Trying to use an invalid port: ${n}. Must be less or equal to ${CONSTANTS.NumNetscriptPorts}.`,
+      `尝试使用无效端口：${n}。必须小于等于 ${CONSTANTS.NumNetscriptPorts}。`,
     );
   }
   return new PortHandle(n as PortNumber);
@@ -710,7 +710,7 @@ function person(ctx: NetscriptContext, p: unknown): IPerson {
     city: undefined,
   };
   const error = missingKey(fakePerson, p);
-  if (error) throw errorMessage(ctx, `person should be a Person.\n${error}`, "TYPE");
+  if (error) throw errorMessage(ctx, `person 应为一个 Person。\n${error}`, "TYPE");
   return p as IPerson;
 }
 
@@ -736,13 +736,13 @@ function server(ctx: NetscriptContext, s: unknown): IServer {
   };
   const error = missingKey(fakeServer, s);
   if (error) {
-    let errorMessagePrefix = "Server must be a normal server.";
+    let errorMessagePrefix = "server 必须是普通服务器。";
     if (s != null && typeof s === "object") {
       if ("hostname" in s) {
-        errorMessagePrefix += ` Server's hostname is ${s.hostname}.`;
+        errorMessagePrefix += ` 该服务器的 hostname 为 ${s.hostname}。`;
       }
       if ("modelId" in s) {
-        errorMessagePrefix += " Server data looks like darknet server data.";
+        errorMessagePrefix += " 该服务器数据看起来像暗网服务器的数据。";
       }
     }
     // throw errorMessage(ctx, `Server should be a normal server.\n${error}`, "TYPE");
@@ -753,19 +753,19 @@ function server(ctx: NetscriptContext, s: unknown): IServer {
 
 function gang(ctx: NetscriptContext, g: unknown): FormulaGang {
   const error = missingKey({ respect: 0, territory: 0, wantedLevel: 0 }, g);
-  if (error) throw errorMessage(ctx, `gang should be a Gang.\n${error}`, "TYPE");
+  if (error) throw errorMessage(ctx, `gang 应为一个 Gang。\n${error}`, "TYPE");
   return g as FormulaGang;
 }
 
 function gangMember(ctx: NetscriptContext, m: unknown): GangMember {
   const error = missingKey(new GangMember(), m);
-  if (error) throw errorMessage(ctx, `member should be a GangMember.\n${error}`, "TYPE");
+  if (error) throw errorMessage(ctx, `member 应为一个 GangMember。\n${error}`, "TYPE");
   return m as GangMember;
 }
 
 function gangTask(ctx: NetscriptContext, t: unknown): GangMemberTask {
   const error = missingKey(new GangMemberTask("", "", false, false, { hackWeight: 100 }), t);
-  if (error) throw errorMessage(ctx, `task should be a GangMemberTask.\n${error}`, "TYPE");
+  if (error) throw errorMessage(ctx, `task 应为一个 GangMemberTask。\n${error}`, "TYPE");
   return t as GangMemberTask;
 }
 
@@ -773,7 +773,7 @@ export function filePath(ctx: NetscriptContext, argName: string, filename: unkno
   assertStringWithNSContext(ctx, argName, filename);
   const path = resolveFilePath(filename, ctx.workerScript.name);
   if (path) return path;
-  throw errorMessage(ctx, `Invalid ${argName}, was not a valid path: ${filename}`);
+  throw errorMessage(ctx, `无效的 ${argName}，不是有效路径：${filename}`);
 }
 
 export function scriptPath(
@@ -787,8 +787,8 @@ export function scriptPath(
 
   const programName = getRecordKeys(Programs).find((name) => name.toLowerCase() === path.toLowerCase());
   const nsMethod = programName ? Programs[programName].nsMethod : "";
-  const hint = nsMethod && showExeErrorHint ? `Did you mean to use ns.${nsMethod} ?` : "";
-  throw errorMessage(ctx, `Invalid ${argName}, must be a script (js, jsx, ts, tsx): ${filename} ${hint}`);
+  const hint = nsMethod && showExeErrorHint ? `你是想使用 ns.${nsMethod} 吗？` : "";
+  throw errorMessage(ctx, `无效的 ${argName}，必须是脚本（js、jsx、ts、tsx）：${filename} ${hint}`);
 }
 
 /**
@@ -810,8 +810,8 @@ export function getRunningScriptsByArgs(
   if (!Array.isArray(scriptArgs)) {
     throw helpers.errorMessage(
       ctx,
-      "Invalid scriptArgs argument passed into getRunningScriptByArgs().\n" +
-        "This is probably a bug. Please report to game developer",
+      "传给 getRunningScriptByArgs() 的 scriptArgs 参数无效。\n" +
+        "这可能是 bug。请报告给游戏开发者",
     );
   }
 
@@ -846,9 +846,9 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
  * @returns Error message to print to logs
  */
 function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string {
-  if (typeof ident === "number") return `Cannot find running script with pid: ${ident}`;
+  if (typeof ident === "number") return `找不到 pid 为 ${ident} 的运行中脚本`;
 
-  return `Cannot find running script ${ident.scriptname} on server ${ident.host} with args: ${arrayToString(
+  return `在服务器 ${ident.host} 上找不到运行中脚本 ${ident.scriptname}，参数为：${arrayToString(
     ident.args,
   )}`;
 }
@@ -905,7 +905,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
  */
 function failOnHacknetServer(ctx: NetscriptContext, server: BaseServer): boolean {
   if (server instanceof HacknetServer) {
-    log(ctx, () => `Does not work on Hacknet Servers`);
+    log(ctx, () => `在 Hacknet 服务器上不可用`);
     return true;
   } else {
     return false;
@@ -930,11 +930,11 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
   }
   if (typeof bitNodeOptions !== "object") {
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
-    throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
+    throw errorMessage(ctx, `如果指定 bitNodeOptions，则它必须是对象。当前为 ${bitNodeOptions}。`);
   }
   const options = bitNodeOptions as Unknownify<BitNodeOptions>;
   if (!(options.sourceFileOverrides instanceof Map)) {
-    throw errorMessage(ctx, `sourceFileOverrides must be a Map.`);
+    throw errorMessage(ctx, `sourceFileOverrides 必须是一个 Map。`);
   }
   const validationResultForSourceFileOverrides = validateSourceFileOverrides(
     /**
@@ -947,7 +947,7 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
   if (!validationResultForSourceFileOverrides.valid) {
     throw errorMessage(
       ctx,
-      `sourceFileOverrides is invalid. Reason: ${validationResultForSourceFileOverrides.message}`,
+      `sourceFileOverrides 无效。原因：${validationResultForSourceFileOverrides.message}`,
     );
   }
 

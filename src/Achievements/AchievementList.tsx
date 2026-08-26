@@ -8,7 +8,6 @@ import { Achievement, PlayerAchievement } from "./Achievements";
 import { Settings } from "../Settings/Settings";
 import { getFiltersFromHex } from "../ThirdParty/colorUtils";
 import { CorruptibleText } from "../ui/React/CorruptibleText";
-import { pluralize } from "../utils/I18nUtils";
 
 interface IProps {
   achievements: Achievement[];
@@ -47,7 +46,7 @@ export function AchievementList({ achievements, playerAchievements }: IProps): J
   return (
     <Box sx={{ my: 2 }}>
       {unlocked.length > 0 && (
-        <AchievementCategory title="Acquired" achievements={unlocked} allAchievements={data} usePadding={true}>
+        <AchievementCategory title="已获得" achievements={unlocked} allAchievements={data} usePadding={true}>
           {unlocked.map((item) => (
             <AchievementEntry
               key={`unlocked_${item.achievement.ID}`}
@@ -60,7 +59,7 @@ export function AchievementList({ achievements, playerAchievements }: IProps): J
         </AchievementCategory>
       )}
       {locked.length > 0 && (
-        <AchievementCategory title="Locked" achievements={locked} usePadding={true}>
+        <AchievementCategory title="未解锁" achievements={locked} usePadding={true}>
           {locked.map((item) => (
             <AchievementEntry
               key={`locked_${item.achievement.ID}`}
@@ -72,14 +71,14 @@ export function AchievementList({ achievements, playerAchievements }: IProps): J
         </AchievementCategory>
       )}
       {unavailable.length > 0 && (
-        <AchievementCategory title="Unavailable" achievements={unavailable}>
+        <AchievementCategory title="不可获得" achievements={unavailable}>
           <Typography sx={{ mt: 1 }}>
-            {pluralize(unavailable.length, "additional achievement")} hidden behind content you don't have access to.
+            还有 {unavailable.length} 个成就被你暂时无法访问的内容所隐藏。
           </Typography>
         </AchievementCategory>
       )}
       {secret.length > 0 && (
-        <AchievementCategory title="Secret" achievements={secret}>
+        <AchievementCategory title="隐藏成就" achievements={secret}>
           <Typography color="secondary" sx={{ mt: 1 }}>
             {secret.map((item) => (
               <span key={`secret_${item.achievement.ID}`}>

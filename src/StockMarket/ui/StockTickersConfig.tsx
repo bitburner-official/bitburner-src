@@ -25,11 +25,11 @@ function DisplayModeButton(props: IProps): React.ReactElement {
   let txt = "";
   let tooltip = "";
   if (props.tickerDisplayMode === TickerDisplayMode.Portfolio) {
-    txt = "Switch to 'All Stocks' Mode";
-    tooltip = "Displays all stocks on the WSE";
+    txt = "切换到“全部股票”模式";
+    tooltip = "显示世界股票交易所（WSE）的所有股票";
   } else {
-    txt = "Switch to 'Portfolio' Mode";
-    tooltip = "Displays only the stocks for which you have shares or orders";
+    txt = "切换到“投资组合”模式";
+    tooltip = "仅显示你持有股份或挂有订单的股票";
   }
 
   return (
@@ -47,7 +47,7 @@ export function StockTickersConfig(props: IProps): React.ReactElement {
       <TextField
         sx={{ width: "100%" }}
         onChange={props.changeWatchlistFilter}
-        placeholder="Filter Stocks by symbol (comma-separated list)"
+        placeholder="按代码筛选股票（逗号分隔列表）"
         type="text"
       />
     </>

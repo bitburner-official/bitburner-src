@@ -2,9 +2,9 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Dark+",
+  name: "深色+",
   credit: "LoganMD",
-  description: "VSCode Dark+",
+  description: "VSCode Dark+ 配色",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/921999975867617310",
   screenshot: img1,
   colors: {

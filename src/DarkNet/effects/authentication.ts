@@ -33,15 +33,13 @@ export const checkPassword = (
   switch (server.modelId) {
     case ModelIds.MastermindHint: {
       const { exactCharacters, misplacedCharacters } = getMastermindResponse(server.password, attemptedPassword);
-      const exactCharsMessage = `${exactCharacters} symbol${exactCharacters == 1 ? " is" : "s are"} match exactly`;
-      const misplacedCharsMessage = `${misplacedCharacters} symbol${misplacedCharacters == 1 ? "" : "s"} match but ${
-        misplacedCharacters == 1 ? "is" : "are"
-      } in the wrong place`;
-      const message = `Hint: ${exactCharsMessage},  and ${misplacedCharsMessage}.`;
+      const exactCharsMessage = `${exactCharacters} 个符号位置完全正确`;
+      const misplacedCharsMessage = `${misplacedCharacters} 个符号正确但位置不对`;
+      const message = `提示：${exactCharsMessage}，且 ${misplacedCharsMessage}。`;
       return getFailureResponse(attemptedPassword, message, `${exactCharacters},${misplacedCharacters}`);
     }
     case ModelIds.GuessNumber: {
-      const hintData = Number(attemptedPassword) > Number(server.password) ? "Lower" : "Higher";
+      const hintData = Number(attemptedPassword) > Number(server.password) ? "更小" : "更大";
       return getFailureResponse(attemptedPassword, server.staticPasswordHint, hintData);
     }
     case ModelIds.RomanNumeral: {
@@ -53,14 +51,14 @@ export const checkPassword = (
         .split("")
         .map((char, i) => (char === server.password[i] ? "yes" : "yesn't"))
         .join(",");
-      return getFailureResponse(attemptedPassword, "that wasn't right", response);
+      return getFailureResponse(attemptedPassword, "那可不对", response);
     }
     case ModelIds.SpiceLevel: {
       const exactChars = getExactCorrectChars(server.password, attemptedPassword);
       const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";
       return getFailureResponse(
         attemptedPassword,
-        "Not spicy enough",
+        "辣度还不够",
         `${pepperRepresentation}/${server.password.length}`,
       );
     }
@@ -68,9 +66,9 @@ export const checkPassword = (
       const password = Number(server.password);
       const attemptedDivisor = Number(attemptedPassword);
       if (isNaN(+attemptedPassword) || password % attemptedDivisor || attemptedPassword === "") {
-        return getFailureResponse(attemptedPassword, `Password is not divisible by '${attemptedPassword}'`, "false");
+        return getFailureResponse(attemptedPassword, `密码不能被 '${attemptedPassword}' 整除`, "false");
       }
-      return getFailureResponse(attemptedPassword, `Password IS divisible by '${attemptedPassword}'`, "true");
+      return getFailureResponse(attemptedPassword, `密码确实能被 '${attemptedPassword}' 整除`, "true");
     }
     case ModelIds.tripleModulo: {
       const password = Number(server.password);
@@ -94,8 +92,8 @@ export const checkPassword = (
     }
     case ModelIds.TimingAttack: {
       const indexOfDifference = server.password.split("").findIndex((char, i) => char !== attemptedPassword[i]);
-      const hint = `Found a mismatch while checking each character (${indexOfDifference})`;
-      const data = `Response time: ${responseTime}ms`;
+      const hint = `在逐个字符检查时发现不匹配（第 ${indexOfDifference} 位）`;
+      const data = `响应时间：${responseTime}ms`;
       return getFailureResponse(attemptedPassword, hint, data);
     }
     case ModelIds.BufferOverflow: {
@@ -112,7 +110,7 @@ export const checkPassword = (
         return getGenericSuccess(attemptedPassword);
       }
 
-      const failureMessage = `auth failed: received '${receivedBuffer}', expected '${expectedValueBuffer}'`;
+      const failureMessage = `认证失败：收到 '${receivedBuffer}'，预期为 '${expectedValueBuffer}'`;
       const data = `${receivedBuffer},${expectedValueBuffer}`;
       return getFailureResponse(attemptedPassword, failureMessage, data);
     }
@@ -120,7 +118,7 @@ export const checkPassword = (
       const altitude = getKingOfTheHillAltitude(server, attemptedPassword);
       return getFailureResponse(
         attemptedPassword,
-        `current altitude: ${altitude.toFixed(5)} m; highest peak: 10,000 m`,
+        `当前海拔：${altitude.toFixed(5)} m；最高峰：10,000 m`,
         `${altitude}`,
       );
     }

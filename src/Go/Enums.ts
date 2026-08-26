@@ -16,14 +16,14 @@ export enum GoColor {
 }
 
 export enum GoValidity {
-  pointBroken = "That node is offline; a piece cannot be placed there",
-  pointNotEmpty = "That node is already occupied by a piece",
-  boardRepeated = "It is illegal to repeat prior board states",
-  noSuicide = "It is illegal to cause your own pieces to be captured",
-  notYourTurn = "It is not your turn to play",
-  gameOver = "The game is over",
-  invalid = "Invalid move",
-  valid = "Valid move",
+  pointBroken = "该节点已离线，无法在此放置棋子",
+  pointNotEmpty = "该节点已被棋子占据",
+  boardRepeated = "重复之前的棋盘状态属于违规",
+  noSuicide = "禁止自杀：不能让自己的棋子被提掉",
+  notYourTurn = "还没轮到你落子",
+  gameOver = "对局已经结束",
+  invalid = "无效落子",
+  valid = "有效落子",
 }
 
 export enum GoPlayType {

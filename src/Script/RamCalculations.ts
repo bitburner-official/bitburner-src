@@ -140,7 +140,7 @@ function parseOnlyRamCalculate(
     if (!script) {
       return {
         errorCode: RamCalculationErrorCode.ImportError,
-        errorMessage: `"${nextModule}" does not exist on server: ${server}`,
+        errorMessage: `"${nextModule}" 在服务器上不存在：${server}`,
       };
     }
     const scriptFileType = getFileType(script.filename);
@@ -150,9 +150,9 @@ function parseOnlyRamCalculate(
     } catch (error) {
       return {
         errorCode: RamCalculationErrorCode.ImportError,
-        errorMessage: `Cannot parse module: ${nextModule}. Filename: ${script.filename}. Reason: ${
+        errorMessage: `无法解析模块：${nextModule}。文件名：${script.filename}。原因：${
           error instanceof Error ? error.message : String(error)
-        }.`,
+        }。`,
       };
     }
     parseCode(moduleAST, nextModule, getFileTypeFeature(scriptFileType));

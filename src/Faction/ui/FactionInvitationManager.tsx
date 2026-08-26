@@ -61,16 +61,16 @@ export function FactionInvitationManager({ hidden }: { hidden: boolean }): React
 
   return (
     <Modal open={!hidden && faction !== null} onClose={close}>
-      <Typography variant="h4">You received a faction invitation.</Typography>
+      <Typography variant="h4">你收到了一份派系邀请。</Typography>
       <Typography>
-        Would you like to join <b>{faction?.name}</b>?
+        你想加入 <b>{faction?.name}</b> 吗？
       </Typography>
       {enemies.length > 0 && (
         <Typography component="div">
           <br />
-          Joining this faction will prevent you from joining its enemies until your next augmentation.
+          加入该派系后，直到你下一次安装强化之前，都无法加入其敌对派系。
           <br />
-          {faction?.name} is enemies with:
+          {faction?.name} 的敌对派系：
           {enemies.map((enemy) => (
             <Typography key={enemy} sx={{ display: "flex", alignItems: "center" }}>
               <Report sx={{ marginLeft: 2, marginRight: 1, color: Settings.theme.error }} />
@@ -81,9 +81,9 @@ export function FactionInvitationManager({ hidden }: { hidden: boolean }): React
       )}
       <br />
       <Button onClick={join} sx={{ marginRight: 1 }}>
-        Join
+        加入
       </Button>
-      <Button onClick={close}>Decide later</Button>
+      <Button onClick={close}>稍后再决定</Button>
     </Modal>
   );
 }

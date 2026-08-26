@@ -109,29 +109,29 @@ export function purchaseServer(hostname: string, ram: number): void {
 
   //Check if player has enough money
   if (!Player.canAfford(cost)) {
-    dialogBoxCreate("You don't have enough money to purchase this server!");
+    dialogBoxCreate("你没有足够的资金购买此服务器！");
     return;
   }
 
   //Maximum server limit
   if (Player.purchasedServers.length >= getCloudServerLimit()) {
     dialogBoxCreate(
-      "You have reached the maximum limit of " +
+      "你已达到 " +
         getCloudServerLimit() +
-        " cloud servers. " +
-        "You cannot purchase any more. You can " +
-        "delete some of your cloud servers using the cloud.deleteServer() Netscript function in a script",
+        " 台云服务器的上限。" +
+        "无法再购买。你可以" +
+        "在脚本中使用 cloud.deleteServer() Netscript 函数删除部分云服务器",
     );
     return;
   }
 
   if (hostname == "") {
-    dialogBoxCreate("You must enter a hostname for your new server!");
+    dialogBoxCreate("你必须为新服务器输入一个主机名！");
     return;
   }
 
   if (hostname.startsWith("hacknet-node-") || hostname.startsWith("hacknet-server-")) {
-    dialogBoxCreate(`'${hostname}' is a reserved hostname, please try again.`);
+    dialogBoxCreate(`'${hostname}' 是保留主机名，请重试。`);
     return;
   }
 
@@ -157,14 +157,14 @@ export function purchaseServer(hostname: string, ram: number): void {
 
   Player.loseMoney(cost, "servers");
 
-  dialogBoxCreate("Cloud server successfully purchased with hostname " + newServ.hostname);
+  dialogBoxCreate("已成功购买云服务器，主机名：" + newServ.hostname);
 }
 
 // Manually upgrade RAM on home computer (NOT through Netscript)
 export function purchaseRamForHomeComputer(): void {
   const cost = Player.getUpgradeHomeRamCost();
   if (!Player.canAfford(cost)) {
-    dialogBoxCreate("You do not have enough money to purchase additional RAM for your home computer");
+    dialogBoxCreate("你没有足够的资金为家用电脑购买额外的 RAM");
     return;
   }
 
@@ -173,7 +173,7 @@ export function purchaseRamForHomeComputer(): void {
     (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
     homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
   ) {
-    dialogBoxCreate(`You cannot upgrade your home computer RAM because it is at its maximum possible value`);
+    dialogBoxCreate(`无法升级家用电脑的 RAM，因为它已达到最大值`);
     return;
   }
 

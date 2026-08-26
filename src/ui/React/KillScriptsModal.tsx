@@ -17,8 +17,8 @@ export function KillScriptsModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>Forcefully kill all running scripts? This will also save your game and reload the game.</Typography>
-      <Button onClick={onClick}>KILL</Button>
+      <Typography>确定要强制终止所有运行中的脚本吗？此操作还会保存并重新加载游戏。</Typography>
+      <Button onClick={onClick}>终止</Button>
     </Modal>
   );
 }

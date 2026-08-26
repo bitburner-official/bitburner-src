@@ -16,19 +16,19 @@ export function TimeSkipDev(): React.ReactElement {
     return () => {
       Player.lastUpdate -= time;
       Engine._lastUpdate -= time;
-      dialogBoxCreate("Time skip effect has been applied");
+      dialogBoxCreate("时间跳跃效果已生效");
     };
   }
 
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_TimeSkipDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Time skip</Typography>
+        <Typography>时间跳跃</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Button onClick={timeskip(60 * 1000)}>1 minute</Button>
-        <Button onClick={timeskip(60 * 60 * 1000)}>1 hour</Button>
-        <Button onClick={timeskip(24 * 60 * 60 * 1000)}>1 day</Button>
+        <Button onClick={timeskip(60 * 1000)}>1 分钟</Button>
+        <Button onClick={timeskip(60 * 60 * 1000)}>1 小时</Button>
+        <Button onClick={timeskip(24 * 60 * 60 * 1000)}>1 天</Button>
       </AccordionDetails>
     </AutoExpandAccordion>
   );

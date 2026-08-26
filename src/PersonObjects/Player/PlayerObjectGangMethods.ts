@@ -11,18 +11,18 @@ import type { Result } from "@nsdefs";
 
 export function canAccessGang(this: PlayerObject): Result {
   if (this.bitNodeOptions.disableGang) {
-    return { success: false, message: "Gang is disabled by advanced options." };
+    return { success: false, message: "帮派已被高级选项禁用。" };
   }
   if (this.bitNodeN === 2) {
     return { success: true };
   }
   if (this.activeSourceFileLvl(2) === 0) {
-    return { success: false, message: "You do not have Source-File 2." };
+    return { success: false, message: "你没有源文件 2。" };
   }
   if (this.karma > GangConstants.GangKarmaRequirement) {
     return {
       success: false,
-      message: `Your karma must be less than or equal to ${GangConstants.GangKarmaRequirement}.`,
+      message: `你的业力必须小于或等于 ${GangConstants.GangKarmaRequirement}。`,
     };
   }
 

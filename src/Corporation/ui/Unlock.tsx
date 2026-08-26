@@ -27,7 +27,7 @@ export function Unlock(props: UnlockProps): React.ReactElement {
     // corp.unlock handles displaying a dialog on failure
     const result = corp.purchaseUnlock(props.name);
     if (!result.success) {
-      dialogBoxCreate(`Error while attempting to purchase ${props.name}:\n${result.message}`);
+      dialogBoxCreate(`尝试购买 ${props.name} 时出错：\n${result.message}`);
     }
     // Rerenders the parent, which should remove this item if the purchase was successful
     props.rerender();

@@ -154,7 +154,7 @@ export class StatusBar {
       this.showRegisters = true;
       return this.update();
     }
-    if (html.innerText.startsWith("----------Registers----------\n\n")) this.notification = "Registers are empty";
+    if (html.innerText.startsWith("----------Registers----------\n\n")) this.notification = "寄存器为空";
     else this.notification = html.innerText;
 
     const currentNotification = this.notification;

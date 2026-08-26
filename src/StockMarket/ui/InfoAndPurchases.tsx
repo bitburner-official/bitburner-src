@@ -47,18 +47,18 @@ function Purchase4SMarketDataTixApiAccessButton(props: IProps): React.ReactEleme
   if (Player.has4SDataTixApi) {
     return (
       <Typography>
-        4S Market Data TIX API Access <CheckIcon />
+        4S 市场数据 TIX API 访问权限 <CheckIcon />
       </Typography>
     );
   }
   const cost = getStockMarket4STixApiCost();
-  let tooltipTitle = "Let you access 4S Market Data through Netscript";
+  let tooltipTitle = "让你通过 Netscript 访问 4S 市场数据";
   if (Player.bitNodeOptions.disable4SData) {
-    tooltipTitle = "4S Market Data is disabled in advanced BitNode options";
+    tooltipTitle = "4S 市场数据已在 BitNode 高级选项中禁用";
   } else if (!Player.hasTixApiAccess) {
-    tooltipTitle = "Requires TIX API Access";
+    tooltipTitle = "需要 TIX API 访问权限";
   } else if (!Player.canAfford(cost)) {
-    tooltipTitle = "You do not have enough money";
+    tooltipTitle = "你的资金不足";
   }
   return (
     <Tooltip title={<Typography>{tooltipTitle}</Typography>}>
@@ -67,7 +67,7 @@ function Purchase4SMarketDataTixApiAccessButton(props: IProps): React.ReactEleme
           disabled={Player.bitNodeOptions.disable4SData || !Player.hasTixApiAccess || !Player.canAfford(cost)}
           onClick={purchase4SMarketDataTixApiAccess}
         >
-          Buy 4S Market Data TIX API Access -&nbsp;
+          购买 4S 市场数据 TIX API 访问权限 -&nbsp;
           <Money money={cost} forPurchase={true} />
         </Button>
       </span>
@@ -79,7 +79,7 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
   if (Player.hasWseAccount) {
     return (
       <Typography>
-        WSE Account <CheckIcon />
+        WSE 账户 <CheckIcon />
       </Typography>
     );
   }
@@ -99,17 +99,17 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
   }
 
   const cost = StockMarketConstants.WseAccountCost;
-  let tooltipTitle = "Let you trade stock via UI";
+  let tooltipTitle = "让你通过界面（UI）交易股票";
   if (!Player.canAfford(cost)) {
-    tooltipTitle = "You do not have enough money";
+    tooltipTitle = "你的资金不足";
   }
   return (
     <>
-      <Typography>If you want to trade via Stock Market dashboard (UI), you must purchase a WSE account.</Typography>
+      <Typography>如果你想通过股票市场面板（UI）进行交易，必须购买 WSE 账户。</Typography>
       <Tooltip title={<Typography>{tooltipTitle}</Typography>}>
         <span>
           <Button disabled={!Player.canAfford(cost)} onClick={purchaseWseAccount}>
-            Buy WSE Account -&nbsp;
+            购买 WSE 账户 -&nbsp;
             <Money money={cost} forPurchase={true} />
           </Button>
         </span>
@@ -137,26 +137,26 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
   if (Player.hasTixApiAccess) {
     return (
       <Typography>
-        TIX API Access <CheckIcon />
+        TIX API 访问权限 <CheckIcon />
       </Typography>
     );
   }
   const cost = StockMarketConstants.TixApiCost;
-  let tooltipTitle = "Let you trade stock via NS APIs";
+  let tooltipTitle = "让你通过 NS API 交易股票";
   if (!Player.canAfford(cost)) {
-    tooltipTitle = "You do not have enough money";
+    tooltipTitle = "你的资金不足";
   }
   return (
     <>
       <Typography>
-        TIX, short for Trade Information eXchange, is the communications protocol used by the WSE. Purchasing access to
-        the TIX API lets you write code to create your own algorithmic/automated trading strategies.
+        TIX 是 Trade Information eXchange 的缩写，是世界股票交易所（WSE）使用的通信协议。购买 TIX API
+        访问权限后，你可以编写代码来构建自己的算法化/自动化交易策略。
       </Typography>
-      <Typography>If you want to trade via NS APIs, you must purchase TIX API access.</Typography>
+      <Typography>如果你想通过 NS API 进行交易，必须购买 TIX API 访问权限。</Typography>
       <Tooltip title={<Typography>{tooltipTitle}</Typography>}>
         <span>
           <Button disabled={!Player.canAfford(cost)} onClick={purchaseTixApiAccess}>
-            Buy Trade Information eXchange (TIX) API Access -&nbsp;
+            购买 Trade Information eXchange（TIX）API 访问权限 -&nbsp;
             <Money money={cost} forPurchase={true} />
           </Button>
         </span>
@@ -186,18 +186,18 @@ function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
   if (Player.has4SData) {
     return (
       <Typography>
-        4S Market Data UI Access <CheckIcon />
+        4S 市场数据界面访问权限 <CheckIcon />
       </Typography>
     );
   }
   const cost = getStockMarket4SDataCost();
-  let tooltipTitle = "Lets you view additional pricing and volatility information about stocks";
+  let tooltipTitle = "让你查看关于股票的额外价格与波动率信息";
   if (Player.bitNodeOptions.disable4SData) {
-    tooltipTitle = "4S Market Data is disabled in advanced BitNode options";
+    tooltipTitle = "4S 市场数据已在 BitNode 高级选项中禁用";
   } else if (!Player.hasWseAccount) {
-    tooltipTitle = "Requires WSE Account";
+    tooltipTitle = "需要 WSE 账户";
   } else if (!Player.canAfford(cost)) {
-    tooltipTitle = "You do not have enough money";
+    tooltipTitle = "你的资金不足";
   }
   return (
     <Tooltip title={<Typography>{tooltipTitle}</Typography>}>
@@ -206,7 +206,7 @@ function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
           disabled={Player.bitNodeOptions.disable4SData || !Player.hasWseAccount || !Player.canAfford(cost)}
           onClick={purchase4SMarketData}
         >
-          Buy 4S Market Data Access -&nbsp;
+          购买 4S 市场数据访问权限 -&nbsp;
           <Money money={cost} forPurchase={true} />
         </Button>
       </span>
@@ -218,24 +218,24 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
   const [helpOpen, setHelpOpen] = useState(false);
   return (
     <>
-      <Typography variant="h4">Welcome to the World Stock Exchange (WSE)!</Typography>
+      <Typography variant="h4">欢迎来到世界股票交易所（WSE）！</Typography>
 
       <Typography variant="h5" color="primary">
-        WSE Account
+        WSE 账户
       </Typography>
       <PurchaseWseAccountButton {...props} />
 
       <Typography variant="h5" color="primary">
-        Trade Information eXchange (TIX) API
+        Trade Information eXchange（TIX）API
       </Typography>
       <PurchaseTixApiAccessButton {...props} />
 
       <Typography variant="h5" color="primary">
-        {FactionName.FourSigma} (4S) Market Data Feed
+        {FactionName.FourSigma}（4S）市场数据源
       </Typography>
       <Typography>
-        {FactionName.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your trading
-        strategies.
+        {FactionName.FourSigma}
+        （4S）市场数据源提供有关股票的信息，可帮助你制定交易策略。
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
         </IconButton>
@@ -244,33 +244,26 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
       <Purchase4SMarketDataButton {...props} />
 
       <Typography>
-        Commission Fees: Every transaction you make has a{" "}
-        <Money money={StockMarketConstants.StockMarketCommission} forPurchase={true} /> commission fee.
+        手续费：你所进行的每笔交易都需要支付{" "}
+        <Money money={StockMarketConstants.StockMarketCommission} forPurchase={true} /> 的佣金。
       </Typography>
       <br />
       <Typography>
-        WARNING: When you reset after installing Augmentations, the Stock Market is reset. You will retain your WSE
-        Account, access to the TIX API, and 4S Market Data access. However, all of your stock positions are lost, so
-        make sure to sell your stocks before installing Augmentations!
+        警告：安装强化后进行重置时，股票市场也会被重置。你将保留 WSE 账户、TIX API
+        访问权限以及 4S 市场数据访问权限。但你所有的股票持仓都会丢失，因此请务必在安装强化前卖掉你的股票！
       </Typography>
       <StaticModal open={helpOpen} onClose={() => setHelpOpen(false)}>
         <Typography>
-          Access to the 4S Market Data feed will display two additional pieces of information about each stock: Price
-          Forecast & Volatility
+          访问 4S 市场数据源后，每只股票会额外显示两项信息：价格预测与波动率
           <br />
           <br />
-          Price Forecast indicates the probability the stock has of increasing or decreasing. A '+' forecast means the
-          stock has a higher chance of increasing than decreasing, and a '-' means the opposite. The number of '+/-'
-          symbols is used to illustrate the magnitude of these probabilities. For example, '+++' means that the stock
-          has a significantly higher chance of increasing than decreasing, while '+' means that the stock only has a
-          slightly higher chance of increasing than decreasing.
+          价格预测表示股票上涨或下跌的概率。“+”预测意味着该股票上涨的可能性大于下跌，“-”则相反。“+/-”
+          符号的数量用于体现这些概率的大小。例如，“+++”表示该股票上涨的可能性远大于下跌，而“+”则表示仅略微偏高。
           <br />
           <br />
-          Volatility represents the maximum percentage by which a stock's price can change every tick (a tick occurs
-          every few seconds while the game is running).
+          波动率表示股票价格每个 tick 可能变化的最大百分比（游戏运行时每隔几秒会发生一个 tick）。
           <br />
-          <br />A stock's price forecast can change over time. This is also affected by volatility. The more volatile a
-          stock is, the more its price forecast will change.
+          <br />股票的价格预测会随时间而变化，这同样受波动率影响。股票的波动性越大，其价格预测的变化幅度也越大。
         </Typography>
       </StaticModal>
     </>

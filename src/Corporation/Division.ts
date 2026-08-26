@@ -340,7 +340,7 @@ export class Division {
       });
     } catch (error) {
       dialogBoxCreate(
-        `Error evaluating your sell amount for ${name} in ${this.name}'s ${city} office. Error: ${error}.`,
+        `计算你在 ${this.name} 部门 ${city} 办事处的 ${name} 出售数量时出错。错误：${error}。`,
       );
       return 0;
     }
@@ -392,8 +392,8 @@ export class Division {
         sCost = evaluateCorpFormula(String(desiredSellPrice), { MP: marketPrice });
       } catch (error) {
         dialogBoxCreate(
-          `Error evaluating your sell price for ${name} in ${this.name}'s ${city} office. ` +
-            `The sell amount is being set to zero. Error: ${error}`,
+          `计算你在 ${this.name} 部门 ${city} 办事处的 ${name} 出售价格时出错。` +
+            `出售数量将被设为零。错误：${error}`,
         );
         return 0;
       }
@@ -733,7 +733,7 @@ export class Division {
                   });
                 } catch (e) {
                   dialogBoxCreate(
-                    `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${e}`,
+                    `计算 ${this.name} 部门 ${city} 中 ${mat.name} 的出口数量时失败，错误信息：${e}`,
                   );
                   continue;
                 }

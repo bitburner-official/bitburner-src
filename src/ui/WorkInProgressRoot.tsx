@@ -56,60 +56,60 @@ function ExpRows(rate: WorkStats): React.ReactElement[] {
     rate.hackExp > 0 && (
       <StatsRow
         key="hack"
-        name="Hacking Exp"
+        name="黑客经验"
         color={Settings.theme.hack}
         data={{
-          content: `${formatExp(rate.hackExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.hackExp * CYCLES_PER_SEC)} / 秒`,
         }}
       />
     ),
     rate.strExp > 0 && (
       <StatsRow
         key="str"
-        name="Strength Exp"
+        name="力量经验"
         color={Settings.theme.combat}
         data={{
-          content: `${formatExp(rate.strExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.strExp * CYCLES_PER_SEC)} / 秒`,
         }}
       />
     ),
     rate.defExp > 0 && (
       <StatsRow
         key="def"
-        name="Defense Exp"
+        name="防御经验"
         color={Settings.theme.combat}
         data={{
-          content: `${formatExp(rate.defExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.defExp * CYCLES_PER_SEC)} / 秒`,
         }}
       />
     ),
     rate.dexExp > 0 && (
       <StatsRow
         key="dex"
-        name="Dexterity Exp"
+        name="灵巧经验"
         color={Settings.theme.combat}
         data={{
-          content: `${formatExp(rate.dexExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.dexExp * CYCLES_PER_SEC)} / 秒`,
         }}
       />
     ),
     rate.agiExp > 0 && (
       <StatsRow
         key="agi"
-        name="Agility Exp"
+        name="敏捷经验"
         color={Settings.theme.combat}
         data={{
-          content: `${formatExp(rate.agiExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.agiExp * CYCLES_PER_SEC)} / 秒`,
         }}
       />
     ),
     rate.chaExp > 0 && (
       <StatsRow
         key="cha"
-        name="Charisma Exp"
+        name="魅力经验"
         color={Settings.theme.cha}
         data={{
-          content: `${formatExp(rate.chaExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.chaExp * CYCLES_PER_SEC)} / 秒`,
         }}
       />
     ),
@@ -122,7 +122,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
     rate.hackExp > 0 && (
       <StatsRow
         key="hack"
-        name="Hacking Exp"
+        name="黑客经验"
         color={Settings.theme.hack}
         data={{
           content: `${formatExp(rate.hackExp)}`,
@@ -132,7 +132,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
     rate.strExp > 0 && (
       <StatsRow
         key="str"
-        name="Strength Exp"
+        name="力量经验"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.strExp)}`,
@@ -142,7 +142,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
     rate.defExp > 0 && (
       <StatsRow
         key="def"
-        name="Defense Exp"
+        name="防御经验"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.defExp)}`,
@@ -152,7 +152,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
     rate.dexExp > 0 && (
       <StatsRow
         key="dex"
-        name="Dexterity Exp"
+        name="灵巧经验"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.dexExp)}`,
@@ -162,7 +162,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
     rate.agiExp > 0 && (
       <StatsRow
         key="agi"
-        name="Agility Exp"
+        name="敏捷经验"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.agiExp)}`,
@@ -172,7 +172,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
     rate.chaExp > 0 && (
       <StatsRow
         key="cha"
-        name="Charisma Exp"
+        name="魅力经验"
         color={Settings.theme.cha}
         data={{
           content: `${formatExp(rate.chaExp)}`,
@@ -221,16 +221,16 @@ export function WorkInProgressRoot(): React.ReactElement {
           Router.toPage(Page.City);
         },
       },
-      title: `You are attempting ${crime.workName}`,
+      title: `你正在尝试${crime.workName}`,
 
       gains: [
         <tr key="header">
           <td>
-            <Typography>Success chance: {formatPercent(successChance)}</Typography>
-            <Typography>Gains (on success)</Typography>
+            <Typography>成功率：{formatPercent(successChance)}</Typography>
+            <Typography>收益（成功时）</Typography>
           </td>
         </tr>,
-        <StatsRow key="money" name="Money:" color={Settings.theme.money}>
+        <StatsRow key="money" name="资金：" color={Settings.theme.money}>
           <Typography>
             <Money money={gains.money} />
           </Typography>
@@ -242,7 +242,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         percentage: completion,
       },
 
-      stopText: "Stop committing crime",
+      stopText: "停止犯罪",
     };
   }
 
@@ -251,9 +251,9 @@ export function WorkInProgressRoot(): React.ReactElement {
 
     let stopText = "";
     if (classWork.isGym()) {
-      stopText = "Stop training at gym";
+      stopText = "停止在健身房训练";
     } else {
-      stopText = "Stop taking course";
+      stopText = "停止上课";
     }
 
     const rates = classWork.calculateRates();
@@ -269,12 +269,12 @@ export function WorkInProgressRoot(): React.ReactElement {
       },
       title: (
         <>
-          You are currently <b>{classWork.getClass().youAreCurrently}</b>
+          你目前正在进行 <b>{classWork.getClass().youAreCurrently}</b>
         </>
       ),
 
       gains: [
-        <StatsRow key="totalCost" name="Total Cost" color={Settings.theme.money}>
+        <StatsRow key="totalCost" name="总花费" color={Settings.theme.money}>
           <Typography>
             <Money money={classWork.earnings.money} /> (<MoneyRate money={rates.money * CYCLES_PER_SEC} />)
           </Typography>
@@ -305,7 +305,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       },
       title: (
         <>
-          You are currently working on coding <b>{create.programName}</b>
+          你目前正在编写程序 <b>{create.programName}</b>
         </>
       ),
 
@@ -314,8 +314,8 @@ export function WorkInProgressRoot(): React.ReactElement {
         percentage: completion,
       },
 
-      stopText: "Stop creating program",
-      stopTooltip: "Your work will be saved and you can return to complete the program later.",
+      stopText: "停止编写程序",
+      stopTooltip: "你的进度会被保存，之后可以回来继续完成该程序。",
     };
   }
 
@@ -335,7 +335,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       },
       title: (
         <>
-          You are currently working on grafting <b>{graftWork.augmentation}</b>
+          你目前正在为 <b>{graftWork.augmentation}</b> 进行移植
         </>
       ),
 
@@ -344,10 +344,10 @@ export function WorkInProgressRoot(): React.ReactElement {
         percentage: (graftWork.unitCompleted / graftWork.unitNeeded()) * 100,
       },
 
-      stopText: "Stop grafting",
+      stopText: "停止移植",
       stopTooltip: (
         <>
-          If you cancel, your work will <b>not</b> be saved, and the money you spent will <b>not</b> be returned
+          如果取消，你的进度将<b>不会</b>被保存，已花费的资金也<b>不会</b>退还
         </>
       ),
     };
@@ -361,17 +361,17 @@ export function WorkInProgressRoot(): React.ReactElement {
           cancel: () => Router.toPage(Page.Factions),
         },
         title:
-          `You have not joined ${Player.currentWork.factionName || "(Faction not found)"} at this time,` +
-          " please try again if you think this should have worked",
+          `你当前尚未加入 ${Player.currentWork.factionName || "(未找到该派系)"}，` +
+          "如果你认为这不应发生，请重试",
 
-        stopText: "Back to Factions",
+        stopText: "返回派系列表",
       };
     }
 
     const description = {
-      [FactionWorkType.hacking]: "carrying out hacking contracts",
-      [FactionWorkType.field]: "carrying out field missions",
-      [FactionWorkType.security]: "performing security detail",
+      [FactionWorkType.hacking]: "执行黑客合同",
+      [FactionWorkType.field]: "执行外勤任务",
+      [FactionWorkType.security]: "执行安保任务",
     };
 
     const exp = Player.currentWork.getExpRates();
@@ -388,14 +388,14 @@ export function WorkInProgressRoot(): React.ReactElement {
       },
       title: (
         <>
-          You are currently {description[Player.currentWork.factionWorkType]} for <b>{faction.name}</b>
+          你目前正在为 <b>{faction.name}</b> {description[Player.currentWork.factionWorkType]}
         </>
       ),
 
       description: (
         <>
-          Current Faction Reputation: <Reputation reputation={faction.playerReputation} /> (
-          <ReputationRate reputation={Player.currentWork.getReputationRate() * CYCLES_PER_SEC} />)
+          当前派系声望：<Reputation reputation={faction.playerReputation} />（
+          <ReputationRate reputation={Player.currentWork.getReputationRate() * CYCLES_PER_SEC} />）
         </>
       ),
       gains: ExpRows(exp),
@@ -403,7 +403,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         elapsed: Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle,
       },
 
-      stopText: "Stop Faction work",
+      stopText: "停止派系工作",
     };
   }
 
@@ -415,10 +415,10 @@ export function WorkInProgressRoot(): React.ReactElement {
           cancel: () => Router.toPage(Page.Terminal),
         },
         title:
-          `You cannot work for ${Player.currentWork.companyName} at this time,` +
-          " please try again if you think this should have worked",
+          `你当前无法为 ${Player.currentWork.companyName} 工作，` +
+          "如果你认为这不应发生，请重试",
 
-        stopText: "Back to Terminal",
+        stopText: "返回终端",
       };
     }
 
@@ -439,22 +439,22 @@ export function WorkInProgressRoot(): React.ReactElement {
       },
       title: (
         <>
-          You are currently working as a <b>{position}</b> at <b>{Player.currentWork.companyName}</b>
+          你目前在 <b>{Player.currentWork.companyName}</b> 担任 <b>{position}</b>
         </>
       ),
 
       description: (
         <>
-          Current Company Reputation: <Reputation reputation={companyRep} />
+          当前公司声望：<Reputation reputation={companyRep} />
         </>
       ),
       gains: [
-        <StatsRow key="money" name="Money" color={Settings.theme.money}>
+        <StatsRow key="money" name="资金" color={Settings.theme.money}>
           <Typography>
             <MoneyRate money={gains.money * CYCLES_PER_SEC} />
           </Typography>
         </StatsRow>,
-        <StatsRow key="reputation" name="Company Reputation" color={Settings.theme.rep}>
+        <StatsRow key="reputation" name="公司声望" color={Settings.theme.rep}>
           <Typography>
             <ReputationRate reputation={gains.reputation * CYCLES_PER_SEC} />
           </Typography>
@@ -465,7 +465,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         elapsed: Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle,
       },
 
-      stopText: "Stop working",
+      stopText: "停止工作",
     };
   }
 
@@ -507,13 +507,13 @@ export function WorkInProgressRoot(): React.ReactElement {
               }}
             >
               {workInfo.progress.elapsed !== undefined && (
-                <Typography>{convertTimeMsToTimeElapsedString(workInfo.progress.elapsed)} elapsed</Typography>
+                <Typography>已进行 {convertTimeMsToTimeElapsedString(workInfo.progress.elapsed)}</Typography>
               )}
               {workInfo.progress.remaining !== undefined && (
-                <Typography>{convertTimeMsToTimeElapsedString(workInfo.progress.remaining)} remaining</Typography>
+                <Typography>剩余 {convertTimeMsToTimeElapsedString(workInfo.progress.remaining)}</Typography>
               )}
               {workInfo.progress.percentage !== undefined && (
-                <Typography>{workInfo.progress.percentage.toFixed(2)}% done</Typography>
+                <Typography>已完成 {workInfo.progress.percentage.toFixed(2)}%</Typography>
               )}
             </Box>
             {workInfo.progress.percentage !== undefined && (
@@ -531,7 +531,7 @@ export function WorkInProgressRoot(): React.ReactElement {
             <Button onClick={workInfo.buttons.cancel}>{workInfo.stopText}</Button>
           )}
           {workInfo.buttons.unfocus && (
-            <Button onClick={workInfo.buttons.unfocus}>Do something else simultaneously</Button>
+            <Button onClick={workInfo.buttons.unfocus}>同时进行其他活动</Button>
           )}
         </Box>
       </Paper>

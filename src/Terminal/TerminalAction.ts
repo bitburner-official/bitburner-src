@@ -13,6 +13,6 @@ export interface TerminalAction {
 
 export class Cancellation extends Error {
   constructor(name: string) {
-    super(`Terminal command ${name} was cancelled`);
+    super(`终端命令 ${name} 已取消`);
   }
 }

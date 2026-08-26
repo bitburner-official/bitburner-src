@@ -49,7 +49,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     division.newInd && mat.name in division.requiredMaterials && mat.buyAmount === 0 && mat.importAmount === 0;
 
   // Purchase material button
-  const purchaseButtonText = `Buy (${formatBigNumber(mat.buyAmount)})`;
+  const purchaseButtonText = `购买（${formatBigNumber(mat.buyAmount)}）`;
 
   // Sell material button
   let sellButtonText: JSX.Element;
@@ -57,13 +57,13 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     if (typeof mat.desiredSellAmount === "string") {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(mat.actualSellAmount)}/{mat.desiredSellAmount})
+          出售（{formatBigNumber(mat.actualSellAmount)}/{mat.desiredSellAmount}）
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(mat.actualSellAmount)}/{formatBigNumber(mat.desiredSellAmount)})
+          出售（{formatBigNumber(mat.actualSellAmount)}/{formatBigNumber(mat.desiredSellAmount)}）
         </>
       );
     }
@@ -71,28 +71,28 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
       {sellButtonText} @ <Money money={mat.uiMarketPrice} />
     </>;
   } else {
-    sellButtonText = <>Sell (0.000/0.000)</>;
+    sellButtonText = <>出售（0.000/0.000）</>;
   }
 
   // Limit Production button
-  let limitMaterialButtonText = "Limit Material Production";
+  let limitMaterialButtonText = "限制材料产量";
   if (mat.productionLimit !== null) {
     limitMaterialButtonText += " (" + formatCorpStat(mat.productionLimit) + ")";
   }
 
   // Material Gain details
   const gainBreakdown = [
-    ["Buy:", mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)],
-    ["Prod:", formatBigNumber(mat.productionAmount)],
-    ["Import:", formatBigNumber(mat.importAmount)],
-    ["Export:", formatBigNumber(-mat.exportedLastCycle || 0)],
-    ["Sell:", formatBigNumber(-mat.actualSellAmount || 0)],
+    ["购买：", mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)],
+    ["生产：", formatBigNumber(mat.productionAmount)],
+    ["进口：", formatBigNumber(mat.importAmount)],
+    ["出口：", formatBigNumber(-mat.exportedLastCycle || 0)],
+    ["出售：", formatBigNumber(-mat.actualSellAmount || 0)],
   ];
   if (corp.unlocks.has(CorpUnlockName.MarketResearchDemand)) {
-    gainBreakdown.push(["Demand:", formatCorpStat(mat.demand)]);
+    gainBreakdown.push(["需求：", formatCorpStat(mat.demand)]);
   }
   if (corp.unlocks.has(CorpUnlockName.MarketDataCompetition)) {
-    gainBreakdown.push(["Competition:", formatCorpStat(mat.competition)]);
+    gainBreakdown.push(["竞争：", formatCorpStat(mat.competition)]);
   }
 
   return (
@@ -108,24 +108,24 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           <Tooltip
             title={
               <Typography>
-                Market Price: The price you would pay if you were to buy this material on the market
+                市场价格：如果你在市场上购买这种材料，需要支付的价格
               </Typography>
             }
           >
             <Typography>
-              MP: <Money money={mat.marketPrice} />
+              市价（MP）：<Money money={mat.marketPrice} />
             </Typography>
           </Tooltip>
           <Tooltip
-            title={<Typography>The quality of your material. Higher quality will lead to more sales</Typography>}
+            title={<Typography>你的材料质量。质量越高销量越大</Typography>}
           >
-            <Typography>Quality: {formatQuality(mat.quality)}</Typography>
+            <Typography>质量：{formatQuality(mat.quality)}</Typography>
           </Tooltip>
         </Box>
 
         <Box sx={{ "& button": { width: "100%" } }}>
           <Tooltip
-            title={tutorial ? <Typography>Purchase your required materials to get production started!</Typography> : ""}
+            title={tutorial ? <Typography>购买所需材料，开始生产吧！</Typography> : ""}
           >
             <Button color={tutorial ? "error" : "primary"} onClick={() => setPurchaseMaterialOpen(true)}>
               {purchaseButtonText}
@@ -142,7 +142,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
 
           {corp.unlocks.has(CorpUnlockName.Export) && (
             <>
-              <Button onClick={() => setExportOpen(true)}>Export</Button>
+              <Button onClick={() => setExportOpen(true)}>出口</Button>
 
               <ExportModal
                 key={`ExportModal-${division.name}-${city}-${mat.name}`}

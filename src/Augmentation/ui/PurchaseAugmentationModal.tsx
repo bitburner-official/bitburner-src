@@ -32,8 +32,8 @@ export function PurchaseAugmentationModal({ aug, faction, onClose, open }: IProp
         {aug.stats}
         <br />
         <br />
-        Would you like to purchase the {aug.name} Augmentation for&nbsp;
-        <Money money={getAugCost(aug).moneyCost} />?
+        是否要以&nbsp;
+        <Money money={getAugCost(aug).moneyCost} /> 购买 {aug.name} 强化？
         <br />
         <br />
       </Typography>
@@ -44,7 +44,7 @@ export function PurchaseAugmentationModal({ aug, faction, onClose, open }: IProp
           onClose();
         }}
       >
-        Purchase
+        购买
       </Button>
     </Modal>
   );

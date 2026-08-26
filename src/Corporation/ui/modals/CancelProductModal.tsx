@@ -25,10 +25,9 @@ export function CancelProductModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Are you sure you want to do this? Canceling a product removes it completely and permanently. You will receive no
-        money back by doing so
+        你确定要这样做吗？取消产品会将其完全且永久地移除。这样做不会退还任何资金
       </Typography>
-      <Button onClick={cancel}>Cancel</Button>
+      <Button onClick={cancel}>取消</Button>
     </Modal>
   );
 }

@@ -4,7 +4,7 @@ import { formatRam } from "../../ui/formatNumber";
 
 export function top(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of top command. Usage: top");
+    Terminal.error("top 命令用法不正确。用法：top");
     return;
   }
 
@@ -13,10 +13,10 @@ export function top(args: (string | number | boolean)[], server: BaseServer): un
   const pidWidth = 10;
   const threadsWidth = 16;
 
-  const scriptTxt = "Script";
+  const scriptTxt = "脚本";
   const pidTxt = "PID";
-  const threadsTxt = "Threads";
-  const ramTxt = "RAM Usage";
+  const threadsTxt = "线程";
+  const ramTxt = "RAM 占用";
 
   const spacesAfterScriptTxt = " ".repeat(scriptWidth - scriptTxt.length);
   const spacesAfterPidTxt = " ".repeat(pidWidth - pidTxt.length);

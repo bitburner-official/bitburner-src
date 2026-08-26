@@ -23,8 +23,7 @@ export function TravelModal({ bladeburner, open, onClose }: TravelModalProps): R
     <Modal open={open} onClose={onClose}>
       <>
         <Typography>
-          Travel to a different city for your Bladeburner activities. This does not cost any money. The city you are in
-          for your Bladeburner duties does not affect your location in the game otherwise.
+          前往其他城市开展Bladeburner活动。这不花费任何资金。Bladeburner活动所在的城市不影响你在游戏中的其他位置状态。
         </Typography>
         {Settings.DisableASCIIArt ? (
           Object.values(CityName).map((city) => (

@@ -48,7 +48,7 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
     return () => document.removeEventListener("keydown", handle);
   }, [alerts]);
 
-  const alertMessage = alerts[0]?.text || "No alert to show";
+  const alertMessage = alerts[0]?.text || "没有可显示的警告";
   const canBeDismissedEasily = alerts[0]?.canBeDismissedEasily;
 
   function getMessageHash(text: string | JSX.Element): string {
@@ -88,7 +88,7 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
       </Box>
       {!canBeDismissedEasily && (
         <Button onClick={close} sx={{ marginTop: "10px" }}>
-          OK
+          确定
         </Button>
       )}
     </Modal>

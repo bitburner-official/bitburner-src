@@ -77,14 +77,14 @@ export function CompaniesDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_CompaniesDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Companies</Typography>
+        <Typography>公司</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Company:</Typography>
+                <Typography>公司：</Typography>
               </td>
               <td colSpan={3}>
                 <Autocomplete
@@ -103,12 +103,12 @@ export function CompaniesDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Reputation:</Typography>
+                <Typography>声望：</Typography>
               </td>
               <td>
                 <Adjuster
-                  label="reputation"
-                  placeholder="amt"
+                  label="声望"
+                  placeholder="数量"
                   tons={() => modifyCompanyRep(1)(largeAmountOfReputation)}
                   add={modifyCompanyRep(1)}
                   subtract={modifyCompanyRep(-1)}
@@ -118,12 +118,12 @@ export function CompaniesDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Favor:</Typography>
+                <Typography>好感：</Typography>
               </td>
               <td>
                 <Adjuster
-                  label="favor"
-                  placeholder="amt"
+                  label="好感"
+                  placeholder="数量"
                   tons={() => modifyCompanyFavor(1)(2000)}
                   add={modifyCompanyFavor(1)}
                   subtract={modifyCompanyFavor(-1)}
@@ -133,20 +133,20 @@ export function CompaniesDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>All Reputation:</Typography>
+                <Typography>全部声望：</Typography>
               </td>
               <td>
-                <Button onClick={tonsOfRepCompanies}>Tons</Button>
-                <Button onClick={resetAllRepCompanies}>Reset</Button>
+                <Button onClick={tonsOfRepCompanies}>海量</Button>
+                <Button onClick={resetAllRepCompanies}>重置</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Typography>All Favor:</Typography>
+                <Typography>全部好感：</Typography>
               </td>
               <td>
-                <Button onClick={tonsOfFavorCompanies}>Tons</Button>
-                <Button onClick={resetAllFavorCompanies}>Reset</Button>
+                <Button onClick={tonsOfFavorCompanies}>海量</Button>
+                <Button onClick={resetAllFavorCompanies}>重置</Button>
               </td>
             </tr>
           </tbody>

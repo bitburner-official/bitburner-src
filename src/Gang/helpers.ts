@@ -5,7 +5,7 @@ import { GangConstants } from "./data/Constants";
 
 export function canCreateGang(faction: FactionName): Result {
   if (Player.gang) {
-    return { success: false, message: "You already have a gang." };
+    return { success: false, message: "你已经拥有一个帮派了。" };
   }
   const checkResult = Player.canAccessGang();
   if (!checkResult.success) {
@@ -14,13 +14,13 @@ export function canCreateGang(faction: FactionName): Result {
   if (!GangConstants.Names.includes(faction)) {
     return {
       success: false,
-      message: `${faction} does not allow creating a gang. You can only do that with ${GangConstants.Names.join(
+      message: `${faction} 不允许创建帮派。你只能通过以下派系来创建帮派：${GangConstants.Names.join(
         ", ",
-      )}.`,
+      )}。`,
     };
   }
   if (!Player.factions.includes(faction)) {
-    return { success: false, message: `You are not a member of ${faction}.` };
+    return { success: false, message: `你不是 ${faction} 的成员。` };
   }
   return { success: true };
 }

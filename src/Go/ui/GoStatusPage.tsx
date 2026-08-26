@@ -23,7 +23,7 @@ export const GoStatusPage = (): React.ReactElement => {
       <Grid container>
         <Grid item>
           <div className={classes.statusPageScore}>
-            <Typography variant="h5">Current Subnet:</Typography>
+            <Typography variant="h5">当前子网：</Typography>
             <GoScoreSummaryTable score={score} opponent={opponent} />
           </div>
         </Grid>
@@ -39,16 +39,16 @@ export const GoStatusPage = (): React.ReactElement => {
         </Grid>
       </Grid>
       <br />
-      <Typography variant="h5">Summary of All Subnet Boosts:</Typography>
+      <Typography variant="h5">所有子网加成汇总：</Typography>
       <br />
       <Table sx={{ display: "table", mb: 1, width: "550px" }}>
         <TableBody>
           <TableRow>
             <TableCell className={classes.cellNone}>
-              <strong>Faction:</strong>
+              <strong>派系：</strong>
             </TableCell>
             <TableCell className={classes.cellNone}>
-              <strong>Effect:</strong>
+              <strong>效果：</strong>
             </TableCell>
           </TableRow>
           {playedOpponentList.map((faction, index) => {

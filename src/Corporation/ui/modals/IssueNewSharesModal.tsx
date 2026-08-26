@@ -43,13 +43,13 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
       dialogBoxCreate(
         <>
           <Typography>
-            Issued {formatShares(newShares)} new shares and raised <Money money={profit} />.
+            发行了 {formatShares(newShares)} 股新股，筹集了 <Money money={profit} />。
           </Typography>
           {privateShares > 0 ? (
-            <Typography>{formatShares(privateShares)} of these shares were bought by private investors.</Typography>
+            <Typography>其中 {formatShares(privateShares)} 股被私人投资者购买。</Typography>
           ) : null}
           <Typography>
-            <b>{corp.name}</b>'s stock price fell to <Money money={corp.sharePrice} />.
+            <b>{corp.name}</b> 的股价跌至 <Money money={corp.sharePrice} />。
           </Typography>
         </>,
       );
@@ -69,36 +69,35 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography component="div">
-        You can issue new equity shares (i.e. stocks) in order to raise capital.
+        你可以发行新股（即股票）来筹集资金。
         <ul>
-          <li>Issuing new shares will cause dilution, lowering stock price and reducing dividends per share.</li>
-          <li>New shares are sold between the current price and the updated price.</li>
-          <li>The money from issuing new shares will be deposited directly into your Corporation's funds.</li>
+          <li>发行新股会造成股权稀释，降低股价并减少每股股息。</li>
+          <li>新股将以当前价格和更新后的价格之间的价格售出。</li>
+          <li>发行新股所得的资金会直接存入企业的资金账户。</li>
           <li>
-            Private shareholders have first priority for buying new shares, up to half of their existing stake in the
-            company <b>({formatPercent(privateOwnedRatio / 2, 1)})</b>.
+            私人股东拥有购买新股的优先权，最多可购买其在公司现有持股的一半{" "}
+            <b>（{formatPercent(privateOwnedRatio / 2, 1)}）</b>。
             <br />
-            If they choose to exercise this option, these newly issued shares become private, restricted shares, which
-            means you cannot buy them back.
+            如果他们选择行使该权利，这些新发行的股份将成为私人的受限股份，这意味着你无法回购它们。
           </li>
           <li>
-            You will not be able to issue new shares again for <b>{corp.convertCooldownToString(nextCooldown)}</b>.
+            之后 <b>{corp.convertCooldownToString(nextCooldown)}</b> 内你将无法再次发行新股。
           </li>
         </ul>
-        You can issue at most {formatShares(maxNewShares)} new shares.
+        你最多可以发行 {formatShares(maxNewShares)} 股新股。
         <br />
-        The number of new shares issued must be a multiple of 10 million.
+        新股发行数量必须是1000万的整数倍。
       </Typography>
       <br />
       <NumberInput
         defaultValue={shares || ""}
         autoFocus
-        placeholder="# New Shares"
+        placeholder="新股数量"
         onChange={setShares}
         onKeyDown={onKeyDown}
       />
       <ButtonWithTooltip disabledTooltip={disabledText} onClick={issueNewShares}>
-        Issue New Shares
+        发行新股
       </ButtonWithTooltip>
       <br />
       <Typography sx={{ minHeight: "6em" }}>
@@ -106,17 +105,17 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
           disabledText
         ) : (
           <>
-            Issue {formatShares(newShares)} new shares?
+            要发行 {formatShares(newShares)} 股新股吗？
             <br />
             {maxPrivateShares > 0
-              ? `Private investors may buy up to ${formatShares(
+              ? `私人投资者最多可能购买其中 ${formatShares(
                   maxPrivateShares,
-                )} of these shares and keep them off the market.`
+                )} 股，并使其不流入市场。`
               : null}
             <br />
-            <b>{corp.name}</b> will receive <Money money={profit} />.
+            <b>{corp.name}</b> 将获得 <Money money={profit} />。
             <br />
-            <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
+            <b>{corp.name}</b> 的股价将跌至每股 <Money money={newSharePrice} />。
           </>
         )}
       </Typography>

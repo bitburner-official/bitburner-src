@@ -33,10 +33,10 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       dialogBoxCreate(
         <>
           <Typography>
-            You bought {formatShares(shares)} shares for <Money money={cost} />.
+            你以 <Money money={cost} /> 的价格购买了 {formatShares(shares)} 股股份。
           </Typography>
           <Typography>
-            <b>{corp.name}</b>'s stock price rose to <Money money={sharePrice} /> per share.
+            <b>{corp.name}</b> 的股价涨至每股 <Money money={sharePrice} />。
           </Typography>
         </>,
       );
@@ -55,25 +55,25 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography component="div">
-        Enter the number of outstanding shares you would like to buy back.
+        输入你想要回购的已发行股份数量。
         <ul>
-          <li>Buying back shares will cause the stock price to rise due to market forces.</li>
-          <li>These shares must be bought at a 10% premium over the market price.</li>
-          <li>You purchase these shares with your own money (NOT your Corporation's funds).</li>
+          <li>回购股份会因市场力量导致股价上涨。</li>
+          <li>这些股份必须以高于市价10%的溢价购买。</li>
+          <li>你需要用自己的钱（而不是企业的资金）购买这些股份。</li>
         </ul>
-        <b>{corp.name}</b> currently has {formatShares(corp.issuedShares)} outstanding stock shares, valued at{" "}
-        <Money money={corp.sharePrice} /> per share.
+        <b>{corp.name}</b> 目前有 {formatShares(corp.issuedShares)} 股已发行股票，每股价值{" "}
+        <Money money={corp.sharePrice} />。
       </Typography>
       <br />
       <NumberInput
         defaultValue={shares || ""}
         autoFocus={true}
-        placeholder="Shares to buyback"
+        placeholder="要回购的股份数"
         onChange={setShares}
         onKeyDown={onKeyDown}
       />
       <ButtonWithTooltip disabledTooltip={disabledText} onClick={buy}>
-        Buy shares
+        购买股份
         {cost > 0 ? (
           <>
             &nbsp;-&nbsp;
@@ -89,7 +89,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
           disabledText
         ) : (
           <>
-            <b>{corp.name}</b>'s stock price will settle at <Money money={sharePrice} /> per share.
+            <b>{corp.name}</b> 的股价将稳定在每股 <Money money={sharePrice} />。
           </>
         )}
       </Typography>

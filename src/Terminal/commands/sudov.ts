@@ -3,13 +3,13 @@ import { BaseServer } from "../../Server/BaseServer";
 
 export function sudov(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 0) {
-    Terminal.error("Incorrect number of arguments. Usage: sudov");
+    Terminal.error("参数数量不正确。用法：sudov");
     return;
   }
 
   if (server.hasAdminRights) {
-    Terminal.print("You have ROOT access to this machine");
+    Terminal.print("你对这台机器拥有 ROOT 权限");
   } else {
-    Terminal.print("You do NOT have root access to this machine");
+    Terminal.print("你对这台机器没有 root 权限");
   }
 }

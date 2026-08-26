@@ -7,15 +7,15 @@ export const mergeOverlappingIntervals: Pick<CodingContractTypes, CodingContract
   [CodingContractName.MergeOverlappingIntervals]: {
     desc: (arr: number[][]): string => {
       return [
-        "Given the following array of arrays of numbers representing a list of",
-        "intervals, merge all overlapping intervals.\n\n",
+        "给定以下表示区间列表的二维数字数组，",
+        "合并所有重叠的区间。\n\n",
         `[${convert2DArrayToString(arr)}]\n\n`,
-        "Example:\n\n",
+        "示例：\n\n",
         "[[1, 3], [8, 10], [2, 6], [10, 16]]\n\n",
-        "would merge into [[1, 6], [8, 16]].\n\n",
-        "The intervals must be returned in ASCENDING order.",
-        "You can assume that in an interval, the first number will always be",
-        "smaller than the second.",
+        "将合并为 [[1, 6], [8, 16]]。\n\n",
+        "区间必须按升序返回。",
+        "可以假设在每个区间中，第一个数总是",
+        "小于第二个数。",
       ].join(" ");
     },
     difficulty: 3,

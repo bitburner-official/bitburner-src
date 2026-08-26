@@ -30,15 +30,15 @@ export const GoScoreModal = ({
   const blackScore = finalScore[GoColor.black];
   const whiteScore = finalScore[GoColor.white];
 
-  const playerWinsText = opponent === GoOpponent.none ? "Black wins!" : "You win!";
-  const opponentWinsText = opponent === GoOpponent.none ? "White wins!" : `Winner: ${opponent}`;
+  const playerWinsText = opponent === GoOpponent.none ? "黑方获胜！" : "你赢了！";
+  const opponentWinsText = opponent === GoOpponent.none ? "白方获胜！" : `获胜者：${opponent}`;
 
   return (
     <Modal open={open} onClose={onClose}>
       <>
         <div className={classes.scoreModal}>
           <Typography variant="h5" className={classes.centeredText}>
-            Game complete!
+            对局结束！
           </Typography>
           <GoScoreSummaryTable score={finalScore} opponent={opponent} />
           <br />
@@ -56,8 +56,8 @@ export const GoScoreModal = ({
             ""
           )}
           <Box className={classes.inlineFlexBox}>
-            <Button onClick={showScoreExplanation}>Score Explanation</Button>
-            <Button onClick={newSubnet}>New Subnet</Button>
+            <Button onClick={showScoreExplanation}>得分说明</Button>
+            <Button onClick={newSubnet}>新子网</Button>
           </Box>
         </div>
       </>

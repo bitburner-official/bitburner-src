@@ -33,12 +33,12 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
       return;
     }
     if (!Number.isFinite(threads) || threads < 0) {
-      dialogBoxCreate("Invalid RAM amount.");
+      dialogBoxCreate("无效的 RAM 数值。");
       return;
     }
     const freeRAM = home.maxRam - home.ramUsed;
     if (ramUsage > freeRAM + 0.001) {
-      dialogBoxCreate("Not enough RAM.");
+      dialogBoxCreate("RAM 不足。");
       return;
     }
 
@@ -58,14 +58,13 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       <Typography>
-        You can share free RAM of your home computer with your factions to get a bonus multiplier for reputation gain.
-        Each time you share your free RAM, you get a boost for {ShareBonusTime / 1000} seconds. After that, you lose the
-        boost and get back your shared RAM. You can share free RAM of other servers that you have admin rights to by
-        using the ns.share() API.
+        你可以将家用电脑的空闲 RAM 与你的各个派系共享，以获得声望收益的加成倍率。每次共享空闲 RAM 后，你会获得{" "}
+        {ShareBonusTime / 1000} 秒的加成。之后加成消失，共享的 RAM 会被归还。你还可以通过 ns.share() API
+        共享你有管理员权限的其他服务器的空闲 RAM。
         <br />
-        Free RAM on home computer: {formatRam(home.maxRam - home.ramUsed)}.
+        家用电脑空闲 RAM：{formatRam(home.maxRam - home.ramUsed)}。
         <br />
-        Current bonus: {formatNumber(calculateCurrentShareBonus(), 6)}. Bonus with {formatRam(ramUsage)}:{" "}
+        当前加成：{formatNumber(calculateCurrentShareBonus(), 6)}。共享 {formatRam(ramUsage)} 后的加成：{" "}
         {formatNumber(calculateShareBonusWithAdditionalThreads(threads, home.cpuCores), 6)}
       </Typography>
 
@@ -87,14 +86,14 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
         <Tooltip
           title={
             <Typography>
-              RAM shared via this tool is rounded down to the nearest multiple of 4.
+              通过此工具共享的 RAM 会向下取整到最接近的 4 的倍数。
               <br />
-              For example, a value of 18 GB results in 16 GB.
+              例如，输入 18 GB 实际会共享 16 GB。
             </Typography>
           }
         >
           <Typography component="div" style={{ display: "flex", alignItems: "center" }}>
-            <Button onClick={onShare}>Share</Button>
+            <Button onClick={onShare}>共享</Button>
             <InfoIcon sx={{ fontSize: "1.5em", marginLeft: "10px" }} />
           </Typography>
         </Tooltip>

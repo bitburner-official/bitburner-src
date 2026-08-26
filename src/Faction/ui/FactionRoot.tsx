@@ -28,24 +28,21 @@ type FactionRootProps = {
 
 // Info text for all options on the UI
 const hackingContractsInfo =
-  "Complete hacking contracts for your faction. " +
-  "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based completely on your hacking skill. " +
-  "You will gain hacking exp.";
+  "为你的派系完成黑客合约。" +
+  "你的效率决定了你能为该派系获得多少声望，" +
+  "它完全取决于你的黑客技能。" +
+  "你将获得黑客经验。";
 const fieldWorkInfo =
-  "Carry out field missions for your faction. " +
-  "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based on all of your stats equally. " +
-  "You will gain exp for all stats.";
+  "为你的派系执行外勤任务。" +
+  "你的效率决定了你能为该派系获得多少声望，" +
+  "它均衡地取决于你的所有属性。" +
+  "你将获得所有属性的经验。";
 const securityWorkInfo =
-  "Serve in a security detail for your faction. " +
-  "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based on your combat stats and your hacking skill. " +
-  "You will gain exp for all combat stats and hacking.";
-const augmentationsInfo =
-  "As your reputation with this faction rises, you will " +
-  "unlock augmentations, which you can purchase to enhance " +
-  "your abilities.";
+  "为你的派系担任安保工作。" +
+  "你的效率决定了你能为该派系获得多少声望，" +
+  "它取决于你的战斗属性和黑客技能。" +
+  "你将获得所有战斗属性和黑客的经验。";
+const augmentationsInfo = "随着你在该派系的声望提升，你将" + "解锁强化项目，购买它们可以增强" + "你的能力。";
 
 interface IMainProps {
   faction: Faction;
@@ -105,7 +102,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 
   return (
     <>
-      <Button onClick={() => Router.toPage(Page.Factions)}>Back</Button>
+      <Button onClick={() => Router.toPage(Page.Factions)}>返回</Button>
       <Typography variant="h4" color="primary">
         {faction.name}
       </Typography>
@@ -114,37 +111,30 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
         <>
           {factionInfo.offersWork() && (
             <Typography>
-              Perform work/carry out assignments for your faction to help further its cause! By doing so, you will earn
-              reputation for your faction. You will also gain reputation passively over time, although at a very slow
-              rate.&nbsp;
-              {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in some BitNodes. </>}
-              Earning reputation will allow you to purchase augmentations through this faction, which are powerful
-              upgrades that enhance your abilities.
+              为你的派系工作/执行任务，助力其事业发展！这样做可以为派系赢得声望。你也会随时间被动地获得声望，不过速度非常缓慢。&nbsp;
+              {knowAboutBitverse() && <>注意在某些 BitNode 中被动声望获取是禁用的。 </>}
+              积累声望后，你就能通过该派系购买强化——它们是能够增强你能力的强力升级。
             </Typography>
           )}
           {factionInfo.offerHackingWork && (
             <Option
-              buttonText={"Hacking Contracts"}
+              buttonText={"黑客合约"}
               infoText={hackingContractsInfo}
               onClick={() => startHackingContracts(faction)}
             />
           )}
           {factionInfo.offerFieldWork && (
-            <Option buttonText={"Field Work"} infoText={fieldWorkInfo} onClick={() => startFieldWork(faction)} />
+            <Option buttonText={"外勤工作"} infoText={fieldWorkInfo} onClick={() => startFieldWork(faction)} />
           )}
           {factionInfo.offerSecurityWork && (
-            <Option
-              buttonText={"Security Work"}
-              infoText={securityWorkInfo}
-              onClick={() => startSecurityWork(faction)}
-            />
+            <Option buttonText={"安保工作"} infoText={securityWorkInfo} onClick={() => startSecurityWork(faction)} />
           )}
           {factionInfo.offersWork() && (
             <DonateOption faction={faction} rerender={rerender} favorToDonate={favorToDonate} disabled={!canDonate} />
           )}
         </>
       )}
-      <Option buttonText={"Purchase Augmentations"} infoText={augmentationsInfo} onClick={onAugmentations} />
+      <Option buttonText={"购买强化"} infoText={augmentationsInfo} onClick={onAugmentations} />
     </>
   );
 }
@@ -156,9 +146,9 @@ export function FactionRoot({ faction }: FactionRootProps): React.ReactElement {
     return (
       <>
         <Typography variant="h4" color="primary">
-          You have not joined {faction.name} yet!
+          你尚未加入 {faction.name}！
         </Typography>
-        <Button onClick={() => Router.toPage(Page.Factions)}>Back to Factions</Button>
+        <Button onClick={() => Router.toPage(Page.Factions)}>返回派系列表</Button>
       </>
     );
   }

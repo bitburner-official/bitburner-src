@@ -66,7 +66,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 501,
       reqdReputation: 400e3,
       repMultiplier: 1.6,
-      hiredText: `Congratulations, you are now ${JobName.software4}`,
+      hiredText: `恭喜，你现在是 ${JobName.software4}`,
     },
     [JobName.software5]: {
       nextPosition: JobName.software6, // Vice President of Technology
@@ -80,7 +80,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 501,
       reqdReputation: 800e3,
       repMultiplier: 1.6,
-      hiredText: `Congratulations, you are now ${JobName.software5}`,
+      hiredText: `恭喜，你现在是 ${JobName.software5}`,
     },
     [JobName.software6]: {
       nextPosition: JobName.software7, // Chief Technology Officer
@@ -94,7 +94,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 601,
       reqdReputation: 1.6e6,
       repMultiplier: 1.75,
-      hiredText: `Congratulations, you are now ${JobName.software6}`,
+      hiredText: `恭喜，你现在是 ${JobName.software6}`,
     },
     [JobName.software7]: {
       nextPosition: null,
@@ -108,7 +108,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 751,
       reqdReputation: 3.2e6,
       repMultiplier: 2,
-      hiredText: `Congratulations, you are now ${JobName.software7}`,
+      hiredText: `恭喜，你现在是 ${JobName.software7}`,
     },
     [JobName.IT0]: {
       nextPosition: JobName.IT1, // IT Analyst
@@ -265,7 +265,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 76,
       reqdReputation: 800e3,
       repMultiplier: 1.6,
-      hiredText: `Congratulations, you are now ${JobName.business4}`,
+      hiredText: `恭喜，你现在是 ${JobName.business4}`,
     },
     [JobName.business5]: {
       nextPosition: null,
@@ -279,7 +279,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 101,
       reqdReputation: 3.2e6,
       repMultiplier: 1.75,
-      hiredText: `Congratulations, you are now ${JobName.business5}`,
+      hiredText: `恭喜，你现在是 ${JobName.business5}`,
     },
     [JobName.security0]: {
       nextPosition: JobName.security1, // Security Officer
@@ -471,8 +471,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.02,
       charismaExpGain: 0.05,
       repMultiplier: 1,
-      applyText: `Apply to be a ${JobName.waiter}`,
-      hiredText: `Congratulations, you are now employed as a ${JobName.waiter}`,
+      applyText: `申请成为 ${JobName.waiter}`,
+      hiredText: `恭喜，你现在受雇为 ${JobName.waiter}`,
     },
     [JobName.employee]: {
       nextPosition: null,
@@ -489,8 +489,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.02,
       charismaExpGain: 0.04,
       repMultiplier: 1,
-      applyText: `Apply to be an ${JobName.employee}`,
-      hiredText: "Congratulations, you are now employed",
+      applyText: `申请成为 ${JobName.employee}`,
+      hiredText: "恭喜，你现在已经就业",
     },
     [JobName.softwareConsult0]: {
       nextPosition: JobName.softwareConsult1, // Senior Software Consultant
@@ -503,8 +503,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       charismaExpGain: 0.03,
       reqdHacking: 51,
       repMultiplier: 1,
-      applyText: `Pitch a Software Consulting contract`,
-      hiredText: `Congratulations, you got a contract as a ${JobName.softwareConsult0}`,
+      applyText: `洽谈一份软件咨询合约`,
+      hiredText: `恭喜，你获得了 ${JobName.softwareConsult0} 的合约`,
     },
     [JobName.softwareConsult1]: {
       nextPosition: null,
@@ -517,8 +517,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 251,
       reqdCharisma: 51,
       repMultiplier: 1.2,
-      applyText: `Pitch a Software Consulting contract`,
-      hiredText: `Congratulations, you got a contract as a ${JobName.softwareConsult1}`,
+      applyText: `洽谈一份软件咨询合约`,
+      hiredText: `恭喜，你获得了 ${JobName.softwareConsult1} 的合约`,
     },
     [JobName.businessConsult0]: {
       nextPosition: JobName.businessConsult1, // Senior Business Consultant
@@ -532,8 +532,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 6,
       reqdCharisma: 51,
       repMultiplier: 1,
-      applyText: `Pitch a Business Consulting contract`,
-      hiredText: `Congratulations, you got a contract as a ${JobName.businessConsult0}`,
+      applyText: `洽谈一份商业咨询合约`,
+      hiredText: `恭喜，你获得了 ${JobName.businessConsult0} 的合约`,
     },
     [JobName.businessConsult1]: {
       nextPosition: null,
@@ -546,8 +546,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 51,
       reqdCharisma: 226,
       repMultiplier: 1.2,
-      applyText: `Pitch a Business Consulting contract`,
-      hiredText: `Congratulations, you got a contract as a ${JobName.businessConsult1}`,
+      applyText: `洽谈一份商业咨询合约`,
+      hiredText: `恭喜，你获得了 ${JobName.businessConsult1} 的合约`,
     },
     [JobName.waiterPT]: {
       nextPosition: null,
@@ -565,8 +565,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       charismaExpGain: 0.04,
       repMultiplier: 1,
       isPartTime: true,
-      applyText: `Apply to be a ${JobName.waiterPT}`,
-      hiredText: `Congratulations, you are now employed as a ${JobName.waiterPT}`,
+      applyText: `申请成为 ${JobName.waiterPT}`,
+      hiredText: `恭喜，你现在受雇为 ${JobName.waiterPT}`,
     },
     [JobName.employeePT]: {
       nextPosition: null,
@@ -584,8 +584,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       charismaExpGain: 0.03,
       repMultiplier: 1,
       isPartTime: true,
-      applyText: `Apply to be a ${JobName.employeePT}`,
-      hiredText: "Congratulations, you are now employed part-time",
+      applyText: `申请成为 ${JobName.employeePT}`,
+      hiredText: "恭喜，你现在得到一份兼职工作",
     },
   };
 }

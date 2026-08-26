@@ -2,5 +2,5 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 
 export function lscpu(_args: (string | number | boolean)[], server: BaseServer): undefined {
-  Terminal.print(server.cpuCores + " Core(s)");
+  Terminal.print(server.cpuCores + " 核心");
 }

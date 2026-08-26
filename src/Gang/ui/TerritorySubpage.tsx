@@ -20,18 +20,17 @@ export function TerritorySubpage(): React.ReactElement {
   return (
     <Container disableGutters maxWidth="md" sx={{ mx: 0 }}>
       <Typography>
-        This page shows how much territory your Gang controls. This statistic is listed as a percentage, which
-        represents how much of the total territory you control.
+        此页面显示你的帮派控制了多少地盘。该数值以百分比表示，代表你控制了总地盘的多大比例。
       </Typography>
 
       <Button onClick={() => setInfoOpen(true)} sx={{ my: 1 }}>
         <Help sx={{ mr: 1 }} />
-        About Gang Territory
+        关于帮派地盘
       </Button>
 
       <Box component={Paper} sx={{ p: 1, mb: 1 }}>
         <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
-          {gang.facName} (Your gang)
+          {gang.facName}（你的帮派）
         </Typography>
 
         <FormControlLabel
@@ -62,14 +61,14 @@ export function TerritorySubpage(): React.ReactElement {
                  * weak and cannot win any other gangs.
                  */
                 if (event.target.checked && needToBeWarned) {
-                  let message = "Your gang is too weak.";
+                  let message = "你的帮派太弱了。";
                   if (!canWinAtLeastOneGang) {
-                    message += " Its win chances against all other gangs are below 50%.";
+                    message += " 它对所有其他帮派的冲突胜率都低于 50%。";
                   }
                   PromptEvent.emit({
                     txt:
                       message +
-                      "\nOn average, you will always lose territory when being engaged in clashes.\n\nDo you really want to engage in territory clashes?",
+                      "\n参与地盘冲突后，平均而言你总会损失地盘。\n\n你真的想参与地盘冲突吗？",
                     resolve: (value: string | boolean) => {
                       if (value === true) {
                         gang.territoryWarfareEngaged = true;
@@ -86,12 +85,11 @@ export function TerritorySubpage(): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Engaging in Territory Clashes sets your clash chance to 100%. Disengaging will cause your clash chance
-                  to gradually decrease until it reaches 0%.
+                  参与地盘冲突会将你的冲突概率设为 100%。停止参与后，你的冲突概率会逐渐下降，直至 0%。
                 </Typography>
               }
             >
-              <Typography>Engage in Territory Clashes</Typography>
+              <Typography>参与地盘冲突</Typography>
             </Tooltip>
           }
         />
@@ -107,20 +105,19 @@ export function TerritorySubpage(): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  If this is enabled, you will receive a pop-up notifying you whenever one of your Gang Members dies in
-                  a territory clash.
+                  如果启用此选项，每当你的帮派成员在地盘冲突中死亡时，你都会收到弹窗通知。
                 </Typography>
               }
             >
-              <Typography>Notify about Gang Member Deaths</Typography>
+              <Typography>帮派成员死亡时通知我</Typography>
             </Tooltip>
           }
         />
 
         <Typography>
-          <b>Territory Clash Chance:</b> {formatPercent(gang.territoryClashChance, 3)} <br />
-          <b>Power:</b> {formatNumberNoSuffix(AllGangs[gang.facName].power, 3)} <br />
-          <b>Territory:</b> {formatTerritory(AllGangs[gang.facName].territory)}% <br />
+          <b>地盘冲突概率：</b> {formatPercent(gang.territoryClashChance, 3)} <br />
+          <b>势力：</b> {formatNumberNoSuffix(AllGangs[gang.facName].power, 3)} <br />
+          <b>地盘：</b> {formatTerritory(AllGangs[gang.facName].territory)}% <br />
         </Typography>
       </Box>
       <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
@@ -164,9 +161,9 @@ function OtherGangTerritory(props: ITerritoryProps): React.ReactElement {
         {props.name}
       </Typography>
       <Typography>
-        <b>Power:</b> {formatNumberNoSuffix(AllGangs[props.name].power, 3)} <br />
-        <b>Territory:</b> {formatTerritory(territory)}% <br />
-        <b>Clash Win Chance:</b> {formatPercent(getClashWinChance(gang.facName, props.name), 3)}
+        <b>势力：</b> {formatNumberNoSuffix(AllGangs[props.name].power, 3)} <br />
+        <b>地盘：</b> {formatTerritory(territory)}% <br />
+        <b>冲突获胜概率：</b> {formatPercent(getClashWinChance(gang.facName, props.name), 3)}
       </Typography>
     </Box>
   );

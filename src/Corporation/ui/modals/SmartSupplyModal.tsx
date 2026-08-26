@@ -53,11 +53,11 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
       {<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
       <FormControlLabel
         control={<Switch checked={value == "leftovers"} onChange={onLOChange} />}
-        label={<Typography>{"Use leftovers"}</Typography>}
+        label={<Typography>{"利用库存"}</Typography>}
       />
       <FormControlLabel
         control={<Switch checked={value == "imports"} onChange={onIChange} />}
-        label={<Typography>{"Use imported"}</Typography>}
+        label={<Typography>{"利用进口"}</Typography>}
       />
       <br />
     </>
@@ -90,30 +90,26 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <>
-        <Typography>Smart Supply purchases the exact amount of materials needed for maximal production.</Typography>
+        <Typography>智能供应会购买实现最大产量所需的精确材料数量。</Typography>
         <br />
         <FormControlLabel
           control={<Switch checked={props.warehouse.smartSupplyEnabled} onChange={smartSupplyOnChange} />}
-          label={<Typography>Enable Smart Supply</Typography>}
+          label={<Typography>启用智能供应</Typography>}
         />
         <br />
         <Typography component="div">
-          Options:
+          选项：
           <ul>
             <li>
-              Use leftovers takes the amount of that material already in storage into account when purchasing new ones.
-              This also accounts for imports, since they are "leftovers" by the time purchasing happens.
+              "利用库存"会在购买新材料时把仓库中已有的该材料数量考虑在内。这也会把进口量计算在内，因为在购买时它们也算作"库存"。
               <br />
-              <i>This is usually the option you want.</i>
+              <i>这通常是你想要的选项。</i>
             </li>
             <li>
-              Use imported takes <b>only</b> the amount of that materials that were imported in the previous cycle into
-              account. This is useful when dealing with specialty situations, like importing materials that also boost
-              production.
+              "利用进口"只把上一周期进口的该材料数量考虑在内。这在处理特殊情况下很有用，比如进口的材料同时也能提升产量。
             </li>
           </ul>
-          If neither is toggled on, Smart Supply will ignore any materials stored and attempts to buy as much as is
-          needed for production.
+          如果两者都未开启，智能供应将忽略任何已存储的材料，并尝试购买生产所需的最大数量。
         </Typography>
         {mats}
       </>

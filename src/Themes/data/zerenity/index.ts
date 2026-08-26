@@ -3,7 +3,7 @@ import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
   name: "Zerenity",
-  description: "Calm purple and grey theme with some bright colors subtly popping up.",
+  description: "平静的紫灰主题，一些亮色若隐若现。",
   credit: "Zelow",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/1137934426832130168",
   screenshot: img1,

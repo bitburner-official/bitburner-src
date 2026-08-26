@@ -26,7 +26,7 @@ export function isValidConnectionHostname(hostname: string): Result {
   if (hostname === "") {
     return {
       success: false,
-      message: "Hostname cannot be empty",
+      message: "主机名不能为空",
     };
   }
   /**
@@ -40,7 +40,7 @@ export function isValidConnectionHostname(hostname: string): Result {
     if (hostname.startsWith("http://") || hostname.startsWith("https://")) {
       return {
         success: false,
-        message: "Do not specify scheme (e.g., http, https)",
+        message: "不要指定协议（例如 http、https）",
       };
     }
     // Parse to a URL with a default scheme.
@@ -49,14 +49,14 @@ export function isValidConnectionHostname(hostname: string): Result {
     if (url.port !== "" || url.pathname !== "/" || url.search !== "") {
       return {
         success: false,
-        message: "Do not specify port, pathname, or search parameters",
+        message: "不要指定端口、路径或查询参数",
       };
     }
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      message: `Invalid hostname: ${hostname}`,
+      message: `无效的主机名：${hostname}`,
     };
   }
   return { success: true };
@@ -70,7 +70,7 @@ export function isValidConnectionHostname(hostname: string): Result {
 export function isValidRFAConnectionPortSetting(port: number): Result {
   // 0 is not a valid port, but it is a valid configuration value that disables RFA.
   if (!Number.isFinite(port) || port < 0 || port > 65535) {
-    return { success: false, message: "Invalid port" };
+    return { success: false, message: "无效的端口" };
   }
   return { success: true };
 }

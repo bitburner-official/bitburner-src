@@ -51,21 +51,18 @@ export function IssueDividendsModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Dividends are a distribution of a portion of the corporation's profits to the shareholders. This includes
-        yourself, as well.
+        股息是将企业利润的一部分分配给股东。这也包括你自己。
         <br />
         <br />
-        Note that issuing dividends will negatively affect <b>{corp.name}</b>'s stock price.
+        请注意，派发股息会对 <b>{corp.name}</b> 的股价产生负面影响。
         <br />
         <br />
-        In order to issue dividends, simply allocate some percentage of your Corporation's profits to dividends. This
-        percentage must be an integer between 0 and 100. (A percentage of 0 means no dividends will be issued.)
+        要派发股息，只需将企业利润的一定百分比分配给股息即可。该百分比必须是0到100之间的整数。（百分比为0表示不派发任何股息。）
         <br />
         <br />
-        <b>Example:</b> Assume your corporation makes <MoneyRate money={100e6} /> in profit and you allocate 40% of that
-        towards dividends. That means your corporation will gain <MoneyRate money={60e6} /> in funds and the remaining{" "}
-        <MoneyRate money={40e6} /> will be paid as dividends. Since your corporation starts with 1 billion shares, every
-        shareholder will be paid <Money money={0.04} /> per share per second before tribute.
+        <b>示例：</b>假设你的企业获得 <MoneyRate money={100e6} /> 利润，而你将其中40%分配给股息。这意味着你的企业将获得{" "}
+        <MoneyRate money={60e6} /> 资金，剩下的 <MoneyRate money={40e6} /> 将作为股息支付。由于你的企业最初拥有10亿股，在缴纳贡金之前，每位股东每股每秒将获得{" "}
+        <Money money={0.04} />。
       </Typography>
       <br />
       <TextField
@@ -73,11 +70,11 @@ export function IssueDividendsModal(props: IProps): React.ReactElement {
         value={percent}
         onChange={onChange}
         onKeyDown={onKeyDown}
-        placeholder="Dividend %"
+        placeholder="股息百分比"
         type="number"
       />
       <Button disabled={!canIssue} sx={{ mx: 1 }} onClick={issueDividends}>
-        Allocate Dividend Percentage
+        设置股息比例
       </Button>
     </Modal>
   );

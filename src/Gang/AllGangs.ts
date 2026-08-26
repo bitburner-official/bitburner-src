@@ -63,7 +63,7 @@ export function loadAllGangs(saveString: string): void {
     console.error("Invalid AllGangsSave:", saveString);
     resetGangs();
     setTimeout(() => {
-      dialogBoxCreate(`Cannot load data of AllGangs. AllGangs is reset. Error: ${error}.`);
+      dialogBoxCreate(`无法加载 AllGangs 数据。AllGangs 已被重置。错误：${error}。`);
     }, 1000);
     return;
   }

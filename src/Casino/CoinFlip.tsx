@@ -13,8 +13,8 @@ const initialBet = 1000;
 const maxBet = 10e3;
 
 enum CoinFlipResult {
-  Head = "Head",
-  Tail = "Tail",
+  Head = "正面",
+  Tail = "反面",
 }
 
 export function CoinFlip(): React.ReactElement {
@@ -38,7 +38,7 @@ export function CoinFlip(): React.ReactElement {
 
     setResult(
       <div>
-        <Typography component="span">Result:</Typography>
+        <Typography component="span">结果：</Typography>
         <Typography
           component="span"
           sx={{ lineHeight: "1em", whiteSpace: "pre" }}
@@ -49,7 +49,7 @@ export function CoinFlip(): React.ReactElement {
         ,
       </div>,
     );
-    setStatus(correct ? " win!" : "lose!");
+    setStatus(correct ? " 赢了！" : "输了！");
     setPlayLock(true);
 
     setTimeout(() => setPlayLock(false), 250);
@@ -73,10 +73,10 @@ export function CoinFlip(): React.ReactElement {
         />
         <Box>
           <Button onClick={trusted(() => play(CoinFlipResult.Head))} disabled={playLock}>
-            Head!
+            正面！
           </Button>
           <Button onClick={trusted(() => play(CoinFlipResult.Tail))} disabled={playLock}>
-            Tail!
+            反面！
           </Button>
         </Box>
       </Box>

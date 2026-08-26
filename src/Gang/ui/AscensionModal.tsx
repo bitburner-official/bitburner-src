@@ -33,30 +33,30 @@ export function AscensionModal({ open, onClose, member, onAscend }: AscensionMod
     const res = gang.ascendMember(member);
     dialogBoxCreate(
       <>
-        {member.name} ascended!
+        {member.name} 飞升了！
         <br />
         {res.respect > 0 && (
           <div>
             <br />
-            Your gang, {Player.gang?.facName}, lost {formatRespect(res.respect)} respect.
+            你的帮派（{Player.gang?.facName}）失去了 {formatRespect(res.respect)} 尊重。
             <br />
           </div>
         )}
         <br />
-        {member.name} gained the following stat multipliers for ascending:
+        {member.name} 因飞升获得了以下属性倍率：
         <br />
         <br />
-        Hacking: x{formatPreciseMultiplier(res.hack)}
+        黑客：x{formatPreciseMultiplier(res.hack)}
         <br />
-        Strength: x{formatPreciseMultiplier(res.str)}
+        力量：x{formatPreciseMultiplier(res.str)}
         <br />
-        Defense: x{formatPreciseMultiplier(res.def)}
+        防御：x{formatPreciseMultiplier(res.def)}
         <br />
-        Dexterity: x{formatPreciseMultiplier(res.dex)}
+        灵巧：x{formatPreciseMultiplier(res.dex)}
         <br />
-        Agility: x{formatPreciseMultiplier(res.agi)}
+        敏捷：x{formatPreciseMultiplier(res.agi)}
         <br />
-        Charisma: x{formatPreciseMultiplier(res.cha)}
+        魅力：x{formatPreciseMultiplier(res.cha)}
         <br />
       </>,
     );
@@ -70,37 +70,37 @@ export function AscensionModal({ open, onClose, member, onAscend }: AscensionMod
   return (
     <Modal open={open} onClose={onClose}>
       <Typography>
-        Are you sure you want to ascend this member? They will lose all of
+        你确定要飞升这名成员吗？飞升后，该成员将失去
         <br />
-        their non-Augmentation upgrades and their stats will reset back to 1.
+        所有非强化类升级，且其属性会重置回 1。
         <br />
         {member.earnedRespect > 0 && (
           <div>
             <br />
-            Furthermore, your gang will lose {formatRespect(member.earnedRespect)} respect.
+            此外，你的帮派将失去 {formatRespect(member.earnedRespect)} 尊重。
             <br />
           </div>
         )}
         <br />
-        In return, {member.name} will gain the following permanent boost to stat multipliers:
+        作为回报，{member.name} 将获得以下永久的属性倍率提升：
         <br />
         <br />
-        Hacking: x{formatPreciseMultiplier(preAscend.hack)} =&gt; x{formatPreciseMultiplier(postAscend.hack)}
+        黑客：x{formatPreciseMultiplier(preAscend.hack)} =&gt; x{formatPreciseMultiplier(postAscend.hack)}
         <br />
-        Strength: x{formatPreciseMultiplier(preAscend.str)} =&gt; x{formatPreciseMultiplier(postAscend.str)}
+        力量：x{formatPreciseMultiplier(preAscend.str)} =&gt; x{formatPreciseMultiplier(postAscend.str)}
         <br />
-        Defense: x{formatPreciseMultiplier(preAscend.def)} =&gt; x{formatPreciseMultiplier(postAscend.def)}
+        防御：x{formatPreciseMultiplier(preAscend.def)} =&gt; x{formatPreciseMultiplier(postAscend.def)}
         <br />
-        Dexterity: x{formatPreciseMultiplier(preAscend.dex)} =&gt; x{formatPreciseMultiplier(postAscend.dex)}
+        灵巧：x{formatPreciseMultiplier(preAscend.dex)} =&gt; x{formatPreciseMultiplier(postAscend.dex)}
         <br />
-        Agility: x{formatPreciseMultiplier(preAscend.agi)} =&gt; x{formatPreciseMultiplier(postAscend.agi)}
+        敏捷：x{formatPreciseMultiplier(preAscend.agi)} =&gt; x{formatPreciseMultiplier(postAscend.agi)}
         <br />
-        Charisma: x{formatPreciseMultiplier(preAscend.cha)} =&gt; x{formatPreciseMultiplier(postAscend.cha)}
+        魅力：x{formatPreciseMultiplier(preAscend.cha)} =&gt; x{formatPreciseMultiplier(postAscend.cha)}
         <br />
         <br />
       </Typography>
-      <Button onClick={confirm}>Ascend</Button>
-      <Button onClick={onClose}>Cancel</Button>
+      <Button onClick={confirm}>飞升</Button>
+      <Button onClick={onClose}>取消</Button>
     </Modal>
   );
 }

@@ -8,9 +8,9 @@ export function StyleEditorButton(): React.ReactElement {
   const [styleEditorOpen, setStyleEditorOpen] = useState(false);
   return (
     <>
-      <Tooltip title="The style editor allows you to modify certain CSS rules used by the game.">
+      <Tooltip title="样式编辑器允许你修改游戏所用的部分 CSS 规则。">
         <Button startIcon={<TextFormatIcon />} onClick={() => setStyleEditorOpen(true)}>
-          Style Editor
+          样式编辑器
         </Button>
       </Tooltip>
       <StyleEditorModal open={styleEditorOpen} onClose={() => setStyleEditorOpen(false)} />

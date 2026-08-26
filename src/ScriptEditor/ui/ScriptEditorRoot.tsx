@@ -197,13 +197,13 @@ function Root(props: IProps): React.ReactElement {
     if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
       //Make sure filename + code properly follow tutorial
       if (currentScript.path !== "n00dles.js") {
-        dialogBoxCreate("Don't change the script name for now.");
+        dialogBoxCreate("暂时不要更改脚本名称。");
         return;
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const expectedCleanCode = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
       if (!cleanCode.includes(expectedCleanCode)) {
-        dialogBoxCreate("Please copy and paste the code from the tutorial!");
+        dialogBoxCreate("请从教程中复制并粘贴代码！");
         return;
       }
 
@@ -227,7 +227,7 @@ function Root(props: IProps): React.ReactElement {
     }
     // Check if "currentScript" is a script. It may be a text file.
     if (!hasScriptExtension(currentScript.path)) {
-      dialogBoxCreate(`Cannot run ${currentScript.path}. It is not a script.`);
+      dialogBoxCreate(`无法运行 ${currentScript.path}，它不是脚本。`);
       return;
     }
     // Check if the current script's server is valid.
@@ -301,7 +301,7 @@ function Root(props: IProps): React.ReactElement {
             glyphMarginClassName: "myGlyphMarginClass",
             glyphMarginHoverMessage: {
               value:
-                "Possible infinite loop, await something. If this is a false positive, use `// @ignore-infinite` to suppress.",
+                "可能存在无限循环，请 await 某个操作。如果这是误报，请使用 `// @ignore-infinite` 来忽略此警告。",
             },
           },
         })),
@@ -320,7 +320,7 @@ function Root(props: IProps): React.ReactElement {
     if (!(server = GetServer(currentScript.hostname))) {
       showRAMError({
         errorCode: RamCalculationErrorCode.InvalidServer,
-        errorMessage: `Server ${currentScript.hostname} does not exist`,
+        errorMessage: `服务器 ${currentScript.hostname} 不存在`,
       });
       return;
     }
@@ -453,7 +453,7 @@ function Root(props: IProps): React.ReactElement {
 
     if (isUnsavedFile(openScripts, index)) {
       PromptEvent.emit({
-        txt: `Do you want to save changes to ${closingScript.path} on ${closingScript.hostname}?`,
+        txt: `要将更改保存到 ${closingScript.hostname} 上的 ${closingScript.path} 吗？`,
         resolve: (result: boolean | string) => {
           if (result) {
             // Save changes
@@ -500,9 +500,9 @@ function Root(props: IProps): React.ReactElement {
     if (openScript.code !== serverScriptCode) {
       PromptEvent.emit({
         txt:
-          "Do you want to overwrite the current editor content with the contents of " +
+          "要用服务器上 " +
           openScript.path +
-          " on the server? This cannot be undone.",
+          " 的内容覆盖当前编辑器中的内容吗？此操作无法撤销。",
         resolve: (result: boolean | string) => {
           if (result) {
             // Save changes

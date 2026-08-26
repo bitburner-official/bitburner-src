@@ -8,21 +8,21 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): undefined {
-  if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
+  if (args.length !== 1) return Terminal.error("cat 命令用法不正确。用法：cat [file]");
 
   const relative_filename = args[0] + "";
   const path = Terminal.getFilepath(relative_filename);
-  if (!path) return Terminal.error(`Invalid filename: ${relative_filename}`);
+  if (!path) return Terminal.error(`无效的文件名：${relative_filename}`);
 
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
-    if (!file) return Terminal.error(`No file at path ${path}`);
+    if (!file) return Terminal.error(`路径 ${path} 处没有文件`);
     dialogBoxCreate(`${file.filename}\n\n${file.content}`);
     return;
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
     return Terminal.error(
-      "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx) or a text extension (.txt, .json, .css)",
+      "无效的文件扩展名。文件名必须以 .msg、.lit、脚本扩展名（.js、.jsx、.ts、.tsx）或文本扩展名（.txt、.json、.css）结尾",
     );
   }
 
@@ -39,5 +39,5 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): un
       return;
     }
   }
-  Terminal.error(`No file at path ${path}`);
+  Terminal.error(`路径 ${path} 处没有文件`);
 }

@@ -86,26 +86,25 @@ export function ExportModal(props: ExportModalProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Select the industry and city to export this material to, as well as how much of this material to export per
-        second.
+        选择要将这种材料出口到的行业和城市，以及每秒要出口的数量。
         <br />
         <br />
-        You can use 'MAX', 'EINV', 'IINV', 'EPROD' or 'IPROD' in the amount for:
+        你可以在数量中使用'MAX'、'EINV'、'IINV'、'EPROD'或'IPROD'：
         <br />
-        - 'MAX' to export maximum amount possible.
+        - 'MAX'：导出尽可能多的数量。
         <br />
-        - 'EINV' export city's inventory of the material.
+        - 'EINV'：导出城市的材料库存量。
         <br />
-        - 'IINV' import city's inventory of the material.
+        - 'IINV'：进口城市的材料库存量。
         <br />
-        - 'EPROD' export city's per second production of the material
+        - 'EPROD'：导出城市每秒的材料产量
         <br />
-        - 'IPROD' import city's per second production of the material
+        - 'IPROD'：进口城市每秒的材料产量
         <br />
-        Note: Consumption is negative production.
+        注意：消耗即为负的产量。
         <br />
         <br />
-        For example: setting the amount "(EINV-20)/10" would try to export all except 20 of the material.
+        例如：把数量设为"(EINV-20)/10"会尝试导出该材料中除20以外的全部库存。
       </Typography>
       <Select onChange={onTargetDivisionChange} value={targetDivision?.name ?? ""}>
         {possibleDivisions.map((division) => (
@@ -121,28 +120,27 @@ export function ExportModal(props: ExportModalProps): React.ReactElement {
           </MenuItem>
         ))}
       </Select>
-      <TextField placeholder="Export amount / s" onChange={onAmtChange} value={exportAmount} />
+      <TextField placeholder="每秒出口数量" onChange={onAmtChange} value={exportAmount} />
       <ButtonWithTooltip
-        disabledTooltip={!targetDivision ? "No target division selected" : !targetCity ? "No target city selected" : ""}
+        disabledTooltip={!targetDivision ? "未选择目标部门" : !targetCity ? "未选择目标城市" : ""}
         onClick={exportMaterial}
       >
-        Export
+        出口
       </ButtonWithTooltip>
       <Typography>
-        Below is a list of all current exports of this material from this warehouse. Clicking on one of the exports
-        below will REMOVE that export.
+        下方列出了此仓库当前对该材料的所有出口。点击其中一项将移除该出口。
       </Typography>
       {props.mat.exports.map((exp: Export, index: number) => (
         <Box display="flex" alignItems="center" key={index}>
           <Button sx={{ mx: 2 }} onClick={() => removeExport(exp)}>
-            delete
+            删除
           </Button>
           <Typography>
-            Industry: {exp.division}
+            行业：{exp.division}
             <br />
-            City: {exp.city}
+            城市：{exp.city}
             <br />
-            Amount/s: {exp.amount}
+            每秒数量：{exp.amount}
           </Typography>
         </Box>
       ))}

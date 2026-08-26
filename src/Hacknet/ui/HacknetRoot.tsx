@@ -99,7 +99,7 @@ export function HacknetRoot(): React.ReactElement {
 
   return (
     <>
-      <Typography variant="h4">Hacknet {hasHacknetServers() ? "Servers" : "Nodes"}</Typography>
+      <Typography variant="h4">Hacknet {hasHacknetServers() ? "服务器" : "节点"}</Typography>
       <GeneralInfo hasHacknetServers={hasHacknetServers()} />
 
       <br />
@@ -117,7 +117,7 @@ export function HacknetRoot(): React.ReactElement {
           this weird ripple effect.
           */}
           <Button focusRipple={false} onClick={() => setOpen(true)}>
-            Spend Hashes on Upgrades
+            用哈希购买升级
           </Button>
           <br />
         </>

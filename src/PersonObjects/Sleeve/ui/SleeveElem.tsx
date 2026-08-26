@@ -16,32 +16,32 @@ import { getEnumHelper } from "../../../utils/EnumHelper";
 import { getRecordEntries } from "../../../Types/Record";
 
 const factionWorkTypeDescriptions = {
-  [FactionWorkType.field]: "Field Work",
-  [FactionWorkType.hacking]: "Hacking Contracts",
-  [FactionWorkType.security]: "Security Work",
+  [FactionWorkType.field]: "外勤工作",
+  [FactionWorkType.hacking]: "黑客合同",
+  [FactionWorkType.security]: "安保工作",
 };
 
 const gymTypeDescriptions: Record<GymType, string> = {
-  [GymType.strength]: "Train Strength",
-  [GymType.defense]: "Train Defense",
-  [GymType.dexterity]: "Train Dexterity",
-  [GymType.agility]: "Train Agility",
+  [GymType.strength]: "训练力量",
+  [GymType.defense]: "训练防御",
+  [GymType.dexterity]: "训练灵巧",
+  [GymType.agility]: "训练敏捷",
 };
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {
   const work = sleeve.currentWork;
-  if (!work) return "This sleeve is currently idle.";
+  if (!work) return "该分身目前处于空闲状态。";
   switch (work.type) {
     case SleeveWorkType.COMPANY:
-      return `This sleeve is currently working your job at ${work.companyName}`;
+      return `该分身目前正在为${work.companyName}工作`;
     case SleeveWorkType.SUPPORT:
-      return "This sleeve is currently supporting you in your bladeburner activities.";
+      return "该分身目前在你的 Bladeburner 活动中为你提供支援。";
     case SleeveWorkType.CLASS:
-      return `This sleeve is currently ${work.isGym() ? "working out" : "studying"} at ${work.location}`;
+      return `该分身目前正在${work.location}${work.isGym() ? "健身" : "上课"}`;
     case SleeveWorkType.RECOVERY:
-      return "This sleeve is currently set to focus on shock recovery. This causes the Sleeve's shock to decrease at a faster rate.";
+      return "该分身当前被设置为专注震荡恢复。这会使分身的震荡以更快的速度消退。";
     case SleeveWorkType.SYNCHRO:
-      return "This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's synchronization to increase.";
+      return "该分身当前被设置为与本体意识同步。这会使分身的同步率上升。";
     case SleeveWorkType.BLADEBURNER: {
       const bladeburner = Player.bladeburner;
       let estimatedSuccessChance;
@@ -54,30 +54,30 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
         }
       }
       return (
-        `This sleeve is currently attempting to perform ${work.actionId.name}.\n\n` +
-        (estimatedSuccessChance ? `Estimated success chance: ${estimatedSuccessChance}\n\n` : "") +
-        `Tasks Completed: ${formatInt(work.tasksCompleted)}\n \n` +
-        `Progress: ${formatPercent(progress)}`
+        `该分身目前正尝试执行 ${work.actionId.name}。\n\n` +
+        (estimatedSuccessChance ? `预估成功率：${estimatedSuccessChance}\n\n` : "") +
+        `已完成任务数：${formatInt(work.tasksCompleted)}\n \n` +
+        `进度：${formatPercent(progress)}`
       );
     }
     case SleeveWorkType.CRIME: {
       const crime = work.getCrime();
       return (
-        `This sleeve is currently attempting ${crime.workName} (Success Rate: ${formatPercent(
+        `该分身目前正在尝试${crime.workName}（成功率：${formatPercent(
           crime.successRate(sleeve),
-        )}).\n\nTasks Completed: ${formatInt(work.tasksCompleted)} 
-		\n` + `Progress: ${formatPercent(progress)}`
+        )}）。\n\n已完成任务数：${formatInt(work.tasksCompleted)} 
+		\n` + `进度：${formatPercent(progress)}`
       );
     }
     case SleeveWorkType.FACTION: {
-      return `This sleeve is currently doing ${factionWorkTypeDescriptions[work.factionWorkType]} for ${
-        work.factionName
-      }.`;
+      return `该分身目前正在为${work.factionName}执行${
+        factionWorkTypeDescriptions[work.factionWorkType]
+      }。`;
     }
     case SleeveWorkType.INFILTRATE:
       return (
-        "This sleeve is currently attempting to infiltrate synthoid communities to generate additional contracts and operations.\nThis activity is less efficient the more sleeves are assigned to it.\n\n" +
-        `Progress: ${formatPercent(progress)}`
+        "该分身目前正尝试潜入合成人社区，以生成额外的合同和行动。\n被指派执行此活动的分身越多，效率越低。\n\n" +
+        `进度：${formatPercent(progress)}`
       );
   }
 }
@@ -219,15 +219,15 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         <span>
           <StatsElement sleeve={props.sleeve} />
           <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr", width: "100%" }}>
-            <Button onClick={() => setStatsOpen(true)}>More Stats</Button>
-            <Tooltip title={Player.money < CONSTANTS.TravelCost ? <Typography>Insufficient funds</Typography> : ""}>
+            <Button onClick={() => setStatsOpen(true)}>更多属性</Button>
+            <Tooltip title={Player.money < CONSTANTS.TravelCost ? <Typography>资金不足</Typography> : ""}>
               <span>
                 <Button
                   onClick={() => setTravelOpen(true)}
                   disabled={Player.money < CONSTANTS.TravelCost}
                   sx={{ width: "100%", height: "100%" }}
                 >
-                  Travel
+                  旅行
                 </Button>
               </span>
             </Tooltip>
@@ -242,7 +242,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
                   disabled={!checkingPreconditionsResult.success}
                   sx={{ width: "100%", height: "100%" }}
                 >
-                  Manage Augmentations
+                  管理强化
                 </Button>
               </span>
             </Tooltip>
@@ -252,7 +252,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
           <EarningsElement sleeve={props.sleeve} />
           <TaskSelector sleeve={props.sleeve} abc={abc} setABC={setABC} />
           <Button onClick={setTask} sx={{ width: "100%" }}>
-            Set Task
+            设置任务
           </Button>
           <Typography whiteSpace={"pre-wrap"}>{desc}</Typography>
           {percentBar}

@@ -54,17 +54,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Welcome to Bitburner, a cyberpunk-themed incremental RPG! The game takes place in a dark, dystopian
-            future... The year is 2077...
+            欢迎来到 Bitburner，一款赛博朋克题材的放置类 RPG！游戏发生在黑暗的反乌托邦未来……那一年是 2077 年……
             <br />
             <br />
-            This tutorial will show you the basics of the game. You may skip the tutorial at any time.
+            本教程将向你介绍游戏的基础知识。你可以随时跳过教程。
             <br />
             <br />
-            You can replay this tutorial by going to the Options tab and pressing "Reset tutorial".
+            你可以在“设置”选项卡中点击“重置教程”来重新进行本教程。
             <br />
             <br />
-            You can also collapse this panel to temporarily hide this tutorial.
+            你也可以折叠此面板来暂时隐藏本教程。
           </Typography>
         </>
       ),
@@ -73,13 +72,13 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.GoToCharacterPage as number]: {
       content: (
         <>
-          <Typography>Let's start by heading to the Stats page. Click</Typography>
+          <Typography>我们先前往“属性”页面。点击</Typography>
           <ListItem>
             <EqualizerIcon color={"error"} />
-            <Typography color={"error"}>Stats</Typography>
+            <Typography color={"error"}>属性</Typography>
           </ListItem>
 
-          <Typography>on the main navigation menu (left-hand side of the screen)</Typography>
+          <Typography>（位于主导航菜单，即屏幕左侧）</Typography>
         </>
       ),
       canNext: false,
@@ -89,10 +88,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <ListItem>
             <EqualizerIcon color={"primary"} />
-            <Typography color={"primary"}>Stats</Typography>
+            <Typography color={"primary"}>属性</Typography>
           </ListItem>
           <Typography>
-            shows a lot of important information about your progress, such as your skills, money, and bonuses.
+            显示了许多关于你游戏进度的重要信息，例如你的技能、资金和加成。
           </Typography>
         </>
       ),
@@ -101,12 +100,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.CharacterGoToTerminalPage as number]: {
       content: (
         <>
-          <Typography>Let's head to your computer's terminal by clicking</Typography>
+          <Typography>接下来点击</Typography>
           <ListItem>
             <LastPageIcon color={"error"} />
-            <Typography color={"error"}>Terminal</Typography>
+            <Typography color={"error"}>终端</Typography>
           </ListItem>
-          <Typography>on the main navigation menu.</Typography>
+          <Typography>前往你的电脑终端（位于主导航菜单中）。</Typography>
         </>
       ),
       canNext: false,
@@ -116,10 +115,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <ListItem>
             <LastPageIcon color={"primary"} />
-            <Typography color={"primary"}>Terminal</Typography>
+            <Typography color={"primary"}>终端</Typography>
           </ListItem>
           <Typography>
-            is used to interface with your home computer as well as all of the other machines around the world.
+            用于连接你的家用电脑以及世界各地的其他机器。
           </Typography>
         </>
       ),
@@ -128,9 +127,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalHelp as number]: {
       content: (
         <>
-          <Typography>Let's try it out. Start by entering</Typography>
+          <Typography>我们来试试看。先输入</Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
-          <Typography>(Don't forget to press Enter after typing the command)</Typography>
+          <Typography>（别忘了输入命令后按回车键）</Typography>
         </>
       ),
       canNext: false,
@@ -140,15 +139,15 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
           <Typography>
-            displays a list of all available Terminal commands, how to use them, and a description of what they do.{" "}
+            会显示所有可用的终端命令列表、用法及其功能说明。{" "}
             <br />
             <br />
-            Let's try another command. Enter
+            我们再试另一个命令。输入
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
-            <br />( "ls" is short for "list" )
+            <br />（“ls” 是 “list” 的缩写）
           </Typography>
         </>
       ),
@@ -160,11 +159,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
             {" "}
-            is a basic command that lists the files on the computer. Right now, it shows that you have a program called{" "}
-            NUKE.exe on your computer. We'll get to what this does later. <br />
+            是一个列出电脑上文件的基础命令。现在，它显示你的电脑上有一个名为{" "}
+            NUKE.exe 的程序。我们稍后会介绍它的用途。 <br />
             <br />
-            Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
-            now by first entering
+            使用家用电脑的终端，你可以连接到世界各地的其他机器。我们现在就来试试，先输入
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
         </>
@@ -176,14 +174,13 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
           <Typography>
-            shows all available network connections. In other words, it displays a list of all servers that can be
-            connected to from your current machine. A server is identified by its hostname. <br />
+            显示所有可用的网络连接。也就是说，它会列出从当前机器可以直接连接的所有服务器。服务器由其主机名标识。 <br />
             <br />
-            That's great and all, but there's so many servers. Which one should you go to?{" "}
+            不过服务器实在太多了，你该去哪一个呢？{" "}
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
-          <Typography>gives some more detailed information about servers on the network. Try it now!</Typography>
+          <Typography>会给出网络中服务器的更详细信息。现在就试试吧！</Typography>
         </>
       ),
       canNext: false,
@@ -193,10 +190,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
           <Typography>
-            shows more detailed information about each server that you can connect to (servers that are a distance of
-            one node away). <br />
-            <br /> It is also possible to run scan-analyze with a higher depth. Let's try a depth of two with the
-            following command:{" "}
+            显示你可以连接到的每台服务器（距离一个节点的服务器）的更详细信息。 <br />
+            <br /> 还可以用更大的深度运行 scan-analyze。让我们用以下命令尝试深度为 2：{" "}
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
@@ -208,18 +203,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Now you can see information about all servers that are up to two nodes away, as well as figure out how to
-            navigate to those servers through the network. You can only connect to a server that is one node away. To
-            connect to a machine, use
+            现在你可以看到两节点以内的所有服务器信息，并了解如何通过网络导航到这些服务器。你只能连接距离一个节点以内的服务器。要连接到某台机器，请使用
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> connect hostname"}</Typography>
 
-          <Typography>From the results of </Typography>
+          <Typography>根据 </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
 
           <Typography>
             {" "}
-            we can see that the n00dles server is only one node away. Let's connect to it now using:
+            的结果可以看到 n00dles 服务器只有一个节点的距离。我们现在使用以下命令连接它：
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> connect n00dles"}</Typography>
@@ -231,13 +224,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You are now connected to another machine! What can you do now? You can hack it!
+            你已经连接到了另一台机器！现在能做什么？入侵它！
             <br />
-            <br /> In the year 2077, currency has become digital and decentralized. People and corporations store their
-            money on servers and computers. Using your hacking abilities, you can hack servers to steal money and gain
-            experience. <br />
+            <br /> 在 2077 年，货币已经数字化并去中心化。人们和企业把资金存储在服务器和电脑上。利用你的黑客能力，你可以入侵服务器来窃取资金并获得经验。 <br />
             <br />
-            Before you try to hack a server, you should run diagnostics using{" "}
+            在你尝试入侵服务器之前，应该先用以下命令运行诊断{" "}
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
         </>
@@ -247,22 +238,20 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalNuke as number]: {
       content: (
         <>
-          <Typography>When </Typography>
+          <Typography>当 </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
 
           <Typography>
-            finishes running it will show useful information about hacking the server. <br />
-            <br /> For this server, the required hacking skill is only 1, which means you can hack it right now.
-            However, in order to hack a server you must first gain root access. The NUKE.exe program that we saw earlier
-            on your home computer is a virus that will grant you root access to a machine if there are enough open
-            ports.
+            运行完毕后，会显示有关入侵该服务器的有用信息。 <br />
+            <br /> 对于这台服务器，所需的黑客等级只有 1，也就是说你现在就可以入侵它。但是，要入侵一台服务器，你必须先获得
+            root 权限。之前在你的家用电脑上看到的 NUKE.exe 程序是一种病毒，只要开放端口数量足够，它就能让你获得机器的
+            root 权限。
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
 
           <Typography>
             {" "}
-            shows that there do not need to be any open ports on this machine for the NUKE virus to work, so go ahead
-            and run the virus using{" "}
+            显示这台机器不需要任何开放端口，NUKE 病毒即可生效，那就用以下命令运行病毒吧{" "}
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> run NUKE.exe"}</Typography>
 
@@ -274,10 +263,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalManualHack as number]: {
       content: (
         <>
-          <Typography>You now have root access! You can hack the server using </Typography>
+          <Typography>你现在已获得 root 权限！可以用以下命令入侵服务器 </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> hack"}</Typography>
 
-          <Typography> Try doing that now.</Typography>
+          <Typography> 现在就试试吧。</Typography>
         </>
       ),
       canNext: true,
@@ -285,21 +274,17 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalHackingMechanics as number]: {
       content: (
         <Typography component="div">
-          You are now attempting to hack the server. Performing a hack takes time and only has a certain percentage
-          chance of success. This time and success chance is determined by a variety of factors, including your hacking
-          skill and the server's security level.
+          你现在正在尝试入侵该服务器。入侵需要时间，且只有一定的成功率。时间和成功率由多种因素决定，包括你的黑客等级和服务器的安全等级。
           <br />
           <br />
-          If your attempt to hack the server is successful, you will steal a certain percentage of the server's total
-          money. This percentage is affected by your hacking skill and the server's security level.
+          如果入侵成功，你将窃取该服务器总资金的一定百分比。这个百分比受你的黑客等级和服务器安全等级影响。
           <br />
           <br />
-          The amount of money on a server is not limitless. So, if you constantly hack a server and deplete its money,
-          then you will encounter diminishing returns in your hacking. You will need to use{" "}
+          服务器上的资金并非无限。因此，如果你不断入侵同一台服务器并耗尽其资金，你会发现收益递减。你需要使用{" "}
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> grow"}</Typography>
-          which tricks the company into adding money to their server and{" "}
+          来欺骗该公司向其服务器添加资金，以及{" "}
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> weaken"}</Typography>
-          which increases the speed of hack and grow.
+          来提高入侵和增长的速度。
         </Typography>
       ),
       canNext: true,
@@ -307,10 +292,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalGoHome as number]: {
       content: (
         <>
-          <Typography>From any server you can get back home using</Typography>
+          <Typography>在任何服务器上，你都可以使用以下命令回到家</Typography>
           <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> home"}</Typography>
 
-          <Typography>Let's head home before creating our first script!</Typography>
+          <Typography>在编写第一个脚本之前，先回家吧！</Typography>
         </>
       ),
       canNext: false,
@@ -319,16 +304,15 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Hacking is the core mechanic of the game and is necessary for progressing. However, you don't want to be
-            hacking manually the entire time. You can automate your hacking by writing scripts!
+            入侵是游戏的核心机制，也是推进游戏所必需的。但你不会想一直手动入侵的。你可以通过编写脚本来自动化入侵！
             <br />
             <br />
-            To create a new script or edit an existing one, you can use{" "}
+            要创建新脚本或编辑现有脚本，可以使用{" "}
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
           <Typography>
-            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
+            脚本必须以脚本扩展名结尾（.js、.jsx、.ts、.tsx）。我们现在输入以下命令来创建脚本
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
@@ -339,8 +323,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            This is the script editor. You can use it to program your scripts. Click this text to copy it and paste it
-            into the text editor:
+            这是脚本编辑器。你可以在其中编写脚本。点击下面的文本即可复制，然后粘贴到文本编辑器中：
           </Typography>
           <br />
           <Typography component="div" classes={{ root: classes.code }}>
@@ -357,18 +340,16 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            For anyone with basic programming experience, this code should be straightforward. This script will
-            continuously hack the n00dles server.
+            对于有基础编程经验的人来说，这段代码应该很容易理解。这个脚本会持续入侵 n00dles 服务器。
             <br />
             <br />
-            Use the search tool at the bottom to find and have a quick glance at documentation of any NS APIs.
+            使用底部的搜索工具可以查找并快速浏览任意 NS API 的文档。
             <br />
             <br />
-            To access <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, press the
-            link at the bottom.
+            要访问 <DocumentationLink page={defaultNsApiPage}>NS API 文档</DocumentationLink>，请点击底部的链接。
             <br />
             <br />
-            To save and close the script editor, press the button at the bottom.
+            要保存并关闭脚本编辑器，请按底部的按钮。
           </Typography>
         </>
       ),
@@ -378,12 +359,11 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we'll run the script. Scripts require a certain amount of RAM to run, and can be run on any machine
-            which you have root access to. Different servers have different amounts of RAM. You can also purchase more
-            RAM for your home server.
+            现在我们来运行脚本。脚本运行需要一定量的 RAM，并且可以在任何你拥有 root 权限的机器上运行。不同服务器的
+            RAM 大小不同。你也可以为家用服务器购买更多 RAM。
             <br />
             <br />
-            To check how much RAM is available on this machine, enter
+            要查看这台机器有多少可用 RAM，请输入
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> free"}</Typography>
         </>
@@ -394,7 +374,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We have 8GB of free RAM on this machine, which is enough to run our script. Let's run our script using
+            这台机器有 8GB 的空闲 RAM，足以运行我们的脚本。使用以下命令运行脚本
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> run ${tutorialScriptName}`}</Typography>
         </>
@@ -405,17 +385,16 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Your script is now running! It will continuously run in the background and will automatically stop if the
-            code ever completes (the {tutorialScriptName} will never complete because it runs an infinite loop). <br />
+            你的脚本正在运行！它会持续在后台运行，当代码执行完成时自动停止（{tutorialScriptName}
+            永远不会结束，因为它运行的是无限循环）。 <br />
             <br />
-            These scripts can passively earn you income and hacking experience. Your scripts will also earn money and
-            experience while you are offline, although at a slightly slower rate. <br />
+            这些脚本可以为你被动赚取收入和黑客经验。即使离线，脚本也会继续赚取资金和经验，只是速度略慢。 <br />
             <br />
-            Let's check out some statistics for our running scripts by clicking{" "}
+            点击查看运行中脚本的统计信息{" "}
           </Typography>
           <ListItem>
             <StorageIcon color={"error"} />
-            <Typography color={"error"}>Active Scripts</Typography>
+            <Typography color={"error"}>运行中的脚本</Typography>
           </ListItem>
         </>
       ),
@@ -425,21 +404,20 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This page displays information about all of your scripts that are running across every server. You can use
-            this to gauge how well your scripts are doing.
+            此页面显示你在所有服务器上运行的脚本信息。你可以用它来评估脚本的运行状况。
             <br />
             <br />
-            Click on Home to see the scripts running on it.
+            点击 home 查看其上运行的脚本。
             <br />
             <br />
-            Then click on n00dles.js to see the scripts information.
+            然后点击 n00dles.js 查看脚本详情。
             <br />
             <br />
-            Let's go back to
+            我们回到
           </Typography>
           <ListItem>
             <LastPageIcon color={"error"} />
-            <Typography color={"error"}>Terminal</Typography>
+            <Typography color={"error"}>终端</Typography>
           </ListItem>
         </>
       ),
@@ -449,8 +427,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            One last thing about scripts, each active script contains logs that detail what it's doing. We can check
-            these logs using the tail command. Do that now for the script we just ran by typing{" "}
+            关于脚本的最后一点：每个运行中的脚本都有详细记录其行为的日志。我们可以使用 tail
+            命令查看这些日志。现在为我们刚运行的脚本输入以下命令{" "}
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> tail ${tutorialScriptName}`}</Typography>
         </>
@@ -461,20 +439,19 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            The log for this script won't show much right now (it might show nothing at all) because it just started
-            running...but check back again in a few minutes! <br />
+            这个脚本的日志现在还不会显示太多内容（甚至可能什么都没有），因为它刚刚开始运行……过几分钟再回来看看吧！ <br />
             <br />
-            This covers the basics of hacking. To learn more about writing scripts, select
+            以上就是入侵的基础知识。要了解更多编写脚本的知识，请选择
           </Typography>
           <ListItem>
             <HelpIcon color={"primary"} />
-            <Typography color={"primary"}>Documentation</Typography>
+            <Typography color={"primary"}>文档</Typography>
           </ListItem>
           <Typography>
-            in the main navigation menu to look at the documentation.
+            查看主导航菜单中的文档。
             <br />
             <br />
-            For now, let's move on to something else!
+            现在，让我们继续下一步！
           </Typography>
         </>
       ),
@@ -484,14 +461,13 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Hacking is not the only way to earn money. One other way to passively earn money is by purchasing and
-            upgrading Hacknet Nodes. Let's go to
+            入侵并不是赚钱的唯一途径。另一种被动赚钱的方式是购买和升级 Hacknet 节点。让我们前往
           </Typography>
           <ListItem>
             <AccountTreeIcon color={"error"} />
             <Typography color={"error"}>Hacknet</Typography>
           </ListItem>
-          <Typography>through the main navigation menu now.</Typography>
+          <Typography>（位于主导航菜单中）。</Typography>
         </>
       ),
       canNext: false,
@@ -499,7 +475,7 @@ export async function main(ns) {
     [iTutorialSteps.HacknetNodesIntroduction as number]: {
       content: (
         <Typography>
-          Here you can purchase new Hacknet Nodes and upgrade your existing ones. Let's purchase a new one now.
+          在这里你可以购买新的 Hacknet 节点并升级已有的节点。现在就来购买一个新的吧。
         </Typography>
       ),
       canNext: true,
@@ -508,15 +484,15 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            You just purchased a Hacknet Node! This Hacknet Node will passively earn you money over time, both online
-            and offline. When you get enough money, you can upgrade your newly-purchased Hacknet Node below.
+            你刚购买了一个 Hacknet 节点！无论在线还是离线，这个节点都会随时间为你被动赚取资金。当你有足够的资金时，可以在下方升级新购买的
+            Hacknet 节点。
             <br />
             <br />
-            Let's go to
+            让我们前往
           </Typography>
           <ListItem>
             <LocationCityIcon color={"error"} />
-            <Typography color={"error"}>City</Typography>
+            <Typography color={"error"}>城市</Typography>
           </ListItem>
         </>
       ),
@@ -526,15 +502,14 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This page lists all of the different locations you can currently travel to. Each location has something that
-            you can do. There's a lot of content out in the world, make sure you explore and discover!
+            此页面列出了你当前可以前往的所有地点。每个地点都有可以做的事情。世界上有很多内容等待你去探索和发现！
             <br />
             <br />
-            Lastly, click on
+            最后，点击
           </Typography>
           <ListItem>
             <HelpIcon color={"error"} />
-            <Typography color={"error"}>Documentation</Typography>
+            <Typography color={"error"}>文档</Typography>
           </ListItem>
         </>
       ),
@@ -543,40 +518,36 @@ export async function main(ns) {
     [iTutorialSteps.DocumentationPageInfo as number]: {
       content: (
         <Typography component="div">
-          This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
-          lot, but I highly suggest you read (or at least skim) through this before you start playing. Some pages are
-          inaccessible at the start and will be unlocked later.
+          此页面包含大量关于游戏内容和机制的文档。我知道内容很多，但我强烈建议你在开始游玩前通读（或至少浏览）一遍。有些页面一开始无法访问，之后才会解锁。
           <br />
           <br />
-          If you click a link in these pages while holding Ctrl key (Control key on Mac keyboard), it will be opened in
-          a new tab. If you play the Steam version, that link will be opened in your default browser.
+          按住 Ctrl 键（Mac 键盘上为 Control 键）点击这些页面中的链接时，链接会在新标签页中打开。如果你玩的是
+          Steam 版本，链接将在默认浏览器中打开。
           <br />
           <br />
-          You should at least check these pages:
+          你至少应该看看这些页面：
           <ul>
             <li>
-              The <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink> contains the
-              guide for new players, navigating you through most of the early game.
+              <DocumentationLink page="help/getting_started.md">新手指南</DocumentationLink>{" "}
+              包含面向新玩家的指南，带你度过大部分前期游戏。
             </li>
             <li>
-              The <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> contains reference
-              materials for all NS APIs.
+              <DocumentationLink page={defaultNsApiPage}>NS API 文档</DocumentationLink> 包含所有 NS API 的参考资料。
             </li>
             <li>
-              The <DocumentationLink page="help/faq.md">FAQ</DocumentationLink> contains questions often asked by
-              beginners of the game.
+              <DocumentationLink page="help/faq.md">常见问题</DocumentationLink> 包含游戏新手经常提出的问题。
             </li>
           </ul>
           <Typography fontWeight="fontWeightBold">
-            This documentation page is the best place to get up-to-date information, especially when you get stuck. If
-            you have a question and cannot find the answer here, please ask us on Discord.
+            这个文档页面是获取最新信息的最佳场所，尤其是在你遇到困难时。如果你有问题且在这里找不到答案，请在
+            Discord 上询问我们。
           </Typography>
           <br />
           <Typography color={Settings.theme.warning}>
-            The documentation at readthedocs is outdated and unmaintained. Do not use them!
+            readthedocs 上的文档已过时且无人维护，请不要使用它们！
           </Typography>
           <br />
-          That's the end of the tutorial. Hope you enjoy the game!
+          教程到此结束。祝你游戏愉快！
         </Typography>
       ),
       canNext: true,
@@ -603,13 +574,13 @@ export async function main(ns) {
       {step !== iTutorialSteps.DocumentationPageInfo && (
         <>
           {step !== iTutorialSteps.Start && (
-            <Button onClick={iTutorialPrevStep} aria-label="previous" style={{ marginRight: "1em" }}>
-              Previous
+            <Button onClick={iTutorialPrevStep} aria-label="上一步" style={{ marginRight: "1em" }}>
+              上一步
             </Button>
           )}
           {(content.canNext || ITutorial.stepIsDone[step]) && (
-            <Button onClick={iTutorialNextStep} aria-label="next">
-              Next
+            <Button onClick={iTutorialNextStep} aria-label="下一步">
+              下一步
             </Button>
           )}
         </>
@@ -617,7 +588,7 @@ export async function main(ns) {
       <br />
       <br />
       <Button onClick={iTutorialEnd}>
-        {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
+        {step !== iTutorialSteps.DocumentationPageInfo ? "退出教程" : "完成教程"}
       </Button>
     </Paper>
   );

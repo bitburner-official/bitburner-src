@@ -5,33 +5,33 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 
 export function mv(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 2) {
-    Terminal.error(`Incorrect number of arguments. Usage: mv [src] [dest]`);
+    Terminal.error(`参数数量不正确。用法：mv [src] [dest]`);
     return;
   }
   const [source, destination] = args.map((arg) => arg + "");
 
   const sourcePath = Terminal.getFilepath(source);
-  if (!sourcePath) return Terminal.error(`Invalid source filename: ${source}`);
+  if (!sourcePath) return Terminal.error(`无效的源文件名：${source}`);
   const destinationPath = Terminal.getFilepath(destination);
-  if (!destinationPath) return Terminal.error(`Invalid destination filename: ${destinationPath}`);
+  if (!destinationPath) return Terminal.error(`无效的目标文件名：${destinationPath}`);
 
   if (
     (!hasScriptExtension(sourcePath) && !hasTextExtension(sourcePath)) ||
     (!hasScriptExtension(destinationPath) && !hasTextExtension(destinationPath))
   ) {
-    return Terminal.error(`'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css)`);
+    return Terminal.error(`'mv' 只能用于脚本（.js、.jsx、.ts、.tsx）和文本文件（.txt、.json、.css）`);
   }
 
   // Allow content to be moved between scripts and textfiles, no need to limit this.
   const sourceContentFile = server.getContentFile(sourcePath);
-  if (!sourceContentFile) return Terminal.error(`Source file ${sourcePath} does not exist`);
+  if (!sourceContentFile) return Terminal.error(`源文件 ${sourcePath} 不存在`);
 
   if (!sourceContentFile.deleteFromServer(server)) {
     return Terminal.error(
-      `Could not remove source file ${sourcePath} from existing location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
+      `无法从原位置移除源文件 ${sourcePath}。如果 ${sourcePath} 是脚本，请确保在使用 'mv' 之前它没有在运行。`,
     );
   }
-  Terminal.print(`Moved ${sourcePath} to ${destinationPath}`);
+  Terminal.print(`已将 ${sourcePath} 移动到 ${destinationPath}`);
   const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
-  if (overwritten) Terminal.warn(`${destinationPath} was overwritten.`);
+  if (overwritten) Terminal.warn(`${destinationPath} 已被覆盖。`);
 }

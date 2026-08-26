@@ -25,15 +25,15 @@ export function CasinoLocation(): React.ReactElement {
     <>
       {game === GameType.None && (
         <Box sx={{ display: "grid", width: "fit-content" }}>
-          <Button onClick={() => updateGame(GameType.Coin)}>Play coin flip</Button>
-          <Button onClick={() => updateGame(GameType.Slots)}>Play slots</Button>
-          <Button onClick={() => updateGame(GameType.Roulette)}>Play roulette</Button>
-          <Button onClick={() => updateGame(GameType.Blackjack)}>Play blackjack ({DECK_COUNT} decks)</Button>
+          <Button onClick={() => updateGame(GameType.Coin)}>玩掷硬币</Button>
+          <Button onClick={() => updateGame(GameType.Slots)}>玩老虎机</Button>
+          <Button onClick={() => updateGame(GameType.Roulette)}>玩轮盘</Button>
+          <Button onClick={() => updateGame(GameType.Blackjack)}>玩二十一点（{DECK_COUNT} 副牌）</Button>
         </Box>
       )}
       {game !== GameType.None && (
         <>
-          <Button onClick={() => updateGame(GameType.None)}>Stop playing</Button>
+          <Button onClick={() => updateGame(GameType.None)}>停止游玩</Button>
           {game === GameType.Coin && <CoinFlip />}
           {game === GameType.Slots && <SlotMachine />}
           {game === GameType.Roulette && <Roulette />}

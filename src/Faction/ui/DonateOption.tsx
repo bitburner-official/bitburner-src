@@ -33,8 +33,8 @@ export function DonateOption({ faction, favorToDonate, disabled, rerender }: Don
     if (repGain > 0) {
       dialogBoxCreate(
         <>
-          You just donated <Money money={donateAmt} /> to {faction.name} to gain <Reputation reputation={repGain} />{" "}
-          reputation.
+          你刚刚向 {faction.name} 捐赠了 <Money money={donateAmt} />
+          ，获得了 <Reputation reputation={repGain} /> 声望。
         </>,
       );
       rerender();
@@ -44,12 +44,12 @@ export function DonateOption({ faction, favorToDonate, disabled, rerender }: Don
   function Status(): React.ReactElement {
     if (isNaN(donateAmt)) return <></>;
     if (!canDonate(donateAmt)) {
-      if (Player.money < donateAmt) return <Typography>Insufficient funds</Typography>;
-      return <Typography>Invalid donate amount entered!</Typography>;
+      if (Player.money < donateAmt) return <Typography>资金不足</Typography>;
+      return <Typography>输入的捐赠金额无效！</Typography>;
     }
     return (
       <Typography>
-        This donation will result in <Reputation reputation={repFromDonation(donateAmt, Player)} /> reputation gain
+        这次捐赠将使你获得 <Reputation reputation={repFromDonation(donateAmt, Player)} /> 声望
       </Typography>
     );
   }
@@ -59,18 +59,18 @@ export function DonateOption({ faction, favorToDonate, disabled, rerender }: Don
       <Status />
       {disabled ? (
         <Typography>
-          Unlock donations at <Favor favor={favorToDonate} /> favor with {faction.name}
+          与 {faction.name} 的人脉达到 <Favor favor={favorToDonate} /> 后解锁捐赠
         </Typography>
       ) : (
         <>
           <NumberInput
             onChange={setDonateAmt}
-            placeholder={"Donation amount"}
+            placeholder={"捐赠金额"}
             disabled={disabled}
             InputProps={{
               endAdornment: (
                 <Button onClick={onDonate} disabled={disabled || !canDonate(donateAmt)}>
-                  donate
+                  捐赠
                 </Button>
               ),
             }}

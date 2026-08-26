@@ -17,7 +17,7 @@ export function StanekDev(): React.ReactElement {
     return (
       <AutoExpandAccordion cacheKey="DEVMENU_StanekDev" unmountOnExit={true} disabled={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Stanek's Gift</Typography>
+          <Typography>Stanek 的礼物</Typography>
         </AccordionSummary>
       </AutoExpandAccordion>
     );
@@ -61,7 +61,7 @@ export function StanekDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_StanekDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Stanek's Gift</Typography>
+        <Typography>Stanek 的礼物</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
@@ -69,8 +69,8 @@ export function StanekDev(): React.ReactElement {
             <tr>
               <td>
                 <Adjuster
-                  label="cycles"
-                  placeholder="amt"
+                  label="周期"
+                  placeholder="数量"
                   tons={addCycles}
                   add={modCycles(1)}
                   subtract={modCycles(-1)}
@@ -81,8 +81,8 @@ export function StanekDev(): React.ReactElement {
             <tr>
               <td>
                 <Adjuster
-                  label="all charge"
-                  placeholder="amt"
+                  label="全部充能"
+                  placeholder="数量"
                   tons={addCharge}
                   add={modCharge(1)}
                   subtract={modCharge(-1)}

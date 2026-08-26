@@ -13,7 +13,7 @@ export function BracketGame({ stage }: IProps): React.ReactElement {
   return (
     <>
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
-        <Typography variant="h4">Close the brackets</Typography>
+        <Typography variant="h4">闭合括号</Typography>
         <Typography style={{ fontSize: "5em" }}>
           {`${stage.left}${stage.right}`}
           <BlinkingCursor />

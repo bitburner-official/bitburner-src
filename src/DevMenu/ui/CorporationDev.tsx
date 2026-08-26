@@ -17,7 +17,7 @@ export function CorporationDev(): React.ReactElement {
     return (
       <AutoExpandAccordion cacheKey="DEVMENU_CorporationDev" unmountOnExit={true} disabled={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Corporation</Typography>
+          <Typography>企业</Typography>
         </AccordionSummary>
       </AutoExpandAccordion>
     );
@@ -73,19 +73,19 @@ export function CorporationDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_CorporationDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Corporation</Typography>
+        <Typography>企业</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Funds:</Typography>
+                <Typography>资金：</Typography>
               </td>
               <td>
                 <Adjuster
-                  label="set funds"
-                  placeholder="amt"
+                  label="设置资金"
+                  placeholder="数量"
                   tons={addTonsCorporationFunds}
                   add={modifyCorporationFunds(1)}
                   subtract={modifyCorporationFunds(-1)}
@@ -95,12 +95,12 @@ export function CorporationDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Cycles:</Typography>
+                <Typography>周期：</Typography>
               </td>
               <td>
                 <Adjuster
-                  label="cycles"
-                  placeholder="amt"
+                  label="周期"
+                  placeholder="数量"
                   tons={addTonsCorporationCycles}
                   add={modifyCorporationCycles(1)}
                   subtract={modifyCorporationCycles(-1)}
@@ -110,17 +110,17 @@ export function CorporationDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Button onClick={finishCorporationProducts}>Finish products</Button>
+                <Button onClick={finishCorporationProducts}>完成产品研发</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Button onClick={addCorporationResearch}>Tons of research</Button>
+                <Button onClick={addCorporationResearch}>海量研究点数</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Button onClick={resetCorporationCooldowns}>Reset stock cooldowns</Button>
+                <Button onClick={resetCorporationCooldowns}>重置股票冷却时间</Button>
               </td>
             </tr>
           </tbody>

@@ -39,7 +39,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
     <Box>
       <Select onChange={onChange} value={currentTask} sx={{ width: "100%" }}>
         <MenuItem key={0} value={"Unassigned"}>
-          Unassigned
+          未分配
         </MenuItem>
         {tasks.map((task: string, i: number) => (
           <MenuItem key={i + 1} value={task}>

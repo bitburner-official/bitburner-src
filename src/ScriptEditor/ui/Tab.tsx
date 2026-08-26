@@ -67,8 +67,7 @@ export function Tab({ provided, tabId, isActive, isExternal, isUnsaved, onClick,
       <Typography component="span" color={Settings.theme.warning}>
         {tabTitle}
         <br />
-        This file is on a non-home server. You will lose all files on non-home servers when they are deleted or
-        recreated (install augmentations, soft reset, deleted by NS APIs, etc.).
+        该文件位于非家用电脑的服务器上。当非家用电脑的服务器被删除或重建时（安装强化、软重置、被 NS API 删除等），你将丢失其上的所有文件。
       </Typography>
     );
   } else {
@@ -134,7 +133,7 @@ export function Tab({ provided, tabId, isActive, isExternal, isUnsaved, onClick,
           <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{tabTitle}</span>
         </Button>
       </Tooltip>
-      <Tooltip title="Overwrite editor content with saved file content">
+      <Tooltip title="用已保存的文件内容覆盖编辑器中的内容">
         <Button onClick={onUpdate} style={iconButtonStyle}>
           <SyncIcon fontSize="small" />
         </Button>

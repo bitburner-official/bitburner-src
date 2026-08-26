@@ -116,11 +116,11 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_GeneralDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>General</Typography>
+        <Typography>常规</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography>
-          Money (current: <Money money={Player.money} />)
+          资金（当前：<Money money={Player.money} />）
         </Typography>
         {moneyValues.map((value) => (
           <Button key={`add money ${value}`} onClick={addMoney(value)}>
@@ -130,28 +130,28 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
         ))}
         <br />
         <NumberInput placeholder={"$$$"} onChange={setDevMoney} />
-        <Button onClick={addCustomMoney}>Give Money</Button>
-        <Button onClick={setMoney(0)}>Clear Money</Button>
+        <Button onClick={addCustomMoney}>给予资金</Button>
+        <Button onClick={setMoney(0)}>清空资金</Button>
         {Player.hashManager.capacity > 0 && (
           <>
             <br />
             <br />
             <Typography>
-              Hashes (current: <Hashes hashes={Player.hashManager.hashes} /> /&nbsp;
-              <Hashes hashes={Player.hashManager.capacity} />)
+              哈希（当前：<Hashes hashes={Player.hashManager.hashes} /> /&nbsp;
+              <Hashes hashes={Player.hashManager.capacity} />）
             </Typography>
-            <NumberInput disabled={!Player.hashManager} placeholder={"hashes"} onChange={setHash} />
+            <NumberInput disabled={!Player.hashManager} placeholder={"哈希"} onChange={setHash} />
             <Button disabled={!Player.hashManager} onClick={addHashes}>
-              Give Hashes
+              给予哈希
             </Button>
             <Button disabled={!Player.hashManager} onClick={() => (Player.hashManager.hashes = 0)}>
-              Clear Hashes
+              清空哈希
             </Button>
           </>
         )}
         <br />
         <br />
-        <Typography>Max Home RAM (current: {formatRam(homeComputer.maxRam)})</Typography>
+        <Typography>家用电脑最大 RAM（当前：{formatRam(homeComputer.maxRam)}）</Typography>
         {ramValues.map((gb) => (
           <Button key={gb} onClick={ramSetter(gb)}>
             {formatRam(gb)}
@@ -160,24 +160,24 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
         <Button onClick={doubleRam}>RAM *= 2</Button>
         <br />
         <br />
-        <Typography>Corporation:</Typography>
+        <Typography>企业：</Typography>
         {Player.corporation ? (
-          <Button onClick={destroyCorporation}>Destroy Corporation</Button>
+          <Button onClick={destroyCorporation}>摧毁企业</Button>
         ) : (
           <>
             <TextField
-              placeholder="Enter Corp Name"
+              placeholder="输入企业名称"
               value={corporationName}
               onChange={(x) => setCorporationName(x.target.value)}
             />
-            <Button onClick={createCorporation}>Create Corporation</Button>
+            <Button onClick={createCorporation}>创建企业</Button>
           </>
         )}
         <br />
         <br />
-        <Typography>Gang:</Typography>
+        <Typography>帮派：</Typography>
         {Player.gang ? (
-          <Button onClick={stopGang}>Leave Gang</Button>
+          <Button onClick={stopGang}>离开帮派</Button>
         ) : (
           <>
             <Select value={gangFaction} onChange={setGangFactionDropdown}>
@@ -187,28 +187,28 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
                 </MenuItem>
               ))}
             </Select>
-            <Button onClick={startGang}>Create Gang</Button>
+            <Button onClick={startGang}>创建帮派</Button>
           </>
         )}
         <br />
         <br />
-        <Typography>Bladeburner:</Typography>
+        <Typography>Bladeburner：</Typography>
         {Player.bladeburner ? (
-          <Button onClick={leaveBladeburner}>Leave BladeBurner</Button>
+          <Button onClick={leaveBladeburner}>离开 Bladeburner</Button>
         ) : (
-          <Button onClick={joinBladeburner}>Join BladeBurner</Button>
+          <Button onClick={joinBladeburner}>加入 Bladeburner</Button>
         )}
         <br />
         <br />
-        <Typography>Misc:</Typography>
-        <Button onClick={quickB1tFlum3}>Quick b1t_flum3.exe</Button>
-        <Button onClick={b1tflum3}>Run b1t_flum3.exe</Button>
+        <Typography>杂项：</Typography>
+        <Button onClick={quickB1tFlum3}>快速 b1t_flum3.exe</Button>
+        <Button onClick={b1tflum3}>运行 b1t_flum3.exe</Button>
         <br />
-        <Button onClick={quickHackW0r1dD43m0n}>Quick w0rld_d34m0n</Button>
-        <Button onClick={hackW0r1dD43m0n}>Hack w0rld_d34m0n</Button>
+        <Button onClick={quickHackW0r1dD43m0n}>快速入侵 w0r1d_d43m0n</Button>
+        <Button onClick={hackW0r1dD43m0n}>入侵 w0r1d_d43m0n</Button>
         <br />
-        <Button onClick={() => setError(true)}>Throw Error</Button>
-        <Button onClick={checkMessages}>Check Messages</Button>
+        <Button onClick={() => setError(true)}>抛出错误</Button>
+        <Button onClick={checkMessages}>检查消息</Button>
       </AccordionDetails>
     </AutoExpandAccordion>
   );

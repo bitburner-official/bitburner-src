@@ -33,7 +33,7 @@ export function PlaceOrderModal(props: IProps): React.ReactElement {
         autoFocus
         type="number"
         onChange={onChange}
-        placeholder="price"
+        placeholder="价格"
         InputProps={{
           endAdornment: <Button onClick={onClick}>{props.placeText}</Button>,
         }}

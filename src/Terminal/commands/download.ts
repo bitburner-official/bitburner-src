@@ -25,13 +25,13 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
     .then((content: Blob) => downloadContentAsFile(content, filename))
     .catch((error) => {
       console.error(error);
-      Terminal.error(`Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
+      Terminal.error(`无法在 ${server.hostname} 上压缩匹配模式 ${pattern} 的脚本。错误：${error}`);
     });
 }
 
 export function download(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of download command. Usage: download [script/text file]");
+    return Terminal.error("download 命令用法不正确。用法：download [script/text file]");
   }
   const pattern = String(args[0]);
   // If the path contains a * or ?, treat as glob
@@ -41,16 +41,16 @@ export function download(args: (string | number | boolean)[], server: BaseServer
       return;
     } catch (error) {
       console.error(error);
-      Terminal.error(`Cannot export scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
+      Terminal.error(`无法在 ${server.hostname} 上导出匹配模式 ${pattern} 的脚本。错误：${error}`);
       return;
     }
   }
   const path = Terminal.getFilepath(pattern);
-  if (!path) return Terminal.error(`Could not resolve path ${pattern}`);
+  if (!path) return Terminal.error(`无法解析路径 ${pattern}`);
   if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-    return Terminal.error("Can only download script and text files");
+    return Terminal.error("只能下载脚本和文本文件");
   }
   const file = server.getContentFile(path);
-  if (!file) return Terminal.error(`File not found: ${path}`);
+  if (!file) return Terminal.error(`未找到文件：${path}`);
   downloadContentAsFile(file.content, file.filename);
 }

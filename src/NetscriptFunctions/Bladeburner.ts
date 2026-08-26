@@ -34,11 +34,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
     const apiAccess = canAccessBitNodeFeature(7) || canAccessBitNodeFeature(6);
     if (!apiAccess) {
-      throw helpers.errorMessage(ctx, "You have not unlocked the Bladeburner API.", "API ACCESS");
+      throw helpers.errorMessage(ctx, "你尚未解锁 Bladeburner API。", "API ACCESS");
     }
     const bladeburner = Player.bladeburner;
     if (!bladeburner)
-      throw helpers.errorMessage(ctx, "You must be a member of the Bladeburner division to use this API.");
+      throw helpers.errorMessage(ctx, "你必须成为 Bladeburner 部门的成员才能使用此 API。");
     return bladeburner;
   };
   function getAction(ctx: NetscriptContext, _type: unknown, name: unknown): Action {
@@ -50,7 +50,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     }
     const action = bladeburner.getActionFromTypeAndName(type, name);
     if (!action) {
-      throw helpers.errorMessage(ctx, `Invalid action type='${_type}', name='${name}'`);
+      throw helpers.errorMessage(ctx, `无效的动作 type='${_type}'，name='${name}'`);
     }
     return action;
   }
@@ -64,7 +64,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     if (!isLevelableAction(action)) {
       throw helpers.errorMessage(
         ctx,
-        `Actions of type ${action.type} are not levelable, ${ctx.functionPath} requires a levelable action`,
+        `类型为 ${action.type} 的动作无法升级等级，${ctx.functionPath} 需要一个可升级等级的动作`,
       );
     }
     return action;
@@ -114,7 +114,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     stopBladeburnerAction: (ctx) => {
       const bladeburner = getBladeburner(ctx);
-      helpers.log(ctx, () => `Stopping current Bladeburner action.`);
+      helpers.log(ctx, () => `正在停止当前的 Bladeburner 行动。`);
       return bladeburner.resetAction();
     },
     getCurrentAction: (ctx) => {
@@ -211,17 +211,17 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       checkBladeburnerAccess(ctx);
       const action = getLevelableAction(ctx, type, name);
       action.autoLevel = autoLevel;
-      helpers.log(ctx, () => `Autolevel for ${action.name} has been ${autoLevel ? "enabled" : "disabled"}`);
+      helpers.log(ctx, () => `${action.name} 的自动升级已${autoLevel ? "启用" : "禁用"}`);
     },
     setActionLevel: (ctx, type, name, _level) => {
       const level = helpers.positiveInteger(ctx, "level", _level ?? 1);
       checkBladeburnerAccess(ctx);
       const action = getLevelableAction(ctx, type, name);
       if (level < 1 || level > action.maxLevel) {
-        throw helpers.errorMessage(ctx, `Level must be between 1 and ${action.maxLevel}, is ${level}`);
+        throw helpers.errorMessage(ctx, `等级必须在 1 到 ${action.maxLevel} 之间，当前为 ${level}`);
       }
       action.level = level;
-      helpers.log(ctx, () => `Set level for ${action.name} to ${level}`);
+      helpers.log(ctx, () => `已将 ${action.name} 的等级设为 ${level}`);
     },
     getRank: (ctx) => {
       const bladeburner = getBladeburner(ctx);
@@ -273,21 +273,21 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const action = getAction(ctx, type, name);
       const size = helpers.integer(ctx, "size", _size);
       if (size < 0) {
-        throw helpers.errorMessage(ctx, "size must be a non-negative integer", "TYPE");
+        throw helpers.errorMessage(ctx, "size 必须是非负整数", "TYPE");
       }
       if (size > bladeburner.teamSize) {
-        helpers.log(ctx, () => `Failed to set team size due to not enough team members.`);
+        helpers.log(ctx, () => `团队成员不足，无法设置团队规模。`);
         return -1;
       }
       switch (action.type) {
         case BladeburnerActionType.Contract:
         case BladeburnerActionType.General:
-          helpers.log(ctx, () => "Only valid for Operations and Black Operations");
+          helpers.log(ctx, () => "仅对行动（Operation）和黑色行动有效");
           return -1;
         case BladeburnerActionType.BlackOp:
         case BladeburnerActionType.Operation: {
           action.teamCount = size;
-          helpers.log(ctx, () => `Set team size for ${action.name} to ${size}`);
+          helpers.log(ctx, () => `已将 ${action.name} 的团队规模设为 ${size}`);
           return size;
         }
       }
@@ -329,15 +329,15 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     joinBladeburnerDivision: (ctx) => {
       if (!canAccessBitNodeFeature(7) && !canAccessBitNodeFeature(6)) {
-        helpers.log(ctx, () => "You do not have Source-File 6 or Source-File 7.");
+        helpers.log(ctx, () => "你没有源文件 6 或源文件 7。");
         return false;
       }
       if (Player.bitNodeOptions.disableBladeburner) {
-        helpers.log(ctx, () => "Bladeburner is disabled by advanced options.");
+        helpers.log(ctx, () => "Bladeburner 已被高级选项禁用。");
         return false;
       }
       if (currentNodeMults.BladeburnerRank === 0) {
-        helpers.log(ctx, () => "Bladeburner is disabled in this BitNode.");
+        helpers.log(ctx, () => "Bladeburner 在此 BitNode 中被禁用。");
         return false;
       }
       // Already member
@@ -353,12 +353,12 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         helpers.log(
           ctx,
           () =>
-            "You do not meet the requirements for joining the Bladeburner division. All combat stats must be at least level 100.",
+            "你不满足加入 Bladeburner 部门的条件。所有战斗属性都必须至少达到 100 级。",
         );
         return false;
       }
       Player.startBladeburner();
-      helpers.log(ctx, () => "You have been accepted into the Bladeburner division.");
+      helpers.log(ctx, () => "你已被 Bladeburner 部门录取。");
 
       return true;
     },

@@ -422,7 +422,7 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
   }
   // Some 2.3 changes are actually in BaseServer.js fromJSONBase function
   if (ver < 31) {
-    Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
+    Terminal.warn("正在迁移到 2.3.0，载入时不包含任何脚本。");
     for (const server of GetAllServers()) {
       // Do not load any saved scripts on migration
       server.savedScripts = [];
@@ -445,7 +445,7 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
       if (isNaN(valuation)) valuation = 300e9;
       Player.startCorporation(String(oldCorp.name), !!oldCorp.seedFunded);
       Player.corporation?.gainFunds(valuation, "force majeure");
-      Terminal.warn("Loading corporation from version prior to 2.3. Corporation has been reset.");
+      Terminal.warn("正在从 2.3 之前的版本加载企业数据。企业已被重置。");
     }
     // End 2.3 changes
   }
@@ -484,7 +484,7 @@ Error: ${e}`,
     }
     if (anyExportsFailed)
       Terminal.error(
-        "Some material exports failed to validate while loading and have been removed. See console for more info.",
+        "部分材料导出在载入时未通过验证并已被移除。详见控制台。",
       );
   }
   if (ver < 33) {
@@ -530,7 +530,7 @@ Error: ${e}`,
         found = true;
       }
     }
-    if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
+    if (found) Terminal.error("发现并修正了包含空格的文件名，详见控制台。");
   }
   // Migrate save data related to the breaking changes in the first beta of v3.0.0.
   if (ver < 44) {

@@ -57,16 +57,16 @@ export function InstalledAugmentations(): React.ReactElement {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ p: 1 }}>
-        <Typography variant="h5">Installed Augmentations</Typography>
+        <Typography variant="h5">已安装的强化</Typography>
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-          <Tooltip title={"Sorts the Augmentations alphabetically in numeral order"}>
+          <Tooltip title={"按字母顺序排列强化"}>
             <Button sx={{ width: "100%" }} onClick={sortInOrder}>
-              Sort in Order
+              按顺序排列
             </Button>
           </Tooltip>
-          <Tooltip title={"Sorts the Augmentations based on when you acquired them (same as default)"}>
+          <Tooltip title={"按照获得时间排列强化（与默认相同）"}>
             <Button sx={{ width: "100%" }} onClick={sortByAcquirementTime}>
-              Sort by Time of Acquirement
+              按获得时间排序
             </Button>
           </Tooltip>
         </Box>
@@ -114,7 +114,7 @@ export function InstalledAugmentations(): React.ReactElement {
         </Paper>
       ) : (
         <Paper sx={{ p: 1 }}>
-          <Typography>No Augmentations have been installed yet</Typography>
+          <Typography>尚未安装任何强化</Typography>
         </Paper>
       )}
     </Box>

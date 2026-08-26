@@ -26,7 +26,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
 
   const lab = getLabyrinthDetails();
   if (lab.cha > Player.skills.charisma) {
-    return <Typography color="error">You don't yet have the wits needed to attempt the labyrinth.</Typography>;
+    return <Typography color="error">你还没有挑战迷宫所需的智慧。</Typography>;
   }
 
   cleanUpLabyrinthLocations();
@@ -53,7 +53,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
       const connectedToLab = scriptServer.serversOnNetwork.includes(lab.name);
       scriptOptions.push(
         <MenuItem key={script.pid} value={Number(script.pid)} disabled={!connectedToLab}>
-          {`PID ${script.pid}: ${script.server} - ${!connectedToLab ? "(Not connected to lab)" : script.filename}`}
+          {`PID ${script.pid}: ${script.server} - ${!connectedToLab ? "（未连接到迷宫）" : script.filename}`}
         </MenuItem>,
       );
     }
@@ -61,7 +61,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
     if (lab.manual) {
       return [
         <MenuItem key={-1} value={-1}>
-          Manual UI
+          手动 UI
         </MenuItem>,
         ...scriptOptions,
       ];
@@ -72,7 +72,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
   const getMenu = () => {
     // With non-manual labyrinth, return immediately if there are no pids navigating the labyrinth.
     if (Object.keys(DarknetState.labLocations).length === 1 && !lab.manual) {
-      return <Typography>(No scripts found)</Typography>;
+      return <Typography>（未找到脚本）</Typography>;
     }
     let perspective = currentPerspective;
     // This happens when a script navigating the labyrinth dies.
@@ -93,7 +93,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
     return (
       <Select
         value={perspective}
-        label="Perspective to view"
+        label="要查看的视角"
         onChange={(val) => {
           setCurrentPerspective(Number(val.target.value));
         }}
@@ -109,7 +109,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
       .serverLogs.filter((log) => log.pid === currentPerspective)
       .slice(0, 2)
       .map(stringifyLog)
-      .join("\n") || "(no response yet)";
+      .join("\n") || "（尚无响应）";
 
   const stringifyLog = (log: LogEntry) => {
     if (typeof log.message === "string") return log.message;
@@ -120,10 +120,10 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
 
   const getManualFeedback = () => {
     if (isAuthenticating) {
-      return "Travelling...";
+      return "移动中……";
     }
     if (currentPerspective !== -1) {
-      return `You are following the progress of pid ${currentPerspective} instead of the manual mode.`;
+      return `你正在跟随 pid ${currentPerspective} 的进度，而不是手动模式。`;
     }
     const lastLog = getServerState(lab.name).serverLogs.find(
       (log) => log.pid === -1 && isPasswordResponse(log.message),
@@ -147,26 +147,25 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
         <div style={{ width: "50%" }}>
           {!lab.manual && currentPerspective === -1 ? (
             <Typography style={{ fontStyle: "italic", paddingRight: "10px" }}>
-              This lab cannot be completed manually. Select a script PID that is attempting the labyrinth from the
-              options below to view its progress.
+              这个迷宫无法手动完成。请从下方选项中选择一个正在尝试迷宫的脚本 PID 来查看其进度。
             </Typography>
           ) : (
             <>
               <Typography>
-                Manual mode feedback: <br />
+                手动模式反馈： <br />
                 {getManualFeedback()}
               </Typography>
-              <Typography>Current Surroundings:</Typography>
+              <Typography>当前周围环境：</Typography>
               <pre className={classes.maze}>{surroundings}</pre>
               <Typography>
-                Current Coordinates: {x},{y}
+                当前坐标：{x},{y}
               </Typography>
             </>
           )}
         </div>
         <div style={{ width: "50%" }}>
           <Typography variant="caption" color="secondary">
-            Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+            通过 <pre style={{ display: "inline" }}>heartbleed</pre> 抓取的日志：
           </Typography>
           <Card style={{ padding: "8px", minHeight: "270px", marginBottom: "8px" }}>
             <div style={{ color: Settings.theme.maplocation }}>
@@ -188,7 +187,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
       <br />
       <br />
       <div style={{ display: "inline-flex", alignItems: "left", gap: "8px" }}>
-        <Typography>Script/perspective to follow: </Typography>
+        <Typography>要跟随的脚本/视角：</Typography>
         {getMenu()}
       </div>
     </>

@@ -62,15 +62,13 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
       <div className={classes.searchBox}>
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <br />
-          <Typography variant="h4">IPvGO Subnet Search</Typography>
+          <Typography variant="h4">IPvGO 子网搜索</Typography>
           <br />
         </Box>
         <br />
         <br />
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
-          <Typography className={classes.opponentLabel}>
-            {opponent !== GoOpponent.none ? "Opponent Faction: " : ""}
-          </Typography>
+          <Typography className={classes.opponentLabel}>{opponent !== GoOpponent.none ? "对手派系： " : ""}</Typography>
           <Select value={opponent} onChange={changeOpponent} sx={{ mr: 1 }}>
             {opponentFactions.map((faction) => (
               <MenuItem key={faction} value={faction}>
@@ -84,7 +82,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
           </Select>
         </Box>
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
-          <Typography className={classes.opponentLabel}>Subnet size: </Typography>
+          <Typography className={classes.opponentLabel}>子网大小： </Typography>
           {opponent === GoOpponent.w0r1d_d43m0n ? (
             <Typography>????</Typography>
           ) : (
@@ -98,19 +96,12 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
           )}
         </Box>
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
-          <Tooltip
-            title={
-              <>
-                This faction will also get a few points as a home-field advantage in the subnet, and to balance the
-                player's advantage of having the first move.
-              </>
-            }
-          >
-            <Typography className={classes.opponentLabel}>Komi: {opponentDetails[opponent].komi}</Typography>
+          <Tooltip title={<>该派系也会得到几分作为其在本子网的主场优势，用以平衡玩家先行落子的优势。</>}>
+            <Typography className={classes.opponentLabel}>贴目：{opponentDetails[opponent].komi}</Typography>
           </Tooltip>
           {handicap ? (
-            <Tooltip title={<>This faction has placed a few routers to defend their subnet already.</>}>
-              <Typography className={classes.opponentLabel}>Handicap: {handicap}</Typography>
+            <Tooltip title={<>该派系已预先放置了几个路由器来防守其子网。</>}>
+              <Typography className={classes.opponentLabel}>让子：{handicap}</Typography>
             </Tooltip>
           ) : (
             ""
@@ -134,18 +125,18 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
         <br />
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <Typography>
-            {opponent !== GoOpponent.none ? "Faction subnet bonus:" : ""} {opponentDetails[opponent].bonusDescription}
+            {opponent !== GoOpponent.none ? "派系子网加成：" : ""} {opponentDetails[opponent].bonusDescription}
           </Typography>
         </Box>
         <br />
         <br />
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
-          <Button onClick={onSearch}>Search for Subnet</Button>
-          <Button onClick={cancel}>Cancel</Button>
+          <Button onClick={onSearch}>搜索子网</Button>
+          <Button onClick={cancel}>取消</Button>
         </Box>
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <Typography onClick={showInstructions} className={classes.link}>
-            How to Play
+            玩法说明
           </Typography>
         </Box>
       </div>

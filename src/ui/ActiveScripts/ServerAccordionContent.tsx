@@ -34,7 +34,7 @@ export function ServerAccordionContent({ scripts }: ServerActiveScriptsProps): R
         <Typography
           component="span"
           marginRight="auto"
-        >{`Displaying scripts ${firstScriptNumber}-${lastScriptNumber} of ${scripts.length}`}</Typography>
+        >{`正在显示脚本 ${firstScriptNumber}-${lastScriptNumber} / ${scripts.length}`}</Typography>
         <IconButton onClick={() => changePage(0)} disabled={page === 0}>
           <FirstPage />
         </IconButton>

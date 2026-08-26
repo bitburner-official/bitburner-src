@@ -145,27 +145,27 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         }}
       >
         <Button onClick={() => props.save()} startIcon={<Save />} sx={{ gridArea: "save" }}>
-          Save Game
+          存档
         </Button>
         <Box sx={{ gridArea: "delete", "& .MuiButton-root": { height: "100%", width: "100%" } }}>
           <DeleteGameButton />
         </Box>
-        <Tooltip title={<Typography>Export your game to a text file.</Typography>}>
+        <Tooltip title={<Typography>将游戏导出为文本文件。</Typography>}>
           <Button onClick={() => props.export()} startIcon={<Download />} sx={{ gridArea: "export" }}>
-            Export Game
+            导出游戏
           </Button>
         </Tooltip>
         <Tooltip
           title={
             <Typography>
-              Import your game from a text file.
+              从文本文件导入游戏。
               <br />
-              This will <strong>overwrite</strong> your current game. Back it up first!
+              这将<strong>覆盖</strong>你当前的游戏。请先备份！
             </Typography>
           }
         >
           <Button onClick={startImport} startIcon={<Upload />} sx={{ gridArea: "import" }}>
-            Import Game
+            导入游戏
             <input
               ref={importInput}
               id="import-game-file-selector"
@@ -187,20 +187,20 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
               console.error(error);
             });
           }}
-          additionalButton={<Button onClick={compareSaveGame}>Compare Save</Button>}
+          additionalButton={<Button onClick={compareSaveGame}>对比存档</Button>}
           confirmationText={
             <>
-              Importing a new game will <strong>completely wipe</strong> the current data!
+              导入新游戏将<strong>完全清除</strong>当前数据！
               <br />
               <br />
-              Make sure to have a backup of your current save file before importing.
+              导入前请确保已备份当前存档文件。
               <br />
-              The file you are attempting to import seems valid.
+              你尝试导入的文件似乎是有效的。
               {(importData?.playerData?.lastSave ?? 0) > 0 && (
                 <>
                   <br />
                   <br />
-                  The export date of the save file is{" "}
+                  存档文件的导出时间为{" "}
                   <strong>{new Date(importData?.playerData?.lastSave ?? 0).toLocaleString()}</strong>
                 </>
               )}
@@ -208,7 +208,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
                 <>
                   <br />
                   <br />
-                  Total play time of imported game:{" "}
+                  导入游戏的累计游戏时长：{" "}
                   {convertTimeMsToTimeElapsedString(importData?.playerData?.totalPlaytime ?? 0)}
                 </>
               )}
@@ -217,11 +217,10 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
               <OptionSwitch
                 checked={syncSteamAchievements}
                 onChange={(newValue) => setSyncSteamAchievements(newValue)}
-                text="Sync Steam achievements"
+                text="同步 Steam 成就"
                 tooltip={
                   <>
-                    This setting is only used in the Steam app. If this setting is enabled, the game will automatically
-                    sync your unlocked Steam achievements to Steam Cloud.
+                    此设置仅用于 Steam 版本。启用后，游戏会自动将你已解锁的 Steam 成就同步到 Steam 云端。
                   </>
                 }
               />
@@ -232,16 +231,14 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         <Tooltip
           title={
             <Typography>
-              Forcefully kill all active running scripts, in case there is a bug or some unexpected issue with the game.
-              After using this, save the game and then reload the page. This is different than normal kill in that
-              normal kill will tell the script to shut down while force kill just removes the references to it (and it
-              should crash on its own). This will not remove the files on your computer, just forcefully kill all
-              running instances of all scripts.
+              强制杀死所有正在运行的脚本，以应对游戏出现 bug 或意外问题的情况。使用后请保存游戏并重新加载页面。
+              这与普通杀死不同：普通杀死会通知脚本自行关闭，而强制杀死只是移除对脚本的引用（脚本应会自行崩溃）。
+              这不会删除你电脑上的文件，只会强制杀死所有脚本的运行实例。
             </Typography>
           }
         >
           <Button onClick={() => props.forceKill()} sx={{ gridArea: "kill" }}>
-            Force kill all active scripts
+            强制杀死所有活动脚本
           </Button>
         </Tooltip>
         <Box sx={{ gridArea: "reset", "& .MuiButton-root": { height: "100%", width: "100%" } }}>
@@ -250,18 +247,17 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         <Tooltip
           title={
             <Typography>
-              If your save file is extremely big you can use this button to view a map of all the files on every server.
-              Be careful: there might be spoilers.
+              如果你的存档文件过大，可以使用此按钮查看所有服务器上全部文件的映射情况。注意：其中可能包含剧透内容。
             </Typography>
           }
         >
           <Button onClick={() => setDiagnosticOpen(true)} sx={{ gridArea: "diagnose" }}>
-            Diagnose Files
+            诊断文件
           </Button>
         </Tooltip>
-        <Tooltip title="Head to the theme browser to see a collection of prebuilt themes.">
+        <Tooltip title="前往主题浏览器查看预置主题合集。">
           <Button startIcon={<Palette />} onClick={() => Router.toPage(Page.ThemeBrowser)} sx={{ gridArea: "browse" }}>
-            Theme Browser
+            主题浏览器
           </Button>
         </Tooltip>
         <Box sx={{ gridArea: "theme", "& .MuiButton-root": { height: "100%", width: "100%" } }}>
@@ -283,22 +279,22 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             my: 1,
           }}
         >
-          <Tooltip title={<Typography>Start a GitHub issue to help the devs find bugs!</Typography>}>
+          <Tooltip title={<Typography>发起 GitHub issue，帮助开发者查找 bug！</Typography>}>
             <Button
               startIcon={<BugReport />}
               href="https://github.com/bitburner-official/bitburner-src/issues/new"
               target="_blank"
               sx={{ gridArea: "bug" }}
             >
-              Report Bug
+              报告 Bug
             </Button>
           </Tooltip>
           <Button startIcon={<Fingerprint />} onClick={() => setCreditsOpen(true)} sx={{ gridArea: "credits" }}>
-            Credits
+            制作人员
           </Button>
           <CreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
           <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
-            Repeat Tutorial
+            重玩教程
           </Button>
           <Button startIcon={<Chat />} href="https://discord.gg/TFc3hKD" target="_blank" sx={{ gridArea: "discord" }}>
             Discord
@@ -313,15 +309,15 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
         </Box>
       </Box>
-      <Typography>Save ID: {Player.identifier}</Typography>
+      <Typography>存档 ID：{Player.identifier}</Typography>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
 
       <ConfirmationModal
         open={confirmResetOpen}
         onClose={() => setConfirmResetOpen(false)}
         onConfirm={props.reactivateTutorial}
-        confirmationText={"Restart the tutorial? Running scripts will be killed."}
-        additionalButton={<Button onClick={() => setConfirmResetOpen(false)}>Cancel</Button>}
+        confirmationText={"重新开始教程？运行中的脚本将被杀死。"}
+        additionalButton={<Button onClick={() => setConfirmResetOpen(false)}>取消</Button>}
       />
     </Box>
   );

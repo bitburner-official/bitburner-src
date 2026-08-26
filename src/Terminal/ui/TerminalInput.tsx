@@ -474,7 +474,7 @@ export function TerminalInput(): React.ReactElement {
       >
         <Paper sx={{ m: 1, p: 2 }}>
           <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
-            Possible autocomplete candidates:
+            可能的自动补全候选：
           </Typography>
           <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
             {possibilities.join(" ")}

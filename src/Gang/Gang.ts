@@ -145,7 +145,7 @@ export class Gang {
     const gangFaction = Factions[this.facName];
     if (!gangFaction) {
       dialogBoxCreate(
-        "ERROR: Could not get Faction associates with your gang. This is a bug, please report to game dev",
+        "错误：无法获取与你帮派关联的派系。这是一个 bug，请向游戏开发者报告",
       );
       throw new Error("Could not find the faction associated with this gang.");
     }
@@ -383,7 +383,7 @@ export class Gang {
 
     // Notify of death
     if (this.notifyMemberDeath) {
-      dialogBoxCreate(`${member.name} was killed in a gang clash! You lost ${lostRespect} respect`);
+      dialogBoxCreate(`${member.name} 在帮派冲突中阵亡！你失去了 ${lostRespect} 尊重`);
     }
   }
 
@@ -392,7 +392,7 @@ export class Gang {
       const res = member.ascend();
       this.respect = Math.max(1, this.respect - res.respect);
       if (workerScript) {
-        workerScript.log("gang.ascendMember", () => `Ascended Gang member ${member.name}`);
+        workerScript.log("gang.ascendMember", () => `已飞升帮派成员 ${member.name}`);
       }
       return res;
     } catch (e: unknown) {

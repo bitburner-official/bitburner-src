@@ -208,7 +208,7 @@ export async function saveGame(emitToastEvent = true): Promise<void> {
     await save(saveData);
   } catch (error) {
     console.error(error);
-    dialogBoxCreate(`Cannot save game: ${error}`);
+    dialogBoxCreate(`无法保存游戏：${error}`);
     return;
   }
   const electronGameData: ElectronGameData = {
@@ -220,7 +220,7 @@ export async function saveGame(emitToastEvent = true): Promise<void> {
   pushGameSaved(electronGameData);
 
   if (emitToastEvent) {
-    SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
+    SnackbarEvents.emit("游戏已存档！", ToastVariant.INFO, 2000);
   }
 }
 
@@ -257,7 +257,7 @@ export async function importGame(
   },
 ): Promise<void> {
   if (!saveData || saveData.length === 0) {
-    dialogBoxCreate("Invalid save data");
+    dialogBoxCreate("存档数据无效");
     return;
   }
   // Modify settings in save data if needed (i.e., toggle SyncSteamAchievements before importing).
@@ -278,7 +278,7 @@ export async function importGame(
       }
     } catch (error) {
       console.error(error);
-      dialogBoxCreate(`Cannot override settings: ${error}`);
+      dialogBoxCreate(`无法覆盖设置：${error}`);
       return;
     }
   }
@@ -291,7 +291,7 @@ export async function importGame(
     pushImportResult(true);
   } catch (error) {
     console.error(error);
-    dialogBoxCreate(`Cannot import save data: ${error}`);
+    dialogBoxCreate(`无法导入存档数据：${error}`);
     return;
   }
   setTimeout(() => location.reload(), 0);
@@ -323,7 +323,7 @@ export async function getParsedSaveData(saveData: SaveData): Promise<ParsedSaveD
 
   if (typeof saveData === "string" && saveData.startsWith(`{"ctor"`)) {
     throw new Error(
-      "The save data is invalid. You must import the original save file. If it's a .gz file, don't decompress it.",
+      "存档数据无效。你必须导入原始存档文件。如果是 .gz 文件，请不要解压。",
     );
   }
 
@@ -566,7 +566,7 @@ export async function loadGame(saveData: SaveData): Promise<boolean> {
 function createScamUpdateText(): void {
   if (navigator.userAgent.includes("wv") && navigator.userAgent.includes("Chrome/")) {
     setInterval(() => {
-      dialogBoxCreate("SCAM ALERT. This app is not official and you should uninstall it.");
+      dialogBoxCreate("诈骗警告。此应用并非官方版本，请立即卸载。");
     }, 1000);
   }
 }
@@ -575,9 +575,9 @@ function createNewUpdateText() {
   setTimeout(
     () =>
       dialogBoxCreate(
-        "New update!\n" +
-          "Please report any bugs/issues through the GitHub repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
+        "新版本更新！\n" +
+          "请通过 GitHub 仓库（https://github.com/bitburner-official/bitburner-src/issues）" +
+          "或 Discord 的 #bug-report 频道（https://discord.com/channels/415207508303544321/415213413745164318）报告任何 bug/问题。\n\n" +
           CONSTANTS.LatestUpdate,
       ),
     1000,
@@ -588,10 +588,9 @@ function createBetaUpdateText() {
   setTimeout(
     () =>
       dialogBoxCreate(
-        "You are playing on the beta environment! This branch of the game " +
-          "features the latest developments in the game. This version may be unstable.\n" +
-          "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
+        "你正在游玩测试版环境！此分支包含游戏的最新开发内容，该版本可能不稳定。\n" +
+          "请通过 GitHub 仓库（https://github.com/bitburner-official/bitburner-src/issues）" +
+          "或 Discord 的 #bug-report 频道（https://discord.com/channels/415207508303544321/415213413745164318）报告任何 bug/问题。\n\n" +
           CONSTANTS.LatestUpdate,
       ),
     1000,

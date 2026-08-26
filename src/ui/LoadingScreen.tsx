@@ -55,14 +55,14 @@ export function LoadingScreen(): React.ReactElement {
         <CircularProgress size={150} color="primary" />
       </Grid>
       <Grid item>
-        <Typography variant="h3">Loading Bitburner {version}</Typography>
+        <Typography variant="h3">Bitburner 加载中 {version}</Typography>
       </Grid>
       {show && (
         <Grid item>
           <Typography>
-            If the game fails to load, consider <a href="?noScripts">killing all scripts</a>
+            如果游戏加载失败，请考虑<a href="?noScripts">终止所有脚本</a>
             <br />
-            You can export your save data at <a href="./export.html">export.html</a>
+            你可以在 <a href="./export.html">export.html</a> 导出你的存档数据
           </Typography>
         </Grid>
       )}

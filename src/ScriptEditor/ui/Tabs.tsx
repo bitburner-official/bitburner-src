@@ -67,7 +67,7 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
   return (
     <Box display="flex" flexGrow="0" flexDirection="row" alignItems="center">
       <Tooltip
-        title={"Search Open Scripts"}
+        title={"搜索打开的脚本"}
         open={isSearchTooltipOpen}
         onOpen={openSearchTooltip}
         onClose={closeSearchTooltip}

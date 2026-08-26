@@ -5,7 +5,7 @@ import { validateConnections } from "../../Server/ServerHelpers";
 export function connect(args: (string | number | boolean)[], server: BaseServer): undefined {
   // Disconnect from current server in Terminal and connect to new one
   if (args.length !== 1) {
-    Terminal.error("Incorrect usage of connect command. Usage: connect [hostname]");
+    Terminal.error("connect 命令用法不正确。用法：connect [hostname]");
     return;
   }
 

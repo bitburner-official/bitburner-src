@@ -49,11 +49,11 @@ export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): Re
           </IconButton>
         )}
       </Box>
-      <Typography>Level: {formatBigNumber(skillLevel)}</Typography>
+      <Typography>等级：{formatBigNumber(skillLevel)}</Typography>
       {maxLvl ? (
-        <Typography>MAX LEVEL</Typography>
+        <Typography>已达最高等级</Typography>
       ) : (
-        <Typography>Skill Points required: {formatBigNumber(pointCost)}</Typography>
+        <Typography>所需技能点：{formatBigNumber(pointCost)}</Typography>
       )}
       <Typography>{skill.desc}</Typography>
     </Paper>

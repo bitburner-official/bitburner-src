@@ -6,11 +6,11 @@ export const squareRoot: Pick<CodingContractTypes, CodingContractName.SquareRoot
   [CodingContractName.SquareRoot]: {
     difficulty: 5,
     desc(data: bigint): string {
-      return `You are given a ~200 digit BigInt. Find the square root of this number, to the nearest integer.\n
-The input is a BigInt value. The answer must be the string representing the solution's BigInt value. The trailing "n" is not part of the string.\n
-Hint: If you are having trouble, you might consult https://en.wikipedia.org/wiki/Methods_of_computing_square_roots
+      return `给你一个约 200 位的大整数（BigInt）。请求出这个数的平方根，精确到最接近的整数。\n
+输入是一个 BigInt 值。答案必须是表示解的 BigInt 值的字符串。末尾的 "n" 不属于该字符串。\n
+提示：如果你遇到困难，可以参考 https://en.wikipedia.org/wiki/Methods_of_computing_square_roots
 
-Input number:
+输入数字：
 ${data}`;
     },
     generate(): [string, string] {

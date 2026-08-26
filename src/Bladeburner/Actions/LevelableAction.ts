@@ -42,7 +42,7 @@ export abstract class LevelableActionClass extends ActionClass {
   }
 
   getAvailability(__bladeburner: Bladeburner): Availability {
-    if (this.count < 1) return { error: "Insufficient action count" };
+    if (this.count < 1) return { error: "行动次数不足" };
     return { available: true };
   }
 

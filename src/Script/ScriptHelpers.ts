@@ -41,7 +41,7 @@ export function scriptCalculateOfflineProduction(
       continue;
     }
     const timesGrown = Math.round(((0.5 * growCount) / runningScript.onlineRunningTime) * timePassed);
-    runningScript.log(`Called on ${server.hostname} ${timesGrown} times while offline`);
+    runningScript.log(`离线期间在 ${server.hostname} 上执行了 grow() ${timesGrown} 次`);
     const host = GetServer(runningScript.server);
     if (host === null) {
       throw new Error("getServer of null key?");
@@ -50,7 +50,7 @@ export function scriptCalculateOfflineProduction(
       throw new Error("trying to grow a non-normal server");
     }
     const growth = processSingleServerGrowth(server, timesGrown, host.cpuCores);
-    runningScript.log(`'${server.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
+    runningScript.log(`离线期间 '${server.hostname}' 增长了 ${formatPercent(growth - 1, 6)}`);
   }
 
   // Offline EXP gain
@@ -85,7 +85,7 @@ export function scriptCalculateOfflineProduction(
     const host = GetServer(runningScript.server);
     if (host === null) throw new Error("getServer of null key?");
     const timesWeakened = Math.round(((0.5 * weakenCount) / runningScript.onlineRunningTime) * timePassed);
-    runningScript.log(`Called weaken() on ${serv.hostname} ${timesWeakened} times while offline`);
+    runningScript.log(`离线期间在 ${serv.hostname} 上执行了 weaken() ${timesWeakened} 次`);
     const weakenAmount = getWeakenEffect(runningScript.threads, host.cpuCores);
     serv.weaken(weakenAmount * timesWeakened);
   }

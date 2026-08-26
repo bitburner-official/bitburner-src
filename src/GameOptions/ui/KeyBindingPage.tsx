@@ -52,7 +52,7 @@ function determineConflictKeys(
     isKeyCombinationPressed(newCombination, { key: KEY.ENTER }) ||
     isKeyCombinationPressed(newCombination, { key: KEY.TAB })
   ) {
-    conflicts.add("Common hotkeys");
+    conflicts.add("常用快捷键");
   }
   // Copy - Paste - Cut
   if (window.navigator.userAgent.includes("Mac")) {
@@ -61,7 +61,7 @@ function determineConflictKeys(
       isKeyCombinationPressed(newCombination, { meta: true, key: KEY.V }) ||
       isKeyCombinationPressed(newCombination, { meta: true, key: KEY.X })
     ) {
-      conflicts.add("Common hotkeys");
+      conflicts.add("常用快捷键");
     }
   } else {
     if (
@@ -69,7 +69,7 @@ function determineConflictKeys(
       isKeyCombinationPressed(newCombination, { control: true, key: KEY.V }) ||
       isKeyCombinationPressed(newCombination, { control: true, key: KEY.X })
     ) {
-      conflicts.add("Common hotkeys");
+      conflicts.add("常用快捷键");
     }
   }
   // Terminal-ClearScreen
@@ -95,7 +95,7 @@ function determineConflictKeys(
       isKeyCombinationPressed(newCombination, { control: true, key: KEY.U }) ||
       isKeyCombinationPressed(newCombination, { control: true, key: KEY.K }))
   ) {
-    conflicts.add("Bash hotkeys");
+    conflicts.add("Bash 快捷键");
   }
   // Remove spoilers in the list
   if (!knowAboutBitverse()) {
@@ -104,7 +104,7 @@ function determineConflictKeys(
         continue;
       }
       conflicts.delete(conflict);
-      conflicts.add("Endgame content");
+      conflicts.add("终局内容");
     }
   }
   return conflicts;
@@ -211,7 +211,7 @@ function SettingUpKeyBindingModal({
   return (
     <Modal open={open} onClose={onClose}>
       <div style={{ textAlign: "center" }}>
-        <Typography style={{ padding: "10px 20px" }}>Press the key you would like to use</Typography>
+        <Typography style={{ padding: "10px 20px" }}>请按下你想使用的按键</Typography>
         <Typography
           minHeight="100px"
           display="flex"
@@ -223,22 +223,22 @@ function SettingUpKeyBindingModal({
           {parseKeyCombinationToString(combination)}
         </Typography>
         <Typography style={{ margin: "15px 0" }}>
-          {conflicts.size === 0 ? "No conflicts detected" : `Conflicts: ${[...conflicts]}`}
+          {conflicts.size === 0 ? "未检测到冲突" : `冲突：${[...conflicts]}`}
         </Typography>
         <div style={{ margin: "10px 0" }}>
           <Button style={{ minWidth: "100px" }} onClick={onClickClear}>
-            Clear
+            清除
           </Button>
           <Button style={{ marginLeft: "10px", minWidth: "100px" }} onClick={onClickDefault}>
-            Default
+            默认
           </Button>
         </div>
         <div>
           <Button style={{ minWidth: "100px" }} onClick={onClickOK}>
-            OK
+            确定
           </Button>
           <Button style={{ marginLeft: "10px", minWidth: "100px" }} onClick={onClickCancel}>
-            Cancel
+            取消
           </Button>
         </div>
       </div>
@@ -261,23 +261,21 @@ export function KeyBindingPage(): React.ReactElement {
     dialogBoxCreate(
       <>
         <Typography>
-          You can assign up to 2 key combinations per "action". If a key combination is assigned to many actions,
-          pressing that key combination will perform all those actions.
+          每个“操作”最多可分配 2 个按键组合。如果同一按键组合被分配给多个操作，按下该组合将执行所有这些操作。
         </Typography>
         <br />
         <Typography>
-          Some key combinations cannot be used. Your OS and browsers usually have some built-in key bindings that cannot
-          be overridden. For example, on Windows, Windows+R always opens the "Run" dialog.
+          某些按键组合无法使用。操作系统和浏览器通常内置了一些无法覆盖的按键绑定。例如在 Windows 上，Windows+R
+          始终会打开“运行”对话框。
         </Typography>
         <br />
         <Typography>
-          When you set up key bindings, the list of conflicts may contain "Endgame content". It means that the key
-          combination is currently used for features that you have not unlocked.
+          设置按键绑定时，冲突列表中可能出现“终局内容”。这表示该按键组合当前正被你尚未解锁的功能使用。
         </Typography>
         <br />
         <Typography>
-          On non-Apple keyboards, the "Windows" key (other names: win, start, super, meta, etc.) is shown as ⊞. On Apple
-          keyboards, the command key is shown as ⌘.
+          在非 Apple 键盘上，“Windows”键（其他名称：win、start、super、meta 等）显示为 ⊞。在 Apple 键盘上，
+          command 键显示为 ⌘。
         </Typography>
       </>,
     );
@@ -324,8 +322,8 @@ export function KeyBindingPage(): React.ReactElement {
     });
 
   return (
-    <GameOptionsPage title="Key Binding">
-      <Button onClick={onClickHowToUse}>How to use</Button>
+    <GameOptionsPage title="按键绑定">
+      <Button onClick={onClickHowToUse}>使用说明</Button>
       <br />
       <table>
         <tbody>{keyBindingRows}</tbody>

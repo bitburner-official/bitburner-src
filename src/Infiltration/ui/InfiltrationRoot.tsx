@@ -96,7 +96,7 @@ export function InfiltrationRoot(): React.ReactElement {
     // fix this state.
     return (
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "calc(100vh - 16px)" }}>
-        <Typography variant="h2">Not currently infiltrating!</Typography>
+        <Typography variant="h2">当前未在进行潜入！</Typography>
       </div>
     );
   }
@@ -113,11 +113,11 @@ export function InfiltrationRoot(): React.ReactElement {
           <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center", gap: 1 }}>
             {!(state.stage instanceof VictoryModel) && (
               <Button sx={{ width: "100%" }} onClick={cancel}>
-                Cancel Infiltration
+                取消潜入
               </Button>
             )}
             <Typography variant="h5">
-              Level {state.level} / {state.maxLevel}
+              第 {state.level} / {state.maxLevel} 层
             </Typography>
             <Progress results={state.results} />
           </Paper>

@@ -27,17 +27,17 @@ export const minimumPathSumInATriangle: Pick<CodingContractTypes, CodingContract
       const triangle = createTriangle(data);
 
       return [
-        "Given a triangle, find the minimum path sum from top to bottom. In each step",
-        "of the path, you may only move to adjacent numbers in the row below.",
-        "The triangle is represented as a 2D array of numbers:\n\n",
+        "给定一个三角形，找出从顶到底的最小路径和。在路径的每一步，",
+        "你只能移动到下一行中相邻的数字。",
+        "该三角形表示为一个二维数字数组：\n\n",
         `${triangle}\n\n`,
-        "Example: If you are given the following triangle:\n\n[\n",
+        "示例：如果给你以下三角形：\n\n[\n",
         "     [2],\n",
         "    [3,4],\n",
         "   [6,5,7],\n",
         "  [4,1,8,3]\n",
         "]\n\n",
-        "The minimum path sum is 11 (2 -> 3 -> 5 -> 1).",
+        "最小路径和为 11（2 -> 3 -> 5 -> 1）。",
       ].join(" ");
     },
     difficulty: 5,

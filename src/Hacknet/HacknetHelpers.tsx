@@ -474,7 +474,7 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
     case HashUpgradeEnum.SellForCorporationFunds: {
       const corp = Player.corporation;
       if (corp === null) {
-        return { success: false, message: "You have not created a corporation." };
+        return { success: false, message: "你尚未创建企业。" };
       }
       corp.gainFunds(upg.value * count, "hacknet");
       break;
@@ -482,15 +482,15 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
     case HashUpgradeEnum.ReduceMinimumSecurity: {
       const target = GetServer(upgTarget);
       if (target == null) {
-        return { success: false, message: `'${upgTarget}' is not a server.` };
+        return { success: false, message: `'${upgTarget}' 不是一台服务器。` };
       }
       if (!(target instanceof Server)) {
-        return { success: false, message: `'${upgTarget}' is not a normal server.` };
+        return { success: false, message: `'${upgTarget}' 不是一台普通服务器。` };
       }
       if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
         return {
           success: false,
-          message: `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
+          message: `'${upgTarget}' 不是有效目标。你只能对不属于你的服务器执行此操作。`,
         };
       }
 
@@ -500,15 +500,15 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
     case HashUpgradeEnum.IncreaseMaximumMoney: {
       const target = GetServer(upgTarget);
       if (target == null) {
-        return { success: false, message: `'${upgTarget}' is not a server.` };
+        return { success: false, message: `'${upgTarget}' 不是一台服务器。` };
       }
       if (!(target instanceof Server)) {
-        return { success: false, message: `'${upgTarget}' is not a normal server.` };
+        return { success: false, message: `'${upgTarget}' 不是一台普通服务器。` };
       }
       if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
         return {
           success: false,
-          message: `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
+          message: `'${upgTarget}' 不是有效目标。你只能对不属于你的服务器执行此操作。`,
         };
       }
 
@@ -529,7 +529,7 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
     case HashUpgradeEnum.ExchangeForCorporationResearch: {
       const corp = Player.corporation;
       if (corp === null) {
-        return { success: false, message: "You have not created a corporation." };
+        return { success: false, message: "你尚未创建企业。" };
       }
       for (const division of corp.divisions.values()) {
         division.researchPoints += upg.value * count;
@@ -539,7 +539,7 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
     case HashUpgradeEnum.ExchangeForBladeburnerRank: {
       const bladeburner = Player.bladeburner;
       if (bladeburner === null) {
-        return { success: false, message: "You have not joined Bladeburner." };
+        return { success: false, message: "你尚未加入 Bladeburner。" };
       }
       bladeburner.changeRank(Player, upg.value * count);
       break;
@@ -547,7 +547,7 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
     case HashUpgradeEnum.ExchangeForBladeburnerSP: {
       const bladeburner = Player.bladeburner;
       if (bladeburner === null) {
-        return { success: false, message: "You have not joined Bladeburner." };
+        return { success: false, message: "你尚未加入 Bladeburner。" };
       }
 
       bladeburner.skillPoints += upg.value * count;
@@ -561,7 +561,7 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
     }
     case HashUpgradeEnum.CompanyFavor: {
       if (!isMember("CompanyName", upgTarget)) {
-        return { success: false, message: `'${upgTarget}' is not a company.` };
+        return { success: false, message: `'${upgTarget}' 不是一家公司。` };
       }
       Companies[upgTarget].setFavor(Companies[upgTarget].favor + 5 * count);
       break;
@@ -578,7 +578,7 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
 export function purchaseHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, count = 1): Result {
   if (!(Player.hashManager instanceof HashManager)) {
     exceptionAlert(new Error("Player does not have a HashManager"));
-    return { success: false, message: "Player does not have a HashManager" };
+    return { success: false, message: "玩家没有 HashManager" };
   }
 
   /**

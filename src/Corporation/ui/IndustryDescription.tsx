@@ -19,16 +19,16 @@ export const IndustryDescription = ({ industry, corp }: IProps) => {
       {data.description}
       <br />
       <br />
-      Required Materials: {Object.keys(data.requiredMaterials).toString().replace(/,/gi, ", ")}
+      所需材料：{Object.keys(data.requiredMaterials).toString().replace(/,/gi, ", ")}
       <br />
-      Produces Materials: {data.producedMaterials ? data.producedMaterials.toString().replace(/,/gi, ", ") : "NONE"}
+      产出材料：{data.producedMaterials ? data.producedMaterials.toString().replace(/,/gi, ", ") : "无"}
       <br />
-      Produces products: {data.product ? "YES" : "NO"}
+      可开发产品：{data.product ? "是" : "否"}
       <br />
       <br />
-      Starting cost: <MoneyCost money={data.startingCost} corp={corp} />
+      起始费用：<MoneyCost money={data.startingCost} corp={corp} />
       <br />
-      Recommended starting Industry: {data.recommendStarting ? "YES" : "NO"}
+      推荐的起步行业：{data.recommendStarting ? "是" : "否"}
     </Typography>
   );
 };

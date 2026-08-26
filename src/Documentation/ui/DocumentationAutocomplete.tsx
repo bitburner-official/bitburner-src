@@ -26,7 +26,7 @@ export function DocumentationAutocomplete({ sx, onChange, width }: Documentation
   return (
     <AutoCompleteSearchBox
       sx={sx}
-      placeholder="Search NS API"
+      placeholder="搜索 NS API"
       maxSuggestions={10}
       suggestionList={() => suggestions}
       ignoredTextRegex={regex}

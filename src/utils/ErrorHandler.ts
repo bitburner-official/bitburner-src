@@ -24,7 +24,7 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
      * - errorType: "RUNTIME"
      * - errorText: "getServer: Invalid hostname: 'invalid'\n\nStack:\ntest.js:L5@main"
      */
-    const errorType = e.match(/^(\w+) ERROR/)?.[1];
+    const errorType = e.match(/^(\w+) (?:ERROR|错误)/)?.[1];
     if (errorType) {
       const errorText = e.split(/\n/).slice(3).join("\n");
       DisplayError(initialText + errorText, errorType, ws);
@@ -51,8 +51,8 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     DisplayError(initialText + getErrorMessageWithStackAndCause(e), getErrorType(e.stack) ?? "RUNTIME", ws);
   } else if (typeof e !== "string") {
     console.error("Unexpected error:", e);
-    const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
-        Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${e}`;
+    const msg = `抛出了意外类型的错误。此错误很可能是在脚本中手动抛出的。
+        错误已记录到控制台。\n\n错误类型：${typeof e}\n错误值：${e}`;
     DisplayError(msg, "UNKNOWN", ws);
   }
 }
@@ -60,12 +60,12 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
 /** Use this handler to handle the error when we call getSaveData function or getSaveInfo function */
 export function handleGetSaveDataInfoError(error: unknown, fromGetSaveInfo = false) {
   console.error(error);
-  let errorMessage = `Cannot get save ${fromGetSaveInfo ? "info" : "data"}. Error: ${error}.`;
+  let errorMessage = `无法获取存档${fromGetSaveInfo ? "信息" : "数据"}。错误：${error}。`;
   if (error instanceof RangeError) {
-    errorMessage += " This may be because the save data is too large.";
+    errorMessage += " 这可能是因为存档数据过大。";
   }
   if (error instanceof Error && error.stack) {
-    errorMessage += `\nStack:\n${error.stack}`;
+    errorMessage += `\n堆栈：\n${error.stack}`;
   }
   dialogBoxCreate(errorMessage);
 }

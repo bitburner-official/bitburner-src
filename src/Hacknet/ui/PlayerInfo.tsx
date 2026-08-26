@@ -24,22 +24,22 @@ export function PlayerInfo(props: IProps): React.ReactElement {
   const hasServers = hasHacknetServers();
 
   const rows: React.ReactNode[][] = [];
-  rows.push(["Money Spent:", <Money key="money" money={-Player.moneySourceA.hacknet_expenses || 0} />]);
-  rows.push(["Money Produced:", <Money key="money" money={Player.moneySourceA.hacknet} />]);
+  rows.push(["已花费资金：", <Money key="money" money={-Player.moneySourceA.hacknet_expenses || 0} />]);
+  rows.push(["已产出资金：", <Money key="money" money={Player.moneySourceA.hacknet} />]);
   if (hasServers) {
     rows.push([
-      "Hashes:",
+      "哈希：",
       <span key={"hashes"}>
         <Hashes hashes={Player.hashManager.hashes} /> / <Hashes hashes={Player.hashManager.capacity} />
       </span>,
     ]);
     rows.push([
-      "Hash Rate:",
+      "哈希速率：",
       <Tooltip
         key="moneyRate"
         title={
           <Typography>
-            <MoneyRate money={(props.totalProduction * 1e6) / 4} /> if sold for money
+            <MoneyRate money={(props.totalProduction * 1e6) / 4} /> 若出售换取资金
           </Typography>
         }
       >
@@ -49,12 +49,12 @@ export function PlayerInfo(props: IProps): React.ReactElement {
       </Tooltip>,
     ]);
   } else {
-    rows.push(["Production Rate:", <MoneyRate key="moneyRate" money={props.totalProduction} />]);
+    rows.push(["生产速率：", <MoneyRate key="moneyRate" money={props.totalProduction} />]);
   }
 
   return (
     <Paper sx={{ display: "inline-block", padding: "0.5em 1em", margin: "0.5em 0" }}>
-      <Typography variant="h6">Hacknet Summary</Typography>
+      <Typography variant="h6">Hacknet 概览</Typography>
       <StatsTable rows={rows} textAlign="left" />
     </Paper>
   );

@@ -81,8 +81,8 @@ export class CreateProgramWork extends PlayerBaseWork {
       );
       if (!this.singularity && !suppressDialog) {
         const lines = [
-          `You've finished creating ${programName}!`,
-          "The new program can be found on your home computer.",
+          `你已完成编写 ${programName}！`,
+          "新程序可以在你的家用电脑上找到。",
         ];
         dialogBoxCreate(lines.join("\n"));
       }

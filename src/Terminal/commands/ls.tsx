@@ -76,7 +76,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
 
   const numArgs = args.length;
   function incorrectUsage(): undefined {
-    Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]");
+    Terminal.error("ls 命令用法不正确。用法：ls [dir] [-l] [-h] [-g, --grep pattern]");
   }
 
   if (numArgs > 5) {
@@ -262,7 +262,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
     })();
     function onClick(): void {
       if (!server.isConnectedTo) {
-        return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
+        return Terminal.error(`文件不在此服务器上，请连接到 ${server.hostname} 后重试`);
       }
       // Message and lit files are always in root, no need to combine path with base directory
       if (isMember("MessageFilename", props.path)) {

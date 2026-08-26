@@ -217,7 +217,7 @@ const Engine = {
         Settings.EnableSaveDataBackupReminder &&
         Player.totalPlaytime >= 86400000
       ) {
-        SnackbarEvents.emit("You have not backed up your save data for over 24 hours!", ToastVariant.WARNING, 30000);
+        SnackbarEvents.emit("你已超过 24 小时未备份存档数据！", ToastVariant.WARNING, 30000);
       }
       Engine.Counters.exportSaveData = 18000;
     }
@@ -313,7 +313,7 @@ const Engine = {
       const offlineProductionFromHacknetNodes = processHacknetEarnings(numCyclesOffline);
       const hacknetProdInfo = hasHacknetServers() ? (
         <>
-          <Hashes hashes={offlineProductionFromHacknetNodes} /> hashes
+          <Hashes hashes={offlineProductionFromHacknetNodes} /> 哈希
         </>
       ) : (
         <Money money={offlineProductionFromHacknetNodes} />
@@ -362,19 +362,19 @@ const Engine = {
         () =>
           AlertEvents.emit(
             <>
-              <Typography>Offline for {timeOfflineString}. While you were offline:</Typography>
+              <Typography>离线时长 {timeOfflineString}。离线期间：</Typography>
               <ul>
                 <li>
                   <Typography>
-                    Your scripts generated <Money money={offlineHackingIncome} />
+                    你的脚本获得了 <Money money={offlineHackingIncome} />
                   </Typography>
                 </li>
                 <li>
-                  <Typography>Your Hacknet Nodes generated {hacknetProdInfo}</Typography>
+                  <Typography>你的 Hacknet 节点产出了 {hacknetProdInfo}</Typography>
                 </li>
                 <li>
                   <Typography>
-                    You gained <Reputation reputation={offlineReputation} /> reputation divided amongst your factions
+                    你获得了 <Reputation reputation={offlineReputation} /> 声望，已分配到你的各个派系
                   </Typography>
                 </li>
               </ul>
@@ -453,7 +453,7 @@ function warnAutosaveDisabled(): void {
 
   const warningToast = (
     <>
-      Auto-saves are <strong>disabled</strong>!
+      自动存档已<strong>禁用</strong>！
       <Button
         sx={{ ml: 1 }}
         color="warning"
@@ -463,7 +463,7 @@ function warnAutosaveDisabled(): void {
           Settings.AutosaveInterval = 60;
         }}
       >
-        Enable
+        启用
       </Button>
     </>
   );

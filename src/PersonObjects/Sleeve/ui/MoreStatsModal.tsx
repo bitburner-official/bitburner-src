@@ -19,57 +19,57 @@ export function MoreStatsModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <StatsTable
         rows={[
-          [<>Hacking:&nbsp;</>, props.sleeve.skills.hacking, <>&nbsp;({formatExp(props.sleeve.exp.hacking)} exp)</>],
-          [<>Strength:&nbsp;</>, props.sleeve.skills.strength, <>&nbsp;({formatExp(props.sleeve.exp.strength)} exp)</>],
-          [<>Defense:&nbsp;</>, props.sleeve.skills.defense, <>&nbsp;({formatExp(props.sleeve.exp.defense)} exp)</>],
+          [<>黑客：&nbsp;</>, props.sleeve.skills.hacking, <>&nbsp;（{formatExp(props.sleeve.exp.hacking)} 经验）</>],
+          [<>力量：&nbsp;</>, props.sleeve.skills.strength, <>&nbsp;（{formatExp(props.sleeve.exp.strength)} 经验）</>],
+          [<>防御：&nbsp;</>, props.sleeve.skills.defense, <>&nbsp;（{formatExp(props.sleeve.exp.defense)} 经验）</>],
           [
-            <>Dexterity:&nbsp;</>,
+            <>灵巧：&nbsp;</>,
             props.sleeve.skills.dexterity,
-            <>&nbsp;({formatExp(props.sleeve.exp.dexterity)} exp)</>,
+            <>&nbsp;（{formatExp(props.sleeve.exp.dexterity)} 经验）</>,
           ],
-          [<>Agility:&nbsp;</>, props.sleeve.skills.agility, <>&nbsp;({formatExp(props.sleeve.exp.agility)} exp)</>],
-          [<>Charisma:&nbsp;</>, props.sleeve.skills.charisma, <>&nbsp;({formatExp(props.sleeve.exp.charisma)} exp)</>],
+          [<>敏捷：&nbsp;</>, props.sleeve.skills.agility, <>&nbsp;（{formatExp(props.sleeve.exp.agility)} 经验）</>],
+          [<>魅力：&nbsp;</>, props.sleeve.skills.charisma, <>&nbsp;（{formatExp(props.sleeve.exp.charisma)} 经验）</>],
           [
             ...(canAccessBitNodeFeature(5)
               ? [
-                  <>Intelligence:&nbsp;</>,
+                  <>智力：&nbsp;</>,
                   props.sleeve.skills.intelligence,
-                  <>&nbsp;({formatExp(props.sleeve.exp.intelligence)} exp)</>,
+                  <>&nbsp;（{formatExp(props.sleeve.exp.intelligence)} 经验）</>,
                 ]
               : [<></>]),
           ],
           [<></>],
         ]}
-        title="Stats:"
+        title="属性："
       />
       <br />
       <StatsTable
         rows={[
-          [<>Hacking Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.hacking)],
-          [<>Hacking Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.hacking_exp)],
-          [<>Strength Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.strength)],
-          [<>Strength Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.strength_exp)],
-          [<>Defense Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.defense)],
-          [<>Defense Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.defense_exp)],
-          [<>Dexterity Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.dexterity)],
-          [<>Dexterity Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.dexterity_exp)],
-          [<>Agility Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.agility)],
-          [<>Agility Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.agility_exp)],
-          [<>Charisma Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.charisma)],
-          [<>Charisma Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.charisma_exp)],
-          [<>Faction Reputation Gain multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.faction_rep)],
-          [<>Company Reputation Gain multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.company_rep)],
-          [<>Salary multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.work_money)],
-          [<>Crime Money multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.crime_money)],
-          [<>Crime Success multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.crime_success)],
+          [<>黑客等级乘数：&nbsp;</>, formatPercent(props.sleeve.mults.hacking)],
+          [<>黑客经验乘数：&nbsp;</>, formatPercent(props.sleeve.mults.hacking_exp)],
+          [<>力量等级乘数：&nbsp;</>, formatPercent(props.sleeve.mults.strength)],
+          [<>力量经验乘数：&nbsp;</>, formatPercent(props.sleeve.mults.strength_exp)],
+          [<>防御等级乘数：&nbsp;</>, formatPercent(props.sleeve.mults.defense)],
+          [<>防御经验乘数：&nbsp;</>, formatPercent(props.sleeve.mults.defense_exp)],
+          [<>灵巧等级乘数：&nbsp;</>, formatPercent(props.sleeve.mults.dexterity)],
+          [<>灵巧经验乘数：&nbsp;</>, formatPercent(props.sleeve.mults.dexterity_exp)],
+          [<>敏捷等级乘数：&nbsp;</>, formatPercent(props.sleeve.mults.agility)],
+          [<>敏捷经验乘数：&nbsp;</>, formatPercent(props.sleeve.mults.agility_exp)],
+          [<>魅力等级乘数：&nbsp;</>, formatPercent(props.sleeve.mults.charisma)],
+          [<>魅力经验乘数：&nbsp;</>, formatPercent(props.sleeve.mults.charisma_exp)],
+          [<>派系声望获取乘数：&nbsp;</>, formatPercent(props.sleeve.mults.faction_rep)],
+          [<>公司声望获取乘数：&nbsp;</>, formatPercent(props.sleeve.mults.company_rep)],
+          [<>薪资乘数：&nbsp;</>, formatPercent(props.sleeve.mults.work_money)],
+          [<>犯罪资金乘数：&nbsp;</>, formatPercent(props.sleeve.mults.crime_money)],
+          [<>犯罪成功率乘数：&nbsp;</>, formatPercent(props.sleeve.mults.crime_success)],
         ]}
-        title="Multipliers:"
+        title="乘数："
       />
 
       {/* Check for storedCycles to be a bit over 0 to prevent jittering */}
       {props.sleeve.storedCycles > 10 && (
         <Typography sx={{ py: 2 }}>
-          Bonus Time: {convertTimeMsToTimeElapsedString(props.sleeve.storedCycles * CONSTANTS.MilliPerCycle)}
+          奖励时间：{convertTimeMsToTimeElapsedString(props.sleeve.storedCycles * CONSTANTS.MilliPerCycle)}
         </Typography>
       )}
     </Modal>

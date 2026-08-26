@@ -5,7 +5,7 @@ import { IPAddress } from "../../Types/strings";
 
 export function scan(args: (string | number | boolean)[], currServ: BaseServer): undefined {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of scan command. Usage: scan");
+    Terminal.error("scan 命令用法不正确。用法：scan");
     return;
   }
   // Displays available network connections using TCP
@@ -15,13 +15,13 @@ export function scan(args: (string | number | boolean)[], currServ: BaseServer):
     return {
       hostname: server.hostname,
       ip: server.ip as IPAddress | "IP",
-      hasRoot: server.hasAdminRights ? "Y" : "N",
+      hasRoot: server.hasAdminRights ? "是" : "否",
     };
   });
   servers.unshift({
-    hostname: "Hostname",
+    hostname: "主机名",
     ip: "IP",
-    hasRoot: "Root Access",
+    hasRoot: "Root 权限",
   });
   const maxHostname = Math.max(...servers.map((s) => s.hostname.length));
   const maxIP = Math.max(...servers.map((s) => s.ip.length));

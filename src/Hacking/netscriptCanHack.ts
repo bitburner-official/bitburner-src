@@ -15,14 +15,14 @@ function baseCheck(server: Server, actionName: string): IReturnStatus {
   if (server.purchasedByPlayer) {
     return {
       res: false,
-      msg: `Cannot ${actionName} ${hostname} server because it is your server`,
+      msg: `无法对 ${hostname} 服务器执行 ${actionName}，因为这是你自己的服务器`,
     };
   }
 
   if (!server.hasAdminRights) {
     return {
       res: false,
-      msg: `Cannot ${actionName} ${hostname} server because you do not have root access`,
+      msg: `无法对 ${hostname} 服务器执行 ${actionName}，因为你没有 root 权限`,
     };
   }
 
@@ -39,7 +39,7 @@ export function netscriptCanHack(server: Server, customActionName?: string): IRe
   if (s.requiredHackingSkill > Player.skills.hacking) {
     return {
       res: false,
-      msg: `Cannot hack ${server.hostname} server because your hacking skill is not high enough`,
+      msg: `无法入侵 ${server.hostname} 服务器，因为你的黑客技能等级不够`,
     };
   }
 

@@ -27,7 +27,7 @@ export function JobRoot(): React.ReactElement {
   if (jobs.length === 0) {
     return (
       <Typography sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        No jobs
+        暂无工作
       </Typography>
     );
   }

@@ -14,6 +14,6 @@ export function history(args: (string | number | boolean)[]): undefined {
     Terminal.commandHistory = [];
     Terminal.commandHistoryIndex = 1;
   } else {
-    Terminal.error("Incorrect usage of history command. usage: history [-c]");
+    Terminal.error("history 命令用法不正确。用法：history [-c]");
   }
 }

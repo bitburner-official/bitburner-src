@@ -104,7 +104,7 @@ export function startWorkerScript(runningScript: RunningScript, server: BaseServ
  */
 function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseServer, parent?: WorkerScript): boolean {
   if (isLegacyScript(runningScriptObj.filename)) {
-    deferredError(`Running .script files is unsupported.`);
+    deferredError(`不支持运行 .script 文件。`);
     return false;
   }
   const ramUsage = roundToTwo(runningScriptObj.ramUsage * runningScriptObj.threads);
@@ -112,11 +112,11 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
   // Check failure conditions before generating the workersScript and return false
   if (ramUsage > ramAvailable + 0.001) {
     deferredError(
-      `Not enough RAM to run script ${runningScriptObj.filename} with args ${arrayToString(
+      `RAM 不足，无法运行脚本 ${runningScriptObj.filename}（参数为 ${arrayToString(
         runningScriptObj.args,
-      )}, needed ${formatRam(ramUsage)} but only have ${formatRam(ramAvailable)} free
-If you are seeing this on startup, likely causes are that the autoexec script is too big to fit in RAM, or it took up too much space and other previously running scripts couldn't fit on home.
-Otherwise, this can also occur if you have attempted to launch a script from a tail window with insufficient RAM.`,
+      )}），需要 ${formatRam(ramUsage)}，但只有 ${formatRam(ramAvailable)} 可用
+如果你是在游戏启动时看到此消息，可能的原因是 autoexec 脚本太大而无法放入 RAM，或者它占用了太多空间导致其他先前运行的脚本无法在家用电脑上运行。
+否则，如果你尝试从日志窗口启动脚本且 RAM 不足，也可能出现此情况。`,
     );
     return false;
   }
@@ -125,8 +125,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
   const pid = generateNextPid();
   if (pid === -1) {
     deferredError(
-      `Failed to start script because could not find available PID. This is most ` +
-        `because you have too many scripts running.`,
+      `脚本启动失败，因为找不到可用的 PID。这最可能是因为你运行的脚本太多了。`,
     );
     return false;
   }
@@ -146,15 +145,15 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
     // running status to false
     .then(function () {
       killWorkerScript(workerScript);
-      workerScript.log("", () => "Script finished running");
+      workerScript.log("", () => "脚本已运行完毕");
     })
     .catch(function (error) {
       handleUnknownError(error, workerScript);
       killWorkerScript(workerScript);
       workerScript.log("", () =>
         error instanceof ScriptDeath
-          ? "main() terminated."
-          : getErrorMessageWithStackAndCause(error, "Script crashed due to an error: "),
+          ? "main() 已终止。"
+          : getErrorMessageWithStackAndCause(error, "脚本因错误而崩溃："),
       );
     })
     .finally(() => {
@@ -189,20 +188,20 @@ function createAutoexec(server: BaseServer): RunningScript | null {
   const cmd = String(args[0]);
   const scriptPath = resolveScriptFilePath(cmd);
   if (!scriptPath) {
-    deferredError(`While running autoexec script:
-"${cmd}" is invalid for a script name (maybe missing suffix?)`);
+    deferredError(`运行 autoexec 脚本时出错：
+"${cmd}" 不是有效的脚本名称（可能缺少后缀？）`);
     return null;
   }
   const script = server.scripts.get(scriptPath);
   if (!script) {
-    deferredError(`While running autoexec script:
-"${cmd}" does not exist!`);
+    deferredError(`运行 autoexec 脚本时出错：
+"${cmd}" 不存在！`);
     return null;
   }
   const ramUsage = script.getRamUsage(server.scripts);
   if (ramUsage === null) {
-    deferredError(`While running autoexec script:
-"${cmd}" has errors!`);
+    deferredError(`运行 autoexec 脚本时出错：
+"${cmd}" 存在错误！`);
     return null;
   }
   args.shift();
@@ -235,7 +234,7 @@ export function loadAllRunningScripts(): void {
      */
     const skipScriptLoad = window.location.href.toLowerCase().includes("?noscript");
     if (skipScriptLoad) {
-      Terminal.warn("Skipped loading player scripts during startup");
+      Terminal.warn("已在启动期间跳过载入玩家脚本");
       console.info("Skipping the load of any scripts during startup");
     }
     for (const server of GetAllServers(true)) {
@@ -273,14 +272,14 @@ export function createRunningScriptInstance(
   if (!script) {
     return {
       success: false,
-      message: `Script ${scriptPath} does not exist on ${server.hostname}.`,
+      message: `脚本 ${scriptPath} 在 ${server.hostname} 上不存在。`,
     };
   }
 
   if (!server.hasAdminRights) {
     return {
       success: false,
-      message: `You do not have root access on ${server.hostname}.`,
+      message: `你没有 ${server.hostname} 的 root 权限。`,
     };
   }
 
@@ -288,7 +287,7 @@ export function createRunningScriptInstance(
   if (!singleRamUsage) {
     return {
       success: false,
-      message: `Cannot calculate RAM usage of ${scriptPath}. Reason: ${script.ramCalculationError}`,
+      message: `无法计算 ${scriptPath} 的 RAM 用量。原因：${script.ramCalculationError}`,
     };
   }
   const ramUsage = singleRamUsage * runOpts.threads;
@@ -296,9 +295,9 @@ export function createRunningScriptInstance(
   if (ramUsage > ramAvailable + 0.001) {
     return {
       success: false,
-      message: `Cannot run ${scriptPath} (t=${runOpts.threads}) on ${server.hostname}. This script requires ${formatRam(
+      message: `无法在 ${server.hostname} 上运行 ${scriptPath}（t=${runOpts.threads}）。此脚本需要 ${formatRam(
         ramUsage,
-      )} of RAM.`,
+      )} 的 RAM。`,
     };
   }
 
@@ -336,14 +335,14 @@ export function runScriptFromScript(
       args,
     ) !== null
   ) {
-    workerScript.log(caller, () => `'${scriptPath}' is already running on '${server.hostname}'`);
+    workerScript.log(caller, () => `'${scriptPath}' 已在 '${server.hostname}' 上运行`);
     return 0;
   }
 
   // Able to run script
   workerScript.log(
     caller,
-    () => `'${scriptPath}' on '${server.hostname}' with ${runOpts.threads} threads and args: ${arrayToString(args)}.`,
+    () => `正在以 ${runOpts.threads} 个线程和参数：${arrayToString(args)} 在 '${server.hostname}' 上运行 '${scriptPath}'。`,
   );
   const runningScriptObj = result.runningScript;
   runningScriptObj.parent = workerScript.pid;

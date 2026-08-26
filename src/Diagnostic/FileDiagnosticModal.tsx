@@ -50,10 +50,10 @@ function ServerAccordion(props: { hostname: ServerName }): React.ReactElement {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Typography>Filename</Typography>
+                  <Typography>文件名</Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography>Size</Typography>
+                  <Typography>大小</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -95,15 +95,14 @@ export function FileDiagnosticModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <>
         <Typography>
-          Welcome to the file diagnostic! If your save file is really big it's likely because you have too many
-          text/scripts. This tool can help you narrow down where they are.
+          欢迎使用文件诊断工具！如果你的存档文件非常大，很可能是因为你的文本/脚本文件太多了。这个工具可以帮你定位它们的所在。
         </Typography>
         {keys.length > 0 ? (
           keys.map((hostname: string) => <ServerAccordion key={hostname} hostname={hostname} />)
         ) : (
           <>
             <br />
-            <Typography>You do not have any files on any server.</Typography>
+            <Typography>你在任何服务器上都没有任何文件。</Typography>
           </>
         )}
       </>

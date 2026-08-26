@@ -84,7 +84,7 @@ export class Infiltration {
         return;
       }
       this.cancel();
-      dialogBoxCreate("Infiltration was cancelled because you were hospitalized");
+      dialogBoxCreate("潜入已取消，因为你被送进了医院");
     });
   }
 
@@ -97,7 +97,7 @@ export class Infiltration {
     if (this.startingDifficulty >= MaxDifficultyForInfiltration) {
       setTimeout(() => {
         SnackbarEvents.emit(
-          "You were discovered immediately. That location is far too secure for your current skill level.",
+          "你立刻就被发现了。以你当前的技能水平，该地点的戒备实在过于森严。",
           ToastVariant.ERROR,
           5000,
         );
@@ -146,7 +146,7 @@ export class Infiltration {
     if (options?.automated) {
       damage = Player.hp.current;
       setTimeout(() => {
-        SnackbarEvents.emit("You were hospitalized. Do not try to automate infiltration!", ToastVariant.WARNING, 5000);
+        SnackbarEvents.emit("你被送进了医院。不要试图自动化潜入！", ToastVariant.WARNING, 5000);
       }, 500);
     }
     if (Player.takeDamage(damage)) {

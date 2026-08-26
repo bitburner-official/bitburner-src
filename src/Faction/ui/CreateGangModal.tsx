@@ -20,15 +20,15 @@ interface IProps {
 export function CreateGangModal(props: IProps): React.ReactElement {
   const combatGangText =
     props.facName +
-    " is a COMBAT gang and its members will have different tasks than in HACKING gangs. " +
-    "Compared to hacking gangs, progression with a combat gang can be more difficult as territory management " +
-    "is more important. However, well-managed combat gangs can progress faster than hacking ones.";
+    " 是一支战斗型帮派，其成员的任务与黑客型帮派不同。" +
+    "与黑客帮派相比，战斗帮派的推进可能更加困难，因为领地管理" +
+    "更为重要。不过，经营得当的战斗帮派推进速度会比黑客帮派更快。";
 
   const hackingGangText =
     props.facName +
-    " is a HACKING gang and its members will have different tasks than in COMBAT gangs. " +
-    "Compared to combat gangs, progression with a hacking gang is slower but more straightforward as territory warfare " +
-    "is not as important.";
+    " 是一支黑客型帮派，其成员的任务与战斗型帮派不同。" +
+    "与战斗帮派相比，黑客帮派的推进较慢但更直接，因为领地争夺战" +
+    "并没有那么重要。";
 
   function isHacking(): boolean {
     return [FactionName.NiteSec, FactionName.TheBlackHand].includes(props.facName);
@@ -52,22 +52,21 @@ export function CreateGangModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to create a new Gang with {props.facName}?
+        你想与 {props.facName} 创建一个新的帮派吗？
         <br />
         <br />
-        This will prevent you from creating a Gang with any other Faction until the BitNode is destroyed or abandoned.
-        It will also reset your reputation with {props.facName}.
+        在当前 BitNode 被摧毁或放弃之前，你将无法与其他任何派系创建帮派。 这还会重置你与 {props.facName} 的声望。
         <br />
         <br />
         {isHacking() ? hackingGangText : combatGangText}
         <br />
         <br />
-        Other than hacking vs combat and name, there are no differences between gangs.
+        除了黑客型与战斗型的区别以及名称之外，各帮派之间没有其他差异。
       </Typography>
       <Button onClick={createGang} onKeyUp={onKeyUp} autoFocus>
-        Create Gang
+        创建帮派
       </Button>
-      <Button onClick={props.onClose}>Cancel</Button>
+      <Button onClick={props.onClose}>取消</Button>
     </Modal>
   );
 }

@@ -38,7 +38,7 @@ corpFormulaParser.consts = {};
 export function evaluateCorpFormula(formula: string, variables: Readonly<Record<string, number>>): number {
   const result = corpFormulaParser.evaluate(formula, variables);
   if (typeof result !== "number" || !Number.isFinite(result)) {
-    throw new Error("Formula did not evaluate to a finite number.");
+    throw new Error("公式的计算结果不是有限数。");
   }
   return result;
 }
@@ -48,13 +48,13 @@ export function convertCreatingCorporationCheckResultToMessage(checkResult: Crea
     case CreatingCorporationCheckResultEnum.Success:
       return "Success";
     case CreatingCorporationCheckResultEnum.NoSf3OrDisabled:
-      return "You don't have SF3 or Corporation is disabled by an advanced option";
+      return "你没有 SF3，或者企业已被高级选项禁用";
     case CreatingCorporationCheckResultEnum.CorporationExists:
-      return "Corporation exists";
+      return "企业已存在";
     case CreatingCorporationCheckResultEnum.UseSeedMoneyOutsideBN3:
-      return "You cannot use seed money outside BitNode 3";
+      return "不能在 BitNode 3 之外使用种子资金";
     case CreatingCorporationCheckResultEnum.DisabledBySoftCap:
-      return "You cannot create a corporation in this BitNode";
+      return "无法在这个 BitNode 中创建企业";
     default:
       throwIfReachable(checkResult);
   }
@@ -126,40 +126,40 @@ export function calculateMaxAffordableUpgrade(corp: Corporation, upgrade: CorpUp
 
 /** Returns a string representing the reason a share sale should fail, or empty string if there is no issue. */
 export function sellSharesFailureReason(corp: Corporation, numShares: number): string {
-  if (!isPositiveInteger(numShares)) return "Number of shares must be a positive integer.";
-  else if (numShares > corp.numShares) return "You do not have that many shares to sell.";
-  else if (numShares === corp.numShares) return "You cannot sell all your shares.";
-  else if (numShares > 1e14) return `Cannot sell more than ${formatShares(1e14)} shares at a time.`;
-  else if (!corp.public) return "Cannot sell shares before going public.";
+  if (!isPositiveInteger(numShares)) return "股份数必须是正整数。";
+  else if (numShares > corp.numShares) return "你没有那么多股份可以出售。";
+  else if (numShares === corp.numShares) return "你不能出售自己的全部股份。";
+  else if (numShares > 1e14) return `单次最多只能出售 ${formatShares(1e14)} 股。`;
+  else if (!corp.public) return "上市之前无法出售股份。";
   else if (corp.shareSaleCooldown)
-    return `Cannot sell shares for another ${corp.convertCooldownToString(corp.shareSaleCooldown)}.`;
+    return `无法出售股份，还需等待 ${corp.convertCooldownToString(corp.shareSaleCooldown)}。`;
   return "";
 }
 
 /** Returns a string representing the reason a share buyback should fail, or empty string if there is no issue. */
 export function buybackSharesFailureReason(corp: Corporation, numShares: number): string {
-  if (!isPositiveInteger(numShares)) return "Number of shares must be a positive integer.";
-  if (numShares > corp.issuedShares) return "Not enough shares are available for buyback.";
-  if (numShares > 1e14) return `Cannot buy more than ${formatShares(1e14)} shares at a time.`;
-  if (!corp.public) return "Cannot buy back shares before going public.";
+  if (!isPositiveInteger(numShares)) return "股份数必须是正整数。";
+  if (numShares > corp.issuedShares) return "没有足够的股份可供回购。";
+  if (numShares > 1e14) return `单次最多只能购买 ${formatShares(1e14)} 股。`;
+  if (!corp.public) return "上市之前无法回购股份。";
 
   const [cost] = corp.calculateShareBuyback(numShares);
-  if (Player.money < cost) return "You cannot afford that many shares.";
+  if (Player.money < cost) return "你买不起那么多股份。";
 
   return "";
 }
 
 /** Returns a string representing the reason issuing new shares should fail, or empty string if there is no issue. */
 export function issueNewSharesFailureReason(corp: Corporation, numShares: number): string {
-  if (!isPositiveInteger(numShares)) return "Number of shares must be a positive integer.";
-  if (numShares % 10e6 !== 0) return "Number of shares must be a multiple of 10 million.";
-  if (!corp.public) return "Cannot issue new shares before going public.";
+  if (!isPositiveInteger(numShares)) return "股份数必须是正整数。";
+  if (numShares % 10e6 !== 0) return "股份数必须是1000万的整数倍。";
+  if (!corp.public) return "上市之前无法发行新股。";
 
   const maxNewShares = corp.calculateMaxNewShares();
-  if (numShares > maxNewShares) return `Number of shares cannot exceed ${maxNewShares} (20% of total shares).`;
+  if (numShares > maxNewShares) return `新股数量不能超过 ${maxNewShares}（占总股份的20%）。`;
 
   const cooldown = corp.issueNewSharesCooldown;
-  if (cooldown > 0) return `Cannot issue new shares for another ${corp.convertCooldownToString(cooldown)}.`;
+  if (cooldown > 0) return `无法发行新股，还需等待 ${corp.convertCooldownToString(cooldown)}。`;
 
   return "";
 }

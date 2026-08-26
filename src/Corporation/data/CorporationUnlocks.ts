@@ -14,8 +14,8 @@ export const CorpUnlocks: Record<CorpUnlockName, CorpUnlock> = {
     name: CorpUnlockName.Export,
     price: 20e9,
     desc:
-      "Develop infrastructure to export your materials to your other facilities. " +
-      "This allows you to move materials around between different divisions and cities.",
+      "开发基础设施，将你的材料出口到其他设施。" +
+      "这允许你在不同的部门和城市之间调运材料。",
   },
 
   //Lets you buy exactly however many required materials you need for production
@@ -23,8 +23,8 @@ export const CorpUnlocks: Record<CorpUnlockName, CorpUnlock> = {
     name: CorpUnlockName.SmartSupply,
     price: 25e9,
     desc:
-      "Use advanced AI to anticipate your supply needs. " +
-      "This allows you to purchase exactly however many materials you need for production.",
+      "利用先进的人工智能预测你的供应需求。" +
+      "这让你能够精确购买生产所需的材料数量。",
   },
 
   //Displays each material/product's demand
@@ -32,8 +32,8 @@ export const CorpUnlocks: Record<CorpUnlockName, CorpUnlock> = {
     name: CorpUnlockName.MarketResearchDemand,
     price: 5e9,
     desc:
-      "Mine and analyze market data to determine the demand of all resources. " +
-      "The demand attribute, which affects sales, will be displayed for every material and product.",
+      "挖掘并分析市场数据，以确定所有资源的需求。" +
+      "影响销售的“需求”属性将显示在每种材料和产品上。",
   },
 
   //Display's each material/product's competition
@@ -41,36 +41,35 @@ export const CorpUnlocks: Record<CorpUnlockName, CorpUnlock> = {
     name: CorpUnlockName.MarketDataCompetition,
     price: 5e9,
     desc:
-      "Mine and analyze market data to determine how much competition there is on the market " +
-      "for all resources. The competition attribute, which affects sales, will be displayed for " +
-      "every material and product.",
+      "挖掘并分析市场数据，以确定市场上所有资源面临的竞争程度。" +
+      "影响销售的“竞争”属性将显示在每种材料和产品上。",
   },
 
   [CorpUnlockName.ShadyAccounting]: {
     name: CorpUnlockName.ShadyAccounting,
     price: 500e12,
     desc:
-      "Utilize unscrupulous accounting practices and pay off government officials to save money " +
-      "on tribute. This reduces the tribute modifier by 0.05.",
+      "利用不正当的会计手段并收买政府官员，在贡金上省下一笔钱。" +
+      "这会将贡金系数降低0.05。",
   },
 
   [CorpUnlockName.GovernmentPartnership]: {
     name: CorpUnlockName.GovernmentPartnership,
     price: 2e15,
     desc:
-      "Help national governments further their agendas in exchange for lowered tribute. " +
-      "This reduces the tribute modifier by 0.1",
+      "帮助各国政府推进其议程，以换取贡金的降低。" +
+      "这会将贡金系数降低0.1。",
   },
 
   [CorpUnlockName.WarehouseAPI]: {
     name: CorpUnlockName.WarehouseAPI,
     price: 50e9,
-    desc: "Enables the warehouse API.",
+    desc: "启用仓库 API。",
   },
 
   [CorpUnlockName.OfficeAPI]: {
     name: CorpUnlockName.OfficeAPI,
     price: 50e9,
-    desc: "Enables the office API.",
+    desc: "启用办公室 API。",
   },
 };

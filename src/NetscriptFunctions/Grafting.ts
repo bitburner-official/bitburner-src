@@ -18,7 +18,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     if (!Player.canAccessGrafting()) {
       throw helpers.errorMessage(
         ctx,
-        "You do not currently have access to the Grafting API. This is either because you are not in BitNode 10 or because you do not have Source-File 10",
+        "你目前无法访问嫁接 API。这可能是因为你不在 BitNode 10，或者你没有源文件 10",
       );
     }
   };
@@ -30,7 +30,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
-        throw helpers.errorMessage(ctx, `Invalid aug: ${augName}`);
+        throw helpers.errorMessage(ctx, `无效的强化：${augName}`);
       }
       const graftableAug = new GraftableAugmentation(Augmentations[augName]);
       return graftableAug.cost;
@@ -40,7 +40,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
-        throw helpers.errorMessage(ctx, `Invalid aug: ${augName}`);
+        throw helpers.errorMessage(ctx, `无效的强化：${augName}`);
       }
       const graftableAug = new GraftableAugmentation(Augmentations[augName]);
       return calculateGraftingTimeWithBonus(graftableAug);
@@ -56,10 +56,10 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       const focus = !!_focus;
       checkGraftingAPIAccess(ctx);
       if (Player.city !== CityName.NewTokyo) {
-        throw helpers.errorMessage(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
+        throw helpers.errorMessage(ctx, "你必须在新东京才能开始嫁接强化。");
       }
       if (!isValidGraftingAugName(augName)) {
-        helpers.log(ctx, () => `Invalid aug: ${augName}`);
+        helpers.log(ctx, () => `无效的强化：${augName}`);
         return false;
       }
 
@@ -67,12 +67,12 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
 
       const craftableAug = new GraftableAugmentation(Augmentations[augName]);
       if (Player.money < craftableAug.cost) {
-        helpers.log(ctx, () => `You don't have enough money to craft ${augName}`);
+        helpers.log(ctx, () => `你没有足够的资金来嫁接 ${augName}`);
         return false;
       }
 
       if (!hasAugmentationPrereqs(craftableAug.augmentation)) {
-        helpers.log(ctx, () => `You don't have the pre-requisites for ${augName}`);
+        helpers.log(ctx, () => `你不满足 ${augName} 的前置条件`);
         return false;
       }
 
@@ -90,7 +90,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         Router.toPage(Page.Terminal);
       }
 
-      helpers.log(ctx, () => `Began grafting Augmentation ${augName}.`);
+      helpers.log(ctx, () => `开始嫁接强化 ${augName}。`);
       return true;
     },
 
@@ -101,7 +101,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       }
       if (!(Player.currentWork instanceof GraftingWork)) {
         return Promise.reject(
-          `The current work is not a grafting work. Type of current work: ${Player.currentWork.type}.`,
+          `当前的工作不是嫁接工作。当前工作类型：${Player.currentWork.type}。`,
         );
       }
       return Player.currentWork.nextCompletion;

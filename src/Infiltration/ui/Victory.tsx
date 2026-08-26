@@ -95,24 +95,24 @@ export function Victory({ state }: IProps): React.ReactElement {
 
   return (
     <Paper sx={{ p: 1, textAlign: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>
-      <Typography variant="h4">Infiltration successful!</Typography>
+      <Typography variant="h4">潜入成功！</Typography>
       <Typography variant="h5" color="primary" width="75%">
-        You{" "}
+        你{" "}
         {isMemberOfInfiltrators ? (
           <>
-            have gained {formatNumberNoSuffix(infiltrationRepGain, 2)} rep for {FactionName.ShadowsOfAnarchy} and{" "}
+            为 {FactionName.ShadowsOfAnarchy} 赢得了 {formatNumberNoSuffix(infiltrationRepGain, 2)} 声望，并且{" "}
           </>
         ) : (
           <></>
         )}
-        can trade the confidential information you found for money or reputation.
+        可以用你找到的机密情报来换取资金或声望。
       </Typography>
       <Box sx={{ width: "fit-content" }}>
         <Box sx={{ width: "100%" }}>
           <Select value={factionName} onChange={changeDropdown} sx={{ mr: 1 }}>
             {defaultFactionChoice === "none" && (
               <MenuItem key={"none"} value={"none"}>
-                {"none"}
+                无
               </MenuItem>
             )}
             {Player.factions
@@ -124,18 +124,18 @@ export function Victory({ state }: IProps): React.ReactElement {
               ))}
           </Select>
           <Button disabled={factionName === "none"} onClick={trade}>
-            Trade for&nbsp;
+            兑换&nbsp;
             <Reputation reputation={repGain} />
-            &nbsp;reputation
+            &nbsp;声望
           </Button>
         </Box>
         <Button onClick={sell} sx={{ width: "100%" }}>
-          Sell for&nbsp;
+          出售换得&nbsp;
           <Money money={moneyGain} />
         </Button>
       </Box>
       <Button onClick={quitInfiltration} sx={{ width: "100%", mt: 1 }}>
-        Quit
+        退出
       </Button>
     </Paper>
   );

@@ -25,10 +25,10 @@ const difficultySettings = {
 const colors = ["#D55E00", "#F0E442", "#0072B2", "#FFFFFF"] as const;
 
 const colorNames = {
-  "#D55E00": "RED", // Okabe-Ito Vermilion
-  "#F0E442": "YELLOW",
-  "#0072B2": "BLUE",
-  "#FFFFFF": "WHITE",
+  "#D55E00": "红色", // Okabe-Ito Vermilion
+  "#F0E442": "黄色",
+  "#0072B2": "蓝色",
+  "#FFFFFF": "白色",
 } as const;
 
 interface Wire {
@@ -45,7 +45,7 @@ function randomPositionQuestion(wires: Wire[]): Question {
   const index = Math.floor(Math.random() * wires.length);
   return {
     render: () => {
-      return `Cut wire number ${index + 1}.`;
+      return `剪断第 ${index + 1} 根电线。`;
     },
     shouldCut: (_wire: Wire, i: number): boolean => {
       return index === i;
@@ -60,7 +60,7 @@ function randomColorQuestion(wires: Wire[]): Question {
     render: () => {
       return (
         <>
-          Cut all wires colored <span style={{ color: cutColor }}>{colorNames[cutColor]}</span>.
+          剪断所有 <span style={{ color: cutColor }}>{colorNames[cutColor]}</span> 的电线。
         </>
       );
     },

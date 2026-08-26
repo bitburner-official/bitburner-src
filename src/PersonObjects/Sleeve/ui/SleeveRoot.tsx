@@ -16,20 +16,18 @@ export function SleeveRoot(): React.ReactElement {
   return (
     <>
       <Container disableGutters maxWidth="md" sx={{ mx: 0 }}>
-        <Typography variant="h4">Sleeves</Typography>
+        <Typography variant="h4">分身</Typography>
         <Typography>
-          Duplicate Sleeves are MK-V Synthoids (synthetic androids) into which your consciousness has been copied. In
-          other words, these Synthoids contain a perfect duplicate of your mind.
+          分身是 MK-V 合成人（人造仿生人），你的意识被复制到了其中。换言之，这些合成人包含你思维的完美复制品。
           <br />
           <br />
-          Sleeves can be used to perform different tasks simultaneously.
+          分身可以被用来同时执行不同的任务。
           <br />
           <br />
         </Typography>
         {Player.bitNodeOptions.disableSleeveExpAndAugmentation && (
           <Typography color={Settings.theme.warning}>
-            You enabled the "Disable Sleeves' experience and augmentation" option. Your sleeves will not gain
-            experience, and they won't be able to install augmentations.
+            你启用了"禁用分身的经验与强化"选项。你的分身将无法获得经验，也无法安装强化。
             <br />
             <br />
           </Typography>

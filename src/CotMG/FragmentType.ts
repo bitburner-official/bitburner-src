@@ -24,52 +24,52 @@ export const FragmentTypeEnum = {
 export function Effect(type: FragmentType): string {
   switch (type) {
     case FragmentTypeEnum.HackingSpeed: {
-      return "+x% faster hack(), grow(), and weaken()";
+      return "+x% hack()、grow() 和 weaken() 速度提升";
     }
     case FragmentTypeEnum.HackingMoney: {
-      return "+x% hack() power";
+      return "+x% hack() 效果";
     }
     case FragmentTypeEnum.HackingGrow: {
-      return "+x% grow() power";
+      return "+x% grow() 效果";
     }
     case FragmentTypeEnum.Hacking: {
-      return "+x% hacking experience and skill level";
+      return "+x% 黑客经验与技能等级";
     }
     case FragmentTypeEnum.Strength: {
-      return "+x% strength experience and skill level";
+      return "+x% 力量经验与技能等级";
     }
     case FragmentTypeEnum.Defense: {
-      return "+x% defense experience and skill level";
+      return "+x% 防御经验与技能等级";
     }
     case FragmentTypeEnum.Dexterity: {
-      return "+x% dexterity experience and skill level";
+      return "+x% 灵巧经验与技能等级";
     }
     case FragmentTypeEnum.Agility: {
-      return "+x% agility experience and skill level";
+      return "+x% 敏捷经验与技能等级";
     }
     case FragmentTypeEnum.Charisma: {
-      return "+x% charisma experience and skill level";
+      return "+x% 魅力经验与技能等级";
     }
     case FragmentTypeEnum.HacknetMoney: {
-      return "+x% hacknet production";
+      return "+x% Hacknet 产出";
     }
     case FragmentTypeEnum.HacknetCost: {
-      return "-x% cheaper hacknet costs";
+      return "-x% Hacknet 花费";
     }
     case FragmentTypeEnum.Rep: {
-      return "+x% reputation from factions and companies";
+      return "+x% 来自派系和公司的声望";
     }
     case FragmentTypeEnum.WorkMoney: {
-      return "+x% work money";
+      return "+x% 工作收入";
     }
     case FragmentTypeEnum.Crime: {
-      return "+x% crime money and success chance";
+      return "+x% 犯罪资金与成功率";
     }
     case FragmentTypeEnum.Bladeburner: {
-      return "+x% bladeburner stats (max stamina, stamina gain, Field Analysis effectiveness, action success chance)";
+      return "+x% Bladeburner 属性（最大体力、体力获取、现场分析效果、行动成功率）";
     }
     case FragmentTypeEnum.Booster: {
-      return "1.1x adjacent fragment power";
+      return "为相邻碎片提供 1.1x 威力加成";
     }
   }
 }

@@ -110,12 +110,12 @@ export function MainBoard(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            WARNING : This will remove all active fragment from the grid. <br />
-            All cumulated charges will be lost.
+            警告：这会移除网格上所有已放置的碎片。<br />
+            所有累计的充能都会丢失。
           </Typography>
         }
       >
-        <Button onClick={clear}>Clear grid</Button>
+        <Button onClick={clear}>清空网格</Button>
       </Tooltip>
     </>
   );

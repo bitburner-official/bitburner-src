@@ -26,24 +26,24 @@ export function SoftResetButton({
     }
   }
 
-  const confirmationMessage = `Soft Reset will:
+  const confirmationMessage = `软重置将会：
 
-  - Reset basic stats and money
-  - Accumulate Favor for companies and factions
-  - Install Augmentations if you have any purchased
-  - Reset servers, programs, recent scripts and terminal 
-  - Scripts on your home server will stop, but aren't deleted
-  - Stop some special mechanics (crime, study, ${knowAboutBitverse() ? `Bladeburner action, Grafting task, ` : ""}etc.)
-  - You will not lose overall progress or access to special mechanics
+  - 重置基础属性与资金
+  - 为公司和派系积累好感
+  - 若有已购买的强化，则将其安装
+  - 重置服务器、程序、最近的脚本和终端 
+  - 家用电脑上的脚本会停止运行，但不会被删除
+  - 停止部分特殊机制（犯罪、学习、${knowAboutBitverse() ? `Bladeburner 行动、移植任务、` : ""}等）
+  - 你不会丢失总体进度或特殊机制的访问权限
 
-Are you sure? 
+确定要继续吗？ 
   `;
 
   return (
     <>
-      <Tooltip title="Perform the same reset as when you install Augmentations. This can be used even when no Augmentations are queued. Installs any queued Augmentations.">
+      <Tooltip title="执行与安装强化时相同的重置。即使没有排队中的强化也可以使用。会安装所有排队中的强化。">
         <Button startIcon={<RestartAltIcon />} color={color} onClick={handleButtonClick}>
-          Soft Reset
+          软重置
         </Button>
       </Tooltip>
       <ConfirmationModal
@@ -51,7 +51,7 @@ Are you sure?
         open={modalOpened}
         onClose={() => setModalOpened(false)}
         confirmationText={<span style={{ whiteSpace: "pre-wrap" }}>{confirmationMessage}</span>}
-        additionalButton={<Button onClick={() => setModalOpened(false)}>Cancel</Button>}
+        additionalButton={<Button onClick={() => setModalOpened(false)}>取消</Button>}
       />
     </>
   );

@@ -11,7 +11,7 @@ import { RecentScriptAccordion } from "./RecentScriptAccordion";
 export function RecentScriptsPage(): React.ReactElement {
   return (
     <>
-      <Typography>List of all recently killed scripts.</Typography>
+      <Typography>最近终止的脚本列表。</Typography>
       {recentScripts.map((r) => (
         <RecentScriptAccordion key={r.id} recentScript={r} />
       ))}

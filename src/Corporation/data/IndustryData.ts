@@ -7,7 +7,7 @@ import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./B
 export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   [IndustryType.Agriculture]: {
     startingCost: 40e9,
-    description: "Cultivate crops and breed livestock to produce food.",
+    description: "种植作物并饲养牲畜以生产食物。",
     recommendStarting: true,
     realEstateFactor: 0.72,
     scienceFactor: 0.5,
@@ -22,7 +22,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Refinery]: {
     startingCost: 50e9,
-    description: "Refine ore into usable metal.",
+    description: "把矿石提炼成可用的金属。",
     recommendStarting: true,
     realEstateFactor: 0.3,
     scienceFactor: 0.5,
@@ -37,7 +37,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Chemical]: {
     startingCost: 70e9,
-    description: "Produce industrial chemicals.",
+    description: "生产工业化学品。",
     recommendStarting: false,
     realEstateFactor: 0.25,
     scienceFactor: 0.75,
@@ -52,11 +52,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Computers]: {
     startingCost: 500e9,
-    description: "Develop and manufacture new computer hardware and networking infrastructures.",
+    description: "开发和制造新的计算机硬件与网络基础设施。",
     product: {
       name: "Product",
       verb: "Create",
-      desc: "Design and manufacture a new computer hardware product!",
+      desc: "设计和制造一款新的计算机硬件产品！",
       ratingWeights: {
         quality: 0.15,
         performance: 0.25,
@@ -79,7 +79,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Fishing]: {
     startingCost: 80e9,
-    description: "Produce food through the breeding and processing of fish and fish products.",
+    description: "通过养殖和加工鱼类及鱼类产品来生产食物。",
     recommendStarting: false,
     realEstateFactor: 0.15,
     scienceFactor: 0.35,
@@ -94,11 +94,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Restaurant]: {
     startingCost: 10e9,
-    description: "Create your own restaurants all around the world.",
+    description: "在世界各地开设你自己的餐厅。",
     product: {
       name: "Restaurant",
       verb: "Build",
-      desc: "Build and manage a new restaurant!",
+      desc: "开设并经营一家新餐厅！",
       ratingWeights: {
         quality: 0.7,
         durability: 0.1,
@@ -118,11 +118,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Healthcare]: {
     startingCost: 750e9,
-    description: "Create and manage hospitals.",
+    description: "创建并经营医院。",
     product: {
       name: "Hospital",
       verb: "Build",
-      desc: "Build and manage a new hospital!",
+      desc: "建造并经营一家新医院！",
       ratingWeights: {
         quality: 0.4,
         performance: 0.1,
@@ -144,7 +144,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Mining]: {
     startingCost: 300e9,
-    description: "Extract and process metals from the earth.",
+    description: "从地下开采并加工金属。",
     recommendStarting: false,
     realEstateFactor: 0.3,
     scienceFactor: 0.26,
@@ -159,11 +159,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Pharmaceutical]: {
     startingCost: 200e9,
-    description: "Discover, develop, and create new pharmaceutical drugs.",
+    description: "发现、开发和创造新的药物。",
     product: {
       name: "Drug",
       verb: "Develop",
-      desc: "Design and develop a new pharmaceutical drug!",
+      desc: "设计和开发一种新药！",
       ratingWeights: {
         quality: 0.2,
         performance: 0.2,
@@ -186,11 +186,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.RealEstate]: {
     startingCost: 600e9,
-    description: "Develop and manage real estate properties.",
+    description: "开发并经营房地产。",
     product: {
       name: "Property",
       verb: "Develop",
-      desc: "Develop a new piece of real estate property!",
+      desc: "开发一处新地产！",
       ratingWeights: {
         quality: 0.2,
         durability: 0.25,
@@ -212,11 +212,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Robotics]: {
     startingCost: 1e12,
-    description: "Develop and create robots.",
+    description: "开发和制造机器人。",
     product: {
       name: "Robot",
       verb: "Design",
-      desc: "Design and create a new robot or robotic system!",
+      desc: "设计并制造新的机器人或机器人系统！",
       ratingWeights: {
         quality: 0.1,
         performance: 0.2,
@@ -239,11 +239,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Software]: {
     startingCost: 25e9,
-    description: "Develop computer software and create AI Cores.",
+    description: "开发计算机软件并制造AI核心。",
     product: {
       name: "Software",
       verb: "Develop",
-      desc: "Develop a new piece of software!",
+      desc: "开发一款新软件！",
       ratingWeights: {
         quality: 0.2,
         performance: 0.2,
@@ -266,11 +266,11 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Tobacco]: {
     startingCost: 20e9,
-    description: "Create and distribute tobacco and tobacco-related products.",
+    description: "制造并销售烟草及烟草相关产品。",
     product: {
       name: "Product",
       verb: "Create",
-      desc: "Create a new tobacco product!",
+      desc: "开发一款新的烟草产品！",
       ratingWeights: {
         quality: 0.7,
         durability: 0.1,
@@ -290,7 +290,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Water]: {
     startingCost: 150e9,
-    description: "Distribute water and provide wastewater services.",
+    description: "配送水源并提供污水处理服务。",
     recommendStarting: false,
     realEstateFactor: 0.5,
     scienceFactor: 0.6,

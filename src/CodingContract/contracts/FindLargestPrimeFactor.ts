@@ -5,7 +5,7 @@ import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive
 export const findLargestPrimeFactor: Pick<CodingContractTypes, CodingContractName.FindLargestPrimeFactor> = {
   [CodingContractName.FindLargestPrimeFactor]: {
     desc: (n: number): string => {
-      return ["A prime factor is a factor that is a prime number.", `What is the largest prime factor of ${n}?`].join(
+      return ["质因数是本身为质数的因数。", `${n} 的最大质因数是多少？`].join(
         " ",
       );
     },

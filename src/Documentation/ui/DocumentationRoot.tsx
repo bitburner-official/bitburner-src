@@ -83,10 +83,10 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
         alignItems="center"
       >
         <Button onClick={() => history.pop()} disabled={history.pages.length === 0}>
-          Back
+          返回
         </Button>
         <Button onClick={() => history.home()} disabled={history.pages.length === 0}>
-          Home
+          主页
         </Button>
         <DocumentationAutocomplete
           sx={{ marginLeft: "10px" }}

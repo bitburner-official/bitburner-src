@@ -48,18 +48,18 @@ export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
         {Player.sleevesFromCovenant < MaxSleevesFromCovenant && (
           <>
             <Typography>
-              Purchase an additional Sleeve. These Duplicate Sleeves are permanent (they persist through BitNodes). You
-              can purchase a total of {MaxSleevesFromCovenant} from {FactionName.TheCovenant}.
+              购买一个额外的分身。这些分身是永久的（它们会在 BitNode 之间保留）。你总共最多可以从
+              {FactionName.TheCovenant} 处购买 {MaxSleevesFromCovenant} 个。
             </Typography>
             <Button disabled={!canPurchaseSleeve().success} onClick={purchaseOnClick}>
-              Purchase -&nbsp;
+              购买 -&nbsp;
               <Money money={getSleeveCost(Player.sleevesFromCovenant)} forPurchase={true} />
             </Button>
             <br />
             <br />
           </>
         )}
-        <Typography>You can also purchase upgrades for your Sleeves. These upgrades are also permanent.</Typography>
+        <Typography>你还可以为你的分身购买升级。这些升级同样是永久的。</Typography>
         {upgradePanels}
       </>
     </Modal>

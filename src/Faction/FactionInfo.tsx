@@ -118,15 +118,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Illuminati]: new FactionInfo({
     infoText: (
       <>
-        Humanity never changes. No matter how civilized society becomes, it will eventually fall back into chaos. And
-        from this chaos, we are the invisible hand that guides them to order.{" "}
+        人类从未改变。无论社会变得多么文明，它最终都会重新陷入混乱。而在混乱之中，我们正是引导他们走向秩序的看不见之手。{" "}
       </>
     ),
     rumorText: (
       <>
-        “...the ancient secret society that controls the entire world from the shadows with their invisible hand. With
-        their personal wealth and skills they have penetrated every major government, financial agency, and
-        corporation...”
+        “...那个用无形之手从暗处掌控整个世界的古老秘密社团。凭借他们个人的财富与技能，他们已经渗透进每一个主要政府、金融机构和企业...”
       </>
     ),
     inviteReqs: [haveAugmentations(30), haveMoney(150e9), haveSkill("hacking", 1500), haveCombatSkills(1200)],
@@ -136,8 +133,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.Daedalus]: new FactionInfo({
-    infoText: <>Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.</>,
-    rumorText: <>Follow the thread. Take fl1ght.</>,
+    infoText: <>昨日我们臣服于君王，向皇帝俯首。今日我们只向真理屈膝。</>,
+    rumorText: <>跟随线索。搭乘 fl1ght。</>,
     inviteReqs: [
       delayedCondition(() => haveAugmentations(currentNodeMults.DaedalusAugsRequirement)),
       haveMoney(100e9),
@@ -151,19 +148,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.TheCovenant]: new FactionInfo({
     infoText: (
       <>
-        Surrender yourself. Give up your empty individuality to become part of something great, something eternal.
-        Become a slave. Submit your mind, body, and soul. Only then can you set yourself free.
+        交出你自己。放弃空洞的自我，成为伟大而不朽之物的一部分。成为一个奴隶。献上你的思想、肉体与灵魂。唯有如此，你才能获得自由。
         <br />
         <br />
-        Only then can you discover immortality.
+        唯有如此，你才能发现永生。
       </>
     ),
-    rumorText: (
-      <>
-        {FactionName.TheCovenant} offers an exclusive service to those who have reached the limits of individual fitness
-        and wish to go further.
-      </>
-    ),
+    rumorText: <>{FactionName.TheCovenant} 为那些已触及个人极限并希望更进一步的人提供专属服务。</>,
     inviteReqs: [haveAugmentations(20), haveMoney(75e9), haveSkill("hacking", 850), haveCombatSkills(850)],
     rumorReqs: [
       someCondition([
@@ -182,12 +173,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.ECorp]: new FactionInfo({
     infoText: (
       <>
-        {FactionName.ECorp}'s mission is simple: to connect the world of today with the technology of tomorrow. With our
-        wide range of Internet-related software and commercial hardware, {FactionName.ECorp} makes the world's
-        information universally accessible.
+        {FactionName.ECorp} 的使命很简单：用明日的科技连接今天的世界。凭借我们种类繁多的互联网相关软件和商用硬件，
+        {FactionName.ECorp} 让全世界的信息触手可及。
       </>
     ),
-    rumorText: <>High-ranking employees of {CompanyName.ECorp} can gain access to proprietary hacking augmentations.</>,
+    rumorText: <>{CompanyName.ECorp} 的高层员工可以获得专属的黑客类强化。</>,
     inviteReqs: [employedBy(CompanyName.ECorp), haveCompanyRep(CompanyName.ECorp, CONSTANTS.CorpFactionRepRequirement)],
     rumorReqs: [employedBy(CompanyName.ECorp)],
     offerHackingWork: true,
@@ -199,18 +189,15 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.MegaCorp]: new FactionInfo({
     infoText: (
       <>
-        {FactionName.MegaCorp} does what no other dares to do. We imagine. We create. We invent. We create what others
-        have never even dreamed of. Our work fills the world's needs for food, water, power, and transportation on an
-        unprecedented scale, in ways that no other company can.
+        {FactionName.MegaCorp}{" "}
+        做着他人不敢做的事。我们想象。我们创造。我们发明。我们造出他人连做梦都想不到的东西。我们以前所未有的规模、以其他公司无法企及的方式，满足世界对食物、水、能源和交通的需求。
         <br />
         <br />
-        In our labs and factories and on the ground with customers, {FactionName.MegaCorp} is ushering in a new era for
-        the world.
+        无论是在实验室和工厂，还是在与客户打交道的最前线，{FactionName.MegaCorp}
+        都在为世界开启一个新时代。
       </>
     ),
-    rumorText: (
-      <>High-ranking employees of {CompanyName.MegaCorp} can gain access to proprietary biotech augmentations.</>
-    ),
+    rumorText: <>{CompanyName.MegaCorp} 的高层员工可以获得专属的生物科技类强化。</>,
     inviteReqs: [
       employedBy(CompanyName.MegaCorp),
       haveCompanyRep(CompanyName.MegaCorp, CONSTANTS.CorpFactionRepRequirement),
@@ -225,18 +212,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.BachmanAndAssociates]: new FactionInfo({
     infoText: (
       <>
-        Where Law and Business meet - that's where we are.
+        法律与商业交汇之处——正是我们所在之地。
         <br />
         <br />
-        Legal Insight - Business Instinct - Innovative Experience.
+        法律洞察——商业直觉——创新经验。
       </>
     ),
-    rumorText: (
-      <>
-        High-ranking employees of {CompanyName.BachmanAndAssociates} can gain access to proprietary negotiation
-        augmentations.
-      </>
-    ),
+    rumorText: <>{CompanyName.BachmanAndAssociates} 的高层员工可以获得专属的谈判类强化。</>,
     inviteReqs: [
       employedBy(CompanyName.BachmanAndAssociates),
       haveCompanyRep(CompanyName.BachmanAndAssociates, CONSTANTS.CorpFactionRepRequirement),
@@ -249,10 +231,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.BladeIndustries]: new FactionInfo({
-    infoText: <>Augmentation is Salvation.</>,
-    rumorText: (
-      <>High-ranking employees of {CompanyName.BladeIndustries} can gain access to proprietary bionic augmentations.</>
-    ),
+    infoText: <>强化即救赎。</>,
+    rumorText: <>{CompanyName.BladeIndustries} 的高层员工可以获得专属的仿生类强化。</>,
     inviteReqs: [
       employedBy(CompanyName.BladeIndustries),
       haveCompanyRep(CompanyName.BladeIndustries, CONSTANTS.CorpFactionRepRequirement),
@@ -267,12 +247,10 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.NWO]: new FactionInfo({
     infoText: (
       <>
-        Humans don't truly desire freedom. They want to be observed, understood, and judged. They want to be given
-        purpose and direction in life. That is why they created God. And that is why they created civilization - not
-        because of willingness, but because of a need to be incorporated into higher orders of structure and meaning.
+        人类并非真正渴望自由。他们渴望被观察、被理解、被评判。他们渴望人生被赋予目标和方向。正因如此，他们创造了神。也正因如此，他们创造了文明——不是出于自愿，而是出于想要融入更高层次结构与意义的需要。
       </>
     ),
-    rumorText: <>High-ranking employees of {CompanyName.NWO} can gain access to proprietary nanotech augmentations.</>,
+    rumorText: <>{CompanyName.NWO} 的高层员工可以获得专属的纳米科技类强化。</>,
     inviteReqs: [employedBy(CompanyName.NWO), haveCompanyRep(CompanyName.NWO, CONSTANTS.CorpFactionRepRequirement)],
     rumorReqs: [employedBy(CompanyName.NWO)],
     offerHackingWork: true,
@@ -282,13 +260,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.ClarkeIncorporated]: new FactionInfo({
-    infoText: <>The Power of the Genome - Unlocked.</>,
-    rumorText: (
-      <>
-        High-ranking employees of {CompanyName.ClarkeIncorporated} can gain access to proprietary neurotech
-        augmentations.
-      </>
-    ),
+    infoText: <>基因组之力——已然解锁。</>,
+    rumorText: <>{CompanyName.ClarkeIncorporated} 的高层员工可以获得专属的神经科技类强化。</>,
     inviteReqs: [
       employedBy(CompanyName.ClarkeIncorporated),
       haveCompanyRep(CompanyName.ClarkeIncorporated, CONSTANTS.CorpFactionRepRequirement),
@@ -301,13 +274,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.OmniTekIncorporated]: new FactionInfo({
-    infoText: <>Simply put, our mission is to design and build robots that make a difference.</>,
-    rumorText: (
-      <>
-        High-ranking employees of {CompanyName.OmniTekIncorporated} can gain access to proprietary data-processing
-        augmentations.
-      </>
-    ),
+    infoText: <>简而言之，我们的使命就是设计和制造能带来改变的机器人。</>,
+    rumorText: <>{CompanyName.OmniTekIncorporated} 的高层员工可以获得专属的数据处理类强化。</>,
     inviteReqs: [
       employedBy(CompanyName.OmniTekIncorporated),
       haveCompanyRep(CompanyName.OmniTekIncorporated, CONSTANTS.CorpFactionRepRequirement),
@@ -322,13 +290,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.FourSigma]: new FactionInfo({
     infoText: (
       <>
-        The scientific method is the best way to approach investing. Big strategies backed up with big data. Driven by
-        deep learning and innovative ideas. And improved by iteration. That's {FactionName.FourSigma}.
+        科学方法是投资的最佳途径。以大数据支撑宏大战略，由深度学习和创新理念驱动，并在迭代中不断完善。这就是
+        {FactionName.FourSigma}。
       </>
     ),
-    rumorText: (
-      <>High-ranking employees of {CompanyName.FourSigma} can gain access to a range of versatile augmentations.</>
-    ),
+    rumorText: <>{CompanyName.FourSigma} 的高层员工可以获得一系列用途广泛的强化。</>,
     inviteReqs: [
       employedBy(CompanyName.FourSigma),
       haveCompanyRep(CompanyName.FourSigma, CONSTANTS.CorpFactionRepRequirement),
@@ -341,13 +307,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.KuaiGongInternational]: new FactionInfo({
-    infoText: <>Dream big. Work hard. Make history.</>,
-    rumorText: (
-      <>
-        High-ranking employees of {CompanyName.KuaiGongInternational} can gain access to proprietary dermatech
-        augmentations.
-      </>
-    ),
+    infoText: <>志存高远。勤奋工作。创造历史。</>,
+    rumorText: <>{CompanyName.KuaiGongInternational} 的高层员工可以获得专属的皮肤科技类强化。</>,
     inviteReqs: [
       employedBy(CompanyName.KuaiGongInternational),
       haveCompanyRep(CompanyName.KuaiGongInternational, CONSTANTS.CorpFactionRepRequirement),
@@ -361,18 +322,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   // Other Corporations
   [FactionName.FulcrumSecretTechnologies]: new FactionInfo({
-    infoText: (
-      <>
-        The human organism has an innate desire to worship. That is why they created gods. If there were no gods, it
-        would be necessary to create them. And now we can.
-      </>
-    ),
-    rumorText: (
-      <>
-        High-ranking employees of {CompanyName.FulcrumTechnologies} may discover a company system with access to
-        proprietary neural network augmentations.
-      </>
-    ),
+    infoText: <>人类机体天生就有崇拜的欲望。正因如此，他们创造了神。如果没有神，那就必须创造神。而现在，我们做到了。</>,
+    rumorText: <>{CompanyName.FulcrumTechnologies} 的高层员工可能会发现一个公司系统，其中含有专属的神经网络类强化。</>,
     inviteReqs: [
       employedBy(CompanyName.FulcrumTechnologies),
       haveCompanyRep(CompanyName.FulcrumTechnologies, CONSTANTS.CorpFactionRepRequirement),
@@ -388,17 +339,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.BitRunners]: new FactionInfo({
     infoText: (
       <>
-        Our entire lives are controlled by bits. All of our actions, our thoughts, our personal information. It's all
-        transformed into bits, stored in bits, communicated through bits. It’s impossible for any person to move, to
-        live, to operate at any level without the use of bits. And when a person moves, lives, and operates, they leave
-        behind their bits, mere traces of seemingly meaningless fragments of information. But these bits can be
-        reconstructed. Transformed. Used.
+        我们的一生都被比特操控。我们的一切行为、思想和个人信息，全都被转化成比特、存储于比特、通过比特传递。任何人若离开比特，就无法行动、无法生存、无法以任何层级运作。而当一个人行动、生活和运作时，他会留下自己的比特——那些看似毫无意义的信息碎片留下的痕迹。但这些比特可以被重构，被转化，被利用。
         <br />
         <br />
-        Those who run the bits, run the world.
+        驾驭比特者，驾驭世界。
       </>
     ),
-    rumorText: <>Run for the hills.</>,
+    rumorText: <>逃往深山。</>,
     inviteReqs: [haveBackdooredServer(SpecialServers.BitRunnersServer)],
     rumorReqs: [haveFile(MessageFilename.BitRunnersTest)],
     offerHackingWork: true,
@@ -407,12 +354,10 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.TheBlackHand]: new FactionInfo({
     infoText: (
       <>
-        The world, so afraid of strong government, now has no government. Only power - Digital power. Financial power.
-        Technological power. And those at the top rule with an invisible hand. They built a society where the rich get
-        richer, and everyone else suffers.
+        这个世界如此惧怕强势政府，如今却根本没有政府。只剩下权力——数字权力。金融权力。科技权力。而身处顶层之人以无形之手统治。他们建立了一个富人愈富、其余所有人受苦的社会。
         <br />
         <br />
-        So much pain. So many lives. Their darkness must end.
+        如此多的痛苦。如此多的生命。他们的黑暗必须终结。
       </>
     ),
     rumorText: <>I.I.I.I</>,
@@ -460,7 +405,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     {"        d      .dNITESEC          $   |  "}<br />
     {"       :bp.__.gNITESEC/$         :$   ;  "}<br />
     {"       NITESECNITESECNIT         /$b :   "}<br /></>),
-    rumorText: <>A hacking group known as {FactionName.NiteSec} may recruit you if you impress them with your hacking skills.</>,
+    rumorText: (
+      <>
+        名为 {FactionName.NiteSec}
+        的黑客组织可能会招募你——只要你用黑客技术给他们留下深刻印象。
+      </>
+    ),
     inviteReqs: [
       haveBackdooredServer(SpecialServers.NiteSecServer)
     ],
@@ -475,15 +425,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.CyberSec]: new FactionInfo({
     infoText: (
       <>
-        The Internet is the first thing that was built that we don't fully understand, the largest experiment in anarchy
-        that we have ever had. And as the world becomes increasingly dominated by it, society approaches the brink of
-        total chaos. We serve only to protect society, to protect humanity, to protect the world from imminent collapse.
+        互联网是我们建造的第一件我们并未完全理解的事物，是我们经历过的最大的一场无政府状态实验。随着世界日益被它主导，社会正走向全面混乱的边缘。我们只为守护而存在——守护社会，守护人类，守护这个世界免于迫近的崩塌。
       </>
     ),
     rumorText: (
       <>
-        A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking
-        skills on their server.
+        名为 {FactionName.CyberSec}
+        的黑客组织会在你于他们的服务器上展示黑客技术后邀请你加入。
       </>
     ),
     inviteReqs: [haveBackdooredServer(SpecialServers.CyberSecServer)],
@@ -493,8 +441,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   // City factions, essentially governments
   [FactionName.Aevum]: new FactionInfo({
-    infoText: <>The Silicon City.</>,
-    rumorText: <>Wealthy residents of {CityName.Aevum} may be invited to work for the Silicon City.</>,
+    infoText: <>硅之城。</>,
+    rumorText: <>{CityName.Aevum} 的富裕居民可能会受邀为硅之城工作。</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Aevum), haveMoney(40e6)],
     rumorReqs: [locatedInCity(CityName.Aevum), haveMoney(20e6)],
@@ -503,8 +451,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerSecurityWork: true,
   }),
   [FactionName.Chongqing]: new FactionInfo({
-    infoText: <>Serve the People.</>,
-    rumorText: <>Wealthy residents of {CityName.Chongqing} may be invited to serve the people.</>,
+    infoText: <>为人民服务。</>,
+    rumorText: <>{CityName.Chongqing} 的富裕居民可能会受邀为人民服务。</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Chongqing), haveMoney(20e6)],
     rumorReqs: [locatedInCity(CityName.Chongqing), haveMoney(10e6)],
@@ -513,10 +461,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerSecurityWork: true,
   }),
   [FactionName.Ishima]: new FactionInfo({
-    infoText: <>The East Asian Order of the Future.</>,
-    rumorText: (
-      <>Wealthy residents of {CityName.Ishima} may be invited to work for the East Asian Order of the Future.</>
-    ),
+    infoText: <>未来东亚秩序。</>,
+    rumorText: <>{CityName.Ishima} 的富裕居民可能会受邀为未来东亚秩序效力。</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Ishima), haveMoney(30e6)],
     rumorReqs: [locatedInCity(CityName.Ishima), haveMoney(15e6)],
@@ -525,8 +471,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerSecurityWork: true,
   }),
   [FactionName.NewTokyo]: new FactionInfo({
-    infoText: <>Asia's World City.</>,
-    rumorText: <>Wealthy residents of {CityName.NewTokyo} may be invited to work for Asia's World City.</>,
+    infoText: <>亚洲国际都会。</>,
+    rumorText: <>{CityName.NewTokyo} 的富裕居民可能会受邀为这座亚洲国际都会效力。</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.NewTokyo), haveMoney(20e6)],
     rumorReqs: [locatedInCity(CityName.NewTokyo), haveMoney(10e6)],
@@ -535,8 +481,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerSecurityWork: true,
   }),
   [FactionName.Sector12]: new FactionInfo({
-    infoText: <>The City of the Future.</>,
-    rumorText: <>Wealthy residents of {CityName.Sector12} may be invited to work for the City of the Future.</>,
+    infoText: <>未来之城。</>,
+    rumorText: <>{CityName.Sector12} 的富裕居民可能会受邀为未来之城工作。</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Sector12), haveMoney(15e6)],
     rumorReqs: [locatedInCity(CityName.Sector12), haveMoney(7.5e6)],
@@ -545,10 +491,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     offerSecurityWork: true,
   }),
   [FactionName.Volhaven]: new FactionInfo({
-    infoText: <>Benefit, Honor, and Glory.</>,
-    rumorText: (
-      <>Wealthy residents of {CityName.Volhaven} may be invited to work for the city's Benefit, Honor, and Glory.</>
-    ),
+    infoText: <>利益、荣誉与荣光。</>,
+    rumorText: <>{CityName.Volhaven} 的富裕居民可能会受邀为这座城市的利益、荣誉与荣光而努力。</>,
     enemies: [FactionName.Chongqing, FactionName.Sector12, FactionName.NewTokyo, FactionName.Aevum, FactionName.Ishima],
     inviteReqs: [locatedInCity(CityName.Volhaven), haveMoney(50e6)],
     rumorReqs: [locatedInCity(CityName.Volhaven), haveMoney(25e6)],
@@ -559,8 +503,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   // Criminal Organizations/Gangs
   [FactionName.SpeakersForTheDead]: new FactionInfo({
-    infoText: <>It is better to reign in Hell than to serve in Heaven.</>,
-    rumorText: <>“We know.”</>,
+    infoText: <>宁在地狱称王，不在天堂为仆。</>,
+    rumorText: <>“我们知道。”</>,
     inviteReqs: [
       notEmployedBy(CompanyName.CIA),
       notEmployedBy(CompanyName.NSA),
@@ -576,8 +520,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.TheDarkArmy]: new FactionInfo({
-    infoText: <>The World doesn't care about right or wrong. It only cares about power.</>,
-    rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}.</>,
+    infoText: <>这个世界不在乎对与错，只在乎权力。</>,
+    rumorText: <>一个盘踞在 {CityName.Chongqing} 的冷酷犯罪组织。</>,
     inviteReqs: [
       locatedInCity(CityName.Chongqing),
       notEmployedBy(CompanyName.CIA),
@@ -599,8 +543,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.TheSyndicate]: new FactionInfo({
-    infoText: <>Honor holds you back.</>,
-    rumorText: <>An elite criminal organization that operates in the western hemisphere.</>,
+    infoText: <>荣誉只会拖住你的脚步。</>,
+    rumorText: <>一个活跃于西半球的精英犯罪组织。</>,
     inviteReqs: [
       locatedInSomeCity(CityName.Aevum, CityName.Sector12),
       notEmployedBy(CompanyName.CIA),
@@ -623,19 +567,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Silhouette]: new FactionInfo({
     infoText: (
       <>
-        Corporations have filled the void of power left behind by the collapse of Western government. The issue is
-        they've become so big that you don't know who they're working for. And if you're employed at one of these
-        corporations, you don't even know who you're working for.
+        西方政府崩塌后留下的权力真空，已被企业填满。问题在于它们变得太过庞大，以至于你不知道它们在为谁效力。而如果你受雇于其中一家企业，你甚至不知道自己在为谁卖命。
         <br />
         <br />
-        That's terror. Terror, fear, and corruption. All born into the system, all propagated by the system.
+        那就是恐怖。恐怖、恐惧与腐败。全都生于体制，也全都由体制传播。
       </>
     ),
-    rumorText: (
-      <>
-        Corporate executives with the right moral flexiblity may be invited to find out who they are truly working for.
-      </>
-    ),
+    rumorText: <>拥有足够“道德灵活性”的企业高管可能会受邀去查清自己究竟在为谁工作。</>,
     inviteReqs: [executiveEmployee(), haveMoney(15e6), haveKarma(-22)],
     rumorReqs: [executiveEmployee()],
     offerHackingWork: true,
@@ -643,8 +581,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.Tetrads]: new FactionInfo({
-    infoText: <>Following the mandate of Heaven and carrying out the way.</>,
-    rumorText: <>A notorious East Asian criminal organization</>,
+    infoText: <>奉天承运，替天行道。</>,
+    rumorText: <>一个臭名昭著的东亚犯罪组织</>,
     inviteReqs: [
       locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
       haveCombatSkills(75),
@@ -660,8 +598,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.SlumSnakes]: new FactionInfo({
-    infoText: <>{FactionName.SlumSnakes} rule!</>,
-    rumorText: <>Graffiti seen in the slums: “{FactionName.SlumSnakes} rule!”</>,
+    infoText: <>{FactionName.SlumSnakes} 称霸！</>,
+    rumorText: <>贫民窟里的涂鸦：“{FactionName.SlumSnakes} 称霸！”</>,
     inviteReqs: [haveCombatSkills(30), haveMoney(1e6), haveKarma(-9)],
     rumorReqs: [haveCombatSkills(10), someCondition([haveKarma(-1), haveFile(LiteratureName.Sector12Crime)])],
     offerFieldWork: true,
@@ -678,8 +616,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
 
   [FactionName.TianDiHui]: new FactionInfo({
-    infoText: <>Obey Heaven and work righteously.</>,
-    rumorText: <>A Chinese honor society with the motto: “Obey Heaven and work righteously.”</>,
+    infoText: <>顺天行道，恪守正义。</>,
+    rumorText: <>一个中国秘密会社，其格言是：“顺天行道，恪守正义。”</>,
     inviteReqs: [
       locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
       haveSkill("hacking", 50),
@@ -698,13 +636,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Bladeburners]: new FactionInfo({
     infoText: (
       <>
-        It's too bad they won't live. But then again, who does?
+        可惜他们活不长了。不过话说回来，谁又能呢？
         <br />
         <br />
-        Reputation can only be gained among the {FactionName.Bladeburners} by completing contracts and operations.
+        只有完成合约和行动，才能在 {FactionName.Bladeburners} 中获得声望。
       </>
     ),
-    rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
+    rumorText: <>等你准备好了，{CompanyName.NSA} 想和你谈谈。</>,
     inviteReqs: [haveSomeSourceFile(6, 7), haveBladeburnerRank(BladeburnerConstants.RankNeededForFaction)],
     rumorReqs: [haveSomeSourceFile(6, 7), notCondition(inBitNode(8))],
     offerHackingWork: false,
@@ -714,8 +652,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     campaign: (): React.ReactElement => {
       return (
         <Option
-          buttonText={"Open Bladeburner headquarters"}
-          infoText={"Gain reputation by completing contracts and operations."}
+          buttonText={"前往 Bladeburner 总部"}
+          infoText={"通过完成合约和行动来获得声望。"}
           onClick={() => Router.toPage(Page.Bladeburner)}
         />
       );
@@ -753,14 +691,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     {"    sNNo-.`.-omNy`           "}<br />
     {"     -smNNNNmdo-             "}<br />
     {"        `..`                 "}<br /><br />
-    Many cultures predict an end to humanity in the near future, a final
-    Armageddon that will end the world; but we disagree.</>),
-    rumorText: <>Trouble is brewing in {CityName.Chongqing}.</>,
+    许多文化都预言人类将在不久的将来迎来终结，一场终结世界的最终末日；但我们不这么认为。</>),
+    rumorText: <>{CityName.Chongqing} 正在酝酿麻烦。</>,
     inviteReqs: [
       haveSourceFile(13),
       haveAugmentations(0),
       {
-        toString: () => `Investigate the dilapidated church in ${CityName.Chongqing}`,
+        toString: () => `调查 ${CityName.Chongqing} 那座破败的教堂`,
         toJSON: () => ({ type: "location", location: LocationName.ChongqingChurchOfTheMachineGod }),
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ChurchOfTheMachineGod);
@@ -776,10 +713,10 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     campaign: (): React.ReactElement => {
       return (
         <Option
-          buttonText={"Open Stanek's Gift"}
+          buttonText={"打开 Stanek 的礼物"}
           infoText={
-            "Stanek's Gift is a powerful augmentation that powers up the stat you chose to boost. " +
-            "Gaining reputation with the Church of the Machine God can only be done by charging the gift."
+            "Stanek 的礼物是一件强大的强化，可以增强你所选择提升的属性。" +
+            "与机械神教积累声望，只能通过为礼物充能来实现。"
           }
           onClick={() => Router.toPage(Page.StaneksGift)}
         />
@@ -787,16 +724,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     },
   }),
   [FactionName.ShadowsOfAnarchy]: new FactionInfo({
-    infoText: (
-      <>
-        The government is ruled by the corporations that we have allowed to consume it. To release the world from its
-        shackles, the gods grant us their strength.
-      </>
-    ),
-    rumorText: <>Your infiltration activity has attracted attention.</>,
+    infoText: <>政府已被那些我们放任吞噬它的企业所掌控。为了将世界从枷锁中解放出来，众神赐予我们力量。</>,
+    rumorText: <>你的潜入活动已经引起了注意。</>,
     inviteReqs: [
       {
-        toString: () => `Complete an infiltration`,
+        toString: () => `完成一次潜入`,
         toJSON: () => ({ type: "numInfiltrations", numInfiltrations: 1 }),
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ShadowsOfAnarchy);
@@ -809,7 +741,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     special: true,
     keepOnInstall: true,
     campaign: (): React.ReactElement => {
-      return <Typography>{FactionName.ShadowsOfAnarchy} can only gain reputation by infiltrating.</Typography>;
+      return <Typography>{FactionName.ShadowsOfAnarchy} 只能通过潜入来获得声望。</Typography>;
     },
   }),
 };

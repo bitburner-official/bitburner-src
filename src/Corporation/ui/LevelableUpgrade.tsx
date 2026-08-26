@@ -33,7 +33,7 @@ export function LevelableUpgrade({ upgradeName, mult, rerender }: IProps): React
     if (corp.funds < cost) return;
     const result = corp.purchaseUpgrade(upgradeName, amount);
     if (!result.success) {
-      dialogBoxCreate(`Could not upgrade ${upgradeName} ${amount} times:\n${result.message}`);
+      dialogBoxCreate(`无法将 ${upgradeName} 升级 ${amount} 级：\n${result.message}`);
     }
     rerender();
   }
@@ -42,14 +42,14 @@ export function LevelableUpgrade({ upgradeName, mult, rerender }: IProps): React
     <Grid item xs={4}>
       <Box display="flex" alignItems="center" flexDirection="row-reverse">
         <ButtonWithTooltip
-          disabledTooltip={corp.funds < cost || amount === 0 ? "Insufficient corporation funds" : ""}
+          disabledTooltip={corp.funds < cost || amount === 0 ? "企业资金不足" : ""}
           onClick={onClick}
         >
           +{amount} -&nbsp; <MoneyCost money={cost} corp={corp} />
         </ButtonWithTooltip>
         <Tooltip title={tooltip}>
           <Typography>
-            {data.name} - lvl {level}
+            {data.name} - {level}级
           </Typography>
         </Tooltip>
       </Box>

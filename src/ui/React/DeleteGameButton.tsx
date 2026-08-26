@@ -16,9 +16,9 @@ export function DeleteGameButton({ color = "primary" }: IProps): React.ReactElem
 
   return (
     <>
-      <Tooltip title="This will permanently delete your local save game. Did you export it before?">
+      <Tooltip title="这将永久删除你的本地存档。你之前导出过存档吗？">
         <Button startIcon={<DeleteIcon />} color={color} onClick={() => setModalOpened(true)}>
-          Delete Save
+          删除存档
         </Button>
       </Tooltip>
       <ConfirmationModal
@@ -33,8 +33,8 @@ export function DeleteGameButton({ color = "primary" }: IProps): React.ReactElem
         }}
         open={modalOpened}
         onClose={() => setModalOpened(false)}
-        confirmationText={"Really delete your game? (It's permanent!)"}
-        additionalButton={<Button onClick={() => setModalOpened(false)}>Cancel</Button>}
+        confirmationText={"真的要删除你的游戏吗？（此操作不可恢复！）"}
+        additionalButton={<Button onClick={() => setModalOpened(false)}>取消</Button>}
       />
     </>
   );

@@ -38,13 +38,13 @@ export const GraftableAugmentations = (): Record<string, GraftableAugmentation> 
 
 const canGraft = (aug: GraftableAugmentation): Result => {
   if (Player.city !== CityName.NewTokyo) {
-    return { success: false, message: "You must be in New Tokyo to begin grafting an augmentation." };
+    return { success: false, message: "你必须在新东京才能开始移植强化。" };
   }
   if (Player.money < aug.cost) {
-    return { success: false, message: "You do not have enough money." };
+    return { success: false, message: "你没有足够的资金。" };
   }
   if (!hasAugmentationPrereqs(aug.augmentation)) {
-    return { success: false, message: "You do not have the pre-requisites augmentations." };
+    return { success: false, message: "你不满足前置强化要求。" };
   }
   return { success: true };
 };
@@ -58,7 +58,7 @@ const AugPreReqsChecklist = (props: IProps): React.ReactElement => {
 
   return (
     <Typography color={Settings.theme.money}>
-      <b>Prerequisites:</b>
+      <b>前置条件：</b>
       <br />
       {aug.prereqs.map((preAug) => (
         <span key={preAug} style={{ display: "flex", alignItems: "center" }}>
@@ -105,34 +105,30 @@ export const GraftingRoot = (): React.ReactElement => {
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-      <Button onClick={() => Router.back()}>Back</Button>
-      <Typography variant="h4">Grafting Laboratory</Typography>
+      <Button onClick={() => Router.back()}>返回</Button>
+      <Typography variant="h4">移植实验室</Typography>
       <Typography>
-        You find yourself in a secret laboratory, owned by a mysterious researcher.
+        你发现自己身处一间秘密实验室，它属于一位神秘的研究员。
         <br />
         <br />
-        The scientist explains that they've been studying augmentation grafting, the process of applying augmentations
-        without requiring a body reset.
+        这位科学家解释说，他们一直在研究强化移植技术——一种无需重置身体即可应用强化的方法。
         <br />
         <br />
-        Through legally questionable connections, the scientist has access to a vast array of augmentation blueprints,
-        even private designs. They offer to build and graft the augmentations to you, in exchange for both a hefty sum
-        of money, and being a lab rat.
+        通过一些游走在法律边缘的关系，这位科学家能接触到大量强化蓝图，甚至包括私藏设计。他们提出可以为你构建并移植这些强化，作为交换，你需要支付一笔不菲的资金，并充当他们的实验小白鼠。
         <br />
         <br />
-        When grafting augmentations, prerequisites work the same way as usual. If an augmentation has prerequisites, you
-        must buy, install or graft those prerequisites before you can graft the augmentation.
+        移植强化时，前置条件的规则与往常相同。如果某个强化有前置条件，你必须先购买、安装或移植这些前置强化，才能移植该强化。
       </Typography>
 
       <Box sx={{ my: 3 }}>
         <Paper sx={{ p: 1 }}>
-          <Typography variant="h5">Graft Augmentations</Typography>
+          <Typography variant="h5">移植强化</Typography>
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <Button sx={{ width: "100%" }} onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Cost)}>
-              Sort by Cost
+              按费用排序
             </Button>
             <Button sx={{ width: "100%" }} onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Default)}>
-              Sort by Default Order
+              按默认顺序排序
             </Button>
           </Box>
         </Paper>
@@ -170,11 +166,11 @@ export const GraftingRoot = (): React.ReactElement => {
               <Tooltip title={checkResult.message}>
                 <span>
                   <Button onClick={() => setGraftOpen(true)} sx={{ width: "100%" }} disabled={!checkResult.success}>
-                    Graft Augmentation (
+                    移植强化（
                     <Typography>
                       <Money money={graftableAugmentations[selectedAug].cost} forPurchase={true} />
                     </Typography>
-                    )
+                    ）
                   </Button>
                 </span>
               </Tooltip>
@@ -199,14 +195,13 @@ export const GraftingRoot = (): React.ReactElement => {
                 }}
                 confirmationText={
                   <Typography component="div" paddingBottom="1rem">
-                    Cancelling grafting will <b>not</b> save grafting progress, and the money you spend will <b>not</b>{" "}
-                    be returned.
+                    取消移植将<b>不会</b>保存移植进度，且你已支付的资金将<b>不会</b>被退还。
                     {!Player.hasAugmentation(AugmentationName.CongruityImplant) &&
                       selectedAug !== AugmentationName.CongruityImplant && (
                         <>
                           <br />
                           <br />
-                          Additionally, grafting an augmentation will increase the potency of the Entropy virus.
+                          此外，移植强化会增加熵病毒的强度。
                         </>
                       )}
                   </Typography>
@@ -214,7 +209,7 @@ export const GraftingRoot = (): React.ReactElement => {
               />
               <Box sx={{ maxHeight: 330, overflowY: "scroll" }}>
                 <Typography color={Settings.theme.info}>
-                  <b>Time to Graft:</b>{" "}
+                  <b>移植时间：</b>{" "}
                   {convertTimeMsToTimeElapsedString(
                     calculateGraftingTimeWithBonus(graftableAugmentations[selectedAug]),
                   )}
@@ -248,30 +243,27 @@ export const GraftingRoot = (): React.ReactElement => {
             </Box>
           </Paper>
         ) : (
-          <Typography>All augmentations owned</Typography>
+          <Typography>所有强化均已拥有</Typography>
         )}
       </Box>
 
       <Box sx={{ my: 3 }}>
-        <Typography variant="h5">Entropy Virus</Typography>
+        <Typography variant="h5">熵病毒</Typography>
 
         <Paper sx={{ my: 1, p: 1, width: "fit-content" }}>
           <Typography>
-            <b>Entropy strength:</b> {Player.entropy}
+            <b>熵强度：</b> {Player.entropy}
             <br />
-            <b>All multipliers decreased by:</b>{" "}
-            {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
+            <b>所有乘数降低：</b>{" "}
+            {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}%（乘法叠加）
           </Typography>
         </Paper>
 
         <Typography>
-          When installed on an unconscious individual, augmentations are scanned by the body on awakening, eliminating
-          hidden malware. However, grafted augmentations do not provide this security measure.
+          当强化安装在失去意识的人身上时，身体会在苏醒时扫描这些强化，清除隐藏的恶意软件。然而，移植的强化并不提供这种安全保障。
           <br />
           <br />
-          Individuals who tested augmentation grafting have reported symptoms of an unknown virus, which persists even
-          after a body reset. They've dubbed it "Entropy". This virus seems to grow more potent with each grafted
-          augmentation ...
+          测试过强化移植的人报告出现了某种未知病毒的症状，即使重置身体后症状依然存在。他们将其命名为"熵"。这种病毒似乎会随着每次强化的移植而变得更强……
         </Typography>
       </Box>
     </Container>

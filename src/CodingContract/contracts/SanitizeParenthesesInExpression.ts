@@ -10,15 +10,15 @@ export const sanitizeParenthesesInExpression: Pick<
   [CodingContractName.SanitizeParenthesesInExpression]: {
     desc: (data: string): string => {
       return [
-        "Given the following string:\n\n",
+        "给定以下字符串：\n\n",
         `${data}\n\n`,
-        "remove the minimum number of invalid parentheses in order to validate",
-        "the string. If there are multiple minimal ways to validate the string,",
-        "provide all of the possible results. The answer should be provided",
-        "as an array of strings. If it is impossible to validate the string",
-        "the result should be an array with only an empty string.\n\n",
-        "IMPORTANT: The string may contain letters, not just parentheses.\n\n",
-        `Examples:\n\n`,
+        "请移除最少数量的无效括号，使字符串",
+        "有效。如果有多种最少移除的方式，",
+        "则提供所有可能的结果。答案应以",
+        "字符串数组的形式提供。如果无法使字符串有效，",
+        "则结果应为只包含一个空字符串的数组。\n\n",
+        "重要提示：字符串中可能包含字母，而不仅仅是括号。\n\n",
+        `示例：\n\n`,
         `"()())()" -> ["()()()", "(())()"]\n`,
         `"(a)())()" -> ["(a)()()", "(a())()"]\n`,
         `")(" -> [""]`,

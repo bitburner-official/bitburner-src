@@ -31,7 +31,7 @@ export function CinematicText(props: IProps): React.ReactElement {
       ))}
       {props.lines.length > i && <CinematicLine key={i} text={props.lines[i]} onDone={advance} />}
       {done && props.additionalElement}
-      {!props.auto && props.onDone && done && <Button onClick={props.onDone}>Continue ...</Button>}
+      {!props.auto && props.onDone && done && <Button onClick={props.onDone}>继续……</Button>}
     </>
   );
 }

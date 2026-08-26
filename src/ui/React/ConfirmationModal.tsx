@@ -22,7 +22,7 @@ export function ConfirmationModal(props: IProps): React.ReactElement {
             props.onConfirm();
           }}
         >
-          Confirm
+          确认
         </Button>
         {props.additionalButton && <>{props.additionalButton}</>}
       </>

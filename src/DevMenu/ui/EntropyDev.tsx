@@ -13,12 +13,12 @@ export function EntropyDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_EntropyDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Entropy</Typography>
+        <Typography>熵</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Adjuster
-          label="Set entropy"
-          placeholder="entropy"
+          label="设置熵"
+          placeholder="熵"
           add={(num) => {
             Player.entropy += num;
             Player.applyEntropy(Player.entropy);

@@ -100,12 +100,12 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                     key="repLabel"
                     title={
                       <>
-                        You will have <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
-                        favor upon resetting after installing Augmentations
+                        安装强化并转生后，你将拥有{" "}
+                        <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> 点公司好感
                       </>
                     }
                   >
-                    <Typography>Total reputation:</Typography>
+                    <Typography>总声望：</Typography>
                   </Tooltip>,
                   <Reputation key="rep" reputation={company.playerReputation} />,
                 ],
@@ -114,13 +114,11 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                     key="favorLabel"
                     title={
                       <>
-                        Company favor increases the rate at which you earn reputation for this company by 1% per favor.
-                        Company favor is gained whenever you reset after installing Augmentations. The amount of favor
-                        you gain depends on how much reputation you have with the company.
+                        公司好感每有 1 点，你在该公司获取声望的速度就会提高 1%。每次安装强化后转生都会获得公司好感。获得的好感数量取决于你在该公司拥有的声望。
                       </>
                     }
                   >
-                    <Typography>Company favor:</Typography>
+                    <Typography>公司好感：</Typography>
                   </Tooltip>,
                   <Favor key="favor" favor={company.favor} />,
                 ],
@@ -131,8 +129,8 @@ export function CompanyLocation(props: IProps): React.ReactElement {
 
         {isEmployedHere && (
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-            <Button onClick={work}>Work</Button>
-            <Button onClick={() => setQuitOpen(true)}>Quit</Button>
+            <Button onClick={work}>工作</Button>
+            <Button onClick={() => setQuitOpen(true)}>离职</Button>
             <QuitJobModal
               companyName={props.companyName}
               company={company}
@@ -145,7 +143,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
 
         {company.companyPositions.size > 0 && <JobListings company={company} currentPosition={currentPosition} />}
 
-        {location.infiltrationData != null && <Button onClick={startInfiltration}>Infiltrate Company</Button>}
+        {location.infiltrationData != null && <Button onClick={startInfiltration}>潜入公司</Button>}
       </Box>
     </>
   );

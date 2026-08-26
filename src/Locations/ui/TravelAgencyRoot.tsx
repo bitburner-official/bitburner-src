@@ -28,7 +28,7 @@ function travel(to: CityName): void {
     return;
   }
   if (!Settings.SuppressTravelConfirmation) {
-    dialogBoxCreate(`You are now in ${to}!`);
+    dialogBoxCreate(`你现在位于 ${to}！`);
   }
   Router.toPage(Page.City);
 }
@@ -52,11 +52,11 @@ export function TravelAgencyRoot(): React.ReactElement {
 
   return (
     <>
-      <Typography variant="h4">Travel Agency</Typography>
+      <Typography variant="h4">旅行社</Typography>
       <Box mx={2}>
         <Typography>
-          From {Player.city}, you can travel to any other city! A ticket costs{" "}
-          <Money money={CONSTANTS.TravelCost} forPurchase={true} />.
+          从 {Player.city} 出发，你可以前往任何其他城市！一张票的价格为{" "}
+          <Money money={CONSTANTS.TravelCost} forPurchase={true} />。
         </Typography>
         {Settings.DisableASCIIArt ? (
           <>
@@ -68,7 +68,7 @@ export function TravelAgencyRoot(): React.ReactElement {
                 return (
                   <React.Fragment key={city}>
                     <Button onClick={() => startTravel(city as CityName)} sx={{ m: 2 }}>
-                      <Typography>Travel to {city}</Typography>
+                      <Typography>前往 {city}</Typography>
                     </Button>
                     <br />
                   </React.Fragment>

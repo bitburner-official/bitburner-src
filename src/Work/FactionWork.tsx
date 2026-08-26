@@ -59,9 +59,9 @@ export class FactionWork extends PlayerBaseWork {
     if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
-          You worked for {this.getFaction().name}.
+          你为{this.getFaction().name}完成了工作。
           <br />
-          They now have a total of <Reputation reputation={this.getFaction().playerReputation} /> reputation.
+          该派系目前总共拥有 <Reputation reputation={this.getFaction().playerReputation} /> 声望。
         </>,
       );
     }

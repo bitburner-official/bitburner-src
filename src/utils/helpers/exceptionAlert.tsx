@@ -61,23 +61,23 @@ export function exceptionAlert(error: unknown, showOnlyOnce = false): void {
 
   dialogBoxCreate(
     <>
-      Caught an exception: {errorData.errorAsString}
+      捕获到异常：{errorData.errorAsString}
       <br />
       <br />
       {errorData.stack && (
         <Typography component="div" style={{ whiteSpace: "pre-wrap" }}>
-          Stack: {errorData.stack}
+          堆栈：{errorData.stack}
         </Typography>
       )}
       {errorData.causeAsString && (
         <>
           <br />
           <Typography component="div" style={{ whiteSpace: "pre-wrap" }}>
-            Error cause: {errorData.causeAsString}
+            错误原因：{errorData.causeAsString}
             {errorData.causeStack && (
               <>
                 <br />
-                Cause stack: {errorData.causeStack}
+                原因堆栈：{errorData.causeStack}
               </>
             )}
           </Typography>
@@ -89,7 +89,7 @@ export function exceptionAlert(error: unknown, showOnlyOnce = false): void {
       UserAgent: {navigator.userAgent}
       <br />
       <br />
-      This is a bug. Please contact developers.
+      这是一个 bug。请联系开发者。
     </>,
   );
 }

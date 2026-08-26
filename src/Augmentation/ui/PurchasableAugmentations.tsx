@@ -30,7 +30,7 @@ const PreReqs = (props: IPreReqsProps): React.ReactElement => {
       title={
         <>
           <Typography sx={{ color: Settings.theme.money }}>
-            This Augmentation has the following pre-requisite(s):
+            该强化拥有以下前置强化：
           </Typography>
           {props.aug.prereqs.map((preAug) => (
             <Requirement
@@ -57,12 +57,12 @@ const PreReqs = (props: IPreReqsProps): React.ReactElement => {
         {hasPreReqs ? (
           <>
             <CheckCircle fontSize="small" sx={{ mr: 1 }} />
-            Pre-requisites Owned
+            前置已满足
           </>
         ) : (
           <>
             <Report fontSize="small" sx={{ mr: 1 }} />
-            Missing {props.aug.prereqs.length - ownedPreReqs.length} pre-requisite(s)
+            缺少 {props.aug.prereqs.length - ownedPreReqs.length} 个前置
           </>
         )}
       </Typography>
@@ -80,23 +80,23 @@ const Exclusive = (props: IExclusiveProps): React.ReactElement => {
       title={
         <>
           <Typography sx={{ color: Settings.theme.money }}>
-            This Augmentation can only be acquired from the following source(s):
+            该强化只能从以下来源获取：
           </Typography>
           <ul>
             <Typography sx={{ color: Settings.theme.money }}>
               <li>
-                <b>{props.aug.factions[0]}</b> faction
+                <b>{props.aug.factions[0]}</b> 派系
               </li>
               {Player.isAwareOfGang() && !props.aug.isSpecial && (
                 <li>
-                  Certain <b>gangs</b>
+                  某些<b>帮派</b>
                 </li>
               )}
               {Player.canAccessGrafting() &&
                 (!props.aug.isSpecial || props.aug.factions.includes(FactionName.Bladeburners)) &&
                 props.aug.name !== AugmentationName.TheRedPill && (
                   <li>
-                    <b>Grafting</b>
+                    <b>移植（Grafting）</b>
                   </li>
                 )}
             </Typography>
@@ -200,7 +200,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
             disabled={!props.parent.canPurchase(aug) || props.owned}
             sx={{ width: "48px", height: "36px", float: "left", clear: "none", mr: 1 }}
           >
-            {props.owned ? "Owned" : "Buy"}
+            {props.owned ? "已拥有" : "购买"}
           </Button>
 
           <Box sx={{ maxWidth: props.owned ? "100%" : "85%" }}>
@@ -210,7 +210,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                   <>
                     <Typography variant="h5">
                       {aug.name}
-                      {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${augLevel + 1}`}
+                      {aug.name === AugmentationName.NeuroFluxGovernor && ` - ${augLevel + 1} 级`}
                     </Typography>
                     <Typography whiteSpace={"pre-wrap"}>{description}</Typography>
                   </>
@@ -227,7 +227,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                   }}
                 >
                   {aug.name}
-                  {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${augLevel + 1}`}
+                  {aug.name === AugmentationName.NeuroFluxGovernor && ` - ${augLevel + 1} 级`}
                 </Typography>
               </Tooltip>
 
@@ -248,7 +248,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
             {props.parent.rep !== undefined && (
               <Requirement
                 fulfilled={props.parent.rep >= repCost}
-                value={`${formatReputation(repCost)} rep`}
+                value={`${formatReputation(repCost)} 声望`}
                 color={Settings.theme.rep}
                 incompleteColor={Settings.theme.error}
               />

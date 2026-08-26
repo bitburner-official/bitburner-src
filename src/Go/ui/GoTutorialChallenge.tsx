@@ -39,16 +39,14 @@ export function GoTutorialChallenge({
 
   const handleClick = (x: number, y: number) => {
     if (stateRef.current.previousBoards.length) {
-      SnackbarEvents.emit(`Hit 'Reset' to try again`, ToastVariant.WARNING, 2000);
+      SnackbarEvents.emit(`点击"重置"再试一次`, ToastVariant.WARNING, 2000);
       return;
     }
     setShowReset(true);
 
     const validity = evaluateIfMoveIsValid(stateRef.current, x, y, GoColor.black);
     if (validity != GoValidity.valid) {
-      setDisplayText(
-        "Invalid move: You cannot suicide your routers by placing them with no access to any empty ports.",
-      );
+      setDisplayText("无效落子：不能把路由器下在没有任何空节点可连通的位置，那等于让自己的路由器自杀。");
       return;
     }
 
@@ -83,7 +81,7 @@ export function GoTutorialChallenge({
         <GoGameboard boardState={stateRef.current} traditional={false} clickHandler={handleClick} hover={true} />
       </div>
       <Typography>{displayText}</Typography>
-      {showReset ? <Button onClick={reset}>Reset</Button> : ""}
+      {showReset ? <Button onClick={reset}>重置</Button> : ""}
     </div>
   );
 }

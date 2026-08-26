@@ -22,11 +22,11 @@ export function RecruitButton(props: IProps): React.ReactElement {
     const respectNeeded = gang.respectForNextRecruit();
     return (
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
-        <Button disabled>Recruit Gang Member</Button>
+        <Button disabled>招募帮派成员</Button>
         {respectNeeded === Infinity ? (
-          <Typography sx={{ ml: 1 }}>Maximum gang members already recruited</Typography>
+          <Typography sx={{ ml: 1 }}>已招募的帮派成员数量已达上限</Typography>
         ) : (
-          <Typography sx={{ ml: 1 }}>{formatRespect(respectNeeded)} respect needed to recruit next member</Typography>
+          <Typography sx={{ ml: 1 }}>还需 {formatRespect(respectNeeded)} 尊重才能招募下一名成员</Typography>
         )}
       </Box>
     );
@@ -35,8 +35,8 @@ export function RecruitButton(props: IProps): React.ReactElement {
   return (
     <>
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
-        <Button onClick={() => setOpen(true)}>Recruit Gang Member</Button>
-        <Typography sx={{ ml: 1 }}>Can recruit {pluralize(recruitsAvailable, "more gang member")}</Typography>
+        <Button onClick={() => setOpen(true)}>招募帮派成员</Button>
+        <Typography sx={{ ml: 1 }}>还可招募 {pluralize(recruitsAvailable, "名帮派成员", "名帮派成员")}</Typography>
       </Box>
       <RecruitModal open={open} onClose={() => setOpen(false)} onRecruit={props.onRecruit} />
     </>

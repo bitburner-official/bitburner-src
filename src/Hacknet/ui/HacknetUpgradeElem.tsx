@@ -54,7 +54,7 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
       props.upg.name === HashUpgradeEnum.CompanyFavor ? selectedCompany : selectedServer,
     );
     if (!result.success) {
-      dialogBoxCreate(`Failed to purchase upgrade. Reason: ${result.message} `);
+      dialogBoxCreate(`购买升级失败。原因：${result.message} `);
     }
     props.rerender();
   }
@@ -73,13 +73,15 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
     <Paper sx={{ p: 1 }}>
       <CopyableText value={upg.name} />
       <Typography>
-        Cost: <Hashes hashes={cost} />, Bought: {level} times
+        费用：
+        <Hashes hashes={cost} />
+        ，已购买：{level} 次
       </Typography>
 
       <Typography>{upg.desc}</Typography>
       {!upg.hasTargetServer && !upg.hasTargetCompany && (
         <Button onClick={purchase} disabled={!canPurchase}>
-          Buy
+          购买
         </Button>
       )}
       {upg.hasTargetServer && (

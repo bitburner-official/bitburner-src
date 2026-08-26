@@ -33,7 +33,7 @@ export function expectDarknetAccess(ctx: NetscriptContext): void {
   if (!hasDarknetAccess()) {
     throw errorMessage(
       ctx,
-      `You do not have access to the dnet api. Purchase "${CompletedProgramName.darkscape}" through your TOR router to unlock it.`,
+      `你没有 dnet API 的访问权限。请通过你的 TOR 路由器购买 "${CompletedProgramName.darkscape}" 来解锁。`,
     );
   }
 }
@@ -70,14 +70,14 @@ export function checkDarknetServer(
       // for callers to use this, as long as they are only expecting a BaseServer.
       return success;
     }
-    const result = `${host} is not a darknet server.`;
+    const result = `${host} 不是一个暗网服务器。`;
     throw errorMessage(ctx, result);
   }
   // This is down here because we don't require darknet access for using
   // allowNonDarknet APIs on non-darknet servers.
   expectDarknetAccess(ctx);
   if (options.preventUseOnStationaryServers && targetServer.isStationary) {
-    const result = `${host} is not a valid target: it is a stationary server.`;
+    const result = `${host} 不是有效目标：它是一台固定服务器。`;
     throw errorMessage(ctx, result);
   }
   if (
@@ -85,9 +85,9 @@ export function checkDarknetServer(
     !isDirectConnected(currentServer, targetServer) &&
     !(options.backdoorBypasses && targetServer.backdoorInstalled)
   ) {
-    let result = `${host} is not connected to the current server ${currentServer.hostname}. It may have moved.`;
+    let result = `${host} 未连接到当前服务器 ${currentServer.hostname}。它可能已经移动了。`;
     if (options.backdoorBypasses) {
-      result += " You can also use a backdoor or stasis link on the target to allow remote access.";
+      result += " 你也可以在目标上使用后门或滞留链路来允许远程访问。";
     }
     logger(ctx)(result);
     return {
@@ -101,7 +101,7 @@ export function checkDarknetServer(
     return success;
   }
   if (options.requireAdminRights && !targetServer.hasAdminRights) {
-    const result = `${host} requires root access. Use ns.dnet.authenticate() to gain access.`;
+    const result = `${host} 需要 root 权限。请使用 ns.dnet.authenticate() 获取访问权限。`;
     logger(ctx)(result);
     return {
       success: false,
@@ -114,7 +114,7 @@ export function checkDarknetServer(
     host !== (!isIPAddress(host) ? currentServer.hostname : currentServer.ip) &&
     !isAuthenticated(targetServer, ctx.workerScript.pid)
   ) {
-    const result = `${host} requires a session to do that. Use ns.dnet.connectToSession() first to authenticate with that server.`;
+    const result = `${host} 需要一个会话才能执行该操作。请先使用 ns.dnet.connectToSession() 与该服务器进行认证。`;
     logger(ctx)(result);
     return {
       success: false,
@@ -142,8 +142,8 @@ export function expectRunningOnDarknetServer(ctx: NetscriptContext): DarknetServ
   if (!(server instanceof DarknetServer)) {
     throw errorMessage(
       ctx,
-      `This API can only be used on a darknet server, but it was called by ${ctx.workerScript.name} (PID: ` +
-        `${ctx.workerScript.pid}) on ${hostname}.`,
+      `该 API 只能在暗网服务器上使用，但它被 ${ctx.workerScript.name}（PID：` +
+        `${ctx.workerScript.pid}）在 ${hostname} 上调用了。`,
     );
   }
   return server;

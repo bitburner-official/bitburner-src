@@ -37,7 +37,7 @@ export function BitNodeMultiplierDescription({ n, level, hideMultsIfCannotAccess
   return (
     <Box component={Paper} sx={{ mt: 1, p: 1 }}>
       <ListItemButton disableGutters onClick={() => setOpen((old) => !old)} sx={{ padding: "4px 8px" }}>
-        <ListItemText primary={<Typography variant="h6">Bitnode Multipliers</Typography>} />
+        <ListItemText primary={<Typography variant="h6">BitNode 倍率</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Collapse in={open}>
@@ -143,198 +143,198 @@ interface IEndGameMultsProps extends IMultsProps {
 
 function GeneralMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    WorldDaemonDifficulty: { name: `${SpecialServers.WorldDaemon} Difficulty` },
+    WorldDaemonDifficulty: { name: `${SpecialServers.WorldDaemon} 难度` },
     DaedalusAugsRequirement: {
-      name: "Daedalus Augs Requirement",
+      name: "Daedalus 强化需求",
       content: String(mults.DaedalusAugsRequirement),
     },
-    HacknetNodeMoney: { name: "Hacknet Production" },
-    CodingContractMoney: { name: "Coding Contract Reward" },
-    ClassGymExpGain: { name: "Class/Gym Exp" },
+    HacknetNodeMoney: { name: "Hacknet 产出" },
+    CodingContractMoney: { name: "编程合约奖励" },
+    ClassGymExpGain: { name: "课程/健身房经验" },
   };
 
-  return <BNMultTable sectionName="General" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="通用" rowData={rows} mults={mults} />;
 }
 
 function AugmentationMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    AugmentationMoneyCost: { name: "Money Cost" },
+    AugmentationMoneyCost: { name: "资金成本" },
     AugmentationRepCost: {
-      name: "Reputation Cost",
+      name: "声望成本",
       color: Settings.theme.rep,
     },
   };
 
-  return <BNMultTable sectionName="Augmentations" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="强化" rowData={rows} mults={mults} />;
 }
 
 function CompanyMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     CompanyWorkMoney: {
-      name: "Work Money",
+      name: "工作收入",
       color: Settings.theme.money,
     },
     CompanyWorkRepGain: {
-      name: "Work Reputation",
+      name: "工作声望",
       color: Settings.theme.rep,
     },
-    CompanyWorkExpGain: { name: "Work Exp" },
+    CompanyWorkExpGain: { name: "工作经验" },
   };
 
-  return <BNMultTable sectionName="Company" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="公司" rowData={rows} mults={mults} />;
 }
 
 function StockMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    FourSigmaMarketDataCost: { name: "Market Data Cost" },
-    FourSigmaMarketDataApiCost: { name: "Market Data API Cost" },
+    FourSigmaMarketDataCost: { name: "市场数据成本" },
+    FourSigmaMarketDataApiCost: { name: "市场数据 API 成本" },
   };
 
-  return <BNMultTable sectionName="Stock Market" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="股票市场" rowData={rows} mults={mults} />;
 }
 
 function FactionMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    FavorToDonateToFaction: { name: "Favor to Donate" },
+    FavorToDonateToFaction: { name: "捐赠所需好感" },
     FactionWorkRepGain: {
-      name: "Work Reputation",
+      name: "工作声望",
       color: Settings.theme.rep,
     },
-    FactionWorkExpGain: { name: "Work Exp" },
+    FactionWorkExpGain: { name: "工作经验" },
     FactionPassiveRepGain: {
-      name: "Passive Rep",
+      name: "被动声望",
       color: Settings.theme.rep,
     },
   };
 
-  return <BNMultTable sectionName="Faction" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="派系" rowData={rows} mults={mults} />;
 }
 
 function CrimeMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     CrimeExpGain: {
-      name: "Crime Exp",
+      name: "犯罪经验",
     },
     CrimeMoney: {
-      name: "Crime Money",
+      name: "犯罪收入",
       color: Settings.theme.money,
     },
     CrimeSuccessRate: {
-      name: "Crime Success Rate",
+      name: "犯罪成功率",
     },
   };
 
-  return <BNMultTable sectionName="Crime" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="犯罪" rowData={rows} mults={mults} />;
 }
 
 function DarknetMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     DarknetMoneyMultiplier: {
-      name: "Darknet Money",
+      name: "暗网收入",
       color: Settings.theme.money,
     },
   };
 
-  return <BNMultTable sectionName="Darknet" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="暗网" rowData={rows} mults={mults} />;
 }
 
 function SkillMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     HackingLevelMultiplier: {
-      name: "Hacking Level",
+      name: "黑客等级",
       color: Settings.theme.hack,
     },
     StrengthLevelMultiplier: {
-      name: "Strength Level",
+      name: "力量等级",
       color: Settings.theme.combat,
     },
     DefenseLevelMultiplier: {
-      name: "Defense Level",
+      name: "防御等级",
       color: Settings.theme.combat,
     },
     DexterityLevelMultiplier: {
-      name: "Dexterity Level",
+      name: "灵巧等级",
       color: Settings.theme.combat,
     },
     AgilityLevelMultiplier: {
-      name: "Agility Level",
+      name: "敏捷等级",
       color: Settings.theme.combat,
     },
     CharismaLevelMultiplier: {
-      name: "Charisma Level",
+      name: "魅力等级",
       color: Settings.theme.cha,
     },
   };
 
-  return <BNMultTable sectionName="Skills" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="技能" rowData={rows} mults={mults} />;
 }
 
 function HackingMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     HackExpGain: {
-      name: "Hacking Exp",
+      name: "黑客经验",
       color: Settings.theme.hack,
     },
     HackingSpeedMultiplier: {
-      name: "Hacking Speed",
+      name: "黑客速度",
       color: Settings.theme.hack,
     },
-    ServerGrowthRate: { name: "Server Growth Rate" },
-    ServerMaxMoney: { name: "Server Max Money", color: Settings.theme.money },
-    ServerStartingMoney: { name: "Server Starting Money", color: Settings.theme.money },
-    ServerStartingSecurity: { name: "Server Starting Security" },
-    ServerWeakenRate: { name: "Server Weaken Rate" },
+    ServerGrowthRate: { name: "服务器增长率" },
+    ServerMaxMoney: { name: "服务器最大资金", color: Settings.theme.money },
+    ServerStartingMoney: { name: "服务器初始资金", color: Settings.theme.money },
+    ServerStartingSecurity: { name: "服务器初始安全等级" },
+    ServerWeakenRate: { name: "服务器削弱率" },
     ManualHackMoney: {
-      name: "Money Gained From Manual Hack",
+      name: "手动入侵获得的资金",
       color: Settings.theme.money,
-      tooltipText: `Influences how much money the player actually gains when they hack a server via the terminal. This is different from "Stolen Money From Hack". When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.`,
+      tooltipText: `影响玩家通过终端入侵服务器时实际获得的资金量。这与"入侵窃取的资金"不同：当玩家通过终端入侵服务器时，该服务器中的资金会减少，但玩家并不会获得等额的资金。`,
     },
     ScriptHackMoney: {
-      name: "Stolen Money From Hack",
+      name: "入侵窃取的资金",
       color: Settings.theme.money,
-      tooltipText: "Influences how much money is stolen from a server when the player performs a hack against it.",
+      tooltipText: "影响玩家对服务器执行入侵时从该服务器窃取的资金量。",
     },
     ScriptHackMoneyGain: {
-      name: "Money Gained From Script Hack",
+      name: "脚本入侵获得的资金",
       color: Settings.theme.money,
-      tooltipText: `Influences how much money the player actually gains when a script hacks a server. This is different from "Stolen Money From Hack". When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
+      tooltipText: `影响脚本入侵服务器时玩家实际获得的资金量。这与"入侵窃取的资金"不同：当脚本入侵服务器时，该服务器中的资金会减少，但玩家并不会获得等额的资金。`,
     },
   };
 
-  return <BNMultTable sectionName="Hacking" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="黑客" rowData={rows} mults={mults} />;
 }
 
 function CloudServersMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     CloudServerCost: {
-      name: "Base Cost",
+      name: "基础成本",
       content: mults.CloudServerCost.toFixed(3),
     },
     CloudServerSoftcap: {
-      name: "Softcap Cost",
+      name: "软上限成本",
       content: mults.CloudServerSoftcap.toFixed(3),
     },
-    CloudServerLimit: { name: "Server Limit" },
-    CloudServerMaxRam: { name: "Max RAM" },
-    HomeComputerRamCost: { name: "Home RAM Cost" },
+    CloudServerLimit: { name: "服务器数量上限" },
+    CloudServerMaxRam: { name: "最大 RAM" },
+    HomeComputerRamCost: { name: "家用电脑 RAM 成本" },
   };
 
-  return <BNMultTable sectionName="Cloud Servers" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="云服务器" rowData={rows} mults={mults} />;
 }
 
 function InfiltrationMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     InfiltrationMoney: {
-      name: "Infiltration Money",
+      name: "潜入收入",
       color: Settings.theme.money,
     },
     InfiltrationRep: {
-      name: "Infiltration Reputation",
+      name: "潜入声望",
       color: Settings.theme.rep,
     },
   };
 
-  return <BNMultTable sectionName="Infiltration" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="潜入" rowData={rows} mults={mults} />;
 }
 
 function BladeburnerMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
@@ -344,15 +344,15 @@ function BladeburnerMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMul
 
   if (mults.BladeburnerRank === 0) {
     const rows: IBNMultRows = {
-      BladeburnerRank: { name: "Disabled", content: "" },
+      BladeburnerRank: { name: "已禁用", content: "" },
     };
 
     return <BNMultTable sectionName="Bladeburner" rowData={rows} mults={mults} />;
   }
 
   const rows: IBNMultRows = {
-    BladeburnerRank: { name: "Rank Gain" },
-    BladeburnerSkillCost: { name: "Skill Cost" },
+    BladeburnerRank: { name: "Rank 获取" },
+    BladeburnerSkillCost: { name: "技能成本" },
   };
 
   return <BNMultTable sectionName="Bladeburner" rowData={rows} mults={mults} />;
@@ -365,14 +365,14 @@ function StanekMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsPro
 
   const extraSize = mults.StaneksGiftExtraSize.toFixed(5);
   const rows: IBNMultRows = {
-    StaneksGiftPowerMultiplier: { name: "Gift Power" },
+    StaneksGiftPowerMultiplier: { name: "礼物威力" },
     StaneksGiftExtraSize: {
-      name: "Base Size Modifier",
+      name: "基础尺寸修正",
       content: `${mults.StaneksGiftExtraSize > defaultMultipliers.StaneksGiftExtraSize ? `+${extraSize}` : extraSize}`,
     },
   };
 
-  return <BNMultTable sectionName="Stanek's Gift" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="Stanek 的礼物" rowData={rows} mults={mults} />;
 }
 
 function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
@@ -382,13 +382,13 @@ function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps
 
   const rows: IBNMultRows = {
     GangSoftcap: {
-      name: "Gang Softcap",
+      name: "帮派软上限",
       content: mults.GangSoftcap.toFixed(3),
     },
-    GangUniqueAugs: { name: "Unique Augmentations" },
+    GangUniqueAugs: { name: "独有强化" },
   };
 
-  return <BNMultTable sectionName="Gang" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="帮派" rowData={rows} mults={mults} />;
 }
 
 function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
@@ -399,30 +399,30 @@ function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMul
   if (mults.CorporationSoftcap < 0.15) {
     const rows: IBNMultRows = {
       CorporationSoftcap: {
-        name: "Disabled",
+        name: "已禁用",
         content: "",
       },
     };
 
-    return <BNMultTable sectionName="Corporation" rowData={rows} mults={mults} />;
+    return <BNMultTable sectionName="企业" rowData={rows} mults={mults} />;
   }
 
   const rows: IBNMultRows = {
     CorporationSoftcap: {
-      name: "Corporation Softcap",
+      name: "企业软上限",
       content: mults.CorporationSoftcap.toFixed(3),
     },
-    CorporationValuation: { name: "Valuation" },
-    CorporationDivisions: { name: "Division limit" },
+    CorporationValuation: { name: "估值" },
+    CorporationDivisions: { name: "部门上限" },
   };
 
-  return <BNMultTable sectionName="Corporation" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="企业" rowData={rows} mults={mults} />;
 }
 
 function GoMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    GoPower: { name: "IPvGO Node Power bonus" },
+    GoPower: { name: "IPvGO 节点威力加成" },
   };
 
-  return <BNMultTable sectionName="IPvGO Subnet Takeover" rowData={rows} mults={mults} />;
+  return <BNMultTable sectionName="IPvGO 子网接管" rowData={rows} mults={mults} />;
 }

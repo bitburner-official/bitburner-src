@@ -173,7 +173,7 @@ export function BladeburnerDev(): React.ReactElement {
           <tbody>
             <tr>
               <td>
-                <Typography>Rank:</Typography>
+                <Typography>军衔：</Typography>
               </td>
               <td>
                 <Adjuster
@@ -188,7 +188,7 @@ export function BladeburnerDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>SP:</Typography>
+                <Typography>技能点：</Typography>
               </td>
               <td>
                 <Adjuster
@@ -203,7 +203,7 @@ export function BladeburnerDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Cycles: </Typography>
+                <Typography>周期： </Typography>
               </td>
               <td>
                 <Adjuster
@@ -218,7 +218,7 @@ export function BladeburnerDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Chaos:</Typography>
+                <Typography>混乱：</Typography>
               </td>
               <td>
                 <Adjuster
@@ -240,7 +240,7 @@ export function BladeburnerDev(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography>Skills: </Typography>
+                <Typography>技能： </Typography>
               </td>
               <td align="center">
                 <FormControl>

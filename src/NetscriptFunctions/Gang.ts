@@ -18,20 +18,20 @@ import { canCreateGang } from "../Gang/helpers";
 export function NetscriptGang(): InternalAPI<IGang> {
   /** Functions as an API check and also returns the gang object */
   const getGang = function (ctx: NetscriptContext): Gang {
-    if (!Player.gang) throw helpers.errorMessage(ctx, "Must have joined gang", "API ACCESS");
+    if (!Player.gang) throw helpers.errorMessage(ctx, "必须已加入帮派", "API ACCESS");
     return Player.gang;
   };
 
   const getGangMember = function (ctx: NetscriptContext, name: string): GangMember {
     const gang = getGang(ctx);
     for (const member of gang.members) if (member.name === name) return member;
-    throw helpers.errorMessage(ctx, `Invalid gang member: '${name}'`);
+    throw helpers.errorMessage(ctx, `无效的帮派成员：'${name}'`);
   };
 
   const getGangTask = function (ctx: NetscriptContext, name: string): GangMemberTask {
     const task = GangMemberTasks[name];
     if (!task) {
-      throw helpers.errorMessage(ctx, `Invalid task: '${name}'`);
+      throw helpers.errorMessage(ctx, `无效的任务：'${name}'`);
     }
 
     return task;
@@ -63,24 +63,24 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const newName = helpers.string(ctx, "newName", _newName);
       const member = gang.members.find((m) => m.name === memberName);
       if (!memberName) {
-        throw helpers.errorMessage(ctx, `Invalid memberName: "" (empty string)`);
+        throw helpers.errorMessage(ctx, `无效的 memberName：""（空字符串）`);
       }
       if (!newName) {
-        throw helpers.errorMessage(ctx, `Invalid newName: "" (empty string)`);
+        throw helpers.errorMessage(ctx, `无效的 newName：""（空字符串）`);
       }
       if (newName === memberName) {
-        throw helpers.errorMessage(ctx, `newName and memberName must be different, but both were: ${newName}`);
+        throw helpers.errorMessage(ctx, `newName 和 memberName 必须不同，但两者都是：${newName}`);
       }
       if (!member) {
-        helpers.log(ctx, () => `Failed to rename member: No member exists with memberName: ${memberName}`);
+        helpers.log(ctx, () => `重命名成员失败：不存在 memberName 为 ${memberName} 的成员`);
         return false;
       }
       if (gang.members.map((m) => m.name).includes(newName)) {
-        helpers.log(ctx, () => `Failed to rename member: A different member already has the newName: ${newName}`);
+        helpers.log(ctx, () => `重命名成员失败：另一个成员已使用了 newName：${newName}`);
         return false;
       }
       member.name = newName;
-      helpers.log(ctx, () => `Renamed member from memberName: ${memberName} to newName: ${newName}`);
+      helpers.log(ctx, () => `已将成员从 memberName：${memberName} 重命名为 newName：${newName}`);
       return true;
     },
     getGangInformation: (ctx) => {
@@ -180,10 +180,10 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       const result = gang.recruitMember(memberName);
       if (result !== RecruitmentResult.Success) {
-        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit gang member '${memberName}'. ${result}.`);
+        ctx.workerScript.log("gang.recruitMember", () => `招募帮派成员 '${memberName}' 失败。${result}.`);
         return false;
       }
-      ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited gang member '${memberName}'`);
+      ctx.workerScript.log("gang.recruitMember", () => `成功招募帮派成员 '${memberName}'`);
       return true;
     },
     getTaskNames: (ctx) => {
@@ -201,7 +201,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         ctx.workerScript.log(
           "gang.setMemberTask",
           () =>
-            `Failed to assign Gang Member '${memberName}' to Invalid task '${taskName}'. '${memberName}' is now Unassigned`,
+            `将帮派成员 '${memberName}' 分配到无效任务 '${taskName}' 失败。'${memberName}' 现已变为未分配`,
         );
         return member.assignToTask("Unassigned");
       }
@@ -209,12 +209,12 @@ export function NetscriptGang(): InternalAPI<IGang> {
       if (success) {
         ctx.workerScript.log(
           "gang.setMemberTask",
-          () => `Successfully assigned Gang Member '${memberName}' to '${taskName}' task`,
+          () => `成功将帮派成员 '${memberName}' 分配到 '${taskName}' 任务`,
         );
       } else {
         ctx.workerScript.log(
           "gang.setMemberTask",
-          () => `Failed to assign Gang Member '${memberName}' to '${taskName}' task. '${memberName}' is now Unassigned`,
+          () => `将帮派成员 '${memberName}' 分配到 '${taskName}' 任务失败。'${memberName}' 现已变为未分配`,
         );
       }
 
@@ -251,7 +251,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       getGang(ctx);
       const equipment = GangMemberUpgrades[equipName];
       if (!equipment) {
-        throw helpers.errorMessage(ctx, `Invalid equipment: ${equipName}`);
+        throw helpers.errorMessage(ctx, `无效的装备：${equipName}`);
       }
       const typecheck: EquipmentStats = equipment.mults;
       return Object.assign({}, typecheck);
@@ -263,19 +263,19 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const member = getGangMember(ctx, memberName);
       const equipment = GangMemberUpgrades[equipName];
       if (!equipment) {
-        ctx.workerScript.log("gang.purchaseEquipment", () => `'${equipName}' is not a valid equipment`);
+        ctx.workerScript.log("gang.purchaseEquipment", () => `'${equipName}' 不是有效的装备`);
         return false;
       }
       const res = member.buyUpgrade(equipment);
       if (res) {
         ctx.workerScript.log(
           "gang.purchaseEquipment",
-          () => `Purchased '${equipName}' for Gang member '${memberName}'`,
+          () => `已为帮派成员 '${memberName}' 购买 '${equipName}'`,
         );
       } else {
         ctx.workerScript.log(
           "gang.purchaseEquipment",
-          () => `Failed to purchase '${equipName}' for Gang member '${memberName}'`,
+          () => `为帮派成员 '${memberName}' 购买 '${equipName}' 失败`,
         );
       }
 
@@ -319,17 +319,17 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       if (engage) {
         gang.territoryWarfareEngaged = true;
-        ctx.workerScript.log("gang.setTerritoryWarfare", () => "Engaging in Gang Territory Warfare");
+        ctx.workerScript.log("gang.setTerritoryWarfare", () => "开始帮派地盘争夺战");
       } else {
         gang.territoryWarfareEngaged = false;
-        ctx.workerScript.log("gang.setTerritoryWarfare", () => "Disengaging in Gang Territory Warfare");
+        ctx.workerScript.log("gang.setTerritoryWarfare", () => "停止帮派地盘争夺战");
       }
     },
     getChanceToWinClash: (ctx, _otherGang) => {
       const otherGang = helpers.string(ctx, "otherGang", _otherGang);
       const gang = getGang(ctx);
       if (AllGangs[otherGang] == null) {
-        throw helpers.errorMessage(ctx, `Invalid gang: ${otherGang}`);
+        throw helpers.errorMessage(ctx, `无效的帮派：${otherGang}`);
       }
 
       const playerPower = AllGangs[gang.facName].power;

@@ -19,17 +19,16 @@ function GangIncompleteCampaign() {
   return (
     <>
       <Option
-        buttonText={"Execute the formation plan"}
+        buttonText={"执行组建计划"}
         infoText={
-          "The tension between our faction and its rivals has been rising. The leader plans to form a specialized " +
-          "group under your command to strengthen our position by improving our standing and expanding our resources."
+          "我们派系与竞争对手之间的紧张关系不断升级。首领计划在你麾下组建一支专门的" +
+          "小队，通过提升我们的地位和扩充我们的资源来巩固势力。"
         }
         onClick={() => setOpen(true)}
       ></Option>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Typography component="div">
-          Each time you attempt to execute the plan, it is abruptly interrupted for reasons no one can explain. You
-          receive the same distorted message every time:
+          每当你试图执行计划时，总会因无人能解释的原因被突然打断。你每次都会收到同样一条失真的讯息：
           <br />
           <br />
           #@)($*&@__Y0U__^%$#@&*()__HAV3__(&@#*$%(@
@@ -65,19 +64,19 @@ export function GangCampaign({ factionName }: { factionName: FactionName }) {
   if (Player.gang) {
     if (Player.getGangName() !== factionName) {
       data.enabled = false;
-      data.title = "Create Gang";
-      data.tooltip = "You already created a gang with another faction";
+      data.title = "创建帮派";
+      data.tooltip = "你已经在其他派系创建了帮派";
     } else {
       data.enabled = true;
-      data.title = "Manage Gang";
-      data.description = "Manage a gang for this Faction. Gangs will earn you money and faction reputation";
+      data.title = "管理帮派";
+      data.description = "管理该派系的帮派。帮派会为你赚取资金和派系声望";
     }
   } else {
     const checkResult = Player.canAccessGang();
     data.enabled = checkResult.success;
-    data.title = "Create Gang";
+    data.title = "创建帮派";
     data.tooltip = !checkResult.success ? checkResult.message : "";
-    data.description = "Create a gang for this Faction. Gangs will earn you money and faction reputation";
+    data.description = "为该派系创建一个帮派。帮派会为你赚取资金和派系声望";
   }
 
   const manageGang = (): void => {

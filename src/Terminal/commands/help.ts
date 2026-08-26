@@ -3,7 +3,7 @@ import { TerminalHelpText, HelpTexts } from "../HelpText";
 
 export function help(args: (string | number | boolean)[]): undefined {
   if (args.length !== 0 && args.length !== 1) {
-    Terminal.error("Incorrect usage of help command. Usage: help");
+    Terminal.error("help 命令用法不正确。用法：help");
     return;
   }
   if (args.length === 0) {
@@ -12,7 +12,7 @@ export function help(args: (string | number | boolean)[]): undefined {
     const cmd = args[0] + "";
     const txt = HelpTexts[cmd];
     if (txt == null) {
-      Terminal.error("No help topics match '" + cmd + "'");
+      Terminal.error("没有匹配 '" + cmd + "' 的帮助主题");
       return;
     }
     txt.forEach((t) => Terminal.print(t));

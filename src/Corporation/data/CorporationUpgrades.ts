@@ -17,8 +17,8 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.06,
     benefit: 0.03,
     desc:
-      "Advanced AI automatically optimizes the operation and productivity " +
-      "of factories. Each level of this upgrade increases your global production by 3% (additive).",
+      "先进的人工智能会自动优化工厂的运营和生产力。" +
+      "该升级每提升一级，你的全局产量就会提高3%（加法叠加）。",
   },
 
   //Smart warehouses, increases storage size
@@ -28,8 +28,8 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.06,
     benefit: 0.1,
     desc:
-      "Advanced AI automatically optimizes your warehouse storage methods. " +
-      "Each level of this upgrade increases your global warehouse storage size by 10% (additive).",
+      "先进的人工智能会自动优化你的仓储方式。" +
+      "该升级每提升一级，你的全局仓库容量就会扩大10%（加法叠加）。",
   },
 
   //Makes advertising more effective
@@ -39,9 +39,8 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 2,
     benefit: 0.005,
     desc:
-      "Purchase data and analysis from Wilson, a marketing research " +
-      "firm. Each level of this upgrade increases the effectiveness of your " +
-      "advertising by 0.5% (additive).",
+      "向营销研究公司Wilson购买数据和分析服务。" +
+      "该升级每提升一级，你的广告效果就会提高0.5%（加法叠加）。",
   },
 
   //Augmentation for employees, increases cre
@@ -51,9 +50,8 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.06,
     benefit: 0.1,
     desc:
-      "Purchase the Nuoptimal Nootropic " +
-      "Injector augmentation for your employees. Each level of this upgrade " +
-      "globally increases the creativity of your employees by 10% (additive).",
+      "为你的员工购买Nuoptimal Nootropic Injector强化。" +
+      "该升级每提升一级，你员工的全局创造力就会提高10%（加法叠加）。",
   },
 
   //Augmentation for employees, increases cha
@@ -63,8 +61,8 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.06,
     benefit: 0.1,
     desc:
-      "Purchase the Speech Processor augmentation for your employees. " +
-      "Each level of this upgrade globally increases the charisma of your employees by 10% (additive).",
+      "为你的员工购买语音处理器（Speech Processor）强化。" +
+      "该升级每提升一级，你员工的全局魅力就会提高10%（加法叠加）。",
   },
 
   //Augmentation for employees, increases int
@@ -74,9 +72,8 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.06,
     benefit: 0.1,
     desc:
-      "Purchase the Neural Accelerator augmentation for your employees. " +
-      "Each level of this upgrade globally increases the intelligence of your employees " +
-      "by 10% (additive).",
+      "为你的员工购买神经加速器（Neural Accelerator）强化。" +
+      "该升级每提升一级，你员工的全局智力就会提高10%（加法叠加）。",
   },
 
   //Augmentation for employees, increases eff
@@ -86,8 +83,8 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.06,
     benefit: 0.1,
     desc:
-      "Purchase the FocusWire augmentation for your employees. Each level " +
-      "of this upgrade globally increases the efficiency of your employees by 10% (additive).",
+      "为你的员工购买FocusWire强化。该升级每提升一级，" +
+      "你员工的全局效率就会提高10%（加法叠加）。",
   },
 
   //Improves sales of materials/products
@@ -97,9 +94,9 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.07,
     benefit: 0.01,
     desc:
-      "Always Be Closing. Purchase these robotic salesmen to increase the amount of " +
-      "materials and products you sell. Each level of this upgrade globally increases your sales " +
-      "by 1% (additive).",
+      "Always Be Closing（不断成交）。购买这些机器人推销员，" +
+      "以增加你售出的材料和产品数量。该升级每提升一级，" +
+      "你的全局销售额就会提高1%（加法叠加）。",
   },
 
   //Improves scientific research rate
@@ -109,8 +106,7 @@ export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
     priceMult: 1.07,
     benefit: 0.05,
     desc:
-      "Purchase 'Project Insight', a R&D service provided by the secretive " +
-      "Fulcrum Technologies. Each level of this upgrade globally increases the amount of " +
-      "Scientific Research you produce by 5% (additive).",
+      "购买“Project Insight”，这是由神秘的Fulcrum Technologies提供的一项研发服务。" +
+      "该升级每提升一级，你产出的科研点数就会增加5%（加法叠加）。",
   },
 };

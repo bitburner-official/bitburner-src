@@ -23,10 +23,10 @@ export function QuitJobModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography> Would you like to quit your job at {props.company.name}?</Typography>
+      <Typography> 你想辞去在 {props.company.name} 的工作吗？</Typography>
       <br />
       <br />
-      <Button onClick={quit}>Quit</Button>
+      <Button onClick={quit}>辞职</Button>
     </Modal>
   );
 }

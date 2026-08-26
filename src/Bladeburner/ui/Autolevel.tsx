@@ -15,8 +15,8 @@ export function Autolevel({ action, rerender }: AutoLevelProps): React.ReactElem
   }
   return (
     <Box display="flex" flexDirection="row" alignItems="center">
-      <Tooltip title={<Typography>Automatically increase operation level when possible</Typography>}>
-        <Typography> Autolevel:</Typography>
+      <Tooltip title={<Typography>尽可能自动提升行动等级</Typography>}>
+        <Typography> 自动升级：</Typography>
       </Tooltip>
       <Switch checked={action.autoLevel} onChange={onAutolevel} />
     </Box>

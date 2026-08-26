@@ -93,11 +93,11 @@ export function assertNumberArray(unknownData: unknown, assertFinite = false): a
 
 export function validateSaveData(unknownData: unknown): Result {
   if (unknownData == null) {
-    return { success: false, message: `Save data is ${unknownData}` };
+    return { success: false, message: `存档数据为 ${unknownData}` };
   }
 
   if (unknownData === "") {
-    return { success: false, message: "Save data is an empty string" };
+    return { success: false, message: "存档数据是空字符串" };
   }
   if (typeof unknownData === "string") {
     return { success: true };
@@ -105,14 +105,14 @@ export function validateSaveData(unknownData: unknown): Result {
 
   if (!(unknownData instanceof Uint8Array)) {
     console.error(unknownData);
-    return { success: false, message: "Save data is not an instance of Uint8Array" };
+    return { success: false, message: "存档数据不是 Uint8Array 的实例" };
   }
   if (unknownData.length === 0) {
-    return { success: false, message: "Save data is an empty Uint8Array" };
+    return { success: false, message: "存档数据是空的 Uint8Array" };
   }
   if (!(unknownData.buffer instanceof ArrayBuffer)) {
     console.error(unknownData.buffer);
-    return { success: false, message: "Save data is a Uint8Array, but its buffer is not an ArrayBuffer" };
+    return { success: false, message: "存档数据是 Uint8Array，但其 buffer 不是 ArrayBuffer" };
   }
 
   return { success: true };

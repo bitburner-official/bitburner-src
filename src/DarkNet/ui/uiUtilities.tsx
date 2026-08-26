@@ -11,7 +11,7 @@ export const formatToMaxDigits = (value: number, maxDigits: number): string => {
 
 export const copyToClipboard = (text: string): void => {
   navigator.clipboard.writeText(text).catch((error) => console.error(error));
-  SnackbarEvents.emit(`Copied "${text}" to clipboard`, ToastVariant.SUCCESS, 2000);
+  SnackbarEvents.emit(`已将 "${text}" 复制到剪贴板`, ToastVariant.SUCCESS, 2000);
 };
 
 export const formatObjectWithColoredKeys = (obj: Record<string, unknown>, filteredKeys?: string[]) => {

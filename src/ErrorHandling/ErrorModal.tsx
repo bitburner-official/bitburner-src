@@ -50,7 +50,7 @@ export function ErrorModal(): React.ReactElement {
     }
     const recentScript = recentScripts.find((script) => script.runningScript.pid === error.pid);
     if (!recentScript) {
-      SnackbarEvents.emit(`No recent script found with pid ${error.pid}`, ToastVariant.INFO, 2000);
+      SnackbarEvents.emit(`未找到 pid 为 ${error.pid} 的最近脚本`, ToastVariant.INFO, 2000);
       return;
     }
     onClose();
@@ -67,35 +67,34 @@ export function ErrorModal(): React.ReactElement {
       {error && (
         <>
           <Typography component="div">
-            <h2>{error.errorType} ERROR</h2>
+            <h2>{error.errorType} 错误</h2>
             {/* Add a zero-width space after each slash to allow clean wrapping. */}
             <p style={{ whiteSpace: "pre-wrap" }}>{error.message.replaceAll("/", "/\u200B")}</p>
             <p>
-              Script: {error.scriptName}
+              脚本：{error.scriptName}
               <br />
-              PID: {String(error.pid)}
+              PID：{String(error.pid)}
             </p>
             {!Settings.SuppressErrorModals && (
               <OptionSwitch
                 checked={errorModalsAreSuppressed()}
                 onChange={(newValue) => toggleSuppressErrorModals(newValue)}
-                text="Suppress error modals (5 min)"
+                text="抑制错误弹窗（5 分钟）"
                 tooltip={
                   <>
-                    If this is set, no error modals will be shown for the next five minutes, and only log errors to the
-                    Recent Errors page.
+                    如果启用此选项，接下来五分钟内将不再显示错误弹窗，错误只会记录到“近期错误”页面。
                   </>
                 }
               />
             )}
           </Typography>
           <Box className={classes.inlineFlexBox}>
-            <Button onClick={() => onClose()}>Close</Button>
+            <Button onClick={() => onClose()}>关闭</Button>
             <div>
               <Button disabled={error.pid === undefined} onClick={viewLogs}>
-                View Script Logs
+                查看脚本日志
               </Button>
-              <Button onClick={goToErrorPage}>Errors Page</Button>
+              <Button onClick={goToErrorPage}>错误页面</Button>
             </div>
           </Box>
         </>

@@ -53,9 +53,9 @@ export class CompanyWork extends PlayerBaseWork {
     if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
-          You finished working for {this.companyName}
+          你结束了为{this.companyName}的工作
           <br />
-          You have <Reputation reputation={this.getCompany().playerReputation} /> reputation with them.
+          你目前在该公司拥有 <Reputation reputation={this.getCompany().playerReputation} /> 声望。
         </>,
       );
     }

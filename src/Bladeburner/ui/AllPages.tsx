@@ -23,11 +23,11 @@ export function AllPages({ bladeburner }: IProps): React.ReactElement {
   return (
     <>
       <Tabs variant="fullWidth" value={value} onChange={handleChange}>
-        <Tab label="General" />
-        <Tab label="Contracts" />
-        <Tab label="Operations" />
-        <Tab label="BlackOps" />
-        <Tab label="Skills" />
+        <Tab label="常规" />
+        <Tab label="合约" />
+        <Tab label="行动" />
+        <Tab label="黑色行动" />
+        <Tab label="技能" />
       </Tabs>
       <Box sx={{ p: 1 }}>
         {value === 0 && <GeneralActionPage bladeburner={bladeburner} />}

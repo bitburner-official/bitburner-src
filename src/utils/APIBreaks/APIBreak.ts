@@ -171,12 +171,12 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
     textFileName,
     `API BREAK INFO FOR ${version}\n\n${details.map((detail) => detail.text).join("\n\n\n\n")}`,
   );
-  Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
-  Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
+  Terminal.warn(`版本 ${version} 的 API 破坏性变更可能已影响到你的部分脚本。`);
+  Terminal.warn(`关于潜在影响的详细信息已记录在你家用电脑上的 ${textFileName} 文件中。`);
   dialogBoxCreate(
-    `SOME OF YOUR SCRIPTS HAVE POTENTIALLY BEEN IMPACTED BY AN API BREAK, DUE TO CHANGES IN VERSION ${version}\n\n` +
-      "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
-      `A file with these details has also been saved on your home computer under filename ${textFileName}.` +
+    `由于版本 ${version} 的变更，你的部分脚本可能受到了 API 破坏性变更的影响\n\n` +
+      "接下来的对话框将提供脚本所受潜在影响的详情。\n" +
+      `包含这些详情的文件也已保存在你的家用电脑上，文件名为 ${textFileName}。` +
       (additionalText ? `\n\n${additionalText}` : ""),
   );
   let warningIndex = 0;
@@ -185,7 +185,7 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
       continue;
     }
     Terminal.warn(
-      `\nAPI BREAK VERSION ${version} DETAILS ${warningIndex + 1} of ${numberOfWarnings}\n\n${
+      `\nAPI 破坏性变更 版本 ${version} 详情 ${warningIndex + 1}/${numberOfWarnings}\n\n${
         detail.apiBreakInfo.info
       }` +
         /**
@@ -195,7 +195,7 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
          * lines is misleading, so we won't say anything about the number of affected lines.
          */
         (detail.apiBreakInfo.brokenAPIs.length > 0
-          ? `\n\nWe found ${pluralize(detail.totalDetectedLines, "affected line")}.`
+          ? `\n\n我们发现了 ${detail.totalDetectedLines} 个受影响的行。`
           : ""),
     );
     ++warningIndex;

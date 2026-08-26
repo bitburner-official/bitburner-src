@@ -50,7 +50,7 @@ export function AchievementsDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_AchievementsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Achievements</Typography>
+        <Typography>成就</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
@@ -58,14 +58,14 @@ export function AchievementsDev(): React.ReactElement {
             <tr>
               <td></td>
               <td>
-                <Typography>Achievements:</Typography>
+                <Typography>成就：</Typography>
               </td>
               <td>
                 <ButtonGroup>
-                  <Button onClick={grantAllAchievements}>Grant All</Button>
-                  <Button onClick={clearAchievements}>Clear</Button>
-                  <Button onClick={disableEngineCheck}>Disable Engine Check</Button>
-                  <Button onClick={enableEngineCheck}>Enable Engine Check</Button>
+                  <Button onClick={grantAllAchievements}>全部授予</Button>
+                  <Button onClick={clearAchievements}>清空</Button>
+                  <Button onClick={disableEngineCheck}>禁用引擎检查</Button>
+                  <Button onClick={enableEngineCheck}>启用引擎检查</Button>
                 </ButtonGroup>
               </td>
             </tr>
@@ -75,11 +75,11 @@ export function AchievementsDev(): React.ReactElement {
                 <tr key={"ach-" + i.ID}>
                   <td>
                     {achieved ? (
-                      <Tooltip title="Achieved">
+                      <Tooltip title="已获得">
                         <LockOpenIcon color="primary" />
                       </Tooltip>
                     ) : (
-                      <Tooltip title="Locked">
+                      <Tooltip title="未解锁">
                         <LockIcon color="secondary" />
                       </Tooltip>
                     )}
@@ -99,8 +99,8 @@ export function AchievementsDev(): React.ReactElement {
                   </td>
                   <td>
                     <ButtonGroup>
-                      <Button onClick={() => grantAchievement(i.ID)}>Grant</Button>
-                      <Button onClick={() => removeAchievement(i.ID)}>Clear</Button>
+                      <Button onClick={() => grantAchievement(i.ID)}>授予</Button>
+                      <Button onClick={() => removeAchievement(i.ID)}>移除</Button>
                     </ButtonGroup>
                   </td>
                 </tr>

@@ -11,14 +11,13 @@ export const uniquePathsInAGrid: Pick<
       const numRows = data[0];
       const numColumns = data[1];
       return [
-        "You are in a grid with",
-        `${numRows} rows and ${numColumns} columns, and you are`,
-        "positioned in the top-left corner of that grid. You are trying to",
-        "reach the bottom-right corner of the grid, but you can only",
-        "move down or right on each step. Determine how many",
-        "unique paths there are from start to finish.\n\n",
-        "NOTE: The data returned for this contract is an array",
-        "with the number of rows and columns:\n\n",
+        "你在一个具有",
+        `${numRows} 行 ${numColumns} 列的网格中，位于该网格的左上角。你要`,
+        "到达网格的右下角，但每一步只能",
+        "向下或向右移动。请计算从起点到终点有多少条",
+        "不同的路径。\n\n",
+        "注意：本合约返回的数据是一个包含",
+        "行数和列数的数组：\n\n",
         `[${numRows}, ${numColumns}]`,
       ].join(" ");
     },
@@ -59,14 +58,14 @@ export const uniquePathsInAGrid: Pick<
         gridString += `${line.toString()},\n`;
       }
       return [
-        "You are located in the top-left corner of the following grid:\n\n",
+        "你位于以下网格的左上角：\n\n",
         `${gridString}\n`,
-        "You are trying to reach the bottom-right corner of the grid, but you can only",
-        "move down or right on each step. Furthermore, there are obstacles on the grid",
-        "that you cannot move onto. These obstacles are denoted by '1', while empty",
-        "spaces are denoted by 0.\n\n",
-        "Determine how many unique paths there are from start to finish.\n\n",
-        "NOTE: The data returned for this contract is an 2D array of numbers representing the grid.",
+        "你要到达网格的右下角，但每一步只能",
+        "向下或向右移动。此外，网格上还有一些障碍物，",
+        "你不能移动到障碍物上。障碍物用 '1' 表示，空白",
+        "位置用 0 表示。\n\n",
+        "请计算从起点到终点有多少条不同的路径。\n\n",
+        "注意：本合约返回的数据是一个表示网格的二维数字数组。",
       ].join(" ");
     },
     difficulty: 5,

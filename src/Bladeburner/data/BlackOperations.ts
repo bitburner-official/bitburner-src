@@ -32,10 +32,8 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "Obadiah Zenyatta is the leader of a RedWater PMC. It has long been known among the intelligence community " +
-        "that Zenyatta, along with the rest of the PMC, is a Synthoid.\n\n" +
-        `The goal of ${BladeburnerBlackOpName.OperationTyphoon} is to find and eliminate Zenyatta and RedWater by any means ` +
-        "necessary. After the task is completed, the actions must be covered up from the general public.",
+        "奥巴迪亚·泽尼亚塔是一家名为RedWater的私人军事公司的领导人。情报界早就知道，泽尼亚塔以及该公司上下都是合成人。\n\n" +
+        `${BladeburnerBlackOpName.OperationTyphoon}的目标是不惜一切代价找出并消灭泽尼亚塔和RedWater。任务完成后，相关行动必须向公众隐瞒。`,
     }),
     [BladeburnerBlackOpName.OperationZero]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationZero,
@@ -65,12 +63,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isStealth: true,
       desc:
-        "AeroCorp is one of the world's largest defense contractors. Its leader, Steve Watataki, is thought to be " +
-        "a supporter of Synthoid rights. He must be removed.\n\n" +
-        `The goal of ${BladeburnerBlackOpName.OperationZero} is to covertly infiltrate ${LocationName.AevumAeroCorp} and uncover any incriminating ` +
-        `evidence or information against Watataki that will cause him to be removed from his position at ${LocationName.AevumAeroCorp}. ` +
-        `Incriminating evidence can be fabricated as a last resort. Be warned that ${LocationName.AevumAeroCorp} has some of the most advanced ` +
-        "security measures in the world.",
+        "AeroCorp是全球最大的国防承包商之一。其领导人史蒂夫·瓦塔塔基被认为是合成人权益的支持者，必须将他扳倒。\n\n" +
+        `${BladeburnerBlackOpName.OperationZero}的目标是秘密潜入${LocationName.AevumAeroCorp}，找出任何能将瓦塔塔基从${LocationName.AevumAeroCorp}的职位上拉下马的罪证或情报。` +
+        `走投无路时也可以伪造罪证。但要注意，${LocationName.AevumAeroCorp}拥有世界上最先进的安全措施。`,
     }),
     [BladeburnerBlackOpName.OperationX]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationX,
@@ -100,13 +95,11 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "We have recently discovered an underground publication group called Samizdat. Even though most of their " +
-        "publications are nonsensical conspiracy theories, the average human is gullible enough to believe them. Many of " +
-        "their works discuss Synthoids and pose a threat to society. The publications are spreading rapidly in China and " +
-        "other Eastern countries.\n\n" +
-        "Samizdat has done a good job of keeping hidden and anonymous. However, we've just received intelligence that " +
-        `their base of operations is in ${CityName.Ishima}'s underground sewer systems. Your task is to investigate the ` +
-        "sewer systems and eliminate Samizdat. They must never publish anything again.",
+        "我们最近发现了一个名为Samizdat的地下出版团体。尽管他们的出版物大多是无稽的阴谋论，但普通人就是容易轻信。许多" +
+        "作品都在讨论合成人，对社会构成威胁，并且正在中国和其他东方国家迅速传播。\n\n" +
+        "Samizdat一直隐藏得很好、保持匿名。但我们刚刚收到情报：" +
+        `他们的行动基地位于${CityName.Ishima}的地下下水道系统中。你的任务是调查` +
+        "下水道系统并消灭Samizdat。绝不能让他们再发表任何东西。",
     }),
     [BladeburnerBlackOpName.OperationTitan]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationTitan,
@@ -136,13 +129,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `Several months ago,${LocationName.AevumNetLinkTechnologies}' Bioengineering department was infiltrated by Synthoids. As far as we ` +
-        `know, ${LocationName.AevumNetLinkTechnologies}' management has no knowledge about this. We don't know what the Synthoids are up to, ` +
-        `but the research that they could be conducting using ${LocationName.AevumNetLinkTechnologies}' vast resources is potentially very ` +
-        "dangerous.\n\n" +
-        `Your goal is to enter and destroy the Bioengineering department's facility in ${CityName.Aevum}. The task is not ` +
-        "just to retire the Synthoids there, but also to destroy any information or research at the facility that is " +
-        "relevant to the Synthoids and their goals.",
+        `几个月前，${LocationName.AevumNetLinkTechnologies}的生物工程部被合成人渗透。据我们所知，${LocationName.AevumNetLinkTechnologies}的管理层对此并不知情。我们不知道这些合成人在密谋什么，` +
+        `但他们利用${LocationName.AevumNetLinkTechnologies}庞大资源所进行的研究可能非常危险。\n\n` +
+        `你的目标是进入并摧毁生物工程部位于${CityName.Aevum}的设施。这项任务不仅是清除那里的合成人，还要销毁设施内任何与合成人及其目的相关的信息和研究。`,
     }),
     [BladeburnerBlackOpName.OperationAres]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationAres,
@@ -172,10 +161,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `One of our undercover agents, Agent Carter, has informed us of a massive weapons deal going down in ${CityName.Volhaven} ` +
-        "between rogue local militants and a radical Synthoid community. These weapons are next-gen plasma and energy " +
-        "weapons. It is critical for the safety of humanity that this deal does not happen.\n\n" +
-        "Your task is to intercept the deal. Leave no survivors.",
+        `我们的卧底特工卡特特工向我们通报：${CityName.Volhaven}正在进行一笔大规模军火交易，交易双方是失控的当地武装分子和一个激进的合成人社区。` +
+        "这些武器是新一代等离子与能量武器。为了人类的安全，这笔交易绝不能达成。\n\n" +
+        "你的任务是拦截这场交易。不留活口。",
     }),
     [BladeburnerBlackOpName.OperationArchangel]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationArchangel,
@@ -205,11 +193,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `Our analysts have discovered that the popular Red Rabbit brothel in ${CityName.Chongqing} is run and 'staffed' by MK-VI ` +
-        "Synthoids. Intelligence suggests that the profit from this brothel is used to fund a large black market arms " +
-        "trafficking operation.\n\n" +
-        "The goal of this operation is to take out the leaders that are running the Red Rabbit brothel. Try to limit the " +
-        "number of other casualties, but do what you must to complete the mission.",
+        `我们的分析人员发现，${CityName.Chongqing}有名的Red Rabbit妓院由MK-VI合成人运营并充当"员工"。情报显示，这家妓院的利润被用于资助一个庞大的黑市军火` +
+        "贩运网络。\n\n" +
+        "本次行动的目标是除掉经营Red Rabbit妓院的头目。尽量减少其他伤亡，但为完成任务可采取一切必要手段。",
     }),
     [BladeburnerBlackOpName.OperationJuggernaut]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationJuggernaut,
@@ -239,12 +225,10 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "The CIA has just encountered a new security threat. A new criminal group, led by a shadowy operative who calls " +
-        "himself Juggernaut, has been smuggling drugs and weapons (including suspected bioweapons) into " +
-        `${CityName.Sector12}. We also have reason to believe they tried to break into one of ${LocationName.Sector12UniversalEnergy}'s ` +
-        "facilities in order to cause a city-wide blackout. The CIA suspects that Juggernaut is a heavily augmented " +
-        "Synthoid and has thus enlisted our help.\n\n" +
-        "Your mission is to eradicate Juggernaut and his followers.",
+        "CIA刚刚遭遇了一个新的安全威胁。一个新犯罪团伙的头目是一名自称Juggernaut的神秘特工，该团伙一直在向" +
+        `${CityName.Sector12}走私毒品和武器（包括疑似生化武器）。我们还有理由相信，他们曾试图闯入${LocationName.Sector12UniversalEnergy}的一处` +
+        "设施以制造全城停电。CIA怀疑Juggernaut是一个经过重度强化的合成人，因此请求我们协助。\n\n" +
+        "你的任务是铲除Juggernaut及其党羽。",
     }),
     [BladeburnerBlackOpName.OperationRedDragon]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationRedDragon,
@@ -274,11 +258,10 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `The ${FactionName.Tetrads} criminal organization is suspected of reverse-engineering the MK-VI Synthoid design. ` +
-        "We believe they altered and possibly improved the design and began manufacturing their own Synthoid models in " +
-        "order to bolster their criminal activities.\n\n" +
-        `Your task is to infiltrate and destroy the ${FactionName.Tetrads}' base of operations in ${CityName.NewTokyo}. ` +
-        "Intelligence tells us that their base houses one of their Synthoid manufacturing units.",
+        `${FactionName.Tetrads}犯罪组织涉嫌对MK-VI合成人的设计进行逆向工程。` +
+        "我们相信他们改动并可能改进了设计，开始制造自己的合成人型号，以此支撑其犯罪活动。\n\n" +
+        `你的任务是潜入并摧毁${FactionName.Tetrads}位于${CityName.NewTokyo}的行动基地。` +
+        "情报显示，他们的基地里设有合成人制造装置之一。",
     }),
     [BladeburnerBlackOpName.OperationK]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationK,
@@ -308,14 +291,10 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `CODE RED SITUATION. Our intelligence tells us that ${LocationName.NewTokyoVitaLife} has discovered a new android cloning technology. ` +
-        "This technology is supposedly capable of cloning Synthoids, not only physically but also their advanced AI " +
-        `modules. We do not believe that ${LocationName.NewTokyoVitaLife} is trying to use this technology illegally or maliciously, but if any ` +
-        "Synthoids were able to infiltrate the corporation and take advantage of this technology, then the results would " +
-        "be catastrophic.\n\n" +
-        "We do not have the power or jurisdiction to shut this down through legal or political means, so we must resort " +
-        "to a covert operation. Your goal is to destroy this technology and eliminate anyone who was involved in its " +
-        "creation.",
+        `红色警报。据情报，${LocationName.NewTokyoVitaLife}发现了一种新的仿生人克隆技术。` +
+        `据说该技术不仅能克隆合成人的躯体，还能克隆其先进的AI模块。我们不认为${LocationName.NewTokyoVitaLife}打算非法或恶意使用这项技术，但一旦有` +
+        "合成人渗透进该公司并利用这项技术，后果将是灾难性的。\n\n" +
+        "我们没有权力也没有司法管辖权通过法律或政治手段叫停此事，因此只能采取秘密行动。你的目标是摧毁这项技术，并消灭所有参与研发的人员。",
     }),
     [BladeburnerBlackOpName.OperationDeckard]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationDeckard,
@@ -345,12 +324,10 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "Despite your success in eliminating VitaLife's new android-replicating technology in " +
-        `${BladeburnerBlackOpName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off with ` +
-        "the schematics and design of the technology before the operation. It is almost a certainty that these Synthoids " +
-        "are some of the rogue MK-VI ones from the Synthoid Uprising.\n\n" +
-        `The goal of ${BladeburnerBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. We don't need to ` +
-        "tell you how critical this mission is.",
+        "尽管你在" +
+        `${BladeburnerBlackOpName.OperationK}中成功摧毁了VitaLife的新仿生人复制技术，但我们发现一小队MK-VI合成人在行动前带走了` +
+        "该技术的图纸与设计。几乎可以肯定，这些合成人正是合成人起义中失控的MK-VI合成人。\n\n" +
+        `${BladeburnerBlackOpName.OperationDeckard}的目标是找到这些合成人并将他们清除。无需多言，此次任务何等关键。`,
     }),
     [BladeburnerBlackOpName.OperationTyrell]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationTyrell,
@@ -380,11 +357,10 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `A week ago, ${FactionName.BladeIndustries} reported a small break-in at one of their ${CityName.Aevum} ` +
-        `Augmentation storage facilities. We figured out that ${FactionName.TheDarkArmy} was behind the heist and didn't think ` +
-        "any more of it. However, we've just discovered that several known MK-VI Synthoids were part of that break-in group.\n\n" +
-        "We cannot have Synthoids upgrading their already-enhanced abilities with augmentations. Your task is to hunt " +
-        `down associated members of ${FactionName.TheDarkArmy} and eliminate them.`,
+        `一周前，${FactionName.BladeIndustries}报告其在${CityName.Aevum}的一处` +
+        `强化存储设施遭到小规模入侵。我们查明${FactionName.TheDarkArmy}是这次盗窃的幕后黑手，但并未深究。然而我们刚刚发现，几名已知的MK-VI合成人参与了那次入侵。\n\n` +
+        "绝不能让合成人用强化技术进一步提升它们本已强化的能力。你的任务是追查" +
+        `${FactionName.TheDarkArmy}的相关成员并消灭他们。`,
     }),
     [BladeburnerBlackOpName.OperationWallace]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationWallace,
@@ -414,15 +390,14 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `Based on information gathered from ${BladeburnerBlackOpName.OperationTyrell}, we've discovered that ` +
-        `${FactionName.TheDarkArmy} was well aware that there were Synthoids amongst their ranks. Even worse, we believe ` +
-        `that ${FactionName.TheDarkArmy} is working together with other criminal organizations such as ` +
-        `${FactionName.TheSyndicate} and that they are planning some sort of large-scale takeover of multiple major ` +
-        `cities, most notably ${CityName.Aevum}. We suspect that Synthoids have infiltrated the ranks of these criminal ` +
-        "factions and are trying to stage another Synthoid uprising.\n\n" +
-        "The best way to deal with this is to prevent it before it even happens. The goal of " +
-        `${BladeburnerBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and ${FactionName.TheSyndicate} factions in ` +
-        `${CityName.Aevum} immediately. Leave no survivors.`,
+        `根据从${BladeburnerBlackOpName.OperationTyrell}收集到的情报，我们发现` +
+        `${FactionName.TheDarkArmy}早就知道自己的队伍中混有合成人。更糟的是，我们认为` +
+        `${FactionName.TheDarkArmy}正在与` +
+        `${FactionName.TheSyndicate}等其他犯罪组织合作，策划对多座大城市发动某种大规模接管，其中首当其冲的是` +
+        `${CityName.Aevum}。我们怀疑合成人已经渗入这些犯罪派系的队伍，正企图再次策动合成人起义。\n\n` +
+        "应对之道就是防患于未然。" +
+        `${BladeburnerBlackOpName.OperationWallace}的目标是立即摧毁${CityName.Aevum}的${FactionName.TheDarkArmy}和${FactionName.TheSyndicate}派系。` +
+        "不留活口。",
     }),
     [BladeburnerBlackOpName.OperationShoulderOfOrion]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationShoulderOfOrion,
@@ -452,11 +427,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isStealth: true,
       desc:
-        `${CityName.Chongqing}'s ${LocationName.ChongqingSolarisSpaceSystems} is secretly launching the first manned spacecraft in over a decade using ` +
-        `Synthoids. We believe ${CityName.Chongqing} is trying to establish the first off-world colonies.\n\n` +
-        "The mission is to prevent this launch without instigating an international conflict. When you accept this " +
-        "mission, you will be officially disavowed by the NSA and the national government until after you successfully " +
-        "return. In the event of failure, all of the operation's team members must not let themselves be captured alive.",
+        `${CityName.Chongqing}的${LocationName.ChongqingSolarisSpaceSystems}正在利用合成人秘密发射十多年来的首艘载人飞船。我们相信${CityName.Chongqing}试图建立首批地外殖民地。\n\n` +
+        "任务是阻止这次发射，同时避免引发国际冲突。接受此任务后，在你成功归来之前，NSA和国家政府将正式与你撇清关系。" +
+        "一旦任务失败，行动队的所有成员都决不能被活捉。",
     }),
     [BladeburnerBlackOpName.OperationHyron]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationHyron,
@@ -486,14 +459,11 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `Our intelligence tells us that ${FactionName.FulcrumSecretTechnologies} is developing a quantum supercomputer ` +
-        "using human brains as core processors. This supercomputer is rumored to be able to store vast amounts of data " +
-        "and perform computations unmatched by any other supercomputer on the planet. But more importantly, the use of " +
-        "organic human brains means that the supercomputer may be able to reason abstractly and become self-aware.\n\n" +
-        "We do not need to remind you why sentient-level AIs pose a serious threat to all of mankind.\n\n" +
-        `The research for this project is being conducted at one of ${FactionName.FulcrumSecretTechnologies} secret ` +
-        `facilities in ${CityName.Aevum}, codenamed 'Alpha Ranch'. Infiltrate the compound, delete and destroy the work, ` +
-        "and then find and kill the project lead.",
+        `据情报，${FactionName.FulcrumSecretTechnologies}正在开发一台以人脑为核心处理器的量子超级计算机。` +
+        "传闻这台超算能存储海量数据，其运算能力举世无双。更重要的是，使用有机人脑意味着这台超算或许能够进行抽象推理并获得自我意识。\n\n" +
+        "拥有自我意识的AI为何会对全人类构成严重威胁，无须我们赘述。\n\n" +
+        `该项目的研究正在${FactionName.FulcrumSecretTechnologies}位于${CityName.Aevum}的一处秘密设施中进行，代号'Alpha Ranch'。潜入建筑群，删除并销毁全部研究成果，` +
+        "然后找到并杀死项目负责人。",
     }),
     [BladeburnerBlackOpName.OperationMorpheus]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationMorpheus,
@@ -523,11 +493,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isStealth: true,
       desc:
-        "DreamSense Technologies is an advertising company that uses special technology to transmit their ads into the " +
-        "people's dreams and subconscious. They do this using broadcast transmitter towers. Based on information from our " +
-        `agents and informants in ${CityName.Chongqing}, we have reason to believe that one of the broadcast towers there ` +
-        "has been compromised by Synthoids and is being used to spread pro-Synthoid propaganda.\n\n" +
-        "The mission is to destroy this broadcast tower. Speed and stealth are of the utmost importance for this.",
+        "DreamSense Technologies是一家广告公司，它利用特殊技术把广告植入人们的梦境与潜意识中，靠广播发射塔实现。根据我们在" +
+        `${CityName.Chongqing}的特工和线人提供的情报，我们有理由相信当地一座发射塔已被合成人控制，正被用来散布支持合成人的宣传。\n\n` +
+        "任务是摧毁这座发射塔。此行速度与隐蔽缺一不可。",
     }),
     [BladeburnerBlackOpName.OperationIonStorm]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationIonStorm,
@@ -557,11 +525,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "Our analysts have uncovered a gathering of MK-VI Synthoids that have taken up residence in the " +
-        `${CityName.Sector12} Slums. We don't know if they are rogue Synthoids from the Uprising, but we do know that they ` +
-        "have been stockpiling weapons, money, and other resources. This makes them dangerous.\n\n" +
-        `This is a full-scale assault operation to find and retire all of these Synthoids in the ${CityName.Sector12} ` +
-        "Slums.",
+        "我们的分析人员发现一批MK-VI合成人聚集盘踞在" +
+        `${CityName.Sector12}贫民窟。尚不确定他们是否是起义中失控的合成人，但可以确定的是，他们一直在囤积武器、资金和其他资源。这使得他们极具威胁。\n\n` +
+        `这是一次全面突击行动，目标是找到并清除${CityName.Sector12}贫民窟中的所有合成人。`,
     }),
     [BladeburnerBlackOpName.OperationAnnihilus]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationAnnihilus,
@@ -591,10 +557,9 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        "Our superiors have ordered us to eradicate everything and everyone in an underground facility located in " +
-        `${CityName.Aevum}. They tell us that the facility houses many dangerous Synthoids and belongs to a terrorist ` +
-        `organization called '${FactionName.TheCovenant}'. We have no prior intelligence about this organization, so you ` +
-        "are going in blind.",
+        "上级命令我们清剿" +
+        `${CityName.Aevum}一处地下设施内的一切人员与物资。据称，该设施内藏匿着许多危险的合成人，属于一个名为'${FactionName.TheCovenant}'的恐怖组织。我们此前没有关于该组织的任何情报，` +
+        "因此你只能在毫无准备的情况下深入虎穴。",
     }),
     [BladeburnerBlackOpName.OperationUltron]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationUltron,
@@ -624,16 +589,11 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       isKill: true,
       desc:
-        `${FactionName.OmniTekIncorporated}, the original designer and manufacturer of Synthoids, has notified us of a ` +
-        "malfunction in their AI design. This malfunction, when triggered, causes MK-VI Synthoids to become radicalized " +
-        "and seek out the destruction of humanity. They say that this bug affects all MK-VI Synthoids, not just the rogue " +
-        "ones from the Uprising.\n\n" +
-        `${FactionName.OmniTekIncorporated} has also told us they believe someone has triggered this malfunction in a ` +
-        "large group of MK-VI Synthoids, and these newly radicalized Synthoids are now amassing in " +
-        `${CityName.Volhaven} to form a terrorist group called Ultron.\n\n` +
-        "Intelligence suggests Ultron is heavily armed and that their members are augmented. We believe Ultron is making " +
-        "moves to take control of and weaponize DeltaOne's Tactical High-Energy Satellite Laser Array (THESLA).\n\n" +
-        "Your task is to find and destroy Ultron.",
+        `${FactionName.OmniTekIncorporated}是合成人的原始设计与制造商，它通知我们其AI设计存在一处缺陷。该缺陷一旦触发，会导致MK-VI合成人走向激进并企图毁灭人类。他们表示这个漏洞影响所有MK-VI合成人，而不仅仅是起义中失控的那批。\n\n` +
+        `${FactionName.OmniTekIncorporated}还告诉我们，他们相信有人在一大批MK-VI合成人身上触发了该缺陷，而这些新近激进化的合成人正在` +
+        `${CityName.Volhaven}集结，组建一个名为Ultron的恐怖组织。\n\n` +
+        "情报显示Ultron装备精良，成员均经过强化。我们认为Ultron正图谋夺取并武器化DeltaOne的战术高能卫星激光阵列（THESLA）。\n\n" +
+        "你的任务是找到并摧毁Ultron。",
     }),
     [BladeburnerBlackOpName.OperationCenturion]: new BlackOperation({
       name: BladeburnerBlackOpName.OperationCenturion,
@@ -663,10 +623,8 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       desc:
         "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)\n\n" +
-        "Throughout all of humanity's history, we have relied on technology to survive, conquer, and progress. Its " +
-        "advancement became our primary goal. And at the peak of human civilization, technology turned into power. Global, " +
-        "absolute power.\n\n" +
-        "It seems that the universe is not without a sense of irony.\n\n" +
+        "纵观人类历史，我们依靠技术生存、征服与进步。技术的发展成为我们的首要目标。而在人类文明的巅峰，技术化作了权力——全球性的、绝对的权力。\n\n" +
+        "宇宙似乎并非不懂讽刺。\n\n" +
         "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)",
     }),
     [BladeburnerBlackOpName.OperationVindictus]: new BlackOperation({
@@ -697,8 +655,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
       },
       desc:
         "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)\n\n" +
-        "The bits are all around us. The daemons that hold the Node together can manifest themselves in many different " +
-        "ways.\n\n" +
+        "比特无处不在。维系着节点的守护进程（daemons）会以多种不同的方式显现自身。\n\n" +
         "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)",
     }),
     [BladeburnerBlackOpName.OperationDaedalus]: new BlackOperation({
@@ -727,7 +684,7 @@ export function createBlackOperations(): Record<BladeburnerBlackOpName, BlackOpe
         charisma: 0,
         intelligence: 0.75,
       },
-      desc: "Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.",
+      desc: "昨日我们臣服于君王，向皇帝屈膝。今日我们只向真理低头。",
     }),
   };
 }

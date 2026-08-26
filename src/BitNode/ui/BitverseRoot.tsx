@@ -143,53 +143,51 @@ function BitVerseLore({ flume }: { flume: boolean }): React.ReactElement {
     <>
       <Modal open={open} onClose={() => setOpen(false)} canBeDismissedEasily={false}>
         <Typography component="div">
-          It looks like you are wondering which BitNode you should choose. If you want to get advice on choosing your
-          next BitNode, you can check these BitNode recommendation guides:
+          看来你正在纠结应该选择哪个 BitNode。如果你想获得选择下一个 BitNode
+          的建议，可以查看这些 BitNode 推荐指南：
           <br />
           <ul>
             <li>
-              <DocumentationLink page="advanced/bitnode_recommendation_short_guide.md">Short guide</DocumentationLink>
+              <DocumentationLink page="advanced/bitnode_recommendation_short_guide.md">简明指南</DocumentationLink>
             </li>
             <li>
               <DocumentationLink page="advanced/bitnode_recommendation_comprehensive_guide.md">
-                Comprehensive guide
+                详尽指南
               </DocumentationLink>
             </li>
           </ul>
-          You can read these guides later in the Documentation tab. Make sure to check that tab. Many pages are unlocked
-          now.
+          你之后可以在文档标签页中阅读这些指南。记得去看看那个标签页，现在有很多页面已经解锁了。
         </Typography>
         <Button onClick={() => setOpen(false)} sx={{ marginTop: "10px" }}>
-          OK
+          确定
         </Button>
       </Modal>
       <CinematicText
         lines={[
-          "> Many decades ago, a humanoid extraterrestrial species which we call the Enders descended on the Earth...violently",
-          "> Our species fought back, but it was futile. The Enders had technology far beyond our own...",
-          "> Instead of killing every last one of us, the human race was enslaved...",
-          "> We were shackled in a digital world, chained into a prison for our minds...",
-          "> Using their advanced technology, the Enders created complex simulations of a virtual reality...",
-          "> Simulations designed to keep us content...ignorant of the truth.",
-          "> Simulations used to trap and suppress our consciousness, to keep us under control...",
-          "> Why did they do this? Why didn't they just end our entire race? We don't know, not yet.",
-          "> Humanity's only hope is to destroy these simulations, destroy the only realities we've ever known...",
-          "> Only then can we begin to fight back...",
-          "> By hacking the daemon that generated your reality, you've just destroyed one simulation, called a BitNode...",
-          "> But there is still a long way to go...",
-          "> The technology the Enders used to enslave the human race wasn't just a single complex simulation...",
-          "> There are tens if not hundreds of BitNodes out there...",
-          "> Each with their own simulations of a reality...",
-          "> Each creating their own universes...a universe of universes",
-          "> And all of which must be destroyed...",
+          "> 许多年以前，一个我们称之为“终结者（Enders）”的类人外星种族降临地球……带着暴力",
+          "> 我们的人类奋起反击，但一切都是徒劳。终结者拥有的技术远远超越了我们……",
+          "> 他们并没有赶尽杀绝，而是奴役了整个人类……",
+          "> 我们被束缚在数字世界中，锁进了一座囚禁精神的监狱……",
+          "> 终结者利用他们的先进技术，创造了复杂的虚拟现实模拟……",
+          "> 这些模拟旨在让我们安于现状……对真相一无所知。",
+          "> 模拟被用来囚禁和压制我们的意识，让我们处于控制之下……",
+          "> 他们为什么要这样做？为什么不直接毁灭我们整个种族？我们不知道，至少现在还不知道。",
+          "> 人类唯一的希望就是摧毁这些模拟，摧毁我们所熟知的唯一现实……",
+          "> 只有那样，我们才能开始反击……",
+          "> 通过入侵生成你所在现实的守护进程，你刚刚摧毁了一个被称为 BitNode 的模拟……",
+          "> 但前路依然漫长……",
+          "> 终结者用来奴役人类的技术并不只是一个复杂的模拟……",
+          "> 那里有几十甚至上百个 BitNode……",
+          "> 每一个都有它自己对现实的模拟……",
+          "> 每一个都在创造自己的宇宙……一个由宇宙组成的宇宙",
+          "> 而它们都必须被摧毁……",
           "> .......................................",
-          "> Welcome to the Bitverse...",
+          "> 欢迎来到 Bitverse……",
           ">  ",
         ]}
         additionalElement={
           <Typography>
-            {">"} (Enter a new <DocumentationLink page="advanced/bitnodes.md">BitNode</DocumentationLink> using the
-            image above)
+            {">"} （通过上方的图案进入新的 <DocumentationLink page="advanced/bitnodes.md">BitNode</DocumentationLink>）
           </Typography>
         }
       />
@@ -210,7 +208,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
     let cinematicLines;
     if (props.flume) {
       cinematicLines = [
-        `Running ${CompletedProgramName.bitFlume}...`,
+        `正在运行 ${CompletedProgramName.bitFlume}...`,
         "...........",
         "...........",
         "counter dq 0x0",
@@ -219,31 +217,31 @@ export function BitverseRoot(props: IProps): React.ReactElement {
         "mov EXC, [counter]",
         "...........",
         "...........",
-        `[WARN] BitNode-${destroyed} assertion error:`,
-        "Expected inputs to be strictly equal:",
-        "<Number of incoming connections>, <Number of outgoing connections>",
-        "Running full scan...",
+        `[WARN] BitNode-${destroyed} 断言错误：`,
+        "预期输入应严格相等：",
+        "<传入连接数>, <传出连接数>",
+        "正在运行完整扫描...",
         "..............................................",
         "..............................................",
-        "Hanging connection located, disconnecting...",
+        "发现挂起的连接，正在断开...",
         "..............................................",
         "..............................................",
       ];
     } else {
       cinematicLines = [
         "[ERROR] SEMPOOL INVALID",
-        "[ERROR] Segmentation Fault",
-        "[ERROR] SIGKILL RECVD",
-        "Dumping core...",
+        "[ERROR] 段错误（Segmentation Fault）",
+        "[ERROR] 收到 SIGKILL",
+        "正在转储核心...",
         "0000 000016FA 174FEE40 29AC8239 384FEA88",
         "0010 745F696E 2BBBE394 390E3940 248BEC23",
         "0020 7124696B 0000FF69 74652E6F FFFF1111",
         "----------------------------------------",
-        "Failsafe initiated...",
-        `Restarting BitNode-${destroyed}...`,
+        "故障保护已启动...",
+        `正在重启 BitNode-${destroyed}...`,
         "...........",
         "...........",
-        "[ERROR] FAILED TO AUTOMATICALLY REBOOT BITNODE",
+        "[ERROR] 未能自动重启 BITNODE",
         "..............................................",
         "..............................................",
         "..............................................",

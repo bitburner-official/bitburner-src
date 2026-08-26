@@ -28,31 +28,31 @@ export interface ScriptEditorContextShape {
 const ScriptEditorContext = React.createContext({} as ScriptEditorContextShape);
 
 export function ScriptEditorContextProvider({ children }: { children: React.ReactNode }) {
-  const [ram, setRAM] = useState("RAM: ???");
+  const [ram, setRAM] = useState("RAM：???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
   const showRAMError: ScriptEditorContextShape["showRAMError"] = (error) => {
     if (!error) {
-      setRAM("N/A");
-      setRamEntries([["N/A", ""]]);
+      setRAM("不适用");
+      setRamEntries([["不适用", ""]]);
       return;
     }
     let errorType;
     switch (error.errorCode) {
       case RamCalculationErrorCode.SyntaxError:
-        errorType = "Syntax Error";
+        errorType = "语法错误";
         break;
       case RamCalculationErrorCode.ImportError:
-        errorType = "Import Error";
+        errorType = "导入错误";
         break;
       case RamCalculationErrorCode.InvalidServer:
-        errorType = "Invalid server";
+        errorType = "无效的服务器";
         break;
       default:
-        errorType = "Unknown Error";
+        errorType = "未知错误";
         break;
     }
-    setRAM(`RAM: ${errorType}`);
+    setRAM(`RAM：${errorType}`);
     setRamEntries([[errorType, error.errorMessage ?? ""]]);
   };
 
@@ -65,7 +65,7 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
         entriesDisp.push([`${entry.name} (${entry.type})`, formatRam(entry.cost)]);
       }
 
-      setRAM("RAM: " + formatRam(ramUsage.cost));
+      setRAM("RAM：" + formatRam(ramUsage.cost));
       setRamEntries(entriesDisp);
       return;
     }
@@ -73,8 +73,8 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     if (ramUsage.errorCode !== undefined) {
       showRAMError(ramUsage);
     } else {
-      setRAM("RAM: Unknown Error");
-      setRamEntries([["Unknown Error", ""]]);
+      setRAM("RAM：未知错误");
+      setRamEntries([["未知错误", ""]]);
     }
   };
 

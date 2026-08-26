@@ -37,7 +37,7 @@ export const launchWebstorm = async (suppressToast = false) => {
     const cancellableSleep = (ms: number) => Promise.race([sleep(ms), cancelPromise]);
 
     if (!suppressToast) {
-      SnackbarEvents.emit(`DARKNET WEBSTORM APPROACHING`, ToastVariant.ERROR, 5000);
+      SnackbarEvents.emit(`暗网网暴即将来临`, ToastVariant.ERROR, 5000);
     }
     await cancellableSleep(5000);
 

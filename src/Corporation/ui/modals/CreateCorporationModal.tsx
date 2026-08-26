@@ -28,7 +28,7 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
     return <></>;
   }
 
-  const disabledTextForNoName = name === "" ? "Enter a name for the corporation" : "";
+  const disabledTextForNoName = name === "" ? "请输入企业名称" : "";
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setName(event.target.value);
@@ -53,37 +53,35 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
       <Typography>
         {!props.restart ? (
           <>
-            Would you like to start a corporation? This will require <Money money={cost} forPurchase={true} /> for
-            registration and initial funding.{" "}
+            要创办一家企业吗？这需要 <Money money={cost} forPurchase={true} /> 作为注册费用和启动资金。{" "}
             {Player.bitNodeN === 3 && (
               <>
-                This <Money money={cost} /> can either be self-funded, or you can obtain the seed money from the
-                government in exchange for {formatShares(500e6)} shares (a <b>33.3%</b> stake in the company).
+                这笔 <Money money={cost} /> 资金既可以自筹，也可以从政府获得种子资金，但需要交换 {formatShares(500e6)}{" "}
+                股股份（占公司 <b>33.3%</b> 的股权）。
               </>
             )}
           </>
         ) : (
           <>
-            Would you like to sell your position as CEO and start a new corporation? Everything from your current
-            corporation will be gone and you start fresh.
+            要出售你的CEO职位并创办一家新企业吗？当前企业的一切都将不复存在，你将重新开始。
           </>
         )}
         <br />
         <br />
-        If you would like to start {props.restart ? "a new" : ""} one, please enter a name for your corporation below:
+        如果你想创办{props.restart ? "新的" : ""}企业，请在下方输入你的企业名称：
       </Typography>
       <br />
-      <TextField autoFocus={true} placeholder="Corporation Name" onChange={onChange} value={name} />
+      <TextField autoFocus={true} placeholder="企业名称" onChange={onChange} value={name} />
       {Player.bitNodeN === 3 && (
         <ButtonWithTooltip onClick={() => createCorporationWithUI(name, false)} disabledTooltip={disabledTextForNoName}>
-          Use seed money
+          使用种子资金
         </ButtonWithTooltip>
       )}
       <ButtonWithTooltip
         onClick={() => createCorporationWithUI(name, true)}
-        disabledTooltip={disabledTextForNoName || (canSelfFund ? "" : "Insufficient player funds")}
+        disabledTooltip={disabledTextForNoName || (canSelfFund ? "" : "玩家资金不足")}
       >
-        Self-Fund (<Money money={cost} forPurchase={true} />)
+        自筹资金（<Money money={cost} forPurchase={true} />）
       </ButtonWithTooltip>
     </Modal>
   );

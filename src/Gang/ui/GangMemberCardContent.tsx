@@ -29,7 +29,7 @@ export function GangMemberCardContent(props: IProps): React.ReactElement {
       {props.member.canAscend() && (
         <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
           <Button onClick={openAscensionModal} style={{ flexGrow: 1, borderRightWidth: 0 }}>
-            Ascend
+            飞升
           </Button>
           <AscensionModal open={ascendOpen} onClose={closeAscensionModal} member={props.member} onAscend={rerender} />
           <Button onClick={openHelpModal} style={{ width: "fit-content", borderLeftWidth: 0 }}>
@@ -37,16 +37,13 @@ export function GangMemberCardContent(props: IProps): React.ReactElement {
           </Button>
           <StaticModal open={helpOpen} onClose={closeHelpModal}>
             <Typography>
-              Ascending a Gang Member resets that member's progress and stats in exchange for a permanent boost to their
-              stat multipliers.
+              飞升一名帮派成员会重置该成员的进度和属性，以换取其属性倍率的永久提升。
               <br />
               <br />
-              The stat boost a Gang Member gains upon ascension is based on the amount of exp they have, and will be
-              shown before you choose to ascend them.
+              帮派成员在飞升时获得的属性提升取决于其拥有的经验值数量，并会在你选择飞升之前展示。
               <br />
               <br />
-              Upon ascension, they will lose all of their non-Augmentation Equipment and your gang will lose respect
-              equal to the total respect earned by that member.
+              飞升后，该成员将失去所有非强化类装备，且你的帮派会失去与该成员所赚取尊重总量相等的尊重。
             </Typography>
           </StaticModal>
         </Box>

@@ -55,20 +55,20 @@ export function CovenantSleeveMemoryUpgrade(props: IProps): React.ReactElement {
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       <Typography variant="h6" color="primary">
-        Upgrade Memory of Sleeve {props.index}
+        升级分身 {props.index} 的记忆
       </Typography>
       <Typography>
-        Purchase a memory upgrade for your sleeve. Note that a sleeve's max memory is 100 (current:{" "}
-        {formatSleeveMemory(props.sleeve.memory)})
+        为你的分身购买记忆升级。注意分身的最大记忆为 100（当前：
+        {formatSleeveMemory(props.sleeve.memory)}）
       </Typography>
 
       <Box display="flex" flexDirection="row" alignItems="center">
-        <Typography>Amount of memory to purchase (must be an integer):&nbsp;</Typography>
+        <Typography>要购买的记忆数量（必须为整数）：&nbsp;</Typography>
         <TextField onChange={changePurchaseAmount} type={"number"} value={amt} />
       </Box>
       <br />
       <Button disabled={!canPurchaseMemoryUpgrade(props.sleeve, amt).success} onClick={purchaseMemory}>
-        Purchase {amt} memory&nbsp;-&nbsp;
+        购买 {amt} 点记忆&nbsp;-&nbsp;
         <Money money={props.sleeve.getMemoryUpgradeCost(amt)} forPurchase={true} />
       </Button>
     </Paper>

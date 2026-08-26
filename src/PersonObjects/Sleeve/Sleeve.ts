@@ -349,14 +349,14 @@ export class Sleeve extends Person implements SleevePerson {
     if (Player.bitNodeOptions.disableSleeveExpAndAugmentation) {
       return {
         success: false,
-        message: `The "Disable Sleeves' experience and augmentation" option was enabled. You cannot purchase augmentations for your sleeves.`,
+        message: `已启用"禁用分身的经验与强化"选项。你无法为分身购买强化。`,
       };
     }
 
     if (this.shock > 0) {
       return {
         success: false,
-        message: `You must reduce the sleeve shock to 0. The current shock is ${formatSleeveShock(this.shock)}.`,
+        message: `你必须将分身震荡降为 0。当前震荡为 ${formatSleeveShock(this.shock)}。`,
       };
     }
 
@@ -372,18 +372,18 @@ export class Sleeve extends Person implements SleevePerson {
     if (!Player.canAfford(aug.baseCost)) {
       return {
         success: false,
-        message: `You must have at least ${formatMoney(aug.baseCost)}.`,
+        message: `你至少需要拥有 ${formatMoney(aug.baseCost)}。`,
       };
     }
 
     // Verify that this sleeve does not already have that augmentation.
     if (this.hasAugmentation(aug.name)) {
-      return { success: false, message: `This sleeve already has "${aug.name}" augmentation.` };
+      return { success: false, message: `该分身已经拥有强化"${aug.name}"。` };
     }
 
     // Verify that the augmentation is available for purchase.
     if (!this.findPurchasableAugs().includes(aug)) {
-      return { success: false, message: `"${aug.name}" is not in the list of purchasable augmentations.` };
+      return { success: false, message: `"${aug.name}"不在可购买的强化列表中。` };
     }
 
     return { success: true };
@@ -573,7 +573,7 @@ export class Sleeve extends Person implements SleevePerson {
   }
 
   whoAmI(): string {
-    return "Sleeve";
+    return "分身";
   }
 
   /** Serialize the current object to a JSON save state. */

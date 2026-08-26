@@ -56,7 +56,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
   const killScript = killWorkerScriptByPid.bind(null, scriptRef.pid);
 
   function killScriptClickHandler(): void {
-    if (killScript()) dialogBoxCreate("Killing script");
+    if (killScript()) dialogBoxCreate("正在终止脚本");
   }
 
   // Calculations for script stats
@@ -82,22 +82,22 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
             <TableBody>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Threads:</Typography>
+                  <Typography>└ 线程：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
                   <Typography>
-                    {formatThreads(scriptRef.threads)} {`(${formatRam(scriptRef.ramUsage)} each)`}
+                    {formatThreads(scriptRef.threads)} {`（每个 ${formatRam(scriptRef.ramUsage)}）`}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={2}>
-                  <Typography sx={{ overflowWrap: "anywhere" }}>└ Args: {arrayToString(scriptRef.args)}</Typography>
+                  <Typography sx={{ overflowWrap: "anywhere" }}>└ 参数：{arrayToString(scriptRef.args)}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Online Time:</Typography>
+                  <Typography>└ 在线时间：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
                   <Typography>{convertTimeMsToTimeElapsedString(scriptRef.onlineRunningTime * 1e3)}</Typography>
@@ -105,7 +105,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Offline Time:</Typography>
+                  <Typography>└ 离线时间：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder}>
                   <Typography>{convertTimeMsToTimeElapsedString(scriptRef.offlineRunningTime * 1e3)}</Typography>
@@ -113,7 +113,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Total online production:</Typography>
+                  <Typography>└ 在线总收益：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
@@ -124,13 +124,13 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
-                  <Typography>&nbsp;{formatExp(scriptRef.onlineExpGained) + " hacking exp"}</Typography>
+                  <Typography>&nbsp;{formatExp(scriptRef.onlineExpGained) + " 黑客经验"}</Typography>
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Online production rate:</Typography>
+                  <Typography>└ 在线产出速率：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
@@ -141,13 +141,13 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
-                  <Typography>&nbsp;{formatExp(onlineEps) + " hacking exp / sec"}</Typography>
+                  <Typography>&nbsp;{formatExp(onlineEps) + " 黑客经验/秒"}</Typography>
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell className={classes.noborder}>
-                  <Typography>└ Total offline production:</Typography>
+                  <Typography>└ 离线总收益：</Typography>
                 </TableCell>
                 <TableCell className={classes.noborder} align="left">
                   <Typography>
@@ -158,13 +158,13 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
               <TableRow>
                 <TableCell className={classes.noborder} colSpan={1} />
                 <TableCell className={classes.noborder} align="left">
-                  <Typography>&nbsp;{formatExp(scriptRef.offlineExpGained) + " hacking exp"}</Typography>
+                  <Typography>&nbsp;{formatExp(scriptRef.offlineExpGained) + " 黑客经验"}</Typography>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
 
-          <Button onClick={logClickHandler}>LOG</Button>
+          <Button onClick={logClickHandler}>日志</Button>
           <IconButton onClick={killScriptClickHandler}>
             <DeleteIcon color="error" />
           </IconButton>

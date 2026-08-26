@@ -27,7 +27,7 @@ export const GoHistoryPage = (): React.ReactElement => {
       <Grid container>
         <Grid item>
           <div className={classes.statusPageScore}>
-            <Typography variant="h5">Previous Subnet:</Typography>
+            <Typography variant="h5">上一子网：</Typography>
             <GoScoreSummaryTable score={score} opponent={opponent} />
           </div>
         </Grid>
@@ -44,7 +44,7 @@ export const GoHistoryPage = (): React.ReactElement => {
       </Grid>
       <br />
       <br />
-      <Typography variant="h5">Faction Stats:</Typography>
+      <Typography variant="h5">派系统计：</Typography>
       <Grid container style={{ maxWidth: "1020px" }}>
         {opponentsToShow.map((faction, index) => {
           const data = getOpponentStats(faction);
@@ -64,7 +64,7 @@ export const GoHistoryPage = (): React.ReactElement => {
                 <TableBody>
                   <TableRow>
                     <TableCell className={classes.cellNone}>
-                      Wins:{faction === GoOpponent.none ? " (Black / White)" : ""}
+                      胜场：{faction === GoOpponent.none ? "（黑方 / 白方）" : ""}
                     </TableCell>
                     <TableCell className={classes.cellNone}>
                       {data.wins} / {data.losses + data.wins}
@@ -72,13 +72,13 @@ export const GoHistoryPage = (): React.ReactElement => {
                   </TableRow>
                   <TableRow>
                     <TableCell className={classes.cellNone}>
-                      Current winstreak{faction === GoOpponent.none ? " for black" : ""}:
+                      当前连胜{faction === GoOpponent.none ? "（执黑）" : ""}：
                     </TableCell>
                     <TableCell className={classes.cellNone}>{data.winStreak}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
-                      Highest winstreak{faction === GoOpponent.none ? " for black" : ""}:
+                      最高连胜{faction === GoOpponent.none ? "（执黑）" : ""}：
                     </TableCell>
                     <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
                       {data.highestWinStreak}
@@ -87,26 +87,29 @@ export const GoHistoryPage = (): React.ReactElement => {
                   <Tooltip
                     title={
                       <>
-                        The total number of empty points and routers <br /> you took control of, across all subnets
+                        所有子网中你夺取控制的空节点与路由器总数
+                        <br />
                       </>
                     }
                   >
                     <TableRow>
-                      <TableCell className={classes.cellNone}>Captured nodes:</TableCell>
+                      <TableCell className={classes.cellNone}>夺取的节点：</TableCell>
                       <TableCell className={classes.cellNone}>{data.nodes}</TableCell>
                     </TableRow>
                   </Tooltip>
                   <Tooltip
                     title={
                       <>
-                        Node power is what stat bonuses scale from, and is gained on each completed subnet. <br />
-                        It is calculated from the number of nodes you control, multiplied by modifiers for the <br />
-                        opponent difficulty, if you won or lost, and your current winstreak.
+                        节点能量是属性加成的来源，每完成一局子网都会获得。
+                        <br />
+                        它由你控制的节点数量乘以以下修正得出：
+                        <br />
+                        对手难度、胜负情况以及当前连胜数。
                       </>
                     }
                   >
                     <TableRow>
-                      <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>Node power:</TableCell>
+                      <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>节点能量：</TableCell>
                       <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
                         {formatNumber(data.nodePower, 2)}
                       </TableCell>
@@ -115,12 +118,10 @@ export const GoHistoryPage = (): React.ReactElement => {
                   <Tooltip
                     title={
                       <>
-                        Two wins in a row against an opponent will give you {getMaxRep() / 200} reputation converted to
-                        favor with that faction (up to a max of {getMaxRep()} reputation), if you are a member of that
-                        faction.
+                        只要你是该派系成员，连续战胜同一对手两次即可获得 {getMaxRep() / 200}{" "}
+                        点声望，转化为该派系的好感度（声望上限为 {getMaxRep()}）。
                         <br />
-                        The reputation is immediately applied as favor, meaning it will increase reputation gain right
-                        away without needing an install.
+                        这些声望会立即转化为好感度，也就是说无需转生安装即可立刻提升声望获取速度。
                       </>
                     }
                   >
@@ -128,23 +129,21 @@ export const GoHistoryPage = (): React.ReactElement => {
                       <Tooltip
                         title={
                           <>
-                            Two wins in a row against an opponent will give you {getMaxRep() / 200} reputation converted
-                            to favor with that faction (up to a max of {getMaxRep()} reputation), if you are a member of
-                            that faction.
+                            只要你是该派系成员，连续战胜同一对手两次即可获得 {getMaxRep() / 200}{" "}
+                            点声望，转化为该派系的好感度（声望上限为 {getMaxRep()}）。
                             <br />
-                            The reputation is immediately applied as favor, meaning it will increase reputation gain
-                            right away without needing an install.
+                            这些声望会立即转化为好感度，也就是说无需转生安装即可立刻提升声望获取速度。
                           </>
                         }
                       >
                         <>
                           <TableCell className={classes.cellNone}>
-                            Rep converted to favor
+                            连胜所得声望
                             <br />
-                            from winstreaks:
+                            已转为好感度：
                           </TableCell>
                           <TableCell className={classes.cellNone}>
-                            {data.rep ?? 0} {data.rep === getMaxRep() ? "(max)" : ""}
+                            {data.rep ?? 0} {data.rep === getMaxRep() ? "（已达上限）" : ""}
                           </TableCell>
                         </>
                       </Tooltip>
@@ -153,9 +152,9 @@ export const GoHistoryPage = (): React.ReactElement => {
                 </TableBody>
               </Table>
               <br />
-              <Tooltip title={<>The total stat multiplier gained via your current node power.</>}>
+              <Tooltip title={<>当前节点能量带来的属性乘数总和。</>}>
                 <Typography>
-                  <strong className={classes.keyText}>Bonus:</strong>
+                  <strong className={classes.keyText}>加成：</strong>
                   <br />
                   <strong className={classes.keyText}>{getBonusText(faction)}</strong>
                 </Typography>

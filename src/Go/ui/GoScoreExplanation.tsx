@@ -17,21 +17,17 @@ export const GoScoreExplanation = ({ open, onClose }: Props): React.ReactElement
       <>
         <div className={classes.scoreExplanationModal}>
           <Typography component="div">
-            <h2>IPvGO Scoring Explanation</h2>
-            IPvGO uses one of the oldest scoring systems in Go, "area scoring", rather than "territory scoring" later
-            popularized by Japan. All stones are alive unless captured, chains that could be dead are not automatically
-            captured after the game, and prisoners are not calculated. The displayed score is always the ending score if
-            both players pass. <br /> <br />
-            This scoring ruleset was chosen for its simplicity to teach and to calculate, rather than using territory
-            scoring shortcuts designed to make physical games quicker.
+            <h2>IPvGO 得分说明</h2>
+            IPvGO 采用围棋中最古老的计分方式之一——"数子法"（area scoring），而非后来由日本推广的"数目法"（territory
+            scoring）。所有棋子除非被提走都算活棋，可能已死的棋链不会在对局结束后被自动提掉，也不计算俘子。所显示的得分始终是双方都停一手时的终局得分。
             <br /> <br />
-            Territory scoring relies heavily on all players having a clear understanding of which chains on the board
-            will be "alive" or "dead" given future perfect play. It is much more complicated to implement, and requires
-            a much deeper knowledge of Go for new players, and for their IPvGO automation scripts.
+            选择这套规则是因为它易于教学、便于计算，而不是采用那些为加快实体对局而设计的数目法捷径。
             <br /> <br />
-            In most cases the winner, and the difference in score between players, comes out to be the same in both
-            scoring systems, but in area scoring you "show your work" and prove that something is alive or dead, and
-            gives opportunities for the player to capitalize on the computer's mistakes (or vice versa).
+            数目法高度依赖所有玩家都能清楚判断：在双方后续完美应对的情况下，盘上哪些棋链算"活"、哪些算"死"。它的实现要复杂得多，
+            无论是对新手玩家还是对他们的 IPvGO 自动化脚本，都需要深入得多的围棋知识。
+            <br /> <br />
+            在大多数情况下，两种记分法得出的胜负与玩家间的分差是相同的，但数子法要求你"展示过程"，实际证明哪些棋是活是死，
+            这也给了玩家利用电脑失误的机会（反之亦然）。
           </Typography>
         </div>
       </>

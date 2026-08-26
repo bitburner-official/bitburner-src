@@ -24,16 +24,15 @@ export function ReputationInfo({
       title={
         <>
           <Typography>
-            You will have <Favor favor={addRepToFavor(favor, playerReputation)} /> faction favor after installing an
-            Augmentation.
+            安装一个强化后，你将拥有 <Favor favor={addRepToFavor(favor, playerReputation)} /> 的派系好感。
           </Typography>
-          <Typography style={{ fontSize: "2rem" }}>r = Total faction reputation</Typography>
+          <Typography style={{ fontSize: "2rem" }}>r = 派系总声望</Typography>
           <MathNotationOutput notation={MathNotation.RepToFavor} />
         </>
       }
     >
       <Typography component="div" sx={{ display: "flex", alignItems: "center", whiteSpace: "pre-wrap" }}>
-        <Typography sx={{ fontWeight: `${boldLabel ? "bold" : "normal"}` }}>Reputation: </Typography>
+        <Typography sx={{ fontWeight: `${boldLabel ? "bold" : "normal"}` }}>声望： </Typography>
         <Reputation reputation={playerReputation} />
         <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />
       </Typography>

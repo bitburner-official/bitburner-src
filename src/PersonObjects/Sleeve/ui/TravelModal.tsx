@@ -19,7 +19,7 @@ interface TravelModalProps {
 export function TravelModal(props: TravelModalProps): React.ReactElement {
   function travel(city: CityName): void {
     if (!props.sleeve.travel(city)) {
-      dialogBoxCreate("You cannot afford to have this sleeve travel to another city");
+      dialogBoxCreate("你负担不起让该分身前往另一座城市的费用");
       return;
     }
     props.rerender();
@@ -30,9 +30,8 @@ export function TravelModal(props: TravelModalProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <>
         <Typography>
-          Have this sleeve travel to a different city. This affects the gyms and universities at which this sleeve can
-          study. Traveling to a different city costs <Money money={CONSTANTS.TravelCost} forPurchase={true} />. It will
-          also set your current sleeve task to idle.
+          让该分身前往另一座城市。这会影响该分身可以使用的健身房和大学。前往另一座城市需要花费{" "}
+          <Money money={CONSTANTS.TravelCost} forPurchase={true} />，同时你当前分身的任务会被设为空闲。
         </Typography>
         {Settings.DisableASCIIArt ? (
           Object.values(CityName).map((city) => (

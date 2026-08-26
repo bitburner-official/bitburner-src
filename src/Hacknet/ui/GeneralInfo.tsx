@@ -14,36 +14,34 @@ export function GeneralInfo(props: IProps): React.ReactElement {
   return (
     <>
       <Typography>
-        The Hacknet is a global, decentralized network of machines. It is used by hackers all around the world to
-        anonymously share computing power and perform distributed cyberattacks without the fear of being traced.
+        Hacknet
+        是一个全球性的去中心化机器网络。世界各地的黑客利用它匿名共享算力，并在不必担心被追踪的情况下发起分布式网络攻击。
       </Typography>
       <br />
       {!props.hasHacknetServers ? (
         <>
           <Typography>
-            {`Here, you can purchase a Hacknet Node, a specialized machine that can connect ` +
-              `and contribute its resources to the Hacknet network. This allows you to take ` +
-              `a small percentage of profits from hacks performed on the network. Essentially, ` +
-              `you are renting out your Node's computing power.`}
+            {`在这里，你可以购买 Hacknet 节点，这是一种专用机器，` +
+              `可以接入 Hacknet 网络并贡献自身的资源。这让你能从网络上进行的入侵中分得一小部分利润。本质上，` +
+              `你是在出租自己节点的算力。`}
           </Typography>
           <Typography>
-            {`Each Hacknet Node you purchase will passively earn you money. Each Hacknet Node ` +
-              `can be upgraded in order to increase its computing power and thereby increase ` +
-              `the profit you earn from it.`}
+            {`你购买的每个 Hacknet 节点都会被动地为你赚取资金。每个 Hacknet 节点` +
+              `都可以通过升级来提高算力，从而增加` +
+              `你从中获得的利润。`}
           </Typography>
         </>
       ) : (
         <>
           <Typography>
-            {`Here, you can purchase a Hacknet Server, an upgraded version of the Hacknet Node. ` +
-              `Hacknet Servers will perform computations and operations on the network, earning ` +
-              `you hashes. Hashes can be spent on a variety of different upgrades.`}
+            {`在这里，你可以购买 Hacknet 服务器，它是 Hacknet 节点的升级版本。` +
+              `Hacknet 服务器会在网络上执行计算和操作，为你赚取` +
+              `哈希。哈希可以用于各种不同的升级。`}
           </Typography>
           <Typography>
-            {`Hacknet Servers can also be used as servers to run scripts. However, running scripts ` +
-              `on a server will reduce its hash rate (hashes generated per second). A Hacknet Server's hash ` +
-              `rate will be reduced by the percentage of RAM that is being used by that Server to run ` +
-              `scripts.`}
+            {`Hacknet 服务器也可以当作服务器来运行脚本。但是，在服务器上运行脚本` +
+              `会降低其哈希速率（每秒生成的哈希数）。Hacknet 服务器的哈希速率降低幅度，等于该服务器用于运行` +
+              `脚本的 RAM 所占的百分比。`}
           </Typography>
         </>
       )}

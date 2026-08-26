@@ -8,18 +8,18 @@ import type { FilePath } from "../../Paths/FilePath";
 
 export function rm(args: (string | number | boolean)[], server: BaseServer): undefined {
   const errors = {
-    arg: (reason: string) => `Incorrect usage of rm command. ${reason}. Usage: rm [OPTION]... [FILE]...`,
+    arg: (reason: string) => `rm 命令用法不正确。${reason}。用法：rm [OPTION]... [FILE]...`,
     dirsProvided: (name: string) =>
-      `Incorrect usage of rm command. To delete directories, use the -r flag. Failing directory: ${name}`,
-    invalidFile: (name: string) => `Invalid filename: ${name}`,
-    noSuchFile: (name: string) => `File does not exist: ${name}`,
-    noSuchDir: (name: string) => `Directory does not exist: ${name}`,
-    deleteFailed: (name: string, reason?: string) => `Failed to delete "${name}". ${reason ?? "Uncaught error"}`,
+      `rm 命令用法不正确。要删除目录，请使用 -r 标志。出错的目录：${name}`,
+    invalidFile: (name: string) => `无效的文件名：${name}`,
+    noSuchFile: (name: string) => `文件不存在：${name}`,
+    noSuchDir: (name: string) => `目录不存在：${name}`,
+    deleteFailed: (name: string, reason?: string) => `删除 "${name}" 失败。${reason ?? "未知错误"}`,
     rootDeletion: () =>
-      "You are trying to delete all files within the root directory. If this is intentional, use the --no-preserve-root flag",
+      "你正在尝试删除根目录下的所有文件。如果这是有意的，请使用 --no-preserve-root 标志",
   } as const;
 
-  if (args.length === 0) return Terminal.error(errors["arg"]("No arguments provided"));
+  if (args.length === 0) return Terminal.error(errors["arg"]("未提供参数"));
 
   const recursive = args.includes("-r") || args.includes("-R") || args.includes("--recursive") || args.includes("-rf");
   const force = args.includes("-f") || args.includes("--force") || args.includes("-rf");
@@ -33,7 +33,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
     typeof arg === "string" && (!arg.startsWith("-") || (index - 1 >= 0 && array[index - 1] === "--"));
   const targets = args.filter(isTargetString);
 
-  if (targets.length === 0) return Terminal.error(errors["arg"]("No targets provided"));
+  if (targets.length === 0) return Terminal.error(errors["arg"]("未提供目标"));
   if (!ignoreSpecialRoot && targets.includes("/")) return Terminal.error(errors["rootDeletion"]());
 
   const directories: Directory[] = [];
@@ -120,7 +120,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
 
     for (const report of reports) {
       if (report.result.res) {
-        Terminal.success(`Deleted: ${report.target}`);
+        Terminal.success(`已删除：${report.target}`);
       } else {
         Terminal.error(errors.deleteFailed(report.target, report.result.msg));
       }
@@ -133,9 +133,9 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
   ) {
     deleteSelectedTargets();
   } else {
-    const promptText = `Are you sure you want to delete ${
-      files.length === 1 ? files[0] : "these files"
-    }? This is irreversible.${files.length > 1 ? "\n\nDeleting:\n" + targetList : ""}`;
+    const promptText = `确定要删除 ${
+      files.length === 1 ? files[0] : "这些文件"
+    }吗？此操作不可逆。${files.length > 1 ? "\n\n将删除：\n" + targetList : ""}`;
 
     PromptEvent.emit({
       txt: promptText,

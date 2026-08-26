@@ -2,8 +2,8 @@ import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
 export const Theme: IPredefinedTheme = {
-  name: "Dark Blue",
-  description: "Very dark with a blue/purplelly primary",
+  name: "暗蓝",
+  description: "非常深的底色，主色偏蓝/紫",
   credit: "Saynt_Garmo",
   reference: "https://discord.com/channels/415207508303544321/921991895230611466/923084732718264340",
   screenshot: img1,

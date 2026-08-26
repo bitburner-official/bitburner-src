@@ -21,5 +21,5 @@ export function getJobRequirements(company: Company, pos: CompanyPosition): Play
 /** Returns a string with the given CompanyPosition's stat requirements */
 export function getJobRequirementText(company: Company, pos: CompanyPosition): string {
   const reqs = getJobRequirements(company, pos);
-  return `(${pos.name} requires: ${reqs.map((s) => s.toString()).join(", ")})`;
+  return `（${pos.name} 的要求：${reqs.map((s) => s.toString()).join("，")}）`;
 }

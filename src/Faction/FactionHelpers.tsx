@@ -61,26 +61,26 @@ function checkIfPlayerCanPurchaseAugmentation(faction: Faction, augmentation: Au
   if (!Player.factions.includes(faction.name)) {
     return {
       success: false,
-      message: `You can't purchase augmentations from '${faction.name}' because you aren't a member.`,
+      message: `你不是 '${faction.name}' 的成员，无法从该派系购买强化。`,
     };
   }
 
   if (!getFactionAugmentationsFiltered(faction).includes(augmentation.name)) {
     return {
       success: false,
-      message: `Faction '${faction.name}' does not have the '${augmentation.name}' augmentation.`,
+      message: `派系 '${faction.name}' 没有 '${augmentation.name}' 这个强化。`,
     };
   }
 
   if (augmentation.name !== AugmentationName.NeuroFluxGovernor) {
     for (const queuedAugmentation of Player.queuedAugmentations) {
       if (queuedAugmentation.name === augmentation.name) {
-        return { success: false, message: `You already purchased the '${augmentation.name}' augmentation.` };
+        return { success: false, message: `你已经购买过 '${augmentation.name}' 强化。` };
       }
     }
     for (const installedAugmentation of Player.augmentations) {
       if (installedAugmentation.name === augmentation.name) {
-        return { success: false, message: `You already installed the '${augmentation.name}' augmentation.` };
+        return { success: false, message: `你已经安装过 '${augmentation.name}' 强化。` };
       }
     }
   }
@@ -88,19 +88,19 @@ function checkIfPlayerCanPurchaseAugmentation(faction: Faction, augmentation: Au
   if (!hasAugmentationPrereqs(augmentation)) {
     return {
       success: false,
-      message: `You must first purchase or install ${augmentation.prereqs
+      message: `你必须先购买或安装 ${augmentation.prereqs
         .filter((req) => !Player.hasAugmentation(req))
-        .join(",")} before you can purchase this one.`,
+        .join("、")}，才能购买这个强化。`,
     };
   }
 
   const augCosts = getAugCost(augmentation);
   if (augCosts.moneyCost !== 0 && Player.money < augCosts.moneyCost) {
-    return { success: false, message: `You don't have enough money to purchase ${augmentation.name}.` };
+    return { success: false, message: `你没有足够的资金购买 ${augmentation.name}。` };
   }
 
   if (faction.playerReputation < augCosts.repCost) {
-    return { success: false, message: `You don't have enough faction reputation to purchase ${augmentation.name}.` };
+    return { success: false, message: `你的派系声望不足以购买 ${augmentation.name}。` };
   }
 
   return { success: true };
@@ -121,9 +121,9 @@ export function purchaseAugmentation(faction: Faction, augmentation: Augmentatio
 
   if (!singularity && !Settings.SuppressBuyAugmentationConfirmation) {
     dialogBoxCreate(
-      `You purchased ${augmentation.name}. Its enhancements will not take effect until they are installed. ` +
-        "To install your augmentations, go to the 'Augmentations' tab on the left-hand navigation menu. " +
-        "Purchasing additional augmentations will now be more expensive.",
+      `你购买了 ${augmentation.name}。其增强效果将在安装后才会生效。` +
+        `要安装强化，请进入左侧导航菜单中的“强化”页面。` +
+        `此后再购买其他强化，价格会更高。`,
     );
   }
   return { success: true };

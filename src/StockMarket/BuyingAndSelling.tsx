@@ -50,9 +50,9 @@ export function buyStock(
   }
   if (stock == null || isNaN(shares)) {
     if (ctx) {
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
+      helpers.log(ctx, () => `参数无效：股票='${stock?.name}' 数量='${shares}'`);
     } else if (opts.suppressDialog !== true) {
-      dialogBoxCreate("Failed to buy stock. This may be a bug, contact developer");
+      dialogBoxCreate("购买股票失败。这可能是个 bug，请联系开发者");
     }
 
     return false;
@@ -65,14 +65,11 @@ export function buyStock(
   }
   if (Player.money < totalPrice) {
     if (ctx) {
-      helpers.log(
-        ctx,
-        () => `You do not have enough money to purchase this position. You need ${formatMoney(totalPrice)}.`,
-      );
+      helpers.log(ctx, () => `你的资金不足以购买该持仓。需要 ${formatMoney(totalPrice)}。`);
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
         <>
-          You do not have enough money to purchase this. You need <Money money={totalPrice} />
+          你的资金不足以完成此次购买。你需要 <Money money={totalPrice} />
         </>,
       );
     }
@@ -86,15 +83,15 @@ export function buyStock(
       helpers.log(
         ctx,
         () =>
-          `Purchasing '${shares + stock.playerShares + stock.playerShortShares}' shares would exceed ${
+          `购买 '${shares + stock.playerShares + stock.playerShortShares}' 股将超过 ${
             stock.symbol
-          }'s maximum (${stock.maxShares}) number of shares`,
+          } 的最大股数（${stock.maxShares}）`,
       );
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
-        `You cannot purchase this many shares. ${stock.symbol} has a maximum of ${formatShares(
+        `你无法购买这么多股票。${stock.symbol} 的最大股数为 ${formatShares(
           stock.maxShares,
-        )} shares.`,
+        )} 股。`,
       );
     }
 
@@ -112,15 +109,15 @@ export function buyStock(
   }
 
   if (ctx) {
-    const resultTxt = `Bought ${formatShares(shares)} shares of ${stock.symbol} for ${formatMoney(
-      totalPrice,
-    )}. Paid ${formatMoney(StockMarketConstants.StockMarketCommission)} in commission fees.`;
+    const resultTxt = `以 ${formatMoney(totalPrice)} 买入了 ${stock.symbol} 的 ${formatShares(
+      shares,
+    )} 股。支付了 ${formatMoney(StockMarketConstants.StockMarketCommission)} 佣金。`;
     helpers.log(ctx, () => resultTxt);
   } else if (opts.suppressDialog !== true) {
     dialogBoxCreate(
       <>
-        Bought {formatShares(shares)} shares of {stock.symbol} for <Money money={totalPrice} />. Paid{" "}
-        <Money money={StockMarketConstants.StockMarketCommission} /> in commission fees.
+        以 <Money money={totalPrice} /> 买入了 {stock.symbol} 的 {formatShares(shares)} 股。支付了{" "}
+        <Money money={StockMarketConstants.StockMarketCommission} /> 佣金。
       </>,
     );
   }
@@ -145,10 +142,10 @@ export function sellStock(
   // Sanitize/Validate arguments
   if (stock == null || shares < 0 || isNaN(shares)) {
     if (ctx) {
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
+      helpers.log(ctx, () => `参数无效：股票='${stock?.name}' 数量='${shares}'`);
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
-        "Failed to sell stock. This is probably due to an invalid quantity. Otherwise, this may be a bug, contact developer",
+        "卖出股票失败。这可能是数量无效所致；否则这可能是个 bug，请联系开发者",
       );
     }
 
@@ -189,14 +186,14 @@ export function sellStock(
 
   if (ctx) {
     const resultTxt =
-      `Sold ${formatShares(shares)} shares of ${stock.symbol}. ` +
-      `After commissions, you gained a total of ${formatMoney(gains)}.`;
+      `卖出了 ${stock.symbol} 的 ${formatShares(shares)} 股。` +
+      `扣除佣金后，你总共获得了 ${formatMoney(gains)}。`;
     helpers.log(ctx, () => resultTxt);
   } else if (opts.suppressDialog !== true) {
     dialogBoxCreate(
       <>
-        Sold {formatShares(shares)} shares of {stock.symbol}. After commissions, you gained a total of{" "}
-        <Money money={gains} />.
+        卖出了 {stock.symbol} 的 {formatShares(shares)} 股。扣除佣金后，你总共获得了{" "}
+        <Money money={gains} />。
       </>,
     );
   }
@@ -225,11 +222,11 @@ export function shortStock(
   }
   if (stock == null || isNaN(shares)) {
     if (ctx) {
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
+      helpers.log(ctx, () => `参数无效：股票='${stock?.name}' 数量='${shares}'`);
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
-        "Failed to initiate a short position in a stock. This is probably " +
-          "due to an invalid quantity. Otherwise, this may be a bug,  so contact developer",
+        "建立股票空头仓位失败。这可能是" +
+          "数量无效所致；否则这可能是个 bug，请联系开发者",
       );
     }
     return false;
@@ -244,12 +241,12 @@ export function shortStock(
     if (ctx) {
       helpers.log(
         ctx,
-        () => "You do not have enough " + "money to purchase this short position. You need " + formatMoney(totalPrice),
+        () => "你的资金不足，" + "无法购买该空头仓位。需要 " + formatMoney(totalPrice),
       );
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
         <>
-          You do not have enough money to purchase this short position. You need <Money money={totalPrice} />
+          你的资金不足以购买该空头仓位。你需要 <Money money={totalPrice} />
         </>,
       );
     }
@@ -263,13 +260,13 @@ export function shortStock(
       helpers.log(
         ctx,
         () =>
-          `This '${shares + stock.playerShares + stock.playerShortShares}' short shares would exceed ${
+          `'${shares + stock.playerShares + stock.playerShortShares}' 股空头将超过 ${
             stock.symbol
-          }'s maximum (${stock.maxShares}) number of shares.`,
+          } 的最大股数（${stock.maxShares}）。`,
       );
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
-        `You cannot purchase this many shares. ${stock.symbol} has a maximum of ${stock.maxShares} shares.`,
+        `你无法购买这么多股票。${stock.symbol} 的最大股数为 ${stock.maxShares} 股。`,
       );
     }
 
@@ -289,15 +286,15 @@ export function shortStock(
 
   if (ctx) {
     const resultTxt =
-      `Bought a short position of ${formatShares(shares)} shares of ${stock.symbol} ` +
-      `for ${formatMoney(totalPrice)}. Paid ${formatMoney(StockMarketConstants.StockMarketCommission)} ` +
-      `in commission fees.`;
+      `为 ${stock.symbol} 买入了 ${formatShares(shares)} 股空头仓位，` +
+      `花费 ${formatMoney(totalPrice)}，` +
+      `支付了 ${formatMoney(StockMarketConstants.StockMarketCommission)} 佣金。`;
     helpers.log(ctx, () => resultTxt);
   } else if (!opts.suppressDialog) {
     dialogBoxCreate(
       <>
-        Bought a short position of {formatShares(shares)} shares of {stock.symbol} for <Money money={totalPrice} />.
-        Paid <Money money={StockMarketConstants.StockMarketCommission} /> in commission fees.
+        以 <Money money={totalPrice} /> 买入了 {stock.symbol} 的 {formatShares(shares)}
+        股空头仓位。支付了 <Money money={StockMarketConstants.StockMarketCommission} /> 佣金。
       </>,
     );
   }
@@ -321,11 +318,11 @@ export function sellShort(
 ): boolean {
   if (stock == null || isNaN(shares) || shares < 0) {
     if (ctx) {
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
+      helpers.log(ctx, () => `参数无效：股票='${stock?.name}' 数量='${shares}'`);
     } else if (!opts.suppressDialog) {
       dialogBoxCreate(
-        "Failed to sell a short position in a stock. This is probably " +
-          "due to an invalid quantity. Otherwise, this may be a bug, so contact developer",
+        "卖出股票空头仓位失败。这可能是" +
+          "数量无效所致；否则这可能是个 bug，请联系开发者",
       );
     }
 
@@ -345,11 +342,11 @@ export function sellShort(
     if (ctx) {
       helpers.log(
         ctx,
-        () => `Failed to sell short position in a stock. This is probably either due to invalid arguments, or a bug`,
+        () => `卖出股票空头仓位失败。这很可能是由于参数无效或 bug 所致`,
       );
     } else if (!opts.suppressDialog) {
       dialogBoxCreate(
-        `Failed to sell short position in a stock. This is probably either due to invalid arguments, or a bug`,
+        `卖出股票空头仓位失败。这很可能是由于参数无效或 bug 所致`,
       );
     }
 
@@ -377,14 +374,14 @@ export function sellShort(
 
   if (ctx) {
     const resultTxt =
-      `Sold your short position of ${formatShares(shares)} shares of ${stock.symbol}. ` +
-      `After commissions, you gained a total of ${formatMoney(totalGain)}`;
+      `卖出了 ${stock.symbol} 的 ${formatShares(shares)} 股空头仓位。` +
+      `扣除佣金后，你总共获得了 ${formatMoney(totalGain)}。`;
     helpers.log(ctx, () => resultTxt);
   } else if (!opts.suppressDialog) {
     dialogBoxCreate(
       <>
-        Sold your short position of {formatShares(shares)} shares of {stock.symbol}. After commissions, you gained a
-        total of <Money money={totalGain} />
+        卖出了 {stock.symbol} 的 {formatShares(shares)} 股空头仓位。扣除佣金后，你总共获得了{" "}
+        <Money money={totalGain} />
       </>,
     );
   }

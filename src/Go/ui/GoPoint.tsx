@@ -110,7 +110,7 @@ export function GoPoint({
       ) : (
         <>
           <div className={classes.broken}>
-            <div className={classes.coordinates}>no signal</div>
+            <div className={classes.coordinates}>无信号</div>
           </div>
         </>
       )}

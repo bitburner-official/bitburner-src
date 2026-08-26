@@ -107,7 +107,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
     // This specifically is thrown only from needing CompressionStream and not having it.
     instructions = (
       <Typography variant="h4" color={Settings.theme.warning}>
-        Please update your browser.
+        请更新你的浏览器。
       </Typography>
     );
   } else if (
@@ -121,13 +121,13 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
       <Typography variant="h5" color={Settings.theme.warning}>
         {loadedSaveObjectMiniDump.VersionSave !== undefined && (
           <>
-            Your save data is from a newer version (Version number: {loadedSaveObjectMiniDump.VersionSave}). The current
-            version number is {CONSTANTS.VersionNumber}.
+            你的存档数据来自更新的版本（版本号：{loadedSaveObjectMiniDump.VersionSave}）。当前
+            版本号为 {CONSTANTS.VersionNumber}。
             <br />
           </>
         )}
-        Please check if you are using the correct build. This may happen when you load the save data of the dev build
-        (Steam Beta or https://bitburner-official.github.io/bitburner-src) on the stable build.
+        请检查你是否使用了正确的构建。在稳定版构建上加载开发版构建（Steam Beta 或
+        https://bitburner-official.github.io/bitburner-src）的存档数据时可能会发生这种情况。
       </Typography>
     );
   } else if (sourceError instanceof InvalidSaveData || sourceError instanceof JSONReviverError) {
@@ -135,31 +135,31 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
     // If they occur while on the same version, it indicates bad save editing.
     instructions = (
       <Typography variant="h4" color={Settings.theme.warning}>
-        Your save data is invalid. Please import a valid backup save file.
+        你的存档数据无效。请导入有效的备份存档文件。
       </Typography>
     );
   } else {
     // If we get this far, we don't know what's going on.
     instructions = (
       <Box>
-        <Typography>It is recommended to alert a developer.</Typography>
+        <Typography>建议通知开发者。</Typography>
         <Typography>
           <Link href={crashReport?.issueUrl ?? newIssueUrl} target="_blank">
-            File an issue on github
+            在 GitHub 上提交 Issue
           </Link>
         </Typography>
         <Typography>
           <Link href="https://discord.gg/TFc3hKD" target="_blank">
-            Post in the #bug-report channel on Discord.
+            在 Discord 的 #bug-report 频道发帖。
           </Link>
         </Typography>
         <Typography>
           <Link href="https://www.reddit.com/r/Bitburner/" target="_blank">
-            Make a reddit post
+            发布 Reddit 帖子
           </Link>
         </Typography>
         <Typography variant="h4" color={Settings.theme.warning}>
-          Please include your save file and the crash report.
+          请附上你的存档文件和崩溃报告。
         </Typography>
       </Box>
     );
@@ -174,40 +174,39 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
 
   return (
     <Box sx={{ padding: "8px 16px", minHeight: "100vh", boxSizing: "border-box" }}>
-      <Typography variant="h3">RECOVERY MODE ACTIVATED</Typography>
+      <Typography variant="h3">已进入恢复模式</Typography>
       <Typography>
-        There was an error with your save file and the game went into recovery mode. In this mode, saving is disabled
-        and the game will automatically export your save file to prevent corruption.
+        你的存档文件出现错误，游戏进入了恢复模式。在此模式下无法保存游戏，且游戏会自动导出你的存档文件以防止数据损坏。
       </Typography>
       <br />
       {sourceError && (
         <Box>
           <Typography variant="h6" color={Settings.theme.error}>
-            Error: {String(sourceError)}
+            错误：{String(sourceError)}
           </Typography>
           <br />
         </Box>
       )}
       {instructions}
       <div>
-        <Button onClick={exportSaveFile}>Export save file</Button>
+        <Button onClick={exportSaveFile}>导出存档文件</Button>
         {crashReport && (
           <Button onClick={() => exportCrashReport(crashReport.body)} style={{ marginLeft: "20px" }}>
-            Export crash report
+            导出崩溃报告
           </Button>
         )}
       </div>
       <br />
       {canDisableRecoveryMode && (
         <Typography>
-          You can disable the recovery mode, but the game may not work correctly, and your save data may be corrupted.
+          你可以禁用恢复模式，但游戏可能无法正常运行，且你的存档数据可能已损坏。
         </Typography>
       )}
       <ButtonGroup sx={{ my: 2 }}>
         {canDisableRecoveryMode && (
-          <Tooltip title="Disable the recovery mode and attempt to head back to the terminal page. This may or may not work. Ensure you saved the recovery file.">
+          <Tooltip title="禁用恢复模式并尝试返回终端页面。此操作不一定成功。请确保你已保存恢复文件。">
             <Button onClick={recover} startIcon={<DirectionsRunIcon />}>
-              Disable Recovery Mode
+              禁用恢复模式
             </Button>
           </Tooltip>
         )}
@@ -220,7 +219,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
           {crashReport.metadata.error.stack && (
             <Paper>
               <TextField
-                label="Stack Trace"
+                label="堆栈跟踪"
                 value={crashReport.metadata.error.stack}
                 variant="outlined"
                 multiline
@@ -230,13 +229,13 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
             </Paper>
           )}
           <Typography variant="h4" color={Settings.theme.warning}>
-            Do NOT take a screenshot of this screen. You must post the bug report text below.
+            请勿截取此屏幕的图片。你必须提交下方的错误报告文本。
           </Typography>
           <Paper sx={{ px: 2, pt: 1, pb: 2, mt: 2 }}>
             <Typography variant="h5">{crashReport.title}</Typography>
             <Box sx={{ my: 2 }}>
               <TextField
-                label={<Typography sx={{ fontSize: "20px" }}>Bug Report Text</Typography>}
+                label={<Typography sx={{ fontSize: "20px" }}>错误报告文本</Typography>}
                 value={crashReport.body}
                 variant="outlined"
                 color="secondary"
@@ -250,7 +249,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
                 }}
               />
             </Box>
-            <Tooltip title="Submitting an issue to GitHub really helps us improve the game!">
+            <Tooltip title="向 GitHub 提交 Issue 真的能帮助我们改进游戏！">
               <Button
                 component={Link}
                 startIcon={<GitHubIcon />}
@@ -259,7 +258,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
                 href={crashReport.issueUrl ?? newIssueUrl}
                 target={"_blank"}
               >
-                Submit Issue to GitHub
+                向 GitHub 提交 Issue
               </Button>
             </Tooltip>
           </Paper>

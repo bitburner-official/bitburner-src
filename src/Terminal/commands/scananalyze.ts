@@ -15,7 +15,7 @@ export function scananalyze(args: (string | number | boolean)[]): undefined {
   } else {
     // # of args must be 2 or 3
     if (args.length > 2) {
-      Terminal.error("Incorrect usage of scan-analyze command. usage: scan-analyze [depth]");
+      Terminal.error("scan-analyze 命令用法不正确。用法：scan-analyze [depth]");
       return;
     }
     let all = false;
@@ -26,18 +26,18 @@ export function scananalyze(args: (string | number | boolean)[]): undefined {
     const depth = parseInt(args[0] + "");
 
     if (isNaN(depth) || depth < 0) {
-      return Terminal.error("Incorrect usage of scan-analyze command. depth argument must be positive numeric");
+      return Terminal.error("scan-analyze 命令用法不正确。depth 参数必须是正数");
     }
     if (
       depth > 3 &&
       !Player.hasProgram(CompletedProgramName.deepScan1) &&
       !Player.hasProgram(CompletedProgramName.deepScan2)
     ) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 3");
+      return Terminal.error("scan-analyze 的深度不能这么大。最大深度为 3");
     } else if (depth > 5 && !Player.hasProgram(CompletedProgramName.deepScan2)) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 5");
+      return Terminal.error("scan-analyze 的深度不能这么大。最大深度为 5");
     } else if (depth > 10) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 10");
+      return Terminal.error("scan-analyze 的深度不能这么大。最大深度为 10");
     }
     executeScanAnalyzeCommand(depth, all);
   }
@@ -96,16 +96,16 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
 
     const server = GetServer(node.hostname);
     if (!server) return;
-    const hasRoot = server.hasAdminRights ? "YES" : "NO";
+    const hasRoot = server.hasAdminRights ? "是" : "否";
     if (server instanceof Server) {
       Terminal.print(
-        `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
+        `${infoPrefix}Root 权限：${hasRoot}，所需黑客等级：${server.requiredHackingSkill}` + "\n",
       );
-      Terminal.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n");
+      Terminal.print(`${infoPrefix}运行 NUKE 所需的开放端口数：${server.numOpenPortsRequired}` + "\n");
     } else {
-      Terminal.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n");
+      Terminal.print(`${infoPrefix}Root 权限：${hasRoot}` + "\n");
     }
-    Terminal.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
+    Terminal.print(`${infoPrefix}RAM：${formatRam(server.maxRam)}` + "\n");
     node.children.forEach((n, i) =>
       printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1),
     );

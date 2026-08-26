@@ -76,9 +76,9 @@ export function UpgradeOfficeSizeModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>Increase the size of your office space to fit additional employees!</Typography>
+      <Typography>扩大你的办公空间，以容纳更多员工！</Typography>
       <Box display="flex" alignItems="center">
-        <Typography>Upgrade size: </Typography>
+        <Typography>升级规模： </Typography>
         <UpgradeSizeButton
           onClose={props.onClose}
           rerender={props.rerender}

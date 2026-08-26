@@ -11,60 +11,57 @@ export const GameplayPage = (): React.ReactElement => {
     toggleSuppressErrorModals(newValue, true);
   };
   return (
-    <GameOptionsPage title="Gameplay">
+    <GameOptionsPage title="游戏玩法">
       <OptionSwitch
         checked={Settings.SuppressMessages}
         onChange={(newValue) => (Settings.SuppressMessages = newValue)}
-        text="Suppress story messages"
+        text="屏蔽剧情消息"
         tooltip={
           <>
-            If this is set, then any messages you receive will not appear as popups on the screen. They will still get
-            sent to your home computer as '.msg' files and can be viewed with the 'cat' Terminal command.
+            设置后，你收到的任何消息都不会以弹窗形式出现在屏幕上。它们仍会以“.msg”文件的形式发送到你的家用电脑，
+            可通过终端的“cat”命令查看。
           </>
         }
       />
       <OptionSwitch
         checked={Settings.SuppressFactionInvites}
         onChange={(newValue) => (Settings.SuppressFactionInvites = newValue)}
-        text="Suppress faction invites"
+        text="屏蔽派系邀请"
         tooltip={
           <>
-            If this is set, then any faction invites you receive will not appear as popups on the screen. Your
-            outstanding faction invites can be viewed in the 'Factions' page.
+            设置后，你收到的派系邀请不会以弹窗形式显示。待处理的派系邀请可在“派系”页面中查看。
           </>
         }
       />
       <OptionSwitch
         checked={Settings.SuppressTravelConfirmation}
         onChange={(newValue) => (Settings.SuppressTravelConfirmation = newValue)}
-        text="Suppress travel confirmations"
+        text="屏蔽旅行确认"
         tooltip={
           <>
-            If this is set, the confirmation message before traveling will not show up. You will automatically be
-            deducted the travel cost as soon as you click.
+            设置后，旅行前的确认消息将不再显示。一旦点击，将自动扣除旅行费用。
           </>
         }
       />
       <OptionSwitch
         checked={Settings.SuppressBuyAugmentationConfirmation}
         onChange={(newValue) => (Settings.SuppressBuyAugmentationConfirmation = newValue)}
-        text="Suppress augmentations confirmation"
-        tooltip={<>If this is set, the confirmation message before buying augmentation will not show up.</>}
+        text="屏蔽强化购买确认"
+        tooltip={<>设置后，购买强化前的确认消息将不再显示。</>}
       />
       <OptionSwitch
         checked={Settings.SuppressTIXPopup}
         onChange={(newValue) => (Settings.SuppressTIXPopup = newValue)}
-        text="Suppress TIX messages"
-        tooltip={<>If this is set, the stock market will never create any popup.</>}
+        text="屏蔽 TIX 消息"
+        tooltip={<>设置后，股票市场将不会创建任何弹窗。</>}
       />
       <OptionSwitch
         checked={Settings.SuppressErrorModals}
         onChange={toggleSuppressErrorModalsSetting}
-        text="Suppress error modals"
+        text="屏蔽错误弹窗"
         tooltip={
           <>
-            If this is set, script errors will never create any popups. The errors can still be seen on the "Recent
-            Errors" tab in the Active Scripts page.
+            设置后，脚本错误将不会创建任何弹窗。错误仍可在“运行中的脚本”页面的“最近错误”标签中查看。
           </>
         }
       />
@@ -72,11 +69,10 @@ export const GameplayPage = (): React.ReactElement => {
         <OptionSwitch
           checked={Settings.SuppressBladeburnerPopup}
           onChange={(newValue) => (Settings.SuppressBladeburnerPopup = newValue)}
-          text="Suppress bladeburner popup"
+          text="屏蔽 Bladeburner 弹窗"
           tooltip={
             <>
-              If this is set, then having your Bladeburner actions interrupted by being busy with something else will
-              not display a popup message.
+              设置后，当你的 Bladeburner 行动因忙于其他事务而被中断时，将不会显示弹窗消息。
             </>
           }
         />

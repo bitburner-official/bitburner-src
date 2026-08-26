@@ -42,42 +42,42 @@ export function UniversityLocation(props: IProps): React.ReactElement {
   const managementCost = calculateCost(Classes[UniversityClassType.management], props.loc);
   const leadershipCost = calculateCost(Classes[UniversityClassType.leadership], props.loc);
 
-  const earnHackingExpTooltip = `Gain hacking experience!`;
-  const earnCharismaExpTooltip = `Gain charisma experience!`;
+  const earnHackingExpTooltip = `获得黑客经验！`;
+  const earnCharismaExpTooltip = `获得魅力经验！`;
 
   return (
     <Box sx={{ display: "grid", width: "fit-content" }}>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.computerScience)}>Study Computer Science (free)</Button>
+        <Button onClick={() => take(UniversityClassType.computerScience)}>学习计算机科学（免费）</Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
         <Button onClick={() => take(UniversityClassType.dataStructures)}>
-          Take Data Structures course (
-          <Money money={dataStructuresCost} forPurchase={true} /> / sec)
+          上数据结构课程（
+          <Money money={dataStructuresCost} forPurchase={true} /> / 秒）
         </Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
         <Button onClick={() => take(UniversityClassType.networks)}>
-          Take Networks course (
-          <Money money={networksCost} forPurchase={true} /> / sec)
+          上网络课程（
+          <Money money={networksCost} forPurchase={true} /> / 秒）
         </Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
         <Button onClick={() => take(UniversityClassType.algorithms)}>
-          Take Algorithms course (
-          <Money money={algorithmsCost} forPurchase={true} /> / sec)
+          上算法课程（
+          <Money money={algorithmsCost} forPurchase={true} /> / 秒）
         </Button>
       </Tooltip>
       <Tooltip title={earnCharismaExpTooltip}>
         <Button onClick={() => take(UniversityClassType.management)}>
-          Take Management course (
-          <Money money={managementCost} forPurchase={true} /> / sec)
+          上管理课程（
+          <Money money={managementCost} forPurchase={true} /> / 秒）
         </Button>
       </Tooltip>
       <Tooltip title={earnCharismaExpTooltip}>
         <Button onClick={() => take(UniversityClassType.leadership)}>
-          Take Leadership course (
-          <Money money={leadershipCost} forPurchase={true} /> / sec)
+          上领导力课程（
+          <Money money={leadershipCost} forPurchase={true} /> / 秒）
         </Button>
       </Tooltip>
     </Box>

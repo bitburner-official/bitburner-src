@@ -10,22 +10,17 @@ function CovenantIncompleteCampaign() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Option
-        buttonText={"Research"}
-        infoText={"The Beginning of True Immortality"}
-        onClick={() => setOpen(true)}
-      ></Option>
+      <Option buttonText={"研究"} infoText={"真正永生的开端"} onClick={() => setOpen(true)}></Option>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Typography component="div">
-          You tried your best to help the research team, but this research isn't making any progress.
+          你竭尽全力帮助研究团队，但这项研究毫无进展。
           <br />
           <br />
           {knowAboutBitverse() ? (
-            "Maybe this research can only be completed in BitNode 10?"
+            "也许这项研究只能在 BitNode 10 中完成？"
           ) : (
             <>
-              Research data is always randomly corrupted for unknown reasons, and a weird message is sent to you every
-              time it happens:
+              研究数据总是因未知原因而随机损坏，每次发生时都会有一条奇怪的讯息发送给你：
               <br />
               <br />
               #@)($*&@__Y0U__^%$#@&*()__HAV3__(&@#*$%(@
@@ -53,8 +48,8 @@ export function CovenantCampaign() {
   return (
     <>
       <Option
-        buttonText={"Purchase & Upgrade Duplicate Sleeves"}
-        infoText={"Purchase Duplicate Sleeves and upgrades. These are permanent!"}
+        buttonText={"购买与升级复制分身"}
+        infoText={"购买复制分身及其升级。这些是永久的！"}
         onClick={() => setOpen(true)}
       ></Option>
       <CovenantPurchasesRoot open={open} onClose={() => setOpen(false)} />

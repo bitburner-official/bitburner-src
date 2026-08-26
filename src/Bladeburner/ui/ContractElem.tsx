@@ -34,13 +34,13 @@ export function ContractElem({ bladeburner, action }: ContractElemProps): React.
         <br />
         <SuccessChance action={action} bladeburner={bladeburner} />
         <br />
-        Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
+        所需时间：{convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Contracts remaining: {formatBigNumber(Math.floor(action.count))}
+        剩余合约次数：{formatBigNumber(Math.floor(action.count))}
         <br />
-        Successes: {formatBigNumber(action.successes)}
+        成功次数：{formatBigNumber(action.successes)}
         <br />
-        Failures: {formatBigNumber(action.failures)}
+        失败次数：{formatBigNumber(action.failures)}
       </Typography>
       <br />
       <Autolevel rerender={rerender} action={action} />

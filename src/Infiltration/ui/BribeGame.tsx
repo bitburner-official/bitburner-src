@@ -44,7 +44,7 @@ export function BribeGame({ stage }: IProps): React.ReactElement {
   return (
     <>
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
-        <Typography variant="h4">Say something nice about the guard</Typography>
+        <Typography variant="h4">说点守卫的好话</Typography>
         <Typography variant="h5" color={upColor}>
           {upArrowSymbol}
         </Typography>

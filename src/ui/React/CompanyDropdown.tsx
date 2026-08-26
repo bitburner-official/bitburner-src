@@ -31,7 +31,7 @@ export function CompanyDropdown(props: IProps): React.ReactElement {
     <Select
       startAdornment={
         <Button onClick={props.purchase} disabled={!props.canPurchase}>
-          Buy
+          购买
         </Button>
       }
       sx={{ mx: 1 }}

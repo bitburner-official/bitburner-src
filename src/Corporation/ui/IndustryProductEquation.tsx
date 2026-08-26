@@ -17,7 +17,7 @@ export function IndustryProductEquation(props: IProps): React.ReactElement {
   }
   const prod = props.division.producedMaterials.map((materialName) => `1 ${materialName}`);
   if (props.division.makesProducts) {
-    prod.push("Products");
+    prod.push("产品");
   }
 
   return (

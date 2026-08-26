@@ -25,7 +25,7 @@ export function StartButton({ bladeburner, action, rerender }: StartButtonProps)
       disabledTooltip={disabledReason}
       onClick={onStart}
     >
-      Start
+      开始
     </ButtonWithTooltip>
   );
 }

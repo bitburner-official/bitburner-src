@@ -27,7 +27,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
   // Utility function to get Hacknet Node object
   const getHacknetNode = function (ctx: NetscriptContext, i: number): HacknetNode | HacknetServer {
     if (i < 0 || i >= Player.hacknetNodes.length) {
-      throw helpers.errorMessage(ctx, "Index specified for Hacknet Node is out-of-bounds: " + i);
+      throw helpers.errorMessage(ctx, "指定的 Hacknet 节点索引越界：" + i);
     }
 
     if (hasHacknetServers()) {
@@ -38,7 +38,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       if (hserver == null) {
         throw helpers.errorMessage(
           ctx,
-          `Could not get Hacknet Server for index ${i}. This is probably a bug, please report to game dev`,
+          `无法获取索引 ${i} 对应的 Hacknet 服务器。这可能是 bug，请报告给游戏开发者`,
         );
       }
 
@@ -118,7 +118,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       }
       const node = getHacknetNode(ctx, i);
       if (!(node instanceof HacknetServer)) {
-        helpers.log(ctx, () => "Can only be called on hacknet servers");
+        helpers.log(ctx, () => "只能在 Hacknet 服务器上调用");
         return false;
       }
       const res = purchaseCacheUpgrade(node, n);
@@ -153,7 +153,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       }
       const node = getHacknetNode(ctx, i);
       if (!(node instanceof HacknetServer)) {
-        helpers.log(ctx, () => "Can only be called on hacknet servers");
+        helpers.log(ctx, () => "只能在 Hacknet 服务器上调用");
         return -1;
       }
       return node.calculateCacheUpgradeCost(n);
@@ -184,7 +184,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       const upgTarget = helpers.string(ctx, "upgTarget", _upgTarget);
       const count = helpers.integer(ctx, "count", _count);
       if (count < 0) {
-        throw helpers.errorMessage(ctx, "Count must be a non-negative integer.");
+        throw helpers.errorMessage(ctx, "count 必须是非负整数。");
       }
       if (!hasHacknetServers()) {
         return false;
@@ -205,7 +205,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       const upgName = helpers.string(ctx, "upgName", _upgName);
       const level = Player.hashManager.upgrades[upgName];
       if (level === undefined) {
-        throw helpers.errorMessage(ctx, `Invalid Hash Upgrade: ${upgName}`);
+        throw helpers.errorMessage(ctx, `无效的哈希升级：${upgName}`);
       }
       return level;
     },

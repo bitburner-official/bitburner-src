@@ -9,15 +9,15 @@ import { formatExp, formatSecurity } from "../../ui/formatNumber";
 import { getWeakenEffect } from "../../Server/ServerHelpers";
 
 export function weaken(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
-  if (args.length !== 0) return Terminal.error("Incorrect usage of weaken command. Usage: weaken");
+  if (args.length !== 0) return Terminal.error("weaken 命令用法不正确。用法：weaken");
 
-  if (server.purchasedByPlayer) return Terminal.error("Cannot weaken your own machines!");
-  if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
+  if (server.purchasedByPlayer) return Terminal.error("无法削弱你自己的机器！");
+  if (!server.hasAdminRights) return Terminal.error("你没有这台机器的管理员权限！");
   // Weaken does not require meeting the hacking level, but undefined requiredHackingSkill indicates the wrong type of server.
-  if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot weaken this server.");
+  if (server.requiredHackingSkill === undefined) return Terminal.error("无法削弱这台服务器。");
 
   if (server instanceof HacknetServer) {
-    Terminal.error("Cannot weaken this kind of server");
+    Terminal.error("无法削弱此类服务器");
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -30,10 +30,10 @@ export function weaken(args: (string | number | boolean)[], server: BaseServer):
 
     Player.gainHackingExp(expGain);
     Terminal.print(
-      `Security decreased on '${server.hostname}' by ${formatSecurity(weakenAmt)} from ${formatSecurity(
+      `'${server.hostname}' 的安全等级降低了 ${formatSecurity(weakenAmt)}，从 ${formatSecurity(
         oldSec,
-      )} to ${formatSecurity(newSec)} (min: ${formatSecurity(server.minDifficulty)})` +
-        ` and Gained ${formatExp(expGain)} hacking exp.`,
+      )} 降至 ${formatSecurity(newSec)}（最低：${formatSecurity(server.minDifficulty)}）` +
+        `，并获得 ${formatExp(expGain)} 点黑客经验。`,
     );
   });
 }

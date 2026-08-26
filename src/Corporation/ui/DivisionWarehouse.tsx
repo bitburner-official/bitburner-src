@@ -123,39 +123,38 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
   }
 
   if (breakdownItems.length > 0) {
-    breakdownItems.unshift(["", "Size", "Units", "Total Space"]);
+    breakdownItems.unshift(["", "大小", "数量", "占用空间"]);
   }
 
   const breakdown =
-    breakdownItems.length > 0 ? <StatsTable rows={breakdownItems} paddingLeft="1em" /> : <>No items in storage.</>;
+    breakdownItems.length > 0 ? <StatsTable rows={breakdownItems} paddingLeft="1em" /> : <>仓库中没有任何物品。</>;
 
   return (
     <Paper>
       <Box display="flex" alignItems="center">
         <Tooltip title={breakdown}>
           <Typography color={props.warehouse.sizeUsed >= props.warehouse.size ? "error" : "primary"}>
-            Storage space: {formatBigNumber(props.warehouse.sizeUsed)} / {formatBigNumber(props.warehouse.size)}
+            仓储空间：{formatBigNumber(props.warehouse.sizeUsed)} / {formatBigNumber(props.warehouse.size)}
           </Typography>
         </Tooltip>
       </Box>
 
       <ButtonWithTooltip
-        disabledTooltip={canAffordUpgrade ? "" : "Insufficient corporation funds"}
+        disabledTooltip={canAffordUpgrade ? "" : "企业资金不足"}
         onClick={upgradeWarehouseOnClick}
       >
-        Upgrade Warehouse Size -&nbsp;
+        升级仓库容量 -&nbsp;
         <MoneyCost money={sizeUpgradeCost} corp={corp} />
       </ButtonWithTooltip>
 
-      <Typography>This industry uses the following equation for its production: </Typography>
+      <Typography>该行业使用以下公式进行生产：</Typography>
       <br />
       <Typography>
         <IndustryProductEquation key={division.name} division={division} />
       </Typography>
       <br />
       <Typography>
-        To get started with production, purchase your required materials or import them from another of your company's
-        divisions.
+        要开始生产，请购买所需材料，或从公司的其他部门进口。
       </Typography>
       <br />
       <Typography style={{ whiteSpace: "pre-wrap" }} className={classes.retainHeight}>
@@ -163,7 +162,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
       </Typography>
       {corp.unlocks.has(CorpUnlockName.SmartSupply) && (
         <>
-          <Button onClick={() => setSmartSupplyOpen(true)}>Configure Smart Supply</Button>
+          <Button onClick={() => setSmartSupplyOpen(true)}>配置智能供应</Button>
           <SmartSupplyModal
             open={smartSupplyOpen}
             onClose={() => setSmartSupplyOpen(false)}
@@ -195,7 +194,7 @@ interface IEmptyProps {
 function EmptyWarehouse(props: IEmptyProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const disabledText = corp.funds < corpConstants.warehouseInitialCost ? "Insufficient corporation funds" : "";
+  const disabledText = corp.funds < corpConstants.warehouseInitialCost ? "企业资金不足" : "";
   function newWarehouse(): void {
     if (disabledText) return;
     purchaseWarehouse(corp, division, props.city);
@@ -204,8 +203,8 @@ function EmptyWarehouse(props: IEmptyProps): React.ReactElement {
   return (
     <Paper>
       <ButtonWithTooltip onClick={newWarehouse} disabledTooltip={disabledText}>
-        Purchase Warehouse (
-        <MoneyCost money={corpConstants.warehouseInitialCost} corp={corp} />)
+        购买仓库（
+        <MoneyCost money={corpConstants.warehouseInitialCost} corp={corp} />）
       </ButtonWithTooltip>
     </Paper>
   );

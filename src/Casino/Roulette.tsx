@@ -110,7 +110,7 @@ export function Roulette(): React.ReactElement {
   const [rng] = useState(new WHRNG(new Date().getTime()));
   const [investment, setInvestment] = useState(initialBet);
   const [canPlay, setCanPlay] = useState(true);
-  const [status, setStatus] = useState<string | JSX.Element>("waiting");
+  const [status, setStatus] = useState<string | JSX.Element>("等待中");
   const [n, setN] = useState(0);
   const [lock, setLock] = useState(true);
 
@@ -138,7 +138,7 @@ export function Roulette(): React.ReactElement {
 
     setCanPlay(false);
     setLock(false);
-    setStatus("playing");
+    setStatus("旋转中");
 
     setTimeout(() => {
       let n = Math.floor(rng.random() * 37);
@@ -156,14 +156,14 @@ export function Roulette(): React.ReactElement {
         gain = investment * strategy.payout;
         status = (
           <>
-            won <Money money={gain} />
+            赢得 <Money money={gain} />
           </>
         );
       } else {
         gain = -investment;
         status = (
           <>
-            lost <Money money={-gain} />
+            输掉 <Money money={-gain} />
           </>
         );
       }
@@ -379,49 +379,49 @@ export function Roulette(): React.ReactElement {
           <tr>
             <td colSpan={4}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Third1))}>
-                1 to 12
+                1 到 12
               </Button>
             </td>
             <td colSpan={4}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Third2))}>
-                13 to 24
+                13 到 24
               </Button>
             </td>
             <td colSpan={4}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Third3))}>
-                25 to 36
+                25 到 36
               </Button>
             </td>
           </tr>
           <tr>
             <td colSpan={2}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Red))}>
-                Red
+                红
               </Button>
             </td>
             <td colSpan={2}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Black))}>
-                Black
+                黑
               </Button>
             </td>
             <td colSpan={2}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Odd))}>
-                Odd
+                单
               </Button>
             </td>
             <td colSpan={2}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Even))}>
-                Even
+                双
               </Button>
             </td>
             <td colSpan={2}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.High))}>
-                High
+                大
               </Button>
             </td>
             <td colSpan={2}>
               <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Low))}>
-                Low
+                小
               </Button>
             </td>
           </tr>

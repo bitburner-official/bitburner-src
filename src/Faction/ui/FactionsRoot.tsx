@@ -29,17 +29,17 @@ const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
   return (
     <>
       {info.offerFieldWork && (
-        <Tooltip title="This Faction offers field work">
+        <Tooltip title="该派系提供外勤工作">
           <Explore sx={{ color: Settings.theme.info, mr: marginRight }} fontSize={fontSize} />
         </Tooltip>
       )}
       {info.offerHackingWork && (
-        <Tooltip title="This Faction offers hacking work">
+        <Tooltip title="该派系提供黑客工作">
           <LastPage sx={{ color: Settings.theme.hack, mr: marginRight }} fontSize={fontSize} />
         </Tooltip>
       )}
       {info.offerSecurityWork && (
-        <Tooltip title="This Faction offers security work">
+        <Tooltip title="该派系提供安保工作">
           <LocalPolice sx={{ color: Settings.theme.combat, mr: marginRight }} fontSize={fontSize} />
         </Tooltip>
       )}
@@ -114,12 +114,12 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
               "& .MuiButton-root": { height: "48px" },
             }}
           >
-            <Button onClick={() => openFaction(props.faction)}>Details</Button>
-            <Button onClick={() => openFactionAugPage(props.faction)}>Augments</Button>
+            <Button onClick={() => openFaction(props.faction)}>详情</Button>
+            <Button onClick={() => openFactionAugPage(props.faction)}>强化</Button>
           </Box>
         ) : props.faction.alreadyInvited ? (
           <Button sx={{ height: "48px", mr: 1 }} onClick={(e) => acceptInvitation(e, props.faction.name)}>
-            Join!
+            加入！
           </Button>
         ) : null}
 
@@ -145,7 +145,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                 <span style={getStylesForFactionName(props.faction)}>{props.faction.name}</span>
               </Tooltip>
             ) : (
-              <Tooltip title={"Rumored Faction"}>
+              <Tooltip title={"传闻中的派系"}>
                 <span style={getStylesForFactionName(props.faction)}>
                   <CorruptibleText content={props.faction.name} spoiler={false} />
                 </span>
@@ -154,13 +154,13 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
 
             <span style={{ display: "flex", alignItems: "center" }}>
               {Player.hasGangWith(props.faction.name) && (
-                <Tooltip title="You have a gang with this Faction">
+                <Tooltip title="你已在该派系拥有帮派">
                   <SportsMma sx={{ color: Settings.theme.hp, ml: 1 }} />
                 </Tooltip>
               )}
 
               {facInfo.special && (
-                <Tooltip title="This is a special Faction">
+                <Tooltip title="这是一个特殊派系">
                   <NewReleases sx={{ ml: 1, color: Settings.theme.money, transform: "rotate(180deg)" }} />
                 </Tooltip>
               )}
@@ -169,13 +169,13 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                 <Tooltip
                   title={
                     <Typography component="div">
-                      This Faction is enemies with:
+                      该派系的敌对派系：
                       <ul>
                         {facInfo.enemies.map((enemy) => (
                           <li key={enemy}>{enemy}</li>
                         ))}
                       </ul>
-                      {!props.faction.isMember && <>Joining this Faction will prevent you from joining its enemies.</>}
+                      {!props.faction.isMember && <>加入该派系将导致你无法加入其敌对派系。</>}
                     </Typography>
                   }
                 >
@@ -189,9 +189,9 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             {props.faction.isMember || props.faction.alreadyInvited ? (
               <>
                 {!Player.hasGangWith(props.faction.name) && <WorkTypesOffered faction={props.faction} />}
-                <Typography variant="body2" sx={{ display: "flex", whiteSpace: "nowrap" }}>{`${
-                  augsLeft || "No"
-                } Augmentations left`}</Typography>
+                <Typography variant="body2" sx={{ display: "flex", whiteSpace: "nowrap" }}>{`还可解锁 ${
+                  augsLeft || "无"
+                } 个强化`}</Typography>
               </>
             ) : (
               <Typography variant="body2" component="div">
@@ -204,9 +204,9 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
 
       {props.faction.isMember && (
         <Box display="grid" sx={{ alignItems: "center", justifyItems: "left", gridAutoFlow: "row" }}>
-          <Typography sx={{ color: Settings.theme.rep }}>{formatFavor(props.faction.favor)} favor</Typography>
+          <Typography sx={{ color: Settings.theme.rep }}>{formatFavor(props.faction.favor)} 人脉</Typography>
           <Typography sx={{ color: Settings.theme.rep }}>
-            {formatReputation(props.faction.playerReputation)} rep
+            {formatReputation(props.faction.playerReputation)} 声望
           </Typography>
         </Box>
       )}
@@ -234,13 +234,11 @@ export function FactionsRoot(): React.ReactElement {
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0, mb: 10 }}>
       <Typography variant="h4">
-        Factions
+        派系
         <Tooltip
           title={
             <Typography>
-              Throughout the game you may receive invitations from factions. There are many different factions, and each
-              faction has different criteria for determining its potential members. Joining a faction and furthering its
-              cause is crucial to progressing in the game and unlocking endgame content.
+              在游戏过程中你会收到来自各个派系的邀请。游戏中有许多不同的派系，每个派系都有不同的准入标准。加入派系并推进其事业，对推进游戏进程和解锁终局内容至关重要。
             </Typography>
           }
         >
@@ -266,7 +264,7 @@ export function FactionsRoot(): React.ReactElement {
           {invitedFactions.length > 0 && (
             <>
               <Typography variant="h5" color="primary">
-                Faction Invitations
+                派系邀请
               </Typography>
               <Box>
                 {invitedFactions.map((faction) => (
@@ -281,7 +279,7 @@ export function FactionsRoot(): React.ReactElement {
           {Player.inGang() && (
             <>
               <Typography variant="h5" color="primary">
-                Your Gang
+                你的帮派
               </Typography>
               <Box>
                 <FactionElement key={Player.getGangName()} faction={Player.getGangFaction()} rerender={rerender} />
@@ -289,7 +287,7 @@ export function FactionsRoot(): React.ReactElement {
             </>
           )}
           <Typography variant="h5" color="primary">
-            Your Factions
+            你的派系
           </Typography>
           <Box>
             {joinedFactions.length > 0 ? (
@@ -298,14 +296,14 @@ export function FactionsRoot(): React.ReactElement {
                 return <FactionElement key={faction.name} faction={faction} rerender={rerender} />;
               })
             ) : (
-              <Typography>You have not yet joined any Factions.</Typography>
+              <Typography>你尚未加入任何派系。</Typography>
             )}
           </Box>
         </span>
       </Box>
       <div style={{ margin: "15px 0" }}>
         <Typography variant="h5" color="primary">
-          Share RAM
+          共享 RAM
         </Typography>
         <ShareOption rerender={rerender} />
       </div>
@@ -313,7 +311,7 @@ export function FactionsRoot(): React.ReactElement {
         {rumoredFactions.length > 0 && (
           <>
             <Typography variant="h5" color="primary">
-              Rumors
+              传闻
             </Typography>
             <Box style={{ display: "grid", gap: 1, gridAutoRows: "minmax(70px, auto)" }}>
               {rumoredFactions.map((faction) => (

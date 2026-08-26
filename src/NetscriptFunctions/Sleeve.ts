@@ -23,7 +23,7 @@ import {
 
 export const checkBitNodeRequirement = function (ctx: NetscriptContext) {
   if (Player.bitNodeN !== 10) {
-    throw helpers.errorMessage(ctx, "You must be in BitNode 10 to use this API.");
+    throw helpers.errorMessage(ctx, "你必须处于 BitNode 10 才能使用此 API。");
   }
 };
 
@@ -35,14 +35,14 @@ export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
   if (Player.bitNodeN !== 10 && Player.sourceFileLvl(10) <= 0) {
     throw helpers.errorMessage(
       ctx,
-      "You do not currently have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10",
+      "你目前无法访问分身 API。这可能是因为你不在 BitNode-10，或者你没有源文件 10",
     );
   }
 };
 
 export const checkSleeveNumber = function (ctx: NetscriptContext, sleeveNumber: number) {
   if (sleeveNumber >= Player.sleeves.length || sleeveNumber < 0) {
-    const msg = `Invalid sleeve number: ${sleeveNumber}`;
+    const msg = `无效的分身编号：${sleeveNumber}`;
     throw helpers.errorMessage(ctx, msg);
   }
 };
@@ -52,14 +52,14 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     if (!canAccessBitNodeFeature(10)) {
       throw helpers.errorMessage(
         ctx,
-        "You do not have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10.",
+        "你无法访问分身 API。这可能是因为你不在 BitNode-10，或者你没有源文件 10。",
       );
     }
   };
 
   const checkSleeveNumber = function (ctx: NetscriptContext, sleeveNumber: number) {
     if (sleeveNumber >= Player.sleeves.length || sleeveNumber < 0) {
-      const msg = `Invalid sleeve number: ${sleeveNumber}`;
+      const msg = `无效的分身编号：${sleeveNumber}`;
       helpers.log(ctx, () => msg);
       throw helpers.errorMessage(ctx, msg);
     }
@@ -111,7 +111,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
       if (!Player.sleeves[sleeveNumber].travel(cityName)) {
-        helpers.log(ctx, () => "Not enough money to travel.");
+        helpers.log(ctx, () => "资金不足，无法旅行。");
         return false;
       }
       return true;
@@ -131,7 +131,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
         if (isSleeveCompanyWork(other.currentWork) && other.currentWork.companyName === companyName) {
           throw helpers.errorMessage(
             ctx,
-            `Sleeve ${sleeveNumber} cannot work for company ${companyName} because Sleeve ${i} is already working for them.`,
+            `分身 ${sleeveNumber} 不能为公司 ${companyName} 工作，因为分身 ${i} 已经在为它工作了。`,
           );
         }
       }
@@ -146,7 +146,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveNumber(ctx, sleeveNumber);
 
       if (!Factions[factionName].isMember) {
-        throw helpers.errorMessage(ctx, `Cannot work for faction ${factionName} without being a member.`);
+        throw helpers.errorMessage(ctx, `不是派系 ${factionName} 的成员，无法为其工作。`);
       }
 
       // Cannot work at the same faction that another sleeve is working at
@@ -158,7 +158,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
         if (isSleeveFactionWork(other.currentWork) && other.currentWork.factionName === factionName) {
           throw helpers.errorMessage(
             ctx,
-            `Sleeve ${sleeveNumber} cannot work for faction ${factionName} because Sleeve ${i} is already working for them.`,
+            `分身 ${sleeveNumber} 不能为派系 ${factionName} 工作，因为分身 ${i} 已经在为它工作了。`,
           );
         }
       }
@@ -166,7 +166,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       if (Player.gang && Player.gang.facName == factionName) {
         throw helpers.errorMessage(
           ctx,
-          `Sleeve ${sleeveNumber} cannot work for faction ${factionName} because you have started a gang with them.`,
+          `分身 ${sleeveNumber} 不能为派系 ${factionName} 工作，因为你已与它建立了帮派。`,
         );
       }
 
@@ -247,7 +247,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
 
       const aug = Augmentations[augName];
       if (!aug) {
-        throw helpers.errorMessage(ctx, `Invalid aug: ${augName}`);
+        throw helpers.errorMessage(ctx, `无效的强化：${augName}`);
       }
 
       const result = Player.sleeves[sleeveNumber].purchaseAugmentation(aug);
@@ -274,7 +274,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
       if (!Player.bladeburner) {
-        helpers.log(ctx, () => "You must be a member of the Bladeburner division to use this API.");
+        helpers.log(ctx, () => "你必须成为 Bladeburner 部门的成员才能使用此 API。");
         return false;
       }
       let contract: BladeburnerContractName | undefined = undefined;
@@ -288,14 +288,14 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
           if (otherWork?.type === SleeveWorkType.BLADEBURNER && otherWork.actionId.name === contract) {
             throw helpers.errorMessage(
               ctx,
-              `Sleeve ${sleeveNumber} cannot take on contracts because Sleeve ${i} is already performing that action.`,
+              `分身 ${sleeveNumber} 无法承接合约，因为分身 ${i} 已经在执行该行动了。`,
             );
           }
         }
         const actionId: ActionIdentifier = { type: BladeburnerActionType.Contract, name: contract };
         const availability = Player.bladeburner.getActionObject(actionId).getAvailability(Player.bladeburner);
         if (!availability.available) {
-          helpers.log(ctx, () => `Could not start action ${contract}: ${availability.error}`);
+          helpers.log(ctx, () => `无法开始行动 ${contract}：${availability.error}`);
           return false;
         }
       }

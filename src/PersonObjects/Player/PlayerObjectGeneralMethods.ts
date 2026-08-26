@@ -283,7 +283,7 @@ export function hospitalize(this: PlayerObject, suppressNotification: boolean): 
   this.loseMoney(cost, "hospitalization");
   this.hp.current = this.hp.max;
   if (!suppressNotification) {
-    SnackbarEvents.emit(`You've been hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
+    SnackbarEvents.emit(`你因受伤住院，花费了 ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
   }
   PlayerEvents.emit(PlayerEventType.Hospitalized);
   return cost;
@@ -303,7 +303,7 @@ export function applyForJob(
   position: CompanyPosition,
 ): Result<{ jobName: JobName }> {
   if (!company) {
-    return { success: false, message: `Invalid company: ${company}.` };
+    return { success: false, message: `无效的公司：${company}。` };
   }
 
   // Start searching the job track from the provided point (which may not be the entry position)
@@ -311,14 +311,14 @@ export function applyForJob(
   if (!this.isQualified(company, pos)) {
     return {
       success: false,
-      message: `Unfortunately, you do not qualify for this position.\n${getJobRequirementText(company, pos)}`,
+      message: `很遗憾，你不符合该职位的条件。\n${getJobRequirementText(company, pos)}`,
     };
   }
 
   if (!company.hasPosition(pos)) {
     return {
       success: false,
-      message: `Company ${company.name} does not have position ${pos.name}.`,
+      message: `公司 ${company.name} 没有职位 ${pos.name}。`,
     };
   }
 
@@ -333,11 +333,11 @@ export function applyForJob(
     let errorMessage;
     const nextPos = getNextCompanyPositionHelper(pos);
     if (nextPos === null) {
-      errorMessage = `You are already ${pos.name}! No promotion available.`;
+      errorMessage = `你已经是${pos.name}了！没有可以晋升的职位。`;
     } else if (!company.hasPosition(nextPos)) {
-      errorMessage = `You already have the highest ${pos.field} position available at ${company.name}! No promotion available.`;
+      errorMessage = `你已经是你在${company.name}的${pos.field}方向上可获得的最高职位！没有可以晋升的职位。`;
     } else {
-      errorMessage = `Unfortunately, you do not qualify for a promotion.\n${getJobRequirementText(company, nextPos)}`;
+      errorMessage = `很遗憾，你不符合晋升的条件。\n${getJobRequirementText(company, nextPos)}`;
     }
     return { success: false, message: errorMessage };
   }
@@ -346,7 +346,7 @@ export function applyForJob(
 
   return {
     success: true,
-    message: `${pos.hiredText} at ${company.name}!`,
+    message: `${pos.hiredText}，任职于${company.name}！`,
     jobName: pos.name,
   };
 }
@@ -385,7 +385,7 @@ export function quitJob(this: PlayerObject, company: CompanyName, suppressDialog
     if (sleeve.currentWork?.type === SleeveWorkType.COMPANY && sleeve.currentWork.companyName === company) {
       sleeve.stopWork();
       if (!suppressDialog) {
-        dialogBoxCreate(`You quit ${company} while one of your sleeves was working there. The sleeve is now idle.`);
+        dialogBoxCreate(`你的某个分身当时正在为${company}工作，而你辞职了。该分身现在处于空闲状态。`);
       }
     }
   }
@@ -474,7 +474,7 @@ export function queueAugmentation(this: PlayerObject, name: AugmentationName): v
   if (name !== AugmentationName.NeuroFluxGovernor) {
     for (const aug of this.queuedAugmentations) {
       if (name === aug.name) {
-        AlertEvents.emit(`Tried to queue ${name} twice. This is a bug. Please contact developers.`);
+        AlertEvents.emit(`试图将 ${name} 加入队列两次。这是一个 bug，请联系开发者。`);
         return;
       }
     }
@@ -482,7 +482,7 @@ export function queueAugmentation(this: PlayerObject, name: AugmentationName): v
     for (const aug of this.augmentations) {
       if (aug.name === name) {
         AlertEvents.emit(
-          `Tried to queue ${name}, but this augmentation was installed. This is a bug. Please contact developers.`,
+          `试图将 ${name} 加入队列，但该强化已被安装。这是一个 bug，请联系开发者。`,
         );
         return;
       }
@@ -505,7 +505,7 @@ export function gainCodingContractReward(
   rewardScaling: number,
 ): string {
   if (!reward) {
-    return `No reward for this contract`;
+    return `该合约没有奖励`;
   }
   // The new standard is smaller, more frequent rewards - a third of the reward size of the previous
   const adjustedScaling = rewardScaling / 3;
@@ -519,7 +519,7 @@ export function gainCodingContractReward(
       const randomFaction = factionsThatAllowHacking[getRandomIntInclusive(0, factionsThatAllowHacking.length - 1)];
       const repGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty * adjustedScaling;
       Factions[randomFaction].playerReputation += repGain;
-      return `Gained ${repGain} faction reputation for ${randomFaction}`;
+      return `为${randomFaction}获得了 ${repGain} 派系声望`;
     }
     case CodingContractRewardType.FactionReputationAll: {
       const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
@@ -532,7 +532,7 @@ export function gainCodingContractReward(
       for (const facName of factionsThatAllowHacking) {
         Factions[facName].playerReputation += gainPerFaction;
       }
-      return `Gained ${gainPerFaction} reputation for each of the following factions: ${factionsThatAllowHacking.join(
+      return `为以下每个派系各获得 ${gainPerFaction} 声望：${factionsThatAllowHacking.join(
         ", ",
       )}`;
     }
@@ -553,13 +553,13 @@ export function gainCodingContractReward(
       const randomCompany = companies[getRandomIntInclusive(0, companies.length - 1)];
       const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty * adjustedScaling;
       Companies[randomCompany].playerReputation += repGain;
-      return `Gained ${repGain} company reputation for ${randomCompany}`;
+      return `为${randomCompany}获得了 ${repGain} 公司声望`;
     }
     case CodingContractRewardType.Money: {
       const moneyGain =
         CONSTANTS.CodingContractBaseMoneyGain * difficulty * currentNodeMults.CodingContractMoney * adjustedScaling;
       this.gainMoney(moneyGain, "codingcontract");
-      return `Gained ${formatMoney(moneyGain)}`;
+      return `获得了 ${formatMoney(moneyGain)}`;
     }
     default: {
       // Verify type switch statement is exhaustive
@@ -581,7 +581,7 @@ export function canAccessGrafting(this: PlayerObject): boolean {
 export function giveExploit(this: PlayerObject, exploit: Exploit): void {
   if (!this.exploits.includes(exploit)) {
     this.exploits.push(exploit);
-    SnackbarEvents.emit("SF -1 acquired!", ToastVariant.SUCCESS, 2000);
+    SnackbarEvents.emit("已获得 SF -1！", ToastVariant.SUCCESS, 2000);
   }
 }
 
@@ -592,7 +592,7 @@ export function giveAchievement(this: PlayerObject, achievementId: AchievementId
   }
   if (!this.achievements.map((a) => a.ID).includes(achievementId)) {
     this.achievements.push({ ID: achievementId, unlockedOn: new Date().getTime() });
-    SnackbarEvents.emit(`Unlocked Achievement: "${achievement.Name}"`, ToastVariant.SUCCESS, 2000);
+    SnackbarEvents.emit(`已解锁成就："${achievement.Name}"`, ToastVariant.SUCCESS, 2000);
   }
 }
 

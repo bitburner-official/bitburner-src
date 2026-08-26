@@ -22,13 +22,13 @@ interface IProps {
 
 function productPlaceholder(type: string): string {
   if (type === IndustryType.Restaurant) {
-    return "Restaurant Name";
+    return "餐厅名称";
   } else if (type === IndustryType.Healthcare) {
-    return "Hospital Name";
+    return "医院名称";
   } else if (type === IndustryType.RealEstate) {
-    return "Property Name";
+    return "地产项目名称";
   }
-  return "Product Name";
+  return "产品名称";
 }
 
 // Create a popup that lets the player create a product for their current industry
@@ -72,13 +72,10 @@ export function MakeProductModal(props: IProps): React.ReactElement {
         {data.product.desc}
         <br />
         <br />
-        To begin developing a product, first choose the city in which it will be designed. The stats of your employees
-        in the selected city affect the properties of the finished product, such as its quality, performance, and
-        durability.
+        要开始开发产品，请先选择进行设计的城市。所选城市员工的属性会影响成品的各种特性，例如质量、性能和耐久度。
         <br />
         <br />
-        You can also choose to invest money in the design and marketing of the product. Investing money in its design
-        will result in a superior product. Investing money in marketing the product will help the product's sales.
+        你还可以选择投入资金用于产品设计和市场营销。投资设计会带来更优秀的产品；为产品营销投入资金则有助于提升产品的销量。
       </Typography>
       <Select style={{ margin: "5px" }} onChange={onCityChange} defaultValue={city}>
         {availableCities.map((cityName: string) => (
@@ -89,9 +86,9 @@ export function MakeProductModal(props: IProps): React.ReactElement {
       </Select>
       <TextField onChange={onProductNameChange} placeholder={productPlaceholder(division.industry)} />
       <br />
-      <NumberInput onChange={setDesign} autoFocus={true} placeholder={"Design investment"} />
-      <NumberInput onChange={setMarketing} onKeyDown={onKeyDown} placeholder={"Marketing investment"} />
-      <Button onClick={makeProduct}>Develop Product</Button>
+      <NumberInput onChange={setDesign} autoFocus={true} placeholder={"设计投资"} />
+      <NumberInput onChange={setMarketing} onKeyDown={onKeyDown} placeholder={"营销投资"} />
+      <Button onClick={makeProduct}>开发产品</Button>
     </Modal>
   );
 }

@@ -15,7 +15,7 @@ export function SleevesDev(): React.ReactElement {
     return (
       <AutoExpandAccordion cacheKey="DEVMENU_SleevesDev" unmountOnExit={true} disabled={true}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Sleeves</Typography>
+          <Typography>分身</Typography>
         </AccordionSummary>
       </AutoExpandAccordion>
     );
@@ -54,43 +54,43 @@ export function SleevesDev(): React.ReactElement {
   return (
     <AutoExpandAccordion cacheKey="DEVMENU_SleevesDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Sleeves</Typography>
+        <Typography>分身</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <table>
           <tbody>
             <tr>
               <td>
-                <Typography>Shock:</Typography>
+                <Typography>震荡：</Typography>
               </td>
               <td>
-                <Button onClick={sleeveMaxAllShock}>Max all</Button>
+                <Button onClick={sleeveMaxAllShock}>全部最大</Button>
               </td>
               <td>
-                <Button onClick={sleeveClearAllShock}>Clear all</Button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Typography>Sync:</Typography>
-              </td>
-              <td>
-                <Button onClick={sleeveSyncMaxAll}>Max all</Button>
-              </td>
-              <td>
-                <Button onClick={sleeveSyncClearAll}>Clear all</Button>
+                <Button onClick={sleeveClearAllShock}>全部清零</Button>
               </td>
             </tr>
             <tr>
               <td>
-                <Typography>Total:</Typography>
+                <Typography>同步：</Typography>
+              </td>
+              <td>
+                <Button onClick={sleeveSyncMaxAll}>全部最大</Button>
+              </td>
+              <td>
+                <Button onClick={sleeveSyncClearAll}>全部清零</Button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>总计：</Typography>
               </td>
             </tr>
             <tr>
               <td colSpan={3}>
                 <Adjuster
-                  label="Stored Cycles"
-                  placeholder="cycles"
+                  label="已存储周期"
+                  placeholder="周期"
                   tons={() => sleeveSetStoredCycles(10000000)}
                   add={sleeveSetStoredCycles}
                   subtract={sleeveSetStoredCycles}

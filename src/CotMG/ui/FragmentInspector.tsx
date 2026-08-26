@@ -30,17 +30,17 @@ export function FragmentInspector(props: IProps): React.ReactElement {
           [X, Y] {props.x}, {props.y}
           <br />
           <br />
-          ID: N/A
+          ID：N/A
           <br />
-          Effect: N/A
+          效果：N/A
           <br />
-          Base Power: N/A
+          基础威力：N/A
           <br />
-          Charge: N/A
+          充能：N/A
           <br />
-          Highest charge: N/A
+          最高充能：N/A
           <br />
-          root [X, Y] N/A
+          根位置 [X, Y] N/A
           <br />
         </Typography>
       </Paper>
@@ -55,7 +55,7 @@ export function FragmentInspector(props: IProps): React.ReactElement {
   if (f.type === FragmentTypeEnum.Booster) {
     charge = "N/A";
     highestCharge = "N/A";
-    effect = `${f.power}x adjacent fragment power`;
+    effect = `为相邻碎片提供 ${f.power}x 威力加成`;
   } else if (Effect(f.type).includes("+x%")) {
     effect = Effect(f.type).replace(/-*x%/, formatPercent(props.gift.effect(props.fragment) - 1));
   } else if (Effect(f.type).includes("-x%")) {
@@ -70,17 +70,17 @@ export function FragmentInspector(props: IProps): React.ReactElement {
         [X, Y] {props.x}, {props.y}
         <br />
         <br />
-        ID: {props.fragment.id}
+        ID：{props.fragment.id}
         <br />
-        Effect: {effect}
+        效果：{effect}
         <br />
-        Base Power: {formatStaneksGiftPower(f.power)}
+        基础威力：{formatStaneksGiftPower(f.power)}
         <br />
-        Charge: {charge}
+        充能：{charge}
         <br />
-        Highest Charge: {highestCharge}
+        最高充能：{highestCharge}
         <br />
-        root [X, Y] {props.fragment.x}, {props.fragment.y}
+        根位置 [X, Y] {props.fragment.x}, {props.fragment.y}
         <br />
       </Typography>
     </Paper>

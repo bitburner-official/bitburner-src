@@ -74,7 +74,7 @@ export function Val({ name, color }: ValProps): React.ReactElement {
   if (name === "Int" && Player.bitNodeOptions.intelligenceOverride !== undefined) {
     return (
       <Tooltip
-        title={`Persistent Intelligence: ${formatSkill(
+        title={`持久智力：${formatSkill(
           Player.calculateSkill(Player.persistentIntelligenceData.exp, 1),
         )}`}
       >
@@ -178,16 +178,16 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
       </Table>
       <Box sx={{ display: "flex", borderTop: `1px solid ${Settings.theme.welllight}` }}>
         <Box sx={{ display: "flex", flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
-          <IconButton aria-label="save game" onClick={save}>
-            <Tooltip title={Settings.AutosaveInterval !== 0 ? "Save game" : "Save game (auto-saves are disabled!)"}>
+          <IconButton aria-label="保存游戏" onClick={save}>
+            <Tooltip title={Settings.AutosaveInterval !== 0 ? "保存游戏" : "保存游戏（自动存档已禁用！）"}>
               <SaveIcon color={Settings.AutosaveInterval !== 0 ? "primary" : "error"} />
             </Tooltip>
           </IconButton>
         </Box>
         <RemoteFileApiConnectionStatus showIcon={true} />
         <Box sx={{ display: "flex", flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
-          <IconButton aria-label="kill all scripts" onClick={() => setKillOpen(true)}>
-            <Tooltip title="Kill all running scripts">
+          <IconButton aria-label="终止所有脚本" onClick={() => setKillOpen(true)}>
+            <Tooltip title="终止所有运行中的脚本">
               <ClearAllIcon color="error" />
             </Tooltip>
           </IconButton>
@@ -225,7 +225,7 @@ function BladeburnerText(): React.ReactElement {
         <>
           <TableRow>
             <TableCell component="th" scope="row" colSpan={2} classes={{ root: classes.cellNone }}>
-              <Typography>Bladeburner:</Typography>
+              <Typography>Bladeburner：</Typography>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -272,7 +272,7 @@ function WorkInProgressOverview({ tooltip, children, header }: WorkInProgressOve
           <TableRow>
             <TableCell component="th" scope="row" align="center" colSpan={2} classes={{ root: classes.cellNone }}>
               <Button sx={{ mt: 1 }} onClick={onClickFocusWork}>
-                Focus
+                专注
               </Button>
             </TableCell>
           </TableRow>
@@ -300,18 +300,18 @@ function Work(): React.ReactElement {
     const perc = (Player.currentWork.unitCompleted / crime.time) * 100;
 
     details = <>{Player.currentWork.crimeType}</>;
-    header = <>You are attempting {Player.currentWork.getCrime().workName}</>;
+    header = <>你正在尝试 {Player.currentWork.getCrime().workName}</>;
     innerText = <>{perc.toFixed(2)}%</>;
   }
   if (isClassWork(Player.currentWork)) {
     details = <>{Player.currentWork.getClass().youAreCurrently}</>;
-    header = <>You are {Player.currentWork.getClass().youAreCurrently}</>;
+    header = <>你目前 {Player.currentWork.getClass().youAreCurrently}</>;
     innerText = <>{convertTimeMsToTimeElapsedString(Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle)}</>;
   }
   if (isCreateProgramWork(Player.currentWork)) {
     const create = Player.currentWork;
-    details = <>Coding {create.programName}</>;
-    header = <>Creating a program</>;
+    details = <>正在编写 {create.programName}</>;
+    header = <>正在创建程序</>;
     innerText = (
       <>
         {create.programName} {((create.unitCompleted / create.unitNeeded()) * 100).toFixed(2)}%
@@ -320,28 +320,28 @@ function Work(): React.ReactElement {
   }
   if (isGraftingWork(Player.currentWork)) {
     const graft = Player.currentWork;
-    details = <>Grafting {graft.augmentation}</>;
-    header = <>Grafting an Augmentation</>;
+    details = <>正在移植 {graft.augmentation}</>;
+    header = <>正在移植强化</>;
     innerText = (
       <>
-        <strong>{((graft.unitCompleted / graft.unitNeeded()) * 100).toFixed(2)}%</strong> done
+        <strong>{((graft.unitCompleted / graft.unitNeeded()) * 100).toFixed(2)}%</strong> 完成
       </>
     );
   }
 
   if (isFactionWork(Player.currentWork)) {
     const factionWork = Player.currentWork;
-    details = <>Doing {factionWork.factionWorkType} work</>;
+    details = <>正在进行 {factionWork.factionWorkType} 工作</>;
     header = (
       <>
-        Working for <strong>{factionWork.factionName}</strong>
+        正在为 <strong>{factionWork.factionName}</strong> 工作
       </>
     );
     innerText = (
       <>
-        <Reputation reputation={factionWork.getFaction().playerReputation} /> rep
-        <br />(
-        <ReputationRate reputation={factionWork.getReputationRate() * (1000 / CONSTANTS.MilliPerCycle)} />)
+        <Reputation reputation={factionWork.getFaction().playerReputation} /> 声望
+        <br />（
+        <ReputationRate reputation={factionWork.getReputationRate() * (1000 / CONSTANTS.MilliPerCycle)} />）
       </>
     );
   }
@@ -353,14 +353,14 @@ function Work(): React.ReactElement {
 
     header = (
       <>
-        Working at <strong>{companyWork.companyName}</strong>
+        正在 <strong>{companyWork.companyName}</strong> 工作
       </>
     );
     innerText = (
       <>
-        <Reputation reputation={companyWork.getCompany().playerReputation} /> rep
-        <br />(
-        <ReputationRate reputation={companyWork.getGainRates(job).reputation * (1000 / CONSTANTS.MilliPerCycle)} />)
+        <Reputation reputation={companyWork.getCompany().playerReputation} /> 声望
+        <br />（
+        <ReputationRate reputation={companyWork.getGainRates(job).reputation * (1000 / CONSTANTS.MilliPerCycle)} />）
       </>
     );
   }

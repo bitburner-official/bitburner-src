@@ -6,11 +6,11 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
   [CodingContractName.TotalPrimesInRange]: {
     desc: (data: [number, number]): string => {
       return [
-        `You are given two random non-negative integers: ${data}.\n`,
-        `The first will be up to 5000000, and the second will be at most 1000000 greater.\n`,
-        `Determine the amount of prime numbers between them (including the numbers given).\n\n`,
-        "Example:\n",
-        `The range of [0,20] contains the primes [2,3,5,7,11,13,17,19], resulting in an answer of 8.`,
+        `给你两个随机的非负整数：${data}。\n`,
+        `第一个数最大为 5000000，第二个数最多比它大 1000000。\n`,
+        `请计算它们之间（包括给定的数字）素数的数量。\n\n`,
+        "示例：\n",
+        `[0,20] 范围内包含素数 [2,3,5,7,11,13,17,19]，因此答案为 8。`,
       ].join(" ");
     },
     difficulty: 2,

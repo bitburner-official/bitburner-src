@@ -90,9 +90,9 @@ function PromptMenuBoolean({ resolve }: IContentProps): React.ReactElement {
     <>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", paddingTop: "10px" }}>
         <Button style={{ marginRight: "auto" }} onClick={yes}>
-          Yes
+          是
         </Button>
-        <Button onClick={no}>No</Button>
+        <Button onClick={no}>否</Button>
       </div>
     </>
   );
@@ -133,7 +133,7 @@ function PromptMenuText({ prompt, resolve }: IContentProps): React.ReactElement 
           onKeyDown={onKeyDown}
           style={{ flex: "1 0 auto" }}
           InputProps={{
-            endAdornment: <Button onClick={submit}>Confirm</Button>,
+            endAdornment: <Button onClick={submit}>确认</Button>,
           }}
         />
       </div>
@@ -170,7 +170,7 @@ function PromptMenuSelect({ prompt, resolve }: IContentProps): React.ReactElemen
   };
 
   if (!Array.isArray(prompt.options?.choices)) {
-    return <Typography>Error: Please provide an array of string choices</Typography>;
+    return <Typography>错误：请提供字符串选项数组</Typography>;
   }
 
   return (
@@ -184,7 +184,7 @@ function PromptMenuSelect({ prompt, resolve }: IContentProps): React.ReactElemen
           {getItems(prompt.options?.choices || [])}
         </Select>
         <Button onClick={submit} disabled={value === ""}>
-          Confirm
+          确认
         </Button>
       </div>
     </>
