@@ -137,7 +137,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             That's given us more detailed information about the servers we can connect to.
             <br />
             <br />
-            To look depeer into the network, change your scanning depth to 2.
+            To look depeer into the network, increase your scanning depth to 2.
             <br />
             <br />
           </Typography>
@@ -165,7 +165,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>
             In the year 2077, currency is digital and decentralized. People and corporations store their money on
-            servers and computers. Using specialised your skills, you can hack servers to steal money and gain
+            servers and computers. Using your specialised skills, you can hack servers to steal money and gain
             experience.
             <br />
             <br />
@@ -173,7 +173,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             skill of only 1. That means you can hack it right now.
             <br />
             <br />
-            To do that, we need to connect to it. You can connect to a machine that is one node away using
+            To do that, you need to connect to it. You can connect to any machine that is one node away using
             <br />
             <br />
           </Typography>
@@ -206,12 +206,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            If you have a look at the diagnostic data, you can see the server's root access status. To hack a server, 
+            If you have a look at the diagnostic data, you can see the server's root access status. To hack a server,
             you must gain root access first.
             <br />
             <br />
-            Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to a machine
-            as long as there are enough open ports.
+            Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to any
+            machine as long as it has enough open ports.
             <br />
             <br />
             If you look at the diagnostics again, you'll see that n00dles' "Required number of open ports for NUKE" is
@@ -350,13 +350,12 @@ export async function main(ns) {
           <br />
           <br />
           <Typography>
-            One benefit of using scripts to hack is that you don't need to be connected to the server you're hacking.
-            You can target any server on the network <em>from</em> any server on the network.
+            One benefit of using scripts to hack is that they don't need to be connected to the server they're hacking.
+            Scripts can target any server on the network.
             <br />
             <br />
             While we're in the editor, it's worth saying that everything we do in this tutorial can be scripted. You can
-            map the network with ns.scan(), run scripts with ns.run() or ns.exec(), and get server information with
-            ns.getServer().
+            map the network with ns.scan(), run scripts with ns.run(), or get server information with ns.getServer().
             <br />
             <br />
             If you want to check which functions are available to you in the editor, use the search bar at the bottom,
@@ -453,8 +452,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Each active script has logs that detail what it's doing. You can check these using the tail command. To
-            do that for the script you just ran, enter
+            Each active script has logs that detail what it's doing. You can check these using the tail command. To do
+            that for the script you just ran, enter
             <br />
             <br />
           </Typography>
@@ -467,7 +466,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This log might not show much because the script has just started... but check back again in a few minutes!
+            This log might not show much because the script just started... but check back again in a few minutes!
           </Typography>
         </>
       ),
@@ -477,8 +476,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We won't get far running scripts on just our home computer. We can run them on other servers too, and
-            to do that, we need to copy them over.
+            We won't get far running scripts on just our home computer. We can run them on other servers too, and to do
+            that, we need to copy them over.
             <br />
             <br />
             First though, let's see what files are stored on our home computer using
@@ -645,8 +644,7 @@ export async function main(ns) {
           <br />
           <br />
           <Typography fontWeight="fontWeightBold">
-            While the documentation is the best place to get help, if you can't
-            find the answer then please{" "}
+            While the documentation is the best place to get help, if you can't find the answer then please{" "}
             <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="hover">
               ask us on Discord
             </Link>

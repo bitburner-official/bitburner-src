@@ -335,7 +335,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         () => (
           <ListItem classes={li_classes} button onClick={toggleDrawer}>
             <ListItemIcon>
-              <ChevronOpenClose color={"primary"}/>
+              <ChevronOpenClose color={"primary"} />
             </ListItemIcon>
             <ListItemText
               primary={
