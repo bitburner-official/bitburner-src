@@ -6,6 +6,7 @@ import { CopyableText } from "../React/CopyableText";
 import { useStyles as codeBlockStyles } from "../MD/code";
 
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import SettingsIcon from "@mui/icons-material/Settings";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import HelpIcon from "@mui/icons-material/Help";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -52,11 +53,15 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             This tutorial will show you the basics of the game.
             <br />
             <br />
-            If you need to hide this tutorial panel temporarily, you can collapse it.
+            If you need to hide the tutorial panel temporarily, you can collapse it.
             <br />
             <br />
-            You can also exit the tutorial at any time. If you ever want to review it, go to the Options tab and select
-            Repeat Tutorial.
+            You can also exit the tutorial at any time. If you ever want to review it, go to the{" "}
+            <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
+              <SettingsIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
+              <Typography sx={{ color: theme.palette.primary.main }}>Options</Typography>
+            </Box>{" "}
+            tab and select Repeat Tutorial.
           </Typography>
         </>
       ),
@@ -68,7 +73,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             We're currently on the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.5 }} />
+              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.primary.main }}>Terminal</Typography>
             </Box>{" "}
             tab.
@@ -76,10 +81,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             You can use the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.5 }} />
+              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.primary.main }}>Terminal</Typography>
             </Box>{" "}
-            to interface with your home computer, as well as with other machines around the world.
+            to interface with your home computer, and with other machines around the world.
           </Typography>
         </>
       ),
@@ -113,8 +118,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <TerminalText>{"[home /]> scan"}</TerminalText>
           <Typography>
             <br />
-            shows all servers that you can connect to from your current machine. Servers are identified by their
-            hostname.
+            shows all servers that you can connect to from your current machine.
             <br />
             <br />
             The network's much bigger than these nearby servers though. To start exploring it, let's enter
@@ -214,8 +218,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             If you have a look, you can see the server's root access status. To hack a server, you must gain root access
-            first. Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to a
-            machine as long as there are enough open ports.
+            first.
+            <br />
+            <br />
+            Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to a machine
+            as long as there are enough open ports.
             <br />
             <br />
             If you look at the diagnostics again, you'll see that n00dles' "Required number of open ports for NUKE" is
@@ -339,10 +346,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            This is the script editor.
-            <br />
-            <br />
-            Below is a basic script that hacks n00dles. Copy and paste it into the editor.
+            Below is a basic script that hacks n00dles on a continuous loop. Copy and paste it into the editor.
           </Typography>
           <br />
           <CopyableText
@@ -357,12 +361,8 @@ export async function main(ns) {
           <br />
           <br />
           <Typography>
-            Have a look at the code of the script. It says to hack n00dles while true is true – which it always is! So
-            this script hacks n00dles on a loop forever.
-            <br />
-            <br />
             One benefit of using scripts to hack is that you don't need to be connected to the server you're hacking.
-            You can target any server on the network from any server on the network.
+            You can target any server on the network <em>from</em> any server on the network.
             <br />
             <br />
             While we're in the editor, it's worth saying that everything we do in this tutorial can be scripted. You can
@@ -370,9 +370,9 @@ export async function main(ns) {
             ns.getServer().
             <br />
             <br />
-            If you ever want to check which functions are available to you in the edior, you can search using the search
-            bar at the bottom, or click the{" "}
-            <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside it.
+            If you want to check which functions are available to you in the editor, use the search bar at the bottom,
+            or click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside
+            it.
             <br />
             <br />
             OK, back to hacking. Click Save at the bottom to save your script and close the editor.
@@ -388,10 +388,7 @@ export async function main(ns) {
             Now we'll run the script. You can run scripts on any server that you have root access to.
             <br />
             <br />
-            Scripts need RAM to run, and different servers have different amounts.
-            <br />
-            <br />
-            To check how much RAM is available on this machine, enter
+            Scripts need RAM to run. To check how much RAM is available on this machine, enter
             <br />
             <br />
           </Typography>
@@ -421,17 +418,17 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Your script is now running! Scripts run in the background until their code completes (although
-            {tutorialScriptName} will never complete because it has an infinite loop).
+            Your script is now running! Scripts run in the background until their code completes ({tutorialScriptName}{" "}
+            will never complete because it has an infinite loop).
             <br />
             <br />
-            Scripts can passively earn you income and hacking experience. They'll keep earning even while you're
-            offline, although at a slower rate.
+            Scripts will passively earn you income and hacking experience. They even keep earning while you're offline,
+            although at a slower rate.
             <br />
             <br />
-            Let's check out some statistics for our running scripts by clicking{" "}
+            Let's check out some statistics of our running scripts by clicking{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <StorageIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <StorageIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Active Scripts</Typography>
             </Box>
           </Typography>
@@ -443,8 +440,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This page displays information about all of your scripts that are running across every server. You can use
-            this to gauge how well your scripts are doing.
+            This page shows every script you're running across every server. You can use it to gauge how well your
+            scripts are doing.
             <br />
             <br />
             Click home to see the scripts running on it.
@@ -468,7 +465,7 @@ export async function main(ns) {
         <>
           <Typography>
             Each active script has logs that detail what it's doing. You can check these logs using the tail command. To
-            do that for the script you just ran, you can enter
+            do that for the script you just ran, enter
             <br />
             <br />
           </Typography>
@@ -481,8 +478,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            The log for this script may not show much right now because it just started running... but check back again
-            in a few minutes!
+            This log might not show much because the script just started... but check back again in a few minutes!
           </Typography>
         </>
       ),
@@ -492,8 +488,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We're not going to get very far running scripts on our home computer alone. We need to copy them to other
-            servers too.
+            We won't get far running scripts on just our home computer. We want to run them on other servers too, and
+            that means we need to copy them over.
             <br />
             <br />
             Before we do that, let's see what files are stored on our home computer using
@@ -513,32 +509,18 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            That's shown you all the files on your home computer. Right now, you can see NUKE.exe, the program that you
-            used earlier, and {tutorialScriptName}.
-            <br />
-            <br />
-            If you want other servers to run {tutorialScriptName}, you need to copy it to them. (NUKE.exe can't be
-            copied elsewhere. It's only stored on home.)
-            <br />
-            <br />
-            To do that, we use
+            To copy {tutorialScriptName} to another server, you can use
             <br />
             <br />
           </Typography>
           <TerminalText>{"[home /]> scp file destination"}</TerminalText>
           <Typography>
             <br />
-            To copy {tutorialScriptName} to n00dles, enter
+            To copy it to n00dles, enter
             <br />
             <br />
           </Typography>
           <TerminalText>{`[home /]> scp ${tutorialScriptName} n00dles`}</TerminalText>
-          <Typography>
-            <br />
-            You can then connect to n00dles and run your script on it later.
-            <br />
-            <br />
-          </Typography>
         </>
       ),
       canNext: false,
@@ -547,7 +529,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Lastly, if you can't remember the right terminal command, you can always use
+            Lastly, if you can't remember the right terminal command, you can always enter
             <br />
             <br />
           </Typography>
@@ -562,7 +544,7 @@ export async function main(ns) {
           <Typography>
             Now we've made some money and exp, let's head to the Stats tab and see what we've gained. Click{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
             </Box>{" "}
             at the left-hand side of the screen.
@@ -576,7 +558,7 @@ export async function main(ns) {
         <>
           <Typography>
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
             </Box>{" "}
             shows information about your skills, money, and bonuses.
@@ -589,13 +571,12 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Hacking isn't the only way to earn money. One other way to passively earn money is to purchase and upgrade
-            Hacknet Nodes. Let's go to{" "}
+            Hacking isn't the only way to earn money. One other way to passively earn money is to purchase Hacknet
+            Nodes. Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <AccountTreeIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <AccountTreeIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Hacknet</Typography>
             </Box>{" "}
-            .
           </Typography>
         </>
       ),
@@ -604,7 +585,7 @@ export async function main(ns) {
     [iTutorialSteps.HacknetNodesIntroduction as number]: {
       content: (
         <Typography>
-          Here you can purchase new Hacknet Nodes and upgrade your existing ones. Let's purchase a new one.
+          Here you can purchase new Hacknet Nodes and upgrade your existing ones. Let's purchase one.
         </Typography>
       ),
       canNext: true,
@@ -614,12 +595,12 @@ export async function main(ns) {
         <>
           <Typography>
             Hacknet Nodes earn you money over time, both online and offline. When you get enough money, you can upgrade
-            your newly-purchased Hacknet Node below.
+            your Hacknet Node below.
             <br />
             <br />
             Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LocationCityIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <LocationCityIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>City</Typography>
             </Box>{" "}
           </Typography>
@@ -635,12 +616,11 @@ export async function main(ns) {
             There's a lot of content out in the world, so make sure you explore and discover!
             <br />
             <br />
-            Lastly, click on{" "}
+            Lastly, go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <HelpIcon sx={{ color: theme.palette.info.main, mr: 0.5 }} />
+              <HelpIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Documentation</Typography>
             </Box>{" "}
-            .
           </Typography>
         </>
       ),
