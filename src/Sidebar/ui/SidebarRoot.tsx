@@ -128,15 +128,14 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
   let flash: Page | null = null;
   switch (ITutorial.currStep) {
-    case iTutorialSteps.CharacterGoToTerminalPage:
     case iTutorialSteps.ActiveScriptsPage:
       flash = Page.Terminal;
       break;
-    case iTutorialSteps.GoToCharacterPage:
-      flash = Page.Stats;
-      break;
     case iTutorialSteps.TerminalGoToActiveScriptsPage:
       flash = Page.ActiveScripts;
+      break;
+    case iTutorialSteps.GoToCharacterPage:
+      flash = Page.Stats;
       break;
     case iTutorialSteps.GoToHacknetNodesPage:
       flash = Page.Hacknet;

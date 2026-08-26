@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { BitNodes } from "../BitNode/BitNode";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BitNodeMultipliersDisplay } from "../BitNode/ui/BitnodeMultipliersDescription";
+import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../InteractiveTutorial";
 import { HacknetServerConstants } from "../Hacknet/data/Constants";
 import { getCloudServerLimit } from "../Server/ServerPurchases";
 import { Settings } from "../Settings/Settings";
@@ -222,6 +223,16 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
 }
 
 export function CharacterStats(): React.ReactElement {
+  /* INTERACTIVE TUTORIAL */
+  if (ITutorial.isRunning) {
+    if (ITutorial.currStep === iTutorialSteps.CharacterPage) {
+      iTutorialNextStep();
+    } else {
+      //return -1; ?? not sure how to handle this
+    }
+  }
+  /* END INTERACTIVE TUTORIAL */
+
   const [moneyOpen, setMoneyOpen] = useState(false);
   const [employersOpen, setEmployersOpen] = useState(false);
   useCycleRerender();

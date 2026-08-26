@@ -1,3 +1,15 @@
+//// Tidy up:
+// n00dles.js
+//
+
+////////
+// Red to blue for stuff
+/// Somewhere ??? the text that says 'can't kill during tutorial' ... when you clearly can
+// Add the stuff about docs and the editor back in later on
+// Don't auto-move from the Script editor to the Termainal. Make the player do that.
+// add scp step
+// add "all this stuff can be automated" scp > ns.scp; run > ns.run/ns.exec; weaken > ns.weaken
+
 import { Player } from "@player";
 import { LiteratureName } from "@enums";
 import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
@@ -5,15 +17,13 @@ import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 // Ordered array of keys to Interactive Tutorial Steps
 enum iTutorialSteps {
   Start,
-  GoToCharacterPage, // Click on 'Stats' page
-  CharacterPage, // Introduction to 'Stats' page
-  CharacterGoToTerminalPage, // Go back to Terminal
+
+  // Hacking
   TerminalIntro, // Introduction to Terminal
-  TerminalHelp, // Using 'help' Terminal command
-  TerminalLs, // Using 'ls' Terminal command
   TerminalScan, // Using 'scan' Terminal command
   TerminalScanAnalyze1, // Using 'scan-analyze' Terminal command
   TerminalScanAnalyze2, // Using 'scan-analyze 3' Terminal command
+  TerminalConnectInterval,
   TerminalConnect, // Connecting to n00dles
   TerminalAnalyze, // Analyzing n00dles
   TerminalNuke, // NUKE n00dles
@@ -28,6 +38,15 @@ enum iTutorialSteps {
   ActiveScriptsPage,
   ActiveScriptsToTerminal,
   TerminalTailScript,
+  TerminalLs, // Using 'ls' Terminal command
+  TerminalScp,
+  TerminalHelp, // Using 'help' Terminal command
+
+  // See the results of our hacking
+  GoToCharacterPage, // Click on 'Stats' page
+  CharacterPage, // Introduction to 'Stats' page
+
+  // Finishing off
   GoToHacknetNodesPage,
   HacknetNodesIntroduction,
   HacknetNodesGoToWorldPage,
@@ -45,7 +64,6 @@ const ITutorial = {
     [iTutorialSteps.Start]: false,
     [iTutorialSteps.GoToCharacterPage]: false,
     [iTutorialSteps.CharacterPage]: false,
-    [iTutorialSteps.CharacterGoToTerminalPage]: false,
     [iTutorialSteps.TerminalIntro]: false,
     [iTutorialSteps.TerminalHelp]: false,
     [iTutorialSteps.TerminalLs]: false,
@@ -53,6 +71,7 @@ const ITutorial = {
     [iTutorialSteps.TerminalScanAnalyze1]: false,
     [iTutorialSteps.TerminalScanAnalyze2]: false,
     [iTutorialSteps.TerminalConnect]: false,
+    [iTutorialSteps.TerminalConnectInterval]: false,
     [iTutorialSteps.TerminalAnalyze]: false,
     [iTutorialSteps.TerminalNuke]: false,
     [iTutorialSteps.TerminalManualHack]: false,
@@ -66,6 +85,7 @@ const ITutorial = {
     [iTutorialSteps.ActiveScriptsPage]: false,
     [iTutorialSteps.ActiveScriptsToTerminal]: false,
     [iTutorialSteps.TerminalTailScript]: false,
+    [iTutorialSteps.TerminalScp]: false,
     [iTutorialSteps.GoToHacknetNodesPage]: false,
     [iTutorialSteps.HacknetNodesIntroduction]: false,
     [iTutorialSteps.HacknetNodesGoToWorldPage]: false,
