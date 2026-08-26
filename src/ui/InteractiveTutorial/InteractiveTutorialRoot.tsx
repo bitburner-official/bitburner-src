@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Paper, Box, Typography, Button, Link } from "@mui/material";
 import { ITutorialEvents } from "./ITutorialEvents";
 import { CopyableText } from "../React/CopyableText";
+import { useStyles as codeBlockStyles } from "../MD/code";
 
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import LastPageIcon from "@mui/icons-material/LastPage";
@@ -11,7 +12,6 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import { useTheme, styled } from "@mui/material/styles";
-import { useStyles as codeBlockStyles } from "../MD/code";
 
 import {
   iTutorialPrevStep,
@@ -34,7 +34,7 @@ export const tutorialScriptName = `hacking.js`;
 
 export function InteractiveTutorialRoot(): React.ReactElement {
   const theme = useTheme();
-  const { classes } = codeBlockStyles();
+  const { classes: codeClasses } = codeBlockStyles();
   const TerminalText = styled(Typography)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.primary.main}`,
   }));
@@ -345,18 +345,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Below is a basic script that hacks n00dles. Copy and paste it into the editor.
           </Typography>
           <br />
-          <Typography component="div" classes={{ root: classes.code }}>
-            {
-              <CopyableText
-                value={`/** @param {NS} ns */
+          <CopyableText
+            className={codeClasses.code}
+            value={`/** @param {NS} ns */
 export async function main(ns) {
   while (true) {
     await ns.hack("n00dles");
   }
 }`}
-              />
-            }
-          </Typography>
+          />
+          <br />
           <br />
           <Typography>
             Have a look at the code of the script. It says to hack n00dles while true is true – which it always is! So
