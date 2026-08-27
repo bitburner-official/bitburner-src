@@ -227,12 +227,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack the server. Hacking takes time, and has a success chance. If your hack is
-            successful, you'll steal a percentage of the server's available money.
+            You're now attempting to hack the server. If your hack is successful, you'll steal a percentage of the server's
+            available money.
             <br />
             <br />
-            All of those variables (time, success chance, and percentage stolen) are affected by your hacking skill, and
-            by the server's security level.
+            Nearly all aspects of hacking (including time taken, success chance and percentage stolen) are affected by your
+            hacking skill, and by the server's security level.
             <br />
             <br />
             When you hack a server, you deplete the money it has available, so any subsequent hacks take less money.
