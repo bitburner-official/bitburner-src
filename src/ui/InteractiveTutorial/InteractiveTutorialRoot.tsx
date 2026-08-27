@@ -148,7 +148,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Now you can see all the servers that are up to 2 nodes away, and the route to get to them.
+            Now you can see all the servers that are up to 2 nodes away, and the routes  to get to them.
             <br />
             <br />
             You can connect to any machine that is 1 node away using
@@ -623,7 +623,6 @@ export async function main(ns) {
             </Link>
            .
           </Typography>
-          <br />
           <TerminalText><br /></TerminalText>
           <br />
           <br />
