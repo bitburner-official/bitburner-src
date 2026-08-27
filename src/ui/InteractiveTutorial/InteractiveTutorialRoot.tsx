@@ -446,8 +446,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We won't get far running scripts on our home computer alone. We can run them on other servers too. To do
-            that, we need to copy them over.
+            You can boost your earnings by running your scripts on other servers too. To do that, we need to copy them
+            over.
             <br />
             <br />
             First, let's see what files are stored on our home computer using
@@ -496,7 +496,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we've gained some money and exp, let look at the Stats tab. Click{" "}
+            Now we've gained some money and exp, let's look at the Stats tab. Click{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
@@ -547,8 +547,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Hacknet Nodes passively earn you money over time, even when you're offline. When you get enough money, you
-            can upgrade your Hacknet Nodes below.
+            Hacknet Nodes passively earn you money over time, even when you're offline.
             <br />
             <br />
             Let's go to{" "}
@@ -565,8 +564,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This shows all the locations in your current city. Each location has something that you can do. There's a
-            lot of content out in the world, so make sure you explore and discover!
+            Each location in a city has something that you can do. There's a lot of content out in the world, 
+            so make sure you explore and discover!
             <br />
             <br />
             Lastly, go to{" "}
@@ -607,6 +606,10 @@ export async function main(ns) {
           If you want to open one of the Documentaion page links in a new tab, click it while holding Ctrl (Control on a
           Mac keyboard). If you're playing the Steam version, doing that will open the link in your default browser.
           <br />
+          <br />          
+          <Typography color={Settings.theme.warning}>
+            Note: The documentation at readthedocs is outdated and unmaintained. Do not use it!
+          </Typography>
           <br />
           <Typography fontWeight="fontWeightBold">
             While the documentation is the first place to get help, if you can't find an answer then please{" "}
@@ -614,17 +617,14 @@ export async function main(ns) {
               href="https://discord.com/channels/415207508303544321/415207508303544323"
               underline="always"
               target="_blank"
+              color={Settings.theme.info}
             >
               ask us on Discord
             </Link>
             .
           </Typography>
           <br />
-          <Typography color={Settings.theme.warning}>
-            Note: The documentation at readthedocs is outdated and unmaintained. Do not use it!
-          </Typography>
-          <br />
-          And that's the end of the tutorial. We hope you enjoy the game!
+          That's the end of the tutorial. We hope you enjoy the game!
         </Typography>
       ),
       canNext: true,
