@@ -148,7 +148,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Now you can see all the servers that are up to 2 nodes away, and the routes  to get to them.
+            Now you can see all the servers that are up to 2 nodes away, and the routes to get to them.
             <br />
             <br />
             You can connect to any machine that is 1 node away using
@@ -564,8 +564,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Each location in a city has something that you can do. There's a lot of content out in the world, 
-            so make sure you explore and discover!
+            Each location in a city has something that you can do. There's a lot of content out in the world, so make
+            sure you explore and discover!
             <br />
             <br />
             Lastly, go to{" "}
@@ -606,24 +606,26 @@ export async function main(ns) {
           If you want to open one of the Documentaion page links in a new tab, click it while holding Ctrl (Control on a
           Mac keyboard). If you're playing the Steam version, doing that will open the link in your default browser.
           <br />
-          <br />          
+          <br />
           <Typography color={Settings.theme.warning}>
             Note: The documentation at readthedocs is outdated and unmaintained. Do not use it!
           </Typography>
           <br />
+          While the documentation is the first place to get help, if you can't find an answer then please{" "}
+          <Link
+            href="https://discord.com/channels/415207508303544321/415207508303544323"
+            underline="always"
+            target="_blank"
+            color={Settings.theme.info}
+          >
+            ask us on Discord
+          </Link>
+          .
           <br />
-            While the documentation is the first place to get help, if you can't find an answer then please{" "}
-            <Link
-              href="https://discord.com/channels/415207508303544321/415207508303544323"
-              underline="always"
-              target="_blank"
-              color={Settings.theme.info}
-            >
-              ask us on Discord
-            </Link>
-           .
           <br />
-          <TerminalText><br /></TerminalText>
+          <TerminalText>
+            <br />
+          </TerminalText>
           <br />
           <br />
           That's the end of the tutorial. We hope you enjoy the game!
