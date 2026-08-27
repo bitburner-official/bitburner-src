@@ -155,7 +155,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <TerminalText>{"[home /]> connect hostname"}</TerminalText>
+          <TerminalText>{"[home /]> connect"}</TerminalText>
           <Typography>
             <br />
             Let's connect to n00dles.
@@ -201,7 +201,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             If you check the diagnostics, you'll see that n00dles' "Required number of open ports for NUKE" is 0. So
-            you're good to run the virus! Just enter
+            you're good to run the virus. Just enter
             <br />
             <br />
           </Typography>
@@ -217,7 +217,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Now you've got root access, you can hack the server! Try entering
             <br />
             <br />
-          </Typography>
+          </Typography>d
           <TerminalText>{"[n00dles /]> hack"}</TerminalText>
         </>
       ),
@@ -324,7 +324,7 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            One benefit of using scripts to hack is that they don't need to be connected to the server they're hacking.
+            One benefit of using scripts to hack is that you don't need to be connected to the server they're hacking.
             Scripts can target any server on the network.
             <br />
             <br />
@@ -377,7 +377,7 @@ export async function main(ns) {
         <>
           <Typography>
             Your script is now running! Scripts run in the background until their code completes (though if they have an
-            infinite loop, like {tutorialScriptName} does, it never will).
+            continuous loop, like {tutorialScriptName} does, they'll run indefinitely).
             <br />
             <br />
             Scripts will passively earn you income and hacking experience. They even earn money and exp while you're
@@ -496,12 +496,12 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we've gained some money and exp, let's look at the Stats tab. Click{" "}
+            Now we've gained some money and exp, let's look at the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
             </Box>{" "}
-            at the left-hand side of the screen.
+            tab
           </Typography>
         </>
       ),
@@ -623,7 +623,7 @@ export async function main(ns) {
           .
           <br />
           <br />
-          And that's the end of the tutorial. I hope you enjoy the game!
+          And that concludes the tutorial. I hope you enjoy the game!
         </Typography>
       ),
       canNext: true,
