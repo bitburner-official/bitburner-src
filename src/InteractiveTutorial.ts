@@ -5,6 +5,10 @@
 // Theming
 // Code block component
 // CL's other points
+/* This should be a tip in the documentation UI -- not in the tutorial
+          If you want to open one of the Documentaion page links in a new tab, click it while holding Ctrl (Control on a
+          Mac keyboard). If you're playing the Steam version, doing that will open the link in your default browser.
+          */
 
 import { Player } from "@player";
 import { LiteratureName } from "@enums";
@@ -19,13 +23,11 @@ enum iTutorialSteps {
   TerminalScan, // Using 'scan' Terminal command
   TerminalScanAnalyze1, // Using 'scan-analyze' Terminal command
   TerminalScanAnalyze2, // Using 'scan-analyze 3' Terminal command
-  TerminalConnectInterval,
   TerminalConnect, // Connecting to n00dles
   TerminalAnalyze, // Analyzing n00dles
   TerminalNuke, // NUKE n00dles
   TerminalManualHack, // Hack n00dles
   TerminalHackingMechanics, // Explanation of hacking mechanics
-  TerminalWeakenGrowMechanics, // Explanation of grow/weaken mechanics
   TerminalGoHome, // Go home before creating a script.
   TerminalCreateScript, // Create a script using 'nano'
   TerminalEditScript, // Script Editor page - Edit script and then save & close
@@ -68,12 +70,10 @@ const ITutorial = {
     [iTutorialSteps.TerminalScanAnalyze1]: false,
     [iTutorialSteps.TerminalScanAnalyze2]: false,
     [iTutorialSteps.TerminalConnect]: false,
-    [iTutorialSteps.TerminalConnectInterval]: false,
     [iTutorialSteps.TerminalAnalyze]: false,
     [iTutorialSteps.TerminalNuke]: false,
     [iTutorialSteps.TerminalManualHack]: false,
     [iTutorialSteps.TerminalHackingMechanics]: false,
-    [iTutorialSteps.TerminalWeakenGrowMechanics]: false,
     [iTutorialSteps.TerminalGoHome]: false,
     [iTutorialSteps.TerminalCreateScript]: false,
     [iTutorialSteps.TerminalEditScript]: false,

@@ -44,7 +44,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Welcome to Bitburner, a cyberpunk-themed incremental RPG! The game takes place in a dark, dystopian
+            Welcome to Bitburner, a cyberpunk-themed incremental RPG. The game takes place in a dark, dystopian
             future... The year is 2077...
             <br />
             <br />
@@ -54,7 +54,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             If you need to hide the tutorial panel temporarily, you can collapse it.
             <br />
             <br />
-            You can also exit the tutorial at any time. If you ever want to review it, go to the{" "}
+            You can exit the tutorial at any time. If you ever want to review it, go to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <SettingsIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.primary.main }}>Options</Typography>
@@ -119,7 +119,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             shows you every server you can connect to from your current machine.
             <br />
             <br />
-            The network's much bigger than that though. To start exploring it, let's enter
+            The network's much bigger than that though! To start exploring it, enter
             <br />
             <br />
           </Typography>
@@ -135,7 +135,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             That's given us more detailed information about the servers we can connect to.
             <br />
             <br />
-            To look depeer into the network, increase your scanning depth to 2.
+            To look depeer into the network, let's increase the scanning depth to 2.
             <br />
             <br />
           </Typography>
@@ -144,41 +144,21 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalConnectInterval as number]: {
-      content: (
-        <>
-          <Typography>
-            Now you can see all servers that are up to 2 nodes away, and how to navigate to them.
-            <br />
-            <br />
-            That's great and all, but there are so many servers. Which ones do we focus on? Well, let's pick a target we
-            can hack.
-          </Typography>
-        </>
-      ),
-      canNext: true,
-    },
     [iTutorialSteps.TerminalConnect as number]: {
       content: (
         <>
           <Typography>
-            In the year 2077, currency is digital and decentralized. People and corporations store their money on
-            servers and computers. Using your specialised skills, you can hack servers to steal money and gain
-            experience.
+            Now you can see all the servers that are up to 2 nodes away, and the route to get to them.
             <br />
             <br />
-            If you check the read-out of scan-analyze in the Terminal, you can see that n00dles has a required hacking
-            skill of 1, making it a great first target.
-            <br />
-            <br />
-            To hack n00dles, you need to connect to it. You can connect to any machine that is 1 node away using
+            You can connect to any machine that is 1 node away using
             <br />
             <br />
           </Typography>
           <TerminalText>{"[home /]> connect hostname"}</TerminalText>
           <Typography>
             <br />
-            So let's connect to n00dles.
+            Let's connect to n00dles.
             <br />
             <br />
           </Typography>
@@ -191,7 +171,15 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            To make sure we can hack n00dles, let's run some diagnostics using
+            In the year 2077, currency is digital and decentralized. People and corporations store their money on
+            servers and computers. Using specialised skills, you can hack servers to steal money and gain experience.
+            <br />
+            <br />
+            You've got the skills to hack n00dles – scan-analyze showed us that n00dles has a required hacking skill of
+            1.
+            <br />
+            <br />
+            But there's something else we need to check. Let's run some diagnostics using
             <br />
             <br />
           </Typography>
@@ -204,16 +192,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            If you have a look at the diagnostic data, you can see the server's root access status. To hack a server,
-            you must gain root access first.
+            If you have a look, you can see the server's "Root Access" status. You must gain root access before you can
+            hack a server.
             <br />
             <br />
-            Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to any
-            machine as long as enough ports are open.
+            Handily, you've built a virus called NUKE.exe. NUKE.exe will grant you root access to any machine as long as
+            enough ports are open.
             <br />
             <br />
-            If you look at the diagnostics again, you'll see that n00dles' "Required number of open ports for NUKE" is
-            0. So you're good to go ahead and run the virus! Just enter
+            If you check the diagnostics, you'll see that n00dles' "Required number of open ports for NUKE" is 0. So
+            you're good to run the virus! Just enter
             <br />
             <br />
           </Typography>
@@ -226,18 +214,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You now have root access! You can hack the server using
+            Now you've got root access, you can hack the server! Try entering
             <br />
             <br />
           </Typography>
           <TerminalText>{"[n00dles /]> hack"}</TerminalText>
-          <Typography>
-            <br />
-            Try doing that now.
-          </Typography>
         </>
       ),
-      canNext: true,
+      canNext: false,
     },
     [iTutorialSteps.TerminalHackingMechanics as number]: {
       content: (
@@ -247,22 +231,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             successful, you'll steal a percentage of the server's available money.
             <br />
             <br />
-            All of those variables (time, success chance, and percentage stolen) are affected by:
-            <ul>
-              <li>your hacking skill</li>
-              <li>the server's security level</li>
-            </ul>
-          </Typography>
-        </>
-      ),
-      canNext: true,
-    },
-    [iTutorialSteps.TerminalWeakenGrowMechanics as number]: {
-      content: (
-        <>
-          <Typography>
-            When you hack a server, you deplete the money it has available, so any subsequent hacks take less money. You'll
-            also cause its security level to rise, so your hacks take longer.
+            All of those variables (time, success chance, and percentage stolen) are affected by your hacking skill, and
+            by the server's security level.
+            <br />
+            <br />
+            When you hack a server, you deplete the money it has available, so any subsequent hacks take less money.
+            You'll also cause its security level to rise, so your hacks take longer.
             <br />
             <br />
             To restore things, you can use
@@ -289,11 +263,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Hacking is the core mechanic of the game and is necessary for progression. So you don't want to hack
-            manually the entire time. We need a way to automate it.
+            Hacking is the core mechanic of the game and is necessary to progress. So you don't want to hack manually
+            the entire time. We need a way to automate it!
             <br />
             <br />
-            So let's head home and create our first script.
+            Let's head home and create our first script.
             <br />
             <br />
             You can get back home from any server using
@@ -336,7 +310,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Below is a script that hacks n00dles on a continuous loop. Copy and paste it into the editor.
           </Typography>
           <br />
-          <Typography component="div" sx={{ whiteSpace: "pre", backgroundColor: "background.paper", }}>
+          <Typography component="div" sx={{ whiteSpace: "pre", backgroundColor: "background.paper" }}>
             {
               <CopyableText
                 value={`/** @param {NS} ns */
@@ -354,16 +328,12 @@ export async function main(ns) {
             Scripts can target any server on the network.
             <br />
             <br />
-            While we're in the editor, it's worth saying that everything we do in this tutorial can be scripted. You can
-            map the network with ns.scan(), run scripts with ns.run(), or get server information with ns.getServer().
-            <br />
-            <br />
-            If you want to check which functions are available, use the search bar at the bottom, or click the{" "}
-            <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>{" "}link beside
+            If you want to check what other functions you can use in the editor, use the search bar at the bottom, or
+            click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside
             it.
             <br />
             <br />
-            OK, back to hacking. Click Save at the bottom to save your script and close the editor.
+            Click Save at the bottom to save your script and close the editor.
           </Typography>
         </>
       ),
@@ -376,7 +346,7 @@ export async function main(ns) {
             Now we'll run the script. You can run scripts on any server that you have root access to.
             <br />
             <br />
-            Scripts need RAM to run. To check how much RAM is available on this machine, enter
+            Scripts need RAM to run. To check how much RAM is available on a machine, enter
             <br />
             <br />
           </Typography>
@@ -406,15 +376,15 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Your script is now running! Scripts run in the background until their code completes ({tutorialScriptName}{" "}
-            will never complete because it has an infinite loop).
+            Your script is now running! Scripts run in the background until their code completes (though if they have an
+            infinite loop, like {tutorialScriptName}, it never will).
             <br />
             <br />
-            Scripts will passively earn you income and hacking experience. They also keep earning while you're offline,
-            although at a slower rate.
+            Scripts will passively earn you income and hacking experience. They even earn money and exp while you're
+            offline, although at a slower rate.
             <br />
             <br />
-            Let's check out some statistics of our running scripts by clicking{" "}
+            Let's check how our running scripts are doing by clicking{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <StorageIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Active Scripts</Typography>
@@ -435,7 +405,7 @@ export async function main(ns) {
             Click home to see the scripts running on it.
             <br />
             <br />
-            Then click {tutorialScriptName} to see the script's information.
+            Then click {tutorialScriptName} to see some data about it.
             <br />
             <br />
             Let's go back to the{" "}
@@ -452,8 +422,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Each active script has logs that detail what it's doing. You can check these using the tail command. To do
-            that for the script you just ran, enter
+            Each active script has logs that detail what it's doing. You can check these using the <code>tail</code>{" "}
+            command. To do that for the script you just ran, enter
             <br />
             <br />
           </Typography>
@@ -476,11 +446,11 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We won't get far running scripts on our home computer alone. We can run them on other servers too, but to do
+            We won't get far running scripts on our home computer alone. We can run them on other servers too. To do
             that, we need to copy them over.
             <br />
             <br />
-            First though, let's see what files are stored on our home computer using
+            First, let's see what files are stored on our home computer using
             <br />
             <br />
           </Typography>
@@ -497,14 +467,10 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            To copy a script to another server, you can use
+            To copy a script to another server, we can use the scp command.
             <br />
             <br />
-          </Typography>
-          <TerminalText>{"[home /]> scp file destination"}</TerminalText>
-          <Typography>
-            <br />
-            To copy {tutorialScriptName} to n00dles, enter
+            Let's copy {tutorialScriptName} to n00dles.
             <br />
             <br />
           </Typography>
@@ -559,8 +525,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Hacking isn't the only way to earn money. One other way to passively earn money is to purchase Hacknet
-            Nodes. Let's go to{" "}
+            Hacking isn't the only way to earn money. One other way to is to purchase Hacknet Nodes. Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <AccountTreeIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Hacknet</Typography>
@@ -582,8 +547,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Hacknet Nodes earn you money over time, both online and offline. When you get enough money, you can upgrade
-            your Hacknet Nodes below.
+            Hacknet Nodes passively earn you money over time, even when you're offline. When you get enough money, you
+            can upgrade your Hacknet Nodes below.
             <br />
             <br />
             Let's go to{" "}
@@ -600,7 +565,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This maps all of the locations in your current city. Each location has something that you can do. There's a
+            This shows all the locations in your current city. Each location has something that you can do. There's a
             lot of content out in the world, so make sure you explore and discover!
             <br />
             <br />
@@ -617,26 +582,26 @@ export async function main(ns) {
     [iTutorialSteps.DocumentationPageInfo as number]: {
       content: (
         <Typography component="div">
-          The pages in the Documentation tab explain the game's content and mechanics. I know it looks a lot, but I
-          highly suggest you read (or at least skim) through this before you start playing.
+          These pages explain the game's content and mechanics. I know it's a lot, but I highly suggest you read (or at
+          least skim) through this before you start playing.
           <br />
           <br />
-          If you look at nothing else, the three pages I'd recommend are:
+          These pages are especially helpful:
           <ul>
             <li>
-              the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which gives
-              you an <strong>invaluable</strong> basic hacking script, and helps with most of the early game
+              The <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink> gives you an{" "}
+              <strong>invaluable</strong> basic hacking script, and helps with most of the early game.
             </li>
             <li>
-              the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, which contains
-              reference materials on functions you can use in scripts
+              The <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> contains reference
+              materials on functions you can use in scripts.
             </li>
             <li>
-              the <DocumentationLink page="help/faq.md">FAQ</DocumentationLink>, which answers questions often asked by
-              beginners
+              The <DocumentationLink page="help/faq.md">FAQ</DocumentationLink> answers questions often asked by
+              beginners.
             </li>
           </ul>
-          You'll notice that some of the pages are inaccessible right now. You'll unlock those later on.
+          You'll notice that some Documentation pages are inaccessible right now. You'll unlock those later on.
           <br />
           <br />
           If you want to open one of the Documentaion page links in a new tab, click it while holding Ctrl (Control on a
@@ -644,16 +609,15 @@ export async function main(ns) {
           <br />
           <br />
           <Typography fontWeight="fontWeightBold">
-            While the documentation is the best place to get help, if you can't find the answer then please{" "}
-            <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="hover">
+            While the documentation is the first place to get help, if you can't find an answer then please{" "}
+            <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="always">
               ask us on Discord
             </Link>
             .
           </Typography>
           <br />
-          <br />
           <Typography color={Settings.theme.warning}>
-            The documentation at readthedocs is outdated and unmaintained. Do not use it!
+            Note: The documentation at readthedocs is outdated and unmaintained. Do not use it!
           </Typography>
           <br />
           And that's the end of the tutorial. We hope you enjoy the game!

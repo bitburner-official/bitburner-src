@@ -348,7 +348,7 @@ export class Terminal {
         throw new Error("Could not get n00dles server");
       }
       const errorMessageForBadCommand =
-        "Wrong command! Try again, or if you'd like to skip the tutorial click Exit Tutorial";
+        "Wrong command. Try again, or if you'd like to skip the tutorial click Exit Tutorial";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
           if (commandArray.length === 1 && commandArray[0] === "help") {
@@ -401,7 +401,7 @@ export class Terminal {
             ) {
               iTutorialNextStep();
             } else {
-              this.error("Wrong command! Try again!");
+              this.error("Wrong command. Try again!");
               return;
             }
           } else {
@@ -442,12 +442,6 @@ export class Terminal {
             return;
           }
           break;
-        case iTutorialSteps.TerminalWeakenGrowMechanics:
-          if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
         case iTutorialSteps.TerminalGoHome:
           if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
@@ -461,7 +455,7 @@ export class Terminal {
             if (commandArray[0] === "nano" && commandArray[1] === tutorialScriptName) {
               iTutorialNextStep();
             } else {
-              this.error("Wrong command! Try again!");
+              this.error("Wrong command. Try again!");
               return;
             }
           } else {
@@ -501,7 +495,7 @@ export class Terminal {
             if (commandArray[0] === "scp" && commandArray[1] === tutorialScriptName && commandArray[2] === "n00dles") {
               iTutorialNextStep();
             } else {
-              this.error("Wrong command! Try again!");
+              this.error("Wrong command. Try again!");
               return;
             }
           } else {
