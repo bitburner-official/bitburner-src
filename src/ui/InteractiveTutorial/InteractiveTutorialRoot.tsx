@@ -611,7 +611,7 @@ export async function main(ns) {
             Note: The documentation at readthedocs is outdated and unmaintained. Do not use it!
           </Typography>
           <br />
-          <Typography fontWeight="fontWeightBold">
+          <br />
             While the documentation is the first place to get help, if you can't find an answer then please{" "}
             <Link
               href="https://discord.com/channels/415207508303544321/415207508303544323"
@@ -622,7 +622,7 @@ export async function main(ns) {
               ask us on Discord
             </Link>
            .
-          </Typography>
+          <br />
           <TerminalText><br /></TerminalText>
           <br />
           <br />
