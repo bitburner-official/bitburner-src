@@ -408,7 +408,7 @@ export async function main(ns) {
             Then click {tutorialScriptName} to see some data about it.
             <br />
             <br />
-            Let's go back to the{" "}
+            When you're ready, let's go back to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <LastPageIcon sx={{ color: theme.palette.info.main }} />
               <Typography sx={{ color: theme.palette.info.main }}>Terminal</Typography>
@@ -621,8 +621,11 @@ export async function main(ns) {
             >
               ask us on Discord
             </Link>
-            .
+           .
           </Typography>
+          <br />
+          <TerminalText><br /></TerminalText>
+          <br />
           <br />
           That's the end of the tutorial. We hope you enjoy the game!
         </Typography>
