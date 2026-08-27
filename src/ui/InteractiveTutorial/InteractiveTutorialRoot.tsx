@@ -175,7 +175,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             servers and computers. Using specialised skills, you can hack servers to steal money and gain experience.
             <br />
             <br />
-            You've got the hacking skill needed to hack n00dles – scan-analyze showed us that n00dles has a required 
+            You've got the hacking skill needed to hack n00dles – scan-analyze showed us that n00dles has a required
             hacking skill of 1.
             <br />
             <br />
@@ -227,12 +227,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack the server. If your hack is successful, you'll steal a percentage of the server's
-            available money.
+            You're now attempting to hack the server. If your hack is successful, you'll steal a percentage of the
+            server's available money.
             <br />
             <br />
-            Nearly all aspects of hacking (including time taken, success chance and percentage stolen) are affected by your
-            hacking skill, and by the server's security level.
+            Nearly all aspects of hacking (including time taken, success chance and percentage stolen) are affected by
+            your hacking skill, and by the server's security level.
             <br />
             <br />
             When you hack a server, you deplete the money it has available, so any subsequent hacks take less money.
@@ -263,8 +263,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Hacking is the core mechanic of the game and is necessary to progress. So you don't want to hack manually
-            the entire time. We need a way to automate it!
+            Hacking is the core mechanic of the game and is necessary to progress. So you don't want to be hacking
+            manually the entire time. We need a way to automate it!
             <br />
             <br />
             Let's head home and create our first script.
@@ -496,7 +496,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we've gained some money and exp, let look at it the Stats tab. Click{" "}
+            Now we've gained some money and exp, let look at the Stats tab. Click{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
