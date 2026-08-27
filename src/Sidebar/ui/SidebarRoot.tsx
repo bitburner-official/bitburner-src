@@ -6,6 +6,7 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -317,18 +318,20 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     <Drawer open={open} anchor="left" variant="permanent">
       {useMemo(
         () => (
-          <ListItemButton onClick={toggleDrawer}>
-            <ListItemIcon>
-              <ChevronOpenClose color={"primary"} />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Tooltip title={commitHash()}>
-                  <Typography>Bitburner v{CONSTANTS.VersionString}</Typography>
-                </Tooltip>
-              }
-            />
-          </ListItemButton>
+          <ListItem disablePadding>
+            <ListItemButton onClick={toggleDrawer}>
+              <ListItemIcon>
+                <ChevronOpenClose color={"primary"} />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Tooltip title={commitHash()}>
+                    <Typography>Bitburner v{CONSTANTS.VersionString}</Typography>
+                  </Tooltip>
+                }
+              />
+            </ListItemButton>
+          </ListItem>
         ),
         [ChevronOpenClose],
       )}

@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import Badge from "@mui/material/Badge";
+import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -26,27 +27,29 @@ export const SidebarItem = memo(function SidebarItem(props: SidebarItemProps): R
   const colorToken = props.flash ? "info.main" : props.active ? "primary.main" : "secondary.main";
 
   return (
-    <ListItemButton
-      key={props.key_}
-      onClick={props.clickFn}
-      sx={{
-        ...(props.active && {
-          borderLeftWidth: 3,
-          borderLeftStyle: "solid",
-          borderLeftColor: "primary.main",
-        }),
-      }}
-    >
-      <ListItemIcon>
-        <Badge badgeContent={(props.count ?? 0) > 0 ? props.count : undefined} color="error">
-          <Tooltip title={!props.sidebarOpen ? props.key_ : ""}>
-            <props.icon sx={{ color: colorToken }} />
-          </Tooltip>
-        </Badge>
-      </ListItemIcon>
-      <ListItemText>
-        <Typography sx={{ color: colorToken }}>{props.key_}</Typography>
-      </ListItemText>
-    </ListItemButton>
+    <ListItem disablePadding>
+      <ListItemButton
+        key={props.key_}
+        onClick={props.clickFn}
+        sx={{
+          ...(props.active && {
+            borderLeftWidth: 3,
+            borderLeftStyle: "solid",
+            borderLeftColor: "primary.main",
+          }),
+        }}
+      >
+        <ListItemIcon>
+          <Badge badgeContent={(props.count ?? 0) > 0 ? props.count : undefined} color="error">
+            <Tooltip title={!props.sidebarOpen ? props.key_ : ""}>
+              <props.icon sx={{ color: colorToken }} />
+            </Tooltip>
+          </Badge>
+        </ListItemIcon>
+        <ListItemText>
+          <Typography sx={{ color: colorToken }}>{props.key_}</Typography>
+        </ListItemText>
+      </ListItemButton>
+    </ListItem>
   );
 });
