@@ -394,9 +394,9 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalConnect:
-          if (commandArray.length === 2) {
+          if (commandArray[0] === "connect") {
             if (
-              commandArray[0] === "connect" &&
+              commandArray.length === 2 &&
               (commandArray[1] === "n00dles" || commandArray[1] === n00dlesServ.hostname)
             ) {
               iTutorialNextStep();
@@ -419,8 +419,8 @@ export class Terminal {
           break;
         case iTutorialSteps.TerminalNuke:
           if (
-            (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") ||
-            commandArray[0] === "NUKE.exe"
+            (commandArray.length === 1 && commandArray[0] === "NUKE.exe") ||
+            (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe")
           ) {
             iTutorialNextStep();
           } else {
@@ -451,8 +451,8 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalCreateScript:
-          if (commandArray.length === 2 || commandArray[0] === "nano") {
-            if (commandArray[0] === "nano" && commandArray[1] === tutorialScriptName) {
+          if (commandArray[0] === "nano") {
+            if (commandArray.length === 2 && commandArray[1] === tutorialScriptName) {
               iTutorialNextStep();
             } else {
               this.error("Wrong command. Try again!");
@@ -473,8 +473,8 @@ export class Terminal {
           break;
         case iTutorialSteps.TerminalRunScript:
           if (
-            (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === tutorialScriptName) ||
-            (commandArray.length === 1 && commandArray[0] === tutorialScriptName)
+            (commandArray.length === 1 && commandArray[0] === tutorialScriptName) ||
+            (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === tutorialScriptName)
           ) {
             iTutorialNextStep();
           } else {
@@ -482,12 +482,12 @@ export class Terminal {
             return;
           }
           break;
-        case iTutorialSteps.TerminalGoToActiveScriptsPage:
+        case iTutorialSteps.TerminalGoToActiveScriptsPage: // giving the player room to play around a bit
           if (
             !(
               (commandArray.length === 1 && commandArray[0] === "free") ||
-              (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === tutorialScriptName) ||
-              (commandArray.length === 1 && commandArray[0] === tutorialScriptName)
+              (commandArray.length === 1 && commandArray[0] === tutorialScriptName) ||
+              (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === tutorialScriptName)
             )
           ) {
             this.error(errorMessageForBadCommand);
@@ -503,8 +503,8 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalScp:
-          if (commandArray.length === 3) {
-            if (commandArray[0] === "scp" && commandArray[1] === tutorialScriptName && commandArray[2] === "n00dles") {
+          if (commandArray[0] === "scp") {
+            if (commandArray.length === 3 && commandArray[1] === tutorialScriptName && commandArray[2] === "n00dles") {
               iTutorialNextStep();
             } else {
               this.error("Wrong command. Try again!");
