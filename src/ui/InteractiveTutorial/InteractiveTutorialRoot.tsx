@@ -205,7 +205,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <TerminalText>{"[n00dles /]> NUKE.exe"}</TerminalText>
+          <TerminalText>{"[n00dles /]> run NUKE.exe"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -367,7 +367,7 @@ export async function main(ns) {
             <br />
             <br />
           </Typography>
-          <TerminalText>{`[home /]> ${tutorialScriptName}`}</TerminalText>
+          <TerminalText>{`[home /]> run ${tutorialScriptName}`}</TerminalText>
         </>
       ),
       canNext: false,
@@ -593,8 +593,8 @@ export async function main(ns) {
               <strong>invaluable</strong> basic hacking script, and helps with most of the early game.
             </li>
             <li>
-              The <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> contains reference
-              materials on functions you can use in scripts.
+              The <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> details the
+              functions you can use in scripts.
             </li>
             <li>
               The <DocumentationLink page="help/faq.md">FAQ</DocumentationLink> answers questions often asked by
