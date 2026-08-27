@@ -200,8 +200,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             enough ports are open.
             <br />
             <br />
-            If you check the diagnostics, you'll see that n00dles' "Required number of open ports for NUKE" is 0. So
-            you're good to run the virus. Just enter
+            If you check the diagnostics again, you'll see that n00dles' "Required number of open ports for NUKE" is 0.
+            So you're good to run the virus. Just enter
             <br />
             <br />
           </Typography>
@@ -217,7 +217,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Now you've got root access, you can hack the server! Try entering
             <br />
             <br />
-          </Typography>d
+          </Typography>
           <TerminalText>{"[n00dles /]> hack"}</TerminalText>
         </>
       ),
@@ -376,7 +376,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Your script is now running! Scripts run in the background until their code completes (though if they have an
+            Your script is now running! Scripts run in the background until their code completes (if they have an
             continuous loop, like {tutorialScriptName} does, they'll run indefinitely).
             <br />
             <br />
