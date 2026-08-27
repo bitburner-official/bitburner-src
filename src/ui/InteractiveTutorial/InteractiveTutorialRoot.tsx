@@ -610,7 +610,11 @@ export async function main(ns) {
           <br />
           <Typography fontWeight="fontWeightBold">
             While the documentation is the first place to get help, if you can't find an answer then please{" "}
-            <Link href="https://discord.com/channels/415207508303544321/415207508303544323" underline="always">
+            <Link
+              href="https://discord.com/channels/415207508303544321/415207508303544323"
+              underline="always"
+              target="_blank"
+            >
               ask us on Discord
             </Link>
             .
