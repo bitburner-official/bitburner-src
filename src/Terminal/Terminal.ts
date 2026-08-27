@@ -451,7 +451,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalCreateScript:
-          if (commandArray.length === 2) {
+          if (commandArray.length === 2 || commandArray[0] === "nano") {
             if (commandArray[0] === "nano" && commandArray[1] === tutorialScriptName) {
               iTutorialNextStep();
             } else {
@@ -474,10 +474,22 @@ export class Terminal {
         case iTutorialSteps.TerminalRunScript:
           if (
             (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === tutorialScriptName) ||
-            commandArray[0] === tutorialScriptName
+            (commandArray.length === 1 && commandArray[0] === tutorialScriptName)
           ) {
             iTutorialNextStep();
           } else {
+            this.error(errorMessageForBadCommand);
+            return;
+          }
+          break;
+        case iTutorialSteps.TerminalGoToActiveScriptsPage:
+          if (
+            !(
+              (commandArray.length === 1 && commandArray[0] === "free") ||
+              (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === tutorialScriptName) ||
+              (commandArray.length === 1 && commandArray[0] === tutorialScriptName)
+            )
+          ) {
             this.error(errorMessageForBadCommand);
             return;
           }
