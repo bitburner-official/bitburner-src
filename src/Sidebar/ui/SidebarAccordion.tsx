@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
-import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
@@ -20,7 +20,6 @@ type SidebarAccordionProps = {
   items: (IItemProps | boolean)[];
   icon: React.ReactElement["type"];
   sidebarOpen: boolean;
-  classes: Record<"listitem" | "active", string>;
 };
 
 type ClickFnCacheKeyType = (page: Page) => void;
@@ -47,7 +46,6 @@ function getClickFn(toWrap: (page: Page) => void, page: Page) {
 
 // This can't be usefully memoized, because props.items is a new array every time.
 export function SidebarAccordion({
-  classes,
   icon: Icon,
   sidebarOpen,
   key_,
@@ -57,7 +55,6 @@ export function SidebarAccordion({
   flash,
 }: SidebarAccordionProps): React.ReactElement {
   const [open, setOpen] = useState(true);
-  const li_classes = useMemo(() => ({ root: classes.listitem }), [classes.listitem]);
 
   // Explicitly useMemo() to save rerendering deep chunks of this tree.
   // memo() can't be (easily) used on components like <List>, because the
@@ -66,17 +63,17 @@ export function SidebarAccordion({
     <>
       {useMemo(
         () => (
-          <ListItem classes={li_classes} button onClick={() => setOpen((open) => !open)}>
+          <ListItemButton onClick={() => setOpen((open) => !open)}>
             <ListItemIcon>
               <Tooltip title={!sidebarOpen ? key_ : ""}>
-                <Icon color={"primary"} />
+                <Icon color="primary" />
               </Tooltip>
             </ListItemIcon>
             <ListItemText primary={<Typography>{key_}</Typography>} />
             {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-          </ListItem>
+          </ListItemButton>
         ),
-        [li_classes, sidebarOpen, key_, open, Icon],
+        [sidebarOpen, key_, open, Icon],
       )}
       <Collapse in={open} timeout="auto" unmountOnExit>
         {items.map((x) => {
@@ -91,7 +88,6 @@ export function SidebarAccordion({
               active={active ?? (page === key_ || x.alternateKeys?.includes(page))}
               clickFn={getClickFn(clickPage, key_)}
               flash={flash === key_}
-              classes={classes}
               sidebarOpen={sidebarOpen}
             />
           );

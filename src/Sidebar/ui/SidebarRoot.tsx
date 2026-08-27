@@ -1,13 +1,12 @@
 import React, { useMemo, useCallback, useState, useEffect, useRef } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
@@ -113,13 +112,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
     ...closedMixin(theme),
     "& .MuiDrawer-paper": closedMixin(theme),
   }),
-}));
-
-const useStyles = makeStyles()((theme: Theme) => ({
-  active: {
-    borderLeft: "3px solid " + theme.palette.primary.main,
-  },
-  listitem: {},
 }));
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
@@ -309,14 +301,13 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     return () => document.removeEventListener("keydown", handleShortcuts);
   }, [canGoToPage, clickPage, props.page]);
 
-  const { classes } = useStyles();
   const [open, setOpen] = useState(Settings.IsSidebarOpened);
   const toggleDrawer = (): void =>
     setOpen((old) => {
       Settings.IsSidebarOpened = !old;
       return !old;
     });
-  const li_classes = useMemo(() => ({ root: classes.listitem }), [classes.listitem]);
+
   const ChevronOpenClose = open ? ChevronLeftIcon : ChevronRightIcon;
 
   // Explicitly useMemo() to save rerendering deep chunks of this tree.
@@ -326,7 +317,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     <Drawer open={open} anchor="left" variant="permanent">
       {useMemo(
         () => (
-          <ListItem classes={li_classes} button onClick={toggleDrawer}>
+          <ListItemButton onClick={toggleDrawer}>
             <ListItemIcon>
               <ChevronOpenClose color={"primary"} />
             </ListItemIcon>
@@ -337,9 +328,9 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
                 </Tooltip>
               }
             />
-          </ListItem>
+          </ListItemButton>
         ),
-        [ChevronOpenClose, li_classes],
+        [ChevronOpenClose],
       )}
       <Divider />
       <List>
@@ -350,7 +341,6 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           flash={flash}
           icon={ComputerIcon}
           sidebarOpen={open}
-          classes={classes}
           items={[
             { key_: Page.Terminal, icon: LastPageIcon },
             { key_: Page.ScriptEditor, icon: CreateIcon },
@@ -373,7 +363,6 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           flash={flash}
           icon={AccountBoxIcon}
           sidebarOpen={open}
-          classes={classes}
           items={[
             { key_: Page.Stats, icon: EqualizerIcon },
             canOpenFactions && {
@@ -401,7 +390,6 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           flash={flash}
           icon={PublicIcon}
           sidebarOpen={open}
-          classes={classes}
           items={[
             {
               key_: Page.City,
@@ -427,7 +415,6 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           flash={flash}
           icon={LiveHelpIcon}
           sidebarOpen={open}
-          classes={classes}
           items={[
             { key_: Page.Milestones, icon: CheckIcon },
             { key_: Page.Documentation, icon: HelpIcon },
