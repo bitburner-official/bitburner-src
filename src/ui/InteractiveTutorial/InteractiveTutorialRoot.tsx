@@ -168,7 +168,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             If you check the read-out of scan-analyze in the Terminal, you can see that n00dles has a required hacking
-            skill of 1, which makes it a great first target.
+            skill of 1, making it a great first target.
             <br />
             <br />
             To hack n00dles, you need to connect to it. You can connect to any machine that is 1 node away using
@@ -289,7 +289,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Hacking is the core mechanic of the game and is necessary for progression. So you don't want to be hacking
+            Hacking is the core mechanic of the game and is necessary for progression. So you don't want to hack
             manually the entire time. We need a way to automate it.
             <br />
             <br />
@@ -314,7 +314,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
           </Typography>
-          <TerminalText>{"[home /]> nano file"}</TerminalText>
+          <TerminalText>{"[home /]> nano"}</TerminalText>
           <Typography>
             <br />
             Script names must end with a script extension (.js, .jsx, .ts, .tsx).
@@ -530,7 +530,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we've made some money and exp, let's head to the Stats tab and see what we've gained. Click{" "}
+            Now we've gained some money and exp, let look at it the Stats tab. Click{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
