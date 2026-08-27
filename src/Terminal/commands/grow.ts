@@ -17,7 +17,7 @@ export function grow(args: (string | number | boolean)[], server: BaseServer): u
   if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot grow this server.");
 
   if (server instanceof HacknetServer) {
-    Terminal.error("Cannot grow this kind of server.");
+    Terminal.error("Cannot grow this kind of server");
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");
@@ -32,7 +32,7 @@ export function grow(args: (string | number | boolean)[], server: BaseServer): u
     Terminal.print(
       `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)} to ${formatMoney(
         newMoney,
-      )}. Gained ${formatExp(expGain)} hacking exp`,
+      )}. Gained ${formatExp(expGain)} hacking exp.`,
     );
     Terminal.print(
       `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,

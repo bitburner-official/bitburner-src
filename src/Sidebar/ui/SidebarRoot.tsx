@@ -120,11 +120,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
     borderLeft: "3px solid " + theme.palette.primary.main,
   },
   listitem: {},
-  // To explain why I did this daft shit: Lots of elements here are setting their colour using color="error" or similar.
-  // The problem is that Typography's default colour options are not the same as with other elements. In particular, it's missing
-  // "info". Do <Typography color="info> and it turns the text black. So unlike everything else, it needs the theme colours
-  // passed to it. Ideally everything should consume useTheme() and be on the same scheme, but that's a refactor that I don't
-  // have the skill to execute.
+  // the following are for Typography, as color="info" isn't available on Typography elements
   themeColorPrimary: { color: theme.palette.primary.main },
   themeColorSecondary: { color: theme.palette.secondary.main },
   themeColorInfo: { color: theme.palette.info.main },

@@ -6,7 +6,7 @@ import { CodeProps } from "react-markdown/lib/ast-to-react";
 import { Typography } from "@mui/material";
 import { makeStyles } from "tss-react/mui";
 
-export const useStyles = makeStyles()((theme: Theme) => ({
+const useStyles = makeStyles()((theme: Theme) => ({
   pre: {
     borderRadius: "6px",
   },
@@ -36,11 +36,7 @@ const InlineCode = (props: React.PropsWithChildren<CodeProps>): React.ReactEleme
   </Typography>
 );
 
-type CodeBlockProps = {
-  children: string;
-};
-
-const BigCode = ({ children }: CodeBlockProps): React.ReactElement => (
+const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => (
   <SyntaxHighlighter
     language="javascript"
     style={theme}
@@ -49,9 +45,9 @@ const BigCode = ({ children }: CodeBlockProps): React.ReactElement => (
       borderRadius: "6px",
     }}
   >
-    {children}
+    {String(props.children)}
   </SyntaxHighlighter>
 );
 
 export const code = (props: React.PropsWithChildren<CodeProps>): React.ReactElement =>
-  props.inline ? <InlineCode {...props} /> : <BigCode>{String(props.children)}</BigCode>;
+  props.inline ? <InlineCode {...props} /> : <BigCode {...props} />;

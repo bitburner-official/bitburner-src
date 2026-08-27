@@ -50,7 +50,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     nsMethod: "nuke",
     create: {
       level: 1,
-      tooltip: "This virus is used to gain root access to a machine if enough ports are opened",
+      tooltip: "This virus is used to gain root access to a machine if enough ports are opened.",
       req: requireHackingLevel(1),
       time: CONSTANTS.MillisecondsPerFiveMinutes,
     },
@@ -62,13 +62,13 @@ export const Programs: Record<CompletedProgramName, Program> = {
       }
       if (server.hasAdminRights) {
         Terminal.print("You already have root access to this computer. There is no reason to run NUKE.exe");
-        Terminal.print("You can run scripts on this server");
+        Terminal.print("You can now run scripts on this server.");
         return;
       }
       if (server.openPortCount >= server.numOpenPortsRequired) {
         server.hasAdminRights = true;
         Terminal.print("NUKE successful! Gained root access to " + server.hostname);
-        Terminal.print("You can now run scripts on this server");
+        Terminal.print("You can now run scripts on this server.");
         return;
       }
 
@@ -87,7 +87,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.bruteSsh, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run BruteSSH.exe on this kind of server");
+        Terminal.error("Cannot run BruteSSH.exe on this kind of server.");
         return;
       }
       if (server.sshPortOpen) {
@@ -95,7 +95,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.purchasedByPlayer) {
-        Terminal.print("Opening ports on your own machines has no negative consequences in the game");
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
       server.sshPortOpen = true;
@@ -115,7 +115,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.ftpCrack, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run FTPCrack.exe on this kind of server");
+        Terminal.error("Cannot run FTPCrack.exe on this kind of server.");
         return;
       }
       if (server.ftpPortOpen) {
@@ -123,7 +123,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.purchasedByPlayer) {
-        Terminal.print("Opening ports on your own machines has no negative consequences in the game");
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
       server.ftpPortOpen = true;
@@ -143,7 +143,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.relaySmtp, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run relaySMTP.exe on this kind of server");
+        Terminal.error("Cannot run relaySMTP.exe on this kind of server.");
         return;
       }
       if (server.smtpPortOpen) {
@@ -151,7 +151,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.purchasedByPlayer) {
-        Terminal.print("Opening ports on your own machines has no negative consequences in the game");
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
       server.smtpPortOpen = true;
@@ -171,7 +171,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.httpWorm, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run HTTPWorm.exe on this kind of server");
+        Terminal.error("Cannot run HTTPWorm.exe on this kind of server.");
         return;
       }
       if (server.httpPortOpen) {
@@ -179,7 +179,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.purchasedByPlayer) {
-        Terminal.print("Opening ports on your own machines has no negative consequences in the game");
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
       server.httpPortOpen = true;
@@ -199,7 +199,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (args: string[], server: BaseServer): void => {
       warnIfNonArgProgramIsRunWithArgs(CompletedProgramName.sqlInject, args);
       if (!(server instanceof Server)) {
-        Terminal.error("Cannot run SQLInject.exe on this kind of server");
+        Terminal.error("Cannot run SQLInject.exe on this kind of server.");
         return;
       }
       if (server.sqlPortOpen) {
@@ -207,7 +207,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.purchasedByPlayer) {
-        Terminal.print("Opening ports on your own machines has no negative consequences in the game");
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
       server.sqlPortOpen = true;
@@ -224,8 +224,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPerQuarterHour,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run");
-      Terminal.print("DeepscanV1.exe lets you run 'scan-analyze' with a depth up to 5");
+      Terminal.print("This executable cannot be run.");
+      Terminal.print("DeepscanV1.exe lets you run 'scan-analyze' with a depth up to 5.");
     },
   }),
   [CompletedProgramName.deepScan2]: new Program({
@@ -237,8 +237,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPer2Hours,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run");
-      Terminal.print("DeepscanV2.exe lets you run 'scan-analyze' with a depth up to 10");
+      Terminal.print("This executable cannot be run.");
+      Terminal.print("DeepscanV2.exe lets you run 'scan-analyze' with a depth up to 10.");
     },
   }),
   [CompletedProgramName.serverProfiler]: new Program({
@@ -263,7 +263,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       }
 
       if (!(targetServer instanceof Server)) {
-        Terminal.error(`ServerProfiler.exe can only be run on normal servers`);
+        Terminal.error(`ServerProfiler.exe can only be run on normal servers.`);
         return;
       }
 
@@ -300,9 +300,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPerQuarterHour,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run");
-      Terminal.print("AutoLink.exe lets you automatically connect to other servers when using 'scan-analyze'");
-      Terminal.print("When using scan-analyze, click on a server's hostname to connect to it");
+      Terminal.print("This executable cannot be run.");
+      Terminal.print("AutoLink.exe lets you automatically connect to other servers when using 'scan-analyze'.");
+      Terminal.print("When using scan-analyze, click on a server's hostname to connect to it.");
     },
   }),
   [CompletedProgramName.formulas]: new Program({
@@ -314,8 +314,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPer4Hours,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run");
-      Terminal.print("Formulas.exe lets you use the formulas API");
+      Terminal.print("This executable cannot be run.");
+      Terminal.print("Formulas.exe lets you use the formulas API.");
     },
   }),
   [CompletedProgramName.bitFlume]: new Program({
