@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { Paper, Box, Typography, Button, Link } from "@mui/material";
 import { ITutorialEvents } from "./ITutorialEvents";
 import { CopyableText } from "../React/CopyableText";
-import { useStyles as codeBlockStyles } from "../MD/code";
 
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -35,7 +34,6 @@ export const tutorialScriptName = `hacking.js`;
 
 export function InteractiveTutorialRoot(): React.ReactElement {
   const theme = useTheme();
-  const { classes: codeClasses } = codeBlockStyles();
   const TerminalText = styled(Typography)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.primary.main}`,
   }));
@@ -170,10 +168,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             If you check the read-out of scan-analyze in the Terminal, you can see that n00dles has a required hacking
-            skill of 1. It's a great first target.
+            skill of 1, which makes it a great first target.
             <br />
             <br />
-            To hack n00dles, you need to connect to it. You can connect to any machine that is one node away using
+            To hack n00dles, you need to connect to it. You can connect to any machine that is 1 node away using
             <br />
             <br />
           </Typography>
@@ -263,7 +261,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            When you hack a server, you deplete the money it has available, so the following hacks take less money. You
+            When you hack a server, you deplete the money it has available, so any subsequent hacks take less money. You'll
             also cause its security level to rise, so your hacks take longer.
             <br />
             <br />
@@ -338,16 +336,18 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Below is a script that hacks n00dles on a continuous loop. Copy and paste it into the editor.
           </Typography>
           <br />
-          <CopyableText
-            className={codeClasses.code}
-            value={`/** @param {NS} ns */
+          <Typography component="div" sx={{ whiteSpace: "pre", backgroundColor: "background.paper", }}>
+            {
+              <CopyableText
+                value={`/** @param {NS} ns */
 export async function main(ns) {
   while (true) {
     await ns.hack("n00dles");
   }
 }`}
-          />
-          <br />
+              />
+            }
+          </Typography>
           <br />
           <Typography>
             One benefit of using scripts to hack is that they don't need to be connected to the server they're hacking.
@@ -358,8 +358,8 @@ export async function main(ns) {
             map the network with ns.scan(), run scripts with ns.run(), or get server information with ns.getServer().
             <br />
             <br />
-            If you want to check which functions are available to you in the editor, use the search bar at the bottom,
-            or click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside
+            If you want to check which functions are available, use the search bar at the bottom, or click the{" "}
+            <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>{" "}link beside
             it.
             <br />
             <br />
