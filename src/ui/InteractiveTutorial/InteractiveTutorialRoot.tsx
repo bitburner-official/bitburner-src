@@ -175,8 +175,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             servers and computers. Using specialised skills, you can hack servers to steal money and gain experience.
             <br />
             <br />
-            You've got the skills to hack n00dles – scan-analyze showed us that n00dles has a required hacking skill of
-            1.
+            You've got the hacking skill needed to hack n00dles – scan-analyze showed us that n00dles has a required 
+            hacking skill of 1.
             <br />
             <br />
             But there's something else we need to check. Let's run some diagnostics using
