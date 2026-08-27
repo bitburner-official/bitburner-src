@@ -118,7 +118,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <TerminalText>{"[home /]> scan"}</TerminalText>
           <Typography>
             <br />
-            shows all servers that you can connect to from your current machine.
+            shows you every server you can connect to from your current machine.
             <br />
             <br />
             The network's much bigger than that though. To start exploring it, let's enter
@@ -154,7 +154,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             That's great and all, but there are so many servers. Which ones do we focus on? Well, let's pick a target we
-            can hack!
+            can hack.
           </Typography>
         </>
       ),
@@ -169,11 +169,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             experience.
             <br />
             <br />
-            If you check the read-out of scan-analyze in the Terminal you can see that n00dles has a required hacking
-            skill of only 1. That means you can hack it right now.
+            If you check the read-out of scan-analyze in the Terminal, you can see that n00dles has a required hacking
+            skill of 1. It's a great first target.
             <br />
             <br />
-            To do that, you need to connect to it. You can connect to any machine that is one node away using
+            To hack n00dles, you need to connect to it. You can connect to any machine that is one node away using
             <br />
             <br />
           </Typography>
@@ -193,7 +193,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Before we try hacking, let's run some diagnostics using
+            To make sure we can hack n00dles, let's run some diagnostics using
             <br />
             <br />
           </Typography>
@@ -211,7 +211,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             Handily, you've come prepared with a virus called NUKE.exe. NUKE.exe will grant you root access to any
-            machine as long as it has enough open ports.
+            machine as long as enough ports are open.
             <br />
             <br />
             If you look at the diagnostics again, you'll see that n00dles' "Required number of open ports for NUKE" is
@@ -249,7 +249,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             successful, you'll steal a percentage of the server's available money.
             <br />
             <br />
-            All of those variables (hacking time, success chance, and the percentage stolen) are affected by:
+            All of those variables (time, success chance, and percentage stolen) are affected by:
             <ul>
               <li>your hacking skill</li>
               <li>the server's security level</li>
@@ -292,7 +292,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>
             Hacking is the core mechanic of the game and is necessary for progression. So you don't want to be hacking
-            manually the entire time. What we need is a way to automate it.
+            manually the entire time. We need a way to automate it.
             <br />
             <br />
             So let's head home and create our first script.
@@ -335,7 +335,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Below is a basic script that hacks n00dles on a continuous loop. Copy and paste it into the editor.
+            Below is a script that hacks n00dles on a continuous loop. Copy and paste it into the editor.
           </Typography>
           <br />
           <CopyableText
@@ -410,7 +410,7 @@ export async function main(ns) {
             will never complete because it has an infinite loop).
             <br />
             <br />
-            Scripts will passively earn you income and hacking experience. They even keep earning while you're offline,
+            Scripts will passively earn you income and hacking experience. They also keep earning while you're offline,
             although at a slower rate.
             <br />
             <br />
@@ -476,7 +476,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We won't get far running scripts on just our home computer. We can run them on other servers too, and to do
+            We won't get far running scripts on our home computer alone. We can run them on other servers too, but to do
             that, we need to copy them over.
             <br />
             <br />
@@ -497,14 +497,14 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            To copy {tutorialScriptName} to another server, you can use
+            To copy a script to another server, you can use
             <br />
             <br />
           </Typography>
           <TerminalText>{"[home /]> scp file destination"}</TerminalText>
           <Typography>
             <br />
-            To copy it to n00dles, enter
+            To copy {tutorialScriptName} to n00dles, enter
             <br />
             <br />
           </Typography>
@@ -583,7 +583,7 @@ export async function main(ns) {
         <>
           <Typography>
             Hacknet Nodes earn you money over time, both online and offline. When you get enough money, you can upgrade
-            your Hacknet Node below.
+            your Hacknet Nodes below.
             <br />
             <br />
             Let's go to{" "}
@@ -600,8 +600,8 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            This page lists all of the locations in your current city. Each location has something that you can do.
-            There's a lot of content out in the world, so make sure you explore and discover!
+            This maps all of the locations in your current city. Each location has something that you can do. There's a
+            lot of content out in the world, so make sure you explore and discover!
             <br />
             <br />
             Lastly, go to{" "}
@@ -625,11 +625,11 @@ export async function main(ns) {
           <ul>
             <li>
               the <DocumentationLink page="help/getting_started.md">Beginner's guide</DocumentationLink>, which gives
-              you an <strong>invaluable</strong> basic hacking script, and helps you with most of the early game
+              you an <strong>invaluable</strong> basic hacking script, and helps with most of the early game
             </li>
             <li>
               the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink>, which contains
-              reference materials for all NS APIs
+              reference materials on functions you can use in scripts
             </li>
             <li>
               the <DocumentationLink page="help/faq.md">FAQ</DocumentationLink>, which answers questions often asked by

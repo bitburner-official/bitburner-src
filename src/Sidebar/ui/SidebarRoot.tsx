@@ -121,7 +121,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
   listitem: {},
   // To explain why I did this daft shit: Lots of elements here are setting their colour using color="error" or similar.
-  // The problem is that Typography doesn't have the same list of possible colours as other items. In particular, it's missing
+  // The problem is that Typography's default colour options are not the same as with other elements. In particular, it's missing
   // "info". Do <Typography color="info> and it turns the text black. So unlike everything else, it needs the theme colours
   // passed to it. Ideally everything should consume useTheme() and be on the same scheme, but that's a refactor that I don't
   // have the skill to execute.

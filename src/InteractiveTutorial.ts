@@ -1,7 +1,6 @@
 //// Still to do:
 // Somewhere ??? the text that says 'Processes cannot be killed during the tutorial' ... when you clearly can!
-// You can't "Previous" if you're on the Stats page. It keeps pushing you forward.
-// Note down changes that are part of something different, and reverse them
+// Note down changes that are part of something different, and reverse them:
 // Full stops
 // Theming
 // Code block component
