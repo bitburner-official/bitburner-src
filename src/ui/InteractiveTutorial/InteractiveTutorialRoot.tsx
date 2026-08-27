@@ -179,7 +179,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             hacking skill of 1.
             <br />
             <br />
-            But there's something else we need to check. Let's run some diagnostics using
+            But there's something else we need to do before we start hacking. To see what, let's run some diagnostics
+            using
             <br />
             <br />
           </Typography>
