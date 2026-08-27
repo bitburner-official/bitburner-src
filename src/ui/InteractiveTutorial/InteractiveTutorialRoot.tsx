@@ -623,12 +623,7 @@ export async function main(ns) {
           .
           <br />
           <br />
-          <TerminalText>
-            <br />
-          </TerminalText>
-          <br />
-          <br />
-          That's the end of the tutorial. We hope you enjoy the game!
+          And that's the end of the tutorial. I hope you enjoy the game!
         </Typography>
       ),
       canNext: true,
