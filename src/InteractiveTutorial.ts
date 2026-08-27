@@ -1,9 +1,7 @@
 //// Still to do:
 // Somewhere ??? the text that says 'Processes cannot be killed during the tutorial' ... when you clearly can!
-// Note down changes that are part of something different, and reverse them:
 // Full stops
 // Theming
-// Code block component
 // CL's other points
 /* This should be a tip in the documentation UI -- not in the tutorial
           If you want to open one of the Documentaion page links in a new tab, click it while holding Ctrl (Control on a

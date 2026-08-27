@@ -54,7 +54,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             If you need to hide the tutorial panel temporarily, you can collapse it.
             <br />
             <br />
-            You can exit the tutorial at any time. If you ever want to review it, go to the{" "}
+            You can also exit the tutorial at any time. If you ever want to review it, go to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <SettingsIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
               <Typography sx={{ color: theme.palette.primary.main }}>Options</Typography>
@@ -377,7 +377,7 @@ export async function main(ns) {
         <>
           <Typography>
             Your script is now running! Scripts run in the background until their code completes (though if they have an
-            infinite loop, like {tutorialScriptName}, it never will).
+            infinite loop, like {tutorialScriptName} does, it never will).
             <br />
             <br />
             Scripts will passively earn you income and hacking experience. They even earn money and exp while you're
@@ -512,8 +512,8 @@ export async function main(ns) {
         <>
           <Typography>
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
+              <EqualizerIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
+              <Typography sx={{ color: theme.palette.primary.main }}>Stats</Typography>
             </Box>{" "}
             shows information about your skills, money, and bonuses.
           </Typography>
