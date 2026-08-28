@@ -33,7 +33,6 @@ interface IContent {
 export const tutorialScriptName = `hacking.js`;
 
 export function InteractiveTutorialRoot(): React.ReactElement {
-  const theme = useTheme();
   const TerminalText = styled(Typography)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.primary.main}`,
   }));
@@ -56,8 +55,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             You can also exit the tutorial at any time. If you ever want to review it, go to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <SettingsIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.primary.main }}>Options</Typography>
+              <SettingsIcon sx={{ color: "primary.main", mr: 0.8 }} />
+              <Typography sx={{ color: "primary.main" }}>Options</Typography>
             </Box>{" "}
             tab and select Repeat Tutorial.
           </Typography>
@@ -71,16 +70,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             We're currently on the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.primary.main }}>Terminal</Typography>
+              <LastPageIcon sx={{ color: "primary.main", mr: 0.8 }} />
+              <Typography sx={{ color: "primary.main" }}>Terminal</Typography>
             </Box>{" "}
             tab.
             <br />
             <br />
             You can use the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.primary.main }}>Terminal</Typography>
+              <LastPageIcon sx={{ color: "primary.main", mr: 0.8 }} />
+              <Typography sx={{ color: "primary.main" }}>Terminal</Typography>
             </Box>{" "}
             to interface with your home computer, and with other machines around the world.
           </Typography>
@@ -179,7 +178,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             hacking skill of 1.
             <br />
             <br />
-            But there's something else we need to do before we start hacking. To see what, let's run some diagnostics
+            But there's something else we need before we can start hacking. To see what, let's run some diagnostics
             using
             <br />
             <br />
@@ -308,7 +307,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Below is a script that hacks n00dles on a continuous loop. Copy and paste it into the editor.
+            Below is a script that hacks n00dles on a continuous loop. Click it to copy it, then paste it into the
+            editor.
           </Typography>
           <br />
           <Typography component="div" sx={{ whiteSpace: "pre", backgroundColor: "background.paper" }}>
@@ -387,8 +387,8 @@ export async function main(ns) {
             <br />
             Let's check how our running scripts are doing by clicking{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <StorageIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.info.main }}>Active Scripts</Typography>
+              <StorageIcon sx={{ color: "info.main", mr: 0.8 }} />
+              <Typography sx={{ color: "info.main" }}>Active Scripts</Typography>
             </Box>
           </Typography>
         </>
@@ -411,8 +411,8 @@ export async function main(ns) {
             <br />
             When you're ready, let's go back to the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LastPageIcon sx={{ color: theme.palette.info.main }} />
-              <Typography sx={{ color: theme.palette.info.main }}>Terminal</Typography>
+              <LastPageIcon sx={{ color: "info.main" }} />
+              <Typography sx={{ color: "info.main" }}>Terminal</Typography>
             </Box>
           </Typography>
         </>
@@ -499,8 +499,8 @@ export async function main(ns) {
           <Typography>
             Now we've gained some money and exp, let's look at the{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.info.main }}>Stats</Typography>
+              <EqualizerIcon sx={{ color: "info.main", mr: 0.8 }} />
+              <Typography sx={{ color: "info.main" }}>Stats</Typography>
             </Box>{" "}
             tab
           </Typography>
@@ -513,8 +513,8 @@ export async function main(ns) {
         <>
           <Typography>
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <EqualizerIcon sx={{ color: theme.palette.primary.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.primary.main }}>Stats</Typography>
+              <EqualizerIcon sx={{ color: "primary.main", mr: 0.8 }} />
+              <Typography sx={{ color: "primary.main" }}>Stats</Typography>
             </Box>{" "}
             shows information about your skills, money, and bonuses.
           </Typography>
@@ -528,8 +528,8 @@ export async function main(ns) {
           <Typography>
             Hacking isn't the only way to earn money. One other way to is to purchase Hacknet Nodes. Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <AccountTreeIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.info.main }}>Hacknet</Typography>
+              <AccountTreeIcon sx={{ color: "info.main", mr: 0.8 }} />
+              <Typography sx={{ color: "info.main" }}>Hacknet</Typography>
             </Box>{" "}
           </Typography>
         </>
@@ -553,8 +553,8 @@ export async function main(ns) {
             <br />
             Let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <LocationCityIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.info.main }}>City</Typography>
+              <LocationCityIcon sx={{ color: "info.main", mr: 0.8 }} />
+              <Typography sx={{ color: "info.main" }}>City</Typography>
             </Box>{" "}
           </Typography>
         </>
@@ -571,8 +571,8 @@ export async function main(ns) {
             <br />
             Lastly, go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <HelpIcon sx={{ color: theme.palette.info.main, mr: 0.8 }} />
-              <Typography sx={{ color: theme.palette.info.main }}>Documentation</Typography>
+              <HelpIcon sx={{ color: "info.main", mr: 0.8 }} />
+              <Typography sx={{ color: "info.main" }}>Documentation</Typography>
             </Box>{" "}
           </Typography>
         </>
