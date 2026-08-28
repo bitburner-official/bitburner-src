@@ -19,6 +19,7 @@ import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { JsonSchemaValidator } from "../JsonSchema/JsonSchemaValidator";
 import { Player } from "../Player";
 import { scaleDarknetVolatilityIncreases, getDarknetVolatilityMult } from "../DarkNet/effects/effects";
+import { clearStockPriceHistories, recordStockPrice } from "./PriceHistory";
 
 export function getDefaultEmptyStockMarket(): IStockMarket {
   return {
@@ -162,6 +163,21 @@ export function loadStockMarket(saveString: string): void {
   }
   // Typecasting here is fine because we validated the loaded data.
   StockMarket = stockMarketData as IStockMarket;
+  resetStockPriceHistories();
+}
+
+/**
+ * Discard any recorded price history and re-anchor each stock's series on its current price.
+ * History is per-session (see PriceHistory.ts), so it has to start over whenever the set of stocks
+ * is replaced - on load, on init, and on prestige.
+ */
+function resetStockPriceHistories(): void {
+  clearStockPriceHistories();
+  for (const name of Object.keys(StockMarket)) {
+    const stock = StockMarket[name];
+    if (!(stock instanceof Stock)) continue;
+    recordStockPrice(stock.symbol, stock.price);
+  }
 }
 
 export function canAccessStockMarket(): boolean {
@@ -182,6 +198,7 @@ export function deleteStockMarket(): void {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete SymbolToStockMap[key];
   }
+  clearStockPriceHistories();
 }
 
 export function initStockMarket(): void {
@@ -207,6 +224,7 @@ export function initStockMarket(): void {
   StockMarket.lastUpdate = Date.now();
   StockMarket.ticksUntilCycle = getRandomIntInclusive(1, StockMarketConstants.TicksPerCycle);
   initSymbolToStockMap();
+  resetStockPriceHistories();
 }
 
 export function initSymbolToStockMap(): void {
@@ -303,6 +321,8 @@ export function processStockPrices(numCycles = 1): void {
       processOrders(stock, OrderType.StopBuy, PositionType.Short, processOrderRefs);
       processOrders(stock, OrderType.StopSell, PositionType.Long, processOrderRefs);
     }
+
+    recordStockPrice(stock.symbol, stock.price);
 
     let otlkMagChange = stock.otlkMag * av;
     if (stock.otlkMag < 5) {

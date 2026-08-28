@@ -21,6 +21,17 @@ interface IProps {
 
 const localesWithLongPriceFormat = ["cs", "lv", "pl", "ru"];
 
+/**
+ * Characters of `+`/`-` this stock's forecast is printed with. The only field of the header whose
+ * width varies from row to row - everything before it is padded to a fixed column.
+ */
+export function forecastLength(stock: Stock): number {
+  return Math.floor(Math.abs(stock.otlkMag) / 10) + 1;
+}
+
+/** Widest that field can get: `Stock.cycleForecast` clamps `otlkMag` to 50. */
+export const maxForecastLength = 6;
+
 export function StockTickerHeaderText(props: IProps): React.ReactElement {
   const stock = props.stock;
 
@@ -42,7 +53,7 @@ export function StockTickerHeaderText(props: IProps): React.ReactElement {
     if (stock.otlkMag < 0) {
       plusOrMinus = !plusOrMinus;
     }
-    hdrText += (plusOrMinus ? "+" : "-").repeat(Math.floor(Math.abs(stock.otlkMag) / 10) + 1);
+    hdrText += (plusOrMinus ? "+" : "-").repeat(forecastLength(stock));
   }
 
   let color = Settings.theme.success;

@@ -271,6 +271,11 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
           <br />
           <br />A stock's price forecast can change over time. This is also affected by volatility. The more volatile a
           stock is, the more its price forecast will change.
+          <br />
+          <br />
+          Each stock is also charted behind its ticker, showing how its price has moved. Expand a ticker for the full
+          history and hover it to read a price off the chart. This history is only kept while the game is running: it is
+          not saved, so it starts over each time the game is loaded.
         </Typography>
       </StaticModal>
     </>
