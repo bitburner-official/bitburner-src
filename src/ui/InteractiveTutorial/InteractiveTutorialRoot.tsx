@@ -8,10 +8,9 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import HelpIcon from "@mui/icons-material/Help";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { useTheme, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 import {
   iTutorialPrevStep,
@@ -64,7 +63,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: true,
     },
-    [iTutorialSteps.TerminalIntro as number]: {
+    [iTutorialSteps.TerminalScan as number]: {
       content: (
         <>
           <Typography>
@@ -82,15 +81,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
               <Typography sx={{ color: "primary.main" }}>Terminal</Typography>
             </Box>{" "}
             to interface with your home computer, and with other machines around the world.
-          </Typography>
-        </>
-      ),
-      canNext: true,
-    },
-    [iTutorialSteps.TerminalScan as number]: {
-      content: (
-        <>
-          <Typography>
+            <br />
+            <br />
             Let's try that out. Start by entering
             <br />
             <br />
@@ -108,14 +100,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Running
-            <br />
-            <br />
-          </Typography>
-          <TerminalText>{"[home /]> scan"}</TerminalText>
-          <Typography>
-            <br />
-            shows you every server you can connect to from your current machine.
+            That's shown you every server you can connect to from your current machine.
             <br />
             <br />
             The network's much bigger than that though! To start exploring it, enter
@@ -178,8 +163,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             hacking skill of 1.
             <br />
             <br />
-            But there's something else we need before we can start hacking. To see what, let's run some diagnostics
-            using
+            But there's something else we need too. To see what, let's run some diagnostics using
             <br />
             <br />
           </Typography>
@@ -227,8 +211,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack the server. If your hack is successful, you'll steal a percentage of the
-            server's available money.
+            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of the server's
+            available money.
             <br />
             <br />
             Nearly all aspects of hacking (including time taken, success chance and percentage stolen) are affected by
@@ -522,36 +506,11 @@ export async function main(ns) {
       ),
       canNext: true,
     },
-    [iTutorialSteps.GoToHacknetNodesPage as number]: {
+    [iTutorialSteps.CharacterGoToWorldPage as number]: {
       content: (
         <>
           <Typography>
-            Hacking isn't the only way to earn money. One other way to is to purchase Hacknet Nodes. Let's go to{" "}
-            <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
-              <AccountTreeIcon sx={{ color: "info.main", mr: 0.8 }} />
-              <Typography sx={{ color: "info.main" }}>Hacknet</Typography>
-            </Box>{" "}
-          </Typography>
-        </>
-      ),
-      canNext: false,
-    },
-    [iTutorialSteps.HacknetNodesIntroduction as number]: {
-      content: (
-        <Typography>
-          Here you can purchase new Hacknet Nodes and upgrade your existing ones. Let's purchase one.
-        </Typography>
-      ),
-      canNext: true,
-    },
-    [iTutorialSteps.HacknetNodesGoToWorldPage as number]: {
-      content: (
-        <>
-          <Typography>
-            Hacknet Nodes passively earn you money over time, even when you're offline.
-            <br />
-            <br />
-            Let's go to{" "}
+            Next, let's go to{" "}
             <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
               <LocationCityIcon sx={{ color: "info.main", mr: 0.8 }} />
               <Typography sx={{ color: "info.main" }}>City</Typography>

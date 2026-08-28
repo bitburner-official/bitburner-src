@@ -7,7 +7,6 @@ enum iTutorialSteps {
   Start,
 
   // Hacking
-  TerminalIntro, // Introduction to Terminal
   TerminalScan, // Using 'scan' Terminal command
   TerminalScanAnalyze1, // Using 'scan-analyze' Terminal command
   TerminalScanAnalyze2, // Using 'scan-analyze 3' Terminal command
@@ -34,9 +33,7 @@ enum iTutorialSteps {
   CharacterPage, // Introduction to 'Stats' page
 
   // Finishing off
-  GoToHacknetNodesPage,
-  HacknetNodesIntroduction,
-  HacknetNodesGoToWorldPage,
+  CharacterGoToWorldPage,
   WorldDescription,
   DocumentationPageInfo,
   End,
@@ -51,7 +48,6 @@ const ITutorial = {
     [iTutorialSteps.Start]: false,
     [iTutorialSteps.GoToCharacterPage]: false,
     [iTutorialSteps.CharacterPage]: false,
-    [iTutorialSteps.TerminalIntro]: false,
     [iTutorialSteps.TerminalHelp]: false,
     [iTutorialSteps.TerminalLs]: false,
     [iTutorialSteps.TerminalScan]: false,
@@ -72,9 +68,7 @@ const ITutorial = {
     [iTutorialSteps.ActiveScriptsToTerminal]: false,
     [iTutorialSteps.TerminalTailScript]: false,
     [iTutorialSteps.TerminalScp]: false,
-    [iTutorialSteps.GoToHacknetNodesPage]: false,
-    [iTutorialSteps.HacknetNodesIntroduction]: false,
-    [iTutorialSteps.HacknetNodesGoToWorldPage]: false,
+    [iTutorialSteps.CharacterGoToWorldPage]: false,
     [iTutorialSteps.WorldDescription]: false,
     [iTutorialSteps.DocumentationPageInfo]: false,
     [iTutorialSteps.End]: false,

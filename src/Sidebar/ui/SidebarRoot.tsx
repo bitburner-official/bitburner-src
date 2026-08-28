@@ -138,13 +138,15 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     case iTutorialSteps.TerminalGoToActiveScriptsPage:
       flash = Page.ActiveScripts;
       break;
+    case iTutorialSteps.TerminalEditScript:
+      if (props.page !== Page.ScriptEditor) {
+        flash = Page.ScriptEditor;
+      }
+      break;
     case iTutorialSteps.GoToCharacterPage:
       flash = Page.Stats;
       break;
-    case iTutorialSteps.GoToHacknetNodesPage:
-      flash = Page.Hacknet;
-      break;
-    case iTutorialSteps.HacknetNodesGoToWorldPage:
+    case iTutorialSteps.CharacterGoToWorldPage:
       flash = Page.City;
       break;
     case iTutorialSteps.WorldDescription:
