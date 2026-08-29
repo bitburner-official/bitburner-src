@@ -158,7 +158,7 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
     }
     const validationData = validationResult.data;
 
-    const fileNameList = [...validationData.server.textFiles.keys(), ...validationData.server.scripts.keys()];
+    const fileNameList = [...validationData.server.scripts.keys(), ...validationData.server.textFiles.keys()];
 
     return new RFASuccessResponse({ result: fileNameList, id: msg.id });
   },
