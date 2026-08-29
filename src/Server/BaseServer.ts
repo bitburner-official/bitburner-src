@@ -13,6 +13,7 @@ import { ScriptFilePath, resolveScriptFilePath, hasScriptExtension } from "../Pa
 import { Directory, resolveDirectory } from "../Paths/Directory";
 import { TextFilePath, resolveTextFilePath, hasTextExtension } from "../Paths/TextFilePath";
 import { Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { stringDataIdx } from "../utils/JSONContext";
 import { matchScriptPathExact, scriptKey } from "../utils/helpers/scriptKey";
 
 import { createRandomIp } from "../utils/IPAddress";
@@ -294,15 +295,26 @@ export abstract class BaseServer implements IServer {
   // Serialize the current object to a JSON save state
   // Called by subclasses, not stringify.
   toJSONBase(ctorName: string, keys: readonly (keyof this)[]): IReviverValue {
-    // RunningScripts are stored as a simple array, both for backward compatibility,
-    // compactness, and ease of filtering them here.
     const result = Generic_toJSON(ctorName, this, keys);
+    // Dedup common strings
+    const data = (result as IReviverValue<BaseServer>).data;
+    data.hostname = stringDataIdx(data.hostname);
+    // We have to make a new array, because the existing one is a reference to
+    // the array in the base object.
+    const onNetwork: string[] = [];
+    for (const host of data.serversOnNetwork) {
+      onNetwork.push(stringDataIdx(host));
+    }
+    data.serversOnNetwork = onNetwork;
+
     assertObject(result.data);
     if (Settings.ExcludeRunningScriptsFromSave) {
       result.data.runningScripts = [];
       return result;
     }
 
+    // RunningScripts are stored as a simple array, both for backward compatibility,
+    // compactness, and ease of filtering them here.
     const rsArray: RunningScript[] = [];
     for (const byPid of this.runningScriptMap.values()) {
       for (const rs of byPid.values()) {
@@ -317,9 +329,27 @@ export abstract class BaseServer implements IServer {
 
   // Initializes a Server Object from a JSON save state
   // Called by subclasses, not Reviver.
-  static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
+  static fromJSONBase<T extends BaseServer>(
+    value: IReviverValue,
+    ctor: new () => T,
+    keys: readonly (keyof T)[],
+    context: string[] | undefined,
+  ): T {
     assertObject(value.data);
-    const server = Generic_fromJSON(ctor, value.data, keys);
+    context ??= [];
+    // This cast is to ensure our writes are type-safe. Our reads are checked
+    // via typeof already (and don't conform to the type given).
+    const data = (value as IReviverValue<T>).data;
+    if (typeof data.hostname === "number") {
+      data.hostname = context[data.hostname];
+    }
+    for (let i = 0; i < data.serversOnNetwork.length; ++i) {
+      const onNetwork = data.serversOnNetwork[i];
+      if (typeof onNetwork === "number") {
+        data.serversOnNetwork[i] = context[onNetwork];
+      }
+    }
+    const server = Generic_fromJSON(ctor, data, keys);
     if (value.data.runningScripts != null && Array.isArray(value.data.runningScripts)) {
       server.savedScripts = value.data.runningScripts;
     }

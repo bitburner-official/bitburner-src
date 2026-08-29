@@ -6,7 +6,7 @@ import { CONSTANTS } from "./Constants";
 import { getFactionsSave, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
 import { Player, setPlayer, loadPlayer } from "./Player";
-import { saveAllServers, loadAllServers } from "./Server/AllServers";
+import { GetAllServers, loadAllServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { loadStockMarket, StockMarket } from "./StockMarket/StockMarket";
 import { staneksGift, loadStaneksGift } from "./CotMG/Helper";
@@ -17,18 +17,19 @@ import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
+import { setJSONContext } from "./utils/JSONContext";
 import { save } from "./db";
 import { ToastVariant } from "@enums";
 import { pushGameSaved, pushImportResult } from "./Electron";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
-import { SaveData } from "./types";
+import type { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
 import { decodeBase64BytesToBytes, isBinaryFormat, isSteamCloudFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
-import { Reviver } from "./utils/GenericReviver";
+import { Reviver, makeReviverWithContext } from "./utils/GenericReviver";
 import { populateDarknet } from "./DarkNet/controllers/NetworkGenerator";
 import { getDarkNetSave, loadDarkNet } from "./DarkNet/effects/SaveLoad";
 import { giveExportBonus } from "./ExportBonus";
@@ -78,14 +79,15 @@ export interface ImportPlayerData {
 
 export type BitburnerSaveObjectType = {
   PlayerSave: string;
+  VersionSave?: string;
+  SettingsSave?: string;
+  Strings: string[];
   AllServersSave: string;
   CompaniesSave: string;
   FactionsSave: string;
   AliasesSave: string;
   GlobalAliasesSave: string;
   StockMarketSave: string;
-  SettingsSave?: string;
-  VersionSave?: string;
   AllGangsSave?: string;
   LastExportBonus?: string;
   StaneksGiftSave: string;
@@ -106,7 +108,7 @@ type ParsedSaveData = {
  *
  * In "loadGame", we parse a json save string to saveObject, then load data from this object. When we do that, we have
  * to ensure that this object contains valid data. Due to how "loadGame" uses other "loader" functions, we split
- * properties of saveObject into 3 groups:
+ * properties of saveObject into 4 groups:
  * - "Mandatory". "loadGame" always loads these properties. The respective loaders require string values. We assert
  * that the values are strings.
  * - "Optional 1": "loadGame" always loads these properties. The respective loaders require string values, but they have
@@ -115,6 +117,7 @@ type ParsedSaveData = {
  * fallback value; otherwise, we check if their values are strings.
  * - "Optional 2": "loadGame" only loads these properties if they exist. The respective loaders require string values.
  * If saveObject has these properties, we check if their values are strings.
+ * - "Strings": Mostly similar to "Optional 1", but handled separately because it is its own type.
  */
 export function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject is BitburnerSaveObjectType {
   assertObject(saveObject);
@@ -132,6 +135,21 @@ export function assertBitburnerSaveObjectType(saveObject: unknown): asserts save
     if (typeof value !== "string") {
       throw new Error(`Save data contains invalid data. Value of ${key} is not a string.`);
     }
+  }
+
+  if (Object.hasOwn(saveObject, "Strings")) {
+    const strs = saveObject.Strings;
+    if (!Array.isArray(strs)) {
+      throw new Error(`Save data contains invalid data. Value of Strings is not an array.`);
+    }
+    for (let i = 0; i < strs.length; ++i) {
+      if (typeof strs[i] !== "string") {
+        throw new Error(`Save data contains invalid data. Value of Strings[${i}] is not a string.`);
+      }
+    }
+  } else {
+    console.warn(`Save data does not have Strings.`);
+    saveObject.Strings = [];
   }
 
   const optional1KeysOfSaveObj = ["StaneksGiftSave", "StockMarketSave"];
@@ -169,27 +187,57 @@ function assertParsedSaveData(parsedSaveData: unknown): asserts parsedSaveData i
 export async function getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
   const save = new BitburnerSaveObject();
   save.PlayerSave = JSON.stringify(Player);
-
-  // For the servers save, overwrite the ExcludeRunningScripts setting if forced
-  const originalExcludeSetting = Settings.ExcludeRunningScriptsFromSave;
-  if (forceExcludeRunningScripts) Settings.ExcludeRunningScriptsFromSave = true;
-  save.AllServersSave = saveAllServers();
-  Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
-
-  save.CompaniesSave = JSON.stringify(getCompaniesSave());
-  save.FactionsSave = JSON.stringify(getFactionsSave());
-  save.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
-  save.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
-  save.StockMarketSave = JSON.stringify(StockMarket);
-  save.SettingsSave = JSON.stringify(Settings);
   save.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
-  save.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
-  save.StaneksGiftSave = JSON.stringify(staneksGift);
-  save.GoSave = JSON.stringify(getGoSave());
-  save.DarknetSave = JSON.stringify(getDarkNetSave());
-  save.InfiltrationsSave = JSON.stringify(InfiltrationState);
+  save.SettingsSave = JSON.stringify(Settings);
 
-  if (Player.gang) save.AllGangsSave = JSON.stringify(AllGangs);
+  // Maps to the index (position) in the map. The string table exists to dedup
+  // common strings. This saves space in the savefile (and thus time in
+  // serializing it), but more importantly it *permanently* saves memory on load,
+  // because deduped strings will all share the same reference no matter how
+  // many times they are used, whereas storing them the naive way creates a new
+  // string copy for each use. As a result, even with compression the ultimate
+  // size in memory after loading is more-or-less proportional to the
+  // *uncompressed* size of the savefile's values.
+  //
+  // There are bigger wins to be had here than you might think, because it is
+  // common for (large) scripts to be copied to many servers as part of DarkNet.
+  const stringData = new Map<string, number>();
+  try {
+    // The three sections above are outside of the string-replacement context
+    // both for legacy/compatibility reasons and for ordering reasons - certain
+    // potential methods of load parsing depend on the strings being read before
+    // the data that needs them, and the strings come after those sections.
+    setJSONContext(stringData);
+
+    // For the servers save, overwrite the ExcludeRunningScripts setting if forced
+    const originalExcludeSetting = Settings.ExcludeRunningScriptsFromSave;
+    try {
+      if (forceExcludeRunningScripts) Settings.ExcludeRunningScriptsFromSave = true;
+      save.AllServersSave = JSON.stringify(GetAllServers(true));
+    } finally {
+      Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
+    }
+
+    save.CompaniesSave = JSON.stringify(getCompaniesSave());
+    save.FactionsSave = JSON.stringify(getFactionsSave());
+    save.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
+    save.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
+    save.StockMarketSave = JSON.stringify(StockMarket);
+    save.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
+    save.StaneksGiftSave = JSON.stringify(staneksGift);
+    save.GoSave = JSON.stringify(getGoSave());
+    save.DarknetSave = JSON.stringify(getDarkNetSave());
+    save.InfiltrationsSave = JSON.stringify(InfiltrationState);
+
+    if (Player.gang) save.AllGangsSave = JSON.stringify(AllGangs);
+  } finally {
+    setJSONContext(undefined);
+  }
+
+  // This comes last, to ensure that all sections that reference it have
+  // finished writing to it. However, its location in the savefile will be near
+  // the front, due to the ordering of field Initialization in the constructor.
+  save.Strings = [...stringData.keys()];
 
   return await encodeJsonSaveString(JSON.stringify(save));
 }
@@ -427,15 +475,26 @@ export const loadedSaveObjectMiniDump = {
 };
 
 class BitburnerSaveObject implements BitburnerSaveObjectType {
+  // Ordering constraints:
+  // PlayerSave must come first, to preserve the possibility of parsing it directly via
+  // regex without needing to JSON.parse() the entire save. This invariant has
+  // been continuously maintained since saving was first implemented.
   PlayerSave = "";
+  // VersionSave and SettingsSave should be next, for efficiency in parsing
+  // the stats during import. (This is not used yet, but it could be.)
+  VersionSave = "";
+  SettingsSave = "";
+  // Strings must come before any sections that refer to it, so in practice it
+  // must be next.
+  Strings = [] as string[];
+  // All other sections have no known ordering considerations, and are left in
+  // their historical ordering, with new sections coming last.
   AllServersSave = "";
   CompaniesSave = "";
   FactionsSave = "";
   AliasesSave = "";
   GlobalAliasesSave = "";
   StockMarketSave = "";
-  SettingsSave = "";
-  VersionSave = "";
   AllGangsSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
@@ -477,9 +536,11 @@ export async function loadGame(saveData: SaveData): Promise<boolean> {
 
   assertBitburnerSaveObjectType(saveObj);
 
+  const withContext = makeReviverWithContext(saveObj.Strings);
+
   // "Mandatory"
   setPlayer(loadPlayer(saveObj.PlayerSave));
-  loadAllServers(saveObj.AllServersSave);
+  loadAllServers(saveObj.AllServersSave, withContext);
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
   loadGo(saveObj.GoSave);

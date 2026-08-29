@@ -1,11 +1,14 @@
 import "../../src/Player";
 
-import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
+import { loadAllServers } from "../../src/Server/AllServers";
+import { type BitburnerSaveObjectType, getSaveData } from "../../src/SaveObject";
+import { decodeSaveData } from "../../src/utils/SaveDataUtils";
 import { loadAllRunningScripts } from "../../src/NetscriptWorker";
 import { Settings } from "../../src/Settings/Settings";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import { UIEventEmitter, UIEventType } from "../../src/ui/UIEventEmitter";
+import { Reviver } from "../../src/utils/GenericReviver";
 import { fixDoImportIssue } from "./Utilities";
 
 jest.useFakeTimers();
@@ -25,8 +28,13 @@ fixDoImportIssue();
 // been removed both for space, and to test that they are added correctly.
 // The one remaining server has been renamed to "__proto__" to test the
 // handling of darknet servers with unusual hostnames.
+//
+// Note that this is a different (older) JSON format than what the game
+// currently produces. This is intentional; the game should continue to be
+// able to read this format to support old savefiles.
 function loadStandardServers() {
-  loadAllServers(String.raw`{
+  loadAllServers(
+    String.raw`{
   "home": {
     "ctor": "Server",
     "data": {
@@ -151,12 +159,21 @@ function loadStandardServers() {
       "serverGrowth": 3000
     }
   }
-}`); // Fix confused highlighting `
+}`,
+    Reviver,
+  ); // Fix confused highlighting `
   loadAllRunningScripts();
   UIEventEmitter.emit(UIEventType.MainUILoaded);
 }
 
-test("load/saveAllServers", () => {
+async function saveAllServers() {
+  const data = JSON.parse(await decodeSaveData(await getSaveData()), Reviver) as BitburnerSaveObjectType;
+  const strings = data.Strings;
+  const allServers = JSON.parse(data.AllServersSave) as unknown;
+  return { strings, allServers };
+}
+
+test("load/saveAllServers", async () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
   jest.setSystemTime(123456789000);
@@ -166,11 +183,11 @@ test("load/saveAllServers", () => {
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs
-  const result = saveAllServers();
-  expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
+  const result = await saveAllServers();
+  expect(JSON.stringify(result, null, 2)).toMatchSnapshot();
 });
 
-test("load/saveAllServers pruning RunningScripts", () => {
+test("load/saveAllServers pruning RunningScripts", async () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
 
@@ -178,6 +195,6 @@ test("load/saveAllServers pruning RunningScripts", () => {
 
   // Re-stringify with indenting for nicer diffs
   Settings.ExcludeRunningScriptsFromSave = true;
-  const result = saveAllServers();
-  expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
+  const result = await saveAllServers();
+  expect(JSON.stringify(result, null, 2)).toMatchSnapshot();
 });
