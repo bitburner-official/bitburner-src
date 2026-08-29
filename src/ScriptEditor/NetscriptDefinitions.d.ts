@@ -7353,8 +7353,10 @@ export interface NS {
    * server to hack that server. For example, you can create a script that hacks the `foodnstuff`
    * server and run that script on any server in the game.
    *
-   * A successful `hack()` on a server will raise that server’s security level by 0.002 per thread. You can use
-   * {@link NS.hackAnalyzeSecurity | hackAnalyzeSecurity} to calculate the security increase for a number of threads.
+   * A successful `hack()` on a server will raise that server’s security level by 0.002 per "used thread". "used thread"
+   * may not be the same as opts.threads. Let's say you call this function with opts.threads = 1000, but it only takes
+   * 500 threads to hack all money in the targeted server. In this case, "used thread" is 500. You should use
+   * {@link NS.hackAnalyzeSecurity | hackAnalyzeSecurity} to calculate the security increase.
    *
    * @example
    * ```js
@@ -7399,7 +7401,11 @@ export interface NS {
    *
    * The grow() command requires root access to the target server, but there is no required hacking
    * level to run the command. It also raises the security level of the target server based on the number of threads.
-   * The security increase can be determined using {@link NS.growthAnalyzeSecurity | growthAnalyzeSecurity}.
+   *
+   * The security level is increased by 0.004 per "used thread". "used thread" may not be the same as opts.threads. Let's
+   * say you call this function with opts.threads = 1000, but it only takes 500 threads to grow the targeted server to
+   * the max money. In this case, "used thread" is 500. You should use {@link NS.growthAnalyzeSecurity | growthAnalyzeSecurity}
+   * to calculate the security increase.
    *
    * @example
    * ```js
