@@ -68,36 +68,6 @@ Error Response:
             "error": string
         }
 
-### Pagination
-
-Some APIs support pagination. These APIs accept the following optional parameters in `params`:
-
-- `limit`: The maximum number of items to return. If omitted, there is no limit.
-- `offset`: The number of items to skip before returning items. If omitted, defaults to 0.
-
-If specified, `limit` and `offset` must be a non-negative integer. `null` is not a valid value.
-
-        {
-            "jsonrpc": "2.0",
-            "id": number,
-            "method": string,
-            "params": {
-                "limit": number;
-                "offset": number;
-            }
-        }
-
-Paginated responses include a `total` field containing the total number of items before applying `limit` and `offset`:
-
-        {
-            "jsonrpc": "2.0",
-            "id": number,
-            "result": any,
-            "total": number
-        }
-
-In the next section, APIs that support pagination will say "This API supports pagination". For brevity, their request and response schemas do not include the optional `limit` and `offset` parameters or the `total` field. The pagination rules described above still apply.
-
 ### API list
 
 #### pushFile
@@ -172,9 +142,10 @@ Response:
             "id": number,
             "result": {
                 "filename": string,
-                "atime": string,
-                "btime": string,
-                "mtime": string
+                "size": number,
+                "atime": number,
+                "btime": number,
+                "mtime": number
             }
         }
 
@@ -206,8 +177,6 @@ Response:
 
 List all file names on a server.
 
-This API supports pagination.
-
 Request:
 
         {
@@ -230,8 +199,6 @@ Response:
 #### getAllFiles
 
 Get the content of all files on a server.
-
-This API supports pagination.
 
 Request:
 
@@ -259,8 +226,6 @@ Response:
 
 Get the content of all files on a server.
 
-This API supports pagination.
-
 Request:
 
         {
@@ -279,9 +244,10 @@ Response:
             "id": number,
             "result": {
                 "filename": string,
-                "atime": string
-                "btime": string,
-                "mtime": string,
+                "size": number,
+                "atime": number,
+                "btime": number,
+                "mtime": number
             }[]
         }
 

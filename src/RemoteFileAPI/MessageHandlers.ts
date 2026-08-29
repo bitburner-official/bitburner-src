@@ -130,6 +130,7 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
     return new RFASuccessResponse({
       result: {
         filename: file.filename,
+        size: file.getSize(),
         ...file.metadata.plain(),
       },
       id: msg.id,
@@ -186,6 +187,7 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
 
     const fileList = [...validationData.server.scripts, ...validationData.server.textFiles].map(([filename, file]) => ({
       filename: filename,
+      size: file.getSize(),
       ...file.metadata.plain(),
     }));
     return new RFASuccessResponse({ result: fileList, id: msg.id });
