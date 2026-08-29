@@ -183,15 +183,13 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
         : combinePath(baseDirectory, relativePath as FilePath);
 
     // Determine file size
-    let contentBytes = 0;
+    let file;
     if (fileType === FileType.TextFile) {
-      const file = server.textFiles.get(fullPath as TextFilePath);
-      contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+      file = server.textFiles.get(fullPath as TextFilePath);
     } else {
-      // Script
-      const file = server.scripts.get(fullPath as ScriptFilePath);
-      contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+      file = server.scripts.get(fullPath as ScriptFilePath);
     }
+    const contentBytes = file?.getSize() ?? 0;
     if (flags["-l"] && flags["-h"]) {
       sizeDisplay = formatBytes(contentBytes);
     } else {
