@@ -16,7 +16,7 @@ export function PriceHistoryChart({
   width?: number;
   height?: number;
 }) {
-  const [hoveredDataPoint, setHoveredDataPoint] = React.useState<number | null>(null);
+  const [hoveredDataPoint, setHoveredDataPoint] = React.useState<Stock["priceHistory"][number] | null>(null);
 
   useCycleRerender();
 
@@ -32,8 +32,6 @@ export function PriceHistoryChart({
     const y = height - padding - ((entry.price - minPrice) / range) * (height - padding * 2);
     return { x, y };
   });
-
-  const hoveredPoint = hoveredDataPoint !== null ? points[hoveredDataPoint] : null;
 
   return (
     <div>
@@ -61,6 +59,7 @@ export function PriceHistoryChart({
           style={{
             background: Settings.theme.backgroundprimary,
           }}
+          onMouseLeave={() => setHoveredDataPoint(null)}
         >
           <polyline
             points={points.map(({ x, y }) => `${x},${y}`).join(" ")}
@@ -88,50 +87,38 @@ export function PriceHistoryChart({
               const mouseX = ((event.clientX - rect.left) / rect.width) * width;
               const index = Math.round(((mouseX - padding) / (width - padding * 2)) * (prices.length - 1));
               if (index >= 0 && index < prices.length) {
-                setHoveredDataPoint(index);
+                setHoveredDataPoint(stock.priceHistory[index]);
               }
             }}
-            onMouseLeave={() => setHoveredDataPoint(null)}
           />
 
-          {points.map(({ x, y }, index) => (
-            <React.Fragment key={index}>
-              <circle
-                stroke={Settings.theme.primary}
-                cx={x}
-                cy={y}
-                r={10}
-                onMouseEnter={() => setHoveredDataPoint(index)}
-                onMouseLeave={() => setHoveredDataPoint(null)}
-              />
-            </React.Fragment>
-          ))}
+          {points.map(({ x, y }, index) => {
+            const entry = stock.priceHistory[index];
+            return (
+              <Tooltip
+                key={index}
+                open={hoveredDataPoint === entry}
+                title={
+                  <>
+                    <div>{new Date(stock.priceHistory[index].timeMs).toLocaleTimeString()}</div>
+                    <div>
+                      <Money money={stock.priceHistory[index].price} />
+                    </div>
+                  </>
+                }
+                placement="right"
+              >
+                <circle
+                  stroke={Settings.theme.primary}
+                  cx={x}
+                  cy={y}
+                  r={10}
+                  onMouseEnter={() => setHoveredDataPoint(entry)}
+                />
+              </Tooltip>
+            );
+          })}
         </svg>
-        {hoveredDataPoint !== null && hoveredPoint !== null && (
-          <Tooltip
-            open
-            title={
-              <>
-                <div>{new Date(stock.priceHistory[hoveredDataPoint].time).toLocaleTimeString()}</div>
-                <div>
-                  <Money money={stock.priceHistory[hoveredDataPoint].price} />
-                </div>
-              </>
-            }
-            placement="right"
-          >
-            <span
-              style={{
-                position: "absolute",
-                left: `${(hoveredPoint.x / width) * 100}%`,
-                top: `${(hoveredPoint.y / height) * 100}%`,
-                width: 1,
-                height: 1,
-                pointerEvents: "none",
-              }}
-            />
-          </Tooltip>
-        )}
       </div>
     </div>
   );

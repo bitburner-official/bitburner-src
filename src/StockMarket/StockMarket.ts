@@ -318,7 +318,7 @@ export function processStockPrices(numCycles = 1): void {
     // Shares required for price movement gradually approaches max over time
     stock.shareTxUntilMovement = Math.min(stock.shareTxUntilMovement + 10, stock.shareTxForMovement);
 
-    stock.priceHistory.push({ time: Date.now(), price: stock.price });
+    stock.priceHistory.push({ timeMs: Date.now(), price: stock.price });
     if (stock.priceHistory.length > 10) {
       stock.priceHistory.splice(0, stock.priceHistory.length - 10);
     }

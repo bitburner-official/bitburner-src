@@ -123,7 +123,7 @@ export class Stock {
    */
   readonly totalShares: number;
 
-  readonly priceHistory: { time: number; price: number }[];
+  readonly priceHistory: { timeMs: number; price: number }[];
 
   constructor(p: IConstructorParams = defaultConstructorParams) {
     this.name = p.name;
