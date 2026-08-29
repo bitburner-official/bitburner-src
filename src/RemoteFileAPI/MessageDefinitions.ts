@@ -12,9 +12,9 @@ abstract class RFAMessage {
 
 export class RFARequest extends RFAMessage {
   public method: string;
-  public params: FileDescription & PaginationParams;
+  public params: FileDescription;
 
-  constructor(obj: { id: number; method: string; params: FileDescription & PaginationParams }) {
+  constructor(obj: { id: number; method: string; params: FileDescription }) {
     super(obj.id);
     this.method = obj.method;
     this.params = obj.params;
@@ -25,14 +25,10 @@ export abstract class RFAResponse extends RFAMessage {}
 
 export class RFASuccessResponse extends RFAResponse {
   public result: ResultType;
-  public total?: number;
 
-  constructor(obj: { id: number; result: ResultType; total?: number }) {
+  constructor(obj: { id: number; result: ResultType }) {
     super(obj.id);
     this.result = obj.result;
-    if (obj.total !== undefined) {
-      this.total = obj.total;
-    }
   }
 }
 
@@ -58,7 +54,6 @@ type ResultType =
     }
   | FileMetadata
   | FileMetadata[];
-
 type FileDescription = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {
@@ -86,11 +81,6 @@ export interface FileMetadata {
   atime: number;
   mtime: number;
   btime: number;
-}
-
-export interface PaginationParams {
-  limit?: number;
-  offset?: number;
 }
 
 export type RFAServerData = Pick<BaseServer, "hostname" | "hasAdminRights" | "purchasedByPlayer">;
