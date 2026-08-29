@@ -54,18 +54,13 @@ export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): P
 
 /** Add the necessary dependency relationships for a script.
  * Dependents are used only for passing invalidation up an import tree, so only direct dependents need to be stored.
- * Direct and indirect dependents need to have the current url/script added to their dependency map for error text.
  *
  * This should only be called once the script has a LoadedModule. */
 function addDependencyInfo(script: Script, seenStack: Script[]) {
   if (!script.mod) throw new Error(`addDependencyInfo called without a LoadedModule (${script.filename})`);
   if (seenStack.length) {
-    script.dependents.add(seenStack[seenStack.length - 1]);
-    for (const dependent of seenStack) dependent.dependencies.set(script.mod.url, script);
+    script.dependents.push(seenStack[seenStack.length - 1]);
   }
-  // Add self to dependencies (it's not part of the stack, since we don't want
-  // it in dependents.)
-  script.dependencies.set(script.mod.url, script);
 }
 
 /**
@@ -160,11 +155,12 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
   let newCode = scriptCode;
+
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
     const importedScript = getModuleScript(node.filename, script.filename, scripts);
     for (const scriptInSeenStack of seenStack) {
-      if (scriptInSeenStack.filename === script.filename) {
+      if (scriptInSeenStack.filename === importedScript.filename) {
         throw new Error(
           `Circular dependencies detected. ${script.filename} imports ${importedScript.filename}, but ` +
             `${importedScript.filename} or its dependencies import ${script.filename}.`,

@@ -2,7 +2,6 @@ import { Router } from "../ui/GameRoot";
 import { SimplePage } from "@enums";
 import { errorModalsAreSuppressed, ErrorRecord, ErrorState } from "./ErrorState";
 import type { WorkerScript } from "../Netscript/WorkerScript";
-import { parseBlobUrlInMessage } from "../Netscript/ErrorMessages";
 
 let currentId = 0;
 
@@ -10,12 +9,11 @@ export const DisplayError = (message: string, errorType: string, ws: WorkerScrip
   const scriptName = ws?.scriptRef?.filename ?? "";
   const hostname = ws?.hostname ?? "";
   const pid = ws?.pid;
-  const parsedMessage = ws ? parseBlobUrlInMessage(ws, message) : message;
   const errorPageOpen = Router.page() === SimplePage.RecentErrors;
   if (!errorPageOpen) {
     ErrorState.UnreadErrors++;
   }
-  const prior = findExistingErrorCopy(parsedMessage, hostname);
+  const prior = findExistingErrorCopy(message, hostname);
   if (prior) {
     prior.occurrences++;
     prior.time = new Date();
@@ -23,7 +21,7 @@ export const DisplayError = (message: string, errorType: string, ws: WorkerScrip
       prior.pid = pid;
     }
     prior.server = hostname;
-    prior.message = parsedMessage;
+    prior.message = message;
 
     updateActiveError(prior);
   } else {
@@ -32,7 +30,7 @@ export const DisplayError = (message: string, errorType: string, ws: WorkerScrip
       server: hostname,
       errorType,
       scriptName,
-      message: parsedMessage,
+      message,
       pid,
       occurrences: 1,
       time: new Date(),
