@@ -43,6 +43,8 @@ All APIs use a request/response format similar to the JSON RPC 2.0 protocol.
 
 Unknown parameters in requests are ignored.
 
+Pagination is not supported.
+
 Request:
 
         {
