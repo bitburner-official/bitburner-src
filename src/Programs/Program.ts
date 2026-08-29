@@ -1,6 +1,7 @@
 import type { CompletedProgramName } from "@enums";
 import { ProgramFilePath, asProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
+import type { StdIO } from "../Terminal/StdIO/StdIO";
 
 export interface IProgramCreate {
   level: number;
@@ -11,14 +12,14 @@ export interface IProgramCreate {
 interface ProgramConstructorParams {
   name: CompletedProgramName;
   create: IProgramCreate | null;
-  run: (args: string[], server: BaseServer) => void;
+  run: (args: string[], server: BaseServer, stdIO: StdIO) => void;
   nsMethod?: string;
 }
 
 export class Program {
   name: ProgramFilePath & CompletedProgramName;
   create: IProgramCreate | null;
-  run: (args: string[], server: BaseServer) => void;
+  run: (args: string[], server: BaseServer, stdIO: StdIO) => void;
   nsMethod?: string;
 
   constructor({ name, create, run, nsMethod }: ProgramConstructorParams) {

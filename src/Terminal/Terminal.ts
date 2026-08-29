@@ -12,7 +12,7 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { parseCommand, parseCommands } from "./Parser";
+import { applyLastPidVariables, parseCommand, parseCommands } from "./Parser";
 import { Settings } from "../Settings/Settings";
 import { createProgressBarText } from "../utils/helpers/createProgressBarText";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
@@ -30,6 +30,7 @@ import { check } from "./commands/check";
 import { connect } from "./commands/connect";
 import { cp } from "./commands/cp";
 import { download } from "./commands/download";
+import { echo } from "./commands/echo";
 import { upload } from "./commands/upload";
 import { expr } from "./commands/expr";
 import { free } from "./commands/free";
@@ -65,11 +66,13 @@ import { commitHash } from "../utils/helpers/commitHash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
+import { StdIO } from "./StdIO/StdIO";
+import { getTerminalStdIO, isLongRunningCommand, parseRedirectedCommands } from "./StdIO/RedirectIO";
 import { mkdir } from "./commands/mkdir";
 
 export const TerminalCommands: Record<
   string,
-  (args: (string | number | boolean)[], server: BaseServer) => undefined | TerminalAction
+  (args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO) => undefined | TerminalAction
 > = {
   "scan-analyze": scananalyze,
   alias: alias,
@@ -85,6 +88,7 @@ export const TerminalCommands: Record<
   connect: connect,
   cp: cp,
   download: download,
+  echo: echo,
   expr: expr,
   free: free,
   grep: grep,
@@ -141,7 +145,10 @@ export class Terminal {
   // Path of current directory
   currDir = "" as Directory;
 
-  append(item: Output | Link | RawOutput): void {
+  // PID of the script run as part of the last executed command, if any
+  pidOfLastScriptRun: number = -1;
+
+  terminalOutput(item: Output | Link | RawOutput): void {
     this.outputHistory.push(item);
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
       this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
@@ -149,31 +156,42 @@ export class Terminal {
     TerminalEvents.emit();
   }
 
-  print(s: string): undefined {
-    this.append(new Output(s, "primary"));
+  print(s: string, stdIO: StdIO): undefined {
+    stdIO.write(s);
   }
 
-  printRaw(node: React.ReactNode): undefined {
-    this.append(new RawOutput(node));
+  printRaw(node: React.ReactNode, stdIO: StdIO): undefined {
+    stdIO.write(new RawOutput(node));
   }
 
-  error(s: string): undefined {
-    this.append(new Output(s, "error"));
+  printAndBypassPipes(s: string, color: "primary" | "error" | "success" | "info" | "warn" = "primary"): undefined {
+    this.terminalOutput(new Output(s, color));
   }
 
-  success(s: string): undefined {
-    this.append(new Output(s, "success"));
+  // Used for logging when a process is ending with an error. Prints directly to terminal so
+  // the error isn't lost due to redirects. Closes the stdIO, if provided
+  fatal(s: string, stdIO: StdIO | null): undefined {
+    stdIO?.close();
+    this.terminalOutput(new Output(s, "error"));
   }
 
-  info(s: string): undefined {
-    this.append(new Output(s, "info"));
+  error(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "error"));
   }
 
-  warn(s: string): undefined {
-    this.append(new Output(s, "warn"));
+  success(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "success"));
   }
 
-  timedAction(durationSec: number, name: string, onDone: () => void): TerminalAction {
+  info(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "info"));
+  }
+
+  warn(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "warn"));
+  }
+
+  timedAction(durationSec: number, name: string, onDone: () => void, stdIO: StdIO): TerminalAction {
     const start = performance.now();
     const progress = () =>
       createProgressBarText({
@@ -193,9 +211,9 @@ export class Terminal {
           };
         });
       } finally {
-        this.print(progress());
+        this.printAndBypassPipes(progress());
         if (cancelled) {
-          this.print(`Cancelled ${name}`);
+          this.print(`Cancelled ${name}`, stdIO);
         }
       }
       onDone();
@@ -205,6 +223,7 @@ export class Terminal {
       cancel: cancel,
       finished: p,
       getProgressText: progress,
+      stdIO,
     };
   }
 
@@ -270,7 +289,7 @@ export class Terminal {
   connectToServer(hostname: string, singularity = false): void {
     const server = GetServer(hostname);
     if (server === null) {
-      this.error("Invalid server. Connection failed.");
+      this.printAndBypassPipes("Invalid server. Connection failed.", "error");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
@@ -278,7 +297,7 @@ export class Terminal {
     server.isConnectedTo = true;
     this.setcwd(root);
     if (!singularity) {
-      this.print("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
+      this.printAndBypassPipes("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
       if (Player.getCurrentServer().hostname === "darkweb") {
         checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
       }
@@ -296,27 +315,15 @@ export class Terminal {
     }
     this.commandHistoryIndex = this.commandHistory.length;
     const allCommands = parseCommands(commands);
-    try {
-      for (const command of allCommands) {
-        const result = this.executeCommand(command);
-        if (result) {
-          this.action = result;
-          TerminalEvents.emit();
-          await result.finished;
-          this.action = null;
-          TerminalEvents.emit();
-        }
-      }
-    } catch (ex) {
-      if (!(ex instanceof Cancellation)) {
-        throw ex;
-      }
-    } finally {
-      // If we throw for any reason, abort the current action.
-      this.action?.cancel();
-      this.action = null;
-      TerminalEvents.emit();
+    for (const command of allCommands) {
+      await parseRedirectedCommands(command);
     }
+  }
+
+  cancelAction(): void {
+    this.action?.cancel();
+    this.action?.stdIO?.close();
+    this.action = null;
   }
 
   clear(): void {
@@ -326,17 +333,16 @@ export class Terminal {
   }
 
   prestige(): void {
-    this.action?.cancel();
-    this.action = null;
+    this.cancelAction();
     this.clear();
   }
 
-  executeCommand(command: string): undefined | TerminalAction {
-    if (this.action !== null) {
-      throw new Error(`Cannot execute command (${command}) while an action is in progress`);
-    }
+  async executeCommand(command: string, stdIO: StdIO): Promise<void> {
+    if (this.action !== null)
+      return this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
 
-    const commandArray = parseCommand(command);
+    const rawCommandArray = parseCommand(command);
+    const commandArray = applyLastPidVariables(rawCommandArray, this.pidOfLastScriptRun);
     if (!commandArray.length) return;
 
     const currentServer = Player.getCurrentServer();
@@ -353,7 +359,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "help") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -361,10 +367,10 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
           } else if (commandArray[0] === "1s") {
-            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?", getTerminalStdIO());
             return;
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -372,7 +378,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "scan") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -380,7 +386,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -388,7 +394,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -400,11 +406,11 @@ export class Terminal {
             ) {
               iTutorialNextStep();
             } else {
-              this.error("Wrong command! Try again!");
+              this.error("Wrong command! Try again!", getTerminalStdIO());
               return;
             }
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -412,7 +418,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "analyze") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -420,7 +426,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -428,13 +434,13 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "hack") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
         case iTutorialSteps.TerminalHackingMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -442,7 +448,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -450,7 +456,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -458,7 +464,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "free") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -466,7 +472,7 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
@@ -474,12 +480,15 @@ export class Terminal {
           if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
+            this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
         default:
-          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
+          this.error(
+            "Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it",
+            getTerminalStdIO(),
+          );
           return;
       }
     }
@@ -487,9 +496,12 @@ export class Terminal {
     /* Command parser */
 
     const commandName = commandArray[0];
-    if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`);
+    if (typeof commandName !== "string") return this.fatal(`${commandName} is not a valid command.`, stdIO);
     // run by path command
-    if (isBasicFilePath(commandName)) return run(commandArray, currentServer);
+    if (isBasicFilePath(commandName)) {
+      run(commandArray, currentServer, stdIO);
+      return;
+    }
 
     // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
     commandArray.shift();
@@ -498,10 +510,30 @@ export class Terminal {
     if (!f) {
       const similarCommands = findSimilarCommands(commandName);
       const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
-      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
+      return this.fatal(`Command ${commandName} not found.${didYouMeanString}`, stdIO);
     }
 
-    return f(commandArray, currentServer);
+    try {
+      const result = f(commandArray, currentServer, stdIO);
+
+      if (result) {
+        this.action = result;
+        TerminalEvents.emit();
+        await result.finished;
+        this.action = null;
+        TerminalEvents.emit();
+      } else if (!isLongRunningCommand(rawCommandArray)) {
+        stdIO.close();
+      }
+    } catch (ex) {
+      if (!(ex instanceof Cancellation)) {
+        throw ex;
+      }
+    } finally {
+      // If we throw for any reason, abort the current action.
+      this.cancelAction();
+      TerminalEvents.emit();
+    }
   }
 
   getProgressText(): string {

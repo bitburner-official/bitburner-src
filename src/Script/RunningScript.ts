@@ -18,6 +18,10 @@ import { ScriptFilePath } from "../Paths/ScriptFilePath";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 
+import { StdIO } from "../Terminal/StdIO/StdIO";
+import { IOStream } from "../Terminal/StdIO/IOStream";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
+
 export class RunningScript {
   // Script arguments
   args: ScriptArg[] = [];
@@ -66,8 +70,17 @@ export class RunningScript {
   // hostname of the server on which this script is running
   server = "";
 
+  // input from pipes or redirects in the terminal
+  stdin: IOStream | null = null;
+
   // Access to properties of the tail window. Can be used to get/set size, position, etc.
   tailProps = null as LogBoxProperties | null;
+
+  // Configuration for piping the script's tail output
+  tailStdOut: StdIO | null = null;
+
+  // Configuration for piping the script's terminal output
+  terminalStdOut: StdIO = getTerminalStdIO();
 
   // Backing store for the title. Null means "use the default", generated lazily by the
   // title getter so we don't store a title for every script up-front. A React element
@@ -117,14 +130,16 @@ export class RunningScript {
 
     this.logs.push(logEntry);
     this.logUpd = true;
+
+    this.tailStdOut?.write?.(logEntry);
   }
 
-  displayLog(): void {
+  displayLog(stdIO: StdIO): void {
     for (const log of this.logs) {
       if (typeof log === "string") {
-        Terminal.print(log);
+        Terminal.print(log, stdIO);
       } else {
-        Terminal.printRaw(log);
+        Terminal.printRaw(log, stdIO);
       }
     }
   }
@@ -186,7 +201,17 @@ export class RunningScript {
   }
 }
 const includedProperties = getKeyList(RunningScript, {
-  removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
+  removedKeys: [
+    "logs",
+    "dependencies",
+    "logUpd",
+    "pid",
+    "parent",
+    "tailProps",
+    "stdin",
+    "tailStdOut",
+    "terminalStdOut",
+  ],
   // Persist the title under its canonical name, keeping its original key position.
 }).map((key) => (key === "title_" ? "title" : key));
 const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");

@@ -7,7 +7,7 @@ import { Settings } from "../../Settings/Settings";
 // This particular eslint-disable is correct.
 // In this super specific weird case we in fact do want a regex on an ANSII character.
 // eslint-disable-next-line no-control-regex
-const ANSI_ESCAPE = new RegExp("\u{001b}\\[(?<code>.*?)m", "ug");
+export const ANSI_ESCAPE = new RegExp("\u{001b}\\[(?<code>.*?)m", "ug");
 
 const useStyles = makeStyles()((theme: Theme) => ({
   success: {

@@ -1,8 +1,10 @@
 import { Terminal } from "../../Terminal";
+import { StdIO } from "../StdIO/StdIO";
+import { BaseServer } from "../../Server/BaseServer";
 
-export function expr(args: (string | number | boolean)[]): undefined {
+export function expr(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length === 0) {
-    Terminal.error("Incorrect usage of expr command. Usage: expr [math expression]");
+    Terminal.fatal("Incorrect usage of expr command. Usage: expr [math expression]", stdIO);
     return;
   }
   const expr = args.join("");
@@ -13,8 +15,8 @@ export function expr(args: (string | number | boolean)[]): undefined {
   try {
     result = String(eval?.(sanitizedExpr));
   } catch (e) {
-    Terminal.error(`Could not evaluate expression: ${sanitizedExpr}. Error: ${e}.`);
+    Terminal.fatal(`Could not evaluate expression: ${sanitizedExpr}. Error: ${e}.`, stdIO);
     return;
   }
-  Terminal.print(result);
+  Terminal.print(result, stdIO);
 }

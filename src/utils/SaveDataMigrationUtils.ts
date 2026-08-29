@@ -37,6 +37,7 @@ import { downloadContentAsFile } from "./FileUtils";
 import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
 import { breakingChanges301 } from "./APIBreaks/3.0.1";
 import { breakingChanges302 } from "./APIBreaks/3.0.2";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -422,7 +423,7 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
   }
   // Some 2.3 changes are actually in BaseServer.js fromJSONBase function
   if (ver < 31) {
-    Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
+    Terminal.warn("Migrating to 2.3.0, loading with no scripts.", getTerminalStdIO());
     for (const server of GetAllServers()) {
       // Do not load any saved scripts on migration
       server.savedScripts = [];
@@ -445,7 +446,7 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
       if (isNaN(valuation)) valuation = 300e9;
       Player.startCorporation(String(oldCorp.name), !!oldCorp.seedFunded);
       Player.corporation?.gainFunds(valuation, "force majeure");
-      Terminal.warn("Loading corporation from version prior to 2.3. Corporation has been reset.");
+      Terminal.warn("Loading corporation from version prior to 2.3. Corporation has been reset.", getTerminalStdIO());
     }
     // End 2.3 changes
   }
@@ -485,6 +486,7 @@ Error: ${e}`,
     if (anyExportsFailed)
       Terminal.error(
         "Some material exports failed to validate while loading and have been removed. See console for more info.",
+        getTerminalStdIO(),
       );
   }
   if (ver < 33) {
@@ -530,7 +532,8 @@ Error: ${e}`,
         found = true;
       }
     }
-    if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
+    if (found)
+      Terminal.error("Filenames with whitespace found and corrected, see console for details.", getTerminalStdIO());
   }
   // Migrate save data related to the breaking changes in the first beta of v3.0.0.
   if (ver < 44) {

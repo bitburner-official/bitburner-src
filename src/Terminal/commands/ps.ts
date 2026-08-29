@@ -2,8 +2,9 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
 import libarg from "arg";
+import { StdIO } from "../StdIO/StdIO";
 
-export function ps(args: (string | number | boolean)[], server: BaseServer): undefined {
+export function ps(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   let flags: {
     "--grep": string;
   };
@@ -18,7 +19,7 @@ export function ps(args: (string | number | boolean)[], server: BaseServer): und
     );
   } catch (e) {
     // catch passing only -g / --grep with no string to use as the search
-    Terminal.error("Incorrect usage of ps command. Usage: ps [-g, --grep pattern]");
+    Terminal.fatal("Incorrect usage of ps command. Usage: ps [-g, --grep pattern]", stdIO);
     return;
   }
   let pattern = flags["--grep"];
@@ -30,7 +31,7 @@ export function ps(args: (string | number | boolean)[], server: BaseServer): und
     if (!re.test(k)) continue;
     for (const rsObj of byPid.values()) {
       const res = `(PID - ${rsObj.pid}) ${rsObj.filename} ${rsObj.args.join(" ")}`;
-      Terminal.print(res);
+      Terminal.print(res, stdIO);
     }
   }
 }

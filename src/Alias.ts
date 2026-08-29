@@ -1,5 +1,6 @@
 import { Terminal } from "./Terminal";
 import { trimQuotes } from "./utils/helpers/string";
+import { StdIO } from "./Terminal/StdIO/StdIO";
 
 export const Aliases = new Map<string, string>();
 export const GlobalAliases = new Map<string, string>();
@@ -23,9 +24,9 @@ export function loadGlobalAliases(saveString: string): void {
 }
 
 // Prints all aliases to terminal
-export function printAliases(): void {
-  for (const [name, alias] of Aliases) Terminal.print("alias " + name + "=" + alias);
-  for (const [name, alias] of GlobalAliases) Terminal.print("global alias " + name + "=" + alias);
+export function printAliases(stdIO: StdIO): void {
+  for (const [name, alias] of Aliases) Terminal.print("alias " + name + "=" + alias, stdIO);
+  for (const [name, alias] of GlobalAliases) Terminal.print("global alias " + name + "=" + alias, stdIO);
 }
 
 export const aliasRegex = /[\w|!%,@-]+/;

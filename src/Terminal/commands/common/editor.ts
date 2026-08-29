@@ -36,7 +36,10 @@ export async function main(ns) {
 
 export function commonEditor(command: string, { args, server, vim }: EditorParameters, allowZeroFiles = false): void {
   if (args.length < 1 && !allowZeroFiles) {
-    return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
+    return Terminal.printAndBypassPipes(
+      `Incorrect usage of ${command} command. Usage: ${command} [scriptname]`,
+      "error",
+    );
   }
   const files = new Map<ScriptFilePath | TextFilePath, string>();
   let hasLegacyScript = false;
@@ -47,7 +50,7 @@ export function commonEditor(command: string, { args, server, vim }: EditorParam
     if (pattern.includes("*") || pattern.includes("?")) {
       const globbedFileMap = getGlobbedFileMap(pattern, server, Terminal.currDir);
       if (globbedFileMap.size === 0) {
-        Terminal.error(`No files matching ${pattern}`);
+        Terminal.printAndBypassPipes(`No files matching ${pattern}`, "error");
         return;
       }
       for (const [path, file] of globbedFileMap) {
@@ -61,10 +64,13 @@ export function commonEditor(command: string, { args, server, vim }: EditorParam
 
     // Non-glob, files do not need to already exist
     const path = Terminal.getFilepath(pattern);
-    if (!path) return Terminal.error(`Invalid file path ${arg}`);
+    if (!path) return Terminal.printAndBypassPipes(`Invalid file path ${arg}`, "error");
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       const hint = hasContractExtension(path) || hasCacheExtension(path) ? " (Try using 'run')" : "";
-      return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`);
+      return Terminal.printAndBypassPipes(
+        `${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`,
+        "error",
+      );
     }
     if (isLegacyScript(path)) {
       hasLegacyScript = true;
