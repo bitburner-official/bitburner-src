@@ -26,6 +26,7 @@ import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
+import { Result } from "../types";
 
 export enum RecruitmentResult {
   Success = "Success",
@@ -431,6 +432,41 @@ export class Gang {
       return Infinity;
     }
     return upg.cost / this.getDiscount();
+  }
+
+  isTooWeak(): Result {
+    let canWinAtLeastOneGang = false;
+    for (const gangName of Object.keys(AllGangs)) {
+      if (this.facName === gangName) {
+        continue;
+      }
+      if (getClashWinChance(this.facName, gangName) >= 0.5) {
+        canWinAtLeastOneGang = true;
+        break;
+      }
+    }
+    /**
+     * tooLowGangPower is a special check. Before the first tick of territory clash, the power of all gangs
+     * is 1, so the win chance of the player's gang against all gangs is 50%. If the player tries to enable
+     * the clash in this short time frame, canWinAtLeastOneGang is true, but their gang will still be
+     * crushed after the first clash tick.
+     */
+    const tooLowGangPower = this.getPower() < 2;
+    const needToBeWarned = !canWinAtLeastOneGang || tooLowGangPower;
+    if (needToBeWarned) {
+      let message = "Your gang is too weak.";
+      if (!canWinAtLeastOneGang) {
+        message += " Its win chances against all other gangs are below 50%.";
+      }
+      return {
+        success: true,
+        message,
+      };
+    }
+    return {
+      success: false,
+      message: "",
+    };
   }
 
   /** Serialize the current object to a JSON save state. */
