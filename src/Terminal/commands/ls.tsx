@@ -131,13 +131,16 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
   for (const msgOrLit of server.messages) handlePath(msgOrLit as FilePath, allMessages);
 
   // Sort the files/folders alphabetically then print each
-  allPrograms.sort();
-  allScripts.sort();
-  allTextFiles.sort();
-  allContracts.sort();
-  allCaches.sort();
-  allMessages.sort();
-  folders.sort();
+
+  const trueAlphabetical = (a: string, b: string) => a.localeCompare(b);
+
+  allPrograms.sort(trueAlphabetical);
+  allScripts.sort(trueAlphabetical);
+  allTextFiles.sort(trueAlphabetical);
+  allContracts.sort(trueAlphabetical);
+  allCaches.sort(trueAlphabetical);
+  allMessages.sort(trueAlphabetical);
+  folders.sort(trueAlphabetical);
 
   let maxSizeStrLength = 0;
   let maxRamStrLength = 0;

@@ -90,7 +90,7 @@ export const Settings = {
   /**  Script editor theme data. */
   EditorTheme: { ...defaultMonacoTheme },
   /** Order to display the player's owned Augmentations/Source Files. */
-  OwnedAugmentationsOrder: OwnedAugmentationsOrderSetting.AcquirementTime,
+  OwnedAugmentationsOrder: OwnedAugmentationsOrderSetting.AcquisitionTime,
   /** What order the Augmentations should be displayed in when purchasing from a Faction. */
   PurchaseAugmentationsOrder: PurchaseAugmentationsOrderSetting.Default,
   /** Script editor theme. */
