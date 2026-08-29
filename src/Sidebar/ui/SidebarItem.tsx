@@ -24,7 +24,7 @@ export interface SidebarItemProps extends ICreateProps {
 }
 
 export const SidebarItem = memo(function SidebarItem(props: SidebarItemProps): React.ReactElement {
-  const colorToken = props.flash ? "info.main" : props.active ? "primary.main" : "secondary.main";
+  const color = props.flash ? "error" : props.active ? "primary" : "secondary";
 
   return (
     <ListItem disablePadding>
@@ -42,12 +42,12 @@ export const SidebarItem = memo(function SidebarItem(props: SidebarItemProps): R
         <ListItemIcon>
           <Badge badgeContent={(props.count ?? 0) > 0 ? props.count : undefined} color="error">
             <Tooltip title={!props.sidebarOpen ? props.key_ : ""}>
-              <props.icon sx={{ color: colorToken }} />
+              <props.icon color={color} />
             </Tooltip>
           </Badge>
         </ListItemIcon>
         <ListItemText>
-          <Typography sx={{ color: colorToken }}>{props.key_}</Typography>
+          <Typography color={color}>{props.key_}</Typography>
         </ListItemText>
       </ListItemButton>
     </ListItem>
