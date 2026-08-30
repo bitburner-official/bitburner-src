@@ -8324,7 +8324,7 @@ export interface NS {
    * Returns a string with the hostname of the server that the script is running on.
    *
    * @remarks
-   * RAM cost: 0.05 GB
+   * RAM cost: 0 GB
    * @returns Hostname of the server that the script runs on.
    */
   getHostname(): string;
