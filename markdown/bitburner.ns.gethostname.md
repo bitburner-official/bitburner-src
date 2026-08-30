@@ -19,5 +19,5 @@ Hostname of the server that the script runs on.
 
 ## Remarks
 
-RAM cost: 0.05 GB
+RAM cost: 0 GB
 
