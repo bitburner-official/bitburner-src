@@ -46,9 +46,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             future... The year is 2077...
             <br />
             <br />
-            This tutorial will show you the basics of the game.
-            <br />
-            <br />
+            This tutorial will show you the basics of the game. We'll look at:
+            <ul>
+              <li>the network</li>
+              <li>hacking</li>
+              <li>scripts</li>
+            </ul>
             If you need to hide the tutorial panel temporarily, you can collapse it.
             <br />
             <br />
@@ -176,8 +179,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            If you have a look, you can see the server's "Root Access" status. You must gain root access before you can
-            hack a server.
+            If you have a look, you can see the server's "Root Access" status is NO. You must gain root access before
+            you can hack a server.
             <br />
             <br />
             Handily, you've built a virus called NUKE.exe. NUKE.exe will grant you root access to any machine as long as
@@ -219,8 +222,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             your hacking skill, and by the server's security level.
             <br />
             <br />
-            When you hack a server, you deplete the money it has available, so any subsequent hacks take less money.
-            You'll also cause its security level to rise, so your hacks take longer.
+            When you hack a server, you deplete the money it has available, so subsequent hacks take less money. You'll
+            also cause its security level to rise, so your hacks take longer.
             <br />
             <br />
             To restore things, you can use
@@ -315,7 +318,8 @@ export async function main(ns) {
             <br />
             If you want to check what other functions you can use in the editor, use the search bar at the bottom, or
             click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside
-            it.
+            it. Almost everything you do in this tutorial can scripted using functions available to you from the very
+            start.
             <br />
             <br />
             Click Save at the bottom to save your script and close the editor.
@@ -344,11 +348,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We have 8GB of free RAM. If that doesn't sound like much, don't worry: you can purchase more RAM for your
-            home server later.
-            <br />
-            <br />
-            For now, let's run our script using
+            We have 8GB of free RAM, enough to run our script. We can do that using
             <br />
             <br />
           </Typography>
@@ -452,7 +452,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            To copy a script to another server, we can use the scp command.
+            To copy a script to another server, you can use the scp command.
             <br />
             <br />
             Let's copy {tutorialScriptName} to n00dles.
@@ -506,7 +506,7 @@ export async function main(ns) {
       ),
       canNext: true,
     },
-    [iTutorialSteps.CharacterGoToWorldPage as number]: {
+    [iTutorialSteps.GoToWorldPage as number]: {
       content: (
         <>
           <Typography>
@@ -524,8 +524,15 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Each location in a city has something that you can do. There's a lot of content out in the world, so make
-            sure you explore and discover!
+            Each location in a city has something that you can do.
+            <br />
+            <br />
+            Look out for <strong>T</strong>ech centres like alpha ent. They'll let you purchase servers and upgrade your
+            home computer.
+            <br />
+            <br />
+            There's a lot of other content out in the world, so make sure you explore and discover! Hacking may be the
+            core mechanic, but it's far from the only one.
             <br />
             <br />
             Lastly, go to{" "}
@@ -623,9 +630,18 @@ export async function main(ns) {
       )}
       <br />
       <br />
-      <Button onClick={iTutorialEnd}>
-        {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
-      </Button>
+      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
+        <Box>
+          <Button onClick={iTutorialEnd}>
+            {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
+          </Button>
+        </Box>
+        <Box>
+          <Typography color="secondary" align="right">
+            {step + 1} / {Object.keys(iTutorialSteps).length / 2 - 1}
+          </Typography>
+        </Box>
+      </Box>
     </Paper>
   );
 }

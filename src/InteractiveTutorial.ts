@@ -33,7 +33,7 @@ enum iTutorialSteps {
   CharacterPage, // Introduction to 'Stats' page
 
   // Finishing off
-  CharacterGoToWorldPage,
+  GoToWorldPage,
   WorldDescription,
   DocumentationPageInfo,
   End,
@@ -68,7 +68,7 @@ const ITutorial = {
     [iTutorialSteps.ActiveScriptsToTerminal]: false,
     [iTutorialSteps.TerminalTailScript]: false,
     [iTutorialSteps.TerminalScp]: false,
-    [iTutorialSteps.CharacterGoToWorldPage]: false,
+    [iTutorialSteps.GoToWorldPage]: false,
     [iTutorialSteps.WorldDescription]: false,
     [iTutorialSteps.DocumentationPageInfo]: false,
     [iTutorialSteps.End]: false,
