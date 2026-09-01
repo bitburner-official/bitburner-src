@@ -66,6 +66,12 @@ let currentScript: OpenScript | null = null;
 function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
+  /**
+   * The editor's container is hidden (display: none) while currentScript is null, and focusing an element inside a
+   * hidden container does nothing. currentScript is not React state, so onMount can set it without the container
+   * becoming visible in the same render, which is why onMount requests focus instead of taking it directly.
+   */
+  const focusRequested = useRef(false);
 
   // This is the workaround for a bug in monaco-editor: https://github.com/microsoft/monaco-editor/issues/4455
   const removeOutlineOfEditor = useCallback(() => {
@@ -152,9 +158,8 @@ function Root(props: IProps): React.ReactElement {
           );
           /**
            * We use openScripts to store all opened files when the player opens them in the editor. When they edit code,
-           * the changed code is in openScripts, regardless of whether they save it. When the player switches from the
-           * editor tab to another tab, all models are disposed, so the next time they open the editor, this function
-           * will load imported scripts. However, if the player did not save their code, loaded scripts would not
+           * the changed code is in openScripts, regardless of whether they save it. This function loads imported
+           * scripts from the server. However, if the player did not save their code, loaded scripts would not
            * contain changed code. Therefore, for each loaded script, we need to check if it is in openScripts. If it
            * is, we use the script content in openScripts.
            */
@@ -345,6 +350,29 @@ function Root(props: IProps): React.ReactElement {
     debouncedCodeParsing(newCode);
   };
 
+  /** Save the cursor position and the view state (folded regions, scroll position) of the current script. */
+  function saveViewState(): void {
+    if (!currentScript || !editorRef.current) return;
+    const currentPosition = editorRef.current.getPosition();
+    if (currentPosition) currentScript.lastPosition = currentPosition;
+    const viewState = editorRef.current.saveViewState();
+    // Restoring the word highlighter rejects a promise monaco never handles, and its highlights are recomputed anyway.
+    if (viewState) delete viewState.contributionsState["editor.contrib.wordHighlighter"];
+    currentScript.lastViewState = viewState;
+  }
+
+  /** Restore what saveViewState stored. Must be called after the editor's model was set to openScript's model. */
+  function restoreViewState(openScript: OpenScript): void {
+    if (!editorRef.current) return;
+    if (openScript.lastViewState) {
+      // The view state contains the cursor position, so there is no need to restore it separately.
+      editorRef.current.restoreViewState(openScript.lastViewState);
+      return;
+    }
+    editorRef.current.setPosition(openScript.lastPosition);
+    editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
+  }
+
   // When the editor is mounted
   function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
@@ -355,10 +383,9 @@ function Root(props: IProps): React.ReactElement {
     if (props.files.size === 0 && currentScript !== null) {
       currentScript.regenerateModel();
       editorRef.current.setModel(currentScript.model);
-      editorRef.current.setPosition(currentScript.lastPosition);
-      editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
+      restoreViewState(currentScript);
       parseCode(currentScript.code);
-      editorRef.current.focus();
+      focusRequested.current = true;
       return;
     }
 
@@ -374,8 +401,7 @@ function Root(props: IProps): React.ReactElement {
 
         currentScript = openScript;
         editorRef.current.setModel(openScript.model);
-        editorRef.current.setPosition(openScript.lastPosition);
-        editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
+        restoreViewState(openScript);
         parseCode(openScript.code);
       } else {
         // Open script
@@ -394,7 +420,7 @@ function Root(props: IProps): React.ReactElement {
       }
     }
 
-    editorRef.current.focus();
+    focusRequested.current = true;
   }
 
   // When the code is updated within the editor
@@ -418,11 +444,7 @@ function Root(props: IProps): React.ReactElement {
 
   function onTabClick(index: number): void {
     if (currentScript !== null) {
-      // Save the current position of the cursor.
-      const currentPosition = editorRef.current?.getPosition();
-      if (currentPosition) {
-        currentScript.lastPosition = currentPosition;
-      }
+      saveViewState();
       // Save currentScript to openScripts
       const curIndex = currentTabIndex();
       if (curIndex !== undefined) {
@@ -437,8 +459,7 @@ function Root(props: IProps): React.ReactElement {
         currentScript.regenerateModel();
       }
       editorRef.current.setModel(currentScript.model);
-      editorRef.current.setPosition(currentScript.lastPosition);
-      editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
+      restoreViewState(currentScript);
       parseCode(currentScript.code);
       editorRef.current.focus();
     }
@@ -463,7 +484,7 @@ function Root(props: IProps): React.ReactElement {
         },
       });
     }
-    //unmounting the editor will dispose all, doesnt hurt to dispose on close aswell
+    // Models outlive the editor, so closing a tab is what releases the model of that script.
     closingScript.model.dispose();
     openScripts.splice(index, 1);
     if (openScripts.length === 0) {
@@ -482,8 +503,7 @@ function Root(props: IProps): React.ReactElement {
           currentScript.regenerateModel();
         }
         editorRef.current.setModel(currentScript.model);
-        editorRef.current.setPosition(currentScript.lastPosition);
-        editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
+        restoreViewState(currentScript);
         parseCode(currentScript.code);
         editorRef.current.focus();
       }
@@ -549,14 +569,7 @@ function Root(props: IProps): React.ReactElement {
   }
 
   function onUnmountEditor() {
-    if (!currentScript) {
-      return;
-    }
-    // Save the current position of the cursor.
-    const currentPosition = editorRef.current?.getPosition();
-    if (currentPosition) {
-      currentScript.lastPosition = currentPosition;
-    }
+    saveViewState();
   }
 
   const { statusBarRef } = useVimEditor({
@@ -576,6 +589,14 @@ function Root(props: IProps): React.ReactElement {
     // disable eslint because we want to run this only once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Take the focus requested by onMount. This runs after every render on purpose: the render that mounts the editor
+  // may still have the container hidden, in which case focusing does nothing and we retry once it becomes visible.
+  useEffect(() => {
+    if (!focusRequested.current || !editorRef.current) return;
+    editorRef.current.focus();
+    if (editorRef.current.hasTextFocus()) focusRequested.current = false;
+  });
 
   return (
     <>
