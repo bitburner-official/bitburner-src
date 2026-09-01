@@ -33,12 +33,17 @@ export const config = {
   },
 };
 
-// Maps code to LoadedModules, so we can reuse compiled code across servers,
-// or possibly across files (if someone makes two copies of the same script,
-// or changes a script and then changes it back).
+// Cache transforms by exact source and file type, and LoadedModules by the
+// dependency-resolved code, so both can be reused across servers and files.
 // Modules can never be garbage collected by Javascript, so it's good to try
 // to keep from making more than we need.
-const moduleCache = new Map<string, LoadedModule>();
+type CachedTransform = ReturnType<typeof transformScript>;
+type ModuleCacheEntry = {
+  module: LoadedModule;
+  transform?: CachedTransform;
+};
+
+const moduleCache = new Map<string, ModuleCacheEntry>();
 
 export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): Promise<ScriptModule> {
   // Return the module if it already exists
@@ -83,8 +88,10 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   if (script.code === "") {
     throw new Error(`Script content is an empty string. Filename: ${script.filename}, server: ${script.server}.`);
   }
-  let scriptCode;
-  let sourceMap;
+  let scriptCode: string;
+  let sourceMap: string | undefined;
+  let transform: CachedTransform | undefined;
+  let transformCacheKey: string | undefined;
   const fileType = getFileType(script.filename);
   switch (fileType) {
     case FileType.JS:
@@ -93,7 +100,9 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     case FileType.JSX:
     case FileType.TS:
     case FileType.TSX:
-      ({ scriptCode, sourceMap } = transformScript(script.code, fileType));
+      transformCacheKey = `\0${fileType}\0${script.code}`;
+      transform = moduleCache.get(transformCacheKey)?.transform ?? transformScript(script.code, fileType);
+      ({ scriptCode, sourceMap } = transform);
       break;
     default:
       throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);
@@ -177,7 +186,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     newCode = newCode.substring(0, node.start) + importedScript.mod.url + newCode.substring(node.end);
   }
 
-  const cachedMod = moduleCache.get(newCode);
+  const cachedMod = moduleCache.get(newCode)?.module;
   if (cachedMod) {
     script.mod = cachedMod;
   } else {
@@ -214,7 +223,11 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // modules work.
     URL.revokeObjectURL(url);
     script.mod = new LoadedModule(url, module);
-    moduleCache.set(newCode, script.mod);
+    moduleCache.set(newCode, { module: script.mod });
+  }
+
+  if (transformCacheKey && transform && !moduleCache.has(transformCacheKey)) {
+    moduleCache.set(transformCacheKey, { module: script.mod, transform });
   }
 
   addDependencyInfo(script, seenStack);
