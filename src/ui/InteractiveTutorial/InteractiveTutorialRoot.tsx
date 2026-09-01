@@ -50,7 +50,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <ul>
               <li>the network</li>
               <li>hacking</li>
-              <li>scripts</li>
+              <li>creating scripts</li>
             </ul>
             If you need to hide the tutorial panel temporarily, you can collapse it.
             <br />
@@ -179,7 +179,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            If you have a look, you can see the server's "Root Access" status is NO. You must gain root access before
+            If you have a look, you can see the server's "Root Access" status is "NO". You must gain root access before
             you can hack a server.
             <br />
             <br />
@@ -318,7 +318,7 @@ export async function main(ns) {
             <br />
             If you want to check what other functions you can use in the editor, use the search bar at the bottom, or
             click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside
-            it. Almost everything you do in this tutorial can scripted using functions available to you from the very
+            it. Almost everything we do in this tutorial can scripted using functions available to you from the very
             start.
             <br />
             <br />
