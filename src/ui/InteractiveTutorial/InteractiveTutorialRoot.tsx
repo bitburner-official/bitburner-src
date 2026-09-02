@@ -380,7 +380,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <TerminalText>{"[n00dles /]> weaken"}</TerminalText>
           <Typography>
             <br />
-            which lowers the server's security level, speeding up hack, grow and weaken.
+            which lowers the server's security level. That actually speeds up grow and weaken too, and makes grow more
+            effective.
           </Typography>
         </>
       ),
