@@ -156,8 +156,9 @@ function parseOnlyRamCalculate(
     } catch (error) {
       return {
         errorCode: RamCalculationErrorCode.ImportError,
-        errorMessage: `Cannot parse module: ${nextModule}. Filename: ${script.filename}. Reason: ${error instanceof Error ? error.message : String(error)
-          }.`,
+        errorMessage: `Cannot parse module: ${nextModule}. Filename: ${script.filename}. Reason: ${
+          error instanceof Error ? error.message : String(error)
+        }.`,
       };
     }
     parseCode(moduleAST, nextModule, getFileTypeFeature(scriptFileType));
@@ -370,7 +371,7 @@ function parseOnlyCalculateDeps(
      * PrivateIdentifier, so we need to add that type to the type list of "node".
      */
     function findIdentifier(node: acorn.Expression | acorn.Super | acorn.PrivateIdentifier) {
-      for (; ;) {
+      for (;;) {
         // Find the identifier node attached to the call
         switch (node.type) {
           case "ParenthesizedExpression":
