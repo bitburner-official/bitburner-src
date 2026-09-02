@@ -26,6 +26,7 @@ import { DocumentationAutocomplete } from "../../Documentation/ui/DocumentationA
 import { openDocumentationPopUp } from "../../Documentation/root";
 import { defaultNsApiPage, openDocExternally } from "../../ui/React/Documentation";
 import { DocumentationLink } from "../../ui/React/DocumentationLink";
+import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
@@ -70,14 +71,25 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
           Beautify
         </Button>
         <Button
-          color={isUpdatingRAM ? "secondary" : "primary"}
-          sx={{ mx: 1, whiteSpace: "nowrap" }}
-          onClick={openRAMInfo}
+          sx={{
+            mx: 1,
+            whiteSpace: "nowrap",
+            color: isUpdatingRAM
+              ? "secondary.main"
+              : ITutorial.currStep === iTutorialSteps.ScriptEditorRam
+              ? "info.main"
+              : "primary.main",
+          }}
+          onClick={() => {
+            if (ITutorial.currStep === iTutorialSteps.ScriptEditorRam) iTutorialNextStep();
+            openRAMInfo();
+          }}
         >
           {ram}
         </Button>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Save])}>
           <Button
+            color={ITutorial.currStep === iTutorialSteps.ScriptEditorEdit ? "info" : "primary"}
             onClick={() => {
               onSave().catch((error) => console.error(error));
             }}

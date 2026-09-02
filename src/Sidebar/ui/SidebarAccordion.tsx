@@ -20,7 +20,7 @@ type SidebarAccordionProps = {
   items: (IItemProps | boolean)[];
   icon: React.ReactElement["type"];
   sidebarOpen: boolean;
-  classes: Record<"listitem" | "active" | "themeColorPrimary" | "themeColorSecondary" | "themeColorInfo", string>;
+  classes: Record<"listitem" | "active", string>;
 };
 
 type ClickFnCacheKeyType = (page: Page) => void;

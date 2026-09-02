@@ -186,7 +186,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <ul>
               <li>the network</li>
               <li>hacking</li>
-              <li>creating scripts</li>
+              <li>working with scripts</li>
             </ul>
             If you need to hide the tutorial panel temporarily, you can collapse it.
             <br />
@@ -352,7 +352,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of its
+            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of n00dles'
             available money.
             <br />
             <br />
@@ -362,7 +362,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
               <li>steal more money</li>
               <li>have a higher success chance</li>
             </ul>
-            When you hack a server, you deplete its available money and increase its security level. Higher security levels make hacking slower and less effective.
+            When you hack a server, you deplete its available money and increase its security level. Higher security
+            levels make hacking slower and less effective.
             <br />
             <br />
             To restore things, you can use
@@ -429,7 +430,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalEditScript as number]: {
+    [iTutorialSteps.ScriptEditorEdit as number]: {
       content: (
         <>
           <Typography>
@@ -451,19 +452,65 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            When using scripts to hack a server, you don't need to be connected to the server. Scripts can target any
-            server, from any server.
+            When using scripts to hack, you don't need to be connected to the target server. Scripts can target any
+            server, no matter where you are.
             <br />
             <br />
             Almost everything we do in this tutorial can be scripted using functions available to you right away. To
-            check what functions there are, you can:
+            check what functions are available, you can:
             <ul>
               <li>use the search bar at the bottom</li>
               <li>
                 click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link
               </li>
             </ul>
-            For now though, click Save at the bottom to save your script and close the editor.
+            For now though, click{" "}
+            <Box component="span" sx={{ color: "info.main" }}>
+              Save
+            </Box>{" "}
+            at the bottom.
+          </Typography>
+        </>
+      ),
+      canNext: false,
+    },
+    [iTutorialSteps.ScriptEditorRam as number]: {
+      content: (
+        <>
+          <Typography>
+            Scripts cost RAM to run.
+            <br />
+            <br />
+            To see how much RAM this script costs, check the{" "}
+            <Box component="span" sx={{ color: "info.main" }}>
+              RAM
+            </Box>{" "}
+            button at the bottom.
+            <br />
+            <br />
+            You can also click the{" "}
+            <Box component="span" sx={{ color: "info.main" }}>
+              RAM
+            </Box>{" "}
+            button to see a breakdown of what's contributing to the RAM cost.
+            <br />
+            <br />
+            Try doing that now.
+          </Typography>
+        </>
+      ),
+      canNext: false,
+    },
+    [iTutorialSteps.ScriptEditorGoToTerminal as number]: {
+      content: (
+        <>
+          <Typography>
+            Now we know how much RAM we need, let's head back to the{" "}
+            <Box sx={{ display: "inline-flex", alignItems: "center", verticalAlign: "bottom" }}>
+              <LastPageIcon sx={{ color: "info.main", mr: 0.8 }} />
+              <Typography sx={{ color: "info.main" }}>Terminal</Typography>
+            </Box>{" "}
+            to run our script.
           </Typography>
         </>
       ),
@@ -473,13 +520,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we'll run the script.
-            <br />
-            <br />
-            You can run scripts on any server that you have root access to.
-            <br />
-            <br />
-            Scripts need RAM to run. To check how much RAM is available on a machine, enter
+            To check how much RAM is available, enter
             <br />
             <br />
           </Typography>
@@ -492,10 +533,10 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We have 8GB of free RAM, enough to run our script.
+            You have 8GB of free RAM, enough to run your script.
             <br />
             <br />
-            We can do that using
+            You can run it using
             <br />
             <br />
           </Typography>
@@ -508,8 +549,11 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Your script is now running! Scripts run in the background until their code completes (if they have an
-            continuous loop, like {tutorialScriptName} does, they'll run indefinitely).
+            Your script is now running!
+            <br />
+            <br />
+            Scripts run in the background until their code completes (if they have an continuous loop, like{" "}
+            {tutorialScriptName} does, they'll run indefinitely).
             <br />
             <br />
             Scripts will passively earn you money and hacking exp. They even earn money and exp while you're offline,
@@ -578,7 +622,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            You can boost your earnings by running your scripts on other servers too. To do that, we need to copy them
+            You can run scripts on any server that you have root access to. To do that, you need to copy your scripts
             over.
             <br />
             <br />

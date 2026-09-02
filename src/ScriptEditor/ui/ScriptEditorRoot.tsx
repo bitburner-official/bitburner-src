@@ -195,7 +195,7 @@ function Root(props: IProps): React.ReactElement {
     const preSave = options.beautifyOnSave ? beautify : () => Promise.resolve();
 
     // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.ScriptEditorEdit) {
       //Make sure filename + code properly follow tutorial
       if (currentScript.path !== tutorialScriptName) {
         dialogBoxCreate("Don't change the script name for now.");
@@ -211,8 +211,6 @@ function Root(props: IProps): React.ReactElement {
       //Save the script
       await preSave();
       saveScript(currentScript);
-      Router.toPage(Page.Terminal);
-
       iTutorialNextStep();
 
       return;

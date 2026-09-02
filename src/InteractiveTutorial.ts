@@ -17,7 +17,9 @@ enum iTutorialSteps {
   TerminalHackingMechanics, // Explanation of hacking mechanics
   TerminalGoHome, // Go home before creating a script.
   TerminalCreateScript, // Create a script using 'nano'
-  TerminalEditScript, // Script Editor page - Edit script and then save & close
+  ScriptEditorEdit, // Script Editor page - Edit script and then save & close
+  ScriptEditorRam,
+  ScriptEditorGoToTerminal,
   TerminalFree, // Using 'Free' Terminal command
   TerminalRunScript, // Running script using 'run' Terminal command
   TerminalGoToActiveScriptsPage,
@@ -60,7 +62,9 @@ const ITutorial = {
     [iTutorialSteps.TerminalHackingMechanics]: false,
     [iTutorialSteps.TerminalGoHome]: false,
     [iTutorialSteps.TerminalCreateScript]: false,
-    [iTutorialSteps.TerminalEditScript]: false,
+    [iTutorialSteps.ScriptEditorEdit]: false,
+    [iTutorialSteps.ScriptEditorRam]: false,
+    [iTutorialSteps.ScriptEditorGoToTerminal]: false,
     [iTutorialSteps.TerminalFree]: false,
     [iTutorialSteps.TerminalRunScript]: false,
     [iTutorialSteps.TerminalGoToActiveScriptsPage]: false,

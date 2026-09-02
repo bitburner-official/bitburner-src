@@ -120,10 +120,6 @@ const useStyles = makeStyles()((theme: Theme) => ({
     borderLeft: "3px solid " + theme.palette.primary.main,
   },
   listitem: {},
-  // the following are for Typography, as color="info" isn't available on Typography elements
-  themeColorPrimary: { color: theme.palette.primary.main },
-  themeColorSecondary: { color: theme.palette.secondary.main },
-  themeColorInfo: { color: theme.palette.info.main },
 }));
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
@@ -141,10 +137,14 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       flash = Page.ActiveScripts;
       shouldIncrementTutorial = true;
       break;
-    case iTutorialSteps.TerminalEditScript:
+    case iTutorialSteps.ScriptEditorEdit:
       if (props.page !== Page.ScriptEditor) {
         flash = Page.ScriptEditor;
       }
+      break;
+    case iTutorialSteps.ScriptEditorGoToTerminal:
+      flash = Page.Terminal;
+      shouldIncrementTutorial = true;
       break;
     case iTutorialSteps.GoToCharacterPage:
       flash = Page.Stats;
