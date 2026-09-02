@@ -1,5 +1,4 @@
 import type { PromisePair } from "../Types/Promises";
-import type { IReviverValue } from "../utils/JSONReviver";
 import type { Task } from "@nsdefs";
 
 export abstract class BaseWork {
@@ -42,7 +41,6 @@ export abstract class PlayerBaseWork extends BaseWork {
     this.resolveNextCompletion();
   }
   abstract APICopy(): Task;
-  abstract toJSON(): IReviverValue;
 }
 
 export enum WorkType {

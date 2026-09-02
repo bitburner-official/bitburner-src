@@ -16,7 +16,6 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { ToastVariant } from "@enums";
 import { pushGameSaved, pushImportResult } from "./Electron";
@@ -28,7 +27,7 @@ import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
-import { Reviver } from "./utils/GenericReviver";
+import { makeSerializable, Replacer, Reviver } from "./utils/GenericReviver";
 import { populateDarknet } from "./DarkNet/controllers/NetworkGenerator";
 import { getDarkNetSave, loadDarkNet } from "./DarkNet/effects/SaveLoad";
 import { giveExportBonus } from "./ExportBonus";
@@ -168,7 +167,7 @@ function assertParsedSaveData(parsedSaveData: unknown): asserts parsedSaveData i
 
 export async function getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
   const save = new BitburnerSaveObject();
-  save.PlayerSave = JSON.stringify(Player);
+  save.PlayerSave = JSON.stringify(Player, Replacer);
 
   // For the servers save, overwrite the ExcludeRunningScripts setting if forced
   const originalExcludeSetting = Settings.ExcludeRunningScriptsFromSave;
@@ -176,22 +175,22 @@ export async function getSaveData(forceExcludeRunningScripts = false): Promise<S
   save.AllServersSave = saveAllServers();
   Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
 
-  save.CompaniesSave = JSON.stringify(getCompaniesSave());
-  save.FactionsSave = JSON.stringify(getFactionsSave());
-  save.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
-  save.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
-  save.StockMarketSave = JSON.stringify(StockMarket);
-  save.SettingsSave = JSON.stringify(Settings);
-  save.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
-  save.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
-  save.StaneksGiftSave = JSON.stringify(staneksGift);
-  save.GoSave = JSON.stringify(getGoSave());
-  save.DarknetSave = JSON.stringify(getDarkNetSave());
-  save.InfiltrationsSave = JSON.stringify(InfiltrationState);
+  save.CompaniesSave = JSON.stringify(getCompaniesSave(), Replacer);
+  save.FactionsSave = JSON.stringify(getFactionsSave(), Replacer);
+  save.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()), Replacer);
+  save.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()), Replacer);
+  save.StockMarketSave = JSON.stringify(StockMarket, Replacer);
+  save.SettingsSave = JSON.stringify(Settings, Replacer);
+  save.VersionSave = JSON.stringify(CONSTANTS.VersionNumber, Replacer);
+  save.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus, Replacer);
+  save.StaneksGiftSave = JSON.stringify(staneksGift, Replacer);
+  save.GoSave = JSON.stringify(getGoSave(), Replacer);
+  save.DarknetSave = JSON.stringify(getDarkNetSave(), Replacer);
+  save.InfiltrationsSave = JSON.stringify(InfiltrationState, Replacer);
 
-  if (Player.gang) save.AllGangsSave = JSON.stringify(AllGangs);
+  if (Player.gang) save.AllGangsSave = JSON.stringify(AllGangs, Replacer);
 
-  return await encodeJsonSaveString(JSON.stringify(save));
+  return await encodeJsonSaveString(JSON.stringify(save, Replacer));
 }
 
 export async function saveGame(emitToastEvent = true): Promise<void> {
@@ -268,12 +267,14 @@ export async function importGame(
       // Validate SettingsSave
       if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
         // Parse settings from data.SettingsSave
-        const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
+        const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave, Reviver);
         assertObject(settings);
         // Modify setting
         settings.SyncSteamAchievements = overrideSettings.SyncSteamAchievements;
         // Save modified data back to saveData
-        parsedSaveData.data.SettingsSave = JSON.stringify(settings);
+        parsedSaveData.data.SettingsSave = JSON.stringify(settings, Replacer);
+        // This does *not* use Replacer, because parsedSaveData is in
+        // IReviverData form already (it was never properly Revived).
         saveData = await encodeJsonSaveString(JSON.stringify(parsedSaveData));
       }
     } catch (error) {
@@ -346,6 +347,7 @@ export async function getParsedSaveData(saveData: SaveData): Promise<ParsedSaveD
 
   let parsedSaveData: unknown;
   try {
+    // This intentionally does not use a Reviver.
     parsedSaveData = JSON.parse(decodedSaveData);
   } catch (error) {
     console.error("decodedSaveData:", decodedSaveData);
@@ -370,7 +372,7 @@ export async function getImportDataFromSaveData(saveData: SaveData): Promise<Imp
   // Parse data.SettingsSave to get syncSteamAchievements.
   if (parsedSaveData.data.SettingsSave && typeof parsedSaveData.data.SettingsSave === "string") {
     try {
-      const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave);
+      const settings: unknown = JSON.parse(parsedSaveData.data.SettingsSave, Reviver);
       assertObject(settings);
       if (typeof settings.SyncSteamAchievements === "boolean") {
         syncSteamAchievements = settings.SyncSteamAchievements;
@@ -443,13 +445,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   DarknetSave = "";
   InfiltrationsSave = "";
 
-  toJSON(): IReviverValue {
-    return Generic_toJSON("BitburnerSaveObject", this);
-  }
-
-  static fromJSON(value: IReviverValue): BitburnerSaveObject {
-    return Generic_fromJSON(BitburnerSaveObject, value.data);
-  }
+  static includedKeys = makeSerializable("BitburnerSaveObject", BitburnerSaveObject);
 }
 
 export async function loadGame(saveData: SaveData): Promise<boolean> {
@@ -518,6 +514,7 @@ export async function loadGame(saveData: SaveData): Promise<boolean> {
   }
   if (saveObj.LastExportBonus) {
     try {
+      // Doesn't need Reviver because it's a number.
       const lastExportBonus: unknown = JSON.parse(saveObj.LastExportBonus);
       if (typeof lastExportBonus !== "number" || !Number.isFinite(lastExportBonus)) {
         throw new Error(`Invalid LastExportBonus: ${saveObj.LastExportBonus}`);
@@ -537,7 +534,8 @@ export async function loadGame(saveData: SaveData): Promise<boolean> {
   }
   if (saveObj.VersionSave) {
     try {
-      const ver: unknown = JSON.parse(saveObj.VersionSave, Reviver);
+      // Doesn't need a Reviver because it's a primitive type
+      const ver: unknown = JSON.parse(saveObj.VersionSave);
       if (typeof ver !== "string" && typeof ver !== "number") {
         throw new Error(`Invalid VersionSave: ${saveObj.VersionSave}`);
       }
@@ -597,5 +595,3 @@ function createBetaUpdateText() {
     1000,
   );
 }
-
-constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;

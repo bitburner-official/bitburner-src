@@ -1,6 +1,7 @@
 import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
 import { CityName, CorpEmployeeJob, IndustryType } from "@enums";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import * as corpConstants from "./data/Constants";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
@@ -14,7 +15,6 @@ import { Corporation } from "./Corporation";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
-import { getKeyList } from "../utils/helpers/getKeyList";
 import { calculateMarkupMultiplier, evaluateCorpFormula } from "./helpers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
@@ -1095,13 +1095,8 @@ export class Division {
     return researchTree.getStorageMultiplier();
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Division", this, Division.includedKeys);
-  }
-
-  /** Initializes a Division object from a JSON save state. */
-  static fromJSON(value: IReviverValue): Division {
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): Division {
     const division = Generic_fromJSON(Division, value.data, Division.includedKeys);
     // division.type was renamed to division.industry in v3.0.0.
     assertObject(value.data);
@@ -1111,7 +1106,5 @@ export class Division {
     return division;
   }
 
-  static includedKeys = getKeyList(Division, { removedKeys: ["treeInitialized"] });
+  static includedKeys = makeSerializable("Division", Division, { removedKeys: ["treeInitialized"] });
 }
-
-constructorsForReviver.Division = Division;

@@ -33,7 +33,8 @@ import {
 
 import { Factions } from "../../Faction/Factions";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../../utils/JSONReviver";
+import { makeSerializable } from "../../utils/GenericReviver";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
 import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
 import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";
@@ -576,14 +577,9 @@ export class Sleeve extends Person implements SleevePerson {
     return "Sleeve";
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Sleeve", this);
-  }
-
-  /** Initializes a Sleeve object from a JSON save state. */
-  static fromJSON(value: IReviverValue): Sleeve {
-    const sleeve = Generic_fromJSON(Sleeve, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): Sleeve {
+    const sleeve = Generic_fromJSON(Sleeve, value.data, Sleeve.includedKeys);
     if (!sleeve.hp?.current || !sleeve.hp?.max) sleeve.hp = { current: 10, max: 10 };
     // Remove any invalid aug names on game load
     sleeve.augmentations = sleeve.augmentations.filter((ownedAug) =>
@@ -595,6 +591,6 @@ export class Sleeve extends Person implements SleevePerson {
 
     return sleeve;
   }
-}
 
-constructorsForReviver.Sleeve = Sleeve;
+  static includedKeys = makeSerializable("Sleeve", Sleeve);
+}

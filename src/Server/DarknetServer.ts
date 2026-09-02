@@ -1,5 +1,6 @@
 import { BaseServer } from "./BaseServer";
-import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
+import type { IReviverValue } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { exampleDarknetServerData } from "../DarkNet/Enums";
 import { createRandomIp } from "../utils/IPAddress";
 import type { CacheFilePath } from "../Paths/CacheFilePath";
@@ -84,12 +85,12 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
     this.isStationary = params.isStationary;
   }
 
-  toJSON(): IReviverValue {
-    return this.toJSONBase("DarknetServer", includedKeys);
+  jsonReplacer(): IReviverValue {
+    return this.toJSONBase("DarknetServer", DarknetServer.includedKeys);
   }
 
-  static fromJSON(value: IReviverValue): DarknetServer {
-    const server = BaseServer.fromJSONBase(value, DarknetServer, includedKeys);
+  static jsonReviver(value: IReviverValue): DarknetServer {
+    const server = BaseServer.fromJSONBase(value, DarknetServer, DarknetServer.includedKeys);
     // Remove duplicate .cache files.
     const cacheSet = new Set(server.caches);
     if (cacheSet.size !== server.caches.length) {
@@ -98,7 +99,8 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
     }
     return server;
   }
+
+  static includedKeys = BaseServer.getIncludedKeys(DarknetServer);
 }
 
-const includedKeys = BaseServer.getIncludedKeys(DarknetServer);
-constructorsForReviver.DarknetServer = DarknetServer;
+makeSerializable("DarknetServer", DarknetServer);

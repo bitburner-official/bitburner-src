@@ -1,7 +1,7 @@
 import { CityName } from "@enums";
 import { BladeburnerConstants } from "./data/Constants";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { addOffset } from "../utils/helpers/addOffset";
 import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
 
@@ -90,15 +90,5 @@ export class City {
     this.chaos = clampNumber(this.chaos + n, 0);
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("City", this);
-  }
-
-  /** Initializes a City object from a JSON save state. */
-  static fromJSON(value: IReviverValue): City {
-    return Generic_fromJSON(City, value.data);
-  }
+  static includedKeys = makeSerializable("City", City);
 }
-
-constructorsForReviver.City = City;

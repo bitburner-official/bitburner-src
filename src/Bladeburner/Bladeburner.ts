@@ -20,7 +20,8 @@ import {
   FactionName,
 } from "@enums";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { formatHp, formatNumberNoSuffix, formatSleeveShock } from "../ui/formatNumber";
 import { Skills } from "./data/Skills";
 import { City } from "./City";
@@ -1470,19 +1471,16 @@ export class Bladeburner implements OperationTeam {
     return id ? this.getActionObject(id) : null;
   }
 
-  static keysToSave = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers", "blackOperationArray"] });
-  // Don't load contracts or operations because of the special loading method they use, see fromJSON
+  static includedKeys = makeSerializable("Bladeburner", Bladeburner, {
+    removedKeys: ["skillMultipliers", "blackOperationArray"],
+  });
+  // Don't load contracts or operations because of the special loading method they use, see jsonReviver
   static keysToLoad = getKeyList(Bladeburner, {
     removedKeys: ["skillMultipliers", "contracts", "operations", "blackOperations", "blackOperationArray"],
   });
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Bladeburner", this, Bladeburner.keysToSave);
-  }
-
-  /** Initializes a Bladeburner object from a JSON save state. */
-  static fromJSON(value: IReviverValue): Bladeburner {
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): Bladeburner {
     assertObject(value.data);
     // Contracts, operations, and black ops are not loaded directly from the save; they are loaded via a different method.
     const contractsData = value.data.contracts;
@@ -1532,5 +1530,3 @@ export class Bladeburner implements OperationTeam {
     return bladeburner;
   }
 }
-
-constructorsForReviver.Bladeburner = Bladeburner;

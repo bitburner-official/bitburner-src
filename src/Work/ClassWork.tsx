@@ -1,5 +1,6 @@
 import React from "react";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { CONSTANTS } from "../Constants";
 import { formatExp } from "../ui/formatNumber";
 import { ClassType, GymType, LocationName, UniversityClassType } from "@enums";
@@ -142,20 +143,15 @@ export class ClassWork extends PlayerBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("ClassWork", this);
-  }
-
-  /** Initializes a ClassWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): ClassWork {
-    const classWork = Generic_fromJSON(ClassWork, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): ClassWork {
+    const classWork = Generic_fromJSON(ClassWork, value.data, ClassWork.includedKeys);
     classWork.classType =
       findEnumMember(UniversityClassType, classWork.classType) ??
       findEnumMember(GymType, classWork.classType) ??
       UniversityClassType.computerScience;
     return classWork;
   }
-}
 
-constructorsForReviver.ClassWork = ClassWork;
+  static includedKeys = makeSerializable("ClassWork", ClassWork);
+}
