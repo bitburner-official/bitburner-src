@@ -324,7 +324,7 @@ export async function main(ns) {
                 click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link
               </li>
             </ul>
-            Almost everything we do in this tutorial can scripted using functions available from the very start.
+            Almost everything we do in this tutorial can be scripted using functions available from the very start.
             <br />
             <br />
             Click Save at the bottom to save your script and close the editor.
