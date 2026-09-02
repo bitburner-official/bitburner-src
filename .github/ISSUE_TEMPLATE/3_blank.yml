@@ -4,6 +4,10 @@ body:
   - type: markdown
     attributes:
       value: |
+        ### Blank Issue
+  - type: markdown
+    attributes:
+      value: |
         Please use an existing issue template whenever possible.
         Only use this form if none of the templates apply to your issue.
   - type: checkboxes
