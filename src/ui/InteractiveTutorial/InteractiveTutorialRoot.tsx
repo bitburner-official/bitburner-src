@@ -380,8 +380,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <TerminalText>{"[n00dles /]> weaken"}</TerminalText>
           <Typography>
             <br />
-            which lowers the server's security level. Lowering security helps grow and weaken too. It speeds them both
-            up, and makes grow more effective.
+            which lowers the server's security level.
+            <br />
+            <br />
+            Lowering security helps grow and weaken too. It speeds them both up, and makes grow more effective.
           </Typography>
         </>
       ),
@@ -624,10 +626,10 @@ export async function main(ns) {
         <>
           <Typography>
             You can run scripts on any server that you have root access to. To do that, you need to copy your scripts
-            over.
+            over to it first.
             <br />
             <br />
-            First, let's see what files are stored on our home computer using
+            Before we do that, let's see what files are stored on our home computer using
             <br />
             <br />
           </Typography>
@@ -678,7 +680,7 @@ export async function main(ns) {
               <EqualizerIcon sx={{ color: "info.main", mr: 0.8 }} />
               <Typography sx={{ color: "info.main" }}>Stats</Typography>
             </Box>{" "}
-            tab
+            tab.
           </Typography>
         </>
       ),
