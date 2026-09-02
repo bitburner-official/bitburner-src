@@ -1,0 +1,26 @@
+name: Blank issue
+description: Only use this if no other template applies.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please use an existing issue template whenever possible.
+        Only use this form if none of the templates apply to your issue.
+  - type: checkboxes
+    attributes:
+      label: Preflight Checklist
+      description: Please ensure you have completed all of the following.
+      options:
+        - label: I have read the [Contributing Guidelines](https://github.com/bitburner-official/bitburner-src/blob/dev/CONTRIBUTING.md).
+          required: true
+        - label: I have searched the [issue tracker](https://github.com/bitburner-official/bitburner-src/issues) for an existing report of this issue and found none.
+          required: true
+        - label: I understand that the issue tracker is for bugs in the game itself and feature requests, not for issues with my own scripts.
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe your issue.
+    validations:
+      required: true

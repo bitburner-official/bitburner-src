@@ -6948,7 +6948,11 @@ interface UserInterface {
    *
    * If the function is called with no arguments, it will close the current script’s logs.
    *
-   * Otherwise, the pid argument can be used to close the logs from another script.
+   * Otherwise, the pid argument can be used to close the logs from another script. Tail windows can remain open
+   * after a script finishes, and can still be closed using that script's PID. If the script is rerun from its tail
+   * window, use the PID of the new process.
+   *
+   * If no tail window exists for the given PID, this function has no effect.
    *
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
