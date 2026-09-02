@@ -1,3 +1,139 @@
+/*
+
+
+Return docs to the home screen when moving to the docs tab.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+
 import React, { useEffect } from "react";
 
 import { Paper, Box, Typography, Button, Link } from "@mui/material";
@@ -187,7 +323,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             In the diagnostics, you'll also see that n00dles' "Required number of open ports for NUKE" is 0. So you're
-            good to run the virus. Just enter
+            good to run the virus.
+            <br />
+            <br />
+            Just enter
             <br />
             <br />
           </Typography>
@@ -223,11 +362,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
               <li>steal more money</li>
               <li>have a higher success chance</li>
             </ul>
-            Higher server security has the opposite effects though.
+            When you hack a server, you deplete its available money and increase its security level. Higher security levels make hacking slower and less effective.
             <br />
             <br />
-            When you hack a server, you deplete its available money and make its security level go up. To restore
-            things, you can use
+            To restore things, you can use
             <br />
             <br />
           </Typography>
@@ -313,21 +451,19 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            When using scripts to hack a server, you don't need to be connected to it. Scripts can target any server,
-            from any server.
+            When using scripts to hack a server, you don't need to be connected to the server. Scripts can target any
+            server, from any server.
             <br />
             <br />
-            To check what other functions you can use in the editor, you can:
+            Almost everything we do in this tutorial can be scripted using functions available to you right away. To
+            check what functions there are, you can:
             <ul>
               <li>use the search bar at the bottom</li>
               <li>
                 click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link
               </li>
             </ul>
-            Almost everything we do in this tutorial can be scripted using functions available from the very start.
-            <br />
-            <br />
-            Click Save at the bottom to save your script and close the editor.
+            For now though, click Save at the bottom to save your script and close the editor.
           </Typography>
         </>
       ),
