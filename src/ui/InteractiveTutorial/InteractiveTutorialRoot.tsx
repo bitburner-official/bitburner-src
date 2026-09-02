@@ -179,16 +179,15 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            If you have a look, you can see the server's "Root Access" status is "NO". You must gain root access before
-            you can hack a server.
+            If you look, you can see that n00dles' "Root Access" status is "NO". You must gain root access before you
+            can hack a server. Handily, you've built a virus called NUKE.exe.
             <br />
             <br />
-            Handily, you've built a virus called NUKE.exe. NUKE.exe will grant you root access to any machine as long as
-            enough ports are open.
+            NUKE.exe will grant you root access to any machine as long as enough ports are open.
             <br />
             <br />
-            If you check the diagnostics again, you'll see that n00dles' "Required number of open ports for NUKE" is 0.
-            So you're good to run the virus. Just enter
+            In the diagnostics, you'll also see that n00dles' "Required number of open ports for NUKE" is 0. So you're
+            good to run the virus. Just enter
             <br />
             <br />
           </Typography>
@@ -214,16 +213,15 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of the server's
+            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of its
             available money.
             <br />
             <br />
-            Nearly all aspects of hacking (including time taken, success chance and percentage stolen) are affected by
-            your hacking skill, and by the server's security level.
+            As your hacking skill increases, hacking takes less time, steals more money, and has a higher success
+            chance. Higher server security has the opposite effect though.
             <br />
             <br />
-            When you hack a server, you deplete the money it has available, so subsequent hacks take less money. You'll
-            also cause its security level to rise, so your hacks take longer.
+            When you hack a server, you deplete its money and cause its security level to rise.
             <br />
             <br />
             To restore things, you can use
@@ -312,14 +310,18 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            One benefit of using scripts to hack is that you don't need to be connected to the server they're hacking.
-            Scripts can target any server on the network.
+            When using scripts to hack, you don't need to be connected to the server they're hacking. Scripts can target
+            any server on the network.
             <br />
             <br />
-            If you want to check what other functions you can use in the editor, use the search bar at the bottom, or
-            click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link beside
-            it. Almost everything we do in this tutorial can scripted using functions available to you from the very
-            start.
+            To check what other functions you can use in the editor, you can:
+            <ul>
+              <li>use the search bar at the bottom</li>
+              <li>
+                click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link
+              </li>
+            </ul>
+            Almost everything we do in this tutorial can scripted using functions available to you from the very start.
             <br />
             <br />
             Click Save at the bottom to save your script and close the editor.
