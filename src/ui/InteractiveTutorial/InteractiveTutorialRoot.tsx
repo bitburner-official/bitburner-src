@@ -352,7 +352,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of n00dles'
+            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of its
             available money.
             <br />
             <br />
@@ -380,8 +380,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <TerminalText>{"[n00dles /]> weaken"}</TerminalText>
           <Typography>
             <br />
-            which lowers the server's security level. Lowering security speeds up not just hack but grow and weaken too,
-            and makes grow more effective.
+            which lowers the server's security level. Lowering security helps grow and weaken too. It speeds them both
+            up, and makes grow more effective.
           </Typography>
         </>
       ),
