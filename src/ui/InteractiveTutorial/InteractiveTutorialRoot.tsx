@@ -83,7 +83,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
               <LastPageIcon sx={{ color: "primary.main", mr: 0.8 }} />
               <Typography sx={{ color: "primary.main" }}>Terminal</Typography>
             </Box>{" "}
-            to interface with your home computer, and with other machines around the world.
+            to interface with your home computer, and with other computers around the world.
             <br />
             <br />
             Let's try that out. Start by entering
@@ -119,7 +119,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            That's given us more detailed information about the servers we can connect to.
+            That's given us more detailed information.
             <br />
             <br />
             To look depeer into the network, let's increase the scanning depth to 2.
@@ -217,14 +217,17 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             available money.
             <br />
             <br />
-            As your hacking skill increases, hacking takes less time, steals more money, and has a higher success
-            chance. Higher server security has the opposite effect though.
+            As your hacking skill increases, hacking will:
+            <ul>
+              <li>take less time</li>
+              <li>steal more money</li>
+              <li>have a higher success chance</li>
+            </ul>
+            Higher server security has the opposite effects though.
             <br />
             <br />
-            When you hack a server, you deplete its money and cause its security level to rise.
-            <br />
-            <br />
-            To restore things, you can use
+            When you hack a server, you deplete its available money and make its security level go up. To restore
+            things, you can use
             <br />
             <br />
           </Typography>
@@ -249,7 +252,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>
             Hacking is the core mechanic of the game and is necessary to progress. So you don't want to be hacking
-            manually the entire time. We need a way to automate it!
+            manually the entire time. You need a way to automate it!
             <br />
             <br />
             Let's head home and create our first script.
@@ -310,8 +313,8 @@ export async function main(ns) {
           </Typography>
           <br />
           <Typography>
-            When using scripts to hack, you don't need to be connected to the server they're hacking. Scripts can target
-            any server on the network.
+            When using scripts to hack a server, you don't need to be connected to it. Scripts can target any server,
+            from any server.
             <br />
             <br />
             To check what other functions you can use in the editor, you can:
@@ -321,7 +324,7 @@ export async function main(ns) {
                 click the <DocumentationLink page={defaultNsApiPage}>NS API documentation</DocumentationLink> link
               </li>
             </ul>
-            Almost everything we do in this tutorial can scripted using functions available to you from the very start.
+            Almost everything we do in this tutorial can scripted using functions available from the very start.
             <br />
             <br />
             Click Save at the bottom to save your script and close the editor.
@@ -334,7 +337,10 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Now we'll run the script. You can run scripts on any server that you have root access to.
+            Now we'll run the script.
+            <br />
+            <br />
+            You can run scripts on any server that you have root access to.
             <br />
             <br />
             Scripts need RAM to run. To check how much RAM is available on a machine, enter
@@ -350,7 +356,10 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            We have 8GB of free RAM, enough to run our script. We can do that using
+            We have 8GB of free RAM, enough to run our script.
+            <br />
+            <br />
+            We can do that using
             <br />
             <br />
           </Typography>
@@ -367,8 +376,8 @@ export async function main(ns) {
             continuous loop, like {tutorialScriptName} does, they'll run indefinitely).
             <br />
             <br />
-            Scripts will passively earn you income and hacking experience. They even earn money and exp while you're
-            offline, although at a slower rate.
+            Scripts will passively earn you money and hacking exp. They even earn money and exp while you're offline,
+            although at a slower rate.
             <br />
             <br />
             Let's check how our running scripts are doing by clicking{" "}
