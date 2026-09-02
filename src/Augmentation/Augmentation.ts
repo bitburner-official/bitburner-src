@@ -1,8 +1,8 @@
 // Class definition for a single Augmentation object
-import { Player } from "@player";
-import { AugmentationName, CompletedProgramName, FactionName } from "@enums";
+import type { AugmentationName, CompletedProgramName, FactionName } from "@enums";
+import type { Multipliers } from "@nsdefs";
 import { formatPercent } from "../ui/formatNumber";
-import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
+import { defaultMultipliers } from "../PersonObjects/Multipliers";
 import { getRecordKeys } from "../Types/Record";
 
 export interface AugmentationCosts {
@@ -232,20 +232,5 @@ export class Augmentation {
     if (params.stats === undefined)
       this.stats = generateStatsDescription(this.mults, params.programs, params.startingMoney);
     else this.stats = params.stats;
-  }
-
-  /** Get the current level of an augmentation before buying. Currently only relevant for NFG. */
-  getLevel(): number {
-    // Only NFG currently has levels, all others will be level 0 before purchase
-    if (this.name !== AugmentationName.NeuroFluxGovernor) return 0;
-    // Owned NFG has the level baked in
-    const ownedNFGLevel = Player.augmentations.find((aug) => aug.name === this.name)?.level ?? 0;
-    // Queued NFG is queued multiple times for each level purchased
-    const queuedNFGLevel = Player.queuedAugmentations.filter((aug) => aug.name === this.name).length;
-    return ownedNFGLevel + queuedNFGLevel;
-  }
-  /** Get the next level of an augmentation to buy. Currently only relevant for NFG. */
-  getNextLevel(): number {
-    return this.getLevel() + 1;
   }
 }

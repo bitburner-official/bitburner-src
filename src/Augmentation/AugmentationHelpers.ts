@@ -5,6 +5,7 @@ import { AugmentationName } from "@enums";
 
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
+import type { Multipliers } from "@nsdefs";
 import { prestigeAugmentation } from "../Prestige";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -36,33 +37,55 @@ export function getGenericAugmentationPriceMultiplier(): number {
   return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNonSoAAugmentationList.length);
 }
 
-export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
-  const staticAugmentation = Augmentations[aug.name];
+// When effectOnly == true, the augmentation is not actually added to the
+// Player, only its effect is added to their mults.
+export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = false): void {
+  let previousLevel = 0;
+  if (!effectOnly) {
+    // Update current level, or add a new Aug if it didn't exist
+    for (const pAug of Player.augmentations) {
+      if (pAug.name === aug.name) {
+        previousLevel = pAug.level;
+        pAug.level = aug.level;
+        break;
+      }
+    }
+    if (!previousLevel) {
+      const ownedAug = new PlayerOwnedAugmentation(aug.name);
+      ownedAug.level = aug.level;
+      Player.augmentations.push(ownedAug);
+    }
+  }
 
   // Apply multipliers
-  Player.mults = mergeMultipliers(Player.mults, staticAugmentation.mults);
+  updateMultipliers(Player.mults, aug, previousLevel);
 
   // Special logic for Congruity Implant
-  if (aug.name === AugmentationName.CongruityImplant && !reapply) {
+  if (aug.name === AugmentationName.CongruityImplant && !effectOnly) {
     Player.entropy = 0;
+    // This ends up recursively calling this function, but with
+    // effectOnly=true, so it doesn't loop. However, it does mean it's
+    // important that everything is in the proper state by this point.
     Player.applyEntropy(Player.entropy);
   }
 
   // Recalculate skill levels after applying multipliers.
   Player.updateSkillLevels();
+}
 
-  // Special logic for NeuroFlux Governor
-  const ownedNfg = Player.augmentations.find((pAug) => pAug.name === AugmentationName.NeuroFluxGovernor);
-  if (aug.name === AugmentationName.NeuroFluxGovernor && !reapply && ownedNfg) {
-    ownedNfg.level = aug.level;
-    return;
+// Update the multipliers in "mults" from previousLevel to aug.level. This should be used in most cases
+// instead of mergeMultipliers, since it handles special cases like NFG uniformly. (It works for both
+// queued and installed augs.)
+export function updateMultipliers(mults: Multipliers, aug: PlayerOwnedAugmentation, previousLevel: number): void {
+  const staticAugmentation = Augmentations[aug.name];
+  if (aug.level <= previousLevel) {
+    throw new Error(`Trying to downlevel/relevel aug {aug.name} from {previousLevel} to {aug.level}!`);
   }
-
-  // Push onto Player's Augmentation list
-  if (!reapply) {
-    const ownedAug = new PlayerOwnedAugmentation(aug.name);
-
-    Player.augmentations.push(ownedAug);
+  if (aug.name !== AugmentationName.NeuroFluxGovernor && (aug.level !== 1 || previousLevel !== 0)) {
+    throw new Error(`Unexpected levels for {aug.name}: Leveling {previousLevel} to {aug.level}!`);
+  }
+  for (let i = previousLevel; i < aug.level; ++i) {
+    mergeMultipliers(mults, staticAugmentation.mults);
   }
 }
 
@@ -124,6 +147,25 @@ export interface AugmentationCosts {
   repCost: number;
 }
 
+/** Get the current level (installed + queued) of an augmentation before buying. */
+export function getAugLevel(aug: Augmentation): number {
+  let level = 0;
+  for (const pAug of Player.augmentations) {
+    if (pAug.name === aug.name) {
+      // There shouldn't be duplicates here, but use the last if there are.
+      level = pAug.level;
+    }
+  }
+  for (const pAug of Player.queuedAugmentations) {
+    if (pAug.name === aug.name) {
+      // There *definitely* can be duplicates here, and we want the last (most powerful) one.
+      // Note that queued levels will always be higher than installed levels, if they exist.
+      level = pAug.level;
+    }
+  }
+  return level;
+}
+
 export function getAugCost(aug: Augmentation): AugmentationCosts {
   let moneyCost = aug.baseCost;
   let repCost = aug.baseRepRequirement;
@@ -131,7 +173,7 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
   switch (aug.name) {
     // Special cost for NFG
     case AugmentationName.NeuroFluxGovernor: {
-      const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, aug.getLevel());
+      const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, getAugLevel(aug));
       repCost = aug.baseRepRequirement * multiplier * currentNodeMults.AugmentationRepCost;
       moneyCost = aug.baseCost * multiplier * currentNodeMults.AugmentationMoneyCost;
       moneyCost *= getGenericAugmentationPriceMultiplier();

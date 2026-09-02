@@ -1,4 +1,5 @@
 import { Player } from "@player";
+import type { Multipliers } from "@nsdefs";
 import { AugmentationName, FactionName } from "@enums";
 import { Fragment } from "./Fragment";
 import { ActiveFragment } from "./ActiveFragment";
@@ -10,7 +11,7 @@ import { StaneksGiftEvents } from "./StaneksGiftEvents";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { StanekConstants } from "./data/Constants";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
+import { defaultMultipliers, mergeMultipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getKeyList } from "../utils/helpers/getKeyList";
 
@@ -205,13 +206,13 @@ export class StaneksGift extends BaseGift {
 
   updateMults(): void {
     const mults = this.calculateMults();
-    Player.mults = mergeMultipliers(Player.mults, mults);
+    mergeMultipliers(Player.mults, mults);
     Player.updateSkillLevels();
     const zoeAmt = Player.sleeves.reduce((n, sleeve) => n + (sleeve.hasAugmentation(AugmentationName.ZOE) ? 1 : 0), 0);
     if (zoeAmt === 0) return;
     // Less powerful for each copy.
     const scaling = 3 / (zoeAmt + 2);
-    const sleeveMults = scaleMultipliers(mults, scaling);
+    scaleMultipliers(mults, scaling);
     for (const sleeve of Player.sleeves) {
       if (!sleeve.hasAugmentation(AugmentationName.ZOE)) continue;
       sleeve.resetMultipliers();
@@ -221,7 +222,7 @@ export class StaneksGift extends BaseGift {
         sleeve.applyAugmentation(aug);
       }
       //applying stanek multiplier
-      sleeve.mults = mergeMultipliers(sleeve.mults, sleeveMults);
+      mergeMultipliers(sleeve.mults, mults);
       sleeve.updateSkillLevels();
     }
   }
