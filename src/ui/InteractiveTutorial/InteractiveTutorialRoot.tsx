@@ -179,8 +179,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            If you look, you can see that n00dles' "Root Access" status is "NO". You must gain root access before you
-            can hack a server. Handily, you've built a virus called NUKE.exe.
+            If you look, you can see that n00dles' "Root Access" status is NO . You must gain root access before you can
+            hack a server. Handily, you've built a virus called NUKE.exe.
             <br />
             <br />
             NUKE.exe will grant you root access to any machine as long as enough ports are open.
@@ -216,7 +216,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of its
+            You're now attempting to hack n00dles. If your hack is successful, you'll steal a percentage of the server's
             available money.
             <br />
             <br />
@@ -492,7 +492,7 @@ export async function main(ns) {
             scripts over to them.
             <br />
             <br />
-            Before that, let's check what files are stored on our home computer using
+            Let's check what files are stored on our home computer using
             <br />
             <br />
           </Typography>
