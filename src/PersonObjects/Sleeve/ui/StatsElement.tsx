@@ -13,7 +13,6 @@ import {
   formatSleeveShock,
   formatSleeveSynchro,
 } from "../../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
 import { useStyles } from "../../../ui/React/CharacterOverview";
@@ -105,17 +104,6 @@ export function StatsElement(props: IProps): React.ReactElement {
           color={Settings.theme.primary}
           data={{ content: formatSleeveMemory(props.sleeve.memory) }}
         />
-        <StatsRow
-          name="Bonus time"
-          color={Settings.theme.primary}
-          data={{
-            content: convertTimeMsToTimeElapsedString(
-              props.sleeve.storedCycles < 10 ? 0 : props.sleeve.storedCycles * CONSTANTS.MilliPerCycle,
-              false,
-              true,
-            ),
-          }}
-        />
       </TableBody>
     </Table>
   );
@@ -181,22 +169,26 @@ export function EarningsElement(props: IProps): React.ReactElement {
   }
 
   return (
-    <>
-      <Typography variant="h6">Earnings {props.sleeve.storedCycles > 50 ? "(boosted by bonus time)" : ""}</Typography>
-      <Table sx={{ display: "table", mb: 1, width: "100%", lineHeight: 0 }}>
-        <TableBody>
-          {data.map(([a, b]) => (
-            <TableRow key={getKeyFromReactElements(a, b)}>
-              <TableCell sx={{ width: "50%" }} classes={{ root: classes.cellNone }}>
-                <Typography>{a}</Typography>
-              </TableCell>
-              <TableCell sx={{ width: "50%" }} align="right" classes={{ root: classes.cellNone }}>
-                <Typography>{b}</Typography>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <Table sx={{ display: "table", mb: 1, width: "100%", lineHeight: 0 }}>
+      <TableBody>
+        <TableRow>
+          <TableCell classes={{ root: classes.cellNone }}>
+            <Typography variant="h6">
+              Earnings {props.sleeve.storedCycles > 50 ? "(Boosted by bonus time)" : ""}
+            </Typography>
+          </TableCell>
+        </TableRow>
+        {data.map(([a, b]) => (
+          <TableRow key={getKeyFromReactElements(a, b)}>
+            <TableCell classes={{ root: classes.cellNone }}>
+              <Typography>{a}</Typography>
+            </TableCell>
+            <TableCell align="right" classes={{ root: classes.cellNone }}>
+              <Typography>{b}</Typography>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
