@@ -169,26 +169,22 @@ export function EarningsElement(props: IProps): React.ReactElement {
   }
 
   return (
-    <Table sx={{ display: "table", mb: 1, width: "100%", lineHeight: 0 }}>
-      <TableBody>
-        <TableRow>
-          <TableCell classes={{ root: classes.cellNone }}>
-            <Typography variant="h6">
-              Earnings {props.sleeve.storedCycles > 50 ? "(Boosted by bonus time)" : ""}
-            </Typography>
-          </TableCell>
-        </TableRow>
-        {data.map(([a, b]) => (
-          <TableRow key={getKeyFromReactElements(a, b)}>
-            <TableCell classes={{ root: classes.cellNone }}>
-              <Typography>{a}</Typography>
-            </TableCell>
-            <TableCell align="right" classes={{ root: classes.cellNone }}>
-              <Typography>{b}</Typography>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Typography variant="h6">Earnings {props.sleeve.storedCycles > 50 ? "(boosted by bonus time)" : ""}</Typography>
+      <Table sx={{ display: "table", mb: 1, width: "100%", lineHeight: 0 }}>
+        <TableBody>
+          {data.map(([a, b]) => (
+            <TableRow key={getKeyFromReactElements(a, b)}>
+              <TableCell sx={{ width: "50%" }} classes={{ root: classes.cellNone }}>
+                <Typography>{a}</Typography>
+              </TableCell>
+              <TableCell sx={{ width: "50%" }} align="right" classes={{ root: classes.cellNone }}>
+                <Typography>{b}</Typography>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   );
 }
