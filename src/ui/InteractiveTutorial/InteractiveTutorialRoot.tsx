@@ -20,7 +20,6 @@ import {
   iTutorialEnd,
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
-import { Settings } from "../../Settings/Settings";
 import { DocumentationLink } from "../React/DocumentationLink";
 import { defaultNsApiPage } from "../React/Documentation";
 
@@ -629,7 +628,7 @@ export async function main(ns) {
           Mac keyboard). If you're playing the Steam version, doing that will open the link in your default browser.
           <br />
           <br />
-          <Typography color={Settings.theme.warning}>
+          <Typography sx={{ color: "warning.main" }}>
             Note: The documentation at readthedocs is outdated and unmaintained. Do not use it!
           </Typography>
           <br />
@@ -638,7 +637,7 @@ export async function main(ns) {
             href="https://discord.com/channels/415207508303544321/415207508303544323"
             underline="always"
             target="_blank"
-            color={Settings.theme.info}
+            sx={{ color: "info.main" }}
           >
             ask us on Discord
           </Link>
