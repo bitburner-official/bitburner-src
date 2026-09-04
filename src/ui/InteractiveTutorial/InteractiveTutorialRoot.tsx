@@ -179,8 +179,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            If you look, you can see that n00dles' "Root Access" status is NO . You must gain root access before you can
-            hack a server. Handily, you've built a virus called NUKE.exe.
+            If you look, you can see that n00dles' "Root Access" status is "NO". You must gain root access before you
+            can hack a server. Handily, you've built a virus called NUKE.exe.
             <br />
             <br />
             NUKE.exe will grant you root access to any machine as long as enough ports are open.
