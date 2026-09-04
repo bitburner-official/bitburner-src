@@ -30,7 +30,7 @@ export function grow(args: (string | number | boolean)[], server: BaseServer): u
 
     Player.gainHackingExp(expGain);
     Terminal.print(
-       `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)} to ${formatMoney(
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)} to ${formatMoney(
         newMoney,
       )}. Gained ${formatExp(expGain)} hacking exp.`,
     );
