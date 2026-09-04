@@ -16,6 +16,7 @@ import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { DocumentationAutocomplete } from "./DocumentationAutocomplete";
+import { iTutorialSteps, ITutorial } from "../../InteractiveTutorial";
 
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
   const history = useHistory();
@@ -47,6 +48,13 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
       }
     };
   }, [history]);
+
+  useEffect(() => {
+    if (ITutorial.currStep === iTutorialSteps.DocumentationPageInfo) {
+      history.home();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // only needs to run once per mount
 
   useEffect(() => {
     if (!deepLink) {

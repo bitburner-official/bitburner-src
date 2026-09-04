@@ -17,8 +17,8 @@ enum iTutorialSteps {
   TerminalHackingMechanics, // Explanation of hacking mechanics
   TerminalGoHome, // Go home before creating a script.
   TerminalCreateScript, // Create a script using 'nano'
-  ScriptEditorEdit, // Script Editor page - Edit script and then save & close
-  ScriptEditorRam,
+  ScriptEditorEdit, // Script Editor page - Edit script
+  ScriptEditorRam, // Script Editor page - Check RAM usage
   ScriptEditorGoToTerminal,
   TerminalFree, // Using 'Free' Terminal command
   TerminalRunScript, // Running script using 'run' Terminal command
@@ -30,11 +30,9 @@ enum iTutorialSteps {
   TerminalScp, // using the 'scp' Terminal command
   TerminalHelp, // Using 'help' Terminal command
 
-  // See the results of our hacking
+  // Finishing off
   GoToCharacterPage, // Click on 'Stats' page
   CharacterPage, // Introduction to 'Stats' page
-
-  // Finishing off
   GoToWorldPage,
   WorldDescription,
   DocumentationPageInfo,
@@ -48,10 +46,7 @@ const ITutorial = {
   // Keeps track of whether each step has been done
   stepIsDone: {
     [iTutorialSteps.Start]: false,
-    [iTutorialSteps.GoToCharacterPage]: false,
-    [iTutorialSteps.CharacterPage]: false,
-    [iTutorialSteps.TerminalHelp]: false,
-    [iTutorialSteps.TerminalLs]: false,
+
     [iTutorialSteps.TerminalScan]: false,
     [iTutorialSteps.TerminalScanAnalyze1]: false,
     [iTutorialSteps.TerminalScanAnalyze2]: false,
@@ -71,7 +66,11 @@ const ITutorial = {
     [iTutorialSteps.ActiveScriptsPage]: false,
     [iTutorialSteps.ActiveScriptsToTerminal]: false,
     [iTutorialSteps.TerminalTailScript]: false,
+    [iTutorialSteps.TerminalLs]: false,
     [iTutorialSteps.TerminalScp]: false,
+    [iTutorialSteps.TerminalHelp]: false,
+    [iTutorialSteps.GoToCharacterPage]: false,
+    [iTutorialSteps.CharacterPage]: false,
     [iTutorialSteps.GoToWorldPage]: false,
     [iTutorialSteps.WorldDescription]: false,
     [iTutorialSteps.DocumentationPageInfo]: false,
