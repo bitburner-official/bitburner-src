@@ -186,11 +186,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             NUKE.exe will grant you root access to any machine as long as enough ports are open.
             <br />
             <br />
-            In the diagnostics, you'll see that n00dles' "Required number of open ports for NUKE" is 0. So you're good
-            to run the virus.
+            In the diagnostics, you'll see that n00dles' "Required number of open ports for NUKE" is 0. 
             <br />
             <br />
-            Just enter
+            So you're good to run the virus. Just enter
             <br />
             <br />
           </Typography>
