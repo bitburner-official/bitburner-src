@@ -302,7 +302,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             hacking skill of 1.
             <br />
             <br />
-            But there's something else we need too. To see what, let's run some diagnostics using
+            But there's something else we need as well. To see what, let's run some diagnostics using
             <br />
             <br />
           </Typography>
@@ -322,8 +322,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             NUKE.exe will grant you root access to any machine as long as enough ports are open.
             <br />
             <br />
-            In the diagnostics, you'll also see that n00dles' "Required number of open ports for NUKE" is 0. So you're
-            good to run the virus.
+            In the diagnostics, you'll see that n00dles' "Required number of open ports for NUKE" is 0. So you're good
+            to run the virus.
             <br />
             <br />
             Just enter
@@ -356,12 +356,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             available money.
             <br />
             <br />
-            As your hacking skill increases, hacking will:
-            <ul>
-              <li>take less time</li>
-              <li>steal more money</li>
-              <li>have a higher success chance</li>
-            </ul>
+            As your hacking skill increases, hacking will take less time, steal more money, and have a higher success
+            chance.
+            <br />
+            <br />
             When you hack a server, you deplete its available money and increase its security level. Higher security
             levels make hacking slower and less effective.
             <br />
@@ -383,7 +381,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             which lowers the server's security level.
             <br />
             <br />
-            Lowering security helps grow and weaken too. It speeds them both up, and makes grow more effective.
+            Lowering the security level helps grow and weaken too. It speeds them both up, and makes grow more
+            effective.
           </Typography>
         </>
       ),
@@ -495,7 +494,7 @@ export async function main(ns) {
             <Box component="span" sx={{ color: "info.main" }}>
               RAM
             </Box>{" "}
-            button to see a breakdown of what's contributing to the RAM cost.
+            button to see what's contributing to the RAM cost.
             <br />
             <br />
             Try doing that now.
@@ -536,7 +535,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            You have 8GB of free RAM, enough to run your script.
+            You have 8GB of free RAM, enough to run your script!
             <br />
             <br />
             You can run it using
@@ -552,7 +551,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Your script is now running!
+            Your script is now running.
             <br />
             <br />
             Scripts run in the background until their code completes (if they have an continuous loop, like{" "}
@@ -601,7 +600,7 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            Each active script has logs that detail what it's doing. You can check these using the <code>tail</code>{" "}
+            Each active script has a log that details what it's doing. You can check these using the <code>tail</code>{" "}
             command. To do that for the script you just ran, enter
             <br />
             <br />
@@ -625,11 +624,11 @@ export async function main(ns) {
       content: (
         <>
           <Typography>
-            You can run scripts on any server that you have root access to. To do that, you need to copy your scripts
-            over to it first.
+            You can run scripts on any servers that you have root access to. To do that, you first need to copy your
+            scripts over to them.
             <br />
             <br />
-            Before we do that, let's see what files are stored on our home computer using
+            Before that, let's check what files are stored on our home computer using
             <br />
             <br />
           </Typography>
@@ -725,8 +724,7 @@ export async function main(ns) {
             home computer.
             <br />
             <br />
-            There's a lot of other content out in the world, so make sure you explore and discover! Hacking may be the
-            core mechanic, but it's far from the only one.
+            There's a lot of other content out in the world, so make sure you explore and discover!
             <br />
             <br />
             Lastly, go to{" "}
