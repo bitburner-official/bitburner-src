@@ -63,8 +63,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>Let's start by heading to the Stats page. Click</Typography>
           <ListItem>
-            <EqualizerIcon sx={{ color: "error.main" }} />
-            <Typography sx={{ color: "error.main" }}>Stats</Typography>
+            <EqualizerIcon color={"error"} />
+            <Typography color={"error"}>Stats</Typography>
           </ListItem>
           <Typography>on the main navigation menu (left-hand side of the screen)</Typography>
         </>
@@ -75,8 +75,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <ListItem>
-            <EqualizerIcon sx={{ color: "primary.main" }} />
-            <Typography sx={{ color: "primary.main" }}>Stats</Typography>
+            <EqualizerIcon color={"primary"} />
+            <Typography color={"primary"}>Stats</Typography>
           </ListItem>
           <Typography>
             shows a lot of important information about your progress, such as your skills, money, and bonuses.
@@ -90,8 +90,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>Let's head to your computer's terminal by clicking</Typography>
           <ListItem>
-            <LastPageIcon sx={{ color: "error.main" }} />
-            <Typography sx={{ color: "error.main" }}>Terminal</Typography>
+            <LastPageIcon color={"error"} />
+            <Typography color={"error"}>Terminal</Typography>
           </ListItem>
           <Typography>on the main navigation menu.</Typography>
         </>
@@ -102,8 +102,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <ListItem>
-            <LastPageIcon sx={{ color: "primary.main" }} />
-            <Typography sx={{ color: "primary.main" }}>Terminal</Typography>
+            <LastPageIcon color={"primary"} />
+            <Typography color={"primary"}>Terminal</Typography>
           </ListItem>
           <Typography>
             is used to interface with your home computer as well as all of the other machines around the world.
@@ -401,8 +401,8 @@ export async function main(ns) {
             Let's check out some statistics for our running scripts by clicking{" "}
           </Typography>
           <ListItem>
-            <StorageIcon sx={{ color: "error.main" }} />
-            <Typography sx={{ color: "error.main" }}>Active Scripts</Typography>
+            <StorageIcon color={"error"} />
+            <Typography color={"error"}>Active Scripts</Typography>
           </ListItem>
         </>
       ),
@@ -425,8 +425,8 @@ export async function main(ns) {
             Let's go back to
           </Typography>
           <ListItem>
-            <LastPageIcon sx={{ color: "error.main" }} />
-            <Typography sx={{ color: "error.main" }}>Terminal</Typography>
+            <LastPageIcon color={"error"} />
+            <Typography color={"error"}>Terminal</Typography>
           </ListItem>
         </>
       ),
@@ -454,8 +454,8 @@ export async function main(ns) {
             This covers the basics of hacking. To learn more about writing scripts, select
           </Typography>
           <ListItem>
-            <HelpIcon sx={{ color: "primary.main" }} />
-            <Typography sx={{ color: "primary.main" }}>Documentation</Typography>
+            <HelpIcon color={"primary"} />
+            <Typography color={"primary"}>Documentation</Typography>
           </ListItem>
           <Typography>
             in the main navigation menu to look at the documentation.
@@ -475,8 +475,8 @@ export async function main(ns) {
             upgrading Hacknet Nodes. Let's go to
           </Typography>
           <ListItem>
-            <AccountTreeIcon sx={{ color: "error.main" }} />
-            <Typography sx={{ color: "error.main" }}>Hacknet</Typography>
+            <AccountTreeIcon color={"error"} />
+            <Typography color={"error"}>Hacknet</Typography>
           </ListItem>
           <Typography>through the main navigation menu now.</Typography>
         </>
@@ -502,8 +502,8 @@ export async function main(ns) {
             Let's go to
           </Typography>
           <ListItem>
-            <LocationCityIcon sx={{ color: "error.main" }} />
-            <Typography sx={{ color: "error.main" }}>City</Typography>
+            <LocationCityIcon color={"error"} />
+            <Typography color={"error"}>City</Typography>
           </ListItem>
         </>
       ),
@@ -520,8 +520,8 @@ export async function main(ns) {
             Lastly, click on
           </Typography>
           <ListItem>
-            <HelpIcon sx={{ color: "error.main" }} />
-            <Typography sx={{ color: "error.main" }}>Documentation</Typography>
+            <HelpIcon color={"error"} />
+            <Typography color={"error"}>Documentation</Typography>
           </ListItem>
         </>
       ),
