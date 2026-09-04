@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { Paper, Typography, Button } from "@mui/material";
 import { ITutorialEvents } from "./ITutorialEvents";
 import { CopyableText } from "../React/CopyableText";
 
@@ -13,8 +11,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+import { styled } from "@mui/material/styles";
 
 import {
   iTutorialPrevStep,
@@ -24,7 +21,6 @@ import {
   iTutorialEnd,
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
-import { Settings } from "../../Settings/Settings";
 import { DocumentationLink } from "../React/DocumentationLink";
 import { defaultNsApiPage } from "../React/Documentation";
 
@@ -33,18 +29,10 @@ interface IContent {
   canNext: boolean;
 }
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  textfield: {
-    borderBottom: "1px solid " + theme.palette.primary.main,
-  },
-  code: {
-    whiteSpace: "pre",
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
-
 export function InteractiveTutorialRoot(): React.ReactElement {
-  const { classes } = useStyles();
+  const TerminalText = styled(Typography)(({ theme }) => ({
+    borderBottom: `1px solid ${theme.palette.primary.main}`,
+  }));
   const rerender = useRerender();
 
   const tutorialScriptName = `n00dles.js`;
@@ -75,10 +63,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>Let's start by heading to the Stats page. Click</Typography>
           <ListItem>
-            <EqualizerIcon color={"error"} />
-            <Typography color={"error"}>Stats</Typography>
+            <EqualizerIcon sx={{ color: "error.main" }} />
+            <Typography sx={{ color: "error.main" }}>Stats</Typography>
           </ListItem>
-
           <Typography>on the main navigation menu (left-hand side of the screen)</Typography>
         </>
       ),
@@ -88,8 +75,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <ListItem>
-            <EqualizerIcon color={"primary"} />
-            <Typography color={"primary"}>Stats</Typography>
+            <EqualizerIcon sx={{ color: "primary.main" }} />
+            <Typography sx={{ color: "primary.main" }}>Stats</Typography>
           </ListItem>
           <Typography>
             shows a lot of important information about your progress, such as your skills, money, and bonuses.
@@ -103,8 +90,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>Let's head to your computer's terminal by clicking</Typography>
           <ListItem>
-            <LastPageIcon color={"error"} />
-            <Typography color={"error"}>Terminal</Typography>
+            <LastPageIcon sx={{ color: "error.main" }} />
+            <Typography sx={{ color: "error.main" }}>Terminal</Typography>
           </ListItem>
           <Typography>on the main navigation menu.</Typography>
         </>
@@ -115,8 +102,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <ListItem>
-            <LastPageIcon color={"primary"} />
-            <Typography color={"primary"}>Terminal</Typography>
+            <LastPageIcon sx={{ color: "primary.main" }} />
+            <Typography sx={{ color: "primary.main" }}>Terminal</Typography>
           </ListItem>
           <Typography>
             is used to interface with your home computer as well as all of the other machines around the world.
@@ -129,7 +116,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>Let's try it out. Start by entering</Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
+          <TerminalText>{"[home /]> help"}</TerminalText>
           <Typography>(Don't forget to press Enter after typing the command)</Typography>
         </>
       ),
@@ -138,7 +125,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalLs as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
+          <TerminalText>{"[home /]> help"}</TerminalText>
           <Typography>
             displays a list of all available Terminal commands, how to use them, and a description of what they do.{" "}
             <br />
@@ -146,7 +133,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Let's try another command. Enter
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
+          <TerminalText>{"[home /]> ls"}</TerminalText>
           <Typography>
             <br />( "ls" is short for "list" )
           </Typography>
@@ -157,7 +144,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalScan as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
+          <TerminalText>{"[home /]> ls"}</TerminalText>
           <Typography>
             {" "}
             is a basic command that lists the files on the computer. Right now, it shows that you have a program called{" "}
@@ -166,7 +153,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
             now by first entering
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
+          <TerminalText>{"[home /]> scan"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -174,7 +161,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalScanAnalyze1 as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
+          <TerminalText>{"[home /]> scan"}</TerminalText>
           <Typography>
             shows all available network connections. In other words, it displays a list of all servers that can be
             connected to from your current machine. A server is identified by its hostname. <br />
@@ -182,7 +169,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             That's great and all, but there's so many servers. Which one should you go to?{" "}
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
+          <TerminalText>{"[home /]> scan-analyze"}</TerminalText>
           <Typography>gives some more detailed information about servers on the network. Try it now!</Typography>
         </>
       ),
@@ -191,7 +178,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalScanAnalyze2 as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
+          <TerminalText>{"[home /]> scan-analyze"}</TerminalText>
           <Typography>
             shows more detailed information about each server that you can connect to (servers that are a distance of
             one node away). <br />
@@ -199,7 +186,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             following command:{" "}
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
+          <TerminalText>{"[home /]> scan-analyze 2"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -212,17 +199,17 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             navigate to those servers through the network. You can only connect to a server that is one node away. To
             connect to a machine, use
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect hostname"}</Typography>
+          <TerminalText>{"[home /]> connect hostname"}</TerminalText>
 
           <Typography>From the results of </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
+          <TerminalText>{"[home /]> scan-analyze 2"}</TerminalText>
 
           <Typography>
             {" "}
             we can see that the n00dles server is only one node away. Let's connect to it now using:
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect n00dles"}</Typography>
+          <TerminalText>{"[home /]> connect n00dles"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -239,7 +226,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             Before you try to hack a server, you should run diagnostics using{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
+          <TerminalText>{"[n00dles /]> analyze"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -248,7 +235,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>When </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
+          <TerminalText>{"[n00dles /]> analyze"}</TerminalText>
 
           <Typography>
             finishes running it will show useful information about hacking the server. <br />
@@ -257,14 +244,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             on your home computer is a virus that will grant you root access to a machine if there are enough open
             ports.
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
+          <TerminalText>{"[n00dles /]> analyze"}</TerminalText>
 
           <Typography>
             {" "}
             shows that there do not need to be any open ports on this machine for the NUKE virus to work, so go ahead
             and run the virus using{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> run NUKE.exe"}</Typography>
+          <TerminalText>{"[n00dles /]> run NUKE.exe"}</TerminalText>
 
           <Typography></Typography>
         </>
@@ -275,7 +262,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>You now have root access! You can hack the server using </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> hack"}</Typography>
+          <TerminalText>{"[n00dles /]> hack"}</TerminalText>
 
           <Typography> Try doing that now.</Typography>
         </>
@@ -296,9 +283,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           The amount of money on a server is not limitless. So, if you constantly hack a server and deplete its money,
           then you will encounter diminishing returns in your hacking. You will need to use{" "}
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> grow"}</Typography>
+          <TerminalText>{"[n00dles /]> grow"}</TerminalText>
           which tricks the company into adding money to their server and{" "}
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> weaken"}</Typography>
+          <TerminalText>{"[n00dles /]> weaken"}</TerminalText>
           which increases the speed of hack and grow.
         </Typography>
       ),
@@ -308,7 +295,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>From any server you can get back home using</Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> home"}</Typography>
+          <TerminalText>{"[n00dles /]> home"}</TerminalText>
 
           <Typography>Let's head home before creating our first script!</Typography>
         </>
@@ -325,12 +312,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             To create a new script or edit an existing one, you can use{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
+          <TerminalText>{"[home /]> nano"}</TerminalText>
 
           <Typography>
             Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
+          <TerminalText>{`[home /]> nano ${tutorialScriptName}`}</TerminalText>
         </>
       ),
       canNext: false,
@@ -343,7 +330,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             into the text editor:
           </Typography>
           <br />
-          <Typography component="div" classes={{ root: classes.code }}>
+          <Typography component="div" sx={{ whiteSpace: "pre", backgroundColor: "background.paper" }}>
             {
               <CopyableText
                 value={`/** @param {NS} ns */
@@ -385,7 +372,7 @@ export async function main(ns) {
             <br />
             To check how much RAM is available on this machine, enter
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home /]> free"}</Typography>
+          <TerminalText>{"[home /]> free"}</TerminalText>
         </>
       ),
       canNext: false,
@@ -396,7 +383,7 @@ export async function main(ns) {
           <Typography>
             We have 8GB of free RAM on this machine, which is enough to run our script. Let's run our script using
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> run ${tutorialScriptName}`}</Typography>
+          <TerminalText>{`[home /]> run ${tutorialScriptName}`}</TerminalText>
         </>
       ),
       canNext: false,
@@ -414,8 +401,8 @@ export async function main(ns) {
             Let's check out some statistics for our running scripts by clicking{" "}
           </Typography>
           <ListItem>
-            <StorageIcon color={"error"} />
-            <Typography color={"error"}>Active Scripts</Typography>
+            <StorageIcon sx={{ color: "error.main" }} />
+            <Typography sx={{ color: "error.main" }}>Active Scripts</Typography>
           </ListItem>
         </>
       ),
@@ -438,8 +425,8 @@ export async function main(ns) {
             Let's go back to
           </Typography>
           <ListItem>
-            <LastPageIcon color={"error"} />
-            <Typography color={"error"}>Terminal</Typography>
+            <LastPageIcon sx={{ color: "error.main" }} />
+            <Typography sx={{ color: "error.main" }}>Terminal</Typography>
           </ListItem>
         </>
       ),
@@ -452,7 +439,7 @@ export async function main(ns) {
             One last thing about scripts, each active script contains logs that detail what it's doing. We can check
             these logs using the tail command. Do that now for the script we just ran by typing{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home /]> tail ${tutorialScriptName}`}</Typography>
+          <TerminalText>{`[home /]> tail ${tutorialScriptName}`}</TerminalText>
         </>
       ),
       canNext: false,
@@ -467,8 +454,8 @@ export async function main(ns) {
             This covers the basics of hacking. To learn more about writing scripts, select
           </Typography>
           <ListItem>
-            <HelpIcon color={"primary"} />
-            <Typography color={"primary"}>Documentation</Typography>
+            <HelpIcon sx={{ color: "primary.main" }} />
+            <Typography sx={{ color: "primary.main" }}>Documentation</Typography>
           </ListItem>
           <Typography>
             in the main navigation menu to look at the documentation.
@@ -488,8 +475,8 @@ export async function main(ns) {
             upgrading Hacknet Nodes. Let's go to
           </Typography>
           <ListItem>
-            <AccountTreeIcon color={"error"} />
-            <Typography color={"error"}>Hacknet</Typography>
+            <AccountTreeIcon sx={{ color: "error.main" }} />
+            <Typography sx={{ color: "error.main" }}>Hacknet</Typography>
           </ListItem>
           <Typography>through the main navigation menu now.</Typography>
         </>
@@ -515,8 +502,8 @@ export async function main(ns) {
             Let's go to
           </Typography>
           <ListItem>
-            <LocationCityIcon color={"error"} />
-            <Typography color={"error"}>City</Typography>
+            <LocationCityIcon sx={{ color: "error.main" }} />
+            <Typography sx={{ color: "error.main" }}>City</Typography>
           </ListItem>
         </>
       ),
@@ -533,8 +520,8 @@ export async function main(ns) {
             Lastly, click on
           </Typography>
           <ListItem>
-            <HelpIcon color={"error"} />
-            <Typography color={"error"}>Documentation</Typography>
+            <HelpIcon sx={{ color: "error.main" }} />
+            <Typography sx={{ color: "error.main" }}>Documentation</Typography>
           </ListItem>
         </>
       ),
@@ -572,7 +559,7 @@ export async function main(ns) {
             you have a question and cannot find the answer here, please ask us on Discord.
           </Typography>
           <br />
-          <Typography color={Settings.theme.warning}>
+          <Typography sx={{ color: "warning.main" }}>
             The documentation at readthedocs is outdated and unmaintained. Do not use them!
           </Typography>
           <br />
