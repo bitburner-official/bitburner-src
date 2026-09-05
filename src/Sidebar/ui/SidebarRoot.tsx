@@ -209,7 +209,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         iTutorialNextStep();
       }
     },
-    [flash, shouldIncrementTutorial],
+    [flash, incrementTutorialStep],
   );
 
   /**
