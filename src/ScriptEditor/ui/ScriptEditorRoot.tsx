@@ -17,6 +17,7 @@ import { checkInfiniteLoop } from "../../Script/RamCalculations";
 
 import { Settings } from "../../Settings/Settings";
 import { iTutorialNextStep, ITutorial, iTutorialSteps } from "../../InteractiveTutorial";
+import { tutorialScriptName } from "../../ui/InteractiveTutorial/InteractiveTutorialRoot";
 import { debounce } from "lodash";
 import { GetServer } from "../../Server/AllServers";
 
@@ -194,9 +195,9 @@ function Root(props: IProps): React.ReactElement {
     const preSave = options.beautifyOnSave ? beautify : () => Promise.resolve();
 
     // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.ScriptEditorEdit) {
       //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.js") {
+      if (currentScript.path !== tutorialScriptName) {
         dialogBoxCreate("Don't change the script name for now.");
         return;
       }
@@ -210,8 +211,6 @@ function Root(props: IProps): React.ReactElement {
       //Save the script
       await preSave();
       saveScript(currentScript);
-      Router.toPage(Page.Terminal);
-
       iTutorialNextStep();
 
       return;

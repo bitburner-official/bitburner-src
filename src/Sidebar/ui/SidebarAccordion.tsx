@@ -69,7 +69,7 @@ export function SidebarAccordion({
           <ListItem classes={li_classes} button onClick={() => setOpen((open) => !open)}>
             <ListItemIcon>
               <Tooltip title={!sidebarOpen ? key_ : ""}>
-                <Icon color={"primary"} />
+                <Icon color="primary" />
               </Tooltip>
             </ListItemIcon>
             <ListItemText primary={<Typography>{key_}</Typography>} />

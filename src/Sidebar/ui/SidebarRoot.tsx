@@ -127,25 +127,36 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   useCycleRerender();
 
   let flash: Page | null = null;
+  let incrementTutorialStep = false;
   switch (ITutorial.currStep) {
-    case iTutorialSteps.CharacterGoToTerminalPage:
     case iTutorialSteps.ActiveScriptsPage:
       flash = Page.Terminal;
-      break;
-    case iTutorialSteps.GoToCharacterPage:
-      flash = Page.Stats;
+      incrementTutorialStep = true;
       break;
     case iTutorialSteps.TerminalGoToActiveScriptsPage:
       flash = Page.ActiveScripts;
+      incrementTutorialStep = true;
       break;
-    case iTutorialSteps.GoToHacknetNodesPage:
-      flash = Page.Hacknet;
+    case iTutorialSteps.ScriptEditorEdit:
+      if (props.page !== Page.ScriptEditor) {
+        flash = Page.ScriptEditor;
+      }
       break;
-    case iTutorialSteps.HacknetNodesGoToWorldPage:
+    case iTutorialSteps.ScriptEditorGoToTerminal:
+      flash = Page.Terminal;
+      incrementTutorialStep = true;
+      break;
+    case iTutorialSteps.GoToCharacterPage:
+      flash = Page.Stats;
+      incrementTutorialStep = true;
+      break;
+    case iTutorialSteps.GoToWorldPage:
       flash = Page.City;
+      incrementTutorialStep = true;
       break;
     case iTutorialSteps.WorldDescription:
       flash = Page.Documentation;
+      incrementTutorialStep = true;
       break;
   }
 
@@ -194,11 +205,11 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       } else {
         throw new Error("Can't handle click on Page " + page);
       }
-      if (flash === page) {
+      if (flash === page && incrementTutorialStep) {
         iTutorialNextStep();
       }
     },
-    [flash],
+    [flash, incrementTutorialStep],
   );
 
   /**

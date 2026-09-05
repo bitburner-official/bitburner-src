@@ -5,12 +5,8 @@ import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 // Ordered array of keys to Interactive Tutorial Steps
 enum iTutorialSteps {
   Start,
-  GoToCharacterPage, // Click on 'Stats' page
-  CharacterPage, // Introduction to 'Stats' page
-  CharacterGoToTerminalPage, // Go back to Terminal
-  TerminalIntro, // Introduction to Terminal
-  TerminalHelp, // Using 'help' Terminal command
-  TerminalLs, // Using 'ls' Terminal command
+
+  // Hacking
   TerminalScan, // Using 'scan' Terminal command
   TerminalScanAnalyze1, // Using 'scan-analyze' Terminal command
   TerminalScanAnalyze2, // Using 'scan-analyze 3' Terminal command
@@ -21,16 +17,23 @@ enum iTutorialSteps {
   TerminalHackingMechanics, // Explanation of hacking mechanics
   TerminalGoHome, // Go home before creating a script.
   TerminalCreateScript, // Create a script using 'nano'
-  TerminalEditScript, // Script Editor page - Edit script and then save & close
+  ScriptEditorEdit, // Script Editor page - Edit script
+  ScriptEditorRam, // Script Editor page - Check RAM usage
+  ScriptEditorGoToTerminal,
   TerminalFree, // Using 'Free' Terminal command
   TerminalRunScript, // Running script using 'run' Terminal command
   TerminalGoToActiveScriptsPage,
   ActiveScriptsPage,
   ActiveScriptsToTerminal,
   TerminalTailScript,
-  GoToHacknetNodesPage,
-  HacknetNodesIntroduction,
-  HacknetNodesGoToWorldPage,
+  TerminalLs, // Using 'ls' Terminal command
+  TerminalScp, // using the 'scp' Terminal command
+  TerminalHelp, // Using 'help' Terminal command
+
+  // Finishing off
+  GoToCharacterPage, // Click on 'Stats' page
+  CharacterPage, // Introduction to 'Stats' page
+  GoToWorldPage,
   WorldDescription,
   DocumentationPageInfo,
   End,
@@ -43,12 +46,7 @@ const ITutorial = {
   // Keeps track of whether each step has been done
   stepIsDone: {
     [iTutorialSteps.Start]: false,
-    [iTutorialSteps.GoToCharacterPage]: false,
-    [iTutorialSteps.CharacterPage]: false,
-    [iTutorialSteps.CharacterGoToTerminalPage]: false,
-    [iTutorialSteps.TerminalIntro]: false,
-    [iTutorialSteps.TerminalHelp]: false,
-    [iTutorialSteps.TerminalLs]: false,
+
     [iTutorialSteps.TerminalScan]: false,
     [iTutorialSteps.TerminalScanAnalyze1]: false,
     [iTutorialSteps.TerminalScanAnalyze2]: false,
@@ -59,16 +57,21 @@ const ITutorial = {
     [iTutorialSteps.TerminalHackingMechanics]: false,
     [iTutorialSteps.TerminalGoHome]: false,
     [iTutorialSteps.TerminalCreateScript]: false,
-    [iTutorialSteps.TerminalEditScript]: false,
+    [iTutorialSteps.ScriptEditorEdit]: false,
+    [iTutorialSteps.ScriptEditorRam]: false,
+    [iTutorialSteps.ScriptEditorGoToTerminal]: false,
     [iTutorialSteps.TerminalFree]: false,
     [iTutorialSteps.TerminalRunScript]: false,
     [iTutorialSteps.TerminalGoToActiveScriptsPage]: false,
     [iTutorialSteps.ActiveScriptsPage]: false,
     [iTutorialSteps.ActiveScriptsToTerminal]: false,
     [iTutorialSteps.TerminalTailScript]: false,
-    [iTutorialSteps.GoToHacknetNodesPage]: false,
-    [iTutorialSteps.HacknetNodesIntroduction]: false,
-    [iTutorialSteps.HacknetNodesGoToWorldPage]: false,
+    [iTutorialSteps.TerminalLs]: false,
+    [iTutorialSteps.TerminalScp]: false,
+    [iTutorialSteps.TerminalHelp]: false,
+    [iTutorialSteps.GoToCharacterPage]: false,
+    [iTutorialSteps.CharacterPage]: false,
+    [iTutorialSteps.GoToWorldPage]: false,
     [iTutorialSteps.WorldDescription]: false,
     [iTutorialSteps.DocumentationPageInfo]: false,
     [iTutorialSteps.End]: false,
