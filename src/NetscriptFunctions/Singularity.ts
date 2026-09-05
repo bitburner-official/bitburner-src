@@ -5,7 +5,14 @@ import { CityName, CompletedProgramName, FactionWorkType, LocationName } from "@
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { getAugCost, installAugmentations, soaAugmentationNames } from "../Augmentation/AugmentationHelpers";
+import {
+  getAugCost,
+  getAugmentMults,
+  getAugName,
+  installAugmentations,
+  labAugmentationNames,
+  soaAugmentationNames,
+} from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
@@ -80,12 +87,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const purchased = !!_purchased;
       const res: string[] = [];
-      for (let i = 0; i < Player.augmentations.length; ++i) {
-        res.push(Player.augmentations[i].name);
+      for (const aug of Player.augmentations) {
+        res.push(getAugName(aug));
       }
       if (purchased) {
-        for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
-          res.push(Player.queuedAugmentations[i].name);
+        for (const queuedAug of Player.queuedAugmentations) {
+          res.push(getAugName(queuedAug, true));
         }
       }
       return res;
@@ -143,7 +150,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const aug = Augmentations[augName];
       // SoA augmentations don't use the bitnode AugmentationMoneyCost multiplier;
       // their cost only scales with the number of SoA augs already owned.
-      if (soaAugmentationNames.includes(augName)) {
+      if (soaAugmentationNames.includes(augName) || labAugmentationNames.includes(augName)) {
         return aug.baseCost;
       }
       return aug.baseCost * currentNodeMults.AugmentationMoneyCost;
@@ -164,7 +171,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return Object.assign({}, aug.mults);
+      return Object.assign({}, getAugmentMults(aug));
     },
     purchaseAugmentation: (ctx, _facName, _augName) => {
       helpers.checkSingularityAccess(ctx);

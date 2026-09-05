@@ -6,14 +6,13 @@ import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatPercent } from "../../ui/formatNumber";
-import { Augmentations } from "../Augmentations";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
+import { getAugmentMults } from "../AugmentationHelpers";
 
 function calculateAugmentedStats(): Multipliers {
   let augP: Multipliers = defaultMultipliers();
   for (const aug of Player.queuedAugmentations) {
-    const augObj = Augmentations[aug.name];
-    augP = mergeMultipliers(augP, augObj.mults);
+    augP = mergeMultipliers(augP, getAugmentMults(aug, true));
   }
   return augP;
 }
