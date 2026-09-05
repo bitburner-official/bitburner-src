@@ -1,6 +1,10 @@
 name: Feature request
 description: Suggest ideas for in-game features or other changes to the project.
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Feature Request
   - type: checkboxes
     attributes:
       label: Preflight Checklist
