@@ -265,8 +265,8 @@ export function processStockPrices(numCycles = 1): void {
   for (const name of Object.keys(StockMarket)) {
     const stock = StockMarket[name];
     if (!(stock instanceof Stock)) continue;
-    const volatility = stock.mv * getDarknetVolatilityMult(stock.symbol);
-    let av = (v * volatility) / 100;
+    const maxVolatility = stock.mv * getDarknetVolatilityMult(stock.symbol);
+    let av = (v * maxVolatility) / 100;
     if (isNaN(av)) {
       av = 0.02;
     }
@@ -304,7 +304,9 @@ export function processStockPrices(numCycles = 1): void {
       processOrders(stock, OrderType.StopSell, PositionType.Long, processOrderRefs);
     }
 
-    let otlkMagChange = stock.otlkMag * av;
+    // Remove darknet influence from stock volatility, so darknet only affects current price, and not the forecast
+    const normalizedVolatility = av / getDarknetVolatilityMult(stock.symbol);
+    let otlkMagChange = stock.otlkMag * normalizedVolatility;
     if (stock.otlkMag < 5) {
       if (stock.otlkMag <= 1) {
         otlkMagChange = 1;
