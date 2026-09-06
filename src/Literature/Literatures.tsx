@@ -1,4 +1,4 @@
-import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
+import { CityName, FactionName, CompanyName, LiteratureName, CompletedProgramName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
@@ -741,9 +741,9 @@ export const Literatures: Record<LiteratureName, Literature> = {
         - or bring code along from home - in order to progress into the deeper layers of the 'net.
         <br />
         <br />
-        You now have permanent access to the Darknet Navigator, allowing exploration of the 'net manually via the UI.
-        But beware: the labyrinths further into the deep are said to only be accessible via script! Do you have the
-        charisma and the scripting skills needed to conquer the dark?
+        You now have permanent access to ${CompletedProgramName.darkscape}, allowing exploration of the 'net manually
+        via the UI. But beware: the labyrinths further into the deep are said to only be accessible via script! Do you
+        have the charisma and the scripting skills needed to conquer the dark?
         <br />
         <br />
         For more details on the darknet and its API, see the Darknet page under Documentation {">"} Advanced.

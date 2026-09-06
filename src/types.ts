@@ -33,7 +33,7 @@ export interface IReturnStatus {
 
 /** Defines the minimum and maximum values for a range.
  * It is up to the consumer if these values are inclusive or exclusive.
- * It is up to the implementor to ensure max > min. */
+ * It is up to the implementer to ensure max > min. */
 export interface IMinMaxRange {
   /** Value by which the bounds are to be divided for the final range */
   divisor?: number;

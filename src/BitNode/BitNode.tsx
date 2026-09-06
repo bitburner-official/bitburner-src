@@ -341,10 +341,10 @@ export function initBitNodes() {
           <li>Level 3: Grants a highly-upgraded Hacknet Server when entering a new BitNode</li>
         </ul>
         (Note that the Level 3 effect of this Source-File only applies when entering a new BitNode, NOT when installing
-        augmentations)
+        augmentations.)
         <br />
         <br />
-        This Source-File also increases hacknet production and reduces hacknet costs by:
+        This Source-File also increases Hacknet production and reduces Hacknet costs by:
         <ul>
           <li>Level 1: 12%</li>
           <li>Level 2: 18%</li>
@@ -951,6 +951,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ScriptHackMoney: dec,
         CodingContractMoney: dec,
         DarknetMoneyMultiplier: dec,
+        DarknetLabyrinthRewardsTheRedPill: 0,
 
         ClassGymExpGain: dec,
         CompanyWorkExpGain: dec,

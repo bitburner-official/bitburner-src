@@ -4745,9 +4745,9 @@ export interface Darknet {
    * RAM cost: 4 GB
    *
    * @param host - Hostname/IP of the connected server to migrate.
-   * @returns A promise that resolves to a {@link DarknetResult} object.
+   * @returns A promise that resolves to a {@link DarknetResult} object with a `progress` field indicating the total migration progress in the range [0, 1].
    */
-  induceServerMigration(host: string): Promise<DarknetResult>;
+  induceServerMigration(host: string): Promise<DarknetResult & { progress: number }>;
 
   /**
    * Executes STORM_SEED.exe, if it is present on the server the script is running on.
@@ -6601,7 +6601,7 @@ interface DarknetFormulas {
   /**
    * Gets the time it will take to scrape logs from a server.
    * @param serverDetails - The server to check heartbleed log scraping time on.
-   * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
+   * @param threads - The number of threads to use for log scraping. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
@@ -6948,7 +6948,11 @@ interface UserInterface {
    *
    * If the function is called with no arguments, it will close the current script’s logs.
    *
-   * Otherwise, the pid argument can be used to close the logs from another script.
+   * Otherwise, the pid argument can be used to close the logs from another script. Tail windows can remain open
+   * after a script finishes, and can still be closed using that script's PID. If the script is rerun from its tail
+   * window, use the PID of the new process.
+   *
+   * If no tail window exists for the given PID, this function has no effect.
    *
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */

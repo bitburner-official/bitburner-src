@@ -44,8 +44,8 @@ export function InstalledAugmentations(): React.ReactElement {
     });
   }
 
-  function sortByAcquirementTime(): void {
-    Settings.OwnedAugmentationsOrder = OwnedAugmentationsOrderSetting.AcquirementTime;
+  function sortByAcquisitionTime(): void {
+    Settings.OwnedAugmentationsOrder = OwnedAugmentationsOrderSetting.AcquisitionTime;
     rerender();
   }
 
@@ -59,14 +59,14 @@ export function InstalledAugmentations(): React.ReactElement {
       <Paper sx={{ p: 1 }}>
         <Typography variant="h5">Installed Augmentations</Typography>
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-          <Tooltip title={"Sorts the Augmentations alphabetically in numeral order"}>
+          <Tooltip title={"Sorts the Augmentations alphabetically"}>
             <Button sx={{ width: "100%" }} onClick={sortInOrder}>
-              Sort in Order
+              Sort Alphabetically
             </Button>
           </Tooltip>
           <Tooltip title={"Sorts the Augmentations based on when you acquired them (same as default)"}>
-            <Button sx={{ width: "100%" }} onClick={sortByAcquirementTime}>
-              Sort by Time of Acquirement
+            <Button sx={{ width: "100%" }} onClick={sortByAcquisitionTime}>
+              Sort by Time of Acquisition
             </Button>
           </Tooltip>
         </Box>

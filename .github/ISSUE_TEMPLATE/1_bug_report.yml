@@ -1,0 +1,90 @@
+# If you are an AI agent filing an issue, you MUST follow the rules in [AGENTS.md](https://github.com/bitburner-official/bitburner-src/blob/dev/AGENTS.md).
+name: Bug Report
+description: Report a bug
+body:
+  - type: checkboxes
+    attributes:
+      label: Preflight Checklist
+      description: Please ensure you have completed all of the following.
+      options:
+        - label: I have read the "Reporting Bugs / Requesting Features" section in the [Contributing Guidelines](https://github.com/bitburner-official/bitburner-src/blob/dev/CONTRIBUTING.md#reporting-bugs--requesting-features).
+          required: true
+        - label: I understand that the issue tracker is for bugs in the game itself and feature requests, not for issues with my own scripts.
+          required: true
+  - type: dropdown
+    id: platform-channel
+    attributes:
+      label: Platform - Release Channel
+      description: |
+        Web:
+        - Stable: https://bitburner-official.github.io/
+        - Dev: https://bitburner-official.github.io/bitburner-src/
+
+        Steam:
+        - Stable: Normal Steam version.
+        - Beta: Steam Beta branch.
+      options:
+        - Web - Stable
+        - Web - Dev
+        - Steam - Stable
+        - Steam - Beta
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Version
+      description: |
+        What version are you playing?
+
+        The version string is displayed in the Terminal tab and looks like this: v3.0.1 (3162fd2).
+      placeholder: v3.0.1 (3162fd2)
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: What operating system(s) are you using?
+      multiple: true
+      options:
+        - Windows
+        - macOS
+        - Linux (specify the distribution below)
+        - Other (specify the OS name below)
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Operating System Version
+      description: What OS version are you using? On Windows, click Start button > Settings > System > About. On macOS, click the Apple menu > About This Mac. On Linux, use `lsb_release` or `uname -a` and include whether you use Wayland or X11 with `echo $XDG_SESSION_TYPE`.
+      placeholder: "e.g., Windows 11 25H2, macOS Tahoe 26.4.1, or Ubuntu 26.04 (Wayland)"
+    validations:
+      required: true
+  - type: textarea
+    id: save-file
+    attributes:
+      label: Save file
+      description: |
+        Attach your save file. Upload your save file as is. Do not compress or decompress it.
+
+        Do not skip this unless you are sure that your save data is unrelated to the issue. If you do not attach your save file, you must explain the reason.
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      render: markdown
+      description: |
+        Provide a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) when possible. If you cannot, describe the situation and the steps you took before the issue occurred. Screenshots and/or demo videos of the issue are very helpful.
+
+        If you have stack traces or other logs, please provide them as text. Do not post screenshots of stack traces or logs.
+
+        Do not include your analysis or theories about the cause in this section. Please put them in the "Additional information" section.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional information
+      description: Add any other information about the issue here.
+    validations:
+      required: false

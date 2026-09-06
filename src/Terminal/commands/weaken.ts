@@ -36,15 +36,14 @@ export function weaken(
       server.weaken(weakenAmt);
       const newSec = server.hackDifficulty;
 
-      Player.gainHackingExp(expGain);
-      Terminal.print(
-        `Security decreased on '${server.hostname}' by ${formatSecurity(weakenAmt)} from ${formatSecurity(
-          oldSec,
-        )} to ${formatSecurity(newSec)} (min: ${formatSecurity(server.minDifficulty)})` +
-          ` and Gained ${formatExp(expGain)} hacking exp.`,
-        stdIO,
-      );
-    },
-    stdIO,
-  );
+    Player.gainHackingExp(expGain);
+    Terminal.print(
+      `Security decreased on '${server.hostname}' by ${formatSecurity(weakenAmt)} from ${formatSecurity(
+        oldSec,
+      )} to ${formatSecurity(newSec)} (min: ${formatSecurity(server.minDifficulty)}). Gained ${formatExp(
+        expGain,
+      )} hacking exp`,
+      stdIO
+    );
+  }, stdIO);
 }

@@ -67,7 +67,7 @@ export function wget(
       // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
       Terminal.fatal(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`, stdIO);
       if (cancelled) {
-        // We need to propogate a Cancellation error to abort any chained
+        // We need to propagate a Cancellation error to abort any chained
         // commands higher up.
         throw new Cancellation("wget");
       }

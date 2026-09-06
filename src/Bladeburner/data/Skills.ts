@@ -74,9 +74,9 @@ export const Skills: Record<BladeburnerSkillName, Skill> = {
     name: BladeburnerSkillName.Datamancer,
     desc:
       "Each level of this skill increases your effectiveness in " +
-      "synthoid population analysis and investigation by 5%. " +
+      "Synthoid population analysis and investigation by 5%. " +
       "This affects all actions that can potentially increase " +
-      "the accuracy of your synthoid population/community estimates.",
+      "the accuracy of your Synthoid population/community estimates.",
     baseCost: 3,
     costInc: 1,
     mults: { [BladeburnerMultName.SuccessChanceEstimate]: 5 },

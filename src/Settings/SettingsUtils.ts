@@ -62,12 +62,24 @@ export function isValidConnectionHostname(hostname: string): Result {
   return { success: true };
 }
 
-export function isValidConnectionPort(port: number): Result {
-  // 0 is a special value for port. It's an invalid port, but the player can use it to disable RFA.
+/**
+ * Checks whether the input is a valid RFA port configuration value.
+ *
+ * Port 0 is normally invalid, but it is used to disable RFA, so this function treats 0 as valid.
+ */
+export function isValidRFAConnectionPortSetting(port: number): Result {
+  // 0 is not a valid port, but it is a valid configuration value that disables RFA.
   if (!Number.isFinite(port) || port < 0 || port > 65535) {
     return { success: false, message: "Invalid port" };
   }
   return { success: true };
+}
+
+/**
+ * Checks whether the input is a valid RFA port before starting a new connection.
+ */
+export function isValidConnectionPort(port: number): boolean {
+  return isValidRFAConnectionPortSetting(port).success && port !== 0;
 }
 
 export function loadSettings(saveString: string) {
@@ -124,7 +136,7 @@ export function loadSettings(saveString: string) {
   if (!isValidConnectionHostname(Settings.RemoteFileApiAddress).success) {
     Settings.RemoteFileApiAddress = "localhost";
   }
-  if (!isValidConnectionPort(Settings.RemoteFileApiPort).success) {
+  if (!isValidRFAConnectionPortSetting(Settings.RemoteFileApiPort).success) {
     Settings.RemoteFileApiPort = 0;
   }
 

@@ -17,5 +17,14 @@ export const breakingChanges302: VersionBreakingChange = {
         "Use ns.singularity.hasExportGameBonus() instead.",
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "getServerDetails",
+        },
+      ],
+      info: "ns.dnet.getServerDetails() now returns the visible depth of the darknet lab server, instead of -1.",
+      showWarning: true,
+    },
   ],
 };

@@ -579,8 +579,8 @@ export class Bladeburner implements OperationTeam {
       ++destCity.comms;
     }
     const count = Math.round(sourceCity.pop * percentage);
-    sourceCity.pop -= count;
-    destCity.pop += count;
+    sourceCity.changePopulationByCount(-count);
+    destCity.changePopulationByCount(count);
     if (destCity.pop < BladeburnerConstants.PopGrowthCeiling) {
       destCity.pop += BladeburnerConstants.BasePopGrowth;
     }
@@ -615,12 +615,12 @@ export class Bladeburner implements OperationTeam {
       ++sourceCity.comms;
       const percentage = getRandomIntInclusive(10, 20) / 100;
       const count = Math.round(sourceCity.pop * percentage);
-      sourceCity.pop += count;
+      sourceCity.changePopulationByCount(count);
       if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
         sourceCity.pop += BladeburnerConstants.BasePopGrowth;
       }
       if (this.logging.events) {
-        this.log("Intelligence indicates that a new Synthoid community was formed in a city");
+        this.log("Intelligence indicates that a new Synthoid community was formed in a city.");
       }
     } else if (chance <= 0.1) {
       // Synthoid Community Migration, 5%
@@ -629,12 +629,12 @@ export class Bladeburner implements OperationTeam {
         ++sourceCity.comms;
         const percentage = getRandomIntInclusive(10, 20) / 100;
         const count = Math.round(sourceCity.pop * percentage);
-        sourceCity.pop += count;
+        sourceCity.changePopulationByCount(count);
         if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
           sourceCity.pop += BladeburnerConstants.BasePopGrowth;
         }
         if (this.logging.events) {
-          this.log("Intelligence indicates that a new Synthoid community was formed in a city");
+          this.log("Intelligence indicates that a new Synthoid community was formed in a city.");
         }
       } else {
         --sourceCity.comms;
@@ -643,14 +643,14 @@ export class Bladeburner implements OperationTeam {
         // Change pop
         const percentage = getRandomIntInclusive(10, 20) / 100;
         const count = Math.round(sourceCity.pop * percentage);
-        sourceCity.pop -= count;
-        destCity.pop += count;
+        sourceCity.changePopulationByCount(-count);
+        destCity.changePopulationByCount(count);
         if (destCity.pop < BladeburnerConstants.PopGrowthCeiling) {
           destCity.pop += BladeburnerConstants.BasePopGrowth;
         }
         if (this.logging.events) {
           this.log(
-            "Intelligence indicates that a Synthoid community migrated from " + sourceCityName + " to some other city",
+            `Intelligence indicates that a Synthoid community migrated from ${sourceCityName} to some other city.`,
           );
         }
       }
@@ -658,13 +658,13 @@ export class Bladeburner implements OperationTeam {
       // New Synthoids (non community), 20%
       const percentage = getRandomIntInclusive(8, 24) / 100;
       const count = Math.round(sourceCity.pop * percentage);
-      sourceCity.pop += count;
+      sourceCity.changePopulationByCount(count);
       if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
         sourceCity.pop += BladeburnerConstants.BasePopGrowth;
       }
       if (this.logging.events) {
         this.log(
-          "Intelligence indicates that the Synthoid population of " + sourceCityName + " just changed significantly",
+          `Intelligence indicates that the Synthoid population of ${sourceCityName} just changed significantly.`,
         );
       }
     } else if (chance <= 0.5) {
@@ -672,9 +672,7 @@ export class Bladeburner implements OperationTeam {
       this.triggerMigration(sourceCityName);
       if (this.logging.events) {
         this.log(
-          "Intelligence indicates that a large number of Synthoids migrated from " +
-            sourceCityName +
-            " to some other city",
+          `Intelligence indicates that a large number of Synthoids migrated from ${sourceCityName} to some other city.`,
         );
       }
     } else if (chance <= 0.7) {
@@ -682,16 +680,16 @@ export class Bladeburner implements OperationTeam {
       sourceCity.changeChaosByCount(1);
       sourceCity.changeChaosByPercentage(getRandomIntInclusive(5, 20));
       if (this.logging.events) {
-        this.log("Tensions between Synthoids and humans lead to riots in " + sourceCityName + "! Chaos increased");
+        this.log(`Tensions between Synthoids and humans lead to riots in ${sourceCityName}! Chaos increased.`);
       }
     } else if (chance <= 0.9) {
       // Less Synthoids, 20%
       const percentage = getRandomIntInclusive(8, 20) / 100;
       const count = Math.round(sourceCity.pop * percentage);
-      sourceCity.pop -= count;
+      sourceCity.changePopulationByCount(-count);
       if (this.logging.events) {
         this.log(
-          "Intelligence indicates that the Synthoid population of " + sourceCityName + " just changed significantly",
+          `Intelligence indicates that the Synthoid population of ${sourceCityName} just changed significantly.`,
         );
       }
     }
@@ -797,7 +795,7 @@ export class Bladeburner implements OperationTeam {
     const action = this.getActionObject(this.action);
     const deaths = resolveTeamCasualties(action, this, success);
     if (this.logging.ops && deaths > 0) {
-      this.log("Lost " + formatNumberNoSuffix(deaths, 0) + " team members during this " + action.name);
+      this.log(`Lost ${formatNumberNoSuffix(deaths, 0)} team members during this ${action.name}.`);
     }
 
     const city = this.getCurrentCity();
@@ -1226,7 +1224,7 @@ export class Bladeburner implements OperationTeam {
               operation.count += (60 * 3 * operation.growthFunction()) / BladeburnerConstants.ActionCountGrowthPeriod;
             }
             if (this.logging.general) {
-              this.log(`${person.whoAmI()}: Incited violence in the synthoid communities.`);
+              this.log(`${person.whoAmI()}: Incited violence in the Synthoid communities.`);
             }
             for (const cityName of Object.values(CityName)) {
               const city = this.cities[cityName];
@@ -1260,7 +1258,7 @@ export class Bladeburner implements OperationTeam {
       this.operations[operation].count += amt;
     }
     if (this.logging.general) {
-      this.log(`Sleeve: Infiltrate the synthoid communities.`);
+      this.log(`Sleeve: Infiltrate the Synthoid communities.`);
     }
   }
 

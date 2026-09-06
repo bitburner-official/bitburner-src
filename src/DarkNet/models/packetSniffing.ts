@@ -89,7 +89,6 @@ const getExactCharactersHint = (lastPassword: string, realPassword: string) => {
 
 export const logPasswordAttempt = (server: DarknetServer, passwordResponse: PasswordResponse, pid: number) => {
   const serverState = getServerState(server.hostname);
-  const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
 
   let message = passwordResponse;
@@ -122,7 +121,8 @@ export const logPasswordAttempt = (server: DarknetServer, passwordResponse: Pass
     message,
     pid,
   };
-  serverState.serverLogs = [logMessage, ...serverLogs].slice(0, MAX_LOG_LINES);
+  serverState.serverLogs.unshift(logMessage);
+  serverState.serverLogs.splice(MAX_LOG_LINES);
 };
 
 export const populateServerLogsWithNoise = (server: DarknetServer) => {
@@ -130,25 +130,29 @@ export const populateServerLogsWithNoise = (server: DarknetServer) => {
 
   const serverState = getServerState(server.hostname);
   const interval = server.logTrafficInterval;
+  const now = Date.now();
   if (!serverState.lastLogTime) {
-    serverState.serverLogs = [
-      getLogNoise(server, new Date(new Date().getTime() - interval * 1000)),
-      getLogNoise(server, new Date(new Date().getTime() - interval * 2000)),
-    ];
-    serverState.lastLogTime = new Date();
+    serverState.serverLogs.length = 0;
+    serverState.serverLogs.push(
+      getLogNoise(server, new Date(now - interval * 1000)),
+      getLogNoise(server, new Date(now - interval * 2000)),
+    );
+    serverState.lastLogTime = new Date(now);
     return;
   }
 
-  const lastLogTime = new Date(serverState.lastLogTime ?? new Date()).getTime();
-  const millisecondsSinceLastLog = new Date().getTime() - lastLogTime;
-  const missingLogs = Math.floor(millisecondsSinceLastLog / (interval * 1000));
-  if (missingLogs > 0) {
-    const noiseArray = Array(missingLogs)
-      .fill("")
-      .map((__: unknown, i: number) => getLogNoise(server, new Date(lastLogTime + interval * 1000 * (i + 1))));
-    serverState.serverLogs = [...noiseArray, ...serverState.serverLogs].slice(0, MAX_LOG_LINES);
-    // set the last log date at when the prior log would have been generated, as if they are added live
-    serverState.lastLogTime = new Date(lastLogTime + missingLogs * interval * 1000);
+  const lastLogTime = serverState.lastLogTime.getTime();
+  const totalMissingLogs = Math.floor((now - lastLogTime) / (interval * 1000));
+  if (totalMissingLogs > 0) {
+    const missingLogs = Math.min(totalMissingLogs, MAX_LOG_LINES);
+    const latestLogTimeMs = lastLogTime + totalMissingLogs * interval * 1000;
+    const noiseArray = Array.from({ length: missingLogs }, (_, i) =>
+      getLogNoise(server, new Date(latestLogTimeMs - interval * 1000 * i)),
+    );
+    serverState.serverLogs.unshift(...noiseArray);
+    serverState.serverLogs.splice(MAX_LOG_LINES);
+    // Advance lastLogTime to the latest generated log, as if the logs were added live.
+    serverState.lastLogTime = new Date(latestLogTimeMs);
   }
 };
 
@@ -219,13 +223,14 @@ export const getMostRecentAuthLog = (hostname: string) => {
 };
 
 export const getServerLogs = (server: DarknetServer, logLines: number, peek = false) => {
+  if (logLines < 0) {
+    throw new Error("logLines must be non-negative");
+  }
   populateServerLogsWithNoise(server);
 
   const serverState = getServerState(server.hostname);
   if (peek) {
     return serverState.serverLogs.slice(0, logLines);
   }
-  const logs = serverState.serverLogs.slice(0, logLines);
-  serverState.serverLogs = serverState.serverLogs.slice(logLines);
-  return logs;
+  return serverState.serverLogs.splice(0, logLines);
 };

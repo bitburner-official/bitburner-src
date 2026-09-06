@@ -44,7 +44,7 @@ export class Division {
   get maxProducts() {
     if (!this.makesProducts) return 0;
 
-    // Calculate additional number of allowed Products from Research/Upgrades
+    // Calculate additional number of allowed products from Research/Upgrades
     let additional = 0;
     if (this.hasResearch("uPgrade: Capacity.I")) ++additional;
     if (this.hasResearch("uPgrade: Capacity.II")) ++additional;
@@ -598,26 +598,26 @@ export class Division {
             warehouse.smartSupplyStore += prod / (corpConstants.secondsPerMarketCycle * marketCycles);
 
             // Make sure we have enough resource to make our materials
-            let producableFrac = 1;
+            let producibleFrac = 1;
             for (const [reqMatName, reqMat] of getRecordEntries(this.requiredMaterials)) {
               const req = reqMat * prod;
               if (warehouse.materials[reqMatName].stored < req) {
-                producableFrac = Math.min(producableFrac, warehouse.materials[reqMatName].stored / req);
+                producibleFrac = Math.min(producibleFrac, warehouse.materials[reqMatName].stored / req);
               }
             }
-            if (producableFrac <= 0) {
-              producableFrac = 0;
+            if (producibleFrac <= 0) {
+              producibleFrac = 0;
               prod = 0;
             }
 
-            // Make our materials if they are producable
-            if (producableFrac > 0 && prod > 0) {
+            // Make our materials if they are producible
+            if (producibleFrac > 0 && prod > 0) {
               const requiredMatsEntries = getRecordEntries(this.requiredMaterials);
               let avgQlt = 0;
               const divider = requiredMatsEntries.length;
               for (const [reqMatName, reqMat] of requiredMatsEntries) {
-                const reqMatQtyNeeded = reqMat * prod * producableFrac;
-                // producableFrac already takes into account that we have enough stored
+                const reqMatQtyNeeded = reqMat * prod * producibleFrac;
+                // producibleFrac already takes into account that we have enough stored
                 // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
                 /**
                  * material.stored can become negative due to floating-point inaccuracy.
@@ -646,7 +646,7 @@ export class Division {
               }
               avgQlt = Math.max(avgQlt, 1);
               for (let j = 0; j < this.producedMaterials.length; ++j) {
-                let outputAmount = prod * producableFrac;
+                let outputAmount = prod * producibleFrac;
                 const productionLimit = warehouse.materials[this.producedMaterials[j]].productionLimit;
                 if (productionLimit !== null) {
                   // productionLimit is per second, so we need to convert it to per market cycle.
@@ -743,7 +743,7 @@ export class Division {
                   amt = mat.stored;
                 }
 
-                // Make sure theres enough space in warehouse
+                // Make sure there's enough space in warehouse
                 if (expWarehouse.sizeUsed >= expWarehouse.size) {
                   // Warehouse at capacity. Exporting doesn't
                   // affect revenue so just return 0's
@@ -864,21 +864,21 @@ export class Division {
 
           warehouse.smartSupplyStore += prod / (corpConstants.secondsPerMarketCycle * marketCycles);
 
-          //Make sure we have enough resources to make our Products
-          let producableFrac = 1;
+          //Make sure we have enough resources to make our products
+          let producibleFrac = 1;
           for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
             const req = reqQty * prod;
             if (warehouse.materials[reqMatName].stored < req) {
-              producableFrac = Math.min(producableFrac, warehouse.materials[reqMatName].stored / req);
+              producibleFrac = Math.min(producibleFrac, warehouse.materials[reqMatName].stored / req);
             }
           }
 
-          //Make our Products if they are producable
-          if (producableFrac > 0 && prod > 0) {
+          // Make our products if they are producible
+          if (producibleFrac > 0 && prod > 0) {
             let avgQlt = 1;
             for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
-              const reqMatQtyNeeded = reqQty * prod * producableFrac;
-              // producableFrac already takes into account that we have enough stored
+              const reqMatQtyNeeded = reqQty * prod * producibleFrac;
+              // producibleFrac already takes into account that we have enough stored
               // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
               /**
                * material.stored can become negative due to floating-point inaccuracy.
@@ -908,15 +908,15 @@ export class Division {
             //Effective Rating
             product.cityData[city].effectiveRating =
               (product.cityData[city].effectiveRating * product.cityData[city].stored +
-                tempEffRat * prod * producableFrac) /
-              (product.cityData[city].stored + prod * producableFrac);
+                tempEffRat * prod * producibleFrac) /
+              (product.cityData[city].stored + prod * producibleFrac);
             //Quantity
-            product.cityData[city].stored += prod * producableFrac;
+            product.cityData[city].stored += prod * producibleFrac;
           }
 
           //Keep track of production Per second
           product.cityData[city].productionAmount =
-            (prod * producableFrac) / (corpConstants.secondsPerMarketCycle * marketCycles);
+            (prod * producibleFrac) / (corpConstants.secondsPerMarketCycle * marketCycles);
           break;
         }
         case "SALE":
