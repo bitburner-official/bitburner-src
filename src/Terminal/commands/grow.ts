@@ -26,23 +26,28 @@ export function grow(
     return;
   }
   if (!(server instanceof Server)) throw new Error("server should be normal server");
-  return Terminal.timedAction(calculateGrowTime(server, Player) / 16, "grow", () => {
-    const expGain = calculateHackingExpGain(server, Player);
-    const oldSec = server.hackDifficulty;
-    const growth = processSingleServerGrowth(server, 25, server.cpuCores);
-    const newSec = server.hackDifficulty;
-    const newMoney = server.moneyAvailable;
+  return Terminal.timedAction(
+    calculateGrowTime(server, Player) / 16,
+    "grow",
+    () => {
+      const expGain = calculateHackingExpGain(server, Player);
+      const oldSec = server.hackDifficulty;
+      const growth = processSingleServerGrowth(server, 25, server.cpuCores);
+      const newSec = server.hackDifficulty;
+      const newMoney = server.moneyAvailable;
 
-    Player.gainHackingExp(expGain);
-    Terminal.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)} to ${formatMoney(
-        newMoney,
-      )}. Gained ${formatExp(expGain)} hacking exp.`,
-      stdIO
-    );
-    Terminal.print(
-      `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,
-      stdIO
-    );
-  }, stdIO);
+      Player.gainHackingExp(expGain);
+      Terminal.print(
+        `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)} to ${formatMoney(
+          newMoney,
+        )}. Gained ${formatExp(expGain)} hacking exp.`,
+        stdIO,
+      );
+      Terminal.print(
+        `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,
+        stdIO,
+      );
+    },
+    stdIO,
+  );
 }
