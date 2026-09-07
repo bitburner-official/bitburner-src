@@ -58,7 +58,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: true,
     },
-    [iTutorialSteps.GoToCharacterPage as number]: {
+    [iTutorialSteps.GoToCharacterStatsPage as number]: {
       content: (
         <>
           <Typography>Let's start by heading to the Stats page. Click</Typography>
@@ -71,7 +71,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.CharacterPage as number]: {
+    [iTutorialSteps.CharacterStatsDescription as number]: {
       content: (
         <>
           <ListItem>
@@ -158,7 +158,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalScanAnalyze1 as number]: {
+    [iTutorialSteps.TerminalScanAnalyze as number]: {
       content: (
         <>
           <TerminalText>{"[home /]> scan"}</TerminalText>
@@ -269,7 +269,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: true,
     },
-    [iTutorialSteps.TerminalHackingMechanics as number]: {
+    [iTutorialSteps.TerminalHackWeakenGrowMechanics as number]: {
       content: (
         <Typography component="div">
           You are now attempting to hack the server. Performing a hack takes time and only has a certain percentage
@@ -291,7 +291,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: true,
     },
-    [iTutorialSteps.TerminalGoHome as number]: {
+    [iTutorialSteps.TerminalHome as number]: {
       content: (
         <>
           <Typography>From any server you can get back home using</Typography>
@@ -302,7 +302,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalCreateScript as number]: {
+    [iTutorialSteps.TerminalNano as number]: {
       content: (
         <>
           <Typography>
@@ -322,7 +322,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalEditScript as number]: {
+    [iTutorialSteps.ScriptEditorEditAndSave as number]: {
       content: (
         <>
           <Typography>
@@ -377,7 +377,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalRunScript as number]: {
+    [iTutorialSteps.TerminalRun as number]: {
       content: (
         <>
           <Typography>
@@ -408,7 +408,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.ActiveScriptsPage as number]: {
+    [iTutorialSteps.ActiveScriptsDescription as number]: {
       content: (
         <>
           <Typography>
@@ -432,7 +432,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.ActiveScriptsToTerminal as number]: {
+    [iTutorialSteps.TerminalTail as number]: {
       content: (
         <>
           <Typography>
@@ -444,7 +444,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalTailScript as number]: {
+    [iTutorialSteps.TerminalTailOutcome as number]: {
       content: (
         <>
           <Typography>
@@ -527,7 +527,7 @@ export async function main(ns) {
       ),
       canNext: false,
     },
-    [iTutorialSteps.DocumentationPageInfo as number]: {
+    [iTutorialSteps.DocumentationInfo as number]: {
       content: (
         <Typography component="div">
           This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
@@ -587,7 +587,7 @@ export async function main(ns) {
     <Paper square sx={{ maxWidth: "70vw", p: 2 }}>
       {content.content}
       <br />
-      {step !== iTutorialSteps.DocumentationPageInfo && (
+      {step !== iTutorialSteps.DocumentationInfo && (
         <>
           {step !== iTutorialSteps.Start && (
             <Button onClick={iTutorialPrevStep} aria-label="previous" style={{ marginRight: "1em" }}>
@@ -604,7 +604,7 @@ export async function main(ns) {
       <br />
       <br />
       <Button onClick={iTutorialEnd}>
-        {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
+        {step !== iTutorialSteps.DocumentationInfo ? "Exit Tutorial" : "Finish Tutorial"}
       </Button>
     </Paper>
   );
