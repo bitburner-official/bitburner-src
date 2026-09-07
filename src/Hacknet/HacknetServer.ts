@@ -140,8 +140,8 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
   }
 
   // Initializes a HacknetServer Object from a JSON save state
-  static fromJSON(value: IReviverValue): HacknetServer {
-    return BaseServer.fromJSONBase(value, HacknetServer, includedKeys);
+  static fromJSON(value: IReviverValue, context?: string[]): HacknetServer {
+    return BaseServer.fromJSONBase(value, HacknetServer, includedKeys, context);
   }
 }
 const includedKeys = BaseServer.getIncludedKeys(HacknetServer);

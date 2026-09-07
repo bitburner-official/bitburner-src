@@ -4,12 +4,13 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { assertObject } from "./TypeAssertion";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
-  fromJSON: (value: IReviverValue) => unknown;
+  fromJSON: (value: IReviverValue, context?: string[]) => unknown;
   validationData?: ObjectValidator<any>;
 };
 
 export interface IReviverValue<T = unknown> {
   ctor: string;
+  index?: boolean;
   data: T;
 }
 

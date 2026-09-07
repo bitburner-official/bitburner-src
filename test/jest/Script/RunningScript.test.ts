@@ -1,7 +1,8 @@
 import { RunningScript } from "../../../src/Script/RunningScript";
-import { Reviver } from "../../../src/utils/GenericReviver";
+import { Reviver, makeReviverWithContext } from "../../../src/utils/GenericReviver";
 import { Script } from "../../../src/Script/Script";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
+import { setJSONContext } from "../../../src/utils/JSONContext";
 
 describe("Validate that a RunningScript can be saved and loaded", () => {
   it("Save and Load", function () {
@@ -15,8 +16,15 @@ describe("Validate that a RunningScript can be saved and loaded", () => {
     const runningScript = new RunningScript(script, ramUsage, args);
     runningScript.dataMap.set(hostname, [1000, 2, 3, 4]);
 
-    const json = JSON.stringify(runningScript);
-    const revivedRunningScript = JSON.parse(json, Reviver) as RunningScript;
+    const stringData = new Map<string, number>();
+    let json;
+    try {
+      setJSONContext(stringData);
+      json = JSON.stringify(runningScript);
+    } finally {
+      setJSONContext(undefined);
+    }
+    const revivedRunningScript = JSON.parse(json, makeReviverWithContext([...stringData.keys()])) as RunningScript;
 
     expect(revivedRunningScript).toBeInstanceOf(RunningScript);
     expect(revivedRunningScript.filename).toEqual(filename);

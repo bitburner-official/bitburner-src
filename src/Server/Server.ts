@@ -151,8 +151,8 @@ export class Server extends BaseServer {
   }
 
   // Initializes a Server Object from a JSON save state
-  static fromJSON(value: IReviverValue): Server {
-    return BaseServer.fromJSONBase(value, Server, includedKeys);
+  static fromJSON(value: IReviverValue, context?: string[]): Server {
+    return BaseServer.fromJSONBase(value, Server, includedKeys, context);
   }
 }
 const includedKeys = BaseServer.getIncludedKeys(Server);

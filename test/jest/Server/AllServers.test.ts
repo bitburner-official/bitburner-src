@@ -3,7 +3,6 @@ import {
   GetAllServers,
   loadAllServers,
   prestigeAllServers,
-  saveAllServers,
   renameServer,
   GetServer,
   ipExists,
@@ -11,13 +10,23 @@ import {
 } from "../../../src/Server/AllServers";
 import { Server } from "../../../src/Server/Server";
 import { IPAddress } from "../../../src/Types/strings";
+import { type BitburnerSaveObjectType, getSaveData } from "../../../src/SaveObject";
+import { decodeSaveData } from "../../../src/utils/SaveDataUtils";
+import { Reviver, makeReviverWithContext } from "../../../src/utils/GenericReviver";
 import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { serverMetadata } from "../../../src/Server/data/servers";
 import { resolveScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { discoverableNetworkScripts } from "../../../src/Literature/DiscoverableNetworkScripts";
 
+async function saveAllServers() {
+  const data = JSON.parse(await decodeSaveData(await getSaveData()), Reviver) as BitburnerSaveObjectType;
+  const strings = data.Strings;
+  const allServers = data.AllServersSave;
+  return { strings, allServers };
+}
+
 describe("AllServers can be saved and loaded", () => {
-  it("saves and loads servers correctly", () => {
+  it("saves and loads servers correctly", async () => {
     prestigeAllServers();
     expect(GetAllServers(true)).toEqual([]);
     const hostname = "__proto__";
@@ -28,12 +37,12 @@ describe("AllServers can be saved and loaded", () => {
     AddToAllServers(server1);
     expect(GetAllServers(true)).toEqual([server1]);
 
-    const serializedServers = saveAllServers();
+    const { strings, allServers: serializedServers } = await saveAllServers();
     expect(serializedServers).toEqual(
-      `{"__proto__":{"ctor":"Server","data":{"contracts":[],"cpuCores":1,"ftpPortOpen":false,"hasAdminRights":false,"hostname":"__proto__","httpPortOpen":false,"ip":"173.78.146.183","isConnectedTo":false,"maxRam":0,"messages":[],"organizationName":"","programs":[],"scripts":{"ctor":"JSONMap","data":[]},"serversOnNetwork":[],"smtpPortOpen":false,"sqlPortOpen":false,"sshPortOpen":false,"textFiles":{"ctor":"JSONMap","data":[]},"purchasedByPlayer":false,"backdoorInstalled":false,"baseDifficulty":1,"hackDifficulty":1,"minDifficulty":1,"moneyAvailable":0,"moneyMax":0,"numOpenPortsRequired":5,"openPortCount":0,"requiredHackingSkill":1,"serverGrowth":1,"runningScripts":[]}}}`,
+      `[{"ctor":"Server","data":{"contracts":[],"cpuCores":1,"ftpPortOpen":false,"hasAdminRights":false,"hostname":0,"httpPortOpen":false,"ip":"173.78.146.183","isConnectedTo":false,"maxRam":0,"messages":[],"organizationName":"","programs":[],"scripts":{"ctor":"JSONMap","data":[]},"serversOnNetwork":[],"smtpPortOpen":false,"sqlPortOpen":false,"sshPortOpen":false,"textFiles":{"ctor":"JSONMap","data":[]},"purchasedByPlayer":false,"backdoorInstalled":false,"baseDifficulty":1,"hackDifficulty":1,"minDifficulty":1,"moneyAvailable":0,"moneyMax":0,"numOpenPortsRequired":5,"openPortCount":0,"requiredHackingSkill":1,"serverGrowth":1,"runningScripts":[]}}]`,
     );
 
-    loadAllServers(serializedServers);
+    loadAllServers(serializedServers, makeReviverWithContext(strings));
     const loadedServers = GetAllServers(true);
     expect(loadedServers.length).toEqual(1);
     const loadedServer = loadedServers[0];

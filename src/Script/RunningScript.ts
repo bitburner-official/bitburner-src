@@ -9,6 +9,7 @@ import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { stringDataIdx } from "../utils/JSONContext";
 import { formatTime } from "../utils/helpers/formatTime";
 import { ScriptArg } from "@nsdefs";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
@@ -156,23 +157,83 @@ export class RunningScript {
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    // Save the title under its canonical name, reading the raw backing field so we don't
-    // generate a default. Omit it when it's the default (null) or a ReactElement; both are
-    // restored on load.
-    return Generic_toJSON(
+    const value = Generic_toJSON(
       "RunningScript",
       {
         ...this,
         dataMap: Object.fromEntries(this.dataMap.entries()),
+        // Save the title under its canonical name, reading the raw backing field so we don't
+        // generate a default. Omit it when it's the default (null) or a ReactElement; both are
+        // restored on load.
         title: this.title_,
       },
       typeof this.title_ === "string" ? includedProperties : includedPropsNoTitle,
-    );
+    ) as IReviverValue<RunningScript & { argIsIdx?: (0 | 1)[] }>;
+    // Dedup common strings
+    value.data.server = stringDataIdx(value.data.server);
+    value.data.filename = stringDataIdx(value.data.filename) as ScriptFilePath;
+    if (value.data.title != null) {
+      // From above, if it's included we know it's a string
+      value.data.title = stringDataIdx(value.data.title as string);
+    }
+    // We have to make a new array, because the existing one is a reference to
+    // the array in the base object.
+    const newArgs: ScriptArg[] = [];
+    const argIsIdx: (0 | 1)[] = [];
+    let usedIdx = false;
+    for (const arg of value.data.args) {
+      if (typeof arg === "string") {
+        argIsIdx.push(1);
+        newArgs.push(stringDataIdx(arg));
+        usedIdx = true;
+      } else {
+        argIsIdx.push(0);
+        newArgs.push(arg);
+      }
+    }
+    if (usedIdx) {
+      value.data.args = newArgs;
+      value.data.argIsIdx = argIsIdx;
+    }
+    return value;
   }
 
   // Initializes a RunningScript Object from a JSON save state
-  static fromJSON(value: IReviverValue): RunningScript {
-    const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
+  static fromJSON(value: IReviverValue, context?: string[]): RunningScript {
+    context ??= [];
+    // This cast is to ensure our writes are type-safe. Our reads are checked
+    // via typeof already (and don't conform to the type given).
+    const data = (value as IReviverValue<RunningScript & { argIsIdx?: (0 | 1)[] }>).data;
+    if (typeof data.server === "number") {
+      data.server = context[data.server];
+    }
+    if (typeof data.filename === "number") {
+      data.filename = context[data.filename] as ScriptFilePath;
+    }
+    if (typeof data.title === "number") {
+      data.title = context[data.title];
+    }
+    if (Array.isArray(data.argIsIdx)) {
+      if (data.argIsIdx.length != data.args.length) {
+        throw new Error(
+          `Data length mismatch for RunningScript ${data.filename}: argIsIdx ${data.argIsIdx.length} vs args ${data.args.length}`,
+        );
+      }
+      for (let i = 0; i < data.args.length; ++i) {
+        if (data.argIsIdx[i]) {
+          const argi = data.args[i];
+          if (typeof argi !== "number") {
+            throw new TypeError(
+              `For RunningScript ${data.filename}: argIsIdx[${i}]=${
+                data.argIsIdx[i]
+              } but args[${i}] is of type ${typeof argi}`,
+            );
+          }
+          data.args[i] = context[argi];
+        }
+      }
+    }
+    const runningScript = Generic_fromJSON(RunningScript, data, includedProperties);
     const validEntries = Object.entries(runningScript.dataMap).filter(isValidDataMapEntry);
     runningScript.dataMap = new Map(validEntries);
 
