@@ -87,6 +87,9 @@ function iTutorialStart(): void {
 
 // Go to the next step and evaluate it
 function iTutorialNextStep(): void {
+  if (!ITutorial.isRunning) {
+    throw new Error("Tutorial is not running, but iTutorialNextStep() was called");
+  }
   ITutorial.stepIsDone[ITutorial.currStep] = true;
   if (ITutorial.currStep < iTutorialSteps.End) {
     ITutorial.currStep += 1;
@@ -97,6 +100,9 @@ function iTutorialNextStep(): void {
 
 // Go to previous step and evaluate
 function iTutorialPrevStep(): void {
+  if (!ITutorial.isRunning) {
+    throw new Error("Tutorial is not running, but iTutorialPrevStep() was called");
+  }
   if (ITutorial.currStep > iTutorialSteps.Start) {
     ITutorial.currStep -= 1;
   }
