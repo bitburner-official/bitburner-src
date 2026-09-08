@@ -23,15 +23,15 @@ import { useRerender } from "../React/hooks";
 import { DocumentationLink } from "../React/DocumentationLink";
 import { defaultNsApiPage } from "../React/Documentation";
 
+interface IContent {
+  content: React.ReactElement;
+  canNext: boolean;
+}
+
 function TerminalText({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
     <Typography sx={{ borderBottom: (theme) => `1px solid ${theme.palette.primary.main}` }}>{children}</Typography>
   );
-}
-
-interface IContent {
-  content: React.ReactElement;
-  canNext: boolean;
 }
 
 export function InteractiveTutorialRoot(): React.ReactElement {
