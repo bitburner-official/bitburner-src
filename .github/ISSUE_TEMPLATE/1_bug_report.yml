@@ -2,10 +2,6 @@
 name: Bug Report
 description: Report a bug
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ### Bug Report
   - type: checkboxes
     attributes:
       label: Preflight Checklist
