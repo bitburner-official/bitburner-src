@@ -848,9 +848,9 @@ interface SourceFileLvl {
  */
 interface BladeburnerCurAction {
   /** Type of Action */
-  type: string;
+  type: BladeburnerActionType;
   /** Name of Action */
-  name: string;
+  name: BladeburnerActionName;
 }
 
 /** @public */
