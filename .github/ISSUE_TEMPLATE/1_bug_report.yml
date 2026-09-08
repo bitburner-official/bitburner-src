@@ -46,7 +46,7 @@ body:
       required: true
   - type: dropdown
     attributes:
-      label: What operating system(s) are you using?
+      label: What operating system are you using?
       options:
         - Windows
         - macOS
