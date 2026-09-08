@@ -5,6 +5,7 @@ import { Apr1Events as devMenu } from "../ui/Apr1";
 import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { setupStackBoundaries } from "../Netscript/ErrorMessages";
 
 export interface INetscriptExtra {
   openDevMenu(): void;
@@ -12,6 +13,7 @@ export interface INetscriptExtra {
   bypass(doc: Document): void;
   alterReality(): void;
   rainbow(guess: string): void;
+  createInternalError(funcName: string): void;
 }
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
@@ -57,5 +59,6 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       Player.giveExploit(Exploit.INeedARainbow);
       return true;
     },
+    createInternalError: () => (funcName) => setupStackBoundaries(funcName),
   };
 }

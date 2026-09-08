@@ -14,7 +14,7 @@ import { compile } from "./NetscriptJSEvaluator";
 import { Port, PortNumber } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
 import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
-import { GetAllServers } from "./Server/AllServers";
+import { GetAllServers, GetServerOrThrow } from "./Server/AllServers";
 import { BaseServer } from "./Server/BaseServer";
 import { Settings } from "./Settings/Settings";
 
@@ -34,6 +34,7 @@ import { UIEventEmitter, UIEventType } from "./ui/UIEventEmitter";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { DarknetServer } from "./Server/DarknetServer";
+import { RamCostConstants } from "./Netscript/RamCostGenerator";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -211,6 +212,49 @@ function createAutoexec(server: BaseServer): RunningScript | null {
   return rs;
 }
 
+// This runs a small script on startup, for the purpose of capturing a stack trace with known
+// properties. The properties we need are that it flows through the exact same frames both entering
+// and exiting as every other user script; thus, we construct it using (mostly) the standard NS script
+// machinery. It has a known structure of two function calls, one with a unique name so we can locate
+// that stack frame unambiguously no matter how it is formatted.
+//
+// We only engage as much machinery as required. WorkerScript/RunningScript requires being backed by
+// a real file on a real server, but we don't register this with the running scripts map, or
+// count memory usage for it.
+function runErrorStackScript(): void {
+  const server = GetServerOrThrow("home");
+  // Chosen to be unique across the whole codebase.
+  const funcName = "doCreateInternalError";
+  // This is not a valid FilePath, because it has exclamation points. However, it will function
+  // just fine in the code we call (our code is not actually sensitive to the invalid characters),
+  // and this guarantees that the file can't already exist.
+  const filename = "!error!.js" as ScriptFilePath;
+  const source = `function ${funcName}(ns) {
+  ns.createInternalError("${funcName}");
+}
+
+export function main(ns) {
+  ${funcName}(ns);
+}`;
+  try {
+    server.writeToScriptFile(filename, source);
+    const script = server.scripts.get(filename);
+    const rs = new RunningScript(script, RamCostConstants.Base, []);
+    const ws = new WorkerScript(rs, 0, NetscriptFunctions);
+    // Because we call startNetscript2Script() directly without going through
+    // createAndAddWorkerScript(), killWorkerScript() is never called so we
+    // don't have to worry about it being removed from a map it's not in, or
+    // spuriously freeing memory.
+    startNetscript2Script(ws).catch(function (error) {
+      handleUnknownError(error, ws);
+    });
+  } finally {
+    // It is OK to remove the file while the script is running; that is a
+    // limitation of higher-up logic and not a fundamental limit.
+    server.removeFile(filename);
+  }
+}
+
 /**
  * Called when the game is loaded. Loads all running scripts (from all servers)
  * into worker scripts so that they will start running
@@ -229,6 +273,8 @@ export function loadAllRunningScripts(): void {
       return;
     }
     unsubscribe();
+    // We need to find error stack boundaries even if no scripts are loaded.
+    runErrorStackScript();
     /**
      * Accept all parameters containing "?noscript". The "standard" parameter is "?noScripts", but new players may not
      * notice the "s" character at the end of "noScripts".

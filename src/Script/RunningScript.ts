@@ -4,7 +4,6 @@
  */
 import type React from "react";
 import { Script } from "./Script";
-import { ScriptURL } from "./LoadedModule";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
 
@@ -88,9 +87,6 @@ export class RunningScript {
   // Whether this RunningScript is excluded from saves
   temporary = false;
 
-  // Script urls for the current running script for translating urls back to file names in errors
-  dependencies = new Map<ScriptURL, Script>();
-
   constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
     if (!script) return;
     if (!ramUsage) throw new Error("Must provide a ramUsage for RunningScript initialization.");
@@ -98,7 +94,6 @@ export class RunningScript {
     this.args = args;
     this.server = script.server;
     this.ramUsage = ramUsage;
-    this.dependencies = script.dependencies;
   }
 
   getDefaultTitle(): string {
@@ -186,7 +181,7 @@ export class RunningScript {
   }
 }
 const includedProperties = getKeyList(RunningScript, {
-  removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
+  removedKeys: ["logs", "logUpd", "pid", "parent", "tailProps"],
   // Persist the title under its canonical name, keeping its original key position.
 }).map((key) => (key === "title_" ? "title" : key));
 const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");
