@@ -330,6 +330,8 @@ function checkTestSaveData(isDataLoadedFromSaveFile: boolean) {
   expect(bladeburner.skillPoints).toBe(998750250);
   expect(bladeburner.action?.type).toBe("General");
   expect(bladeburner.action?.name).toBe("Training");
+  expect(bladeburner.cities["Sector-12"].pop).toBe(2e9);
+  expect(bladeburner.cities["Sector-12"].popEst).toBe(3e9);
   expect(bladeburner.skills.Hyperdrive).toBe(1000);
   expect(bladeburner.operations.Assassination.count).toBe(1000);
 
@@ -345,6 +347,7 @@ function checkTestSaveData(isDataLoadedFromSaveFile: boolean) {
     throw new Error("Gang object is null");
   }
   const member = gang.members[0];
+  expect(member.task).toBe("Train Combat");
   expect(member.str_exp).toBeGreaterThan(1);
   expect(member.str_mult).toBeGreaterThan(1);
   expect(member.upgrades[0]).toBe("Baseball Bat");
