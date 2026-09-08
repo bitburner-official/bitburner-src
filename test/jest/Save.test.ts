@@ -211,6 +211,8 @@ test("load/saveAllServers pruning RunningScripts", () => {
   expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
 });
 
+// This function interacts with most of the game mechanics in some way to create a state that will exercise most of our
+// save/load functionality.
 function initTestSaveData() {
   const ns = getNS();
   ns.write("foo.txt", "foo", "w");
@@ -371,6 +373,9 @@ function checkTestSaveData(isDataLoadedFromSaveFile: boolean) {
   expect(Settings.AutosaveInterval).toBe(1000);
 }
 
+// This functions in a complementary way to the snapshot tests we have above and in FullSave.test. The snapshot tests
+// check for an exact save format result, but are more rigid and less comprehensive as a result. These tests check the
+// result after loading, which both tests the load system and allows for more flexible tests. Both are important.
 describe("Save/Load system", () => {
   beforeAll(() => {
     initGameEnvironment();
