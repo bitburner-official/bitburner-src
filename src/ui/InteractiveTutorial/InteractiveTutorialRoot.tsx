@@ -11,7 +11,6 @@ import HelpIcon from "@mui/icons-material/Help";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { styled } from "@mui/material/styles";
 
 import {
   iTutorialPrevStep,
