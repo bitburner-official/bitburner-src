@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { LiteratureName } from "@enums";
 import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 
-// Ordered array of keys to Interactive Tutorial Steps
+// Ordered array of keys for Interactive Tutorial Steps
 enum iTutorialSteps {
   Start, // Intro, overview, and housekeeping
 
@@ -42,6 +42,14 @@ enum iTutorialSteps {
 }
 
 const ITutorial = {
+  /**
+   * If you want something to happen based on the current step and the trigger is in a script other
+   * than InteractiveTutorialRoot, then:
+   *   If the step is Start you must check ITutorial.isRunning
+   *   If the step is not Start, you must check ITutorial.currStep === iTutorialSteps.YourStep, but
+   *     do not need to check isRunning
+   */
+
   currStep: iTutorialSteps.Start,
   isRunning: false,
 
@@ -85,11 +93,7 @@ function iTutorialStart(): void {
   ITutorial.currStep = iTutorialSteps.Start;
 }
 
-// Go to the next step and evaluate it
 function iTutorialNextStep(): void {
-  if (!ITutorial.isRunning) {
-    throw new Error("Tutorial is not running, but iTutorialNextStep() was called");
-  }
   ITutorial.stepIsDone[ITutorial.currStep] = true;
   if (ITutorial.currStep < iTutorialSteps.End) {
     ITutorial.currStep += 1;
@@ -98,11 +102,7 @@ function iTutorialNextStep(): void {
   ITutorialEvents.emit();
 }
 
-// Go to previous step and evaluate
 function iTutorialPrevStep(): void {
-  if (!ITutorial.isRunning) {
-    throw new Error("Tutorial is not running, but iTutorialPrevStep() was called");
-  }
   if (ITutorial.currStep > iTutorialSteps.Start) {
     ITutorial.currStep -= 1;
   }
