@@ -93,6 +93,7 @@ function iTutorialStart(): void {
   ITutorial.currStep = iTutorialSteps.Start;
 }
 
+// Go to the next step and evaluate it
 function iTutorialNextStep(): void {
   ITutorial.stepIsDone[ITutorial.currStep] = true;
   if (ITutorial.currStep < iTutorialSteps.End) {
@@ -102,6 +103,7 @@ function iTutorialNextStep(): void {
   ITutorialEvents.emit();
 }
 
+// Go to previous step and evaluate
 function iTutorialPrevStep(): void {
   if (ITutorial.currStep > iTutorialSteps.Start) {
     ITutorial.currStep -= 1;
