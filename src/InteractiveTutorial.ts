@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { LiteratureName } from "@enums";
 import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 
-// Ordered array of keys for Interactive Tutorial Steps
+// Ordered array of keys to Interactive Tutorial Steps
 enum iTutorialSteps {
   Start, // Intro, overview, and housekeeping
 
