@@ -45,7 +45,9 @@ const ITutorial = {
   /**
    * If you want something to happen based which step is the currStep:
    *   If the step is Start you must check that
-   *     ITutorial.isRunning and ITutorial.currStep === iTutorialSteps.Start
+   *     ITutorial.isRunning
+   *      and that
+   *     ITutorial.currStep === iTutorialSteps.Start
    *   If the step is not Start, you must check that
    *     ITutorial.currStep === iTutorialSteps.YourStep
    *     but you do not need to check isRunning
