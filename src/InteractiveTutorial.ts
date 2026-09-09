@@ -48,9 +48,8 @@ const ITutorial = {
    *     ITutorial.isRunning
    *      and that
    *     ITutorial.currStep is iTutorialSteps.Start
-   *   If the step is not Start, you must check that
+   *   If the step is not Start, you only need to check that
    *     ITutorial.currStep is iTutorialSteps.YourStep
-   *     but you do not need to check isRunning
    */
 
   currStep: iTutorialSteps.Start,
