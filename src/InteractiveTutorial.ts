@@ -45,7 +45,7 @@ const ITutorial = {
   /**
    * If you want something to happen based on the current step and the trigger is in a script other
    * than InteractiveTutorialRoot, then:
-   *   If the step is Start you must check that 
+   *   If the step is Start you must check that
    *     ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.Start
    *   If the step is not Start, you must check that
    *     ITutorial.currStep === iTutorialSteps.YourStep
