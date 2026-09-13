@@ -4,14 +4,14 @@
 
 ## NS.prompt() method
 
-Prompt the player with a dialogue box modal.
+Prompt the player with an input modal.
 
 **Signature:**
 
 ```typescript
 prompt(
     txt: string,
-    options?: { type?: "boolean" | "text" | "select"; choices?: Array<string | number> },
+    options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 ```
 
@@ -56,7 +56,7 @@ options
 
 </td><td>
 
-{ type?: "boolean" \| "text" \| "select"; choices?: Array&lt;string \| number&gt; }
+{ type?: "boolean" \| "text" \| "select"; choices?: (string \| number)\[\] }
 
 
 </td><td>

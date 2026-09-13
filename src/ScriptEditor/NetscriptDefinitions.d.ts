@@ -9017,7 +9017,7 @@ export interface NS {
   vsprintf(format: string, args: any[]): string;
 
   /**
-   * Prompt the player with a dialogue box modal.
+   * Prompt the player with an input modal.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -9084,7 +9084,7 @@ export interface NS {
    */
   prompt(
     txt: string,
-    options?: { type?: "boolean" | "text" | "select"; choices?: Array<string | number> },
+    options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 
   /**
