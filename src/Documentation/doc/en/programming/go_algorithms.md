@@ -130,7 +130,7 @@ export async function main(ns) {
       result = await ns.go.makeMove(x, y);
     }
 
-    // Log opponent's next move, once it happens
+    // Log opponents next move, once it happens
     await ns.go.opponentNextTurn();
 
     await ns.sleep(200);
@@ -208,13 +208,13 @@ If the opposing faction's network is down to its last open port, placing a route
 To find out what networks are in danger of capture, `ns.go.analysis.getLiberties()` shows how many empty nodes / open ports each network has. As with `getBoardState()` and `getValidMoves()` , the number of liberties (open ports) for a given point's network can be retrieved via its coordinates `[x][y]` on the grid returned by `getLiberties()`
 
 ```text
-Detect moves to capture the opponent's routers:
+Detect moves to capture the opponents routers:
    For each point on the board:
       * If the empty point is a valid move, and
       * If a point to the north, south, east, or west is a router with exactly 1 liberty, and
       * That point is controlled by the opponent [it is a "O" via getBoardState()]
 
-      Then, playing that move will capture the opponent's network.
+      Then, playing that move will capture the opponents network.
 ```
 
 &nbsp;
