@@ -33,7 +33,7 @@ export function GeneralInfo(props: IProps): React.ReactElement {
       ) : (
         <>
           <Typography>
-            Here you can purchase Hacknet Servers, an upgraded version of Hacknet Nodes. Hacknet Servers perform
+            Here you can purchase Hacknet Servers, an upgraded version of the Hacknet Node. Hacknet Servers perform
             computations and operations on the network, earning you hashes. Hashes can be spent on a variety of
             upgrades.
             <br />
