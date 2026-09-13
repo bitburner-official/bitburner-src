@@ -11,7 +11,7 @@ Prompt the player with a modal and response options.
 ```typescript
 prompt(
     txt: string,
-    options?: { type?: "boolean" | "text" | "select"; choices?: Array<string|number> },
+    options?: { type?: "boolean" | "text" | "select"; choices?: Array<string | number> },
   ): Promise<boolean | string>;
 ```
 
@@ -56,7 +56,7 @@ options
 
 </td><td>
 
-{ type?: "boolean" \| "text" \| "select"; choices?: Array&lt;string\|number&gt; }
+{ type?: "boolean" \| "text" \| "select"; choices?: Array&lt;string \| number&gt; }
 
 
 </td><td>
