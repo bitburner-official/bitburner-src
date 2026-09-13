@@ -59,7 +59,7 @@ export function SidebarAccordion({
   const [open, setOpen] = useState(true);
   const li_classes = useMemo(() => ({ root: classes.listitem }), [classes.listitem]);
 
-  // Explicitily useMemo() to save rerendering deep chunks of this tree.
+  // Explicitly useMemo() to save rerendering deep chunks of this tree.
   // memo() can't be (easily) used on components like <List>, because the
   // props.children array will be a different object every time.
   return (

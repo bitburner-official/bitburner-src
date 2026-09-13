@@ -11,6 +11,16 @@ import { Adjuster } from "./Adjuster";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function SleevesDev(): React.ReactElement {
+  if (Player.sleeves.length === 0) {
+    return (
+      <AutoExpandAccordion cacheKey="DEVMENU_SleevesDev" unmountOnExit={true} disabled={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Sleeves</Typography>
+        </AccordionSummary>
+      </AutoExpandAccordion>
+    );
+  }
+
   function sleeveMaxAllShock(): void {
     for (let i = 0; i < Player.sleeves.length; ++i) {
       Player.sleeves[i].shock = 100;

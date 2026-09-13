@@ -4,7 +4,7 @@ import { BaseServer } from "./BaseServer";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 
 import { createRandomIp } from "../utils/IPAddress";
-import { Reviver } from "../utils/GenericReviver";
+import { Replacer, Reviver } from "../utils/GenericReviver";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
@@ -176,5 +176,5 @@ export function loadAllServers(saveString: string): void {
 }
 
 export function saveAllServers(): string {
-  return JSON.stringify(Object.fromEntries(GetAllServers(true).map((s) => [s.hostname, s])));
+  return JSON.stringify(Object.fromEntries(GetAllServers(true).map((s) => [s.hostname, s])), Replacer);
 }

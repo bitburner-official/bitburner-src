@@ -160,7 +160,7 @@ describe("Netscript Go API unit tests", () => {
       const boardState = ["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"];
       const mockNetscriptContext = getMockedNetscriptContext();
 
-      const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext)(boardState, null, true);
+      const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext, boardState, null, true);
 
       expect(result).toEqual([
         [false, false, false, true, true],
@@ -175,7 +175,7 @@ describe("Netscript Go API unit tests", () => {
       const boardState = ["#..##", ".....", "...O.", ".....", "....."];
       const mockNetscriptContext = getMockedNetscriptContext();
 
-      const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext)(boardState, boardState, true);
+      const result = NetscriptGo().analysis.getValidMoves(mockNetscriptContext, boardState, boardState, true);
 
       expect(result).toEqual([
         [false, true, true, false, false],
@@ -245,7 +245,7 @@ describe("Netscript Go API unit tests", () => {
       const boardState = [".XXX#", "XOOOX", "XOXOX", "XOOOX", "XXXX."];
       const mockNetscriptContext = getMockedNetscriptContext();
 
-      const result = NetscriptGo().analysis.getLiberties(mockNetscriptContext)(boardState);
+      const result = NetscriptGo().analysis.getLiberties(mockNetscriptContext, boardState);
 
       expect(result).toEqual([
         [-1, 1, 1, 1, -1],
@@ -284,7 +284,7 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
 
-      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], null, true);
+      NetscriptGo().analysis.setTestingBoardState(mockCtx, ["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], null, true);
 
       const newBoard = simpleBoardFromBoard(Go.currentGame.board);
       expect(newBoard).toEqual(["XOX..", "X.X.X", ".X..X", "...XX", "..X.."]);
@@ -298,7 +298,7 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
 
-      NetscriptGo().analysis.setTestingBoardState(mockCtx)(["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], 13);
+      NetscriptGo().analysis.setTestingBoardState(mockCtx, ["XOX..", "X.X.X", ".X..X", "...XX", "..XOO"], 13);
 
       const newBoard = simpleBoardFromBoard(Go.currentGame.board);
       expect(newBoard).toEqual(["XOX..", "X.X.X", ".X..X", "...XX", "..X.."]);

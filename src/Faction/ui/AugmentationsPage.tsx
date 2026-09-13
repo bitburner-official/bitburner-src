@@ -38,7 +38,10 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   );
 
   function getAugs(): AugmentationName[] {
-    return filteredFactionAugs;
+    // filteredFactionAugs contains augs in the default order. We need to return a copy here so callers cannot
+    // accidentally mutate it.
+    // Using slice is enough because the array contains only strings.
+    return filteredFactionAugs.slice();
   }
 
   function getAugsSorted(): AugmentationName[] {

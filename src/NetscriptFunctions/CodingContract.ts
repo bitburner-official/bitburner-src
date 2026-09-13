@@ -87,22 +87,22 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
   }
 
   return {
-    attempt: (ctx) => (answer, _filename, _host?) => {
+    attempt: (ctx, answer, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const [contract, server] = getCodingContract(ctx, _host, filename);
       return attemptContract(ctx, server, contract, answer);
     },
-    getContractType: (ctx) => (_filename, _host?) => {
+    getContractType: (ctx, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const [contract] = getCodingContract(ctx, _host, filename);
       return contract.getType();
     },
-    getData: (ctx) => (_filename, _host?) => {
+    getData: (ctx, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const [contract] = getCodingContract(ctx, _host, filename);
       return structuredClone(contract.getData());
     },
-    getContract: (ctx) => (_filename, _host?) => {
+    getContract: (ctx, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const [contract, server] = getCodingContract(ctx, _host, filename);
       // asserting type here is required, since it is not feasible to properly type getData
@@ -121,17 +121,17 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
         },
       } as CodingContractObject;
     },
-    getDescription: (ctx) => (_filename, _host?) => {
+    getDescription: (ctx, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const [contract] = getCodingContract(ctx, _host, filename);
       return contract.getDescription();
     },
-    getNumTriesRemaining: (ctx) => (_filename, _host?) => {
+    getNumTriesRemaining: (ctx, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const [contract] = getCodingContract(ctx, _host, filename);
       return contract.getMaxNumTries() - contract.tries;
     },
-    createDummyContract: (ctx) => (_type, _host?) => {
+    createDummyContract: (ctx, _type, _host?) => {
       const type = getEnumHelper("CodingContractName").nsGetMember(ctx, _type);
       const [server] = helpers.getServer(ctx, _host);
       if (server == null) {
@@ -139,6 +139,6 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       }
       return generateDummyContract(type, server);
     },
-    getContractTypes: () => () => Object.values(CodingContractName),
+    getContractTypes: () => Object.values(CodingContractName),
   };
 }

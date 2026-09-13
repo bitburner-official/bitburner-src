@@ -454,7 +454,7 @@
     "CHALLENGE_BN9": {
       "ID": "CHALLENGE_BN9",
       "Name": "BN9: Challenge",
-      "Description": "Destroy BN9 without using hacknet servers or hacknet nodes."
+      "Description": "Destroy BN9 without converting hashes from hacknet servers into money or using hacknet nodes."
     },
     "CHALLENGE_BN10": {
       "ID": "CHALLENGE_BN10",

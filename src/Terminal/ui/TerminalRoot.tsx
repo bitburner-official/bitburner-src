@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link as MuiLink, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import _ from "lodash";
@@ -14,6 +14,7 @@ import { CodingContractModal } from "../../ui/React/CodingContractModal";
 import { ANSIITypography } from "../../ui/React/ANSIITypography";
 import { useRerender } from "../../ui/React/hooks";
 import { TerminalActionTimer } from "./TerminalActionTimer";
+import { ConnectLink } from "./ConnectLink";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   container: {
@@ -94,7 +95,7 @@ export function TerminalRoot(): React.ReactElement {
             {item instanceof Link && (
               <Typography component="div" classes={{ root: classes.preformatted }}>
                 {item.dashes}
-                <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
+                <ConnectLink path={item.path} text={item.text} />
               </Typography>
             )}
           </li>

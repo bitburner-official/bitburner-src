@@ -60,6 +60,17 @@ Close the tail window of a script.
 </td></tr>
 <tr><td>
 
+[createConnectLink(connectPath, linkText)](./bitburner.userinterface.createconnectlink.md)
+
+
+</td><td>
+
+Allows programmatic use of AutoLink.exe.
+
+
+</td></tr>
+<tr><td>
+
 [getAllAliases()](./bitburner.userinterface.getallaliases.md)
 
 

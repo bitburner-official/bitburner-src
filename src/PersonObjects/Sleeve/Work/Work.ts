@@ -1,5 +1,4 @@
 import { Player } from "@player";
-import { IReviverValue } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applyWorkStatsExp, WorkStats } from "../../../Work/WorkStats";
 import { SleeveTask } from "@nsdefs";
@@ -28,7 +27,6 @@ export abstract class SleeveBaseWork extends BaseWork {
   abstract type: SleeveWorkType;
   abstract process(sleeve: Sleeve, cycles: number): void;
   abstract APICopy(sleeve: Sleeve): SleeveTask;
-  abstract toJSON(): IReviverValue;
   /**
    * Child classes that override this function must call `this.resolveNextCompletion()` when appropriate to ensure the
    * completion promise is resolved.

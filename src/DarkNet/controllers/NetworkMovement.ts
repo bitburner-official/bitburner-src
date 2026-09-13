@@ -10,7 +10,7 @@ import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killServerScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
+import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { LOW_LEVEL_SERVER_DENSITY, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,
@@ -121,7 +121,7 @@ export const mutateDarknet = (): void => {
   }
 
   if (Math.random() < 0.5) {
-    // delink all connections from a server
+    // unlink all connections from a server
     disconnectRandomServer();
   }
 
@@ -186,7 +186,7 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
   DeleteServer(server.hostname);
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [];
+  serverState.serverLogs.length = 0;
 };
 
 export const addRandomDarknetServers = (count = 1, difficulty?: number, fixedDepth?: boolean): void => {
@@ -306,7 +306,8 @@ export const restartServer = (server: DarknetServer): void => {
   killServerScripts(server, "Server restarted.");
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [{ pid: -1, message: "Server restarting, terminating scripts..." }];
+  serverState.serverLogs.length = 0;
+  serverState.serverLogs.push({ pid: -1, message: "Server restarting, terminating scripts..." });
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);
@@ -337,7 +338,7 @@ export const addGuaranteedConnection = (server: DarknetServer): void => {
 export const validateDarknetNetwork = (): void => {
   const servers = getAllDarknetServers();
   // The darknet should have at least darkweb and labyrinth servers.
-  if (servers.length < getLabyrinthServerNames().length + 1) {
+  if (servers.length < 2) {
     exceptionAlert(new Error(`There are too few darknet servers. servers.length: ${servers.length}`), true);
   }
   for (const server of servers) {

@@ -215,6 +215,7 @@ const singularity = {
   getSaveData: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGame: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGameBonus: SF4Cost(RamCostConstants.SingularityFn1 / 4),
+  hasExportGameBonus: SF4Cost(RamCostConstants.SingularityFn1 / 4),
   b1tflum3: SF4Cost(16),
   destroyW0r1dD43m0n: SF4Cost(32),
   getCurrentWork: SF4Cost(0.5),
@@ -459,6 +460,7 @@ const ui = {
   unalias: 0,
   getAllAliases: 0,
   renderPage: 0,
+  createConnectLink: 5,
 } as const;
 
 // Grafting API

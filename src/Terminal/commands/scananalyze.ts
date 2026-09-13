@@ -2,7 +2,6 @@ import { Player } from "@player";
 import { CompletedProgramName } from "@enums";
 import { Terminal } from "../../Terminal";
 import type { BaseServer } from "../../Server/BaseServer";
-import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { Server } from "../../Server/Server";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { GetServer } from "../../Server/AllServers";
@@ -47,31 +46,41 @@ export function scananalyze(args: (string | number | boolean)[]): undefined {
 function executeScanAnalyzeCommand(depth: number, all: boolean): void {
   interface Node {
     hostname: string;
+    path: string[];
     children: Node[];
   }
 
-  const ignoreServer = (s: BaseServer, d: number): boolean =>
-    (!all && s.purchasedByPlayer && s.hostname != "home") ||
-    d > depth ||
-    (!all && s instanceof HacknetServer) ||
-    (!all && s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb);
+  const showServer = (s: BaseServer, d: number): boolean => {
+    if (d > depth) {
+      return false;
+    }
+    if (s.purchasedByPlayer && s.hostname !== SpecialServers.Home) {
+      // cloud servers, hacknet servers
+      return all;
+    }
+    if (s instanceof DarknetServer && s.hostname !== SpecialServers.DarkWeb) {
+      return all && s.hasAdminRights;
+    }
+    return true;
+  };
 
   const makeNode = (root: BaseServer = Player.getCurrentServer()) => {
     // Keep track of previously seen servers to prevent backtracking (since darknet can be cyclical)
     const seenServers = [root.hostname];
-    const populateNode = (s: BaseServer, d = 1): Node => {
+    const populateNode = (s: BaseServer = root, path: string[] = [root.hostname], d = 1): Node => {
       seenServers.push(s.hostname);
       return {
         hostname: s.hostname,
+        path,
         children: s.serversOnNetwork
           .filter((h) => !seenServers.includes(h))
           .map((s) => GetServer(s))
-          .filter((v): v is BaseServer => !!v)
-          .filter((v) => !ignoreServer(v, d))
-          .map((h) => populateNode(h, d + 1)),
+          .filter((v) => v != null)
+          .filter((v) => showServer(v, d))
+          .map((h) => populateNode(h, [...path, h.hostname], d + 1)),
       };
     };
-    return populateNode(root);
+    return populateNode();
   };
 
   const root = makeNode();
@@ -80,7 +89,7 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
     const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
     const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
     if (Player.hasProgram(CompletedProgramName.autoLink)) {
-      Terminal.append(new Link(titlePrefix, node.hostname));
+      Terminal.append(new Link(titlePrefix, node.path, node.hostname));
     } else {
       Terminal.print(titlePrefix + node.hostname + "\n");
     }

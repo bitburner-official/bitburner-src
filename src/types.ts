@@ -15,7 +15,7 @@ export const isPositiveSafeInteger = (n: unknown): n is PositiveSafeInteger => i
 /** Utility type for typechecking objects. Makes all keys optional and sets values to unknown,
  * making it safe to assert a shape for the variable once it's known to be a non-null object */
 export type Unknownify<T> = {
-  [key in keyof T]?: unknown;
+  [key in keyof T]: unknown;
 };
 
 /** Get the member type of either an array or an object */
@@ -33,7 +33,7 @@ export interface IReturnStatus {
 
 /** Defines the minimum and maximum values for a range.
  * It is up to the consumer if these values are inclusive or exclusive.
- * It is up to the implementor to ensure max > min. */
+ * It is up to the implementer to ensure max > min. */
 export interface IMinMaxRange {
   /** Value by which the bounds are to be divided for the final range */
   divisor?: number;

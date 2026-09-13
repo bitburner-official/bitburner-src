@@ -314,7 +314,7 @@ interface RunningScript {
 interface RunOptions {
   /** Number of threads that the script will run with, defaults to 1 */
   threads?: number;
-  /** Whether this script is excluded from saves, defaults to false */
+  /** Whether this script is excluded from saves and the "Recently Killed" tab in Active Scripts, defaults to false */
   temporary?: boolean;
   /**
    * The RAM allocation to launch each thread of the script with.
@@ -848,9 +848,9 @@ interface SourceFileLvl {
  */
 interface BladeburnerCurAction {
   /** Type of Action */
-  type: string;
+  type: BladeburnerActionType;
   /** Name of Action */
-  name: string;
+  name: BladeburnerActionName;
 }
 
 /** @public */
@@ -1975,15 +1975,25 @@ export interface Singularity {
   exportGame(): Promise<void>;
 
   /**
-   * Returns Backup save bonus availability.
+   * Returns whether the Export Game bonus is available.
+   *
+   * This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link Singularity.hasExportGameBonus | hasExportGameBonus} instead.
+   *
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
-   *
-   *
-   * This function will check if there is a bonus for backing up your save.
-   *
    */
   exportGameBonus(): boolean;
+
+  /**
+   * Returns whether the Export Game bonus is available.
+   *
+   * @remarks
+   * RAM cost: 0.5 GB * 16/4/1
+   */
+  hasExportGameBonus(): boolean;
 
   /**
    * Take university class.
@@ -2773,9 +2783,9 @@ export interface Singularity {
    * RAM cost: 5 GB * 16/4/1
    *
    *
-   * This function will perform a reset even if you don’t have any augmentation installed.
+   * Performs the same reset as when you install Augmentations. This can be used even when no Augmentations are queued. Installs any queued Augmentations.
    *
-   * @param cbScript - This is a script that will automatically be run after Augmentations are installed (after the reset). This script will be run with no arguments and 1 thread. It must be located on your home computer.
+   * @param cbScript - This is a script that will automatically be run after the reset. This script will be run with no arguments and 1 thread. It must be located on your home computer.
    */
   softReset(cbScript?: string): void;
 
@@ -4735,9 +4745,9 @@ export interface Darknet {
    * RAM cost: 4 GB
    *
    * @param host - Hostname/IP of the connected server to migrate.
-   * @returns A promise that resolves to a {@link DarknetResult} object.
+   * @returns A promise that resolves to a {@link DarknetResult} object with a `progress` field indicating the total migration progress in the range [0, 1].
    */
-  induceServerMigration(host: string): Promise<DarknetResult>;
+  induceServerMigration(host: string): Promise<DarknetResult & { progress: number }>;
 
   /**
    * Executes STORM_SEED.exe, if it is present on the server the script is running on.
@@ -6591,7 +6601,7 @@ interface DarknetFormulas {
   /**
    * Gets the time it will take to scrape logs from a server.
    * @param serverDetails - The server to check heartbleed log scraping time on.
-   * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
+   * @param threads - The number of threads to use for log scraping. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
@@ -6938,7 +6948,11 @@ interface UserInterface {
    *
    * If the function is called with no arguments, it will close the current script’s logs.
    *
-   * Otherwise, the pid argument can be used to close the logs from another script.
+   * Otherwise, the pid argument can be used to close the logs from another script. Tail windows can remain open
+   * after a script finishes, and can still be closed using that script's PID. If the script is rerun from its tail
+   * window, use the PID of the new process.
+   *
+   * If no tail window exists for the given PID, this function has no effect.
    *
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
@@ -7169,6 +7183,32 @@ interface UserInterface {
    * @param node - The node to be rendered.
    */
   renderPage(node: ReactNode): void;
+
+  /**
+   * Allows programmatic use of AutoLink.exe.
+   *
+   * @remarks
+   * RAM cost: 5 GB
+   *
+   * This function uses AutoLink.exe to create a clickable link. Clicking on the link is
+   * equivalent to typing a sequence of "connect" commands into the terminal.
+   *
+   * @example
+   * ```js
+   * export async function main(ns) {
+   *   // Prints a link to the terminal. Clicking on it is equivalent
+   *   // to typing `connect joesguns; connect zer0; connect silver-helix`.
+   *   ns.tprintRaw(ns.ui.createConnectLink(['joesguns', 'zer0', 'silver-helix']));
+   * }
+   * ```
+   *
+   * @param connectPath - Hostnames or IP addresses of servers to connect to.
+   * @param linkText - The text to display on the link. Defaults to the last hostname or IP in connectPath. If
+   * connectPath is an empty array and linkText is nullish, linkText is set to `"do nothing"`.
+   * @returns A ReactElement that can be used with APIs such as {@link NS.tprintRaw | tprintRaw} and
+   * {@link NS.printRaw | printRaw}.
+   */
+  createConnectLink(connectPath: string[], linkText?: string): ReactElement;
 }
 
 /**
@@ -9168,8 +9208,7 @@ export interface NS {
    *
    * Move the source file to the specified destination on the target server.
    *
-   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). It cannot, however, be
-   * used to convert from script to text file, or vice versa.
+   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css).
    *
    * This function can also be used to rename files.
    *

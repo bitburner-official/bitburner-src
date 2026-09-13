@@ -3,7 +3,7 @@
               (c) 2063 Ishima Storm Technologies. All Rights Reserved.
 
 
-   > I cant believe they're making me actually do a coding test. What is this, some kind of joke?
+   > I can't believe they're making me actually do a coding test. What is this, some kind of joke?
    > They're asking me - with a full set of Neurolink augments and half the net under my control -
    > to make an "interactive experience"?
    >

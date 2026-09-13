@@ -8,12 +8,12 @@ import { ScriptURL } from "./LoadedModule";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, type IReviverValue } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { formatTime } from "../utils/helpers/formatTime";
 import { ScriptArg } from "@nsdefs";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
-import { getKeyList } from "../utils/helpers/getKeyList";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
@@ -154,8 +154,8 @@ export class RunningScript {
     this.dataMap.set(hostname, [hackMoney, hackCount, growCount, weakenCount + n]);
   }
 
-  // Serialize the current object to a JSON save state
-  toJSON(): IReviverValue {
+  // Custom save handling
+  jsonReplacer(): IReviverValue {
     // Save the title under its canonical name, reading the raw backing field so we don't
     // generate a default. Omit it when it's the default (null) or a ReactElement; both are
     // restored on load.
@@ -166,18 +166,32 @@ export class RunningScript {
         dataMap: Object.fromEntries(this.dataMap.entries()),
         title: this.title_,
       },
-      typeof this.title_ === "string" ? includedProperties : includedPropsNoTitle,
+      typeof this.title_ === "string" ? RunningScript.includedKeys : RunningScript.includedKeysNoTitle,
     );
   }
 
-  // Initializes a RunningScript Object from a JSON save state
-  static fromJSON(value: IReviverValue): RunningScript {
-    const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
+  // Custom load handling
+  static jsonReviver(value: IReviverValue): RunningScript {
+    const runningScript = Generic_fromJSON(RunningScript, value.data, RunningScript.includedKeys);
     const validEntries = Object.entries(runningScript.dataMap).filter(isValidDataMapEntry);
     runningScript.dataMap = new Map(validEntries);
 
     return runningScript;
   }
+
+  static includedKeys = makeSerializable("RunningScript", RunningScript, {
+    removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
+  }) as string[];
+  static {
+    // Persist the title under its canonical name, keeping its original key position.
+    const keys = RunningScript.includedKeys;
+    for (let i = 0; i < keys.length; ++i) {
+      if (keys[i] === "title_") {
+        keys[i] = "title";
+      }
+    }
+  }
+  static includedKeysNoTitle = RunningScript.includedKeys.filter((x) => x !== "title");
 
   initDataMapIfNeeded(hostname: string) {
     if (!this.dataMap.has(hostname)) {
@@ -185,15 +199,8 @@ export class RunningScript {
     }
   }
 }
-const includedProperties = getKeyList(RunningScript, {
-  removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
-  // Persist the title under its canonical name, keeping its original key position.
-}).map((key) => (key === "title_" ? "title" : key));
-const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");
 
 function isValidDataMapEntry(entry: [string, unknown]): entry is [string, number[]] {
   const [, value] = entry;
   return Array.isArray(value) && value.length === 4 && value.every((v) => typeof v === "number");
 }
-
-constructorsForReviver.RunningScript = RunningScript;

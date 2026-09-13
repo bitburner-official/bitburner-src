@@ -110,7 +110,7 @@ function possibleContracts(sleeve: Sleeve): BladeburnerContractName[] | ["------
       contracts = contracts.filter((x) => x != w.actionId.name);
     }
   }
-  return contracts;
+  return contracts.length !== 0 ? contracts : ["------"];
 }
 
 const tasks: {
@@ -200,8 +200,14 @@ const tasks: {
     return { first: gymSelectorOptions, second: () => gyms };
   },
   "Perform Bladeburner Actions": (sleeve: Sleeve): ITaskDetails => {
+    const contracts = possibleContracts(sleeve);
+    const isContractsUnavailable = contracts.length === 1 && contracts[0] === "------";
+    const availableOptions = isContractsUnavailable
+      ? bladeburnerSelectorOptions.filter((opt) => opt !== SpecialBladeburnerActionTypeForSleeve.TakeOnContracts)
+      : bladeburnerSelectorOptions;
+
     return {
-      first: bladeburnerSelectorOptions,
+      first: availableOptions,
       second: (s1: string) => {
         if (s1 === SpecialBladeburnerActionTypeForSleeve.TakeOnContracts) {
           return possibleContracts(sleeve);

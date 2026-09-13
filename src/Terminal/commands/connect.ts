@@ -1,8 +1,6 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { getServerOnNetwork } from "../../Server/ServerHelpers";
-import { GetServer } from "../../Server/AllServers";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { validateConnections } from "../../Server/ServerHelpers";
 
 export function connect(args: (string | number | boolean)[], server: BaseServer): undefined {
   // Disconnect from current server in Terminal and connect to new one
@@ -13,39 +11,10 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
 
   const hostname = String(args[0]);
 
-  const target = GetServer(hostname);
-  if (target === null) {
-    Terminal.error(`Invalid hostname: '${hostname}'`);
+  const result = validateConnections(server, [hostname]);
+  if (!result.success) {
+    Terminal.error(result.message);
     return;
   }
-
-  // Adjacent servers
-  for (let i = 0; i < server.serversOnNetwork.length; i++) {
-    const other = getServerOnNetwork(server, i);
-    if (other === null) {
-      exceptionAlert(
-        new Error(
-          `${server.serversOnNetwork[i]} is on the network of ${server.hostname}, but we cannot find its data.`,
-        ),
-      );
-      return;
-    }
-    if (other.hostname === target.hostname) {
-      Terminal.connectToServer(hostname);
-      return;
-    }
-  }
-
-  /**
-   * Backdoored + owned servers (home, private servers, or hacknet servers). With home computer, purchasedByPlayer is
-   * true.
-   */
-  if (target.backdoorInstalled || target.purchasedByPlayer) {
-    Terminal.connectToServer(hostname);
-    return;
-  }
-
-  Terminal.error(
-    `Cannot directly connect to ${hostname}. Make sure the server is backdoored or adjacent to your current server`,
-  );
+  Terminal.connectToServer(result.destination);
 }

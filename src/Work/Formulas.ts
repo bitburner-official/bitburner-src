@@ -97,26 +97,26 @@ export function calculateFactionExp(person: IPerson, type: FactionWorkType): Wor
 }
 
 /** Calculate cost for a class */
-export function calculateCost(classs: Class, location: Location): number {
+export function calculateCost(classInfo: Class, location: Location): number {
   const serverMeta = serverMetadata.find((s) => s.specialName === location.name);
   const server = GetServer(serverMeta ? serverMeta.hostname : "");
   const discount = (server as Server)?.backdoorInstalled ? 0.9 : 1;
-  return classs.earnings.money * location.costMult * discount;
+  return classInfo.earnings.money * location.costMult * discount;
 }
 
 /** @returns per-cycle WorkStats */
 export function calculateClassEarnings(person: IPerson, type: ClassType, locationName: LocationName): WorkStats {
   const hashManager = Player.hashManager;
-  const classs = Classes[type];
+  const classInfo = Classes[type];
   const location = Locations[locationName];
 
   const hashMult = isMember("GymType", type) ? hashManager.getTrainingMult() : hashManager.getStudyMult();
 
   const earnings = multWorkStats(
-    scaleWorkStats(classs.earnings, (location.expMult / gameCPS) * hashMult, false),
+    scaleWorkStats(classInfo.earnings, (location.expMult / gameCPS) * hashMult, false),
     person.mults,
   );
-  earnings.money = calculateCost(classs, location) / gameCPS;
+  earnings.money = calculateCost(classInfo, location) / gameCPS;
   return processWorkStats(person, earnings);
 }
 

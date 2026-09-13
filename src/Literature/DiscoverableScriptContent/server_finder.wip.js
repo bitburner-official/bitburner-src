@@ -2,7 +2,7 @@
                    ~Network scanner~
            [Copyright (c) 2058  Junie Perez]
 
-  This is supposed to be a re-usable tool to get the full list of
+  This is supposed to be a reusable tool to get the full list of
   servers out there.The network has never really been fully explored,
   you know? Maybe I can make a name for myself that way.
 

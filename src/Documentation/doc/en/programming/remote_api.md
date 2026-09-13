@@ -37,7 +37,13 @@ Links:
 
 ## API specification
 
+### Overview
+
 All APIs use a request/response format similar to the JSON RPC 2.0 protocol.
+
+Unknown parameters in requests are ignored.
+
+Pagination is not supported.
 
 Request:
 
@@ -64,7 +70,9 @@ Error Response:
             "error": string
         }
 
-### pushFile
+### API list
+
+#### pushFile
 
 Create or update a file.
 
@@ -89,7 +97,7 @@ Response:
             "result": "OK"
         }
 
-### getFile
+#### getFile
 
 Read a file and its content.
 
@@ -113,7 +121,7 @@ Response:
             "result": string
         }
 
-### getFileMetadata
+#### getFileMetadata
 
 Read metadata of a file.
 
@@ -136,13 +144,14 @@ Response:
             "id": number,
             "result": {
                 "filename": string,
-                "atime": string,
-                "btime": string,
-                "mtime": string
+                "size": number,
+                "atime": number,
+                "btime": number,
+                "mtime": number
             }
         }
 
-### deleteFile
+#### deleteFile
 
 Delete a file.
 
@@ -166,7 +175,7 @@ Response:
             "result": "OK"
         }
 
-### getFileNames
+#### getFileNames
 
 List all file names on a server.
 
@@ -189,7 +198,7 @@ Response:
             "result": string[]
         }
 
-### getAllFiles
+#### getAllFiles
 
 Get the content of all files on a server.
 
@@ -215,11 +224,11 @@ Response:
             }[]
         }
 
-### getAllFileMetadata
-
-Request:
+#### getAllFileMetadata
 
 Get the content of all files on a server.
+
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -237,13 +246,14 @@ Response:
             "id": number,
             "result": {
                 "filename": string,
-                "atime": string
-                "btime": string,
-                "mtime": string,
+                "size": number,
+                "atime": number,
+                "btime": number,
+                "mtime": number
             }[]
         }
 
-### calculateRam
+#### calculateRam
 
 Calculate the in-game ram cost of a script.
 
@@ -267,7 +277,7 @@ Response:
             "result": number
         }
 
-### getDefinitionFile
+#### getDefinitionFile
 
 Get the definition file of NS APIs.
 
@@ -287,7 +297,7 @@ Response:
             "result": string
         }
 
-### getSaveFile
+#### getSaveFile
 
 Get save data.
 
@@ -311,7 +321,7 @@ Response:
             }
         }
 
-### getAllServers
+#### getAllServers
 
 Get all servers.
 

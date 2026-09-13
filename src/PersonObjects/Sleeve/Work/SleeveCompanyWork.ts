@@ -1,6 +1,7 @@
 import { Player } from "@player";
 import { CompanyName, JobName } from "@enums";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, type IReviverValue } from "../../../utils/JSONReviver";
+import { makeSerializable } from "../../../utils/GenericReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { Companies } from "../../../Company/Companies";
@@ -55,17 +56,12 @@ export class SleeveCompanyWork extends SleeveBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveCompanyWork", this);
-  }
-
-  /** Initializes a CompanyWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): SleeveCompanyWork {
-    const work = Generic_fromJSON(SleeveCompanyWork, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): SleeveCompanyWork {
+    const work = Generic_fromJSON(SleeveCompanyWork, value.data, SleeveCompanyWork.includedKeys);
     if (!isMember("CompanyName", work.companyName)) return invalidWork();
     return work;
   }
-}
 
-constructorsForReviver.SleeveCompanyWork = SleeveCompanyWork;
+  static includedKeys = makeSerializable("SleeveCompanyWork", SleeveCompanyWork);
+}
