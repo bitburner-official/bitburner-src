@@ -208,14 +208,13 @@ If the opposing faction's network is down to its last open port, placing a route
 To find out what networks are in danger of capture, `ns.go.analysis.getLiberties()` shows how many empty nodes / open ports each network has. As with `getBoardState()` and `getValidMoves()` , the number of liberties (open ports) for a given point's network can be retrieved via its coordinates `[x][y]` on the grid returned by `getLiberties()`
 
 ```text
-Detect moves to capture the opponent's routers:
+Detect moves to capture the opponents routers:
    For each point on the board:
       * If the empty point is a valid move, and
-      * If a point to the north, south, east, or west is a router with exactly 1
-          liberty [via its coordinates in getLiberties()], and
+      * If a point to the north, south, east, or west is a router with exactly 1 liberty, and
       * That point is controlled by the opponent [it is a "O" via getBoardState()]
 
-      Then, playing that move will capture the opponent's network.
+      Then, playing that move will capture the opponents network.
 ```
 
 &nbsp;
@@ -228,22 +227,19 @@ Detect moves to capture the opponent's routers:
 Detect moves to defend a threatened network:
    For each point on the board:
       * If the empty point is a valid move, and
-      * If a point to the north, south, east, or west is a router with exactly 1
-           liberty [via its coordinates in getLiberties()], and
+      * If a point to the north, south, east, or west is a router with exactly 1 liberty, and
       * That point is controlled by the player [it is a "X" via getBoardState()]
 
       Then, that network is in danger of being captured.
 
 
-   To detect if that network can be saved:
+To detect if that network can be saved:
 
-   * Ensure the new move will not immediately allow the opponent to capture:
-      * That empty point ALSO has two or more empty points adjacent to it
-           [a "." via getBoardState()], OR
-      * That empty point has a friendly network adjacent to it, and that network
-           has 3 or more liberties [via getLiberties()]
+* Ensure the new move will not immediately allow the opponent to capture:
+  * That empty point ALSO has two or more empty points adjacent to it [a "." via getBoardState()], OR
+  * That empty point has a friendly network adjacent to it, and that network has 3+ liberties
 
-      Then, playing that move will prevent your network from being captured (at least for a turn or two)
+  Then, playing that move will prevent your network from being captured (at least for a turn or two)
 ```
 
 &nbsp;
