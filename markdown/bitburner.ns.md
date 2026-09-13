@@ -1383,7 +1383,7 @@ Prints a ReactNode to the script logs.
 
 </td><td>
 
-Prompt the player with a modal and response options.
+Prompt the player with a dialogue box modal.
 
 
 </td></tr>

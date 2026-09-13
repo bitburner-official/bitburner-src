@@ -4,7 +4,7 @@
 
 ## NS.prompt() method
 
-Prompt the player with a modal and response options.
+Prompt the player with a dialogue box modal.
 
 **Signature:**
 

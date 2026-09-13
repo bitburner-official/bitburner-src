@@ -9017,7 +9017,7 @@ export interface NS {
   vsprintf(format: string, args: any[]): string;
 
   /**
-   * Prompt the player with a modal and response options.
+   * Prompt the player with a dialogue box modal.
    * @remarks
    * RAM cost: 0 GB
    *
