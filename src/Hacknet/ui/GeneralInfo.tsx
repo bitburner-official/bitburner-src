@@ -21,8 +21,8 @@ export function GeneralInfo(props: IProps): React.ReactElement {
       {!props.hasHacknetServers ? (
         <>
           <Typography>
-            Here you can purchase Hacknet Nodes, specialized machines that can anonymously connect and contribute their
-            resoures to the network. They allow you to take a small percentage of profits from hacks performed on the
+            Here you can purchase Hacknet Nodes, specialized machines that can connect and contribute their resoures to
+            the Hacknet network. They allow you to take a small percentage of profits from hacks performed on the
             network. Essentially, you are renting out your Nodes' computing power.
             <br />
             <br />
