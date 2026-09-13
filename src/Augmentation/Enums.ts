@@ -92,7 +92,7 @@ export enum AugmentationName {
   SNA = "Social Negotiation Assistant (S.N.A)",
   CongruityImplant = "violet Congruity Implant",
   HydroflameLeftArm = "Hydroflame Left Arm",
-  BigDsBigBrain = "BigD's Big... Brain",
+  BigDsBigBrain = "BigD's Big ... Brain",
   ZOE = "Z.O.Ë.",
   Eloquence = "Eloquence Module",
   GoldenTongue = "Golden Tongue Module",
