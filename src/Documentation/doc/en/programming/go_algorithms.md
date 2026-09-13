@@ -149,7 +149,7 @@ export async function main(ns) {
 
 Just playing random moves is not very effective, though. The next step is to use the board state to try and take over territory.
 
-`ns.go.getBoardState()` returns a simple grid representing what the current board looks like. The player's routers are marked with `X`, and the opponents with `O`.
+`ns.go.getBoardState()` returns a simple grid representing what the current board looks like. The player's routers are marked with `X`, and the opponent's with `O`.
 
 Example 5x5 board state, with a number of networks for each player:
 
@@ -208,13 +208,13 @@ If the opposing faction's network is down to its last open port, placing a route
 To find out what networks are in danger of capture, `ns.go.analysis.getLiberties()` shows how many empty nodes / open ports each network has. As with `getBoardState()` and `getValidMoves()` , the number of liberties (open ports) for a given point's network can be retrieved via its coordinates `[x][y]` on the grid returned by `getLiberties()`
 
 ```text
-Detect moves to capture the opponents routers:
+Detect moves to capture the opponent's routers:
    For each point on the board:
       * If the empty point is a valid move, and
       * If a point to the north, south, east, or west is a router with exactly 1 liberty, and
       * That point is controlled by the opponent [it is a "O" via getBoardState()]
 
-      Then, playing that move will capture the opponents network.
+      Then, playing that move will capture the opponent's network.
 ```
 
 &nbsp;
