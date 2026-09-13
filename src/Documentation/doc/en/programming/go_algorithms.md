@@ -211,7 +211,7 @@ To find out what networks are in danger of capture, `ns.go.analysis.getLiberties
 Detect moves to capture the opponent's routers:
    For each point on the board:
       * If the empty point is a valid move, and
-      * If a point to the north, south, east, or west is a router with exactly 1 
+      * If a point to the north, south, east, or west is a router with exactly 1
           liberty [via its coordinates in getLiberties()], and
       * That point is controlled by the opponent [it is a "O" via getBoardState()]
 
@@ -238,9 +238,9 @@ Detect moves to defend a threatened network:
    To detect if that network can be saved:
 
    * Ensure the new move will not immediately allow the opponent to capture:
-      * That empty point ALSO has two or more empty points adjacent to it 
+      * That empty point ALSO has two or more empty points adjacent to it
            [a "." via getBoardState()], OR
-      * That empty point has a friendly network adjacent to it, and that network 
+      * That empty point has a friendly network adjacent to it, and that network
            has 3 or more liberties [via getLiberties()]
 
       Then, playing that move will prevent your network from being captured (at least for a turn or two)
