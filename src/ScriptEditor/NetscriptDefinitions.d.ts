@@ -9076,14 +9076,14 @@ export interface NS {
    * ```
    *
    * @param txt - Text to appear in the prompt dialog box.
-   * @param heading - Heading to appear at the top of the prompt dialog box.
    * @param options - Options to modify the prompt the player is shown.
+   * @param heading - Heading to appear at the top of the prompt dialog box.
    * @returns True if the player clicks “Yes”; false if the player clicks “No”; or the value entered by the player.
    */
   prompt(
     txt: string,
-    heading?: string,
     options?: { type?: "boolean" | "text" | "select"; choices?: string[] },
+    heading?: string,
   ): Promise<boolean | string>;
 
   /**

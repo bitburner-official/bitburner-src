@@ -1378,7 +1378,7 @@ Prints a ReactNode to the script logs.
 </td></tr>
 <tr><td>
 
-[prompt(txt, heading, options)](./bitburner.ns.prompt.md)
+[prompt(txt, options, heading)](./bitburner.ns.prompt.md)
 
 
 </td><td>

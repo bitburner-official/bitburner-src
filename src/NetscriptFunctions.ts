@@ -1288,7 +1288,7 @@ export const ns: InternalAPI<NSFull> = {
     const duration = _duration === null ? null : helpers.number(ctx, "duration", _duration);
     SnackbarEvents.emit(message, variant as ToastVariant, duration);
   },
-  prompt: (ctx, _txt, _heading, _options) => {
+  prompt: (ctx, _txt, _options, _heading) => {
     const options: { type?: string; choices?: string[] } = {};
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
