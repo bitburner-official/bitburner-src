@@ -9040,7 +9040,7 @@ export interface NS {
    * The `options.choices` property is an optional array, only needed for the "select" prompt and ignored otherwise. Its
    * elements can be strings or numbers (excluding BigInt).
    *
-   * Note that when the player selects an option from the choices aray, the selected value will always be converted to a
+   * Note that when the player selects an option from the choices array, the selected value will always be converted to a
    * string. For example, if the choices array is `[1, "2"]` and the player chooses `1` (the number value), the promise
    * resolves to `"1"` (the string value).
    *

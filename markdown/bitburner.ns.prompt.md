@@ -89,7 +89,7 @@ If the `options.type` is `"text"`<!-- -->: - Prompt options: Free-form text fiel
 
 The `options.choices` property is an optional array, only needed for the "select" prompt and ignored otherwise. Its elements can be strings or numbers (excluding BigInt).
 
-Note that when the player selects an option from the choices aray, the selected value will always be converted to a string. For example, if the choices array is `[1, "2"]` and the player chooses `1` (the number value), the promise resolves to `"1"` (the string value).
+Note that when the player selects an option from the choices array, the selected value will always be converted to a string. For example, if the choices array is `[1, "2"]` and the player chooses `1` (the number value), the promise resolves to `"1"` (the string value).
 
 The player can cancel the prompt in two ways: by clicking the X button in the top-right, or clicking outside the dialog box.
 
