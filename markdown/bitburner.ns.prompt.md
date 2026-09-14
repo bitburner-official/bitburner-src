@@ -71,7 +71,7 @@ _(Optional)_ Options to modify the prompt the player is shown.
 
 Promise&lt;boolean \| string&gt;
 
-Return value depends on the player action and `options.type`<!-- -->. If `options.type` is "boolean" or `undefined`<!-- -->, the return value is `true` if the player clicks Yes, and `false` if they click "No" or cancels the dialogue box. If the `options.type` is "text" or "select", the return value is the one selected or entered by the player, or `""` if they cancel the dialogue box.
+Return value depends on the player action and `options.type`<!-- -->. If `options.type` is "boolean" or `undefined`<!-- -->, the return value is `true` if the player clicks Yes, and `false` if they click "No" or cancel the prompt. If the `options.type` is "text" or "select", the return value is the one selected or entered by the player, or `""` if they cancel the prompt.
 
 ## Remarks
 
@@ -85,11 +85,13 @@ If the `options.type` is `"boolean"`<!-- -->, not provided, or `undefined`<!-- -
 
 If the `options.type` is `"select"`<!-- -->: - Prompt options: Dropdown list of options - Return value: The value selected by the player, or `""` if they cancel the box.
 
-If the `options.type` is `"text"`<!-- -->: - Prompt options: Free-form text field - Return value: The value entered by the player, or `""` if they cancel the box. - `options.choices` value: An array of strings, numbers (excluding BigInt), or a mix of both.
+If the `options.type` is `"text"`<!-- -->: - Prompt options: Free-form text field - Return value: The value entered by the player, or `""` if they cancel the box.
 
-The `options.choices` property is only needed for "select" prompts. It's ignored otherwise.
+The `options.choices` property is an optional array, only needed for the "select" prompt and ignored otherwise. Its elements can be strings or numbers (excluding BigInt).
 
-The player can cancel the dialogue box by either: - clicking the X button in the top-right - clicking outside the dialog box
+Note that when the player selects an option from the choices aray, the selected value will always be converted to a string. For example, if the choices array is `[1, "2"]` and the player chooses `1` (the number value), the promise resolves to `"1"` (the string value).
+
+The player can cancel the prompt in two ways: by clicking the X button in the top-right, or clicking outside the dialog box.
 
 If the prompt API is called again while the old dialog box still exists, the old dialog box will be replaced with a new one, and the old promise will be resolved with the default value.
 
