@@ -12,6 +12,7 @@ import { Terminal } from "../../Terminal";
 export const PromptEvent = new EventEmitter<[Prompt]>();
 
 interface Prompt {
+  heading?: string;
   txt: string;
   options?: { type?: string; choices?: string[] };
   resolve: (result: boolean | string) => void;
@@ -67,6 +68,7 @@ export function PromptManager({ hidden }: { hidden: boolean }): React.ReactEleme
     <Modal open={!hidden && prompt !== null} onClose={close}>
       {prompt && (
         <>
+          {prompt.heading && <Typography variant="h4">{prompt.heading}</Typography>}
           <pre>
             <Typography>{prompt.txt}</Typography>
           </pre>

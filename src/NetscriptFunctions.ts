@@ -1288,10 +1288,17 @@ export const ns: InternalAPI<NSFull> = {
     const duration = _duration === null ? null : helpers.number(ctx, "duration", _duration);
     SnackbarEvents.emit(message, variant as ToastVariant, duration);
   },
-  prompt: (ctx, _txt, _options) => {
+  prompt: (ctx, _txt, _heading, _options) => {
     const options: { type?: string; choices?: string[] } = {};
+    let heading: string | undefined;
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
+    if (typeof _heading !== "undefined" && typeof _heading !== "string") {
+      assert(_heading, assertString, (type) =>
+        helpers.errorMessage(ctx, `Invalid type for heading: ${type}. Should be string.`, "TYPE"),
+      );
+    }
+    heading = _heading;
     assert(_options, assertObject, (type) =>
       helpers.errorMessage(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
     );
@@ -1320,6 +1327,7 @@ export const ns: InternalAPI<NSFull> = {
     }
     return new Promise(function (resolve) {
       PromptEvent.emit({
+        heading: heading,
         txt: txt,
         options,
         resolve: resolve,

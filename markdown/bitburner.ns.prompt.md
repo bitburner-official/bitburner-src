@@ -11,6 +11,7 @@ Prompt the player with an input modal.
 ```typescript
 prompt(
     txt: string,
+    heading?: string,
     options?: { type?: "boolean" | "text" | "select"; choices?: string[] },
   ): Promise<boolean | string>;
 ```
@@ -46,6 +47,22 @@ string
 </td><td>
 
 Text to appear in the prompt dialog box.
+
+
+</td></tr>
+<tr><td>
+
+heading
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Heading to appear at the top of the prompt dialog box.
 
 
 </td></tr>
