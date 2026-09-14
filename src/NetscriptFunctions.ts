@@ -1290,7 +1290,6 @@ export const ns: InternalAPI<NSFull> = {
   },
   prompt: (ctx, _txt, _heading, _options) => {
     const options: { type?: string; choices?: string[] } = {};
-    let heading: string | undefined;
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
     if (typeof _heading !== "undefined" && typeof _heading !== "string") {
@@ -1298,7 +1297,7 @@ export const ns: InternalAPI<NSFull> = {
         helpers.errorMessage(ctx, `Invalid type for heading: ${type}. Should be string.`, "TYPE"),
       );
     }
-    heading = _heading;
+    const heading = _heading;
     assert(_options, assertObject, (type) =>
       helpers.errorMessage(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
     );
