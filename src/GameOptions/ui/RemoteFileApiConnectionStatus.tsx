@@ -13,20 +13,22 @@ import { Page } from "../../ui/Router";
 import { RFAConnectionEvents, RFAConnectionSettingEvents } from "../../RemoteFileAPI/Remote";
 import { useRerender } from "../../ui/React/hooks";
 
-export const RFAConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
-  const [rfaConnectionStatus, setRfaConnectionStatus] = useState(getRFAConnectionStatus());
+export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
+  const [remoteFileApiConnectionStatus, setRemoteFileApiConnectionStatus] = useState(
+    getRemoteFileApiConnectionStatus(),
+  );
   const rerender = useRerender();
 
   useEffect(() => {
-    const unsubscriberForRFAEvents = RFAConnectionEvents.subscribe((status) => {
-      setRfaConnectionStatus(status);
+    const unsubscriberForRemoteFileApiEvents = RemoteFileApiConnectionEvents.subscribe((status) => {
+      setRemoteFileApiConnectionStatus(status);
     });
-    const unsubscriberForRFASettingEvents = RFAConnectionSettingEvents.subscribe(() => {
+    const unsubscriberForRemoteFileApiSettingEvents = RemoteFileApiConnectionSettingEvents.subscribe(() => {
       rerender();
     });
     return () => {
-      unsubscriberForRFAEvents();
-      unsubscriberForRFASettingEvents();
+      unsubscriberForRemoteFileApiEvents();
+      unsubscriberForRemoteFileApiSettingEvents();
     };
   }, [rerender]);
 
@@ -48,7 +50,7 @@ export const RFAConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.
     },
   };
 
-  const color = connectionConfig[rfaConnectionStatus].color;
+  const color = connectionConfig[remoteFileApiConnectionStatus].color;
 
   return (
     <Box style={{ display: "flex", flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
@@ -56,7 +58,7 @@ export const RFAConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.
         <IconButton
           aria-label="Remote API status"
           onClick={() => {
-            switch (rfaConnectionStatus) {
+            switch (remoteFileApiConnectionStatus) {
               case "Online":
                 closeRFAConnection();
                 break;
@@ -77,9 +79,9 @@ export const RFAConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.
           <Tooltip
             title={
               <>
-                Remote API: {rfaConnectionStatus}
+                Remote API: {remoteFileApiConnectionStatus}
                 <br />
-                {connectionConfig[rfaConnectionStatus].instruction}
+                {connectionConfig[remoteFileApiConnectionStatus].instruction}
               </>
             }
           >
@@ -88,7 +90,7 @@ export const RFAConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.
         </IconButton>
       ) : (
         <Typography>
-          Status: <span style={{ color }}>{rfaConnectionStatus}</span>
+          Status: <span style={{ color }}>{remoteFileApiConnectionStatus}</span>
         </Typography>
       )}
     </Box>
