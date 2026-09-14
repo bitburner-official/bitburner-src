@@ -9076,11 +9076,10 @@ export interface NS {
    *
    * @param txt - Text to appear in the prompt dialog box.
    * @param options - Options to modify the prompt the player is shown.
-   * @returns Return value depends on the player action and `options.type`. If `options.type`
-   * is "boolean" or `undefined`, the return value is `true` if the player clicks Yes, and
-   * `false` if they click "No" or cancels the dialogue box. If the `options.type` is "text"
-   * or "select", the return value is the one selected or entered by the player, or `""` if
-   * they cancel the dialogue box.
+   * @returns Return value depends on the player action and `options.type`. If `options.type` is "boolean" or
+   * `undefined`, the return value is `true` if the player clicks Yes, and `false` if they click "No" or cancel the
+   * prompt. If the `options.type` is "text" or "select", the return value is the one selected or entered by the player,
+   * or `""` if they cancel the prompt.
    */
   prompt(
     txt: string,
