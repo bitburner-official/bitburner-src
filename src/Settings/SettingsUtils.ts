@@ -21,7 +21,7 @@ import { Settings } from "./Settings";
  * - Use non-http schemes in the hostname: "ftp://a.com"
  * - etc.
  */
-export function isValidRFAHostname(hostname: string): Result {
+export function isValidRemoteFileApiHostname(hostname: string): Result {
   // Return a user-friendly error message.
   if (hostname === "") {
     return {
@@ -133,8 +133,8 @@ export function loadSettings(saveString: string) {
    * The hostname and port of RemoteFileApi have not been validated properly, so the save data may contain invalid data.
    * In that case, we set them to the default value.
    */
-  if (!isValidRFAHostname(Settings.RFAAddress).success) {
-    Settings.RFAAddress = "localhost";
+  if (!isValidRemoteFileApiHostname(Settings.RemoteFileApiAddress).success) {
+    Settings.RemoteFileApiAddress = "localhost";
   }
   if (!isValidRemoteFileApiConnectionPortSetting(Settings.RemoteFileApiPort).success) {
     Settings.RemoteFileApiPort = 0;

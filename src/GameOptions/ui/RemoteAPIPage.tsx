@@ -2,23 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Button, TextField, Tooltip, Typography } from "@mui/material";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { Settings } from "../../Settings/Settings";
-import { isValidConnectionHostname, isValidRemoteFileApiConnectionPortSetting } from "../../Settings/SettingsUtils";
+import { isValidRemoteFileApiHostname, isValidRemoteFileApiConnectionPortSetting } from "../../Settings/SettingsUtils";
 import { RemoteFileApiConnectionStatus } from "./RemoteFileApiConnectionStatus";
 import {
-  canCreateNewRFAConnection,
-  closeRFAConnection,
-  isRFAConnectionLive,
-  newRFAConnection,
+  canCreateNewRemoteFileApiConnection,
+  closeRemoteFileApiConnection,
+  isRemoteFileApiConnectionLive,
+  newRemoteFileApiConnection,
 } from "../../RemoteFileAPI/RemoteFileAPI";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { DocumentationLink } from "../../ui/React/DocumentationLink";
-import { RFAConnectionEvents, RFAConnectionSettingEvents } from "../../RemoteFileAPI/Remote";
+import { RemoteFileApiConnectionEvents, RemoteFileApiConnectionSettingEvents } from "../../RemoteFileAPI/Remote";
 import { useRerender } from "../../ui/React/hooks";
 
 export const RemoteAPIPage = (): React.ReactElement => {
   const [remoteFileApiHostname, setRemoteFileApiHostname] = useState(Settings.RemoteFileApiAddress);
   const [hostnameError, setHostnameError] = useState(
-    isValidConnectionHostname(Settings.RemoteFileApiAddress).message ?? "",
+    isValidRemoteFileApiHostname(Settings.RemoteFileApiAddress).message ?? "",
   );
   const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort.toString());
   const [portError, setPortError] = useState(
@@ -33,7 +33,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
 
   useEffect(
     () =>
-      RFAConnectionEvents.subscribe(() => {
+      RemoteFileApiConnectionEvents.subscribe(() => {
         rerender();
       }),
     [rerender],
@@ -43,43 +43,43 @@ export const RemoteAPIPage = (): React.ReactElement => {
   const isValidPort = portError === "";
   const isValidReconnectionDelay = reconnectionDelayError === "";
 
-  function handleRFAHostnameChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  function handleRemoteFileApiHostnameChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const newValue = event.target.value.trim();
-    setRFAHostname(newValue);
-    const result = isValidRFAHostname(newValue);
+    setRemoteFileApiHostname(newValue);
+    const result = isValidRemoteFileApiHostname(newValue);
     if (!result.success) {
       setHostnameError(result.message);
       return;
     }
-    Settings.RFAAddress = newValue;
-    RFAConnectionSettingEvents.emit();
+    Settings.RemoteFileApiAddress = newValue;
+    RemoteFileApiConnectionSettingEvents.emit();
     setHostnameError("");
   }
 
-  function handleRFAPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const newValue = event.target.value.trim();
-    setRFAPort(newValue);
+    setRemoteFileApiPort(newValue);
     const port = Number(newValue);
     const result = isValidRemoteFileApiConnectionPortSetting(port);
     if (!result.success) {
       setPortError(result.message);
       return;
     }
-    Settings.RFAPort = port;
-    RFAConnectionSettingEvents.emit();
+    Settings.RemoteFileApiPort = port;
+    RemoteFileApiConnectionSettingEvents.emit();
     setPortError("");
   }
 
-  function handleRFAReconnectionDelayChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  function handleRemoteFileApiReconnectionDelayChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const newValue = event.target.value.trim();
-    setRFAReconnectionDelay(newValue);
+    setRemoteFileApiReconnectionDelay(newValue);
     const reconnectionDelay = Number(newValue);
     if (!Number.isFinite(reconnectionDelay) || reconnectionDelay < 0) {
       setReconnectionDelayError("Invalid reconnection delay");
       return;
     }
-    Settings.RFAReconnectionDelay = reconnectionDelay;
-    RFAConnectionSettingEvents.emit();
+    Settings.RemoteFileApiReconnectionDelay = reconnectionDelay;
+    RemoteFileApiConnectionSettingEvents.emit();
     setReconnectionDelayError("");
   }
 
@@ -92,7 +92,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
       <Typography>
         <DocumentationLink page="programming/remote_api.md">Documentation</DocumentationLink>
       </Typography>
-      <RFAConnectionStatus showIcon={false} />
+      <RemoteFileApiConnectionStatus showIcon={false} />
       <Tooltip
         title={
           <Typography>
@@ -111,8 +111,8 @@ export const RemoteAPIPage = (): React.ReactElement => {
             InputProps={{
               startAdornment: <Typography style={{ minWidth: "200px" }}>Hostname:&nbsp;</Typography>,
             }}
-            value={rfaHostname}
-            onChange={handleRFAHostnameChange}
+            value={remoteFileApiHostname}
+            onChange={handleRemoteFileApiHostnameChange}
             placeholder="localhost"
             size={"medium"}
           />
@@ -139,8 +139,8 @@ export const RemoteAPIPage = (): React.ReactElement => {
                 </Typography>
               ),
             }}
-            value={rfaPort}
-            onChange={handleRFAPortChange}
+            value={remoteFileApiPort}
+            onChange={handleRemoteFileApiPortChange}
             placeholder="12525"
             size={"medium"}
           />
@@ -169,8 +169,8 @@ export const RemoteAPIPage = (): React.ReactElement => {
                 </Typography>
               ),
             }}
-            value={rfaReconnectionDelay}
-            onChange={handleRFAReconnectionDelayChange}
+            value={remoteFileApiReconnectionDelay}
+            onChange={handleRemoteFileApiReconnectionDelayChange}
             placeholder="0"
             size={"medium"}
           />
@@ -178,25 +178,25 @@ export const RemoteAPIPage = (): React.ReactElement => {
         </div>
       </Tooltip>
       <OptionSwitch
-        checked={Settings.UseWssForRFA}
+        checked={Settings.UseWssForRemoteFileApi}
         onChange={(newValue) => {
-          Settings.UseWssForRFA = newValue;
-          RFAConnectionSettingEvents.emit();
+          Settings.UseWssForRemoteFileApi = newValue;
+          RemoteFileApiConnectionSettingEvents.emit();
         }}
         text="Use wss"
         tooltip={<>Use wss instead of ws when connecting to RemoteFileApi clients.</>}
       />
       <Button
-        disabled={!isRFAConnectionLive() && !canCreateNewRFAConnection()}
+        disabled={!isRemoteFileApiConnectionLive() && !canCreateNewRemoteFileApiConnection()}
         onClick={() => {
-          if (!isRFAConnectionLive()) {
-            newRFAConnection();
+          if (!isRemoteFileApiConnectionLive()) {
+            newRemoteFileApiConnection();
           } else {
-            closeRFAConnection();
+            closeRemoteFileApiConnection();
           }
         }}
       >
-        {!isRFAConnectionLive() ? "Connect" : "Disconnect"}
+        {!isRemoteFileApiConnectionLive() ? "Connect" : "Disconnect"}
       </Button>
     </GameOptionsPage>
   );

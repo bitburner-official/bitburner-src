@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import {
-  canCreateNewRFAConnection,
-  closeRFAConnection,
-  getRFAConnectionStatus,
-  newRFAConnection,
+  canCreateNewRemoteFileApiConnection,
+  closeRemoteFileApiConnection,
+  getRemoteFileApiConnectionStatus,
+  newRemoteFileApiConnection,
 } from "../../RemoteFileAPI/RemoteFileAPI";
 import OnlinePredictionIcon from "@mui/icons-material/OnlinePrediction";
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { RFAConnectionEvents, RFAConnectionSettingEvents } from "../../RemoteFileAPI/Remote";
+import { RemoteFileApiConnectionEvents, RemoteFileApiConnectionSettingEvents } from "../../RemoteFileAPI/Remote";
 import { useRerender } from "../../ui/React/hooks";
 
 export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
@@ -36,11 +36,11 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
     Online: { color: Settings.theme.success, instruction: "Click to disconnect" },
     Offline: {
       color: Settings.theme.error,
-      instruction: canCreateNewRFAConnection() ? "Click to connect" : "Click to go to the option page",
+      instruction: canCreateNewRemoteFileApiConnection() ? "Click to connect" : "Click to go to the option page",
     },
     Reconnecting: {
       color: Settings.theme.warning,
-      instruction: canCreateNewRFAConnection()
+      instruction: canCreateNewRemoteFileApiConnection()
         ? "Click to try to connect immediately without waiting"
         : "Click to go to the option page",
     },
@@ -60,12 +60,12 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
           onClick={() => {
             switch (remoteFileApiConnectionStatus) {
               case "Online":
-                closeRFAConnection();
+                closeRemoteFileApiConnection();
                 break;
               case "Offline":
               case "Reconnecting":
-                if (canCreateNewRFAConnection()) {
-                  newRFAConnection();
+                if (canCreateNewRemoteFileApiConnection()) {
+                  newRemoteFileApiConnection();
                 } else {
                   Router.toPage(Page.Options, { tab: "Remote API" });
                 }

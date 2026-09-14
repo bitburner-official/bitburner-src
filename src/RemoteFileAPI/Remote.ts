@@ -4,7 +4,7 @@ import { SnackbarEvents } from "../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { Settings } from "../Settings/Settings";
 import { EventEmitter } from "../utils/EventEmitter";
-import type { getRFAConnectionStatus } from "./RemoteFileAPI";
+import type { getRemoteFileApiConnectionStatus } from "./RemoteFileAPI";
 
 const timeOutIds = new Set<number>();
 
@@ -12,8 +12,8 @@ function showErrorMessage(address: string, detail: string) {
   SnackbarEvents.emit(`Error with websocket ${address}, details: ${detail}`, ToastVariant.ERROR, 5000);
 }
 
-export const RFAConnectionEvents = new EventEmitter<[ReturnType<typeof getRFAConnectionStatus>]>();
-export const RFAConnectionSettingEvents = new EventEmitter();
+export const RemoteFileApiConnectionEvents = new EventEmitter<[ReturnType<typeof getRemoteFileApiConnectionStatus>]>();
+export const RemoteFileApiConnectionSettingEvents = new EventEmitter();
 
 export class Remote {
   connection?: WebSocket;
@@ -37,11 +37,11 @@ export class Remote {
       this.connection.intentionallyClosed = true;
     }
     this.connection?.close();
-    RFAConnectionEvents.emit("Offline");
+    RemoteFileApiConnectionEvents.emit("Offline");
   }
 
   public startConnection(autoConnectAttempt = 1): void {
-    const address = (Settings.UseWssForRFA ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
+    const address = (Settings.UseWssForRemoteFileApi ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
 
     // This tracks if a connection was established to prevent redundant toasts
     let successfullyConnected = false;
@@ -54,7 +54,7 @@ export class Remote {
       return;
     }
 
-    RFAConnectionEvents.emit("Connecting");
+    RemoteFileApiConnectionEvents.emit("Connecting");
     // Log connection errors on manual and the first auto connect attempts
     this.connection.addEventListener("error", (e: Event) => {
       if (autoConnectAttempt <= 1 || successfullyConnected) {
@@ -71,7 +71,7 @@ export class Remote {
         ToastVariant.SUCCESS,
         2000,
       );
-      RFAConnectionEvents.emit("Online");
+      RemoteFileApiConnectionEvents.emit("Online");
     });
     this.connection.addEventListener("close", (event) => {
       /**
@@ -92,7 +92,7 @@ export class Remote {
         SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
       }
 
-      if (Settings.RFAReconnectionDelay > 0) {
+      if (Settings.RemoteFileApiReconnectionDelay > 0) {
         this.reconnecting = true;
         const timeOutId = window.setTimeout(() => {
           timeOutIds.delete(timeOutId);
@@ -104,12 +104,12 @@ export class Remote {
           const attempts = successfullyConnected ? 1 : autoConnectAttempt + 1;
 
           this.startConnection(attempts);
-        }, Settings.RFAReconnectionDelay * 1000);
+        }, Settings.RemoteFileApiReconnectionDelay * 1000);
         timeOutIds.add(timeOutId);
-        RFAConnectionEvents.emit("Reconnecting");
+        RemoteFileApiConnectionEvents.emit("Reconnecting");
       } else {
         this.reconnecting = false;
-        RFAConnectionEvents.emit("Offline");
+        RemoteFileApiConnectionEvents.emit("Offline");
       }
     });
   }

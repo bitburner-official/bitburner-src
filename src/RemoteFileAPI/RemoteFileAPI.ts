@@ -1,35 +1,38 @@
 import { Settings } from "../Settings/Settings";
-import { isValidRFAHostname, isValidRFAPort } from "../Settings/SettingsUtils";
+import { isValidRemoteFileApiHostname, isValidRemoteFileApiConnectionPortSetting } from "../Settings/SettingsUtils";
 import { Remote } from "./Remote";
 
 let server: Remote | undefined;
 
-export function canCreateNewRFAConnection(): boolean {
-  return isValidRFAHostname(Settings.RFAAddress).success && isValidRFAPort(Settings.RFAPort).success;
+export function canCreateNewRemoteFileApiConnection(): boolean {
+  return (
+    isValidRemoteFileApiHostname(Settings.RemoteFileApiAddress).success &&
+    isValidRemoteFileApiConnectionPortSetting(Settings.RemoteFileApiPort).success
+  );
 }
 
-export function newRFAConnection(): void {
-  closeRFAConnection();
-  if (!canCreateNewRFAConnection()) {
+export function newRemoteFileApiConnection(): void {
+  closeRemoteFileApiConnection();
+  if (!canCreateNewRemoteFileApiConnection()) {
     return;
   }
-  server = new Remote(Settings.RFAAddress, Settings.RFAPort);
+  server = new Remote(Settings.RemoteFileApiAddress, Settings.RemoteFileApiPort);
   server.startConnection();
 }
 
-export function closeRFAConnection(): void {
+export function closeRemoteFileApiConnection(): void {
   if (!server) {
     return;
   }
   server.stopConnection();
 }
 
-export function isRFAConnectionLive(): boolean {
+export function isRemoteFileApiConnectionLive(): boolean {
   return server !== undefined && server.connection !== undefined && server.connection.readyState === 1;
 }
 
-export function getRFAConnectionStatus(): "Online" | "Offline" | "Reconnecting" | "Connecting" {
-  if (isRFAConnectionLive()) {
+export function getRemoteFileApiConnectionStatus(): "Online" | "Offline" | "Reconnecting" | "Connecting" {
+  if (isRemoteFileApiConnectionLive()) {
     return "Online";
   }
   if (server?.reconnecting) {

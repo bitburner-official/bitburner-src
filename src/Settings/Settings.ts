@@ -42,13 +42,13 @@ export const Settings = {
   /** Limit the number of entries in the terminal. */
   MaxTerminalCapacity: 500,
   /** IP address the Remote File API client will try to connect to. Default localhost . */
-  RFAAddress: "localhost",
+  RemoteFileApiAddress: "localhost",
   /** Port the Remote File API client will try to connect to. 0 to disable. */
-  RFAPort: 0,
+  RemoteFileApiPort: 0,
   /** Automatically reconnect to the Remote File API client after this delay. Set it 0 to disable. */
-  RFAReconnectionDelay: 0,
-  /** Use wss instead of ws when connecting to RFA clients */
-  UseWssForRFA: false,
+  RemoteFileApiReconnectionDelay: 0,
+  /** Use wss instead of ws when connecting to RemoteFileApi clients */
+  UseWssForRemoteFileApi: false,
   /** Whether to save the game when the player saves any file. */
   SaveGameOnFileSave: true,
   /** Whether to hide the confirmation dialog for augmentation purchases. */
