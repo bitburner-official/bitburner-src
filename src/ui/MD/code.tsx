@@ -1,6 +1,6 @@
 import React from "react";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { monokaiSublime as theme } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { default as HljsHighlighter } from "react-syntax-highlighter";
+import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Theme } from "@mui/material/styles";
 import { CodeProps } from "react-markdown/lib/ast-to-react";
 import { Typography } from "@mui/material";
@@ -36,18 +36,32 @@ const InlineCode = (props: React.PropsWithChildren<CodeProps>): React.ReactEleme
   </Typography>
 );
 
-const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => (
-  <SyntaxHighlighter
-    language="javascript"
-    style={theme}
-    customStyle={{
-      padding: "16px",
-      borderRadius: "6px",
-    }}
-  >
-    {String(props.children)}
-  </SyntaxHighlighter>
-);
+const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => {
+  let language = props.className?.startsWith("language-") ? props.className.slice("language-".length) : "javascript";
+  // In documentation, we usually use "js" after triple backticks, so the class name is usually "language-js".
+  // The highlighter does not recognize "js" as an alias for "javascript", so we need to normalize the language name
+  // here.
+  switch (language) {
+    case "js":
+      language = "javascript";
+      break;
+    case "ts":
+      language = "typescript";
+      break;
+  }
+  return (
+    <HljsHighlighter
+      language={language}
+      style={monokaiSublime}
+      customStyle={{
+        padding: "16px",
+        borderRadius: "6px",
+      }}
+    >
+      {String(props.children)}
+    </HljsHighlighter>
+  );
+};
 
 export const code = (props: React.PropsWithChildren<CodeProps>): React.ReactElement =>
   props.inline ? <InlineCode {...props} /> : <BigCode {...props} />;
