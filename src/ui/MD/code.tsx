@@ -36,18 +36,23 @@ const InlineCode = (props: React.PropsWithChildren<CodeProps>): React.ReactEleme
   </Typography>
 );
 
-const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => (
-  <SyntaxHighlighter
-    language="javascript"
-    style={theme}
-    customStyle={{
-      padding: "16px",
-      borderRadius: "6px",
-    }}
-  >
-    {String(props.children)}
-  </SyntaxHighlighter>
-);
+const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => {
+  const match = /language-(\w+)/.exec(props.className || "");
+  const language = match ? match[1] : undefined;
+
+  return (
+    <SyntaxHighlighter
+      language={language}
+      style={theme}
+      customStyle={{
+        padding: "16px",
+        borderRadius: "6px",
+      }}
+    >
+      {String(props.children)}
+    </SyntaxHighlighter>
+  );
+};
 
 export const code = (props: React.PropsWithChildren<CodeProps>): React.ReactElement =>
   props.inline ? <InlineCode {...props} /> : <BigCode {...props} />;
