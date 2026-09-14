@@ -45,7 +45,7 @@ string
 
 </td><td>
 
-Text to appear in the prompt dialog box.
+Text to appear in the prompt's body.
 
 
 </td></tr>

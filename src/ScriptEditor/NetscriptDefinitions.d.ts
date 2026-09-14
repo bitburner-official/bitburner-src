@@ -9075,7 +9075,7 @@ export interface NS {
    * ns.tprint(`Your favorite fruit is ${resultD.toLowerCase()}.`);
    * ```
    *
-   * @param txt - Text to appear in the prompt dialog box.
+   * @param txt - Text to appear in the prompt's body.
    * @param options - Options to modify the prompt the player is shown.
    * @returns Return value depends on the player action and `options.type`. If `options.type` is "boolean" or
    * `undefined`, the return value is `true` if the player clicks Yes, and `false` if they click "No" or cancel the
