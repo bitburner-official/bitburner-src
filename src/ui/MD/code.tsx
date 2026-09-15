@@ -37,7 +37,7 @@ const InlineCode = (props: React.PropsWithChildren<CodeProps>): React.ReactEleme
 );
 
 const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => {
-  let language = props.className?.startsWith("language-") ? props.className.slice("language-".length) : "javascript";
+  let language = props.className?.startsWith("language-") ? props.className.slice("language-".length) : "text";
   // In documentation, we usually use "js" after triple backticks, so the class name is usually "language-js".
   // The highlighter does not recognize "js" as an alias for "javascript", so we need to normalize the language name
   // here.
