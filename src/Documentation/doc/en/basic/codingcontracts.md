@@ -34,7 +34,9 @@ lower rewards. Contracts generated this way grant 50% lower rewards than those g
 
 To run a Coding Contract in the [Terminal](terminal.md), simply use the `run` command:
 
-    $ run some-contract.cct
+```text
+$ run some-contract.cct
+```
 
 Doing this will bring up a popup.
 The popup will display the contract's problem, the number of attempts remaining, and an area to provide an answer.
@@ -114,7 +116,7 @@ string conversion unless specifically asked for.
 For example, suppose a contract requires the answer to be an array containing strings, and you determine that those
 strings are `foo` and `bar`. Your code should look like this:
 
-```js
+```javascript
 const firstString = "foo";
 const secondString = "bar";
 const answer = [firstString, secondString];
@@ -127,7 +129,7 @@ In the "General rules" section above, with array-of-strings solutions, we say `D
 However, this code works:
 
 <!-- prettier-ignore -->
-```js
+```javascript
 const firstString = 'foo'; // Single quotes
 const secondString = 'bar'; // Single quotes
 const answer = [firstString, secondString];
@@ -148,7 +150,7 @@ you do not need to worry about quote types.
 
 Let's check another example:
 
-```js
+```javascript
 const firstString = "foo";
 const secondString = "bar";
 const answer = [firstString, secondString];

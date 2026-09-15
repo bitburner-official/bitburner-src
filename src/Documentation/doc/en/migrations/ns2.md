@@ -20,7 +20,7 @@ Since all ES5 code is still valid Javascript, you may be wondering why the old c
 
 1. Wrap the entire script inside of an exported main function, like so:
 
-```js
+```javascript
 /** @param {NS} ns */
 export async function main(ns) {
   // your code here
@@ -36,7 +36,7 @@ export async function main(ns) {
 
 Original (`early-hacking-template.script`):
 
-```js
+```javascript
 var target = "n00dles";
 var moneyThresh = getServerMaxMoney(target) * 0.9;
 var securityThresh = getServerMinSecurityLevel(target) + 5;
@@ -54,7 +54,7 @@ while (true) {
 
 Migrated (`early-hacking-template.js`):
 
-```js
+```javascript
 /** @param {NS} ns */
 export async function main(ns) {
   const target = "n00dles";

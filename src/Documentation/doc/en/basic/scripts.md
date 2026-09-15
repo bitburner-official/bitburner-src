@@ -38,9 +38,11 @@ If searching by filename, arguments must be an **exact** match - both the order 
 In order to reference a file, `functions` require the **full** absolute file path.
 For example
 
-    ns.run("/scripts/hacking/helpers.myHelperScripts.js");
-    ns.rm("/logs/myHackingLogs.txt");
-    ns.rm("thisIsAFileInTheRootDirectory.txt");
+```javascript
+ns.run("/scripts/hacking/helpers.myHelperScripts.js");
+ns.rm("/logs/myHackingLogs.txt");
+ns.rm("thisIsAFileInTheRootDirectory.txt");
+```
 
 A full file path **must** begin with a forward slash (/) if that file is not in the root directory.
 For details on references in terminal commands, see [Terminal](terminal.md).
@@ -49,8 +51,10 @@ For details on references in terminal commands, see [Terminal](terminal.md).
 
 When running a script, you can use [flags](../../../../../markdown/bitburner.ns.flags.md) and [arguments](../../../../../markdown/bitburner.ns.args.md), which the script's logic can access and act on, allowing flexibility in your script designs. For example allowing you to get different results or attack different targets without re-writing your code:
 
-    $ run hack.js "harakiri-sushi"
-    $ run hack.js "silver-helix"
+```text
+$ run hack.js "harakiri-sushi"
+$ run hack.js "silver-helix"
+```
 
 ## Multithreading scripts
 
@@ -86,7 +90,9 @@ Remember that scripts are uniquely identified by their arguments as well as thei
 Arguments should be separated by a space.
 For example, if you ran a script `foo.js` with the argument `foodnstuff` then in order to 'check' it you must also add `foodnstuff` as an argument for the `check` command:
 
-    $ check foo.js foodnstuff
+```text
+$ check foo.js foodnstuff
+```
 
 **free**
 
@@ -100,14 +106,18 @@ Arguments should be separated by a space.
 For example, if you ran a script `foo.js` with the arguments `1` and `2`, then just typing `kill foo.js` will not work.
 Instead use:
 
-    $ kill foo.js 1 2
+```text
+$ kill foo.js 1 2
+```
 
 **mem [script] [-t] [n]**
 
 Check how much [RAM](ram.md) a script requires to run with "n" threads
 
-    $ mem [scriptname] -t n
-    $ mem hack.js -t 500
+```text
+$ mem [scriptname] -t n
+$ mem hack.js -t 500
+```
 
 **nano [script]**
 
@@ -133,19 +143,27 @@ Examples:
 
 Run `foo.js` single-threaded with no arguments::
 
-    $ run foo.js
+```text
+$ run foo.js
+```
 
 Run `foo.js` with 10 threads and no arguments:
 
-    $ run foo.js -t 10
+```text
+$ run foo.js -t 10
+```
 
 Run `foo.js` single-threaded with three arguments: `[foodnstuff, sigma-cosmetics, 10]`:
 
-    $ run foo.js foodnstuff sigma-cosmetics 10
+```text
+$ run foo.js foodnstuff sigma-cosmetics 10
+```
 
 Run `foo.js` with 50 threads and a single argument: `foodnstuff`:
 
-    $ run foo.js -t 50 foodnstuff
+```text
+$ run foo.js -t 50 foodnstuff
+```
 
 **tail [pid]** or **tail [script] [args...]**
 
@@ -153,10 +171,14 @@ Displays the logs of the script specified by the PID or filename and arguments.
 Remember that scripts are identified by their arguments as well as their filename.
 For example, if you ran a script `foo.js` with the argument `foodnstuff`, in order to `tail` it you must also add the `foodnstuff` argument to the `tail` command as so:
 
-    $ tail foo.js foodnstuff
+```text
+$ tail foo.js foodnstuff
+```
 
 **top**
 
 Prints all scripts running on the server and their [RAM](ram.md) usage.
 
-    $ top
+```text
+$ top
+```

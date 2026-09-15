@@ -37,21 +37,25 @@ Because of this, they guarantee a consistent, but relatively small flow of money
 
 The general logic goes like this:
 
-    loop forever {
-        if security is not minimum {
-            await ns.weaken(target)
-        } else if money is not maximum {
-            await ns.grow(target)
-        } else {
-            await ns.hack(target)
-        }
-    }
+```text
+loop forever {
+  if security is not minimum {
+    await ns.weaken(target)
+  } else if money is not maximum {
+    await ns.grow(target)
+  } else {
+    await ns.hack(target)
+  }
+}
+```
 
 This algorithm is perfectly capable of paving the way through the early stages of the game, but it has a few significant issues.
 
 For ease of visualisation, this is a simplified representation of the hacking sequence:
 
-    |Hack=||=Weaken=============||=Grow===========||=Weaken=============|
+```text
+|Hack=||=Weaken=============||=Grow===========||=Weaken=============|
+```
 
 - It tends to make all your scripts on every server do the same thing (e.g. If the target is 0.01 security above the minimum, all scripts will decide to weaken, when only a handful of threads should be devoted to the task). This wastes time that could be spent on the next function and delays when the script starts to bring in money.
 - At higher thread counts, these scripts have the potential to hack the server to \$0, or maximum security, requiring a long setup time while the scripts return the server to the best stats.
@@ -65,7 +69,9 @@ To resolve EHT's issues, we can manage the hack, grow and weaken functions from 
 
   - The worker scripts can be as simple as
 
-        await ns.hack(target) // or grow, or weaken
+```javascript
+await ns.hack(target); // or grow, or weaken
+```
 
 - The central controller can monitor the state of the target server and calculate exactly how many weaken, grow or hack threads are needed at any time to maximise RAM effectiveness and reduce the risk of over hacking.
 
@@ -99,10 +105,12 @@ A single batch often consists of four actions:
 3.  A grow script counters the money decrease caused by the hack script.
 4.  A weaken script counters the security increase caused by the grow script.
 
-                       |Hack=|
-         |=Weaken=============|
-              |=Grow===========|
-           |=Weaken=============|
+```text
+              |Hack=|
+|=Weaken=============|
+     |=Grow===========|
+  |=Weaken=============|
+```
 
 This is HWGW (Hack-Weaken-Grow-Weaken) batch, which is simple to implement and does not need formulas APIs. There are other batch types that may be better in some cases (e.g., HGW batch), but they usually need formulas APIs.
 
@@ -122,7 +130,9 @@ Don't forget to explore the [NS API](github.com/bitburner-official/bitburner-src
 
 There are many ways to launch batches. The simplest way is to launch them sequentially like this:
 
-    |=Batch=||=Batch=||=Batch=||=Batch=||=Batch=||=Batch=|
+```text
+|=Batch=||=Batch=||=Batch=||=Batch=||=Batch=||=Batch=|
+```
 
 This is called "proto-batcher", in which the next batch is only launched when the previous batch completes. The next sections will show you other types of batching.
 
@@ -143,19 +153,23 @@ Cons:
 A shotgun batcher uses a controller script to launch as many batches in parallel as possible.
 Each function has a delay to make them all the same run time, meaning if they are launched in the correct order they will finish in the correct order. Each batch looks like this:
 
-    |=Hack+additionalMsec=|
-    |=Weaken==============|
-    |=Grow+additionalMsec=|
-    |=Weaken==============|
+```text
+|=Hack+additionalMsec=|
+|=Weaken==============|
+|=Grow+additionalMsec=|
+|=Weaken==============|
+```
 
 Very little - potentially 0 - time is needed between batches if they are launched correctly. In other words, instead of launching batches sequentially (like the proto-batcher), a shotgun batcher uses the available RAM in parallel to hit the target multiple times almost instantly - hence the name.
 
-    |=Batch=|
-    |=Batch=|
-    |=Batch=|
-    |=Batch=|
-    |=Batch=|
-    |=Batch=|
+```text
+|=Batch=|
+|=Batch=|
+|=Batch=|
+|=Batch=|
+|=Batch=|
+|=Batch=|
+```
 
 Launching potentially thousands of batches at the same time is intensive on real-life hardware. It's recommended to limit the number of parallel batches to around 100 000 to reduce the risk of the game soft-crashing. (Also called a "black screen" because of how it appears when this happens.)
 
@@ -174,20 +188,27 @@ Cons:
 
 Shotgun batchers are not very RAM efficient because the scripts take up RAM during their delay timer. For example, if a hack function is 4 times faster than a weaken, the same RAM could be used to run the hack function for four different batches. This is shown visually below:
 
-                       |Hack=||Hack=||Hack=||Hack=|
-         |=Weaken=============| |=Weaken=============|
-              |=Grow===========|   |=Grow===========|
-           |=Weaken=============|
+```text
+              |Hack=||Hack=||Hack=||Hack=|
+|=Weaken=============| |=Weaken=============|
+     |=Grow===========|   |=Grow===========|
+  |=Weaken=============|
+       |=Weaken=============|
+            |=Grow===========|
+         |=Weaken=============|
+              |=Weaken=============|
+                   |=Grow===========|
                 |=Weaken=============|
-                     |=Grow===========|
-                  |=Weaken=============|
-                       |=Weaken=============|
-                            |=Grow===========|
-                         |=Weaken=============|
-                              |=Weaken=============|
+                     |=Weaken=============|
+```
 
 Or:
 
+```text
+              |Hack=|
+|=Weaken=============|
+     |=Grow===========|
+  |=Weaken=============|
                   |Hack=|
     |=Weaken=============|
          |=Grow===========|
@@ -196,10 +217,7 @@ Or:
         |=Weaken=============|
              |=Grow===========|
           |=Weaken=============|
-                          |Hack=|
-            |=Weaken=============|
-                 |=Grow===========|
-              |=Weaken=============|
+```
 
 \*For illustrative purposes only.
 

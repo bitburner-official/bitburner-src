@@ -20,16 +20,22 @@ These features are typically in Linux filesystems and have not yet been added to
 
 In order to create a directory, simply name a file using a full absolute Linux-style path:
 
-    /scripts/myScript.js
+```text
+/scripts/myScript.js
+```
 
 This will automatically create a "directory" called `scripts`.
 This will also work for subdirectories:
 
-    /scripts/hacking/helpers/myHelperScripts.js
+```text
+/scripts/hacking/helpers/myHelperScripts.js
+```
 
 Files in the root directory do not need to begin with a forward slash:
 
-    thisIsAFileInTheRootDirectory.txt
+```text
+thisIsAFileInTheRootDirectory.txt
+```
 
 Note that **there is no way to manually create or remove directories.**
 Creation and deletion of "directories" is automatically handled as you create, rename, or delete files in game.
@@ -41,19 +47,25 @@ Many Terminal commands accept both absolute and relative paths for specifying a 
 An absolute path specifies the location of the file from the root directory (/).
 Any path that begins with the forward slash is an absolute path:
 
-    $ nano /scripts/myScript.js
-    $ cat /serverList.txt
+```text
+$ nano /scripts/myScript.js
+$ cat /serverList.txt
+```
 
 A relative path specifies the location of the file relative to the current working directory.
 Any path that does **not** begin with a forward slash is a relative path.
 Note that the Linux-style dot symbols will work for relative paths:
 
-    . (a single dot) - represents the current directory
-    .. (two dots) - represents the parent directory
+```text
+. (a single dot) - represents the current directory
+.. (two dots) - represents the parent directory
+```
 
-    $ cd ..
-    $ nano ../scripts/myScript.js
-    $ nano ../../helper.js
+```text
+$ cd ..
+$ nano ../scripts/myScript.js
+$ nano ../../helper.js
+```
 
 For additional details about specifying paths and references in scripts, see [Scripts](scripts.md).
 
@@ -72,32 +84,40 @@ When running scripts, however, it may be important to know specific detail, espe
 Here's an example to show how these rules work.
 Consider the following script `argType.js`:
 
-    export async function main(ns) {
-        ns.tprint("Number of args: " + ns.args.length);
-        for (var i = 0; i < ns.args.length; ++i) {
-            ns.tprint(typeof ns.args[i]);
-        }
-    }
+```javascript
+export async function main(ns) {
+  ns.tprint("Number of args: " + ns.args.length);
+  for (var i = 0; i < ns.args.length; ++i) {
+    ns.tprint(typeof ns.args[i]);
+  }
+}
+```
 
 Then if we run the following terminal command:
 
-    $ run argType.js 123 1e3 "5" "this is a single argument"
+```text
+$ run argType.js 123 1e3 "5" "this is a single argument"
+```
 
 We'll see the following in the Terminal:
 
-    Running script with 1 thread(s), pid 1 and args: [123, 1000, "5", "this is a single argument"].
-    argType.js: Number of args: 4
-    argType.js: number
-    argType.js: number
-    argType.js: string
-    argType.js: string
+```text
+Running script with 1 thread(s), pid 1 and args: [123, 1000, "5", "this is a single argument"].
+argType.js: Number of args: 4
+argType.js: number
+argType.js: number
+argType.js: string
+argType.js: string
+```
 
 ## Chaining Commands
 
 You can run multiple Terminal commands at once by separating each command
 with a semicolon (;). For example:
 
-    $ run foo.js; tail foo.js
+```text
+$ run foo.js; tail foo.js
+```
 
 Chained commands do **not** wait for functions like `hack` or `wget` to finish executing, and so may not always work as expected.
 

@@ -94,7 +94,7 @@ In that example typing `run script.js` and pressing tab would initially suggest 
 
 This is a function that works nearly identically to `ns.flags()`. The only difference is that it allows unknown options. For example:
 
-```js
+```javascript
 export function autocomplete(data, args) {
   const parsedFlags = data.flags([["foo", true]]);
   return [];
@@ -113,7 +113,7 @@ If you type `run a.js --f` in the terminal and press tab, `parsedFlags` in `auto
 
 If you type `run a.js --f` in the terminal and press enter, an error will be thrown:
 
-```
+```text
 ArgError: unknown or unexpected option: --f
 ```
 

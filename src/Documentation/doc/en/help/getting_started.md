@@ -52,94 +52,108 @@ The `weaken()` function is used to decrease a [Server](../basic/servers.md)'s se
 Now let's move on to actually creating the [Script](../basic/scripts.md).
 Go to your home computer and then create a [Script](../basic/scripts.md) called `early-hack-template.js` by going to [Terminal](../basic/terminal.md) and entering the following two commands:
 
-    $ home
-    $ nano early-hack-template.js
+```text
+$ home
+$ nano early-hack-template.js
+```
 
 This will take you to the [Script](../basic/scripts.md) editor, which you can use to code and create [Scripts](../basic/scripts.md).
 
 Enter the following code in the [Script](../basic/scripts.md) editor:
 
-    /** @param {NS} ns */
-    export async function main(ns) {
-        // Defines the "target server", which is the server
-        // that we're going to hack. In this case, it's "n00dles"
-        const target = "n00dles";
+```javascript
+/** @param {NS} ns */
+export async function main(ns) {
+  // Defines the "target server", which is the server
+  // that we're going to hack. In this case, it's "n00dles"
+  const target = "n00dles";
 
-        // Defines how much money a server should have before we hack it
-        // In this case, it is set to the maximum amount of money.
-        const moneyThresh = ns.getServerMaxMoney(target);
+  // Defines how much money a server should have before we hack it
+  // In this case, it is set to the maximum amount of money.
+  const moneyThresh = ns.getServerMaxMoney(target);
 
-        // Defines the minimum security level the target server can
-        // have. If the target's security level is higher than this,
-        // we'll weaken it before doing anything else
-        const securityThresh = ns.getServerMinSecurityLevel(target);
+  // Defines the minimum security level the target server can
+  // have. If the target's security level is higher than this,
+  // we'll weaken it before doing anything else
+  const securityThresh = ns.getServerMinSecurityLevel(target);
 
-        // If we have the BruteSSH.exe program, use it to open the SSH Port
-        // on the target server
-        if (ns.fileExists("BruteSSH.exe", "home")) {
-            ns.brutessh(target);
-        }
+  // If we have the BruteSSH.exe program, use it to open the SSH Port
+  // on the target server
+  if (ns.fileExists("BruteSSH.exe", "home")) {
+    ns.brutessh(target);
+  }
 
-        // Get root access to target server
-        ns.nuke(target);
+  // Get root access to target server
+  ns.nuke(target);
 
-        // Infinite loop that continously hacks/grows/weakens the target server
-        while(true) {
-            if (ns.getServerSecurityLevel(target) > securityThresh) {
-                // If the server's security level is above our threshold, weaken it
-                await ns.weaken(target);
-            } else if (ns.getServerMoneyAvailable(target) < moneyThresh) {
-                // If the server's money is less than our threshold, grow it
-                await ns.grow(target);
-            } else {
-                // Otherwise, hack it
-                await ns.hack(target);
-            }
-        }
+  // Infinite loop that continously hacks/grows/weakens the target server
+  while (true) {
+    if (ns.getServerSecurityLevel(target) > securityThresh) {
+      // If the server's security level is above our threshold, weaken it
+      await ns.weaken(target);
+    } else if (ns.getServerMoneyAvailable(target) < moneyThresh) {
+      // If the server's money is less than our threshold, grow it
+      await ns.grow(target);
+    } else {
+      // Otherwise, hack it
+      await ns.hack(target);
     }
+  }
+}
+```
 
 The [Script](../basic/scripts.md) above contains comments that document what it does, but let's go through it step-by-step anyway.
 
-    const target = "n00dles";
+```javascript
+const target = "n00dles";
+```
 
 This first command defines a string which contains our target [Server](../basic/servers.md).
 That's the [Server](../basic/servers.md) that we're going to [hack](../basic/hacking.md).
 For now, it's set to `"n00dles"` because that's the only [Server](../basic/servers.md) with a required hacking level of `1`.
 If you want to [hack](../basic/hacking.md) a different [Server](../basic/servers.md), simply change this variable to be the hostname of another [Server](../basic/servers.md).
 
-    const moneyThresh = ns.getServerMaxMoney(target);
+```javascript
+const moneyThresh = ns.getServerMaxMoney(target);
+```
 
 This second command defines a numerical value representing the minimum amount of money that must be available on the target [Server](../basic/servers.md) in order for our [Script](../basic/scripts.md) to [hack](../basic/hacking.md) it.
 If the money available on the target [Server](../basic/servers.md) is less than this value, then our [Script](../basic/scripts.md) will `grow()` the [Server](../basic/servers.md) rather than [hacking](../basic/hacking.md) it.
 It is set to the maximum amount of money that can be available on the [Server](../basic/servers.md).
 The `getServerMaxMoney()` function is used to find this value
 
-    const securityThresh = ns.getServerMinSecurityLevel(target);
+```javascript
+const securityThresh = ns.getServerMinSecurityLevel(target);
+```
 
 This third command defines a numerical value representing the minimum security level the target [Server](../basic/servers.md) can have.
 If the target [Server](../basic/servers.md)'s security level is higher than this value, then our [Script](../basic/scripts.md) will `weaken()` the server before doing anything else.
 
-    if (ns.fileExists("BruteSSH.exe", "home")) {
-        ns.brutessh(target);
-    }
+```javascript
+if (ns.fileExists("BruteSSH.exe", "home")) {
+  ns.brutessh(target);
+}
 
-    ns.nuke(target);
+ns.nuke(target);
+```
 
 This section of code is used to gain root access on the target [Server](../basic/servers.md).
 This is necessary for [hacking](../basic/hacking.md).
 
-    while (true) {
-        if (ns.getServerSecurityLevel(target) > securityThresh) {
-            // If the server's security level is above our threshold, weaken it
-            await ns.weaken(target);
-        } else if (ns.getServerMoneyAvailable(target) < moneyThresh) {
-            // Otherwise, if the server's money is less than our threshold, grow it
-            await ns.grow(target);
-        } else {
-            // Otherwise, hack it
-            await ns.hack(target);
-        }
-    }
+```javascript
+while (true) {
+  if (ns.getServerSecurityLevel(target) > securityThresh) {
+    // If the server's security level is above our threshold, weaken it
+    await ns.weaken(target);
+  } else if (ns.getServerMoneyAvailable(target) < moneyThresh) {
+    // Otherwise, if the server's money is less than our threshold, grow it
+    await ns.grow(target);
+  } else {
+    // Otherwise, hack it
+    await ns.hack(target);
+  }
+}
+```
 
 This is the main section that drives our [Script](../basic/scripts.md).
 It dictates the [Script](../basic/scripts.md)'s logic and carries out the [hacking](../basic/hacking.md) operations.
@@ -157,7 +171,9 @@ Instead, we'll take advantage of the [RAM](../basic/ram.md) on other machines.
 
 Go to `Terminal` and enter the following command:
 
-    $ scan-analyze 2
+```text
+$ scan-analyze 2
+```
 
 This will show detailed information about some [Servers](../basic/servers.md) on the network.
 
@@ -165,55 +181,57 @@ This will show detailed information about some [Servers](../basic/servers.md) on
 
 Here's what mine showed at the time I made this:
 
-    [home ~]> scan-analyze 2
-    ┕ home
-      ┃   Root Access: YES, Required hacking skill: 1
-      ┃   Number of open ports required to NUKE: 5
-      ┃   RAM: 8.00GB
-      ┣ n00dles
-      ┃ ┃   Root Access: YES, Required hacking skill: 1
-      ┃ ┃   Number of open ports required to NUKE: 0
-      ┃ ┃   RAM: 4.00GB
-      ┃ ┕ nectar-net
-      ┃       Root Access: NO, Required hacking skill: 20
-      ┃       Number of open ports required to NUKE: 0
-      ┃       RAM: 16.00GB
-      ┣ foodnstuff
-      ┃ ┃   Root Access: NO, Required hacking skill: 1
-      ┃ ┃   Number of open ports required to NUKE: 0
-      ┃ ┃   RAM: 16.00GB
-      ┃ ┕ zer0
-      ┃       Root Access: NO, Required hacking skill: 75
-      ┃       Number of open ports required to NUKE: 1
-      ┃       RAM: 32.00GB
-      ┣ sigma-cosmetics
-      ┃ ┃   Root Access: NO, Required hacking skill: 5
-      ┃ ┃   Number of open ports required to NUKE: 0
-      ┃ ┃   RAM: 16.00GB
-      ┃ ┕ max-hardware
-      ┃       Root Access: NO, Required hacking skill: 80
-      ┃       Number of open ports required to NUKE: 1
-      ┃       RAM: 32.00GB
-      ┣ joesguns
-      ┃     Root Access: NO, Required hacking skill: 10
-      ┃     Number of open ports required to NUKE: 0
-      ┃     RAM: 16.00GB
-      ┣ hong-fang-tea
-      ┃     Root Access: NO, Required hacking skill: 30
-      ┃     Number of open ports required to NUKE: 0
-      ┃     RAM: 16.00GB
-      ┣ harakiri-sushi
-      ┃     Root Access: NO, Required hacking skill: 40
-      ┃     Number of open ports required to NUKE: 0
-      ┃     RAM: 16.00GB
-      ┕ iron-gym
-        ┃   Root Access: NO, Required hacking skill: 100
-        ┃   Number of open ports required to NUKE: 1
-        ┃   RAM: 32.00GB
-        ┕ CSEC
-              Root Access: NO, Required hacking skill: 55
-              Number of open ports required to NUKE: 1
-              RAM: 8.00GB
+```text
+[home ~]> scan-analyze 2
+┕ home
+    ┃   Root Access: YES, Required hacking skill: 1
+    ┃   Number of open ports required to NUKE: 5
+    ┃   RAM: 8.00GB
+    ┣ n00dles
+    ┃ ┃   Root Access: YES, Required hacking skill: 1
+    ┃ ┃   Number of open ports required to NUKE: 0
+    ┃ ┃   RAM: 4.00GB
+    ┃ ┕ nectar-net
+    ┃       Root Access: NO, Required hacking skill: 20
+    ┃       Number of open ports required to NUKE: 0
+    ┃       RAM: 16.00GB
+    ┣ foodnstuff
+    ┃ ┃   Root Access: NO, Required hacking skill: 1
+    ┃ ┃   Number of open ports required to NUKE: 0
+    ┃ ┃   RAM: 16.00GB
+    ┃ ┕ zer0
+    ┃       Root Access: NO, Required hacking skill: 75
+    ┃       Number of open ports required to NUKE: 1
+    ┃       RAM: 32.00GB
+    ┣ sigma-cosmetics
+    ┃ ┃   Root Access: NO, Required hacking skill: 5
+    ┃ ┃   Number of open ports required to NUKE: 0
+    ┃ ┃   RAM: 16.00GB
+    ┃ ┕ max-hardware
+    ┃       Root Access: NO, Required hacking skill: 80
+    ┃       Number of open ports required to NUKE: 1
+    ┃       RAM: 32.00GB
+    ┣ joesguns
+    ┃     Root Access: NO, Required hacking skill: 10
+    ┃     Number of open ports required to NUKE: 0
+    ┃     RAM: 16.00GB
+    ┣ hong-fang-tea
+    ┃     Root Access: NO, Required hacking skill: 30
+    ┃     Number of open ports required to NUKE: 0
+    ┃     RAM: 16.00GB
+    ┣ harakiri-sushi
+    ┃     Root Access: NO, Required hacking skill: 40
+    ┃     Number of open ports required to NUKE: 0
+    ┃     RAM: 16.00GB
+    ┕ iron-gym
+    ┃   Root Access: NO, Required hacking skill: 100
+    ┃   Number of open ports required to NUKE: 1
+    ┃   RAM: 32.00GB
+    ┕ CSEC
+            Root Access: NO, Required hacking skill: 55
+            Number of open ports required to NUKE: 1
+            RAM: 8.00GB
+```
 
 Take note of the following servers:
 
@@ -234,7 +252,9 @@ First, let's determine how many threads of our [hacking](../basic/hacking.md) [S
 The [Script](../basic/scripts.md) we wrote uses 2.6GB of [RAM](../basic/ram.md).
 You can check this using the following `Terminal` command:
 
-    $ mem early-hack-template.js
+```text
+$ mem early-hack-template.js
+```
 
 This means we can run 6 threads on a 16GB server.
 Now, to run our [Scripts](../basic/scripts.md) on all of these servers, we have to do the following:
@@ -247,42 +267,44 @@ Now, to run our [Scripts](../basic/scripts.md) on all of these servers, we have 
 
 Here's the sequence of `Terminal` commands I used in order to achieve this:
 
-    $ home
-    $ scp early-hack-template.js n00dles
-    $ scp early-hack-template.js sigma-cosmetics
-    $ scp early-hack-template.js joesguns
-    $ scp early-hack-template.js nectar-net
-    $ scp early-hack-template.js hong-fang-tea
-    $ scp early-hack-template.js harakiri-sushi
-    $ scp early-hack-template.js foodnstuff
-    $ connect n00dles
-    $ run NUKE.exe
-    $ run early-hack-template.js -t 1
-    $ home
-    $ connect sigma-cosmetics
-    $ run NUKE.exe
-    $ run early-hack-template.js -t 6
-    $ home
-    $ connect joesguns
-    $ run NUKE.exe
-    $ run early-hack-template.js -t 6
-    $ home
-    $ connect hong-fang-tea
-    $ run NUKE.exe
-    $ run early-hack-template.js -t 6
-    $ home
-    $ connect harakiri-sushi
-    $ run NUKE.exe
-    $ run early-hack-template.js -t 6
-    $ home
-    $ connect n00dles
-    $ connect nectar-net
-    $ run NUKE.exe
-    $ run early-hack-template.js -t 6
-    $ home
-    $ connect foodnstuff
-    $ run NUKE.exe
-    $ run early-hack-template.js -t 6
+```text
+$ home
+$ scp early-hack-template.js n00dles
+$ scp early-hack-template.js sigma-cosmetics
+$ scp early-hack-template.js joesguns
+$ scp early-hack-template.js nectar-net
+$ scp early-hack-template.js hong-fang-tea
+$ scp early-hack-template.js harakiri-sushi
+$ scp early-hack-template.js foodnstuff
+$ connect n00dles
+$ run NUKE.exe
+$ run early-hack-template.js -t 1
+$ home
+$ connect sigma-cosmetics
+$ run NUKE.exe
+$ run early-hack-template.js -t 6
+$ home
+$ connect joesguns
+$ run NUKE.exe
+$ run early-hack-template.js -t 6
+$ home
+$ connect hong-fang-tea
+$ run NUKE.exe
+$ run early-hack-template.js -t 6
+$ home
+$ connect harakiri-sushi
+$ run NUKE.exe
+$ run early-hack-template.js -t 6
+$ home
+$ connect n00dles
+$ connect nectar-net
+$ run NUKE.exe
+$ run early-hack-template.js -t 6
+$ home
+$ connect foodnstuff
+$ run NUKE.exe
+$ run early-hack-template.js -t 6
+```
 
 Pressing the `Tab` key in the middle of a Terminal command will attempt to auto-complete the command.
 For example, if you type in `scp ea` and then hit `Tab`, the rest of the [Script](../basic/scripts.md)'s name should automatically be filled in.
@@ -332,12 +354,16 @@ Therefore, we want to change our [hacking](../basic/hacking.md) [Script](../basi
 
 Go to `Terminal` and edit the [hacking](../basic/hacking.md) [Script](../basic/scripts.md) by entering:
 
-    $ home
-    $ nano early-hack-template.js
+```text
+$ home
+$ nano early-hack-template.js
+```
 
 At the top of the [Script](../basic/scripts.md), change the `target` variable to be `"joesguns"`:
 
-    const target = "joesguns";
+```javascript
+const target = "joesguns";
+```
 
 Note that this will **NOT** affect any instances of the [Script](../basic/scripts.md) that are already running.
 This will only affect instances of the [Script](../basic/scripts.md) that are run from this point forward.
@@ -360,39 +386,43 @@ In order to create this [Script](../basic/scripts.md), you should familiarize yo
 
 Create the [Script](../basic/scripts.md) by going to `Terminal` and typing:
 
-    $ home
-    $ nano purchase-server-8gb.js
+```text
+$ home
+$ nano purchase-server-8gb.js
+```
 
 Paste the following code into the [Script](../basic/scripts.md) editor:
 
-    /** @param {NS} ns */
-    export async function main(ns) {
-        // How much RAM each cloud server will have. In this case, it'll be 8GB.
-        const ram = 8;
+```javascript
+/** @param {NS} ns */
+export async function main(ns) {
+  // How much RAM each cloud server will have. In this case, it'll be 8GB.
+  const ram = 8;
 
-        // Iterator we'll use for our loop
-        let i = ns.cloud.getServerNames().length;
+  // Iterator we'll use for our loop
+  let i = ns.cloud.getServerNames().length;
 
-        // Continuously try to purchase cloud servers until we've reached the maximum
-        // amount of servers
-        while (i < ns.cloud.getServerLimit()) {
-            // Check if we have enough money to purchase access to a server
-            if (ns.getServerMoneyAvailable("home") > ns.cloud.getServerCost(ram)) {
-                // If we have enough money, then:
-                //  1. Purchase the server
-                //  2. Copy our hacking script onto the newly purchased cloud server
-                //  3. Run our hacking script on the newly purchased cloud server with 3 threads
-                //  4. Increment our iterator to indicate that we've bought a new server
-                const hostname = ns.cloud.purchaseServer("cloud-server-" + i, ram);
-                ns.scp("early-hack-template.js", hostname);
-                ns.exec("early-hack-template.js", hostname, 3);
-                ++i;
-            }
-            // Make the script wait for a second before looping again.
-            // Removing this line will cause an infinite loop and crash the game.
-            await ns.sleep(1000);
-        }
+  // Continuously try to purchase cloud servers until we've reached the maximum
+  // amount of servers
+  while (i < ns.cloud.getServerLimit()) {
+    // Check if we have enough money to purchase access to a server
+    if (ns.getServerMoneyAvailable("home") > ns.cloud.getServerCost(ram)) {
+      // If we have enough money, then:
+      //  1. Purchase the server
+      //  2. Copy our hacking script onto the newly purchased cloud server
+      //  3. Run our hacking script on the newly purchased cloud server with 3 threads
+      //  4. Increment our iterator to indicate that we've bought a new server
+      const hostname = ns.cloud.purchaseServer("cloud-server-" + i, ram);
+      ns.scp("early-hack-template.js", hostname);
+      ns.exec("early-hack-template.js", hostname, 3);
+      ++i;
     }
+    // Make the script wait for a second before looping again.
+    // Removing this line will cause an infinite loop and crash the game.
+    await ns.sleep(1000);
+  }
+}
+```
 
 This code uses a while loop to purchase the maximum amount of cloud [Servers](../basic/servers.md) using the `purchaseServer()` function.
 Each of these [Servers](../basic/servers.md) will have 8GB of [RAM](../basic/ram.md), as defined in the `ram` variable.
@@ -403,7 +433,9 @@ Whenever the script purchases a new cloud [Server](../basic/servers.md), it uses
 
 To run this [Script](../basic/scripts.md), go to `Terminal` and type:
 
-    $ run purchase-server-8gb.js
+```text
+$ run purchase-server-8gb.js
+```
 
 This purchase will continuously run until it has purchased the maximum number of cloud [Servers](../basic/servers.md).
 When this happens, it'll mean that you have a bunch of new [Servers](../basic/servers.md) that are all running [hacking](../basic/hacking.md) [Scripts](../basic/scripts.md) against the `joesguns` [Server](../basic/servers.md)!
@@ -484,8 +516,10 @@ This will free up some [RAM](../basic/ram.md) on your home computer.
 We don't want this [RAM](../basic/ram.md) to go to waste, so we'll make use of it.
 Go to `Terminal` and enter the following commands:
 
-    $ home
-    $ run early-hack-template.js -t 3
+```text
+$ home
+$ run early-hack-template.js -t 3
+```
 
 ## Reaching a Hacking Level of 50
 
@@ -516,24 +550,28 @@ It makes it much less tedious to connect to other [Servers](../basic/servers.md)
 
 Shortly after you reached level 50 hacking, you should have received a message that said this:
 
-    Message received from unknown sender:
+```text
+Message received from unknown sender:
 
-    We've been watching you. Your skills are very impressive. But you're wasting your talents.
-    If you join us, you can put your skills to good use and change the world for the better.
-    If you join us, we can unlock your full potential.
+We've been watching you. Your skills are very impressive. But you're wasting your talents.
+If you join us, you can put your skills to good use and change the world for the better.
+If you join us, we can unlock your full potential.
 
-    But first, you must pass our test. Find and install the backdoor on our server.
+But first, you must pass our test. Find and install the backdoor on our server.
 
-    -CyberSec
+-CyberSec
 
-    This message was saved as csec-test.msg onto your home computer.
+This message was saved as csec-test.msg onto your home computer.
+```
 
 If you didn't, or if you accidentally closed it, that's okay!
 Messages get saved onto your home computer.
 Enter the following `Terminal` commands to view the message:
 
-    $ home
-    $ cat csec-test.msg
+```text
+$ home
+$ cat csec-test.msg
+```
 
 This message is part of the game's main "quest-line".
 It is a message from the `CyberSec` [faction](../basic/factions.md) that is asking you to pass their test.
@@ -541,34 +579,40 @@ Passing their test is simple, you just have to find their [Server](../basic/serv
 Their [Server](../basic/servers.md) is called `CSEC`.
 To do this, we'll use the `scan-analyze` Terminal command, just like we did before:
 
-    $ home
-    $ scan-analyze 2
+```text
+$ home
+$ scan-analyze 2
+```
 
 This will show you the network for all [Servers](../basic/servers.md) that are up to 2 "nodes" away from your home computer.
 Remember that the network is randomly generated so it'll look different for everyone.
 Here's the relevant part of my `scan-analyze` results:
 
-    ┕ home
-      ┃   Root Access: YES, Required hacking skill: 1
-      ┃   Number of open ports required to NUKE: 5
-      ┃   RAM: 8.00GB
-      ┣ harakiri-sushi
-      ┃     Root Access: NO, Required hacking skill: 40
-      ┃     Number of open ports required to NUKE: 0
-      ┃     RAM: 16.00GB
-      ┕ iron-gym
-        ┃   Root Access: NO, Required hacking skill: 100
-        ┃   Number of open ports required to NUKE: 1
-        ┃   RAM: 32.00GB
-        ┕ CSEC
-                  Root Access: NO, Required hacking skill: 55
-              Number of open ports required to NUKE: 1
-              RAM: 8.00GB
+```text
+┕ home
+    ┃   Root Access: YES, Required hacking skill: 1
+    ┃   Number of open ports required to NUKE: 5
+    ┃   RAM: 8.00GB
+    ┣ harakiri-sushi
+    ┃     Root Access: NO, Required hacking skill: 40
+    ┃     Number of open ports required to NUKE: 0
+    ┃     RAM: 16.00GB
+    ┕ iron-gym
+    ┃   Root Access: NO, Required hacking skill: 100
+    ┃   Number of open ports required to NUKE: 1
+    ┃   RAM: 32.00GB
+    ┕ CSEC
+                Root Access: NO, Required hacking skill: 55
+            Number of open ports required to NUKE: 1
+            RAM: 8.00GB
+```
 
 This tells me that I can reach `CSEC` by going through `iron-gym`:
 
-    $ connect iron-gym
-    $ connect CSEC
+```text
+$ connect iron-gym
+$ connect CSEC
+```
 
 If you created the `AutoLink.exe` program earlier, then there is an easier method of connecting to `CSEC`.
 You'll notice that in the `scan-analyze` results, all of the [Server](../basic/servers.md) hostnames are white and underlined.
@@ -584,9 +628,11 @@ Note that this [Server](../basic/servers.md) requires one open port in order to 
 We can open the SSH port using the `BruteSSH.exe` program we created earlier.
 In `Terminal`:
 
-    $ run BruteSSH.exe
-    $ run NUKE.exe
-    $ backdoor
+```text
+$ run BruteSSH.exe
+$ run NUKE.exe
+$ backdoor
+```
 
 After you successfully install the backdoor, you should receive a [faction](../basic/factions.md) invitation from `CyberSec` shortly afterwards.
 Accept it.
@@ -616,18 +662,22 @@ All of these [Servers](../basic/servers.md) have 32GB of [RAM](../basic/ram.md).
 You can use the `Terminal` command `scan-analyze 3` to see for yourself.
 To copy our [hacking](../basic/hacking.md) [Scripts](../basic/scripts.md) onto these [Servers](../basic/servers.md), go to `Terminal` and run:
 
-    $ home
-    $ scp early-hack-template.js neo-net
-    $ scp early-hack-template.js zer0
-    $ scp early-hack-template.js max-hardware
-    $ scp early-hack-template.js iron-gym
+```text
+$ home
+$ scp early-hack-template.js neo-net
+$ scp early-hack-template.js zer0
+$ scp early-hack-template.js max-hardware
+$ scp early-hack-template.js iron-gym
+```
 
 Since each of these [Servers](../basic/servers.md) has 32GB of [RAM](../basic/ram.md), we can run our [hacking](../basic/hacking.md) script with 12 threads on each [Server](../basic/servers.md).
 By now, you should know how to connect to [Servers](../basic/servers.md).
 So find and connect to each of the [Servers](../basic/servers.md) above using the `scan-analyze 3` `Terminal` command.
 Then, use following `Terminal` command to run our [hacking](../basic/hacking.md) script with 12 threads:
 
-    $ run early-hack-template.js -t 12
+```text
+$ run early-hack-template.js -t 12
+```
 
 Remember that if you have the `AutoLink` program, you can simply click on the hostname of a [Server](../basic/servers.md) after running `scan-analyze` to connect to it.
 
@@ -722,51 +772,46 @@ Doing this every time you install [Augmentations](../basic/augmentations.md) wou
 Here's a simple example for a startup [Script](../basic/scripts.md).
 Feel free to adjust it to your liking.
 
-    /** @param {NS} ns */
-    export async function main(ns) {
-        // Array of all servers that don't need any ports opened
-        // to gain root access. These have 16 GB of RAM
-        const servers0Port = ["sigma-cosmetics",
-                            "joesguns",
-                            "nectar-net",
-                            "hong-fang-tea",
-                            "harakiri-sushi"];
+```javascript
+/** @param {NS} ns */
+export async function main(ns) {
+  // Array of all servers that don't need any ports opened
+  // to gain root access. These have 16 GB of RAM
+  const servers0Port = ["sigma-cosmetics", "joesguns", "nectar-net", "hong-fang-tea", "harakiri-sushi"];
 
-        // Array of all servers that only need 1 port opened
-        // to gain root access. These have 32 GB of RAM
-        const servers1Port = ["neo-net",
-                            "zer0",
-                            "max-hardware",
-                            "iron-gym"];
+  // Array of all servers that only need 1 port opened
+  // to gain root access. These have 32 GB of RAM
+  const servers1Port = ["neo-net", "zer0", "max-hardware", "iron-gym"];
 
-        // Copy our scripts onto each server that requires 0 ports
-        // to gain root access. Then use nuke() to gain admin access and
-        // run the scripts.
-        for (let i = 0; i < servers0Port.length; ++i) {
-            const serv = servers0Port[i];
+  // Copy our scripts onto each server that requires 0 ports
+  // to gain root access. Then use nuke() to gain admin access and
+  // run the scripts.
+  for (let i = 0; i < servers0Port.length; ++i) {
+    const serv = servers0Port[i];
 
-            ns.scp("early-hack-template.js", serv);
-            ns.nuke(serv);
-            ns.exec("early-hack-template.js", serv, 6);
-        }
+    ns.scp("early-hack-template.js", serv);
+    ns.nuke(serv);
+    ns.exec("early-hack-template.js", serv, 6);
+  }
 
-        // Wait until we acquire the "BruteSSH.exe" program
-        while (!ns.fileExists("BruteSSH.exe")) {
-            await ns.sleep(60000);
-        }
+  // Wait until we acquire the "BruteSSH.exe" program
+  while (!ns.fileExists("BruteSSH.exe")) {
+    await ns.sleep(60000);
+  }
 
-        // Copy our scripts onto each server that requires 1 port
-        // to gain root access. Then use brutessh() and nuke()
-        // to gain admin access and run the scripts.
-        for (let i = 0; i < servers1Port.length; ++i) {
-            const serv = servers1Port[i];
+  // Copy our scripts onto each server that requires 1 port
+  // to gain root access. Then use brutessh() and nuke()
+  // to gain admin access and run the scripts.
+  for (let i = 0; i < servers1Port.length; ++i) {
+    const serv = servers1Port[i];
 
-            ns.scp("early-hack-template.js", serv);
-            ns.brutessh(serv);
-            ns.nuke(serv);
-            ns.exec("early-hack-template.js", serv, 12);
-        }
-    }
+    ns.scp("early-hack-template.js", serv);
+    ns.brutessh(serv);
+    ns.nuke(serv);
+    ns.exec("early-hack-template.js", serv, 12);
+  }
+}
+```
 
 ## Random Tips
 
