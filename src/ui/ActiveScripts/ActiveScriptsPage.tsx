@@ -100,9 +100,6 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
   const firstServerNumber = serverData.length === 0 ? 0 : adjustedIndex + 1;
   const lastServerNumber = serverData.length === 0 ? 0 : adjustedIndex + dataToShow.length;
 
-  const serverAccordionHeight = 42.3;
-  const minBoxHeight = 10 * serverAccordionHeight;
-
   function PaginationControls() {
     return (
       <>
@@ -125,7 +122,7 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
 
   return (
     <>
-      <Box sx={{ minHeight: `${minBoxHeight}px` }}>
+      <Box sx={{ minHeight: `450px` }}>
         <Typography>
           This page displays a list of all of your scripts that are currently running across every machine. It also
           provides information about each script's production. The scripts are categorized by the hostnames of the
