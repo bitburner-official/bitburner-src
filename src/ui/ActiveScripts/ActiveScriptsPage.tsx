@@ -132,14 +132,14 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
         <ScriptProduction />
         <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
           <PaginationControls />
-          <Typography marginLeft="1em">Servers/page:</Typography>
+          <Typography marginLeft="2em">Servers/page:</Typography>
           <Select value={serversPerPage} onChange={changeServersPerPage}>
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={15}>15</MenuItem>
             <MenuItem value={20}>20</MenuItem>
             <MenuItem value={100}>100</MenuItem>
           </Select>
-          <Typography marginLeft="1em">Scripts/page:</Typography>
+          <Typography marginLeft="2em">Scripts/page:</Typography>
           <Select value={scriptsPerPage} onChange={changeScriptsPerPage}>
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={15}>15</MenuItem>
