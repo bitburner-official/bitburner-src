@@ -297,7 +297,7 @@ Some Jest tests fail to run in Node versions older than v24. On those versions, 
 - Fork the repo ([How to setup your fork properly](#how-to-setup-your-fork-properly)).
 - Make your changes.
 - Test your changes manually before submitting anything ([Running locally](#running-locally)).
-- Run `npm run format`, `npm run lint`, `npm run typecheck`, and `npm run test`. If you makde any changes to
+- Run `npm run format`, `npm run lint`, `npm run typecheck`, and `npm run test`. If you made any changes to
   `NetscriptDefinitions.d.ts` or in-game documentation pages, run `npm run doc`.
 - Commit your changes ([Development Workflow](#development-workflow-best-practices)).
 - Go to GitHub and create a PR [Submitting a Pull Request](#submitting-a-pull-request).
