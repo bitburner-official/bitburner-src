@@ -69,7 +69,7 @@ To resolve EHT's issues, we can manage the hack, grow and weaken functions from 
 
   - The worker scripts can be as simple as
 
-```javascript
+```js
 await ns.hack(target); // or grow, or weaken
 ```
 

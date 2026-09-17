@@ -17,7 +17,7 @@ If you run the executable file from the command line, you can use the `--no-scri
 
 Then, to fix your script, make sure you have a `sleep()` or any other timed function like `hack()` or `grow()` in any infinite loops:
 
-```javascript
+```js
 // This is an infinite loop that does something
 while (true) {
   // Other code
@@ -29,7 +29,7 @@ while (true) {
 
 Also make sure that each while loop gets to the `await`ed function or `break`, for example the next snippet has a `sleep()` function, but it nor any possible conditional breaks are never reached and therefore will crash the game:
 
-```javascript
+```js
 while (true) {
   let currentMoney = ns.getServerMoneyAvailable("n00dles");
   let maxMoney = ns.getServerMaxMoney("n00dles");
@@ -47,7 +47,7 @@ Adding a sleep like in the first example, or changing the code so that the `awai
 
 Common infinite loop when translating the server purchasing script in starting guide to scripts is to have a while loop, where the condition's change is conditional:
 
-```javascript
+```js
 const ram = 8;
 let i = ns.cloud.getServerNames().length;
 

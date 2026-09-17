@@ -73,7 +73,7 @@ As you design your darknet scripts, here are some ideas to keep in mind as you d
 
 Darknet servers, in an attempt to hide from official scrutiny, do not show up when using ns.scan. (This is where the "dark net" got its name!) To find them, you will first need to buy the tool `DarkscapeNavigator.exe` using the `buy` command in the terminal, with a TOR router. This gives access to the `ns.dnet` api. Then, you can use `ns.dnet.probe()` to see a list of darknet servers connected to the current server. Note that probe does not work at a distance: it cannot target distant servers like scan() can. To explore the dark, you will need to place your scripts in it, one server at a time.
 
-```javascript
+```js
 const nearbyDarknetServers = ns.dnet.probe();
 for (const hostname of nearbyDarknetServers) {
   /* do something with each server here */
@@ -90,7 +90,7 @@ Darknet servers require a password to interact with. To get started, use `dnet.g
 
 You can use `await ns.dnet.authenticate` to check if a guessed password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' security. Using more threads also speeds up this process. It may be faster to divide up the work across multiple scripts, if you can coordinate them. (Note that **`dnet.authenticate` can only target nearby connected servers**. You can verify if a server is connected to the current one using `dnet.probe` or `dnet.getServerDetails`.)
 
-```javascript
+```js
 const details = ns.dnet.getServerDetails(hostname);
 if (!details.isConnectedToCurrentServer || !details.isOnline) {
   /* If the server isn't connected or is offline, we can't authenticate */
@@ -109,7 +109,7 @@ Once you successfully run `dnet.authenticate` with the correct password, you gai
 
 Once you figure out the right password, you will want it later (so other scripts can connect, or in case the server restarts & you need to start your scripts again.) Make sure to save the password somewhere durable, so it isn't lost if your script gets stopped later on.
 
-```javascript
+```js
 const result = await ns.dnet.authenticate(hostname, passwordToAttempt);
 if (result.success === false) {
   const recentLogResult = await ns.dnet.heartbleed(server, { peek: true });
@@ -125,7 +125,7 @@ Once you have authenticated, other scripts can then connect to that same server 
 
 `scp` file transfers can be performed at any distance once you have established a session. However, `exec` also requires the script to either be run from a server adjacent to and connected to the target server, or a backdoor or stasis link on the target server. You can identify direct connections using `probe` or `getServerDetails`.
 
-```javascript
+```js
 // the darknet server in "hostname" must be either backdoored, stasis linked, or directly connected to the server this script is running on
 // to allow exec calls from the current server
 if (ns.dnet.getServerDetails(hostname).isConnectedToCurrentServer) {
@@ -177,7 +177,7 @@ This is a simple self-replicating script that demonstrates how the darknet api c
 
 It needs a lot of improvements, and only works on one model type right now. See the `// TODO`s in the code for suggestions and ideas.
 
-```javascript
+```js
 /** @param {NS} ns */
 export async function main(ns) {
   while (true) {

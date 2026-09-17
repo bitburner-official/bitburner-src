@@ -30,7 +30,7 @@ The `ns.go` API provides a number of useful tools to understand the current subn
 
 You can test if a given move `x,y` is valid with a test like this:
 
-```javascript
+```js
 const validMoves = ns.go.analysis.getValidMoves();
 
 if (validMoves[x][y] === true) {
@@ -50,7 +50,7 @@ It would be a problem to fill in every single node on the board, however. If net
 
 One way to do this is to exclude nodes with both even X coordinate and even y coordinate:
 
-```javascript
+```js
 /**
  * Choose one of the empty points on the board at random to play
  */
@@ -93,7 +93,7 @@ Now that a simple move type is available, it can be used to play on the current 
 
 Both `makeMove()` and `passTurn()`, when awaited, return an object that tells you what the AI's response is, and if the game is over.
 
-```javascript
+```js
 {
   // If the opponent moved or passed, or if the game is now over.
   type: "move" | "pass" | "gameOver";
@@ -106,7 +106,7 @@ Both `makeMove()` and `passTurn()`, when awaited, return an object that tells yo
 
 When used together with the `getRandomMove()` implemented above, the framework of the script is ready. An example `main()` that implements this is below. Search for a new subnet using the UI, then launch the script you have been working on, and watch it play!
 
-```javascript
+```js
 /** @param {NS} ns */
 export async function main(ns) {
   let result, x, y;

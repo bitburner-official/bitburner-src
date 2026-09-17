@@ -84,7 +84,7 @@ When running scripts, however, it may be important to know specific detail, espe
 Here's an example to show how these rules work.
 Consider the following script `argType.js`:
 
-```javascript
+```js
 export async function main(ns) {
   ns.tprint("Number of args: " + ns.args.length);
   for (var i = 0; i < ns.args.length; ++i) {

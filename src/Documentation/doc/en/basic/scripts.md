@@ -38,7 +38,7 @@ If searching by filename, arguments must be an **exact** match - both the order 
 In order to reference a file, `functions` require the **full** absolute file path.
 For example
 
-```javascript
+```js
 ns.run("/scripts/hacking/helpers.myHelperScripts.js");
 ns.rm("/logs/myHackingLogs.txt");
 ns.rm("thisIsAFileInTheRootDirectory.txt");

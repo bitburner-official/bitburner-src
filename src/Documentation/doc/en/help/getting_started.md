@@ -61,7 +61,7 @@ This will take you to the [Script](../basic/scripts.md) editor, which you can us
 
 Enter the following code in the [Script](../basic/scripts.md) editor:
 
-```javascript
+```js
 /** @param {NS} ns */
 export async function main(ns) {
   // Defines the "target server", which is the server
@@ -104,7 +104,7 @@ export async function main(ns) {
 
 The [Script](../basic/scripts.md) above contains comments that document what it does, but let's go through it step-by-step anyway.
 
-```javascript
+```js
 const target = "n00dles";
 ```
 
@@ -113,7 +113,7 @@ That's the [Server](../basic/servers.md) that we're going to [hack](../basic/hac
 For now, it's set to `"n00dles"` because that's the only [Server](../basic/servers.md) with a required hacking level of `1`.
 If you want to [hack](../basic/hacking.md) a different [Server](../basic/servers.md), simply change this variable to be the hostname of another [Server](../basic/servers.md).
 
-```javascript
+```js
 const moneyThresh = ns.getServerMaxMoney(target);
 ```
 
@@ -122,14 +122,14 @@ If the money available on the target [Server](../basic/servers.md) is less than 
 It is set to the maximum amount of money that can be available on the [Server](../basic/servers.md).
 The `getServerMaxMoney()` function is used to find this value
 
-```javascript
+```js
 const securityThresh = ns.getServerMinSecurityLevel(target);
 ```
 
 This third command defines a numerical value representing the minimum security level the target [Server](../basic/servers.md) can have.
 If the target [Server](../basic/servers.md)'s security level is higher than this value, then our [Script](../basic/scripts.md) will `weaken()` the server before doing anything else.
 
-```javascript
+```js
 if (ns.fileExists("BruteSSH.exe", "home")) {
   ns.brutessh(target);
 }
@@ -140,7 +140,7 @@ ns.nuke(target);
 This section of code is used to gain root access on the target [Server](../basic/servers.md).
 This is necessary for [hacking](../basic/hacking.md).
 
-```javascript
+```js
 while (true) {
   if (ns.getServerSecurityLevel(target) > securityThresh) {
     // If the server's security level is above our threshold, weaken it
@@ -361,7 +361,7 @@ $ nano early-hack-template.js
 
 At the top of the [Script](../basic/scripts.md), change the `target` variable to be `"joesguns"`:
 
-```javascript
+```js
 const target = "joesguns";
 ```
 
@@ -393,7 +393,7 @@ $ nano purchase-server-8gb.js
 
 Paste the following code into the [Script](../basic/scripts.md) editor:
 
-```javascript
+```js
 /** @param {NS} ns */
 export async function main(ns) {
   // How much RAM each cloud server will have. In this case, it'll be 8GB.
@@ -772,7 +772,7 @@ Doing this every time you install [Augmentations](../basic/augmentations.md) wou
 Here's a simple example for a startup [Script](../basic/scripts.md).
 Feel free to adjust it to your liking.
 
-```javascript
+```js
 /** @param {NS} ns */
 export async function main(ns) {
   // Array of all servers that don't need any ports opened

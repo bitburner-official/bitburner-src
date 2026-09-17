@@ -11,7 +11,7 @@ Unlike [scripts](scripts.md) you write for yourself with JavaScript, Programs ar
 
 or
 
-```javascript
+```js
 ns.sqlinject("n00dles");
 ```
 

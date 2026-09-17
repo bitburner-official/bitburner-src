@@ -116,7 +116,7 @@ string conversion unless specifically asked for.
 For example, suppose a contract requires the answer to be an array containing strings, and you determine that those
 strings are `foo` and `bar`. Your code should look like this:
 
-```javascript
+```js
 const firstString = "foo";
 const secondString = "bar";
 const answer = [firstString, secondString];
@@ -129,7 +129,7 @@ In the "General rules" section above, with array-of-strings solutions, we say `D
 However, this code works:
 
 <!-- prettier-ignore -->
-```javascript
+```js
 const firstString = 'foo'; // Single quotes
 const secondString = 'bar'; // Single quotes
 const answer = [firstString, secondString];
@@ -150,7 +150,7 @@ you do not need to worry about quote types.
 
 Let's check another example:
 
-```javascript
+```js
 const firstString = "foo";
 const secondString = "bar";
 const answer = [firstString, secondString];
