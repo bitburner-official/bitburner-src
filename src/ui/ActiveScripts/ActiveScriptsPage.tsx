@@ -100,11 +100,15 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
   const firstServerNumber = serverData.length === 0 ? 0 : adjustedIndex + 1;
   const lastServerNumber = serverData.length === 0 ? 0 : adjustedIndex + dataToShow.length;
 
-  function PaginationControls({ alignRight = false }) {
+  interface PaginationControlsProps {
+    alignRight?: boolean;
+  }
+
+  function PaginationControls(props: PaginationControlsProps) {
     return (
       <>
         <Typography
-          marginLeft={alignRight ? "auto" : undefined}
+          marginLeft={props?.alignRight ? "auto" : undefined}
           marginRight="1em"
         >{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
         <IconButton onClick={() => changePage(0)} disabled={page === 0}>
