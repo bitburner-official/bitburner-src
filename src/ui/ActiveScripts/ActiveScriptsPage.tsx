@@ -3,7 +3,7 @@ import type { BaseServer } from "../../Server/BaseServer";
 
 import React, { useState } from "react";
 
-import { MenuItem, Typography, Select, SelectChangeEvent, TextField, IconButton, List, Box } from "@mui/material";
+import { MenuItem, Typography, Select, SelectChangeEvent, TextField, IconButton, List } from "@mui/material";
 import { FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage, Search } from "@mui/icons-material";
 
 import { ScriptProduction } from "./ScriptProduction";
@@ -100,10 +100,13 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
   const firstServerNumber = serverData.length === 0 ? 0 : adjustedIndex + 1;
   const lastServerNumber = serverData.length === 0 ? 0 : adjustedIndex + dataToShow.length;
 
-  function PaginationControls() {
+  function PaginationControls({ alignRight = false }) {
     return (
       <>
-        <Typography marginRight="1em">{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
+        <Typography
+          marginLeft={alignRight ? "auto" : undefined}
+          marginRight="1em"
+        >{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
         <IconButton onClick={() => changePage(0)} disabled={page === 0}>
           <FirstPage />
         </IconButton>
@@ -122,47 +125,44 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
 
   return (
     <>
-      <Box sx={{ minHeight: `450px` }}>
-        <Typography>
-          This page displays a list of all of your scripts that are currently running across every machine. It also
-          provides information about each script's production. The scripts are categorized by the hostnames of the
-          servers on which they are running.
-        </Typography>
+      <Typography>
+        This page displays a list of all of your scripts that are currently running across every machine. It also
+        provides information about each script's production. The scripts are categorized by the hostnames of the servers
+        on which they are running.
+      </Typography>
 
-        <ScriptProduction />
-        <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <PaginationControls />
-          <Typography marginLeft="2em">Servers/page:</Typography>
-          <Select value={serversPerPage} onChange={changeServersPerPage}>
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={20}>20</MenuItem>
-            <MenuItem value={100}>100</MenuItem>
-          </Select>
-          <Typography marginLeft="2em">Scripts/page:</Typography>
-          <Select value={scriptsPerPage} onChange={changeScriptsPerPage}>
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={20}>20</MenuItem>
-            <MenuItem value={100}>100</MenuItem>
-          </Select>
-          <TextField
-            sx={{ marginLeft: "auto" }}
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            autoFocus
-            InputProps={{ startAdornment: <Search />, spellCheck: false }}
-            size="small"
-          />
-        </div>
-        <List dense={true}>
-          {dataToShow.map(([server, scripts]) => (
-            <ServerAccordion key={server.hostname} server={server} scripts={scripts} startOpen={!!props.serverName} />
-          ))}
-        </List>
-      </Box>
+      <ScriptProduction />
+      <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
+        <TextField
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          autoFocus
+          InputProps={{ startAdornment: <Search />, spellCheck: false }}
+          size="small"
+        />
+        <Typography marginLeft="1em">Servers/page:</Typography>
+        <Select value={serversPerPage} onChange={changeServersPerPage}>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={100}>100</MenuItem>
+        </Select>
+        <Typography marginLeft="1em">Scripts/page:</Typography>
+        <Select value={scriptsPerPage} onChange={changeScriptsPerPage}>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={100}>100</MenuItem>
+        </Select>
+        <PaginationControls alignRight />
+      </div>
+      <List dense={true}>
+        {dataToShow.map(([server, scripts]) => (
+          <ServerAccordion key={server.hostname} server={server} scripts={scripts} startOpen={!!props.serverName} />
+        ))}
+      </List>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <PaginationControls />
+        {serversPerPage <= serverData.length && <PaginationControls />}
       </div>
     </>
   );
