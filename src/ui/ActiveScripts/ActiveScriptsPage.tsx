@@ -100,17 +100,10 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
   const firstServerNumber = serverData.length === 0 ? 0 : adjustedIndex + 1;
   const lastServerNumber = serverData.length === 0 ? 0 : adjustedIndex + dataToShow.length;
 
-  interface PaginationControlsProps {
-    alignRight?: boolean;
-  }
-
-  function PaginationControls(props: PaginationControlsProps) {
+  function PaginationControls() {
     return (
       <>
-        <Typography
-          marginLeft={props?.alignRight ? "auto" : undefined}
-          marginRight="1em"
-        >{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
+        <Typography marginRight="1em">{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
         <IconButton onClick={() => changePage(0)} disabled={page === 0}>
           <FirstPage />
         </IconButton>
@@ -137,28 +130,29 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
 
       <ScriptProduction />
       <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
-        <TextField
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          autoFocus
-          InputProps={{ startAdornment: <Search />, spellCheck: false }}
-          size="small"
-        />
-        <Typography marginLeft="1em">Servers/page:</Typography>
+        <PaginationControls />
+        <Typography marginLeft="2em">Servers/page:</Typography>
         <Select value={serversPerPage} onChange={changeServersPerPage}>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={15}>15</MenuItem>
           <MenuItem value={20}>20</MenuItem>
           <MenuItem value={100}>100</MenuItem>
         </Select>
-        <Typography marginLeft="1em">Scripts/page:</Typography>
+        <Typography marginLeft="2em">Scripts/page:</Typography>
         <Select value={scriptsPerPage} onChange={changeScriptsPerPage}>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={15}>15</MenuItem>
           <MenuItem value={20}>20</MenuItem>
           <MenuItem value={100}>100</MenuItem>
         </Select>
-        <PaginationControls alignRight />
+        <TextField
+          sx={{ marginLeft: "2em" }}
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          autoFocus
+          InputProps={{ startAdornment: <Search />, spellCheck: false }}
+          size="small"
+        />
       </div>
       <List dense={true}>
         {dataToShow.map(([server, scripts]) => (
