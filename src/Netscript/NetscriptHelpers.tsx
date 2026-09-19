@@ -60,6 +60,7 @@ import { assertStringWithNSContext, debugType, missingKey, userFriendlyString } 
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,
+  knowAboutBitverse,
   validateSourceFileOverrides,
 } from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
@@ -439,7 +440,9 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
-      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game. It will be very obvious when and how you can obtain it.`,
+      `This singularity function requires ${
+        knowAboutBitverse() ? "Source-File 4" : "an endgame feature"
+      } to run. A power up you obtain later in the game. It will be very obvious when and how you can obtain it.`,
       "API ACCESS",
     );
   }

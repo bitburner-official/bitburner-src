@@ -18,7 +18,7 @@ import { Skills } from "../Bladeburner/data/Skills";
 import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { numberOfBlackOperations } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
-import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
+import { canAccessBitNodeFeature, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 import {
   calculateActionRankGain,
   calculateActionRankLoss,
@@ -34,7 +34,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
     const apiAccess = canAccessBitNodeFeature(7) || canAccessBitNodeFeature(6);
     if (!apiAccess) {
-      throw helpers.errorMessage(ctx, "You have not unlocked the Bladeburner API.", "API ACCESS");
+      throw helpers.errorMessage(
+        ctx,
+        `You have not unlocked ${knowAboutBitverse() ? "the Bladeburner API" : "this special feature"}.`,
+        "API ACCESS",
+      );
     }
     const bladeburner = Player.bladeburner;
     if (!bladeburner)
