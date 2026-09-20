@@ -6,9 +6,9 @@ import { addCacheToServer } from "../../../src/DarkNet/effects/cacheFiles";
 import { getDarkscapeNavigator } from "../../../src/DarkNet/effects/effects";
 import { connectServers, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
-import { initStockMarket } from "../../../src/StockMarket/StockMarket";
 import {
   fixDoImportIssue,
+  getFirstDarknetServerAdjacentToDarkWeb,
   getMockedNetscriptContext,
   getNS,
   getWorkerScriptAndNS,
@@ -22,7 +22,6 @@ import { ModelIds, ResponseCodeEnum } from "../../../src/DarkNet/Enums";
 import { getAllMovableDarknetServers } from "../../../src/DarkNet/utils/darknetNetworkUtils";
 import { expectRunningOnDarknetServer } from "../../../src/DarkNet/effects/offlineServerHandling";
 import { sleep } from "../../../src/utils/Utility";
-import { addLowLevelServersIfNeeded } from "../../../src/DarkNet/controllers/NetworkMovement";
 import { isIPAddress } from "../../../src/Types/strings";
 import { clearDarknet, populateDarknet } from "../../../src/DarkNet/controllers/NetworkGenerator";
 import {
@@ -45,7 +44,6 @@ fixDoImportIssue();
 
 beforeAll(() => {
   initGameEnvironment();
-  initStockMarket();
 });
 beforeEach(() => {
   DarknetState.offlineServers = new Set();
@@ -81,16 +79,6 @@ function getNsOnServerNearLabyrinth() {
     }
   }
   return getNS(server);
-}
-
-function getFirstDarknetServerAdjacentToDarkWeb() {
-  addLowLevelServersIfNeeded();
-  const darkweb = getDarknetServerOrThrow(SpecialServers.DarkWeb);
-  const result = darkweb.serversOnNetwork.filter((hostname) => hostname !== SpecialServers.Home)[0];
-  if (!result) {
-    throw new Error("No darknet server adjacent to darkweb found");
-  }
-  return result;
 }
 
 function getNsOnNonDarkwebDarknetServer() {
@@ -238,6 +226,7 @@ describe("home", () => {
   });
   test("promoteStock", async () => {
     const ns = getNsOnHome();
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -321,7 +310,7 @@ describe("home", () => {
     await ns.singularity.installBackdoor();
     // Can exec from home
     expect(ns.exec(scriptPath, dnetServerHostname)).toBeGreaterThan(0);
-  });
+  }, 8000);
   test("getServerRequiredCharismaLevel", () => {
     const ns = getNS(SpecialServers.Home);
     const server = GetServerOrThrow(SpecialServers.Home);
@@ -402,6 +391,7 @@ describe("Normal NPC server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNS(SpecialServers.CyberSecServer);
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -492,6 +482,7 @@ describe("Private server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNS("test-server-1");
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -582,6 +573,7 @@ describe("Hashnet server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNS("hacknet-server-0");
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     await expect(async () => {
       await ns.dnet.promoteStock("ECP");
     }).rejects.toContain("This API can only be used on a darknet server");
@@ -712,13 +704,13 @@ describe("expectRunningOnDarknetServer", () => {
   test("throws when called on non-darknet server", () => {
     const logger = jest.fn();
     const ctx = getMockedNetscriptContext(logger);
-    ctx.workerScript.hostname = SpecialServers.Home;
+    ctx.workerScript.scriptRef.server = SpecialServers.Home;
     expect(() => expectRunningOnDarknetServer(ctx)).toThrow("This API can only be used on a darknet server");
   });
   test("does not throw when called on darknet server", () => {
     const logger = jest.fn();
     const ctx = getMockedNetscriptContext(logger);
-    ctx.workerScript.hostname = SpecialServers.DarkWeb;
+    ctx.workerScript.scriptRef.server = SpecialServers.DarkWeb;
     expect(() => expectRunningOnDarknetServer(ctx)).not.toThrow();
   });
 });
@@ -756,6 +748,9 @@ describe("darkweb", () => {
     const result = addCacheToServer(darkweb, false, "test");
     if (!result.success) {
       throw new Error("Cannot add cache");
+    }
+    if (result.cacheFilename == null) {
+      throw new Error("No cache filename");
     }
     expect(darkweb.caches.length).toBe(1);
     expect(darkweb.caches[0]).toMatch(/test_[0-9]+\.cache/);
@@ -817,6 +812,7 @@ describe("darkweb", () => {
   });
   test("promoteStock", async () => {
     const ns = getNsOnDarkWeb();
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     const result = await ns.dnet.promoteStock("ECP");
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
@@ -898,9 +894,12 @@ describe("Non-darkweb darknet server", () => {
   });
   test("openCache", () => {
     const ns = getNsOnNonDarkwebDarknetServer();
-    const result = addCacheToServer(getDarknetServerOrThrow(ns.getHostname()), "test.cache");
+    const result = addCacheToServer(getDarknetServerOrThrow(ns.getHostname()), false, "test.cache");
     if (!result.success) {
       throw new Error(result.message);
+    }
+    if (result.cacheFilename == null) {
+      throw new Error("No cache filename");
     }
     ns.dnet.openCache(result.cacheFilename);
   });
@@ -1011,6 +1010,7 @@ describe("Non-darkweb darknet server", () => {
   });
   test("promoteStock", async () => {
     const ns = getNsOnNonDarkwebDarknetServer();
+    expect(ns.stock.purchaseTixApi()).toBe(true);
     const result = await ns.dnet.promoteStock("ECP");
     expect(result.success).toStrictEqual(true);
     expect(result.code).toStrictEqual(ResponseCodeEnum.Success);
@@ -1301,4 +1301,29 @@ describe("lab location methods", () => {
       }
     }
   });
+});
+
+test.each([
+  ["heartbleed", true],
+  ["heartbleed", false],
+])("%s with peek = %s", async (__, peek) => {
+  const ns = getNsOnHome();
+  const serverState = getServerState(SpecialServers.DarkWeb);
+  await ns.dnet.authenticate(SpecialServers.DarkWeb, "");
+
+  const serverLogs = serverState.serverLogs;
+  const result = await ns.dnet.heartbleed(SpecialServers.DarkWeb, { logsToCapture: 1, peek });
+  // serverLogs contain 3 entries: the success response and two noise logs. The heartbleed call returns the success
+  // response.
+  expect(result.logs.length).toBe(1);
+  expect(result.logs[0]).toBe(`{"code":200,"message":"Success","passwordAttempted":""}`);
+  // This is similar to the "do not assign a new array to serverState.serverLogs" test in
+  // test/jest/Darknet/Darknet.test.ts, but for the heartbleed API.
+  expect(serverState.serverLogs).toBe(serverLogs);
+  // Check whether we handle the peek parameter correctly.
+  if (peek) {
+    expect(serverLogs.length).toBe(3);
+  } else {
+    expect(serverLogs.length).toBe(2);
+  }
 });

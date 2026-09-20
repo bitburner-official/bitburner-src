@@ -21,8 +21,8 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
   return (
     <>
       <Typography>
-        Black Operations (Black Ops) are special, one-time covert operations. Each Black Op must be unlocked
-        successively by completing the one before it.
+        Black Operations (Black Ops) are special, one-time covert operations. Each Black Op is unlocked by completing
+        the one before it.
         <br />
         <br />
         <b>
@@ -31,8 +31,8 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
         </b>
         <br />
         <br />
-        Like normal operations, you may use a team for Black Ops. Failing a black op will incur heavy HP and rank
-        losses. Black Ops success significantly affected by combat stats. Many Ops benefit from Hacking skill.
+        Like normal operations, you may use a team for Black Ops. Failing a Black Op will incur heavy HP and rank
+        losses. Black Ops success is significantly affected by combat stats. Many Ops benefit from Hacking skill.
         Unaffected by Charisma.
       </Typography>
 

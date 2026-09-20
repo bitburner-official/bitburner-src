@@ -21,6 +21,7 @@ import { enterBitNode } from "../../src/RedPill";
 import { getDefaultBitNodeOptions } from "../../src/BitNode/BitNodeUtils";
 import type { NSFull } from "../../src/NetscriptFunctions";
 import { CityName, IndustryType } from "../../src/Enums";
+import type { CorpUnlockName } from "@nsdefs";
 
 initGameEnvironment();
 
@@ -230,11 +231,13 @@ describe("String conversion", () => {
   });
 });
 
-function setUpCorp(ns: NSFull): void {
+function setUpCorp(ns: NSFull, upgrades: CorpUnlockName[]): void {
   const corp = getCorp();
   corp.funds = 1e100;
   corp.storedCycles = 1e10;
-  ns.corporation.purchaseUnlock("Smart Supply");
+  for (const upgrade of upgrades) {
+    ns.corporation.purchaseUnlock(upgrade);
+  }
 }
 
 function setUpDivision(ns: NSFull, divisionName: string): void {
@@ -247,6 +250,14 @@ function setUpDivision(ns: NSFull, divisionName: string): void {
   setUpOffice(ns, divisionName, CityName.Sector12);
   for (const materialName of division.producedMaterials) {
     ns.corporation.sellMaterial(divisionName, CityName.Sector12, materialName, "MAX", "MP");
+  }
+  ns.corporation.upgradeWarehouse(divisionName, CityName.Sector12, 100);
+}
+
+function processCycles(numberOfCycles: number) {
+  const corp = getCorp();
+  for (let i = 0; i < numberOfCycles; ++i) {
+    corp.process();
   }
 }
 
@@ -266,9 +277,9 @@ function setUpOffice(ns: NSFull, divisionName: string, city: CityName): void {
 }
 
 describe("production", () => {
-  test("limitMaterialProduction", () => {
+  test("limitMaterialProduction 1", () => {
     const ns = getNS();
-    setUpCorp(ns);
+    setUpCorp(ns, ["Smart Supply"]);
     for (const industry of Object.values(IndustryType)) {
       if (!ns.corporation.getIndustryData(industry).makesMaterials) {
         continue;
@@ -278,16 +289,11 @@ describe("production", () => {
     }
     const corp = getCorp();
     // Process 1 market cycle to purchase input materials.
-    corp.process();
-    corp.process();
-    corp.process();
-    corp.process();
-    corp.process();
+    processCycles(5);
     expect(corp.getNextState()).toStrictEqual("START");
-    corp.process();
-    corp.process();
+    processCycles(2);
     expect(corp.getNextState()).toStrictEqual("PRODUCTION");
-    corp.process();
+    processCycles(1);
     for (const division of corp.divisions.values()) {
       for (const city of Object.values(CityName)) {
         const warehouse = division.warehouses[city];
@@ -305,12 +311,9 @@ describe("production", () => {
         }
       }
     }
-    corp.process();
-    corp.process();
-    corp.process();
-    corp.process();
+    processCycles(4);
     expect(corp.getNextState()).toStrictEqual("PRODUCTION");
-    corp.process();
+    processCycles(1);
     for (const division of corp.divisions.values()) {
       for (const city of Object.values(CityName)) {
         const warehouse = division.warehouses[city];
@@ -331,5 +334,91 @@ describe("production", () => {
         }
       }
     }
+  });
+  test("limitMaterialProduction 2", () => {
+    const ns = getNS();
+    setUpCorp(ns, ["Export"]);
+    for (let i = 0; i < 1000; ++i) {
+      ns.corporation.levelUpgrade("Smart Storage");
+    }
+    const corp = getCorp();
+    const div1 = "Pharmaceutical";
+    const div2 = "Healthcare";
+    const city = CityName.Sector12;
+    ns.corporation.expandIndustry("Pharmaceutical", div1);
+    setUpDivision(ns, div1);
+    ns.corporation.sellMaterial(div1, city, "Drugs", "MAX", "MP");
+    ns.corporation.limitMaterialProduction(div1, city, "Drugs", 0);
+    ns.corporation.expandIndustry("Healthcare", div2);
+    ns.corporation.exportMaterial(div1, city, div2, city, "Drugs", "MAX");
+    setUpDivision(ns, div2);
+    ns.corporation.bulkPurchase(div1, city, "Chemicals", 1e6);
+    ns.corporation.bulkPurchase(div1, city, "Water", 1e6);
+    ns.corporation.bulkPurchase(div2, city, "Robots", 1e6);
+    ns.corporation.bulkPurchase(div2, city, "AI Cores", 1e6);
+    ns.corporation.bulkPurchase(div2, city, "Food", 1e6);
+
+    processCycles(5);
+    expect(Number.isFinite(ns.corporation.getMaterial(div1, city, "Drugs").quality)).toBe(true);
+
+    ns.corporation.bulkPurchase(div1, city, "Drugs", 1e6);
+    ns.corporation.makeProduct(div2, city, "0", 1e10, 1e10);
+    ns.corporation.sellProduct(div2, city, "0", "MAX", "MP", true);
+    const product = corp.divisions.get(div2)?.products.get("0");
+    if (!product) {
+      throw new Error("Invalid product");
+    }
+    product.developmentProgress = 99.99;
+    processCycles(10);
+
+    expect(Number.isFinite(ns.corporation.getMaterial(div1, city, "Drugs").quality)).toBe(true);
+    expect(Number.isFinite(ns.corporation.getMaterial(div2, city, "Drugs").quality)).toBe(true);
+    expect(Number.isFinite(ns.corporation.getProduct(div2, city, "0").effectiveRating)).toBe(true);
+    expect(Number.isFinite(corp.totalAssets)).toBe(true);
+  });
+
+  // Test two example cases documented in the limitMaterialProduction API.
+  test.each([
+    // Test case 1: There is enough free space for the expected RawProduction value.
+    // Expected RawProduction = 1000. Free space = 45.
+    ["limitMaterialProduction 3", [20, 10], 45, [500, 200], [200, 100], 67],
+    // Test case 2: There is insufficient free space for the expected RawProduction value. The effective RawProduction
+    // is scaled down.
+    // Expected RawProduction = 1000. Free space = 22.5.
+    ["limitMaterialProduction 4", [-1, 0], 22.5, [250, 100], [500, 0], 15],
+  ])("%s", (_, limits, freeSpace, expectedConsumedInput, expectedOutput, expectedRemainingFreeSpace) => {
+    const ns = getNS();
+    setUpCorp(ns, []);
+    for (let i = 0; i < 1000; ++i) {
+      ns.corporation.levelUpgrade("Smart Storage");
+    }
+    const corp = getCorp();
+    const div = "Agriculture";
+    const city = CityName.Sector12;
+    ns.corporation.expandIndustry("Agriculture", div);
+    setUpDivision(ns, div);
+    ns.corporation.bulkPurchase(div, city, "Chemicals", 1e6);
+    ns.corporation.bulkPurchase(div, city, "Water", 1e6);
+    ns.corporation.bulkPurchase(div, city, "Real Estate", 1e6);
+    processCycles(2);
+
+    ns.corporation.limitMaterialProduction(div, city, "Plants", limits[0]);
+    ns.corporation.limitMaterialProduction(div, city, "Food", limits[1]);
+    // Manually set the free space.
+    const warehouse = corp.divisions.get(div)?.warehouses[city];
+    if (!warehouse) {
+      throw new Error("Invalid warehouse");
+    }
+    warehouse.size = warehouse.sizeUsed + freeSpace;
+
+    processCycles(1);
+    expect(ns.corporation.getMaterial(div, city, "Water").stored).toBe(1e6 - expectedConsumedInput[0]);
+    expect(ns.corporation.getMaterial(div, city, "Chemicals").stored).toBe(1e6 - expectedConsumedInput[1]);
+    expect(ns.corporation.getMaterial(div, city, "Plants").stored).toBe(expectedOutput[0]);
+    expect(ns.corporation.getMaterial(div, city, "Food").stored).toBe(expectedOutput[1]);
+
+    expect(ns.corporation.getWarehouse(div, city).size - ns.corporation.getWarehouse(div, city).sizeUsed).toBe(
+      expectedRemainingFreeSpace,
+    );
   });
 });

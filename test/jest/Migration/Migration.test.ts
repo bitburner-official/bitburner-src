@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import fs from "node:fs";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
-import { loadGame, saveObject } from "../../../src/SaveObject";
+import { loadGame, saveGame, getSaveData } from "../../../src/SaveObject";
 import * as db from "../../../src/db";
 import * as FileUtils from "../../../src/utils/FileUtils";
 import type { SaveData } from "../../../src/types";
@@ -28,7 +28,7 @@ async function loadGameFromSaveData(saveData: SaveData) {
 
 describe("v3", () => {
   test("v2.8.1 to v3.0.0", async () => {
-    const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v2.8.1.gz"));
+    const saveData = new Uint8Array(fs.readFileSync("test/jest/save-files/v2.8.1.gz"));
     const mockedDownload = await loadGameFromSaveData(saveData);
 
     // Check if auto-migration works
@@ -48,9 +48,9 @@ describe("v3", () => {
   });
 
   test.each([
-    ["test/jest/Migration/save-files/v2.8.1_500int.gz", 1773597870229, 1773597871370, undefined, 500, 300],
-    ["test/jest/Migration/save-files/v2.8.1_500int_override_100int.gz", 1773597926723, 1773597928370, 100, 500, 300],
-    ["test/jest/Migration/save-files/v2.8.1_500int_override_1000int.gz", 1773597951205, 1773597953370, 1000, 500, 300],
+    ["test/jest/save-files/v2.8.1_500int.gz", 1773597870229, 1773597871370, undefined, 500, 300],
+    ["test/jest/save-files/v2.8.1_500int_override_100int.gz", 1773597926723, 1773597928370, 100, 500, 300],
+    ["test/jest/save-files/v2.8.1_500int_override_1000int.gz", 1773597951205, 1773597953370, 1000, 500, 300],
   ])("%s", async (path, lastSave, lastUpdate, intelligenceOverride, playerInt, sleeveInt) => {
     const saveData = new Uint8Array(fs.readFileSync(path));
     const mockedDownload = await loadGameFromSaveData(saveData);
@@ -88,8 +88,8 @@ describe("v3", () => {
     }
 
     // Save and reload.
-    await saveObject.saveGame();
-    await loadGameFromSaveData(await saveObject.getSaveData());
+    await saveGame();
+    await loadGameFromSaveData(await getSaveData());
     expect(Player.lastSave).not.toStrictEqual(lastSave);
 
     // Check if gained exp is saved correctly.
@@ -109,7 +109,7 @@ describe("v3", () => {
 
   describe("Intelligence migration bug", () => {
     test("No change in exp and skill level", async () => {
-      const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v2.8.1_SF1.1_SF10.3.gz"));
+      const saveData = new Uint8Array(fs.readFileSync("test/jest/save-files/v2.8.1_SF1.1_SF10.3.gz"));
       const mockedDownload = await loadGameFromSaveData(saveData);
 
       for (const person of [Player, ...Player.sleeves]) {
@@ -121,7 +121,7 @@ describe("v3", () => {
       expect(mockedDownload).toHaveBeenCalledWith(saveData, "bitburnerSave_backup_2.8.1_1776173824.json.gz");
     });
     test("Reset wrong exp and skill level", async () => {
-      const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/v3.0.0_int_migration_bug.gz"));
+      const saveData = new Uint8Array(fs.readFileSync("test/jest/save-files/v3.0.0_int_migration_bug.gz"));
       const mockedDownload = await loadGameFromSaveData(saveData);
 
       for (const person of [Player, ...Player.sleeves]) {
@@ -135,7 +135,7 @@ describe("v3", () => {
   });
 
   test("Malformed hostname", async () => {
-    const saveData = new Uint8Array(fs.readFileSync("test/jest/Migration/save-files/malformed-hostname.gz"));
+    const saveData = new Uint8Array(fs.readFileSync("test/jest/save-files/malformed-hostname.gz"));
     await loadGameFromSaveData(saveData);
     for (const server of GetAllServers(true)) {
       expect(server.hostname.isWellFormed()).toBe(true);

@@ -5,6 +5,7 @@ import { Page } from "../../ui/Router";
 import { EventEmitter } from "../../utils/EventEmitter";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { CompletedProgramName } from "../../Enums";
 
 export const BitFlumeEvent = new EventEmitter<[]>();
 
@@ -24,6 +25,9 @@ export function BitFlumeModal(): React.ReactElement {
         <br />
         <br />
         Do you want to travel to the BitNode Nexus? This allows you to reset the current BitNode and select a new one.
+        <br />
+        <br />
+        You can use the "-q" option when running {CompletedProgramName.bitFlume} to skip this confirmation dialog.
       </Typography>
       <br />
       <br />

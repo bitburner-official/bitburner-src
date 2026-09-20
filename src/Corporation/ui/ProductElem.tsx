@@ -168,6 +168,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
         <>
           <Button onClick={() => setSellOpen(true)}>{sellButtonText}</Button>
           <SellProductModal
+            key={`SellProductModal-${division.name}-${city}-${product.name}`}
             product={product}
             div={division}
             city={city}

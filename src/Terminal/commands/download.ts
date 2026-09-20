@@ -29,7 +29,7 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
     });
 }
 
-export function download(args: (string | number | boolean)[], server: BaseServer): void {
+export function download(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 1) {
     return Terminal.error("Incorrect usage of download command. Usage: download [script/text file]");
   }
@@ -52,5 +52,5 @@ export function download(args: (string | number | boolean)[], server: BaseServer
   }
   const file = server.getContentFile(path);
   if (!file) return Terminal.error(`File not found: ${path}`);
-  return downloadContentAsFile(file.content, file.filename);
+  downloadContentAsFile(file.content, file.filename);
 }

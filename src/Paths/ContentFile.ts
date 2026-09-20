@@ -3,6 +3,10 @@ import type { ScriptFilePath } from "./ScriptFilePath";
 import type { TextFilePath } from "./TextFilePath";
 import { FileMetadata } from "./FileMetadata";
 
+// Share a TextEncoder to avoid creating a new instance for each size calculation.
+// TextEncoder is stateless, so sharing it is safe.
+const textEncoder = new TextEncoder();
+
 /** Provide a common interface for accessing script and text files */
 export type ContentFilePath = ScriptFilePath | TextFilePath;
 export abstract class ContentFile {
@@ -16,6 +20,12 @@ export abstract class ContentFile {
     this.metadata = new FileMetadata();
   }
   abstract deleteFromServer(server: BaseServer): boolean;
+  /**
+   * Returns the UTF-8 byte size of the file content.
+   */
+  getSize(): number {
+    return textEncoder.encode(this.content).length;
+  }
 }
 export type ContentFileMap = Map<ContentFilePath, ContentFile>;
 

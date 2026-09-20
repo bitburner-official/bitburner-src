@@ -2,7 +2,7 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { formatRam } from "../../ui/formatNumber";
 
-export function top(args: (string | number | boolean)[], server: BaseServer): void {
+export function top(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 0) {
     Terminal.error("Incorrect usage of top command. Usage: top");
     return;

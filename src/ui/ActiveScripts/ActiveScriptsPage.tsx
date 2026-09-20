@@ -14,10 +14,14 @@ import { Settings } from "../../Settings/Settings";
 import { isPositiveInteger } from "../../types";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
-export function ActiveScriptsPage(): React.ReactElement {
+interface IProps {
+  serverName?: string;
+}
+
+export function ActiveScriptsPage(props: IProps): React.ReactElement {
   const [scriptsPerPage, setScriptsPerPage] = useState(Settings.ActiveScriptsScriptPageSize);
   const [serversPerPage, setServersPerPage] = useState(Settings.ActiveScriptsServerPageSize);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState(props.serverName ?? "");
   const [page, setPage] = useState(0);
 
   function changeScriptsPerPage(e: SelectChangeEvent<number>) {
@@ -100,7 +104,7 @@ export function ActiveScriptsPage(): React.ReactElement {
     <>
       <Typography>
         This page displays a list of all of your scripts that are currently running across every machine. It also
-        provides information about each script's production. The scripts are categorized by the hostname of the servers
+        provides information about each script's production. The scripts are categorized by the hostnames of the servers
         on which they are running.
       </Typography>
 
@@ -146,7 +150,7 @@ export function ActiveScriptsPage(): React.ReactElement {
       </div>
       <List dense={true}>
         {dataToShow.map(([server, scripts]) => (
-          <ServerAccordion key={server.hostname} server={server} scripts={scripts} />
+          <ServerAccordion key={server.hostname} server={server} scripts={scripts} startOpen={!!props.serverName} />
         ))}
       </List>
     </>

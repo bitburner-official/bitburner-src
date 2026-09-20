@@ -1,11 +1,12 @@
 import { Terminal } from "../../Terminal";
+import type { TerminalAction } from "../TerminalAction";
 import type { BaseServer } from "../../Server/BaseServer";
 import { combinePath, isFilePath } from "../../Paths/FilePath";
 import { hasTextExtension, validTextExtensions } from "../../Paths/TextFilePath";
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
 import { PromptEvent } from "../../ui/React/PromptManager";
 import type { ContentFilePath } from "../../Paths/ContentFile";
-import { invalidCharacters } from "../../Paths/Directory";
+import { type Directory, invalidCharacters } from "../../Paths/Directory";
 import { pluralize } from "../../utils/I18nUtils";
 
 function pickDirectory(): Promise<FileList | null> {
@@ -38,15 +39,7 @@ function askConfirm(txt: string): Promise<boolean> {
   });
 }
 
-async function uploadAsync(args: (string | number | boolean)[], server: BaseServer) {
-  if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
-  }
-  const destinationInput = String(args[0]);
-  const destination = Terminal.getDirectory(destinationInput);
-  if (destination === null) {
-    return Terminal.error(`Could not resolve ${destinationInput} as a Directory`);
-  }
+async function uploadAsync(destination: Directory, destForPrint: string, server: BaseServer) {
   const files = await pickDirectory();
   if (files === null || files.length === 0) {
     return;
@@ -98,7 +91,6 @@ async function uploadAsync(args: (string | number | boolean)[], server: BaseServ
   const overwrite = withPath.filter((item) => "overwrite" in item);
   const skipped = withPath.filter((item) => "badPath" in item);
   const create = withPath.filter((item) => "create" in item);
-  const destForPrint = destination === "" ? "/" : destination;
   const lines = [`Upload files to ${destForPrint}?`];
   if (overwrite.length !== 0) {
     lines.push(
@@ -127,7 +119,6 @@ async function uploadAsync(args: (string | number | boolean)[], server: BaseServ
   if (!(await askConfirm(lines.join("\n")))) {
     return;
   }
-  Terminal.print(`Starting to upload files to ${destForPrint}`);
   for (const item of [...overwrite, ...create]) {
     const destFilePath = "create" in item ? item.create : item.overwrite;
     let text: string | undefined = undefined;
@@ -143,9 +134,19 @@ async function uploadAsync(args: (string | number | boolean)[], server: BaseServ
   Terminal.print(`Successfully uploaded files to ${destForPrint}`);
 }
 
-export function upload(args: (string | number | boolean)[], server: BaseServer): void {
-  uploadAsync(args, server).catch((error) => {
-    console.error(error);
-    Terminal.error(`Error while uploading files. Error: ${error}`);
-  });
+export function upload(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
+  if (args.length !== 1) {
+    return Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
+  }
+  const destinationInput = String(args[0]);
+  const destination = Terminal.getDirectory(destinationInput);
+  if (destination === null) {
+    return Terminal.error(`Could not resolve ${destinationInput} as a Directory`);
+  }
+  const destForPrint = destination === "" ? "/" : destination;
+  return {
+    cancel: () => {}, // Upload ignores cancellation
+    finished: uploadAsync(destination, destForPrint, server),
+    getProgressText: () => `Uploading files to ${destForPrint}`,
+  };
 }

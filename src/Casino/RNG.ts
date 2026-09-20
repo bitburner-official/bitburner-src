@@ -42,9 +42,9 @@ export class WHRNG implements RNG {
   s2 = 0;
   s3 = 0;
 
-  constructor(totalPlaytime: number) {
-    // This one is seeded by the players total play time.
-    const v: number = (totalPlaytime / 1000) % 30000;
+  constructor(seed: number) {
+    // Trying to cheat? This one is seeded by the players total play time. Allegedly.
+    const v: number = (seed / 1000) % 30000;
     this.s1 = v;
     this.s2 = v;
     this.s3 = v;

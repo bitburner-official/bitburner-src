@@ -6,7 +6,7 @@ import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
-import { AutocompleteData } from "@nsdefs";
+import type { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";

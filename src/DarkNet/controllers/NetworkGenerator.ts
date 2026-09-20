@@ -122,7 +122,7 @@ export const clearDarknet = () => {
   }
   const darkwebRoot = GetServer(SpecialServers.DarkWeb);
   if (darkwebRoot) {
-    darkwebRoot.serversOnNetwork = [Player.getHomeComputer().hostname];
+    darkwebRoot.serversOnNetwork = Player.hasTorRouter() ? [Player.getHomeComputer().hostname] : [];
   }
 
   for (const lab of getLabyrinthServerNames()) {
@@ -247,7 +247,8 @@ export const addLabyrinth = () => {
     isStationary: true,
   };
 
-  for (const hostname of getLabyrinthServerNames()) {
+  const hostname = getLabyrinthDetails().name;
+  if (hostname) {
     const passwordSalt = Math.floor(Math.random() * 10000);
     const server = new DarknetServer({
       ...commonData,

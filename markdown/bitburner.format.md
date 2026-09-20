@@ -27,6 +27,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[money(n, exponential)](./bitburner.format.money.md)
+
+
+</td><td>
+
+Format a number as an amount of money.
+
+
+</td></tr>
+<tr><td>
+
 [number(n, fractionalDigits, suffixStart, isInteger)](./bitburner.format.number.md)
 
 

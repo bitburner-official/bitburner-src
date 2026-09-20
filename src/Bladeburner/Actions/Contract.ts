@@ -1,7 +1,8 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { ActionIdFor } from "../Types";
 
-import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import type { IReviverValue } from "../../utils/JSONReviver";
+import { makeSerializable } from "../../utils/GenericReviver";
 import { BladeburnerActionType, BladeburnerContractName, BladeburnerMultName } from "../Enums";
 import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -31,13 +32,10 @@ export class Contract extends LevelableActionClass {
     return inst.getSkillMult(BladeburnerMultName.SuccessChanceContract);
   }
 
-  toJSON(): IReviverValue {
+  // Custom save handling
+  jsonReplacer(): IReviverValue {
     return this.save("Contract");
   }
 
-  static fromJSON(value: IReviverValue): Contract {
-    return Generic_fromJSON(Contract, value.data);
-  }
+  static includedKeys = makeSerializable("Contract", Contract);
 }
-
-constructorsForReviver.Contract = Contract;

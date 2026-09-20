@@ -769,6 +769,13 @@ export const achievements: Record<AchievementId, Achievement> = {
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.TrueRecursion),
   },
+  THE_VOID: {
+    ...achievementData.THE_VOID,
+    Icon: "the-void",
+    Secret: true,
+    Condition: () => false,
+    NotInSteam: true,
+  },
 };
 
 // Steam has a limit of 100 achievement. So these were planned but commented for now.

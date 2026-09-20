@@ -1,4 +1,4 @@
-import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
+import { connectServers, DeleteServer, disconnectServers, GetServer, GetServerOrThrow } from "../../Server/AllServers";
 import {
   DarknetEvents,
   DarknetState,
@@ -10,7 +10,7 @@ import { createDarknetServer } from "./ServerGenerator";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killServerScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getLabyrinthServerNames, getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
+import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { LOW_LEVEL_SERVER_DENSITY, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 import {
   getAllAdjacentNeighbors,
@@ -121,7 +121,7 @@ export const mutateDarknet = (): void => {
   }
 
   if (Math.random() < 0.5) {
-    // delink all connections from a server
+    // unlink all connections from a server
     disconnectRandomServer();
   }
 
@@ -186,7 +186,7 @@ export const deleteDarknetServer = (server: DarknetServer, force = false): void 
   DeleteServer(server.hostname);
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [];
+  serverState.serverLogs.length = 0;
 };
 
 export const addRandomDarknetServers = (count = 1, difficulty?: number, fixedDepth?: boolean): void => {
@@ -225,7 +225,7 @@ export const balanceDarknetServers = (): void => {
 };
 
 const isImmutable = (server: DarknetServer): boolean =>
-  server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink;
+  server === DarknetState.openServer || server.isConnectedTo || server.hasStasisLink || !server.maxRam;
 
 export const moveDarknetServer = (
   server: DarknetServer,
@@ -238,7 +238,7 @@ export const moveDarknetServer = (
     return false;
   }
   if (isImmutable(server)) {
-    // Do not try to move the server that is open in the UI or the terminal
+    // Do not try to move the server that is frozen, stasis locked, or open in the UI or the terminal
     return false;
   }
 
@@ -269,21 +269,22 @@ const disconnectRandomServer = (): void => {
 };
 
 /**
- * By default, this function disconnects the specified server from its neighbors, unless the neighbor is darkweb. Use
- * the second parameter to ignore the exception. We added this exception to improve the stability of the servers
- * directly connected to darkweb.
+ * By default, this function disconnects the specified server from its neighbors, unless the neighbor is darkweb or a
+ * labyrinth server. Use the second parameter to ignore the exception.
+ * We added this exception to improve the stability of the servers directly connected to darkweb or labyrinth servers.
  */
-export const disconnectServer = (server: DarknetServer, disconnectFromDarkweb = false): void => {
+export const disconnectServer = (server: DarknetServer, force = false): void => {
   if (server.hostname === SpecialServers.DarkWeb) {
     exceptionAlert(new Error("Something is trying to disconnect darkweb"), true);
     return;
   }
-  if (isImmutable(server)) {
+  if (isImmutable(server) && !force) {
     return;
   }
   for (const neighbor of server.serversOnNetwork) {
-    const connectedServer = GetServer(neighbor);
-    const isOkToDisconnect = disconnectFromDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
+    const connectedServer = GetServerOrThrow(neighbor);
+    const isOkToDisconnect =
+      force || (connectedServer.hostname !== SpecialServers.DarkWeb && !isLabyrinthServer(neighbor));
     if (connectedServer && isOkToDisconnect) {
       disconnectServers(server, connectedServer);
     }
@@ -305,7 +306,8 @@ export const restartServer = (server: DarknetServer): void => {
   killServerScripts(server, "Server restarted.");
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
-  serverState.serverLogs = [{ pid: -1, message: "Server restarting, terminating scripts..." }];
+  serverState.serverLogs.length = 0;
+  serverState.serverLogs.push({ pid: -1, message: "Server restarting, terminating scripts..." });
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);
@@ -336,7 +338,7 @@ export const addGuaranteedConnection = (server: DarknetServer): void => {
 export const validateDarknetNetwork = (): void => {
   const servers = getAllDarknetServers();
   // The darknet should have at least darkweb and labyrinth servers.
-  if (servers.length < getLabyrinthServerNames().length + 1) {
+  if (servers.length < 2) {
     exceptionAlert(new Error(`There are too few darknet servers. servers.length: ${servers.length}`), true);
   }
   for (const server of servers) {
@@ -395,4 +397,16 @@ export const validateDarknetNetwork = (): void => {
       }
     }
   }
+};
+
+export const freezeServer = (server: DarknetServer): void => {
+  killServerScripts(server, "Server was frozen.");
+  server.maxRam = 0;
+  server.blockedRam = 0;
+  // When blockedRam is non-zero, server.ramUsed is equal to blockedRam. When scripts are running, server.ramUsed is
+  // equal to totalRAMCost + blockedRam. After all scripts are killed, server.ramUsed resets to blockedRam.
+  // When a server is frozen, its maxRam is 0, so blockedRam should naturally also be 0. Therefore, we need to manually
+  // set ramUsed to 0.
+  server.updateRamUsed(0);
+  server.isStationary = true;
 };

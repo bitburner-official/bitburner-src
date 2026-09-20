@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { getServerOnNetwork } from "../../Server/ServerHelpers";
 import { IPAddress } from "../../Types/strings";
 
-export function scan(args: (string | number | boolean)[], currServ: BaseServer): void {
+export function scan(args: (string | number | boolean)[], currServ: BaseServer): undefined {
   if (args.length !== 0) {
     Terminal.error("Incorrect usage of scan command. Usage: scan");
     return;

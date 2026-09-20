@@ -96,8 +96,6 @@ Because this function immediately terminates the script, it does not have a retu
 
 Running this function with 0 or fewer threads will cause a runtime error.
 
-For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
-
 ## Example
 
 

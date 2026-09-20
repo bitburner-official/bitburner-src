@@ -5,6 +5,7 @@ import type {
   Server as IServer,
   ScriptArg,
   BitNodeOptions,
+  EditorOptions,
 } from "@nsdefs";
 import type { WorkerScript } from "./WorkerScript";
 
@@ -31,7 +32,6 @@ import { FormulaGang } from "../Gang/formulas/formulas";
 import { GangMember } from "../Gang/GangMember";
 import { GangMemberTask } from "../Gang/GangMemberTask";
 import { RunningScript } from "../Script/RunningScript";
-import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScripts, findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { arrayToString } from "../utils/helpers/ArrayHelpers";
@@ -68,7 +68,8 @@ import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
 import { DarknetServer } from "../Server/DarknetServer";
 import { DarknetState } from "../DarkNet/models/DarknetState";
-import { getFriendlyType } from "../utils/TypeAssertion";
+import { getFriendlyType, isObject } from "../utils/TypeAssertion";
+import { SpecialServers } from "../Server/data/SpecialServers";
 
 export const helpers = {
   string,
@@ -80,10 +81,12 @@ export const helpers = {
   scriptArgs,
   boolean,
   runOptions,
+  editorOptions,
   spawnOptions,
   hostReturnOptions,
   returnServerID,
   argsToString,
+  getTextColor,
   errorMessage,
   validateHGWOptions,
   checkEnvFlags,
@@ -222,6 +225,31 @@ function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
   return v;
 }
 
+/**
+ * Converts the provided to a valid EditorOptions object, throwing if it is not an object
+ * @param ctx
+ * @param _options
+ */
+function editorOptions(ctx: NetscriptContext, _options: unknown): EditorOptions {
+  if (!_options) {
+    return {};
+  }
+  if (!isObject(_options)) {
+    throw errorMessage(
+      ctx,
+      `editorOptions must be an object. Its type is ${getFriendlyType(_options)}. Its string value is ${String(
+        _options,
+      )}`,
+    );
+  }
+  // Safe assertion since _options type has been narrowed to a non-null object
+  const options = _options as Unknownify<EditorOptions>;
+  if (Object.hasOwn(options, "vim") && typeof options.vim !== "boolean") {
+    throw errorMessage(ctx, `editorOptions.vim must be a boolean, was ${options.vim}`);
+  }
+  return _options;
+}
+
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
   const result: CompleteRunOptions = {
     threads: 1 as PositiveInteger,
@@ -308,25 +336,28 @@ function argsToString(args: unknown[]): string {
     if (arg === undefined) {
       return (out += "undefined");
     }
-    const nativeArg = toNative(arg);
 
     // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
     // output is  "< Map: key1 => value1; key2 => value2 >"
-    if (nativeArg instanceof Map) {
-      return (out += mapToString(nativeArg));
+    if (arg instanceof Map) {
+      return (out += mapToString(arg));
     }
     // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
-    if (nativeArg instanceof Set) {
-      return (out += setToString(nativeArg));
+    if (arg instanceof Set) {
+      return (out += setToString(arg));
     }
-    if (typeof nativeArg === "object") {
-      return (out += JSON.stringify(nativeArg, (_, value: unknown) => {
+    if (typeof arg === "object") {
+      return (out += JSON.stringify(arg, (_, value: unknown) => {
         /**
          * If the property is a promise, we will return a string that clearly states that it's a promise object, not a
          * normal object. If we don't do that, all promises will be serialized into "{}".
          */
         if (value instanceof Promise) {
           // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
+          return value.toString();
+        }
+        // Print the name and message of the error instead of "{}".
+        if (value instanceof Error) {
           return value.toString();
         }
         if (value instanceof Map) {
@@ -339,8 +370,27 @@ function argsToString(args: unknown[]): string {
       }));
     }
 
-    return (out += String(nativeArg));
+    return (out += String(arg));
   }, "");
+}
+
+/** Determine what default color a string should have for tprint/print. */
+function getTextColor(str: string): "error" | "success" | "warn" | "info" | "primary" {
+  // Match a tag at the start-of-line with an optional bracket part (primarily for timestamps)
+  // Example: "[13:10] ERROR: Too much regex"
+  if (str.match(/^(\[[^\]]+\] )?ERROR/) || str.match(/^(\[[^\]]+\] )?FAIL/)) {
+    return "error";
+  }
+  if (str.match(/^(\[[^\]]+\] )?SUCCESS/)) {
+    return "success";
+  }
+  if (str.match(/^(\[[^\]]+\] )?WARN/)) {
+    return "warn";
+  }
+  if (str.match(/^(\[[^\]]+\] )?INFO/)) {
+    return "info";
+  }
+  return "primary";
 }
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
@@ -398,16 +448,16 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
 /** Create an error if a script is dead or if concurrent ns function calls are made */
 function checkEnvFlags(ctx: NetscriptContext): void {
   const ws = ctx.workerScript;
-  if (ws.env.stopFlag) {
+  if (ws.stopFlag) {
     log(ctx, () => "Failed to run due to script being killed.");
     throw new ScriptDeath(ws);
   }
-  if (ws.env.runningFn && ctx.function !== "asleep") {
+  if (ws.runningFn && ctx.function !== "asleep") {
     log(ctx, () => "Failed to run due to failed concurrency check.");
     const err = errorMessage(
       ctx,
       "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
-        `promise-returning function?\nCurrently running: ${ws.env.runningFn}\nTried to run: ${ctx.function}`,
+        `promise-returning function?\nCurrently running: ${ws.runningFn}\nTried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
@@ -422,12 +472,12 @@ function netscriptDelay(ctx: NetscriptContext, time: number): Promise<void> {
     ws.delay = window.setTimeout(() => {
       ws.delay = null;
       ws.delayReject = undefined;
-      ws.env.runningFn = "";
-      if (ws.env.stopFlag) reject(new ScriptDeath(ws));
+      ws.runningFn = "";
+      if (ws.stopFlag) reject(new ScriptDeath(ws));
       else resolve();
     }, time);
     ws.delayReject = reject;
-    ws.env.runningFn = ctx.function;
+    ws.runningFn = ctx.function;
   });
 }
 
@@ -504,7 +554,11 @@ function scriptIdentifier(ctx: NetscriptContext, scriptID: unknown, _host: unkno
 export function getServer(ctx: NetscriptContext, _host: unknown): [BaseServer | null, string] {
   const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
   const server = GetServer(host);
-  if (server != null && (server.serversOnNetwork.length > 0 || server instanceof DarknetServer)) {
+  if (
+    server != null &&
+    (server.serversOnNetwork.length > 0 ||
+      (server instanceof DarknetServer && server.hostname !== SpecialServers.DarkWeb))
+  ) {
     return [server, host];
   }
   if (DarknetState.offlineServers.has(host)) {
@@ -809,6 +863,7 @@ function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string
  */
 function createPublicRunningScript(runningScript: RunningScript, workerScript?: WorkerScript): IRunningScript {
   const logProps = runningScript.tailProps;
+
   return {
     args: runningScript.args.slice(),
     dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),

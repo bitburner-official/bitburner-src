@@ -11,6 +11,7 @@ import { copyToClipboard, formatObjectWithColoredKeys, formatToMaxDigits } from 
 import { useCycleRerender } from "../../ui/React/hooks";
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { logBoxBaseZIndex } from "../../ui/React/Constants";
+import { Settings } from "../../Settings/Settings";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -104,7 +105,7 @@ export const ServerDetailsModal = ({
           {!isLabServer && (
             <>
               <Card style={{ height: "250px", overflowY: "scroll" }}>
-                <div style={{ color: "white", paddingLeft: "10px" }}>{logContent}</div>
+                <div style={{ color: Settings.theme.maplocation, paddingLeft: "10px" }}>{logContent}</div>
               </Card>
             </>
           )}

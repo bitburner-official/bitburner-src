@@ -40,7 +40,7 @@ function coloredArrow(difficulty: number): JSX.Element {
   const cappedDifficulty = Math.min(difficulty, MaxDifficultyForInfiltration);
   if (cappedDifficulty === 0) {
     return (
-      <span style={{ color: "white" }}>
+      <span style={{ color: Settings.theme.success }}>
         {">"}
         {" ".repeat(51)}
       </span>

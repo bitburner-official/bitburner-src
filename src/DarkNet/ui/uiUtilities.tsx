@@ -2,6 +2,7 @@ import React from "react";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { DWServerLogStyles } from "./dnetStyles";
+import { Settings } from "../../Settings/Settings";
 
 export const formatToMaxDigits = (value: number, maxDigits: number): string => {
   if (value === 0) return "0";
@@ -29,7 +30,7 @@ export const formatObjectWithColoredKeys = (obj: Record<string, unknown>, filter
       {Object.entries(filteredObject).map(([key, value]) => {
         return (
           <React.Fragment key={key}>
-            <span style={{ color: "grey" }}>{key}: </span>
+            <span style={{ color: Settings.theme.secondary }}>{key}: </span>
             {/* React does not render null, undefined, and boolean values */}
             {typeof value !== "boolean" ? value : String(value)}
             <br />

@@ -109,7 +109,7 @@ export async function save(saveData: SaveData): Promise<void> {
   }
   const db = await getDB();
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["savestring"], "readwrite");
+    const transaction = db.transaction(["savestring"], "readwrite", { durability: "strict" });
     const rejectHandler = () => {
       reject(transaction.error ?? new Error("Cannot save game data. Transaction aborted or encountered an error."));
     };

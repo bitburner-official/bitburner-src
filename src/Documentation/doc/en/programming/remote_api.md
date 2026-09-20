@@ -9,7 +9,8 @@ You only need to do 2 things:
 
 ## Community tools
 
-All these tools support synchronizing scripts to Bitburner and transpiling TypeScript/JSX to JavaScript. Note that Bitburner has native support for TypeScript/JSX.
+All these tools support synchronizing scripts to Bitburner. Some tools support transpiling TypeScript/JSX to JavaScript.
+Note that Bitburner has native support for TypeScript/JSX.
 
 Links:
 
@@ -17,9 +18,10 @@ Links:
 - [viteburner](https://github.com/Tanimodori/viteburner): Daemon tools of bitburner using vite for script transform, file syncing, RAM monitoring and more!
 - [bb-external-editor](https://github.com/shyguy1412/bb-external-editor): This tool uses esbuild to transpile and bundle your scripts. It supports JS, TS and React as well as importing from any browser-compatible npm library out of the box.
 - [BitburnerGoFilesync](https://github.com/CTNOriginals/BitburnerGoFilesync): A standalone binary cli tool that doesn't require any setup or third party libraries. It is designed to be very minimal and easy to use out of the box.
+- [VS Code Extension: Bitburner File Sync Plugin](https://github.com/ficocelliguy/bitburner-file-sync-plugin): A VS Code extension that syncs your local script files to Bitburner.
 
 `typescript-template` and `BitburnerGoFilesync` both have a small set of options and features, their simplicity is by design.  
-`viteburner` and `bb-external-editor` have more fancy features and may offer more control for specific use cases.
+`viteburner`, `bb-external-editor`, and `VS Code Extension: Bitburner File Sync Plugin` have more fancy features and may offer more control for specific use cases.
 
 ## Troubleshooting tips
 
@@ -35,9 +37,15 @@ Links:
 
 ## API specification
 
-All APIs use an input/output format similar to the JSON RPC 2.0 protocol.
+### Overview
 
-Input:
+All APIs use a request/response format similar to the JSON RPC 2.0 protocol.
+
+Unknown parameters in requests are ignored.
+
+Pagination is not supported.
+
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -46,20 +54,29 @@ Input:
             "params": any
         }
 
-Output:
+Success Response:
 
         {
             "jsonrpc": "2.0",
             "id": number,
-            "result": any,
-            "error": any
+            "result": any
         }
 
-### pushFile
+Error Response:
+
+        {
+            "jsonrpc": "2.0",
+            "id": number,
+            "error": string
+        }
+
+### API list
+
+#### pushFile
 
 Create or update a file.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -72,7 +89,7 @@ Input:
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -80,11 +97,11 @@ Output:
             "result": "OK"
         }
 
-### getFile
+#### getFile
 
 Read a file and its content.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -96,7 +113,7 @@ Input:
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -104,11 +121,11 @@ Output:
             "result": string
         }
 
-### getFileMetadata
+#### getFileMetadata
 
 Read metadata of a file.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -120,24 +137,25 @@ Input:
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
             "id": number,
             "result": {
                 "filename": string,
-                "atime": string,
-                "btime": string,
-                "mtime": string
+                "size": number,
+                "atime": number,
+                "btime": number,
+                "mtime": number
             }
         }
 
-### deleteFile
+#### deleteFile
 
 Delete a file.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -149,7 +167,7 @@ Input:
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -157,11 +175,11 @@ Output:
             "result": "OK"
         }
 
-### getFileNames
+#### getFileNames
 
 List all file names on a server.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -172,7 +190,7 @@ Input:
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -180,11 +198,11 @@ Output:
             "result": string[]
         }
 
-### getAllFiles
+#### getAllFiles
 
 Get the content of all files on a server.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -195,7 +213,7 @@ Input:
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -206,11 +224,11 @@ Output:
             }[]
         }
 
-### getAllFileMetadata
-
-Input:
+#### getAllFileMetadata
 
 Get the content of all files on a server.
+
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -221,24 +239,25 @@ Get the content of all files on a server.
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
             "id": number,
             "result": {
                 "filename": string,
-                "atime": string
-                "btime": string,
-                "mtime": string,
+                "size": number,
+                "atime": number,
+                "btime": number,
+                "mtime": number
             }[]
         }
 
-### calculateRam
+#### calculateRam
 
 Calculate the in-game ram cost of a script.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -250,7 +269,7 @@ Input:
             }
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -258,11 +277,11 @@ Output:
             "result": number
         }
 
-### getDefinitionFile
+#### getDefinitionFile
 
 Get the definition file of NS APIs.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -270,7 +289,7 @@ Input:
             "method": "getDefinitionFile"
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -278,11 +297,11 @@ Output:
             "result": string
         }
 
-### getSaveFile
+#### getSaveFile
 
 Get save data.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -290,7 +309,7 @@ Input:
             "method": "getSaveFile"
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",
@@ -302,11 +321,11 @@ Output:
             }
         }
 
-### getAllServers
+#### getAllServers
 
 Get all servers.
 
-Input:
+Request:
 
         {
             "jsonrpc": "2.0",
@@ -314,7 +333,7 @@ Input:
             "method": "getAllServers"
         }
 
-Output:
+Response:
 
         {
             "jsonrpc": "2.0",

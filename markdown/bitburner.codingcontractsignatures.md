@@ -4,6 +4,7 @@
 
 ## CodingContractSignatures type
 
+This is a map of contract types to their input and answer data types. The key is the contract type. The value is a tuple containing the input and answer data types.
 
 **Signature:**
 
@@ -36,8 +37,17 @@ export type CodingContractSignatures = {
   "Compression III: LZ Compression": [string, string];
   "Encryption I: Caesar Cipher": [[string, number], string];
   "Encryption II: Vigenère Cipher": [[string, string], string];
-  "Square Root": [bigint, bigint, [string, string]];
+  "Square Root": [bigint, bigint];
   "Total Number of Primes": [[number, number], number];
   "Largest Rectangle in a Matrix": [(1 | 0)[][], [[number, number], [number, number]]];
 };
 ```
+
+## Example
+
+
+```
+"Subarray with Maximum Sum": [number[], number]
+```
+For the "Subarray with Maximum Sum" contract, the input type is `number[]` and the answer type is `number`<!-- -->.
+

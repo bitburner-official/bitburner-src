@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { makeSerializable } from "../../../utils/GenericReviver";
 import { Sleeve } from "../Sleeve";
 import { SleeveBaseWork, SleeveWorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
@@ -25,15 +25,5 @@ export class SleeveSynchroWork extends SleeveBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveSynchroWork", this);
-  }
-
-  /** Initializes a SynchroWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): SleeveSynchroWork {
-    return Generic_fromJSON(SleeveSynchroWork, value.data);
-  }
+  static includedKeys = makeSerializable("SleeveSynchroWork", SleeveSynchroWork);
 }
-
-constructorsForReviver.SleeveSynchroWork = SleeveSynchroWork;

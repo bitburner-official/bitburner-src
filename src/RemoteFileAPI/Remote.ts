@@ -1,4 +1,4 @@
-import { RFAMessage } from "./MessageDefinitions";
+import { type RFARequest, RFAErrorResponse } from "./MessageDefinitions";
 import { RFARequestHandler } from "./MessageHandlers";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
@@ -13,6 +13,7 @@ function showErrorMessage(address: string, detail: string) {
 }
 
 export const RemoteFileApiConnectionEvents = new EventEmitter<[ReturnType<typeof getRemoteFileApiConnectionStatus>]>();
+export const RemoteFileApiConnectionSettingEvents = new EventEmitter();
 
 export class Remote {
   connection?: WebSocket;
@@ -27,7 +28,8 @@ export class Remote {
 
   public stopConnection(): void {
     // Cancel all pending retries immediately. This function is only called when we intentionally close the current
-    // connection before starting a new one. The new connection will retry on its own if needed.
+    // connection before starting a new one or the player intentionally closes the current connection. The new
+    // connection will retry on its own if needed.
     timeOutIds.forEach((id) => window.clearTimeout(id));
     timeOutIds.clear();
 
@@ -52,6 +54,7 @@ export class Remote {
       return;
     }
 
+    RemoteFileApiConnectionEvents.emit("Connecting");
     // Log connection errors on manual and the first auto connect attempts
     this.connection.addEventListener("error", (e: Event) => {
       if (autoConnectAttempt <= 1 || successfullyConnected) {
@@ -117,16 +120,14 @@ function handleMessageEvent(this: WebSocket, e: MessageEvent): void {
    * Validating e.data and the result of JSON.parse() is too troublesome, so we typecast them here. If the data is
    * invalid, it means the RFA "client" (the tool that the player is using) is buggy, but that's not our problem.
    */
-  const msg = JSON.parse(e.data as string) as RFAMessage;
+  const msg = JSON.parse(e.data as string) as RFARequest;
 
   if (!msg.method || !RFARequestHandler[msg.method]) {
-    const response = new RFAMessage({ error: "Unknown message received", id: msg.id });
+    const response = new RFAErrorResponse({ error: "Unknown message received", id: msg.id });
     this.send(JSON.stringify(response));
     return;
   }
   const response = RFARequestHandler[msg.method](msg);
-  if (!response) return;
-
   if (response instanceof Promise) {
     void response.then((data) => this.send(JSON.stringify(data)));
     return;

@@ -27,3 +27,5 @@ For example, let's say you have SF 1.3, but you overrode the active level of SF1
 
 If the active level of a source file is 0, that source file won't be included in the result.
 
+This function does not require owning Source-File 4 or being in BitNode 4. You can also use [ResetInfo.ownedSF](./bitburner.resetinfo.ownedsf.md) as a lower-RAM alternative.
+

@@ -1,7 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { TerminalHelpText, HelpTexts } from "../HelpText";
 
-export function help(args: (string | number | boolean)[]): void {
+export function help(args: (string | number | boolean)[]): undefined {
   if (args.length !== 0 && args.length !== 1) {
     Terminal.error("Incorrect usage of help command. Usage: help");
     return;

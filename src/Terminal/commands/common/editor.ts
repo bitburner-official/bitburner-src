@@ -34,8 +34,10 @@ export async function main(ns) {
   }
 }
 
-export function commonEditor(command: string, { args, server, vim }: EditorParameters): void {
-  if (args.length < 1) return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
+export function commonEditor(command: string, { args, server, vim }: EditorParameters, allowZeroFiles = false): void {
+  if (args.length < 1 && !allowZeroFiles) {
+    return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
+  }
   const files = new Map<ScriptFilePath | TextFilePath, string>();
   let hasLegacyScript = false;
   for (const arg of args) {

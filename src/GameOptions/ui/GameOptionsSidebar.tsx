@@ -12,7 +12,7 @@ import {
 import { Box, Button, List, ListItemButton, Paper, Tooltip, Typography } from "@mui/material";
 import { default as React, useRef, useState } from "react";
 import { FileDiagnosticModal } from "../../Diagnostic/FileDiagnosticModal";
-import { ImportData, saveObject } from "../../SaveObject";
+import { ImportData, getSaveDataFromFile, getImportDataFromSaveData, importGame } from "../../SaveObject";
 import { StyleEditorButton } from "../../Themes/ui/StyleEditorButton";
 import { ThemeEditorButton } from "../../Themes/ui/ThemeEditorButton";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
@@ -74,8 +74,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
 
   async function onImport(event: React.ChangeEvent<HTMLInputElement>): Promise<void> {
     try {
-      const saveData = await saveObject.getSaveDataFromFile(event.target.files);
-      const data = await saveObject.getImportDataFromSaveData(saveData);
+      const saveData = await getSaveDataFromFile(event.target.files);
+      const data = await getImportDataFromSaveData(saveData);
       setImportData(data);
       setImportSaveOpen(true);
       setSyncSteamAchievements(data.playerData?.syncSteamAchievements ?? true);
@@ -98,7 +98,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           SyncSteamAchievements: syncSteamAchievements,
         };
       }
-      await saveObject.importGame(importData.saveData, overrideSettings);
+      await importGame(importData.saveData, overrideSettings);
     } catch (e: unknown) {
       console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
@@ -256,7 +256,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           }
         >
           <Button onClick={() => setDiagnosticOpen(true)} sx={{ gridArea: "diagnose" }}>
-            Diagnose files
+            Diagnose Files
           </Button>
         </Tooltip>
         <Tooltip title="Head to the theme browser to see a collection of prebuilt themes.">
@@ -298,7 +298,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
           <CreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
           <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
-            Reset tutorial
+            Repeat Tutorial
           </Button>
           <Button startIcon={<Chat />} href="https://discord.gg/TFc3hKD" target="_blank" sx={{ gridArea: "discord" }}>
             Discord

@@ -94,9 +94,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("SSH Port (22) is already open!");
         return;
       }
+      if (server.purchasedByPlayer) {
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
+      }
 
       server.sshPortOpen = true;
-      Terminal.print("Opened SSH Port(22)!");
+      Terminal.print("Opened SSH Port (22)!");
       server.openPortCount++;
     },
   }),
@@ -105,7 +108,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     nsMethod: "ftpcrack",
     create: {
       level: 100,
-      tooltip: "This program cracks open FTP ports",
+      tooltip: "This program cracks open FTP ports by exploiting weak credentials",
       req: requireHackingLevel(100),
       time: CONSTANTS.MillisecondsPerHalfHour,
     },
@@ -118,6 +121,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       if (server.ftpPortOpen) {
         Terminal.print("FTP Port (21) is already open!");
         return;
+      }
+      if (server.purchasedByPlayer) {
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
       server.ftpPortOpen = true;
@@ -144,6 +150,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("SMTP Port (25) is already open!");
         return;
       }
+      if (server.purchasedByPlayer) {
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
+      }
 
       server.smtpPortOpen = true;
       Terminal.print("Opened SMTP Port (25)!");
@@ -155,7 +164,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     nsMethod: "httpworm",
     create: {
       level: 500,
-      tooltip: "This virus opens up HTTP ports",
+      tooltip: "This virus opens up HTTP ports by exploiting web servers' vulnerabilities",
       req: requireHackingLevel(500),
       time: CONSTANTS.MillisecondsPer4Hours,
     },
@@ -169,6 +178,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Terminal.print("HTTP Port (80) is already open!");
         return;
       }
+      if (server.purchasedByPlayer) {
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
+      }
 
       server.httpPortOpen = true;
       Terminal.print("Opened HTTP Port (80)!");
@@ -180,7 +192,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     nsMethod: "sqlinject",
     create: {
       level: 750,
-      tooltip: "This virus opens SQL ports",
+      tooltip: "This virus opens SQL ports by injecting malicious code into databases",
       req: requireHackingLevel(750),
       time: CONSTANTS.MillisecondsPer8Hours,
     },
@@ -193,6 +205,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       if (server.sqlPortOpen) {
         Terminal.print("SQL Port (1433) is already open!");
         return;
+      }
+      if (server.purchasedByPlayer) {
+        Terminal.print("Opening ports on your own machines has no negative consequences in the game.");
       }
 
       server.sqlPortOpen = true;

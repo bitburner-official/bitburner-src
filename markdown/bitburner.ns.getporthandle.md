@@ -56,5 +56,9 @@ Port number. Must be a positive integer.
 
 RAM cost: 0 GB
 
-Get a handle to a Netscript Port. Ports are shared across all hosts and contents are reset on game restart.
+Get a handle to a Netscript Port.
+
+All methods of the port handle can be used while the ns instance is "busy" (they avoid the concurrency check), or even when it is dead.
+
+Ports are shared across all hosts and contents are reset on game restart.
 

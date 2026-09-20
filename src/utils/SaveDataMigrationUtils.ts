@@ -35,7 +35,9 @@ import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../C
 import { load } from "../db";
 import { downloadContentAsFile } from "./FileUtils";
 import { initDarkwebServer } from "../DarkNet/controllers/NetworkGenerator";
+import { Replacer } from "./GenericReviver";
 import { breakingChanges301 } from "./APIBreaks/3.0.1";
+import { breakingChanges302 } from "./APIBreaks/3.0.2";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -509,7 +511,10 @@ Error: ${e}`,
     if (!stats || typeof stats !== "object") break v2_60;
     const freshSaveData = getGoSave();
     Object.assign(freshSaveData.stats, stats);
-    loadGo(JSON.stringify(freshSaveData));
+    // As of this writing (version 52), Go data does not include any classes
+    // so it does not need a replacer. However, the generic replacer is used
+    // so that this case isn't missed if this ever changes.
+    loadGo(JSON.stringify(freshSaveData, Replacer));
   }
   if (ver < 39) {
     showAPIBreaks("2.6.1", breakInfos261);
@@ -647,5 +652,8 @@ Error: ${e}`,
   }
   if (ver < 51) {
     showAPIBreaks("3.0.1", breakingChanges301);
+  }
+  if (ver < 52) {
+    showAPIBreaks("3.0.2", breakingChanges302);
   }
 }

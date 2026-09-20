@@ -1,7 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 
-export function history(args: (string | number | boolean)[]): void {
+export function history(args: (string | number | boolean)[]): undefined {
   if (args.length === 0) {
     Terminal.commandHistory.forEach((command, index) => {
       Terminal.print(`${index.toString().padStart(2)} ${command}`);

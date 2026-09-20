@@ -12,9 +12,8 @@ Collection of all functions passed to scripts
 export interface NS 
 ```
 
-## Remarks
+## Example
 
-<b>Basic usage example:</b>
 
 ```js
 export async function main(ns) {
@@ -702,7 +701,7 @@ Returns the amount of Faction favor required to be able to donate to a faction.
 </td></tr>
 <tr><td>
 
-[getFileMetadata(filename)](./bitburner.ns.getfilemetadata.md)
+[getFileMetadata(filename, host)](./bitburner.ns.getfilemetadata.md)
 
 
 </td><td>
@@ -1209,6 +1208,28 @@ Returns whether the player has access to the darkweb.
 </td><td>
 
 Runs HTTPWorm.exe on a server.
+
+
+</td></tr>
+<tr><td>
+
+[isEmptyPort(portNumber)](./bitburner.ns.isemptyport.md)
+
+
+</td><td>
+
+Check if a port is empty.
+
+
+</td></tr>
+<tr><td>
+
+[isFullPort(portNumber)](./bitburner.ns.isfullport.md)
+
+
+</td><td>
+
+Check if a port is full.
 
 
 </td></tr>

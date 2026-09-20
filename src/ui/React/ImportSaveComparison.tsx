@@ -28,7 +28,7 @@ import ThumbDownAlt from "@mui/icons-material/ThumbDownAlt";
 
 import { Skills } from "@nsdefs";
 
-import { ImportData, saveObject } from "../../SaveObject";
+import { ImportData, getSaveData, getImportDataFromSaveData, importGame } from "../../SaveObject";
 import { Settings } from "../../Settings/Settings";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
@@ -125,7 +125,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
         SyncSteamAchievements: syncSteamAchievements,
       };
     }
-    await saveObject.importGame(props.saveData, overrideSettings);
+    await importGame(props.saveData, overrideSettings);
   };
 
   useEffect(() => {
@@ -143,8 +143,8 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
-      const dataBeingImported = await saveObject.getImportDataFromSaveData(props.saveData);
-      const dataCurrentlyInGame = await saveObject.getImportDataFromSaveData(await saveObject.getSaveData(true));
+      const dataBeingImported = await getImportDataFromSaveData(props.saveData);
+      const dataCurrentlyInGame = await getImportDataFromSaveData(await getSaveData(true));
 
       setImportData(dataBeingImported);
       setCurrentData(dataCurrentlyInGame);

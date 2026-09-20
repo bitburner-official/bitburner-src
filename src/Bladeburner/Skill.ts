@@ -81,9 +81,6 @@ export class Skill {
   }
 
   calculateMaxUpgradeCount(currentLevel: number, cost: PositiveNumber): number {
-    // At extreme levels, floating-point precision loss makes currentLevel + 1 === currentLevel,
-    // causing calculateCost to return 0. No upgrade is possible in this case.
-    if (this.calculateCost(currentLevel, 1 as PositiveInteger) <= 0) return 0;
     /**
      * Define:
      * - x = count

@@ -15,3 +15,5 @@ tools
 src/ThirdParty
 
 webpack.config.js
+
+src/Literature/DiscoverableScriptContent/

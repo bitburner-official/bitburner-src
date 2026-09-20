@@ -106,7 +106,7 @@ export function SellProductModal(props: IProps): React.ReactElement {
                 <Typography>
                   If this is enabled, then this Material will automatically be sold at market price + markup.
                   <br />
-                  This overrides player set pricing and gets overriden by an active TA2.
+                  This overrides player set pricing and gets overridden by an active TA2.
                 </Typography>
               }
             >

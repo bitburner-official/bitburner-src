@@ -6,6 +6,8 @@
 
 Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone.
 
+This function requires TIX API access. You can use [purchaseTixApi](./bitburner.stock.purchasetixapi.md) to purchase it.
+
 **Signature:**
 
 ```typescript

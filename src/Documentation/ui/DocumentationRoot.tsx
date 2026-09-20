@@ -82,8 +82,12 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
         bgcolor={Settings.theme.backgroundprimary}
         alignItems="center"
       >
-        <Button onClick={() => history.pop()}>Back</Button>
-        <Button onClick={() => history.home()}>Home</Button>
+        <Button onClick={() => history.pop()} disabled={history.pages.length === 0}>
+          Back
+        </Button>
+        <Button onClick={() => history.home()} disabled={history.pages.length === 0}>
+          Home
+        </Button>
         <DocumentationAutocomplete
           sx={{ marginLeft: "10px" }}
           onChange={(path, external) => {

@@ -1855,9 +1855,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "An experimental augmentation that lets the user make incredible leaps of insight and flights of fancy. " +
         "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
         "metallic patterns on the user's upper back and shoulders. " +
-        "Awarded to those who discover the secrets of the labyrinth.",
+        "Awarded to those who discover the secrets of the labyrinth." +
+        "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases the stasis link limit by one, and raises charisma by 5% and agility by 10%, and darknet money by 30%.",
+        "This augmentation increases the stasis link limit by one, charisma by 5%, agility by 10%, and darknet money by 30%.",
       charisma: 1.05,
       agility: 1.1,
       dnet_money: 1.3,
@@ -1870,9 +1871,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
         "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
-        "Awarded to those who discover the secrets of the labyrinth.",
+        "Awarded to those who discover the secrets of the labyrinth." +
+        "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases the speed of authentication and heartbleed by 20%, and raises charisma and dexterity by 6%.",
+        "This augmentation increases charisma and dexterity by 6%, and the speed of authentication and heartbleed by 20%.",
       charisma: 1.06,
       dexterity: 1.06,
       isSpecial: true,
@@ -1885,9 +1887,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "This unique augmentation allows the user to strike straight to the heart of the matter and sweep aside obstacles in the way of their goals. " +
         "Appearing as a simple insignia on the user's forearm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
-        "Awarded to those who discover the secrets of the labyrinth.",
+        "Awarded to those who discover the secrets of the labyrinth." +
+        "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases the stasis link limit by one, and raises charisma by 7%, strength by 10%, and darknet money by 10%.",
+        "This augmentation increases the stasis link limit by one, charisma by 7%, strength by 10%, and darknet money by 10%.",
       charisma: 1.07,
       strength: 1.1,
       dnet_money: 1.1,
@@ -1900,9 +1903,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 1e6,
       info:
         "This skeletal augmentation greatly enhances the user's durability and health. Inspired by the original Staff of Medicine that is said to " +
-        "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. ",
+        "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. " +
+        "Awarded to those who discover the secrets of the labyrinth." +
+        "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases the stasis link limit by one, and raises charisma xp, defense, and darknet money by 10%.",
+        "This augmentation increases the stasis link limit by one, and charisma xp, defense, and darknet money by 10%.",
       charisma_exp: 1.1,
       defense: 1.1,
       dnet_money: 1.1,
@@ -1917,7 +1922,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "An advanced neural implant that integrates Bayesian inference algorithms into the brain's decision-making processes. " +
         "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
         "making them exceptionally persuasive and confident in negotiations and social interactions. " +
-        "Awarded to those who discover the secrets of the labyrinth.",
+        "Awarded to those who discover the secrets of the labyrinth." +
+        "\n\nInstalling this augment will deepen the darkness...",
       stats: "This augmentation raises charisma by 9%, company rep by 5%, and darknet money by 15%.",
       charisma: 1.09,
       company_rep: 1.05,

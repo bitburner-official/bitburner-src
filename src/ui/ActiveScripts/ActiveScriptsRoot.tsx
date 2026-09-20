@@ -2,8 +2,8 @@
  * Root React Component for the "Active Scripts" UI page. This page displays
  * and provides information about all of the player's scripts that are currently running
  */
-import React, { useState, useEffect } from "react";
-import { Button, Tabs, Tab } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Button, Tab, Tabs } from "@mui/material";
 
 import { ActiveScriptsPage } from "./ActiveScriptsPage";
 import { RecentScriptsPage } from "./RecentScriptsPage";
@@ -12,17 +12,18 @@ import { useRerender } from "../React/hooks";
 import { errorModalsAreSuppressed, ErrorState, toggleSuppressErrorModals } from "../../ErrorHandling/ErrorState";
 import { OptionSwitch } from "../React/OptionSwitch";
 import { killAllScripts } from "../../Netscript/killWorkerScript";
-import { SimplePage } from "@enums";
+import { ComplexPage, SimplePage } from "@enums";
 import { Router } from "../GameRoot";
 import { Settings } from "../../Settings/Settings";
 
-type ActiveScriptsTab = SimplePage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors;
+type ActiveScriptsTab = ComplexPage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors;
 
 export type ComponentProps = {
   page: ActiveScriptsTab;
+  serverName?: string;
 };
 
-export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement {
+export function ActiveScriptsRoot({ page, serverName }: ComponentProps): React.ReactElement {
   const [tab, setTab] = useState<ActiveScriptsTab>(page);
   useRerender(400);
 
@@ -34,10 +35,14 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
 
   function handleChange(
     __event: React.SyntheticEvent | null,
-    tab: SimplePage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors,
+    tab: ComplexPage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors,
   ): void {
     setTab(tab);
-    Router.toPage(tab);
+    if (tab === ComplexPage.ActiveScripts) {
+      Router.toPage(tab, {});
+    } else {
+      Router.toPage(tab);
+    }
   }
 
   function errorTabText(): string {
@@ -63,7 +68,7 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
             },
           }}
         >
-          <Tab label={"Active"} value={SimplePage.ActiveScripts} />
+          <Tab label={"Active"} value={ComplexPage.ActiveScripts} />
           <Tab label={"Recently Killed"} value={SimplePage.RecentlyKilledScripts} />
           <Tab label={errorTabText()} value={SimplePage.RecentErrors} />
         </Tabs>
@@ -88,7 +93,7 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
         </Button>
       </div>
 
-      {tab === SimplePage.ActiveScripts && <ActiveScriptsPage />}
+      {tab === ComplexPage.ActiveScripts && <ActiveScriptsPage serverName={serverName} />}
       {tab === SimplePage.RecentlyKilledScripts && <RecentScriptsPage />}
       {tab === SimplePage.RecentErrors && <RecentErrorsPage />}
     </>

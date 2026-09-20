@@ -17,7 +17,7 @@ import { isIPAddress } from "../Types/strings";
 
 export function NetscriptCloud(): InternalAPI<Cloud> {
   return {
-    getServerCost: (ctx) => (_ram) => {
+    getServerCost: (ctx, _ram) => {
       const ram = helpers.number(ctx, "ram", _ram);
 
       const cost = getCloudServerCost(ram);
@@ -32,7 +32,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
 
       return cost;
     },
-    purchaseServer: (ctx) => (_hostname, _ram) => {
+    purchaseServer: (ctx, _hostname, _ram) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const ram = helpers.number(ctx, "ram", _ram);
       if (hostname === "") {
@@ -91,7 +91,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       helpers.log(ctx, () => `Purchased new cloud server with hostname '${newServ.hostname}' for ${formatMoney(cost)}`);
       return newServ.hostname;
     },
-    getServerUpgradeCost: (ctx) => (_host, _ram) => {
+    getServerUpgradeCost: (ctx, _host, _ram) => {
       const host = helpers.string(ctx, "host", _host);
       const ram = helpers.number(ctx, "ram", _ram);
       try {
@@ -101,7 +101,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
         return -1;
       }
     },
-    upgradeServer: (ctx) => (_host, _ram) => {
+    upgradeServer: (ctx, _host, _ram) => {
       const host = helpers.string(ctx, "host", _host);
       const ram = helpers.number(ctx, "ram", _ram);
       try {
@@ -112,7 +112,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
         return false;
       }
     },
-    renameServer: (ctx) => (_hostname, _newName) => {
+    renameServer: (ctx, _hostname, _newName) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const newName = helpers.string(ctx, "newName", _newName);
       try {
@@ -124,7 +124,7 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       }
     },
 
-    deleteServer: (ctx) => (_name) => {
+    deleteServer: (ctx, _name) => {
       const host = helpers.string(ctx, "name", _name);
       const server = helpers.getNormalServer(ctx, host);
       const hostname = server.hostname;
@@ -192,22 +192,20 @@ export function NetscriptCloud(): InternalAPI<Cloud> {
       helpers.log(ctx, () => `Could not find server ${hostname} as a cloud server. This is a bug. Report to dev.`);
       return false;
     },
-    getServerNames:
-      () =>
-      (_returnOpts): string[] => {
-        const returnOpts = helpers.hostReturnOptions(_returnOpts);
-        const res: string[] = [];
-        for (const hostname of Player.purchasedServers) {
-          const server = GetServerOrThrow(hostname);
-          const id = helpers.returnServerID(server, returnOpts);
-          res.push(id);
-        }
-        return res;
-      },
-    getServerLimit: () => () => {
+    getServerNames: (_, _returnOpts): string[] => {
+      const returnOpts = helpers.hostReturnOptions(_returnOpts);
+      const res: string[] = [];
+      for (const hostname of Player.purchasedServers) {
+        const server = GetServerOrThrow(hostname);
+        const id = helpers.returnServerID(server, returnOpts);
+        res.push(id);
+      }
+      return res;
+    },
+    getServerLimit: () => {
       return getCloudServerLimit();
     },
-    getRamLimit: () => () => {
+    getRamLimit: () => {
       return getCloudServerMaxRam();
     },
   };

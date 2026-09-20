@@ -1,3 +1,5 @@
+import type { GangTaskName } from "@nsdefs";
+import { GangTaskNameEnum } from "../Enums";
 import { ITaskParams } from "../ITaskParams";
 
 /**
@@ -15,7 +17,7 @@ interface IGangMemberTaskMetadata {
   isHacking: boolean;
 
   /** Name of the task */
-  name: string;
+  name: GangTaskName;
 
   /**
    * An object containing weighting parameters for the task. These parameters are used for
@@ -33,14 +35,14 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "This gang member is currently idle",
     isCombat: true,
     isHacking: true,
-    name: "Unassigned",
+    name: GangTaskNameEnum.Unassigned,
     params: { hackWeight: 100 }, // This is just to get by the weight check in the GangMemberTask constructor
   },
   {
     desc: "Assign this gang member to create and distribute ransomware<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Ransomware",
+    name: GangTaskNameEnum.Ransomware,
     params: {
       baseRespect: 0.00005,
       baseWanted: 0.0001,
@@ -53,7 +55,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to attempt phishing scams and attacks<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Phishing",
+    name: GangTaskNameEnum.Phishing,
     params: {
       baseRespect: 0.00008,
       baseWanted: 0.003,
@@ -67,7 +69,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to attempt identity theft<br><br>Earns money - Increases respect - Increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Identity Theft",
+    name: GangTaskNameEnum.IdentityTheft,
     params: {
       baseRespect: 0.0001,
       baseWanted: 0.075,
@@ -81,7 +83,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to carry out DDoS attacks<br><br>Increases respect - Increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "DDoS Attacks",
+    name: GangTaskNameEnum.DDoSAttacks,
     params: {
       baseRespect: 0.0004,
       baseWanted: 0.2,
@@ -93,7 +95,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to create and distribute malicious viruses<br><br>Increases respect - Increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Plant Virus",
+    name: GangTaskNameEnum.PlantVirus,
     params: {
       baseRespect: 0.0006,
       baseWanted: 0.4,
@@ -105,7 +107,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to commit financial fraud and digital counterfeiting<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Fraud & Counterfeiting",
+    name: GangTaskNameEnum.FraudAndCounterfeiting,
     params: {
       baseRespect: 0.0004,
       baseWanted: 0.3,
@@ -119,7 +121,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to launder money<br><br>Earns money - Increases respect - Increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Money Laundering",
+    name: GangTaskNameEnum.MoneyLaundering,
     params: {
       baseRespect: 0.001,
       baseWanted: 1.25,
@@ -133,7 +135,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to commit acts of cyberterrorism<br><br>Greatly increases respect - Greatly increases wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Cyberterrorism",
+    name: GangTaskNameEnum.Cyberterrorism,
     params: {
       baseRespect: 0.01,
       baseWanted: 6,
@@ -146,7 +148,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to be an ethical hacker for corporations<br><br>Earns money - Lowers wanted level",
     isCombat: false,
     isHacking: true,
-    name: "Ethical Hacking",
+    name: GangTaskNameEnum.EthicalHacking,
     params: {
       baseWanted: -0.001,
       baseMoney: 3,
@@ -159,7 +161,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to mug random people on the streets<br><br>Earns money - Slightly increases respect - Very slightly increases wanted level",
     isCombat: true,
     isHacking: false,
-    name: "Mug People",
+    name: GangTaskNameEnum.MugPeople,
     params: {
       baseRespect: 0.00005,
       baseWanted: 0.00005,
@@ -176,7 +178,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to sell drugs<br><br>Earns money - Slightly increases respect - Slightly increases wanted level - Scales slightly with territory",
     isCombat: true,
     isHacking: false,
-    name: "Deal Drugs",
+    name: GangTaskNameEnum.DealDrugs,
     params: {
       baseRespect: 0.00006,
       baseWanted: 0.002,
@@ -196,7 +198,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to extort civilians in your territory<br><br>Earns money - Slightly increases respect - Increases wanted - Scales heavily with territory",
     isCombat: true,
     isHacking: false,
-    name: "Strongarm Civilians",
+    name: GangTaskNameEnum.StrongarmCivilians,
     params: {
       baseRespect: 0.00004,
       baseWanted: 0.02,
@@ -219,7 +221,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to run cons<br><br>Earns money - Increases respect - Increases wanted level",
     isCombat: true,
     isHacking: false,
-    name: "Run a Con",
+    name: GangTaskNameEnum.RunACon,
     params: {
       baseRespect: 0.00012,
       baseWanted: 0.05,
@@ -236,7 +238,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to commit armed robbery on stores, banks and armored cars<br><br>Earns money - Increases respect - Increases wanted level",
     isCombat: true,
     isHacking: false,
-    name: "Armed Robbery",
+    name: GangTaskNameEnum.ArmedRobbery,
     params: {
       baseRespect: 0.00014,
       baseWanted: 0.1,
@@ -254,7 +256,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to traffick illegal arms<br><br>Earns money - Increases respect - Increases wanted level - Scales heavily with territory",
     isCombat: true,
     isHacking: false,
-    name: "Traffick Illegal Arms",
+    name: GangTaskNameEnum.TraffickIllegalArms,
     params: {
       baseRespect: 0.0002,
       baseWanted: 0.24,
@@ -276,7 +278,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to threaten and blackmail high-profile targets<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
     isCombat: true,
     isHacking: false,
-    name: "Threaten & Blackmail",
+    name: GangTaskNameEnum.ThreatenAndBlackmail,
     params: {
       baseRespect: 0.0002,
       baseWanted: 0.125,
@@ -292,7 +294,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to engage in human trafficking operations<br><br>Earns money - Increases respect - Increases wanted level - Scales heavily with territory",
     isCombat: true,
     isHacking: false,
-    name: "Human Trafficking",
+    name: GangTaskNameEnum.HumanTrafficking,
     params: {
       baseRespect: 0.004,
       baseWanted: 1.25,
@@ -314,7 +316,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to commit acts of terrorism<br><br>Greatly increases respect - Greatly increases wanted level - Scales heavily with territory",
     isCombat: true,
     isHacking: false,
-    name: "Terrorism",
+    name: GangTaskNameEnum.Terrorism,
     params: {
       baseRespect: 0.01,
       baseWanted: 6,
@@ -335,7 +337,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to be a vigilante and protect the city from criminals<br><br>Decreases wanted level",
     isCombat: true,
     isHacking: true,
-    name: "Vigilante Justice",
+    name: GangTaskNameEnum.VigilanteJustice,
     params: {
       baseWanted: -0.001,
       hackWeight: 20,
@@ -355,7 +357,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to increase their combat stats (str, def, dex, agi)",
     isCombat: true,
     isHacking: true,
-    name: "Train Combat",
+    name: GangTaskNameEnum.TrainCombat,
     params: {
       strWeight: 25,
       defWeight: 25,
@@ -368,21 +370,21 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     desc: "Assign this gang member to train their hacking skills",
     isCombat: true,
     isHacking: true,
-    name: "Train Hacking",
+    name: GangTaskNameEnum.TrainHacking,
     params: { hackWeight: 100, difficulty: 45 },
   },
   {
     desc: "Assign this gang member to train their charisma",
     isCombat: true,
     isHacking: true,
-    name: "Train Charisma",
+    name: GangTaskNameEnum.TrainCharisma,
     params: { chaWeight: 100, difficulty: 8 },
   },
   {
     desc: "Members assigned to this task increase your gang's power. They will also fight for territory if 'Territory Clashes' are enabled.<br /><br />Gang members performing this task can be killed during clashes.",
     isCombat: true,
     isHacking: true,
-    name: "Territory Warfare",
+    name: GangTaskNameEnum.TerritoryWarfare,
     params: {
       hackWeight: 15,
       strWeight: 20,

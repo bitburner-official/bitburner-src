@@ -31,6 +31,9 @@ import { getTorRouter } from "../../../src/Server/ServerHelpers";
 import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
 import { numberOfBlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
 import type { SleeveTask, Task } from "@nsdefs";
+import { Router } from "../../../src/ui/GameRoot";
+import { Page } from "../../../src/ui/Router";
+import { getDefaultBitNodeOptions } from "../../../src/BitNode/BitNodeUtils";
 
 const nextBN = 4;
 
@@ -278,8 +281,27 @@ describe("b1tflum3", () => {
       }).toThrow();
       expectFailToB1tflum3();
     });
+    test("Invalid nextBN", () => {
+      const ns = getNS();
+      expect(() => ns.singularity.b1tflum3(-1)).toThrow("Invalid BitNode");
+    });
   });
 });
+
+// Make sure that the player is in the next BN and received SF rewards.
+const expectSucceedInJumpingToNextBN = () => {
+  expect(Player.bitNodeN).toStrictEqual(nextBN);
+  expect(Player.augmentations.length).toStrictEqual(0);
+  expect(Player.sourceFileLvl(1)).toStrictEqual(1);
+};
+
+// Make sure that the player is still in the same BN without SF rewards.
+const expectFailToJumpToNextBN = (expectedWDBackdoorStatus = false) => {
+  expect(Player.bitNodeN).toStrictEqual(1);
+  expect(Player.augmentations.length).toStrictEqual(1);
+  expect(Player.sourceFileLvl(1)).toStrictEqual(0);
+  expect(GetServerOrThrow(SpecialServers.WorldDaemon).backdoorInstalled).toBe(expectedWDBackdoorStatus);
+};
 
 describe("destroyW0r1dD43m0n", () => {
   beforeEach(() => {
@@ -288,17 +310,11 @@ describe("destroyW0r1dD43m0n", () => {
   });
 
   describe("Success", () => {
-    // Make sure that the player is in the next BN and received SF rewards.
-    const expectSucceedInDestroyingWD = () => {
-      expect(Player.bitNodeN).toStrictEqual(nextBN);
-      expect(Player.augmentations.length).toStrictEqual(0);
-      expect(Player.sourceFileLvl(1)).toStrictEqual(1);
-    };
     test("Hacking route", () => {
       setNumBlackOpsComplete(0);
       const ns = getNS();
       ns.singularity.destroyW0r1dD43m0n(nextBN);
-      expectSucceedInDestroyingWD();
+      expectSucceedInJumpingToNextBN();
     });
     test("Hacking route with BN options", () => {
       setNumBlackOpsComplete(0);
@@ -308,13 +324,13 @@ describe("destroyW0r1dD43m0n", () => {
         sourceFileOverrides: new Map(),
         intelligenceOverride: 1,
       });
-      expectSucceedInDestroyingWD();
+      expectSucceedInJumpingToNextBN();
     });
     test("Bladeburner route", () => {
       Player.skills.hacking = 0;
       const ns = getNS();
       ns.singularity.destroyW0r1dD43m0n(nextBN);
-      expectSucceedInDestroyingWD();
+      expectSucceedInJumpingToNextBN();
     });
     test("Bladeburner route with BN options", () => {
       Player.skills.hacking = 0;
@@ -324,26 +340,30 @@ describe("destroyW0r1dD43m0n", () => {
         sourceFileOverrides: new Map(),
         intelligenceOverride: 1,
       });
-      expectSucceedInDestroyingWD();
+      expectSucceedInJumpingToNextBN();
     });
     test("intelligenceOverride", () => {
-      testIntelligenceOverride(getNS(), "destroyW0r1dD43m0n", expectSucceedInDestroyingWD, setUpBeforeDestroyingWD);
+      testIntelligenceOverride(getNS(), "destroyW0r1dD43m0n", expectSucceedInJumpingToNextBN, setUpBeforeDestroyingWD);
+    });
+    test("nullish nextBN", () => {
+      setNumBlackOpsComplete(0);
+      const ns = getNS();
+      const spiedRouterToPage = jest.spyOn(Router, "toPage");
+      ns.singularity.destroyW0r1dD43m0n(undefined);
+
+      expectFailToJumpToNextBN(true);
+      expect(spiedRouterToPage).toHaveBeenCalledWith(Page.BitVerse, { flume: false, quick: false });
+      spiedRouterToPage.mockRestore();
     });
   });
 
   describe("Failure", () => {
-    // Make sure that the player is still in the same BN without SF rewards.
-    const expectFailToDestroyWD = () => {
-      expect(Player.bitNodeN).toStrictEqual(1);
-      expect(Player.augmentations.length).toStrictEqual(1);
-      expect(Player.sourceFileLvl(1)).toStrictEqual(0);
-    };
     test("Do not have enough hacking level and numBlackOpsComplete", () => {
       Player.skills.hacking = 0;
       setNumBlackOpsComplete(0);
       const ns = getNS();
       ns.singularity.destroyW0r1dD43m0n(nextBN);
-      expectFailToDestroyWD();
+      expectFailToJumpToNextBN();
     });
     test("Do not have admin rights on WD and do not have enough numBlackOpsComplete", () => {
       const wdServer = GetServerOrThrow(SpecialServers.WorldDaemon);
@@ -351,7 +371,7 @@ describe("destroyW0r1dD43m0n", () => {
       setNumBlackOpsComplete(0);
       const ns = getNS();
       ns.singularity.destroyW0r1dD43m0n(nextBN);
-      expectFailToDestroyWD();
+      expectFailToJumpToNextBN();
     });
     test("Invalid intelligenceOverride", () => {
       const ns = getNS();
@@ -361,7 +381,7 @@ describe("destroyW0r1dD43m0n", () => {
           intelligenceOverride: -1,
         });
       }).toThrow();
-      expectFailToDestroyWD();
+      expectFailToJumpToNextBN();
     });
     test("Invalid sourceFileOverrides", () => {
       const ns = getNS();
@@ -371,7 +391,28 @@ describe("destroyW0r1dD43m0n", () => {
           sourceFileOverrides: [] as unknown as Map<number, number>,
         });
       }).toThrow();
-      expectFailToDestroyWD();
+      expectFailToJumpToNextBN();
+    });
+    test("Invalid nextBN", () => {
+      const ns = getNS();
+      expect(() => ns.singularity.destroyW0r1dD43m0n(0)).toThrow("Invalid BitNode");
+      expect(() => ns.singularity.destroyW0r1dD43m0n(-1)).toThrow("Invalid BitNode");
+    });
+    test.each([
+      ["1", undefined, getDefaultBitNodeOptions()],
+      ["2", "test.js", undefined],
+      ["3", "test.js", getDefaultBitNodeOptions()],
+    ])("nextBN is nullish but other parameters are not - %s", (__, callbackScript, bitNodeOptions) => {
+      setNumBlackOpsComplete(0);
+      const ns = getNS();
+      const spiedRouterToPage = jest.spyOn(Router, "toPage");
+      expect(() => ns.singularity.destroyW0r1dD43m0n(undefined, callbackScript, bitNodeOptions)).toThrow(
+        "When nextBN is nullish, other parameters must be nullish.",
+      );
+
+      expectFailToJumpToNextBN();
+      expect(spiedRouterToPage).not.toHaveBeenCalled();
+      spiedRouterToPage.mockRestore();
     });
   });
 });

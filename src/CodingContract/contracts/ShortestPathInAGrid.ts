@@ -120,6 +120,9 @@ export const shortestPathInAGrid: Pick<CodingContractTypes, CodingContractName.S
           default:
             return false;
         }
+        if (!validPosition(ansY, ansX)) {
+          return false;
+        }
       }
 
       return ansX === dstX && ansY === dstY;

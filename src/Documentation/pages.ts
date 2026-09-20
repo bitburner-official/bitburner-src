@@ -426,6 +426,7 @@ import nsDoc_bitburner_crimetask_type_md from "../../markdown/bitburner.crimetas
 import nsDoc_bitburner_crimetype_md from "../../markdown/bitburner.crimetype.md?raw";
 import nsDoc_bitburner_darknet_authenticate_md from "../../markdown/bitburner.darknet.authenticate.md?raw";
 import nsDoc_bitburner_darknet_connecttosession_md from "../../markdown/bitburner.darknet.connecttosession.md?raw";
+import nsDoc_bitburner_darknet_freezeserver_md from "../../markdown/bitburner.darknet.freezeserver.md?raw";
 import nsDoc_bitburner_darknet_getblockedram_md from "../../markdown/bitburner.darknet.getblockedram.md?raw";
 import nsDoc_bitburner_darknet_getdarknetinstability_md from "../../markdown/bitburner.darknet.getdarknetinstability.md?raw";
 import nsDoc_bitburner_darknet_getdepth_md from "../../markdown/bitburner.darknet.getdepth.md?raw";
@@ -487,6 +488,8 @@ import nsDoc_bitburner_division_products_md from "../../markdown/bitburner.divis
 import nsDoc_bitburner_division_researchpoints_md from "../../markdown/bitburner.division.researchpoints.md?raw";
 import nsDoc_bitburner_division_thiscycleexpenses_md from "../../markdown/bitburner.division.thiscycleexpenses.md?raw";
 import nsDoc_bitburner_division_thiscyclerevenue_md from "../../markdown/bitburner.division.thiscyclerevenue.md?raw";
+import nsDoc_bitburner_editoroptions_md from "../../markdown/bitburner.editoroptions.md?raw";
+import nsDoc_bitburner_editoroptions_vim_md from "../../markdown/bitburner.editoroptions.vim.md?raw";
 import nsDoc_bitburner_employedbyrequirement_company_md from "../../markdown/bitburner.employedbyrequirement.company.md?raw";
 import nsDoc_bitburner_employedbyrequirement_md from "../../markdown/bitburner.employedbyrequirement.md?raw";
 import nsDoc_bitburner_employedbyrequirement_type_md from "../../markdown/bitburner.employedbyrequirement.type.md?raw";
@@ -522,6 +525,7 @@ import nsDoc_bitburner_filerequirement_file_md from "../../markdown/bitburner.fi
 import nsDoc_bitburner_filerequirement_md from "../../markdown/bitburner.filerequirement.md?raw";
 import nsDoc_bitburner_filerequirement_type_md from "../../markdown/bitburner.filerequirement.type.md?raw";
 import nsDoc_bitburner_format_md from "../../markdown/bitburner.format.md?raw";
+import nsDoc_bitburner_format_money_md from "../../markdown/bitburner.format.money.md?raw";
 import nsDoc_bitburner_format_number_md from "../../markdown/bitburner.format.number.md?raw";
 import nsDoc_bitburner_format_percent_md from "../../markdown/bitburner.format.percent.md?raw";
 import nsDoc_bitburner_format_ram_md from "../../markdown/bitburner.format.ram.md?raw";
@@ -667,6 +671,8 @@ import nsDoc_bitburner_gangmemberinstall_str_md from "../../markdown/bitburner.g
 import nsDoc_bitburner_gangotherinfoobject_md from "../../markdown/bitburner.gangotherinfoobject.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_power_md from "../../markdown/bitburner.gangotherinfoobject.power.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_territory_md from "../../markdown/bitburner.gangotherinfoobject.territory.md?raw";
+import nsDoc_bitburner_gangtaskname_md from "../../markdown/bitburner.gangtaskname.md?raw";
+import nsDoc_bitburner_gangtasknameenumtype_md from "../../markdown/bitburner.gangtasknameenumtype.md?raw";
 import nsDoc_bitburner_gangtaskstats_agiweight_md from "../../markdown/bitburner.gangtaskstats.agiweight.md?raw";
 import nsDoc_bitburner_gangtaskstats_basemoney_md from "../../markdown/bitburner.gangtaskstats.basemoney.md?raw";
 import nsDoc_bitburner_gangtaskstats_baserespect_md from "../../markdown/bitburner.gangtaskstats.baserespect.md?raw";
@@ -1064,6 +1070,8 @@ import nsDoc_bitburner_ns_hastorrouter_md from "../../markdown/bitburner.ns.hast
 import nsDoc_bitburner_ns_heart_md from "../../markdown/bitburner.ns.heart.md?raw";
 import nsDoc_bitburner_ns_httpworm_md from "../../markdown/bitburner.ns.httpworm.md?raw";
 import nsDoc_bitburner_ns_infiltration_md from "../../markdown/bitburner.ns.infiltration.md?raw";
+import nsDoc_bitburner_ns_isemptyport_md from "../../markdown/bitburner.ns.isemptyport.md?raw";
+import nsDoc_bitburner_ns_isfullport_md from "../../markdown/bitburner.ns.isfullport.md?raw";
 import nsDoc_bitburner_ns_islogenabled_md from "../../markdown/bitburner.ns.islogenabled.md?raw";
 import nsDoc_bitburner_ns_isrunning_md from "../../markdown/bitburner.ns.isrunning.md?raw";
 import nsDoc_bitburner_ns_kill_1_md from "../../markdown/bitburner.ns.kill_1.md?raw";
@@ -1268,7 +1276,14 @@ import nsDoc_bitburner_server_servergrowth_md from "../../markdown/bitburner.ser
 import nsDoc_bitburner_server_smtpportopen_md from "../../markdown/bitburner.server.smtpportopen.md?raw";
 import nsDoc_bitburner_server_sqlportopen_md from "../../markdown/bitburner.server.sqlportopen.md?raw";
 import nsDoc_bitburner_server_sshportopen_md from "../../markdown/bitburner.server.sshportopen.md?raw";
+import nsDoc_bitburner_simpleopponentstats_bonusdescription_md from "../../markdown/bitburner.simpleopponentstats.bonusdescription.md?raw";
+import nsDoc_bitburner_simpleopponentstats_bonuspercent_md from "../../markdown/bitburner.simpleopponentstats.bonuspercent.md?raw";
+import nsDoc_bitburner_simpleopponentstats_highestwinstreak_md from "../../markdown/bitburner.simpleopponentstats.highestwinstreak.md?raw";
+import nsDoc_bitburner_simpleopponentstats_losses_md from "../../markdown/bitburner.simpleopponentstats.losses.md?raw";
 import nsDoc_bitburner_simpleopponentstats_md from "../../markdown/bitburner.simpleopponentstats.md?raw";
+import nsDoc_bitburner_simpleopponentstats_rep_md from "../../markdown/bitburner.simpleopponentstats.rep.md?raw";
+import nsDoc_bitburner_simpleopponentstats_wins_md from "../../markdown/bitburner.simpleopponentstats.wins.md?raw";
+import nsDoc_bitburner_simpleopponentstats_winstreak_md from "../../markdown/bitburner.simpleopponentstats.winstreak.md?raw";
 import nsDoc_bitburner_singularity_applytocompany_md from "../../markdown/bitburner.singularity.applytocompany.md?raw";
 import nsDoc_bitburner_singularity_b1tflum3_md from "../../markdown/bitburner.singularity.b1tflum3.md?raw";
 import nsDoc_bitburner_singularity_cat_md from "../../markdown/bitburner.singularity.cat.md?raw";
@@ -1313,6 +1328,7 @@ import nsDoc_bitburner_singularity_getupgradehomecorescost_md from "../../markdo
 import nsDoc_bitburner_singularity_getupgradehomeramcost_md from "../../markdown/bitburner.singularity.getupgradehomeramcost.md?raw";
 import nsDoc_bitburner_singularity_gotolocation_md from "../../markdown/bitburner.singularity.gotolocation.md?raw";
 import nsDoc_bitburner_singularity_gymworkout_md from "../../markdown/bitburner.singularity.gymworkout.md?raw";
+import nsDoc_bitburner_singularity_hasexportgamebonus_md from "../../markdown/bitburner.singularity.hasexportgamebonus.md?raw";
 import nsDoc_bitburner_singularity_hospitalize_md from "../../markdown/bitburner.singularity.hospitalize.md?raw";
 import nsDoc_bitburner_singularity_installaugmentations_md from "../../markdown/bitburner.singularity.installaugmentations.md?raw";
 import nsDoc_bitburner_singularity_installbackdoor_md from "../../markdown/bitburner.singularity.installbackdoor.md?raw";
@@ -1499,14 +1515,19 @@ import nsDoc_bitburner_universityclassenumtype_md from "../../markdown/bitburner
 import nsDoc_bitburner_universityclasstype_md from "../../markdown/bitburner.universityclasstype.md?raw";
 import nsDoc_bitburner_universitylocationname_md from "../../markdown/bitburner.universitylocationname.md?raw";
 import nsDoc_bitburner_universitylocationnameenumtype_md from "../../markdown/bitburner.universitylocationnameenumtype.md?raw";
+import nsDoc_bitburner_userinterface_alias_md from "../../markdown/bitburner.userinterface.alias.md?raw";
 import nsDoc_bitburner_userinterface_clearterminal_md from "../../markdown/bitburner.userinterface.clearterminal.md?raw";
 import nsDoc_bitburner_userinterface_closetail_md from "../../markdown/bitburner.userinterface.closetail.md?raw";
+import nsDoc_bitburner_userinterface_createconnectlink_md from "../../markdown/bitburner.userinterface.createconnectlink.md?raw";
+import nsDoc_bitburner_userinterface_getallaliases_md from "../../markdown/bitburner.userinterface.getallaliases.md?raw";
 import nsDoc_bitburner_userinterface_getgameinfo_md from "../../markdown/bitburner.userinterface.getgameinfo.md?raw";
 import nsDoc_bitburner_userinterface_getstyles_md from "../../markdown/bitburner.userinterface.getstyles.md?raw";
 import nsDoc_bitburner_userinterface_gettheme_md from "../../markdown/bitburner.userinterface.gettheme.md?raw";
 import nsDoc_bitburner_userinterface_md from "../../markdown/bitburner.userinterface.md?raw";
 import nsDoc_bitburner_userinterface_movetail_md from "../../markdown/bitburner.userinterface.movetail.md?raw";
+import nsDoc_bitburner_userinterface_opencodeeditor_md from "../../markdown/bitburner.userinterface.opencodeeditor.md?raw";
 import nsDoc_bitburner_userinterface_opentail_md from "../../markdown/bitburner.userinterface.opentail.md?raw";
+import nsDoc_bitburner_userinterface_renderpage_md from "../../markdown/bitburner.userinterface.renderpage.md?raw";
 import nsDoc_bitburner_userinterface_rendertail_md from "../../markdown/bitburner.userinterface.rendertail.md?raw";
 import nsDoc_bitburner_userinterface_resetstyles_md from "../../markdown/bitburner.userinterface.resetstyles.md?raw";
 import nsDoc_bitburner_userinterface_resettheme_md from "../../markdown/bitburner.userinterface.resettheme.md?raw";
@@ -1516,6 +1537,7 @@ import nsDoc_bitburner_userinterface_settailfontsize_md from "../../markdown/bit
 import nsDoc_bitburner_userinterface_settailminimized_md from "../../markdown/bitburner.userinterface.settailminimized.md?raw";
 import nsDoc_bitburner_userinterface_settailtitle_md from "../../markdown/bitburner.userinterface.settailtitle.md?raw";
 import nsDoc_bitburner_userinterface_settheme_md from "../../markdown/bitburner.userinterface.settheme.md?raw";
+import nsDoc_bitburner_userinterface_unalias_md from "../../markdown/bitburner.userinterface.unalias.md?raw";
 import nsDoc_bitburner_userinterface_windowsize_md from "../../markdown/bitburner.userinterface.windowsize.md?raw";
 import nsDoc_bitburner_userinterfacetheme_backgroundprimary_md from "../../markdown/bitburner.userinterfacetheme.backgroundprimary.md?raw";
 import nsDoc_bitburner_userinterfacetheme_backgroundsecondary_md from "../../markdown/bitburner.userinterfacetheme.backgroundsecondary.md?raw";
@@ -2035,6 +2057,7 @@ AllPages["nsDoc/bitburner.crimetask.type.md"] = nsDoc_bitburner_crimetask_type_m
 AllPages["nsDoc/bitburner.crimetype.md"] = nsDoc_bitburner_crimetype_md;
 AllPages["nsDoc/bitburner.darknet.authenticate.md"] = nsDoc_bitburner_darknet_authenticate_md;
 AllPages["nsDoc/bitburner.darknet.connecttosession.md"] = nsDoc_bitburner_darknet_connecttosession_md;
+AllPages["nsDoc/bitburner.darknet.freezeserver.md"] = nsDoc_bitburner_darknet_freezeserver_md;
 AllPages["nsDoc/bitburner.darknet.getblockedram.md"] = nsDoc_bitburner_darknet_getblockedram_md;
 AllPages["nsDoc/bitburner.darknet.getdarknetinstability.md"] = nsDoc_bitburner_darknet_getdarknetinstability_md;
 AllPages["nsDoc/bitburner.darknet.getdepth.md"] = nsDoc_bitburner_darknet_getdepth_md;
@@ -2096,6 +2119,8 @@ AllPages["nsDoc/bitburner.division.products.md"] = nsDoc_bitburner_division_prod
 AllPages["nsDoc/bitburner.division.researchpoints.md"] = nsDoc_bitburner_division_researchpoints_md;
 AllPages["nsDoc/bitburner.division.thiscycleexpenses.md"] = nsDoc_bitburner_division_thiscycleexpenses_md;
 AllPages["nsDoc/bitburner.division.thiscyclerevenue.md"] = nsDoc_bitburner_division_thiscyclerevenue_md;
+AllPages["nsDoc/bitburner.editoroptions.md"] = nsDoc_bitburner_editoroptions_md;
+AllPages["nsDoc/bitburner.editoroptions.vim.md"] = nsDoc_bitburner_editoroptions_vim_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.company.md"] = nsDoc_bitburner_employedbyrequirement_company_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.md"] = nsDoc_bitburner_employedbyrequirement_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.type.md"] = nsDoc_bitburner_employedbyrequirement_type_md;
@@ -2131,6 +2156,7 @@ AllPages["nsDoc/bitburner.filerequirement.file.md"] = nsDoc_bitburner_filerequir
 AllPages["nsDoc/bitburner.filerequirement.md"] = nsDoc_bitburner_filerequirement_md;
 AllPages["nsDoc/bitburner.filerequirement.type.md"] = nsDoc_bitburner_filerequirement_type_md;
 AllPages["nsDoc/bitburner.format.md"] = nsDoc_bitburner_format_md;
+AllPages["nsDoc/bitburner.format.money.md"] = nsDoc_bitburner_format_money_md;
 AllPages["nsDoc/bitburner.format.number.md"] = nsDoc_bitburner_format_number_md;
 AllPages["nsDoc/bitburner.format.percent.md"] = nsDoc_bitburner_format_percent_md;
 AllPages["nsDoc/bitburner.format.ram.md"] = nsDoc_bitburner_format_ram_md;
@@ -2276,6 +2302,8 @@ AllPages["nsDoc/bitburner.gangmemberinstall.str.md"] = nsDoc_bitburner_gangmembe
 AllPages["nsDoc/bitburner.gangotherinfoobject.md"] = nsDoc_bitburner_gangotherinfoobject_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.power.md"] = nsDoc_bitburner_gangotherinfoobject_power_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.territory.md"] = nsDoc_bitburner_gangotherinfoobject_territory_md;
+AllPages["nsDoc/bitburner.gangtaskname.md"] = nsDoc_bitburner_gangtaskname_md;
+AllPages["nsDoc/bitburner.gangtasknameenumtype.md"] = nsDoc_bitburner_gangtasknameenumtype_md;
 AllPages["nsDoc/bitburner.gangtaskstats.agiweight.md"] = nsDoc_bitburner_gangtaskstats_agiweight_md;
 AllPages["nsDoc/bitburner.gangtaskstats.basemoney.md"] = nsDoc_bitburner_gangtaskstats_basemoney_md;
 AllPages["nsDoc/bitburner.gangtaskstats.baserespect.md"] = nsDoc_bitburner_gangtaskstats_baserespect_md;
@@ -2673,6 +2701,8 @@ AllPages["nsDoc/bitburner.ns.hastorrouter.md"] = nsDoc_bitburner_ns_hastorrouter
 AllPages["nsDoc/bitburner.ns.heart.md"] = nsDoc_bitburner_ns_heart_md;
 AllPages["nsDoc/bitburner.ns.httpworm.md"] = nsDoc_bitburner_ns_httpworm_md;
 AllPages["nsDoc/bitburner.ns.infiltration.md"] = nsDoc_bitburner_ns_infiltration_md;
+AllPages["nsDoc/bitburner.ns.isemptyport.md"] = nsDoc_bitburner_ns_isemptyport_md;
+AllPages["nsDoc/bitburner.ns.isfullport.md"] = nsDoc_bitburner_ns_isfullport_md;
 AllPages["nsDoc/bitburner.ns.islogenabled.md"] = nsDoc_bitburner_ns_islogenabled_md;
 AllPages["nsDoc/bitburner.ns.isrunning.md"] = nsDoc_bitburner_ns_isrunning_md;
 AllPages["nsDoc/bitburner.ns.kill_1.md"] = nsDoc_bitburner_ns_kill_1_md;
@@ -2877,7 +2907,14 @@ AllPages["nsDoc/bitburner.server.servergrowth.md"] = nsDoc_bitburner_server_serv
 AllPages["nsDoc/bitburner.server.smtpportopen.md"] = nsDoc_bitburner_server_smtpportopen_md;
 AllPages["nsDoc/bitburner.server.sqlportopen.md"] = nsDoc_bitburner_server_sqlportopen_md;
 AllPages["nsDoc/bitburner.server.sshportopen.md"] = nsDoc_bitburner_server_sshportopen_md;
+AllPages["nsDoc/bitburner.simpleopponentstats.bonusdescription.md"] = nsDoc_bitburner_simpleopponentstats_bonusdescription_md;
+AllPages["nsDoc/bitburner.simpleopponentstats.bonuspercent.md"] = nsDoc_bitburner_simpleopponentstats_bonuspercent_md;
+AllPages["nsDoc/bitburner.simpleopponentstats.highestwinstreak.md"] = nsDoc_bitburner_simpleopponentstats_highestwinstreak_md;
+AllPages["nsDoc/bitburner.simpleopponentstats.losses.md"] = nsDoc_bitburner_simpleopponentstats_losses_md;
 AllPages["nsDoc/bitburner.simpleopponentstats.md"] = nsDoc_bitburner_simpleopponentstats_md;
+AllPages["nsDoc/bitburner.simpleopponentstats.rep.md"] = nsDoc_bitburner_simpleopponentstats_rep_md;
+AllPages["nsDoc/bitburner.simpleopponentstats.wins.md"] = nsDoc_bitburner_simpleopponentstats_wins_md;
+AllPages["nsDoc/bitburner.simpleopponentstats.winstreak.md"] = nsDoc_bitburner_simpleopponentstats_winstreak_md;
 AllPages["nsDoc/bitburner.singularity.applytocompany.md"] = nsDoc_bitburner_singularity_applytocompany_md;
 AllPages["nsDoc/bitburner.singularity.b1tflum3.md"] = nsDoc_bitburner_singularity_b1tflum3_md;
 AllPages["nsDoc/bitburner.singularity.cat.md"] = nsDoc_bitburner_singularity_cat_md;
@@ -2922,6 +2959,7 @@ AllPages["nsDoc/bitburner.singularity.getupgradehomecorescost.md"] = nsDoc_bitbu
 AllPages["nsDoc/bitburner.singularity.getupgradehomeramcost.md"] = nsDoc_bitburner_singularity_getupgradehomeramcost_md;
 AllPages["nsDoc/bitburner.singularity.gotolocation.md"] = nsDoc_bitburner_singularity_gotolocation_md;
 AllPages["nsDoc/bitburner.singularity.gymworkout.md"] = nsDoc_bitburner_singularity_gymworkout_md;
+AllPages["nsDoc/bitburner.singularity.hasexportgamebonus.md"] = nsDoc_bitburner_singularity_hasexportgamebonus_md;
 AllPages["nsDoc/bitburner.singularity.hospitalize.md"] = nsDoc_bitburner_singularity_hospitalize_md;
 AllPages["nsDoc/bitburner.singularity.installaugmentations.md"] = nsDoc_bitburner_singularity_installaugmentations_md;
 AllPages["nsDoc/bitburner.singularity.installbackdoor.md"] = nsDoc_bitburner_singularity_installbackdoor_md;
@@ -3108,14 +3146,19 @@ AllPages["nsDoc/bitburner.universityclassenumtype.md"] = nsDoc_bitburner_univers
 AllPages["nsDoc/bitburner.universityclasstype.md"] = nsDoc_bitburner_universityclasstype_md;
 AllPages["nsDoc/bitburner.universitylocationname.md"] = nsDoc_bitburner_universitylocationname_md;
 AllPages["nsDoc/bitburner.universitylocationnameenumtype.md"] = nsDoc_bitburner_universitylocationnameenumtype_md;
+AllPages["nsDoc/bitburner.userinterface.alias.md"] = nsDoc_bitburner_userinterface_alias_md;
 AllPages["nsDoc/bitburner.userinterface.clearterminal.md"] = nsDoc_bitburner_userinterface_clearterminal_md;
 AllPages["nsDoc/bitburner.userinterface.closetail.md"] = nsDoc_bitburner_userinterface_closetail_md;
+AllPages["nsDoc/bitburner.userinterface.createconnectlink.md"] = nsDoc_bitburner_userinterface_createconnectlink_md;
+AllPages["nsDoc/bitburner.userinterface.getallaliases.md"] = nsDoc_bitburner_userinterface_getallaliases_md;
 AllPages["nsDoc/bitburner.userinterface.getgameinfo.md"] = nsDoc_bitburner_userinterface_getgameinfo_md;
 AllPages["nsDoc/bitburner.userinterface.getstyles.md"] = nsDoc_bitburner_userinterface_getstyles_md;
 AllPages["nsDoc/bitburner.userinterface.gettheme.md"] = nsDoc_bitburner_userinterface_gettheme_md;
 AllPages["nsDoc/bitburner.userinterface.md"] = nsDoc_bitburner_userinterface_md;
 AllPages["nsDoc/bitburner.userinterface.movetail.md"] = nsDoc_bitburner_userinterface_movetail_md;
+AllPages["nsDoc/bitburner.userinterface.opencodeeditor.md"] = nsDoc_bitburner_userinterface_opencodeeditor_md;
 AllPages["nsDoc/bitburner.userinterface.opentail.md"] = nsDoc_bitburner_userinterface_opentail_md;
+AllPages["nsDoc/bitburner.userinterface.renderpage.md"] = nsDoc_bitburner_userinterface_renderpage_md;
 AllPages["nsDoc/bitburner.userinterface.rendertail.md"] = nsDoc_bitburner_userinterface_rendertail_md;
 AllPages["nsDoc/bitburner.userinterface.resetstyles.md"] = nsDoc_bitburner_userinterface_resetstyles_md;
 AllPages["nsDoc/bitburner.userinterface.resettheme.md"] = nsDoc_bitburner_userinterface_resettheme_md;
@@ -3125,6 +3168,7 @@ AllPages["nsDoc/bitburner.userinterface.settailfontsize.md"] = nsDoc_bitburner_u
 AllPages["nsDoc/bitburner.userinterface.settailminimized.md"] = nsDoc_bitburner_userinterface_settailminimized_md;
 AllPages["nsDoc/bitburner.userinterface.settailtitle.md"] = nsDoc_bitburner_userinterface_settailtitle_md;
 AllPages["nsDoc/bitburner.userinterface.settheme.md"] = nsDoc_bitburner_userinterface_settheme_md;
+AllPages["nsDoc/bitburner.userinterface.unalias.md"] = nsDoc_bitburner_userinterface_unalias_md;
 AllPages["nsDoc/bitburner.userinterface.windowsize.md"] = nsDoc_bitburner_userinterface_windowsize_md;
 AllPages["nsDoc/bitburner.userinterfacetheme.backgroundprimary.md"] = nsDoc_bitburner_userinterfacetheme_backgroundprimary_md;
 AllPages["nsDoc/bitburner.userinterfacetheme.backgroundsecondary.md"] = nsDoc_bitburner_userinterfacetheme_backgroundsecondary_md;

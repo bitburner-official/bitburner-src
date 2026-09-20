@@ -104,9 +104,17 @@ void
 
 RAM cost: 20 GB
 
-This limit applies only to output; it does not affect input consumption.
+This limit applies only to output. It does not reduce input consumption. The excess output is discarded after being produced.
 
-For example, in Agriculture, assume the division's raw production is 1000. You need to consume 500 Water and 200 Chemicals to produce 1000 Plants and 1000 Food. If you set the limits for Plants and Food to 200 and 100 respectively, you will still consume 500 Water and 200 Chemicals, but only produce 200 Plants and 100 Food.
+For example: Assume the division's raw production is 1000 and the warehouse has enough input materials. In Agriculture, for each unit of raw production, you need 0.045 units of free space (check corporation documentation for further explanation). Therefore, with RawProduction = 1000, you need 45 units of free space to avoid being bottlenecked by insufficient free space.
+
+Case 1: Enough free space (Free space = 45). You need to consume 500 Water and 200 Chemicals to produce 1000 Plants and 1000 Food.
+
+If you set the limits for Plants and Food to 200 and 100 respectively, you will still consume 500 Water and 200 Chemicals, but only produce 200 Plants and 100 Food (the excess 800 Plants and 900 Food are discarded after being produced). The free space after production is 67 (800 Plants and 900 Food are discarded).
+
+Case 2: Insufficient free space (Free space = 22.5). The available free space is only 50% of the required free space. Therefore, RawProduction is scaled down to 500.
+
+You need to consume 250 Water and 100 Chemicals to produce 500 Plants and 500 Food. If you set the Food limit to 0, you will still consume 250 Water and 100 Chemicals, but only produce 500 Plants (the excess 500 Food are discarded after being produced). The free space after production is 15 (500 Food are discarded).
 
 With industries that produce both materials and products, the material production limits do not affect product production.
 

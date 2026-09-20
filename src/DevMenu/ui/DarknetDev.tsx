@@ -54,6 +54,7 @@ import {
   ServerConfig,
   serverFactory,
 } from "../../DarkNet/controllers/ServerGenerator";
+import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
 
 export function DarknetDev(): React.ReactElement {
   const [open, setOpen] = React.useState(false);
@@ -172,6 +173,7 @@ export function DarknetDev(): React.ReactElement {
         </AccordionSummary>
         <AccordionDetails>
           <OptionSwitch
+            disabled={!hasDarknetAccess()}
             checked={DarknetState.showFullNetwork}
             onChange={(newValue) => toggleShowFullNetwork(newValue)}
             text="Show Full Network"
@@ -189,64 +191,80 @@ export function DarknetDev(): React.ReactElement {
           <br />
           <br />
           <Tooltip title={<Typography>Create a new darkweb network.</Typography>}>
-            <Button
-              onClick={() => {
-                clearDarknet();
-                populateDarknet();
-                SnackbarEvents.emit("New dark network generated", ToastVariant.SUCCESS, 2000);
-              }}
-            >
-              Generate New Dark Network
-            </Button>
+            <span>
+              <Button
+                disabled={!hasDarknetAccess()}
+                onClick={() => {
+                  clearDarknet();
+                  populateDarknet();
+                  SnackbarEvents.emit("New dark network generated", ToastVariant.SUCCESS, 2000);
+                }}
+              >
+                Generate New Dark Network
+              </Button>
+            </span>
           </Tooltip>
           <br />
           <br />
           <Tooltip title={<Typography>Reposition the majority of servers in the darknet.</Typography>}>
-            <Button
-              onClick={() => {
-                moveRandomDarknetServers(Math.floor(getAllDarknetServers().length / 2));
-                SnackbarEvents.emit("Darknet servers shuffled", ToastVariant.SUCCESS, 2000);
-              }}
-            >
-              Shuffle Server Locations
-            </Button>
+            <span>
+              <Button
+                disabled={!hasDarknetAccess()}
+                onClick={() => {
+                  moveRandomDarknetServers(Math.floor(getAllDarknetServers().length / 2));
+                  SnackbarEvents.emit("Darknet servers shuffled", ToastVariant.SUCCESS, 2000);
+                }}
+              >
+                Shuffle Server Locations
+              </Button>
+            </span>
           </Tooltip>
           <br />
           <br />
           <Tooltip title={<Typography>Adds a new server of a specific variety.</Typography>}>
-            <Button onClick={() => setOpen(true)}>Add Darknet Servers...</Button>
+            <span>
+              <Button disabled={!hasDarknetAccess()} onClick={() => setOpen(true)}>
+                Add Darknet Servers...
+              </Button>
+            </span>
           </Tooltip>
           <br />
           <br />
           <Tooltip title={<Typography>Root all standard darknet servers.</Typography>}>
-            <Button
-              onClick={() => {
-                getAllMovableDarknetServers().forEach((server) => {
-                  if (!isLabyrinthServer(server.hostname)) {
-                    handleSuccessfulAuth(server, 1, -1);
-                  }
-                });
-                SnackbarEvents.emit("Gained darknet server admin rights", ToastVariant.SUCCESS, 2000);
-              }}
-            >
-              Gain admin access to all darknet servers
-            </Button>
+            <span>
+              <Button
+                disabled={!hasDarknetAccess()}
+                onClick={() => {
+                  getAllMovableDarknetServers().forEach((server) => {
+                    if (!isLabyrinthServer(server.hostname)) {
+                      handleSuccessfulAuth(server, 1, -1);
+                    }
+                  });
+                  SnackbarEvents.emit("Gained darknet server admin rights", ToastVariant.SUCCESS, 2000);
+                }}
+              >
+                Gain admin access to all darknet servers
+              </Button>
+            </span>
           </Tooltip>
           <br />
           <br />
           <Tooltip title={<Typography>Root all darknet labyrinth servers.</Typography>}>
-            <Button
-              onClick={() => {
-                getAllDarknetServers().forEach((server) => {
-                  if (isLabyrinthServer(server.hostname)) {
-                    server.hasAdminRights = true;
-                  }
-                });
-                SnackbarEvents.emit("Gained lab admin rights", ToastVariant.SUCCESS, 2000);
-              }}
-            >
-              Gain admin access to labyrinth server
-            </Button>
+            <span>
+              <Button
+                disabled={!hasDarknetAccess()}
+                onClick={() => {
+                  getAllDarknetServers().forEach((server) => {
+                    if (isLabyrinthServer(server.hostname)) {
+                      server.hasAdminRights = true;
+                    }
+                  });
+                  SnackbarEvents.emit("Gained lab admin rights", ToastVariant.SUCCESS, 2000);
+                }}
+              >
+                Gain admin access to labyrinth server
+              </Button>
+            </span>
           </Tooltip>
           <br />
           <br />
@@ -257,14 +275,17 @@ export function DarknetDev(): React.ReactElement {
               </Typography>
             }
           >
-            <Button
-              onClick={() => {
-                void launchWebstorm();
-                Router.toPage(SimplePage.DarkNet);
-              }}
-            >
-              START WEBSTORM
-            </Button>
+            <span>
+              <Button
+                disabled={!hasDarknetAccess()}
+                onClick={() => {
+                  void launchWebstorm();
+                  Router.toPage(SimplePage.DarkNet);
+                }}
+              >
+                START WEBSTORM
+              </Button>
+            </span>
           </Tooltip>
         </AccordionDetails>
       </AutoExpandAccordion>

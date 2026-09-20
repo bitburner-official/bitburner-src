@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
 import libarg from "arg";
 
-export function ps(args: (string | number | boolean)[], server: BaseServer): void {
+export function ps(args: (string | number | boolean)[], server: BaseServer): undefined {
   let flags: {
     "--grep": string;
   };

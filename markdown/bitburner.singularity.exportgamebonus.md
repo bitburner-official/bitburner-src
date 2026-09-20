@@ -4,7 +4,14 @@
 
 ## Singularity.exportGameBonus() method
 
-Returns Backup save bonus availability.
+> Warning: This API is now obsolete.
+> 
+> Use [hasExportGameBonus](./bitburner.singularity.hasexportgamebonus.md) instead.
+> 
+
+Returns whether the Export Game bonus is available.
+
+This function is deprecated and will be removed in a later version.
 
 **Signature:**
 
@@ -18,6 +25,4 @@ boolean
 ## Remarks
 
 RAM cost: 0.5 GB \* 16/4/1
-
-This function will check if there is a bonus for backing up your save.
 

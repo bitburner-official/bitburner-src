@@ -25,6 +25,9 @@ declare module "@mui/material/styles" {
       black: React.CSSProperties["color"];
       maplocation: React.CSSProperties["color"];
       disabled: React.CSSProperties["color"];
+      primary: React.CSSProperties["color"];
+      secondary: React.CSSProperties["color"];
+      well: React.CSSProperties["color"];
     };
   }
   interface ThemeOptions {
@@ -46,6 +49,9 @@ declare module "@mui/material/styles" {
       black: React.CSSProperties["color"];
       maplocation: React.CSSProperties["color"];
       disabled: React.CSSProperties["color"];
+      primary: React.CSSProperties["color"];
+      secondary: React.CSSProperties["color"];
+      well: React.CSSProperties["color"];
     };
   }
 }
@@ -73,6 +79,9 @@ export function refreshTheme(): void {
       black: Settings.theme.black,
       maplocation: Settings.theme.maplocation,
       disabled: Settings.theme.disabled,
+      primary: Settings.theme.primary,
+      secondary: Settings.theme.secondary,
+      well: Settings.theme.well,
     },
     palette: {
       primary: {

@@ -27,6 +27,10 @@ Furthermore, some BitNodes introduce new content and mechanics.
 For example, there is one BitNode that grants access to the [Singularity API](../../../../../markdown/bitburner.singularity.md).
 There is another BitNode in which you can manage a [Gang](gang.md) to earn money and [Reputation](../basic/reputation.md).
 
+After entering a BitNode, if you want to jump to another BitNode immediately, you can run `b1t_flum3.exe` to return to
+the BitVerse screen.
+Note that if you leave the current BitNode in this way, you will lose all progress made in that BitNode.
+
 ## How to destroy a BitNode
 
 Initially, the only way to destroy a BitNode is to join Daedalus.
@@ -153,7 +157,7 @@ You are trying to make a name for yourself as an up-and-coming hedge fund manage
 
 In this BitNode:
 
-- You start with $250 million
+- Your starting money is 250 million.
 - You start with a WSE membership and access to the TIX API
 - You are able to short stocks and place different types of orders (limit/stop)
 

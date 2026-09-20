@@ -49,13 +49,13 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   const scripts = workerScript.getServer().scripts;
   const script = workerScript.getScript();
   if (!script) throw "workerScript had no associated script. This is a bug.";
-  const ns = workerScript.env.vars;
+  const ns = workerScript.vars;
   if (!ns) throw `${script.filename} cannot be run because the NS object hasn't been constructed properly.`;
 
   const loadedModule = await compile(script, scripts);
 
   // if for whatever reason the stopFlag is already set we abort
-  if (workerScript.env.stopFlag) return;
+  if (workerScript.stopFlag) return;
 
   if (!loadedModule) throw `${script.filename} cannot be run because the script module won't load`;
   const mainFunc = loadedModule.main;
@@ -159,7 +159,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
     })
     .finally(() => {
       // The earnings are transferred to the parent if it still exists.
-      if (parent && !parent.env.stopFlag) {
+      if (parent && !parent.stopFlag) {
         parent.scriptRef.onlineExpGained += runningScriptObj.onlineExpGained;
         parent.scriptRef.onlineMoneyMade += runningScriptObj.onlineMoneyMade;
       }

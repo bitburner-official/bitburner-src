@@ -20,12 +20,16 @@ import { iTutorialStart } from "./InteractiveTutorial";
 import { checkForMessagesToSend } from "./Message/MessageHelpers";
 import { loadAllRunningScripts, updateOnlineScriptTimes } from "./NetscriptWorker";
 import { Player } from "@player";
-import { saveObject, loadGame } from "./SaveObject";
+import { saveGame, loadGame } from "./SaveObject";
 import { GetAllServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
-import { canAccessStockMarket, initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
-import { Terminal } from "./Terminal";
+import {
+  canAccessStockMarket,
+  initSymbolToStockMap,
+  isStockMarketInitialized,
+  processStockPrices,
+} from "./StockMarket/StockMarket";
 
 import { Money } from "./ui/React/Money";
 import { Hashes } from "./ui/React/Hashes";
@@ -53,6 +57,7 @@ import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
 import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
 import { initForeignServers } from "./Server/ServerHelpers";
 import { apr1 } from "./Terminal/commands/apr1";
+import { LastExportBonus } from "./ExportBonus";
 
 declare global {
   // This property is only available in the dev build
@@ -62,10 +67,6 @@ declare global {
     GetAllServers: typeof GetAllServers;
     Factions: typeof Factions;
     Companies: typeof Companies;
-    SaveObject: {
-      saveObject: typeof saveObject;
-      loadGame: typeof loadGame;
-    };
   };
   // eslint-disable-next-line no-var
   var openDevMenu: () => void;
@@ -92,8 +93,6 @@ const Engine = {
     Player.totalPlaytime += time;
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
-
-    Terminal.process(numCycles);
 
     Player.processWork(numCycles);
 
@@ -145,18 +144,13 @@ const Engine = {
    */
   Counters: {
     autoSaveCounter: 300,
-    updateSkillLevelsCounter: 10,
-    updateDisplays: 3,
-    updateDisplaysLong: 15,
-    updateActiveScriptsDisplay: 5,
-    createProgramNotifications: 10,
-    augmentationsNotifications: 10,
     checkFactionInvitations: 10,
     passiveFactionGrowth: 5,
     messages: 150,
-    mechanicProcess: 5, // Process Bladeburner
+    bladeburnerProcess: 5,
     contractGeneration: 3000, // Generate Coding Contracts
     achievementsCounter: 5, // Check if we have new achievements
+    exportSaveData: 18000,
   },
 
   decrementAllCounters: function (numCycles = 1) {
@@ -196,7 +190,7 @@ const Engine = {
         Engine.Counters.messages = 150;
       }
     }
-    if (Engine.Counters.mechanicProcess <= 0) {
+    if (Engine.Counters.bladeburnerProcess <= 0) {
       if (Player.bladeburner) {
         try {
           Player.bladeburner.process();
@@ -204,7 +198,7 @@ const Engine = {
           exceptionAlert(e, true);
         }
       }
-      Engine.Counters.mechanicProcess = 5;
+      Engine.Counters.bladeburnerProcess = 5;
     }
 
     if (Engine.Counters.contractGeneration <= 0) {
@@ -215,6 +209,17 @@ const Engine = {
     if (Engine.Counters.achievementsCounter <= 0) {
       calculateAchievements();
       Engine.Counters.achievementsCounter = 5;
+    }
+
+    if (Engine.Counters.exportSaveData <= 0) {
+      if (
+        LastExportBonus < Date.now() - 86400000 &&
+        Settings.EnableSaveDataBackupReminder &&
+        Player.totalPlaytime >= 86400000
+      ) {
+        SnackbarEvents.emit("You have not backed up your save data for over 24 hours!", ToastVariant.WARNING, 30000);
+      }
+      Engine.Counters.exportSaveData = 18000;
     }
 
     // This **MUST** remain the last block in the function!
@@ -231,7 +236,7 @@ const Engine = {
         Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
       } else {
         Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
+        saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
       }
     }
   },
@@ -247,7 +252,7 @@ const Engine = {
     if (saveData !== undefined && (await loadGame(saveData))) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      if (canAccessStockMarket()) {
+      if (isStockMarketInitialized()) {
         initSymbolToStockMap();
       }
 
@@ -402,11 +407,6 @@ const Engine = {
         // Manipulate data of Factions and Companies
         Factions: Factions,
         Companies: Companies,
-        // saveObject and loadGame can be used to create a custom save/load tool
-        SaveObject: {
-          saveObject: saveObject,
-          loadGame: loadGame,
-        },
       };
     }
     globalThis.openDevMenu = () => apr1();

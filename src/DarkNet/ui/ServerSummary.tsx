@@ -1,12 +1,24 @@
 import React from "react";
 import { SvgIcon, Tooltip, Typography } from "@mui/material";
-import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
+import {
+  AcUnit,
+  Add,
+  Bolt,
+  Code,
+  Description,
+  DoorBackSharp,
+  Inventory2,
+  LockPerson,
+  Terminal,
+} from "@mui/icons-material";
 import { formatNumber } from "../../ui/formatNumber";
-import { CompletedProgramName } from "@enums";
+import { CompletedProgramName, ComplexPage } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetConstants } from "../Constants";
+import { Router } from "../../ui/GameRoot";
+import { Settings } from "../../Settings/Settings";
 
 export type ServerSummaryProps = {
   server: DarknetServer;
@@ -24,7 +36,7 @@ export function ServerSummary({
   showDetails = false,
 }: ServerSummaryProps): React.ReactElement {
   if (!server.hasAdminRights && enableAuth) {
-    return <Typography>[ auth required ]</Typography>;
+    return <Typography color={Settings.theme.int}>[ auth required ]</Typography>;
   }
   if (!server.hasAdminRights && !enableAuth) {
     return <Typography color="secondary">(no connection)</Typography>;
@@ -64,20 +76,21 @@ export function ServerSummary({
     server.caches.length > 3 ? ` +${server.caches.length - 3}` : ""
   }`;
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
-  const hasBackdoor = server.backdoorInstalled && !server.hasStasisLink;
   const ramBlockedDetails = formatToMaxDigits(server.blockedRam, 2) + "GB";
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.blockedRam, 0);
 
-  const runningScriptsComponent = (
-    <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>}>
-      <Typography color={runningScriptCount > 0 ? "primary" : "secondary"}>
+  const components = [
+    <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>} style={{ cursor: "pointer" }}>
+      <Typography
+        color={runningScriptCount > 0 ? "primary" : "secondary"}
+        onClick={() => Router.toPage(ComplexPage.ActiveScripts, { serverName: server.hostname })}
+      >
         <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
         {runningScriptCount}
       </Typography>
-    </Tooltip>
-  );
+    </Tooltip>,
+  ];
 
-  const components = [];
   if (cacheCount) {
     components.push(
       <Tooltip key="cache" title={<>{dataCacheTooltip}</>}>
@@ -97,19 +110,10 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  if (hasBackdoor) {
-    components.push(
-      <Tooltip key="backdoor" title={<>Backdoor installed. Warning: this increases darknet instability.</>}>
-        <Typography>
-          <SvgIcon component={DoorBackSharp} className={`${classes.red} ${classes.serverStatusIcon}`} />
-        </Typography>
-      </Tooltip>,
-    );
-  }
   if (server.hasStasisLink) {
     components.push(
       <Tooltip
-        key="backdoor"
+        key="stasisLinked"
         title={
           <>
             Stasis link installed. This allows connecting to the server remotely, as well as ns.exec from any distance.
@@ -118,6 +122,26 @@ export function ServerSummary({
       >
         <Typography>
           <SvgIcon component={DoorBackSharp} className={`${classes.gold} ${classes.serverStatusIcon}`} />
+        </Typography>
+      </Tooltip>,
+    );
+  } else if (server.backdoorInstalled) {
+    components.push(
+      <Tooltip key="backdoor" title={<>Backdoor installed. Warning: this increases darknet instability.</>}>
+        <Typography>
+          <SvgIcon component={DoorBackSharp} className={`${classes.red} ${classes.serverStatusIcon}`} />
+        </Typography>
+      </Tooltip>,
+    );
+  }
+  if (!server.maxRam) {
+    components.push(
+      <Tooltip
+        key="frozen"
+        title={<>Server has been frozen. It will not move, but has no max ram and does not give charisma xp.</>}
+      >
+        <Typography>
+          <SvgIcon component={AcUnit} className={`${classes.blue} ${classes.serverStatusIcon}`} />
         </Typography>
       </Tooltip>,
     );
@@ -155,8 +179,17 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  const maxIcons = showDetails ? components.length : 2;
-  const componentsToShow = [...components.slice(0, maxIcons), runningScriptsComponent];
+  const componentsToShow =
+    showDetails || components.length <= 4
+      ? components
+      : [
+          ...components.slice(0, 3),
+          <Tooltip key="others" placement="right" title={<div style={{ display: "flex" }}>{components.slice(3)}</div>}>
+            <Typography>
+              <SvgIcon component={Add} className={classes.serverStatusIcon} />
+            </Typography>
+          </Tooltip>,
+        ];
 
   return (
     <div style={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>

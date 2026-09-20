@@ -66,7 +66,7 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     };
   };
   return {
-    getPossibleLocations: () => () => {
+    getPossibleLocations: () => {
       return filterTruthy(
         getLocationsWithInfiltrations.map((l) => {
           if (!l.city) return false;
@@ -77,7 +77,7 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
         }),
       );
     },
-    getInfiltration: (ctx) => (_locationName) => {
+    getInfiltration: (ctx, _locationName) => {
       const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
       return calculateInfiltrationData(ctx, locationName);
     },

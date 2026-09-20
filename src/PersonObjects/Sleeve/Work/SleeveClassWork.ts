@@ -1,5 +1,6 @@
 import { ClassType, LocationName, UniversityClassType } from "@enums";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { makeSerializable } from "../../../utils/GenericReviver";
+import { Generic_fromJSON, type IReviverValue } from "../../../utils/JSONReviver";
 import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { Classes } from "../../../Work/ClassWork";
 import { calculateClassEarnings } from "../../../Work/Formulas";
@@ -49,13 +50,8 @@ export class SleeveClassWork extends SleeveBaseWork {
       nextCompletion: this.nextCompletion,
     };
   }
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveClassWork", this);
-  }
-
-  /** Initializes a ClassWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): SleeveClassWork {
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): SleeveClassWork {
     assertObject(value.data);
     if (typeof value.data.classType !== "string" || !(value.data.classType in Classes)) {
       value.data.classType = "Computer Science";
@@ -63,8 +59,8 @@ export class SleeveClassWork extends SleeveBaseWork {
     if (typeof value.data.location !== "string" || !(value.data.location in Locations)) {
       value.data.location = LocationName.Sector12RothmanUniversity;
     }
-    return Generic_fromJSON(SleeveClassWork, value.data);
+    return Generic_fromJSON(SleeveClassWork, value.data, SleeveClassWork.includedKeys);
   }
-}
 
-constructorsForReviver.SleeveClassWork = SleeveClassWork;
+  static includedKeys = makeSerializable("SleeveClassWork", SleeveClassWork);
+}

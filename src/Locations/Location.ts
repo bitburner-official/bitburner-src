@@ -6,12 +6,12 @@ interface IInfiltrationMetadata {
 }
 
 export interface IConstructorParams {
-  city?: CityName | null;
+  city: CityName | null;
   costMult?: number;
   expMult?: number;
   infiltrationData?: IInfiltrationMetadata;
-  name?: LocationName;
-  types?: LocationType[];
+  name: LocationName;
+  types: LocationType[];
   techVendorMaxRam?: number;
   techVendorMinRam?: number;
 }
@@ -37,13 +37,13 @@ export class Location {
   infiltrationData?: IInfiltrationMetadata;
 
   /** Identifier for location */
-  name: LocationName = LocationName.Void;
+  name: LocationName;
 
   /**
    * List of what type(s) this location is. A location can be multiple types
    * (e.g. company and tech vendor)
    */
-  types: LocationType[] = [];
+  types: LocationType[];
 
   /**
    * Tech vendors allow you to purchase servers.
@@ -58,6 +58,8 @@ export class Location {
   techVendorMinRam = 0;
 
   constructor(p: IConstructorParams) {
+    this.name = p.name;
+    this.types = p.types;
     if (p.city) {
       this.city = p.city;
     }
@@ -69,12 +71,6 @@ export class Location {
     }
     if (p.infiltrationData) {
       this.infiltrationData = p.infiltrationData;
-    }
-    if (p.name) {
-      this.name = p.name;
-    }
-    if (p.types) {
-      this.types = p.types;
     }
     if (p.techVendorMaxRam) {
       this.techVendorMaxRam = p.techVendorMaxRam;

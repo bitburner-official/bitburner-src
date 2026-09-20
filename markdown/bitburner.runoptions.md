@@ -93,7 +93,7 @@ boolean
 
 </td><td>
 
-_(Optional)_ Whether this script is excluded from saves, defaults to false
+_(Optional)_ Whether this script is excluded from saves and the "Recently Killed" tab in Active Scripts, defaults to false
 
 
 </td></tr>

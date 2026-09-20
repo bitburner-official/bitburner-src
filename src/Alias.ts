@@ -1,12 +1,13 @@
 import { Terminal } from "./Terminal";
 import { trimQuotes } from "./utils/helpers/string";
+import { Reviver } from "./utils/GenericReviver";
 
 export const Aliases = new Map<string, string>();
 export const GlobalAliases = new Map<string, string>();
 
 export function loadAliases(saveString: string): void {
   Aliases.clear();
-  const parsedAliases: unknown = JSON.parse(saveString);
+  const parsedAliases: unknown = JSON.parse(saveString, Reviver);
   if (!parsedAliases || typeof parsedAliases !== "object") return;
   for (const [name, alias] of Object.entries(parsedAliases)) {
     if (typeof name === "string" && typeof alias === "string") Aliases.set(name, alias);
@@ -15,7 +16,7 @@ export function loadAliases(saveString: string): void {
 
 export function loadGlobalAliases(saveString: string): void {
   GlobalAliases.clear();
-  const parsedAliases: unknown = JSON.parse(saveString);
+  const parsedAliases: unknown = JSON.parse(saveString, Reviver);
   if (!parsedAliases || typeof parsedAliases !== "object") return;
   for (const [name, alias] of Object.entries(parsedAliases)) {
     if (typeof name === "string" && typeof alias === "string") GlobalAliases.set(name, alias);
@@ -28,9 +29,11 @@ export function printAliases(): void {
   for (const [name, alias] of GlobalAliases) Terminal.print("global alias " + name + "=" + alias);
 }
 
+export const aliasRegex = /[\w|!%,@-]+/;
+const re = new RegExp("^(" + aliasRegex.source + ")=(.+)$");
+
 // Returns true if successful, false otherwise
 export function parseAliasDeclaration(dec: string, global = false): boolean {
-  const re = /^([\w|!%,@-]+)=(.+)$/;
   const matches = dec.match(re);
   if (matches == null || matches.length != 3) {
     return false;
@@ -45,12 +48,12 @@ export function parseAliasDeclaration(dec: string, global = false): boolean {
   return true;
 }
 
-function addAlias(name: string, value: string): void {
+export function addAlias(name: string, value: string): void {
   GlobalAliases.delete(name);
   Aliases.set(name, value.trim());
 }
 
-function addGlobalAlias(name: string, value: string): void {
+export function addGlobalAlias(name: string, value: string): void {
   Aliases.delete(name);
   GlobalAliases.set(name, value.trim());
 }

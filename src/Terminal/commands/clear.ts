@@ -1,5 +1,5 @@
 import { Terminal } from "../../Terminal";
 
-export function clear(): void {
+export function clear(): undefined {
   Terminal.clear();
 }

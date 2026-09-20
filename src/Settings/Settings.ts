@@ -69,6 +69,8 @@ export const Settings = {
   SuppressSavedGameToast: false,
   /** Whether to hide the toast warning when the autosave is disabled. */
   SuppressAutosaveDisabledWarnings: false,
+  /** Whether to enable the save data backup reminder. */
+  EnableSaveDataBackupReminder: true,
   /** Whether to GiB instead of GB. */
   UseIEC60027_2: false,
   /** Whether to display intermediary time unit when their value is null */
@@ -77,7 +79,7 @@ export const Settings = {
   ExcludeRunningScriptsFromSave: false,
   /**  Whether the game's sidebar is opened. */
   IsSidebarOpened: true,
-  /** Tail rendering intervall in ms */
+  /** Tail rendering interval in ms */
   TailRenderInterval: 1000,
   /** Theme colors. */
   theme: { ...defaultTheme },
@@ -88,7 +90,7 @@ export const Settings = {
   /**  Script editor theme data. */
   EditorTheme: { ...defaultMonacoTheme },
   /** Order to display the player's owned Augmentations/Source Files. */
-  OwnedAugmentationsOrder: OwnedAugmentationsOrderSetting.AcquirementTime,
+  OwnedAugmentationsOrder: OwnedAugmentationsOrderSetting.AcquisitionTime,
   /** What order the Augmentations should be displayed in when purchasing from a Faction. */
   PurchaseAugmentationsOrder: PurchaseAugmentationsOrderSetting.Default,
   /** Script editor theme. */
