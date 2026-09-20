@@ -583,7 +583,7 @@ describe("Terminal Pipes", () => {
   });
 });
 
-function getOutput(outputHistory: (Output | Link | RawOutput)[], index = 0) {
+export function getOutput(outputHistory: (Output | Link | RawOutput)[], index = 0) {
   const locationIndex = index < 0 ? outputHistory.length - Math.abs(index) : index;
   const mostRecentOutput = outputHistory[locationIndex];
   if (!(mostRecentOutput instanceof Output)) {

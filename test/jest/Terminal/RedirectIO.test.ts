@@ -14,6 +14,7 @@ import { TextFilePath } from "../../../src/Paths/TextFilePath";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { Output } from "../../../src/Terminal/OutputTypes";
 import { ANSI_ESCAPE } from "../../../src/ui/React/ANSIITypography";
+import { getOutput } from "./Pipes.test";
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -36,7 +37,7 @@ describe("RedirectIOTests", () => {
     await sleep(50);
 
     expect(Terminal.outputHistory.length).toBe(1);
-    expect(Terminal.outputHistory[0].text).toContain(data);
+    expect(getOutput(Terminal.outputHistory, 0).text).toContain(data);
   });
 
   it("findCommandsSplitByRedirects should split commands by pipes", () => {
@@ -58,8 +59,8 @@ describe("RedirectIOTests", () => {
       await handleCommand(stdIO, commandString.split(" "));
       await sleep(50);
 
-      expect(stdIO.stdout.empty()).toBe(false);
-      const output = stdIO.stdout.read();
+      expect(stdIO.stdout?.empty()).toBe(false);
+      const output = stdIO.stdout?.read();
       expect(output).toBe("Hello, World");
     });
 
@@ -134,7 +135,7 @@ describe("RedirectIOTests", () => {
 
       console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
-      const outputText: Output = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
+      const outputText: Output | undefined = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
       expect(outputText?.text).toEqual(`${scriptName}: Received input: ${inputData}`);
     });
 
@@ -157,7 +158,7 @@ describe("RedirectIOTests", () => {
 
       console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
-      const outputText: Output = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
+      const outputText: Output | undefined = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
       expect(outputText?.text).toEqual(`${scriptName}: Received input: ${scriptName}: Received input: ${inputData}`);
     });
   });
@@ -171,7 +172,7 @@ describe("RedirectIOTests", () => {
 
       await parseRedirectedCommands(`echo 1 | cat ${filename}`);
       expect(Terminal.outputHistory.length).toBe(1);
-      expect(Terminal.outputHistory[0].text).toBe("First Line\nSecond Line1");
+      expect(getOutput(Terminal.outputHistory, 0).text).toBe("First Line\nSecond Line1");
     });
 
     it("should be able to grep files read by cat", async () => {
@@ -183,7 +184,7 @@ describe("RedirectIOTests", () => {
       await parseRedirectedCommands(`cat ${filename} | grep Second`);
 
       expect(Terminal.outputHistory.length).toBe(1);
-      const log = Terminal.outputHistory[0];
+      const log = getOutput(Terminal.outputHistory, 0);
       if (!isOutput(log)) throw new Error("Expected output to be of type Output");
       expect(log.text.replaceAll(ANSI_ESCAPE, "")).toBe("Second Line");
     });
