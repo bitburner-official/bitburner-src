@@ -9,6 +9,7 @@ import { grep } from "../../../src/Terminal/commands/grep";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { Script } from "../../../src/Script/Script";
 import { stringify } from "../../../src/Terminal/StdIO/utils";
+import { getOutput } from "./Pipes.test";
 
 const fileName = "example.txt" as TextFilePath;
 const fileName2 = "example2.txt" as TextFilePath;
@@ -76,7 +77,7 @@ describe("grep command", () => {
 
   it("should grep input piped from cat", async () => {
     await Terminal.executeCommands(`cat ${fileName} ${fileName2} | grep "line 2"`);
-    const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+    const lastOutput = getOutput(Terminal.outputHistory, -1);
     // Output from cat will not have filenames, and will not add additional newlines between file contents
     expect(stringify(lastOutput.text, true)).toBe(
       `This is line 2 of file 1This is another example text file.\nThis is line 2 of file 2`,
