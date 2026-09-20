@@ -4,36 +4,41 @@ import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 
 // Ordered array of keys to Interactive Tutorial Steps
 enum iTutorialSteps {
-  Start,
-  GoToCharacterPage, // Click on 'Stats' page
-  CharacterPage, // Introduction to 'Stats' page
-  CharacterGoToTerminalPage, // Go back to Terminal
-  TerminalIntro, // Introduction to Terminal
-  TerminalHelp, // Using 'help' Terminal command
-  TerminalLs, // Using 'ls' Terminal command
-  TerminalScan, // Using 'scan' Terminal command
-  TerminalScanAnalyze1, // Using 'scan-analyze' Terminal command
-  TerminalScanAnalyze2, // Using 'scan-analyze 3' Terminal command
-  TerminalConnect, // Connecting to n00dles
-  TerminalAnalyze, // Analyzing n00dles
-  TerminalNuke, // NUKE n00dles
-  TerminalManualHack, // Hack n00dles
-  TerminalHackingMechanics, // Explanation of hacking mechanics
-  TerminalGoHome, // Go home before creating a script.
-  TerminalCreateScript, // Create a script using 'nano'
-  TerminalEditScript, // Script Editor page - Edit script and then save & close
-  TerminalFree, // Using 'Free' Terminal command
-  TerminalRunScript, // Running script using 'run' Terminal command
-  TerminalGoToActiveScriptsPage,
-  ActiveScriptsPage,
-  ActiveScriptsToTerminal,
-  TerminalTailScript,
+  Start, // Intro, overview, and housekeeping
+
+  // Hacking
+  GoToCharacterStatsPage,
+  CharacterStatsDescription,
+  CharacterGoToTerminalPage,
+  TerminalIntro,
+  TerminalHelp,
+  TerminalLs,
+  TerminalScan,
+  TerminalScanAnalyze,
+  TerminalScanAnalyze2,
+  TerminalConnect,
+  TerminalAnalyze,
+  TerminalNuke,
+  TerminalManualHack,
+  TerminalHackWeakenGrowMechanics,
+  TerminalHome,
+  TerminalNano,
+  ScriptEditorEditAndSave,
+  TerminalFree,
+  TerminalRun,
+  TerminalGoToActiveScriptsPage, // Also explains a bit about running scripts
+  ActiveScriptsDescription,
+  TerminalTail,
+  TerminalTailOutcome,
+
+  // Finishing off
   GoToHacknetNodesPage,
   HacknetNodesIntroduction,
   HacknetNodesGoToWorldPage,
   WorldDescription,
-  DocumentationPageInfo,
-  End,
+  DocumentationInfo,
+
+  End, // Empty step not seen by players. Powers the logic in iTutorialNextStep.
 }
 
 const ITutorial = {
@@ -43,34 +48,34 @@ const ITutorial = {
   // Keeps track of whether each step has been done
   stepIsDone: {
     [iTutorialSteps.Start]: false,
-    [iTutorialSteps.GoToCharacterPage]: false,
-    [iTutorialSteps.CharacterPage]: false,
+    [iTutorialSteps.GoToCharacterStatsPage]: false,
+    [iTutorialSteps.CharacterStatsDescription]: false,
     [iTutorialSteps.CharacterGoToTerminalPage]: false,
     [iTutorialSteps.TerminalIntro]: false,
     [iTutorialSteps.TerminalHelp]: false,
     [iTutorialSteps.TerminalLs]: false,
     [iTutorialSteps.TerminalScan]: false,
-    [iTutorialSteps.TerminalScanAnalyze1]: false,
+    [iTutorialSteps.TerminalScanAnalyze]: false,
     [iTutorialSteps.TerminalScanAnalyze2]: false,
     [iTutorialSteps.TerminalConnect]: false,
     [iTutorialSteps.TerminalAnalyze]: false,
     [iTutorialSteps.TerminalNuke]: false,
     [iTutorialSteps.TerminalManualHack]: false,
-    [iTutorialSteps.TerminalHackingMechanics]: false,
-    [iTutorialSteps.TerminalGoHome]: false,
-    [iTutorialSteps.TerminalCreateScript]: false,
-    [iTutorialSteps.TerminalEditScript]: false,
+    [iTutorialSteps.TerminalHackWeakenGrowMechanics]: false,
+    [iTutorialSteps.TerminalHome]: false,
+    [iTutorialSteps.TerminalNano]: false,
+    [iTutorialSteps.ScriptEditorEditAndSave]: false,
     [iTutorialSteps.TerminalFree]: false,
-    [iTutorialSteps.TerminalRunScript]: false,
+    [iTutorialSteps.TerminalRun]: false,
     [iTutorialSteps.TerminalGoToActiveScriptsPage]: false,
-    [iTutorialSteps.ActiveScriptsPage]: false,
-    [iTutorialSteps.ActiveScriptsToTerminal]: false,
-    [iTutorialSteps.TerminalTailScript]: false,
+    [iTutorialSteps.ActiveScriptsDescription]: false,
+    [iTutorialSteps.TerminalTail]: false,
+    [iTutorialSteps.TerminalTailOutcome]: false,
     [iTutorialSteps.GoToHacknetNodesPage]: false,
     [iTutorialSteps.HacknetNodesIntroduction]: false,
     [iTutorialSteps.HacknetNodesGoToWorldPage]: false,
     [iTutorialSteps.WorldDescription]: false,
-    [iTutorialSteps.DocumentationPageInfo]: false,
+    [iTutorialSteps.DocumentationInfo]: false,
     [iTutorialSteps.End]: false,
   },
 };

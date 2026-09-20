@@ -7,12 +7,11 @@ import { BaseGift } from "./BaseGift";
 import { Factions } from "../Faction/Factions";
 import { CalculateEffect } from "./formulas/effect";
 import { StaneksGiftEvents } from "./StaneksGiftEvents";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { StanekConstants } from "./data/Constants";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class StaneksGift extends BaseGift {
   isBonusCharging = false;
@@ -235,17 +234,5 @@ export class StaneksGift extends BaseGift {
     this.storedCycles = 0;
   }
 
-  static includedProperties = getKeyList(StaneksGift, { removedKeys: ["justCharged"] });
-
-  /** Serialize Stanek's Gift to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("StaneksGift", this, StaneksGift.includedProperties);
-  }
-
-  /** Initializes Stanek's Gift from a JSON save state */
-  static fromJSON(value: IReviverValue): StaneksGift {
-    return Generic_fromJSON(StaneksGift, value.data, StaneksGift.includedProperties);
-  }
+  static includedKeys = makeSerializable("StaneksGift", StaneksGift, { removedKeys: ["justCharged"] });
 }
-
-constructorsForReviver.StaneksGift = StaneksGift;

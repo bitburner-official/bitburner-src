@@ -382,7 +382,7 @@ export class Terminal {
             return;
           }
           break;
-        case iTutorialSteps.TerminalScanAnalyze1:
+        case iTutorialSteps.TerminalScanAnalyze:
           if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
@@ -438,13 +438,13 @@ export class Terminal {
             return;
           }
           break;
-        case iTutorialSteps.TerminalHackingMechanics:
+        case iTutorialSteps.TerminalHackWeakenGrowMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
             this.printAndBypassPipes(errorMessageForBadCommand, "error");
             return;
           }
           break;
-        case iTutorialSteps.TerminalGoHome:
+        case iTutorialSteps.TerminalHome:
           if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
@@ -452,7 +452,7 @@ export class Terminal {
             return;
           }
           break;
-        case iTutorialSteps.TerminalCreateScript:
+        case iTutorialSteps.TerminalNano:
           if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
@@ -468,7 +468,7 @@ export class Terminal {
             return;
           }
           break;
-        case iTutorialSteps.TerminalRunScript:
+        case iTutorialSteps.TerminalRun:
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
@@ -476,7 +476,7 @@ export class Terminal {
             return;
           }
           break;
-        case iTutorialSteps.ActiveScriptsToTerminal:
+        case iTutorialSteps.TerminalTail:
           if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {

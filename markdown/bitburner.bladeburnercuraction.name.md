@@ -9,5 +9,5 @@ Name of Action
 **Signature:**
 
 ```typescript
-name: string;
+name: BladeburnerActionName;
 ```
