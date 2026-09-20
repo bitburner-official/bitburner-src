@@ -17,6 +17,7 @@ import { AugmentationName } from "@enums";
 import { getAuthResult } from "../../../src/DarkNet/effects/authentication";
 import { getMostRecentAuthLog } from "../../../src/DarkNet/models/packetSniffing";
 import { applyAugmentation } from "../../../src/Augmentation/AugmentationHelpers";
+import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
 
 fixDoImportIssue();
 
