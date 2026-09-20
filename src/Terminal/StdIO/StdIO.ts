@@ -2,18 +2,7 @@ import { IOStream } from "./IOStream";
 import { Terminal } from "../../Terminal";
 import { Output, RawOutput, Link } from "../OutputTypes";
 import { stringify } from "./utils";
-
-let remaining = 0;
-const registerStdIOInstance = (stdIO: StdIO) => {
-  const id = `StdIO-${Math.random().toString(16).slice(2)}`;
-  StdIORegistry.register(stdIO, id);
-  remaining++;
-  console.debug(`Created StdIO instance ${id}. Instances remaining: ${remaining}`);
-};
-const StdIORegistry = new FinalizationRegistry((name: string) => {
-  remaining--;
-  console.debug(`StdIO instance ${name} has been garbage collected. Remaining instances: ${remaining}`);
-});
+import { isValidElement } from "react";
 
 export class StdIO {
   stdin: WeakRef<IOStream> | null = null;
@@ -25,7 +14,6 @@ export class StdIO {
       this.stdin = new WeakRef(stdin);
     }
     this.stdout = stdout;
-    registerStdIOInstance(this);
   }
 
   // Async iterator to read from stdin
@@ -70,6 +58,9 @@ export class StdIO {
     // If there is no stdout, write to the terminal
     if (data instanceof Output || data instanceof Link || data instanceof RawOutput) {
       return Terminal.terminalOutput(data);
+    }
+    if (isValidElement(data)) {
+      return Terminal.terminalOutput(new RawOutput(data));
     }
     Terminal.printAndBypassPipes(stringify(data));
   }

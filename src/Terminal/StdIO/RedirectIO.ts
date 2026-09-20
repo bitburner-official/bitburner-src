@@ -90,7 +90,7 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
     if (index !== 1 && commandGroup[0] === PipeSymbols.InputRedirection) {
       handleIoError(
         getTerminalStdIO(),
-        `Error in pipe command: Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`,
+        `Error in pipe command: Input redirection '<' can only be used after the first pipe command.`,
       );
       return [];
     }

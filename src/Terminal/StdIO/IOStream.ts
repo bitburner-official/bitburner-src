@@ -34,7 +34,7 @@ export class IOStream implements NetscriptPort {
     if (this.isClosed) {
       return false;
     }
-    return this.write(value) !== null;
+    return this.write(value) === null;
   }
 
   clear(): void {
@@ -59,12 +59,5 @@ export class IOStream implements NetscriptPort {
 
   read(): unknown {
     return this.handle.read();
-  }
-
-  from(other: IOStream): void {
-    if (this.isClosed) {
-      return;
-    }
-    this.handle.n = other.handle.n;
   }
 }

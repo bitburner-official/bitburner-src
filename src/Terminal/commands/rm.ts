@@ -123,7 +123,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
       if (report.result.res) {
         Terminal.success(`Deleted: ${report.target}`, stdIO);
       } else {
-        Terminal.fatal(errors.deleteFailed(report.target, report.result.msg), stdIO);
+        Terminal.error(errors.deleteFailed(report.target, report.result.msg), stdIO);
       }
     }
   };

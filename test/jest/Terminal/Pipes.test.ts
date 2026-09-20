@@ -1,5 +1,5 @@
 import { Terminal } from "../../../src/Terminal";
-import { GetServer, prestigeAllServers } from "../../../src/Server/AllServers";
+import { GetServer, GetServerOrThrow, prestigeAllServers } from "../../../src/Server/AllServers";
 import { Player } from "@player";
 import { type TextFilePath } from "../../../src/Paths/TextFilePath";
 import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
@@ -9,6 +9,7 @@ import { runScript } from "../../../src/Terminal/commands/runScript";
 import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
 import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
 import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
+import { Link, Output, RawOutput } from "../../../src/Terminal/OutputTypes";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -42,7 +43,7 @@ describe("Terminal Pipes", () => {
       const command = `echo 'Hello World' > ${invalidFileName}`;
       await Terminal.executeCommands(command);
 
-      const mostRecentOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      const mostRecentOutput = getOutput(Terminal.outputHistory, -1);
       expect(mostRecentOutput?.text).toBe(`Invalid file path provided: ${invalidFileName}`);
     });
 
@@ -51,7 +52,10 @@ describe("Terminal Pipes", () => {
       const command = `echo 'Hello World' > ${invalidFileName}`;
       await Terminal.executeCommands(command);
 
-      const mostRecentOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      const mostRecentOutput = getOutput(Terminal.outputHistory, -1);
+      if (!(mostRecentOutput instanceof Output)) {
+        throw new Error("Unexpected terminal output: was not an Output");
+      }
       expect(mostRecentOutput?.text).toBe(`Invalid file path provided: ${invalidFileName}`);
     });
 
@@ -198,7 +202,7 @@ describe("Terminal Pipes", () => {
       const newFileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
       expect(newFileContent).toBe(fileContent);
 
-      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      const lastOutput = getOutput(Terminal.outputHistory, -1);
       expect(lastOutput.text).toContain(fileContent);
     });
 
@@ -213,7 +217,7 @@ describe("Terminal Pipes", () => {
       const newFileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
       expect(newFileContent).toContain("hacking is the most profitable way to earn money and progress");
 
-      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      const lastOutput = getOutput(Terminal.outputHistory, -1);
       expect(lastOutput.text).toContain("hacking is the most profitable way to earn money and progress");
     });
 
@@ -228,7 +232,7 @@ describe("Terminal Pipes", () => {
       const newFileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
       expect(newFileContent).toContain("__ESCAP3__");
 
-      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      const lastOutput = getOutput(Terminal.outputHistory, -1);
       expect(lastOutput.text).toContain("__ESCAP3__");
     });
   });
@@ -249,8 +253,8 @@ describe("Terminal Pipes", () => {
       await Terminal.executeCommands(command);
       await sleep(100);
 
-      expect(Terminal.outputHistory[0]?.text).toContain(`Running script with 1 thread`);
-      expect(Terminal.outputHistory[1]?.text).toEqual(`${scriptName}: Input received: data`);
+      expect(getOutput(Terminal.outputHistory, 0)?.text).toContain(`Running script with 1 thread`);
+      expect(getOutput(Terminal.outputHistory, 1)?.text).toEqual(`${scriptName}: Input received: data`);
     });
 
     it("should piping content out of a script", async () => {
@@ -395,7 +399,7 @@ describe("Terminal Pipes", () => {
       const commandString = `cat < ${fileName} | cat `;
       await Terminal.executeCommands(commandString);
 
-      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1];
+      const lastOutput = getOutput(Terminal.outputHistory, -1);
       expect(lastOutput?.text).toBe(fileContent);
     });
 
@@ -404,16 +408,16 @@ describe("Terminal Pipes", () => {
       const commandString = `cat < ${fileName}`;
       await Terminal.executeCommands(commandString);
 
-      const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 2];
+      const lastOutput = getOutput(Terminal.outputHistory, -2);
       expect(lastOutput?.text).toBe(`No file at path ${fileName}`);
     });
 
     it("should return an error if the input redirection is not the first pipe in the chain", async () => {
       await Terminal.executeCommands(`echo 'Some data' | cat < inputFile.txt`);
 
-      const error = Terminal.outputHistory[0];
+      const error = getOutput(Terminal.outputHistory, 0);
       expect(error?.text).toBe(
-        `Error in pipe command: Invalid pipe command. Only the first command in a pipe chain can have input redirection '<'.`,
+        `Error in pipe command: Input redirection '<' can only be used after the first pipe command.`,
       );
     });
   });
@@ -425,13 +429,13 @@ describe("Terminal Pipes", () => {
     await sleep(50);
 
     expect(Terminal.outputHistory.length).toBe(1);
-    expect(Terminal.outputHistory[0].text).toContain(testContent);
+    expect(getOutput(Terminal.outputHistory, 0).text).toContain(testContent);
   });
 
   it("should replace $! with the PID of the last script run", async () => {
     const scriptName = "testScript.js" as ScriptFilePath;
     const scriptContent = `export async function main(ns) { ns.print('Script is running'); await ns.sleep(100); }`;
-    const server = GetServer(Player.currentServer);
+    const server = GetServerOrThrow(Player.currentServer);
 
     // Add script to server
     await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
@@ -578,3 +582,12 @@ describe("Terminal Pipes", () => {
     });
   });
 });
+
+function getOutput(outputHistory: (Output | Link | RawOutput)[], index = 0) {
+  const locationIndex = index < 0 ? outputHistory.length - Math.abs(index) : index;
+  const mostRecentOutput = outputHistory[locationIndex];
+  if (!(mostRecentOutput instanceof Output)) {
+    throw new Error("Unexpected terminal output: was not an Output");
+  }
+  return mostRecentOutput;
+}

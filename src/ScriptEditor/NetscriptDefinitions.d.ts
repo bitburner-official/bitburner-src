@@ -9382,7 +9382,7 @@ export interface NS {
    *
    * If more data is added later (for example, if one script's terminal is piped to another script),
    * then the script can read that data from `ns.getStdin()` as well.
-   * `await ns.getStdin().nextPortWrite()` can be used to wait until new data is available to read.
+   * `await ns.getStdin().nextWrite()` can be used to wait until new data is available to read.
    */
   getStdin(): NetscriptPort | null;
 

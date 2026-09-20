@@ -54,7 +54,7 @@ export function backdoor(
 
   // Backdoor should take the same amount of time as hack
   if (server instanceof HacknetServer) {
-    Terminal.error("Cannot backdoor this kind of server", stdIO);
+    Terminal.fatal("Cannot backdoor this kind of server", stdIO);
     return;
   }
   if (!(server instanceof Server || server instanceof DarknetServer)) {

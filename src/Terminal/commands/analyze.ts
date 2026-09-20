@@ -16,7 +16,7 @@ export function analyze(
   stdIO: StdIO,
 ): undefined | TerminalAction {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of analyze command. Usage: analyze", stdIO);
+    Terminal.fatal("Incorrect usage of analyze command. Usage: analyze", stdIO);
     return;
   }
 

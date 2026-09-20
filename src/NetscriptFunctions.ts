@@ -118,7 +118,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
 import { setDeprecatedProperties } from "./utils/DeprecationHelper";
-import { IOStream } from "./Terminal/StdIO/IOStream";
 
 export const enums: NSEnums = {
   CityName,
@@ -1484,7 +1483,7 @@ export const ns: InternalAPI<NSFull> = {
     if (!stdin) {
       return null;
     }
-    return new IOStream(stdin.handle.n);
+    return stdin.handle;
   },
   flags: (ctx, ...args) => Flags(ctx, false)(...args),
   heart: { break: () => Player.karma },

@@ -161,7 +161,7 @@ export class Terminal {
   }
 
   printRaw(node: React.ReactNode, stdIO: StdIO): undefined {
-    stdIO.write(new RawOutput(node));
+    stdIO.write(node);
   }
 
   printAndBypassPipes(s: string, color: "primary" | "error" | "success" | "info" | "warn" = "primary"): undefined {
