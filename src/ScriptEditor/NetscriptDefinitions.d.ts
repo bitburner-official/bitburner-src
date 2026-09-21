@@ -8888,6 +8888,7 @@ export interface NS {
    *
    * Returns the amount of RAM required to run the specified script on the target server.
    * Returns 0 if the script does not exist.
+   * Throws an error if RAM usage cannot be calculated, for example due to syntax errors or invalid imports.
    *
    * @param script - Filename of script. This is case-sensitive.
    * @param host - Hostname/IP of the server the target script is located on. Optional. Defaults to the server the calling script is running on.

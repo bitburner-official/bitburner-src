@@ -1184,8 +1184,12 @@ export const ns: InternalAPI<NSFull> = {
     if (!script) return 0;
     const ramUsage = script.getRamUsage(server.scripts);
     if (!ramUsage) {
-      helpers.log(ctx, () => `Could not calculate ram usage for ${path} on ${host}.`);
-      return 0;
+      throw helpers.errorMessage(
+        ctx,
+        `Could not calculate RAM usage for ${path} on ${host}. Check for syntax errors or invalid imports.\n${
+          script.ramCalculationError ?? ""
+        }`,
+      );
     }
     return ramUsage;
   },
