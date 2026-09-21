@@ -106,7 +106,7 @@ export function installAugmentations(force?: boolean): boolean {
       "You slowly drift to sleep as scientists put you under in order " +
         "to install the following Augmentations:\n" +
         augmentationList +
-        "\nYou wake up in your home...you feel different...",
+        "\nYou wake up in your home... you feel different...",
     );
   }
   prestigeAugmentation();
