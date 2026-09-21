@@ -8,7 +8,7 @@ This function must return an array, the contents of which make up the autocomple
 
 A basic example as a complete script;
 
-```javascript
+```js
 /**
  * @param {AutocompleteData} data - context about the game, useful when autocompleting
  * @param {string[]} args - current arguments, not including "run script.js"
@@ -33,7 +33,7 @@ To make this feature more useful, an [AutocompleteData](../../../../../markdown/
 
 AutocompleteData is an object with the following properties;
 
-```javascript
+```js
   {
     command:    // The command being run, as seen on the terminal.
     enums:      // The ns.enums object with various in-game strings.
@@ -49,7 +49,7 @@ AutocompleteData is an object with the following properties;
 
 Here is a more complete example, utilising and returning information from the AutocompleteData object.
 
-```javascript
+```js
 /**
  * @param {AutocompleteData} data - context about the game, useful when autocompleting
  * @param {string[]} args - current arguments, not including "run script.js"
@@ -74,7 +74,7 @@ This can be used to remove already passed arguments from the autocomplete sugges
 
 For example;
 
-```javascript
+```js
 /**
  * @param {AutocompleteData} data - context about the game, useful when autocompleting
  * @param {string[]} args - current arguments, not including "run script.js"
@@ -113,7 +113,7 @@ If you type `run a.js --f` in the terminal and press tab, `parsedFlags` in `auto
 
 If you type `run a.js --f` in the terminal and press enter, an error will be thrown:
 
-```
+```text
 ArgError: unknown or unexpected option: --f
 ```
 

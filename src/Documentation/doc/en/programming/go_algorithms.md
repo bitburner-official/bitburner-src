@@ -153,7 +153,7 @@ Just playing random moves is not very effective, though. The next step is to use
 
 Example 5x5 board state, with a number of networks for each player:
 
-```angularjs
+```text
 [  "XX.O.",
    "X..OO",
    ".XO..",
