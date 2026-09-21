@@ -205,8 +205,7 @@ $ .build/bitburner-win32-x64/bitburner.exe
 
 The following list specifies workflows that you should avoid unless they are really necessary. The reason is explained along the element:
 
-- **Force pushing:** A force push happens when you overwrite previous commits that were already pushed. This makes it hard for reviwers to _see what has changed_. Quoting maintainer's feedback:
-  > By the way, please avoid rebasing after a PR has been reviewed. The change in this PR is very small, so it is not a problem here. However, for non-trivial PRs, a rebase can make it much harder to track what has changed. In some cases, we even have to review the entire PR from scratch.
+- **Force pushing:** A force push happens when you overwrite previous commits that were already pushed. This can make it harder for reviewers to see what has changed.
 
 ### Submitting a Pull Request
 
