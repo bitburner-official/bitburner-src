@@ -24,7 +24,7 @@ export const TerminalHelpText: string[] = [
   "    upload DIRECTORY                 Upload scripts or text files from your home computer",
   "    expr EXPRESSION                  Evaluate a mathematical expression",
   "    free                             Check the machine's memory (RAM) usage",
-  "    grep [OPTION]... PATTERN         Search for PATTERN (string/regular expression) in each FILE and print",
+  "    grep [OPTION]... PATTERN         Search for a PATTERN (string/regular expression) in each FILE and print",
   "        [FILE]... [-O OUTFILE]          results to the Terminal",
   "        [-m NUM] [-B NUM] [-A NUM]",
   "        [-C NUM]",
