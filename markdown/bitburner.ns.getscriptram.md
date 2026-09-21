@@ -76,3 +76,5 @@ RAM cost: 0.1 GB
 
 Returns the amount of RAM required to run the specified script on the target server. Returns 0 if the script does not exist.
 
+Be aware that this function does \*not\* throw an error if the target script has syntax errors, but instead, returns `0`<!-- -->.
+
