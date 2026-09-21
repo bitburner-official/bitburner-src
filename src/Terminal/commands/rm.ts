@@ -8,7 +8,7 @@ import type { FilePath } from "../../Paths/FilePath";
 
 export function rm(args: (string | number | boolean)[], server: BaseServer): undefined {
   const errors = {
-    arg: (reason: string) => `Incorrect usage of rm command. ${reason}. Usage: rm [OPTION]... [FILE]...`,
+    arg: (reason: string) => `Incorrect usage of rm command. ${reason}. Usage: rm [OPTION]... FILE...`,
     dirsProvided: (name: string) =>
       `Incorrect usage of rm command. To delete directories, use the -r flag. Failing directory: ${name}`,
     invalidFile: (name: string) => `Invalid filename: ${name}`,

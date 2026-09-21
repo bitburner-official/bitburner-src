@@ -15,7 +15,7 @@ export function scananalyze(args: (string | number | boolean)[]): undefined {
   } else {
     // # of args must be 2 or 3
     if (args.length > 2) {
-      Terminal.error("Incorrect usage of scan-analyze command. usage: scan-analyze [depth]");
+      Terminal.error("Incorrect usage of scan-analyze command. Usage: scan-analyze [DEPTH] [-a]");
       return;
     }
     let all = false;

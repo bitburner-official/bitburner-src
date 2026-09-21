@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { directoryExistsOnServer, resolveDirectory } from "../../Paths/Directory";
 
 export function cd(args: (string | number | boolean)[], server: BaseServer): undefined {
-  if (args.length > 1) return Terminal.error("Incorrect number of arguments. Usage: cd [dir]");
+  if (args.length > 1) return Terminal.error("Incorrect number of arguments. Usage: cd DIR");
   // If no arg was provided, just use "/".
   const userInput = String(args[0] ?? "/");
   const targetDir = resolveDirectory(userInput, Terminal.currDir);

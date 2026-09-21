@@ -9,7 +9,7 @@ import { ContentFile } from "../../Paths/ContentFile";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length < 2) {
-    return Terminal.error("Incorrect usage of scp command. Usage: scp [source filename] [destination hostname]");
+    return Terminal.error("Incorrect usage of scp command. Usage: scp FILE... SERVER");
   }
 
   // Validate destination server

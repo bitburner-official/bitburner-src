@@ -6,7 +6,7 @@ import { BaseServer } from "../../Server/BaseServer";
 export function mem(args: (string | number | boolean)[], server: BaseServer): undefined {
   try {
     if (args.length !== 1 && args.length !== 3) {
-      Terminal.error("Incorrect usage of mem command. usage: mem [scriptname] [-t] [number threads]");
+      Terminal.error("Incorrect usage of mem command. Usage: mem SCRIPT [-t NUM_THREADS]");
       return;
     }
 
