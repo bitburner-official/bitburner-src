@@ -68,11 +68,11 @@ _(Optional)_ Hostname/IP of the server the target script is located on. Optional
 
 number
 
-Amount of RAM (in GB) required to run the specified script, and 0 if the script does not exist or has syntax errors.
+Amount of RAM (in GB) required to run the specified script, and 0 if the script does not exist or has errors.
 
 ## Remarks
 
 RAM cost: 0.1 GB
 
-Returns the amount of RAM required to run the specified script on the target server. Returns 0 if the script does not exist or has syntax errors.
+Returns the amount of RAM required to run the specified script on the target server. Returns 0 if the script does not exist or has errors.
 
