@@ -35,15 +35,25 @@ AutocompleteData is an object with the following properties;
 
 ```js
   {
-    command:    // The command being run, as seen on the terminal.
-    enums:      // The ns.enums object with various in-game strings.
-    filename:   // The name of the script file containing the autocomplete function.
-    hostname:   // The name of the host server the script would be running on.
-    processes:  // List of all processes running on the current server.
-    servers:    // List of all servers in the game. Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do not satisfy their requirements.
-    txts:       // List of all text files on the current server.
-    scripts:    // List of all scripts on the current server.
-    flags:      // A function similar to ns.flags(). Calling this function adds all the flags as autocomplete arguments.
+    // The command being run, as seen on the terminal.
+    command:
+    // The ns.enums object with various in-game strings.
+    enums:
+    // The name of the script file containing the autocomplete function.
+    filename:
+    // The name of the host server the script would be running on.
+    hostname:
+    // List of all processes running on the current server.
+    processes:
+    // List of all servers in the game. Some servers are hidden until you satisfy their requirements. This array does not
+    // contain those servers if you do not satisfy their requirements.
+    servers:
+    // List of all text files on the current server.
+    txts:
+    // List of all scripts on the current server.
+    scripts:
+    // A function similar to ns.flags(). Calling this function adds all the flags as autocomplete arguments.
+    flags:
   }
 ```
 
@@ -62,7 +72,8 @@ export function autocomplete(data, args) {
   const gymTypesObject = data.enums.GymType; // The data.enums holds the enum information as objects.
   const gymTypes = Object.values(gymTypesObject); // We are only interested in the string values from the enums object.
 
-  return [...scripts, ...servers, ...gymTypes]; // Offer a list of all servers, all scripts on the current server, and gym jobs ("str", "agi" etc) as autocomplete options.
+  // Offer a list of all servers, all scripts on the current server, and gym jobs ("str", "agi" etc) as autocomplete options.
+  return [...scripts, ...servers, ...gymTypes];
 }
 ```
 

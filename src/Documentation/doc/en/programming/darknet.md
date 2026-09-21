@@ -126,8 +126,8 @@ Once you have authenticated, other scripts can then connect to that same server 
 `scp` file transfers can be performed at any distance once you have established a session. However, `exec` also requires the script to either be run from a server adjacent to and connected to the target server, or a backdoor or stasis link on the target server. You can identify direct connections using `probe` or `getServerDetails`.
 
 ```js
-// the darknet server in "hostname" must be either backdoored, stasis linked, or directly connected to the server this script is running on
-// to allow exec calls from the current server
+// the darknet server in "hostname" must be either backdoored, stasis linked, or directly connected to the server this
+// script is running on to allow exec calls from the current server
 if (ns.dnet.getServerDetails(hostname).isConnectedToCurrentServer) {
   ns.dnet.connectToSession(hostname, previouslyDiscoveredPassword);
   ns.scp("my_script.js", hostname);
@@ -230,7 +230,8 @@ export const serverSolver = async (ns, hostname) => {
 
     // TODO: handle other models of darknet servers here
 
-    // TODO: get recent server logs with `await ns.dnet.heartbleed(hostname)` for more detailed logging on failed auth attempts
+    // TODO: get recent server logs with `await ns.dnet.heartbleed(hostname)` for more detailed logging on
+    // failed auth attempts
 
     default:
       ns.tprint(`Unrecognized modelId: ${details.modelId}`);
