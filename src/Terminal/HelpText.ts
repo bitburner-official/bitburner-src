@@ -31,7 +31,7 @@ export const TerminalHelpText: string[] = [
   "    grow                             Spoof money in a server's bank account, increasing the amount available",
   "    hack                             Hack the current machine",
   "    help [COMMAND]                   Display this help text, or the help text for a command",
-  "    history [-c]                     Display the Terminal history",
+  "    history [-c]                     Display your Terminal command history",
   "    home                             Connect to home computer",
   "    hostname                         Display the hostname of the machine",
   "    ipaddr                           Display the IP address of the machine",
