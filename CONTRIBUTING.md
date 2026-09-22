@@ -231,6 +231,8 @@ the following rules:
   `MISC: Reticulated the splines`, where the first word must be capitalised
   and relate to the kind of change being implemented. Possible examples
   are UI, BUGFIX, SERVERS, API... You get the idea.
+- Avoid rebasing and force-pushing after your pull request has been reviewed. A rebase can make it much harder to track
+  what has changed. In some cases, maintainers even have to review the entire pull request from scratch.
 
 ## As a Documenter
 
