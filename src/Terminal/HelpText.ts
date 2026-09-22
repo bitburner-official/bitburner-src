@@ -1,5 +1,5 @@
 export const TerminalHelpText: string[] = [
-  "Type 'help [COMMAND]' to learn more about a command.",
+  "To learn more about a command, enter 'help [COMMAND]' in the Terminal.",
   " ",
   "In the list of commands below:",
   "- Square brackets [] mean something's optional. No brackets means it's mandatory. Curly brackets {} mean",
