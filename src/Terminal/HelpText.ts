@@ -20,8 +20,8 @@ export const TerminalHelpText: string[] = [
   "    cls                              Clear all text on the Terminal",
   "    connect HOSTNAME                 Connect to a remote server",
   "    cp SRC DEST                      Copy a file",
-  "    download FILE                    Download scripts or text files to your home computer",
-  "    upload DIRECTORY                 Upload scripts or text files from your home computer",
+  "    download FILE                    Download scripts or text files to your IRL computer",
+  "    upload DIRECTORY                 Upload scripts or text files from your IRL computer",
   "    expr EXPRESSION                  Evaluate a mathematical expression",
   "    free                             Check the machine's memory (RAM) usage",
   "    grep [OPTION]... PATTERN         Search for a PATTERN (string/regular expression) in each FILE and print",
@@ -56,7 +56,7 @@ export const TerminalHelpText: string[] = [
   "    unalias {ALIAS_NAME|--all}       Delete the specified alias",
   "    vim {FILE|GLOB}...               Open a script or text file in the Script Editor in Vim mode",
   "    weaken                           Reduce the security of the current machine",
-  "    wget URL TARGET_FILE             Retrieves code/text from a web server",
+  "    wget URL TARGET_FILE             Retrieves code/text from an IRL web server",
   " ",
 ];
 
