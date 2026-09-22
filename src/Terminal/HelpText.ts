@@ -25,7 +25,7 @@ export const TerminalHelpText: string[] = [
   "    expr EXPRESSION                  Evaluate a mathematical expression",
   "    free                             Check the machine's memory (RAM) usage",
   "    grep [OPTION]... PATTERN         Search for a PATTERN (string/regular expression) in each FILE and print",
-  "        [FILE]... [-O OUTFILE]          results to the Terminal",
+  "        [FILE]... [-O OUTFILE]          the results to the Terminal",
   "        [-m NUM] [-B NUM] [-A NUM]",
   "        [-C NUM]",
   "    grow                             Spoof money in a server's bank account, increasing the amount available",
