@@ -47,7 +47,7 @@ export const TerminalHelpText: string[] = [
   "    scan                             Print all immediately-available network connections",
   "    scan-analyze [DEPTH] [-a]        Print info for all servers up to the depth's nodes away",
   "    scp FILE... SERVER               Copy scripts, text files, or .lit files to a destination server",
-  "    sudov                            Show whether you have root access on this computer",
+  "    sudov                            Show whether you have root access to this machine",
   "    tail {PID|SCRIPT [ARGS...]}      Display dynamic logs for the specified script",
   "    top                              Display all running scripts and their RAM usage",
   "    unalias {ALIAS_NAME|--all}       Delete the specified alias",
