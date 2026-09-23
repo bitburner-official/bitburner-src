@@ -220,7 +220,7 @@ export const HelpTexts: Record<string, string[]> = {
   download: [
     "Usage: download FILE",
     " ",
-    "Downloads a script or text file to your computer (like your real life computer).",
+    "Downloads a script or text file to your your real-life computer.",
     " ",
     "You can also download all of your scripts/text files as a zip file using the following Terminal commands:",
     " ",
@@ -234,7 +234,7 @@ export const HelpTexts: Record<string, string[]> = {
   upload: [
     "Usage: upload DIR",
     " ",
-    "Uploads a directory from your computer into the game.",
+    "Uploads a directory from your real-life computer into the game.",
     " ",
     "Examples:",
     " ",
