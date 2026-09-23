@@ -3,7 +3,7 @@ export const TerminalHelpText: string[] = [
   " ",
   "In the list below:",
   "- [] means something's optional. No brackets means mandatory. {} means there's a mandatory choice (pick one).",
-  "- UPPERCASE indicates a placeholder value.",
+  "- UPPERCASE indicates a placeholder.",
   "- ... means you can pass in multiple arguments separated by spaces.",
   " ",
   '    alias [-g] [ALIAS_NAME="VALUE"]  Create or display aliases, aliases being shortcuts for Terminal commands',
