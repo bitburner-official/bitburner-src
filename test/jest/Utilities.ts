@@ -59,7 +59,7 @@ export function initGameEnvironment() {
 }
 
 export function setupBasicTestingEnvironment(
-  { purchaseHacknetServer, purchasePServer } = { purchasePServer: false, purchaseHacknetServer: false },
+  { purchaseCloudServer, purchaseHacknetServer } = { purchaseCloudServer: false, purchaseHacknetServer: false },
 ): void {
   workerScripts.clear();
   // We need to delete all servers before calling initForeignServers.
@@ -82,7 +82,7 @@ export function setupBasicTestingEnvironment(
   // Get some money.
   Player.money = 1e15;
 
-  if (purchasePServer) {
+  if (purchaseCloudServer) {
     purchaseServer("test-server-1", 2);
   }
   if (purchaseHacknetServer) {
