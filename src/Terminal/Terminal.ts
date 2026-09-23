@@ -12,6 +12,7 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
+import { tutorialScriptName } from "../ui/InteractiveTutorial/InteractiveTutorialRoot";
 import { parseCommand, parseCommands } from "./Parser";
 import { Settings } from "../Settings/Settings";
 import { createProgressBarText } from "../utils/helpers/createProgressBarText";
@@ -346,141 +347,100 @@ export class Terminal {
       if (n00dlesServ == null) {
         throw new Error("Could not get n00dles server");
       }
-      const errorMessageForBadCommand =
-        "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
+
+      const matchesCommandArray = (...rightCommand: (string | number)[]): boolean =>
+        commandArray.length === rightCommand.length && commandArray.every((e, idx) => e === rightCommand[idx]);
+
+      const errorMessageForBadCommand = "Wrong command. Try again.";
+
+      let isCorrect: boolean;
+      let incrementStep = true;
+
       switch (ITutorial.currStep) {
-        case iTutorialSteps.TerminalHelp:
-          if (commandArray.length === 1 && commandArray[0] === "help") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
+        case iTutorialSteps.TerminalScan:
+          isCorrect = matchesCommandArray("scan");
           break;
+
+        case iTutorialSteps.TerminalScanAnalyze:
+          isCorrect = matchesCommandArray("scan-analyze");
+          break;
+
+        case iTutorialSteps.TerminalScanAnalyze2:
+          isCorrect = matchesCommandArray("scan-analyze", 2);
+          break;
+
+        case iTutorialSteps.TerminalConnect:
+          isCorrect = matchesCommandArray("connect", "n00dles") || matchesCommandArray("connect", n00dlesServ.hostname);
+          break;
+
+        case iTutorialSteps.TerminalAnalyze:
+          isCorrect = matchesCommandArray("analyze");
+          break;
+
+        case iTutorialSteps.TerminalNuke:
+          isCorrect = matchesCommandArray("run", "NUKE.exe");
+          break;
+
+        case iTutorialSteps.TerminalManualHack:
+          isCorrect = matchesCommandArray("hack");
+          break;
+
+        case iTutorialSteps.TerminalHackWeakenGrowMechanics:
+          isCorrect = ["hack", "weaken", "grow"].some((c) => matchesCommandArray(c));
+          incrementStep = false;
+          break;
+
+        case iTutorialSteps.TerminalHome:
+          isCorrect = matchesCommandArray("home");
+          break;
+
+        case iTutorialSteps.TerminalNano:
+          isCorrect = matchesCommandArray("nano", tutorialScriptName);
+          break;
+
+        case iTutorialSteps.TerminalFree:
+          isCorrect = matchesCommandArray("free");
+          break;
+
+        case iTutorialSteps.TerminalRun:
+          isCorrect = matchesCommandArray("run", tutorialScriptName);
+          break;
+
+        case iTutorialSteps.TerminalTail:
+          isCorrect = matchesCommandArray("tail", tutorialScriptName);
+          break;
+
         case iTutorialSteps.TerminalLs:
-          if (commandArray.length === 1 && commandArray[0] === "ls") {
-            iTutorialNextStep();
+          if (matchesCommandArray("ls")) {
+            isCorrect = true;
           } else if (commandArray[0] === "1s") {
             this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
             return;
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            isCorrect = false;
           }
           break;
-        case iTutorialSteps.TerminalScan:
-          if (commandArray.length === 1 && commandArray[0] === "scan") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
+
+        case iTutorialSteps.TerminalScp:
+          isCorrect = matchesCommandArray("scp", tutorialScriptName, "n00dles");
           break;
-        case iTutorialSteps.TerminalScanAnalyze:
-          if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
+
+        case iTutorialSteps.TerminalHelp:
+          isCorrect = matchesCommandArray("help");
           break;
-        case iTutorialSteps.TerminalScanAnalyze2:
-          if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalConnect:
-          if (commandArray.length === 2) {
-            if (
-              commandArray[0] === "connect" &&
-              (commandArray[1] === "n00dles" || commandArray[1] === n00dlesServ.hostname)
-            ) {
-              iTutorialNextStep();
-            } else {
-              this.error("Wrong command! Try again!");
-              return;
-            }
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalAnalyze:
-          if (commandArray.length === 1 && commandArray[0] === "analyze") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalNuke:
-          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalManualHack:
-          if (commandArray.length === 1 && commandArray[0] === "hack") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalHackWeakenGrowMechanics:
-          if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalHome:
-          if (commandArray.length === 1 && commandArray[0] === "home") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalNano:
-          if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalFree:
-          if (commandArray.length === 1 && commandArray[0] === "free") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalRun:
-          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
-        case iTutorialSteps.TerminalTail:
-          if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
-            iTutorialNextStep();
-          } else {
-            this.error(errorMessageForBadCommand);
-            return;
-          }
-          break;
+
         default:
-          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
+          this.error("This tutorial step doesn't involve the terminal");
           return;
+      }
+
+      if (!isCorrect) {
+        this.error(errorMessageForBadCommand);
+        return;
+      }
+
+      if (incrementStep) {
+        iTutorialNextStep();
       }
     }
     /****************** END INTERACTIVE TUTORIAL ******************/

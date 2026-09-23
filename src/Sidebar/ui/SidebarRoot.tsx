@@ -127,26 +127,39 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   useCycleRerender();
 
   let flash: Page | null = null;
-  switch (ITutorial.currStep) {
-    case iTutorialSteps.CharacterGoToTerminalPage:
-    case iTutorialSteps.ActiveScriptsDescription:
-      flash = Page.Terminal;
-      break;
-    case iTutorialSteps.GoToCharacterStatsPage:
-      flash = Page.Stats;
-      break;
-    case iTutorialSteps.TerminalGoToActiveScriptsPage:
-      flash = Page.ActiveScripts;
-      break;
-    case iTutorialSteps.GoToHacknetNodesPage:
-      flash = Page.Hacknet;
-      break;
-    case iTutorialSteps.HacknetNodesGoToWorldPage:
-      flash = Page.City;
-      break;
-    case iTutorialSteps.WorldDescription:
-      flash = Page.Documentation;
-      break;
+  let incrementTutorialStep = false;
+  if (ITutorial.isRunning) {
+    switch (ITutorial.currStep) {
+      case iTutorialSteps.ScriptEditorEditAndSave:
+        if (props.page !== Page.ScriptEditor) {
+          flash = Page.ScriptEditor;
+        }
+        break;
+      case iTutorialSteps.ScriptEditorGoToTerminalPage:
+        flash = Page.Terminal;
+        incrementTutorialStep = true;
+        break;
+      case iTutorialSteps.TerminalGoToActiveScriptsPage:
+        flash = Page.ActiveScripts;
+        incrementTutorialStep = true;
+        break;
+      case iTutorialSteps.ActiveScriptsDescription:
+        flash = Page.Terminal;
+        incrementTutorialStep = true;
+        break;
+      case iTutorialSteps.TerminalGoToCharacterStatsPage:
+        flash = Page.Stats;
+        incrementTutorialStep = true;
+        break;
+      case iTutorialSteps.CharacterStatsGoToWorldPage:
+        flash = Page.City;
+        incrementTutorialStep = true;
+        break;
+      case iTutorialSteps.WorldDescription:
+        flash = Page.Documentation;
+        incrementTutorialStep = true;
+        break;
+    }
   }
 
   const augmentationCount = Player.queuedAugmentations.length;
@@ -194,11 +207,11 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       } else {
         throw new Error("Can't handle click on Page " + page);
       }
-      if (flash === page) {
+      if (flash === page && incrementTutorialStep) {
         iTutorialNextStep();
       }
     },
-    [flash],
+    [flash, incrementTutorialStep],
   );
 
   /**
