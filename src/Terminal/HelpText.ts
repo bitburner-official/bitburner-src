@@ -466,7 +466,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Run a program, a script, or a coding contract.",
     " ",
-    "The '[-t NUM_THREADS]', '[--tail]', `[--ram-override RAM_IN_GBs]`, [--temporary], and '[ARGS...]' arguments are",
+    "The '[-t NUM_THREADS]', '[--tail]', `[--ram-override RAM_IN_GB]`, [--temporary], and '[ARGS...]' arguments are",
     "only valid when running a script. The '-t' flag is used to indicate that the script should be run with the specified",
     "number of threads. If the flag is omitted, then the script will be run with a single thread by default. The",
     "'--tail' flag is used to immediately open a tail window for the script being ran. The '--ram-override' flag is used",

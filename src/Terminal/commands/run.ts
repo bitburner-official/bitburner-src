@@ -17,7 +17,9 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
   // Run a program or a script
   const arg = args.shift();
   if (!arg)
-    return Terminal.error("Usage: run FILE [-t NUM_THREADS] [--tail] [--ram-override RAM_IN_GB] [--temporary] [ARGS...]");
+    return Terminal.error(
+      "Usage: run FILE [-t NUM_THREADS] [--tail] [--ram-override RAM_IN_GB] [--temporary] [ARGS...]",
+    );
 
   const path = Terminal.getFilepath(String(arg));
   if (!path) return Terminal.error(`${arg} is not a valid filepath.`);
