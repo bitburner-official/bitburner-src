@@ -11,7 +11,7 @@ import type { WorkerScript } from "./WorkerScript";
  * more easily detect this error type and ignore it (if desired) or get a stack
  * trace to help them identify the root cause (if the behaviour is unexpected).
  *
- * IMPORTANT: the game engine should not base any of it's decisions on the data
+ * IMPORTANT: the game engine should not base any of its decisions on the data
  * carried in a ScriptDeath instance.
  *
  * This is because ScriptDeath instances are thrown through player code when a

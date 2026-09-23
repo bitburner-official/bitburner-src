@@ -10,7 +10,7 @@ export interface IConstructorParams {
 }
 
 export class GraftableAugmentation {
-  // The augmentation that this craftable corresponds to
+  // The augmentation that this graftable corresponds to
   augmentation: Augmentation;
 
   constructor(augmentation: Augmentation) {
