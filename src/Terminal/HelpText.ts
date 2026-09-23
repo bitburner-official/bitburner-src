@@ -583,7 +583,7 @@ export const HelpTexts: Record<string, string[]> = {
   wget: [
     "Usage: wget URL TARGET_FILE",
     " ",
-    "Retrieves data from a URL and downloads it to a file on the current server. The data can only be downloaded",
+    "Retrieve data from a URL and download it to a file on the current server. The data can only be downloaded",
     "to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css).",
     " ",
     "If the file already exists, it will be overwritten by this command.",
