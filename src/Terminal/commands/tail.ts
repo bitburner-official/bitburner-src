@@ -7,7 +7,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 export function tail(commandArray: (string | number | boolean)[], server: BaseServer): undefined {
   try {
     if (commandArray.length < 1) {
-      Terminal.error("Incorrect number of arguments. tail {SCRIPT [ARGS...]|PID}");
+      Terminal.error("Incorrect number of arguments. tail {PID|SCRIPT_NAME [ARGS...]}");
     } else if (typeof commandArray[0] === "string") {
       const [rawName, ...args] = commandArray;
       const path = Terminal.getFilepath(rawName);

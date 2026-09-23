@@ -5,7 +5,7 @@ import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFil
 
 export function check(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length < 1) {
-    Terminal.error(`Incorrect number of arguments. Usage: check check SCRIPT [ARGS...]`);
+    Terminal.error(`Incorrect number of arguments. Usage: check SCRIPT_NAME [ARGS...]`);
   } else {
     const scriptName = Terminal.getFilepath(args[0] + "");
     if (!scriptName) return Terminal.error(`Invalid filename: ${args[0]}`);

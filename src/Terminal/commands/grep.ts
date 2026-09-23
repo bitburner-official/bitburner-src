@@ -18,8 +18,7 @@ const YELLOW: string = "\x1b[33m";
 const WHITE: string = "\x1b[37m";
 
 const ERR = {
-  noArgs:
-    "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O OUTFILE] [-m NUM] [-B NUM] [-A NUM] [-C NUM]",
+  noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O OUTFILE] [-{m|A|B|C} NUM]...",
   noSearchArg:
     "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
   badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
