@@ -211,7 +211,12 @@ export const HelpTexts: Record<string, string[]> = {
     "a backdoor installed can be connected to. To see which servers can be connected to, use the 'scan' command.",
     " ",
   ],
-  cp: ["Usage: cp SOURCE DEST", " ", "Copy a file on this server. To copy a file to another server use scp.", " "],
+  cp: [
+    "Usage: cp SOURCE DESTINATION",
+    " ",
+    "Copy a file on this server. To copy a file to another server use scp.",
+    " ",
+  ],
   download: [
     "Usage: download FILE",
     " ",
