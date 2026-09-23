@@ -548,6 +548,13 @@ function Root(props: IProps): React.ReactElement {
     }
   }
 
+  function onCloseCurrentTab(): void {
+    const currIndex = currentTabIndex();
+    if (currIndex !== undefined) {
+      onTabClose(currIndex);
+    }
+  }
+
   function onUnmountEditor() {
     if (!currentScript) {
       return;
@@ -565,6 +572,7 @@ function Root(props: IProps): React.ReactElement {
     onSave: save,
     onOpenNextTab,
     onOpenPreviousTab,
+    onCloseCurrentTab,
   });
 
   useEffect(() => {
