@@ -62,7 +62,7 @@ const TemplatedHelpTexts: Record<string, (command: string) => string[]> = {
     return [
       `Usage: ${command} {FILE|GLOB}...`,
       ` `,
-      `Open up the specified files in the Script Editor. Only scripts (.js, .jsx, .ts, .tsx) `,
+      `Open up the specified file(s) in the Script Editor. Only scripts (.js, .jsx, .ts, .tsx) `,
       `or text files (.txt, .json, .css) can be edited using the Script Editor. If a file does not exist, a new `,
       `one will be created.`,
       ` `,
