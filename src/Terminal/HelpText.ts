@@ -2,7 +2,7 @@ export const TerminalHelpText: string[] = [
   "To learn more about a command, enter 'help [COMMAND]'.",
   " ",
   "In the list below:",
-  "- [] means it's optional. No brackets means mandatory. {} means a mandatory choice (pick one).",
+  "- [] means something's optional. No brackets means mandatory. {} means a mandatory choice (pick one).",
   "- UPPERCASE indicates a placeholder.",
   "- ... means you can pass in multiple arguments separated by spaces.",
   " ",
