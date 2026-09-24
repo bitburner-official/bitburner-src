@@ -78,7 +78,7 @@ Function that is used to try and hack servers to steal money and gain hacking ex
 
 A script can hack a server from anywhere. It does not need to be running on the same server to hack that server. For example, you can create a script that hacks the `foodnstuff` server and run that script on any server in the game.
 
-A successful `hack()` on a server will raise that server’s security level by 0.002 per thread. You can use [hackAnalyzeSecurity](./bitburner.ns.hackanalyzesecurity.md) to calculate the security increase for a number of threads.
+A successful `hack()` on a server will raise that server’s security level by 0.002 per "used thread". "used thread" may not be the same as opts.threads. Let's say you call this function with opts.threads = 1000, but it only takes 500 threads to hack all money in the targeted server. In this case, "used thread" is 500. You should use [hackAnalyzeSecurity](./bitburner.ns.hackanalyzesecurity.md) to calculate the security increase.
 
 ## Example
 
