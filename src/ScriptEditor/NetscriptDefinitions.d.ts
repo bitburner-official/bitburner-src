@@ -1141,7 +1141,9 @@ interface GangMemberAscension {
 interface SleeveBladeburnerTask extends BaseTask {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
-  actionName: string;
+  actionName:
+    | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionNameEnumType["InciteViolence"]>
+    | BladeburnerContractName;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;
