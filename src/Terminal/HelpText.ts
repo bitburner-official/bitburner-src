@@ -42,7 +42,7 @@ export const TerminalHelpText: string[] = [
   "    scan                             Print servers 1 node away",
   "    scan-analyze [DEPTH] [-a]        Print servers up to DEPTH nodes away",
   "    scp FILE... HOSTNAME             Copy script, text, or .lit files to server HOSTNAME",
-  "    sudov                            Print whether you have root access on this server",
+  "    sudov                            Print whether you have root access to this server",
   "    tail {PID|SCRIPT [ARGS...]}      Display live logs of a script",
   "    top                              List running scripts and their RAM usage",
   "    unalias {ALIAS_NAME|--all}       Delete an alias",
