@@ -13,7 +13,7 @@ import {
 import type { PlayerObject } from "./PlayerObject";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 
-import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
+import { applyAugmentation, getAugLevel } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CodingContractRewardType, ICodingContractReward } from "../../CodingContract/Contract";
@@ -415,14 +415,6 @@ export function reapplyAllAugmentations(this: PlayerObject, resetMultipliers = t
   }
 
   for (const playerAug of this.augmentations) {
-    const augName = playerAug.name;
-
-    if (augName == AugmentationName.NeuroFluxGovernor) {
-      for (let i = 0; i < playerAug.level; ++i) {
-        applyAugmentation(playerAug, true);
-      }
-      continue;
-    }
     applyAugmentation(playerAug, true);
   }
 
@@ -471,29 +463,16 @@ export function setBitNodeNumber(this: PlayerObject, n: number): void {
 }
 
 export function queueAugmentation(this: PlayerObject, name: AugmentationName): void {
-  if (name !== AugmentationName.NeuroFluxGovernor) {
-    for (const aug of this.queuedAugmentations) {
-      if (name === aug.name) {
-        AlertEvents.emit(`Tried to queue ${name} twice. This is a bug. Please contact developers.`);
-        return;
-      }
-    }
-
-    for (const aug of this.augmentations) {
-      if (aug.name === name) {
-        AlertEvents.emit(
-          `Tried to queue ${name}, but this augmentation was installed. This is a bug. Please contact developers.`,
-        );
-        return;
-      }
-    }
+  const currentLevel = getAugLevel(Augmentations[name]);
+  if (name !== AugmentationName.NeuroFluxGovernor && currentLevel !== 0) {
+    AlertEvents.emit(
+      `Tried to queue ${name}, but it was already installed or queued. This is a bug. Please contact developers.`,
+    );
+    return;
   }
 
   const queuedAugmentation = new PlayerOwnedAugmentation(name);
-  if (name === AugmentationName.NeuroFluxGovernor) {
-    const augmentation = Augmentations[name];
-    queuedAugmentation.level = augmentation.getNextLevel();
-  }
+  queuedAugmentation.level = currentLevel + 1;
   this.queuedAugmentations.push(queuedAugmentation);
 }
 
