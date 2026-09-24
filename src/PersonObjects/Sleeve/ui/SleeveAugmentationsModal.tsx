@@ -5,6 +5,7 @@ import { Modal } from "../../../ui/React/Modal";
 import { Sleeve } from "../Sleeve";
 import { useRerender } from "../../../ui/React/hooks";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { MultiplierArea } from "../../../ui/React/MultiplierArea";
 
 interface IProps {
   open: boolean;
@@ -38,6 +39,9 @@ export function SleeveAugmentationsModal(props: IProps): React.ReactElement {
           <br />
           Augmentations will appear below as they become available.
         </Typography>
+      </Container>
+      <Container component={Paper} disableGutters maxWidth="lg" sx={{ mx: 0, mb: 1, p: 1 }}>
+        {MultiplierArea(props.sleeve)}
       </Container>
       <PurchasableAugmentations
         augNames={availableAugs.map((aug) => aug.name)}
