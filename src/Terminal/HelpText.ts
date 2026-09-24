@@ -19,7 +19,7 @@ export const TerminalHelpText: string[] = [
   "    free                             Print this server's max RAM and usage",
   "    grep [OPTION...] PATTERN         Search each FILE for a PATTERN (a string or regex) and print the results",
   "         [FILE...] [-O OUTFILE]",
-  "         [-{m|A|B|C} NUM]...",
+  "         [-m NUM] [-{A|B|C} NUM]...",
   "    grow                             Spoof money in this server's bank account, increasing the amount available",
   "    hack                             Steal money from this server",
   "    help [COMMAND]                   Print this help text, or help text for COMMAND",
