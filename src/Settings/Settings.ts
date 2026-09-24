@@ -47,7 +47,7 @@ export const Settings = {
   RemoteFileApiPort: 0,
   /** Automatically reconnect to the Remote File API client after this delay. Set it 0 to disable. */
   RemoteFileApiReconnectionDelay: 0,
-  /** Use wss instead of ws when connecting to RFA clients */
+  /** Use wss instead of ws when connecting to RemoteFileApi clients */
   UseWssForRemoteFileApi: false,
   /** Whether to save the game when the player saves any file. */
   SaveGameOnFileSave: true,

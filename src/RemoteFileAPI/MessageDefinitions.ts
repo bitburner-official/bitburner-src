@@ -1,7 +1,7 @@
 import type { SaveData } from "../types";
 import type { BaseServer } from "../Server/BaseServer";
 
-abstract class RFAMessage {
+abstract class RemoteFileApiMessage {
   jsonrpc = "2.0";
   public id: number; // ID to keep track of request -> response interaction
 
@@ -10,7 +10,7 @@ abstract class RFAMessage {
   }
 }
 
-export class RFARequest extends RFAMessage {
+export class RemoteFileApiRequest extends RemoteFileApiMessage {
   public method: string;
   public params: FileDescription;
 
@@ -21,9 +21,9 @@ export class RFARequest extends RFAMessage {
   }
 }
 
-export abstract class RFAResponse extends RFAMessage {}
+export abstract class RemoteFileApiResponse extends RemoteFileApiMessage {}
 
-export class RFASuccessResponse extends RFAResponse {
+export class RemoteFileApiSuccessResponse extends RemoteFileApiResponse {
   public result: ResultType;
 
   constructor(obj: { id: number; result: ResultType }) {
@@ -32,7 +32,7 @@ export class RFASuccessResponse extends RFAResponse {
   }
 }
 
-export class RFAErrorResponse extends RFAResponse {
+export class RemoteFileApiErrorResponse extends RemoteFileApiResponse {
   public error: string;
 
   constructor(obj: { id: number; error: string }) {
@@ -46,7 +46,7 @@ type ResultType =
   | number
   | string[]
   | FileContent[]
-  | RFAServerData[]
+  | RemoteFileApiServerData[]
   | {
       identifier: string;
       binary: boolean;
@@ -84,7 +84,7 @@ export interface FileMetadata {
   btime: number;
 }
 
-export type RFAServerData = Pick<BaseServer, "hostname" | "hasAdminRights" | "purchasedByPlayer">;
+export type RemoteFileApiServerData = Pick<BaseServer, "hostname" | "hasAdminRights" | "purchasedByPlayer">;
 
 export function isFileData(p: unknown): p is FileData {
   const pf = p as FileData;
