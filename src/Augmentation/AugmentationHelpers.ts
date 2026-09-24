@@ -79,10 +79,10 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = fal
 export function updateMultipliers(mults: Multipliers, aug: PlayerOwnedAugmentation, previousLevel: number): void {
   const staticAugmentation = Augmentations[aug.name];
   if (aug.level <= previousLevel) {
-    throw new Error(`Trying to downlevel/relevel aug {aug.name} from {previousLevel} to {aug.level}!`);
+    throw new Error(`Trying to downlevel/relevel aug ${aug.name} from ${previousLevel} to ${aug.level}!`);
   }
   if (aug.name !== AugmentationName.NeuroFluxGovernor && (aug.level !== 1 || previousLevel !== 0)) {
-    throw new Error(`Unexpected levels for {aug.name}: Leveling {previousLevel} to {aug.level}!`);
+    throw new Error(`Unexpected levels for ${aug.name}: Leveling ${previousLevel} to ${aug.level}!`);
   }
   for (let i = previousLevel; i < aug.level; ++i) {
     mergeMultipliers(mults, staticAugmentation.mults);
