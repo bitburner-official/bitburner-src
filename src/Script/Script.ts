@@ -23,6 +23,10 @@ export class Script extends ContentFile {
   mod: LoadedModule | null = null;
   /** Scripts that directly import this one. Stored so we can invalidate these dependent scripts when this one is invalidated. */
   dependents = new Set<Script>();
+  /** Scripts directly imported by the RAM calculation graph. */
+  private readonly ramDependencies = new Set<Script>();
+  /** Scripts directly imported by the compiled module graph. */
+  private readonly moduleDependencies = new Set<Script>();
   /**
    * Scripts that we directly or indirectly import, including ourselves.
    * Stored only so RunningScript can use it, to translate urls in error messages.
@@ -50,18 +54,59 @@ export class Script extends ContentFile {
 
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
   invalidateModule(): void {
-    // Always clear ram usage
     this.ramUsage = null;
     this.ramUsageEntries.length = 0;
     this.ramCalculationError = null;
-    // Early return if there's already no URL
-    if (!this.mod) return;
     this.mod = null;
-    for (const dependent of this.dependents) dependent.invalidateModule();
-    this.dependents.clear();
     // This will be mutated in compile(), but is immutable after that.
     // (No RunningScripts can access this copy before that point).
     this.dependencies = new Map();
+
+    // Clear before recursing so circular dependency graphs terminate.
+    const dependents = [...this.dependents];
+    this.dependents.clear();
+    this.detachFromDependencies();
+
+    for (const dependent of dependents) dependent.invalidateModule();
+  }
+
+  /** Register one direct dependency discovered while compiling this script. */
+  registerModuleDependency(dependency: Script): void {
+    if (dependency === this) return;
+    this.moduleDependencies.add(dependency);
+    dependency.dependents.add(this);
+  }
+
+  /** Remove partially registered compile edges without disturbing a still-valid RAM graph. */
+  clearModuleDependencies(): void {
+    for (const dependency of this.moduleDependencies) {
+      if (!this.ramDependencies.has(dependency)) dependency.dependents.delete(this);
+    }
+    this.moduleDependencies.clear();
+  }
+
+  /** Replace RAM dependency edges only after a complete calculation succeeds. */
+  private replaceRamDependencies(dependencies: Set<Script>): void {
+    dependencies.delete(this);
+    for (const dependency of this.ramDependencies) {
+      if (!dependencies.has(dependency) && !this.moduleDependencies.has(dependency)) {
+        dependency.dependents.delete(this);
+      }
+    }
+    this.ramDependencies.clear();
+    for (const dependency of dependencies) {
+      this.ramDependencies.add(dependency);
+      dependency.dependents.add(this);
+    }
+  }
+
+  /** Detach all outgoing graph edges when this Script object is invalidated or removed. */
+  private detachFromDependencies(): void {
+    for (const dependency of new Set([...this.ramDependencies, ...this.moduleDependencies])) {
+      dependency.dependents.delete(this);
+    }
+    this.ramDependencies.clear();
+    this.moduleDependencies.clear();
   }
 
   /** Gets the ram usage, while also attempting to update it if it's currently null */
@@ -78,6 +123,21 @@ export class Script extends ContentFile {
   updateRamUsage(otherScripts: Map<ScriptFilePath, Script>): void {
     const ramCalc = calculateRamUsage(this.code, this.filename, this.server, otherScripts);
     if (ramCalc.cost && ramCalc.cost >= RamCostConstants.Base) {
+      const dependencyGraph = new Map<Script, Set<Script>>();
+      for (const path of ramCalc.parsedModules) {
+        const dependent = path === this.filename ? this : otherScripts.get(path);
+        if (dependent) dependencyGraph.set(dependent, new Set());
+      }
+      for (const [dependentPath, dependencyPath] of ramCalc.dependencyEdges) {
+        const dependent = dependentPath === this.filename ? this : otherScripts.get(dependentPath);
+        const dependency = dependencyPath === this.filename ? this : otherScripts.get(dependencyPath);
+        if (dependent && dependency && dependent !== dependency) {
+          const dependencies = dependencyGraph.get(dependent) ?? new Set<Script>();
+          dependencies.add(dependency);
+          dependencyGraph.set(dependent, dependencies);
+        }
+      }
+      for (const [dependent, dependencies] of dependencyGraph) dependent.replaceRamDependencies(dependencies);
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries;
       this.ramCalculationError = null;
