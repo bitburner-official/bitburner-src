@@ -29,7 +29,7 @@ export const TerminalHelpText: string[] = [
   "    ipaddr                           Print the IP address of this server",
   "    kill {PID|SCRIPT [ARGS...]}      Stop a running script on this server",
   "    killall                          Stop all running scripts on this server",
-  "    ls [DIR] [-l] [-h] [-g PATTERN]  List the contents of DIR, or the current directory",
+  "    ls [DIR] [-l] [-h] [-g PATTERN]  List the contents of the curent directory, or of DIR",
   "    lscpu                            Print the number of CPU cores on this server",
   "    mem SCRIPT [-t NUM_THREADS]      Print the RAM needed to run SCRIPT",
   "    mv SOURCE DESTINATION            Move or rename SOURCE to DESTINATION",
