@@ -1,11 +1,6 @@
 export const TerminalHelpText: string[] = [
   "To learn more about a command, enter 'help [COMMAND]'.",
   " ",
-  "In the list below:",
-  "- [] means optional. No brackets means mandatory. {} means a mandatory choice (pick one).",
-  "- UPPERCASE means a placeholder.",
-  "- ... means you can pass in multiple arguments separated by spaces.",
-  " ",
   '    alias [-g] [ALIAS_NAME="VALUE"]  Create or display aliases, aliases being shortcuts for Terminal commands',
   "    analyze                          Get information about the current machine",
   "    backdoor                         Install a backdoor on the current machine",
