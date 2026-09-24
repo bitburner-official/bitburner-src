@@ -7459,9 +7459,12 @@ export interface NS {
    *
    * This function returns the decimal number of script threads you need when running the hack command
    * to steal the specified amount of money from the target server.
-   * If hackAmount is less than zero or greater than the amount of money available on the server, your
-   * hacking level is below the required level for the target server, or if the target server's
-   * security level is equal to 100, then this function returns -1.
+   *
+   * If any of the following condtions are met, returns -1:
+   *  - `hackAmount` is less than, or equal to 0
+   *  - `hackAmount` is greater than the amount of money currently on the server
+   *  - player's hacking level is beloe the minimum required to hack
+   *  - server security level is equal to 100
    *
    *
    * @example
