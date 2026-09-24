@@ -20,7 +20,7 @@ export const TerminalHelpText: string[] = [
   "    grep [OPTION...] PATTERN         Search each FILE for a PATTERN (a string or regex) and print the results",
   "         [FILE...] [-O OUTFILE]",
   "         [-{m|A|B|C} NUM]...",
-  "    grow                             Spoof money in this server's bank account",
+  "    grow                             Spoof money in this server's bank account, increasing the money available",
   "    hack                             Steal money from this server",
   "    help [COMMAND]                   Print this help text, or help text for COMMAND",
   "    history [-c]                     Print your Terminal command history",
