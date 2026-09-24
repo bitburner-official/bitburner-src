@@ -6,7 +6,7 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 
 export function wget(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   if (args.length !== 2 || typeof args[0] !== "string" || typeof args[1] !== "string") {
-    Terminal.error("Incorrect usage of wget command. Usage: wget URL TARGET_FILE");
+    Terminal.error("Incorrect usage of wget command. Usage: wget URL FILE");
     return;
   }
 

@@ -32,7 +32,7 @@ export const TerminalHelpText: string[] = [
   "    ls [DIR] [-l] [-h] [-g PATTERN]  List the contents of DIR, or the current directory",
   "    lscpu                            Print the number of CPU cores on this server",
   "    mem SCRIPT [-t NUM_THREADS]      Print the RAM needed to run SCRIPT",
-  "    mv SOURCE DESTINATION            Move or rename FILE to DESTINATION",
+  "    mv SOURCE DESTINATION            Move or rename SOURCE to DESTINATION",
   "    nano {FILE|GLOB}...              Open files in the Script Editor",
   "    ps [{-g|--grep} PATTERN]         List all running scripts, optionally filtered by PATTERN",
   "    rm [OPTION...] FILE...           Delete files from this server",
@@ -48,7 +48,7 @@ export const TerminalHelpText: string[] = [
   "    unalias {ALIAS_NAME|--all}       Delete an alias",
   "    vim {FILE|GLOB}...               Open files in the Script Editor in Vim mode",
   "    weaken                           Reduce the security level of this server",
-  "    wget URL TARGET_FILE             Retrieve code or text from a real-world URL and save it as FILE",
+  "    wget URL FILE                    Retrieve code or text from a real-world URL and save it as FILE",
   " ",
 ];
 
@@ -576,7 +576,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
   ],
   wget: [
-    "Usage: wget URL TARGET_FILE",
+    "Usage: wget URL FILE",
     " ",
     "Retrieve data from a URL and download it to a file on the current server. The data can only be downloaded",
     "to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css).",
