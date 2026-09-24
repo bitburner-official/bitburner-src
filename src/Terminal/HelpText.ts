@@ -1,7 +1,7 @@
 export const TerminalHelpText: string[] = [
   "To learn more about a command, enter 'help [COMMAND]'.",
   " ",
-  '    alias [-g] [ALIAS_NAME="VALUE"]  Define or print aliases (shortcuts for Terminal commands)',
+  '    alias [-g] [ALIAS_NAME="VALUE"]  Create or print aliases (shortcuts for Terminal commands)',
   "    analyze                          Print information about this server",
   "    backdoor                         Install a backdoor on this server",
   "    buy {-l|-a|PROGRAM}              Purchase a Program on the Dark Web",
