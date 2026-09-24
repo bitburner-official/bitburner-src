@@ -30,7 +30,11 @@ export function AugmentationsDev(): React.ReactElement {
       return;
     }
     // NFG can be queued again to increase its level.
-    if (Player.hasAugmentation(augmentation) && augmentation !== AugmentationName.NeuroFluxGovernor) {
+    if (
+      Player.hasAugmentation(augmentation) &&
+      augmentation !== AugmentationName.NeuroFluxGovernor &&
+      augmentation !== AugmentationName.TheThread
+    ) {
       return;
     }
     Player.queueAugmentation(augmentation);
@@ -81,8 +85,10 @@ export function AugmentationsDev(): React.ReactElement {
 
   const options = Object.values(AugmentationName).filter(
     (augmentationName) =>
-      // NFG is always eligible.
-      !Player.hasAugmentation(augmentationName) || augmentationName === AugmentationName.NeuroFluxGovernor,
+      // NFG and The Thread are always eligible.
+      !Player.hasAugmentation(augmentationName) ||
+      augmentationName === AugmentationName.NeuroFluxGovernor ||
+      augmentationName === AugmentationName.TheThread,
   );
 
   return (
