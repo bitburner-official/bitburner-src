@@ -4,8 +4,14 @@ import { BaseServer } from "../../Server/BaseServer";
 import { Programs } from "../../Programs/Programs";
 import { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import { getRecordKeys } from "../../Types/Record";
+import { StdIO } from "../StdIO/StdIO";
 
-export function runProgram(path: ProgramFilePath, args: (string | number | boolean)[], server: BaseServer): undefined {
+export function runProgram(
+  path: ProgramFilePath,
+  args: (string | number | boolean)[],
+  server: BaseServer,
+  stdIO: StdIO,
+): undefined {
   // Check if you have the program on your computer. If you do, execute it, otherwise
   // display an error message
   const programLowered = path.toLowerCase();
@@ -14,10 +20,11 @@ export function runProgram(path: ProgramFilePath, args: (string | number | boole
   const realProgramName = getRecordKeys(Programs).find((name) => name.toLowerCase() === programLowered);
   const programPresentOnServer = server.programs.find((name) => name.toLowerCase() === programLowered);
   if (!realProgramName || (!Player.hasProgram(realProgramName) && !programPresentOnServer)) {
-    Terminal.error(
+    Terminal.fatal(
       `No such (js, jsx, ts, tsx, script, cct, or exe) file! (Only finished programs that exist on your home computer or scripts on ${server.hostname} can be run)`,
+      stdIO,
     );
     return;
   }
-  Programs[realProgramName].run(args.map(String), server);
+  Programs[realProgramName].run(args.map(String), server, stdIO);
 }

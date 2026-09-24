@@ -8,6 +8,7 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 import type { ContentFilePath } from "../../Paths/ContentFile";
 import { type Directory, invalidCharacters } from "../../Paths/Directory";
 import { pluralize } from "../../utils/I18nUtils";
+import { StdIO } from "../StdIO/StdIO";
 
 function pickDirectory(): Promise<FileList | null> {
   return new Promise((resolve) => {
@@ -39,7 +40,12 @@ function askConfirm(txt: string): Promise<boolean> {
   });
 }
 
-async function uploadAsync(destination: Directory, destForPrint: string, server: BaseServer) {
+async function uploadAsync(
+  destination: Directory,
+  destForPrint: string,
+  server: BaseServer,
+  stdIO: StdIO,
+): Promise<void> {
   const files = await pickDirectory();
   if (files === null || files.length === 0) {
     return;
@@ -126,27 +132,32 @@ async function uploadAsync(destination: Directory, destForPrint: string, server:
       text = await item.file.text();
     } catch (error) {
       console.error(error);
-      Terminal.error(`Failed to upload ${destFilePath}. Error: ${error}`);
+      Terminal.fatal(`Failed to upload ${destFilePath}. Error: ${error}`, stdIO);
       continue;
     }
     server.writeToContentFile(destFilePath, text);
   }
-  Terminal.print(`Successfully uploaded files to ${destForPrint}`);
+  Terminal.print(`Successfully uploaded files to ${destForPrint}`, stdIO);
 }
 
-export function upload(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
+export function upload(
+  args: (string | number | boolean)[],
+  server: BaseServer,
+  stdIO: StdIO,
+): undefined | TerminalAction {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
+    return Terminal.fatal("Incorrect usage of upload command. Usage: upload [dir]", stdIO);
   }
   const destinationInput = String(args[0]);
   const destination = Terminal.getDirectory(destinationInput);
   if (destination === null) {
-    return Terminal.error(`Could not resolve ${destinationInput} as a Directory`);
+    return Terminal.fatal(`Could not resolve ${destinationInput} as a Directory`, stdIO);
   }
   const destForPrint = destination === "" ? "/" : destination;
   return {
     cancel: () => {}, // Upload ignores cancellation
-    finished: uploadAsync(destination, destForPrint, server),
+    finished: uploadAsync(destination, destForPrint, server, stdIO),
     getProgressText: () => `Uploading files to ${destForPrint}`,
+    stdIO,
   };
 }

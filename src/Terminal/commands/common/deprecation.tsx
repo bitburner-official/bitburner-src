@@ -3,6 +3,7 @@ import { Terminal } from "../../../Terminal";
 import { Settings } from "../../../Settings/Settings";
 import { Typography } from "@mui/material";
 import { DocumentationLink } from "../../../ui/React/DocumentationLink";
+import { getTerminalStdIO } from "../../StdIO/RedirectIO";
 
 export function sendDeprecationNotice() {
   return Terminal.printRaw(
@@ -13,5 +14,6 @@ export function sendDeprecationNotice() {
       </DocumentationLink>{" "}
       to migrate your scripts to .js files instead.
     </Typography>,
+    getTerminalStdIO(),
   );
 }

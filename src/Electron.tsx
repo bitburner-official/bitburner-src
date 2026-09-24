@@ -19,6 +19,7 @@ import { CONSTANTS } from "./Constants";
 import { commitHash } from "./utils/helpers/commitHash";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { assertSaveData } from "./utils/TypeAssertion";
+import { getTerminalStdIO } from "./Terminal/StdIO/RedirectIO";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
@@ -66,14 +67,14 @@ function initAppNotifier(): void {
   const funcs = {
     terminal: (message: string, type?: string) => {
       const typesFn: Record<string, (s: string) => void> = {
-        info: (s) => Terminal.info(s),
-        warn: (s) => Terminal.warn(s),
-        error: (s) => Terminal.error(s),
-        success: (s) => Terminal.success(s),
+        info: (s) => Terminal.info(s, getTerminalStdIO()),
+        warn: (s) => Terminal.warn(s, getTerminalStdIO()),
+        error: (s) => Terminal.error(s, getTerminalStdIO()),
+        success: (s) => Terminal.success(s, getTerminalStdIO()),
       };
       let fn;
       if (type) fn = typesFn[type];
-      if (!fn) fn = (s: string) => Terminal.print(s);
+      if (!fn) fn = (s: string) => Terminal.print(s, getTerminalStdIO());
       fn.bind(Terminal)(message);
     },
     toast: (message: string, type: ToastVariant, duration = 2000) => SnackbarEvents.emit(message, type, duration),

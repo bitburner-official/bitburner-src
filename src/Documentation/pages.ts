@@ -65,7 +65,8 @@ import file62 from "./doc/en/programming/hackingalgorithms.md?raw";
 import file63 from "./doc/en/programming/learn.md?raw";
 import file64 from "./doc/en/programming/offlineandbonustime.md?raw";
 import file65 from "./doc/en/programming/remote_api.md?raw";
-import file66 from "./doc/en/programming/typescript_react.md?raw";
+import file66 from "./doc/en/programming/terminal_pipes_and_redirects.md?raw";
+import file67 from "./doc/en/programming/typescript_react.md?raw";
 
 import nsDoc_bitburner__valueof_md from "../../markdown/bitburner._valueof.md?raw";
 import nsDoc_bitburner_activefragment_chargedeffect_md from "../../markdown/bitburner.activefragment.chargedeffect.md?raw";
@@ -1051,6 +1052,7 @@ import nsDoc_bitburner_ns_getserverrequiredhackinglevel_md from "../../markdown/
 import nsDoc_bitburner_ns_getserversecuritylevel_md from "../../markdown/bitburner.ns.getserversecuritylevel.md?raw";
 import nsDoc_bitburner_ns_getserverusedram_md from "../../markdown/bitburner.ns.getserverusedram.md?raw";
 import nsDoc_bitburner_ns_getsharepower_md from "../../markdown/bitburner.ns.getsharepower.md?raw";
+import nsDoc_bitburner_ns_getstdin_md from "../../markdown/bitburner.ns.getstdin.md?raw";
 import nsDoc_bitburner_ns_gettotalscriptexpgain_md from "../../markdown/bitburner.ns.gettotalscriptexpgain.md?raw";
 import nsDoc_bitburner_ns_gettotalscriptincome_md from "../../markdown/bitburner.ns.gettotalscriptincome.md?raw";
 import nsDoc_bitburner_ns_getweakentime_md from "../../markdown/bitburner.ns.getweakentime.md?raw";
@@ -1696,7 +1698,8 @@ AllPages["en/programming/hackingalgorithms.md"] = file62;
 AllPages["en/programming/learn.md"] = file63;
 AllPages["en/programming/offlineandbonustime.md"] = file64;
 AllPages["en/programming/remote_api.md"] = file65;
-AllPages["en/programming/typescript_react.md"] = file66;
+AllPages["en/programming/terminal_pipes_and_redirects.md"] = file66;
+AllPages["en/programming/typescript_react.md"] = file67;
 
 AllPages["nsDoc/bitburner._valueof.md"] = nsDoc_bitburner__valueof_md;
 AllPages["nsDoc/bitburner.activefragment.chargedeffect.md"] = nsDoc_bitburner_activefragment_chargedeffect_md;
@@ -2682,6 +2685,7 @@ AllPages["nsDoc/bitburner.ns.getserverrequiredhackinglevel.md"] = nsDoc_bitburne
 AllPages["nsDoc/bitburner.ns.getserversecuritylevel.md"] = nsDoc_bitburner_ns_getserversecuritylevel_md;
 AllPages["nsDoc/bitburner.ns.getserverusedram.md"] = nsDoc_bitburner_ns_getserverusedram_md;
 AllPages["nsDoc/bitburner.ns.getsharepower.md"] = nsDoc_bitburner_ns_getsharepower_md;
+AllPages["nsDoc/bitburner.ns.getstdin.md"] = nsDoc_bitburner_ns_getstdin_md;
 AllPages["nsDoc/bitburner.ns.gettotalscriptexpgain.md"] = nsDoc_bitburner_ns_gettotalscriptexpgain_md;
 AllPages["nsDoc/bitburner.ns.gettotalscriptincome.md"] = nsDoc_bitburner_ns_gettotalscriptincome_md;
 AllPages["nsDoc/bitburner.ns.getweakentime.md"] = nsDoc_bitburner_ns_getweakentime_md;

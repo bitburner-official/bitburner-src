@@ -1,5 +1,6 @@
 import { trimQuotes } from "../utils/helpers/string";
 import { substituteAliases } from "../Alias";
+
 // Helper function to parse individual arguments into number/boolean/string as appropriate
 function parseArg(arg: string): string | number | boolean {
   if (arg === "true") return true;
@@ -32,4 +33,11 @@ export function parseCommand(command: string): (string | number | boolean)[] {
   const commandArgs = command.match(argDetection);
   if (!commandArgs) return [];
   return commandArgs.map(parseArg);
+}
+
+export function applyLastPidVariables(
+  command: (string | number | boolean)[],
+  pid: number | null,
+): (string | number | boolean)[] {
+  return command.map((c) => (c === "$!" ? pid ?? -1 : c));
 }
