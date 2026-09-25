@@ -1,7 +1,7 @@
 export const TerminalHelpText: string[] = [
-  "To learn more about a command, enter 'help [COMMAND]'.",
+  "Enter 'help COMMAND' for details about a command.",
   " ",
-  '    alias [-g] [ALIAS_NAME="VALUE"]  Define or print aliases (shortcuts for Terminal commands)',
+  '    alias [-g] [ALIAS_NAME="VALUE"]  Create or print aliases (shortcuts for Terminal commands)',
   "    analyze                          Print information about this server",
   "    backdoor                         Install a backdoor on this server",
   "    buy {-l|-a|PROGRAM}              Purchase a Program on the Dark Web",
@@ -19,7 +19,7 @@ export const TerminalHelpText: string[] = [
   "    free                             Print the max RAM and usage of this server",
   "    grep [OPTION...] PATTERN         Search each FILE for a PATTERN (a string or regex) and print the results",
   "         [FILE...] [-O OUTFILE]",
-  "         [-{m|A|B|C} NUM]...",
+  "         [-m NUM] [-{A|B|C} NUM]...",
   "    grow                             Spoof money in this server's bank account, increasing the amount available",
   "    hack                             Steal money from this server",
   "    help [COMMAND]                   Print this help text, or help text for COMMAND",
