@@ -36,7 +36,7 @@ export async function main(ns) {
 
 export function commonEditor(command: string, { args, server, vim }: EditorParameters, allowZeroFiles = false): void {
   if (args.length < 1 && !allowZeroFiles) {
-    return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
+    return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} {FILE|PATTERN}`);
   }
   const files = new Map<ScriptFilePath | TextFilePath, string>();
   let hasLegacyScript = false;
