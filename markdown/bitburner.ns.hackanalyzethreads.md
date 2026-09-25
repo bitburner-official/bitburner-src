@@ -74,7 +74,19 @@ The number of threads needed to hack the server for hackAmount money.
 
 RAM cost: 1 GB
 
-This function returns the decimal number of script threads you need when running the hack command to steal the specified amount of money from the target server. If hackAmount is less than zero, greater than the amount of money available on the server, or your hacking level is below the required level for the target server, then this function returns -1.
+This function returns the decimal number of script threads you need when running the hack command to steal the specified amount of money from the target server.
+
+Returns -1 if any of the following conditions are met:
+
+- `hackAmount` is less than 0.
+
+- `hackAmount` is greater than the available money on the server.
+
+- The available money on the server is 0.
+
+- The player's hacking level is below the minimum required level to hack.
+
+- The server security level is greater than or equal to 100.
 
 ## Example
 
