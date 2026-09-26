@@ -487,7 +487,7 @@ export const HelpTexts: Record<string, string[]> = {
     "Usage: scan",
     " ",
     "Prints all immediately-available network connection. This will print a list of all servers that you can currently connect ",
-    "to using the 'connect' Terminal command. This includes purchased servers.",
+    "to using the 'connect' Terminal command, including purchased servers.",
     " ",
   ],
   "scan-analyze": [
