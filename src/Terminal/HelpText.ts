@@ -308,7 +308,7 @@ export const HelpTexts: Record<string, string[]> = {
   grow: [
     "Usage: grow",
     " ",
-    "Spoof money in the current server, increasing the money available. Requires root access.",
+    "Spoof transactions in the current server, increasing the money available. Requires root access.",
     " ",
     "For more information, go to Documentation > Resources > NS API Documentation > Grow",
     " ",
