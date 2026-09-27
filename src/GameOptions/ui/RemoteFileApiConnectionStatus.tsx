@@ -14,9 +14,7 @@ import { RemoteFileApiConnectionEvents, RemoteFileApiConnectionSettingEvents } f
 import { useRerender } from "../../ui/React/hooks";
 
 export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
-  const [remoteFileApiConnectionStatus, setRemoteFileApiConnectionStatus] = useState(
-    getRemoteFileApiConnectionStatus(),
-  );
+  const [rfaConnectionStatus, setRemoteFileApiConnectionStatus] = useState(getRemoteFileApiConnectionStatus());
   const rerender = useRerender();
 
   useEffect(() => {
@@ -50,7 +48,7 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
     },
   };
 
-  const color = connectionConfig[remoteFileApiConnectionStatus].color;
+  const color = connectionConfig[rfaConnectionStatus].color;
 
   return (
     <Box style={{ display: "flex", flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
@@ -58,7 +56,7 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
         <IconButton
           aria-label="Remote API status"
           onClick={() => {
-            switch (remoteFileApiConnectionStatus) {
+            switch (rfaConnectionStatus) {
               case "Online":
                 closeRemoteFileApiConnection();
                 break;
@@ -79,9 +77,9 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
           <Tooltip
             title={
               <>
-                Remote API: {remoteFileApiConnectionStatus}
+                Remote API: {rfaConnectionStatus}
                 <br />
-                {connectionConfig[remoteFileApiConnectionStatus].instruction}
+                {connectionConfig[rfaConnectionStatus].instruction}
               </>
             }
           >
@@ -90,7 +88,7 @@ export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean 
         </IconButton>
       ) : (
         <Typography>
-          Status: <span style={{ color }}>{remoteFileApiConnectionStatus}</span>
+          Status: <span style={{ color }}>{rfaConnectionStatus}</span>
         </Typography>
       )}
     </Box>

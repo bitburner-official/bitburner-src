@@ -21,7 +21,7 @@ import { Settings } from "./Settings";
  * - Use non-http schemes in the hostname: "ftp://a.com"
  * - etc.
  */
-export function isValidRemoteFileApiHostname(hostname: string): Result {
+export function isValidConnectionHostname(hostname: string): Result {
   // Return a user-friendly error message.
   if (hostname === "") {
     return {
@@ -67,7 +67,7 @@ export function isValidRemoteFileApiHostname(hostname: string): Result {
  *
  * Port 0 is normally invalid, but it is used to disable RemoteFileApi, so this function treats 0 as valid.
  */
-export function isValidRemoteFileApiConnectionPortSetting(port: number): Result {
+export function isValidRFAConnectionPortSetting(port: number): Result {
   // 0 is not a valid port, but it is a valid configuration value that disables RemoteFileApi.
   if (!Number.isFinite(port) || port < 0 || port > 65535) {
     return { success: false, message: "Invalid port" };
@@ -79,7 +79,7 @@ export function isValidRemoteFileApiConnectionPortSetting(port: number): Result 
  * Checks whether the input is a valid RemoteFileApi port before starting a new connection.
  */
 export function isValidConnectionPort(port: number): boolean {
-  return isValidRemoteFileApiConnectionPortSetting(port).success && port !== 0;
+  return isValidRFAConnectionPortSetting(port).success && port !== 0;
 }
 
 export function loadSettings(saveString: string) {
@@ -133,10 +133,10 @@ export function loadSettings(saveString: string) {
    * The hostname and port of RemoteFileApi have not been validated properly, so the save data may contain invalid data.
    * In that case, we set them to the default value.
    */
-  if (!isValidRemoteFileApiHostname(Settings.RemoteFileApiAddress).success) {
+  if (!isValidConnectionHostname(Settings.RemoteFileApiAddress).success) {
     Settings.RemoteFileApiAddress = "localhost";
   }
-  if (!isValidRemoteFileApiConnectionPortSetting(Settings.RemoteFileApiPort).success) {
+  if (!isValidRFAConnectionPortSetting(Settings.RemoteFileApiPort).success) {
     Settings.RemoteFileApiPort = 0;
   }
 

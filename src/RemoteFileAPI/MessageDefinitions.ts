@@ -1,7 +1,7 @@
 import type { SaveData } from "../types";
 import type { BaseServer } from "../Server/BaseServer";
 
-abstract class RemoteFileApiMessage {
+abstract class RFAMessage {
   jsonrpc = "2.0";
   public id: number; // ID to keep track of request -> response interaction
 
@@ -10,7 +10,7 @@ abstract class RemoteFileApiMessage {
   }
 }
 
-export class RemoteFileApiRequest extends RemoteFileApiMessage {
+export class RemoteFileApiRequest extends RFAMessage {
   public method: string;
   public params: FileDescription;
 
@@ -21,7 +21,7 @@ export class RemoteFileApiRequest extends RemoteFileApiMessage {
   }
 }
 
-export abstract class RemoteFileApiResponse extends RemoteFileApiMessage {}
+export abstract class RemoteFileApiResponse extends RFAMessage {}
 
 export class RemoteFileApiSuccessResponse extends RemoteFileApiResponse {
   public result: ResultType;

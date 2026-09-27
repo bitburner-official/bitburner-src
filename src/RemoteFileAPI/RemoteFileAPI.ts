@@ -1,13 +1,13 @@
 import { Settings } from "../Settings/Settings";
-import { isValidRemoteFileApiHostname, isValidRemoteFileApiConnectionPortSetting } from "../Settings/SettingsUtils";
+import { isValidConnectionHostname, isValidRFAConnectionPortSetting } from "../Settings/SettingsUtils";
 import { Remote } from "./Remote";
 
 let server: Remote | undefined;
 
 export function canCreateNewRemoteFileApiConnection(): boolean {
   return (
-    isValidRemoteFileApiHostname(Settings.RemoteFileApiAddress).success &&
-    isValidRemoteFileApiConnectionPortSetting(Settings.RemoteFileApiPort).success
+    isValidConnectionHostname(Settings.RemoteFileApiAddress).success &&
+    isValidRFAConnectionPortSetting(Settings.RemoteFileApiPort).success
   );
 }
 
