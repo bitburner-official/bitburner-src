@@ -714,7 +714,7 @@ interface BitNodeMultipliers {
   CompanyWorkRepGain: number;
   /** Influences the amount of divisions a corporation can have at the same time. */
   CorporationDivisions: number;
-  /** Influences profits from corporation dividends and selling shares. */
+  /** Influences an exponential modifier to the profits from corporation dividends. */
   CorporationSoftcap: number;
   /** Influences the valuation of corporations created by the player. */
   CorporationValuation: number;
@@ -740,7 +740,7 @@ interface BitNodeMultipliers {
   FourSigmaMarketDataApiCost: number;
   /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
   FourSigmaMarketDataCost: number;
-  /** Influences the respect gain and money gain of your gang. */
+  /** Influences an exponential modifier to money and respect gain. */
   GangSoftcap: number;
   /** Percentage of unique augs that the gang has. */
   GangUniqueAugs: number;
@@ -771,7 +771,7 @@ interface BitNodeMultipliers {
   ManualHackMoney: number;
   /** Influence how much it costs to purchase a cloud server */
   CloudServerCost: number;
-  /** Influence how much it costs to purchase a cloud server */
+  /** Applies an exponential modifer to the cost of purchases and upgrades beyond 32GB */
   CloudServerSoftcap: number;
   /** Influences the maximum number of cloud servers you can have */
   CloudServerLimit: number;

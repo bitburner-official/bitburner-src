@@ -10,6 +10,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { Info } from "@mui/icons-material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
@@ -66,6 +67,7 @@ export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFea
       <AugmentationMults n={n} mults={mults} />
       <HackingMults n={n} mults={mults} />
       <CloudServersMults n={n} mults={mults} />
+      <HomeComputerRamCost n={n} mults={mults} />
       <StockMults n={n} mults={mults} />
       <CrimeMults n={n} mults={mults} />
       <DarknetMults n={n} mults={mults} />
@@ -104,7 +106,7 @@ const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
         <Tooltip title={<span>{value.tooltipText}</span>}>
           <span>
             {value.name}
-            <sup>(*)</sup>
+            <Info sx={{ ml: 1 }} color="info" fontSize="small" />
           </span>
         </Tooltip>
       ) : (
@@ -197,12 +199,12 @@ function FactionMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     FavorToDonateToFaction: { name: "Favor to Donate" },
     FactionWorkRepGain: {
-      name: "Work Reputation",
+      name: "Work Reputation Gain",
       color: Settings.theme.rep,
     },
     FactionWorkExpGain: { name: "Work Exp" },
     FactionPassiveRepGain: {
-      name: "Passive Rep",
+      name: "Passive Reputation Gain",
       color: Settings.theme.rep,
     },
   };
@@ -313,13 +315,21 @@ function CloudServersMults({ mults }: IMultsProps): React.ReactElement {
     CloudServerSoftcap: {
       name: "Softcap Cost",
       content: mults.CloudServerSoftcap.toFixed(3),
+      tooltipText: "Applies an exponential modifer to the cost of purchases and upgrades beyond 32GB.",
     },
-    CloudServerLimit: { name: "Server Limit" },
+    CloudServerLimit: { name: "Server Count Limit" },
     CloudServerMaxRam: { name: "Max RAM" },
-    HomeComputerRamCost: { name: "Home RAM Cost" },
   };
 
   return <BNMultTable sectionName="Cloud Servers" rowData={rows} mults={mults} />;
+}
+
+function HomeComputerRamCost({ mults }: IMultsProps): React.ReactElement {
+  const rows: IBNMultRows = {
+    HomeComputerRamCost: { name: "Home RAM Cost" },
+  };
+
+  return <BNMultTable sectionName="Home Computer" rowData={rows} mults={mults} />;
 }
 
 function InfiltrationMults({ mults }: IMultsProps): React.ReactElement {
@@ -367,7 +377,7 @@ function StanekMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsPro
   const rows: IBNMultRows = {
     StaneksGiftPowerMultiplier: { name: "Gift Power" },
     StaneksGiftExtraSize: {
-      name: "Base Size Modifier",
+      name: "Grid Size Modifier",
       content: `${mults.StaneksGiftExtraSize > defaultMultipliers.StaneksGiftExtraSize ? `+${extraSize}` : extraSize}`,
     },
   };
@@ -384,6 +394,7 @@ function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps
     GangSoftcap: {
       name: "Gang Softcap",
       content: mults.GangSoftcap.toFixed(3),
+      tooltipText: "Influences an exponential modifier to money and respect gain.",
     },
     GangUniqueAugs: { name: "Unique Augmentations" },
   };
@@ -411,9 +422,10 @@ function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMul
     CorporationSoftcap: {
       name: "Corporation Softcap",
       content: mults.CorporationSoftcap.toFixed(3),
+      tooltipText: "Influences an exponential modifier to the profits from corporation dividends.",
     },
     CorporationValuation: { name: "Valuation" },
-    CorporationDivisions: { name: "Division limit" },
+    CorporationDivisions: { name: "Division Limit" },
   };
 
   return <BNMultTable sectionName="Corporation" rowData={rows} mults={mults} />;
