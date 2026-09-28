@@ -289,17 +289,17 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ManualHackMoney: {
       name: "Money Gained From Manual Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much money the player actually gains when they hack a server via the terminal. This is different from "Stolen Money From Hack". When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.`,
+      tooltipText: `Influences how much of the money stolen when a player hacks a server using the Terminal is actually gained by the player. This is different from "Money Stolen By Hack". When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.`,
     },
     ScriptHackMoney: {
-      name: "Stolen Money From Hack",
+      name: "Money Stolen By Hack",
       color: Settings.theme.money,
       tooltipText: "Influences how much money is stolen from a server when the player performs a hack against it.",
     },
     ScriptHackMoneyGain: {
       name: "Money Gained From Script Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much money the player actually gains when a script hacks a server. This is different from "Stolen Money From Hack". When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
+      tooltipText: `Influences how much of the money stolen when a script hacks a server is actually gained by the player. This is different from "Money Stolen By Hack". When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
     },
   };
 
@@ -313,7 +313,7 @@ function CloudServersMults({ mults }: IMultsProps): React.ReactElement {
       content: mults.CloudServerCost.toFixed(3),
     },
     CloudServerSoftcap: {
-      name: "Softcap Cost",
+      name: "Cost Scaling",
       content: mults.CloudServerSoftcap.toFixed(3),
       tooltipText: "Applies an exponential modifer to the cost of purchases and upgrades beyond 32GB.",
     },
