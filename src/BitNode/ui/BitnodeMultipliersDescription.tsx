@@ -422,7 +422,7 @@ function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMul
     CorporationSoftcap: {
       name: "Corporation Softcap",
       content: mults.CorporationSoftcap.toFixed(3),
-      tooltipText: "Influences an exponential modifier applied to corporation dividends..",
+      tooltipText: "Influences an exponential modifier applied to corporation dividends.",
     },
     CorporationValuation: { name: "Valuation" },
     CorporationDivisions: { name: "Division Limit" },
