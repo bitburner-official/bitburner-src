@@ -771,7 +771,7 @@ interface BitNodeMultipliers {
   ManualHackMoney: number;
   /** Influence how much it costs to purchase a cloud server */
   CloudServerCost: number;
-  /** Applies an exponential modifer to the cost of purchases and upgrades beyond 32GB */
+  /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB */
   CloudServerSoftcap: number;
   /** Influences the maximum number of cloud servers you can have */
   CloudServerLimit: number;
