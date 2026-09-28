@@ -1,7 +1,7 @@
 import { CONSTANTS } from "../../Constants";
 
 import { Player } from "@player";
-import { Multipliers } from "../Multipliers";
+import type { Multipliers } from "@nsdefs";
 
 export const calculateEntropy = (stacks = 1): Multipliers => {
   const nerf = CONSTANTS.EntropyEffect ** stacks;
