@@ -700,7 +700,7 @@ interface BitNodeMultipliers {
   BladeburnerRank: number;
   /** Influences the cost of skill levels from Bladeburner. */
   BladeburnerSkillCost: number;
-  /** Influences how quickly the player's charisma level (not exp) scales */
+  /** Influences how quickly the player's charisma level (not exp) scales. */
   CharismaLevelMultiplier: number;
   /** Influences the experience gained for each ability when a player completes a class. */
   ClassGymExpGain: number;
@@ -722,13 +722,13 @@ interface BitNodeMultipliers {
   CrimeExpGain: number;
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney: number;
-  /** Influences the success chance of committing crimes */
+  /** Influences the success chance of committing crimes. */
   CrimeSuccessRate: number;
-  /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
+  /** Influences how many Augmentations you need in order to get invited to the Daedalus faction. */
   DaedalusAugsRequirement: number;
-  /** Influences how quickly the player's defense level (not exp) scales */
+  /** Influences how quickly the player's defense level (not exp) scales. */
   DefenseLevelMultiplier: number;
-  /** Influences how quickly the player's dexterity level (not exp) scales */
+  /** Influences how quickly the player's dexterity level (not exp) scales. */
   DexterityLevelMultiplier: number;
   /** Influences how much rep the player gains in each faction simply by being a member. */
   FactionPassiveRepGain: number;
@@ -736,9 +736,9 @@ interface BitNodeMultipliers {
   FactionWorkExpGain: number;
   /** Influences how much rep the player gains when performing work for a faction or donating to it. */
   FactionWorkRepGain: number;
-  /** Influences how much it costs to unlock the stock market's 4S Market Data API */
+  /** Influences how much it costs to unlock the stock market's 4S Market Data API. */
   FourSigmaMarketDataApiCost: number;
-  /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
+  /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API). */
   FourSigmaMarketDataCost: number;
   /** Influences an exponential modifier applied to money and respect gain. */
   GangSoftcap: number;
@@ -748,20 +748,20 @@ interface BitNodeMultipliers {
   GoPower: number;
   /** Influences the experienced gained when hacking a server. */
   HackExpGain: number;
-  /** Influences how quickly the player's hacking level (not experience) scales */
+  /** Influences how quickly the player's hacking level (not experience) scales. */
   HackingLevelMultiplier: number;
-  /** Influences how quickly the player's hack(), grow() and weaken() calls run */
+  /** Influences how quickly the player's hack(), grow() and weaken() calls run. */
   HackingSpeedMultiplier: number;
   /**
    * Influences how much money is produced by Hacknet Nodes.
-   * Influences the hash rate of Hacknet Servers (unlocked in BitNode-9)
+   * Influences the hash rate of Hacknet Servers (unlocked in BitNode-9).
    */
   HacknetNodeMoney: number;
-  /** Influences how much money it costs to upgrade your home computer's RAM */
+  /** Influences how much money it costs to upgrade your home computer's RAM. */
   HomeComputerRamCost: number;
   /** Influences how much money is gained when the player infiltrates a company. */
   InfiltrationMoney: number;
-  /** Influences how much rep the player can gain from factions when selling stolen documents and secrets */
+  /** Influences how much rep the player can gain from factions when selling stolen documents and secrets. */
   InfiltrationRep: number;
   /**
    * Influences how much money the player actually gains when they hack a server via the terminal. This is different
@@ -769,13 +769,13 @@ interface BitNodeMultipliers {
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;
-  /** Influence how much it costs to purchase a cloud server */
+  /** Influence how much it costs to purchase a cloud server. */
   CloudServerCost: number;
-  /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB */
+  /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB. */
   CloudServerSoftcap: number;
-  /** Influences the maximum number of cloud servers you can have */
+  /** Influences the maximum number of cloud servers you can have. */
   CloudServerLimit: number;
-  /** Influences the maximum allowed RAM for a cloud server */
+  /** Influences the maximum allowed RAM for a cloud server. */
   CloudServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction: number;
@@ -797,13 +797,13 @@ interface BitNodeMultipliers {
   ServerStartingSecurity: number;
   /** Influences the weaken amount per invocation against a server. */
   ServerWeakenRate: number;
-  /** Influences how quickly the player's strength level (not exp) scales */
+  /** Influences how quickly the player's strength level (not exp) scales. */
   StrengthLevelMultiplier: number;
   /** Influences the power of the gift. */
   StaneksGiftPowerMultiplier: number;
   /** Influences the size of the gift. */
   StaneksGiftExtraSize: number;
-  /** Influences the hacking skill required to backdoor the world daemon. */
+  /** Influences the hacking skill required to backdoor the World Daemon. */
   WorldDaemonDifficulty: number;
 }
 
