@@ -145,7 +145,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's charisma level (not exp) scales
+Influences how quickly the player's charisma level (not exp) scales.
 
 
 </td></tr>
@@ -183,7 +183,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a cloud server
+Influence how much it costs to purchase a cloud server.
 
 
 </td></tr>
@@ -202,7 +202,7 @@ number
 
 </td><td>
 
-Influences the maximum number of cloud servers you can have
+Influences the maximum number of cloud servers you can have.
 
 
 </td></tr>
@@ -221,7 +221,7 @@ number
 
 </td><td>
 
-Influences the maximum allowed RAM for a cloud server
+Influences the maximum allowed RAM for a cloud server.
 
 
 </td></tr>
@@ -240,7 +240,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a cloud server
+Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.
 
 
 </td></tr>
@@ -354,7 +354,7 @@ number
 
 </td><td>
 
-Influences profits from corporation dividends and selling shares.
+Influences an exponential modifier applied to corporation dividends.
 
 
 </td></tr>
@@ -430,7 +430,7 @@ number
 
 </td><td>
 
-Influences the success chance of committing crimes
+Influences the success chance of committing crimes.
 
 
 </td></tr>
@@ -449,7 +449,7 @@ number
 
 </td><td>
 
-Influences how many Augmentations you need in order to get invited to the Daedalus faction
+Influences how many Augmentations you need in order to get invited to the Daedalus faction.
 
 
 </td></tr>
@@ -468,7 +468,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's defense level (not exp) scales
+Influences how quickly the player's defense level (not exp) scales.
 
 
 </td></tr>
@@ -487,7 +487,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's dexterity level (not exp) scales
+Influences how quickly the player's dexterity level (not exp) scales.
 
 
 </td></tr>
@@ -582,7 +582,7 @@ number
 
 </td><td>
 
-Influences how much it costs to unlock the stock market's 4S Market Data API
+Influences how much it costs to unlock the stock market's 4S Market Data API.
 
 
 </td></tr>
@@ -601,7 +601,7 @@ number
 
 </td><td>
 
-Influences how much it costs to unlock the stock market's 4S Market Data (NOT API)
+Influences how much it costs to unlock the stock market's 4S Market Data (NOT API).
 
 
 </td></tr>
@@ -620,7 +620,7 @@ number
 
 </td><td>
 
-Influences the respect gain and money gain of your gang.
+Influences an exponential modifier applied to money and respect gain.
 
 
 </td></tr>
@@ -696,7 +696,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's hacking level (not experience) scales
+Influences how quickly the player's hacking level (not experience) scales.
 
 
 </td></tr>
@@ -715,7 +715,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's hack(), grow() and weaken() calls run
+Influences how quickly the player's hack(), grow() and weaken() calls run.
 
 
 </td></tr>
@@ -734,7 +734,7 @@ number
 
 </td><td>
 
-Influences how much money is produced by Hacknet Nodes. Influences the hash rate of Hacknet Servers (unlocked in BitNode-9)
+Influences how much money is produced by Hacknet Nodes. Influences the hash rate of Hacknet Servers (unlocked in BitNode-9).
 
 
 </td></tr>
@@ -753,7 +753,7 @@ number
 
 </td><td>
 
-Influences how much money it costs to upgrade your home computer's RAM
+Influences how much money it costs to upgrade your home computer's RAM.
 
 
 </td></tr>
@@ -791,7 +791,7 @@ number
 
 </td><td>
 
-Influences how much rep the player can gain from factions when selling stolen documents and secrets
+Influences how much rep the player can gain from factions when selling stolen documents and secrets.
 
 
 </td></tr>
@@ -1000,7 +1000,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's strength level (not exp) scales
+Influences how quickly the player's strength level (not exp) scales.
 
 
 </td></tr>
@@ -1019,7 +1019,7 @@ number
 
 </td><td>
 
-Influences the hacking skill required to backdoor the world daemon.
+Influences the hacking skill required to backdoor the World Daemon.
 
 
 </td></tr>

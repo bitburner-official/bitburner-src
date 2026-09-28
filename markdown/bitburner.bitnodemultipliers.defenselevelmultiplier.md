@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.DefenseLevelMultiplier property
 
-Influences how quickly the player's defense level (not exp) scales
+Influences how quickly the player's defense level (not exp) scales.
 
 **Signature:**
 

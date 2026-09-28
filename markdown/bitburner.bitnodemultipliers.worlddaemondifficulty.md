@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.WorldDaemonDifficulty property
 
-Influences the hacking skill required to backdoor the world daemon.
+Influences the hacking skill required to backdoor the World Daemon.
 
 **Signature:**
 

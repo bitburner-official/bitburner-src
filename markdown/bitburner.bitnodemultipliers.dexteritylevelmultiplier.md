@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.DexterityLevelMultiplier property
 
-Influences how quickly the player's dexterity level (not exp) scales
+Influences how quickly the player's dexterity level (not exp) scales.
 
 **Signature:**
 

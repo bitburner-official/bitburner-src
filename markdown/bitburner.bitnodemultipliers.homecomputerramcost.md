@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.HomeComputerRamCost property
 
-Influences how much money it costs to upgrade your home computer's RAM
+Influences how much money it costs to upgrade your home computer's RAM.
 
 **Signature:**
 

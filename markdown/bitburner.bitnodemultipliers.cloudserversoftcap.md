@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CloudServerSoftcap property
 
-Influence how much it costs to purchase a cloud server
+Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.
 
 **Signature:**
 

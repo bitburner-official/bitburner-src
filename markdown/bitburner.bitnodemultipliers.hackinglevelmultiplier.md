@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.HackingLevelMultiplier property
 
-Influences how quickly the player's hacking level (not experience) scales
+Influences how quickly the player's hacking level (not experience) scales.
 
 **Signature:**
 
