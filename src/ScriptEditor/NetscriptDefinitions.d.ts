@@ -714,7 +714,7 @@ interface BitNodeMultipliers {
   CompanyWorkRepGain: number;
   /** Influences the amount of divisions a corporation can have at the same time. */
   CorporationDivisions: number;
-  /** Influences an exponential modifier to the profits from corporation dividends. */
+  /** Influences an exponential modifier applied to corporation dividends. */
   CorporationSoftcap: number;
   /** Influences the valuation of corporations created by the player. */
   CorporationValuation: number;
