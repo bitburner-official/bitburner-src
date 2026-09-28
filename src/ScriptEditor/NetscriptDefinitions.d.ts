@@ -740,7 +740,7 @@ interface BitNodeMultipliers {
   FourSigmaMarketDataApiCost: number;
   /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
   FourSigmaMarketDataCost: number;
-  /** Influences an exponential modifier to money and respect gain. */
+  /** Influences an exponential modifier applied to money and respect gain. */
   GangSoftcap: number;
   /** Percentage of unique augs that the gang has. */
   GangUniqueAugs: number;
