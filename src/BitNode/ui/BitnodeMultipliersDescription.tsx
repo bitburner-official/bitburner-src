@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import Info from "@mui/icons-material/Info";
+import { Info } from "@mui/icons-material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
@@ -106,7 +106,7 @@ const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
         <Tooltip title={<span>{value.tooltipText}</span>}>
           <span>
             {value.name}
-            <Info sx={{ ml: 1 }} color="info" fontSize="small" />
+            <Info sx={{ ml: 1, fontSize: "1.125rem" }} color="info" />
           </span>
         </Tooltip>
       ) : (
@@ -315,8 +315,7 @@ function CloudServersMults({ mults }: IMultsProps): React.ReactElement {
     CloudServerSoftcap: {
       name: "Softcap Cost",
       content: mults.CloudServerSoftcap.toFixed(3),
-      tooltipText:
-        "Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.",
+      tooltipText: "Applies an exponential modifer to the cost of purchases and upgrades beyond 32GB.",
     },
     CloudServerLimit: { name: "Server Count Limit" },
     CloudServerMaxRam: { name: "Max RAM" },
@@ -395,7 +394,7 @@ function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps
     GangSoftcap: {
       name: "Gang Softcap",
       content: mults.GangSoftcap.toFixed(3),
-      tooltipText: "Influences an exponential modifier applied to money and respect gain.",
+      tooltipText: "Influences an exponential modifier to money and respect gain.",
     },
     GangUniqueAugs: { name: "Unique Augmentations" },
   };
@@ -423,7 +422,7 @@ function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMul
     CorporationSoftcap: {
       name: "Corporation Softcap",
       content: mults.CorporationSoftcap.toFixed(3),
-      tooltipText: "Influences an exponential modifier applied to corporation dividends.",
+      tooltipText: "Influences an exponential modifier to the profits from corporation dividends.",
     },
     CorporationValuation: { name: "Valuation" },
     CorporationDivisions: { name: "Division Limit" },
