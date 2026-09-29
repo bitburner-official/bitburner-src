@@ -289,7 +289,7 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ManualHackMoney: {
       name: "Money Gained From Manual Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much of the stolen money you actually gain when hacking a server using the Terminal. When you hack a server using the Terminal, an amount of money is removed from it. This multiplier determines how much of the removed money you actually gain.`,
+      tooltipText: `Influences how much of the stolen money you actually gain when hacking a server using the Terminal. When you hack a server using the Terminal, an amount of money is removed from the server. This multiplier determines how much of the removed money you actually gain.`,
     },
     ScriptHackMoney: {
       name: "Money Stolen By Hack",
@@ -299,7 +299,7 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ScriptHackMoneyGain: {
       name: "Money Gained From Script Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much of the stolen money you actually gain when hacking a server using a script. When you hack a server with a script, an amount of money is removed from it. This multiplier determines how much of the removed money you actually gain.`,
+      tooltipText: `Influences how much of the stolen money you actually gain when hacking a server using a script. When you hack a server with a script, an amount of money is removed from the server. This multiplier determines how much of the removed money you actually gain.`,
     },
   };
 
