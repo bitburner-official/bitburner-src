@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ScriptHackMoneyGain property
 
-Influences how much of the stolen money you actually gain when hacking a server using a script. When you hack a server with a script, an amount of money is removed from the server. This multiplier determines how much of the removed money you actually gain.
+Influences how much of the stolen money you actually gain when a script hacks a server. When you hack a server with a script, an amount of money is removed from the server. This multiplier determines how much of the removed money you actually gain.
 
 **Signature:**
 
