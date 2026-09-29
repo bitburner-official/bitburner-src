@@ -848,7 +848,7 @@ number
 
 </td><td>
 
-Influences how much of the stolen money you actually gain when a script hacks a server. When you hack a server with a script, an amount of money is removed from the server. This multiplier determines how much of the removed money you actually gain.
+Influences how much of the stolen money you actually gain when a script hacks a server. When a script hacks a server, an amount of money is removed from the server. This multiplier determines how much of the removed money you actually gain.
 
 
 </td></tr>
