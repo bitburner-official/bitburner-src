@@ -393,7 +393,7 @@ function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps
 
   const rows: IBNMultRows = {
     GangSoftcap: {
-      name: "Respect And Money Softcap",
+      name: "Respect And Money Gain Softcap",
       content: mults.GangSoftcap.toFixed(3),
       tooltipText: "Influences an exponential modifier applied to money and respect gain.",
     },
