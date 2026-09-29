@@ -121,9 +121,9 @@ export class BitNodeMultipliers {
   InfiltrationRep = 1;
 
   /**
-   * Influences how much of the stolen money you actually gain when hacking a server using the Terminal.
-   * When you hack a server using the Terminal, an amount of money is removed from the server.
-   * This multiplier determines how much of the removed money you actually gain.
+   * Influences how much money the player actually gains when they hack a server via the Terminal. This is different
+   * from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is
+   * reduced, but they do not gain that same amount.
    */
   ManualHackMoney = 1;
 
@@ -142,13 +142,13 @@ export class BitNodeMultipliers {
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction = 1;
 
-  /** Influences how much money is stolen from a server when you hack it. */
+  /** Influences how much money is stolen from a server when the player hacks it. */
   ScriptHackMoney = 1;
 
   /**
-   * Influences how much of the stolen money you actually gain when a script hacks a server.
-   * When a script hacks a server, an amount of money is removed from the server.
-   * This multiplier determines how much of the removed money you actually gain.
+   * Influences how much money the player actually gains when a script hacks a server. This is different from
+   * ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does
+   * not gain that same amount.
    */
   ScriptHackMoneyGain = 1;
 

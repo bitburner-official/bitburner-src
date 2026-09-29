@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ScriptHackMoney property
 
-Influences how much money is stolen from a server when you hack it.
+Influences how much money is stolen from a server when the player hacks it.
 
 **Signature:**
 
