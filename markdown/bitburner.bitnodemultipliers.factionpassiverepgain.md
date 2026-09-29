@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.FactionPassiveRepGain property
 
-Influences how much rep the player gains in each faction simply by being a member.
+Influences the rep the player gains with each faction simply by being a member.
 
 **Signature:**
 

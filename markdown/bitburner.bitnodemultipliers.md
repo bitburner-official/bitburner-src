@@ -50,7 +50,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's agility level (not exp) scales
+Influences how quickly the player's agility level (not exp) scales.
 
 
 </td></tr>
@@ -69,7 +69,7 @@ number
 
 </td><td>
 
-Influences the base cost to purchase an augmentation.
+Influences the base cost of purchasing an augmentation.
 
 
 </td></tr>
@@ -107,7 +107,7 @@ number
 
 </td><td>
 
-Influences how quickly the player can gain rank within Bladeburner.
+Influences how quickly the player gains Bladeburner rank.
 
 
 </td></tr>
@@ -126,7 +126,7 @@ number
 
 </td><td>
 
-Influences the cost of skill levels from Bladeburner.
+Influences the cost of Bladeburner skills.
 
 
 </td></tr>
@@ -164,7 +164,7 @@ number
 
 </td><td>
 
-Influences the experience gained for each ability when a player completes a class.
+Influences the experience gained from taking a class.
 
 
 </td></tr>
@@ -183,7 +183,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a cloud server.
+Influences the base cost of cloud server purchases and upgrades.
 
 
 </td></tr>
@@ -278,7 +278,7 @@ number
 
 </td><td>
 
-Influences the experience gained for each ability when the player completes working their job.
+Influences the experience gained from working for a company.
 
 
 </td></tr>
@@ -297,7 +297,7 @@ number
 
 </td><td>
 
-Influences how much money the player earns when completing working their job.
+Influences the money earned from working for a company.
 
 
 </td></tr>
@@ -316,7 +316,7 @@ number
 
 </td><td>
 
-Influences how much rep the player gains when performing work for a company.
+Influences the rep gained from working for a company.
 
 
 </td></tr>
@@ -392,7 +392,7 @@ number
 
 </td><td>
 
-Influences the base experience gained for each ability when the player commits a crime.
+Influences the experience gained from committing crimes.
 
 
 </td></tr>
@@ -411,7 +411,7 @@ number
 
 </td><td>
 
-Influences the base money gained when the player commits a crime.
+Influences the money gained from committing crimes.
 
 
 </td></tr>
@@ -449,7 +449,7 @@ number
 
 </td><td>
 
-Influences how many Augmentations you need in order to get invited to the Daedalus faction.
+Influences how many augmentations you need in order to get invited to the Daedalus faction.
 
 
 </td></tr>
@@ -506,7 +506,7 @@ number
 
 </td><td>
 
-Influences how much rep the player gains in each faction simply by being a member.
+Influences the rep the player gains with each faction simply by being a member.
 
 
 </td></tr>
@@ -525,7 +525,7 @@ number
 
 </td><td>
 
-Influences the experience gained for each ability when the player completes work for a Faction.
+Influences the experience gained from working for a faction.
 
 
 </td></tr>
@@ -544,7 +544,7 @@ number
 
 </td><td>
 
-Influences how much rep the player gains when performing work for a faction or donating to it.
+Influences the rep gained working for a faction or donating to it.
 
 
 </td></tr>
@@ -582,7 +582,7 @@ number
 
 </td><td>
 
-Influences how much it costs to unlock the stock market's 4S Market Data API.
+Influences the cost of unlocking stock market's 4S Market Data API.
 
 
 </td></tr>
@@ -601,7 +601,7 @@ number
 
 </td><td>
 
-Influences how much it costs to unlock the stock market's 4S Market Data (NOT API).
+Influences the cost of unlocking the stock market's 4S Market Data (not the API).
 
 
 </td></tr>
@@ -677,7 +677,7 @@ number
 
 </td><td>
 
-Influences the experienced gained when hacking a server.
+Influences the experience gained when hacking a server.
 
 
 </td></tr>
@@ -696,7 +696,7 @@ number
 
 </td><td>
 
-Influences how quickly the player's hacking level (not experience) scales.
+Influences how quickly the player's hacking level (not exp) scales.
 
 
 </td></tr>
@@ -753,7 +753,7 @@ number
 
 </td><td>
 
-Influences how much money it costs to upgrade your home computer's RAM.
+Influences the cost of upgrading your home computer's RAM.
 
 
 </td></tr>
@@ -772,7 +772,7 @@ number
 
 </td><td>
 
-Influences how much money is gained when the player infiltrates a company.
+Influences the money gained from infiltrating a company.
 
 
 </td></tr>
@@ -791,7 +791,7 @@ number
 
 </td><td>
 
-Influences how much rep the player can gain from factions when selling stolen documents and secrets.
+Influences the faction rep the player can gain from selling stolen documents and secrets.
 
 
 </td></tr>
@@ -810,7 +810,7 @@ number
 
 </td><td>
 
-Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.
+Influences how much of the stolen money you actually gain when hacking a server using the Terminal. When you hack a server using the Terminal, an amount of money is removed from it. This multiplier determines how much of the removed money you actually gain.
 
 
 </td></tr>
@@ -829,7 +829,7 @@ number
 
 </td><td>
 
-Influences how much money is stolen from a server when the player performs a hack against it.
+Influences how much money is stolen from a server when you hack it.
 
 
 </td></tr>
@@ -848,7 +848,7 @@ number
 
 </td><td>
 
-Influences how much money the player actually gains when a script hacks a server. This is different from ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.
+Influences how much of the stolen money you actually gain when hacking a server using a script. When you hack a server with a script, an amount of money is removed from it. This multiplier determines how much of the removed money you actually gain.
 
 
 </td></tr>
@@ -867,7 +867,7 @@ number
 
 </td><td>
 
-Influences the growth percentage per cycle against a server.
+Influences the growth percentage per cycle.
 
 
 </td></tr>
@@ -943,7 +943,7 @@ number
 
 </td><td>
 
-Influences the weaken amount per invocation against a server.
+Influences the server weaken amount per cycle.
 
 
 </td></tr>

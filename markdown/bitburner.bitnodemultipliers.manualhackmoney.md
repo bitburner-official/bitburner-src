@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ManualHackMoney property
 
-Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.
+Influences how much of the stolen money you actually gain when hacking a server using the Terminal. When you hack a server using the Terminal, an amount of money is removed from it. This multiplier determines how much of the removed money you actually gain.
 
 **Signature:**
 

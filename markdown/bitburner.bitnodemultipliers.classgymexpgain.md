@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ClassGymExpGain property
 
-Influences the experience gained for each ability when a player completes a class.
+Influences the experience gained from taking a class.
 
 **Signature:**
 

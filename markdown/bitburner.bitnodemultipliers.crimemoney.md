@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CrimeMoney property
 
-Influences the base money gained when the player commits a crime.
+Influences the money gained from committing crimes.
 
 **Signature:**
 

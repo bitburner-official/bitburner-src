@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CrimeExpGain property
 
-Influences the base experience gained for each ability when the player commits a crime.
+Influences the experience gained from committing crimes.
 
 **Signature:**
 

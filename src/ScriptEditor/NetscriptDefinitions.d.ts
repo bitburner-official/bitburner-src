@@ -690,27 +690,27 @@ export interface Server {
  * @public
  */
 interface BitNodeMultipliers {
-  /** Influences how quickly the player's agility level (not exp) scales */
+  /** Influences how quickly the player's agility level (not exp) scales. */
   AgilityLevelMultiplier: number;
-  /** Influences the base cost to purchase an augmentation. */
+  /** Influences the base cost of purchasing an augmentation. */
   AugmentationMoneyCost: number;
   /** Influences the base rep the player must have with a faction to purchase an augmentation. */
   AugmentationRepCost: number;
-  /** Influences how quickly the player can gain rank within Bladeburner. */
+  /** Influences how quickly the player gains Bladeburner rank. */
   BladeburnerRank: number;
-  /** Influences the cost of skill levels from Bladeburner. */
+  /** Influences the cost of Bladeburner skills. */
   BladeburnerSkillCost: number;
   /** Influences how quickly the player's charisma level (not exp) scales. */
   CharismaLevelMultiplier: number;
-  /** Influences the experience gained for each ability when a player completes a class. */
+  /** Influences the experience gained from taking a class. */
   ClassGymExpGain: number;
   /** Influences the amount of money gained from completing Coding Contracts. */
   CodingContractMoney: number;
-  /** Influences the experience gained for each ability when the player completes working their job. */
+  /** Influences the experience gained from working for a company. */
   CompanyWorkExpGain: number;
-  /** Influences how much money the player earns when completing working their job. */
+  /** Influences the money earned from working for a company. */
   CompanyWorkMoney: number;
-  /** Influences how much rep the player gains when performing work for a company. */
+  /** Influences the rep gained from working for a company. */
   CompanyWorkRepGain: number;
   /** Influences the amount of divisions a corporation can have at the same time. */
   CorporationDivisions: number;
@@ -718,27 +718,27 @@ interface BitNodeMultipliers {
   CorporationSoftcap: number;
   /** Influences the valuation of corporations created by the player. */
   CorporationValuation: number;
-  /** Influences the base experience gained for each ability when the player commits a crime. */
+  /** Influences the experience gained from committing crimes. */
   CrimeExpGain: number;
-  /** Influences the base money gained when the player commits a crime. */
+  /** Influences the money gained from committing crimes. */
   CrimeMoney: number;
   /** Influences the success chance of committing crimes. */
   CrimeSuccessRate: number;
-  /** Influences how many Augmentations you need in order to get invited to the Daedalus faction. */
+  /** Influences how many augmentations you need in order to get invited to the Daedalus faction. */
   DaedalusAugsRequirement: number;
   /** Influences how quickly the player's defense level (not exp) scales. */
   DefenseLevelMultiplier: number;
   /** Influences how quickly the player's dexterity level (not exp) scales. */
   DexterityLevelMultiplier: number;
-  /** Influences how much rep the player gains in each faction simply by being a member. */
+  /** Influences the rep the player gains with each faction simply by being a member. */
   FactionPassiveRepGain: number;
-  /** Influences the experience gained for each ability when the player completes work for a Faction. */
+  /** Influences the experience gained from working for a faction. */
   FactionWorkExpGain: number;
-  /** Influences how much rep the player gains when performing work for a faction or donating to it. */
+  /** Influences the rep gained working for a faction or donating to it. */
   FactionWorkRepGain: number;
-  /** Influences how much it costs to unlock the stock market's 4S Market Data API. */
+  /** Influences the cost of unlocking stock market's 4S Market Data API. */
   FourSigmaMarketDataApiCost: number;
-  /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API). */
+  /** Influences the cost of unlocking the stock market's 4S Market Data (not the API). */
   FourSigmaMarketDataCost: number;
   /** Influences an exponential modifier applied to money and respect gain. */
   GangSoftcap: number;
@@ -746,9 +746,9 @@ interface BitNodeMultipliers {
   GangUniqueAugs: number;
   /** Percentage multiplier on the effect of the IPvGO rewards  **/
   GoPower: number;
-  /** Influences the experienced gained when hacking a server. */
+  /** Influences the experience gained when hacking a server. */
   HackExpGain: number;
-  /** Influences how quickly the player's hacking level (not experience) scales. */
+  /** Influences how quickly the player's hacking level (not exp) scales. */
   HackingLevelMultiplier: number;
   /** Influences how quickly the player's hack(), grow() and weaken() calls run. */
   HackingSpeedMultiplier: number;
@@ -757,19 +757,19 @@ interface BitNodeMultipliers {
    * Influences the hash rate of Hacknet Servers (unlocked in BitNode-9).
    */
   HacknetNodeMoney: number;
-  /** Influences how much money it costs to upgrade your home computer's RAM. */
+  /** Influences the cost of upgrading your home computer's RAM. */
   HomeComputerRamCost: number;
-  /** Influences how much money is gained when the player infiltrates a company. */
+  /** Influences the money gained from infiltrating a company. */
   InfiltrationMoney: number;
-  /** Influences how much rep the player can gain from factions when selling stolen documents and secrets. */
+  /** Influences the faction rep the player can gain from selling stolen documents and secrets. */
   InfiltrationRep: number;
   /**
-   * Influences how much money the player actually gains when they hack a server via the terminal. This is different
-   * from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is
-   * reduced, but they do not gain that same amount.
+   * Influences how much of the stolen money you actually gain when hacking a server using the Terminal.
+   * When you hack a server using the Terminal, an amount of money is removed from it.
+   * This multiplier determines how much of the removed money you actually gain.
    */
   ManualHackMoney: number;
-  /** Influence how much it costs to purchase a cloud server. */
+  /** Influences the base cost of cloud server purchases and upgrades. */
   CloudServerCost: number;
   /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB. */
   CloudServerSoftcap: number;
@@ -779,15 +779,15 @@ interface BitNodeMultipliers {
   CloudServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction: number;
-  /** Influences how much money is stolen from a server when the player performs a hack against it. */
+  /** Influences how much money is stolen from a server when you hack it. */
   ScriptHackMoney: number;
   /**
-   * Influences how much money the player actually gains when a script hacks a server. This is different from
-   * ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does
-   * not gain that same amount.
+   * Influences how much of the stolen money you actually gain when hacking a server using a script.
+   * When you hack a server with a script, an amount of money is removed from it.
+   * This multiplier determines how much of the removed money you actually gain.
    */
   ScriptHackMoneyGain: number;
-  /** Influences the growth percentage per cycle against a server. */
+  /** Influences the growth percentage per cycle. */
   ServerGrowthRate: number;
   /** Influences the maximum money that a server can grow to. */
   ServerMaxMoney: number;
@@ -795,7 +795,7 @@ interface BitNodeMultipliers {
   ServerStartingMoney: number;
   /** Influences the initial security level (hackDifficulty) of a server. */
   ServerStartingSecurity: number;
-  /** Influences the weaken amount per invocation against a server. */
+  /** Influences the server weaken amount per cycle. */
   ServerWeakenRate: number;
   /** Influences how quickly the player's strength level (not exp) scales. */
   StrengthLevelMultiplier: number;

@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.BladeburnerSkillCost property
 
-Influences the cost of skill levels from Bladeburner.
+Influences the cost of Bladeburner skills.
 
 **Signature:**
 

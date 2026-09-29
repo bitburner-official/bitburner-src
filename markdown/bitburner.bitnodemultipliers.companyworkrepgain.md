@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CompanyWorkRepGain property
 
-Influences how much rep the player gains when performing work for a company.
+Influences the rep gained from working for a company.
 
 **Signature:**
 

@@ -315,7 +315,8 @@ function CloudServersMults({ mults }: IMultsProps): React.ReactElement {
     CloudServerSoftcap: {
       name: "Cost Scaling",
       content: mults.CloudServerSoftcap.toFixed(3),
-      tooltipText: "Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.",
+      tooltipText:
+        "Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.",
     },
     CloudServerLimit: { name: "Server Count Limit" },
     CloudServerMaxRam: { name: "Max RAM" },
