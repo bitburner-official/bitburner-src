@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CompanyWorkExpGain property
 
-Influences the experience gained from working for a company.
+Influences the experience gained for each ability when the player completes working their job.
 
 **Signature:**
 

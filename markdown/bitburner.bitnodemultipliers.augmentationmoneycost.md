@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.AugmentationMoneyCost property
 
-Influences the base cost of purchasing an augmentation.
+Influences the base cost to purchase an augmentation.
 
 **Signature:**
 

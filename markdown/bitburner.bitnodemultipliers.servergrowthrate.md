@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ServerGrowthRate property
 
-Influences the growth percentage per cycle.
+Influences the growth percentage per cycle against a server.
 
 **Signature:**
 

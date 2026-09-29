@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CharismaLevelMultiplier property
 
-Influences how quickly the player's charisma level (not exp) scales.
+Influences how quickly the player's charisma level (not exp) scales
 
 **Signature:**
 

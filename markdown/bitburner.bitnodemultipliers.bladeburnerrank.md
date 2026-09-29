@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.BladeburnerRank property
 
-Influences how quickly the player gains Bladeburner rank.
+Influences how quickly the player can gain rank within Bladeburner.
 
 **Signature:**
 

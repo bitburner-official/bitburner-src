@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.FactionWorkExpGain property
 
-Influences the experience gained from working for a faction.
+Influences the experience gained for each ability when the player completes work for a Faction.
 
 **Signature:**
 

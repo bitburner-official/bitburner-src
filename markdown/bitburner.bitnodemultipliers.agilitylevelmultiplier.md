@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.AgilityLevelMultiplier property
 
-Influences how quickly the player's agility level (not exp) scales.
+Influences how quickly the player's agility level (not exp) scales
 
 **Signature:**
 

@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.InfiltrationRep property
 
-Influences the faction rep the player can gain from selling stolen documents and secrets.
+Influences how much rep the player can gain from factions when selling stolen documents and secrets
 
 **Signature:**
 

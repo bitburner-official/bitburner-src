@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.StrengthLevelMultiplier property
 
-Influences how quickly the player's strength level (not exp) scales.
+Influences how quickly the player's strength level (not exp) scales
 
 **Signature:**
 

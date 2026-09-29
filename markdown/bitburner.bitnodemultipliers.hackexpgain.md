@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.HackExpGain property
 
-Influences the experience gained when hacking a server.
+Influences the experienced gained when hacking a server.
 
 **Signature:**
 

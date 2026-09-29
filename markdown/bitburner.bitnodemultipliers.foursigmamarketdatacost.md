@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.FourSigmaMarketDataCost property
 
-Influences the cost of unlocking the stock market's 4S Market Data (not the API).
+Influences how much it costs to unlock the stock market's 4S Market Data (NOT API)
 
 **Signature:**
 

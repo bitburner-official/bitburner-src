@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.InfiltrationMoney property
 
-Influences the money gained from infiltrating a company.
+Influences how much money is gained when the player infiltrates a company.
 
 **Signature:**
 

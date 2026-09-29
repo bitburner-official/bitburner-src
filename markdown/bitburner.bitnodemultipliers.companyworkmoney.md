@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CompanyWorkMoney property
 
-Influences the money earned from working for a company.
+Influences how much money the player earns when completing working their job.
 
 **Signature:**
 

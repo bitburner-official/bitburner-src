@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CrimeSuccessRate property
 
-Influences the success chance of committing crimes.
+Influences the success chance of committing crimes
 
 **Signature:**
 

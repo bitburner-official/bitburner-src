@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.HackingSpeedMultiplier property
 
-Influences how quickly the player's hack(), grow() and weaken() calls run.
+Influences how quickly the player's hack(), grow() and weaken() calls run
 
 **Signature:**
 

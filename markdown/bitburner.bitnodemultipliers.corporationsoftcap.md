@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CorporationSoftcap property
 
-Influences an exponential modifier applied to corporation dividends.
+Influences profits from corporation dividends and selling shares.
 
 **Signature:**
 

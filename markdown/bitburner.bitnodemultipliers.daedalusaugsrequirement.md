@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.DaedalusAugsRequirement property
 
-Influences how many augmentations you need in order to get invited to the Daedalus faction.
+Influences how many Augmentations you need in order to get invited to the Daedalus faction
 
 **Signature:**
 

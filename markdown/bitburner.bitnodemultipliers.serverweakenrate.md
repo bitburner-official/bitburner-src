@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ServerWeakenRate property
 
-Influences the server weaken amount per cycle.
+Influences the weaken amount per invocation against a server.
 
 **Signature:**
 
