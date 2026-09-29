@@ -299,7 +299,7 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ScriptHackMoneyGain: {
       name: "Money Gained From Script Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much money the player actually gains when a script hacks a server. This is different from ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
+      tooltipText: `Influences how much money the player actually gains when a script hacks a server. This is different from "Stolen Money From Hack". When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
     },
   };
 
