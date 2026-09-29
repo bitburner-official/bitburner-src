@@ -810,7 +810,7 @@ number
 
 </td><td>
 
-Influences how much money the player actually gains when they hack a server via the Terminal. This is different from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.
+Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.
 
 
 </td></tr>
