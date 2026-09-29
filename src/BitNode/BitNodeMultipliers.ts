@@ -27,7 +27,7 @@ export class BitNodeMultipliers {
   /** Influences the experience gained from taking a class. */
   ClassGymExpGain = 1;
 
-  /** Influences the amount of money gained from completing Coding Contracts. */
+  /** Influences the money gained from completing Coding Contracts. */
   CodingContractMoney = 1;
 
   /** Influences the experience gained from working for a company. */
