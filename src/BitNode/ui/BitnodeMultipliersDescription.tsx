@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Info } from "@mui/icons-material";
+import Info from "@mui/icons-material/Info";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
@@ -106,7 +106,7 @@ const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
         <Tooltip title={<span>{value.tooltipText}</span>}>
           <span>
             {value.name}
-            <Info sx={{ ml: 1, fontSize: "1.125rem" }} color="info" />
+            <Info sx={{ ml: 1 }} color="info" fontSize="small" />
           </span>
         </Tooltip>
       ) : (
@@ -289,17 +289,17 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ManualHackMoney: {
       name: "Money Gained From Manual Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much of the money stolen when a player hacks a server using the Terminal is actually gained by the player. This is different from "Money Stolen By Hack". When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.`,
+      tooltipText: `Influences how much of the stolen money you actually gain when hacking a server using the Terminal. When you hack a server using the Terminal, an amount of money is removed from it. This multiplier determines how much of the removed money you actually gain.`,
     },
     ScriptHackMoney: {
       name: "Money Stolen By Hack",
       color: Settings.theme.money,
-      tooltipText: "Influences how much money is stolen from a server when the player performs a hack against it.",
+      tooltipText: "Influences how much money is stolen from a server when you hack it.",
     },
     ScriptHackMoneyGain: {
       name: "Money Gained From Script Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much of the money stolen when a script hacks a server is actually gained by the player. This is different from "Money Stolen By Hack". When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
+      tooltipText: `Influences how much of the stolen money you actually gain when hacking a server using a script. When you hack a server with a script, an amount of money is removed from it. This multiplier determines how much of the removed money you actually gain.`,
     },
   };
 
@@ -315,7 +315,7 @@ function CloudServersMults({ mults }: IMultsProps): React.ReactElement {
     CloudServerSoftcap: {
       name: "Cost Scaling",
       content: mults.CloudServerSoftcap.toFixed(3),
-      tooltipText: "Applies an exponential modifer to the cost of purchases and upgrades beyond 32GB.",
+      tooltipText: "Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.",
     },
     CloudServerLimit: { name: "Server Count Limit" },
     CloudServerMaxRam: { name: "Max RAM" },
@@ -377,7 +377,7 @@ function StanekMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsPro
   const rows: IBNMultRows = {
     StaneksGiftPowerMultiplier: { name: "Gift Power" },
     StaneksGiftExtraSize: {
-      name: "Grid Size Modifier",
+      name: "Grid Size",
       content: `${mults.StaneksGiftExtraSize > defaultMultipliers.StaneksGiftExtraSize ? `+${extraSize}` : extraSize}`,
     },
   };
@@ -392,9 +392,9 @@ function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps
 
   const rows: IBNMultRows = {
     GangSoftcap: {
-      name: "Gang Softcap",
+      name: "Respect And Money Softcap",
       content: mults.GangSoftcap.toFixed(3),
-      tooltipText: "Influences an exponential modifier to money and respect gain.",
+      tooltipText: "Influences an exponential modifier applied to money and respect gain.",
     },
     GangUniqueAugs: { name: "Unique Augmentations" },
   };
@@ -420,9 +420,9 @@ function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMul
 
   const rows: IBNMultRows = {
     CorporationSoftcap: {
-      name: "Corporation Softcap",
+      name: "Dividend Softcap",
       content: mults.CorporationSoftcap.toFixed(3),
-      tooltipText: "Influences an exponential modifier to the profits from corporation dividends.",
+      tooltipText: "Influences an exponential modifier applied to corporation dividends.",
     },
     CorporationValuation: { name: "Valuation" },
     CorporationDivisions: { name: "Division Limit" },
@@ -433,7 +433,7 @@ function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMul
 
 function GoMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    GoPower: { name: "IPvGO Node Power bonus" },
+    GoPower: { name: "IPvGO Node Power Bonus" },
   };
 
   return <BNMultTable sectionName="IPvGO Subnet Takeover" rowData={rows} mults={mults} />;
