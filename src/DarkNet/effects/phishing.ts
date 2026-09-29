@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
-import {formatMoney, formatNumber} from "../../ui/formatNumber";
+import { formatMoney, formatNumber } from "../../ui/formatNumber";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { NetscriptContext } from "../../Netscript/APIWrapper";
 import { helpers } from "../../Netscript/NetscriptHelpers";
