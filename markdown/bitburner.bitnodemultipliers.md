@@ -240,7 +240,7 @@ number
 
 </td><td>
 
-Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB
+Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.
 
 
 </td></tr>

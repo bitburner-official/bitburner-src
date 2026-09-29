@@ -130,7 +130,7 @@ export class BitNodeMultipliers {
   /** Influence how much it costs to purchase a cloud server */
   CloudServerCost = 1;
 
-  /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB */
+  /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB. */
   CloudServerSoftcap = 1;
 
   /** Influences the maximum number of cloud servers you can have */
