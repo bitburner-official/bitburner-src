@@ -1,10 +1,11 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { formatRam } from "../../ui/formatNumber";
+import { StdIO } from "../StdIO/StdIO";
 
-export function top(args: (string | number | boolean)[], server: BaseServer): undefined {
+export function top(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length !== 0) {
-    Terminal.error("Incorrect usage of top command. Usage: top");
+    Terminal.fatal("Incorrect usage of top command. Usage: top", stdIO);
     return;
   }
 
@@ -24,7 +25,7 @@ export function top(args: (string | number | boolean)[], server: BaseServer): un
 
   const headers = `${scriptTxt}${spacesAfterScriptTxt}${pidTxt}${spacesAfterPidTxt}${threadsTxt}${spacesAfterThreadsTxt}${ramTxt}`;
 
-  Terminal.print(headers);
+  Terminal.print(headers, stdIO);
 
   const currRunningScripts = server.runningScriptMap;
   // Iterate through scripts on current server
@@ -48,7 +49,7 @@ export function top(args: (string | number | boolean)[], server: BaseServer): un
       const entry = [script.filename, spacesScript, script.pid, spacesPid, script.threads, spacesThread, ramUsage].join(
         "",
       );
-      Terminal.print(entry);
+      Terminal.print(entry, stdIO);
     }
   }
 }

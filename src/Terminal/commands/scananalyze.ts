@@ -8,14 +8,15 @@ import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { formatRam } from "../../ui/formatNumber";
 import { Link } from "../OutputTypes";
+import { StdIO } from "../StdIO/StdIO";
 
-export function scananalyze(args: (string | number | boolean)[]): undefined {
+export function scananalyze(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
   if (args.length === 0) {
-    executeScanAnalyzeCommand(1, false);
+    executeScanAnalyzeCommand(1, false, stdIO);
   } else {
     // # of args must be 2 or 3
     if (args.length > 2) {
-      Terminal.error("Incorrect usage of scan-analyze command. usage: scan-analyze [depth]");
+      Terminal.fatal("Incorrect usage of scan-analyze command. usage: scan-analyze [depth]", stdIO);
       return;
     }
     let all = false;
@@ -26,24 +27,24 @@ export function scananalyze(args: (string | number | boolean)[]): undefined {
     const depth = parseInt(args[0] + "");
 
     if (isNaN(depth) || depth < 0) {
-      return Terminal.error("Incorrect usage of scan-analyze command. depth argument must be positive numeric");
+      return Terminal.fatal("Incorrect usage of scan-analyze command. depth argument must be positive numeric", stdIO);
     }
     if (
       depth > 3 &&
       !Player.hasProgram(CompletedProgramName.deepScan1) &&
       !Player.hasProgram(CompletedProgramName.deepScan2)
     ) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 3");
+      return Terminal.fatal("You cannot scan-analyze with that high of a depth. Maximum depth is 3", stdIO);
     } else if (depth > 5 && !Player.hasProgram(CompletedProgramName.deepScan2)) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 5");
+      return Terminal.fatal("You cannot scan-analyze with that high of a depth. Maximum depth is 5", stdIO);
     } else if (depth > 10) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 10");
+      return Terminal.fatal("You cannot scan-analyze with that high of a depth. Maximum depth is 10", stdIO);
     }
-    executeScanAnalyzeCommand(depth, all);
+    executeScanAnalyzeCommand(depth, all, stdIO);
   }
 }
 
-function executeScanAnalyzeCommand(depth: number, all: boolean): void {
+function executeScanAnalyzeCommand(depth: number, all: boolean, stdIO: StdIO): void {
   interface Node {
     hostname: string;
     path: string[];
@@ -89,9 +90,9 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
     const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
     const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
     if (Player.hasProgram(CompletedProgramName.autoLink)) {
-      Terminal.append(new Link(titlePrefix, node.path, node.hostname));
+      Terminal.printRaw(new Link(titlePrefix, node.path, node.hostname), stdIO);
     } else {
-      Terminal.print(titlePrefix + node.hostname + "\n");
+      Terminal.print(titlePrefix + node.hostname + "\n", stdIO);
     }
 
     const server = GetServer(node.hostname);
@@ -100,12 +101,16 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
     if (server instanceof Server) {
       Terminal.print(
         `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
+        stdIO,
       );
-      Terminal.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n");
+      Terminal.print(
+        `${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n",
+        stdIO,
+      );
     } else {
-      Terminal.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n");
+      Terminal.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n", stdIO);
     }
-    Terminal.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
+    Terminal.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n", stdIO);
     node.children.forEach((n, i) =>
       printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1),
     );
