@@ -64,12 +64,12 @@ export function isValidConnectionHostname(hostname: string): Result {
 }
 
 /**
- * Checks whether the input is a valid RFA port configuration value.
+ * Checks whether the input is a valid RemoteFileApi port configuration value.
  *
- * Port 0 is normally invalid, but it is used to disable RFA, so this function treats 0 as valid.
+ * Port 0 is normally invalid, but it is used to disable RemoteFileApi, so this function treats 0 as valid.
  */
 export function isValidRFAConnectionPortSetting(port: number): Result {
-  // 0 is not a valid port, but it is a valid configuration value that disables RFA.
+  // 0 is not a valid port, but it is a valid configuration value that disables RemoteFileApi.
   if (!Number.isFinite(port) || port < 0 || port > 65535) {
     return { success: false, message: "Invalid port" };
   }
@@ -77,7 +77,7 @@ export function isValidRFAConnectionPortSetting(port: number): Result {
 }
 
 /**
- * Checks whether the input is a valid RFA port before starting a new connection.
+ * Checks whether the input is a valid RemoteFileApi port before starting a new connection.
  */
 export function isValidConnectionPort(port: number): boolean {
   return isValidRFAConnectionPortSetting(port).success && port !== 0;
@@ -131,8 +131,8 @@ export function loadSettings(saveString: string) {
     KeyBindings: Settings.KeyBindings,
   });
   /**
-   * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that
-   * case, we set them to the default value.
+   * The hostname and port of RemoteFileApi have not been validated properly, so the save data may contain invalid data.
+   * In that case, we set them to the default value.
    */
   if (!isValidConnectionHostname(Settings.RemoteFileApiAddress).success) {
     Settings.RemoteFileApiAddress = "localhost";

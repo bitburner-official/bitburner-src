@@ -9,10 +9,10 @@ import {
   type FileData,
   type FileLocation,
   type FileServer,
-  RFAErrorResponse,
-  type RFARequest,
-  type RFAResponse,
-  RFASuccessResponse,
+  RemoteFileApiErrorResponse,
+  type RemoteFileApiRequest,
+  type RemoteFileApiResponse,
+  RemoteFileApiSuccessResponse,
 } from "./MessageDefinitions";
 
 import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";
@@ -22,14 +22,17 @@ import type { BaseServer } from "../Server/BaseServer";
 import type { ContentFilePath } from "../Paths/ContentFile";
 
 type SuccessResult<T> = { success: true; params: T };
-type FailureResult = { success: false; errorResponse: RFAErrorResponse };
+type FailureResult = { success: false; errorResponse: RemoteFileApiErrorResponse };
 export type ValidationResult<T> = SuccessResult<T> | FailureResult;
 
-function getErrorResponse(errorMsg: string, { id }: RFARequest): RFAErrorResponse {
-  return new RFAErrorResponse({ error: errorMsg, id });
+function getErrorResponse(errorMsg: string, { id }: RemoteFileApiRequest): RemoteFileApiErrorResponse {
+  return new RemoteFileApiErrorResponse({ error: errorMsg, id });
 }
 
-function validateParams<T>(validationFunction: (p: unknown) => p is T, request: RFARequest): ValidationResult<T> {
+function validateParams<T>(
+  validationFunction: (p: unknown) => p is T,
+  request: RemoteFileApiRequest,
+): ValidationResult<T> {
   if (!request.params) {
     return { success: false, errorResponse: getErrorResponse("Missing params", request) };
   }
@@ -44,7 +47,7 @@ function validateParams<T>(validationFunction: (p: unknown) => p is T, request: 
 
 function validateFilePathAndServerParams<T extends FileData | FileLocation>(
   validationFunction: (p: unknown) => p is T,
-  request: RFARequest,
+  request: RemoteFileApiRequest,
 ): { success: true; data: { filePath: ContentFilePath; server: BaseServer; params: T } } | FailureResult {
   const validationResult = validateParams(validationFunction, request);
   if (!validationResult.success) {
@@ -72,7 +75,7 @@ function validateFilePathAndServerParams<T extends FileData | FileLocation>(
 }
 
 function validateServerParams(
-  request: RFARequest,
+  request: RemoteFileApiRequest,
 ): { success: true; data: { server: BaseServer; params: FileServer } } | FailureResult {
   const validationResult = validateParams(isFileServer, request);
   if (!validationResult.success) {
@@ -88,8 +91,11 @@ function validateServerParams(
   return { success: true, data: { server, params: fileServer } };
 }
 
-export const RFARequestHandler: Record<string, (message: RFARequest) => RFAResponse | Promise<RFAResponse>> = {
-  pushFile: function (msg: RFARequest): RFAResponse {
+export const RemoteFileApiRequestHandler: Record<
+  string,
+  (message: RemoteFileApiRequest) => RemoteFileApiResponse | Promise<RemoteFileApiResponse>
+> = {
+  pushFile: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateFilePathAndServerParams(isFileData, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -97,10 +103,10 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
     const validationData = validationResult.data;
 
     validationData.server.writeToContentFile(validationData.filePath, validationData.params.content);
-    return new RFASuccessResponse({ result: "OK", id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: "OK", id: msg.id });
   },
 
-  getFile: function (msg: RFARequest): RFAResponse {
+  getFile: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -112,10 +118,10 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
       return getErrorResponse(`File does not exist. Filename: ${validationData.params.filename}`, msg);
     }
 
-    return new RFASuccessResponse({ result: file.content, id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: file.content, id: msg.id });
   },
 
-  getFileMetadata: function (msg: RFARequest): RFAResponse {
+  getFileMetadata: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -127,7 +133,7 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
       return getErrorResponse(`File does not exist. Filename: ${validationData.params.filename}`, msg);
     }
 
-    return new RFASuccessResponse({
+    return new RemoteFileApiSuccessResponse({
       result: {
         filename: file.filename,
         size: file.getSize(),
@@ -137,7 +143,7 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
     });
   },
 
-  deleteFile: function (msg: RFARequest): RFAResponse {
+  deleteFile: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -149,10 +155,10 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
       return getErrorResponse(resultOfRemovingFile.msg ?? "Failed", msg);
     }
 
-    return new RFASuccessResponse({ result: "OK", id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: "OK", id: msg.id });
   },
 
-  getFileNames: function (msg: RFARequest): RFAResponse {
+  getFileNames: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateServerParams(msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -161,10 +167,10 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
 
     const fileNameList = [...validationData.server.scripts.keys(), ...validationData.server.textFiles.keys()];
 
-    return new RFASuccessResponse({ result: fileNameList, id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: fileNameList, id: msg.id });
   },
 
-  getAllFiles: function (msg: RFARequest): RFAResponse {
+  getAllFiles: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateServerParams(msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -175,10 +181,10 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
       filename,
       content: file.content,
     }));
-    return new RFASuccessResponse({ result: fileList, id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: fileList, id: msg.id });
   },
 
-  getAllFileMetadata: function (msg: RFARequest): RFAResponse {
+  getAllFileMetadata: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateServerParams(msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -190,10 +196,10 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
       size: file.getSize(),
       ...file.metadata.plain(),
     }));
-    return new RFASuccessResponse({ result: fileList, id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: fileList, id: msg.id });
   },
 
-  calculateRam: function (msg: RFARequest): RFAResponse {
+  calculateRam: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const validationResult = validateFilePathAndServerParams(isFileLocation, msg);
     if (!validationResult.success) {
       return validationResult.errorResponse;
@@ -218,18 +224,18 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
       );
     }
 
-    return new RFASuccessResponse({ result: ramUsage, id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: ramUsage, id: msg.id });
   },
 
-  getDefinitionFile: function (msg: RFARequest): RFAResponse {
-    return new RFASuccessResponse({ result: libSource, id: msg.id });
+  getDefinitionFile: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
+    return new RemoteFileApiSuccessResponse({ result: libSource, id: msg.id });
   },
 
-  getSaveFile: async function (msg: RFARequest): Promise<RFAResponse> {
+  getSaveFile: async function (msg: RemoteFileApiRequest): Promise<RemoteFileApiResponse> {
     const saveData = await getSaveData();
 
     if (typeof saveData === "string") {
-      return new RFASuccessResponse({
+      return new RemoteFileApiSuccessResponse({
         result: {
           identifier: Player.identifier,
           binary: false,
@@ -246,7 +252,7 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
       converted += String.fromCharCode(saveData[i]);
     }
 
-    return new RFASuccessResponse({
+    return new RemoteFileApiSuccessResponse({
       result: {
         identifier: Player.identifier,
         binary: true,
@@ -256,13 +262,13 @@ export const RFARequestHandler: Record<string, (message: RFARequest) => RFARespo
     });
   },
 
-  getAllServers: function (msg: RFARequest): RFAResponse {
+  getAllServers: function (msg: RemoteFileApiRequest): RemoteFileApiResponse {
     const servers = GetAllServers().map(({ hostname, hasAdminRights, purchasedByPlayer }) => ({
       hostname,
       hasAdminRights,
       purchasedByPlayer,
     }));
 
-    return new RFASuccessResponse({ result: servers, id: msg.id });
+    return new RemoteFileApiSuccessResponse({ result: servers, id: msg.id });
   },
 };
