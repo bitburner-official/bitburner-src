@@ -364,7 +364,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         ctx,
         () => `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
       );
-      // setStasisLink's delay is hardcoded at 30s. We should skip this delay in Jest tests.
       return helpers.netscriptDelay(ctx, getSetStasisLinkDuration()).then(() => setStasisLink(ctx, server, shouldLink));
     },
     getStasisLinkLimit: (ctx: NetscriptContext): number => {

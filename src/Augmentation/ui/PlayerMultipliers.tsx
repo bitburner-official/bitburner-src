@@ -1,18 +1,27 @@
+import type { Multipliers } from "@nsdefs";
+import type { AugmentationName } from "@enums";
 import { DoubleArrow } from "@mui/icons-material";
 import { List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
 import * as React from "react";
-import { Multipliers, defaultMultipliers, mergeMultipliers } from "../../PersonObjects/Multipliers";
+import { defaultMultipliers } from "../../PersonObjects/Multipliers";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatPercent } from "../../ui/formatNumber";
+import { updateMultipliers } from "../AugmentationHelpers";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
-import { getAugmentMults } from "../AugmentationHelpers";
 
 function calculateAugmentedStats(): Multipliers {
-  let augP: Multipliers = defaultMultipliers();
+  const augP: Multipliers = defaultMultipliers();
+  // Given the specifics of how we enqueue augs, we could do this another way.
+  // But using a map is straightforward and future-proof.
+  const levels = new Map<AugmentationName, number>();
+  for (const aug of Player.augmentations) {
+    levels.set(aug.name, aug.level);
+  }
   for (const aug of Player.queuedAugmentations) {
-    augP = mergeMultipliers(augP, getAugmentMults(aug, true));
+    updateMultipliers(augP, aug, levels.get(aug.name) ?? 0);
+    levels.set(aug.name, aug.level);
   }
   return augP;
 }

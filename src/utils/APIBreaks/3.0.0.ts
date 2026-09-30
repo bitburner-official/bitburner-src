@@ -1,4 +1,5 @@
 import type { VersionBreakingChange } from "./APIBreak";
+import { CONSTANTS } from "../../Constants";
 
 export function convertV2GangEquipmentNames(name: string): string {
   switch (name) {
@@ -35,7 +36,7 @@ export const breakingChanges300: VersionBreakingChange = {
       info:
         "You cannot use the deprecated VSCode extension to connect to the Steam app via API server now. You have to " +
         "use Remote API to connect your external editors to Bitburner.\nFor more information, please check the Remote " +
-        "API page in the Documentation tab. If you have a question, please ask us on #external-editors on Discord (https://discord.gg/TFc3hKD).",
+        `API page in the Documentation tab. If you have a question, please ask us on #external-editors on Discord (${CONSTANTS.DiscordURL}).`,
       showWarning: true,
       doNotSkip: true,
     },

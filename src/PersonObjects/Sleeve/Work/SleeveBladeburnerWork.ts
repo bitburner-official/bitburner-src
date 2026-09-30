@@ -1,5 +1,7 @@
 import type { Sleeve } from "../Sleeve";
-import type { ActionIdentifier } from "../../../Bladeburner/Types";
+import type { ActionIdFor } from "../../../Bladeburner/Types";
+import type { GeneralAction } from "../../../Bladeburner/Actions/GeneralAction";
+import type { Contract } from "../../../Bladeburner/Actions/Contract";
 import { Player } from "@player";
 import { BladeburnerActionType, BladeburnerGeneralActionName } from "@enums";
 import { Generic_fromJSON, type IReviverValue } from "../../../utils/JSONReviver";
@@ -12,7 +14,11 @@ import { invalidWork } from "../../../Work/InvalidWork";
 import { assertObject } from "../../../utils/TypeAssertion";
 
 interface SleeveBladeburnerWorkParams {
-  actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
+  actionId:
+    | (ActionIdFor<GeneralAction> & {
+        name: Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.InciteViolence>;
+      })
+    | ActionIdFor<Contract>;
 }
 
 export const isSleeveBladeburnerWork = (w: SleeveBaseWork | null): w is SleeveBladeburnerWork =>
@@ -22,7 +28,11 @@ export class SleeveBladeburnerWork extends SleeveBaseWork {
   type: SleeveWorkType.BLADEBURNER = SleeveWorkType.BLADEBURNER;
   tasksCompleted = 0;
   cyclesWorked = 0;
-  actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
+  actionId:
+    | (ActionIdFor<GeneralAction> & {
+        name: Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.InciteViolence>;
+      })
+    | ActionIdFor<Contract>;
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();

@@ -271,7 +271,7 @@ export const GraftingRoot = (): React.ReactElement => {
           <br />
           Individuals who tested augmentation grafting have reported symptoms of an unknown virus, which persists even
           after a body reset. They've dubbed it "Entropy". This virus seems to grow more potent with each grafted
-          augmentation ...
+          augmentation...
         </Typography>
       </Box>
     </Container>

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
@@ -66,14 +67,16 @@ export function SidebarAccordion({
     <>
       {useMemo(
         () => (
-          <ListItem classes={li_classes} button onClick={() => setOpen((open) => !open)}>
-            <ListItemIcon>
-              <Tooltip title={!sidebarOpen ? key_ : ""}>
-                <Icon color={"primary"} />
-              </Tooltip>
-            </ListItemIcon>
-            <ListItemText primary={<Typography>{key_}</Typography>} />
-            {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+          <ListItem classes={li_classes} disablePadding>
+            <ListItemButton onClick={() => setOpen((open) => !open)}>
+              <ListItemIcon>
+                <Tooltip title={!sidebarOpen ? key_ : ""}>
+                  <Icon color={"primary"} />
+                </Tooltip>
+              </ListItemIcon>
+              <ListItemText primary={<Typography>{key_}</Typography>} />
+              {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
+            </ListItemButton>
           </ListItem>
         ),
         [li_classes, sidebarOpen, key_, open, Icon],

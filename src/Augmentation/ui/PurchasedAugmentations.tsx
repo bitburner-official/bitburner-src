@@ -14,11 +14,13 @@ export function PurchasedAugmentations(): React.ReactElement {
   const augs: React.ReactElement[] = [];
   // Only render the last NeuroFlux
   const nfgIndex = Player.queuedAugmentations.findLastIndex((a) => a.name == AugmentationName.NeuroFluxGovernor);
+  const threadIndex = Player.queuedAugmentations.findLastIndex((a) => a.name == AugmentationName.TheThread);
   for (let i = 0; i < Player.queuedAugmentations.length; i++) {
     const ownedAug = Player.queuedAugmentations[i];
     let displayName: string = ownedAug.name;
 
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor && i !== nfgIndex) continue;
+    if (ownedAug.name === AugmentationName.TheThread && i !== threadIndex) continue;
     const aug = Augmentations[ownedAug.name];
 
     let level = null;

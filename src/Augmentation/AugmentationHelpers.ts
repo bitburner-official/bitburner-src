@@ -5,6 +5,7 @@ import { AugmentationName } from "@enums";
 
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
+import type { Multipliers } from "@nsdefs";
 import { prestigeAugmentation } from "../Prestige";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -14,7 +15,6 @@ import { defaultMultipliers, mergeMultipliers } from "../PersonObjects/Multiplie
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { prestigeWorkerScripts } from "../NetscriptWorker";
 import { romanNumeralEncoder } from "../DarkNet/controllers/ServerGenerator";
-import type { Multipliers } from "@nsdefs";
 
 export const soaAugmentationNames = [
   AugmentationName.BeautyOfAphrodite,
@@ -48,42 +48,64 @@ export function getGenericAugmentationPriceMultiplier(): number {
   return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNonSoAAugmentationList.length);
 }
 
-export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
+// When effectOnly == true, the augmentation is not actually added to the
+// Player, only its effect is added to their mults.
+export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = false): void {
+  let previousLevel = 0;
+  if (!effectOnly) {
+    // Update current level, or add a new Aug if it didn't exist
+    for (const pAug of Player.augmentations) {
+      if (pAug.name === aug.name) {
+        previousLevel = pAug.level;
+        pAug.level = aug.level;
+        break;
+      }
+    }
+    if (!previousLevel) {
+      const ownedAug = new PlayerOwnedAugmentation(aug.name);
+      ownedAug.level = aug.level;
+      Player.augmentations.push(ownedAug);
+    }
+  }
+
   // Apply multipliers
-  Player.mults = mergeMultipliers(Player.mults, getAugmentMults(aug, !reapply));
+  updateMultipliers(Player.mults, aug, previousLevel);
 
   // Special logic for Congruity Implant
-  if (aug.name === AugmentationName.CongruityImplant && !reapply) {
+  if (aug.name === AugmentationName.CongruityImplant && !effectOnly) {
     Player.entropy = 0;
+    // This ends up recursively calling this function, but with
+    // effectOnly=true, so it doesn't loop. However, it does mean it's
+    // important that everything is in the proper state by this point.
     Player.applyEntropy(Player.entropy);
   }
 
   // Recalculate skill levels after applying multipliers.
   Player.updateSkillLevels();
+}
 
-  // Special logic for NeuroFlux Governor
-  const ownedNfg = Player.augmentations.find((pAug) => pAug.name === AugmentationName.NeuroFluxGovernor);
-  if (aug.name === AugmentationName.NeuroFluxGovernor && !reapply && ownedNfg) {
-    ownedNfg.level = aug.level;
+// Update the multipliers in "mults" from previousLevel to aug.level. This should be used in most cases
+// instead of mergeMultipliers, since it handles special cases like NFG uniformly. (It works for both
+// queued and installed augs.)
+export function updateMultipliers(mults: Multipliers, aug: PlayerOwnedAugmentation, previousLevel: number): void {
+  if (aug.level <= previousLevel) {
+    throw new Error(`Trying to downlevel/relevel aug ${aug.name} from ${previousLevel} to ${aug.level}!`);
+  }
+  if (
+    aug.name !== AugmentationName.NeuroFluxGovernor &&
+    aug.name !== AugmentationName.TheThread &&
+    (aug.level !== 1 || previousLevel !== 0)
+  ) {
+    throw new Error(`Unexpected levels for ${aug.name}: Leveling ${previousLevel} to ${aug.level}!`);
+  }
+  if (aug.name === AugmentationName.TheThread) {
+    const augMults = getThreadAugmentMults(aug.level, previousLevel);
+    mergeMultipliers(mults, augMults);
     return;
   }
-  if (aug.name === AugmentationName.TheThread && !reapply) {
-    const ownedThread = Player.augmentations.find((pAug) => pAug.name === AugmentationName.TheThread);
-    if (ownedThread) {
-      ownedThread.level += aug.level;
-    } else {
-      const ownedAug = new PlayerOwnedAugmentation(aug.name);
-      ownedAug.level = aug.level;
-      Player.augmentations.push(ownedAug);
-    }
-    return;
-  }
-
-  // Push onto Player's Augmentation list
-  if (!reapply) {
-    const ownedAug = new PlayerOwnedAugmentation(aug.name);
-
-    Player.augmentations.push(ownedAug);
+  for (let i = previousLevel; i < aug.level; ++i) {
+    const augMults = getAugmentMults(aug, i);
+    mergeMultipliers(mults, augMults);
   }
 }
 
@@ -123,7 +145,7 @@ export function installAugmentations(force?: boolean): boolean {
       "You slowly drift to sleep as scientists put you under in order " +
         "to install the following Augmentations:\n" +
         augmentationList +
-        "\nYou wake up in your home...you feel different...",
+        "\nYou wake up in your home... you feel different...",
     );
   }
   prestigeAugmentation();
@@ -141,6 +163,25 @@ export interface AugmentationCosts {
   repCost: number;
 }
 
+/** Get the current level (installed + queued) of an augmentation before buying. */
+export function getAugLevel(aug: Augmentation): number {
+  let level = 0;
+  for (const pAug of Player.augmentations) {
+    if (pAug.name === aug.name) {
+      // There shouldn't be duplicates here, but use the last if there are.
+      level = pAug.level;
+    }
+  }
+  for (const pAug of Player.queuedAugmentations) {
+    if (pAug.name === aug.name) {
+      // There *definitely* can be duplicates here, and we want the last (most powerful) one.
+      // Note that queued levels will always be higher than installed levels, if they exist.
+      level = pAug.level;
+    }
+  }
+  return level;
+}
+
 export function getAugCost(aug: Augmentation): AugmentationCosts {
   let moneyCost = aug.baseCost;
   let repCost = aug.baseRepRequirement;
@@ -148,7 +189,7 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
   switch (aug.name) {
     // Special cost for NFG
     case AugmentationName.NeuroFluxGovernor: {
-      const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, aug.getLevel());
+      const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, getAugLevel(aug));
       repCost = aug.baseRepRequirement * multiplier * currentNodeMults.AugmentationRepCost;
       moneyCost = aug.baseCost * multiplier * currentNodeMults.AugmentationMoneyCost;
       moneyCost *= getGenericAugmentationPriceMultiplier();
@@ -189,9 +230,9 @@ export function getAugName(augment: PlayerOwnedAugmentation, includeQueued = fal
  * Retrieves the mults for the given augmentation.
  * Has special handling for "The Thr3ad of Ariadne" since its mults are additive, not multiplicative, per level
  */
-export function getAugmentMults(augment: Augmentation | PlayerOwnedAugmentation, delta = false): Multipliers {
+export function getAugmentMults(augment: Augmentation | PlayerOwnedAugmentation, level = 1): Multipliers {
   if (augment.name === AugmentationName.TheThread) {
-    return getThreadAugmentMults(delta);
+    return getThreadAugmentMults(level);
   }
 
   return Augmentations[augment.name].mults;
@@ -207,9 +248,8 @@ export function getTotalThreadAugCount(): number {
   return getInstalledThreadAugCount() + pendingThreadCount;
 }
 
-export function getThreadAugmentMults(delta = false): Multipliers {
-  const existingMult = 1 + 0.01 * getInstalledThreadAugCount();
-  const mult = delta ? (1 + 0.01 * getTotalThreadAugCount()) / existingMult : existingMult;
+export function getThreadAugmentMults(level = 1, previousLevel = 0): Multipliers {
+  const mult = (1 + 0.01 * level) / (1 + 0.01 * previousLevel);
   return {
     ...defaultMultipliers(),
     hacking_chance: mult,
