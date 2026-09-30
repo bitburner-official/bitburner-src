@@ -395,7 +395,7 @@ const getRandomOffset = () => {
   if (!getLabyrinthDetails().offsetStartAndEnd) {
     return [0, 0];
   }
-  const maxOffset = 3 + getInstalledThreadAugCount() / 3;
+  const maxOffset = Math.min(3 + getInstalledThreadAugCount() / 3, (DarknetState.labyrinth?.length ?? 30) / 4);
   const offsetX = Math.floor(Math.random() * maxOffset) * 2;
   const offsetY = Math.floor(Math.random() * maxOffset) * 2;
   return [offsetX, offsetY];
@@ -433,7 +433,7 @@ export const getLabAugReward = (): AugmentationName => {
   const nextAug = augmentOrder.find((aug) => !hasAugment(aug));
 
   if (!nextAug && (hasAugment(AugmentationName.TheRedPill) || !allowTRP)) {
-    return AugmentationName.NeuroFluxGovernor;
+    return AugmentationName.TheThread;
   }
 
   // On BN15, the fourth lab has the Red Pill
@@ -446,7 +446,7 @@ export const getLabAugReward = (): AugmentationName => {
     return AugmentationName.TheRedPill;
   }
 
-  return nextAug ?? AugmentationName.NeuroFluxGovernor;
+  return nextAug ?? AugmentationName.TheThread;
 };
 
 const hasAugment = (aug: AugmentationName) => !!Player.augmentations.find((a) => a.name === aug);

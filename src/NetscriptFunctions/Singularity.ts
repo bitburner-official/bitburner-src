@@ -8,7 +8,6 @@ import { Augmentations } from "../Augmentation/Augmentations";
 import {
   getAugCost,
   getAugmentMults,
-  getAugName,
   installAugmentations,
   labAugmentationNames,
   soaAugmentationNames,
@@ -87,12 +86,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const purchased = !!_purchased;
       const res: string[] = [];
-      for (const aug of Player.augmentations) {
-        res.push(getAugName(aug));
+      for (let i = 0; i < Player.augmentations.length; ++i) {
+        res.push(Player.augmentations[i].name);
       }
       if (purchased) {
-        for (const queuedAug of Player.queuedAugmentations) {
-          res.push(getAugName(queuedAug, true));
+        for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
+          res.push(Player.queuedAugmentations[i].name);
         }
       }
       return res;

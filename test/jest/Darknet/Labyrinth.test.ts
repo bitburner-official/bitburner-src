@@ -296,7 +296,7 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.name).toEqual(SpecialServers.BonusLab);
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.BonusLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.BonusLab].cha);
-      expect(getLabAugReward()).toEqual(AugmentationName.NeuroFluxGovernor);
+      expect(getLabAugReward()).toEqual(AugmentationName.TheThread);
     });
     it("should attach bonus lab if the player has SF15 access and final lab aug", () => {
       setupNonBN15Environment(6, true, true);
@@ -314,7 +314,7 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.name).toEqual(SpecialServers.BonusLab);
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.BonusLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.BonusLab].cha);
-      expect(getLabAugReward()).toEqual(AugmentationName.NeuroFluxGovernor);
+      expect(getLabAugReward()).toEqual(AugmentationName.TheThread);
     });
   });
 
@@ -389,7 +389,7 @@ describe("Labyrinth Tests", () => {
       expect(labDetails.name).toEqual(SpecialServers.BonusLab);
       expect(labDetails.lab?.hostname).toEqual(SpecialServers.BonusLab);
       expect(labDetails.lab?.requiredCharismaSkill).toEqual(labData[SpecialServers.BonusLab].cha);
-      expect(getLabAugReward()).toEqual(AugmentationName.NeuroFluxGovernor);
+      expect(getLabAugReward()).toEqual(AugmentationName.TheThread);
     });
   });
 

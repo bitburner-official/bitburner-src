@@ -244,7 +244,7 @@ export function getInstalledThreadAugCount(): number {
 
 export function getTotalThreadAugCount(): number {
   const pendingThreadCount =
-    Player.queuedAugmentations.find((aug) => aug.name == AugmentationName.TheThread)?.level ?? 0;
+    Player.queuedAugmentations.findLast((aug) => aug.name == AugmentationName.TheThread)?.level ?? 0;
   return getInstalledThreadAugCount() + pendingThreadCount;
 }
 
