@@ -19,7 +19,7 @@ export const TerminalHelpText: string[] = [
   "    free                             Print the max RAM and usage of this server",
   "    grep [OPTION...] PATTERN         Search each FILE for a PATTERN (a string or regex) and print the results",
   "         [FILE...] [-O OUTFILE]",
-  "         [-m NUM] [-{A|B|C} NUM]...",
+  "         [-m NUM] [-{A|B|C} NUM]",
   "    grow                             Spoof money in this server's bank account, increasing the amount available",
   "    hack                             Steal money from this server",
   "    help [COMMAND]                   Print this help text, or help text for COMMAND",
@@ -57,14 +57,14 @@ const TemplatedHelpTexts: Record<string, (command: string) => string[]> = {
     return [
       `Usage: ${command} {FILE|GLOB}...`,
       ` `,
-      `Open up the specified FILEs in the Script Editor. Only scripts (.js, .jsx, .ts, .tsx) or text`,
-      `files (.txt, .json, .css) can be edited using the Script Editor. If a FILE does not exist, a new`,
-      `one will be created.`,
+      `Open up the specified FILEs in the Script Editor. Only scripts (.js, .jsx, .ts, .tsx) or text ` +
+        `files (.txt, .json, .css) can be edited using the Script Editor. If a FILE does not exist, a new ` +
+        `one will be created.`,
       ` `,
-      `Any argument containing '*' or '?' is treated as a GLOB and matched against existing files on the`,
-      `server. All matches are then opened. '*' is a wildcard that matches 0 or more characters, and '?'`,
-      `a wildcard that matches exactly 1 character. ${command} cannot create files via a GLOB, so a file`,
-      `matched by one must already exist.`,
+      `Any argument containing '*' or '?' is treated as a GLOB and matched against existing files on the ` +
+        `server. All matches are then opened. '*' is a wildcard that matches 0 or more characters, and '?' ` +
+        `a wildcard that matches exactly 1 character. ${command} cannot create files via a GLOB, so a file ` +
+        `matched by one must already exist.`,
       ` `,
       `Glob and literal filename arguments can be freely mixed in the same command.`,
       ` `,
@@ -84,16 +84,16 @@ export const HelpTexts: Record<string, string[]> = {
   alias: [
     'Usage: alias [-g] [ALIAS_NAME="VALUE"]',
     " ",
-    "Create or display aliases. An alias enables a replacement of a word with another string. ",
-    "It can be used to abbreviate a commonly used command, or commonly used parts of a command. The NAME ",
-    "of an alias defines the word that will be replaced, while the VALUE defines what it will be replaced by. For example, ",
-    "you could create the alias 'nuke' for the Terminal command 'run NUKE.exe' using the following: ",
+    "Create or display aliases. An alias enables a replacement of a word with another string. " +
+      "It can be used to abbreviate a commonly used command, or commonly used parts of a command. The NAME " +
+      "of an alias defines the word that will be replaced, while the VALUE defines what it will be replaced by. For example, " +
+      "you could create the alias 'nuke' for the Terminal command 'run NUKE.exe' using the following: ",
     " ",
     '    alias nuke="run NUKE.exe"',
     " ",
-    "Then, to run the NUKE.exe program you would just have to enter 'nuke' in Terminal rather than the full command. ",
-    "It is important to note that 'default' aliases will only be substituted for the first word of a Terminal command. For ",
-    "example, if the following alias was set: ",
+    "Then, to run the NUKE.exe program you would just have to enter 'nuke' in Terminal rather than the full command. " +
+      "It is important to note that 'default' aliases will only be substituted for the first word of a Terminal command. For " +
+      "example, if the following alias was set: ",
     " ",
     '    alias worm="HTTPWorm.exe"',
     " ",
@@ -101,15 +101,15 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "    run worm",
     " ",
-    "This would fail because the worm alias is not the first word of a Terminal command. To allow an alias to be substituted ",
-    "anywhere in a Terminal command, rather than just the first word, you must set it to be a global alias using the -g flag: ",
+    "This would fail because the worm alias is not the first word of a Terminal command. To allow an alias to be substituted " +
+      "anywhere in a Terminal command, rather than just the first word, you must set it to be a global alias using the -g flag: ",
     " ",
     '    alias -g worm="HTTPWorm.exe"',
     " ",
     "Now, the 'worm' alias will be substituted anytime it shows up as an individual word in a Terminal command. ",
     " ",
-    "Entering just the command 'alias' without any arguments prints the list of all defined aliases in the reusable",
-    "form 'alias NAME=VALUE' on the Terminal. ",
+    "Entering just the command 'alias' without any arguments prints the list of all defined aliases in the reusable " +
+      "form 'alias NAME=VALUE' on the Terminal. ",
     " ",
     "The 'unalias' command can be used to remove aliases. Note that the --all alias is reserved for removal.",
     " ",
@@ -117,17 +117,17 @@ export const HelpTexts: Record<string, string[]> = {
   analyze: [
     "Usage: analyze",
     " ",
-    "Print details and statistics about the current server. The information that is printed includes basic ",
-    "server details such as the hostname, whether the player has root access, what ports are opened/closed, and also ",
-    "hacking-related information such as an estimated chance to successfully hack, an estimate of how much money is ",
-    "available on the server, etc.",
+    "Print details and statistics about the current server. The information that is printed includes basic " +
+      "server details such as the hostname, whether the player has root access, what ports are opened/closed, and also " +
+      "hacking-related information such as an estimated chance to successfully hack, an estimate of how much money is " +
+      "available on the server, etc.",
     " ",
   ],
   backdoor: [
     "Usage: backdoor",
     " ",
-    "Install a backdoor on the current server, which allows you to connect to it from any server.",
-    "It may also grant a secret bonus, such as store discounts, depending on the server.",
+    "Install a backdoor on the current server, which allows you to connect to it from any server. " +
+      "It may also grant a secret bonus, such as store discounts, depending on the server.",
     " ",
     "Requires root access to run.",
     " ",
@@ -137,8 +137,8 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Purchase a program through the Dark Web. Requires a TOR router to use.",
     " ",
-    "If this command is run with the '-l' flag, it will display a list of all programs that can be bought through the ",
-    "Dark Web to the Terminal, as well as their costs.",
+    "If this command is run with the '-l' flag, it will display a list of all programs that can be bought through the " +
+      "Dark Web to the Terminal, as well as their costs.",
     " ",
     "If this command is run with the '-a' flag, it will attempt to purchase all unowned programs.",
     " ",
@@ -172,9 +172,9 @@ export const HelpTexts: Record<string, string[]> = {
   check: [
     "Usage: check SCRIPT_NAME [ARGS...]",
     " ",
-    "Print the logs of the script specified by the script name and arguments to the Terminal. Each argument must be separated by ",
-    "a space. Remember that a running script is uniquely ",
-    "identified both by its name and the arguments that are used to start it. So, if a script was run with the following arguments: ",
+    "Print the logs of the script specified by the script name and arguments to the Terminal. Each argument must be separated by " +
+      "a space. Remember that a running script is uniquely " +
+      "identified both by its name and the arguments that are used to start it. So, if a script was run with the following arguments:",
     " ",
     "    run foo.js 1 2 foodnstuff",
     " ",
@@ -186,23 +186,23 @@ export const HelpTexts: Record<string, string[]> = {
   clear: [
     "Usage: clear",
     " ",
-    "Clear the Terminal screen, deleting all of the text. Note that this does not delete the user's command history, so using the up ",
-    "and down arrow keys is still valid. Also note that this is permanent and there is no way to undo this. Synonymous with 'cls' command",
+    "Clear the Terminal screen, deleting all of the text. Note that this does not delete the user's command history, so using the up " +
+      "and down arrow keys is still valid. Also note that this is permanent and there is no way to undo this. Synonymous with 'cls' command.",
     " ",
   ],
   cls: [
     "Usage: cls",
     " ",
-    "Clear the Terminal screen, deleting all of the text. Note that this does not delete the user's command history, so using the up ",
-    "and down arrow keys is still valid. Also note that this is permanent and there is no way to undo this. Synonymous with 'clear' command",
+    "Clear the Terminal screen, deleting all of the text. Note that this does not delete the user's command history, so using the up " +
+      "and down arrow keys is still valid. Also note that this is permanent and there is no way to undo this. Synonymous with 'clear' command.",
     " ",
   ],
   connect: [
     "Usage: connect HOSTNAME",
     " ",
-    "Connect to a remote server. The hostname of the remote server must be given as the argument ",
-    "to this command. Note that only servers that are immediately adjacent to the current server in the network and the ones that have",
-    "a backdoor installed can be connected to. To see which servers can be connected to, use the 'scan' command.",
+    "Connect to a remote server. The hostname of the remote server must be given as the argument " +
+      "to this command. Note that only servers that are immediately adjacent to the current server in the network and the ones that have " +
+      "a backdoor installed can be connected to. To see which servers can be connected to, use the 'scan' command.",
     " ",
   ],
   cp: [
@@ -246,20 +246,20 @@ export const HelpTexts: Record<string, string[]> = {
     "    expr 25*2",
     `    expr "25 * 2 ** 10"`,
     " ",
-    `Except for the dot ("."), parentheses ("(" and ")"), and the letters "e" and "E" (used for scientific notation), `,
-    `most non-digit characters are not allowed and will be removed from the input.`,
-    "Some edge cases may need to be enclosed in quotes to evaluate correctly.",
+    `Except for the dot ("."), parentheses ("(" and ")"), and the letters "e" and "E" (used for scientific notation), ` +
+      `most non-digit characters are not allowed and will be removed from the input. ` +
+      "Some edge cases may need to be enclosed in quotes to evaluate correctly.",
     " ",
   ],
   free: [
     "Usage: free",
     " ",
-    "Display the memory usage on the current server. Print the amount of RAM that is available on the current server as well as ",
-    "how much of it is being used.",
+    "Display the memory usage on the current server. Print the amount of RAM that is available on the current server as well as " +
+      "how much of it is being used.",
     " ",
   ],
   grep: [
-    "Usage: grep [OPTION...] PATTERN [FILE...] [-O OUTFILE] [-{m|A|B|C} NUM]...",
+    "Usage: grep [OPTION...] PATTERN [FILE...] [-O OUTFILE] [-m NUM] [-{A|B|C} NUM]",
     " ",
     "Search for PATTERN in each FILE and print results to the Terminal. For example:",
     " ",
@@ -327,9 +327,9 @@ export const HelpTexts: Record<string, string[]> = {
   help: [
     "Usage: help [COMMAND]",
     " ",
-    "Display Terminal help information. Without arguments, 'help' prints a list of all valid Terminal commands and a brief ",
-    "description of their functionality. You can also pass the name of a Terminal command as an argument to 'help' to print ",
-    "more detailed information about the Terminal command. Examples: ",
+    "Display Terminal help information. Without arguments, 'help' prints a list of all valid Terminal commands and a brief " +
+      "description of their functionality. You can also pass the name of a Terminal command as an argument to 'help' to print " +
+      "more detailed information about the Terminal command. Examples: ",
     " ",
     "    help alias",
     "    help scan-analyze",
@@ -354,10 +354,10 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Kill the script specified by its PID OR its script name and arguments.",
     " ",
-    "If you are killing the script using its filename and arguments, then each ",
-    "argument must be separated by a space. Remember that a running script is ",
-    "uniquely identified by both its name and the arguments that are used to start ",
-    "it. So, if a script was run with the following arguments:",
+    "If you are killing the script using its filename and arguments, then each " +
+      "argument must be separated by a space. Remember that a running script is " +
+      "uniquely identified by both its name and the arguments that are used to start " +
+      "it. So, if a script was run with the following arguments:",
     " ",
     "    run foo.js 1 sigma-cosmetics",
     " ",
@@ -372,8 +372,8 @@ export const HelpTexts: Record<string, string[]> = {
   ls: [
     "Usage: ls [DIR] [-l] [-h] [-g, --grep PATTERN]",
     " ",
-    "The ls command, with no arguments, prints all files and directories on the current server's directory to the Terminal screen.",
-    "The files will be displayed in alphabetical order.",
+    "The ls command, with no arguments, prints all files and directories on the current server's directory to the Terminal screen. " +
+      "The files will be displayed in alphabetical order.",
     " ",
     "The 'DIR' optional parameter can be used to display files and directories in another directory.",
     " ",
@@ -402,23 +402,23 @@ export const HelpTexts: Record<string, string[]> = {
   mem: [
     "Usage: mem SCRIPT [-t NUM_THREADS]",
     " ",
-    "Display the amount of RAM needed to run the specified script with a single thread. The command can also be used to print ",
-    "the amount of RAM needed to run a script with multiple threads using the '-t' flag. If the '-t' flag is specified, then ",
-    "an argument for the number of threads must be passed in afterwards. Examples:",
+    "Display the amount of RAM needed to run the specified script with a single thread. The command can also be used to print " +
+      "the amount of RAM needed to run a script with multiple threads using the '-t' flag. If the '-t' flag is specified, then " +
+      "an argument for the number of threads must be passed in afterwards. Examples:",
     " ",
     "    mem foo.js",
     "    mem foo.js -t 50",
     " ",
-    "The first example above will print the amount of RAM needed to run 'foo.js' with a single thread. The second example",
-    "above will print the amount of RAM needed to run 'foo.js' with 50 threads.",
+    "The first example above will print the amount of RAM needed to run 'foo.js' with a single thread. The second example " +
+      "above will print the amount of RAM needed to run 'foo.js' with 50 threads.",
     " ",
   ],
   mv: [
     "Usage: mv SOURCE DESTINATION",
     " ",
-    "Move the source file to the specified destination. This can also be used to rename files.",
-    "This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). This command CANNOT be used to",
-    "convert to different file types",
+    "Move the source file to the specified destination. This can also be used to rename files. " +
+      "This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css). This command CANNOT be used to " +
+      "convert to different file types",
     " ",
     "Note that, unlike the Linux 'mv' command, the destination argument must be the full filepath.",
     " ",
@@ -469,50 +469,51 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Run a program, a script, or a coding contract.",
     " ",
-    "The '[-t NUM_THREADS]', '[--tail]', '[--ram-override RAM_IN_GB]', '[--temporary]', and '[ARGS...]' arguments are",
-    "only valid when running a script. The '-t' flag is used to indicate that the script should be run with the specified",
-    "number of threads. If the flag is omitted, then the script will be run with a single thread by default. The",
-    "'--tail' flag is used to immediately open a tail window for the script being run. The '--ram-override' flag is used",
-    "to override the amount of RAM (per thread) the script is run with. If the script ends up using more than that",
-    "amount of RAM it will crash. The '--temporary' flag is used to exclude this script both from save data,",
-    "and from the list of Recently Killed scripts in the Active Scripts tab.",
+    "The '[-t NUM_THREADS]', '[--tail]', '[--ram-override RAM_IN_GB]', '[--temporary]', and '[ARGS...]' arguments are " +
+      "only valid when running a script. The '-t' flag is used to indicate that the script should be run with the specified " +
+      "number of threads. If the flag is omitted, then the script will be run with a single thread by default. The " +
+      "'--tail' flag is used to immediately open a tail window for the script being run. The '--ram-override' flag is used " +
+      "to override the amount of RAM (per thread) the script is run with. If the script ends up using more than that " +
+      "amount of RAM it will crash. The '--temporary' flag is used to exclude this script both from save data, " +
+      "and from the list of Recently Killed scripts in the Active Scripts tab.",
     " ",
-    "You must specify FILE after 'run' and before any flags. You can use the built-in flags or mix them with your",
-    "custom flags in any order.",
+    "You must specify FILE after 'run' and before any flags. You can use the built-in flags or mix them with your " +
+      "custom flags in any order.",
     " ",
-    "Note: 'ns.args' only contains custom flags, not built-in flags. You can use '--' to end special args processing, if",
-    "you want to explicitly pass these built-in flags to your script. For example:",
+    "Note: 'ns.args' only contains custom flags, not built-in flags. You can use '--' to end special args processing, if " +
+      "you want to explicitly pass these built-in flags to your script. For example:",
     " ",
     "    'run a.js -t 5': Run a.js with 5 threads. 'ns.args' is an empty array.",
     "    'run a.js -- -t 10': Run a.js with 1 thread. 'ns.args' is an array: ['-t', 10].",
     " ",
-    "[ARGS...] represents a variable number of arguments that will be passed into the script. See the documentation about script arguments. Each specified argument must be separated by a space.",
+    "[ARGS...] represents a variable number of arguments that will be passed into the script. See the documentation about " +
+      "script arguments. Each specified argument must be separated by a space.",
     " ",
   ],
   scan: [
     "Usage: scan",
     " ",
-    "Prints all immediately-available network connections. This will print a list of all servers that you can currently connect ",
-    "to using the 'connect' Terminal command, including purchased servers.",
+    "Prints all immediately-available network connections. This will print a list of all servers that you can currently connect " +
+      "to using the 'connect' Terminal command, including purchased servers.",
     " ",
   ],
   "scan-analyze": [
     "Usage: scan-analyze [DEPTH] [-a]",
     " ",
-    "Print detailed information about all servers up to [DEPTH] nodes away on the network. Calling ",
-    "'scan-analyze 1' will display information for the same servers that are shown by the 'scan' Terminal ",
-    "command. This command also shows the relative paths to reach each server.",
+    "Print detailed information about all servers up to [DEPTH] nodes away on the network. Calling " +
+      "'scan-analyze 1' will display information for the same servers that are shown by the 'scan' Terminal " +
+      "command. This command also shows the relative paths to reach each server.",
     " ",
-    "By default, the maximum depth that can be specified for 'scan-analyze' is 3. However, once you have ",
-    "the DeepscanV1.exe and DeepscanV2.exe programs, you can execute 'scan-analyze' with a depth up to ",
-    "5 and 10, respectively.",
+    "By default, the maximum depth that can be specified for 'scan-analyze' is 3. However, once you have " +
+      "the DeepscanV1.exe and DeepscanV2.exe programs, you can execute 'scan-analyze' with a depth up to " +
+      "5 and 10, respectively.",
     " ",
-    "The information 'scan-analyze' displays about each server includes whether or not you have root access to it, ",
-    "its required hacking level, the number of open ports required to run NUKE.exe on it, and how much RAM ",
-    "it has.",
+    "The information 'scan-analyze' displays about each server includes whether or not you have root access to it, " +
+      "its required hacking level, the number of open ports required to run NUKE.exe on it, and how much RAM " +
+      "it has.",
     " ",
-    "By default, this command will not display servers that you have purchased. However, you can pass in the ",
-    "-a flag at the end of the command if you would like to enable that.",
+    "By default, this command will not display servers that you have purchased. However, you can pass in the " +
+      "-a flag at the end of the command if you would like to enable that.",
     " ",
   ],
   scp: [
@@ -520,8 +521,8 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Copy the specified files from the current server to the target server. ",
     " ",
-    "This command only works for script files (.js, .jsx, .ts, .tsx), text files (.txt, .json, .css), ",
-    "and literature files (.lit).",
+    "This command only works for script files (.js, .jsx, .ts, .tsx), text files (.txt, .json, .css), " +
+      "and literature files (.lit).",
     " ",
     "The second argument passed in must be the hostname or IP of the target server. Examples:",
     " ",
@@ -533,9 +534,9 @@ export const HelpTexts: Record<string, string[]> = {
   tail: [
     "Usage: tail {PID|SCRIPT_NAME [ARGS...]}",
     " ",
-    "Display dynamic logs for the script specified by the script name and arguments, or by its PID. Each argument ",
-    "must be separated by a space. Remember that a running script is uniquely identified by both its name and the ",
-    "arguments that were used to run it. So, if a script was run with the following arguments: ",
+    "Display dynamic logs for the script specified by the script name and arguments, or by its PID. Each argument " +
+      "must be separated by a space. Remember that a running script is uniquely identified by both its name and the " +
+      "arguments that were used to run it. So, if a script was run with the following arguments: ",
     " ",
     "    run foo.js 10 50000",
     " ",
@@ -551,8 +552,8 @@ export const HelpTexts: Record<string, string[]> = {
   top: [
     "Usage: top",
     " ",
-    "Print a list of all scripts running on the current server as well as their thread count and how much ",
-    "RAM they are using in total.",
+    "Print a list of all scripts running on the current server as well as their thread count and how much " +
+      "RAM they are using in total.",
     " ",
   ],
   unalias: [
@@ -577,8 +578,8 @@ export const HelpTexts: Record<string, string[]> = {
   weaken: [
     "Usage: weaken",
     " ",
-    "Reduce the security level of the current server, decreasing the time it takes for all operations on this server.",
-    "Requires root access.",
+    "Reduce the security level of the current server, decreasing the time it takes for all operations on this server. " +
+      "Requires root access.",
     " ",
     "For more information, go to Documentation > Resources > NS API Documentation > Weaken",
     " ",
@@ -586,13 +587,13 @@ export const HelpTexts: Record<string, string[]> = {
   wget: [
     "Usage: wget URL FILE",
     " ",
-    "Retrieve data from a real-world URL and download it to a FILE on the current server. The data can only be downloaded",
-    "to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css).",
+    "Retrieve data from a real-world URL and download it to a FILE on the current server. The data can only be downloaded " +
+      "to a script (.js, .jsx, .ts, .tsx) or a text file (.txt, .json, .css).",
     " ",
     "If the FILE already exists, it will be overwritten by this command.",
     " ",
-    "Note that it will not be possible to download data from many websites because they do not allow",
-    "cross-origin resource sharing (CORS). Example:",
+    "Note that it will not be possible to download data from many websites because they do not allow " +
+      "cross-origin resource sharing (CORS). Example:",
     " ",
     "    wget https://raw.githubusercontent.com/bitburner-official/bitburner-src/master/README.md game_readme.txt",
     " ",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
+import { Box } from "@mui/material";
 import { makeStyles } from "tss-react/mui";
 import _ from "lodash";
 
@@ -83,30 +84,32 @@ export function TerminalRoot(): React.ReactElement {
   const { classes } = useStyles();
   return (
     <div className={classes.container}>
-      <ul key={key} id="terminal" className={classes.entries} ref={scrollHook}>
-        {Terminal.outputHistory.map((item, i) => (
-          <li key={i}>
-            {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
-            {item instanceof RawOutput && (
-              <Typography component="div" classes={{ root: classes.preformatted }} paragraph={false}>
-                {item.raw}
-              </Typography>
-            )}
-            {item instanceof Link && (
-              <Typography component="div" classes={{ root: classes.preformatted }}>
-                {item.dashes}
-                <ConnectLink path={item.path} text={item.text} />
-              </Typography>
-            )}
-          </li>
-        ))}
+      <Box sx={{ maxWidth: "lg" }}>
+        <ul key={key} id="terminal" className={classes.entries} ref={scrollHook}>
+          {Terminal.outputHistory.map((item, i) => (
+            <li key={i}>
+              {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
+              {item instanceof RawOutput && (
+                <Typography component="div" classes={{ root: classes.preformatted }} paragraph={false}>
+                  {item.raw}
+                </Typography>
+              )}
+              {item instanceof Link && (
+                <Typography component="div" classes={{ root: classes.preformatted }}>
+                  {item.dashes}
+                  <ConnectLink path={item.path} text={item.text} />
+                </Typography>
+              )}
+            </li>
+          ))}
 
-        {Terminal.action !== null && (
-          <li>
-            <TerminalActionTimer />{" "}
-          </li>
-        )}
-      </ul>
+          {Terminal.action !== null && (
+            <li>
+              <TerminalActionTimer />{" "}
+            </li>
+          )}
+        </ul>
+      </Box>
       <TerminalInput />
       <BitFlumeModal />
       <CodingContractModal />
