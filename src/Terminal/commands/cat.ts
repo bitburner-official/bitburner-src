@@ -8,7 +8,7 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): undefined {
-  if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
+  if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat FILE");
 
   const relative_filename = args[0] + "";
   const path = Terminal.getFilepath(relative_filename);
