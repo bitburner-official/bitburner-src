@@ -85,7 +85,7 @@ Additionally, this controller script doesn't have to wait for each hack, grow or
   This is because hack takes a fraction of the current money on the server, and grow increases the current amount of money by a fixed multiple.
 - The time taken to execute hack, grow, or weaken is determined when the function is called and is based on the security level of the target server and your hacking level.
   You generally want these effects to start when the security level is minimized.
-- The effects of hack, grow, and weaken, are determined when the time is completed, rather than at the beginning.
+- The effects of hack, grow, and weaken are also based on the security level of the target server and your hacking level. They are determined when the time is completed, rather than at the beginning. This means that the server will not be at optimal conditions if a hack or grow completes immediately after another one, making the later function less effective.
   Hack should finish when security is minimum and money is maximum.
   Grow should finish when security is minimum, shortly after a hack occurred.
   Weaken should occur when security is not at a minimum due to a hack or grow increasing it.
@@ -122,7 +122,8 @@ However, due to JavaScript limitations, the delay duration is not millisecond-pr
 Instead, the hack, grow and weaken functions have a special [option](../../../../../markdown/bitburner.basichgwoptions.md) called `additionalMsec` that allows more precise delays.
 
 As well as the run time for each function, we also need information on the impact of a hack, grow or weaken thread on the target's security and/or money to optimise the thread ratios between the functions.
-This information can come from `formulas.exe` and use of the `getPlayer` and `getServer` functions, but cheaper functions such as `hackAnalyze`, `hackAnalyzeSecurity`, `getHackTime`, `growthAnalyze` and `growthAnalyzeSecurity` can still be used.
+This information can come from `Formulas.exe` and use of the `getPlayer` and `getServer` functions, but cheaper functions such as `hackAnalyze`, `hackAnalyzeSecurity`, `getHackTime`, `growthAnalyze` and `growthAnalyzeSecurity` can still be used.
+As your stats change over time, you will need to recalculate this information occasionally to keep your batcher working effectively.
 
 Don't forget to explore the [NS API](github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md) for other functions that might be useful in these calculations!
 
