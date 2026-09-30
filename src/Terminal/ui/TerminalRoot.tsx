@@ -27,7 +27,8 @@ const useStyles = makeStyles()((theme: Theme) => ({
     padding: 0,
     overflow: "scroll",
     flex: "0 1 auto",
-    margin: "auto 0 0",
+    margin: 0,
+    minHeight: 0,
   },
   preformatted: {
     whiteSpace: "pre-wrap",
@@ -84,7 +85,17 @@ export function TerminalRoot(): React.ReactElement {
   const { classes } = useStyles();
   return (
     <div className={classes.container}>
-      <Box sx={{ maxWidth: "lg" }}>
+      <Box
+        sx={{
+          maxWidth: "lg",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          flex: "0 1 auto",
+          minHeight: 0,
+          marginTop: "auto",
+        }}
+      >
         <ul key={key} id="terminal" className={classes.entries} ref={scrollHook}>
           {Terminal.outputHistory.map((item, i) => (
             <li key={i}>
