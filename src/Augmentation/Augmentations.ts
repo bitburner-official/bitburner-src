@@ -1959,7 +1959,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "stockings - and made a way to trace an unerring path through the Labyrinth. This fiber-optic threading brand is now synonymous " +
         "with step-by-step logic and guiding paths.",
       stats:
-        "Improves all stats by 1%. This bonus is increased by an additional 1% for each spool of thread installed.",
+        "Improves all stats by 1%. This bonus is increased by an additive 1% for each spool of thread installed.",
       isSpecial: true,
       prereqs: [AugmentationName.TheSword],
       factions: [],
