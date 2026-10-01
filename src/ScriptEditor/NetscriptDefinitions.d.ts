@@ -2753,7 +2753,7 @@ export interface Singularity {
    * RAM cost: 5 GB * 16/4/1
    *
    *
-   * This function returns augmentation stats.
+   * This function returns augmentation stats for one level or copy of the augment.
    *
    * @param name - Name of Augmentation. CASE-SENSITIVE.
    * @returns Augmentation stats.
