@@ -183,7 +183,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a cloud server
+Influences the base cost of cloud server purchases and upgrades.
 
 
 </td></tr>
@@ -373,7 +373,7 @@ number
 
 </td><td>
 
-Influences the valuation of corporations created by the player.
+Influences an exponential modifier applied to corporation dividends.
 
 
 </td></tr>

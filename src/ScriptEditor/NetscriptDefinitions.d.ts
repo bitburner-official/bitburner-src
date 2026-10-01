@@ -716,7 +716,7 @@ interface BitNodeMultipliers {
   CorporationDivisions: number;
   /** Influences profits from corporation dividends and selling shares. */
   CorporationSoftcap: number;
-  /** Influences the valuation of corporations created by the player. */
+  /** Influences an exponential modifier applied to corporation dividends. */
   CorporationValuation: number;
   /** Influences the base experience gained for each ability when the player commits a crime. */
   CrimeExpGain: number;
@@ -769,7 +769,7 @@ interface BitNodeMultipliers {
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;
-  /** Influence how much it costs to purchase a cloud server */
+  /** Influences the base cost of cloud server purchases and upgrades. */
   CloudServerCost: number;
   /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB. */
   CloudServerSoftcap: number;

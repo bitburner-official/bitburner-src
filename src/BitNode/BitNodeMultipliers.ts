@@ -45,7 +45,7 @@ export class BitNodeMultipliers {
   /** Influences profits from corporation dividends and selling shares. */
   CorporationSoftcap = 1;
 
-  /** Influences the valuation of corporations created by the player. */
+  /** Influences an exponential modifier applied to corporation dividends. */
   CorporationValuation = 1;
 
   /** Influences the base experience gained for each ability when the player commits a crime. */
@@ -127,7 +127,7 @@ export class BitNodeMultipliers {
    */
   ManualHackMoney = 1;
 
-  /** Influence how much it costs to purchase a cloud server */
+  /** Influences the base cost of cloud server purchases and upgrades. */
   CloudServerCost = 1;
 
   /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB. */
