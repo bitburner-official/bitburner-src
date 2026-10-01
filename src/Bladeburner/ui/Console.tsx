@@ -4,33 +4,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { KEY } from "../../utils/KeyboardEventKey";
 
 import { Box, List, ListItem, Paper, TextField, Typography } from "@mui/material";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
 import { useRerender } from "../../ui/React/hooks";
 
 interface ILineProps {
   content: React.ReactNode;
 }
-
-const useStyles = makeStyles()((theme: Theme) => ({
-  textfield: {
-
-  },
-  input: {
-    backgroundColor: theme.colors.backgroundsecondary,
-  },
-  nopadding: {
-    padding: theme.spacing(0),
-  },
-  preformatted: {
-    whiteSpace: "pre-wrap",
-    margin: theme.spacing(0),
-  },
-  list: {
-    padding: theme.spacing(0),
-    height: "100%",
-  },
-}));
 
 function Line(props: ILineProps): React.ReactElement {
   return (
@@ -45,7 +23,6 @@ interface IProps {
 }
 
 export function Console(props: IProps): React.ReactElement {
-  const { classes } = useStyles();
   const [command, setCommand] = useState("");
   const consoleInput = useRef<HTMLInputElement>(null);
   useRerender(1000);
@@ -137,7 +114,7 @@ export function Console(props: IProps): React.ReactElement {
       <TextField
         sx={{
           m: 0,
-          width: "100%"
+          width: "100%",
         }}
         autoFocus
         tabIndex={1}
@@ -148,7 +125,9 @@ export function Console(props: IProps): React.ReactElement {
         onKeyDown={handleKeyDown}
         InputProps={{
           // for players to hook in
-          className: classes.input,
+          sx: {
+            backgroundColor: (theme) => theme.colors.backgroundsecondary,
+          },
           startAdornment: (
             <>
               <Typography>&gt;&nbsp;</Typography>

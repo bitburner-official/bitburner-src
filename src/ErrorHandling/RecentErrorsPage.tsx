@@ -1,9 +1,19 @@
 import React, { useEffect } from "react";
-import { makeStyles } from "tss-react/mui";
 import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
-import { Typography, Tooltip } from "@mui/material";
-import { Theme } from "@mui/material/styles";
+import { Box, Table, TableCell, TableRow, Typography, Tooltip } from "@mui/material";
+
+const cellText = {
+  verticalAlign: "top",
+  padding: "4px",
+  textAlign: "left",
+};
+
+const xsmall = {
+  maxWidth: "110px",
+  fontSize: "14px",
+  lineHeight: 1.2,
+};
 
 export function RecentErrorsPage(): React.ReactElement {
   const rerender = useRerender();
@@ -22,8 +32,6 @@ export function RecentErrorsPage(): React.ReactElement {
     });
   }, []);
 
-  const { classes } = useStyles();
-
   const showError = (error: ErrorRecord): void => {
     ErrorState.ErrorUpdate.emit({ ...error, force: true });
   };
@@ -39,82 +47,85 @@ export function RecentErrorsPage(): React.ReactElement {
   return (
     <div>
       <Typography component="div" sx={{ height: "100vh", overflowY: "auto", scrollbarWidth: "thin" }}>
-        <table className={classes.errorTable}>
+        <Table sx={{ width: "100%", maxWidth: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr>
-              <th className={classes.cellText}>Count</th>
-              <th className={classes.cellText}>Type</th>
-              <th className={classes.cellText}>Message</th>
-              <th className={classes.cellText}>Script</th>
-              <th className={classes.cellText}>Time</th>
+              <TableCell component="th" sx={cellText}>
+                Count
+              </TableCell>
+              <TableCell component="th" sx={cellText}>
+                Type
+              </TableCell>
+              <TableCell component="th" sx={cellText}>
+                Message
+              </TableCell>
+              <TableCell component="th" sx={cellText}>
+                Script
+              </TableCell>
+              <TableCell component="th" sx={cellText}>
+                Time
+              </TableCell>
             </tr>
           </thead>
           <tbody>
             {ErrorState.Errors.map((e, i) => (
-              <tr key={i} className={classes.errorRow} onClick={() => showError(e)}>
-                <td className={classes.cellText}>
-                  <div className={classes.xsmall}>{e.occurrences}</div>
-                </td>
-                <td className={classes.cellText}>
-                  <div className={classes.xsmall}>{e.errorType}</div>
-                </td>
-                <td>
-                  <div className={classes.errorText} key={i}>
+              <TableRow
+                key={i}
+                sx={(theme) => ({
+                  errorRow: {
+                    borderTop: `1px solid ${theme.colors.button}`,
+                    "&:hover": {
+                      backgroundColor: theme.colors.button,
+                    },
+                  },
+                })}
+                onClick={() => showError(e)}
+              >
+                <TableCell sx={cellText}>
+                  <Box component="div" sx={xsmall}>
+                    {e.occurrences}
+                  </Box>
+                </TableCell>
+                <TableCell sx={cellText}>
+                  <Box component="div" sx={xsmall}>
+                    {e.errorType}
+                  </Box>
+                </TableCell>
+                <TableCell>
+                  <Box
+                    component="div"
+                    sx={{
+                      margin: "4px",
+                      color: "primary",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "pre-wrap",
+                      lineClamp: "6",
+                      lineHeight: 1.1,
+                      overflowX: "auto",
+                      maxHeight: "200px",
+                    }}
+                    key={i}
+                  >
                     {formatMessage(e.message)}
-                  </div>
-                </td>
-                <td className={classes.cellText}>
-                  <div className={classes.small}>
+                  </Box>
+                </TableCell>
+                <TableCell sx={cellText}>
+                  <Box component="div" sx={{ maxWidth: "200px" }}>
                     <Tooltip title={<>{formatMessage(e.scriptName)}</>}>
                       <div style={{ textOverflow: "ellipsis", overflow: "auto" }}>{formatMessage(e.scriptName)}</div>
                     </Tooltip>
-                  </div>
-                </td>
-                <td className={classes.cellText}>
-                  <div className={classes.xsmall}>{e.time.toLocaleString()}</div>
-                </td>
-              </tr>
+                  </Box>
+                </TableCell>
+                <TableCell sx={cellText}>
+                  <Box component="div" sx={xsmall}>
+                    {e.time.toLocaleString()}
+                  </Box>
+                </TableCell>
+              </TableRow>
             ))}
           </tbody>
-        </table>
+        </Table>
       </Typography>
     </div>
   );
 }
-
-const useStyles = makeStyles()((theme: Theme) => ({
-  errorTable: {
-    width: "100%",
-    maxWidth: "100%",
-    borderCollapse: "collapse",
-  },
-  errorRow: {
-    borderTop: `1px solid ${theme.colors.button}`,
-    "&:hover": {
-      backgroundColor: theme.colors.button,
-    },
-  },
-  cellText: {
-    verticalAlign: "top",
-    padding: "4px",
-    textAlign: "left",
-  },
-  errorText: {
-    margin: "4px",
-    color: theme.colors.primary,
-    textOverflow: "ellipsis",
-    whiteSpace: "pre-wrap",
-    lineClamp: "6",
-    lineHeight: 1.1,
-    overflowX: "auto",
-    maxHeight: "200px",
-  },
-  xsmall: {
-    maxWidth: "110px",
-    fontSize: "14px",
-    lineHeight: 1.2,
-  },
-  small: {
-    maxWidth: "200px",
-  },
-}));

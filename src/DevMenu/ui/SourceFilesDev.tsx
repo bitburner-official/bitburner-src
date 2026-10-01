@@ -2,8 +2,6 @@ import React, { useCallback, useState } from "react";
 
 import { AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography, TextField } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { makeStyles } from "tss-react/mui";
-
 import { Player } from "@player";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import {
@@ -17,20 +15,12 @@ import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-const useStyles = makeStyles()({
-  group: {
-    display: "inline-flex",
-    placeItems: "center",
-  },
-  extraInfo: {
-    marginLeft: "0.5em",
-    marginRight: "0.5em",
-  },
-});
+const extraInfoSX = {
+  marginLeft: "0.5em",
+  marginRight: "0.5em",
+};
 
 export function SourceFilesDev({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
-  const { classes } = useStyles();
-
   const setSF = useCallback(
     (sfN: number, sfLvl: number) => () => {
       if (!Number.isInteger(sfLvl) || sfLvl < 0) {
@@ -103,7 +93,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
           <Typography>{title}</Typography>
         </td>
         <td>
-          <ButtonGroup className={classes.group}>
+          <ButtonGroup sx={{ display: "inline-flex", placeItems: "center" }}>
             {devLvls.map((lvl) => (
               <Button key={lvl} onClick={sfN === undefined ? setAllSF(lvl) : setSF(sfN, lvl)}>
                 {lvl}
@@ -119,7 +109,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                 <Button onClick={setSF(12, newSf12Level)}>Set</Button>
               </>
             )}
-            {sfN && <Typography className={classes.extraInfo}>{`Level: ${level}`}</Typography>}
+            {sfN && <Typography sx={extraInfoSX}>{`Level: ${level}`}</Typography>}
             {sfN === 10 && (
               <>
                 <ButtonWithTooltip
@@ -134,7 +124,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                 >
                   +1 sleeve
                 </ButtonWithTooltip>
-                <Typography className={classes.extraInfo}>Extra sleeves: {Player.sleevesFromCovenant}</Typography>
+                <Typography sx={extraInfoSX}>Extra sleeves: {Player.sleevesFromCovenant}</Typography>
               </>
             )}
           </ButtonGroup>

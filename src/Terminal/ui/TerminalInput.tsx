@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
 import { Paper, Popper, TextField, Typography } from "@mui/material";
 
 import { KEY } from "../../utils/KeyboardEventKey";
@@ -11,27 +9,9 @@ import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  input: {
-    backgroundColor: theme.colors.backgroundprimary,
-  },
-  nopadding: {
-    padding: theme.spacing(0),
-  },
-  preformatted: {
-    margin: theme.spacing(0),
-  },
-  absolute: {
-    margin: theme.spacing(0),
-    position: "absolute",
-    bottom: "12px",
-    opacity: "0.75",
-    maxWidth: "100%",
-    whiteSpace: "pre",
-    overflow: "hidden",
-    pointerEvents: "none",
-  },
-}));
+const preformatted = {
+  m: 0,
+};
 
 // Save command in case we de-load this screen.
 let command = "";
@@ -45,7 +25,6 @@ export function TerminalInput(): React.ReactElement {
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [searchResultsIndex, setSearchResultsIndex] = useState(0);
   const [autofilledValue, setAutofilledValue] = useState(false);
-  const { classes } = useStyles();
 
   // If we have no data in the current terminal history, let's initialize it from the player save
   if (Terminal.commandHistory.length === 0 && Player.terminalCommandHistory.length > 0) {
@@ -436,19 +415,19 @@ export function TerminalInput(): React.ReactElement {
   return (
     <>
       <TextField
+        sx={preformatted}
         fullWidth
         color={Terminal.action === null ? "primary" : "secondary"}
         autoFocus
         disabled={Terminal.action !== null}
         autoComplete="off"
         value={value}
-        classes={{ root: classes.preformatted }}
         onChange={handleValueChange}
         inputRef={terminalInput}
         InputProps={{
           // for players to hook in
           id: "terminal-input",
-          className: classes.input,
+          sx: { backgroundColor: (theme) => theme.colors.backgroundprimary },
           startAdornment: (
             <Typography color={Terminal.action === null ? "primary" : "secondary"} flexShrink={0}>
               [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;
@@ -473,15 +452,28 @@ export function TerminalInput(): React.ReactElement {
         sx={{ maxWidth: "75%" }}
       >
         <Paper sx={{ m: 1, p: 2 }}>
-          <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
+          <Typography sx={preformatted} color={"primary"} paragraph={false}>
             Possible autocomplete candidates:
           </Typography>
-          <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
+          <Typography sx={preformatted} color={"primary"} paragraph={false}>
             {possibilities.join(" ")}
           </Typography>
         </Paper>
       </Popper>
-      <Typography classes={{ root: classes.absolute }} color={"primary"} paragraph={false}>
+      <Typography
+        sx={{
+          m: 0,
+          position: "absolute",
+          bottom: "12px",
+          opacity: "0.75",
+          maxWidth: "100%",
+          whiteSpace: "pre",
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+        color={"primary"}
+        paragraph={false}
+      >
         {getSearchSuggestionPrespace()}
         {(searchResults[searchResultsIndex] ?? "").substring(value.length)}
       </Typography>
