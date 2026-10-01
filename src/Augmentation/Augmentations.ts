@@ -1958,8 +1958,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "famously used to conquer the original Labyrinth. Where many heroes had failed, this woman took the most humble of material - yarn for " +
         "stockings - and made a way to trace an unerring path through the Labyrinth. This fiber-optic threading brand is now synonymous " +
         "with step-by-step logic and guiding paths.",
-      stats:
-        "Improves all stats by 1%. This bonus is increased by an additive 1% for each spool of thread installed.",
+      stats: "Improves all stats by 1%. This bonus is increased by an additive 1% for each spool of thread installed.",
       isSpecial: true,
       prereqs: [AugmentationName.TheSword],
       factions: [],
