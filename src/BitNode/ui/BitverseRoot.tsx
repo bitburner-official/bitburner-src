@@ -20,6 +20,23 @@ function BitVerseMapRow({ children }: { children: React.ReactNode }): React.Reac
   );
 }
 
+function getPortalColor(n: number, level: number): string {
+  // Repeating BitNode: levels above 2 keep the level 2 color
+  if (n === 12 && level >= 2) {
+    return Settings.theme.bnlvl2;
+  }
+  switch (level) {
+    case 1:
+      return Settings.theme.bnlvl1;
+    case 2:
+      return Settings.theme.bnlvl2;
+    case 3:
+      return Settings.theme.bnlvl3;
+    default:
+      return Settings.theme.bnlvl0;
+  }
+}
+
 interface IPortalProps {
   n: number;
   level: number;
@@ -66,14 +83,7 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
               "&:hover": {
                 color: "#fff",
               },
-              color:
-                props.level === 1
-                  ? Settings.theme.bnlvl1
-                  : props.level === 2 || (props.n === 12 && props.level >= 2)
-                  ? Settings.theme.bnlvl2
-                  : props.level === 3
-                  ? Settings.theme.bnlvl3
-                  : Settings.theme.bnlvl0,
+              color: getPortalColor(props.n, props.level),
             }}
             aria-label={`BitNode-${bitNode.number.toString()}: ${bitNode.name}`}
             aria-description={bitNode.tagline}

@@ -14,8 +14,7 @@ interface ILineProps {
 
 const useStyles = makeStyles()((theme: Theme) => ({
   textfield: {
-    margin: theme.spacing(0),
-    width: "100%",
+
   },
   input: {
     backgroundColor: theme.colors.backgroundsecondary,
@@ -136,7 +135,10 @@ export function Console(props: IProps): React.ReactElement {
         </Box>
       </Box>
       <TextField
-        classes={{ root: classes.textfield }}
+        sx={{
+          m: 0,
+          width: "100%"
+        }}
         autoFocus
         tabIndex={1}
         type="text"
