@@ -716,7 +716,7 @@ interface BitNodeMultipliers {
   CorporationDivisions: number;
   /** Influences profits from corporation dividends and selling shares. */
   CorporationSoftcap: number;
-  /** Influences the valuation of corporations created by the player. */
+  /** Influences an exponential modifier applied to corporation dividends. */
   CorporationValuation: number;
   /** Influences the base experience gained for each ability when the player commits a crime. */
   CrimeExpGain: number;
@@ -740,7 +740,7 @@ interface BitNodeMultipliers {
   FourSigmaMarketDataApiCost: number;
   /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
   FourSigmaMarketDataCost: number;
-  /** Influences the respect gain and money gain of your gang. */
+  /** Influences an exponential modifier applied to money and respect gain. */
   GangSoftcap: number;
   /** Percentage of unique augs that the gang has. */
   GangUniqueAugs: number;
@@ -769,9 +769,9 @@ interface BitNodeMultipliers {
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;
-  /** Influence how much it costs to purchase a cloud server */
+  /** Influences the base cost of cloud server purchases and upgrades. */
   CloudServerCost: number;
-  /** Influence how much it costs to purchase a cloud server */
+  /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB. */
   CloudServerSoftcap: number;
   /** Influences the maximum number of cloud servers you can have */
   CloudServerLimit: number;
@@ -779,7 +779,7 @@ interface BitNodeMultipliers {
   CloudServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction: number;
-  /** Influences how much money is stolen from a server when the player performs a hack against it. */
+  /** Influences how much money is stolen from a server when the player hacks it. */
   ScriptHackMoney: number;
   /**
    * Influences how much money the player actually gains when a script hacks a server. This is different from
