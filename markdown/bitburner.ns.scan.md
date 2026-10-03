@@ -106,20 +106,20 @@ If you run the "scan-analyze" command at home, it won't show all servers due to 
 // All servers that are one hop from the current server.
 ns.tprint("Neighbors of current server:");
 let neighbors = ns.scan();
-for (let neighbor of neighbors) {
+for (const neighbor of neighbors) {
     ns.tprint(neighbor);
 }
 // All servers that are one hop from the current server, but by IP address.
 ns.tprint("IPs of current server's neighbors:");
 let neighborIPs = ns.scan(undefined, { returnByIP: true });
-for (let neighborIP of neighborIPs) {
+for (const neighborIP of neighborIPs) {
     ns.tprint(neighborIP);
 }
 // All neighbors of n00dles.
 const target = "n00dles";
 let n00dlesNeighbors = ns.scan(target);
 ns.tprintf("Neighbors of %s:", target);
-for (let neighbor of n00dlesNeighbors) {
+for (const neighbor of n00dlesNeighbors) {
     ns.tprint(neighbor);
 }
 ```
