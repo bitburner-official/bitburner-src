@@ -71,7 +71,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     expectedRamCost: number,
     extraLayerCost = 0,
   ) {
-    const code = `${fnPath.join(".")}();\n`.repeat(3);
+    const code = `ns.${fnPath.join(".")}();\n`.repeat(3);
     const fnName = fnPath[fnPath.length - 1];
     const server = "testserver";
 
