@@ -1,19 +1,11 @@
 import * as React from "react";
 import { formatReputation } from "../formatNumber";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
-
-const useStyles = makeStyles()((theme: Theme) => ({
-  reputation: {
-    color: theme.colors.rep,
-  },
-}));
+import { Typography } from "@mui/material";
 
 export function Reputation({ reputation }: { reputation: number | string }): React.ReactElement {
-  const { classes } = useStyles();
   return (
-    <span className={classes.reputation}>
+    <Typography component="span" sx={{ color: (theme) => theme.colors.rep }}>
       {typeof reputation === "number" ? formatReputation(reputation) : reputation}
-    </span>
+    </Typography>
   );
 }

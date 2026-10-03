@@ -25,7 +25,6 @@ import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
 import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
-import { makeStyles } from "tss-react/mui";
 import { logBoxBaseZIndex } from "./Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { helpers } from "../../Netscript/NetscriptHelpers";
@@ -162,30 +161,18 @@ interface LogWindowProps {
   hidden: boolean;
 }
 
-const useStyles = makeStyles()({
-  logs: {
-    overflowY: "scroll",
-    overflowX: "hidden",
-    scrollbarWidth: "auto",
-    flexDirection: "column-reverse",
-    whiteSpace: "pre-wrap",
-    wordWrap: "break-word",
-    borderWidth: "0 1px 1px 1px",
-  },
-  titleButton: {
-    borderWidth: "0 0 0 1px",
-    borderColor: Settings.theme.welllight,
-    borderStyle: "solid",
-    borderRadius: "0",
-    padding: "0",
-    height: "100%",
-  },
-});
+const titleButtonSx = {
+  borderWidth: "0 0 0 1px",
+  borderColor: Settings.theme.welllight,
+  borderStyle: "solid",
+  borderRadius: "0",
+  padding: "0",
+  height: "100%",
+};
 
 function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
-  const { classes } = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
   const rerender = useRerender(Settings.TailRenderInterval);
@@ -371,31 +358,37 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
 
               <span style={{ minWidth: "fit-content", height: `${minWindowSize[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
-                  <IconButton title="Re-run script" className={classes.titleButton} onClick={run} onTouchEnd={run}>
+                  <IconButton title="Re-run script" sx={titleButtonSx} onClick={run} onTouchEnd={run}>
                     <PlayCircleIcon />
                   </IconButton>
                 ) : (
-                  <IconButton title="Stop script" className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
+                  <IconButton title="Stop script" sx={titleButtonSx} onClick={kill} onTouchEnd={kill}>
                     <StopCircleIcon color="error" />
                   </IconButton>
                 )}
                 <IconButton
                   title={propsRef.current.minimized ? "Expand" : "Minimize"}
-                  className={classes.titleButton}
+                  sx={titleButtonSx}
                   onClick={minimize}
                   onTouchEnd={minimize}
                 >
                   {propsRef.current.minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                 </IconButton>
-                <IconButton title="Close window" className={classes.titleButton} onClick={onClose} onTouchEnd={onClose}>
+                <IconButton title="Close window" sx={titleButtonSx} onClick={onClose} onTouchEnd={onClose}>
                   <CloseIcon />
                 </IconButton>
               </span>
             </Paper>
 
             <Paper
-              className={classes.logs}
-              style={{
+              sx={{
+                overflowY: "scroll",
+                overflowX: "hidden",
+                scrollbarWidth: "auto",
+                flexDirection: "column-reverse",
+                whiteSpace: "pre-wrap",
+                wordWrap: "break-word",
+                borderWidth: "0 1px 1px 1px",
                 height: `calc(100% - ${minWindowSize[1]}px)`,
                 display: propsRef.current.minimized ? "none" : "flex",
               }}

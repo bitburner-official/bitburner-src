@@ -9,9 +9,20 @@ import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
-const preformatted = {
+const zeroMarginSx = {
   m: 0,
-};
+} satisfies SxProps<Theme>;
+
+const suggestionSx = {
+  ...zeroMarginSx,
+  position: "absolute",
+  bottom: "12px",
+  opacity: 0.75,
+  maxWidth: "100%",
+  whiteSpace: "pre",
+  overflow: "hidden",
+  pointerEvents: "none",
+} satisfies SxProps<Theme>;
 
 // Save command in case we de-load this screen.
 let command = "";
@@ -415,7 +426,7 @@ export function TerminalInput(): React.ReactElement {
   return (
     <>
       <TextField
-        sx={preformatted}
+        sx={zeroMarginSx}
         fullWidth
         color={Terminal.action === null ? "primary" : "secondary"}
         autoFocus
@@ -429,7 +440,7 @@ export function TerminalInput(): React.ReactElement {
           id: "terminal-input",
           sx: { backgroundColor: (theme) => theme.colors.backgroundprimary },
           startAdornment: (
-            <Typography color={Terminal.action === null ? "primary" : "secondary"} flexShrink={0}>
+            <Typography sx={{ flexShrink: 0 }} color={Terminal.action === null ? "primary" : "secondary"}>
               [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;
             </Typography>
           ),
@@ -452,25 +463,16 @@ export function TerminalInput(): React.ReactElement {
         sx={{ maxWidth: "75%" }}
       >
         <Paper sx={{ m: 1, p: 2 }}>
-          <Typography sx={preformatted} color={"primary"} paragraph={false}>
+          <Typography sx={zeroMarginSx} color={"primary"} paragraph={false}>
             Possible autocomplete candidates:
           </Typography>
-          <Typography sx={preformatted} color={"primary"} paragraph={false}>
+          <Typography sx={zeroMarginSx} color={"primary"} paragraph={false}>
             {possibilities.join(" ")}
           </Typography>
         </Paper>
       </Popper>
       <Typography
-        sx={{
-          m: 0,
-          position: "absolute",
-          bottom: "12px",
-          opacity: "0.75",
-          maxWidth: "100%",
-          whiteSpace: "pre",
-          overflow: "hidden",
-          pointerEvents: "none",
-        }}
+        sx={ suggestionSx }
         color={"primary"}
         paragraph={false}
       >

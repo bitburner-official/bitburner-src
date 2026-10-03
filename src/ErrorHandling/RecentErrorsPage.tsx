@@ -1,19 +1,22 @@
 import React, { useEffect } from "react";
 import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
-import { Box, Table, TableCell, TableRow, Typography, Tooltip } from "@mui/material";
+import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography, Tooltip } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 
-const cellText = {
+const cellTextSx = {
   verticalAlign: "top",
   padding: "4px",
   textAlign: "left",
-};
+} satisfies SxProps<Theme>;
 
-const xsmall = {
+const TableCellXSmall = styled(TableCell)({
+  ...cellTextSx,
   maxWidth: "110px",
   fontSize: "14px",
   lineHeight: 1.2,
-};
+});
 
 export function RecentErrorsPage(): React.ReactElement {
   const rerender = useRerender();
@@ -48,58 +51,51 @@ export function RecentErrorsPage(): React.ReactElement {
     <div>
       <Typography component="div" sx={{ height: "100vh", overflowY: "auto", scrollbarWidth: "thin" }}>
         <Table sx={{ width: "100%", maxWidth: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <TableCell component="th" sx={cellText}>
+          <TableHead>
+            <TableRow>
+              <TableCell component="th" sx={cellTextSx}>
                 Count
               </TableCell>
-              <TableCell component="th" sx={cellText}>
+              <TableCell component="th" sx={cellTextSx}>
                 Type
               </TableCell>
-              <TableCell component="th" sx={cellText}>
+              <TableCell component="th" sx={cellTextSx}>
                 Message
               </TableCell>
-              <TableCell component="th" sx={cellText}>
+              <TableCell component="th" sx={cellTextSx}>
                 Script
               </TableCell>
-              <TableCell component="th" sx={cellText}>
+              <TableCell component="th" sx={cellTextSx}>
                 Time
               </TableCell>
-            </tr>
-          </thead>
-          <tbody>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {ErrorState.Errors.map((e, i) => (
               <TableRow
                 key={i}
                 sx={(theme) => ({
-                  errorRow: {
-                    borderTop: `1px solid ${theme.colors.button}`,
-                    "&:hover": {
-                      backgroundColor: theme.colors.button,
-                    },
-                  },
+                  borderTop: `1px solid ${theme.colors.button}`,
+                  "&:hover": { backgroundColor: theme.colors.button, },
+                  cursor: "pointer",
                 })}
                 onClick={() => showError(e)}
               >
-                <TableCell sx={cellText}>
-                  <Box component="div" sx={xsmall}>
-                    {e.occurrences}
-                  </Box>
-                </TableCell>
-                <TableCell sx={cellText}>
-                  <Box component="div" sx={xsmall}>
-                    {e.errorType}
-                  </Box>
-                </TableCell>
+                <TableCellXSmall>
+                  {e.occurrences}
+                </TableCellXSmall>
+                <TableCellXSmall>
+                  {e.errorType}
+                </TableCellXSmall>
                 <TableCell>
                   <Box
                     component="div"
                     sx={{
                       margin: "4px",
-                      color: "primary",
+                      color: "primary.main",
                       textOverflow: "ellipsis",
                       whiteSpace: "pre-wrap",
-                      lineClamp: "6",
+                      lineClamp: "6", // Needs webkit stuff, otherwise not an actual property. Also conflicts with overflowX: "auto" and maxHeight.
                       lineHeight: 1.1,
                       overflowX: "auto",
                       maxHeight: "200px",
@@ -109,21 +105,19 @@ export function RecentErrorsPage(): React.ReactElement {
                     {formatMessage(e.message)}
                   </Box>
                 </TableCell>
-                <TableCell sx={cellText}>
+                <TableCell sx={cellTextSx}>
                   <Box component="div" sx={{ maxWidth: "200px" }}>
                     <Tooltip title={<>{formatMessage(e.scriptName)}</>}>
-                      <div style={{ textOverflow: "ellipsis", overflow: "auto" }}>{formatMessage(e.scriptName)}</div>
+                      <Box component="div" sx={{ textOverflow: "ellipsis", overflow: "auto" }}>{formatMessage(e.scriptName)}</Box>
                     </Tooltip>
                   </Box>
                 </TableCell>
-                <TableCell sx={cellText}>
-                  <Box component="div" sx={xsmall}>
-                    {e.time.toLocaleString()}
-                  </Box>
-                </TableCell>
+                <TableCellXSmall>
+                  {e.time.toLocaleString()}
+                </TableCellXSmall>
               </TableRow>
             ))}
-          </tbody>
+          </TableBody>
         </Table>
       </Typography>
     </div>
