@@ -13,6 +13,7 @@ function showErrorMessage(address: string, detail: string) {
 }
 
 export const RemoteFileApiConnectionEvents = new EventEmitter<[ReturnType<typeof getRemoteFileApiConnectionStatus>]>();
+export const RemoteFileApiConnectionSettingEvents = new EventEmitter();
 
 export class Remote {
   connection?: WebSocket;
@@ -27,7 +28,8 @@ export class Remote {
 
   public stopConnection(): void {
     // Cancel all pending retries immediately. This function is only called when we intentionally close the current
-    // connection before starting a new one. The new connection will retry on its own if needed.
+    // connection before starting a new one or the player intentionally closes the current connection. The new
+    // connection will retry on its own if needed.
     timeOutIds.forEach((id) => window.clearTimeout(id));
     timeOutIds.clear();
 
@@ -52,6 +54,7 @@ export class Remote {
       return;
     }
 
+    RemoteFileApiConnectionEvents.emit("Connecting");
     // Log connection errors on manual and the first auto connect attempts
     this.connection.addEventListener("error", (e: Event) => {
       if (autoConnectAttempt <= 1 || successfullyConnected) {

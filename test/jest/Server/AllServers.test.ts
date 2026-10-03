@@ -105,8 +105,15 @@ describe("initForeignServers seeds discoverable scripts onto the right servers",
     setupBasicTestingEnvironment();
   });
 
-  const seededMetadata = serverMetadata.filter((m) => m.discoverableScripts && m.discoverableScripts.length > 0);
-
+  type IServerMetadata = (typeof serverMetadata)[number];
+  type ServerMetadataWithDiscoverableScripts = IServerMetadata & {
+    discoverableScripts: NonNullable<IServerMetadata["discoverableScripts"]>;
+  };
+  const seededMetadata = serverMetadata
+    .filter((m): m is ServerMetadataWithDiscoverableScripts => m.discoverableScripts != null)
+    .map((v) => {
+      return { hostname: v.hostname, discoverableScripts: v.discoverableScripts };
+    });
   it.each(seededMetadata.map((m) => [m.hostname, m.discoverableScripts]))(
     "places discoverable scripts on %s",
     (hostname, scriptNames) => {

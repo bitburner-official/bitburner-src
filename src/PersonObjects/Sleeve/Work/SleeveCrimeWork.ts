@@ -1,5 +1,6 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, type IReviverValue } from "../../../utils/JSONReviver";
+import { makeSerializable } from "../../../utils/GenericReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { CrimeType } from "@enums";
@@ -64,19 +65,14 @@ export class SleeveCrimeWork extends SleeveBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveCrimeWork", this);
-  }
-
-  /** Initializes an object from a JSON save state. */
-  static fromJSON(value: IReviverValue): SleeveCrimeWork {
-    const crimeWork = Generic_fromJSON(SleeveCrimeWork, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): SleeveCrimeWork {
+    const crimeWork = Generic_fromJSON(SleeveCrimeWork, value.data, SleeveCrimeWork.includedKeys);
     if (!(crimeWork.crimeType in Crimes)) {
       crimeWork.crimeType = CrimeType.shoplift;
     }
     return crimeWork;
   }
-}
 
-constructorsForReviver.SleeveCrimeWork = SleeveCrimeWork;
+  static includedKeys = makeSerializable("SleeveCrimeWork", SleeveCrimeWork);
+}

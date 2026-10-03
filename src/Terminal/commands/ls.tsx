@@ -131,13 +131,16 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
   for (const msgOrLit of server.messages) handlePath(msgOrLit as FilePath, allMessages);
 
   // Sort the files/folders alphabetically then print each
-  allPrograms.sort();
-  allScripts.sort();
-  allTextFiles.sort();
-  allContracts.sort();
-  allCaches.sort();
-  allMessages.sort();
-  folders.sort();
+
+  const trueAlphabetical = (a: string, b: string) => a.localeCompare(b);
+
+  allPrograms.sort(trueAlphabetical);
+  allScripts.sort(trueAlphabetical);
+  allTextFiles.sort(trueAlphabetical);
+  allContracts.sort(trueAlphabetical);
+  allCaches.sort(trueAlphabetical);
+  allMessages.sort(trueAlphabetical);
+  folders.sort(trueAlphabetical);
 
   let maxSizeStrLength = 0;
   let maxRamStrLength = 0;
@@ -183,15 +186,13 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
         : combinePath(baseDirectory, relativePath as FilePath);
 
     // Determine file size
-    let contentBytes = 0;
+    let file;
     if (fileType === FileType.TextFile) {
-      const file = server.textFiles.get(fullPath as TextFilePath);
-      contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+      file = server.textFiles.get(fullPath as TextFilePath);
     } else {
-      // Script
-      const file = server.scripts.get(fullPath as ScriptFilePath);
-      contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+      file = server.scripts.get(fullPath as ScriptFilePath);
     }
+    const contentBytes = file?.getSize() ?? 0;
     if (flags["-l"] && flags["-h"]) {
       sizeDisplay = formatBytes(contentBytes);
     } else {

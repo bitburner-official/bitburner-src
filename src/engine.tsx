@@ -212,7 +212,11 @@ const Engine = {
     }
 
     if (Engine.Counters.exportSaveData <= 0) {
-      if (LastExportBonus < Date.now() - 86400000 && Settings.EnableSaveDataBackupReminder) {
+      if (
+        LastExportBonus < Date.now() - 86400000 &&
+        Settings.EnableSaveDataBackupReminder &&
+        Player.totalPlaytime >= 86400000
+      ) {
         SnackbarEvents.emit("You have not backed up your save data for over 24 hours!", ToastVariant.WARNING, 30000);
       }
       Engine.Counters.exportSaveData = 18000;

@@ -21,11 +21,11 @@ import { setPlayer } from "@player";
 import { CompanyName, FactionName, JobName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
 import { type MoneySource, MoneySourceTracker } from "../../utils/MoneySourceTracker";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
+import { Generic_fromJSON, type IReviverValue } from "../../utils/JSONReviver";
+import { makeSerializable } from "../../utils/GenericReviver";
 import { JSONMap, JSONSet } from "../../Types/Jsonable";
 import { cyrb53 } from "../../utils/HashUtils";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { getKeyList } from "../../utils/helpers/getKeyList";
 import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
@@ -180,15 +180,9 @@ export class PlayerObject extends Person implements IPlayer {
     return this.sleeves.filter((s) => isSleeveSupportWork(s.currentWork));
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    // For the time being, infiltration is not part of the save.
-    return Generic_toJSON("PlayerObject", this, getKeyList(PlayerObject, { removedKeys: ["infiltration"] }));
-  }
-
-  /** Initializes a PlayerObject object from a JSON save state. */
-  static fromJSON(value: IReviverValue): PlayerObject {
-    const player = Generic_fromJSON(PlayerObject, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): PlayerObject {
+    const player = Generic_fromJSON(PlayerObject, value.data, PlayerObject.includedKeys);
     // Any statistics that could be infinite would be serialized as null (JSON.stringify(Infinity) is "null")
     player.hp = { current: player.hp?.current ?? 10, max: player.hp?.max ?? 10 };
     player.money ??= 0;
@@ -220,8 +214,9 @@ export class PlayerObject extends Person implements IPlayer {
     }
     return player;
   }
+
+  // For the time being, infiltration is not part of the save.
+  static includedKeys = makeSerializable("PlayerObject", PlayerObject, { removedKeys: ["infiltration"] });
 }
 
 setPlayer(new PlayerObject());
-
-constructorsForReviver.PlayerObject = PlayerObject;

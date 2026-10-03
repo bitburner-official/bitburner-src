@@ -45,7 +45,7 @@ Description
 
 </td><td>
 
-string
+\| Exclude&lt;[BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md)<!-- -->, [BladeburnerGeneralActionNameEnumType](./bitburner.bladeburnergeneralactionnameenumtype.md)<!-- -->\["InciteViolence"\]&gt; \| [BladeburnerContractName](./bitburner.bladeburnercontractname.md)
 
 
 </td><td>

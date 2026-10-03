@@ -1,7 +1,7 @@
 import type { BaseServer } from "../Server/BaseServer";
 import { calculateRamUsage, type RamUsageEntry } from "./RamCalculations";
 import type { LoadedModule, ScriptURL } from "./LoadedModule";
-import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
@@ -97,17 +97,7 @@ export class Script extends ContentFile {
   }
 
   /** The keys that are relevant in a save file */
-  static savedKeys = ["code", "filename", "server", "metadata"] as const;
-
-  // Serialize the current object to a JSON save state
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Script", this, Script.savedKeys);
-  }
-
-  // Initializes a Script Object from a JSON save state
-  static fromJSON(value: IReviverValue): Script {
-    return Generic_fromJSON(Script, value.data, Script.savedKeys);
-  }
+  static includedKeys = ["code", "filename", "server", "metadata"] as const;
 }
 
-constructorsForReviver.Script = Script;
+makeSerializable("Script", Script);

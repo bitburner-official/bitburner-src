@@ -5,7 +5,8 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { getRandomAlphanumericString } from "../utils/StringHelperFunctions";
 import { createRandomIp } from "../utils/IPAddress";
-import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
+import type { IReviverValue } from "../utils/JSONReviver";
 import { IPAddress } from "../Types/strings";
 
 export interface StandardServerConstructorParams {
@@ -81,7 +82,8 @@ export class Server extends BaseServer {
     this.hackDifficulty = Math.min(realDifficulty, 100);
     this.baseDifficulty = this.hackDifficulty;
     this.minDifficulty = Math.min(Math.max(1, Math.round(realDifficulty / 3)), 100);
-    this.serverGrowth = params.serverGrowth != null ? params.serverGrowth : 1; //Integer from 0 to 100. Affects money increase from grow()
+    // Integer from 0 to 100, or 3000 for n00dles. Affects money increase from grow()
+    this.serverGrowth = params.serverGrowth != null ? params.serverGrowth : 1;
 
     //Port information, required for porthacking servers to get admin rights
     this.numOpenPortsRequired = params.numOpenPortsRequired != null ? params.numOpenPortsRequired : 5;
@@ -145,16 +147,17 @@ export class Server extends BaseServer {
     this.capDifficulty();
   }
 
-  /** Serialize the current object to a JSON save state */
-  toJSON(): IReviverValue {
-    return this.toJSONBase("Server", includedKeys);
+  /** Custom save handling */
+  jsonReplacer(): IReviverValue {
+    return this.toJSONBase("Server", Server.includedKeys);
   }
 
-  // Initializes a Server Object from a JSON save state
-  static fromJSON(value: IReviverValue): Server {
-    return BaseServer.fromJSONBase(value, Server, includedKeys);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): Server {
+    return BaseServer.fromJSONBase(value, Server, Server.includedKeys);
   }
+
+  static includedKeys = BaseServer.getIncludedKeys(Server);
 }
-const includedKeys = BaseServer.getIncludedKeys(Server);
 
-constructorsForReviver.Server = Server;
+makeSerializable("Server", Server);
