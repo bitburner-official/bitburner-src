@@ -3,6 +3,8 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 
+import { styled } from "@mui/material/styles";
+
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -155,20 +157,20 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
   );
 }
 
-interface LogWindowProps {
-  script: RunningScript;
-  onClose: () => void;
-  hidden: boolean;
-}
-
-const titleButtonSx = {
+const TitleButton = styled(IconButton)({
   borderWidth: "0 0 0 1px",
   borderColor: Settings.theme.welllight,
   borderStyle: "solid",
   borderRadius: "0",
   padding: "0",
   height: "100%",
-};
+});
+
+interface LogWindowProps {
+  script: RunningScript;
+  onClose: () => void;
+  hidden: boolean;
+}
 
 function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
@@ -358,25 +360,24 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
 
               <span style={{ minWidth: "fit-content", height: `${minWindowSize[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
-                  <IconButton title="Re-run script" sx={titleButtonSx} onClick={run} onTouchEnd={run}>
+                  <TitleButton title="Re-run script" onClick={run} onTouchEnd={run}>
                     <PlayCircleIcon />
-                  </IconButton>
+                  </TitleButton>
                 ) : (
-                  <IconButton title="Stop script" sx={titleButtonSx} onClick={kill} onTouchEnd={kill}>
+                  <TitleButton title="Stop script" onClick={kill} onTouchEnd={kill}>
                     <StopCircleIcon color="error" />
-                  </IconButton>
+                  </TitleButton>
                 )}
-                <IconButton
+                <TitleButton
                   title={propsRef.current.minimized ? "Expand" : "Minimize"}
-                  sx={titleButtonSx}
                   onClick={minimize}
                   onTouchEnd={minimize}
                 >
                   {propsRef.current.minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-                </IconButton>
-                <IconButton title="Close window" sx={titleButtonSx} onClick={onClose} onTouchEnd={onClose}>
+                </TitleButton>
+                <TitleButton title="Close window" onClick={onClose} onTouchEnd={onClose}>
                   <CloseIcon />
-                </IconButton>
+                </TitleButton>
               </span>
             </Paper>
 

@@ -2,7 +2,6 @@ import React from "react";
 import { formatMoney } from "../formatNumber";
 import { Typography } from "@mui/material";
 
-
 export function MoneyRate({
   money,
   useExponentialFormForSmallValue,

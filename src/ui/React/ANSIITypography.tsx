@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import { makeStyles } from "tss-react/mui";
-import { Theme } from "@mui/material/styles";
+import { SxProps, Theme } from "@mui/material/styles";
 import { Settings } from "../../Settings/Settings";
 
 // This particular eslint-disable is correct.
@@ -9,52 +8,15 @@ import { Settings } from "../../Settings/Settings";
 // eslint-disable-next-line no-control-regex
 const ANSI_ESCAPE = new RegExp("\u{001b}\\[(?<code>.*?)m", "ug");
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  success: {
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    margin: theme.spacing(0),
-    color: theme.colors.success,
-    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-  },
-  error: {
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    margin: theme.spacing(0),
-    color: theme.palette.error.main,
-    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-  },
-  primary: {
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    margin: theme.spacing(0),
-    color: theme.palette.primary.main,
-    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-  },
-  info: {
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    margin: theme.spacing(0),
-    color: theme.palette.info.main,
-    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-  },
-  warning: {
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    margin: theme.spacing(0),
-    color: theme.palette.warning.main,
-    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-  },
-}));
-
-const lineClass = (classes: Record<string, string>, s: string): string => {
-  const lineClassMap: Record<string, string> = {
-    error: classes.error,
-    success: classes.success,
-    info: classes.info,
-    warn: classes.warning,
+const getColor = (theme: Theme, colorKey: ANSIITypographyProps["color"]): string => {
+  const colorMap: Record<ANSIITypographyProps["color"], string> = {
+    error: theme.palette.error.main,
+    success: theme.palette.success.main,
+    info: theme.palette.info.main,
+    warn: theme.palette.warning.main,
+    primary: theme.palette.primary.main,
   };
-  return lineClassMap[s] || classes.primary;
+  return colorMap[colorKey] ?? theme.palette.primary.main;
 };
 
 type ANSIITypographyProps = {
@@ -65,7 +27,6 @@ type ANSIITypographyProps = {
 
 export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIITypographyProps): React.ReactElement {
   const text = String(props.text);
-  const { classes } = useStyles();
   const parts = [];
 
   // Build a look-alike regex match to place at the front of the matches list
@@ -97,9 +58,15 @@ export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIIT
   return (
     <Typography
       component={"div"}
-      classes={{ root: lineClass(classes, props.color) }}
       paragraph={false}
-      sx={{ ...(props.styles ?? {}) }}
+      sx={{
+        whiteSpace: "pre-wrap",
+        overflowWrap: "anywhere",
+        m: 0,
+        color: (theme) => getColor(theme, props.color),
+        "--padForFlushBg": `${(Settings.styles.lineHeight - 1) / 2}em`,
+        ...(props.styles ?? {}),
+      }}
     >
       {parts.map((part, i) => (
         <span key={i} style={{ ...ansiCodeStyle(part.code), ...(props.styles ?? {}) }}>

@@ -7,7 +7,7 @@ import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import type { ContentFilePath } from "../../Paths/ContentFile";
 import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 
-import { makeStyles } from "tss-react/mui";
+import { Box } from "@mui/material";
 import { BaseServer } from "../../Server/BaseServer";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -208,29 +208,25 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
     return { ramDisplay, sizeDisplay };
   }
 
-  function SegmentGrid(props: { colSize: string; children: React.ReactChild[] }): React.ReactElement {
-    const { classes } = makeStyles()({
-      segmentGrid: {
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, var(--colSize))",
-      },
-    })();
-    const style = { ["--colSize"]: props.colSize } as React.CSSProperties;
+  interface SegmentGridProps {
+    colSize: string;
+    children: React.ReactNode;
+  }
+
+  function SegmentGrid({ colSize, children }: SegmentGridProps): React.ReactElement {
     return (
-      <span style={style} className={classes.segmentGrid}>
-        {props.children}
-      </span>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: `repeat(auto-fill, ${colSize})`,
+        }}
+      >
+        {children}
+      </Box>
     );
   }
 
   function ClickableContentFileLink(props: { path: ScriptFilePath | TextFilePath }): React.ReactElement {
-    const { classes } = makeStyles()((theme: Theme) => ({
-      link: {
-        cursor: "pointer",
-        textDecorationLine: "underline",
-        color: theme.palette.warning.main,
-      },
-    }))();
     const fullPath = combinePath(baseDirectory, props.path);
     function onClick() {
       let content;
@@ -246,20 +242,18 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
     }
     return (
       <span>
-        <span className={classes.link} onClick={onClick}>
+        <Box
+          component="span"
+          onClick={onClick}
+          sx={{ cursor: "pointer", textDecorationLine: "underline", color: (theme) => theme.palette.warning.main }}
+        >
           {props.path}
-        </span>
+        </Box>
       </span>
     );
   }
 
   function ClickableMessageLink(props: { path: FilePath }): React.ReactElement {
-    const { classes } = makeStyles()({
-      link: {
-        cursor: "pointer",
-        textDecorationLine: "underline",
-      },
-    })();
     function onClick(): void {
       if (!server.isConnectedTo) {
         return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
@@ -273,9 +267,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
     }
     return (
       <span>
-        <span className={classes.link} onClick={onClick}>
+        <Box component="span" onClick={onClick} sx={{ cursor: "pointer", textDecorationLine: "underline" }}>
           {props.path}
-        </span>
+        </Box>
       </span>
     );
   }

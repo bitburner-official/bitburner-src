@@ -472,11 +472,7 @@ export function TerminalInput(): React.ReactElement {
           </Typography>
         </Paper>
       </Popper>
-      <Typography
-        sx={ suggestionSx }
-        color={"primary"}
-        paragraph={false}
-      >
+      <Typography sx={suggestionSx} color={"primary"} paragraph={false}>
         {getSearchSuggestionPrespace()}
         {(searchResults[searchResultsIndex] ?? "").substring(value.length)}
       </Typography>

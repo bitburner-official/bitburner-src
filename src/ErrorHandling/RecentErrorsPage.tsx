@@ -3,7 +3,7 @@ import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
 import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography, Tooltip } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 const cellTextSx = {
   verticalAlign: "top",
@@ -76,17 +76,13 @@ export function RecentErrorsPage(): React.ReactElement {
                 key={i}
                 sx={(theme) => ({
                   borderTop: `1px solid ${theme.colors.button}`,
-                  "&:hover": { backgroundColor: theme.colors.button, },
+                  "&:hover": { backgroundColor: theme.colors.button },
                   cursor: "pointer",
                 })}
                 onClick={() => showError(e)}
               >
-                <TableCellXSmall>
-                  {e.occurrences}
-                </TableCellXSmall>
-                <TableCellXSmall>
-                  {e.errorType}
-                </TableCellXSmall>
+                <TableCellXSmall>{e.occurrences}</TableCellXSmall>
+                <TableCellXSmall>{e.errorType}</TableCellXSmall>
                 <TableCell>
                   <Box
                     component="div"
@@ -108,13 +104,13 @@ export function RecentErrorsPage(): React.ReactElement {
                 <TableCell sx={cellTextSx}>
                   <Box component="div" sx={{ maxWidth: "200px" }}>
                     <Tooltip title={<>{formatMessage(e.scriptName)}</>}>
-                      <Box component="div" sx={{ textOverflow: "ellipsis", overflow: "auto" }}>{formatMessage(e.scriptName)}</Box>
+                      <Box component="div" sx={{ textOverflow: "ellipsis", overflow: "auto" }}>
+                        {formatMessage(e.scriptName)}
+                      </Box>
                     </Tooltip>
                   </Box>
                 </TableCell>
-                <TableCellXSmall>
-                  {e.time.toLocaleString()}
-                </TableCellXSmall>
+                <TableCellXSmall>{e.time.toLocaleString()}</TableCellXSmall>
               </TableRow>
             ))}
           </TableBody>

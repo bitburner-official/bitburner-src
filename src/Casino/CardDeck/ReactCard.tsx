@@ -4,6 +4,19 @@ import { Card, Suit } from "./Card";
 import Paper from "@mui/material/Paper";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 import { Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material";
+
+const cardSx = {
+  padding: "10px",
+  border: "solid 1px #808080",
+  backgroundColor: "white",
+  display: "inline-block",
+  borderRadius: "10px",
+  fontSize: "18.5px",
+  textAlign: "center",
+  margin: "3px",
+  fontWeight: "bold",
+} satisfies SxProps<Theme>;
 
 interface Props {
   card: Card;
@@ -31,15 +44,7 @@ export const ReactCard: FC<Props> = ({ card, hidden }) => {
   return (
     <Paper
       sx={{
-        padding: "10px",
-        border: "solid 1px #808080",
-        backgroundColor: "white",
-        display: "inline-block",
-        borderRadius: "10px",
-        fontSize: "18.5px",
-        textAlign: "center",
-        margin: "3px",
-        fontWeight: "bold",
+        ...cardSx,
         color: card.isRedSuit() ? "red" : "black",
       }}
     >
