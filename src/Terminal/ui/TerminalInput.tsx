@@ -8,6 +8,7 @@ import { extractCurrentText, getTabCompletionPossibilities } from "../getTabComp
 import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import type { SxProps, Theme } from "@mui/material";
 
 const zeroMarginSx = {
   m: 0,
