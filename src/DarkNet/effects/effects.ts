@@ -77,7 +77,7 @@ export const calculateAuthenticationTime = (
   const applyUnderleveledFactor = person.skills.charisma <= chaRequired && darknetServerData.depth > 1;
   const underleveledFactor = applyUnderleveledFactor ? 1.5 + (chaRequired + 50) / (person.skills.charisma + 50) : 1;
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
-  const hasSf15_2Factor = Player.activeSourceFileLvl(15) > 2 ? 0.8 : 1;
+  const hasSf15_2Factor = Player.activeSourceFileLvl(15) >= 2 ? 0.8 : 1;
   const intelligenceFactor = 1 / calculateIntelligenceBonus(person.skills.intelligence, 0.25);
 
   const time =

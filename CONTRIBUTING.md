@@ -20,30 +20,35 @@ heard:
   browser's JavaScript interaction. So please do not be afraid to open a
   [new Issue](https://github.com/bitburner-official/bitburner-src/issues/new).
 
-## Reporting Bugs
+## Reporting Bugs / Requesting Features
 
-The recommended method for reporting a bug is by opening a [Github Issue](https://github.com/bitburner-official/bitburner-src/issues)
-or contacting us on the [#bug-report channel](https://discord.com/channels/415207508303544321/415213413745164318).
+The recommended methods for reporting a bug or requesting a feature is by opening a
+[Github Issue](https://github.com/bitburner-official/bitburner-src/issues) or contacting us in the
+[#bug-report channel](https://discord.com/channels/415207508303544321/415213413745164318) or
+[#suggestions channel](https://discord.com/channels/415207508303544321/415213435974975508).
 
-Alternatively, you can post a bug by creating a post on the
-[game's subreddit](https://www.reddit.com/r/Bitburner/).
+Alternatively, you can create a post on the [game's subreddit](https://www.reddit.com/r/Bitburner/).
 
-Before submitting a bug report, please check to make sure the bug has not
-already been reported as an [Issue](https://github.com/bitburner-official/bitburner-src/issues).
+Before submitting a bug report or a feature request, please check whether it has already been reported as an
+[Issue](https://github.com/bitburner-official/bitburner-src/issues).
 
 #### How to Submit a Good Bug Report
 
-- **Use a clear and descriptive title** for the Issue.
-- **State your browser, your browser's version, and your computer's OS.**
-- **Attach your save file**, if you think it would help solve the Issue.
-  Upload your save file as is. Do NOT compress or decompress it.
-- **Provide instructions on how to reproduce the bug** in as much detail
-  as possible. If you cannot reliably reproduce the bug, then just try
-  your best to explain what was happening when the bug occurred.
-- **Provide any scripts** that triggered the bug if the Issue is Netscript-related.
+- **Use a clear and descriptive title** for the issue.
+- Complete the bug report template and provide all requested information. Incomplete reports may be closed if the missing information prevents investigation.
+  - **State your browser, its version, and your computer's OS.**
+  - **Attach your save file**. Upload your save file as is. Do NOT compress or decompress it.
+  - **Provide a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example)**.
+    If you cannot reliably reproduce the bug, then just try your best to explain what was happening when the bug occurred.
+  - **Provide any scripts** that triggered the bug if the issue is Netscript-related.
+- Screenshots and/or demo videos of the issue are very helpful.
+- If you have stack traces or other logs, please provide them as text. Do NOT post screenshots of stack traces or logs.
 - **Open the Console tab in your browser's Dev Tools and report any error-related output**
   that may be printed there. The Dev Tools can be opened on most modern
   browsers by pressing F12 or Ctrl+Shift+I (Cmd + Option + I on macOS machines).
+
+Note that the issue tracker is for bugs in the game itself and feature requests, not for issues with your own scripts.
+If you want to get help with your scripts, please ask in the [#help-scripts](https://discord.com/channels/415207508303544321/415247422638522395) channel or other relevant channels on Discord.
 
 ## As a Developer
 
@@ -212,9 +217,9 @@ the following rules:
   the changes to the UI.
 - If your changes affect the Netscript APIs, provide some
   scripts that can be used to test the Netscript changes.
-- Ensure you have run `npm run lint` to make sure your changes conform to the
-  rules enforced across the code base. The command will fail if any of the
-  linters find a violation.
+- Ensure you have run `npm run lint` and `npm run typecheck` to make sure your changes conform to the
+  rules enforced across the codebase. The command will fail if the
+  linter finds a violation.
 - Ensure you have run `npm run format` to make sure your changes conform to the
   style guide.
 - Also, ensure you have run `npm run test` to make sure your changes pass
@@ -226,6 +231,8 @@ the following rules:
   `MISC: Reticulated the splines`, where the first word must be capitalised
   and relate to the kind of change being implemented. Possible examples
   are UI, BUGFIX, SERVERS, API... You get the idea.
+- Avoid rebasing and force-pushing after your pull request has been reviewed. A rebase can make it much harder to track
+  what has changed. In some cases, maintainers even have to review the entire pull request from scratch.
 
 ## As a Documenter
 
@@ -292,7 +299,7 @@ Some Jest tests fail to run in Node versions older than v24. On those versions, 
 - Fork the repo ([How to setup your fork properly](#how-to-setup-your-fork-properly)).
 - Make your changes.
 - Test your changes manually before submitting anything ([Running locally](#running-locally)).
-- Run `npm run format`, `npm run lint`, and `npm run test`. If you make any changes to
+- Run `npm run format`, `npm run lint`, `npm run typecheck`, and `npm run test`. If you made any changes to
   `NetscriptDefinitions.d.ts` or in-game documentation pages, run `npm run doc`.
 - Commit your changes ([Development Workflow](#development-workflow-best-practices)).
 - Go to GitHub and create a PR [Submitting a Pull Request](#submitting-a-pull-request).

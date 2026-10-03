@@ -1,5 +1,6 @@
 import { CorpMaterialName } from "@nsdefs";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { materialNames } from "./data/Constants";
 import { Export } from "./Export";
 import { MaterialInfo } from "./MaterialInfo";
@@ -125,14 +126,9 @@ export class Material {
     }
   }
 
-  // Serialize the current object to a JSON save state.
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Material", this);
-  }
-
-  // Initializes a Material object from a JSON save state.
-  static fromJSON(value: IReviverValue): Material {
-    const material = Generic_fromJSON(Material, value.data);
+  // Custom load handling
+  static jsonReviver(value: IReviverValue): Material {
+    const material = Generic_fromJSON(Material, value.data, Material.includedKeys);
     if (!Number.isFinite(material.quality)) {
       material.quality = 1;
     }
@@ -145,6 +141,6 @@ export class Material {
     }
     return material;
   }
-}
 
-constructorsForReviver.Material = Material;
+  static includedKeys = makeSerializable("Material", Material);
+}

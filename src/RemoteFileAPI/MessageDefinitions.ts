@@ -78,6 +78,7 @@ export interface FileServer {
 
 export interface FileMetadata {
   filename: string;
+  size: number;
   atime: number;
   mtime: number;
   btime: number;

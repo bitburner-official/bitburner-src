@@ -101,7 +101,6 @@ export function FragmentById(id: number): Fragment | null {
       1,
       1, // limit
       Effect(FragmentTypeEnum.Hacking),
-      //Effect(FragmentType.Hacking],
     ),
   );
   Fragments.push(

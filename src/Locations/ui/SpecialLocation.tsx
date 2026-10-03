@@ -280,9 +280,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         <>
           <Typography>
             <i>
-              Allison "Mother" Stanek: ..can ...you hear them too ...? Come now, don't be shy and let me get a closer
+              Allison "Mother" Stanek: ...can ...you hear them too...? Come now, don't be shy and let me get a closer
               look at you. Yes wonderful, I see my creation has taken root without consequence or much ill effect it
-              seems. Curious, Just how much of a machine's soul do you house in that body?
+              seems. Curious, just how much of a machine's soul do you house in that body?
             </i>
           </Typography>
           <br />

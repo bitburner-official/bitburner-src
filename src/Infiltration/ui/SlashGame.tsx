@@ -21,13 +21,13 @@ export function SlashGame({ stage }: IProps): React.ReactElement {
         <br />
         {stage.phase === 0 && stage.hasMightOfAres && (
           <Box sx={{ my: 1 }}>
-            <Typography variant="h5">The sentinel will drop his guard and be distracted in ...</Typography>
+            <Typography variant="h5">The sentinel will drop his guard and be distracted in...</Typography>
             <GameTimer endTimestamp={stage.guardingEndTime} />
             <br />
           </Box>
         )}
 
-        {stage.phase === 0 && <Typography variant="h4">Guarding ...</Typography>}
+        {stage.phase === 0 && <Typography variant="h4">Guarding...</Typography>}
         {stage.phase === 1 && <Typography variant="h4">Distracted!</Typography>}
         {stage.phase === 2 && <Typography variant="h4">Alerted!</Typography>}
       </Paper>

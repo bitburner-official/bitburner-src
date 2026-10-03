@@ -1,8 +1,11 @@
 import type { Sleeve } from "../Sleeve";
-import type { ActionIdentifier } from "../../../Bladeburner/Types";
+import type { ActionIdFor } from "../../../Bladeburner/Types";
+import type { GeneralAction } from "../../../Bladeburner/Actions/GeneralAction";
+import type { Contract } from "../../../Bladeburner/Actions/Contract";
 import { Player } from "@player";
 import { BladeburnerActionType, BladeburnerGeneralActionName } from "@enums";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, type IReviverValue } from "../../../utils/JSONReviver";
+import { makeSerializable } from "../../../utils/GenericReviver";
 import { applySleeveGains, SleeveBaseWork, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
 import { scaleWorkStats } from "../../../Work/WorkStats";
@@ -11,7 +14,11 @@ import { invalidWork } from "../../../Work/InvalidWork";
 import { assertObject } from "../../../utils/TypeAssertion";
 
 interface SleeveBladeburnerWorkParams {
-  actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
+  actionId:
+    | (ActionIdFor<GeneralAction> & {
+        name: Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.InciteViolence>;
+      })
+    | ActionIdFor<Contract>;
 }
 
 export const isSleeveBladeburnerWork = (w: SleeveBaseWork | null): w is SleeveBladeburnerWork =>
@@ -21,7 +28,11 @@ export class SleeveBladeburnerWork extends SleeveBaseWork {
   type: SleeveWorkType.BLADEBURNER = SleeveWorkType.BLADEBURNER;
   tasksCompleted = 0;
   cyclesWorked = 0;
-  actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
+  actionId:
+    | (ActionIdFor<GeneralAction> & {
+        name: Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.InciteViolence>;
+      })
+    | ActionIdFor<Contract>;
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();
@@ -72,13 +83,8 @@ export class SleeveBladeburnerWork extends SleeveBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveBladeburnerWork", this);
-  }
-
-  /** Initializes a BladeburnerWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): SleeveBladeburnerWork {
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): SleeveBladeburnerWork {
     assertObject(value.data);
     let actionId = loadActionIdentifier(value.data?.actionId);
     if (!actionId) {
@@ -95,8 +101,8 @@ export class SleeveBladeburnerWork extends SleeveBaseWork {
       }
     }
     value.data.actionId = actionId;
-    return Generic_fromJSON(SleeveBladeburnerWork, value.data);
+    return Generic_fromJSON(SleeveBladeburnerWork, value.data, SleeveBladeburnerWork.includedKeys);
   }
-}
 
-constructorsForReviver.SleeveBladeburnerWork = SleeveBladeburnerWork;
+  static includedKeys = makeSerializable("SleeveBladeburnerWork", SleeveBladeburnerWork);
+}

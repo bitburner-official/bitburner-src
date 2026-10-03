@@ -29,6 +29,7 @@ import Paper from "@mui/material/Paper";
 import Collapse from "@mui/material/Collapse";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
+import { PriceHistoryChart } from "./PriceHistoryChart";
 
 enum SelectorOrderType {
   Market = "Market Order",
@@ -307,8 +308,16 @@ export function StockTicker(props: IProps): React.ReactElement {
             <StockTickerTxButton onClick={handleBuyMaxButtonClick} text={"Buy MAX"} />
             <StockTickerTxButton onClick={handleSellAllButtonClick} text={"Sell ALL"} />
           </Box>
-          <StockTickerPositionText stock={props.stock} />
-          <StockTickerOrderList orders={props.orders} stock={props.stock} />
+
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            <Box>
+              <StockTickerPositionText stock={props.stock} />
+              <StockTickerOrderList orders={props.orders} stock={props.stock} />
+            </Box>
+            <Box sx={{ flex: "1 1 450px" }}>
+              <PriceHistoryChart stock={props.stock} />
+            </Box>
+          </Box>
 
           <PlaceOrderModal
             text={modalProps.text}

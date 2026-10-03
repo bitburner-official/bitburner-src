@@ -1,6 +1,6 @@
 import { CityName, CorpEmployeeJob } from "@enums";
 import * as corpConstants from "./data/Constants";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { Division } from "./Division";
 import { Corporation } from "./Corporation";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
@@ -235,13 +235,5 @@ export class OfficeSpace {
     return false;
   }
 
-  toJSON(): IReviverValue {
-    return Generic_toJSON("OfficeSpace", this);
-  }
-
-  static fromJSON(value: IReviverValue): OfficeSpace {
-    return Generic_fromJSON(OfficeSpace, value.data);
-  }
+  static includedKeys = makeSerializable("OfficeSpace", OfficeSpace);
 }
-
-constructorsForReviver.OfficeSpace = OfficeSpace;

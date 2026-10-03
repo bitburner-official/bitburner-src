@@ -1,5 +1,5 @@
 import { CorpStateName } from "@nsdefs";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { stateNames } from "./data/Constants";
 
 export class CorporationState {
@@ -21,14 +21,5 @@ export class CorporationState {
     this.state = (this.state + 1) % stateNames.length;
   }
 
-  // Serialize the current object to a JSON save state.
-  toJSON(): IReviverValue {
-    return Generic_toJSON("CorporationState", this);
-  }
-  // Initializes a CorporationState object from a JSON save state.
-  static fromJSON(value: IReviverValue): CorporationState {
-    return Generic_fromJSON(CorporationState, value.data);
-  }
+  static includedKeys = makeSerializable("CorporationState", CorporationState);
 }
-
-constructorsForReviver.CorporationState = CorporationState;

@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { makeSerializable } from "../../../utils/GenericReviver";
 import { Sleeve } from "../Sleeve";
 import { SleeveBaseWork, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
@@ -36,15 +36,5 @@ export class SleeveInfiltrateWork extends SleeveBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveInfiltrateWork", this);
-  }
-
-  /** Initializes a BladeburnerWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): SleeveInfiltrateWork {
-    return Generic_fromJSON(SleeveInfiltrateWork, value.data);
-  }
+  static includedKeys = makeSerializable("SleeveInfiltrateWork", SleeveInfiltrateWork);
 }
-
-constructorsForReviver.SleeveInfiltrateWork = SleeveInfiltrateWork;

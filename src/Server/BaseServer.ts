@@ -12,7 +12,7 @@ import { IReturnStatus } from "../types";
 import { ScriptFilePath, resolveScriptFilePath, hasScriptExtension } from "../Paths/ScriptFilePath";
 import { Directory, resolveDirectory } from "../Paths/Directory";
 import { TextFilePath, resolveTextFilePath, hasTextExtension } from "../Paths/TextFilePath";
-import { Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { Generic_toJSON, Generic_fromJSON, type IReviverValue } from "../utils/JSONReviver";
 import { matchScriptPathExact, scriptKey } from "../utils/helpers/scriptKey";
 
 import { createRandomIp } from "../utils/IPAddress";
@@ -293,7 +293,7 @@ export abstract class BaseServer implements IServer {
 
   // Serialize the current object to a JSON save state
   // Called by subclasses, not stringify.
-  toJSONBase(ctorName: string, keys: readonly (keyof this)[]): IReviverValue {
+  toJSONBase(ctorName: string, keys: readonly string[]): IReviverValue {
     // RunningScripts are stored as a simple array, both for backward compatibility,
     // compactness, and ease of filtering them here.
     const result = Generic_toJSON(ctorName, this, keys);
@@ -317,7 +317,7 @@ export abstract class BaseServer implements IServer {
 
   // Initializes a Server Object from a JSON save state
   // Called by subclasses, not Reviver.
-  static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
+  static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly string[]): T {
     assertObject(value.data);
     const server = Generic_fromJSON(ctor, value.data, keys);
     if (value.data.runningScripts != null && Array.isArray(value.data.runningScripts)) {
@@ -380,7 +380,7 @@ export abstract class BaseServer implements IServer {
   }
 
   // Customize a prune list for a subclass.
-  static getIncludedKeys<T extends BaseServer>(ctor: new () => T): readonly (keyof T)[] {
+  static getIncludedKeys<T extends BaseServer>(ctor: new () => T): readonly string[] {
     return getKeyList(ctor, { removedKeys: ["runningScriptMap", "savedScripts", "ramUsed", "isHacknetServer"] });
   }
 }

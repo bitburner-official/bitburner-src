@@ -15,7 +15,8 @@ import {
 import { IPAddress } from "../Types/strings";
 import { createRandomIp } from "../utils/IPAddress";
 
-import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { type IReviverValue } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { Player } from "@player";
 
 interface HacknetServerConstructorParams {
@@ -134,16 +135,17 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
     }
   }
 
-  // Serialize the current object to a JSON save state
-  toJSON(): IReviverValue {
-    return this.toJSONBase("HacknetServer", includedKeys);
+  // Custom save handling
+  jsonReplacer(): IReviverValue {
+    return this.toJSONBase("HacknetServer", HacknetServer.includedKeys);
   }
 
-  // Initializes a HacknetServer Object from a JSON save state
-  static fromJSON(value: IReviverValue): HacknetServer {
-    return BaseServer.fromJSONBase(value, HacknetServer, includedKeys);
+  // Custom load handling
+  static jsonReviver(value: IReviverValue): HacknetServer {
+    return BaseServer.fromJSONBase(value, HacknetServer, HacknetServer.includedKeys);
   }
+
+  static includedKeys = BaseServer.getIncludedKeys(HacknetServer);
 }
-const includedKeys = BaseServer.getIncludedKeys(HacknetServer);
 
-constructorsForReviver.HacknetServer = HacknetServer;
+makeSerializable("HacknetServer", HacknetServer);

@@ -7,6 +7,7 @@ import { IStockMarket } from "../IStockMarket";
 
 import { Player } from "@player";
 import { useCycleRerender } from "../../ui/React/hooks";
+import Container from "@mui/material/Container";
 
 interface IProps {
   stockMarket: IStockMarket;
@@ -16,9 +17,9 @@ interface IProps {
 export function StockMarketRoot(props: IProps): React.ReactElement {
   const rerender = useCycleRerender();
   return (
-    <>
+    <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
       <InfoAndPurchases rerender={rerender} />
       {Player.hasWseAccount && <StockTickers stockMarket={props.stockMarket} />}
-    </>
+    </Container>
   );
 }

@@ -8,7 +8,7 @@ import type { PromisePair } from "../Types/Promises";
 import { Factions } from "../Faction/Factions";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
@@ -433,15 +433,5 @@ export class Gang {
     return upg.cost / this.getDiscount();
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Gang", this);
-  }
-
-  /** Initializes a Gang object from a JSON save state. */
-  static fromJSON(value: IReviverValue): Gang {
-    return Generic_fromJSON(Gang, value.data);
-  }
+  static includedKeys = makeSerializable("Gang", Gang);
 }
-
-constructorsForReviver.Gang = Gang;
