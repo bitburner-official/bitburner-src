@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, List, ListItem, Typography } from "@mui/material";
-import { SxProps, Theme } from "@mui/material";
 import _ from "lodash";
 
 import { Output, Link, RawOutput } from "../OutputTypes";

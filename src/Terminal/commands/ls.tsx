@@ -1,5 +1,4 @@
 import React from "react";
-import { Theme } from "@mui/material/styles";
 
 import { hasTextExtension, type TextFilePath } from "../../Paths/TextFilePath";
 import type { ContractFilePath } from "../../Paths/ContractFilePath";
