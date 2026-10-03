@@ -1,7 +1,6 @@
 import React from "react";
 import { default as HljsHighlighter } from "react-syntax-highlighter";
 import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { Theme } from "@mui/material/styles";
 import { CodeProps } from "react-markdown/lib/ast-to-react";
 import { Typography } from "@mui/material";
 
