@@ -28,6 +28,7 @@ declare module "@mui/material/styles" {
       primary: React.CSSProperties["color"];
       secondary: React.CSSProperties["color"];
       well: React.CSSProperties["color"];
+      welllight: React.CSSProperties["color"];
     };
   }
   interface ThemeOptions {
@@ -52,6 +53,7 @@ declare module "@mui/material/styles" {
       primary: React.CSSProperties["color"];
       secondary: React.CSSProperties["color"];
       well: React.CSSProperties["color"];
+      welllight: React.CSSProperties["color"];
     };
   }
 }
@@ -82,6 +84,7 @@ export function refreshTheme(): void {
       primary: Settings.theme.primary,
       secondary: Settings.theme.secondary,
       well: Settings.theme.well,
+      welllight: Settings.theme.welllight,
     },
     palette: {
       primary: {

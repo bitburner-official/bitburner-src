@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableCell from "@mui/material/TableCell";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Collapse,
+  IconButton,
+  Paper,
+  Table,
+  TableHead,
+  TableBody,
+  TableContainer,
+  TableCell,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { tableClasses, tableHeadClasses, tableBodyClasses, tableRowClasses, tableCellClasses } from "@mui/material";
 
-import { makeStyles } from "tss-react/mui";
-import { Theme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 import WarningIcon from "@mui/icons-material/Warning";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
@@ -49,50 +51,37 @@ const ComparisonIcon = ({ isBetter }: { isBetter: boolean }): JSX.Element => {
   return <Tooltip title={title}>{icon}</Tooltip>;
 };
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  root: {
-    padding: theme.spacing(2),
-    maxWidth: "1000px",
+const Root = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  maxWidth: "1000px",
 
-    "& .MuiTable-root": {
-      "& .MuiTableCell-root": {
-        borderBottom: `1px solid ${Settings.theme.welllight}`,
-        width: "30%",
-      },
-      "& .MuiTableCell-root:last-child": {
-        width: "10%",
-      },
+  [`& .${tableClasses.root}`]: {
+    [`& .${tableCellClasses.root}`]: {
+      borderBottom: `1px solid ${theme.colors.welllight}`,
+      width: "30%",
+    },
+    [`& .${tableCellClasses.root}:last-child`]: {
+      width: "10%",
+    },
 
-      "& .MuiTableHead-root .MuiTableRow-root": {
-        backgroundColor: Settings.theme.backgroundsecondary,
-
-        "& .MuiTableCell-root": {
-          color: Settings.theme.primary,
-          fontWeight: "bold",
-        },
-      },
-
-      "& .MuiTableBody-root": {
-        "& .MuiTableRow-root:nth-of-type(odd)": {
-          backgroundColor: Settings.theme.well,
-
-          "& .MuiTableCell-root": {
-            color: Settings.theme.primarylight,
-          },
-        },
-        "& .MuiTableRow-root:nth-of-type(even)": {
-          backgroundColor: Settings.theme.backgroundsecondary,
-
-          "& .MuiTableCell-root": {
-            color: Settings.theme.primarylight,
-          },
-        },
+    [`& .${tableHeadClasses.root} .${tableRowClasses.root}`]: {
+      backgroundColor: theme.colors.backgroundsecondary,
+      [`& .${tableCellClasses.root}`]: {
+        color: theme.colors.primary,
+        fontWeight: "bold",
       },
     },
-  },
 
-  skillTitle: {
-    textTransform: "capitalize",
+    [`& .${tableBodyClasses.root}`]: {
+      [`& .${tableRowClasses.root}:nth-of-type(odd)`]: {
+        backgroundColor: theme.colors.well,
+        [`& .${tableCellClasses.root}`]: { color: theme.palette.primary.light },
+      },
+      [`& .${tableRowClasses.root}:nth-of-type(even)`]: {
+        backgroundColor: theme.colors.backgroundsecondary,
+        [`& .${tableCellClasses.root}`]: { color: theme.palette.primary.light },
+      },
+    },
   },
 }));
 
@@ -102,7 +91,6 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 let initialAutosave = 0;
 
 export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
-  const { classes } = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
   const [isImportModalOpen, { on: openImportModal, off: closeImportModal }] = useBoolean(false);
@@ -165,7 +153,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
   if (!importData || !currentData) return <></>;
 
   return (
-    <Box className={classes.root}>
+    <Root>
       <Typography variant="h4" sx={{ mb: 2 }}>
         Import Save Comparison
       </Typography>
@@ -271,7 +259,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
                         const importSkill = importData.playerData?.skills[skill] ?? 0;
                         return (
                           <TableRow key={skill}>
-                            <TableCell className={classes.skillTitle}>{skill}</TableCell>
+                            <TableCell sx={{ textTransform: "capitalize" }}>{skill}</TableCell>
                             <TableCell>{formatNumberNoSuffix(currentSkill, 0)}</TableCell>
                             <TableCell>{formatNumberNoSuffix(importSkill, 0)}</TableCell>
                             <TableCell>
@@ -446,6 +434,6 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
           additionalButton={<Button onClick={closeImportModal}>Cancel</Button>}
         />
       </Box>
-    </Box>
+    </Root>
   );
 };
