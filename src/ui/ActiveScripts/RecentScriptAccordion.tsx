@@ -16,7 +16,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { makeStyles } from "tss-react/mui";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -28,18 +27,11 @@ import { MoneyRate } from "../React/MoneyRate";
 import { RecentScript } from "../../Netscript/RecentScripts";
 import { LogBoxEvents } from "../React/LogBoxManager";
 
-const useStyles = makeStyles()({
-  noborder: {
-    borderBottom: "none",
-  },
-});
-
 interface IProps {
   recentScript: RecentScript;
 }
 
 export function RecentScriptAccordion(props: IProps): React.ReactElement {
-  const { classes } = useStyles();
   const [open, setOpen] = React.useState(false);
   const recentScript = props.recentScript;
 
@@ -68,53 +60,53 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
           <Table padding="none" size="small">
             <TableBody>
               <TableRow>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>└ Threads:</Typography>
                 </TableCell>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>{formatThreads(recentScript.runningScript.threads)}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.noborder} colSpan={2}>
+                <TableCell sx={{ borderBottom: "none" }} colSpan={2}>
                   <Typography sx={{ overflowWrap: "anywhere" }}>
                     └ Args: {arrayToString(recentScript.runningScript.args)}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>└ Online Time:</Typography>
                 </TableCell>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>
                     {convertTimeMsToTimeElapsedString(recentScript.runningScript.onlineRunningTime * 1e3)}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>└ Offline Time:</Typography>
                 </TableCell>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>
                     {convertTimeMsToTimeElapsedString(recentScript.runningScript.offlineRunningTime * 1e3)}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>└ Total online production:</Typography>
                 </TableCell>
-                <TableCell className={classes.noborder} align="left">
+                <TableCell sx={{ borderBottom: "none" }} align="left">
                   <Typography>
                     <Money money={recentScript.runningScript.onlineMoneyMade} />
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.noborder} colSpan={1} />
-                <TableCell className={classes.noborder} align="left">
+                <TableCell sx={{ borderBottom: "none" }} colSpan={1} />
+                <TableCell sx={{ borderBottom: "none" }} align="left">
                   <Typography>
                     &nbsp;{formatExp(recentScript.runningScript.onlineExpGained) + " hacking exp"}
                   </Typography>
@@ -122,35 +114,35 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
               </TableRow>
 
               <TableRow>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>└ Online production rate:</Typography>
                 </TableCell>
-                <TableCell className={classes.noborder} align="left">
+                <TableCell sx={{ borderBottom: "none" }} align="left">
                   <Typography>
                     <MoneyRate money={onlineMps} />
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.noborder} colSpan={1} />
-                <TableCell className={classes.noborder} align="left">
+                <TableCell sx={{ borderBottom: "none" }} colSpan={1} />
+                <TableCell sx={{ borderBottom: "none" }} align="left">
                   <Typography>&nbsp;{formatExp(onlineEps) + " hacking exp / sec"}</Typography>
                 </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell className={classes.noborder}>
+                <TableCell sx={{ borderBottom: "none" }}>
                   <Typography>└ Total offline production:</Typography>
                 </TableCell>
-                <TableCell className={classes.noborder} align="left">
+                <TableCell sx={{ borderBottom: "none" }} align="left">
                   <Typography>
                     <Money money={recentScript.runningScript.offlineMoneyMade} />
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.noborder} colSpan={1} />
-                <TableCell className={classes.noborder} align="left">
+                <TableCell sx={{ borderBottom: "none" }} colSpan={1} />
+                <TableCell sx={{ borderBottom: "none" }} align="left">
                   <Typography>
                     &nbsp;{formatExp(recentScript.runningScript.offlineExpGained) + " hacking exp"}
                   </Typography>
