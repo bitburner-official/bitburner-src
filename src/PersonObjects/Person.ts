@@ -1,6 +1,5 @@
 import type { Person as IPerson, WorkStats } from "@nsdefs";
 import type { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import type { IReviverValue } from "../utils/JSONReviver";
 import type { MoneySource } from "../utils/MoneySourceTracker";
 import type { HP } from "./HP";
 import type { Skills } from "./Skills";
@@ -261,5 +260,4 @@ export abstract class Person implements IPerson {
   abstract travelCostMoneySource(): MoneySource;
   abstract takeDamage(amt: number): boolean;
   abstract whoAmI(): string;
-  abstract toJSON(): IReviverValue;
 }

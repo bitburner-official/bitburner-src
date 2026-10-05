@@ -9,7 +9,7 @@
 import { HashUpgrades } from "./HashUpgrades";
 import { HashUpgrade } from "./HashUpgrade";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import type { Result } from "@nsdefs";
 import { HashUpgradeEnum } from "./Enums";
 
@@ -146,15 +146,5 @@ export class HashManager {
     return { success: true };
   }
 
-  //Serialize the current object to a JSON save state.
-  toJSON(): IReviverValue {
-    return Generic_toJSON("HashManager", this);
-  }
-
-  // Initializes a HashManager object from a JSON save state.
-  static fromJSON(value: IReviverValue): HashManager {
-    return Generic_fromJSON(HashManager, value.data);
-  }
+  static includedKeys = makeSerializable("HashManager", HashManager);
 }
-
-constructorsForReviver.HashManager = HashManager;

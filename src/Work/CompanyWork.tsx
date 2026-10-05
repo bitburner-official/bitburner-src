@@ -1,5 +1,6 @@
 import React from "react";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { Player } from "@player";
 import { PlayerBaseWork, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
@@ -71,17 +72,12 @@ export class CompanyWork extends PlayerBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("CompanyWork", this);
-  }
-
-  /** Initializes a CompanyWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): CompanyWork {
-    const work = Generic_fromJSON(CompanyWork, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): CompanyWork {
+    const work = Generic_fromJSON(CompanyWork, value.data, CompanyWork.includedKeys);
     if (!isMember("CompanyName", work.companyName)) return invalidWork();
     return work;
   }
-}
 
-constructorsForReviver.CompanyWork = CompanyWork;
+  static includedKeys = makeSerializable("CompanyWork", CompanyWork);
+}

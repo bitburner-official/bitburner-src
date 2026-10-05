@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest ideas for in-game features or other changes to the project.
+body:
+  - type: checkboxes
+    attributes:
+      label: Preflight Checklist
+      description: Please ensure you have completed all of the following.
+      options:
+        - label: I have read the "Reporting Bugs / Requesting Features" section in the [Contributing Guidelines](https://github.com/bitburner-official/bitburner-src/blob/dev/CONTRIBUTING.md#reporting-bugs--requesting-features).
+          required: true
+        - label: I understand that the issue tracker is for bugs in the game itself and feature requests, not for issues with my own scripts.
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe your suggestion.
+    validations:
+      required: true

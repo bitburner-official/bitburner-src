@@ -6,7 +6,8 @@ import { IAscensionResult } from "./IAscensionResult";
 import { Player } from "@player";
 import { Gang } from "./Gang";
 import { GangConstants } from "./data/Constants";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import {
   calculateRespectGain,
   calculateMoneyGain,
@@ -366,19 +367,14 @@ export class GangMember {
     return true;
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("GangMember", this);
-  }
-
-  /** Initializes a GangMember object from a JSON save state. */
-  static fromJSON(value: IReviverValue): GangMember {
-    const member = Generic_fromJSON(GangMember, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): GangMember {
+    const member = Generic_fromJSON(GangMember, value.data, GangMember.includedKeys);
     for (let i = 0; i < member.upgrades.length; ++i) {
       member.upgrades[i] = convertV2GangEquipmentNames(member.upgrades[i]);
     }
     return member;
   }
-}
 
-constructorsForReviver.GangMember = GangMember;
+  static includedKeys = makeSerializable("GangMember", GangMember);
+}

@@ -5,7 +5,8 @@ import { CityName, CorpEmployeeJob } from "@enums";
 import { IndustriesData } from "./data/IndustryData";
 import { MaterialInfo } from "./MaterialInfo";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { PartialRecord, createEnumKeyedRecord, getRecordEntries, getRecordKeys } from "../Types/Record";
 
@@ -220,14 +221,9 @@ export class Product {
     );
   }
 
-  // Serialize the current object to a JSON save state.
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Product", this);
-  }
-
-  // Initializes a Product object from a JSON save state.
-  static fromJSON(value: IReviverValue): Product {
-    const product = Generic_fromJSON(Product, value.data);
+  // Custom load handling
+  static jsonReviver(value: IReviverValue): Product {
+    const product = Generic_fromJSON(Product, value.data, Product.includedKeys);
     for (const productDataPerCity of Object.values(product.cityData)) {
       if (!Number.isFinite(productDataPerCity.effectiveRating)) {
         // Reset to a small value instead of 0 to avoid issues such as division by 0.
@@ -236,6 +232,6 @@ export class Product {
     }
     return product;
   }
-}
 
-constructorsForReviver.Product = Product;
+  static includedKeys = makeSerializable("Product", Product);
+}

@@ -149,7 +149,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
           </Link>
         </Typography>
         <Typography>
-          <Link href="https://discord.gg/TFc3hKD" target="_blank">
+          <Link href={CONSTANTS.DiscordURL} target="_blank">
             Post in the #bug-report channel on Discord.
           </Link>
         </Typography>

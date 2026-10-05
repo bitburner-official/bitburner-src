@@ -11,6 +11,7 @@ import { boardSizes } from "./Constants";
 import { isInteger, isNumber } from "../types";
 import { handleNextTurn, resetAI } from "./boardAnalysis/goAI";
 import { getMaxRep } from "./effects/effect";
+import { Reviver } from "../utils/GenericReviver";
 
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
@@ -66,7 +67,7 @@ export function loadGo(data: unknown): boolean {
   if (typeof data !== "string") return showError("Savedata was not a string");
   let parsedData;
   try {
-    parsedData = JSON.parse(data) as unknown;
+    parsedData = JSON.parse(data, Reviver) as unknown;
   } catch (e) {
     return showError(`Cannot JSON.parse the savedata: ${data}`);
   }

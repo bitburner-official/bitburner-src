@@ -17,7 +17,7 @@ import {
 import { HacknetNodeConstants } from "./data/Constants";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { ObjectValidator, minMax } from "../utils/Validator";
 
 export class HacknetNode implements IHacknetNode {
@@ -120,15 +120,5 @@ export class HacknetNode implements IHacknetNode {
     }
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("HacknetNode", this);
-  }
-
-  /** Initializes a HacknetNode object from a JSON save state. */
-  static fromJSON(value: IReviverValue): HacknetNode {
-    return Generic_fromJSON(HacknetNode, value.data);
-  }
+  static includedKeys = makeSerializable("HacknetNode", HacknetNode);
 }
-
-constructorsForReviver.HacknetNode = HacknetNode;

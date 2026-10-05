@@ -22,7 +22,7 @@ fixDoImportIssue();
 
 beforeAll(() => {
   initGameEnvironment();
-  setupBasicTestingEnvironment({ purchasePServer: true, purchaseHacknetServer: true });
+  setupBasicTestingEnvironment({ purchaseCloudServer: true, purchaseHacknetServer: true });
   getDarkscapeNavigator();
   Player.gainCharismaExp(1e100);
 });

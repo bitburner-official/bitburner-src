@@ -848,9 +848,9 @@ interface SourceFileLvl {
  */
 interface BladeburnerCurAction {
   /** Type of Action */
-  type: string;
+  type: BladeburnerActionType;
   /** Name of Action */
-  name: string;
+  name: BladeburnerActionName;
 }
 
 /** @public */
@@ -1141,7 +1141,9 @@ interface GangMemberAscension {
 interface SleeveBladeburnerTask extends BaseTask {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
-  actionName: string;
+  actionName:
+    | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionNameEnumType["InciteViolence"]>
+    | BladeburnerContractName;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;
@@ -6948,7 +6950,11 @@ interface UserInterface {
    *
    * If the function is called with no arguments, it will close the current script’s logs.
    *
-   * Otherwise, the pid argument can be used to close the logs from another script.
+   * Otherwise, the pid argument can be used to close the logs from another script. Tail windows can remain open
+   * after a script finishes, and can still be closed using that script's PID. If the script is rerun from its tail
+   * window, use the PID of the new process.
+   *
+   * If no tail window exists for the given PID, this function has no effect.
    *
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
@@ -7455,10 +7461,18 @@ export interface NS {
    *
    * This function returns the decimal number of script threads you need when running the hack command
    * to steal the specified amount of money from the target server.
-   * If hackAmount is less than zero, greater than the amount of money available on the server,
-   * or your hacking level is below the required level for the target server,
-   * then this function returns -1.
    *
+   * Returns -1 if any of the following conditions are met:
+   *
+   *  - `hackAmount` is less than 0.
+   *
+   *  - `hackAmount` is greater than the available money on the server.
+   *
+   *  - The available money on the server is 0.
+   *
+   *  - The player's hacking level is below the minimum required level to hack.
+   *
+   *  - The server security level is greater than or equal to 100.
    *
    * @example
    * ```js
@@ -7898,23 +7912,23 @@ export interface NS {
    * @example
    * ```js
    * // All servers that are one hop from the current server.
-   * ns.tprint("Neighbors of current server.");
-   * let neighbor = ns.scan();
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * ns.tprint("Neighbors of current server:");
+   * const neighbors = ns.scan();
+   * for (const neighbor of neighbors) {
+   *     ns.tprint(neighbor);
    * }
    * // All servers that are one hop from the current server, but by IP address.
-   * ns.tprint("IPs of current server's neighbors.");
-   * let neighbor = ns.scan(null, { returnByIP: true });
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * ns.tprint("IPs of current server's neighbors:");
+   * const neighborIPs = ns.scan(undefined, { returnByIP: true });
+   * for (const neighborIP of neighborIPs) {
+   *     ns.tprint(neighborIP);
    * }
    * // All neighbors of n00dles.
    * const target = "n00dles";
-   * neighbor = ns.scan(target);
-   * ns.tprintf("Neighbors of %s.", target);
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * const n00dlesNeighbors = ns.scan(target);
+   * ns.tprintf("Neighbors of %s:", target);
+   * for (const neighbor of n00dlesNeighbors) {
+   *     ns.tprint(neighbor);
    * }
    * ```
    *
@@ -8883,7 +8897,7 @@ export interface NS {
    * RAM cost: 0.1 GB
    *
    * Returns the amount of RAM required to run the specified script on the target server.
-   * Returns 0 if the script does not exist.
+   * Returns 0 if the script does not exist, has syntax errors or import errors.
    *
    * @param script - Filename of script. This is case-sensitive.
    * @param host - Hostname/IP of the server the target script is located on. Optional. Defaults to the server the calling script is running on.
@@ -9021,34 +9035,34 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Prompts the player with a dialog box and returns a promise. If the player cancels this dialog box (press X button
-   * or click outside the dialog box), the promise is resolved with a default value (empty string or "false"). If this
-   * API is called again while the old dialog box still exists, the old dialog box will be replaced with a new one, and
-   * the old promise will be resolved with the default value.
+   * Prompts the player with a dialog box and returns a promise.
    *
-   * Here is an explanation of the various options.
+   * The prompt and the return value depend on the `options.type` and on the player's action.
    *
-   * - `options.type` is not provided to the function. If `options.type` is left out and
-   *   only a string is passed to the function, then the default behavior is to create a
-   *   boolean dialog box.
+   * If the `options.type` is `"boolean"`, not provided, or `undefined`:
+   * - Prompt options: Yes/No
+   * - Return value: `true` if the player selects Yes, or `false` if they click No or cancel the box.
    *
-   * - `options.type` has value `undefined` or `"boolean"`. A boolean dialog box is
-   *   created. The player is shown "Yes" and "No" prompts, which return true and false
-   *   respectively. The script's execution is halted until the player presses either the
-   *   "Yes" or "No" button.
+   * If the `options.type` is `"select"`:
+   * - Prompt options: Dropdown list of options
+   * - Return value: The value selected by the player, or `""` if they cancel the box.
    *
-   * - `options.type` has value `"text"`. The player is given a text field to enter
-   *   free-form text. The script's execution is halted until the player enters some text
-   *   and/or presses the "Confirm" button.
+   * If the `options.type` is `"text"`:
+   * - Prompt options: Free-form text field
+   * - Return value: The value entered by the player, or `""` if they cancel the box.
    *
-   * - `options.type` has value `"select"`. The player is shown a drop-down field.
-   *   Choosing type `"select"` will require an array to be passed via the
-   *   `options.choices` property. The array can be an array of strings, an array of
-   *   numbers (not BigInt numbers), or a mixture of both numbers and strings. Any other
-   *   types of array elements will result in an error or an undefined/unexpected
-   *   behavior. The `options.choices` property will be ignored if `options.type` has a
-   *   value other than `"select"`. The script's execution is halted until the player
-   *   chooses one of the provided options and presses the "Confirm" button.
+   * The `options.choices` property is an optional array, only needed for the "select" prompt and ignored otherwise. Its
+   * elements can be strings or numbers (excluding BigInt).
+   *
+   * Note that when the player selects an option from the choices array, the selected value will always be converted to a
+   * string. For example, if the choices array is `[1, "2"]` and the player chooses `1` (the number value), the promise
+   * resolves to `"1"` (the string value).
+   *
+   * The player can cancel the prompt in two ways: by clicking the X button in the top-right, or clicking outside the dialog
+   * box.
+   *
+   * If the prompt API is called again while the old dialog box still exists, the old dialog box will be replaced with
+   * a new one, and the old promise will be resolved with the default value.
    *
    * @example
    * ```js
@@ -9075,13 +9089,16 @@ export interface NS {
    * ns.tprint(`Your favorite fruit is ${resultD.toLowerCase()}.`);
    * ```
    *
-   * @param txt - Text to appear in the prompt dialog box.
+   * @param txt - Text to appear in the prompt's body.
    * @param options - Options to modify the prompt the player is shown.
-   * @returns True if the player clicks “Yes”; false if the player clicks “No”; or the value entered by the player.
+   * @returns Return value depends on the player action and `options.type`. If `options.type` is "boolean" or
+   * `undefined`, the return value is `true` if the player clicks Yes, and `false` if they click "No" or cancel the
+   * prompt. If the `options.type` is "text" or "select", the return value is the one selected or entered by the player,
+   * or `""` if they cancel the prompt.
    */
   prompt(
     txt: string,
-    options?: { type?: "boolean" | "text" | "select"; choices?: string[] },
+    options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 
   /**
