@@ -1,7 +1,7 @@
 import * as React from "react";
 import { formatMoney } from "../formatNumber";
 import { Player } from "@player";
-import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 interface IProps {
   money: number;
@@ -9,13 +9,13 @@ interface IProps {
 }
 export function Money(props: IProps): React.ReactElement {
   return (
-    <Typography
+    <Box
       component="span"
       sx={(theme) => ({
         color: props.forPurchase && !Player.canAfford(props.money) ? theme.palette.action.disabled : theme.colors.money,
       })}
     >
       {formatMoney(props.money)}
-    </Typography>
+    </Box>
   );
 }

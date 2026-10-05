@@ -14,17 +14,6 @@ const zeroMarginSx = {
   m: 0,
 } satisfies SxProps<Theme>;
 
-const suggestionSx = {
-  ...zeroMarginSx,
-  position: "absolute",
-  bottom: "12px",
-  opacity: 0.75,
-  maxWidth: "100%",
-  whiteSpace: "pre",
-  overflow: "hidden",
-  pointerEvents: "none",
-} satisfies SxProps<Theme>;
-
 // Save command in case we de-load this screen.
 let command = "";
 
@@ -472,7 +461,20 @@ export function TerminalInput(): React.ReactElement {
           </Typography>
         </Paper>
       </Popper>
-      <Typography sx={suggestionSx} color={"primary"} paragraph={false}>
+      <Typography
+        sx={{
+          position: "absolute",
+          bottom: "12px",
+          opacity: 0.75,
+          maxWidth: "100%",
+          whiteSpace: "pre",
+          overflow: "hidden",
+          pointerEvents: "none",
+          ...zeroMarginSx,
+        }}
+        color={"primary"}
+        paragraph={false}
+      >
         {getSearchSuggestionPrespace()}
         {(searchResults[searchResultsIndex] ?? "").substring(value.length)}
       </Typography>

@@ -12,10 +12,10 @@ const cellTextSx = {
 } satisfies SxProps<Theme>;
 
 const TableCellXSmall = styled(TableCell)({
-  ...cellTextSx,
   maxWidth: "110px",
   fontSize: "14px",
   lineHeight: 1.2,
+  ...cellTextSx,
 });
 
 export function RecentErrorsPage(): React.ReactElement {
@@ -88,7 +88,7 @@ export function RecentErrorsPage(): React.ReactElement {
                     component="div"
                     sx={{
                       margin: "4px",
-                      color: "primary.main",
+                      color: (theme) => theme.palette.primary.main,
                       textOverflow: "ellipsis",
                       whiteSpace: "pre-wrap",
                       lineClamp: "6", // Needs webkit stuff, otherwise not an actual property. Also conflicts with overflowX: "auto" and maxHeight.

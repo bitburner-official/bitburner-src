@@ -3,7 +3,7 @@ import { Card, Suit } from "./Card";
 
 import Paper from "@mui/material/Paper";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
-import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material";
 
 const cardSx = {
@@ -49,9 +49,9 @@ export const ReactCard: FC<Props> = ({ card, hidden }) => {
       }}
     >
       <>
-        <Typography component="span" sx={{ fontSize: "20px", fontFamily: "sans-serif" }}>
+        <Box component="span" sx={{ fontSize: "20px", fontFamily: "sans-serif" }}>
           {hidden ? " - " : card.formatValue()}
-        </Typography>
+        </Box>
         <span>{hidden ? " - " : suit}</span>
       </>
     </Paper>

@@ -26,8 +26,8 @@ interface IProps {
 const locationSx = {
   color: (theme) => theme.colors.maplocation,
   whiteSpace: "nowrap",
-  margin: "0px",
-  padding: "0px",
+  m: 0,
+  p: 0,
   cursor: "pointer",
 } satisfies SxProps<Theme>;
 

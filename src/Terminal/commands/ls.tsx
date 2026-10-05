@@ -216,6 +216,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
   function SegmentGrid({ colSize, children }: SegmentGridProps): React.ReactElement {
     return (
       <Box
+        component="span"
         sx={{
           display: "grid",
           gridTemplateColumns: `repeat(auto-fill, ${colSize})`,

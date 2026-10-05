@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, List, ListItem, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import _ from "lodash";
 
 import { Output, Link, RawOutput } from "../OutputTypes";
@@ -67,14 +67,15 @@ export function TerminalRoot(): React.ReactElement {
 
   return (
     <Box component="div" sx={{ display: "flex", flexDirection: "column", height: "calc(100vh - 16px)" }}>
-      <List
+      <Box
+        component="ul" // used Box component="" because List and ListItem come with default styling
         key={key}
         id="terminal"
         sx={{ padding: 0, overflow: "scroll", flex: "0 1 auto", margin: "auto 0 0" }}
         ref={scrollHook}
       >
         {Terminal.outputHistory.map((item, i) => (
-          <ListItem key={i}>
+          <Box component="li" key={i}>
             {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
             {item instanceof RawOutput && (
               <Typography component="div" sx={preformattedTypographySx} paragraph={false}>
@@ -87,15 +88,15 @@ export function TerminalRoot(): React.ReactElement {
                 <ConnectLink path={item.path} text={item.text} />
               </Typography>
             )}
-          </ListItem>
+          </Box>
         ))}
 
         {Terminal.action !== null && (
-          <ListItem>
+          <Box component="li">
             <TerminalActionTimer />{" "}
-          </ListItem>
+          </Box>
         )}
-      </List>
+      </Box>
       <TerminalInput />
       <BitFlumeModal />
       <CodingContractModal />

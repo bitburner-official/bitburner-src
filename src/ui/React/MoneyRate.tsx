@@ -1,6 +1,6 @@
 import React from "react";
 import { formatMoney } from "../formatNumber";
-import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 export function MoneyRate({
   money,
@@ -10,8 +10,8 @@ export function MoneyRate({
   useExponentialFormForSmallValue?: boolean;
 }): JSX.Element {
   return (
-    <Typography component="span" sx={{ color: (theme) => theme.colors.money }}>
+    <Box component="span" sx={{ color: (theme) => theme.colors.money }}>
       {formatMoney(money, useExponentialFormForSmallValue)} / sec
-    </Typography>
+    </Box>
   );
 }

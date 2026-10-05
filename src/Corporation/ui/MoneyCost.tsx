@@ -1,7 +1,10 @@
 import * as React from "react";
 import { formatMoney } from "../../ui/formatNumber";
 import { Corporation } from "../Corporation";
-import { Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const ActionDisabled = styled("span")((theme) => ({ color: theme.theme.palette.action.disabled }));
+const ActionEnabled = styled("span")((theme) => ({ color: theme.theme.colors.money }));
 
 interface IProps {
   money: number;
@@ -9,16 +12,7 @@ interface IProps {
 }
 
 export function MoneyCost(props: IProps): React.ReactElement {
-  if (!(props.corp.funds > props.money))
-    return (
-      <Typography component="span" sx={{ color: (theme) => theme.palette.action.disabled }}>
-        {formatMoney(props.money)}
-      </Typography>
-    );
+  if (!(props.corp.funds > props.money)) return <ActionDisabled>{formatMoney(props.money)}</ActionDisabled>;
 
-  return (
-    <Typography component="span" sx={{ color: (theme) => theme.colors.money }}>
-      {formatMoney(props.money)}
-    </Typography>
-  );
+  return <ActionEnabled>{formatMoney(props.money)}</ActionEnabled>;
 }

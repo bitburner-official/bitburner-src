@@ -49,7 +49,7 @@ export const Modal = ({
         onClose();
       }}
       closeAfterTransition
-      sx={{ ...sx, display: "flex", alignItems: "center", justifyContent: "center" }}
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center", ...sx }}
     >
       <Fade in={open}>
         <Box
@@ -60,7 +60,7 @@ export const Modal = ({
             backgroundColor: theme.palette.background.default,
             border: "2px solid " + theme.palette.primary.main,
             boxShadow: `0px 3px 5px -1px ${theme.palette.primary.dark},0px 5px 8px 0px ${theme.palette.primary.dark},0px 1px 14px 0px ${theme.palette.primary.dark}`,
-            padding: 2,
+            p: "2px",
             maxWidth: "80%",
             maxHeight: "80%",
             overflow: "auto",
@@ -77,13 +77,11 @@ export const Modal = ({
           <IconButton
             onClick={onClose}
             sx={{
-              closeButton: {
-                position: "absolute",
-                right: 3,
-                top: 3,
-                width: 20,
-                height: 20,
-              },
+              position: "absolute",
+              right: 3,
+              top: 3,
+              width: 20,
+              height: 20,
             }}
           >
             <CloseIcon />
