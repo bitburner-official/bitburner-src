@@ -21,7 +21,7 @@ export const TerminalHelpText: string[] = [
   "         [FILE...] [-O OUTFILE]",
   "         [-m NUM] [-{A|B|C} NUM]",
   "    grow                             Spoof money in this server's bank account, increasing the amount available",
-  "    hack                             Steal money from this server",
+  "    hack                             Steal money from this server and backdoor it",
   "    help [COMMAND]                   Print this help text, or help text for COMMAND",
   "    history [-c]                     Print your Terminal command history",
   "    home                             Connect to your home computer",
@@ -319,7 +319,7 @@ export const HelpTexts: Record<string, string[]> = {
   hack: [
     "Usage: hack",
     " ",
-    "Steal money from the current server. Requires root access.",
+    "Steal money from the current server and backdoor it. Requires root access.",
     " ",
     "For more information, go to Documentation > Resources > NS API Documentation > Hack",
     " ",
