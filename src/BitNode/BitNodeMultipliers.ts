@@ -42,10 +42,10 @@ export class BitNodeMultipliers {
   /** Influences the amount of divisions a corporation can have at the same time. */
   CorporationDivisions = 1;
 
-  /** Influences profits from corporation dividends and selling shares. */
+  /** Influences an exponential modifier applied to corporation dividends. */
   CorporationSoftcap = 1;
 
-  /** Influences an exponential modifier applied to corporation dividends. */
+  /** Influences the valuation of corporations created by the player. */
   CorporationValuation = 1;
 
   /** Influences the base experience gained for each ability when the player commits a crime. */

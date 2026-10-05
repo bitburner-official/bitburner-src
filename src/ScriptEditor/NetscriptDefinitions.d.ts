@@ -714,9 +714,9 @@ interface BitNodeMultipliers {
   CompanyWorkRepGain: number;
   /** Influences the amount of divisions a corporation can have at the same time. */
   CorporationDivisions: number;
-  /** Influences profits from corporation dividends and selling shares. */
-  CorporationSoftcap: number;
   /** Influences an exponential modifier applied to corporation dividends. */
+  CorporationSoftcap: number;
+  /** Influences the valuation of corporations created by the player. */
   CorporationValuation: number;
   /** Influences the base experience gained for each ability when the player commits a crime. */
   CrimeExpGain: number;

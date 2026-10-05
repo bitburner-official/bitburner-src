@@ -354,7 +354,7 @@ number
 
 </td><td>
 
-Influences profits from corporation dividends and selling shares.
+Influences an exponential modifier applied to corporation dividends.
 
 
 </td></tr>
@@ -373,7 +373,7 @@ number
 
 </td><td>
 
-Influences an exponential modifier applied to corporation dividends.
+Influences the valuation of corporations created by the player.
 
 
 </td></tr>

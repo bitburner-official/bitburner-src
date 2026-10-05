@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CorporationValuation property
 
-Influences an exponential modifier applied to corporation dividends.
+Influences the valuation of corporations created by the player.
 
 **Signature:**
 
