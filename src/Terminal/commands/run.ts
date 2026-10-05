@@ -30,7 +30,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
     (async () => {
       // There's already an opened contract
       if (Terminal.contractOpen) {
-        return Terminal.error("There's already a Coding Contract in progress");
+        return Terminal.error("There's already a Coding Contract in Progress");
       }
 
       const server = Player.getCurrentServer();
@@ -48,7 +48,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
       // Check if the contract still exists by the time the promise is fulfilled
       if (postPromptServer?.getContract(path) == null) {
         Terminal.contractOpen = false;
-        return Terminal.error("Contract no longer exists. (Was it solved by a script?)");
+        return Terminal.error("Contract no longer exists (Was it solved by a script?)");
       }
 
       switch (promptResult.result) {
