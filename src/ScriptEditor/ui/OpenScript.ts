@@ -11,6 +11,8 @@ export class OpenScript {
   code: string;
   hostname: string;
   lastPosition: Position;
+  /** Editor view state (folded regions, scroll position, cursor). Restored when the editor shows this script again. */
+  lastViewState: editor.ICodeEditorViewState | null = null;
   model: ITextModel;
   vimMode: boolean;
   isTxt: boolean;
