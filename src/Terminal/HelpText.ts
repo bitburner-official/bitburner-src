@@ -415,6 +415,7 @@ export const HelpTexts: Record<string, string[]> = {
     "Examples: ",
     " ",
     "    mv hacking-controller.js scripts/hacking-controller.js",
+    " ",
     "    mv myScript.js myOldScript.js",
     " ",
   ],
