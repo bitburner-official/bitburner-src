@@ -19,7 +19,7 @@ export const TerminalHelpText: string[] = [
   "    free                             Print the max RAM and usage of this server",
   "    grep [OPTION...] PATTERN         Search each FILE for a PATTERN (a string or regex) and print the results",
   "         [FILE...] [-O OUTFILE]",
-  "         [-m NUM] [-{A|B|C} NUM]...",
+  "         [-m NUM] [-{A|B|C} NUM]",
   "    grow                             Spoof money in this server's bank account, increasing the amount available",
   "    hack                             Steal money from this server",
   "    help [COMMAND]                   Print this help text, or help text for COMMAND",
@@ -259,7 +259,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
   ],
   grep: [
-    "Usage: grep [OPTION...] PATTERN [FILE...] [-O OUTFILE] [-{m|A|B|C} NUM]...",
+    "Usage: grep [OPTION...] PATTERN [FILE...] [-O OUTFILE] [-{m|A|B|C} NUM]",
     " ",
     "Search for PATTERN in each FILE and print results to the Terminal. For example:",
     " ",
