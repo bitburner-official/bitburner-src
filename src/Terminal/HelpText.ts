@@ -231,6 +231,7 @@ export const HelpTexts: Record<string, string[]> = {
     "Examples:",
     " ",
     "    upload path/to/dir",
+    " ",
     "    upload .",
     " ",
   ],
@@ -514,6 +515,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
   ],
   sudov: ["Usage: sudov", " ", "Prints whether or not you have root access to the current machine", " "],
+
   tail: [
     "Usage: tail {PID|SCRIPT_NAME [ARGS...]}",
     " ",
