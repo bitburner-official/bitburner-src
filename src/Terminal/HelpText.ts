@@ -1,5 +1,5 @@
 export const TerminalHelpText: string[] = [
-  "Enter 'help COMMAND' for details about a command.",
+  "Type 'help [COMMAND]' to learn more about the command ",
   " ",
   '    alias [-g] [ALIAS_NAME="VALUE"]  Create or display Terminal aliases',
   "    analyze                          Get information about the current machine ",
@@ -162,8 +162,6 @@ export const HelpTexts: Record<string, string[]> = {
     "    cd scripts/hacking",
     " ",
     "    cd /logs",
-    " ",
-    "Or to change to a parent directory:",
     " ",
     "    cd ../",
     " ",
@@ -339,7 +337,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
   ],
   hostname: ["Usage: hostname", " ", "Prints the hostname of the current server", " "],
-  ipaddr: ["Usage: ipaddr", " ", "Prints the IP address of the current server.", " "],
+  ipaddr: ["Usage: ipaddr", " ", "Prints the IP address of the current server", " "],
   kill: [
     "Usage: kill {PID|SCRIPT_NAME [ARGS...]}",
     " ",
