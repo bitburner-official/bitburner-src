@@ -259,7 +259,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
   ],
   grep: [
-    "Usage: grep [OPTION...] PATTERN [FILE...] [-O OUTFILE] [-{m|A|B|C} NUM]",
+    "Usage: grep [OPTION...] PATTERN [FILE...] [-O OUTFILE] [-m NUM] [-{A|B|C} NUM]",
     " ",
     "Search for PATTERN in each FILE and print results to the Terminal. For example:",
     " ",
