@@ -99,7 +99,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
           <Box
             sx={{ cursor: "grab", textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}
           >
-            <LeftIcon color="secondary" sx={{ fontSize: "24px", padding: "2px" }} />
+            <LeftIcon sx={{ fontSize: "24px", padding: "2px", color: (theme) => theme.colors.secondary }} />
             <Typography flexGrow={1} color="secondary">
               {header}
             </Typography>
