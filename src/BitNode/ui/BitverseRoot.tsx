@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import { CompletedProgramName } from "@enums";
 import { Modal } from "../../ui/React/Modal";
 import { DocumentationLink } from "../../ui/React/DocumentationLink";
+import type { Theme } from "@mui/material";
 
 function BitVerseMapRow({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
@@ -20,20 +21,20 @@ function BitVerseMapRow({ children }: { children: React.ReactNode }): React.Reac
   );
 }
 
-function getPortalColor(n: number, level: number): string {
+function getPortalColor(theme: Theme, n: number, level: number): React.CSSProperties["color"] {
   // Repeating BitNode: levels above 2 keep the level 2 color
   if (n === 12 && level >= 2) {
-    return Settings.theme.bnlvl2;
+    return theme.colors.bnlvl2;
   }
   switch (level) {
     case 1:
-      return Settings.theme.bnlvl1;
+      return theme.colors.bnlvl1;
     case 2:
-      return Settings.theme.bnlvl2;
+      return theme.colors.bnlvl2;
     case 3:
-      return Settings.theme.bnlvl3;
+      return theme.colors.bnlvl3;
     default:
-      return Settings.theme.bnlvl0;
+      return theme.colors.bnlvl0;
   }
 }
 
@@ -83,7 +84,7 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
               "&:hover": {
                 color: "#fff",
               },
-              color: getPortalColor(props.n, props.level),
+              color: (theme) => getPortalColor(theme, props.n, props.level),
             }}
             aria-label={`BitNode-${bitNode.number.toString()}: ${bitNode.name}`}
             aria-description={bitNode.tagline}
