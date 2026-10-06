@@ -396,7 +396,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
             <Paper
               className={classes.logs}
               style={{
-                height: `calc(100% - ${minWindowSize[1]}px)`,
+                height: `calc(100% - ${minWindowSize[1] + 2}px)`,
                 display: propsRef.current.minimized ? "none" : "flex",
               }}
               tabIndex={-1}
