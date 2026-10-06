@@ -103,7 +103,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
           <Box
             sx={{ cursor: "grab", textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}
           >
-            <LeftIcon color="secondary" sx={{ ...iconSx, padding: "2px" }} />
+            <LeftIcon color="secondary" sx={{ padding: "2px", ...iconSx }} />
             <Typography flexGrow={1} color="secondary">
               {header}
             </Typography>
@@ -123,8 +123,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
             >
               {
                 <CurrentIcon
-                  sx={iconSx}
-                  color="secondary"
+                  sx={{ color: (theme) => theme.colors.secondary, ...iconSx }}
                   onClick={() => setOpen((old) => !old)}
                   onTouchEnd={() => setOpen((old) => !old)}
                 />

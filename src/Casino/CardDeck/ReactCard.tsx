@@ -44,8 +44,8 @@ export const ReactCard: FC<Props> = ({ card, hidden }) => {
   return (
     <Paper
       sx={{
-        ...cardSx,
         color: card.isRedSuit() ? "red" : "black",
+        ...cardSx,
       }}
     >
       <>

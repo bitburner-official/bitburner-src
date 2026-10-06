@@ -8,11 +8,6 @@ import { extractCurrentText, getTabCompletionPossibilities } from "../getTabComp
 import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
-import type { SxProps, Theme } from "@mui/material";
-
-const zeroMarginSx = {
-  m: 0,
-} satisfies SxProps<Theme>;
 
 // Save command in case we de-load this screen.
 let command = "";
@@ -416,7 +411,7 @@ export function TerminalInput(): React.ReactElement {
   return (
     <>
       <TextField
-        sx={zeroMarginSx}
+        sx={{ m: 0 }}
         fullWidth
         color={Terminal.action === null ? "primary" : "secondary"}
         autoFocus
@@ -453,10 +448,22 @@ export function TerminalInput(): React.ReactElement {
         sx={{ maxWidth: "75%" }}
       >
         <Paper sx={{ m: 1, p: 2 }}>
-          <Typography sx={zeroMarginSx} color={"primary"} paragraph={false}>
+          <Typography
+            sx={{
+              m: 0,
+              color: (theme) => theme.colors.primary,
+            }}
+            paragraph={false}
+          >
             Possible autocomplete candidates:
           </Typography>
-          <Typography sx={zeroMarginSx} color={"primary"} paragraph={false}>
+          <Typography
+            sx={{
+              m: 0,
+              color: (theme) => theme.colors.primary,
+            }}
+            paragraph={false}
+          >
             {possibilities.join(" ")}
           </Typography>
         </Paper>
@@ -470,7 +477,7 @@ export function TerminalInput(): React.ReactElement {
           whiteSpace: "pre",
           overflow: "hidden",
           pointerEvents: "none",
-          ...zeroMarginSx,
+          m: 0,
         }}
         color={"primary"}
         paragraph={false}
