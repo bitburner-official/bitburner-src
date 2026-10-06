@@ -675,7 +675,7 @@ export async function main(ns) {
     throw new Error(`Invalid step in the tutorial: ${step}`);
   }
   return (
-    <Paper square sx={{ width: "50vw", minWidth: "50vw", p: 2 }}>
+    <Paper square sx={{ width: "50vw", minWidth: "50vw", p: 2, border: 0}}>
       {content.content}
       <br />
       {step !== iTutorialSteps.DocumentationInfo && (
