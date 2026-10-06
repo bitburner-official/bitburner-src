@@ -157,14 +157,14 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
   );
 }
 
-const TitleButton = styled(IconButton)({
+const TitleButton = styled(IconButton)(({ theme }) => ({
   borderWidth: "0 0 0 1px",
-  borderColor: Settings.theme.welllight,
+  borderColor: theme.colors.welllight,
   borderStyle: "solid",
   borderRadius: "0",
   padding: "0",
   height: "100%",
-});
+}));
 
 interface LogWindowProps {
   script: RunningScript;
