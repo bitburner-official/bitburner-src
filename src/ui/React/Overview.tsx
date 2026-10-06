@@ -12,10 +12,6 @@ import { Settings } from "../../Settings/Settings";
 import { Box, Button, Typography } from "@mui/material";
 import { debounce } from "lodash";
 
-const iconSx = {
-  fontSize: "24px",
-};
-
 interface IProps {
   children: (parentOpen: boolean) => JSX.Element[] | JSX.Element | React.ReactElement[] | React.ReactElement;
   mode: "tutorial" | "overview";
@@ -103,7 +99,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
           <Box
             sx={{ cursor: "grab", textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}
           >
-            <LeftIcon color="secondary" sx={{ padding: "2px", ...iconSx }} />
+            <LeftIcon color="secondary" sx={{ fontSize: "24px", padding: "2px" }} />
             <Typography flexGrow={1} color="secondary">
               {header}
             </Typography>
@@ -123,7 +119,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
             >
               {
                 <CurrentIcon
-                  sx={{ color: (theme) => theme.colors.secondary, ...iconSx }}
+                  sx={{ fontSize: "24px", color: (theme) => theme.colors.secondary }}
                   onClick={() => setOpen((old) => !old)}
                   onTouchEnd={() => setOpen((old) => !old)}
                 />
