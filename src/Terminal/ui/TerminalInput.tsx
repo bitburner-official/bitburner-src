@@ -478,8 +478,8 @@ export function TerminalInput(): React.ReactElement {
           overflow: "hidden",
           pointerEvents: "none",
           m: 0,
+          color: (theme) => theme.colors.primary,
         }}
-        color={"primary"}
         paragraph={false}
       >
         {getSearchSuggestionPrespace()}
