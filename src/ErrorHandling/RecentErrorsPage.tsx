@@ -11,12 +11,13 @@ const cellTextSx = {
   textAlign: "left",
 } satisfies SxProps<Theme>;
 
-const TableCellXSmall = styled(TableCell)({
-  maxWidth: "110px",
+const TDXSmall = ({ children }: { children: React.ReactNode }): React.ReactElement => (
+  <Box component="td" sx={cellTextSx}>
+    <Box component="div" sx={{  maxWidth: "110px",
   fontSize: "14px",
-  lineHeight: 1.2,
-  ...cellTextSx,
-});
+  lineHeight: 1.2,}}>{children}</Box>
+  </Box>
+);
 
 export function RecentErrorsPage(): React.ReactElement {
   const rerender = useRerender();
@@ -50,29 +51,29 @@ export function RecentErrorsPage(): React.ReactElement {
   return (
     <div>
       <Typography component="div" sx={{ height: "100vh", overflowY: "auto", scrollbarWidth: "thin" }}>
-        <Table sx={{ width: "100%", maxWidth: "100%", borderCollapse: "collapse" }}>
-          <TableHead>
-            <TableRow>
-              <TableCell component="th" sx={cellTextSx}>
+        <Box component="table" sx={{ width: "100%", maxWidth: "100%", borderCollapse: "collapse" }}>
+          <Box component="thead">
+            <Box component="tr">
+              <Box component="th" sx={cellTextSx}>
                 Count
-              </TableCell>
-              <TableCell component="th" sx={cellTextSx}>
+              </Box>
+              <Box component="th" sx={cellTextSx}>
                 Type
-              </TableCell>
-              <TableCell component="th" sx={cellTextSx}>
+              </Box>
+              <Box component="th" sx={cellTextSx}>
                 Message
-              </TableCell>
-              <TableCell component="th" sx={cellTextSx}>
+              </Box>
+              <Box component="th" sx={cellTextSx}>
                 Script
-              </TableCell>
-              <TableCell component="th" sx={cellTextSx}>
+              </Box>
+              <Box component="th" sx={cellTextSx}>
                 Time
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+              </Box>
+            </Box>
+          </Box>
+          <Box component="tbody">
             {ErrorState.Errors.map((e, i) => (
-              <TableRow
+              <Box component="tr"
                 key={i}
                 sx={(theme) => ({
                   borderTop: `1px solid ${theme.colors.button}`,
@@ -81,14 +82,14 @@ export function RecentErrorsPage(): React.ReactElement {
                 })}
                 onClick={() => showError(e)}
               >
-                <TableCellXSmall>{e.occurrences}</TableCellXSmall>
-                <TableCellXSmall>{e.errorType}</TableCellXSmall>
-                <TableCell>
+                <TDXSmall>{e.occurrences}</TDXSmall>
+                <TDXSmall>{e.errorType}</TDXSmall>
+                <Box component="td">
                   <Box
                     component="div"
                     sx={{
                       margin: "4px",
-                      color: (theme) => theme.palette.primary.main,
+                      color: (theme) => theme.colors.primary,
                       textOverflow: "ellipsis",
                       whiteSpace: "pre-wrap",
                       lineClamp: "6", // Needs webkit stuff, otherwise not an actual property. Also conflicts with overflowX: "auto" and maxHeight.
@@ -100,21 +101,21 @@ export function RecentErrorsPage(): React.ReactElement {
                   >
                     {formatMessage(e.message)}
                   </Box>
-                </TableCell>
-                <TableCell sx={cellTextSx}>
+                </Box>
+                <Box component="td" sx={cellTextSx}>
                   <Box component="div" sx={{ maxWidth: "200px" }}>
                     <Tooltip title={<>{formatMessage(e.scriptName)}</>}>
                       <Box component="div" sx={{ textOverflow: "ellipsis", overflow: "auto" }}>
                         {formatMessage(e.scriptName)}
-                      </Box>
+                      </Box>  
                     </Tooltip>
                   </Box>
-                </TableCell>
-                <TableCellXSmall>{e.time.toLocaleString()}</TableCellXSmall>
-              </TableRow>
+                </Box>
+                <TDXSmall>{e.time.toLocaleString()}</TDXSmall>
+              </Box>
             ))}
-          </TableBody>
-        </Table>
+          </Box>
+        </Box>
       </Typography>
     </div>
   );
