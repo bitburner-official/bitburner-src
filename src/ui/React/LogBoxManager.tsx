@@ -3,6 +3,8 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 
+import { styled } from "@mui/material/styles";
+
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -25,7 +27,6 @@ import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
 import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
-import { makeStyles } from "tss-react/mui";
 import { logBoxBaseZIndex } from "./Constants";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { helpers } from "../../Netscript/NetscriptHelpers";
@@ -156,36 +157,24 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
   );
 }
 
+const TitleButton = styled(IconButton)({
+  borderWidth: "0 0 0 1px",
+  borderColor: Settings.theme.welllight,
+  borderStyle: "solid",
+  borderRadius: "0",
+  padding: "0",
+  height: "100%",
+});
+
 interface LogWindowProps {
   script: RunningScript;
   onClose: () => void;
   hidden: boolean;
 }
 
-const useStyles = makeStyles()({
-  logs: {
-    overflowY: "scroll",
-    overflowX: "hidden",
-    scrollbarWidth: "auto",
-    flexDirection: "column-reverse",
-    whiteSpace: "pre-wrap",
-    wordWrap: "break-word",
-    borderWidth: "0 1px 1px 1px",
-  },
-  titleButton: {
-    borderWidth: "0 0 0 1px",
-    borderColor: Settings.theme.welllight,
-    borderStyle: "solid",
-    borderRadius: "0",
-    padding: "0",
-    height: "100%",
-  },
-});
-
 function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
-  const { classes } = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
   const rerender = useRerender(Settings.TailRenderInterval);
@@ -365,38 +354,49 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
             </span>
           }
         >
-          <>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}
+          >
             <Paper className="drag" sx={{ display: "flex", alignItems: "center", cursor: "grab" }} ref={draggableRef}>
               {title()}
 
               <span style={{ minWidth: "fit-content", height: `${minWindowSize[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
-                  <IconButton title="Re-run script" className={classes.titleButton} onClick={run} onTouchEnd={run}>
+                  <TitleButton title="Re-run script" onClick={run} onTouchEnd={run}>
                     <PlayCircleIcon />
-                  </IconButton>
+                  </TitleButton>
                 ) : (
-                  <IconButton title="Stop script" className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
+                  <TitleButton title="Stop script" onClick={kill} onTouchEnd={kill}>
                     <StopCircleIcon color="error" />
-                  </IconButton>
+                  </TitleButton>
                 )}
-                <IconButton
+                <TitleButton
                   title={propsRef.current.minimized ? "Expand" : "Minimize"}
-                  className={classes.titleButton}
                   onClick={minimize}
                   onTouchEnd={minimize}
                 >
                   {propsRef.current.minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-                </IconButton>
-                <IconButton title="Close window" className={classes.titleButton} onClick={onClose} onTouchEnd={onClose}>
+                </TitleButton>
+                <TitleButton title="Close window" onClick={onClose} onTouchEnd={onClose}>
                   <CloseIcon />
-                </IconButton>
+                </TitleButton>
               </span>
             </Paper>
 
             <Paper
-              className={classes.logs}
-              style={{
-                height: `calc(100% - ${minWindowSize[1] + 2}px)`,
+              sx={{
+                overflowY: "scroll",
+                overflowX: "hidden",
+                scrollbarWidth: "auto",
+                flexDirection: "column-reverse",
+                whiteSpace: "pre-wrap",
+                wordWrap: "break-word",
+                borderWidth: "0 1px 1px 1px",
+                height: `calc(100% - ${minWindowSize[1]}px)`,
                 display: propsRef.current.minimized ? "none" : "flex",
               }}
               tabIndex={-1}
@@ -421,7 +421,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                 )}
               </div>
             </Paper>
-          </>
+          </Box>
         </ResizableBox>
       </Box>
     </Draggable>
