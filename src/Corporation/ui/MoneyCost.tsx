@@ -9,7 +9,16 @@ interface IProps {
 }
 
 export function MoneyCost(props: IProps): React.ReactElement {
-  if (!(props.corp.funds > props.money)) return <Box component="span" sx={(theme) => ({ color: theme.palette.action.disabled })}>{formatMoney(props.money)}</Box>;
+  if (!(props.corp.funds > props.money))
+    return (
+      <Box component="span" sx={(theme) => ({ color: theme.palette.action.disabled })}>
+        {formatMoney(props.money)}
+      </Box>
+    );
 
-  return <Box component="span" sx={(theme) => ({ color: theme.colors.money })}>{formatMoney(props.money)}</Box>;
+  return (
+    <Box component="span" sx={(theme) => ({ color: theme.colors.money })}>
+      {formatMoney(props.money)}
+    </Box>
+  );
 }

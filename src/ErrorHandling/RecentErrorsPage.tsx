@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
-import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography, Tooltip } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
 
 const cellTextSx = {
   verticalAlign: "top",
@@ -13,9 +12,9 @@ const cellTextSx = {
 
 const TDXSmall = ({ children }: { children: React.ReactNode }): React.ReactElement => (
   <Box component="td" sx={cellTextSx}>
-    <Box component="div" sx={{  maxWidth: "110px",
-  fontSize: "14px",
-  lineHeight: 1.2,}}>{children}</Box>
+    <Box component="div" sx={{ maxWidth: "110px", fontSize: "14px", lineHeight: 1.2 }}>
+      {children}
+    </Box>
   </Box>
 );
 
@@ -73,7 +72,8 @@ export function RecentErrorsPage(): React.ReactElement {
           </Box>
           <Box component="tbody">
             {ErrorState.Errors.map((e, i) => (
-              <Box component="tr"
+              <Box
+                component="tr"
                 key={i}
                 sx={(theme) => ({
                   borderTop: `1px solid ${theme.colors.button}`,
@@ -107,7 +107,7 @@ export function RecentErrorsPage(): React.ReactElement {
                     <Tooltip title={<>{formatMessage(e.scriptName)}</>}>
                       <Box component="div" sx={{ textOverflow: "ellipsis", overflow: "auto" }}>
                         {formatMessage(e.scriptName)}
-                      </Box>  
+                      </Box>
                     </Tooltip>
                   </Box>
                 </Box>
