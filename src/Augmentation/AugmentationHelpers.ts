@@ -72,7 +72,7 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = fal
     Player.applyEntropy(Player.entropy);
   }
 
-  // Ban COTMG in faction rumours if aug is not NFG 
+  // Ban COTMG in faction rumours if aug is not NFG
   if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod) && aug.name !== AugmentationName.NeuroFluxGovernor) {
     Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
   }
