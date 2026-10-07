@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
-import { Theme } from "@mui/material/styles";
 
 import { Player } from "@player";
 import { FactionName, FactionDiscovery } from "@enums";
@@ -59,13 +58,15 @@ const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   );
 };
 
-const factionNameSx = (theme: Theme, faction: Faction) => ({
-  overflow: "hidden",
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
-  color: faction.isBanned ? theme.palette.action.disabled : "inherit",
-  textDecorationLine: faction.isBanned ? "line-through" : "none",
-});
+function getStylesForFactionName(faction: Faction) {
+  return {
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    color: faction.isBanned ? Settings.theme.disabled : "inherit",
+    textDecorationLine: faction.isBanned ? "line-through" : "none",
+  };
+}
 
 interface FactionElementProps {
   faction: Faction;
@@ -141,15 +142,13 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                   </>
                 }
               >
-                <Box component="span" sx={(theme) => factionNameSx(theme, props.faction)}>
-                  {props.faction.name}
-                </Box>
+                <span style={getStylesForFactionName(props.faction)}>{props.faction.name}</span>
               </Tooltip>
             ) : (
               <Tooltip title={"Rumored Faction"}>
-                <Box component="span" sx={(theme) => factionNameSx(theme, props.faction)}>
+                <span style={getStylesForFactionName(props.faction)}>
                   <CorruptibleText content={props.faction.name} spoiler={false} />
-                </Box>
+                </span>
               </Tooltip>
             )}
 
