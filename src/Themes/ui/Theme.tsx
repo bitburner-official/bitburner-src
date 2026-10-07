@@ -15,19 +15,16 @@ declare module "@mui/material/styles" {
       cha: React.CSSProperties["color"];
       int: React.CSSProperties["color"];
       rep: React.CSSProperties["color"];
-      backgroundprimary: React.CSSProperties["color"];
       backgroundsecondary: React.CSSProperties["color"];
       button: React.CSSProperties["color"];
-      successlight: React.CSSProperties["color"];
-      success: React.CSSProperties["color"];
-      successdark: React.CSSProperties["color"];
       white: React.CSSProperties["color"];
       black: React.CSSProperties["color"];
       maplocation: React.CSSProperties["color"];
-      disabled: React.CSSProperties["color"];
-      primary: React.CSSProperties["color"];
-      secondary: React.CSSProperties["color"];
-      well: React.CSSProperties["color"];
+      welllight: React.CSSProperties["color"];
+      bnlvl0: React.CSSProperties["color"];
+      bnlvl1: React.CSSProperties["color"];
+      bnlvl2: React.CSSProperties["color"];
+      bnlvl3: React.CSSProperties["color"];
     };
   }
   interface ThemeOptions {
@@ -39,19 +36,16 @@ declare module "@mui/material/styles" {
       cha: React.CSSProperties["color"];
       int: React.CSSProperties["color"];
       rep: React.CSSProperties["color"];
-      backgroundprimary: React.CSSProperties["color"];
       backgroundsecondary: React.CSSProperties["color"];
       button: React.CSSProperties["color"];
-      successlight: React.CSSProperties["color"];
-      success: React.CSSProperties["color"];
-      successdark: React.CSSProperties["color"];
       white: React.CSSProperties["color"];
       black: React.CSSProperties["color"];
       maplocation: React.CSSProperties["color"];
-      disabled: React.CSSProperties["color"];
-      primary: React.CSSProperties["color"];
-      secondary: React.CSSProperties["color"];
-      well: React.CSSProperties["color"];
+      welllight: React.CSSProperties["color"];
+      bnlvl0: React.CSSProperties["color"];
+      bnlvl1: React.CSSProperties["color"];
+      bnlvl2: React.CSSProperties["color"];
+      bnlvl3: React.CSSProperties["color"];
     };
   }
 }
@@ -69,19 +63,16 @@ export function refreshTheme(): void {
       cha: Settings.theme.cha,
       int: Settings.theme.int,
       rep: Settings.theme.rep,
-      backgroundprimary: Settings.theme.backgroundprimary,
       backgroundsecondary: Settings.theme.backgroundsecondary,
       button: Settings.theme.button,
-      successlight: Settings.theme.successlight,
-      success: Settings.theme.success,
-      successdark: Settings.theme.successdark,
       white: Settings.theme.white,
       black: Settings.theme.black,
       maplocation: Settings.theme.maplocation,
-      disabled: Settings.theme.disabled,
-      primary: Settings.theme.primary,
-      secondary: Settings.theme.secondary,
-      well: Settings.theme.well,
+      welllight: Settings.theme.welllight,
+      bnlvl0: Settings.theme.bnlvl0,
+      bnlvl1: Settings.theme.bnlvl1,
+      bnlvl2: Settings.theme.bnlvl2,
+      bnlvl3: Settings.theme.bnlvl3,
     },
     palette: {
       primary: {
@@ -435,7 +426,7 @@ export function refreshTheme(): void {
     },
   });
 
-  document.body.style.backgroundColor = theme.colors.backgroundprimary?.toString() ?? "black";
+  document.body.style.backgroundColor = theme.palette.background.default?.toString() ?? "black";
 
   const styleSheet =
     ":root {" +
