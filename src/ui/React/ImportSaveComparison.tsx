@@ -67,7 +67,7 @@ const Root = styled(Box)(({ theme }) => ({
     [`& .${tableHeadClasses.root} .${tableRowClasses.root}`]: {
       backgroundColor: theme.colors.backgroundsecondary,
       [`& .${tableCellClasses.root}`]: {
-        color: theme.colors.primary,
+        color: theme.palette.primary.main,
         fontWeight: "bold",
       },
     },
