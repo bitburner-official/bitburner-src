@@ -6810,7 +6810,7 @@ interface Stanek {
    * @remarks
    * RAM cost: 2 GB
    *
-   * The church only accepts those who have not purchased or installed any augmentations. "NeuroFlux Governor"
+   * The church only accepts those who have not queued or installed any augmentations. "NeuroFlux Governor"
    * augmentation is the only exception.
    *
    * @returns true if the player is a member of the church and has the gift installed,
@@ -11390,7 +11390,10 @@ interface FileRequirement {
 }
 /**
  * Player must have at least this many augmentations installed (if positive).
- * Player must have no augmentations installed (if zero).
+ *
+ * Player must have no augmentations queued or installed (if zero). The "NeuroFlux Governor" augmentation is the only
+ * exception in this case; i.e., if you queued or installed only that augmentation and nothing else, you still satisfy
+ * this condition.
  * @public
  */
 interface NumAugmentationsRequirement {
