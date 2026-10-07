@@ -471,12 +471,7 @@ export function queueAugmentation(this: PlayerObject, name: AugmentationName): v
     return;
   }
 
-  if (
-    (!Player.hasAugmentation(AugmentationName.StaneksGift1, true) ||
-      !Player.hasAugmentation(AugmentationName.StaneksGift2, true) ||
-      !Player.hasAugmentation(AugmentationName.StaneksGift3, true)) &&
-    name !== AugmentationName.NeuroFluxGovernor
-  ) {
+  if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod) && name !== AugmentationName.NeuroFluxGovernor) {
     Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
   }
 

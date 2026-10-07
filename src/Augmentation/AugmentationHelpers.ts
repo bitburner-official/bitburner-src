@@ -72,12 +72,7 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = fal
     Player.applyEntropy(Player.entropy);
   }
 
-  if (
-    (!Player.hasAugmentation(AugmentationName.StaneksGift1, true) ||
-      !Player.hasAugmentation(AugmentationName.StaneksGift2, true) ||
-      !Player.hasAugmentation(AugmentationName.StaneksGift3, true)) &&
-    aug.name !== AugmentationName.NeuroFluxGovernor
-  ) {
+  if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod) && aug.name !== AugmentationName.NeuroFluxGovernor) {
     Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
   }
 
