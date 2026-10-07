@@ -74,7 +74,7 @@ const Root = styled(Box)(({ theme }) => ({
 
     [`& .${tableBodyClasses.root}`]: {
       [`& .${tableRowClasses.root}:nth-of-type(odd)`]: {
-        backgroundColor: theme.colors.well,
+        backgroundColor: theme.palette.background.paper,
         [`& .${tableCellClasses.root}`]: { color: theme.palette.primary.light },
       },
       [`& .${tableRowClasses.root}:nth-of-type(even)`]: {
