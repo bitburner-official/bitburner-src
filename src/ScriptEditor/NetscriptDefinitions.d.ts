@@ -6609,7 +6609,7 @@ interface DarknetFormulas {
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+   * Gets the expected amount of ram that will be freed by a call to dnet.memoryReallocation
    * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
