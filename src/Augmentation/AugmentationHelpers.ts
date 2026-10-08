@@ -8,6 +8,9 @@ import { Player } from "@player";
 import type { Multipliers } from "@nsdefs";
 import { prestigeAugmentation } from "../Prestige";
 
+import { FactionName } from "@enums";
+import { Factions } from "../Faction/Factions";
+
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
@@ -67,6 +70,11 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = fal
     // effectOnly=true, so it doesn't loop. However, it does mean it's
     // important that everything is in the proper state by this point.
     Player.applyEntropy(Player.entropy);
+  }
+
+  // CotMG is unavailable after accepting any other aug
+  if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod) && aug.name !== AugmentationName.NeuroFluxGovernor) {
+    Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
   }
 
   // Recalculate skill levels after applying multipliers.
