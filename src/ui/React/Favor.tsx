@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 
 export function Favor({ favor }: { favor: number }): React.ReactElement {
   return (
-    <Box component="span" sx={{ color: (theme) => theme.colors.rep }}>
+    <Box component="span" sx={(theme) => ({ color: theme.colors.rep })}>
       {formatFavor(favor)}
     </Box>
   );

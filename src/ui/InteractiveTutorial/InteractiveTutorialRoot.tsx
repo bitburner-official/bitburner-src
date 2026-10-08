@@ -30,7 +30,7 @@ interface IContent {
 
 function TerminalText({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
-    <Typography sx={{ borderBottom: (theme) => `1px solid ${theme.palette.primary.main}` }}>{children}</Typography>
+    <Typography sx={(theme) => ({ borderBottom: `1px solid ${theme.palette.primary.main}` })}>{children}</Typography>
   );
 }
 

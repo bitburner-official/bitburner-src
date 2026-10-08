@@ -125,9 +125,9 @@ export function Console(props: IProps): React.ReactElement {
         onKeyDown={handleKeyDown}
         InputProps={{
           // for players to hook in
-          sx: {
-            backgroundColor: (theme) => theme.colors.backgroundsecondary,
-          },
+          sx: (theme) => ({
+            backgroundColor: theme.colors.backgroundsecondary,
+          }),
           startAdornment: (
             <>
               <Typography>&gt;&nbsp;</Typography>

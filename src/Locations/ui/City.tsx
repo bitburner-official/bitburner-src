@@ -23,13 +23,13 @@ interface IProps {
   city: City;
 }
 
-const locationSx = {
-  color: (theme) => theme.colors.maplocation,
+const locationSx: SxProps<Theme> = (theme) => ({
+  color: theme.colors.maplocation,
   whiteSpace: "nowrap",
   m: 0,
   p: 0,
   cursor: "pointer",
-} satisfies SxProps<Theme>;
+});
 
 function toLocation(location: Location): void {
   if (location.name === LocationName.TravelAgency) {

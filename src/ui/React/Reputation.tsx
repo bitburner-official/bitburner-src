@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 
 export function Reputation({ reputation }: { reputation: number | string }): React.ReactElement {
   return (
-    <Box component="span" sx={{ color: (theme) => theme.colors.rep }}>
+    <Box component="span" sx={(theme) => ({ color: theme.colors.rep })}>
       {typeof reputation === "number" ? formatReputation(reputation) : reputation}
     </Box>
   );

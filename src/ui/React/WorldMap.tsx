@@ -15,7 +15,7 @@ function City(props: ICityProps): React.ReactElement {
         <Typography
           component="span"
           onClick={() => props.onTravel(props.city)}
-          sx={{ color: (theme) => theme.colors.maplocation, lineHeight: "1em", whiteSpace: "pre", cursor: "pointer" }}
+          sx={(theme) => ({ color: theme.colors.maplocation, lineHeight: "1em", whiteSpace: "pre", cursor: "pointer" })}
         >
           {props.city[0]}
         </Typography>

@@ -74,7 +74,7 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
         ) : (
           <IconButton
             onClick={() => setPortalOpen(true)}
-            sx={{
+            sx={(theme) => ({
               cursor: "pointer",
               fontFamily: "inherit",
               fontSize: "1rem",
@@ -84,8 +84,8 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
               "&:hover": {
                 color: "#fff",
               },
-              color: (theme) => getPortalColor(theme, props.n, props.level),
-            }}
+              color: getPortalColor(theme, props.n, props.level),
+            })}
             aria-label={`BitNode-${bitNode.number.toString()}: ${bitNode.name}`}
             aria-description={bitNode.tagline}
           >

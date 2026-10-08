@@ -10,7 +10,7 @@ export function MoneyRate({
   useExponentialFormForSmallValue?: boolean;
 }): JSX.Element {
   return (
-    <Box component="span" sx={{ color: (theme) => theme.colors.money }}>
+    <Box component="span" sx={(theme) => ({ color: theme.colors.money })}>
       {formatMoney(money, useExponentialFormForSmallValue)} / sec
     </Box>
   );
