@@ -43,7 +43,7 @@ Gets the time it will take to authenticate a server.
 
 </td><td>
 
-Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+Gets the expected amount of ram that will be freed by a call to dnet.memoryReallocation
 
 
 </td></tr>

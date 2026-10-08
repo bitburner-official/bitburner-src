@@ -2220,7 +2220,7 @@ export interface Singularity {
    * const companyName = "ECorp";
    * const position = "Chief Executive Officer";
    *
-   * let requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
+   * const requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
    * ```
    * @param companyName - Name of company to get the requirements for. Must be an exact match.
    * @param positionName - Name of position to get the requirements for. Must be an exact match.
@@ -2447,7 +2447,7 @@ export interface Singularity {
    * const factionName = "CyberSec";
    * const workType = "hacking";
    *
-   * let success = ns.singularity.workForFaction(factionName, workType);
+   * const success = ns.singularity.workForFaction(factionName, workType);
    * if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`);
    * ```
    * @param faction - Name of faction to work for.
@@ -6609,7 +6609,7 @@ interface DarknetFormulas {
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+   * Gets the expected amount of ram that will be freed by a call to dnet.memoryReallocation
    * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
@@ -7862,8 +7862,8 @@ export interface NS {
    *
    * @example
    * ```js
-   * let recentScripts = ns.getRecentScripts();
-   * let mostRecent = recentScripts.shift();
+   * const recentScripts = ns.getRecentScripts();
+   * const mostRecent = recentScripts.shift();
    * if (mostRecent)
    *   ns.tprint(mostRecent.logs.join('\n'));
    * ```
