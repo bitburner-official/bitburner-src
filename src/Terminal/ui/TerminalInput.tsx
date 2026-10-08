@@ -423,7 +423,7 @@ export function TerminalInput(): React.ReactElement {
         InputProps={{
           // for players to hook in
           id: "terminal-input",
-          sx: { backgroundColor: (theme) => theme.palette.background.default },
+          sx: { backgroundColor: "background.default" },
           startAdornment: (
             <Typography sx={{ flexShrink: 0 }} color={Terminal.action === null ? "primary" : "secondary"}>
               [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;
@@ -451,7 +451,7 @@ export function TerminalInput(): React.ReactElement {
           <Typography
             sx={{
               m: 0,
-              color: (theme) => theme.palette.primary.main,
+              color: "primary.main",
             }}
             paragraph={false}
           >
@@ -460,7 +460,7 @@ export function TerminalInput(): React.ReactElement {
           <Typography
             sx={{
               m: 0,
-              color: (theme) => theme.palette.primary.main,
+              color: "primary.main",
             }}
             paragraph={false}
           >
@@ -478,7 +478,7 @@ export function TerminalInput(): React.ReactElement {
           overflow: "hidden",
           pointerEvents: "none",
           m: 0,
-          color: (theme) => theme.palette.primary.main,
+          color: "primary.main",
         }}
         paragraph={false}
       >

@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import { Theme } from "@mui/material/styles";
 import { Settings } from "../../Settings/Settings";
 
 // This particular eslint-disable is correct.
@@ -8,15 +7,15 @@ import { Settings } from "../../Settings/Settings";
 // eslint-disable-next-line no-control-regex
 const ANSI_ESCAPE = new RegExp("\u{001b}\\[(?<code>.*?)m", "ug");
 
-const getColor = (theme: Theme, colorKey: ANSIITypographyProps["color"]): string => {
+const getColor = (colorKey: ANSIITypographyProps["color"]): string => {
   const colorMap: Record<ANSIITypographyProps["color"], string> = {
-    error: theme.palette.error.main,
-    success: theme.palette.success.main,
-    info: theme.palette.info.main,
-    warn: theme.palette.warning.main,
-    primary: theme.palette.primary.main,
+    error: "error.main",
+    success: "success.main",
+    info: "info.main",
+    warn: "warning.main",
+    primary: "primary.main",
   };
-  return colorMap[colorKey] ?? theme.palette.primary.main;
+  return colorMap[colorKey] ?? "primary.main";
 };
 
 type ANSIITypographyProps = {
@@ -63,7 +62,7 @@ export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIIT
         whiteSpace: "pre-wrap",
         overflowWrap: "anywhere",
         m: 0,
-        color: (theme) => getColor(theme, props.color),
+        color: getColor(props.color),
         "--padForFlushBg": `${(Settings.styles.lineHeight - 1) / 2}em`,
         ...(props.styles ?? {}),
       }}

@@ -99,7 +99,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
           <Box
             sx={{ cursor: "grab", textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}
           >
-            <LeftIcon sx={{ fontSize: "24px", padding: "2px", color: (theme) => theme.palette.secondary.main }} />
+            <LeftIcon sx={{ fontSize: "24px", padding: "2px", color: "secondary.main" }} />
             <Typography flexGrow={1} color="secondary">
               {header}
             </Typography>
@@ -119,7 +119,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
             >
               {
                 <CurrentIcon
-                  sx={{ fontSize: "24px", color: (theme) => theme.palette.secondary.main }}
+                  sx={{ fontSize: "24px", color: "secondary.main" }}
                   onClick={() => setOpen((old) => !old)}
                   onTouchEnd={() => setOpen((old) => !old)}
                 />

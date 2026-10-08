@@ -89,7 +89,7 @@ export function RecentErrorsPage(): React.ReactElement {
                     component="div"
                     sx={{
                       margin: "4px",
-                      color: (theme) => theme.palette.primary.main,
+                      color: "primary.main",
                       textOverflow: "ellipsis",
                       whiteSpace: "pre-wrap",
                       lineClamp: "6", // Needs webkit stuff, otherwise not an actual property. Also conflicts with overflowX: "auto" and maxHeight.

@@ -246,7 +246,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
         <Box
           component="span"
           onClick={onClick}
-          sx={{ cursor: "pointer", textDecorationLine: "underline", color: (theme) => theme.palette.warning.main }}
+          sx={{ cursor: "pointer", textDecorationLine: "underline", color: "warning.main" }}
         >
           {props.path}
         </Box>

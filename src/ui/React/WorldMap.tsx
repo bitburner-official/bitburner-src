@@ -23,7 +23,7 @@ function City(props: ICityProps): React.ReactElement {
     );
   }
   return (
-    <Typography component="span" sx={{ color: (theme) => theme.colors.disabled, lineHeight: "1em", whiteSpace: "pre" }}>
+    <Typography component="span" sx={{ color: "action.disabled", lineHeight: "1em", whiteSpace: "pre" }}>
       {props.city[0]}
     </Typography>
   );

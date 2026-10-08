@@ -119,7 +119,7 @@ export const Blockquote = (props: React.PropsWithChildren<object>): React.ReactE
     <Box
       component="blockquote"
       sx={{
-        borderLeftColor: (theme) => theme.palette.background.paper,
+        borderLeftColor: "background.paper",
         borderLeftStyle: "solid",
         borderLeftWidth: "4px",
         paddingLeft: "16px",

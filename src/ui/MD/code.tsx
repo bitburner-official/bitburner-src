@@ -22,7 +22,7 @@ const InlineCode = (props: React.PropsWithChildren<CodeProps>): React.ReactEleme
       paddingTop: "2.72px",
       borderRadius: "6px",
       display: "inline",
-      backgroundColor: (theme) => theme.palette.background.paper,
+      backgroundColor: "background.paper",
     }}
   >
     {props.children}
