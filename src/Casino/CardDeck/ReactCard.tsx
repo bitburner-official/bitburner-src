@@ -6,6 +6,11 @@ import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 import { Box } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material";
 
+interface Props {
+  card: Card;
+  hidden?: boolean;
+}
+
 const cardSx = {
   padding: "10px",
   border: "solid 1px #808080",
@@ -17,11 +22,6 @@ const cardSx = {
   margin: "3px",
   fontWeight: "bold",
 } satisfies SxProps<Theme>;
-
-interface Props {
-  card: Card;
-  hidden?: boolean;
-}
 
 export const ReactCard: FC<Props> = ({ card, hidden }) => {
   let suit: React.ReactNode;

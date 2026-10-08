@@ -21,23 +21,6 @@ function BitVerseMapRow({ children }: { children: React.ReactNode }): React.Reac
   );
 }
 
-function getPortalColor(theme: Theme, n: number, level: number): React.CSSProperties["color"] {
-  // Repeating BitNode: levels above 2 keep the level 2 color
-  if (n === 12 && level >= 2) {
-    return theme.colors.bnlvl2;
-  }
-  switch (level) {
-    case 1:
-      return theme.colors.bnlvl1;
-    case 2:
-      return theme.colors.bnlvl2;
-    case 3:
-      return theme.colors.bnlvl3;
-    default:
-      return theme.colors.bnlvl0;
-  }
-}
-
 interface IPortalProps {
   n: number;
   level: number;
@@ -51,6 +34,23 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
   if (bitNode == null) {
     throw new Error(`Invalid BitNode: BitNode${props.n}`);
   }
+
+  const getPortalColor = (theme: Theme, n: number, level: number): React.CSSProperties["color"] => {
+    // Repeating BitNode
+    if (n === 12 && level >= 2) {
+      return theme.colors.bnlvl2;
+    }
+    switch (level) {
+      case 1:
+        return theme.colors.bnlvl1;
+      case 2:
+        return theme.colors.bnlvl2;
+      case 3:
+        return theme.colors.bnlvl3;
+      default:
+        return theme.colors.bnlvl0;
+    }
+  };
 
   return (
     <>
