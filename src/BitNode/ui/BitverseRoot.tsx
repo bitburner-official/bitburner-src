@@ -36,18 +36,20 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
   }
 
   const getPortalColor = (theme: Theme, n: number, level: number): React.CSSProperties["color"] => {
-    let color = theme.colors.bnlvl0;
+    // Repeating BitNode
     if (n === 12 && level >= 2) {
-      // Repeating BitNode
-      color = theme.colors.bnlvl2;
-    } else if (level === 1) {
-      color = theme.colors.bnlvl1;
-    } else if (level === 2) {
-      color = theme.colors.bnlvl2;
-    } else if (level === 3) {
-      color = theme.colors.bnlvl3;
+      return theme.colors.bnlvl2;
     }
-    return color;
+    switch (level) {
+      case 1:
+        return theme.colors.bnlvl1;
+      case 2:
+        return theme.colors.bnlvl2;
+      case 3:
+        return theme.colors.bnlvl3;
+      default:
+        return theme.colors.bnlvl0;
+    }
   };
 
   return (
