@@ -354,7 +354,13 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
             </span>
           }
         >
-          <>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}
+          >
             <Paper className="drag" sx={{ display: "flex", alignItems: "center", cursor: "grab" }} ref={draggableRef}>
               {title()}
 
@@ -390,7 +396,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                 whiteSpace: "pre-wrap",
                 wordWrap: "break-word",
                 borderWidth: "0 1px 1px 1px",
-                height: `calc(100% - ${minWindowSize[1]}px)`,
+                flex: 1,
                 display: propsRef.current.minimized ? "none" : "flex",
               }}
               tabIndex={-1}
@@ -415,7 +421,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                 )}
               </div>
             </Paper>
-          </>
+          </Box>
         </ResizableBox>
       </Box>
     </Draggable>
