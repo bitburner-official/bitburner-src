@@ -72,7 +72,7 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = fal
     Player.applyEntropy(Player.entropy);
   }
 
-  // Logic for banning CotMG
+  // CotMG is unavailable after accepting any other aug
   if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod) && aug.name !== AugmentationName.NeuroFluxGovernor) {
     Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
   }
