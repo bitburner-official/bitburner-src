@@ -449,6 +449,7 @@ import nsDoc_bitburner_darknet_promotestock_md from "../../markdown/bitburner.da
 import nsDoc_bitburner_darknet_setstasislink_md from "../../markdown/bitburner.darknet.setstasislink.md?raw";
 import nsDoc_bitburner_darknet_unleashstormseed_md from "../../markdown/bitburner.darknet.unleashstormseed.md?raw";
 import nsDoc_bitburner_darknetformulas_getauthenticatetime_md from "../../markdown/bitburner.darknetformulas.getauthenticatetime.md?raw";
+import nsDoc_bitburner_darknetformulas_getexpectedmigrationcharge_md from "../../markdown/bitburner.darknetformulas.getexpectedmigrationcharge.md?raw";
 import nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md from "../../markdown/bitburner.darknetformulas.getexpectedramblockremoved.md?raw";
 import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown/bitburner.darknetformulas.getheartbleedtime.md?raw";
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
@@ -2080,6 +2081,7 @@ AllPages["nsDoc/bitburner.darknet.promotestock.md"] = nsDoc_bitburner_darknet_pr
 AllPages["nsDoc/bitburner.darknet.setstasislink.md"] = nsDoc_bitburner_darknet_setstasislink_md;
 AllPages["nsDoc/bitburner.darknet.unleashstormseed.md"] = nsDoc_bitburner_darknet_unleashstormseed_md;
 AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] = nsDoc_bitburner_darknetformulas_getauthenticatetime_md;
+AllPages["nsDoc/bitburner.darknetformulas.getexpectedmigrationcharge.md"] = nsDoc_bitburner_darknetformulas_getexpectedmigrationcharge_md;
 AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;

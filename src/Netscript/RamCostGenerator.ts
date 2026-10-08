@@ -745,6 +745,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       getAuthenticateTime: 0,
       getHeartbleedTime: 0,
       getExpectedRamBlockRemoved: 0,
+      getExpectedMigrationCharge: 0,
     },
   },
 } as const;

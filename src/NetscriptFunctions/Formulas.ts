@@ -56,6 +56,7 @@ import { calculateEffectiveSharedThreads, calculateShareBonus } from "../Network
 import { calculateAuthenticationTime } from "../DarkNet/effects/effects";
 import { assertDarknetServerDetails } from "../Netscript/TypeAssertion";
 import { getRamBlockRemoved } from "../DarkNet/effects/ramblock";
+import { getServerMigrationChargeValue } from "../DarkNet/effects/effects";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -462,6 +463,12 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const threads = helpers.number(ctx, "threads", _threads ?? 1);
         const person = helpers.person(ctx, _person ?? Player);
         return getRamBlockRemoved(_darknetServerDetails, threads, person);
+      },
+      getExpectedMigrationCharge: (ctx, _darknetServerDetails, _threads, _person): number => {
+        assertDarknetServerDetails(ctx, _darknetServerDetails);
+        const threads = helpers.number(ctx, "threads", _threads ?? 1);
+        const person = helpers.person(ctx, _person ?? Player);
+        return getServerMigrationChargeValue(_darknetServerDetails, threads, person);
       },
     },
   };
