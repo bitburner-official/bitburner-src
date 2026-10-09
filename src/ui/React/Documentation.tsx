@@ -18,7 +18,7 @@ interface History {
   page: FilePath;
   push(p: FilePath): void;
   pop(): void;
-  home(): void;
+  home: () => void;
 }
 
 export const defaultPage = asFilePath("index.md");
