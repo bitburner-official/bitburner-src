@@ -33,9 +33,9 @@ export function scriptCalculateOfflineProduction(
   Player.gainHackingExp(expGain);
 
   // MONEY GAIN
-  // Money for offline script production is given to player during engine load. In this 
-  // script we just update production values both of running scripts and in the player 
-  // data.
+  // Money for offline script production is given to the player during engine load. In 
+  // this script we just update production values both of running scripts and in the 
+  // player data.
   let moneyGain =
     (runningScript.onlineMoneyMade / playerPlaytimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
   if (!Number.isFinite(moneyGain)) {
