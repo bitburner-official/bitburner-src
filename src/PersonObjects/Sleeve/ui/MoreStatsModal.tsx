@@ -1,8 +1,5 @@
 import { Sleeve } from "../Sleeve";
 import { formatExp, formatPercent } from "../../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
-import { CONSTANTS } from "../../../Constants";
-import { Typography } from "@mui/material";
 import { StatsTable } from "../../../ui/React/StatsTable";
 import { Modal } from "../../../ui/React/Modal";
 import React from "react";
@@ -65,13 +62,6 @@ export function MoreStatsModal(props: IProps): React.ReactElement {
         ]}
         title="Multipliers:"
       />
-
-      {/* Check for storedCycles to be a bit over 0 to prevent jittering */}
-      {props.sleeve.storedCycles > 10 && (
-        <Typography sx={{ py: 2 }}>
-          Bonus Time: {convertTimeMsToTimeElapsedString(props.sleeve.storedCycles * CONSTANTS.MilliPerCycle)}
-        </Typography>
-      )}
     </Modal>
   );
 }
