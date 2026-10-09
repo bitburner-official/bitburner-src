@@ -14,19 +14,19 @@ import { RemoteFileApiConnectionEvents, RemoteFileApiConnectionSettingEvents } f
 import { useRerender } from "../../ui/React/hooks";
 
 export const RemoteFileApiConnectionStatus = ({ showIcon }: { showIcon: boolean }): React.ReactElement => {
-  const [rfaConnectionStatus, setRfaConnectionStatus] = useState(getRemoteFileApiConnectionStatus());
+  const [rfaConnectionStatus, setRemoteFileApiConnectionStatus] = useState(getRemoteFileApiConnectionStatus());
   const rerender = useRerender();
 
   useEffect(() => {
-    const unsubscriberForRFAEvents = RemoteFileApiConnectionEvents.subscribe((status) => {
-      setRfaConnectionStatus(status);
+    const unsubscriberForRemoteFileApiEvents = RemoteFileApiConnectionEvents.subscribe((status) => {
+      setRemoteFileApiConnectionStatus(status);
     });
-    const unsubscriberForRFASettingEvents = RemoteFileApiConnectionSettingEvents.subscribe(() => {
+    const unsubscriberForRemoteFileApiSettingEvents = RemoteFileApiConnectionSettingEvents.subscribe(() => {
       rerender();
     });
     return () => {
-      unsubscriberForRFAEvents();
-      unsubscriberForRFASettingEvents();
+      unsubscriberForRemoteFileApiEvents();
+      unsubscriberForRemoteFileApiSettingEvents();
     };
   }, [rerender]);
 

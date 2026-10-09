@@ -1,5 +1,5 @@
-import { type RFARequest, RFAErrorResponse } from "./MessageDefinitions";
-import { RFARequestHandler } from "./MessageHandlers";
+import { type RemoteFileApiRequest, RemoteFileApiErrorResponse } from "./MessageDefinitions";
+import { RemoteFileApiRequestHandler } from "./MessageHandlers";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { Settings } from "../Settings/Settings";
@@ -118,16 +118,17 @@ export class Remote {
 function handleMessageEvent(this: WebSocket, e: MessageEvent): void {
   /**
    * Validating e.data and the result of JSON.parse() is too troublesome, so we typecast them here. If the data is
-   * invalid, it means the RFA "client" (the tool that the player is using) is buggy, but that's not our problem.
+   * invalid, it means the RemoteFileApi "client" (the tool that the player is using) is buggy, but that's not our
+   * problem.
    */
-  const msg = JSON.parse(e.data as string) as RFARequest;
+  const msg = JSON.parse(e.data as string) as RemoteFileApiRequest;
 
-  if (!msg.method || !RFARequestHandler[msg.method]) {
-    const response = new RFAErrorResponse({ error: "Unknown message received", id: msg.id });
+  if (!msg.method || !RemoteFileApiRequestHandler[msg.method]) {
+    const response = new RemoteFileApiErrorResponse({ error: "Unknown message received", id: msg.id });
     this.send(JSON.stringify(response));
     return;
   }
-  const response = RFARequestHandler[msg.method](msg);
+  const response = RemoteFileApiRequestHandler[msg.method](msg);
   if (response instanceof Promise) {
     void response.then((data) => this.send(JSON.stringify(data)));
     return;
