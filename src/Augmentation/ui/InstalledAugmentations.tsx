@@ -18,12 +18,13 @@ import { Player } from "@player";
 import { Augmentations } from "../Augmentations";
 import { AugmentationName } from "@enums";
 import { useRerender } from "../../ui/React/hooks";
+import type { PlayerOwnedAugmentation } from "../PlayerOwnedAugmentation";
 
 export function InstalledAugmentations(): React.ReactElement {
   const rerender = useRerender();
   const sourceAugs = Player.augmentations.slice().filter((aug) => aug.name !== AugmentationName.NeuroFluxGovernor);
 
-  const [selectedAug, setSelectedAug] = useState(sourceAugs[0]);
+  const [selectedAug, setSelectedAug] = useState<PlayerOwnedAugmentation | undefined>(sourceAugs[0]);
 
   const [filterText, setFilterText] = useState("");
   const matches = (s1: string, s2: string) => s1.toLowerCase().includes(s2.toLowerCase());
@@ -52,6 +53,24 @@ export function InstalledAugmentations(): React.ReactElement {
   function sortInOrder(): void {
     Settings.OwnedAugmentationsOrder = OwnedAugmentationsOrderSetting.Alphabetically;
     rerender();
+  }
+
+  let selectedAugDetail;
+  if (selectedAug) {
+    const aug = Augmentations[selectedAug.name];
+    selectedAugDetail = (
+      <Box sx={{ m: 1 }}>
+        <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+          {selectedAug.name}
+        </Typography>
+        <Typography sx={{ maxHeight: 350, overflowY: "scroll", whiteSpace: "pre-wrap" }}>
+          {typeof aug.info === "string" ? <span>{aug.info}</span> : aug.info}
+          <br />
+          <br />
+          {aug.stats}
+        </Typography>
+      </Box>
+    );
   }
 
   return (
@@ -90,27 +109,7 @@ export function InstalledAugmentations(): React.ReactElement {
               ))}
             </List>
           </Box>
-          <Box sx={{ m: 1 }}>
-            <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
-              {selectedAug.name}
-            </Typography>
-            <Typography sx={{ maxHeight: 350, overflowY: "scroll", whiteSpace: "pre-wrap" }}>
-              {(() => {
-                const aug = Augmentations[selectedAug.name];
-
-                const info = typeof aug.info === "string" ? <span>{aug.info}</span> : aug.info;
-                const tooltip = (
-                  <>
-                    {info}
-                    <br />
-                    <br />
-                    {aug.stats}
-                  </>
-                );
-                return tooltip;
-              })()}
-            </Typography>
-          </Box>
+          {selectedAugDetail}
         </Paper>
       ) : (
         <Paper sx={{ p: 1 }}>

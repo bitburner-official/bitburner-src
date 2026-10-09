@@ -71,7 +71,6 @@ body:
     id: description
     attributes:
       label: Describe the bug
-      render: markdown
       description: |
         Provide a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) when possible. If you cannot, describe the situation and the steps you took before the issue occurred. Screenshots and/or demo videos of the issue are very helpful.
 

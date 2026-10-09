@@ -14,12 +14,12 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
-import { getKeyList } from "../utils/helpers/getKeyList";
 import { assertObject } from "../utils/TypeAssertion";
 
 export const CorporationPromise: PromisePair<CorpStateName> = { promise: null, resolve: null };
@@ -490,16 +490,11 @@ export class Corporation {
   }
 
   // Exclude numberOfOfficesAndWarehouses
-  static includedProperties = getKeyList(Corporation, { removedKeys: ["numberOfOfficesAndWarehouses"] });
-
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Corporation", this, Corporation.includedProperties);
-  }
+  static includedKeys = makeSerializable("Corporation", Corporation, { removedKeys: ["numberOfOfficesAndWarehouses"] });
 
   /** Initializes a Corporation object from a JSON save state. */
-  static fromJSON(value: IReviverValue): Corporation {
-    const corporation = Generic_fromJSON(Corporation, value.data, Corporation.includedProperties);
+  static jsonReviver(value: IReviverValue): Corporation {
+    const corporation = Generic_fromJSON(Corporation, value.data, Corporation.includedKeys);
     // numberOfOfficesAndWarehouses is not in the included properties and must be calculated
     for (const division of corporation.divisions.values()) {
       corporation.numberOfOfficesAndWarehouses += getRecordValues(division.offices).length;
@@ -519,5 +514,3 @@ export class Corporation {
     return corporation;
   }
 }
-
-constructorsForReviver.Corporation = Corporation;

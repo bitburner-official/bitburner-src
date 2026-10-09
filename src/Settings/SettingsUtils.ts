@@ -9,6 +9,7 @@ import {
 import { mergePlayerDefinedKeyBindings } from "../utils/KeyBindingUtils";
 import { assertObject } from "../utils/TypeAssertion";
 import { Settings } from "./Settings";
+import { Reviver } from "../utils/GenericReviver";
 
 /**
  * This function won't be able to catch **all** invalid hostnames. In order to validate a hostname properly, we need to
@@ -83,7 +84,7 @@ export function isValidConnectionPort(port: number): boolean {
 }
 
 export function loadSettings(saveString: string) {
-  const save: unknown = JSON.parse(saveString);
+  const save: unknown = JSON.parse(saveString, Reviver);
   assertObject(save);
   save.overview && Object.assign(Settings.overview, save.overview);
   try {

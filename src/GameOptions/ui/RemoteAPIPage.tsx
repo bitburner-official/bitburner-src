@@ -81,6 +81,11 @@ export const RemoteAPIPage = (): React.ReactElement => {
     setReconnectionDelayError("");
   }
 
+  function handleOnSubmitEvent(event: React.KeyboardEvent<HTMLDivElement>): void {
+    event.preventDefault();
+    if (canCreateNewRemoteFileApiConnection() && !isRemoteFileApiConnectionLive()) newRemoteFileApiConnection();
+  }
+
   return (
     <GameOptionsPage title="Remote API">
       <Typography>
@@ -111,6 +116,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
             }}
             value={remoteFileApiHostname}
             onChange={handleRemoteFileApiHostnameChange}
+            onKeyDown={(e) => e.key == "Enter" && handleOnSubmitEvent(e)}
             placeholder="localhost"
             size={"medium"}
           />
@@ -139,6 +145,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
             }}
             value={remoteFileApiPort}
             onChange={handleRemoteFileApiPortChange}
+            onKeyDown={(e) => e.key == "Enter" && handleOnSubmitEvent(e)}
             placeholder="12525"
             size={"medium"}
           />

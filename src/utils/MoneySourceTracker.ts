@@ -1,6 +1,6 @@
 import type { TypedKeys } from "../types";
 
-import { Generic_fromJSON, Generic_toJSON, constructorsForReviver, IReviverValue } from "./JSONReviver";
+import { makeSerializable } from "./GenericReviver";
 
 export type MoneySource = TypedKeys<MoneySourceTracker, number>;
 
@@ -42,15 +42,5 @@ export class MoneySourceTracker {
     }
   }
 
-  // Serialize the current object to a JSON save state.
-  toJSON(): IReviverValue {
-    return Generic_toJSON("MoneySourceTracker", this);
-  }
-
-  // Initializes a MoneySourceTracker object from a JSON save state.
-  static fromJSON(value: IReviverValue): MoneySourceTracker {
-    return Generic_fromJSON(MoneySourceTracker, value.data);
-  }
+  static includedKeys = makeSerializable("MoneySourceTracker", MoneySourceTracker);
 }
-
-constructorsForReviver.MoneySourceTracker = MoneySourceTracker;

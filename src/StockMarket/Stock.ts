@@ -1,5 +1,5 @@
 import { IMinMaxRange } from "../types";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 
 export const StockForecastInfluenceLimit = 5;
@@ -268,15 +268,5 @@ export class Stock {
     }
   }
 
-  /** Serialize the Stock to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Stock", this);
-  }
-
-  /** Initializes a Stock from a JSON save state */
-  static fromJSON(value: IReviverValue): Stock {
-    return Generic_fromJSON(Stock, value.data);
-  }
+  static includedKeys = makeSerializable("Stock", Stock);
 }
-
-constructorsForReviver.Stock = Stock;

@@ -2,7 +2,7 @@ import type { MoneySource } from "../utils/MoneySourceTracker";
 
 import { Person } from "../PersonObjects/Person";
 import { Player } from "@player";
-import { Multipliers } from "../PersonObjects/Multipliers";
+import type { Multipliers } from "@nsdefs";
 
 export interface WorkStats {
   money: number;

@@ -7,7 +7,7 @@ import { PlayerBaseWork, WorkType } from "./Work";
 import { graftingIntBonus } from "../PersonObjects/Grafting/GraftingHelpers";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { Augmentations } from "../Augmentation/Augmentations";
 
@@ -101,15 +101,5 @@ export class GraftingWork extends PlayerBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("GraftingWork", this);
-  }
-
-  /** Initializes a GraftingWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): GraftingWork {
-    return Generic_fromJSON(GraftingWork, value.data);
-  }
+  static includedKeys = makeSerializable("GraftingWork", GraftingWork);
 }
-
-constructorsForReviver.GraftingWork = GraftingWork;
