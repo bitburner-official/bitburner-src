@@ -424,7 +424,7 @@ export class Terminal {
         case iTutorialSteps.TerminalTail:
           isCorrect = matchesCommandArray("tail", "n00dles.js");
           break;
-          
+
         default:
           this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
           return;
