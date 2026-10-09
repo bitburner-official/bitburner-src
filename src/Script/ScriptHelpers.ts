@@ -21,7 +21,7 @@ export function scriptCalculateOfflineProduction(
   const lastUpdate = playerLastUpdate;
   const timePassed = Math.max((thisUpdate - lastUpdate) / 1000, 0); //Seconds
 
-  // EXP gain
+  // EXP GAIN
   //Calculate the "confidence" rating of the script's true exp production. This is based
   //entirely off of time. We will arbitrarily say that if a script has been running for
   //4 hours (14400 sec) then we are completely confident in its ability
@@ -32,7 +32,7 @@ export function scriptCalculateOfflineProduction(
   const expGain = confidence * (runningScript.onlineExpGained / runningScript.onlineRunningTime) * timePassed;
   Player.gainHackingExp(expGain);
 
-  // Money gain
+  // MONEY GAIN
   let moneyGain =
     (runningScript.onlineMoneyMade / playerPlaytimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
   if (!Number.isFinite(moneyGain)) {
@@ -47,7 +47,7 @@ export function scriptCalculateOfflineProduction(
   runningScript.offlineMoneyMade += moneyGain;
 
   // dataMap entry schema: [MoneyStolen, NumTimesHacked, NumTimesGrown, NumTimesWeaken]
-  // Grow
+  // GROW
   for (const [hostname, [, , growCount]] of runningScript.dataMap.entries()) {
     if (growCount == 0 || growCount == null) {
       continue;
@@ -69,7 +69,7 @@ export function scriptCalculateOfflineProduction(
     runningScript.log(`'${server.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
   }
 
-  // Weaken
+  // WEAKEN
   for (const [hostname, [, , , weakenCount]] of runningScript.dataMap.entries()) {
     if (weakenCount == 0 || weakenCount == null) {
       continue;
