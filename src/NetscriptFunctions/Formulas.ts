@@ -467,7 +467,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       getExpectedMigrationCharge: (ctx, _darknetServerDetails, _person, _threads): number => {
         assertDarknetServerDetails(ctx, _darknetServerDetails);
         const threads = helpers.number(ctx, "threads", _threads ?? 1);
-        const person = helpers.person(ctx, _person ?? Player);
+        const person = helpers.person(ctx, _person);
         return getServerMigrationChargeValue(_darknetServerDetails, person, threads);
       },
     },
