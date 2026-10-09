@@ -358,7 +358,7 @@ export class Terminal {
 
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
-          isCorrect = matchesCommandArray("scan");
+          isCorrect = matchesCommandArray("help");
           break;
 
         case iTutorialSteps.TerminalLs:
