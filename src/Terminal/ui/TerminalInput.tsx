@@ -13,7 +13,7 @@ import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   input: {
-    backgroundColor: theme.colors.backgroundprimary,
+    backgroundColor: theme.palette.background.default,
   },
   nopadding: {
     padding: theme.spacing(0),
