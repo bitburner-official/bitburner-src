@@ -45,8 +45,7 @@ export function scriptCalculateOfflineProduction(
   runningScript.offlineExpGained += expGain;
   runningScript.offlineMoneyMade += moneyGain;
 
-  //Data map: [MoneyStolen, NumTimesHacked, NumTimesGrown, NumTimesWeaken]
-
+  //dataMap entry schema: [MoneyStolen, NumTimesHacked, NumTimesGrown, NumTimesWeaken]
   // Grow
   for (const [hostname, [, , growCount]] of runningScript.dataMap.entries()) {
     if (growCount == 0 || growCount == null) {
