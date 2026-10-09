@@ -68,7 +68,7 @@ export function TerminalRoot(): React.ReactElement {
   return (
     <Box component="div" sx={{ display: "flex", flexDirection: "column", height: "calc(100vh - 16px)" }}>
       <Box
-        component="ul" // used Box component="" because List and ListItem come with default styling
+        component="ul"
         key={key}
         id="terminal"
         sx={{ padding: 0, overflow: "scroll", flex: "0 1 auto", margin: "auto 0 0" }}

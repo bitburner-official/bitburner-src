@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
 import { Box, Typography, Tooltip } from "@mui/material";
-import type { SxProps, Theme } from "@mui/material/styles";
 
 const cellTextSx = {
   verticalAlign: "top",
   padding: "4px",
   textAlign: "left",
-} satisfies SxProps<Theme>;
+};
 
 const TDXSmall = ({ children }: { children: React.ReactNode }): React.ReactElement => (
   <Box component="td" sx={cellTextSx}>

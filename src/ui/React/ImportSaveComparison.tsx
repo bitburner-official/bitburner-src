@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Collapse,
-  IconButton,
-  Paper,
-  Table,
-  TableHead,
-  TableBody,
-  TableContainer,
-  TableCell,
-  TableRow,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { tableClasses, tableHeadClasses, tableBodyClasses, tableRowClasses, tableCellClasses } from "@mui/material";
 
 import { styled } from "@mui/material/styles";

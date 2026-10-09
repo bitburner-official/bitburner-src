@@ -4,7 +4,6 @@ import { Card, Suit } from "./Card";
 import Paper from "@mui/material/Paper";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 import { Box } from "@mui/material";
-import type { SxProps, Theme } from "@mui/material";
 
 interface Props {
   card: Card;
@@ -21,7 +20,7 @@ const cardSx = {
   textAlign: "center",
   margin: "3px",
   fontWeight: "bold",
-} satisfies SxProps<Theme>;
+};
 
 export const ReactCard: FC<Props> = ({ card, hidden }) => {
   let suit: React.ReactNode;
