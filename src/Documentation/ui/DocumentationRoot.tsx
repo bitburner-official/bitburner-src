@@ -71,20 +71,6 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
     }, 0);
   });
 
-  /**
-   * During the tutorial, the player is given the link to the NS API page a few times. If they click one of the links,
-   * then when they come to the documentation step they'll still see the NS API docs. This ensures that when the player
-   * visits the documentation page for the Docs step, they see index.md / home.
-   */
-  useEffect(() => {
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.DocumentationInfo) {
-      history.home();
-    }
-
-    // Lint doesn't like empty dependencies. But this really should only run on the first render. So:
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <Box

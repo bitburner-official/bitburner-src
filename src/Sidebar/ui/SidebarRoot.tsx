@@ -49,6 +49,7 @@ import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
 import { CONSTANTS } from "../../Constants";
 import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
+import { useHistory } from "../../ui/React/Documentation";
 import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
 import { Settings } from "../../Settings/Settings";
 import { AugmentationName } from "@enums";
@@ -125,6 +126,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const isSettingUpKeyBindings = useRef(false);
+  const { home } = useHistory();
   useCycleRerender();
 
   let flash: Page | null = null;
@@ -203,11 +205,16 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       } else {
         throw new Error("Can't handle click on Page " + page);
       }
-      if (flash === page && incrementTutorialStep) {
-        iTutorialNextStep();
+      if (ITutorial.isRunning) {
+        if (flash === page && incrementTutorialStep) {
+          iTutorialNextStep();
+        }
+        if (ITutorial.currStep === iTutorialSteps.DocumentationInfo) {
+          home();
+        }
       }
     },
-    [flash, incrementTutorialStep],
+    [flash, incrementTutorialStep, home],
   );
 
   /**
