@@ -6,7 +6,6 @@ import { Player } from "@player";
 import { formatPercent, formatInt } from "../../../ui/formatNumber";
 import { ProgressBar } from "../../../ui/React/Progress";
 import { Sleeve } from "../Sleeve";
-import { MoreStatsModal } from "./MoreStatsModal";
 import { SleeveAugmentationsModal } from "./SleeveAugmentationsModal";
 import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
@@ -125,7 +124,6 @@ interface SleeveElemProps {
   rerender: () => void;
 }
 export function SleeveElem(props: SleeveElemProps): React.ReactElement {
-  const [statsOpen, setStatsOpen] = useState(false);
   const [travelOpen, setTravelOpen] = useState(false);
   const [augmentationsOpen, setAugmentationsOpen] = useState(false);
 
@@ -219,18 +217,6 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         <span>
           <StatsElement sleeve={props.sleeve} />
           <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr", width: "100%" }}>
-            <Button onClick={() => setStatsOpen(true)}>More Stats</Button>
-            <Tooltip title={Player.money < CONSTANTS.TravelCost ? <Typography>Insufficient funds</Typography> : ""}>
-              <span>
-                <Button
-                  onClick={() => setTravelOpen(true)}
-                  disabled={Player.money < CONSTANTS.TravelCost}
-                  sx={{ width: "100%", height: "100%" }}
-                >
-                  Travel
-                </Button>
-              </span>
-            </Tooltip>
             <Tooltip
               title={
                 !checkingPreconditionsResult.success && <Typography>{checkingPreconditionsResult.message}</Typography>
@@ -246,6 +232,17 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
                 </Button>
               </span>
             </Tooltip>
+            <Tooltip title={Player.money < CONSTANTS.TravelCost ? <Typography>Insufficient funds</Typography> : ""}>
+              <span>
+                <Button
+                  onClick={() => setTravelOpen(true)}
+                  disabled={Player.money < CONSTANTS.TravelCost}
+                  sx={{ width: "100%", height: "100%" }}
+                >
+                  Travel
+                </Button>
+              </span>
+            </Tooltip>
           </Box>
         </span>
         <span>
@@ -258,7 +255,6 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
           {percentBar}
         </span>
       </Paper>
-      <MoreStatsModal open={statsOpen} onClose={() => setStatsOpen(false)} sleeve={props.sleeve} />
       <TravelModal
         open={travelOpen}
         onClose={() => setTravelOpen(false)}
