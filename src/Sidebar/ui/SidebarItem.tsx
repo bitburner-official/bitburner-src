@@ -42,7 +42,7 @@ export const SidebarItem = memo(function SidebarItem(props: SidebarItemProps): R
           </Badge>
         </ListItemIcon>
         <ListItemText>
-          <Typography color={color}>{props.key_}</Typography>
+          <Typography sx={{ color: colorSelection }}>{props.key_}</Typography>
         </ListItemText>
       </ListItemButton>
     </ListItem>
