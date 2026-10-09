@@ -16,7 +16,6 @@ import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { DocumentationAutocomplete } from "./DocumentationAutocomplete";
-import { iTutorialSteps, ITutorial } from "../../InteractiveTutorial";
 
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
   const history = useHistory();
