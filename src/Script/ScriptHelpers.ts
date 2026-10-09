@@ -25,7 +25,10 @@ export function scriptCalculateOfflineProduction(
   //Calculate the "confidence" rating of the script's true exp production. This is based
   //entirely off of time. We will arbitrarily say that if a script has been running for
   //4 hours (14400 sec) then we are completely confident in its ability
-  let confidence = Math.max(1, runningScript.onlineRunningTime / 14400);
+  let confidence = runningScript.onlineRunningTime / 14400;
+  if (confidence >= 1) {
+    confidence = 1;
+  }
   const expGain = confidence * (runningScript.onlineExpGained / runningScript.onlineRunningTime) * timePassed;
   Player.gainHackingExp(expGain);
 
