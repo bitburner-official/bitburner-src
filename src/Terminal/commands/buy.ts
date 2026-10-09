@@ -13,7 +13,7 @@ export function buy(args: (string | number | boolean)[]): undefined {
     Terminal.print("Incorrect number of arguments. Usage: ");
     Terminal.print("buy -l");
     Terminal.print("buy -a");
-    Terminal.print("buy [item name]");
+    Terminal.print("buy PROGRAM");
     return;
   }
   const arg = args[0] + "";
