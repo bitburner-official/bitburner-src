@@ -49,7 +49,7 @@ import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
 import { CONSTANTS } from "../../Constants";
 import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
-import { useHistory } from "src/ui/React/Documentation";
+import { useHistory } from "../../ui/React/Documentation";
 import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
 import { Settings } from "../../Settings/Settings";
 import { AugmentationName } from "@enums";
