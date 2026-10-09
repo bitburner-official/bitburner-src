@@ -16,9 +16,9 @@ export const windowTopPositionOfPages = new Map<FilePath, number>();
 interface History {
   pages: FilePath[];
   page: FilePath;
-  push(p: FilePath): void;
-  pop(): void;
-  home(): void;
+  push: (p: FilePath) => void;
+  pop: () => void;
+  home: () => void;
 }
 
 export const defaultPage = asFilePath("index.md");
