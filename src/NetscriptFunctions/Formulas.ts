@@ -464,11 +464,11 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const person = helpers.person(ctx, _person ?? Player);
         return getRamBlockRemoved(_darknetServerDetails, threads, person);
       },
-      getExpectedMigrationCharge: (ctx, _darknetServerDetails, _threads, _person): number => {
+      getExpectedMigrationCharge: (ctx, _darknetServerDetails, _person, _threads): number => {
         assertDarknetServerDetails(ctx, _darknetServerDetails);
         const threads = helpers.number(ctx, "threads", _threads ?? 1);
         const person = helpers.person(ctx, _person ?? Player);
-        return getServerMigrationChargeValue(_darknetServerDetails, threads, person);
+        return getServerMigrationChargeValue(_darknetServerDetails, person, threads);
       },
     },
   };

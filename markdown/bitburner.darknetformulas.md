@@ -38,7 +38,7 @@ Gets the time it will take to authenticate a server.
 </td></tr>
 <tr><td>
 
-[getExpectedMigrationCharge(serverDetails, threads, player)](./bitburner.darknetformulas.getexpectedmigrationcharge.md)
+[getExpectedMigrationCharge(serverDetails, player, threads)](./bitburner.darknetformulas.getexpectedmigrationcharge.md)
 
 
 </td><td>

@@ -9,7 +9,7 @@ Gets the expected amount of charge that will be gained by a call to dnet.induceS
 **Signature:**
 
 ```typescript
-getExpectedMigrationCharge(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
+getExpectedMigrationCharge(serverDetails: DarknetServerDetails, player: Person, threads?: number): number;
 ```
 
 ## Parameters
@@ -48,6 +48,22 @@ The server to estimate charge build-up on.
 </td></tr>
 <tr><td>
 
+player
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+The player object.
+
+
+</td></tr>
+<tr><td>
+
 threads
 
 
@@ -59,22 +75,6 @@ number
 </td><td>
 
 _(Optional)_ The number of threads used in the induceServerMigration call. Optional, defaults to 1
-
-
-</td></tr>
-<tr><td>
-
-player
-
-
-</td><td>
-
-[Person](./bitburner.person.md)
-
-
-</td><td>
-
-_(Optional)_ The player object. Optional, defaults to the current player status
 
 
 </td></tr>

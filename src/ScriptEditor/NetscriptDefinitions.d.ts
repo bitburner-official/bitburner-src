@@ -6619,10 +6619,10 @@ interface DarknetFormulas {
   /**
    * Gets the expected amount of charge that will be gained by a call to dnet.induceServerMigration
    * @param serverDetails - The server to estimate charge build-up on.
+   * @param player - The player object.
    * @param threads - The number of threads used in the induceServerMigration call. Optional, defaults to 1
-   * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedMigrationCharge(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
+  getExpectedMigrationCharge(serverDetails: DarknetServerDetails, player: Person, threads?: number): number;
 }
 
 /**
