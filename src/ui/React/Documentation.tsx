@@ -16,8 +16,8 @@ export const windowTopPositionOfPages = new Map<FilePath, number>();
 interface History {
   pages: FilePath[];
   page: FilePath;
-  push: (p: FilePath) => void;
-  pop: () => void;
+  push(p: FilePath): void;
+  pop(): void;
   home: () => void;
 }
 
