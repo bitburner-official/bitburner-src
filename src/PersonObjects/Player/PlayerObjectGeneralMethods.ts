@@ -464,7 +464,7 @@ export function setBitNodeNumber(this: PlayerObject, n: number): void {
 
 export function queueAugmentation(this: PlayerObject, name: AugmentationName): void {
   const currentLevel = getAugLevel(Augmentations[name]);
-  if (name !== AugmentationName.NeuroFluxGovernor && currentLevel !== 0) {
+  if (name !== AugmentationName.NeuroFluxGovernor && name !== AugmentationName.TheThread && currentLevel !== 0) {
     AlertEvents.emit(
       `Tried to queue ${name}, but it was already installed or queued. This is a bug. Please contact developers.`,
     );

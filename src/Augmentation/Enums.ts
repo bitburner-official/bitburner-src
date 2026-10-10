@@ -134,6 +134,7 @@ export enum AugmentationName {
   TheHammer = "The H4mmer of Daedalus",
   TheLaw = "The L4w of Bayes",
   TheSword = "The B1ade of Solomonoff",
+  TheThread = "The Thr3ad of Ariadne",
 
   // Infiltrators MiniGames
   MightOfAres = "SoA - Might of Ares", // slash
