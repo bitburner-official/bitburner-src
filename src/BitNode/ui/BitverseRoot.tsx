@@ -3,7 +3,6 @@ import { BitNodes } from "../BitNode";
 import { PortalModal } from "./PortalModal";
 import { CinematicText } from "../../ui/React/CinematicText";
 import { Player } from "@player";
-import { makeStyles } from "tss-react/mui";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -12,32 +11,7 @@ import Button from "@mui/material/Button";
 import { CompletedProgramName } from "@enums";
 import { Modal } from "../../ui/React/Modal";
 import { DocumentationLink } from "../../ui/React/DocumentationLink";
-
-const useStyles = makeStyles()(() => ({
-  portal: {
-    cursor: "pointer",
-    fontFamily: "inherit",
-    fontSize: "1rem",
-    fontWeight: "bold",
-    lineHeight: 1,
-    padding: 0,
-    "&:hover": {
-      color: "#fff",
-    },
-  },
-  level0: {
-    color: Settings.theme.bnlvl0,
-  },
-  level1: {
-    color: Settings.theme.bnlvl1,
-  },
-  level2: {
-    color: Settings.theme.bnlvl2,
-  },
-  level3: {
-    color: Settings.theme.bnlvl3,
-  },
-}));
+import type { Theme } from "@mui/material";
 
 function BitVerseMapRow({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
@@ -56,25 +30,27 @@ interface IPortalProps {
 
 function BitNodePortal(props: IPortalProps): React.ReactElement {
   const [portalOpen, setPortalOpen] = useState(false);
-  const { classes } = useStyles();
   const bitNode = BitNodes[`BitNode${props.n}`];
   if (bitNode == null) {
     throw new Error(`Invalid BitNode: BitNode${props.n}`);
   }
 
-  let cssClass = classes.level0;
-  if (props.n === 12 && props.level >= 2) {
+  const getPortalColor = (theme: Theme, n: number, level: number): React.CSSProperties["color"] => {
     // Repeating BitNode
-    cssClass = classes.level2;
-  } else if (props.level === 1) {
-    cssClass = classes.level1;
-  } else if (props.level === 3) {
-    cssClass = classes.level3;
-  }
-  if (props.level === 2) {
-    cssClass = classes.level2;
-  }
-  cssClass = `${classes.portal} ${cssClass}`;
+    if (n === 12 && level >= 2) {
+      return theme.colors.bnlvl2;
+    }
+    switch (level) {
+      case 1:
+        return theme.colors.bnlvl1;
+      case 2:
+        return theme.colors.bnlvl2;
+      case 3:
+        return theme.colors.bnlvl3;
+      default:
+        return theme.colors.bnlvl0;
+    }
+  };
 
   return (
     <>
@@ -98,7 +74,18 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
         ) : (
           <IconButton
             onClick={() => setPortalOpen(true)}
-            className={cssClass}
+            sx={(theme) => ({
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: "1rem",
+              fontWeight: "bold",
+              lineHeight: 1,
+              padding: 0,
+              "&:hover": {
+                color: "#fff",
+              },
+              color: getPortalColor(theme, props.n, props.level),
+            })}
             aria-label={`BitNode-${bitNode.number.toString()}: ${bitNode.name}`}
             aria-description={bitNode.tagline}
           >

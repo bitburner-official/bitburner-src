@@ -15,24 +15,21 @@ import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import Typography from "@mui/material/Typography";
+import { Box, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+import { SxProps, Theme } from "@mui/material/styles";
 
 interface IProps {
   city: City;
 }
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  location: {
-    color: theme.colors.maplocation,
-    whiteSpace: "nowrap",
-    margin: "0px",
-    padding: "0px",
-    cursor: "pointer",
-  },
-}));
+const locationSx: SxProps<Theme> = (theme) => ({
+  color: theme.colors.maplocation,
+  whiteSpace: "nowrap",
+  m: 0,
+  p: 0,
+  cursor: "pointer",
+});
 
 function toLocation(location: Location): void {
   if (location.name === LocationName.TravelAgency) {
@@ -44,7 +41,7 @@ function toLocation(location: Location): void {
   }
 }
 
-function LocationLetter(location: Location, className: string): React.ReactElement {
+function LocationLetter(location: Location, locationSx: SxProps<Theme>): React.ReactElement {
   let L = "X";
   if (location.types.includes(LocationType.Company)) L = "C";
   if (location.types.includes(LocationType.Gym)) L = "G";
@@ -56,11 +53,17 @@ function LocationLetter(location: Location, className: string): React.ReactEleme
   if (location.types.includes(LocationType.University)) L = "U";
   if (location.types.includes(LocationType.Casino)) L = "¢";
   if (location.types.includes(LocationType.Special)) L = "?";
-  if (!location) return <span>*</span>;
+  if (!location) return <Box component="span">*</Box>;
   return (
-    <span aria-label={location.name} key={location.name} className={className} onClick={() => toLocation(location)}>
-      <b>{L}</b>
-    </span>
+    <Box
+      component="span"
+      aria-label={location.name}
+      key={location.name}
+      sx={locationSx}
+      onClick={() => toLocation(location)}
+    >
+      <strong>{L}</strong>
+    </Box>
   );
 }
 
@@ -94,7 +97,6 @@ function ASCIICity(props: IProps): React.ReactElement {
     Y: 24,
     Z: 25,
   };
-  const { classes } = useStyles();
 
   const lineElems = (s: string): (string | React.ReactElement)[] => {
     const elems: (string | React.ReactElement)[] = [];
@@ -113,7 +115,7 @@ function ASCIICity(props: IProps): React.ReactElement {
       const endI = matches[i].index;
       elems.push(s.slice(startI, endI));
       const locationI = letterMap[s[matches[i].index]];
-      elems.push(LocationLetter(Locations[props.city.locations[locationI]], classes.location));
+      elems.push(LocationLetter(Locations[props.city.locations[locationI]], locationSx));
     }
     elems.push(s.slice(matches[matches.length - 1].index + 1));
     return elems;

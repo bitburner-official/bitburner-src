@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+import { styled } from "@mui/material/styles";
 
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
@@ -82,18 +81,16 @@ import { CustomPage } from "./CustomPage";
 
 const htmlLocation = location;
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  root: {
-    msOverflowStyle: "none" /* for Internet Explorer, Edge */,
-    scrollbarWidth: "none" /* for Firefox */,
-    margin: theme.spacing(0),
-    flexGrow: 1,
-    padding: "8px",
-    minHeight: "100vh",
-    boxSizing: "border-box",
-    width: "1px",
-  },
-}));
+const MainPageBox = styled(Box)({
+  msOverflowStyle: "none" /* for Internet Explorer, Edge */,
+  scrollbarWidth: "none" /* for Firefox */,
+  m: 0,
+  flexGrow: 1,
+  padding: "8px",
+  minHeight: "100vh",
+  boxSizing: "border-box",
+  width: "1px",
+});
 
 const MAX_PAGES_IN_HISTORY = 10;
 
@@ -172,8 +169,6 @@ function determineStartPage(): PageWithContext {
 }
 
 export function GameRoot(): React.ReactElement {
-  const { classes } = useStyles();
-
   const [pages, setPages] = useState<PageWithContext[]>(() => [determineStartPage()]);
   let pageWithContext = pages[0];
 
@@ -550,10 +545,10 @@ export function GameRoot(): React.ReactElement {
               {withSidebar ? (
                 <Box display="flex" flexDirection="row" width="100%">
                   <SidebarRoot page={pageWithContext.page} />
-                  <Box className={classes.root}>{mainPage}</Box>
+                  <MainPageBox>{mainPage}</MainPageBox>
                 </Box>
               ) : (
-                <Box className={classes.root}>{mainPage}</Box>
+                <MainPageBox>{mainPage}</MainPageBox>
               )}
               <Unclickable />
               <LogBoxManager hidden={hidePopups} />
