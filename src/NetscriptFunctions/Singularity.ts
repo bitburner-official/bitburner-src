@@ -64,11 +64,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     if (!script) return;
     const ramUsage = script.getRamUsage(home.scripts);
     if (!ramUsage) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
+      return Terminal.printAndBypassPipes(
+        `Attempted to launch ${cbScript} after reset but could not calculate ram usage.`,
+        "error",
+      );
     }
     const ramAvailable = home.maxRam - home.ramUsed;
     if (ramUsage > ramAvailable + 0.001) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
+      return Terminal.printAndBypassPipes(
+        `Attempted to launch ${cbScript} after reset but there was not enough ram.`,
+        "error",
+      );
     }
     // Start script with no args and 1 thread (default).
     const runningScriptObj = new RunningScript(script, ramUsage, []);
@@ -467,7 +473,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const filename = helpers.string(ctx, "filename", _filename);
       const server = Player.getCurrentServer();
-      cat([filename], server);
+      cat([filename], server, ctx.workerScript.scriptRef.terminalStdOut);
     },
     connect: (ctx, _host?) => {
       helpers.checkSingularityAccess(ctx);
