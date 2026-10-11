@@ -79,7 +79,7 @@ This technique is sometimes used to sacrifice a new device that appears on the n
 
 </td><td>
 
-Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using [memoryReallocation](./bitburner.darknet.memoryreallocation.md)<!-- -->.
+Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using [memoryReallocation](./bitburner.darknet.memoryreallocation.md)<!-- -->.
 
 Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
 

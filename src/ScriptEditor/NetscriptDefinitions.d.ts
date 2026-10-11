@@ -4791,7 +4791,7 @@ export interface Darknet {
   memoryReallocation(host?: string): Promise<DarknetResult>;
 
   /**
-   * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using {@link Darknet.memoryReallocation | memoryReallocation}.
+   * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using {@link Darknet.memoryReallocation | memoryReallocation}.
    *
    * Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
    *
