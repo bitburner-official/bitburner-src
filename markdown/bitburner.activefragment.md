@@ -106,7 +106,7 @@ If the current threads used is greater than highestCharge then highestCharge val
 
 `numCharge = (numCharge * highestCharge) / threadsUsed + 1`
 
-This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged..
+This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
 
 
 </td></tr>

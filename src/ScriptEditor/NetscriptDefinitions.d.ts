@@ -6707,7 +6707,7 @@ interface ActiveFragment extends Fragment {
    *
    * `numCharge = (numCharge * highestCharge) / threadsUsed + 1`
    *
-   * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged..
+   * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
    */
   numCharge: number;
   /**
