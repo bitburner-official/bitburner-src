@@ -335,7 +335,7 @@ Get the current work the player is doing.
 
 </td><td>
 
-Check the price of an exploit on the dark web
+Check the price of an exploit on the darkweb.
 
 
 </td></tr>
@@ -346,7 +346,7 @@ Check the price of an exploit on the dark web
 
 </td><td>
 
-Get a list of programs offered on the dark web.
+Get a list of programs offered on the darkweb.
 
 
 </td></tr>
@@ -621,7 +621,7 @@ Purchase an augmentation
 
 </td><td>
 
-Purchase a program from the dark web.
+Purchase a program from the darknet.
 
 
 </td></tr>

@@ -4,7 +4,7 @@
 
 ## Singularity.getDarkwebProgramCost() method
 
-Check the price of an exploit on the dark web
+Check the price of an exploit on the darkweb.
 
 **Signature:**
 

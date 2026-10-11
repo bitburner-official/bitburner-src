@@ -2070,15 +2070,15 @@ export interface Singularity {
   purchaseTor(): boolean;
 
   /**
-   * Purchase a program from the dark web.
+   * Purchase a program from the darknet.
    * @remarks
    * RAM cost: 2 GB * 16/4/1
    *
    *
    * This function allows you to automatically purchase programs. You MUST have a
    * TOR router in order to use this function. The cost of purchasing programs
-   * using this function is the same as if you were purchasing them through the Dark
-   * Web using the Terminal buy command.
+   * using this function is the same as if you were purchasing them through the darknet
+   * using the Terminal buy command.
    *
    * @example
    * ```js
@@ -2876,13 +2876,13 @@ export interface Singularity {
   setFocus(focus: boolean): boolean;
 
   /**
-   * Get a list of programs offered on the dark web.
+   * Get a list of programs offered on the darkweb.
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
    *
    *
    * This function allows the player to get a list of programs available for purchase
-   * on the dark web. Players MUST have purchased Tor to get the list of programs
+   * on the darkweb. Players MUST have purchased Tor to get the list of programs
    * available. If Tor has not been purchased yet, this function will return an
    * empty list.
    *
@@ -2891,13 +2891,13 @@ export interface Singularity {
    * const programs = ns.singularity.getDarkwebPrograms();
    * ns.tprint(`Available programs are: ${programs}`);
    * ```
-   * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
+   * @returns - a list of programs available for purchase on the darkweb, or [] if Tor has not
    * been purchased
    */
   getDarkwebPrograms(): ProgramName[];
 
   /**
-   * Check the price of an exploit on the dark web
+   * Check the price of an exploit on the darkweb.
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
    *
@@ -7951,7 +7951,7 @@ export interface NS {
    */
   scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 
-  /** Returns whether the player has access to the darkweb.
+  /** Returns whether the player has access to the darknet.
    * @remarks
    * RAM cost: 0.05GB
    *
@@ -7960,7 +7960,7 @@ export interface NS {
    * if (ns.hasTorRouter()) ns.tprint("TOR router detected.");
    * ```
    *
-   * @returns Whether player has access to the dark web. */
+   * @returns Whether player has access to the darknet. */
   hasTorRouter(): boolean;
 
   /**

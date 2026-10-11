@@ -4,7 +4,7 @@
 
 ## NS.hasTorRouter() method
 
-Returns whether the player has access to the darkweb.
+Returns whether the player has access to the darknet.
 
 **Signature:**
 
@@ -15,7 +15,7 @@ hasTorRouter(): boolean;
 
 boolean
 
-Whether player has access to the dark web.
+Whether player has access to the darknet.
 
 ## Remarks
 
