@@ -4576,7 +4576,7 @@ interface DarknetInstability {
  */
 export interface Darknet {
   /**
-   * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
+   * Sends a network request to try to authenticate on a darknet server. The target server must be directly connected
    * to the server that the script is running on. The speed of authentication scales with the number of threads used.
    *
    * If successful, grants the current script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
@@ -4600,7 +4600,7 @@ export interface Darknet {
   authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 
   /**
-   * Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`,
+   * Attempts to connect to a target darknet server that you have previously authenticated on. Unlike `authenticate`,
    * connectToSession can be used to get a session on servers at any distance.
    *
    * If successful, grants the script a session, allowing it to scp() files to that target. It also allows starting scripts
@@ -4804,10 +4804,10 @@ export interface Darknet {
   getBlockedRam(host?: string): number;
 
   /**
-   * Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and
+   * Gets the current depth of the specified server into the darknet. Servers immediately below the "darkweb" server are depth 0, and
    * each visual row in the UI below that increases the depth of the server.
    *
-   * Returns -1 if the server is offline, not found, or not a darkweb server.
+   * Returns -1 if the server is offline, not found, or not a darknet server.
    *
    * @remarks
    * RAM cost: 0.1 GB
@@ -7887,7 +7887,7 @@ export interface NS {
 
   /**
    * Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers
-   * (e.g., darkweb). Use {@link Darknet.probe | probe} if you want to list darknet servers.
+   * (e.g., "darkweb"). Use {@link Darknet.probe | probe} if you want to list darknet servers.
    * @remarks
    * RAM cost: 0.2 GB
    *
