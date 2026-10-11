@@ -74,7 +74,7 @@ number
 
 </td><td>
 
-A number from 0 to 3, the mount of 90 degree turn to take.
+A number from 0 to 3, the amount of 90 degree turns to take.
 
 
 </td></tr>
