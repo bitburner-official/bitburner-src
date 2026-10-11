@@ -79,7 +79,9 @@ This technique is sometimes used to sacrifice a new device that appears on the n
 
 </td><td>
 
-Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
+Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using dnet.memoryReallocation().
+
+Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
 
 
 </td></tr>
