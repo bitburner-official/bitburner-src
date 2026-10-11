@@ -92,7 +92,9 @@ Unlike reallocation itself, blocked RAM can be evaluated regardless of distance 
 
 </td><td>
 
-Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+Gets the current instability penalties caused by excessive backdoor installations on the darknet.
+
+Note that instability is not associated with darknet network mutations or network mutation rate.
 
 
 </td></tr>

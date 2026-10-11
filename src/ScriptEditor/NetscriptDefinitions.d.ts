@@ -4848,11 +4848,13 @@ export interface Darknet {
   phishingAttack(): Promise<DarknetResult>;
 
   /**
-   * Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+   * Gets the current instability penalties caused by excessive backdoor installations on the darknet.
+   * 
+   * Note that instability is not associated with darknet network mutations or network mutation rate.
    * @remarks
    * Ram cost: 0 GB
    *
-   * @returns An object containing the current instability values.
+   * @returns An object containing the current instability penalty values.
    */
   getDarknetInstability(): DarknetInstability;
 
