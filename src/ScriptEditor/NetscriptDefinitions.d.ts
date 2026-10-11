@@ -4690,7 +4690,7 @@ export interface Darknet {
    * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
    * going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
    *
-   * There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit().
+   * There is a maximum number of stasis links that can be applied globally, which can be seen using getStasisLinkLimit().
    * This limit can be increased by finding special augmentations in the deep darknet.
    *
    * @remarks
