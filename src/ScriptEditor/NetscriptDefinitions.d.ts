@@ -4792,7 +4792,7 @@ export interface Darknet {
 
   /**
    * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using dnet.memoryReallocation().
-   * 
+   *
    * Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
    *
    * @remarks
@@ -4849,7 +4849,7 @@ export interface Darknet {
 
   /**
    * Gets the current instability penalties caused by excessive backdoor installations on the darknet.
-   * 
+   *
    * Note that instability is not associated with darknet network mutations or network mutation rate.
    * @remarks
    * Ram cost: 0 GB
