@@ -4,7 +4,7 @@
 
 ## Singularity.purchaseProgram() method
 
-Purchase a program from the darknet.
+Purchase a program from the Dark Web.
 
 **Signature:**
 
@@ -58,7 +58,7 @@ True if the specified program is purchased or if you already own it, and false o
 
 RAM cost: 2 GB \* 16/4/1
 
-This function allows you to automatically purchase programs. You MUST have a TOR router in order to use this function. The cost of purchasing programs using this function is the same as if you were purchasing them through the darknet using the Terminal buy command.
+This function allows you to automatically purchase programs. You MUST have a TOR router in order to use this function. The cost of purchasing programs using this function is the same as if you were purchasing them through the Dark Web using the Terminal buy command.
 
 ## Example
 

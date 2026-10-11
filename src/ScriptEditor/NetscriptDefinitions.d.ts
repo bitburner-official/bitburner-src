@@ -2070,14 +2070,14 @@ export interface Singularity {
   purchaseTor(): boolean;
 
   /**
-   * Purchase a program from the darknet.
+   * Purchase a program from the Dark Web.
    * @remarks
    * RAM cost: 2 GB * 16/4/1
    *
    *
    * This function allows you to automatically purchase programs. You MUST have a
    * TOR router in order to use this function. The cost of purchasing programs
-   * using this function is the same as if you were purchasing them through the darknet
+   * using this function is the same as if you were purchasing them through the Dark Web
    * using the Terminal buy command.
    *
    * @example
@@ -2876,13 +2876,13 @@ export interface Singularity {
   setFocus(focus: boolean): boolean;
 
   /**
-   * Get a list of programs offered on the darkweb.
+   * Get a list of programs offered on the Dark Web.
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
    *
    *
    * This function allows the player to get a list of programs available for purchase
-   * on the darkweb. Players MUST have purchased Tor to get the list of programs
+   * on the Dark Web. Players MUST have purchased Tor to get the list of programs
    * available. If Tor has not been purchased yet, this function will return an
    * empty list.
    *
@@ -2891,18 +2891,18 @@ export interface Singularity {
    * const programs = ns.singularity.getDarkwebPrograms();
    * ns.tprint(`Available programs are: ${programs}`);
    * ```
-   * @returns - a list of programs available for purchase on the darkweb, or [] if Tor has not
+   * @returns - a list of programs available for purchase on the Dark Web, or [] if Tor has not
    * been purchased
    */
   getDarkwebPrograms(): ProgramName[];
 
   /**
-   * Check the price of an exploit on the darkweb.
+   * Check the price of an exploit on the Dark Web.
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
    *
    *
-   * This function allows you to check the price of a darkweb exploit/program.
+   * This function allows you to check the price of a Dark Web exploit/program.
    * You MUST have a TOR router in order to use this function. The price returned
    * by this function is the same price you would see with buy -l from the terminal.
    * Returns the cost of the program if it has not been purchased yet, 0 if it
@@ -2919,7 +2919,7 @@ export interface Singularity {
    * if (cost > 0) ns.tprint(`${programName} costs $${ns.format.number(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
-   * @returns Price of the specified darkweb program
+   * @returns Price of the specified Dark Web program
    * (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been
    * purchased. Throws an error if the specified program/exploit does not exist
    */
@@ -7951,7 +7951,7 @@ export interface NS {
    */
   scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 
-  /** Returns whether the player has access to the darknet.
+  /** Returns whether the player has access to the Dark Web via a TOR Router.
    * @remarks
    * RAM cost: 0.05GB
    *
@@ -7960,7 +7960,7 @@ export interface NS {
    * if (ns.hasTorRouter()) ns.tprint("TOR router detected.");
    * ```
    *
-   * @returns Whether player has access to the darknet. */
+   * @returns Whether player has access to the Dark Web via a TOR Router. */
   hasTorRouter(): boolean;
 
   /**

@@ -1196,7 +1196,7 @@ Check if you have root access on a server.
 
 </td><td>
 
-Returns whether the player has access to the darknet.
+Returns whether the player has access to the Dark Web via a TOR Router.
 
 
 </td></tr>
