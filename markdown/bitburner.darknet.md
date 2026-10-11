@@ -38,7 +38,7 @@ If successful, grants the current script a session, allowing it to exec() script
 
 Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer if the player's charisma is below the server's charisma level.
 
-Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use [connectToSession](./bitburner.darknet.connecttosession.md) with the correct password to also get a session with the target server.
 
 
 </td></tr>
@@ -51,9 +51,9 @@ Note that the session granted is only for the current script instance (by PID) -
 
 Attempts to connect to a target darknet server that you have previously authenticated on. Unlike `authenticate`<!-- -->, connectToSession can be used to get a session on servers at any distance.
 
-If successful, grants the script a session, allowing it to scp() files to that target. It also allows starting scripts with exec() on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
+If successful, grants the script a session, allowing it to [scp()](./bitburner.ns.scp.md) files to that target. It also allows starting scripts with [exec()](./bitburner.ns.exec.md) on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
 
-If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+If unsuccessful, more detail may be able to be gathered by using [heartbleed()](./bitburner.darknet.heartbleed.md) to look at the resulting logs on the server.
 
 Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
 
@@ -79,7 +79,7 @@ This technique is sometimes used to sacrifice a new device that appears on the n
 
 </td><td>
 
-Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using dnet.memoryReallocation().
+Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using [memoryReallocation](./bitburner.darknet.memoryreallocation.md)<!-- -->.
 
 Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
 
@@ -131,7 +131,7 @@ If the darknet server has recently gone offline, the returned object will be a d
 
 </td><td>
 
-Gets the required charisma level to target the server with dnet.heartbleed().
+Gets the required charisma level to target the server with [dnet.heartbleed](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep in the darknet, be impossible.
 
@@ -319,11 +319,11 @@ This function requires TIX API access. You can use [purchaseTixApi](./bitburner.
 
 </td><td>
 
-Applies or removes a stasis link to the script's current server. This will allow you to exec() to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
+Applies or removes a stasis link to the script's current server. This will allow you to [exec()](./bitburner.ns.exec.md) to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
 
 Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
 
-There is a maximum number of stasis links that can be applied globally, which can be seen using getStasisLinkLimit(). This limit can be increased by finding special augmentations in the deep darknet.
+There is a maximum number of stasis links that can be applied globally, which can be seen using [getStasisLinkLimit](./bitburner.darknet.getstasislinklimit.md)<!-- -->. This limit can be increased by finding special augmentations in the deep darknet.
 
 
 </td></tr>

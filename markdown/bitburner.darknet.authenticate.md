@@ -10,7 +10,7 @@ If successful, grants the current script a session, allowing it to exec() script
 
 Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer if the player's charisma is below the server's charisma level.
 
-Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use [connectToSession](./bitburner.darknet.connecttosession.md) with the correct password to also get a session with the target server.
 
 **Signature:**
 

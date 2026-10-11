@@ -4585,7 +4585,7 @@ export interface Darknet {
    * if the player's charisma is below the server's charisma level.
    *
    * Note that the session granted is only for the current script instance (by PID) - other running scripts will need to
-   * use connectToSession with the correct password to also get a session with the target server.
+   * use {@link Darknet.connectToSession | connectToSession} with the correct password to also get a session with the target server.
    *
    * @remarks
    * RAM cost: 0.4 GB
@@ -4603,11 +4603,11 @@ export interface Darknet {
    * Attempts to connect to a target darknet server that you have previously authenticated on. Unlike `authenticate`,
    * connectToSession can be used to get a session on servers at any distance.
    *
-   * If successful, grants the script a session, allowing it to scp() files to that target. It also allows starting scripts
-   * with exec() on that target, if the target is directly connected to the server that the script is running on,
+   * If successful, grants the script a session, allowing it to {@link NS.scp | scp()} files to that target. It also allows starting scripts
+   * with {@link NS.exec | exec()} on that target, if the target is directly connected to the server that the script is running on,
    * or has a backdoor or stasis link.
    *
-   * If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+   * If unsuccessful, more detail may be able to be gathered by using {@link Darknet.heartbleed | heartbleed()} to look at the resulting logs on the server.
    *
    * Note that the session granted is only for the current script instance (by PID) - other running scripts will need to
    * use connectToSession with the correct password to also get a session with the target server.
@@ -4684,13 +4684,13 @@ export interface Darknet {
   probe(returnByIP?: boolean): string[];
 
   /**
-   * Applies or removes a stasis link to the script's current server. This will allow you to exec() to the server remotely, even if it is
+   * Applies or removes a stasis link to the script's current server. This will allow you to {@link NS.exec | exec()} to the server remotely, even if it is
    * not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
    *
    * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
    * going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
    *
-   * There is a maximum number of stasis links that can be applied globally, which can be seen using getStasisLinkLimit().
+   * There is a maximum number of stasis links that can be applied globally, which can be seen using {@link Darknet.getStasisLinkLimit | getStasisLinkLimit}.
    * This limit can be increased by finding special augmentations in the deep darknet.
    *
    * @remarks
@@ -4791,7 +4791,7 @@ export interface Darknet {
   memoryReallocation(host?: string): Promise<DarknetResult>;
 
   /**
-   * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using dnet.memoryReallocation().
+   * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for use using {@link Darknet.memoryReallocation | memoryReallocation}.
    *
    * Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
    *
@@ -4882,7 +4882,7 @@ export interface Darknet {
   nextMutation(): Promise<void>;
 
   /**
-   * Gets the required charisma level to target the server with dnet.heartbleed().
+   * Gets the required charisma level to target the server with {@link Darknet.heartbleed | dnet.heartbleed}.
    *
    * Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep
    * in the darknet, be impossible.
@@ -6614,7 +6614,7 @@ interface DarknetFormulas {
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount of ram that will be freed by a call to dnet.memoryReallocation
+   * Gets the expected amount of ram that will be freed by a call to {@link Darknet.memoryReallocation | dnet.memoryReallocation}
    * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
@@ -6622,7 +6622,7 @@ interface DarknetFormulas {
   getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount of charge that will be gained by a call to dnet.induceServerMigration
+   * Gets the expected amount of charge that will be gained by a call to {@link Darknet.induceServerMigration | dnet.induceServerMigration}
    * @param serverDetails - The server to estimate charge build-up on.
    * @param player - The player object.
    * @param threads - The number of threads used in the induceServerMigration call. Optional, defaults to 1
