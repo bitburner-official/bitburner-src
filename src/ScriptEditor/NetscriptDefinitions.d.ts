@@ -6707,10 +6707,6 @@ interface ActiveFragment extends Fragment {
    *
    * `numCharge = (numCharge * highestCharge) / threadsUsed + 1`
    *
-   * If the highest charge remains unchanged during a charge cycle, then the charge gained can be shown as
-   *
-   * `numCharge = 1 + (cores - 1) / 16`.
-   *
    * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged..
    */
   numCharge: number;
