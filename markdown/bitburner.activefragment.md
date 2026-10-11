@@ -75,6 +75,10 @@ number
 
 </td><td>
 
+The highest effective number of threads ever used in a single script's [chargeFragment()](./bitburner.stanek.chargefragment.md) call on this fragment.
+
+This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
+
 
 </td></tr>
 <tr><td>
@@ -91,6 +95,22 @@ number
 
 
 </td><td>
+
+The current charge value in play for this fragment. The amount of numCharge gained per charge cycle can vary depending on the current threads used in relation to the fragment's current highestCharge.
+
+If the current threads used is less than or equal to highestCharge, then the updated numCharge can be shown as:
+
+`numCharge += threadsUsed / highestCharge`
+
+If the current threads used is greater than highestCharge then highestCharge value is updated, and then for this once the updated numCharge can be shown as:
+
+`numCharge = (numCharge * highestCharge) / threadsUsed + 1`
+
+If the highest charge remains unchanged during a charge cycle, then the charge gained can be shown as
+
+`numCharge = 1 + (cores - 1) / 16`<!-- -->.
+
+This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged..
 
 
 </td></tr>
@@ -109,6 +129,8 @@ number
 
 </td><td>
 
+The amount of 90-degree turns applied to the fragment's placement.
+
 
 </td></tr>
 <tr><td>
@@ -126,6 +148,8 @@ number
 
 </td><td>
 
+The root x coordinate against which the top left of the fragment was aligned.
+
 
 </td></tr>
 <tr><td>
@@ -142,6 +166,8 @@ number
 
 
 </td><td>
+
+The root y coordinate against which the top left of the fragment was aligned.
 
 
 </td></tr>

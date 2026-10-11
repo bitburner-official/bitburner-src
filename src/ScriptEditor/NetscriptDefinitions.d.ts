@@ -6690,10 +6690,41 @@ interface Fragment {
 
 /** @public */
 interface ActiveFragment extends Fragment {
+  /**
+   * The highest effective number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
+   */
   highestCharge: number;
+  /**
+   * The current charge value in play for this fragment. The amount of numCharge gained per charge cycle can vary depending on the current threads used in relation to the fragment's current highestCharge.
+   *
+   * If the current threads used is less than or equal to highestCharge, then the updated numCharge can be shown as:
+   *
+   * `numCharge += threadsUsed / highestCharge`
+   *
+   * If the current threads used is greater than highestCharge then highestCharge value is updated, and then for this once the updated numCharge can be shown as:
+   *
+   * `numCharge = (numCharge * highestCharge) / threadsUsed + 1`
+   *
+   * If the highest charge remains unchanged during a charge cycle, then the charge gained can be shown as
+   *
+   * `numCharge = 1 + (cores - 1) / 16`.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged..
+   */
   numCharge: number;
+  /**
+   * The amount of 90-degree turns applied to the fragment's placement.
+   */
   rotation: number;
+  /**
+   * The root x coordinate against which the top left of the fragment was aligned.
+   */
   x: number;
+  /**
+   * The root y coordinate against which the top left of the fragment was aligned.
+   */
   y: number;
   /**
    * This is the raw value of the modifier used to calculate the effect on your multipliers. It may not be a multiplier.
@@ -6786,7 +6817,7 @@ interface Stanek {
    *
    * @param rootX - X against which to align the top left of the fragment.
    * @param rootY - Y against which to align the top left of the fragment.
-   * @param rotation - A number from 0 to 3, the amount of 90 degree turns to take.
+   * @param rotation - A number from 0 to 3, the amount of 90-degree turns to take.
    * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */

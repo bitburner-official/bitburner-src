@@ -4,6 +4,10 @@
 
 ## ActiveFragment.highestCharge property
 
+The highest effective number of threads ever used in a single script's [chargeFragment()](./bitburner.stanek.chargefragment.md) call on this fragment.
+
+This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
+
 **Signature:**
 
 ```typescript
