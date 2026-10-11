@@ -4,7 +4,7 @@
 
 ## NS.hasTorRouter() method
 
-Returns whether the player has access to the Dark Web via a TOR Router.
+Returns whether the player has access to the Dark Web via a TOR Router. Note that this is not the Darknet accessible via DarkscapeNavigator.exe.
 
 **Signature:**
 

@@ -7952,6 +7952,7 @@ export interface NS {
   scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 
   /** Returns whether the player has access to the Dark Web via a TOR Router.
+   * Note that this is not the Darknet accessible via DarkscapeNavigator.exe.
    * @remarks
    * RAM cost: 0.05GB
    *
