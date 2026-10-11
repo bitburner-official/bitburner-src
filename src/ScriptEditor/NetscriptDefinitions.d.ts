@@ -4738,10 +4738,10 @@ export interface Darknet {
   getServerDetails(host?: string): DarknetServerDetails & { isOnline: boolean };
 
   /**
-   * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
+   * Attempts to move a target server to other parts of the darknet, by overloading the connections between it and the current server. Continued attempts accrue charge on the target server, which results in the target's migration when charge reaches 100%.
    * The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
    *
-   * Effect scales with threads and charisma level.
+   * The amount of charge gained scales with threads and charisma level.
    *
    * @remarks
    * RAM cost: 4 GB
