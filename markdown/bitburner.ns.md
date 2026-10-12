@@ -1051,9 +1051,15 @@ Get the used RAM on a server. This includes ram used by running scripts as well 
 
 </td><td>
 
-Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking work, share power still increases the reputation gain rate, but the effect is non-linear.
+Share power has a multiplicative effect on the reputation gain rate of faction work.
 
-Scales with a player stat unlocked later on, as well as effective thread count(including server core bonus) but at a sharply decreasing rate.
+The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
+
+Share power increases for each thread of share running on your server network, but at a sharply decreasing rate. A server's cores bonus effectively increases its thread count.
+
+The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+
+Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
 
 
 </td></tr>
@@ -1537,7 +1543,15 @@ Returns a boolean denoting whether or not the specified server exists.
 
 </td><td>
 
-Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is applied to all faction work of all factions.
+Multiplies the reputation gain rate of faction work by sharing the server's RAM with the faction.
+
+The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
+
+Share power increases for each thread of share running on your server network, but at a sharply decreasing rate. A server's cores bonus effectively increases its thread count.
+
+The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+
+Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
 
 
 </td></tr>
