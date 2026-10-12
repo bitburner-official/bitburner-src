@@ -6691,7 +6691,7 @@ interface Fragment {
 /** @public */
 interface ActiveFragment extends Fragment {
   /**
-   * The highest effective number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
+   * The highest effective(including server core bonus) number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
    *
    * This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
    */
@@ -6763,6 +6763,10 @@ interface Stanek {
 
   /**
    * Charge a fragment, increasing its power.
+   *
+   * The amount of charge gained can vary based on the fragment's current values, as well as threads used and cores active on the server charging.
+   *
+   * See {@link ActiveFragment | ActiveFragment} for additional information.
    * @remarks
    * RAM cost: 0.4 GB
    * @param rootX - Root X against which to align the top left of the fragment.

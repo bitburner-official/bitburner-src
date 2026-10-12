@@ -6,6 +6,10 @@
 
 Charge a fragment, increasing its power.
 
+The amount of charge gained can vary based on the fragment's current values, as well as threads used and cores active on the server charging.
+
+See [ActiveFragment](./bitburner.activefragment.md) for additional information.
+
 **Signature:**
 
 ```typescript
