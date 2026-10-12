@@ -19,5 +19,5 @@ Promise&lt;void&gt;
 
 RAM cost: 2.4 GB
 
-Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds. Scales with thread count, but at a sharply decreasing rate.
+Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds. Scales with a player stat unlocked later on, as well as effective thread count(including server core bonus) but at a sharply decreasing rate.
 

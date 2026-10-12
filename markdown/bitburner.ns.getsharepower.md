@@ -6,7 +6,7 @@
 
 Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking work, share power still increases the reputation gain rate, but the effect is non-linear.
 
-Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+Scales with a player stat unlocked later on, as well as effective thread count(including server core bonus) but at a sharply decreasing rate.
 
 **Signature:**
 

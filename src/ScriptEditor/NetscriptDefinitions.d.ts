@@ -9350,7 +9350,7 @@ export interface NS {
    * RAM cost: 2.4 GB
    *
    * Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds.
-   * Scales with thread count, but at a sharply decreasing rate.
+   * Scales with a player stat unlocked later on, as well as effective thread count(including server core bonus) but at a sharply decreasing rate.
    */
   share(): Promise<void>;
 
@@ -9358,7 +9358,7 @@ export interface NS {
    * Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking
    * work, share power still increases the reputation gain rate, but the effect is non-linear.
    *
-   * Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+   * Scales with a player stat unlocked later on, as well as effective thread count(including server core bonus) but at a sharply decreasing rate.
    * @remarks
    * RAM cost: 0.2 GB
    */
