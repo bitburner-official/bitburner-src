@@ -9363,7 +9363,7 @@ export interface NS {
    *
    * The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
    *
-   * Share power increases for each thread of share running on your server network, but at a sharply decreasing rate. A server's cores bonus effectively increases its thread count.
+   * Share power increases for each thread of share running on your server network, but the total amount is logarithmic. A server's cores bonus effectively increases its thread count.
    *
    * The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
    *
