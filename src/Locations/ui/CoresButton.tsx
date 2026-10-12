@@ -37,7 +37,7 @@ export function CoresButton(props: IProps): React.ReactElement {
       <span>
         <br />
         <Typography>
-          <i>"Cores increase the effectiveness of grow() and weaken() on 'home'"</i>
+          <i>"Cores increase the effectiveness of grow(), weaken(), and share() on 'home'"</i>
         </Typography>
         <br />
         <Button disabled={!Player.canAfford(cost) || reachMaxCore} onClick={buy}>
