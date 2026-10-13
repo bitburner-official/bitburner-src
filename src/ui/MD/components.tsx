@@ -134,7 +134,17 @@ export const table = (props: React.PropsWithChildren<object>): React.ReactElemen
 };
 
 export const tr = (props: React.PropsWithChildren<object>): React.ReactElement => {
-  return <TableRow>{props.children}</TableRow>;
+  return (
+    <TableRow
+      sx={{
+        "&:nth-of-type(even) td": {
+          backgroundColor: Settings.theme.backgroundsecondary,
+        },
+      }}
+    >
+      {props.children}
+    </TableRow>
+  );
 };
 
 export const Blockquote = (props: React.PropsWithChildren<object>): React.ReactElement => {
