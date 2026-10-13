@@ -117,7 +117,7 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
       sx={{
         border: "1px solid",
         borderColor: Settings.theme.welllight,
-        backgroundColor: Settings.theme.well,
+        backgroundColor: "background.paper",
         fontWeight: "bold",
         "& p": { fontWeight: "inherit", mb: 0 },
       }}
@@ -136,11 +136,11 @@ export const table = (props: React.PropsWithChildren<object>): React.ReactElemen
 export const tr = (props: React.PropsWithChildren<object>): React.ReactElement => {
   return (
     <TableRow
-      sx={{
+      sx={(theme) => ({
         "&:nth-of-type(even) td": {
-          backgroundColor: Settings.theme.backgroundsecondary,
+          backgroundColor: theme.colors.backgroundsecondary,
         },
-      }}
+      })}
     >
       {props.children}
     </TableRow>
