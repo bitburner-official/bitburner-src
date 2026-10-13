@@ -1,6 +1,7 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { BladeburnerActionType, FactionWorkType, GymType, SpecialBladeburnerActionTypeForSleeve } from "@enums";
+import { BladeburnerConstants } from "../../../Bladeburner/data/Constants";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent, formatInt } from "../../../ui/formatNumber";
@@ -54,7 +55,11 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
         }
       }
       return (
-        `This sleeve is currently attempting to perform ${work.actionId.name}.\n\n` +
+        (work.actionId.name === "Training"
+          ? `This sleeve is currently attempting to perform ${work.actionId.name}. This action costs the player ${
+              0.5 * BladeburnerConstants.BaseStaminaLoss
+            } stamina.\n\n`
+          : `This sleeve is currently attempting to perform ${work.actionId.name}.\n\n`) +
         (estimatedSuccessChance ? `Estimated success chance: ${estimatedSuccessChance}\n\n` : "") +
         `Tasks Completed: ${formatInt(work.tasksCompleted)}\n \n` +
         `Progress: ${formatPercent(progress)}`
