@@ -1,12 +1,12 @@
 # Bladeburners
 
-Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society.
+Bladeburner divisions were formed in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids that have blended into society.
 
-By working for the Bladeburners and operating against increasingly strong Synthoid opposition, you'll get access to their augmentations, and a unique method of destroying [BitNodes](bitnodes.md). Through the Bladeburners, you can destroy the World Daemon in any BitNode without needing the Red Pill.
+By working for the Bladeburners against increasingly strong Synthoid opposition, you'll get access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). Through the Bladeburners' Black Ops, you can destroy the World Daemon in any BitNode without needing the Red Pill.
 
-## Bladeburner rank
+## Gaining rank
 
-You can gain rank by taking on Contracts, Operations and Black Ops. Gaining rank lets you:
+You gain rank by taking on Contracts, Operations and Black Ops. Gaining rank lets you:
 
 - Purchase Bladeburner skills
 - Join the Bladeburner faction
@@ -24,11 +24,7 @@ Bladeburner faction reputation can only be gained through Bladeburner actions. F
 
 Designed to improve a human agent's capabilities beyond their natural limits, Bladeburner skills add bonuses that persist after installing augmentations.
 
-Bladeburner skills are purchased with Bladeburner skill points, not money.
-
-There is no limit on the skill level you can reach, except Overclock, which can only reach level 90. Each individual skill will become more expensive as you level it up.
-
-The benefit of each skill level is additive, but different skills together have a multiplicative effect.
+There is no limit on the skill level you can reach, with the exception of Overclock which can only reach level 90.
 
 ## Actions
 
@@ -99,6 +95,8 @@ Actions like Field Analysis improve your estimate of how many Synthoids are in a
 
 ## Stamina
 
+Training, and all Contracts, Operations and Black Ops cost stamina.
+
 Your max stamina increases with:
 
 - Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
@@ -112,7 +110,7 @@ Your stamina gain rate increases with:
 - Your max stamina
 - The Bladeburner Stamina Gain multiplier your Stats page
 
-Stamina can also be restored with the Hyperbolic Regeneration Chamber action.
+Stamina can also be restored by the Hyperbolic Regeneration Chamber action.
 
 Once your stamina falls below 50% of its max value, it begins to reduce the success rate of your Contracts and Operations.
 
