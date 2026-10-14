@@ -22,8 +22,8 @@ I'm going to assume you followed the introductory tutorial when you first began 
 In this introductory tutorial, you created a [Script](../basic/scripts.md) called `n00dles.js` and ran it on the `n00dles` server.
 Now, we'll kill this [Script](../basic/scripts.md). There are two ways to do this:
 
-- You can go to the <icon name="terminal"></icon> Terminal tab and enter: `kill n00dles.js`
-- You can go to the <icon name="active-scripts"></icon> Active Scripts tab (Alt + s) and press the `Kill Script` button for `n00dles.js`.
+- You can go to the <icon name="terminal"></icon> Terminal and enter: `kill n00dles.js`
+- You can go to the <icon name="active-scripts"></icon> Active Scripts page (Alt + s) and press the `Kill Script` button for `n00dles.js`.
 
 If you skipped the introductory tutorial, then ignore the part above.
 Instead, go to the <icon name="hacknet"></icon> Hacknet tab (Alt + h) and purchase a [Hacknet Node](../basic/hacknet_nodes.md) to start generating some passive income.
@@ -506,7 +506,7 @@ You can cancel working at any time.
 Once your hacking hits level 75, you can visit `Carmichael Security` in the city and get a software job there.
 This job offers higher pay and also earns you hacking experience.
 
-There are many more companies in the <icon name="city"></icon> `City` tab that offer more pay and also more gameplay features.
+There are many more companies in the <icon name="city"></icon> City tab that offer more pay and also more gameplay features.
 Feel free to explore!
 
 ## After you Purchase your New Cloud Servers
@@ -527,7 +527,7 @@ Once you reach a hacking level of 50, two new important parts of the game open u
 
 ## Creating your first program: BruteSSH.exe
 
-On the left-hand navigation menu you will notice a <icon name="create-program"></icon> `Create Program` tab (Alt + p) with a red notification icon.
+On the left-hand navigation menu you will notice a <icon name="create-program"></icon> Create Program tab (Alt + p) with a red notification icon.
 This indicates that there are programs available to be created.
 Go to that tab, and you'll see a list of all the programs you can currently create.
 Hovering over a program will give a brief description of its function.
