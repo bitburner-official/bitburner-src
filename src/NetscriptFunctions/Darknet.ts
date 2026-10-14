@@ -468,7 +468,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             result.newCharge * 100,
           )}%. (Gained ${formatNumber(result.xpGained)} cha xp)`,
         );
-        if (result.newCharge >= 1 && currentDepth < server.depth) {
+        if (result.newCharge >= 1) {
           logger(ctx)(`${server.hostname} has been migrated!`);
         }
         return {
