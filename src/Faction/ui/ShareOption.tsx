@@ -60,10 +60,10 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       <Typography>
-        You can share free RAM with factions. Doing that adds a bonus multiplier to the reputation gain of work you do
+        You can share free RAM with factions. Doing that adds a bonus multiplier to the reputation gain of work you perform
         for them. Each time you share RAM, your work rep gets a boost for {ShareBonusTime / 1000} seconds. After that,
         you lose the boost and get back your shared RAM. You can share free RAM of any server that you have admin rights to
-        use the ns.share() API.
+        using the ns.share() API.
         <br />
         <br />
         Free RAM on home computer: {formatRam(home.maxRam - home.ramUsed)}
