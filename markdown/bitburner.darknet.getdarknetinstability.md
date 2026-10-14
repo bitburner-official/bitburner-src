@@ -6,6 +6,8 @@
 
 Gets the current instability penalties caused by excessive backdoor installations on the darknet.
 
+Backdoors applied by stasis links are not factored for penalty calculations.
+
 Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error".
 
 **Signature:**

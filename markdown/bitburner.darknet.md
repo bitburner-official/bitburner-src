@@ -94,6 +94,8 @@ Unlike reallocation itself, blocked RAM can be evaluated regardless of distance 
 
 Gets the current instability penalties caused by excessive backdoor installations on the darknet.
 
+Backdoors applied by stasis links are not factored for penalty calculations.
+
 Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error".
 
 
@@ -317,11 +319,15 @@ This function requires TIX API access. You can use [purchaseTixApi()](./bitburne
 
 </td><td>
 
-Applies or removes a stasis link to the script's current server. This will allow you to [exec()](./bitburner.ns.exec.md) to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
+Applies or removes a stasis link to the script's current server. Applying will install a backdoor on the server, and removing will uninstall a backdoor even if one existed before receiving a stasis link.
+
+Due to having a backdoor installed, this will allow you to [exec()](./bitburner.ns.exec.md) to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
 
 Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
 
 There is a maximum number of stasis links that can be applied globally, which can be seen using [getStasisLinkLimit()](./bitburner.darknet.getstasislinklimit.md)<!-- -->. This limit can be increased by finding special augmentations in the deep darknet.
+
+Note that backdoors on stasis linked servers are excluded from [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalty calculations.
 
 
 </td></tr>

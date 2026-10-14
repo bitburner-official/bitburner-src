@@ -4,7 +4,9 @@
 
 ## DarknetInstability interface
 
-Instability of the darknet caused by excessive backdoor installations on the darknet.
+Instability penalties caused by excessive backdoor installations on the darknet.
+
+Backdoors applied by stasis links are not factored for penalty calculations.
 
 **Signature:**
 
