@@ -2892,7 +2892,7 @@ export interface Singularity {
    * ns.tprint(`Available programs are: ${programs}`);
    * ```
    * @returns - a list of programs available for purchase on the Dark Web, or [] if Tor has not
-   * been purchased
+   * been purchased.
    */
   getDarkwebPrograms(): ProgramName[];
 
@@ -2921,7 +2921,7 @@ export interface Singularity {
    * @param programName - Name of program to check the price of
    * @returns Price of the specified Dark Web program
    * (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been
-   * purchased. Throws an error if the specified program/exploit does not exist
+   * purchased. Throws an error if the specified program/exploit does not exist.
    */
   getDarkwebProgramCost(programName: ProgramName): number;
 

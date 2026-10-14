@@ -15,7 +15,7 @@ getDarkwebPrograms(): ProgramName[];
 
 [ProgramName](./bitburner.programname.md)<!-- -->\[\]
 
-- a list of programs available for purchase on the Dark Web, or \[\] if Tor has not been purchased
+- a list of programs available for purchase on the Dark Web, or \[\] if Tor has not been purchased.
 
 ## Remarks
 

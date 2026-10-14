@@ -52,7 +52,7 @@ Name of program to check the price of
 
 number
 
-Price of the specified Dark Web program (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been purchased. Throws an error if the specified program/exploit does not exist
+Price of the specified Dark Web program (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been purchased. Throws an error if the specified program/exploit does not exist.
 
 ## Remarks
 
