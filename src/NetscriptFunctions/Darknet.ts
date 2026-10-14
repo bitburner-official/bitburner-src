@@ -460,7 +460,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           }));
         }
         const server = serverCheck.server;
-        const currentDepth = server.depth;
         const result = chargeServerMigration(server, ctx.workerScript.scriptRef.threads);
 
         logger(ctx)(
