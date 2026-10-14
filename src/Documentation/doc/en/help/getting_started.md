@@ -23,7 +23,7 @@ In this introductory tutorial, you created a [Script](../basic/scripts.md) calle
 Now, we'll kill this [Script](../basic/scripts.md). There are two ways to do this:
 
 - You can go to the <icon name="terminal"></icon> Terminal and enter: `kill n00dles.js`
-- You can go to the <icon name="active-scripts"></icon> Active Scripts page (Alt + s) and press the `Kill Script` button for `n00dles.js`.
+- You can go to the <icon name="active-scripts"></icon> Active Scripts tab (Alt + s) and press the `Kill Script` button for `n00dles.js`.
 
 If you skipped the introductory tutorial, then ignore the part above.
 Instead, go to the <icon name="hacknet"></icon> Hacknet tab (Alt + h) and purchase a [Hacknet Node](../basic/hacknet_nodes.md) to start generating some passive income.
