@@ -56,17 +56,17 @@ There are 4 types of action:
 
 #### Diplomacy
 
-- Reduces chaos by %1, with a small bonus reduction from charisma.
+- Reduces chaos by a %, calculated as `Math.pow(person_charisma, 0.045) + person_charisma / 1000`. If sleeves are performing the action, it's their charisma that's used.
 
 #### Hyperbolic Regeneration Chamber
 
 - Regenerates 1% of your max stamina.
-- Regenerates 2 health.
+- Regenerates 2 health of the person performing the action. If a sleeve is doing it, it's the sleeve's health that's regenerated.
 
 #### Incite Violence
 
 - Gives the equivalent of 3 minutes of passive Contract and Operation generation.
-- Raises the chaos of every city by 10, and then by a further (city chaos / log10(city chaos)).
+- Raises the chaos of every city by 10, and then by a further `city_chaos / Math.log10(city_chaos)`.
 
 ### Contracts, Operations and Black Ops
 
@@ -83,9 +83,9 @@ Your success chance in Contracts, Operations and Black Ops is based on:
 
 - Team size (applies to Operations and Black Ops only). The multiplier is `Math.pow(team_count + 1, 0.05)`.
 - Chaos level in your current city above 50. If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`.
-- The Synthoid population in your current city being less than 1,000,000,000 (again, Black Ops ignore population). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
+- The Synthoid population in your current city being less than 1,000,000,000. The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
 - The inherent difficulty of the action.
-- The your skill levels (strength, defence, intelligence, and so on).
+- Your skill levels (strength, defence, intelligence, and so on).
 - Succcess multiplers from augs, source files, and Bladeburner skills.
 - Whether your stamina is below 50%.
 
@@ -102,13 +102,13 @@ Your max stamina increases with:
 - Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
 - Levels in the Cyber's Edge skill
 - Training, which gives +0.04 max stamina, multiplied by your bonus from Cyber's Edge
-- The Bladeburner Max Stamina multiplier from your Stats page
+- The Bladeburner Max Stamina multiplier from your Stats tab
 
 Your stamina gain rate increases with:
 
 - Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
 - Your max stamina
-- The Bladeburner Stamina Gain multiplier your Stats page
+- The Bladeburner Stamina Gain multiplier from your Stats page
 
 Stamina can also be restored by the Hyperbolic Regeneration Chamber action.
 
