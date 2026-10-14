@@ -1,6 +1,6 @@
 # Bladeburners
 
-Bladeburner divisions were formed in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids that have blended into society.
+Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society.
 
 By working for the Bladeburners against increasingly strong Synthoid opposition, you'll get access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). Through the Bladeburners' Black Ops, you can destroy the World Daemon in any BitNode without needing the Red Pill.
 
@@ -32,7 +32,7 @@ There are 4 types of action:
 
 - General actions are safe, supporting activities. They do things like increase your max stamina, or lower chaos.
 - Contracts earn money, exp and rank.
-- Operations earn exp and rank at a higher rate.
+- Operations earn exp and rank, at a higher rate.
 - Black Ops earn rank. Completing all 21 Black Ops gives you the ability to destroy the World Daemon.
 
 ### General actions
@@ -45,18 +45,18 @@ There are 4 types of action:
 
 #### Field Analysis
 
-- Improves your estimate of the Synthoid population in the current city. This increases the precision of your success chance estimates. The improvement of the estimate scales with your hacking and charisma skills.
+- Improves your estimate of the Synthoid population in the current city. This increases the precision of your success chance estimates. The degree of the improvement scales with your hacking and charisma skills.
 - Gives hacking and charisma exp.
 
 #### Recruitment
 
 - Gives a chance of recruiting 1 team member. The success chance increases with your charisma level, and decreases the more team members you already have.
 - Action time is reduced by higher charisma levels.
-- Gives charisma exp that scales with your charisma level. Studying at a university offers better charisma exp at lower levels. Charisma exp is soft-capped at 60 exp/s.
+- Gives charisma exp that scales with your charisma level.
 
 #### Diplomacy
 
-- Reduces chaos by %1, with a bonus reduction from charisma. At a charisma level of 1000, the chaos reduction is 2.3% per action.
+- Reduces chaos by %1, with a small bonus reduction from charisma.
 
 #### Hyperbolic Regeneration Chamber
 
@@ -66,7 +66,7 @@ There are 4 types of action:
 #### Incite Violence
 
 - Gives the equivalent of 3 minutes of passive Contract and Operation generation.
-- Raises the chaos of every city by 10 + log10(current_city_chaos).
+- Raises the chaos of every city by 10, and then by a further (city chaos / log10(city chaos)).
 
 ### Contracts, Operations and Black Ops
 
@@ -81,9 +81,9 @@ Action time is reduced by:
 
 Your success chance in Contracts, Operations and Black Ops is based on:
 
-- Team size, in Operations and Black Ops. The multiplier is `Math.pow(team_count + 1, 0.05)`, so the benefit of having more team members tails of quickly.
-- Chaos level in your current city above 50. If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`. So a chaos level of 60 reduces your success chance by 90%.
-- The Synthoid population in your current city being less than 1,000,000,000 (again, Black Ops ignore population). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`, so it scales in your favour. At 100,000,000 population, you have x0.2 success multiplier.
+- Team size (applies to Operations and Black Ops only). The multiplier is `Math.pow(team_count + 1, 0.05)`.
+- Chaos level in your current city above 50. If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`.
+- The Synthoid population in your current city being less than 1,000,000,000 (again, Black Ops ignore population). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
 - The inherent difficulty of the action.
 - The your skill levels (strength, defence, intelligence, and so on).
 - Succcess multiplers from augs, source files, and Bladeburner skills.
@@ -120,11 +120,11 @@ Sleeves can perform all the General actions. They don't have a stamina stat, so 
 
 Sleeves can also do the following:
 
-- Infiltrate Synthoids to generate more Contracts and Operations.
+- Infiltrate Synthoids to generate more Contracts and Operations. Infiltrating Synthoids is less effective the more sleeves are doing it. The calculation is `Math.pow(infilSleeves, -0.5) / 2`
 - Support the Main Sleeve. This means they will be available to join you as a team member on Bladeburner Operations and Black Ops. If the sleeve is hurt and loses all its health, it will receive shock.
 - Take on Contracts, as if it were you doing them.
 
-Infiltrating Synthoids is less effective the more sleeves are doing it.
+
 
 <table>
 <tr>
