@@ -4643,7 +4643,7 @@ export interface Darknet {
    *
    * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
    *
-   * The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
+   * The speed of capture scales with the number of threads used. See {@link DarknetFormulas.getHeartbleedTime | getHeartbleedTime()} for more information.
    * Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
    *
    * @remarks
@@ -4882,7 +4882,7 @@ export interface Darknet {
   nextMutation(): Promise<void>;
 
   /**
-   * Gets the required charisma level to target the server with {@link Darknet.heartbleed | dnet.heartbleed}.
+   * Gets the required charisma level to target the server with {@link Darknet.heartbleed | heartbleed}.
    *
    * Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep
    * in the darknet, be impossible.
@@ -6614,7 +6614,7 @@ interface DarknetFormulas {
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount of ram that will be freed by a call to {@link Darknet.memoryReallocation | dnet.memoryReallocation}
+   * Gets the expected amount of ram that will be freed by a call to {@link Darknet.memoryReallocation | memoryReallocation}
    * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
@@ -6622,7 +6622,7 @@ interface DarknetFormulas {
   getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount of charge that will be gained by a call to {@link Darknet.induceServerMigration | dnet.induceServerMigration}
+   * Gets the expected amount of charge that will be gained by a call to {@link Darknet.induceServerMigration | induceServerMigration}
    * @param serverDetails - The server to estimate charge build-up on.
    * @param player - The player object.
    * @param threads - The number of threads used in the induceServerMigration call. Optional, defaults to 1
@@ -8281,8 +8281,8 @@ export interface NS {
    *
    * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec}, does not
    * require a direct connection — scp works at any distance. The source server has no darknet requirements
-   * (no session or connection needed). Use {@link Darknet.authenticate | dnet.authenticate} (requires direct
-   * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (at any distance) to
+   * (no session or connection needed). Use {@link Darknet.authenticate | authenticate} (requires direct
+   * connection) or {@link Darknet.connectToSession | connectToSession} (at any distance) to
    * establish a session.
    *
    * @param files - Filename or an array of filenames of text/script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.

@@ -131,7 +131,7 @@ If the darknet server has recently gone offline, the returned object will be a d
 
 </td><td>
 
-Gets the required charisma level to target the server with [dnet.heartbleed](./bitburner.darknet.heartbleed.md)<!-- -->.
+Gets the required charisma level to target the server with [heartbleed](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep in the darknet, be impossible.
 
@@ -170,7 +170,7 @@ Uses an exploit to extract log data from a server by sending a malformed heartbe
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
-The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information. Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
+The speed of capture scales with the number of threads used. See [getHeartbleedTime()](./bitburner.darknetformulas.getheartbleedtime.md) for more information. Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
 
 
 </td></tr>
