@@ -4579,7 +4579,7 @@ export interface Darknet {
    * Sends a network request to try to authenticate on a darknet server. The target server must be directly connected
    * to the server that the script is running on. The speed of authentication scales with the number of threads used.
    *
-   * If successful, grants the current script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
+   * If successful, grants the current script a session, allowing it to {@link NS.exec | exec()} scripts on that server, or {@link NS.scp | scp()} files to it. (scp() *from* the server is always allowed.)
    *
    * Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer
    * if the player's charisma is below the server's charisma level.
