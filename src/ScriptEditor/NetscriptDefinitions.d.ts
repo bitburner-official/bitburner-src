@@ -4561,7 +4561,7 @@ interface HeartbleedOptions {
 
 /**
  * Instability penalties caused by excessive backdoor installations on the darknet.
- * 
+ *
  * Backdoors applied by stasis links are not factored for penalty calculations.
  * @public
  */
@@ -4696,7 +4696,7 @@ export interface Darknet {
    *
    * There is a maximum number of stasis links that can be applied globally, which can be seen using {@link Darknet.getStasisLinkLimit | getStasisLinkLimit()}.
    * This limit can be increased by finding special augmentations in the deep darknet.
-   * 
+   *
    * Note that backdoors on stasis linked servers are excluded from {@link Darknet.getDarknetInstability | Darknet Instability} penalty calculations.
    *
    * @remarks
@@ -4855,7 +4855,7 @@ export interface Darknet {
 
   /**
    * Gets the current instability penalties caused by excessive backdoor installations on the darknet.
-   * 
+   *
    * Backdoors applied by stasis links are not factored for penalty calculations.
    *
    * Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error.
