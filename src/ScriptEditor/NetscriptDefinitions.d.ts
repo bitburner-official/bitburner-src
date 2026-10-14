@@ -2882,8 +2882,8 @@ export interface Singularity {
    *
    *
    * This function allows the player to get a list of programs available for purchase
-   * on the Dark Web. Players MUST have purchased Tor to get the list of programs
-   * available. If Tor has not been purchased yet, this function will return an
+   * on the Dark Web. Players MUST have purchased TOR to get the list of programs
+   * available. If TOR has not been purchased yet, this function will return an
    * empty list.
    *
    * @example
@@ -2891,7 +2891,7 @@ export interface Singularity {
    * const programs = ns.singularity.getDarkwebPrograms();
    * ns.tprint(`Available programs are: ${programs}`);
    * ```
-   * @returns - a list of programs available for purchase on the Dark Web, or [] if Tor has not
+   * @returns - a list of programs available for purchase on the Dark Web, or [] if TOR has not
    * been purchased.
    */
   getDarkwebPrograms(): ProgramName[];
@@ -2906,7 +2906,7 @@ export interface Singularity {
    * You MUST have a TOR router in order to use this function. The price returned
    * by this function is the same price you would see with buy -l from the terminal.
    * Returns the cost of the program if it has not been purchased yet, 0 if it
-   * has already been purchased, or -1 if Tor has not been purchased (and thus
+   * has already been purchased, or -1 if TOR has not been purchased (and thus
    * the program/exploit is not available for purchase).
    *
    * If the program does not exist, an error is thrown.
@@ -2920,7 +2920,7 @@ export interface Singularity {
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified Dark Web program
-   * (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been
+   * (if not yet purchased), 0 if it has already been purchased, or -1 if TOR has not been
    * purchased. Throws an error if the specified program/exploit does not exist.
    */
   getDarkwebProgramCost(programName: ProgramName): number;

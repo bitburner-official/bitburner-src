@@ -52,13 +52,13 @@ Name of program to check the price of
 
 number
 
-Price of the specified Dark Web program (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been purchased. Throws an error if the specified program/exploit does not exist.
+Price of the specified Dark Web program (if not yet purchased), 0 if it has already been purchased, or -1 if TOR has not been purchased. Throws an error if the specified program/exploit does not exist.
 
 ## Remarks
 
 RAM cost: 0.5 GB \* 16/4/1
 
-This function allows you to check the price of a Dark Web exploit/program. You MUST have a TOR router in order to use this function. The price returned by this function is the same price you would see with buy -l from the terminal. Returns the cost of the program if it has not been purchased yet, 0 if it has already been purchased, or -1 if Tor has not been purchased (and thus the program/exploit is not available for purchase).
+This function allows you to check the price of a Dark Web exploit/program. You MUST have a TOR router in order to use this function. The price returned by this function is the same price you would see with buy -l from the terminal. Returns the cost of the program if it has not been purchased yet, 0 if it has already been purchased, or -1 if TOR has not been purchased (and thus the program/exploit is not available for purchase).
 
 If the program does not exist, an error is thrown.
 
