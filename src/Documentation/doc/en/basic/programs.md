@@ -17,4 +17,5 @@ ns.sqlinject("n00dles");
 
 After meeting a Program's [Hacking Skill level](stats.md) threshold, you have the option to `Create Program` as a focused or unfocused activity. The time needed to create a Program increases with their level requirement, and creation speed scales with your [stats](stats.md).
 
-Alternatively, you may also find the same Programs available for purchase by connecting to the in-game Dark Web, accessed after finding a tech store in a City and purchasing TOR [("The Onion Router")](<https://en.wikipedia.org/wiki/Tor_(network)>).
+Alternatively, you can find the same Programs available for purchase via TOR's access to the Dark Web.
+The TOR [("The Onion Router")](<https://en.wikipedia.org/wiki/Tor_(network)>) router can be purchased in any city's tech store, and utilized in the Terminal through the `buy` command.
