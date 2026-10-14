@@ -4602,7 +4602,7 @@ export interface Darknet {
   authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 
   /**
-   * Attempts to connect to a target darknet server that you have previously authenticated on. Unlike `authenticate`,
+   * Attempts to connect to a target darknet server that you have previously authenticated on. Unlike {@link Darknet.authenticate | authenticate()},
    * connectToSession can be used to get a session on servers at any distance.
    *
    * If successful, grants the script a session, allowing it to {@link NS.scp | scp()} files to that target. It also allows starting scripts

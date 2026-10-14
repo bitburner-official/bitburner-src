@@ -49,7 +49,7 @@ Note that the session granted is only for the current script instance (by PID) -
 
 </td><td>
 
-Attempts to connect to a target darknet server that you have previously authenticated on. Unlike `authenticate`<!-- -->, connectToSession can be used to get a session on servers at any distance.
+Attempts to connect to a target darknet server that you have previously authenticated on. Unlike [authenticate()](./bitburner.darknet.authenticate.md)<!-- -->, connectToSession can be used to get a session on servers at any distance.
 
 If successful, grants the script a session, allowing it to [scp()](./bitburner.ns.scp.md) files to that target. It also allows starting scripts with [exec()](./bitburner.ns.exec.md) on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
 
