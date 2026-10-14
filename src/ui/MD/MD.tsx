@@ -57,7 +57,8 @@ export function MD({ pageFilePath }: { pageFilePath: FilePath }): React.ReactEle
         tr: tr,
         blockquote: Blockquote,
         a: A,
-        // spread gets round the typecheck. components is typed against JSX.IntrinsicElements, and icon isn't in it
+        // Spreading icon gets round the typecheck
+        // components is typed against JSX.IntrinsicElements, and icon isn't in it
         ...icon,
       }}
       remarkPlugins={[remarkGfm, remarkMath]}
