@@ -66,8 +66,11 @@ export function Icon({ name }: { name?: string }): React.ReactElement | null {
   const Component = name ? icons[name] : undefined;
   return Component ? (
     <Component
-      fontSize="small"
-      sx={{ verticalAlign: "text-top", ...(name === "augmentations" && { transform: "rotate(-90deg)" }) }}
+      sx={{
+        verticalAlign: "middle",
+        ...(name === "augmentations" && { transform: "rotate(-90deg)" }),
+        fontSize: "max(1em, 20px)",
+      }}
     />
   ) : null;
 }
