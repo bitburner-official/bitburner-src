@@ -1147,7 +1147,7 @@ Steal a server's money.
 
 </td><td>
 
-Get the part of money stolen with a single thread.
+Get the part of money stolen with a single thread as a decimal fraction between 0 and 1.
 
 
 </td></tr>

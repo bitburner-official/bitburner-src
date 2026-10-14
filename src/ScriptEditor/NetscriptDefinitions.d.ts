@@ -7498,11 +7498,11 @@ export interface NS {
   hackAnalyzeThreads(host: string, hackAmount: number): number;
 
   /**
-   * Get the part of money stolen with a single thread.
+   * Get the part of money stolen with a single thread as a decimal fraction between 0 and 1.
    * @remarks
    * RAM cost: 1 GB
    *
-   * Returns the part of the specified server’s money you will steal with a single thread hack.
+   * Returns the part of the specified server’s money you will steal with a single thread hack as a decimal fraction between 0 and 1.
    *
    * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
    * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackPercent | formulas.hacking.hackPercent}.

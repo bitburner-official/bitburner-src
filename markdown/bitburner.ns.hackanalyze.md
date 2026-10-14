@@ -4,7 +4,7 @@
 
 ## NS.hackAnalyze() method
 
-Get the part of money stolen with a single thread.
+Get the part of money stolen with a single thread as a decimal fraction between 0 and 1.
 
 **Signature:**
 
@@ -58,7 +58,7 @@ The part of money you will steal from the target server with a single thread hac
 
 RAM cost: 1 GB
 
-Returns the part of the specified server’s money you will steal with a single thread hack.
+Returns the part of the specified server’s money you will steal with a single thread hack as a decimal fraction between 0 and 1.
 
 Like other basic hacking analysis functions, this calculation uses the current status of the player and server. To calculate using hypothetical server or player status, obtain access to the Formulas API and use [formulas.hacking.hackPercent](./bitburner.hackingformulas.hackpercent.md)<!-- -->.
 
