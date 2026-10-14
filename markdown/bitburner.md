@@ -820,7 +820,7 @@ Hacknet Server formulas
 
 </td><td>
 
-Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
+Options to change the behavior of [heartbleed()](./bitburner.darknet.heartbleed.md) API.
 
 
 </td></tr>

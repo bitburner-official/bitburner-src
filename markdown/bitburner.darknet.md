@@ -38,7 +38,7 @@ If successful, grants the current script a session, allowing it to exec() script
 
 Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer if the player's charisma is below the server's charisma level.
 
-Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use [connectToSession](./bitburner.darknet.connecttosession.md) with the correct password to also get a session with the target server.
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use [connectToSession()](./bitburner.darknet.connecttosession.md) with the correct password to also get a session with the target server.
 
 
 </td></tr>
@@ -79,7 +79,7 @@ This technique is sometimes used to sacrifice a new device that appears on the n
 
 </td><td>
 
-Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using [memoryReallocation](./bitburner.darknet.memoryreallocation.md)<!-- -->.
+Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using [memoryReallocation()](./bitburner.darknet.memoryreallocation.md)<!-- -->.
 
 Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
 
@@ -131,7 +131,7 @@ If the darknet server has recently gone offline, the returned object will be a d
 
 </td><td>
 
-Gets the required charisma level to target the server with [heartbleed](./bitburner.darknet.heartbleed.md)<!-- -->.
+Gets the required charisma level to target the server with [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep in the darknet, be impossible.
 
@@ -308,7 +308,7 @@ Note that there is no guarantee about the order of servers in the returned list.
 
 Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone.
 
-This function requires TIX API access. You can use [purchaseTixApi](./bitburner.stock.purchasetixapi.md) to purchase it.
+This function requires TIX API access. You can use [purchaseTixApi()](./bitburner.stock.purchasetixapi.md) to purchase it.
 
 
 </td></tr>
@@ -323,7 +323,7 @@ Applies or removes a stasis link to the script's current server. This will allow
 
 Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
 
-There is a maximum number of stasis links that can be applied globally, which can be seen using [getStasisLinkLimit](./bitburner.darknet.getstasislinklimit.md)<!-- -->. This limit can be increased by finding special augmentations in the deep darknet.
+There is a maximum number of stasis links that can be applied globally, which can be seen using [getStasisLinkLimit()](./bitburner.darknet.getstasislinklimit.md)<!-- -->. This limit can be increased by finding special augmentations in the deep darknet.
 
 
 </td></tr>

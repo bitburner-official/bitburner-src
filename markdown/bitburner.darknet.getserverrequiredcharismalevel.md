@@ -4,7 +4,7 @@
 
 ## Darknet.getServerRequiredCharismaLevel() method
 
-Gets the required charisma level to target the server with [heartbleed](./bitburner.darknet.heartbleed.md)<!-- -->.
+Gets the required charisma level to target the server with [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep in the darknet, be impossible.
 

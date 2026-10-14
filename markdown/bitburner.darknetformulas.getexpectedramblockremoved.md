@@ -4,7 +4,7 @@
 
 ## DarknetFormulas.getExpectedRamBlockRemoved() method
 
-Gets the expected amount of ram that will be freed by a call to [memoryReallocation](./bitburner.darknet.memoryreallocation.md)
+Gets the expected amount of ram that will be freed by a call to [memoryReallocation()](./bitburner.darknet.memoryreallocation.md)
 
 **Signature:**
 

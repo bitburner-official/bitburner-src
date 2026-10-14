@@ -43,7 +43,7 @@ Gets the time it will take to authenticate a server.
 
 </td><td>
 
-Gets the expected amount of charge that will be gained by a call to [induceServerMigration](./bitburner.darknet.induceservermigration.md)
+Gets the expected amount of charge that will be gained by a call to [induceServerMigration()](./bitburner.darknet.induceservermigration.md)
 
 
 </td></tr>
@@ -54,7 +54,7 @@ Gets the expected amount of charge that will be gained by a call to [induceServe
 
 </td><td>
 
-Gets the expected amount of ram that will be freed by a call to [memoryReallocation](./bitburner.darknet.memoryreallocation.md)
+Gets the expected amount of ram that will be freed by a call to [memoryReallocation()](./bitburner.darknet.memoryreallocation.md)
 
 
 </td></tr>

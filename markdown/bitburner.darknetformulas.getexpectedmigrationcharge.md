@@ -4,7 +4,7 @@
 
 ## DarknetFormulas.getExpectedMigrationCharge() method
 
-Gets the expected amount of charge that will be gained by a call to [induceServerMigration](./bitburner.darknet.induceservermigration.md)
+Gets the expected amount of charge that will be gained by a call to [induceServerMigration()](./bitburner.darknet.induceservermigration.md)
 
 **Signature:**
 

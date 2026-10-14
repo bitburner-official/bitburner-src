@@ -4547,7 +4547,7 @@ interface DarknetServerDetails {
 }
 
 /**
- * Options to change the behavior of {@link Darknet.heartbleed | heartbleed} API.
+ * Options to change the behavior of {@link Darknet.heartbleed | heartbleed()} API.
  * @public
  */
 interface HeartbleedOptions {
@@ -4585,7 +4585,7 @@ export interface Darknet {
    * if the player's charisma is below the server's charisma level.
    *
    * Note that the session granted is only for the current script instance (by PID) - other running scripts will need to
-   * use {@link Darknet.connectToSession | connectToSession} with the correct password to also get a session with the target server.
+   * use {@link Darknet.connectToSession | connectToSession()} with the correct password to also get a session with the target server.
    *
    * @remarks
    * RAM cost: 0.4 GB
@@ -4690,7 +4690,7 @@ export interface Darknet {
    * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
    * going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
    *
-   * There is a maximum number of stasis links that can be applied globally, which can be seen using {@link Darknet.getStasisLinkLimit | getStasisLinkLimit}.
+   * There is a maximum number of stasis links that can be applied globally, which can be seen using {@link Darknet.getStasisLinkLimit | getStasisLinkLimit()}.
    * This limit can be increased by finding special augmentations in the deep darknet.
    *
    * @remarks
@@ -4791,7 +4791,7 @@ export interface Darknet {
   memoryReallocation(host?: string): Promise<DarknetResult>;
 
   /**
-   * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using {@link Darknet.memoryReallocation | memoryReallocation}.
+   * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using {@link Darknet.memoryReallocation | memoryReallocation()}.
    *
    * Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
    *
@@ -4822,7 +4822,7 @@ export interface Darknet {
    * stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the
    * number of threads used, but degrades over time if left alone.
    *
-   * This function requires TIX API access. You can use {@link Stock.purchaseTixApi | purchaseTixApi} to purchase it.
+   * This function requires TIX API access. You can use {@link Stock.purchaseTixApi | purchaseTixApi()} to purchase it.
    *
    * @remarks
    * RAM cost: 2 GB
@@ -4882,7 +4882,7 @@ export interface Darknet {
   nextMutation(): Promise<void>;
 
   /**
-   * Gets the required charisma level to target the server with {@link Darknet.heartbleed | heartbleed}.
+   * Gets the required charisma level to target the server with {@link Darknet.heartbleed | heartbleed()}.
    *
    * Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep
    * in the darknet, be impossible.
@@ -6614,7 +6614,7 @@ interface DarknetFormulas {
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount of ram that will be freed by a call to {@link Darknet.memoryReallocation | memoryReallocation}
+   * Gets the expected amount of ram that will be freed by a call to {@link Darknet.memoryReallocation | memoryReallocation()}
    * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
@@ -6622,7 +6622,7 @@ interface DarknetFormulas {
   getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount of charge that will be gained by a call to {@link Darknet.induceServerMigration | induceServerMigration}
+   * Gets the expected amount of charge that will be gained by a call to {@link Darknet.induceServerMigration | induceServerMigration()}
    * @param serverDetails - The server to estimate charge build-up on.
    * @param player - The player object.
    * @param threads - The number of threads used in the induceServerMigration call. Optional, defaults to 1
@@ -7887,7 +7887,7 @@ export interface NS {
 
   /**
    * Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers
-   * (e.g., "darkweb"). Use {@link Darknet.probe | probe} if you want to list darknet servers.
+   * (e.g., "darkweb"). Use {@link Darknet.probe | probe()} if you want to list darknet servers.
    * @remarks
    * RAM cost: 0.2 GB
    *
@@ -8279,10 +8279,10 @@ export interface NS {
    * ns.scp(files, server, "home");
    * ```
    *
-   * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec}, does not
+   * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec()}, does not
    * require a direct connection — scp works at any distance. The source server has no darknet requirements
-   * (no session or connection needed). Use {@link Darknet.authenticate | authenticate} (requires direct
-   * connection) or {@link Darknet.connectToSession | connectToSession} (at any distance) to
+   * (no session or connection needed). Use {@link Darknet.authenticate | authenticate()} (requires direct
+   * connection) or {@link Darknet.connectToSession | connectToSession()} (at any distance) to
    * establish a session.
    *
    * @param files - Filename or an array of filenames of text/script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
