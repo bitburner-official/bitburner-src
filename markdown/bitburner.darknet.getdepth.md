@@ -6,7 +6,7 @@
 
 Gets the current depth of the specified server into the darknet. Servers immediately below the "darkweb" server are depth 0, and each visual row in the UI below that increases the depth of the server.
 
-Returns -1 if the server is offline, not found, or not a darknet server.
+Returns -1 on the server "darkweb" or if the server is offline, not found, or not a darknet server.
 
 **Signature:**
 
