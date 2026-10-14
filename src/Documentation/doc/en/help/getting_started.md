@@ -22,11 +22,11 @@ I'm going to assume you followed the introductory tutorial when you first began 
 In this introductory tutorial, you created a [Script](../basic/scripts.md) called `n00dles.js` and ran it on the `n00dles` server.
 Now, we'll kill this [Script](../basic/scripts.md). There are two ways to do this:
 
-- You can go to the Terminal and enter: `kill n00dles.js`
-- You can go to the `Active Scripts` page (Alt + s) and press the `Kill Script` button for `n00dles.js`.
+- You can go to the <icon name="terminal"></icon> Terminal tab and enter: `kill n00dles.js`
+- You can go to the <icon name="active-scripts"></icon> Active Scripts tab (Alt + s) and press the `Kill Script` button for `n00dles.js`.
 
 If you skipped the introductory tutorial, then ignore the part above.
-Instead, go to the `Hacknet Nodes` page (Alt + h) and purchase a [Hacknet Node](../basic/hacknet_nodes.md) to start generating some passive income.
+Instead, go to the <icon name="hacknet"></icon> Hacknet tab (Alt + h) and purchase a [Hacknet Node](../basic/hacknet_nodes.md) to start generating some passive income.
 
 ## Creating our First Script
 
@@ -50,7 +50,7 @@ The `grow()` function is used to increase the amount of money available on a [Se
 The `weaken()` function is used to decrease a [Server](../basic/servers.md)'s security level.
 
 Now let's move on to actually creating the [Script](../basic/scripts.md).
-Go to your home computer and then create a [Script](../basic/scripts.md) called `early-hack-template.js` by going to [Terminal](../basic/terminal.md) and entering the following two commands:
+Go to your home computer and then create a [Script](../basic/scripts.md) called `early-hack-template.js` by going to <icon name="terminal"></icon> [Terminal](../basic/terminal.md) and entering the following two commands:
 
 ```text
 $ home
@@ -169,7 +169,7 @@ Now we want to start running our [hacking](../basic/hacking.md) [Script](../basi
 Our home computer only has 8GB of [RAM](../basic/ram.md), and we'll be using it for something else later.
 Instead, we'll take advantage of the [RAM](../basic/ram.md) on other machines.
 
-Go to `Terminal` and enter the following command:
+Go to <icon name="terminal"></icon> Terminal and enter the following command:
 
 ```text
 $ scan-analyze 2
@@ -329,7 +329,7 @@ Therefore, we should raise our hacking level.
 Not only will this let us hack more [Servers](../basic/servers.md), but it will also increase the effectiveness of our [hacking](../basic/hacking.md) against `n00dles`.
 
 The easiest way to train your hacking level is to visit Rothman University.
-You can do this from the `City` tab (Alt + w) on the left-hand navigation menu.
+You can do this from the <icon name="city"></icon> City tab (Alt + w) on the left-hand navigation menu.
 Rothman University should be the "U" near the bottom-right.
 Click the "U" to go to the location.
 
@@ -342,7 +342,7 @@ While you are doing this, you cannot interact with any other part of the game un
 
 Right now, we want a hacking level of 10.
 You need approximately 174 hacking experience to reach level 10.
-You can check how much hacking experience you have by going to the `Stats` tab (Alt + c) on the left-hand navigation menu.
+You can check how much hacking experience you have by going to the <icon name="stats"></icon> Stats tab (Alt + c) on the left-hand navigation menu.
 Since studying at Rothman University earns you 1 experience per second, this will take 174 seconds, or approximately 3 minutes.
 Feel free to do something in the meantime!
 
@@ -352,7 +352,7 @@ Now that we have a hacking level of 10, we can hack the `joesguns` [Server](../b
 This [Server](../basic/servers.md) will be slightly more profitable than `n00dles`.
 Therefore, we want to change our [hacking](../basic/hacking.md) [Script](../basic/scripts.md) to target `joesguns` instead of `n00dles`.
 
-Go to `Terminal` and edit the [hacking](../basic/hacking.md) [Script](../basic/scripts.md) by entering:
+Go to <icon name="terminal"></icon> Terminal and edit the [hacking](../basic/hacking.md) [Script](../basic/scripts.md) by entering:
 
 ```text
 $ home
@@ -384,7 +384,7 @@ In order to create this [Script](../basic/scripts.md), you should familiarize yo
 - `scp()`
 - `exec()`
 
-Create the [Script](../basic/scripts.md) by going to `Terminal` and typing:
+Create the [Script](../basic/scripts.md) by going to <icon name="terminal"></icon> Terminal and typing:
 
 ```text
 $ home
@@ -431,7 +431,7 @@ This is then used to check if you can afford to purchase a cloud [Server](../bas
 
 Whenever the script purchases a new cloud [Server](../basic/servers.md), it uses the `scp()` function to copy our [Script](../basic/scripts.md) onto that new [Server](../basic/servers.md), and then it uses the `exec()` function to execute it on that cloud [Server](../basic/servers.md).
 
-To run this [Script](../basic/scripts.md), go to `Terminal` and type:
+To run this [Script](../basic/scripts.md), go to <icon name="terminal"></icon> Terminal and type:
 
 ```text
 $ run purchase-server-8gb.js
@@ -468,7 +468,7 @@ I wouldn't bother with [RAM](../basic/ram.md) and Core upgrades until later on.
 
 The best source of income right now is from [crimes](../basic/crimes.md).
 This is because it not only gives you a large amount of money, but it also raises your hacking level.
-To commit [crimes](../basic/crimes.md), go to the `City` tab (Alt + w).
+To commit [crimes](../basic/crimes.md), go to the <icon name="city"></icon> City tab (Alt + w).
 Then, click on the link that says `The Slums`.
 
 In the Slums, you can attempt to commit a variety of [crimes](../basic/crimes.md), each of which gives certain types of experience and money if successful.
@@ -490,7 +490,7 @@ This [crime](../basic/crimes.md) is slightly easier and more profitable than `Ro
 If you don't want to commit [crimes](../basic/crimes.md), there's another option - working for a [company](../basic/companies.md).
 This will not be nearly as profitable as [crimes](../basic/crimes.md), but will provide [company](../basic/companies.md) [reputation](../basic/reputation.md).
 
-Go to the `City` tab on the left-hand navigation menu and then go to `Joe's Guns`.
+Go to the <icon name="city"></icon> City tab and then go to `Joe's Guns`.
 At `Joe's Guns`, there will be an option that says `Apply to be an Employee`.
 Click this to get the job.
 Then, a new option will appear that simply says `Work`.
@@ -506,7 +506,7 @@ You can cancel working at any time.
 Once your hacking hits level 75, you can visit `Carmichael Security` in the city and get a software job there.
 This job offers higher pay and also earns you hacking experience.
 
-There are many more companies in the `City` tab that offer more pay and also more gameplay features.
+There are many more companies in the <icon name="city"></icon> `City` tab that offer more pay and also more gameplay features.
 Feel free to explore!
 
 ## After you Purchase your New Cloud Servers
@@ -514,7 +514,7 @@ Feel free to explore!
 After you've made a total of \$11 million, your automatic cloud [Server](../basic/servers.md)-purchasing [Script](../basic/scripts.md) should finish running.
 This will free up some [RAM](../basic/ram.md) on your home computer.
 We don't want this [RAM](../basic/ram.md) to go to waste, so we'll make use of it.
-Go to `Terminal` and enter the following commands:
+Go to <icon name="terminal"></icon> Terminal and enter the following commands:
 
 ```text
 $ home
@@ -527,7 +527,7 @@ Once you reach a hacking level of 50, two new important parts of the game open u
 
 ## Creating your first program: BruteSSH.exe
 
-On the left-hand navigation menu you will notice a `Create Program` tab (Alt + p) with a red notification icon.
+On the left-hand navigation menu you will notice a <icon name="create-program"></icon> `Create Program` tab (Alt + p) with a red notification icon.
 This indicates that there are programs available to be created.
 Go to that tab, and you'll see a list of all the programs you can currently create.
 Hovering over a program will give a brief description of its function.
@@ -542,7 +542,7 @@ Feel free to cancel your work on creating a program at any time, as your progres
 
 ## Optional: Create AutoLink.exe
 
-On the `Create Programs` page, you will notice another program you can create called `AutoLink.exe`.
+On the <icon name="create-program"></icon> Create Program tab, you will notice another program you can create called `AutoLink.exe`.
 If you don't mind waiting another 10-15 minutes, you should go ahead and create this program.
 It makes it much less tedious to connect to other [Servers](../basic/servers.md), but it's not necessary for progression.
 
@@ -637,7 +637,7 @@ $ backdoor
 After you successfully install the backdoor, you should receive a [faction](../basic/factions.md) invitation from `CyberSec` shortly afterwards.
 Accept it.
 If you accidentally reject the invitation, that's okay.
-Just go to the `Factions` tab (Alt + f) and you should see an option that lets you accept the invitation.
+Just go to the <icon name="factions"></icon> Factions tab (Alt + f) and you should see an option that lets you accept the invitation.
 
 Congrats!
 You just joined your first [faction](../basic/factions.md).
@@ -660,7 +660,7 @@ The [Servers](../basic/servers.md) we'll be using to run our [Scripts](../basic/
 
 All of these [Servers](../basic/servers.md) have 32GB of [RAM](../basic/ram.md).
 You can use the `Terminal` command `scan-analyze 3` to see for yourself.
-To copy our [hacking](../basic/hacking.md) [Scripts](../basic/scripts.md) onto these [Servers](../basic/servers.md), go to `Terminal` and run:
+To copy our [hacking](../basic/hacking.md) [Scripts](../basic/scripts.md) onto these [Servers](../basic/servers.md), go to <icon name="terminal"></icon> Terminal and run:
 
 ```text
 $ home
@@ -690,14 +690,14 @@ It will take a bit for them to `grow()` and `weaken()` the [Server](../basic/ser
 Once they do, however, the [Scripts](../basic/scripts.md) will be very profitable.
 
 For reference, in about two hours after starting my first [Script](../basic/scripts.md), my [Scripts](../basic/scripts.md) had a production rate of \$20k per second and had earned a total of \$70 million.
-(You can see these stats on the `Active Scripts` tab).
+(You can see these stats on the <icon name="active-scripts"></icon> Active Scripts tab).
 
 After another 15 minutes, the production rate had increased to \$25k per second and the [Scripts](../basic/scripts.md) had made an additional \$55 million.
 
 Your results will vary based on how fast you earned money from [crime](../basic/crimes.md)/[working](../basic/companies.md)/[hacknet nodes](../basic/hacknet_nodes.md), but this will hopefully give you a good indication of how much the [Scripts](../basic/scripts.md) can earn.
 
 In the meantime, we are going to be gaining reputation with the `CyberSec` [faction](../basic/factions.md).
-Go to the `Factions` tab (Alt + f) on the left-hand navigation menu, and from there select `CyberSec`.
+Go to the <icon name="factions"></icon> Factions tab (Alt + f), and from there select `CyberSec`.
 In the middle of the page there should be a button for `Hacking Contracts`.
 Click it to start earning [reputation](../basic/reputation.md) for the `CyberSec` [faction](../basic/factions.md) (as well as some hacking experience).
 The higher your hacking level, the more [reputation](../basic/reputation.md) you will gain.
@@ -715,7 +715,7 @@ Now, it's time to spend all of this money on some persistent upgrades to help pr
 The most important thing to upgrade right now is the [RAM](../basic/ram.md) on your home computer.
 This will allow you to run more [Scripts](../basic/scripts.md).
 
-To upgrade your [RAM](../basic/ram.md), go to the `City` tab and visit the company `Alpha Enterprises`.
+To upgrade your [RAM](../basic/ram.md), go to the <icon name="city"></icon> City tab and visit the company `Alpha Enterprises`.
 There will be a button that says `Upgrade 'home' RAM (8.00GB -> 16.00GB) - $1.010m`.
 Click it to upgrade your [RAM](../basic/ram.md).
 
@@ -726,7 +726,7 @@ Getting it even higher would be better.
 
 Once you get ~1000 [reputation](../basic/reputation.md) with the `CyberSec` [faction](../basic/factions.md), you can purchase your first [Augmentation](../basic/augmentations.md) from them.
 
-To do this, go to the `Factions` tab on the left-hand navigation menu (Alt + f) and select `CyberSec`.
+To do this, go to the <icon name="factions"></icon> Factions tab (Alt + f) and select `CyberSec`.
 There is a button near the bottom that says `Purchase Augmentations`.
 This will bring up a page that displays all of the [Augmentations](../basic/augmentations.md) available from `CyberSec`.
 Some of them may be locked right now.
@@ -760,7 +760,7 @@ The following are a few things you may want to consider doing in the near future
 If you've purchased any [Augmentations](../basic/augmentations.md), you'll need to install them before you actually gain their effects.
 Installing [Augmentations](../basic/augmentations.md) is the game's "soft-reset" or "prestige" mechanic.
 
-To install your [Augmentations](../basic/augmentations.md), go to the `Augmentations` tab (Alt + a) on the left-hand navigation menu.
+To install your [Augmentations](../basic/augmentations.md), go to the <icon name="augmentations"></icon> Augmentations tab (Alt + a) on the left-hand navigation menu.
 You will see a list of all of the [Augmentations](../basic/augmentations.md) you have purchased.
 Below that, you will see a button that says `Install Augmentations`.
 Be warned, after clicking this there is no way to undo it (unless you load an earlier save).

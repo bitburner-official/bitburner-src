@@ -4,6 +4,7 @@ import { TableHead } from "@mui/material";
 import remarkGfm from "remark-gfm";
 import { h1, h2, h3, h4, h5, h6, li, Td, Th, table, tr, Blockquote, p } from "./components";
 import { code, Pre } from "./code";
+import { icon } from "./icons";
 import { A } from "./a";
 import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
@@ -56,6 +57,8 @@ export function MD({ pageFilePath }: { pageFilePath: FilePath }): React.ReactEle
         tr: tr,
         blockquote: Blockquote,
         a: A,
+        // spread gets round the typecheck. components is typed against JSX.IntrinsicElements, and icon isn't in it
+        ...icon,
       }}
       remarkPlugins={[remarkGfm, remarkMath]}
       // Use a custom rehype plugin to render LaTeX notation in md files. Use rehypeRaw to support HTML content in NS
