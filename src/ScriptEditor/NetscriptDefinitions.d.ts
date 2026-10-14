@@ -4858,7 +4858,7 @@ export interface Darknet {
    * 
    * Backdoors applied by stasis links are not factored for penalty calculations.
    *
-   * Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error".
+   * Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error.
    * @remarks
    * Ram cost: 0 GB
    *

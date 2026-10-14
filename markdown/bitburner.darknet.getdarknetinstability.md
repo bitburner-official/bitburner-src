@@ -8,7 +8,7 @@ Gets the current instability penalties caused by excessive backdoor installation
 
 Backdoors applied by stasis links are not factored for penalty calculations.
 
-Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error".
+Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error.
 
 **Signature:**
 
