@@ -94,7 +94,7 @@ Unlike reallocation itself, blocked RAM can be evaluated regardless of distance 
 
 Gets the current instability penalties caused by excessive backdoor installations on the darknet.
 
-Note that instability is not associated with darknet network mutations or network mutation rate.
+Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error".
 
 
 </td></tr>
@@ -255,8 +255,6 @@ Some possible mutations that can occur somewhere on the darknet each cycle:
 - Some servers restart, which kills all running scripts on the server.
 
 - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
-
-Mutation time is NOT modified by nor related to any active instability penalties.
 
 
 </td></tr>

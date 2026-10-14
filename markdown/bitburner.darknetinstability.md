@@ -4,7 +4,7 @@
 
 ## DarknetInstability interface
 
-Instability of the darknet caused by excessive backdoor-ing of servers.
+Instability of the darknet caused by excessive backdoor installations on the darknet.
 
 **Signature:**
 

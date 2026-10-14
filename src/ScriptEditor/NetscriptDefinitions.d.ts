@@ -4850,7 +4850,7 @@ export interface Darknet {
   /**
    * Gets the current instability penalties caused by excessive backdoor installations on the darknet.
    *
-   * Note that instability is not associated with darknet network mutations or network mutation rate.
+   * Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error".
    * @remarks
    * Ram cost: 0 GB
    *
@@ -4874,8 +4874,6 @@ export interface Darknet {
    * - Some servers restart, which kills all running scripts on the server.
    *
    * - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
-   *
-   * Mutation time is NOT modified by nor related to any active instability penalties.
    * @remarks
    * RAM cost: 0 GB
    */

@@ -18,8 +18,6 @@ Some possible mutations that can occur somewhere on the darknet each cycle:
 
 - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
 
-Mutation time is NOT modified by nor related to any active instability penalties.
-
 **Signature:**
 
 ```typescript

@@ -6,7 +6,7 @@
 
 Gets the current instability penalties caused by excessive backdoor installations on the darknet.
 
-Note that instability is not associated with darknet network mutations or network mutation rate.
+Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error".
 
 **Signature:**
 
