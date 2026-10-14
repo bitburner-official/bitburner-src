@@ -118,8 +118,7 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
         border: "1px solid",
         borderColor: Settings.theme.welllight,
         backgroundColor: "background.paper",
-        fontWeight: "bold",
-        "& p": { fontWeight: "inherit", mb: 0 },
+        "& p": { fontWeight: "bold", mb: 0 },
       }}
     >
       <Typography component="div" align={align}>
