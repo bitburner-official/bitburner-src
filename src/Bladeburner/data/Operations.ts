@@ -115,7 +115,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
         "current city in order for this Operation to be successful.\n" +
-        "Completing this operation will increase the chaos level of your current city. Whether you complete it successfully or not, it will decrease the Synthoid population of your current city.",
+        "Completing this operation will increase the chaos level of your current city, and decrease its Synthoid population.",
       warning: "This action decreases population and increases chaos by percentage.",
       successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 800,
