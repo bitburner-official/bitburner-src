@@ -113,9 +113,9 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Raid]: new Operation({
       name: BladeburnerOperationName.Raid,
       desc:
-        "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your current city in order for this Operation to be successful.\n" +
-        "Completing this operation will increase the chaos level of your current city. It will decrease the Synthoid " +
-        "population of your current city whether you complete it successfully or not.",
+        "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
+        "current city in order for this Operation to be successful.\n" +
+        "Completing this operation will increase the chaos level of your current city. It will decrease the Synthoid population of your current city whether you complete it successfully or not.",
       warning: "This action decreases population and increases chaos by percentage.",
       successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 800,
