@@ -26,7 +26,7 @@ export function AllPages({ bladeburner }: IProps): React.ReactElement {
         <Tab label="General" />
         <Tab label="Contracts" />
         <Tab label="Operations" />
-        <Tab label="BlackOps" />
+        <Tab label="Black Ops" />
         <Tab label="Skills" />
       </Tabs>
       <Box sx={{ p: 1 }}>

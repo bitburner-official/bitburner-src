@@ -1,46 +1,147 @@
 # Bladeburners
 
-Bladeburner divisions were created internationally in the mid-21st century. Tasked with monitoring and "managing" rogue Synthoids, which may have blended into society and are sometimes considered a threat, working for Bladeburners gives access to powerful enhancements and a goal of destroying [BitNodes](bitnodes.md) by operating against increasingly strong Synthoid opposition.
+Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society and are sometimes considered a threat.
 
-## Bladeburner Skills:
+By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md) that does not require the Red Pill.
 
-Designed to improve a human agent's capabilities beyond their natural limits, Bladeburner skills add a persistent bonus while in the [BitNode](bitnodes.md) where they were purchased. Bladeburner skills are purchased with Bladeburner skill points, not money. There is no limit on the skills level, except for "Overclock" which can only reach level 90. Each individual skill will become more expensive as you level it up. Each skill level is additive, however different skills' effects are multiplicative.
+Your goal is to complete all of the Bladeburner's Black Ops.
 
-## Faction and Rank:
+## Joining the Bladeburners
 
-Bladeburners also offer unique [Augmentations](../basic/augmentations.md) and a [Faction](factions.md) invite to agents who "put in the work" to gain a small amount of rank. While Bladeburner rank and skill points persist after any augmentation installs, faction reputation will be reset. Bladeburner faction reputation can only be gained through Bladeburner actions.
+To join the Bladeburners, visit the NSA in Sector-12.
 
-## Team members
+For them to approve your application, you will need level 100 in each combat skill (strength, defense, dexterity and agility).
 
-You can recruit team members via the "Recruitment" action in the General tab. [Sleeves](../advanced/sleeves.md) can also perform this action.
-The more team members you have, the easier it will be to complete the task successfully. Team members increase your success chance in Operations and
-BlackOps, but they will also die no matter if you fail or succeed in the task. Note that, the more team members you have, the more difficult it is to recruit them.
+## Gaining rank
 
-## Distribution
+You gain rank by taking on Contracts, Operations and Black Ops. Gaining rank lets you:
 
-### General
+- Purchase Bladeburner skills
+- Join the Bladeburner faction
+- Take on more dangerous Black Ops
 
-Here you will find basic activities that can improve your stats and gain you rank. From here, you can recruit members, train, recover HP and take
-some minor contracts to gain rank. You should train your stats first before attempting any of the other activities.
+Your rank persists throughout a [BitNode](bitnodes.md), even after installing augmentations.
 
-### Contracts
+## Bladeburner faction
 
-Contracts are a basic way to increase your rank and gain money. Contracts will level up as you succeed and make you lose HP if you fail them.
-The higher the level, the more rank, experience and money you will gain, but the difficulty will also increase. [Sleeves](../advanced/sleeves.md) can also take
-contracts.
+The Bladeburners offer unique [Augmentations](../basic/augmentations.md), and will invite you to join their faction when you reach 25 rank.
 
-### Operations
+Bladeburner faction reputation can only be gained through Bladeburner actions. Faction reputation is reset when you install augmentations.
 
-Operations are harder and more punishing than contracts, but are also more rewarding. Failing an Operation will have the same effects but on a higher scale as failing a contract, but it will also reduce your rank. Similarly, succeeding an Operation will earn you more rank and more experience than Contracts. Operations do not earn money.
-For Operations you may use a team. See the team section above for more detailed information.
+## Bladeburner skills
 
-### Black Operations
+Designed to improve a human agent's capabilities beyond their natural limits, Bladeburner skills add bonuses that persist after installing augmentations.
 
-Black Operations (BlackOps) are special, one-time covert operations. Each BlackOp must be unlocked successively by completing the one before it.
-Failing a BlackOp will incur heavy HP and rank losses.
+Bladeburner skills are purchased with Bladeburner skill points, not money.
 
-**You must complete all the BlackOps in order to destroy the World Daemon.**
+There is no limit on the skill level you can reach, with the exception of Overclock which can only reach level 90.
 
-## Sleeves and Bladeburner
+The benefit of each skill level is additive, but different skills together have a multiplicative effect.
 
-[Sleeves](../advanced/sleeves.md) can perform various bladeburner actions. They are able to do all the "General" tab actions, Infiltrate Synthoids (generate more contracts and operations), support the main sleeve (bonus to your bladeburner work) and take on contracts (as if it were you).
+## Actions
+
+There are 4 types of action you can take:
+
+- General actions are supporting activities. They might increase your max stamina, or reduce a city's city chaos.
+- Contracts earn money, exp and rank.
+- Operations earn exp and rank, at a higher rate.
+- Black Ops earn rank.
+
+### General actions
+
+Any exp that a person (whether you or a sleeve) gains from doing a General action is boosted by their exp multipliers, but not by the exp bonus from the Hyperdrive skill.
+
+#### Training
+
+- Costs 0.1425 stamina.
+- Increases your max stamina by 0.04, multiplied by your bonus from the Cyber's Edge skill.
+- Gives 1 exp/second in each combat stat.
+
+#### Field Analysis
+
+- Improves your estimate of the Synthoid population in the current city. This increases the precision of your success chance estimates. The degree of the improvement scales with your hacking and charisma skills.
+- Gives hacking and charisma exp.
+- Increases your rank.
+
+#### Recruitment
+
+- Gives a chance of recruiting 1 team member. The success chance increases with your charisma level, and decreases the more team members you already have.
+- Gives charisma exp.
+- Action time is reduced by higher charisma levels.
+
+#### Diplomacy
+
+- Reduces chaos by a %, calculated as `Math.pow(person_charisma, 0.045) + person_charisma / 1000`. If sleeves are performing the action, it's their charisma that's used.
+
+#### Hyperbolic Regeneration Chamber
+
+- Regenerates 1% of your max stamina.
+- Regenerates 2 health for the person performing the action, either you or a sleeve.
+
+#### Incite Violence
+
+- Gives the equivalent of 3 minutes' passive Contract and Operation generation.
+- Raises the chaos of every city by 10, and then by a further `city_chaos / Math.log10(city_chaos)`.
+
+### Contracts, Operations and Black Ops
+
+Contracts, Operations and Black Ops all cost stamina.
+
+Failing them causes you to lose health, and in the case of Operations and Black Ops, rank. Black Ops are particularly punishing to fail.
+
+#### Action time
+
+Action time is reduced by:
+
+- The Overclock skill
+- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills
+
+#### Action success chance
+
+Your success chance in Contracts, Operations and Black Ops is based on:
+
+- Team size (applies to Operations and Black Ops only). The multiplier is `Math.pow(team_count + 1, 0.05)`.
+- How far the chaos level in your current city is above 50 (does not apply to Black Ops). If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`.
+- How much the Synthoid population in your current city is less than 1bn (does not apply to Black Ops). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
+- How far your stamina is below 50%. The penalty scales linearly: `success_chance * Math.max(1, current_stamina / (0.5 * max_stamina))`.
+- The inherent difficulty of the action.
+- Your skill levels (strength, defense, intelligence, and so on).
+- Success multipliers from augs, source files and Bladeburner skills.
+
+Actions like Field Analysis improve your estimate of how many Synthoids are in a city. That improves the precision of your estimated success chance. But it does not improve the success chance itself.
+
+## Synthoid population and communities
+
+- On average, Synthoid populations grow slowly. Every few minutes, one city will undergo a population change event. Its population might increase, decrease, or a part of it might migrate to another city.
+- Having more Synthoid communities does not increase the growth rate of a city's Synthoid population.
+
+## Stamina
+
+Training, and all Contracts, Operations and Black Ops cost stamina.
+
+Your max stamina increases with:
+
+- Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
+- Levels in the Cyber's Edge skill
+- Training, which gives +0.04 max stamina, multiplied by your bonus from Cyber's Edge
+- The Bladeburner Max Stamina multiplier
+
+Your stamina gain rate increases with:
+
+- Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
+- Your max stamina
+- The Bladeburner Stamina Gain multiplier
+
+Stamina can also be restored by the Hyperbolic Regeneration Chamber action.
+
+Once your stamina falls below 50% of its max value, it begins to reduce the success rate of your Contracts and Operations.
+
+## Sleeves
+
+Sleeves can perform all the General actions. They don't have a stamina stat, so if they perform Training or Hyperbolic Regeneration Chamber, it's your stamina that's affected.
+
+Sleeves can also do the following:
+
+- Take on Contracts, as if it were you doing them.
+- Infiltrate Synthoids to generate more Contracts and Operations. Infiltrating Synthoids is less effective the more sleeves are doing it. The calculation is `Math.pow(infilSleeves, -0.5) / 2`.
+- Support the Main Sleeve. This means they will be available to join you as a team member on Bladeburner Operations and Black Ops. If the sleeve loses all its health during an Operation, it will receive shock.

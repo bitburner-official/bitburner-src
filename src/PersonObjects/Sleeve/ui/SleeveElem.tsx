@@ -35,7 +35,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
     case SleeveWorkType.COMPANY:
       return `This sleeve is currently working your job at ${work.companyName}`;
     case SleeveWorkType.SUPPORT:
-      return "This sleeve is currently supporting you in your bladeburner activities.";
+      return "This sleeve is ready to act as a team member on Bladeburner Operations and Black Ops. If it loses all its health during an Operation, it will receive shock.";
     case SleeveWorkType.CLASS:
       return `This sleeve is currently ${work.isGym() ? "working out" : "studying"} at ${work.location}`;
     case SleeveWorkType.RECOVERY:
@@ -54,7 +54,9 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
         }
       }
       return (
-        `This sleeve is currently attempting to perform ${work.actionId.name}.\n\n` +
+        (work.actionId.name === "Training"
+          ? `This sleeve is currently attempting to perform ${work.actionId.name}. This will cost you stamina rather than the sleeve.\n\n`
+          : `This sleeve is currently attempting to perform ${work.actionId.name}.\n\n`) +
         (estimatedSuccessChance ? `Estimated success chance: ${estimatedSuccessChance}\n\n` : "") +
         `Tasks Completed: ${formatInt(work.tasksCompleted)}\n \n` +
         `Progress: ${formatPercent(progress)}`
