@@ -191,7 +191,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
         "Synthoid communities.\n" +
-        "Completing this operation has a chance to increase or decrease the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
+        "Completing this operation may increase or decrease the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
       warning: "This action may increase chaos by percentage.",
       successScaling:
         "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill.\n" +
