@@ -42,7 +42,7 @@ export function getBaseAugmentationPriceMultiplier(): number {
   return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.activeSourceFileLvl(11)];
 }
 export function getGenericAugmentationPriceMultiplier(): number {
-  const queuedNonSoAAugmentationList = Player.queuedAugmentations.filter((augmentation) => {
+  const queuedNormalAugmentationList = Player.queuedAugmentations.filter((augmentation) => {
     return !soaAugmentationNames.includes(augmentation.name) && !labAugmentationNames.includes(augmentation.name);
   });
   return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNonSoAAugmentationList.length);
