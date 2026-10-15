@@ -17,6 +17,7 @@ import { checkInfiniteLoop } from "../../Script/RamCalculations";
 
 import { Settings } from "../../Settings/Settings";
 import { iTutorialNextStep, ITutorial, iTutorialSteps } from "../../InteractiveTutorial";
+import { tutorialScriptName } from "../../ui/InteractiveTutorial/InteractiveTutorialRoot";
 import { debounce } from "lodash";
 import { GetServer } from "../../Server/AllServers";
 
@@ -194,24 +195,26 @@ function Root(props: IProps): React.ReactElement {
     const preSave = options.beautifyOnSave ? beautify : () => Promise.resolve();
 
     // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.ScriptEditorEditAndSave) {
+    if (
+      ITutorial.isRunning &&
+      (ITutorial.currStep === iTutorialSteps.ScriptEditorEditAndSave ||
+        ITutorial.currStep === iTutorialSteps.ScriptEditorRam)
+    ) {
       //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.js") {
-        dialogBoxCreate("Don't change the script name for now.");
+      if (currentScript.path !== tutorialScriptName) {
+        dialogBoxCreate("Don't change the script's name for now.");
         return;
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const expectedCleanCode = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
       if (!cleanCode.includes(expectedCleanCode)) {
-        dialogBoxCreate("Please copy and paste the code from the tutorial!");
+        dialogBoxCreate("Use the code from the tutorial panel. Don't change it for now.");
         return;
       }
 
       //Save the script
       await preSave();
       saveScript(currentScript);
-      Router.toPage(Page.Terminal);
-
       iTutorialNextStep();
 
       return;
