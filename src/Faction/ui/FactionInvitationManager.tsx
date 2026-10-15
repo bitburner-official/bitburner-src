@@ -68,7 +68,7 @@ export function FactionInvitationManager({ hidden }: { hidden: boolean }): React
       {enemies.length > 0 && (
         <Typography component="div">
           <br />
-          Joining this faction will prevent you from joining its enemies until your next augmentation.
+          Joining this faction will prevent you from joining its enemies until you next install augmentations.
           <br />
           {faction?.name} is enemies with:
           {enemies.map((enemy) => (
