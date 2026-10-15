@@ -2,11 +2,15 @@
 
 Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society.
 
-By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). Completing all of the Bladeburners' Black Ops gives you the ability to destroy the World Daemon without needing the Red Pill. This is possible in any BitNode, not just BitNodes 6 and 7.
+By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md) that does not require the Red Pill.
+
+Your goal is to complete all of the Bladeburner's Black Ops.
 
 ## Joining the Bladeburners
 
 To join the Bladeburners, visit the NSA in Sector-12.
+
+For them to approve your application, you will need level 100 in each combat skill (strength, defense, dexterity and agility).
 
 ## Gaining rank
 
@@ -28,7 +32,11 @@ Bladeburner faction reputation can only be gained through Bladeburner actions. F
 
 Designed to improve a human agent's capabilities beyond their natural limits, Bladeburner skills add bonuses that persist after installing augmentations.
 
+Bladeburner skills are purchased with Bladeburner skill points, not money.
+
 There is no limit on the skill level you can reach, with the exception of Overclock which can only reach level 90.
+
+The benefit of each skill level is additive, but different skills together have a multiplicative effect.
 
 ## Actions
 
@@ -37,11 +45,11 @@ There are 4 types of action you can take:
 - General actions are supporting activities. They might increase your max stamina, or reduce a city's city chaos.
 - Contracts earn money, exp and rank.
 - Operations earn exp and rank, at a higher rate.
-- Black Ops earn rank. Completing all 21 Black Ops gives you the ability to destroy the World Daemon.
+- Black Ops earn rank.
 
 ### General actions
 
-Any exp you gain from General actions is boosted by a person's exp multipliers (either yours, or a sleeve's, depending on who's doing the action). But it is not boosted by the exp bonus from the Hyperdrive skill.
+Any exp you gain from General actions is boosted by the exp multipliers of the person performing the action (either yours, or a sleeve's). But it's not boosted by the exp bonus from the Hyperdrive skill.
 
 #### Training
 
@@ -94,13 +102,18 @@ Your success chance in Contracts, Operations and Black Ops is based on:
 
 - Team size (applies to Operations and Black Ops only). The multiplier is `Math.pow(team_count + 1, 0.05)`.
 - How far the chaos level in your current city is above 50 (does not apply to Black Ops). If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`.
-- How much the Synthoid population in your current city is less than 1,000,000,000 (does not apply to Black Ops). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
+- How much the Synthoid population in your current city is less than 1bn (does not apply to Black Ops). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
 - How far your stamina is below 50%. The penalty scales linearly: `success_chance * Math.max(1, current_stamina / (0.5 * max_stamina))`.
 - The inherent difficulty of the action.
 - Your skill levels (strength, defense, intelligence, and so on).
 - Success multipliers from augs, source files and Bladeburner skills.
 
 Actions like Field Analysis improve your estimate of how many Synthoids are in a city. That improves the precision of your estimated success chance. But it does not improve the success chance itself.
+
+## Synthoid population and communities
+
+- On average, Synthoid populations grow slowly. Every few minutes, one city will undergo a population change event. Its population might increase, decrease, or a part of it might migrate to another city.
+- Having more Synthoid communities does not increase the growth rate of a city's Synthoid population.
 
 ## Stamina
 
