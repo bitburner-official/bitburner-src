@@ -158,8 +158,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
         "Completing this operation will decrease the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
       warning: "This action decreases population by percentage.",
       successScaling:
-        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. " +
-        "Unaffected by Charisma.",
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 1000,
       difficultyFac: 1.05,
       rewardFac: 1.11,
