@@ -1,7 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { BladeburnerActionType, FactionWorkType, GymType, SpecialBladeburnerActionTypeForSleeve } from "@enums";
-import { BladeburnerConstants } from "../../../Bladeburner/data/Constants";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent, formatInt } from "../../../ui/formatNumber";
