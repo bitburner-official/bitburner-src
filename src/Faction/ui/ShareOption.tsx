@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { TextField } from "@mui/material";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -8,6 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 
 import { Player } from "@player";
+import { Settings } from "../../Settings/Settings";
 import {
   calculateCurrentShareBonus,
   calculateShareBonusWithAdditionalThreads,
@@ -58,20 +60,27 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       <Typography>
-        You can share free RAM of your home computer with your factions to get a bonus multiplier for reputation gain.
-        Each time you share your free RAM, you get a boost for {ShareBonusTime / 1000} seconds. After that, you lose the
-        boost and get back your shared RAM. You can share free RAM of other servers that you have admin rights to by
-        using the ns.share() API.
+        You can share free RAM with factions. Doing that adds a bonus multiplier to the reputation gain of work you
+        perform for them. Each time you share RAM, your work rep gets a boost for {ShareBonusTime / 1000} seconds. After
+        that, you lose the boost and get back your shared RAM. You can share free RAM of other servers that you have
+        admin rights to using the ns.share() API.
         <br />
-        Free RAM on home computer: {formatRam(home.maxRam - home.ramUsed)}.
         <br />
-        Current bonus: {formatNumber(calculateCurrentShareBonus(), 6)}. Bonus with {formatRam(ramUsage)}:{" "}
-        {formatNumber(calculateShareBonusWithAdditionalThreads(threads, home.cpuCores), 6)}
+        Free RAM on home computer: {formatRam(home.maxRam - home.ramUsed)}
+        <br />
+        <Box component="span" sx={{ display: "inline-flex", gap: 2 }}>
+          <span>Current work bonus: {formatNumber(calculateCurrentShareBonus(), Settings.fractionalDigits)}</span>
+          <span>
+            Bonus with {formatRam(ramUsage)}:{" "}
+            {formatNumber(calculateShareBonusWithAdditionalThreads(threads, home.cpuCores), Settings.fractionalDigits)}
+          </span>
+        </Box>
       </Typography>
 
       <Typography component="div" style={{ display: "flex" }}>
         <TextField
           value={ram}
+          inputProps={{ maxLength: 20 }}
           onChange={(event) => {
             if (event.target.value === "") {
               setRam(0);
