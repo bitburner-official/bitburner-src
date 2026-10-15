@@ -35,7 +35,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
     case SleeveWorkType.COMPANY:
       return `This sleeve is currently working your job at ${work.companyName}`;
     case SleeveWorkType.SUPPORT:
-      return "This sleeve is ready to act as a team member on Bladeburner Operations and Black Ops. If a sleeve that joins your team is hurt and loses all its health, it will receive shock.";
+      return "This sleeve is ready to act as a team member on Bladeburner Operations and Black Ops. If it loses all its health during an Operation, it will receive shock.";
     case SleeveWorkType.CLASS:
       return `This sleeve is currently ${work.isGym() ? "working out" : "studying"} at ${work.location}`;
     case SleeveWorkType.RECOVERY:

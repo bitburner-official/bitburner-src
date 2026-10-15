@@ -34,7 +34,7 @@ There is no limit on the skill level you can reach, with the exception of Overcl
 
 There are 4 types of action you can take:
 
-- General actions are safe, supporting activities. They give benefits like increasing your max stamina, or lowering chaos.
+- General actions are supporting activities. They might increase your max stamina, or reduce a city's city chaos.
 - Contracts earn money, exp and rank.
 - Operations earn exp and rank, at a higher rate.
 - Black Ops earn rank. Completing all 21 Black Ops gives you the ability to destroy the World Daemon.
@@ -76,6 +76,10 @@ Any exp you gain from General actions is boosted by a person's exp multipliers (
 - Raises the chaos of every city by 10, and then by a further `city_chaos / Math.log10(city_chaos)`.
 
 ### Contracts, Operations and Black Ops
+
+Contracts, Operations and Black Ops all cost stamina.
+
+Failing them causes you to lose health, and in the case of Operations and Black Ops, rank. Black Ops are particularly punishing to fail.
 
 #### Action time
 
