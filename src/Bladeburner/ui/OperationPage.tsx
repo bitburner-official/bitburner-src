@@ -18,6 +18,10 @@ export function OperationPage({ bladeburner }: OperationPageProps): React.ReactE
         are harder and more punishing than contracts, but are also more rewarding.
         <br />
         <br />
+        Operations can affect the chaos level and Synthoid population of your current city. The exact effects vary
+        between different Operations.
+        <br />
+        <br />
         For operations, you can use a team. You must first recruit team members. Having a larger team will improve your
         chances of success.
         <br />
