@@ -11,7 +11,6 @@ import { addCacheToServer } from "./cacheFiles";
 import { getDarknetServer } from "../utils/darknetServerUtils";
 import { getFriendlyType, TypeAssertionError } from "../../utils/TypeAssertion";
 import type { SuccessResult } from "@nsdefs";
-import { getInstalledThreadAugCount } from "../../Augmentation/AugmentationHelpers";
 
 export const LAB_CACHE_NAME = "the_great_work";
 
@@ -330,6 +329,10 @@ export const handleLabyrinthPassword = (
     data: newSurroundings,
   };
 };
+
+export function getInstalledThreadAugCount(): number {
+  return Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
+}
 
 const getCacheCount = (): number => {
   if (getLabyrinthDetails().name !== SpecialServers.BonusLab) {

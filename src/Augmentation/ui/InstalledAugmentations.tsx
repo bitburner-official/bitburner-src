@@ -18,7 +18,6 @@ import { Player } from "@player";
 import { Augmentations } from "../Augmentations";
 import { AugmentationName } from "@enums";
 import { useRerender } from "../../ui/React/hooks";
-import { getAugName } from "../AugmentationHelpers";
 import type { PlayerOwnedAugmentation } from "../PlayerOwnedAugmentation";
 
 export function InstalledAugmentations(): React.ReactElement {
@@ -105,7 +104,7 @@ export function InstalledAugmentations(): React.ReactElement {
             <List sx={{ height: 400, overflowY: "scroll", borderRight: `1px solid ${Settings.theme.welllight}` }}>
               {filteredSourceAugs.map((k, i) => (
                 <ListItemButton key={i + 1} onClick={() => setSelectedAug(k)} selected={selectedAug === k}>
-                  <Typography>{getAugName(k)}</Typography>
+                  <Typography>{k.name}</Typography>
                 </ListItemButton>
               ))}
             </List>

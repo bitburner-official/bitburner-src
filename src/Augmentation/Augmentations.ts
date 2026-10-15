@@ -1849,8 +1849,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [FactionName.TheBlackHand],
     },
     [AugmentationName.TheBrokenWings]: {
-      repCost: 1e4,
-      moneyCost: 1e6,
+      repCost: 0,
+      moneyCost: 0,
       info:
         "An experimental augmentation that lets the user make incredible leaps of insight and flights of fancy. " +
         "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
@@ -1866,8 +1866,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [],
     },
     [AugmentationName.TheBoots]: {
-      repCost: 1e4,
-      moneyCost: 1e6,
+      repCost: 0,
+      moneyCost: 0,
       info:
         "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
         "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
@@ -1882,8 +1882,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [],
     },
     [AugmentationName.TheHammer]: {
-      repCost: 1e4,
-      moneyCost: 1e6,
+      repCost: 0,
+      moneyCost: 0,
       info:
         "This unique augmentation allows the user to strike straight to the heart of the matter and sweep aside obstacles in the way of their goals. " +
         "Appearing as a simple insignia on the user's forearm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
@@ -1899,8 +1899,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [],
     },
     [AugmentationName.TheStaff]: {
-      repCost: 1e4,
-      moneyCost: 1e6,
+      repCost: 0,
+      moneyCost: 0,
       info:
         "This skeletal augmentation greatly enhances the user's durability and health. Inspired by the original Staff of Medicine that is said to " +
         "have been given to Daedalus as a reward for the completion of the Labyrinth, which all modern augments are a descendant of. " +
@@ -1916,8 +1916,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [],
     },
     [AugmentationName.TheLaw]: {
-      repCost: 1e4,
-      moneyCost: 1e6,
+      repCost: 0,
+      moneyCost: 0,
       info:
         "An advanced neural implant that integrates Bayesian inference algorithms into the brain's decision-making processes. " +
         "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
@@ -1933,8 +1933,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [],
     },
     [AugmentationName.TheSword]: {
-      repCost: 1e4,
-      moneyCost: 1e6,
+      repCost: 0,
+      moneyCost: 0,
       info:
         "A cutting-edge neural implant that leverages Solomonoff induction to analyze and predict patterns with unparalleled precision. " +
         "This augmentation enhances the user's ability to deduce optimal strategies and make compelling arguments, " +
@@ -1951,8 +1951,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [],
     },
     [AugmentationName.TheThread]: {
-      repCost: 1e4,
-      moneyCost: 1e6,
+      repCost: 0,
+      moneyCost: 0,
       info:
         "A simple, crystalline, fiber-optic neural threading system. It is styled after the mythical threads that the Princess Ariadne " +
         "famously used to conquer the original Labyrinth. Where many heroes had failed, this woman took the most humble of material - yarn for " +

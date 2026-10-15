@@ -8,7 +8,6 @@ import { Player } from "@player";
 import { Augmentations } from "../Augmentations";
 import { AugmentationName } from "@enums";
 import { romanNumeralEncoder } from "../../DarkNet/controllers/ServerGenerator";
-import { getTotalThreadAugCount } from "../AugmentationHelpers";
 
 export function PurchasedAugmentations(): React.ReactElement {
   const augs: React.ReactElement[] = [];
@@ -28,7 +27,7 @@ export function PurchasedAugmentations(): React.ReactElement {
       level = ownedAug.level;
       displayName += ` - Level ${level}`;
     } else if (ownedAug.name === AugmentationName.TheThread) {
-      displayName += ` ${romanNumeralEncoder(getTotalThreadAugCount())}`;
+      displayName += ` ${romanNumeralEncoder(ownedAug.level)}`;
     }
 
     augs.push(

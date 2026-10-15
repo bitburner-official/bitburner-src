@@ -45,7 +45,7 @@ export function getGenericAugmentationPriceMultiplier(): number {
   const queuedNormalAugmentationList = Player.queuedAugmentations.filter((augmentation) => {
     return !soaAugmentationNames.includes(augmentation.name) && !labAugmentationNames.includes(augmentation.name);
   });
-  return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNonSoAAugmentationList.length);
+  return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNormalAugmentationList.length);
 }
 
 // When effectOnly == true, the augmentation is not actually added to the
@@ -135,7 +135,7 @@ export function installAugmentations(force?: boolean): boolean {
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ` - ${ownedAug.level}`;
     } else if (ownedAug.name === AugmentationName.TheThread) {
-      level = ` ${romanNumeralEncoder(getInstalledThreadAugCount())}`;
+      level = ` ${romanNumeralEncoder(ownedAug.level)}`;
     }
     augmentationList += aug.name + level + "\n";
   }
@@ -218,14 +218,6 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
   return { moneyCost, repCost };
 }
 
-export function getAugName(augment: PlayerOwnedAugmentation, includeQueued = false): string {
-  if (augment.name === AugmentationName.TheThread) {
-    const count = includeQueued ? getTotalThreadAugCount() : getInstalledThreadAugCount();
-    return `${augment.name} ${romanNumeralEncoder(count)}`;
-  }
-  return augment.name;
-}
-
 /**
  * Retrieves the mults for the given augmentation.
  * Has special handling for "The Thr3ad of Ariadne" since its mults are additive, not multiplicative, per level
@@ -236,16 +228,6 @@ export function getAugmentMults(augment: Augmentation | PlayerOwnedAugmentation,
   }
 
   return Augmentations[augment.name].mults;
-}
-
-export function getInstalledThreadAugCount(): number {
-  return Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
-}
-
-export function getTotalThreadAugCount(): number {
-  const pendingThreadCount =
-    Player.queuedAugmentations.findLast((aug) => aug.name == AugmentationName.TheThread)?.level ?? 0;
-  return getInstalledThreadAugCount() + pendingThreadCount;
 }
 
 function getThreadAugmentMults(level = 1, previousLevel = 0): Multipliers {
