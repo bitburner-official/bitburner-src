@@ -169,7 +169,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      const mults = aug.name === AugmentationName.TheThread ? getThreadAugmentMults() : Augmentations[aug.name].mults;
+      const mults = aug.name === AugmentationName.TheThread ? getThreadAugmentMults() : aug.mults;
       return Object.assign({}, mults);
     },
     purchaseAugmentation: (ctx, _facName, _augName) => {

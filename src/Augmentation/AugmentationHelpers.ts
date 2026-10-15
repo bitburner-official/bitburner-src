@@ -100,9 +100,7 @@ export function updateMultipliers(mults: Multipliers, aug: PlayerOwnedAugmentati
   }
   for (let i = previousLevel; i < aug.level; ++i) {
     const augMults =
-      aug.name === AugmentationName.TheThread
-        ? getThreadAugmentMults(aug.level, previousLevel)
-        : Augmentations[aug.name].mults;
+      aug.name === AugmentationName.TheThread ? getThreadAugmentMults(i + 1, i) : Augmentations[aug.name].mults;
     mergeMultipliers(mults, augMults);
   }
 }
