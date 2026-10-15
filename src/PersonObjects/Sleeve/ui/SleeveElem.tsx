@@ -56,9 +56,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
       }
       return (
         (work.actionId.name === "Training"
-          ? `This sleeve is currently attempting to perform ${work.actionId.name}. This action costs the player ${
-              0.5 * BladeburnerConstants.BaseStaminaLoss
-            } stamina.\n\n`
+          ? `This sleeve is currently attempting to perform ${work.actionId.name}. This action costs the player stamina.\n\n`
           : `This sleeve is currently attempting to perform ${work.actionId.name}.\n\n`) +
         (estimatedSuccessChance ? `Estimated success chance: ${estimatedSuccessChance}\n\n` : "") +
         `Tasks Completed: ${formatInt(work.tasksCompleted)}\n \n` +

@@ -2,7 +2,7 @@
 
 Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society.
 
-By working for the Bladeburners against increasingly strong Synthoid opposition, you'll get access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). Through the Bladeburners' Black Ops, you can destroy the World Daemon in any BitNode without needing the Red Pill.
+By working for the Bladeburners against increasingly strong Synthoid opposition, you'll get access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). After completing all of the Bladeburners' Black Ops, you can destroy the World Daemon without needing the Red Pill.
 
 ## Gaining rank
 
@@ -10,7 +10,7 @@ You gain rank by taking on Contracts, Operations and Black Ops. Gaining rank let
 
 - Purchase Bladeburner skills
 - Join the Bladeburner faction
-- Take on more dangerous Black Ops, and eventually destroy World Daemon
+- Take on more dangerous Black Ops
 
 Your rank persists throughout a [BitNode](bitnodes.md), even after installing augmentations.
 
@@ -18,7 +18,7 @@ Your rank persists throughout a [BitNode](bitnodes.md), even after installing au
 
 The Bladeburners offer unique [Augmentations](../basic/augmentations.md), and will invite you to join their faction when you reach 25 rank.
 
-Bladeburner faction reputation can only be gained through Bladeburner actions. Faction reputation is reset when you install agumentations.
+Bladeburner faction reputation can only be gained through Bladeburner actions. Faction reputation is reset when you install augmentations.
 
 ## Bladeburner skills
 
@@ -41,7 +41,7 @@ There are 4 types of action:
 
 - Costs 0.1425 stamina.
 - Increases your max stamina by 0.04, multiplied by your bonus from the Cyber's Edge skill.
-- Gives 30 exp (1 exp/second) in each combat stat, increasing with your combat exp multipliers. (The exp from other Bladeburner actions is increased by your multipliers too, we're just calling this one out because otherwise it sounds like a flat exp rate.)
+- Gives 1 exp/second in each combat stat. This exp is boosted by a person's exp multipliers (either yours, or a sleeve's, depending on who's doing the action). But it is not boosted by the exp bonus from the Hyperdrive skill.
 
 #### Field Analysis
 
@@ -52,7 +52,7 @@ There are 4 types of action:
 
 - Gives a chance of recruiting 1 team member. The success chance increases with your charisma level, and decreases the more team members you already have.
 - Action time is reduced by higher charisma levels.
-- Gives charisma exp that scales with your charisma level.
+- Gives charisma exp that scales with your charisma level, calculated as `Math.max(1, 60 * (1 - Math.exp(-Math.pow(person.exp.charisma / 216000, 1.3))))`. This exp is boosted by a person's exp multipliers (either yours, or a sleeve's, depending on who's doing the action). But it is not boosted by the exp bonus from the Hyperdrive skill.
 
 #### Diplomacy
 
@@ -61,11 +61,11 @@ There are 4 types of action:
 #### Hyperbolic Regeneration Chamber
 
 - Regenerates 1% of your max stamina.
-- Regenerates 2 health of the person performing the action. If a sleeve is doing it, it's the sleeve's health that's regenerated.
+- Regenerates 2 health for the person performing the action, either you or a sleeve.
 
 #### Incite Violence
 
-- Gives the equivalent of 3 minutes of passive Contract and Operation generation.
+- Gives the equivalent of 3 minutes' passive Contract and Operation generation.
 - Raises the chaos of every city by 10, and then by a further `city_chaos / Math.log10(city_chaos)`.
 
 ### Contracts, Operations and Black Ops
@@ -74,22 +74,20 @@ There are 4 types of action:
 
 Action time is reduced by:
 
-- The Overlock skill
-- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills
+- The Overclock skill
+- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills. The calculation for this reduction is `action_time / (Math.pow(effAgility, 0.04) + Math.pow(effDexterity, 0.035) + effAgility / 10000 + effDexterity / 10000)`.
 
 #### Action success chance
 
 Your success chance in Contracts, Operations and Black Ops is based on:
 
 - Team size (applies to Operations and Black Ops only). The multiplier is `Math.pow(team_count + 1, 0.05)`.
-- Chaos level in your current city above 50. If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`.
-- The Synthoid population in your current city being less than 1,000,000,000. The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
+- How far the chaos level in your current city is above 50 (does not apply to Black Ops). If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`.
+- How much the Synthoid population in your current city is less than 1,000,000,000 (does not apply to Black Ops). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
+- How far your stamina is below 50%. The penalty scales linearly: `success_chance * Math.max(1, current_stamina / (0.5 * max_stamina))`.
 - The inherent difficulty of the action.
-- Your skill levels (strength, defence, intelligence, and so on).
-- Succcess multiplers from augs, source files, and Bladeburner skills.
-- Whether your stamina is below 50%.
-
-Black ops ignore chaos and city population.
+- Your skill levels (strength, defense, intelligence, and so on).
+- Success multipliers from augs, source files and Bladeburner skills.
 
 Actions like Field Analysis improve your estimate of how many Synthoids are in a city. That improves the precision of your estimated success chance. But it does not improve the success chance itself.
 
@@ -102,13 +100,13 @@ Your max stamina increases with:
 - Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
 - Levels in the Cyber's Edge skill
 - Training, which gives +0.04 max stamina, multiplied by your bonus from Cyber's Edge
-- The Bladeburner Max Stamina multiplier from your Stats tab
+- The Bladeburner Max Stamina multiplier
 
 Your stamina gain rate increases with:
 
 - Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
 - Your max stamina
-- The Bladeburner Stamina Gain multiplier from your Stats page
+- The Bladeburner Stamina Gain multiplier
 
 Stamina can also be restored by the Hyperbolic Regeneration Chamber action.
 
@@ -116,42 +114,10 @@ Once your stamina falls below 50% of its max value, it begins to reduce the succ
 
 ## Sleeves
 
-Sleeves can perform all the General actions. They don't have a stamina stat, so if they perform Training or Hyperbolic Regeneration Chamber, it's the player's stamina that's affected.
+Sleeves can perform all the General actions. They don't have a stamina stat, so if they perform Training or Hyperbolic Regeneration Chamber, it's your stamina that's affected.
 
 Sleeves can also do the following:
 
+- Take on Contracts, as if it were you doing them.
 - Infiltrate Synthoids to generate more Contracts and Operations. Infiltrating Synthoids is less effective the more sleeves are doing it. The calculation is `Math.pow(infilSleeves, -0.5) / 2`
 - Support the Main Sleeve. This means they will be available to join you as a team member on Bladeburner Operations and Black Ops. If the sleeve is hurt and loses all its health, it will receive shock.
-- Take on Contracts, as if it were you doing them.
-
-
-
-<table>
-<tr>
-<th>Sleeves infiltrating simultaneously</th><th>Contracts generated per action</th>
-</tr>
-<tr>
-<td>1</td><td>0.50</td>
-</tr>
-<tr>
-<td>2</td><td>0.71</td>
-</tr>
-<tr>
-<td>3</td><td>0.87</td>
-</tr>
-<tr>
-<td>4</td><td>1.00</td>
-</tr>
-<tr>
-<td>5</td><td>1.12</td>
-</tr>
-<tr>
-<td>6</td><td>1.22</td>
-</tr>
-<tr>
-<td>7</td><td>1.32</td>
-</tr>
-<tr>
-<td>8</td><td>1.41</td>
-</tr>
-</table>
