@@ -1,5 +1,5 @@
 import { Settings } from "../Settings/Settings";
-import { isValidConnectionHostname, isValidConnectionPort } from "../Settings/SettingsUtils";
+import { isValidConnectionHostname, isValidRFAConnectionPortSetting } from "../Settings/SettingsUtils";
 import { Remote } from "./Remote";
 
 let server: Remote | undefined;
@@ -7,7 +7,7 @@ let server: Remote | undefined;
 export function canCreateNewRemoteFileApiConnection(): boolean {
   return (
     isValidConnectionHostname(Settings.RemoteFileApiAddress).success &&
-    isValidConnectionPort(Settings.RemoteFileApiPort)
+    isValidRFAConnectionPortSetting(Settings.RemoteFileApiPort).success
   );
 }
 
