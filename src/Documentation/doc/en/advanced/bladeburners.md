@@ -93,8 +93,8 @@ Failing them causes you to lose health, and in the case of Operations and Black 
 
 Action time is reduced by:
 
-- The Overclock skill.
-- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills. The calculation for this reduction is `action_time / (Math.pow(effAgility, 0.04) + Math.pow(effDexterity, 0.035) + effAgility / 10000 + effDexterity / 10000)`.
+- The Overclock skill
+- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills
 
 #### Action success chance
 
@@ -143,5 +143,5 @@ Sleeves can perform all the General actions. They don't have a stamina stat, so 
 Sleeves can also do the following:
 
 - Take on Contracts, as if it were you doing them.
-- Infiltrate Synthoids to generate more Contracts and Operations. Infiltrating Synthoids is less effective the more sleeves are doing it. The calculation is `Math.pow(infilSleeves, -0.5) / 2`
+- Infiltrate Synthoids to generate more Contracts and Operations. Infiltrating Synthoids is less effective the more sleeves are doing it. The calculation is `Math.pow(infilSleeves, -0.5) / 2`.
 - Support the Main Sleeve. This means they will be available to join you as a team member on Bladeburner Operations and Black Ops. If the sleeve loses all its health during an Operation, it will receive shock.
