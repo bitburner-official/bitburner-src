@@ -1,6 +1,6 @@
 # Bladeburners
 
-Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society.
+Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society and are sometimes considered a threat.
 
 By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md) that does not require the Red Pill.
 
@@ -49,7 +49,7 @@ There are 4 types of action you can take:
 
 ### General actions
 
-Any exp you gain from General actions is boosted by the exp multipliers of the person performing the action (either yours, or a sleeve's). But it's not boosted by the exp bonus from the Hyperdrive skill.
+Any exp that a person (whether you or a sleeve) gains from doing a General action is boosted by their exp multipliers, but not by the exp bonus from the Hyperdrive skill.
 
 #### Training
 
@@ -144,4 +144,4 @@ Sleeves can also do the following:
 
 - Take on Contracts, as if it were you doing them.
 - Infiltrate Synthoids to generate more Contracts and Operations. Infiltrating Synthoids is less effective the more sleeves are doing it. The calculation is `Math.pow(infilSleeves, -0.5) / 2`
-- Support the Main Sleeve. This means they will be available to join you as a team member on Bladeburner Operations and Black Ops. If the sleeve is hurt and loses all its health, it will receive shock.
+- Support the Main Sleeve. This means they will be available to join you as a team member on Bladeburner Operations and Black Ops. If the sleeve loses all its health during an Operation, it will receive shock.
