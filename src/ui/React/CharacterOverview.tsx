@@ -5,8 +5,7 @@ import React, { useMemo, useState, useEffect, ReactNode } from "react";
 import { Box, Button, IconButton, Table, TableBody, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
-import { Theme, useTheme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+import { useTheme } from "@mui/material/styles";
 
 import { Player } from "@player";
 import { formatHp, formatMoney, formatSkill } from "../formatNumber";
@@ -30,6 +29,25 @@ import { isCrimeWork } from "../../Work/CrimeWork";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { useRerender } from "./hooks";
 import { RemoteFileApiConnectionStatus } from "../../GameOptions/ui/RemoteFileApiConnectionStatus";
+
+const workCellSx = {
+  textAlign: "center",
+  maxWidth: "200px",
+  borderBottom: "none",
+  p: 0,
+  m: 0,
+};
+
+export const cellNoneSx = {
+  borderBottom: "none",
+  p: 0,
+  m: 0,
+};
+
+const cellSx = {
+  p: 0,
+  m: 0,
+};
 
 export const OverviewEventEmitter = new EventEmitter();
 
@@ -95,18 +113,18 @@ interface DataRowProps {
   cellType: "cellNone" | "cell";
 }
 export function DataRow({ name, showBar, color, cellType }: DataRowProps): React.ReactElement {
-  const { classes } = useStyles();
   const skillBar = showBar && <StatsProgressBar name={name} color={color} />;
+  const localCellSx = cellType === "cell" ? cellSx : cellNoneSx;
   return (
     <>
       <TableRow>
-        <TableCell component="th" scope="row" classes={{ root: classes[cellType] }}>
+        <TableCell component="th" scope="row" sx={localCellSx}>
           <Typography color={color}>{name}&nbsp;</Typography>
         </TableCell>
-        <TableCell align="right" classes={{ root: classes[cellType] }}>
+        <TableCell align="right" sx={localCellSx}>
           <Val name={name} color={color} />
         </TableCell>
-        <TableCell align="right" classes={{ root: classes[cellType] }}>
+        <TableCell align="right" sx={localCellSx}>
           <Typography id={"overview-" + name.toLowerCase() + "-hook"} color={color}>
             {}
           </Typography>
@@ -136,7 +154,7 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
     }, 600);
     return () => clearInterval(interval);
   }, [parentOpen]);
-  const { classes } = useStyles();
+
   const theme = useTheme();
   return (
     <>
@@ -156,17 +174,17 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
             <></>
           )}
           <TableRow>
-            <TableCell component="th" scope="row" classes={{ root: classes.cell }}>
+            <TableCell component="th" scope="row" sx={cellSx}>
               <Typography id="overview-extra-hook-0" color={theme.colors.hack}>
                 {}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" align="right" classes={{ root: classes.cell }}>
+            <TableCell component="th" scope="row" align="right" sx={cellSx}>
               <Typography id="overview-extra-hook-1" color={theme.colors.hack}>
                 {}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" align="right" classes={{ root: classes.cell }}>
+            <TableCell component="th" scope="row" align="right" sx={cellSx}>
               <Typography id="overview-extra-hook-2" color={theme.colors.hack}>
                 {}
               </Typography>
@@ -209,7 +227,6 @@ function ActionText({ action }: { action: ActionIdentifier }): React.ReactElemen
 }
 
 function BladeburnerText(): React.ReactElement {
-  const { classes } = useStyles();
   const rerender = useRerender();
   useEffect(() => {
     const clearSubscription = OverviewEventEmitter.subscribe(rerender);
@@ -224,18 +241,18 @@ function BladeburnerText(): React.ReactElement {
       ) : (
         <>
           <TableRow>
-            <TableCell component="th" scope="row" colSpan={2} classes={{ root: classes.cellNone }}>
+            <TableCell component="th" scope="row" colSpan={2} sx={cellNoneSx}>
               <Typography>Bladeburner:</Typography>
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell component="th" scope="row" colSpan={2} classes={{ root: classes.cellNone }}>
+            <TableCell component="th" scope="row" colSpan={2} sx={cellNoneSx}>
               <ActionText action={action} />
             </TableCell>
           </TableRow>
         </>
       ),
-    [action, classes.cellNone],
+    [action],
   );
 }
 
@@ -250,34 +267,31 @@ const onClickFocusWork = (): void => {
   Router.toPage(Page.Work);
 };
 function WorkInProgressOverview({ tooltip, children, header }: WorkInProgressOverviewProps): React.ReactElement {
-  const { classes } = useStyles();
   return (
     <>
       <TableRow>
-        <TableCell component="th" scope="row" colSpan={2} classes={{ root: classes.workCell }}>
+        <TableCell component="th" scope="row" colSpan={2} sx={workCellSx}>
           <Tooltip title={<>{tooltip}</>}>
-            <Typography className={classes.workHeader} sx={{ pt: 1, pb: 0.5 }}>
-              {header}
-            </Typography>
+            <Typography sx={{ pt: 1, pb: 0.5, fontSize: "0.9rem" }}>{header}</Typography>
           </Tooltip>
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell component="th" scope="row" colSpan={2} classes={{ root: classes.workCell }}>
-          <Typography className={classes.workSubtitles}>{children}</Typography>
+        <TableCell component="th" scope="row" colSpan={2} sx={workCellSx}>
+          <Typography sx={{ fontSize: "0.8rem" }}>{children}</Typography>
         </TableCell>
       </TableRow>
       {useMemo(
         () => (
           <TableRow>
-            <TableCell component="th" scope="row" align="center" colSpan={2} classes={{ root: classes.cellNone }}>
+            <TableCell component="th" scope="row" align="center" colSpan={2} sx={cellNoneSx}>
               <Button sx={{ mt: 1 }} onClick={onClickFocusWork}>
                 Focus
               </Button>
             </TableCell>
           </TableRow>
         ),
-        [classes.cellNone],
+        [],
       )}
     </>
   );
@@ -371,51 +385,3 @@ function Work(): React.ReactElement {
     </WorkInProgressOverview>
   );
 }
-
-const useStyles = makeStyles()((theme: Theme) => ({
-  workCell: {
-    textAlign: "center",
-    maxWidth: "200px",
-    borderBottom: "none",
-    padding: 0,
-    margin: 0,
-  },
-
-  workHeader: {
-    fontSize: "0.9rem",
-  },
-
-  workSubtitles: {
-    fontSize: "0.8rem",
-  },
-
-  cellNone: {
-    borderBottom: "none",
-    padding: 0,
-    margin: 0,
-  },
-  cell: {
-    padding: 0,
-    margin: 0,
-  },
-  hp: {
-    color: theme.colors.hp,
-  },
-  money: {
-    color: theme.colors.money,
-  },
-  hack: {
-    color: theme.colors.hack,
-  },
-  combat: {
-    color: theme.colors.combat,
-  },
-  cha: {
-    color: theme.colors.cha,
-  },
-  int: {
-    color: theme.colors.int,
-  },
-}));
-
-export { useStyles };

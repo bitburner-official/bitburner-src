@@ -1,7 +1,6 @@
 // React Component for displaying an Industry's warehouse information
 // (right-side panel in the Industry UI)
 import React, { useState } from "react";
-import { makeStyles } from "tss-react/mui";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import * as corpConstants from "../data/Constants";
 import { CityName, CorpUnlockName } from "@enums";
@@ -33,14 +32,7 @@ interface WarehouseProps {
   rerender: () => void;
 }
 
-const useStyles = makeStyles()(() => ({
-  retainHeight: {
-    minHeight: "3em",
-  },
-}));
-
 function WarehouseRoot(props: WarehouseProps): React.ReactElement {
-  const { classes } = useStyles();
   const corp = useCorporation();
   const division = useDivision();
   const [smartSupplyOpen, setSmartSupplyOpen] = useState(false);
@@ -158,7 +150,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
         divisions.
       </Typography>
       <br />
-      <Typography style={{ whiteSpace: "pre-wrap" }} className={classes.retainHeight}>
+      <Typography sx={{ whiteSpace: "pre-wrap", minHeight: "3em" }}>
         {prevState} {stateBar} {nextState}
       </Typography>
       {corp.unlocks.has(CorpUnlockName.SmartSupply) && (
