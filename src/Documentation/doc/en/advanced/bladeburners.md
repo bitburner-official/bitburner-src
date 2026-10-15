@@ -85,7 +85,7 @@ Failing them causes you to lose health, and in the case of Operations and Black 
 
 Action time is reduced by:
 
-- The Overclock skill
+- The Overclock skill.
 - Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills. The calculation for this reduction is `action_time / (Math.pow(effAgility, 0.04) + Math.pow(effDexterity, 0.035) + effAgility / 10000 + effDexterity / 10000)`.
 
 #### Action success chance
