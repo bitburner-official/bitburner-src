@@ -4,7 +4,7 @@ Bladeburner divisions were created internationally in the mid-21st century, task
 
 By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). After completing all of the Bladeburners' Black Ops, you can destroy the World Daemon without needing the Red Pill.
 
-## Joining a Bladeburner division
+## Joining the Bladeburners
 
 To join the Bladeburners, visit the NSA in Sector-12.
 
