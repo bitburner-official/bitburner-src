@@ -2,7 +2,7 @@
 
 Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society.
 
-By working for the Bladeburners against increasingly strong Synthoid opposition, you'll get access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). After completing all of the Bladeburners' Black Ops, you can destroy the World Daemon without needing the Red Pill.
+By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). After completing all of the Bladeburners' Black Ops, you can destroy the World Daemon without needing the Red Pill.
 
 ## Joining a Bladeburner division
 
@@ -34,29 +34,32 @@ There is no limit on the skill level you can reach, with the exception of Overcl
 
 There are 4 types of action you can take:
 
-- General actions are safe, supporting activities. They do things like increase your max stamina, or lower chaos.
+- General actions are safe, supporting activities. They give benefits like increasing your max stamina, or lowering chaos.
 - Contracts earn money, exp and rank.
 - Operations earn exp and rank, at a higher rate.
 - Black Ops earn rank. Completing all 21 Black Ops gives you the ability to destroy the World Daemon.
 
 ### General actions
 
+Any exp you gain from General actions is boosted by a person's exp multipliers (either yours, or a sleeve's, depending on who's doing the action). But it is not boosted by the exp bonus from the Hyperdrive skill.
+
 #### Training
 
 - Costs 0.1425 stamina.
 - Increases your max stamina by 0.04, multiplied by your bonus from the Cyber's Edge skill.
-- Gives 1 exp/second in each combat stat. This exp is boosted by a person's exp multipliers (either yours, or a sleeve's, depending on who's doing the action). But it is not boosted by the exp bonus from the Hyperdrive skill.
+- Gives 1 exp/second in each combat stat.
 
 #### Field Analysis
 
 - Improves your estimate of the Synthoid population in the current city. This increases the precision of your success chance estimates. The degree of the improvement scales with your hacking and charisma skills.
 - Gives hacking and charisma exp.
+- Increases your rank.
 
 #### Recruitment
 
 - Gives a chance of recruiting 1 team member. The success chance increases with your charisma level, and decreases the more team members you already have.
+- Gives charisma exp.
 - Action time is reduced by higher charisma levels.
-- Gives charisma exp that scales with your charisma level, calculated as `Math.max(1, 60 * (1 - Math.exp(-Math.pow(person.exp.charisma / 216000, 1.3))))`. This exp is boosted by a person's exp multipliers (either yours, or a sleeve's, depending on who's doing the action). But it is not boosted by the exp bonus from the Hyperdrive skill.
 
 #### Diplomacy
 
