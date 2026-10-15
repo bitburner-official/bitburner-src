@@ -248,7 +248,7 @@ export function getTotalThreadAugCount(): number {
   return getInstalledThreadAugCount() + pendingThreadCount;
 }
 
-export function getThreadAugmentMults(level = 1, previousLevel = 0): Multipliers {
+function getThreadAugmentMults(level = 1, previousLevel = 0): Multipliers {
   const mult = (1 + 0.01 * level) / (1 + 0.01 * previousLevel);
   // These mults are chosen to match NFG. They are explicitly *not* all the multipliers that exist,
   // and shouldn't be switched to something like scaleMults() which would apply across everything.
