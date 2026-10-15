@@ -115,7 +115,10 @@ export const notEmployedBy = (companyName: CompanyName): PlayerCondition => ({
 
 export const haveAugmentations = (n: number): PlayerCondition => ({
   toString(): string {
-    return `${n || "No"} augmentations installed`;
+    if (n === 0) {
+      return `No augmentations queued or installed`;
+    }
+    return `${n} augmentations installed`;
   },
   toJSON(): NumAugmentationsRequirement {
     return { type: "numAugmentations", numAugmentations: n };
