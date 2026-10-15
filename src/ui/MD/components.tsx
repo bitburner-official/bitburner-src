@@ -3,8 +3,8 @@ import { Theme } from "@mui/material/styles";
 import { ListItemText, Table, TableCell, TableCellProps, TableRow, Typography } from "@mui/material";
 import { LiProps, TableDataCellProps, TableHeaderCellProps } from "react-markdown/lib/ast-to-react";
 import { makeStyles } from "tss-react/mui";
+import { Settings } from "../../Settings/Settings";
 const useStyles = makeStyles()((theme: Theme) => ({
-  th: { whiteSpace: "pre", fontWeight: "bold" },
   td: { button: { textAlign: "left" } },
   blockquote: {
     borderLeftColor: theme.palette.background.paper,
@@ -100,7 +100,7 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
     return child;
   });
   return (
-    <TableCell align={align}>
+    <TableCell align={align} sx={{ border: "1px solid", borderColor: Settings.theme.welllight, "& p": { mb: 0 } }}>
       <Typography component="div" align={align} classes={{ root: classes.td }}>
         {content}
       </Typography>
@@ -109,12 +109,18 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
 };
 
 export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.ReactElement => {
-  const { classes } = useStyles();
   const align = fixAlign(props.style?.textAlign);
 
   return (
-    <TableCell align={align}>
-      <Typography component="div" align={align} classes={{ root: classes.th }}>
+    <TableCell
+      align={align}
+      sx={{
+        border: "1px solid",
+        borderColor: Settings.theme.welllight,
+        backgroundColor: "background.paper",
+      }}
+    >
+      <Typography component="div" align={align} sx={{ fontWeight: "bold", "& p": { fontWeight: "inherit", mb: 0 } }}>
         {props.children}
       </Typography>
     </TableCell>
@@ -122,11 +128,21 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
 };
 
 export const table = (props: React.PropsWithChildren<object>): React.ReactElement => {
-  return <Table sx={{ width: "inherit" }}>{props.children}</Table>;
+  return <Table sx={{ width: "inherit", borderCollapse: "collapse" }}>{props.children}</Table>;
 };
 
 export const tr = (props: React.PropsWithChildren<object>): React.ReactElement => {
-  return <TableRow>{props.children}</TableRow>;
+  return (
+    <TableRow
+      sx={(theme) => ({
+        "&:nth-of-type(even) td": {
+          backgroundColor: theme.colors.backgroundsecondary,
+        },
+      })}
+    >
+      {props.children}
+    </TableRow>
+  );
 };
 
 export const Blockquote = (props: React.PropsWithChildren<object>): React.ReactElement => {
