@@ -143,6 +143,12 @@ function parseOnlyRamCalculate(
         errorMessage: `"${nextModule}" does not exist on server: ${server}`,
       };
     }
+
+    const dependent = otherScripts.get(scriptName);
+    if (dependent) {
+      script.dependents.add(dependent);
+    }
+
     const scriptFileType = getFileType(script.filename);
     let moduleAST;
     try {
