@@ -2,7 +2,7 @@
 
 Bladeburner divisions were created internationally in the mid-21st century, tasked with monitoring and "managing" rogue Synthoids, which may have blended into society.
 
-By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). After completing all of the Bladeburners' Black Ops, you can destroy the World Daemon without needing the Red Pill.
+By working for the Bladeburners against increasingly strong Synthoid opposition, you'll gain access to their augmentations, and to a unique method of destroying [BitNodes](bitnodes.md). After completing all of the Bladeburners' Black Ops, you can destroy the World Daemon without needing the Red Pill. This is possible in any Bitnode, not just Bitnodes 6 and 7.
 
 ## Joining the Bladeburners
 
