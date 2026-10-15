@@ -79,8 +79,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       name: BladeburnerOperationName.Sting,
       desc:
         "Conduct a sting operation to bait and capture particularly notorious Synthoid criminals.\n" +
-        "Completing this operation will increase the chaos level of your current city. If you complete it successfully, " +
-        "it will decrease the Synthoid population of your current city.",
+        "Completing this operation will increase the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
       warning: "This action decreases population by percentage.",
       successScaling:
         "Significantly affected by Hacking skill and Dexterity. Major bonus from Charisma. Minor bonus from combat stats.",
@@ -117,7 +116,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
         "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
         "current city in order for this Operation to be successful.\n" +
         "Completing this operation will increase the chaos level of your current city. It will decrease the Synthoid " + 
-        "population of your current city whether or not you complete it successfully.",
+        "population of your current city whether you complete it successfully or not.",
       warning: "This action decreases population and increases chaos by percentage.",
       successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 800,
@@ -195,7 +194,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
         "Synthoid communities.\n" +
-        "Completing this operation has an equal chance to increase or decrease the chaos level of your current city. If " + 
+        "Completing this operation has a chance to increase or decrease the chaos level of your current city. If " + 
         "you complete it successfully, it will decrease the Synthoid population of your current city.",
       warning: "This action may increase chaos by percentage.",
       successScaling:
