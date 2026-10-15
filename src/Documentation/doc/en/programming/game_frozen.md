@@ -32,7 +32,7 @@ Also make sure that each while loop gets to the `await`ed function or `break`, f
 ```js
 while (true) {
   let currentMoney = ns.getServerMoneyAvailable("n00dles");
-  let maxMoney = ns.getServerMaxMoney("n00dles");
+  const maxMoney = ns.getServerMaxMoney("n00dles");
   if (currentMoney < maxMoney / 2) {
     await ns.grow("n00dles");
   }

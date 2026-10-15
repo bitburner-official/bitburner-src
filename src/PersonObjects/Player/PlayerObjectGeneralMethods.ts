@@ -471,6 +471,10 @@ export function queueAugmentation(this: PlayerObject, name: AugmentationName): v
     return;
   }
 
+  if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod) && name !== AugmentationName.NeuroFluxGovernor) {
+    Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
+  }
+
   const queuedAugmentation = new PlayerOwnedAugmentation(name);
   queuedAugmentation.level = currentLevel + 1;
   this.queuedAugmentations.push(queuedAugmentation);

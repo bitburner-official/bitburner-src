@@ -63,7 +63,7 @@ function getStylesForFactionName(faction: Faction) {
     overflow: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
-    color: faction.isBanned ? Settings.theme.error : "inherit",
+    color: faction.isBanned ? Settings.theme.disabled : "inherit",
     textDecorationLine: faction.isBanned ? "line-through" : "none",
   };
 }

@@ -263,8 +263,20 @@ export const setStasisLink = (ctx: NetscriptContext, server: DarknetServer, shou
   };
 };
 
+export const getServerMigrationChargeValue = (
+  darknetServerData: DarknetServerData | DarknetServerDetails,
+  player: IPerson = Player,
+  threads = 1,
+) => {
+  const chargeIncrease =
+    ((player.skills.charisma + 500) / (darknetServerData.difficulty * 200 + 1000)) * 0.01 * threads;
+
+  return chargeIncrease;
+};
+
 export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
-  const chargeIncrease = ((Player.skills.charisma + 500) / (server.difficulty * 200 + 1000)) * 0.01 * threads;
+  const chargeIncrease = getServerMigrationChargeValue(server, Player, threads);
+
   const xpGained = Player.mults.charisma_exp * 5 * threads * server.difficulty;
   Player.gainCharismaExp(xpGained);
   const currentCharge = DarknetState.migrationInductionServers.get(server.hostname) ?? 0;

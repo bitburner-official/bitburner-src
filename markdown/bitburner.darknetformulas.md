@@ -38,12 +38,23 @@ Gets the time it will take to authenticate a server.
 </td></tr>
 <tr><td>
 
+[getExpectedMigrationCharge(serverDetails, player, threads)](./bitburner.darknetformulas.getexpectedmigrationcharge.md)
+
+
+</td><td>
+
+Gets the expected amount of charge that will be gained by a call to dnet.induceServerMigration
+
+
+</td></tr>
+<tr><td>
+
 [getExpectedRamBlockRemoved(serverDetails, threads, player)](./bitburner.darknetformulas.getexpectedramblockremoved.md)
 
 
 </td><td>
 
-Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+Gets the expected amount of ram that will be freed by a call to dnet.memoryReallocation
 
 
 </td></tr>

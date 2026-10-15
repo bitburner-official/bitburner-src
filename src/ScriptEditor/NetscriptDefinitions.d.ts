@@ -2220,7 +2220,7 @@ export interface Singularity {
    * const companyName = "ECorp";
    * const position = "Chief Executive Officer";
    *
-   * let requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
+   * const requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
    * ```
    * @param companyName - Name of company to get the requirements for. Must be an exact match.
    * @param positionName - Name of position to get the requirements for. Must be an exact match.
@@ -2447,7 +2447,7 @@ export interface Singularity {
    * const factionName = "CyberSec";
    * const workType = "hacking";
    *
-   * let success = ns.singularity.workForFaction(factionName, workType);
+   * const success = ns.singularity.workForFaction(factionName, workType);
    * if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`);
    * ```
    * @param faction - Name of faction to work for.
@@ -6609,12 +6609,20 @@ interface DarknetFormulas {
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+   * Gets the expected amount of ram that will be freed by a call to dnet.memoryReallocation
    * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
   getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
+
+  /**
+   * Gets the expected amount of charge that will be gained by a call to dnet.induceServerMigration
+   * @param serverDetails - The server to estimate charge build-up on.
+   * @param player - The player object.
+   * @param threads - The number of threads used in the induceServerMigration call. Optional, defaults to 1
+   */
+  getExpectedMigrationCharge(serverDetails: DarknetServerDetails, player: Person, threads?: number): number;
 }
 
 /**
@@ -7490,11 +7498,11 @@ export interface NS {
   hackAnalyzeThreads(host: string, hackAmount: number): number;
 
   /**
-   * Get the part of money stolen with a single thread.
+   * Get the fraction (between 0 and 1) of money stolen with a single thread.
    * @remarks
    * RAM cost: 1 GB
    *
-   * Returns the part of the specified server’s money you will steal with a single thread hack.
+   * Returns the fraction of the specified server’s money you will steal with a single thread hack.
    *
    * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
    * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackPercent | formulas.hacking.hackPercent}.
@@ -7506,7 +7514,7 @@ export interface NS {
    * //This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.
    * ```
    * @param host - Hostname/IP of the target server.
-   * @returns The part of money you will steal from the target server with a single thread hack.
+   * @returns The fraction of money you will steal from the target server with a single thread hack.
    */
   hackAnalyze(host: string): number;
 
@@ -7862,8 +7870,8 @@ export interface NS {
    *
    * @example
    * ```js
-   * let recentScripts = ns.getRecentScripts();
-   * let mostRecent = recentScripts.shift();
+   * const recentScripts = ns.getRecentScripts();
+   * const mostRecent = recentScripts.shift();
    * if (mostRecent)
    *   ns.tprint(mostRecent.logs.join('\n'));
    * ```
@@ -7912,23 +7920,23 @@ export interface NS {
    * @example
    * ```js
    * // All servers that are one hop from the current server.
-   * ns.tprint("Neighbors of current server.");
-   * let neighbor = ns.scan();
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * ns.tprint("Neighbors of current server:");
+   * const neighbors = ns.scan();
+   * for (const neighbor of neighbors) {
+   *     ns.tprint(neighbor);
    * }
    * // All servers that are one hop from the current server, but by IP address.
-   * ns.tprint("IPs of current server's neighbors.");
-   * let neighbor = ns.scan(null, { returnByIP: true });
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * ns.tprint("IPs of current server's neighbors:");
+   * const neighborIPs = ns.scan(undefined, { returnByIP: true });
+   * for (const neighborIP of neighborIPs) {
+   *     ns.tprint(neighborIP);
    * }
    * // All neighbors of n00dles.
    * const target = "n00dles";
-   * neighbor = ns.scan(target);
-   * ns.tprintf("Neighbors of %s.", target);
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * const n00dlesNeighbors = ns.scan(target);
+   * ns.tprintf("Neighbors of %s:", target);
+   * for (const neighbor of n00dlesNeighbors) {
+   *     ns.tprint(neighbor);
    * }
    * ```
    *
@@ -9336,21 +9344,30 @@ export interface NS {
   };
 
   /**
-   * Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is
-   * applied to all faction work of all factions.
+   * Multiplies the reputation gain rate of faction work by sharing the server's RAM with the faction.
+   *
+   * The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
+   *
+   * Share power increases for each thread of share running on your server network, but the total amount is logarithmic. A server's cores bonus effectively increases its thread count.
+   *
+   * The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+   *
+   * Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
    * @remarks
    * RAM cost: 2.4 GB
-   *
-   * Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds.
-   * Scales with thread count, but at a sharply decreasing rate.
    */
   share(): Promise<void>;
 
   /**
-   * Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking
-   * work, share power still increases the reputation gain rate, but the effect is non-linear.
+   * Share power has a multiplicative effect on the reputation gain rate of faction work.
    *
-   * Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+   * The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
+   *
+   * Share power increases for each thread of share running on your server network, but the total amount is logarithmic. A server's cores bonus effectively increases its thread count.
+   *
+   * The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+   *
+   * Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
    * @remarks
    * RAM cost: 0.2 GB
    */
