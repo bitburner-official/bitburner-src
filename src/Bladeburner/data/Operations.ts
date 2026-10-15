@@ -155,8 +155,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Lead a covert operation to retire Synthoids. The objective is to complete the task without drawing any " +
         "attention. Stealth and discretion are key.\n" +
-        "Completing this operation will decrease the chaos level of your current city. If you complete it successfully, " +
-        "it will decrease the Synthoid population of your current city.",
+        "Completing this operation will decrease the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
       warning: "This action decreases population by percentage.",
       successScaling:
         "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. " +
