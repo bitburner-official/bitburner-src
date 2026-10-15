@@ -22,7 +22,7 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
     <>
       <Typography>
         Black Operations (Black Ops) are special, one-time covert operations. Each Black Op is unlocked by completing
-        the one before it.        
+        the one before it.
         <br />
         <br />
         <b>

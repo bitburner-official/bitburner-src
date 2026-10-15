@@ -115,7 +115,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
         "current city in order for this Operation to be successful.\n" +
-        "Completing this operation will increase the chaos level of your current city. It will decrease the Synthoid " + 
+        "Completing this operation will increase the chaos level of your current city. It will decrease the Synthoid " +
         "population of your current city whether you complete it successfully or not.",
       warning: "This action decreases population and increases chaos by percentage.",
       successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
@@ -155,11 +155,11 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Lead a covert operation to retire Synthoids. The objective is to complete the task without drawing any " +
         "attention. Stealth and discretion are key.\n" +
-        "Completing this operation will decrease the chaos level of your current city. If you complete it successfully, " + 
+        "Completing this operation will decrease the chaos level of your current city. If you complete it successfully, " +
         "it will decrease the Synthoid population of your current city.",
       warning: "This action decreases population by percentage.",
       successScaling:
-        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. " + 
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. " +
         "Unaffected by Charisma.",
       baseDifficulty: 1000,
       difficultyFac: 1.05,
@@ -194,7 +194,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
         "Synthoid communities.\n" +
-        "Completing this operation has a chance to increase or decrease the chaos level of your current city. If " + 
+        "Completing this operation has a chance to increase or decrease the chaos level of your current city. If " +
         "you complete it successfully, it will decrease the Synthoid population of your current city.",
       warning: "This action may increase chaos by percentage.",
       successScaling:
