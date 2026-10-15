@@ -98,13 +98,11 @@ export function updateMultipliers(mults: Multipliers, aug: PlayerOwnedAugmentati
   ) {
     throw new Error(`Unexpected levels for ${aug.name}: Leveling ${previousLevel} to ${aug.level}!`);
   }
-  if (aug.name === AugmentationName.TheThread) {
-    const augMults = getThreadAugmentMults(aug.level, previousLevel);
-    mergeMultipliers(mults, augMults);
-    return;
-  }
   for (let i = previousLevel; i < aug.level; ++i) {
-    const augMults = getAugmentMults(aug, i);
+    const augMults =
+      aug.name === AugmentationName.TheThread
+        ? getThreadAugmentMults(aug.level, previousLevel)
+        : Augmentations[aug.name].mults;
     mergeMultipliers(mults, augMults);
   }
 }
@@ -218,19 +216,7 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
   return { moneyCost, repCost };
 }
 
-/**
- * Retrieves the mults for the given augmentation.
- * Has special handling for "The Thr3ad of Ariadne" since its mults are additive, not multiplicative, per level
- */
-export function getAugmentMults(augment: Augmentation | PlayerOwnedAugmentation, level = 1): Multipliers {
-  if (augment.name === AugmentationName.TheThread) {
-    return getThreadAugmentMults(level);
-  }
-
-  return Augmentations[augment.name].mults;
-}
-
-function getThreadAugmentMults(level = 1, previousLevel = 0): Multipliers {
+export function getThreadAugmentMults(level = 1, previousLevel = 0): Multipliers {
   const mult = (1 + 0.01 * level) / (1 + 0.01 * previousLevel);
   // These mults are chosen to match NFG. They are explicitly *not* all the multipliers that exist,
   // and shouldn't be switched to something like scaleMults() which would apply across everything.

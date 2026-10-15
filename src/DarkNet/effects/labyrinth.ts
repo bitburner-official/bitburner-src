@@ -330,7 +330,7 @@ export const handleLabyrinthPassword = (
   };
 };
 
-export function getInstalledThreadAugCount(): number {
+function installedThreadLevel(): number {
   return Player.augmentations.find((aug) => aug.name === AugmentationName.TheThread)?.level ?? 0;
 }
 
@@ -339,11 +339,11 @@ const getCacheCount = (): number => {
     return 1;
   }
   // For first three completions, award 3 levels of The Thread
-  if (getInstalledThreadAugCount() < 9) {
+  if (installedThreadLevel() < 9) {
     return 3;
   }
   // For the next three completions, award 2 levels of The Thread
-  if (getInstalledThreadAugCount() < 15) {
+  if (installedThreadLevel() < 15) {
     return 2;
   }
   // After that, reward only 1
@@ -383,7 +383,7 @@ const getOrdinalInput = (input: string): number[] | null => {
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {
     const { mazeWidth, mazeHeight } = getLabyrinthDetails();
-    const bonusSize = Math.min(getInstalledThreadAugCount() * 4, 900);
+    const bonusSize = Math.min(installedThreadLevel() * 4, 900);
     DarknetState.labyrinth = generateMaze(mazeWidth + bonusSize, mazeHeight + bonusSize);
     const [offsetX, offsetY] = getRandomOffset();
     DarknetState.labEndpoint = [
@@ -398,7 +398,7 @@ const getRandomOffset = () => {
   if (!getLabyrinthDetails().offsetStartAndEnd) {
     return [0, 0];
   }
-  const maxOffset = Math.min(3 + getInstalledThreadAugCount() / 3, (DarknetState.labyrinth?.length ?? 30) / 4);
+  const maxOffset = Math.min(3 + installedThreadLevel() / 3, (DarknetState.labyrinth?.length ?? 30) / 4);
   const offsetX = Math.floor(Math.random() * maxOffset) * 2;
   const offsetY = Math.floor(Math.random() * maxOffset) * 2;
   return [offsetX, offsetY];
