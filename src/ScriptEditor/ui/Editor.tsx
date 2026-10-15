@@ -44,13 +44,16 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
      * monaco editor has a bug that makes function definitions appear as duplicate ones. For more information, please
      * check: https://github.com/microsoft/monaco-editor/issues/3580 and https://github.com/microsoft/monaco-editor/pull/4544.
      */
-    monaco.editor.createModel(
-      netscriptDefinitions.replace(/^export /gm, ""),
-      "typescript",
-      monaco.Uri.file("netscript.d.ts"),
-    );
-    monaco.editor.createModel(reactTypes, "typescript", monaco.Uri.file("react.d.ts"));
-    monaco.editor.createModel(reactDomTypes, "typescript", monaco.Uri.file("react-dom.d.ts"));
+    const createLibModel = (content: string, fileName: string) => {
+      const uri = monaco.Uri.file(fileName);
+      // These models are kept alive across unmounts, so only create them once.
+      const existingModel = monaco.editor.getModel(uri);
+      if (existingModel && !existingModel.isDisposed()) return;
+      monaco.editor.createModel(content, "typescript", uri);
+    };
+    createLibModel(netscriptDefinitions.replace(/^export /gm, ""), "netscript.d.ts");
+    createLibModel(reactTypes, "react.d.ts");
+    createLibModel(reactDomTypes, "react-dom.d.ts");
 
     // Initialize monaco editor
     editorRef.current = monaco.editor.create(containerDiv.current, {
@@ -82,7 +85,11 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
     return () => {
       onUnmount();
       subscription.current?.dispose();
-      monaco.editor.getModels().forEach((model) => model.dispose());
+      /**
+       * Models are intentionally not disposed here. They hold the undo/redo stack of each open script and the extra
+       * libraries synced to the TypeScript worker; disposing them on every page switch would wipe that state and force
+       * a full re-typecheck. Models of closed scripts are disposed in onTabClose instead.
+       */
       editorRef.current?.dispose();
     };
     // this eslint ignore instruction can potentially cause unobvious bugs
