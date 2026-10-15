@@ -41,7 +41,7 @@ There are 4 types of action you can take:
 
 ### General actions
 
-Any exp you gain from General actions is boosted by a person's exp multipliers (either yours, or a sleeve's, depending on who's doing the action). But it is not boosted by the exp bonus from the Hyperdrive skill.
+Any exp that a person (whether you or a sleeve) gains from doing a General action is boosted by their exp multipliers, but not by the exp bonus from the Hyperdrive skill.
 
 #### Training
 
