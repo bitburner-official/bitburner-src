@@ -9097,7 +9097,7 @@ export interface NS {
    * or `""` if they cancel the prompt.
    */
   prompt(
-    txt: string | number,
+    txt: string,
     options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 
