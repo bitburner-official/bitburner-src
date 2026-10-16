@@ -42,7 +42,7 @@ export class BitNodeMultipliers {
   /** Influences the amount of divisions a corporation can have at the same time. */
   CorporationDivisions = 1;
 
-  /** Influences profits from corporation dividends and selling shares. */
+  /** Influences an exponential modifier applied to corporation dividends. */
   CorporationSoftcap = 1;
 
   /** Influences the valuation of corporations created by the player. */
@@ -87,7 +87,7 @@ export class BitNodeMultipliers {
   /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
   FourSigmaMarketDataCost = 1;
 
-  /** Influences the respect gain and money gain of your gang. */
+  /** Influences an exponential modifier applied to money and respect gain. */
   GangSoftcap = 1;
 
   /** Percentage of unique augs that the gang has. */
@@ -127,10 +127,10 @@ export class BitNodeMultipliers {
    */
   ManualHackMoney = 1;
 
-  /** Influence how much it costs to purchase a cloud server */
+  /** Influences the base cost of cloud server purchases and upgrades. */
   CloudServerCost = 1;
 
-  /** Influence how much it costs to purchase a cloud server */
+  /** Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB. */
   CloudServerSoftcap = 1;
 
   /** Influences the maximum number of cloud servers you can have */
@@ -142,7 +142,7 @@ export class BitNodeMultipliers {
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction = 1;
 
-  /** Influences how much money is stolen from a server when the player performs a hack against it. */
+  /** Influences how much money is stolen from a server when the player hacks it. */
   ScriptHackMoney = 1;
 
   /**

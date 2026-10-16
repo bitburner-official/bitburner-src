@@ -183,7 +183,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a cloud server
+Influences the base cost of cloud server purchases and upgrades.
 
 
 </td></tr>
@@ -240,7 +240,7 @@ number
 
 </td><td>
 
-Influence how much it costs to purchase a cloud server
+Influences an exponential modifier applied to cloud server purchase and upgrade costs beyond 32 GB.
 
 
 </td></tr>
@@ -354,7 +354,7 @@ number
 
 </td><td>
 
-Influences profits from corporation dividends and selling shares.
+Influences an exponential modifier applied to corporation dividends.
 
 
 </td></tr>
@@ -620,7 +620,7 @@ number
 
 </td><td>
 
-Influences the respect gain and money gain of your gang.
+Influences an exponential modifier applied to money and respect gain.
 
 
 </td></tr>
@@ -829,7 +829,7 @@ number
 
 </td><td>
 
-Influences how much money is stolen from a server when the player performs a hack against it.
+Influences how much money is stolen from a server when the player hacks it.
 
 
 </td></tr>
