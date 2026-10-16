@@ -9,7 +9,7 @@ Write data to a file.
 **Signature:**
 
 ```typescript
-write(filename: string, data?: string, mode?: "w" | "a"): void;
+write(filename: string, data?: string | number, mode?: "w" | "a"): void;
 ```
 
 ## Parameters
@@ -53,7 +53,7 @@ data
 
 </td><td>
 
-string
+string \| number
 
 
 </td><td>

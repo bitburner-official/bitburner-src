@@ -8656,7 +8656,7 @@ export interface NS {
    * @param data - Data to write.
    * @param mode - Defines the write mode.
    */
-  write(filename: string, data?: string, mode?: "w" | "a"): void;
+  write(filename: string, data?: string | number, mode?: "w" | "a"): void;
 
   /**
    * Attempt to write to a port.
@@ -9097,7 +9097,7 @@ export interface NS {
    * or `""` if they cancel the prompt.
    */
   prompt(
-    txt: string,
+    txt: string | number,
     options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 
@@ -9121,7 +9121,7 @@ export interface NS {
    * @param variant - Type of toast. Must be one of success, info, warning, error. Defaults to success.
    * @param duration - Duration of toast in ms. Can also be `null` to create a persistent toast. Defaults to 2000.
    */
-  toast(msg: string, variant?: ToastVariant, duration?: number | null): void;
+  toast(msg: string | number, variant?: ToastVariant, duration?: number | null): void;
 
   /**
    * Download a file from the internet.

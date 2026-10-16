@@ -10,7 +10,7 @@ Prompt the player with an input modal.
 
 ```typescript
 prompt(
-    txt: string,
+    txt: string | number,
     options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 ```
@@ -40,7 +40,7 @@ txt
 
 </td><td>
 
-string
+string \| number
 
 
 </td><td>
