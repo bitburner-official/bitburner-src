@@ -6,7 +6,7 @@ Converts a date representing time in milliseconds to a string with the format H 
 e.g.    10000 -> "10 seconds"
         120000 -> "2 minutes and 0 seconds"
 */
-export function convertTimeMsToTimeElapsedString(time: number, showMilli = false): string {
+export function convertTimeMsToTimeElapsedString(time: number, showMilli = false, compact = false): string {
   const negFlag = time < 0;
   time = Math.abs(Math.floor(time));
   const millisecondsPerSecond = 1000;
@@ -36,17 +36,22 @@ export function convertTimeMsToTimeElapsedString(time: number, showMilli = false
 
   const seconds: string = showMilli ? `${secTruncMinutes}.${milliTruncSec}` : `${secTruncMinutes}`;
 
+  const dayString = compact ? `${days}d` : pluralize(days, "day");
+  const hourString = compact ? `${hours}h` : pluralize(hours, "hour");
+  const minuteString = compact ? `${minutes}m` : pluralize(minutes, "minute");
+  const secondString = compact ? "s" : `second${!showMilli && secTruncMinutes === 1 ? "" : "s"}`;
+
   let res = "";
   if (days > 0) {
-    res += `${pluralize(days, "day")} `;
+    res += `${dayString} `;
   }
   if (hours > 0 || (Settings.ShowMiddleNullTimeUnit && res != "")) {
-    res += `${pluralize(hours, "hour")} `;
+    res += `${hourString} `;
   }
   if (minutes > 0 || (Settings.ShowMiddleNullTimeUnit && res != "")) {
-    res += `${pluralize(minutes, "minute")} `;
+    res += `${minuteString} `;
   }
-  res += `${seconds} second${!showMilli && secTruncMinutes === 1 ? "" : "s"}`;
+  res += `${seconds}${compact ? "" : " "}${secondString}`;
 
   return negFlag ? `-(${res})` : res;
 }
