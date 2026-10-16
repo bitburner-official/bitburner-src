@@ -6691,7 +6691,7 @@ interface Fragment {
 /** @public */
 interface ActiveFragment extends Fragment {
   /**
-   * The highest effective(including server core bonus) number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
+   * The highest effective (including server core bonus) number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
    *
    * This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
    */
