@@ -171,8 +171,7 @@ You can see the currently stasis-linked servers with `ns.dnet.getStasisLinkedSer
 
 Installing backdoors on darknet servers can grant the ability to not only connect to that server through the terminal, but also `ns.exec()` to launch scripts on that server remotely at any distance. This is a huge benefit on a network that has no guarantee for a direct connection at any given moment.
 
-However, convenience can sometimes come with its own drawbacks, and backdoors have one such on the darknet: Instability.
-Instability changes the behavior of authentications, scaling with every existing backdoor on the darknet(with some leeway). While stasis links do apply backdoors to their servers, stasis linked servers won't count towards penalty calculations and can be used without worry.
+However, installing backdoors can also have a significant drawback. "Instability" changes the behavior of authentications, scaling with every existing backdoor on the darknet(with some leeway). While stasis links do apply backdoors to their servers, stasis linked servers won't count towards penalty calculations and can be used without worry.
 
 You can see the darknet's current instability penalty values with `ns.dnet.getDarknetInstability()`.
 
