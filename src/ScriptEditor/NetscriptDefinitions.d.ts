@@ -4799,7 +4799,7 @@ export interface Darknet {
   /**
    * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using {@link Darknet.memoryReallocation | memoryReallocation()}.
    *
-   * Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
+   * Unlike {@link Darknet.memoryReallocation | memoryReallocation()}, getBlockedRam() can be evaluated regardless of distance or session held.
    *
    * @remarks
    * RAM cost: 0 GB
