@@ -81,7 +81,7 @@ This technique is sometimes used to sacrifice a new device that appears on the n
 
 Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using [memoryReallocation()](./bitburner.darknet.memoryreallocation.md)<!-- -->.
 
-Unlike reallocation itself, blocked RAM can be evaluated regardless of distance or session held.
+Unlike [memoryReallocation()](./bitburner.darknet.memoryreallocation.md)<!-- -->, getBlockedRam() can be evaluated regardless of distance or session held.
 
 
 </td></tr>
@@ -183,7 +183,7 @@ The speed of capture scales with the number of threads used. See [getHeartbleedT
 
 </td><td>
 
-Attempts to move a target server to other parts of the darknet, by overloading the connections between it and the current server. Continued attempts accrue charge on the target server, which results in the target's migration when charge reaches 100%. The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
+Attempts to move a target server to other parts of the darknet, by overloading the connections between it and the current server. Continued attempts accrue charge on the target server, which causes the server to move when charge reaches 100%. The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
 
 The amount of charge gained scales with threads and charisma level.
 
