@@ -379,7 +379,7 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
       backgroundColor: theme.colors.cha,
     },
     libertyBlack: {
-      backgroundColor: theme.colors.success,
+      backgroundColor: theme.palette.success.main,
     },
     northLiberty: {
       width: "2%",
@@ -474,7 +474,7 @@ export const boardStyles = makeStyles<unknown, Size | "background">({ uniqId: "b
       margin: "10px",
       borderWidth: "1px",
       borderStyle: "solid",
-      borderColor: theme.colors.success,
+      borderColor: theme.palette.success.main,
       width: "320px",
     },
     board: {
@@ -520,7 +520,7 @@ export const boardStyles = makeStyles<unknown, Size | "background">({ uniqId: "b
     buttonHighlight: {
       borderStyle: "solid",
       borderWidth: "8px",
-      borderColor: theme.colors.success,
+      borderColor: theme.palette.success.main,
       padding: "0 12px",
       width: "200px",
       animation: `${fadeLoop} 600ms ${theme.transitions.easing.easeInOut} infinite alternate`,
@@ -612,7 +612,7 @@ export const boardStyles = makeStyles<unknown, Size | "background">({ uniqId: "b
       borderBottom: "none",
       padding: 0,
       margin: 0,
-      color: theme.colors.success,
+      color: theme.palette.success.main,
     },
     cellBottomPadding: {
       paddingBottom: "20px",

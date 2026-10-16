@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
     cursor: "pointer",
   },
   currentCity: {
-    color: theme.colors.disabled,
+    color: theme.palette.action.disabled,
     lineHeight: "1em",
     whiteSpace: "pre",
   },
