@@ -9,7 +9,7 @@ Queue a toast (bottom-right notification).
 **Signature:**
 
 ```typescript
-toast(msg: string | number, variant?: ToastVariant, duration?: number | null): void;
+toast(msg: string, variant?: ToastVariant, duration?: number | null): void;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ msg
 
 </td><td>
 
-string \| number
+string
 
 
 </td><td>
