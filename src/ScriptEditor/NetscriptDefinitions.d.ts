@@ -6703,7 +6703,7 @@ interface ActiveFragment extends Fragment {
    *
    * `numCharge += threadsUsed / highestCharge`
    *
-   * If the current threads used is greater than highestCharge then for this once the updated numCharge can be shown as:
+   * If the current threads used is greater than highestCharge, then the updated numCharge can be shown as:
    *
    * `numCharge = (numCharge * highestCharge) / threadsUsed + 1`
    *
