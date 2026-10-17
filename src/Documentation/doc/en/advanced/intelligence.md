@@ -7,11 +7,58 @@ It never gets reset back to 1.
 However, gaining Intelligence experience is extremely slow.
 It is a stat that gradually builds up as you continue to play the game.
 
-Intelligence will boost your production for many actions in the game, including:
+Intelligence will provide varying bonuses to many different parts of game, which will be categorized below.
 
-- [Hacking](../basic/hacking.md)
-- [Infiltration](../basic/infiltration.md)
-- [Crime](../basic/crimes.md) success rate
-- [Bladeburner](bladeburners.md) actions
-- [Reputation](../basic/reputation.md) gain for [Companies](../basic/companies.md) & [Factions](../basic/factions.md)
-- [Augmentation](../basic/augmentations.md) [Grafting](grafting.md) speed
+### Bonuses
+
+**Hacking**
+
+- hack() speed
+- hack() success chance
+
+**Crime**
+
+- Crime success chance
+
+**share()**
+
+- Effective thread count
+
+**Programs**
+
+- Program creation speed
+- Effective Hacking skill level required
+
+**Faction Reputation Work**
+
+- Effective skill level
+- Reputation bonus
+
+**Company Work**
+
+- Reputation bonus
+
+**Infiltrations**
+
+- Infiltration difficulty
+- Infiltration rewards
+
+**Bladeburner**
+
+- Action success chance
+- Field Analysis Effectiveness
+
+**Grafting**
+
+- Grafting speed
+
+**Sleeves**
+
+- Shock Recovery speed (per sleeve)
+- Synchronization speed (per sleeve)
+
+**Darknet**
+
+- Authentication speed
+- Heartbleed speed
+- [REDACTED] speed
