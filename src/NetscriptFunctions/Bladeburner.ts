@@ -32,11 +32,13 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     return;
   };
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
-    const apiAccess = canAccessBitNodeFeature(7) || canAccessBitNodeFeature(6);
-    if (!apiAccess) {
+    // If player can't access BN6 or BN7
+    if (!canAccessBitNodeFeature(7) && !canAccessBitNodeFeature(6)) {
       throw helpers.errorMessage(
         ctx,
-        `You have not unlocked ${knowAboutBitverse() ? "the Bladeburner API" : "this special feature"}.`,
+        `This function requires ${
+          knowAboutBitverse() ? "Source-File 6 or Source-File 7" : "an endgame power up"
+        } to run. It will be very obvious when and how you can obtain it.`,
         "API ACCESS",
       );
     }

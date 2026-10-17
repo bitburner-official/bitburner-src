@@ -440,9 +440,9 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
-      `This singularity function requires ${
-        knowAboutBitverse() ? "Source-File 4" : "an endgame feature"
-      } to run. A power up you obtain later in the game. It will be very obvious when and how you can obtain it.`,
+      `This function requires ${
+        knowAboutBitverse() ? "Source-File 4" : "an endgame power up"
+      } to run. It will be very obvious when and how you can obtain it.`,
       "API ACCESS",
     );
   }
