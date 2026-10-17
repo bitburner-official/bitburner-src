@@ -30,7 +30,7 @@ In some cases, the only way to get to deeper parts of the darknet is to hitch a 
 - `ns.dnet.memoryReallocation(hostname)`: lets you unlock blocked-off RAM on a target server. If a server has blocked RAM, the amount can be obtained in the server details above or through `ns.dnet.getBlockedRam(hostname)`.
 - `ns.dnet.openCache(fileName)`: lets you open `.cache` files on darknet servers, the contents of which can be extremely valuable.
 - `ns.dnet.phishingAttack()`: lets you launch attacks that generate money or sometimes `.cache` files, scaling off your charisma and crime success stat.
-- `ns.dnet.setStasisLink(boolean)`: lets you lock a darknet server in its position and install a backdoor. This prevents it from moving or going offline, and due to the backdoor also lets you `ns.exec()` scripts to the server at a distance.
+- `ns.dnet.setStasisLink(boolean)`: lets you lock a darknet server in its position. This prevents it from moving or going offline, and also lets you `ns.exec()` scripts to the server at a distance.
 - `ns.dnet.induceServerMigration(hostname)`: can be used to target a connected server and, when used enough, will force it to move to a new location on the darknet.
 - `ns.dnet.promoteStock(stockSymbol)`: increases the volatility of the targeted stock via propaganda, which can increase the potential profits from trading it.
 
