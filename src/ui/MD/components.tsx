@@ -125,7 +125,7 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
         align={align}
         sx={{
           fontWeight: "bold",
-          // In the API docs, ReactMarkdown nests the text of each <th> inside 
+          // In the API docs, ReactMarkdown nests the text of each <th> inside
           // a <p>, so we need to target the fontWeight of the <p> as well.
           "& p": { fontWeight: "inherit", mb: 0 },
         }}
