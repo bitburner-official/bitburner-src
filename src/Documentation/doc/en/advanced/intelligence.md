@@ -29,9 +29,8 @@ Intelligence will provide varying bonuses to many different parts of game, which
 - Program creation speed
 - Effective Hacking skill level required
 
-**Faction Reputation Work**
+**Faction & Company Reputation Work**
 
-- Effective skill level
 - Reputation bonus
 
 **Company Work**
