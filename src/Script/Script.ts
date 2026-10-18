@@ -54,9 +54,10 @@ export class Script extends ContentFile {
     this.ramUsage = null;
     this.ramUsageEntries.length = 0;
     this.ramCalculationError = null;
-    // Early return if there's already no URL
-    if (!this.mod) return;
-    this.mod = null;
+    // Clear the module, which will force a recompile on next run
+    if (this.mod) {
+      this.mod = null;
+    }
     for (const dependent of this.dependents) dependent.invalidateModule();
     this.dependents.clear();
     // This will be mutated in compile(), but is immutable after that.
