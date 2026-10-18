@@ -405,8 +405,8 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
       favorTooltip: (
         <>
-          You will have <Favor favor={addRepToFavor(faction.favor, faction.playerReputation)} /> faction favor after installing
-          an Augmentation.
+          You will have <Favor favor={addRepToFavor(faction.favor, faction.playerReputation)} /> faction favor after
+          installing an Augmentation.
           <Typography style={{ fontSize: "2rem" }}>r = Total faction reputation</Typography>
           <MathNotationOutput notation={MathNotation.RepToFavor} />
         </>
@@ -463,8 +463,8 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
       favorTooltip: (
         <>
-          You will have <Favor favor={addRepToFavor(comp.favor, companyRep)} /> company favor after installing
-          an Augmentation.
+          You will have <Favor favor={addRepToFavor(comp.favor, companyRep)} /> company favor after installing an
+          Augmentation.
           <Typography style={{ fontSize: "2rem" }}>r = Total copmany reputation</Typography>
           <MathNotationOutput notation={MathNotation.RepToFavor} />
         </>
@@ -506,7 +506,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       <Typography>{workInfo.favorTooltip}</Typography>
     ) : (
       workInfo.favorTooltip || <></>
-    )
+    );
 
   return (
     <Container
