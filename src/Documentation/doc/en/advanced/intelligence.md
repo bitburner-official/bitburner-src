@@ -46,7 +46,7 @@ Intelligence will provide varying bonuses to many different parts of game, which
 **Bladeburner**
 
 - Action success chance
-- Field Analysis Effectiveness
+- Field Analysis effectiveness
 
 **Grafting**
 
