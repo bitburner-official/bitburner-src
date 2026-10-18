@@ -4,6 +4,8 @@
 
 ## Fragment.type property
 
+An enumerated value for the fragment's bonus type.
+
 **Signature:**
 
 ```typescript

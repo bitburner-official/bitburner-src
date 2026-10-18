@@ -4,6 +4,8 @@
 
 ## Fragment.limit property
 
+The total amount of times fragments with this ID can be placed.
+
 **Signature:**
 
 ```typescript

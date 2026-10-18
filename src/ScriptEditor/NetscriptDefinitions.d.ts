@@ -6680,11 +6680,29 @@ type FragmentType = _ValueOf<FragmentEnumType>;
 
 /** @public */
 interface Fragment {
+  /**
+   * The fragment's ID.
+   */
   id: number;
+  /**
+   * A two-dimensional array representing with `true` the slots a fragment will obstruct, with no rotations applied.
+   */
   shape: boolean[][];
+  /**
+   * An enumerated value for the fragment's bonus type.
+   */
   type: FragmentType;
+  /**
+   * A direct multiplier influencing the fragment's final chargedEffect value.
+   */
   power: number;
+  /**
+   * The total amount of times fragments with this ID can be placed.
+   */
   limit: number;
+  /**
+   * The fragment's effect description.
+   */
   effect: string;
 }
 

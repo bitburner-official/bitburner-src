@@ -49,6 +49,8 @@ string
 
 </td><td>
 
+The fragment's effect description.
+
 
 </td></tr>
 <tr><td>
@@ -65,6 +67,8 @@ number
 
 
 </td><td>
+
+The fragment's ID.
 
 
 </td></tr>
@@ -83,6 +87,8 @@ number
 
 </td><td>
 
+The total amount of times fragments with this ID can be placed.
+
 
 </td></tr>
 <tr><td>
@@ -99,6 +105,8 @@ number
 
 
 </td><td>
+
+A direct multiplier influencing the fragment's final chargedEffect value.
 
 
 </td></tr>
@@ -117,6 +125,8 @@ boolean\[\]\[\]
 
 </td><td>
 
+A two-dimensional array representing with `true` the slots a fragment will obstruct, with no rotations applied.
+
 
 </td></tr>
 <tr><td>
@@ -133,6 +143,8 @@ boolean\[\]\[\]
 
 
 </td><td>
+
+An enumerated value for the fragment's bonus type.
 
 
 </td></tr>

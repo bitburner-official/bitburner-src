@@ -4,6 +4,8 @@
 
 ## Fragment.id property
 
+The fragment's ID.
+
 **Signature:**
 
 ```typescript
