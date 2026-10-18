@@ -13,7 +13,7 @@ Intelligence will provide varying bonuses to many different parts of game, which
 
 **Hacking**
 
-- hack() speed
+- hack(), grow(), and weaken() speed
 - hack() success chance
 
 **Crime**
