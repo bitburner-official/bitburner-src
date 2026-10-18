@@ -39,7 +39,7 @@ Intelligence will provide varying bonuses to many different parts of game, which
 
 **Infiltrations**
 
-- Infiltration difficulty
+- Infiltration difficulty reduction
 - Infiltration rewards
 
 **Bladeburner**
