@@ -60,4 +60,5 @@ Intelligence will provide varying bonuses to many different parts of game, which
 
 - Authentication speed
 - Heartbleed speed
-- [REDACTED] speed
+- labradar() speed
+- labreport() speed
