@@ -29,6 +29,10 @@ import { isCompanyWork } from "../Work/CompanyWork";
 import { Router } from "./GameRoot";
 import { Page } from "./Router";
 import { formatExp, formatPercent } from "./formatNumber";
+import { Favor } from "./React/Favor";
+import { addRepToFavor } from "../Faction/formulas/favor";
+import MathNotation from "../Documentation/data/MathNotation.json";
+import { MathNotationOutput } from "../Documentation/ui/MathNotationOutput";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
@@ -40,6 +44,7 @@ interface IWorkInfo {
   title: string | React.ReactElement;
 
   description?: string | React.ReactElement;
+  favorTooltip?: string | React.ReactElement;
   gains?: React.ReactElement[];
   progress?: {
     elapsed?: number;
@@ -398,6 +403,14 @@ export function WorkInProgressRoot(): React.ReactElement {
           <ReputationRate reputation={Player.currentWork.getReputationRate() * CYCLES_PER_SEC} />)
         </>
       ),
+      favorTooltip: (
+        <>
+          You will have <Favor favor={addRepToFavor(faction.favor, faction.playerReputation)} /> faction favor after installing
+          an Augmentation.
+          <Typography style={{ fontSize: "2rem" }}>r = Total faction reputation</Typography>
+          <MathNotationOutput notation={MathNotation.RepToFavor} />
+        </>
+      ),
       gains: ExpRows(exp),
       progress: {
         elapsed: Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle,
@@ -448,6 +461,14 @@ export function WorkInProgressRoot(): React.ReactElement {
           Current Company Reputation: <Reputation reputation={companyRep} />
         </>
       ),
+      favorTooltip: (
+        <>
+          You will have <Favor favor={addRepToFavor(comp.favor, companyRep)} /> company favor after installing
+          an Augmentation.
+          <Typography style={{ fontSize: "2rem" }}>r = Total copmany reputation</Typography>
+          <MathNotationOutput notation={MathNotation.RepToFavor} />
+        </>
+      ),
       gains: [
         <StatsRow key="money" name="Money" color={Settings.theme.money}>
           <Typography>
@@ -480,6 +501,13 @@ export function WorkInProgressRoot(): React.ReactElement {
       workInfo.stopTooltip || <></>
     );
 
+  const favorTooltipInfo =
+    typeof workInfo.favorTooltip === "string" ? (
+      <Typography>{workInfo.favorTooltip}</Typography>
+    ) : (
+      workInfo.favorTooltip || <></>
+    )
+
   return (
     <Container
       maxWidth="md"
@@ -487,7 +515,13 @@ export function WorkInProgressRoot(): React.ReactElement {
     >
       <Paper sx={{ p: 1, mb: 1 }}>
         <Typography variant="h6">{workInfo.title}</Typography>
-        <Typography>{workInfo.description}</Typography>
+        {workInfo.favorTooltip ? (
+          <Tooltip title={favorTooltipInfo}>
+            <Typography>{workInfo.description}</Typography>
+          </Tooltip>
+        ) : (
+          <Typography>{workInfo.description}</Typography>
+        )}
         {workInfo.gains && (
           <Table sx={{ mt: 1 }}>
             <TableBody>{workInfo.gains}</TableBody>
