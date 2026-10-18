@@ -117,7 +117,7 @@ number
 
 </td><td>
 
-The amount of 90-degree turns applied to the fragment's placement.
+The amount of clockwise 90-degree turns applied to the fragment's placement.
 
 
 </td></tr>
