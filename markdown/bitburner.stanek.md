@@ -67,7 +67,7 @@ Check if fragment can be placed at specified location.
 
 Charge a fragment, increasing its power.
 
-The amount of charge gained can vary based on the fragment's current values, as well as threads used and cores active on the server charging.
+Charge is based on the cumulative effective threads used to charge across all cycles, divided by the (current) single highest thread count.
 
 See [ActiveFragment](./bitburner.activefragment.md) for additional information.
 

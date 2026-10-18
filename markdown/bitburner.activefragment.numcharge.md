@@ -4,17 +4,7 @@
 
 ## ActiveFragment.numCharge property
 
-The current charge value in play for this fragment. The amount of numCharge gained per charge cycle can vary depending on the current threads used in relation to the fragment's current highestCharge.
-
-If the current threads used is less than or equal to highestCharge, then the updated numCharge can be shown as:
-
-`numCharge += threadsUsed / highestCharge`
-
-If the current threads used is greater than highestCharge, then the updated numCharge can be shown as:
-
-`numCharge = (numCharge * highestCharge) / threadsUsed + 1`
-
-Afterwards highestCharge will be updated based on threadsUsed in the action.
+The current charge value in play for this fragment. This is the cumulative effective threads used to charge across all cycles, divided by the (current) highestCharge.
 
 This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
 
