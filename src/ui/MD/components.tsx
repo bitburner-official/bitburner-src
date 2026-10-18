@@ -120,7 +120,16 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
         backgroundColor: "background.paper",
       }}
     >
-      <Typography component="div" align={align} sx={{ fontWeight: "bold", "& p": { fontWeight: "inherit", mb: 0 } }}>
+      <Typography
+        component="div"
+        align={align}
+        sx={{
+          fontWeight: "bold",
+          // In the API docs, ReactMarkdown nests the text of each <th> inside 
+          // a <p>, so we need to target the fontWeight of the <p> as well.
+          "& p": { fontWeight: "inherit", mb: 0 },
+        }}
+      >
         {props.children}
       </Typography>
     </TableCell>
