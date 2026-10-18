@@ -33,10 +33,6 @@ Intelligence will provide varying bonuses to many different parts of game, which
 
 - Reputation bonus
 
-**Company Work**
-
-- Reputation bonus
-
 **Infiltrations**
 
 - Infiltration difficulty reduction
