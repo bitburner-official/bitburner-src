@@ -494,7 +494,7 @@ export function WorkInProgressRoot(): React.ReactElement {
     return <></>;
   }
 
-  const tooltipInfo =
+  const stopTooltipInfo =
     typeof workInfo.stopTooltip === "string" ? (
       <Typography>{workInfo.stopTooltip}</Typography>
     ) : (
@@ -558,7 +558,7 @@ export function WorkInProgressRoot(): React.ReactElement {
 
         <Box display="grid" sx={{ gridTemplateColumns: `repeat(${Object.keys(workInfo.buttons).length}, 1fr)` }}>
           {workInfo.stopTooltip ? (
-            <Tooltip title={tooltipInfo}>
+            <Tooltip title={stopTooltipInfo}>
               <Button onClick={workInfo.buttons.cancel}>{workInfo.stopText}</Button>
             </Tooltip>
           ) : (
