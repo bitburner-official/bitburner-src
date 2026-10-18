@@ -31,8 +31,6 @@ import { Page } from "./Router";
 import { formatExp, formatPercent } from "./formatNumber";
 import { Favor } from "./React/Favor";
 import { addRepToFavor } from "../Faction/formulas/favor";
-import MathNotation from "../Documentation/data/MathNotation.json";
-import { MathNotationOutput } from "../Documentation/ui/MathNotationOutput";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
@@ -407,8 +405,6 @@ export function WorkInProgressRoot(): React.ReactElement {
         <>
           You will have <Favor favor={addRepToFavor(faction.favor, faction.playerReputation)} /> faction favor after
           installing an Augmentation.
-          <Typography style={{ fontSize: "2rem" }}>r = Total faction reputation</Typography>
-          <MathNotationOutput notation={MathNotation.RepToFavor} />
         </>
       ),
       gains: ExpRows(exp),
@@ -465,8 +461,6 @@ export function WorkInProgressRoot(): React.ReactElement {
         <>
           You will have <Favor favor={addRepToFavor(comp.favor, companyRep)} /> company favor after installing an
           Augmentation.
-          <Typography style={{ fontSize: "2rem" }}>r = Total company reputation</Typography>
-          <MathNotationOutput notation={MathNotation.RepToFavor} />
         </>
       ),
       gains: [
