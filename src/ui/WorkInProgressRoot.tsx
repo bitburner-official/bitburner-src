@@ -465,7 +465,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         <>
           You will have <Favor favor={addRepToFavor(comp.favor, companyRep)} /> company favor after installing an
           Augmentation.
-          <Typography style={{ fontSize: "2rem" }}>r = Total copmany reputation</Typography>
+          <Typography style={{ fontSize: "2rem" }}>r = Total company reputation</Typography>
           <MathNotationOutput notation={MathNotation.RepToFavor} />
         </>
       ),
