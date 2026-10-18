@@ -22,7 +22,7 @@ Intelligence will provide varying bonuses to many different parts of game, which
 
 **share()**
 
-- Effective thread count
+- Effective thread count multiplier
 
 **Programs**
 
