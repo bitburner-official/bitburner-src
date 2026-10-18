@@ -1,6 +1,7 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { GangMember } from "../GangMember";
 import { GangMemberTask } from "../GangMemberTask";
+import { GangConstants } from "../data/Constants";
 
 export interface FormulaGang {
   respect: number;
@@ -28,6 +29,11 @@ export function calculateRespectGain(gang: FormulaGang, member: GangMember, task
   if (isNaN(territoryMult) || territoryMult <= 0) return 0;
   const respectMult = calculateWantedPenalty(gang);
   return Math.pow(11 * task.baseRespect * statWeight * territoryMult * respectMult, territoryPenalty);
+}
+
+export function calculateReputationGain(respectGain: number, favor: number, faction_rep_mult: number): number {
+  const favorMult = 1 + favor / 100;
+  return (faction_rep_mult * respectGain * favorMult) / GangConstants.GangRespectToReputationRatio;
 }
 
 export function calculateWantedLevelGain(gang: FormulaGang, member: GangMember, task: GangMemberTask): number {
