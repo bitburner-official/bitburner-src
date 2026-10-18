@@ -1,11 +1,16 @@
 import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
-import { CityName, CompletedProgramName, FactionWorkType, LocationName } from "@enums";
+import { AugmentationName, CityName, CompletedProgramName, FactionWorkType, LocationName } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { getAugCost, installAugmentations, soaAugmentationNames } from "../Augmentation/AugmentationHelpers";
+import {
+  getAugCost,
+  getThreadAugmentMults,
+  installAugmentations,
+  soaAugmentationNames,
+} from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
@@ -164,7 +169,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return Object.assign({}, aug.mults);
+      const mults = aug.name === AugmentationName.TheThread ? getThreadAugmentMults() : aug.mults;
+      return Object.assign({}, mults);
     },
     purchaseAugmentation: (ctx, _facName, _augName) => {
       helpers.checkSingularityAccess(ctx);
