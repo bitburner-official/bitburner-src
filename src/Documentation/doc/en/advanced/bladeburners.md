@@ -49,7 +49,7 @@ There are 4 types of action you can take:
 
 ### General actions
 
-Any exp that a person (whether you or a sleeve) gains from doing a General action is boosted by their exp multipliers, but not by the exp bonus from the Hyperdrive skill.
+Note: Any exp that a person (whether you or a sleeve) gains from doing a General action is boosted by their exp multipliers, but not by the exp bonus from the Hyperdrive skill.
 
 #### Training
 
@@ -93,15 +93,19 @@ Failing them causes you to lose health, and in the case of Operations and Black 
 
 Action time is reduced by:
 
-- The Overclock skill
-- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills
+- The Overclock skill.
+- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills.
+
+```javascript
+0.5 * (Math.pow(effAgility, 0.04) + Math.pow(effDexterity, 0.035) + effAgility / 10000 + effDexterity / 10000);
+```
 
 #### Action success chance
 
 Your success chance in Contracts, Operations and Black Ops is based on:
 
 - Team size (applies to Operations and Black Ops only). The multiplier is `Math.pow(team_count + 1, 0.05)`.
-- How far the chaos level in your current city is above 50 (does not apply to Black Ops). If your chaos is 50 or less, your success chance is not affected. After 50 chaos, your success chance is divided by `1 + city chaos - 50`.
+- How far the chaos level in your current city is above 50 (does not apply to Black Ops). If your chaos is above 50, your success chance is divided by `1 + city chaos - 50`.
 - How much the Synthoid population in your current city is less than 1bn (does not apply to Black Ops). The multiplier is `Math.pow(population / 1,000,000,000, 0.7)`.
 - How far your stamina is below 50%. The penalty scales linearly: `success_chance * Math.max(1, current_stamina / (0.5 * max_stamina))`.
 - The inherent difficulty of the action.
@@ -126,11 +130,22 @@ Your max stamina increases with:
 - Training, which gives +0.04 max stamina, multiplied by your bonus from Cyber's Edge
 - The Bladeburner Max Stamina multiplier
 
+The base max stamina calculation before Training is: `Math.pow(effective_agility, 0.8) * cybers_edge_multiplier * player_max_stamina_multiplier`
+
 Your stamina gain rate increases with:
 
 - Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
 - Your max stamina
 - The Bladeburner Stamina Gain multiplier
+
+The calculation is:
+
+```javascript
+Math.pow(effective_agility, 0.17) *
+  (max_stamina / 70000 + 0.0085) *
+  cybers_edge_multiplier *
+  player_max_stamina_multiplier;
+```
 
 Stamina can also be restored by the Hyperbolic Regeneration Chamber action.
 
