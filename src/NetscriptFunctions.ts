@@ -412,17 +412,18 @@ export const ns: InternalAPI<NSFull> = {
       throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
     }
     const str = helpers.argsToString(args);
+    const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
     const color = helpers.getTextColor(str);
     switch (color) {
       case "error":
       case "success":
       case "warn":
       case "info": {
-        Terminal[color](`${ctx.workerScript.name}: ${str}`);
+        Terminal[color](`${ctx.workerScript.name}: ${str}`, stdOut);
         break;
       }
       case "primary": {
-        Terminal.print(`${ctx.workerScript.name}: ${str}`);
+        Terminal.print(`${ctx.workerScript.name}: ${str}`, stdOut);
         break;
       }
     }
@@ -430,17 +431,18 @@ export const ns: InternalAPI<NSFull> = {
   tprintf: (ctx, _format, ...args) => {
     const format = helpers.string(ctx, "format", _format);
     const str = vsprintf(format, args);
+    const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
     const color = helpers.getTextColor(str);
     switch (color) {
       case "error":
       case "success":
       case "warn":
       case "info": {
-        Terminal[color](`${str}`);
+        Terminal[color](`${str}`, stdOut);
         break;
       }
       case "primary": {
-        Terminal.print(`${str}`);
+        Terminal.print(`${str}`, stdOut);
         break;
       }
     }
@@ -1459,8 +1461,8 @@ export const ns: InternalAPI<NSFull> = {
     }
     return getRamCost(name.split("."), true);
   },
-  tprintRaw: (_, value) => {
-    Terminal.printRaw(wrapUserNode(value));
+  tprintRaw: (ctx, value) => {
+    Terminal.printRaw(wrapUserNode(value), ctx.workerScript.scriptRef.terminalStdOut);
   },
   printRaw: (ctx, value) => {
     ctx.workerScript.print(wrapUserNode(value));
@@ -1475,6 +1477,13 @@ export const ns: InternalAPI<NSFull> = {
     //We validated the path as ScriptFilePath and made sure script is not null
     //Script **must** be a script at this point
     return compile(script as Script, server.scripts);
+  },
+  getStdin: (ctx) => {
+    const stdin = ctx.workerScript.scriptRef.stdin;
+    if (!stdin) {
+      return null;
+    }
+    return stdin.handle;
   },
   flags: (ctx, ...args) => Flags(ctx, false)(...args),
   heart: { break: () => Player.karma },
