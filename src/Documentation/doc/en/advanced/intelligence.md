@@ -7,7 +7,7 @@ It never gets reset back to 1.
 However, gaining Intelligence experience is extremely slow.
 It is a stat that gradually builds up as you continue to play the game.
 
-Intelligence will provide varying bonuses to many different parts of game, which will be categorized below.
+Intelligence will provide varying bonuses to many different parts of the game. Where those bonuses apply, as well as where Intelligence is gained will be categorized below.
 
 ### Bonuses
 
@@ -58,3 +58,45 @@ Intelligence will provide varying bonuses to many different parts of game, which
 - Heartbleed speed
 - labradar() speed
 - labreport() speed
+
+### Sources
+
+**Crime**
+
+- Rob Store
+- Larceny
+- Bond Forgery
+- Grand Theft Auto
+- Kidnap
+- Assassination
+- Heist
+
+**Singularity**
+
+- manualHack()
+- purchaseAugmentation()
+- installAugmentations()
+- goToLocation()
+- travelToCity()
+- purchaseTor()
+- purchaseProgram()
+- upgradeHomeCores()
+- upgradeHomeRam()
+- joinFaction()
+
+**Bladeburner**
+
+- Contracts
+- Operations
+- Black Ops
+
+**Work**
+
+- Program creation
+- Grafting
+- Studying
+
+**Misc**
+
+- Terminal hack command
+- Destroying a bitnode
