@@ -104,7 +104,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                       <>
                         <Typography>
                           You will have <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
-                          favor after installing an Augmentation.
+                          favor after installing Augmentations.
                         </Typography>
                         <Typography style={{ fontSize: "2rem" }}>r = Total company reputation</Typography>
                         <MathNotationOutput notation={MathNotation.RepToFavor} />
@@ -122,7 +122,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                       <>
                         <Typography>
                           Company favor increases the rate at which you earn reputation for this company by 1% per
-                          favor. Company favor is gained whenever you install an Augmentation. The amount
+                          favor. Company favor is gained whenever you install Augmentations. The amount
                           of favor you gain depends on the total amount of reputation you earned with this company
                           across all resets.
                         </Typography>
