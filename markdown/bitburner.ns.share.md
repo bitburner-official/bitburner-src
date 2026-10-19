@@ -6,7 +6,7 @@
 
 Share RAM with factions to multiply the reputation gain rate of faction work.
 
-The RAM cost of ns.share() represents the amount of memory you're loaning out. To increase the power of share, run more threads of scripts that await ns.share(). A server's cores bonus effectively multiplies its thread count.
+The RAM cost of ns.share() represents the amount of memory you're loaning out. To increase the power of share, run more threads of scripts that await ns.share(). A server's cores boost its effective thread count.
 
 Share power increases for each thread of share running on your server network, but the effect scales logarithmically.
 

@@ -1055,7 +1055,7 @@ Share power has a multiplicative effect on the reputation gain rate of faction w
 
 The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
 
-Share power increases for each thread of share running on your server network, but the effect scales logarithmically. A server's cores bonus effectively increases its thread count.
+Share power increases for each thread of share running on your server network, but the effect scales logarithmically. A server's cores boost its effective thread count.
 
 The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
 
@@ -1545,7 +1545,7 @@ Returns a boolean denoting whether or not the specified server exists.
 
 Share RAM with factions to multiply the reputation gain rate of faction work.
 
-The RAM cost of ns.share() represents the amount of memory you're loaning out. To increase the power of share, run more threads of scripts that await ns.share(). A server's cores bonus effectively multiplies its thread count.
+The RAM cost of ns.share() represents the amount of memory you're loaning out. To increase the power of share, run more threads of scripts that await ns.share(). A server's cores boost its effective thread count.
 
 Share power increases for each thread of share running on your server network, but the effect scales logarithmically.
 
