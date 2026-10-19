@@ -59,7 +59,7 @@ Note: Any exp that a person (whether you or a sleeve) gains from doing a General
 
 #### Field Analysis
 
-- Improves your estimate of the Synthoid population in the current city. This increases the precision of your success chance estimates. The degree of the improvement scales with your hacking and charisma skills.
+- Improves your estimate of the Synthoid population in the current city by a percentage of the actual population. This increases the precision of your success chance estimates. The degree of the improvement scales with your hacking and charisma skills.
 - Gives hacking and charisma exp.
 - Increases your rank.
 
@@ -88,6 +88,16 @@ Note: Any exp that a person (whether you or a sleeve) gains from doing a General
 Contracts, Operations and Black Ops all cost stamina.
 
 Failing them causes you to lose health, and in the case of Operations and Black Ops, rank. Black Ops are particularly punishing to fail.
+
+#### Effects on chaos
+
+- The Bounty Hunter and Retirement Contracts affect chaos by a flat amount.
+- The Sting Opeation, Raid, Stealth Retirement Operation and Assassination Operations affect chaos by a percentage.
+
+#### Effects on population
+
+- The Bounty Hunter and Retirement Contracts, and the Assassination Operation reduce the population by 1.
+- The Sting, Raid and Stealth Retirement Operations reduce population by a percentage.
 
 #### Action time
 
