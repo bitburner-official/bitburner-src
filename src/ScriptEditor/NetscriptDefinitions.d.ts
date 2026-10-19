@@ -4562,7 +4562,7 @@ interface HeartbleedOptions {
 /**
  * Instability penalties caused by excessive backdoor installations on the darknet.
  *
- * Backdoors applied by stasis links are not factored for penalty calculations.
+ * Backdoors on stationary servers are not factored for penalty calculations.
  * @public
  */
 interface DarknetInstability {
@@ -4686,9 +4686,9 @@ export interface Darknet {
   probe(returnByIP?: boolean): string[];
 
   /**
-   * Applies or removes a stasis link to the script's current server. Applying will install a backdoor on the server, and removing will uninstall a backdoor even if one existed before receiving a stasis link.
+   * Applies or removes a stasis link to the script's current server.
    *
-   * Due to having a backdoor installed, this will allow you to {@link NS.exec | exec()} to the server remotely, even if it is
+   * This will allow you to {@link NS.exec | exec()} to the server remotely, even if it is
    * not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
    *
    * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
@@ -4697,10 +4697,14 @@ export interface Darknet {
    * There is a maximum number of stasis links that can be applied globally, which can be seen using {@link Darknet.getStasisLinkLimit | getStasisLinkLimit()}.
    * This limit can be increased by finding special augmentations in the deep darknet.
    *
-   * Note that backdoors on stasis linked servers are excluded from {@link Darknet.getDarknetInstability | Darknet Instability} penalty calculations.
-   *
    * @remarks
    * RAM cost: 12 GB
+   *
+   * Stasis links utilize backdoors in order to allow the remote {@link NS.exec | exec()} and terminal connection.
+   * When links are applied or removed, a backdoor is also applied or removed regardless of a server's preexisting backdoor status.
+   *
+   * Since stationary server backdoors are excluded from {@link Darknet.getDarknetInstability | Darknet Instability} penalty calculations,
+   * and since backdoors backdoors are always removed when a stasis link is removed, this means stasis-links themselves will never be responsible for scaling Instability values.
    *
    * @param shouldLink - true to apply a stasis link, false to remove it. Optional. Defaults to true.
    * @returns A promise that resolves to a {@link DarknetResult} object.
@@ -4856,11 +4860,11 @@ export interface Darknet {
   /**
    * Gets the current instability penalties caused by excessive backdoor installations on the darknet.
    *
-   * Backdoors applied by stasis links are not factored for penalty calculations.
-   *
    * Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error.
    * @remarks
    * Ram cost: 0 GB
+   *
+   * Backdoors on stationary servers are excluded from penalty calculations.
    *
    * @returns An object containing the current instability penalty values.
    */

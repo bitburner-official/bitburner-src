@@ -4,15 +4,13 @@
 
 ## Darknet.setStasisLink() method
 
-Applies or removes a stasis link to the script's current server. Applying will install a backdoor on the server, and removing will uninstall a backdoor even if one existed before receiving a stasis link.
+Applies or removes a stasis link to the script's current server.
 
-Due to having a backdoor installed, this will allow you to [exec()](./bitburner.ns.exec.md) to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
+This will allow you to [exec()](./bitburner.ns.exec.md) to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
 
 Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
 
 There is a maximum number of stasis links that can be applied globally, which can be seen using [getStasisLinkLimit()](./bitburner.darknet.getstasislinklimit.md)<!-- -->. This limit can be increased by finding special augmentations in the deep darknet.
-
-Note that backdoors on stasis linked servers are excluded from [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalty calculations.
 
 **Signature:**
 
@@ -65,4 +63,8 @@ A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) objec
 ## Remarks
 
 RAM cost: 12 GB
+
+Stasis links utilize backdoors in order to allow the remote [exec()](./bitburner.ns.exec.md) and terminal connection. When links are applied or removed, a backdoor is also applied or removed regardless of a server's preexisting backdoor status.
+
+Since stationary server backdoors are excluded from [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalty calculations, and since backdoors backdoors are always removed when a stasis link is removed, this means stasis-links themselves will never be responsible for scaling Instability values.
 

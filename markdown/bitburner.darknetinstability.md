@@ -6,7 +6,7 @@
 
 Instability penalties caused by excessive backdoor installations on the darknet.
 
-Backdoors applied by stasis links are not factored for penalty calculations.
+Backdoors on stationary servers are not factored for penalty calculations.
 
 **Signature:**
 
