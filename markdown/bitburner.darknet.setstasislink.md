@@ -66,5 +66,5 @@ RAM cost: 12 GB
 
 Stasis links utilize backdoors in order to allow the remote [exec()](./bitburner.ns.exec.md) and terminal connection. When links are applied or removed, a backdoor is also applied or removed regardless of a server's preexisting backdoor status.
 
-Since stationary server backdoors are excluded from [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalty calculations, and since backdoors are always removed when a stasis link is removed, this means stasis-links themselves will never be responsible for scaling Instability values.
+Since stationary server backdoors are excluded from [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalty calculations, and since backdoors are always removed when a stasis link is removed, this means stasis links themselves will never be responsible for scaling Instability values.
 
