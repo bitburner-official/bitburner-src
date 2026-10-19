@@ -104,7 +104,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                       <>
                         <Typography>
                           You will have <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
-                          favor after installing Augmentations.
+                          favor after installing Augmentations
                         </Typography>
                         <Typography style={{ fontSize: "2rem" }}>r = Total company reputation</Typography>
                         <MathNotationOutput notation={MathNotation.RepToFavor} />

@@ -404,7 +404,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       favorTooltip: (
         <>
           You will have <Favor favor={addRepToFavor(faction.favor, faction.playerReputation)} /> faction favor after
-          installing an Augmentation.
+          installing an Augmentation
         </>
       ),
       gains: ExpRows(exp),
@@ -460,7 +460,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       favorTooltip: (
         <>
           You will have <Favor favor={addRepToFavor(comp.favor, companyRep)} /> company favor after installing an
-          Augmentation.
+          Augmentation
         </>
       ),
       gains: [
