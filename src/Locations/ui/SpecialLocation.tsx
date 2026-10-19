@@ -346,10 +346,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return (
         <>
           <Typography>
-            <i>
-              Allison "Mother" Stanek: Begone you filth! My gift must be the first modification that your body should
-              have!
-            </i>
+            <i>Allison "Mother" Stanek: Begone you filth! My gift must be the first modification to touch your body!</i>
           </Typography>
         </>
       );
