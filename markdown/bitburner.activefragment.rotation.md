@@ -4,7 +4,7 @@
 
 ## ActiveFragment.rotation property
 
-The amount of clockwise 90-degree turns applied to the fragment's placement.
+The integer number of clockwise 90-degree turns applied to the fragment's orientation.
 
 **Signature:**
 
