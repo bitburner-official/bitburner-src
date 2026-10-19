@@ -6693,7 +6693,7 @@ interface Fragment {
    */
   type: FragmentType;
   /**
-   * A direct multiplier influencing the fragment's final chargedEffect value.
+   * A fixed multiplier influencing the fragment's final chargedEffect value.
    */
   power: number;
   /**
