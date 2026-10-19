@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
     whiteSpace: "pre-wrap",
     overflowWrap: "anywhere",
     margin: theme.spacing(0),
-    color: theme.colors.success,
+    color: theme.palette.success.main,
     "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
   },
   error: {
