@@ -25,6 +25,8 @@ import { JobSummary } from "../../Company/ui/JobSummary";
 import { StatsTable } from "../../ui/React/StatsTable";
 import { JobListings } from "../../Company/ui/JobListings";
 import { addRepToFavor } from "../../Faction/formulas/favor";
+import { MathNotationOutput } from "../../Documentation/ui/MathNotationOutput";
+import MathNotation from "../../Documentation/data/MathNotation.json";
 
 interface IProps {
   companyName: CompanyName;
@@ -100,8 +102,12 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                     key="repLabel"
                     title={
                       <>
-                        You will have <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
-                        favor upon resetting after installing Augmentations
+                        <Typography>
+                          You will have <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
+                          favor after installing Augmentations
+                        </Typography>
+                        <Typography style={{ fontSize: "2rem" }}>r = Total company reputation</Typography>
+                        <MathNotationOutput notation={MathNotation.RepToFavor} />
                       </>
                     }
                   >
@@ -114,9 +120,14 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                     key="favorLabel"
                     title={
                       <>
-                        Company favor increases the rate at which you earn reputation for this company by 1% per favor.
-                        Company favor is gained whenever you reset after installing Augmentations. The amount of favor
-                        you gain depends on how much reputation you have with the company.
+                        <Typography>
+                          Company favor increases the rate at which you earn reputation for this company by 1% per
+                          favor. Company favor is gained whenever you install Augmentations. The amount
+                          of favor you gain depends on the total amount of reputation you earned with this company
+                          across all resets.
+                        </Typography>
+                        <Typography style={{ fontSize: "2rem" }}>r = Reputation gain</Typography>
+                        <MathNotationOutput notation={MathNotation.FavorBonus} />
                       </>
                     }
                   >
