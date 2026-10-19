@@ -4704,7 +4704,7 @@ export interface Darknet {
    * When links are applied or removed, a backdoor is also applied or removed regardless of a server's preexisting backdoor status.
    *
    * Since stationary server backdoors are excluded from {@link Darknet.getDarknetInstability | Darknet Instability} penalty calculations,
-   * and since backdoors backdoors are always removed when a stasis link is removed, this means stasis-links themselves will never be responsible for scaling Instability values.
+   * and since backdoors are always removed when a stasis link is removed, this means stasis-links themselves will never be responsible for scaling Instability values.
    *
    * @param shouldLink - true to apply a stasis link, false to remove it. Optional. Defaults to true.
    * @returns A promise that resolves to a {@link DarknetResult} object.
