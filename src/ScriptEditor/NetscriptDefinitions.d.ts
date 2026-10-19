@@ -9346,15 +9346,18 @@ export interface NS {
   /**
    * Share RAM with factions to multiply the reputation gain rate of faction work.
    * 
-   * ns.share() only shares RAM of the server it's being run on, and its RAM cost represents the amount of memory you're loaning out. To increase your bonus from share, run more threads of scripts that await ns.share() on any server. A server's cores bonus effectively multiplies its thread count.
+   * The RAM cost of ns.share() represents the amount of memory you're loaning out. To increase the power of share, 
+   * run more threads of scripts that await ns.share(). A server's cores bonus effectively multiplies its thread count.
    * 
-   * Share power scales logarithmically with the total number of share threads being run on your server network.
+   * Share's power scales logarithmically with the number of share threads running on your server network.
    * 
-   * The reputation gain rate multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
-   * 
-   * Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
-   *
    * The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+   * 
+   * The reputation gain rate multiplier is applied fully to Hacking Contracts work, but only partially to Security Work
+   * and Field Work.
+   * 
+   * The multiplier only applies to faction work. It does not affect your passive reputation gain rate (the rate at which
+   * your faction rep increases just by being a member).
    *
    * @remarks
    * RAM cost: 2.4 GB
