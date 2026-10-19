@@ -2,7 +2,7 @@ import { Terminal } from "../../Terminal";
 
 export function expr(args: (string | number | boolean)[]): undefined {
   if (args.length === 0) {
-    Terminal.error("Incorrect usage of expr command. Usage: expr [math expression]");
+    Terminal.error("Incorrect usage of expr command. Usage: expr [MATH_EXPRESSION]");
     return;
   }
   const expr = args.join("");
