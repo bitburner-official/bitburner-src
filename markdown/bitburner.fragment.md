@@ -106,7 +106,7 @@ number
 
 </td><td>
 
-A direct multiplier influencing the fragment's final chargedEffect value.
+A fixed multiplier influencing the fragment's final chargedEffect value.
 
 
 </td></tr>

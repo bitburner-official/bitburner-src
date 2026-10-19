@@ -6,8 +6,6 @@
 
 Charge a fragment, increasing its power.
 
-Charge is based on the cumulative effective threads used to charge across all cycles, divided by the (current) single highest thread count.
-
 See [ActiveFragment](./bitburner.activefragment.md) for additional information.
 
 **Signature:**

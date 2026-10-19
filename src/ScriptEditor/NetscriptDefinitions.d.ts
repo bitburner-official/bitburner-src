@@ -6772,8 +6772,6 @@ interface Stanek {
   /**
    * Charge a fragment, increasing its power.
    *
-   * Charge is based on the cumulative effective threads used to charge across all cycles, divided by the (current) single highest thread count.
-   *
    * See {@link ActiveFragment | ActiveFragment} for additional information.
    * @remarks
    * RAM cost: 0.4 GB
