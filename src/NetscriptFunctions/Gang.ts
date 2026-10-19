@@ -14,11 +14,20 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CONSTANTS } from "../Constants";
 import { canCreateGang } from "../Gang/helpers";
+import { canAccessBitNodeFeature, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 export function NetscriptGang(): InternalAPI<IGang> {
   /** Functions as an API check and also returns the gang object */
   const getGang = function (ctx: NetscriptContext): Gang {
-    if (!Player.gang) throw helpers.errorMessage(ctx, "Must have joined gang", "API ACCESS");
+    if (!canAccessBitNodeFeature(2))
+      throw helpers.errorMessage(
+        ctx,
+        `This function requires ${
+          knowAboutBitverse() ? "Source-File 2" : "an endgame power up"
+        } to run. It will be very obvious when and how you can obtain it.`,
+        "API ACCESS",
+      );
+    if (!Player.gang) throw helpers.errorMessage(ctx, "You must join a gang to use this API", "API ACCESS");
     return Player.gang;
   };
 
