@@ -34,6 +34,8 @@ import { arrayToString } from "../../utils/helpers/ArrayHelpers";
 import { Money } from "../React/Money";
 import { MoneyRate } from "../React/MoneyRate";
 
+import { iTutorialSteps, ITutorial } from "../../InteractiveTutorial";
+
 const useStyles = makeStyles()({
   noborder: {
     borderBottom: "none",
@@ -68,7 +70,15 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
       <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper}>
         <ListItemText
           primary={
-            <Typography sx={{ overflowWrap: "break-word" }}>
+            <Typography
+              sx={{
+                overflowWrap: "break-word",
+                color:
+                  ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.ActiveScriptsDescription
+                    ? "info.main"
+                    : "primary.main",
+              }}
+            >
               └ {props.workerScript.name} ({formatRam(scriptRef.ramUsage * scriptRef.threads)}){" "}
               {JSON.stringify(scriptRef.args)}
             </Typography>

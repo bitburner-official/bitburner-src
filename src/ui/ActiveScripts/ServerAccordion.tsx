@@ -10,6 +10,8 @@ import { ServerAccordionContent } from "./ServerAccordionContent";
 
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 
+import { iTutorialSteps, ITutorial } from "../../InteractiveTutorial";
+
 interface ServerAccordionProps {
   server: BaseServer;
   scripts: WorkerScript[];
@@ -36,7 +38,21 @@ export function ServerAccordion({ server, scripts, startOpen }: ServerAccordionP
   return (
     <Paper>
       <ListItemButton onClick={() => setOpen((old) => !old)}>
-        <ListItemText primary={<Typography style={{ whiteSpace: "pre-wrap" }}>{headerTxt}</Typography>} />
+        <ListItemText
+          primary={
+            <Typography
+              sx={{
+                whiteSpace: "pre-wrap",
+                color:
+                  ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.ActiveScriptsDescription
+                    ? "info.main"
+                    : "primary.main",
+              }}
+            >
+              {headerTxt}
+            </Typography>
+          }
+        />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Box mx={2}>
