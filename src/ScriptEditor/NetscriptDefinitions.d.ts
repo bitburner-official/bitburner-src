@@ -6770,7 +6770,7 @@ interface Stanek {
   giftHeight(): number;
 
   /**
-   * Charge a fragment, increasing its power.
+   * Charge a fragment, increasing its effect strength.
    *
    * See {@link ActiveFragment | ActiveFragment} for additional information.
    * @remarks
