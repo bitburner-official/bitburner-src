@@ -31,6 +31,16 @@ function createLogLevelMenuItem(window, configKey, logLevel) {
   };
 }
 
+/**
+ * @param {import('electron').BrowserWindow} window
+ */
+function toggleFullscreen(window) {
+  if (!window) {
+    return;
+  }
+  window.setFullScreen(!window.isFullScreen());
+}
+
 function getMenu(window) {
   const canZoomIn = utils.getZoomFactor() <= 2;
   const zoomIn = () => {
@@ -232,14 +242,18 @@ function getMenu(window) {
       submenu: [
         {
           label: "Fullscreen",
+          accelerator: "f11",
+          click: () => toggleFullscreen(window),
+        },
+        // F9 was the shortcut to toggle fullscreen, but some players weren't aware of this (F11 is the default shortcut
+        // in most browsers on Windows/Linux). To avoid confusion, we switch to using F11 as well, but we still support
+        // the old shortcut. Hiding this option in the menu bar is debatable. Sometimes, people are confused when they
+        // see many ways to do the same thing.
+        {
+          label: "Fullscreen (Alt)",
           accelerator: "f9",
-          click: (() => {
-            let full = false;
-            return () => {
-              full = !full;
-              window.setFullScreen(full);
-            };
-          })(),
+          visible: false,
+          click: () => toggleFullscreen(window),
         },
         {
           type: "separator",
