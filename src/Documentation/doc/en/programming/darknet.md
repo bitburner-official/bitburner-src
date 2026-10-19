@@ -50,7 +50,7 @@ In some cases, the only way to get to deeper parts of the darknet is to hitch a 
 
 - **Session** - A script needs a session on a darknet server in order to `ns.scp()` or `ns.exec()` targeting that server. A script gets a session after it calls `ns.dnet.authenticate()` with the correct password. Scripts can also get a session by calling `ns.dnet.connectToSession()` (a sync API with low RAM cost) after any script authenticates successfully on that server at least once. Note that sessions are per-PID (running instance of a script) - each script needs to individually get a session with a specific darknet server in order to `ns.exec()` or `ns.scp()` to that server.
 
-- **Connected** - Each server on the network has specific other servers it is linked to. These are the links seen in the UI, the servers that appear when using "scan" in the terminal, or that can be seen by calling `ns.dnet.probe()`. This kind of direct connection is required for most dnet API methods. `ns.exec()` requires either a direct connection, or a backdoor, or a stasis link to target a darknet server.
+- **Connected** - Each server on the network has specific other servers it is linked to. These are the links seen in the UI, the servers that appear when using "scan" in the terminal, or that can be seen by calling `ns.dnet.probe()`. This kind of direct connection is required for most dnet API methods. `ns.exec()` requires either a direct connection, or a backdoor or stasis link on the target darknet server.
 
 - **Offline** - Sometimes darknet servers will go offline. Effectively, the server is deleted, and any running scripts that were on it are killed. Eventually, a server with the same name may come back online, but it will have a different password, and will be fully cleaned and cleared of scripts. Using an API call targeting an offline server will produce a default/failed response instead of the exception you typically get with non-existent servers. Take care with this, since the list of offline servers is cleared on augment installation and game reload.
 
@@ -163,7 +163,7 @@ Darknet servers belong to somebody already, and they are often already using the
 
 ### Stabilizing a server with dnet.setStasisLink()
 
-Servers on the darknet are notoriously unreliable. After a mutation they may restart or go offline, killing all the running scripts on them. They also can move away from the area you are working on. To combat this problem, you have a limited number of "stasis links" available to you, which can be applied (or removed from) the current server using `ns.dnet.setStasisLink()`. Placing a stasis link on a server locks that server's position in the darknet and prevents it from going offline. It also applies a backdoor to the server which allows you to `ns.exec()` scripts to it and `connect` to it from the terminal.
+Servers on the darknet are notoriously unreliable. After a mutation they may restart or go offline, killing all the running scripts on them. They also can move away from the area you are working on. To combat this problem, you have a limited number of "stasis links" available to you, which can be applied (or removed from) the current server using `ns.dnet.setStasisLink()`. Placing a stasis link on a server locks that server's position in the darknet and prevents it from going offline. It also allows you to `ns.exec()` scripts to it remotely and `connect` to it from the terminal.
 
 You can see the currently stasis-linked servers with `ns.dnet.getStasisLinkedServers()`, and see the current limit using `ns.dnet.getStasisLinkLimit()`.
 
@@ -171,9 +171,7 @@ You can see the currently stasis-linked servers with `ns.dnet.getStasisLinkedSer
 
 Installing backdoors on darknet servers can grant the ability to not only connect to that server through the terminal, but also `ns.exec()` to launch scripts on that server remotely at any distance. This is a huge benefit on a network that has no guarantee for a direct connection at any given moment.
 
-However, installing backdoors can also have a significant drawback. "Instability" changes the behavior of authentications, scaling with every existing backdoor on the darknet(with some leeway). While stasis links do apply backdoors to their servers, stasis linked servers won't count towards penalty calculations and can be used without worry.
-
-You can see the darknet's current instability penalty values with `ns.dnet.getDarknetInstability()`.
+However, installing backdoors can also have a significant drawback. "Instability" changes the behavior of authentications, scaling with existing backdoors on the darknet. You can see the darknet's current instability penalty values with `ns.dnet.getDarknetInstability()`.
 
 ### Moving servers with dnet.induceServerMigration()
 
