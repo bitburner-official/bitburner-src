@@ -84,7 +84,7 @@ As you design your darknet scripts, here are some ideas to keep in mind as you d
 ### Navigating the darknet with dnet.probe()
 
 Darknet servers, in an attempt to hide from official scrutiny, do not show up when using `ns.scan()`. (This is where the "Darknet" got its name!)
-To find them, you will first need the previously mentioned [program](../basic/programs.md), `DarkscapeNavigator.exe`. This gives access to the `ns.dnet` api. Then, you can use `ns.dnet.probe()` to see a list of darknet servers connected to the current server. Note that probe does not work at a distance: it cannot target distant servers like `ns.scan()` can. To explore the darknet, you will need to place your scripts in it, one server at a time.
+To find them, you will first need the [program](../basic/programs.md) `DarkscapeNavigator.exe`. This gives access to the `ns.dnet` api. Then, you can use `ns.dnet.probe()` to see a list of darknet servers connected to the current server. Note that probe does not work at a distance: it cannot target distant servers like `ns.scan()` can. To explore the darknet, you will need to place your scripts in it, one server at a time.
 
 ```js
 const nearbyDarknetServers = ns.dnet.probe();
