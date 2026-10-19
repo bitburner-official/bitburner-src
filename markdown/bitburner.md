@@ -376,7 +376,9 @@ Darknet formulas
 
 </td><td>
 
-Instability of the darknet caused by excessive backdoor-ing of servers.
+Instability penalties caused by excessive backdoor installations on the darknet.
+
+Backdoors on stationary servers are not factored for penalty calculations.
 
 
 </td></tr>
@@ -820,7 +822,7 @@ Hacknet Server formulas
 
 </td><td>
 
-Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
+Options to change the behavior of [heartbleed()](./bitburner.darknet.heartbleed.md) API.
 
 
 </td></tr>
@@ -1986,7 +1988,7 @@ Errors:
 
 - NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
 
-- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalties.
 
 - ServiceUnavailable: The server is offline.
 

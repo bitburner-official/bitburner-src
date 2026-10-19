@@ -1,56 +1,68 @@
-# The Darkweb Network
+# The Dark Web Network
 
-Easy wealth... secret augments... The siren call of the so-called "dark net" has echoed in rumors for years. Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive authority and surveillance.
+Easy wealth... secret augments... The siren call of the so-called "dark" network has echoed in rumors for years. Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive authority and surveillance.
 
-Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers on that unregulated network. A person like you, perhaps.
+Leaving the internet behind and turning to the Dark Web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers on that unregulated network. A person like you, perhaps.
 
 For the full NS docs for the api, you can go to the [API documentation page](../../../../../markdown/bitburner.darknet.md).
 
+### Access requires DarkscapeNavigator.exe
+
+This can be purchased through the [TOR Router](../basic/programs.md), or a shadowy location in Chongqing.
+
 ### Network structure
 
-Unlike the traditional BitBurner network, the darknet is constantly changing. Servers may sometimes restart, change its connections to other servers, or even go offline indefinitely. The network is also not a simple tree: it contains loops of connections, backtracks, and disconnected islands of servers to explore.
+Unlike the traditional BitBurner network, the darknet is constantly changing. Servers may sometimes restart, adjust their position or connections to other servers, or even go offline indefinitely. The network is also not a simple tree: it contains loops of connections, backtracks, and disconnected islands of servers to explore.
 
-Due to the instability of the darknet, long-distance communication is often difficult or impossible. Servers on the darknet are not freely accessible from anywhere. Generally, they can only be interacted with or modified if your script is running on a directly connected nearby server. This means you will need to find a way to make deployers or probes that can roam the network and duplicate themselves.
+Due to the mutations of the darknet, long-distance communication is often difficult or impossible. Servers on the darknet are not freely accessible and can only be interacted with or modified if your script is running on an authenticated session, which will usually require being directly connected nearby. This means you will need to find a way to make your scripts effectively: deploy, probe, roam, and duplicate themselves to and from servers that will very commonly be completely isolated from the rest of the known darknet.
 
-In some cases, the only way to get to deeper parts of the net is to hitch a ride on a server when it moves to another location!
-
-**In order to access the darknet, you will need to purchase `DarkscapeNavigator.exe`**. This can be done with the `buy` command in the terminal after purchasing a Tor router. There is also a location in Chongqing where you can purchase access, as well.
+In some cases, the only way to get to deeper parts of the darknet is to hitch a ride on a server when it moves to another location!
 
 ### TL;DR: Executive summary of the darknet API
 
 **There is an example starter script at the bottom of this document, to see some of these API methods in action.**
 
-- `dnet.getServerDetails(hostname)` tells you a server's password hint and format, and if the server is offline or connected to the current server.
-- `ns.dnet.probe()` lets you find darknet servers directly connected to your current server. Use this to find targets to crack and copy your script onto.
-- `await ns.dnet.authenticate(hostname, password)` lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `exec` and `scp` to move scripts onto that server.
-- Some servers require interactive feedback to guess their password. Use `await ns.dnet.heartbleed(hostname)` to check that server's logs and get clues after you attempt a password.
-- `ns.dnet.connectToSession(hostName, password)` lets you use a password you already know to log in to a darknet server at a distance. This is required to scp files there.
-- Some servers will have part of their max ram blocked off. Use `ns.dnet.memoryReallocation()` to free it.
-- Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
-- Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
-- Using `ns.dnet.setStasisLink()` will stasis lock the current server. This prevents it from moving or going offline, and also allows getting a session on the server at a distance like backdooring does.
-- `ns.dnet.induceServerMigration()` can be used to target a connected server and, when used enough, will force it to move to a new location on the darknet.
-- `ns.dnet.promoteStock()` increases the volatility of the targeted stock via propaganda, which can increase the potential profits from trading it.
+- `ns.dnet.getServerDetails(hostname)`: tells you a server's password hint and format, and if the server is offline or connected to the current server.
+- `ns.dnet.probe()`: lets you find darknet servers directly connected to your script's server. Use this to find targets to crack and copy your script onto.
+- `await ns.dnet.authenticate(hostname, password)`: lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `ns.exec()` and `ns.scp()` to move scripts onto that server.
+- `await ns.dnet.heartbleed(hostname)`: lets you scrape a server's logs after attempting passwords. Some servers provide necessary clues or interactive feedback in their logs.
+- `ns.dnet.connectToSession(hostname, password)`: lets you use a password you already know to log in to a darknet server at a distance. This is required to `ns.scp()` files remotely with no direct connection.
+- `ns.dnet.memoryReallocation(hostname)`: lets you unlock blocked-off RAM on a target server. If a server has blocked RAM, the amount can be obtained in the server details above or through `ns.dnet.getBlockedRam(hostname)`.
+- `ns.dnet.openCache(fileName)`: lets you open `.cache` files on darknet servers, the contents of which can be extremely valuable.
+- `ns.dnet.phishingAttack()`: lets you launch attacks that generate money or sometimes `.cache` files, scaling off your charisma and crime success stat.
+- `ns.dnet.setStasisLink(boolean)`: lets you lock a darknet server in its position. This prevents it from moving or going offline, and also lets you `ns.exec()` scripts to the server at a distance.
+- `ns.dnet.induceServerMigration(hostname)`: can be used to target a connected server and, when used enough, will force it to move to a new location on the darknet.
+- `ns.dnet.promoteStock(stockSymbol)`: increases the volatility of the targeted stock via propaganda, which can increase the potential profits from trading it.
 
 ### Glossary of Terms
 
-**Authenticated** - When a script calls dnet.authenticate with the correct password, two things happen. Firstly, you are given admin rights to the server (the same as nuking). Second, the script that called authenticate gets a session with the target server. A session on the target server is required for some dnet API methods.
+- **Dark Web** - The infrastructure provided by the [TOR Router](../basic/programs.md).
 
-**Session** - A script needs a session on a darknet server in order to scp or exec targeting that server. A script gets a session after it calls `dnet.authenticate` with the correct password. Scripts can also get a session by calling `dnet.connectToSession` (a sync API with low RAM cost) after any script authenticates successfully on that server at least once. Note that sessions are per-pid (running instance of a script) - each script needs to individually get a session with a specific darknet server in order to exec or scp to that server.
+- **Darknet** - The "dark" network available on the Dark Web, accessed through `DarkscapeNavigator.exe`. Where everything we'll be discussing, is happening.
 
-**Connected** - Each server on the network has specific other servers it is linked to. These are the links seen in the UI, the servers that appear when using "scan" in the terminal, or that can be seen by calling dnet.probe. This kind of direct connection is required for most dnet API methods. ns.exec requires either a direct connection, or a backdoor, or a stasis link (which also sets a backdoor) to target a darknet server.
+- **"darkweb"** - The name of a server that exists in the darknet, not to be confused with the Dark Web itself.
 
-**Offline** - Sometimes darknet servers will go offline. Effectively, the server is deleted, and any running scripts that were on it are killed. Eventually, a server with the same name may come back online, but it will have a different password, and will be fully cleaned and cleared of scripts. Using an API call targeting an offline server will produce a default/failed response instead of the exception you typically get with non-existent servers. Take care with this, since the list of offline servers is cleared on prestige and game reload.
+- **Mutation** - An single instance of change in the darknet. Servers can change positions or connections to other servers, and can sometimes restart or go offline.
+
+- **Instability** - the name of a penalty applied to authentication behavior.
+
+- **Authenticated** - When a script calls dnet.authenticate with the correct password, two things happen. Firstly, you are given admin rights to the server (the same as nuking). Second, the script that called authenticate gets a session with the target server. A session on the target server is required for some dnet API methods.
+
+- **Session** - A script needs a session on a darknet server in order to `ns.scp()` or `ns.exec()` targeting that server. A script gets a session after it calls `ns.dnet.authenticate()` with the correct password. Scripts can also get a session by calling `ns.dnet.connectToSession()` (a sync API with low RAM cost) after any script authenticates successfully on that server at least once. Note that sessions are per-PID (running instance of a script) - each script needs to individually get a session with a specific darknet server in order to `ns.exec()` or `ns.scp()` to that server.
+
+- **Connected** - Each server on the network has specific other servers it is linked to. These are the links seen in the UI, the servers that appear when using "scan" in the terminal, or that can be seen by calling `ns.dnet.probe()`. This kind of direct connection is required for most dnet API methods. `ns.exec()` requires either a direct connection, or a backdoor or stasis link on the target darknet server.
+
+- **Offline** - Sometimes darknet servers will go offline. Effectively, the server is deleted, and any running scripts that were on it are killed. Eventually, a server with the same name may come back online, but it will have a different password, and will be fully cleaned and cleared of scripts. Using an API call targeting an offline server will produce a default/failed response instead of the exception you typically get with non-existent servers. Take care with this, since the list of offline servers is cleared on augment installation and game reload.
 
 ### Darknet script design considerations
 
 As you design your darknet scripts, here are some ideas to keep in mind as you decide on your approach.
 
-#### The darknet is unstable, and scripts will sometimes be killed or servers will disappear.
+#### The darknet mutates, and scripts will sometimes be killed or servers will disappear.
 
 - How can passwords be preserved so that they are not lost if the script holding them is killed?
 - How can you watch for neighbor servers that have been restarted?
-- How can you recover if many or all of the running scripts are killed?
+- How can you recover, if many or all of the running scripts are killed?
 
 #### The darknet is a tangled web that you cannot easily remotely traverse.
 
@@ -58,10 +70,10 @@ As you design your darknet scripts, here are some ideas to keep in mind as you d
 - How do you update your scripts when a new version of them is made?
 - How do you get scripts into parts of the network that aren't connected to areas where you are?
 
-#### There is a lot of ram on the darknet, but it is harder to access than the standard network.
+#### There is a lot of RAM on the darknet, but it is harder to access than the standard network.
 
-- What is the best use of all that ram?
-- How do you coordinate scripts using that ram when the situation changes?
+- What is the best use of all that RAM?
+- How do you coordinate scripts using that RAM when the situation changes?
 
 #### The darknet is a treasure trove of data, if you know where to look.
 
@@ -69,9 +81,10 @@ As you design your darknet scripts, here are some ideas to keep in mind as you d
 - Sometimes a server will authenticate to another server, and those credentials will be visible in the server logs or active packets.
 - There are lists of commonly re-used passwords that can be found on some data files.
 
-### Navigating the Dark Net with dnet.probe
+### Navigating the darknet with dnet.probe()
 
-Darknet servers, in an attempt to hide from official scrutiny, do not show up when using ns.scan. (This is where the "dark net" got its name!) To find them, you will first need to buy the tool `DarkscapeNavigator.exe` using the `buy` command in the terminal, with a TOR router. This gives access to the `ns.dnet` api. Then, you can use `ns.dnet.probe()` to see a list of darknet servers connected to the current server. Note that probe does not work at a distance: it cannot target distant servers like scan() can. To explore the dark, you will need to place your scripts in it, one server at a time.
+Darknet servers, in an attempt to hide from official scrutiny, do not show up when using `ns.scan()`. (This is where the "Darknet" got its name!)
+To find them, you will first need the [program](../basic/programs.md) `DarkscapeNavigator.exe`. This gives access to the `ns.dnet` api. Then, you can use `ns.dnet.probe()` to see a list of darknet servers connected to the current server. Note that probe does not work at a distance: it cannot target distant servers like `ns.scan()` can. To explore the darknet, you will need to place your scripts in it, one server at a time.
 
 ```js
 const nearbyDarknetServers = ns.dnet.probe();
@@ -84,11 +97,11 @@ for (const hostname of nearbyDarknetServers) {
 
 Darknet servers cannot simply be broken into with a few port openers you can buy off the shelf. Instead, you must find a way to crack the password of each one to run scripts on it and pass through it. Fortunately, each server's logs give some hints and feedback as you attempt to guess the password, and you will find that similar models of computer have similar vulnerabilities. If you aren't sure how to guess a server's auth codes, look around for notes on darknet servers you have already unlocked; they may have hints for how to solve some of the puzzles (and sometimes other helpful data files, too.)
 
-### Cracking servers with dnet.authenticate and dnet.heartbleed
+### Cracking servers with dnet.authenticate() and dnet.heartbleed()
 
-Darknet servers require a password to interact with. To get started, use `dnet.getServerDetails` to find out critical information about a server. It will give a hint to the password, and tell you if the server is still online.
+Darknet servers require a password to interact with. To get started, use `ns.dnet.getServerDetails()` to find out critical information about a server. It will give a hint to the password, and tell you if the server is still online.
 
-You can use `await ns.dnet.authenticate` to check if a guessed password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' security. Using more threads also speeds up this process. It may be faster to divide up the work across multiple scripts, if you can coordinate them. (Note that **`dnet.authenticate` can only target nearby connected servers**. You can verify if a server is connected to the current one using `dnet.probe` or `dnet.getServerDetails`.)
+You can use `await ns.dnet.authenticate()` to check if a guessed password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' security. Using more threads also speeds up this process. It may be faster to divide up the work across multiple scripts, if you can coordinate them. (Note that **`ns.dnet.authenticate()` can only target nearby connected servers**. You can verify if a server is connected to the current one using `ns.dnet.probe()` or `ns.dnet.getServerDetails()`.)
 
 ```js
 const details = ns.dnet.getServerDetails(hostname);
@@ -103,9 +116,9 @@ if (details.modelId === "ZeroLogon") {
 }
 ```
 
-When you are trying to find the password, you can extract the server's logs using the exploit `await ns.dnet.heartbleed`. This will extract the most recent logs from the target server, which in some cases lets you see extra hints or clues to why the last password attempt was not correct. In addition to your authentication attempts, the server's own traffic will register some logs as well. They're often useless, but sometimes have interesting hints or even other server's passwords! (these are the same logs you can see in the Darknet UI when you click on a server.)
+When you are trying to find the password, you can extract the server's logs using the exploit `await ns.dnet.heartbleed()`. This will extract the most recent logs from the target server, which in some cases lets you see extra hints or clues to why the last password attempt was not correct. In addition to your authentication attempts, the server's own traffic will register some logs as well. They're often useless, but sometimes have interesting hints or even other server's passwords! (these are the same logs you can see in the Darknet UI when you click on a server.)
 
-Once you successfully run `dnet.authenticate` with the correct password, you gain admin rights to the server (similar to what NUKE.EXE does). It also gives your scripts a session with that server, so you can edit that server with `scp` and `exec`.
+Once you successfully run `ns.dnet.authenticate()` with the correct password, you gain admin rights to the server (similar to what NUKE.EXE does). It also gives your scripts a session with that server, so you can edit that server with `ns.scp()` and `ns.exec()`.
 
 Once you figure out the right password, you will want it later (so other scripts can connect, or in case the server restarts & you need to start your scripts again.) Make sure to save the password somewhere durable, so it isn't lost if your script gets stopped later on.
 
@@ -117,13 +130,14 @@ if (result.success === false) {
 }
 ```
 
-### Modifying servers with ns.exec and ns.scp
+### Modifying servers with ns.exec() and ns.scp()
 
-Darknet servers are password-protected. This means that you will need to get a session in order to get admin rights, or to `scp` files onto them or `exec` scripts on them. Successfully finding a password with `dnet.authenticate` will automatically grant a session to the script that ran the command.
+Darknet servers are password-protected. This means that you will need to get a session in order to get admin rights, or to `ns.scp()` files onto them or `ns.exec()` scripts on them. Successfully finding a password with `ns.dnet.authenticate()` will automatically grant a session to the script that ran the command.
 
-Once you have authenticated, other scripts can then connect to that same server using `dnet.connectToSession` and the password for the server. This is synchronous and can be done at any distance, meaning you don't have to wait for an authenticate call.
+Once you have authenticated at least once, other scripts can then connect to that same server using `ns.dnet.connectToSession()` and the password for the server. This is synchronous and can be done at any distance, meaning you don't have to wait for an authenticate call.
 
-`scp` file transfers can be performed at any distance once you have established a session. However, `exec` also requires the script to either be run from a server adjacent to and connected to the target server, or a backdoor or stasis link on the target server. You can identify direct connections using `probe` or `getServerDetails`.
+`ns.scp()` file transfers can be performed at any distance once you have established a session. However, `ns.exec()` requires the target to either be directly connected to the script's server, or have a backdoor or stasis link applied.
+You can identify direct connections using `ns.dnet.probe()` or `ns.dnet.getServerDetails()`.
 
 ```js
 // the darknet server in "hostname" must be either backdoored, stasis linked, or directly connected to the server this
@@ -137,31 +151,37 @@ if (ns.dnet.getServerDetails(hostname).isConnectedToCurrentServer) {
 }
 ```
 
-### Looting servers with dnet.openCache and dnet.phishingAttack
+### Looting servers with dnet.openCache() and dnet.phishingAttack()
 
-Sometimes you will find valuable data in .cache files on servers you unlock. They can contain money or experience, programs, or even stock market access keys. They can be opened via `run` from the terminal, or `dnet.openCache` from a script on that server. You can use `ns.ls(ns.getHostname(), '.cache')` to identify if any .cache files exist on the current server.
+Sometimes you will find valuable data in `.cache` files on servers you unlock. They can contain money or experience, programs, or even stock market access keys. They can be opened via `run` from the terminal, or `ns.dnet.openCache()` from a script on that server. You can use `ns.ls(ns.getHostname(), '.cache')` to identify if any `.cache` files exist on the current server.
 
-Once you have access to a darknet server, you can begin to use it for your own purposes. One option is to run `dnet.phishingAttack()` to raise your charisma levels and to try and con money out of the less tech-savvy middle managers out there. Occasionally you will even lift .cache data files from the attempt!
+Once you have access to a darknet server, you can begin to use it for your own purposes. One option is to run `ns.dnet.phishingAttack()` to raise your charisma levels and to try and con money out of the less tech-savvy middle managers out there. Occasionally you will even lift `.cache` data files from the attempt!
 
-### Freeing up more ram with dnet.memoryReallocation
+### Freeing up more RAM with dnet.memoryReallocation()
 
-Darknet servers belong to somebody already, and they are often already doing stuff on them. When you first authenticate on some of these servers, a chunk of the ram will be "in use" by the owner's (clearly wasteful) purposes, and needs to be... liberated. You can fully free up that ram for yourself using repeated calls to `dnet.memoryReallocation`. You will usually find valuable .cache files left behind after all the ram is cleared.
+Darknet servers belong to somebody already, and they are often already using them. When you first authenticate on some of these servers, a chunk of the RAM will be "in use" by the owner's (clearly wasteful) purposes, and needs to be... liberated. You can fully free up that RAM for yourself using repeated calls to `ns.dnet.memoryReallocation()`. You will usually find valuable `.cache` files left behind after all the RAM is cleared.
 
-### Stabilizing a server with dnet.setStasisLink
+### Stabilizing a server with dnet.setStasisLink()
 
-Servers on the darknet are notoriously unreliable. They may restart or go offline, killing all the running scripts on them. They also can move away from the area you are working on. To combat this problem, you have a limited number of "stasis links" available to you, which can be applied (or removed from) the current server using `dnet.setStasisLink`. Placing a stasis link on a server allows you to `dnet.connectToSession` and `exec`, and `connect` to it from the terminal, from any distance.
+Servers on the darknet are notoriously unreliable. After a mutation they may restart or go offline, killing all the running scripts on them. They also can move away from the area you are working on. To combat this problem, you have a limited number of "stasis links" available to you, which can be applied (or removed from) the current server using `ns.dnet.setStasisLink()`. Placing a stasis link on a server locks that server's position in the darknet and prevents it from going offline. It also allows you to `ns.exec()` scripts to it remotely and `connect` to it from the terminal.
 
-You can see the currently stasis-linked servers with `dnet.getStasisLinkedServers`, and see the current limit using `dnet.getStasisLinkLimit`.
+You can see the currently stasis-linked servers with `ns.dnet.getStasisLinkedServers()`, and see the current limit using `ns.dnet.getStasisLinkLimit()`.
 
-### Moving servers with dnet.induceServerMigration
+### Backdoors and dnet.getDarknetInstability()
 
-Some parts of the darknet are disconnected from others, leaving "air gaps". These can only be crossed via riding a server as it moves. Waiting for a convenient movement may be inconsistent - but you can speed it along.
+Installing backdoors on darknet servers can grant the ability to not only connect to that server through the terminal, but also `ns.exec()` to launch scripts on that server remotely at any distance. This is a huge benefit on a network that has no guarantee for a direct connection at any given moment.
 
-Repeatedly calling `dnet.induceServerMigration` builds up a charge on the target server, eventually forcing it to move. (It often will move deeper into the net, but the direction of the movement is not guaranteed.) `dnet.induceServerMigration` can only target servers directly connected to the script's current server, but the effect stacks if multiple servers all target the same one.
+However, installing backdoors can also have a significant drawback. "Instability" changes the behavior of authentications, scaling with existing backdoors on the darknet. You can see the darknet's current instability penalty values with `ns.dnet.getDarknetInstability()`.
 
-### Increasing stock volatility with dnet.promoteStock
+### Moving servers with dnet.induceServerMigration()
 
-A stock's volatility is what determines how much the price can increase or decrease on each stock market update. Repeatedly calling `dnet.promoteStock` allows you to target a stock and increase this volatility greatly. This does not change its forecast the way using the stock options in hack() or grow() does - the stock will still be on the same general rising or falling trajectory. However, careful use of `dnet.promoteStock` on key stocks you hold (or want to buy, or have options on) can increase your profits from the stock market.
+Some parts of the darknet are disconnected from others, leaving "air gaps". These can only be crossed via riding a server as it moves in a mutation. Waiting for a convenient movement may be inconsistent - but you can speed it along.
+
+Repeatedly calling `ns.dnet.induceServerMigration()` builds up a charge on the target server, eventually forcing it to move. (It often will move deeper into the net, but the direction of the movement is not guaranteed.) `ns.dnet.induceServerMigration()` can only target servers directly connected to the script's current server, but the effect stacks if multiple servers all target the same one.
+
+### Increasing stock volatility with dnet.promoteStock()
+
+A stock's volatility is what determines how much the price can increase or decrease on each stock market update. Repeatedly calling `ns.dnet.promoteStock()` allows you to target a stock and increase this volatility greatly. This does not change its forecast the way using the stock options in `ns.hack()` or `ns.grow()` does - the stock will still be on the same general rising or falling trajectory. However, careful use of `ns.dnet.promoteStock()` on key stocks you hold (or want to buy, or have options on) can increase your profits from the stock market.
 
 ## Example Script
 
@@ -198,11 +218,11 @@ export async function main(ns) {
       });
     }
 
-    // TODO: free up blocked ram on this server using ns.dnet.memoryReallocation
+    // TODO: free up blocked RAM on this server using ns.dnet.memoryReallocation(hostname)
 
-    // TODO: look for .cache files on this server and open them with ns.dnet.openCache
+    // TODO: look for .cache files on this server and open them with ns.dnet.openCache(filename)
 
-    // TODO: take advantage of the extra ram on darknet servers to run ns.dnet.phishingAttack calls for money
+    // TODO: take advantage of the extra RAM on darknet servers to run ns.dnet.phishingAttack() calls for money
 
     await ns.sleep(5000);
   }
