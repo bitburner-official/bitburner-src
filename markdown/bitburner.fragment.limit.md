@@ -4,7 +4,7 @@
 
 ## Fragment.limit property
 
-The total amount of times fragments with this ID can be placed.
+The maximum number of concurrent placements allowed, for fragments with this ID.
 
 **Signature:**
 

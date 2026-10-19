@@ -68,7 +68,7 @@ number
 
 </td><td>
 
-The fragment's ID.
+A unique integer ID assigned to the combination of a fragment's shape, effect, and power.
 
 
 </td></tr>
@@ -87,7 +87,7 @@ number
 
 </td><td>
 
-The total amount of times fragments with this ID can be placed.
+The maximum number of concurrent placements allowed, for fragments with this ID.
 
 
 </td></tr>

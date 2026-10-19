@@ -6681,7 +6681,7 @@ type FragmentType = _ValueOf<FragmentEnumType>;
 /** @public */
 interface Fragment {
   /**
-   * The fragment's ID.
+   * A unique integer ID assigned to the combination of a fragment's shape, effect, and power.
    */
   id: number;
   /**
