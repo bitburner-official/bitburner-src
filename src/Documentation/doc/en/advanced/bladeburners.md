@@ -92,7 +92,7 @@ Failing them causes you to lose health, and in the case of Operations and Black 
 #### Effects on chaos
 
 - The Bounty Hunter and Retirement Contracts affect chaos by a flat amount.
-- The Sting Opeation, Raid, Stealth Retirement Operation and Assassination Operations affect chaos by a percentage.
+- The Sting Operation, Raid, Stealth Retirement Operation and Assassination Operations affect chaos by a percentage.
 
 #### Effects on population
 
@@ -104,11 +104,7 @@ Failing them causes you to lose health, and in the case of Operations and Black 
 Action time is reduced by:
 
 - The Overclock skill.
-- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills.
-
-```javascript
-0.5 * (Math.pow(effAgility, 0.04) + Math.pow(effDexterity, 0.035) + effAgility / 10000 + effDexterity / 10000);
-```
+- Your effective agility and dexterity level, which is your level in those skills multiplied by the bonuses from the Reaper and Evasive System skills. Action time is divided by `0.5 * (Math.pow(effAgility, 0.04) + Math.pow(effDexterity, 0.035) + effAgility / 10000 + effDexterity / 10000)`.
 
 #### Action success chance
 
@@ -137,7 +133,7 @@ Your max stamina increases with:
 
 - Your effective agility level, which is your agility level multiplied by the bonuses from the Reaper and Evasive System skills
 - Levels in the Cyber's Edge skill
-- Training, which gives +0.04 max stamina, multiplied by your bonus from Cyber's Edge
+- Training, which gives +0.04 max stamina, multiplied by your bonus from Cyber's Edge (so Cyber's Edge is applied twice to the max stamina you gain from Training)
 - The Bladeburner Max Stamina multiplier
 
 The base max stamina calculation before Training is: `Math.pow(effective_agility, 0.8) * cybers_edge_multiplier * player_max_stamina_multiplier`
