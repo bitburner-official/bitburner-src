@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TableRow, TableCell, Tooltip, Typography } from "@mui/material";
-import { OverviewEventEmitter, useStyles } from "./CharacterOverview";
+import { OverviewEventEmitter, cellNoneSx } from "./CharacterOverview";
 import { Player } from "@player";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
@@ -114,8 +114,6 @@ function StatsProgressBarInner({ name, color }: InnerProps): React.ReactElement 
 }
 
 export function StatsProgressBar({ name, color }: IProps): React.ReactElement {
-  const { classes } = useStyles();
-
   if (!isSkill(name)) {
     return <></>;
   }
@@ -126,7 +124,7 @@ export function StatsProgressBar({ name, color }: IProps): React.ReactElement {
         component="th"
         scope="row"
         colSpan={2}
-        classes={{ root: classes.cellNone }}
+        sx={cellNoneSx}
         style={{ paddingBottom: "2px", position: "relative", top: "-3px" }}
       >
         <StatsProgressBarInner name={name} color={color} />

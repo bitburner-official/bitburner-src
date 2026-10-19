@@ -1,17 +1,7 @@
 import * as React from "react";
 import { formatMoney } from "../../ui/formatNumber";
 import { Corporation } from "../Corporation";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
-
-const useStyles = makeStyles()((theme: Theme) => ({
-  unbuyable: {
-    color: theme.palette.action.disabled,
-  },
-  money: {
-    color: theme.colors.money,
-  },
-}));
+import Box from "@mui/material/Box";
 
 interface IProps {
   money: number;
@@ -19,8 +9,16 @@ interface IProps {
 }
 
 export function MoneyCost(props: IProps): React.ReactElement {
-  const { classes } = useStyles();
-  if (!(props.corp.funds > props.money)) return <span className={classes.unbuyable}>{formatMoney(props.money)}</span>;
+  if (!(props.corp.funds > props.money))
+    return (
+      <Box component="span" sx={{ color: "action.disabled" }}>
+        {formatMoney(props.money)}
+      </Box>
+    );
 
-  return <span className={classes.money}>{formatMoney(props.money)}</span>;
+  return (
+    <Box component="span" sx={(theme) => ({ color: theme.colors.money })}>
+      {formatMoney(props.money)}
+    </Box>
+  );
 }
