@@ -1028,7 +1028,7 @@ export const ns: InternalAPI<NSFull> = {
     const lowerPath = path.toLowerCase();
     return server.programs.map((programName) => programName.toLowerCase()).includes(lowerPath);
   },
-  isRunning:(ctx, fn, host?, ...scriptArgs) => {
+  isRunning: (ctx, fn, host?, ...scriptArgs) => {
     const ident = helpers.scriptIdentifier(ctx, fn, host, scriptArgs);
     return helpers.getRunningScript(ctx, ident) !== null;
   },
