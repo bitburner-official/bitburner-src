@@ -1,6 +1,6 @@
 import React from "react";
 import { Theme } from "@mui/material/styles";
-import { ListItemText, Table, TableCell, TableCellProps, TableRow, Typography } from "@mui/material";
+import { ListItemText, Table, TableCell, TableCellProps, TableContainer, TableRow, Typography } from "@mui/material";
 import { LiProps, TableDataCellProps, TableHeaderCellProps } from "react-markdown/lib/ast-to-react";
 import { makeStyles } from "tss-react/mui";
 import { Settings } from "../../Settings/Settings";
@@ -137,7 +137,7 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
 };
 
 export const table = (props: React.PropsWithChildren<object>): React.ReactElement => {
-  return <Table sx={{ width: "inherit", borderCollapse: "collapse" }}>{props.children}</Table>;
+  return <TableContainer sx={{marginBottom: "0.5em"}}><Table sx={{ width: "inherit", borderCollapse: "collapse" }}>{props.children}</Table></TableContainer>;
 };
 
 export const tr = (props: React.PropsWithChildren<object>): React.ReactElement => {
