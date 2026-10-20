@@ -137,7 +137,11 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
 };
 
 export const table = (props: React.PropsWithChildren<object>): React.ReactElement => {
-  return <TableContainer sx={{marginBottom: "0.5em"}}><Table sx={{ width: "inherit", borderCollapse: "collapse" }}>{props.children}</Table></TableContainer>;
+  return (
+    <TableContainer sx={{ marginBottom: "0.5em" }}>
+      <Table sx={{ width: "inherit", borderCollapse: "collapse" }}>{props.children}</Table>
+    </TableContainer>
+  );
 };
 
 export const tr = (props: React.PropsWithChildren<object>): React.ReactElement => {
