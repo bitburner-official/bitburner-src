@@ -74,7 +74,7 @@ number
 
 </td><td>
 
-An integer from 0 to 3, the amount of clockwise 90-degree turns to apply.
+An integer from 0 to 3, the amount of clockwise 90-degree turns to apply. Values over 3 will wrap back inside the 0-3 range.
 
 
 </td></tr>
