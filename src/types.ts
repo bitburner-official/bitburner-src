@@ -3,6 +3,7 @@ export type Integer = number & { __Integer: true };
 export type SafeInteger = Integer & { __isSafe: true };
 export type PositiveNumber = number & { __Positive: true };
 export type PositiveInteger = Integer & PositiveNumber;
+export type NonNegativeInteger = Integer & { __NonNegative: true };
 export type PositiveSafeInteger = PositiveInteger & SafeInteger;
 
 // Numeric typechecking functions - these should be moved somewhere else
@@ -10,6 +11,7 @@ export const isNumber = (n: unknown): n is number => !Number.isNaN(Number(n));
 export const isInteger = (n: unknown): n is Integer => Number.isInteger(n);
 export const isSafeInteger = (n: unknown): n is SafeInteger => Number.isSafeInteger(n);
 export const isPositiveInteger = (n: unknown): n is PositiveInteger => isInteger(n) && n > 0;
+export const isNonNegativeInteger = (n: unknown): n is NonNegativeInteger => isInteger(n) && n >= 0;
 export const isPositiveNumber = (n: unknown): n is PositiveNumber => isNumber(n) && n > 0;
 export const isPositiveSafeInteger = (n: unknown): n is PositiveSafeInteger => isSafeInteger(n) && isPositiveInteger(n);
 /** Utility type for typechecking objects. Makes all keys optional and sets values to unknown,

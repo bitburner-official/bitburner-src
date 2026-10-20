@@ -40,6 +40,8 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { RamCostConstants } from "./RamCostGenerator";
 import {
+  NonNegativeInteger,
+  isNonNegativeInteger,
   isPositiveInteger,
   PositiveInteger,
   Unknownify,
@@ -75,6 +77,7 @@ export const helpers = {
   string,
   number,
   integer,
+  nonNegativeInteger,
   positiveInteger,
   positiveSafeInteger,
   positiveNumber,
@@ -169,6 +172,15 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
   const n = number(ctx, argName, v);
   if (!isPositiveInteger(n)) {
     throw errorMessage(ctx, `${argName} must be a positive integer, was ${n}`, "TYPE");
+  }
+  return n;
+}
+
+/** Convert provided value v for argument argName to a non-negative integer, throwing if it looks like something else. */
+function nonNegativeInteger(ctx: NetscriptContext, argName: string, v: unknown): NonNegativeInteger {
+  const n = number(ctx, argName, v);
+  if (!isNonNegativeInteger(n)) {
+    throw errorMessage(ctx, `${argName} must be a non-negative integer, was ${n}`, "TYPE");
   }
   return n;
 }
