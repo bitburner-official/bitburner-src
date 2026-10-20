@@ -4,6 +4,11 @@ import { Shapes } from "./data/Shapes";
 
 export const Fragments: Fragment[] = [];
 
+export const getValidFragmentRotationValue = (_rotation: number): number => {
+  return _rotation % 4;
+  //without this, some fragments will try to flip against the y axis on odd rotations >=5
+};
+
 export class Fragment {
   id: number;
   shape: boolean[][];
@@ -22,6 +27,8 @@ export class Fragment {
   }
 
   fullAt(x: number, y: number, rotation: number): boolean {
+    rotation = getValidFragmentRotationValue(rotation);
+
     if (y < 0) return false;
     if (y >= this.height(rotation)) return false;
     if (x < 0) return false;

@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { AugmentationName, FactionName } from "@enums";
 
 import { canAcceptStaneksGift, staneksGift } from "../CotMG/Helper";
-import { Fragments, FragmentById } from "../CotMG/Fragment";
+import { Fragments, FragmentById, getValidFragmentRotationValue } from "../CotMG/Fragment";
 import { FragmentTypeEnum } from "../CotMG/FragmentType";
 
 import type { Stanek as IStanek } from "@nsdefs";
@@ -12,6 +12,12 @@ import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getCoreBonus } from "../Server/ServerHelpers";
+
+export const getValidFragmentUserRotation = (ctx: NetscriptContext, _rotation: unknown): number => {
+  const rotation = helpers.nonNegativeInteger(ctx, "rotation", _rotation);
+
+  return getValidFragmentRotationValue(rotation);
+};
 
 export function NetscriptStanek(): InternalAPI<IStanek> {
   function checkStanekAPIAccess(ctx: NetscriptContext): void {
@@ -31,8 +37,8 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     },
     chargeFragment: (ctx, _rootX, _rootY) => {
       //Get the fragment object using the given coordinates
-      const rootX = helpers.number(ctx, "rootX", _rootX);
-      const rootY = helpers.number(ctx, "rootY", _rootY);
+      const rootX = helpers.nonNegativeInteger(ctx, "rootX", _rootX);
+      const rootY = helpers.nonNegativeInteger(ctx, "rootY", _rootY);
       checkStanekAPIAccess(ctx);
       const fragment = staneksGift.findFragment(rootX, rootY);
       //Check whether the selected fragment can ge charged
@@ -77,10 +83,10 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       staneksGift.clear();
     },
     canPlaceFragment: (ctx, _rootX, _rootY, _rotation, _fragmentId) => {
-      const rootX = helpers.number(ctx, "rootX", _rootX);
-      const rootY = helpers.number(ctx, "rootY", _rootY);
-      const rotation = helpers.number(ctx, "rotation", _rotation);
-      const fragmentId = helpers.number(ctx, "fragmentId", _fragmentId);
+      const rootX = helpers.nonNegativeInteger(ctx, "rootX", _rootX);
+      const rootY = helpers.nonNegativeInteger(ctx, "rootY", _rootY);
+      const rotation = getValidFragmentUserRotation(ctx, _rotation);
+      const fragmentId = helpers.nonNegativeInteger(ctx, "fragmentId", _fragmentId);
       checkStanekAPIAccess(ctx);
       const fragment = FragmentById(fragmentId);
       if (!fragment) throw helpers.errorMessage(ctx, `Invalid fragment id: ${fragmentId}`);
@@ -88,18 +94,18 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       return can;
     },
     placeFragment: (ctx, _rootX, _rootY, _rotation, _fragmentId) => {
-      const rootX = helpers.number(ctx, "rootX", _rootX);
-      const rootY = helpers.number(ctx, "rootY", _rootY);
-      const rotation = helpers.number(ctx, "rotation", _rotation);
-      const fragmentId = helpers.number(ctx, "fragmentId", _fragmentId);
+      const rootX = helpers.nonNegativeInteger(ctx, "rootX", _rootX);
+      const rootY = helpers.nonNegativeInteger(ctx, "rootY", _rootY);
+      const rotation = getValidFragmentUserRotation(ctx, _rotation);
+      const fragmentId = helpers.nonNegativeInteger(ctx, "fragmentId", _fragmentId);
       checkStanekAPIAccess(ctx);
       const fragment = FragmentById(fragmentId);
       if (!fragment) throw helpers.errorMessage(ctx, `Invalid fragment id: ${fragmentId}`);
       return staneksGift.place(rootX, rootY, rotation, fragment);
     },
     getFragment: (ctx, _rootX, _rootY) => {
-      const rootX = helpers.number(ctx, "rootX", _rootX);
-      const rootY = helpers.number(ctx, "rootY", _rootY);
+      const rootX = helpers.nonNegativeInteger(ctx, "rootX", _rootX);
+      const rootY = helpers.nonNegativeInteger(ctx, "rootY", _rootY);
       checkStanekAPIAccess(ctx);
       const activeFragment = staneksGift.findFragment(rootX, rootY);
       if (activeFragment !== undefined) {
@@ -112,8 +118,8 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       return undefined;
     },
     removeFragment: (ctx, _rootX, _rootY) => {
-      const rootX = helpers.number(ctx, "rootX", _rootX);
-      const rootY = helpers.number(ctx, "rootY", _rootY);
+      const rootX = helpers.nonNegativeInteger(ctx, "rootX", _rootX);
+      const rootY = helpers.nonNegativeInteger(ctx, "rootY", _rootY);
       checkStanekAPIAccess(ctx);
       return staneksGift.delete(rootX, rootY);
     },

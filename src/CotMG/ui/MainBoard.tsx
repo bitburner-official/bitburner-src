@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type Fragment } from "../Fragment";
+import { type Fragment, getValidFragmentRotationValue } from "../Fragment";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentInspector } from "./FragmentInspector";
 import { FragmentSelector, isUIFragment, NoneFragment, type UIFragment } from "./FragmentSelector";
@@ -72,12 +72,12 @@ export function MainBoard(props: IProps): React.ReactElement {
   React.useEffect(() => {
     function doRotate(this: Document, event: KeyboardEvent): void {
       if (event.key === "q") {
-        const r = (rotation - 1 + 4) % 4;
+        const r = getValidFragmentRotationValue(rotation - 1 + 4);
         setRotation(r);
         moveGhost(pos[0], pos[1], r);
       }
       if (event.key === "e") {
-        const r = (rotation + 1) % 4;
+        const r = getValidFragmentRotationValue(rotation + 1);
         setRotation(r);
         moveGhost(pos[0], pos[1], r);
       }
