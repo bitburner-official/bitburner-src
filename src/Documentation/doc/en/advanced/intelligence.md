@@ -1,102 +1,63 @@
 # Intelligence
 
-Intelligence is a stat that is unlocked by having [Source-File 5](sourcefiles.md) (i.e. Destroying [BitNode-5](bitnodes.md)).
+Intelligence is a skill you unlock by gaining [Source-File 5.1](sourcefiles.md) (after destroying [BitNode-5](bitnodes.md)).
 
-Intelligence is unique because it is permanent and persistent.
-It never gets reset back to 1.
-However, gaining Intelligence experience is extremely slow.
-It is a stat that gradually builds up as you continue to play the game.
+Intelligence is unique in that it persists across BitNodes, and never gets reset back to 1.
 
-Intelligence will provide varying bonuses to many different parts of the game. Where those bonuses apply, as well as where Intelligence is gained will be categorized below.
+## What Intelligence improves
 
-### Bonuses
-
-**Hacking**
-
-- hack(), grow(), and weaken() speed
-- hack() success chance
-
-**Crime**
-
+- Bladeburner
+  - Action success chance
+  - Field Analysis effectiveness
 - Crime success chance
-
-**share()**
-
-- Effective thread count multiplier
-
-**Programs**
-
-- Program creation speed
-- Effective Hacking skill level required
-
-**Faction & Company Work**
-
-- Reputation bonus
-
-**Infiltrations**
-
-- Infiltration difficulty reduction
-- Infiltration rewards
-
-**Bladeburner**
-
-- Action success chance
-- Field Analysis effectiveness
-
-**Grafting**
-
+- Darknet
+  - `authenticate()` speed
+  - `heartBleed()` speed
+  - `labradar()` speed
+  - `labreport()` speed
+- Faction and company work reputation bonus
 - Grafting speed
-
-**Sleeves**
-
-- Shock Recovery speed (per sleeve)
-- Synchronization speed (per sleeve)
-
-**Darknet**
-
-- Authentication speed
-- Heartbleed speed
-- labradar() speed
-- labreport() speed
-
-### Sources
-
-**Crime**
-
-- Rob Store
-- Larceny
-- Bond Forgery
-- Grand Theft Auto
-- Kidnap
-- Assassination
-- Heist
-
-**Singularity**
-
-- manualHack()
-- purchaseAugmentation()
-- installAugmentations()
-- goToLocation()
-- travelToCity()
-- purchaseTor()
-- purchaseProgram()
-- upgradeHomeCores()
-- upgradeHomeRam()
-- joinFaction()
-
-**Bladeburner**
-
-- Contracts
-- Operations
-- Black Ops
-
-**Work**
-
+- Hacking
+  - `hack()`, `grow()`, and `weaken()` speed
+  - `hack()` success chance
+- Infiltration
+  - Infiltration difficulty reduction
+  - Infiltration rewards
 - Program creation
+  - Creation speed
+  - Hacking skill level required
+- `share()` effective thread count multiplier
+- Sleeves
+  - Shock Recovery speed (per sleeve)
+  - Synchronization speed (per sleeve)
+
+## Sources of Intelligence experience
+
+- Bladeburner
+  - Contracts
+  - Operations
+  - Black Ops
+- Crime
+  - Rob Store
+  - Larceny
+  - Bond Forgery
+  - Grand Theft Auto
+  - Kidnap
+  - Assassination
+  - Heist
+- Destroying a BitNode
 - Grafting
+- Program creation
+- Singularity API
+  - `goToLocation()`
+  - `installAugmentations()`
+  - `joinFaction()`
+  - `manualHack()`
+  - `purchaseTor()`
+  - `purchaseAugmentation()`
+  - `purchaseProgram()`
+  - `travelToCity()`
+  - `upgradeHomeCores()`
+  - `upgradeHomeRam()`
 - Studying
-
-**Misc**
-
-- Terminal hack command
-- Destroying a bitnode
+- Terminal `hack` command
