@@ -50,6 +50,7 @@
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
+    "source-map-js": "^1.2.1",
     "sprintf-js": "^1.1.3",
     "tss-react": "^4.9.19",
     "unist-util-visit-parents": "^5.1.3"
