@@ -1,10 +1,11 @@
 import { Player } from "@player";
+import type { Multipliers } from "@nsdefs";
 
 import { GoOpponent } from "@enums";
 import { Go } from "../Go";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { opponentDetails } from "../Constants";
-import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
+import { defaultMultipliers, mergeMultipliers } from "../../PersonObjects/Multipliers";
 import { formatPercent } from "../../ui/formatNumber";
 import { getOpponentStats } from "../boardAnalysis/scoring";
 import { getRecordEntries, getRecordValues } from "../../Types/Record";
@@ -58,7 +59,7 @@ export function getBonusText(opponent: GoOpponent) {
  */
 export function updateGoMults(): void {
   const mults = calculateMults();
-  Player.mults = mergeMultipliers(Player.mults, mults);
+  mergeMultipliers(Player.mults, mults);
   Player.updateSkillLevels();
 }
 

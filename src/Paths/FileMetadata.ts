@@ -1,4 +1,4 @@
-import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 
 export class FileMetadata {
   /** Time of Access */
@@ -35,13 +35,5 @@ export class FileMetadata {
     };
   }
 
-  toJSON(): IReviverValue {
-    return Generic_toJSON("FileMetadata", this);
-  }
-
-  static fromJSON(value: IReviverValue): FileMetadata {
-    return Generic_fromJSON(FileMetadata, value.data);
-  }
+  static includedKeys = makeSerializable("FileMetadata", FileMetadata);
 }
-
-constructorsForReviver.FileMetadata = FileMetadata;

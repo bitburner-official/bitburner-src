@@ -1,5 +1,5 @@
 import { Fragment, FragmentById } from "./Fragment";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 
 export interface IActiveFragmentParams {
   x: number;
@@ -71,15 +71,5 @@ export class ActiveFragment {
     return Object.assign({}, this);
   }
 
-  /** Serialize an active fragment to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("ActiveFragment", this);
-  }
-
-  /** Initializes an active fragment from a JSON save state */
-  static fromJSON(value: IReviverValue): ActiveFragment {
-    return Generic_fromJSON(ActiveFragment, value.data);
-  }
+  static includedKeys = makeSerializable("ActiveFragment", ActiveFragment);
 }
-
-constructorsForReviver.ActiveFragment = ActiveFragment;

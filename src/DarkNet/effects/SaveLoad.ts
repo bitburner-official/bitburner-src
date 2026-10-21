@@ -1,5 +1,6 @@
 import { DarknetState } from "../models/DarknetState";
 import { assertObject } from "../../utils/TypeAssertion";
+import { Reviver } from "../../utils/GenericReviver";
 
 export type DarknetSaveFormat = {
   storedCycles: number;
@@ -18,7 +19,7 @@ export function loadDarkNet(saveString: unknown): void {
     return;
   }
   try {
-    const parsedData: unknown = JSON.parse(saveString);
+    const parsedData: unknown = JSON.parse(saveString, Reviver);
     assertObject(parsedData);
     const { storedCycles, hasUsedHeartbleed } = parsedData;
     if (typeof storedCycles !== "number" || !Number.isFinite(storedCycles)) {

@@ -1,5 +1,6 @@
 import { assertObject } from "../utils/TypeAssertion";
 import { InfiltrationState, InfiltrationStateDefault } from "./formulas/game";
+import { Reviver } from "../utils/GenericReviver";
 
 export function loadInfiltrations(saveString: unknown): void {
   if (saveString == null || typeof saveString !== "string" || saveString === "") {
@@ -7,7 +8,7 @@ export function loadInfiltrations(saveString: unknown): void {
     return;
   }
   try {
-    const parsedData: unknown = JSON.parse(saveString);
+    const parsedData: unknown = JSON.parse(saveString, Reviver);
     assertObject(parsedData);
     const { floors, lastChangeTimestamp } = parsedData;
     if (typeof floors !== "number") {

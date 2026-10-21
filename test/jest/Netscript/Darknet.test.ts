@@ -47,7 +47,7 @@ beforeAll(() => {
 });
 beforeEach(() => {
   DarknetState.offlineServers = new Set();
-  setupBasicTestingEnvironment({ purchasePServer: true, purchaseHacknetServer: true });
+  setupBasicTestingEnvironment({ purchaseCloudServer: true, purchaseHacknetServer: true });
   Player.sourceFiles.set(15, 1);
   getDarkscapeNavigator();
   Player.getHomeComputer().programs.push(CompletedProgramName.formulas);
@@ -704,13 +704,13 @@ describe("expectRunningOnDarknetServer", () => {
   test("throws when called on non-darknet server", () => {
     const logger = jest.fn();
     const ctx = getMockedNetscriptContext(logger);
-    ctx.workerScript.hostname = SpecialServers.Home;
+    ctx.workerScript.scriptRef.server = SpecialServers.Home;
     expect(() => expectRunningOnDarknetServer(ctx)).toThrow("This API can only be used on a darknet server");
   });
   test("does not throw when called on darknet server", () => {
     const logger = jest.fn();
     const ctx = getMockedNetscriptContext(logger);
-    ctx.workerScript.hostname = SpecialServers.DarkWeb;
+    ctx.workerScript.scriptRef.server = SpecialServers.DarkWeb;
     expect(() => expectRunningOnDarknetServer(ctx)).not.toThrow();
   });
 });

@@ -1,7 +1,8 @@
 import { CodingContractName } from "@enums";
 import { CodingContractTypes } from "./ContractTypes";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { assertObject } from "../utils/TypeAssertion";
 import type { Result } from "@nsdefs";
@@ -172,21 +173,16 @@ export class CodingContract {
     });
   }
 
-  /** Serialize the current file to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("CodingContract", this);
-  }
-
-  /** Initializes a CodingContract from a JSON save state. */
-  static fromJSON(value: IReviverValue): CodingContract {
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): CodingContract {
     assertObject(value.data);
     // In previous versions, there was a data field instead of a state field.
     if ("data" in value.data) {
       value.data.state = value.data.data;
       delete value.data.data;
     }
-    return Generic_fromJSON(CodingContract, value.data);
+    return Generic_fromJSON(CodingContract, value.data, CodingContract.includedKeys);
   }
-}
 
-constructorsForReviver.CodingContract = CodingContract;
+  static includedKeys = makeSerializable("CodingContract", CodingContract);
+}

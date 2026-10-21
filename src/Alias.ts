@@ -1,12 +1,13 @@
 import { Terminal } from "./Terminal";
 import { trimQuotes } from "./utils/helpers/string";
+import { Reviver } from "./utils/GenericReviver";
 
 export const Aliases = new Map<string, string>();
 export const GlobalAliases = new Map<string, string>();
 
 export function loadAliases(saveString: string): void {
   Aliases.clear();
-  const parsedAliases: unknown = JSON.parse(saveString);
+  const parsedAliases: unknown = JSON.parse(saveString, Reviver);
   if (!parsedAliases || typeof parsedAliases !== "object") return;
   for (const [name, alias] of Object.entries(parsedAliases)) {
     if (typeof name === "string" && typeof alias === "string") Aliases.set(name, alias);
@@ -15,7 +16,7 @@ export function loadAliases(saveString: string): void {
 
 export function loadGlobalAliases(saveString: string): void {
   GlobalAliases.clear();
-  const parsedAliases: unknown = JSON.parse(saveString);
+  const parsedAliases: unknown = JSON.parse(saveString, Reviver);
   if (!parsedAliases || typeof parsedAliases !== "object") return;
   for (const [name, alias] of Object.entries(parsedAliases)) {
     if (typeof name === "string" && typeof alias === "string") GlobalAliases.set(name, alias);

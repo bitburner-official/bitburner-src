@@ -21,17 +21,35 @@ export function scriptCalculateOfflineProduction(
   const lastUpdate = playerLastUpdate;
   const timePassed = Math.max((thisUpdate - lastUpdate) / 1000, 0); //Seconds
 
-  //Calculate the "confidence" rating of the script's true production. This is based
+  // EXP GAIN
+  //Calculate the "confidence" rating of the script's true exp production. This is based
   //entirely off of time. We will arbitrarily say that if a script has been running for
   //4 hours (14400 sec) then we are completely confident in its ability
   let confidence = runningScript.onlineRunningTime / 14400;
   if (confidence >= 1) {
     confidence = 1;
   }
+  const expGain = confidence * (runningScript.onlineExpGained / runningScript.onlineRunningTime) * timePassed;
+  Player.gainHackingExp(expGain);
 
-  //Data map: [MoneyStolen, NumTimesHacked, NumTimesGrown, NumTimesWeaken]
+  // MONEY GAIN
+  // Money for offline script production is given to the player during engine load. In
+  // this script we just update production records both of running scripts and in the
+  // player data.
+  let moneyGain =
+    (runningScript.onlineMoneyMade / playerPlaytimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
+  if (!Number.isFinite(moneyGain)) {
+    moneyGain = 0;
+  }
+  Player.scriptProdSinceLastAug += moneyGain;
 
-  // Grow
+  // Update script stats
+  runningScript.offlineRunningTime += timePassed;
+  runningScript.offlineExpGained += expGain;
+  runningScript.offlineMoneyMade += moneyGain;
+
+  // dataMap entry schema: [MoneyStolen, NumTimesHacked, NumTimesGrown, NumTimesWeaken]
+  // GROW
   for (const [hostname, [, , growCount]] of runningScript.dataMap.entries()) {
     if (growCount == 0 || growCount == null) {
       continue;
@@ -53,25 +71,7 @@ export function scriptCalculateOfflineProduction(
     runningScript.log(`'${server.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
   }
 
-  // Offline EXP gain
-  // A script's offline production will always be at most half of its online production.
-  const expGain = confidence * (runningScript.onlineExpGained / runningScript.onlineRunningTime) * timePassed;
-  Player.gainHackingExp(expGain);
-
-  let moneyGain =
-    (runningScript.onlineMoneyMade / playerPlaytimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
-  if (!Number.isFinite(moneyGain)) {
-    moneyGain = 0;
-  }
-  // money is given to player during engine load
-  Player.scriptProdSinceLastAug += moneyGain;
-
-  // Update script stats
-  runningScript.offlineRunningTime += timePassed;
-  runningScript.offlineExpGained += expGain;
-  runningScript.offlineMoneyMade += moneyGain;
-
-  // Weaken
+  // WEAKEN
   for (const [hostname, [, , , weakenCount]] of runningScript.dataMap.entries()) {
     if (weakenCount == 0 || weakenCount == null) {
       continue;

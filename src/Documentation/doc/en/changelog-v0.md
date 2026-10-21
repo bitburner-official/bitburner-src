@@ -2370,19 +2370,27 @@
 - Added ability to pass arguments into scripts. See documentation
 - The implementation/function signature of functions that deal with scripts have changed. Therefore, some old scripts might not work anymore. Some of these functions include run(), exec(), isRunning(), kill(), and some others I may have forgot about. Please check the updated Netscript documentation if you run into issues.-Note that scripts are now uniquely identified by the script name and their arguments. For example, you can run a script using::
 
-  run foodnstuff.script 1
+```text
+run foodnstuff.script 1
+```
 
 and you can also run the same script with a different argument::
 
-    run foodnstuff.script 2
+```text
+run foodnstuff.script 2
+```
 
 These will be considered two different scripts. To kill the first script you must run::
 
-    kill foodnstuff.script 1
+```text
+kill foodnstuff.script 1
+```
 
 and to kill the second you must run::
 
-    kill foodnstuff.script 2
+```text
+kill foodnstuff.script 2
+```
 
 Similar concepts apply for Terminal Commands such as tail, and Netscript commands such as run(), exec(), kill(), isRunning(), etc.
 

@@ -4,7 +4,7 @@
 
 ## DarknetFormulas.getExpectedRamBlockRemoved() method
 
-Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+Gets the expected amount of ram that will be freed by a call to dnet.memoryReallocation
 
 **Signature:**
 

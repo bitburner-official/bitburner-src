@@ -6,7 +6,8 @@ import { ActionClass, ActionParams } from "./Action";
 import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import type { TeamActionWithCasualties } from "./TeamCasualties";
-import { constructorsForReviver, Generic_fromJSON, type IReviverValue } from "../../utils/JSONReviver";
+import { type IReviverValue } from "../../utils/JSONReviver";
+import { makeSerializable } from "../../utils/GenericReviver";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 
 interface BlackOpParams {
@@ -68,7 +69,8 @@ export class BlackOperation extends ActionClass implements TeamActionWithCasualt
 
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 
-  toJSON(): IReviverValue {
+  // This is very strange, but it's how it's always been done.
+  jsonReplacer(): IReviverValue {
     return {
       ctor: "BlackOperation",
       data: {
@@ -81,9 +83,5 @@ export class BlackOperation extends ActionClass implements TeamActionWithCasualt
     this.teamCount = clampInteger(loadedObject.teamCount, 0);
   }
 
-  static fromJSON(value: IReviverValue): BlackOperation {
-    return Generic_fromJSON(BlackOperation, value.data);
-  }
+  static includedKeys = makeSerializable("BlackOperation", BlackOperation);
 }
-
-constructorsForReviver.BlackOperation = BlackOperation;

@@ -100,41 +100,10 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
   const firstServerNumber = serverData.length === 0 ? 0 : adjustedIndex + 1;
   const lastServerNumber = serverData.length === 0 ? 0 : adjustedIndex + dataToShow.length;
 
-  return (
-    <>
-      <Typography>
-        This page displays a list of all of your scripts that are currently running across every machine. It also
-        provides information about each script's production. The scripts are categorized by the hostnames of the servers
-        on which they are running.
-      </Typography>
-
-      <ScriptProduction />
-      <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
-        <TextField
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          autoFocus
-          InputProps={{ startAdornment: <Search />, spellCheck: false }}
-          size="small"
-        />
-        <Typography marginLeft="1em">Servers/page:</Typography>
-        <Select value={serversPerPage} onChange={changeServersPerPage}>
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={15}>15</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={100}>100</MenuItem>
-        </Select>
-        <Typography marginLeft="1em">Scripts/page:</Typography>
-        <Select value={scriptsPerPage} onChange={changeScriptsPerPage}>
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={15}>15</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={100}>100</MenuItem>
-        </Select>
-        <Typography
-          marginLeft="auto"
-          marginRight="1em"
-        >{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
+  function PaginationControls() {
+    return (
+      <>
+        <Typography marginRight="1em">{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
         <IconButton onClick={() => changePage(0)} disabled={page === 0}>
           <FirstPage />
         </IconButton>
@@ -147,12 +116,52 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
         <IconButton onClick={() => changePage(lastPage)} disabled={page === lastPage}>
           <LastPage />
         </IconButton>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Typography>
+        This page displays a list of all of your scripts that are currently running across every machine. It also
+        provides information about each script's production. The scripts are categorized by the hostnames of the servers
+        on which they are running.
+      </Typography>
+
+      <ScriptProduction />
+      <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
+        <PaginationControls />
+        <Typography marginLeft="2em">Servers/page:</Typography>
+        <Select value={serversPerPage} onChange={changeServersPerPage}>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={100}>100</MenuItem>
+        </Select>
+        <Typography marginLeft="2em">Scripts/page:</Typography>
+        <Select value={scriptsPerPage} onChange={changeScriptsPerPage}>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={100}>100</MenuItem>
+        </Select>
+        <TextField
+          sx={{ marginLeft: "2em" }}
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          autoFocus
+          InputProps={{ startAdornment: <Search />, spellCheck: false }}
+          size="small"
+        />
       </div>
       <List dense={true}>
         {dataToShow.map(([server, scripts]) => (
           <ServerAccordion key={server.hostname} server={server} scripts={scripts} startOpen={!!props.serverName} />
         ))}
       </List>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {serversPerPage <= serverData.length && <PaginationControls />}
+      </div>
     </>
   );
 }

@@ -1301,7 +1301,7 @@ export const ns: InternalAPI<NSFull> = {
       );
       options.type = _options.type;
       const validTypes = ["boolean", "text", "select"];
-      if (!["boolean", "text", "select"].includes(options.type)) {
+      if (!validTypes.includes(options.type)) {
         throw helpers.errorMessage(
           ctx,
           `Invalid value for options.type: ${options.type}. Must be one of ${validTypes.join(", ")}.`,

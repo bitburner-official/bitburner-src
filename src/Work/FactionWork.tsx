@@ -2,7 +2,8 @@ import type { Faction } from "../Faction/Faction";
 
 import React from "react";
 import { PlayerBaseWork, WorkType } from "./Work";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { Player } from "@player";
 import { FactionName, FactionWorkType } from "@enums";
 import { Factions } from "../Faction/Factions";
@@ -78,20 +79,15 @@ export class FactionWork extends PlayerBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("FactionWork", this);
-  }
-
-  /** Initializes a FactionWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): FactionWork {
-    const factionWork = Generic_fromJSON(FactionWork, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): FactionWork {
+    const factionWork = Generic_fromJSON(FactionWork, value.data, FactionWork.includedKeys);
     factionWork.factionWorkType = getEnumHelper("FactionWorkType").getMember(factionWork.factionWorkType, {
       alwaysMatch: true,
     });
     factionWork.factionName = getEnumHelper("FactionName").getMember(factionWork.factionName, { alwaysMatch: true });
     return factionWork;
   }
-}
 
-constructorsForReviver.FactionWork = FactionWork;
+  static includedKeys = makeSerializable("FactionWork", FactionWork);
+}

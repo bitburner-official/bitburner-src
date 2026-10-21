@@ -66,6 +66,8 @@ In order to do this, the sleeve's shock must be at `0`.
 Any [Augmentation](../basic/augmentations.md) that is currently available to you through a faction is also available for your Duplicate Sleeves.
 There are a few [Augmentations](../basic/augmentations.md), such as NeuroFlux Governor and [Bladeburner](bladeburners.md)-specific ones, that cannot be purchased for a Duplicate Sleeve.
 
+The "Unstable Circadian Modulator" augmentation's effect is randomized when you load the game or prestige, so different sleeves with this augmentation can have different multipliers. This also means that this augmentation is sometimes not purchasable, depending on the current randomized effect.
+
 When you purchase an [Augmentation](../basic/augmentations.md) for a Duplicate Sleeve, it is instantly installed.
 When this happens, the sleeve's stats are instantly reset back to 0, similar to when you normally install [Augmentations](../basic/augmentations.md).
 

@@ -1,4 +1,4 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { makeSerializable } from "../../../utils/GenericReviver";
 import { Sleeve } from "../Sleeve";
 import { SleeveBaseWork, SleeveWorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
@@ -24,15 +24,5 @@ export class SleeveRecoveryWork extends SleeveBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveRecoveryWork", this);
-  }
-
-  /** Initializes a RecoveryWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): SleeveRecoveryWork {
-    return Generic_fromJSON(SleeveRecoveryWork, value.data);
-  }
+  static includedKeys = makeSerializable("SleeveRecoveryWork", SleeveRecoveryWork);
 }
-
-constructorsForReviver.SleeveRecoveryWork = SleeveRecoveryWork;

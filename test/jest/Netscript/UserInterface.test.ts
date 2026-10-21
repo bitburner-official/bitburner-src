@@ -2,7 +2,7 @@ import { IStyleSettings, UserInterfaceTheme } from "../../../src/ScriptEditor/Ne
 import { Settings } from "../../../src/Settings/Settings";
 import { defaultStyles } from "../../../src/Themes/Styles";
 import { defaultTheme } from "../../../src/Themes/Themes";
-import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
+import { getNS, getWorkerScriptAndNS, initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { AddToAllServers, GetServerOrThrow, prestigeAllServers, connectServers } from "../../../src/Server/AllServers";
 import { Player } from "@player";
@@ -10,6 +10,7 @@ import { CompletedProgramName } from "@enums";
 import { validateConnections } from "../../../src/Server/ServerHelpers";
 import { Server } from "../../../src/Server/Server";
 import type { IPAddress } from "../../../src/Types/strings";
+import { LogBoxCloserEvents } from "../../../src/ui/React/LogBoxManager";
 
 const themeHexColor = "#abc";
 const fontFamily = "monospace";
@@ -20,6 +21,23 @@ beforeAll(() => {
 
 beforeEach(() => {
   setupBasicTestingEnvironment();
+});
+
+describe("closeTail", () => {
+  test("closes a tail after its script has stopped", () => {
+    const { ws, ns } = getWorkerScriptAndNS();
+    let closedPid: number | undefined;
+    const unsubscribe = LogBoxCloserEvents.subscribe((pid) => {
+      closedPid = pid;
+    });
+
+    try {
+      ns.ui.closeTail(ws.scriptRef.pid);
+      expect(closedPid).toBe(ws.scriptRef.pid);
+    } finally {
+      unsubscribe();
+    }
+  });
 });
 
 describe("setTheme", () => {

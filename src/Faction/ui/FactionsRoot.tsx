@@ -63,7 +63,7 @@ function getStylesForFactionName(faction: Faction) {
     overflow: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
-    color: faction.isBanned ? Settings.theme.error : "inherit",
+    color: faction.isBanned ? Settings.theme.disabled : "inherit",
     textDecorationLine: faction.isBanned ? "line-through" : "none",
   };
 }
@@ -175,7 +175,13 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                           <li key={enemy}>{enemy}</li>
                         ))}
                       </ul>
-                      {!props.faction.isMember && <>Joining this Faction will prevent you from joining its enemies.</>}
+                      {!props.faction.isMember && (
+                        <>
+                          Joining this Faction will prevent you from joining its
+                          <br />
+                          enemies until you next install augmentations.
+                        </>
+                      )}
                     </Typography>
                   }
                 >

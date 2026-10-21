@@ -7,5 +7,7 @@
 **Signature:**
 
 ```typescript
-actionName: string;
+actionName:
+    | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionNameEnumType["InciteViolence"]>
+    | BladeburnerContractName;
 ```

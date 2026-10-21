@@ -558,8 +558,7 @@ export function initBitNodes() {
   );
 }
 
-export const defaultMultipliers = new BitNodeMultipliers();
-Object.freeze(defaultMultipliers);
+export const defaultMultipliers = Object.freeze(new BitNodeMultipliers());
 
 export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultipliers {
   switch (n) {

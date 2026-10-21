@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
-import { formatNumber } from "../../ui/formatNumber";
+import { formatMoney, formatNumber } from "../../ui/formatNumber";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { NetscriptContext } from "../../Netscript/APIWrapper";
 import { helpers } from "../../Netscript/NetscriptHelpers";
@@ -46,7 +46,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
       currentNodeMults.DarknetMoneyMultiplier;
     Player.gainMoney(moneyReward, "darknet");
     Player.gainCharismaExp(xpReward);
-    const result = `Phishing attack succeeded! $${formatNumber(moneyReward, 2)} retrieved. (Gained ${formatNumber(
+    const result = `Phishing attack succeeded! ${formatMoney(moneyReward)} retrieved. (Gained ${formatNumber(
       xpReward,
       1,
     )} cha xp)`;

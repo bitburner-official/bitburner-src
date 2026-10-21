@@ -13,7 +13,7 @@ import { Augmentation } from "../Augmentation";
 import { AugmentationName, FactionName } from "@enums";
 import { Augmentations } from "../Augmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
-import { getAugCost } from "../AugmentationHelpers";
+import { getAugCost, getAugLevel } from "../AugmentationHelpers";
 import { useRerender } from "../../ui/React/hooks";
 import { Requirement } from "../../ui/Components/Requirement";
 
@@ -160,7 +160,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
 
   const aug = Augmentations[props.augName];
   if (!aug) return <></>;
-  const augLevel = aug.getLevel();
+  const augLevel = getAugLevel(aug);
   const augCosts = getAugCost(aug);
   const cost = props.parent.sleeveAugs ? aug.baseCost : augCosts.moneyCost;
   const repCost = augCosts.repCost;

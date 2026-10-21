@@ -1,5 +1,5 @@
 import { IMinMaxRange } from "../types";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 
 export const StockForecastInfluenceLimit = 5;
@@ -123,6 +123,8 @@ export class Stock {
    */
   readonly totalShares: number;
 
+  readonly priceHistory: { timeMs: number; price: number }[];
+
   constructor(p: IConstructorParams = defaultConstructorParams) {
     this.name = p.name;
     this.symbol = p.symbol;
@@ -148,6 +150,8 @@ export class Stock {
     // Max Shares (Outstanding shares) is a percentage of total shares
     const outstandingSharePercentage = 0.2;
     this.maxShares = Math.round((this.totalShares * outstandingSharePercentage) / 1e5) * 1e5;
+
+    this.priceHistory = [];
   }
 
   /** Safely set the stock's second-order forecast to a new value */
@@ -188,11 +192,11 @@ export class Stock {
       this.otlkMag += changeAmt;
     }
 
-    this.otlkMag = Math.min(this.otlkMag, 50);
     if (this.otlkMag < 0) {
       this.otlkMag *= -1;
       this.b = !this.b;
     }
+    this.otlkMag = Math.min(this.otlkMag, 50);
   }
 
   /**
@@ -264,15 +268,5 @@ export class Stock {
     }
   }
 
-  /** Serialize the Stock to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Stock", this);
-  }
-
-  /** Initializes a Stock from a JSON save state */
-  static fromJSON(value: IReviverValue): Stock {
-    return Generic_fromJSON(Stock, value.data);
-  }
+  static includedKeys = makeSerializable("Stock", Stock);
 }
-
-constructorsForReviver.Stock = Stock;

@@ -1,6 +1,7 @@
 import { Player } from "@player";
 import { CrimeType } from "@enums";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { type IReviverValue, Generic_fromJSON } from "../utils/JSONReviver";
+import { makeSerializable } from "../utils/GenericReviver";
 import { Crime } from "../Crime/Crime";
 import { CONSTANTS } from "../Constants";
 import { determineCrimeSuccess } from "../Crime/CrimeHelpers";
@@ -94,17 +95,12 @@ export class CrimeWork extends PlayerBaseWork {
     };
   }
 
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("CrimeWork", this);
-  }
-
-  /** Initializes a CrimeWork object from a JSON save state. */
-  static fromJSON(value: IReviverValue): CrimeWork {
-    const crimeWork = Generic_fromJSON(CrimeWork, value.data);
+  /** Custom load handling */
+  static jsonReviver(value: IReviverValue): CrimeWork {
+    const crimeWork = Generic_fromJSON(CrimeWork, value.data, CrimeWork.includedKeys);
     crimeWork.crimeType = getEnumHelper("CrimeType").getMember(crimeWork.crimeType, { alwaysMatch: true });
     return crimeWork;
   }
-}
 
-constructorsForReviver.CrimeWork = CrimeWork;
+  static includedKeys = makeSerializable("CrimeWork", CrimeWork);
+}

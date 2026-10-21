@@ -79,11 +79,7 @@ export function generateRandomContract(): void {
   const reward = getRandomReward();
 
   // Finally select a random problem type.
-  // Difficulty is capped to not overwhelm a new player.
-  const totalSFs = [...Player.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0);
-  const maxDif = 2 * totalSFs + 1;
-
-  const problemType = getRandomProblemType(maxDif);
+  const problemType = getRandomProblemType();
 
   const contractFn = getRandomFilename(randServer);
   if (contractFn == null) {
@@ -101,7 +97,6 @@ export function generateRandomContractOnHome(): void {
   // Then select a random reward type. 'Money' will always be the last reward type
   const reward = getRandomReward();
 
-  // Choose random server
   const serv = Player.getHomeComputer();
 
   const contractFn = getRandomFilename(serv);
@@ -169,7 +164,13 @@ export function generateContract(params: IGenerateContractParams): ContractFileP
   return contract.fn;
 }
 
-function getRandomProblemType(maxDif = 10): CodingContractName {
+function calculateDefaultMaxDifficulty(): number {
+  // Difficulty is capped to not overwhelm a new player.
+  const totalSFs = [...Player.sourceFiles].reduce((total, [__bn, lvl]) => (total += lvl), 0);
+  return 2 * totalSFs + 1;
+}
+
+function getRandomProblemType(maxDif = calculateDefaultMaxDifficulty()): CodingContractName {
   const problemTypes = Object.values(CodingContractName).filter((x) => CodingContractTypes[x].difficulty <= maxDif);
   const randIndex = getRandomIntInclusive(0, problemTypes.length - 1);
 

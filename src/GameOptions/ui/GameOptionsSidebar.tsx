@@ -27,6 +27,7 @@ import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFuncti
 import { OptionsTabName } from "./GameOptionsRoot";
 import { Player } from "@player";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
+import { CONSTANTS } from "../../Constants";
 
 interface IProps {
   tab: OptionsTabName;
@@ -300,7 +301,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
             Repeat Tutorial
           </Button>
-          <Button startIcon={<Chat />} href="https://discord.gg/TFc3hKD" target="_blank" sx={{ gridArea: "discord" }}>
+          <Button startIcon={<Chat />} href={CONSTANTS.DiscordURL} target="_blank" sx={{ gridArea: "discord" }}>
             Discord
           </Button>
           <Button

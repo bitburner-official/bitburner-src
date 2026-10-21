@@ -21,6 +21,7 @@ import { enterBitNode } from "../../src/RedPill";
 import { getDefaultBitNodeOptions } from "../../src/BitNode/BitNodeUtils";
 import { addLowLevelServersIfNeeded } from "../../src/DarkNet/controllers/NetworkMovement";
 import { getDarknetServerOrThrow } from "../../src/DarkNet/utils/darknetServerUtils";
+import { workerScripts } from "../../src/Netscript/WorkerScripts";
 
 declare const importActual: (typeof config)["doImport"];
 
@@ -28,8 +29,8 @@ export function fixDoImportIssue() {
   // Replace Blob/ObjectURL functions, because they don't work natively in Jest
   global.Blob = class extends Blob {
     code: string;
-    constructor(blobParts?: BlobPart[], __options?: BlobPropertyBag) {
-      super();
+    constructor(blobParts?: BlobPart[], options?: BlobPropertyBag) {
+      super(blobParts, options);
       this.code = String((blobParts ?? [])[0]);
     }
   };
@@ -58,8 +59,9 @@ export function initGameEnvironment() {
 }
 
 export function setupBasicTestingEnvironment(
-  { purchaseHacknetServer, purchasePServer } = { purchasePServer: false, purchaseHacknetServer: false },
+  { purchaseCloudServer, purchaseHacknetServer } = { purchaseCloudServer: false, purchaseHacknetServer: false },
 ): void {
+  workerScripts.clear();
   // We need to delete all servers before calling initForeignServers.
   prestigeAllServers();
   setPlayer(new PlayerObject());
@@ -80,7 +82,7 @@ export function setupBasicTestingEnvironment(
   // Get some money.
   Player.money = 1e15;
 
-  if (purchasePServer) {
+  if (purchaseCloudServer) {
     purchaseServer("test-server-1", 2);
   }
   if (purchaseHacknetServer) {
@@ -125,6 +127,9 @@ export function getMockedNetscriptContext(
     functionPath: "",
     workerScript: {
       log: workerScriptLogFunction,
+      get hostname() {
+        return (this as WorkerScript).scriptRef.server;
+      },
       scriptRef: {
         dependencies: [],
       },

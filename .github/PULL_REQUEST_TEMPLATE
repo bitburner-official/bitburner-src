@@ -30,4 +30,4 @@ It'll automate the process.
 - Include how it was tested
 - Include screenshot / gif (if possible)
 
-Make sure you run `npm run format` and `npm run lint` before pushing.
+Make sure you run `npm run format`, `npm run lint`, and `npm run typecheck` before pushing.

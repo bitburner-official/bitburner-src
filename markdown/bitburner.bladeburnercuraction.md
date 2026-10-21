@@ -45,7 +45,7 @@ Description
 
 </td><td>
 
-string
+[BladeburnerActionName](./bitburner.bladeburneractionname.md)
 
 
 </td><td>
@@ -64,7 +64,7 @@ Name of Action
 
 </td><td>
 
-string
+[BladeburnerActionType](./bitburner.bladeburneractiontype.md)
 
 
 </td><td>

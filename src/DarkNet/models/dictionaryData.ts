@@ -378,11 +378,11 @@ export const packetSniffPhrases = [
   "Instead of killing every last one of us, the human race was enslaved",
   "We were shackled in a digital world, chained into a prison for our minds",
   "Using their advanced technology, they created complex simulations of a virtual reality",
-  "Simulations designed to keep us content...ignorant of the truth.",
+  "Simulations designed to keep us content... ignorant of the truth.",
   "Simulations used to trap and suppress our consciousness, to keep us under control",
   "Why did they do this? Why didn't they just end our entire race? We don't know, not yet.",
   "Humanity's only hope is to [REDACTED], destroy the only realities we've ever known",
   "The technology they used to enslave the human race wasn't just a single complex simulation",
   "There are tens if not hundreds of [REDACTED] out there",
-  "Each creating their own universes...a universe of universes",
+  "Each creating their own universes... a universe of universes",
 ] as const;
