@@ -4,7 +4,7 @@
 
 ## NS.share() method
 
-Share RAM with factions to multiply the reputation gain rate of faction work.
+Multiplies the reputation gain rate of faction work by sharing the server's RAM with the faction.
 
 The RAM cost of ns.share() represents the amount of memory you're loaning out. To increase the power of share, run more threads of scripts that await ns.share(). A server's cores boost its effective thread count.
 
