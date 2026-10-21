@@ -2,7 +2,7 @@
 
 Intelligence is a skill you unlock by gaining [Source-File 5.1](sourcefiles.md) (after destroying [BitNode-5](bitnodes.md)).
 
-Intelligence is unique in that it persists across BitNodes, and never gets reset back to 1.
+Intelligence is unique in that it persists across BitNodes, and never gets reset back to 1. However, you gain experience much slower than you do with other skills.
 
 ## What Intelligence improves
 
