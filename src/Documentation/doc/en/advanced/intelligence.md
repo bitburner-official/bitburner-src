@@ -73,22 +73,15 @@ When entering a BitNode, the player has options to override the level of Source-
 
 ## Intelligence Overrides
 
-When entering a BitNode, the player has options to override the level of their Intelligence skill. When assigning a value with this feature, your Intelligence and your Sleeves' Intelligence will be temporarily set to this value if it is lower than
-their current values. For example:
+When entering a BitNode, the player has options to override the level of their Intelligence skill. When assigning a value with this feature, your Intelligence and your Sleeves' Intelligence will be temporarily set to this value if it is lower than their current values. For example:
 
 - If your Intelligence is 1000 and you set this value to 500, your Intelligence will be temporarily set to 500.
 - If a Sleeve's Intelligence is 200 and you set this value to 500, that Sleeve's Intelligence is still 200.
 
 Note that you still gain Intelligence experience as normal.
 
-For example, suppose you have 1e6 Intelligence exp (Intelligence skill = 242) and set the Intelligence
-override to 100. At the start of the BitNode, your Intelligence skill will be set to 100 (equivalent to
-~11255.318 Intelligence exp).
+For example, suppose you have 1e6 Intelligence exp (Intelligence skill = 242) and set the Intelligence override to 100. At the start of the BitNode, your Intelligence skill will be set to 100 (equivalent to ~11255.318 Intelligence exp).
 
-If you gain 500e3 Intelligence exp during the BitNode, your Intelligence skill will increase to 220 (total
-Intelligence exp = 11255 + 500e3 = 511255). After performing bitflume, the exp gained during the BitNode is
-added to your original exp. Your Intelligence skill will then become 255 (total Intelligence exp = 1e6 +
-500e3 = 1.5e6).
+If you gain 500e3 Intelligence exp during the BitNode, your Intelligence skill will increase to 220 (total Intelligence exp = 11255 + 500e3 = 511255). After performing bitflume, the exp gained during the BitNode is added to your original exp. Your Intelligence skill will then become 255 (total Intelligence exp = 1e6 + 500e3 = 1.5e6).
 
-The overridden Intelligence will be shown in the character overview. You can hover your mouse over it to see
-the original value.
+The overridden Intelligence will be shown in the character overview. You can hover your mouse over it to see the original value.
