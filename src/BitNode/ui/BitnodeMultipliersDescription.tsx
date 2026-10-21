@@ -294,7 +294,7 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ScriptHackMoney: {
       name: "Money Stolen By Hack",
       color: Settings.theme.money,
-      tooltipText: "Influences how much money is stolen from a server when the player hacks it.",
+      tooltipText: "Influences how much money is stolen from a server when the player performs a hack against it.",
     },
     ScriptHackMoneyGain: {
       name: "Money Gained From Script Hack",

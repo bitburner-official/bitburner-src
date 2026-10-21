@@ -829,7 +829,7 @@ number
 
 </td><td>
 
-Influences how much money is stolen from a server when the player hacks it.
+Influences how much money is stolen from a server when the player performs a hack against it.
 
 
 </td></tr>

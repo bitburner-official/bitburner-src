@@ -142,7 +142,7 @@ export class BitNodeMultipliers {
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   FavorToDonateToFaction = 1;
 
-  /** Influences how much money is stolen from a server when the player hacks it. */
+  /** Influences how much money is stolen from a server when the player performs a hack against it. */
   ScriptHackMoney = 1;
 
   /**
