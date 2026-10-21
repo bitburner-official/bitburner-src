@@ -8803,6 +8803,10 @@ export interface NS {
 
   /**
    * Attempt to write to a port.
+   *
+   * @deprecated
+   * Use {@link Port.tryWrite | Port.tryWrite} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8901,6 +8905,10 @@ export interface NS {
 
   /**
    * Write data to a port.
+   *
+   * @deprecated
+   * Use {@link Port.write | Port.write} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *

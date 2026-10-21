@@ -4,6 +4,11 @@
 
 ## NS.writePort() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.write](./bitburner.port.write.md) instead.
+> 
+
 Write data to a port.
 
 **Signature:**

@@ -1033,9 +1033,9 @@ export const ns: InternalAPI<NSFull> = {
     return helpers.getRunningScript(ctx, ident) !== null;
   },
   writePort: (ctx, _portNumber, data) => {
-    deprecationWarning("writePort", "Use ns.port.write instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.write(data);
+    deprecationWarning("ns.writePort", "Use ns.port.write instead.");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This API intentionally returns any.
+    return ns.port.write(ctx, _portNumber, data);
   },
   write: (ctx, _filename, _data, _mode) => {
     const filepath = helpers.filePath(ctx, "filename", _filename);
@@ -1066,9 +1066,8 @@ export const ns: InternalAPI<NSFull> = {
     server.writeToTextFile(filepath, mode === "w" ? data : existingText + data);
   },
   tryWritePort: (ctx, _portNumber, data) => {
-    deprecationWarning("tryWritePort", "Use ns.port.tryWrite instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.tryWrite(data);
+    deprecationWarning("ns.tryWritePort", "Use ns.port.tryWrite instead.");
+    return ns.port.tryWrite(ctx, _portNumber, data);
   },
   nextPortWrite: (ctx, _portNumber) => {
     deprecationWarning("nextPortWrite", "Use ns.port.nextWrite instead.");
