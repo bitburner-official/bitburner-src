@@ -10,6 +10,7 @@ import { FactionName } from "@enums";
 import { AllGangs } from "../Gang/AllGangs";
 import { GangMemberTasks } from "../Gang/GangMemberTasks";
 import { GangMemberUpgrades } from "../Gang/GangMemberUpgrades";
+import { calculateExpGain } from "../Gang/formulas/formulas";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CONSTANTS } from "../Constants";
@@ -160,7 +161,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         respectGain: member.calculateRespectGain(gang),
         wantedLevelGain: member.calculateWantedLevelGain(gang),
         moneyGain: member.calculateMoneyGain(gang),
-        expGain: member.calculateExpGain(),
+        expGain: calculateExpGain(member, member.getTask()),
       };
     },
     canRecruitMember: (ctx) => {

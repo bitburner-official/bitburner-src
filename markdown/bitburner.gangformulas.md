@@ -49,6 +49,17 @@ Calculate ascension point gain.
 </td></tr>
 <tr><td>
 
+[expGain(member, task)](./bitburner.gangformulas.expgain.md)
+
+
+</td><td>
+
+Calculate experience gain per tick.
+
+
+</td></tr>
+<tr><td>
+
 [moneyGain(gang, member, task)](./bitburner.gangformulas.moneygain.md)
 
 

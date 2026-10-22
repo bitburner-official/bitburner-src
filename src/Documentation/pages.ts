@@ -587,6 +587,7 @@ import nsDoc_bitburner_gang_setmembertask_md from "../../markdown/bitburner.gang
 import nsDoc_bitburner_gang_setterritorywarfare_md from "../../markdown/bitburner.gang.setterritorywarfare.md?raw";
 import nsDoc_bitburner_gangformulas_ascensionmultiplier_md from "../../markdown/bitburner.gangformulas.ascensionmultiplier.md?raw";
 import nsDoc_bitburner_gangformulas_ascensionpointsgain_md from "../../markdown/bitburner.gangformulas.ascensionpointsgain.md?raw";
+import nsDoc_bitburner_gangformulas_expgain_md from "../../markdown/bitburner.gangformulas.expgain.md?raw";
 import nsDoc_bitburner_gangformulas_md from "../../markdown/bitburner.gangformulas.md?raw";
 import nsDoc_bitburner_gangformulas_moneygain_md from "../../markdown/bitburner.gangformulas.moneygain.md?raw";
 import nsDoc_bitburner_gangformulas_respectgain_md from "../../markdown/bitburner.gangformulas.respectgain.md?raw";
@@ -2219,6 +2220,7 @@ AllPages["nsDoc/bitburner.gang.setmembertask.md"] = nsDoc_bitburner_gang_setmemb
 AllPages["nsDoc/bitburner.gang.setterritorywarfare.md"] = nsDoc_bitburner_gang_setterritorywarfare_md;
 AllPages["nsDoc/bitburner.gangformulas.ascensionmultiplier.md"] = nsDoc_bitburner_gangformulas_ascensionmultiplier_md;
 AllPages["nsDoc/bitburner.gangformulas.ascensionpointsgain.md"] = nsDoc_bitburner_gangformulas_ascensionpointsgain_md;
+AllPages["nsDoc/bitburner.gangformulas.expgain.md"] = nsDoc_bitburner_gangformulas_expgain_md;
 AllPages["nsDoc/bitburner.gangformulas.md"] = nsDoc_bitburner_gangformulas_md;
 AllPages["nsDoc/bitburner.gangformulas.moneygain.md"] = nsDoc_bitburner_gangformulas_moneygain_md;
 AllPages["nsDoc/bitburner.gangformulas.respectgain.md"] = nsDoc_bitburner_gangformulas_respectgain_md;

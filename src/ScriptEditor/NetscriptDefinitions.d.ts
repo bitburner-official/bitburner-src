@@ -1096,11 +1096,8 @@ interface GangMemberInfo {
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
-  /** Per Cycle Exp object for each stat for this gang member.
-   *
-   * null in the event that the member does not have a given task.
-   */
-  expGain: GangMemberExpGain | null;
+  /** Per Cycle Exp object for each stat for this gang member. */
+  expGain: GangMemberExpGain;
 }
 
 /** @public */
@@ -6550,6 +6547,13 @@ interface GangFormulas {
    * @returns The calculated money gain.
    */
   moneyGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
+  /**
+   * Calculate experience gain per tick.
+   * @param member - Member info from {@link Gang.getMemberInformation | getMemberInformation}
+   * @param task - Task info from {@link Gang.getTaskStats | getTaskStats}
+   * @returns The calculated exp gain.
+   */
+  expGain(member: GangMemberInfo, task: GangTaskStats): GangMemberExpGain;
 
   /**
    * Calculate ascension point gain.

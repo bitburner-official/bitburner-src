@@ -462,14 +462,12 @@ Amount of Respect earned by member since they last Ascended
 
 </td><td>
 
-[GangMemberExpGain](./bitburner.gangmemberexpgain.md) \| null
+[GangMemberExpGain](./bitburner.gangmemberexpgain.md)
 
 
 </td><td>
 
 Per Cycle Exp object for each stat for this gang member.
-
-null in the event that the member does not have a given task.
 
 
 </td></tr>
