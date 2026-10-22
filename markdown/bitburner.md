@@ -1138,6 +1138,17 @@ Base interface of all player tasks.
 </td></tr>
 <tr><td>
 
+[Port](./bitburner.port.md)
+
+
+</td><td>
+
+Port API
+
+
+</td></tr>
+<tr><td>
+
 [ProcessInfo](./bitburner.processinfo.md)
 
 

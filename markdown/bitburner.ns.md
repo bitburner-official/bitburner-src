@@ -383,6 +383,27 @@ The current script's PID
 </td></tr>
 <tr><td>
 
+[port](./bitburner.ns.port.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[Port](./bitburner.port.md)
+
+
+</td><td>
+
+Namespace for [port](./bitburner.port.md) functions.
+
+
+</td></tr>
+<tr><td>
+
 [singularity](./bitburner.ns.singularity.md)
 
 
