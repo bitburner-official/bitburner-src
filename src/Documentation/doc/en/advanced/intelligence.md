@@ -5,7 +5,7 @@ Intelligence is a skill available to you either:
 - Permanently, after having obtained [Source-File 5.1](sourcefiles.md) from completing [BitNode-5](bitnodes.md) the first time.
 - Temporarily, during [BitNode-5](bitnodes.md) before completing it and getting the first Source-File level.
 
-Intelligence is unique in that once fully unlocked it will persist across BitNodes and never be reset back to 1. The only exception to this would be during BitNode-5 _before_ getting Source-File 5.1, if you leave at any point to enter another BitNode that is not BitNode-5 without first getting Source-File 5.1 then any Intelligence gained will be reset to 0. Conversely any Intelligence gained during time spent in BitNode-5 that is followed up with completing the BitNode will be retained, as from that point onward Intelligence is fully unlocked and is now a permanent skill.
+Intelligence is unique in that once fully unlocked, it will persist across BitNodes and never be reset back to 1. The only exception to this would be during BitNode-5, _before_ getting Source-File 5.1. If you leave at any point to enter another BitNode that is not BitNode-5 without first getting Source-File 5.1, then any Intelligence gained will be reset to 0. Conversely, any Intelligence gained during time spent in BitNode-5 that is followed up with completing the BitNode will be retained, as from that point onward, Intelligence is fully unlocked and is now a permanent skill.
 
 Another unique trait of Intelligence is, due to its persistent nature and variety of bonuses provided, how much slower you gain experience for it compared to other skills.
 
