@@ -106,7 +106,7 @@ const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
         <Tooltip title={<span>{value.tooltipText}</span>}>
           <span>
             {value.name}
-            <Info sx={{ ml: 1, fontsize: "1.125rem" }} color="info" />
+            <Info sx={{ ml: 1, fontsize: "1rem", verticalAlign: "middle" }} color="info" />
           </span>
         </Tooltip>
       ) : (
