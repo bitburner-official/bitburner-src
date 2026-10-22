@@ -111,7 +111,9 @@ export const HelpTexts: Record<string, string[]> = {
     "Entering just the command 'alias' without any arguments prints the list of all defined aliases in the reusable form ",
     "'alias NAME=VALUE' on the Terminal. ",
     " ",
-    "The 'unalias' command can be used to remove aliases. Note that the --all alias is reserved for removal.",
+    "The 'unalias' command can be used to remove aliases.",
+    " ",
+    "NOTE:  The --all alias is reserved for removal.",
     " ",
   ],
   analyze: [
@@ -142,7 +144,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "If this command is run with the '-a' flag, it will attempt to purchase all unowned programs.",
     " ",
-    "Otherwise, the name of the program must be passed in as a parameter. This name is not case-sensitive.",
+    "Otherwise, the name of the program must be passed in as a parameter. This name is NOT case-sensitive.",
     " ",
   ],
   cat: [
