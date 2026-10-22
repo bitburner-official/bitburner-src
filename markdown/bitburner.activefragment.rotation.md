@@ -4,6 +4,8 @@
 
 ## ActiveFragment.rotation property
 
+The integer number of clockwise 90-degree turns applied to the fragment's orientation.
+
 **Signature:**
 
 ```typescript
