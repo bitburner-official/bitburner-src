@@ -12,9 +12,9 @@ Creating a Gang in other [BitNodes](bitnodes.md) will offer more [Augmentations]
 
 After creating a gang, you will be able to start recruiting, adding members to your gang as you gain Respect. While in a BitNode, your gang and gang member stats will not reset if you install augmentations.
 
-## Respect
+## Respect and faction reputation
 
-Earned as your gang members complete tasks, Respect affects your gang's productivity, including your Faction Reputation (needed to buy augmentations from your Gang Faction), and the number of recruits you can have. An individual gang member's Respect is lost or reset if they Ascend, or are killed in a Territory Warfare clash.
+Both faction reputation (needed to buy augmentations from your Gang Faction) and respect are earned as your gang members complete tasks. Respect affects your gang's productivity and the number of recruits you can have. An individual gang member's Respect is lost or reset if they Ascend, or are killed in a Territory Warfare clash.
 
 ## Ascending
 
