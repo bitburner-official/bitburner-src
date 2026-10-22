@@ -8823,6 +8823,10 @@ export interface NS {
 
   /**
    * Listen for a port write.
+   *
+   * @deprecated
+   * Use {@link Port.nextWrite | Port.nextWrite} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8868,6 +8872,10 @@ export interface NS {
 
   /**
    * Get a copy of the data from a port without popping it.
+   *
+   * @deprecated
+   * Use {@link Port.peek | Port.peek} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8894,6 +8902,10 @@ export interface NS {
 
   /**
    * Clear data from a port.
+   *
+   * @deprecated
+   * Use {@link Port.clear | Port.clear} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8928,6 +8940,10 @@ export interface NS {
 
   /**
    * Read data from a port.
+   *
+   * @deprecated
+   * Use {@link Port.read | Port.read} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8943,6 +8959,10 @@ export interface NS {
 
   /**
    * Get all data on a port.
+   *
+   * @deprecated
+   * Use {@link Port.getHandle | Port.getHandle} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8959,6 +8979,10 @@ export interface NS {
 
   /**
    * Check if a port is full.
+   *
+   * @deprecated
+   * Use {@link Port.isFull | Port.isFull} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8971,6 +8995,10 @@ export interface NS {
 
   /**
    * Check if a port is empty.
+   *
+   * @deprecated
+   * Use {@link Port.isEmpty | Port.isEmpty} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *

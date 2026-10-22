@@ -1070,14 +1070,13 @@ export const ns: InternalAPI<NSFull> = {
     return ns.port.tryWrite(ctx, _portNumber, data);
   },
   nextPortWrite: (ctx, _portNumber) => {
-    deprecationWarning("nextPortWrite", "Use ns.port.nextWrite instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.nextWrite();
+    deprecationWarning("ns.nextPortWrite", "Use ns.port.nextWrite instead.");
+    return ns.port.nextWrite(ctx, _portNumber);
   },
   readPort: (ctx, _portNumber) => {
-    deprecationWarning("readPort", "Use ns.port.read instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.read();
+    deprecationWarning("ns.readPort", "Use ns.port.read instead.");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This API intentionally returns any.
+    return ns.port.read(ctx, _portNumber);
   },
   read: (ctx, _filename) => {
     const path = helpers.filePath(ctx, "filename", _filename);
@@ -1113,19 +1112,17 @@ export const ns: InternalAPI<NSFull> = {
     return contentFile.metadata.plain();
   },
   peek: (ctx, _portNumber) => {
-    deprecationWarning("peek", "Use ns.port.peek instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.peek();
+    deprecationWarning("ns.peek", "Use ns.port.peek instead.");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This API intentionally returns any.
+    return ns.port.peek(ctx, _portNumber);
   },
   isFullPort: (ctx, _portNumber) => {
-    deprecationWarning("isFullPort", "Use ns.port.isFull instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.full();
+    deprecationWarning("ns.isFullPort", "Use ns.port.isFull instead.");
+    return ns.port.isFull(ctx, _portNumber);
   },
   isEmptyPort: (ctx, _portNumber) => {
-    deprecationWarning("isEmptyPort", "Use ns.port.isEmpty instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.empty();
+    deprecationWarning("ns.isEmptyPort", "Use ns.port.isEmpty instead.");
+    return ns.port.isEmpty(ctx, _portNumber);
   },
   clear: (ctx, _file) => {
     const path = helpers.filePath(ctx, "file", _file);
@@ -1139,14 +1136,12 @@ export const ns: InternalAPI<NSFull> = {
     file.content = "";
   },
   clearPort: (ctx, _portNumber) => {
-    deprecationWarning("clearPort", "Use ns.port.clear instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.clear();
+    deprecationWarning("ns.clearPort", "Use ns.port.clear instead.");
+    return ns.port.clear(ctx, _portNumber);
   },
   getPortHandle: (ctx, _portNumber) => {
-    deprecationWarning("getPortHandle", "Use ns.port.getHandle instead.");
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle;
+    deprecationWarning("ns.getPortHandle", "Use ns.port.getHandle instead.");
+    return ns.port.getHandle(ctx, _portNumber);
   },
   rm: (ctx, _fn, _host?) => {
     const filepath = helpers.filePath(ctx, "fn", _fn);
