@@ -102,3 +102,30 @@ describe("createGang", () => {
     });
   });
 });
+
+test("ns.formulas.gang.reputationGain()", () => {
+  Player.karma = GangConstants.GangKarmaRequirement;
+  joinFaction(Factions[FactionName.SlumSnakes]);
+  const ns = getNS();
+  ns.singularity.purchaseTor();
+  ns.singularity.purchaseProgram("Formulas.exe");
+  ns.gang.createGang(FactionName.SlumSnakes);
+  ns.gang.recruitMember("Alice");
+  const alice = Player.gang?.members[0];
+  if (alice != null) {
+    alice.str = 100;
+    alice.def = 100;
+    alice.dex = 100;
+    alice.agi = 100;
+  }
+  const g = ns.gang.getGangInformation();
+  const m = ns.gang.getMemberInformation("Alice");
+  const t = ns.gang.getTaskStats("Mug People");
+  ns.gang.setMemberTask("Alice", "Mug People");
+
+  const predicted = 10 * ns.formulas.gang.reputationGain(g, m, t, 0, 1);
+  Player.gang?.process(10);
+  const real = ns.singularity.getFactionRep(FactionName.SlumSnakes);
+
+  expect(predicted).toBeCloseTo(real, 8);
+});
