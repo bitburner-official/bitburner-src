@@ -4,7 +4,7 @@
 
 ## Multipliers.hacking\_speed property
 
-Multiplier to hacking speed
+Multiplier to the speed of hack(), grow() and weaken()
 
 **Signature:**
 

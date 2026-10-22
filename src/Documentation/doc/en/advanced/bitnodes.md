@@ -167,7 +167,7 @@ Destroying this BitNode will give you Source-File 8, or if you already have this
 - Level 2: Ability to short stocks in other BitNodes
 - Level 3: Ability to use limit/stop orders in other BitNodes
 
-This Source-File also increases your hacking growth multipliers by:
+This Source-File also increases your grow() power multiplier by:
 
 - Level 1: 12%
 - Level 2: 18%

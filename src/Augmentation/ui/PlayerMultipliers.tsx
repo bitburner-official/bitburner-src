@@ -124,7 +124,7 @@ export function PlayerMultipliers(): React.ReactElement {
         bnMult: currentNodeMults.ScriptHackMoney,
       },
       {
-        mult: "Hacking Growth",
+        mult: "Grow() Power",
         current: Player.mults.hacking_grow,
         augmented: Player.mults.hacking_grow * mults.hacking_grow,
       },

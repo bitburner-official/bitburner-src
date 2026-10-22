@@ -276,7 +276,7 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
       color: Settings.theme.hack,
     },
     HackingSpeedMultiplier: {
-      name: "Hacking Speed",
+      name: "Speed of hack(), grow() and weaken()",
       color: Settings.theme.hack,
     },
     ServerGrowthRate: { name: "Server Growth Rate" },
