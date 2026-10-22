@@ -32,6 +32,9 @@ describe("Terminal timedAction", () => {
     await expect(action.finished).rejects.toThrow();
     expect(onDone).not.toHaveBeenCalled();
 
+    const progressBarOutput = Terminal.outputHistory[Terminal.outputHistory.length - 2] as Output;
+    expect(progressBarOutput.text).toBe(`[${"|".repeat(25)}${"-".repeat(25)}]`);
+
     const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1] as Output;
     expect(lastOutput.text).toContain("Cancelled hack");
   });
