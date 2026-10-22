@@ -589,7 +589,7 @@ export function CharacterStats(): React.ReactElement {
               <MultiplierTable
                 rows={[
                   {
-                    mult: "IPvGO Node Power bonus",
+                    mult: "IPvGO Node Power Bonus",
                     value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
