@@ -76,7 +76,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
 
   const numArgs = args.length;
   function incorrectUsage(): undefined {
-    Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]");
+    Terminal.error("Incorrect usage of ls command. Usage: ls [DIR] [-l] [-h] [-g, --grep PATTERN]");
   }
 
   if (numArgs > 5) {
