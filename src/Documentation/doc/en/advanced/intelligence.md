@@ -69,11 +69,11 @@ Another unique trait of Intelligence is, due to its persistent nature and variet
 
 ## Source-File 5 Overrides
 
-When entering a BitNode, the player has options to override the level of Source-File 5 if already owned. If Source-File 5 is ever set to level 0, this will _not_ reset any progress made on Intelligence experience gained nor will it remove the ability to gain experience for it.
+When entering a BitNode, you have options to override the level of Source-File 5 if already owned. If Source-File 5 is ever set to level 0, this will _not_ reset any progress made on Intelligence experience gained nor will it remove the ability to gain experience for it.
 
 ## Intelligence Overrides
 
-When entering a BitNode, the player has options to override the level of their Intelligence skill. When assigning a value with this feature, your Intelligence and your Sleeves' Intelligence will be temporarily set to this value if it is lower than their current values. For example:
+When entering a BitNode, you have options to override the level of their Intelligence skill. When assigning a value with this feature, your Intelligence and your Sleeves' Intelligence will be temporarily set to this value if it is lower than their current values. For example:
 
 - If your Intelligence is 1000 and you set this value to 500, your Intelligence will be temporarily set to 500.
 - If a Sleeve's Intelligence is 200 and you set this value to 500, that Sleeve's Intelligence is still 200.
