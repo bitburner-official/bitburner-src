@@ -5,8 +5,13 @@ import { Shapes } from "./data/Shapes";
 export const Fragments: Fragment[] = [];
 
 export const getValidFragmentRotationValue = (_rotation: number): number => {
-  return _rotation % 4;
-  //without this, some fragments will try to flip against the y axis on odd rotations >=5
+  /**
+   * just a quick helper to unify rotation values for several places that would otherwise repeat the same math.
+   *
+   * without this, fullAt in particular will have different behavior for rotations outside of the 0-3 range.
+   * square shapes will stop rotating after 4, and rectangles will flip against the y-axis on odd rotations
+   */
+  return ((_rotation % 4) + 4) % 4;
 };
 
 export class Fragment {
