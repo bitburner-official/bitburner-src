@@ -10,7 +10,7 @@ describe("Terminal timedAction", () => {
     jest.useRealTimers();
   });
 
-  it("should print 100% completed progress bar when onDone is called", async () => {
+  test("prints 100% completed progress bar when onDone is called", async () => {
     const onDone = jest.fn();
     const action = Terminal.timedAction(1, "hack", onDone);
 
@@ -21,5 +21,18 @@ describe("Terminal timedAction", () => {
 
     const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1] as Output;
     expect(lastOutput.text).toBe(`[${"|".repeat(50)}]`);
+  });
+
+  test("does not run onDone and reports cancellation when cancelled", async () => {
+    const onDone = jest.fn();
+    const action = Terminal.timedAction(10, "hack", onDone);
+
+    jest.advanceTimersByTime(5000);
+    action.cancel();
+    await expect(action.finished).rejects.toThrow();
+    expect(onDone).not.toHaveBeenCalled();
+
+    const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1] as Output;
+    expect(lastOutput.text).toContain("Cancelled hack");
   });
 });
