@@ -23,6 +23,18 @@ describe("Terminal timedAction", () => {
     expect(lastOutput.text).toBe(`[${"|".repeat(50)}]`);
   });
 
+  test("prints 100% completed progress bar when onDone is called even with timer jitter", async () => {
+    const onDone = jest.fn();
+    const action = Terminal.timedAction(1, "hack", onDone);
+
+    jest.spyOn(performance, "now").mockReturnValueOnce(999);
+    jest.advanceTimersByTime(1000);
+    await action.finished;
+
+    const lastOutput = Terminal.outputHistory[Terminal.outputHistory.length - 1] as Output;
+    expect(lastOutput.text).toBe(`[${"|".repeat(50)}]`);
+  });
+
   test("does not run onDone and reports cancellation when cancelled", async () => {
     const onDone = jest.fn();
     const action = Terminal.timedAction(10, "hack", onDone);
