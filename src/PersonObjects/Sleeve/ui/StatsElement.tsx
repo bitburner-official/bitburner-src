@@ -13,6 +13,7 @@ import {
   formatSleeveShock,
   formatSleeveSynchro,
 } from "../../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
 import { useStyles } from "../../../ui/React/CharacterOverview";
@@ -103,6 +104,17 @@ export function StatsElement(props: IProps): React.ReactElement {
           name="Memory"
           color={Settings.theme.primary}
           data={{ content: formatSleeveMemory(props.sleeve.memory) }}
+        />
+        <StatsRow
+          name="Bonus time"
+          color={Settings.theme.primary}
+          data={{
+            content: convertTimeMsToTimeElapsedString(
+              props.sleeve.storedCycles < 10 ? 0 : props.sleeve.storedCycles * CONSTANTS.MilliPerCycle,
+              false,
+              true,
+            ),
+          }}
         />
       </TableBody>
     </Table>
