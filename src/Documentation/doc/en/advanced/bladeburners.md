@@ -59,7 +59,7 @@ Note: Any exp that a person (whether you or a sleeve) gains from doing a General
 
 #### Field Analysis
 
-- Improves your estimate of the Synthoid population in the current city by a percentage of the actual population. This increases the precision of your success chance estimates. The degree of the improvement scales with your hacking and charisma skills.
+- Improves your estimate of the Synthoid population in the current city by a percentage of the actual population. This increases the precision of your success chance estimates, but does not improve your actual success chance. The degree of the improvement scales with your hacking and charisma skills, with the Datamancer skill, and with your Field Analysis Effectiveness multiplier.
 - Gives hacking and charisma exp.
 - Increases your rank.
 
@@ -99,6 +99,13 @@ Failing them causes you to lose health, and in the case of Operations and Black 
 - The Bounty Hunter and Retirement Contracts, and the Assassination Operation reduce the population by 1.
 - The Sting, Raid and Stealth Retirement Operations reduce population by a percentage.
 
+#### Effects on population estimates
+
+- The Tracking Contract improves population estimates by a flat amount.
+- The Undercover Operation and Investigation Opertions improve population estimates by a percentage.
+
+Neither Contracts or Operations are improved by the Field Analysis Effectiveness multiplier, which affects the Field Analysis General action only. They are, however, improved by the Datamancer skill.
+
 #### Action time
 
 Action time is reduced by:
@@ -118,7 +125,7 @@ Your success chance in Contracts, Operations and Black Ops is based on:
 - Your skill levels (strength, defense, intelligence, and so on).
 - Success multipliers from augs, source files and Bladeburner skills.
 
-Actions like Field Analysis improve your estimate of how many Synthoids are in a city. That improves the precision of your estimated success chance. But it does not improve the success chance itself.
+Actions like Field Analysis improve your estimate of how many Synthoids are in a city. That improves the precision of your success chance estimates, but it does not improve your actual success chance.
 
 ## Synthoid population and communities
 
