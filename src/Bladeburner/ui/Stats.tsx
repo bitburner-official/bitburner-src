@@ -1,7 +1,7 @@
 import type { Bladeburner } from "../Bladeburner";
 
 import React, { useState } from "react";
-import { Box, Button, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import { Player } from "@player";
 import { FactionName } from "@enums";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
@@ -213,21 +213,13 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
         )}
         <Typography>Skill Points: {formatBigNumber(bladeburner.skillPoints)}</Typography>
         <br />
-        <Typography>Mults from Augmentations and Source Files</Typography>
-        <List>
-          <ListItem>
-            Success Chance: {formatNumberNoSuffix(Player.mults.bladeburner_success_chance * 100, 1)}%
-          </ListItem>
-          <ListItem>
-            Max Stamina: {formatNumberNoSuffix(Player.mults.bladeburner_max_stamina * 100, 1)}%
-          </ListItem>
-          <ListItem>
-            Stamina Gain: {formatNumberNoSuffix(Player.mults.bladeburner_stamina_gain * 100, 1)}%
-          </ListItem>
-          <ListItem>
-            Field Analysis Effectiveness: {formatNumberNoSuffix(Player.mults.bladeburner_analysis * 100, 1)}%
-          </ListItem>
-        </List>
+        <Typography>
+          Mults from Augmentations and Source Files:
+          <br />- Success Chance: {formatNumberNoSuffix(Player.mults.bladeburner_success_chance * 100, 1)}%
+          <br />- Max Stamina: {formatNumberNoSuffix(Player.mults.bladeburner_max_stamina * 100, 1)}%
+          <br />- Stamina Gain: {formatNumberNoSuffix(Player.mults.bladeburner_stamina_gain * 100, 1)}%
+          <br />- Field Analysis Effectiveness: {formatNumberNoSuffix(Player.mults.bladeburner_analysis * 100, 1)}%
+        </Typography>
       </Box>
     </Paper>
   );
