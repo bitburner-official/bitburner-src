@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { AugmentationName, FactionName } from "@enums";
 
 import { canAcceptStaneksGift, staneksGift } from "../CotMG/Helper";
-import { Fragments, FragmentById, getValidFragmentRotationValue } from "../CotMG/Fragment";
+import { Fragments, FragmentById } from "../CotMG/Fragment";
 import { FragmentTypeEnum } from "../CotMG/FragmentType";
 
 import type { Stanek as IStanek } from "@nsdefs";
@@ -12,12 +12,6 @@ import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getCoreBonus } from "../Server/ServerHelpers";
-
-export const getValidFragmentUserRotation = (ctx: NetscriptContext, _rotation: unknown): number => {
-  const rotation = helpers.number(ctx, "rotation", _rotation);
-
-  return getValidFragmentRotationValue(rotation);
-};
 
 export function NetscriptStanek(): InternalAPI<IStanek> {
   function checkStanekAPIAccess(ctx: NetscriptContext): void {
@@ -85,7 +79,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     canPlaceFragment: (ctx, _rootX, _rootY, _rotation, _fragmentId) => {
       const rootX = helpers.number(ctx, "rootX", _rootX);
       const rootY = helpers.number(ctx, "rootY", _rootY);
-      const rotation = getValidFragmentUserRotation(ctx, _rotation);
+      const rotation = helpers.number(ctx, "rotation", _rotation);
       const fragmentId = helpers.number(ctx, "fragmentId", _fragmentId);
       checkStanekAPIAccess(ctx);
       const fragment = FragmentById(fragmentId);
@@ -96,7 +90,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     placeFragment: (ctx, _rootX, _rootY, _rotation, _fragmentId) => {
       const rootX = helpers.number(ctx, "rootX", _rootX);
       const rootY = helpers.number(ctx, "rootY", _rootY);
-      const rotation = getValidFragmentUserRotation(ctx, _rotation);
+      const rotation = helpers.number(ctx, "rotation", _rotation);
       const fragmentId = helpers.number(ctx, "fragmentId", _fragmentId);
       checkStanekAPIAccess(ctx);
       const fragment = FragmentById(fragmentId);
