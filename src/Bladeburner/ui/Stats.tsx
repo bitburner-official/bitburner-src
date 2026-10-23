@@ -223,4 +223,4 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
       </Box>
     </Paper>
   );
-}//
+}
