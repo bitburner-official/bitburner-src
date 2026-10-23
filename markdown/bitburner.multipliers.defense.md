@@ -4,7 +4,7 @@
 
 ## Multipliers.defense property
 
-Multiplier to defense skill level
+Multiplier to defense skill
 
 **Signature:**
 

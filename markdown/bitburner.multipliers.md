@@ -68,7 +68,7 @@ number
 
 </td><td>
 
-Multiplier to agility skill level
+Multiplier to agility skill
 
 
 </td></tr>
@@ -182,7 +182,7 @@ number
 
 </td><td>
 
-Multiplier to charisma skill level
+Multiplier to charisma skill
 
 
 </td></tr>
@@ -277,7 +277,7 @@ number
 
 </td><td>
 
-Multiplier to defense skill level
+Multiplier to defense skill
 
 
 </td></tr>
@@ -315,7 +315,7 @@ number
 
 </td><td>
 
-Multiplier to dexterity skill level
+Multiplier to dexterity skill
 
 
 </td></tr>
@@ -467,7 +467,7 @@ number
 
 </td><td>
 
-Multiplier to hacking skill level
+Multiplier to hacking skill
 
 
 </td></tr>
@@ -600,7 +600,7 @@ number
 
 </td><td>
 
-Multiplier to strength skill level
+Multiplier to strength skill
 
 
 </td></tr>
