@@ -20,6 +20,23 @@ Earned as your gang members complete tasks, Respect affects your gang's producti
 
 When experienced enough, gang members are offered Ascension, a permanent boost to their stat multipliers at the cost of resetting their base stats and equipment to 0, and reducing your Gang Reputation by the same amount as that member had earned since they last Ascended.
 
+## Stat levels
+
+The level of each stat that a gang member has (hack, str, def, dex, agi, cha) is calculated from three numbers:
+
+- Experience (e.g. str_exp).
+- Total ascension points accumulated by the member from all previous ascensions (e.g. str_asc_points).
+- The multiplier from equipment (e.g. str_mult).
+
+The namespace ns.formulas.gang has no functions to calculate level from experience or experience from level. You can use ns.formulas.skills.calculateSkill() instead:
+
+```js
+const member = ns.gang.getMemberInformation("member name");
+const str_asc_mult = ns.formulas.gang.ascensionMultiplier(member.str_asc_points);
+// Should be the same as member.str
+const str = ns.formulas.skills.calculateSkill(member.str_exp, member.str_mult * str_asc_mult);
+```
+
 ## Equipping and Managing
 
 Buying Equipment for a gang member will give them a stat boost until they Ascend or are killed, at which point most equipment will reset.
