@@ -54,9 +54,6 @@ interface IMultRow {
 
   // Whether to format as percent or scalar
   isNumber?: boolean;
-
-  // If specified, adds an Info icon with tooltip text
-  tooltipText?: string;
 }
 
 interface MultTableProps {
@@ -70,22 +67,11 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
     <Table sx={{ display: "table", width: "100%", mb: props.noMargin ? 0 : 2 }}>
       <TableBody>
         {props.rows.map((data) => {
-          const { mult, value, effValue = null, color = props.color, tooltipText } = data;
-
-          const multText = tooltipText ? (
-            <Tooltip title={<span>{tooltipText}</span>}>
-              <span>
-                {mult}
-                <Info sx={{ ml: 1, fontSize: "1.25rem", verticalAlign: "middle" }} color="info" />
-              </span>
-            </Tooltip>
-          ) : (
-            mult
-          );
+          const { mult, value, effValue = null, color = props.color } = data;
 
           if (effValue !== null && effValue !== value && canAccessBitNodeFeature(5)) {
             return (
-              <StatsRow key={mult} name={multText} color={color} data={{}}>
+              <StatsRow key={mult} name={mult} color={color} data={{}}>
                 <>
                   <Typography color={color}>
                     {data.isNumber ? (
@@ -103,7 +89,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
           return (
             <StatsRow
               key={mult}
-              name={multText}
+              name={mult}
               color={color}
               data={{ content: data.isNumber ? formatNumber(value, 0) : formatPercent(value) }}
             />
@@ -378,7 +364,6 @@ export function CharacterStats(): React.ReactElement {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
                   effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
-                  tooltipText: "Affects hack(), grow() and weaken()",
                 },
                 {
                   mult: "Hack() Success Chance",
@@ -596,9 +581,6 @@ export function CharacterStats(): React.ReactElement {
                     mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
-                    tooltipText: `IPvGO winstreaks award favor by giving reptuation that's immediately converted to favour.
-                    Max Rep Converted To Favor limits how much converted rep you can gain for a single faction, and increases
-                    converted rep gained per winstreak bonus.`,
                   },
                 ]}
                 color={Settings.theme.combat}
