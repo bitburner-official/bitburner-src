@@ -4,7 +4,7 @@
 
 ## Multipliers.charisma property
 
-Multiplier to charisma skill
+Multiplier to charisma skill level
 
 **Signature:**
 

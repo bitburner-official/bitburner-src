@@ -51,7 +51,7 @@ function getRandomBonus(): CircadianBonus {
         hacking_exp: 2,
       },
       description:
-        "Increases the player's hacking skill by 15%.\n" +
+        "Increases the player's hacking skill level by 15%.\n" +
         "Increases the player's hacking experience gain rate by 100%.",
     },
     {

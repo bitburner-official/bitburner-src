@@ -70,25 +70,25 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
     mults.hacking === mults.agility &&
     mults.hacking === mults.charisma
   ) {
-    desc += `\n+${f(mults.hacking - 1)} all skills`;
+    desc += `\n+${f(mults.hacking - 1)} all skill levels`;
   } else {
     // Not allskills
-    if (mults.hacking !== 1) desc += `\n+${f(mults.hacking - 1)} hacking skill`;
+    if (mults.hacking !== 1) desc += `\n+${f(mults.hacking - 1)} hacking skill level`;
     if (
       mults.strength !== 1 &&
       mults.strength === mults.defense &&
       mults.strength === mults.dexterity &&
       mults.strength === mults.agility
     ) {
-      desc += `\n+${f(mults.strength - 1)} combat skills`;
+      desc += `\n+${f(mults.strength - 1)} combat skill levels`;
     } else {
       // Not all combat
-      if (mults.strength !== 1) desc += `\n+${f(mults.strength - 1)} strength skill`;
-      if (mults.defense !== 1) desc += `\n+${f(mults.defense - 1)} defense skill`;
-      if (mults.dexterity !== 1) desc += `\n+${f(mults.dexterity - 1)} dexterity skill`;
-      if (mults.agility !== 1) desc += `\n+${f(mults.agility - 1)} agility skill`;
+      if (mults.strength !== 1) desc += `\n+${f(mults.strength - 1)} strength skill level`;
+      if (mults.defense !== 1) desc += `\n+${f(mults.defense - 1)} defense skill level`;
+      if (mults.dexterity !== 1) desc += `\n+${f(mults.dexterity - 1)} dexterity skill level`;
+      if (mults.agility !== 1) desc += `\n+${f(mults.agility - 1)} agility skill level`;
     }
-    if (mults.charisma !== 1) desc += `\n+${f(mults.charisma - 1)} charisma skill`;
+    if (mults.charisma !== 1) desc += `\n+${f(mults.charisma - 1)} charisma skill level`;
   }
 
   // Skill XP
