@@ -280,6 +280,7 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     HackingSpeedMultiplier: {
       name: "Hacking Speed",
       color: Settings.theme.hack,
+      tooltipText: "Influences the speed of hack(), grow() and weaken().",
     },
     ServerGrowthRate: { name: "Server Growth Rate" },
     ServerMaxMoney: { name: "Server Max Money", color: Settings.theme.money },
