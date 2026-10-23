@@ -375,22 +375,22 @@ export function CharacterStats(): React.ReactElement {
             <MultiplierTable
               rows={[
                 {
-                  mult: "Hacking Chance",
-                  value: Player.mults.hacking_chance,
-                },
-                {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
                   effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
                   tooltipText: "Affects the speed of hack(), grow() and weaken()",
                 },
                 {
-                  mult: "Hacking Money",
+                  mult: "Hack Success Chance",
+                  value: Player.mults.hacking_chance,
+                },
+                {
+                  mult: "Hack Money",
                   value: Player.mults.hacking_money,
                   effValue: Player.mults.hacking_money * currentNodeMults.ScriptHackMoney,
                 },
                 {
-                  mult: "Grow() Power",
+                  mult: "Grow Money",
                   value: Player.mults.hacking_grow,
                   effValue: Player.mults.hacking_grow * currentNodeMults.ServerGrowthRate,
                 },

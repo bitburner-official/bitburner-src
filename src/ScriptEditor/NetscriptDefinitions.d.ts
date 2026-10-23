@@ -518,11 +518,11 @@ interface ProcessInfo {
  * @public
  */
 interface HackingMultipliers {
-  /** Player's hacking chance multiplier. */
+  /** Player's hack success chance multiplier. */
   chance: number;
   /** Player's hacking speed multiplier. */
   speed: number;
-  /** Player's hacking money stolen multiplier. */
+  /** Player's hack money multiplier. */
   money: number;
   /** Player's hacking growth multiplier */
   growth: number;
