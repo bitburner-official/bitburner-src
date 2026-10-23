@@ -55,7 +55,7 @@ interface IMultRow {
   // Whether to format as percent or scalar
   isNumber?: boolean;
 
-  // If specified, adds an Info icon with the tooltip text
+  // If specified, adds an Info icon with tooltip text
   tooltipText?: string;
 }
 
@@ -72,7 +72,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
         {props.rows.map((data) => {
           const { mult, value, effValue = null, color = props.color, tooltipText } = data;
 
-          const text = tooltipText ? (
+          const multText = tooltipText ? (
             <Tooltip title={<span>{tooltipText}</span>}>
               <span>
                 {mult}
@@ -85,7 +85,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
 
           if (effValue !== null && effValue !== value && canAccessBitNodeFeature(5)) {
             return (
-              <StatsRow key={mult} name={text} color={color} data={{}}>
+              <StatsRow key={mult} name={multText} color={color} data={{}}>
                 <>
                   <Typography color={color}>
                     {data.isNumber ? (
@@ -103,7 +103,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
           return (
             <StatsRow
               key={mult}
-              name={text}
+              name={multText}
               color={color}
               data={{ content: data.isNumber ? formatNumber(value, 0) : formatPercent(value) }}
             />
@@ -378,7 +378,7 @@ export function CharacterStats(): React.ReactElement {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
                   effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
-                  tooltipText: "Affects the speed of hack(), grow() and weaken()",
+                  tooltipText: "Affects hack(), grow() and weaken()",
                 },
                 {
                   mult: "Hack Success Chance",

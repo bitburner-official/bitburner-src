@@ -124,7 +124,7 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
   if (mults.hacking_speed !== 1) desc += `\n+${f(mults.hacking_speed - 1)} faster hack(), grow(), and weaken()`;
   if (mults.hacking_chance !== 1) desc += `\n+${f(mults.hacking_chance - 1)} hack() success chance`;
   if (mults.hacking_money !== 1) desc += `\n+${f(mults.hacking_money - 1)} hack() money`;
-  if (mults.hacking_grow !== 1) desc += `\n+${f(mults.hacking_grow - 1)} grow() power`;
+  if (mults.hacking_grow !== 1) desc += `\n+${f(mults.hacking_grow - 1)} grow() money`;
 
   // Reputation
   if (mults.faction_rep !== 1 && mults.faction_rep === mults.company_rep)

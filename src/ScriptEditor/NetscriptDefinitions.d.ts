@@ -524,7 +524,7 @@ interface HackingMultipliers {
   speed: number;
   /** Player's hack money multiplier. */
   money: number;
-  /** Player's hacking growth multiplier */
+  /** Player's grow money multiplier */
   growth: number;
 }
 
