@@ -138,17 +138,17 @@ interface MoneySources {
 
 /** @public */
 interface Multipliers {
-  /** Multiplier to hacking skill */
+  /** Multiplier to hacking skill level */
   hacking: number;
-  /** Multiplier to strength skill */
+  /** Multiplier to strength skill level */
   strength: number;
-  /** Multiplier to defense skill */
+  /** Multiplier to defense skill level */
   defense: number;
-  /** Multiplier to dexterity skill */
+  /** Multiplier to dexterity skill level */
   dexterity: number;
-  /** Multiplier to agility skill */
+  /** Multiplier to agility skill level */
   agility: number;
-  /** Multiplier to charisma skill */
+  /** Multiplier to charisma skill level */
   charisma: number;
   /** Multiplier to hacking experience gain rate */
   hacking_exp: number;

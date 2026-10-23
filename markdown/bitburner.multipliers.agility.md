@@ -4,7 +4,7 @@
 
 ## Multipliers.agility property
 
-Multiplier to agility skill
+Multiplier to agility skill level
 
 **Signature:**
 
