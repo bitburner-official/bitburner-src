@@ -22,6 +22,12 @@ export class Fragment {
   }
 
   fullAt(x: number, y: number, rotation: number): boolean {
+    /**
+     * without this, frags will have different behavior for rotations outside of the 0-3 range.
+     * square shapes will stop rotating after 4, and rectangles will continue to rotate but flip against the y-axis on odd rotations
+     */
+    rotation = ((rotation % 4) + 4) % 4;
+
     if (y < 0) return false;
     if (y >= this.height(rotation)) return false;
     if (x < 0) return false;

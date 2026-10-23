@@ -72,12 +72,12 @@ export function MainBoard(props: IProps): React.ReactElement {
   React.useEffect(() => {
     function doRotate(this: Document, event: KeyboardEvent): void {
       if (event.key === "q") {
-        const r = (rotation - 1 + 4) % 4;
+        const r = rotation - 1;
         setRotation(r);
         moveGhost(pos[0], pos[1], r);
       }
       if (event.key === "e") {
-        const r = (rotation + 1) % 4;
+        const r = rotation + 1;
         setRotation(r);
         moveGhost(pos[0], pos[1], r);
       }
