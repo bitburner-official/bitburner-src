@@ -596,6 +596,8 @@ export function CharacterStats(): React.ReactElement {
                     mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
+                    tooltipText: `Max Rep Converted To Favor limits how much reputation-converted-to-favor you can get for a
+                    single faction. It also raises the converted rep gained per winstreak bonus.`,
                   },
                 ]}
                 color={Settings.theme.combat}
