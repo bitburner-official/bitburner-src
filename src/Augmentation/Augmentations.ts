@@ -1858,7 +1858,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Awarded to those who discover the secrets of the labyrinth." +
         "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases the stasis link limit by one, charisma by 5%, agility by 10%, and darknet money by 30%.",
+        "This augmentation increases the stasis link limit by one, your charisma level by 5%, agility level by 10%, and darknet money by 30%.",
       charisma: 1.05,
       agility: 1.1,
       dnet_money: 1.3,
@@ -1874,7 +1874,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Awarded to those who discover the secrets of the labyrinth." +
         "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases charisma and dexterity by 6%, and the speed of authentication and heartbleed by 20%.",
+        "This augmentation increases your charisma level and dexterity level by 6%, and the speed of authentication and heartbleed by 20%.",
       charisma: 1.06,
       dexterity: 1.06,
       isSpecial: true,
@@ -1890,7 +1890,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Awarded to those who discover the secrets of the labyrinth." +
         "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases the stasis link limit by one, charisma by 7%, strength by 10%, and darknet money by 10%.",
+        "This augmentation increases the stasis link limit by one, and your charisma level by 7%, strength level by 10%, and darknet money by 10%.",
       charisma: 1.07,
       strength: 1.1,
       dnet_money: 1.1,
@@ -1907,7 +1907,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Awarded to those who discover the secrets of the labyrinth." +
         "\n\nInstalling this augment will deepen the darkness...",
       stats:
-        "This augmentation increases the stasis link limit by one, and charisma xp, defense, and darknet money by 10%.",
+        "This augmentation increases the stasis link limit by one, and your charisma xp, defense level, and darknet money by 10%.",
       charisma_exp: 1.1,
       defense: 1.1,
       dnet_money: 1.1,
@@ -1924,7 +1924,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "making them exceptionally persuasive and confident in negotiations and social interactions. " +
         "Awarded to those who discover the secrets of the labyrinth." +
         "\n\nInstalling this augment will deepen the darkness...",
-      stats: "This augmentation raises charisma by 9%, company rep by 5%, and darknet money by 15%.",
+      stats: "This augmentation raises your charisma level by 9%, company rep by 5%, and darknet money by 15%.",
       charisma: 1.09,
       company_rep: 1.05,
       dnet_money: 1.15,
@@ -1941,7 +1941,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
         "more powerful version of Occam's razor. " +
         "The final augment awarded to those who discover the secrets of the labyrinth.",
-      stats: "This augmentation raises charisma, hacking, darknet money, and company rep by 10%.",
+      stats: "This augmentation raises charisma level, hacking level, darknet money, and company rep by 10%.",
       charisma: 1.1,
       hacking: 1.1,
       company_rep: 1.1,
