@@ -4,7 +4,7 @@
 
 ## HackingMultipliers.growth property
 
-Player's hacking growth multiplier
+Player's grow() power multiplier
 
 **Signature:**
 

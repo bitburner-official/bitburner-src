@@ -50,7 +50,7 @@ number
 
 </td><td>
 
-Player's hack success chance multiplier.
+Player's hack() success chance multiplier.
 
 
 </td></tr>
@@ -69,7 +69,7 @@ number
 
 </td><td>
 
-Player's hacking growth multiplier
+Player's grow() power multiplier
 
 
 </td></tr>
@@ -88,7 +88,7 @@ number
 
 </td><td>
 
-Player's hack money multiplier.
+Player's hack() money multiplier.
 
 
 </td></tr>

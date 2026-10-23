@@ -381,16 +381,16 @@ export function CharacterStats(): React.ReactElement {
                   tooltipText: "Affects hack(), grow() and weaken()",
                 },
                 {
-                  mult: "Hack Success Chance",
+                  mult: "Hack() Success Chance",
                   value: Player.mults.hacking_chance,
                 },
                 {
-                  mult: "Hack Money",
+                  mult: "Hack() Money",
                   value: Player.mults.hacking_money,
                   effValue: Player.mults.hacking_money * currentNodeMults.ScriptHackMoney,
                 },
                 {
-                  mult: "Grow Money",
+                  mult: "Grow() Power",
                   value: Player.mults.hacking_grow,
                   effValue: Player.mults.hacking_grow * currentNodeMults.ServerGrowthRate,
                 },
