@@ -14,7 +14,7 @@ reputationGain(
     member: GangMemberInfo,
     task: GangTaskStats,
     favor: number,
-    faction_rep_mult: number,
+    factionRepMult: number,
   ): number;
 ```
 
@@ -96,13 +96,13 @@ number
 
 </td><td>
 
-Faction favor from (<!-- -->@<!-- -->link Singularity.getFactionFavor \| getFactionFavor<!-- -->}
+Faction favor from [getFactionFavor](./bitburner.singularity.getfactionfavor.md)
 
 
 </td></tr>
 <tr><td>
 
-faction\_rep\_mult
+factionRepMult
 
 
 </td><td>

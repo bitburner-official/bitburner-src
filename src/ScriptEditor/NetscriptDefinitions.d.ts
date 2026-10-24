@@ -6539,7 +6539,7 @@ interface GangFormulas {
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
    * @param member - Member info from {@link Gang.getMemberInformation | getMemberInformation}
    * @param task - Task info from {@link Gang.getTaskStats | getTaskStats}
-   * @param favor - Faction favor from (@link Singularity.getFactionFavor | getFactionFavor}
+   * @param favor - Faction favor from {@link Singularity.getFactionFavor | getFactionFavor}
    * @param factionRepMult - faction_rep multiplier from {@link NS.getPlayer | getPlayer}.
    * @returns The calculated faction reputation gain.
    */

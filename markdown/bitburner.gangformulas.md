@@ -60,7 +60,7 @@ Calculate money gain per tick.
 </td></tr>
 <tr><td>
 
-[reputationGain(gang, member, task, favor, faction\_rep\_mult)](./bitburner.gangformulas.reputationgain.md)
+[reputationGain(gang, member, task, favor, factionRepMult)](./bitburner.gangformulas.reputationgain.md)
 
 
 </td><td>
