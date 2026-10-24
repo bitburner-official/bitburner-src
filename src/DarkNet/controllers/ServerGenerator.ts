@@ -3,6 +3,7 @@ import {
   commonPasswordDictionary,
   defaultSettingsDictionary,
   dogNameDictionary,
+  ellipticCurvePrivateKeys,
   EUCountries,
   filler,
   letters,
@@ -39,6 +40,7 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
     getParseArithmeticExpressionConfig,
     getXorMaskEncryptedPasswordConfig,
     getTripleModuloConfig,
+    getEllipticCurvePrivateKeyConfig,
   ];
 
   if (difficulty <= 2) {
@@ -703,4 +705,9 @@ const getPasswordMadeUpOfPrimesProduct = (difficulty = 1) => {
     }
   } while (BigInt(Number(password)) !== password); // ensure it fits in JS number precision
   return password.toString();
+};
+
+export const getEllipticCurvePrivateKeyConfig = (difficulty: number): ServerConfig => {
+  const hintTemplates = ["384-bit means it's between 1 and 384, right?"];
+  return getDictionaryAttackConfig(difficulty, ellipticCurvePrivateKeys, hintTemplates, ModelIds.ECDSA);
 };
