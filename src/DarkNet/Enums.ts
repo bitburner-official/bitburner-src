@@ -38,6 +38,7 @@ export const ModelIds = {
   packetSniffer: "OpenWebAccessPoint",
   encryptedPassword: "OrdoXenos",
   labyrinth: "(The Labyrinth)",
+  ECDSA: "4",
 } as const;
 
 export type MinigamesType = _ValueOf<typeof ModelIds>;

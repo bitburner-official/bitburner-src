@@ -33,6 +33,7 @@ export enum LiteratureName {
   FactoryDefaultHint = "factory-default.lit",
   StasisLinkHint = "stasis-link.lit",
   LabHint = "secrets-in-the-depths.lit",
+  EllipticCurveHint = "emudhra-ca.lit",
 }
 
 export const DiscoverableScriptName = {

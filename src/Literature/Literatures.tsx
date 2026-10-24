@@ -834,4 +834,9 @@ export const Literatures: Record<LiteratureName, Literature> = {
       </Typography>
     ),
   }),
+  [LiteratureName.EllipticCurveHint]: new Literature({
+    title: "P-384 ECDSA",
+    filename: LiteratureName.EllipticCurveHint,
+    text: <Typography>Give me 8 random numbers</Typography>,
+  }),
 };

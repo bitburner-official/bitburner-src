@@ -386,3 +386,5 @@ export const packetSniffPhrases = [
   "There are tens if not hundreds of [REDACTED] out there",
   "Each creating their own universes... a universe of universes",
 ] as const;
+
+export const ellipticCurvePrivateKeys = ["4", "56", "66", "115", "155", "156", "230", "237"] as const;

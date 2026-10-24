@@ -11,4 +11,5 @@ export const hintLiterature: LiteratureName[] = [
   LiteratureName.FactoryDefaultHint,
   LiteratureName.StasisLinkHint,
   LiteratureName.LabHint,
+  LiteratureName.EllipticCurveHint,
 ];
