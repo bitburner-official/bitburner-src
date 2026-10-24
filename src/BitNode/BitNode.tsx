@@ -304,7 +304,7 @@ export function initBitNodes() {
           <li>Level 2: Ability to short stocks in other BitNodes</li>
           <li>Level 3: Ability to use limit/stop orders in other BitNodes</li>
         </ul>
-        This Source-File also increases your hacking growth multipliers by:
+        This Source-File also increases your grow() power multiplier by:
         <ul>
           <li>Level 1: 12%</li>
           <li>Level 2: 18%</li>
