@@ -377,8 +377,7 @@ export function CharacterStats(): React.ReactElement {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
                   effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
-                  tooltipText:
-                    "Affects hack(), grow() and weaken().\n\nAlso affects the equivalent Terminal commands, along with Hack Success Chance, Hack Power and Grow Power.",
+                  tooltipText: "Affects hack(), grow() and weaken()",
                 },
                 {
                   mult: "Hack Success Chance",
