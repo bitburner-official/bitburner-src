@@ -36,6 +36,7 @@ import {
   getDivisibilityTestConfig,
   getDogNameConfig,
   getEchoVulnConfig,
+  getEllipticCurvePrivateKeyConfig,
   getEuCountryDictionaryConfig,
   getGuessNumberConfig,
   getKingOfTheHillConfig,
@@ -321,4 +322,5 @@ const serverTypeOptions: ServerTypeOption[] = [
   { label: ModelIds.globalMaxima, constructor: getKingOfTheHillConfig },
   { label: ModelIds.packetSniffer, constructor: getPacketSnifferConfig },
   { label: ModelIds.encryptedPassword, constructor: getBinaryEncodedConfig },
+  { label: ModelIds.ECDSA, constructor: getEllipticCurvePrivateKeyConfig },
 ];
