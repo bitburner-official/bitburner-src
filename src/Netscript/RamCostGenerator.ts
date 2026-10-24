@@ -727,6 +727,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       respectGain: 0,
       wantedLevelGain: 0,
       moneyGain: 0,
+      expGain: 0,
       ascensionPointsGain: 0,
       ascensionMultiplier: 0,
     },

@@ -102,3 +102,29 @@ describe("createGang", () => {
     });
   });
 });
+
+test("ns.formulas.gang.expGain()", () => {
+  Player.karma = GangConstants.GangKarmaRequirement;
+  joinFaction(Factions[FactionName.SlumSnakes]);
+  const ns = getNS();
+  ns.singularity.purchaseTor();
+  ns.singularity.purchaseProgram("Formulas.exe");
+  ns.gang.createGang(FactionName.SlumSnakes);
+  ns.gang.recruitMember("Alice");
+  const member = ns.gang.getMemberInformation("Alice");
+  const task = ns.gang.getTaskStats("Train Combat");
+  ns.gang.setMemberTask("Alice", "Train Combat");
+
+  const predicted = ns.formulas.gang.expGain(member, task);
+  predicted.str_exp *= 10;
+  predicted.def_exp *= 10;
+  predicted.dex_exp *= 10;
+  predicted.agi_exp *= 10;
+  Player.gang?.process(10);
+  const real = ns.gang.getMemberInformation("Alice");
+
+  expect(predicted.str_exp).toBeCloseTo(real.str_exp);
+  expect(predicted.def_exp).toBeCloseTo(real.def_exp);
+  expect(predicted.dex_exp).toBeCloseTo(real.dex_exp);
+  expect(predicted.agi_exp).toBeCloseTo(real.agi_exp);
+});

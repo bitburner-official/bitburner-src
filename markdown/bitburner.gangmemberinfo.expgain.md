@@ -6,10 +6,8 @@
 
 Per Cycle Exp object for each stat for this gang member.
 
-null in the event that the member does not have a given task.
-
 **Signature:**
 
 ```typescript
-expGain: GangMemberExpGain | null;
+expGain: GangMemberExpGain;
 ```
