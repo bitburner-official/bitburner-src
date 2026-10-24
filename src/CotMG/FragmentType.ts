@@ -27,7 +27,7 @@ export function Effect(type: FragmentType): string {
       return "+x% faster hack(), grow(), and weaken()";
     }
     case FragmentTypeEnum.HackingMoney: {
-      return "+x% hack() money";
+      return "+x% hack() power";
     }
     case FragmentTypeEnum.HackingGrow: {
       return "+x% grow() power";

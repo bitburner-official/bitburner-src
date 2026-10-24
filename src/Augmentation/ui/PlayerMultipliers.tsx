@@ -118,7 +118,7 @@ export function PlayerMultipliers(): React.ReactElement {
         augmented: Player.mults.hacking_chance * mults.hacking_chance,
       },
       {
-        mult: "Hack() Money",
+        mult: "Hack() Power",
         current: Player.mults.hacking_money,
         augmented: Player.mults.hacking_money * mults.hacking_money,
         bnMult: currentNodeMults.ScriptHackMoney,
