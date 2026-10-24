@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import GlobalStyles from "@mui/material/GlobalStyles";
 
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -72,6 +73,18 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
 
   return (
     <>
+      {/*<GlobalStyles styles={{ html: { scrollbarWidth: "thin" } }} />*/}
+      <GlobalStyles
+        styles={(theme) => ({
+          // Supported by Safari and Chrome only. Firefox ignores.
+          html: { scrollbarWidth: "auto" },
+          "html::-webkit-scrollbar": { display: "block", width: 14, height: 12 },
+          "html::-webkit-scrollbar-track": { background: "transparent" },
+          "html::-webkit-scrollbar-thumb": { background: theme.colors.button },
+          "html::-webkit-scrollbar-thumb:hover": { background: theme.palette.secondary.dark },
+          "html::-webkit-scrollbar-thumb:active": { background: theme.palette.secondary.main },
+        })}
+      />
       <Box
         position="fixed"
         display="flex"
