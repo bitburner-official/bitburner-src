@@ -72,7 +72,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
           const { mult, value, effValue = null, color = props.color, tooltipText } = data;
 
           const multText = tooltipText ? (
-            <Tooltip title={<span style={{ whiteSpace: 'pre-line', display: 'block' }}>{tooltipText}</span>}>
+            <Tooltip title={<span style={{ whiteSpace: "pre-line", display: "block" }}>{tooltipText}</span>}>
               <span>
                 {mult}
                 <Info sx={{ ml: 1, fontSize: "1.25rem", verticalAlign: "middle" }} color="info" />
@@ -377,8 +377,7 @@ export function CharacterStats(): React.ReactElement {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
                   effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
-                  tooltipText:
-                    `Affects hack(), grow() and weaken().
+                  tooltipText: `Affects hack(), grow() and weaken().
                     
                     Along with Hack() Success Chance, Hack() Money and Grow() Power, also affects the equivalent Terminal commands.`,
                 },
