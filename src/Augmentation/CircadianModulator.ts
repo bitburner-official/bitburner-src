@@ -41,7 +41,7 @@ function getRandomBonus(): CircadianBonus {
       },
       description:
         "Increases the player's hack() success chance by 25%.\n" +
-        "Increases the player's hack() speed by 10%.\n" +
+        "Increases the player's hack(), grow() and weaken() speeds by 10%.\n" +
         "Increases the amount of money the player steals through hacking by 25%.\n" +
         "Improves the effectiveness of grow() by 10%.",
     },
