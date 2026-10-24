@@ -111,11 +111,11 @@ test("ns.formulas.gang.expGain()", () => {
   ns.singularity.purchaseProgram("Formulas.exe");
   ns.gang.createGang(FactionName.SlumSnakes);
   ns.gang.recruitMember("Alice");
-  const m = ns.gang.getMemberInformation("Alice");
-  const t = ns.gang.getTaskStats("Train Combat");
+  const member = ns.gang.getMemberInformation("Alice");
+  const task = ns.gang.getTaskStats("Train Combat");
   ns.gang.setMemberTask("Alice", "Train Combat");
 
-  const predicted = ns.formulas.gang.expGain(m, t);
+  const predicted = ns.formulas.gang.expGain(member, task);
   predicted.str_exp *= 10;
   predicted.def_exp *= 10;
   predicted.dex_exp *= 10;
