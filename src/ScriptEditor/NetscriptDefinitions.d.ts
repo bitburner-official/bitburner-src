@@ -6540,7 +6540,7 @@ interface GangFormulas {
    * @param member - Member info from {@link Gang.getMemberInformation | getMemberInformation}
    * @param task - Task info from {@link Gang.getTaskStats | getTaskStats}
    * @param favor - Faction favor from (@link Singularity.getFactionFavor | getFactionFavor}
-   * @param faction_rep_mult - faction_rep multiplier from {@link NS.getPlayer | getPlayer}.
+   * @param factionRepMult - faction_rep multiplier from {@link NS.getPlayer | getPlayer}.
    * @returns The calculated faction reputation gain.
    */
   reputationGain(
@@ -6548,7 +6548,7 @@ interface GangFormulas {
     member: GangMemberInfo,
     task: GangTaskStats,
     favor: number,
-    faction_rep_mult: number,
+    factionRepMult: number,
   ): number;
   /**
    * Calculate wanted gain per tick.

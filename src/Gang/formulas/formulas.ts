@@ -31,9 +31,9 @@ export function calculateRespectGain(gang: FormulaGang, member: GangMember, task
   return Math.pow(11 * task.baseRespect * statWeight * territoryMult * respectMult, territoryPenalty);
 }
 
-export function calculateReputationGain(respectGain: number, favor: number, faction_rep_mult: number): number {
+export function calculateReputationGain(respectGain: number, favor: number, factionRepMult: number): number {
   const favorMult = 1 + favor / 100;
-  return (faction_rep_mult * respectGain * favorMult) / GangConstants.GangRespectToReputationRatio;
+  return (factionRepMult * respectGain * favorMult) / GangConstants.GangRespectToReputationRatio;
 }
 
 export function calculateWantedLevelGain(gang: FormulaGang, member: GangMember, task: GangMemberTask): number {

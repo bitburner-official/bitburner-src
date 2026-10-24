@@ -344,15 +344,15 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         return calculateRespectGain(gang, member, task);
       },
-      reputationGain: (ctx, _gang, _member, _task, _favor, _faction_rep_mult) => {
+      reputationGain: (ctx, _gang, _member, _task, _favor, _factionRepMult) => {
         const gang = helpers.gang(ctx, _gang);
         const member = helpers.gangMember(ctx, _member);
         const task = helpers.gangTask(ctx, _task);
         const favor = helpers.number(ctx, "favor", _favor);
-        const faction_rep_mult = helpers.number(ctx, "faction_rep_mult", _faction_rep_mult);
+        const factionRepMult = helpers.number(ctx, "factionRepMult", _factionRepMult);
         checkFormulasAccess(ctx);
         const respectGain = calculateRespectGain(gang, member, task);
-        return calculateReputationGain(respectGain, favor, faction_rep_mult);
+        return calculateReputationGain(respectGain, favor, factionRepMult);
       },
       wantedLevelGain: (ctx, _gang, _member, _task) => {
         const gang = helpers.gang(ctx, _gang);

@@ -118,12 +118,12 @@ test("ns.formulas.gang.reputationGain()", () => {
     alice.dex = 100;
     alice.agi = 100;
   }
-  const g = ns.gang.getGangInformation();
-  const m = ns.gang.getMemberInformation("Alice");
-  const t = ns.gang.getTaskStats("Mug People");
+  const gang = ns.gang.getGangInformation();
+  const member = ns.gang.getMemberInformation("Alice");
+  const task = ns.gang.getTaskStats("Mug People");
   ns.gang.setMemberTask("Alice", "Mug People");
 
-  const predicted = 10 * ns.formulas.gang.reputationGain(g, m, t, 0, 1);
+  const predicted = 10 * ns.formulas.gang.reputationGain(gang, member, task, 0, 1);
   Player.gang?.process(10);
   const real = ns.singularity.getFactionRep(FactionName.SlumSnakes);
 
