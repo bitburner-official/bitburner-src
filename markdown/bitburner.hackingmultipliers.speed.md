@@ -4,7 +4,7 @@
 
 ## HackingMultipliers.speed property
 
-Player's hack(), grow() and weaken() speed multiplier
+Player's hack(), grow() and weaken() speed multiplier.
 
 **Signature:**
 

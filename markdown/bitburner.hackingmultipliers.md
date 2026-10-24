@@ -50,7 +50,7 @@ number
 
 </td><td>
 
-Player's hack() success chance multiplier
+Player's hack() success chance multiplier.
 
 
 </td></tr>
@@ -107,7 +107,7 @@ number
 
 </td><td>
 
-Player's hack(), grow() and weaken() speed multiplier
+Player's hack(), grow() and weaken() speed multiplier.
 
 
 </td></tr>
