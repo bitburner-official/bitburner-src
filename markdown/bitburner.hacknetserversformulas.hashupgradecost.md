@@ -9,7 +9,7 @@ Calculate hash cost of an upgrade.
 **Signature:**
 
 ```typescript
-hashUpgradeCost(upgName: HacknetServerHashUpgrade, level: number): number;
+hashUpgradeCost(upgName: HashUpgradeName, level: number): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ upgName
 
 </td><td>
 
-[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
+[HashUpgradeName](./bitburner.hashupgradename.md)
 
 
 </td><td>

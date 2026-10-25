@@ -71,6 +71,8 @@ Get the level of a hash upgrade.
 
 Get the list of hash upgrades
 
+This function will be removed in a later version of the game
+
 
 </td></tr>
 <tr><td>

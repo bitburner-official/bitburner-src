@@ -2158,7 +2158,17 @@ Locations of gym
 </td></tr>
 <tr><td>
 
-[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
+[HashUpgradeEnumType](./bitburner.hashupgradeenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[HashUpgradeName](./bitburner.hashupgradename.md)
 
 
 </td><td>
