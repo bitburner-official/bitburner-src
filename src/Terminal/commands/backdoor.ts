@@ -33,7 +33,7 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
   }
   if (server.requiredHackingSkill && server.requiredHackingSkill > Player.skills.hacking) {
     Terminal.error(
-      "Your hacking skill is not high enough to install a backdoor on this machine. Try analyzing the machine to determine the required hacking skill.",
+      "Your hacking skill level is not high enough to install a backdoor on this machine. Try analyzing the machine to determine the required hacking level.",
     );
     return;
   }

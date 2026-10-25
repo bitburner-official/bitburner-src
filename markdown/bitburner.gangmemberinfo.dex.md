@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.dex property
 
-Dexterity skill level
+Dexterity level
 
 **Signature:**
 

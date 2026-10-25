@@ -278,7 +278,7 @@ number
 
 </td><td>
 
-The charisma skill required to authenticate on the server
+The charisma level required to authenticate on the server
 
 
 </td></tr>

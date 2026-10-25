@@ -176,7 +176,7 @@ export class BitNodeMultipliers {
   /** Influences the size of the gift. */
   StaneksGiftExtraSize = 0;
 
-  /** Influences the hacking skill required to backdoor the world daemon. */
+  /** Influences the hacking skill level required to backdoor the world daemon. */
   WorldDaemonDifficulty = 1;
 
   constructor(a: PartialRecord<keyof BitNodeMultipliers, number> = {}) {

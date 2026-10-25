@@ -16,7 +16,7 @@ In order for the `NUKE.exe` virus to succeed, the target [server](servers.md) ne
 Some [servers](servers.md) have no security and will not need any ports opened.
 Some will have very high security and will need many ports opened.
 In order to open ports on another [server](servers.md), you will need to run programs that attack the [server](servers.md) to open specific ports.
-These programs can be coded once your hacking skill gets high enough, or they can be purchased if you can find a seller.
+These programs can be coded once your hacking skill level gets high enough, or they can be purchased if you can find a seller.
 
 **There are two ways to execute port-opening programs and the NUKE virus:**
 
@@ -46,7 +46,7 @@ See [Offline And Bonus Time](../programming/offlineandbonustime.md).
 When you execute the `hack` command, either manually through the [Terminal](terminal.md) or automatically through a script, you attempt to hack the [server](servers.md).
 This action takes time.
 The more advanced a [server](servers.md)'s security is, the more time it will take.
-Your hacking skill level also affects the hacking time, with a higher hacking skill leading to shorter hacking times.
+Your hacking skill level also affects the hacking time, with a higher hacking level leading to shorter hacking times.
 Also, running the hack command manually through [Terminal](terminal.md)
 is faster than hacking from a script.
 

@@ -138,17 +138,17 @@ interface MoneySources {
 
 /** @public */
 interface Multipliers {
-  /** Multiplier to hacking skill */
+  /** Multiplier to hacking level */
   hacking: number;
-  /** Multiplier to strength skill */
+  /** Multiplier to strength level */
   strength: number;
-  /** Multiplier to defense skill */
+  /** Multiplier to defense level */
   defense: number;
-  /** Multiplier to dexterity skill */
+  /** Multiplier to dexterity level */
   dexterity: number;
-  /** Multiplier to agility skill */
+  /** Multiplier to agility level */
   agility: number;
-  /** Multiplier to charisma skill */
+  /** Multiplier to charisma level */
   charisma: number;
   /** Multiplier to hacking experience gain rate */
   hacking_exp: number;
@@ -803,7 +803,7 @@ interface BitNodeMultipliers {
   StaneksGiftPowerMultiplier: number;
   /** Influences the size of the gift. */
   StaneksGiftExtraSize: number;
-  /** Influences the hacking skill required to backdoor the world daemon. */
+  /** Influences the hacking level required to backdoor the world daemon. */
   WorldDaemonDifficulty: number;
 }
 
@@ -1020,17 +1020,17 @@ interface GangMemberInfo {
   /** Amount of Respect earned by member since they last Ascended */
   earnedRespect: number;
 
-  /** Hack skill level */
+  /** Hacking level */
   hack: number;
-  /** Strength skill level */
+  /** Strength level */
   str: number;
-  /** Defense skill level */
+  /** Defense level */
   def: number;
-  /** Dexterity skill level */
+  /** Dexterity level */
   dex: number;
-  /** Agility skill level */
+  /** Agility level */
   agi: number;
-  /** Charisma skill level */
+  /** Charisma level */
   cha: number;
 
   /** Current hack experience */
@@ -4540,7 +4540,7 @@ interface DarknetServerDetails {
   difficulty: number;
   /** The current depth in the darknet of the server */
   depth: number;
-  /** The charisma skill required to authenticate on the server */
+  /** The charisma level required to authenticate on the server */
   requiredCharismaSkill: number;
   /** If this darknet server cannot be moved. True for fixed/story servers. */
   isStationary: boolean;

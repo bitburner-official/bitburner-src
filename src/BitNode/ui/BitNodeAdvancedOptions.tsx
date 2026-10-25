@@ -305,13 +305,13 @@ function IntelligenceOverride({
           <Typography>
             Note that you still gain intelligence experience as normal.
             <br />
-            For example, suppose you have 1e6 intelligence exp (intelligence skill = 242) and set the intelligence
-            override to 100. At the start of the BitNode, your intelligence skill will be set to 100 (equivalent to
+            For example, suppose you have 1e6 intelligence exp (intelligence level = 242) and set the intelligence
+            override to 100. At the start of the BitNode, your intelligence level will be set to 100 (equivalent to
             ~11255.318 intelligence exp).
             <br />
-            If you gain 500e3 intelligence exp during the BitNode, your intelligence skill will increase to 220 (total
+            If you gain 500e3 intelligence exp during the BitNode, your intelligence level will increase to 220 (total
             intelligence exp = 11255 + 500e3 = 511255). After performing bitflume, the exp gained during the BitNode is
-            added to your original exp. Your intelligence skill will then become 255 (total intelligence exp = 1e6 +
+            added to your original exp. Your intelligence level will then become 255 (total intelligence exp = 1e6 +
             500e3 = 1.5e6).
           </Typography>
           <br />

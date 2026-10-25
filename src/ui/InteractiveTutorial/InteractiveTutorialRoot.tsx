@@ -241,7 +241,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
 
           <Typography>
             finishes running it will show useful information about hacking the server. <br />
-            <br /> For this server, the required hacking skill is only 1, which means you can hack it right now.
+            <br /> For this server, the required hacking level is only 1, which means you can hack it right now.
             However, in order to hack a server you must first gain root access. The NUKE.exe program that we saw earlier
             on your home computer is a virus that will grant you root access to a machine if there are enough open
             ports.
@@ -280,7 +280,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           <br />
           If your attempt to hack the server is successful, you will steal a certain percentage of the server's total
-          money. This percentage is affected by your hacking skill and the server's security level.
+          money. This percentage is affected by your hacking level and the server's security level.
           <br />
           <br />
           The amount of money on a server is not limitless. So, if you constantly hack a server and deplete its money,

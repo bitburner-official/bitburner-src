@@ -4,7 +4,7 @@
 
 ## Multipliers.dexterity property
 
-Multiplier to dexterity skill
+Multiplier to dexterity level
 
 **Signature:**
 

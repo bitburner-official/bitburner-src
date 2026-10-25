@@ -99,7 +99,7 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
     const hasRoot = server.hasAdminRights ? "YES" : "NO";
     if (server instanceof Server) {
       Terminal.print(
-        `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
+        `${infoPrefix}Root Access: ${hasRoot}, Required hacking level: ${server.requiredHackingSkill}` + "\n",
       );
       Terminal.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n");
     } else {

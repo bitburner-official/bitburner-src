@@ -51,7 +51,7 @@ function getRandomBonus(): CircadianBonus {
         hacking_exp: 2,
       },
       description:
-        "Increases the player's hacking skill by 15%.\n" +
+        "Increases the player's hacking level by 15%.\n" +
         "Increases the player's hacking experience gain rate by 100%.",
     },
     {
@@ -66,8 +66,8 @@ function getRandomBonus(): CircadianBonus {
         agility_exp: 2,
       },
       description:
-        "Increases all of the player's combat stats by 25%.\n" +
-        "Increases all of the player's combat stat experience gain rate by 100%.",
+        "Increases all of the player's level by 25% in combat skills.\n" +
+        "Increases all of the player's combat skill experience gain rate by 100%.",
     },
     {
       bonuses: {
@@ -75,7 +75,7 @@ function getRandomBonus(): CircadianBonus {
         charisma_exp: 2,
       },
       description:
-        "This augmentation increases the player's charisma by 50%.\n" +
+        "This augmentation increases the player's charisma level by 50%.\n" +
         "Increases the player's charisma experience gain rate by 100%.",
     },
     {

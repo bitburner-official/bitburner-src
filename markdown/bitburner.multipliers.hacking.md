@@ -4,7 +4,7 @@
 
 ## Multipliers.hacking property
 
-Multiplier to hacking skill
+Multiplier to hacking level
 
 **Signature:**
 

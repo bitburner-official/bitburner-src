@@ -1019,7 +1019,7 @@ number
 
 </td><td>
 
-Influences the hacking skill required to backdoor the world daemon.
+Influences the hacking level required to backdoor the world daemon.
 
 
 </td></tr>

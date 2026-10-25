@@ -4,7 +4,7 @@
 
 ## Multipliers.strength property
 
-Multiplier to strength skill
+Multiplier to strength level
 
 **Signature:**
 

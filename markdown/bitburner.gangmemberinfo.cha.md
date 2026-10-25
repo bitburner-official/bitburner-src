@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.cha property
 
-Charisma skill level
+Charisma level
 
 **Signature:**
 

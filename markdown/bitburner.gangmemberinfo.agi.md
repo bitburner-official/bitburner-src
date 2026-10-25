@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.agi property
 
-Agility skill level
+Agility level
 
 **Signature:**
 

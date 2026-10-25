@@ -33,22 +33,22 @@ export function Effect(type: FragmentType): string {
       return "+x% grow() power";
     }
     case FragmentTypeEnum.Hacking: {
-      return "+x% hacking experience and skill level";
+      return "+x% hacking experience and level";
     }
     case FragmentTypeEnum.Strength: {
-      return "+x% strength experience and skill level";
+      return "+x% strength experience and level";
     }
     case FragmentTypeEnum.Defense: {
-      return "+x% defense experience and skill level";
+      return "+x% defense experience and level";
     }
     case FragmentTypeEnum.Dexterity: {
-      return "+x% dexterity experience and skill level";
+      return "+x% dexterity experience and level";
     }
     case FragmentTypeEnum.Agility: {
-      return "+x% agility experience and skill level";
+      return "+x% agility experience and level";
     }
     case FragmentTypeEnum.Charisma: {
-      return "+x% charisma experience and skill level";
+      return "+x% charisma experience and level";
     }
     case FragmentTypeEnum.HacknetMoney: {
       return "+x% hacknet production";

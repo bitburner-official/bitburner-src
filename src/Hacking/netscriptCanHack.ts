@@ -39,7 +39,7 @@ export function netscriptCanHack(server: Server, customActionName?: string): IRe
   if (s.requiredHackingSkill > Player.skills.hacking) {
     return {
       res: false,
-      msg: `Cannot hack ${server.hostname} server because your hacking skill is not high enough`,
+      msg: `Cannot hack ${server.hostname} server because your hacking level is not high enough`,
     };
   }
 

@@ -57,7 +57,7 @@ export interface DarknetServerData {
   difficulty: number;
   /** The depth of the server in the net */
   depth: number;
-  /** The charisma skill required to heartbleed the server */
+  /** The charisma skill level required to heartbleed the server */
   requiredCharismaSkill: number;
   /** The interval at which the server periodically adds to its logs, in seconds. */
   logTrafficInterval: number;

@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.hack property
 
-Hack skill level
+Hacking level
 
 **Signature:**
 

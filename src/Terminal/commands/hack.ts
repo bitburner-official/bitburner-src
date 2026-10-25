@@ -26,7 +26,7 @@ export function hack(args: (string | number | boolean)[], server: BaseServer): u
   if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot hack this server.");
   if (server.requiredHackingSkill > Player.skills.hacking) {
     return Terminal.error(
-      "Your hacking skill is not high enough to hack this machine. Try analyzing the machine to determine the required hacking skill",
+      "Your hacking skill level is not high enough to hack this machine. Try analyzing the machine to determine the required hacking level",
     );
   }
 

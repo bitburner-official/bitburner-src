@@ -70,7 +70,7 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
     mults.hacking === mults.agility &&
     mults.hacking === mults.charisma
   ) {
-    desc += `\n+${f(mults.hacking - 1)} all skill levels`;
+    desc += `\n+${f(mults.hacking - 1)} level in all skills`;
   } else {
     // Not allskills
     if (mults.hacking !== 1) desc += `\n+${f(mults.hacking - 1)} hacking level`;
@@ -80,7 +80,7 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
       mults.strength === mults.dexterity &&
       mults.strength === mults.agility
     ) {
-      desc += `\n+${f(mults.strength - 1)} combat skill levels`;
+      desc += `\n+${f(mults.strength - 1)} level in combat skills`;
     } else {
       // Not all combat
       if (mults.strength !== 1) desc += `\n+${f(mults.strength - 1)} strength level`;

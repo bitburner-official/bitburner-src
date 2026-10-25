@@ -123,7 +123,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
                     WARNING: Installing your Augmentations resets most of your progress, including:
                   </Typography>
                   <br />
-                  <Typography>- Stats/Skill levels and Experience</Typography>
+                  <Typography>- Skill levels and experience</Typography>
                   <Typography>- Money</Typography>
                   <Typography>- Scripts on every computer but your home computer</Typography>
                   <Typography>- Cloud servers</Typography>

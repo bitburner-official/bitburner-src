@@ -184,51 +184,51 @@ Here's what mine showed at the time I made this:
 ```text
 [home ~]> scan-analyze 2
 ┕ home
-    ┃   Root Access: YES, Required hacking skill: 1
+    ┃   Root Access: YES, Required hacking level: 1
     ┃   Number of open ports required to NUKE: 5
     ┃   RAM: 8.00GB
     ┣ n00dles
-    ┃ ┃   Root Access: YES, Required hacking skill: 1
+    ┃ ┃   Root Access: YES, Required hacking level: 1
     ┃ ┃   Number of open ports required to NUKE: 0
     ┃ ┃   RAM: 4.00GB
     ┃ ┕ nectar-net
-    ┃       Root Access: NO, Required hacking skill: 20
+    ┃       Root Access: NO, Required hacking level: 20
     ┃       Number of open ports required to NUKE: 0
     ┃       RAM: 16.00GB
     ┣ foodnstuff
-    ┃ ┃   Root Access: NO, Required hacking skill: 1
+    ┃ ┃   Root Access: NO, Required hacking level: 1
     ┃ ┃   Number of open ports required to NUKE: 0
     ┃ ┃   RAM: 16.00GB
     ┃ ┕ zer0
-    ┃       Root Access: NO, Required hacking skill: 75
+    ┃       Root Access: NO, Required hacking level: 75
     ┃       Number of open ports required to NUKE: 1
     ┃       RAM: 32.00GB
     ┣ sigma-cosmetics
-    ┃ ┃   Root Access: NO, Required hacking skill: 5
+    ┃ ┃   Root Access: NO, Required hacking level: 5
     ┃ ┃   Number of open ports required to NUKE: 0
     ┃ ┃   RAM: 16.00GB
     ┃ ┕ max-hardware
-    ┃       Root Access: NO, Required hacking skill: 80
+    ┃       Root Access: NO, Required hacking level: 80
     ┃       Number of open ports required to NUKE: 1
     ┃       RAM: 32.00GB
     ┣ joesguns
-    ┃     Root Access: NO, Required hacking skill: 10
+    ┃     Root Access: NO, Required hacking level: 10
     ┃     Number of open ports required to NUKE: 0
     ┃     RAM: 16.00GB
     ┣ hong-fang-tea
-    ┃     Root Access: NO, Required hacking skill: 30
+    ┃     Root Access: NO, Required hacking level: 30
     ┃     Number of open ports required to NUKE: 0
     ┃     RAM: 16.00GB
     ┣ harakiri-sushi
-    ┃     Root Access: NO, Required hacking skill: 40
+    ┃     Root Access: NO, Required hacking level: 40
     ┃     Number of open ports required to NUKE: 0
     ┃     RAM: 16.00GB
     ┕ iron-gym
-    ┃   Root Access: NO, Required hacking skill: 100
+    ┃   Root Access: NO, Required hacking level: 100
     ┃   Number of open ports required to NUKE: 1
     ┃   RAM: 32.00GB
     ┕ CSEC
-            Root Access: NO, Required hacking skill: 55
+            Root Access: NO, Required hacking level: 55
             Number of open ports required to NUKE: 1
             RAM: 8.00GB
 ```
@@ -320,7 +320,7 @@ However, this will probably be different for you.
 
 After running all of these `Terminal` commands, our [Scripts](../basic/scripts.md) are now up and running.
 These will earn money and hacking experience over time.
-These gains will be really slow right now, but they will increase once our hacking skill rises and we start running more [Scripts](../basic/scripts.md).
+These gains will be really slow right now, but they will increase once our hacking skill level rises and we start running more [Scripts](../basic/scripts.md).
 
 ## Increasing Hacking Level
 
@@ -590,19 +590,19 @@ Here's the relevant part of my `scan-analyze` results:
 
 ```text
 ┕ home
-    ┃   Root Access: YES, Required hacking skill: 1
+    ┃   Root Access: YES, Required hacking level: 1
     ┃   Number of open ports required to NUKE: 5
     ┃   RAM: 8.00GB
     ┣ harakiri-sushi
-    ┃     Root Access: NO, Required hacking skill: 40
+    ┃     Root Access: NO, Required hacking level: 40
     ┃     Number of open ports required to NUKE: 0
     ┃     RAM: 16.00GB
     ┕ iron-gym
-    ┃   Root Access: NO, Required hacking skill: 100
+    ┃   Root Access: NO, Required hacking level: 100
     ┃   Number of open ports required to NUKE: 1
     ┃   RAM: 32.00GB
     ┕ CSEC
-                Root Access: NO, Required hacking skill: 55
+                Root Access: NO, Required hacking level: 55
             Number of open ports required to NUKE: 1
             RAM: 8.00GB
 ```
@@ -619,7 +619,7 @@ You'll notice that in the `scan-analyze` results, all of the [Server](../basic/s
 You can simply click one of the [Server](../basic/servers.md) hostnames in order to connect to it.
 So, simply click `CSEC`!
 
-Make sure you notice the required hacking skill for the `CSEC` [Server](../basic/servers.md).
+Make sure you notice the Required hacking level for the `CSEC` [Server](../basic/servers.md).
 This is a random value between 51 and 60.
 Although you receive the message from CSEC once you hit 50 hacking, you cannot actually pass their test until your hacking is high enough to install a backdoor on their [Server](../basic/servers.md).
 

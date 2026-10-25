@@ -34,7 +34,7 @@ export function analyze(args: (string | number | boolean)[]): undefined | Termin
     if (server instanceof Server) {
       Terminal.print("Backdoor: " + (server.backdoorInstalled ? "YES" : "NO"));
       const hackingSkill = server.requiredHackingSkill;
-      Terminal.print("Required hacking skill for hack() and backdoor: " + (!isHacknet ? hackingSkill : "N/A"));
+      Terminal.print("Required hacking level for hack() and backdoor: " + (!isHacknet ? hackingSkill : "N/A"));
       const security = server.hackDifficulty;
       Terminal.print("Server security level: " + (!isHacknet ? formatSecurity(security) : "N/A"));
       const hackingChance = calculateHackingChance(server, Player);

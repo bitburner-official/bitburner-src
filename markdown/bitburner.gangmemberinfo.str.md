@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.str property
 
-Strength skill level
+Strength level
 
 **Signature:**
 

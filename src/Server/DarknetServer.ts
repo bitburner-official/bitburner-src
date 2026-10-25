@@ -53,7 +53,7 @@ export class DarknetServer extends BaseServer implements DarknetServerData {
   blockedRam: number;
   /** The interval at which the server logs traffic */
   logTrafficInterval: number;
-  /** The charisma skill required to heartbleed the server */
+  /** The charisma skill level required to heartbleed the server */
   requiredCharismaSkill: number;
   /** If this darknet server cannot be moved. True for fixed/story servers. */
   isStationary: boolean;

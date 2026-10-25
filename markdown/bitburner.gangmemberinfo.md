@@ -125,7 +125,7 @@ number
 
 </td><td>
 
-Agility skill level
+Agility level
 
 
 </td></tr>
@@ -239,7 +239,7 @@ number
 
 </td><td>
 
-Charisma skill level
+Charisma level
 
 
 </td></tr>
@@ -334,7 +334,7 @@ number
 
 </td><td>
 
-Defense skill level
+Defense level
 
 
 </td></tr>
@@ -429,7 +429,7 @@ number
 
 </td><td>
 
-Dexterity skill level
+Dexterity level
 
 
 </td></tr>
@@ -564,7 +564,7 @@ number
 
 </td><td>
 
-Hack skill level
+Hacking level
 
 
 </td></tr>
@@ -716,7 +716,7 @@ number
 
 </td><td>
 
-Strength skill level
+Strength level
 
 
 </td></tr>

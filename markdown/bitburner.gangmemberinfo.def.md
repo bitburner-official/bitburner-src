@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.def property
 
-Defense skill level
+Defense level
 
 **Signature:**
 
