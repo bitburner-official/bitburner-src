@@ -25,7 +25,7 @@ import { Companies } from "../Company/Companies";
 import { isMember } from "../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 import { checkServerOwnership, ServerOwnershipType } from "../Server/ServerHelpers";
-import type { Result } from "@nsdefs";
+import type { HashUpgradeName, Result } from "@nsdefs";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { HashUpgradeEnum } from "./Enums";
 
@@ -463,7 +463,7 @@ export function updateHashManagerCapacity(): void {
   Player.hashManager.updateCapacity(total);
 }
 
-function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, count = 1): Result {
+function applyEffectOfHashUpgrade(upgName: HashUpgradeName, upgTarget: string, count = 1): Result {
   const upg = HashUpgrades[upgName];
 
   switch (upgName) {
@@ -575,7 +575,7 @@ function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, c
   return { success: true };
 }
 
-export function purchaseHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, count = 1): Result {
+export function purchaseHashUpgrade(upgName: HashUpgradeName, upgTarget: string, count = 1): Result {
   if (!(Player.hashManager instanceof HashManager)) {
     exceptionAlert(new Error("Player does not have a HashManager"));
     return { success: false, message: "Player does not have a HashManager" };

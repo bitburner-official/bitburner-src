@@ -10,7 +10,7 @@ import { HashUpgrades } from "./HashUpgrades";
 import { HashUpgrade } from "./HashUpgrade";
 
 import { makeSerializable } from "../utils/GenericReviver";
-import type { Result } from "@nsdefs";
+import type { HashUpgradeName, Result } from "@nsdefs";
 import { HashUpgradeEnum } from "./Enums";
 
 export class HashManager {
@@ -31,7 +31,7 @@ export class HashManager {
   }
 
   /** Generic helper function for getting a multiplier from a HashUpgrade */
-  getMult(upgName: HashUpgradeEnum): number {
+  getMult(upgName: HashUpgradeName): number {
     const upg = HashUpgrades[upgName];
     const currLevel = this.upgrades[upgName];
     if (upg == null || currLevel == null) {
@@ -56,7 +56,7 @@ export class HashManager {
     return this.getMult(upgName);
   }
 
-  getUpgrade(upgName: HashUpgradeEnum): HashUpgrade | null {
+  getUpgrade(upgName: HashUpgradeName): HashUpgrade | null {
     const upg = HashUpgrades[upgName];
     if (!upg) {
       console.error(`Invalid Upgrade Name given to HashManager.getUpgrade(): ${upgName}`);
@@ -66,7 +66,7 @@ export class HashManager {
   }
 
   /** Get the cost (in hashes) of an upgrade */
-  getUpgradeCost(upgName: HashUpgradeEnum, count = 1): number {
+  getUpgradeCost(upgName: HashUpgradeName, count = 1): number {
     const upg = this.getUpgrade(upgName);
     const currLevel = this.upgrades[upgName];
     if (upg == null || currLevel == null) {
@@ -88,7 +88,7 @@ export class HashManager {
   }
 
   /** Reverts an upgrade and refunds the hashes used to buy it */
-  refundUpgrade(upgName: HashUpgradeEnum, count = 1): void {
+  refundUpgrade(upgName: HashUpgradeName, count = 1): void {
     const upg = HashUpgrades[upgName];
 
     // Reduce the level first, so we get the right cost
@@ -128,7 +128,7 @@ export class HashManager {
    * Returns boolean indicating whether or not the upgrade was successfully purchased.
    * Note that this function does NOT actually implement the effect.
    */
-  upgrade(upgName: HashUpgradeEnum, count = 1): Result {
+  upgrade(upgName: HashUpgradeName, count = 1): Result {
     const upg = HashUpgrades[upgName];
     if (upg == null) {
       return { success: false, message: `Invalid Upgrade Name given to HashManager.upgrade(): ${upgName}` };
