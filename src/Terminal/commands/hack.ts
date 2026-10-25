@@ -13,7 +13,7 @@ import {
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { Engine } from "../../engine";
+import { processFactionInvitations } from "../../Faction/FactionHelpers";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "../../Server/data/Constants";
 import { formatExp, formatMoney, formatSecurity } from "../../ui/formatNumber";
@@ -50,8 +50,7 @@ export function hack(args: (string | number | boolean)[], server: BaseServer): u
         return;
       }
       // Manually check for faction invitations
-      Engine.Counters.checkFactionInvitations = 0;
-      Engine.checkCounters();
+      processFactionInvitations();
 
       let moneyDrained = server.moneyAvailable * calculatePercentMoneyHacked(server, Player);
 

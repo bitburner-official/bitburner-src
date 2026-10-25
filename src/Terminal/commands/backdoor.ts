@@ -7,7 +7,7 @@ import { Server } from "../../Server/Server";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { Page } from "../../ui/Router";
 import { Router } from "../../ui/GameRoot";
-import { Engine } from "../../engine";
+import { processFactionInvitations } from "../../Faction/FactionHelpers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { calculateHackingTime } from "../../Hacking";
 
@@ -62,8 +62,7 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
       return;
     }
     // Manunally check for faction invites
-    Engine.Counters.checkFactionInvitations = 0;
-    Engine.checkCounters();
+    processFactionInvitations();
 
     Terminal.print(`Backdoor on '${server.hostname}' successful!`);
   });

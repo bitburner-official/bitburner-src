@@ -50,7 +50,7 @@ import {
   isInteger,
   type Integer,
 } from "../types";
-import { Engine } from "../engine";
+import { processFactionInvitations } from "../Faction/FactionHelpers";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
@@ -671,8 +671,7 @@ function hack(ctx: NetscriptContext, _host: unknown, manual: boolean, opts: unkn
       if (manual) {
         server.backdoorInstalled = true;
         // Manunally check for faction invites
-        Engine.Counters.checkFactionInvitations = 0;
-        Engine.checkCounters();
+        processFactionInvitations();
       }
       return moneyGained;
     } else {

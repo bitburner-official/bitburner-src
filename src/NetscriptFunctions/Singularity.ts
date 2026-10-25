@@ -2,7 +2,12 @@ import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
 import { AugmentationName, CityName, CompletedProgramName, FactionWorkType, LocationName } from "@enums";
-import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
+import {
+  purchaseAugmentation,
+  joinFaction,
+  getFactionAugmentationsFiltered,
+  processFactionInvitations,
+} from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
 import {
@@ -44,7 +49,6 @@ import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus } from "../ExportBonus";
 import { getSaveData, exportGame } from "../SaveObject";
 import { calculateCompanyWorkStats, calculateCrimeWorkStats } from "../Work/Formulas";
-import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { getRecordEntries } from "../Types/Record";
@@ -532,8 +536,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           return Router.toPage(Page.BitVerse, { flume: false, quick: false });
         }
         // Manunally check for faction invites
-        Engine.Counters.checkFactionInvitations = 0;
-        Engine.checkCounters();
+        processFactionInvitations();
       });
     },
     isFocused: (ctx) => {
@@ -748,8 +751,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     checkFactionInvitations: (ctx) => {
       helpers.checkSingularityAccess(ctx);
       // Manually trigger a check for faction invites
-      Engine.Counters.checkFactionInvitations = 0;
-      Engine.checkCounters();
+      processFactionInvitations();
       // Make a copy of player.factionInvitations
       return Player.factionInvitations.slice();
     },
