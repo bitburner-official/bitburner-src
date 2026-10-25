@@ -67,7 +67,7 @@ function getRandomBonus(): CircadianBonus {
       },
       description:
         "Increases all of the player's level by 25% in combat skills.\n" +
-        "Increases all of the player's combat skill experience gain rate by 100%.",
+        "Increases all of the player's combat skill experience gain rates by 100%.",
     },
     {
       bonuses: {
