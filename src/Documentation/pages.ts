@@ -669,6 +669,8 @@ import nsDoc_bitburner_gangmemberinstall_dex_md from "../../markdown/bitburner.g
 import nsDoc_bitburner_gangmemberinstall_hack_md from "../../markdown/bitburner.gangmemberinstall.hack.md?raw";
 import nsDoc_bitburner_gangmemberinstall_md from "../../markdown/bitburner.gangmemberinstall.md?raw";
 import nsDoc_bitburner_gangmemberinstall_str_md from "../../markdown/bitburner.gangmemberinstall.str.md?raw";
+import nsDoc_bitburner_gangmemberupgradename_md from "../../markdown/bitburner.gangmemberupgradename.md?raw";
+import nsDoc_bitburner_gangmemberupgradenameenumtype_md from "../../markdown/bitburner.gangmemberupgradenameenumtype.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_md from "../../markdown/bitburner.gangotherinfoobject.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_power_md from "../../markdown/bitburner.gangotherinfoobject.power.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_territory_md from "../../markdown/bitburner.gangotherinfoobject.territory.md?raw";
@@ -2301,6 +2303,8 @@ AllPages["nsDoc/bitburner.gangmemberinstall.dex.md"] = nsDoc_bitburner_gangmembe
 AllPages["nsDoc/bitburner.gangmemberinstall.hack.md"] = nsDoc_bitburner_gangmemberinstall_hack_md;
 AllPages["nsDoc/bitburner.gangmemberinstall.md"] = nsDoc_bitburner_gangmemberinstall_md;
 AllPages["nsDoc/bitburner.gangmemberinstall.str.md"] = nsDoc_bitburner_gangmemberinstall_str_md;
+AllPages["nsDoc/bitburner.gangmemberupgradename.md"] = nsDoc_bitburner_gangmemberupgradename_md;
+AllPages["nsDoc/bitburner.gangmemberupgradenameenumtype.md"] = nsDoc_bitburner_gangmemberupgradenameenumtype_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.md"] = nsDoc_bitburner_gangotherinfoobject_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.power.md"] = nsDoc_bitburner_gangotherinfoobject_power_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.territory.md"] = nsDoc_bitburner_gangotherinfoobject_territory_md;

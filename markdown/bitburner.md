@@ -2087,6 +2087,26 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 </td></tr>
 <tr><td>
 
+[GangMemberUpgradeName](./bitburner.gangmemberupgradename.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GangMemberUpgradeNameEnumType](./bitburner.gangmemberupgradenameenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [GangTaskName](./bitburner.gangtaskname.md)
 
 
