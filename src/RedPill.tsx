@@ -5,8 +5,7 @@ import { type BitNodeOptions } from "@nsdefs";
 import { SourceFiles } from "./SourceFile/SourceFiles";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
+import { Page, Router } from "./ui/Router";
 import { prestigeSourceFile } from "./Prestige";
 import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUtils";
 import { prestigeWorkerScripts } from "./NetscriptWorker";

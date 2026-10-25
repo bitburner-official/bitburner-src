@@ -31,8 +31,7 @@ import { getTorRouter } from "../../../src/Server/ServerHelpers";
 import * as exceptionAlertModule from "../../../src/utils/helpers/exceptionAlert";
 import { numberOfBlackOperations } from "../../../src/Bladeburner/data/BlackOperations";
 import type { SleeveTask, Task } from "@nsdefs";
-import { Router } from "../../../src/ui/GameRoot";
-import { Page } from "../../../src/ui/Router";
+import { Page, Router } from "../../../src/ui/Router";
 import { getDefaultBitNodeOptions } from "../../../src/BitNode/BitNodeUtils";
 
 const nextBN = 4;

@@ -10,8 +10,7 @@ import { TravelConfirmationModal } from "./TravelConfirmationModal";
 
 import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Settings } from "../../Settings/Settings";
 
 import { Money } from "../../ui/React/Money";

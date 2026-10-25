@@ -21,8 +21,7 @@ import { AugmentationName, CompletedProgramName, FactionName, LocationName, Toas
 import { Factions } from "../../Faction/Factions";
 import { joinFaction } from "../../Faction/FactionHelpers";
 
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";

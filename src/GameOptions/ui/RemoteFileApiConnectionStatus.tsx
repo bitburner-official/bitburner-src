@@ -8,8 +8,7 @@ import {
 } from "../../RemoteFileAPI/RemoteFileAPI";
 import OnlinePredictionIcon from "@mui/icons-material/OnlinePrediction";
 import { Settings } from "../../Settings/Settings";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { RemoteFileApiConnectionEvents, RemoteFileApiConnectionSettingEvents } from "../../RemoteFileAPI/Remote";
 import { useRerender } from "../../ui/React/hooks";
 

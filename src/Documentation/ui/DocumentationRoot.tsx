@@ -13,8 +13,7 @@ import {
 } from "../../ui/React/Documentation";
 import { asFilePath } from "../../Paths/FilePath";
 import { Settings } from "../../Settings/Settings";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { DocumentationAutocomplete } from "./DocumentationAutocomplete";
 
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {

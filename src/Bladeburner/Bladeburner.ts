@@ -26,8 +26,7 @@ import { formatHp, formatNumberNoSuffix, formatSleeveShock } from "../ui/formatN
 import { Skills } from "./data/Skills";
 import { City } from "./City";
 import { Player } from "@player";
-import { Router } from "../ui/GameRoot";
-import { Page } from "../ui/Router";
+import { Page, Router } from "../ui/Router";
 import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";

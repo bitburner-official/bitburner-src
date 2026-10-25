@@ -42,9 +42,8 @@ import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvG
 import ShareIcon from "@mui/icons-material/Share"; // DarkWeb
 import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
-import { Router } from "../../ui/GameRoot";
 import { ComplexPage, SimplePage } from "../../ui/Enums";
-import { Page, isSimplePage } from "../../ui/Router";
+import { Page, isSimplePage, Router } from "../../ui/Router";
 import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
 import { CONSTANTS } from "../../Constants";
