@@ -18,6 +18,21 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { DocumentationAutocomplete } from "./DocumentationAutocomplete";
 
+const scrollbarStyles = (
+  <GlobalStyles
+    styles={(theme) => ({
+      html: { scrollbarWidth: "auto" },
+
+      // Safari and Chrome only; Firefox ignores
+      "html::-webkit-scrollbar": { display: "block", width: 14, height: 12 },
+      "html::-webkit-scrollbar-track": { background: "transparent" },
+      "html::-webkit-scrollbar-thumb": { background: theme.colors.button },
+      "html::-webkit-scrollbar-thumb:hover": { background: theme.palette.secondary.dark },
+      "html::-webkit-scrollbar-thumb:active": { background: theme.palette.secondary.main },
+    })}
+  />
+);
+
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
   const history = useHistory();
   const [deepLink, setDeepLink] = useState(docPage);
@@ -73,18 +88,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
 
   return (
     <>
-      {/*<GlobalStyles styles={{ html: { scrollbarWidth: "thin" } }} />*/}
-      <GlobalStyles
-        styles={(theme) => ({
-          // Supported by Safari and Chrome only. Firefox ignores.
-          html: { scrollbarWidth: "auto" },
-          "html::-webkit-scrollbar": { display: "block", width: 14, height: 12 },
-          "html::-webkit-scrollbar-track": { background: "transparent" },
-          "html::-webkit-scrollbar-thumb": { background: theme.colors.button },
-          "html::-webkit-scrollbar-thumb:hover": { background: theme.palette.secondary.dark },
-          "html::-webkit-scrollbar-thumb:active": { background: theme.palette.secondary.main },
-        })}
-      />
+      {scrollbarStyles}
       <Box
         position="fixed"
         display="flex"
