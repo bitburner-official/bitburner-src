@@ -44,7 +44,7 @@ declare global {
   }
 }
 
-module "monaco-vim" {
+module "@catloversg/monaco-vim" {
   export const initVimMode: (...args: unknown[]) => { dispose: () => void };
   export const VimMode: {
     Vim: {

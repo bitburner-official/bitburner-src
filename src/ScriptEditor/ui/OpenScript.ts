@@ -1,5 +1,5 @@
 import type { ContentFilePath } from "../../Paths/ContentFile";
-import { editor, Position } from "monaco-editor";
+import type { editor, Position } from "monaco-editor";
 import { makeModel } from "./utils";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 
