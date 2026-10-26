@@ -595,7 +595,7 @@ export function CharacterStats(): React.ReactElement {
                     mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
-                    tooltipText: `IPvGO winstreaks award favor by giving reptuation that's immediately converted to favour.
+                    tooltipText: `IPvGO winstreaks award favor by giving reputation that's immediately converted to favor.
                     Max Rep Converted To Favor limits how much converted rep you can gain for a single faction, and increases
                     converted rep gained per winstreak bonus.`,
                   },
