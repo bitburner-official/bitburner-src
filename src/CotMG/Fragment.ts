@@ -1,6 +1,7 @@
 import type { FragmentType } from "@nsdefs";
 import { FragmentTypeEnum, Effect } from "./FragmentType";
 import { Shapes } from "./data/Shapes";
+import { normalizeFragmentRotation } from "./Helper";
 
 export const Fragments: Fragment[] = [];
 
@@ -22,11 +23,7 @@ export class Fragment {
   }
 
   fullAt(x: number, y: number, rotation: number): boolean {
-    /**
-     * without this, frags will have different behavior for rotations outside of the 0-3 range.
-     * square shapes will stop rotating after 4, and rectangles will continue to rotate but flip against the y-axis on odd rotations
-     */
-    rotation = ((rotation % 4) + 4) % 4;
+    rotation = normalizeFragmentRotation(rotation);
 
     if (y < 0) return false;
     if (y >= this.height(rotation)) return false;
