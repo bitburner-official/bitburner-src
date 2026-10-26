@@ -30,7 +30,7 @@ export const GangTaskNameEnum = {
   TerritoryWarfare: "Territory Warfare",
 } as const;
 
-export const GangMemberUpgradeEnum = {
+export const GangMemberUpgradeNameEnum = {
   Bat: "Baseball Bat",
   Katana: "Katana",
   Malorian: "Malorian-3516",

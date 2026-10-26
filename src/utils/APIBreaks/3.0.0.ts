@@ -1,29 +1,29 @@
 import type { VersionBreakingChange } from "./APIBreak";
 import { CONSTANTS } from "../../Constants";
-import { GangMemberUpgradeEnum } from "../../Enums";
+import { GangMemberUpgradeNameEnum } from "../../Enums";
 
 export function convertV2GangEquipmentNames(name: string): string {
   switch (name) {
     case "Glock 18C":
-      return GangMemberUpgradeEnum.Malorian;
+      return GangMemberUpgradeNameEnum.Malorian;
     case "P90C":
-      return GangMemberUpgradeEnum.Hansen;
+      return GangMemberUpgradeNameEnum.Hansen;
     case "Steyr AUG":
-      return GangMemberUpgradeEnum.Arasaka;
+      return GangMemberUpgradeNameEnum.Arasaka;
     case "AK-47":
-      return GangMemberUpgradeEnum.Militech;
+      return GangMemberUpgradeNameEnum.Militech;
     case "M15A10 Assault Rifle":
-      return GangMemberUpgradeEnum.Nokota;
+      return GangMemberUpgradeNameEnum.Nokota;
     case "AWM Sniper Rifle":
-      return GangMemberUpgradeEnum.Techtronika;
+      return GangMemberUpgradeNameEnum.Techtronika;
     case "Ford Flex V20":
-      return GangMemberUpgradeEnum.Herrera;
+      return GangMemberUpgradeNameEnum.Herrera;
     case "ATX1070 Superbike":
-      return GangMemberUpgradeEnum.Yaiba;
+      return GangMemberUpgradeNameEnum.Yaiba;
     case "Mercedes-Benz S9001":
-      return GangMemberUpgradeEnum.Rayfield;
+      return GangMemberUpgradeNameEnum.Rayfield;
     case "White Ferrari":
-      return GangMemberUpgradeEnum.Quadra;
+      return GangMemberUpgradeNameEnum.Quadra;
     default:
       return name;
   }

@@ -9956,7 +9956,7 @@ type NSEnums = {
   DarknetResponseCode: DarknetResponseCodeType;
   ProgramName: ProgramNameEnumType;
   GangTaskName: GangTaskNameEnumType;
-  GangMemberUpgrade: GangMemberUpgradeEnumType;
+  GangMemberUpgradeName: GangMemberUpgradeNameEnumType;
 };
 
 /**
