@@ -3,8 +3,7 @@ import * as MonacoVim from "monaco-vim";
 import type { editor } from "monaco-editor";
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { StatusBar } from "./StatusBar";
 import { useRerender } from "../../ui/React/hooks";
 

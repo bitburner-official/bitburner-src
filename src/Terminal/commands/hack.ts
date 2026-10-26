@@ -11,8 +11,7 @@ import {
   calculateHackingTime,
 } from "../../Hacking";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Engine } from "../../engine";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "../../Server/data/Constants";

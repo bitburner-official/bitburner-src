@@ -1,7 +1,7 @@
 import React from "react";
 import { Message } from "./Message";
 import { AugmentationName, CompletedProgramName, FactionName, MessageFilename } from "@enums";
-import { Router } from "../ui/GameRoot";
+import { Router } from "../ui/Router";
 import { Player } from "@player";
 import { GetServer } from "../Server/AllServers";
 import { SpecialServers } from "../Server/data/SpecialServers";

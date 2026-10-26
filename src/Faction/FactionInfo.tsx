@@ -1,8 +1,7 @@
 import React from "react";
 import { FactionName, CompanyName, CityName, LiteratureName, MessageFilename, LocationName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { Router } from "../ui/GameRoot";
-import { Page } from "../ui/Router";
+import { Page, Router } from "../ui/Router";
 import { Option } from "./ui/Option";
 import { Typography } from "@mui/material";
 import {
