@@ -20,5 +20,5 @@ type HacknetServerHashUpgradeEnumType = {
   ExchangeForBladeburnerSP: "Exchange for Bladeburner SP";
   GenerateCodingContract: "Generate Coding Contract";
   CompanyFavor: "Company Favor";
-}
+};
 ```
