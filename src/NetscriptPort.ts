@@ -1,12 +1,13 @@
 import { Settings } from "./Settings/Settings";
 import { NetscriptPort } from "@nsdefs";
-import { NetscriptPorts } from "./NetscriptWorker";
 import { PositiveInteger } from "./types";
 
 type Resolver = () => void;
 const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
 export type PortNumber = PositiveInteger & { __PortNumber: true };
+
+export const NetscriptPorts = new Map<PortNumber, Port>();
 
 function isObjectLike(value: unknown): value is object {
   return (typeof value === "object" && value !== null) || typeof value === "function";

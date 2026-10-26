@@ -6,7 +6,7 @@ import { tryGeneratingRandomContract } from "./CodingContract/ContractGenerator"
 import { CONSTANTS } from "./Constants";
 import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
-import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
+import { processPassiveFactionRepGain, processFactionInvitations } from "./Faction/FactionHelpers";
 import { Router } from "./ui/Router";
 import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
@@ -48,7 +48,7 @@ import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
 import { Go } from "./Go/Go";
-import { EventEmitter } from "./utils/EventEmitter";
+import { GameCycleEvents } from "./GameCycleEvents";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { getRecordEntries } from "./Types/Record";
@@ -71,8 +71,6 @@ declare global {
   // eslint-disable-next-line no-var
   var openDevMenu: () => void;
 }
-
-export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
 const Engine = {
@@ -169,10 +167,7 @@ const Engine = {
    */
   checkCounters: function () {
     if (Engine.Counters.checkFactionInvitations <= 0) {
-      const invitedFactions = Player.checkForFactionInvitations();
-      for (const invitedFaction of invitedFactions) {
-        inviteToFaction(invitedFaction);
-      }
+      processFactionInvitations();
       Engine.Counters.checkFactionInvitations = 10;
     }
 
