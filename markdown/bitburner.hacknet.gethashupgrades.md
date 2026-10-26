@@ -4,23 +4,31 @@
 
 ## Hacknet.getHashUpgrades() method
 
-> Warning: This API is now obsolete.
-> 
-> Use  instead.
-> 
-
 Get the list of hash upgrades
-
-This function will be removed in a later version of the game
 
 **Signature:**
 
 ```typescript
-getHashUpgrades(): HashUpgradeName[];
+getHashUpgrades(): HacknetServerHashUpgrade[];
 ```
 **Returns:**
 
-[HashUpgradeName](./bitburner.hashupgradename.md)<!-- -->\[\]
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)<!-- -->\[\]
 
 An array containing the available upgrades
+
+## Remarks
+
+RAM cost: 0.5 GB
+
+This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
+
+Returns the list of all available hash upgrades that can be used in the spendHashes function.
+
+## Example
+
+
+```js
+const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
+```
 

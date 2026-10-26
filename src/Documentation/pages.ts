@@ -827,6 +827,8 @@ import nsDoc_bitburner_hacknetserverconstants_upgradecachemult_md from "../../ma
 import nsDoc_bitburner_hacknetserverconstants_upgradecoremult_md from "../../markdown/bitburner.hacknetserverconstants.upgradecoremult.md?raw";
 import nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md from "../../markdown/bitburner.hacknetserverconstants.upgradelevelmult.md?raw";
 import nsDoc_bitburner_hacknetserverconstants_upgraderammult_md from "../../markdown/bitburner.hacknetserverconstants.upgraderammult.md?raw";
+import nsDoc_bitburner_hacknetserverhashupgrade_md from "../../markdown/bitburner.hacknetserverhashupgrade.md?raw";
+import nsDoc_bitburner_hacknetserverhashupgradeenumtype_md from "../../markdown/bitburner.hacknetserverhashupgradeenumtype.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.cacheupgradecost.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_constants_md from "../../markdown/bitburner.hacknetserversformulas.constants.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.coreupgradecost.md?raw";
@@ -836,8 +838,6 @@ import nsDoc_bitburner_hacknetserversformulas_hashupgradecost_md from "../../mar
 import nsDoc_bitburner_hacknetserversformulas_levelupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.levelupgradecost.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_md from "../../markdown/bitburner.hacknetserversformulas.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_ramupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.ramupgradecost.md?raw";
-import nsDoc_bitburner_hashupgradeenumtype_md from "../../markdown/bitburner.hashupgradeenumtype.md?raw";
-import nsDoc_bitburner_hashupgradename_md from "../../markdown/bitburner.hashupgradename.md?raw";
 import nsDoc_bitburner_heartbleedoptions_additionalmsec_md from "../../markdown/bitburner.heartbleedoptions.additionalmsec.md?raw";
 import nsDoc_bitburner_heartbleedoptions_logstocapture_md from "../../markdown/bitburner.heartbleedoptions.logstocapture.md?raw";
 import nsDoc_bitburner_heartbleedoptions_md from "../../markdown/bitburner.heartbleedoptions.md?raw";
@@ -2460,6 +2460,8 @@ AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecachemult.md"] = nsDoc_b
 AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecoremult.md"] = nsDoc_bitburner_hacknetserverconstants_upgradecoremult_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.upgradelevelmult.md"] = nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.upgraderammult.md"] = nsDoc_bitburner_hacknetserverconstants_upgraderammult_md;
+AllPages["nsDoc/bitburner.hacknetserverhashupgrade.md"] = nsDoc_bitburner_hacknetserverhashupgrade_md;
+AllPages["nsDoc/bitburner.hacknetserverhashupgradeenumtype.md"] = nsDoc_bitburner_hacknetserverhashupgradeenumtype_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.cacheupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.constants.md"] = nsDoc_bitburner_hacknetserversformulas_constants_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.coreupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md;
@@ -2469,8 +2471,6 @@ AllPages["nsDoc/bitburner.hacknetserversformulas.hashupgradecost.md"] = nsDoc_bi
 AllPages["nsDoc/bitburner.hacknetserversformulas.levelupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_levelupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.md"] = nsDoc_bitburner_hacknetserversformulas_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.ramupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_ramupgradecost_md;
-AllPages["nsDoc/bitburner.hashupgradeenumtype.md"] = nsDoc_bitburner_hashupgradeenumtype_md;
-AllPages["nsDoc/bitburner.hashupgradename.md"] = nsDoc_bitburner_hashupgradename_md;
 AllPages["nsDoc/bitburner.heartbleedoptions.additionalmsec.md"] = nsDoc_bitburner_heartbleedoptions_additionalmsec_md;
 AllPages["nsDoc/bitburner.heartbleedoptions.logstocapture.md"] = nsDoc_bitburner_heartbleedoptions_logstocapture_md;
 AllPages["nsDoc/bitburner.heartbleedoptions.md"] = nsDoc_bitburner_heartbleedoptions_md;

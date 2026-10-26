@@ -9,7 +9,7 @@ Purchase a hash upgrade.
 **Signature:**
 
 ```typescript
-spendHashes(upgName: HashUpgradeName, upgTarget?: string, count?: number): boolean;
+spendHashes(upgName: HacknetServerHashUpgrade, upgTarget?: string, count?: number): boolean;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ upgName
 
 </td><td>
 
-[HashUpgradeName](./bitburner.hashupgradename.md)
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
 
 
 </td><td>

@@ -18,7 +18,7 @@ import { HashUpgrades } from "../Hacknet/HashUpgrades";
 import { HashUpgrade } from "../Hacknet/HashUpgrade";
 import { GetServer } from "../Server/AllServers";
 
-import { HashUpgradeName, Hacknet as IHacknet, NodeStats } from "@nsdefs";
+import { Hacknet as IHacknet, NodeStats } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -180,7 +180,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       return Player.hashManager.getUpgradeCost(upgName, count);
     },
     spendHashes: (ctx, _upgName, _upgTarget = "", _count = 1) => {
-      const upgName: HashUpgradeName = getEnumHelper("HashUpgradeEnum").nsGetMember(ctx, _upgName, "upgName");
+      const upgName = getEnumHelper("HashUpgradeEnum").nsGetMember(ctx, _upgName);
       const upgTarget = helpers.string(ctx, "upgTarget", _upgTarget);
       const count = helpers.integer(ctx, "count", _count);
       if (count < 0) {

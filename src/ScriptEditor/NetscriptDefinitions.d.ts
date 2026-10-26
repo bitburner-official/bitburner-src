@@ -2989,7 +2989,7 @@ export interface CompanyPositionInfo {
 }
 
 /** @public */
-type HashUpgradeEnumType = {
+type HacknetServerHashUpgradeEnumType = {
   SellForMoney: "Sell for Money";
   SellForCorporationFunds: "Sell for Corporation Funds";
   ReduceMinimumSecurity: "Reduce Minimum Security";
@@ -3004,7 +3004,7 @@ type HashUpgradeEnumType = {
 };
 
 /** @public */
-type HashUpgradeName = _ValueOf<HashUpgradeEnumType>;
+type HacknetServerHashUpgrade = _ValueOf<HacknetServerHashUpgradeEnumType>;
 
 /**
  * Hacknet API
@@ -3264,7 +3264,7 @@ export interface Hacknet {
    * @param count - Number of upgrades to buy at once. Defaults to 1 if not specified.
    * @returns Number of hashes required for the specified upgrade.
    */
-  hashCost(upgName: HashUpgradeName, count?: number): number;
+  hashCost(upgName: HacknetServerHashUpgrade, count?: number): number;
 
   /**
    * Purchase a hash upgrade.
@@ -3293,19 +3293,23 @@ export interface Hacknet {
    * For compatibility reasons, upgTarget must be specified, even if it is not used, in order to specify count.
    * @returns True if the upgrade is successfully purchased, and false otherwise.
    */
-  spendHashes(upgName: HashUpgradeName, upgTarget?: string, count?: number): boolean;
+  spendHashes(upgName: HacknetServerHashUpgrade, upgTarget?: string, count?: number): boolean;
 
   /**
    * Get the list of hash upgrades
+   * @remarks
+   * RAM cost: 0.5 GB
    *
-   * This function will be removed in a later version of the game
+   * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
-   * @deprecated
-   * Use {@link NSEnums.HashUpgradeName | HashUpgradeName} instead.
-   *
+   * Returns the list of all available hash upgrades that can be used in the spendHashes function.
+   * @example
+   * ```js
+   * const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
+   * ```
    * @returns An array containing the available upgrades
    */
-  getHashUpgrades(): HashUpgradeName[];
+  getHashUpgrades(): HacknetServerHashUpgrade[];
 
   /**
    * Get the level of a hash upgrade.
@@ -3316,7 +3320,7 @@ export interface Hacknet {
    *
    * @returns Level of the upgrade.
    */
-  getHashUpgradeLevel(upgName: HashUpgradeName): number;
+  getHashUpgradeLevel(upgName: HacknetServerHashUpgrade): number;
 
   /**
    * Get the multiplier to study.
@@ -6500,7 +6504,7 @@ interface HacknetServersFormulas {
    * @param level - level of the upgrade
    * @returns The calculated hash cost.
    */
-  hashUpgradeCost(upgName: HashUpgradeName, level: number): number;
+  hashUpgradeCost(upgName: HacknetServerHashUpgrade, level: number): number;
   /**
    * Calculate the cost of a hacknet server.
    * @param n - number of the hacknet server
@@ -9913,7 +9917,7 @@ type NSEnums = {
   DarknetResponseCode: DarknetResponseCodeType;
   ProgramName: ProgramNameEnumType;
   GangTaskName: GangTaskNameEnumType;
-  HashUpgradeName: HashUpgradeEnumType;
+  HacknetServerHashUpgrade: HacknetServerHashUpgradeEnumType;
 };
 
 /**

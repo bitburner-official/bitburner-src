@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { HashUpgradeName } from "@nsdefs";
+import type { HacknetServerHashUpgrade } from "@nsdefs";
 
 /** Object representing an upgrade that can be purchased with hashes */
 export interface HashUpgradeParams {
@@ -8,7 +8,7 @@ export interface HashUpgradeParams {
   desc: ReactNode;
   hasTargetServer?: boolean;
   hasTargetCompany?: boolean;
-  name: HashUpgradeName;
+  name: HacknetServerHashUpgrade;
   value: number;
   effectText?: (level: number) => JSX.Element | null;
 }
@@ -44,7 +44,7 @@ export class HashUpgrade {
   hasTargetCompany = false;
 
   /** Name of upgrade */
-  name: HashUpgradeName;
+  name: HacknetServerHashUpgrade;
 
   // Generic value used to indicate the potency/amount of this upgrade's effect
   // The meaning varies between different upgrades

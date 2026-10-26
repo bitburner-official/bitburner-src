@@ -2158,7 +2158,7 @@ Locations of gym
 </td></tr>
 <tr><td>
 
-[HashUpgradeEnumType](./bitburner.hashupgradeenumtype.md)
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
 
 
 </td><td>
@@ -2168,7 +2168,7 @@ Locations of gym
 </td></tr>
 <tr><td>
 
-[HashUpgradeName](./bitburner.hashupgradename.md)
+[HacknetServerHashUpgradeEnumType](./bitburner.hacknetserverhashupgradeenumtype.md)
 
 
 </td><td>
