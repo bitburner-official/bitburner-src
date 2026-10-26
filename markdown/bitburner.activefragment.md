@@ -117,8 +117,6 @@ number
 
 </td><td>
 
-The integer number of clockwise 90-degree turns applied to the fragment's orientation.
-
 
 </td></tr>
 <tr><td>

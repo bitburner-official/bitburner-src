@@ -6720,9 +6720,6 @@ interface ActiveFragment extends Fragment {
    * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
    */
   numCharge: number;
-  /**
-   * The integer number of clockwise 90-degree turns applied to the fragment's orientation.
-   */
   rotation: number;
   /**
    * The root x coordinate against which the top left of the fragment was aligned.
@@ -6813,7 +6810,7 @@ interface Stanek {
    *
    * @param rootX - Root X against which to align the top left of the fragment.
    * @param rootY - Root Y against which to align the top left of the fragment.
-   * @param rotation - An integer number from 0 to 3, the amount of clockwise 90-degree turns to apply. Values over 3 will wrap back inside the 0-3 range, and negative values will wrap from the other direction.
+   * @param rotation - A number from 0 to 3, the amount of 90-degree turns to take.
    * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
@@ -6825,7 +6822,7 @@ interface Stanek {
    *
    * @param rootX - X against which to align the top left of the fragment.
    * @param rootY - Y against which to align the top left of the fragment.
-   * @param rotation - An integer from 0 to 3, the amount of clockwise 90-degree turns to apply. Values over 3 will wrap back inside the 0-3 range, and negative values will wrap from the other direction.
+   * @param rotation - A number from 0 to 3, the mount of 90 degree turn to take.
    * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
