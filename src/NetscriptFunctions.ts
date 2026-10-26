@@ -141,7 +141,7 @@ export const enums: NSEnums = {
   DarknetResponseCode: ResponseCodeEnum,
   ProgramName: CompletedProgramName,
   GangTaskName: GangTaskNameEnum,
-  GangMemberUpgrade: GangMemberUpgradeNameEnum,
+  GangMemberUpgradeName: GangMemberUpgradeNameEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
