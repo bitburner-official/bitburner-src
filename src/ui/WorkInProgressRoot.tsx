@@ -26,8 +26,7 @@ import { isCreateProgramWork } from "../Work/CreateProgramWork";
 import { isGraftingWork } from "../Work/GraftingWork";
 import { isFactionWork } from "../Work/FactionWork";
 import { isCompanyWork } from "../Work/CompanyWork";
-import { Router } from "./GameRoot";
-import { Page } from "./Router";
+import { Page, Router } from "./Router";
 import { formatExp, formatPercent } from "./formatNumber";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;

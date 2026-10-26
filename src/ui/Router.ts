@@ -67,3 +67,59 @@ export interface IRouter {
 
 const simplePages = Object.values(SimplePage);
 export const isSimplePage = (page: Page): page is SimplePage => simplePages.includes(page as SimplePage);
+
+export type RouterAction = (
+  | {
+      type: "toPage";
+      page: Page;
+      context?: PageContext<ComplexPage>;
+    }
+  | {
+      type: "back";
+    }
+) & { stackTrace: string | undefined };
+
+/**
+ * When the main UI is not loaded, all router actions ("toPage" and "back") are stored in this array. After that, we
+ * will run them and show a warning popup. This queue is empty in a normal situation. If it has items, there are bugs
+ * that try to route the main UI when it's not loaded.
+ */
+export const pendingRouterActions: RouterAction[] = [];
+
+export let Router: IRouter = {
+  page: () => {
+    return Page.LoadingScreen;
+  },
+  /**
+   * This function is only called in ImportSave.tsx. That component is only used when the main UI shows Page.ImportSave,
+   * so it's impossible for this function to run before the main UI is loaded. If it happens, it's a fatal error. In
+   * that case, throwing an error is the only option.
+   */
+  allowRouting: () => {
+    throw new Error("Router.allowRouting() was called before initialization.");
+  },
+  hidingMessages: () => true,
+  toPage: (page: Page, context?: PageContext<ComplexPage>) => {
+    const stackTrace = new Error().stack;
+    console.error("Router.toPage() was called before initialization.", page, context, stackTrace);
+    pendingRouterActions.push({
+      type: "toPage",
+      page,
+      context,
+      stackTrace,
+    });
+  },
+  back: () => {
+    const stackTrace = new Error().stack;
+    console.error("Default Router.back() was called before initialization.", stackTrace);
+    pendingRouterActions.push({
+      type: "back",
+      stackTrace,
+    });
+  },
+};
+
+/** Called by GameRoot on render to install the real router implementation. */
+export function setRouter(router: IRouter): void {
+  Router = router;
+}

@@ -10,8 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { Crimes } from "../../Crime/Crimes";
 
 import { formatPercent } from "../../ui/formatNumber";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Player } from "@player";
 import { Box } from "@mui/material";
 import { Crime } from "../../Crime/Crime";

@@ -8,7 +8,7 @@ import { GetServerOrThrow, prestigeAllServers } from "../../src/Server/AllServer
 import { SpecialServers } from "../../src/Server/data/SpecialServers";
 import { initSourceFiles } from "../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../src/ui/formatNumber";
-import { Router } from "../../src/ui/GameRoot";
+import { Router } from "../../src/ui/Router";
 import { config } from "../../src/NetscriptJSEvaluator";
 import type { NetscriptContext } from "../../src/Netscript/APIWrapper";
 import { purchaseServer } from "../../src/Server/ServerPurchases";

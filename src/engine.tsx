@@ -7,7 +7,7 @@ import { CONSTANTS } from "./Constants";
 import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, processFactionInvitations } from "./Faction/FactionHelpers";
-import { Router } from "./ui/GameRoot";
+import { Router } from "./ui/Router";
 import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
 import {
