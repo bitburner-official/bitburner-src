@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -10,6 +10,7 @@ import {
   useHistory,
   openDocExternally,
   convertNavigatorHref,
+  ScrollContainerContext,
 } from "../../ui/React/Documentation";
 import { asFilePath } from "../../Paths/FilePath";
 import { Settings } from "../../Settings/Settings";
@@ -20,6 +21,7 @@ import { DocumentationAutocomplete } from "./DocumentationAutocomplete";
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
   const history = useHistory();
   const [deepLink, setDeepLink] = useState(docPage);
+  const scrollContainerRef = useContext(ScrollContainerContext);
   const navigator = {
     /**
      * This function is used for navigating inside the documentation tab.
@@ -41,12 +43,13 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
   // We need to use "useLayoutEffect" instead of "useEffect". "useLayoutEffect" is fired before the browser repaints the
   // screen.
   useLayoutEffect(() => {
+    const scrollContainer = scrollContainerRef?.current;
     return () => {
       if (Router.page() !== Page.Documentation) {
-        windowTopPositionOfPages.set(history.page, window.scrollY);
+        windowTopPositionOfPages.set(history.page, scrollContainer?.scrollTop ?? 0);
       }
     };
-  }, [history]);
+  }, [history, scrollContainerRef]);
 
   useEffect(() => {
     if (!deepLink) {
@@ -66,12 +69,16 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
      * tab, then switch back.
      */
     setTimeout(() => {
-      window.scrollTo({ top: windowTopPositionOfPages.get(history.page) ?? 0, behavior: "instant" });
+      scrollContainerRef?.current?.scrollTo({
+        top: windowTopPositionOfPages.get(history.page) ?? 0,
+        behavior: "instant",
+      });
     }, 0);
   });
 
   return (
     <Box
+      ref={scrollContainerRef}
       sx={{
         height: "100vh",
         overflowY: "auto",
