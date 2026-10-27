@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import GlobalStyles from "@mui/material/GlobalStyles";
 
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -17,45 +16,6 @@ import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { DocumentationAutocomplete } from "./DocumentationAutocomplete";
-
-const scrollbarStyles = (
-  <GlobalStyles
-    styles={(theme) => ({
-      // Firefox
-      "@supports not selector(::-webkit-scrollbar)": {
-        html: {
-          scrollbarWidth: "auto",
-          scrollbarColor: `${theme.palette.secondary.dark} transparent`,
-        },
-      },
-
-      // Chrome and Safari
-      "@supports selector(::-webkit-scrollbar)": {
-        html: {
-          scrollbarWidth: "auto",
-        },
-
-        "html::-webkit-scrollbar": {
-          display: "block",
-          width: 14,
-          height: 12,
-        },
-        "html::-webkit-scrollbar-track": {
-          background: "transparent",
-        },
-        "html::-webkit-scrollbar-thumb": {
-          background: theme.colors.button,
-        },
-        "html::-webkit-scrollbar-thumb:hover": {
-          background: theme.palette.secondary.dark,
-        },
-        "html::-webkit-scrollbar-thumb:active": {
-          background: theme.palette.secondary.main,
-        },
-      },
-    })}
-  />
-);
 
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
   const history = useHistory();
@@ -111,15 +71,20 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
   });
 
   return (
-    <>
-      {scrollbarStyles}
+    <Box
+      sx={{
+        height: "100vh",
+        overflowY: "auto",
+        scrollbarWidth: "auto",
+        scrollbarColor: `${Settings.theme.button} transparent`,
+      }}
+    >
       <Box
-        position="fixed"
+        position="sticky"
         display="flex"
         top={0}
         zIndex={1}
         width="100%"
-        paddingTop="8px"
         bgcolor={Settings.theme.backgroundprimary}
         alignItems="center"
       >
@@ -136,11 +101,11 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
           }}
         />
       </Box>
-      <Box sx={{ paddingTop: "50px", maxWidth: "lg" }}>
+      <Box sx={{ maxWidth: "lg" }}>
         <Navigator.Provider value={navigator}>
           <MD pageFilePath={deepLink ? asFilePath(deepLink) : history.page} />
         </Navigator.Provider>
       </Box>
-    </>
+    </Box>
   );
 }
