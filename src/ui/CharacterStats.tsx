@@ -596,7 +596,7 @@ export function CharacterStats(): React.ReactElement {
                     value: getMaxRep(),
                     isNumber: true,
                     tooltipText: `IPvGO winstreaks award favor by giving reputation that's immediately converted to favor.
-                    Max Rep Converted To Favor limits how much converted rep you can gain for a single faction, and increases
+                    Max Rep Converted To Favor limits how much converted rep you can gain for a single faction, and determines
                     converted rep gained per winstreak bonus.`,
                   },
                 ]}
