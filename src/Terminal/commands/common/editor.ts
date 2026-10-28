@@ -1,6 +1,5 @@
 import { Terminal } from "../../../Terminal";
-import { Page } from "../../../ui/Router";
-import { Router } from "../../../ui/GameRoot";
+import { Page, Router } from "../../../ui/Router";
 import type { BaseServer } from "../../../Server/BaseServer";
 import { type ScriptFilePath, hasScriptExtension, isLegacyScript } from "../../../Paths/ScriptFilePath";
 import { type TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";

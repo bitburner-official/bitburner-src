@@ -449,6 +449,7 @@ import nsDoc_bitburner_darknet_promotestock_md from "../../markdown/bitburner.da
 import nsDoc_bitburner_darknet_setstasislink_md from "../../markdown/bitburner.darknet.setstasislink.md?raw";
 import nsDoc_bitburner_darknet_unleashstormseed_md from "../../markdown/bitburner.darknet.unleashstormseed.md?raw";
 import nsDoc_bitburner_darknetformulas_getauthenticatetime_md from "../../markdown/bitburner.darknetformulas.getauthenticatetime.md?raw";
+import nsDoc_bitburner_darknetformulas_getexpectedmigrationcharge_md from "../../markdown/bitburner.darknetformulas.getexpectedmigrationcharge.md?raw";
 import nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md from "../../markdown/bitburner.darknetformulas.getexpectedramblockremoved.md?raw";
 import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown/bitburner.darknetformulas.getheartbleedtime.md?raw";
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
@@ -588,6 +589,7 @@ import nsDoc_bitburner_gangformulas_ascensionmultiplier_md from "../../markdown/
 import nsDoc_bitburner_gangformulas_ascensionpointsgain_md from "../../markdown/bitburner.gangformulas.ascensionpointsgain.md?raw";
 import nsDoc_bitburner_gangformulas_md from "../../markdown/bitburner.gangformulas.md?raw";
 import nsDoc_bitburner_gangformulas_moneygain_md from "../../markdown/bitburner.gangformulas.moneygain.md?raw";
+import nsDoc_bitburner_gangformulas_reputationgain_md from "../../markdown/bitburner.gangformulas.reputationgain.md?raw";
 import nsDoc_bitburner_gangformulas_respectgain_md from "../../markdown/bitburner.gangformulas.respectgain.md?raw";
 import nsDoc_bitburner_gangformulas_wantedlevelgain_md from "../../markdown/bitburner.gangformulas.wantedlevelgain.md?raw";
 import nsDoc_bitburner_gangformulas_wantedpenalty_md from "../../markdown/bitburner.gangformulas.wantedpenalty.md?raw";
@@ -668,6 +670,8 @@ import nsDoc_bitburner_gangmemberinstall_dex_md from "../../markdown/bitburner.g
 import nsDoc_bitburner_gangmemberinstall_hack_md from "../../markdown/bitburner.gangmemberinstall.hack.md?raw";
 import nsDoc_bitburner_gangmemberinstall_md from "../../markdown/bitburner.gangmemberinstall.md?raw";
 import nsDoc_bitburner_gangmemberinstall_str_md from "../../markdown/bitburner.gangmemberinstall.str.md?raw";
+import nsDoc_bitburner_gangmemberupgradename_md from "../../markdown/bitburner.gangmemberupgradename.md?raw";
+import nsDoc_bitburner_gangmemberupgradenameenumtype_md from "../../markdown/bitburner.gangmemberupgradenameenumtype.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_md from "../../markdown/bitburner.gangotherinfoobject.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_power_md from "../../markdown/bitburner.gangotherinfoobject.power.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_territory_md from "../../markdown/bitburner.gangotherinfoobject.territory.md?raw";
@@ -2080,6 +2084,7 @@ AllPages["nsDoc/bitburner.darknet.promotestock.md"] = nsDoc_bitburner_darknet_pr
 AllPages["nsDoc/bitburner.darknet.setstasislink.md"] = nsDoc_bitburner_darknet_setstasislink_md;
 AllPages["nsDoc/bitburner.darknet.unleashstormseed.md"] = nsDoc_bitburner_darknet_unleashstormseed_md;
 AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] = nsDoc_bitburner_darknetformulas_getauthenticatetime_md;
+AllPages["nsDoc/bitburner.darknetformulas.getexpectedmigrationcharge.md"] = nsDoc_bitburner_darknetformulas_getexpectedmigrationcharge_md;
 AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
@@ -2219,6 +2224,7 @@ AllPages["nsDoc/bitburner.gangformulas.ascensionmultiplier.md"] = nsDoc_bitburne
 AllPages["nsDoc/bitburner.gangformulas.ascensionpointsgain.md"] = nsDoc_bitburner_gangformulas_ascensionpointsgain_md;
 AllPages["nsDoc/bitburner.gangformulas.md"] = nsDoc_bitburner_gangformulas_md;
 AllPages["nsDoc/bitburner.gangformulas.moneygain.md"] = nsDoc_bitburner_gangformulas_moneygain_md;
+AllPages["nsDoc/bitburner.gangformulas.reputationgain.md"] = nsDoc_bitburner_gangformulas_reputationgain_md;
 AllPages["nsDoc/bitburner.gangformulas.respectgain.md"] = nsDoc_bitburner_gangformulas_respectgain_md;
 AllPages["nsDoc/bitburner.gangformulas.wantedlevelgain.md"] = nsDoc_bitburner_gangformulas_wantedlevelgain_md;
 AllPages["nsDoc/bitburner.gangformulas.wantedpenalty.md"] = nsDoc_bitburner_gangformulas_wantedpenalty_md;
@@ -2299,6 +2305,8 @@ AllPages["nsDoc/bitburner.gangmemberinstall.dex.md"] = nsDoc_bitburner_gangmembe
 AllPages["nsDoc/bitburner.gangmemberinstall.hack.md"] = nsDoc_bitburner_gangmemberinstall_hack_md;
 AllPages["nsDoc/bitburner.gangmemberinstall.md"] = nsDoc_bitburner_gangmemberinstall_md;
 AllPages["nsDoc/bitburner.gangmemberinstall.str.md"] = nsDoc_bitburner_gangmemberinstall_str_md;
+AllPages["nsDoc/bitburner.gangmemberupgradename.md"] = nsDoc_bitburner_gangmemberupgradename_md;
+AllPages["nsDoc/bitburner.gangmemberupgradenameenumtype.md"] = nsDoc_bitburner_gangmemberupgradenameenumtype_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.md"] = nsDoc_bitburner_gangotherinfoobject_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.power.md"] = nsDoc_bitburner_gangotherinfoobject_power_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.territory.md"] = nsDoc_bitburner_gangotherinfoobject_territory_md;

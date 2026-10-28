@@ -7,8 +7,7 @@ import { FactionName, FactionDiscovery } from "@enums";
 
 import { Settings } from "../../Settings/Settings";
 import { formatFavor, formatReputation } from "../../ui/formatNumber";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { Requirement } from "../../ui/Components/Requirement";
@@ -175,7 +174,13 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                           <li key={enemy}>{enemy}</li>
                         ))}
                       </ul>
-                      {!props.faction.isMember && <>Joining this Faction will prevent you from joining its enemies.</>}
+                      {!props.faction.isMember && (
+                        <>
+                          Joining this Faction will prevent you from joining its
+                          <br />
+                          enemies until you next install augmentations.
+                        </>
+                      )}
                     </Typography>
                   }
                 >

@@ -34,8 +34,7 @@ import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFuncti
 import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
 import { ConfirmationModal } from "./ConfirmationModal";
 import { pushImportResult } from "../../Electron";
-import { Router } from "../GameRoot";
-import { Page } from "../Router";
+import { Page, Router } from "../Router";
 import { useBoolean } from "./hooks";
 
 import { SaveData } from "../../types";

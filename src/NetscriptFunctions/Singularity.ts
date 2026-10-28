@@ -1,18 +1,27 @@
 import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
-import { CityName, CompletedProgramName, FactionWorkType, LocationName } from "@enums";
-import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
+import { AugmentationName, CityName, CompletedProgramName, FactionWorkType, LocationName } from "@enums";
+import {
+  purchaseAugmentation,
+  joinFaction,
+  getFactionAugmentationsFiltered,
+  processFactionInvitations,
+} from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { getAugCost, installAugmentations, soaAugmentationNames } from "../Augmentation/AugmentationHelpers";
+import {
+  getAugCost,
+  getThreadAugmentMults,
+  installAugmentations,
+  soaAugmentationNames,
+} from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { Router } from "../ui/GameRoot";
-import { Page } from "../ui/Router";
+import { Page, Router } from "../ui/Router";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
@@ -39,7 +48,6 @@ import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus } from "../ExportBonus";
 import { getSaveData, exportGame } from "../SaveObject";
 import { calculateCompanyWorkStats, calculateCrimeWorkStats } from "../Work/Formulas";
-import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { getRecordEntries } from "../Types/Record";
@@ -164,7 +172,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return Object.assign({}, aug.mults);
+      const mults = aug.name === AugmentationName.TheThread ? getThreadAugmentMults() : aug.mults;
+      return Object.assign({}, mults);
     },
     purchaseAugmentation: (ctx, _facName, _augName) => {
       helpers.checkSingularityAccess(ctx);
@@ -526,8 +535,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           return Router.toPage(Page.BitVerse, { flume: false, quick: false });
         }
         // Manunally check for faction invites
-        Engine.Counters.checkFactionInvitations = 0;
-        Engine.checkCounters();
+        processFactionInvitations();
       });
     },
     isFocused: (ctx) => {
@@ -742,8 +750,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     checkFactionInvitations: (ctx) => {
       helpers.checkSingularityAccess(ctx);
       // Manually trigger a check for faction invites
-      Engine.Counters.checkFactionInvitations = 0;
-      Engine.checkCounters();
+      processFactionInvitations();
       // Make a copy of player.factionInvitations
       return Player.factionInvitations.slice();
     },

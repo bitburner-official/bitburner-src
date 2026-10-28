@@ -4,6 +4,8 @@
 
 ## ActiveFragment.x property
 
+The root x coordinate against which the top left of the fragment was aligned.
+
 **Signature:**
 
 ```typescript

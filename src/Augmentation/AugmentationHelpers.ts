@@ -12,11 +12,11 @@ import { FactionName } from "@enums";
 import { Factions } from "../Faction/Factions";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Router } from "../ui/GameRoot";
-import { Page } from "../ui/Router";
-import { mergeMultipliers } from "../PersonObjects/Multipliers";
+import { Page, Router } from "../ui/Router";
+import { defaultMultipliers, mergeMultipliers } from "../PersonObjects/Multipliers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { prestigeWorkerScripts } from "../NetscriptWorker";
+import { romanNumeralEncoder } from "../DarkNet/controllers/ServerGenerator";
 
 export const soaAugmentationNames = [
   AugmentationName.BeautyOfAphrodite,
@@ -30,14 +30,24 @@ export const soaAugmentationNames = [
   AugmentationName.WisdomOfAthena,
 ];
 
+export const labAugmentationNames = [
+  AugmentationName.TheBrokenWings,
+  AugmentationName.TheBoots,
+  AugmentationName.TheStaff,
+  AugmentationName.TheHammer,
+  AugmentationName.TheLaw,
+  AugmentationName.TheSword,
+  AugmentationName.TheThread,
+];
+
 export function getBaseAugmentationPriceMultiplier(): number {
   return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.activeSourceFileLvl(11)];
 }
 export function getGenericAugmentationPriceMultiplier(): number {
-  const queuedNonSoAAugmentationList = Player.queuedAugmentations.filter((augmentation) => {
-    return !soaAugmentationNames.includes(augmentation.name);
+  const queuedNormalAugmentationList = Player.queuedAugmentations.filter((augmentation) => {
+    return !soaAugmentationNames.includes(augmentation.name) && !labAugmentationNames.includes(augmentation.name);
   });
-  return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNonSoAAugmentationList.length);
+  return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNormalAugmentationList.length);
 }
 
 // When effectOnly == true, the augmentation is not actually added to the
@@ -85,15 +95,20 @@ export function applyAugmentation(aug: PlayerOwnedAugmentation, effectOnly = fal
 // instead of mergeMultipliers, since it handles special cases like NFG uniformly. (It works for both
 // queued and installed augs.)
 export function updateMultipliers(mults: Multipliers, aug: PlayerOwnedAugmentation, previousLevel: number): void {
-  const staticAugmentation = Augmentations[aug.name];
   if (aug.level <= previousLevel) {
     throw new Error(`Trying to downlevel/relevel aug ${aug.name} from ${previousLevel} to ${aug.level}!`);
   }
-  if (aug.name !== AugmentationName.NeuroFluxGovernor && (aug.level !== 1 || previousLevel !== 0)) {
+  if (
+    aug.name !== AugmentationName.NeuroFluxGovernor &&
+    aug.name !== AugmentationName.TheThread &&
+    (aug.level !== 1 || previousLevel !== 0)
+  ) {
     throw new Error(`Unexpected levels for ${aug.name}: Leveling ${previousLevel} to ${aug.level}!`);
   }
   for (let i = previousLevel; i < aug.level; ++i) {
-    mergeMultipliers(mults, staticAugmentation.mults);
+    const augMults =
+      aug.name === AugmentationName.TheThread ? getThreadAugmentMults(i + 1, i) : Augmentations[aug.name].mults;
+    mergeMultipliers(mults, augMults);
   }
 }
 
@@ -107,13 +122,7 @@ export function installAugmentations(force?: boolean): boolean {
   prestigeWorkerScripts();
 
   let augmentationList = "";
-  let nfgIndex = -1;
-  for (let i = Player.queuedAugmentations.length - 1; i >= 0; i--) {
-    if (Player.queuedAugmentations[i].name === AugmentationName.NeuroFluxGovernor) {
-      nfgIndex = i;
-      break;
-    }
-  }
+  const nfgIndex = Player.queuedAugmentations.findLastIndex((aug) => aug.name === AugmentationName.NeuroFluxGovernor);
   for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
     const ownedAug = Player.queuedAugmentations[i];
     const aug = Augmentations[ownedAug.name];
@@ -128,6 +137,8 @@ export function installAugmentations(force?: boolean): boolean {
     let level = "";
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ` - ${ownedAug.level}`;
+    } else if (ownedAug.name === AugmentationName.TheThread) {
+      level = ` ${romanNumeralEncoder(ownedAug.level)}`;
     }
     augmentationList += aug.name + level + "\n";
   }
@@ -208,4 +219,40 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
       repCost = aug.baseRepRequirement * currentNodeMults.AugmentationRepCost;
   }
   return { moneyCost, repCost };
+}
+
+export function getThreadAugmentMults(level = 1, previousLevel = 0): Multipliers {
+  const mult = (1 + 0.01 * level) / (1 + 0.01 * previousLevel);
+  // These mults are chosen to match NFG. They are explicitly *not* all the multipliers that exist,
+  // and shouldn't be switched to something like scaleMults() which would apply across everything.
+  return {
+    ...defaultMultipliers(),
+    hacking_chance: mult,
+    hacking_speed: mult,
+    hacking_money: mult,
+    hacking_grow: mult,
+    hacking: mult,
+    strength: mult,
+    defense: mult,
+    dexterity: mult,
+    agility: mult,
+    charisma: mult,
+    hacking_exp: mult,
+    strength_exp: mult,
+    defense_exp: mult,
+    dexterity_exp: mult,
+    agility_exp: mult,
+    charisma_exp: mult,
+    company_rep: mult,
+    faction_rep: mult,
+    crime_money: mult,
+    crime_success: mult,
+    dnet_money: mult,
+    hacknet_node_money: mult,
+    hacknet_node_purchase_cost: 1 / mult,
+    hacknet_node_ram_cost: 1 / mult,
+    hacknet_node_core_cost: 1 / mult,
+    hacknet_node_level_cost: 1 / mult,
+    work_money: mult,
+  };
 }

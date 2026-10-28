@@ -10,8 +10,7 @@ import { extend as extendAcornWalkForJsxNodes } from "acorn-jsx-walk";
 
 import { Editor } from "./Editor";
 
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { checkInfiniteLoop } from "../../Script/RamCalculations";
 

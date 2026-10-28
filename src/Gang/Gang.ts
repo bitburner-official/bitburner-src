@@ -26,6 +26,7 @@ import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
+import { calculateReputationGain } from "./formulas/formulas";
 
 export enum RecruitmentResult {
   Success = "Success",
@@ -149,10 +150,12 @@ export class Gang {
       );
       throw new Error("Could not find the faction associated with this gang.");
     }
-    const favorMult = 1 + gangFaction.favor / 100;
 
-    gangFaction.playerReputation +=
-      (Player.mults.faction_rep * respectGainsTotal * favorMult) / GangConstants.GangRespectToReputationRatio;
+    gangFaction.playerReputation += calculateReputationGain(
+      respectGainsTotal,
+      gangFaction.favor,
+      Player.mults.faction_rep,
+    );
 
     if (this.wanted !== 1 || wantedLevelGainPerCycle >= 0) {
       const oldWanted = this.wanted;
