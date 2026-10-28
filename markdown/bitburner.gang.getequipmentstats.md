@@ -9,7 +9,7 @@ Get stats of an equipment.
 **Signature:**
 
 ```typescript
-getEquipmentStats(equipName: string): EquipmentStats;
+getEquipmentStats(equipName: GangMemberUpgradeName): EquipmentStats;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ equipName
 
 </td><td>
 
-string
+[GangMemberUpgradeName](./bitburner.gangmemberupgradename.md)
 
 
 </td><td>
