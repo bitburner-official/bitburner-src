@@ -3346,7 +3346,7 @@ export interface Hacknet {
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
    * Returns the list of all available hash upgrades that can be used in the spendHashes function. You can also use
-   * {@link HacknetServerHashUpgrade | HacknetServerHashUpgrade}
+   * the {@link NSEnums | HacknetServerHashUpgrade property in NSEnums}
    * @example
    * ```js
    * const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
