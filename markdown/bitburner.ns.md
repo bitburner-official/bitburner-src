@@ -89,7 +89,7 @@ These arguments can be accessed as a normal array by using the `[]` operator (`a
 
 </td><td>
 
-Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. Contains spoilers.
+Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. This namespace contains spoilers.
 
 
 </td></tr>
@@ -152,7 +152,7 @@ Namespace for [coding contract](./bitburner.codingcontract.md) functions.
 
 </td><td>
 
-Namespace for [corporation](./bitburner.corporation.md) functions. Contains spoilers.
+Namespace for [corporation](./bitburner.corporation.md) functions. This namespace contains spoilers.
 
 
 </td></tr>
@@ -173,7 +173,7 @@ Namespace for [corporation](./bitburner.corporation.md) functions. Contains spoi
 
 </td><td>
 
-Namespace for darknet functions. Contains spoilers.
+Namespace for darknet functions. Some of this namespace contains spoilers.
 
 
 </td></tr>
@@ -253,7 +253,7 @@ Namespace for [formulas](./bitburner.formulas.md) functions.
 
 </td><td>
 
-Namespace for [gang](./bitburner.gang.md) functions. Contains spoilers.
+Namespace for [gang](./bitburner.gang.md) functions. This namespace contains spoilers.
 
 
 </td></tr>
@@ -295,7 +295,7 @@ Namespace for [Go](./bitburner.go.md) functions.
 
 </td><td>
 
-Namespace for [grafting](./bitburner.grafting.md) functions. Contains spoilers.
+Namespace for [grafting](./bitburner.grafting.md) functions. This namespace contains spoilers.
 
 
 </td></tr>
@@ -316,7 +316,7 @@ Namespace for [grafting](./bitburner.grafting.md) functions. Contains spoilers.
 
 </td><td>
 
-Namespace for [hacknet](./bitburner.hacknet.md) functions. Some of this API contains spoilers.
+Namespace for [hacknet](./bitburner.hacknet.md) functions. Some of this namespace contains spoilers.
 
 
 </td></tr>
@@ -398,7 +398,7 @@ The current script's PID
 
 </td><td>
 
-Namespace for [singularity](./bitburner.singularity.md) functions. Contains spoilers.
+Namespace for [singularity](./bitburner.singularity.md) functions. This namespace contains spoilers.
 
 
 </td></tr>
@@ -419,7 +419,7 @@ Namespace for [singularity](./bitburner.singularity.md) functions. Contains spoi
 
 </td><td>
 
-Namespace for [sleeve](./bitburner.sleeve.md) functions. Contains spoilers.
+Namespace for [sleeve](./bitburner.sleeve.md) functions. This namespace contains spoilers.
 
 
 </td></tr>
@@ -440,7 +440,7 @@ Namespace for [sleeve](./bitburner.sleeve.md) functions. Contains spoilers.
 
 </td><td>
 
-Namespace for [Stanek](./bitburner.stanek.md) functions. Contains spoilers.
+Namespace for [Stanek](./bitburner.stanek.md) functions. This namespace contains spoilers.
 
 
 </td></tr>
