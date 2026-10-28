@@ -177,9 +177,9 @@ export function DarknetDev(): React.ReactElement {
             checked={DarknetState.showFullNetwork}
             onChange={(newValue) => toggleShowFullNetwork(newValue)}
             text="Show Full Network"
-            tooltip={<>If this is set, the full depth of the dark network will be displayed.</>}
+            tooltip={<>If this is set, the full depth of the darknet will be displayed.</>}
           />
-          <Tooltip title={<Typography>Gain access to the darkweb network.</Typography>}>
+          <Tooltip title={<Typography>Gain access to the Dark Web network.</Typography>}>
             <Button
               onClick={() => {
                 getDarkscapeNavigator();
@@ -190,17 +190,17 @@ export function DarknetDev(): React.ReactElement {
           </Tooltip>
           <br />
           <br />
-          <Tooltip title={<Typography>Create a new darkweb network.</Typography>}>
+          <Tooltip title={<Typography>Create a new Dark Web network.</Typography>}>
             <span>
               <Button
                 disabled={!hasDarknetAccess()}
                 onClick={() => {
                   clearDarknet();
                   populateDarknet();
-                  SnackbarEvents.emit("New dark network generated", ToastVariant.SUCCESS, 2000);
+                  SnackbarEvents.emit("New Dark Web network generated", ToastVariant.SUCCESS, 2000);
                 }}
               >
-                Generate New Dark Network
+                Generate New Dark Web Network
               </Button>
             </span>
           </Tooltip>

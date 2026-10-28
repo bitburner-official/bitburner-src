@@ -4,7 +4,7 @@
 
 ## Singularity.purchaseProgram() method
 
-Purchase a program from the dark web.
+Purchase a program from the Dark Web.
 
 **Signature:**
 
