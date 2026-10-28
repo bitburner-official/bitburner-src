@@ -24,17 +24,17 @@ When experienced enough, gang members are offered Ascension, a permanent boost t
 
 The level of each stat that a gang member has (hack, str, def, dex, agi, cha) is calculated from three numbers:
 
-- Experience (e.g. str_exp).
-- Total ascension points accumulated by the member from all previous ascensions (e.g. str_asc_points).
-- The multiplier from equipment (e.g. str_mult).
+- Experience (e.g. `str_exp`).
+- Total ascension points accumulated by the member from all previous ascensions (e.g. `str_asc_points`).
+- The multiplier from equipment (e.g. `str_mult`).
 
-The namespace ns.formulas.gang has no functions to calculate level from experience or experience from level. You can use ns.formulas.skills.calculateSkill() instead:
+The namespace `ns.formulas.gang` has no functions to calculate level from experience or experience from level. You can use `ns.formulas.skills.calculateSkill()` instead:
 
 ```js
 const member = ns.gang.getMemberInformation("member name");
-const str_asc_mult = ns.formulas.gang.ascensionMultiplier(member.str_asc_points);
+const strAscMult = ns.formulas.gang.ascensionMultiplier(member.str_asc_points);
 // Should be the same as member.str
-const str = ns.formulas.skills.calculateSkill(member.str_exp, member.str_mult * str_asc_mult);
+const str = ns.formulas.skills.calculateSkill(member.str_exp, member.str_mult * strAscMult);
 ```
 
 ## Equipping and Managing
